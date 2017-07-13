@@ -32,27 +32,27 @@ def requires_auth(f):
     return decorated
 
 
-@app.route('/api/events')
+@app.route('/events')
 @requires_auth
 def events():
     events = kocherga.events.all_future_events()
     return json.dumps(events)
 
 
-@app.route('/api/event/<event_id>/property/<key>', methods=['POST'])
+@app.route('/event/<event_id>/property/<key>', methods=['POST'])
 @requires_auth
 def set_property(event_id, key):
     value = request.get_json()['value']
     kocherga.events.set_property(event_id, key, value)
     return trivial_ok, 200
 
-@app.route('/api/event/<event_id>/post/timepad', methods=['POST'])
+@app.route('/event/<event_id>/post/timepad', methods=['POST'])
 @requires_auth
 def post_timepad(event_id):
     kocherga.events.post_to_timepad(event_id)
     return trivial_ok, 200
 
-@app.route('/api/event/<event_id>/check/timepad', methods=['POST'])
+@app.route('/event/<event_id>/check/timepad', methods=['POST'])
 @requires_auth
 def check_timepad(event_id):
     outcome = kocherga.events.check_timepad(event_id)
