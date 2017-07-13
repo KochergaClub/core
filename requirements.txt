@@ -1,0 +1,5 @@
+Flask
+Flask-BasicAuth
+python-dateutil
+httplib2
+google-api-python-client
