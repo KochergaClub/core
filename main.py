@@ -61,9 +61,17 @@ def check_timepad(event_id):
 
 @app.route('/bookings/<date_str>')
 def bookings(date_str):
-    date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    if date_str == 'today':
+        date = datetime.today().date()
+    else:
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+
     bookings = kocherga.events.day_bookings(date)
     return jsonify(bookings)
+
+@app.route('/bookings', methods=['POST'])
+def add_booking():
+    raise Exception('not implemented')
 
 if __name__ == '__main__':
     if DEV:
