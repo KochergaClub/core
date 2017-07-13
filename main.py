@@ -11,6 +11,10 @@ import kocherga.events
 DEV = bool(os.environ.get('DEV', 0))
 
 app = Flask(__name__)
+if DEV:
+    app.debug = True
+app.config['JSON_AS_ASCII'] = False
+app.config['JSONIFY_MIMETYPE'] = 'application/json; charset=utf-8'
 CORS(app)
 
 ok = {'result': 'ok'}
@@ -74,6 +78,4 @@ def add_booking():
     raise Exception('not implemented')
 
 if __name__ == '__main__':
-    if DEV:
-        app.debug = True
     app.run()
