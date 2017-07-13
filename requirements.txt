@@ -1,5 +1,6 @@
 Flask
 Flask-BasicAuth
+flask-cors
 python-dateutil
 httplib2
 google-api-python-client
