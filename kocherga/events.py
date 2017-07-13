@@ -60,6 +60,23 @@ def is_private(event):
     return False
 
 
+def event2room(event):
+    ROOMS = ['лекционная', 'гэб', 'китайская', 'летняя']
+    if 'location' in event:
+        location = event.get('location').strip().lower()
+        if location in ROOMS:
+            # everything is ok
+            return location
+        if len(location):
+            return 'unknown'
+
+    for room in ROOMS:
+        if room in event['summary'].lower():
+            return room # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
+
+    return 'unknown'
+
+
 def get_week_boundaries():
     today = datetime.datetime.today()
 
@@ -103,3 +120,22 @@ def all_future_events():
         timeMin=datetime.datetime.today().isoformat() + 'Z',
         timeMax=(datetime.datetime.today() + datetime.timedelta(weeks=8)).isoformat() + 'Z',
     )
+
+
+def day_bookings(date):
+    dt = datetime.datetime.combine(date, datetime.datetime.min.time())
+    events = events_with_condition(
+        timeMin=dt.isoformat() + 'Z',
+        timeMax=(dt + datetime.timedelta(days=1)).isoformat() + 'Z',
+    )
+
+    bookings = []
+
+    for event in events:
+        bookings.append({
+            'start': event['start']['dateTime'],
+            'end': event['end']['dateTime'],
+            'room': event2room(event)
+        })
+
+    return bookings

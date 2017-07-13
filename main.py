@@ -1,8 +1,9 @@
 import json
 import os
 from functools import wraps
+from datetime import datetime
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 
 import kocherga.events
@@ -12,7 +13,7 @@ DEV = bool(os.environ.get('DEV', 0))
 app = Flask(__name__)
 CORS(app)
 
-trivial_ok = json.dumps({'result': 'ok'})
+ok = {'result': 'ok'}
 
 # from http://flask.pocoo.org/snippets/8/
 def requires_auth(f):
@@ -36,7 +37,7 @@ def requires_auth(f):
 @requires_auth
 def events():
     events = kocherga.events.all_future_events()
-    return json.dumps(events)
+    return jsonify(events)
 
 
 @app.route('/event/<event_id>/property/<key>', methods=['POST'])
@@ -44,13 +45,13 @@ def events():
 def set_property(event_id, key):
     value = request.get_json()['value']
     kocherga.events.set_property(event_id, key, value)
-    return trivial_ok, 200
+    return jsonify(ok)
 
 @app.route('/event/<event_id>/post/timepad', methods=['POST'])
 @requires_auth
 def post_timepad(event_id):
     kocherga.events.post_to_timepad(event_id)
-    return trivial_ok, 200
+    return jsonify(ok)
 
 @app.route('/event/<event_id>/check/timepad', methods=['POST'])
 @requires_auth
@@ -58,6 +59,11 @@ def check_timepad(event_id):
     outcome = kocherga.events.check_timepad(event_id)
     return 'ok: {}'.format(outcome), 200
 
+@app.route('/bookings/<date_str>')
+def bookings(date_str):
+    date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    bookings = kocherga.events.day_bookings(date)
+    return jsonify(bookings)
 
 if __name__ == '__main__':
     if DEV:
