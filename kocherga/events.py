@@ -1,10 +1,17 @@
+import re
 import datetime
-import dateutil.parser
 
 import kocherga.calendar_api
 import kocherga.timepad
 
+from kocherga.common import PublicError
+
 CALENDAR = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
+
+ROOMS = ['лекционная', 'гэб', 'китайская', 'летняя']
+
+MSK_TZ = datetime.timezone(datetime.timedelta(hours=3)) # unused for now
+MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
 
 
 def api():
@@ -68,20 +75,19 @@ def is_private(event):
 
 
 def event2room(event):
-    ROOMS = ['лекционная', 'гэб', 'китайская', 'летняя']
     if 'location' in event:
         location = event.get('location').strip().lower()
         if location in ROOMS:
             # everything is ok
-            return location
+            return location.capitalize()
         if len(location):
-            return 'unknown'
+            return 'Unknown'
 
     for room in ROOMS:
         if room in event['summary'].lower():
-            return room # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
+            return room.capitalize() # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
 
-    return 'unknown'
+    return 'Unknown'
 
 
 def get_week_boundaries():
@@ -111,7 +117,7 @@ def events_with_condition(**kwargs):
               if 'dateTime' in e['start']]  # filter out all-day events
 
     for event in events:
-        event['type'] = 'private' if is_private(event) else 'public'
+        event = improve_event(event)
 
     return events
 
@@ -146,3 +152,73 @@ def day_bookings(date):
         })
 
     return bookings
+
+def check_availability(startDt, endDt, room):
+    bookings = day_bookings(date)
+    for booking in bookings:
+        if booking['room'] not in (room, 'unknown'):
+            continue # irrelevant
+
+        BOOKING_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
+        bookingStartDt = datetime.strptime(booking.start, BOOKING_DATE_FORMAT)
+        bookingEndDt = datetime.strptime(booking.end, BOOKING_DATE_FORMAT)
+
+        if endDt < bookingStartDt:
+            return False
+
+        if startDt < bookingStartDt:
+            return False
+
+
+def add_booking(date, room, people, startTime, endTime, contact):
+    # validate
+    dt = datetime.datetime.strptime(date, '%Y-%m-%d')
+
+    if room not in ROOMS:
+        raise PublicError('unknown room {}'.format(room))
+
+    if not re.match(r'\d+$', people):
+        raise PublicError('invalid number of people: {}'.format(people))
+
+    people = int(people)
+    if people == 0:
+        raise PublicError('zero rights for zero people, sorry')
+
+    if people > 40:
+        raise PublicError("you can't fit more than 40 people in a single Kocherga")
+
+    if len(contact) == 0:
+        raise PublicError('contact is required')
+
+    def parse_time(t):
+
+        timeParsed = re.match(r'(\d\d):(\d\d)$', t)
+        if not timeParsed:
+            raise PublicError('invalid time {}'.format(t))
+
+        return dt.replace(hour=int(timeParsed.group(1)), minute=int(timeParsed.group(2)))
+
+    startDt = parse_time(startTime)
+    endDt = parse_time(endTime)
+
+    if endDt <= startDt:
+        raise PublicError("event should end after it starts")
+
+    # check availability
+    bookings = check_bookings(startDt, endDt, room)
+
+    # insert
+    event = {
+        'summary': 'Бронь {room}, {people} человек'.format(room=room, people=people),
+        'location': room,
+        'start': {
+            'dateTime': startDt.strftime(MSK_DATE_FORMAT),
+        },
+        'end': {
+            'dateTime': endDt.strftime(MSK_DATE_FORMAT),
+        },
+    }
+    api().events().insert(
+        calendarId=CALENDAR,
+        body=event,
+    ).execute()

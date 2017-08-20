@@ -90,7 +90,14 @@ def bookings(date_str):
 
 @app.route('/bookings', methods=['POST'])
 def add_booking():
-    raise Exception('not implemented')
+    data = {}
+    for field in ('date', 'room', 'people', 'startTime', 'endTime', 'contact'):
+        if field not in request.form:
+            raise PublicError('field {} is required'.format(field))
+        data[field] = str(request.form.get(field, ''))
+    kocherga.events.add_booking(**data)
+
+    return jsonify(ok)
 
 if __name__ == '__main__':
     app.run()
