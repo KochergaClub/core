@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 
 import kocherga.events
+from kocherga.common import PublicError
 
 DEV = bool(os.environ.get('DEV', 0))
 
@@ -18,6 +19,13 @@ app.config['JSONIFY_MIMETYPE'] = 'application/json; charset=utf-8'
 CORS(app)
 
 ok = {'result': 'ok'}
+
+# via https://github.com/pallets/flask/blob/master/docs/patterns/apierrors.rst
+@app.errorhandler(PublicError)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 # from http://flask.pocoo.org/snippets/8/
 def requires_auth(f):
