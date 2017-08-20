@@ -52,6 +52,13 @@ def events():
     return jsonify(events)
 
 
+@app.route('/event/<event_id>')
+@requires_auth
+def event(event_id):
+    event = kocherga.events.get_event(event_id)
+    return jsonify(event)
+
+
 @app.route('/event/<event_id>/property/<key>', methods=['POST'])
 @requires_auth
 def set_property(event_id, key):

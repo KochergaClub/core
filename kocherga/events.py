@@ -11,8 +11,15 @@ def api():
     return kocherga.calendar_api.get_service()
 
 
+def improve_event(event):
+    event['type'] = 'private' if is_private(event) else 'public'
+    return event
+
+
 def get_event(event_id):
-    return api().events().get(calendarId=CALENDAR, eventId=event_id).execute()
+    event = api().events().get(calendarId=CALENDAR, eventId=event_id).execute()
+    return improve_event(event)
+
 
 def post_to_timepad(event_id):
     event = get_event(event_id)
