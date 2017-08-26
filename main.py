@@ -3,11 +3,12 @@ import os
 from functools import wraps
 from datetime import datetime
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
+
 from flask_cors import CORS
 
 import kocherga.events
-from kocherga.common import PublicError
+from kocherga.common import PublicError, upload_dir
 
 DEV = bool(os.environ.get('DEV', 0))
 
@@ -77,6 +78,39 @@ def post_timepad(event_id):
 def check_timepad(event_id):
     outcome = kocherga.events.check_timepad(event_id)
     return 'ok: {}'.format(outcome), 200
+
+@app.route('/event/<event_id>/image/<image_type>', methods=['GET'])
+def event_image(event_id, image_type):
+    if image_type not in kocherga.events.IMAGE_TYPES:
+        raise PublicError('unknown image type {}'.format(image_type))
+
+    return send_from_directory(upload_dir(), kocherga.events.image_filename(event_id, image_type))
+
+@app.route('/event/<event_id>/image/<image_type>', methods=['POST'])
+def upload_event_image(event_id, image_type):
+    if image_type not in kocherga.events.IMAGE_TYPES:
+        raise PublicError('unknown image type {}'.format(image_type))
+
+    if not kocherga.events.get_event(event_id):
+        raise PublicError('event {} not found'.format(event_id)) # actually, get_event() will raise an error, so we'll never get to this point anyway
+
+    if 'file' not in request.files:
+        raise PublicError('Expected a file')
+    file = request.files['file']
+
+    if file.filename == '':
+        raise PublicError('No filename')
+
+    filename = kocherga.events.image_filename(event_id, image_type)
+    file.save(os.path.join(upload_dir(), filename))
+
+    kocherga.events.set_property(
+        event_id,
+        kocherga.events.image_flag_property(image_type),
+        'true'
+    )
+
+    return jsonify(ok)
 
 @app.route('/bookings/<date_str>')
 def bookings(date_str):

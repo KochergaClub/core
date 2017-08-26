@@ -1,10 +1,15 @@
 import re
 import datetime
+import hashlib
+
+import os.path
+
+from werkzeug.utils import secure_filename
 
 import kocherga.calendar_api
 import kocherga.timepad
 
-from kocherga.common import PublicError
+from kocherga.common import PublicError, web_root, upload_dir
 
 CALENDAR = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
 
@@ -13,13 +18,41 @@ ROOMS = ['лекционная', 'гэб', 'китайская', 'летняя']
 MSK_TZ = datetime.timezone(datetime.timedelta(hours=3)) # unused for now
 MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
 
+IMAGE_TYPES = ['default', 'vk']
 
 def api():
     return kocherga.calendar_api.get_service()
 
 
+def get_property(event, key):
+    return event.get('extendedProperties', {}).get('private', {}).get(key, None)
+
+
+def image_flag_property(image_type):
+    return 'has_{}_image'.format(image_type)
+
+
+def image_filename(event_id, image_type):
+    return secure_filename('event_image.{}.{}.jpg'.format(image_type, event_id))
+
+
+def full_image_filename(event_id, image_type):
+    return os.path.join(upload_dir(), image_filename(event_id, image_type))
+
+
 def improve_event(event):
     event['type'] = 'private' if is_private(event) else 'public'
+    event['images'] = {}
+
+    for image_type in IMAGE_TYPES:
+        if not get_property(event, image_flag_property(image_type)):
+            continue
+        url = web_root() + '/event/{}/image/{}'.format(event['id'], image_type)
+        filename = full_image_filename(event['id'], image_type)
+        md5 = hashlib.md5(open(filename, 'rb').read()).hexdigest()
+
+        event['images'][image_type] = url + '?hash=' + md5
+
     return event
 
 
@@ -37,7 +70,7 @@ def post_to_timepad(event_id):
 
 def check_timepad(event_id):
     event = get_event(event_id)
-    timepad_url = event.get('extendedProperties', {}).get('private', {}).get('timepad', None)
+    timepad_url = get_property(event, 'timepad')
     if not timepad_url:
         return 'no url'
 
@@ -61,8 +94,7 @@ def set_property(event_id, key, value):
 
 
 def is_private(event):
-    preset_type = event.get('extendedProperties', {}).get('private', {}).get(
-        'type', None)
+    preset_type = get_property(event, 'type')
     if preset_type == 'private':
         return True
     if preset_type == 'public':

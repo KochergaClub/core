@@ -3,8 +3,21 @@ import os
 def project_dir():
     return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
+def web_root():
+    DEV = bool(os.environ.get('DEV', 0))
+    if DEV:
+        return 'http://localhost:5000'
+    else:
+        return 'http://api.kocherga.club'
+
 def credentials_dir():
     result = os.path.join(project_dir(), '.credentials')
+    if not os.path.exists(result):
+        os.makedirs(result)
+    return result
+
+def upload_dir():
+    result = os.path.join(project_dir(), 'upload')
     if not os.path.exists(result):
         os.makedirs(result)
     return result

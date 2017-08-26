@@ -1,3 +1,4 @@
 __pycache__
 /.credentials
 /google_api_secret.json
+/upload
