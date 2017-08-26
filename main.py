@@ -80,7 +80,6 @@ def check_timepad(event_id):
     return 'ok: {}'.format(outcome), 200
 
 @app.route('/event/<event_id>/image/<image_type>', methods=['GET'])
-@requires_auth
 def event_image(event_id, image_type):
     if image_type not in kocherga.events.IMAGE_TYPES:
         raise PublicError('unknown image type {}'.format(image_type))
