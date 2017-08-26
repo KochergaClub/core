@@ -49,6 +49,10 @@ def improve_event(event):
             continue
         url = web_root() + '/event/{}/image/{}'.format(event['id'], image_type)
         filename = full_image_filename(event['id'], image_type)
+
+        if not os.path.isfile(filename):
+            continue
+
         md5 = hashlib.md5(open(filename, 'rb').read()).hexdigest()
 
         event['images'][image_type] = url + '?hash=' + md5
