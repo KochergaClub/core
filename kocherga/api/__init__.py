@@ -113,7 +113,6 @@ def create_app(DEV):
         return jsonify(ok)
 
     @app.route('/event/<event_id>/image/<image_type>', methods=['GET'])
-    @requires_auth
     def event_image(event_id, image_type):
         if image_type not in kocherga.events.IMAGE_TYPES:
             raise PublicError('unknown image type {}'.format(image_type))
@@ -121,7 +120,6 @@ def create_app(DEV):
         return send_file( image_storage.event_image_file(event_id, image_type))
 
     @app.route('/schedule/weekly-image', methods=['GET'])
-    @requires_auth
     def schedule_weekly_image():
         dt = datetime.today()
         if dt.weekday() < 2:
