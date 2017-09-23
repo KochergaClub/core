@@ -1,0 +1,13 @@
+[Unit]
+Description=Kocherga API
+After=network.target
+
+[Service]
+User=berekuk
+Restart=on-failure
+WorkingDirectory=/srv/kocherga-api
+EnvironmentFile=/srv/kocherga-api/env
+ExecStart=/srv/kocherga-api/venv/bin/python3 /srv/kocherga-api/venv/bin/flask run --port 5101
+
+[Install]
+WantedBy=multi-user.target
