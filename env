@@ -1,3 +1,4 @@
 LANG=en_US.utf8
 LC_ALL=en_US.utf8
 FLASK_APP=kocherga.api
+PYTHONPATH=.
