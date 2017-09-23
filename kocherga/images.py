@@ -81,11 +81,13 @@ class ImageStorage:
         start_day = str(start_date.day)
         end_day = str(end_date.day)
 
+        months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+
         l3_start = str(start_date.day) + ' '
         if start_date.month != end_date.month:
-            l3_start += start_date.strftime('%B ')
+            l3_start += str(months[start_date.month - 1]) + ' '
 
-        l3_end = ' ' + str(end_date.day) + ' ' + end_date.strftime('%B')
+        l3_end = ' ' + str(end_date.day) + ' ' + str(months[end_date.month - 1])
         l3_dash = '—'
 
         l3_heigth = l2_size[1]
