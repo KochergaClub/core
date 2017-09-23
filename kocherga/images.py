@@ -4,7 +4,7 @@ import os.path
 from PIL import Image, ImageFont, ImageDraw
 
 import locale
-locale.setlocale(locale.LC_TIME, "ru_RU")
+locale.setlocale(locale.LC_TIME, locale.normalize('ru'))
 
 from werkzeug.utils import secure_filename
 
