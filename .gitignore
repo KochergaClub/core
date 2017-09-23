@@ -1,5 +1,6 @@
 __pycache__
 /.credentials
 /google_api_secret.json
-/upload
+/upload/event_image
+/upload/mailchimp
 /venv

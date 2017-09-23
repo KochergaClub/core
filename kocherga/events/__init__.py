@@ -6,10 +6,10 @@ import os.path
 
 from werkzeug.utils import secure_filename
 
-import kocherga.calendar_api
-import kocherga.timepad
+import kocherga.events.google
+import kocherga.events.timepad
 
-from kocherga.common import PublicError, web_root, upload_dir
+from kocherga.common import PublicError, web_root, image_storage
 
 CALENDAR = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
 
@@ -21,7 +21,7 @@ MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
 IMAGE_TYPES = ['default', 'vk']
 
 def api():
-    return kocherga.calendar_api.get_service()
+    return kocherga.events.google.get_service()
 
 
 def get_property(event, key):
@@ -32,14 +32,6 @@ def image_flag_property(image_type):
     return 'has_{}_image'.format(image_type)
 
 
-def image_filename(event_id, image_type):
-    return secure_filename('event_image.{}.{}.jpg'.format(image_type, event_id))
-
-
-def full_image_filename(event_id, image_type):
-    return os.path.join(upload_dir(), image_filename(event_id, image_type))
-
-
 def improve_event(event):
     event['type'] = 'private' if is_private(event) else 'public'
     event['images'] = {}
@@ -48,8 +40,8 @@ def improve_event(event):
         if not get_property(event, image_flag_property(image_type)):
             continue
         url = web_root() + '/event/{}/image/{}'.format(event['id'], image_type)
-        filename = full_image_filename(event['id'], image_type)
 
+        filename = image_storage.event_image_file(event['id'], image_type)
         if not os.path.isfile(filename):
             continue
 
@@ -67,7 +59,7 @@ def get_event(event_id):
 
 def post_to_timepad(event_id):
     event = get_event(event_id)
-    timepad_event = kocherga.timepad.create(event)
+    timepad_event = kocherga.events.timepad.create(event)
 
     set_property(event_id, 'timepad', timepad_event['url'])
 
@@ -78,7 +70,7 @@ def check_timepad(event_id):
     if not timepad_url:
         return 'no url'
 
-    if kocherga.timepad.check(timepad_url):
+    if kocherga.events.timepad.check(timepad_url):
         return 'event exists'
 
     set_property(event_id, 'timepad', None) # not found

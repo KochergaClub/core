@@ -1,4 +1,5 @@
 import os
+import kocherga.images
 
 def project_dir():
     return os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -21,6 +22,8 @@ def upload_dir():
     if not os.path.exists(result):
         os.makedirs(result)
     return result
+
+image_storage = kocherga.images.ImageStorage(upload_dir())
 
 class PublicError(Exception):
     status_code = 400
