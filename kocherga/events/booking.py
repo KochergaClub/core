@@ -1,4 +1,6 @@
 import datetime
+import re
+
 from kocherga.common import PublicError, ROOMS
 from kocherga.events import events_with_condition, event2room
 
@@ -59,6 +61,8 @@ def add_booking(date, room, people, startTime, endTime, contact):
     dt = datetime.datetime.strptime(date, '%Y-%m-%d')
 
     _validate_room(room)
+
+    people = str(people) # accept either int or str
 
     if not re.match(r'\d+$', people):
         raise PublicError('Invalid number of people: {}'.format(people))
