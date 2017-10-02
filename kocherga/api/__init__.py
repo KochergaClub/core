@@ -8,6 +8,7 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from flask_cors import CORS
 
 import kocherga.events
+import kocherga.events.booking
 from kocherga.common import PublicError, image_storage
 import kocherga.common
 from datetime import datetime, timedelta
@@ -145,7 +146,7 @@ def create_app(DEV):
         else:
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
 
-        bookings = kocherga.events.day_bookings(date)
+        bookings = kocherga.events.booking.day_bookings(date)
         return jsonify(bookings)
 
     @app.route('/bookings', methods=['POST'])
@@ -156,7 +157,7 @@ def create_app(DEV):
             if field not in payload:
                 raise PublicError('field {} is required'.format(field))
             data[field] = str(payload.get(field, ''))
-        kocherga.events.add_booking(**data)
+        kocherga.events.booking.add_booking(**data)
 
         return jsonify(ok)
 

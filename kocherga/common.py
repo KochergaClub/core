@@ -39,3 +39,11 @@ class PublicError(Exception):
         rv = dict(self.payload or ())
         rv['message'] = self.message
         return rv
+
+    def __str__(self):
+        return self.message
+
+    def __repr__(self):
+        return "PublicError('{}')".format(self.message)
+
+ROOMS = ['лекционная', 'гэб', 'китайская', 'летняя']
