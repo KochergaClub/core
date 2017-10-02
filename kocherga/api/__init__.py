@@ -153,9 +153,9 @@ def create_app(DEV):
         data = {}
         payload = request.get_json() or request.form
         for field in ('date', 'room', 'people', 'startTime', 'endTime', 'contact'):
-            if field not in request.form:
+            if field not in payload:
                 raise PublicError('field {} is required'.format(field))
-            data[field] = str(request.form.get(field, ''))
+            data[field] = str(payload.get(field, ''))
         kocherga.events.add_booking(**data)
 
         return jsonify(ok)
