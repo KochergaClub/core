@@ -151,6 +151,7 @@ def create_app(DEV):
     @app.route('/bookings', methods=['POST'])
     def add_booking():
         data = {}
+        payload = request.get_json() or request.form
         for field in ('date', 'room', 'people', 'startTime', 'endTime', 'contact'):
             if field not in request.form:
                 raise PublicError('field {} is required'.format(field))
