@@ -112,7 +112,15 @@ class TestAddBooking:
             eventId=event['id'],
         ).execute()
 
-        assert event['summary'] == 'Бронь ГЭБ, 3 человек'
+        assert event['summary'] == 'Бронь ГЭБ, 3 человек, somebody@example.com'
+
+    def test_add_booking_unknown(self):
+        with pytest.raises(PublicError, match='Unknown room'):
+            kocherga.events.booking.add_booking((datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d'), 'unknown', 3, '12:00', '12:30', 'somebody@example.com')
+
+    def test_add_booking_unknown2(self):
+        with pytest.raises(PublicError, match='Unknown room'):
+            kocherga.events.booking.add_booking((datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d'), 'неизвестная', 3, '12:00', '12:30', 'somebody@example.com')
 
     def test_add_duplicate(self):
         event = kocherga.events.booking.add_booking((datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')

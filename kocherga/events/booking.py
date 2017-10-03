@@ -127,7 +127,7 @@ def add_booking(date, room, people, startTime, endTime, contact):
 
     # insert
     event = {
-        'summary': 'Бронь {room}, {people} человек'.format(room=room, people=people),
+        'summary': 'Бронь {room}, {people} человек, {contact}'.format(room=room, people=people, contact=contact),
         'location': room,
         'start': {
             'dateTime': startDt.strftime(MSK_DATE_FORMAT),
