@@ -9,7 +9,8 @@ from werkzeug.utils import secure_filename
 import kocherga.events.google
 import kocherga.events.timepad
 
-from kocherga.common import PublicError, web_root, image_storage, ROOMS
+from kocherga.common import PublicError, web_root, image_storage
+import kocherga.room
 
 CALENDAR = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
 
@@ -98,19 +99,18 @@ def is_private(event):
 
 
 def event2room(event):
-    if 'location' in event:
-        location = event.get('location').strip().lower()
-        if location in ROOMS:
-            # everything is ok
-            return location.capitalize()
-        if len(location):
-            return 'Unknown'
+    if event.get('location', '').strip():
+        room = kocherga.room.normalize(event.get('location', ''), fail=False)
+        if room:
+            return room
+        return kocherga.room.unknown
 
-    for room in ROOMS:
+    # TODO - move to kocherga.room.look_for_room_in_string(...)?
+    for room in kocherga.room.all_rooms:
         if room in event['summary'].lower():
-            return room.capitalize() # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
+            return room # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
 
-    return 'Unknown'
+    return kocherga.room.unknown
 
 
 def get_week_boundaries():

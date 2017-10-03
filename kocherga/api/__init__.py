@@ -147,7 +147,10 @@ def create_app(DEV):
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
 
         bookings = kocherga.events.booking.day_bookings(date)
-        return jsonify(bookings)
+        return jsonify([
+            b.public_object()
+            for b in bookings
+        ])
 
     @app.route('/bookings', methods=['POST'])
     def add_booking():

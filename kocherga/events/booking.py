@@ -1,15 +1,45 @@
 import datetime
 import re
 
-from kocherga.common import PublicError, ROOMS
+from kocherga.common import PublicError
+import kocherga.room
 from kocherga.events import events_with_condition, event2room
+import kocherga.events
 
 MSK_TZ = datetime.timezone(datetime.timedelta(hours=3)) # unused for now
 MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
 
-def _validate_room(room):
-    if room not in ROOMS:
-        raise PublicError('Unknown room {}.'.format(room))
+# types:
+# room (unicode, lowercase)
+# pretty room (unicode, capitalized)
+# booking (all params)
+# booking.public (start, end, pretty room)
+
+class Booking:
+    BOOKING_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
+
+    def __init__(self, start_dt, end_dt, room):
+        self.start_dt = start_dt
+        self.end_dt = end_dt
+        kocherga.room.validate(room)
+        self.room = room
+
+    @classmethod
+    def from_event(self, event):
+        start_dt = datetime.datetime.strptime(event['start']['dateTime'], self.BOOKING_DATE_FORMAT)
+        end_dt = datetime.datetime.strptime(event['end']['dateTime'], self.BOOKING_DATE_FORMAT)
+
+        room = event2room(event)
+        # TODO - parse the number of people and other info for the booking.py-created bookings
+
+        return Booking(start_dt, end_dt, room)
+
+    def public_object(self):
+        return {
+            'start': self.start_dt.strftime(self.BOOKING_DATE_FORMAT),
+            'end': self.end_dt.strftime(self.BOOKING_DATE_FORMAT),
+            'room': kocherga.room.pretty(self.room),
+        }
 
 def day_bookings(date):
     dt = datetime.datetime.combine(date, datetime.datetime.min.time())
@@ -18,40 +48,35 @@ def day_bookings(date):
         timeMax=(dt + datetime.timedelta(days=1)).isoformat() + 'Z',
     )
 
-    bookings = []
-
-    for event in events:
-        bookings.append({
-            'start': event['start']['dateTime'],
-            'end': event['end']['dateTime'],
-            'room': event2room(event)
-        })
+    bookings = [
+        Booking.from_event(event)
+        for event in events
+    ]
 
     return bookings
 
 
-def check_availability(startDt, endDt, room):
-    if not startDt.date() == endDt.date():
+def check_availability(start_dt, end_dt, room):
+    if not start_dt.date() == end_dt.date():
         raise PublicError('Starting date and ending date should be equal.')
 
-    _validate_room(room)
+    room = kocherga.room.normalize(room, fail=True)
+    print(room)
 
-    date = startDt.date()
+    date = start_dt.date()
 
     bookings = day_bookings(date)
     for booking in bookings:
-        if booking['room'] not in (room, 'unknown'):
+        if booking.room not in (room, kocherga.room.unknown):
             continue # irrelevant
 
-        BOOKING_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
-        bookingStartDt = datetime.strptime(booking.start, BOOKING_DATE_FORMAT)
-        bookingEndDt = datetime.strptime(booking.end, BOOKING_DATE_FORMAT)
+        if end_dt < booking.start_dt:
+            continue
 
-        if endDt < bookingStartDt:
-            return False
+        if start_dt > booking.end_dt:
+            continue
 
-        if startDt < bookingStartDt:
-            return False
+        return False
 
     return True
 
@@ -60,7 +85,8 @@ def add_booking(date, room, people, startTime, endTime, contact):
     # validate
     dt = datetime.datetime.strptime(date, '%Y-%m-%d')
 
-    _validate_room(room)
+    room = kocherga.room.normalize(room)
+    room = kocherga.room.pretty(room)
 
     people = str(people) # accept either int or str
 
@@ -77,6 +103,9 @@ def add_booking(date, room, people, startTime, endTime, contact):
     if len(contact) == 0:
         raise PublicError('Contact is required.')
 
+    if dt < datetime.datetime.today():
+        raise PublicError('The past is already gone.')
+
     def parse_time(t):
 
         timeParsed = re.match(r'(\d\d):(\d\d)$', t)
@@ -92,7 +121,9 @@ def add_booking(date, room, people, startTime, endTime, contact):
         raise PublicError("Event should end after it starts.")
 
     # check availability
-    bookings = check_availability(startDt, endDt, room)
+    available = check_availability(startDt, endDt, room)
+    if not available:
+        raise PublicError('This room is not available at that time.')
 
     # insert
     event = {
@@ -105,7 +136,8 @@ def add_booking(date, room, people, startTime, endTime, contact):
             'dateTime': endDt.strftime(MSK_DATE_FORMAT),
         },
     }
-    api().events().insert(
-        calendarId=CALENDAR,
+    result = kocherga.events.api().events().insert(
+        calendarId=kocherga.events.CALENDAR,
         body=event,
     ).execute()
+    return result

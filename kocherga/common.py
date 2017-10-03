@@ -45,5 +45,3 @@ class PublicError(Exception):
 
     def __repr__(self):
         return "PublicError('{}')".format(self.message)
-
-ROOMS = ['лекционная', 'гэб', 'китайская', 'летняя']
