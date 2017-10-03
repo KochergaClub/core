@@ -140,7 +140,7 @@ def create_app(DEV):
     @app.route('/rooms')
     def rooms():
         return jsonify([
-            kocherga.room.pretty(room)
+            kocherga.room.details(room)
             for room in kocherga.room.all_rooms
         ])
 

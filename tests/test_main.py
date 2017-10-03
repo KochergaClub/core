@@ -9,3 +9,5 @@ def test_bookings(client):
 def test_rooms(client):
     res = client.get('/rooms')
     assert res.status_code == 200
+    assert len(res.json) == 4
+    assert type(res.json[0]) == dict

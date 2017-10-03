@@ -31,3 +31,28 @@ def normalize(maybe_room, fail=True):
         raise _panic(maybe_room)
     else:
         return None
+
+def details(room):
+    DETAILS = {
+        'лекционная': {
+            'max_people': 40,
+            'area': 50,
+        },
+        'гэб': {
+            'max_people': 20,
+            'area': 30,
+        },
+        'летняя': {
+            'max_people': 5,
+            'area': 9,
+        },
+        'китайская': {
+            'max_people': 12,
+            'area': 17,
+        },
+    }
+
+    validate(room)
+    result = DETAILS[room].copy()
+    result['name'] = pretty(room)
+    return result

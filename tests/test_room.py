@@ -38,3 +38,11 @@ class TestNormalize:
     def test_normalize_room_default_fail(self):
         with pytest.raises(PublicError, match='Unknown room'):
             kocherga.room.normalize('Зимняя')
+
+class TestDetails:
+    def test(self):
+        with pytest.raises(PublicError, match='Unknown room'):
+            assert kocherga.room.details('blah')
+
+    def test(self):
+        assert kocherga.room.details('летняя')['area'], 9
