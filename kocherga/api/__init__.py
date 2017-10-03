@@ -136,6 +136,13 @@ def create_app(DEV):
 
         return send_file(filename)
 
+    ################## ROOMS ###########################
+    @app.route('/rooms')
+    def rooms():
+        return jsonify([
+            kocherga.room.pretty(room)
+            for room in kocherga.room.all_rooms
+        ])
 
     ################## BOOKINGS ########################
 
