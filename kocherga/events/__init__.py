@@ -93,7 +93,7 @@ def is_private(event):
         return False
 
     for keyword in ('бронь', 'аренда', 'инвентаризация'):
-        if keyword in event['summary'].lower():
+        if keyword in event.get('summary', '').lower():
             return True
     return False
 
@@ -107,7 +107,7 @@ def event2room(event):
 
     # TODO - move to kocherga.room.look_for_room_in_string(...)?
     for room in kocherga.room.all_rooms:
-        if room in event['summary'].lower():
+        if room in event.get('summary', '').lower():
             return room # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
 
     return kocherga.room.unknown
