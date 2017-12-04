@@ -144,6 +144,11 @@ def create_app(DEV):
             for room in kocherga.room.all_rooms
         ])
 
+    ################## SENSORS ###########################
+    @app.route('/sensors/<key>', methods=['POST'])
+    def add_sensor_value(key):
+        print(key, request.data)
+
     ################## BOOKINGS ########################
 
     @app.route('/bookings/<date_str>')
