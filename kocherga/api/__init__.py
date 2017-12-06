@@ -1,4 +1,5 @@
 import json
+import logging
 import os, sys
 from functools import wraps
 from datetime import datetime
@@ -9,9 +10,10 @@ from flask_cors import CORS
 
 import kocherga.events
 import kocherga.events.booking
-from kocherga.common import PublicError, image_storage
-import kocherga.common
+from kocherga.error import PublicError
 from datetime import datetime, timedelta
+
+from kocherga.images import image_storage
 
 ok = {'result': 'ok'}
 
@@ -19,6 +21,9 @@ def create_app(DEV):
     app = Flask(__name__)
     if DEV:
         app.debug = True
+        app.logger.setLevel(logging.DEBUG)
+    else:
+        app.logger.setLevel(logging.INFO)
     app.config['JSON_AS_ASCII'] = False
     app.config['JSONIFY_MIMETYPE'] = 'application/json; charset=utf-8'
     CORS(app)
@@ -147,7 +152,8 @@ def create_app(DEV):
     ################## SENSORS ###########################
     @app.route('/sensors/<key>', methods=['POST'])
     def add_sensor_value(key):
-        print(key, request.data)
+        app.logger.info('[sensor value] {}: {}'.format(key, request.data))
+        return jsonify({'ok': 1})
 
     ################## BOOKINGS ########################
 
