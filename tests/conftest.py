@@ -1,7 +1,6 @@
-import kocherga.api
+import kocherga.api.app
 import pytest
 
 @pytest.fixture
 def app():
-    app = kocherga.api.create_app(DEV=True)
-    return app
+    return kocherga.api.app.create_app(DEV=True)
