@@ -10,6 +10,7 @@ import kocherga.events.booking
 from kocherga.error import PublicError
 from datetime import datetime, timedelta
 
+import kocherga.api.routes.auth
 import kocherga.api.routes.events
 import kocherga.api.routes.rooms
 import kocherga.api.routes.sensors
@@ -37,7 +38,7 @@ def create_app(DEV):
         response.status_code = error.status_code
         return response
 
-    for route_name in ('events', 'rooms', 'sensors', 'bookings'):
+    for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings'):
         route = getattr(kocherga.api.routes, route_name)
         app.register_blueprint(route.bp)
 

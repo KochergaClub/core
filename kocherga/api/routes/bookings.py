@@ -4,6 +4,7 @@ from datetime import datetime
 
 from kocherga.error import PublicError
 import kocherga.events.booking
+from kocherga.api.auth import auth
 
 bp = Blueprint('bookings', __name__)
 
@@ -21,6 +22,7 @@ def bookings(date_str):
     ])
 
 @bp.route('/bookings', methods=['POST'])
+@auth('any')
 def add_booking():
     data = {}
     payload = request.get_json() or request.form

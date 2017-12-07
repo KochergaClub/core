@@ -8,3 +8,5 @@ Pillow
 requests
 pytest
 pytest-flask
+google-auth
+pyjwt
