@@ -1,4 +1,4 @@
-import sys
+import os, sys
 from functools import wraps
 import datetime
 import jwt
@@ -12,7 +12,7 @@ from kocherga.error import PublicError
 
 import kocherga.team
 
-JWT_SECRET_KEY='k9h5UbEJe4yyFg'
+JWT_SECRET_KEY=os.environ['JWT_SECRET_KEY']
 
 # FIXME Potential security issue - any email can be checked for team membership.
 def check_email_for_team(email, team):
