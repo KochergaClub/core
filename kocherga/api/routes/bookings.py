@@ -5,6 +5,7 @@ from datetime import datetime
 from kocherga.error import PublicError
 import kocherga.events.booking
 from kocherga.api.auth import auth
+from kocherga.api.common import ok
 
 bp = Blueprint('bookings', __name__)
 
