@@ -74,7 +74,7 @@ def google_auth():
         payload={
             'email': email,
             'source': 'google',
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(months=1)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=50)
         },
         key=JWT_SECRET_KEY
     )
