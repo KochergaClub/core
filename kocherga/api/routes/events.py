@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from kocherga.error import PublicError
 import kocherga.events.db
 import kocherga.events.event
+import kocherga.events.announce
 from kocherga.images import image_storage
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
@@ -32,12 +33,18 @@ def set_property(event_id, key):
     kocherga.events.db.set_event_property(event_id, key, value)
     return jsonify(ok)
 
-#@bp.route('/event/<event_id>/post/timepad', methods=['POST'])
-#@auth('kocherga')
-#def post_timepad(event_id):
-#    kocherga.events.post_to_timepad(event_id)
-#    return jsonify(ok)
-#
+# Idea: workflows for announcements.
+# /workflow/timepad -> returns { 'steps': ['post-draft', 'publish'], 'current-step': ... }
+# /workflow/timepad/post-draft
+# /workflow/timepad/publish
+
+@bp.route('/event/<event_id>/announce/timepad', methods=['POST'])
+@auth('kocherga')
+def post_timepad(event_id):
+    event = kocherga.events.db.get_event(event_id)
+    timepad_event_id = kocherga.events.announce.post_to_timepad(event)
+    return jsonify(ok)
+
 #@bp.route('/event/<event_id>/check/timepad', methods=['POST'])
 #@auth('kocherga')
 #def check_timepad(event_id):
