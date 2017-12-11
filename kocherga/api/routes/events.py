@@ -43,7 +43,7 @@ def set_property(event_id, key):
 def post_timepad(event_id):
     event = kocherga.events.db.get_event(event_id)
     timepad_event_id = kocherga.events.announce.post_to_timepad(event)
-    return jsonify(ok)
+    return jsonify({ 'timepad_event_id': timepad_event_id })
 
 #@bp.route('/event/<event_id>/check/timepad', methods=['POST'])
 #@auth('kocherga')
