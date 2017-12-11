@@ -1,14 +1,11 @@
 import logging
 import os
 
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, jsonify
 
 from flask_cors import CORS
 
-import kocherga.events
-import kocherga.events.booking
 from kocherga.error import PublicError
-from datetime import datetime, timedelta
 
 import kocherga.api.routes.auth
 import kocherga.api.routes.events

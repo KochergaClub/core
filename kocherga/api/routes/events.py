@@ -3,7 +3,8 @@ from flask import Blueprint, jsonify, request, send_file
 from datetime import datetime, timedelta
 
 from kocherga.error import PublicError
-import kocherga.events
+import kocherga.events.db
+import kocherga.events.event
 from kocherga.images import image_storage
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
@@ -13,44 +14,44 @@ bp = Blueprint('events', __name__)
 @bp.route('/events')
 @auth('kocherga')
 def events():
-    events = kocherga.events.all_future_events()
-    return jsonify(events)
+    events = kocherga.events.db.list_events()
+    return jsonify([e.to_dict() for e in events])
 
 
 @bp.route('/event/<event_id>')
 @auth('kocherga')
 def event(event_id):
-    event = kocherga.events.get_event(event_id)
-    return jsonify(event)
+    event = kocherga.events.db.get_event(event_id)
+    return jsonify(event.to_dict())
 
 
 @bp.route('/event/<event_id>/property/<key>', methods=['POST'])
 @auth('kocherga')
 def set_property(event_id, key):
     value = request.get_json()['value']
-    kocherga.events.set_property(event_id, key, value)
+    kocherga.events.db.set_event_property(event_id, key, value)
     return jsonify(ok)
 
-@bp.route('/event/<event_id>/post/timepad', methods=['POST'])
-@auth('kocherga')
-def post_timepad(event_id):
-    kocherga.events.post_to_timepad(event_id)
-    return jsonify(ok)
-
-@bp.route('/event/<event_id>/check/timepad', methods=['POST'])
-@auth('kocherga')
-def check_timepad(event_id):
-    outcome = kocherga.events.check_timepad(event_id)
-    return 'ok: {}'.format(outcome), 200
+#@bp.route('/event/<event_id>/post/timepad', methods=['POST'])
+#@auth('kocherga')
+#def post_timepad(event_id):
+#    kocherga.events.post_to_timepad(event_id)
+#    return jsonify(ok)
+#
+#@bp.route('/event/<event_id>/check/timepad', methods=['POST'])
+#@auth('kocherga')
+#def check_timepad(event_id):
+#    outcome = kocherga.events.check_timepad(event_id)
+#    return 'ok: {}'.format(outcome), 200
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['POST'])
 @auth('kocherga')
 def upload_event_image(event_id, image_type):
     print('uploading')
-    if image_type not in kocherga.events.IMAGE_TYPES:
+    if image_type not in kocherga.events.event.IMAGE_TYPES:
         raise PublicError('unknown image type {}'.format(image_type))
 
-    if not kocherga.events.get_event(event_id):
+    if not kocherga.events.db.get_event(event_id):
         raise PublicError('event {} not found'.format(event_id)) # actually, get_event() will raise an error, so we'll never get to this point anyway
 
     if 'file' not in request.files:
@@ -64,9 +65,9 @@ def upload_event_image(event_id, image_type):
     print('filename: ' + filename)
     file.save(filename)
 
-    kocherga.events.set_property(
+    kocherga.events.db.set_event_property(
         event_id,
-        kocherga.events.image_flag_property(image_type),
+        kocherga.events.event.image_flag_property(image_type),
         'true'
     )
 
@@ -74,7 +75,7 @@ def upload_event_image(event_id, image_type):
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['GET'])
 def event_image(event_id, image_type):
-    if image_type not in kocherga.events.IMAGE_TYPES:
+    if image_type not in kocherga.events.event.IMAGE_TYPES:
         raise PublicError('unknown image type {}'.format(image_type))
 
     return send_file(image_storage.event_image_file(event_id, image_type))
