@@ -4,10 +4,19 @@ from datetime import datetime
 
 from kocherga.error import PublicError
 import kocherga.events.booking
-from kocherga.api.auth import auth
+from kocherga.api.auth import auth, get_email
 from kocherga.api.common import ok
 
 bp = Blueprint('bookings', __name__)
+
+@bp.route('/my/bookings')
+@auth('any')
+def my_bookings():
+    bookings = kocherga.events.booking.bookings_by_email(get_email())
+    return jsonify([
+        b.public_object()
+        for b in bookings
+    ])
 
 @bp.route('/bookings/<date_str>')
 def bookings(date_str):

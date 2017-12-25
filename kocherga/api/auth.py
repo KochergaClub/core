@@ -26,18 +26,21 @@ def check_email_for_team(email, team):
     else:
         raise PublicError('Unknown team {}'.format(team))
 
+def get_email():
+    header = request.headers.get('Authorization', '')
+
+    if not header.startswith('JWT '):
+        raise PublicError('Authentication required', status_code=401)
+
+    decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY)
+
+    return decoded['email']
+
 
 def auth(team):
     def check_auth():
-        header = request.headers.get('Authorization', '')
-
-        if not header.startswith('JWT '):
-            raise PublicError('Authentication required', status_code=401)
-
-        decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY)
-        print(decoded)
-
-        if check_email_for_team(decoded['email'], team) == True:
+        email = get_email()
+        if check_email_for_team(email, team) == True:
             return True
         raise Exception('check_email_for_team() returned an unknown value')
 
