@@ -34,9 +34,11 @@ def bookings(date_str):
 @bp.route('/bookings', methods=['POST'])
 @auth('any')
 def add_booking():
-    data = {}
+    data = {
+        'contact': get_email()
+    }
     payload = request.get_json() or request.form
-    for field in ('date', 'room', 'people', 'startTime', 'endTime', 'contact'):
+    for field in ('date', 'room', 'people', 'startTime', 'endTime'):
         if field not in payload:
             raise PublicError('field {} is required'.format(field))
         data[field] = str(payload.get(field, ''))
