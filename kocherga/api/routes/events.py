@@ -16,10 +16,17 @@ bp = Blueprint('events', __name__)
 @auth('kocherga')
 def events():
     def arg2date(arg):
-        d = request.args.get('from_date')
+        d = request.args.get(arg)
         if d: d = datetime.strptime(d, '%Y-%m-%d').date()
         return d
 
+    print(
+        dict(
+            date=request.args.get('date'),
+            from_date=arg2date('from_date'),
+            to_date=arg2date('to_date'),
+        )
+    )
     events = kocherga.events.db.list_events(
         date=request.args.get('date'),
         from_date=arg2date('from_date'),
