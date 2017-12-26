@@ -35,7 +35,7 @@ def bookings(date_str):
 @auth('any')
 def add_booking():
     data = {
-        'contact': get_email()
+        'email': get_email()
     }
     payload = request.get_json() or request.form
     for field in ('date', 'room', 'people', 'startTime', 'endTime'):
