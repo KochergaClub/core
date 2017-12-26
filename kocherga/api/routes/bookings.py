@@ -50,8 +50,6 @@ def add_booking():
 @auth('any')
 def delete_booking(event_id):
     email = get_email()
-    payload = request.get_json() or request.form
-
     kocherga.events.booking.delete_booking(event_id, email)
 
     return jsonify(ok)
