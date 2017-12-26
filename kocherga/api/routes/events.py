@@ -15,7 +15,16 @@ bp = Blueprint('events', __name__)
 @bp.route('/events')
 @auth('kocherga')
 def events():
-    events = kocherga.events.db.list_events()
+    def arg2date(arg):
+        d = request.args.get('from_date')
+        if d: d = datetime.strptime('%Y-%m-%d', d)
+        return d
+
+    events = kocherga.events.db.list_events(
+        date=request.args.get('date'),
+        from_date=arg2date('from_date'),
+        to_date=arg2date('to_date'),
+    )
     return jsonify([e.to_dict() for e in events])
 
 
