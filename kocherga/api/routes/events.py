@@ -17,7 +17,7 @@ bp = Blueprint('events', __name__)
 def events():
     def arg2date(arg):
         d = request.args.get('from_date')
-        if d: d = datetime.strptime(d, '%Y-%m-%d')
+        if d: d = datetime.strptime(d, '%Y-%m-%d').date()
         return d
 
     events = kocherga.events.db.list_events(
