@@ -32,7 +32,7 @@ def get_email():
     if not header.startswith('JWT '):
         raise PublicError('Authentication required', status_code=401)
 
-    decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY)
+    decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY, algorithm='HS256')
 
     return decoded['email']
 
@@ -79,6 +79,7 @@ def google_auth():
             'source': 'google',
             'exp': datetime.datetime.utcnow() + datetime.timedelta(weeks=50)
         },
-        key=JWT_SECRET_KEY
+        key=JWT_SECRET_KEY,
+        algorithm='HS256'
     )
     return token.decode('utf-8')
