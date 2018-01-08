@@ -49,6 +49,15 @@ def set_property(event_id, key):
     kocherga.events.db.set_event_property(event_id, key, value)
     return jsonify(ok)
 
+@bp.route('/event/<event_id>', methods=['PATCH'])
+@auth('kocherga')
+def patch_event(event_id):
+    payload = request.get_json() or request.form
+
+    return jsonify(
+        kocherga.events.db.patch_event(event_id, patch)
+    )
+
 # Idea: workflows for announcements.
 # /workflow/timepad -> returns { 'steps': ['post-draft', 'publish'], 'current-step': ... }
 # /workflow/timepad/post-draft
