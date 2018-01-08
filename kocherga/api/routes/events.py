@@ -55,7 +55,7 @@ def patch_event(event_id):
     payload = request.get_json() or request.form
 
     return jsonify(
-        kocherga.events.db.patch_event(event_id, payload)
+        kocherga.events.db.patch_event(event_id, payload).to_dict()
     )
 
 # Idea: workflows for announcements.
