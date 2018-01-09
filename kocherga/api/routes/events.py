@@ -2,7 +2,6 @@ import sys
 from flask import Blueprint, jsonify, request, send_file
 from datetime import datetime, timedelta
 import requests
-import shutil
 
 from kocherga.error import PublicError
 import kocherga.events.db
@@ -113,11 +112,12 @@ def set_event_image_from_url(event_id, image_type):
     payload = request.get_json() or request.form
 
     url = payload['url']
-    stream = requests.get(url).content
+    r = requests.get(url, stream=True)
 
     filename = image_storage.event_image_file(event_id, image_type)
     with open(filename, 'wb') as fh:
-        shutil.copyfileobj(stream, fh)
+        for chunk in r.iter_content(100000):
+            fh.write(chunk)
 
     kocherga.events.db.set_event_property(
         event_id,
