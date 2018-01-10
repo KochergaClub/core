@@ -10,3 +10,4 @@ pytest
 pytest-flask
 google-auth
 pyjwt
+gunicorn

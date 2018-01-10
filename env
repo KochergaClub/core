@@ -1,5 +1,4 @@
 LANG=en_US.UTF-8
 LC_ALL=en_US.UTF-8
-FLASK_APP=kocherga.api.app
 PYTHONPATH=../kocherga-common:.
 JWT_SECRET_KEY='Development JWT secret (REPLACE IN PRODUCTION)'
