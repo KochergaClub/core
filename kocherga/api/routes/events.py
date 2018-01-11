@@ -68,25 +68,20 @@ def patch_event(event_id):
 @auth('kocherga')
 def post_timepad(event_id):
     event = kocherga.events.db.get_event(event_id)
-    timepad_event_id = kocherga.events.announce.post_to_timepad(event)
-    return jsonify({ 'timepad_event_id': timepad_event_id })
+    announcement = kocherga.events.announce.post_to_timepad(event)
+    return jsonify({ 'link': announcement.link })
 
-#@bp.route('/event/<event_id>/check/timepad', methods=['POST'])
-#@auth('kocherga')
-#def check_timepad(event_id):
-#    outcome = kocherga.events.check_timepad(event_id)
-#    return 'ok: {}'.format(outcome), 200
+@bp.route('/event/<event_id>/announce/vk', methods=['POST'])
+@auth('kocherga')
+def post_vk(event_id):
+    event = kocherga.events.db.get_event(event_id)
+    announcement = kocherga.events.announce.post_to_vk(event)
+    return jsonify({ 'link': announcement.link })
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['POST'])
 @auth('kocherga')
 def upload_event_image(event_id, image_type):
     print('uploading')
-    if image_type not in kocherga.events.event.IMAGE_TYPES:
-        raise PublicError('unknown image type {}'.format(image_type))
-
-    if not kocherga.events.db.get_event(event_id):
-        raise PublicError('event {} not found'.format(event_id)) # actually, get_event() will raise an error, so we'll never get to this point anyway
-
     if 'file' not in request.files:
         raise PublicError('Expected a file')
     file = request.files['file']
@@ -94,15 +89,7 @@ def upload_event_image(event_id, image_type):
     if file.filename == '':
         raise PublicError('No filename')
 
-    filename = image_storage.event_image_file(event_id, image_type)
-    print('filename: ' + filename)
-    file.save(filename)
-
-    kocherga.events.db.set_event_property(
-        event_id,
-        kocherga.events.event.image_flag_property(image_type),
-        'true'
-    )
+    kocherga.events.db.add_image(event_id, image_type, file.stream)
 
     return jsonify(ok)
 

@@ -1,5 +1,10 @@
-import kocherga.api.app
 import pytest
+import os
+
+os.environ['TIER'] = 'dev'
+os.environ['JWT_SECRET_KEY'] = 'testkey'
+
+import kocherga.api.app
 
 @pytest.fixture
 def app():
