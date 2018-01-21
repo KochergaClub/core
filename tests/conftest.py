@@ -1,21 +1,80 @@
 import pytest
 import os
-import json
-from flask import Response
+import os.path
+from datetime import datetime, timedelta
 
 os.environ['TIER'] = 'dev'
-os.environ['JWT_SECRET_KEY'] = 'testkey'
 
-import kocherga.api.app
+from kocherga.events.event import Event
+import kocherga.events.db
 
-class TestResponse(Response):
-    @property
-    def json(self):
-        return json.loads(self.data)
+@pytest.fixture
+def google_object():
+    return {
+        'created': '2017-09-01T17:59:38.000Z',
+        'creator': { 'email': 'mmcleric@gmail.com' },
+        'summary': 'бронь итальянский',
+        'location': 'летняя',
+        'start': {
+            'dateTime': '2017-12-10T10:30:00+03:00',
+        },
+        'end': {
+            'dateTime': '2017-12-10T12:30:00+03:00',
+        },
+        'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
+        'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
+    }
 
-@pytest.fixture('session')
-def api_client():
-    app = kocherga.api.app.create_app(DEV=True)
-    app.response_class = TestResponse
-    # Don't set `app.testing = True` - we want to distinguish PublicError from generic Exceptions to check for information leaks. Eventually.
-    return app.test_client()
+@pytest.fixture(scope='session')
+def image_file():
+    return os.path.join(os.path.dirname(__file__), 'images', 'vk')
+
+@pytest.fixture(scope='session')
+def event(image_file):
+    dt = datetime.today() + timedelta(days=3)
+    event = Event(
+        start_dt=dt,
+        end_dt=dt + timedelta(hours=1),
+        title='Элиезер проповедь',
+        description='chicken chicken chicken. chicken?\n\nchicken chicken chicken.',
+        location='ГЭБ',
+        props={
+            'vk_group': 159971736,
+            'has_vk_image': True,
+        },
+    )
+    event = kocherga.events.db.insert_event(event)
+
+    with open(image_file, 'rb') as fh:
+        kocherga.events.db.add_image(event.google_id, 'vk', fh)
+
+    yield event
+
+    kocherga.events.db.delete_event(event.google_id)
+
+@pytest.fixture(scope='session')
+def minimal_event():
+    dt = datetime.today() + timedelta(days=1)
+    event = Event(
+        start_dt=dt,
+        end_dt=dt + timedelta(hours=1),
+        title="бронь Летняя",
+    )
+    event = kocherga.events.db.insert_event(event)
+    yield event
+
+    kocherga.events.db.delete_event(event.google_id)
+
+@pytest.fixture
+def event_for_edits():
+    dt = datetime.today() + timedelta(days=2)
+    event = Event(
+        start_dt=dt,
+        end_dt=dt + timedelta(hours=1),
+        title="title doesn't matter",
+        description="description doesn't matter"
+    )
+    event = kocherga.events.db.insert_event(event)
+    yield event
+
+    kocherga.events.db.delete_event(event.google_id)
