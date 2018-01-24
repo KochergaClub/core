@@ -28,3 +28,8 @@ def test_rooms(api_client):
     assert res.status_code == 200
     assert len(res.json) == 4
     assert type(res.json[0]) == dict
+
+def test_now(api_client):
+    res = api_client.get('/people/now')
+    assert res.status_code == 200
+    assert type(res.json['now']), int
