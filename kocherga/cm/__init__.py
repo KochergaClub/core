@@ -31,15 +31,26 @@ def get_cookies():
     cookies.update(cookies_dict)
     return cookies
 
+def now_count():
+    r = requests.get(DOMAIN, cookies=get_cookies())
+    r.encoding = 'utf-8'
+    match = re.search(r'Посетителей сейчас в зале: <b>(\d+)</b>', r.text)
+    if not match:
+        raise Exception("Failed to parse cafe-manager data " + r.text)
+    result = int(match.group(1))
+    return result
+
 def load_customers():
     url = DOMAIN + '/customer/export/'
 
+    customers = []
     with requests.get(url, cookies=get_cookies(), stream=True) as r:
         r.raise_for_status()
 
-        customer_reader = csv.reader(StringIO(r.content.decode('utf-8')))
+        customer_reader = csv.DictReader(StringIO(r.content.decode('utf-8')), delimiter=';')
         for row in customer_reader:
-            print(row)
+            customers.append(row)
+    return customers
 
 def add_customer(card_id, first_name, last_name, email):
     url = DOMAIN + '/customer/new/'
