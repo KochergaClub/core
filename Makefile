@@ -1,6 +1,6 @@
 deploy:
 	git push
-	ssh -A berekuk.ru 'cd /srv/kocherga-api && git pull && make install-common && sudo systemctl restart kocherga-api'
+	ssh -A api.kocherga.club 'cd /srv/kocherga-api && git pull && make install-common && sudo systemctl restart kocherga-api'
 
 install-common:
 	python3 -mvenv venv
