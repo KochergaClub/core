@@ -32,7 +32,7 @@ def get_cookies():
     return cookies
 
 def now_count():
-    r = requests.get(DOMAIN, cookies=get_cookies())
+    r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
     r.encoding = 'utf-8'
     match = re.search(r'Посетителей сейчас в зале: <b>(\d+)</b>', r.text)
     if not match:
