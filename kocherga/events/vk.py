@@ -84,10 +84,7 @@ def create(event):
     tail = 'Встреча пройдёт в {}, в @kocherga_club (антикафе Кочерга). Оплата участия — по тарифам антикафе: 2,5 руб./минута.'.format(date_string)
 
     if timepad_link:
-        tail += 'Регистрация: {}'.format(
-            date_string,
-            timepad_link
-        )
+        tail += 'Регистрация: {}'.format(timepad_link)
 
     photo_id = upload_wall_image(group_id, image_file)
 
