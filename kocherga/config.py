@@ -1,5 +1,5 @@
 import os
-import os.path
+from pathlib import Path
 import datetime
 import json
 
@@ -13,25 +13,25 @@ def is_dev():
 
 def config_dir():
     override = os.environ.get('CONFIG_DIR')
-    if override: return override
+    if override: return Path(override)
 
     tier = os.environ.get('TIER', 'prod')
 
     if is_dev():
         if tier == 'dev':
-            return '/Users/berekuk/coding/kocherga/config-dev'
+            return Path('/Users/berekuk/coding/kocherga/config-dev')
         elif tier == 'prod':
-            return '/Users/berekuk/coding/kocherga/config'
+            return Path('/Users/berekuk/coding/kocherga/config')
         else:
             raise Exception('Unknown tier {}'.format(tier))
     else:
         if tier == 'prod':
-            return '/data/kocherga/config'
+            return Path('/data/kocherga/config')
         else:
             raise Exception('Unknown tier {}'.format(tier))
 
 def main_config_file():
-    return os.path.join(config_dir(), 'config.json')
+    return Path(config_dir()) / 'config.json'
 
 CONFIG = None
 def config():
@@ -47,14 +47,13 @@ def config():
 # Whenever possible, powerful secrets should be limited and scoped in the minimal portions of our code.
 # (E.g., don't share a google spreadsheet with all passwords with Ludwig. Create separate service accounts for each service.)
 def secrets_dir():
-    return os.path.join(config_dir(), 'secrets')
+    return Path(config_dir()) / 'secrets'
 
 def web_root():
     return config()['web_root']
 
 def image_storage_dir():
     return config()['image_storage_dir']
-    # return '/srv/kocherga-api/upload'
 
 def google_calendar_id():
     return config()['google_calendar_id']

@@ -1,4 +1,4 @@
-import os.path
+from pathlib import Path
 
 import dateutil.parser
 import hashlib
@@ -106,7 +106,7 @@ class Event:
             return None
 
         filename = image_storage.event_image_file(self.google_id, image_type)
-        if check_if_exists and not os.path.isfile(filename):
+        if check_if_exists and not Path(filename).is_file():
             return None
 
         return filename
