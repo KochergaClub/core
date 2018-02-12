@@ -21,23 +21,28 @@ MAX_BOOKING_DELAY = datetime.timedelta(days=60)
 
 class Booking:
 
-    def __init__(self, start_dt, end_dt, room, event_id=None):
+    def __init__(self, start_dt, end_dt, room, people, event_id=None):
         self.start_dt = start_dt
         self.end_dt = end_dt
         kocherga.room.validate(room)
         self.room = room
+        self.people = people
         self.event_id = event_id
 
     @classmethod
     def from_event(self, event):
-        # TODO - parse the number of people and other info for the booking.py-created bookings
-        return Booking(event.start_dt, event.end_dt, event.get_room(), event.google_id)
+        match = re.match(r'Бронь \w+, (\d+) человек', event.title)
+        people = None
+        if match:
+            people = match.group(1)
+        return Booking(event.start_dt, event.end_dt, event.get_room(), people, event.google_id)
 
     def public_object(self):
         return {
             'start': self.start_dt.strftime(MSK_DATE_FORMAT),
             'end': self.end_dt.strftime(MSK_DATE_FORMAT),
             'room': kocherga.room.pretty(self.room),
+            'people': self.people,
             'event_id': self.event_id,
         }
 
