@@ -15,3 +15,5 @@ gunicorn
 Flask
 Flask-BasicAuth
 flask-cors
+mwclient
+termcolor
