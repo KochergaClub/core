@@ -5,7 +5,7 @@ import kocherga.google
 import kocherga.config
 import kocherga.slack
 
-TeamMember = namedtuple('TeamMember', ['short_name', 'full_name', 'email', 'role', 'status', 'vk', 'slack_id', 'gender'])
+TeamMember = namedtuple('TeamMember', ['short_name', 'full_name', 'email', 'role', 'status', 'vk', 'slack_id', 'gender', 'cm_login'])
 
 def _fetch_members(sc=None):
     gc = kocherga.google.gspread_client()
@@ -29,6 +29,7 @@ def _fetch_members(sc=None):
         return TeamMember(
             short_name=row['Имя'],
             full_name=row['Имя, фамилия'],
+            cm_login=row['Логин в КМ'],
             email=primary_email,
             slack_id=slack_id,
             role=row['Роль'],
