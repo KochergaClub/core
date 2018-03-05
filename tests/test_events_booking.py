@@ -1,10 +1,12 @@
 import pytest
+
+from datetime import datetime, timedelta
+
 import kocherga.events.booking
 import kocherga.events.google
 from kocherga.events.event import Event
 from kocherga.error import PublicError
 from kocherga.config import TZ
-from datetime import datetime, timedelta
 
 @pytest.fixture
 def event1():
@@ -44,11 +46,11 @@ def event1():
 class TestBooking:
 
     def test_constructor(self):
-        assert type(kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб')) == kocherga.events.booking.Booking
+        assert type(kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб', 5)) == kocherga.events.booking.Booking
 
     def test_constructor_wrong_room(self):
         with pytest.raises(PublicError, match='Unknown room'):
-            kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'блаблабла')
+            kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'блаблабла', 5)
 
     def test_from_event(self, event1):
         booking = kocherga.events.booking.Booking.from_event(event1)
@@ -78,12 +80,12 @@ class TestCheckAvailability:
             kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(days=1), 'гэб')
 
     def test_normal(self):
-        result = kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ), 'лекционная')
+        result = kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб')
         assert result == True
 
     def test_unknown_room(self):
         with pytest.raises(PublicError, match='Unknown room blah.'):
-            kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ), 'blah')
+            kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'blah')
 
 class TestAddBooking:
     def test_no_params(self):

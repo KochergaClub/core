@@ -17,9 +17,6 @@ class TestTeam:
         assert len(members) >= 3
         assert len([m for m in members if m.status == 'Текущий']) != len(members)
 
-    def test_slack_ids(self):
-        assert kocherga.team.check_slack_ids() >= 1
-
     def test_member_by_short_name(self):
         assert kocherga.team.find_member_by_short_name('Скотт')
 

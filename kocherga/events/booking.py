@@ -82,6 +82,8 @@ def check_availability(start_dt, end_dt, room):
         if start_dt >= booking.end_dt:
             continue
 
+        print('collision with:')
+        print(vars(booking))
         return False
 
     return True

@@ -57,3 +57,11 @@ def find_member_by_short_name(short_name):
 def find_member_by_email(email):
     # TODO - find by the alternative emails too
     return next(filter(lambda m: m.email.lower() == email.lower(), members()), None)
+
+def add_member(email, role):
+    # add to wiki
+    # add to slack
+    # add to CM
+    # add to Google Drive
+    # add to calendar
+    raise Exception('Not implemented yet')
