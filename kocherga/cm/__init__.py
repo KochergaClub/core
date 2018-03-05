@@ -75,6 +75,9 @@ class Order(namedtuple('Order', order_csv_fields())):
             return None
         return self._date_and_time_to_dt(self.end_date, self.end_time)
 
+OrderHistoryItem = namedtuple('OrderHistoryItem', 'operation dt login')
+
+User = namedtuple('User', 'id login name level')
 
 def get_new_cookies(login, password):
     r = requests.post(
@@ -116,7 +119,7 @@ def load_customers():
     with requests.get(url, cookies=get_cookies(), stream=True) as r:
         r.raise_for_status()
 
-        customer_reader = csv.DictReader(StringIO(r.content.decode('utf-8')), delimiter=';')
+        customer_reader = csv.DictReader(StringIO(r.content.decode('utf-8-sig')), delimiter=';')
         for row in customer_reader:
             customers.append(row)
     return customers
@@ -133,6 +136,72 @@ def load_orders():
             order = Order(row)
             orders.append(order)
     return orders
+
+def load_users():
+    url = DOMAIN + '/config/'
+
+    r = requests.get(url, cookies=get_cookies())
+
+    html = r.content.decode('utf-8')
+
+    fragments = re.findall(r"""<form method='post' action='/config/user/(\d+)/edit/#user'>(.*?)</form>""", html, flags=re.DOTALL)
+
+    users = []
+    for (user_id_str, form_html) in fragments:
+        user_id = str(user_id_str)
+        login_match = re.search(r"<input name='login' maxlength='\d+' value='(.*?)'", form_html)
+        if login_match:
+            login = login_match.group(1)
+        else:
+            if 'admin' not in form_html:
+                raise Exception('bad html')
+            login = 'admin'
+
+        name = re.search(r"<input name='name'.*? value='(.*?)'", form_html).group(1)
+
+        if login == 'admin':
+            level = 'Администратор'
+        else:
+            level = re.search(r"<option value=\d+ selected>(.*?)</option>", form_html).group(1)
+
+        user = User(
+            id=user_id,
+            login=login,
+            name=name,
+            level=level,
+        )
+        users.append(user)
+
+    return users
+
+def load_order_history(order_id):
+    url = f'{DOMAIN}/order/{order_id}'
+    r = requests.get(url, cookies=get_cookies())
+
+    match = re.search(r'История изменения заказа:\s*<div.*?>(.*?)</div>', r.content.decode('utf-8'), re.DOTALL)
+    if not match:
+        raise Exception('Failed to parse CM html, update the parsing code')
+
+    users = load_users()
+    username2login = { u.name: u.login for u in users }
+
+    history_html = match.group(1)
+    items = []
+    for item_html in re.findall(r'<li>(.*?)</li>', history_html):
+        match = re.match(r'(.*?)\s*<i>(\d+.\d+.\d+ \d+:\d+) \((.*?)\)</i>', item_html)
+        if not match:
+            raise Exception(f'Failed to parse CM html item "{item_html}", update the parsing code')
+        (operation, date_str, username) = match.groups()
+
+        item = OrderHistoryItem(
+            operation=operation,
+            dt=datetime.strptime(date_str, '%d.%m.%Y %H:%M'),
+            login=username2login[username],
+        )
+        items.append(item)
+
+    return items
+
 
 def add_customer(card_id, first_name, last_name, email):
     url = DOMAIN + '/customer/new/'
