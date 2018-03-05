@@ -1,11 +1,80 @@
-import csv
 import re
 from io import StringIO
+
+from collections import namedtuple, OrderedDict
+from datetime import datetime
+import csv
 import requests
 
 import kocherga.secrets
 
 DOMAIN = kocherga.secrets.plain_secret('cafe_manager_server')
+
+order_fields = OrderedDict([
+    ('order_id',             { 'ru_title': 'Номер заказа', 'type': 'int', }),
+    ('card_id',              { 'ru_title': 'Номер карты', 'type': 'int', }),
+    ('start_date',           { 'ru_title': 'Дата начала', 'type': 'str', }),
+    ('start_time',           { 'ru_title': 'Время начала', 'type': 'str', }),
+    ('end_date',             { 'ru_title': 'Дата конца', 'type': 'str', }),
+    ('end_time',             { 'ru_title': 'Время конца', 'type': 'str', }),
+    ('people',               { 'ru_title': 'Кол-во человек', 'type': 'int', }),
+    ('visit_length',         { 'ru_title': 'Продолжительность посещения, мин', 'type': 'int', }),
+    ('full_visit_length',    { 'ru_title': 'Полная продолжительность посещения, мин', 'type': 'int', }),
+    ('order_value',          { 'ru_title': 'Сумма заказа', 'type': 'int', }),
+    ('time_value',           { 'ru_title': 'Стоимость времени', 'type': 'int', }),
+    ('stuff_value',          { 'ru_title': 'Стоимость товаров', 'type': 'int', }),
+    ('payment_type',         { 'ru_title': 'Тип оплаты', 'type': 'str', }),
+    ('is_fixed',             { 'ru_title': 'Фикс', 'type': 'str', }),
+    ('client_name',          { 'ru_title': 'Клиент', 'type': 'str', }),
+    ('manager',              { 'ru_title': 'Менеджер', 'type': 'str', }),
+    ('tariff_time',          { 'ru_title': 'Тарификация по времени', 'type': 'str', }),
+    ('tariff_plan',          { 'ru_title': 'Тарифный план', 'type': 'str', }),
+    ('comment',              { 'ru_title': 'Комментарии', 'type': 'str', }),
+    ('history',              { 'ru_title': 'История', 'type': 'str', }),
+    ('start_dt',             { 'type': 'datetime' }),
+    ('end_dt',               { 'type': 'datetime' }),
+])
+
+def order_csv_fields():
+    return [f for f in order_fields.keys() if 'ru_title' in order_fields[f]]
+
+class Order(namedtuple('Order', order_csv_fields())):
+
+    def __new__(cls, csv_row):
+        params = {}
+        for key in order_fields:
+            ru_title = order_fields[key].get('ru_title', None)
+            if not ru_title:
+                continue
+
+            value = csv_row[ru_title]
+            if order_fields[key]['type'] == 'int':
+                if value == '':
+                    value = None
+                else:
+                    value = int(float(value))
+
+            params[key] = value
+
+        return super(Order, cls).__new__(cls, **params)
+
+
+    def _date_and_time_to_dt(self, date, time):
+        return datetime.strptime(
+            '{} {}'.format(date, time),
+            "%d.%m.%Y %H:%M"
+        )
+
+    @property
+    def start_dt(self):
+        return self._date_and_time_to_dt(self.start_date, self.start_time)
+
+    @property
+    def end_dt(self):
+        if not self.end_date:
+            return None
+        return self._date_and_time_to_dt(self.end_date, self.end_time)
+
 
 def get_new_cookies(login, password):
     r = requests.post(
@@ -51,6 +120,19 @@ def load_customers():
         for row in customer_reader:
             customers.append(row)
     return customers
+
+def load_orders():
+    url = DOMAIN + '/stat/export/'
+
+    orders = []
+    with requests.get(url, cookies=get_cookies(), stream=True) as r:
+        r.raise_for_status()
+
+        csv_reader = csv.DictReader(StringIO(r.content.decode('utf-8-sig')), delimiter=';')
+        for row in csv_reader:
+            order = Order(row)
+            orders.append(order)
+    return orders
 
 def add_customer(card_id, first_name, last_name, email):
     url = DOMAIN + '/customer/new/'
