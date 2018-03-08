@@ -184,6 +184,7 @@ def load_order_history(order_id):
 
     users = load_users()
     username2login = { u.name: u.login for u in users }
+    username2login['Нароттам Паршик'] = username2login['Нароттам Паршиков']
 
     history_html = match.group(1)
     items = []
