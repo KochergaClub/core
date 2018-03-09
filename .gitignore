@@ -3,3 +3,4 @@ __pycache__
 /upload/mailchimp
 /venv
 /.cache
+/env
