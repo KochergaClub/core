@@ -47,6 +47,8 @@ def create_app(DEV):
 
     @app.after_request
     def after_request(response):
+        if request.method == 'OPTIONS':
+            response = current_app.make_default_options_response()
         header = response.headers
         header['Access-Control-Allow-Origin'] = '*'
         return response
