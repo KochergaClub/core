@@ -1,5 +1,5 @@
 import sys
-from flask import Blueprint, jsonify, request, send_file
+from quart import Blueprint, jsonify, request, send_file
 from datetime import datetime, timedelta
 import requests
 
@@ -45,15 +45,15 @@ def event(event_id):
 
 @bp.route('/event/<event_id>/property/<key>', methods=['POST'])
 @auth('kocherga')
-def set_property(event_id, key):
-    value = request.get_json()['value']
+async def set_property(event_id, key):
+    value = (await request.get_json())['value']
     kocherga.events.db.set_event_property(event_id, key, value)
     return jsonify(ok)
 
 @bp.route('/event/<event_id>', methods=['PATCH'])
 @auth('kocherga')
-def patch_event(event_id):
-    payload = request.get_json() or request.form
+async def patch_event(event_id):
+    payload = await request.get_json() or await request.form
 
     return jsonify(
         kocherga.events.db.patch_event(event_id, payload).to_dict()
@@ -80,11 +80,12 @@ def post_vk(event_id):
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['POST'])
 @auth('kocherga')
-def upload_event_image(event_id, image_type):
+async def upload_event_image(event_id, image_type):
     print('uploading')
-    if 'file' not in request.files:
+    files = await request.files
+    if 'file' not in files:
         raise PublicError('Expected a file')
-    file = request.files['file']
+    file = files['file']
 
     if file.filename == '':
         raise PublicError('No filename')
@@ -95,8 +96,8 @@ def upload_event_image(event_id, image_type):
 
 @bp.route('/event/<event_id>/image_from_url/<image_type>', methods=['POST'])
 @auth('kocherga')
-def set_event_image_from_url(event_id, image_type):
-    payload = request.get_json() or request.form
+async def set_event_image_from_url(event_id, image_type):
+    payload = await request.get_json() or await request.form
 
     url = payload['url']
     r = requests.get(url, stream=True)

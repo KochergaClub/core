@@ -3,7 +3,7 @@ from functools import wraps
 import datetime
 import jwt
 
-from flask import request
+from quart import request
 
 import requests
 
@@ -55,10 +55,11 @@ def auth(team):
 
     return decorator
 
-def google_auth():
+async def google_auth():
     CLIENT_ID = '462291115265-7ft6f9ssdpprl899q1v0le90lrto8th9.apps.googleusercontent.com'
-    token = request.args.get('token', '') or request.json.get('token', '')
-    team = request.args.get('team', '') or request.json.get('team', '')
+    request_json = await request.get_json()
+    token = request.args.get('token', '') or request_json.get('token', '')
+    team = request.args.get('team', '') or request_json.get('team', '')
     if not token:
         raise PublicError('token is required')
 

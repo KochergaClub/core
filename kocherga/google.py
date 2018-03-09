@@ -7,6 +7,18 @@ import kocherga.config
 from googleapiclient import discovery
 import gspread
 
+import warnings
+
+def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
+
+    log = file if hasattr(file,'write') else sys.stderr
+    traceback.print_stack(file=log)
+    log.write(warnings.formatwarning(message, category, filename, lineno, line))
+
+warnings.showwarning = warn_with_traceback
+
+warnings.filterwarnings('ignore', '.*key_file, cert_file and check_hostname are deprecated, use a custom context instead')
+
 GOOGLE_CREDENTIALS = kocherga.secrets.json_secret('google_credentials.json')
 
 def credentials():

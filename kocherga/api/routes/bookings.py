@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from quart import Blueprint, jsonify, request
 
 from datetime import datetime
 
@@ -33,11 +33,11 @@ def bookings(date_str):
 
 @bp.route('/bookings', methods=['POST'])
 @auth('any')
-def add_booking():
+async def add_booking():
     data = {
         'email': get_email()
     }
-    payload = request.get_json() or request.form
+    payload = await request.get_json() or await request.form
     for field in ('date', 'room', 'people', 'startTime', 'endTime'):
         if field not in payload:
             raise PublicError('field {} is required'.format(field))

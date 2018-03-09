@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from quart import Blueprint, jsonify
 import kocherga.cm
 
 bp = Blueprint('people', __name__)

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from quart import Blueprint, jsonify
 
 from kocherga.api.common import ok
 import kocherga.api.auth
@@ -6,9 +6,8 @@ import kocherga.api.auth
 bp = Blueprint('auth', __name__)
 
 @bp.route('/auth/google', methods=['POST'])
-def google():
-    token = kocherga.api.auth.google_auth()
-    print(token)
+async def google():
+    token = await kocherga.api.auth.google_auth()
     return jsonify({
         'jwt_token': token,
     })

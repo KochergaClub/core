@@ -2,9 +2,9 @@ import logging
 import os
 from pathlib import Path
 
-from flask import Flask, jsonify
+from quart import Quart, jsonify
 
-from flask_cors import CORS
+#from flask_cors import CORS
 
 from kocherga.error import PublicError
 
@@ -18,7 +18,7 @@ import kocherga.api.routes.templater
 import kocherga.api.common
 
 def create_app(DEV):
-    app = Flask(
+    app = Quart(
         __name__,
         root_path=str(Path(__file__).parent.parent.parent.resolve())
     )
@@ -30,7 +30,7 @@ def create_app(DEV):
         app.logger.setLevel(logging.INFO)
     app.config['JSON_AS_ASCII'] = False
     app.config['JSONIFY_MIMETYPE'] = 'application/json; charset=utf-8'
-    CORS(app)
+    #CORS(app)
 
     ################## COMMON ########################
 
@@ -44,6 +44,12 @@ def create_app(DEV):
     for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings', 'people', 'templater'):
         route = getattr(kocherga.api.routes, route_name)
         app.register_blueprint(route.bp)
+
+    @app.after_request
+    def after_request(response):
+        header = response.headers
+        header['Access-Control-Allow-Origin'] = '*'
+        return response
 
     return app
 

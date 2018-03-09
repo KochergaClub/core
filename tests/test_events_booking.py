@@ -80,12 +80,12 @@ class TestCheckAvailability:
             kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(days=1), 'гэб')
 
     def test_normal(self):
-        result = kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб')
+        result = kocherga.events.booking.check_availability(datetime.now(TZ).replace(hour=18), datetime.now(TZ).replace(hour=19), 'гэб')
         assert result == True
 
     def test_unknown_room(self):
         with pytest.raises(PublicError, match='Unknown room blah.'):
-            kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'blah')
+            kocherga.events.booking.check_availability(datetime.now(TZ).replace(hour=18), datetime.now(TZ).replace(hour=19), 'blah')
 
 class TestAddBooking:
     def test_no_params(self):
