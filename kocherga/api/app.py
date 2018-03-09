@@ -49,8 +49,11 @@ def create_app(DEV):
     async def after_request(response):
         if request.method == 'OPTIONS':
             response = await current_app.make_default_options_response()
-        header = response.headers
-        header['Access-Control-Allow-Origin'] = '*'
+            response.headers['Access-Control-Allow-Methods'] = 'DELETE, GET, POST, PUT'
+            headers = request.headers.get('Access-Control-Request-Headers')
+            if headers:
+                response.headers['Access-Control-Allow-Headers'] = headers
+        response.headers['Access-Control-Allow-Origin'] = '*'
         return response
 
     return app
