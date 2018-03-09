@@ -1,9 +1,16 @@
-`api.kocherga.club` - HTTP API for all kocherga-related things.
+Этот репозиторий включает в себя основной код бекенда Кочерги. В том числе:
 
-# Modules
+* API на Python
+* HTTP API на Quart (асинхронный клон Flask) - тонкая обёртка над Python API.
 
-* kocherga.api.app - the main Flask app
-* kocherga.api.routes.* - Flask blueprints
+# HTTP API
+
+Продакшн работает на `https://api.kocherga.club`.
+
+## Модули
+
+* kocherga.api.app - the main Quart app
+* kocherga.api.routes.* - Quart blueprints
 * kocherga.api.common - some common vars and functions
 * kocherga.api.auth - auth decorators for routes
 
