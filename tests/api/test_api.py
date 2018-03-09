@@ -47,3 +47,9 @@ async def test_now(api_client):
 async def test_templater(api_client):
     res = await api_client.get('/templater/html/mailchimp?start_date=2017-03-01&end_date=2017-03-08')
     assert res.status_code == 200
+
+@pytest.mark.asyncio
+async def test_options(api_client):
+    res = await api_client.options('/rooms')
+    assert res.status_code == 200
+    assert res.headers.get('Access-Control-Allow-Origin') == '*'

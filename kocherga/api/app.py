@@ -46,9 +46,9 @@ def create_app(DEV):
         app.register_blueprint(route.bp)
 
     @app.after_request
-    def after_request(response):
+    async def after_request(response):
         if request.method == 'OPTIONS':
-            response = current_app.make_default_options_response()
+            response = await current_app.make_default_options_response()
         header = response.headers
         header['Access-Control-Allow-Origin'] = '*'
         return response
