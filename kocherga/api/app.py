@@ -2,7 +2,7 @@ import logging
 import os
 from pathlib import Path
 
-from quart import Quart, jsonify, request
+from quart import Quart, jsonify, request, current_app
 
 #from flask_cors import CORS
 
