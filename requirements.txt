@@ -12,9 +12,7 @@ Pillow
 requests
 pyjwt
 gunicorn
-Flask
-Flask-BasicAuth
-flask-cors
+quart
 mwclient
 termcolor
 pandas
