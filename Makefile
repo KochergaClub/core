@@ -17,7 +17,7 @@ install-dev: install-common
 	. ./venv/bin/activate && pip install -r ./requirements-dev.txt
 
 dev:
-	. ./venv/bin/activate && . ./env && JWT_SECRET_KEY=dev FLASK_APP=kocherga.api.app DEV=1 flask run
+	. ./venv/bin/activate && . ./env && JWT_SECRET_KEY=dev QUART_APP=kocherga/api/app.py DEV=1 quart run
 
 test:
 	. ./venv/bin/activate && pytest
