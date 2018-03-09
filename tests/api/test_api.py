@@ -33,3 +33,8 @@ def test_now(api_client):
     res = api_client.get('/people/now')
     assert res.status_code == 200
     assert type(res.json['now']), int
+
+def test_templater(api_client):
+    res = api_client.get('/templater/html/mailchimp')
+    assert res.status_code == 200
+    print(res.data)

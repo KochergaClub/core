@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 from flask import Flask, jsonify
 
@@ -13,10 +14,14 @@ import kocherga.api.routes.rooms
 import kocherga.api.routes.sensors
 import kocherga.api.routes.bookings
 import kocherga.api.routes.people
+import kocherga.api.routes.templater
 import kocherga.api.common
 
 def create_app(DEV):
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        root_path=str(Path(__file__).parent.parent.parent.resolve())
+    )
     if DEV:
         app.debug = True
         app.logger.setLevel(logging.DEBUG)
@@ -36,7 +41,7 @@ def create_app(DEV):
         response.status_code = error.status_code
         return response
 
-    for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings', 'people'):
+    for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings', 'people', 'templater'):
         route = getattr(kocherga.api.routes, route_name)
         app.register_blueprint(route.bp)
 
