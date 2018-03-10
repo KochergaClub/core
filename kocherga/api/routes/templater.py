@@ -39,7 +39,6 @@ async def get_html(args, name):
     return await render_template(f'templater/{name}.html', **args)
 
 @bp.route('/templater/html/<name>')
-@auth('kocherga')
 async def generate_html(name):
     return await get_html(
         get_args(request.args, await request.form, request.headers['Host']),
@@ -47,7 +46,6 @@ async def generate_html(name):
     )
 
 @bp.route('/templater/png/<name>')
-@auth('kocherga')
 async def generate_png(name):
     html = await get_html(
         get_args(request.args, await request.form, request.headers['Host']),
