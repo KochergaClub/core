@@ -165,6 +165,11 @@ class Event:
         }
         d['type'] = 'private' if self.is_private() else 'public'
 
+        if self.master_id:
+            d['master_id'] = self.master_id
+        if self.is_master:
+            d['is_master'] = self.is_master
+
         d['images'] = self.get_images()
 
         return d

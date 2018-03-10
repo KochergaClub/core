@@ -29,6 +29,11 @@ def test_is_private_not_booking(google_object):
     event = Event.from_google(dict(google_object, summary='лекция'))
     assert event.is_private() == False
 
+def test_to_dict(google_object):
+    event = Event.from_google(google_object)
+    assert type(event.to_dict()) == dict
+    print(event.to_dict())
+
 class TestImages:
     def test_get_images(self, google_object):
         event = Event.from_google(google_object)
