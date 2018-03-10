@@ -68,6 +68,9 @@ async def generate_png(name):
         'waitUntil': 'load',
         'timeout': 10000,
     })
+    await page.waitForNavigation({
+        'waitUntil': 'load',
+    })
 
     image_bytes = await page.screenshot()
     await page.close()
