@@ -68,6 +68,7 @@ async def generate_png(name):
         'waitUntil': 'load',
         'timeout': 10000,
     })
+    # attempt to work around pyppeteer bugs
     await page.waitForNavigation({
         'waitUntil': 'load',
     })
