@@ -31,7 +31,7 @@ class ImageStorage:
 
         if not os.path.isfile(filename):
             image_bytes = self.create_mailchimp_image(start_date)
-            with open(filename, 'w') as fh:
+            with open(filename, 'wb') as fh:
                 fh.write(image_bytes)
 
         return filename
