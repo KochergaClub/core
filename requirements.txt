@@ -16,4 +16,4 @@ quart
 mwclient
 termcolor
 pandas
-git+https://github.com/miyakogi/pyppeteer.git@f971a74e24eefb79322f389b82c99cbf29bcc08c
+pyppeteer

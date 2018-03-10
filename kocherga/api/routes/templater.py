@@ -14,7 +14,7 @@ _browser = None
 async def get_browser():
     global _browser
     if not _browser:
-        _browser = await pyppeteer.launch()
+        _browser = pyppeteer.launch()
     return _browser
 
 @bp.app_template_filter()
