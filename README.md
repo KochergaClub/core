@@ -19,6 +19,6 @@
 1. Скачать код kocherga-api.
 2. Получить у кого-нибудь архив с тестовыми конфигами, распаковать конфиги куда-нибудь неважно куда (можно вне репозитория).
 3. Открыть config.json, поправить в нём переменные `image_storage_dir` и `kocherga_db_file`.
-4. Завести virtualenv (`python3 -mvenv venv`), активировать (`. ./venv/bin/activate`), поставить `requirements.txt` через `pip install -r ./requirements.txt`.
+4. Создать virtualenv и поставить зависимости c помощью `make install-dev`.
 5. Путь к конфигам можно передать через `CONFIG_DIR` (логика выбора пути к конфигам находится в `kocherga.config`).
 6. Попробовать запустить pytest, убедиться, что тесты проходятся.
