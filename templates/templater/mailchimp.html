@@ -48,7 +48,7 @@
           {% if start_d.month == end_d.month %}
           {{ start_d.day }} — {{ end_d.day }} {{ months[start_d.month] }}
           {% else %}
-            {{ start_d }} — {{ end_d }}
+            {{ start_d.day }} {{ months[start_d.month] }} — {{ end_d.day }} {{ months[end_d.month] }}
           {% endif %}
         </h2>
       </div>
