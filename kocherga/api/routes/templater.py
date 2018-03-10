@@ -14,7 +14,7 @@ _browser = None
 async def get_browser():
     global _browser
     if not _browser:
-        _browser = pyppeteer.launch()
+        _browser = await pyppeteer.launch()
     return _browser
 
 @bp.app_template_filter()
@@ -64,13 +64,14 @@ async def generate_png(name):
         'height': height,
         'deviceScaleFactor': 2,
     })
+    await page.setContent(html)
+    #await page.waitFor(1000)
+    #await page.waitForNavigation({
+    #    'waitUntil': 'networkidle',
+    #})
     await page.goto(f'data:text/html,{html}', {
-        'waitUntil': 'load',
+        'waitUntil': 'networkidle0',
         'timeout': 10000,
-    })
-    # attempt to work around pyppeteer bugs
-    await page.waitForNavigation({
-        'waitUntil': 'load',
     })
 
     image_bytes = await page.screenshot()
