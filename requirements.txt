@@ -16,3 +16,4 @@ quart
 mwclient
 termcolor
 pandas
+pyppeteer
