@@ -62,6 +62,7 @@ async def generate_png(name):
     await page.setViewport({
         'width': width,
         'height': height,
+        'deviceScaleFactor': 2,
     })
     await page.goto(f'data:text/html,{html}', {
         'waitUntil': 'load',

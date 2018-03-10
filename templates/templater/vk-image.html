@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+     @font-face {
+       font-family: 'Intro';
+       src: local('Intro'), url('/static/fonts/intro.woff2') format('woff2'), url('/static/fonts/intro.woff') format('woff');
+     }
+     * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+     }
+
+     .VkImage {
+       position: relative;
+       width: 550px;
+       padding-bottom: 350px;
+       height: 0;
+
+       font-family: Intro;
+     }
+
+     .VkImage-Main {
+       width: 100%;
+       height: 309px;
+       position: absolute;
+       color: white;
+     }
+
+     .VkImage-Background {
+       position: absolute;
+       width: 100%;
+       height: 100%;
+
+       background-repeat: no-repeat;
+       background-size: cover;
+       background-position: center;
+     }
+
+     .VkImage-Darken {
+       width: 100%;
+       height: 100%;
+       position: absolute;
+       left: 0;
+       background-color: black;
+       opacity: 0.6;
+     }
+
+     .VkImage-Texts {
+       position: absolute;
+       top: 20%;
+       height: 60%;
+
+       text-align: center;
+       width: 100%;
+     }
+
+     .VkImage-Header {
+       font-size: 16px;
+     }
+
+     .VkImage-Title {
+       font-size: 30px;
+       line-height: 1.2em;
+     }
+
+     .VkImage-Line {
+       margin-left: 25%;
+       margin-top: 8px;
+       margin-bottom: 12px;
+       width: 50%;
+       height: 1.5%;
+       background-color: white;
+     }
+
+     .VkImage-Datetime {
+       position: absolute;
+       bottom: 0;
+       width: 100%;
+       text-align: center;
+       font-size: 21px;
+       line-height: 1.2em;
+       color: #eee;
+     }
+
+     .VkImage-Footer {
+       position: absolute;
+       bottom: 0;
+       left: 0;
+       height: 41px;
+       width: 100%;
+
+       background-color: black;
+
+       font-size: 12px;
+       color: #b9b9b9;
+
+       line-height: 1.35em;
+
+       display: flex;
+       flex-direction: row;
+       align-items: center;
+       justify-content: space-between;
+       padding: 0 8px;
+     }
+
+     .VkImage-Footer-Left {
+       display: flex;
+       flex-direction: row;
+       align-items: center;
+     }
+
+     .VkImage-Footer-Left > * + * {
+       margin-left: 6px;
+     }
+
+     .VkImage-Footer img {
+       width: 38px;
+       height: 38px;
+     }
+
+     .VkImage-Links {
+       text-align: right;
+     }
+    </style>
+  </head>
+  <body>
+    {% set d = date | parse_date('%Y-%m-%d') %}
+    {% set months = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'] %}
+    <div class="VkImage">
+      <div class="VkImage-Main">
+        <div class="VkImage-Background" style="background-image: url(&quot;{{ background_image }}&quot;)">&nbsp;</div>
+        <div class="VkImage-Darken"></div>
+        <div class="VkImage-Texts">
+          <div class="VkImage-Header" contenteditable="true">{{ header }}</div>
+          <div class="VkImage-Line"></div>
+          <div class="VkImage-Title" contenteditable="true">{{ title }}</div>
+        </div>
+        <div class="VkImage-Datetime" contenteditable="true">{{ d.day }} {{ months[d.month] }}<br>{{ d.strftime('%A') }}&nbsp;&nbsp;{{ time }}</div>
+      </div>
+      <footer class="VkImage-Footer">
+        <div class="VkImage-Footer-Left">
+          <img src="{{ url_for('static', filename='kocherga-black.png') }}">
+          <div class="VkImage-Address">антикафе «Кочерга», москва, м. Киевская<br>ул. Большая дорогомиловская, д. 5к2</div>
+        </div>
+        <div class="VkImage-Links">kocherga-club.ru<br>vk.com/kocherga_club</div>
+      </footer>
+    </div>
+  </body>
+</html>
+<!-- width=550 height=350 -->
