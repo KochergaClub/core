@@ -3,8 +3,7 @@ deploy:
 	ssh -A api.kocherga.club 'cd /srv/kocherga-api && git pull && make install-common && sudo systemctl restart kocherga-api'
 
 install-common:
-	python3 -mvenv venv
-	. ./venv/bin/activate && pip install -r ./requirements.txt
+  pipenv install
 
 install: install-common
 	sudo cp systemd.service /etc/systemd/system/kocherga-api.service
@@ -14,10 +13,10 @@ install: install-common
 	sudo systemctl restart nginx
 
 install-dev: install-common
-	. ./venv/bin/activate && pip install -r ./requirements-dev.txt
+  pipenv install -d
 
 dev:
-	. ./venv/bin/activate && . ./env.example && QUART_APP=kocherga/api/app.py DEV=1 quart run
+	. ./env.example && QUART_APP=kocherga/api/app.py DEV=1 quart run
 
 test:
-	. ./venv/bin/activate && pytest
+	pytest

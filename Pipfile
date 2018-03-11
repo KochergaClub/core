@@ -1,0 +1,44 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+slackclient = "*"
+markdown = "*"
+sqlalchemy = "*"
+captcha-solver = "*"
+python-dateutil = "*"
+"httplib2" = "*"
+google-api-python-client = "*"
+google-auth = "*"
+"google-auth-httplib2" = "*"
+gspread = "*"
+pillow = "*"
+requests = "*"
+pyjwt = "*"
+gunicorn = "*"
+quart = "*"
+mwclient = "*"
+termcolor = "*"
+pandas = "*"
+pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
+
+
+[dev-packages]
+
+pytest = "*"
+freezegun = "*"
+
+
+[requires]
+
+python_version = "3.6"
+
+
+[pipenv]
+
+keep_outdated = true
