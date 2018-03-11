@@ -1,6 +1,7 @@
 import datetime
 import re
 import asyncio
+import logging
 
 from quart import Blueprint, request, render_template, make_response
 
@@ -57,26 +58,26 @@ async def generate_png(name):
     if match:
         (width, height) = (int(v) for v in match.groups())
 
+    logging.info('getting browser')
     browser = await get_browser()
     page = await browser.newPage()
     await page.setViewport({
         'width': width,
         'height': height,
-        'deviceScaleFactor': 2,
+        'deviceScaleFactor': 2, # retina
     })
-    await page.setContent(html)
-    #await page.waitFor(1000)
-    #await page.waitForNavigation({
-    #    'waitUntil': 'networkidle',
-    #})
+    logging.info('calling goto')
     await page.goto(f'data:text/html,{html}', {
-        'waitUntil': 'networkidle0',
+        'waitUntil': 'load',
         'timeout': 10000,
     })
 
+    logging.info('calling screenshot')
     image_bytes = await page.screenshot()
+    logging.info('calling close')
     await page.close()
 
+    logging.info('calling make_response')
     response = await make_response(image_bytes)
     response.headers['Content-Type'] = 'image/png'
     return response
