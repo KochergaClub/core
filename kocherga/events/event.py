@@ -140,6 +140,9 @@ class Event:
             'true'
         )
 
+    def fb_announce_page(self):
+        return 'https://www.facebook.com/groups/' + self.get_prop('fb_group') or kocherga.config.config()['fb']['main_page']['announce_page']
+
     # dict for the further serialization (e.g. for api.kocherga.club)
     def to_dict(self):
         d = {

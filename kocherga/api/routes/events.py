@@ -78,6 +78,13 @@ def post_vk(event_id):
     announcement = kocherga.events.announce.post_to_vk(event)
     return jsonify({ 'link': announcement.link })
 
+@bp.route('/event/<event_id>/announce/fb', methods=['POST'])
+@auth('kocherga')
+async def post_fb(event_id):
+    event = kocherga.events.db.get_event(event_id)
+    announcement = await kocherga.events.announce.post_to_fb(event)
+    return jsonify({ 'link': announcement.link })
+
 @bp.route('/event/<event_id>/image/<image_type>', methods=['POST'])
 @auth('kocherga')
 async def upload_event_image(event_id, image_type):

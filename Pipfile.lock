@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "01cbb197e1fed0ed488faa9c7158587bb7004c8a56689cf3f2f3f76edb51172b"
+            "sha256": "439762d7af3cf72b721d022c4789da667f01e8b0790fddabc1be61fa59e45b2d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -490,6 +490,12 @@
         }
     },
     "develop": {
+        "aioconsole": {
+            "hashes": [
+                "sha256:7e48faa8f08cf042e65bcb8ce34ee12b62c8f3597e99aadaad96a9072e73769d"
+            ],
+            "version": "==0.1.7"
+        },
         "attrs": {
             "hashes": [
                 "sha256:1c7960ccfd6a005cd9f7ba884e6316b5e430a3f1a6c37c5f87d8b43f83b54ec9",
