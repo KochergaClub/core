@@ -116,9 +116,9 @@ async def create(event, debugging=False):
         # don't confirm
         return page
 
-    await asyncio.gather([
+    await asyncio.gather(
         page.click('[data-testid=event-create-dialog-confirm-button]'),
         page.waitForNavigation()
-    ])
+    )
 
     return FbAnnouncement(page.url)
