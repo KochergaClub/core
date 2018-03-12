@@ -6,6 +6,7 @@ import asyncio
 import pyppeteer
 
 import kocherga.events.db
+import kocherga.events.markup
 import kocherga.config
 import kocherga.secrets
 from kocherga.images import image_storage
@@ -43,19 +44,6 @@ async def select_from_listbox(page, fb_id):
     await page.waitForSelector(selector)
     await page.click(selector)
 
-class Entity:
-    __slots__ = ['name', 'fb_id', 'vk_id']
-
-def parse_entity(entity_str):
-    logging.debug(f'parsing {entity_str}')
-    match = re.match(r'\{\{Entity\|(.*)\}\}$', entity_str)
-    params = match.group(1).split('|')
-    entity = Entity()
-    for param in params:
-        (key, value) = param.split('=', 1)
-        setattr(entity, key, value)
-    return entity
-
 async def fill_entity(page, entity):
     if not entity.name:
         raise Exception('Having a name is a must')
@@ -67,24 +55,21 @@ async def fill_description(page, description):
     details = await page.J('[data-testid=event-create-dialog-details-field]')
     await details.click()
 
-    while len(description):
-        match = re.match(r'\{\{Entity\|.*?\}\}', description)
-        if match:
-            entity = parse_entity(match.group(0))
+    parsed = kocherga.events.markup.parse(description)
+    for part in parsed:
+        if type(part) == str:
+            await page.keyboard.type(part)
+        elif type(part) == kocherga.events.markup.Entity:
             await fill_entity(page, entity)
-            description = re.sub(r'^\{\{Entity\|.*?\}\}', '', description)
-            continue
-
-        if description.startswith(FB_CONFIG['main_page']['autoreplace']['from']):
+        elif type(part) == kocherga.events.markup.SelfMention:
             await page.keyboard.type(FB_CONFIG['main_page']['autoreplace']['to'])
             await select_from_listbox(page, FB_CONFIG['main_page']['id'])
-            description = re.sub('^' + re.escape(FB_CONFIG['main_page']['autoreplace']['from']), '', description)
+        else:
+            raise Exception('unknown part encountered while parsing: ' + str(part))
 
-        await page.keyboard.type(description[0])
-        description = description[1:]
-
-async def create(event):
+async def create(event, debugging=False):
     browser = await pyppeteer.launch(
+        headless=False if debugging else True,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
     )
     print(browser.wsEndpoint)
@@ -126,6 +111,10 @@ async def create(event):
     await fill_date_time(page, event.end_dt)
 
     await fill_description(page, event.description)
+
+    if debugging:
+        # don't confirm
+        return page
 
     await asyncio.gather([
         page.click('[data-testid=event-create-dialog-confirm-button]'),

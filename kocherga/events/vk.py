@@ -59,6 +59,18 @@ def upload_wall_image(group_id, image_file):
 
     return photo_id
 
+def vk_description(description):
+    result = ''
+    parsed = kocherga.events.markup.parse(description)
+    for part in parsed:
+        if type(part) == str:
+            result += part
+        elif type(part) == kocherga.events.markup.Entity:
+            result += f'@{part.vk_id} ({part.name})'
+        elif type(part) == kocherga.events.markup.SelfMention:
+            result += f'@kocherga_club (антикафе Кочерга)'
+
+    return result
 
 def create(event):
 
@@ -91,7 +103,7 @@ def create(event):
     response = kocherga.vk.call('wall.post', {
         'owner_id': -group_id,
         'from_group': 1,
-        'message': event.description + '\n\n***\n' + tail,
+        'message': vk_description(event.description) + '\n\n***\n' + tail,
         'publish_date': int(datetime.now().timestamp()) + 86400,
         'attachments': photo_id,
     })
