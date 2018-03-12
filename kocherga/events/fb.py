@@ -85,7 +85,6 @@ async def fill_description(page, description):
 
 async def create(event):
     browser = await pyppeteer.launch(
-        headless=False,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
     )
     print(browser.wsEndpoint)
