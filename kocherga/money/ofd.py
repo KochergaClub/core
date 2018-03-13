@@ -24,7 +24,7 @@ class CheckType(enum.Enum):
 class OfdDocument(kocherga.db.Base):
     __tablename__ = 'ofd_documents'
     id = Column(Integer, primary_key=True)
-    timestamp = Column('timestamp', DateTime)
+    timestamp = Column('timestamp', Integer)
     cash = Column('cash', Integer)
     ecash = Column('ecash', Integer)
     check_type = Column('check_type', Enum(CheckType))
