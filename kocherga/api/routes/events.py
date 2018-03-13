@@ -3,6 +3,7 @@ from quart import Blueprint, jsonify, request, send_file
 from datetime import datetime, timedelta
 import requests
 import logging
+from werkzeug.contrib.iterio import IterIO
 
 from kocherga.error import PublicError
 import kocherga.events.db
@@ -48,7 +49,7 @@ def event(event_id):
 @auth('kocherga')
 async def set_property(event_id, key):
     value = (await request.get_json())['value']
-    kocherga.events.db.set_event_property(event_id, key, value)
+    kocherga.events.db.get_event(event_id).set_prop(key, value)
     return jsonify(ok)
 
 @bp.route('/event/<event_id>', methods=['PATCH'])
@@ -109,16 +110,9 @@ async def set_event_image_from_url(event_id, image_type):
 
     url = payload['url']
     r = requests.get(url, stream=True)
-
-    filename = image_storage.event_image_file(event_id, image_type)
-    with open(filename, 'wb') as fh:
-        for chunk in r.iter_content(100000):
-            fh.write(chunk)
-
-    kocherga.events.db.set_event_property(
-        event_id,
-        kocherga.events.event.image_flag_property(image_type),
-        'true'
+    kocherga.events.db.get_event(event_id).add_image(
+        image_type,
+        IterIO(r.raw.stream(4096, decode_content=True))
     )
 
     return jsonify(ok)

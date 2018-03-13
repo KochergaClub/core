@@ -40,7 +40,7 @@ async def test_upload_image(api_client, upload):
     import asyncio
     request = quart.wrappers.Request(
         'POST',
-        f'/event/{event.google_id}/image/default',
+        f'/event/{event.google_id}/image/vk',
         {
             'Content-Type': content_type,
             'Content-Length': len(body),
@@ -49,11 +49,29 @@ async def test_upload_image(api_client, upload):
     request.body.set_result(body)
     res = await asyncio.ensure_future(api_client.app.handle_request(request))
     #res = await api_client.post(
-    #    f'/events/{event.google_id}/image/default',
+    #    f'/event/{event.google_id}/image/vk',
     #    headers={
     #        'Content-Type': content_type,
     #    },
     #    data=body,
     #)
+
+    assert b'JFIF' in open(kocherga.events.db.get_event(event.google_id).image_file('vk'), 'rb').read()[:10]
+
+    assert res.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_upload_image_from_url(api_client, upload):
+    event = kocherga.events.db.list_events()[0] # doesn't matter which one
+
+    res = await api_client.post(
+        f'/event/{event.google_id}/image_from_url/default',
+        form={
+            'url': 'https://wiki.admin.kocherga.club/resources/assets/kch.png',
+        }
+    )
+
+    assert b'PNG' in open(kocherga.events.db.get_event(event.google_id).image_file('default'), 'rb').read()[:10]
 
     assert res.status_code == 200

@@ -26,6 +26,7 @@ mwclient = "*"
 termcolor = "*"
 pandas = "*"
 pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
+werkzeug = "*"
 
 
 [dev-packages]

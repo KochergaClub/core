@@ -1,5 +1,4 @@
 # Glue code for posting events and updating databases.
-import kocherga.events.db
 import kocherga.events.timepad
 import kocherga.events.vk
 import kocherga.events.fb
@@ -10,8 +9,7 @@ TIMEPAD_ORGANIZATION = kocherga.config.config()['timepad']
 def post_to_timepad(event):
     timepad_announcement = kocherga.events.timepad.create(event)
 
-    kocherga.events.db.set_event_property(
-        event.google_id,
+    event.set_prop(
         'posted-timepad',
         timepad_announcement.link
     )
@@ -20,8 +18,7 @@ def post_to_timepad(event):
 
 def post_to_vk(event):
     announcement = kocherga.events.vk.create(event)
-    kocherga.events.db.set_event_property(
-        event.google_id,
+    event.set_prop(
         'posted-vk',
         announcement.link
     )
@@ -30,8 +27,7 @@ def post_to_vk(event):
 
 async def post_to_fb(event):
     announcement = await kocherga.events.fb.create(event)
-    kocherga.events.db.set_event_property(
-        event.google_id,
+    event.set_prop(
         'posted-fb',
         announcement.link
     )
