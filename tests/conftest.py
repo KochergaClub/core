@@ -46,7 +46,7 @@ def event(image_file):
     event = kocherga.events.db.insert_event(event)
 
     with open(image_file, 'rb') as fh:
-        kocherga.events.db.add_image(event.google_id, 'vk', fh)
+        event.add_image('vk', fh)
 
     yield event
 

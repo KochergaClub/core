@@ -1,4 +1,5 @@
 from kocherga.events.event import Event
+import kocherga.events.db
 from datetime import datetime, timedelta
 
 class TestEventConstructor:
@@ -39,3 +40,14 @@ class TestImages:
         event = Event.from_google(google_object)
 
         assert event.get_images() is not None
+
+    def test_add_image(self, event_for_edits, image_file):
+        event = event_for_edits
+
+        with open(image_file, 'rb') as fh:
+            event.add_image('vk', fh)
+
+        assert event.image_file('vk')
+
+        event = kocherga.events.db.get_event(event.google_id) # reloading for another check
+        assert event.image_file('vk')

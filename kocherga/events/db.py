@@ -62,23 +62,6 @@ def patch_event(event_id, patch):
 def delete_event(event_id):
     kocherga.events.google.delete_event(event_id)
 
-# Deprecated, use event.add_image instead
-def add_image(event_id, image_type, fh):
-    if image_type not in IMAGE_TYPES:
-        raise PublicError('unknown image type {}'.format(image_type))
-
-    event = get_event(event_id)
-
-    filename = image_storage.event_image_file(event_id, image_type)
-    with open(filename, 'wb') as write_fh:
-        shutil.copyfileobj(fh, write_fh)
-
-    kocherga.events.db.set_event_property(
-        event_id,
-        kocherga.events.event.image_flag_property(image_type),
-        'true'
-    )
-
 # Deprecated, use event.set_prop instead
 def set_event_property(event_id, key, value):
     # Planned future changes: save some or all properties in a local sqlite DB instead.

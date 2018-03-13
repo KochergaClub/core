@@ -42,15 +42,3 @@ class TestPatchEvent:
         patched = kocherga.events.db.patch_event(event.google_id, { 'title': 'blah' })
         assert type(patched) == Event
         assert patched.title == 'blah'
-
-class TestAddImage:
-    def test_add_image(self, event_for_edits, image_file):
-        event = event_for_edits
-
-        with open(image_file, 'rb') as fh:
-            kocherga.events.db.add_image(event.google_id, 'vk', fh)
-
-        event = kocherga.events.db.get_event(event.google_id) # needs to be reloaded
-
-        print(event.image_file('vk'))
-        assert event.image_file('vk')

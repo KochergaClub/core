@@ -26,7 +26,7 @@ class TestCreate:
         event = event_for_edits
 
         with open(image_file, 'rb') as fh:
-            kocherga.events.db.add_image(event.google_id, 'vk', fh)
+            event.add_image('vk', fh)
 
         kocherga.events.db.set_event_property(event.google_id, 'vk_group', 159971736)
         event = kocherga.events.db.patch_event(event.google_id, { 'description': 'Длинный текст.\n' * 100 })

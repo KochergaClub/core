@@ -2,6 +2,7 @@ from pathlib import Path
 
 import dateutil.parser
 import hashlib
+import shutil
 
 import kocherga.config
 from kocherga.config import TZ
@@ -98,7 +99,7 @@ class Event:
     def set_prop(self, key, value):
         # Planned future changes: save some or all properties in a local sqlite DB instead.
         # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
-        kocherga.events.google.set_event_property(self.google_id, key, value)
+        kocherga.events.google.set_property(self.google_id, key, value)
         self.props[key] = value
 
     def image_file(self, image_type, check_if_exists=True):
@@ -130,15 +131,11 @@ class Event:
         if image_type not in IMAGE_TYPES:
             raise PublicError('unknown image type {}'.format(image_type))
 
-        filename = image_storage.event_image_file(event_id, image_type)
+        filename = image_storage.event_image_file(self.google_id, image_type)
         with open(filename, 'wb') as write_fh:
             shutil.copyfileobj(fh, write_fh)
 
-        kocherga.events.google.set_event_property(
-            self.google_id,
-            image_flag_property(image_type),
-            'true'
-        )
+        self.set_prop(image_flag_property(image_type), 'true')
 
     def fb_announce_page(self):
         fb_group = self.get_prop('fb_group')

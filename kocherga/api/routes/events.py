@@ -97,7 +97,8 @@ async def upload_event_image(event_id, image_type):
     if file.filename == '':
         raise PublicError('No filename')
 
-    kocherga.events.db.add_image(event_id, image_type, file.stream)
+    event = kocherga.events.db.get_event(event_id)
+    event.add_image(image_type, file.stream)
 
     return jsonify(ok)
 
