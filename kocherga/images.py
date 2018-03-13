@@ -10,6 +10,10 @@ locale.setlocale(locale.LC_TIME, locale.normalize('ru'))
 
 class ImageStorage:
     def __init__(self, directory):
+        self.set_directory(directory)
+
+    # used in tests
+    def set_directory(self, directory):
         self.directory = directory
 
         self.assets_dir = os.path.join(self.directory, 'assets')
@@ -27,7 +31,6 @@ class ImageStorage:
 
     def schedule_file(self, start_date):
         filename = os.path.join(self.mailchimp_dir, '{}.png'.format(start_date.strftime('%Y-%m-%d')))
-        print(filename)
 
         if not os.path.isfile(filename):
             image_bytes = self.create_mailchimp_image(start_date)

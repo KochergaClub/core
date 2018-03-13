@@ -2,6 +2,7 @@ import sys
 from quart import Blueprint, jsonify, request, send_file
 from datetime import datetime, timedelta
 import requests
+import logging
 
 from kocherga.error import PublicError
 import kocherga.events.db
@@ -21,7 +22,7 @@ def events():
         if d: d = datetime.strptime(d, '%Y-%m-%d').date()
         return d
 
-    print(
+    logging.debug(
         dict(
             date=request.args.get('date'),
             from_date=arg2date('from_date'),
@@ -88,7 +89,6 @@ async def post_fb(event_id):
 @bp.route('/event/<event_id>/image/<image_type>', methods=['POST'])
 @auth('kocherga')
 async def upload_event_image(event_id, image_type):
-    print('uploading')
     files = await request.files
     if 'file' not in files:
         raise PublicError('Expected a file')

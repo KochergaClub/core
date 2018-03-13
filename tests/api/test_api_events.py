@@ -1,5 +1,11 @@
 import pytest
 
+from urllib3.filepost import encode_multipart_formdata
+from urllib3.fields import RequestField
+
+import kocherga.events.db
+import kocherga.config
+
 @pytest.mark.asyncio
 async def test_events(api_client):
     res = await api_client.get('/events')
@@ -19,3 +25,35 @@ async def test_events_from_date(api_client):
     assert len(events) > 5
 
     assert '2018' in events[0]['start']['dateTime']
+
+@pytest.mark.asyncio
+async def test_upload_image(api_client, upload):
+    body, content_type = encode_multipart_formdata({
+        'file': ('vk', open('tests/images/vk', 'rb').read())
+    })
+
+    event = kocherga.events.db.list_events()[0] # doesn't matter which one
+
+    # 'data' param for test_client is implemented in quart but not released yet (at the time of this comment, 2018-03-13)
+    # When it's released, this code can be replaced with the simpler version commented below.
+    import quart.wrappers
+    import asyncio
+    request = quart.wrappers.Request(
+        'POST',
+        f'/event/{event.google_id}/image/default',
+        {
+            'Content-Type': content_type,
+            'Content-Length': len(body),
+        },
+    )
+    request.body.set_result(body)
+    res = await asyncio.ensure_future(api_client.app.handle_request(request))
+    #res = await api_client.post(
+    #    f'/events/{event.google_id}/image/default',
+    #    headers={
+    #        'Content-Type': content_type,
+    #    },
+    #    data=body,
+    #)
+
+    assert res.status_code == 200
