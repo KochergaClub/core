@@ -33,6 +33,7 @@ pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
 pytest = "*"
 freezegun = "*"
 aioconsole = "*"
+pytest-asyncio = "*"
 
 
 [requires]
