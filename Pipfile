@@ -29,6 +29,7 @@ pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
 werkzeug = "*"
 attrs = "*"
 apscheduler = "*"
+alembic = "*"
 
 
 [dev-packages]
