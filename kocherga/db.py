@@ -4,6 +4,8 @@ import enum
 
 import sqlalchemy
 from sqlalchemy import Table, Column, String, DateTime, Integer, Enum
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 from kocherga.config import config
 
@@ -14,12 +16,7 @@ def engine():
 
 metadata = sqlalchemy.MetaData()
 
-class CheckType(enum.Enum):
-    income = 1
-    refund_income = 2
-    expense = 3
-    refund_expense = 4
-
+Base = declarative_base()
 
 class Tables:
     watchmen_schedule = Table('watchmen_schedule', metadata,
@@ -27,16 +24,18 @@ class Tables:
                               Column('shift', String),
                               Column('watchman', String)
     )
-    ofd_documents = Table('ofd_documents', metadata,
-                              Column('timestamp', DateTime),
-                              Column('cash', Integer),
-                              Column('ecash', Integer),
-                              Column('check_type', Enum(CheckType))
-    )
 
 
 def create_all():
-    metadata.create_all(engine())
+    e = engine()
+    metadata.create_all(e)
+    Base.metadata.create_all(e) # this doesn't create *everything*, just definitions that we've imported so far
 
 def connect():
     return engine().connect()
+
+# Needed in tests. If we don't recreate a Session in fixture then we can't replace the DB file on each test.
+def create_session_class():
+    return sessionmaker(bind=engine())
+
+Session = create_session_class()
