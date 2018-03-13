@@ -33,7 +33,7 @@ class OfdDocument(kocherga.db.Base):
     def from_json(cls, item):
         return OfdDocument(
             id=item['fiscalDocumentNumber'],
-            timestamp=datetime.fromtimestamp(item['dateTime']),
+            timestamp=int(item['dateTime']),
             cash=item['cashTotalSum'],
             ecash=item['ecashTotalSum'],
             check_type=CheckType(item['operationType']),
