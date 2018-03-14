@@ -5,7 +5,7 @@ import requests
 import enum
 
 from sqlalchemy.sql import func, select
-from sqlalchemy import Column, DateTime, Integer, Enum
+from sqlalchemy import Column, DateTime, Integer, String, Numeric, Enum
 
 import kocherga.secrets
 import kocherga.db
@@ -24,19 +24,44 @@ class CheckType(enum.Enum):
 class OfdDocument(kocherga.db.Base):
     __tablename__ = 'ofd_documents'
     id = Column(Integer, primary_key=True)
-    timestamp = Column('timestamp', Integer)
-    cash = Column('cash', Integer)
-    ecash = Column('ecash', Integer)
-    check_type = Column('check_type', Enum(CheckType))
+    timestamp = Column(Integer)
+    cash = Column(Numeric(10, 2))
+    electronic = Column(Numeric(10, 2))
+    total = Column(Numeric(10, 2))
+    check_type = Column(Enum(CheckType))
+    shift_id = Column(Integer) # TODO - foreign key
+    request_id = Column(Integer) # cheque number in current shift
+    operator = Column(String)
+    operator_inn = Column(Integer)
+    fiscal_sign = Column(Integer)
+    midday_ts = Column(Integer) # used for analytics only
 
     @classmethod
     def from_json(cls, item):
+        ts = int(item['dateTime'])
+
+        dt = datetime.fromtimestamp(ts, tz=kocherga.config.TZ)
+        if dt.hour < 4:
+            dt -= timedelta(days=1)
+        midday_ts = int(dt.replace(hour=12).timestamp())
+
+        cash = item['cashTotalSum'] / 100
+        electronic = item['ecashTotalSum'] / 100
+        assert item['cashTotalSum'] + item['ecashTotalSum'] == item['totalSum'] # if this check doesn't pass, something is seriously wrong
+
         return OfdDocument(
-            id=item['fiscalDocumentNumber'],
-            timestamp=int(item['dateTime']),
-            cash=item['cashTotalSum'],
-            ecash=item['ecashTotalSum'],
-            check_type=CheckType(item['operationType']),
+            id = item['fiscalDocumentNumber'],
+            timestamp = ts,
+            cash = cash,
+            electronic = electronic,
+            total = cash + electronic,
+            check_type = CheckType(item['operationType']),
+            shift_id = int(item['shiftNumber']),
+            request_id = int(item['requestNumber']),
+            operator = item['operator'],
+            operator_inn = item.get('operator_inn', None),
+            fiscal_sign = item['fiscalSign'],
+            midday_ts = midday_ts,
         )
 
 class OfdYaKkt:
