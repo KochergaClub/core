@@ -5,7 +5,7 @@ import requests
 import enum
 
 from sqlalchemy.sql import func, select
-from sqlalchemy import Column, DateTime, Integer, String, Numeric, Enum
+from sqlalchemy import Column, Integer, String, Numeric, Enum
 
 from typing import Any, Dict, List
 
