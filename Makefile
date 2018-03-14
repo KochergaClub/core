@@ -8,9 +8,11 @@ install-dev:
 dev:
 	. ./env.example && QUART_APP=kocherga/api/app.py DEV=1 quart run
 
-test:
+test-types:
+	git submodule init
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional kocherga
+
+test-code:
 	pytest
 
-types:
-	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy kocherga
+test: test-types test-code
