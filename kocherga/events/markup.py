@@ -1,7 +1,7 @@
 import logging
 import re
 
-from typing import List
+from typing import Any, List
 
 class Entity:
     __slots__ = ['name', 'fb_id', 'vk_id']
@@ -12,6 +12,8 @@ class SelfMention:
 def parse_entity(entity_str):
     logging.debug(f'parsing {entity_str}')
     match = re.match(r'\{\{Entity\|(.*)\}\}$', entity_str)
+    if not match:
+        raise Exception('Expected a valid entity')
     params = match.group(1).split('|')
     entity = Entity()
     for param in params:
@@ -20,7 +22,7 @@ def parse_entity(entity_str):
     return entity
 
 def parse(description):
-    result = []
+    result: List[Any] = []
     text = ''
 
     while len(description):

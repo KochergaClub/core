@@ -135,7 +135,7 @@ def load_orders():
 
         csv_reader = csv.DictReader(StringIO(r.content.decode('utf-8-sig')), delimiter=';')
         for row in csv_reader:
-            order = Order(row)
+            order = Order(row) # type: ignore
             orders.append(order)
     return orders
 
@@ -159,12 +159,18 @@ def load_users():
                 raise Exception('bad html')
             login = 'admin'
 
-        name = re.search(r"<input name='name'.*? value='(.*?)'", form_html).group(1)
+        match = re.search(r"<input name='name'.*? value='(.*?)'", form_html)
+        if not match:
+            raise Exception('name input not found')
+        name = match.group(1)
 
         if login == 'admin':
             level = 'Администратор'
         else:
-            level = re.search(r"<option value=\d+ selected>(.*?)</option>", form_html).group(1)
+            match = re.search(r"<option value=\d+ selected>(.*?)</option>", form_html)
+            if not match:
+                raise Exception('selected option not found')
+            level = match.group(1)
 
         user = User(
             id=user_id,

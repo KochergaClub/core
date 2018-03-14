@@ -10,7 +10,7 @@ dev:
 
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional kocherga
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga
 
 test-code:
 	pytest

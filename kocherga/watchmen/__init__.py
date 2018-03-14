@@ -3,7 +3,7 @@ from enum import IntEnum
 
 import sqlalchemy.sql
 
-from typing import List
+from typing import List, Dict
 
 import kocherga.google
 import kocherga.db
@@ -90,13 +90,9 @@ class Shift(IntEnum):
 
 class Schedule:
     def __init__(self):
-        self._data = {}
+        self._data: Dict[date, Dict[Shift, str]] = {}
 
-    def add_shift_info(self, d, shift, watchman):
-        assert isinstance(d, date)
-        assert isinstance(shift, Shift)
-        assert isinstance(watchman, str)
-
+    def add_shift_info(self, d: date, shift: Shift, watchman: str) -> None:
         if d not in self._data:
             self._data[d] = {}
 
@@ -108,9 +104,7 @@ class Schedule:
             raise Exception('Shift by date {} is not found'.format(d))
         return shift_info
 
-    def watchman_by_dt(self, dt):
-        assert isinstance(dt, datetime)
-
+    def watchman_by_dt(self, dt: datetime) -> str:
         shift = Shift.by_dt(dt)
 
         d = dt.date()

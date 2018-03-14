@@ -119,6 +119,6 @@ def edit(announcement, patch):
 
     r = requests.post(
         url,
-        data=json.dumps(data)
+        data=json.dumps(patch)
     )
     r.raise_for_status()

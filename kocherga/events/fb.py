@@ -60,7 +60,7 @@ async def fill_description(page, description):
         if type(part) == str:
             await page.keyboard.type(part)
         elif type(part) == kocherga.events.markup.Entity:
-            await fill_entity(page, entity)
+            await fill_entity(page, part)
         elif type(part) == kocherga.events.markup.SelfMention:
             await page.keyboard.type(FB_CONFIG['main_page']['autoreplace']['to'])
             await select_from_listbox(page, FB_CONFIG['main_page']['id'])

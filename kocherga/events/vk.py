@@ -7,6 +7,7 @@ import kocherga.vk
 from kocherga.error import PublicError
 
 from kocherga.events.announcement import BaseAnnouncement
+import kocherga.events.markup
 
 class VkAnnouncement(BaseAnnouncement):
     def __init__(self, group_name, group_id, post_id):

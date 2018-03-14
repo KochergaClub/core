@@ -45,7 +45,7 @@ def call(method, params):
         if wants_captcha(r):
             logging.warn('Got a captcha, solving...')
             img_link = r['error']['captcha_img']
-            img_content = requests.get(img).contetn
+            img_content = requests.get(img_link).content
             captcha_key = captcha_solver.solve_captcha(img_content)
 
             logging.warn('Captcha solved: {}'.format(captcha_key))
@@ -59,4 +59,4 @@ def call(method, params):
 
     check_response(r)
 
-    return r['response']
+    return r['response'] # type: ignore

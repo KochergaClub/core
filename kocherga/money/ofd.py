@@ -7,6 +7,8 @@ import enum
 from sqlalchemy.sql import func, select
 from sqlalchemy import Column, DateTime, Integer, String, Numeric, Enum
 
+from typing import Any, Dict, List
+
 import kocherga.secrets
 import kocherga.db
 
@@ -37,7 +39,7 @@ class OfdDocument(kocherga.db.Base):
     midday_ts = Column(Integer) # used for analytics only
 
     @classmethod
-    def from_json(cls, item):
+    def from_json(cls, item: Dict[str, Any]) -> OfdDocument:
         ts = int(item['dateTime'])
 
         dt = datetime.fromtimestamp(ts, tz=kocherga.config.TZ)
@@ -65,10 +67,10 @@ class OfdDocument(kocherga.db.Base):
         )
 
 class OfdYaKkt:
-    def __init__(self, fiscal_drive_number):
+    def __init__(self, fiscal_drive_number: int):
         self.fdnum = fiscal_drive_number
 
-    def request(self, method, params):
+    def request(self, method: str, params: Dict[str, Any]):
         r = requests.post(
             f'{API_URL}/{method}',
             headers={
@@ -80,7 +82,7 @@ class OfdYaKkt:
         r.raise_for_status()
         return r.json()
 
-    def documents(self, d):
+    def documents(self, d: date) -> List[OfdDocument]:
         items = self.request(
             'documents',
             {
@@ -92,7 +94,7 @@ class OfdYaKkt:
         return [OfdDocument.from_json(item) for item in items]
 
 
-    def shift_opened(self, shift_id):
+    def shift_opened(self, shift_id: int) -> date:
         items = self.request(
             'documentsShift',
             {
@@ -127,7 +129,7 @@ def last_date_with_data() -> date:
 
     return dt.date()
 
-def import_since(d):
+def import_since(d: date):
     today_date = datetime.now().date()
 
     while d <= today_date:
