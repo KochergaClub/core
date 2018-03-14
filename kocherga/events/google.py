@@ -1,4 +1,7 @@
 import datetime
+import logging
+
+from typing import Any, Dict, List
 
 import kocherga.google
 import kocherga.events.timepad
@@ -28,7 +31,7 @@ def set_property(event_id, key, value):
         }
     })
 
-def events_with_condition(**kwargs):
+def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
     kw = {
         'calendarId': CALENDAR,
         'maxResults': 100,
@@ -37,15 +40,35 @@ def events_with_condition(**kwargs):
     }
     kw.update(kwargs)
 
+    logging.info('Requesting a list of events')
+
     eventsResult = api().events().list(**kw).execute()
     events = eventsResult.get('items', [])
 
     events = [e for e in events
               if 'dateTime' in e['start']]  # filter out all-day events
 
+    if 'nextPageToken' in eventsResult:
+        logging.info('Asking for the next page')
+        events.extend(
+            events_with_condition(
+                **{
+                    **kwargs,
+                    **{
+                        'pageToken': eventsResult['nextPageToken']
+                    }
+                }
+            )
+        )
+
     return events
 
-def list_events(date=None, from_date=None, to_date=None, q=None):
+def list_events(
+        date: datetime.date = None,
+        from_date: datetime.date = None,
+        to_date: datetime.date = None,
+        q = None
+) -> List[Dict[str, Any]]:
     if date and from_date or date and to_date:
         raise Exception('No more than 1 of `date` and `from_date`/`to_date` should be set')
 

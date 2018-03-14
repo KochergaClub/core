@@ -39,7 +39,7 @@ class OfdDocument(kocherga.db.Base):
     midday_ts = Column(Integer) # used for analytics only
 
     @classmethod
-    def from_json(cls, item: Dict[str, Any]) -> OfdDocument:
+    def from_json(cls, item: Dict[str, Any]) -> 'OfdDocument':
         ts = int(item['dateTime'])
 
         dt = datetime.fromtimestamp(ts, tz=kocherga.config.TZ)

@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings('ignore', '.*key_file, cert_file and check_hostname are deprecated, use a custom context instead', DeprecationWarning)
+
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
 
@@ -6,11 +9,6 @@ import kocherga.config
 
 from googleapiclient import discovery
 import gspread
-
-# Not working (don't know why):
-#
-# import warnings
-# warnings.filterwarnings('ignore', '.*key_file, cert_file and check_hostname are deprecated, use a custom context instead')
 
 GOOGLE_CREDENTIALS = kocherga.secrets.json_secret('google_credentials.json')
 
