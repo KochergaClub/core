@@ -4,6 +4,10 @@ import dateutil.parser
 import hashlib
 import shutil
 
+from sqlalchemy import Column, Integer, String, Boolean
+
+import kocherga.db
+
 import kocherga.config
 from kocherga.config import TZ
 
@@ -23,7 +27,23 @@ def image_flag_property(image_type):
 
 IMAGE_TYPES = ['default', 'vk']
 
-class Event:
+class Event(kocherga.db.Base):
+    __tablename__ = 'events'
+    google_id = Column(String, primary_key=True)
+    start_ts = Column(Integer)
+    end_ts = Column(Integer)
+    created_ts = Column(Integer)
+    creator = Column(String)
+    title = Column(String)
+    description = Column(String)
+    location = Column(String)
+    google_link = Column(String)
+    is_master = Column(Boolean)
+    master_id = Column(String)
+    visitors = Column(Integer)
+    is_private = Column(String)
+    event_type = Column(String)
+
     def __init__(
             self,
             start_dt, end_dt,
@@ -48,12 +68,18 @@ class Event:
         self.attendees = attendees
         self.props = props
 
+        self.start_ts = self.start_dt.timestamp()
+        self.end_ts = self.end_dt.timestamp()
+        self.created_ts = self.created_dt.timestamp()
+        self.visitors = self.get_prop('visitors')
+        self.event_type = self.get_prop('type')
+
     @classmethod
     def from_google(cls, google_event):
         obj = cls(
             created_dt=parse_iso8601(google_event['created']),
             creator=google_event['creator'].get('email', 'UNKNOWN'),
-            title=google_event['summary'],
+            title=google_event.get('summary', ''),
             description=google_event.get('description', None),
             start_dt=parse_iso8601(google_event['start']['dateTime']),
             end_dt=parse_iso8601(google_event['end']['dateTime']),

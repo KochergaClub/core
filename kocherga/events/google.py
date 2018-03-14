@@ -49,7 +49,7 @@ def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
               if 'dateTime' in e['start']]  # filter out all-day events
 
     if 'nextPageToken' in eventsResult:
-        logging.info('Asking for the next page')
+        logging.info('Asking for the next page, last date is {}'.format(events[-1]['start']['dateTime']))
         events.extend(
             events_with_condition(
                 **{

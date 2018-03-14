@@ -1,4 +1,7 @@
 import shutil
+import datetime
+
+import kocherga.db
 import kocherga.events.google
 from kocherga.events.event import Event, IMAGE_TYPES
 from kocherga.images import image_storage
@@ -67,3 +70,15 @@ def set_event_property(event_id, key, value):
     # Planned future changes: save some or all properties in a local sqlite DB instead.
     # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
     kocherga.events.google.set_property(event_id, key, value)
+
+def copy_all_events_to_sqlite():
+    Event.__table__.create(bind=kocherga.db.engine())
+    events = list_events(
+        from_date=datetime.date(2015,9,1),
+        to_date=datetime.date(2019,1,1),
+    )
+    session = kocherga.db.Session()
+    for event in events:
+        print(event.start_dt)
+        session.add(event)
+    session.commit()
