@@ -1,11 +1,13 @@
 import logging
 import re
 
+from typing import List
+
 class Entity:
     __slots__ = ['name', 'fb_id', 'vk_id']
 
 class SelfMention:
-    __slots__ = []
+    __slots__: List[str] = []
 
 def parse_entity(entity_str):
     logging.debug(f'parsing {entity_str}')

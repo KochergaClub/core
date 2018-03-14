@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import requests
 
 import enum
@@ -107,7 +107,7 @@ class OfdYaKkt:
 
 ofd = OfdYaKkt(FISCAL_DRIVE_NUMBER)
 
-def import_date(d):
+def import_date(d: date) -> None:
     session = kocherga.db.Session()
     documents = ofd.documents(d)
 
@@ -116,7 +116,7 @@ def import_date(d):
         document = session.merge(document) # not add_all because of a stupid collision on 00:00
     session.commit()
 
-def last_date_with_data():
+def last_date_with_data() -> date:
     db = kocherga.db.connect()
     table = kocherga.db.Tables.ofd_documents
     dt = db.execute(

@@ -5,3 +5,4 @@ __pycache__
 /.cache
 /env
 /.pytest_cache
+/.mypy_cache

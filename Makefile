@@ -10,3 +10,7 @@ dev:
 
 test:
 	pytest
+
+types:
+	git submodule init
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy kocherga

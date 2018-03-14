@@ -35,6 +35,7 @@ pytest = "*"
 freezegun = "*"
 aioconsole = "*"
 pytest-asyncio = "*"
+mypy = "*"
 
 
 [requires]

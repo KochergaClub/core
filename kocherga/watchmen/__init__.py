@@ -1,11 +1,13 @@
 from datetime import datetime, date, time, timedelta
 from enum import IntEnum
 
+import sqlalchemy.sql
+
+from typing import List
+
 import kocherga.google
 import kocherga.db
 import kocherga.config
-
-import sqlalchemy.sql
 
 MODERN_SHIFTS_FIRST_DATE = datetime.strptime(kocherga.config.config()['modern_shifts_first_date'], '%Y-%m-%d').date()
 WATCHMEN_SPREADSHEET_KEY = kocherga.config.config()['watchmen_spreadsheet_key']
@@ -154,9 +156,9 @@ class Schedule:
 
 _LAST_UPDATED_WORKSHEET = None
 _LAST_UPDATED_SPREADSHEET = None
-_CACHED_ROWS = []
+_CACHED_ROWS: List[List[str]] = []
 # from time import time as clock, sleep
-def fetch_worksheet():
+def fetch_worksheet() -> List[List[str]]:
     global _LAST_UPDATED_WORKSHEET
     global _LAST_UPDATED_SPREADSHEET
     global _CACHED_ROWS

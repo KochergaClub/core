@@ -6,6 +6,8 @@ from datetime import datetime
 import csv
 import requests
 
+from typing import List
+
 import kocherga.secrets
 
 DOMAIN = kocherga.secrets.plain_secret('cafe_manager_server')
@@ -35,10 +37,10 @@ order_fields = OrderedDict([
     ('end_dt',               { 'type': 'datetime' }),
 ])
 
-def order_csv_fields():
+def order_csv_fields() -> List[str]:
     return [f for f in order_fields.keys() if 'ru_title' in order_fields[f]]
 
-class Order(namedtuple('Order', order_csv_fields())):
+class Order(namedtuple('Order', order_csv_fields())): # type: ignore
 
     def __new__(cls, csv_row):
         params = {}

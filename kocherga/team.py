@@ -5,6 +5,8 @@ import kocherga.google
 import kocherga.config
 import kocherga.slack
 
+from typing import List
+
 TeamMember = namedtuple('TeamMember', ['short_name', 'full_name', 'email', 'role', 'status', 'vk', 'slack_id', 'gender', 'cm_login'])
 
 def _fetch_members(sc=None):
@@ -40,7 +42,7 @@ def _fetch_members(sc=None):
 
     return [row2member(row) for row in rows]
 
-_cached_members = []
+_cached_members: List[TeamMember] = []
 def members(status='Текущий', sc=None):
     global _cached_members
     if not _cached_members:
