@@ -227,6 +227,10 @@ def load_schedule_from_db():
 
     return schedule
 
+# for the code which doesn't care about a source - to make a migration to the local DB easier
+def load_schedule():
+    return load_schedule_from_google()
+
 def current_watchman():
     return load_schedule_from_google().current_watchman()
 

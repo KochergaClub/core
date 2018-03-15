@@ -10,6 +10,7 @@ from typing import DefaultDict, Dict, Iterator, List
 
 import kocherga.db
 import kocherga.secrets
+import kocherga.watchmen
 
 from sqlalchemy import Column, Integer, String, Enum
 
@@ -48,6 +49,7 @@ class Call(kocherga.db.Base):
     ts = Column(Integer)
     wait_seconds = Column(Integer)
     seconds = Column(Integer)
+    watchman = Column(String)
 
     @classmethod
     def from_csv_rows(cls, rows: List[Dict[str, str]]) -> 'Call':
@@ -138,5 +140,15 @@ def import_all(from_dt=datetime(2015,9,1)):
 
     for call in fetch_all_calls(from_dt):
         session.merge(call)
+
+    session.commit()
+
+def fill_watchmen():
+    session = kocherga.db.Session()
+
+    schedule = kocherga.watchmen.load_schedule()
+    for call in session.query(Call):
+        watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts))
+        call.watchman = watchman
 
     session.commit()
