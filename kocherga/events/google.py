@@ -81,6 +81,7 @@ def list_events(
 
     if from_date:
         timeMin = datetime.datetime.combine(from_date, datetime.time()).isoformat() + 'Z'
+    if to_date:
         timeMax = datetime.datetime.combine(to_date, datetime.time()).isoformat() + 'Z'
 
     return events_with_condition(
