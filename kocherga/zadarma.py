@@ -30,6 +30,7 @@ class Disposition(enum.Enum):
     answered = 1
     no_answer = 2
     busy = 3
+    call_failed = 4
 
     @classmethod
     def from_str(cls, s: str) -> 'Disposition':
