@@ -3,6 +3,7 @@ from pathlib import Path
 import dateutil.parser
 import hashlib
 import shutil
+from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, Boolean
 
@@ -41,7 +42,6 @@ class Event(kocherga.db.Base):
     is_master = Column(Boolean)
     master_id = Column(String)
     visitors = Column(Integer)
-    is_private = Column(String)
     event_type = Column(String)
 
     def __init__(
@@ -67,6 +67,9 @@ class Event(kocherga.db.Base):
         self.master_id = master_id
         self.attendees = attendees
         self.props = props
+
+        if not created_dt:
+            self.created_dt = datetime.now(TZ)
 
         self.start_ts = self.start_dt.timestamp()
         self.end_ts = self.end_dt.timestamp()

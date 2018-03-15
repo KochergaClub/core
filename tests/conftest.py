@@ -42,6 +42,7 @@ def db(tmpdir):
 def event(image_file):
     dt = datetime.today() + timedelta(days=3)
     event = Event(
+        created_dt=dt - timedelta(days=5),
         start_dt=dt,
         end_dt=dt + timedelta(hours=1),
         title='Элиезер проповедь',
@@ -65,6 +66,7 @@ def event(image_file):
 def minimal_event():
     dt = datetime.today() + timedelta(days=1)
     event = Event(
+        created_dt=dt - timedelta(days=3),
         start_dt=dt,
         end_dt=dt + timedelta(hours=1),
         title="бронь Летняя",
@@ -78,6 +80,7 @@ def minimal_event():
 def event_for_edits():
     dt = datetime.today() + timedelta(days=2)
     event = Event(
+        created_dt=dt - timedelta(days=5),
         start_dt=dt,
         end_dt=dt + timedelta(hours=1),
         title="title doesn't matter",

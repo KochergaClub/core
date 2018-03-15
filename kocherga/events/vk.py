@@ -61,17 +61,7 @@ def upload_wall_image(group_id, image_file):
     return photo_id
 
 def vk_description(description):
-    result = ''
-    parsed = kocherga.events.markup.parse(description)
-    for part in parsed:
-        if type(part) == str:
-            result += part
-        elif type(part) == kocherga.events.markup.Entity:
-            result += f'@{part.vk_id} ({part.name})'
-        elif type(part) == kocherga.events.markup.SelfMention:
-            result += f'@kocherga_club (антикафе Кочерга)'
-
-    return result
+    return kocherga.events.markup.Markup(description).as_vk()
 
 def create(event):
 

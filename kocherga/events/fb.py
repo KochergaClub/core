@@ -55,13 +55,13 @@ async def fill_description(page, description):
     details = await page.J('[data-testid=event-create-dialog-details-field]')
     await details.click()
 
-    parsed = kocherga.events.markup.parse(description)
-    for part in parsed:
-        if type(part) == str:
-            await page.keyboard.type(part)
-        elif type(part) == kocherga.events.markup.Entity:
+    markup_parts = kocherga.events.markup.parse_to_parts(description)
+    for part in markup_parts:
+        if isinstance(part, kocherga.events.markup.Text):
+            await page.keyboard.type(part.text)
+        elif isinstance(part, kocherga.events.markup.Entity):
             await fill_entity(page, part)
-        elif type(part) == kocherga.events.markup.SelfMention:
+        elif isinstance(part, kocherga.events.markup.SelfMention):
             await page.keyboard.type(FB_CONFIG['main_page']['autoreplace']['to'])
             await select_from_listbox(page, FB_CONFIG['main_page']['id'])
         else:

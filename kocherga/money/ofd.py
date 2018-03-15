@@ -11,9 +11,10 @@ from typing import Any, Dict, List
 
 import kocherga.secrets
 import kocherga.db
+import kocherga.config
 
 API_URL = 'https://api.ofd-ya.ru/ofdapi/v1'
-FISCAL_DRIVE_NUMBER = '8712000101056759'
+FISCAL_DRIVE_NUMBER = kocherga.config.config()["money"]["fiscal_drive_number"]
 TOKEN = kocherga.secrets.plain_secret('ofd_ya_token')
 DT_FORMAT = '%Y-%m-%d %H:%M:%S'
 
