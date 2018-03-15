@@ -120,25 +120,26 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
     for rows in fetch_csv_row_groups(from_dt, to_dt):
         yield Call.from_csv_rows(rows)
 
-def fetch_all_calls(from_dt=datetime(2015,9,1)) -> Iterator[Call]:
+def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
     STEP = timedelta(days=28)
 
-    to_dt = from_dt + STEP
+    chunk_from_dt = from_dt
+    chunk_to_dt = from_dt + STEP
 
-    while from_dt < datetime.now():
-        logging.info(f'Fetching from {from_dt} to {to_dt}')
-        for call in fetch_calls(from_dt, to_dt):
+    while from_dt_chunk < (to_dt or datetime.now()):
+        logging.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
+        for call in fetch_calls(chunk_from_dt, chunk_to_dt):
             yield call
 
-        from_dt += STEP
-        to_dt += STEP
+        chunk_from_dt += STEP
+        chunk_to_dt += STEP
 
-def import_all(from_dt=datetime(2015,9,1)):
+def import_all(from_dt=datetime(2015,9,1), to_dt=None):
     session = kocherga.db.Session()
 
     logging.info(f'Importing all calls')
 
-    for call in fetch_all_calls(from_dt):
+    for call in fetch_all_calls(from_dt, to_dt):
         session.merge(call)
 
     session.commit()
