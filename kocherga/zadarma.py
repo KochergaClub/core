@@ -128,8 +128,11 @@ def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
 
     while from_dt_chunk < (to_dt or datetime.now()):
         logging.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
+        counter = 0
         for call in fetch_calls(chunk_from_dt, chunk_to_dt):
             yield call
+            counter += 1
+        logging.info(f'Fetched {counter} calls')
 
         chunk_from_dt += STEP
         chunk_to_dt += STEP
