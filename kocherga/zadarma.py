@@ -85,7 +85,8 @@ def api_text_to_row_groups(text: str) -> Iterator[List[Dict[str, str]]]:
     if text.startswith('Вы уже использовали'):
         raise Exception(f'Temporarily banned by API: {text}')
 
-    if not text.startswith('id;call_type'):
+    # Arrayid is a weird header for some older requests but they seem fine otherwise
+    if not text.startswith('id;call_type') and not text.startswith('Arrayid;call_type'):
         raise Exception(f'Unexpected response {text}')
 
     reader = csv.DictReader(io.StringIO(text), delimiter=';')
