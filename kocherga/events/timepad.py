@@ -9,6 +9,7 @@ import kocherga.secrets
 from kocherga.datetime import dts
 
 from kocherga.events.announcement import BaseAnnouncement
+import kocherga.events.markup
 
 BASE_URL = 'https://api.timepad.ru/v1'
 
@@ -22,7 +23,7 @@ class TimepadAnnouncement(BaseAnnouncement):
 
     @property
     def link(self):
-        return 'https://{}.timepad.ru/event/{}'.format(ORGANIZATION, self.timepad_event_id)
+        return f'https://{ORGANIZATION}.timepad.ru/event/{self.timepad_event_id}'
 
 
 def token():
@@ -37,13 +38,19 @@ def check(url):
         raise Exception("Weird url: {}".format(url))
     timepad_id = int(match.group(1))
     r = requests.get(
-        BASE_URL + '/events.json?organization_ids={}'.format(ORGANIZATION_ID)
+        f'{BASE_URL}/events.json?organization_ids={ORGANIZATION_ID}'
     )
     r.raise_for_status()
     events = json.loads(r.text)['values']
 
     return timepad_id in [event['id'] for event in events]
 
+def timepad_description(event):
+    return kocherga.events.markup.Markup(event.description).as_html()
+
+def timepad_summary(event):
+    summary = event.description.split('\n\n')[0]
+    return kocherga.events.markup.Markup(summary).as_plain()
 
 def create(event):
     url = BASE_URL + '/events.json?token=' + token()
@@ -54,7 +61,8 @@ def create(event):
         'starts_at': dts(event.start_dt),
         'ends_at': dts(event.end_dt),
         'name': event.title,
-        'description_html': markdown.markdown(event.description),
+        'description_html': timepad_description(event),
+        'description_short': timepad_summary(event),
         'categories': [
             {
                 'id': 462,

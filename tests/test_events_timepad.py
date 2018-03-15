@@ -10,4 +10,4 @@ class TestAnnouncement:
 class TestCreate:
     def test_create(self, event):
         result = kocherga.events.timepad.create(event)
-        assert type(result), TimepadAnnouncement
+        assert type(result) == TimepadAnnouncement
