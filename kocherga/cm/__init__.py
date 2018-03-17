@@ -55,18 +55,18 @@ class Order(kocherga.db.Base):
 
             params[column.name] = value
 
-        params['start_ts'] = cls._date_and_time_to_dt(csv_row['Дата начала'], csv_row['Время начала'])
+        params['start_ts'] = cls._date_and_time_to_ts(csv_row['Дата начала'], csv_row['Время начала'])
         if csv_row['Дата конца']:
-            params['end_ts'] = cls._date_and_time_to_dt(csv_row['Дата конца'], csv_row['Время конца'])
+            params['end_ts'] = cls._date_and_time_to_ts(csv_row['Дата конца'], csv_row['Время конца'])
 
         return Order(**params)
 
     @classmethod
-    def _date_and_time_to_dt(cls, date, time):
+    def _date_and_time_to_ts(cls, date, time):
         return datetime.strptime(
             '{} {}'.format(date, time),
             "%d.%m.%Y %H:%M"
-        )
+        ).timestamp()
 
 OrderHistoryItem = namedtuple('OrderHistoryItem', 'operation dt login')
 
