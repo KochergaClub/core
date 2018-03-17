@@ -28,6 +28,7 @@ pandas = "*"
 pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
 werkzeug = "*"
 attrs = "*"
+apscheduler = "*"
 
 
 [dev-packages]

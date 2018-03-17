@@ -3,6 +3,9 @@ from pathlib import Path
 import datetime
 import json
 
+import logging
+logging.basicConfig(level=logging.INFO)
+
 TZ = datetime.timezone(datetime.timedelta(hours=3))
 
 def is_dev():

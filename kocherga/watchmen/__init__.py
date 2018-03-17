@@ -8,6 +8,7 @@ from typing import List, Dict
 import kocherga.google
 import kocherga.db
 import kocherga.config
+import kocherga.importer.base
 
 MODERN_SHIFTS_FIRST_DATE = datetime.strptime(kocherga.config.config()['modern_shifts_first_date'], '%Y-%m-%d').date()
 WATCHMEN_SPREADSHEET_KEY = kocherga.config.config()['watchmen_spreadsheet_key']
@@ -239,3 +240,11 @@ def last_watchman():
 
 def nearest_watchman():
     return load_schedule_from_google().nearest_watchman()
+
+
+class Importer(kocherga.importer.base.FullImporter):
+    def init_db(self):
+        pass
+
+    def do_full_import(self, session):
+        load_schedule_from_google().save_to_db()

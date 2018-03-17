@@ -8,74 +8,65 @@ import requests
 
 from typing import List
 
+from kocherga.config import TZ
 import kocherga.secrets
+import kocherga.importer.base
+
+from sqlalchemy import inspect, Column, Integer, String
 
 DOMAIN = kocherga.secrets.plain_secret('cafe_manager_server')
 
-order_fields = OrderedDict([
-    ('order_id',             { 'ru_title': 'Номер заказа', 'type': 'int', }),
-    ('card_id',              { 'ru_title': 'Номер карты', 'type': 'int', }),
-    ('start_date',           { 'ru_title': 'Дата начала', 'type': 'str', }),
-    ('start_time',           { 'ru_title': 'Время начала', 'type': 'str', }),
-    ('end_date',             { 'ru_title': 'Дата конца', 'type': 'str', }),
-    ('end_time',             { 'ru_title': 'Время конца', 'type': 'str', }),
-    ('people',               { 'ru_title': 'Кол-во человек', 'type': 'int', }),
-    ('visit_length',         { 'ru_title': 'Продолжительность посещения, мин', 'type': 'int', }),
-    ('full_visit_length',    { 'ru_title': 'Полная продолжительность посещения, мин', 'type': 'int', }),
-    ('order_value',          { 'ru_title': 'Сумма заказа', 'type': 'int', }),
-    ('time_value',           { 'ru_title': 'Стоимость времени', 'type': 'int', }),
-    ('stuff_value',          { 'ru_title': 'Стоимость товаров', 'type': 'int', }),
-    ('payment_type',         { 'ru_title': 'Тип оплаты', 'type': 'str', }),
-    ('is_fixed',             { 'ru_title': 'Фикс', 'type': 'str', }),
-    ('client_name',          { 'ru_title': 'Клиент', 'type': 'str', }),
-    ('manager',              { 'ru_title': 'Менеджер', 'type': 'str', }),
-    ('tariff_time',          { 'ru_title': 'Тарификация по времени', 'type': 'str', }),
-    ('tariff_plan',          { 'ru_title': 'Тарифный план', 'type': 'str', }),
-    ('comment',              { 'ru_title': 'Комментарии', 'type': 'str', }),
-    ('history',              { 'ru_title': 'История', 'type': 'str', }),
-    ('start_dt',             { 'type': 'datetime' }),
-    ('end_dt',               { 'type': 'datetime' }),
-])
+class Order(kocherga.db.Base):
+    __tablename__ = 'cm_orders'
 
-def order_csv_fields() -> List[str]:
-    return [f for f in order_fields.keys() if 'ru_title' in order_fields[f]]
+    order_id = Column(Integer, info={ 'ru_title': 'Номер заказа' }, primary_key=True)
+    card_id = Column(Integer, info={ 'ru_title': 'Номер карты' })
+    start_ts = Column(Integer)
+    end_ts = Column(Integer)
+    people = Column(Integer, info={ 'ru_title': 'Кол-во человек' })
+    visit_length = Column(Integer, info={ 'ru_title': 'Продолжительность посещения, мин' })
+    full_visit_length = Column(Integer, info={ 'ru_title': 'Полная продолжительность посещения, мин' })
+    order_value = Column(Integer, info={ 'ru_title': 'Сумма заказа' })
+    time_value = Column(Integer, info={ 'ru_title': 'Стоимость времени' })
+    stuff_value = Column(Integer, info={ 'ru_title': 'Стоимость товаров' })
+    payment_type = Column(String, info={ 'ru_title': 'Тип оплаты' })
+    is_fixed = Column(String, info={ 'ru_title': 'Фикс' })
+    client_name = Column(String, info={ 'ru_title': 'Клиент' })
+    manager = Column(String, info={ 'ru_title': 'Менеджер' })
+    tariff_time = Column(String, info={ 'ru_title': 'Тарификация по времени' })
+    tariff_plan = Column(String, info={ 'ru_title': 'Тарифный план' })
+    comment = Column(String, info={ 'ru_title': 'Комментарии' })
+    history = Column(String, info={ 'ru_title': 'История' })
 
-class Order(namedtuple('Order', order_csv_fields())): # type: ignore
-
-    def __new__(cls, csv_row):
+    @classmethod
+    def from_csv_row(cls, csv_row):
         params = {}
-        for key in order_fields:
-            ru_title = order_fields[key].get('ru_title', None)
+        for column in inspect(cls).columns:
+            ru_title = column.info.get('ru_title', None)
             if not ru_title:
                 continue
 
             value = csv_row[ru_title]
-            if order_fields[key]['type'] == 'int':
+            if column.type.python_type == int:
                 if value == '':
                     value = None
                 else:
                     value = int(float(value))
 
-            params[key] = value
+            params[column.name] = value
 
-        return super(Order, cls).__new__(cls, **params)
+        params['start_ts'] = cls._date_and_time_to_dt(csv_row['Дата начала'], csv_row['Время начала'])
+        if csv_row['Дата конца']:
+            params['end_ts'] = cls._date_and_time_to_dt(csv_row['Дата конца'], csv_row['Время конца'])
 
+        return Order(**params)
 
-    def _date_and_time_to_dt(self, date, time):
+    @classmethod
+    def _date_and_time_to_dt(cls, date, time):
         return datetime.strptime(
             '{} {}'.format(date, time),
             "%d.%m.%Y %H:%M"
         )
-
-    @property
-    def start_dt(self):
-        return self._date_and_time_to_dt(self.start_date, self.start_time)
-
-    @property
-    def end_dt(self):
-        if not self.end_date:
-            return None
-        return self._date_and_time_to_dt(self.end_date, self.end_time)
 
 OrderHistoryItem = namedtuple('OrderHistoryItem', 'operation dt login')
 
@@ -135,7 +126,7 @@ def load_orders():
 
         csv_reader = csv.DictReader(StringIO(r.content.decode('utf-8-sig')), delimiter=';')
         for row in csv_reader:
-            order = Order(row) # type: ignore
+            order = Order.from_csv_row(row)
             orders.append(order)
     return orders
 
@@ -243,3 +234,11 @@ def add_customer(card_id, first_name, last_name, email):
 
     print(r.text)
     raise Exception('Expected a message about success in response, got something else')
+
+class Importer(kocherga.importer.base.FullImporter):
+    def init_db(self):
+        Order.__table__.create(bind=kocherga.db.engine())
+
+    def do_full_import(self, session):
+        for order in load_orders():
+            session.merge(order)

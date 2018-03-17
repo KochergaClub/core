@@ -9,8 +9,10 @@ import logging
 from typing import DefaultDict, Dict, Iterator, List
 
 import kocherga.db
+import kocherga.datetime
 import kocherga.secrets
 import kocherga.watchmen
+import kocherga.importer.base
 
 from sqlalchemy import Column, Integer, String, Enum
 
@@ -122,12 +124,7 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
         yield Call.from_csv_rows(rows)
 
 def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
-    STEP = timedelta(days=28)
-
-    chunk_from_dt = from_dt
-    chunk_to_dt = from_dt + STEP
-
-    while chunk_from_dt < (to_dt or datetime.now()):
+    for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, timedelta(days=28)):
         logging.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
         counter = 0
         for call in fetch_calls(chunk_from_dt, chunk_to_dt):
@@ -135,25 +132,25 @@ def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
             counter += 1
         logging.info(f'Fetched {counter} calls')
 
-        chunk_from_dt += STEP
-        chunk_to_dt += STEP
+class Importer(kocherga.importer.base.IncrementalImporter):
+    def get_initial_dt(self):
+        return datetime(2015,9,1)
 
-def import_all(from_dt=datetime(2015,9,1), to_dt=None):
-    session = kocherga.db.Session()
+    def init_db(self):
+        Call.__table__.create(bind=kocherga.db.engine())
 
-    logging.info(f'Importing all calls')
+    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+        last_call = None
 
-    for call in fetch_all_calls(from_dt, to_dt):
-        session.merge(call)
+        schedule = kocherga.watchmen.load_schedule()
 
-    session.commit()
+        for call in fetch_all_calls(from_dt, to_dt):
+            watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts))
+            call.watchman = watchman
+            session.merge(call)
+            last_call = call
 
-def fill_watchmen():
-    session = kocherga.db.Session()
-
-    schedule = kocherga.watchmen.load_schedule()
-    for call in session.query(Call):
-        watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts))
-        call.watchman = watchman
-
-    session.commit()
+        if last_call:
+            return datetime.fromtimestamp(last_call.ts)
+        else:
+            return from_dt

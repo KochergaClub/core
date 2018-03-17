@@ -4,7 +4,6 @@ import requests
 
 import enum
 
-from sqlalchemy.sql import func, select
 from sqlalchemy import Column, Integer, String, Numeric, Enum
 
 from typing import Any, Dict, List
@@ -12,6 +11,7 @@ from typing import Any, Dict, List
 import kocherga.secrets
 import kocherga.db
 import kocherga.config
+import kocherga.importer.base
 
 API_URL = 'https://api.ofd-ya.ru/ofdapi/v1'
 FISCAL_DRIVE_NUMBER = kocherga.config.config()["money"]["fiscal_drive_number"]
@@ -68,7 +68,7 @@ class OfdDocument(kocherga.db.Base):
         )
 
 class OfdYaKkt:
-    def __init__(self, fiscal_drive_number: int):
+    def __init__(self, fiscal_drive_number: int) -> None:
         self.fdnum = fiscal_drive_number
 
     def request(self, method: str, params: Dict[str, Any]):
@@ -95,7 +95,7 @@ class OfdYaKkt:
         return [OfdDocument.from_json(item) for item in items]
 
 
-    def shift_opened(self, shift_id: int) -> date:
+    def shift_opened(self, shift_id: int) -> datetime:
         items = self.request(
             'documentsShift',
             {
@@ -110,43 +110,39 @@ class OfdYaKkt:
 
 ofd = OfdYaKkt(FISCAL_DRIVE_NUMBER)
 
-def import_date(d: date) -> None:
-    session = kocherga.db.Session()
+def import_date(d: date, session) -> None:
     documents = ofd.documents(d)
 
-    session.query(OfdDocument).filter(d <= OfdDocument.timestamp, OfdDocument.timestamp < d + timedelta(days=1))
     for document in documents:
         document = session.merge(document) # not add_all because of a stupid collision on 00:00
-    session.commit()
-
-def last_date_with_data() -> date:
-    db = kocherga.db.connect()
-    table = kocherga.db.Tables.ofd_documents
-    dt = db.execute(
-        select([
-            func.max(table.c.timestamp)
-        ])
-    ).scalar()
-
-    return dt.date()
-
-def import_since(d: date):
-    today_date = datetime.now().date()
-
-    while d <= today_date:
-        logging.info('importing ' + d.strftime('%Y-%m-%d'))
-        import_date(d)
-        d += timedelta(days=1)
-
-def import_new():
-    d = last_date_with_data()
-    import_since(d)
-
-def import_all():
-    # take the first shift's date
-    first_d = ofd.shift_opened(1).date()
-
-    # scroll back a few more days just in case
-    import_since(first_d - timedelta(days=2))
 
     # TODO - import shifts
+
+class Importer(kocherga.importer.base.IncrementalImporter):
+    def init_db(self):
+        OfdDocument.__table__.create(bind=kocherga.db.engine())
+
+    def get_initial_dt(self):
+        # take the first shift's date
+        d = ofd.shift_opened(1).date()
+
+        # scroll back a few more days just in case
+        d -= timedelta(days=2)
+
+        return datetime.combine(d, datetime.min.time())
+
+    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+        from_d = from_dt.date()
+        to_d = to_dt.date()
+
+        d = from_d
+
+        while d <= to_d:
+            logging.info('importing ' + d.strftime('%Y-%m-%d'))
+            import_date(d, session)
+            d += timedelta(days=1)
+
+        return datetime.combine(to_d, datetime.min.time())
+
+    def interval(self):
+        return {'seconds': 15}

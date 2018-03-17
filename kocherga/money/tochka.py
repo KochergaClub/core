@@ -1,17 +1,18 @@
 import requests
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 import xml.etree.ElementTree as ET
 
 from sqlalchemy import Column, Integer, String, Numeric, Boolean
 
-from typing import Any, List
+from typing import Any, List, Iterable
 
 import kocherga.secrets
 import kocherga.db
 import kocherga.datetime
 from kocherga.config import TZ
+import kocherga.importer.base
 
 # Secret tochka API docs: https://apitochka.docs.apiary.io/
 
@@ -88,7 +89,7 @@ def get_account_id(token: str) -> str:
     return accounts[0].findtext("./accountId")
 
 
-def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> List[Any]:
+def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> Iterable[Any]:
     if not from_dt.tzname():
         raise Exception('Timezone-aware from_dt is required')
     if not to_dt.tzname():
@@ -151,16 +152,18 @@ def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> List[Any]:
     for item in statement.findall('./days/day/records/record'):
         yield Record.from_element(item)
 
-def import_all():
-    session = kocherga.db.Session()
+class Importer(kocherga.importer.base.IncrementalImporter):
+    def get_initial_dt(self):
+        return datetime(2015,8,1,tzinfo=TZ)
 
-    token = get_access_token() # TODO - cache
-    for (from_dt, to_dt) in kocherga.datetime.date_chunks(datetime(2015,8,1,tzinfo=TZ), datetime.now(TZ)):
-        logging.info(f'Importing from {from_dt} to {to_dt}')
-        for record in get_statements(token, from_dt, to_dt):
-            session.merge(record)
+    def init_db(self):
+        Record.__table__.create(bind=kocherga.db.engine())
 
-    session.commit()
+    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+        token = get_access_token() # TODO - cache
+        for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, step=timedelta(days=28)):
+            logging.info(f'Importing from {chunk_from_dt} to {chunk_to_dt}')
+            for record in get_statements(token, chunk_from_dt, chunk_to_dt):
+                session.merge(record)
 
-def init_db():
-    Record.__table__.create(bind=kocherga.db.engine())
+        return to_dt - timedelta(days=1) # I'm not sure if tochka statements change after some time or are immutable

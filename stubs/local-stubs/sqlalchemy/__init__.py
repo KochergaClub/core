@@ -7,7 +7,9 @@ String: Any
 DateTime: Any
 Integer: Any
 Enum: Any
+Numeric: Any
 
 MetaData: Any
 
 create_engine: Any
+inspect: Any

@@ -8,5 +8,4 @@ def test_date_chunks():
     assert inspect.isgenerator(chunks)
 
     chunks = list(chunks)
-    print(chunks)
-    assert len(chunks) == 12
+    assert len(chunks) == 13
