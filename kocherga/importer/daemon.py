@@ -1,5 +1,9 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 
+from datetime import datetime
+
+from kocherga.config import TZ
+
 import kocherga.money.tochka
 import kocherga.money.ofd
 import kocherga.money.cashier
@@ -28,7 +32,8 @@ def run():
             trigger='interval',
             args=[importer],
             name=importer.name,
-            **importer.interval()
+            **importer.interval(),
+            start_date=datetime.now(TZ),
         )
 
     scheduler.start()
