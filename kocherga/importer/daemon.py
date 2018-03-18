@@ -25,7 +25,6 @@ def all_importers():
 
 def run():
     scheduler = BlockingScheduler()
-    scheduler.add_executor('processpool')
 
     for importer in all_importers():
         scheduler.add_job(
