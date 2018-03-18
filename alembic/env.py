@@ -1,6 +1,6 @@
 from pathlib import Path
 import sys
-sys.path.append(str(Path(__file__.parent.parent)))
+sys.path.append(str(Path(__file__).parent.parent))
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
