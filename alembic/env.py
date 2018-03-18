@@ -14,6 +14,7 @@ import kocherga.events.event
 import kocherga.importer.base
 import kocherga.money.ofd
 import kocherga.money.tochka
+import kocherga.money.cashier
 import kocherga.watchmen
 import kocherga.zadarma
 

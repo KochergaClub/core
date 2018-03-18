@@ -129,7 +129,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         # scroll back a few more days just in case
         d -= timedelta(days=2)
 
-        return datetime.combine(d, datetime.min.time())
+        return datetime.combine(d, datetime.min.time(), tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         from_d = from_dt.date()
@@ -142,7 +142,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             import_date(d, session)
             d += timedelta(days=1)
 
-        return datetime.combine(to_d, datetime.min.time())
+        return datetime.combine(to_d, datetime.min.time(), tzinfo=TZ)
 
     def interval(self):
         return {'seconds': 15}

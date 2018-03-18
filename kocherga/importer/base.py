@@ -20,7 +20,7 @@ class ImporterState(kocherga.db.Base):
 
     @property
     def dt(self) -> datetime:
-        return datetime.fromtimestamp(self.timestamp)
+        return datetime.fromtimestamp(self.timestamp, TZ)
 
 class ImporterLogEntry(kocherga.db.Base):
     __tablename__ = 'importers_log'

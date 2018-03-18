@@ -153,12 +153,12 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         schedule = kocherga.watchmen.load_schedule()
 
         for call in fetch_all_calls(from_dt, to_dt):
-            watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts))
+            watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts, TZ))
             call.watchman = watchman
             session.merge(call)
             last_call = call
 
         if last_call:
-            return datetime.fromtimestamp(last_call.ts)
+            return datetime.fromtimestamp(last_call.ts, TZ)
         else:
             return from_dt

@@ -2,6 +2,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 import kocherga.money.tochka
 import kocherga.money.ofd
+import kocherga.money.cashier
 import kocherga.zadarma
 import kocherga.cm
 import kocherga.events.db
