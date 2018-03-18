@@ -1,4 +1,5 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.executors.pool import ProcessPoolExecutor
 
 from datetime import datetime, timedelta
 
@@ -24,7 +25,11 @@ def all_importers():
     ]
 
 def run():
-    scheduler = BlockingScheduler()
+    scheduler = BlockingScheduler(
+        executors={
+            'default': ProcessPoolExecutor(1),
+        }
+    )
 
     for importer in all_importers():
         scheduler.add_job(
