@@ -145,4 +145,4 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         return datetime.combine(to_d, datetime.min.time(), tzinfo=kocherga.config.TZ)
 
     def interval(self):
-        return {'seconds': 15}
+        return {'minutes': 5}
