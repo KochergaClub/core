@@ -8,6 +8,7 @@ DateTime: Any
 Integer: Any
 Enum: Any
 Numeric: Any
+Date: Any
 
 MetaData: Any
 

@@ -15,8 +15,6 @@ class SomeImporter(kocherga.importer.base.IncrementalImporter):
         pass
 
 def test_importer(db):
-    kocherga.db.create_all()
-    #kocherga.importer.base.ImporterState.init_db()
     importer = SomeImporter()
     importer.import_all()
     importer.import_new()

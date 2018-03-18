@@ -11,5 +11,4 @@ def test_documents():
 
 def test_import_all(db, caplog):
     caplog.set_level(logging.INFO)
-    kocherga.db.create_all()
     kocherga.money.ofd.Importer().import_all()

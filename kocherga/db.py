@@ -16,11 +16,6 @@ Base = declarative_base()
 def engine():
     return sqlalchemy.create_engine('sqlite:///{}'.format(DB_FILE))
 
-def create_all():
-    e = engine()
-    # FIXME: this doesn't create *everything*, just the definitions that we've imported so far.
-    Base.metadata.create_all(e)
-
 def connect():
     return engine().connect()
 

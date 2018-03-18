@@ -5,6 +5,15 @@ from logging.config import fileConfig
 
 import kocherga.db
 
+# Import all modules with tables. TODO - think about how to improve this.
+import kocherga.cm
+import kocherga.events.event
+import kocherga.importer.base
+import kocherga.money.ofd
+import kocherga.money.tochka
+import kocherga.watchmen
+import kocherga.zadarma
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
