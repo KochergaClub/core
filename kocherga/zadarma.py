@@ -8,6 +8,7 @@ import logging
 
 from typing import DefaultDict, Dict, Iterator, List
 
+from kocherga.config import TZ
 import kocherga.db
 import kocherga.datetime
 import kocherga.secrets
@@ -123,7 +124,7 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
     for rows in fetch_csv_row_groups(from_dt, to_dt):
         yield Call.from_csv_rows(rows)
 
-def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
+def fetch_all_calls(from_dt=datetime(2015,9,1,tzinfo=TZ), to_dt=None) -> Iterator[Call]:
     api_requests = 0
     for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, timedelta(days=28)):
         logging.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
@@ -141,7 +142,7 @@ def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
 
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
-        return datetime(2015,9,1)
+        return datetime(2015,9,1,tzinfo=TZ)
 
     def init_db(self):
         Call.__table__.create(bind=kocherga.db.engine())
