@@ -16,6 +16,7 @@ def all_importers():
     return [
         kocherga.money.ofd.Importer(),
         kocherga.money.tochka.Importer(),
+        kocherga.money.cashier.Importer(),
         kocherga.zadarma.Importer(),
         kocherga.events.db.Importer(),
         kocherga.cm.Importer(),
@@ -33,7 +34,7 @@ def run():
             args=[importer],
             name=importer.name,
             **importer.interval(),
-            start_date=datetime.now(TZ),
+            start_date=datetime.now(TZ) + timedelta(seconds=5),
         )
 
     scheduler.start()
