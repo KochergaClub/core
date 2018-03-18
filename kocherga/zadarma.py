@@ -137,7 +137,7 @@ def fetch_all_calls(from_dt=datetime(2015,9,1,tzinfo=TZ), to_dt=None) -> Iterato
         # We shouldn't make too many API requests in a row - we'll get banned.
         # This early break helps the importer to finish the full import in several portions.
         api_requests += 1
-        if api_requests >= 10:
+        if api_requests >= 3:
             break
 
 class Importer(kocherga.importer.base.IncrementalImporter):
