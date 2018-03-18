@@ -124,6 +124,7 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
         yield Call.from_csv_rows(rows)
 
 def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
+    api_requests = 0
     for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, timedelta(days=28)):
         logging.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
         counter = 0
@@ -131,6 +132,12 @@ def fetch_all_calls(from_dt=datetime(2015,9,1), to_dt=None) -> Iterator[Call]:
             yield call
             counter += 1
         logging.info(f'Fetched {counter} calls')
+
+        # We shouldn't make too many API requests in a row - we'll get banned.
+        # This early break helps the importer to finish the full import in several portions.
+        api_requests += 1
+        if api_requests >= 10:
+            break
 
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
