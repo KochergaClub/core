@@ -11,7 +11,9 @@ def google_schedule():
 
 @pytest.fixture(scope='class')
 def db_schedule():
-    kocherga.watchmen.load_schedule_from_google().save_to_db()
+    session = kocherga.db.Session()
+    kocherga.watchmen.load_schedule_from_google().save_to_db(session)
+    session.commit()
     return kocherga.watchmen.load_schedule_from_db()
 
 @pytest.fixture(scope='class', params=['google', 'db'])
@@ -36,8 +38,8 @@ class TestSchedule:
 
         assert watchman, 'Скотт'
 
-    def test_save_to_db(self, schedule):
-        watchman = schedule.save_to_db()
+    def test_save_to_db(self, db, schedule):
+        watchman = schedule.save_to_db(kocherga.db.Session())
 
     def test_current_watchman(self, schedule):
         with freeze_time('2017-12-20 10:00'):

@@ -37,6 +37,7 @@ def db(tmpdir):
     kocherga.config.config()['kocherga_db_file'] = filename
     kocherga.db.DB_FILE = filename
     kocherga.db.Session = kocherga.db.create_session_class()
+    kocherga.db.create_all()
 
 @pytest.fixture(scope='session')
 def event(image_file):

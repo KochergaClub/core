@@ -10,6 +10,8 @@ import kocherga.db
 import kocherga.config
 import kocherga.importer.base
 
+from sqlalchemy import Column, Date, String, Enum
+
 MODERN_SHIFTS_FIRST_DATE = datetime.strptime(kocherga.config.config()['modern_shifts_first_date'], '%Y-%m-%d').date()
 WATCHMEN_SPREADSHEET_KEY = kocherga.config.config()['watchmen_spreadsheet_key']
 
@@ -88,6 +90,12 @@ class Shift(IntEnum):
         }
         return time2shift[timestring]
 
+class ScheduleItem(kocherga.db.Base):
+    __tablename__ = 'watchmen_schedule'
+    date = Column(Date, primary_key=True)
+    shift = Column(Enum(Shift), primary_key=True)
+    watchman = Column(String, index=True)
+
 
 class Schedule:
     def __init__(self):
@@ -115,16 +123,17 @@ class Schedule:
         shift_info = self.shifts_by_date(d)
         return shift_info[shift]
 
-    def save_to_db(self):
-        db = kocherga.db.connect()
-        table = kocherga.db.Tables.watchmen_schedule
-        with db:
-            db.execute(table.delete())
-            db.execute(table.insert(), [
-                { 'date': d.strftime('%Y-%m-%d'), 'shift': shift.name, 'watchman': watchman }
-                for (d, shift_info) in self._data.items()
-                for (shift, watchman) in shift_info.items()
-            ])
+    def save_to_db(self, session):
+        session.query(ScheduleItem).delete()
+        for (d, shift_info) in self._data.items():
+            for (shift, watchman) in shift_info.items():
+                session.add(
+                    ScheduleItem(
+                        date=d,
+                        shift=shift,
+                        watchman=watchman,
+                    )
+                )
 
     def current_watchman(self):
         return self.watchman_by_dt(datetime.today())
@@ -217,13 +226,12 @@ def load_schedule_from_google(worksheet=None):
 def load_schedule_from_db():
     schedule = Schedule()
 
-    db = kocherga.db.connect()
-    table = kocherga.db.Tables.watchmen_schedule
+    session = kocherga.db.Session()
 
-    for row in db.execute(sqlalchemy.sql.select([table])):
-        d = datetime.strptime(row[table.c.date], '%Y-%m-%d').date()
-        shift = Shift[row[table.c.shift]]
-        watchman = row[table.c.watchman]
+    for item in session.query(ScheduleItem).all():
+        d = item.date
+        shift = item.shift
+        watchman = item.watchman
         schedule.add_shift_info(d, shift, watchman)
 
     return schedule
@@ -247,4 +255,4 @@ class Importer(kocherga.importer.base.FullImporter):
         pass
 
     def do_full_import(self, session):
-        load_schedule_from_google().save_to_db()
+        load_schedule_from_google().save_to_db(session)

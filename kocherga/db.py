@@ -11,25 +11,15 @@ from kocherga.config import config
 
 DB_FILE = config()['kocherga_db_file']
 
+Base = declarative_base()
+
 def engine():
     return sqlalchemy.create_engine('sqlite:///{}'.format(DB_FILE))
 
-metadata = sqlalchemy.MetaData()
-
-Base = declarative_base()
-
-class Tables:
-    watchmen_schedule = Table('watchmen_schedule', metadata,
-                              Column('date', String),
-                              Column('shift', String),
-                              Column('watchman', String)
-    )
-
-
 def create_all():
     e = engine()
-    metadata.create_all(e)
-    Base.metadata.create_all(e) # this doesn't create *everything*, just definitions that we've imported so far
+    # FIXME: this doesn't create *everything*, just the definitions that we've imported so far.
+    Base.metadata.create_all(e)
 
 def connect():
     return engine().connect()
