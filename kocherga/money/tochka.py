@@ -124,8 +124,8 @@ def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> Iterable[A
     '''
 
     step = 1
-    max_step = 60
-    max_wait = 600
+    max_step = 10
+    max_wait = 60
     total_wait = 0
     statement = None
     while total_wait < max_wait:
