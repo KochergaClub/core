@@ -72,7 +72,7 @@ async def create(event, debugging=False):
         headless=False if debugging else True,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
     )
-    print(browser.wsEndpoint)
+    logging.info(f'Started browser at {browser.wsEndpoint}')
     page = await browser.newPage()
     await page.goto('https://facebook.com')
 
