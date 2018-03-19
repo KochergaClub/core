@@ -142,7 +142,7 @@ def fetch_all_calls(from_dt=datetime(2015,9,1,tzinfo=TZ), to_dt=None) -> Iterato
 
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
-        return datetime(2015,9,1,tzinfo=TZ)
+        return datetime(2016,11,1,tzinfo=TZ)
 
     def init_db(self):
         Call.__table__.create(bind=kocherga.db.engine())
