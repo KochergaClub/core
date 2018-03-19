@@ -35,6 +35,7 @@ class Disposition(enum.Enum):
     no_answer = 2
     busy = 3
     call_failed = 4
+    parse_failed = 5
 
     @classmethod
     def from_str(cls, s: str) -> 'Disposition':
@@ -56,10 +57,6 @@ class Call(kocherga.db.Base):
 
     @classmethod
     def from_csv_rows(cls, rows: List[Dict[str, str]]) -> 'Call':
-        if len(rows) > 2:
-            # I expect this can happen if we ever implement manual call redirects
-            raise Exception(f"Didn't expect to get more than two rows, call_id = {rows[0]['call_id']}")
-
         row1 = rows[0]
         call = Call(
             call_id=row1['call_id'],
@@ -71,6 +68,9 @@ class Call(kocherga.db.Base):
             ts=datetime.strptime(row1['date'], '%Y-%m-%d %H:%M:%S').timestamp(),
             seconds=int(row1['seconds']),
         )
+
+        if len(rows) > 2:
+            call.disposition = Disposition.parse_failed
 
         if len(rows) == 2:
             row2 = rows[1]
