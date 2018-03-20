@@ -21,6 +21,6 @@ def connect():
 
 # Needed in tests. If we don't recreate a Session in fixture then we can't replace the DB file on each test.
 def create_session_class():
-    return sessionmaker(bind=engine())
+    return sessionmaker(bind=engine(), autoflush=False)
 
 Session = create_session_class()
