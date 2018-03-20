@@ -30,6 +30,8 @@ werkzeug = "*"
 attrs = "*"
 apscheduler = "*"
 alembic = "*"
+fire = "*"
+python-gitlab = "*"
 
 
 [dev-packages]

@@ -68,6 +68,16 @@ class Order(kocherga.db.Base):
             "%d.%m.%Y %H:%M"
         ).timestamp()
 
+    @property
+    def start_dt(self):
+        return datetime.fromtimestamp(self.start_ts, TZ)
+
+    @property
+    def end_dt(self):
+        if not self.end_ts:
+            return None
+        return datetime.fromtimestamp(self.end_ts, TZ)
+
 OrderHistoryItem = namedtuple('OrderHistoryItem', 'operation dt login')
 
 User = namedtuple('User', 'id login name level')
