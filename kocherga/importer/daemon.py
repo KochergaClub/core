@@ -22,7 +22,7 @@ def all_importers():
     importers = []
     for module_name in IMPORTER_MODULES:
         module = importlib.import_module(f'kocherga.{module_name}')
-        importers.append(module.Importer())
+        importers.append(module.Importer()) # type: ignore
 
     return importers
 
