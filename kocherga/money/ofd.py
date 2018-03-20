@@ -114,7 +114,11 @@ def import_date(d: date, session) -> None:
     documents = ofd.documents(d)
 
     for document in documents:
-        document = session.merge(document) # not add_all because of a stupid collision on 00:00
+        document = session.merge(document)
+
+    # Necessary because session.merge can't resolve duplicate objects.
+    # We get some duplicates on consecutive dates because of a stupid collision on 00:00.
+    session.flush()
 
     # TODO - import shifts
 
