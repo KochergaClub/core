@@ -29,7 +29,7 @@ def all_importers():
 def run():
     scheduler = BlockingScheduler(
         executors={
-            'default': ProcessPoolExecutor(1),
+            'default': ProcessPoolExecutor(3),
         }
     )
 
