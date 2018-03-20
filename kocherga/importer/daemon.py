@@ -5,24 +5,26 @@ from datetime import datetime, timedelta
 
 from kocherga.config import TZ
 
-import kocherga.money.tochka
-import kocherga.money.ofd
-import kocherga.money.cashier
-import kocherga.zadarma
-import kocherga.cm
-import kocherga.events.db
-import kocherga.watchmen
+import importlib
+
+IMPORTER_MODULES = [
+    'money.cashier',
+    'money.ofd',
+    'money.tochka',
+    'zadarma',
+    'cm',
+    'events.db',
+    'watchmen',
+    'gitlab'
+]
 
 def all_importers():
-    return [
-        kocherga.money.ofd.Importer(),
-        kocherga.money.cashier.Importer(),
-        kocherga.zadarma.Importer(),
-        kocherga.events.db.Importer(),
-        kocherga.cm.Importer(),
-        kocherga.watchmen.Importer(),
-        kocherga.money.tochka.Importer(),
-    ]
+    importers = []
+    for module_name in IMPORTER_MODULES:
+        module = importlib.import_module(f'kocherga.{module_name}')
+        importers.append(module.Importer())
+
+    return importers
 
 def run():
     scheduler = BlockingScheduler(
