@@ -34,6 +34,7 @@ class Event(kocherga.db.Base):
     start_ts = Column(Integer)
     end_ts = Column(Integer)
     created_ts = Column(Integer)
+    updated_ts = Column(Integer)
     creator = Column(String)
     title = Column(String)
     description = Column(String)
@@ -47,7 +48,8 @@ class Event(kocherga.db.Base):
     def __init__(
             self,
             start_dt, end_dt,
-            created_dt=None, creator=None,
+            created_dt=None, updated_dt=None,
+            creator=None,
             title='', description='', location='',
             google_id=None, google_link=None,
             is_master=False, master_id=None,
@@ -55,6 +57,7 @@ class Event(kocherga.db.Base):
             props={}
     ):
         self.created_dt = created_dt
+        self.updated_dt = updated_dt
         self.creator = creator
         self.title = title
         self.description = description
@@ -70,10 +73,13 @@ class Event(kocherga.db.Base):
 
         if not created_dt:
             self.created_dt = datetime.now(TZ)
+        if not updated_dt:
+            self.updated_dt = self.created_dt
 
         self.start_ts = self.start_dt.timestamp()
         self.end_ts = self.end_dt.timestamp()
         self.created_ts = self.created_dt.timestamp()
+        self.updated_ts = self.updated_dt.timestamp()
         self.visitors = self.get_prop('visitors')
         self.event_type = self.get_prop('type')
 
@@ -81,6 +87,7 @@ class Event(kocherga.db.Base):
     def from_google(cls, google_event):
         obj = cls(
             created_dt=parse_iso8601(google_event['created']),
+            updated_dt=parse_iso8601(google_event['updated']),
             creator=google_event['creator'].get('email', 'UNKNOWN'),
             title=google_event.get('summary', ''),
             description=google_event.get('description', None),

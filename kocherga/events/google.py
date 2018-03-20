@@ -45,8 +45,11 @@ def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
     eventsResult = api().events().list(**kw).execute()
     events = eventsResult.get('items', [])
 
-    events = [e for e in events
-              if 'dateTime' in e['start']]  # filter out all-day events
+    # filter out cancelled and all-day events
+    events = [
+        e for e in events
+        if 'start' in e and 'dateTime' in e['start']
+    ]
 
     if 'nextPageToken' in eventsResult:
         logging.info('Asking for the next page, last date is {}'.format(events[-1]['start']['dateTime']))
@@ -67,7 +70,9 @@ def list_events(
         date: datetime.date = None,
         from_date: datetime.date = None,
         to_date: datetime.date = None,
-        q = None
+        q = None,
+        order_by = None,
+        updated_min = None,
 ) -> List[Dict[str, Any]]:
     if date and from_date or date and to_date:
         raise Exception('No more than 1 of `date` and `from_date`/`to_date` should be set')
@@ -75,17 +80,24 @@ def list_events(
     timeMin = None
     timeMax = None
 
+    kwargs = {}
+
     if date:
-        timeMin = datetime.datetime.combine(date, datetime.time()).isoformat() + 'Z'
-        timeMax = datetime.datetime.combine(date + datetime.timedelta(days=1), datetime.time()).isoformat() + 'Z'
+        kwargs['timeMin'] = datetime.datetime.combine(date, datetime.time()).isoformat() + 'Z'
+        kwargs['timeMax'] = datetime.datetime.combine(date + datetime.timedelta(days=1), datetime.time()).isoformat() + 'Z'
 
     if from_date:
-        timeMin = datetime.datetime.combine(from_date, datetime.time()).isoformat() + 'Z'
+        kwargs['timeMin'] = datetime.datetime.combine(from_date, datetime.time()).isoformat() + 'Z'
     if to_date:
-        timeMax = datetime.datetime.combine(to_date, datetime.time()).isoformat() + 'Z'
+        kwargs['timeMax'] = datetime.datetime.combine(to_date, datetime.time()).isoformat() + 'Z'
 
-    return events_with_condition(
-        timeMin=timeMin,
-        timeMax=timeMax,
-        q=q,
-    )
+    if q:
+        kwargs['q'] = q
+
+    if order_by:
+        kwargs['orderBy'] = order_by
+
+    if updated_min:
+        kwargs['updatedMin'] = updated_min.isoformat()
+
+    return events_with_condition(**kwargs)

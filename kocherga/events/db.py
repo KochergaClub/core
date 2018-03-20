@@ -1,4 +1,4 @@
-import shutil
+import logging
 from datetime import datetime, timedelta
 
 from kocherga.config import TZ
@@ -14,8 +14,8 @@ def get_event(event_id):
     google_event = kocherga.events.google.get_event(event_id)
     return Event.from_google(google_event)
 
-def list_events(limit=100, date=None, from_date=None, to_date=None, q=None):
-    google_events = kocherga.events.google.list_events(date=date, from_date=from_date, to_date=to_date, q=q)
+def list_events(**kwargs):
+    google_events = kocherga.events.google.list_events(**kwargs)
     events = [Event.from_google(e) for e in google_events]
     return events
 
@@ -82,11 +82,21 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         Event.__table__.create(bind=kocherga.db.engine())
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+        if from_dt < datetime.now(tz=TZ) - timedelta(days=7):
+            logging.info(f"from_dt = {from_dt} is too old, let's reimport everything")
+            events = list_events(
+                to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
+            )
+            for event in events:
+                session.merge(event)
+            return datetime.now(tz=TZ) - timedelta(days=1)
+
         events = list_events(
-            from_date=(from_dt + timedelta(days=14)).date(),
-            to_date=(to_dt + timedelta(days=7*8)).date(),
+            to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
+            order_by='updated',
+            updated_min=from_dt,
         )
         for event in events:
             session.merge(event)
 
-        return datetime.now(TZ)
+        return max(e.updated_dt for e in events)

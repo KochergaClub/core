@@ -13,6 +13,7 @@ import kocherga.db
 def google_object():
     return {
         'created': '2017-09-01T17:59:38.000Z',
+        'updated': '2017-10-01T18:00:00.000Z',
         'creator': { 'email': 'mmcleric@gmail.com' },
         'summary': 'бронь итальянский',
         'location': 'летняя',
@@ -44,6 +45,7 @@ def event(image_file):
     dt = datetime.today() + timedelta(days=3)
     event = Event(
         created_dt=dt - timedelta(days=5),
+        updated_dt=dt - timedelta(days=5),
         start_dt=dt,
         end_dt=dt + timedelta(hours=1),
         title='Элиезер проповедь',
@@ -68,6 +70,7 @@ def minimal_event():
     dt = datetime.today() + timedelta(days=1)
     event = Event(
         created_dt=dt - timedelta(days=3),
+        updated_dt=dt - timedelta(days=3),
         start_dt=dt,
         end_dt=dt + timedelta(hours=1),
         title="бронь Летняя",
@@ -82,6 +85,7 @@ def event_for_edits():
     dt = datetime.today() + timedelta(days=2)
     event = Event(
         created_dt=dt - timedelta(days=5),
+        updated_dt=dt - timedelta(days=5),
         start_dt=dt,
         end_dt=dt + timedelta(hours=1),
         title="title doesn't matter",
