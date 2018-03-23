@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import pathlib, sys
+sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
 import locale
 locale.setlocale(locale.LC_TIME, locale.normalize('ru'))
