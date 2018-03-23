@@ -6,7 +6,7 @@ import copy
 
 import fire
 
-from kocherga.watchmen import load_schedule_from_google, Shift
+from kocherga.watchmen import load_schedule, Shift
 import kocherga.team
 import kocherga.slack
 import kocherga.cm
@@ -27,7 +27,7 @@ def rate_by_shift(shift):
 def shift_salaries(start_date, end_date):
     stat = Counter()
 
-    schedule = load_schedule_from_google()
+    schedule = load_schedule()
 
     d = start_date
     while d <= end_date:
@@ -51,7 +51,7 @@ def bonuses(start_date, end_date):
     customers = kocherga.cm.load_customers()
     customers_dict = { int(c['Номер Карты']): c for c in customers }
 
-    schedule = load_schedule_from_google()
+    schedule = load_schedule()
 
     stat = Counter()
 

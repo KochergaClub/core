@@ -8,6 +8,7 @@ from typing import List, Dict
 import kocherga.google
 import kocherga.db
 import kocherga.config
+from kocherga.config import TZ
 import kocherga.importer.base
 
 from sqlalchemy import Column, Date, String, Enum
@@ -238,16 +239,19 @@ def load_schedule_from_db():
 
 # for the code which doesn't care about a source - to make a migration to the local DB easier
 def load_schedule():
-    return load_schedule_from_google()
+    last_dt = Importer().last_dt
+    if not last_dt or last_dt < datetime.now(TZ) - timedelta(minutes=30):
+        return load_schedule_from_google()
+    return load_schedule_from_db()
 
 def current_watchman():
-    return load_schedule_from_google().current_watchman()
+    return load_schedule().current_watchman()
 
 def last_watchman():
-    return load_schedule_from_google().last_watchman()
+    return load_schedule().last_watchman()
 
 def nearest_watchman():
-    return load_schedule_from_google().nearest_watchman()
+    return load_schedule().nearest_watchman()
 
 
 class Importer(kocherga.importer.base.FullImporter):

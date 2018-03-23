@@ -26,6 +26,12 @@ class ImporterState(kocherga.db.Base):
             return None
         return datetime.fromtimestamp(self.until_ts, TZ)
 
+    @property
+    def last_dt(self) -> Optional[datetime]:
+        if not self.last_ts:
+            return None
+        return datetime.fromtimestamp(self.last_ts, TZ)
+
 class ImporterLogEntry(kocherga.db.Base):
     __tablename__ = 'importers_log'
     id = Column(Integer, primary_key=True)
@@ -52,15 +58,14 @@ class ImportContext:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        print('__exit__')
-        print(exc_type, exc_value, traceback)
         self.state.last_ts = datetime.now(TZ).timestamp()
 
         if exc_value:
             # let's drop everything from our failed session
             self.session = kocherga.db.Session()
-
-        self.state.last_exception = str(exc_value)
+            self.state.last_exception = str(exc_value)
+        else:
+            self.state.last_exception = None
 
         self.log_entry.end_ts = self.state.last_ts
         self.log_entry.exception = self.state.last_exception
@@ -79,6 +84,11 @@ class BaseImporter(ABC):
     @abstractmethod
     def import_new(self) -> None:
         pass
+
+    @property
+    def last_dt(self) -> Optional[datetime]:
+        state = kocherga.db.Session().query(ImporterState).filter_by(name=self.name).first()
+        return state.last_dt
 
     @property
     def name(self):
@@ -120,7 +130,6 @@ class IncrementalImporter(BaseImporter):
             end_dt = datetime.now(TZ)
 
             last_dt = self.do_period_import(start_dt, end_dt, ic.session)
-            print(last_dt)
             if not last_dt:
                 raise Exception(f"{self.name}.do_period_import didn't return a datetime object")
             ic.state.until_ts = last_dt.timestamp()
