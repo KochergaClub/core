@@ -2,11 +2,12 @@ import os
 from pathlib import Path
 import datetime
 import json
+import pytz
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
-TZ = datetime.timezone(datetime.timedelta(hours=3))
+TZ = pytz.timezone('Europe/Moscow')
 
 def is_dev():
     hostname = os.uname()[1]

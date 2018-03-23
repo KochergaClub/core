@@ -32,6 +32,8 @@ apscheduler = "*"
 alembic = "*"
 fire = "*"
 python-gitlab = "*"
+slackeventsapi = "*"
+pytz = "*"
 
 
 [dev-packages]
