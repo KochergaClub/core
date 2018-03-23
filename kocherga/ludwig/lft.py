@@ -4,7 +4,7 @@ import pathlib
 from kocherga.ludwig.bot import bot
 
 def quote_lft():
-    lines = open(pathlib.Path(__file__).parent.parent.parent / 'lft.txt').readlines()
+    lines = open(pathlib.Path(__file__).parent.parent.parent / 'static' / 'lft.txt').readlines()
     line_id = random.randint(0, len(lines) - 1)
     return '> {}'.format(lines[line_id])
 
