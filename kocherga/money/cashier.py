@@ -7,12 +7,17 @@ import kocherga.db
 
 import kocherga.importer.base
 
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, UniqueConstraint
 
 class CashierItem(kocherga.db.Base):
     __tablename__ = 'cashier'
-    date = Column(String, primary_key=True)
-    shift = Column(String, primary_key=True)
+    __table_args__ = (
+        UniqueConstraint('date', 'shift', name='cashier_shift_pair'),
+    )
+
+    id = Column(Integer, primary_key=True)
+    date = Column(String)
+    shift = Column(String)
     watchman = Column(String)
     cash_income = Column(Integer)
     electronic_income = Column(Integer)
@@ -49,6 +54,10 @@ def export_to_db():
         if_exists='replace',
         index_label='id',
     )
+
+def current_cash():
+    item = kocherga.db.Session().query(CashierItem).order_by(CashierItem.id.desc()).first()
+    return item.current_cash
 
 class Importer(kocherga.importer.base.FullImporter):
     def init_db(self):

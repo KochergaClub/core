@@ -18,6 +18,7 @@ depends_on = None
 
 def upgrade():
     op.create_table('cashier',
+        sa.Column('id', sa.Integer()),
         sa.Column('date', sa.String(), nullable=False),
         sa.Column('shift', sa.String(), nullable=False),
         sa.Column('watchman', sa.String(), nullable=True),
