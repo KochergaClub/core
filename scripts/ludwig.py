@@ -11,6 +11,7 @@ import kocherga.ludwig.explain
 import kocherga.ludwig.lft
 import kocherga.ludwig.events
 import kocherga.ludwig.crypto
+import kocherga.ludwig.money
 
 from kocherga.ludwig.bot import bot
 
