@@ -7,7 +7,7 @@ def cash_response():
     return f'В кассе {cash} руб.'
 
 @bot.listen_to(r'сколько\s+(сейчас\s+)?денег\s+в\s+кассе')
-def react_current_cash(message):
+def react_current_cash(message, query):
     message.reply(cash_response())
 
 @bot.command('/cash')
