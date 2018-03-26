@@ -25,7 +25,7 @@ class ImageStorage:
             if not Path(d).exists():
                 Path(d).mkdir()
 
-    def save_screenshot(self, name, bytes):
+    def save_screenshot(self, name, image_bytes):
         filename = Path(self.screenshot_dir) / name
         with open(filename, 'wb') as fh:
             fh.write(image_bytes)
