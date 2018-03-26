@@ -119,7 +119,6 @@ async def _create(page, event, debugging):
     return FbAnnouncement(page.url)
 
 async def create(event, debugging=False):
-    debugging = True
     browser = await pyppeteer.launch(
         headless=False if debugging else True,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
