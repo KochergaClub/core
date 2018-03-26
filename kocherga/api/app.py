@@ -35,10 +35,15 @@ def create_app(DEV):
     ################## COMMON ########################
 
     # via https://github.com/pallets/flask/blob/master/docs/patterns/apierrors.rst
-    @app.errorhandler(PublicError)
+    @app.errorhandler(Exception)
     def handle_invalid_usage(error):
-        response = jsonify(error.to_dict())
-        response.status_code = error.status_code
+        if isinstance(error, PublicError):
+            response = jsonify(error.to_dict())
+            response.status_code = error.status_code
+        else:
+            response = jsonify({'error': 'Internal error'})
+            response.status_code = 500
+        response.headers['Access-Control-Allow-Origin'] = '*'
         return response
 
     for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings', 'people', 'templater'):
