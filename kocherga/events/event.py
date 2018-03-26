@@ -23,10 +23,13 @@ from kocherga.datetime import dts
 def parse_iso8601(s):
     return dateutil.parser.parse(s).astimezone(TZ)
 
-def image_flag_property(image_type):
-    return 'has_{}_image'.format(image_type)
-
 IMAGE_TYPES = ['default', 'vk']
+
+def image_flag_property(image_type):
+    if image_type not in IMAGE_TYPES:
+        raise PublicError('unknown image type {}'.format(image_type))
+
+    return 'has_{}_image'.format(image_type)
 
 class Event(kocherga.db.Base):
     __tablename__ = 'events'

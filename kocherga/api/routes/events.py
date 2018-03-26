@@ -119,10 +119,7 @@ async def set_event_image_from_url(event_id, image_type):
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['GET'])
 def event_image(event_id, image_type):
-    if image_type not in kocherga.events.event.IMAGE_TYPES:
-        raise PublicError('unknown image type {}'.format(image_type))
-
-    return send_file(image_storage.event_image_file(event_id, image_type))
+    return send_file(kocherga.events.db.get_event(event_id).image_file(image_type))
 
 # No auth - images are requested directly
 # TODO - accept a token via CGI params? hmm...
