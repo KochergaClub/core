@@ -2,6 +2,7 @@ import re
 from collections import namedtuple
 import logging
 import asyncio
+from random import random
 
 import pyppeteer
 
@@ -67,13 +68,7 @@ async def fill_description(page, description):
         else:
             raise Exception('unknown part encountered while parsing: ' + str(part))
 
-async def create(event, debugging=False):
-    browser = await pyppeteer.launch(
-        headless=False if debugging else True,
-        args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
-    )
-    logging.info(f'Started browser at {browser.wsEndpoint}')
-    page = await browser.newPage()
+async def _create(page, event, debugging):
     await page.goto('https://facebook.com')
 
     await page.focus('input[name=email]')
@@ -122,3 +117,19 @@ async def create(event, debugging=False):
     )
 
     return FbAnnouncement(page.url)
+
+async def create(event, debugging=False):
+    debugging = True
+    browser = await pyppeteer.launch(
+        headless=False if debugging else True,
+        args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
+    )
+    logging.info(f'Started browser at {browser.wsEndpoint}')
+    page = await browser.newPage()
+
+    try:
+        return _create(page, event, debugging)
+    except:
+        image_bytes = await page.screenshot()
+        image_storage.save_screenshot(str(random()), image_bytes)
+        raise
