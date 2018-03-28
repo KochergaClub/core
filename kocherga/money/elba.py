@@ -64,14 +64,17 @@ async def begin_request(page):
     await page.click('#CreateRequestButton')
     await page.waitForNavigation()
 
-async def prepare_request_accounting(page, dt):
-    logging.info(f'Preparing accounting request')
-    await page.click('input[value=AccountingReference]')
-    await page.focus('#TypeRadioGroup_AccountingReferenceDate')
+async def fill_date_input(page, selector, d):
+    await page.focus(selector)
     for i in range(15):
         await page.keyboard.press('Backspace')
         await page.keyboard.press('Delete')
-    await page.keyboard.type(dt.strftime('%d.%m.%Y'))
+    await page.keyboard.type(d.strftime('%d.%m.%Y'))
+
+async def prepare_request_accounting(page, dt):
+    logging.info(f'Preparing accounting request')
+    await page.click('input[value=AccountingReference]')
+    await fill_date_input(page, '#TypeRadioGroup_AccountingReferenceDate', dt)
 
 async def prepare_request_operations(page, year):
     logging.info(f'Preparing operations request')
@@ -89,14 +92,14 @@ async def request_anything(page):
     logging.info(f'Requesting...')
     await page.click('#SendReportViaCloud_SendInternetReportButton')
 
-    await page.waitForSelector('#SendCloudReportLightbox_CodeInput')
+    await page.waitForSelector('#SendCloudReportLightbox_CodeInput', visible=True)
     code = get_code()
     await page.type('#SendCloudReportLightbox_CodeInput', code)
     await page.click('#SendCloudReportLightbox_AcceptButton')
     await page.waitForNavigation()
     logging.info(f'Request submitted')
 
-async def make_ion_requests(accounting_dates, operation_years, declaration_years):
+async def elba_page():
     logging.info('Starting browser')
     browser = await pyppeteer.launch(
         headless=False,
@@ -115,6 +118,12 @@ async def make_ion_requests(accounting_dates, operation_years, declaration_years
     await page.waitForNavigation()
 
     logging.info('Signed in')
+
+    return page
+
+async def make_ion_requests(accounting_dates, operation_years, declaration_years):
+    page = await elba_page()
+
     for d in accounting_dates:
         await begin_request(page)
         await prepare_request_accounting(page, d)
@@ -131,3 +140,48 @@ async def make_ion_requests(accounting_dates, operation_years, declaration_years
         await request_anything(page)
 
     time.sleep(3000) # we run this on desktop anyway, so let's linger around to check that everything's ok
+
+async def add_cash_income(data, start_pko_id, from_date=None):
+    page = await elba_page()
+
+    await page.click('#MainMenu_Payments_Link')
+    await page.waitForNavigation()
+
+    logging.info('Got to Payments page')
+
+    pko_id = start_pko_id
+
+    for row in data:
+        logging.info(row['date'])
+        income = row['clean_income']
+        if income == 0:
+            logging.info('No income, skip')
+            continue
+        if income < 0:
+            logging.warn('Negative income! Skip.')
+            continue
+        d = datetime.strptime(row['date'], '%Y-%m-%d').date()
+        if from_date and d < from_date:
+            logging.info('Too old, skip')
+            continue
+
+        await page.click('#CreateDebetButton')
+        await page.waitForSelector('#ComponentsHost_PaymentEditLightbox_IncomeSum', visible=True)
+        await page.type('#ComponentsHost_PaymentEditLightbox_IncomeSum', str(row['clean_income']))
+        await fill_date_input(page, '#ComponentsHost_PaymentEditLightbox_Date', d)
+
+        await page.type('#ComponentsHost_PaymentEditLightbox_PaymentDescription', f'ОФД: выручка за {d.strftime("%d.%m.%Y")}')
+
+        docnum_el = await page.J('#ComponentsHost_PaymentEditLightbox_DocumentNumber')
+        await docnum_el.focus()
+        for i in range(10):
+            await docnum_el.press('Backspace')
+        await docnum_el.type(str(pko_id))
+
+        logging.info(f'Submitting a form for {d.strftime("%Y-%m-%d")}, pko id = {pko_id}')
+        await page.click('#ComponentsHost_PaymentEditLightbox_AcceptButton')
+        await page.waitForSelector('.c-lightbox-overlay', hidden=True)
+
+        pko_id += 1
+
+    time.sleep(3000)
