@@ -130,5 +130,5 @@ async def create(event, debugging=False):
         return await _create(page, event, debugging)
     except:
         image_bytes = await page.screenshot()
-        image_storage.save_screenshot(str(random()), image_bytes)
+        image_storage.save_screenshot('error', image_bytes)
         raise

@@ -30,6 +30,9 @@ class ImageStorage:
         with open(filename, 'wb') as fh:
             fh.write(image_bytes)
 
+    def screenshot_file(self, name):
+        return str(Path(self.screenshot_dir) / name)
+
     def event_image_file(self, event_id, image_type):
         re.match(r'^\w+$', image_type)
         re.match(r'^\w+$', event_id)

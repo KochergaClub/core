@@ -138,3 +138,9 @@ def schedule_weekly_image():
         raise PublicError(error)
 
     return send_file(filename)
+
+@bp.route('/screenshot/last', methods=['GET'])
+@auth('kocherga')
+def last_screenshot():
+    filename = image_storage.screenshot_file('last')
+    return send_file(filename)
