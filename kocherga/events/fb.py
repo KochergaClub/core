@@ -71,6 +71,7 @@ async def fill_description(page, description):
 async def _create(page, event, debugging):
     await page.goto('https://facebook.com')
 
+    logging.info('Signing in')
     await page.focus('input[name=email]')
     await page.keyboard.type(FB_CONFIG['announcer_login'])
 
@@ -81,36 +82,44 @@ async def _create(page, event, debugging):
 
     await page.waitForNavigation()
 
+    logging.info('Signed in')
     events_page = event.fb_announce_page() + '/events'
-    logging.debug('going to page:', events_page)
+    logging.info('Going to page:', events_page)
     await page.goto(events_page)
-    await page.click('[data-testid=event-create-button]')
 
+    logging.info('Opening an event creation form')
+    await page.click('[data-testid=event-create-button]')
     await page.waitForSelector('[data-testid=event-create-dialog-name-field]')
 
+    logging.info('Uploading an image')
     await page.waitForSelector('[data-testid=event-create-dialog-image-selector')
     el = await page.J('[data-testid=event-create-dialog-image-selector')
     await el.uploadFile(event.image_file('default'))
 
+    logging.info('Filling title')
     await page.focus('[data-testid=event-create-dialog-name-field]')
     await page.keyboard.type(event.title)
 
+    logging.info('Filling where')
     await page.focus('[data-testid=event-create-dialog-where-field]')
     await page.keyboard.type(FB_CONFIG['main_page']['name'])
 
     await select_from_listbox(page, FB_CONFIG['main_page']['id'])
 
+    logging.info('Filling dates')
     await page.focus('[data-testid=event-create-dialog-start-time] input[placeholder="дд.мм.гггг"]')
     await fill_date_time(page, event.start_dt)
     await page.focus('[data-testid=event-create-dialog-end-time] input[placeholder="дд.мм.гггг"]')
     await fill_date_time(page, event.end_dt)
 
+    logging.info('Filling description')
     await fill_description(page, event.description)
 
     if debugging:
         # don't confirm
         return page
 
+    logging.info('Confirming')
     await asyncio.gather(
         page.click('[data-testid=event-create-dialog-confirm-button]'),
         page.waitForNavigation()
