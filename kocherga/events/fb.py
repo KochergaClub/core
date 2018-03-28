@@ -129,6 +129,8 @@ async def create(event, debugging=False):
     try:
         return await _create(page, event, debugging)
     except:
+        logging.info(f'Error while creating a FB announcement')
         image_bytes = await page.screenshot()
         image_storage.save_screenshot('error', image_bytes)
+        logging.info(f'Screenshot saved')
         raise
