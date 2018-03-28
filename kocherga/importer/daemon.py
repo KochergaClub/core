@@ -29,7 +29,7 @@ def all_importers():
 def run():
     scheduler = BlockingScheduler(
         executors={
-            'default': ProcessPoolExecutor(3),
+            'default': ProcessPoolExecutor(2),
         }
     )
 
@@ -40,6 +40,7 @@ def run():
             args=[importer],
             name=importer.name,
             **importer.interval(),
+            jitter=300,
             start_date=datetime.now(TZ) + timedelta(seconds=i*5),
         )
 
