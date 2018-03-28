@@ -84,7 +84,7 @@ async def _create(page, event, debugging):
 
     logging.info('Signed in')
     events_page = event.fb_announce_page() + '/events'
-    logging.info('Going to page:', events_page)
+    logging.info('Going to page: ' + events_page)
     await page.goto(events_page)
 
     logging.info('Opening an event creation form')
