@@ -69,6 +69,7 @@ async def fill_description(page, description):
             raise Exception('unknown part encountered while parsing: ' + str(part))
 
 async def _create(page, event, debugging):
+    logging.info('Going to facebook')
     await page.goto('https://facebook.com')
 
     logging.info('Signing in')
@@ -136,6 +137,7 @@ async def create(event, debugging=False):
     page = await browser.newPage()
 
     try:
+        logging.info(f'Trying to create')
         return await _create(page, event, debugging)
     except Exception as e:
         logging.info(f'Error while creating a FB announcement: {str(e)}')
