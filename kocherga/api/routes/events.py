@@ -139,7 +139,7 @@ def schedule_weekly_image():
 
     return send_file(filename)
 
-@bp.route('/screenshot/last', methods=['GET'])
+@bp.route('/screenshot/error', methods=['GET'])
 def last_screenshot():
-    filename = image_storage.screenshot_file('last')
+    filename = image_storage.screenshot_file('error')
     return send_file(filename)
