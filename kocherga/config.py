@@ -37,13 +37,13 @@ def config_dir():
 def main_config_file():
     return Path(config_dir()) / 'config.json'
 
-CONFIG = None
+_CONFIG = None
 def config():
-    global CONFIG
-    if not CONFIG:
-        CONFIG = json.load(open(main_config_file()))
+    global _CONFIG
+    if not _CONFIG:
+        _CONFIG = json.load(open(main_config_file()))
 
-    return CONFIG
+    return _CONFIG
 
 # A directory with credentials for backend services.
 #
