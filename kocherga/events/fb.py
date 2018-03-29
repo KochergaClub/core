@@ -123,7 +123,7 @@ async def _create(page, event, debugging):
     logging.info('Confirming')
     await asyncio.gather(
         page.click('[data-testid=event-create-dialog-confirm-button]'),
-        page.waitForNavigation(timeout=60)
+        page.waitForNavigation(timeout=60000)
     )
 
     return FbAnnouncement(page.url)
