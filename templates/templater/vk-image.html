@@ -135,11 +135,11 @@
         <div class="VkImage-Background" style="background-image: url(&quot;{{ background_image }}&quot;)">&nbsp;</div>
         <div class="VkImage-Darken"></div>
         <div class="VkImage-Texts">
-          <div class="VkImage-Header" contenteditable="true">{{ header }}</div>
+          <div class="VkImage-Header">{{ header }}</div>
           <div class="VkImage-Line"></div>
-          <div class="VkImage-Title" contenteditable="true">{{ title }}</div>
+          <div class="VkImage-Title">{{ title }}</div>
         </div>
-        <div class="VkImage-Datetime" contenteditable="true">{{ d.day }} {{ months[d.month] }}<br>{{ d.strftime('%A') }}&nbsp;&nbsp;{{ time }}</div>
+        <div class="VkImage-Datetime">{{ d.day }} {{ months[d.month] }}<br>{{ d.strftime('%A') }}&nbsp;&nbsp;{{ time }}</div>
       </div>
       <footer class="VkImage-Footer">
         <div class="VkImage-Footer-Left">
