@@ -39,14 +39,14 @@ class ImageStorage:
         return str(Path(self.event_dir) / f'{image_type}.{event_id}.jpg')
 
     def schedule_file(self, start_date):
-        filename = str(Path(self.mailchimp_dir) / '{}.png'.format(start_date.strftime('%Y-%m-%d')))
+        image_file = Path(self.mailchimp_dir) / f'{start_date:%Y-%m-%d}.png'
 
-        if not Path.is_file(filename):
+        if not image_file.is_file():
             image_bytes = self.create_mailchimp_image(start_date)
-            with open(filename, 'wb') as fh:
+            with open(image_file, 'wb') as fh:
                 fh.write(image_bytes)
 
-        return filename
+        return str(image_file)
 
     def create_mailchimp_image(self, start_date):
         web_root = kocherga.config.web_root()
