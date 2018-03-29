@@ -1,4 +1,6 @@
 import pytest
+
+from pathlib import Path
 import os
 import os.path
 from datetime import datetime, timedelta
@@ -8,6 +10,7 @@ os.environ['TIER'] = 'dev'
 from kocherga.events.event import Event
 import kocherga.events.db
 import kocherga.db
+import kocherga.images
 
 @pytest.fixture
 def google_object():
@@ -29,16 +32,26 @@ def google_object():
 
 @pytest.fixture(scope='session')
 def image_file():
-    return os.path.join(os.path.dirname(__file__), 'images', 'vk')
+    return str(Path(__file__).parent / 'images' / 'vk')
 
 @pytest.fixture
 def db(tmpdir):
     db_dir = tmpdir.mkdir('db')
     filename = db_dir + '/kocherga.db'
+
+    # This is unfortunately fragile.
     kocherga.config.config()['kocherga_db_file'] = filename
     kocherga.db.DB_FILE = filename
     kocherga.db.Session = kocherga.db.create_session_class()
     kocherga.db.Base.metadata.create_all(kocherga.db.engine())
+
+@pytest.fixture
+def image_storage(tmpdir):
+    d = Path(tmpdir) / 'upload'
+    d.mkdir()
+    kocherga.config.config()['image_storage_dir'] = str(d)
+    kocherga.images.image_storage = kocherga.images.init_global_image_storage()
+    return kocherga.images.image_storage
 
 @pytest.fixture(scope='session')
 def event(image_file):

@@ -27,7 +27,7 @@ async def test_events_from_date(api_client):
     assert '2018' in events[0]['start']['dateTime']
 
 @pytest.mark.asyncio
-async def test_upload_image(api_client, upload):
+async def test_upload_image(api_client, image_storage):
     body, content_type = encode_multipart_formdata({
         'file': ('vk', open('tests/images/vk', 'rb').read())
     })
@@ -62,7 +62,7 @@ async def test_upload_image(api_client, upload):
 
 
 @pytest.mark.asyncio
-async def test_upload_image_from_url(api_client, upload):
+async def test_upload_image_from_url(api_client, image_storage):
     event = kocherga.events.db.list_events()[0] # doesn't matter which one
 
     res = await api_client.post(

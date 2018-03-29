@@ -60,4 +60,7 @@ class ImageStorage:
         r.raise_for_status()
         return r.content
 
-image_storage = ImageStorage(kocherga.config.image_storage_dir())
+def init_global_image_storage():
+    return ImageStorage(kocherga.config.image_storage_dir())
+
+image_storage = init_global_image_storage()
