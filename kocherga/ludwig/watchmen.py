@@ -175,7 +175,7 @@ def command_watchmen(payload):
 
     raise ErrorResponse(f'Непонятная команда `{query}`.')
 
-@bot.listen_to(r'админ(?:чик)?[,\s.!]')
+@bot.listen_to(r'админ(?:чик)?[,.!].+')
 def react_tag_admin(message):
     member = get_current_watchman_or_complain(message)
     if not member:
