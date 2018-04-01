@@ -5,6 +5,7 @@ from pathlib import Path
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from quart import Quart, jsonify, request, current_app, _app_ctx_stack
+import quart.flask_patch # for __ident_func__
 
 #from flask_cors import CORS
 
