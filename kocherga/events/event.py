@@ -110,15 +110,11 @@ class Event(kocherga.db.Base):
 
     @property
     def start_dt(self):
-        print('get start_dt -> ' + str(datetime.fromtimestamp(self.start_ts, TZ)))
         return datetime.fromtimestamp(self.start_ts, TZ)
 
     @start_dt.setter
     def start_dt(self, value):
-        print(self.start_ts)
-        print('set start_dt: ' + str(value))
         self.start_ts = value.timestamp()
-        print(self.start_ts)
 
     @property
     def end_dt(self):
