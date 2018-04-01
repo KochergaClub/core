@@ -42,6 +42,7 @@ def db(tmpdir):
     # This is unfortunately fragile.
     kocherga.config.config()['kocherga_db_file'] = filename
     kocherga.db.DB_FILE = filename
+    kocherga.db.Session.remove()
     kocherga.db.Session.configure(bind=kocherga.db.engine())
     kocherga.db.Base.metadata.create_all(kocherga.db.engine())
 
