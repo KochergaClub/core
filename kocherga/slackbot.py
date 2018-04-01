@@ -2,6 +2,7 @@ import re
 import json
 from functools import wraps
 import logging
+import pytz
 
 from flask import request, jsonify
 
@@ -125,7 +126,7 @@ class Dispatcher:
 class Bot:
     def __init__(self, port, workplace_token, verification_token):
         self.dispatcher = Dispatcher()
-        self.scheduler = BackgroundScheduler(timezone=kocherga.config.TZ)
+        self.scheduler = BackgroundScheduler(timezone=pytz.timezone('Europe/Moscow')) # can't use kocherga.config.TZ - it's based on dateutil.tz now
         self.sc = SlackClient(workplace_token)
         self.slack_events_adapter = SlackEventAdapter(
             verification_token,
