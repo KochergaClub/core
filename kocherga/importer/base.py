@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 import kocherga.db
+from kocherga.db import Session
 from kocherga.config import TZ
 
 class ImporterState(kocherga.db.Base):
@@ -48,11 +49,10 @@ class ImportContext:
     def __init__(self, name, mode):
         self.name = name
         self.mode = mode
-        self.session = kocherga.db.Session()
 
     def __enter__(self):
         self.log_entry = ImporterLogEntry(self.name)
-        self.state = self.session.query(ImporterState).filter_by(name=self.name).first()
+        self.state = Session().query(ImporterState).filter_by(name=self.name).first()
         if not self.state:
             self.state = ImporterState(name=self.name)
         return self
@@ -62,7 +62,7 @@ class ImportContext:
 
         if exc_value:
             # let's drop everything from our failed session
-            self.session = kocherga.db.Session()
+            Session().remove()
             self.state.last_exception = str(exc_value)
         else:
             self.state.last_exception = None
@@ -70,10 +70,10 @@ class ImportContext:
         self.log_entry.end_ts = self.state.last_ts
         self.log_entry.exception = self.state.last_exception
 
-        self.session.merge(self.state)
-        self.session.add(self.log_entry)
+        Session().merge(self.state)
+        Session().add(self.log_entry)
 
-        self.session.commit()
+        Session().commit()
         logging.info(f'{self.name} imported')
 
 class BaseImporter(ABC):
@@ -87,7 +87,7 @@ class BaseImporter(ABC):
 
     @property
     def last_dt(self) -> Optional[datetime]:
-        state = kocherga.db.Session().query(ImporterState).filter_by(name=self.name).first()
+        state = Session().query(ImporterState).filter_by(name=self.name).first()
         return state.last_dt
 
     @property
@@ -107,7 +107,7 @@ class FullImporter(BaseImporter):
 
     def import_new(self) -> None:
         with ImportContext(self.name, 'full') as ic:
-            self.do_full_import(ic.session)
+            self.do_full_import(Session())
 
 
 class IncrementalImporter(BaseImporter):
@@ -129,7 +129,7 @@ class IncrementalImporter(BaseImporter):
 
             end_dt = datetime.now(TZ)
 
-            last_dt = self.do_period_import(start_dt, end_dt, ic.session)
+            last_dt = self.do_period_import(start_dt, end_dt, Session())
             if not last_dt:
                 raise Exception(f"{self.name}.do_period_import didn't return a datetime object")
             ic.state.until_ts = last_dt.timestamp()

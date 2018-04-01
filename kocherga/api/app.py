@@ -22,17 +22,23 @@ import kocherga.api.routes.people
 import kocherga.api.routes.templater
 import kocherga.api.common
 
+def init_quart_scoped_sessions():
+    # we can't just use a default kocherga.db.Session because quart is async
+    kocherga.db.Session.replace(
+        scoped_session(
+            sessionmaker(bind=kocherga.db.engine(), autoflush=False),
+            scopefunc=_app_ctx_stack.__ident_func__
+        )
+    )
+
+
 def create_app(DEV):
     app = Quart(
         __name__,
         root_path=str(Path(__file__).parent.parent.parent.resolve())
     )
 
-    # we can't just use a default kocherga.db.Session because quart is async
-    kocherga.db.Session = scoped_session(
-        sessionmaker(bind=kocherga.db.engine(), autoflush=False),
-        scopefunc=_app_ctx_stack.__ident_func__
-    )
+    init_quart_scoped_sessions()
 
     if DEV:
         app.debug = True
@@ -53,6 +59,7 @@ def create_app(DEV):
             response = jsonify(error.to_dict())
             response.status_code = error.status_code
         else:
+            logging.error(error)
             response = jsonify({'error': 'Internal error'})
             response.status_code = 500
         response.headers['Access-Control-Allow-Origin'] = '*'

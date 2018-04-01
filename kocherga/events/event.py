@@ -55,6 +55,12 @@ class Event(kocherga.db.Base):
     visitors = Column(Integer)
     event_type = Column(String)
 
+    vk_group = Column(String)
+    fb_group = Column(String)
+
+    has_default_image = Column(Boolean)
+    has_vk_image = Column(Boolean)
+
     def __init__(
             self,
             start_dt, end_dt,
@@ -83,10 +89,23 @@ class Event(kocherga.db.Base):
 
         self.visitors = self.get_prop('visitors')
         self.event_type = self.get_prop('type')
+        self.vk_group = self.get_prop('vk_group')
+        self.fb_group = self.get_prop('fb_group')
+        self.has_default_image = self.get_prop('has_default_image') in ('true', True)
+        self.has_vk_image = self.get_prop('has_vk_image') in ('true', True)
 
     @orm.reconstructor
     def init_on_load(self):
-        self.props = {} # TODO - get rid of props or fill this attr
+        # deprecated
+        self.props = {
+            'visitors': self.visitors,
+            'type': self.event_type,
+            'vk_group': self.vk_group,
+            'fb_group': self.fb_group,
+            'has_default_image': self.has_default_image,
+            'has_vk_image': self.has_vk_image,
+        }
+
         self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
         self.updated_dt = datetime.fromtimestamp(self.updated_ts, TZ)
         self.start_dt = datetime.fromtimestamp(self.start_ts, TZ)

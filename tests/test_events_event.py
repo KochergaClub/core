@@ -1,6 +1,11 @@
+import pytest
+
+from datetime import datetime, timedelta
+
 from kocherga.events.event import Event
 import kocherga.events.db
-from datetime import datetime, timedelta
+
+pytestmark = pytest.mark.usefixtures('db')
 
 class TestEventConstructor:
     def test_minimal(self):

@@ -1,4 +1,5 @@
 import pytest
+pytestmark = pytest.mark.usefixtures('db')
 
 @pytest.mark.asyncio
 async def test_bookings(api_client):

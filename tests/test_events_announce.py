@@ -1,3 +1,6 @@
+import pytest
+pytestmark = pytest.mark.usefixtures('db')
+
 import kocherga.events.announce
 from kocherga.events.announcement import BaseAnnouncement
 

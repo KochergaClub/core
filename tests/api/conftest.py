@@ -1,4 +1,6 @@
 import pytest
+
+import logging
 import os
 import json
 from quart import Response
@@ -17,7 +19,9 @@ os.environ['JWT_SECRET_KEY'] = 'testkey'
 
 import kocherga.api.app
 
-@pytest.fixture('session')
-def api_client():
+@pytest.fixture
+def api_client(db):
+    logging.info('api_client fixture')
     app = kocherga.api.app.create_app(DEV=True)
+    logging.info('api_client fixture app created')
     return app.test_client()

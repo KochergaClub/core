@@ -1,3 +1,6 @@
+import pytest
+pytestmark = pytest.mark.usefixtures('db')
+
 import datetime
 
 from kocherga.events.event import Event

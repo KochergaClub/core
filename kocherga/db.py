@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import enum
+import logging
 
 import sqlalchemy
 from sqlalchemy import Table, Column, String, DateTime, Integer, Enum
@@ -14,6 +15,7 @@ DB_FILE = config()['kocherga_db_file']
 Base = declarative_base()
 
 def engine():
+    logging.info(f'Creating an engine for sqlite file {DB_FILE}')
     return sqlalchemy.create_engine('sqlite:///{}'.format(DB_FILE))
 
 def connect():
@@ -27,4 +29,21 @@ def create_session_class():
         sessionmaker(bind=engine(), autoflush=False)
     )
 
-Session = create_session_class()
+class WrappedSession:
+    def __init__(self):
+        self.session = create_session_class()
+
+    def __call__(self):
+        return self.session()
+
+    def replace(self, new_session):
+        self.session.remove()
+        self.session = new_session
+
+    def configure(self, *args, **kwargs):
+        return self.session.configure(*args, **kwargs)
+
+    def remove(self):
+        return self.session.remove()
+
+Session = WrappedSession()

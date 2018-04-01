@@ -16,7 +16,7 @@ import kocherga.importer.base
 def get_event(event_id):
     google_event = kocherga.events.google.get_event(event_id)
     event = Event.from_google(google_event)
-    event = Session.merge(event)
+    event = Session().merge(event)
 
     return event
 
@@ -24,7 +24,8 @@ def list_events(**kwargs):
     google_events = kocherga.events.google.list_events(**kwargs)
     events = [Event.from_google(e) for e in google_events]
 
-    events = [Session.merge(event) for event in events]
+    # Note that merge doesn't rewrite the local-db-only fields such as event.summary (I checked).
+    events = [Session().merge(event) for event in events]
 
     return events
 
@@ -33,8 +34,6 @@ def insert_event(event):
         raise Exception("Event already exists, can't insert")
 
     MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00' # copy-pasted from kocherga.events.booking, FIXME
-
-    print('insert_event: ' + str(event.start_dt) + ' -> ' + str(event.end_dt))
 
     result = kocherga.events.google.api().events().insert(
         calendarId=kocherga.events.google.CALENDAR,
@@ -59,7 +58,7 @@ def insert_event(event):
     ).execute()
 
     event = Event.from_google(result)
-    event = Session.merge(event)
+    event = Session().merge(event)
     return event
 
 
@@ -77,13 +76,14 @@ def patch_event(event_id, patch):
 
     google_event = kocherga.events.google.patch_event(event_id, google_patch)
     event = Event.from_google(google_event)
-    return _update_local_db(event)
+    event = Session().merge(event)
+    return event
 
 def delete_event(event_id):
     kocherga.events.google.delete_event(event_id)
-    event = Session.query(Event).get(event_id)
+    event = Session().query(Event).get(event_id)
     if event:
-        Session.delete(event) # TODO - set deleted bit instead?
+        Session().delete(event) # TODO - set deleted bit instead?
 
 # Deprecated, use event.set_prop instead
 # (Still used in Ludwig)
@@ -106,9 +106,8 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             events = list_events(
                 to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
             )
-            for event in events:
-                # Note that merge doesn't rewrite the local-only fields such as event.summary (I checked).
-                merged_event = session.merge(event)
+            # we don't need to do anything else - list_events updates the local db every time
+
             return datetime.now(tz=TZ) - timedelta(days=1)
 
         events = list_events(
@@ -116,7 +115,4 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             order_by='updated',
             updated_min=from_dt,
         )
-        for event in events:
-            session.merge(event)
-
         return max(e.updated_dt for e in events)
