@@ -2,12 +2,21 @@ import os
 from pathlib import Path
 import datetime
 import json
-import pytz
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
-TZ = pytz.timezone('Europe/Moscow')
+### pytz is kinda crazy - it returns LMT from time to time.
+### It can be fixed by using tz.localize(dt) instead of passing tzinfo, and it looks more correct, but it requires a big refactoring.
+###
+### Also: "The preferred way of dealing with times is to always work in UTC, converting to localtime only when generating output to be read by humans."
+### (from https://pypi.python.org/pypi/pytz/)
+###
+# import pytz
+# TZ = pytz.timezone('Europe/Moscow')
+
+from dateutil import tz
+TZ = tz.tzoffset('MSK', 3600 * 3)
 
 def is_dev():
     hostname = os.uname()[1]
