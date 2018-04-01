@@ -2,9 +2,13 @@ import logging
 import os
 from pathlib import Path
 
-from quart import Quart, jsonify, request, current_app
+from sqlalchemy.orm import sessionmaker, scoped_session
+
+from quart import Quart, jsonify, request, current_app, _app_ctx_stack
 
 #from flask_cors import CORS
+
+import kocherga.db
 
 from kocherga.error import PublicError
 
@@ -22,6 +26,13 @@ def create_app(DEV):
         __name__,
         root_path=str(Path(__file__).parent.parent.parent.resolve())
     )
+
+    # we can't just use a default kocherga.db.Session because quart is async
+    kocherga.db.Session = scoped_session(
+        sessionmaker(bind=kocherga.db.engine(), autoflush=False),
+        scopefunc=_app_ctx_stack.__ident_func__
+    )
+
     if DEV:
         app.debug = True
         app.logger.setLevel(logging.DEBUG)

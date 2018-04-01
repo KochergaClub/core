@@ -72,6 +72,7 @@ def check_availability(start_dt, end_dt, room):
     date = start_dt.date()
 
     bookings = day_bookings(date)
+    print([vars(b) for b in bookings])
     for booking in bookings:
         if booking.room not in (room, kocherga.room.unknown):
             continue # irrelevant
@@ -82,8 +83,6 @@ def check_availability(start_dt, end_dt, room):
         if start_dt >= booking.end_dt:
             continue
 
-        print('collision with:')
-        print(vars(booking))
         return False
 
     return True
@@ -117,6 +116,8 @@ def delete_booking(event_id, email):
 def add_booking(date, room, people, startTime, endTime, email):
     # validate
     dt = datetime.datetime.strptime(date, '%Y-%m-%d').replace(tzinfo=TZ)
+    print('TZ: ' + str(TZ))
+    print('dt: ' + str(dt))
 
     if datetime.datetime.today().replace(tzinfo=TZ) + MAX_BOOKING_DELAY < dt:
         raise PublicError("This booking is too far off, we can't allow it.")
@@ -159,6 +160,7 @@ def add_booking(date, room, people, startTime, endTime, email):
 
     startDt = parse_time(startTime)
     endDt = parse_time(endTime)
+    print(f'booking: {str(startDt)} -> {str(endDt)}')
 
     if endDt <= startDt:
         raise PublicError("Event should end after it starts.")
@@ -179,5 +181,7 @@ def add_booking(date, room, people, startTime, endTime, email):
         end_dt=endDt,
         attendees=[email],
     )
+    print(f'booking event: {str(event.start_dt)} -> {str(event.end_dt)}')
+
 
     return kocherga.events.db.insert_event(event)
