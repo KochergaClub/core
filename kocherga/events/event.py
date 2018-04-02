@@ -130,9 +130,9 @@ class Event(kocherga.db.Base):
         else:
             self.asked_for_visitors_ts = None
 
-        self.posted_fb = self.get_prop('posted_fb')
-        self.posted_timepad = self.get_prop('posted_timepad')
-        self.posted_vk = self.get_prop('posted_vk')
+        self.posted_fb = self.get_prop('posted-fb')
+        self.posted_timepad = self.get_prop('posted-timepad')
+        self.posted_vk = self.get_prop('posted-vk')
 
     @orm.reconstructor
     def init_on_load(self):
