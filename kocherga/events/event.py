@@ -67,24 +67,26 @@ class Event(kocherga.db.Base):
     # TODO - collect all properties
 
     ### all existing props:
-    # [?] _timepad_
     # [x] asked_for_visitors
-    # [?] bar
     # [x] fb_group
-    # [?] foo
     # [x] has_default_image
-    # [?] has_image
     # [x] has_vk_image
-    # [?] hello
+    # [x] ready-to-post
+    # [x] type
+    # [x] visitors
+    # [x] vk_group
+
+    # [?] _timepad_
+    # [?] bar - obviously testing
+    # [?] foo - obviously testing
+    # [?] has_image - single value, doesn't matter
+    # [?] hello - 2 values, doesn't matter
+
     # [a] posted-fb
     # [a] posted-timepad
     # [a] posted-vk
-    # [x] ready-to-post
     # [a] timepad
-    # [x] type
-    # [x] visitors
     # [a] vk-link
-    # [x] vk_group
 
     def __init__(
             self,
@@ -295,7 +297,7 @@ class Event(kocherga.db.Base):
             'extendedProperties': { # deprecated
                 'private': dict(self.props),
             },
-            'event_type': self.event_type,
+            'type': self.event_type,
             # TODO - add field from props as top-level fields
         }
 
