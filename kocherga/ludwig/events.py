@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from kocherga.config import TZ
 import kocherga.events.db
+from kocherga.db import Session
 
 from kocherga.ludwig.bot import bot
 
@@ -191,10 +192,12 @@ def ask_for_event_visitors():
     for e in events:
         kocherga.events.db.set_event_property(e.google_id, 'asked_for_visitors', datetime.now().strftime('%Y-%m-%d %H:%M'))
         bot.send_message(**event_visitors_question(e))
+        Session().commit()
 
 @bot.action(r'event_visitors/(.*)/reset')
 def reset_event_visitors(payload, event_id):
     kocherga.events.db.set_event_property(event_id, 'visitors', None)
+    Session().commit()
     event = kocherga.events.db.get_event(event_id)
 
     return event_visitors_question(event)
@@ -204,6 +207,7 @@ def accept_event_visitors(payload, event_id):
     value = payload['actions'][0]['value']
 
     kocherga.events.db.set_event_property(event_id, 'visitors', value)
+    Session().commit()
     event = kocherga.events.db.get_event(event_id)
 
     attachment = visitors_attachment(event)
