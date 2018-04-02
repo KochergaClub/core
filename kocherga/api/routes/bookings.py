@@ -2,6 +2,7 @@ from quart import Blueprint, jsonify, request
 
 from datetime import datetime
 
+from kocherga.db import Session
 from kocherga.error import PublicError
 import kocherga.events.booking
 from kocherga.api.auth import auth, get_email
