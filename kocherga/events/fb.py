@@ -30,118 +30,142 @@ async def find_browser_page(endpoint):
     page = next(p for p in await browser.pages() if 'facebook' in p.url)
     return page
 
-async def fill_date_time(page, dt):
-    for i in range(15):
-        await page.keyboard.press('Backspace')
-        await page.keyboard.press('Delete')
-    await page.keyboard.type(dt.strftime('%d.%m.%Y'))
-    await page.keyboard.press('Tab')
-    await page.keyboard.type(str(dt.hour))
-    await page.keyboard.press('Tab')
-    await page.keyboard.type(str(dt.minute))
+class AnnounceSession:
+    def __init__(self):
+        pass
 
-async def select_from_listbox(page, fb_id):
-    selector = f'[role=listbox] [src*="{fb_id}"], [role=listbox] [style*="{fb_id}"]'
-    await page.waitForSelector(selector)
-    await page.click(selector)
+    @classmethod
+    async def create(cls, browser, event, access_token=None, auto_confirm=True, select_self_location=True):
+        self = cls()
+        self.page = await browser.newPage()
+        self.event = event
+        self.access_token = access_token
+        self.auto_confirm = auto_confirm
+        self.select_self_location = select_self_location
+        return self
 
-async def fill_entity(page, entity):
-    if not entity.name:
-        raise Exception('Having a name is a must')
-    await page.keyboard.type('@' + entity.name[:20])
+    async def clean_field(self, max_length=20, both_directions=False):
+        for i in range(max_length):
+            await self.page.keyboard.press('Backspace')
+            if both_directions:
+                await self.page.keyboard.press('Delete')
 
-    await select_from_listbox(page, entity.fb_id)
+    async def fill_date_time(self, dt):
+        await self.clean_field(15, both_directions=True)
+        await self.page.keyboard.type(dt.strftime('%d.%m.%Y'))
+        await self.page.keyboard.press('Tab')
+        await self.page.keyboard.type(str(dt.hour))
+        await self.page.keyboard.press('Tab')
+        await self.page.keyboard.type(str(dt.minute))
 
-async def fill_description(page, description):
-    details = await page.J('[data-testid=event-create-dialog-details-field]')
-    await details.click()
+    async def select_from_listbox(self, fb_id):
+        selector = f'[role=listbox] [src*="{fb_id}"], [role=listbox] [style*="{fb_id}"]'
+        await self.page.waitForSelector(selector)
+        await self.page.click(selector)
 
-    markup_parts = kocherga.events.markup.parse_to_parts(description)
-    for part in markup_parts:
-        if isinstance(part, kocherga.events.markup.Text):
-            await page.keyboard.type(part.text)
-        elif isinstance(part, kocherga.events.markup.Entity):
-            await fill_entity(page, part)
-        elif isinstance(part, kocherga.events.markup.SelfMention):
-            await page.keyboard.type(FB_CONFIG['main_page']['autoreplace']['to'])
-            await select_from_listbox(page, FB_CONFIG['main_page']['id'])
-        else:
-            raise Exception('unknown part encountered while parsing: ' + str(part))
+    async def fill_entity(self, entity):
+        if not entity.name:
+            raise Exception('Having a name is a must')
+        await self.page.keyboard.type('@' + entity.name[:20])
 
-async def _create(page, event, debugging):
-    logging.info('Going to facebook')
-    await page.goto('https://facebook.com')
+        await self.select_from_listbox(entity.fb_id)
 
-    logging.info('Signing in')
-    await page.focus('input[name=email]')
-    await page.keyboard.type(FB_CONFIG['announcer_login'])
+    async def fill_description(self, description):
+        details = await self.page.J('[data-testid=event-create-dialog-details-field]')
+        await details.click()
 
-    await page.focus('input[name=pass]')
-    await page.keyboard.type(PASSWORD)
+        markup_parts = kocherga.events.markup.parse_to_parts(description)
+        for part in markup_parts:
+            if isinstance(part, kocherga.events.markup.Text):
+                await self.page.keyboard.type(part.text)
+            elif isinstance(part, kocherga.events.markup.Entity):
+                await fill_entity(self.page, part)
+            elif isinstance(part, kocherga.events.markup.SelfMention):
+                await self.page.keyboard.type(FB_CONFIG['main_page']['autoreplace']['to'])
+                await self.select_from_listbox(FB_CONFIG['main_page']['id'])
+            else:
+                raise Exception('unknown part encountered while parsing: ' + str(part))
 
-    await page.keyboard.press('Enter')
+    async def run(self):
+        page = self.page
+        event = self.event
 
-    await page.waitForNavigation()
+        logging.info('Going to facebook')
+        await page.goto('https://facebook.com')
 
-    logging.info('Signed in')
-    events_page = event.fb_announce_page() + '/events'
-    logging.info('Going to page: ' + events_page)
-    await page.goto(events_page)
+        logging.info('Signing in')
+        await page.focus('input[name=email]')
+        await page.keyboard.type(FB_CONFIG['announcer_login'])
 
-    logging.info('Opening an event creation form')
-    await page.click('[data-testid=event-create-button]')
-    await page.waitForSelector('[data-testid=event-create-dialog-name-field]')
+        await page.focus('input[name=pass]')
+        await page.keyboard.type(PASSWORD)
 
-    logging.info('Uploading an image')
-    await page.waitForSelector('[data-testid=event-create-dialog-image-selector')
-    el = await page.J('[data-testid=event-create-dialog-image-selector')
-    await el.uploadFile(event.image_file('default'))
+        await page.keyboard.press('Enter')
 
-    logging.info('Filling title')
-    await page.focus('[data-testid=event-create-dialog-name-field]')
-    await page.keyboard.type(event.title)
+        await page.waitForNavigation()
 
-    logging.info('Filling where')
-    await page.focus('[data-testid=event-create-dialog-where-field]')
-    await page.keyboard.type(FB_CONFIG['main_page']['name'])
+        logging.info('Signed in')
+        events_page = event.fb_announce_page() + '/events'
+        logging.info('Going to page: ' + events_page)
+        await page.goto(events_page)
 
-    await select_from_listbox(page, FB_CONFIG['main_page']['id'])
+        logging.info('Opening an event creation form')
+        await page.click('[data-testid=event-create-button]')
+        await page.waitForSelector('[data-testid=event-create-dialog-name-field]')
 
-    logging.info('Filling dates')
-    await page.focus('[data-testid=event-create-dialog-start-time] input[placeholder="дд.мм.гггг"]')
-    await fill_date_time(page, event.start_dt)
-    await page.focus('[data-testid=event-create-dialog-end-time] input[placeholder="дд.мм.гггг"]')
-    await fill_date_time(page, event.end_dt)
+        logging.info('Uploading an image')
+        await page.waitForSelector('[data-testid=event-create-dialog-image-selector')
+        el = await page.J('[data-testid=event-create-dialog-image-selector')
+        await el.uploadFile(event.image_file('default'))
 
-    logging.info('Filling description')
-    await fill_description(page, event.description)
+        logging.info('Filling title')
+        await page.focus('[data-testid=event-create-dialog-name-field]')
+        await page.keyboard.type(event.title)
 
-    if debugging:
-        # don't confirm
-        return page
+        logging.info('Filling where')
+        await page.focus('[data-testid=event-create-dialog-where-field]')
+        await self.clean_field(40)
+        await page.keyboard.type(FB_CONFIG['main_page']['name'])
 
-    logging.info('Confirming')
-    await asyncio.gather(
-        page.click('[data-testid=event-create-dialog-confirm-button]'),
-        page.waitForNavigation(timeout=60000)
-    )
+        if self.select_self_location:
+            await self.select_from_listbox(FB_CONFIG['main_page']['id'])
 
-    return FbAnnouncement(page.url)
+        logging.info('Filling dates')
+        await page.focus('[data-testid=event-create-dialog-start-time] input[placeholder="дд.мм.гггг"]')
+        await self.fill_date_time(event.start_dt)
+        await page.focus('[data-testid=event-create-dialog-end-time] input[placeholder="дд.мм.гггг"]')
+        await self.fill_date_time(event.end_dt)
 
-async def create(event, debugging=False):
+        logging.info('Filling description')
+        await self.fill_description(event.description)
+
+        if not self.auto_confirm:
+            return page
+
+        logging.info('Confirming')
+        await page.click('[data-testid=event-create-dialog-confirm-button]')
+        await page.waitForSelector('h1[data-testid=event-permalink-event-name]')
+
+        return FbAnnouncement(page.url)
+
+    async def screenshot(self):
+        return await self.page.screenshot()
+
+
+async def create(event, headless=True, **kwargs):
     browser = await pyppeteer.launch(
-        headless=False if debugging else True,
+        headless=headless,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
     )
     logging.info(f'Started browser at {browser.wsEndpoint}')
-    page = await browser.newPage()
 
+    session = await AnnounceSession.create(browser, event, **kwargs)
     try:
         logging.info(f'Trying to create')
-        return await _create(page, event, debugging)
+        return await session.run()
     except Exception as e:
         logging.info(f'Error while creating a FB announcement: {str(e)}')
-        image_bytes = await page.screenshot()
-        image_storage.save_screenshot('error', image_bytes)
-        logging.info(f'Screenshot saved')
+        image_bytes = await session.screenshot()
+        filename = image_storage.save_screenshot('error', image_bytes)
+        logging.info(f'Screenshot saved to {filename}')
         raise

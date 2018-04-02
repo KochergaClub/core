@@ -29,6 +29,7 @@ class ImageStorage:
         filename = Path(self.screenshot_dir) / name
         with open(filename, 'wb') as fh:
             fh.write(image_bytes)
+        return filename
 
     def screenshot_file(self, name):
         return str(Path(self.screenshot_dir) / name)

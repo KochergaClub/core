@@ -32,8 +32,12 @@ def google_object():
     }
 
 @pytest.fixture(scope='session')
-def image_file():
+def vk_image_file():
     return str(Path(__file__).parent / 'images' / 'vk')
+
+@pytest.fixture(scope='session')
+def image_file():
+    return str(Path(__file__).parent / 'images' / 'default')
 
 @pytest.fixture
 def db(tmpdir):
@@ -58,7 +62,7 @@ def image_storage(tmpdir):
     return kocherga.images.image_storage
 
 @pytest.fixture(scope='session')
-def event(image_file):
+def event(image_file, vk_image_file):
     dt = datetime.today() + timedelta(days=3)
     event = Event(
         created_dt=dt - timedelta(days=5),
@@ -75,8 +79,11 @@ def event(image_file):
     )
     event = kocherga.events.db.insert_event(event)
 
-    with open(image_file, 'rb') as fh:
+    with open(vk_image_file, 'rb') as fh:
         event.add_image('vk', fh)
+
+    with open(image_file, 'rb') as fh:
+        event.add_image('default', fh)
 
     yield event
 

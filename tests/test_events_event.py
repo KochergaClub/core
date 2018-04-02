@@ -50,9 +50,9 @@ class TestImages:
         event = event_for_edits
 
         with open(image_file, 'rb') as fh:
-            event.add_image('vk', fh)
+            event.add_image('default', fh)
 
-        assert event.image_file('vk')
+        assert event.image_file('default')
 
         event = kocherga.events.db.get_event(event.google_id) # reloading for another check
-        assert event.image_file('vk')
+        assert event.image_file('default')
