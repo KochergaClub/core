@@ -61,6 +61,29 @@ class Event(kocherga.db.Base):
     has_default_image = Column(Boolean)
     has_vk_image = Column(Boolean)
 
+    # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
+    # TODO - collect all properties
+
+    ### all existing props:
+    # [?] _timepad_
+    # [ ] asked_for_visitors
+    # [?] bar
+    # [x] fb_group
+    # [?] foo
+    # [x] has_default_image
+    # [?] has_image
+    # [x] has_vk_image
+    # [?] hello
+    # [a] posted-fb
+    # [a] posted-timepad
+    # [a] posted-vk
+    # [ ] ready-to-post
+    # [a] timepad
+    # [x] type
+    # [x] visitors
+    # [a] vk-link
+    # [x] vk_group
+
     def __init__(
             self,
             start_dt, end_dt,
