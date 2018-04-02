@@ -85,7 +85,7 @@ def post_vk(event_id):
 
 @bp.route('/event/<event_id>/announce/fb', methods=['POST'])
 @auth('kocherga')
-async def post_fb(event_id, access_token):
+async def post_fb(event_id):
     access_token = (await request.get_json())['fb_access_token']
 
     event = kocherga.events.db.get_event(event_id)
