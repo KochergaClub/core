@@ -39,6 +39,7 @@ def get_image_id(fb_id: str, access_token: str):
             'fields': field
         })
         if r.status_code != 200:
+            logging.warn(f"Can't read {fb_id}/{field}: {r.status_code}, {str(r.json())}")
             continue
         logging.info(f'Got JSON for field {field}: {str(r.json())}')
 
