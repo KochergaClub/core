@@ -113,7 +113,7 @@ class Event(kocherga.db.Base):
         self.props = props
 
         self.visitors = self.get_prop('visitors')
-        self.event_type = self.get_prop('type')
+        self.event_type = self.is_private()
         self.vk_group = self.get_prop('vk_group')
         self.fb_group = self.get_prop('fb_group')
         self.has_default_image = self.get_prop('has_default_image') in ('true', True)
