@@ -53,6 +53,7 @@ class Event(kocherga.db.Base):
     master_id = Column(String)
 
     visitors = Column(Integer)
+    asked_for_visitors_ts = Column(Integer)
     event_type = Column(String)
 
     vk_group = Column(String)
@@ -60,13 +61,14 @@ class Event(kocherga.db.Base):
 
     has_default_image = Column(Boolean)
     has_vk_image = Column(Boolean)
+    ready_to_post = Column(Boolean)
 
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
 
     ### all existing props:
     # [?] _timepad_
-    # [ ] asked_for_visitors
+    # [x] asked_for_visitors
     # [?] bar
     # [x] fb_group
     # [?] foo
@@ -77,7 +79,7 @@ class Event(kocherga.db.Base):
     # [a] posted-fb
     # [a] posted-timepad
     # [a] posted-vk
-    # [ ] ready-to-post
+    # [x] ready-to-post
     # [a] timepad
     # [x] type
     # [x] visitors
@@ -116,6 +118,11 @@ class Event(kocherga.db.Base):
         self.fb_group = self.get_prop('fb_group')
         self.has_default_image = self.get_prop('has_default_image') in ('true', True)
         self.has_vk_image = self.get_prop('has_vk_image') in ('true', True)
+        self.ready_to_post = self.get_prop('ready-to-post') in ('true', True)
+        if self.get_prop('asked_for_visitors'):
+            self.asked_for_visitors_ts = datetime.strptime(self.get_prop('asked_for_visitors'), '%Y-%m-%d %H:%M').replace(tzinfo=TZ).timestamp()
+        else:
+            self.asked_for_visitors_ts = None
 
     @orm.reconstructor
     def init_on_load(self):
@@ -127,6 +134,8 @@ class Event(kocherga.db.Base):
             'fb_group': self.fb_group,
             'has_default_image': self.has_default_image,
             'has_vk_image': self.has_vk_image,
+            'ready-to-post': self.ready_to_post,
+            'asked_for_visitors': self.asked_for_visitors_ts.strftime('%Y-%m-%d %H:%M') if self.asked_for_visitors_ts else None,
         }
 
         self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
@@ -279,12 +288,13 @@ class Event(kocherga.db.Base):
                 'dateTime': dts(self.end_dt),
             },
             'created': dts(self.created_dt),
-            'props': dict(self.props),
+            'props': dict(self.props), # deprecated
             'google_link': self.google_link,
             'htmlLink': self.google_link, # deprecated
             'extendedProperties': { # deprecated
                 'private': dict(self.props),
             },
+            # TODO - add field from props as top-level fields
         }
         d['type'] = 'private' if self.is_private() else 'public'
 
