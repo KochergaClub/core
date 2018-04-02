@@ -118,21 +118,8 @@ class Event(kocherga.db.Base):
         self.attendees = attendees
         self.props = props
 
-        self.visitors = self.get_prop('visitors')
-        self.event_type = 'private' if self.is_private() else 'public'
-        self.vk_group = self.get_prop('vk_group')
-        self.fb_group = self.get_prop('fb_group')
-        self.has_default_image = self.get_prop('has_default_image') in ('true', True)
-        self.has_vk_image = self.get_prop('has_vk_image') in ('true', True)
-        self.ready_to_post = self.get_prop('ready-to-post') in ('true', True)
-        if self.get_prop('asked_for_visitors'):
-            self.asked_for_visitors_ts = datetime.strptime(self.get_prop('asked_for_visitors'), '%Y-%m-%d %H:%M').replace(tzinfo=TZ).timestamp()
-        else:
-            self.asked_for_visitors_ts = None
-
-        self.posted_fb = self.get_prop('posted-fb')
-        self.posted_timepad = self.get_prop('posted-timepad')
-        self.posted_vk = self.get_prop('posted-vk')
+        for key in ('visitors', 'type', 'vk_group', 'fb_group', 'has_default_image', 'has_vk_image', 'ready-to-post', 'asked_for_visitors', 'posted-fb', 'posted-timepad', 'posted-vk'):
+            self.set_field_by_prop(key, self.get_prop(key))
 
     @orm.reconstructor
     def init_on_load(self):
@@ -146,7 +133,6 @@ class Event(kocherga.db.Base):
             'has_vk_image': self.has_vk_image,
             'ready-to-post': self.ready_to_post,
             'asked_for_visitors': datetime.fromtimestamp(self.asked_for_visitors_ts, TZ).strftime('%Y-%m-%d %H:%M') if self.asked_for_visitors_ts else None,
-            'visitors': self.visitors,
             'posted-fb': self.posted_fb,
             'posted-timepad': self.posted_timepad,
             'posted-vk': self.posted_vk,
@@ -241,8 +227,32 @@ class Event(kocherga.db.Base):
     def set_prop(self, key, value):
         # Planned future changes: save some or all properties in a local sqlite DB instead.
         # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
-        kocherga.events.google.set_property(self.google_id, key, value)
         self.props[key] = value
+        self.set_field_by_prop(key, value)
+        kocherga.events.google.set_property(self.google_id, key, value)
+
+    def set_field_by_prop(self, key, value):
+        if key == 'visitors': self.visitors = value
+        elif key == 'vk_group': self.vk_group = value
+        elif key == 'fb_group': self.fb_group = value
+        elif key == 'posted-fb': self.posted_fb = value
+        elif key == 'posted-timepad': self.posted_timepad = value
+        elif key == 'posted-vk': self.posted_vk = value
+
+        # huh?
+        # should refactor this quick - is_private() can change and this is extremely fragile
+        elif key == 'type': self.event_type = 'private' if self.is_private() else 'public'
+
+        elif key == 'has_default_image': self.has_default_image = value in ('true', True)
+        elif key == 'has_vk_image': self.has_vk_image = value in ('true', True)
+        elif key == 'ready-to-post': self.ready_to_post = value in ('true', True)
+        elif key == 'asked_for_visitors':
+            if value:
+                self.asked_for_visitors_ts = datetime.strptime(value, '%Y-%m-%d %H:%M').replace(tzinfo=TZ).timestamp()
+            else:
+                self.asked_for_visitors_ts = None
+        else:
+            raise PublicError(f'Unknown prop {key}')
 
     def image_file(self, image_type, check_if_exists=True):
         if not self.get_prop(image_flag_property(image_type)):
