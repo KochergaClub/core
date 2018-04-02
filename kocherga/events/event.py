@@ -63,6 +63,10 @@ class Event(kocherga.db.Base):
     has_vk_image = Column(Boolean)
     ready_to_post = Column(Boolean)
 
+    posted_fb = Column(String)
+    posted_timepad = Column(String)
+    posted_vk = Column(String)
+
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
 
@@ -126,6 +130,10 @@ class Event(kocherga.db.Base):
         else:
             self.asked_for_visitors_ts = None
 
+        self.posted_fb = self.get_prop('posted_fb')
+        self.posted_timepad = self.get_prop('posted_timepad')
+        self.posted_vk = self.get_prop('posted_vk')
+
     @orm.reconstructor
     def init_on_load(self):
         # deprecated
@@ -139,6 +147,9 @@ class Event(kocherga.db.Base):
             'ready-to-post': self.ready_to_post,
             'asked_for_visitors': datetime.fromtimestamp(self.asked_for_visitors_ts, TZ).strftime('%Y-%m-%d %H:%M') if self.asked_for_visitors_ts else None,
             'visitors': self.visitors,
+            'posted-fb': self.posted_fb,
+            'posted-timepad': self.posted_timepad,
+            'posted-vk': self.posted_vk,
         }
 
         self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
