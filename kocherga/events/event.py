@@ -135,7 +135,7 @@ class Event(kocherga.db.Base):
             'has_default_image': self.has_default_image,
             'has_vk_image': self.has_vk_image,
             'ready-to-post': self.ready_to_post,
-            'asked_for_visitors': self.asked_for_visitors_ts.strftime('%Y-%m-%d %H:%M') if self.asked_for_visitors_ts else None,
+            'asked_for_visitors': datetime.fromtimestamp(self.asked_for_visitors_ts, TZ).strftime('%Y-%m-%d %H:%M') if self.asked_for_visitors_ts else None,
         }
 
         self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
