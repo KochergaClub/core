@@ -46,7 +46,11 @@ def get_image_id(fb_id: str, access_token: str):
         if field == 'cover':
             url = r.json()['cover']['source']
         elif field == 'picture':
-            url = r.json()['picture']['data']['url']
+            picture = r.json()['picture']
+            if type(picture) == str:
+                url = picture
+            else:
+                url = picture['data']['url']
         else:
             raise NotImplemented
         match = re.match(r'https://.*?/v/.*?/p\d+x\d+/(\d+_\d+_\d+)', url)
