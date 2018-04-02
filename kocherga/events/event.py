@@ -5,7 +5,7 @@ import hashlib
 import shutil
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, orm
 
 import kocherga.db
 
@@ -34,19 +34,55 @@ def image_flag_property(image_type):
 class Event(kocherga.db.Base):
     __tablename__ = 'events'
     google_id = Column(String, primary_key=True)
+    google_link = Column(String)
+
     start_ts = Column(Integer)
     end_ts = Column(Integer)
     created_ts = Column(Integer)
     updated_ts = Column(Integer)
     creator = Column(String)
+
     title = Column(String)
+    # Not a google_event.summary! We don't store this field on google at all for now. This is for the short schedule/timepad/email summaries.
+    summary = Column(String)
     description = Column(String)
+
     location = Column(String)
-    google_link = Column(String)
+
     is_master = Column(Boolean)
     master_id = Column(String)
+
     visitors = Column(Integer)
     event_type = Column(String)
+
+    vk_group = Column(String)
+    fb_group = Column(String)
+
+    has_default_image = Column(Boolean)
+    has_vk_image = Column(Boolean)
+
+    # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
+    # TODO - collect all properties
+
+    ### all existing props:
+    # [?] _timepad_
+    # [ ] asked_for_visitors
+    # [?] bar
+    # [x] fb_group
+    # [?] foo
+    # [x] has_default_image
+    # [?] has_image
+    # [x] has_vk_image
+    # [?] hello
+    # [a] posted-fb
+    # [a] posted-timepad
+    # [a] posted-vk
+    # [ ] ready-to-post
+    # [a] timepad
+    # [x] type
+    # [x] visitors
+    # [a] vk-link
+    # [x] vk_group
 
     def __init__(
             self,
@@ -59,8 +95,8 @@ class Event(kocherga.db.Base):
             attendees=[],
             props={}
     ):
-        self.created_dt = created_dt
-        self.updated_dt = updated_dt
+        self.created_dt = created_dt or datetime.now(TZ)
+        self.updated_dt = updated_dt or self.created_dt
         self.creator = creator
         self.title = title
         self.description = description
@@ -74,17 +110,61 @@ class Event(kocherga.db.Base):
         self.attendees = attendees
         self.props = props
 
-        if not created_dt:
-            self.created_dt = datetime.now(TZ)
-        if not updated_dt:
-            self.updated_dt = self.created_dt
-
-        self.start_ts = self.start_dt.timestamp()
-        self.end_ts = self.end_dt.timestamp()
-        self.created_ts = self.created_dt.timestamp()
-        self.updated_ts = self.updated_dt.timestamp()
         self.visitors = self.get_prop('visitors')
         self.event_type = self.get_prop('type')
+        self.vk_group = self.get_prop('vk_group')
+        self.fb_group = self.get_prop('fb_group')
+        self.has_default_image = self.get_prop('has_default_image') in ('true', True)
+        self.has_vk_image = self.get_prop('has_vk_image') in ('true', True)
+
+    @orm.reconstructor
+    def init_on_load(self):
+        # deprecated
+        self.props = {
+            'visitors': self.visitors,
+            'type': self.event_type,
+            'vk_group': self.vk_group,
+            'fb_group': self.fb_group,
+            'has_default_image': self.has_default_image,
+            'has_vk_image': self.has_vk_image,
+        }
+
+        self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
+        self.updated_dt = datetime.fromtimestamp(self.updated_ts, TZ)
+        self.start_dt = datetime.fromtimestamp(self.start_ts, TZ)
+        self.end_dt = datetime.fromtimestamp(self.end_ts, TZ)
+
+    @property
+    def created_dt(self):
+        return datetime.fromtimestamp(self.created_ts, TZ)
+
+    @created_dt.setter
+    def created_dt(self, value):
+        self.created_ts = value.timestamp()
+
+    @property
+    def updated_dt(self):
+        return datetime.fromtimestamp(self.updated_ts, TZ)
+
+    @updated_dt.setter
+    def updated_dt(self, value):
+        self.updated_ts = value.timestamp()
+
+    @property
+    def start_dt(self):
+        return datetime.fromtimestamp(self.start_ts, TZ)
+
+    @start_dt.setter
+    def start_dt(self, value):
+        self.start_ts = value.timestamp()
+
+    @property
+    def end_dt(self):
+        return datetime.fromtimestamp(self.end_ts, TZ)
+
+    @end_dt.setter
+    def end_dt(self, value):
+        self.end_ts = value.timestamp()
 
     @classmethod
     def from_google(cls, google_event):
@@ -187,7 +267,7 @@ class Event(kocherga.db.Base):
     def to_dict(self):
         d = {
             'id': self.google_id,
-            'summary': self.title, # deprecated
+            'summary': self.summary,
             'title': self.title,
             'description': self.description,
             'location': self.location, # deprecated

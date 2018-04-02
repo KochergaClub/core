@@ -2,21 +2,31 @@ import logging
 from datetime import datetime, timedelta
 
 from kocherga.config import TZ
+
 import kocherga.db
+from kocherga.db import Session
+
+from kocherga.error import PublicError
+
 import kocherga.events.google
 from kocherga.events.event import Event, IMAGE_TYPES
 from kocherga.images import image_storage
 import kocherga.importer.base
 
-from kocherga.error import PublicError
-
 def get_event(event_id):
     google_event = kocherga.events.google.get_event(event_id)
-    return Event.from_google(google_event)
+    event = Event.from_google(google_event)
+    event = Session().merge(event)
+
+    return event
 
 def list_events(**kwargs):
     google_events = kocherga.events.google.list_events(**kwargs)
     events = [Event.from_google(e) for e in google_events]
+
+    # Note that merge doesn't rewrite the local-db-only fields such as event.summary (I checked).
+    events = [Session().merge(event) for event in events]
+
     return events
 
 def insert_event(event):
@@ -47,7 +57,10 @@ def insert_event(event):
         },
     ).execute()
 
-    return Event.from_google(result)
+    event = Event.from_google(result)
+    event = Session().merge(event)
+    return event
+
 
 def patch_event(event_id, patch):
     google_patch = {}
@@ -62,17 +75,23 @@ def patch_event(event_id, patch):
             raise Exception('Key {} is not allowed in patch yet'.format(key))
 
     google_event = kocherga.events.google.patch_event(event_id, google_patch)
-    return Event.from_google(google_event)
+    event = Event.from_google(google_event)
+    event = Session().merge(event)
+    return event
 
 def delete_event(event_id):
     kocherga.events.google.delete_event(event_id)
+    event = Session().query(Event).get(event_id)
+    if event:
+        Session().delete(event) # TODO - set deleted bit instead?
 
 # Deprecated, use event.set_prop instead
-# Still used in Ludwig!
+# (Still used in Ludwig)
 def set_event_property(event_id, key, value):
     # Planned future changes: save some or all properties in a local sqlite DB instead.
     # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
     kocherga.events.google.set_property(event_id, key, value)
+    # TODO - update local DB too!
 
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
@@ -87,8 +106,8 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             events = list_events(
                 to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
             )
-            for event in events:
-                session.merge(event)
+            # we don't need to do anything else - list_events updates the local db every time
+
             return datetime.now(tz=TZ) - timedelta(days=1)
 
         events = list_events(
@@ -96,7 +115,4 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             order_by='updated',
             updated_min=from_dt,
         )
-        for event in events:
-            session.merge(event)
-
         return max(e.updated_dt for e in events)

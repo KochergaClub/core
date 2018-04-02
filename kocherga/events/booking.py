@@ -1,5 +1,6 @@
 import datetime
 import re
+import logging
 
 import googleapiclient.errors
 
@@ -72,6 +73,7 @@ def check_availability(start_dt, end_dt, room):
     date = start_dt.date()
 
     bookings = day_bookings(date)
+    logging.debug([vars(b) for b in bookings])
     for booking in bookings:
         if booking.room not in (room, kocherga.room.unknown):
             continue # irrelevant
@@ -82,8 +84,6 @@ def check_availability(start_dt, end_dt, room):
         if start_dt >= booking.end_dt:
             continue
 
-        print('collision with:')
-        print(vars(booking))
         return False
 
     return True
@@ -179,5 +179,6 @@ def add_booking(date, room, people, startTime, endTime, email):
         end_dt=endDt,
         attendees=[email],
     )
+
 
     return kocherga.events.db.insert_event(event)

@@ -1,3 +1,6 @@
+import pytest
+pytestmark = pytest.mark.usefixtures('db')
+
 import kocherga.events.timepad
 from kocherga.events.timepad import TimepadAnnouncement
 

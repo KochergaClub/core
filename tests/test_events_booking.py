@@ -8,6 +8,8 @@ from kocherga.events.event import Event
 from kocherga.error import PublicError
 from kocherga.config import TZ
 
+pytestmark = pytest.mark.usefixtures('db')
+
 @pytest.fixture
 def event1():
     GOOGLE_EVENT = {
@@ -44,7 +46,6 @@ def event1():
     return Event.from_google(GOOGLE_EVENT)
 
 class TestBooking:
-
     def test_constructor(self):
         assert type(kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб', 5)) == kocherga.events.booking.Booking
 
@@ -133,11 +134,17 @@ class TestAddBooking:
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
 
     def test_add_booking_back_to_back(self):
-        event1 = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '09:00', '09:30', 'somebody@example.com')
-        event2 = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '09:30', '10:00', 'somebody@example.com')
+        print('add 1')
+        event1 = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '09:00', '09:30', 'somebody1@example.com')
+        print(event1.title)
+        print(event1.google_id)
+        print(event1.start_dt)
+        print(event1.end_dt)
+        print('add 2')
+        event2 = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '09:30', '10:00', 'somebody2@example.com')
 
-        assert event1.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
-        assert event2.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
+        assert event1.title == 'Бронь ГЭБ, 3 человек, somebody1@example.com'
+        assert event2.title == 'Бронь ГЭБ, 3 человек, somebody2@example.com'
 
         # cleanup
         for event in (event1, event2):
