@@ -52,7 +52,7 @@ class Event(kocherga.db.Base):
     is_master = Column(Boolean)
     master_id = Column(String)
 
-    visitors = Column(Integer)
+    visitors = Column(String) # not Integer, because it can take values such as 'no_record' or 'cancelled'
     asked_for_visitors_ts = Column(Integer)
     event_type = Column(String)
 
