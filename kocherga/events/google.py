@@ -34,7 +34,7 @@ def set_property(event_id, key, value):
 def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
     kw = {
         'calendarId': CALENDAR,
-        'maxResults': 100,
+        'maxResults': 1000,
         'singleEvents': True,
         'orderBy': 'startTime',
     }
