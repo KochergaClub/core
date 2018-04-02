@@ -51,6 +51,7 @@ def event(event_id):
 async def set_property(event_id, key):
     value = (await request.get_json())['value']
     kocherga.events.db.get_event(event_id).set_prop(key, value)
+    Session().commit()
     return jsonify(ok)
 
 @bp.route('/event/<event_id>', methods=['PATCH'])
