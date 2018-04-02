@@ -115,6 +115,7 @@ def create(event):
         url,
         json=data
     )
+    print(r.text)
     r.raise_for_status()
 
     result = json.loads(r.text)

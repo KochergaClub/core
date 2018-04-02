@@ -3,6 +3,7 @@ from collections import namedtuple
 import logging
 import asyncio
 from random import random
+import requests
 
 import pyppeteer
 
@@ -30,12 +31,37 @@ async def find_browser_page(endpoint):
     page = next(p for p in await browser.pages() if 'facebook' in p.url)
     return page
 
+def get_image_id(fb_id: str, access_token: str):
+    # Facebook groups have a cover. Facebook pages have a picture. We have to be smart about this because graph API returns an error if we ask a group for a picture.
+    for field in ('picture', 'cover'):
+        r = requests.get(f'https://graph.facebook.com/v2.12/{fb_id}', params={
+            'access_token': access_token,
+            'fields': field
+        })
+        if r.status_code != 200:
+            continue
+        logging.info(f'Got JSON for field {field}: {str(r.json())}')
+
+        url = None
+        if field == 'cover':
+            url = r.json()['cover']['source']
+        elif field == 'picture':
+            url = r.json()['picture']['data']['url']
+        else:
+            raise NotImplemented
+        match = re.match(r'https://.*?/v/.*?/p\d+x\d+/(\d+_\d+_\d+)', url)
+        if not match:
+            raise Exception(f'Unparsable FB image url: {url}')
+        return match.group(1)
+    raise Exception("Couldn't find picture or cover")
+
+
 class AnnounceSession:
     def __init__(self):
         pass
 
     @classmethod
-    async def create(cls, browser, event, access_token=None, auto_confirm=True, select_self_location=True):
+    async def create(cls, browser, access_token, event, auto_confirm=True, select_self_location=True):
         self = cls()
         self.page = await browser.newPage()
         self.event = event
@@ -59,7 +85,9 @@ class AnnounceSession:
         await self.page.keyboard.type(str(dt.minute))
 
     async def select_from_listbox(self, fb_id):
-        selector = f'[role=listbox] [src*="{fb_id}"], [role=listbox] [style*="{fb_id}"]'
+        image_id = get_image_id(fb_id, self.access_token)
+        logging.info(f'Looking for image {image_id}')
+        selector = f'[role=listbox] [src*="{image_id}"], [role=listbox] [style*="{image_id}"]'
         await self.page.waitForSelector(selector)
         await self.page.click(selector)
 
@@ -79,7 +107,7 @@ class AnnounceSession:
             if isinstance(part, kocherga.events.markup.Text):
                 await self.page.keyboard.type(part.text)
             elif isinstance(part, kocherga.events.markup.Entity):
-                await fill_entity(self.page, part)
+                await self.fill_entity(part)
             elif isinstance(part, kocherga.events.markup.SelfMention):
                 await self.page.keyboard.type(FB_CONFIG['main_page']['autoreplace']['to'])
                 await self.select_from_listbox(FB_CONFIG['main_page']['id'])
@@ -152,14 +180,18 @@ class AnnounceSession:
         return await self.page.screenshot()
 
 
-async def create(event, headless=True, **kwargs):
+# FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),
+# so it's not a hack that we usually bring a token from a client from a client side to server to make an announcement.
+#
+# It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
+async def create(event, access_token, headless=True, **kwargs):
     browser = await pyppeteer.launch(
         headless=headless,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
     )
     logging.info(f'Started browser at {browser.wsEndpoint}')
 
-    session = await AnnounceSession.create(browser, event, **kwargs)
+    session = await AnnounceSession.create(browser, access_token, event, **kwargs)
     try:
         logging.info(f'Trying to create')
         return await session.run()
