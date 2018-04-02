@@ -25,8 +25,8 @@ def post_to_vk(event):
 
     return announcement
 
-async def post_to_fb(event):
-    announcement = await kocherga.events.fb.create(event)
+async def post_to_fb(event, access_token):
+    announcement = await kocherga.events.fb.create(event, access_token)
     event.set_prop(
         'posted-fb',
         announcement.link
