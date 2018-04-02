@@ -6,6 +6,7 @@ import logging
 from werkzeug.contrib.iterio import IterIO
 
 from kocherga.error import PublicError
+from kocherga.db import Session
 import kocherga.events.db
 import kocherga.events.event
 import kocherga.events.announce
@@ -57,9 +58,9 @@ async def set_property(event_id, key):
 async def patch_event(event_id):
     payload = await request.get_json() or await request.form
 
-    return jsonify(
-        kocherga.events.db.patch_event(event_id, payload).to_dict()
-    )
+    result = kocherga.events.db.patch_event(event_id, payload).to_dict()
+    Session().commit()
+    return jsonify(result)
 
 # Idea: workflows for announcements.
 # /workflow/timepad -> returns { 'steps': ['post-draft', 'publish'], 'current-step': ... }
@@ -71,6 +72,7 @@ async def patch_event(event_id):
 def post_timepad(event_id):
     event = kocherga.events.db.get_event(event_id)
     announcement = kocherga.events.announce.post_to_timepad(event)
+    Session().commit()
     return jsonify({ 'link': announcement.link })
 
 @bp.route('/event/<event_id>/announce/vk', methods=['POST'])
@@ -78,6 +80,7 @@ def post_timepad(event_id):
 def post_vk(event_id):
     event = kocherga.events.db.get_event(event_id)
     announcement = kocherga.events.announce.post_to_vk(event)
+    Session().commit()
     return jsonify({ 'link': announcement.link })
 
 @bp.route('/event/<event_id>/announce/fb', methods=['POST'])
@@ -85,6 +88,7 @@ def post_vk(event_id):
 async def post_fb(event_id, access_token):
     event = kocherga.events.db.get_event(event_id)
     announcement = await kocherga.events.announce.post_to_fb(event, access_token)
+    Session().commit()
     return jsonify({ 'link': announcement.link })
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['POST'])
@@ -100,6 +104,7 @@ async def upload_event_image(event_id, image_type):
 
     event = kocherga.events.db.get_event(event_id)
     event.add_image(image_type, file.stream)
+    Session().commit()
 
     return jsonify(ok)
 

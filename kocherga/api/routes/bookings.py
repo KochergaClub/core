@@ -43,6 +43,7 @@ async def add_booking():
             raise PublicError('field {} is required'.format(field))
         data[field] = str(payload.get(field, ''))
     kocherga.events.booking.add_booking(**data)
+    Session().commit()
 
     return jsonify(ok)
 
@@ -51,5 +52,6 @@ async def add_booking():
 def delete_booking(event_id):
     email = get_email()
     kocherga.events.booking.delete_booking(event_id, email)
+    Session().commit()
 
     return jsonify(ok)
