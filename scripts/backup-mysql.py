@@ -29,7 +29,7 @@ def main():
         subprocess.run(f'mysqldump {db_name} | gzip >{tmp_file}', shell=True, check=True)
 
         logging.info(f'Uploading {tmp_file} to S3')
-        s3.upload_file(tmp_file, BUCKET_NAME, f'mysql/{db_name}.gz')
+        s3.upload_file(str(tmp_file), BUCKET_NAME, f'mysql/{db_name}.gz')
         logging.info(f'MySQL DB {db_name} backup successful')
 
 main()
