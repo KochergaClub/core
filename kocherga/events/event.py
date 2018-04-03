@@ -6,6 +6,7 @@ import shutil
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, Boolean, orm
+import sqlalchemy
 
 import kocherga.db
 
@@ -330,3 +331,12 @@ class Event(kocherga.db.Base):
         d['images'] = self.get_images()
 
         return d
+
+#    def patch_google(self):
+#        logging.info('saving to google')
+#        # google_event = kocherga.events.google.patch_event(self.google_id, ...)
+#
+#def patch_google(session):
+#    target.patch_google()
+#
+#sqlalchemy.event.listen(kocherga.db.Session.session, 'before_commit', patch_google)
