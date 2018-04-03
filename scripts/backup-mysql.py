@@ -30,7 +30,7 @@ def main():
         subprocess.run(f'mysqldump {db_name} | gzip >{tmp_file}', shell=True, check=True)
 
         logging.info(f'Uploading {tmp_file} to S3')
-        s3.upload_file(kocherga.db.DB_FILE, BUCKET_NAME, f'mysql/{tmp_file}')
+        s3.upload_file(kocherga.db.DB_FILE, BUCKET_NAME, f'mysql/{db_file}.gz')
         logging.info(f'MySQL DB {db_name} backup successful')
 
 main()
