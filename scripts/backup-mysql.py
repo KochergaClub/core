@@ -6,6 +6,7 @@ import boto3
 import logging
 import sys
 from pathlib import Path
+import subprocess
 
 import kocherga.secrets
 import kocherga.db

@@ -19,6 +19,4 @@ def main():
     s3.upload_file(kocherga.db.DB_FILE, BUCKET_NAME, 'kocherga.db')
     logging.info('SQLite db backup successful')
 
-    shell.subprocess('mysqldump --databases {{kocherga.wiki.db.name}} {{kocherga.metabase.db.name}} {{kocherga.passbolt.db.name}')
-
 main()
