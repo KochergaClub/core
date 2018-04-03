@@ -5,6 +5,7 @@ from kocherga.config import TZ
 
 import kocherga.db
 from kocherga.db import Session
+from kocherga.datetime import MSK_DATE_FORMAT
 
 from kocherga.error import PublicError
 
@@ -32,8 +33,6 @@ def list_events(**kwargs):
 def insert_event(event):
     if event.google_id:
         raise Exception("Event already exists, can't insert")
-
-    MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00' # copy-pasted from kocherga.events.booking, FIXME
 
     result = kocherga.events.google.api().events().insert(
         calendarId=kocherga.events.google.CALENDAR,
