@@ -9,7 +9,6 @@ from pathlib import Path
 import subprocess
 
 import kocherga.secrets
-import kocherga.db
 import kocherga.config
 
 AWS_CONFIG = kocherga.secrets.json_secret('aws_credentials')
@@ -30,7 +29,7 @@ def main():
         subprocess.run(f'mysqldump {db_name} | gzip >{tmp_file}', shell=True, check=True)
 
         logging.info(f'Uploading {tmp_file} to S3')
-        s3.upload_file(kocherga.db.DB_FILE, BUCKET_NAME, f'mysql/{db_file}.gz')
+        s3.upload_file(tmp_file, BUCKET_NAME, f'mysql/{db_name}.gz')
         logging.info(f'MySQL DB {db_name} backup successful')
 
 main()
