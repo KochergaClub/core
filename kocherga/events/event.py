@@ -1,5 +1,7 @@
 from pathlib import Path
+import logging
 
+from dateutil.tz import tzutc
 import dateutil.parser
 import hashlib
 import shutil
@@ -261,6 +263,7 @@ class Event(kocherga.db.Base):
 
         filename = image_storage.event_image_file(self.google_id, image_type)
         if check_if_exists and not Path(filename).is_file():
+            logging.info(f'{self.google_id} has image prop, but file not found')
             return None
 
         return filename
@@ -332,10 +335,29 @@ class Event(kocherga.db.Base):
 
         return d
 
-#    def patch_google(self):
-#        logging.info('saving to google')
-#        # google_event = kocherga.events.google.patch_event(self.google_id, ...)
-#
+    def to_google(self):
+        convert_dt = lambda dt: dt.astimezone(tzutc()).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        return {
+            'created': convert_dt(self.created_dt),
+            'updated': convert_dt(self.updated_dt),
+            'creator': self.creator,
+            'summary': self.title,
+            'description': self.description,
+            'start': {
+                'dateTime': convert_dt(self.start_dt),
+            },
+            'end': {
+                'dateTime': convert_dt(self.end_dt),
+            },
+            'extendedProperties': {
+                'private': self.props,
+            },
+        }
+
+    def patch_google(self):
+        logging.info('Saving to google')
+        kocherga.events.google.patch_event(self.google_id, self.to_google())
+
 #def patch_google(session):
 #    target.patch_google()
 #

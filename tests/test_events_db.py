@@ -44,6 +44,7 @@ class TestPatchEvent:
     def test_patch(self, db, event_for_edits):
         event = event_for_edits
         patched = kocherga.events.db.patch_event(event.google_id, { 'title': 'blah' })
+
         assert type(patched) == Event
         assert patched.title == 'blah'
 

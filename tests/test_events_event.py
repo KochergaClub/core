@@ -1,9 +1,11 @@
 import pytest
 
+import logging
 from datetime import datetime, timedelta
 
 from kocherga.events.event import Event
 import kocherga.events.db
+from kocherga.db import Session
 
 pytestmark = pytest.mark.usefixtures('db')
 
@@ -52,6 +54,8 @@ class TestImages:
         with open(image_file, 'rb') as fh:
             event.add_image('default', fh)
 
+        assert event.image_file('default')
+        Session().commit()
         assert event.image_file('default')
 
         event = kocherga.events.db.get_event(event.google_id) # reloading for another check

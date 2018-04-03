@@ -20,7 +20,8 @@ def delete_event(event_id):
     return api().events().delete(calendarId=CALENDAR, eventId=event_id).execute()
 
 def patch_event(event_id, patch):
-    return api().events().patch(calendarId=CALENDAR, eventId=event_id, body=patch).execute()
+    logging.debug(f'Patching {event_id} with {str(patch)}')
+    return api().events().patch(calendarId=CALENDAR, eventId=event_id, body={'resource': patch}).execute()
 
 def set_property(event_id, key, value):
     return patch_event(event_id, {

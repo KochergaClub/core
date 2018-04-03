@@ -61,7 +61,7 @@ def image_storage(tmpdir):
     kocherga.images.image_storage = kocherga.images.init_global_image_storage()
     return kocherga.images.image_storage
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def event(image_file, vk_image_file):
     dt = datetime.today() + timedelta(days=3)
     event = Event(

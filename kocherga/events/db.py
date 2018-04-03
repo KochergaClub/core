@@ -62,19 +62,22 @@ def insert_event(event):
 
 
 def patch_event(event_id, patch):
+    # This method is incomplete for the period of google calendar -> kocherga.db migration.
+    # It supports only patching 'title' and 'description'.
+    # Everything else is unused for now anyway.
+
+    event = get_event(event_id)
+
     google_patch = {}
     for (key, value) in patch.items():
         if key == 'title':
-            google_patch['summary'] = value
+            event.title = value
         elif key == 'description':
-            google_patch['description'] = value
-        elif key == 'room':
-            google_patch['location'] = value
+            event.description = value
         else:
             raise Exception('Key {} is not allowed in patch yet'.format(key))
 
-    google_event = kocherga.events.google.patch_event(event_id, google_patch)
-    event = Event.from_google(google_event)
+    event.patch_google()
     event = Session().merge(event)
     return event
 
@@ -89,8 +92,8 @@ def delete_event(event_id):
 def set_event_property(event_id, key, value):
     # Planned future changes: save some or all properties in a local sqlite DB instead.
     # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
-    kocherga.events.google.set_property(event_id, key, value)
-    # TODO - update local DB too!
+    event = get_event(event_id)
+    event.set_prop(key, value) # saves both to google and to local DB
 
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
