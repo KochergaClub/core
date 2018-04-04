@@ -14,6 +14,7 @@ from slackclient import SlackClient
 from typing import List, Dict
 
 import kocherga.config
+import kocherga.db
 
 class ErrorResponse(Exception):
     pass
@@ -145,7 +146,14 @@ class Bot:
 
     def schedule(self, trigger, **kwargs):
         def wrap(f):
-            self.scheduler.add_job(f, trigger, **kwargs)
+            def job(*args, **kwargs):
+                try:
+                    f(*args, **kwargs)
+                except:
+                    kocherga.db.Session.remove()
+                    raise
+
+            self.scheduler.add_job(job, trigger, **kwargs)
         return wrap
 
     def action(self, regex):
@@ -175,6 +183,7 @@ class Bot:
         try:
             self.dispatcher.process_message(msg)
         except Exception as e:
+            kocherga.db.Session.remove()
             msg.reply('Что-то пошло не так: ```{}```'.format(str(e)))
 
     def run(self):
@@ -186,7 +195,12 @@ class Bot:
             if payload['token'] != self.verification_token:
                 raise Exception('nope')
 
-            result = self.dispatcher.process_action(payload)
+            try:
+                result = self.dispatcher.process_action(payload)
+            except:
+                kocherga.db.Session.remove()
+                raise
+
             return jsonify(result)
 
         @self.slack_events_adapter.server.route('/slack/command', methods=['POST'])
@@ -198,6 +212,7 @@ class Bot:
             try:
                 result = self.dispatcher.process_command(payload)
             except Exception as e:
+                kocherga.db.Session.remove()
                 return 'Что-то пошло не так: ```{}```'.format(str(e))
 
             if type(result) == str:
