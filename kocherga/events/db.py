@@ -17,6 +17,7 @@ import kocherga.importer.base
 def get_event(event_id):
     google_event = kocherga.events.google.get_event(event_id)
     event = Event.from_google(google_event)
+
     event = Session().merge(event)
 
     return event
@@ -78,7 +79,6 @@ def patch_event(event_id, patch):
             raise Exception('Key {} is not allowed in patch yet'.format(key))
 
     event.patch_google()
-    event = Session().merge(event)
     return event
 
 def delete_event(event_id):

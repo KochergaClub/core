@@ -26,7 +26,7 @@ def create_session_class():
     # Note that we can't use this in kocherga.api.app because we use async/await and it's incompatible with a simple scoped_session().
     # So kocherga.api.app overrides a Session object.
     return scoped_session(
-        sessionmaker(bind=engine(), autoflush=False)
+        sessionmaker(bind=engine())
     )
 
 class WrappedSession:
