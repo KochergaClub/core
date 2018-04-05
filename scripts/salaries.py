@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import pathlib, sys
+sys.path.append(str(pathlib.Path(__file__).parent.parent))
+
 from collections import Counter
 from datetime import datetime, timedelta, date
 import logging
@@ -143,7 +146,7 @@ def main(month, mode):
     year = 2018
 
     add_basic_salaries = True
-    add_bonus_salaries = True
+    add_bonus_salaries = False
 
     if mode == 5:
         end_date = date(year, month, 5)
