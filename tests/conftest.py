@@ -99,7 +99,7 @@ def event_for_timepad(event):
     event.set_prop('has_default_image', None) # FIXME - timepad can't fetch our local image, unfortunately
     return event
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def minimal_event():
     dt = datetime.today() + timedelta(days=1)
     event = Event(
@@ -115,6 +115,7 @@ def minimal_event():
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
+    kocherga.db.Session().commit()
 
 @pytest.fixture
 def event_for_edits():

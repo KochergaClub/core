@@ -5,10 +5,12 @@ from datetime import datetime
 import requests
 import json
 
+from kocherga.db import Session
 import kocherga.vk
 from kocherga.error import PublicError
 
 from kocherga.events.announcement import BaseAnnouncement
+from kocherga.events.event import Event
 import kocherga.events.markup
 
 class VkAnnouncement(BaseAnnouncement):
@@ -126,3 +128,10 @@ def add_week_to_event_date(vk_group_id):
         'event_start_date': start_date + 86400 * 7,
         'event_finish_date': finish_date + 86400 * 7,
     })
+
+def all_groups():
+    logger.info('Selecting all vk groups')
+    query = Session().query(Event.vk_group.distinct().label("vk_group"))
+    groups = [row.vk_group for row in query.all()]
+    logger.info(f'Got {len(groups)} groups')
+    return groups

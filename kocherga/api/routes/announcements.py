@@ -37,6 +37,12 @@ def timepad_categories():
         for c in categories
     ])
 
+@bp.route('/announcements/vk/groups')
+@auth('kocherga')
+def vk_groups():
+    all_groups = kocherga.events.vk.all_groups()
+    return jsonify(all_groups)
+
 @bp.route('/announcements/vk/event/<event_id>', methods=['POST'])
 @auth('kocherga')
 def post_vk(event_id):
