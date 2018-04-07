@@ -4,6 +4,7 @@ import logging
 from kocherga.config import TZ
 import kocherga.events.db
 from kocherga.db import Session
+from kocherga.events.event import Event
 
 from kocherga.ludwig.bot import bot
 
@@ -201,7 +202,10 @@ def ask_for_event_visitors():
 
 @bot.action(r'event_visitors/(.*)/reset')
 def reset_event_visitors(payload, event_id):
-    event = kocherga.events.db.get_event(event_id)
+    event = Session().query(Event).get(event_id)
+    if not event:
+        raise Exception(f'Event {event_id} not found')
+
     event.set_prop('visitors', None)
     Session().commit()
 
@@ -211,7 +215,9 @@ def reset_event_visitors(payload, event_id):
 def accept_event_visitors(payload, event_id):
     value = payload['actions'][0]['value']
 
-    event = kocherga.events.db.get_event(event_id)
+    event = Session().query(Event).get(event_id)
+    if not event:
+        raise Exception(f'Event {event_id} not found')
     event.set_prop('visitors', value)
     Session().commit()
 
