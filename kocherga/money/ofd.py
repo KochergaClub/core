@@ -4,7 +4,7 @@ import requests
 
 import enum
 
-from sqlalchemy import Column, Integer, String, Numeric, Enum
+from sqlalchemy import Column, Integer, BigInteger, String, Text, Numeric, Enum
 
 from typing import Any, Dict, List
 
@@ -34,9 +34,9 @@ class OfdDocument(kocherga.db.Base):
     check_type = Column(Enum(CheckType))
     shift_id = Column(Integer) # TODO - foreign key
     request_id = Column(Integer) # cheque number in current shift
-    operator = Column(String)
-    operator_inn = Column(Integer)
-    fiscal_sign = Column(Integer)
+    operator = Column(String(255))
+    operator_inn = Column(BigInteger)
+    fiscal_sign = Column(BigInteger)
     midday_ts = Column(Integer) # used for analytics only
 
     @classmethod

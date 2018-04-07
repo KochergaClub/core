@@ -95,7 +95,7 @@ class ScheduleItem(kocherga.db.Base):
     __tablename__ = 'watchmen_schedule'
     date = Column(Date, primary_key=True)
     shift = Column(Enum(Shift), primary_key=True)
-    watchman = Column(String, index=True)
+    watchman = Column(String(100), index=True)
 
 
 class Schedule:

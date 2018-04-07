@@ -44,16 +44,16 @@ class Disposition(enum.Enum):
 
 class Call(kocherga.db.Base):
     __tablename__ = 'zadarma_calls'
-    call_id = Column(String, primary_key=True)
+    call_id = Column(String(100), primary_key=True)
     call_type = Column(Enum(CallType))
-    internal_number = Column(String)
-    caller_number = Column(String)
-    destination_number = Column(String)
+    internal_number = Column(String(100))
+    caller_number = Column(String(100))
+    destination_number = Column(String(100))
     disposition = Column(Enum(Disposition))
     ts = Column(Integer)
     wait_seconds = Column(Integer)
     seconds = Column(Integer)
-    watchman = Column(String)
+    watchman = Column(String(100))
 
     @classmethod
     def from_csv_rows(cls, rows: List[Dict[str, str]]) -> 'Call':

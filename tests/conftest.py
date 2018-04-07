@@ -1,4 +1,5 @@
 import pytest
+import subprocess
 
 from pathlib import Path
 import os
@@ -40,15 +41,17 @@ def image_file():
     return str(Path(__file__).parent / 'images' / 'default')
 
 @pytest.fixture
-def db(tmpdir):
-    db_dir = tmpdir.mkdir('db')
-    filename = db_dir + '/kocherga.db'
-
+def db():
     # This is unfortunately fragile.
     logging.info('db fixture')
-    kocherga.config.config()['kocherga_db_file'] = filename
-    kocherga.db.DB_FILE = filename
+    kocherga.db.Session().close_all()
     kocherga.db.Session.remove()
+
+    subprocess.run("mysql -uroot -e 'drop database if exists test'", shell=True)
+    subprocess.run("mysql -uroot -e 'create database test'", shell=True)
+
+    kocherga.db.DB_URL = 'mysql://root:@localhost/test'
+    kocherga.config.config()['kocherga_db'] = kocherga.db.DB_URL
     kocherga.db.Session.configure(bind=kocherga.db.engine())
     kocherga.db.Base.metadata.create_all(kocherga.db.engine())
     logging.info('db fixture set')
@@ -88,6 +91,11 @@ def event(image_file, vk_image_file):
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
+
+@pytest.fixture
+def event_for_timepad(event):
+    event.set_prop('has_default_image', None) # FIXME - timepad can't fetch our local image, unfortunately
+    return event
 
 @pytest.fixture(scope='session')
 def minimal_event():

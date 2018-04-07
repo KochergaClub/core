@@ -10,13 +10,13 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 from kocherga.config import config
 
-DB_FILE = config()['kocherga_db_file']
+DB_URL = config()['kocherga_db']
 
 Base = declarative_base()
 
 def engine():
-    logging.info(f'Creating an engine for sqlite file {DB_FILE}')
-    return sqlalchemy.create_engine('sqlite:///{}'.format(DB_FILE))
+    logging.info(f'Creating an engine for {DB_URL}')
+    return sqlalchemy.create_engine(DB_URL)
 
 def connect():
     return engine().connect()
@@ -37,6 +37,7 @@ class WrappedSession:
         return self.session()
 
     def replace(self, new_session):
+        self.session.close()
         self.session.remove()
         self.session = new_session
 
@@ -44,6 +45,7 @@ class WrappedSession:
         return self.session.configure(*args, **kwargs)
 
     def remove(self):
+        self.session.close()
         return self.session.remove()
 
 Session = WrappedSession()

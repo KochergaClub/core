@@ -7,7 +7,7 @@ import kocherga.db
 
 import kocherga.importer.base
 
-from sqlalchemy import Column, String, Integer, UniqueConstraint
+from sqlalchemy import Column, String, Integer, Text, UniqueConstraint
 
 class CashierItem(kocherga.db.Base):
     __tablename__ = 'cashier'
@@ -16,14 +16,14 @@ class CashierItem(kocherga.db.Base):
     )
 
     id = Column(Integer, primary_key=True)
-    date = Column(String)
-    shift = Column(String)
-    watchman = Column(String)
+    date = Column(String(40))
+    shift = Column(String(40))
+    watchman = Column(String(100))
     cash_income = Column(Integer)
     electronic_income = Column(Integer)
     total_income = Column(Integer) # could be restored from other data
     current_cash = Column(Integer)
-    notes = Column(String)
+    notes = Column(Text)
     discrepancy = Column(Integer) # could be restored from other data
     spendings = Column(Integer)
 
