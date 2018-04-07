@@ -52,6 +52,8 @@ def timepad_description(event):
     return kocherga.events.markup.Markup(event.description).as_html()
 
 def timepad_summary(event):
+    if event.summary:
+        return event.summary
     summary = event.description.split('\n\n')[0]
     return kocherga.events.markup.Markup(summary).as_plain()
 
