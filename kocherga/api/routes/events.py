@@ -66,11 +66,7 @@ async def patch_event(event_id):
     Session().commit()
     return jsonify(result)
 
-# Idea: workflows for announcements.
-# /workflow/timepad -> returns { 'steps': ['post-draft', 'publish'], 'current-step': ... }
-# /workflow/timepad/post-draft
-# /workflow/timepad/publish
-
+# DEPRECATED. Use /announcements/... routes instead.
 @bp.route('/event/<event_id>/announce/timepad', methods=['POST'])
 @auth('kocherga')
 def post_timepad(event_id):
@@ -79,6 +75,7 @@ def post_timepad(event_id):
     Session().commit()
     return jsonify({ 'link': announcement.link })
 
+# DEPRECATED. Use /announcements/... routes instead.
 @bp.route('/event/<event_id>/announce/vk', methods=['POST'])
 @auth('kocherga')
 def post_vk(event_id):
@@ -87,6 +84,7 @@ def post_vk(event_id):
     Session().commit()
     return jsonify({ 'link': announcement.link })
 
+# DEPRECATED. Use /announcements/... routes instead.
 @bp.route('/event/<event_id>/announce/fb', methods=['POST'])
 @auth('kocherga')
 async def post_fb(event_id):

@@ -23,6 +23,7 @@ import kocherga.api.routes.sensors
 import kocherga.api.routes.bookings
 import kocherga.api.routes.people
 import kocherga.api.routes.templater
+import kocherga.api.routes.announcements
 import kocherga.api.common
 
 def create_app(DEV):
@@ -60,7 +61,7 @@ def create_app(DEV):
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response
 
-    for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings', 'people', 'templater'):
+    for route_name in ('auth', 'events', 'rooms', 'sensors', 'bookings', 'people', 'templater', 'announcements'):
         route = getattr(kocherga.api.routes, route_name)
         app.register_blueprint(route.bp)
 
