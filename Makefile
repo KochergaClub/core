@@ -15,4 +15,12 @@ test-types:
 test-code:
 	pytest
 
+release-quick:
+	git push
+	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core-quick'
+
+release:
+	git push
+	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core'
+
 test: test-types test-code
