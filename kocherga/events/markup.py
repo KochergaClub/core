@@ -19,8 +19,8 @@ class Text(Part):
 @attr.s
 class Entity(Part):
     name = attr.ib()
-    fb_id = attr.ib()
-    vk_id = attr.ib()
+    fb_id = attr.ib(default=None)
+    vk_id = attr.ib(default=None)
 
 class SelfMention(Part):
     pass
