@@ -8,7 +8,7 @@ import kocherga.events.db
 import kocherga.db
 
 class TestGetEvent:
-    def test_get(self, db, event):
+    def test_get(self, db, event, imported_events):
         e = kocherga.events.db.get_event(event.google_id)
         assert e
         assert type(e) == Event
@@ -28,13 +28,13 @@ class TestGetEvent:
         print(e.to_dict())
 
 class TestListEvents:
-    def test_list(self, db):
+    def test_list(self, db, imported_events):
         out = kocherga.events.db.list_events()
         assert type(out) == list
         assert len(out) > 10
         assert type(out[0]) == Event
 
-    def test_list_with_date(self, db):
+    def test_list_with_date(self, db, imported_events):
         out = kocherga.events.db.list_events(date=datetime.datetime.today().date())
         assert type(out) == list
         assert 0 < len(out) < 20

@@ -81,16 +81,18 @@ def event(image_file, vk_image_file):
         },
     )
     event = kocherga.events.db.insert_event(event)
-
     with open(vk_image_file, 'rb') as fh:
         event.add_image('vk', fh)
 
     with open(image_file, 'rb') as fh:
         event.add_image('default', fh)
 
+    kocherga.db.Session().commit()
+
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
+    kocherga.db.Session().commit()
 
 @pytest.fixture
 def event_for_timepad(event):
@@ -108,6 +110,8 @@ def minimal_event():
         title="бронь Летняя",
     )
     event = kocherga.events.db.insert_event(event)
+    kocherga.db.Session().commit()
+
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
@@ -124,6 +128,12 @@ def event_for_edits():
         description="description doesn't matter"
     )
     event = kocherga.events.db.insert_event(event)
+    kocherga.db.Session().commit()
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
+    kocherga.db.Session().commit()
+
+@pytest.fixture
+def imported_events(db):
+    kocherga.events.db.Importer().import_all()

@@ -5,6 +5,7 @@ import logging
 import pytz
 
 from flask import request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -133,6 +134,10 @@ class Bot:
             verification_token,
             endpoint="/slack/events"
         )
+        flask_app = self.slack_events_adapter.server
+        flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        flask_app.config['SQLALCHEMY_DATABASE_URI'] = kocherga.db.DB_URL
+        kocherga.db.Session.replace(SQLAlchemy(flask_app).session)
 
         self.port = port
         self.verification_token = verification_token

@@ -66,7 +66,7 @@ class TestBooking:
 
 
 class TestDayBookings:
-    def test_is_array(self):
+    def test_is_array(self, imported_events):
         result = kocherga.events.booking.day_bookings(datetime.now(TZ))
         assert type(result) == list
 
@@ -168,7 +168,7 @@ class TestAddBooking:
 
 class TestDeleteBooking:
     def test_delete_booking_unknown(self):
-        with pytest.raises(PublicError, match='Not found'):
+        with pytest.raises(PublicError, match='[nN]ot found'):
             kocherga.events.booking.delete_booking('blahblah', 'somebody@example.com')
 
     def test_delete_booking(self):

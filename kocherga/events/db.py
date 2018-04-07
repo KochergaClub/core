@@ -15,19 +15,26 @@ from kocherga.images import image_storage
 import kocherga.importer.base
 
 def get_event(event_id):
-    google_event = kocherga.events.google.get_event(event_id)
-    event = Event.from_google(google_event)
-
-    event = Session().merge(event)
+    event = Session().query(Event).get(event_id)
+    if not event:
+        raise PublicError(f'Event {event_id} not found')
 
     return event
 
 def list_events(**kwargs):
     google_events = kocherga.events.google.list_events(**kwargs)
-    events = [Event.from_google(e) for e in google_events]
 
-    # Note that merge doesn't rewrite the local-db-only fields such as event.summary (I checked).
-    events = [Session().merge(event) for event in events]
+    order_arg = None
+    if kwargs.get('order_by', None) == 'updated':
+        order_args = Event.updated_ts
+    else:
+        order_args = Event.start_ts
+
+    events = Session().query(Event).filter(
+            Event.google_id.in_(
+                tuple(ge['id'] for ge in google_events)
+            )
+        ).order_by(order_args).all()
 
     return events
 
@@ -95,18 +102,25 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         Event.__table__.create(bind=kocherga.db.engine())
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
-        if from_dt < datetime.now(tz=TZ) - timedelta(days=7):
+        google_events = None
+        too_old = from_dt < datetime.now(tz=TZ) - timedelta(days=7)
+        if too_old:
             logging.info(f"from_dt = {from_dt} is too old, let's reimport everything")
-            events = list_events(
+            google_events = kocherga.events.google.list_events(
                 to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
             )
-            # we don't need to do anything else - list_events updates the local db every time
+        else:
+            google_events = kocherga.events.google.list_events(
+                to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
+                order_by='updated',
+                updated_min=from_dt,
+            )
 
+        events = [Event.from_google(e) for e in google_events]
+        # Note that merge doesn't rewrite the local-db-only fields such as event.summary (I checked).
+        events = [Session().merge(event) for event in events]
+
+        if too_old:
             return datetime.now(tz=TZ) - timedelta(days=1)
-
-        events = list_events(
-            to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
-            order_by='updated',
-            updated_min=from_dt,
-        )
-        return max(e.updated_dt for e in events)
+        else:
+            return max(e.updated_dt for e in events)

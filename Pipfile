@@ -36,6 +36,7 @@ slackeventsapi = "*"
 pytz = "*"
 "boto3" = "*"
 mysqlclient = "*"
+flask-sqlalchemy = "*"
 
 
 [dev-packages]

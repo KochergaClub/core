@@ -8,7 +8,7 @@ import kocherga.events.db
 import kocherga.config
 
 @pytest.mark.asyncio
-async def test_events(api_client):
+async def test_events(api_client, imported_events):
     res = await api_client.get('/events')
     assert res.status_code == 200
     events = await res.get_json()
@@ -18,7 +18,7 @@ async def test_events(api_client):
     assert '2017' in events[0]['start']['dateTime']
 
 @pytest.mark.asyncio
-async def test_events_from_date(api_client):
+async def test_events_from_date(api_client, imported_events):
     res = await api_client.get('/events?from_date=2018-01-01&to_date=2018-01-14')
     assert res.status_code == 200
     events = await res.get_json()
@@ -28,12 +28,10 @@ async def test_events_from_date(api_client):
     assert '2018' in events[0]['start']['dateTime']
 
 @pytest.mark.asyncio
-async def test_upload_image(api_client, image_storage):
+async def test_upload_image(api_client, image_storage, event):
     body, content_type = encode_multipart_formdata({
         'file': ('vk', open('tests/images/vk', 'rb').read())
     })
-
-    event = kocherga.events.db.list_events()[0] # doesn't matter which one
 
     # 'data' param for test_client is implemented in quart but not released yet (at the time of this comment, 2018-03-13)
     # When it's released, this code can be replaced with the simpler version commented below.
@@ -63,9 +61,7 @@ async def test_upload_image(api_client, image_storage):
 
 
 @pytest.mark.asyncio
-async def test_upload_image_from_url(api_client, image_storage):
-    event = kocherga.events.db.list_events()[0] # doesn't matter which one
-
+async def test_upload_image_from_url(api_client, image_storage, event):
     res = await api_client.post(
         f'/event/{event.google_id}/image_from_url/default',
         form={

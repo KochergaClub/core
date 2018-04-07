@@ -8,6 +8,7 @@ from quart import Quart, jsonify, request, current_app, _app_ctx_stack
 import quart.flask_patch # for __ident_func__
 
 #from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 import kocherga.db
 
@@ -22,23 +23,15 @@ import kocherga.api.routes.people
 import kocherga.api.routes.templater
 import kocherga.api.common
 
-def init_quart_scoped_sessions():
-    # we can't just use a default kocherga.db.Session because quart is async
-    kocherga.db.Session.replace(
-        scoped_session(
-            sessionmaker(bind=kocherga.db.engine(), autoflush=False),
-            scopefunc=_app_ctx_stack.__ident_func__
-        )
-    )
-
-
 def create_app(DEV):
     app = Quart(
         __name__,
         root_path=str(Path(__file__).parent.parent.parent.resolve())
     )
 
-    init_quart_scoped_sessions()
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = kocherga.db.DB_URL
+    kocherga.db.Session.replace(SQLAlchemy(app).session)
 
     if DEV:
         app.debug = True
