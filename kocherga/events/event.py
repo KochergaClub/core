@@ -37,7 +37,7 @@ def image_flag_property(image_type):
 class Event(kocherga.db.Base):
     __tablename__ = 'events'
     google_id = Column(String(100), primary_key=True)
-    google_link = Column(String(255))
+    google_link = Column(String(1024))
 
     start_ts = Column(Integer)
     end_ts = Column(Integer)
@@ -66,9 +66,9 @@ class Event(kocherga.db.Base):
     has_vk_image = Column(Boolean)
     ready_to_post = Column(Boolean)
 
-    posted_fb = Column(String(255))
-    posted_timepad = Column(String(255))
-    posted_vk = Column(String(255))
+    posted_fb = Column(String(1024))
+    posted_timepad = Column(String(1024))
+    posted_vk = Column(String(1024))
 
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
