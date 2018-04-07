@@ -35,6 +35,7 @@ python-gitlab = "*"
 slackeventsapi = "*"
 pytz = "*"
 "boto3" = "*"
+mysqlclient = "*"
 
 
 [dev-packages]
