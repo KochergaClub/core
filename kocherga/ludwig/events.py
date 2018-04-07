@@ -195,15 +195,15 @@ def ask_for_event_visitors():
     for e in events:
         logging.info(f"Asking for event {e.google_id} ({e.title}). Old asked_for_visitors: {e.get_prop('asked_for_visitors')}")
 
-        kocherga.events.db.set_event_property(e.google_id, 'asked_for_visitors', datetime.now().strftime('%Y-%m-%d %H:%M'))
+        e.set_prop('asked_for_visitors', datetime.now().strftime('%Y-%m-%d %H:%M'))
         bot.send_message(**event_visitors_question(e))
         Session().commit()
 
 @bot.action(r'event_visitors/(.*)/reset')
 def reset_event_visitors(payload, event_id):
-    kocherga.events.db.set_event_property(event_id, 'visitors', None)
-    Session().commit()
     event = kocherga.events.db.get_event(event_id)
+    event.set_prop('visitors', None)
+    Session().commit()
 
     return event_visitors_question(event)
 
@@ -211,9 +211,9 @@ def reset_event_visitors(payload, event_id):
 def accept_event_visitors(payload, event_id):
     value = payload['actions'][0]['value']
 
-    kocherga.events.db.set_event_property(event_id, 'visitors', value)
-    Session().commit()
     event = kocherga.events.db.get_event(event_id)
+    event.set_prop('visitors', value)
+    Session().commit()
 
     attachment = visitors_attachment(event)
     attachment['text'] = f"<@{payload['user']['id']}>: {attachment['text']}"

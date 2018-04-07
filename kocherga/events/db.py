@@ -87,14 +87,6 @@ def delete_event(event_id):
     if event:
         Session().delete(event) # TODO - set deleted bit instead?
 
-# Deprecated, use event.set_prop instead
-# (Still used in Ludwig)
-def set_event_property(event_id, key, value):
-    # Planned future changes: save some or all properties in a local sqlite DB instead.
-    # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
-    event = get_event(event_id)
-    event.set_prop(key, value) # saves both to google and to local DB
-
 class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2015,8,1,tzinfo=TZ)

@@ -29,7 +29,7 @@ class TestCreate:
         with open(image_file, 'rb') as fh:
             event.add_image('vk', fh)
 
-        kocherga.events.db.set_event_property(event.google_id, 'vk_group', 159971736)
+        event.set_prop('vk_group', 159971736)
         event = kocherga.events.db.patch_event(event.google_id, { 'description': 'Длинный текст.\n' * 100 })
 
         result = kocherga.events.vk.create(event)
