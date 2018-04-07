@@ -73,21 +73,15 @@ def insert_event(event):
 
 def patch_event(event_id, patch):
     # This method is incomplete for the period of google calendar -> kocherga.db migration.
-    # It supports only patching 'title' and 'description'.
+    # It supports only some fields.
     # Everything else is unused for now anyway.
 
     event = get_event(event_id)
 
     google_patch = {}
     for (key, value) in patch.items():
-        if key == 'title':
-            event.title = value
-        elif key == 'description':
-            event.description = value
-        elif key == 'summary':
-            event.summary = value
-        elif key == 'timepad_category':
-            event.timepad_category = value
+        if key in ('title', 'description', 'summary', 'timepad_category_code', 'timepad_prepaid_tickets'):
+            setattr(event, key, value)
         else:
             raise Exception('Key {} is not allowed in patch yet'.format(key))
 
