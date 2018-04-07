@@ -100,12 +100,9 @@ def bookings_by_email(email):
     return bookings
 
 def delete_booking(event_id, email):
-    try:
-        event = kocherga.events.db.get_event(event_id)
-    except googleapiclient.errors.HttpError as e:
-        if e.resp.status == 404:
-            raise PublicError('Not found')
-        raise e
+    event = Event.by_id(event_id)
+    if not event:
+        raise PublicError('Not found')
 
     if 'Бронь' not in event.title:
         raise PublicError('Not a booking')

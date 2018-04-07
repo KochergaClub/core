@@ -10,7 +10,7 @@ from werkzeug.contrib.iterio import IterIO
 from kocherga.error import PublicError
 from kocherga.db import Session
 import kocherga.events.db
-import kocherga.events.event
+from kocherga.events.event import Event
 import kocherga.events.announce
 from kocherga.images import image_storage
 from kocherga.api.common import ok
@@ -44,7 +44,7 @@ def events():
 @bp.route('/event/<event_id>')
 @auth('kocherga')
 def event(event_id):
-    event = kocherga.events.db.get_event(event_id)
+    event = Event.by_id(event_id)
     return jsonify(event.to_dict())
 
 
@@ -52,7 +52,8 @@ def event(event_id):
 @auth('kocherga')
 async def set_property(event_id, key):
     value = (await request.get_json())['value']
-    kocherga.events.db.get_event(event_id).set_prop(key, value)
+    event = Event.by_id(event_id)
+    event.set_prop(key, value)
     Session().commit()
     return jsonify(ok)
 
@@ -73,7 +74,7 @@ async def patch_event(event_id):
 @bp.route('/event/<event_id>/announce/timepad', methods=['POST'])
 @auth('kocherga')
 def post_timepad(event_id):
-    event = kocherga.events.db.get_event(event_id)
+    event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_timepad(event)
     Session().commit()
     return jsonify({ 'link': announcement.link })
@@ -81,7 +82,7 @@ def post_timepad(event_id):
 @bp.route('/event/<event_id>/announce/vk', methods=['POST'])
 @auth('kocherga')
 def post_vk(event_id):
-    event = kocherga.events.db.get_event(event_id)
+    event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_vk(event)
     Session().commit()
     return jsonify({ 'link': announcement.link })
@@ -91,7 +92,7 @@ def post_vk(event_id):
 async def post_fb(event_id):
     access_token = (await request.get_json())['fb_access_token']
 
-    event = kocherga.events.db.get_event(event_id)
+    event = Event.by_id(event_id)
     announcement = await kocherga.events.announce.post_to_fb(event, access_token)
     Session().commit()
     return jsonify({ 'link': announcement.link })
@@ -107,7 +108,7 @@ async def upload_event_image(event_id, image_type):
     if file.filename == '':
         raise PublicError('No filename')
 
-    event = kocherga.events.db.get_event(event_id)
+    event = Event.by_id(event_id)
     event.add_image(image_type, file.stream)
     Session().commit()
 
@@ -120,7 +121,9 @@ async def set_event_image_from_url(event_id, image_type):
 
     url = payload['url']
     r = requests.get(url, stream=True)
-    kocherga.events.db.get_event(event_id).add_image(
+
+    event = Event.by_id(event_id)
+    event.add_image(
         image_type,
         IterIO(r.raw.stream(4096, decode_content=True))
     )
@@ -129,7 +132,7 @@ async def set_event_image_from_url(event_id, image_type):
 
 @bp.route('/event/<event_id>/image/<image_type>', methods=['GET'])
 def event_image(event_id, image_type):
-    return send_file(kocherga.events.db.get_event(event_id).image_file(image_type))
+    return send_file(Event.by_id(event_id).image_file(image_type))
 
 # No auth - images are requested directly
 # TODO - accept a token via CGI params? hmm...

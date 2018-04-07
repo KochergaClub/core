@@ -11,7 +11,7 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, Text, orm
 import sqlalchemy
 
-import kocherga.db
+from kocherga.db import Session, Base
 
 import kocherga.config
 from kocherga.config import TZ
@@ -35,7 +35,7 @@ def image_flag_property(image_type):
 
     return 'has_{}_image'.format(image_type)
 
-class Event(kocherga.db.Base):
+class Event(Base):
     __tablename__ = 'events'
     google_id = Column(String(100), primary_key=True)
     google_link = Column(String(1024))
@@ -178,6 +178,10 @@ class Event(kocherga.db.Base):
     @end_dt.setter
     def end_dt(self, value):
         self.end_ts = value.timestamp()
+
+    @classmethod
+    def by_id(cls, event_id):
+        return Session().query(Event).get(event_id)
 
     @classmethod
     def from_google(cls, google_event):
@@ -373,4 +377,4 @@ class Event(kocherga.db.Base):
 #def patch_google(session):
 #    target.patch_google()
 #
-#sqlalchemy.event.listen(kocherga.db.Session.session, 'before_commit', patch_google)
+#sqlalchemy.event.listen(Session.session, 'before_commit', patch_google)
