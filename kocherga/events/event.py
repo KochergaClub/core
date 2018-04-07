@@ -72,6 +72,7 @@ class Event(Base):
     posted_vk = Column(String(1024))
 
     timepad_category_code = Column(String(40))
+    timepad_prepaid_tickets = Column(Boolean)
 
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
@@ -326,6 +327,7 @@ class Event(Base):
             'type': self.event_type,
             # TODO - add field from props as top-level fields
             'timepad_category_code': self.timepad_category_code,
+            'timepad_prepaid_tickets': self.timepad_prepaid_tickets,
         }
 
         if self.master_id:

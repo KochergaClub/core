@@ -94,6 +94,35 @@ def create(event):
     url = BASE_URL + '/events.json?token=' + token()
 
     timepad_category = timepad_category_by_code(event.timepad_category_code or 'other_event')
+
+    if event.timepad_prepaid_tickets:
+        ticket_types = [
+            {
+                'name': kocherga.config.config()['tariff'],
+                'description': 'оплата ПОСЛЕ мероприятия, по времени',
+                'price': 0,
+                'limit': 30,
+                'sale_ends_at': dts(event.start_dt),
+            },
+            {
+                'name': 'лекция + посещение',
+                'description': 'Оплата ЗАРАНЕЕ, на месте подобный билет приобрести нельзя',
+                'price': 300,
+                'limit': 30,
+                'sale_ends_at': dts(event.start_dt),
+            },
+        ]
+    else:
+        ticket_types = [
+            {
+                'name': kocherga.config.config()['tariff'],
+                'description': 'Оплата по тарифам антикафе',
+                'price': 0,
+                'limit': 50,
+                'sale_ends_at': dts(event.start_dt),
+            }
+        ]
+
     data = {
         'organization': {
             'id': ORGANIZATION_ID,
@@ -111,15 +140,7 @@ def create(event):
         ],
         'location': TIMEPAD_CONFIG['location'],
         'tickets_limit': 50,
-        'ticket_types': [
-            {
-                'name': kocherga.config.config()['tariff'],
-                'description': 'Оплата по тарифам антикафе',
-                'price': 0,
-                'limit': 50,
-                'sale_ends_at': dts(event.start_dt),
-            }
-        ],
+        'ticket_types': ticket_types,
         'questions': [
             {
                 'field_id': 'mail',
