@@ -20,7 +20,7 @@ class Issue(kocherga.db.Base):
     __tablename__ = 'gitlab_issues'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String)
+    username = Column(String(100))
     created_ts = Column(Integer)
     updated_ts = Column(Integer)
 
@@ -37,7 +37,7 @@ class IssueNote(kocherga.db.Base):
     __tablename__ = 'gitlab_issue_notes'
 
     id = Column(Integer, primary_key=True)
-    username = Column(String)
+    username = Column(String(100))
     created_ts = Column(Integer)
     updated_ts = Column(Integer)
 

@@ -4,8 +4,8 @@ pytestmark = pytest.mark.usefixtures('db')
 import kocherga.events.announce
 from kocherga.events.announcement import BaseAnnouncement
 
-def test_announce_timepad(event):
-    announcement = kocherga.events.announce.post_to_timepad(event)
+def test_announce_timepad(event_for_timepad):
+    announcement = kocherga.events.announce.post_to_timepad(event_for_timepad)
     assert isinstance(announcement, BaseAnnouncement)
 
 def test_announce_vk(event):

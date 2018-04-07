@@ -12,7 +12,7 @@ from kocherga.config import TZ
 import kocherga.secrets
 import kocherga.importer.base
 
-from sqlalchemy import inspect, Column, Integer, String
+from sqlalchemy import inspect, Column, Integer, String, Text
 
 DOMAIN = kocherga.secrets.plain_secret('cafe_manager_server')
 
@@ -29,14 +29,14 @@ class Order(kocherga.db.Base):
     order_value = Column(Integer, info={ 'ru_title': 'Сумма заказа' })
     time_value = Column(Integer, info={ 'ru_title': 'Стоимость времени' })
     stuff_value = Column(Integer, info={ 'ru_title': 'Стоимость товаров' })
-    payment_type = Column(String, info={ 'ru_title': 'Тип оплаты' })
-    is_fixed = Column(String, info={ 'ru_title': 'Фикс' })
-    client_name = Column(String, info={ 'ru_title': 'Клиент' })
-    manager = Column(String, info={ 'ru_title': 'Менеджер' })
-    tariff_time = Column(String, info={ 'ru_title': 'Тарификация по времени' })
-    tariff_plan = Column(String, info={ 'ru_title': 'Тарифный план' })
-    comment = Column(String, info={ 'ru_title': 'Комментарии' })
-    history = Column(String, info={ 'ru_title': 'История' })
+    payment_type = Column(String(20), info={ 'ru_title': 'Тип оплаты' })
+    is_fixed = Column(String(20), info={ 'ru_title': 'Фикс' })
+    client_name = Column(String(255), info={ 'ru_title': 'Клиент' })
+    manager = Column(String(255), info={ 'ru_title': 'Менеджер' })
+    tariff_time = Column(String(20), info={ 'ru_title': 'Тарификация по времени' })
+    tariff_plan = Column(String(20), info={ 'ru_title': 'Тарифный план' })
+    comment = Column(String(255), info={ 'ru_title': 'Комментарии' })
+    history = Column(Text, info={ 'ru_title': 'История' })
 
     @classmethod
     def from_csv_row(cls, csv_row):

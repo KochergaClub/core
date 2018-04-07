@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 from abc import ABC, abstractmethod
 
 from typing import Any, Optional
@@ -12,10 +12,10 @@ from kocherga.config import TZ
 
 class ImporterState(kocherga.db.Base):
     __tablename__ = 'importers_state'
-    name = Column(String, primary_key=True)
+    name = Column(String(100), primary_key=True)
     until_ts = Column(Integer)
     last_ts = Column(Integer)
-    last_exception = Column(String)
+    last_exception = Column(Text)
 
     @classmethod
     def init_db(cls):
@@ -36,10 +36,10 @@ class ImporterState(kocherga.db.Base):
 class ImporterLogEntry(kocherga.db.Base):
     __tablename__ = 'importers_log'
     id = Column(Integer, primary_key=True)
-    name = Column(String, index=True)
+    name = Column(String(100), index=True)
     start_ts = Column(Integer)
     end_ts = Column(Integer)
-    exception = Column(String)
+    exception = Column(Text)
 
     def __init__(self, name):
         self.name = name
@@ -62,7 +62,7 @@ class ImportContext:
 
         if exc_value:
             # let's drop everything from our failed session
-            Session().remove()
+            Session.remove()
             self.state.last_exception = str(exc_value)
         else:
             self.state.last_exception = None

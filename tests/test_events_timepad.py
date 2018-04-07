@@ -11,6 +11,6 @@ class TestAnnouncement:
         assert t.link == 'https://kocherga-dev.timepad.ru/event/123'
 
 class TestCreate:
-    def test_create(self, event):
-        result = kocherga.events.timepad.create(event)
+    def test_create(self, event_for_timepad):
+        result = kocherga.events.timepad.create(event_for_timepad)
         assert type(result) == TimepadAnnouncement

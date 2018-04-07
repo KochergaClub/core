@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import time
 import xml.etree.ElementTree as ET
 
-from sqlalchemy import Column, Integer, String, Numeric, Boolean
+from sqlalchemy import Column, Integer, String, Text, Numeric, Boolean
 
 from typing import Any, List, Iterable
 
@@ -18,10 +18,10 @@ import kocherga.importer.base
 
 class Record(kocherga.db.Base):
     __tablename__ = 'tochka_records'
-    id = Column(String, primary_key=True)
+    id = Column(String(100), primary_key=True)
     ts = Column(Integer)
     debit = Column(Boolean)
-    purpose = Column(String)
+    purpose = Column(Text)
     document_type = Column(Integer)
     total = Column(Numeric(10, 2))
 

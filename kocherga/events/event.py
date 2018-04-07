@@ -7,7 +7,7 @@ import hashlib
 import shutil
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, orm
+from sqlalchemy import Column, Integer, String, Boolean, Text, orm
 import sqlalchemy
 
 import kocherga.db
@@ -36,39 +36,39 @@ def image_flag_property(image_type):
 
 class Event(kocherga.db.Base):
     __tablename__ = 'events'
-    google_id = Column(String, primary_key=True)
-    google_link = Column(String)
+    google_id = Column(String(100), primary_key=True)
+    google_link = Column(String(1024))
 
     start_ts = Column(Integer)
     end_ts = Column(Integer)
     created_ts = Column(Integer)
     updated_ts = Column(Integer)
-    creator = Column(String)
+    creator = Column(String(255))
 
-    title = Column(String)
+    title = Column(String(255))
     # Not a google_event.summary! We don't store this field on google at all for now. This is for the short schedule/timepad/email summaries.
-    summary = Column(String)
-    description = Column(String)
+    summary = Column(Text)
+    description = Column(Text)
 
-    location = Column(String)
+    location = Column(String(255))
 
     is_master = Column(Boolean)
-    master_id = Column(String)
+    master_id = Column(String(100))
 
-    visitors = Column(String) # not Integer, because it can take values such as 'no_record' or 'cancelled'
+    visitors = Column(String(100)) # not Integer, because it can take values such as 'no_record' or 'cancelled'
     asked_for_visitors_ts = Column(Integer)
-    event_type = Column(String)
+    event_type = Column(String(40))
 
-    vk_group = Column(String)
-    fb_group = Column(String)
+    vk_group = Column(String(40))
+    fb_group = Column(String(40))
 
     has_default_image = Column(Boolean)
     has_vk_image = Column(Boolean)
     ready_to_post = Column(Boolean)
 
-    posted_fb = Column(String)
-    posted_timepad = Column(String)
-    posted_vk = Column(String)
+    posted_fb = Column(String(1024))
+    posted_timepad = Column(String(1024))
+    posted_vk = Column(String(1024))
 
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
@@ -337,10 +337,21 @@ class Event(kocherga.db.Base):
 
     def to_google(self):
         convert_dt = lambda dt: dt.astimezone(tzutc()).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        google_props = {}
+        for k, v in self.props.items():
+            if v == False:
+                google_props[k] = 'false'
+            elif v == True:
+                google_props[k] = 'true'
+            elif v:
+                google_props[k] = v
+
         return {
             'created': convert_dt(self.created_dt),
             'updated': convert_dt(self.updated_dt),
-            'creator': self.creator,
+            'creator': {
+                'email': self.creator,
+            },
             'summary': self.title,
             'description': self.description,
             'start': {
@@ -350,7 +361,7 @@ class Event(kocherga.db.Base):
                 'dateTime': convert_dt(self.end_dt),
             },
             'extendedProperties': {
-                'private': self.props,
+                'private': google_props,
             },
         }
 

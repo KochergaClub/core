@@ -6,7 +6,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
-import kocherga.db
+from kocherga.db import DB_URL
 
 # Import all modules with tables. TODO - think about how to improve this.
 import kocherga.cm
@@ -48,7 +48,7 @@ def run_migrations_offline():
 
     """
     context.configure(
-        url=f'sqlite:///{kocherga.db.DB_FILE}',
+        url=DB_URL,
         target_metadata=target_metadata,
         literal_binds=True
     )
