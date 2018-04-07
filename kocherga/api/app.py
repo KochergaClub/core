@@ -54,7 +54,7 @@ def create_app(DEV):
             response = jsonify(error.to_dict())
             response.status_code = error.status_code
         else:
-            logger.error(f'URL: {request.url}, method: {request.method}, error: {str(error)}')
+            logger.error(f'URL: {request.path}, method: {request.method}, error: {str(error)}')
             response = jsonify({'error': 'Internal error'})
             response.status_code = 500
         response.headers['Access-Control-Allow-Origin'] = '*'
