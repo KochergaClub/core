@@ -5,6 +5,8 @@ from quart import Blueprint, jsonify, request
 
 from kocherga.db import Session
 from kocherga.events.event import Event
+import kocherga.events.timepad
+import kocherga.events.announce
 from kocherga.api.auth import auth
 
 bp = Blueprint('announces', __name__)
@@ -21,6 +23,19 @@ def post_timepad(event_id):
     announcement = kocherga.events.announce.post_to_timepad(event)
     Session().commit()
     return jsonify({ 'link': announcement.link })
+
+@bp.route('/announcements/timepad/categories')
+@auth('kocherga')
+def timepad_categories():
+    categories = kocherga.events.timepad.timepad_categories()
+    return jsonify([
+        {
+            'id': c.id,
+            'name': c.name,
+            'code': c.code,
+        }
+        for c in categories
+    ])
 
 @bp.route('/announcements/vk/event/<event_id>', methods=['POST'])
 @auth('kocherga')

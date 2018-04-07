@@ -58,7 +58,8 @@ def timepad_summary(event):
     summary = event.description.split('\n\n')[0]
     return kocherga.events.markup.Markup(summary).as_plain()
 
-TimepadCategory = namedtuple('TimepadCategory', 'id name code')
+class TimepadCategory(namedtuple('TimepadCategory', 'id name code')):
+    pass
 
 def timepad_categories():
     return [
