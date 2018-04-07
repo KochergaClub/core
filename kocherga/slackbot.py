@@ -2,6 +2,7 @@ import re
 import json
 from functools import wraps
 import logging
+logger = logging.getLogger(__name__)
 import pytz
 
 from flask import request, jsonify
@@ -228,7 +229,7 @@ class Bot:
         @self.slack_events_adapter.on("message")
         def on_event(event):
             if request.headers.get('X-Slack-Retry-Reason') == 'http_timeout':
-                logging.warning('Got a retry request because of timeout')
+                logger.warning('Got a retry request because of timeout')
                 return
 
             self.process_message(event['event'])

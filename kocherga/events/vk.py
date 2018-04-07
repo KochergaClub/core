@@ -1,7 +1,9 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime
 import requests
 import json
-import logging
 
 import kocherga.vk
 from kocherga.error import PublicError
@@ -45,7 +47,7 @@ def upload_wall_image(group_id, image_file):
     if not len(photo):
         raise Exception("vk didn't like our image file")
 
-    logging.debug('image upload response: ' + str(upload_response))
+    logger.debug('image upload response: ' + str(upload_response))
 
     photo = kocherga.vk.call('photos.saveWallPhoto', {
         'group_id': group_id,
@@ -56,7 +58,7 @@ def upload_wall_image(group_id, image_file):
     })
 
     photo_id = 'photo{owner_id}_{id}'.format(**photo[0])
-    logging.info('photo id: ' + str(photo_id))
+    logger.info('photo id: ' + str(photo_id))
 
     return photo_id
 

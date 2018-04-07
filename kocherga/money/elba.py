@@ -1,7 +1,9 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import time
 from datetime import datetime
 import sqlite3
-import logging
 import re
 
 import pyppeteer
@@ -22,11 +24,11 @@ def get_last_code():
     ts += ts_base
 
     if guid == last_sms_guid:
-        logging.info("We've already seen this sms, let's wait for another one")
+        logger.info("We've already seen this sms, let's wait for another one")
         return
 
     if datetime.now().timestamp() - ts > 30:
-        logging.info("Got a code, but it's too old, let's wait for another one")
+        logger.info("Got a code, but it's too old, let's wait for another one")
         return
 
     match = re.match(r'Код: (\d+)', text)
@@ -40,14 +42,14 @@ def get_code():
     for i in range(20):
         code = get_last_code()
         if code:
-            logging.info(f'CODE: {code}')
+            logger.info(f'CODE: {code}')
             return code
         time.sleep(1)
 
     raise Exception("Couldn't get a code")
 
 async def begin_request(page):
-    logging.info(f'Navigating to request options page')
+    logger.info(f'Navigating to request options page')
     await page.click('#MainMenu_Reports_LinkText')
     await page.waitForNavigation()
 
@@ -72,24 +74,24 @@ async def fill_date_input(page, selector, d):
     await page.keyboard.type(d.strftime('%d.%m.%Y'))
 
 async def prepare_request_accounting(page, dt):
-    logging.info(f'Preparing accounting request')
+    logger.info(f'Preparing accounting request')
     await page.click('input[value=AccountingReference]')
     await fill_date_input(page, '#TypeRadioGroup_AccountingReferenceDate', dt)
 
 async def prepare_request_operations(page, year):
-    logging.info(f'Preparing operations request')
+    logger.info(f'Preparing operations request')
     await page.click('input[value=OperationsExcerpt]')
     await page.click('#TypeRadioGroup_OperationsExcerptSelect')
     await page.click(f'#TypeRadioGroup_OperationsExcerptSelect_Options li[key="{year}"]')
 
 async def prepare_request_declaration(page, year):
-    logging.info(f'Preparing declaration request')
+    logger.info(f'Preparing declaration request')
     await page.click('input[value=DeclarationList]')
     await page.click('#TypeRadioGroup_DeclarationListSelect')
     await page.click(f'#TypeRadioGroup_DeclarationListSelect_Options li[key="{year}"]')
 
 async def request_anything(page):
-    logging.info(f'Requesting...')
+    logger.info(f'Requesting...')
     await page.click('#SendReportViaCloud_SendInternetReportButton')
 
     await page.waitForSelector('#SendCloudReportLightbox_CodeInput', visible=True)
@@ -97,10 +99,10 @@ async def request_anything(page):
     await page.type('#SendCloudReportLightbox_CodeInput', code)
     await page.click('#SendCloudReportLightbox_AcceptButton')
     await page.waitForNavigation()
-    logging.info(f'Request submitted')
+    logger.info(f'Request submitted')
 
 async def elba_page():
-    logging.info('Starting browser')
+    logger.info('Starting browser')
     browser = await pyppeteer.launch(
         headless=False,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
@@ -108,16 +110,16 @@ async def elba_page():
     page = await browser.newPage()
     await page.setViewport({ 'width': 1270, 'height': 700 }) # left sidebar appears at 1260+ width
 
-    logging.info('Going to elba')
+    logger.info('Going to elba')
     await page.goto('https://elba.kontur.ru')
 
-    logging.info('Signing in')
+    logger.info('Signing in')
     await page.type('#Email', ELBA_CREDENTIALS['email'])
     await page.type('#Password', ELBA_CREDENTIALS['password'])
     await page.keyboard.press('Enter')
     await page.waitForNavigation()
 
-    logging.info('Signed in')
+    logger.info('Signed in')
 
     return page
 
@@ -147,22 +149,22 @@ async def add_cash_income(data, start_pko_id, from_date=None):
     await page.click('#MainMenu_Payments_Link')
     await page.waitForNavigation()
 
-    logging.info('Got to Payments page')
+    logger.info('Got to Payments page')
 
     pko_id = start_pko_id
 
     for row in data:
-        logging.info(row['date'])
+        logger.info(row['date'])
         income = row['clean_income']
         if income == 0:
-            logging.info('No income, skip')
+            logger.info('No income, skip')
             continue
         if income < 0:
-            logging.warn('Negative income! Skip.')
+            logger.warn('Negative income! Skip.')
             continue
         d = datetime.strptime(row['date'], '%Y-%m-%d').date()
         if from_date and d < from_date:
-            logging.info('Too old, skip')
+            logger.info('Too old, skip')
             continue
 
         await page.click('#CreateDebetButton')
@@ -178,7 +180,7 @@ async def add_cash_income(data, start_pko_id, from_date=None):
             await docnum_el.press('Backspace')
         await docnum_el.type(str(pko_id))
 
-        logging.info(f'Submitting a form for {d.strftime("%Y-%m-%d")}, pko id = {pko_id}')
+        logger.info(f'Submitting a form for {d.strftime("%Y-%m-%d")}, pko id = {pko_id}')
         await page.click('#ComponentsHost_PaymentEditLightbox_AcceptButton')
         await page.waitForSelector('.c-lightbox-overlay', hidden=True)
 

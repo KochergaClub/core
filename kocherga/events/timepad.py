@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import os
 import requests
 import json
@@ -110,12 +113,12 @@ def create(event):
     if image:
         data['poster_image_url'] = image
 
-    logging.debug('creating timepad event %s', data)
+    logger.debug('creating timepad event %s', data)
     r = requests.post(
         url,
         json=data
     )
-    print(r.text)
+    logger.debug(r.text)
     r.raise_for_status()
 
     result = json.loads(r.text)

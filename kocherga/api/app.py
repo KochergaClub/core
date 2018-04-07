@@ -1,4 +1,6 @@
 import logging
+logger = logging.getLogger(__name__)
+
 import os
 from pathlib import Path
 
@@ -52,7 +54,7 @@ def create_app(DEV):
             response = jsonify(error.to_dict())
             response.status_code = error.status_code
         else:
-            logging.error(error)
+            logger.error(error)
             response = jsonify({'error': 'Internal error'})
             response.status_code = 500
         response.headers['Access-Control-Allow-Origin'] = '*'

@@ -1,8 +1,9 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import sqlite3
 import os
 import enum
-import logging
-
 import sqlalchemy
 from sqlalchemy import Table, Column, String, DateTime, Integer, Enum
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,7 +16,7 @@ DB_URL = config()['kocherga_db']
 Base = declarative_base()
 
 def engine():
-    logging.info(f'Creating an engine for {DB_URL}')
+    logger.info(f'Creating an engine for {DB_URL}')
     return sqlalchemy.create_engine(DB_URL)
 
 def connect():

@@ -1,6 +1,8 @@
 # Audit team access permissions.
 
 import logging
+logger = logging.getLogger(__name__)
+
 from termcolor import colored
 
 import kocherga.team
@@ -21,7 +23,7 @@ def audit():
     audit_calendar()
 
 def audit_wiki():
-    logging.info('Audit wiki permissions')
+    logger.info('Audit wiki permissions')
     wiki = kocherga.wiki.get_wiki()
 
     team = kocherga.team.members()
@@ -47,7 +49,7 @@ def audit_wiki():
 
 
 def audit_slack():
-    logging.info('Audit slack permissions')
+    logger.info('Audit slack permissions')
     team = kocherga.team.members()
 
     ok = 0
@@ -61,7 +63,7 @@ def audit_slack():
     return ok
 
 def audit_calendar():
-    logging.info('Audit calendar permissions')
+    logger.info('Audit calendar permissions')
     calendar = kocherga.google.service('calendar')
     acl = calendar.acl().list(calendarId=kocherga.config.google_calendar_id()).execute()
 

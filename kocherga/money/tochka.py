@@ -1,5 +1,7 @@
-import requests
 import logging
+logger = logging.getLogger(__name__)
+
+import requests
 from datetime import datetime, timedelta
 import time
 import xml.etree.ElementTree as ET
@@ -131,7 +133,7 @@ def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> Iterable[A
     while total_wait < max_wait:
         response = xml_request(token, 'R0101', request_xml)
         state = response.find('./state_info').get('state')
-        logging.info(f'State: {state}')
+        logger.info(f'State: {state}')
         if state == 'failed':
             raise Exception('Statement request resulted in state=failed')
 
@@ -140,7 +142,7 @@ def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> Iterable[A
             break
 
         step = min(step, max_wait - total_wait)
-        logging.info(f'No statement, waiting for {step} seconds')
+        logger.info(f'No statement, waiting for {step} seconds')
         time.sleep(step)
         total_wait += step
         if step < max_step:
@@ -162,7 +164,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         token = get_access_token() # TODO - cache
         for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, step=timedelta(days=28)):
-            logging.info(f'Importing from {chunk_from_dt} to {chunk_to_dt}')
+            logger.info(f'Importing from {chunk_from_dt} to {chunk_to_dt}')
             for record in get_statements(token, chunk_from_dt, chunk_to_dt):
                 session.merge(record)
 

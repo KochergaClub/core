@@ -1,4 +1,6 @@
 import logging
+logger = logging.getLogger(__name__)
+
 import re
 import markdown
 import attr
@@ -24,7 +26,7 @@ class SelfMention(Part):
     pass
 
 def parse_entity(entity_str: str) -> Entity:
-    logging.debug(f'parsing {entity_str}')
+    logger.debug(f'parsing {entity_str}')
     match = re.match(r'\{\{Entity\|(.*)\}\}$', entity_str)
     if not match:
         raise Exception('Expected a valid entity')

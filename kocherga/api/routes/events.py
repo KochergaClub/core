@@ -1,8 +1,10 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import sys
 from quart import Blueprint, jsonify, request, send_file
 from datetime import datetime, timedelta
 import requests
-import logging
 from werkzeug.contrib.iterio import IterIO
 
 from kocherga.error import PublicError
@@ -24,7 +26,7 @@ def events():
         if d: d = datetime.strptime(d, '%Y-%m-%d').date()
         return d
 
-    logging.debug(
+    logger.debug(
         dict(
             date=request.args.get('date'),
             from_date=arg2date('from_date'),

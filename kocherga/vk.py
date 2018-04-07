@@ -1,7 +1,8 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import requests
 import kocherga.secrets
-
-import logging
 
 from captcha_solver import CaptchaSolver
 
@@ -38,17 +39,17 @@ def call(method, params):
             'https://api.vk.com/method/{}'.format(method),
             data=params
         )
-        logging.debug('response: ' + str(response.content))
+        logger.debug('response: ' + str(response.content))
         response.raise_for_status()
         r = response.json()
 
         if wants_captcha(r):
-            logging.warn('Got a captcha, solving...')
+            logger.warn('Got a captcha, solving...')
             img_link = r['error']['captcha_img']
             img_content = requests.get(img_link).content
             captcha_key = captcha_solver.solve_captcha(img_content)
 
-            logging.warn('Captcha solved: {}'.format(captcha_key))
+            logger.warn('Captcha solved: {}'.format(captcha_key))
 
             params['captcha_sid'] = r['error']['captcha_sid']
             params['captcha_key'] = captcha_key

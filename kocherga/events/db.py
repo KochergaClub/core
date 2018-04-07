@@ -1,4 +1,6 @@
 import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime, timedelta
 
 from kocherga.config import TZ
@@ -105,7 +107,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         google_events = None
         too_old = from_dt < datetime.now(tz=TZ) - timedelta(days=7)
         if too_old:
-            logging.info(f"from_dt = {from_dt} is too old, let's reimport everything")
+            logger.info(f"from_dt = {from_dt} is too old, let's reimport everything")
             google_events = kocherga.events.google.list_events(
                 to_date=(datetime.now(tz=TZ) + timedelta(days=7*8)).date(),
             )

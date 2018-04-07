@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import logging
+logger = logging.getLogger(__name__)
 
 from kocherga.config import TZ
 import kocherga.events.db
@@ -177,7 +178,7 @@ def event_visitors_question(event):
 @bot.schedule('interval', minutes=5)
 def ask_for_event_visitors():
     events = kocherga.events.db.list_events(date=datetime.now().date())
-    logging.info(f'Total events: {len(events)}')
+    logger.info(f'Total events: {len(events)}')
 
     events = [
         e for e in events
@@ -188,13 +189,13 @@ def ask_for_event_visitors():
             or datetime.now(tz=TZ) < e.start_dt + timedelta(minutes=30) # event haven't started yet, let's wait
         )
     ]
-    logging.info(f'Events we should ask about: {len(events)}')
+    logger.info(f'Events we should ask about: {len(events)}')
 
     if not len(events):
         return # nothing to ask about
 
     for e in events:
-        logging.info(f"Asking for event {e.google_id} ({e.title}). Old asked_for_visitors: {e.get_prop('asked_for_visitors')}")
+        logger.info(f"Asking for event {e.google_id} ({e.title}). Old asked_for_visitors: {e.get_prop('asked_for_visitors')}")
 
         e.set_prop('asked_for_visitors', datetime.now().strftime('%Y-%m-%d %H:%M'))
         bot.send_message(**event_visitors_question(e))

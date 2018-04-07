@@ -1,10 +1,12 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import csv
 import requests
 from collections import defaultdict
 from datetime import datetime, timedelta
 import enum
 import io
-import logging
 
 from typing import DefaultDict, Dict, Iterator, List
 
@@ -98,13 +100,13 @@ def api_text_to_row_groups(text: str) -> Iterator[List[Dict[str, str]]]:
     for row in reader:
         rows_by_call_id[row['call_id']].append(row)
 
-    logging.info(f'Got {len(rows_by_call_id)} rows')
+    logger.info(f'Got {len(rows_by_call_id)} rows')
 
     for (call_id, rows) in rows_by_call_id.items():
         yield rows
 
 def fetch_csv_row_groups(from_dt: datetime, to_dt: datetime) -> Iterator[List[Dict[str, str]]]:
-    logging.info(f'Fetching from {from_dt} to {to_dt}')
+    logger.info(f'Fetching from {from_dt} to {to_dt}')
     api_params={
         'secret': SECRET,
         'start': from_dt.strftime('%Y%m%d%H%M%S'),
@@ -127,12 +129,12 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
 def fetch_all_calls(from_dt=datetime(2015,9,1,tzinfo=TZ), to_dt=None) -> Iterator[Call]:
     api_requests = 0
     for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, timedelta(days=28)):
-        logging.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
+        logger.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
         counter = 0
         for call in fetch_calls(chunk_from_dt, chunk_to_dt):
             yield call
             counter += 1
-        logging.info(f'Fetched {counter} calls')
+        logger.info(f'Fetched {counter} calls')
 
         # We shouldn't make too many API requests in a row - we'll get banned.
         # This early break helps the importer to finish the full import in several portions.

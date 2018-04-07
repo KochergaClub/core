@@ -1,7 +1,8 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import datetime
 import re
-import logging
-
 import googleapiclient.errors
 
 from kocherga.config import TZ
@@ -73,7 +74,7 @@ def check_availability(start_dt, end_dt, room):
     date = start_dt.date()
 
     bookings = day_bookings(date)
-    logging.debug([vars(b) for b in bookings])
+    logger.debug([vars(b) for b in bookings])
     for booking in bookings:
         if booking.room not in (room, kocherga.room.unknown):
             continue # irrelevant

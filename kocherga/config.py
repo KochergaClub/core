@@ -1,10 +1,10 @@
+import logging
+logging.basicConfig(level=logging.INFO)
+
 import os
 from pathlib import Path
 import datetime
 import json
-
-import logging
-logging.basicConfig(level=logging.INFO)
 
 ### pytz is kinda crazy - it returns LMT from time to time.
 ### It can be fixed by using tz.localize(dt) instead of passing tzinfo, and it looks more correct, but it requires a big refactoring.

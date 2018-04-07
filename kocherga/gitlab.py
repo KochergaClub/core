@@ -1,5 +1,7 @@
-import dateutil.parser
 import logging
+logger = logging.getLogger(__name__)
+
+import dateutil.parser
 from datetime import datetime
 
 import gitlab
@@ -70,7 +72,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         issue = None
         for gl_issue in main_project().issues.list(updated_after=from_dt.isoformat(), order_by='updated_at', sort='asc', all=True):
-            logging.info(f'Importing issue {gl_issue.iid}')
+            logger.info(f'Importing issue {gl_issue.iid}')
             issue = Issue.from_gl(gl_issue)
             session.merge(issue)
 

@@ -1,5 +1,7 @@
-import datetime
 import logging
+logger = logging.getLogger(__name__)
+
+import datetime
 
 from typing import Any, Dict, List
 
@@ -20,7 +22,7 @@ def delete_event(event_id):
     return api().events().delete(calendarId=CALENDAR, eventId=event_id).execute()
 
 def patch_event(event_id, patch):
-    logging.info(f'Patching {event_id} with {str(patch)}')
+    logger.info(f'Patching {event_id} with {str(patch)}')
     return api().events().patch(calendarId=CALENDAR, eventId=event_id, body=patch).execute()
 
 def set_property(event_id, key, value):
@@ -41,7 +43,7 @@ def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
     }
     kw.update(kwargs)
 
-    logging.info('Requesting a list of events')
+    logger.info('Requesting a list of events')
 
     eventsResult = api().events().list(**kw).execute()
     events = eventsResult.get('items', [])
@@ -53,7 +55,7 @@ def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
     ]
 
     if 'nextPageToken' in eventsResult:
-        logging.info('Asking for the next page, last date is {}'.format(events[-1]['start']['dateTime']))
+        logger.info('Asking for the next page, last date is {}'.format(events[-1]['start']['dateTime']))
         events.extend(
             events_with_condition(
                 **{

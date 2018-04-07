@@ -1,6 +1,8 @@
 import re
 from collections import namedtuple
 import logging
+logger = logging.getLogger(__name__)
+
 import asyncio
 from random import random
 import requests
@@ -39,9 +41,9 @@ def get_image_id(fb_id: str, access_token: str):
             'fields': field
         })
         if r.status_code != 200:
-            logging.warn(f"Can't read {fb_id}/{field}: {r.status_code}, {str(r.json())}")
+            logger.warn(f"Can't read {fb_id}/{field}: {r.status_code}, {str(r.json())}")
             continue
-        logging.info(f'Got JSON for field {field}: {str(r.json())}')
+        logger.info(f'Got JSON for field {field}: {str(r.json())}')
 
         url = None
         if field == 'cover':
@@ -91,7 +93,7 @@ class AnnounceSession:
 
     async def select_from_listbox(self, fb_id):
         image_id = get_image_id(fb_id, self.access_token)
-        logging.info(f'Looking for image {image_id}')
+        logger.info(f'Looking for image {image_id}')
         selector = f'[role=listbox] [src*="{image_id}"], [role=listbox] [style*="{image_id}"]'
         await self.page.waitForSelector(selector)
         await self.page.click(selector)
@@ -123,10 +125,10 @@ class AnnounceSession:
         page = self.page
         event = self.event
 
-        logging.info('Going to facebook')
+        logger.info('Going to facebook')
         await page.goto('https://facebook.com')
 
-        logging.info('Signing in')
+        logger.info('Signing in')
         await page.focus('input[name=email]')
         await page.keyboard.type(FB_CONFIG['announcer_login'])
 
@@ -137,25 +139,25 @@ class AnnounceSession:
 
         await page.waitForNavigation()
 
-        logging.info('Signed in')
+        logger.info('Signed in')
         events_page = event.fb_announce_page() + '/events'
-        logging.info('Going to page: ' + events_page)
+        logger.info('Going to page: ' + events_page)
         await page.goto(events_page)
 
-        logging.info('Opening an event creation form')
+        logger.info('Opening an event creation form')
         await page.click('[data-testid=event-create-button]')
         await page.waitForSelector('[data-testid=event-create-dialog-name-field]')
 
-        logging.info('Uploading an image')
+        logger.info('Uploading an image')
         await page.waitForSelector('[data-testid=event-create-dialog-image-selector')
         el = await page.J('[data-testid=event-create-dialog-image-selector')
         await el.uploadFile(event.image_file('default'))
 
-        logging.info('Filling title')
+        logger.info('Filling title')
         await page.focus('[data-testid=event-create-dialog-name-field]')
         await page.keyboard.type(event.title)
 
-        logging.info('Filling where')
+        logger.info('Filling where')
         await page.focus('[data-testid=event-create-dialog-where-field]')
         await self.clean_field(40)
         await page.keyboard.type(FB_CONFIG['main_page']['name'])
@@ -163,19 +165,19 @@ class AnnounceSession:
         if self.select_self_location:
             await self.select_from_listbox(FB_CONFIG['main_page']['id'])
 
-        logging.info('Filling dates')
+        logger.info('Filling dates')
         await page.focus('[data-testid=event-create-dialog-start-time] input[placeholder="дд.мм.гггг"]')
         await self.fill_date_time(event.start_dt)
         await page.focus('[data-testid=event-create-dialog-end-time] input[placeholder="дд.мм.гггг"]')
         await self.fill_date_time(event.end_dt)
 
-        logging.info('Filling description')
+        logger.info('Filling description')
         await self.fill_description(event.description)
 
         if not self.auto_confirm:
             return page
 
-        logging.info('Confirming')
+        logger.info('Confirming')
         await page.click('[data-testid=event-create-dialog-confirm-button]')
         await page.waitForSelector('h1[data-testid=event-permalink-event-name]')
 
@@ -194,15 +196,15 @@ async def create(event, access_token, headless=True, **kwargs):
         headless=headless,
         args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
     )
-    logging.info(f'Started browser at {browser.wsEndpoint}')
+    logger.info(f'Started browser at {browser.wsEndpoint}')
 
     session = await AnnounceSession.create(browser, access_token, event, **kwargs)
     try:
-        logging.info(f'Trying to create')
+        logger.info(f'Trying to create')
         return await session.run()
     except Exception as e:
-        logging.info(f'Error while creating a FB announcement: {str(e)}')
+        logger.info(f'Error while creating a FB announcement: {str(e)}')
         image_bytes = await session.screenshot()
         filename = image_storage.save_screenshot('error', image_bytes)
-        logging.info(f'Screenshot saved to {filename}')
+        logger.info(f'Screenshot saved to {filename}')
         raise
