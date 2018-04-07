@@ -7,6 +7,7 @@ import json
 import re
 import markdown
 import logging
+from collections import namedtuple
 
 import kocherga.secrets
 from kocherga.datetime import dts
@@ -57,8 +58,42 @@ def timepad_summary(event):
     summary = event.description.split('\n\n')[0]
     return kocherga.events.markup.Markup(summary).as_plain()
 
+TimepadCategory = namedtuple('TimepadCategory', 'id name code')
+
+def timepad_categories():
+    return [
+        TimepadCategory(*args)
+        for args in (
+                (217, 'Бизнес', 'business'),
+                (374, 'Кино', 'cinema'),
+                (376, 'Спорт', 'sport'),
+                (379, 'Для детей', 'kids'),
+                (382, 'Иностранные языки', 'languages'),
+                (399, 'Красота и здоровье', 'beauty'),
+                (452, 'ИТ и интернет', 'it'),
+                (453, 'Психология и самопознание', 'psychology'),
+                (456, 'Еда', 'food'),
+                (457, 'Вечеринки', 'party'),
+                (458, 'Выставки', 'exhibition'),
+                (459, 'Театры', 'theater'),
+                (460, 'Концерты', 'concert'),
+                (461, 'Экскурсии и путешествия', 'trip'),
+                (462, 'Другие события', 'other_event'),
+                (463, 'Другие развлечения', 'other_entertainment'),
+                (524, 'Хобби и творчество', 'hobby'),
+                (525, 'Искусство и культура', 'art'),
+                (1315, 'Образование за рубежом', 'education_abroad'),
+                (1940, 'Гражданские проекты', 'civil'),
+        )
+    ]
+
+def timepad_category_by_code(code):
+    return next(c for c in timepad_categories() if c.code == code)
+
 def create(event):
     url = BASE_URL + '/events.json?token=' + token()
+
+    timepad_category = timepad_category_by_code(event.timepad_category_code or 'other_event')
     data = {
         'organization': {
             'id': ORGANIZATION_ID,
@@ -70,8 +105,8 @@ def create(event):
         'description_short': timepad_summary(event),
         'categories': [
             {
-                'id': 462,
-                'name': 'Другие события',
+                'id': timepad_category.id,
+                'name': timepad_category.name,
             },
         ],
         'location': TIMEPAD_CONFIG['location'],

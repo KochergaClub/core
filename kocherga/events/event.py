@@ -71,6 +71,8 @@ class Event(Base):
     posted_timepad = Column(String(1024))
     posted_vk = Column(String(1024))
 
+    timepad_category_code = Column(String(40))
+
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
 
@@ -83,13 +85,7 @@ class Event(Base):
     # [x] type
     # [x] visitors
     # [x] vk_group
-
-    # [?] _timepad_
-    # [?] bar - obviously testing
-    # [?] foo - obviously testing
-    # [?] has_image - single value, doesn't matter
-    # [?] hello - 2 values, doesn't matter
-
+    # (move these to event_announcements)
     # [a] posted-fb
     # [a] posted-timepad
     # [a] posted-vk
@@ -329,6 +325,7 @@ class Event(Base):
             },
             'type': self.event_type,
             # TODO - add field from props as top-level fields
+            'timepad_category_code': self.timepad_category_code,
         }
 
         if self.master_id:

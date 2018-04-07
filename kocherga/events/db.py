@@ -86,6 +86,8 @@ def patch_event(event_id, patch):
             event.description = value
         elif key == 'summary':
             event.summary = value
+        elif key == 'timepad_category':
+            event.timepad_category = value
         else:
             raise Exception('Key {} is not allowed in patch yet'.format(key))
 
