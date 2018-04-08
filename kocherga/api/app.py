@@ -40,7 +40,7 @@ def create_app(DEV):
 
     sentry_dsn = kocherga.config.config().get('sentry', {}).get('api', None)
     if sentry_dsn:
-        sentry = Sentry(app, dsn=sentry_dsn)
+        sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
 
     if DEV:
         app.debug = True
