@@ -52,12 +52,6 @@ def check(url):
 def timepad_description(event):
     return kocherga.events.markup.Markup(event.description).as_html()
 
-def timepad_summary(event):
-    if event.summary:
-        return event.summary
-    summary = event.description.split('\n\n')[0]
-    return kocherga.events.markup.Markup(summary).as_plain()
-
 class TimepadCategory(namedtuple('TimepadCategory', 'id name code')):
     pass
 
@@ -132,7 +126,7 @@ def create(event):
         'ends_at': dts(event.end_dt),
         'name': event.title,
         'description_html': timepad_description(event),
-        'description_short': timepad_summary(event),
+        'description_short': event.generate_summary(),
         'categories': [
             {
                 'id': timepad_category.id,

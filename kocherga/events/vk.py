@@ -1,13 +1,15 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 import json
 
+from kocherga.config import TZ
 from kocherga.db import Session
 import kocherga.vk
 from kocherga.error import PublicError
+import kocherga.datetime
 
 from kocherga.events.announcement import BaseAnnouncement
 from kocherga.events.event import Event
@@ -135,3 +137,56 @@ def all_groups():
     groups = [row.vk_group for row in query.all()]
     logger.info(f'Got {len(groups)} groups')
     return groups
+
+def update_wiki_schedule():
+    logger.info('Selecting all vk groups')
+
+    last_monday = datetime.now(TZ) - timedelta(days=datetime.now(TZ).weekday())
+
+    query = (
+        Session().query(Event)
+        .filter(Event.start_ts > last_monday.timestamp())
+        .filter(Event.start_ts < (last_monday + timedelta(weeks=4)).timestamp())
+        .filter(Event.posted_vk != None)
+        .filter(Event.posted_vk != '')
+    )
+
+    events = query.order_by(Event.start_ts).all()
+    logger.info(f'Schedule includes {len(events)} events')
+
+    result = ''
+    prev_date = None
+    for event in events:
+        if event.start_dt.date() != prev_date:
+            weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+            weekday = weekdays[event.start_dt.weekday()]
+            month = kocherga.datetime.inflected_month(event.start_dt)
+            result += f'==={weekday}, {event.start_dt.day} {month}===\n'
+            prev_date = event.start_dt.date()
+
+        result += f"<blockquote>'''{event.start_dt:%H:%M}''' [{event.posted_vk}|{event.title}]\n"
+        result += f"{event.generate_summary()}</blockquote>\n"
+
+    group_id = group2id(kocherga.config.config()['vk']['main_page']['id'])
+    page_id = group2id(kocherga.config.config()['vk']['main_page']['main_wall_page_id'])
+    r = kocherga.vk.call(
+        'pages.get', {
+            'owner_id': -group_id,
+            'page_id': page_id,
+            'need_source': 1,
+        }
+    )
+
+    position = r['source'].index('''</blockquote>\n\n-----\n\n[https://kocherga.timepad.ru/events/past/''')
+    position += len('</blockquote>\n')
+
+    content = result + r['source'][position:]
+
+    r = kocherga.vk.call(
+        'pages.save', {
+            'group_id': group_id,
+            'page_id': page_id,
+            'text': content,
+        }
+    )
+    print(r)

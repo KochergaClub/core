@@ -19,6 +19,7 @@ from kocherga.config import TZ
 from kocherga.images import image_storage
 import kocherga.room
 import kocherga.events.google
+import kocherga.events.markup
 
 from kocherga.error import PublicError
 
@@ -258,6 +259,12 @@ class Event(Base):
                 self.asked_for_visitors_ts = None
         else:
             raise PublicError(f'Unknown prop {key}')
+
+    def generate_summary(self):
+        if self.summary:
+            return self.summary
+        summary = self.description.split('\n\n')[0]
+        return kocherga.events.markup.Markup(summary).as_plain()
 
     def image_file(self, image_type, check_if_exists=True):
         if not self.get_prop(image_flag_property(image_type)):
