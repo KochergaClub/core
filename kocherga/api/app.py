@@ -12,6 +12,8 @@ import quart.flask_patch # for __ident_func__
 #from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
+from raven.contrib.flask import Sentry
+
 import kocherga.db
 
 from kocherga.error import PublicError
@@ -35,6 +37,10 @@ def create_app(DEV):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = kocherga.db.DB_URL
     kocherga.db.Session.replace(SQLAlchemy(app).session)
+
+    sentry_dsn = kocherga.config.config().get('sentry', {}).get('api', None)
+    if sentry_dsn:
+        sentry = Sentry(app, dsn=sentry_dsn)
 
     if DEV:
         app.debug = True

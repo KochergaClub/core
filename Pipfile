@@ -37,6 +37,7 @@ pytz = "*"
 "boto3" = "*"
 mysqlclient = "*"
 flask-sqlalchemy = "*"
+raven = "*"
 
 
 [dev-packages]
