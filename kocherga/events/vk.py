@@ -167,6 +167,8 @@ def update_wiki_schedule():
         result += f"<blockquote>'''{event.start_dt:%H:%M}''' [{event.posted_vk}|{event.title}]\n"
         result += f"{event.generate_summary()}</blockquote>\n"
 
+    logger.debug(f'New schedule: {result}')
+
     group_id = group2id(kocherga.config.config()['vk']['main_page']['id'])
     page_id = group2id(kocherga.config.config()['vk']['main_page']['main_wall_page_id'])
     r = kocherga.vk.call(
@@ -181,6 +183,7 @@ def update_wiki_schedule():
     position += len('</blockquote>\n')
 
     content = result + r['source'][position:]
+    logger.debug(f'New wiki page content: {content}')
 
     r = kocherga.vk.call(
         'pages.save', {
@@ -189,4 +192,3 @@ def update_wiki_schedule():
             'text': content,
         }
     )
-    print(r)
