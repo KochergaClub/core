@@ -13,9 +13,8 @@ from quart import Quart, jsonify, request, current_app, _app_ctx_stack
 #from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-from raven.contrib.flask import Sentry
-
 import kocherga.db
+import raven
 
 from kocherga.error import PublicError
 
@@ -43,8 +42,13 @@ def create_app(DEV):
 
     #Disabled until we upgrade to quart 0.5.0 with its Werkzeug wrapper API (https://gitlab.com/pgjones/quart/issues/6)
     #
+    #from raven.contrib.flask import Sentry
     #if sentry_dsn:
     #    sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
+
+    raven_client = None
+    if sentry_dsn:
+        raven_client = raven.Client(sentry_dsn)
 
     if DEV:
         app.debug = True
@@ -61,6 +65,8 @@ def create_app(DEV):
     # via https://github.com/pallets/flask/blob/master/docs/patterns/apierrors.rst
     @app.errorhandler(Exception)
     def handle_invalid_usage(error):
+        if raven_client:
+            raven_client.captureMessage(str(error))
         if isinstance(error, PublicError):
             response = jsonify(error.to_dict())
             response.status_code = error.status_code
