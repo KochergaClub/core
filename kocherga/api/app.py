@@ -40,8 +40,11 @@ def create_app(DEV):
     kocherga.db.Session.replace(SQLAlchemy(app).session)
 
     sentry_dsn = kocherga.config.config().get('sentry', {}).get('api', None)
-    if sentry_dsn:
-        sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
+
+    #Disabled until we upgrade to quart 0.5.0 with its Werkzeug wrapper API (https://gitlab.com/pgjones/quart/issues/6)
+    #
+    #if sentry_dsn:
+    #    sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
 
     if DEV:
         app.debug = True
