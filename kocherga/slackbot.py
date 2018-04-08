@@ -13,6 +13,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from slackeventsapi import SlackEventAdapter
 from slackclient import SlackClient
 
+from raven.contrib.flask import Sentry
+
 from typing import List, Dict
 
 import kocherga.config
@@ -139,6 +141,10 @@ class Bot:
         flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         flask_app.config['SQLALCHEMY_DATABASE_URI'] = kocherga.db.DB_URL
         kocherga.db.Session.replace(SQLAlchemy(flask_app).session)
+
+        sentry_dsn = kocherga.config.config().get('sentry', {}).get('ludwig', None)
+        if sentry_dsn:
+            sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
 
         self.port = port
         self.verification_token = verification_token
