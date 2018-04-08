@@ -144,7 +144,7 @@ class Bot:
 
         sentry_dsn = kocherga.config.config().get('sentry', {}).get('ludwig', None)
         if sentry_dsn:
-            sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
+            sentry = Sentry(flask_app, dsn=sentry_dsn, wrap_wsgi=False)
 
         self.port = port
         self.verification_token = verification_token
