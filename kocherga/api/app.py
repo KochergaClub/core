@@ -28,6 +28,7 @@ import kocherga.api.routes.templater
 import kocherga.api.routes.announcements
 import kocherga.api.common
 
+# Necessary until https://github.com/mitsuhiko/flask-sqlalchemy/pull/577 will be merged and released.
 class SQLAlchemyPatched(SQLAlchemy):
     def apply_pool_defaults(self, app, options):
         super().apply_pool_defaults(app, options)
