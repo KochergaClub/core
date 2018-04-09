@@ -138,15 +138,19 @@ def all_groups():
     logger.info(f'Got {len(groups)} groups')
     return groups
 
-def update_wiki_schedule():
+def update_wiki_schedule(from_dt=None):
     logger.info('Selecting all vk groups')
 
-    last_monday = datetime.now(TZ) - timedelta(days=datetime.now(TZ).weekday())
+    if from_dt:
+        _from_dt = from_dt
+    else:
+        # last monday
+        _from_dt = datetime.now(TZ) - timedelta(days=datetime.now(TZ).weekday())
 
     query = (
         Session().query(Event)
-        .filter(Event.start_ts > last_monday.timestamp())
-        .filter(Event.start_ts < (last_monday + timedelta(weeks=4)).timestamp())
+        .filter(Event.start_ts > _from_dt.timestamp())
+        .filter(Event.start_ts < (datetime.now(TZ) + timedelta(weeks=4)).timestamp())
         .filter(Event.posted_vk != None)
         .filter(Event.posted_vk != '')
     )

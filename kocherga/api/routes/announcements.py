@@ -8,6 +8,7 @@ from kocherga.events.event import Event
 import kocherga.events.timepad
 import kocherga.events.announce
 from kocherga.api.auth import auth
+from kocherga.api.common import ok
 
 bp = Blueprint('announces', __name__)
 
@@ -42,6 +43,12 @@ def timepad_categories():
 def vk_groups():
     all_groups = kocherga.events.vk.all_groups()
     return jsonify(all_groups)
+
+@bp.route('/announcements/vk/update_wiki_schedule', methos=['POST'])
+@auth('kocherga')
+def update_wiki_schedule():
+    kocherga.events.vk.update_wiki_schedule()
+    return jsonify(ok)
 
 @bp.route('/announcements/vk/event/<event_id>', methods=['POST'])
 @auth('kocherga')
