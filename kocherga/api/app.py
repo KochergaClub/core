@@ -72,7 +72,8 @@ def create_app(DEV):
     @app.errorhandler(Exception)
     def handle_invalid_usage(error):
         if raven_client:
-            raven_client.captureMessage(str(error))
+            raven_client.captureException()
+
         if isinstance(error, PublicError):
             response = jsonify(error.to_dict())
             response.status_code = error.status_code
