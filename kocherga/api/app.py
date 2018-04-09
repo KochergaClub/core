@@ -8,7 +8,7 @@ from pathlib import Path
 
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from quart import Quart, jsonify, request, current_app, _app_ctx_stack
+from quart import Quart, jsonify, request, current_app, _app_ctx_stack, render_template
 
 #from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -36,9 +36,13 @@ class SQLAlchemyPatched(SQLAlchemy):
 
 
 def create_app(DEV):
+    app_root = (Path(__file__).parent.parent.parent / 'http_api').resolve()
     app = Quart(
         __name__,
-        root_path=str(Path(__file__).parent.parent.parent.resolve())
+        root_path=str(app_root),
+#        static_folder=str(app_root / 'static'),
+#        template_folder=str(app_root / 'api_static'),
+        static_url_path='',
     )
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -69,11 +73,16 @@ def create_app(DEV):
 
     ################## COMMON ########################
 
+    @app.route('/')
+    async def index_route():
+        return await render_template('index.html')
+
     # via https://github.com/pallets/flask/blob/master/docs/patterns/apierrors.rst
     @app.errorhandler(Exception)
     def handle_invalid_usage(error):
         if raven_client:
             raven_client.captureException()
+        print(error)
 
         if isinstance(error, PublicError):
             response = jsonify(error.to_dict())
