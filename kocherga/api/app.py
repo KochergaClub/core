@@ -28,6 +28,12 @@ import kocherga.api.routes.templater
 import kocherga.api.routes.announcements
 import kocherga.api.common
 
+class SQLAlchemyPatched(SQLAlchemy):
+    def apply_pool_defaults(self, app, options):
+        super().apply_pool_defaults(app, options)
+        options['pool_pre_ping'] = True
+
+
 def create_app(DEV):
     app = Quart(
         __name__,
@@ -36,7 +42,7 @@ def create_app(DEV):
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_DATABASE_URI'] = kocherga.db.DB_URL
-    kocherga.db.Session.replace(SQLAlchemy(app).session)
+    kocherga.db.Session.replace(SQLAlchemyPatched(app).session)
 
     sentry_dsn = kocherga.config.config().get('sentry', {}).get('api', None)
 

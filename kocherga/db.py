@@ -17,7 +17,7 @@ Base = declarative_base()
 
 def engine():
     logger.info(f'Creating an engine for {DB_URL}')
-    return sqlalchemy.create_engine(DB_URL)
+    return sqlalchemy.create_engine(DB_URL, pool_pre_ping=True)
 
 def connect():
     return engine().connect()
