@@ -24,4 +24,4 @@ def react_new_video(message, url):
     logger.info(f'Card ID: {card_id}')
 
     subscription_until = extend_subscription(card_id, timedelta(days=7))
-    return(f'Спасибо! Абонемент продлён до {subscription_until:%Y-%m-%d}')
+    return(f'Спасибо! Абонемент продлён до {subscription_until:%Y-%m-%d}.')
