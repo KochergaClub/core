@@ -326,9 +326,12 @@ def load_customer_from_html(customer_id):
         'Скидка на время:': 'discount',
         'Абонемент до:': 'subscription',
         'Рассылки:': 'subscr',
+        'Заметка:': 'comment',
     }
     result = {}
     for fragment in fragments:
+        if '>Заметка:</label>' in fragment:
+            continue
         match = re.search("<label.*?>(.*?)</label>\s*<span.*?>(.*?)</span>", fragment, flags=re.DOTALL)
         if not match:
             raise Exception("Unexpected form-group: " + fragment)
@@ -337,7 +340,7 @@ def load_customer_from_html(customer_id):
             continue
         key = label2key[label]
         if key == 'subscription':
-            value = datetime.strptime(value, '%d.%m.%Y %H:%M')
+            value = datetime.strptime(value, '%d.%m.%Y %H:%M').date()
         elif key == 'subscr':
             if value == 'согласен на получение':
                 value = True
@@ -378,6 +381,10 @@ def extend_subscription(card_id, period):
         },
     )
     r.raise_for_status()
+
+    customer = load_customer_from_html(customer_id) # we can't rely on DB cache here
+    if customer['subscription'] != subs_until:
+        raise Exception("Failed to extend a subscription, don't know why.")
 
     return subs_until
 
