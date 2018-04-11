@@ -1,8 +1,9 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import re
 import json
 from functools import wraps
-import logging
-logger = logging.getLogger(__name__)
 import pytz
 
 from flask import request, jsonify
@@ -109,6 +110,7 @@ class Dispatcher:
             match = re.match(listener['regex'], msg.body['text'], flags=re.IGNORECASE)
             if not match:
                 continue
+            logger.debug(f"{msg.body['text']} matches {str(listener)}")
             args = (msg,) + match.groups() # type: ignore
             result = listener['f'](*args)
 
@@ -119,7 +121,9 @@ class Dispatcher:
             elif result:
                 raise Exception('Bad listener result: {}'.format(result))
 
-            break
+            return
+
+        logger.debug(f"{msg.body['text']} doesn't match anything")
 
     def process_command(self, payload):
         command = payload['command']

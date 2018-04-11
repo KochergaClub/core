@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import re
 from io import StringIO
 
@@ -6,11 +9,13 @@ from collections import namedtuple, OrderedDict
 from datetime import datetime, date
 import csv
 import requests
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from sqlalchemy import inspect, Column, Integer, String, Text, DateTime, Date, Enum, Boolean
 
 from typing import List
 
+from kocherga.db import Session
 from kocherga.config import TZ
 import kocherga.secrets
 import kocherga.importer.base
@@ -306,6 +311,75 @@ def load_order_history(order_id):
 
     return items
 
+def load_customer_from_html(customer_id):
+    url = f'{DOMAIN}/customer/{customer_id}/'
+    r = requests.get(url, cookies=get_cookies(), timeout=10)
+    r.raise_for_status()
+
+    html = r.content.decode('utf-8')
+    fragments = re.findall(r"""<div class="form-group">.*?</div>""", html, flags=re.DOTALL)
+
+    label2key = {
+        'Номер карты:': 'card',
+        'Имя:': 'name',
+        'Фамилия:': 'family',
+        'Скидка на время:': 'discount',
+        'Абонемент до:': 'subscription',
+        'Рассылки:': 'subscr',
+    }
+    result = {}
+    for fragment in fragments:
+        match = re.search("<label.*?>(.*?)</label>\s*<span.*?>(.*?)</span>", fragment, flags=re.DOTALL)
+        if not match:
+            raise Exception("Unexpected form-group: " + fragment)
+        (label, value) = match.groups()
+        if label not in label2key:
+            continue
+        key = label2key[label]
+        if key == 'subscription':
+            value = datetime.strptime(value, '%d.%m.%Y %H:%M')
+        elif key == 'subscr':
+            if value == 'согласен на получение':
+                value = True
+            else:
+                value = False
+        result[key] = value
+
+    for required_field in 'name', 'family', 'card':
+        if required_field not in result:
+            raise Exception(f"{required_field} not found")
+
+    return result
+
+def extend_subscription(card_id, period):
+    customer_from_db = Session().query(Customer).filter(Customer.card_id == card_id).first()
+    customer_id = customer_from_db.customer_id
+    logger.info(f'Customer ID for card ID {card_id}: {customer_id}')
+    customer = load_customer_from_html(customer_id) # we can't rely on DB cache here
+    url = f'{DOMAIN}/customer/{customer_id}/edit/'
+
+    subs_until = customer.get('subscription', datetime.now()) + period
+    multipart_data = MultipartEncoder(
+        fields={
+            'card': customer['card'],
+            'name': customer['name'],
+            'family': customer['family'],
+            'subs': subs_until.strftime('%d.%m.%Y'),
+            'subscr': 'true' if customer['subscr'] else None,
+        }
+    )
+
+    r = requests.post(
+        url,
+        cookies=get_cookies(),
+        data=multipart_data,
+        headers={
+            'Content-Type': multipart_data.content_type
+        },
+    )
+    r.raise_for_status()
+
+    return subs_until
 
 def add_customer(card_id, first_name, last_name, email):
     url = DOMAIN + '/customer/new/'
@@ -344,7 +418,8 @@ class Importer(kocherga.importer.base.FullImporter):
         Order.__table__.create(bind=kocherga.db.engine())
 
     def do_full_import(self, session):
-        for order in load_orders():
-            session.merge(order)
-        for customer in load_customers():
-            session.merge(order)
+        for method, type_name in (load_orders, 'order'), (load_customers, 'customer'):
+            items = method()
+            for item in items:
+                session.merge(item)
+            logger.info(f'Imported {len(items)} {type_name}s')

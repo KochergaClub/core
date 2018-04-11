@@ -38,6 +38,7 @@ pytz = "*"
 mysqlclient = "*"
 flask-sqlalchemy = "*"
 raven = "*"
+requests-toolbelt = "*"
 
 
 [dev-packages]
