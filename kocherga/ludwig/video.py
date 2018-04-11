@@ -12,7 +12,7 @@ def react_new_video(message, url):
     channel_id = message.body['channel']
     response = message.sc.api_call('channels.info', channel=channel_id)
     if not response['ok']:
-        raise Exception("Couldn't load channel info")
+        raise Exception("Couldn't load channel info: " + str(response))
     channel_name = response['channel']['name']
     if channel_name != 'video_s':
         return 'О новых видео надо писать в #video_s, а не сюда.'
