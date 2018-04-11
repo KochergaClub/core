@@ -369,8 +369,8 @@ def extend_subscription(card_id, period):
             'card': customer['card'],
             'name': customer['name'],
             'family': customer['family'],
-            'phone': customer['phone_number'],
-            'mail': customer['email'],
+            'phone': customer.get('phone_number', None),
+            'mail': customer.get('email', None),
             'subs': subs_until.strftime('%d.%m.%Y'),
             'subscr': 'true' if customer['subscr'] else None,
         }
