@@ -323,6 +323,8 @@ def load_customer_from_html(customer_id):
         'Номер карты:': 'card',
         'Имя:': 'name',
         'Фамилия:': 'family',
+        'E-mail': 'email',
+        'Номер телефона:': 'phone_number',
         'Скидка на время:': 'discount',
         'Абонемент до:': 'subscription',
         'Рассылки:': 'subscr',
@@ -367,6 +369,8 @@ def extend_subscription(card_id, period):
             'card': customer['card'],
             'name': customer['name'],
             'family': customer['family'],
+            'phone': customer['phone_number'],
+            'mail': customer['email'],
             'subs': subs_until.strftime('%d.%m.%Y'),
             'subscr': 'true' if customer['subscr'] else None,
         }
