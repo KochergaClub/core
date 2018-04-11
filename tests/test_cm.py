@@ -1,4 +1,8 @@
+import pytest
+pytestmark = pytest.mark.usefixtures('db')
+
 import kocherga.cm
+from kocherga.db import Session
 
 def test_now_count():
     c = kocherga.cm.now_count()
@@ -15,3 +19,7 @@ def test_load_orders():
     assert type(orders) == list
     assert len(orders) > 10
     assert type(orders[0]) == kocherga.cm.Order
+def test_importer():
+    kocherga.cm.Importer().import_new()
+    assert len(Session().query(kocherga.cm.Order).all()) > 10
+    assert len(Session().query(kocherga.cm.Customer).all()) > 10
