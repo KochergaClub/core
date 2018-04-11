@@ -352,7 +352,7 @@ def load_customer_from_html(customer_id):
     return result
 
 def extend_subscription(card_id, period):
-    customer_from_db = Session().query(Customer).filter(Customer.card_id == card_id).first()
+    customer_from_db = Session().query(Customer).filter(Customer.card_id == card_id, Customer.is_active == True).first()
     customer_id = customer_from_db.customer_id
     logger.info(f'Customer ID for card ID {card_id}: {customer_id}')
     customer = load_customer_from_html(customer_id) # we can't rely on DB cache here
