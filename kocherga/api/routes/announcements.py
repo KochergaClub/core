@@ -44,7 +44,7 @@ def vk_groups():
     all_groups = kocherga.events.vk.all_groups()
     return jsonify(all_groups)
 
-@bp.route('/announcements/vk/update_wiki_schedule', methos=['POST'])
+@bp.route('/announcements/vk/update_wiki_schedule', methods=['POST'])
 @auth('kocherga')
 def update_wiki_schedule():
     kocherga.events.vk.update_wiki_schedule()
