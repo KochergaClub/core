@@ -124,3 +124,8 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             return datetime.now(tz=TZ) - timedelta(days=1)
         else:
             return max(e.updated_dt for e in events)
+
+    def interval(self):
+        return {
+            'minutes': 1
+        }
