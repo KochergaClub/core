@@ -122,8 +122,11 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
         if too_old:
             return datetime.now(tz=TZ) - timedelta(days=1)
-        else:
+
+        if len(events):
             return max(e.updated_dt for e in events)
+        else:
+            return from_dt
 
     def interval(self):
         return {
