@@ -103,10 +103,13 @@ class AnnounceSession:
             raise Exception('Having a name is a must')
         await self.page.keyboard.type('@' + entity.name[:20])
 
-        if entity.fb_id:
-            await self.select_from_listbox(entity.fb_id)
-        else:
-            await self.page.keyboard.type(entity.name)
+        await self.page.keyboard.type(entity.name)
+        # Temporarily disabled - see https://gitlab.com/kocherga/code/core/issues/26
+        #
+        # if entity.fb_id:
+        #     await self.select_from_listbox(entity.fb_id)
+        # else:
+        #     await self.page.keyboard.type(entity.name)
 
     async def fill_description(self, description):
         details = await self.page.J('[data-testid=event-create-dialog-details-field]')
