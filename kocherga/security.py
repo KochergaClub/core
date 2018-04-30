@@ -55,7 +55,7 @@ def audit_slack():
     ok = 0
     for m in team:
         if not m.slack_id:
-            report_shortage('not found in slack: ' + str(m))
+            report_shortage(f'Not found in slack: {m.full_name}, {m.email}')
             continue
 
         ok += 1
@@ -81,5 +81,8 @@ def audit_calendar():
     for m in kocherga.team.members():
         email2member[m.email] = m
 
-    for extra_email in set(email2role.keys()) - set(email2member.keys()):
-        report_excess('Extra user with the {} calendar access: {}'.format(email2role[extra_email], extra_email))
+    for email in set(email2role.keys()) - set(email2member.keys()):
+        report_excess(f'Extra user with the {email2role[email]} calendar access: {email}')
+
+    for email in set(email2member.keys()) - set(email2role.keys()):
+        report_shortage(f'No calendar access: {email}')
