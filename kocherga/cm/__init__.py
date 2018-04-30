@@ -22,6 +22,38 @@ import kocherga.importer.base
 
 DOMAIN = kocherga.secrets.plain_secret('cafe_manager_server')
 
+class SubscriptionOrder(kocherga.db.Base):
+    __tablename__ = 'cm_subscription_orders'
+
+    card_id = Column(Integer, info={ 'ru_title': 'Номер карты' }, primary_key=True)
+    ts = Column(Integer, primary_key=True)
+    order_value = Column(Integer, info={ 'ru_title': 'Сумма заказа' })
+    payment_type = Column(String(20), info={ 'ru_title': 'Тип оплаты' })
+    client_name = Column(String(255), info={ 'ru_title': 'Клиент' })
+    manager = Column(String(255), info={ 'ru_title': 'Менеджер' })
+
+    @classmethod
+    def from_csv_row(cls, csv_row):
+        params = {}
+        for column in inspect(cls).columns:
+            ru_title = column.info.get('ru_title', None)
+            if not ru_title:
+                continue
+
+            value = csv_row[ru_title]
+            if column.type.python_type == int:
+                if value == '':
+                    value = None
+                else:
+                    value = int(float(value))
+
+            params[column.name] = value
+
+        params['ts'] = cls._date_and_time_to_ts(csv_row['Дата начала'], csv_row['Время начала'])
+
+        return cls(**params)
+
+
 class Order(kocherga.db.Base):
     __tablename__ = 'cm_orders'
 
@@ -65,7 +97,10 @@ class Order(kocherga.db.Base):
         if csv_row['Дата конца']:
             params['end_ts'] = cls._date_and_time_to_ts(csv_row['Дата конца'], csv_row['Время конца'])
 
-        return Order(**params)
+        if not params['order_id']:
+            raise Exception(f"Can't accept an order without a primary key; row: {str(csv_row)}")
+
+        return cls(**params)
 
     @classmethod
     def _date_and_time_to_ts(cls, date, time):
@@ -235,7 +270,10 @@ def load_orders():
 
         csv_reader = csv.DictReader(StringIO(r.content.decode('utf-8-sig')), delimiter=';')
         for row in csv_reader:
-            order = Order.from_csv_row(row)
+            if row['История'].lower() == 'продажа абонемента':
+                order = SubscriptionOrder.from_csv_row(row)
+            else:
+                order = Order.from_csv_row(row)
             orders.append(order)
     return orders
 
