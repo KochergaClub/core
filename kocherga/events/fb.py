@@ -87,9 +87,9 @@ class AnnounceSession:
         await self.clean_field(15, both_directions=True)
         await self.page.keyboard.type(dt.strftime('%d.%m.%Y'))
         await self.page.keyboard.press('Tab')
-        await self.page.keyboard.type(str(dt.hour))
+        await self.page.keyboard.type(f'{dt.hour:02}')
         await self.page.keyboard.press('Tab')
-        await self.page.keyboard.type(str(dt.minute))
+        await self.page.keyboard.type(f'{dt.minute:02}')
 
     async def select_from_listbox(self, fb_id):
         image_id = get_image_id(fb_id, self.access_token)
@@ -127,9 +127,8 @@ class AnnounceSession:
             else:
                 raise Exception('unknown part encountered while parsing: ' + str(part))
 
-    async def run(self):
+    async def sign_in(self):
         page = self.page
-        event = self.event
 
         logger.info('Going to facebook')
         await page.goto('https://facebook.com')
@@ -144,8 +143,14 @@ class AnnounceSession:
         await page.keyboard.press('Enter')
 
         await page.waitForNavigation()
-
         logger.info('Signed in')
+
+    async def run(self):
+        page = self.page
+        await self.sign_in()
+
+        event = self.event
+
         events_page = event.fb_announce_page() + '/events'
         logger.info('Going to page: ' + events_page)
         await page.goto(events_page)
@@ -184,25 +189,36 @@ class AnnounceSession:
             return page
 
         logger.info('Confirming')
-        await page.click('[data-testid=event-create-dialog-confirm-button]')
+        await asyncio.gather(
+            page.waitForNavigation(waitUntil='documentloaded'),
+            page.click('[data-testid=event-create-dialog-confirm-button]'),
+        )
+        logger.info('Clicked and navigated somewhere')
         await page.waitForSelector('h1[data-testid=event-permalink-event-name]')
+        logger.info('Confirmed')
+
+        if '/events/' not in page.url:
+            raise Exception(f"Expected '/events/' in page url, got: {page.url}")
 
         return FbAnnouncement(page.url)
 
     async def screenshot(self):
         return await self.page.screenshot()
 
+async def get_browser(headless):
+    browser = await pyppeteer.launch(
+        headless=headless,
+        args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
+    )
+    logger.info(f'Started browser at {browser.wsEndpoint}')
+    return browser
 
 # FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),
 # so it's not a hack that we usually bring a token from a client from a client side to server to make an announcement.
 #
 # It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
 async def create(event, access_token, headless=True, **kwargs):
-    browser = await pyppeteer.launch(
-        headless=headless,
-        args=['--disable-notifications'] # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
-    )
-    logger.info(f'Started browser at {browser.wsEndpoint}')
+    browser = await get_browser(headless)
 
     session = await AnnounceSession.create(browser, access_token, event, **kwargs)
     try:
