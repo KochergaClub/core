@@ -39,6 +39,7 @@ async def test_upload_image(api_client, image_storage, event):
     import asyncio
     request = quart.wrappers.Request(
         'POST',
+        'http',
         f'/event/{event.google_id}/image/vk',
         {
             'Content-Type': content_type,
