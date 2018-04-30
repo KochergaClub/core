@@ -22,6 +22,12 @@ import kocherga.importer.base
 
 DOMAIN = kocherga.secrets.plain_secret('cafe_manager_server')
 
+def _date_and_time_to_ts(date, time):
+    return datetime.strptime(
+        '{} {}'.format(date, time),
+        "%d.%m.%Y %H:%M"
+    ).timestamp()
+
 class SubscriptionOrder(kocherga.db.Base):
     __tablename__ = 'cm_subscription_orders'
 
@@ -49,7 +55,7 @@ class SubscriptionOrder(kocherga.db.Base):
 
             params[column.name] = value
 
-        params['ts'] = cls._date_and_time_to_ts(csv_row['Дата начала'], csv_row['Время начала'])
+        params['ts'] = _date_and_time_to_ts(csv_row['Дата начала'], csv_row['Время начала'])
 
         return cls(**params)
 
@@ -93,21 +99,14 @@ class Order(kocherga.db.Base):
 
             params[column.name] = value
 
-        params['start_ts'] = cls._date_and_time_to_ts(csv_row['Дата начала'], csv_row['Время начала'])
+        params['start_ts'] = _date_and_time_to_ts(csv_row['Дата начала'], csv_row['Время начала'])
         if csv_row['Дата конца']:
-            params['end_ts'] = cls._date_and_time_to_ts(csv_row['Дата конца'], csv_row['Время конца'])
+            params['end_ts'] = _date_and_time_to_ts(csv_row['Дата конца'], csv_row['Время конца'])
 
         if not params['order_id']:
             raise Exception(f"Can't accept an order without a primary key; row: {str(csv_row)}")
 
         return cls(**params)
-
-    @classmethod
-    def _date_and_time_to_ts(cls, date, time):
-        return datetime.strptime(
-            '{} {}'.format(date, time),
-            "%d.%m.%Y %H:%M"
-        ).timestamp()
 
     @property
     def start_dt(self):
