@@ -125,6 +125,7 @@ async def set_event_image_from_url(event_id, image_type):
         image_type,
         IterIO(r.raw.stream(4096, decode_content=True))
     )
+    Session().commit()
 
     return jsonify(ok)
 
