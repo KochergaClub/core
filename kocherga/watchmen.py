@@ -187,7 +187,7 @@ def fetch_worksheet() -> List[List[str]]:
     worksheet = spreadsheet.worksheet('Смены')
     logger.debug('Worksheet: ', clock() - prev_clock); prev_clock = clock()
 
-    if worksheet.updated == _LAST_UPDATED_WORKSHEET:
+    if _LAST_UPDATED_SPREADSHEET and worksheet.updated == _LAST_UPDATED_WORKSHEET:
         logger.debug('rows from cache! worksheet last updated: ' + str(_LAST_UPDATED_WORKSHEET))
         return _CACHED_ROWS
 
