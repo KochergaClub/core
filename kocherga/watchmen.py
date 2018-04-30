@@ -1,3 +1,7 @@
+import logging
+logger = logging.getLogger(__name__)
+
+from time import time as clock
 from datetime import datetime, date, time, timedelta
 from enum import IntEnum
 
@@ -162,19 +166,18 @@ class Schedule:
 _LAST_UPDATED_WORKSHEET = None
 _LAST_UPDATED_SPREADSHEET = None
 _CACHED_ROWS: List[List[str]] = []
-# from time import time as clock, sleep
 def fetch_worksheet() -> List[List[str]]:
     global _LAST_UPDATED_WORKSHEET
     global _LAST_UPDATED_SPREADSHEET
     global _CACHED_ROWS
 
-    # prev_clock = clock()
+    prev_clock = clock()
 
     gc = kocherga.google.gspread_client()
-    # print('Authorized: ', clock() - prev_clock); prev_clock = clock()
+    logger.debug('Authorized: ', clock() - prev_clock); prev_clock = clock()
 
     spreadsheet = gc.open_by_key(WATCHMEN_SPREADSHEET_KEY)
-    # print('Opened: ', clock() - prev_clock); prev_clock = clock()
+    logger.debug('Opened: ', clock() - prev_clock); prev_clock = clock()
 
     # =================== DISABLED - not very reliable =====================
     #if spreadsheet.updated == _LAST_UPDATED_SPREADSHEET:
@@ -182,14 +185,14 @@ def fetch_worksheet() -> List[List[str]]:
     #    return _CACHED_ROWS
 
     worksheet = spreadsheet.worksheet('Смены')
-    # print('Worksheet: ', clock() - prev_clock); prev_clock = clock()
+    logger.debug('Worksheet: ', clock() - prev_clock); prev_clock = clock()
 
     if worksheet.updated == _LAST_UPDATED_WORKSHEET:
-        # print('rows from cache! worksheet last updated: ' + _LAST_UPDATED_WORKSHEET)
+        logger.debug('rows from cache! worksheet last updated: ' + str(_LAST_UPDATED_WORKSHEET))
         return _CACHED_ROWS
 
     rows = worksheet.get_all_values()
-    # print('All values: ', clock() - prev_clock); prev_clock = clock()
+    logger.debug('All values: ', clock() - prev_clock); prev_clock = clock()
 
     _CACHED_ROWS = rows
     _LAST_UPDATED_WORKSHEET = worksheet.updated
