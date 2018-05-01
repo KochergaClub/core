@@ -400,7 +400,7 @@ def extend_subscription(card_id, period):
     customer = load_customer_from_html(customer_id) # we can't rely on DB cache here
     url = f'{DOMAIN}/customer/{customer_id}/edit/'
 
-    subs_until = customer.get('subscription', datetime.now()) + period
+    subs_until = max(customer.get('subscription', datetime.now()), datetime.now()) + period
     multipart_data = MultipartEncoder(
         fields={
             'card': customer['card'],
