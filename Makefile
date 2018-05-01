@@ -19,6 +19,8 @@ release-quick:
 	git push
 	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core-quick'
 
+rq: release-quick
+
 release:
 	git push
 	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core'
