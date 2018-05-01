@@ -7,7 +7,7 @@ import kocherga.slack
 
 from typing import List
 
-TeamMember = namedtuple('TeamMember', ['short_name', 'full_name', 'email', 'role', 'status', 'vk', 'slack_id', 'gender', 'cm_login', 'cm_card_id'])
+TeamMember = namedtuple('TeamMember', ['short_name', 'full_name', 'email', 'role', 'status', 'vk', 'slack_id', 'gender', 'cm_login', 'cm_card_id', 'alt_emails'])
 
 def _fetch_members(sc=None):
     gc = kocherga.google.gspread_client()
@@ -21,8 +21,9 @@ def _fetch_members(sc=None):
 
     def row2member(row):
         primary_email = row['email'].lower()
+        alt_emails = [e.strip().lower() for e in row["Альтернативные email'ы"].split(',')]
 
-        for email in [primary_email] + [e.strip().lower() for e in row["Альтернативные email'ы"].split(',')]:
+        for email in [primary_email] + alt_emails:
             slack_user = slack_users.get(email, None)
             if slack_user:
                 break
@@ -34,6 +35,7 @@ def _fetch_members(sc=None):
             cm_login=row['Логин в КМ'],
             cm_card_id=row['Номер карты'],
             email=primary_email,
+            alt_emails=alt_emails,
             slack_id=slack_id,
             role=row['Роль'],
             status=row['Статус'],
@@ -59,8 +61,12 @@ def find_member_by_short_name(short_name):
     return next(filter(lambda m: m.short_name == short_name, members()), None)
 
 def find_member_by_email(email):
-    # TODO - find by the alternative emails too
-    return next(filter(lambda m: m.email.lower() == email.lower(), members()), None)
+    for member in members():
+        if member.email.lower() == email.lower():
+            return member
+        if email.lower() in member.alt_emails:
+            return member
+    return None
 
 def add_member(email, role):
     # add to wiki

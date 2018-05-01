@@ -29,5 +29,8 @@ class TestTeam:
     def test_member_by_email(self):
         assert kocherga.team.find_member_by_email('slava@kocherga-club.ru')
 
+    def test_member_by_alt_email(self):
+        assert kocherga.team.find_member_by_email('mmcleric@gmail.com')
+
     def test_member_by_email_unknown(self):
         assert kocherga.team.find_member_by_email('somebody@gmail.com') is None
