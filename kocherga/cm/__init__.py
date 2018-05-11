@@ -11,7 +11,7 @@ import csv
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from sqlalchemy import inspect, Column, Integer, String, Text, DateTime, Date, Enum, Boolean
+from sqlalchemy import inspect, Column, Integer, String, Text, DateTime, Date, Enum, Boolean, or_
 
 from typing import List
 
@@ -460,6 +460,14 @@ def add_customer(card_id, first_name, last_name, email):
 
     print(r.text)
     raise Exception('Expected a message about success in response, got something else')
+
+def orders_at_dt(dt):
+    orders = kocherga.db.Session().query(Order) \
+        .filter(Order.start_ts <= dt.timestamp()) \
+        .filter(or_(Order.end_ts >= dt.timestamp(), Order.end_ts is None)) \
+        .all()
+
+    return orders
 
 class Importer(kocherga.importer.base.FullImporter):
     def init_db(self):
