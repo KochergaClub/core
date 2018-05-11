@@ -349,6 +349,7 @@ class Event(Base):
             # TODO - add field from props as top-level fields
             'timepad_category_code': self.timepad_category_code,
             'timepad_prepaid_tickets': self.timepad_prepaid_tickets,
+            'timing_description_override': self.timing_description_override,
         }
 
         if self.master_id:
