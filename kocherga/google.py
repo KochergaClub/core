@@ -12,15 +12,19 @@ import gspread
 
 GOOGLE_CREDENTIALS = kocherga.secrets.json_secret('google_credentials.json')
 
-def credentials():
+def credentials(name):
     credentials = service_account.Credentials.from_service_account_info(GOOGLE_CREDENTIALS)
-    scopes = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/calendar']
+    scopes = {
+        'calendar': ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/calendar'],
+        'drive': ['https://www.googleapis.com/auth/drive'],
+    }[name]
     scoped_credentials = credentials.with_scopes(scopes)
     return scoped_credentials
 
 def service(name):
     API_VERSIONS = {
         'calendar': 'v3',
+        'drive': 'v3',
     }
 
     if name not in API_VERSIONS:
@@ -29,7 +33,7 @@ def service(name):
     return discovery.build(
         name,
         API_VERSIONS[name],
-        credentials=credentials(),
+        credentials=credentials(name),
         cache_discovery=False
     )
 
