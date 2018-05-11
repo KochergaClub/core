@@ -101,7 +101,7 @@ class AnnounceSession:
     async def fill_entity(self, entity):
         if not entity.name:
             raise Exception('Having a name is a must')
-        await self.page.keyboard.type('@' + entity.name[:20])
+        #await self.page.keyboard.type('@' + entity.name[:20])
 
         await self.page.keyboard.type(entity.name)
         # Temporarily disabled - see https://gitlab.com/kocherga/code/core/issues/26
