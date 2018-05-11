@@ -38,8 +38,8 @@ class WrappedSession:
         return self.session()
 
     def replace(self, new_session):
-        self.session.rollback()
-        self.session.close()
+        self.session().rollback()
+        self.session().close()
         self.session.remove()
         self.session = new_session
 
@@ -47,8 +47,8 @@ class WrappedSession:
         return self.session.configure(*args, **kwargs)
 
     def remove(self):
-        self.session.rollback()
-        self.session.close()
+        self.session().rollback()
+        self.session().close()
         return self.session.remove()
 
 Session = WrappedSession()
