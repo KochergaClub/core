@@ -52,9 +52,9 @@ def check(url):
 def timepad_description(event):
     tail = f'*{event.timing_description} в антикафе Кочерга.*\n\n'
     if event.vk_group:
-        tail += '* [Мероприятие вконтакте](https://vk.com/' + event.vk_group + ')'
+        tail += '* [Мероприятие вконтакте](https://vk.com/' + event.vk_group + ')\n'
     if event.fb_group:
-        tail += '* [Мероприятие в facebook](https://www.facebook.com/groups/' + event.fb_group + ')'
+        tail += '* [Мероприятие в facebook](https://www.facebook.com/groups/' + event.fb_group + ')\n'
 
     text = event.description + '\n\n---\n\n' + tail
     return kocherga.events.markup.Markup(text).as_html()
