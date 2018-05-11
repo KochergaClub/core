@@ -8,6 +8,7 @@ import attr
 from typing import Any, List
 
 from kocherga.config import config
+from kocherga.error import PublicError
 
 class Part:
     pass
@@ -34,6 +35,8 @@ def parse_entity(entity_str: str) -> Entity:
 
     params_parsed = {}
     for param in params:
+        if '=' not in param:
+            raise PublicError(f'Param {param} is unparsable - should be key=value')
         (key, value) = param.split('=', 1)
         params_parsed[key] = value
 
