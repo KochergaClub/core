@@ -80,7 +80,7 @@ def patch_event(event_id, patch):
 
     google_patch = {}
     for (key, value) in patch.items():
-        if key in ('title', 'description', 'summary', 'timepad_category_code', 'timepad_prepaid_tickets'):
+        if key in ('title', 'description', 'summary', 'timepad_category_code', 'timepad_prepaid_tickets', 'timing_description_override'):
             setattr(event, key, value)
         else:
             raise Exception('Key {} is not allowed in patch yet'.format(key))
