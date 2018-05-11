@@ -13,13 +13,14 @@ import gspread
 GOOGLE_CREDENTIALS = kocherga.secrets.json_secret('google_credentials.json')
 
 def credentials(name):
-    credentials = service_account.Credentials.from_service_account_info(GOOGLE_CREDENTIALS)
+    creds = service_account.Credentials.from_service_account_info(GOOGLE_CREDENTIALS)
     scopes = {
-        'calendar': ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/calendar'],
+        'sheets': ['https://spreadsheets.google.com/feeds'],
+        'calendar': ['https://www.googleapis.com/auth/calendar'],
         'drive': ['https://www.googleapis.com/auth/drive'],
     }[name]
-    scoped_credentials = credentials.with_scopes(scopes)
-    return scoped_credentials
+    scoped_creds = creds.with_scopes(scopes)
+    return scoped_creds
 
 def service(name):
     API_VERSIONS = {
@@ -40,7 +41,7 @@ def service(name):
 def gspread_client(gc=None):
     if gc: return gc
 
-    creds = credentials()
+    creds = credentials('sheets')
 
     gc = gspread.Client(auth=creds)
     gc.session = AuthorizedSession(creds)

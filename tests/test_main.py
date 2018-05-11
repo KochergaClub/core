@@ -7,7 +7,7 @@ import kocherga.slack
 
 class TestGoogle:
     def test_credentials(self):
-        assert kocherga.google.credentials()
+        assert kocherga.google.credentials('calendar')
 
 class TestSlack:
     def test_token(self):
