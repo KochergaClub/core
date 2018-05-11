@@ -115,7 +115,14 @@ class AnnounceSession:
         details = await self.page.J('[data-testid=event-create-dialog-details-field]')
         await details.click()
 
-        markup_parts = kocherga.events.markup.parse_to_parts(description)
+        tail = f'{self.event.timing_description} в антикафе Кочерга. Оплата участия — по тарифам антикафе: 2,5 руб./минута.'
+
+        timepad_link = event.get_prop('posted-timepad')
+        if timepad_link:
+            tail += ' Регистрация: {}'.format(timepad_link)
+
+        markup_parts = kocherga.events.markup.parse_to_parts(description + '\n\n***\n' + tail)
+
         for part in markup_parts:
             if isinstance(part, kocherga.events.markup.Text):
                 await self.page.keyboard.type(part.text)

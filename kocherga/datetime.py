@@ -14,6 +14,11 @@ def date_chunks(from_dt, to_dt, step=timedelta(days=28)):
         yield (chunk_from_dt, min(chunk_from_dt + step, to_dt))
         chunk_from_dt += step
 
+def inflected_weekday(dt):
+    return [
+        'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу', 'воскресенье'
+    ][dt.weekday()]
+
 def inflected_month(dt):
     return [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'

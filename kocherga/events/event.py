@@ -23,7 +23,7 @@ import kocherga.events.markup
 
 from kocherga.error import PublicError
 
-from kocherga.datetime import dts
+from kocherga.datetime import dts, inflected_weekday, inflected_month
 
 def parse_iso8601(s):
     return dateutil.parser.parse(s).astimezone(TZ)
@@ -74,6 +74,8 @@ class Event(Base):
 
     timepad_category_code = Column(String(40))
     timepad_prepaid_tickets = Column(Boolean)
+
+    timing_description_override = Column(String(255))
 
     # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
     # TODO - collect all properties
@@ -308,6 +310,18 @@ class Event(Base):
             return f'https://www.facebook.com/groups/{fb_group}'
         else:
             return kocherga.config.config()['fb']['main_page']['announce_page']
+
+    @property
+    def timing_description(self):
+        if self.timing_description_override:
+            return self.timing_description_override
+
+        return 'Встреча пройдёт в {weekday} {day} {month}, в {time},'.format(
+            weekday=inflected_weekday(self.start_dt),
+            day=self.start_dt.day,
+            month=inflected_month(self.start_dt),
+            time=self.start_dt.strftime('%H:%M')
+        )
 
     # dict for the further serialization (e.g. for api.kocherga.club)
     def to_dict(self):

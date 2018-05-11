@@ -69,6 +69,18 @@ def upload_wall_image(group_id, image_file):
 def vk_description(event):
     return kocherga.events.markup.Markup(event.description).as_vk()
 
+def vk_tail(event):
+    tail = f'{event.timing_description} в @kocherga_club (антикафе Кочерга). Оплата участия — по тарифам антикафе: 2,5 руб./минута.'
+
+    timepad_link = event.get_prop('posted-timepad')
+    if timepad_link:
+        tail += ' Регистрация: {}'.format(timepad_link)
+
+    return tail
+
+def vk_text(event):
+    return vk_description(event) + '\n\n***\n' + vk_tail(event)
+
 def create(event):
 
     group_name = event.get_prop('vk_group')
@@ -81,26 +93,13 @@ def create(event):
     if not image_file:
         raise PublicError("Can't announce - add a vk image first")
 
-    date_string = '{weekday} {day} {month}, в {time}'.format(
-        weekday=['понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу', 'воскресенье'][event.start_dt.weekday()],
-        day=event.start_dt.day,
-        month=['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'][event.start_dt.month - 1],
-        time=event.start_dt.strftime('%H:%M')
-    )
-
-    timepad_link = event.get_prop('posted-timepad')
-
-    tail = 'Встреча пройдёт в {}, в @kocherga_club (антикафе Кочерга). Оплата участия — по тарифам антикафе: 2,5 руб./минута.'.format(date_string)
-
-    if timepad_link:
-        tail += ' Регистрация: {}'.format(timepad_link)
-
     photo_id = upload_wall_image(group_id, image_file)
+    message = vk_text(event)
 
     response = kocherga.vk.call('wall.post', {
         'owner_id': -group_id,
         'from_group': 1,
-        'message': vk_description(event) + '\n\n***\n' + tail,
+        'message': message,
         'publish_date': int(datetime.now().timestamp()) + 86400,
         'attachments': photo_id,
     })

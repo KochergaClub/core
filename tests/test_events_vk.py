@@ -1,15 +1,23 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
+import re
 from datetime import datetime, timedelta
 import shutil
 import os.path
+
+from freezegun import freeze_time
 
 import kocherga.vk
 import kocherga.events.vk
 from kocherga.db import Session
 
 from kocherga.events.event import Event
+
+class TestTexts:
+    def test_tail(self, event):
+        assert re.match(r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\. Оплата участия — по тарифам антикафе: 2,5 руб\./минута\.$', kocherga.events.vk.vk_tail(event))
+
 
 class TestCreate:
     def test_create(self, event):
