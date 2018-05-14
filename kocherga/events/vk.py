@@ -195,3 +195,48 @@ def update_wiki_schedule(from_dt=None):
             'text': content,
         }
     )
+
+def create_schedule_post(prefix_text):
+    message = '#расписание_кочерги\n'
+    message += prefix_text
+
+    message += '\n\n'
+
+    dt = datetime.today()
+    if dt.weekday() < 2:
+        dt = dt - timedelta(days = dt.weekday())
+    else:
+        dt = dt + timedelta(days = 7 - dt.weekday())
+
+    query = (
+        Session().query(Event)
+        .filter(Event.start_ts > dt.timestamp())
+        .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
+        .filter(Event.posted_vk != None)
+        .filter(Event.posted_vk != '')
+    )
+
+    events = query.order_by(Event.start_ts).all()
+    logger.info(f'Schedule includes {len(events)} events')
+
+    prev_date = None
+    for event in events:
+        if event.start_dt.date() != prev_date:
+            weekday = kocherga.datetime.weekday(event.start_dt).upper()
+            month = kocherga.datetime.inflected_month(event.start_dt)
+            message += f'{weekday}, {event.start_dt.day} {month}\n'
+            prev_date = event.start_dt.date()
+
+        title = event.title
+        if event.vk_group:
+            title = f'@{event.vk_group} ({title})'
+        message += f"{event.start_dt:%H:%M} {title}\n"
+        message += f"{event.generate_summary()}\n\n"
+
+    group_id = group2id(kocherga.config.config()['vk']['main_page']['id'])
+    response = kocherga.vk.call('wall.post', {
+        'owner_id': -group_id,
+        'from_group': 1,
+        'message': message,
+        'publish_date': int(datetime.now().timestamp()) + 86400,
+    })
