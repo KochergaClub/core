@@ -210,7 +210,15 @@ class Customer(kocherga.db.Base):
         return Customer(**params)
 
 
-OrderHistoryItem = namedtuple('OrderHistoryItem', 'operation dt login')
+class OrderLogEntry(kocherga.db.Base):
+    __tablename__ = 'cm_order_log'
+
+    order_id = Column(Integer, primary_key=True)
+    operation_id = Column(Integer, primary_key=True)
+    operation = Column(String(1024))
+    ts = Column(Integer)
+    login = Column(String(80))
+
 
 User = namedtuple('User', 'id login name level')
 
@@ -286,6 +294,12 @@ def load_users():
     fragments = re.findall(r"""<form method='post' action='/config/user/(\d+)/edit/#user'>(.*?)</form>""", html, flags=re.DOTALL)
 
     users = []
+
+    # needed for OrderLogEntries
+    for i, name in enumerate(['Мальбург', 'Андрей Ершов']):
+        deleted_user = User(id=-i, name=name, login=name, level='deleted')
+        users.append(deleted_user)
+
     for (user_id_str, form_html) in fragments:
         user_id = str(user_id_str)
         login_match = re.search(r"<input name='login' maxlength='\d+' value='(.*?)'", form_html)
@@ -319,7 +333,7 @@ def load_users():
 
     return users
 
-def load_order_history(order_id):
+def load_order_log(order_id):
     url = f'{DOMAIN}/order/{order_id}'
     r = requests.get(url, cookies=get_cookies())
 
@@ -331,22 +345,24 @@ def load_order_history(order_id):
     username2login = { u.name: u.login for u in users }
     username2login['Нароттам Паршик'] = username2login['Нароттам Паршиков']
 
-    history_html = match.group(1)
-    items = []
-    for item_html in re.findall(r'<li>(.*?)</li>', history_html):
-        match = re.match(r'(.*?)\s*<i>(\d+.\d+.\d+ \d+:\d+) \((.*?)\)</i>', item_html)
+    log_html = match.group(1)
+    entries = []
+    for operation_id, entry_html in enumerate(reversed(re.findall(r'<li>(.*?)</li>', log_html))):
+        match = re.match(r'(.*?)\s*<i>(\d+.\d+.\d+ \d+:\d+) \((.*?)\)</i>', entry_html)
         if not match:
-            raise Exception(f'Failed to parse CM html item "{item_html}", update the parsing code')
+            raise Exception(f'Failed to parse CM html item "{entry_html}", update the parsing code')
         (operation, date_str, username) = match.groups()
 
-        item = OrderHistoryItem(
+        entry = OrderLogEntry(
+            order_id=order_id,
+            operation_id=operation_id,
             operation=operation,
-            dt=datetime.strptime(date_str, '%d.%m.%Y %H:%M'),
+            ts=datetime.strptime(date_str, '%d.%m.%Y %H:%M').timestamp(),
             login=username2login[username],
         )
-        items.append(item)
+        entries.append(entry)
 
-    return items
+    return entries
 
 def load_customer_from_html(customer_id):
     url = f'{DOMAIN}/customer/{customer_id}/'
