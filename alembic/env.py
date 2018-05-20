@@ -3,7 +3,8 @@ import sys
 sys.path.append(str(Path(__file__).parent.parent))
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config, pool, Boolean
+from sqlalchemy.dialects import mysql
 from logging.config import fileConfig
 
 from kocherga.db import DB_URL
@@ -50,12 +51,22 @@ def run_migrations_offline():
     context.configure(
         url=DB_URL,
         target_metadata=target_metadata,
-        literal_binds=True
+        literal_binds=True,
+        compare_type=True,
     )
 
     with context.begin_transaction():
         context.run_migrations()
 
+# Special code to avoid infinite tinyint -> boolean migrations.
+# See https://bitbucket.org/zzzeek/alembic/issues/46/mysqltinyint-display_width-1-vs-saboolean for details.
+def my_compare_type(context, inspected_column,
+                    metadata_column, inspected_type, metadata_type):
+
+    if type(inspected_type) == mysql.TINYINT and type(metadata_type) == Boolean:
+        return False  # Types are identical!
+
+    return None
 
 def run_migrations_online():
     """Run migrations in 'online' mode.
@@ -69,7 +80,8 @@ def run_migrations_online():
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
-            target_metadata=target_metadata
+            target_metadata=target_metadata,
+            compare_type=my_compare_type,
         )
 
         with context.begin_transaction():
