@@ -67,6 +67,8 @@ class Order(kocherga.db.Base):
     card_id = Column(Integer, info={ 'ru_title': 'Номер карты' })
     start_ts = Column(Integer)
     end_ts = Column(Integer)
+    imported_ts = Column(Integer)
+    log_imported_ts = Column(Integer)
     people = Column(Integer, info={ 'ru_title': 'Кол-во человек' })
     visit_length = Column(Integer, info={ 'ru_title': 'Продолжительность посещения, мин' })
     full_visit_length = Column(Integer, info={ 'ru_title': 'Полная продолжительность посещения, мин' })
@@ -79,7 +81,7 @@ class Order(kocherga.db.Base):
     manager = Column(String(255), info={ 'ru_title': 'Менеджер' })
     tariff_time = Column(String(20), info={ 'ru_title': 'Тарификация по времени' })
     tariff_plan = Column(String(40), info={ 'ru_title': 'Тарифный план' })
-    comment = Column(String(255), info={ 'ru_title': 'Комментарии' })
+    comment = Column(String(1024), info={ 'ru_title': 'Комментарии' })
     history = Column(Text, info={ 'ru_title': 'История' })
 
     @classmethod
@@ -105,6 +107,8 @@ class Order(kocherga.db.Base):
 
         if not params['order_id']:
             raise Exception(f"Can't accept an order without a primary key; row: {str(csv_row)}")
+
+        params['imported_ts'] = datetime.now().timestamp()
 
         return cls(**params)
 
@@ -210,7 +214,15 @@ class Customer(kocherga.db.Base):
         return Customer(**params)
 
 
-OrderHistoryItem = namedtuple('OrderHistoryItem', 'operation dt login')
+class OrderLogEntry(kocherga.db.Base):
+    __tablename__ = 'cm_order_log'
+
+    order_id = Column(Integer, primary_key=True)
+    operation_id = Column(Integer, primary_key=True)
+    operation = Column(String(1024))
+    ts = Column(Integer)
+    login = Column(String(80))
+
 
 User = namedtuple('User', 'id login name level')
 
@@ -286,6 +298,12 @@ def load_users():
     fragments = re.findall(r"""<form method='post' action='/config/user/(\d+)/edit/#user'>(.*?)</form>""", html, flags=re.DOTALL)
 
     users = []
+
+    # needed for OrderLogEntries
+    for i, name in enumerate(['Мальбург', 'Андрей Ершов']):
+        deleted_user = User(id=-i, name=name, login=name, level='deleted')
+        users.append(deleted_user)
+
     for (user_id_str, form_html) in fragments:
         user_id = str(user_id_str)
         login_match = re.search(r"<input name='login' maxlength='\d+' value='(.*?)'", form_html)
@@ -319,7 +337,7 @@ def load_users():
 
     return users
 
-def load_order_history(order_id):
+def load_order_log(order_id):
     url = f'{DOMAIN}/order/{order_id}'
     r = requests.get(url, cookies=get_cookies())
 
@@ -329,24 +347,35 @@ def load_order_history(order_id):
 
     users = load_users()
     username2login = { u.name: u.login for u in users }
-    username2login['Нароттам Паршик'] = username2login['Нароттам Паршиков']
 
-    history_html = match.group(1)
-    items = []
-    for item_html in re.findall(r'<li>(.*?)</li>', history_html):
-        match = re.match(r'(.*?)\s*<i>(\d+.\d+.\d+ \d+:\d+) \((.*?)\)</i>', item_html)
+    username_fixes = {
+        'Нароттам Паршик': 'Нароттам Паршиков',
+    }
+
+    log_html = match.group(1)
+    entries = []
+    for operation_id, entry_html in enumerate(reversed(re.findall(r'<li>(.*?)</li>', log_html))):
+        match = re.match(r'(.*?)\s*<i>(\d+.\d+.\d+ \d+:\d+) \((.*?)\)</i>', entry_html)
         if not match:
-            raise Exception(f'Failed to parse CM html item "{item_html}", update the parsing code')
+            raise Exception(f'Failed to parse CM html item "{entry_html}", update the parsing code')
         (operation, date_str, username) = match.groups()
 
-        item = OrderHistoryItem(
+        if username in username2login:
+            login = username2login[username]
+        elif username in username_fixes:
+            login = username2login[username_fixes[username]]
+        else:
+            raise Exception(f'Login not found for username {username}')
+        entry = OrderLogEntry(
+            order_id=order_id,
+            operation_id=operation_id,
             operation=operation,
-            dt=datetime.strptime(date_str, '%d.%m.%Y %H:%M'),
-            login=username2login[username],
+            ts=datetime.strptime(date_str, '%d.%m.%Y %H:%M').timestamp(),
+            login=login,
         )
-        items.append(item)
+        entries.append(entry)
 
-    return items
+    return entries
 
 def load_customer_from_html(customer_id):
     url = f'{DOMAIN}/customer/{customer_id}/'
@@ -473,9 +502,35 @@ class Importer(kocherga.importer.base.FullImporter):
     def init_db(self):
         Order.__table__.create(bind=kocherga.db.engine())
 
+    def import_order_log(self, session, order):
+        logger.info(f'Updating log for {order.order_id}; last ts = {order.log_imported_ts}')
+        log_entries = load_order_log(order.order_id)
+        session.query(OrderLogEntry).filter(OrderLogEntry.order_id == order.order_id).delete()
+        for entry in log_entries:
+            session.add(entry)
+        order.log_imported_ts = datetime.now().timestamp()
+
     def do_full_import(self, session):
-        for method, type_name in (load_orders, 'order'), (load_customers, 'customer'):
-            items = method()
-            for item in items:
-                session.merge(item)
-            logger.info(f'Imported {len(items)} {type_name}s')
+        logger.info('Loading orders')
+        orders = load_orders()
+        logger.info('Merging orders')
+        for order in orders:
+            session.merge(order)
+            # self.import_order_log(session, order)
+            # logger.info(f'Imported {order.order_id}')
+
+        logger.info(f'Imported {len(orders)} orders')
+
+        query = session.query(Order).filter(or_(
+            Order.log_imported_ts < datetime.now().timestamp() - 86400,
+            Order.log_imported_ts == None,
+        )).order_by(Order.order_id)
+        for order in query.limit(100).all():
+            self.import_order_log(session, order)
+
+        logger.info('Loading customers')
+        customers = load_customers()
+        logger.info('Merging customers')
+        for customer in customers:
+            session.merge(customer)
+        logger.info(f'Imported {len(customers)} customers')
