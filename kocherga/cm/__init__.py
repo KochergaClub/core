@@ -67,6 +67,8 @@ class Order(kocherga.db.Base):
     card_id = Column(Integer, info={ 'ru_title': 'Номер карты' })
     start_ts = Column(Integer)
     end_ts = Column(Integer)
+    imported_ts = Column(Integer)
+    log_imported_ts = Column(Integer)
     people = Column(Integer, info={ 'ru_title': 'Кол-во человек' })
     visit_length = Column(Integer, info={ 'ru_title': 'Продолжительность посещения, мин' })
     full_visit_length = Column(Integer, info={ 'ru_title': 'Полная продолжительность посещения, мин' })
@@ -79,7 +81,7 @@ class Order(kocherga.db.Base):
     manager = Column(String(255), info={ 'ru_title': 'Менеджер' })
     tariff_time = Column(String(20), info={ 'ru_title': 'Тарификация по времени' })
     tariff_plan = Column(String(40), info={ 'ru_title': 'Тарифный план' })
-    comment = Column(String(255), info={ 'ru_title': 'Комментарии' })
+    comment = Column(String(1024), info={ 'ru_title': 'Комментарии' })
     history = Column(Text, info={ 'ru_title': 'История' })
 
     @classmethod
@@ -105,6 +107,8 @@ class Order(kocherga.db.Base):
 
         if not params['order_id']:
             raise Exception(f"Can't accept an order without a primary key; row: {str(csv_row)}")
+
+        params['imported_ts'] = datetime.now().timestamp()
 
         return cls(**params)
 
@@ -489,9 +493,35 @@ class Importer(kocherga.importer.base.FullImporter):
     def init_db(self):
         Order.__table__.create(bind=kocherga.db.engine())
 
+    def import_order_log(self, session, order):
+        logger.info(f'Updating log for {order.order_id}; last ts = {order.log_imported_ts}')
+        log_entries = load_order_log(order.order_id)
+        session.query(OrderLogEntry).filter(OrderLogEntry.order_id == order.order_id).delete()
+        for entry in log_entries:
+            session.add(entry)
+        order.log_imported_ts = datetime.now().timestamp()
+
     def do_full_import(self, session):
-        for method, type_name in (load_orders, 'order'), (load_customers, 'customer'):
-            items = method()
-            for item in items:
-                session.merge(item)
-            logger.info(f'Imported {len(items)} {type_name}s')
+        logger.info('Loading orders')
+        orders = load_orders()
+        logger.info('Merging orders')
+        for order in orders:
+            session.merge(order)
+            # self.import_order_log(session, order)
+            # logger.info(f'Imported {order.order_id}')
+
+        logger.info(f'Imported {len(orders)} orders')
+
+        query = session.query(Order).filter(or_(
+            Order.log_imported_ts < datetime.now().timestamp() - 86400,
+            Order.log_imported_ts == None,
+        )).order_by(Order.order_id)
+        for order in query.limit(100).all():
+            self.import_order_log(session, order)
+
+        logger.info('Loading customers')
+        customers = load_customers()
+        logger.info('Merging customers')
+        for customer in customers:
+            session.merge(customer)
+        logger.info(f'Imported {len(customers)} customers')
