@@ -347,7 +347,10 @@ def load_order_log(order_id):
 
     users = load_users()
     username2login = { u.name: u.login for u in users }
-    username2login['Нароттам Паршик'] = username2login['Нароттам Паршиков']
+
+    username_fixes = {
+        'Нароттам Паршик': 'Нароттам Паршиков',
+    }
 
     log_html = match.group(1)
     entries = []
@@ -357,12 +360,18 @@ def load_order_log(order_id):
             raise Exception(f'Failed to parse CM html item "{entry_html}", update the parsing code')
         (operation, date_str, username) = match.groups()
 
+        if username in username2login:
+            login = username2login[username]
+        elif username in username_fixes:
+            login = username2login[username_fixes[username]]
+        else:
+            raise Exception(f'Login not found for username {username}')
         entry = OrderLogEntry(
             order_id=order_id,
             operation_id=operation_id,
             operation=operation,
             ts=datetime.strptime(date_str, '%d.%m.%Y %H:%M').timestamp(),
-            login=username2login[username],
+            login=login,
         )
         entries.append(entry)
 
