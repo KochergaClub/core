@@ -10,8 +10,9 @@ import kocherga.db
 from kocherga.db import Session
 from kocherga.config import TZ
 
+
 class ImporterState(kocherga.db.Base):
-    __tablename__ = 'importers_state'
+    __tablename__ = "importers_state"
     name = Column(String(100), primary_key=True)
     until_ts = Column(Integer)
     last_ts = Column(Integer)
@@ -33,8 +34,9 @@ class ImporterState(kocherga.db.Base):
             return None
         return datetime.fromtimestamp(self.last_ts, TZ)
 
+
 class ImporterLogEntry(kocherga.db.Base):
-    __tablename__ = 'importers_log'
+    __tablename__ = "importers_log"
     id = Column(Integer, primary_key=True)
     name = Column(String(100), index=True)
     start_ts = Column(Integer)
@@ -45,7 +47,9 @@ class ImporterLogEntry(kocherga.db.Base):
         self.name = name
         self.start_ts = datetime.now(TZ).timestamp()
 
+
 class ImportContext:
+
     def __init__(self, name, mode):
         self.name = name
         self.mode = mode
@@ -74,9 +78,11 @@ class ImportContext:
         Session().add(self.log_entry)
 
         Session().commit()
-        logging.info(f'{self.name} imported')
+        logging.info(f"{self.name} imported")
+
 
 class BaseImporter(ABC):
+
     @abstractmethod
     def init_db(self) -> None:
         pass
@@ -92,37 +98,39 @@ class BaseImporter(ABC):
 
     @property
     def name(self):
-        return f'{self.__class__.__module__}.{self.__class__.__name__}'
+        return f"{self.__class__.__module__}.{self.__class__.__name__}"
 
     def interval(self):
-        return {
-            'minutes': 15
-        }
+        return {"minutes": 15}
 
 
 class FullImporter(BaseImporter):
+
     @abstractmethod
     def do_full_import(self, session: Any) -> None:
         pass
 
     def import_new(self) -> None:
-        with ImportContext(self.name, 'full') as ic:
+        with ImportContext(self.name, "full") as ic:
             self.do_full_import(Session())
 
 
 class IncrementalImporter(BaseImporter):
+
     @abstractmethod
     def get_initial_dt(self) -> datetime:
         pass
 
     # Should return a datetime of a last imported object or a last datetime that we can be sure won't be needed to be imported again.
     @abstractmethod
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session: object) -> datetime:
+    def do_period_import(
+        self, from_dt: datetime, to_dt: datetime, session: object
+    ) -> datetime:
         pass
 
     def _import(self, mode: str) -> None:
         with ImportContext(self.name, mode) as ic:
-            if mode == 'all' or not ic.state.until_dt:
+            if mode == "all" or not ic.state.until_dt:
                 start_dt = self.get_initial_dt()
             else:
                 start_dt = ic.state.until_dt
@@ -131,11 +139,13 @@ class IncrementalImporter(BaseImporter):
 
             last_dt = self.do_period_import(start_dt, end_dt, Session())
             if not last_dt:
-                raise Exception(f"{self.name}.do_period_import didn't return a datetime object")
+                raise Exception(
+                    f"{self.name}.do_period_import didn't return a datetime object"
+                )
             ic.state.until_ts = last_dt.timestamp()
 
     def import_all(self) -> None:
-        self._import('all')
+        self._import("all")
 
     def import_new(self) -> None:
-        self._import('new')
+        self._import("new")

@@ -1,10 +1,12 @@
 from datetime import timedelta
 
 # TODO - base this on kocherga.config.TZ
-MSK_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S+03:00'
+MSK_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S+03:00"
+
 
 def dts(dt):
     return dt.strftime(MSK_DATE_FORMAT)
+
 
 def date_chunks(from_dt, to_dt, step=timedelta(days=28)):
     chunk_from_dt = from_dt
@@ -14,17 +16,43 @@ def date_chunks(from_dt, to_dt, step=timedelta(days=28)):
         yield (chunk_from_dt, min(chunk_from_dt + step, to_dt))
         chunk_from_dt += step
 
+
 def inflected_weekday(dt):
     return [
-        'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу', 'воскресенье'
+        "понедельник",
+        "вторник",
+        "среду",
+        "четверг",
+        "пятницу",
+        "субботу",
+        "воскресенье",
     ][dt.weekday()]
+
 
 def weekday(dt):
     return [
-        'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье'
+        "понедельник",
+        "вторник",
+        "среда",
+        "четверг",
+        "пятница",
+        "суббота",
+        "воскресенье",
     ][dt.weekday()]
+
 
 def inflected_month(dt):
     return [
-        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        "января",
+        "февраля",
+        "марта",
+        "апреля",
+        "мая",
+        "июня",
+        "июля",
+        "августа",
+        "сентября",
+        "октября",
+        "ноября",
+        "декабря",
     ][dt.month - 1]

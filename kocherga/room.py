@@ -1,28 +1,32 @@
 from kocherga.error import PublicError
 from kocherga.config import config
 
-all_rooms_details = config()['rooms']
-all_rooms = [r['name'] for r in all_rooms_details]
+all_rooms_details = config()["rooms"]
+all_rooms = [r["name"] for r in all_rooms_details]
 
-unknown = 'unknown'
+unknown = "unknown"
+
 
 def _panic(room):
-    return PublicError('Unknown room {}.'.format(room))
+    return PublicError("Unknown room {}.".format(room))
+
 
 def validate(room):
     if room not in all_rooms and room != unknown:
         raise _panic(room)
 
+
 def pretty(room):
     validate(room)
 
-    if room == 'гэб':
-        return 'ГЭБ'
+    if room == "гэб":
+        return "ГЭБ"
 
     if room == unknown:
-        return 'Неизвестная'
+        return "Неизвестная"
 
     return room.capitalize()
+
 
 def normalize(maybe_room, fail=True):
     maybe_room = maybe_room.strip().lower()
@@ -35,13 +39,14 @@ def normalize(maybe_room, fail=True):
     else:
         return None
 
+
 def details(room):
     validate(room)
 
     for room_details in all_rooms_details:
-        if room_details['name'] == room:
+        if room_details["name"] == room:
             result = room_details.copy()
-            result['name'] = pretty(room)
+            result["name"] = pretty(room)
             return result
 
-    raise Exception('Room not found') # shouldn't happen because of validation
+    raise Exception("Room not found")  # shouldn't happen because of validation

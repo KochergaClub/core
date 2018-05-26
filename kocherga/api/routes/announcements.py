@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from quart import Blueprint, jsonify, request
@@ -10,60 +11,59 @@ import kocherga.events.announce
 from kocherga.api.auth import auth
 from kocherga.api.common import ok
 
-bp = Blueprint('announces', __name__)
+bp = Blueprint("announces", __name__)
 
 # Idea: workflows for announcements.
 # /workflow/timepad -> returns { 'steps': ['post-draft', 'publish'], 'current-step': ... }
 # /workflow/timepad/post-draft
 # /workflow/timepad/publish
 
-@bp.route('/announcements/timepad/event/<event_id>', methods=['POST'])
-@auth('kocherga')
+
+@bp.route("/announcements/timepad/event/<event_id>", methods=["POST"])
+@auth("kocherga")
 def post_timepad(event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_timepad(event)
     Session().commit()
-    return jsonify({ 'link': announcement.link })
+    return jsonify({"link": announcement.link})
 
-@bp.route('/announcements/timepad/categories')
-@auth('kocherga')
+
+@bp.route("/announcements/timepad/categories")
+@auth("kocherga")
 def timepad_categories():
     categories = kocherga.events.timepad.timepad_categories()
-    return jsonify([
-        {
-            'id': c.id,
-            'name': c.name,
-            'code': c.code,
-        }
-        for c in categories
-    ])
+    return jsonify([{"id": c.id, "name": c.name, "code": c.code} for c in categories])
 
-@bp.route('/announcements/vk/groups')
-@auth('kocherga')
+
+@bp.route("/announcements/vk/groups")
+@auth("kocherga")
 def vk_groups():
     all_groups = kocherga.events.vk.all_groups()
     return jsonify(all_groups)
 
-@bp.route('/announcements/vk/update_wiki_schedule', methods=['POST'])
-@auth('kocherga')
+
+@bp.route("/announcements/vk/update_wiki_schedule", methods=["POST"])
+@auth("kocherga")
 def update_wiki_schedule():
     kocherga.events.vk.update_wiki_schedule()
     return jsonify(ok)
 
-@bp.route('/announcements/vk/event/<event_id>', methods=['POST'])
-@auth('kocherga')
+
+@bp.route("/announcements/vk/event/<event_id>", methods=["POST"])
+@auth("kocherga")
 def post_vk(event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_vk(event)
     Session().commit()
-    return jsonify({ 'link': announcement.link })
+    return jsonify({"link": announcement.link})
 
-@bp.route('/announcements/fb/event/<event_id>', methods=['POST'])
-@auth('kocherga')
+
+@bp.route("/announcements/fb/event/<event_id>", methods=["POST"])
+@auth("kocherga")
 async def post_fb(event_id):
-    access_token = (await request.get_json())['fb_access_token']
+    access_token = (await request.get_json())["fb_access_token"]
 
     event = Event.by_id(event_id)
     announcement = await kocherga.events.announce.post_to_fb(event, access_token)
     Session().commit()
-    return jsonify({ 'link': announcement.link })
+    return jsonify({"link": announcement.link})

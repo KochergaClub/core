@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from pathlib import Path
@@ -25,19 +26,23 @@ from kocherga.error import PublicError
 
 from kocherga.datetime import dts, inflected_weekday, inflected_month
 
+
 def parse_iso8601(s):
     return dateutil.parser.parse(s).astimezone(TZ)
 
-IMAGE_TYPES = ['default', 'vk']
+
+IMAGE_TYPES = ["default", "vk"]
+
 
 def image_flag_property(image_type):
     if image_type not in IMAGE_TYPES:
-        raise PublicError('unknown image type {}'.format(image_type))
+        raise PublicError("unknown image type {}".format(image_type))
 
-    return 'has_{}_image'.format(image_type)
+    return "has_{}_image".format(image_type)
+
 
 class Event(Base):
-    __tablename__ = 'events'
+    __tablename__ = "events"
     google_id = Column(String(100), primary_key=True)
     google_link = Column(String(1024))
 
@@ -57,7 +62,9 @@ class Event(Base):
     is_master = Column(Boolean)
     master_id = Column(String(100))
 
-    visitors = Column(String(100)) # not Integer, because it can take values such as 'no_record' or 'cancelled'
+    visitors = Column(
+        String(100)
+    )  # not Integer, because it can take values such as 'no_record' or 'cancelled'
     asked_for_visitors_ts = Column(Integer)
     event_type = Column(String(40))
 
@@ -97,15 +104,21 @@ class Event(Base):
     # [a] vk-link
 
     def __init__(
-            self,
-            start_dt, end_dt,
-            created_dt=None, updated_dt=None,
-            creator=None,
-            title='', description='', location='',
-            google_id=None, google_link=None,
-            is_master=False, master_id=None,
-            attendees=[],
-            props={}
+        self,
+        start_dt,
+        end_dt,
+        created_dt=None,
+        updated_dt=None,
+        creator=None,
+        title="",
+        description="",
+        location="",
+        google_id=None,
+        google_link=None,
+        is_master=False,
+        master_id=None,
+        attendees=[],
+        props={},
     ):
         self.created_dt = created_dt or datetime.now(TZ)
         self.updated_dt = updated_dt or self.created_dt
@@ -122,24 +135,40 @@ class Event(Base):
         self.attendees = attendees
         self.props = props
 
-        for key in ('visitors', 'type', 'vk_group', 'fb_group', 'has_default_image', 'has_vk_image', 'ready-to-post', 'asked_for_visitors', 'posted-fb', 'posted-timepad', 'posted-vk'):
+        for key in (
+            "visitors",
+            "type",
+            "vk_group",
+            "fb_group",
+            "has_default_image",
+            "has_vk_image",
+            "ready-to-post",
+            "asked_for_visitors",
+            "posted-fb",
+            "posted-timepad",
+            "posted-vk",
+        ):
             self.set_field_by_prop(key, self.get_prop(key))
 
     @orm.reconstructor
     def init_on_load(self):
         # deprecated
         self.props = {
-            'visitors': self.visitors,
-            'type': self.event_type,
-            'vk_group': self.vk_group,
-            'fb_group': self.fb_group,
-            'has_default_image': self.has_default_image,
-            'has_vk_image': self.has_vk_image,
-            'ready-to-post': self.ready_to_post,
-            'asked_for_visitors': datetime.fromtimestamp(self.asked_for_visitors_ts, TZ).strftime('%Y-%m-%d %H:%M') if self.asked_for_visitors_ts else None,
-            'posted-fb': self.posted_fb,
-            'posted-timepad': self.posted_timepad,
-            'posted-vk': self.posted_vk,
+            "visitors": self.visitors,
+            "type": self.event_type,
+            "vk_group": self.vk_group,
+            "fb_group": self.fb_group,
+            "has_default_image": self.has_default_image,
+            "has_vk_image": self.has_vk_image,
+            "ready-to-post": self.ready_to_post,
+            "asked_for_visitors": datetime.fromtimestamp(
+                self.asked_for_visitors_ts, TZ
+            ).strftime("%Y-%m-%d %H:%M")
+            if self.asked_for_visitors_ts
+            else None,
+            "posted-fb": self.posted_fb,
+            "posted-timepad": self.posted_timepad,
+            "posted-vk": self.posted_vk,
         }
 
         self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
@@ -186,19 +215,19 @@ class Event(Base):
     @classmethod
     def from_google(cls, google_event):
         obj = cls(
-            created_dt=parse_iso8601(google_event['created']),
-            updated_dt=parse_iso8601(google_event['updated']),
-            creator=google_event['creator'].get('email', 'UNKNOWN'),
-            title=google_event.get('summary', ''),
-            description=google_event.get('description', None),
-            start_dt=parse_iso8601(google_event['start']['dateTime']),
-            end_dt=parse_iso8601(google_event['end']['dateTime']),
-            location=google_event.get('location', ''),
-            google_id=google_event['id'],
-            google_link=google_event['htmlLink'],
-            is_master=('recurrence' in google_event),
-            master_id=google_event.get('recurringEventId', None),
-            props=google_event.get('extendedProperties', {}).get('private', {}),
+            created_dt=parse_iso8601(google_event["created"]),
+            updated_dt=parse_iso8601(google_event["updated"]),
+            creator=google_event["creator"].get("email", "UNKNOWN"),
+            title=google_event.get("summary", ""),
+            description=google_event.get("description", None),
+            start_dt=parse_iso8601(google_event["start"]["dateTime"]),
+            end_dt=parse_iso8601(google_event["end"]["dateTime"]),
+            location=google_event.get("location", ""),
+            google_id=google_event["id"],
+            google_link=google_event["htmlLink"],
+            is_master=("recurrence" in google_event),
+            master_id=google_event.get("recurringEventId", None),
+            props=google_event.get("extendedProperties", {}).get("private", {}),
         )
 
         return obj
@@ -213,18 +242,20 @@ class Event(Base):
         # TODO - move to kocherga.room.look_for_room_in_string(...)?
         for room in kocherga.room.all_rooms:
             if room in self.title.lower():
-                return room # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
+                return (
+                    room
+                )  # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
 
         return kocherga.room.unknown
 
     def is_private(self):
-        preset_type = self.props.get('type', None)
-        if preset_type == 'private':
+        preset_type = self.props.get("type", None)
+        if preset_type == "private":
             return True
-        if preset_type == 'public':
+        if preset_type == "public":
             return False
 
-        for keyword in ('бронь', 'аренда', 'инвентаризация'):
+        for keyword in ("бронь", "аренда", "инвентаризация"):
             if keyword in self.title.lower():
                 return True
         return False
@@ -240,32 +271,46 @@ class Event(Base):
         kocherga.events.google.set_property(self.google_id, key, value)
 
     def set_field_by_prop(self, key, value):
-        if key == 'visitors': self.visitors = value
-        elif key == 'vk_group': self.vk_group = value
-        elif key == 'fb_group': self.fb_group = value
-        elif key == 'posted-fb': self.posted_fb = value
-        elif key == 'posted-timepad': self.posted_timepad = value
-        elif key == 'posted-vk': self.posted_vk = value
+        if key == "visitors":
+            self.visitors = value
+        elif key == "vk_group":
+            self.vk_group = value
+        elif key == "fb_group":
+            self.fb_group = value
+        elif key == "posted-fb":
+            self.posted_fb = value
+        elif key == "posted-timepad":
+            self.posted_timepad = value
+        elif key == "posted-vk":
+            self.posted_vk = value
 
         # huh?
         # should refactor this quick - is_private() can change and this is extremely fragile
-        elif key == 'type': self.event_type = 'private' if self.is_private() else 'public'
+        elif key == "type":
+            self.event_type = "private" if self.is_private() else "public"
 
-        elif key == 'has_default_image': self.has_default_image = value in ('true', True)
-        elif key == 'has_vk_image': self.has_vk_image = value in ('true', True)
-        elif key == 'ready-to-post': self.ready_to_post = value in ('true', True)
-        elif key == 'asked_for_visitors':
+        elif key == "has_default_image":
+            self.has_default_image = value in ("true", True)
+        elif key == "has_vk_image":
+            self.has_vk_image = value in ("true", True)
+        elif key == "ready-to-post":
+            self.ready_to_post = value in ("true", True)
+        elif key == "asked_for_visitors":
             if value:
-                self.asked_for_visitors_ts = datetime.strptime(value, '%Y-%m-%d %H:%M').replace(tzinfo=TZ).timestamp()
+                self.asked_for_visitors_ts = (
+                    datetime.strptime(value, "%Y-%m-%d %H:%M")
+                    .replace(tzinfo=TZ)
+                    .timestamp()
+                )
             else:
                 self.asked_for_visitors_ts = None
         else:
-            raise PublicError(f'Unknown prop {key}')
+            raise PublicError(f"Unknown prop {key}")
 
     def generate_summary(self):
         if self.summary:
             return self.summary
-        summary = self.description.split('\n\n')[0]
+        summary = self.description.split("\n\n")[0]
         return kocherga.events.markup.Markup(summary).as_plain()
 
     def image_file(self, image_type, check_if_exists=True):
@@ -274,7 +319,7 @@ class Event(Base):
 
         filename = image_storage.event_image_file(self.google_id, image_type)
         if check_if_exists and not Path(filename).is_file():
-            logger.info(f'{self.google_id} has image prop, but file not found')
+            logger.info(f"{self.google_id} has image prop, but file not found")
             return None
 
         return filename
@@ -283,119 +328,108 @@ class Event(Base):
         images = {}
 
         for image_type in IMAGE_TYPES:
-            url = kocherga.config.web_root() + '/event/{}/image/{}'.format(self.google_id, image_type)
+            url = kocherga.config.web_root() + "/event/{}/image/{}".format(
+                self.google_id, image_type
+            )
             filename = self.image_file(image_type)
             if not filename:
                 continue
 
-            md5 = hashlib.md5(open(filename, 'rb').read()).hexdigest()
+            md5 = hashlib.md5(open(filename, "rb").read()).hexdigest()
 
-            images[image_type] = url + '?hash=' + md5
+            images[image_type] = url + "?hash=" + md5
 
         return images
 
     def add_image(self, image_type, fh):
         if image_type not in IMAGE_TYPES:
-            raise PublicError('unknown image type {}'.format(image_type))
+            raise PublicError("unknown image type {}".format(image_type))
 
         filename = image_storage.event_image_file(self.google_id, image_type)
-        with open(filename, 'wb') as write_fh:
+        with open(filename, "wb") as write_fh:
             shutil.copyfileobj(fh, write_fh)
 
-        self.set_prop(image_flag_property(image_type), 'true')
+        self.set_prop(image_flag_property(image_type), "true")
 
     def fb_announce_page(self):
-        fb_group = self.get_prop('fb_group')
+        fb_group = self.get_prop("fb_group")
         if fb_group:
-            return f'https://www.facebook.com/groups/{fb_group}'
+            return f"https://www.facebook.com/groups/{fb_group}"
         else:
-            return kocherga.config.config()['fb']['main_page']['announce_page']
+            return kocherga.config.config()["fb"]["main_page"]["announce_page"]
 
     @property
     def timing_description(self):
         if self.timing_description_override:
             return self.timing_description_override
 
-        return 'Встреча пройдёт в {weekday} {day} {month}, в {time},'.format(
+        return "Встреча пройдёт в {weekday} {day} {month}, в {time},".format(
             weekday=inflected_weekday(self.start_dt),
             day=self.start_dt.day,
             month=inflected_month(self.start_dt),
-            time=self.start_dt.strftime('%H:%M')
+            time=self.start_dt.strftime("%H:%M"),
         )
 
     # dict for the further serialization (e.g. for api.kocherga.club)
     def to_dict(self):
         d = {
-            'id': self.google_id,
-            'summary': self.summary,
-            'title': self.title,
-            'description': self.description,
-            'location': self.location, # deprecated
-            'room': self.get_room(),
-            'start': {
-                'dateTime': dts(self.start_dt),
-            },
-            'end': {
-                'dateTime': dts(self.end_dt),
-            },
-            'created': dts(self.created_dt),
-            'props': dict(self.props), # deprecated
-            'google_link': self.google_link,
-            'htmlLink': self.google_link, # deprecated
-            'extendedProperties': { # deprecated
-                'private': dict(self.props),
-            },
-            'type': self.event_type,
+            "id": self.google_id,
+            "summary": self.summary,
+            "title": self.title,
+            "description": self.description,
+            "location": self.location,  # deprecated
+            "room": self.get_room(),
+            "start": {"dateTime": dts(self.start_dt)},
+            "end": {"dateTime": dts(self.end_dt)},
+            "created": dts(self.created_dt),
+            "props": dict(self.props),  # deprecated
+            "google_link": self.google_link,
+            "htmlLink": self.google_link,  # deprecated
+            "extendedProperties": {"private": dict(self.props)},  # deprecated
+            "type": self.event_type,
             # TODO - add field from props as top-level fields
-            'timepad_category_code': self.timepad_category_code,
-            'timepad_prepaid_tickets': self.timepad_prepaid_tickets,
-            'timing_description_override': self.timing_description_override,
+            "timepad_category_code": self.timepad_category_code,
+            "timepad_prepaid_tickets": self.timepad_prepaid_tickets,
+            "timing_description_override": self.timing_description_override,
         }
 
         if self.master_id:
-            d['master_id'] = self.master_id
+            d["master_id"] = self.master_id
         if self.is_master:
-            d['is_master'] = self.is_master
+            d["is_master"] = self.is_master
 
-        d['images'] = self.get_images()
+        d["images"] = self.get_images()
 
         return d
 
     def to_google(self):
-        convert_dt = lambda dt: dt.astimezone(tzutc()).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        convert_dt = lambda dt: dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         google_props = {}
         for k, v in self.props.items():
             if v == False:
-                google_props[k] = 'false'
+                google_props[k] = "false"
             elif v == True:
-                google_props[k] = 'true'
+                google_props[k] = "true"
             elif v:
                 google_props[k] = v
 
         return {
-            'created': convert_dt(self.created_dt),
-            'updated': convert_dt(self.updated_dt),
-            'creator': {
-                'email': self.creator,
-            },
-            'summary': self.title,
-            'description': self.description,
-            'start': {
-                'dateTime': convert_dt(self.start_dt),
-            },
-            'end': {
-                'dateTime': convert_dt(self.end_dt),
-            },
-            'extendedProperties': {
-                'private': google_props,
-            },
+            "created": convert_dt(self.created_dt),
+            "updated": convert_dt(self.updated_dt),
+            "creator": {"email": self.creator},
+            "summary": self.title,
+            "description": self.description,
+            "start": {"dateTime": convert_dt(self.start_dt)},
+            "end": {"dateTime": convert_dt(self.end_dt)},
+            "extendedProperties": {"private": google_props},
         }
 
     def patch_google(self):
-        logger.info('Saving to google')
+        logger.info("Saving to google")
         kocherga.events.google.patch_event(self.google_id, self.to_google())
 
-#def patch_google(session):
+
+# def patch_google(session):
 #    target.patch_google()
 #
-#sqlalchemy.event.listen(Session.session, 'before_commit', patch_google)
+# sqlalchemy.event.listen(Session.session, 'before_commit', patch_google)

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import csv
@@ -19,18 +20,17 @@ import kocherga.importer.base
 
 from sqlalchemy import Column, Integer, String, Enum
 
-SECRET = kocherga.secrets.plain_secret('zadarma_api_key')
+SECRET = kocherga.secrets.plain_secret("zadarma_api_key")
+
 
 class CallType(enum.Enum):
     incoming = 1
     outcoming = 2
 
     @classmethod
-    def from_str(cls, s: str) -> 'CallType':
-        return {
-            'in': cls.incoming,
-            'out': cls.outcoming,
-        }[s]
+    def from_str(cls, s: str) -> "CallType":
+        return {"in": cls.incoming, "out": cls.outcoming}[s]
+
 
 class Disposition(enum.Enum):
     answered = 1
@@ -40,12 +40,13 @@ class Disposition(enum.Enum):
     parse_failed = 5
 
     @classmethod
-    def from_str(cls, s: str) -> 'Disposition':
-        s = s.replace(' ', '_')
+    def from_str(cls, s: str) -> "Disposition":
+        s = s.replace(" ", "_")
         return cls[s]
 
+
 class Call(kocherga.db.Base):
-    __tablename__ = 'zadarma_calls'
+    __tablename__ = "zadarma_calls"
     call_id = Column(String(100), primary_key=True)
     call_type = Column(Enum(CallType))
     internal_number = Column(String(100))
@@ -58,17 +59,17 @@ class Call(kocherga.db.Base):
     watchman = Column(String(100))
 
     @classmethod
-    def from_csv_rows(cls, rows: List[Dict[str, str]]) -> 'Call':
+    def from_csv_rows(cls, rows: List[Dict[str, str]]) -> "Call":
         row1 = rows[0]
         call = Call(
-            call_id=row1['call_id'],
-            call_type=CallType.from_str(row1['call_type']),
-            caller_number=row1['clid'],
-            destination_number=row1['destination'],
-            internal_number=row1['internal_number'],
-            disposition=Disposition.from_str(row1['disposition']),
-            ts=datetime.strptime(row1['date'], '%Y-%m-%d %H:%M:%S').timestamp(),
-            seconds=int(row1['seconds']),
+            call_id=row1["call_id"],
+            call_type=CallType.from_str(row1["call_type"]),
+            caller_number=row1["clid"],
+            destination_number=row1["destination"],
+            internal_number=row1["internal_number"],
+            disposition=Disposition.from_str(row1["disposition"]),
+            ts=datetime.strptime(row1["date"], "%Y-%m-%d %H:%M:%S").timestamp(),
+            seconds=int(row1["seconds"]),
         )
 
         if len(rows) > 2:
@@ -76,65 +77,74 @@ class Call(kocherga.db.Base):
 
         if len(rows) == 2:
             row2 = rows[1]
-            assert row2['call_id'] == row1['call_id']
+            assert row2["call_id"] == row1["call_id"]
             if call.call_type != CallType.incoming:
-                raise Exception("Can't parse two-rows format for anything except incoming calls")
-            call.internal_number = row2['internal_number']
+                raise Exception(
+                    "Can't parse two-rows format for anything except incoming calls"
+                )
+            call.internal_number = row2["internal_number"]
 
             call.wait_seconds = call.seconds
-            call.seconds = row2['seconds']
+            call.seconds = row2["seconds"]
 
         return call
 
+
 def api_text_to_row_groups(text: str) -> Iterator[List[Dict[str, str]]]:
-    if text.startswith('Вы уже использовали'):
-        raise Exception(f'Temporarily banned by API: {text}')
+    if text.startswith("Вы уже использовали"):
+        raise Exception(f"Temporarily banned by API: {text}")
 
     # Arrayid is a weird header for some older requests but they seem fine otherwise
-    if not text.startswith('id;call_type') and not text.startswith('Arrayid;call_type'):
-        raise Exception(f'Unexpected response {text}')
+    if not text.startswith("id;call_type") and not text.startswith("Arrayid;call_type"):
+        raise Exception(f"Unexpected response {text}")
 
-    reader = csv.DictReader(io.StringIO(text), delimiter=';')
+    reader = csv.DictReader(io.StringIO(text), delimiter=";")
 
-    rows_by_call_id = defaultdict(list) # type: DefaultDict[str, List[Dict[str, str]]]
+    rows_by_call_id = defaultdict(list)  # type: DefaultDict[str, List[Dict[str, str]]]
     for row in reader:
-        rows_by_call_id[row['call_id']].append(row)
+        rows_by_call_id[row["call_id"]].append(row)
 
-    logger.info(f'Got {len(rows_by_call_id)} rows')
+    logger.info(f"Got {len(rows_by_call_id)} rows")
 
     for (call_id, rows) in rows_by_call_id.items():
         yield rows
 
-def fetch_csv_row_groups(from_dt: datetime, to_dt: datetime) -> Iterator[List[Dict[str, str]]]:
-    logger.info(f'Fetching from {from_dt} to {to_dt}')
-    api_params={
-        'secret': SECRET,
-        'start': from_dt.strftime('%Y%m%d%H%M%S'),
-        'end': to_dt.strftime('%Y%m%d%H%M%S'),
-        'format': 'new',
+
+def fetch_csv_row_groups(
+    from_dt: datetime, to_dt: datetime
+) -> Iterator[List[Dict[str, str]]]:
+    logger.info(f"Fetching from {from_dt} to {to_dt}")
+    api_params = {
+        "secret": SECRET,
+        "start": from_dt.strftime("%Y%m%d%H%M%S"),
+        "end": to_dt.strftime("%Y%m%d%H%M%S"),
+        "format": "new",
     }
-    r = requests.get(
-        'https://my.zadarma.com/mypbx/stat/export',
-        params=api_params
-    )
+    r = requests.get("https://my.zadarma.com/mypbx/stat/export", params=api_params)
 
     r.raise_for_status()
 
     return api_text_to_row_groups(r.text)
 
+
 def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
     for rows in fetch_csv_row_groups(from_dt, to_dt):
         yield Call.from_csv_rows(rows)
 
-def fetch_all_calls(from_dt=datetime(2015,9,1,tzinfo=TZ), to_dt=None) -> Iterator[Call]:
+
+def fetch_all_calls(
+    from_dt=datetime(2015, 9, 1, tzinfo=TZ), to_dt=None
+) -> Iterator[Call]:
     api_requests = 0
-    for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(from_dt, to_dt, timedelta(days=28)):
-        logger.info(f'Fetching from {chunk_from_dt} to {chunk_to_dt}')
+    for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(
+        from_dt, to_dt, timedelta(days=28)
+    ):
+        logger.info(f"Fetching from {chunk_from_dt} to {chunk_to_dt}")
         counter = 0
         for call in fetch_calls(chunk_from_dt, chunk_to_dt):
             yield call
             counter += 1
-        logger.info(f'Fetched {counter} calls')
+        logger.info(f"Fetched {counter} calls")
 
         # We shouldn't make too many API requests in a row - we'll get banned.
         # This early break helps the importer to finish the full import in several portions.
@@ -142,9 +152,11 @@ def fetch_all_calls(from_dt=datetime(2015,9,1,tzinfo=TZ), to_dt=None) -> Iterato
         if api_requests >= 3:
             break
 
+
 class Importer(kocherga.importer.base.IncrementalImporter):
+
     def get_initial_dt(self):
-        return datetime(2016,11,1,tzinfo=TZ)
+        return datetime(2016, 11, 1, tzinfo=TZ)
 
     def init_db(self):
         Call.__table__.create(bind=kocherga.db.engine())

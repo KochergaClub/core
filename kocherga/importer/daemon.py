@@ -8,40 +8,38 @@ from kocherga.config import TZ
 import importlib
 
 IMPORTER_MODULES = [
-    'money.cashier',
-    'money.ofd',
-    'money.tochka',
-    'zadarma',
-    'cm',
-    'events.db',
-    'watchmen',
-    'gitlab'
+    "money.cashier",
+    "money.ofd",
+    "money.tochka",
+    "zadarma",
+    "cm",
+    "events.db",
+    "watchmen",
+    "gitlab",
 ]
+
 
 def all_importers():
     importers = []
     for module_name in IMPORTER_MODULES:
-        module = importlib.import_module(f'kocherga.{module_name}')
-        importers.append(module.Importer()) # type: ignore
+        module = importlib.import_module(f"kocherga.{module_name}")
+        importers.append(module.Importer())  # type: ignore
 
     return importers
 
+
 def run():
-    scheduler = BlockingScheduler(
-        executors={
-            'default': ProcessPoolExecutor(2),
-        }
-    )
+    scheduler = BlockingScheduler(executors={"default": ProcessPoolExecutor(2)})
 
     for i, importer in enumerate(all_importers()):
         scheduler.add_job(
             func=importer.__class__.import_new,
-            trigger='interval',
+            trigger="interval",
             args=[importer],
             name=importer.name,
             **importer.interval(),
             jitter=300,
-            start_date=datetime.now(TZ) + timedelta(seconds=i*5),
+            start_date=datetime.now(TZ) + timedelta(seconds=i * 5),
         )
 
     scheduler.start()

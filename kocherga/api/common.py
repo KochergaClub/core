@@ -1,3 +1,3 @@
-ok = {'result': 'ok'}
+ok = {"result": "ok"}
 
 DEV = False
