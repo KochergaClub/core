@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import re
 import hashlib
 
@@ -15,7 +18,7 @@ def get_mailchimp_date_group_category():
 
 def get_all_mailchimp_dates(category_id):
     response = kocherga.mailchimp.api_call('GET', f'lists/{LIST_ID}/interest-categories/{date_group_id}/interests')
-    print(response)
+    logger.info(response)
 
 def create_new_mailchimp_date(category_id, event_type, event_id):
     event_type_ru = {
@@ -23,12 +26,29 @@ def create_new_mailchimp_date(category_id, event_type, event_id):
         '3week': 'Трехнедельный курс'
     }[event_type]
 
+    name = f'{event_type_ru} {event_id}'
+
+    # check if interest already exists
     response = kocherga.mailchimp.api_call(
-        'POST',
+        'GET',
         f'lists/{LIST_ID}/interest-categories/{category_id}/interests',
-        { 'name': f'{event_type_ru} {event_id}' }
     )
-    return response['id']
+    interest = next(
+        (i for i in response['interests'] if i['name'] == name),
+        None
+    )
+
+    if interest:
+        logger.info(f'Group {name} already exists')
+    else:
+        logger.info('Creating group {name}')
+        interest = kocherga.mailchimp.api_call(
+            'POST',
+            f'lists/{LIST_ID}/interest-categories/{category_id}/interests',
+            { 'name': name }
+        )
+
+    return interest['id']
 
 def import_user_to_mailchimp(user, group_id):
     md5 = hashlib.md5(user['email'].lower().encode()).hexdigest()
@@ -82,4 +102,4 @@ def sheet2mailchimp(event_type, event_id):
     users = get_users(event_type, event_id)
     for user in users:
         import_user_to_mailchimp(user, group_id)
-        print(f'Added {user["email"]}')
+        logger.info(f'Added {user["email"]}')

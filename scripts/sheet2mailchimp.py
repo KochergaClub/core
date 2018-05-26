@@ -4,6 +4,8 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
 import fire
 
+import kocherga.ratio.users
+
 def main(event_type, event_id):
     kocherga.ratio.users.sheet2mailchimp(event_type, event_id)
 
