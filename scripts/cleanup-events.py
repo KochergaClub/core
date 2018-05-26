@@ -59,6 +59,7 @@ def main():
 
     stat(events)
 
-main()
+if __name__ == '__main__':
+    main()
 
 # All migrations are complete. This script stays here just for a historical interest and can be removed later at any time.

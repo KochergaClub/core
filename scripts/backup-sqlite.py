@@ -15,4 +15,5 @@ BUCKET_NAME = kocherga.config.config()['s3']['backups']
 def main():
     logging.info('Nothing to do here.')
 
-main()
+if __name__ == '__main__':
+    main()

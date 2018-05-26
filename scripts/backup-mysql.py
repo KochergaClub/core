@@ -32,4 +32,5 @@ def main():
         s3.upload_file(str(tmp_file), BUCKET_NAME, f'mysql/{db_name}.gz')
         logging.info(f'MySQL DB {db_name} backup successful')
 
-main()
+if __name__ == '__main__':
+    main()
