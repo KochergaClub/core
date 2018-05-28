@@ -6,7 +6,6 @@ import os
 import requests
 import json
 import re
-import markdown
 import logging
 from collections import namedtuple
 

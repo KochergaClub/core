@@ -19,7 +19,7 @@ def post_to_channel(message):
         params={
             "chat_id": get_channel_id(),
             "text": message,
-            "parse_mode": "markdown",
+            "parse_mode": "html",
             "disable_web_page_preview": "true",
         },
     )

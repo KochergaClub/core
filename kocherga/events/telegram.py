@@ -44,7 +44,7 @@ def post_schedule_message():
 
         title = event.title
         if event.posted_vk:
-            title = f"[{title}]({event.posted_vk})"
+            title = f"<a href=\"{event.posted_vk}\">{title}</a>"
         message += f"{event.start_dt:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
