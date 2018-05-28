@@ -11,8 +11,7 @@ from kocherga.telegram import post_to_channel
 from kocherga.db import Session
 from kocherga.events.event import Event
 
-
-def post_schedule():
+def post_schedule_message():
     message = "#расписание_кочерги\nНа этой неделе в Кочерге:"
 
     message += "\n\n"
@@ -49,4 +48,9 @@ def post_schedule():
         message += f"{event.start_dt:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
+    return message
+
+
+def post_schedule():
+    message = post_schedule_message()
     post_to_channel(message)
