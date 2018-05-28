@@ -14,7 +14,7 @@ def get_channel_id():
 
 def post_to_channel(message):
     token = get_token()
-    requests.get(
+    r = requests.get(
         f"https://api.telegram.org/bot{token}/sendMessage",
         params={
             "chat_id": get_channel_id(),
@@ -23,3 +23,4 @@ def post_to_channel(message):
             "disable_web_page_preview": "true",
         },
     )
+    r.raise_for_status()
