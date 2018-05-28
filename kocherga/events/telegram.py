@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -9,6 +10,7 @@ from kocherga.telegram import post_to_channel
 
 from kocherga.db import Session
 from kocherga.events.event import Event
+
 
 def post_schedule():
     message = "#расписание_кочерги\nНа этой неделе в Кочерге:"
