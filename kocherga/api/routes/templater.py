@@ -9,6 +9,7 @@ from quart import Blueprint, request, render_template, make_response
 
 import pyppeteer
 
+import kocherga.config
 from kocherga.api.auth import auth
 
 bp = Blueprint("templater", __name__)
@@ -28,17 +29,14 @@ def parse_date(value, fmt):
     return datetime.datetime.strptime(value, fmt)
 
 
-def get_args(args, form, host):
+def get_args(args, form):
     result = {}
 
     for k, v in args.items():
         result[k] = v
     result.update(form)
 
-    # Sorry, this is a hack - I can't find a way to extract the protocol from quart directly, so I have to use this heuristic:
-    # everything localhost is http, everything else is https.
-    schema = "http" if host.startswith("localhost") else "https"
-    result["url_root"] = f"{schema}://{host}"
+    result["url_root"] = kocherga.config.config()['web_root']
 
     return result
 
@@ -50,14 +48,14 @@ async def get_html(args, name):
 @bp.route("/templater/html/<name>")
 async def generate_html(name):
     return await get_html(
-        get_args(request.args, await request.form, request.headers["Host"]), name
+        get_args(request.args, await request.form), name
     )
 
 
 @bp.route("/templater/png/<name>")
 async def generate_png(name):
     html = await get_html(
-        get_args(request.args, await request.form, request.headers["Host"]), name
+        get_args(request.args, await request.form), name
     )
 
     (width, height) = (800, 600)  # should we fast fail instead?
