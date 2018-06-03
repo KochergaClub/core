@@ -39,6 +39,7 @@ mysqlclient = "*"
 flask-sqlalchemy = "*"
 raven = "*"
 requests-toolbelt = "*"
+slappy = "*"
 
 
 [dev-packages]
