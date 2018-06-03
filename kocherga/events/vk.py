@@ -243,6 +243,8 @@ def create_schedule_post(prefix_text):
     else:
         dt = dt + timedelta(days=7 - dt.weekday())
 
+    dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+
     query = (
         Session()
         .query(Event)
