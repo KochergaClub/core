@@ -1,7 +1,3 @@
-deploy:
-	git push
-	ssh -A api.kocherga.club 'cd /srv/kocherga-api && git pull && make install-common && sudo systemctl restart kocherga-api'
-
 install-dev:
 	pipenv install -d
 
