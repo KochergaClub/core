@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bfb29b2c063c97a56cba2119e67db2ecb8e5cc14881961d138495b9e9f6806a7"
+            "sha256": "95aea42d00487cc79af288da113bb902ef4d296d1ce09c58191e35554c999927"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -580,10 +580,10 @@
         },
         "slappy": {
             "hashes": [
-                "sha256:01483ba0e5a24ccb75655a6a285752cf048a85910b1c7652acfe88d59307a9e7",
-                "sha256:cc057dd1c8b1ef9daa0ccbf5e903d0784882813ab05a5d8bb33345ad26fa275f"
+                "sha256:775e641407abd4521acaa17528414e21ff6c98eeabf7f251001ed801dda45872",
+                "sha256:986c03ba42f330a1582e9ecd42940bac2345976dcf46881d7e2f6de868c595fa"
             ],
-            "version": "==0.2.0"
+            "version": "==0.2.1"
         },
         "sortedcontainers": {
             "hashes": [
