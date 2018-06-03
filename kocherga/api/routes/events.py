@@ -72,38 +72,6 @@ async def patch_event(event_id):
     return jsonify(result)
 
 
-# DEPRECATED. Use /announcements/... routes instead.
-@bp.route("/event/<event_id>/announce/timepad", methods=["POST"])
-@auth("kocherga")
-def post_timepad(event_id):
-    event = Event.by_id(event_id)
-    announcement = kocherga.events.announce.post_to_timepad(event)
-    Session().commit()
-    return jsonify({"link": announcement.link})
-
-
-# DEPRECATED. Use /announcements/... routes instead.
-@bp.route("/event/<event_id>/announce/vk", methods=["POST"])
-@auth("kocherga")
-def post_vk(event_id):
-    event = Event.by_id(event_id)
-    announcement = kocherga.events.announce.post_to_vk(event)
-    Session().commit()
-    return jsonify({"link": announcement.link})
-
-
-# DEPRECATED. Use /announcements/... routes instead.
-@bp.route("/event/<event_id>/announce/fb", methods=["POST"])
-@auth("kocherga")
-async def post_fb(event_id):
-    access_token = (await request.get_json())["fb_access_token"]
-
-    event = Event.by_id(event_id)
-    announcement = await kocherga.events.announce.post_to_fb(event, access_token)
-    Session().commit()
-    return jsonify({"link": announcement.link})
-
-
 @bp.route("/event/<event_id>/image/<image_type>", methods=["POST"])
 @auth("kocherga")
 async def upload_event_image(event_id, image_type):
