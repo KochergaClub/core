@@ -11,6 +11,7 @@ from kocherga.telegram import post_to_channel
 from kocherga.db import Session
 from kocherga.events.event import Event
 
+
 def post_schedule_message():
     message = "#расписание_кочерги\nНа этой неделе в Кочерге:"
 
@@ -44,7 +45,7 @@ def post_schedule_message():
 
         title = event.title
         if event.posted_vk:
-            title = f"<a href=\"{event.posted_vk}\">{title}</a>"
+            title = f'<a href="{event.posted_vk}">{title}</a>'
         message += f"{event.start_dt:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
