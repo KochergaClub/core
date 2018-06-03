@@ -85,7 +85,7 @@ def react_somebody_explain(message, query):
     message.reply(**explain(query))
 
 
-@bot.listen_to(r"людвиг,?\s+расскажи\s+про\s+(.*?)[.?!]?$")
+@bot.respond_to(r"расскажи\s+про\s+(.*?)[.?!]?$")
 def react_ludwig_explain(message, query):
     message.reply(**explain(query))
 
@@ -93,7 +93,6 @@ def react_ludwig_explain(message, query):
 @bot.listen_to(r"расскажи\s+про\s+(.*?)[.?!]?$")
 def react_explain(message, query):
     # This question might be addressed to someone else, so Ludwig tries to be quiet if he can't help.
-    # TODO - special case for a private message.
     reply = explain(query, quiet=True)
     if not reply:
         return

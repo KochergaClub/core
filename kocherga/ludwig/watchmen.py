@@ -6,7 +6,7 @@ from kocherga.ludwig.bot import bot
 import kocherga.watchmen
 import kocherga.team
 
-from kocherga.slackbot import ErrorResponse
+from slappy import ErrorResponse
 
 INFLECTED_WEEKDAY_NAMES = [
     "понедельник",
@@ -188,7 +188,7 @@ def react_future_week_watchmen(message, query):
     return daily_watchmen(d)
 
 
-@bot.listen_to(r"(?:людвиг,\s+)?кто\s+(?:сейчас\s+)?(?:админит|админ|дежурит)\?")
+@bot.listen_to(r"кто\s+(?:сейчас\s+)?(?:админит|админ|дежурит)\?")
 def react_find_watchman(message):
     member = get_current_watchman_or_complain(message)
     if not member:

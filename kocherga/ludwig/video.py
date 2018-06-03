@@ -9,7 +9,7 @@ from kocherga.cm import extend_subscription
 import kocherga.team
 
 
-@bot.listen_to(r"Людвиг,\s+новое\s+видео:\s+<(https://\S+)>")
+@bot.respond_to(r"новое\s+видео:\s+<(https://\S+)>")
 def react_new_video(message, url):
     channel_id = message.body["channel"]
     response = message.sc.api_call("channels.info", channel=channel_id)

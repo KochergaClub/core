@@ -1,28 +1,27 @@
 import sys
 from kocherga.ludwig.bot import bot
 
+from slappy import Listener
 
 def suicide(message):
     message.reply("Умираю!")
     sys.exit()
 
 
-@bot.listen_to(r"привет,?\s+людвиг")
+@bot.respond_to(r"привет")
 def react_hello(message):
     return "Привет!"
 
 
-@bot.listen_to(r"людвиг,?\s+умри")
+@bot.respond_to(r"умри")
 def react_die(message):
     suicide(message)
 
 
 def add_simple_interactions():
-    interactions = [
+    listen_interactions = [
         (r"Какой\s+номер\s+(у\s+)?Кочерги\?", "+7(499)350-20-42"),
         (r"Как\s+позвонить\s+в\s+кочергу\?", "+7(499)350-20-42"),
-        (r"Людвиг, ты солнышко", ":heart:"),
-        (r"Людвиг, ты лапочка", ":smile_cat:"),
         (
             r"не работает мыш(ка|ь)",
             "В ноуте барахлит один usb-разъём (правый ближний), возможно, дело в этом?",
@@ -37,6 +36,11 @@ def add_simple_interactions():
         ),
     ]
 
+    respond_interactions = [
+        (r"ты солнышко", ":heart:"),
+        (r"ты лапочка", ":smile_cat:"),
+    ]
+
     def gen_cb(response):
 
         def f(msg, *args):
@@ -44,8 +48,15 @@ def add_simple_interactions():
 
         return f
 
-    for interaction in interactions:
-        bot.dispatcher.register_listener(interaction[0], gen_cb(interaction[1]))
+    for interaction in listen_interactions:
+        bot.dispatcher.register_listener(
+            Listener(interaction[0], gen_cb(interaction[1]))
+        )
+
+    for interaction in respond_interactions:
+        bot.dispatcher.register_listener(
+            Listener(interaction[0], gen_cb(interaction[1]), mention_only=True)
+        )
 
 
 add_simple_interactions()

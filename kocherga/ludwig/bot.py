@@ -14,7 +14,7 @@ SLACK_WORKPLACE_TOKEN = kocherga.slack.token()
 PORT = kocherga.config.config()["ludwig_port"]
 
 
-class Bot(slappy.bot):
+class Bot(slappy.Bot):
 
     def cleanup_on_exception(self):
         kocherga.db.Session.remove()
@@ -28,6 +28,7 @@ def create_bot():
         timezone=pytz.timezone(
             "Europe/Moscow"
         ),  # can't use kocherga.config.TZ - it's based on dateutil.tz now
+        alt_names=['людвиг']
     )
 
     bot.flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

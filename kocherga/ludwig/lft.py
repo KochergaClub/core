@@ -12,7 +12,7 @@ def quote_lft():
     return "> {}".format(lines[line_id])
 
 
-@bot.listen_to(r"людвиг,?\s+процитируй лфт")
+@bot.respond_to(r"процитируй лфт")
 def react_quote_lft(message):
     return quote_lft()
 
