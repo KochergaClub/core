@@ -338,7 +338,7 @@ def load_users():
     users = []
 
     # needed for OrderLogEntries
-    for i, name in enumerate(["Мальбург", "Андрей Ершов"]):
+    for i, name in enumerate(["Мальбург", "Андрей Ершов", "Макс"]):
         deleted_user = User(id=-i, name=name, login=name, level="deleted")
         users.append(deleted_user)
 
