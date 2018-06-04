@@ -377,12 +377,18 @@ def load_order_log(order_id):
     url = f"{DOMAIN}/order/{order_id}"
     r = requests.get(url, cookies=get_cookies())
 
+    html = r.content.decode("utf-8")
+
     match = re.search(
         r"История изменения заказа:\s*<div.*?>(.*?)</div>",
-        r.content.decode("utf-8"),
+        html,
         re.DOTALL,
     )
     if not match:
+        if re.search(r'Заказ с номером №\d+ не найден', html):
+            # probably deleted, that's ok
+            return []
+
         raise Exception("Failed to parse CM html, update the parsing code")
 
     users = load_users()
