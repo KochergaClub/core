@@ -605,7 +605,7 @@ class Importer(kocherga.importer.base.FullImporter):
                     Order.log_imported_ts == None,
                 )
             )
-            .order_by(Order.order_id)
+            .order_by(Order.order_id.desc())
         )
         for order in query.limit(100).all():
             self.import_order_log(session, order)
