@@ -62,14 +62,14 @@ class ImportContext:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.state.last_ts = datetime.now(TZ).timestamp()
-
         if exc_value:
-            # let's drop everything from our failed session
-            Session.remove()
+            # roll back everything done by importer
+            Session().rollback()
             self.state.last_exception = str(exc_value)
         else:
             self.state.last_exception = None
+
+        self.state.last_ts = datetime.now(TZ).timestamp()
 
         self.log_entry.end_ts = self.state.last_ts
         self.log_entry.exception = self.state.last_exception
