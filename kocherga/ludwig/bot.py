@@ -21,7 +21,7 @@ class Bot(slappy.Bot):
 
 
 def create_bot():
-    bot = slappy.Bot(
+    bot = Bot(
         PORT,
         SLACK_WORKPLACE_TOKEN,
         SLACK_VERIFICATION_TOKEN,
