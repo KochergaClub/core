@@ -172,8 +172,8 @@ def update_wiki_schedule(from_dt=None):
     if from_dt:
         _from_dt = from_dt
     else:
-        # last monday
-        _from_dt = datetime.now(TZ) - timedelta(days=datetime.now(TZ).weekday())
+        # today
+        _from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
 
     query = (
         Session()
@@ -187,7 +187,8 @@ def update_wiki_schedule(from_dt=None):
     events = query.order_by(Event.start_ts).all()
     logger.info(f"Schedule includes {len(events)} events")
 
-    result = ""
+    result = "=== Лента всех мероприятий: [https://vk.com/kocherga_daily] ===\n\n-----\n<br>\n"
+
     prev_date = None
     for event in events:
         if event.start_dt.date() != prev_date:
