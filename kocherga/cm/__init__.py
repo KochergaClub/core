@@ -394,7 +394,10 @@ def load_order_log(order_id):
     users = load_users()
     username2login = {u.name: u.login for u in users}
 
-    username_fixes = {"Нароттам Паршик": "Нароттам Паршиков"}
+    username_fixes = {
+        "Нароттам Паршик": "Нароттам Паршиков",
+        "Настя Колеснико": "Настя Колесникова",
+    }
 
     log_html = match.group(1)
     entries = []
