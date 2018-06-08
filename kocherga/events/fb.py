@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 import asyncio
 from random import random
 import requests
+import traceback
 
 import pyppeteer
 
@@ -121,9 +122,28 @@ class AnnounceSession:
         # else:
         #     await self.page.keyboard.type(entity.name)
 
-    async def fill_description(self, description):
+    async def fill_category(self):
+        dropdown = await self.page.J(".uiPopover[data-testid=event_category_selector]")
+        if not dropdown:
+            return
+        await dropdown.click()
+
+        logger.info('Waiting for dropdown list to appear')
+        await self.page.waitForSelector('.uiLayer[data-testid=event_category_selector]')
+
+        logger.info('Looking for "Другое" item')
+        links = await self.page.xpath(
+            '//*[contains(concat(" ", @class, " "), " uiLayer ") and @data-testid="event_category_selector"]//a//span[contains(text(), "Другое")]'
+        )
+        logger.info(f'Got {len(links)} items')
+        if len(links):
+            await links[0].click()
+
+    async def fill_description(self):
         details = await self.page.J("[data-testid=event-create-dialog-details-field]")
         await details.click()
+
+        description = self.event.description
 
         tail = (
             f"{self.event.timing_description} в антикафе Кочерга. Оплата участия — по тарифам антикафе: 2,5 руб./минута."
@@ -209,25 +229,38 @@ class AnnounceSession:
         )
         await self.fill_date_time(event.end_dt)
 
+        logger.info("Filling category if necessary")
+        await self.fill_category()
+
         logger.info("Filling description")
-        await self.fill_description(event.description)
+        await self.fill_description()
 
         if not self.auto_confirm:
             return page
 
         logger.info("Confirming")
-        await asyncio.gather(
-            page.waitForNavigation(waitUntil="documentloaded"),
-            page.click("[data-testid=event-create-dialog-confirm-button]"),
-        )
-        logger.info("Clicked and navigated somewhere")
-        await page.waitForSelector("h1[data-testid=event-permalink-event-name]")
-        logger.info("Confirmed")
+        # This commented code is unstable, although it seems like there *is* a navigation happening, but it doesn't fire for some reason.
+        # (Maybe it doesn't fire because it's emulated via history.pushSate()?)
 
-        if "/events/" not in page.url:
-            raise Exception(f"Expected '/events/' in page url, got: {page.url}")
+        #await asyncio.gather(
+        #    page.waitForNavigation(waitUntil="documentloaded", timeout=180000),
+        #    page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000),
+        #)
+        await page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000)
 
-        return FbAnnouncement(page.url)
+        logger.info(f"Clicked confirm button, waiting for title to appear")
+        await page.waitForSelector("h1#seo_h1_tag[data-testid=event-permalink-event-name]")
+
+        logger.info(f"Confirmed")
+
+        # page.url is invalid because waitForNavigation is broken
+        page_url = await page.evaluate('() => window.location.href')
+        logger.info(f"URL: {page_url}")
+
+        if "/events/" not in page_url:
+            raise Exception(f"Expected '/events/' in page url, got: {page_url}")
+
+        return FbAnnouncement(page_url)
 
     async def screenshot(self):
         return await self.page.screenshot()
@@ -256,7 +289,8 @@ async def create(event, access_token, headless=True, **kwargs):
         logger.info(f"Trying to create")
         return await session.run()
     except Exception as e:
-        logger.info(f"Error while creating a FB announcement: {str(e)}")
+        logger.info(f"Error while creating a FB announcement:\n" + traceback.format_exc())
+        traceback.print_exc()
         image_bytes = await session.screenshot()
         filename = image_storage.save_screenshot("error", image_bytes)
         logger.info(f"Screenshot saved to {filename}")
