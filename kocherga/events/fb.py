@@ -32,6 +32,12 @@ class FbAnnouncement(BaseAnnouncement):
     def link(self):
         return self._link
 
+def all_groups():
+    logger.info("Selecting all fb groups")
+    query = Session().query(Event.fb_group.distinct().label("fb_group"))
+    groups = [row.fb_group for row in query.all()]
+    logger.info(f"Got {len(groups)} groups")
+    return groups
 
 async def find_browser_page(endpoint):
     browser = await pyppeteer.launcher.connect({"browserWSEndpoint": endpoint})

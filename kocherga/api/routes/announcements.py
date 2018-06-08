@@ -58,6 +58,13 @@ def post_vk(event_id):
     return jsonify({"link": announcement.link})
 
 
+@bp.route("/announcements/fb/groups")
+@auth("kocherga")
+def fb_groups():
+    all_groups = kocherga.events.fb.all_groups()
+    return jsonify(all_groups)
+
+
 @bp.route("/announcements/fb/event/<event_id>", methods=["POST"])
 @auth("kocherga")
 async def post_fb(event_id):
