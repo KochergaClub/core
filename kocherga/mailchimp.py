@@ -35,5 +35,8 @@ def api_call(method, url, data={}):
     else:
         raise Exception(f"Unknown method {method}")
 
+    if r.status_code >= 400:
+        raise Exception(f"Error: {r.status_code} {r.reason}\n\n{r.text}")
     r.raise_for_status()
+
     return r.json()

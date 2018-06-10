@@ -1,0 +1,11 @@
+{
+  "name": "kocherga-core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@gitlab.com:kocherga/code/core.git",
+  "author": "Vyacheslav Matyukhin <me@berekuk.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "mjml": "^4.0.5"
+  }
+}
