@@ -9,6 +9,8 @@ MAX_SHARE_DELAY = 3600
 
 @bot.schedule("cron", hour="11,23")
 def check_miners():
+    return # temporarily disabled - mining is inactive because of the router & internet issues in GEB
+
     r = requests.get("https://api.nanopool.org/v1/eth/workers/{}".format(ETH_ADDRESS))
     r.raise_for_status()
 
