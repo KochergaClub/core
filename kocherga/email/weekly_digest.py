@@ -109,7 +109,7 @@ from kocherga.db import Session
 import kocherga.datetime
 from datetime import timedelta, datetime
 
-def get_digest_dates():
+def get_week_boundaries():
     dt = datetime.today()
     if dt.weekday() < 2:
         dt = dt - timedelta(days=dt.weekday())
@@ -122,10 +122,10 @@ def get_digest_dates():
 
     return (dt, end_dt)
 
-def generate_digest_content(image_url):
+def generate_content(image_url):
     template = Template(template_str)
 
-    (dt, end_dt) = get_digest_dates()
+    (dt, end_dt) = get_week_boundaries()
 
     query = (
         Session()
@@ -180,7 +180,7 @@ def generate_digest_content(image_url):
     fp.seek(0)
     html_out_fh = io.StringIO()
 
-    root_dir = Path(__file__.parent.parent.parent)
+    root_dir = Path(__file__).parent.parent.parent
     mjml = str(root_dir / 'node_modules' / '.bin' / 'mjml')
     with subprocess.Popen(
             [mjml, '/dev/stdin'],
@@ -200,8 +200,8 @@ def generate_digest_content(image_url):
 MAIN_LIST_ID = "d73cd4de36"
 IMAGE_FOLDER_ID = 19921
 
-def upload_weekly_image():
-    (dt, _) = get_digest_dates()
+def upload_main_image():
+    (dt, _) = get_week_boundaries()
 
     image_content = kocherga.images.image_storage.create_mailchimp_image(dt)
 
@@ -217,9 +217,9 @@ def upload_weekly_image():
 
     return result['full_size_url']
 
-def create_campaign_draft():
-    image_url = upload_weekly_image()
-    content = generate_digest_content(image_url)
+def create_draft():
+    image_url = upload_main_image()
+    content = generate_content(image_url)
 
     campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
         'type': 'regular',
