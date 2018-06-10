@@ -99,6 +99,7 @@ import io
 import subprocess
 import tempfile
 import base64
+from pathlib import Path
 
 import kocherga.mailchimp
 import kocherga.images
@@ -178,8 +179,11 @@ def generate_digest_content(image_url):
     fp.write(mjml)
     fp.seek(0)
     html_out_fh = io.StringIO()
+
+    root_dir = Path(__file__.parent.parent.parent)
+    mjml = str(root_dir / 'node_modules' / '.bin' / 'mjml')
     with subprocess.Popen(
-            ['mjml', '/dev/stdin'],
+            [mjml, '/dev/stdin'],
             stdin=fp,
             stdout=subprocess.PIPE,
             encoding='utf-8',
