@@ -265,10 +265,13 @@ class AnnounceSession:
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
-        if "/events/" not in page_url:
+        match = re.match(r'https://(?:www|business)\.facebook\.com/events/(\d+)/?(?:$|\?)', page_url)
+        if not match:
             raise Exception(f"Expected '/events/' in page url, got: {page_url}")
 
-        return FbAnnouncement(page_url)
+        event_id = match.group(1)
+
+        return FbAnnouncement(f'https://www.facebook.com/events/{event_id}')
 
     async def screenshot(self):
         return await self.page.screenshot()
