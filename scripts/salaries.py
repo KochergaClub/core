@@ -209,10 +209,10 @@ def main(month, mode):
     if add_basic_salaries:
         stat = add_dict(stat, basic_salaries())
     if add_bonus_salaries:
-        # stat += add_dict(stat, night_bonuses(start_date, end_date))
+        # stat = add_dict(stat, night_bonuses(start_date, end_date))
         commissions = commission_bonuses(start_date, end_date)
         print(commissions)
-        stat += add_dict(stat, commissions)
+        stat = add_dict(stat, commissions)
 
     for person in sorted(stat.keys()):
         member = kocherga.team.find_member_by_short_name(person)
