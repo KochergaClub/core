@@ -70,12 +70,16 @@ def find_order_value(order, customers_dict):
 
     return value
 
-def commission_bonuses(start_date, end_date):
+def period_orders(start_date, end_date):
     orders = Session() \
         .query(kocherga.cm.Order) \
-        .filter(kocherga.cm.Order.start_ts >= start_date.timestamp()) \
-        .filter(kocherga.cm.Order.end_ts <= end_date.timestamp() + 86400) \
+        .filter(kocherga.cm.Order.start_ts >= datetime.combine(start_date, datetime.min.time()).timestamp()) \
+        .filter(kocherga.cm.Order.end_ts <= datetime.combine(end_date, datetime.max.time()).timestamp()) \
         .all()
+    return orders
+
+def commission_bonuses(start_date, end_date):
+    orders = period_orders(start_date, end_date)
 
     commissions = defaultdict(float)
     for order in orders:
@@ -94,10 +98,7 @@ def commission_bonuses(start_date, end_date):
 
 
 def night_bonuses(start_date, end_date):
-    orders = Session().query(kocherga.cm.Order) \
-        .filter(kocherga.cm.Order.start_ts >= start_date.timestamp()) \
-        .filter(kocherga.cm.Order.end_ts <= end_date.timestamp() + 86400) \
-        .all()
+    orders = period_orders(start_date, end_date)
 
     customers = Session().query(kocherga.cm.Customer).all()
     customers_dict = { int(c['Номер Карты']): c for c in customers }
@@ -182,7 +183,7 @@ def main(month, mode):
     year = 2018
 
     add_basic_salaries = True
-    add_bonus_salaries = False
+    add_bonus_salaries = True
 
     if mode == 5:
         end_date = date(year, month, 5)
@@ -217,7 +218,7 @@ def main(month, mode):
         member = kocherga.team.find_member_by_short_name(person)
         # slack_user = kocherga.slack.client().api_call('users.info', user=member.slack_id)
         # display_name = slack_user['user']['profile']['display_name']
-        print(f'{member.short_name}: {stat[person]}')
+        print(f'{member.short_name}: {int(stat[person])}')
 
 if __name__ == '__main__':
     fire.Fire(main)
