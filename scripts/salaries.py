@@ -2,13 +2,14 @@
 import pathlib, sys
 sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
-from collections import Counter
+from collections import defaultdict
 from datetime import datetime, timedelta, date
 import logging
 import copy
 
 import fire
 
+from kocherga.db import Session
 from kocherga.watchmen import load_schedule, Shift
 import kocherga.team
 import kocherga.slack
@@ -28,7 +29,7 @@ def rate_by_shift(shift):
     raise Exception("Unknown shift")
 
 def shift_salaries(start_date, end_date):
-    stat = Counter()
+    stat = defaultdict(int)
 
     schedule = load_schedule()
 
@@ -45,38 +46,65 @@ def shift_salaries(start_date, end_date):
     return stat
 
 def basic_salaries():
-    return Counter(**{
-        'Таня': 15000,
-    })
+    result = defaultdict(int)
+    result['Таня'] = 15000
+    return result
 
-def bonuses(start_date, end_date):
-    orders = kocherga.cm.load_orders()
-    customers = kocherga.cm.load_customers()
+def order_discount(order, customers_dict):
+    discount = 0
+
+    if order.card_id in customers_dict:
+        if customers_dict[order.card_id]['Скидка на время'] == '20%':
+            discount = 0.2
+
+    return discount
+
+def find_order_value(order, customers_dict):
+    discount = order_discount(order, customers_dict)
+    minutes = (order.end_dt - order.start_dt).seconds / 60
+
+    value = 0
+    while minutes > 0:
+        value += order.people * min(600, 2.5 * minutes * (1 - discount))
+        minutes -= min(minutes, 12 * 60)
+
+    return value
+
+def commission_bonuses(start_date, end_date):
+    orders = Session() \
+        .query(kocherga.cm.Order) \
+        .filter(kocherga.cm.Order.start_ts >= start_date.timestamp()) \
+        .filter(kocherga.cm.Order.end_ts <= end_date.timestamp() + 86400) \
+        .all()
+
+    commissions = defaultdict(float)
+    for order in orders:
+        if not order.end_dt:
+            continue # not over yet
+        if not (start_date <= order.end_dt.date() <= end_date):
+            continue
+
+        open_manager = order.log_entries[0].login
+        close_manager = order.log_entries[-1].login
+        value = order.order_value
+        commissions[open_manager] += value * 0.01
+        commissions[close_manager] += value * 0.01
+
+    return commissions
+
+
+def night_bonuses(start_date, end_date):
+    orders = Session().query(kocherga.cm.Order) \
+        .filter(kocherga.cm.Order.start_ts >= start_date.timestamp()) \
+        .filter(kocherga.cm.Order.end_ts <= end_date.timestamp() + 86400) \
+        .all()
+
+    customers = Session().query(kocherga.cm.Customer).all()
     customers_dict = { int(c['Номер Карты']): c for c in customers }
 
     schedule = load_schedule()
 
-    stat = Counter()
-
-    def order_discount(order):
-        discount = 0
-
-        if order.card_id in customers_dict:
-            if customers_dict[order.card_id]['Скидка на время'] == '20%':
-                discount = 0.2
-
-        return discount
-
-    def find_value(order):
-        discount = order_discount(order)
-        minutes = (order.end_dt - order.start_dt).seconds / 60
-
-        value = 0
-        while minutes > 0:
-            value += order.people * min(600, 2.5 * minutes * (1 - discount))
-            minutes -= min(minutes, 12 * 60)
-
-        return value
+    stat = defaultdict(int)
 
     def find_counterfactual_value(order):
         # mode = nightless; TODO - generalize to other modes, move to kocherga.cm for analytics
@@ -91,7 +119,7 @@ def bonuses(start_date, end_date):
                 # (this check for the sake of clearer calculations, not for the sake of saving money on bonuses)
                 order.end_ts = order.end_dt.replace(hour=0, minute=0).timestamp()
 
-        return find_value(order)
+        return find_order_value(order, customers_dict)
 
     def find_night_watchman(order):
         night_dt = order.end_dt.replace(hour=0, minute=10)
@@ -124,7 +152,7 @@ def bonuses(start_date, end_date):
         if order.start_dt.date() == order.end_dt.date() and order.start_dt.hour >= 9:
             continue # not relevant
 
-        value = find_value(order)
+        value = find_order_value(order, customers_dict)
         if abs(order.time_value - value) > 10 * order.people:
             logging.info(f'order {order.order_id} is not ok, got {value} instead of {order.time_value}')
             continue
@@ -141,6 +169,14 @@ def bonuses(start_date, end_date):
 
     logging.info(stat)
     return stat
+
+def add_dict(d1, d2):
+    result = defaultdict(float)
+    for (k, v) in d1.items():
+        result[k] += v
+    for (k, v) in d2.items():
+        result[k] += v
+    return result
 
 def main(month, mode):
     year = 2018
@@ -170,9 +206,12 @@ def main(month, mode):
 
     stat = shift_salaries(start_date, end_date)
     if add_basic_salaries:
-        stat += basic_salaries()
+        stat = add_dict(stat, basic_salaries())
     if add_bonus_salaries:
-        stat += bonuses(start_date, end_date)
+        # stat += add_dict(stat, night_bonuses(start_date, end_date))
+        commissions = commission_bonuses(start_date, end_date)
+        print(commissions)
+        stat += add_dict(stat, commissions)
 
     for person in sorted(stat.keys()):
         member = kocherga.team.find_member_by_short_name(person)
