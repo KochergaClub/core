@@ -23,7 +23,9 @@ from sqlalchemy import (
     Enum,
     Boolean,
     or_,
+    ForeignKey
 )
+from sqlalchemy.orm import relationship
 
 from typing import List
 
@@ -73,6 +75,18 @@ class SubscriptionOrder(kocherga.db.Base):
         return cls(**params)
 
 
+class OrderLogEntry(kocherga.db.Base):
+    __tablename__ = "cm_order_log"
+
+    order_id = Column(Integer, ForeignKey("cm_orders.order_id"), primary_key=True)
+    operation_id = Column(Integer, primary_key=True)
+    operation = Column(String(1024))
+    ts = Column(Integer)
+    login = Column(String(80))
+
+    order = relationship("Order", back_populates="log_entries")
+
+
 class Order(kocherga.db.Base):
     __tablename__ = "cm_orders"
 
@@ -100,6 +114,8 @@ class Order(kocherga.db.Base):
     tariff_plan = Column(String(40), info={"ru_title": "Тарифный план"})
     comment = Column(String(1024), info={"ru_title": "Комментарии"})
     history = Column(Text, info={"ru_title": "История"})
+
+    log_entries = relationship("OrderLogEntry", order_by=OrderLogEntry.operation_id, back_populates="order")
 
     @classmethod
     def from_csv_row(cls, csv_row):
@@ -242,15 +258,6 @@ class Customer(kocherga.db.Base):
 
         return Customer(**params)
 
-
-class OrderLogEntry(kocherga.db.Base):
-    __tablename__ = "cm_order_log"
-
-    order_id = Column(Integer, primary_key=True)
-    operation_id = Column(Integer, primary_key=True)
-    operation = Column(String(1024))
-    ts = Column(Integer)
-    login = Column(String(80))
 
 
 User = namedtuple("User", "id login name level")
