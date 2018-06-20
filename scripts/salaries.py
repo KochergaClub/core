@@ -2,7 +2,7 @@
 import pathlib, sys
 sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from datetime import datetime, timedelta, date
 import logging
 import copy
@@ -28,6 +28,24 @@ def rate_by_shift(shift):
         return 600
     raise Exception("Unknown shift")
 
+def short_name_stat_to_email_stat(stat):
+    result = defaultdict(int)
+    for k, v in stat.items():
+        member = kocherga.team.find_member_by_short_name(k)
+        if not member:
+            raise Exception(f"Member {k} not found")
+        result[member.email] = v
+    return result
+
+def cm_login_stat_to_email_stat(stat):
+    result = defaultdict(int)
+    for k, v in stat.items():
+        member = kocherga.team.find_member_by_cm_login(k)
+        if not member:
+            raise Exception(f"Member {k} not found")
+        result[member.email] = v
+    return result
+
 def shift_salaries(start_date, end_date):
     stat = defaultdict(int)
 
@@ -43,12 +61,12 @@ def shift_salaries(start_date, end_date):
             stat[watchman] += rate
         d += timedelta(days=1)
 
-    return stat
+    return short_name_stat_to_email_stat(stat)
 
 def basic_salaries():
     result = defaultdict(int)
     result['Таня'] = 15000
-    return result
+    return short_name_stat_to_email_stat(result)
 
 def order_discount(order, customers_dict):
     discount = 0
@@ -94,7 +112,7 @@ def commission_bonuses(start_date, end_date):
         commissions[open_manager] += value * 0.01
         commissions[close_manager] += value * 0.01
 
-    return commissions
+    return cm_login_stat_to_email_stat(commissions)
 
 
 def night_bonuses(start_date, end_date):
@@ -169,7 +187,7 @@ def night_bonuses(start_date, end_date):
         stat[watchman] += int(delta * 0.5)
 
     logging.info(stat)
-    return stat
+    return short_name_stat_to_email_stat(stat)
 
 def add_dict(d1, d2):
     result = defaultdict(float)
@@ -179,11 +197,55 @@ def add_dict(d1, d2):
         result[k] += v
     return result
 
+class Salary:
+    def __init__(self):
+        self.shifts = 0
+        self.commissions = 0
+        self.basic = 0
+
+    def set(self, kind, value):
+        value = int(value)
+        if kind == 'shifts':
+            self.shifts = value
+        elif kind == 'commissions':
+            self.commissions = value
+        elif kind == 'basic':
+            self.basic = value
+        else:
+            raise Exception(f"Unknown kind {kind}")
+
+    @property
+    def total(self):
+        return self.shifts + self.commissions + self.basic
+
+class SalaryContainer:
+    def __init__(self):
+        self.salaries = {}
+
+    def add_salary(self, email, kind, value):
+        if email not in self.salaries:
+            self.salaries[email] = Salary()
+
+        self.salaries[email].set(kind, value)
+
+    def print_all(self):
+        print(f'{"Имя":<14} {"База":<8}{"2%":<8}{"Смены":<12}{"Всего":<8}')
+        print('-' * 50)
+        for email in sorted(self.salaries.keys()):
+            member = kocherga.team.find_member_by_email(email)
+            if not member:
+                raise Exception(f'Person {email} not found')
+            # slack_user = kocherga.slack.client().api_call('users.info', user=member.slack_id)
+            # display_name = slack_user['user']['profile']['display_name']
+            salary = self.salaries[email]
+            print(f'{member.short_name:<14} {salary.basic:<8}{salary.commissions:<8}{salary.shifts:<12}{salary.total:<8}')
+
 def main(month, mode):
     year = 2018
 
     add_basic_salaries = True
     add_bonus_salaries = True
+    container = SalaryContainer()
 
     if mode == 5:
         end_date = date(year, month, 5)
@@ -206,19 +268,21 @@ def main(month, mode):
         raise Exception("Unknown mode, expected 5 or 20")
 
     stat = shift_salaries(start_date, end_date)
-    if add_basic_salaries:
-        stat = add_dict(stat, basic_salaries())
-    if add_bonus_salaries:
-        # stat = add_dict(stat, night_bonuses(start_date, end_date))
-        commissions = commission_bonuses(start_date, end_date)
-        print(commissions)
-        stat = add_dict(stat, commissions)
+    for k, v in stat.items():
+        container.add_salary(k, 'shifts', v)
 
-    for person in sorted(stat.keys()):
-        member = kocherga.team.find_member_by_short_name(person)
-        # slack_user = kocherga.slack.client().api_call('users.info', user=member.slack_id)
-        # display_name = slack_user['user']['profile']['display_name']
-        print(f'{member.short_name}: {int(stat[person])}')
+    if add_basic_salaries:
+        stat = basic_salaries()
+        for k, v in stat.items():
+            container.add_salary(k, 'basic', v)
+
+    if add_bonus_salaries:
+        # stat = night_bonuses(start_date, end_date)
+        stat = commission_bonuses(start_date, end_date)
+        for k, v in stat.items():
+            container.add_salary(k, 'commissions', v)
+
+    container.print_all()
 
 if __name__ == '__main__':
     fire.Fire(main)
