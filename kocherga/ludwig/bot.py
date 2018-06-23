@@ -1,7 +1,7 @@
 import slappy
 
 import pytz
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy as SA
 from raven.contrib.flask import Sentry
 
 import kocherga.slack
@@ -18,6 +18,13 @@ class Bot(slappy.Bot):
 
     def cleanup_on_exception(self):
         kocherga.db.Session.remove()
+
+
+# via https://github.com/mitsuhiko/flask-sqlalchemy/issues/589
+class SQLAlchemy(SA):
+    def apply_pool_defaults(self, app, options):
+        SA.apply_pool_defaults(self, app, options)
+        options["pool_pre_ping"] = True
 
 
 def create_bot():
