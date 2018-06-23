@@ -125,7 +125,9 @@ class Markup:
         return result
 
     def as_html(self) -> str:
-        parts = parse_to_parts(markdown.markdown(self.text))
+        parts = parse_to_parts(
+            markdown.markdown(self.text, extensions=['markdown.extensions.nl2br'])
+        )
 
         result = ""
         for part in parts:
