@@ -71,9 +71,14 @@ class EventPrototype(Base):
             end_dt=dt + timedelta(minutes=self.length),
             **{
                 prop: getattr(self, prop)
-                for prop in ('title', 'summary', 'description', 'vk_group', 'fb_group')
+                for prop in ('title', 'summary', 'description')
             }
         )
+
+        # Event constructor doesn't understand all props
+        for prop in ('vk_group', 'fb_group'):
+            setattr(tmp_event, prop, getattr(self, prop))
+
         google_event = kocherga.events.google.insert_event(
             tmp_event.to_google()
         )
