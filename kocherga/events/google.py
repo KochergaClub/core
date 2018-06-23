@@ -26,6 +26,10 @@ def delete_event(event_id):
     return api().events().delete(calendarId=CALENDAR, eventId=event_id).execute()
 
 
+def insert_event(params):
+    return api().events().insert(calendarId=CALENDAR, body=params).execute()
+
+
 def patch_event(event_id, patch):
     logger.info(f"Patching {event_id} with {str(patch)}")
     return (

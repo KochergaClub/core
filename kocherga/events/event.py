@@ -1,5 +1,4 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 from pathlib import Path
@@ -61,6 +60,7 @@ class Event(Base):
 
     is_master = Column(Boolean)
     master_id = Column(String(100))
+    prototype_id = Column(Integer)
 
     visitors = Column(
         String(100)
