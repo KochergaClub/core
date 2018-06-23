@@ -112,6 +112,7 @@ class Event(Base):
         creator=None,
         title="",
         description="",
+        summary="",
         location="",
         google_id=None,
         google_link=None,
@@ -124,6 +125,7 @@ class Event(Base):
         self.updated_dt = updated_dt or self.created_dt
         self.creator = creator
         self.title = title
+        self.summary = summary
         self.description = description
         self.start_dt = start_dt
         self.end_dt = end_dt
