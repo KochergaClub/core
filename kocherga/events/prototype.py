@@ -8,6 +8,7 @@ from .event import Event
 
 from kocherga.db import Session, Base
 from kocherga.config import TZ
+import kocherga.events.google
 
 class EventCancelled(Base):
     __tablename__ = "events_cancelled"

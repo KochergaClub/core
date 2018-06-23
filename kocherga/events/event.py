@@ -124,7 +124,7 @@ class Event(Base):
         self.created_dt = created_dt or datetime.now(TZ)
         self.updated_dt = updated_dt or self.created_dt
         self.creator = creator
-        self.title = title
+        self.title = title or ''
         self.summary = summary
         self.description = description
         self.start_dt = start_dt
