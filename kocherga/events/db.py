@@ -50,24 +50,15 @@ def insert_event(event):
     if event.google_id:
         raise Exception("Event already exists, can't insert")
 
-    result = (
-        kocherga.events.google.api()
-        .events()
-        .insert(
-            calendarId=kocherga.events.google.CALENDAR,
-            sendNotifications=True,
-            body={
-                "summary": event.title,
-                "location": event.get_room(),
-                "description": event.description,
-                "start": {"dateTime": event.start_dt.strftime(MSK_DATE_FORMAT)},
-                "end": {"dateTime": event.end_dt.strftime(MSK_DATE_FORMAT)},
-                "attendees": [{"email": email} for email in event.attendees],
-                "extendedProperties": {"private": event.props},
-            },
-        )
-        .execute()
-    )
+    result = kocherga.events.google.insert_event({
+        "summary": event.title,
+        "location": event.get_room(),
+        "description": event.description,
+        "start": {"dateTime": event.start_dt.strftime(MSK_DATE_FORMAT)},
+        "end": {"dateTime": event.end_dt.strftime(MSK_DATE_FORMAT)},
+        "attendees": [{"email": email} for email in event.attendees],
+        "extendedProperties": {"private": event.props},
+    })
 
     event = Event.from_google(result)
     event = Session().merge(event)

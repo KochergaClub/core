@@ -27,7 +27,11 @@ def delete_event(event_id):
 
 
 def insert_event(params):
-    return api().events().insert(calendarId=CALENDAR, body=params).execute()
+    return api().events().insert(
+        calendarId=CALENDAR,
+        sendNotifications=True,
+        body=params
+    ).execute()
 
 
 def patch_event(event_id, patch):
