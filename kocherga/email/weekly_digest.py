@@ -132,7 +132,7 @@ def utmify(value):
 def generate_content(image_url):
     env = jinja2.Environment()
     env.filters['utmify'] = utmify
-    template = jinja2.Template(template_str)
+    template = env.from_string(template_str)
 
     (dt, end_dt) = get_week_boundaries()
 
