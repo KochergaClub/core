@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from jinja2 import Template
+import jinja2
 
 template_str = """<mjml>
   <mj-head>
-    <mj-title>Расписание мероприятий Кочерги на {{ title_dates }}</mj-title>
+    <mj-title>Расписание мероприятий Кочерги на {{ title_dates | e }}</mj-title>
     <mj-font name="Open Sans" href="https://fonts.googleapis.com/css?family=Open+Sans"></mj-font>
     <mj-attributes>
       <mj-all font-family="Open Sans, sans-serif"></mj-all>
@@ -29,13 +29,13 @@ template_str = """<mjml>
     </mj-section>
     <mj-section>
       <mj-column width="100%">
-        <mj-image href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=image" src="{{ image_url }}"></mj-image>
+        <mj-image href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=image" src="{{ image_url | e }}"></mj-image>
       </mj-column>
     </mj-section>
     <mj-section padding-top="30px">
       <mj-column width="100%">
         <mj-text>
-          {{ text }}
+          {{ text | e }}
         </mj-text>
       </mj-column>
     </mj-section>
@@ -48,17 +48,17 @@ template_str = """<mjml>
     <mj-section>
       <mj-column width="100%">
         <mj-text>
-          <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) }}</h2>
+          <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
           {% for event in group['events'] %}
             <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0">
-                {{ event.start_dt.strftime("%H:%M") }}. {{ event.title }}
+                {{ event.start_dt.strftime("%H:%M") | e }}. {{ event.title | e }}
             </h3>
-            <p style="font-size: 14px">{{ event.summary }}
+            <p style="font-size: 14px">{{ event.summary | e }}
             </p>
             <p><i>Подробнее:
-              <a href="{{ event.posted_vk }}">вконтакте</a>,
-              <a href="{{ event.posted_fb }}">facebook</a>,
-              <a href="{{ event.posted_timepad }}">timepad</a>
+              <a href="{{ event.posted_vk | utmify | e }}">вконтакте</a>,
+              <a href="{{ event.posted_fb | utmify | e }}">facebook</a>,
+              <a href="{{ event.posted_timepad | utmify | e }}">timepad</a>
             </i></p>
           {% endfor %}
         </mj-text>
@@ -122,8 +122,17 @@ def get_week_boundaries():
 
     return (dt, end_dt)
 
+def utmify(value):
+    if 'vk.com' in value or 'facebook.com' in value:
+        return value # utmifying social links is not necessary
+
+    value += '&' if '?' in value else '?'
+    return value + 'utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter'
+
 def generate_content(image_url):
-    template = Template(template_str)
+    env = jinja2.Environment()
+    env.filters['utmify'] = utmify
+    template = jinja2.Template(template_str)
 
     (dt, end_dt) = get_week_boundaries()
 
