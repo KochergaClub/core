@@ -12,7 +12,7 @@ from kocherga.db import Session
 from kocherga.events.event import Event
 
 
-def post_schedule_message():
+def schedule_message():
     message = "#расписание_кочерги\nНа этой неделе в Кочерге:"
 
     message += "\n\n"
@@ -55,5 +55,5 @@ def post_schedule_message():
 
 
 def post_schedule():
-    message = post_schedule_message()
+    message = schedule_message()
     post_to_channel(message)
