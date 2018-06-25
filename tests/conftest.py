@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 os.environ['TIER'] = 'dev'
 
 from kocherga.events.event import Event
+from kocherga.events.prototype import EventPrototype
 import kocherga.events.db
 import kocherga.db
 import kocherga.images
@@ -138,3 +139,16 @@ def event_for_edits():
 @pytest.fixture
 def imported_events(db):
     kocherga.events.db.Importer().import_all()
+
+@pytest.fixture
+def common_prototype(db):
+    prototype = EventPrototype(
+        title='четверговое событие',
+        weekday=4,
+        hour=16,
+        minute=30,
+        length=120,
+    )
+    kocherga.db.Session().add(prototype)
+    kocherga.db.Session().commit()
+    return prototype

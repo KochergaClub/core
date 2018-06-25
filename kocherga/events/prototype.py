@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, inspect
 
 from .event import Event
 
@@ -89,3 +89,10 @@ class EventPrototype(Base):
 
     def cancel_event(self, dt):
         raise NotImplemented # mark an event as cancelled (in a separate table)
+
+    def to_dict(self):
+        columns = inspect(self).attrs.keys()
+        return {
+            column: getattr(self, column)
+            for column in columns
+        }

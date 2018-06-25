@@ -73,3 +73,44 @@ async def test_upload_image_from_url(api_client, image_storage, event):
     assert b'PNG' in open(kocherga.events.db.get_event(event.google_id).image_file('default'), 'rb').read()[:10]
 
     assert res.status_code == 200
+
+class TestPrototypes:
+    @pytest.mark.asyncio
+    async def test_list_empty(self, api_client):
+        res = await api_client.get('/event_prototypes')
+        assert res.status_code == 200
+        prototypes = await res.get_json()
+
+        assert type(prototypes) == list
+        assert len(prototypes) == 0
+
+
+    @pytest.mark.asyncio
+    async def test_create(self, api_client):
+        res = await api_client.post(
+            '/event_prototypes',
+            json={
+                'title': 'hello',
+                'weekday': 3,
+                'hour': 15,
+                'minute': 30,
+                'length': 120,
+            }
+        )
+        assert res.status_code == 200
+
+        res = await api_client.get('/event_prototypes')
+        assert res.status_code == 200
+        prototypes = await res.get_json()
+
+        assert type(prototypes) == list
+        assert len(prototypes) == 1
+
+    @pytest.mark.asyncio
+    async def test_suggested_dates(self, api_client, common_prototype):
+        res = await api_client.get(f'/event_prototypes/{common_prototype.prototype_id}/suggested_dates')
+        assert res.status_code == 200
+        dates = await res.get_json()
+
+        assert type(dates) == list
+        assert len(dates) > 5
