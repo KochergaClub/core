@@ -90,6 +90,7 @@ class EventPrototype(Base):
             setattr(tmp_event, prop, getattr(self, prop))
 
         Session().add(event) # don't forget to commit!
+        return event
 
     def cancel_event(self, dt):
         raise NotImplemented # mark an event as cancelled (in a separate table)
