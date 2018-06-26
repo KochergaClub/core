@@ -113,4 +113,4 @@ class TestPrototypes:
         dates = await res.get_json()
 
         assert type(dates) == list
-        assert len(dates) > 5
+        assert len(dates) == 5

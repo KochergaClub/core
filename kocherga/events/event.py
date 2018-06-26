@@ -399,6 +399,8 @@ class Event(Base):
             d["master_id"] = self.master_id
         if self.is_master:
             d["is_master"] = self.is_master
+        if self.prototype_id:
+            d["prototype_id"] = self.prototype_id
 
         d["images"] = self.get_images()
 

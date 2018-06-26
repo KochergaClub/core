@@ -9,6 +9,7 @@ from .event import Event
 from kocherga.db import Session, Base
 from kocherga.config import TZ
 import kocherga.events.google
+from kocherga.datetime import dts
 
 class EventCancelled(Base):
     __tablename__ = "events_cancelled"
@@ -35,11 +36,14 @@ class EventPrototype(Base):
 
     active = Column(Boolean)
 
-    def instances(self):
-        events = Session().query(Event).filter(Event.prototype_id == self.prototype_id).all()
+    def instances(self, limit=None):
+        query = Session().query(Event).filter_by(prototype_id=self.prototype_id).order_by(Event.start_ts.desc())
+        if limit:
+            query = query.limit(limit)
+        events = query.all()
         return events
 
-    def suggested_dates(self, until=None, limit=10):
+    def suggested_dates(self, until=None, limit=5):
         now = datetime.now(tz=TZ)
 
         dt = now - timedelta(days=now.weekday())
@@ -90,9 +94,15 @@ class EventPrototype(Base):
     def cancel_event(self, dt):
         raise NotImplemented # mark an event as cancelled (in a separate table)
 
-    def to_dict(self):
+    def to_dict(self, detailed=False):
         columns = inspect(self).attrs.keys()
-        return {
+        result = {
             column: getattr(self, column)
             for column in columns
         }
+
+        if detailed:
+            result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
+            result['instances'] = [e.to_dict() for e in self.instances(limit=5)]
+
+        return result

@@ -138,7 +138,7 @@ def r_schedule_weekly_image():
 def r_prototypes():
     prototypes = Session().query(EventPrototype).all()
     return jsonify([
-        p.to_dict()
+        p.to_dict(detailed=True)
         for p in prototypes
     ])
 
@@ -172,7 +172,7 @@ async def r_prototype_new():
 @auth("kocherga")
 def r_prototype(prototype_id):
     prototype = Session().query(EventPrototype).get(prototype_id)
-    return jsonify(p.to_dict())
+    return jsonify(p.to_dict(detailed=True))
 
 
 @bp.route("/event_prototypes/<prototype_id>/instances", methods=["GET"])
