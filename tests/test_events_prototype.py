@@ -13,6 +13,7 @@ def test_new_event(common_prototype):
     ep = common_prototype
     dt = ep.suggested_dates()[0]
     event = ep.new_event(dt)
+    assert event.prototype_id == ep.prototype_id
     Session().commit()
 
 def test_to_dict(common_prototype):

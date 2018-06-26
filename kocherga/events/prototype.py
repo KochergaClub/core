@@ -85,13 +85,12 @@ class EventPrototype(Base):
         )
         event = Event.from_google(google_event)
 
-
         for prop in ('summary', 'vk_group', 'fb_group'):
-            setattr(tmp_event, prop, getattr(self, prop))
-        tmp_event.prototype_id = self.prototype_id
+            setattr(event, prop, getattr(self, prop))
+        event.prototype_id = self.prototype_id
 
         Session().add(event) # don't forget to commit!
-        return tmp_event
+        return event
 
     def cancel_event(self, dt):
         raise NotImplemented # mark an event as cancelled (in a separate table)
