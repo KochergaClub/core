@@ -181,7 +181,7 @@ async def r_patch_prototype(prototype_id):
 
     prototype = Session().query(EventPrototype).get(prototype_id)
 
-    for (key, value) in patch.items():
+    for (key, value) in payload.items():
         if key in (
             "title",
             "description",
