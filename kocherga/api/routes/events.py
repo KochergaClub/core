@@ -174,6 +174,33 @@ def r_prototype(prototype_id):
     prototype = Session().query(EventPrototype).get(prototype_id)
     return jsonify(prototype.to_dict(detailed=True))
 
+@bp.route("/event_prototypes/<prototype_id>", methods=["PATCH"])
+@auth("kocherga")
+async def r_patch_prototype(prototype_id):
+    payload = await request.get_json() or await request.form
+
+    prototype = Session().query(EventPrototype).get(prototype_id)
+
+    for (key, value) in patch.items():
+        if key in (
+            "title",
+            "description",
+            "summary",
+            "location",
+            "weekday",
+            "hour",
+            "minute",
+            "length",
+            "vk_group",
+            "fb_group",
+        ):
+            setattr(prototype, key, value)
+        else:
+            raise Exception("Key {} is not allowed in patch".format(key))
+
+    Session().commit()
+    return jsonify(prototype.to_dict())
+
 
 @bp.route("/event_prototypes/<prototype_id>/instances", methods=["GET"])
 @auth("kocherga")
