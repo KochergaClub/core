@@ -23,6 +23,7 @@ class EventPrototype(Base):
     prototype_id = Column(Integer, primary_key=True)
 
     title = Column(String(255))
+    location = Column(String(255))
     summary = Column(Text)
     description = Column(Text)
 
@@ -76,7 +77,7 @@ class EventPrototype(Base):
             end_dt=dt + timedelta(minutes=self.length),
             **{
                 prop: getattr(self, prop)
-                for prop in ('title', 'description')
+                for prop in ('title', 'location', 'description')
             }
         )
 

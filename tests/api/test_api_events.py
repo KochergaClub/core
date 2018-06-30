@@ -91,6 +91,7 @@ class TestPrototypes:
             '/event_prototypes',
             json={
                 'title': 'hello',
+                'location': 'лекционная',
                 'weekday': 3,
                 'hour': 15,
                 'minute': 30,

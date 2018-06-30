@@ -148,7 +148,7 @@ def r_prototypes():
 async def r_prototype_new():
     payload = await request.get_json()
 
-    required_fields = ("title", "weekday", "hour", "minute", "length")
+    required_fields = ("title", "location", "weekday", "hour", "minute", "length")
     optional_fields = ("vk_group", "fb_group", "summary", "description")
 
     props = {}

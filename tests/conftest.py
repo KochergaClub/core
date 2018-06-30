@@ -144,6 +144,7 @@ def imported_events(db):
 def common_prototype(db):
     prototype = EventPrototype(
         title='четверговое событие',
+        location='лекционная',
         weekday=4,
         hour=16,
         minute=30,
