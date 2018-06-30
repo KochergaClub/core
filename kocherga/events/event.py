@@ -56,6 +56,8 @@ class Event(Base):
     summary = Column(Text)
     description = Column(Text)
 
+    deleted = Column(Boolean)
+
     location = Column(String(255))
 
     is_master = Column(Boolean)
@@ -229,7 +231,6 @@ class Event(Base):
             google_link=google_event["htmlLink"],
             is_master=("recurrence" in google_event),
             master_id=google_event.get("recurringEventId", None),
-            props=google_event.get("extendedProperties", {}).get("private", {}),
         )
 
         return obj
@@ -266,11 +267,10 @@ class Event(Base):
         return self.props.get(key, None)
 
     def set_prop(self, key, value):
-        # Planned future changes: save some or all properties in a local sqlite DB instead.
-        # Google sets 1k limit for property values, it won't be enough for longer descriptions (draft, minor changes for timepad, etc).
+        # We're saving all props in a local mysql DB now, so we don't need this untyped props dict.
+        # TODO - refactor.
         self.props[key] = value
         self.set_field_by_prop(key, value)
-        kocherga.events.google.set_property(self.google_id, key, value)
 
     def set_field_by_prop(self, key, value):
         if key == "visitors":
@@ -386,8 +386,6 @@ class Event(Base):
             "created": dts(self.created_dt),
             "props": dict(self.props),  # deprecated
             "google_link": self.google_link,
-            "htmlLink": self.google_link,  # deprecated
-            "extendedProperties": {"private": dict(self.props)},  # deprecated
             "type": self.event_type,
             # TODO - add field from props as top-level fields
             "timepad_category_code": self.timepad_category_code,
@@ -408,14 +406,6 @@ class Event(Base):
 
     def to_google(self):
         convert_dt = lambda dt: dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        google_props = {}
-        for k, v in self.props.items():
-            if v == False:
-                google_props[k] = "false"
-            elif v == True:
-                google_props[k] = "true"
-            elif v:
-                google_props[k] = v
 
         return {
             "created": convert_dt(self.created_dt),
@@ -425,7 +415,6 @@ class Event(Base):
             "description": self.description,
             "start": {"dateTime": convert_dt(self.start_dt)},
             "end": {"dateTime": convert_dt(self.end_dt)},
-            "extendedProperties": {"private": google_props},
         }
 
     def patch_google(self):

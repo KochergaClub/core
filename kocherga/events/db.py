@@ -1,5 +1,4 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -94,7 +93,7 @@ def delete_event(event_id):
     kocherga.events.google.delete_event(event_id)
     event = Session().query(Event).get(event_id)
     if event:
-        Session().delete(event)  # TODO - set deleted bit instead?
+        event.deleted = True
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
@@ -120,15 +119,24 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                 updated_min=from_dt,
             )
 
-        events = [Event.from_google(e) for e in google_events]
-        # Note that merge doesn't rewrite the local-db-only fields such as event.summary (I checked).
-        events = [Session().merge(event) for event in events]
+        imported_events = [Event.from_google(ge) for ge in google_events]
+
+        # We can't just Session().merge(...) a google event - it would override local db-only props
+        for imported_event in imported_events:
+            existing_event = session.query(Event).get(imported_event.google_id)
+            if existing_event:
+                logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - existing')
+                for prop in ('title', 'description', 'location', 'start_dt', 'end_dt', 'updated_dt'):
+                    setattr(existing_event, prop, getattr(imported_event, prop))
+            else:
+                logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - new')
+                session.add(imported_event)
 
         if too_old:
             return datetime.now(tz=TZ) - timedelta(days=1)
 
-        if len(events):
-            return max(e.updated_dt for e in events)
+        if len(imported_events):
+            return max(e.updated_dt for e in imported_events)
         else:
             return from_dt
 
