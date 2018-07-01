@@ -56,7 +56,7 @@ class Event(Base):
     summary = Column(Text)
     description = Column(Text)
 
-    deleted = Column(Boolean)
+    deleted = Column(Boolean, default=False)
 
     location = Column(String(255))
 
