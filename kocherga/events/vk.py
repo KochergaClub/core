@@ -177,6 +177,7 @@ def update_wiki_schedule(from_dt=None):
     query = (
         Session()
         .query(Event)
+        .filter(Event.deleted == False)
         .filter(Event.start_ts > _from_dt.timestamp())
         .filter(Event.start_ts < (datetime.now(TZ) + timedelta(weeks=4)).timestamp())
         .filter(Event.posted_vk != None)
@@ -248,8 +249,8 @@ def create_schedule_post(prefix_text):
     query = (
         Session()
         .query(Event)
-        .filter(Event.start_ts > dt.timestamp())
         .filter(Event.deleted == False)
+        .filter(Event.start_ts > dt.timestamp())
         .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
         .filter(Event.posted_vk != None)
         .filter(Event.posted_vk != "")
