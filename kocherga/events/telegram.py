@@ -28,6 +28,7 @@ def schedule_message():
     query = (
         Session()
         .query(Event)
+        .filter_by(deleted=False)
         .filter(Event.start_ts > dt.timestamp())
         .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
         .filter(Event.posted_vk != None)
