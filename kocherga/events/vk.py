@@ -75,7 +75,7 @@ def upload_wall_image(group_id, image_file):
 
 
 def vk_description(event):
-    return kocherga.events.markup.Markup(event.description).as_vk()
+    return kocherga.events.markup.Markup(event.description or '').as_vk()
 
 
 def vk_tail(event):
