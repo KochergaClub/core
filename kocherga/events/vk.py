@@ -249,6 +249,7 @@ def create_schedule_post(prefix_text):
         Session()
         .query(Event)
         .filter(Event.start_ts > dt.timestamp())
+        .filter(Event.deleted == False)
         .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
         .filter(Event.posted_vk != None)
         .filter(Event.posted_vk != "")
