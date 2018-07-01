@@ -76,6 +76,16 @@ async def r_patch_event(event_id):
     return jsonify(result)
 
 
+@bp.route("/event/<event_id>", methods=["DELETE"])
+@auth("kocherga")
+async def r_delete_event(event_id):
+    event = Event.by_id(event_id)
+    event.delete()
+    event.patch_google()
+    Session().commit()
+    return jsonify(ok)
+
+
 @bp.route("/event/<event_id>/image/<image_type>", methods=["POST"])
 @auth("kocherga")
 async def r_upload_event_image(event_id, image_type):

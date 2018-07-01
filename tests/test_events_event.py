@@ -60,3 +60,8 @@ class TestImages:
 
         event = kocherga.events.db.get_event(event.google_id) # reloading for another check
         assert event.image_file('default')
+
+def test_delete(google_object):
+    event = Event.from_google(dict(google_object, summary='лекция'))
+    event.delete()
+    assert event.to_google()['status'] == 'cancelled'

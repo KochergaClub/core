@@ -372,6 +372,9 @@ class Event(Base):
             time=self.start_dt.strftime("%H:%M"),
         )
 
+    def delete(self):
+        self.deleted = True
+
     # dict for the further serialization (e.g. for api.kocherga.club)
     def to_dict(self):
         d = {
@@ -407,7 +410,7 @@ class Event(Base):
     def to_google(self):
         convert_dt = lambda dt: dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
-        return {
+        result = {
             "created": convert_dt(self.created_dt),
             "updated": convert_dt(self.updated_dt),
             "creator": {"email": self.creator},
@@ -416,13 +419,10 @@ class Event(Base):
             "start": {"dateTime": convert_dt(self.start_dt)},
             "end": {"dateTime": convert_dt(self.end_dt)},
         }
+        if self.deleted:
+            result['status'] = 'cancelled'
+        return result
 
     def patch_google(self):
         logger.info("Saving to google")
         kocherga.events.google.patch_event(self.google_id, self.to_google())
-
-
-# def patch_google(session):
-#    target.patch_google()
-#
-# sqlalchemy.event.listen(Session.session, 'before_commit', patch_google)
