@@ -53,8 +53,8 @@ class Event(Base):
 
     title = Column(String(255))
     # Not a google_event.summary! We don't store this field on google at all for now. This is for the short schedule/timepad/email summaries.
-    summary = Column(Text)
-    description = Column(Text)
+    summary = Column(Text, nullable=False)
+    description = Column(Text, nullable=False)
 
     deleted = Column(Boolean, default=False)
 
