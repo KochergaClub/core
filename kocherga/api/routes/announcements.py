@@ -1,10 +1,14 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
-from quart import Blueprint, jsonify, request
+from datetime import datetime, timedelta
 
+from quart import Blueprint, jsonify, request, send_file
+
+from kocherga.error import PublicError
 from kocherga.db import Session
+
+from kocherga.images import image_storage
 from kocherga.events.event import Event
 import kocherga.events.timepad
 import kocherga.events.announce
@@ -74,3 +78,28 @@ async def post_fb(event_id):
     announcement = await kocherga.events.announce.post_to_fb(event, access_token)
     Session().commit()
     return jsonify({"link": announcement.link})
+
+
+# No auth - images are requested directly
+# TODO - accept a token via CGI params? hmm...
+@bp.route("/schedule/weekly-image", methods=["GET"])
+def r_schedule_weekly_image():
+    dt = datetime.today()
+    if dt.weekday() < 2:
+        dt = dt - timedelta(days=dt.weekday())
+    else:
+        dt = dt + timedelta(days=7 - dt.weekday())
+
+    try:
+        filename = image_storage.schedule_file(dt)
+    except:
+        error = str(sys.exc_info())
+        raise PublicError(error)
+
+    return send_file(filename)
+
+
+@bp.route("/screenshot/error", methods=["GET"])
+def r_last_screenshot():
+    filename = image_storage.screenshot_file("error")
+    return send_file(filename)

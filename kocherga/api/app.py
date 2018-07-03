@@ -21,6 +21,7 @@ from kocherga.error import PublicError
 
 import kocherga.api.routes.auth
 import kocherga.api.routes.events
+import kocherga.api.routes.event_prototypes
 import kocherga.api.routes.rooms
 import kocherga.api.routes.sensors
 import kocherga.api.routes.bookings
@@ -101,6 +102,7 @@ def create_app(DEV):
     for route_name in (
         "auth",
         "events",
+        "event_prototypes",
         "rooms",
         "sensors",
         "bookings",
