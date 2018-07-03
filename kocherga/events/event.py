@@ -121,7 +121,7 @@ class Event(Base):
         is_master=False,
         master_id=None,
         attendees=[],
-        props={},
+        props=None,
     ):
         self.created_dt = created_dt or datetime.now(TZ)
         self.updated_dt = updated_dt or self.created_dt
@@ -137,7 +137,7 @@ class Event(Base):
         self.is_master = is_master
         self.master_id = master_id
         self.attendees = attendees
-        self.props = props
+        self.props = props or {}
 
         for key in (
             "visitors",
