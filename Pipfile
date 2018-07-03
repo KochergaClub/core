@@ -49,7 +49,7 @@ freezegun = "*"
 aioconsole = "*"
 pytest-asyncio = "*"
 mypy = "*"
-black = "*"
+black = "==18.6b4"
 
 
 [requires]

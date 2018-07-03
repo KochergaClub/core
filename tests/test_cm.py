@@ -24,6 +24,7 @@ def test_load_customer():
     customer = kocherga.cm.load_customer_from_html(40)
     print(customer)
 
+@pytest.mark.slow
 def test_importer():
     kocherga.cm.Importer().import_new()
     assert len(Session().query(kocherga.cm.Order).all()) > 10
