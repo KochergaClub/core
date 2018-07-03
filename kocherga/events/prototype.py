@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from typing import List
+
 from datetime import datetime, timedelta
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, inspect
 
@@ -59,7 +61,7 @@ class EventPrototype(Base):
             for e in self.instances()
         )
 
-        result = []
+        result: List[datetime] = []
         while len(result) < limit:
             if until and dt > until:
                 break

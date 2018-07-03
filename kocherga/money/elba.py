@@ -39,6 +39,8 @@ def get_last_code():
         return
 
     match = re.match(r"Код: (\d+)", text)
+    if not match:
+        raise Exception("Impossible internal error")
     code = match.group(1)
 
     last_sms_guid = guid

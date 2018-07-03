@@ -76,7 +76,9 @@ def check_availability(start_dt, end_dt, room):
     date = start_dt.date()
 
     bookings = day_bookings(date)
-    logger.debug([vars(b) for b in bookings])
+    logger.debug(
+        str([vars(b) for b in bookings])
+    )
     for booking in bookings:
         if booking.room not in (room, kocherga.room.unknown):
             continue  # irrelevant

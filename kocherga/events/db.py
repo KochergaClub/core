@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from typing import Dict, Any
+
 from datetime import datetime, timedelta
 
 from kocherga.config import TZ
@@ -71,7 +73,7 @@ def patch_event(event_id, patch):
 
     event = get_event(event_id)
 
-    google_patch = {}
+    google_patch: Dict[str, Any] = {}
     for (key, value) in patch.items():
         if key in (
             "title",
