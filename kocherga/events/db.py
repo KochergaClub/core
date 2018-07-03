@@ -56,11 +56,11 @@ def insert_event(event):
         "start": {"dateTime": event.start_dt.strftime(MSK_DATE_FORMAT)},
         "end": {"dateTime": event.end_dt.strftime(MSK_DATE_FORMAT)},
         "attendees": [{"email": email} for email in event.attendees],
-        "extendedProperties": {"private": event.props},
     })
 
-    event = Event.from_google(result)
-    event = Session().merge(event)
+    event.google_id = result['id']
+    event.google_link = result['htmlLink']
+    Session().add(event)
     return event
 
 
