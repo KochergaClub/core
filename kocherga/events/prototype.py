@@ -24,8 +24,8 @@ class EventPrototype(Base):
 
     title = Column(String(255))
     location = Column(String(255))
-    summary = Column(Text)
-    description = Column(Text)
+    summary = Column(Text, nullable=False, default='')
+    description = Column(Text, nullable=False, default='')
 
     vk_group = Column(String(40))
     fb_group = Column(String(40))

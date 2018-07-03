@@ -127,8 +127,8 @@ class Event(Base):
         self.updated_dt = updated_dt or self.created_dt
         self.creator = creator
         self.title = title or ''
-        self.summary = summary
-        self.description = description
+        self.summary = summary or ''
+        self.description = description or ''
         self.start_dt = start_dt
         self.end_dt = end_dt
         self.location = location
