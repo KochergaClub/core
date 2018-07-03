@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 import requests
 import kocherga.secrets
+import kocherga.config
 
 from captcha_solver import CaptchaSolver
 
@@ -11,7 +12,7 @@ captcha_solver = CaptchaSolver(
     "rucaptcha", api_key=kocherga.secrets.plain_secret("rucaptcha_key")
 )
 
-API_VERSION = "5.69"
+API_VERSION = "5.80"
 
 
 def api_key():
@@ -33,9 +34,10 @@ def wants_captcha(r):
 
 
 def new_token_url():
-    return (
-        "https://oauth.vk.com/authorize?client_id=6274394&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=groups,wall,photos,offline&response_type=token&v=5.69"
-    )
+    redirect_uri = "https://oauth.vk.com/blank.html"
+    scope = "groups,wall,photos,offline"
+    client_id = kocherga.config.config()['vk']['client_id']
+    return f"https://oauth.vk.com/authorize?client_id={client_id}&display=page&redirect_uri={redirect_uri}&scope={scope}&response_type=token&v={API_VERSION}"
 
 
 def call(method, params):
