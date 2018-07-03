@@ -18,7 +18,6 @@ class TestGetEvent:
         assert type(e.end_dt) == datetime.datetime
         assert e.title == 'Элиезер проповедь'
         assert e.description.startswith('chicken')
-        assert '@' in e.creator
         assert e.is_master == False
         assert e.master_id is None
 

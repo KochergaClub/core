@@ -44,7 +44,6 @@ class TestCreate:
         result = kocherga.events.vk.create(event)
 
         assert isinstance(result, kocherga.events.vk.VkAnnouncement)
-        print(result.link)
 
         kocherga.vk.call('wall.delete', {
             'owner_id': -result.group_id,
@@ -52,8 +51,10 @@ class TestCreate:
         })
 
     def test_create_without_group(self, minimal_event):
+        assert minimal_event.vk_group == None
         with pytest.raises(Exception, match='vk_group is not set'):
             result = kocherga.events.vk.create(minimal_event)
+
 
 class TestGroups:
     def test_groups_none(self):
