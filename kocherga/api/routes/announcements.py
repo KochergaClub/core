@@ -14,6 +14,8 @@ import kocherga.events.timepad
 import kocherga.events.vk
 import kocherga.events.telegram
 import kocherga.events.announce
+import kocherga.email.weekly_digest
+
 from kocherga.api.auth import auth
 from kocherga.api.common import ok
 
@@ -66,6 +68,13 @@ def r_vk_create_schedule_post():
 @auth("kocherga")
 def r_telegram_post_schedule():
     kocherga.events.telegram.post_schedule()
+    return jsonify(ok)
+
+
+@bp.route("/announcements/email/post_digest", methods=["POST"])
+@auth("kocherga")
+def r_email_post_digest():
+    kocherga.email.weekly_digest.create_draft()
     return jsonify(ok)
 
 
