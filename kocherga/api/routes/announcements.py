@@ -11,6 +11,8 @@ from kocherga.db import Session
 from kocherga.images import image_storage
 from kocherga.events.event import Event
 import kocherga.events.timepad
+import kocherga.events.vk
+import kocherga.events.telegram
 import kocherga.events.announce
 from kocherga.api.auth import auth
 from kocherga.api.common import ok
@@ -50,6 +52,20 @@ def vk_groups():
 @auth("kocherga")
 def update_wiki_schedule():
     kocherga.events.vk.update_wiki_schedule()
+    return jsonify(ok)
+
+
+@bp.route("/announcements/vk/create_schedule_post", methods=["POST"])
+@auth("kocherga")
+def r_vk_create_schedule_post():
+    kocherga.events.vk.create_schedule_post('')
+    return jsonify(ok)
+
+
+@bp.route("/announcements/telegram/post_schedule", methods=["POST"])
+@auth("kocherga")
+def r_telegram_post_schedule():
+    kocherga.events.telegram.post_schedule()
     return jsonify(ok)
 
 
