@@ -56,9 +56,9 @@ template_str = """<mjml>
             <p style="font-size: 14px">{{ event.summary | e }}
             </p>
             <p><i>Подробнее:
-              {% if event.posted_vk %}<a href="{{ event.posted_vk | utmify | e }}">вконтакте</a>,{% endif %}
-              {% if event.posted_fb %}<a href="{{ event.posted_fb | utmify | e }}">facebook</a>,{% endif %}
-              {% if event.timepad %}<a href="{{ event.posted_timepad | utmify | e }}">timepad</a>{% endif %}
+              {% if event.posted_vk %}<a href="{{ event.posted_vk | utmify | e }}">вконтакте</a>,{% endif -%}
+              {% if event.posted_fb %}, <a href="{{ event.posted_fb | utmify | e }}">facebook</a>,{% endif -%}
+              {% if event.posted_timepad %}, <a href="{{ event.posted_timepad | utmify | e }}">timepad</a>{% endif -%}
             </i></p>
           {% endfor %}
         </mj-text>
