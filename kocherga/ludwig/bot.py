@@ -23,8 +23,8 @@ class Bot(slappy.Bot):
 # via https://github.com/mitsuhiko/flask-sqlalchemy/issues/589
 class SQLAlchemy(SA):
     def apply_pool_defaults(self, app, options):
-        SA.apply_pool_defaults(self, app, options)
         options["pool_pre_ping"] = True
+        SA.apply_pool_defaults(self, app, options)
 
 
 def create_bot():
