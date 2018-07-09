@@ -27,7 +27,7 @@ bp = Blueprint("announces", __name__)
 
 @bp.route("/announcements/timepad/event/<event_id>", methods=["POST"])
 @auth("kocherga")
-def post_timepad(event_id):
+def r_timepad_post(event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_timepad(event)
     Session().commit()
@@ -36,7 +36,7 @@ def post_timepad(event_id):
 
 @bp.route("/announcements/timepad/categories")
 @auth("kocherga")
-def timepad_categories():
+def r_timepad_categories():
     categories = kocherga.events.timepad.timepad_categories()
     return jsonify([{"id": c.id, "name": c.name, "code": c.code} for c in categories])
 
@@ -50,7 +50,7 @@ def vk_groups():
 
 @bp.route("/announcements/vk/update_wiki_schedule", methods=["POST"])
 @auth("kocherga")
-def update_wiki_schedule():
+def r_vk_update_wiki_schedule():
     kocherga.events.vk.update_wiki_schedule()
     return jsonify(ok)
 
@@ -71,7 +71,7 @@ def r_telegram_post_schedule():
 
 @bp.route("/announcements/vk/event/<event_id>", methods=["POST"])
 @auth("kocherga")
-def post_vk(event_id):
+def r_vk_post(event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_vk(event)
     Session().commit()
@@ -80,14 +80,14 @@ def post_vk(event_id):
 
 @bp.route("/announcements/fb/groups")
 @auth("kocherga")
-def fb_groups():
+def r_fb_groups():
     all_groups = kocherga.events.fb.all_groups()
     return jsonify(all_groups)
 
 
 @bp.route("/announcements/fb/event/<event_id>", methods=["POST"])
 @auth("kocherga")
-async def post_fb(event_id):
+async def r_fb_post(event_id):
     access_token = (await request.get_json())["fb_access_token"]
 
     event = Event.by_id(event_id)
