@@ -44,6 +44,7 @@ def patch_event(event_id, patch):
     )
 
 
+# unused - all props are moved to the local database
 def set_property(event_id, key, value):
     return patch_event(event_id, {"extendedProperties": {"private": {key: value}}})
 

@@ -97,7 +97,7 @@ def event(image_file, vk_image_file):
 
 @pytest.fixture
 def event_for_timepad(event):
-    event.set_prop('has_default_image', None) # FIXME - timepad can't fetch our local image, unfortunately
+    event.has_default_image = None # FIXME - timepad can't fetch our local image, unfortunately
     return event
 
 @pytest.fixture

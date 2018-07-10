@@ -157,7 +157,7 @@ class AnnounceSession:
             f"{self.event.timing_description} в антикафе Кочерга. Оплата участия — по тарифам антикафе: 2,5 руб./минута."
         )
 
-        timepad_link = self.event.get_prop("posted-timepad")
+        timepad_link = self.event.posted_timepad
         if timepad_link:
             tail += " Регистрация: {}".format(timepad_link)
 

@@ -56,7 +56,7 @@ def r_event(event_id):
 async def r_set_property(event_id, key):
     value = (await request.get_json())["value"]
     event = Event.by_id(event_id)
-    event.set_prop(key, value)
+    event.set_field_by_prop(key, value)
     Session().commit()
     return jsonify(ok)
 

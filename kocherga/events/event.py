@@ -42,6 +42,7 @@ def image_flag_property(image_type):
 
 class Event(Base):
     __tablename__ = "events"
+
     google_id = Column(String(100), primary_key=True)
     google_link = Column(String(1024))
 
@@ -77,6 +78,7 @@ class Event(Base):
     has_vk_image = Column(Boolean)
     ready_to_post = Column(Boolean)
 
+    # (move these to event_announcements)
     posted_fb = Column(String(1024))
     posted_timepad = Column(String(1024))
     posted_vk = Column(String(1024))
@@ -85,25 +87,6 @@ class Event(Base):
     timepad_prepaid_tickets = Column(Boolean)
 
     timing_description_override = Column(String(255))
-
-    # TODO - ready-to-post, announcements link (posted-vk, posted-fb, posted-timepad)
-    # TODO - collect all properties
-
-    ### all existing props:
-    # [x] asked_for_visitors
-    # [x] fb_group
-    # [x] has_default_image
-    # [x] has_vk_image
-    # [x] ready-to-post
-    # [x] type
-    # [x] visitors
-    # [x] vk_group
-    # (move these to event_announcements)
-    # [a] posted-fb
-    # [a] posted-timepad
-    # [a] posted-vk
-    # [a] timepad
-    # [a] vk-link
 
     def __init__(
         self,
@@ -121,7 +104,6 @@ class Event(Base):
         is_master=False,
         master_id=None,
         attendees=[],
-        props=None,
     ):
         self.created_dt = created_dt or datetime.now(TZ)
         self.updated_dt = updated_dt or self.created_dt
@@ -137,48 +119,6 @@ class Event(Base):
         self.is_master = is_master
         self.master_id = master_id
         self.attendees = attendees
-        self.props = props or {}
-
-        for key in (
-            "visitors",
-            "type",
-            "vk_group",
-            "fb_group",
-            "has_default_image",
-            "has_vk_image",
-            "ready-to-post",
-            "asked_for_visitors",
-            "posted-fb",
-            "posted-timepad",
-            "posted-vk",
-        ):
-            self.set_field_by_prop(key, self.get_prop(key))
-
-    @orm.reconstructor
-    def init_on_load(self):
-        # deprecated
-        self.props = {
-            "visitors": self.visitors,
-            "type": self.event_type,
-            "vk_group": self.vk_group,
-            "fb_group": self.fb_group,
-            "has_default_image": self.has_default_image,
-            "has_vk_image": self.has_vk_image,
-            "ready-to-post": self.ready_to_post,
-            "asked_for_visitors": datetime.fromtimestamp(
-                self.asked_for_visitors_ts, TZ
-            ).strftime("%Y-%m-%d %H:%M")
-            if self.asked_for_visitors_ts
-            else None,
-            "posted-fb": self.posted_fb,
-            "posted-timepad": self.posted_timepad,
-            "posted-vk": self.posted_vk,
-        }
-
-        self.created_dt = datetime.fromtimestamp(self.created_ts, TZ)
-        self.updated_dt = datetime.fromtimestamp(self.updated_ts, TZ)
-        self.start_dt = datetime.fromtimestamp(self.start_ts, TZ)
-        self.end_dt = datetime.fromtimestamp(self.end_ts, TZ)
 
     @property
     def created_dt(self):
@@ -211,6 +151,16 @@ class Event(Base):
     @end_dt.setter
     def end_dt(self, value):
         self.end_ts = value.timestamp()
+
+    @property
+    def asked_for_visitors_dt(self):
+        if not self.asked_for_visitors_ts:
+            return None
+        return datetime.fromtimestamp(self.asked_for_visitors_ts, TZ)
+
+    @created_dt.setter
+    def asked_for_visitors_dt(self, value):
+        self.asked_for_visitors_ts = None if value is None else value.timestamp()
 
     @classmethod
     def by_id(cls, event_id):
@@ -252,7 +202,7 @@ class Event(Base):
         return kocherga.room.unknown
 
     def is_private(self):
-        preset_type = self.props.get("type", None)
+        preset_type = self.event_type
         if preset_type == "private":
             return True
         if preset_type == "public":
@@ -262,15 +212,6 @@ class Event(Base):
             if keyword in self.title.lower():
                 return True
         return False
-
-    def get_prop(self, key):
-        return self.props.get(key, None)
-
-    def set_prop(self, key, value):
-        # We're saving all props in a local mysql DB now, so we don't need this untyped props dict.
-        # TODO - refactor.
-        self.props[key] = value
-        self.set_field_by_prop(key, value)
 
     def set_field_by_prop(self, key, value):
         if key == "visitors":
@@ -316,7 +257,12 @@ class Event(Base):
         return kocherga.events.markup.Markup(summary).as_plain()
 
     def image_file(self, image_type, check_if_exists=True):
-        if not self.get_prop(image_flag_property(image_type)):
+        if image_type not in IMAGE_TYPES:
+            raise Exception(f"Bad image type {image_type}")
+
+        if image_type == 'default' and not self.has_default_image:
+            return None
+        if image_type == 'vk' and not self.has_vk_image:
             return None
 
         filename = image_storage.event_image_file(self.google_id, image_type)
@@ -351,12 +297,11 @@ class Event(Base):
         with open(filename, "wb") as write_fh:
             shutil.copyfileobj(fh, write_fh)
 
-        self.set_prop(image_flag_property(image_type), "true")
+        self.set_field_by_prop(image_flag_property(image_type), True)
 
     def fb_announce_page(self):
-        fb_group = self.get_prop("fb_group")
-        if fb_group:
-            return f"https://www.facebook.com/groups/{fb_group}"
+        if self.fb_group:
+            return f"https://www.facebook.com/groups/{self.fb_group}"
         else:
             return kocherga.config.config()["fb"]["main_page"]["announce_page"]
 
@@ -387,10 +332,8 @@ class Event(Base):
             "start": {"dateTime": dts(self.start_dt)},
             "end": {"dateTime": dts(self.end_dt)},
             "created": dts(self.created_dt),
-            "props": dict(self.props),  # deprecated
             "google_link": self.google_link,
             "type": self.event_type,
-            # TODO - add field from props as top-level fields
             "timepad_category_code": self.timepad_category_code,
             "timepad_prepaid_tickets": self.timepad_prepaid_tickets,
             "timing_description_override": self.timing_description_override,

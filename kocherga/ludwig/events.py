@@ -46,7 +46,7 @@ def humanized_visitors(value):
 def visitors_attachment(event):
     return {
         "fallback": "",
-        "text": humanized_visitors(event.get_prop("visitors")),
+        "text": humanized_visitors(event.visitors),
         "title": event.title,
         "title_link": event.google_link,
         "color": event_color(event),
@@ -110,7 +110,7 @@ def list_event_visitors():
 
     attachments = []
     for event in events:
-        visitors = event.get_prop("visitors")
+        visitors = event.visitors
         if not visitors:
             continue
         attachments.append(visitors_attachment(event))
@@ -193,8 +193,8 @@ def ask_for_event_visitors():
         for e in events
         if not (
             # e.is_private() # private event - should we ask for those too?
-            e.get_prop("visitors")  # already entered
-            or e.get_prop("asked_for_visitors")  # already asked
+            e.visitors  # already entered
+            or e.asked_for_visitors_dt  # already asked
             or datetime.now(tz=TZ)
             < e.start_dt
             + timedelta(minutes=30)  # event haven't started yet, let's wait
@@ -207,10 +207,10 @@ def ask_for_event_visitors():
 
     for e in events:
         logger.info(
-            f"Asking for event {e.google_id} ({e.title}). Old asked_for_visitors: {e.get_prop('asked_for_visitors')}"
+            f"Asking for event {e.google_id} ({e.title}). Old asked_for_visitors: {e.asked_for_visitors_dt}"
         )
 
-        e.set_prop("asked_for_visitors", datetime.now().strftime("%Y-%m-%d %H:%M"))
+        e.asked_for_visitors_dt = datetime.now(TZ)
         bot.send_message(**event_visitors_question(e))
         Session().commit()
 
@@ -221,7 +221,7 @@ def reset_event_visitors(payload, event_id):
     if not event:
         raise Exception(f"Event {event_id} not found")
 
-    event.set_prop("visitors", None)
+    event.visitors = None
     Session().commit()
 
     return event_visitors_question(event)
@@ -234,7 +234,8 @@ def accept_event_visitors(payload, event_id):
     event = Session().query(Event).get(event_id)
     if not event:
         raise Exception(f"Event {event_id} not found")
-    event.set_prop("visitors", value)
+
+    event.visitors = value
     Session().commit()
 
     attachment = visitors_attachment(event)

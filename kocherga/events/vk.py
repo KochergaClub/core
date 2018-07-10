@@ -83,7 +83,7 @@ def vk_tail(event):
         f"{event.timing_description} в @kocherga_club (антикафе Кочерга). Оплата участия — по тарифам антикафе: 2,5 руб./минута."
     )
 
-    timepad_link = event.get_prop("posted-timepad")
+    timepad_link = event.posted_timepad
     if timepad_link:
         tail += " Регистрация: {}".format(timepad_link)
 
@@ -96,7 +96,7 @@ def vk_text(event):
 
 def create(event):
 
-    group_name = event.get_prop("vk_group")
+    group_name = event.vk_group
     if not group_name:
         raise PublicError("Can't announce - vk_group is not set")
 
