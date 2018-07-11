@@ -298,7 +298,7 @@ def now_stats():
         raise Exception("Failed to parse cafe-manager data " + r.text)
     total = int(match.group(1))
 
-    customer_ids = [int(value) for value in re.findall(r'<a\s+href="/customer/(\d+)/?"', r.text)]
+    customer_ids = [int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)]
     customers = Session().query(Customer).filter(Customer.customer_id.in_(customer_ids)).all()
 
     return {
