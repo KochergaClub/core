@@ -260,7 +260,7 @@ class Customer(kocherga.db.Base):
 
     @property
     def privacy_mode(self):
-        if 'PRIVACY:PUBLIC' in self.comment:
+        if self.comment and 'PRIVACY:PUBLIC' in self.comment:
             return 'public'
         return 'private'
 
