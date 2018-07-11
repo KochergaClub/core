@@ -76,11 +76,9 @@ def event(image_file, vk_image_file):
         title='Элиезер проповедь',
         description='chicken chicken chicken. chicken?\n\nchicken chicken chicken.',
         location='ГЭБ',
-        props={
-            'vk_group': 159971736,
-            'has_vk_image': True,
-        },
     )
+    event.vk_group = 159971736
+    event.has_vk_image = True
     event = kocherga.events.db.insert_event(event)
     with open(vk_image_file, 'rb') as fh:
         event.add_image('vk', fh)
