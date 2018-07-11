@@ -6,8 +6,9 @@ import os
 import requests
 import json
 import re
-import logging
 from collections import namedtuple
+from io import StringIO
+import csv
 
 import kocherga.secrets
 from kocherga.datetime import dts
@@ -19,6 +20,7 @@ BASE_URL = "https://api.timepad.ru/v1"
 
 TIMEPAD_CONFIG = kocherga.config.config()["timepad"]
 ORGANIZATION = TIMEPAD_CONFIG["organization"]
+SUBSCRIBERS_LIST_ID = TIMEPAD_CONFIG["subscribers_list_id"]
 ORGANIZATION_ID = TIMEPAD_CONFIG["organization_id"]
 
 
@@ -185,3 +187,29 @@ def edit(announcement, patch):
 
     r = requests.post(url, data=json.dumps(patch))
     r.raise_for_status()
+
+def get_all_subscribers():
+    URL = f'https://{ORGANIZATION}.timepad.ru/crm/list/{SUBSCRIBERS_LIST_ID}/export/'
+
+    from pycookiecheat import chrome_cookies
+    r = requests.get(URL, cookies=chrome_cookies(URL)) # hmmm
+
+    fh = StringIO(r.text)
+
+    # parse csv
+    users = []
+    reader = csv.DictReader(fh, delimiter=',')
+    for row in reader:
+        print(row)
+        if not len(row):
+            # empty row
+            continue
+
+        user = {
+            "email": row['Адрес эл. почты'],
+            "last_name": row['Фамилия'],
+            "first_name": row['Имя'],
+        }
+        users.append(user)
+
+    return users

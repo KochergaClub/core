@@ -9,10 +9,8 @@ import kocherga.google
 import kocherga.mailchimp
 
 
-LIST_ID = (
-    "8b43e3793e"
-)  # https://us11.admin.mailchimp.com/lists/settings/defaults?id=428961, "Участники Воркшопов и Курсов"
-SPREADSHEET_ID = "1mj-YsVklLtlFfy_04lZ5a0NX85iZ3O_IxsUehBeJiFg"
+LIST_ID = config()["mailchimp"]["ratio_list_id"]
+SPREADSHEET_ID = config()["ratio"]["users_spreadsheet_id"]
 
 
 def get_mailchimp_date_group_category():

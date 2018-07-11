@@ -1,3 +1,4 @@
+import time
 import json
 import requests
 
@@ -40,3 +41,23 @@ def api_call(method, url, data={}):
     r.raise_for_status()
 
     return r.json()
+
+def wait_for_batch(batch_id):
+    url = MAILCHIMP_API + '/batches/' + batch_id
+
+    while True:
+        r = requests.get(
+            url,
+            {
+                'fields': 'status,total_operations,finished_operations,errored_operations,response_body_url',
+            },
+            headers={
+                'Authorization': 'apikey ' + MAILCHIMP_API_KEY,
+            },
+        )
+
+        body = json.loads(r.text)
+        print(body)
+        if body['status'] == 'finished':
+            break
+        time.sleep(1)
