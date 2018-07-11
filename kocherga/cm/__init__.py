@@ -258,6 +258,11 @@ class Customer(kocherga.db.Base):
 
         return Customer(**params)
 
+    @property
+    def privacy_mode(self):
+        if 'PRIVACY:PUBLIC' in self.comment:
+            return 'public'
+        return 'private'
 
 
 User = namedtuple("User", "id login name level")
@@ -284,14 +289,29 @@ def get_cookies():
     return cookies
 
 
-def now_count():
+def now_stats():
     r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
     r.encoding = "utf-8"
+
     match = re.search(r"Посетителей сейчас в зале: <b>(\d+)</b>", r.text)
     if not match:
         raise Exception("Failed to parse cafe-manager data " + r.text)
-    result = int(match.group(1))
-    return result
+    total = int(match.group(1))
+
+    customer_ids = [int(value) for value in re.findall(r'<a href="/customer/(\d+)\/?', r.text)]
+    customers = Session().query(Customer).filter(Customer.customer_id.in_(customer_ids)).all()
+
+    return {
+        "total": total,
+        "customers": [
+            {
+                "first_name": customer.first_name,
+                "last_name": customer.last_name,
+                "privacy_mode": customer.privacy_mode,
+            }
+            for customer in customers
+        ]
+    }
 
 
 def load_customers():
@@ -576,7 +596,7 @@ def add_customer(card_id, first_name, last_name, email):
 
 def orders_at_dt(dt):
     orders = (
-        kocherga.db.Session()
+        Session()
         .query(Order)
         .filter(Order.start_ts <= dt.timestamp())
         .filter(or_(Order.end_ts >= dt.timestamp(), Order.end_ts is None))

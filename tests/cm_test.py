@@ -5,8 +5,8 @@ import kocherga.cm
 from kocherga.db import Session
 
 def test_now_count():
-    c = kocherga.cm.now_count()
-    assert type(c) == int
+    c = kocherga.cm.now_stats()
+    assert type(c["total"]) == int
 
 def test_load_customers():
     customers = kocherga.cm.load_customers()
