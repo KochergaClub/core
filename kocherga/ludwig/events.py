@@ -195,9 +195,7 @@ def ask_for_event_visitors():
             # e.is_private() # private event - should we ask for those too?
             e.visitors  # already entered
             or e.asked_for_visitors_dt  # already asked
-            or datetime.now(tz=TZ)
-            < e.start_dt
-            + timedelta(minutes=30)  # event haven't started yet, let's wait
+            or datetime.now(tz=TZ) < e.start_dt + timedelta(minutes=30)  # event haven't started yet, let's wait
         )
     ]
     logger.info(f"Events we should ask about: {len(events)}")
