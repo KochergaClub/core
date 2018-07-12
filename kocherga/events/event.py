@@ -352,8 +352,8 @@ class Event(Base):
             "posted_timepad",
         )
         for field in optional:
-            if self.getattr(field):
-                d[field] = self.getattr(field)
+            if getattr(self, field):
+                d[field] = getattr(self, field)
 
         d["images"] = self.get_images()
 
