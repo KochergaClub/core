@@ -227,10 +227,10 @@ class Event(Base):
         elif key == "posted_vk":
             self.posted_vk = value
 
-        # huh?
-        # should refactor this quick - is_private() can change and this is extremely fragile
         elif key == "type":
-            self.event_type = "private" if self.is_private() else "public"
+            if value not in ("private", "public"):
+                raise Exception("type can only be set to public or private")
+            self.event_type = value
 
         elif key == "has_default_image":
             self.has_default_image = value in ("true", True)
