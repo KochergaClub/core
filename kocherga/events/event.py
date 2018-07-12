@@ -220,11 +220,11 @@ class Event(Base):
             self.vk_group = value
         elif key == "fb_group":
             self.fb_group = value
-        elif key == "posted-fb":
+        elif key == "posted_fb":
             self.posted_fb = value
-        elif key == "posted-timepad":
+        elif key == "posted_timepad":
             self.posted_timepad = value
-        elif key == "posted-vk":
+        elif key == "posted_vk":
             self.posted_vk = value
 
         # huh?
@@ -236,7 +236,7 @@ class Event(Base):
             self.has_default_image = value in ("true", True)
         elif key == "has_vk_image":
             self.has_vk_image = value in ("true", True)
-        elif key == "ready-to-post":
+        elif key == "ready_to_post":
             self.ready_to_post = value in ("true", True)
         elif key == "asked_for_visitors":
             if value:
@@ -339,12 +339,21 @@ class Event(Base):
             "timing_description_override": self.timing_description_override,
         }
 
-        if self.master_id:
-            d["master_id"] = self.master_id
-        if self.is_master:
-            d["is_master"] = self.is_master
-        if self.prototype_id:
-            d["prototype_id"] = self.prototype_id
+        optional = (
+            "master_id",
+            "is_master",
+            "prototype_id",
+            "vk_group",
+            "fb_group",
+            "ready_to_post",
+            "visitors",
+            "posted_vk",
+            "posted_fb",
+            "posted_timepad",
+        )
+        for field in optional:
+            if self.getattr(field):
+                d[field] = self.getattr(field)
 
         d["images"] = self.get_images()
 
