@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0e6c9ceccd58c32c6b06b202e9ca608e2da0bd691af46f9f212240a43a3ee365"
+            "sha256": "ae9cdf7ff5c6415600238999576db846ab83a8df11e88f6c5d73f40faa1c68cc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -61,17 +61,17 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:30fb8f9732580af40c8fc6b7e80cb63e0407888b764aa9b0289881ff5164b7c6",
-                "sha256:720d7b79951e63105bae06e6f90311427d565b3c50249c093a3b1d5b52191839"
+                "sha256:9a4c8522c578c36758d715005d41fc8f3b55e820c6a795f6fcfcaf45832e5530",
+                "sha256:acb7e467a13b4537a43d3a56896e48d524f37c98273e2a6bc9d185f9674288c3"
             ],
-            "version": "==1.7.55"
+            "version": "==1.7.56"
         },
         "botocore": {
             "hashes": [
-                "sha256:1b763c6d0001d90230488559af2c4cb76a2ef09d72b86eaa774bb920b979bb04",
-                "sha256:52407f23fd9544775d7aa14fcd13223bd3c441c5973d71b98b0fd123bebbf044"
+                "sha256:106805ae53236748168289023499f9e48a9d5f1476a3d6891621300f95d3e200",
+                "sha256:9bdce4d151da8925f6ced292f37d2db946a579449871e7cfbebde443536564e9"
             ],
-            "version": "==1.10.55"
+            "version": "==1.10.56"
         },
         "cachetools": {
             "hashes": [
@@ -171,10 +171,10 @@
         },
         "google-api-python-client": {
             "hashes": [
-                "sha256:876b974612c6d9b5de348079b706500bd170e7fdab30b9a4b72758d129cd64dc",
-                "sha256:e32d30563b90c4f88ff042d4d891b5e8ed1f6cdca0adab95e9c2ce2603087436"
+                "sha256:5d5cb02c6f3112c68eed51b74891a49c0e35263380672d662f8bfe85b8114d7c",
+                "sha256:7cc47cf80b25ecd7f3d917ea247bb6c62587514e40604ae29c47c0e4ebd1174b"
             ],
-            "version": "==1.7.3"
+            "version": "==1.7.4"
         },
         "google-auth": {
             "hashes": [
@@ -608,10 +608,10 @@
         },
         "slappy": {
             "hashes": [
-                "sha256:775e641407abd4521acaa17528414e21ff6c98eeabf7f251001ed801dda45872",
-                "sha256:986c03ba42f330a1582e9ecd42940bac2345976dcf46881d7e2f6de868c595fa"
+                "sha256:cbea79df1fcb74e1d19990b3929821c24e026003e1c904ec7c26e66c0fddeda3",
+                "sha256:e6c785205b80a090195fe0bc8ce4bbe6099c977129623e04b1b0046042986d91"
             ],
-            "version": "==0.2.1"
+            "version": "==0.2.2"
         },
         "sortedcontainers": {
             "hashes": [
