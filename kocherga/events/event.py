@@ -158,7 +158,7 @@ class Event(Base):
             return None
         return datetime.fromtimestamp(self.asked_for_visitors_ts, TZ)
 
-    @asked_for_visitors.setter
+    @asked_for_visitors_dt.setter
     def asked_for_visitors_dt(self, value):
         self.asked_for_visitors_ts = None if value is None else value.timestamp()
 
