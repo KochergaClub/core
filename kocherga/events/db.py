@@ -77,6 +77,7 @@ def patch_event(event_id, patch):
     for (key, value) in patch.items():
         if key in (
             "title",
+            "location",
             "description",
             "summary",
             "timepad_category_code",
