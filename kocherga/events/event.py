@@ -368,6 +368,7 @@ class Event(Base):
             "creator": {"email": self.creator},
             "summary": self.title,
             "description": self.description,
+            "location": self.location,
             "start": {"dateTime": convert_dt(self.start_dt)},
             "end": {"dateTime": convert_dt(self.end_dt)},
         }
