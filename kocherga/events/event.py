@@ -69,7 +69,7 @@ class Event(Base):
         String(100)
     )  # not Integer, because it can take values such as 'no_record' or 'cancelled'
     asked_for_visitors_ts = Column(Integer)
-    event_type = Column(String(40))
+    event_type = Column(String(40), default="unknown")
 
     vk_group = Column(String(40))
     fb_group = Column(String(40))
@@ -119,6 +119,7 @@ class Event(Base):
         self.is_master = is_master
         self.master_id = master_id
         self.attendees = attendees
+        self.event_type = "unknown"
 
     @property
     def created_dt(self):
@@ -200,18 +201,6 @@ class Event(Base):
                 )  # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
 
         return kocherga.room.unknown
-
-    def is_private(self):
-        preset_type = self.event_type
-        if preset_type == "private":
-            return True
-        if preset_type == "public":
-            return False
-
-        for keyword in ("бронь", "аренда", "инвентаризация"):
-            if keyword in self.title.lower():
-                return True
-        return False
 
     def set_field_by_prop(self, key, value):
         if key == "visitors":

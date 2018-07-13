@@ -29,13 +29,9 @@ def test_get_room(google_object):
     event = Event.from_google(google_object)
     assert event.get_room() == 'летняя'
 
-def test_is_private(google_object):
+def test_default_event_type(google_object):
     event = Event.from_google(google_object)
-    assert event.is_private() == True
-
-def test_is_private_not_booking(google_object):
-    event = Event.from_google(dict(google_object, summary='лекция'))
-    assert event.is_private() == False
+    assert event.event_type == "unknown"
 
 def test_to_dict(google_object):
     event = Event.from_google(google_object)

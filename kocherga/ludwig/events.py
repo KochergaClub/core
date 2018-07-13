@@ -12,7 +12,7 @@ from kocherga.ludwig.bot import bot
 
 
 def event_color(event):
-    return "#999" if event.is_private() else "good"
+    return "#999" if event.event_type == "private" else "good"
 
 
 # TODO - move this function to some common module
@@ -192,7 +192,6 @@ def ask_for_event_visitors():
         e
         for e in events
         if not (
-            # e.is_private() # private event - should we ask for those too?
             e.visitors  # already entered
             or e.asked_for_visitors_dt  # already asked
             or datetime.now(tz=TZ) < e.start_dt + timedelta(minutes=30)  # event haven't started yet, let's wait

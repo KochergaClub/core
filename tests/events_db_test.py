@@ -22,7 +22,7 @@ class TestGetEvent:
         assert e.master_id is None
 
         assert e.get_room() == 'гэб'
-        assert e.is_private() == False
+        assert e.event_type == "unknown"
 
         print(e.to_dict())
 
