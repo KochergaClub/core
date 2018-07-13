@@ -339,6 +339,7 @@ class Event(Base):
             "posted_vk",
             "posted_fb",
             "posted_timepad",
+            "deleted"
         )
         for field in optional:
             if getattr(self, field):
