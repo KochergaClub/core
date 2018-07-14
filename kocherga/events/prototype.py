@@ -5,6 +5,7 @@ from typing import List
 
 from datetime import datetime, timedelta
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, inspect
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from .event import Event
 
@@ -12,12 +13,6 @@ from kocherga.db import Session, Base
 from kocherga.config import TZ
 import kocherga.events.google
 from kocherga.datetime import dts
-
-class EventCancelled(Base):
-    __tablename__ = "events_cancelled"
-
-    prototype_id = Column(Integer, primary_key=True, autoincrement=False)
-    start = Column(DateTime)
 
 class EventPrototype(Base):
     __tablename__ = "event_prototypes"
@@ -38,6 +33,8 @@ class EventPrototype(Base):
     length = Column(Integer) # in minutes
 
     active = Column(Boolean)
+
+    _canceled_dates = Column('canceled_dates', Text)
 
     def instances(self, limit=None):
         query = Session().query(Event).filter_by(prototype_id=self.prototype_id).order_by(Event.start_ts.desc())
@@ -66,7 +63,7 @@ class EventPrototype(Base):
             if until and dt > until:
                 break
 
-            if dt not in existing_dts:
+            if dt not in existing_dts and dt.date() not in self.canceled_dates:
                 result.append(dt)
 
             dt += timedelta(weeks=1)
@@ -95,8 +92,21 @@ class EventPrototype(Base):
         Session().add(event) # don't forget to commit!
         return event
 
-    def cancel_event(self, dt):
-        raise NotImplemented # mark an event as cancelled (in a separate table)
+    @hybrid_property
+    def canceled_dates(self):
+        if not self._canceled_dates:
+            return []
+        return [datetime.strptime(d, '%Y-%m-%d').date() for d in self._canceled_dates.split(',')]
+
+    @canceled_dates.setter
+    def canceled_dates(self, value):
+        self._canceled_dates = ','.join([
+            d.strftime('%Y-%m-%d')
+            for d in value # TODO - filter out past dates which we don't care about anymore?
+        ])
+
+    def cancel_date(self, d):
+        self.canceled_dates = self.canceled_dates + [d]
 
     def to_dict(self, detailed=False):
         columns = inspect(self).attrs.keys()

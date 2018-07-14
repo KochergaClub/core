@@ -6,7 +6,6 @@ from kocherga.db import Session
 
 def test_suggestions(common_prototype):
     ep = common_prototype
-    print(ep.suggested_dates())
     assert type(ep.suggested_dates()) == list
 
 def test_new_event(common_prototype):
@@ -20,3 +19,15 @@ def test_to_dict(common_prototype):
     ep = common_prototype
     assert type(ep.to_dict()) == dict
     assert type(ep.to_dict(detailed=True)) == dict
+
+def test_cancel(common_prototype):
+    ep = common_prototype
+
+    suggested = ep.suggested_dates()
+    ep.cancel_date(suggested[2].date())
+
+    suggested2 = ep.suggested_dates()
+    assert suggested[0] == suggested2[0]
+    assert suggested[1] == suggested2[1]
+    assert suggested[2] != suggested2[2]
+    assert suggested[3] == suggested2[2]
