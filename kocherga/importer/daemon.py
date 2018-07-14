@@ -19,13 +19,22 @@ IMPORTER_MODULES = [
 ]
 
 
+def get_importer(module_name):
+    module = importlib.import_module(f"kocherga.{module_name}")
+    return module.Importer()
+
+
 def all_importers():
     importers = []
     for module_name in IMPORTER_MODULES:
-        module = importlib.import_module(f"kocherga.{module_name}")
-        importers.append(module.Importer())  # type: ignore
+        importers.append(get_importer(module_name))
 
     return importers
+
+
+def run_one(name):
+    importer = get_importer(name)
+    importer.import_new()
 
 
 def run():

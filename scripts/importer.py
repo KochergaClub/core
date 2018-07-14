@@ -4,8 +4,13 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
 import kocherga.importer.daemon
 
-def main():
-    kocherga.importer.daemon.run()
+import fire
+
+def main(name=None):
+    if name:
+        kocherga.importer.daemon.run_one(name)
+    else:
+        kocherga.importer.daemon.run()
 
 if __name__ == '__main__':
-    main()
+    fire.Fire(main)
