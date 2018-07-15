@@ -117,6 +117,6 @@ class EventPrototype(Base):
 
         if detailed:
             result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
-            result['instances'] = [e.to_dict() for e in self.instances(limit=5)]
+            result['instances'] = [e.to_dict() for e in self.instances(limit=20)]
 
         return result
