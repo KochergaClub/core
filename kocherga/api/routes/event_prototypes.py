@@ -99,6 +99,7 @@ def r_prototype_instances(prototype_id):
 def r_prototype_cancel_date(prototype_id, date_str):
     prototype = Session().query(EventPrototype).get(prototype_id)
     prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
+    Session().commit()
     return jsonify(ok)
 
 
