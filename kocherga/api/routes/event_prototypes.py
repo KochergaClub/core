@@ -94,6 +94,14 @@ def r_prototype_instances(prototype_id):
     return jsonify([e.to_dict() for e in events])
 
 
+@bp.route("/event_prototypes/<prototype_id>/cancel_date/<date>", methods=["POST"])
+@auth("kocherga")
+def r_prototype_cancel_date(prototype_id, date_str):
+    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
+    return jsonify(ok)
+
+
 @bp.route("/event_prototypes/<prototype_id>/suggested_dates")
 @auth("kocherga")
 def r_prototype_suggested_dates(prototype_id):
