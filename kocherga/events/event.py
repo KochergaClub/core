@@ -76,6 +76,10 @@ class Event(Base):
 
     has_default_image = Column(Boolean)
     has_vk_image = Column(Boolean)
+
+    image = Column(String(32))
+    vk_image = Column(String(32))
+
     ready_to_post = Column(Boolean)
 
     # (move these to event_announcements)
@@ -245,7 +249,26 @@ class Event(Base):
         summary = self.description.split("\n\n")[0]
         return kocherga.events.markup.Markup(summary).as_plain()
 
-    def image_file(self, image_type, check_if_exists=True):
+
+    # transitional method, to be removed soon
+    def migrate_images(self):
+        for image_type in ('default', 'vk'):
+            filename = self.old_image_file(image_type)
+            if not filename:
+                continue
+
+            md5 = hashlib.md5(open(filename, "rb").read()).hexdigest()
+
+            if image_type == 'default':
+                self.image = md5
+            else:
+                self.vk_image = md5
+
+            image_storage.add_file(md5, open(filename, 'rb'))
+
+
+    # transitional method, to be removed soon
+    def old_image_file(self, image_type, check_if_exists=True):
         if image_type not in IMAGE_TYPES:
             raise Exception(f"Bad image type {image_type}")
 
@@ -260,6 +283,25 @@ class Event(Base):
             return None
 
         return filename
+
+
+    def new_image_file(self, image_type):
+        image_id = None
+        if image_type == 'vk':
+            image_id = self.vk_image
+        elif image_type == 'default':
+            image_id = self.image
+        else:
+            raise Exception(f"Bad image type {image_type}")
+        if not hash:
+            return None
+
+        return image_storage.get_filename(image_id)
+
+
+    def image_file(self, image_type, check_if_exists=True):
+        return self.old_image_file(image_type, check_if_exists)
+
 
     def get_images(self):
         images = {}

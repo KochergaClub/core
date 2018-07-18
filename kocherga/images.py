@@ -23,6 +23,7 @@ class ImageStorage:
         self.event_dir = str(Path(self.directory) / "event_image")
         self.mailchimp_dir = str(Path(self.directory) / "mailchimp")
         self.screenshot_dir = str(Path(self.directory) / "screenshot")
+        self.main_dir = str(Path(self.directory) / "images")
 
         for d in (
             self.assets_dir,
@@ -68,6 +69,17 @@ class ImageStorage:
         )
         r.raise_for_status()
         return r.content
+
+    def get_filename(self, key):
+        re.match(r"^\w+$", key)
+        return str(Path(self.main_dir) / f"{key}.jpg")
+
+    def add_file(self, key, fh_in):
+        re.match(r"^\w+$", key)
+        bytes = fh_in.read()
+
+        with open(self.get_filename(key), "wb") as fh_out:
+            fh_out.write(bytes)
 
 
 def init_global_image_storage():
