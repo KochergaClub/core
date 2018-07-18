@@ -122,3 +122,21 @@ async def r_prototype_new_event(prototype_id):
     event = prototype.new_event(dt)
     Session().commit()
     return jsonify(event.to_dict())
+
+
+@bp.route("/event_prototypes/<prototype_id>/image", methods=["POST"])
+@auth("kocherga")
+async def r_upload_image(prototype_id):
+    files = await request.files
+    if "file" not in files:
+        raise PublicError("Expected a file")
+    file = files["file"]
+
+    if file.filename == "":
+        raise PublicError("No filename")
+
+    prototype = EventPrototype.by_id(prototype_id)
+    prototype.add_image(file.stream)
+    Session().commit()
+
+    return jsonify(ok)

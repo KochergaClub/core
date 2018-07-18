@@ -11,8 +11,10 @@ from .event import Event
 
 from kocherga.db import Session, Base
 from kocherga.config import TZ
+import kocherga.config
 import kocherga.events.google
 from kocherga.datetime import dts
+from kocherga.images import image_storage
 
 class EventPrototype(Base):
     __tablename__ = "event_prototypes"
@@ -32,9 +34,15 @@ class EventPrototype(Base):
     minute = Column(Integer)
     length = Column(Integer) # in minutes
 
+    image = Column(String(32))
+
     active = Column(Boolean)
 
     _canceled_dates = Column('canceled_dates', Text)
+
+    @classmethod
+    def by_id(cls, prototype_id):
+        return Session().query(EventPrototype).get(prototype_id)
 
     def instances(self, limit=None):
         query = Session().query(Event).filter_by(prototype_id=self.prototype_id).order_by(Event.start_ts.desc())
@@ -89,6 +97,9 @@ class EventPrototype(Base):
             setattr(event, prop, getattr(self, prop))
         event.prototype_id = self.prototype_id
 
+        if self.image:
+            event.image = self.image
+
         Session().add(event) # don't forget to commit!
         return event
 
@@ -108,15 +119,24 @@ class EventPrototype(Base):
     def cancel_date(self, d):
         self.canceled_dates = self.canceled_dates + [d]
 
+    def image_file(self):
+        return image_storage.get_filename(self.image)
+
     def to_dict(self, detailed=False):
         columns = inspect(self).attrs.keys()
-        result = {
-            column: getattr(self, column)
-            for column in columns
-        }
+        result = {}
+        for column in columns:
+            if column == 'image':
+                if self.image:
+                    result[column] = kocherga.config.web_root() + f"/images/{self.image}"
+            else:
+                result[column] = getattr(self, column)
 
         if detailed:
             result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
             result['instances'] = [e.to_dict() for e in self.instances(limit=20)]
 
         return result
+
+    def add_image(self, fh):
+        self.image = image_storage.add_file(fh)
