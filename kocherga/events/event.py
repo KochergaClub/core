@@ -63,7 +63,7 @@ class Event(Base):
 
     is_master = Column(Boolean)
     master_id = Column(String(100))
-    prototype_id = Column(Integer)
+    prototype_id = Column(Integer, index=True)
 
     visitors = Column(
         String(100)
