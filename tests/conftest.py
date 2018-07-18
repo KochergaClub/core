@@ -78,7 +78,7 @@ def event(image_file, vk_image_file):
         location='ГЭБ',
     )
     event.vk_group = 159971736
-    event.has_vk_image = True
+
     event = kocherga.events.db.insert_event(event)
     with open(vk_image_file, 'rb') as fh:
         event.add_image('vk', fh)
@@ -95,7 +95,7 @@ def event(image_file, vk_image_file):
 
 @pytest.fixture
 def event_for_timepad(event):
-    event.has_default_image = None # FIXME - timepad can't fetch our local image, unfortunately
+    event.image = None # FIXME - timepad can't fetch our local image, unfortunately
     return event
 
 @pytest.fixture

@@ -33,13 +33,6 @@ def parse_iso8601(s):
 IMAGE_TYPES = ["default", "vk"]
 
 
-def image_flag_property(image_type):
-    if image_type not in IMAGE_TYPES:
-        raise PublicError("unknown image type {}".format(image_type))
-
-    return "has_{}_image".format(image_type)
-
-
 class Event(Base):
     __tablename__ = "events"
 
@@ -73,9 +66,6 @@ class Event(Base):
 
     vk_group = Column(String(40))
     fb_group = Column(String(40))
-
-    has_default_image = Column(Boolean)
-    has_vk_image = Column(Boolean)
 
     image = Column(String(32))
     vk_image = Column(String(32))
@@ -225,10 +215,6 @@ class Event(Base):
                 raise Exception("type can only be set to public or private")
             self.event_type = value
 
-        elif key == "has_default_image":
-            self.has_default_image = value in ("true", True)
-        elif key == "has_vk_image":
-            self.has_vk_image = value in ("true", True)
         elif key == "ready_to_post":
             self.ready_to_post = value in ("true", True)
         elif key == "asked_for_visitors":
@@ -250,42 +236,7 @@ class Event(Base):
         return kocherga.events.markup.Markup(summary).as_plain()
 
 
-    # transitional method, to be removed soon
-    def migrate_images(self):
-        for image_type in ('default', 'vk'):
-            filename = self.old_image_file(image_type)
-            if not filename:
-                continue
-
-            md5 = hashlib.md5(open(filename, "rb").read()).hexdigest()
-
-            if image_type == 'default':
-                self.image = md5
-            else:
-                self.vk_image = md5
-
-            image_storage.add_file(md5, open(filename, 'rb'))
-
-
-    # transitional method, to be removed soon
-    def old_image_file(self, image_type, check_if_exists=True):
-        if image_type not in IMAGE_TYPES:
-            raise Exception(f"Bad image type {image_type}")
-
-        if image_type == 'default' and not self.has_default_image:
-            return None
-        if image_type == 'vk' and not self.has_vk_image:
-            return None
-
-        filename = image_storage.event_image_file(self.google_id, image_type)
-        if check_if_exists and not Path(filename).is_file():
-            logger.info(f"{self.google_id} has image prop, but file not found")
-            return None
-
-        return filename
-
-
-    def new_image_file(self, image_type):
+    def image_file(self, image_type):
         image_id = None
         if image_type == 'vk':
             image_id = self.vk_image
@@ -293,42 +244,44 @@ class Event(Base):
             image_id = self.image
         else:
             raise Exception(f"Bad image type {image_type}")
-        if not hash:
+        if not image_id:
             return None
 
         return image_storage.get_filename(image_id)
-
-
-    def image_file(self, image_type, check_if_exists=True):
-        return self.old_image_file(image_type, check_if_exists)
 
 
     def get_images(self):
         images = {}
 
         for image_type in IMAGE_TYPES:
-            url = kocherga.config.web_root() + "/event/{}/image/{}".format(
-                self.google_id, image_type
-            )
-            filename = self.image_file(image_type)
-            if not filename:
+            if image_type == 'default':
+                image_id = self.image
+            elif image_type == 'vk':
+                image_id = self.vk_image
+            else:
+                raise NotImplemented
+
+            if not image_id:
                 continue
 
-            md5 = hashlib.md5(open(filename, "rb").read()).hexdigest()
-
-            images[image_type] = url + "?hash=" + md5
+            url = kocherga.config.web_root() + f"/images/{image_id}"
+            images[image_type] = url
 
         return images
+
 
     def add_image(self, image_type, fh):
         if image_type not in IMAGE_TYPES:
             raise PublicError("unknown image type {}".format(image_type))
 
-        filename = image_storage.event_image_file(self.google_id, image_type)
-        with open(filename, "wb") as write_fh:
-            shutil.copyfileobj(fh, write_fh)
+        key = image_storage.add_file(fh)
+        if image_type == 'default':
+            self.image = key
+        elif image_type == 'vk':
+            self.vk_image = key
+        else:
+            raise NotImplemented
 
-        self.set_field_by_prop(image_flag_property(image_type), True)
 
     def fb_announce_page(self):
         if self.fb_group:

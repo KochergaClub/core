@@ -1,9 +1,9 @@
 import quart.flask_patch
 
 import logging
-
 logger = logging.getLogger(__name__)
 
+import importlib
 import os
 from pathlib import Path
 
@@ -19,15 +19,6 @@ import raven
 
 from kocherga.error import PublicError
 
-import kocherga.api.routes.auth
-import kocherga.api.routes.events
-import kocherga.api.routes.event_prototypes
-import kocherga.api.routes.rooms
-import kocherga.api.routes.sensors
-import kocherga.api.routes.bookings
-import kocherga.api.routes.people
-import kocherga.api.routes.templater
-import kocherga.api.routes.announcements
 import kocherga.api.common
 
 # Necessary until https://github.com/mitsuhiko/flask-sqlalchemy/pull/577 will be merged and released.
@@ -99,7 +90,7 @@ def create_app(DEV):
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
 
-    for route_name in (
+    for module_name in (
         "auth",
         "events",
         "event_prototypes",
@@ -109,9 +100,10 @@ def create_app(DEV):
         "people",
         "templater",
         "announcements",
+        "images",
     ):
-        route = getattr(kocherga.api.routes, route_name)
-        app.register_blueprint(route.bp)
+        module = importlib.import_module(f"kocherga.api.routes.{module_name}")
+        app.register_blueprint(module.bp)
 
     @app.after_request
     async def after_request(response):

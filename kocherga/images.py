@@ -1,7 +1,11 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import timedelta
 from pathlib import Path
 import re
 import requests
+import hashlib
 
 import kocherga.config
 
@@ -72,14 +76,18 @@ class ImageStorage:
 
     def get_filename(self, key):
         re.match(r"^\w+$", key)
-        return str(Path(self.main_dir) / f"{key}.jpg")
+        return str(Path(self.main_dir) / f"{key}.jpg") # TODO - check for existence?
 
-    def add_file(self, key, fh_in):
-        re.match(r"^\w+$", key)
+    def add_file(self, fh_in):
         bytes = fh_in.read()
+
+        key = hashlib.md5(bytes).hexdigest()
+        logger.info(f'Saving image with key {key}')
 
         with open(self.get_filename(key), "wb") as fh_out:
             fh_out.write(bytes)
+
+        return key
 
 
 def init_global_image_storage():
