@@ -51,7 +51,7 @@ def salaries_message():
                     "short": True,
                 },
                 {
-                    "title": "2%",
+                    "title": "2% бонус",
                     "value": f"{salary.commissions} руб.",
                     "short": True,
                 },
