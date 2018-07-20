@@ -209,6 +209,7 @@ def ask_for_event_visitors():
 
         e.asked_for_visitors_dt = datetime.now(TZ)
         bot.send_message(**event_visitors_question(e))
+
         Session().commit()
 
 
@@ -234,6 +235,12 @@ def accept_event_visitors(payload, event_id):
 
     event.visitors = value
     Session().commit()
+
+    if event.event_type == 'private' and value.isdigit() and int(value) >= 4:
+        bot.send_message(
+            text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\nНайдите человека, на которого оформлена эта бронь (аренда), и спросите у него, как они нашли Кочергу; ответ напишите в треде.",
+            channel="#watchmen",
+        )
 
     attachment = visitors_attachment(event)
     attachment["text"] = f"<@{payload['user']['id']}>: {attachment['text']}"
