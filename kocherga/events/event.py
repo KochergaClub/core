@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 from pathlib import Path
 from dateutil.tz import tzutc
 import dateutil.parser
-import hashlib
 import shutil
 from datetime import datetime
 
