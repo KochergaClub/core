@@ -55,10 +55,10 @@ def react_show_salaries(message):
             ],
         })
 
-    message.reply(**{
-        text: "Зарплаты",
-        attachments: attachments,
-    })
+    message.reply(
+        text="Зарплаты",
+        attachments=attachments,
+    )
 
 @bot.listen_to(r"отправь зарплаты")
 def react_send_salaries(message):
