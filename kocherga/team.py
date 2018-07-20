@@ -103,4 +103,4 @@ def add_member(email, role):
     # add to CM
     # add to Google Drive
     # add to calendar
-    raise Exception("Not implemented yet")
+    raise NotImplemented
