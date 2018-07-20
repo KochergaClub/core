@@ -28,7 +28,7 @@ def react_show_salaries(message):
         raise Exception("Couldn't load user info")
 
     email = response["user"]["profile"]["email"]
-    if email != "slava@kocherga-club":
+    if email != "slava@kocherga-club.ru":
         message.reply("Только Слава может управлять зарплатами.")
         return
 
