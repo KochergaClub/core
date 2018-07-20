@@ -208,7 +208,7 @@ class Importer(kocherga.importer.base.FullImporter):
             session.merge(customer)
 
         kocherga.email.lists.populate_main_list([
-            kocherga.email.lists.MailUser(
+            kocherga.email.lists.User(
                 email=c.email,
                 first_name=c.first_name,
                 last_name=c.last_name,
