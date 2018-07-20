@@ -20,18 +20,17 @@ def command_current_cash(payload):
     return cash_response()
 
 
-@bot.listen_to(r"покажи зарплаты")
-def react_show_salaries(message):
+def is_slava(message):
     user_id = message.body["user"]
     response = message.sc.api_call("users.info", user=user_id)
     if not response["ok"]:
         raise Exception("Couldn't load user info")
 
     email = response["user"]["profile"]["email"]
-    if email != "slava@kocherga-club.ru":
-        message.reply("Только Слава может управлять зарплатами.")
-        return
+    return email == "slava@kocherga-club.ru"
 
+
+def salaries_message():
     salaries = kocherga.money.salaries.calculate_new_salaries()
 
     attachments = []
@@ -57,11 +56,28 @@ def react_show_salaries(message):
             ],
         })
 
-    message.reply(
-        text="Зарплаты",
-        attachments=attachments,
-    )
+    return {
+        "text": "Зарплаты",
+        "attachments": "attachments",
+    }
+
+
+@bot.listen_to(r"покажи зарплаты")
+def react_show_salaries(message):
+    if not is_slava(message):
+        message.reply("Только Слава может управлять зарплатами.")
+        return
+
+    message.reply(**salaries_message())
+
 
 @bot.listen_to(r"отправь зарплаты")
 def react_send_salaries(message):
-    message.reply("Пока не умею.")
+    if not is_slava(message):
+        message.reply("Только Слава может управлять зарплатами.")
+        return
+
+    bot.send_message(
+        channel="#general",
+        **salaries_message()
+    )
