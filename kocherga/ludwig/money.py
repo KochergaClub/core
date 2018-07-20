@@ -58,7 +58,7 @@ def salaries_message():
 
     return {
         "text": "Зарплаты",
-        "attachments": "attachments",
+        "attachments": attachments,
     }
 
 
