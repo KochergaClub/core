@@ -3,6 +3,7 @@ from kocherga.ludwig.bot import bot
 import kocherga.money.cashier
 import kocherga.money.salaries
 import kocherga.team
+from kocherga.datetime import inflected_month
 
 
 def cash_response():
@@ -32,6 +33,7 @@ def is_slava(message):
 
 def salaries_message():
     salaries = kocherga.money.salaries.calculate_new_salaries()
+    (start_date, end_date) = kocherga.money.salaries.dates_period()
 
     attachments = []
     for email, salary in salaries.salaries.items():
@@ -41,23 +43,29 @@ def salaries_message():
         member = kocherga.team.find_member_by_email(email)
 
         attachments.append({
-            "text": f"{member.short_name} <@{member.slack_id}>: *{salary.total}*",
+            "text": f"{member.short_name} <@{member.slack_id}>: *{salary.total}* руб.",
             "fields": [
                 {
                     "title": "Смены",
-                    "value": salary.shifts,
+                    "value": f"{salary.shifts} руб.",
                     "short": True,
                 },
                 {
                     "title": "2%",
-                    "value": salary.commissions,
+                    "value": f"{salary.commissions} руб.",
                     "short": True,
                 },
             ],
         })
 
+    header = "Зарплаты за "
+    if start_date.month == end_date.month:
+        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date.month)}"
+    else:
+        header += f"{start_date.day} {inflected_month(start_date.month)}–{end_date.day} {inflected_month(end_date.month)}"
+
     return {
-        "text": "Зарплаты",
+        "text": header,
         "attachments": attachments,
     }
 

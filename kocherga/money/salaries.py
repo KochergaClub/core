@@ -262,9 +262,8 @@ def calculate_salaries(start_date, end_date):
 
     return container
 
-def calculate_new_salaries(d=None):
+def dates_period(d=None):
     today = d or date.today()
-    print(today)
 
     year = today.year
     month = today.month
@@ -278,6 +277,12 @@ def calculate_new_salaries(d=None):
         end_date = date(year, month, 20)
     else:
         raise Exception(f"Today is {today}, it's not time to pay any salaries")
+
+    return (start_date, end_date)
+
+
+def calculate_new_salaries(d=None):
+    (start_date, end_date) = dates_period(d)
 
     salaries = calculate_salaries(start_date, end_date)
 
