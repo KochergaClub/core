@@ -60,9 +60,9 @@ def salaries_message():
 
     header = "Зарплаты за "
     if start_date.month == end_date.month:
-        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date.month)}"
+        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
     else:
-        header += f"{start_date.day} {inflected_month(start_date.month)}–{end_date.day} {inflected_month(end_date.month)}"
+        header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}"
 
     return {
         "text": header,
