@@ -21,7 +21,7 @@ def command_current_cash(payload):
 
 
 @bot.listen_to(r"покажи зарплаты")
-def react_show_salaries():
+def react_show_salaries(message):
     user_id = message.body["user"]
     response = message.sc.api_call("users.info", user=user_id)
     if not response["ok"]:
@@ -61,5 +61,5 @@ def react_show_salaries():
     })
 
 @bot.listen_to(r"отправь зарплаты")
-def react_send_salaries():
+def react_send_salaries(message):
     message.reply("Пока не умею.")
