@@ -36,9 +36,13 @@ def react_show_salaries(message):
 
     attachments = []
     for email, salary in salaries.salaries.items():
+        if salary.total == 0:
+            continue
+
         member = kocherga.team.find_member_by_email(email)
+
         attachments.append({
-            "text": f"{member.short_name} <@{member.slack_id}>",
+            "text": f"{member.short_name} <@{member.slack_id}>: *{salary.total}*",
             "fields": [
                 {
                     "title": "Смены",
@@ -50,11 +54,6 @@ def react_show_salaries(message):
                     "value": salary.commissions,
                     "short": True,
                 },
-                {
-                    "title": "Всего",
-                    "value": salary.total,
-                    "short": True,
-                }
             ],
         })
 

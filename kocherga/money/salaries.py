@@ -282,7 +282,7 @@ def calculate_new_salaries(d=None):
     salaries = calculate_salaries(start_date, end_date)
 
     def once_per_month(email):
-        return email in [] # 'tschikalowa.daria@gmail.com', 'mayaplisova@gmail.com', 'tension94@gmail.com']
+        return email in ['tschikalowa.daria@gmail.com', 'mayaplisova@gmail.com', 'tension94@gmail.com']
 
     if end_date.day == 5:
         # need to add salaries for the previous period for those who get salaries on card once per month on 5th
