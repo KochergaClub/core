@@ -101,6 +101,7 @@ def create_app(DEV):
         "templater",
         "announcements",
         "images",
+        "supplies",
     ):
         module = importlib.import_module(f"kocherga.api.routes.{module_name}")
         app.register_blueprint(module.bp)

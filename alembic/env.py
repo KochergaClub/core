@@ -20,6 +20,7 @@ import kocherga.watchmen
 import kocherga.zadarma
 import kocherga.gitlab
 import kocherga.events.prototype
+import kocherga.supplies.cookies
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
