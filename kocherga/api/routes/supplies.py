@@ -21,3 +21,21 @@ async def r_pick_cookie():
     Session().commit()
 
     return jsonify(ok)
+
+@bp.route("/cookies/pick-neither", methods=["POST"])
+async def r_pick_cookie():
+    payload = await request.get_json()
+
+    for key in ['c1', 'c2']:
+        pick = CookiePick(
+            cookie_id='',
+            against_id=payload[key],
+            position=-1,
+            user=payload['user'],
+            time=payload['time'],
+        )
+        Session().add(pick)
+
+    Session().commit()
+
+    return jsonify(ok)
