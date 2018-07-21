@@ -23,7 +23,7 @@ async def r_pick_cookie():
     return jsonify(ok)
 
 @bp.route("/cookies/pick-neither", methods=["POST"])
-async def r_pick_cookie():
+async def r_pick_neither_cookie():
     payload = await request.get_json()
 
     for key in ['c1', 'c2']:
