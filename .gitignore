@@ -7,3 +7,5 @@ __pycache__
 /.pytest_cache
 /.mypy_cache
 /node_modules
+/*.ipynb
+/.ipynb_checkpoints
