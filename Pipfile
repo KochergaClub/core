@@ -46,11 +46,12 @@ slappy = ">=0.3.0"
 
 pytest = "*"
 freezegun = "*"
-aioconsole = "*"
 pytest-asyncio = "*"
 mypy = "*"
 black = "==18.6b4"
 pycookiecheat = "*"
+jupyter = "*"
+aioconsole = "*"
 
 
 [requires]
