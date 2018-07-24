@@ -7,7 +7,8 @@ import dateutil.parser
 import shutil
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, Text, orm
+from sqlalchemy import Column, Integer, String, Boolean, Text
+from sqlalchemy.orm import relationship
 import sqlalchemy
 
 from kocherga.db import Session, Base
@@ -19,6 +20,7 @@ from kocherga.images import image_storage
 import kocherga.room
 import kocherga.events.google
 import kocherga.events.markup
+from kocherga.events.tag import EventTag
 
 from kocherga.error import PublicError
 
@@ -80,6 +82,8 @@ class Event(Base):
     timepad_prepaid_tickets = Column(Boolean)
 
     timing_description_override = Column(String(255))
+
+    tags = relationship("EventTag", order_by=EventTag.tag, back_populates="event")
 
     def __init__(
         self,

@@ -88,9 +88,11 @@ def event(image_file, vk_image_file):
 
     kocherga.db.Session().commit()
 
+    event_id = event.google_id # session can be reset after the test, so we need to store this and don't reference our event after the yield
+
     yield event
 
-    kocherga.events.db.delete_event(event.google_id)
+    kocherga.events.db.delete_event(event_id)
     kocherga.db.Session().commit()
 
 @pytest.fixture
