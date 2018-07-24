@@ -4,8 +4,8 @@ pytestmark = pytest.mark.usefixtures('db')
 from urllib3.filepost import encode_multipart_formdata
 from urllib3.fields import RequestField
 
-import kocherga.events.db
 import kocherga.config
+from kocherga.events.event import Event
 from kocherga.events.prototype import EventPrototype
 
 @pytest.mark.asyncio
@@ -20,7 +20,10 @@ async def test_events(api_client, imported_events):
 
 @pytest.mark.asyncio
 async def test_events_from_date(api_client, imported_events):
-    res = await api_client.get('/events?from_date=2018-01-01&to_date=2018-01-14')
+    res = await api_client.get(
+        '/events',
+        query_string={'from_date': '2018-01-01', 'to_date': '2018-01-14'}
+    )
     assert res.status_code == 200
     events = await res.get_json()
 
@@ -42,7 +45,8 @@ async def test_upload_image(api_client, image_storage, event):
         'POST',
         'http',
         f'/event/{event.google_id}/image/vk',
-        {
+        query_string=b'',
+        headers={
             'Content-Type': content_type,
             'Content-Length': len(body),
         },
@@ -57,7 +61,7 @@ async def test_upload_image(api_client, image_storage, event):
     #    data=body,
     #)
 
-    assert b'JFIF' in open(kocherga.events.db.get_event(event.google_id).image_file('vk'), 'rb').read()[:10]
+    assert b'JFIF' in open(Event.by_id(event.google_id).image_file('vk'), 'rb').read()[:10]
 
     assert res.status_code == 200
 
@@ -71,7 +75,7 @@ async def test_upload_image_from_url(api_client, image_storage, event):
         }
     )
 
-    assert b'PNG' in open(kocherga.events.db.get_event(event.google_id).image_file('default'), 'rb').read()[:10]
+    assert b'PNG' in open(Event.by_id(event.google_id).image_file('default'), 'rb').read()[:10]
 
     assert res.status_code == 200
 
@@ -131,7 +135,8 @@ class TestPrototypes:
             'POST',
             'http',
             f'/event_prototypes/{common_prototype.prototype_id}/image',
-            {
+            query_string=b'',
+            headers={
                 'Content-Type': content_type,
                 'Content-Length': len(body),
             },

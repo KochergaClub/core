@@ -37,7 +37,25 @@ def test_default_event_type(google_object):
 def test_to_dict(google_object):
     event = Event.from_google(google_object)
     assert type(event.to_dict()) == dict
-    print(event.to_dict())
+
+
+class TestGetEvent:
+    def test_get(self, db, event, imported_events):
+        e = Event.by_id(event.google_id)
+        assert e
+        assert type(e) == Event
+
+        assert type(e.created_dt) == datetime
+        assert type(e.start_dt) == datetime
+        assert type(e.end_dt) == datetime
+        assert e.title == 'Элиезер проповедь'
+        assert e.description.startswith('chicken')
+        assert e.is_master == False
+        assert e.master_id is None
+
+        assert e.get_room() == 'гэб'
+        assert e.event_type == "unknown"
+
 
 class TestImages:
     def test_get_images(self, google_object):

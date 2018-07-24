@@ -55,8 +55,10 @@ def r_get(event_id):
 @auth("kocherga")
 async def r_set_property(event_id, key):
     value = (await request.get_json())["value"]
+
     event = Event.by_id(event_id)
-    event.set_field_by_prop(key, value)
+    event.patch({ key: value })
+
     Session().commit()
     return jsonify(ok)
 
@@ -66,9 +68,11 @@ async def r_set_property(event_id, key):
 async def r_patch(event_id):
     payload = await request.get_json() or await request.form
 
-    result = kocherga.events.db.patch_event(event_id, payload).to_dict()
+    event = Event.by_id(event_id)
+    event.patch(payload)
+
     Session().commit()
-    return jsonify(result)
+    return jsonify(event.to_dict())
 
 
 @bp.route("/event/<event_id>", methods=["DELETE"])

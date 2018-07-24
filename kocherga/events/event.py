@@ -205,18 +205,16 @@ class Event(Base):
         return kocherga.room.unknown
 
     def set_field_by_prop(self, key, value):
-        if key == "visitors":
-            self.visitors = value
-        elif key == "vk_group":
-            self.vk_group = value
-        elif key == "fb_group":
-            self.fb_group = value
-        elif key == "posted_fb":
-            self.posted_fb = value
-        elif key == "posted_timepad":
-            self.posted_timepad = value
-        elif key == "posted_vk":
-            self.posted_vk = value
+        if key in (
+                "visitors",
+                "vk_group", "fb_group",
+                "posted_fb", "posted_timepad", "posted_vk",
+                "title", "location", "description", "summary",
+                "timepad_category_code",
+                "timing_description_override",
+        ):
+            assert type(value) == str
+            setattr(self, key, value)
 
         elif key == "type":
             if value not in ("private", "public"):
@@ -225,6 +223,8 @@ class Event(Base):
 
         elif key == "ready_to_post":
             self.ready_to_post = value in ("true", True)
+        elif key == "timepad_prepaid_tickets":
+            self.timepad_prepaid_tickets = value in ("true", True)
         elif key == "asked_for_visitors":
             if value:
                 self.asked_for_visitors_ts = (
@@ -236,6 +236,12 @@ class Event(Base):
                 self.asked_for_visitors_ts = None
         else:
             raise PublicError(f"Unknown prop {key}")
+
+    def patch(self, data):
+        for (key, value) in data.items():
+            self.set_field_by_prop(key, value)
+
+        self.patch_google()
 
     def generate_summary(self):
         if self.summary:

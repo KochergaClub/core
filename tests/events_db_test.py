@@ -7,25 +7,6 @@ from kocherga.events.event import Event
 import kocherga.events.db
 import kocherga.db
 
-class TestGetEvent:
-    def test_get(self, db, event, imported_events):
-        e = kocherga.events.db.get_event(event.google_id)
-        assert e
-        assert type(e) == Event
-
-        assert type(e.created_dt) == datetime.datetime
-        assert type(e.start_dt) == datetime.datetime
-        assert type(e.end_dt) == datetime.datetime
-        assert e.title == 'Элиезер проповедь'
-        assert e.description.startswith('chicken')
-        assert e.is_master == False
-        assert e.master_id is None
-
-        assert e.get_room() == 'гэб'
-        assert e.event_type == "unknown"
-
-        print(e.to_dict())
-
 class TestListEvents:
     def test_list(self, db, imported_events):
         out = kocherga.events.db.list_events()
@@ -42,10 +23,8 @@ class TestListEvents:
 class TestPatchEvent:
     def test_patch(self, db, event_for_edits):
         event = event_for_edits
-        patched = kocherga.events.db.patch_event(event.google_id, { 'title': 'blah' })
-
-        assert type(patched) == Event
-        assert patched.title == 'blah'
+        event_for_edits.patch({ 'title': 'blah' })
+        assert event.title == 'blah'
 
 class TestImporter:
     def test_importer(self, db):
