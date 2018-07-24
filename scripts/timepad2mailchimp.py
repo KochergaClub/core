@@ -9,10 +9,11 @@ def main():
     timepad_subscribers = kocherga.events.timepad.get_all_subscribers()
 
     mailchimp_users = [
-        kocherga.emails.list.User(
+        kocherga.email.lists.User(
             first_name=s['first_name'],
             last_name=s['last_name'],
             email=s['email'],
+            card_id=None,
         )
         for s in timepad_subscribers
     ]
