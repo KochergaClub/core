@@ -170,36 +170,51 @@ async def make_ion_requests(accounting_dates, operation_years, declaration_years
     )  # we run this on desktop anyway, so let's linger around to check that everything's ok
 
 
-async def add_cash_income(data, start_pko_id, from_date=None):
+async def payments_page():
     page = await elba_page()
 
     await page.click("#MainMenu_Payments_Link")
     await page.waitForNavigation()
 
     logger.info("Got to Payments page")
+    return page
 
-    pko_id = start_pko_id
+
+async def get_last_pko_id(page):
+    await page.click("#Filter_FormOfMoneyFilter_Caption")
+    await page.click(f'#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
+
+    await page.waitForXPath('//span[@id="Footer_MovementPeriod" and text()="Итого наличных"]')
+
+    raise NotImplemented
+    # for el in await page.JJ('.paymentsList-item .g-col-44'):
+    # ...
+
+
+async def add_cash_income(data, last_pko_id=None):
+    page = await payments_page()
+
+    pko_id = last_pko_id or await get_last_pko_id(page)
 
     for row in data:
+        pko_id += 1
+
         logger.info(row["date"])
-        income = row["clean_income"]
+        income = row["income"]
         if income == 0:
             logger.info("No income, skip")
             continue
         if income < 0:
             logger.warn("Negative income! Skip.")
             continue
-        d = datetime.strptime(row["date"], "%Y-%m-%d").date()
-        if from_date and d < from_date:
-            logger.info("Too old, skip")
-            continue
+        d = row["date"]
 
         await page.click("#CreateDebetButton")
         await page.waitForSelector(
             "#ComponentsHost_PaymentEditLightbox_IncomeSum", visible=True
         )
         await page.type(
-            "#ComponentsHost_PaymentEditLightbox_IncomeSum", str(row["clean_income"])
+            "#ComponentsHost_PaymentEditLightbox_IncomeSum", str(row["income"])
         )
         await fill_date_input(page, "#ComponentsHost_PaymentEditLightbox_Date", d)
 
@@ -219,7 +234,5 @@ async def add_cash_income(data, start_pko_id, from_date=None):
         )
         await page.click("#ComponentsHost_PaymentEditLightbox_AcceptButton")
         await page.waitForSelector(".c-lightbox-overlay", hidden=True)
-
-        pko_id += 1
 
     time.sleep(3000)

@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime, timedelta, date
 import requests
+from collections import defaultdict
+import decimal
 
 import enum
 
@@ -10,6 +12,7 @@ from typing import Any, Dict, List
 
 import kocherga.secrets
 import kocherga.db
+from kocherga.db import Session
 import kocherga.config
 import kocherga.importer.base
 
@@ -48,7 +51,7 @@ class OfdDocument(kocherga.db.Base):
         dt = datetime.fromtimestamp(ts, tz=kocherga.config.TZ)
         if dt.hour < 4:
             dt -= timedelta(days=1)
-        midday_ts = int(dt.replace(hour=12).timestamp())
+        midday_ts = int(dt.replace(hour=12, minute=0, second=0).timestamp())
 
         cash = item["cashTotalSum"] / 100
         electronic = item["ecashTotalSum"] / 100
@@ -109,6 +112,27 @@ class OfdYaKkt:
 
 
 ofd = OfdYaKkt(FISCAL_DRIVE_NUMBER)
+
+
+def cash_income_by_date(start_d, end_d):
+    docs = Session().query(OfdDocument).filter(
+        OfdDocument.midday_ts >= datetime.combine(start_d, datetime.min.time()).timestamp()
+    ).filter(
+        OfdDocument.midday_ts <= datetime.combine(end_d, datetime.max.time()).timestamp()
+    ).all()
+
+    date2income = defaultdict(decimal.Decimal)
+    for doc in docs:
+        d = datetime.fromtimestamp(doc.midday_ts).date()
+        if doc.check_type == CheckType.income:
+            date2income[d] += doc.cash
+        elif doc.check_type == CheckType.refund_income:
+            date2income[d] -= doc.cash
+
+    return [
+        {'date': d, 'income': date2income[d]}
+        for d in sorted(date2income.keys())
+    ]
 
 
 def import_date(d: date, session) -> None:

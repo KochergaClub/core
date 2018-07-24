@@ -2,22 +2,32 @@
 import pathlib, sys
 sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
+import fire
+
 import logging
 import asyncio
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import kocherga.money.elba
+import kocherga.money.ofd
 
 logging.basicConfig(level=logging.INFO)
 
-async def main():
-    filename = '/Users/berekuk/Downloads/query_result_2018-04-25T11_28_59.559Z.json'
+async def async_main(start_date_str, last_pko_id):
+    start_d = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+    end_d = (datetime.now() - timedelta(days=3)).date()
+
+    cash_income = kocherga.money.ofd.cash_income_by_date(start_d, end_d)
+
     await kocherga.money.elba.add_cash_income(
-        json.load(open(filename)),
-        802,
-        from_date=datetime(2018,3,27).date()
+        cash_income,
+        last_pko_id=last_pko_id,
     )
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(asyncio.wait([main()]))
+def main(start_date_str, last_pko_id):
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.wait([async_main(start_date_str, last_pko_id)]))
+
+if __name__ == '__main__':
+    fire.Fire(main)
