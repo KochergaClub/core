@@ -83,7 +83,12 @@ class Event(Base):
 
     timing_description_override = Column(String(255))
 
-    tags = relationship("EventTag", order_by=EventTag.tag, back_populates="event")
+    tags = relationship(
+        "EventTag",
+        order_by=EventTag.name,
+        back_populates="event",
+        cascade="all, delete, delete-orphan"
+    )
 
     def __init__(
         self,
@@ -345,6 +350,8 @@ class Event(Base):
 
         d["images"] = self.get_images()
 
+        d["tags"] = self.tag_names()
+
         return d
 
     def to_google(self):
@@ -367,3 +374,17 @@ class Event(Base):
     def patch_google(self):
         logger.info("Saving to google")
         kocherga.events.google.patch_event(self.google_id, self.to_google())
+
+    def tag_names(self):
+        return [
+            tag.name
+            for tag in self.tags
+        ]
+
+    def add_tag(self, tag_name):
+        if tag_name in self.tag_names():
+            raise Exception(f"Tag {tag_name} already exists on this event")
+        self.tags.append(EventTag(name=tag_name))
+
+    def delete_tag(self, tag_name):
+        self.tags.remove(next(tag for tag in e.tags if tag.name == tag_name))

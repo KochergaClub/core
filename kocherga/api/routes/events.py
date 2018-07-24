@@ -21,7 +21,7 @@ bp = Blueprint("events", __name__)
 
 @bp.route("/events")
 @auth("kocherga")
-def r_events():
+def r_list():
 
     def arg2date(arg):
         d = request.args.get(arg)
@@ -46,7 +46,7 @@ def r_events():
 
 @bp.route("/event/<event_id>")
 @auth("kocherga")
-def r_event(event_id):
+def r_get(event_id):
     event = Event.by_id(event_id)
     return jsonify(event.to_dict())
 
@@ -63,7 +63,7 @@ async def r_set_property(event_id, key):
 
 @bp.route("/event/<event_id>", methods=["PATCH"])
 @auth("kocherga")
-async def r_patch_event(event_id):
+async def r_patch(event_id):
     payload = await request.get_json() or await request.form
 
     result = kocherga.events.db.patch_event(event_id, payload).to_dict()
@@ -73,7 +73,7 @@ async def r_patch_event(event_id):
 
 @bp.route("/event/<event_id>", methods=["DELETE"])
 @auth("kocherga")
-async def r_delete_event(event_id):
+async def r_delete(event_id):
     event = Event.by_id(event_id)
     event.delete()
     event.patch_google()
@@ -83,7 +83,7 @@ async def r_delete_event(event_id):
 
 @bp.route("/event/<event_id>/image/<image_type>", methods=["POST"])
 @auth("kocherga")
-async def r_upload_event_image(event_id, image_type):
+async def r_upload_image(event_id, image_type):
     files = await request.files
     if "file" not in files:
         raise PublicError("Expected a file")
@@ -101,7 +101,7 @@ async def r_upload_event_image(event_id, image_type):
 
 @bp.route("/event/<event_id>/image_from_url/<image_type>", methods=["POST"])
 @auth("kocherga")
-async def r_set_event_image_from_url(event_id, image_type):
+async def r_set_image_from_url(event_id, image_type):
     payload = await request.get_json() or await request.form
 
     url = payload["url"]
@@ -115,5 +115,24 @@ async def r_set_event_image_from_url(event_id, image_type):
 
 
 @bp.route("/event/<event_id>/image/<image_type>", methods=["GET"])
-def r_event_image(event_id, image_type):
+def r_get_image(event_id, image_type):
     return send_file(Event.by_id(event_id).image_file(image_type))
+
+
+@bp.route("/event/<event_id>/tag/<tag_name>", methods=["POST"])
+def r_tag_add(event_id, tag_name):
+    event = Event.by_id(event_id)
+
+    event.add_tag(tag_name)
+
+    return jsonify(ok)
+
+
+@bp.route("/event/<event_id>/tag/<tag_name>", methods=["DELETE"])
+def r_tag_delete(event_id, tag_name):
+    event = Event.by_id(event_id)
+
+    event.delete_tag(tag_name)
+    Session().commit()
+
+    return jsonify(ok)

@@ -68,13 +68,13 @@ class TestTags:
         assert event.tags == []
 
     def test_set_tags(self, event):
-        event.tags.append(EventTag(tag='foo'))
-        event.tags.append(EventTag(tag='bar'))
+        event.tags.append(EventTag(name='foo'))
+        event.tags.append(EventTag(name='bar'))
         Session().commit()
         event_id = event.google_id
 
         Session.remove()
         event = Session().query(Event).filter_by(google_id=event_id).first()
         assert len(event.tags) == 2
-        assert event.tags[0].tag == 'bar' # tags are sorted by name
-        assert event.tags[1].tag == 'foo'
+        assert event.tags[0].name == 'bar' # tags are sorted by name
+        assert event.tags[1].name == 'foo'
