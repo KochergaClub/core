@@ -44,3 +44,14 @@ async def r_png(name):
 async def r_schema(name):
     template = kocherga.templater.Template(name)
     return jsonify(template.schema)
+
+@bp.route("/templater")
+async def r_list():
+    names = kocherga.templater.list_templates()
+    return jsonify([
+        {
+            "name": name,
+            "schema": Template.by_name(name).schema,
+        }
+        for name in names
+    ])
