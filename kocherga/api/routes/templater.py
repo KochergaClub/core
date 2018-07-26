@@ -40,7 +40,7 @@ async def r_html(name):
     return template.generate_html(args)
 
 
-@bp.route("/templater/<image>/png")
+@bp.route("/templater/<name>/png")
 async def r_png(name):
     template = kocherga.templater.Template.by_name(name)
     args = get_args(request.args, await request.form)
