@@ -23,7 +23,18 @@ def get_args(args, form):
     return result
 
 
-@bp.route("/templater/html/<name>") # TODO - rename to /templater/<name>/html
+@bp.route("/templater/html/<name>") # deprecated
+@auth("kocherga")
+async def r_html_old(name):
+    return redirect(f"/templater/{name}/html", code=301)
+
+
+@bp.route("/templater/png/<name>") # deprecated
+async def r_png_old(name):
+    return redirect(f"/templater/{name}/png", code=301)
+
+
+@bp.route("/templater/<name>/html")
 @auth("kocherga")
 async def r_html(name):
     template = kocherga.templater.Template.by_name(name)
@@ -31,7 +42,8 @@ async def r_html(name):
     return template.generate_html(args)
 
 
-@bp.route("/templater/png/<name>") # TODO - rename to /templater/<name>/html
+@bp.route("/templater/<image>/png")
+@auth("kocherga")
 async def r_png(name):
     template = kocherga.templater.Template.by_name(name)
     args = get_args(request.args, await request.form)
