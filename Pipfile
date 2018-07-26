@@ -52,6 +52,8 @@ black = "==18.6b4"
 pycookiecheat = "*"
 jupyter = "*"
 aioconsole = "*"
+matplotlib = "*"
+seaborn = "*"
 
 
 [requires]

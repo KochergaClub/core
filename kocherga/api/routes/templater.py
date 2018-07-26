@@ -1,32 +1,13 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import datetime
-import re
-import asyncio
-
-from quart import Blueprint, request, render_template, make_response
-
-import pyppeteer
+from quart import Blueprint, request, make_response
 
 import kocherga.config
-from kocherga.api.auth import auth
+import kocherga.templater
+
 
 bp = Blueprint("templater", __name__)
-
-_browser = None
-
-
-async def get_browser():
-    global _browser
-    if not _browser:
-        _browser = await pyppeteer.launch()
-    return _browser
-
-
-@bp.app_template_filter()
-def parse_date(value, fmt):
-    return datetime.datetime.strptime(value, fmt)
 
 
 def get_args(args, form):
@@ -41,43 +22,25 @@ def get_args(args, form):
     return result
 
 
-async def get_html(args, name):
-    return await render_template(f"templater/{name}.html", **args)
+@bp.route("/templater/html/<name>") # TODO - rename to /templater/<name>/html
+async def r_html(name):
+    template = kocherga.templater.Template(name)
+    args = get_args(request.args, await request.form)
+    return template.generate_html(args)
 
 
-@bp.route("/templater/html/<name>")
-async def generate_html(name):
-    return await get_html(
-        get_args(request.args, await request.form), name
-    )
+@bp.route("/templater/png/<name>") # TODO - rename to /templater/<name>/html
+async def r_png(name):
+    template = kocherga.templater.Template(name)
+    args = get_args(request.args, await request.form)
+    image_bytes = await template.generate_png(args)
 
-
-@bp.route("/templater/png/<name>")
-async def generate_png(name):
-    html = await get_html(
-        get_args(request.args, await request.form), name
-    )
-
-    (width, height) = (800, 600)  # should we fast fail instead?
-    match = re.search(r"<!-- width=(\d+) height=(\d+)", html)
-    if match:
-        (width, height) = (int(v) for v in match.groups())
-
-    logger.info("getting browser")
-    browser = await get_browser()
-    page = await browser.newPage()
-    await page.setViewport(
-        {"width": width, "height": height, "deviceScaleFactor": 2}  # retina
-    )
-    logger.info("calling goto")
-    await page.goto(f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000})
-
-    logger.info("calling screenshot")
-    image_bytes = await page.screenshot()
-    logger.info("calling close")
-    await page.close()
-
-    logger.info("calling make_response")
     response = await make_response(image_bytes)
     response.headers["Content-Type"] = "image/png"
     return response
+
+
+@bp.route("/templater/<name>/schema")
+async def r_schema(name):
+    template = kocherga.templater.Template(name)
+    return jsonify(template.schema)
