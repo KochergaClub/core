@@ -13,3 +13,7 @@ name2schema['mailchimp'] = {
 name2schema['workshop-badge'] = {
     'fields': [field('date_text')],
 }
+
+name2schema['workshop-thin'] = {
+    'fields': [field('date_text')],
+}
