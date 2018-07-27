@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from quart import Blueprint, request, make_response
+from quart import Blueprint, request, make_response, redirect
 
 import kocherga.config
 import kocherga.templater
