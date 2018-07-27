@@ -25,12 +25,12 @@ def get_args(args, form):
 
 @bp.route("/templater/html/<name>") # deprecated
 async def r_html_old(name):
-    return redirect(f"/templater/{name}/html", code=301)
+    return redirect(f"/templater/{name}/html")
 
 
 @bp.route("/templater/png/<name>") # deprecated
 async def r_png_old(name):
-    return redirect(f"/templater/{name}/png", code=301)
+    return redirect(f"/templater/{name}/png")
 
 
 @bp.route("/templater/<name>/html")
