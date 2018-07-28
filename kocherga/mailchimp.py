@@ -3,8 +3,10 @@ import json
 import requests
 
 import kocherga.secrets
+import kocherga.config
 
-MAILCHIMP_API = "https://us11.api.mailchimp.com/3.0"
+MAILCHIMP_DC = kocherga.config.config()["mailchimp"]["datacenter"]
+MAILCHIMP_API = f"https://{MAILCHIMP_DC}.api.mailchimp.com/3.0"
 MAILCHIMP_API_KEY = kocherga.secrets.plain_secret("mailchimp_api_key")
 
 
