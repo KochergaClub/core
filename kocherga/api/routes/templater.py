@@ -1,10 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from quart import Blueprint, request, make_response, redirect
+from quart import Blueprint, request, make_response, redirect, jsonify
 
 import kocherga.config
-import kocherga.templater
+from kocherga.templater import Template
 from kocherga.api.auth import auth
 
 
@@ -35,14 +35,14 @@ async def r_png_old(name):
 
 @bp.route("/templater/<name>/html")
 async def r_html(name):
-    template = kocherga.templater.Template.by_name(name)
+    template = Template.by_name(name)
     args = get_args(request.args, await request.form)
     return template.generate_html(args)
 
 
 @bp.route("/templater/<name>/png")
 async def r_png(name):
-    template = kocherga.templater.Template.by_name(name)
+    template = Template.by_name(name)
     args = get_args(request.args, await request.form)
     image_bytes = await template.generate_png(args)
 
@@ -54,8 +54,8 @@ async def r_png(name):
 @bp.route("/templater/<name>/schema")
 @auth("kocherga")
 async def r_schema(name):
-    template = kocherga.templater.Template.by_name(name)
-    return jsonify(template.schema)
+    template = Template.by_name(name)
+    return jsonify(template.schema.to_dict())
 
 @bp.route("/templater")
 @auth("kocherga")
@@ -64,7 +64,7 @@ async def r_list():
     return jsonify([
         {
             "name": name,
-            "schema": Template.by_name(name).schema,
+            "schema": Template.by_name(name).schema.to_dict(),
         }
         for name in names
     ])
