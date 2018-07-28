@@ -162,6 +162,9 @@ def load_order_log(order_id):
 
 class Importer(kocherga.importer.base.FullImporter):
 
+    def __init__(self, log_portion_size=100):
+        self.log_portion_size = log_portion_size
+
     def init_db(self):
         Order.__table__.create(bind=kocherga.db.engine())
 
@@ -198,7 +201,7 @@ class Importer(kocherga.importer.base.FullImporter):
             )
             .order_by(Order.order_id.desc())
         )
-        for order in query.limit(100).all():
+        for order in query.limit(self.log_portion_size).all():
             self.import_order_log(session, order)
 
         logger.info("Loading customers")
