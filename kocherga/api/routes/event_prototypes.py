@@ -33,7 +33,7 @@ async def r_prototype_new():
     payload = await request.get_json()
 
     required_fields = ("title", "location", "weekday", "hour", "minute", "length")
-    optional_fields = ("vk_group", "fb_group", "summary", "description")
+    optional_fields = ("vk_group", "fb_group", "summary", "description", "timepad_category_code", "timepad_prepaid_tickets", "timing_description_override")
 
     props = {}
     for field in required_fields:
@@ -77,6 +77,9 @@ async def r_patch_prototype(prototype_id):
             "length",
             "vk_group",
             "fb_group",
+            "timepad_category_code",
+            "timepad_prepaid_tickets",
+            "timing_description_override",
         ):
             setattr(prototype, key, value)
         else:
