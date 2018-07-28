@@ -20,7 +20,7 @@ bp = Blueprint("event_prototypes", __name__)
 @bp.route("/event_prototypes", methods=["GET"])
 @auth("kocherga")
 def r_prototypes():
-    prototypes = Session().query(EventPrototype).all()
+    prototypes = Session().query(EventPrototype).order_by(EventPrototype.weekday).all()
     return jsonify([
         p.to_dict(detailed=True)
         for p in prototypes
