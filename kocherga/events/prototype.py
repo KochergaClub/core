@@ -48,7 +48,7 @@ class EventPrototype(Base):
         return Session().query(EventPrototype).get(prototype_id)
 
     def instances(self, limit=None):
-        query = Session().query(Event).filter_by(prototype_id=self.prototype_id).order_by(Event.start_ts.desc())
+        query = Session().query(Event).filter_by(prototype_id=self.prototype_id).filter_by(deleted=False).order_by(Event.start_ts.desc())
         if limit:
             query = query.limit(limit)
         events = query.all()
