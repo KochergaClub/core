@@ -25,6 +25,9 @@ class EventPrototype(Base):
     location = Column(String(255))
     summary = Column(Text, nullable=False, default='')
     description = Column(Text, nullable=False, default='')
+    timing_description_override = Column(String(255))
+    timepad_category_code = Column(String(40))
+    timepad_prepaid_tickets = Column(Boolean)
 
     vk_group = Column(String(40))
     fb_group = Column(String(40))
@@ -93,8 +96,11 @@ class EventPrototype(Base):
         )
         event = Event.from_google(google_event)
 
-        for prop in ('summary', 'vk_group', 'fb_group'):
-            setattr(event, prop, getattr(self, prop))
+        for prop in ('summary', 'vk_group', 'fb_group', 'timepad_prepaid_tickets', 'timepad_category_code', 'timing_description_override'):
+            value = getattr(self, prop)
+            if value is not None:
+                event.set_field_by_prop(prop, value)
+
         event.prototype_id = self.prototype_id
 
         if self.image:
