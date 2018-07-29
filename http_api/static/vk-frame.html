@@ -4,7 +4,7 @@
   <script type="text/javascript">
    VK.init(function() {
      VK.callMethod('showGroupSettingsBox', 64);
-     VK.addCallback('onSettingsChanged', function f(settings) {
+     VK.addCallback('onGroupSettingsChanged', function f(settings) {
        console.log('settings changed');
        VK.callMethod('showAppWidgetPreviewBox', 'list', 'return { \
         "title": "Расписание", \
