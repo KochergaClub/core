@@ -241,6 +241,7 @@ def create_draft():
             'from_name': 'Антикафе Кочерга',
             'reply_to': 'info@kocherga-club.ru',
             'to_name': '*|FNAME|*',
+            'folder_id': kocherga.mailchimp.folder_id_by_name('Еженедельная рассылка'),
         }
     })
 

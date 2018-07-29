@@ -44,6 +44,14 @@ def api_call(method, url, data={}):
 
     return r.json()
 
+def folder_id_by_name(name):
+    response = api_call('GET', 'campaign-folders')
+    return next(
+        f['id']
+        for f in kocherga.mailchimp.api_call('GET', 'campaign-folders')['folders']
+        if f['name'] == name
+    )
+
 def wait_for_batch(batch_id):
     url = MAILCHIMP_API + '/batches/' + batch_id
 
