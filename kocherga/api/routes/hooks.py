@@ -72,7 +72,7 @@ async def r_vk_callback():
     elif payload["type"] == "market_comment_new":
         notify(
             'Новый комментарий к товару',
-            f'https://vk.com/club{group_id}?w=product-{group_id}_{obj["item_id"]}
+            f'https://vk.com/club{group_id}?w=product-{group_id}_{obj["item_id"]}'
         )
 
     return "ok"
