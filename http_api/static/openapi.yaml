@@ -7,6 +7,16 @@ info:
 servers:
   - url: https://api.kocherga.club
 
+tags:
+  - name: bookings
+    description: Бронирование комнат
+  - name: people
+    description: Люди
+  - name: events
+    description: Мероприятия
+  - name: space
+    description: Пространство
+
 paths:
   /rooms:
     get:
@@ -14,6 +24,8 @@ paths:
       responses:
         '200':
           description: JSON-массив с информацией о комнатах
+      tags:
+        - space
 
   /bookings/today:
     get:
@@ -21,6 +33,8 @@ paths:
       responses:
         '200':
           description: JSON-массив со списком забронированных комнат.
+      tags:
+        - bookings
 
   /bookings/{date}:
     get:
@@ -37,6 +51,8 @@ paths:
       responses:
         '200':
           description: JSON-массив со списком забронированных комнат.
+      tags:
+        - bookings
 
   /people/now:
     get:
@@ -44,6 +60,8 @@ paths:
       responses:
         '200':
           description: JSON-объект с информацией о людях и их количестве.
+      tags:
+        - people
           
 
   /public_events:
@@ -71,3 +89,5 @@ paths:
       responses:
         '200':
           description: JSON-объект с информацией о людях и их количестве.
+      tags:
+        - events
