@@ -38,13 +38,15 @@ def group2id(group_name):
     return r[0]["id"]
 
 
-def upload_wall_image(group_id, image_file):
+def upload_wall_image(group_id, image_bytes):
     upload_server = kocherga.vk.call(
         "photos.getWallUploadServer", {"group_id": group_id}
     )
     upload_url = upload_server["upload_url"]
 
-    r = requests.post(upload_url, files={"file": open(image_file, "rb")})
+    r = requests.post(upload_url, files={
+        "file": ("image.png", image_bytes)
+    })
     r.raise_for_status()
 
     # note that image upload doesn't wrap the result in {'response': ...}, do it doesn't need to be checked with kocherga.vk.check_response
@@ -106,7 +108,7 @@ def create(event):
     if not image_file:
         raise PublicError("Can't announce - add a vk image first")
 
-    photo_id = upload_wall_image(group_id, image_file)
+    photo_id = upload_wall_image(group_id, open(image_file, 'rb').read())
     message = vk_text(event)
 
     response = kocherga.vk.call(
@@ -274,12 +276,17 @@ def create_schedule_post(prefix_text):
         message += f"{event.generate_summary()}\n\n"
 
     group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
-    response = kocherga.vk.call(
+
+    image_bytes = kocherga.images.image_storage.create_mailchimp_image(dt)
+    photo_id = upload_wall_image(group_id, image_bytes)
+
+    kocherga.vk.call(
         "wall.post",
         {
             "owner_id": -group_id,
             "from_group": 1,
             "message": message,
             "publish_date": int(datetime.now().timestamp()) + 86400,
+            "attachments": photo_id,
         },
     )

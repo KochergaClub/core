@@ -73,3 +73,7 @@ class TestGroups:
         assert isinstance(result, list)
         assert len(result) == 1
         assert result[0] == 'blahblah_something'
+
+class TestSchedule():
+    def test_schedule_post(self):
+        kocherga.events.vk.create_schedule_post('')

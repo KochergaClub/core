@@ -65,7 +65,7 @@ class ImageStorage:
     def create_mailchimp_image(self, start_date):
         web_root = kocherga.config.web_root()
         r = requests.get(
-            f"{web_root}/templater/png/mailchimp",
+            f"{web_root}/templater/mailchimp/png",
             params={
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": (start_date + timedelta(days=6)).strftime("%Y-%m-%d"),
