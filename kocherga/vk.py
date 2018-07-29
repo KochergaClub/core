@@ -73,3 +73,11 @@ def call(method, params):
     check_response(r)
 
     return r["response"]  # type: ignore
+
+
+def group2id(group_name):
+    if type(group_name) == int:
+        return group_name
+
+    r = call("groups.getById", {"group_id": group_name})
+    return r[0]["id"]

@@ -8,6 +8,7 @@ import json
 from kocherga.config import TZ
 from kocherga.db import Session
 import kocherga.vk
+from kocherga.vk import group2id
 from kocherga.error import PublicError
 import kocherga.datetime
 
@@ -28,14 +29,6 @@ class VkAnnouncement(BaseAnnouncement):
         return "https://vk.com/{}?w=wall-{}_{}".format(
             self.group_name, self.group_id, self.post_id
         )
-
-
-def group2id(group_name):
-    if type(group_name) == int:
-        return group_name
-
-    r = kocherga.vk.call("groups.getById", {"group_id": group_name})
-    return r[0]["id"]
 
 
 def upload_wall_image(group_id, image_bytes):
