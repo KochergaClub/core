@@ -1,15 +1,22 @@
 <!doctype html>
+<head>
+  <link rel="stylesheet" href="/static/swagger-ui.css" />
+  <style>
+   #swagger-ui {
+     margin: 0 auto;
+     max-width: 1020px;
+     margin-bottom: 40px;
+   }
+  </style>
+</head>
 <body>
-  <p>
-  HTTP API Кочерги.
-  <p>
-  Документация появится позже.
-    <p>
-      Можно попробовать:
-      <ul>
-        <li><a href="/bookings/today">/bookings/today</a></li>
-        <li><a href="/bookings/2018-04-01">/bookings/2018-04-01</a></li>
-        <li><a href="/rooms">/rooms</a></li>
-        <li><a href="/people/now">/people/now</a></li>
-      </ul>
+  <div id="swagger-ui"></div>
+
+  <script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+  <script>
+  const ui = SwaggerUIBundle({
+    url: "/openapi.yaml",
+    dom_id: '#swagger-ui',
+  })
+  </script>
 </body>

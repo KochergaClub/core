@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: Kocherga API
+  description: Публичное REST API клуба «Кочерга».
+  version: "0.1"
+
+servers:
+  - url: https://api.kocherga.club
+
+paths:
+  /rooms:
+    get:
+      summary: Возвращает список комнат.
+      responses:
+        '200':
+          description: JSON-массив с информацией о комнатах
+
+  /bookings/today:
+    get:
+      summary: Возвращает список броней на сегодня
+      responses:
+        '200':
+          description: JSON-массив со списком забронированных комнат.
+
+  /bookings/{date}:
+    get:
+      summary: Возвращает список броней на указанную дату.
+      parameters:
+        - name: date
+          in: path
+          required: true
+          description: Дата в формате YYYY-MM-DD.
+          example: 2018-04-01
+          schema:
+            type : string
+            format: date
+      responses:
+        '200':
+          description: JSON-массив со списком забронированных комнат.
+
+  /people/now:
+    get:
+      summary: Возвращает информацию о числе людей и о людях, включивших информацию о своём присутствии.
+      responses:
+        '200':
+          description: JSON-объект с информацией о людях и их количестве.
+          
+
+  /public_events:
+    get:
+      summary: Возвращает список публичных событий за указанный период.
+      parameters:
+        - name: from_date
+          in: query
+          example: 2018-06-01
+          schema:
+            type : string
+            format: date
+        - name: to_date
+          in: query
+          example: 2018-07-01
+          schema:
+            type : string
+            format: date
+        - name: date
+          in: query
+          example: 2018-06-15
+          schema:
+            type : string
+            format: date
+      responses:
+        '200':
+          description: JSON-объект с информацией о людях и их количестве.
