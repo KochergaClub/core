@@ -161,7 +161,7 @@ def list_public_events(date=None, from_date=None, to_date=None):
         query = query.filter(Event.start_ts >= datetime.combine(from_date, time.min).timestamp())
 
     if to_date:
-        query = query.filter(Event.start_ts >= datetime.combine(to_date, time.max).timestamp())
+        query = query.filter(Event.start_ts <= datetime.combine(to_date, time.max).timestamp())
 
     if date:
         query = query.filter(
