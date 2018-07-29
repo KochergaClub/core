@@ -7,7 +7,9 @@ import re
 import googleapiclient.errors
 
 from kocherga.config import TZ
+from kocherga.datetime import MSK_DATE_FORMAT
 from kocherga.error import PublicError
+
 import kocherga.room
 import kocherga.events.db
 from kocherga.events.event import Event
@@ -17,8 +19,6 @@ from kocherga.events.event import Event
 # pretty room (unicode, capitalized)
 # booking (all params)
 # booking.public (start, end, pretty room)
-
-MSK_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S+03:00"
 
 MAX_BOOKING_DELAY = datetime.timedelta(days=60)
 

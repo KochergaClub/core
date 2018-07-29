@@ -56,6 +56,7 @@ def create_app(DEV):
         raven_client = raven.Client(sentry_dsn)
 
     if DEV:
+        logger.info("DEV mode")
         app.debug = True
         app.logger.setLevel(logging.DEBUG)
         kocherga.api.common.DEV = True
@@ -63,6 +64,7 @@ def create_app(DEV):
         app.logger.setLevel(logging.INFO)
     app.config["JSON_AS_ASCII"] = False
     app.config["JSONIFY_MIMETYPE"] = "application/json; charset=utf-8"
+
     # CORS(app)
 
     ################## COMMON ########################

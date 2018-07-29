@@ -3,7 +3,7 @@ logger = logging.getLogger(__name__)
 
 import sys
 from quart import Blueprint, jsonify, request, send_file
-from datetime import datetime
+from datetime import datetime, time
 import requests
 from werkzeug.contrib.iterio import IterIO
 
@@ -140,3 +140,66 @@ def r_tag_delete(event_id, tag_name):
     Session().commit()
 
     return jsonify(ok)
+
+
+def list_public_events(date=None, from_date=None, to_date=None):
+    query = Session().query(Event).filter_by(
+        deleted=False,
+        event_type='public',
+    ).filter(
+        Event.posted_vk != None
+    ).filter(
+        Event.posted_vk != ''
+    ).filter(
+        Event.start_ts >= datetime(2018, 6, 1).timestamp() # earlier events are not cleaned up yet
+    )
+
+    if not from_date and not to_date and not date:
+        raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
+
+    if from_date:
+        query = query.filter(Event.start_ts >= datetime.combine(from_date, time.min).timestamp())
+
+    if to_date:
+        query = query.filter(Event.start_ts >= datetime.combine(to_date, time.max).timestamp())
+
+    if date:
+        query = query.filter(
+            Event.start_ts >= datetime.combine(date, time.min).timestamp()
+        ).filter(
+            Event.start_ts <= datetime.combine(date, time.max).timestamp()
+        )
+
+    print(str(query))
+
+    events = query.order_by(Event.start_ts).limit(1000).all()
+
+    return [
+        e.public_object()
+        for e in events
+    ]
+
+
+@bp.route("/public_events")
+def r_list_public():
+    def arg2date(arg):
+        d = request.args.get(arg)
+        if d:
+            d = datetime.strptime(d, "%Y-%m-%d").date()
+        return d
+
+    return jsonify(
+        list_public_events(
+            date=arg2date('date'),
+            from_date=arg2date('from_date'),
+            to_date=arg2date('to_date'),
+        )
+    )
+
+@bp.route("/public_events/today")
+def r_list_public_today():
+    return jsonify(
+        list_public_events(
+            date=datetime.today().date(),
+        )
+    )

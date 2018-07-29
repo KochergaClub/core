@@ -15,6 +15,7 @@ from kocherga.db import Session, Base
 
 import kocherga.config
 from kocherga.config import TZ
+from kocherga.datetime import MSK_DATE_FORMAT
 
 from kocherga.images import image_storage
 import kocherga.room
@@ -394,3 +395,25 @@ class Event(Base):
 
     def delete_tag(self, tag_name):
         self.tags.remove(next(tag for tag in e.tags if tag.name == tag_name))
+
+    def public_object(self):
+        # Some precautions against information leaking (although we do more checks in /public_events API route).
+        if self.deleted: return {}
+        if self.event_type != 'public': return {}
+
+        announcements = {}
+
+        for (key, attr) in [("vk", "posted_vk"), ("fb", "posted_fb"), ("timepad", "posted_timepad")]:
+            if getattr(self, attr):
+                announcements[key] = {
+                    "link": getattr(self, attr),
+                }
+
+        return {
+            "event_id": self.google_id,
+            "title": self.title,
+            "room": kocherga.room.pretty(self.get_room()),
+            "announcements": announcements,
+            "start": self.start_dt.strftime(MSK_DATE_FORMAT),
+            "end": self.end_dt.strftime(MSK_DATE_FORMAT),
+        }
