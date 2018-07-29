@@ -30,5 +30,4 @@ async def r_vk_callback():
         if not result['ok']:
             raise Exception("processing failed")
 
-    Session().commit()
     return "ok"
