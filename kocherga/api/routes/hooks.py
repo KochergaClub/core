@@ -32,7 +32,7 @@ async def r_vk_callback():
         result = kocherga.slack.client().api_call(
             "chat.postMessage",
             text=f'Новое сообщение вк-сообществу: {link}\n>>> {obj["text"]}',
-            channel='vk_support',
+            channel='#vk_support',
         )
         if not result['ok']:
             raise Exception("processing failed")
