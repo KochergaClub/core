@@ -16,10 +16,14 @@ VK_SECRET = kocherga.config.config()['vk']['callback_secret']
 
 @bp.route("/hooks/vk_callback", methods=["POST"])
 async def r_vk_callback():
-    req_secret = request.args.get("secret")
+    payload = await request.get_json()
+
+    req_secret = payload["secret"]
     assert req_secret == VK_SECRET
 
-    payload = await request.get_json()
+    # sorry for hardcode, I'll fix this later with https://vk.com/dev/groups.addCallbackServer
+    if payload["type"] == "confirmation" and payload["group_id"] == 99973027:
+        return "f4cc4bd9"
 
     if payload["type"] == "message_new":
         result = kocherga.slack.client().api_call(
