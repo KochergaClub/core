@@ -26,9 +26,12 @@ async def r_vk_callback():
         return "f4cc4bd9"
 
     if payload["type"] == "message_new":
+        obj = payload["object"]
+        group_id = payload["group_id"]
+        link = f'https://vk.com/gim{group_id}?sel={obj["from_id"]}'
         result = kocherga.slack.client().api_call(
             "chat.postMessage",
-            text='Новое сообщение вк-сообществу',
+            text=f'Новое сообщение вк-сообществу: {link}\n>>> {obj["text"]}',
             channel='#test',
         )
         if not result['ok']:
