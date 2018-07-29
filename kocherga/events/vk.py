@@ -226,6 +226,8 @@ def update_wiki_schedule(from_dt=None):
         "pages.save", {"group_id": group_id, "page_id": page_id, "text": content}
     )
 
+    update_widget()
+
 
 def create_schedule_post(prefix_text):
     message = "#расписание_кочерги\n"
@@ -282,4 +284,49 @@ def create_schedule_post(prefix_text):
             "publish_date": int(datetime.now().timestamp()) + 86400,
             "attachments": photo_id,
         },
+    )
+
+def update_widget():
+    from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
+    query = (
+        Session()
+        .query(Event)
+        .filter(Event.deleted == False)
+        .filter(Event.start_ts > from_dt.timestamp())
+        .filter(Event.start_ts < (datetime.now(TZ) + timedelta(weeks=4)).timestamp())
+        .filter(Event.event_type == "public")
+        .filter(Event.posted_vk != None)
+        .filter(Event.posted_vk != "")
+    )
+    events = query.order_by(Event.start_ts).limit(3).all()
+
+    def event2time(event):
+        day_codes = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+        day = day_codes[event.start_dt.weekday()]
+        return f"{day} {event.start_dt:%H:%M}"
+
+    group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
+    page_id = group2id(kocherga.config.config()["vk"]["main_page"]["main_wall_page_id"])
+    wiki_url = "https://vk.com/page-{group_id}_{page_id}"
+
+    kocherga.vk.call(
+        "appWidgets.update",
+        {
+            "type": "compact_list",
+            "code": "return " + json.dumps({
+                "title": "Расписание",
+                "rows": [
+                    {
+                        "title": event.title,
+                        "title_url": event.posted_vk,
+                        "time": event2time(event),
+                    }
+                    for event in events
+                ],
+                "title_url": wiki_url,
+                "more": "Все мероприятия",
+                "more_url": wiki_url
+            }, ensure_ascii=False) + ";"
+        },
+        group_token=True
     )

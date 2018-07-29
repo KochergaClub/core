@@ -18,8 +18,8 @@ API_VERSION = "5.80"
 def api_key():
     return kocherga.secrets.plain_secret("vk_api_key")
 
-
-KEY = api_key()
+def group_api_key():
+    return kocherga.secrets.plain_secret("vk_group_api_key")
 
 
 def check_response(r):
@@ -40,9 +40,10 @@ def new_token_url():
     return f"https://oauth.vk.com/authorize?client_id={client_id}&display=page&redirect_uri={redirect_uri}&scope={scope}&response_type=token&v={API_VERSION}"
 
 
-def call(method, params):
+def call(method, params, group_token=False):
     params = dict(params)  # copy - we'll modify it and don't want to affect the args
-    params["access_token"] = api_key()
+
+    params["access_token"] = group_api_key() if group_token else api_key()
     params["v"] = API_VERSION
 
     r = None
