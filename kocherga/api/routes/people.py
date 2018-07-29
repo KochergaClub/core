@@ -1,14 +1,31 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from quart import Blueprint, jsonify
+
+import time
+
 import kocherga.cm
 
 bp = Blueprint("people", __name__)
 
+stats_cached_ts = None
+stats_cached = None
+CACHE_PERIOD = 5
 
 @bp.route("/people/now")
 def now():
+    global stats_cached
+    global stats_cached_ts
+
+    now_ts = time.time()
+    if stats_cached_ts and now_ts - stats_cached_ts < CACHE_PERIOD:
+        logger.info("return now stats from cache")
+        return jsonify(stats_cached)
+
     stats = kocherga.cm.now_stats()
+
     result = {
-        "now": stats["total"], # deprecated
         "total": stats["total"],
         "customers": [
             {
@@ -19,4 +36,9 @@ def now():
             if c["privacy_mode"] == "public"
         ]
     }
+
+    stats_cached = result
+    stats_cached_ts = now_ts
+    logger.info("updated now stats")
+
     return jsonify(result)
