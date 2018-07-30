@@ -15,7 +15,6 @@ def main():
         trigger="interval",
         name='update_vk_widget',
         minutes=1,
-        jitter=300,
     )
 
     scheduler.add_job(
@@ -23,7 +22,6 @@ def main():
         trigger="interval",
         name='update_vk_cover',
         minutes=2,
-        jitter=300,
     )
 
     scheduler.start()
