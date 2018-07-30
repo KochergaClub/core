@@ -1,11 +1,12 @@
 class Field:
-    def __init__(self, name):
+    def __init__(self, name, value_type='str'):
         self.name = name
+        self.value_type = value_type
 
     def to_dict(self):
         return {
             'name': self.name,
-            'type': 'str',
+            'value_type': self.value_type,
         }
 
 class Schema:
@@ -36,4 +37,8 @@ name2schema['workshop-badge'] = Schema(
 
 name2schema['workshop-thin'] = Schema(
     [Field('date_text')]
+)
+
+name2schema['vk-cover'] = Schema(
+    [Field('now_total', 'int')]
 )

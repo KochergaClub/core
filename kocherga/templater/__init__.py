@@ -8,6 +8,8 @@ import re
 import pyppeteer
 import jinja2
 
+import kocherga.config
+
 from .config import name2schema
 
 jinja_loader = jinja2.FileSystemLoader(
@@ -57,7 +59,17 @@ class Template:
     def template(self):
         return jinja_env.get_template(f'{self.name}.html')
 
-    def generate_html(self, props):
+    def generate_html(self, args):
+        props = {}
+        for field in self.schema.fields:
+            if field.name in args:
+                value = str(args[field.name])
+                if field.value_type == 'int':
+                    value = int(value)
+                props[field.name] = value
+
+        props['url_root'] = kocherga.config.config()['web_root']
+
         return self.template.render(**props)
 
     async def generate_png(self, props):

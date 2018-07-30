@@ -18,8 +18,6 @@ def get_args(args, form):
         result[k] = v
     result.update(form)
 
-    result["url_root"] = kocherga.config.config()['web_root']
-
     return result
 
 

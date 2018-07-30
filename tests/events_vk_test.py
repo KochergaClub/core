@@ -8,7 +8,7 @@ import os.path
 
 from freezegun import freeze_time
 
-import kocherga.vk
+import kocherga.vk.api
 import kocherga.events.vk
 from kocherga.db import Session
 
@@ -27,7 +27,7 @@ class TestCreate:
         assert isinstance(result, kocherga.events.vk.VkAnnouncement)
         print(result.link)
 
-        kocherga.vk.call('wall.delete', {
+        kocherga.vk.api.call('wall.delete', {
             'owner_id': -result.group_id,
             'post_id': result.post_id,
         })
@@ -45,7 +45,7 @@ class TestCreate:
 
         assert isinstance(result, kocherga.events.vk.VkAnnouncement)
 
-        kocherga.vk.call('wall.delete', {
+        kocherga.vk.api.call('wall.delete', {
             'owner_id': -result.group_id,
             'post_id': result.post_id,
         })

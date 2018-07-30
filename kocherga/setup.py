@@ -13,16 +13,17 @@
 #
 # This module should provide the way to set up all of those (but does so only partially for now).
 
-import kocherga.vk
+import kocherga.vk.api
+import kocherga.vk.helpers
 import kocherga.config
 
 def get_vk_group_id():
     group = kocherga.config.config()['vk']['main_page']['id']
-    return kocherga.vk.group2id(group)
+    return kocherga.vk.helpers.group2id(group)
 
 def find_vk_callback_server():
     group_id = get_vk_group_id()
-    response = kocherga.vk.call('groups.getCallbackServers', { 'group_id': group_id })
+    response = kocherga.vk.api.call('groups.getCallbackServers', { 'group_id': group_id })
     server = next(
         (s for s in response['items'] if s['title'] == 'Kocherga API'),
         None
@@ -39,10 +40,10 @@ def install_vk_callback_api():
     if not server:
         server = create_vk_callback_server()
 
-    result = kocherga.vk.call('groups.setCallbackSettings', {
+    result = kocherga.vk.api.call('groups.setCallbackSettings', {
         'group_id': get_vk_group_id(),
         'server_id': server['id'],
-        'api_version': kocherga.vk.API_VERSION,
+        'api_version': kocherga.vk.api.API_VERSION,
         'message_new': 1,
         'wall_reply_new': 1,
         'wall_post_new': 1,

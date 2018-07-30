@@ -7,8 +7,8 @@ import json
 
 from kocherga.config import TZ
 from kocherga.db import Session
-import kocherga.vk
-from kocherga.vk import group2id
+import kocherga.vk.api
+from kocherga.vk.helpers import group2id, upload_wall_image
 from kocherga.error import PublicError
 import kocherga.datetime
 
@@ -29,44 +29,6 @@ class VkAnnouncement(BaseAnnouncement):
         return "https://vk.com/{}?w=wall-{}_{}".format(
             self.group_name, self.group_id, self.post_id
         )
-
-
-def upload_wall_image(group_id, image_bytes):
-    upload_server = kocherga.vk.call(
-        "photos.getWallUploadServer", {"group_id": group_id}
-    )
-    upload_url = upload_server["upload_url"]
-
-    r = requests.post(upload_url, files={
-        "file": ("image.png", image_bytes)
-    })
-    r.raise_for_status()
-
-    # note that image upload doesn't wrap the result in {'response': ...}, do it doesn't need to be checked with kocherga.vk.check_response
-    upload_response = r.json()
-
-    photo = json.loads(upload_response["photo"])
-
-    if not len(photo):
-        raise Exception("vk didn't like our image file")
-
-    logger.debug("image upload response: " + str(upload_response))
-
-    photo = kocherga.vk.call(
-        "photos.saveWallPhoto",
-        {
-            "group_id": group_id,
-            "photo": upload_response["photo"],
-            "server": upload_response["server"],
-            "hash": upload_response["hash"],
-            "caption": "Картинка к посту",
-        },
-    )
-
-    photo_id = "photo{owner_id}_{id}".format(**photo[0])
-    logger.info("photo id: " + str(photo_id))
-
-    return photo_id
 
 
 def vk_description(event):
@@ -104,7 +66,7 @@ def create(event):
     photo_id = upload_wall_image(group_id, open(image_file, 'rb').read())
     message = vk_text(event)
 
-    response = kocherga.vk.call(
+    response = kocherga.vk.api.call(
         "wall.post",
         {
             "owner_id": -group_id,
@@ -115,7 +77,7 @@ def create(event):
         },
     )
 
-    kocherga.vk.call(
+    kocherga.vk.api.call(
         "groups.edit",
         {
             "group_id": group_id,
@@ -125,31 +87,6 @@ def create(event):
     )
 
     return VkAnnouncement(group_name, group_id, response["post_id"])
-
-
-def add_week_to_event_date(vk_group_id):
-    vk_group_id = group2id(vk_group_id)
-
-    response = kocherga.vk.call(
-        "groups.getSettings",
-        {
-            "group_id": vk_group_id,
-            "event_start_date": 1512059400,
-            "event_finish_date": 1512070200,
-        },
-    )
-
-    start_date = response["start_date"]
-    finish_date = response["finish_date"]
-
-    kocherga.vk.call(
-        "groups.edit",
-        {
-            "group_id": vk_group_id,
-            "event_start_date": start_date + 86400 * 7,
-            "event_finish_date": finish_date + 86400 * 7,
-        },
-    )
 
 
 def all_groups():
@@ -210,7 +147,7 @@ def update_wiki_schedule(from_dt=None):
 
     group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
     page_id = group2id(kocherga.config.config()["vk"]["main_page"]["main_wall_page_id"])
-    r = kocherga.vk.call(
+    r = kocherga.vk.api.call(
         "pages.get", {"owner_id": -group_id, "page_id": page_id, "need_source": 1}
     )
 
@@ -222,7 +159,7 @@ def update_wiki_schedule(from_dt=None):
     content = result + r["source"][position:]
     logger.debug(f"New wiki page content: {content}")
 
-    r = kocherga.vk.call(
+    r = kocherga.vk.api.call(
         "pages.save", {"group_id": group_id, "page_id": page_id, "text": content}
     )
 
@@ -275,7 +212,7 @@ def create_schedule_post(prefix_text):
     image_bytes = kocherga.images.image_storage.create_mailchimp_image(dt)
     photo_id = upload_wall_image(group_id, image_bytes)
 
-    kocherga.vk.call(
+    kocherga.vk.api.call(
         "wall.post",
         {
             "owner_id": -group_id,
@@ -307,9 +244,9 @@ def update_widget():
 
     group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
     page_id = group2id(kocherga.config.config()["vk"]["main_page"]["main_wall_page_id"])
-    wiki_url = "https://vk.com/page-{group_id}_{page_id}"
+    wiki_url = f"https://vk.com/page-{group_id}_{page_id}"
 
-    kocherga.vk.call(
+    kocherga.vk.api.call(
         "appWidgets.update",
         {
             "type": "compact_list",
@@ -319,6 +256,8 @@ def update_widget():
                     {
                         "title": event.title,
                         "title_url": event.posted_vk,
+                        "button": "Подробнее",
+                        "button_url": event.posted_vk,
                         "time": event2time(event),
                     }
                     for event in events
