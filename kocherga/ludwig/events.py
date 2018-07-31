@@ -149,19 +149,19 @@ def event_visitors_question(event):
                 "actions": [
                     {
                         "name": "visitors",
-                        "text": "записать",
+                        "text": "Записать",
                         "type": "button",
                         "value": "dialog",
                     },
                     {
                         "name": "visitors",
-                        "text": "не записали :(",
+                        "text": "Не записали :(",
                         "type": "button",
                         "value": "no_record",
                     },
                     {
                         "name": "visitors",
-                        "text": "не состоялось",
+                        "text": "Не состоялось",
                         "type": "button",
                         "value": "cancelled",
                     },
