@@ -15,6 +15,48 @@ def event_color(event):
     return "#999" if event.event_type == "private" else "good"
 
 
+def list_events():
+    events = kocherga.events.db.list_events(date=datetime.now().date())
+
+    attachments = []
+    for event in events:
+        start_time = event.start_dt.strftime("%H:%M")
+        end_time = event.end_dt.strftime("%H:%M")
+
+        text = f"С {start_time} до {end_time}"
+        if event.location:
+            text += ", " + event.location
+
+        attachments.append(
+            {
+                "text": text,
+                "title": event.title,
+                "title_link": event.google_link,
+                "color": event_color(event),
+                "mrkdwn_in": ["text"],
+            }
+        )
+
+    word_form = plural_form(len(events), ("событие", "события", "событий"))
+
+    return {"text": f"Сегодня *{len(events)}* {word_form}:", "attachments": attachments}
+
+
+@bot.listen_to(r"какие сегодня события\?")
+def react_events(message):
+    return list_events()
+
+
+@bot.schedule("cron", hour=9)
+def morning_events_notification():
+    bot.send_message(**list_events(), channel="#watchmen")
+
+
+@bot.command("/events")
+def command_events(payload):
+    return list_events()
+
+
 # TODO - move this function to some common module
 def plural_form(n, forms):
     NOMINATIVE = 0
@@ -63,48 +105,6 @@ def visitors_attachment(event):
     }
 
 
-def list_events():
-    events = kocherga.events.db.list_events(date=datetime.now().date())
-
-    attachments = []
-    for event in events:
-        start_time = event.start_dt.strftime("%H:%M")
-        end_time = event.end_dt.strftime("%H:%M")
-
-        text = f"С {start_time} до {end_time}"
-        if event.location:
-            text += ", " + event.location
-
-        attachments.append(
-            {
-                "text": text,
-                "title": event.title,
-                "title_link": event.google_link,
-                "color": event_color(event),
-                "mrkdwn_in": ["text"],
-            }
-        )
-
-    word_form = plural_form(len(events), ("событие", "события", "событий"))
-
-    return {"text": f"Сегодня *{len(events)}* {word_form}:", "attachments": attachments}
-
-
-@bot.listen_to(r"какие сегодня события\?")
-def react_events(message):
-    return list_events()
-
-
-@bot.schedule("cron", hour=9)
-def morning_events_notification():
-    bot.send_message(**list_events(), channel="#watchmen")
-
-
-@bot.command("/events")
-def command_events(payload):
-    return list_events()
-
-
 def list_event_visitors():
     events = kocherga.events.db.list_events(date=datetime.now().date())
 
@@ -133,37 +133,25 @@ def command_event_visitors(payload):
 
 
 def event_visitors_question(event):
-    return {
+    result = {
         "text": "Сколько человек пришло на событие?",
         "channel": "#watchmen",
-        "attachments": [
+    }
+    if event.visitors:
+        result["attachments"] = [visitors_attachment(event)]
+    else:
+        result["attachments"] = [
             {
                 "title": event.title,
                 "title_link": event.google_link,
                 "color": event_color(event),
-            }
-        ]
-        + [
-            {
-                "fallback": "Кнопок нет.",
-                "callback_id": f"event_visitors/{event.google_id}",
-                "actions": [
-                    {"name": "visitors", "text": n, "type": "button", "value": n}
-                    for n in range(5 * base + 1, 5 * base + 6)
-                ],
-            }
-            for base in range(4)
-        ]
-        + [
-            {
-                "fallback": "Кнопок нет.",
                 "callback_id": f"event_visitors/{event.google_id}",
                 "actions": [
                     {
                         "name": "visitors",
-                        "text": "более 20",
+                        "text": "записать",
                         "type": "button",
-                        "value": "more_than_20",
+                        "value": "dialog",
                     },
                     {
                         "name": "visitors",
@@ -179,8 +167,9 @@ def event_visitors_question(event):
                     },
                 ],
             }
-        ],
-    }
+        ]
+
+    return result
 
 
 @bot.schedule("interval", minutes=5)
@@ -203,10 +192,6 @@ def ask_for_event_visitors():
         return  # nothing to ask about
 
     for e in events:
-        logger.info(
-            f"Asking for event {e.google_id} ({e.title}). Old asked_for_visitors: {e.asked_for_visitors_dt}"
-        )
-
         e.asked_for_visitors_dt = datetime.now(TZ)
         bot.send_message(**event_visitors_question(e))
 
@@ -220,9 +205,37 @@ def reset_event_visitors(payload, event_id):
         raise Exception(f"Event {event_id} not found")
 
     event.visitors = None
+    return event_visitors_question(event)
+
+
+@bot.action(r"event_visitors/(.*)/submit/(.*)")
+def submit_event_visitors_dialog(payload, event_id, original_message_path):
+    (original_message_id, original_channel_id) = original_message_path.split('@')
+    assert payload["type"] == "dialog_submission"
+
+    event = Session().query(Event).get(event_id)
+    event.visitors = payload["submission"]["visitors"]
     Session().commit()
 
-    return event_visitors_question(event)
+    if event.event_type == 'private' and value.isdigit() and int(value) >= 4:
+        bot.send_message(
+            text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\nНайдите человека, на которого оформлена эта бронь (аренда), и спросите у него, как они нашли Кочергу; ответ напишите в треде.",
+            channel="#watchmen",
+        )
+
+    question = event_visitors_question(event)
+    question['channel'] = original_channel_id
+
+    response = bot.sc.api_call(
+        'chat.update',
+        ts=original_message_id,
+        **question,
+    )
+    if not response["ok"]:
+        logger.warning(response)
+        raise Exception("Couldn't update question message")
+
+    return {}
 
 
 @bot.action(r"event_visitors/(.*)")
@@ -233,16 +246,36 @@ def accept_event_visitors(payload, event_id):
     if not event:
         raise Exception(f"Event {event_id} not found")
 
-    event.visitors = value
-    Session().commit()
-
-    if event.event_type == 'private' and value.isdigit() and int(value) >= 4:
-        bot.send_message(
-            text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\nНайдите человека, на которого оформлена эта бронь (аренда), и спросите у него, как они нашли Кочергу; ответ напишите в треде.",
-            channel="#watchmen",
+    if value == 'dialog':
+        response = bot.sc.api_call(
+            'dialog.open',
+            trigger_id=payload["trigger_id"],
+            dialog={
+                "callback_id": f"event_visitors/{event.google_id}/submit/{payload['message_ts']}@{payload['channel']['id']}",
+                "title": "Статистика мероприятия",
+                "submit_label": "Сохранить",
+                "elements": [
+                    {
+                        "name": "visitors",
+                        "type": "text",
+                        "subtype": "number",
+                        "label": "Количество человек",
+                        "hint": "Не считая ведущего.",
+                    }
+                ],
+            },
         )
+        if not response["ok"]:
+            logger.warning(response)
+            raise Exception("Couldn't open visitors dialog")
+    elif value == 'no_record':
+        event.visitors = 'no_record'
+        Session().commit()
 
-    attachment = visitors_attachment(event)
-    attachment["text"] = f"<@{payload['user']['id']}>: {attachment['text']}"
+    elif value == 'cancelled':
+        event.visitors = 'cancelled'
+        Session().commit()
+    else:
+        raise Exception("Unknown value")
 
-    return {"text": "Сколько человек пришло на событие?", "attachments": [attachment]}
+    return event_visitors_question(event)
