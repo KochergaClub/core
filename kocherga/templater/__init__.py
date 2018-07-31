@@ -28,7 +28,9 @@ _browser = None
 async def get_browser():
     global _browser
     if not _browser:
+        logger.info("Launching new headless browser")
         _browser = await pyppeteer.launch()
+        logger.info("Browser created")
     return _browser
 
 class Template:
@@ -78,13 +80,17 @@ class Template:
         browser = await get_browser()
         page = await browser.newPage()
 
-        (width, height) = self.sizes
-        await page.setViewport(
-            {"width": width, "height": height, "deviceScaleFactor": 2}  # retina
-        )
-        await page.goto(f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000})
+        try:
+            (width, height) = self.sizes
+            await page.setViewport(
+                {"width": width, "height": height, "deviceScaleFactor": 2}  # retina
+            )
+            await page.goto(f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000})
 
-        image_bytes = await page.screenshot()
+            image_bytes = await page.screenshot()
+        finally:
+            await page.close()
+
         return image_bytes
 
 def list_templates():
