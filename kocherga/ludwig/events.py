@@ -242,10 +242,6 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
 def accept_event_visitors(payload, event_id):
     value = payload["actions"][0]["value"]
 
-    event = Session().query(Event).get(event_id)
-    if not event:
-        raise Exception(f"Event {event_id} not found")
-
     if value == 'dialog':
         response = bot.sc.api_call(
             'dialog.open',
@@ -268,7 +264,14 @@ def accept_event_visitors(payload, event_id):
         if not response["ok"]:
             logger.warning(response)
             raise Exception("Couldn't open visitors dialog")
-    elif value == 'no_record':
+
+        return event_visitors_question(event) # do we really have to resend the same message just because Slack awaits some answer from the action?
+
+    event = Session().query(Event).get(event_id)
+    if not event:
+        raise Exception(f"Event {event_id} not found")
+
+    if value == 'no_record':
         event.visitors = 'no_record'
         Session().commit()
 
