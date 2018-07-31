@@ -265,6 +265,9 @@ def accept_event_visitors(payload, event_id):
             logger.warning(response)
             raise Exception("Couldn't open visitors dialog")
 
+        event = Session().query(Event).get(event_id)
+        if not event:
+            raise Exception(f"Event {event_id} not found")
         return event_visitors_question(event) # do we really have to resend the same message just because Slack awaits some answer from the action?
 
     event = Session().query(Event).get(event_id)
