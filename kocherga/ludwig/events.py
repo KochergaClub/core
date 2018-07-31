@@ -247,7 +247,7 @@ def accept_event_visitors(payload, event_id):
             'dialog.open',
             trigger_id=payload["trigger_id"],
             dialog={
-                "callback_id": f"event_visitors/{event.google_id}/submit/{payload['message_ts']}@{payload['channel']['id']}",
+                "callback_id": f"event_visitors/{event_id}/submit/{payload['message_ts']}@{payload['channel']['id']}",
                 "title": "Статистика мероприятия",
                 "submit_label": "Сохранить",
                 "elements": [
