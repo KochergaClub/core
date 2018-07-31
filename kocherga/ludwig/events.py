@@ -176,7 +176,7 @@ def event_visitors_question(event):
 
 @bot.schedule("interval", seconds=5)
 def ask_for_event_visitors():
-    events = kocherga.events.db.list_events(date=datetime.now().date())
+    events = Session().query(Event).filter_by(deleted=False).filter(Event.start_ts > datetime.now(TZ).timestamp() - 86400).all()
     logger.info(f"Total events: {len(events)}")
 
     events = [
@@ -215,11 +215,23 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
     (original_message_id, original_channel_id) = original_message_path.split('@')
     assert payload["type"] == "dialog_submission"
 
+    value = payload["submission"]["visitors"]
+
+    if not value.isdigit():
+        return {
+            "errors": [
+                {
+                    "name": "visitors",
+                    "error": "Нужно ввести число"
+                },
+            ]
+        }
+
     event = Session().query(Event).get(event_id)
-    event.visitors = payload["submission"]["visitors"]
+    event.visitors = value
     Session().commit()
 
-    if event.event_type == 'private' and value.isdigit() and int(value) >= 4:
+    if event.event_type == 'private' and int(value) >= 4:
         bot.send_message(
             text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\nНайдите человека, на которого оформлена эта бронь (аренда), и спросите у него, как они нашли Кочергу; ответ напишите в треде.",
             channel="#watchmen",
@@ -239,7 +251,7 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
         logger.warning(response)
         raise Exception("Couldn't update question message")
 
-    return {}
+    return
 
 
 @bot.action(r"event_visitors/(.*)")
@@ -269,10 +281,7 @@ def accept_event_visitors(payload, event_id):
             logger.warning(response)
             raise Exception("Couldn't open visitors dialog")
 
-        event = Session().query(Event).get(event_id)
-        if not event:
-            raise Exception(f"Event {event_id} not found")
-        return event_visitors_question(event) # do we really have to resend the same message just because Slack awaits some answer from the action?
+        return
 
     event = Session().query(Event).get(event_id)
     if not event:
