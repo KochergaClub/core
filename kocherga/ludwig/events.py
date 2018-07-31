@@ -149,21 +149,23 @@ def event_visitors_question(event):
                 "actions": [
                     {
                         "name": "visitors",
-                        "text": "Записать",
+                        "text": ":writing_hand: Записать",
                         "type": "button",
                         "value": "dialog",
-                    },
-                    {
-                        "name": "visitors",
-                        "text": "Не записали :(",
-                        "type": "button",
-                        "value": "no_record",
+                        "style": "primary",
                     },
                     {
                         "name": "visitors",
                         "text": "Не состоялось",
                         "type": "button",
                         "value": "cancelled",
+                    },
+                    {
+                        "name": "visitors",
+                        "text": "Не записали :(",
+                        "type": "button",
+                        "value": "no_record",
+                        "style": "danger",
                     },
                 ],
             }
@@ -172,7 +174,7 @@ def event_visitors_question(event):
     return result
 
 
-@bot.schedule("interval", minutes=5)
+@bot.schedule("interval", seconds=5)
 def ask_for_event_visitors():
     events = kocherga.events.db.list_events(date=datetime.now().date())
     logger.info(f"Total events: {len(events)}")
@@ -225,6 +227,8 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
 
     question = event_visitors_question(event)
     question['channel'] = original_channel_id
+    attachment = question['attachments'][0]
+    attachment['text'] = f"<@{payload['user']['id']}>: {attachment['text']}"
 
     response = bot.sc.api_call(
         'chat.update',
