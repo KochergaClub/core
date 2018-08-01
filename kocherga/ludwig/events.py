@@ -174,7 +174,7 @@ def event_visitors_question(event):
     return result
 
 
-@bot.schedule("interval", seconds=5)
+@bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
     events = Session().query(Event).filter_by(deleted=False).filter(Event.start_ts > datetime.now(TZ).timestamp() - 86400).all()
     logger.info(f"Total events: {len(events)}")
