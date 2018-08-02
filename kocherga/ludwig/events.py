@@ -1,7 +1,7 @@
-from datetime import datetime, timedelta
 import logging
-
 logger = logging.getLogger(__name__)
+
+from datetime import datetime, timedelta
 
 from kocherga.config import TZ
 import kocherga.events.db
@@ -176,8 +176,9 @@ def event_visitors_question(event):
 
 @bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
+    logger.debug("ask_for_event_visitors, session id = " + str(id(Session())))
     events = Session().query(Event).filter_by(deleted=False).filter(Event.start_ts > datetime.now(TZ).timestamp() - 86400).all()
-    logger.info(f"Total events: {len(events)}")
+    logger.debug(f"Total events: {len(events)}")
 
     events = [
         e

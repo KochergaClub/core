@@ -1,8 +1,12 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import slappy
 
 import pytz
 from flask_sqlalchemy import SQLAlchemy as SA
 from raven.contrib.flask import Sentry
+
 
 import kocherga.slack
 import kocherga.db
@@ -15,8 +19,12 @@ PORT = kocherga.config.config()["ludwig_port"]
 
 
 class Bot(slappy.Bot):
-
     def cleanup_on_exception(self):
+        logger.info("cleanup_on_exception")
+        kocherga.db.Session.remove()
+
+    def cleanup_on_anything(self):
+        logger.info("cleanup_on_anything")
         kocherga.db.Session.remove()
 
 
