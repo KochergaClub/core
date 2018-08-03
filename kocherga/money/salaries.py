@@ -273,7 +273,7 @@ def dates_period(d=None):
         month_ago = end_date - timedelta(days=30)
         start_date = date(month_ago.year, month_ago.month, 21)
     elif 17 <= today.day <= 21:
-        start_date = date(year, month, 5)
+        start_date = date(year, month, 6)
         end_date = date(year, month, 20)
     else:
         raise Exception(f"Today is {today}, it's not time to pay any salaries")
