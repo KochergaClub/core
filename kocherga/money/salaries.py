@@ -213,7 +213,7 @@ class Salary:
 
     @property
     def for_elba(self):
-        return math.ceil((self.shifts + self.commissions) * 1.13 / 115) * 115
+        return math.ceil((self.shifts + self.commissions) / 0.87 / 115) * 115
 
 class SalaryContainer:
     def __init__(self):
