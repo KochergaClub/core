@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 import logging
 import copy
+import math
 
 import fire
 
@@ -208,7 +209,11 @@ class Salary:
 
     @property
     def total(self):
-        return self.shifts + self.commissions + self.basic
+        return self.shifts + self.commissions
+
+    @property
+    def for_elba(self):
+        return math.ceil((self.shifts + self.commissions) * 1.13 / 115) * 115
 
 class SalaryContainer:
     def __init__(self):

@@ -31,7 +31,7 @@ def is_slava(message):
     return email == "slava@kocherga-club.ru"
 
 
-def salaries_message():
+def salaries_message(with_elba_values=False):
     salaries = kocherga.money.salaries.calculate_new_salaries()
     (start_date, end_date) = kocherga.money.salaries.dates_period()
 
@@ -42,7 +42,7 @@ def salaries_message():
 
         member = kocherga.team.find_member_by_email(email)
 
-        attachments.append({
+        member_attachment = {
             "text": f"{member.short_name} <@{member.slack_id}>: *{salary.total}* руб.",
             "fields": [
                 {
@@ -56,7 +56,14 @@ def salaries_message():
                     "short": True,
                 },
             ],
-        })
+        }
+        if with_elba_values:
+            member_attachment['fields'].append({
+                "title": "В Эльбу",
+                "value": f"{salary.for_elba} руб.",
+                "short": True,
+            })
+        attachments.append(member_attachment)
 
     header = ":moneybag: Зарплаты за "
     if start_date.month == end_date.month:
@@ -77,7 +84,7 @@ def react_show_salaries(message):
         message.reply("Только Слава может управлять зарплатами.")
         return
 
-    message.reply(**salaries_message())
+    message.reply(**salaries_message(with_elba_values=True))
 
 
 @bot.listen_to(r"отправь зарплаты")
