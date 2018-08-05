@@ -72,7 +72,7 @@ def create(event):
             "owner_id": -group_id,
             "from_group": 1,
             "message": message,
-            "publish_date": int(datetime.now().timestamp()) + 86400,
+            # "publish_date": int(datetime.now().timestamp()) + 86400,
             "attachments": photo_id,
         },
     )
