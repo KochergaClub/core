@@ -165,7 +165,7 @@ def create(event):
             {"field_id": "name", "name": "Имя", "type": "text", "is_mandatory": True},
         ],
         "properties": ["organization_letter_checkbox", "timepad_letter_checkbox"],
-        "access_status": "private",
+        "access_status": "public",
     }
     image = event.get_images().get("default", None)
     if image:
