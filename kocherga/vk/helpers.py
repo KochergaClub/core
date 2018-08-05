@@ -6,6 +6,7 @@ More specific tools (cover generation, widgets, etc.) should go to other modules
 import logging
 logger = logging.getLogger(__name__)
 
+import re
 import json
 import requests
 
@@ -14,6 +15,10 @@ import kocherga.vk.api
 def group2id(group_name):
     if type(group_name) == int:
         return group_name
+
+    match = re.match(r'^(?:public|club)(\d+)', group_name)
+    if match:
+        return int(match.group(1))
 
     r = kocherga.vk.api.call("groups.getById", {"group_id": group_name})
     return r[0]["id"]
