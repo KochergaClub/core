@@ -149,13 +149,13 @@ async def r_upload_image(prototype_id):
 def r_tag_add(prototype_id, tag_name):
     prototype = EventPrototype.by_id(prototype_id)
 
-    event.add_tag(tag_name)
+    prototype.add_tag(tag_name)
     Session().commit()
 
     return jsonify(ok)
 
 
-@bp.route("/event/<prototype_id>/tag/<tag_name>", methods=["DELETE"])
+@bp.route("/event_prototypes/<prototype_id>/tag/<tag_name>", methods=["DELETE"])
 def r_tag_delete(prototype_id, tag_name):
     prototype = EventPrototype.by_id(prototype_id)
 
