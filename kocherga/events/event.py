@@ -81,7 +81,6 @@ class Event(Base):
 
     timepad_category_code = Column(String(40))
     timepad_prepaid_tickets = Column(Boolean)
-
     timing_description_override = Column(String(255))
 
     tags = relationship(

@@ -55,7 +55,7 @@ async def r_prototype_new():
 @bp.route("/event_prototypes/<prototype_id>", methods=["GET"])
 @auth("kocherga")
 def r_prototype(prototype_id):
-    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype = EventPrototype.by_id(prototype_id)
     return jsonify(prototype.to_dict(detailed=True))
 
 @bp.route("/event_prototypes/<prototype_id>", methods=["PATCH"])
@@ -63,7 +63,7 @@ def r_prototype(prototype_id):
 async def r_patch_prototype(prototype_id):
     payload = await request.get_json() or await request.form
 
-    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype = EventPrototype.by_id(prototype_id)
 
     for (key, value) in payload.items():
         if key in (
@@ -92,7 +92,7 @@ async def r_patch_prototype(prototype_id):
 @bp.route("/event_prototypes/<prototype_id>/instances", methods=["GET"])
 @auth("kocherga")
 def r_prototype_instances(prototype_id):
-    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype = EventPrototype.by_id(prototype_id)
     events = prototype.instances()
     return jsonify([e.to_dict() for e in events])
 
@@ -100,7 +100,7 @@ def r_prototype_instances(prototype_id):
 @bp.route("/event_prototypes/<prototype_id>/cancel_date/<date_str>", methods=["POST"])
 @auth("kocherga")
 def r_prototype_cancel_date(prototype_id, date_str):
-    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype = EventPrototype.by_id(prototype_id)
     prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
     Session().commit()
     return jsonify(ok)
@@ -109,7 +109,7 @@ def r_prototype_cancel_date(prototype_id, date_str):
 @bp.route("/event_prototypes/<prototype_id>/suggested_dates")
 @auth("kocherga")
 def r_prototype_suggested_dates(prototype_id):
-    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype = EventPrototype.by_id(prototype_id)
     datetimes = prototype.suggested_dates()
     return jsonify([dts(dt) for dt in datetimes])
 
@@ -120,7 +120,7 @@ async def r_prototype_new_event(prototype_id):
     payload = await request.get_json()
     ts = payload["ts"]
 
-    prototype = Session().query(EventPrototype).get(prototype_id)
+    prototype = EventPrototype.by_id(prototype_id)
     dt = datetime.fromtimestamp(ts)
     event = prototype.new_event(dt)
     Session().commit()
@@ -143,3 +143,24 @@ async def r_upload_image(prototype_id):
     Session().commit()
 
     return jsonify(ok)
+
+
+@bp.route("/event_prototypes/<prototype_id>/tag/<tag_name>", methods=["POST"])
+def r_tag_add(prototype_id, tag_name):
+    prototype = EventPrototype.by_id(prototype_id)
+
+    event.add_tag(tag_name)
+    Session().commit()
+
+    return jsonify(ok)
+
+
+@bp.route("/event/<prototype_id>/tag/<tag_name>", methods=["DELETE"])
+def r_tag_delete(prototype_id, tag_name):
+    prototype = EventPrototype.by_id(prototype_id)
+
+    prototype.delete_tag(tag_name)
+    Session().commit()
+
+    return jsonify(ok)
+

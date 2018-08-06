@@ -2,6 +2,7 @@ import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
 from kocherga.events.prototype import EventPrototype
+from kocherga.events.prototype_tag import EventPrototypeTag
 from kocherga.db import Session
 
 def test_suggestions(common_prototype):
@@ -31,3 +32,19 @@ def test_cancel(common_prototype):
     assert suggested[1] == suggested2[1]
     assert suggested[2] != suggested2[2]
     assert suggested[3] == suggested2[2]
+
+class TestTags:
+    def test_list_default_tags(self, common_prototype):
+        assert common_prototype.tags == []
+
+    def test_set_tags(self, common_prototype):
+        common_prototype.tags.append(EventPrototypeTag(name='foo'))
+        common_prototype.tags.append(EventPrototypeTag(name='bar'))
+        Session().commit()
+        prototype_id = common_prototype.prototype_id
+
+        Session.remove()
+        common_prototype = Session().query(EventPrototype).filter_by(prototype_id=prototype_id).first()
+        assert len(common_prototype.tags) == 2
+        assert common_prototype.tags[0].name == 'bar' # tags are sorted by name
+        assert common_prototype.tags[1].name == 'foo'

@@ -5,9 +5,11 @@ from typing import List
 
 from datetime import datetime, timedelta
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, inspect
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from .event import Event
+from .prototype_tag import EventPrototypeTag
 
 from kocherga.db import Session, Base
 from kocherga.config import TZ
@@ -25,9 +27,9 @@ class EventPrototype(Base):
     location = Column(String(255))
     summary = Column(Text, nullable=False, default='')
     description = Column(Text, nullable=False, default='')
-    timing_description_override = Column(String(255))
     timepad_category_code = Column(String(40))
     timepad_prepaid_tickets = Column(Boolean)
+    timing_description_override = Column(String(255))
 
     vk_group = Column(String(40))
     fb_group = Column(String(40))
@@ -40,6 +42,14 @@ class EventPrototype(Base):
     image = Column(String(32))
 
     active = Column(Boolean)
+
+    tags = relationship(
+        "EventPrototypeTag",
+        order_by=EventPrototypeTag.name,
+        back_populates="prototype",
+        cascade="all, delete, delete-orphan"
+    )
+
 
     _canceled_dates = Column('canceled_dates', Text)
 
@@ -142,7 +152,23 @@ class EventPrototype(Base):
             result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
             result['instances'] = [e.to_dict() for e in self.instances(limit=20)]
 
+        result["tags"] = self.tag_names()
+
         return result
 
     def add_image(self, fh):
         self.image = image_storage.add_file(fh)
+
+    def tag_names(self):
+        return [
+            tag.name
+            for tag in self.tags
+        ]
+
+    def add_tag(self, tag_name):
+        if tag_name in self.tag_names():
+            raise Exception(f"Tag {tag_name} already exists on this event prototype")
+        self.tags.append(EventPrototypeTag(name=tag_name))
+
+    def delete_tag(self, tag_name):
+        self.tags.remove(next(tag for tag in self.tags if tag.name == tag_name))
