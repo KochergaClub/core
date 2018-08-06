@@ -128,6 +128,7 @@ def r_tag_add(event_id, tag_name):
     event = Event.by_id(event_id)
 
     event.add_tag(tag_name)
+    Session().commit()
 
     return jsonify(ok)
 
