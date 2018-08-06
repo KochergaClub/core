@@ -394,7 +394,7 @@ class Event(Base):
         self.tags.append(EventTag(name=tag_name))
 
     def delete_tag(self, tag_name):
-        self.tags.remove(next(tag for tag in e.tags if tag.name == tag_name))
+        self.tags.remove(next(tag for tag in self.tags if tag.name == tag_name))
 
     def public_object(self):
         # Some precautions against information leaking (although we do more checks in /public_events API route).
