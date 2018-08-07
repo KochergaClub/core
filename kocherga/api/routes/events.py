@@ -18,6 +18,7 @@ from kocherga.api.common import ok
 from kocherga.api.auth import auth
 
 from kocherga.config import config
+from kocherga.datetime import MSK_DATE_FORMAT
 
 from feedgen.feed import FeedGenerator
 
@@ -225,10 +226,14 @@ def r_list_public_atom():
     fg.title('Публичные мероприятия Кочерги')
     fg.author({ 'name': 'Антикафе Кочерга' })
 
-    for item in data:
+    for item in reversed(data):
         fe = fg.add_entry()
         fe.id(f'{config()["web_root"]}/public_event/{item["event_id"]}')
+        dt = datetime.strptime(item["start"], MSK_DATE_FORMAT)
         fe.title(item["title"])
+        dt_str = kocherga.datetime.weekday(dt).capitalize() + ', ' + str(dt.day) + ' ' + kocherga.datetime.inflected_month(dt) + ', ' + dt.strftime('%H:%M')
+        fe.summary(dt_str)
+        fe.content(dt_str)
         fe.link(href=item["announcements"]["vk"]["link"])
 
     return fg.atom_str(pretty=True)
