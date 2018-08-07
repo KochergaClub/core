@@ -12,9 +12,14 @@ from kocherga.db import Session
 
 import kocherga.events.db
 from kocherga.events.event import Event
+from kocherga.events.tag import EventTag
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
+
+from kocherga.config import config
+
+from feedgen.feed import FeedGenerator
 
 bp = Blueprint("events", __name__)
 
@@ -143,10 +148,9 @@ def r_tag_delete(event_id, tag_name):
     return jsonify(ok)
 
 
-def list_public_events(date=None, from_date=None, to_date=None):
-    query = Session().query(Event).filter_by(
-        deleted=False,
-        event_type='public',
+def list_public_events(date=None, from_date=None, to_date=None, tag=None):
+    query = Event.query().filter_by(
+        event_type='public'
     ).filter(
         Event.posted_vk != None
     ).filter(
@@ -154,6 +158,9 @@ def list_public_events(date=None, from_date=None, to_date=None):
     ).filter(
         Event.start_ts >= datetime(2018, 6, 1).timestamp() # earlier events are not cleaned up yet
     )
+
+    if tag:
+        query = query.join(EventTag).filter(EventTag.name == tag)
 
     if not from_date and not to_date and not date:
         raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
@@ -189,18 +196,39 @@ def r_list_public():
             d = datetime.strptime(d, "%Y-%m-%d").date()
         return d
 
-    return jsonify(
-        list_public_events(
-            date=arg2date('date'),
-            from_date=arg2date('from_date'),
-            to_date=arg2date('to_date'),
-        )
+    data = list_public_events(
+        date=arg2date('date'),
+        from_date=arg2date('from_date'),
+        to_date=arg2date('to_date'),
+        tag=request.args.get('tag'),
     )
+    return jsonify(data)
 
 @bp.route("/public_events/today")
 def r_list_public_today():
     return jsonify(
         list_public_events(
             date=datetime.today().date(),
+            tag=request.args.get('tag'),
         )
     )
+
+@bp.route("/public_events_atom")
+def r_list_public_atom():
+    data = list_public_events(
+        from_date=datetime.now().date(),
+        tag=request.args.get('tag'),
+    )
+
+    fg = FeedGenerator()
+    fg.id(f'{config()["web_root"]}/public_events_atom') # should we add query params here?
+    fg.title('Публичные мероприятия Кочерги')
+    fg.author({ 'name': 'Антикафе Кочерга' })
+
+    for item in data:
+        fe = fg.add_entry()
+        fe.id(f'{config()["web_root"]}/public_event/{item["event_id"]}')
+        fe.title(item["title"])
+        fe.link(href=item["announcements"]["vk"]["link"])
+
+    return fg.atom_str(pretty=True)

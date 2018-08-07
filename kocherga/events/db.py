@@ -40,6 +40,7 @@ def list_events(**kwargs):
         Session()
         .query(Event)
         .filter(Event.google_id.in_(tuple(ge["id"] for ge in google_events)))
+        .filter_by(deleted=False)
         .order_by(order_args)
         .all()
     )
