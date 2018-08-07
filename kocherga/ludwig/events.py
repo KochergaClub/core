@@ -233,8 +233,19 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
     Session().commit()
 
     if event.event_type == 'private' and int(value) >= 4:
+        watchman_slack_id = None
+        try:
+            watchman = kocherga.watchmen.current_watchman()
+            if watchman and watchman != 'Ночь':
+                member = kocherga.team.find_member_by_short_name(watchman)
+                watchman_slack_id = member.slack_id
+        except:
+            log.error("Couldn't find watchman or their slack id")
+
+        question_variant = '<@watchman_slack_id>, найди' if watchman_slack_id else 'Админ, найди'
+
         bot.send_message(
-            text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\nНайдите человека, на которого оформлена эта бронь (аренда), и спросите у него, как они нашли Кочергу; ответ напишите в треде.",
+            text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\n{question_variant} человека, на которого оформлена эта бронь (аренда), и спроси у него, как они нашли Кочергу; ответ напиши в треде.",
             channel="#watchmen",
         )
 
