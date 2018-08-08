@@ -55,6 +55,7 @@ jupyter = "*"
 aioconsole = "*"
 matplotlib = "*"
 seaborn = "*"
+tqdm = "*"
 
 
 [requires]
