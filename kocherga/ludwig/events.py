@@ -242,7 +242,7 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
         except:
             log.error("Couldn't find watchman or their slack id")
 
-        question_variant = '<@watchman_slack_id>, найди' if watchman_slack_id else 'Админ, найди'
+        question_variant = f'<@{watchman_slack_id}>, найди' if watchman_slack_id else 'Админ, найди'
 
         bot.send_message(
             text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\n{question_variant} человека, на которого оформлена эта бронь (аренда), и спроси у него, как они нашли Кочергу; ответ напиши в треде.",
