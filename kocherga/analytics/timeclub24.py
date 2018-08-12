@@ -27,7 +27,7 @@ class Importer(kocherga.importer.base.FullImporter):
         client = kocherga.telegram.core_api.get_client()
         client.send_message(TIMECLUB_BOT, 'Загруженность клубов')
         time.sleep(3)
-        message = self.client.get_messages(TIMECLUB_BOT)[0].message
+        message = client.get_messages(TIMECLUB_BOT)[0].message
 
         parts = message.split('\n')
         ts = datetime.now()
