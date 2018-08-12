@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import Column, String, Integer, DateTime, UniqueConstraint
 
 import kocherga.db
-
+import kocherga.importer.base
 import kocherga.telegram.core_api
 
 TIMECLUB_BOT = 'timeclub24_bot'
