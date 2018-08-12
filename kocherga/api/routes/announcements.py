@@ -128,4 +128,4 @@ def r_schedule_weekly_image():
 @bp.route("/screenshot/error", methods=["GET"])
 def r_last_screenshot():
     filename = image_storage.screenshot_file("error")
-    return send_file(filename, mimetype="image/png")
+    return send_file(filename)
