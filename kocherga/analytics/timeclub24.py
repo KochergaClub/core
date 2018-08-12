@@ -32,7 +32,10 @@ class Importer(kocherga.importer.base.FullImporter):
         parts = message.split('\n')
         ts = datetime.now()
         for part in parts:
-            (venue, visitors) = re.match(r'(.*): (\d+)$', part).groups()
+            match = re.match(r'(.*): (\d+)$', part)
+            if not match:
+                raise Exception(f"Can't parse message: {message}")
+            (venue, visitors) = match.groups()
 
             session.add(Timeclub24Visitors(
                 ts=ts,
