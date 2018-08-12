@@ -23,11 +23,9 @@ class Timeclub24Visitors(kocherga.db.Base):
     visitors = Column(Integer)
 
 class Importer(kocherga.importer.base.FullImporter):
-    def __init__(self):
-        self.client = kocherga.telegram.core_api.get_client()
-
     def do_full_import(self, session):
-        self.client.send_message(TIMECLUB_BOT, 'Загруженность клубов')
+        client = kocherga.telegram.core_api.get_client()
+        client.send_message(TIMECLUB_BOT, 'Загруженность клубов')
         time.sleep(3)
         message = self.client.get_messages(TIMECLUB_BOT)[0].message
 
