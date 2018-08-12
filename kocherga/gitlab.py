@@ -71,10 +71,6 @@ def main_project():
 
 class Importer(kocherga.importer.base.IncrementalImporter):
 
-    def init_db(self):
-        IssueNote.__table__.create(bind=kocherga.db.engine())
-        Issue.__table__.create(bind=kocherga.db.engine())
-
     def get_initial_dt(self):
         return datetime(2017, 10, 1, tzinfo=kocherga.config.TZ)
 

@@ -14,9 +14,6 @@ class SomeImporter(IncrementalImporter):
         return datetime.now()
         pass
 
-    def init_db(self):
-        pass
-
 def test_import_new(db):
     importer = SomeImporter()
     importer.import_new()

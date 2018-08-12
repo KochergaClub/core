@@ -18,10 +18,6 @@ class ImporterState(kocherga.db.Base):
     last_ts = Column(Integer)
     last_exception = Column(Text)
 
-    @classmethod
-    def init_db(cls):
-        cls.__table__.create(bind=kocherga.db.engine())
-
     @property
     def until_dt(self) -> Optional[datetime]:
         if not self.until_ts:
@@ -82,11 +78,6 @@ class ImportContext:
 
 
 class BaseImporter(ABC):
-
-    @abstractmethod
-    def init_db(self) -> None:
-        pass
-
     @abstractmethod
     def import_new(self) -> None:
         pass

@@ -150,9 +150,6 @@ def import_date(d: date, session) -> None:
 
 class Importer(kocherga.importer.base.IncrementalImporter):
 
-    def init_db(self):
-        OfdDocument.__table__.create(bind=kocherga.db.engine())
-
     def get_initial_dt(self):
         # take the first shift's date
         d = ofd.shift_opened(1).date()

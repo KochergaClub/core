@@ -79,9 +79,6 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2015, 8, 1, tzinfo=TZ)
 
-    def init_db(self):
-        Event.__table__.create(bind=kocherga.db.engine())
-
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         google_events = None
         too_old = from_dt < datetime.now(tz=TZ) - timedelta(days=7)

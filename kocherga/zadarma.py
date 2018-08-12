@@ -158,9 +158,6 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2016, 11, 1, tzinfo=TZ)
 
-    def init_db(self):
-        Call.__table__.create(bind=kocherga.db.engine())
-
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         last_call = None
 

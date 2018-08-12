@@ -165,9 +165,6 @@ class Importer(kocherga.importer.base.FullImporter):
     def __init__(self, log_portion_size=100):
         self.log_portion_size = log_portion_size
 
-    def init_db(self):
-        Order.__table__.create(bind=kocherga.db.engine())
-
     def import_order_log(self, session, order):
         logger.info(
             f"Updating log for {order.order_id}; last ts = {order.log_imported_ts}"
