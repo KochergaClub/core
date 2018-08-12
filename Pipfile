@@ -41,6 +41,8 @@ raven = "*"
 requests-toolbelt = "*"
 slappy = "==0.3.3"
 feedgen = "*"
+telethon-sync = "*"
+pysocks = "*"
 
 
 [dev-packages]

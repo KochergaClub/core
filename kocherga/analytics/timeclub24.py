@@ -1,9 +1,12 @@
 from telethon import TelegramClient
 import socks
+
 import time
+from datetime import datetime
+
+from sqlalchemy import Column, String, Integer, DateTime, UniqueConstraint
 
 import kocherga.db
-import datetime
 
 import kocherga.telegram.core_api
 
@@ -13,6 +16,7 @@ class Timeclub24Visitors(kocherga.db.Base):
     __tablename__ = "timeclub24_visitors"
     __table_args__ = (UniqueConstraint("ts", "venue"),)
 
+    id = Column(Integer, primary_key=True)
     ts = Column(DateTime, default=datetime.now)
     venue = Column(String(100), nullable=False)
     visitors = Column(Integer)
