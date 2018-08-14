@@ -13,6 +13,7 @@ from kocherga.error import PublicError
 import kocherga.room
 import kocherga.events.db
 from kocherga.events.event import Event
+import kocherga.events.helpers
 
 # types:
 # room (unicode, lowercase)
@@ -116,13 +117,7 @@ def delete_booking(event_id, email):
     kocherga.events.db.delete_event(event_id)
 
 
-def add_booking(date, room, people, startTime, endTime, email):
-    # validate
-    dt = datetime.datetime.strptime(date, "%Y-%m-%d").replace(tzinfo=TZ)
-
-    if datetime.datetime.today().replace(tzinfo=TZ) + MAX_BOOKING_DELAY < dt:
-        raise PublicError("This booking is too far off, we can't allow it.")
-
+def add_booking(date_str, room, people, start_time, end_time, email):
     room = kocherga.room.normalize(room)
     room = kocherga.room.pretty(room)
 
@@ -144,34 +139,19 @@ def add_booking(date, room, people, startTime, endTime, email):
     if len(email) == 0:
         raise PublicError("Email is required.")
 
-    def parse_time(t):
-        timeParsed = re.match(r"(\d\d):(\d\d)$", t)
-        if not timeParsed:
-            raise PublicError("Invalid time {}.".format(t))
+    (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(date_str, start_time, end_time)
 
-        result_dt = dt
+    if datetime.datetime.today().replace(tzinfo=TZ) + MAX_BOOKING_DELAY < start_dt:
+        raise PublicError("This booking is too far off, we can't allow it.")
 
-        (hour, minute) = (int(timeParsed.group(1)), int(timeParsed.group(2)))
-        if hour == 24:
-            hour = 0
-            result_dt += datetime.timedelta(days=1)
-
-        if minute not in (0, 30):
-            raise PublicError("Only booking for 30-minute intervals are allowed")
-
-        return result_dt.replace(hour=hour, minute=minute)
-
-    startDt = parse_time(startTime)
-    endDt = parse_time(endTime)
-
-    if endDt <= startDt:
+    if end_dt <= start_dt:
         raise PublicError("Event should end after it starts.")
 
-    if startDt < datetime.datetime.now(TZ):
+    if start_dt < datetime.datetime.now(TZ):
         raise PublicError("The past is already gone.")
 
     # check availability
-    available = check_availability(startDt, endDt, room)
+    available = check_availability(start_dt, end_dt, room)
     if not available:
         raise PublicError("This room is not available at that time.")
 
@@ -181,8 +161,8 @@ def add_booking(date, room, people, startTime, endTime, email):
             room=room, people=people, email=email
         ),
         location=room,
-        start_dt=startDt,
-        end_dt=endDt,
+        start_dt=start_dt,
+        end_dt=end_dt,
         attendees=[email],
     )
 

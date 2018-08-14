@@ -82,8 +82,9 @@ async def test_create(api_client):
         '/event',
         json={
             'title': 'test event',
-            'start': '2018-06-01T18:00:00+03:00',
-            'end': '2018-06-01T19:00:00+03:00',
+            'date': '2018-06-01',
+            'startTime': '18:00',
+            'endTime': '19:00',
         }
     )
     assert res.status_code == 200

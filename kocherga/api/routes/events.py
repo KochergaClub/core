@@ -61,12 +61,18 @@ def r_get(event_id):
 @auth("kocherga")
 async def r_create():
     payload = await request.get_json() or await request.form
+    for field in ("title", "date", "startTime", "endTime"):
+        if field not in payload:
+            raise PublicError("field {} is required".format(field))
+
     title = payload['title']
-    start_dt = datetime.strptime(payload['start'], MSK_DATE_FORMAT)
-    end_dt = datetime.strptime(payload['end'], MSK_DATE_FORMAT)
+    (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(payload['date'], payload['startTime'], payload['endTime'])
+
     event = Event(title=title, start_dt=start_dt, end_dt=end_dt)
+
     kocherga.events.db.insert_event(event)
     Session().commit()
+
     return jsonify(event.to_dict())
 
 
