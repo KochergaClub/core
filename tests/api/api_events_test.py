@@ -79,7 +79,7 @@ async def test_upload_image_from_url(api_client, image_storage, event):
 @pytest.mark.asyncio
 async def test_create(api_client):
     res = await api_client.post(
-        '/event',
+        '/events',
         json={
             'title': 'test event',
             'date': '2018-06-01',

@@ -57,7 +57,7 @@ def r_get(event_id):
     return jsonify(event.to_dict())
 
 
-@bp.route("/event", methods=["POST"])
+@bp.route("/events", methods=["POST"])
 @auth("kocherga")
 async def r_create():
     payload = await request.get_json() or await request.form
