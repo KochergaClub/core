@@ -77,7 +77,10 @@ def create_app(DEV):
     @app.errorhandler(Exception)
     def handle_invalid_usage(error):
         if raven_client:
-            raven_client.captureException()
+            try:
+                raven_client.captureException()
+            except:
+                logger.warn('Raven.captureException failed')
         print(error)
 
         if isinstance(error, PublicError):
