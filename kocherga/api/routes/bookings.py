@@ -13,13 +13,13 @@ bp = Blueprint("bookings", __name__)
 
 @bp.route("/my/bookings")
 @auth("any")
-def my_bookings():
+def r_list_my():
     bookings = kocherga.events.booking.bookings_by_email(get_email())
     return jsonify([b.public_object() for b in bookings])
 
 
 @bp.route("/bookings/<date_str>")
-def bookings(date_str):
+def r_list_by_date(date_str):
     if date_str == "today":
         date = datetime.today().date()
     else:
@@ -31,7 +31,7 @@ def bookings(date_str):
 
 @bp.route("/bookings", methods=["POST"])
 @auth("any")
-async def add_booking():
+async def r_create():
     data = {"email": get_email()}
     payload = await request.get_json() or await request.form
     for field in ("date", "room", "people", "startTime", "endTime"):
@@ -46,7 +46,7 @@ async def add_booking():
 
 @bp.route("/bookings/<event_id>", methods=["DELETE"])
 @auth("any")
-def delete_booking(event_id):
+def r_delete(event_id):
     email = get_email()
     kocherga.events.booking.delete_booking(event_id, email)
     Session().commit()
