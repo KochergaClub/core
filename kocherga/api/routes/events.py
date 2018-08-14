@@ -57,6 +57,19 @@ def r_get(event_id):
     return jsonify(event.to_dict())
 
 
+@bp.route("/event", methods=["POST"])
+@auth("kocherga")
+async def r_create():
+    payload = await request.get_json() or await request.form
+    title = payload['title']
+    start_dt = datetime.strptime(payload['start'], MSK_DATE_FORMAT)
+    end_dt = datetime.strptime(payload['end'], MSK_DATE_FORMAT)
+    event = Event(title=title, start_dt=start_dt, end_dt=end_dt)
+    kocherga.events.db.insert_event(event)
+    Session().commit()
+    return jsonify(event.to_dict())
+
+
 @bp.route("/event/<event_id>/property/<key>", methods=["POST"])
 @auth("kocherga")
 async def r_set_property(event_id, key):
