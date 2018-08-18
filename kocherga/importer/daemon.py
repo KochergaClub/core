@@ -16,7 +16,7 @@ IMPORTER_MODULES = [
     "events.db",
     "watchmen",
     "gitlab",
-    "analytics.timeclub24",
+#    "analytics.timeclub24",
 ]
 
 
