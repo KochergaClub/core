@@ -7,6 +7,7 @@ import hashlib
 
 import kocherga.google
 import kocherga.mailchimp
+from kocherga.config import config
 
 
 LIST_ID = config()["mailchimp"]["ratio_list_id"]
