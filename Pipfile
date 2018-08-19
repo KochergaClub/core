@@ -58,6 +58,7 @@ aioconsole = "*"
 matplotlib = "*"
 seaborn = "*"
 tqdm = "*"
+python-docx = "*"
 
 
 [requires]

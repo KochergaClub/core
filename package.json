@@ -6,6 +6,11 @@
   "author": "Vyacheslav Matyukhin <me@berekuk.ru>",
   "license": "MIT",
   "dependencies": {
-    "mjml": "^4.0.5"
+    "mjml": "^4.0.5",
+    "remark": "^9.0.0",
+    "remark-cli": "^5.0.0",
+    "remark-custom-blocks": "^2.2.3",
+    "remark-shortcodes": "^0.2.1",
+    "unified-stream": "^1.0.2"
   }
 }
