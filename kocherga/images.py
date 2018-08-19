@@ -24,14 +24,12 @@ class ImageStorage:
         self.directory = directory
 
         self.assets_dir = str(Path(self.directory) / "assets")
-        self.event_dir = str(Path(self.directory) / "event_image")
         self.mailchimp_dir = str(Path(self.directory) / "mailchimp")
         self.screenshot_dir = str(Path(self.directory) / "screenshot")
         self.main_dir = str(Path(self.directory) / "images")
 
         for d in (
             self.assets_dir,
-            self.event_dir,
             self.mailchimp_dir,
             self.screenshot_dir,
         ):
@@ -46,11 +44,6 @@ class ImageStorage:
 
     def screenshot_file(self, name):
         return str(Path(self.screenshot_dir) / name)
-
-    def event_image_file(self, event_id, image_type):
-        re.match(r"^\w+$", image_type)
-        re.match(r"^\w+$", event_id)
-        return str(Path(self.event_dir) / f"{image_type}.{event_id}.jpg")
 
     def schedule_file(self, start_date):
         image_file = Path(self.mailchimp_dir) / f"{start_date:%Y-%m-%d}.png"
