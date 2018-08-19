@@ -31,7 +31,11 @@ def get_cookies():
 
 
 def now_stats():
-    r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
+    try:
+        r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
+    except ConnectionError as e:
+        raise Exception("Failed to connect to Cafe Manager: " + repr(e))
+
     r.encoding = "utf-8"
 
     match = re.search(r"Посетителей сейчас в зале: <b>(\d+)</b>", r.text)
