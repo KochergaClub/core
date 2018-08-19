@@ -229,15 +229,16 @@ class Event(Base):
             self.ready_to_post = value in ("true", True)
         elif key == "timepad_prepaid_tickets":
             self.timepad_prepaid_tickets = value in ("true", True)
-        elif key == "asked_for_visitors":
+        elif key in ("asked_for_visitors", "start", "end"):
+            attr = key + '_ts'
+            ts_value = None
             if value:
-                self.asked_for_visitors_ts = (
+                ts_value = (
                     datetime.strptime(value, "%Y-%m-%d %H:%M")
                     .replace(tzinfo=TZ)
                     .timestamp()
                 )
-            else:
-                self.asked_for_visitors_ts = None
+            setattr(self, attr, ts_value)
         else:
             raise PublicError(f"Unknown prop {key}")
 
