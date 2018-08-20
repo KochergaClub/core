@@ -239,8 +239,6 @@ class SalaryContainer:
             member = kocherga.team.find_member_by_email(email)
             if not member:
                 raise Exception(f'Person {email} not found')
-            # slack_user = kocherga.slack.client().api_call('users.info', user=member.slack_id)
-            # display_name = slack_user['user']['profile']['display_name']
             salary = self.salaries[email]
             print(f'{member.short_name:<14} {salary.shifts:<12}{salary.commissions:<8}{salary.total:<8}')
 
@@ -260,8 +258,8 @@ def calculate_salaries(start_date, end_date):
             container.add(k, 'basic', v)
 
     if add_bonus_salaries:
-        # stat = night_bonuses(start_date, end_date)
-        stat = commission_bonuses(start_date, end_date)
+        bonuses_start_date = date(2018,8,4) if start_date == date(2018,8,6) else start_date # temporary fix for one ahead-of-time salaries event
+        stat = commission_bonuses(bonuses_start_date, end_date)
         for k, v in stat.items():
             container.add(k, 'commissions', v)
 
