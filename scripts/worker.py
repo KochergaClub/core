@@ -11,8 +11,10 @@ from kocherga.db import Session
 def job_wrapper(func):
     # Without this the connection can cache the old data if transaction isolation level is set to REPEATABLE READ.
     # (See https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html for details.)
-    Session.remove()
-    func()
+    def wrap():
+        Session.remove()
+        func()
+    return wrap
 
 def main():
     scheduler = BlockingScheduler()
