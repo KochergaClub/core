@@ -16,7 +16,6 @@ class EventTag(Base):
     event_id = Column(String(100), ForeignKey("events.google_id"), nullable=False)
     name = Column(String(40), nullable=False)
 
-
     event = relationship(
         "Event",
         back_populates="tags",
