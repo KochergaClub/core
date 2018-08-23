@@ -43,6 +43,7 @@ slappy = "==0.3.3"
 feedgen = "*"
 telethon-sync = "*"
 pysocks = "*"
+raven-aiohttp = "*"
 
 
 [dev-packages]

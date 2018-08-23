@@ -14,9 +14,10 @@ from quart import Quart, jsonify, request, current_app, _app_ctx_stack, render_t
 # from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-import kocherga.db
 import raven
+from raven_aiohttp import AioHttpTransport
 
+import kocherga.db
 from kocherga.error import PublicError
 
 import kocherga.api.common
@@ -27,6 +28,14 @@ class SQLAlchemyPatched(SQLAlchemy):
     def apply_pool_defaults(self, app, options):
         super().apply_pool_defaults(app, options)
         options["pool_pre_ping"] = True
+
+
+def get_raven_client():
+    sentry_dsn = kocherga.config.config().get("sentry", {}).get("api")
+    if not sentry_dsn:
+        return
+
+    return raven.Client(sentry_dsn)
 
 
 def create_app(DEV):
@@ -43,17 +52,7 @@ def create_app(DEV):
     app.config["SQLALCHEMY_DATABASE_URI"] = kocherga.db.DB_URL
     kocherga.db.Session.replace(SQLAlchemyPatched(app).session)
 
-    sentry_dsn = kocherga.config.config().get("sentry", {}).get("api", None)
-
-    # Disabled until we upgrade to quart 0.5.0 with its Werkzeug wrapper API (https://gitlab.com/pgjones/quart/issues/6)
-    #
-    # from raven.contrib.flask import Sentry
-    # if sentry_dsn:
-    #    sentry = Sentry(app, dsn=sentry_dsn, wrap_wsgi=False)
-
-    raven_client = None
-    if sentry_dsn:
-        raven_client = raven.Client(sentry_dsn)
+    raven_client = get_raven_client()
 
     if DEV:
         logger.info("DEV mode")
@@ -62,6 +61,7 @@ def create_app(DEV):
         kocherga.api.common.DEV = True
     else:
         app.logger.setLevel(logging.INFO)
+
     app.config["JSON_AS_ASCII"] = False
     app.config["JSONIFY_MIMETYPE"] = "application/json; charset=utf-8"
 
@@ -81,17 +81,18 @@ def create_app(DEV):
                 raven_client.captureException()
             except:
                 logger.warn('Raven.captureException failed')
-        print(error)
+
+        logger.error(
+            f"URL: {request.path}, method: {request.method}, error: {str(error)}"
+        )
 
         if isinstance(error, PublicError):
             response = jsonify(error.to_dict())
             response.status_code = error.status_code
         else:
-            logger.error(
-                f"URL: {request.path}, method: {request.method}, error: {str(error)}"
-            )
             response = jsonify({"error": "Internal error"})
             response.status_code = 500
+
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response
 
