@@ -38,6 +38,7 @@ def get_raven_client():
     return raven.Client(
         sentry_dsn,
         release=raven.fetch_git_sha(str(Path(__file__).parent.parent.parent)),
+        transport=AioHttpTransport,
     )
 
 
@@ -81,7 +82,7 @@ def create_app(DEV):
     def handle_invalid_usage(error):
         if raven_client:
             try:
-                raven_client.captureException(None, data={
+                raven_client.captureException(None, tags={
                     'url': request.path,
                     'args': str(request.args),
                     'method': request.method,
