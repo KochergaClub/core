@@ -37,7 +37,7 @@ def get_raven_client():
 
     return raven.Client(
         sentry_dsn,
-        release=raven.fetch_git_sha(os.path.dirname(__file__)),
+        release=raven.fetch_git_sha(str(Path(__file__).parent.parent.parent)),
     )
 
 
