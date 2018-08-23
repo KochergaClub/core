@@ -78,6 +78,12 @@ def create_app(DEV):
     def handle_invalid_usage(error):
         if raven_client:
             try:
+                raven_client.context.activate()
+                raven_client.context.merge({
+                    'url': request.path,
+                    'args': str(request.args),
+                    'method': request.method,
+                })
                 raven_client.captureException()
             except:
                 logger.warn('Raven.captureException failed')
