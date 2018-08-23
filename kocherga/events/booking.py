@@ -117,7 +117,7 @@ def delete_booking(event_id, email):
     kocherga.events.db.delete_event(event_id)
 
 
-def add_booking(date_str, room, people, start_time, end_time, email):
+def add_booking(date, room, people, start_time, end_time, email):
     room = kocherga.room.normalize(room)
     room = kocherga.room.pretty(room)
 
@@ -139,7 +139,7 @@ def add_booking(date_str, room, people, start_time, end_time, email):
     if len(email) == 0:
         raise PublicError("Email is required.")
 
-    (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(date_str, start_time, end_time)
+    (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(date, start_time, end_time)
 
     if datetime.datetime.today().replace(tzinfo=TZ) + MAX_BOOKING_DELAY < start_dt:
         raise PublicError("This booking is too far off, we can't allow it.")
