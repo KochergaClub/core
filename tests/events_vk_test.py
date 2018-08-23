@@ -6,8 +6,6 @@ from datetime import datetime, timedelta
 import shutil
 import os.path
 
-from freezegun import freeze_time
-
 import kocherga.vk.api
 import kocherga.events.vk
 from kocherga.db import Session

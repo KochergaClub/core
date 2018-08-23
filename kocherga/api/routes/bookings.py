@@ -32,13 +32,22 @@ def r_list_by_date(date_str):
 @bp.route("/bookings", methods=["POST"])
 @auth("any")
 async def r_create():
-    data = {"email": get_email()}
     payload = await request.get_json() or await request.form
+
+    data={}
     for field in ("date", "room", "people", "startTime", "endTime"):
         if field not in payload:
             raise PublicError("field {} is required".format(field))
         data[field] = str(payload.get(field, ""))
-    kocherga.events.booking.add_booking(**data)
+
+    kocherga.events.booking.add_booking(
+        date=data['date'],
+        room=data['room'],
+        people=data['people'],
+        start_time=data['startTime'],
+        end_time=data['endTime'],
+        email=get_email(),
+    )
     Session().commit()
 
     return jsonify(ok)
