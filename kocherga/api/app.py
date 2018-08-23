@@ -35,7 +35,10 @@ def get_raven_client():
     if not sentry_dsn:
         return
 
-    return raven.Client(sentry_dsn)
+    return raven.Client(
+        sentry_dsn,
+        release=raven.fetch_git_sha(os.path.dirname(__file__)),
+    )
 
 
 def create_app(DEV):
@@ -78,13 +81,11 @@ def create_app(DEV):
     def handle_invalid_usage(error):
         if raven_client:
             try:
-                raven_client.context.activate()
-                raven_client.context.merge({
+                raven_client.captureException(None, data={
                     'url': request.path,
                     'args': str(request.args),
                     'method': request.method,
                 })
-                raven_client.captureException()
             except:
                 logger.warn('Raven.captureException failed')
 
