@@ -111,24 +111,33 @@ class AnnounceSession:
     async def select_from_listbox(self, fb_id):
         image_id = get_image_id(fb_id, self.access_token)
         logger.info(f"Looking for image {image_id}")
+        await self.page.waitForSelector('[role=listbox]')
         selector = (
             f'[role=listbox] [src*="{image_id}"], [role=listbox] [style*="{image_id}"]'
         )
-        await self.page.waitForSelector(selector)
-        await self.page.click(selector)
+        if await self.page.J(selector):
+            await self.page.click(selector)
+            return True
+        return False
 
     async def fill_entity(self, entity):
         if not entity.name:
             raise Exception("Having a name is a must")
-        # await self.page.keyboard.type('@' + entity.name[:20])
+
+        # Problems? See https://gitlab.com/kocherga/code/core/issues/26
+        if entity.fb_id:
+            logger.info(f'Looking for {entity.name} in listbox')
+            prefix = '@' + entity.name[:20]
+            await self.page.keyboard.type(prefix)
+            selected = await self.select_from_listbox(entity.fb_id)
+            if selected:
+                return # yay
+
+            logger.info('Listbox failed, rollback and type entity name as is')
+            for i in range(len(prefix)):
+                await self.page.keyboard.press("Backspace")
 
         await self.page.keyboard.type(entity.name)
-        # Temporarily disabled - see https://gitlab.com/kocherga/code/core/issues/26
-        #
-        # if entity.fb_id:
-        #     await self.select_from_listbox(entity.fb_id)
-        # else:
-        #     await self.page.keyboard.type(entity.name)
 
     async def fill_category(self):
         dropdown = await self.page.J(".uiPopover[data-testid=event_category_selector]")
@@ -289,7 +298,7 @@ async def get_browser(headless):
 
 
 # FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),
-# so it's not a hack that we usually bring a token from a client from a client side to server to make an announcement.
+# so it's not a hack that we usually bring a token from a client side to server to make an announcement.
 #
 # It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
 async def create(event, access_token, headless=True, **kwargs):
