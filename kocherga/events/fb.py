@@ -74,7 +74,9 @@ def get_image_id(fb_id: str, access_token: str):
         if not match:
             raise Exception(f"Unparsable FB image url: {url}")
         return match.group(1)
-    raise Exception("Couldn't find picture or cover")
+
+    logger.warning("Couldn't find picture or cover")
+    return None
 
 
 class AnnounceSession:
@@ -110,6 +112,9 @@ class AnnounceSession:
 
     async def select_from_listbox(self, fb_id):
         image_id = get_image_id(fb_id, self.access_token)
+        if not image_id:
+            return False
+
         logger.info(f"Looking for image {image_id}")
         await self.page.waitForSelector('[role=listbox]')
         selector = (
