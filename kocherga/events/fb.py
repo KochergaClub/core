@@ -121,8 +121,11 @@ class AnnounceSession:
             f'[role=listbox] [src*="{image_id}"], [role=listbox] [style*="{image_id}"]'
         )
         if await self.page.J(selector):
-            await self.page.click(selector)
-            return True
+            try:
+                await self.page.click(selector)
+                return True
+            except:
+                return False
         return False
 
     async def fill_entity(self, entity):
