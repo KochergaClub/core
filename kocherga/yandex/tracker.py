@@ -79,7 +79,7 @@ def import_gl_note(gl_note, gl_issue, yandex_issue_id):
 
     api_call('POST', f'issues/{yandex_issue_id}/comments/_import', payload)
 
-IMPORT_UNIQUE_KEY = 'gitlab4'
+IMPORT_UNIQUE_KEY = 'gitlab6'
 def import_gl_issue(gl_issue, target_queue):
 
     def gl_wiki_link(url):
@@ -101,19 +101,35 @@ def import_gl_issue(gl_issue, target_queue):
             'description': f'{gl_wiki_link(gl_issue.web_url)}\n\n{gl_issue.description}',
             'tags': [s.replace(' ', '_').replace(',', '_') for s in gl_issue.attributes.get('labels', [])],
             'unique': f'{IMPORT_UNIQUE_KEY}-{gl_issue.id}',
-            'status': 8 if gl_issue.state == 'closed' else 1,
+            'status': 1, # can be overriden later
         }
         if gl_issue.attributes['assignee']:
             request_body['assignee'] = gl2tracker_users.get(gl_issue.attributes['assignee']['username'], 'info')
 
+        notes = gl_issue.notes.list(all=True, as_list=True)
+        if gl_issue.state == 'closed':
+            request_body['status'] = 8
+            request_body['resolution'] = 1
+            close_notes = [n for n in notes if n.body == 'closed' and n.system == True]
+            if len(close_notes) == 0:
+                # moved?
+                moved_notes = [n for n in notes if n.body.startswith('moved to ') and n.system == True]
+                close_note = moved_notes[0]
+            else:
+                close_note = close_notes[0]
+
+            request_body['resolvedAt'] = min(dateutil.parser.parse(close_note.attributes["created_at"]), updated_dt).strftime(DATE_FORMAT)
+            request_body['resolvedBy'] = gl2tracker_users.get(close_note.author['username'], 'info')
+
         result = api_call('POST', 'issues/_import', request_body)
 
-        for gl_note in gl_issue.notes.list(all=True, as_list=False):
+        for gl_note in notes:
             import_gl_note(gl_note, gl_issue, result['key'])
 
     except ConflictException:
         pass # whatever
 
-def import_main_tasks():
-    for gl_issue in kocherga.gitlab.main_project().issues.list(all=True, as_list=False, order_by='created_at', sort='asc'):
-        import_gl_issue(gl_issue, 'TESTC')
+def import_from_gitlab(gitlab_project_name, tracker_queue_name):
+    gitlab_project = kocherga.gitlab.get_gl().projects.get(gitlab_project_name)
+    for gl_issue in gitlab_project.issues.list(all=True, as_list=False, order_by='created_at', sort='asc'):
+        import_gl_issue(gl_issue, tracker_queue_name)
