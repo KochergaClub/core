@@ -11,8 +11,9 @@ from raven.contrib.flask import Sentry
 import kocherga.slack
 import kocherga.db
 import kocherga.config
+import kocherga.secrets
 
-SLACK_VERIFICATION_TOKEN = kocherga.slack.verification_token()
+SLACK_SIGNING_SECRET = kocherga.secrets.plain_secret('slack_signing_secret')
 SLACK_WORKPLACE_TOKEN = kocherga.slack.token()
 
 PORT = kocherga.config.config()["ludwig_port"]
@@ -39,7 +40,7 @@ def create_bot():
     bot = Bot(
         PORT,
         SLACK_WORKPLACE_TOKEN,
-        SLACK_VERIFICATION_TOKEN,
+        SLACK_SIGNING_SECRET,
         timezone=pytz.timezone(
             "Europe/Moscow"
         ),  # can't use kocherga.config.TZ - it's based on dateutil.tz now
