@@ -58,7 +58,7 @@ def export_to_db():
 
 def current_cash():
     item = (
-        kocherga.db.Session().query(CashierItem).order_by(CashierItem.id.desc()).first()
+        kocherga.db.Session().query(CashierItem).filter(CashierItem.current_cash != '').order_by(CashierItem.id.desc()).first()
     )
     return item.current_cash
 
