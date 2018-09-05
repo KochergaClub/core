@@ -135,10 +135,15 @@ async def elba_page():
 
     logger.info("Going to elba")
     await page.goto("https://elba.kontur.ru")
+    await page.waitForSelector('#Email')
+
+    import time; time.sleep(3) # there's some weird flickering in email field without this line
 
     logger.info("Signing in")
+
     await page.type("#Email", ELBA_CREDENTIALS["email"])
     await page.type("#Password", ELBA_CREDENTIALS["password"])
+
     await page.keyboard.press("Enter")
     await page.waitForNavigation()
 
