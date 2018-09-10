@@ -103,7 +103,7 @@ def load_customer_from_html(customer_id):
                 value = False
         result[key] = value
 
-    for required_field in "name", "family", "card":
+    for required_field in "name", "card":
         if required_field not in result:
             raise Exception(f"{required_field} not found")
 
