@@ -8,7 +8,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from kocherga.db import Session
 from .model import Customer
-from .scraper import DOMAIN, load_customer_from_html
+from .scraper import DOMAIN, load_customer_from_html, get_cookies
 
 def extend_subscription(card_id, period):
     customer_from_db = (
