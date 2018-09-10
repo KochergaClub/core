@@ -75,7 +75,8 @@ def r_telegram_post_schedule():
 @bp.route("/announcements/email/post_digest", methods=["POST"])
 @auth("kocherga")
 def r_email_post_digest():
-    kocherga.email.weekly_digest.create_draft()
+    text = (await request.get_json()).get('text', '')
+    kocherga.email.weekly_digest.create_draft(text)
     return jsonify(ok)
 
 

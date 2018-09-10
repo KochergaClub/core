@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import jinja2
+import markdown
 
 template_str = """<mjml>
   <mj-head>
@@ -35,7 +36,7 @@ template_str = """<mjml>
     <mj-section padding-top="30px">
       <mj-column width="100%">
         <mj-text>
-          {{ text | e }}
+          {{ text }}
         </mj-text>
       </mj-column>
     </mj-section>
@@ -129,7 +130,7 @@ def utmify(value):
     value += '&' if '?' in value else '?'
     return value + 'utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter'
 
-def generate_content(image_url):
+def generate_content(text, image_url):
     env = jinja2.Environment()
     env.filters['utmify'] = utmify
     template = env.from_string(template_str)
@@ -177,6 +178,7 @@ def generate_content(image_url):
         return f"{weekday}, {dt.day} {month}"
 
     mjml = template.render(
+        text=markdown.markdown(text, extensions=['markdown.extensions.nl2br']),
         image_url=image_url,
         title_dates=title_dates,
         events_by_date=events_by_date,
@@ -226,9 +228,9 @@ def upload_main_image():
 
     return result['full_size_url']
 
-def create_draft():
+def create_draft(text=''):
     image_url = upload_main_image()
-    content = generate_content(image_url)
+    content = generate_content(text, image_url)
 
     campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
         'type': 'regular',
