@@ -20,7 +20,7 @@ def now():
 
     now_ts = time.time()
     if stats_cached_ts and now_ts - stats_cached_ts < CACHE_PERIOD:
-        logger.info("return now stats from cache")
+        logger.debug("return now stats from cache")
         return jsonify(stats_cached)
 
     stats = kocherga.cm.now_stats()
