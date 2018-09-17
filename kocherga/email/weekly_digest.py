@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+import logging
+logger = logging.getLogger(__name__)
 
 import jinja2
 import markdown
@@ -102,6 +103,7 @@ import tempfile
 import base64
 from pathlib import Path
 
+import kocherga.config
 import kocherga.mailchimp
 import kocherga.images
 
@@ -109,6 +111,9 @@ from kocherga.events.event import Event
 from kocherga.db import Session
 import kocherga.datetime
 from datetime import timedelta, datetime
+
+MAIN_LIST_ID = kocherga.config.config()['mailchimp']['main_list_id']
+IMAGE_FOLDER_NAME = 'Расписание на неделю'
 
 def get_week_boundaries():
     dt = datetime.today()
@@ -207,20 +212,25 @@ def generate_content(text, image_url):
         'html': html,
     }
 
-# TODO - move to config or detect by name
-MAIN_LIST_ID = "d73cd4de36"
-IMAGE_FOLDER_ID = 19921
+def get_image_folder_id():
+    folders = kocherga.mailchimp.api_call(
+        'GET',
+        '/file-manager/folders',
+    )['folders']
+
+    return next(f for f in folders if f['name'] == IMAGE_FOLDER_NAME)['id']
 
 def upload_main_image():
     (dt, _) = get_week_boundaries()
 
     image_content = kocherga.images.image_storage.create_mailchimp_image(dt)
 
+    logger.info('Uploading weekly digest image to mailchimp')
     result = kocherga.mailchimp.api_call(
         'POST',
         f'file-manager/files',
         {
-            'folder_id': IMAGE_FOLDER_ID,
+            'folder_id': get_image_folder_id(),
             'name': f"weekly-image-{dt.strftime('%Y-%m-%d')}.png",
             'file_data': base64.encodebytes(image_content).decode('utf-8'),
         }
@@ -230,8 +240,11 @@ def upload_main_image():
 
 def create_draft(text=''):
     image_url = upload_main_image()
+
+    logger.info('Generating html content')
     content = generate_content(text, image_url)
 
+    logger.info('Creating campaign draft')
     campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
         'type': 'regular',
         'recipients': {
@@ -249,6 +262,7 @@ def create_draft(text=''):
 
     campaign_id = campaign['id']
 
+    logger.info('Filling campaign content')
     kocherga.mailchimp.api_call('PUT', f'campaigns/{campaign_id}/content', {
         'html': content['html'],
     })

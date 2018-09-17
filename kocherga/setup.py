@@ -13,9 +13,12 @@
 #
 # This module should provide the way to set up all of those (but does so only partially for now).
 
+import kocherga.config
+
 import kocherga.vk.api
 import kocherga.vk.helpers
-import kocherga.config
+import kocherga.mailchimp
+import kocherga.email.weekly_digest
 
 def get_vk_group_id():
     group = kocherga.config.config()['vk']['main_page']['id']
@@ -53,3 +56,25 @@ def install_vk_callback_api():
         'market_comment_new': 1,
     })
     print(result)
+
+def create_mailchimp_file_folder(name):
+    folders = kocherga.mailchimp.api_call(
+        'GET',
+        '/campaign-folders',
+    )['folders']
+
+    if name in [f['name'] for f in folders]:
+        return # already exists
+
+    kocherga.mailchimp.api_call(
+        'POST',
+        '/campaign-folders',
+        {
+            'name': name,
+        }
+    )
+
+def setup_mailchimp():
+    kocherga.mailchimp.create_file_folder(kocherga.email.weekly_digest.IMAGE_FOLDER_NAME)
+    kocherga.mailchimp.create_campaign_folder('Еженедельная рассылка')
+    kocherga.mailchimp.create_campaign_folder('Воркшопы')

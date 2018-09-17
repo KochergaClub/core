@@ -71,3 +71,39 @@ def wait_for_batch(batch_id):
         if body['status'] == 'finished':
             break
         time.sleep(1)
+
+# Used in setup only
+def create_campaign_folder(name):
+    folders = kocherga.mailchimp.api_call(
+        'GET',
+        '/campaign-folders',
+    )['folders']
+
+    if name in [f['name'] for f in folders]:
+        return # already exists
+
+    kocherga.mailchimp.api_call(
+        'POST',
+        '/campaign-folders',
+        {
+            'name': name,
+        }
+    )
+
+# Used in setup only
+def create_file_folder(name):
+    folders = kocherga.mailchimp.api_call(
+        'GET',
+        '/file-manager/folders',
+    )['folders']
+
+    if name in [f['name'] for f in folders]:
+        return # already exists
+
+    kocherga.mailchimp.api_call(
+        'POST',
+        '/file-manager/folders',
+        {
+            'name': name,
+        }
+    )
