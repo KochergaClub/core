@@ -22,6 +22,7 @@ TIMEPAD_CONFIG = kocherga.config.config()["timepad"]
 ORGANIZATION = TIMEPAD_CONFIG["organization"]
 SUBSCRIBERS_LIST_ID = TIMEPAD_CONFIG["subscribers_list_id"]
 ORGANIZATION_ID = TIMEPAD_CONFIG["organization_id"]
+DEFAULT_ACCESS_STATUS = TIMEPAD_CONFIG["default_access_status"]
 
 
 class TimepadAnnouncement(BaseAnnouncement):
@@ -165,7 +166,7 @@ def create(event):
             {"field_id": "name", "name": "Имя", "type": "text", "is_mandatory": True},
         ],
         "properties": ["organization_letter_checkbox", "timepad_letter_checkbox"],
-        "access_status": "public",
+        "access_status": DEFAULT_ACCESS_STATUS,
     }
     image = event.get_images().get("default", None)
     if image:
