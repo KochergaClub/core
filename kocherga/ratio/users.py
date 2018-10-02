@@ -30,7 +30,7 @@ def get_all_mailchimp_dates(category_id):
 
 
 def create_new_mailchimp_date(category_id, event_type, event_id):
-    event_type_ru = {"workshop": "Воркшоп", "3week": "Трехнедельный курс"}[event_type]
+    event_type_ru = {"workshop": "Воркшоп", "3week": "Трехнедельный курс", "bb": "Бытовое байесианство"}[event_type]
 
     name = f"{event_type_ru} {event_id}"
 
@@ -43,7 +43,7 @@ def create_new_mailchimp_date(category_id, event_type, event_id):
     if interest:
         logger.info(f"Group {name} already exists")
     else:
-        logger.info("Creating group {name}")
+        logger.info(f"Creating group {name}")
         interest = kocherga.mailchimp.api_call(
             "POST",
             f"lists/{LIST_ID}/interest-categories/{category_id}/interests",
@@ -72,7 +72,7 @@ def import_user_to_mailchimp(user, group_id):
 def get_users(event_type, event_id):
     gc = kocherga.google.gspread_client()
 
-    event_type_ru = {"workshop": "Воркшоп", "3week": "Курс"}[event_type]
+    event_type_ru = {"workshop": "Воркшоп", "3week": "Курс", "bb": "Байесианство"}[event_type]
 
     spreadsheet = gc.open_by_key(SPREADSHEET_ID)
     worksheet = spreadsheet.worksheet(f"{event_type_ru} {event_id}")
@@ -86,7 +86,7 @@ def get_users(event_type, event_id):
 
 
 def sheet2mailchimp(event_type, event_id):
-    assert event_type in ("workshop", "3week")
+    assert event_type in ("workshop", "3week", "bb")
     assert re.match(r"\d+-\d+$", event_id)
 
     category = get_mailchimp_date_group_category()
