@@ -122,15 +122,14 @@ def load_order_log(order_id):
         raise Exception("Failed to parse CM html, update the parsing code")
 
     users = load_users()
-    username2login = {u.name: u.login for u in users}
 
-    username_fixes = {
-        "Нароттам Паршик": "Нароттам Паршиков",
-        "Настя Колеснико": "Настя Колесникова",
-        "Анастасия Шафор": "Анастасия Шаф.",
-        "Александр Шишки": "Александр Шишкин",
-        "Александр Князе": "Александр Князев",
-    }
+    username2login = {}
+    for u in users:
+        username2login[u.name] = u.login
+        if len(u.name) > 15:
+            username2login[u.name[:15]] = u.login
+    username2login["Анастасия Шафор"] = "AHACTAC"
+
 
     log_html = match.group(1)
     entries = []
@@ -146,8 +145,6 @@ def load_order_log(order_id):
 
         if username in username2login:
             login = username2login[username]
-        elif username in username_fixes:
-            login = username2login[username_fixes[username]]
         else:
             raise Exception(f"Login not found for username {username}")
         entry = OrderLogEntry(
