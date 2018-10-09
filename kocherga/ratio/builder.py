@@ -1,10 +1,11 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from pathlib import Path
 import re
 import subprocess
 import os
-from tempfile import NamedTemporaryFile
+from tempfile import TemporaryDirectory
 
 import pyppeteer
 
@@ -63,27 +64,31 @@ def prepare_folders(event_name):
 
 async def build_slides(folder_id):
     logger.info("Building slides")
+    server = serve_slides()
+
     try:
         slides_folder_id = kocherga.gdrive.create_folder(folder_id, "Слайды")
-
-        server = serve_slides()
 
         browser = await pyppeteer.launch()
         page = await browser.newPage()
 
-        for section in SECTIONS:
-            name = f'{section["id"]} - {section["name"]}.pdf'
+        with TemporaryDirectory() as tmp_dir:
+            for section in SECTIONS:
+                name = f'{section["id"]} - {section["name"]}.pdf'
 
-            if kocherga.gdrive.find_in_folder(slides_folder_id, name, missing_ok=True):
-                continue # already exists
+                if kocherga.gdrive.find_in_folder(slides_folder_id, name, missing_ok=True):
+                    continue # already exists
 
-            logger.info(f'Section {section["name"]}')
-            await page.goto("http://localhost:8000/" + section["name"])
+                logger.info(f'Section {section["name"]}')
+                await page.goto("http://localhost:8000/" + section["name"])
 
-            with NamedTemporaryFile() as tmp_file:
                 pdf_bytes = await page.pdf(width="32.04cm", height="18.03cm")
-                tmp_file.write(pdf_bytes)
-                kocherga.gdrive.upload_file(tmp_file.name, name, slides_folder_id)
+
+                tmp_filename = str(Path(tmp_dir) / section["id"])
+                with open(tmp_filename, 'wb') as fh:
+                    fh.write(pdf_bytes)
+
+                kocherga.gdrive.upload_file(tmp_filename, name, slides_folder_id)
 
     finally:
         server.kill()
