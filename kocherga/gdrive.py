@@ -1,4 +1,4 @@
-from apiclient.http import MediaIoBaseDownload
+from apiclient.http import MediaIoBaseDownload, MediaFileUpload
 
 import kocherga.google
 
@@ -43,10 +43,14 @@ def upload_file(local_filename, google_filename, folder_id):
         "name": (google_filename,),
         "parents": [folder_id],
     }
+    mimetype = None
+    if local_filename.endswith('.pdf'):
+        mimetype = 'application/pdf'
+    media = MediaFileUpload(local_filename, mimetype=mimetype)
     result = (
         gdrive()
         .files()
-        .create(body=file_metadata, media_body=local_filename)
+        .create(body=file_metadata, media_body=media)
         .execute()
     )
 
