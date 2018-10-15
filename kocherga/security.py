@@ -36,6 +36,8 @@ def audit_wiki():
     team_by_name = {m.full_name: m for m in team}
 
     for wiki_user in wiki_team:
+        if wiki_user["name"] == "Flow talk page manager":
+            continue
         if wiki_user["name"] not in team_by_name:
             report_excess(
                 "Wiki user is not a team member: {}".format(wiki_user["name"])
@@ -59,6 +61,14 @@ def audit_slack():
             continue
 
         ok += 1
+
+    for user in kocherga.slack.users():
+        email = user.get("profile", {}).get("email", None)
+        if not email:
+            continue
+        if not kocherga.team.find_member_by_email(email):
+            report_excess(f"Slack user is not a team member: {email}, {user.get('real_name')}")
+
 
     return ok
 
