@@ -35,7 +35,7 @@ def users(sc=None):
     if not response["ok"]:
         raise Exception("Couldn't load the list of users")
 
-    return response["members"]
+    return [m for m in response["members"] if not m.get('deleted')]
 
 
 def users_by_id(sc=None):
