@@ -4,25 +4,10 @@ import random
 import warnings
 
 from kocherga.ludwig.bot import bot
-import kocherga.config
-import kocherga.secrets
-
-WIKI_DOMAIN = kocherga.config.config()["wiki_domain"]
-WIKI_SITE = None
-
-
-def get_wiki_site():
-    warnings.warn("moved to kocherga.wiki.get_wiki()", DeprecationWarning)
-    global WIKI_SITE
-    if not WIKI_SITE:
-        site = mwclient.Site(WIKI_DOMAIN, path="/")
-        site.login("Людвиг", kocherga.secrets.plain_secret("wiki_password"))
-        WIKI_SITE = site
-    return WIKI_SITE
-
+from kocherga.wiki import get_wiki, WIKI_DOMAIN
 
 def search_wiki(query):
-    wiki_site = get_wiki_site()
+    wiki_site = get_wiki()
     response = list(wiki_site.search(query))
     if not len(response):
         return  # nothing found
@@ -55,7 +40,7 @@ def explain(query, quiet=False, try_harder=False):
         return None
 
     if try_harder:
-        titles = [page["title"] for page in get_wiki_site().search(query, what="text")]
+        titles = [page["title"] for page in get_wiki().search(query, what="text")]
         if titles:
             return {
                 "text": 'Я не нашёл статью на вики с заголовком "{}", но нашёл несколько упоминаний:'.format(
