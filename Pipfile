@@ -60,6 +60,9 @@ matplotlib = "*"
 seaborn = "*"
 tqdm = "*"
 python-docx = "*"
+pystan = "*"
+scipy = "*"
+arviz = "*"
 
 
 [requires]
