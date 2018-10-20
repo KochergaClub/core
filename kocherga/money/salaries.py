@@ -10,7 +10,6 @@ import fire
 from kocherga.db import Session
 from kocherga.watchmen import load_schedule, Shift
 import kocherga.team
-import kocherga.slack
 import kocherga.cm
 
 def rate_by_shift(shift):
