@@ -116,8 +116,8 @@ class Order(kocherga.db.Base):
                 else:
                     value = int(float(value))
 
-            if column.name == 'card_id' and value > 2147483648:
-                value = 2147483648 # this bad order fails to import to the db: https://kocherga.cafe-manager.ru/order/29541/
+            if column.name == 'card_id' and value > 2147483647:
+                value = 2147483647 # this bad order fails to import to the db: https://kocherga.cafe-manager.ru/order/29541/
 
             params[column.name] = value
 
