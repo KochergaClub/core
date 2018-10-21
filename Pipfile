@@ -60,9 +60,6 @@ matplotlib = "*"
 seaborn = "*"
 tqdm = "*"
 python-docx = "*"
-pystan = "*"
-scipy = "*"
-arviz = "*"
 
 
 [requires]
@@ -72,4 +69,4 @@ python_version = "3.6"
 
 [pipenv]
 
-keep_outdated = true
+# keep_outdated = true
