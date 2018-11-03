@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import re
 from pathlib import Path
 from dateutil.tz import tzutc
 import dateutil.parser
@@ -193,11 +194,13 @@ class Event(Base):
         return obj
 
     def get_room(self):
+        maybe_long_location = kocherga.room.from_long_location(self.location)
+        if maybe_long_location:
+            return maybe_long_location
+
         if self.location.strip():
             room = kocherga.room.normalize(self.location, fail=False)
-            if room:
-                return room
-            return kocherga.room.unknown
+            return room or kocherga.room.unknown
 
         # TODO - move to kocherga.room.look_for_room_in_string(...)?
         for room in kocherga.room.all_rooms:

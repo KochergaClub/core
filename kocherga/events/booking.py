@@ -160,7 +160,7 @@ def add_booking(date, room, people, start_time, end_time, email):
         title="Бронь {room}, {people} человек, {email}".format(
             room=room, people=people, email=email
         ),
-        location=room,
+        location=kocherga.room.to_long_location(room),
         start_dt=start_dt,
         end_dt=end_dt,
         attendees=[email],

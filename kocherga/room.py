@@ -1,3 +1,5 @@
+import re
+
 from kocherga.error import PublicError
 from kocherga.config import config
 
@@ -50,3 +52,15 @@ def details(room):
             return result
 
     raise Exception("Room not found")  # shouldn't happen because of validation
+
+
+def from_long_location(location):
+    match = re.match(r'Антикафе Кочерга, комната (\w+)$', location)
+    if not match:
+        return None
+    return normalize(match.group(1)) or None
+
+
+def to_long_location(room):
+    room = normalize(room)
+    return f'Антикафе Кочерга, комната {pretty(room)}'
