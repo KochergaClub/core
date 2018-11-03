@@ -54,7 +54,7 @@ def insert_event(event):
 
     result = kocherga.events.google.insert_event({
         "summary": event.title,
-        "location": event.get_room(),
+        "location": event.location,
         "description": event.description,
         "start": {"dateTime": event.start_dt.strftime(MSK_DATE_FORMAT)},
         "end": {"dateTime": event.end_dt.strftime(MSK_DATE_FORMAT)},

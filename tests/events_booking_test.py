@@ -124,6 +124,7 @@ class TestAddBooking:
         kocherga.events.db.delete_event(event.google_id)
 
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
+        assert event.location == 'Антикафе Кочерга, комната ГЭБ'
 
     def test_add_booking_midnight(self):
         event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '23:00', '24:00', 'somebody@example.com')
