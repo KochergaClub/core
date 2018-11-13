@@ -48,7 +48,8 @@ def now_stats():
     customers = Session().query(Customer).filter(Customer.customer_id.in_(customer_ids)).all()
 
     return {
-        "total": total,
+        # "total": total,
+        "total": "много",
         "customers": [
             {
                 "first_name": customer.first_name,
