@@ -215,6 +215,11 @@ class AnnounceSession:
 
     async def run(self):
         page = self.page
+        await page.setViewport({
+            'width': 1280,
+            'height': 800,
+        })
+
         await self.sign_in()
 
         event = self.event
