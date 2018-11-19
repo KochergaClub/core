@@ -65,7 +65,7 @@ class OrderLogEntry(kocherga.db.Base):
     order_id = Column(Integer, ForeignKey("cm_orders.order_id"), primary_key=True)
     operation_id = Column(Integer, primary_key=True)
     operation = Column(String(1024))
-    ts = Column(Integer)
+    ts = Column(Integer, index=True)
     login = Column(String(80))
 
     order = relationship("Order", back_populates="log_entries")
@@ -75,9 +75,9 @@ class Order(kocherga.db.Base):
     __tablename__ = "cm_orders"
 
     order_id = Column(Integer, info={"ru_title": "Номер заказа"}, primary_key=True)
-    card_id = Column(BigInteger, info={"ru_title": "Номер карты"})
-    start_ts = Column(Integer)
-    end_ts = Column(Integer)
+    card_id = Column(BigInteger, info={"ru_title": "Номер карты"}, index=True)
+    start_ts = Column(Integer, index=True)
+    end_ts = Column(Integer, index=True)
     imported_ts = Column(Integer)
     log_imported_ts = Column(Integer)
     people = Column(Integer, info={"ru_title": "Кол-во человек"})
@@ -160,11 +160,11 @@ class Customer(kocherga.db.Base):
 
     # important
     customer_id = Column(Integer, info={"ru_title": "id"}, primary_key=True)
-    card_id = Column(BigInteger, info={"ru_title": "Номер Карты"})
+    card_id = Column(BigInteger, info={"ru_title": "Номер Карты"}, index=True)
     first_name = Column(String(100), info={"ru_title": "Имя"})
     last_name = Column(String(100), info={"ru_title": "Фамилия"})
     gender = Column(Enum(Gender), info={"ru_title": "Пол"})
-    email = Column(String(255), info={"ru_title": "E-mail"})
+    email = Column(String(255), info={"ru_title": "E-mail"}, index=True)
     time_discount = Column(Integer, info={"ru_title": "Скидка на время"})
     is_active = Column(Boolean, info={"ru_title": "Статус"})  # "Активный" / "В архиве"
 
