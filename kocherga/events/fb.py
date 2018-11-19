@@ -122,7 +122,9 @@ class AnnounceSession:
         )
         if await self.page.J(selector):
             try:
+                logger.info("Clicking on listbox item")
                 await self.page.click(selector)
+                logger.info("Listbox click succeeded")
                 return True
             except:
                 return False
