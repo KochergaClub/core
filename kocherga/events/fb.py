@@ -228,7 +228,7 @@ class AnnounceSession:
 
         events_page = event.fb_announce_page() + "/events"
         logger.info("Going to page: " + events_page)
-        await page.goto(events_page)
+        await page.goto(events_page, { 'waitUntil': 'networkidle2' })
 
         logger.info("Opening an event creation form")
         await page.click("[data-testid=event-create-button]")
