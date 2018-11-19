@@ -38,6 +38,10 @@ def create_new_mailchimp_date(category_id, event_type, event_id):
     response = kocherga.mailchimp.api_call(
         "GET", f"lists/{LIST_ID}/interest-categories/{category_id}/interests"
     )
+    print([
+        i["name"]
+        for i in response["interests"]
+    ])
     interest = next((i for i in response["interests"] if i["name"] == name), None)
 
     if interest:
@@ -72,16 +76,18 @@ def import_user_to_mailchimp(user, group_id):
 def get_users(event_type, event_id):
     gc = kocherga.google.gspread_client()
 
-    event_type_ru = {"workshop": "Воркшоп", "3week": "Курс", "bb": "Байесианство"}[event_type]
+    event_type_ru = {"workshop": "воркшоп", "3week": "курс", "bb": "бб"}[event_type]
+    event = f"{event_id} {event_type_ru}"
 
     spreadsheet = gc.open_by_key(SPREADSHEET_ID)
-    worksheet = spreadsheet.worksheet(f"{event_type_ru} {event_id}")
+    worksheet = spreadsheet.worksheet(f"Все участники")
 
     rows = worksheet.get_all_records()
 
     return [
         {"email": row["Емейл"], "first_name": row["Имя"], "last_name": row["Фамилия"]}
         for row in rows
+        if row["Событие"] == event
     ]
 
 
@@ -93,6 +99,7 @@ def sheet2mailchimp(event_type, event_id):
     group_id = create_new_mailchimp_date(category["id"], event_type, event_id)
 
     users = get_users(event_type, event_id)
+
     for user in users:
         import_user_to_mailchimp(user, group_id)
         logger.info(f'Added {user["email"]}')
