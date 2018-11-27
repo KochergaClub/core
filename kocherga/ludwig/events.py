@@ -11,8 +11,22 @@ from kocherga.events.event import Event
 from kocherga.ludwig.bot import bot
 
 
+def event_emoji(event):
+    if event.event_type == "private":
+        return ":lock:"
+    elif event.event_type == "public":
+        return ":earth_americas:"
+    else:
+        return ""
+
+
 def event_color(event):
-    return "#999" if event.event_type == "private" else "good"
+    if event.event_type == "private":
+        return "warning"
+    elif event.event_type == "public":
+        return "good"
+    else:
+        return "#999"
 
 
 def list_events():
@@ -30,7 +44,7 @@ def list_events():
         attachments.append(
             {
                 "text": text,
-                "title": event.title,
+                "title": event_emoji(event) + event.title,
                 "title_link": event.google_link,
                 "color": event_color(event),
                 "mrkdwn_in": ["text"],
