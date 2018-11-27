@@ -11,13 +11,21 @@ from kocherga.events.event import Event
 from kocherga.ludwig.bot import bot
 
 
+def clock_emoji(t):
+    result = ':clock'
+    result += str(t.hour)
+    if t.minute == 30:
+        result += '30'
+    return result + ':'
+
+
 def event_emoji(event):
     if event.event_type == "private":
         return ":lock:"
     elif event.event_type == "public":
         return ":earth_americas:"
     else:
-        return ""
+        return ":grey_question:"
 
 
 def event_color(event):
@@ -37,14 +45,14 @@ def list_events():
         start_time = event.start_dt.strftime("%H:%M")
         end_time = event.end_dt.strftime("%H:%M")
 
-        text = f"С {start_time} до {end_time}"
+        text = clock_emoji(event.start_dt.time()) + f" С {start_time} до {end_time}"
         if event.location:
             text += ", " + event.location
 
         attachments.append(
             {
                 "text": text,
-                "title": event_emoji(event) + event.title,
+                "title": event_emoji(event) + ' ' + event.title,
                 "title_link": event.google_link,
                 "color": event_color(event),
                 "mrkdwn_in": ["text"],
