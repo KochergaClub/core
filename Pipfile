@@ -1,12 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 slackclient = "*"
 markdown = "*"
 sqlalchemy = "*"
@@ -39,15 +36,13 @@ mysqlclient = "*"
 flask-sqlalchemy = "*"
 raven = "*"
 requests-toolbelt = "*"
-slappy = "==0.3.4"
+slappy = "==0.3.5"
 feedgen = "*"
 telethon-sync = "*"
 pysocks = "*"
 raven-aiohttp = "*"
 
-
 [dev-packages]
-
 pytest = "*"
 freezegun = "*"
 pytest-asyncio = "*"
@@ -61,12 +56,8 @@ seaborn = "*"
 tqdm = "*"
 python-docx = "*"
 
-
 [requires]
-
 python_version = "3.6"
 
-
 [pipenv]
-
 # keep_outdated = true

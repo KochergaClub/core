@@ -20,6 +20,17 @@ def react_die(message):
     suicide(message)
 
 
+@bot.respond_to(r"(?:сделала?\sзаказ|заказала?)\s.*")
+def react_like_supply(message):
+    if message.channel.name != 'test':
+        return
+    if random.random() > 0.5:
+        return
+    message.react(random.choice([
+        'heart', 'heartbeat', 'heart_eyes', 'blue_heart', 'heart_decoration', 'kissing_heart', 'heart_eyes_cat'
+    ]))
+
+
 def add_simple_interactions():
     listen_interactions = [
         (r"Какой\s+номер\s+(у\s+)?Кочерги\?", "+7(499)350-20-42"),
