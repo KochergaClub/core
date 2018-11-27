@@ -13,7 +13,7 @@ from kocherga.ludwig.bot import bot
 
 def clock_emoji(t):
     result = ':clock'
-    result += str(t.hour)
+    result += str(t.hour if t.hour < 12 else t.hour - 12)
     if t.minute == 30:
         result += '30'
     return result + ':'
