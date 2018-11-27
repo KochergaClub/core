@@ -1,6 +1,8 @@
 import sys
 from kocherga.ludwig.bot import bot
 
+import kocherga.ludwig.events
+
 from slappy import Listener
 
 def suicide(message):
@@ -22,10 +24,6 @@ def add_simple_interactions():
     listen_interactions = [
         (r"Какой\s+номер\s+(у\s+)?Кочерги\?", "+7(499)350-20-42"),
         (r"Как\s+позвонить\s+в\s+кочергу\?", "+7(499)350-20-42"),
-        (
-            r"не работает мыш(ка|ь)",
-            "В ноуте барахлит один usb-разъём (правый ближний), возможно, дело в этом?",
-        ),
         (
             r"не работает (клава|клавиатура)",
             "Клавиатура в админском ноуте сломана. Подключи внешнюю.",
@@ -60,3 +58,8 @@ def add_simple_interactions():
 
 
 add_simple_interactions()
+
+@bot.schedule("cron", hour=9)
+def morning_events_notification():
+    bot.send_message(**kocherga.ludwig.watchmen.today_watchmen(), channel="#watchmen")
+    bot.send_message(**kocherga.ludwig.events.list_events(), channel="#watchmen")

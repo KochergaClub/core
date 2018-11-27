@@ -88,11 +88,6 @@ def react_events(message):
     return list_events()
 
 
-@bot.schedule("cron", hour=9)
-def morning_events_notification():
-    bot.send_message(**list_events(), channel="#watchmen")
-
-
 @bot.command("/events")
 def command_events(payload):
     return list_events()
