@@ -13,7 +13,7 @@ from kocherga.ludwig.bot import bot
 
 def clock_emoji(t):
     result = ':clock'
-    result += str(t.hour if t.hour < 12 else t.hour - 12)
+    result += str(t.hour if t.hour <= 12 else t.hour - 12)
     if t.minute == 30:
         result += '30'
     return result + ':'
@@ -39,7 +39,7 @@ def event_instructions(event):
     if 'record' in event.tag_names():
         instructions.append(':video_camera: Нужна видеозапись.')
 
-    return ' '.join(instructions)
+    return '\n'.join(instructions)
 
 
 def event_color(event):
@@ -59,7 +59,7 @@ def list_events():
         start_time = event.start_dt.strftime("%H:%M")
         end_time = event.end_dt.strftime("%H:%M")
 
-        text = clock_emoji(event.start_dt.time()) + f" С {start_time} до {end_time}"
+        text = f"С {start_time} до {end_time}."
         if event.location:
             text += ", " + event.location
 
