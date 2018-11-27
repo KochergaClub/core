@@ -52,7 +52,7 @@ def event_color(event):
 
 
 def list_events():
-    events = kocherga.events.db.list_events(date=datetime.now().date())
+    events = kocherga.events.db.list_events(date=datetime.now(TZ).date())
 
     attachments = []
     for event in events:
