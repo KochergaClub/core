@@ -30,13 +30,13 @@ def event_emoji(event):
 
 def event_instructions(event):
     instructions = []
-    if 'feedback' in event.tag_names:
+    if 'feedback' in event.tag_names():
         instructions.append(':memo: Нужно собрать фидбек.')
 
-    if 'slides' in event.tag_names:
+    if 'slides' in event.tag_names():
         instructions.append(':tv: Нужен телевизор для показа слайдов.')
 
-    if 'record' in event.tag_names:
+    if 'record' in event.tag_names():
         instructions.append(':video_camera: Нужна видеозапись.')
 
     return ' '.join(instructions)
