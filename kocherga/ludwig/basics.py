@@ -27,7 +27,7 @@ def react_die(message):
 
 @bot.listen_to(r"(?:сделала?\sзаказ|заказала?)\s.*")
 def react_like_supply(message):
-    if message.channel.name != 'test':
+    if message.channel.name != 'supply':
         return
     if random.random() > 0.5:
         return
