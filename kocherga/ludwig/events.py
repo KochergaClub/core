@@ -28,6 +28,20 @@ def event_emoji(event):
         return ":grey_question:"
 
 
+def event_instructions(event):
+    instructions = []
+    if 'feedback' in event.tag_names:
+        instructions.append(':memo: Нужно собрать фидбек.')
+
+    if 'slides' in event.tag_names:
+        instructions.append(':tv: Нужен телевизор для показа слайдов.')
+
+    if 'record' in event.tag_names:
+        instructions.append(':video_camera: Нужна видеозапись.')
+
+    return ' '.join(instructions)
+
+
 def event_color(event):
     if event.event_type == "private":
         return "warning"
@@ -48,6 +62,10 @@ def list_events():
         text = clock_emoji(event.start_dt.time()) + f" С {start_time} до {end_time}"
         if event.location:
             text += ", " + event.location
+
+        instructions = event_instructions(event)
+        if instructions:
+            text += '\n' + instructions
 
         attachments.append(
             {
