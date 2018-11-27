@@ -59,9 +59,10 @@ def list_events():
         start_time = event.start_dt.strftime("%H:%M")
         end_time = event.end_dt.strftime("%H:%M")
 
-        text = f"С {start_time} до {end_time}."
+        text = f"С {start_time} до {end_time}"
         if event.location:
             text += ", " + event.location
+        text += '.'
 
         instructions = event_instructions(event)
         if instructions:
