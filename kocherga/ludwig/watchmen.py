@@ -3,6 +3,8 @@ import re
 
 from kocherga.ludwig.bot import bot
 
+from kocherga.config import TZ
+
 import kocherga.watchmen
 import kocherga.team
 
@@ -69,7 +71,7 @@ def get_current_watchman_or_complain(message):
 def daily_watchmen(d):
     schedule = kocherga.watchmen.load_schedule()
 
-    now = datetime.today()
+    now = datetime.now(TZ)
     shift_info = schedule.shifts_by_date(d)
 
     attachments = []
@@ -110,7 +112,7 @@ def daily_watchmen(d):
 
 
 def today_watchmen():
-    now = datetime.today()
+    now = datetime.now(TZ)
     d = now.date()
     if now.hour < 1:
         d -= timedelta(days=1)
@@ -119,7 +121,7 @@ def today_watchmen():
 
 
 def tomorrow_watchmen():
-    now = datetime.today()
+    now = datetime.now(TZ)
     d = now.date()
     if now.hour < 6:
         d -= timedelta(days=1)
@@ -134,7 +136,7 @@ def react_today_watchmen(message):
 
 
 def today_past_watchmen():
-    now = datetime.today()
+    now = datetime.now(TZ)
     d = now.date()
     if now.hour < 6:
         d -= timedelta(days=1)
@@ -154,7 +156,7 @@ def react_tomorrow_watchmen(message):
 
 @bot.listen_to(r"кто (?:будет сегодня|сегодня будет) (?:админить|дежурить)\?")
 def react_today_future_watchmen(message):
-    d = datetime.today().date()
+    d = datetime.now(TZ).date()
     return daily_watchmen(d)
 
 
@@ -163,7 +165,7 @@ def react_today_future_watchmen(message):
 )
 def react_past_week_watchmen(message, query):
     weekday = INFLECTED_WEEKDAY_NAMES.index(query)
-    d = datetime.today().date()
+    d = datetime.now(TZ).date()
     if d.weekday() == weekday:
         # unclear, I'll just keep quiet
         return
@@ -178,7 +180,7 @@ def react_past_week_watchmen(message, query):
 )
 def react_future_week_watchmen(message, query):
     weekday = INFLECTED_WEEKDAY_NAMES.index(query)
-    d = datetime.today().date()
+    d = datetime.now(TZ).date()
     if d.weekday() == weekday:
         # unclear, I'll just keep quiet
         return
@@ -214,7 +216,7 @@ def command_watchmen(payload):
         days = int(match.group(2))
         if match.group(1) == "-":
             days = -days
-        d = datetime.today().date()
+        d = datetime.now(TZ).date()
         d += timedelta(days=days)
         return daily_watchmen(d)
 
