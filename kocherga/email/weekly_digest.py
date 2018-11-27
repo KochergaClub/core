@@ -104,6 +104,7 @@ import base64
 from pathlib import Path
 
 import kocherga.config
+from kocherga.config import TZ
 import kocherga.mailchimp
 import kocherga.images
 
@@ -116,7 +117,7 @@ MAIN_LIST_ID = kocherga.config.config()['mailchimp']['main_list_id']
 IMAGE_FOLDER_NAME = 'Расписание на неделю'
 
 def get_week_boundaries():
-    dt = datetime.today()
+    dt = datetime.now(TZ)
     if dt.weekday() < 2:
         dt = dt - timedelta(days=dt.weekday())
     else:

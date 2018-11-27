@@ -172,7 +172,7 @@ def create_schedule_post(prefix_text):
 
     message += "\n\n"
 
-    dt = datetime.today()
+    dt = datetime.now(TZ)
     if dt.weekday() < 2:
         dt = dt - timedelta(days=dt.weekday())
     else:

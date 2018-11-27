@@ -141,7 +141,7 @@ def add_booking(date, room, people, start_time, end_time, email):
 
     (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(date, start_time, end_time)
 
-    if datetime.datetime.today().replace(tzinfo=TZ) + MAX_BOOKING_DELAY < start_dt:
+    if datetime.datetime.now(TZ) + MAX_BOOKING_DELAY < start_dt:
         raise PublicError("This booking is too far off, we can't allow it.")
 
     if end_dt <= start_dt:

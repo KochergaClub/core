@@ -67,8 +67,8 @@ class Shift(IntEnum):
         if self.value == Shift.NIGHT:
             d += timedelta(days=1)
         return (
-            datetime.combine(d, self.start_time()),
-            datetime.combine(d, self.end_time()),
+            datetime.combine(d, self.start_time(), tzinfo=TZ),
+            datetime.combine(d, self.end_time(), tzinfo=TZ),
         )
 
     @classmethod
@@ -151,11 +151,11 @@ class Schedule:
                 session.add(ScheduleItem(date=d, shift=shift, watchman=watchman))
 
     def current_watchman(self):
-        return self.watchman_by_dt(datetime.today())
+        return self.watchman_by_dt(datetime.now(TZ))
 
     # Find the last active watchman. The current one or the one before if there's nobody right now (because it's night, probably).
     def last_watchman(self):
-        dt = datetime.today()
+        dt = datetime.now(TZ)
         for i in range(48):
             watchman = self.watchman_by_dt(dt - timedelta(hours=i))
             if watchman and watchman != "Ночь":
@@ -165,7 +165,7 @@ class Schedule:
 
     # Find the nearest active watchman. The current one or the one after if there's nobody right now (because it's night, probably).
     def nearest_watchman(self):
-        dt = datetime.today()
+        dt = datetime.now(TZ)
         for i in range(48):
             watchman = self.watchman_by_dt(dt + timedelta(hours=i))
             if watchman and watchman != "Ночь":
