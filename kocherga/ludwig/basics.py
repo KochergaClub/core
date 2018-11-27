@@ -1,9 +1,14 @@
-import sys
-from kocherga.ludwig.bot import bot
+import logging
+logger = logging.getLogger(__name__)
 
+import sys
+import random
+
+from kocherga.ludwig.bot import bot
 import kocherga.ludwig.events
 
 from slappy import Listener
+
 
 def suicide(message):
     message.reply("Умираю!")
@@ -20,7 +25,7 @@ def react_die(message):
     suicide(message)
 
 
-@bot.respond_to(r"(?:сделала?\sзаказ|заказала?)\s.*")
+@bot.listen_to(r"(?:сделала?\sзаказ|заказала?)\s.*")
 def react_like_supply(message):
     if message.channel.name != 'test':
         return
