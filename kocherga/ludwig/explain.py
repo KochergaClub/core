@@ -20,7 +20,7 @@ def wiki_link(title):
     return "https://{}/{}".format(WIKI_DOMAIN, url_title)
 
 
-def explain(query, quiet=False, try_harder=False):
+def explain(query, quiet=False, try_harder=True):
     if query.lower() == "лфт":
         return {"text": "Это такая зелёная книга в ГЭБ. Я её написал!"}
 
@@ -36,9 +36,6 @@ def explain(query, quiet=False, try_harder=False):
         prefix = prefixes[random.randint(0, len(prefixes) - 1)]
         return {"text": "{}: {}".format(prefix, wiki_link(title))}
 
-    if quiet:
-        return None
-
     if try_harder:
         titles = [page["title"] for page in get_wiki().search(query, what="text")]
         if titles:
@@ -49,36 +46,38 @@ def explain(query, quiet=False, try_harder=False):
                 "attachments": [{"title": wiki_link(title)} for title in titles],
             }
 
+    if quiet:
+        return None
+
     return {"text": 'Ничего не знаю про "{}".'.format(query)}
-
-
-@bot.listen_to(r"что\s+такое\s+(.*?)\?")
-def react_what_is(message, query):
-    message.reply(**explain(query))
 
 
 @bot.command("/wiki")
 def command_wiki(payload):
     query = payload["text"]
 
-    result = explain(query, try_harder=True)
+    result = explain(query)
     return result
 
 
-@bot.listen_to(r"расскажите\s+про\s+(.*?)[.?!]?$")
+@bot.listen_to(r"(?:расскажите\s+про|что\s+такое)\s+(.*?)[.?!]?$")
 def react_somebody_explain(message, query):
-    message.reply(**explain(query))
+    reply = explain(query, quiet=True)
+    if not reply:
+        return
+
+    message.reply(**reply)
 
 
-@bot.respond_to(r"расскажи\s+про\s+(.*?)[.?!]?$")
+@bot.respond_to(r"(?:расскажи\s+про|что\s+такое)\s+(.*?)[.?!]?$")
 def react_ludwig_explain(message, query):
     message.reply(**explain(query))
 
 
 @bot.listen_to(r"расскажи\s+про\s+(.*?)[.?!]?$")
 def react_explain(message, query):
-    # This question might be addressed to someone else, so Ludwig tries to be quiet if he can't help.
-    reply = explain(query, quiet=True)
+    # This question might be addressed to someone else, so Ludwig doesn't try so hard to help.
+    reply = explain(query, quiet=True, try_harder=False)
     if not reply:
         return
 
