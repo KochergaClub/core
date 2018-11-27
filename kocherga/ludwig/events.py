@@ -23,7 +23,7 @@ def event_emoji(event):
     if event.event_type == "private":
         return ":lock:"
     elif event.event_type == "public":
-        return ":earth_americas:"
+        return ":globe_with_meridians:"
     else:
         return ":grey_question:"
 
