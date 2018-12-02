@@ -50,19 +50,19 @@ def get_current_watchman_or_complain(message):
         )
 
         message.reply(
-            f"Сейчас ночь. Вечером админил(а) {last.short_name}, а утром будет {nearest.short_name}."
+            f"Сейчас ночь. Вечером админил(а) *{last.short_name}*, а утром будет *{nearest.short_name}*."
         )
         return
 
     member = kocherga.team.find_member_by_short_name(watchman)
     if not member:
         raise ErrorResponse(
-            f"Админит {watchman}, но у меня не получилось найти этого человека в базе сотрудников."
+            f"Админит *{watchman}*, но у меня не получилось найти этого человека в базе сотрудников."
         )
 
     if not member.slack_id:
         raise ErrorResponse(
-            f"Админит {watchman}, {member.full_name}, но я не знаю, кто это в слаке."
+            f"Админит *{watchman}*, {member.full_name}, но я не знаю, кто это в слаке."
         )
 
     return member
@@ -100,12 +100,12 @@ def daily_watchmen(d):
             rel = "админит"
 
         attachments.append(
-            {"text": f"{shift.when().capitalize()} {rel} {shift_info[shift]}.\n"}
+            {"text": f"{shift.when().capitalize()} {rel} *{shift_info[shift]}*.\n"}
         )
 
     preposition = "Во" if d.weekday() == 1 else "В"
     weekday_str = INFLECTED_WEEKDAY_NAMES[d.weekday()]
-    date_str = d.strftime(f"%d {INFLECTED_MONTH_NAMES[d.month - 1]} %Y")
+    date_str = f"{d.day} {INFLECTED_MONTH_NAMES[d.month - 1]} {d.year}"
     text = f"{preposition} {weekday_str} {date_str}:\n"
 
     return {"text": text, "attachments": attachments}
