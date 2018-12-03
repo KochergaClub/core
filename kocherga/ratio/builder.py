@@ -62,7 +62,7 @@ def prepare_folders(event_name):
     return public_folder_id
 
 
-async def build_slides(folder_id):
+async def build_slides(folder_id, sections=SECTIONS):
     logger.info("Building slides")
     server = serve_slides()
 
@@ -73,7 +73,7 @@ async def build_slides(folder_id):
         page = await browser.newPage()
 
         with TemporaryDirectory() as tmp_dir:
-            for section in SECTIONS:
+            for section in sections:
                 name = f'{section["id"]} - {section["name"]}.pdf'
 
                 if kocherga.gdrive.find_in_folder(slides_folder_id, name, missing_ok=True):
