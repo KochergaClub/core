@@ -22,7 +22,7 @@ quart = "*"
 mwclient = "*"
 termcolor = "*"
 pandas = "*"
-pyppeteer = "*"
+pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
 werkzeug = "*"
 attrs = "*"
 apscheduler = "*"
