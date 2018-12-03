@@ -49,14 +49,7 @@ def now_stats():
 
     return {
         "total": total,
-        "customers": [
-            {
-                "first_name": customer.first_name,
-                "last_name": customer.last_name,
-                "privacy_mode": customer.privacy_mode,
-            }
-            for customer in customers
-        ]
+        "customers": customers,
     }
 
 

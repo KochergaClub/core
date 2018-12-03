@@ -29,11 +29,12 @@ def now():
         "total": stats["total"],
         "customers": [
             {
-                "first_name": c["first_name"],
-                "last_name": c["last_name"],
+                "first_name": c.first_name,
+                "last_name": c.last_name,
+                "card_id": c.card_id,
             }
             for c in stats["customers"]
-            if c["privacy_mode"] == "public"
+            if c.privacy_mode == "public"
         ]
     }
 
