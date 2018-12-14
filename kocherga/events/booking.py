@@ -98,7 +98,11 @@ def check_availability(start_dt, end_dt, room):
 def bookings_by_email(email):
     events = kocherga.events.db.list_events(q="Бронь {}".format(email))
 
-    bookings = [Booking.from_event(event) for event in events]
+    bookings = [
+        Booking.from_event(event)
+        for event in events
+        if event.title.endswith(" " + email)
+    ]
 
     return bookings
 
