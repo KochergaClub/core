@@ -210,9 +210,10 @@ class AnnounceSession:
         await page.focus("input[name=pass]")
         await page.keyboard.type(PASSWORD)
 
-        await page.keyboard.press("Enter")
-
-        await page.waitForNavigation()
+        await asyncio.wait([
+            page.keyboard.press("Enter"),
+            page.waitForNavigation(),
+        ])
         logger.info("Signed in")
 
     async def run(self):
