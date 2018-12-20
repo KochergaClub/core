@@ -15,6 +15,7 @@ TeamMember = namedtuple(
         "email",
         "role",
         "status",
+        "payment_type",
         "vk",
         "slack_id",
         "gender",
@@ -57,6 +58,7 @@ def _fetch_members(sc=None):
             slack_id=slack_id,
             role=row["Роль"],
             status=row["Статус"],
+            payment_type=row["Вид оплаты"],
             vk=row["В соцсетях"],
             gender=row["Гендер"],
         )

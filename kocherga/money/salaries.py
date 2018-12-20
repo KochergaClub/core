@@ -289,7 +289,12 @@ def calculate_new_salaries(d=None):
     salaries = calculate_salaries(start_date, end_date)
 
     def once_per_month(email):
-        return email in ['tschikalowa.daria@gmail.com', 'mayaplisova@gmail.com', 'tension94@gmail.com', 'dsentemployee@gmail.com']
+        payment_type = kocherga.team.find_member_by_email(email).payment_type
+        if payment_type == 'безнал':
+            return True
+        if payment_type == 'нал':
+            return False
+        raise Exception(f"Unknown payment type {payment_type} for email {email}")
 
     if end_date.day == 5:
         # need to add salaries for the previous period for those who get salaries on card once per month on 5th
