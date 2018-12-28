@@ -94,7 +94,7 @@ async def build_slides(folder_id, sections=SECTIONS):
         server.kill()
 
 
-def build_handbooks(event_name):
+def build_handbooks(event_name, sections=SECTIONS):
     # TODO - get from gdrive
     DOCX_TEMPLATE = '/Users/berekuk/Google Drive/Rationality/Workshops/Шаблоны/Стили рабочих тетрадей.docx'
 
@@ -110,7 +110,7 @@ def build_handbooks(event_name):
 
         # TODO - add TOC
 
-        for section_info in SECTIONS:
+        for section_info in sections:
             if not section_info['id'].startswith(day + '.'):
                 continue
             if not section_info.get('handbook', True):
