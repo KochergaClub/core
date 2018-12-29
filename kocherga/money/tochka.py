@@ -3,9 +3,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 import requests
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import time
-import xml.etree.ElementTree as ET
+import dbm
 
 from sqlalchemy import Column, Integer, String, Text, Numeric, Boolean
 
@@ -17,115 +17,137 @@ import kocherga.datetime
 from kocherga.config import TZ
 import kocherga.importer.base
 
-# Secret tochka API docs: https://apitochka.docs.apiary.io/
+# Docs: https://enter.tochka.com/doc/v1/index.html
+TOCHKA_API = kocherga.config.config()['money']['tochka']['api']
+TOKENS_FILE = kocherga.config.config()['money']['tochka']['tokens_file']
 
 
 class Record(kocherga.db.Base):
     __tablename__ = "tochka_records"
     id = Column(String(100), primary_key=True)
     ts = Column(Integer)
-    debit = Column(Boolean)
     purpose = Column(Text)
     document_type = Column(Integer)
     total = Column(Numeric(10, 2))
 
     @classmethod
     def from_element(cls, record):
-        dt_str = record.get("origin_date")
-        if ":" == dt_str[-3:-2]:
-            dt_str = dt_str[:-3] + dt_str[-2:]
-        dt = datetime.strptime(dt_str, "%Y-%m-%dT%H:%M:%S%z")
+        dt = datetime.strptime(record['payment_date'], '%d.%m.%Y')
 
         return cls(
-            id=record.get("core_banking_id"),
+            id=record.get("x_payment_id"),
             ts=dt.timestamp(),
-            purpose=record.get("purpose"),
-            total=float(record.get("sum")),
-            document_type=int(record.get("document_type")),
-            debit=(record.get("debit") == "true"),
+            purpose=record.get("payment_purpose"),
+            total=float(record.get("payment_amount")),
+            document_type=int(record.get("operation_type")),
         )
 
 
+def save_tokens(response_json):
+    with dbm.open(TOKENS_FILE, 'c') as db:
+        db['refresh_token'] = response_json['refresh_token']
+        db['access_token'] = response_json['access_token']
+
+
+# Interactive function, run this from CLI once.
+def init_tokens():
+    credentials = kocherga.secrets.json_secret('tochka_client')
+    url = f"{TOCHKA_API}/authorize?response_type=code&client_id={credentials['client_id']}"
+    print(f"Open this url: {url}")
+    code = input("Enter the authorization code here: ")
+
+    r = requests.post(
+        f"{TOCHKA_API}/oauth2/token",
+        json={
+            "client_id": credentials["client_id"],
+            "client_secret": credentials["client_secret"],
+            "grant_type": "authorization_code",
+            "code": code,
+        },
+    )
+    print(r.json())
+    r.raise_for_status()
+
+    save_tokens(r.json())
+
+
+def update_tokens():
+    credentials = kocherga.secrets.json_secret('tochka_client')
+    with dbm.open(TOKENS_FILE, 'w') as db:
+        r = requests.post(
+            f"{TOCHKA_API}/oauth2/token",
+            json={
+                "client_id": credentials["client_id"],
+                "client_secret": credentials["client_secret"],
+                "grant_type": "refresh_token",
+                "refresh_token": db["refresh_token"].decode('utf-8'),
+            },
+        )
+        r.raise_for_status()
+
+        save_tokens(r.json())
+
 def get_access_token():
-    credentials = kocherga.secrets.json_secret("tochka_credentials")
-    username = credentials["username"]
-    password = credentials["password"]
+    access_token = None
+    with dbm.open(TOKENS_FILE, 'r') as db:
+        access_token = db['access_token'].decode('utf-8')
 
-    r = requests.post(
-        "https://api.tochka.com/auth/oauth/token",
-        data={"username": username, "password": password, "grant_type": "password"},
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": "Basic aXBob25lYXBwOnNlY3JldA==",  # fixed string, see https://apitochka.docs.apiary.io/#reference/0/oauth-20/accestoken
-        },
-    )
+    # TODO - check and update if necessary?
+    return access_token
+
+
+def call(method, url, data={}):
+    access_token = get_access_token()
+    if method == "GET":
+        r = requests.get(
+            f"{TOCHKA_API}/{url}",
+            headers={
+                "Authorization": f"Bearer {access_token}"
+            },
+        )
+    elif method == "POST":
+        r = requests.post(
+            f"{TOCHKA_API}/{url}",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+            },
+            json=data,
+        )
+    else:
+        raise Exception(f"Unknown method {method}")
+
     r.raise_for_status()
 
-    return r.json()["access_token"]
+    return r.json()
 
 
-def xml_request(token: str, method: str, xml: str):
-    r = requests.post(
-        f"https://api.tochka.com/ws/do/{method}",
-        data=xml,
-        headers={
-            "Content-Type": "application/xml",
-            "Authorization": f"Bearer {token}",
-            "Accept": "application/xml",
-        },
-    )
-    r.raise_for_status()
-    return ET.fromstring(r.text)
+def get_account_info() -> str:
+    accounts = call('GET', 'account/list')
 
+    accounts = [
+        a for a in accounts
+        if a['code'][5:8] == '810' # RUB
+    ]
 
-def get_account_id(token: str) -> str:
-    request_xml = """
-    <message_v1 xmlns="http://www.anr.ru/types" type="request">
-      <data trn_code="Q0112"></data>
-    </message_v1>
-    """
+    # sandbox returns multiple RUB accounts
+    if 'sandbox' in TOCHKA_API:
+        accounts = accounts[:1]
 
-    response = xml_request(token, "Q0112", request_xml)
-    accounts = response.findall(
-        "./data/knopka_account_summaries/accounts_wrapper/accounts"
-    )
     assert len(accounts) == 1
-    return accounts[0].findtext("./accountId")
+
+    return (accounts[0]['code'], accounts[0]['bank_code'])
 
 
-def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> Iterable[Any]:
-    if not from_dt.tzname():
-        raise Exception("Timezone-aware from_dt is required")
-    if not to_dt.tzname():
-        raise Exception("Timezone-aware from_dt is required")
-    account_id = get_account_id(token)
+def get_statements(from_d: date, to_d: date) -> Iterable[Any]:
+    (account_id, bank_code) = get_account_info()
 
-    request_xml = f"""
-    <message_v1 xmlns="http://www.anr.ru/types" type="request">
-      <data trn_code="R0100">
-        <statement_request_v1
-            xmlns="http://www.anr.ru/types"
-            account_id="{account_id}"
-            start_date="{from_dt.isoformat('T', 'seconds')}"
-            end_date="{to_dt.isoformat('T', 'seconds')}"
-        >
-        </statement_request_v1>
-      </data>
-    </message_v1>
-    """
-    response = xml_request(token, "R0100", request_xml)
-
-    state = response.find("./state_info").get("state")
-    if state != "accepted":
-        raise Exception(f"Asked for statement, got bad state {state}")
-
-    int_id = response.get("int_id")
-
-    request_xml = f"""
-      <message_v1 type="request" int_id="{int_id}">
-        <data trn_code="R0101"></data>
-      </message_v1>
-    """
+    response = call('POST', 'statement', {
+        'account_code': account_id,
+        'bank_code': bank_code,
+        'date_start': from_d.strftime('%Y-%m-%d'),
+        'date_end': to_d.strftime('%Y-%m-%d'),
+    })
+    request_id = response['request_id']
 
     step = 1
     max_step = 10
@@ -133,28 +155,26 @@ def get_statements(token: str, from_dt: datetime, to_dt: datetime) -> Iterable[A
     total_wait = 0
     statement = None
     while total_wait < max_wait:
-        response = xml_request(token, "R0101", request_xml)
-        state = response.find("./state_info").get("state")
+        response = call('GET', f'statement/status/{request_id}')
+        state = response['status']
         logger.info(f"State: {state}")
-        if state == "failed":
-            raise Exception("Statement request resulted in state=failed")
-
-        statement = response.find("./data/statement_response_v1")
-        if statement:
+        if state == "ready":
             break
+        elif state == "queued":
+            step = min(step, max_wait - total_wait)
+            logger.info(f"No statement, waiting for {step} seconds")
+            time.sleep(step)
+            total_wait += step
+            if step < max_step:
+                step = min(step + 1, max_step)
+            if step > max_step or total_wait > max_wait:
+                raise Exception(f"Waited for {total_wait} seconds and still got no statement")
+        else:
+            raise Exception(f"Bad or unknown status: {state}")
 
-        step = min(step, max_wait - total_wait)
-        logger.info(f"No statement, waiting for {step} seconds")
-        time.sleep(step)
-        total_wait += step
-        if step < max_step:
-            step = min(step + 1, max_step)
-
-    if not statement:
-        raise Exception(f"Waited for {total_wait} seconds and still got no statement")
-
-    for item in statement.findall("./days/day/records/record"):
-        yield Record.from_element(item)
+    response = call('GET', f'statement/result/{request_id}')
+    for payment in response['payments']:
+        yield Record.from_element(payment)
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
@@ -163,12 +183,13 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         return datetime(2015, 8, 1, tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
-        token = get_access_token()  # TODO - cache
         for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(
             from_dt, to_dt, step=timedelta(days=28)
         ):
-            logger.info(f"Importing from {chunk_from_dt} to {chunk_to_dt}")
-            for record in get_statements(token, chunk_from_dt, chunk_to_dt):
+            chunk_from_d = (chunk_from_dt - timedelta(days=2)).date()
+            chunk_to_d = chunk_to_dt.date()
+            logger.info(f"Importing from {chunk_from_d} to {chunk_to_d}")
+            for record in get_statements(chunk_from_d, chunk_to_d):
                 session.merge(record)
 
         return to_dt - timedelta(
