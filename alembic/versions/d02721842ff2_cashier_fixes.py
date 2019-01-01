@@ -62,11 +62,9 @@ def upgrade():
                existing_type=mysql.TEXT(collation='utf8_unicode_ci'),
                type_=sa.String(length=100),
                existing_nullable=True)
-    op.create_unique_constraint('cashier_shift_pair', 'cashier', ['date', 'shift'])
 
 
 def downgrade():
-    op.drop_constraint('cashier_shift_pair', 'cashier', type_='unique')
     op.alter_column('cashier', 'watchman',
                existing_type=sa.String(length=100),
                type_=mysql.TEXT(collation='utf8_unicode_ci'),

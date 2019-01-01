@@ -62,7 +62,6 @@ def upgrade():
                existing_type=mysql.TEXT(collation='utf8_unicode_ci'),
                type_=sa.String(length=100),
                existing_nullable=True)
-    op.create_unique_constraint('cashier_shift_pair', 'cashier', ['date', 'shift'])
     op.execute("UPDATE cashier SET id = id + 1") # id can be zero and that's bad
     op.execute("ALTER TABLE cashier CHANGE id id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY")
     op.drop_index('ix_cashier_id', table_name='cashier')
@@ -70,7 +69,6 @@ def upgrade():
 
 def downgrade():
     op.create_index('ix_cashier_id', 'cashier', ['id'], unique=False)
-    op.drop_constraint('cashier_shift_pair', 'cashier', type_='unique')
     op.alter_column('cashier', 'watchman',
                existing_type=sa.String(length=100),
                type_=mysql.TEXT(collation='utf8_unicode_ci'),
