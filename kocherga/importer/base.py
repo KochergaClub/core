@@ -85,6 +85,8 @@ class BaseImporter(ABC):
     @property
     def last_dt(self) -> Optional[datetime]:
         state = Session().query(ImporterState).filter_by(name=self.name).first()
+        if not state:
+            return None
         return state.last_dt
 
     @property
