@@ -231,3 +231,46 @@ def react_tag_admin(message):
 
     slack_user_id = member.slack_id
     return {"text": f"<@{slack_user_id}>, см. выше."}
+
+@bot.schedule("cron", hour=12)
+def roster_check():
+    # We have a reason to panic if either of the following is true:
+    # - at least 1 empty shift in the next CRITICAL_DAYS days
+    # - at least SHIFTS_THRESHOLD empty shifts in the next TOTAL_DAYS days
+    CRITICAL_DAYS = 2
+    SHIFTS_THRESHOLD = 6
+    TOTAL_DAYS = 7
+    CHANNEL = '#roster'
+
+    schedule = kocherga.watchmen.load_schedule()
+
+    today = datetime.now(TZ).date()
+    d = today
+
+    empty_total = 0
+    critical_sent = False
+    while d < today + timedelta(days=TOTAL_DAYS):
+        empty_for_day = 0
+
+        shift_info = schedule.shifts_by_date(d)
+        for shift in sorted(shift_info.keys()):
+            watchman = shift_info[shift]
+            if watchman == "":
+                empty_for_day += 1
+
+        if empty_for_day and d <= today + timedelta(days=CRITICAL_DAYS) and not critical_sent:
+            bot.send_message(
+                text=f":exclamation: Есть пустые смены в ближайшие {CRITICAL_DAYS} дня.",
+                channel="#watchmen"
+            )
+            critical_sent = True
+
+        empty_total += empty_for_day
+        d += timedelta(days=1)
+
+    if empty_total >= SHIFTS_THRESHOLD:
+        bot.send_message(
+            text=f":exclamation: {empty_total} пустых смен в ближайшие {TOTAL_DAYS} дней.",
+            channel="#watchmen"
+        )
+
