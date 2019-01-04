@@ -7,6 +7,9 @@ dev:
 ludwig:
 	TIER=dev ./scripts/ludwig.py
 
+ludwig-lt:
+	lt --port 5200 --subdomain kocherga-dev
+
 test-types:
 	git submodule init
 	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga

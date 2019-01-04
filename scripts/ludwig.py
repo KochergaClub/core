@@ -13,6 +13,7 @@ import kocherga.ludwig.events
 import kocherga.ludwig.crypto
 import kocherga.ludwig.money
 import kocherga.ludwig.video
+import kocherga.ludwig.daily_tasks
 
 from kocherga.ludwig.bot import bot
 
