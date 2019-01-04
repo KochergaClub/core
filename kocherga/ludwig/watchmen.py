@@ -261,7 +261,7 @@ def roster_check():
         if empty_for_day and d <= today + timedelta(days=CRITICAL_DAYS) and not critical_sent:
             bot.send_message(
                 text=f":exclamation: Есть пустые смены в ближайшие {CRITICAL_DAYS} дня.",
-                channel="#watchmen"
+                channel=CHANNEL,
             )
             critical_sent = True
 
@@ -271,6 +271,6 @@ def roster_check():
     if empty_total >= SHIFTS_THRESHOLD:
         bot.send_message(
             text=f":exclamation: {empty_total} пустых смен в ближайшие {TOTAL_DAYS} дней.",
-            channel="#watchmen"
+            channel=CHANNEL,
         )
 
