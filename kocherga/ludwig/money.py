@@ -42,8 +42,14 @@ def salaries_message(with_elba_values=False):
 
         member = kocherga.team.find_member_by_email(email)
 
+        payment_emoji = ''
+        if member.payment_type =='нал':
+            payment_emoji = ':dollar:'
+        elif member.payment_type == 'безнал':
+            payment_emoji = ':credit_card:'
+
         member_attachment = {
-            "text": f"{member.short_name} <@{member.slack_id}>: *{salary.total}* руб.",
+            "text": f"{member.short_name} <@{member.slack_id}>: {payment_emoji}*{salary.total}* руб.",
             "fields": [
                 {
                     "title": "Смены",
