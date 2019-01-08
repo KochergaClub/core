@@ -250,11 +250,14 @@ def create_draft(text=''):
         'type': 'regular',
         'recipients': {
             'list_id': MAIN_LIST_ID,
+            'segment_opts': {
+                'saved_segment_id': kocherga.mailchimp.segment_by_name('Подписаны на расписание')['id'],
+            },
         },
         'settings': {
             'subject_line': content['title'],
             'title': content['title'],
-            'from_name': 'Антикафе Кочерга',
+            'from_name': 'Кочерга',
             'reply_to': 'info@kocherga-club.ru',
             'to_name': '*|FNAME|*',
             'folder_id': kocherga.mailchimp.folder_id_by_name('Еженедельная рассылка'),
