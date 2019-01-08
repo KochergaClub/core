@@ -279,5 +279,6 @@ def roster_check():
 def watchmen_new_week():
     bot.send_message(
         text="@channel, новая неделя в расписании!",
-        channel="U0B4JEZA6",
+        channel="#roster",
     )
+    return 'ok'
