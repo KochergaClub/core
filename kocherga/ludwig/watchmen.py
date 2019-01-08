@@ -274,3 +274,10 @@ def roster_check():
             channel=CHANNEL,
         )
 
+
+@bot.flask_app.route('/trigger/watchmen_new_week', methods=['POST'])
+def watchmen_new_week():
+    bot.send_message(
+        text="@channel, новая неделя в расписании!",
+        channel="U0B4JEZA6",
+    )
