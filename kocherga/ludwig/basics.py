@@ -29,7 +29,7 @@ def react_die(message):
 def react_like_supply(message):
     if message.channel.name != 'supply':
         return
-    if random.random() > 0.5:
+    if random.random() > 0.8:
         return
     message.react(random.choice([
         'heart', 'heartbeat', 'heart_eyes', 'blue_heart', 'heart_decoration', 'kissing_heart', 'heart_eyes_cat'
