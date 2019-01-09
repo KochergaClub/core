@@ -8,18 +8,11 @@ import hashlib
 import kocherga.google
 import kocherga.mailchimp
 from kocherga.config import config
+import kocherga.secrets
 
 
-LIST_ID = config()["mailchimp"]["ratio_list_id"]
+LIST_ID = config()["mailchimp"]["main_list_id"]
 SPREADSHEET_ID = config()["ratio"]["users_spreadsheet_id"]
-
-
-def get_mailchimp_date_group_category():
-    response = kocherga.mailchimp.api_call(
-        "GET", f"lists/{LIST_ID}/interest-categories"
-    )
-    category = next(c for c in response["categories"] if c["title"] == "Дата воркшопа")
-    return category
 
 
 def get_all_mailchimp_dates(category_id):
@@ -35,18 +28,10 @@ def create_new_mailchimp_date(category_id, event_type, event_id):
     name = f"{event_type_ru} {event_id}"
 
     # check if interest already exists
-    response = kocherga.mailchimp.api_call(
-        "GET", f"lists/{LIST_ID}/interest-categories/{category_id}/interests"
-    )
-    print([
-        i["name"]
-        for i in response["interests"]
-    ])
-    interest = next((i for i in response["interests"] if i["name"] == name), None)
-
-    if interest:
+    try:
+        interest = kocherga.mailchimp.interest_by_name(category_id, name)
         logger.info(f"Group {name} already exists")
-    else:
+    except kocherga.mailchimp.NotFoundException:
         logger.info(f"Creating group {name}")
         interest = kocherga.mailchimp.api_call(
             "POST",
@@ -59,13 +44,14 @@ def create_new_mailchimp_date(category_id, event_type, event_id):
 
 def import_user_to_mailchimp(user, group_id):
     md5 = hashlib.md5(user["email"].lower().encode()).hexdigest()
+    print({"FNAME": user["first_name"], "LNAME": user["last_name"], "USER_ID": user["uid"]})
     response = kocherga.mailchimp.api_call(
         "PUT",
         f"lists/{LIST_ID}/members/{md5}",
         {
             "email_type": "html",
             "email_address": user["email"],
-            "merge_fields": {"FNAME": user["first_name"], "LNAME": user["last_name"]},
+            "merge_fields": {"FNAME": user["first_name"], "LNAME": user["last_name"], "USER_ID": user["uid"]},
             "interests": {group_id: True},
             "status_if_new": "subscribed",
         },
@@ -84,18 +70,30 @@ def get_users(event_type, event_id):
 
     rows = worksheet.get_all_records()
 
-    return [
-        {"email": row["Емейл"], "first_name": row["Имя"], "last_name": row["Фамилия"]}
-        for row in rows
-        if row["Событие"] == event
-    ]
+    result = []
+
+    SALT = kocherga.secrets.plain_secret('mailchimp_uid_salt').encode()
+    for row in rows:
+        if row["Событие"] != event:
+            continue
+
+        uid = hashlib.sha1(SALT + row["Емейл"].lower().encode()).hexdigest()[:10]
+        result.append(
+            {
+                "email": row["Емейл"],
+                "first_name": row["Имя"],
+                "last_name": row["Фамилия"],
+                "uid": uid,
+            }
+        )
+    return result
 
 
 def sheet2mailchimp(event_type, event_id):
     assert event_type in ("workshop", "3week", "bb")
     assert re.match(r"\d+-\d+$", event_id)
 
-    category = get_mailchimp_date_group_category()
+    category = kocherga.mailchimp.interest_category_by_name('Участники воркшопа')
     group_id = create_new_mailchimp_date(category["id"], event_type, event_id)
 
     users = get_users(event_type, event_id)
