@@ -6,42 +6,12 @@ from abc import ABC, abstractmethod
 
 from typing import Any, Optional
 
-import kocherga.db
 from kocherga.db import Session
 from kocherga.config import TZ
 
+import django.db
 
-class ImporterState(kocherga.db.Base):
-    __tablename__ = "importers_state"
-    name = Column(String(100), primary_key=True)
-    until_ts = Column(Integer)
-    last_ts = Column(Integer)
-    last_exception = Column(Text)
-
-    @property
-    def until_dt(self) -> Optional[datetime]:
-        if not self.until_ts:
-            return None
-        return datetime.fromtimestamp(self.until_ts, TZ)
-
-    @property
-    def last_dt(self) -> Optional[datetime]:
-        if not self.last_ts:
-            return None
-        return datetime.fromtimestamp(self.last_ts, TZ)
-
-
-class ImporterLogEntry(kocherga.db.Base):
-    __tablename__ = "importers_log"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), index=True)
-    start_ts = Column(Integer)
-    end_ts = Column(Integer)
-    exception = Column(Text)
-
-    def __init__(self, name):
-        self.name = name
-        self.start_ts = datetime.now(TZ).timestamp()
+from .models import State, LogEntry
 
 
 class ImportContext:
@@ -51,29 +21,37 @@ class ImportContext:
         self.mode = mode
 
     def __enter__(self):
-        self.log_entry = ImporterLogEntry(self.name)
-        self.state = Session().query(ImporterState).filter_by(name=self.name).first()
-        if not self.state:
-            self.state = ImporterState(name=self.name)
+        django.db.transaction.set_autocommit(False)
+
+        self.log_entry = LogEntry(name=self.name)
+
+        try:
+            self.state = State.objects.get(name=self.name)
+        except State.DoesNotExist:
+            self.state = State(name=self.name)
+
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value:
             # roll back everything done by importer
-            Session().rollback()
             self.state.last_exception = str(exc_value)
+            django.db.transaction.rollback()
         else:
             self.state.last_exception = None
+            django.db.transaction.commit()
 
-        self.state.last_ts = datetime.now(TZ).timestamp()
+        self.state.last_dt = datetime.now(TZ)
 
-        self.log_entry.end_ts = self.state.last_ts
+        self.log_entry.end_dt = self.state.last_dt
         self.log_entry.exception = self.state.last_exception
 
-        Session().merge(self.state)
-        Session().add(self.log_entry)
+        self.state.save()
+        self.log_entry.save()
 
-        Session().commit()
+        django.db.transaction.set_autocommit(True)
+        django.db.transaction.commit()
+
         logging.info(f"{self.name} imported")
 
 
@@ -84,9 +62,11 @@ class BaseImporter(ABC):
 
     @property
     def last_dt(self) -> Optional[datetime]:
-        state = Session().query(ImporterState).filter_by(name=self.name).first()
-        if not state:
+        try:
+            state = State.objects.get(name=self.name)
+        except State.DoesNotExist:
             return None
+
         return state.last_dt
 
     @property
@@ -135,7 +115,7 @@ class IncrementalImporter(BaseImporter):
                 raise Exception(
                     f"{self.name}.do_period_import didn't return a datetime object"
                 )
-            ic.state.until_ts = last_dt.timestamp()
+            ic.state.until_dt = last_dt
 
     def import_all(self) -> None:
         self._import("all")

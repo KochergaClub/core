@@ -22,7 +22,7 @@ quart = "*"
 mwclient = "*"
 termcolor = "*"
 pandas = "*"
-pyppeteer = { git = 'https://github.com/berekuk/pyppeteer.git' }
+pyppeteer = {git = 'https://github.com/berekuk/pyppeteer.git'}
 werkzeug = "*"
 attrs = "*"
 apscheduler = "*"
@@ -41,6 +41,9 @@ feedgen = "*"
 telethon-sync = "*"
 pysocks = "*"
 raven-aiohttp = "*"
+django = "*"
+pytest-django = "*"
+pytest-asyncio = "*"
 
 [dev-packages]
 pytest = "*"

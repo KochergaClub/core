@@ -1,30 +1,27 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
-import csv
-import requests
-from collections import defaultdict, OrderedDict
+import kocherga.db
+
+from django.db import models
+
+from collections import OrderedDict
 from datetime import datetime, timedelta
+import requests
 import enum
-import io
 import hashlib
 import hmac
 import base64
 import urllib
 import itertools
 
-from typing import DefaultDict, Dict, Iterator, List
+from typing import Iterator
 
 from kocherga.config import TZ
-import kocherga.db
 import kocherga.datetime
 import kocherga.secrets
 import kocherga.watchmen
 import kocherga.importer.base
-
-from sqlalchemy import Column, Integer, String, Enum, DateTime, Boolean
-
 
 class CallType(enum.Enum):
     incoming = 1
@@ -38,26 +35,26 @@ class CallType(enum.Enum):
             return cls.outcoming
         raise Exception(f"Can't detect call type by data {data}")
 
+class Call(models.Model):
+    call_id = models.CharField(primary_key=True, max_length=100)
+    pbx_call_id = models.CharField(max_length=100)
 
-class Call(kocherga.db.Base):
-    __tablename__ = "zadarma_calls"
+    ts = models.DateTimeField()
+    call_type = models.CharField(max_length=15)
+    disposition = models.CharField(max_length=40)
+    clid = models.CharField(max_length=100, blank=True)
+    destination = models.CharField(max_length=20)
+    sip = models.CharField(max_length=100)
+    seconds = models.IntegerField()
+    is_recorded = models.IntegerField()
+    watchman = models.CharField(max_length=100)
 
-    call_id = Column(String(100), primary_key=True)
-    pbx_call_id = Column(String(100), index=True, nullable=False)
+    class Meta:
+        managed = False
+        db_table = 'zadarma_calls'
 
-    ts = Column(DateTime, nullable=False)
-    call_type = Column(Enum(CallType))
-
-    disposition = Column(String(40))
-
-    clid = Column(String(100))
-    destination = Column(String(20))
-    sip = Column(String(100))
-
-    seconds = Column(Integer)
-    is_recorded = Column(Boolean)
-
-    watchman = Column(String(100))
+    def __str__(self):
+        return f'[{self.ts}] {self.call_type} {self.clid} ---> {self.destination}'
 
     @classmethod
     def from_api_data(cls, data) -> "Call":
@@ -66,24 +63,12 @@ class Call(kocherga.db.Base):
             args[arg] = data[arg]
 
         call = Call(
-            ts=datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S"),
-            call_type=CallType.from_api_data(data),
+            ts=datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
+            call_type=CallType.from_api_data(data).name,
             is_recorded=(data['is_recorded'] == 'true'),
             destination=str(data['destination']),
             **args,
         )
-
-        #if len(rows) == 2:
-        #    row2 = rows[1]
-        #    assert row2["call_id"] == row1["call_id"]
-        #    if call.call_type != CallType.incoming:
-        #        raise Exception(
-        #            "Can't parse two-rows format for anything except incoming calls"
-        #        )
-        #    call.internal_number = row2["internal_number"]
-
-        #    call.wait_seconds = call.seconds
-        #    call.seconds = row2["seconds"]
 
         return call
 
@@ -162,7 +147,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         for call in fetch_all_calls(from_dt, to_dt):
             watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts.timestamp(), TZ))
             call.watchman = watchman
-            session.merge(call)
+            call.save()
             last_call = call
 
         if last_call:

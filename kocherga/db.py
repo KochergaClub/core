@@ -11,6 +11,8 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 from kocherga.config import config
 
+################### Legacy - init SQLAlchemy #####################
+
 DB_URL = config()["kocherga_db"]
 
 Base = declarative_base()
