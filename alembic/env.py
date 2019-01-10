@@ -10,14 +10,11 @@ from logging.config import fileConfig
 from kocherga.db import DB_URL
 
 # Import all modules with tables. TODO - think about how to improve this.
-import kocherga.cm
 import kocherga.events.event
-import kocherga.importer.base
 import kocherga.money.ofd
 import kocherga.money.tochka
 import kocherga.money.cashier
 import kocherga.watchmen
-import kocherga.zadarma
 import kocherga.gitlab
 import kocherga.events.prototype
 import kocherga.supplies.cookies

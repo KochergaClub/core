@@ -1,11 +1,10 @@
-from kocherga.db import Session
-from kocherga.cm import Customer
+from kocherga.cm.models import Customer
 
 from .lists import populate_main_list
 from .lists import User as MailUser
 
 def import_customers():
-    customers = Session().query(Customer).all()
+    customers = Customer.objects.all()
 
     populate_main_list([
         MailUser(

@@ -15,6 +15,7 @@ def get_interest_category_id():
     return kocherga.mailchimp.interest_category_by_name('Подписки')['id']
 
 def get_all_interests():
+    LIST_ID = config()['mailchimp']['main_list_id']
     return kocherga.mailchimp.api_call(
         'GET',
         f"lists/{LIST_ID}/interest-categories/{get_interest_category_id()}/interests"

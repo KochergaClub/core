@@ -5,7 +5,7 @@ from quart import Blueprint, jsonify
 
 import time
 
-import kocherga.cm
+import kocherga.cm.scraper
 
 bp = Blueprint("people", __name__)
 
@@ -23,7 +23,7 @@ def now():
         logger.debug("return now stats from cache")
         return jsonify(stats_cached)
 
-    stats = kocherga.cm.now_stats()
+    stats = kocherga.cm.scraper.now_stats()
 
     result = {
         "total": stats["total"],

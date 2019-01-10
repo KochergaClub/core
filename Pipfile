@@ -42,8 +42,6 @@ telethon-sync = "*"
 pysocks = "*"
 raven-aiohttp = "*"
 django = "*"
-pytest-django = "*"
-pytest-asyncio = "*"
 
 [dev-packages]
 pytest = "*"
@@ -58,6 +56,9 @@ matplotlib = "*"
 seaborn = "*"
 tqdm = "*"
 python-docx = "*"
+pytest-env = "*"
+pytest-django = "*"
+pytest-asyncio = "*"
 
 [requires]
 python_version = "3.6"

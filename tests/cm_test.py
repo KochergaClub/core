@@ -1,13 +1,12 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
-import kocherga.cm
-import kocherga.cm.model
+import kocherga.cm.models
+import kocherga.cm.scraper
 import kocherga.cm.importer
-from kocherga.db import Session
 
 def test_now_stats():
-    c = kocherga.cm.now_stats()
+    c = kocherga.cm.scraper.now_stats()
     assert type(c["total"]) == int
 
 def test_load_customers():
@@ -20,14 +19,15 @@ def test_load_orders():
     orders = kocherga.cm.importer.load_orders()
     assert type(orders) == list
     assert len(orders) > 10
-    assert type(orders[0]) == kocherga.cm.model.Order
+    assert type(orders[0]) == kocherga.cm.models.Order
 
 def test_load_customer():
-    customer = kocherga.cm.load_customer_from_html(40)
+    customer = kocherga.cm.scraper.load_customer_from_html(40)
     assert customer
 
 @pytest.mark.slow
+@pytest.mark.django_db(transaction=True)
 def test_importer():
-    kocherga.cm.Importer(log_portion_size=3).import_new()
-    assert len(Session().query(kocherga.cm.model.Order).all()) > 10
-    assert len(Session().query(kocherga.cm.model.Customer).all()) > 10
+    kocherga.cm.importer.Importer(log_portion_size=3).import_new()
+    assert len(kocherga.cm.models.Order.objects.all()) > 10
+    assert len(kocherga.cm.models.Customer.objects.all()) > 10

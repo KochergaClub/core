@@ -3,9 +3,8 @@ import re
 from datetime import datetime
 
 import kocherga.secrets
-from kocherga.db import Session
 
-from .model import Customer
+from .models import Customer
 
 DOMAIN = kocherga.secrets.plain_secret("cafe_manager_server")
 
@@ -45,7 +44,7 @@ def now_stats():
     total = int(match.group(1))
 
     customer_ids = [int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)]
-    customers = Session().query(Customer).filter(Customer.customer_id.in_(customer_ids)).all()
+    customers = Customer.objects.filter(customer_id__in=customer_ids).all()
 
     return {
         "total": total,

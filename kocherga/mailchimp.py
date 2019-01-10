@@ -54,7 +54,7 @@ def folder_id_by_name(name):
     response = api_call('GET', 'campaign-folders')
     return next(
         f['id']
-        for f in kocherga.mailchimp.api_call('GET', 'campaign-folders')['folders']
+        for f in api_call('GET', 'campaign-folders')['folders']
         if f['name'] == name
     )
 
@@ -80,7 +80,7 @@ def wait_for_batch(batch_id):
 
 # Used in setup only
 def create_campaign_folder(name):
-    folders = kocherga.mailchimp.api_call(
+    folders = api_call(
         'GET',
         '/campaign-folders',
     )['folders']
@@ -88,7 +88,7 @@ def create_campaign_folder(name):
     if name in [f['name'] for f in folders]:
         return # already exists
 
-    kocherga.mailchimp.api_call(
+    api_call(
         'POST',
         '/campaign-folders',
         {

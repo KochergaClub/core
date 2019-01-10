@@ -6,17 +6,11 @@ import re
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from kocherga.db import Session
 from .model import Customer
 from .scraper import DOMAIN, load_customer_from_html, get_cookies
 
 def extend_subscription(card_id, period):
-    customer_from_db = (
-        Session()
-        .query(Customer)
-        .filter(Customer.card_id == card_id, Customer.is_active == True)
-        .first()
-    )
+    customer_from_db = Customer.objects.get(card_id=card_id, is_active=True)
     customer_id = customer_from_db.customer_id
     logger.info(f"Customer ID for card ID {card_id}: {customer_id}")
     customer = load_customer_from_html(customer_id)  # we can't rely on DB cache here

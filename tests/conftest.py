@@ -7,8 +7,6 @@ import os.path
 import logging
 from datetime import datetime, timedelta
 
-os.environ['TIER'] = 'dev'
-
 from kocherga.events.event import Event
 from kocherga.events.prototype import EventPrototype
 import kocherga.events.db
@@ -137,7 +135,7 @@ def event_for_edits():
     kocherga.db.Session().commit()
 
 @pytest.fixture
-def imported_events(db):
+def imported_events(db, transactional_db):
     kocherga.events.db.Importer().import_all()
 
 @pytest.fixture

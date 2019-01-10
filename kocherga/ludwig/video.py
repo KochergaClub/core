@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 from datetime import timedelta
 
 from kocherga.ludwig.bot import bot
-from kocherga.cm import extend_subscription
+from kocherga.cm.tools import extend_subscription
 import kocherga.team
 
 

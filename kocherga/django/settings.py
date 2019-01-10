@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'kocherga.zadarma',
     'kocherga.importer',
+    'kocherga.cm',
 ]
 
 MIDDLEWARE = [

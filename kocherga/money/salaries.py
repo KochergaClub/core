@@ -10,7 +10,7 @@ import fire
 from kocherga.db import Session
 from kocherga.watchmen import load_schedule, Shift
 import kocherga.team
-import kocherga.cm
+from kocherga.cm.models import Order
 
 def rate_by_shift(shift):
     if shift in (Shift.MORNING_V1, Shift.EVENING_V1):
@@ -85,11 +85,10 @@ def basic_salaries():
 #     return value
 
 def period_orders(start_date, end_date):
-    orders = Session() \
-        .query(kocherga.cm.Order) \
-        .filter(kocherga.cm.Order.start_ts >= datetime.combine(start_date, datetime.min.time()).timestamp()) \
-        .filter(kocherga.cm.Order.end_ts <= datetime.combine(end_date, datetime.max.time()).timestamp()) \
-        .all()
+    orders = Order.objects.filter(
+        start_ts__gte = datetime.combine(start_date, datetime.min.time()).timestamp(),
+        end_ts__lte = datetime.combine(end_date, datetime.max.time()).timestamp(),
+    ).all()
     return orders
 
 def commission_bonuses(start_date, end_date):
@@ -102,88 +101,14 @@ def commission_bonuses(start_date, end_date):
         if not (start_date <= order.end_dt.date() <= end_date):
             continue
 
-        open_manager = order.log_entries[0].login
-        close_manager = order.log_entries[-1].login
+        open_manager = order.order_log_entry_set.all()[0].login
+        close_manager = order.order_log_entry_set.all()[-1].login
         value = order.order_value
         commissions[open_manager] += value * 0.01
         commissions[close_manager] += value * 0.01
 
     return cm_login_stat_to_email_stat(commissions)
 
-
-# def night_bonuses(start_date, end_date):
-#     orders = period_orders(start_date, end_date)
-#
-#     customers = Session().query(kocherga.cm.Customer).all()
-#     customers_dict = { int(c['Номер Карты']): c for c in customers }
-#
-#     schedule = load_schedule()
-#
-#     stat = defaultdict(int)
-#
-#     def find_counterfactual_value(order):
-#         # mode = nightless; TODO - generalize to other modes, move to kocherga.cm for analytics
-#
-#         order = copy.copy(order)
-#
-#         if order.start_dt.hour < 9:
-#             order = order.start_dt.replace(hour=9, minute=0).timestamp()
-#         if order.end_dt.hour < 9 or order.start_dt.date() != order.end_dt.date():
-#             if not (order.end_dt.hour == 0 and order.end_dt.minute < 10):
-#                 # Probably just an overtime and we'd get this income anyway
-#                 # (this check for the sake of clearer calculations, not for the sake of saving money on bonuses)
-#                 order.end_ts = order.end_dt.replace(hour=0, minute=0).timestamp()
-#
-#         return find_order_value(order, customers_dict)
-#
-#     def find_night_watchman(order):
-#         night_dt = order.end_dt.replace(hour=0, minute=10)
-#         if not (order.start_dt < night_dt < order.end_dt):
-#             raise Exception(f'{order.order_id}, {order.start_dt}, {night_dt}, {order.end_dt}')
-#         watchman = schedule.watchman_by_dt(night_dt)
-#
-#         if watchman == 'Ночь':
-#             # extra shift, we'll have to check CM order history
-#             history_items = kocherga.cm.load_order_history(order.order_id)
-#
-#             close_item = next(item for item in history_items if item.operation == 'Заказ закрыт')
-#             cm_login = close_item.login
-#             team_member = next(m for m in kocherga.team.members() if m.cm_login == cm_login)
-#
-#             watchman = team_member.short_name
-#
-#         return watchman
-#
-#     for order in orders:
-#         if not order.end_dt:
-#             continue # not over yet
-#         if order.time_value == 0:
-#             continue # free
-#         if not (start_date <= order.end_dt.date() <= end_date):
-#             continue
-#         if order.is_fixed == 'да':
-#             continue # TODO - check if it could result in some bonuses anyway
-#
-#         if order.start_dt.date() == order.end_dt.date() and order.start_dt.hour >= 9:
-#             continue # not relevant
-#
-#         value = find_order_value(order, customers_dict)
-#         if abs(order.time_value - value) > 10 * order.people:
-#             logging.info(f'order {order.order_id} is not ok, got {value} instead of {order.time_value}')
-#             continue
-#
-#         nightless_value = find_counterfactual_value(order)
-#         if value == nightless_value:
-#             continue
-#
-#         watchman = find_night_watchman(order)
-#         logging.info(f'{value} -> {nightless_value} | https://kocherga.cafe-manager.ru/order/{order.order_id} | {watchman}')
-#         delta = value - nightless_value
-#
-#         stat[watchman] += int(delta * 0.5)
-#
-#     logging.info(stat)
-#     return short_name_stat_to_email_stat(stat)
 
 class Salary:
     def __init__(self):

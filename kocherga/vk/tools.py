@@ -1,14 +1,14 @@
 import requests
 
 import kocherga.config
-import kocherga.cm
+import kocherga.cm.scraper
 
 from .helpers import upload_cover_image, group2id
 
 group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
 
 def update_cover():
-    now_total = kocherga.cm.now_stats()['total']
+    now_total = kocherga.cm.scraper.now_stats()['total']
 
     web_root = kocherga.config.web_root()
     r = requests.get(
