@@ -10,14 +10,6 @@ from logging.config import fileConfig
 from kocherga.db import DB_URL
 
 # Import all modules with tables. TODO - think about how to improve this.
-import kocherga.events.event
-import kocherga.money.ofd
-import kocherga.money.tochka
-import kocherga.money.cashier
-import kocherga.watchmen
-import kocherga.gitlab
-import kocherga.events.prototype
-import kocherga.supplies.cookies
 import kocherga.analytics.timeclub24
 
 # this is the Alembic Config object, which provides

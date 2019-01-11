@@ -45,8 +45,10 @@ django = "*"
 
 [dev-packages]
 pytest = "*"
-freezegun = "*"
 pytest-asyncio = "*"
+pytest-env = "*"
+pytest-django = "*"
+freezegun = "*"
 mypy = "*"
 black = "==18.6b4"
 pycookiecheat = "*"
@@ -56,9 +58,6 @@ matplotlib = "*"
 seaborn = "*"
 tqdm = "*"
 python-docx = "*"
-pytest-env = "*"
-pytest-django = "*"
-pytest-asyncio = "*"
 
 [requires]
 python_version = "3.6"

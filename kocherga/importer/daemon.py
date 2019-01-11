@@ -9,12 +9,12 @@ import importlib
 
 IMPORTER_MODULES = [
     "money.cashier",
-    "money.ofd",
+    "money.ofd.models",
     "money.tochka",
     "zadarma",
     "cm",
     "events.db",
-    "watchmen",
+    "watchmen.importer",
     "gitlab",
 #    "analytics.timeclub24",
 ]

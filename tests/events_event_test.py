@@ -4,7 +4,7 @@ import logging
 from datetime import datetime, timedelta
 
 from kocherga.events.event import Event
-from kocherga.events.tag import EventTag
+from kocherga.events.tag import Tag
 import kocherga.events.db
 from kocherga.db import Session
 
@@ -70,8 +70,6 @@ class TestImages:
             event.add_image('default', fh)
 
         assert event.image_file('default')
-        Session().commit()
-        assert event.image_file('default')
 
         event = kocherga.events.db.get_event(event.google_id) # reloading for another check
         assert event.image_file('default')
@@ -86,13 +84,11 @@ class TestTags:
         assert event.tags == []
 
     def test_set_tags(self, event):
-        event.tags.append(EventTag(name='foo'))
-        event.tags.append(EventTag(name='bar'))
-        Session().commit()
+        event.tag_set.add(Tag(name='foo'))
+        event.tag_set.add(Tag(name='bar'))
         event_id = event.google_id
 
-        Session.remove()
-        event = Session().query(Event).filter_by(google_id=event_id).first()
+        event = Event.get(google_id=event_id)
         assert len(event.tags) == 2
         assert event.tags[0].name == 'bar' # tags are sorted by name
         assert event.tags[1].name == 'foo'

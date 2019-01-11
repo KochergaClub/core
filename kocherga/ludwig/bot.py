@@ -4,12 +4,9 @@ logger = logging.getLogger(__name__)
 import slappy
 
 import pytz
-from flask_sqlalchemy import SQLAlchemy as SA
 from raven.contrib.flask import Sentry
 
-
 import kocherga.slack
-import kocherga.db
 import kocherga.config
 import kocherga.secrets
 
@@ -20,20 +17,7 @@ PORT = kocherga.config.config()["ludwig_port"]
 
 
 class Bot(slappy.Bot):
-    def cleanup_on_exception(self):
-        logger.info("cleanup_on_exception")
-        kocherga.db.Session.remove()
-
-    def cleanup_on_anything(self):
-        logger.info("cleanup_on_anything")
-        kocherga.db.Session.remove()
-
-
-# via https://github.com/mitsuhiko/flask-sqlalchemy/issues/589
-class SQLAlchemy(SA):
-    def apply_pool_defaults(self, app, options):
-        options["pool_pre_ping"] = True
-        SA.apply_pool_defaults(self, app, options)
+    pass
 
 
 def create_bot():
@@ -46,10 +30,6 @@ def create_bot():
         ),  # can't use kocherga.config.TZ - it's based on dateutil.tz now
         alt_names=['людвиг']
     )
-
-    bot.flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    bot.flask_app.config["SQLALCHEMY_DATABASE_URI"] = kocherga.db.DB_URL
-    kocherga.db.Session.replace(SQLAlchemy(bot.flask_app).session)
 
     sentry_dsn = kocherga.config.config().get("sentry", {}).get("ludwig", None)
     if sentry_dsn:

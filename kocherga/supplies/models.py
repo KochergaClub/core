@@ -11,79 +11,65 @@ import re
 import requests
 import hashlib
 
-from sqlalchemy import (
-    String,
-    Integer,
-    DateTime,
-    Column,
-    Float,
-    UniqueConstraint,
-    ForeignKey,
-)
-from sqlalchemy.orm import relationship
+from django.db import models
 
-import kocherga.db
-from kocherga.db import Session
+class Cookie(models.Model):
+    class Meta:
+        db_table = 'cookies'
 
-class Cookie(kocherga.db.Base):
-    __tablename__ = "cookies"
+    id = models.CharField(max_length=32, primary_key=True)
+    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    price = models.FloatField()
+    weight = models.FloatField()
+    prodway_page = models.CharField(max_length=255)
+    prodway_image = models.CharField(max_length=255)
 
-    id = Column(String(32), primary_key=True)
-    title = Column(String(255), nullable=False)
-    price = Column(Float, nullable=False)
-    weight = Column(Float, nullable=False)
-    prodway_page = Column(String(255), nullable=False)
-    prodway_image = Column(String(255), nullable=False)
+def dt_now():
+    return datetime.now(TZ)
+
+class CookiePick(models.Model):
+    class Meta:
+        db_table = 'cookie_picks'
+
+    pick_id = models.IntegerField(primary_key=True)
+    ts = models.DateTimeField(default=dt_now)
+    cookie_id = models.CharField(max_length=32)
+    against_id = models.CharField(max_length=32)
+    position = models.IntegerField()
+    position = models.CharField(max_length=255)
+    time = models.IntegerField()
 
 
-class CookiePick(kocherga.db.Base):
-    __tablename__ = "cookie_picks"
+class CookieCombinationItem(models.Model):
+    class Meta:
+        db_table = 'cookie_combination_items'
+        unique_together(
+            ('combination_id', 'position_id'),
+        )
 
-    pick_id = Column(Integer, primary_key=True)
-    ts = Column(DateTime, default=datetime.now)
-    cookie_id = Column(String(32), nullable=False)
-    against_id = Column(String(32), nullable=False)
-    position = Column(Integer)
-    user = Column(String(255))
-    time = Column(Integer)
+    id = models.IntegerField(primary_key=True)
 
-class CookieCombinationItem(kocherga.db.Base):
-    __tablename__ = "cookie_combination_items"
-    __table_args__ = (
-        UniqueConstraint('combination_id', 'position_id'),
-    )
-
-    id = Column(Integer, primary_key=True)
-    combination_id = Column(Integer, ForeignKey('cookie_combinations.combination_id'), nullable=False)
+    combination = models.ForeignKey('CookieCombination', on_delete=models.CASCADE)
     position_id = Column(Integer, nullable=False)
     cookie_id = Column(String(32), nullable=False)
-
-    combination = relationship(
-        "CookieCombination",
-        back_populates="items",
-        single_parent=True
-    )
 
     @property
     def image_link(self):
         return f'http://cookies.kocherga.club/images/{self.cookie_id}'
 
-class CookieCombination(kocherga.db.Base):
-    __tablename__ = "cookie_combinations"
 
-    combination_id = Column(Integer, primary_key=True)
-    happy_users = Column(Integer, nullable=False)
-    total_users = Column(Integer, nullable=False)
+class CookieCombination(models.Model):
+    class Meta:
+        db_table = 'cookie_combinations'
 
-    items = relationship(
-        "CookieCombinationItem",
-        order_by=CookieCombinationItem.position_id,
-        back_populates="combination",
-        cascade="all, delete, delete-orphan"
-    )
+    combination_id = models.IntegerField(primary_key=True)
+    happy_users = models.IntegerField()
+    total_users = models.IntegerField()
+
 
 def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, combination_size=3):
-    cookie_picks = Session().query(CookiePick).all()
+    cookie_picks = CookiePick.objects.all()
 
     cookies = defaultdict(lambda: len(cookies)) # https://wchargin.github.io/posts/a-cute-autoincrementing-id-table-in-one-line-of-python/
     votes = defaultdict(list)
@@ -142,8 +128,8 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
         )
         ctuple2rating[ctuple] = happy_users
 
-    for combination in Session().query(CookieCombination):
-        Session().delete(combination)
+    for combination in CookieCombination.objects.all():
+        combination.delete()
 
     for ctuple in itertools.islice(sorted(ctuple2rating.keys(), key=lambda a: ctuple2rating[a], reverse=True), limit):
         combination = CookieCombination(
@@ -154,13 +140,13 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
             CookieCombinationItem(cookie_id=cookie_id, position_id=i)
             for (i, cookie_id) in enumerate(ctuple)
         ]
-        Session().add(combination)
+        combination.save()
 
 def generate_wiki_rating(limit=10):
     result = '{|class="wikitable"\n'
 
     partials = []
-    for combination in Session().query(CookieCombination).order_by(CookieCombination.happy_users.desc()):
+    for combination in CookieCombination.objects.order_by('-happy_users'):
         partial = f'| {combination.happy_users}\n'
         for item in combination.items:
             partial += f'| <img src="{item.image_link}" style="width: 200px; height: auto">\n'
@@ -259,4 +245,4 @@ def fetch_cookies_info():
 
         cookie.id = filename
 
-        Session().merge(cookie)
+        cookie.save()

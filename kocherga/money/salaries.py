@@ -7,8 +7,8 @@ import math
 
 import fire
 
-from kocherga.db import Session
-from kocherga.watchmen import load_schedule, Shift
+from kocherga.watchmen.tools import load_schedule
+from kocherga.watchmen.models import Shift
 import kocherga.team
 from kocherga.cm.models import Order
 

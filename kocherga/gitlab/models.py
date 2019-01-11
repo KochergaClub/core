@@ -7,11 +7,10 @@ from datetime import datetime
 
 import gitlab
 
-from sqlalchemy import Column, Integer, String
+from django.db import models
 
 import kocherga.config
 import kocherga.secrets
-import kocherga.db
 import kocherga.importer.base
 
 SERVER = "https://gitlab.com"
@@ -21,13 +20,14 @@ def iso2ts(s):
     return int(dateutil.parser.parse(s).timestamp())
 
 
-class Issue(kocherga.db.Base):
-    __tablename__ = "gitlab_issues"
+class Issue(models.Model):
+    class Meta:
+        db_table = 'gitlab_issues'
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String(100))
-    created_ts = Column(Integer)
-    updated_ts = Column(Integer)
+    id = models.IntegerColumn(primary_key=True)
+    username = models.CharField(max_length=100)
+    created_ts = models.IntegerField()
+    updated_ts = models.IntegerField()
 
     @classmethod
     def from_gl(cls, gl_issue):
@@ -39,13 +39,14 @@ class Issue(kocherga.db.Base):
         )
 
 
-class IssueNote(kocherga.db.Base):
-    __tablename__ = "gitlab_issue_notes"
+class IssueNote(models.Model):
+    class Meta:
+        db_table = 'gitlab_issue_notes'
 
-    id = Column(Integer, primary_key=True)
-    username = Column(String(100))
-    created_ts = Column(Integer)
-    updated_ts = Column(Integer)
+    id = models.IntegerField(primary_key=True)
+    username = models.CharField(max_length=100)
+    created_ts = models.IntegerField()
+    updated_ts = models.IntegerField()
 
     @classmethod
     def from_gl(cls, gl_note):
@@ -84,11 +85,11 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         ):
             logger.info(f"Importing issue {gl_issue.iid}")
             issue = Issue.from_gl(gl_issue)
-            session.merge(issue)
+            issue.save()
 
             for gl_note in gl_issue.notes.list(all=True):
                 note = IssueNote.from_gl(gl_note)
-                session.merge(note)
+                note.save()
 
         if not issue:
             return self.get_initial_dt()

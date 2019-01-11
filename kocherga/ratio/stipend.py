@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from collections import OrderedDict
 
-import kocherga.gitlab
+import kocherga.gitlab.models
 import kocherga.google
 
 STIPEND_SPREADSHEET_KEY = "1HfG3o5tMc3w-mAT0I9o4s9mICuXWXTyVEIM_MxG6Fno"
@@ -34,7 +34,7 @@ def list_responses_from_google():
 
 
 def gitlab_project():
-    return kocherga.gitlab.get_gl().projects.get(GITLAB_PROJECT_NAME)
+    return kocherga.gitlab.models.get_gl().projects.get(GITLAB_PROJECT_NAME)
 
 
 def response2gitlab(response):

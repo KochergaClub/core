@@ -12,7 +12,7 @@ from kocherga.db import Session
 
 import kocherga.events.db
 from kocherga.events.event import Event
-from kocherga.events.tag import EventTag
+from kocherga.events.tag import Tag
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
@@ -180,7 +180,7 @@ def list_public_events(date=None, from_date=None, to_date=None, tag=None):
     )
 
     if tag:
-        query = query.join(EventTag).filter(EventTag.name == tag)
+        query = query.join(Tag).filter(Tag.name == tag)
 
     if not from_date and not to_date and not date:
         raise PublicError("One of 'date', 'from_date', 'to_date' must be set")

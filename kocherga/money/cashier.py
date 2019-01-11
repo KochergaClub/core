@@ -1,35 +1,37 @@
 from datetime import datetime
 import pandas as pd
 
+from django.db import models
+
 import kocherga.google
-import kocherga.watchmen
-import kocherga.db
+import kocherga.config
 
 import kocherga.importer.base
 
-from sqlalchemy import Column, String, Integer, Text, UniqueConstraint
 
+class CashierItem(models.Model):
+    class Meta:
+        db_table = 'cashier'
+        unique_together = (
+            ("date", "shift"),
+        )
 
-class CashierItem(kocherga.db.Base):
-    __tablename__ = "cashier"
-    __table_args__ = (UniqueConstraint("date", "shift", name="cashier_shift_pair"),)
-
-    id = Column(Integer, primary_key=True)
-    date = Column(String(40))
-    shift = Column(String(40))
-    watchman = Column(String(100))
-    cash_income = Column(Integer)
-    electronic_income = Column(Integer)
-    total_income = Column(Integer)  # could be restored from other data
-    current_cash = Column(Integer)
-    notes = Column(Text)
-    discrepancy = Column(Integer)  # could be restored from other data
-    spendings = Column(Integer)
+    id = model.IntegerField(primary_key=True)
+    date = models.CharField(max_length=40)
+    shift = models.CharField(max_length=40)
+    watchman = models.CharField(max_length=100)
+    cash_income = models.IntegerField()
+    electronic_income = models.IntegerField()
+    total_income = models.IntegerField()  # could be restored from other data
+    current_cash = models.IntegerField()
+    notes = models.TextField()
+    discrepancy = models.IntegerField() # could be restored from other data
+    spendings = models.IntegerField()
 
 
 def export_to_db():
     gc = kocherga.google.gspread_client()
-    gs = gc.open_by_key(kocherga.watchmen.WATCHMEN_SPREADSHEET_KEY)
+    gs = gc.open_by_key(kocherga.config.config()["watchmen_spreadsheet_key"])
     gw = gs.worksheet("Деньги")
     df = pd.DataFrame(gw.get_all_records())
     df = df[df.Дата != ""]
@@ -58,7 +60,7 @@ def export_to_db():
 
 def current_cash():
     item = (
-        kocherga.db.Session().query(CashierItem).filter(CashierItem.current_cash != '').order_by(CashierItem.id.desc()).first()
+        CashierItem.objects.filter(current_cash__ne = '').order_by('-id')[0]
     )
     return item.current_cash
 

@@ -20,7 +20,7 @@ from typing import Iterator
 from kocherga.config import TZ
 import kocherga.datetime
 import kocherga.secrets
-import kocherga.watchmen
+import kocherga.watchmen.tools
 import kocherga.importer.base
 
 class CallType(enum.Enum):
@@ -142,7 +142,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         last_call = None
 
-        schedule = kocherga.watchmen.load_schedule()
+        schedule = kocherga.watchmen.tools.load_schedule()
 
         for call in fetch_all_calls(from_dt, to_dt):
             watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts.timestamp(), TZ))

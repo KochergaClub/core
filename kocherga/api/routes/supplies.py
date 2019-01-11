@@ -1,7 +1,7 @@
 from quart import Blueprint, request, jsonify
 from kocherga.api.common import ok
 
-from kocherga.supplies.cookies import CookiePick
+from kocherga.supplies.models import CookiePick
 from kocherga.db import Session
 
 bp = Blueprint("supplies", __name__)

@@ -1,23 +1,17 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import relationship
+from django.db import models
 
-from kocherga.db import Session, Base
+class EventPrototypeTag(models.Model):
+    class Meta:
+        db_table = 'event_prototype_tags'
+        unique_together = (
+            ('prototype', 'name'),
+        )
+        managed = False
 
-class EventPrototypeTag(Base):
-    __tablename__ = "event_prototype_tags"
-    __table_args__ = (
-        UniqueConstraint('prototype_id', 'name'),
-    )
-    id = Column(Integer, primary_key=True)
+    id = models.IntegerField(primary_key=True)
+    prototype = models.ForeignKey('EventPrototype', on_delete=models.CASCADE)
 
-    prototype_id = Column(Integer, ForeignKey("event_prototypes.prototype_id"), nullable=False)
-    name = Column(String(40), nullable=False)
-
-    prototype = relationship(
-        "EventPrototype",
-        back_populates="tags",
-        single_parent=True
-    )
+    name = models.CharField(max_length=40)

@@ -10,7 +10,7 @@ import json
 from datetime import datetime, timedelta
 
 import kocherga.money.elba
-import kocherga.money.ofd
+import kocherga.money.ofd.models
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,7 +18,7 @@ async def async_main(start_date_str, last_pko_id):
     start_d = datetime.strptime(start_date_str, '%Y-%m-%d').date()
     end_d = (datetime.now() - timedelta(days=3)).date()
 
-    cash_income = kocherga.money.ofd.cash_income_by_date(start_d, end_d)
+    cash_income = kocherga.money.ofd.models.cash_income_by_date(start_d, end_d)
 
     await kocherga.money.elba.add_cash_income(
         cash_income,

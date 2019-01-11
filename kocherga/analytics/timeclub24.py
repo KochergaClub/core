@@ -5,22 +5,27 @@ import time
 from datetime import datetime
 import re
 
-from sqlalchemy import Column, String, Integer, DateTime, UniqueConstraint
+from django.db import models
 
-import kocherga.db
 import kocherga.importer.base
 import kocherga.telegram.core_api
 
 TIMECLUB_BOT = 'timeclub24_bot'
 
-class Timeclub24Visitors(kocherga.db.Base):
-    __tablename__ = "timeclub24_visitors"
-    __table_args__ = (UniqueConstraint("ts", "venue"),)
+def dt_now():
+    return datetime.now(TZ)
 
-    id = Column(Integer, primary_key=True)
-    ts = Column(DateTime, default=datetime.now)
-    venue = Column(String(100), nullable=False)
-    visitors = Column(Integer)
+class Timeclub24Visitors(models.Model):
+    class Meta:
+        db_table = 'timeclub24_visitors'
+        unique_together = (
+            ("ts", "venue"),
+        )
+
+    id = models.IntegerField(primary_key=True)
+    ts = models.DateTimeField(default=dt_now)
+    venue = models.CharField(max_length=100)
+    visitors = models.IntegerField()
 
 class Importer(kocherga.importer.base.FullImporter):
     def do_full_import(self, session):
@@ -37,8 +42,8 @@ class Importer(kocherga.importer.base.FullImporter):
                 raise Exception(f"Can't parse message: {message}")
             (venue, visitors) = match.groups()
 
-            session.add(Timeclub24Visitors(
+            Timeclub24Visitors(
                 ts=ts,
                 venue=venue,
                 visitors=int(visitors),
-            ))
+            ).save()

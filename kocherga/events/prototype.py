@@ -4,63 +4,56 @@ logger = logging.getLogger(__name__)
 from typing import List
 
 from datetime import datetime, timedelta
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, inspect
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.hybrid import hybrid_property
+
+from django.db import models
 
 from .event import Event
 from .prototype_tag import EventPrototypeTag
 
-from kocherga.db import Session, Base
 from kocherga.config import TZ
 import kocherga.config
 import kocherga.events.google
 from kocherga.datetime import dts
 from kocherga.images import image_storage
 
-class EventPrototype(Base):
-    __tablename__ = "event_prototypes"
+class EventPrototype(models.Model):
+    class Meta:
+        db_table = 'event_prototypes'
+        managed = False
 
-    prototype_id = Column(Integer, primary_key=True)
+    prototype_id = models.IntegerField(primary_key=True)
 
-    title = Column(String(255))
-    location = Column(String(255))
-    summary = Column(Text, nullable=False, default='')
-    description = Column(Text, nullable=False, default='')
-    timepad_category_code = Column(String(40))
-    timepad_prepaid_tickets = Column(Boolean)
-    timing_description_override = Column(String(255))
+    title = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True)
+    summary = models.TextField(blank=True)
+    description = models.TextField(blank=True)
 
-    vk_group = Column(String(40))
-    fb_group = Column(String(40))
+    timepad_category_code = models.CharField(max_length=40, blank=True)
+    timepad_prepaid_tickets = models.BooleanField(default=False)
+    timing_description_override = models.CharField(max_length=255, blank=True)
 
-    weekday = Column(Integer)
-    hour = Column(Integer)
-    minute = Column(Integer)
-    length = Column(Integer) # in minutes
+    vk_group = models.CharField(max_length=40, blank=True)
+    fb_group = models.CharField(max_length=40, blank=True)
 
-    image = Column(String(32))
+    weekday = models.IntegerField()
+    hour = models.IntegerField()
+    minute = models.IntegerField()
+    length = models.IntegerField() # in minutes
 
-    active = Column(Boolean)
+    image = models.CharField(max_length=32, null=True)
 
-    tags = relationship(
-        "EventPrototypeTag",
-        order_by=EventPrototypeTag.name,
-        back_populates="prototype",
-        cascade="all, delete, delete-orphan"
-    )
+    active = models.BooleanField(default=True)
 
-
-    _canceled_dates = Column('canceled_dates', Text)
+    canceled_dates = models.TextField()
 
     @classmethod
     def by_id(cls, prototype_id):
-        return Session().query(EventPrototype).get(prototype_id)
+        return EventPrototype.objects.get(id=prototype_id)
 
     def instances(self, limit=None):
-        query = Session().query(Event).filter_by(prototype_id=self.prototype_id).filter_by(deleted=False).order_by(Event.start_ts.desc())
+        query = Event.objects.filter(prototype_id=self.prototype_id, deleted=False).order_by('-start_ts')
         if limit:
-            query = query.limit(limit)
+            query = query[:limit]
         events = query.all()
         return events
 
@@ -116,37 +109,36 @@ class EventPrototype(Base):
         if self.image:
             event.image = self.image
 
-        Session().add(event) # don't forget to commit!
+        event.save()
         return event
 
-    @hybrid_property
-    def canceled_dates(self):
-        if not self._canceled_dates:
+    @property
+    def canceled_dates_list(self):
+        if not self.canceled_dates:
             return []
-        return [datetime.strptime(d, '%Y-%m-%d').date() for d in self._canceled_dates.split(',')]
+        return [datetime.strptime(d, '%Y-%m-%d').date() for d in self.canceled_dates.split(',')]
 
-    @canceled_dates.setter
-    def canceled_dates(self, value):
-        self._canceled_dates = ','.join([
+    def set_canceled_dates(self, value):
+        self.canceled_dates = ','.join([
             d.strftime('%Y-%m-%d')
             for d in value # TODO - filter out past dates which we don't care about anymore?
         ])
 
     def cancel_date(self, d):
-        self.canceled_dates = self.canceled_dates + [d]
+        self.set_canceled_dates(self.canceled_dates_list + [d])
 
     def image_file(self):
         return image_storage.get_filename(self.image)
 
     def to_dict(self, detailed=False):
-        columns = inspect(self).attrs.keys()
+        fields = EventPrototype._meta.get_fields()
         result = {}
-        for column in columns:
-            if column == 'image':
+        for field in fields:
+            if field.name == 'image':
                 if self.image:
-                    result[column] = kocherga.config.web_root() + f"/images/{self.image}"
+                    result[field.name] = kocherga.config.web_root() + f"/images/{self.image}"
             else:
-                result[column] = getattr(self, column)
+                result[field.name] = getattr(self, field.name)
 
         if detailed:
             result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
@@ -159,6 +151,10 @@ class EventPrototype(Base):
     def add_image(self, fh):
         self.image = image_storage.add_file(fh)
 
+    @property
+    def tags(self):
+        return list(self.tag_set.all())
+
     def tag_names(self):
         return [
             tag.name
@@ -168,7 +164,7 @@ class EventPrototype(Base):
     def add_tag(self, tag_name):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event prototype")
-        self.tags.append(EventPrototypeTag(name=tag_name))
+        self.tag_set.add(EventPrototypeTag(name=tag_name))
 
     def delete_tag(self, tag_name):
-        self.tags.remove(next(tag for tag in self.tags if tag.name == tag_name))
+        self.tag_set.remove(next(tag for tag in self.tags if tag.name == tag_name))

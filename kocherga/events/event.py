@@ -8,11 +8,8 @@ import dateutil.parser
 import shutil
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, Text
-from sqlalchemy.orm import relationship
-import sqlalchemy
-
-from kocherga.db import Session, Base
+from django.db import models
+import django.dispatch
 
 import kocherga.config
 from kocherga.config import TZ
@@ -22,7 +19,7 @@ from kocherga.images import image_storage
 import kocherga.room
 import kocherga.events.google
 import kocherga.events.markup
-from kocherga.events.tag import EventTag
+from kocherga.events.tag import Tag
 
 from kocherga.error import PublicError
 
@@ -36,93 +33,59 @@ def parse_iso8601(s):
 IMAGE_TYPES = ["default", "vk"]
 
 
-class Event(Base):
-    __tablename__ = "events"
+def ts_now():
+    return datetime.now(TZ).timestamp()
 
-    google_id = Column(String(100), primary_key=True)
-    google_link = Column(String(1024))
+class Event(models.Model):
+    class Meta:
+        db_table = "events"
+        managed = False
 
-    start_ts = Column(Integer)
-    end_ts = Column(Integer)
-    created_ts = Column(Integer)
-    updated_ts = Column(Integer)
-    creator = Column(String(255))
+    google_id = models.CharField(max_length=100, primary_key=True)
+    google_link = models.CharField(max_length=1024)
 
-    title = Column(String(255))
-    # Not a google_event.summary! We don't store this field on google at all for now. This is for the short schedule/timepad/email summaries.
-    summary = Column(Text, nullable=False)
-    description = Column(Text, nullable=False)
+    start_ts = models.IntegerField()
+    end_ts = models.IntegerField()
+    created_ts = models.IntegerField(default=ts_now)
+    updated_ts = models.IntegerField()
+    creator = models.CharField(max_length=255)
 
-    deleted = Column(Boolean, default=False)
+    title = models.CharField(max_length=255)
+    # Not a google_event.summary! We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
+    summary = models.TextField()
+    description = models.TextField()
 
-    location = Column(String(255))
+    deleted = models.BooleanField(default=False)
 
-    is_master = Column(Boolean)
-    master_id = Column(String(100))
-    prototype_id = Column(Integer, index=True)
+    location = models.CharField(max_length=255, blank=True)
 
-    visitors = Column(
-        String(100)
+    is_master = models.BooleanField(default=False)
+    master_id = models.CharField(max_length=100, blank=True) # deprecated, use prototype_id instead
+    prototype_id = models.IntegerField(null=True, db_index=True)
+
+    visitors = models.CharField(
+        max_length=100,
+        null=True
     )  # not Integer, because it can take values such as 'no_record' or 'cancelled'
-    asked_for_visitors_ts = Column(Integer)
-    event_type = Column(String(40), default="unknown")
+    asked_for_visitors_ts = models.IntegerField(null=True)
+    event_type = models.CharField(max_length=40, default="unknown")
 
-    vk_group = Column(String(40))
-    fb_group = Column(String(40))
+    vk_group = models.CharField(max_length=40, blank=True)
+    fb_group = models.CharField(max_length=40, blank=True)
 
-    image = Column(String(32))
-    vk_image = Column(String(32))
+    image = models.CharField(max_length=32, null=True)
+    vk_image = models.CharField(max_length=32, null=True)
 
-    ready_to_post = Column(Boolean)
+    ready_to_post = models.BooleanField(default=False)
 
     # (move these to event_announcements)
-    posted_fb = Column(String(1024))
-    posted_timepad = Column(String(1024))
-    posted_vk = Column(String(1024))
+    posted_fb = models.CharField(max_length=1024, blank=True)
+    posted_timepad = models.CharField(max_length=1024, blank=True)
+    posted_vk = models.CharField(max_length=1024, blank=True)
 
-    timepad_category_code = Column(String(40))
-    timepad_prepaid_tickets = Column(Boolean)
-    timing_description_override = Column(String(255))
-
-    tags = relationship(
-        "EventTag",
-        order_by=EventTag.name,
-        back_populates="event",
-        cascade="all, delete, delete-orphan"
-    )
-
-    def __init__(
-        self,
-        start_dt,
-        end_dt,
-        created_dt=None,
-        updated_dt=None,
-        creator=None,
-        title="",
-        description="",
-        summary="",
-        location="",
-        google_id=None,
-        google_link=None,
-        is_master=False,
-        master_id=None,
-        attendees=[],
-    ):
-        self.created_dt = created_dt or datetime.now(TZ)
-        self.updated_dt = updated_dt or self.created_dt
-        self.creator = creator
-        self.title = title or ''
-        self.summary = summary or ''
-        self.description = description or ''
-        self.start_dt = start_dt
-        self.end_dt = end_dt
-        self.location = location
-        self.google_id = google_id
-        self.google_link = google_link
-        self.is_master = is_master
-        self.master_id = master_id
-        self.attendees = attendees
-        self.event_type = "unknown"
+    timepad_category_code = models.CharField(max_length=40, blank=True)
+    timepad_prepaid_tickets = models.BooleanField(default=False)
+    timing_description_override = models.CharField(max_length=255, blank=True)
 
     @property
     def created_dt(self):
@@ -168,11 +131,11 @@ class Event(Base):
 
     @classmethod
     def by_id(cls, event_id):
-        return Session().query(Event).get(event_id)
+        return Event.objects.get(event_id)
 
     @classmethod
     def query(cls):
-        return Session().query(Event).filter_by(deleted=False)
+        return Event.objects.filter(deleted=False)
 
     @classmethod
     def from_google(cls, google_event):
@@ -323,6 +286,7 @@ class Event(Base):
             time=self.start_dt.strftime("%H:%M"),
         )
 
+    # overrides django method, but that's probably ok
     def delete(self):
         self.deleted = True
 
@@ -389,6 +353,10 @@ class Event(Base):
         logger.info("Saving to google")
         kocherga.events.google.patch_event(self.google_id, self.to_google())
 
+    @property
+    def tags(self):
+        return list(self.tag_set.all())
+
     def tag_names(self):
         return [
             tag.name
@@ -398,10 +366,10 @@ class Event(Base):
     def add_tag(self, tag_name):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event")
-        self.tags.append(EventTag(name=tag_name))
+        self.tag_set.add(Tag(name=tag_name))
 
     def delete_tag(self, tag_name):
-        self.tags.remove(next(tag for tag in self.tags if tag.name == tag_name))
+        self.tag_set.remove(next(tag for tag in self.tags if tag.name == tag_name))
 
     def public_object(self):
         # Some precautions against information leaking (although we do more checks in /public_events API route).
@@ -424,3 +392,10 @@ class Event(Base):
             "start": self.start_dt.strftime(MSK_DATE_FORMAT),
             "end": self.end_dt.strftime(MSK_DATE_FORMAT),
         }
+
+
+@django.dispatch.receiver(models.signals.post_init, sender=Event)
+def fill_updated_ts(**kwargs):
+    instance = kwargs['instance']
+    if not instance.updated_ts:
+        instance.updated_ts = instance.created_ts

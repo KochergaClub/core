@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'kocherga.zadarma',
     'kocherga.importer',
     'kocherga.cm',
+    'kocherga.watchmen',
+    'kocherga.money.ofd',
+    'kocherga.money.tochka',
+    'kocherga.events',
 ]
 
 MIDDLEWARE = [

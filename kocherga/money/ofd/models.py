@@ -1,4 +1,6 @@
 import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime, timedelta, date
 import requests
 from collections import defaultdict
@@ -6,13 +8,11 @@ import decimal
 
 import enum
 
-from sqlalchemy import Column, Integer, BigInteger, String, Text, Numeric, Enum
+from django.db import models
 
 from typing import Any, Dict, List
 
 import kocherga.secrets
-import kocherga.db
-from kocherga.db import Session
 import kocherga.config
 import kocherga.importer.base
 
@@ -29,20 +29,28 @@ class CheckType(enum.Enum):
     refund_expense = 4
 
 
-class OfdDocument(kocherga.db.Base):
-    __tablename__ = "ofd_documents"
-    id = Column(Integer, primary_key=True)
-    timestamp = Column(Integer)
-    cash = Column(Numeric(10, 2))
-    electronic = Column(Numeric(10, 2))
-    total = Column(Numeric(10, 2))
-    check_type = Column(Enum(CheckType))
-    shift_id = Column(Integer)  # TODO - foreign key
-    request_id = Column(Integer)  # cheque number in current shift
-    operator = Column(String(255))
-    operator_inn = Column(BigInteger)
-    fiscal_sign = Column(BigInteger)
-    midday_ts = Column(Integer)  # used for analytics only
+class OfdDocument(models.Model):
+    class Meta:
+        db_table = "ofd_documents"
+        managed = False
+
+    id = models.IntegerField(primary_key=True)
+    timestamp = models.IntegerField()
+    cash = models.DecimalField(max_digits=10, decimal_places=2)
+    electronic = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    check_type = models.CharField(
+        max_length=20,
+        choices=[
+            (t, t.name) for t in CheckType
+        ],
+    )
+    shift_id = models.IntegerField()   # TODO - foreign key
+    request_id = models.IntegerField() # cheque number in current shift
+    operator = models.CharField(max_length=255)
+    operator_inn = models.BigIntegerField()
+    fiscal_sign = models.BigIntegerField()
+    midday_ts = models.IntegerField()  # used for analytics only
 
     @classmethod
     def from_json(cls, item: Dict[str, Any]) -> "OfdDocument":
@@ -115,10 +123,10 @@ ofd = OfdYaKkt(FISCAL_DRIVE_NUMBER)
 
 
 def cash_income_by_date(start_d, end_d):
-    docs = Session().query(OfdDocument).filter(
-        OfdDocument.midday_ts >= datetime.combine(start_d, datetime.min.time()).timestamp()
+    docs = OfdDocument.objects.filter(
+        midday_ts__gte = datetime.combine(start_d, datetime.min.time()).timestamp()
     ).filter(
-        OfdDocument.midday_ts <= datetime.combine(end_d, datetime.max.time()).timestamp()
+        midday_ts__lte = datetime.combine(end_d, datetime.max.time()).timestamp()
     ).all()
 
     date2income = defaultdict(decimal.Decimal)
@@ -135,15 +143,11 @@ def cash_income_by_date(start_d, end_d):
     ]
 
 
-def import_date(d: date, session) -> None:
+def import_date(d: date) -> None:
     documents = ofd.documents(d)
 
     for document in documents:
-        document = session.merge(document)
-
-    # Necessary because session.merge can't resolve duplicate objects.
-    # We get some duplicates on consecutive dates because of a stupid collision on 00:00.
-    session.flush()
+        document.save()
 
     # TODO - import shifts
 
@@ -166,8 +170,8 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         d = from_d
 
         while d <= to_d:
-            logging.info("importing " + d.strftime("%Y-%m-%d"))
-            import_date(d, session)
+            logger.info("importing " + d.strftime("%Y-%m-%d"))
+            import_date(d)
             d += timedelta(days=1)
 
         return datetime.combine(to_d, datetime.min.time(), tzinfo=kocherga.config.TZ)

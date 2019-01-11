@@ -3,18 +3,19 @@ import pytest
 import datetime
 from freezegun import freeze_time
 
-import kocherga.watchmen
+import kocherga.watchmen.tools
+import kocherga.watchmen.models
 
 @pytest.fixture(scope='class')
 def google_schedule():
-    return kocherga.watchmen.load_schedule_from_google()
+    return kocherga.watchmen.tools.load_schedule_from_google()
 
 @pytest.fixture(scope='class')
 def db_schedule():
     session = kocherga.db.Session()
-    kocherga.watchmen.load_schedule_from_google().save_to_db(session)
+    kocherga.watchmen.tools.load_schedule_from_google().save_to_db(session)
     session.commit()
-    return kocherga.watchmen.load_schedule_from_db()
+    return kocherga.watchmen.tools.load_schedule_from_db()
 
 @pytest.fixture(scope='class', params=['google', 'db'])
 def schedule(request, google_schedule, db_schedule):
@@ -25,13 +26,13 @@ def schedule(request, google_schedule, db_schedule):
 
 class TestSchedule:
     def test_load_schedule(self, schedule):
-        assert type(schedule), kocherga.watchmen.Schedule
+        assert type(schedule), kocherga.watchmen.models.Schedule
 
     def test_shifts_by_date(self, schedule):
         by_date = schedule.shifts_by_date(datetime.date(2017, 12, 18))
 
         assert type(by_date), dict
-        assert by_date[kocherga.watchmen.Shift.MORNING], 'Элиезер'
+        assert by_date[kocherga.watchmen.models.Shift.MORNING], 'Элиезер'
 
     def test_watchman_by_dt(self, schedule):
         watchman = schedule.watchman_by_dt(datetime.datetime(2017, 12, 18, hour=15, minute=0))

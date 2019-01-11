@@ -1,5 +1,4 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 import requests
@@ -7,12 +6,11 @@ from datetime import date, datetime, timedelta
 import time
 import dbm
 
-from sqlalchemy import Column, Integer, String, Text, Numeric, Boolean
-
 from typing import Any, List, Iterable
 
+from django.db import models
+
 import kocherga.secrets
-import kocherga.db
 import kocherga.datetime
 from kocherga.config import TZ
 import kocherga.importer.base
@@ -22,13 +20,15 @@ TOCHKA_API = kocherga.config.config()['money']['tochka']['api']
 TOKENS_FILE = kocherga.config.config()['money']['tochka']['tokens_file']
 
 
-class Record(kocherga.db.Base):
-    __tablename__ = "tochka_records"
-    id = Column(String(100), primary_key=True)
-    ts = Column(Integer)
-    purpose = Column(Text)
-    document_type = Column(Integer)
-    total = Column(Numeric(10, 2))
+class Record(models.Model):
+    class Meta:
+        db_table = 'tochka_records'
+
+    id = models.CharField(max_length=100, primary_key=True)
+    ts = models.IntegerField()
+    purpose = models.TextField()
+    document_type = models.IntegerField()
+    total = models.DecimalField(max_digits=10, decimal_places=2)
 
     @classmethod
     def from_element(cls, record):
@@ -190,7 +190,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             chunk_to_d = chunk_to_dt.date()
             logger.info(f"Importing from {chunk_from_d} to {chunk_to_d}")
             for record in get_statements(chunk_from_d, chunk_to_d):
-                session.merge(record)
+                record.save()
 
         return to_dt - timedelta(
             days=1

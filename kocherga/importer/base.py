@@ -6,7 +6,6 @@ from abc import ABC, abstractmethod
 
 from typing import Any, Optional
 
-from kocherga.db import Session
 from kocherga.config import TZ
 
 import django.db
@@ -85,7 +84,7 @@ class FullImporter(BaseImporter):
 
     def import_new(self) -> None:
         with ImportContext(self.name, "full") as ic:
-            self.do_full_import(Session())
+            self.do_full_import(None)
 
 
 class IncrementalImporter(BaseImporter):
@@ -110,7 +109,7 @@ class IncrementalImporter(BaseImporter):
 
             end_dt = datetime.now(TZ)
 
-            last_dt = self.do_period_import(start_dt, end_dt, Session())
+            last_dt = self.do_period_import(start_dt, end_dt, None)
             if not last_dt:
                 raise Exception(
                     f"{self.name}.do_period_import didn't return a datetime object"
