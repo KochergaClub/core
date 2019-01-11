@@ -5,7 +5,6 @@ import datetime
 
 from kocherga.events.event import Event
 import kocherga.events.db
-import kocherga.db
 
 class TestListEvents:
     def test_list(self, db, imported_events):
@@ -26,27 +25,26 @@ class TestPatchEvent:
         event_for_edits.patch({ 'title': 'blah' })
         assert event.title == 'blah'
 
+@pytest.mark.django_db(transaction=True)
 class TestImporter:
     def test_importer(self, db):
         importer = kocherga.events.db.Importer()
         importer.import_all()
-        assert kocherga.db.Session().query(Event).count() > 10
+        assert len(Event.objects.all()) > 10
 
     def test_importer_doesnt_override_summary(self, db):
         importer = kocherga.events.db.Importer()
         importer.import_all()
 
-        session = kocherga.db.Session()
-        e = session.query(Event).first()
+        e = Event.objects.all()[0]
         print(e.google_id)
         e.summary = 'asdf'
-        session.commit()
+        e.save()
 
-        e = session.query(Event).first()
+        e = Event.objects.all()[0]
         assert e.summary == 'asdf'
 
         importer.import_all()
 
-        session = kocherga.db.Session()
-        e = session.query(Event).first()
+        e = Event.objects.all()[0]
         assert e.summary == 'asdf'

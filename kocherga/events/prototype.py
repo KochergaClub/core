@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from django.db import models
 
 from .event import Event
-from .prototype_tag import EventPrototypeTag
 
 from kocherga.config import TZ
 import kocherga.config
@@ -19,9 +18,8 @@ from kocherga.images import image_storage
 class EventPrototype(models.Model):
     class Meta:
         db_table = 'event_prototypes'
-        managed = False
 
-    prototype_id = models.IntegerField(primary_key=True)
+    prototype_id = models.AutoField(primary_key=True)
 
     title = models.CharField(max_length=255)
     location = models.CharField(max_length=255, blank=True)
@@ -48,7 +46,7 @@ class EventPrototype(models.Model):
 
     @classmethod
     def by_id(cls, prototype_id):
-        return EventPrototype.objects.get(id=prototype_id)
+        return EventPrototype.objects.get(pk=prototype_id)
 
     def instances(self, limit=None):
         query = Event.objects.filter(prototype_id=self.prototype_id, deleted=False).order_by('-start_ts')
@@ -77,7 +75,7 @@ class EventPrototype(models.Model):
             if until and dt > until:
                 break
 
-            if dt not in existing_dts and dt.date() not in self.canceled_dates:
+            if dt not in existing_dts and dt.date() not in self.canceled_dates_list:
                 result.append(dt)
 
             dt += timedelta(weeks=1)
@@ -137,6 +135,8 @@ class EventPrototype(models.Model):
             if field.name == 'image':
                 if self.image:
                     result[field.name] = kocherga.config.web_root() + f"/images/{self.image}"
+            elif field.name == 'eventprototypetag':
+                pass
             else:
                 result[field.name] = getattr(self, field.name)
 
@@ -151,20 +151,30 @@ class EventPrototype(models.Model):
     def add_image(self, fh):
         self.image = image_storage.add_file(fh)
 
-    @property
-    def tags(self):
-        return list(self.tag_set.all())
-
     def tag_names(self):
         return [
             tag.name
-            for tag in self.tags
+            for tag in self.tags.all()
         ]
 
     def add_tag(self, tag_name):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event prototype")
-        self.tag_set.add(EventPrototypeTag(name=tag_name))
+        tag = EventPrototypeTag(name=tag_name, prototype=self).save()
+        return tag
 
     def delete_tag(self, tag_name):
-        self.tag_set.remove(next(tag for tag in self.tags if tag.name == tag_name))
+        self.tags.remove(self.tags.get(name=tag_name))
+
+
+class EventPrototypeTag(models.Model):
+    class Meta:
+        db_table = 'event_prototype_tags'
+        unique_together = (
+            ('prototype', 'name'),
+        )
+
+    id = models.AutoField(primary_key=True)
+    prototype = models.ForeignKey(EventPrototype, on_delete=models.CASCADE, related_name='tags')
+
+    name = models.CharField(max_length=40)

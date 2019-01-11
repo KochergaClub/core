@@ -8,7 +8,7 @@ from kocherga.config import TZ
 import importlib
 
 IMPORTER_MODULES = [
-    "money.cashier",
+    "money.cashier.models",
     "money.ofd.models",
     "money.tochka",
     "zadarma",

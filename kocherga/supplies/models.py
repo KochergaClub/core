@@ -32,7 +32,7 @@ class CookiePick(models.Model):
     class Meta:
         db_table = 'cookie_picks'
 
-    pick_id = models.IntegerField(primary_key=True)
+    pick_id = models.AutoField(primary_key=True)
     ts = models.DateTimeField(default=dt_now)
     cookie_id = models.CharField(max_length=32)
     against_id = models.CharField(max_length=32)
@@ -48,7 +48,7 @@ class CookieCombinationItem(models.Model):
             ('combination_id', 'position_id'),
         )
 
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
 
     combination = models.ForeignKey('CookieCombination', on_delete=models.CASCADE)
     position_id = Column(Integer, nullable=False)
@@ -63,7 +63,7 @@ class CookieCombination(models.Model):
     class Meta:
         db_table = 'cookie_combinations'
 
-    combination_id = models.IntegerField(primary_key=True)
+    combination_id = models.AutoField(primary_key=True)
     happy_users = models.IntegerField()
     total_users = models.IntegerField()
 

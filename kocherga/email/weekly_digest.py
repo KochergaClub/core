@@ -109,7 +109,6 @@ import kocherga.mailchimp
 import kocherga.images
 
 from kocherga.events.event import Event
-from kocherga.db import Session
 import kocherga.datetime
 from datetime import timedelta, datetime
 
@@ -144,14 +143,15 @@ def generate_content(text, image_url):
     (dt, end_dt) = get_week_boundaries()
 
     query = (
-        Session()
-        .query(Event)
-        .filter(Event.start_ts > dt.timestamp())
-        .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
-        .filter(Event.posted_vk != None)
-        .filter(Event.posted_vk != "")
+        Event.objects
+        .filter(
+            start_ts__gt = dt.timestamp(),
+            start_ts__lt = (dt + timedelta(weeks=1)).timestamp(),
+        )
+        .exclude(posted_vk__isnull=True)
+        .exclude(posted_vk='')
     )
-    events = query.order_by(Event.start_ts).all()
+    events = query.order_by('start_ts').all()
 
     date2events = {}
     for event in events:

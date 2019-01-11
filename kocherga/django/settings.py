@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'kocherga.watchmen',
     'kocherga.money.ofd',
     'kocherga.money.tochka',
+    'kocherga.money.cashier',
     'kocherga.events',
 ]
 

@@ -4,7 +4,6 @@ from datetime import datetime, date
 import enum
 from collections import namedtuple
 
-import kocherga.db
 from kocherga.config import TZ
 
 

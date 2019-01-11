@@ -1,8 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import kocherga.db
-
 from django.db import models
 
 from collections import OrderedDict
@@ -50,7 +48,6 @@ class Call(models.Model):
     watchman = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
         db_table = 'zadarma_calls'
 
     def __str__(self):

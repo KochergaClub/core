@@ -11,7 +11,6 @@ import requests
 
 import pyppeteer
 
-from kocherga.db import Session
 from kocherga.events.event import Event
 import kocherga.events.db
 import kocherga.events.markup
@@ -36,7 +35,7 @@ class FbAnnouncement(BaseAnnouncement):
 
 def all_groups():
     logger.info("Selecting all fb groups")
-    query = Session().query(Event.fb_group.distinct().label("fb_group"))
+    query = Event.objects.values_list('fb_group').distinct()
     groups = [row.fb_group for row in query.all()]
     logger.info(f"Got {len(groups)} groups")
     return groups

@@ -32,7 +32,7 @@ class CheckType(enum.Enum):
 class OfdDocument(models.Model):
     class Meta:
         db_table = "ofd_documents"
-        managed = False
+#        managed = False
 
     id = models.IntegerField(primary_key=True)
     timestamp = models.IntegerField()
@@ -40,15 +40,15 @@ class OfdDocument(models.Model):
     electronic = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     check_type = models.CharField(
-        max_length=20,
+        max_length=40,
         choices=[
-            (t, t.name) for t in CheckType
+            (t.name, t.name) for t in CheckType
         ],
     )
     shift_id = models.IntegerField()   # TODO - foreign key
     request_id = models.IntegerField() # cheque number in current shift
     operator = models.CharField(max_length=255)
-    operator_inn = models.BigIntegerField()
+    operator_inn = models.BigIntegerField(null=True)
     fiscal_sign = models.BigIntegerField()
     midday_ts = models.IntegerField()  # used for analytics only
 
@@ -132,9 +132,9 @@ def cash_income_by_date(start_d, end_d):
     date2income = defaultdict(decimal.Decimal)
     for doc in docs:
         d = datetime.fromtimestamp(doc.midday_ts).date()
-        if doc.check_type == CheckType.income:
+        if doc.check_type == 'income':
             date2income[d] += doc.cash
-        elif doc.check_type == CheckType.refund_income:
+        elif doc.check_type == 'refund_income':
             date2income[d] -= doc.cash
 
     return [

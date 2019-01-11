@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 from kocherga.events.event import Event
 from kocherga.events.prototype import EventPrototype
 import kocherga.events.db
-import kocherga.db
 import kocherga.images
 
 @pytest.fixture
@@ -40,22 +39,6 @@ def image_file():
     return str(Path(__file__).parent / 'images' / 'default')
 
 @pytest.fixture
-def db():
-    # This is unfortunately fragile.
-    logging.info('db fixture')
-    kocherga.db.Session().close_all()
-    kocherga.db.Session.remove()
-
-    subprocess.run("mysql -uroot -e 'drop database if exists test'", shell=True)
-    subprocess.run("mysql -uroot -e 'create database test'", shell=True)
-
-    kocherga.db.DB_URL = 'mysql://root:@localhost/test'
-    kocherga.config.config()['kocherga_db'] = kocherga.db.DB_URL
-    kocherga.db.Session.configure(bind=kocherga.db.engine())
-    kocherga.db.Base.metadata.create_all(kocherga.db.engine())
-    logging.info('db fixture set')
-
-@pytest.fixture
 def image_storage(tmpdir):
     d = Path(tmpdir) / 'upload'
     d.mkdir()
@@ -75,7 +58,7 @@ def event(image_file, vk_image_file):
         description='chicken chicken chicken. chicken?\n\nchicken chicken chicken.',
         location='ГЭБ',
     )
-    event.vk_group = 159971736
+    event.vk_group = 'event159971736'
 
     event = kocherga.events.db.insert_event(event)
     with open(vk_image_file, 'rb') as fh:
@@ -84,14 +67,11 @@ def event(image_file, vk_image_file):
     with open(image_file, 'rb') as fh:
         event.add_image('default', fh)
 
-    kocherga.db.Session().commit()
-
     event_id = event.google_id # session can be reset after the test, so we need to store this and don't reference our event after the yield
 
     yield event
 
     kocherga.events.db.delete_event(event_id)
-    kocherga.db.Session().commit()
 
 @pytest.fixture
 def event_for_timepad(event):
@@ -109,12 +89,10 @@ def minimal_event():
         title="бронь Летняя",
     )
     event = kocherga.events.db.insert_event(event)
-    kocherga.db.Session().commit()
 
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
-    kocherga.db.Session().commit()
 
 @pytest.fixture
 def event_for_edits():
@@ -128,11 +106,9 @@ def event_for_edits():
         description="description doesn't matter"
     )
     event = kocherga.events.db.insert_event(event)
-    kocherga.db.Session().commit()
     yield event
 
     kocherga.events.db.delete_event(event.google_id)
-    kocherga.db.Session().commit()
 
 @pytest.fixture
 def imported_events(db, transactional_db):
@@ -148,6 +124,5 @@ def common_prototype(db):
         minute=30,
         length=120,
     )
-    kocherga.db.Session().add(prototype)
-    kocherga.db.Session().commit()
+    prototype.save()
     return prototype

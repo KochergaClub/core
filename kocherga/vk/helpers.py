@@ -16,7 +16,7 @@ def group2id(group_name):
     if type(group_name) == int:
         return group_name
 
-    match = re.match(r'^(?:public|club)(\d+)', group_name)
+    match = re.match(r'^(?:public|club|event)(\d+)', group_name)
     if match:
         return int(match.group(1))
 

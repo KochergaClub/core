@@ -19,7 +19,6 @@ from kocherga.images import image_storage
 import kocherga.room
 import kocherga.events.google
 import kocherga.events.markup
-from kocherga.events.tag import Tag
 
 from kocherga.error import PublicError
 
@@ -39,7 +38,6 @@ def ts_now():
 class Event(models.Model):
     class Meta:
         db_table = "events"
-        managed = False
 
     google_id = models.CharField(max_length=100, primary_key=True)
     google_link = models.CharField(max_length=1024)
@@ -48,7 +46,7 @@ class Event(models.Model):
     end_ts = models.IntegerField()
     created_ts = models.IntegerField(default=ts_now)
     updated_ts = models.IntegerField()
-    creator = models.CharField(max_length=255)
+    creator = models.CharField(max_length=255, null=True)
 
     title = models.CharField(max_length=255)
     # Not a google_event.summary! We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
@@ -131,7 +129,7 @@ class Event(models.Model):
 
     @classmethod
     def by_id(cls, event_id):
-        return Event.objects.get(event_id)
+        return Event.objects.get(pk=event_id)
 
     @classmethod
     def query(cls):
@@ -144,14 +142,14 @@ class Event(models.Model):
             updated_dt=parse_iso8601(google_event["updated"]),
             creator=google_event["creator"].get("email", "UNKNOWN"),
             title=google_event.get("summary", ""),
-            description=google_event.get("description", None),
+            description=google_event.get("description", ""),
             start_dt=parse_iso8601(google_event["start"]["dateTime"]),
             end_dt=parse_iso8601(google_event["end"]["dateTime"]),
             location=google_event.get("location", ""),
             google_id=google_event["id"],
             google_link=google_event["htmlLink"],
             is_master=("recurrence" in google_event),
-            master_id=google_event.get("recurringEventId", None),
+            master_id=google_event.get("recurringEventId", ""),
         )
 
         return obj
@@ -266,6 +264,7 @@ class Event(models.Model):
             self.vk_image = key
         else:
             raise NotImplemented
+        self.save()
 
 
     def fb_announce_page(self):
@@ -353,23 +352,28 @@ class Event(models.Model):
         logger.info("Saving to google")
         kocherga.events.google.patch_event(self.google_id, self.to_google())
 
-    @property
-    def tags(self):
-        return list(self.tag_set.all())
-
     def tag_names(self):
         return [
             tag.name
-            for tag in self.tags
+            for tag in self.tags.all()
         ]
 
     def add_tag(self, tag_name):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event")
-        self.tag_set.add(Tag(name=tag_name))
+        tag = Tag(name=tag_name, event=self).save()
 
     def delete_tag(self, tag_name):
-        self.tag_set.remove(next(tag for tag in self.tags if tag.name == tag_name))
+        self.tags.remove(self.tags.get(name=tag_name))
+
+    def set_attendees(self, attendees):
+        # Attendees not stored anywhere yet - used in .booking to pass to google.
+        # TODO: store attendees in related event_attendees table.
+        self._attendees = attendees
+
+    @property
+    def attendees(self):
+        return getattr(self, '_attendees', [])
 
     def public_object(self):
         # Some precautions against information leaking (although we do more checks in /public_events API route).
@@ -392,6 +396,19 @@ class Event(models.Model):
             "start": self.start_dt.strftime(MSK_DATE_FORMAT),
             "end": self.end_dt.strftime(MSK_DATE_FORMAT),
         }
+
+
+class Tag(models.Model):
+    class Meta:
+        db_table= "event_tags"
+        unique_together = (
+            ('event', 'name'),
+        )
+
+    id = models.AutoField(primary_key=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tags')
+
+    name = models.CharField(max_length=40)
 
 
 @django.dispatch.receiver(models.signals.post_init, sender=Event)

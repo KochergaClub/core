@@ -6,7 +6,6 @@ import requests
 import json
 
 from kocherga.config import TZ
-from kocherga.db import Session
 import kocherga.vk.api
 from kocherga.vk.helpers import group2id, upload_wall_image
 from kocherga.error import PublicError
@@ -91,8 +90,8 @@ def create(event):
 
 def all_groups():
     logger.info("Selecting all vk groups")
-    query = Session().query(Event.vk_group.distinct().label("vk_group"))
-    groups = [row.vk_group for row in query.all()]
+    query = Event.objects.values_list('vk_group').distinct()
+    groups = [row[0] for row in query.all()]
     logger.info(f"Got {len(groups)} groups")
     return groups
 
@@ -107,16 +106,16 @@ def update_wiki_schedule(from_dt=None):
         _from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
 
     query = (
-        Session()
-        .query(Event)
-        .filter(Event.deleted == False)
-        .filter(Event.start_ts > _from_dt.timestamp())
-        .filter(Event.start_ts < (datetime.now(TZ) + timedelta(weeks=4)).timestamp())
-        .filter(Event.posted_vk != None)
-        .filter(Event.posted_vk != "")
+        Event.objects
+        .exclude(deleted=True)
+        .filter(
+            start_ts__gt = _from_dt.timestamp(),
+            start_ts__lt = (datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
+        )
+        .exclude(posted_vk__isnull=True)
+        .exclude(posted_vk='')
     )
-
-    events = query.order_by(Event.start_ts).all()
+    events = query.order_by('start_ts').all()
     logger.info(f"Schedule includes {len(events)} events")
 
     result = "=== Лента всех мероприятий: [https://vk.com/kocherga_daily] ===\n\n-----\n<br>\n"
@@ -181,16 +180,16 @@ def create_schedule_post(prefix_text):
     dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
     query = (
-        Session()
-        .query(Event)
-        .filter(Event.deleted == False)
-        .filter(Event.start_ts > dt.timestamp())
-        .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
-        .filter(Event.posted_vk != None)
-        .filter(Event.posted_vk != "")
+        Event.objects
+        .exclude(deleted=True)
+        .filter(
+            start_ts__gt = dt.timestamp(),
+            start_ts__lt = (datetime.now(TZ) + timedelta(weeks=1)).timestamp(),
+        )
+        .exclude(posted_vk__isnull=True)
+        .exclude(posted_vk='')
     )
-
-    events = query.order_by(Event.start_ts).all()
+    events = query.order_by('start_ts').all()
     logger.info(f"Schedule includes {len(events)} events")
 
     prev_date = None
@@ -226,16 +225,17 @@ def create_schedule_post(prefix_text):
 def update_widget():
     from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
     query = (
-        Session()
-        .query(Event)
-        .filter(Event.deleted == False)
-        .filter(Event.start_ts > from_dt.timestamp())
-        .filter(Event.start_ts < (datetime.now(TZ) + timedelta(weeks=4)).timestamp())
-        .filter(Event.event_type == "public")
-        .filter(Event.posted_vk != None)
-        .filter(Event.posted_vk != "")
+        Event.objects
+        .exclude(deleted=True)
+        .filter(
+            start_ts__gt = _from_dt.timestamp(),
+            start_ts__lt = (datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
+        )
+        .filter(event_type = 'public')
+        .exclude(posted_vk__isnull=True)
+        .exclude(posted_vk='')
     )
-    events = query.order_by(Event.start_ts).limit(3).all()
+    events = query.order_by('start_ts')[:3].all()
 
     def event2time(event):
         day_codes = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]

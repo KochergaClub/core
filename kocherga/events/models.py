@@ -1,2 +1,2 @@
-from .event import Event
-from .prototype import EventPrototype
+from .event import Event, Tag
+from .prototype import EventPrototype, EventPrototypeTag

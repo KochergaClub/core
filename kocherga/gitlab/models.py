@@ -24,7 +24,7 @@ class Issue(models.Model):
     class Meta:
         db_table = 'gitlab_issues'
 
-    id = models.IntegerColumn(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=100)
     created_ts = models.IntegerField()
     updated_ts = models.IntegerField()

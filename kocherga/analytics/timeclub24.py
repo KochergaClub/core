@@ -22,7 +22,7 @@ class Timeclub24Visitors(models.Model):
             ("ts", "venue"),
         )
 
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     ts = models.DateTimeField(default=dt_now)
     venue = models.CharField(max_length=100)
     visitors = models.IntegerField()

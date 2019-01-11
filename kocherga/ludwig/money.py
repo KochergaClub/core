@@ -1,13 +1,13 @@
 from kocherga.ludwig.bot import bot
 
-import kocherga.money.cashier
+import kocherga.money.cashier.models
 import kocherga.money.salaries
 import kocherga.team
 from kocherga.datetime import inflected_month
 
 
 def cash_response():
-    cash = kocherga.money.cashier.current_cash()
+    cash = kocherga.money.cashier.models.current_cash()
     return f"В кассе {cash} руб."
 
 

@@ -16,20 +16,20 @@ class CashierItem(models.Model):
             ("date", "shift"),
         )
 
-    id = model.IntegerField(primary_key=True)
-    date = models.CharField(max_length=40)
+    id = models.AutoField(primary_key=True)
+    date = models.DateTimeField()
     shift = models.CharField(max_length=40)
     watchman = models.CharField(max_length=100)
-    cash_income = models.IntegerField()
-    electronic_income = models.IntegerField()
-    total_income = models.IntegerField()  # could be restored from other data
-    current_cash = models.IntegerField()
+    cash_income = models.IntegerField(null=True)
+    electronic_income = models.IntegerField(null=True)
+    total_income = models.IntegerField(null=True)  # could be restored from other data
+    current_cash = models.IntegerField(null=True)
     notes = models.TextField()
-    discrepancy = models.IntegerField() # could be restored from other data
-    spendings = models.IntegerField()
+    discrepancy = models.IntegerField(null=True) # could be restored from other data
+    spendings = models.IntegerField(null=True)
 
 
-def export_to_db():
+def load_df_from_google():
     gc = kocherga.google.gspread_client()
     gs = gc.open_by_key(kocherga.config.config()["watchmen_spreadsheet_key"])
     gw = gs.worksheet("Деньги")
@@ -54,13 +54,26 @@ def export_to_db():
         }
     )
 
-    # TODO - do it in SQLAlchemy ORM way
-    df.to_sql("cashier", kocherga.db.connect(), if_exists="replace", index_label="id")
+    return df
+
+
+def export_to_db():
+    df = load_df_from_google()
+
+    CashierItem.objects.all().delete()
+
+    int_fields = [f.name for f in CashierItem._meta.get_fields() if type(f) == models.fields.IntegerField]
+
+    for row in df.to_dict('records'):
+        for int_field in int_fields:
+            if row[int_field] == '':
+                row[int_field] = None
+        CashierItem.objects.create(**row)
 
 
 def current_cash():
     item = (
-        CashierItem.objects.filter(current_cash__ne = '').order_by('-id')[0]
+        CashierItem.objects.exclude(current_cash = None).order_by('-id')[0]
     )
     return item.current_cash
 

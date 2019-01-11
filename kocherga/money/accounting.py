@@ -5,7 +5,7 @@ class FinAccount(models.Model):
     class Meta:
         db_table = 'fin_accounts'
 
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=40)
     parent = models.ForeignKey('self', on_delete=models.CASCADE)
 
@@ -17,7 +17,7 @@ class FinTransaction(kocherga.db.Base):
     class Meta:
         db_table = 'fin_transactions'
 
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     comment = models.TextField()
 
 

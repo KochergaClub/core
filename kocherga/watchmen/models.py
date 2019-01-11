@@ -105,10 +105,14 @@ class ScheduleItem(models.Model):
     shift = models.CharField(
         max_length=20,
         choices=[
-            (shift, shift.name) for shift in Shift
+            (shift.name, shift.name) for shift in Shift
         ],
     )
     watchman = models.CharField(max_length=100, db_index=True)
+
+    @property
+    def shift_obj(self):
+        return Shift[self.shift]
 
     class Meta:
         db_table = "watchmen_schedule"
@@ -150,7 +154,7 @@ class Schedule:
         ScheduleItem.objects.all().delete()
         for (d, shift_info) in self._data.items():
             for (shift, watchman) in shift_info.items():
-                ScheduleItem.create(date=d, shift=shift, watchman=watchman)
+                ScheduleItem.objects.create(date=d, shift=shift.name, watchman=watchman)
 
     def current_watchman(self):
         return self.watchman_by_dt(datetime.now(TZ))

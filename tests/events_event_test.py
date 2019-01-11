@@ -3,10 +3,8 @@ import pytest
 import logging
 from datetime import datetime, timedelta
 
-from kocherga.events.event import Event
-from kocherga.events.tag import Tag
+from kocherga.events.models import Event, Tag
 import kocherga.events.db
-from kocherga.db import Session
 
 pytestmark = pytest.mark.usefixtures('db')
 
@@ -51,7 +49,7 @@ class TestGetEvent:
         assert e.title == 'Элиезер проповедь'
         assert e.description.startswith('chicken')
         assert e.is_master == False
-        assert e.master_id is None
+        assert e.master_id == ''
 
         assert e.get_room() == 'гэб'
         assert e.event_type == "unknown"
@@ -81,14 +79,15 @@ def test_delete(google_object):
 
 class TestTags:
     def test_list_default_tags(self, event):
-        assert event.tags == []
+        assert list(event.tags.all()) == []
 
     def test_set_tags(self, event):
-        event.tag_set.add(Tag(name='foo'))
-        event.tag_set.add(Tag(name='bar'))
+        event.add_tag('foo')
+        event.add_tag('bar')
         event_id = event.google_id
 
-        event = Event.get(google_id=event_id)
-        assert len(event.tags) == 2
-        assert event.tags[0].name == 'bar' # tags are sorted by name
-        assert event.tags[1].name == 'foo'
+        event = Event.objects.get(pk=event_id)
+        tags = event.tags.all()
+        assert len(tags) == 2
+        assert tags[0].name == 'bar' # tags are sorted by name
+        assert tags[1].name == 'foo'

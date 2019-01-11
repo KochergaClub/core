@@ -8,7 +8,6 @@ import os.path
 
 import kocherga.vk.api
 import kocherga.events.vk
-from kocherga.db import Session
 
 from kocherga.events.event import Event
 
@@ -49,7 +48,7 @@ class TestCreate:
         })
 
     def test_create_without_group(self, minimal_event):
-        assert minimal_event.vk_group == None
+        assert minimal_event.vk_group == ''
         with pytest.raises(Exception, match='vk_group is not set'):
             result = kocherga.events.vk.create(minimal_event)
 
@@ -64,7 +63,7 @@ class TestGroups:
 
     def test_groups_single(self, event):
         event.vk_group = 'blahblah_something'
-        Session().commit()
+        event.save()
 
         result = kocherga.events.vk.all_groups()
 

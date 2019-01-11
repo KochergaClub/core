@@ -169,7 +169,7 @@ class TestAddBooking:
 
 class TestDeleteBooking:
     def test_delete_booking_unknown(self):
-        with pytest.raises(PublicError, match='[nN]ot found'):
+        with pytest.raises(Event.DoesNotExist):
             kocherga.events.booking.delete_booking('blahblah', 'somebody@example.com')
 
     def test_delete_booking(self):

@@ -11,8 +11,7 @@ from kocherga.error import PublicError
 from kocherga.db import Session
 
 import kocherga.events.db
-from kocherga.events.event import Event
-from kocherga.events.tag import Tag
+from kocherga.events.models import Event, Tag
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth

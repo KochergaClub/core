@@ -12,6 +12,8 @@ import kocherga.google
 import kocherga.config
 from kocherga.config import TZ
 
+from .models import Schedule, ScheduleItem, Shift
+
 WATCHMEN_SPREADSHEET_KEY = kocherga.config.config()["watchmen_spreadsheet_key"]
 
 _LAST_UPDATED_WORKSHEET = None
@@ -93,7 +95,7 @@ def load_schedule_from_db():
 
     for item in ScheduleItem.objects.all():
         d = item.date
-        shift = item.shift
+        shift = item.shift_obj
         watchman = item.watchman
         schedule.add_shift_info(d, shift, watchman)
 

@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'zadarma_calls',
-                'managed': False,
+#                'managed': False,
             },
         ),
     ]

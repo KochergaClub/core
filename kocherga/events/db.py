@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 
 from kocherga.config import TZ
 
-import kocherga.db
 from kocherga.datetime import MSK_DATE_FORMAT
 
 from kocherga.error import PublicError
@@ -19,10 +18,7 @@ import kocherga.importer.base
 
 
 def get_event(event_id):
-    event = Event.objects.get(event_id=event_id)
-    if not event:
-        raise PublicError(f"Event {event_id} not found")
-
+    event = Event.objects.get(pk=event_id)
     return event
 
 
@@ -45,7 +41,7 @@ def list_events(**kwargs):
         .all()
     )
 
-    return events
+    return list(events)
 
 
 def insert_event(event):
@@ -70,7 +66,7 @@ def insert_event(event):
 def delete_event(event_id):
     kocherga.events.google.delete_event(event_id)
     try:
-        event = Event.objects.get(id=event_id)
+        event = Event.objects.get(pk=event_id)
         event.delete()
     except Event.DoesNotExist:
         pass
@@ -104,7 +100,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         # I'm not sure whether this still applies after we migrated Flask -> Django. Too lazy to investigate right now.
         for imported_event in imported_events:
             try:
-                existing_event = Event.get(id=imported_event.google_id)
+                existing_event = Event.objects.get(pk=imported_event.google_id)
                 logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - existing')
                 for prop in ('title', 'description', 'location', 'start_dt', 'end_dt', 'updated_dt'):
                     setattr(existing_event, prop, getattr(imported_event, prop))

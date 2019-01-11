@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'importers_log_entry',
-                'managed': False,
+#                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'importers_state',
-                'managed': False,
+#                'managed': False,
             },
         ),
     ]
