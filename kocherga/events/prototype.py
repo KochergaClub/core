@@ -150,6 +150,7 @@ class EventPrototype(models.Model):
 
     def add_image(self, fh):
         self.image = image_storage.add_file(fh)
+        self.save()
 
     def tag_names(self):
         return [

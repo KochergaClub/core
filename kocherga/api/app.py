@@ -105,18 +105,6 @@ def create_app(DEV):
         return response
 
     for module_name in (
-        "auth",
-        "events",
-        "event_prototypes",
-        "rooms",
-        "sensors",
-        "bookings",
-        "people",
-        "templater",
-        "announcements",
-        "images",
-        "supplies",
-        "hooks",
     ):
         module = importlib.import_module(f"kocherga.api.routes.{module_name}")
         app.register_blueprint(module.bp)

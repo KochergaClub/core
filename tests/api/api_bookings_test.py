@@ -1,29 +1,28 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
+import json
+
 from freezegun import freeze_time
 from datetime import datetime, timedelta
 
-@pytest.mark.asyncio
-async def test_list(api_client):
-    res = await api_client.get('/bookings/today')
+def test_list(client):
+    res = client.get('/api/bookings/today')
     assert res.status_code == 200
 
-@pytest.mark.asyncio
-async def test_add(api_client, user_jwt_token):
+def test_add(client, user_jwt_token):
     dt = datetime.now() + timedelta(days=3)
 
-    res = await api_client.post(
-        '/bookings',
-        headers={
-            'Authorization': 'JWT ' + user_jwt_token,
-        },
-        json={
+    res = client.post(
+        '/api/bookings',
+        json.dumps({
             'date': dt.strftime('%Y-%m-%d'),
             'room': 'Летняя',
             'people': '3',
             'startTime': '18:00',
             'endTime': '19:00',
-        }
+        }),
+        content_type='application/json',
+        AUTHORIZATION='JWT ' + user_jwt_token,
     )
     assert res.status_code == 200

@@ -35,6 +35,38 @@ IMAGE_TYPES = ["default", "vk"]
 def ts_now():
     return datetime.now(TZ).timestamp()
 
+
+class EventManager(models.Manager):
+    def public_events(self, date=None, from_date=None, to_date=None, tag=None):
+        query = Event \
+            .filter(event_type='public') \
+            .exclude(posted_vk__isnull = True) \
+            .exclude(posted_vk = '') \
+            .filter(start_ts__gte = datetime(2018, 6, 1).timestamp()) # earlier events are not cleaned up yet
+
+        if tag:
+            query = query.filter(tag__name = tag)
+
+        if not from_date and not to_date and not date:
+            raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
+
+        if from_date:
+            query = query.filter(start_ts__gte = datetime.combine(from_date, time.min).timestamp())
+
+        if to_date:
+            query = query.filter(start_ts__lte = datetime.combine(to_date, time.max).timestamp())
+
+        if date:
+            query = query.filter(
+                start_ts__gte = datetime.combine(date, time.min).timestamp()
+            ).filter(
+                start_ts__lte = datetime.combine(date, time.max).timestamp()
+            )
+
+        query = query.order_by('start_ts')
+        return query
+
+
 class Event(models.Model):
     class Meta:
         db_table = "events"
@@ -211,6 +243,7 @@ class Event(models.Model):
             self.set_field_by_prop(key, value)
 
         self.patch_google()
+        self.save()
 
     def generate_summary(self):
         if self.summary:
@@ -288,6 +321,7 @@ class Event(models.Model):
     # overrides django method, but that's probably ok
     def delete(self):
         self.deleted = True
+        self.save()
 
     # dict for the further serialization (e.g. for api.kocherga.club)
     def to_dict(self):

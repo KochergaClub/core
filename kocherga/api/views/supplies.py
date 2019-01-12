@@ -1,14 +1,15 @@
-from quart import Blueprint, request, jsonify
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+
+import json
+
 from kocherga.api.common import ok
 
 from kocherga.supplies.models import CookiePick
-from kocherga.db import Session
 
-bp = Blueprint("supplies", __name__)
-
-@bp.route("/cookies/pick", methods=["POST"])
-async def r_pick_cookie():
-    payload = await request.get_json()
+@require_POST
+def r_pick_cookie(request):
+    payload = json.loads(request.body)
 
     pick = CookiePick(
         cookie_id=payload['cookie'],
@@ -17,14 +18,13 @@ async def r_pick_cookie():
         user=payload['user'],
         time=payload['time'],
     )
-    Session().add(pick)
-    Session().commit()
+    pick.save()
 
-    return jsonify(ok)
+    return JsonResponse(ok)
 
-@bp.route("/cookies/pick-neither", methods=["POST"])
-async def r_pick_neither_cookie():
-    payload = await request.get_json()
+@require_POST
+def r_pick_neither_cookie(request):
+    payload = json.loads(request.body)
 
     for key in ['c1', 'c2']:
         pick = CookiePick(
@@ -34,8 +34,6 @@ async def r_pick_neither_cookie():
             user=payload['user'],
             time=payload['time'],
         )
-        Session().add(pick)
+        pick.save()
 
-    Session().commit()
-
-    return jsonify(ok)
+    return JsonResponse(ok)

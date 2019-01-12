@@ -37,6 +37,10 @@ def kocherga_jwt_token():
     return _jwt_token('test@kocherga-club.ru')
 
 @pytest.fixture
+def kocherga_auth_header(kocherga_jwt_token):
+    return {'AUTHORIZATION': 'JWT ' + kocherga_jwt_token}
+
+@pytest.fixture
 def user_jwt_token():
     return _jwt_token('somebody@example.com')
 

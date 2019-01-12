@@ -1,27 +1,26 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from quart import Blueprint, jsonify
+from django.http import JsonResponse
+from django.views.decorators.http import require_safe
 
 import time
 
 import kocherga.cm.scraper
 
-bp = Blueprint("people", __name__)
-
 stats_cached_ts = None
 stats_cached = None
 CACHE_PERIOD = 5
 
-@bp.route("/people/now")
-def now():
+@require_safe
+def now(request):
     global stats_cached
     global stats_cached_ts
 
     now_ts = time.time()
     if stats_cached_ts and now_ts - stats_cached_ts < CACHE_PERIOD:
         logger.debug("return now stats from cache")
-        return jsonify(stats_cached)
+        return JsonResponse(stats_cached)
 
     stats = kocherga.cm.scraper.now_stats()
 
@@ -42,4 +41,4 @@ def now():
     stats_cached_ts = now_ts
     logger.info("updated now stats")
 
-    return jsonify(result)
+    return JsonResponse(result)

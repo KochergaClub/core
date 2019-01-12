@@ -1,8 +1,8 @@
 import pytest
+pytestmark = pytest.mark.usefixtures('db')
 
-@pytest.mark.asyncio
-async def test_now(api_client):
-    res = await api_client.get('/people/now')
+def test_now(client):
+    res = client.get('/api/people/now')
     assert res.status_code == 200
-    now = await res.get_json()
-    assert type(now['total']), int
+    now = res.json()
+    assert type(now['total']) == int

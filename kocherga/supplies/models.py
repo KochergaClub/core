@@ -44,15 +44,15 @@ class CookiePick(models.Model):
 class CookieCombinationItem(models.Model):
     class Meta:
         db_table = 'cookie_combination_items'
-        unique_together(
-            ('combination_id', 'position_id'),
+        unique_together = (
+            ('combination', 'position_id'),
         )
 
     id = models.AutoField(primary_key=True)
 
     combination = models.ForeignKey('CookieCombination', on_delete=models.CASCADE)
-    position_id = Column(Integer, nullable=False)
-    cookie_id = Column(String(32), nullable=False)
+    position_id = models.IntegerField()
+    cookie_id = models.CharField(max_length=32)
 
     @property
     def image_link(self):

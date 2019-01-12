@@ -1,38 +1,36 @@
-from quart import Blueprint, jsonify, request
+from django.http import JsonResponse
+from django.views.decorators.http import require_safe, require_POST, require_http_methods
 
+import json
 from datetime import datetime
 
-from kocherga.db import Session
 from kocherga.error import PublicError
 import kocherga.events.booking
 from kocherga.api.auth import auth, get_email
 from kocherga.api.common import ok
 
-bp = Blueprint("bookings", __name__)
-
-
-@bp.route("/my/bookings")
 @auth("any")
-def r_list_my():
-    bookings = kocherga.events.booking.bookings_by_email(get_email())
-    return jsonify([b.public_object() for b in bookings])
+@require_safe
+def r_list_my(request):
+    bookings = kocherga.events.booking.bookings_by_email(get_email(request))
+    return JsonResponse([b.public_object() for b in bookings], safe=False)
 
 
-@bp.route("/bookings/<date_str>")
-def r_list_by_date(date_str):
+@require_safe
+def r_list_by_date(request, date_str):
     if date_str == "today":
         date = datetime.today().date()
     else:
         date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
     bookings = kocherga.events.booking.day_bookings(date)
-    return jsonify([b.public_object() for b in bookings])
+    return JsonResponse([b.public_object() for b in bookings], safe=False)
 
 
-@bp.route("/bookings", methods=["POST"])
+@require_POST
 @auth("any")
-async def r_create():
-    payload = await request.get_json() or await request.form
+def r_create(request):
+    payload = json.loads(request.body)
 
     data={}
     for field in ("date", "room", "people", "startTime", "endTime"):
@@ -46,18 +44,16 @@ async def r_create():
         people=data['people'],
         start_time=data['startTime'],
         end_time=data['endTime'],
-        email=get_email(),
+        email=get_email(request),
     )
-    Session().commit()
 
-    return jsonify(ok)
+    return JsonResponse(ok)
 
 
-@bp.route("/bookings/<event_id>", methods=["DELETE"])
+@require_http_methods(["DELETE"])
 @auth("any")
-def r_delete(event_id):
-    email = get_email()
+def r_delete(request, event_id):
+    email = get_email(request)
     kocherga.events.booking.delete_booking(event_id, email)
-    Session().commit()
 
     return jsonify(ok)

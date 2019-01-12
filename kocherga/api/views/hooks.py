@@ -1,29 +1,28 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import json
+from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 
-from quart import Blueprint, request
+import json
 
 import kocherga.config
 import kocherga.slack
 
 # Routes for external hooks.
 
-bp = Blueprint("hooks", __name__)
-
 VK_SECRET = kocherga.config.config()['vk']['callback_secret']
 
-@bp.route("/hooks/vk_callback", methods=["POST"])
-async def r_vk_callback():
-    payload = await request.get_json()
+@require_POST
+def r_vk_callback(request):
+    payload = json.loads(request.body)
 
     req_secret = payload["secret"]
     assert req_secret == VK_SECRET
 
     # sorry for hardcode, I'll fix this later with https://vk.com/dev/groups.addCallbackServer
     if payload["type"] == "confirmation" and payload["group_id"] == 99973027:
-        return "f4cc4bd9"
+        return HttpResponse("f4cc4bd9")
 
     channel = '#vk_support'
 
@@ -75,4 +74,4 @@ async def r_vk_callback():
             f'https://vk.com/club{group_id}?w=product-{group_id}_{obj["item_id"]}'
         )
 
-    return "ok"
+    return HttpResponse("ok")
