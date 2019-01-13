@@ -1,10 +1,11 @@
 import pytest
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from kocherga.events.models import Event, Tag
 import kocherga.events.db
+import django.db
 
 pytestmark = pytest.mark.usefixtures('db')
 
@@ -91,3 +92,8 @@ class TestTags:
         assert len(tags) == 2
         assert tags[0].name == 'bar' # tags are sorted by name
         assert tags[1].name == 'foo'
+
+class TestManager:
+    def test_public_events(self):
+        public_events = Event.objects.public_events(date=date(2019,1,12))
+        assert type(public_events) == django.db.models.query.QuerySet

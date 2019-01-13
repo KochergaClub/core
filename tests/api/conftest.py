@@ -19,8 +19,6 @@ def upload(tmpdir):
 os.environ['TIER'] = 'dev'
 os.environ['JWT_SECRET_KEY'] = 'testkey'
 
-import kocherga.api.app
-
 def _jwt_token(email):
     return jwt.encode(
         payload={
@@ -43,10 +41,3 @@ def kocherga_auth_header(kocherga_jwt_token):
 @pytest.fixture
 def user_jwt_token():
     return _jwt_token('somebody@example.com')
-
-@pytest.fixture
-def api_client(db):
-    logging.info('api_client fixture')
-    app = kocherga.api.app.create_app(DEV=True)
-    logging.info('api_client fixture app created')
-    return app.test_client()

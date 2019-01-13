@@ -1,4 +1,3 @@
-import kocherga.db
 from django.db import models
 
 class FinAccount(models.Model):
@@ -13,7 +12,7 @@ class FinAccount(models.Model):
         return FinAccount.objects.create(name=name, parent=self)
 
 
-class FinTransaction(kocherga.db.Base):
+class FinTransaction(models.Model):
     class Meta:
         db_table = 'fin_transactions'
 
@@ -21,7 +20,7 @@ class FinTransaction(kocherga.db.Base):
     comment = models.TextField()
 
 
-class FinTransactionLine(kocherga.db.Base):
+class FinTransactionLine(models.Model):
     class Meta:
         db_table = 'fin_transaction_lines'
         unique_together = (

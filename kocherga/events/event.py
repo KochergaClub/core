@@ -6,7 +6,7 @@ from pathlib import Path
 from dateutil.tz import tzutc
 import dateutil.parser
 import shutil
-from datetime import datetime
+from datetime import datetime, time
 
 from django.db import models
 import django.dispatch
@@ -38,7 +38,7 @@ def ts_now():
 
 class EventManager(models.Manager):
     def public_events(self, date=None, from_date=None, to_date=None, tag=None):
-        query = Event \
+        query = super().get_queryset() \
             .filter(event_type='public') \
             .exclude(posted_vk__isnull = True) \
             .exclude(posted_vk = '') \
@@ -70,6 +70,8 @@ class EventManager(models.Manager):
 class Event(models.Model):
     class Meta:
         db_table = "events"
+
+    objects = EventManager()
 
     google_id = models.CharField(max_length=100, primary_key=True)
     google_link = models.CharField(max_length=1024)

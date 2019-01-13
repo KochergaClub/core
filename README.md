@@ -16,7 +16,7 @@
 
 ## Выкладка изменений
 
-Деплой организован с помощью Ansible, конфиги в [отдельном репозитории](https://gitlab.com/kocherga/code/deploy) (роль kocherga-api).
+Деплой организован с помощью Ansible, конфиги в [отдельном репозитории](https://gitlab.com/kocherga/code/deploy) (роль kocherga-core).
 
 ## Типизация
 
@@ -40,16 +40,7 @@
 
 ## HTTP API
 
-Код в `kocherga.api.*`.
-
-Написано на фреймворке Quart (асинхронный клон Flask'а).
-
-### Модули
-
-* `kocherga.api.app` - главное Quart-приложение
-* `kocherga.api.routes.*` - Blueprints
-* `kocherga.api.common` - некоторые общие переменные и функции
-* `kocherga.api.auth` - декораторы для авторизации
+Код в `kocherga.api.*`. Django-приложение.
 
 ## Importer
 
@@ -67,6 +58,4 @@
 
 ## База данных
 
-За хранение большинства данных отвечает локальная sqlite-база.
-
-Для взаимодействия с базой используем [SQLAlchemy](https://www.sqlalchemy.org/) ORM. Для миграций - [Alembic](http://alembic.zzzcomputing.com/).
+За хранение большинства данных отвечает локальная MySQL-база.

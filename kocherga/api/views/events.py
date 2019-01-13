@@ -7,7 +7,7 @@ from django.views.decorators.http import require_safe
 
 import sys
 import json
-from datetime import datetime, time
+from datetime import datetime
 import requests
 from werkzeug.contrib.iterio import IterIO
 

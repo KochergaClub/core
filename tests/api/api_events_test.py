@@ -4,6 +4,7 @@ pytestmark = pytest.mark.usefixtures('db')
 import json
 
 from kocherga.events.event import Event
+from kocherga.error import PublicError
 
 def test_events(client, imported_events, kocherga_auth_header):
     res = client.get('/api/events', **kocherga_auth_header)
@@ -79,3 +80,13 @@ def test_create(client, kocherga_auth_header):
 
     event_json = res.json()
     assert event_json['title'] == 'test event'
+
+def test_public_events(client):
+    with pytest.raises(PublicError, match=r'One.*must be set'):
+        res = client.get('/api/public_events')
+
+    res = client.get('/api/public_events?date=2019-01-12')
+    assert res.status_code == 200
+
+    events = res.json()
+    assert type(events) == list

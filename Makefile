@@ -2,7 +2,7 @@ install-dev:
 	pipenv install -d
 
 dev:
-	. ./env.example && QUART_APP=kocherga/api/app.py DEV=1 quart run
+	. ./env.example && ./manage.py runserver
 
 ludwig:
 	TIER=dev ./scripts/ludwig.py

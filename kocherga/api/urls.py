@@ -1,4 +1,5 @@
 from django.urls import include, path, re_path
+from django.views.generic.base import TemplateView
 
 import kocherga.api.views.people as people
 import kocherga.api.views.announcements as announcements
@@ -26,6 +27,7 @@ announcement_patterns = [
 ]
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='api/index.html')),
     path('people/now', people.now),
 
     path('announcements/', include(announcement_patterns)),
