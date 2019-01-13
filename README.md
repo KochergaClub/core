@@ -63,7 +63,7 @@ Django apps:
 * ratio
 * room.py
 * security.py
-* setup.py
+* setup
 * slack.py
 * team.py
 * telegram
