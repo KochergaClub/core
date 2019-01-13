@@ -18,6 +18,7 @@ class SubscriptionOrder(models.Model):
         )
         db_table = 'cm_subscription_orders'
 
+    id = models.AutoField(primary_key=True)
     card_id = models.BigIntegerField()
     ts = models.IntegerField() # TODO - migrate to DateTimeField
     order_value = models.IntegerField()
@@ -81,6 +82,9 @@ class Order(models.Model):
     tariff_plan = models.CharField(max_length=40)
     comment = models.CharField(max_length=1024)
     history = models.TextField()
+
+    def __str__(self):
+        return f'[{self.order_id}] {self.order_value} руб.'
 
     @classmethod
     def from_csv_row(cls, csv_row):
@@ -213,6 +217,9 @@ class Customer(models.Model):
     activity_ended = models.DateTimeField(null=True)
     last_visit = models.DateField(null=True)
     total_spent = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.card_id} {self.first_name or ""} {self.last_name or ""}'
 
     @classmethod
     def from_csv_row(cls, csv_row):

@@ -119,6 +119,9 @@ class Event(models.Model):
     timepad_prepaid_tickets = models.BooleanField(default=False)
     timing_description_override = models.CharField(max_length=255, blank=True)
 
+    def __str__(self):
+        return f'{self.start_dt} - {self.title}'
+
     @property
     def created_dt(self):
         return datetime.fromtimestamp(self.created_ts, TZ)

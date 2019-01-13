@@ -44,6 +44,9 @@ class EventPrototype(models.Model):
 
     canceled_dates = models.TextField()
 
+    def __str__(self):
+        return self.title
+
     @classmethod
     def by_id(cls, prototype_id):
         return EventPrototype.objects.get(pk=prototype_id)

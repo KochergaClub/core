@@ -34,23 +34,63 @@
 
 # Компоненты
 
-* HTTP API - Quart-приложение на https://api.kocherga.club, реализующее REST API
-* Importer - демон для наполнения базы
-* прочие модули `kocherga.*`, используемые в скриптах и других компонентах
+Django apps:
+* api
+* cm
+* events
+* gitlab
+* importer
+* money.*
+* supplies
+* watchmen
+* zadarma
 
-## HTTP API
+Общие и вспомогательные модули:
+* django
+* config.py
+* datetime.py
+* error.py
+* secrets.py
 
-Код в `kocherga.api.*`. Django-приложение.
+Прочее (постепенно будет переезжать в common/ или рефакториться в django-приложения):
+* analytics
+* email
+* gdrive.py
+* google.py
+* images.py
+* ludwig
+* mailchimp.py
+* ratio
+* room.py
+* security.py
+* setup.py
+* slack.py
+* team.py
+* telegram
+* templater
+* vk
+* wiki.py
+* yandex
 
-## Importer
+## api
+
+REST API. Код в `kocherga.api.*`. Django-приложение для урлов в `/api`.
+
+Пока что это портированный с Flask (точнее, Quart) код.
+
+В будущем перепишем на Django REST Framework и разберу на отдельные приложения.
+
+## importer
 
 Код в `kocherga.importer.*`.
 
 Наполняет локальную базу данными из различных источников (ОФД, телефония, гуглокалендарь и т.д.)
 
-Работает в виде демона (см. `kocherga.importer.daemon`).
+Работает в виде демона (см. `kocherga.importer.daemon`). Отдельные импорты можно запускать через скрипт `scripts/importer.py`.
 
-## Конфиги
+## Прочее
+
+### Конфиги (config и secrets)
 
 Модуль `kocherga.config` отвечает за загрузку конфигурации (файла config.json), а модуль `kocherga.secrets` - за загрузку более секретных ключей и паролей.
 
