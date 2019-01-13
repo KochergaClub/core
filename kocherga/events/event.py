@@ -9,11 +9,10 @@ import shutil
 from datetime import datetime, time
 
 from django.db import models
+from django.conf import settings
 import django.dispatch
 
-import kocherga.config
-from kocherga.config import TZ
-from kocherga.datetime import MSK_DATE_FORMAT
+from kocherga.datetime import TZ, MSK_DATE_FORMAT
 
 from kocherga.images import image_storage
 import kocherga.room
@@ -285,7 +284,7 @@ class Event(models.Model):
             if not image_id:
                 continue
 
-            url = kocherga.config.web_root() + f"/images/{image_id}"
+            url = settings.KOCHERGA_API_ROOT + f"/images/{image_id}"
             images[image_type] = url
 
         return images
@@ -309,7 +308,7 @@ class Event(models.Model):
         if self.fb_group:
             return f"https://www.facebook.com/groups/{self.fb_group}"
         else:
-            return kocherga.config.config()["fb"]["main_page"]["announce_page"]
+            return settings.KOCHERGA_FB["main_page"]["announce_page"]
 
     @property
     def timing_description(self):

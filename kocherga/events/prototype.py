@@ -5,14 +5,13 @@ from typing import List
 
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db import models
 
 from .event import Event
 
-from kocherga.config import TZ
-import kocherga.config
 import kocherga.events.google
-from kocherga.datetime import dts
+from kocherga.datetime import dts, TZ
 from kocherga.images import image_storage
 
 class EventPrototype(models.Model):
@@ -137,7 +136,7 @@ class EventPrototype(models.Model):
         for field in fields:
             if field.name == 'image':
                 if self.image:
-                    result[field.name] = kocherga.config.web_root() + f"/images/{self.image}"
+                    result[field.name] = settings.KOCHERGA_API_ROOT + f"/images/{self.image}"
             elif field.name == 'eventprototypetag':
                 pass
             else:

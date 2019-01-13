@@ -2,13 +2,12 @@ import requests
 import hashlib
 import json
 
-from kocherga.config import config
 import kocherga.mailchimp
 
 URL = 'https://audd.io/hpmor/api/?action=get_subscribed'
 
 def import_all():
-    LIST_ID = config()['mailchimp']['main_list_id']
+    LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
 
     interests = kocherga.mailchimp.api_call('GET', f"lists/{LIST_ID}/interest-categories/861f3cb880/interests")
     news_interest = next(i for i in interests['interests'] if i['name'] == 'Материалы и новости')['id']

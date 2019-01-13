@@ -1,19 +1,19 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 import slappy
 
 import pytz
 from raven.contrib.flask import Sentry
 
 import kocherga.slack
-import kocherga.config
-import kocherga.secrets
 
-SLACK_SIGNING_SECRET = kocherga.secrets.plain_secret('slack_signing_secret')
+SLACK_SIGNING_SECRET = settings.KOCHERGA_SLACK_SIGNING_SECRET
 SLACK_WORKPLACE_TOKEN = kocherga.slack.token()
 
-PORT = kocherga.config.config()["ludwig_port"]
+PORT = settings.KOCHERGA_LUDWIG_PORT
 
 
 class Bot(slappy.Bot):
@@ -27,11 +27,11 @@ def create_bot():
         SLACK_SIGNING_SECRET,
         timezone=pytz.timezone(
             "Europe/Moscow"
-        ),  # can't use kocherga.config.TZ - it's based on dateutil.tz now
+        ),  # can't use kocherga.datetime.TZ - it's based on dateutil.tz now
         alt_names=['людвиг']
     )
 
-    sentry_dsn = kocherga.config.config().get("sentry", {}).get("ludwig", None)
+    sentry_dsn = settings.KOCHERGA_LUDWIG_SENTRY_DSN
     if sentry_dsn:
         sentry = Sentry(bot.flask_app, dsn=sentry_dsn, wrap_wsgi=False)
 

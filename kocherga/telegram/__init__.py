@@ -1,15 +1,14 @@
 import requests
 
-import kocherga.config
-import kocherga.secrets
+from django.conf import settings
 
 
 def get_token():
-    return kocherga.secrets.plain_secret("telegram_token")
+    return settings.KOCHERGA_TELEGRAM_TOKEN
 
 
 def get_channel_id():
-    return kocherga.config.config()["telegram"]["channel"]
+    return settings.KOCHERGA_TELEGRAM["channel"]
 
 
 def post_to_channel(message):

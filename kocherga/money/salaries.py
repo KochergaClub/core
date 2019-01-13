@@ -9,7 +9,7 @@ import fire
 
 from kocherga.watchmen.tools import load_schedule
 from kocherga.watchmen.models import Shift
-import kocherga.team
+import kocherga.team.tools
 from kocherga.cm.models import Order
 
 def rate_by_shift(shift):
@@ -28,7 +28,7 @@ def rate_by_shift(shift):
 def short_name_stat_to_email_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
-        member = kocherga.team.find_member_by_short_name(k)
+        member = kocherga.team.tools.find_member_by_short_name(k)
         if not member:
             raise Exception(f"Member {k} not found")
         result[member.email] = v
@@ -37,7 +37,7 @@ def short_name_stat_to_email_stat(stat):
 def cm_login_stat_to_email_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
-        member = kocherga.team.find_member_by_cm_login(k)
+        member = kocherga.team.tools.find_member_by_cm_login(k)
         if not member:
             raise Exception(f"Member {k} not found")
         result[member.email] = v
@@ -160,7 +160,7 @@ class SalaryContainer:
         print(f'{"Имя":<14} {"2%":<8}{"Смены":<12}{"Всего":<8}')
         print('-' * 50)
         for email in sorted(self.salaries.keys()):
-            member = kocherga.team.find_member_by_email(email)
+            member = kocherga.team.tools.find_member_by_email(email)
             if not member:
                 raise Exception(f'Person {email} not found')
             salary = self.salaries[email]
@@ -214,7 +214,7 @@ def calculate_new_salaries(d=None):
     salaries = calculate_salaries(start_date, end_date)
 
     def once_per_month(email):
-        payment_type = kocherga.team.find_member_by_email(email).payment_type
+        payment_type = kocherga.team.tools.find_member_by_email(email).payment_type
         if payment_type == 'безнал':
             return True
         if payment_type == 'нал':

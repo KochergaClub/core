@@ -9,8 +9,7 @@ import gitlab
 
 from django.db import models
 
-import kocherga.config
-import kocherga.secrets
+from kocherga.datetime import TZ
 import kocherga.importer.base
 
 SERVER = "https://gitlab.com"
@@ -59,7 +58,7 @@ class IssueNote(models.Model):
 
 
 def get_token():
-    return kocherga.secrets.plain_secret("gitlab_token")
+    return settings.KOCHERGA_GITLAB_TOKEN
 
 
 def get_gl():
@@ -73,7 +72,7 @@ def main_project():
 class Importer(kocherga.importer.base.IncrementalImporter):
 
     def get_initial_dt(self):
-        return datetime(2017, 10, 1, tzinfo=kocherga.config.TZ)
+        return datetime(2017, 10, 1, tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         issue = None
@@ -93,4 +92,4 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
         if not issue:
             return self.get_initial_dt()
-        return datetime.fromtimestamp(issue.updated_ts, kocherga.config.TZ)
+        return datetime.fromtimestamp(issue.updated_ts, TZ)

@@ -1,10 +1,8 @@
 import pytest
-import subprocess
+
+from django.conf import settings
 
 from pathlib import Path
-import os
-import os.path
-import logging
 from datetime import datetime, timedelta
 
 from kocherga.events.event import Event
@@ -42,7 +40,7 @@ def image_file():
 def image_storage(tmpdir):
     d = Path(tmpdir) / 'upload'
     d.mkdir()
-    kocherga.config.config()['image_storage_dir'] = str(d)
+    settings.KOCHERGA_IMAGE_STORAGE_DIR = str(d)
     kocherga.images.image_storage = kocherga.images.init_global_image_storage()
     return kocherga.images.image_storage
 

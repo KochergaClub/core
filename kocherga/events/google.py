@@ -1,6 +1,7 @@
 import logging
-
 logger = logging.getLogger(__name__)
+
+from django.conf import settings
 
 import datetime
 
@@ -9,9 +10,7 @@ from typing import Any, Dict, List
 import kocherga.google
 import kocherga.events.timepad
 
-import kocherga.config
-
-CALENDAR = kocherga.config.google_calendar_id()
+CALENDAR = settings.KOCHERGA_GOOGLE_CALENDAR_ID
 
 
 def api():

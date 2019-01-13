@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponse
 
 import asyncio
 
-import kocherga.config
+import kocherga.templater
 from kocherga.templater import Template
 from kocherga.api.auth import auth
 

@@ -4,9 +4,6 @@ import asyncio
 import kocherga.events.timepad
 import kocherga.events.vk
 import kocherga.events.fb
-import kocherga.config
-
-TIMEPAD_ORGANIZATION = kocherga.config.config()["timepad"]
 
 
 def post_to_timepad(event):

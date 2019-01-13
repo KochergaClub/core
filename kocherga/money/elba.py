@@ -1,6 +1,7 @@
 import logging
-
 logger = logging.getLogger(__name__)
+
+from django.conf import settings
 
 import time
 from datetime import datetime
@@ -9,9 +10,7 @@ import re
 
 import pyppeteer
 
-import kocherga.secrets
-
-ELBA_CREDENTIALS = kocherga.secrets.json_secret("elba_credentials")
+ELBA_CREDENTIALS = settings.KOCHERGA_ELBA_CREDENTIALS
 
 last_sms_guid = None
 

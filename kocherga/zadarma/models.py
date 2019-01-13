@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
 from django.db import models
 
 from collections import OrderedDict
@@ -15,9 +16,8 @@ import itertools
 
 from typing import Iterator
 
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 import kocherga.datetime
-import kocherga.secrets
 import kocherga.watchmen.tools
 import kocherga.importer.base
 
@@ -83,7 +83,7 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
         )
     )
 
-    credentials = kocherga.secrets.json_secret('zadarma_credentials')
+    credentials = settings.KOCHERGA_ZADARMA_CREDENTIALS
     key = credentials['key']
 
     params_str = urllib.parse.urlencode(params)

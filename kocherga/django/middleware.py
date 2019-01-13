@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import traceback
+
 from django.http import JsonResponse, HttpResponse
 from kocherga.error import PublicError
 
@@ -15,7 +17,8 @@ class JsonExceptionMiddleware:
         if not request.path_info.startswith('/api/'):
             return
 
-        logger.error(exception)
+        logger.error(traceback.format_exc())
+
         if isinstance(exception, PublicError):
             return JsonResponse(exception.to_dict(), status=exception.status_code)
         else:

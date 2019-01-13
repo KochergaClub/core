@@ -1,8 +1,9 @@
+from django.conf import settings
+
 from collections import namedtuple
 import gspread
 
 import kocherga.google
-import kocherga.config
 import kocherga.slack
 
 from typing import List
@@ -28,7 +29,7 @@ TeamMember = namedtuple(
 
 def _fetch_members(sc=None):
     gc = kocherga.google.gspread_client()
-    spreadsheet = gc.open_by_key(kocherga.config.config()["team_spreadsheet_key"])
+    spreadsheet = gc.open_by_key(settings.KOCHERGA_TEAM_SPREADSHEET_KEY)
     worksheet = spreadsheet.worksheet("Сотрудники")
 
     rows = worksheet.get_all_records()

@@ -1,14 +1,14 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 from pathlib import Path
 import datetime
 import re
 
 import pyppeteer
 import jinja2
-
-import kocherga.config
 
 from .config import name2schema
 
@@ -70,7 +70,7 @@ class Template:
                     value = int(value)
                 props[field.name] = value
 
-        props['url_root'] = kocherga.config.config()['web_root']
+        props['url_root'] = settings.KOCHERGA_API_ROOT
 
         return self.template.render(**props)
 

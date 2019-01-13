@@ -2,9 +2,9 @@ from datetime import datetime
 import pandas as pd
 
 from django.db import models
+from django.conf import settings
 
 import kocherga.google
-import kocherga.config
 
 import kocherga.importer.base
 
@@ -31,7 +31,7 @@ class CashierItem(models.Model):
 
 def load_df_from_google():
     gc = kocherga.google.gspread_client()
-    gs = gc.open_by_key(kocherga.config.config()["watchmen_spreadsheet_key"])
+    gs = gc.open_by_key(settings.KOCHERGA_WATCHMEN_SPREADSHEET_KEY)
     gw = gs.worksheet("Деньги")
     df = pd.DataFrame(gw.get_all_records())
     df = df[df.Дата != ""]

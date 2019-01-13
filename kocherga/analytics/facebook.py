@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime, timedelta
 
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 import kocherga.cm.models
 
 def export_offline_conversions(filename, min_order_id):

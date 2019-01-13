@@ -82,8 +82,8 @@ def test_create(client, kocherga_auth_header):
     assert event_json['title'] == 'test event'
 
 def test_public_events(client):
-    with pytest.raises(PublicError, match=r'One.*must be set'):
-        res = client.get('/api/public_events')
+    res = client.get('/api/public_events')
+    assert res.status_code == 400
 
     res = client.get('/api/public_events?date=2019-01-12')
     assert res.status_code == 200

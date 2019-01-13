@@ -1,0 +1,92 @@
+from .base import *
+from .prod_secrets import *
+
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+SENTRY_DSN = 'https://379bb5d0da004b9fbf140914d870c555:147a473bac5641d79000d51873032874@sentry.io/1160229'
+sentry_sdk.init(
+    dsn=sentry_dsn,
+    integrations=[DjangoIntegration()]
+)
+
+DEBUG = False
+
+# Kocherga settings
+KOCHERGA_TEAM_SPREADSHEET_KEY = '1mTt7kI9A3CNzhDSKBcyY-PNGd5E2ooBRaGcqXN-t_7g'
+
+KOCHERGA_WATCHMEN_SPREADSHEET_KEY = '1hOdxVC3d7O9gziOLNLz2OPV_lkw0hf0_6jA5L7FA844'
+
+KOCHERGA_GOOGLE_CALENDAR_ID = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
+
+KOCHERGA_MAILCHIMP_MAIN_LIST_ID = 'd73cd4de36'
+KOCHERGA_MAILCHIMP_DATACENTER = 'us11'
+
+KOCHERGA_EVENT_MARKUP_SELF_MENTION = 'антикафе Кочерга'
+
+KOCHERGA_MONEY_TOCHKA_API = 'https://enter.tochka.com/api/v1'
+KOCHERGA_MONEY_TOCHKA_TOKENS_FILE = '/data/kocherga/tochka.dbm' # hardcoded file path, this is bad (until we move to Docker)
+
+KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759' # TODO - replaced since 2018-12
+
+KOCHERGA_TIMEPAD = {
+    "organization": "kocherga",
+    "organization_id": 53244,
+    "subscribers_list_id": 92482,
+    "location": {
+        "city": "Москва",
+        "address": "ул. Большая Дорогомиловская, д.5к2"
+    },
+    "default_access_status": "public",
+}
+
+KOCHERGA_FB = {
+    "main_page": {
+        "id": 1083453805000382,
+        "name": "Кочерга",
+        "autoreplace": {
+            "from": "антикафе Кочерга",
+            "to": "антикафе @Кочерга",
+        },
+        "announce_page": "https://www.facebook.com/pg/kocherga.club",
+    },
+    "announcer_login": "mmcleric@gmail.com",
+}
+
+KOCHERGA_WIKI = {
+    "domain": "wiki.team.kocherga.club",
+    "bot": {
+      "username": "Вячеслав Матюхин@Людвиг"
+    }
+}
+
+KOCHERGA_VK = {
+    "main_page": {
+        "id": "kocherga_club",
+        "main_wall_page_id": 50473877,
+    },
+    "client_id": 6274394,
+    "callback_secret": "UHD9g3yQkhgb9ZjCZ1Q1qWVuDUo", # FIXME - secret??
+}
+
+KOCHERGA_TELEGRAM = {
+    "channel": "@kocherga_club",
+    "core_api": {
+        "api_id": 434030,
+        "api_hash": "c13cbcfc179d34db2b2c862d2693606f",
+        "session_file": "/data/kocherga/telegram_core_api.session", # FIXME - hardcoded path
+    },
+}
+
+KOCHERGA_BACKUPS_S3_BUCKET = 'kocherga-backups'
+
+KOCHERGA_IMAGE_STORAGE_DIR = '/data/kocherga/upload' # FIXME
+
+KOCHERGA_LUDWIG_SENTRY_DSN = 'https://d6daa44a06a846a98743000040168090:7b1fad4c93454acd90fe9f973934ba90@sentry.io/1161227' # TODO - move to sentry_sdk?
+
+KOCHERGA_RATIO_USERS_SPREADSHEET_ID = '1mj-YsVklLtlFfy_04lZ5a0NX85iZ3O_IxsUehBeJiFg'
+
+KOCHERGA_API_ROOT = 'https://api.kocherga.club'
+KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
+
+KOCHERGA_YANDEX_ORG_ID = 649407

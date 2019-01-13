@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 from time import time as clock
 from datetime import datetime, timedelta
 
@@ -9,12 +11,11 @@ from typing import List, Dict
 import kocherga.importer.base
 
 import kocherga.google
-import kocherga.config
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 
 from .models import Schedule, ScheduleItem, Shift
 
-WATCHMEN_SPREADSHEET_KEY = kocherga.config.config()["watchmen_spreadsheet_key"]
+WATCHMEN_SPREADSHEET_KEY = settings.KOCHERGA_WATCHMEN_SPREADSHEET_KEY
 
 _LAST_UPDATED_WORKSHEET = None
 _LAST_UPDATED_SPREADSHEET = None

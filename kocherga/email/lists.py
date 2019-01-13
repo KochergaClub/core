@@ -5,8 +5,6 @@ from collections import namedtuple
 
 from typing import List
 
-from kocherga.config import config
-
 import kocherga.mailchimp
 
 User = namedtuple("User", "email first_name last_name card_id")
@@ -15,14 +13,14 @@ def get_interest_category_id():
     return kocherga.mailchimp.interest_category_by_name('Подписки')['id']
 
 def get_all_interests():
-    LIST_ID = config()['mailchimp']['main_list_id']
+    LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
     return kocherga.mailchimp.api_call(
         'GET',
         f"lists/{LIST_ID}/interest-categories/{get_interest_category_id()}/interests"
     )['interests']
 
 def populate_main_list(users: List[User]):
-    LIST_ID = config()['mailchimp']['main_list_id']
+    LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
 
     operations = []
     for user in users:

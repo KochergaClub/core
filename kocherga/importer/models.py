@@ -1,7 +1,7 @@
 from django.db import models
 
 from datetime import datetime
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 
 from typing import Optional
 

@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 import re
 from collections import namedtuple
 from random import random
@@ -14,14 +16,12 @@ import pyppeteer
 from kocherga.events.event import Event
 import kocherga.events.db
 import kocherga.events.markup
-import kocherga.config
-import kocherga.secrets
 from kocherga.images import image_storage
 from kocherga.events.announcement import BaseAnnouncement
 
-PASSWORD = kocherga.secrets.plain_secret("facebook_announcer_password")
+PASSWORD = settings.KOCHERGA_FB_ANNOUNCER_PASSWORD
 
-FB_CONFIG = kocherga.config.config()["fb"]
+FB_CONFIG = settings.KOCHERGA_FB
 
 
 class FbAnnouncement(BaseAnnouncement):

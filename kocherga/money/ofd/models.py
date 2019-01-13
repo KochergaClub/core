@@ -8,17 +8,17 @@ import decimal
 
 import enum
 
+from django.conf import settings
 from django.db import models
 
 from typing import Any, Dict, List
 
-import kocherga.secrets
-import kocherga.config
+from kocherga.datetime import TZ
 import kocherga.importer.base
 
 API_URL = "https://api.ofd-ya.ru/ofdapi/v1"
-FISCAL_DRIVE_NUMBER = kocherga.config.config()["money"]["fiscal_drive_number"]
-TOKEN = kocherga.secrets.plain_secret("ofd_ya_token")
+FISCAL_DRIVE_NUMBER = settings.KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER
+TOKEN = settings.KOCHERGA_MONEY_OFD_YA_TOKEN
 DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
@@ -56,7 +56,7 @@ class OfdDocument(models.Model):
     def from_json(cls, item: Dict[str, Any]) -> "OfdDocument":
         ts = int(item["dateTime"])
 
-        dt = datetime.fromtimestamp(ts, tz=kocherga.config.TZ)
+        dt = datetime.fromtimestamp(ts, tz=TZ)
         if dt.hour < 4:
             dt -= timedelta(days=1)
         midday_ts = int(dt.replace(hour=12, minute=0, second=0).timestamp())
@@ -161,7 +161,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         # scroll back a few more days just in case
         d -= timedelta(days=2)
 
-        return datetime.combine(d, datetime.min.time(), tzinfo=kocherga.config.TZ)
+        return datetime.combine(d, datetime.min.time(), tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
         from_d = from_dt.date()
@@ -174,7 +174,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             import_date(d)
             d += timedelta(days=1)
 
-        return datetime.combine(to_d, datetime.min.time(), tzinfo=kocherga.config.TZ)
+        return datetime.combine(to_d, datetime.min.time(), tzinfo=TZ)
 
     def interval(self):
         return {"minutes": 5}

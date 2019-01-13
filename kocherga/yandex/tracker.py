@@ -1,18 +1,19 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 import re
 import requests
 import dateutil.parser
 
-import kocherga.secrets
 import kocherga.gitlab.models
 ROOT = 'https://api.tracker.yandex.net/v2'
 
-ORG_ID = 649407
+ORG_ID = settings.KOCHERGA_YANDEX_ORD_ID
 
 def token():
-    return kocherga.secrets.plain_secret('yandex_token')
+    return settings.KOCHERGA_YANDEX_TOKEN
 
 gl2tracker_users = {
     'berekuk': 'slava',

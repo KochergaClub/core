@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from kocherga.importer.base import IncrementalImporter, State, LogEntry
 
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 
 
 class SomeImporter(IncrementalImporter):

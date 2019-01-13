@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.views import View
 from django.views.decorators.http import require_safe
+from django.conf import settings
 
 import sys
 import json
@@ -19,7 +20,6 @@ from kocherga.events.models import Event, Tag
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
 
-from kocherga.config import config
 from kocherga.datetime import MSK_DATE_FORMAT
 
 from feedgen.feed import FeedGenerator
@@ -188,14 +188,14 @@ def r_list_public_atom(request):
     )
 
     fg = FeedGenerator()
-    fg.id(f'{config()["web_root"]}/public_events_atom') # should we add query params here?
+    fg.id(f'{settings.KOCHERGA_API_ROOT}/public_events_atom') # should we add query params here?
     fg.title('Публичные мероприятия Кочерги')
     fg.author({ 'name': 'Кочерга' })
 
     for event in reversed(events.all()):
         item = event.public_object()
         fe = fg.add_entry()
-        fe.id(f'{config()["web_root"]}/public_event/{item["event_id"]}')
+        fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{item["event_id"]}')
         dt = datetime.strptime(item["start"], MSK_DATE_FORMAT)
         fe.title(item["title"])
         dt_str = kocherga.datetime.weekday(dt).capitalize() + ', ' + str(dt.day) + ' ' + kocherga.datetime.inflected_month(dt) + ', ' + dt.strftime('%H:%M')

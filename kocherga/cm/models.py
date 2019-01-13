@@ -4,7 +4,7 @@ from datetime import datetime, date
 import enum
 from collections import namedtuple
 
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 
 
 def _date_and_time_to_ts(d, t):

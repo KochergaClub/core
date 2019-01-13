@@ -1,6 +1,7 @@
 import logging
-
 logger = logging.getLogger(__name__)
+
+from django.conf import settings
 
 import re
 import markdown
@@ -8,7 +9,6 @@ import attr
 
 from typing import Any, List
 
-from kocherga.config import config
 from kocherga.error import PublicError
 
 
@@ -65,13 +65,13 @@ def parse_to_parts(description: str) -> List[Part]:
             result.append(entity)
             continue
 
-        if description.startswith(config()["event_markup"]["self_mention"]):
+        if description.startswith(settings.KOCHERGA_EVENT_MARKUP_SELF_MENTION):
             if text:
                 result.append(Text(text))
                 text = ""
             result.append(SelfMention())
             description = re.sub(
-                "^" + re.escape(config()["event_markup"]["self_mention"]),
+                "^" + re.escape(settings.KOCHERGA_EVENT_MARKUP_SELF_MENTION),
                 "",
                 description,
             )
@@ -102,7 +102,7 @@ class Markup:
             elif isinstance(part, Entity):
                 result += part.name
             elif isinstance(part, SelfMention):
-                result += config()["event_markup"]["self_mention"]
+                result += settings.KOCHERGA_EVENT_MARKUP_SELF_MENTION
             else:
                 raise Exception(f"Unknown part {part}")
 
@@ -118,7 +118,7 @@ class Markup:
             elif isinstance(part, Entity):
                 result += f"@{part.vk_id} ({part.name})"
             elif isinstance(part, SelfMention):
-                result += f'@{config()["vk"]["main_page"]["id"]} ({config()["name"]})'
+                result += f'@{settings.KOCHERGA_VK["main_page"]["id"]} ({settings.KOCHERGA_EVENT_MARKUP_SELF_MENTION})'
             else:
                 raise Exception(f"Unknown part {part}")
 
@@ -139,7 +139,7 @@ class Markup:
                 else:
                     result += part.name
             elif isinstance(part, SelfMention):
-                result += f'<a href="{config()["website"]}">{config()["name"]}</a>'
+                result += f'<a href="{settings.KOCHERGA_WEBSITE}">{settings.KOCHERGA_WEBSITE}</a>'
             else:
                 raise Exception(f"Unknown part {part}")
 

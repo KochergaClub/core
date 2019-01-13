@@ -1,13 +1,13 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import kocherga.config
+from django.conf import settings
 
 import kocherga.vk.api
 import kocherga.vk.helpers
 
 def get_vk_group_id():
-    group = kocherga.config.config()['vk']['main_page']['id']
+    group = settings.KOCHERGA_VK['main_page']['id']
     return kocherga.vk.helpers.group2id(group)
 
 def find_vk_callback_server():

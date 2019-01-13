@@ -4,21 +4,7 @@ logging.basicConfig(level=logging.INFO)
 
 import os
 from pathlib import Path
-import datetime
 import json
-
-### pytz is kinda crazy - it returns LMT from time to time.
-### It can be fixed by using tz.localize(dt) instead of passing tzinfo, and it looks more correct, but it requires a big refactoring.
-###
-### Also: "The preferred way of dealing with times is to always work in UTC, converting to localtime only when generating output to be read by humans."
-### (from https://pypi.python.org/pypi/pytz/)
-###
-# import pytz
-# TZ = pytz.timezone('Europe/Moscow')
-
-from dateutil import tz
-
-TZ = tz.tzoffset("MSK", 3600 * 3)
 
 
 def is_dev():
@@ -72,14 +58,3 @@ def config():
 def secrets_dir():
     return Path(config_dir()) / "secrets"
 
-
-def web_root():
-    return config()["web_root"]
-
-
-def image_storage_dir():
-    return config()["image_storage_dir"]
-
-
-def google_calendar_id():
-    return config()["google_calendar_id"]

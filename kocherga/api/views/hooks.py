@@ -1,17 +1,17 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 
 import json
 
-import kocherga.config
 import kocherga.slack
 
 # Routes for external hooks.
 
-VK_SECRET = kocherga.config.config()['vk']['callback_secret']
+VK_SECRET = settings.KOCHERGA_VK['callback_secret']
 
 @require_POST
 def r_vk_callback(request):

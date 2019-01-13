@@ -6,13 +6,13 @@ from enum import IntEnum
 
 from typing import Dict
 
+from django.conf import settings
 from django.db import models
 
-import kocherga.config
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 
 MODERN_SHIFTS_FIRST_DATE = datetime.strptime(
-    kocherga.config.config()["modern_shifts_first_date"], "%Y-%m-%d"
+    settings.KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE, "%Y-%m-%d"
 ).date()
 
 

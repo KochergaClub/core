@@ -6,8 +6,7 @@ import datetime
 import re
 import googleapiclient.errors
 
-from kocherga.config import TZ
-from kocherga.datetime import MSK_DATE_FORMAT
+from kocherga.datetime import TZ, MSK_DATE_FORMAT
 from kocherga.error import PublicError
 
 import kocherga.room

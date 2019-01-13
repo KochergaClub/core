@@ -1,6 +1,7 @@
 import logging
-
 logger = logging.getLogger(__name__)
+
+from django.conf import settings
 
 import os
 import requests
@@ -10,7 +11,6 @@ from collections import namedtuple
 from io import StringIO
 import csv
 
-import kocherga.secrets
 from kocherga.datetime import dts
 
 from kocherga.events.announcement import BaseAnnouncement
@@ -18,7 +18,7 @@ import kocherga.events.markup
 
 BASE_URL = "https://api.timepad.ru/v1"
 
-TIMEPAD_CONFIG = kocherga.config.config()["timepad"]
+TIMEPAD_CONFIG = settings.KOCHERGA_TIMEPAD
 ORGANIZATION = TIMEPAD_CONFIG["organization"]
 SUBSCRIBERS_LIST_ID = TIMEPAD_CONFIG["subscribers_list_id"]
 ORGANIZATION_ID = TIMEPAD_CONFIG["organization_id"]
@@ -36,7 +36,7 @@ class TimepadAnnouncement(BaseAnnouncement):
 
 
 def token():
-    return kocherga.secrets.plain_secret("timepad_token")
+    return settings.KOCHERGA_TIMEPAD_TOKEN
 
 
 def check(url):
@@ -114,7 +114,7 @@ def create(event):
     if event.timepad_prepaid_tickets:
         ticket_types = [
             {
-                "name": kocherga.config.config()["tariff"],
+                "name": settings.KOCHERGA_TARIFF,
                 "description": "оплата ПОСЛЕ мероприятия, по времени",
                 "price": 0,
                 "limit": 30,
@@ -131,7 +131,7 @@ def create(event):
     else:
         ticket_types = [
             {
-                "name": kocherga.config.config()["tariff"],
+                "name": settings.KOCHERGA_TARIFF,
                 "description": "Оплата по тарифам антикафе",
                 "price": 0,
                 "limit": 50,

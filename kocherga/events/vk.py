@@ -1,14 +1,17 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 from datetime import datetime, timedelta
 import requests
 import json
 
-from kocherga.config import TZ
 import kocherga.vk.api
 from kocherga.vk.helpers import group2id, upload_wall_image
 from kocherga.error import PublicError
+
+from kocherga.datetime import TZ
 import kocherga.datetime
 
 from kocherga.events.announcement import BaseAnnouncement
@@ -144,8 +147,8 @@ def update_wiki_schedule(from_dt=None):
 
     logger.debug(f"New schedule: {result}")
 
-    group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
-    page_id = group2id(kocherga.config.config()["vk"]["main_page"]["main_wall_page_id"])
+    group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
+    page_id = group2id(settings.KOCHERGA_VK["main_page"]["main_wall_page_id"])
     r = kocherga.vk.api.call(
         "pages.get", {"owner_id": -group_id, "page_id": page_id, "need_source": 1}
     )
@@ -206,7 +209,7 @@ def create_schedule_post(prefix_text):
         message += f"{event.start_dt:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
-    group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
+    group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
 
     image_bytes = kocherga.images.image_storage.create_mailchimp_image(dt)
     photo_id = upload_wall_image(group_id, image_bytes)
@@ -242,8 +245,8 @@ def update_widget():
         day = day_codes[event.start_dt.weekday()]
         return f"{day} {event.start_dt:%H:%M}"
 
-    group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
-    page_id = group2id(kocherga.config.config()["vk"]["main_page"]["main_wall_page_id"])
+    group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
+    page_id = group2id(settings.KOCHERGA_VK["main_page"]["main_wall_page_id"])
     wiki_url = f"https://vk.com/page-{group_id}_{page_id}"
 
     kocherga.vk.api.call(

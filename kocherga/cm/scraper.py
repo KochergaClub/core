@@ -1,12 +1,14 @@
 import requests
 import re
 from datetime import datetime
+import json
+import dbm
 
-import kocherga.secrets
+from django.conf import settings
 
 from .models import Customer
 
-DOMAIN = kocherga.secrets.plain_secret("cafe_manager_server")
+DOMAIN = settings.CAFE_MANAGER_SERVER
 
 
 def get_new_cookies(login, password):
@@ -15,18 +17,20 @@ def get_new_cookies(login, password):
     return r.cookies
 
 
-def update_cookies_secret():
-    auth = kocherga.secrets.json_secret("cafe_manager_credentials")
+def update_cookies():
+    auth = settings.CAFE_MANAGER_CREDENTIALS
 
     cookies = get_new_cookies(auth["login"], auth["password"])
 
-    kocherga.secrets.save_json_secret(cookies.get_dict(), "cafe_manager_cookies")
+    with dbm.open(settings.CAFE_MANAGER_COOKIES_FILE, 'c') as db:
+        db['cookies'] = json.dumps(cookies.get_dict())
 
 
 def get_cookies():
-    cookies_dict = kocherga.secrets.json_secret("cafe_manager_cookies")
-    cookies = requests.cookies.RequestsCookieJar()
-    cookies.update(cookies_dict)
+    with dbm.open(settings.CAFE_MANAGER_COOKIES_FILE) as db:
+        cookies = requests.cookies.RequestsCookieJar()
+        cookies.update(json.loads(db['cookies']))
+
     return cookies
 
 

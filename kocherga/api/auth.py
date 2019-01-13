@@ -1,3 +1,5 @@
+from django.conf import settings
+
 import os, sys
 from functools import wraps
 import datetime
@@ -7,18 +9,17 @@ import requests
 
 import kocherga.api.common
 from kocherga.error import PublicError
-from kocherga.secrets import plain_secret
 
-import kocherga.team
+import kocherga.team.tools
 
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", None) or plain_secret('jwt_secret_key')
+JWT_SECRET_KEY = settings.KOCHERGA_JWT_SECRET_KEY
 
 # FIXME Potential security issue - any email can be checked for team membership.
 def check_email_for_team(email, team):
     if team == "any":
         return True
     elif team == "kocherga":
-        member = kocherga.team.find_member_by_email(email)
+        member = kocherga.team.tools.find_member_by_email(email)
         if not member:
             raise PublicError(
                 "Should be a member of the Kocherga team", status_code=403

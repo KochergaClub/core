@@ -6,16 +6,15 @@ warnings.filterwarnings(
     DeprecationWarning,
 )
 
+from django.conf import settings
+
 from google.oauth2 import service_account
 from google.auth.transport.requests import AuthorizedSession
-
-import kocherga.secrets
-import kocherga.config
 
 from googleapiclient import discovery
 import gspread
 
-GOOGLE_CREDENTIALS = kocherga.secrets.json_secret("google_credentials.json")
+GOOGLE_CREDENTIALS = settings.KOCHERGA_GOOGLE_CREDENTIALS
 
 
 def credentials(name):

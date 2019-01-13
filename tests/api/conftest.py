@@ -7,17 +7,16 @@ import datetime
 from quart import Response
 import jwt
 
-import kocherga.config
+from django.conf import settings
 import kocherga.images
 
 @pytest.fixture
 def upload(tmpdir):
     upload = tmpdir.mkdir('upload')
-    kocherga.config.config()['image_storage_dir'] = upload
+    settings.configure(
+        KOCHERGA_IMAGE_STORAGE_DIR = str(d)
+    )
     kocherga.images.image_storage.set_directory(upload)
-
-os.environ['TIER'] = 'dev'
-os.environ['JWT_SECRET_KEY'] = 'testkey'
 
 def _jwt_token(email):
     return jwt.encode(
@@ -26,7 +25,7 @@ def _jwt_token(email):
             "source": "test",
             "exp": datetime.datetime.utcnow() + datetime.timedelta(weeks=50),
         },
-        key=os.environ['JWT_SECRET_KEY'],
+        key=settings.KOCHERGA_JWT_SECRET_KEY,
         algorithm="HS256",
     ).decode('utf-8')
 

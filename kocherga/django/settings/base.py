@@ -9,28 +9,13 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from pathlib import Path
 
-import kocherga.config
-
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
-
-SENTRY_DSN = kocherga.config.config().get('sentry', {}).get('api')
-if SENTRY_DSN:
-    sentry_sdk.init(
-        dsn=sentry_dsn,
-        integrations=[DjangoIntegration()]
-    )
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = str(Path(__file__).parent.parent.parent.parent)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*@9n0beejs5a2-umi2lo3l9qr)&-3j4g$iegzpxiqa00l#5bqq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -146,3 +131,37 @@ USE_L10N = True
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = TODO
+
+###### Kocherga settings ######
+
+KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
+
+KOCHERGA_TARIFF = "2,5 руб./минута"
+
+# TODO - move to DB (implement kocherga.rooms.models)
+KOCHERGA_ROOMS = [
+    {
+        "name": "лекционная",
+        "max_people": 40,
+        "area": 50
+    },
+    {
+        "name": "гэб",
+        "max_people": 20,
+        "area": 30
+    },
+    {
+        "name": "летняя",
+        "max_people": 5,
+        "area": 9
+    },
+    {
+        "name": "китайская",
+        "max_people": 12,
+        "area": 17
+    },
+]
+
+KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE = '2016-03-14'
+
+KOCHERGA_LUDWIG_PORT = 5200

@@ -9,15 +9,15 @@ import dbm
 from typing import Any, List, Iterable
 
 from django.db import models
+from django.conf import settings
 
-import kocherga.secrets
 import kocherga.datetime
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 import kocherga.importer.base
 
 # Docs: https://enter.tochka.com/doc/v1/index.html
-TOCHKA_API = kocherga.config.config()['money']['tochka']['api']
-TOKENS_FILE = kocherga.config.config()['money']['tochka']['tokens_file']
+TOCHKA_API = settings.KOCHERGA_MONEY_TOCHKA_API
+TOKENS_FILE = settings.KOCHERGA_MONEY_TOCHKA_TOKENS_FILE
 
 
 class Record(models.Model):
@@ -51,7 +51,7 @@ def save_tokens(response_json):
 
 # Interactive function, run this from CLI once.
 def init_tokens():
-    credentials = kocherga.secrets.json_secret('tochka_client')
+    credentials = settings.KOCHERGA_MONEY_TOCHKA_CLIENT
     url = f"{TOCHKA_API}/authorize?response_type=code&client_id={credentials['client_id']}"
     print(f"Open this url: {url}")
     code = input("Enter the authorization code here: ")
@@ -72,7 +72,7 @@ def init_tokens():
 
 
 def update_tokens():
-    credentials = kocherga.secrets.json_secret('tochka_client')
+    credentials = settings.KOCHERGA_MONEY_TOCHKA_CLIENT
     with dbm.open(TOKENS_FILE, 'w') as db:
         r = requests.post(
             f"{TOCHKA_API}/oauth2/token",
