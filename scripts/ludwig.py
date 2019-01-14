@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-import sys, os, django
+import sys, pathlib, os.path
+sys.path.append(
+    os.path.abspath(
+        str(pathlib.Path(__file__).parent.parent)
+    )
+)
+
+import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
 django.setup()
-
-import pathlib
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
 import locale
 locale.setlocale(locale.LC_TIME, locale.normalize('ru'))
