@@ -1,5 +1,4 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 import dateutil.parser
@@ -7,6 +6,7 @@ from datetime import datetime
 
 import gitlab
 
+from django.conf import settings
 from django.db import models
 
 from kocherga.datetime import TZ

@@ -15,6 +15,8 @@ from kocherga.datetime import TZ
 
 from .models import Schedule, ScheduleItem, Shift
 
+import kocherga.importer.base
+
 WATCHMEN_SPREADSHEET_KEY = settings.KOCHERGA_WATCHMEN_SPREADSHEET_KEY
 
 _LAST_UPDATED_WORKSHEET = None
@@ -121,3 +123,7 @@ def last_watchman():
 
 def nearest_watchman():
     return load_schedule().nearest_watchman()
+
+class Importer(kocherga.importer.base.FullImporter):
+    def do_full_import(self, session):
+        load_schedule_from_google().save_to_db()
