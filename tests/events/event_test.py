@@ -93,6 +93,10 @@ class TestTags:
         assert tags[0].name == 'bar' # tags are sorted by name
         assert tags[1].name == 'foo'
 
+    def test_delete_tags(self, event):
+        event.add_tag('foo')
+        event.delete_tag('foo')
+
 class TestManager:
     def test_public_events(self):
         public_events = Event.objects.public_events(date=date(2019,1,12))
