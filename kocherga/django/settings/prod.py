@@ -104,3 +104,5 @@ KOCHERGA_API_ROOT = 'https://api.kocherga.club'
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
 
 KOCHERGA_YANDEX_ORG_ID = 649407
+
+CAFE_MANAGER_COOKIES_FILE = '/data/kocherga/cafe_manager_cookies.dbm'
