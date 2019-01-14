@@ -12,6 +12,20 @@ sentry_sdk.init(
 
 DEBUG = False
 
+# Doesn't matter, really, since we use nginx as a reverse proxy.
+ALLOWED_HOSTS = ['*']
+
+# Security
+
+# TODO - deploy these; but for now we have HTTP-only iacsv.kocherga.club
+# SECURE_HSTS_SECONDS = 86400 # TODO - increase
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 # Kocherga settings
 KOCHERGA_TEAM_SPREADSHEET_KEY = '1mTt7kI9A3CNzhDSKBcyY-PNGd5E2ooBRaGcqXN-t_7g'
 
