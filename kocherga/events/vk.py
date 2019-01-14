@@ -231,7 +231,7 @@ def update_widget():
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt = _from_dt.timestamp(),
+            start_ts__gt = from_dt.timestamp(),
             start_ts__lt = (datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
         )
         .filter(event_type = 'public')
