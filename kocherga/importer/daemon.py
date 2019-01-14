@@ -10,7 +10,7 @@ import importlib
 IMPORTER_MODULES = [
     "money.cashier.models",
     "money.ofd.models",
-    "money.tochka",
+    "money.tochka.models",
     "zadarma",
     "cm",
     "events.db",
