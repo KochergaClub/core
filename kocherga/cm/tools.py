@@ -6,7 +6,7 @@ import re
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-from .model import Customer
+from .models import Customer
 from .scraper import DOMAIN, load_customer_from_html, get_cookies
 
 def extend_subscription(card_id, period):
