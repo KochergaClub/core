@@ -35,9 +35,9 @@ feedgen = "*"
 telethon-sync = "*"
 pysocks = "*"
 django = "*"
-sentry-sdk = "*"
 django-cors-headers = "*"
 django-rest-framework = "*"
+sentry-sdk = {extras = ["flask"],version = "*"}
 
 [dev-packages]
 pytest = "*"
