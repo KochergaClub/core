@@ -124,6 +124,9 @@ AUTH_USER_MODEL = 'kocherga_auth.User'
 
 # Email via Amazon SES
 
+DEFAULT_FROM_EMAIL = 'info@kocherga-club.ru'
+SERVER_EMAIL = 'django@kocherga-club.ru'
+
 EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
