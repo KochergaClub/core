@@ -90,3 +90,13 @@ def test_public_events(client):
 
     events = res.json()
     assert type(events) == list
+
+def test_add_tag(event, client, kocherga_auth_header):
+    res = client.post(
+        f'/api/event/{event.google_id}/tag/mytag',
+        content_type='application/json',
+        **kocherga_auth_header,
+    )
+    assert res.status_code == 200
+    event.refresh_from_db()
+    assert 'mytag' in event.tag_names()

@@ -54,7 +54,7 @@ urlpatterns = [
     path('event/<event_id>/property/<key>', events.PropertyView.as_view()),
     path('event/<event_id>/image/<image_type>', events.ImageView.as_view()),
     path('event/<event_id>/image_from_url/<image_type>', events.ImageFromUrlView.as_view()),
-    path('event/<event_id>/tag/<tag_name>', events.ImageFromUrlView.as_view()),
+    path('event/<event_id>/tag/<tag_name>', events.TagView.as_view()),
     path('public_events', events.r_list_public),
     path('public_events/today', events.r_list_public_today),
     path('public_events_atom', events.r_list_public_atom),
