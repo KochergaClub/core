@@ -37,7 +37,7 @@ class CookiePick(models.Model):
     cookie_id = models.CharField(max_length=32)
     against_id = models.CharField(max_length=32)
     position = models.IntegerField()
-    position = models.CharField(max_length=255)
+    user = models.CharField(max_length=255)
     time = models.IntegerField()
 
 

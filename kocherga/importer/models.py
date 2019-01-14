@@ -24,4 +24,4 @@ class LogEntry(models.Model):
     exception = models.TextField(null=True)
 
     class Meta:
-        db_table = 'importers_log_entry'
+        db_table = 'importers_log'

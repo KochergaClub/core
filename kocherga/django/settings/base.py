@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',
     'kocherga.cm',
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'kocherga.money.ofd',
     'kocherga.money.tochka',
     'kocherga.money.cashier',
+    'kocherga.analytics.timeclub24',
+    'kocherga.gitlab',
     'kocherga.events',
     'kocherga.api',
 ]
@@ -78,6 +81,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 
+LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -87,7 +91,7 @@ LOGOUT_REDIRECT_URL = '/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kocherga',
+        'NAME': 'kocherga_django',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',
@@ -113,6 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'kocherga_auth.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -165,3 +171,7 @@ KOCHERGA_ROOMS = [
 KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE = '2016-03-14'
 
 KOCHERGA_LUDWIG_PORT = 5200
+
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
