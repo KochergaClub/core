@@ -6,7 +6,9 @@ from django.conf import settings
 import slappy
 
 import pytz
-from raven.contrib.flask import Sentry
+
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 import kocherga.slack
 
@@ -33,7 +35,10 @@ def create_bot():
 
     sentry_dsn = settings.KOCHERGA_LUDWIG_SENTRY_DSN
     if sentry_dsn:
-        sentry = Sentry(bot.flask_app, dsn=sentry_dsn, wrap_wsgi=False)
+        sentry_sdk.init(
+            dsn=sentry_dsn,
+            integrations=[FlaskIntegration()]
+        )
 
     return bot
 
