@@ -36,7 +36,7 @@ class CorsMiddleware:
         if request.method == "OPTIONS":
             response = HttpResponse()
             response["Access-Control-Allow-Methods"] = "DELETE, GET, POST, PUT, PATCH"
-            headers = request.META.get("ACCESS_CONTROL_REQUEST_HEADERS")
+            headers = request.META.get("HTTP_ACCESS_CONTROL_REQUEST_HEADERS")
             if headers:
                 response["Access-Control-Allow-Headers"] = headers
         else:

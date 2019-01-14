@@ -57,6 +57,7 @@ def event(image_file, vk_image_file):
         location='ГЭБ',
     )
     event.vk_group = 'event159971736'
+    event.fb_group = 'nonexisting_facebook_group'
 
     event = kocherga.events.db.insert_event(event)
     with open(vk_image_file, 'rb') as fh:

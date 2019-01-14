@@ -1,12 +1,15 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import json
 import sys
 from datetime import datetime, timedelta
 
-from django.http import JsonResponse, FileResponse
-from django.views.decorators.http import require_safe, require_POST
+from django.http import FileResponse
+from django.views.decorators.http import require_safe
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 
 from kocherga.error import PublicError
 
@@ -27,87 +30,87 @@ from kocherga.api.common import ok
 # /workflow/timepad/publish
 
 
+class TimepadPostView(APIView):
+    @auth("kocherga", method=True)
+    def post(self, request, event_id):
+        event = Event.objects.get(pk=event_id)
+        announcement = kocherga.events.announce.post_to_timepad(event)
+
+        return Response({"link": announcement.link})
+
+
+class TimepadCategoriesView(APIView):
+    @auth("kocherga", method=True)
+    def get(self, request):
+        categories = kocherga.events.timepad.timepad_categories()
+        return Response([
+            {
+                "id": c.id, "name": c.name, "code": c.code
+            } for c in categories
+        ])
+
+
 @auth("kocherga")
-@require_POST
-def r_timepad_post(request, event_id):
-    event = Event.objects.get(pk=event_id)
-    announcement = kocherga.events.announce.post_to_timepad(event)
-
-    return JsonResponse({"link": announcement.link})
-
-
-@auth("kocherga")
-@require_safe
-def r_timepad_categories(request):
-    categories = kocherga.events.timepad.timepad_categories()
-    return JsonResponse([
-        {
-            "id": c.id, "name": c.name, "code": c.code
-        } for c in categories
-    ], safe=False)
-
-
-@auth("kocherga")
-@require_safe
-def r_vk_groups():
+@api_view()
+def r_vk_groups(request):
     all_groups = kocherga.events.vk.all_groups()
-    return JsonResponse(all_groups, safe=False)
+    return Response(all_groups)
 
 
 @auth("kocherga")
-@require_POST
+@api_view(['POST'])
 def r_vk_update_wiki_schedule(request):
     kocherga.events.vk.update_wiki_schedule()
-    return JsonResponse(ok)
+    return Response(ok)
 
 
 @auth("kocherga")
-@require_POST
+@api_view(['POST'])
 def r_vk_create_schedule_post(request):
     kocherga.events.vk.create_schedule_post('')
-    return JsonResponse(ok)
+    return Response(ok)
 
 
 @auth("kocherga")
-@require_POST
+@api_view(['POST'])
 def r_telegram_post_schedule(request):
     kocherga.events.telegram.post_schedule()
-    return JsonResponse(ok)
+    return Response(ok)
 
 
 @auth("kocherga")
-@require_POST
+@api_view(['POST'])
 def r_email_post_digest(request):
-    text = json.loads(request.body).get('text', '')
+    text = request.data.get('text', '')
     kocherga.email.weekly_digest.create_draft(text)
-    return JsonResponse(ok)
+    return Response(ok)
 
 
-@require_POST
 @auth("kocherga")
+@api_view(['POST'])
 def r_vk_post(request, event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_vk(event)
 
-    return JsonResponse({"link": announcement.link})
+    return Response({"link": announcement.link})
 
 
-@require_safe
 @auth("kocherga")
-def r_fb_groups():
+@api_view()
+def r_fb_groups(request):
     all_groups = kocherga.events.fb.all_groups()
-    return JsonResponse(all_groups, safe=False)
+    return Response(all_groups)
 
 
-@require_POST
 @auth("kocherga")
+@api_view(['POST'])
 def r_fb_post(request, event_id):
-    access_token = (json.loads(request.body))["fb_access_token"]
+    access_token = request.data["fb_access_token"]
 
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_fb(event, access_token)
 
-    return JsonResponse({"link": announcement.link})
+    return Response({"link": announcement.link})
 
 
 # No auth - images are requested directly

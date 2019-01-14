@@ -4,6 +4,7 @@ import os, sys
 from functools import wraps
 import datetime
 import jwt
+import json
 
 import requests
 
@@ -30,7 +31,7 @@ def check_email_for_team(email, team):
 
 
 def get_email(request):
-    header = request.META.get('AUTHORIZATION', '')
+    header = request.META.get('HTTP_AUTHORIZATION', '')
 
     if not header.startswith("JWT "):
         raise PublicError("Authentication required", status_code=401)

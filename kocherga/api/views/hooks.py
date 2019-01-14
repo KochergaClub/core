@@ -2,10 +2,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
-from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 
-import json
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 import kocherga.slack
 
@@ -13,9 +13,9 @@ import kocherga.slack
 
 VK_SECRET = settings.KOCHERGA_VK['callback_secret']
 
-@require_POST
+@api_view(['POST'])
 def r_vk_callback(request):
-    payload = json.loads(request.body)
+    payload = request.data
 
     req_secret = payload["secret"]
     assert req_secret == VK_SECRET

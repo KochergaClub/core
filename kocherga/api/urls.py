@@ -14,8 +14,8 @@ import kocherga.api.views.auth
 import kocherga.api.views.templater as templater
 
 announcement_patterns = [
-    path('timepad/event/<event_id>', announcements.r_timepad_post),
-    path('timepad/categories', announcements.r_timepad_categories),
+    path('timepad/event/<event_id>', announcements.TimepadPostView.as_view()),
+    path('timepad/categories', announcements.TimepadCategoriesView.as_view()),
     path('vk/groups', announcements.r_vk_groups),
     path('vk/update_wiki_schedule', announcements.r_vk_update_wiki_schedule),
     path('vk/create_schedule_post', announcements.r_vk_create_schedule_post),
@@ -34,7 +34,7 @@ urlpatterns = [
     path('schedule/weekly-image', announcements.r_schedule_weekly_image),
     path('screenshot/error', announcements.r_last_screenshot),
 
-    path('rooms', rooms.r_rooms),
+    path('rooms', rooms.RoomsView.as_view()),
 
     path('my/bookings', bookings.r_list_my),
     re_path(r'bookings/(?P<date_str>(?:\d{4}-\d{2}-\d{2}|today))', bookings.r_list_by_date),

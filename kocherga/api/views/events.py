@@ -1,13 +1,15 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.http import JsonResponse, HttpResponse, FileResponse
-from django.views import View
+from django.http import HttpResponse, FileResponse
 from django.views.decorators.http import require_safe
 from django.conf import settings
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 import sys
-import json
 from datetime import datetime
 import requests
 from werkzeug.contrib.iterio import IterIO
@@ -24,26 +26,26 @@ from kocherga.datetime import MSK_DATE_FORMAT
 
 from feedgen.feed import FeedGenerator
 
-class RootView(View):
+class RootView(APIView):
     @auth("kocherga", method=True)
     def get(self, request):
         def arg2date(arg):
-            d = request.GET.get(arg)
+            d = request.query_params.get(arg)
             if d:
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
         events = kocherga.events.db.list_events(
-            date=request.GET.get("date"),
+            date=request.query_params.get("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
         )
-        return JsonResponse([e.to_dict() for e in events], safe=False)
+        return Response([e.to_dict() for e in events])
 
 
     @auth("kocherga", method=True)
     def post(self, request):
-        payload = json.loads(request.body)
+        payload = request.data
         for field in ("title", "date", "startTime", "endTime"):
             if field not in payload:
                 raise PublicError("field {} is required".format(field))
@@ -55,24 +57,22 @@ class RootView(View):
 
         kocherga.events.db.insert_event(event)
 
-        return JsonResponse(event.to_dict())
+        return Response(event.to_dict())
 
 
-class ObjectView(View):
+class ObjectView(APIView):
     @auth("kocherga", method=True)
     def get(self, request, event_id):
         event = Event.by_id(event_id)
-        return JsonResponse(event.to_dict())
+        return Response(event.to_dict())
 
 
     @auth("kocherga", method=True)
     def patch(self, request, event_id):
-        payload = json.loads(request.body)
-
         event = Event.by_id(event_id)
-        event.patch(payload)
+        event.patch(request.data)
 
-        return JsonResponse(event.to_dict())
+        return Response(event.to_dict())
 
 
     @auth("kocherga")
@@ -81,21 +81,21 @@ class ObjectView(View):
         event.delete()
         event.patch_google()
 
-        return JsonResponse(ok)
+        return Response(ok)
 
 
-class PropertyView(View):
+class PropertyView(APIView):
     @auth("kocherga", method=True)
     def post(self, request, event_id, key):
-        value = json.loads(request.body)["value"]
+        value = request.data['value']
 
         event = Event.by_id(event_id)
         event.patch({ key: value })
 
-        return JsonResponse(ok)
+        return Response(ok)
 
 
-class ImageView(View):
+class ImageView(APIView):
     @auth("kocherga", method=True)
     def post(self, request, event_id, image_type):
         files = request.FILES
@@ -109,7 +109,7 @@ class ImageView(View):
         event = Event.by_id(event_id)
         event.add_image(image_type, f)
 
-        return JsonResponse(ok)
+        return Response(ok)
 
     def get(self, request, event_id, image_type):
         return FileResponse(
@@ -120,10 +120,10 @@ class ImageView(View):
         )
 
 
-class ImageFromUrlView(View):
+class ImageFromUrlView(APIView):
     @auth("kocherga", method=True)
     def post(self, request, event_id, image_type):
-        payload = json.loads(request.body)
+        payload = request.data
 
         url = payload["url"]
         r = requests.get(url, stream=True)
@@ -131,29 +131,29 @@ class ImageFromUrlView(View):
         event = Event.by_id(event_id)
         event.add_image(image_type, IterIO(r.raw.stream(4096, decode_content=True)))
 
-        return JsonResponse(ok)
+        return Response(ok)
 
 
-class TagView(View):
+class TagView(APIView):
     @auth('kocherga', method=True)
     def post(self, request, event_id, tag_name):
         event = Event.by_id(event_id)
         event.add_tag(tag_name)
 
-        return JsonResponse(ok)
+        return Response(ok)
 
     @auth('kocherga', method=True)
     def delete(self, request, event_id, tag_name):
         event = Event.by_id(event_id)
         event.delete_tag(tag_name)
 
-        return JsonResponse(ok)
+        return Response(ok)
 
 
-@require_safe
+@api_view()
 def r_list_public(request):
     def arg2date(arg):
-        d = request.GET.get(arg)
+        d = request.query_params.get(arg)
         if d:
             d = datetime.strptime(d, "%Y-%m-%d").date()
         return d
@@ -162,23 +162,23 @@ def r_list_public(request):
         date=arg2date('date'),
         from_date=arg2date('from_date'),
         to_date=arg2date('to_date'),
-        tag=request.GET.get('tag'),
+        tag=request.query_params.get('tag'),
     )
-    return JsonResponse([
+    return Response([
         event.public_object()
         for event in events[:1000]
-    ], safe=False)
+    ])
 
-@require_safe
+@api_view()
 def r_list_public_today(request):
     events = Event.objects.public_events(
         date=datetime.today().date(),
-        tag=request.GET.get('tag'),
+        tag=request.query_params.get('tag'),
     )
-    return JsonResponse([
+    return Response([
         event.public_object()
         for event in events[:1000]
-    ], safe=False)
+    ])
 
 @require_safe
 def r_list_public_atom(request):

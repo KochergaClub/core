@@ -29,14 +29,14 @@ def _jwt_token(email):
         algorithm="HS256",
     ).decode('utf-8')
 
-@pytest.fixture
-def kocherga_jwt_token():
-    return _jwt_token('test@kocherga-club.ru')
+def _auth_header(email):
+    token = _jwt_token(email)
+    return {'HTTP_AUTHORIZATION': 'JWT ' + token}
 
 @pytest.fixture
-def kocherga_auth_header(kocherga_jwt_token):
-    return {'AUTHORIZATION': 'JWT ' + kocherga_jwt_token}
+def kocherga_auth_header():
+    return _auth_header('test@kocherga-club.ru')
 
 @pytest.fixture
-def user_jwt_token():
-    return _jwt_token('somebody@example.com')
+def user_auth_header():
+    return _auth_header('somebody@example.com')

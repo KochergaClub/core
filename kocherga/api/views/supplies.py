@@ -1,15 +1,13 @@
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
-
-import json
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from kocherga.api.common import ok
 
 from kocherga.supplies.models import CookiePick
 
-@require_POST
+@api_view(['POST'])
 def r_pick_cookie(request):
-    payload = json.loads(request.body)
+    payload = request.data
 
     pick = CookiePick(
         cookie_id=payload['cookie'],
@@ -20,11 +18,11 @@ def r_pick_cookie(request):
     )
     pick.save()
 
-    return JsonResponse(ok)
+    return Response(ok)
 
-@require_POST
+@api_view(['POST'])
 def r_pick_neither_cookie(request):
-    payload = json.loads(request.body)
+    payload = request.data
 
     for key in ['c1', 'c2']:
         pick = CookiePick(
@@ -36,4 +34,4 @@ def r_pick_neither_cookie(request):
         )
         pick.save()
 
-    return JsonResponse(ok)
+    return Response(ok)

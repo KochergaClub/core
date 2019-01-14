@@ -23,6 +23,6 @@ def test_add(client, user_jwt_token):
             'endTime': '19:00',
         }),
         content_type='application/json',
-        AUTHORIZATION='JWT ' + user_jwt_token,
+        HTTP_AUTHORIZATION='JWT ' + user_jwt_token,
     )
     assert res.status_code == 200

@@ -1,16 +1,16 @@
-from django.views.decorators.http import require_POST, require_safe
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from kocherga.api.common import ok
 import kocherga.api.auth
 
-@require_POST
+@api_view(['POST'])
 def r_google(request):
     token = kocherga.api.auth.google_auth(request)
-    return JsonResponse({"jwt_token": token})
+    return Response({"jwt_token": token})
 
 
-@require_safe
 @kocherga.api.auth.auth("any")
+@api_view()
 def r_check(request):
-    return JsonResponse(ok)
+    return Response(ok)

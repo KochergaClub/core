@@ -1,7 +1,6 @@
-from django.http import JsonResponse
-from django.views.decorators.http import require_safe, require_POST, require_http_methods
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-import json
 from datetime import datetime
 
 from kocherga.error import PublicError
@@ -10,13 +9,13 @@ from kocherga.api.auth import auth, get_email
 from kocherga.api.common import ok
 
 @auth("any")
-@require_safe
+@api_view()
 def r_list_my(request):
     bookings = kocherga.events.booking.bookings_by_email(get_email(request))
-    return JsonResponse([b.public_object() for b in bookings], safe=False)
+    return Response([b.public_object() for b in bookings])
 
 
-@require_safe
+@api_view()
 def r_list_by_date(request, date_str):
     if date_str == "today":
         date = datetime.today().date()
@@ -24,13 +23,13 @@ def r_list_by_date(request, date_str):
         date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
     bookings = kocherga.events.booking.day_bookings(date)
-    return JsonResponse([b.public_object() for b in bookings], safe=False)
+    return Response([b.public_object() for b in bookings])
 
 
-@require_POST
 @auth("any")
+@api_view(['POST'])
 def r_create(request):
-    payload = json.loads(request.body)
+    payload = request.data
 
     data={}
     for field in ("date", "room", "people", "startTime", "endTime"):
@@ -47,13 +46,13 @@ def r_create(request):
         email=get_email(request),
     )
 
-    return JsonResponse(ok)
+    return Response(ok)
 
 
-@require_http_methods(["DELETE"])
 @auth("any")
+@api_view(['DELETE'])
 def r_delete(request, event_id):
     email = get_email(request)
     kocherga.events.booking.delete_booking(event_id, email)
 
-    return jsonify(ok)
+    return Response(ok)

@@ -4,6 +4,9 @@ logger = logging.getLogger(__name__)
 from django.views.decorators.http import require_safe
 from django.http import JsonResponse, HttpResponse
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 import asyncio
 
 import kocherga.templater
@@ -38,18 +41,20 @@ def r_png(request, name):
 
 
 @auth("kocherga")
+@api_view()
 def r_schema(request, name):
     template = Template.by_name(name)
-    return JsonResponse(template.schema.to_dict())
+    return Response(template.schema.to_dict())
 
 
 @auth("kocherga")
+@api_view()
 def r_list(request):
     names = kocherga.templater.list_templates()
-    return JsonResponse([
+    return Response([
         {
             "name": name,
             "schema": Template.by_name(name).schema.to_dict(),
         }
         for name in names
-    ], safe=False)
+    ])

@@ -37,6 +37,7 @@ pysocks = "*"
 django = "*"
 sentry-sdk = "*"
 django-cors-headers = "*"
+django-rest-framework = "*"
 
 [dev-packages]
 pytest = "*"

@@ -36,7 +36,7 @@ class FbAnnouncement(BaseAnnouncement):
 def all_groups():
     logger.info("Selecting all fb groups")
     query = Event.objects.values_list('fb_group').distinct()
-    groups = [row.fb_group for row in query.all()]
+    groups = [row[0] for row in query.all()]
     logger.info(f"Got {len(groups)} groups")
     return groups
 
