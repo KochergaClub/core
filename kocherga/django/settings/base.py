@@ -99,6 +99,7 @@ DATABASES = {
     }
 }
 
+CONN_MAX_AGE = 3600
 
 # Auth
 
