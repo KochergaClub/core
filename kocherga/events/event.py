@@ -402,7 +402,7 @@ class Event(models.Model):
         tag = Tag(name=tag_name, event=self).save()
 
     def delete_tag(self, tag_name):
-        self.tags.remove(self.tags.get(name=tag_name))
+        self.tags.get(name=tag_name).delete()
 
     def set_attendees(self, attendees):
         # Attendees not stored anywhere yet - used in .booking to pass to google.

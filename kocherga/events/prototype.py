@@ -167,7 +167,7 @@ class EventPrototype(models.Model):
         return tag
 
     def delete_tag(self, tag_name):
-        self.tags.remove(self.tags.get(name=tag_name))
+        self.tags.get(name=tag_name).delete()
 
 
 class EventPrototypeTag(models.Model):
