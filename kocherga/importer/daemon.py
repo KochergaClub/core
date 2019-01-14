@@ -50,6 +50,7 @@ def run():
             **importer.interval(),
             jitter=300,
             start_date=datetime.now(TZ) + timedelta(seconds=i * 5),
+            timezone=TZ,
         )
 
     scheduler.start()
