@@ -1,10 +1,10 @@
 from telethon import TelegramClient
 
-import kocherga.config
+from django.conf import settings
 
-API_ID = kocherga.config.config()['telegram']['core_api']['api_id']
-API_HASH = kocherga.config.config()['telegram']['core_api']['api_hash']
-SESSION = kocherga.config.config()['telegram']['core_api']['session_file']
+API_ID = settings.KOCHERGA_TELEGRAM['core_api']['api_id']
+API_HASH = settings.KOCHERGA_TELEGRAM['core_api']['api_hash']
+SESSION = settings.KOCHERGA_TELEGRAM['core_api']['session_file']
 
 def get_client():
     client = TelegramClient(SESSION, API_ID, API_HASH)

@@ -5,8 +5,8 @@ logger = logging.getLogger(__name__)
 from datetime import timedelta
 
 from kocherga.ludwig.bot import bot
-from kocherga.cm import extend_subscription
-import kocherga.team
+from kocherga.cm.tools import extend_subscription
+import kocherga.team.tools
 
 
 @bot.respond_to(r"новое\s+видео:\s+<(https://\S+)>")
@@ -28,7 +28,7 @@ def react_new_video(message, url):
     email = response["user"]["profile"]["email"]
     logger.info(f"Got email: {email}")
 
-    team_member = kocherga.team.find_member_by_email(email)
+    team_member = kocherga.team.tools.find_member_by_email(email)
     card_id = team_member.cm_card_id
     logger.info(f"Card ID: {card_id}")
 

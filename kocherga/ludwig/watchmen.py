@@ -3,10 +3,10 @@ import re
 
 from kocherga.ludwig.bot import bot
 
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 
-import kocherga.watchmen
-import kocherga.team
+import kocherga.watchmen.tools
+import kocherga.team.tools
 
 from slappy import ErrorResponse
 
@@ -36,17 +36,17 @@ INFLECTED_MONTH_NAMES = [
 
 
 def get_current_watchman_or_complain(message):
-    watchman = kocherga.watchmen.current_watchman()
+    watchman = kocherga.watchmen.tools.current_watchman()
     if not watchman:
         message.reply("Админа нет, паникуем!")
         return
     if watchman == "Ночь":
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
-        last = kocherga.team.find_member_by_short_name(
-            kocherga.watchmen.last_watchman()
+        last = kocherga.team.tools.find_member_by_short_name(
+            kocherga.watchmen.tools.last_watchman()
         )
-        nearest = kocherga.team.find_member_by_short_name(
-            kocherga.watchmen.nearest_watchman()
+        nearest = kocherga.team.tools.find_member_by_short_name(
+            kocherga.watchmen.tools.nearest_watchman()
         )
 
         message.reply(
@@ -54,7 +54,7 @@ def get_current_watchman_or_complain(message):
         )
         return
 
-    member = kocherga.team.find_member_by_short_name(watchman)
+    member = kocherga.team.tools.find_member_by_short_name(watchman)
     if not member:
         raise ErrorResponse(
             f"Админит *{watchman}*, но у меня не получилось найти этого человека в базе сотрудников."
@@ -69,7 +69,7 @@ def get_current_watchman_or_complain(message):
 
 
 def daily_watchmen(d):
-    schedule = kocherga.watchmen.load_schedule()
+    schedule = kocherga.watchmen.tools.load_schedule()
 
     now = datetime.now(TZ)
     shift_info = schedule.shifts_by_date(d)
@@ -86,7 +86,7 @@ def daily_watchmen(d):
             )
             continue
 
-        member = kocherga.team.find_member_by_short_name(watchman)
+        member = kocherga.team.tools.find_member_by_short_name(watchman)
         if not member:
             raise ErrorResponse(f"Не найден сотрудник по имени {shift_info[shift]}.")
 
@@ -242,7 +242,7 @@ def roster_check():
     TOTAL_DAYS = 7
     CHANNEL = '#roster'
 
-    schedule = kocherga.watchmen.load_schedule()
+    schedule = kocherga.watchmen.tools.load_schedule()
 
     today = datetime.now(TZ).date()
     d = today

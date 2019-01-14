@@ -6,8 +6,7 @@ import datetime
 import re
 import googleapiclient.errors
 
-from kocherga.config import TZ
-from kocherga.datetime import MSK_DATE_FORMAT
+from kocherga.datetime import TZ, MSK_DATE_FORMAT
 from kocherga.error import PublicError
 
 import kocherga.room
@@ -167,7 +166,7 @@ def add_booking(date, room, people, start_time, end_time, email):
         location=kocherga.room.to_long_location(room),
         start_dt=start_dt,
         end_dt=end_dt,
-        attendees=[email],
     )
+    event.set_attendees([email])
 
     return kocherga.events.db.insert_event(event)

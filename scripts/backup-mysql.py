@@ -8,13 +8,12 @@ import sys
 from pathlib import Path
 import subprocess
 
-import kocherga.secrets
-import kocherga.config
-
-AWS_CONFIG = kocherga.secrets.json_secret('aws_credentials')
-BUCKET_NAME = kocherga.config.config()['s3']['backups']
+from django.conf import settings
 
 def main():
+    AWS_CONFIG = settings.KOCHERGA_BACKUPS_AWS_CREDENTIALS
+    BUCKET_NAME = settings.KOCHERGA_BACKUPS_S3_BUCKET
+
     logging.info('Backing up MySQL databases...')
 
     s3 = boto3.session.Session(**AWS_CONFIG).client('s3')
@@ -33,4 +32,8 @@ def main():
         logging.info(f'MySQL DB {db_name} backup successful')
 
 if __name__ == '__main__':
+    import sys, os, django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+    django.setup()
+
     main()

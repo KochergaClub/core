@@ -1,18 +1,19 @@
 import requests
 
-import kocherga.config
-import kocherga.cm
+from django.conf import settings
+
+import kocherga.cm.scraper
 
 from .helpers import upload_cover_image, group2id
 
-group_id = group2id(kocherga.config.config()["vk"]["main_page"]["id"])
+group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
 
 def update_cover():
-    now_total = kocherga.cm.now_stats()['total']
+    now_total = kocherga.cm.scraper.now_stats()['total']
 
-    web_root = kocherga.config.web_root()
+    api_root = settings.KOCHERGA_API_ROOT
     r = requests.get(
-        f"{web_root}/templater/vk-cover/png",
+        f"{api_root}/templater/vk-cover/png",
         params={
             "now_total": now_total,
         },

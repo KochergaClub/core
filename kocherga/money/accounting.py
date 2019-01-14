@@ -1,51 +1,45 @@
-import kocherga.db
+from django.db import models
 
-class FinAccount(kocherga.db.Base):
-    __tablename__ = "fin_accounts"
+class FinAccount(models.Model):
+    class Meta:
+        db_table = 'fin_accounts'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(40), nullable=False)
-    parent_id = Column(Integer, ForeignKey('fin_accounts.id'))
-
-    @classmethod
-    def add(cls, name, parent_id=None):
-        account = FinAccount(name=name, parent_id=parent_id)
-        kocherga.db.Session().add(account)
-        return account
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=40)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE)
 
     def add_child(self, name):
-        return FinAccount.add(name, parent_id=self.id)
+        return FinAccount.objects.create(name=name, parent=self)
 
 
-class FinTransaction(kocherga.db.Base):
-    __tablename__ = "fin_transactions"
+class FinTransaction(models.Model):
+    class Meta:
+        db_table = 'fin_transactions'
 
-    id = Column(Integer, primary_key=True)
-    comment = Column(Text)
-
-    @classmethod
-    def add(cls, lines):
-        raise NotImplementedError
+    id = models.AutoField(primary_key=True)
+    comment = models.TextField()
 
 
-class FinTransactionLine(kocherga.db.Base):
-    __tablename__ = "fin_transaction_lines"
-    __table_args__ = (
-        UniqueConstraint("transaction_id", "account_id", name="transaction_account_pair"),
-    )
+class FinTransactionLine(models.Model):
+    class Meta:
+        db_table = 'fin_transaction_lines'
+        unique_together = (
+            ('transaction', 'account'),
+        )
 
-    transaction_id = Column(Integer, ForeignKey('fin_transactions.id'), nullable=False)
-    account_id = Column(Integer, ForeignKey('fin_accounts.id'), nullable=False)
-    debit = Column(Numeric(10, 2), nullable=False)
-    credit = Column(Numeric(10, 2), nullable=False)
+    transaction = models.ForeignKey(FinTransaction, on_delete=models.CASCADE)
+    account = models.ForeignKey(FinAccount, on_delete=models.CASCADE)
+
+    debit = models.DecimalField(max_digits=10, decimal_places=2)
+    credit = models.DecimalField(max_digits=10, decimal_places=2)
 
 
 def demo():
-    cash = FinAccount.add('cash')
+    cash = FinAccount.objects.create('cash')
     cash.add_child('cash.register')
     cash.add_child('cash.tochka')
 
-    FinAccount.add('equity')
+    FinAccount.objects.create('equity')
     # FinAccount.add('yandex_kassa')
     # FinAccount.add('timepad')
 

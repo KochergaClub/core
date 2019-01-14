@@ -1,17 +1,15 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 import time
 import json
 import requests
 
-import kocherga.secrets
-import kocherga.config
-
-MAILCHIMP_DC = kocherga.config.config()["mailchimp"]["datacenter"]
-MAILCHIMP_API = f"https://{MAILCHIMP_DC}.api.mailchimp.com/3.0"
-MAILCHIMP_API_KEY = kocherga.secrets.plain_secret("mailchimp_api_key")
-MAIN_LIST_ID = kocherga.config.config()["mailchimp"]["main_list_id"]
+MAILCHIMP_API = f"https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.api.mailchimp.com/3.0"
+MAILCHIMP_API_KEY = settings.KOCHERGA_MAILCHIMP_API_KEY
+MAIN_LIST_ID = settings.KOCHERGA_MAILCHIMP_MAIN_LIST_ID
 
 class NotFoundException(Exception):
     pass
@@ -54,7 +52,7 @@ def folder_id_by_name(name):
     response = api_call('GET', 'campaign-folders')
     return next(
         f['id']
-        for f in kocherga.mailchimp.api_call('GET', 'campaign-folders')['folders']
+        for f in api_call('GET', 'campaign-folders')['folders']
         if f['name'] == name
     )
 
@@ -80,7 +78,7 @@ def wait_for_batch(batch_id):
 
 # Used in setup only
 def create_campaign_folder(name):
-    folders = kocherga.mailchimp.api_call(
+    folders = api_call(
         'GET',
         '/campaign-folders',
     )['folders']
@@ -88,7 +86,7 @@ def create_campaign_folder(name):
     if name in [f['name'] for f in folders]:
         return # already exists
 
-    kocherga.mailchimp.api_call(
+    api_call(
         'POST',
         '/campaign-folders',
         {

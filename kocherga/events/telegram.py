@@ -8,7 +8,6 @@ import kocherga.datetime
 
 from kocherga.telegram import post_to_channel
 
-from kocherga.db import Session
 from kocherga.events.event import Event
 
 
@@ -26,16 +25,15 @@ def schedule_message():
     dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
     query = (
-        Session()
-        .query(Event)
-        .filter_by(deleted=False)
-        .filter(Event.start_ts > dt.timestamp())
-        .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
-        .filter(Event.posted_vk != None)
-        .filter(Event.posted_vk != "")
+        Event
+        .filter(deleted=False)
+        .filter(start_ts__gt = dt.timestamp())
+        .filter(start_ts__lt = (dt + timedelta(weeks=1)).timestamp())
+        .exclude(posted_vk__isnull = True)
+        .exclude(posted_vk = '')
     )
 
-    events = query.order_by(Event.start_ts).all()
+    events = query.order_by('start_ts').all()
     logger.info(f"Schedule includes {len(events)} events")
 
     prev_date = None

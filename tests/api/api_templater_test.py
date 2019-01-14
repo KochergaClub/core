@@ -1,23 +1,18 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
-@pytest.mark.asyncio
-async def test_html(api_client):
-    res = await api_client.get(
-        '/templater/mailchimp/html',
-        query_string={'start_date': '2017-03-01', 'end_date': '2017-03-08'},
-        headers={'Host': 'http://example.com'}
+def test_html(client):
+    res = client.get(
+        '/api/templater/mailchimp/html?start_date=2017-03-01&end_date=2017-03-08',
     )
     assert res.status_code == 200
 
 
-@pytest.mark.asyncio
-async def test_list(api_client):
-    res = await api_client.get(
-        '/templater',
-        query_string={'start_date': '2017-03-01', 'end_date': '2017-03-08'},
-        headers={'Host': 'http://example.com'}
+def test_list(client, kocherga_auth_header):
+    res = client.get(
+        '/api/templater',
+        **kocherga_auth_header
     )
     assert res.status_code == 200
-    data = await res.get_json()
+    data = res.json()
     assert type(data) == list

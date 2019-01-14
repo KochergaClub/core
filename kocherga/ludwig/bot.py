@@ -1,39 +1,25 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 import slappy
 
 import pytz
-from flask_sqlalchemy import SQLAlchemy as SA
-from raven.contrib.flask import Sentry
 
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 import kocherga.slack
-import kocherga.db
-import kocherga.config
-import kocherga.secrets
 
-SLACK_SIGNING_SECRET = kocherga.secrets.plain_secret('slack_signing_secret')
+SLACK_SIGNING_SECRET = settings.KOCHERGA_SLACK_SIGNING_SECRET
 SLACK_WORKPLACE_TOKEN = kocherga.slack.token()
 
-PORT = kocherga.config.config()["ludwig_port"]
+PORT = settings.KOCHERGA_LUDWIG_PORT
 
 
 class Bot(slappy.Bot):
-    def cleanup_on_exception(self):
-        logger.info("cleanup_on_exception")
-        kocherga.db.Session.remove()
-
-    def cleanup_on_anything(self):
-        logger.info("cleanup_on_anything")
-        kocherga.db.Session.remove()
-
-
-# via https://github.com/mitsuhiko/flask-sqlalchemy/issues/589
-class SQLAlchemy(SA):
-    def apply_pool_defaults(self, app, options):
-        options["pool_pre_ping"] = True
-        SA.apply_pool_defaults(self, app, options)
+    pass
 
 
 def create_bot():
@@ -43,17 +29,16 @@ def create_bot():
         SLACK_SIGNING_SECRET,
         timezone=pytz.timezone(
             "Europe/Moscow"
-        ),  # can't use kocherga.config.TZ - it's based on dateutil.tz now
+        ),  # can't use kocherga.datetime.TZ - it's based on dateutil.tz now
         alt_names=['людвиг']
     )
 
-    bot.flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    bot.flask_app.config["SQLALCHEMY_DATABASE_URI"] = kocherga.db.DB_URL
-    kocherga.db.Session.replace(SQLAlchemy(bot.flask_app).session)
-
-    sentry_dsn = kocherga.config.config().get("sentry", {}).get("ludwig", None)
+    sentry_dsn = settings.KOCHERGA_LUDWIG_SENTRY_DSN
     if sentry_dsn:
-        sentry = Sentry(bot.flask_app, dsn=sentry_dsn, wrap_wsgi=False)
+        sentry_sdk.init(
+            dsn=sentry_dsn,
+            integrations=[FlaskIntegration()]
+        )
 
     return bot
 

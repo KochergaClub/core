@@ -1,19 +1,19 @@
 from slackclient import SlackClient
 import os.path
 
-import kocherga.secrets
+from django.conf import settings
 
 
 def token():
-    return kocherga.secrets.plain_secret("slack_workplace_token")
+    return settings.KOCHERGA_SLACK_WORKPLACE_TOKEN
 
 
 def classic_token():
-    return kocherga.secrets.plain_secret("slack_bot_token")
+    return settings.KOCHERGA_SLACK_BOT_TOKEN
 
 
 def verification_token():
-    return kocherga.secrets.plain_secret("slack_verification_token")
+    return settings.KOCHERGA_SLACK_VERIFICATION_TOKEN
 
 
 # workplace client

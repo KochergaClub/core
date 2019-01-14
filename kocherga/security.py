@@ -1,12 +1,13 @@
 # Audit team access permissions.
 
 import logging
-
 logger = logging.getLogger(__name__)
+
+from django.conf import settings
 
 from termcolor import colored
 
-import kocherga.team
+import kocherga.team.tools
 import kocherga.wiki
 
 
@@ -30,7 +31,7 @@ def audit_wiki():
     logger.info("Audit wiki permissions")
     wiki = kocherga.wiki.get_wiki()
 
-    team = kocherga.team.members()
+    team = kocherga.team.tools.members()
     wiki_team = [u for u in wiki.allusers(prop="blockinfo") if not u.get("blockid")]
 
     team_by_name = {m.full_name: m for m in team}
@@ -52,7 +53,7 @@ def audit_wiki():
 
 def audit_slack():
     logger.info("Audit slack permissions")
-    team = kocherga.team.members()
+    team = kocherga.team.tools.members()
 
     ok = 0
     for m in team:
@@ -66,7 +67,7 @@ def audit_slack():
         email = user.get("profile", {}).get("email", None)
         if not email:
             continue
-        if not kocherga.team.find_member_by_email(email):
+        if not kocherga.team.tools.find_member_by_email(email):
             report_excess(f"Slack user is not a team member: {email}, {user.get('real_name')}")
 
 
@@ -76,7 +77,7 @@ def audit_slack():
 def audit_calendar():
     logger.info("Audit calendar permissions")
     calendar = kocherga.google.service("calendar")
-    acl = calendar.acl().list(calendarId=kocherga.config.google_calendar_id()).execute()
+    acl = calendar.acl().list(calendarId=settings.KOCHERGA_GOOGLE_CALENDAR_ID).execute()
 
     email2role = {}
     for item in acl["items"]:
@@ -91,7 +92,7 @@ def audit_calendar():
         email2role[email] = role
 
     email2member = {}
-    for m in kocherga.team.members():
+    for m in kocherga.team.tools.members():
         email2member[m.email] = m
 
     for email in set(email2role.keys()) - set(email2member.keys()):

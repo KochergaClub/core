@@ -1,16 +1,15 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 from datetime import timedelta
 from pathlib import Path
 import re
 import requests
 import hashlib
 
-import kocherga.config
-
 import locale
-
 locale.setlocale(locale.LC_TIME, locale.normalize("ru"))
 
 
@@ -56,9 +55,9 @@ class ImageStorage:
         return str(image_file)
 
     def create_mailchimp_image(self, start_date):
-        web_root = kocherga.config.web_root()
+        api_root = settings.KOCHERGA_API_ROOT
         r = requests.get(
-            f"{web_root}/templater/mailchimp/png",
+            f"{api_root}/templater/mailchimp/png",
             params={
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": (start_date + timedelta(days=6)).strftime("%Y-%m-%d"),
@@ -84,7 +83,7 @@ class ImageStorage:
 
 
 def init_global_image_storage():
-    return ImageStorage(kocherga.config.image_storage_dir())
+    return ImageStorage(settings.KOCHERGA_IMAGE_STORAGE_DIR)
 
 
 image_storage = init_global_image_storage()

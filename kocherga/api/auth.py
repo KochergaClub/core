@@ -1,25 +1,26 @@
+from django.conf import settings
+
 import os, sys
 from functools import wraps
 import datetime
 import jwt
-
-from quart import request
+import json
 
 import requests
 
 import kocherga.api.common
 from kocherga.error import PublicError
 
-import kocherga.team
+import kocherga.team.tools
 
-JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
+JWT_SECRET_KEY = settings.KOCHERGA_JWT_SECRET_KEY
 
 # FIXME Potential security issue - any email can be checked for team membership.
 def check_email_for_team(email, team):
     if team == "any":
         return True
     elif team == "kocherga":
-        member = kocherga.team.find_member_by_email(email)
+        member = kocherga.team.tools.find_member_by_email(email)
         if not member:
             raise PublicError(
                 "Should be a member of the Kocherga team", status_code=403
@@ -29,21 +30,21 @@ def check_email_for_team(email, team):
         raise PublicError("Unknown team {}".format(team))
 
 
-def get_email():
-    header = request.headers.get("Authorization", "")
+def get_email(request):
+    header = request.META.get('HTTP_AUTHORIZATION', '')
 
     if not header.startswith("JWT "):
         raise PublicError("Authentication required", status_code=401)
 
-    decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY, algorithm="HS256")
+    decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY, algorithms="HS256")
 
     return decoded["email"]
 
 
-def auth(team):
+def auth(team, method=False):
 
-    def check_auth():
-        email = get_email()
+    def check_auth(request):
+        email = get_email(request)
         if check_email_for_team(email, team) == True:
             return True
         raise Exception("check_email_for_team() returned an unknown value")
@@ -52,8 +53,13 @@ def auth(team):
 
         @wraps(f)
         def decorated(*args, **kwargs):
+            if method:
+                request = args[1]
+            else:
+                request = args[0]
+
             if not kocherga.api.common.DEV:
-                if check_auth() != True:
+                if check_auth(request) != True:
                     raise PublicError("Access denied", status_code=401)
             return f(*args, **kwargs)
 
@@ -61,14 +67,13 @@ def auth(team):
 
     return decorator
 
-
-async def google_auth():
+def google_auth(request):
     CLIENT_ID = (
         "462291115265-7ft6f9ssdpprl899q1v0le90lrto8th9.apps.googleusercontent.com"
     )
-    request_json = await request.get_json()
-    token = request.args.get("token", "") or request_json.get("token", "")
-    team = request.args.get("team", "") or request_json.get("team", "")
+    request_json = json.loads(request.body)
+    token = request_json.get("token", "")
+    team = request_json.get("team", "")
     if not token:
         raise PublicError("token is required")
 

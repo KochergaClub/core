@@ -13,4 +13,8 @@ def main(name=None):
         kocherga.importer.daemon.run()
 
 if __name__ == '__main__':
+    import sys, os, django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+    django.setup()
+
     fire.Fire(main)

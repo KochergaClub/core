@@ -103,17 +103,15 @@ import tempfile
 import base64
 from pathlib import Path
 
-import kocherga.config
-from kocherga.config import TZ
 import kocherga.mailchimp
 import kocherga.images
 
 from kocherga.events.event import Event
-from kocherga.db import Session
+
 import kocherga.datetime
+from kocherga.datetime import TZ
 from datetime import timedelta, datetime
 
-MAIN_LIST_ID = kocherga.config.config()['mailchimp']['main_list_id']
 IMAGE_FOLDER_NAME = 'Расписание на неделю'
 
 def get_week_boundaries():
@@ -144,14 +142,15 @@ def generate_content(text, image_url):
     (dt, end_dt) = get_week_boundaries()
 
     query = (
-        Session()
-        .query(Event)
-        .filter(Event.start_ts > dt.timestamp())
-        .filter(Event.start_ts < (dt + timedelta(weeks=1)).timestamp())
-        .filter(Event.posted_vk != None)
-        .filter(Event.posted_vk != "")
+        Event.objects
+        .filter(
+            start_ts__gt = dt.timestamp(),
+            start_ts__lt = (dt + timedelta(weeks=1)).timestamp(),
+        )
+        .exclude(posted_vk__isnull=True)
+        .exclude(posted_vk='')
     )
-    events = query.order_by(Event.start_ts).all()
+    events = query.order_by('start_ts').all()
 
     date2events = {}
     for event in events:
@@ -249,7 +248,7 @@ def create_draft(text=''):
     campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
         'type': 'regular',
         'recipients': {
-            'list_id': MAIN_LIST_ID,
+            'list_id': kocherga.mailchimp.MAIN_LIST_ID,
             'segment_opts': {
                 'saved_segment_id': kocherga.mailchimp.segment_by_name('Подписаны на расписание')['id'],
             },

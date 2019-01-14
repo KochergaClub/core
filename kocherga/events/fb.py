@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 import re
 from collections import namedtuple
 from random import random
@@ -11,18 +13,15 @@ import requests
 
 import pyppeteer
 
-from kocherga.db import Session
 from kocherga.events.event import Event
 import kocherga.events.db
 import kocherga.events.markup
-import kocherga.config
-import kocherga.secrets
 from kocherga.images import image_storage
 from kocherga.events.announcement import BaseAnnouncement
 
-PASSWORD = kocherga.secrets.plain_secret("facebook_announcer_password")
+PASSWORD = settings.KOCHERGA_FB_ANNOUNCER_PASSWORD
 
-FB_CONFIG = kocherga.config.config()["fb"]
+FB_CONFIG = settings.KOCHERGA_FB
 
 
 class FbAnnouncement(BaseAnnouncement):
@@ -36,8 +35,8 @@ class FbAnnouncement(BaseAnnouncement):
 
 def all_groups():
     logger.info("Selecting all fb groups")
-    query = Session().query(Event.fb_group.distinct().label("fb_group"))
-    groups = [row.fb_group for row in query.all()]
+    query = Event.objects.values_list('fb_group').distinct()
+    groups = [row[0] for row in query.all()]
     logger.info(f"Got {len(groups)} groups")
     return groups
 

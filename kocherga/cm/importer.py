@@ -7,14 +7,13 @@ import requests
 import re
 from datetime import datetime
 
-from sqlalchemy import or_
+from django.db.models import Q
 
 import kocherga.importer.base
-import kocherga.db
 import kocherga.email.lists
 
 from .scraper import DOMAIN, get_cookies
-from .model import Order, OrderLogEntry, Customer, SubscriptionOrder, User
+from .models import Order, OrderLogEntry, Customer, SubscriptionOrder, User
 
 
 def load_customers():
@@ -28,6 +27,8 @@ def load_customers():
             StringIO(r.content.decode("utf-8-sig")), delimiter=";"
         )
         for row in customer_reader:
+            if row['Фамилия'] == '%3cscript3ealert(docum':
+                continue
             customer = Customer.from_csv_row(row)
             customers.append(customer)
     return customers
@@ -164,16 +165,14 @@ class Importer(kocherga.importer.base.FullImporter):
     def __init__(self, log_portion_size=100):
         self.log_portion_size = log_portion_size
 
-    def import_order_log(self, session, order):
+    def import_order_log(self, order):
         logger.info(
             f"Updating log for {order.order_id}; last ts = {order.log_imported_ts}"
         )
         log_entries = load_order_log(order.order_id)
-        session.query(OrderLogEntry).filter(
-            OrderLogEntry.order_id == order.order_id
-        ).delete()
+        OrderLogEntry.objects.filter(order_id=order.order_id).delete()
         for entry in log_entries:
-            session.add(entry)
+            entry.save()
         order.log_imported_ts = datetime.now().timestamp()
 
     def do_full_import(self, session):
@@ -181,30 +180,25 @@ class Importer(kocherga.importer.base.FullImporter):
         orders = load_orders()
         logger.info("Merging orders")
         for order in orders:
-            session.merge(order)
-            # self.import_order_log(session, order)
-            # logger.info(f'Imported {order.order_id}')
+            order.save()
 
         logger.info(f"Imported {len(orders)} orders")
 
         query = (
-            session.query(Order)
-            .filter(
-                or_(
-                    Order.log_imported_ts < datetime.now().timestamp() - 86400,
-                    Order.log_imported_ts == None,
-                )
+            Order.objects.filter(
+                Q(log_imported_ts__lt=datetime.now().timestamp() - 86400)
+                | Q(log_imported_ts__isnull=True)
             )
-            .order_by(Order.order_id.desc())
+            .order_by('-order_id')
         )
-        for order in query.limit(self.log_portion_size).all():
-            self.import_order_log(session, order)
+        for order in query[:self.log_portion_size]:
+            self.import_order_log(order)
 
         logger.info("Loading customers")
         customers = load_customers()
         logger.info("Merging customers")
         for customer in customers:
-            session.merge(customer)
+            customer.save()
 
         kocherga.email.lists.populate_main_list([
             kocherga.email.lists.User(

@@ -1,13 +1,12 @@
 import csv
 from datetime import datetime, timedelta
 
-from kocherga.db import Session
-from kocherga.config import TZ
-import kocherga.cm
+from kocherga.datetime import TZ
+import kocherga.cm.models
 
 def export_offline_conversions(filename, min_order_id):
-    orders = Session().query(kocherga.cm.Order).all()
-    customers = Session().query(kocherga.cm.Customer).all()
+    orders = kocherga.cm.models.Order.objects.all()
+    customers = kocherga.cm.models.Customer.objects.all()
     card_id2customer = { c.card_id: c for c in customers }
 
     with open(filename, 'w') as fh:

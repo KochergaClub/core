@@ -1,9 +1,10 @@
+from django.conf import settings
+
 import re
 
 from kocherga.error import PublicError
-from kocherga.config import config
 
-all_rooms_details = config()["rooms"]
+all_rooms_details = settings.KOCHERGA_ROOMS
 all_rooms = [r["name"] for r in all_rooms_details]
 
 unknown = "unknown"

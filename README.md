@@ -11,12 +11,12 @@
 3. Открыть config.json в папке с конфигами, поправить в нём переменные `image_storage_dir` и `kocherga_db_file`.
 4. Установить pipenv и поставить зависимости c помощью `make install-dev`.
 5. Активировать среду разработки с помощью `pipenv shell`.
-6. Путь к конфигам можно передать через `CONFIG_DIR` (логика выбора пути к конфигам находится в `kocherga.config`).
+6. Выбрать настройки (боевая/тестовая база и т.д.) можно через переменную среды `TIER` (логика выбора django-конфига находится в `kocherga/django/settings/__init__.py`).
 7. Запустить pytest, убедиться, что тесты проходятся.
 
 ## Выкладка изменений
 
-Деплой организован с помощью Ansible, конфиги в [отдельном репозитории](https://gitlab.com/kocherga/code/deploy) (роль kocherga-api).
+Деплой организован с помощью Ansible, конфиги в [отдельном репозитории](https://gitlab.com/kocherga/code/deploy) (роль kocherga-core).
 
 ## Типизация
 
@@ -34,39 +34,66 @@
 
 # Компоненты
 
-* HTTP API - Quart-приложение на https://api.kocherga.club, реализующее REST API
-* Importer - демон для наполнения базы
-* прочие модули `kocherga.*`, используемые в скриптах и других компонентах
+Django apps:
+* api
+* cm
+* events
+* gitlab
+* importer
+* money.*
+* supplies
+* watchmen
+* zadarma
 
-## HTTP API
+Общие и вспомогательные модули:
+* django
+* config.py
+* datetime.py
+* error.py
+* secrets.py
 
-Код в `kocherga.api.*`.
+Прочее (постепенно будет переезжать в common/ или рефакториться в django-приложения):
+* analytics
+* email
+* gdrive.py
+* google.py
+* images.py
+* ludwig
+* mailchimp.py
+* ratio
+* room.py
+* security.py
+* setup
+* slack.py
+* team.py
+* telegram
+* templater
+* vk
+* wiki.py
+* yandex
 
-Написано на фреймворке Quart (асинхронный клон Flask'а).
+## api
 
-### Модули
+REST API. Код в `kocherga.api.*`. Django-приложение для урлов в `/api`.
 
-* `kocherga.api.app` - главное Quart-приложение
-* `kocherga.api.routes.*` - Blueprints
-* `kocherga.api.common` - некоторые общие переменные и функции
-* `kocherga.api.auth` - декораторы для авторизации
+Пока что это портированный с Flask (точнее, Quart) код.
 
-## Importer
+В будущем перепишем на Django REST Framework и разберу на отдельные приложения.
+
+## importer
 
 Код в `kocherga.importer.*`.
 
 Наполняет локальную базу данными из различных источников (ОФД, телефония, гуглокалендарь и т.д.)
 
-Работает в виде демона (см. `kocherga.importer.daemon`).
+Работает в виде демона (см. `kocherga.importer.daemon`). Отдельные импорты можно запускать через скрипт `scripts/importer.py`.
 
-## Конфиги
+## Прочее
 
-Модуль `kocherga.config` отвечает за загрузку конфигурации (файла config.json), а модуль `kocherga.secrets` - за загрузку более секретных ключей и паролей.
+### Конфиги (config и secrets)
 
-Все конфиги и секреты находятся в директории `config/`, существующей вне этого репозитория. Чтобы присоединиться к разработке или выкатить куда-нибудь этот код, вам надо будет где-то добыть эту директорию (иначе придётся собирать все поля конфига по кусочкам из разных модулей).
+(Устарело, конфиги теперь в Django, в `kocherga.django.settings.*`).
 
 ## База данных
 
-За хранение большинства данных отвечает локальная sqlite-база.
-
-Для взаимодействия с базой используем [SQLAlchemy](https://www.sqlalchemy.org/) ORM. Для миграций - [Alembic](http://alembic.zzzcomputing.com/).
+За хранение большинства данных отвечает локальная MySQL-база.

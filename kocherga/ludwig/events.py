@@ -3,10 +3,9 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
-from kocherga.config import TZ
+from kocherga.datetime import TZ
 import kocherga.events.db
-from kocherga.db import Session
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 
 from kocherga.ludwig.bot import bot
 
@@ -212,8 +211,8 @@ def event_visitors_question(event):
 
 @bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
-    logger.debug("ask_for_event_visitors, session id = " + str(id(Session())))
-    events = Session().query(Event).filter_by(deleted=False).filter(Event.start_ts > datetime.now(TZ).timestamp() - 86400).all()
+    logger.debug("ask_for_event_visitors")
+    events = Event.objects.filter(deleted=False, start_ts__gt=datetime.now(TZ).timestamp() - 86400).all()
     logger.debug(f"Total events: {len(events)}")
 
     events = [
@@ -233,17 +232,15 @@ def ask_for_event_visitors():
     for e in events:
         e.asked_for_visitors_dt = datetime.now(TZ)
         bot.send_message(**event_visitors_question(e))
-
-        Session().commit()
+        e.save()
 
 
 @bot.action(r"event_visitors/(.*)/reset")
 def reset_event_visitors(payload, event_id):
-    event = Session().query(Event).get(event_id)
-    if not event:
-        raise Exception(f"Event {event_id} not found")
-
+    event = Event.objects.get(pk=event_id)
     event.visitors = None
+    event.save()
+
     return event_visitors_question(event)
 
 
@@ -264,29 +261,9 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
             ]
         }
 
-    event = Session().query(Event).get(event_id)
+    event = Event.objects.get(pk=event_id)
     event.visitors = value
-    Session().commit()
-
-    #############
-    # Temporarily disabled. We need a smarter heuristics to avoid annoying multiple questions about this for the same groups of people.
-    #############
-    # if event.event_type == 'private' and int(value) >= 4:
-    #     watchman_slack_id = None
-    #     try:
-    #         watchman = kocherga.watchmen.current_watchman()
-    #         if watchman and watchman != 'Ночь':
-    #             member = kocherga.team.find_member_by_short_name(watchman)
-    #             watchman_slack_id = member.slack_id
-    #     except:
-    #         log.error("Couldn't find watchman or their slack id")
-
-    #     question_variant = f'<@{watchman_slack_id}>, найди' if watchman_slack_id else 'Админ, найди'
-
-    #     bot.send_message(
-    #         text=f"*{event.title}: большая бронь (или аренда)! Откуда эти люди о нас узнали?*\n{question_variant} человека, на которого оформлена эта бронь (аренда), и спроси у него, как они нашли Кочергу; ответ напиши в треде.",
-    #         channel="#watchmen",
-    #     )
+    event.save()
 
     question = event_visitors_question(event)
     question['channel'] = original_channel_id
@@ -334,17 +311,14 @@ def accept_event_visitors(payload, event_id):
 
         return
 
-    event = Session().query(Event).get(event_id)
-    if not event:
-        raise Exception(f"Event {event_id} not found")
+    event = Event.objects.get(pk=event_id)
 
     if value == 'no_record':
         event.visitors = 'no_record'
-        Session().commit()
-
+        Event.save()
     elif value == 'cancelled':
         event.visitors = 'cancelled'
-        Session().commit()
+        Event.save()
     else:
         raise Exception("Unknown value")
 

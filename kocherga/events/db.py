@@ -5,11 +5,7 @@ from typing import Dict, Any
 
 from datetime import datetime, timedelta
 
-from kocherga.config import TZ
-
-import kocherga.db
-from kocherga.db import Session
-from kocherga.datetime import MSK_DATE_FORMAT
+from kocherga.datetime import TZ, MSK_DATE_FORMAT
 
 from kocherga.error import PublicError
 
@@ -20,10 +16,7 @@ import kocherga.importer.base
 
 
 def get_event(event_id):
-    event = Session().query(Event).get(event_id)
-    if not event:
-        raise PublicError(f"Event {event_id} not found")
-
+    event = Event.objects.get(pk=event_id)
     return event
 
 
@@ -32,20 +25,21 @@ def list_events(**kwargs):
 
     order_arg = None
     if kwargs.get("order_by", None) == "updated":
-        order_args = Event.updated_ts
+        order_args = 'updated_ts'
     else:
-        order_args = Event.start_ts
+        order_args = 'start_ts'
 
     events = (
-        Session()
-        .query(Event)
-        .filter(Event.google_id.in_(tuple(ge["id"] for ge in google_events)))
-        .filter_by(deleted=False)
+        Event.objects
+        .filter(
+            google_id__in=[ge["id"] for ge in google_events],
+            deleted=False,
+        )
         .order_by(order_args)
         .all()
     )
 
-    return events
+    return list(events)
 
 
 def insert_event(event):
@@ -63,15 +57,17 @@ def insert_event(event):
 
     event.google_id = result['id']
     event.google_link = result['htmlLink']
-    Session().add(event)
+    event.save()
     return event
 
 
 def delete_event(event_id):
     kocherga.events.google.delete_event(event_id)
-    event = Session().query(Event).get(event_id)
-    if event:
-        event.deleted = True
+    try:
+        event = Event.objects.get(pk=event_id)
+        event.delete()
+    except Event.DoesNotExist:
+        pass
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
@@ -96,16 +92,19 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
         imported_events = [Event.from_google(ge) for ge in google_events]
 
-        # We can't just Session().merge(...) a google event - it would override local db-only props
+        # Old comment:
+        # "We can't just Session().merge(...) a google event - it would override local db-only props"
+        #
+        # I'm not sure whether this still applies after we migrated Flask -> Django. Too lazy to investigate right now.
         for imported_event in imported_events:
-            existing_event = session.query(Event).get(imported_event.google_id)
-            if existing_event:
+            try:
+                existing_event = Event.objects.get(pk=imported_event.google_id)
                 logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - existing')
                 for prop in ('title', 'description', 'location', 'start_dt', 'end_dt', 'updated_dt'):
                     setattr(existing_event, prop, getattr(imported_event, prop))
-            else:
+            except Event.DoesNotExist:
                 logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - new')
-                session.add(imported_event)
+                imported_event.save()
 
         if too_old:
             return datetime.now(tz=TZ) - timedelta(days=1)

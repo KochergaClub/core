@@ -1,18 +1,17 @@
 import logging
-
 logger = logging.getLogger(__name__)
+
+from django.conf import settings
 
 import re
 import hashlib
 
 import kocherga.google
 import kocherga.mailchimp
-from kocherga.config import config
-import kocherga.secrets
 
 
-LIST_ID = config()["mailchimp"]["main_list_id"]
-SPREADSHEET_ID = config()["ratio"]["users_spreadsheet_id"]
+LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
+SPREADSHEET_ID = settings.KOCHERGA_RATIO_USERS_SPREADSHEET_ID
 
 
 def get_all_mailchimp_dates(category_id):
@@ -72,7 +71,7 @@ def get_users(event_type, event_id):
 
     result = []
 
-    SALT = kocherga.secrets.plain_secret('mailchimp_uid_salt').encode()
+    SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
     for row in rows:
         if row["Событие"] != event:
             continue
