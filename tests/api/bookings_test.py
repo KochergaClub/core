@@ -10,7 +10,7 @@ def test_list(client):
     res = client.get('/api/bookings/today')
     assert res.status_code == 200
 
-def test_add(client, user_jwt_token):
+def test_add(client, user_auth_header):
     dt = datetime.now() + timedelta(days=3)
 
     res = client.post(
@@ -23,6 +23,6 @@ def test_add(client, user_jwt_token):
             'endTime': '19:00',
         }),
         content_type='application/json',
-        HTTP_AUTHORIZATION='JWT ' + user_jwt_token,
+        **user_auth_header,
     )
     assert res.status_code == 200

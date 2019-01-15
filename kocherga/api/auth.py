@@ -11,7 +11,7 @@ import requests
 import kocherga.api.common
 from kocherga.error import PublicError
 
-import kocherga.team.tools
+import kocherga.staff.tools
 
 JWT_SECRET_KEY = settings.KOCHERGA_JWT_SECRET_KEY
 
@@ -20,7 +20,7 @@ def check_email_for_team(email, team):
     if team == "any":
         return True
     elif team == "kocherga":
-        member = kocherga.team.tools.find_member_by_email(email)
+        member = kocherga.staff.tools.find_member_by_email(email)
         if not member:
             raise PublicError(
                 "Should be a member of the Kocherga team", status_code=403

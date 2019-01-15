@@ -1,4 +1,4 @@
-# Audit team access permissions.
+# Audit staff access permissions.
 
 import logging
 logger = logging.getLogger(__name__)
@@ -7,7 +7,7 @@ from django.conf import settings
 
 from termcolor import colored
 
-import kocherga.team.tools
+import kocherga.staff.tools
 import kocherga.wiki
 
 
@@ -31,32 +31,32 @@ def audit_wiki():
     logger.info("Audit wiki permissions")
     wiki = kocherga.wiki.get_wiki()
 
-    team = kocherga.team.tools.members()
+    staff = kocherga.staff.tools.members()
     wiki_team = [u for u in wiki.allusers(prop="blockinfo") if not u.get("blockid")]
 
-    team_by_name = {m.full_name: m for m in team}
+    staff_by_name = {m.full_name: m for m in staff}
 
     for wiki_user in wiki_team:
         if wiki_user["name"] == "Flow talk page manager":
             continue
-        if wiki_user["name"] not in team_by_name:
+        if wiki_user["name"] not in staff_by_name:
             report_excess(
-                "Wiki user is not a team member: {}".format(wiki_user["name"])
+                "Wiki user is not a staff member: {}".format(wiki_user["name"])
             )
 
     wiki_team_by_name = {u["name"]: u for u in wiki_team}
 
-    for user in team:
+    for user in staff:
         if user.full_name not in wiki_team_by_name:
-            report_shortage("Team member is not a wiki user: {}".format(user.full_name))
+            report_shortage("Staff member is not a wiki user: {}".format(user.full_name))
 
 
 def audit_slack():
     logger.info("Audit slack permissions")
-    team = kocherga.team.tools.members()
+    staff = kocherga.staff.tools.members()
 
     ok = 0
-    for m in team:
+    for m in staff:
         if not m.slack_id:
             report_shortage(f"Not found in slack: {m.full_name}, {m.email}")
             continue
@@ -67,8 +67,8 @@ def audit_slack():
         email = user.get("profile", {}).get("email", None)
         if not email:
             continue
-        if not kocherga.team.tools.find_member_by_email(email):
-            report_excess(f"Slack user is not a team member: {email}, {user.get('real_name')}")
+        if not kocherga.staff.tools.find_member_by_email(email):
+            report_excess(f"Slack user is not a staff member: {email}, {user.get('real_name')}")
 
 
     return ok
@@ -92,7 +92,7 @@ def audit_calendar():
         email2role[email] = role
 
     email2member = {}
-    for m in kocherga.team.tools.members():
+    for m in kocherga.staff.tools.members():
         email2member[m.email] = m
 
     for email in set(email2role.keys()) - set(email2member.keys()):

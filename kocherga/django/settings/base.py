@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'kocherga.analytics.timeclub24',
     'kocherga.gitlab',
     'kocherga.events',
+    'kocherga.staff',
     'kocherga.api',
 ]
 

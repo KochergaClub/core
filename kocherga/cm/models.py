@@ -179,7 +179,7 @@ class Customer(models.Model):
         db_table = 'cm_customers'
 
     # important
-    customer_id = models.AutoField(primary_key=True)
+    customer_id = models.IntegerField(primary_key=True)
     card_id = models.BigIntegerField(db_index=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

@@ -56,4 +56,6 @@ def users_by_email(sc=None):
             continue
         result[email.lower()] = user
 
+    ... # CACHE!
+
     return result

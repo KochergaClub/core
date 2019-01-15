@@ -125,3 +125,33 @@ def common_prototype(db):
     )
     prototype.save()
     return prototype
+
+@pytest.fixture
+def common_team(db):
+    from django.contrib.auth import get_user_model
+    from kocherga.staff.models import Member, AltEmail
+
+    Member.objects.create(
+        user=get_user_model().objects.create_user('yudkowsky@example.com'),
+        short_name='Элиезер',
+        is_current=True,
+    )
+
+    Member.objects.create(
+        user=get_user_model().objects.create_user('ssc@example.com'),
+        short_name='Скотт',
+        is_current=True,
+    )
+
+    m = Member.objects.create(
+        user=get_user_model().objects.create_user('test@kocherga-club.ru'),
+        short_name='Слава',
+        is_current=True,
+    )
+    AltEmail.objects.create(member=m, email='mmcleric@gmail.com')
+
+    Member.objects.create(
+        user=get_user_model().objects.create_user('not.about.email@example.com'),
+        short_name='Робин',
+        is_current=False,
+    )
