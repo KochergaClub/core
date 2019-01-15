@@ -6,7 +6,7 @@ import enum
 import kocherga.slack
 
 class Member(models.Model):
-    short_name = models.CharField(max_length=20)
+    short_name = models.CharField(max_length=20, blank=True)
     full_name = models.CharField(max_length=80)
     # email - from user
     role = models.CharField(

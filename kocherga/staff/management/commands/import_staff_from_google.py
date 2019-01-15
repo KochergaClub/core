@@ -51,7 +51,7 @@ def import_spreadspeet_data():
             'Видеоменеджер': 'VIDEOMANAGER',
             'Админ': 'WATCHMAN',
             'Тренер': 'TRAINER',
-            'Внешний консультант': 'CONSULTALT',
+            'Внешний консультант': 'CONSULTANT',
             'Волонтёр': 'VOLUNTEER',
             'Разработчик': 'VOLUNTEER',
             'Оператор админки': 'VOLUNTEER',
