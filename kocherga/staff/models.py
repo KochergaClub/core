@@ -72,6 +72,11 @@ class Member(models.Model):
 
         return slack_id
 
+    def update_user_permissions(self):
+        self.user.is_staff = self.is_current
+        self.user.save()
+
+
 class AltEmail(models.Model):
     email = models.EmailField()
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='alt_emails')
