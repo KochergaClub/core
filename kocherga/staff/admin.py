@@ -8,6 +8,9 @@ class AltEmailInline(admin.TabularInline):
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'role', 'is_current')
+    list_filter = ('is_current',)
+    ordering = ('-is_current', 'role')
+
     inlines = [
         AltEmailInline,
     ]
