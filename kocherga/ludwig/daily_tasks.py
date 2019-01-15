@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from kocherga.datetime import TZ
 from kocherga.ludwig.bot import bot
 
-from kocherga.watchmen_routine.models import Task
+from kocherga.watchmen_routine.models import Task, RewardImage
 
 def get_task_by_id(task_id):
     return Task.objects.get(pk=task_id)

@@ -60,3 +60,6 @@ class Schedule(models.Model):
 
 class RewardImage(models.Model):
     image_link = models.URLField(max_length=255)
+
+    def __str__(self):
+        return self.image_link
