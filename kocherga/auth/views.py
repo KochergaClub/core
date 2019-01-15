@@ -40,7 +40,7 @@ class LoginView(View):
         email = form.cleaned_data['email']
 
         magic_token = get_magic_token(email)
-        magic_link = request.build_absolute_uri(reverse('magic-link') + '?token=' + urllib.parse.quote(magic_token))
+        magic_link = request.build_absolute_uri(reverse('auth:magic-link') + '?token=' + urllib.parse.quote(magic_token))
 
         send_mail(
             'Magic link',
@@ -49,7 +49,7 @@ class LoginView(View):
             [email],
         )
 
-        return redirect(reverse('sent-magic-link'))
+        return redirect(reverse('auth:sent-magic-link'))
 
 class SentMagicLinkView(View):
     def get(self, request):
@@ -74,23 +74,25 @@ class MagicLinkView(View):
         return redirect(reverse('admin:index'))
 
         if registered:
-            return redirect(reverse('registered'))
+            return redirect(reverse('auth:registered'))
         else:
-            return redirect(reverse('signed-in'))
+            return redirect(reverse('auth:signed-in'))
 
 class SignedInView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'auth/signed-in.html', {
-            'registered': False,
-        })
+        return redirect(reverse('admin:index'))
+        # return render(request, 'auth/signed-in.html', {
+        #     'registered': False,
+        # })
 
 class RegisteredView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'auth/signed-in.html', {
-            'registered': True,
-        })
+        return redirect(reverse('admin:index'))
+        # return render(request, 'auth/signed-in.html', {
+        #     'registered': True,
+        # })
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('/')
+        return redirect('auth:login')
