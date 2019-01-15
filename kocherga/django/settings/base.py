@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'kocherga.events',
     'kocherga.staff',
     'kocherga.api',
+    'kocherga.watchmen_routine',
 ]
 
 MIDDLEWARE = [
