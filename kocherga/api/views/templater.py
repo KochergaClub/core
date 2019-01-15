@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.views.decorators.http import require_safe
 from django.http import JsonResponse, HttpResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -23,6 +24,7 @@ def get_args(args):
 
 
 @require_safe
+@xframe_options_exempt # html templater is used on evenman.team.kocherga.club
 def r_html(request, name):
     template = Template.by_name(name)
     args = get_args(request.GET)
