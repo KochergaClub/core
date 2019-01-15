@@ -4,6 +4,7 @@ from django.conf import settings
 import enum
 
 import kocherga.slack
+import kocherga.cm.models
 
 class Member(models.Model):
     short_name = models.CharField(max_length=20, blank=True)
@@ -45,6 +46,7 @@ class Member(models.Model):
 
     cm_login = models.CharField(max_length=255, blank=True)
     cm_card_id = models.IntegerField(null=True)
+    cm_customer = models.ForeignKey(kocherga.cm.models.Customer, null=True, on_delete=models.SET_NULL)
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
