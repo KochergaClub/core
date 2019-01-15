@@ -8,72 +8,10 @@ from datetime import datetime, timedelta
 from kocherga.datetime import TZ
 from kocherga.ludwig.bot import bot
 
-class WeeklySchedule:
-    def __init__(self, weekday):
-        self.weekday = weekday
-
-    def check(self, d):
-        return (d.weekday() + 1 == self.weekday)
-
-class BiweeklySchedule(WeeklySchedule):
-    def check(self, d):
-        if not super().check(d):
-            return False
-        return bool(d.isocalendar()[1] % 2)
-
-class MonthlySchedule:
-    def __init__(self, day):
-        self.day = day
-
-    def check(self, d):
-        return d.day == self.day
-
-class Task:
-    def __init__(self, name, schedule):
-        self.name = name
-        self.schedule = schedule
-
-    # This is bad and should be replaced with database id eventually (when we'll move all tasks to Django)
-    @property
-    def id(self):
-        return hashlib.sha1(self.name.encode('utf-8')).hexdigest()
-
-FLOWERS_TASK = 'Полить цветы согласно инструкции <https://wiki.team.kocherga.club/Цветы>'
-VR_TASK = 'Проверить, заряжены ли контроллеры для VR, поставить на зарядку, если нужно'
-
-ALL_TASKS = [
-    Task(
-        'Маркерные стены - стереть всё. Инструкция: https://wiki.team.kocherga.club/Маркерные_стены',
-        WeeklySchedule(1),
-    ),
-    Task(FLOWERS_TASK, WeeklySchedule(1)),
-    Task(FLOWERS_TASK, WeeklySchedule(3)),
-    Task(FLOWERS_TASK, WeeklySchedule(5)),
-    Task(
-        'Приставки и VR - проверить, работают ли, запустив что-нибудь и на том, и на другом, если есть проблемы - сообщить. Инструкция для VR - wiki.team.kocherga.club/VR',
-        WeeklySchedule(2),
-    ),
-    Task(
-        'Навести порядок на полках с играми. Если какие-то коробки стоят криво, плохо закрыты, - поправить. Большие коробки не должны стоять на маленьких. Протереть пыль на полках и коробках. Если видите, что какая-то коробка порвалась, подклейте прозрачным скотчем. Посмотреть, как приблизительно должно выглядеть: https://wiki.team.kocherga.club/Настольные_игры',
-        WeeklySchedule(6),
-    ),
-    Task(VR_TASK, WeeklySchedule(2)),
-    Task(VR_TASK, WeeklySchedule(5)),
-    Task('Еженедельное опрыскивание цветов (плюс, если сделано)', WeeklySchedule(2)),
-    Task('Ручки - выкинуть все, что не пишет и что плохо выглядит (во всех комнатах); доложить из кладовки, если не хватает', WeeklySchedule(3)),
-    Task('Стеллаж с посудой - убрать моющие средства в кладовку, лишнее разнести по местам; протереть полочки. Инструкция: https://wiki.team.kocherga.club/Порядок', WeeklySchedule(3)),
-    Task('Проверить папку "УЭ фидбэк", если там есть заполненнные анкеты - вбить в форму. Инструкция: https://wiki.team.kocherga.club/Админам#.D0.A1.D0.B1.D0.BE.D1.80_.D0.BE.D1.82.D0.B7.D1.8B.D0.B2.D0.BE.D0.B2', WeeklySchedule(3)),
-    Task('Дозаторы - проверить, достаточно ли зарядки и мыла; добавить, если надо', WeeklySchedule(7)),
-    Task('Книги - разобрать по тематикам, аккуратно поставить, убрать с админского стола и других мест, где они не должны быть. Инструкция: wiki.team.kocherga.club/Книги', BiweeklySchedule(6)),
-    Task('Большие плакаты в Лекционной - проверить, не отваливаются ли и не помялись ли; что можно - исправить', BiweeklySchedule(4)),
-    Task('Протереть листья цветов от пыли', MonthlySchedule(17)),
-]
+from kocherga.watchmen_routine.models import Task
 
 def get_task_by_id(task_id):
-    for task in ALL_TASKS:
-        if task.id == task_id:
-            return task
-    raise Exception(f"Task with id {task_id} not found")
+    return Task.objects.get(pk=task_id)
 
 def task_attachment(task, status='new'):
     if status == 'new':
@@ -109,18 +47,14 @@ def task_attachment(task, status='new'):
         }
 
 def send_daily_tasks():
-    today = datetime.now(TZ).date()
-    today_tasks = []
-    for task in ALL_TASKS:
-        if task.schedule.check(today):
-            today_tasks.append(task)
+    today_tasks = list(Task.objects.today_tasks())
 
     if not today_tasks:
         return
 
     bot.send_message(
         text="Таски на сегодня:",
-        channel="#watchmen",
+        channel="#" + task.channel,
         attachments=[
             task_attachment(task)
             for task in today_tasks

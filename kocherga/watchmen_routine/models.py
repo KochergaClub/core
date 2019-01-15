@@ -1,8 +1,22 @@
 from django.db import models
 
+from datetime import datetime
+from kocherga.datetime import TZ
+
+class TaskManager(models.Manager):
+    def today_tasks(self):
+        today = datetime.now(TZ).date()
+        for task in self.all():
+            for schedule in task.schedules.all():
+                if schedule.check_date(today):
+                    yield task
+                    continue
+
 class Task(models.Model):
     name = models.TextField(max_length=1024)
     channel = models.CharField(default='watchmen', max_length=40)
+
+    objects = TaskManager()
 
     def __str__(self):
         return self.name
@@ -32,6 +46,11 @@ class Schedule(models.Model):
     @property
     def weekday_short(self):
         return ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'][self.weekday]
+
+    def check_date(self, d):
+        if d.isocalendar()[1] % self.period:
+            return False
+        return (d.weekday() == self.weekday)
 
     def __str__(self):
         result = self.weekday_short
