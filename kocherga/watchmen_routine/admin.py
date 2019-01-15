@@ -14,4 +14,4 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(RewardImage)
 class RewardPictureAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'is_active')

@@ -76,7 +76,7 @@ def react_send_daily_tasks(message):
     send_daily_tasks()
 
 def get_reward_picture():
-    reward_image = RewardImage.objects.order_by('?').first()
+    reward_image = RewardImage.objects.filter(is_active=True).order_by('?').first()
     return reward_image.image_link
 
 @bot.action(r"daily_tasks/action/(.*)")
