@@ -1,6 +1,14 @@
 #!/usr/bin/env python
-import pathlib, sys
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
+import sys, pathlib, os.path
+sys.path.append(
+    os.path.abspath(
+        str(pathlib.Path(__file__).parent.parent)
+    )
+)
+
+import os, django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
