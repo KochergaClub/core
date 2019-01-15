@@ -17,6 +17,8 @@ from kocherga.images import image_storage
 class EventPrototype(models.Model):
     class Meta:
         db_table = 'event_prototypes'
+        verbose_name = 'Прототип события'
+        verbose_name_plural = 'Прототипы событий'
 
     prototype_id = models.AutoField(primary_key=True)
 

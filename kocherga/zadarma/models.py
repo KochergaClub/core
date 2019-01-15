@@ -49,6 +49,8 @@ class Call(models.Model):
 
     class Meta:
         db_table = 'zadarma_calls'
+        verbose_name = 'Звонок'
+        verbose_name_plural = 'Звонки'
 
     def __str__(self):
         return f'[{self.ts}] {self.call_type} {self.clid} ---> {self.destination}'

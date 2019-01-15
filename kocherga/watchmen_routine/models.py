@@ -13,10 +13,14 @@ class TaskManager(models.Manager):
                     continue
 
 class Task(models.Model):
-    name = models.TextField(max_length=1024)
-    channel = models.CharField(default='watchmen', max_length=40)
+    name = models.TextField('Название', max_length=1024)
+    channel = models.CharField('Канал', default='watchmen', max_length=40)
 
     objects = TaskManager()
+
+    class Meta:
+        verbose_name = 'Задача'
+        verbose_name_plural = 'Задачи'
 
     def __str__(self):
         return self.name
@@ -26,9 +30,10 @@ class Task(models.Model):
             str(s)
             for s in self.schedules.all()
         )
+    days_string.short_description = 'Расписание'
 
 class Schedule(models.Model):
-    weekday = models.IntegerField(
+    weekday = models.IntegerField('День недели',
         choices=(
             (0, 'Понедельник'),
             (1, 'Вторник'),
@@ -39,9 +44,13 @@ class Schedule(models.Model):
             (6, 'Воскресенье'),
         )
     )
-    period = models.IntegerField(default=1)
+    period = models.IntegerField('Периодичность', default=1, help_text='Повторять каждые N недель')
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='schedules')
+
+    class Meta:
+        verbose_name = 'Расписания'
+        verbose_name_plural = 'Расписание'
 
     @property
     def weekday_short(self):
@@ -59,8 +68,12 @@ class Schedule(models.Model):
         return result
 
 class RewardImage(models.Model):
-    image_link = models.URLField(max_length=255)
-    is_active = models.BooleanField(default=True)
+    image_link = models.URLField('Ссылка', max_length=255)
+    is_active = models.BooleanField('Используется', default=True)
+
+    class Meta:
+        verbose_name = 'Добрый мем'
+        verbose_name_plural = 'Добрые мемы'
 
     def __str__(self):
         return self.image_link

@@ -17,6 +17,8 @@ class SubscriptionOrder(models.Model):
             ('card_id', 'ts'),
         )
         db_table = 'cm_subscription_orders'
+        verbose_name = 'Абонемент'
+        verbose_name_plural = 'Абонементы'
 
     id = models.AutoField(primary_key=True)
     card_id = models.BigIntegerField()
@@ -61,9 +63,11 @@ class SubscriptionOrder(models.Model):
 class Order(models.Model):
     class Meta:
         db_table = 'cm_orders'
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
 
     order_id = models.IntegerField(primary_key=True)
-    card_id = models.BigIntegerField(db_index=True)
+    card_id = models.BigIntegerField('Номер карты', db_index=True)
     start_ts = models.IntegerField(db_index=True)
     end_ts = models.IntegerField(db_index=True)
     imported_ts = models.IntegerField()
@@ -177,13 +181,16 @@ class Gender(enum.Enum):
 class Customer(models.Model):
     class Meta:
         db_table = 'cm_customers'
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'Клиенты'
 
     # important
     customer_id = models.IntegerField(primary_key=True)
-    card_id = models.BigIntegerField(db_index=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    card_id = models.BigIntegerField('Номер карты', db_index=True)
+    first_name = models.CharField('Имя', max_length=100)
+    last_name = models.CharField('Фамилия', max_length=100)
     gender = models.CharField(
+        'Пол',
         max_length=20,
         choices=[
             (t.name, t.name) for t in Gender

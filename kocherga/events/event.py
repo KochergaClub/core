@@ -69,6 +69,8 @@ class EventManager(models.Manager):
 class Event(models.Model):
     class Meta:
         db_table = "events"
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'
 
     objects = EventManager()
 
@@ -442,6 +444,8 @@ class Tag(models.Model):
         unique_together = (
             ('event', 'name'),
         )
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
     id = models.AutoField(primary_key=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tags')
