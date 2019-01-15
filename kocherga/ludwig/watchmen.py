@@ -6,7 +6,7 @@ from kocherga.ludwig.bot import bot
 from kocherga.datetime import TZ
 
 import kocherga.watchmen.tools
-import kocherga.team.tools
+import kocherga.staff.tools
 
 from slappy import ErrorResponse
 
@@ -42,10 +42,10 @@ def get_current_watchman_or_complain(message):
         return
     if watchman == "Ночь":
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
-        last = kocherga.team.tools.find_member_by_short_name(
+        last = kocherga.staff.tools.find_member_by_short_name(
             kocherga.watchmen.tools.last_watchman()
         )
-        nearest = kocherga.team.tools.find_member_by_short_name(
+        nearest = kocherga.staff.tools.find_member_by_short_name(
             kocherga.watchmen.tools.nearest_watchman()
         )
 
@@ -54,7 +54,7 @@ def get_current_watchman_or_complain(message):
         )
         return
 
-    member = kocherga.team.tools.find_member_by_short_name(watchman)
+    member = kocherga.staff.tools.find_member_by_short_name(watchman)
     if not member:
         raise ErrorResponse(
             f"Админит *{watchman}*, но у меня не получилось найти этого человека в базе сотрудников."
@@ -86,14 +86,14 @@ def daily_watchmen(d):
             )
             continue
 
-        member = kocherga.team.tools.find_member_by_short_name(watchman)
+        member = kocherga.staff.tools.find_member_by_short_name(watchman)
         if not member:
             raise ErrorResponse(f"Не найден сотрудник по имени {shift_info[shift]}.")
 
         (shift_start, shift_end) = shift.dt_tuple_by_date(d)
 
         if shift_end < now:
-            rel = "админил" if member.gender == "М" else "админила"
+            rel = "админил" if member.gender == 'MALE' else "админила"
         elif shift_start > now:
             rel = "будет админить"
         else:

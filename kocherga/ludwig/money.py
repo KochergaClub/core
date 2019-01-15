@@ -2,7 +2,7 @@ from kocherga.ludwig.bot import bot
 
 import kocherga.money.cashier.models
 import kocherga.money.salaries
-import kocherga.team.tools
+import kocherga.staff.tools
 from kocherga.datetime import inflected_month
 
 
@@ -40,12 +40,12 @@ def salaries_message(with_elba_values=False):
         if salary.total == 0:
             continue
 
-        member = kocherga.team.tools.find_member_by_email(email)
+        member = kocherga.staff.tools.find_member_by_email(email)
 
         payment_emoji = ''
-        if member.payment_type =='нал':
+        if member.payment_type == 'CASH':
             payment_emoji = ':dollar:'
-        elif member.payment_type == 'безнал':
+        elif member.payment_type == 'ELECTRONIC':
             payment_emoji = ':credit_card:'
 
         member_attachment = {

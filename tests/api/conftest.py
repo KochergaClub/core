@@ -34,9 +34,9 @@ def _auth_header(email):
     return {'HTTP_AUTHORIZATION': 'JWT ' + token}
 
 @pytest.fixture
-def kocherga_auth_header():
+def kocherga_auth_header(common_team):
     return _auth_header('test@kocherga-club.ru')
 
 @pytest.fixture
-def user_auth_header():
+def user_auth_header(common_team):
     return _auth_header('somebody@example.com')
