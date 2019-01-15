@@ -49,7 +49,7 @@ def task_attachment(task, status='new'):
 def send_daily_tasks():
     tasks = list(Task.objects.today_tasks())
 
-    if not today_tasks:
+    if not tasks:
         return
 
     channels = set(
