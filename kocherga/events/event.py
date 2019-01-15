@@ -44,7 +44,7 @@ class EventManager(models.Manager):
             .filter(start_ts__gte = datetime(2018, 6, 1).timestamp()) # earlier events are not cleaned up yet
 
         if tag:
-            query = query.filter(tag__name = tag)
+            query = query.filter(tags__name = tag)
 
         if not from_date and not to_date and not date:
             raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
