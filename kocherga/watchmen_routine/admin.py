@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Schedule, Task
+from .models import Schedule, Task, RewardImage
 
 class ScheduleInline(admin.TabularInline):
     model = Schedule
@@ -10,3 +10,8 @@ class TaskAdmin(admin.ModelAdmin):
     inlines = [
         ScheduleInline
     ]
+
+
+@admin.register(RewardImage)
+class RewardPictureAdmin(admin.ModelAdmin):
+    pass

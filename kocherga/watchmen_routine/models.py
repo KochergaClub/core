@@ -41,7 +41,7 @@ class Schedule(models.Model):
     )
     period = models.IntegerField(default=1)
 
-    routine = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='schedules')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='schedules')
 
     @property
     def weekday_short(self):
@@ -57,3 +57,6 @@ class Schedule(models.Model):
         if self.period != 1:
             result += '/' + str(self.period)
         return result
+
+class RewardImage(models.Model):
+    image_link = models.URLField(max_length=255)

@@ -70,6 +70,9 @@ class MagicLinkView(View):
             registered = True
 
         login(request, user)
+
+        return redirect(reverse('admin:index'))
+
         if registered:
             return redirect(reverse('registered'))
         else:
