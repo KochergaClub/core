@@ -7,10 +7,11 @@ import kocherga.slack
 import kocherga.cm.models
 
 class Member(models.Model):
-    short_name = models.CharField(max_length=20, blank=True)
-    full_name = models.CharField(max_length=80)
+    short_name = models.CharField('Короткое имя', max_length=20, blank=True)
+    full_name = models.CharField('Полное имя', max_length=80)
     # email - from user
     role = models.CharField(
+        'Должность',
         max_length=20,
         choices=[
             ('FOUNDER', 'Основатель'),
@@ -23,7 +24,7 @@ class Member(models.Model):
         ]
     )
 
-    is_current = models.BooleanField() # was: status
+    is_current = models.BooleanField('Текущий сотрудник')
     payment_type = models.CharField(
         max_length=10,
         blank=True,
@@ -33,9 +34,10 @@ class Member(models.Model):
         ]
     )
 
-    vk = models.CharField(max_length=255, blank=True)
+    vk = models.URLField('Профиль VK', max_length=255, blank=True)
 
     gender = models.CharField(
+        'Пол',
         max_length=10,
         null=True,
         choices=[
@@ -44,8 +46,13 @@ class Member(models.Model):
         ],
     )
 
-    cm_login = models.CharField(max_length=255, blank=True)
-    cm_customer = models.ForeignKey(kocherga.cm.models.Customer, null=True, on_delete=models.SET_NULL)
+    cm_login = models.CharField('Логин в CM', max_length=255, blank=True)
+    cm_customer = models.ForeignKey(
+        kocherga.cm.models.Customer,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='staff_member',
+    )
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
