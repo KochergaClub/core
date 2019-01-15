@@ -18,8 +18,6 @@ last_sms_guid = None
 def get_last_code():
     global last_sms_guid
 
-    start_ts = datetime.now().timestamp()
-
     conn = sqlite3.connect("/Users/berekuk/Library/Messages/chat.db")
     (guid, text, ts) = conn.execute(
         "SELECT guid, text, date / 1000000000 FROM message WHERE text LIKE 'Код: %' ORDER BY date DESC LIMIT 1"
