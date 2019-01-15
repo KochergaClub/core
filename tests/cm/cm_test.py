@@ -3,10 +3,11 @@ pytestmark = pytest.mark.usefixtures('db')
 
 import kocherga.cm.models
 import kocherga.cm.scraper
+import kocherga.cm.tools
 import kocherga.cm.importer
 
 def test_now_stats():
-    c = kocherga.cm.scraper.now_stats()
+    c = kocherga.cm.tools.now_stats()
     assert type(c["total"]) == int
 
 def test_load_customers():

@@ -40,7 +40,7 @@ def image_file():
 def image_storage(tmpdir):
     d = Path(tmpdir) / 'upload'
     d.mkdir()
-    settings.KOCHERGA_IMAGE_STORAGE_DIR = str(d)
+    settings.DATA_DIR = str(tmpdir)
     kocherga.images.image_storage = kocherga.images.init_global_image_storage()
     return kocherga.images.image_storage
 

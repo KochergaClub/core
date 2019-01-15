@@ -1,11 +1,9 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 from datetime import timedelta
 
 from kocherga.ludwig.bot import bot
-from kocherga.cm.tools import extend_subscription
 import kocherga.staff.tools
 
 
@@ -29,8 +27,7 @@ def react_new_video(message, url):
     logger.info(f"Got email: {email}")
 
     staff_member = kocherga.staff.tools.find_member_by_email(email)
-    card_id = staff_member.cm_card_id
     logger.info(f"Card ID: {card_id}")
 
-    subscription_until = extend_subscription(card_id, timedelta(days=7))
+    subscription_until = staff_member.cm_customer.extend_subscription(timedelta(days=7))
     return f"Спасибо! :heart:\nАбонемент продлён до {subscription_until:%Y-%m-%d}."

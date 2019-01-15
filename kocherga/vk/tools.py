@@ -9,7 +9,7 @@ from .helpers import upload_cover_image, group2id
 group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
 
 def update_cover():
-    now_total = kocherga.cm.scraper.now_stats()['total']
+    now_total = kocherga.cm.tools.now_stats()['total']
 
     api_root = settings.KOCHERGA_API_ROOT
     r = requests.get(

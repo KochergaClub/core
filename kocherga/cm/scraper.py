@@ -3,13 +3,13 @@ import re
 from datetime import datetime
 import json
 import dbm
+import os.path
 
 from django.conf import settings
 
-from .models import Customer
-
 DOMAIN = settings.CAFE_MANAGER_SERVER
 
+COOKIES_FILE = os.path.join(settings.DATA_DIR, 'cafe_manager_cookies.dbm')
 
 def get_new_cookies(login, password):
     r = requests.post(DOMAIN, data={"login": login, "pass": password})
@@ -22,38 +22,16 @@ def update_cookies():
 
     cookies = get_new_cookies(auth["login"], auth["password"])
 
-    with dbm.open(settings.CAFE_MANAGER_COOKIES_FILE, 'c') as db:
+    with dbm.open(COOKIES_FILE, 'c') as db:
         db['cookies'] = json.dumps(cookies.get_dict())
 
 
 def get_cookies():
-    with dbm.open(settings.CAFE_MANAGER_COOKIES_FILE) as db:
+    with dbm.open(COOKIES_FILE) as db:
         cookies = requests.cookies.RequestsCookieJar()
         cookies.update(json.loads(db['cookies']))
 
     return cookies
-
-
-def now_stats():
-    try:
-        r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
-    except ConnectionError as e:
-        raise Exception("Failed to connect to Cafe Manager: " + repr(e))
-
-    r.encoding = "utf-8"
-
-    match = re.search(r"Посетителей сейчас в зале: <b>(\d+)</b>", r.text)
-    if not match:
-        raise Exception("Failed to parse cafe-manager data " + r.text)
-    total = int(match.group(1))
-
-    customer_ids = [int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)]
-    customers = Customer.objects.filter(customer_id__in=customer_ids).all()
-
-    return {
-        "total": total,
-        "customers": customers,
-    }
 
 
 def load_customer_from_html(customer_id):

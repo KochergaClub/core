@@ -4,47 +4,9 @@ logger = logging.getLogger(__name__)
 from datetime import datetime
 import re
 import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from .models import Customer
-from .scraper import DOMAIN, load_customer_from_html, get_cookies
-
-def extend_subscription(card_id, period):
-    customer_from_db = Customer.objects.get(card_id=card_id, is_active=True)
-    customer_id = customer_from_db.customer_id
-    logger.info(f"Customer ID for card ID {card_id}: {customer_id}")
-    customer = load_customer_from_html(customer_id)  # we can't rely on DB cache here
-    url = f"{DOMAIN}/customer/{customer_id}/edit/"
-
-    subs_until = (
-        max(customer.get("subscription", datetime.now().date()), datetime.now().date())
-        + period
-    )
-    multipart_data = MultipartEncoder(
-        fields={
-            "card": customer["card"],
-            "name": customer["name"],
-            "family": customer["family"],
-            "phone": customer.get("phone_number", None),
-            "mail": customer.get("email", None),
-            "subs": subs_until.strftime("%d.%m.%Y"),
-            "subscr": "true" if customer["subscr"] else None,
-        }
-    )
-
-    r = requests.post(
-        url,
-        cookies=get_cookies(),
-        data=multipart_data,
-        headers={"Content-Type": multipart_data.content_type},
-    )
-    r.raise_for_status()
-
-    customer = load_customer_from_html(customer_id)  # we can't rely on DB cache here
-    if customer["subscription"] != subs_until:
-        raise Exception("Failed to extend a subscription, don't know why.")
-
-    return subs_until
+from .scraper import DOMAIN, get_cookies
 
 
 def add_customer(card_id, first_name, last_name, email):
@@ -89,3 +51,25 @@ def add_customer(card_id, first_name, last_name, email):
 
     print(r.text)
     raise Exception("Expected a message about success in response, got something else")
+
+
+def now_stats():
+    try:
+        r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
+    except ConnectionError as e:
+        raise Exception("Failed to connect to Cafe Manager: " + repr(e))
+
+    r.encoding = "utf-8"
+
+    match = re.search(r"Посетителей сейчас в зале: <b>(\d+)</b>", r.text)
+    if not match:
+        raise Exception("Failed to parse cafe-manager data " + r.text)
+    total = int(match.group(1))
+
+    customer_ids = [int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)]
+    customers = Customer.objects.filter(customer_id__in=customer_ids).all()
+
+    return {
+        "total": total,
+        "customers": customers,
+    }

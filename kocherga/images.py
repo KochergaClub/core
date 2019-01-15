@@ -8,6 +8,7 @@ from pathlib import Path
 import re
 import requests
 import hashlib
+import os.path
 
 import locale
 locale.setlocale(locale.LC_TIME, locale.normalize("ru"))
@@ -83,7 +84,7 @@ class ImageStorage:
 
 
 def init_global_image_storage():
-    return ImageStorage(settings.KOCHERGA_IMAGE_STORAGE_DIR)
+    return ImageStorage(os.path.join(settings.DATA_DIR, 'upload'))
 
 
 image_storage = init_global_image_storage()

@@ -14,7 +14,7 @@ import kocherga.images
 def upload(tmpdir):
     upload = tmpdir.mkdir('upload')
     settings.configure(
-        KOCHERGA_IMAGE_STORAGE_DIR = str(d)
+        DATA_DIR = str(tmpdir)
     )
     kocherga.images.image_storage.set_directory(upload)
 

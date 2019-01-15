@@ -1,6 +1,7 @@
 from .base import *
 from .dev_secrets import *
 
+DATA_DIR = '/Users/berekuk/coding/kocherga/data-dev'
 DEBUG = True
 
 INSTALLED_APPS += ['debug_toolbar']
@@ -20,7 +21,6 @@ KOCHERGA_MAILCHIMP_DATACENTER = 'us18'
 KOCHERGA_EVENT_MARKUP_SELF_MENTION = 'секта имени Юдковского'
 
 KOCHERGA_MONEY_TOCHKA_API = 'https://enter.tochka.com/sandbox/v1'
-KOCHERGA_MONEY_TOCHKA_TOKENS_FILE = '/Users/berekuk/coding/kocherga/upload-dev/tochka.dbm'
 
 KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759' # same as in prod.py, OFD is read-only anyway
 
@@ -68,13 +68,8 @@ KOCHERGA_TELEGRAM = {
     "core_api": {
         "api_id": 12345,
         "api_hash": "00000",
-        "session_file": "/Users/berekuk/coding/kocherga/upload-dev/telegram_core_api.session",
     },
 }
 
-KOCHERGA_IMAGE_STORAGE_DIR = '/Users/berekuk/coding/kocherga/upload-dev'
-
 KOCHERGA_API_ROOT = 'https://api-dev.kocherga.club'
 KOCHERGA_WEBSITE = 'https://yudkowsky.cult'
-
-CAFE_MANAGER_COOKIES_FILE = '/Users/berekuk/coding/kocherga/upload-dev/cafe_manager_cookies.dbm'

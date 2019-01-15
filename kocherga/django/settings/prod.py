@@ -1,6 +1,8 @@
 from .base import *
 from .prod_secrets import *
 
+import os
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -11,6 +13,7 @@ sentry_sdk.init(
 )
 
 DEBUG = False
+DATA_DIR = os.environ.get('DATA_DIR', '/data/kocherga')
 
 # Doesn't matter, really, since we use nginx as a reverse proxy.
 ALLOWED_HOSTS = ['*']
@@ -64,7 +67,6 @@ KOCHERGA_MAILCHIMP_DATACENTER = 'us11'
 KOCHERGA_EVENT_MARKUP_SELF_MENTION = 'антикафе Кочерга'
 
 KOCHERGA_MONEY_TOCHKA_API = 'https://enter.tochka.com/api/v1'
-KOCHERGA_MONEY_TOCHKA_TOKENS_FILE = '/data/kocherga/tochka.dbm' # hardcoded file path, this is bad (until we move to Docker)
 
 KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759' # TODO - replaced since 2018-12
 
@@ -113,13 +115,10 @@ KOCHERGA_TELEGRAM = {
     "core_api": {
         "api_id": 434030,
         "api_hash": "c13cbcfc179d34db2b2c862d2693606f",
-        "session_file": "/data/kocherga/telegram_core_api.session", # FIXME - hardcoded path
     },
 }
 
 KOCHERGA_BACKUPS_S3_BUCKET = 'kocherga-backups'
-
-KOCHERGA_IMAGE_STORAGE_DIR = '/data/kocherga/upload' # FIXME
 
 KOCHERGA_LUDWIG_SENTRY_DSN = 'https://d6daa44a06a846a98743000040168090:7b1fad4c93454acd90fe9f973934ba90@sentry.io/1161227' # TODO - move to sentry_sdk?
 
@@ -129,5 +128,3 @@ KOCHERGA_API_ROOT = 'https://api.kocherga.club'
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
 
 KOCHERGA_YANDEX_ORG_ID = 649407
-
-CAFE_MANAGER_COOKIES_FILE = '/data/kocherga/cafe_manager_cookies.dbm'

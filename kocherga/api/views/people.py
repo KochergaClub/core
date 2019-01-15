@@ -22,7 +22,7 @@ def now(request):
         logger.debug("return now stats from cache")
         return Response(stats_cached)
 
-    stats = kocherga.cm.scraper.now_stats()
+    stats = kocherga.cm.tools.now_stats()
 
     result = {
         "total": stats["total"],

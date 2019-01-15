@@ -45,7 +45,6 @@ class Member(models.Model):
     )
 
     cm_login = models.CharField(max_length=255, blank=True)
-    cm_card_id = models.IntegerField(null=True)
     cm_customer = models.ForeignKey(kocherga.cm.models.Customer, null=True, on_delete=models.SET_NULL)
 
     user = models.OneToOneField(

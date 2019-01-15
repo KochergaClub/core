@@ -5,6 +5,7 @@ import requests
 from datetime import date, datetime, timedelta
 import time
 import dbm
+import os.path
 
 from typing import Any, List, Iterable
 
@@ -17,7 +18,7 @@ import kocherga.importer.base
 
 # Docs: https://enter.tochka.com/doc/v1/index.html
 TOCHKA_API = settings.KOCHERGA_MONEY_TOCHKA_API
-TOKENS_FILE = settings.KOCHERGA_MONEY_TOCHKA_TOKENS_FILE
+TOKENS_FILE = os.path.join(settings.DATA_DIR, 'tochka.dbm')
 
 
 class Record(models.Model):
