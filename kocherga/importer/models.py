@@ -14,6 +14,9 @@ class State(models.Model):
     class Meta:
         db_table = 'importers_state'
 
+    def __str__(self):
+        return self.name
+
 def dt_now():
     return datetime.now(TZ)
 
