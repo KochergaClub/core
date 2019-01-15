@@ -42,16 +42,18 @@ def inflected_weekday(dt):
     ][dt.weekday()]
 
 
+WEEKDAY_NAMES = [
+    "понедельник",
+    "вторник",
+    "среда",
+    "четверг",
+    "пятница",
+    "суббота",
+    "воскресенье",
+]
+
 def weekday(dt):
-    return [
-        "понедельник",
-        "вторник",
-        "среда",
-        "четверг",
-        "пятница",
-        "суббота",
-        "воскресенье",
-    ][dt.weekday()]
+    return WEEKDAY_NAMES[dt.weekday()]
 
 
 def inflected_month(dt):
