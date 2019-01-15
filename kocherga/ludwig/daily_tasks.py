@@ -47,19 +47,25 @@ def task_attachment(task, status='new'):
         }
 
 def send_daily_tasks():
-    today_tasks = list(Task.objects.today_tasks())
+    tasks = list(Task.objects.today_tasks())
 
     if not today_tasks:
         return
 
-    bot.send_message(
-        text="Таски на сегодня:",
-        channel="#" + task.channel,
-        attachments=[
-            task_attachment(task)
-            for task in today_tasks
-        ],
+    channels = set(
+        task.channel for task in tasks
     )
+
+    for channel in channels:
+        bot.send_message(
+            text="Таски на сегодня:",
+            channel="#" + channel,
+            attachments=[
+                task_attachment(task)
+                for task in tasks
+                if task.channel == channel
+            ],
+        )
 
 @bot.schedule("cron", hour=9, minute=30)
 def daily_tasks_cron():
