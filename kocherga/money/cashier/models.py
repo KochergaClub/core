@@ -17,7 +17,7 @@ class CashierItem(models.Model):
         )
 
     id = models.AutoField(primary_key=True)
-    date = models.DateTimeField()
+    date = models.DateField()
     shift = models.CharField(max_length=40)
     watchman = models.CharField(max_length=100)
     cash_income = models.IntegerField(null=True)
