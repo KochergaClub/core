@@ -53,6 +53,8 @@ def import_spreadspeet_data():
             'Тренер': 'TRAINER',
             'Внешний консультант': 'CONSULTALT',
             'Волонтёр': 'VOLUNTEER',
+            'Разработчик': 'VOLUNTEER',
+            'Оператор админки': 'VOLUNTEER',
         }
         role = ROLES[row['Роль']]
 
