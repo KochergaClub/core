@@ -79,6 +79,15 @@ TEMPLATES = [
             ],
         },
     },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'jinja_templates'),
+        ],
+        'OPTIONS': {
+            'environment': 'kocherga.django.jinja2.environment',
+        },
+    },
 ]
 
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'

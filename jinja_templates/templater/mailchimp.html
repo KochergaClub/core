@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <base href="{{ url_root }}">
+    <style>
+     @font-face {
+       font-family: 'Intro';
+       src: local('Intro'), url('{{ static("fonts/intro.woff2") }}') format('woff2'), url('{{ static("fonts/intro.woff") }}') format('woff');
+     }
+     * {
+       margin: 0;
+       padding: 0;
+     }
+     body {
+       font-family: 'Intro';
+     }
+     main {
+       width: 900px;
+       heigth: 260px;
+       display: flex;
+       flex-direction: row;
+       justify-content: space-between;
+       align-items: center;
+     }
+     h1, h2 {
+       text-align: center;
+     }
+     h1 {
+       font-size: 96px;
+       line-height: 1.15;
+     }
+     h2 {
+       font-size: 32px;
+     }
+    </style>
+  </head>
+  <body>
+    {% set start_d = start_date | parse_date('%Y-%m-%d') %}
+    {% set end_d = end_date | parse_date('%Y-%m-%d') %}
+    {% set months = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'] %}
+    <main>
+      <img src="{{ static 'logo.png' }}" style="height: 260px; width: 260px;" />
+      <div style="flex: 1">
+        <h1>Кочерга</h1>
+        <h2>Расписание мероприятий</h2>
+        <h2>
+          {% if start_d.month == end_d.month %}
+          {{ start_d.day }} — {{ end_d.day }} {{ months[start_d.month] }}
+          {% else %}
+            {{ start_d.day }} {{ months[start_d.month] }} — {{ end_d.day }} {{ months[end_d.month] }}
+          {% endif %}
+        </h2>
+      </div>
+    </main>
+  </body>
+</html>
+<!-- width=900 height=260 -->

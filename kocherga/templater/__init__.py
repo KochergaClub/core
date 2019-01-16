@@ -2,27 +2,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
+import django.template.loader
 
 from pathlib import Path
 import datetime
 import re
 
 import pyppeteer
-import jinja2
 
 from .config import name2schema
-
-jinja_loader = jinja2.FileSystemLoader(
-    str(Path(__file__).parent.parent.parent / 'http_api' / 'templates' / 'templater')
-)
-
-jinja_env = jinja2.Environment(loader=jinja_loader)
-
-@jinja2.environmentfilter
-def parse_date(env, value, fmt):
-    return datetime.datetime.strptime(value, fmt)
-
-jinja_env.filters['parse_date'] = parse_date
 
 _browser = None
 async def get_browser():
@@ -47,7 +35,7 @@ class Template:
 
     @property
     def sizes(self):
-        (source, _, _) = jinja_loader.get_source(jinja_env, self.template_file)
+        source = open(self.template.origin.name, 'r').read()
 
         match = re.search(r"<!-- width=(\d+) height=(\d+)", source)
         (width, height) = (int(v) for v in match.groups())
@@ -55,11 +43,11 @@ class Template:
 
     @property
     def template_file(self):
-        return f'{self.name}.html'
+        return f'templater/{self.name}.html'
 
     @property
     def template(self):
-        return jinja_env.get_template(f'{self.name}.html')
+        return django.template.loader.get_template(self.template_file)
 
     def generate_html(self, args):
         props = {}
@@ -72,7 +60,7 @@ class Template:
 
         props['url_root'] = settings.KOCHERGA_API_ROOT
 
-        return self.template.render(**props)
+        return self.template.render(props)
 
     async def generate_png(self, props):
         html = self.generate_html(props)
