@@ -2,7 +2,7 @@ import requests
 
 from django.conf import settings
 
-import kocherga.cm.scraper
+import kocherga.cm.tools
 
 from .helpers import upload_cover_image, group2id
 

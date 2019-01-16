@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 
 import time
 
-import kocherga.cm.scraper
+import kocherga.cm.tools
 
 stats_cached_ts = None
 stats_cached = None
