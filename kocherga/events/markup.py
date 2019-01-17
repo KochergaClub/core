@@ -139,7 +139,7 @@ class Markup:
                 else:
                     result += part.name
             elif isinstance(part, SelfMention):
-                result += f'<a href="{settings.KOCHERGA_WEBSITE}">{settings.KOCHERGA_WEBSITE}</a>'
+                result += f'<a href="{settings.KOCHERGA_WEBSITE}">{settings.KOCHERGA_EVENT_MARKUP_SELF_MENTION}</a>'
             else:
                 raise Exception(f"Unknown part {part}")
 
