@@ -8,7 +8,7 @@ from kocherga.datetime import TZ
 import importlib
 
 IMPORTER_MODULES = [
-    "analytics.timeclub24.models",
+#    "analytics.timeclub24.models",
     "cm.importer",
     "events.db",
     "gitlab.models",
