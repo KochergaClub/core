@@ -2,10 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <base href="{{ url_root }}">
     <style>
      @font-face {
        font-family: 'Intro';
-       src: local('Intro'), url('{{ static("fonts/intro.woff2") }}') format('woff2'), url('{{ static("fonts/intro.woff") }}') format('woff');
+       src: url('{{ static("fonts/intro.woff2") }}') format('woff2'), url('{{ static("fonts/intro.woff") }}') format('woff');
      }
      * {
        margin: 0;
