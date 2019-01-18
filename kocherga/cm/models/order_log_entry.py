@@ -14,4 +14,4 @@ class OrderLogEntry(models.Model):
     ts = models.IntegerField(db_index=True)
     login = models.CharField(max_length=80)
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='log_entries')
