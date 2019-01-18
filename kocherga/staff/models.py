@@ -73,7 +73,7 @@ class Member(models.Model):
 
         primary_email = self.user.email.lower()
         alt_emails = [
-            a.email.lower() for a in self.alt_emails
+            a.email.lower() for a in self.alt_emails.all()
         ]
 
         for email in [primary_email] + alt_emails:
