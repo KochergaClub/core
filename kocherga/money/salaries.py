@@ -31,7 +31,7 @@ def short_name_stat_to_email_stat(stat):
         member = kocherga.staff.tools.find_member_by_short_name(k)
         if not member:
             raise Exception(f"Member {k} not found")
-        result[member.email] = v
+        result[member.user.email] = v
     return result
 
 def cm_login_stat_to_email_stat(stat):
@@ -40,7 +40,7 @@ def cm_login_stat_to_email_stat(stat):
         member = kocherga.staff.tools.find_member_by_cm_login(k)
         if not member:
             raise Exception(f"Member {k} not found")
-        result[member.email] = v
+        result[member.user.email] = v
     return result
 
 def shift_salaries(start_date, end_date):
