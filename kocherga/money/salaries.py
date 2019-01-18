@@ -101,8 +101,8 @@ def commission_bonuses(start_date, end_date):
         if not (start_date <= order.end_dt.date() <= end_date):
             continue
 
-        open_manager = order.log_entries.all()[0].login
-        close_manager = order.log_entries.all()[-1].login
+        open_manager = order.log_entries.first().login
+        close_manager = order.log_entries.last().login
         value = order.order_value
         commissions[open_manager] += value * 0.01
         commissions[close_manager] += value * 0.01
