@@ -315,10 +315,10 @@ def accept_event_visitors(payload, event_id):
 
     if value == 'no_record':
         event.visitors = 'no_record'
-        Event.save()
+        event.save()
     elif value == 'cancelled':
         event.visitors = 'cancelled'
-        Event.save()
+        event.save()
     else:
         raise Exception("Unknown value")
 
