@@ -75,7 +75,7 @@ class ObjectView(APIView):
         return Response(event.to_dict())
 
 
-    @auth("kocherga")
+    @auth("kocherga", method=True)
     def delete(self, request, event_id):
         event = Event.by_id(event_id)
         event.delete()
