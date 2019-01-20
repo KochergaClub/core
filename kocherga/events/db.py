@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from typing import Dict, Any
+from typing import List, Dict, Any
 
 from datetime import datetime, timedelta
 
@@ -75,7 +75,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2015, 8, 1, tzinfo=TZ)
 
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+    def load_updated_google_events(self, from_dt: datetime) -> List[Dict[str, Any]]:
         google_events = None
         too_old = from_dt < datetime.now(tz=TZ) - timedelta(days=7)
         if too_old:
@@ -89,30 +89,29 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                 order_by="updated",
                 updated_min=from_dt,
             )
+        return google_events
 
-        imported_events = [Event.from_google(ge) for ge in google_events]
+    def update_or_create_event(self, event):
+        try:
+            existing_event = Event.objects.get(pk=event.google_id)
+            logger.debug(f'Event {event.google_id}, title {event.title} - existing')
+            for prop in ('title', 'description', 'location', 'start_dt', 'end_dt', 'updated_dt'):
+                setattr(existing_event, prop, getattr(event, prop))
+            existing_event.save()
+        except Event.DoesNotExist:
+            logger.debug(f'Event {event.google_id}, title {event.title} - new')
+            event.save()
 
-        # Old comment:
-        # "We can't just Session().merge(...) a google event - it would override local db-only props"
-        #
-        # I'm not sure whether this still applies after we migrated Flask -> Django. Too lazy to investigate right now.
-        for imported_event in imported_events:
-            try:
-                existing_event = Event.objects.get(pk=imported_event.google_id)
-                logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - existing')
-                for prop in ('title', 'description', 'location', 'start_dt', 'end_dt', 'updated_dt'):
-                    setattr(existing_event, prop, getattr(imported_event, prop))
-            except Event.DoesNotExist:
-                logger.debug(f'Event {imported_event.google_id}, title {imported_event.title} - new')
-                imported_event.save()
+    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+        google_events = self.load_updated_google_events(from_dt)
 
-        if too_old:
-            return datetime.now(tz=TZ) - timedelta(days=1)
+        last_dt = from_dt
+        for google_event in google_events:
+            imported_event = Event.from_google(google_event)
+            last_dt = max(last_dt, imported_event.updated_dt)
+            self.update_or_create_event(imported_event)
 
-        if len(imported_events):
-            return max(e.updated_dt for e in imported_events)
-        else:
-            return from_dt
+        return last_dt
 
     def interval(self):
         return {"minutes": 1}
