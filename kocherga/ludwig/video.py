@@ -27,7 +27,6 @@ def react_new_video(message, url):
     logger.info(f"Got email: {email}")
 
     staff_member = kocherga.staff.tools.find_member_by_email(email)
-    logger.info(f"Card ID: {card_id}")
 
     subscription_until = staff_member.cm_customer.extend_subscription(timedelta(days=7))
     return f"Спасибо! :heart:\nАбонемент продлён до {subscription_until:%Y-%m-%d}."
