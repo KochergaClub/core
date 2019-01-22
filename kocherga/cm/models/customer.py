@@ -9,6 +9,7 @@ import requests
 from kocherga.datetime import TZ
 
 from kocherga.cm.scraper import DOMAIN, get_cookies, load_customer_from_html
+from .order import Order
 
 class Gender(enum.Enum):
     unknown = 0
@@ -210,3 +211,11 @@ class Customer(models.Model):
             raise Exception("Failed to extend a subscription, don't know why.")
 
         return subs_until
+
+    def orders(self):
+        qs = Order.objects.filter(card_id=self.card_id)
+        if self.activity_started:
+            qs = qs.filter(start_ts__gte=self.activity_started.timestamp())
+        if self.activity_ended:
+            qs = qs.filter(end_ts__lte=self.activity_ended.timestamp())
+        return qs
