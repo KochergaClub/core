@@ -48,7 +48,7 @@ class Order(models.Model):
             'order_value': 'Сумма заказа',
             'time_value': 'Стоимость времени',
             'stuff_value': 'Стоимость товаров',
-            'payment_type': 'Тип оплаты',
+            'payment_type': ' Тип оплаты',
             'is_fixed': 'Фикс',
             'client_name': 'Клиент',
             'manager': 'Менеджер',

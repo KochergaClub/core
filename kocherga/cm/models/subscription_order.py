@@ -26,7 +26,7 @@ class SubscriptionOrder(models.Model):
         field_map = {
             'card_id': 'Номер карты',
             'order_value': 'Сумма заказа',
-            'payment_type': 'Тип оплаты',
+            'payment_type': ' Тип оплаты',
             'client_name': 'Клиент',
             'manager': 'Менеджер',
         }
@@ -48,4 +48,8 @@ class SubscriptionOrder(models.Model):
             csv_row["Дата начала"], csv_row["Время начала"]
         )
 
-        return cls(**params)
+        (obj, created) = SubscriptionOrder.objects.update_or_create(
+            card_id=params['card_id'], ts=params['ts'],
+            defaults=params,
+        )
+        return obj
