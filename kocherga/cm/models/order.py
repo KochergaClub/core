@@ -67,7 +67,7 @@ class Order(models.Model):
                 if value == "":
                     value = None
                 else:
-                    value = int(float(value))
+                    value = int(float(value.replace(',', '.')))
 
             if field.name == 'card_id' and value > 2147483647:
                 value = 2147483647 # this bad order fails to import to the db: https://kocherga.cafe-manager.ru/order/29541/
@@ -89,6 +89,10 @@ class Order(models.Model):
 
         params["imported_ts"] = datetime.now(TZ).timestamp()
 
+        (obj, created) = Order.objects.update_or_create(
+            order_id=params['order_id'],
+            defaults=params,
+        )
         return cls(**params)
 
     @property

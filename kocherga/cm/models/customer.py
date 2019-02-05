@@ -132,7 +132,8 @@ class Customer(models.Model):
                     value = value[:-1]
                 if value == '':
                     value = 0
-                value = int(float(value))
+                else:
+                    value = int(float(value.replace(',', '.')))
             # Order for this and the following case is important - seems like DateTimeField subclasses DateField.
             elif isinstance(field, models.fields.DateTimeField):
                 if value == '':
