@@ -93,7 +93,7 @@ class Order(models.Model):
             order_id=params['order_id'],
             defaults=params,
         )
-        return cls(**params)
+        return obj
 
     @property
     def start_dt(self):
