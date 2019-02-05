@@ -174,6 +174,7 @@ class Importer(kocherga.importer.base.FullImporter):
         for entry in log_entries:
             entry.save()
         order.log_imported_ts = datetime.now().timestamp()
+        order.save()
 
     def do_full_import(self, session):
         logger.info("Loading orders")
