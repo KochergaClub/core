@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
-import pathlib, sys
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
+import sys, os.path
+from pathlib import Path
+sys.path.append(
+    os.path.abspath(
+        str(Path(__file__).parent.parent)
+    )
+)
+
+import os, django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+django.setup()
 
 import kocherga.events.timepad
 import kocherga.email.lists
