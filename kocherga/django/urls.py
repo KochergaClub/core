@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('kocherga.auth.urls')),
     path('api/', include('kocherga.api.urls')),
+    path('team/ratio/', include('kocherga.ratio.urls')),
 ]
 
 if settings.DEBUG:

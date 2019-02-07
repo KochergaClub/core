@@ -85,6 +85,7 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'jinja_templates'),
         ],
+        'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'kocherga.django.jinja2.environment',
         },

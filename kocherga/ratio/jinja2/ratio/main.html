@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Ratio{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Воркшопы и тренинги</h1>
+  <div>Ближайший тренинг: <a href="{{ training_url }}">{{ training.name }}</a></div>
+  <div>Когда: <strong>{{ training.date }}</strong></div>
+  <h3>Число участников: <a href="{{ tickets_url }}">{{ training.tickets_count() }}</a></h3>
+  <div>
+    <form method="post">
+      {{ csrf_input }}
+      <input type="submit" class="btn btn-primary" value="Отправить участников в mailchimp" />
+    </form>
+  </div>
+</div>
+{% endblock %}

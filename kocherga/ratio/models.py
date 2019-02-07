@@ -2,6 +2,11 @@ from django.db import models
 from django.conf import settings
 
 import hashlib
+from datetime import date
+
+class TrainingManager(models.Manager):
+    def next_training(self):
+        return Training.objects.filter(date__gt=date.today()).order_by('date').first()
 
 class Training(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
@@ -12,10 +17,15 @@ class Training(models.Model):
     post_survey_link = models.URLField('Форма пострассылки', blank=True)
     gdrive_link = models.URLField('Материалы', blank=True)
 
+    objects = TrainingManager()
+
     class Meta:
         verbose_name = 'Тренинг'
         verbose_name_plural = 'Тренинги'
         ordering = ['-date']
+        permissions = (
+            ('manage', 'Может управлять тренингами'),
+        )
 
     def __str__(self):
         return self.name

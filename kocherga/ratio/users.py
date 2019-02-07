@@ -13,7 +13,6 @@ import kocherga.mailchimp
 from .models import Training, Ticket
 
 LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
-SPREADSHEET_ID = settings.KOCHERGA_RATIO_USERS_SPREADSHEET_ID
 MAILCHIMP_TRAINING_CATEGORY_NAME = 'Участники тренингов'
 
 
@@ -71,7 +70,7 @@ def training2mailchimp(training):
 def sheet2db():
     gc = kocherga.google.gspread_client()
 
-    spreadsheet = gc.open_by_key(SPREADSHEET_ID)
+    spreadsheet = gc.open_by_key(settings.KOCHERGA_RATIO_USERS_SPREADSHEET_ID)
     worksheet = spreadsheet.worksheet(f"Все участники")
 
     rows = worksheet.get_all_records()
