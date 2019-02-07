@@ -4,7 +4,7 @@ from .models import Training, Ticket
 
 @admin.register(Training)
 class TrainingAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'date', 'tickets_count', 'total_income')
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
