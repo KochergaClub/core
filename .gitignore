@@ -9,3 +9,4 @@ __pycache__
 /node_modules
 .ipynb_checkpoints
 /notebooks/scratch.ipynb
+/collected_static
