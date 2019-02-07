@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'kocherga.staff',
     'kocherga.api',
     'kocherga.watchmen_routine',
+    'kocherga.ratio',
 ]
 
 MIDDLEWARE = [
