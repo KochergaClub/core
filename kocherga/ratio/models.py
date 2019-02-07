@@ -1,4 +1,7 @@
 from django.db import models
+from django.conf import settings
+
+import hashlib
 
 class Training(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
@@ -51,3 +54,8 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f'{self.training} - {self.email}'
+
+    # UID is used for sharing anonymised data with third-party, e.g. with academy crowd when we collect data from rationality tests.
+    def uid(self):
+        SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
+        return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]

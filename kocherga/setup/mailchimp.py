@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 import kocherga.mailchimp
 import kocherga.email.weekly_digest
+import kocherga.ratio.users
 
 def create_mailchimp_file_folder(name):
     folders = kocherga.mailchimp.api_call(
@@ -55,7 +56,7 @@ def setup_mailchimp():
     kocherga.mailchimp.create_campaign_folder('Еженедельная рассылка')
     kocherga.mailchimp.create_campaign_folder('Воркшопы')
     create_mailchimp_interest_group('Подписки', 'checkboxes')
-    create_mailchimp_interest_group('Участники воркшопа', 'hidden')
+    create_mailchimp_interest_group(kocherga.ratio.users.MAILCHIMP_TRAINING_CATEGORY_NAME, 'hidden')
     create_mailchimp_interest('Подписки', 'Материалы и новости')
     create_mailchimp_interest('Подписки', 'Расписание мероприятий')
     create_mailchimp_interest('Подписки', 'Уведомления о новых тренингах')
