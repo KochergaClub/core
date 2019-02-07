@@ -17,6 +17,8 @@ class Training(models.Model):
     post_survey_link = models.URLField('Форма пострассылки', blank=True)
     gdrive_link = models.URLField('Материалы', blank=True)
 
+    mailchimp_interest_id = models.CharField('ID Mailchimp-группы', max_length=20, blank=True)
+
     objects = TrainingManager()
 
     class Meta:
