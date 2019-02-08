@@ -8,22 +8,31 @@ from .users import training2mailchimp
 
 from urllib.parse import urlencode
 
-class MainView(UserPassesTestMixin, View):
-
+class RatioManagerMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.has_perm('ratio.manage')
 
+
+class MainView(RatioManagerMixin, View):
     def get(self, request):
-        training = Training.objects.next_training()
+        trainings = Training.objects.all()
+        return render(request, 'ratio/index.html', {
+            'trainings': trainings,
+        })
+
+
+class TrainingView(RatioManagerMixin, View):
+    def get(self, request, name):
+        training = Training.objects.get(name=name)
         training_url = reverse('admin:ratio_training_change', args=(training.name,))
         tickets_url = reverse('admin:ratio_ticket_changelist') + '?' + urlencode({ 'training__name__exact': training.name })
 
-        return render(request, 'ratio/main.html', {
+        return render(request, 'ratio/training.html', {
             'training': training,
             'training_url': training_url,
             'tickets_url': tickets_url,
         })
 
-    def post(self, request):
-        training2mailchimp(Training.objects.next_training())
+    def post(self, request, name):
+        training2mailchimp(Training.objects.get(name=name))
         return redirect('ratio:index')
