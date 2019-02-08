@@ -7,10 +7,11 @@ class Trainer(models.Model):
         on_delete=models.CASCADE,
         related_name='ratio_trainer',
     )
+    short_name = models.CharField('Короткое имя', max_length=40)
 
     class Meta:
         verbose_name = 'Тренер'
         verbose_name_plural = 'Тренеры'
 
     def __str__(self):
-        return self.user.email
+        return self.short_name
