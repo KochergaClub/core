@@ -43,5 +43,5 @@ class ScheduleView(RatioManagerMixin, View):
         training = Training.objects.get(name=name)
         return render(request, 'ratio/schedule.html', {
             'name': training.name,
-            'schedule': training.schedule.all(),
+            'schedule_by_day': training.schedule_by_day(),
         })

@@ -2,6 +2,7 @@ from django.db import models
 
 import hashlib
 from datetime import date
+from collections import OrderedDict
 
 class TrainingManager(models.Manager):
     def next_training(self):
@@ -38,3 +39,12 @@ class Training(models.Model):
     def total_income(self):
         return sum(ticket.payment_amount for ticket in self.tickets.all())
     total_income.short_description = 'Суммарный доход'
+
+    def schedule_by_day(self):
+        result = OrderedDict()
+        for activity in self.schedule.all():
+            day = activity.day
+            if day not in result:
+                result[day] = []
+            result[day].append(activity)
+        return result

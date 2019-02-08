@@ -7,15 +7,44 @@
  .ratio-schedule {
    text-align: center;
  }
+
+ .ratio-schedule-section {
+   margin-bottom: 1em;
+ }
+ .ratio-schedule-section > time {
+   font-style: italic;
+ }
+ .ratio-schedule-section > header {
+   font-weight: bold;
+ }
+ .ratio-schedule-break {
+   font-style: italic;
+   color: #666;
+   margin-bottom: 1em;
+ }
 </style>
 <div class="container ratio-schedule">
   <h1>{{ name }}</h1>
-  {% for activity in schedule %}
-  <section>
-    <time>{{ activity.time }}</time>
-    <header>{{ activity.name }}</header>
-    <div>[{{ activity.trainer }}]</div>
-  </section>
+
+  {% for day, activities in schedule_by_day.items() %}
+  <h2>День {{ day }}</h2>
+
+  {% for activity in activities %}
+
+    {% if activity.activity_type == 'section' %}
+    <section class="ratio-schedule-section">
+      <time>{{ activity.time.strftime('%H:%M') }}</time>
+      <header>{{ activity.name }}</header>
+      <div>[{{ activity.trainer }}]</div>
+    </section>
+    {% elif activity.activity_type == 'break' %}
+    <section class="ratio-schedule-break">
+      (<time>{{ activity.time.strftime('%H:%M') }}</time> {{ activity.name }})
+    </section>
+    {% endif %}
+
   {% endfor %}
+  {% endfor %}
+
 </div>
 {% endblock %}
