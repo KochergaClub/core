@@ -7,6 +7,7 @@
   <h1>{{ training.name }}</h1>
   <p>Когда: <strong>{{ training.date }}</strong></p>
   <p>Число участников: <a href="{{ tickets_url }}">{{ training.tickets_count() }}</a></p>
+  <p><a href="{{ url('ratio:schedule', kwargs={'name': training.name}) }}">Расписание</a></p>
   <div>
     <form method="post">
       {{ csrf_input }}

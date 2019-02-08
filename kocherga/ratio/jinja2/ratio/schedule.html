@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{name}}{% endblock %}
+
+{% block content %}
+<style>
+ .ratio-schedule {
+   text-align: center;
+ }
+</style>
+<div class="container ratio-schedule">
+  <h1>{{ name }}</h1>
+  {% for activity in schedule %}
+  <section>
+    <time>{{ activity.time }}</time>
+    <header>{{ activity.name }}</header>
+    <div>[{{ activity.trainer }}]</div>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}
