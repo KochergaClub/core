@@ -6,38 +6,71 @@
 <style>
  .ratio-schedule {
    text-align: center;
-   font-size: 1.2em;
  }
 
  @media print {
    .ratio-schedule-control {
      display: none;
    }
+
+   .ratio-schedule-day-footer {
+     position: fixed;
+     bottom: 0;
+     width: 100%;
+   }
+ }
+
+ .ratio-schedule hr {
+   margin: 32px 0;
+   height: 1px;
+   border: 0;
+   border-top: 1px solid #ddd;
  }
 
  .ratio-schedule-day {
    page-break-after: always;
  }
+ .ratio-schedule-day-header {
+   font-size: 32px;
+   font-weight: bold;
+ }
 
  .ratio-schedule-section {
-   margin-bottom: 1.5em;
+   margin-bottom: 32px;
  }
  .ratio-schedule-section > time {
    font-style: italic;
-   font-size: 1.4em;
+   font-size: 24px;
  }
  .ratio-schedule-section > header {
-   font-weight: bold;
-   font-size: 1.4em;
+   font-size: 24px;
+   font-weight: 600;
+   margin: 8px 0;
  }
  .ratio-schedule-bonus {
-   font-size: 1.4em;
+   font-size: 24px;
  }
  .ratio-schedule-break {
    font-style: italic;
    color: #666;
-   margin-top: 2em;
-   margin-bottom: 2em;
+   margin-top: 32px;
+   margin-bottom: 32px;
+ }
+
+ .ratio-schedule-day-footer {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   color: #666;
+ }
+ .ratio-schedule-day-footer--branding {
+   display: flex;
+   align-items: center;
+   font-family: Intro;
+ }
+ .ratio-schedule-day-footer--branding img {
+   height: 32px;
+   margin-right: 8px;
  }
 </style>
 <div class="ratio-schedule">
@@ -52,7 +85,7 @@
 
   {% for day, activities in schedule_by_day.items() %}
   <section class="ratio-schedule-day">
-  <h2>День {{ day }}</h2>
+  <header class="ratio-schedule-day-header">День {{ day }}</header>
   <hr>
 
   {% for activity in activities %}
@@ -77,6 +110,13 @@
 
   {% endfor %}
 
+    <footer class="ratio-schedule-day-footer">
+      <div class="ratio-schedule-day-footer--branding">
+        <img src="{{ static('logo.png') }}">
+        <div>Кочерга</div>
+      </div>
+      <div>{{ long_name }}</div>
+    </footer>
   </section>
   {% endfor %}
 

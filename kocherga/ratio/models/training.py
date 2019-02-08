@@ -4,6 +4,8 @@ import hashlib
 from datetime import date
 from collections import OrderedDict
 
+from kocherga.datetime import inflected_month
+
 class TrainingManager(models.Manager):
     def next_training(self):
         return Training.objects.filter(date__gt=date.today()).order_by('date').first()
@@ -48,3 +50,7 @@ class Training(models.Model):
                 result[day] = []
             result[day].append(activity)
         return result
+
+    @property
+    def long_name(self):
+        return f'Воркшоп по прикладной рациональности {self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
