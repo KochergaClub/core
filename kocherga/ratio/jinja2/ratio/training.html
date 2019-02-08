@@ -3,16 +3,26 @@
 {% block title %}Ratio{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h1>{{ training.name }}</h1>
-  <p>Когда: <strong>{{ training.date }}</strong></p>
-  <p>Число участников: <a href="{{ tickets_url }}">{{ training.tickets_count() }}</a></p>
-  <p><a href="{{ url('ratio:schedule', kwargs={'name': training.name}) }}">Расписание</a></p>
-  <div>
-    <form method="post">
-      {{ csrf_input }}
-      <input type="submit" class="btn btn-primary" value="Отправить участников в mailchimp" />
-    </form>
-  </div>
+<h1>{{ training.name }}</h1>
+<p>Когда: <strong>{{ training.date }}</strong></p>
+
+<section>
+  <h2>Участники: <a href="{{ tickets_url }}">{{ training.tickets_count() }}</a></h2>
+  <ul>
+    {% for ticket in training.tickets.all() %}
+    <li>{{ ticket.email }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<div>
+  <form method="post">
+    {{ csrf_input }}
+    <input type="submit" value="Отправить участников в mailchimp" />
+  </form>
 </div>
+
+<section>
+  <a href="{{ url('ratio:schedule', kwargs={'name': training.name}) }}">Расписание</a>
+</section>
 {% endblock %}
