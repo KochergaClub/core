@@ -23,7 +23,7 @@
     Номер вашей карты: <strong>{{customer.card_id}}</strong>
     </p>
     {% if customer.subscription_until %}
-    <p>Абонемент действует до <strong>{{ customer.subscription_until.date() }}</strong>.
+    <p>Абонемент до <strong>{{ customer.subscription_until }}</strong>.
     {% endif %}
     <p
     {% if orders|length %}
