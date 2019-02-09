@@ -69,6 +69,8 @@ class MagicLinkView(View):
         registered = False
         try:
             user = User.objects.get(email=email)
+            if not user.last_login:
+                registered = True # existed from external data source, e.g. cm_customers
         except User.DoesNotExist:
             user = User.objects.create_user(email)
             registered = True
