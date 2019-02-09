@@ -27,7 +27,7 @@ class LoginView(View):
             return redirect('/')
 
         return render(request, 'auth/login.html', {
-            'form': LoginForm,
+            'form': str(LoginForm()),
         })
 
     def post(self, request):
@@ -53,7 +53,7 @@ class LoginView(View):
 
 class SentMagicLinkView(View):
     def get(self, request):
-        return HttpResponse('go click a link in the email we sent')
+        return render(request, 'auth/check-your-email.html')
 
 class MagicLinkView(View):
     def get(self, request):

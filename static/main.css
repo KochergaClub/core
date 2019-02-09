@@ -8,3 +8,22 @@ main {
   max-width: 1080px;
   margin: 0 auto;
 }
+
+/* styles copy-pasted from frontkit */
+button {
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 0;
+  color: rgb(32, 80, 96);
+  cursor: pointer;
+  padding: 5px 8px;
+  overflow: hidden;
+  border-width: 2px;
+  border-style: solid;
+  border-image: initial;
+  border-color: rgb(179, 217, 230);
+  background: linear-gradient(rgb(236, 245, 249) 0%, rgb(244, 249, 251) 100%);
+}
+button:hover {
+  border-color: rgb(140, 198, 217);
+}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Логин{% endblock %}
+
+{% block content %}
+<style>
+ .auth-container {
+   margin: 0 auto;
+   margin-top: 30vh;
+   max-width: 320px;
+ }
+</style>
+<div class="auth-container">
+  {% block auth_content %}
+  Тут должен быть контент страницы.
+  {% endblock %}
+</div>
+{% endblock %}

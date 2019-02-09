@@ -1,0 +1,22 @@
+{% extends 'auth/layout.html' %}
+
+{% block auth_content %}
+<style>
+ .login-form {
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+ }
+
+ .login-form button {
+   margin-top: 4px;
+   width: 100%;
+ }
+</style>
+
+<form method="post" class="login-form">
+  {{ csrf_input }}
+  {{ form }}
+  <button type="submit">Войти</button>
+</form>
+{% endblock %}
