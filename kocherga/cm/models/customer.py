@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 import enum
 from datetime import datetime
@@ -37,6 +39,12 @@ class Customer(models.Model):
         blank=True,
     )
     email = models.CharField(max_length=255, db_index=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+    )
     time_discount = models.IntegerField()
     is_active = models.BooleanField()  # "Активный" / "В архиве"
 
@@ -159,7 +167,20 @@ class Customer(models.Model):
 
             params[field.name] = value
 
-        return Customer(**params)
+        email = params['email']
+        if email and params['is_active']:
+            User = get_user_model()
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = User.objects.create_user(email)
+            params['user'] = user
+
+        (obj, created) = Customer.objects.update_or_create(
+            customer_id=params['customer_id'],
+            defaults=params,
+        )
+        return obj
 
     @property
     def privacy_mode(self):

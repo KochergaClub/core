@@ -179,28 +179,26 @@ class Importer(kocherga.importer.base.FullImporter):
     def do_full_import(self, session):
         logger.info("Loading orders")
         orders = load_orders()
-        logger.info("Merging orders")
-        for order in orders:
-            order.save()
 
         logger.info(f"Imported {len(orders)} orders")
 
-        query = (
-            Order.objects.filter(
-                Q(log_imported_ts__lt=datetime.now().timestamp() - 86400)
-                | Q(log_imported_ts__isnull=True)
+        logger.info("Importing order logs")
+
+        for (q, note) in (
+                (Q(log_imported_ts__lt=datetime.now().timestamp() - 86400), 'stale'),
+                (Q(log_imported_ts__isnull=True), 'never imported'),
+        ):
+            logger.info(f"Importing {note} order logs")
+            query = (
+                Order.objects.filter(q).order_by('-order_id')
             )
-            .order_by('-order_id')
-        )
-        for order in query[:self.log_portion_size]:
-            self.import_order_log(order)
+            for order in query[:self.log_portion_size]:
+                self.import_order_log(order)
 
         logger.info("Loading customers")
         customers = load_customers()
-        logger.info("Merging customers")
-        for customer in customers:
-            customer.save()
 
+        logger.info("Uploading customers to Mailchimp")
         kocherga.email.lists.populate_main_list([
             kocherga.email.lists.User(
                 email=c.email,
