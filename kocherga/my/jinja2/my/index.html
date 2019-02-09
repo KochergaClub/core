@@ -5,9 +5,17 @@
 {% block content %}
 <div>
   <h1>Личный кабинет Кочерги</h1>
+
   <div>
   Аккаунт: <code>{{ email }}</code>
   </div>
+
+  {% if is_staff %}
+  <div>
+    <a href="{{ url('admin:index') }}">Перейти в админку</a>
+  </div>
+  {% endif %}
+
   {% if customer %}
     <p>
     Номер вашей карты: <strong>{{customer.card_id}}</strong>

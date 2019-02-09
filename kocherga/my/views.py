@@ -6,5 +6,6 @@ class MainView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'my/index.html', {
             'email': request.user.email,
+            'is_staff': request.user.is_staff,
             'customer': request.user.customer if hasattr(request.user, 'customer') else None,
         })

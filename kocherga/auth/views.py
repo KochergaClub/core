@@ -42,7 +42,7 @@ class LoginView(View):
         magic_token = get_magic_token(email)
         params_str = urllib.parse.urlencode({
             'token': magic_token,
-            'next': request.GET.get('next', reverse('admin:index')),
+            'next': request.GET.get('next', reverse('my:index')),
         })
         magic_link = request.build_absolute_uri(reverse('auth:magic-link') + '?' + params_str)
 
@@ -80,14 +80,12 @@ class MagicLinkView(View):
         if registered:
             return redirect(reverse('auth:registered'))
         else:
-            next_url = request.GET.get('next', reverse('admin:index'))
+            next_url = request.GET.get('next', reverse('my:index'))
             return redirect(next_url)
 
 class RegisteredView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'auth/registered.html', {
-            'is_staff': request.user.is_staff,
-        })
+        return render(request, 'auth/registered.html')
 
 class LogoutView(View):
     def get(self, request):
