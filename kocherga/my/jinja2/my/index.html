@@ -8,7 +8,7 @@
 
   <div>
     Аккаунт: <code>{{ email }}</code>.
-    <a href={{ url('admin:logout') }}>Выйти</a>
+    <a href="/logout">Выйти</a>
   </div>
 
   {% if is_staff %}
@@ -22,6 +22,10 @@
     <p>
     Номер вашей карты: <strong>{{customer.card_id}}</strong>
     </p>
+    {% if customer.subscription_until %}
+    <p>Абонемент действует до <strong>{{ customer.subscription_until.date() }}</strong>.
+    {% endif %}
+    <p
     {% if orders|length %}
     <p>
       Последнее посещение:

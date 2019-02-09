@@ -48,7 +48,7 @@ class Customer(models.Model):
     time_discount = models.IntegerField()
     is_active = models.BooleanField()  # "Активный" / "В архиве"
 
-    # can be restored from subscriptions table (when we import it)
+    # can be restored from subscriptions table.
     subscription_until = models.DateField(null=True)
 
     # maybe important
