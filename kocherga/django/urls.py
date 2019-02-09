@@ -24,6 +24,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
     path('api/', include('kocherga.api.urls')),
     path('team/ratio/', include('kocherga.ratio.urls')),
+    path('my/', include('kocherga.my.urls')),
     path('', include('kocherga.auth.urls')),
     path('admin/', admin.site.urls),
 ]
