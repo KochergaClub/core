@@ -15,18 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path, include, reverse
 from django.views.generic.base import TemplateView, RedirectView
 
 import kocherga.auth.views
 
 urlpatterns = [
     path('', RedirectView.as_view(url='https://kocherga-club.ru')),
-    path('admin/login/', kocherga.auth.views.LoginView.as_view()),
-    path('admin/', admin.site.urls),
-    path('auth/', include('kocherga.auth.urls')),
     path('api/', include('kocherga.api.urls')),
     path('team/ratio/', include('kocherga.ratio.urls')),
+    path('', include('kocherga.auth.urls')),
+    path('admin/', admin.site.urls),
 ]
 
 if settings.DEBUG:
