@@ -85,7 +85,9 @@ class MagicLinkView(View):
 
 class RegisteredView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'auth/registered.html')
+        return render(request, 'auth/registered.html', {
+            'is_staff': request.user.is_staff,
+        })
 
 class LogoutView(View):
     def get(self, request):

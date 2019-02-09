@@ -21,7 +21,7 @@ from django.views.generic.base import TemplateView, RedirectView
 import kocherga.auth.views
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='https://kocherga-club.ru')),
+    path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
     path('api/', include('kocherga.api.urls')),
     path('team/ratio/', include('kocherga.ratio.urls')),
     path('', include('kocherga.auth.urls')),

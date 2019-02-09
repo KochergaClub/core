@@ -1,5 +1,9 @@
 {% extends 'auth/layout.html' %}
 
 {% block auth_content %}
-Вы вошли! <a href="{{ url('admin:index') }}">Перейти в админку</a>
+Вы вошли!<br>
+<a href="{{ url('root') }}">Перейти на сайт</a>
+{% if is_staff %}
+<br><a href="{{ url('admin:index') }}">Перейти в админку</a>
+{% endif %}
 {% endblock %}
