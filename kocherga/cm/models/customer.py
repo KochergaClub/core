@@ -52,31 +52,37 @@ class Customer(models.Model):
     subscription_until = models.DateField(null=True)
 
     # maybe important
-    comment = models.TextField()
+    comment = models.TextField(blank=True)
 
     # mostly unused
-    phone_number = models.CharField(max_length=40)
-    phone_number2 = models.CharField(max_length=40)
-    vk_link = models.CharField(max_length=1024)
-    fb_link = models.CharField(max_length=1024)
-    twitter_link = models.CharField(max_length=1024)
-    instagram_link = models.CharField(max_length=1024)
-    skype_link = models.CharField(max_length=1024)
-    website_link = models.CharField(max_length=1024)
-    birthday = models.DateField(null=True)
-    address = models.CharField(max_length=1024)
+    phone_number = models.CharField(max_length=40, blank=True)
+    phone_number2 = models.CharField(max_length=40, blank=True)
+    vk_link = models.CharField(max_length=1024, blank=True)
+    fb_link = models.CharField(max_length=1024, blank=True)
+    twitter_link = models.CharField(max_length=1024, blank=True)
+    instagram_link = models.CharField(max_length=1024, blank=True)
+    skype_link = models.CharField(max_length=1024, blank=True)
+    website_link = models.CharField(max_length=1024, blank=True)
+    birthday = models.DateField(blank=True, null=True)
+    address = models.CharField(max_length=1024, blank=True)
 
-    ref = models.CharField(max_length=1024)
-    ref2 = models.CharField(max_length=1024)
+    ref = models.CharField(max_length=1024, blank=True)
+    ref2 = models.CharField(max_length=1024, blank=True)
     mailing_list = models.BooleanField()  # useless - filled randomly
 
     goods_discount = models.IntegerField()
 
     # can probably be restored from other data
     activity_started = models.DateTimeField(null=True)
-    activity_ended = models.DateTimeField(null=True)
+    activity_ended = models.DateTimeField(null=True, blank=True)
     last_visit = models.DateField(null=True)
     total_spent = models.IntegerField()
+
+    # local fields - not from CM
+    privacy_mode = models.CharField('Приватность', max_length=40, default='private', choices=(
+        ('private', 'private'),
+        ('public', 'public'),
+    ))
 
     def __str__(self):
         return f'{self.card_id} {self.first_name or ""} {self.last_name or ""}'
@@ -181,12 +187,6 @@ class Customer(models.Model):
             defaults=params,
         )
         return obj
-
-    @property
-    def privacy_mode(self):
-        if self.comment and 'PRIVACY:PUBLIC' in self.comment:
-            return 'public'
-        return 'private'
 
 
     def _http_update_customer(self, data):

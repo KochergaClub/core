@@ -26,10 +26,10 @@
     <p>Абонемент до <strong>{{ customer.subscription_until }}</strong>.
     {% endif %}
 
-    {% if orders|length %}
+    {% if customer.last_visit %}
     <p>
       Последнее посещение:
-      <strong>{{ orders[-1].end_dt.date() }}</strong>
+      <strong>{{ customer.last_visit }}</strong>
     </p>
     {% endif %}
     <p>
@@ -38,6 +38,16 @@
     <p>
       Суммарно вы потратили в Кочерге <strong>{{ customer.total_spent }}</strong> руб.
     </p>
+
+    <section>
+      <h3>Настройки приватности</h3>
+      Ваше присутствие <strong>{% if customer.privacy_mode == 'public' %}отображается{% else %}не отображается{% endif %}</strong> на <a href="https://now.kocherga.club" >now.kocherga.club</a> и телевизорах в Кочерге.
+      <form method="post" action="{{ url('my:set-privacy-mode') }}">
+        {{ csrf_input }}
+        <input type="hidden" value="{{ opposite_privacy_mode }}" name="privacy_mode">
+        <input type="submit" value="{{ 'Отключить' if customer.privacy_mode == 'public' else 'Включить' }}">
+      </form>
+    </section>
   {% else %}
     <p>
       <i>
