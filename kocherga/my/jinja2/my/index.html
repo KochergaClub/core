@@ -36,7 +36,7 @@
       Всего вы были в Кочерге <strong>{{ orders|length }}</strong> раз.
     </p>
     <p>
-      Суммарно вы потратили в Кочерге <strong>{{ orders|sum(attribute='order_value') }}</strong> руб.
+      Суммарно вы потратили в Кочерге <strong>{{ customer.total_spent }}</strong> руб.
     </p>
   {% else %}
     <p>
