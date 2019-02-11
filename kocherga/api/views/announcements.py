@@ -19,7 +19,7 @@ import kocherga.events.timepad
 import kocherga.events.vk
 import kocherga.events.telegram
 import kocherga.events.announce
-import kocherga.email.weekly_digest
+import kocherga.events.weekly_digest
 
 from kocherga.api.auth import auth
 from kocherga.api.common import ok
@@ -82,7 +82,7 @@ def r_telegram_post_schedule(request):
 @api_view(['POST'])
 def r_email_post_digest(request):
     text = request.data.get('text', '')
-    kocherga.email.weekly_digest.create_draft(text)
+    kocherga.events.weekly_digest.create_draft(text)
     return Response(ok)
 
 

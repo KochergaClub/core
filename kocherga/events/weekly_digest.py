@@ -106,7 +106,7 @@ from pathlib import Path
 import kocherga.mailchimp
 import kocherga.images
 
-from kocherga.events.event import Event
+from .models import Event
 
 import kocherga.datetime
 from kocherga.datetime import TZ
