@@ -258,7 +258,7 @@ def create_draft(text=''):
             'title': content['title'],
             'from_name': 'Кочерга',
             'reply_to': 'info@kocherga-club.ru',
-            'to_name': '*|FNAME|*',
+            'to_name': '*|FNAME|* *|LNAME|*',
             'folder_id': kocherga.mailchimp.folder_id_by_name('Еженедельная рассылка'),
         }
     })
