@@ -1,101 +1,9 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import jinja2
-import markdown
+from django.template.loader import render_to_string
 
-template_str = """<mjml>
-  <mj-head>
-    <mj-title>Расписание мероприятий Кочерги на {{ title_dates | e }}</mj-title>
-    <mj-font name="Open Sans" href="https://fonts.googleapis.com/css?family=Open+Sans"></mj-font>
-    <mj-attributes>
-      <mj-all font-family="Open Sans, sans-serif"></mj-all>
-      <mj-text font-weight="300" font-size="16px" color="#616161" line-height="24px"></mj-text>
-      <mj-section padding="0"></mj-section>
-    </mj-attributes>
-    <mj-style inline="inline">
-      a {
-        color: #3498DB;
-        text-decoration: none;
-      }
-    </mj-style>
-  </mj-head>
-  <mj-body>
-    <mj-section padding="20px 0">
-      <mj-column width="60%">
-        <mj-text font-size="10px">Мероприятия Кочерги на ближайшую неделю</mj-text>
-      </mj-column>
-      <mj-column width="40%">
-        <mj-text font-size="10px" align="right"><a href="*|ARCHIVE|*">Открыть это письмо в браузере</a></mj-text>
-      </mj-column>
-    </mj-section>
-    <mj-section>
-      <mj-column width="100%">
-        <mj-image href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=image" src="{{ image_url | e }}"></mj-image>
-      </mj-column>
-    </mj-section>
-    <mj-section padding-top="30px">
-      <mj-column width="100%">
-        <mj-text>
-          {{ text }}
-        </mj-text>
-      </mj-column>
-    </mj-section>
-    <mj-section>
-      <mj-column width="100%">
-        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
-      </mj-column>
-    </mj-section>
-{% for group in events_by_date %}
-    <mj-section>
-      <mj-column width="100%">
-        <mj-text>
-          <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
-          {% for event in group['events'] %}
-            <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0">
-                {{ event.start_dt.strftime("%H:%M") | e }}. {{ event.title | e }}
-            </h3>
-            <p style="font-size: 14px">{{ event.summary | e }}
-            </p>
-            <p><i>Подробнее:
-              {% if event.posted_vk %}<a href="{{ event.posted_vk | utmify | e }}">вконтакте</a>{% endif -%}
-              {% if event.posted_fb %}, <a href="{{ event.posted_fb | utmify | e }}">facebook</a>{% endif -%}
-              {% if event.posted_timepad %}, <a href="{{ event.posted_timepad | utmify | e }}">timepad</a>{% endif -%}
-            </i></p>
-          {% endfor %}
-        </mj-text>
-      </mj-column>
-    </mj-section>
-{% endfor %}
-    <mj-section>
-      <mj-column width="100%">
-        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
-      </mj-column>
-    </mj-section>
-    <mj-section>
-      <mj-column width="75%">
-        <mj-text>
-          <a href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=footer">Клуб Кочерга</a>
-        </mj-text>
-      </mj-column>
-      <mj-column width="25%">
-        <mj-table>
-          <tr style="list-style: none;line-height:1">
-            <td> <a href="https://vk.com/kocherga_club">
-                  <img width="25" src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-vk-48.png" />
-                </a> </td>
-            <td> <a href="https://facebook.com/kocherga.club">
-                  <img width="25" src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-facebook-48.png" />
-                </a> </td>
-            <td> <a href="https://www.youtube.com/c/КочергаКлуб">
-                  <img width="25" src="https://cdn-images.mailchimp.com/icons/social-block-v2/color-youtube-48.png" />
-                </a> </td>
-          </tr>
-        </mj-table>
-      </mj-column>
-    </mj-section>
-  </mj-body>
-</mjml>"""
+import markdown
 
 import io
 import subprocess
@@ -105,6 +13,7 @@ from pathlib import Path
 
 import kocherga.mailchimp
 import kocherga.images
+from kocherga.email.tools import get_utmify, mjml2html
 
 from .models import Event
 
@@ -127,18 +36,7 @@ def get_week_boundaries():
 
     return (dt, end_dt)
 
-def utmify(value):
-    if 'vk.com' in value or 'facebook.com' in value:
-        return value # utmifying social links is not necessary
-
-    value += '&' if '?' in value else '?'
-    return value + 'utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter'
-
 def generate_content(text, image_url):
-    env = jinja2.Environment()
-    env.filters['utmify'] = utmify
-    template = env.from_string(template_str)
-
     (dt, end_dt) = get_week_boundaries()
 
     query = (
@@ -182,32 +80,18 @@ def generate_content(text, image_url):
         month = kocherga.datetime.inflected_month(dt)
         return f"{weekday}, {dt.day} {month}"
 
-    mjml = template.render(
-        text=markdown.markdown(text, extensions=['markdown.extensions.nl2br']),
-        image_url=image_url,
-        title_dates=title_dates,
-        events_by_date=events_by_date,
-        date2day=date2day,
-    )
+    mjml = render_to_string('events/email/weekly_digest.mjml', {
+        'text': markdown.markdown(text, extensions=['markdown.extensions.nl2br']),
+        'image_url': image_url,
+        'title_dates': title_dates,
+        'events_by_date': events_by_date,
+        'date2day': date2day,
+        'utmify': get_utmify('weekly-digest', 'kocherga-newsletter'),
+    })
 
-    mjml_in_fh = io.StringIO(mjml)
-    fp = tempfile.TemporaryFile(mode='w+')
-    fp.write(mjml)
-    fp.seek(0)
-    html_out_fh = io.StringIO()
-
-    root_dir = Path(__file__).parent.parent.parent
-    mjml = str(root_dir / 'node_modules' / '.bin' / 'mjml')
-    with subprocess.Popen(
-            [mjml, '/dev/stdin'],
-            stdin=fp,
-            stdout=subprocess.PIPE,
-            encoding='utf-8',
-        ) as proc:
-        html = proc.stdout.read()
+    html = mjml2html(mjml)
 
     return {
-        'mjml': mjml,
         'title': f'Расписание мероприятий Кочерги на {title_dates}',
         'html': html,
     }

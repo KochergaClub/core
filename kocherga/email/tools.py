@@ -15,18 +15,10 @@ def get_utmify(campaign, source):
 
         value += '&' if '?' in value else '?'
         return value + f'utm_campaign={campaign}&utm_medium=email&utm_source={source}'
+
     return utmify
 
-def generate_html(template_str, props, campaign, source):
-    env = jinja2.Environment()
-    env.filters['utmify'] = get_utmify(campaign, source)
-
-    template = env.from_string(template_str)
-
-    mjml = template.render(
-        **props
-    )
-
+def mjml2html(mjml):
     mjml_in_fh = io.StringIO(mjml)
     fp = tempfile.TemporaryFile(mode='w+')
     fp.write(mjml)
