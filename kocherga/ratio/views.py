@@ -37,12 +37,12 @@ class TrainingView(RatioManagerMixin, View):
 class TrainingToMailchimpView(RatioManagerMixin, View):
     def post(self, request, name):
         training2mailchimp(Training.objects.get(name=name))
-        return redirect('ratio:index')
+        return redirect('ratio:training', name=name)
 
 class TrainingPostEmailView(RatioManagerMixin, View):
     def post(self, request, name):
         create_post_draft(Training.objects.get(name=name))
-        return redirect('ratio:index')
+        return redirect('ratio:training', name=name)
 
 class ScheduleView(RatioManagerMixin, View):
     def get(self, request, name):
