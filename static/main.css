@@ -10,7 +10,7 @@ main {
 }
 
 /* styles copy-pasted from frontkit */
-button {
+button, input[type="submit"] {
   font-size: 0.9rem;
   position: relative;
   z-index: 0;
@@ -24,6 +24,6 @@ button {
   border-color: rgb(179, 217, 230);
   background: linear-gradient(rgb(236, 245, 249) 0%, rgb(244, 249, 251) 100%);
 }
-button:hover {
+button:hover, input[type="submit"]:hover {
   border-color: rgb(140, 198, 217);
 }
