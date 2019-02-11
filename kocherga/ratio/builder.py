@@ -130,10 +130,11 @@ def build_extra_files(folder_id):
     sources_folder_id = kocherga.gdrive.parent_id(folder_id)
     event_folder_id = kocherga.gdrive.parent_id(sources_folder_id)
 
-    # schedule
-    schedule_gdoc_id = kocherga.gdrive.find_in_folder(event_folder_id, "Расписание")
-    filename = kocherga.gdrive.gdoc_to_pdf(schedule_gdoc_id)
-    kocherga.gdrive.upload_file(filename, "Расписание.pdf", folder_id)
+    # # schedule
+    # TODO - build schedule from html to pdf
+    # schedule_gdoc_id = kocherga.gdrive.find_in_folder(event_folder_id, "Расписание")
+    # filename = kocherga.gdrive.gdoc_to_pdf(schedule_gdoc_id)
+    # kocherga.gdrive.upload_file(filename, "Расписание.pdf", folder_id)
 
     # additional materials
     materials_gdoc_id = kocherga.gdrive.find_in_folder(sources_folder_id, "Дополнительные материалы")
