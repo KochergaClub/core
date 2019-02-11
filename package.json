@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@gitlab.com:kocherga/code/core.git",
-  "author": "Vyacheslav Matyukhin <me@berekuk.ru>",
-  "license": "MIT",
+  "author": "Vyacheslav Matyukhin <slava@kocherga-club.ru>",
+  "private": true,
+  "license": "UNLICENSED",
   "dependencies": {
     "mjml": "^4.0.5",
     "remark": "^9.0.0",
