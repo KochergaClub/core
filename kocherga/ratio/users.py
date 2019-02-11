@@ -53,9 +53,12 @@ def import_ticket_to_mailchimp(ticket, group_id):
     return response["id"]
 
 
-def training2mailchimp(training):
+def training_category_id():
     category = kocherga.mailchimp.interest_category_by_name(MAILCHIMP_TRAINING_CATEGORY_NAME)
-    group_id = create_new_mailchimp_training_group(category["id"], training)
+    return category['id']
+
+def training2mailchimp(training):
+    group_id = create_new_mailchimp_training_group(training_category_id(), training)
 
     for ticket in training.tickets.all():
         import_ticket_to_mailchimp(ticket, group_id)

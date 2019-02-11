@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from .models import Training
 from .users import training2mailchimp
+from .email import create_post_draft
 
 from urllib.parse import urlencode
 
@@ -33,10 +34,15 @@ class TrainingView(RatioManagerMixin, View):
             'tickets_url': tickets_url,
         })
 
+class TrainingToMailchimpView(RatioManagerMixin, View):
     def post(self, request, name):
         training2mailchimp(Training.objects.get(name=name))
         return redirect('ratio:index')
 
+class TrainingPostEmailView(RatioManagerMixin, View):
+    def post(self, request, name):
+        create_post_draft(Training.objects.get(name=name))
+        return redirect('ratio:index')
 
 class ScheduleView(RatioManagerMixin, View):
     def get(self, request, name):

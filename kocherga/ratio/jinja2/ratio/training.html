@@ -16,9 +16,16 @@
 </section>
 
 <div>
-  <form method="post">
+  <form method="post" action="{{ url('ratio:training_to_mailchimp', kwargs={'name': training.name }) }}">
     {{ csrf_input }}
     <input type="submit" value="Отправить участников в mailchimp" />
+  </form>
+</div>
+
+<div>
+  <form method="post" action="{{ url('ratio:training_post_email', kwargs={'name': training.name }) }}">
+    {{ csrf_input }}
+    <input type="submit" value="Создать черновик пострассылки" />
   </form>
 </div>
 
