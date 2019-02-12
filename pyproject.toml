@@ -43,6 +43,7 @@ sentry-sdk = {extras = ["flask"],version = "*"}
 django-debug-toolbar = "*"
 react = "*"
 honcho = "*"
+tqdm = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
@@ -57,5 +58,4 @@ jupyter = "*"
 aioconsole = "*"
 matplotlib = "*"
 seaborn = "*"
-tqdm = "*"
 python-docx = "*"

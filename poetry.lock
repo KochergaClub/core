@@ -1405,7 +1405,7 @@ python-versions = ">= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, != 3.3.*"
 version = "5.1.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Fast, Extensible Progress Meter"
 name = "tqdm"
 optional = false
@@ -1515,7 +1515,7 @@ version = "3.4.2"
 notebook = ">=4.4.1"
 
 [metadata]
-content-hash = "e4df4131cb18a23e59f92aa7c24b06d840c64a899bafd7d51d8eda6a5746607e"
+content-hash = "b463fe5e499c36de05f105e67a3b4ba5458031769fa220f3b25a9519eb0d9e7c"
 python-versions = "^3.6"
 
 [metadata.hashes]
