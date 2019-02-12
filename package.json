@@ -15,6 +15,7 @@
     "mjml": "^4.0.5",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
+    "react-helmet": "^5.2.0",
     "react-render": "^3.0.0",
     "remark": "^9.0.0",
     "remark-cli": "^5.0.0",

@@ -22,6 +22,7 @@ const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 
 const { ServerStyleSheet } = require('styled-components');
+const { Helmet } = require('react-helmet');
 
 // Ensure support for loading files that contain ES6+7 & JSX
 require('babel-core/register');
@@ -50,15 +51,17 @@ function reactRender(opts, cb) {
         React.createElement(component, props)
       )
     );
+    const helmet = Helmet.renderStatic();
     const styleTags = sheet.getStyleTags();
-    cb(null, html, styleTags);
+
+    cb(null, html, styleTags, helmet);
   } catch(err) {
     cb(err);
   }
 }
 
 app.post('/render', function(req, res) {
-  reactRender(req.body, function(err, markup, style) {
+  reactRender(req.body, function(err, markup, style, helmet) {
     if (err) {
 			res.json({
 				error: {
@@ -73,6 +76,7 @@ app.post('/render', function(req, res) {
 				error: null,
 				markup: markup,
         style: style,
+        helmet: helmet.title.toString() + helmet.meta.toString() + helmet.link.toString(),
 			});
 		}
 	});

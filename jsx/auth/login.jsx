@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Helmet } from 'react-helmet';
+
 const AuthContainer = styled.div`
   margin: 0 auto;
   margin-top: 30vh;
@@ -13,6 +15,10 @@ class LoginPage extends React.Component {
   render() {
     return (
       <AuthContainer>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Login title</title>
+        </Helmet>
         <form method="post" className="login-form">
           <input
             type="hidden"
