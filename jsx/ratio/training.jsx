@@ -15,7 +15,9 @@ export default ({ training, tickets, urls, csrfToken }) => (
       <h2>
         Участники: <a href={urls.tickets_admin}>{tickets.length}</a>
       </h2>
-      <ul>{tickets.map(ticket => <li>{ticket.email}</li>)}</ul>
+      <ul>
+        {tickets.map(ticket => <li key={ticket.email}>{ticket.email}</li>)}
+      </ul>
     </section>
 
     <div>
