@@ -11,6 +11,8 @@ from django.contrib.auth import login, logout, get_user_model
 
 from django.core.signing import TimestampSigner
 
+from kocherga.django.react import react_render
+
 import urllib.parse
 
 from .forms import LoginForm
@@ -26,8 +28,8 @@ class LoginView(View):
         if request.user.is_authenticated:
             return redirect('/')
 
-        return render(request, 'auth/login.html', {
-            'form': str(LoginForm()),
+        return react_render(request, 'auth/login.jsx', {
+            'djangoForm': str(LoginForm().as_p()),
         })
 
     def post(self, request):
