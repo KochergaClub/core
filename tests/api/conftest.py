@@ -4,7 +4,6 @@ import logging
 import os
 import json
 import datetime
-from quart import Response
 import jwt
 
 from django.conf import settings

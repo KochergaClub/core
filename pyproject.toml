@@ -1,9 +1,11 @@
-[[source]]
-url = "https://pypi.python.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "kocherga-core"
+version = "0.1.0"
+description = ""
+authors = ["Vyacheslav Matyukhin <slava@kocherga-club.ru>"]
 
-[packages]
+[tool.poetry.dependencies]
+python = "^3.6"
 slackclient = "*"
 markdown = "*"
 captcha-solver = "*"
@@ -19,7 +21,7 @@ pyjwt = "*"
 mwclient = "*"
 termcolor = "*"
 pandas = "*"
-pyppeteer = {git = 'https://github.com/berekuk/pyppeteer.git'}
+pyppeteer = { git = "https://github.com/berekuk/pyppeteer.git" }
 werkzeug = "*"
 attrs = "*"
 apscheduler = "*"
@@ -28,7 +30,7 @@ python-gitlab = "*"
 slackeventsapi = "*"
 pytz = "*"
 "boto3" = "*"
-mysqlclient = "*"
+mysqlclient = "==1.4.2"
 requests-toolbelt = "*"
 slappy = "==0.3.5"
 feedgen = "*"
@@ -42,7 +44,7 @@ django-debug-toolbar = "*"
 react = "*"
 honcho = "*"
 
-[dev-packages]
+[tool.poetry.dev-dependencies]
 pytest = "*"
 pytest-asyncio = "*"
 pytest-env = "*"
@@ -57,9 +59,3 @@ matplotlib = "*"
 seaborn = "*"
 tqdm = "*"
 python-docx = "*"
-
-[requires]
-python_version = "3.6"
-
-[pipenv]
-# keep_outdated = true
