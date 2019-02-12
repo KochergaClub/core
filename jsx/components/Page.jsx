@@ -16,6 +16,14 @@ const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     line-height: 24px;
   }
+
+  p {
+    margin: 16px 0;
+  }
+
+  h2, h3, h4 {
+    margin: 16px 0;
+  }
 `;
 
 const Main = styled.main`
