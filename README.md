@@ -14,6 +14,14 @@
 6. Выбрать настройки (боевая/тестовая база и т.д.) можно через переменную среды `TIER` (логика выбора django-конфига находится в `kocherga/django/settings/__init__.py`).
 7. Запустить pytest, убедиться, что тесты проходятся.
 
+## Как начать быстрее
+Если нужно просто дописать модель или две и устраивает 
+
+1. ~
+2. `cp kocherga/django/settings/dbonly.py kocherga/django/settings/new_config.py`
+3. `echo new_config > tier.txt`
+4. `./manage.py migrate`
+
 ## Выкладка изменений
 
 Деплой организован с помощью Ansible, конфиги в [отдельном репозитории](https://gitlab.com/kocherga/code/deploy) (роль kocherga-core).

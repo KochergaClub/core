@@ -8,4 +8,4 @@ def get_tier():
 
 
 TIER = get_tier()
-exec(f"from .{TIER} import *")
+exec(f"from .{TIER.strip()} import *")
