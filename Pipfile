@@ -39,6 +39,8 @@ django-cors-headers = "*"
 django-rest-framework = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
 django-debug-toolbar = "*"
+react = "*"
+honcho = "*"
 
 [dev-packages]
 pytest = "*"

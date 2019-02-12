@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 import hashlib
 from datetime import date
@@ -49,8 +50,15 @@ class Training(models.Model):
             if day not in result:
                 result[day] = []
             result[day].append(activity)
-        return result
+
+        return [
+            {'day': key, 'activities': result[key]}
+            for key in result
+        ]
 
     @property
     def long_name(self):
         return f'Воркшоп по прикладной рациональности {self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
+
+    def get_absolute_url(self):
+        return reverse('ratio:training', kwargs={'name': self.name})
