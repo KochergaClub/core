@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.core.mail import send_mail
 from django.contrib.auth import login, logout, get_user_model
 
@@ -35,8 +35,8 @@ class LoginView(View):
     def post(self, request):
         form = LoginForm(request.POST)
         if not form.is_valid():
-            return render(request, 'auth/login.html', {
-                'form': form,
+            return react_render(request, 'auth/login.jsx', {
+                'djangoForm': form.as_p(),
             })
 
         email = form.cleaned_data['email']
@@ -59,7 +59,7 @@ class LoginView(View):
 
 class SentMagicLinkView(View):
     def get(self, request):
-        return render(request, 'auth/check-your-email.html')
+        return react_render(request, 'auth/check-your-email.jsx')
 
 class MagicLinkView(View):
     def get(self, request):
@@ -87,7 +87,9 @@ class MagicLinkView(View):
 
 class RegisteredView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'auth/registered.html')
+        return react_render(request, 'auth/registered.jsx', {
+            'index_url': reverse('my:index'),
+        })
 
 class LogoutView(View):
     def get(self, request):

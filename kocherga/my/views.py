@@ -1,21 +1,24 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from kocherga.django.react import react_render
+
+from kocherga.cm.serializers import CustomerSerializer, OrderSerializer
 
 class MainView(LoginRequiredMixin, View):
     def get(self, request):
         customer = request.user.customer if hasattr(request.user, 'customer') else None
 
-        opposite_privacy_mode = None
-        if customer:
-            opposite_privacy_mode = 'public' if customer.privacy_mode == 'private' else 'private'
-
-        return render(request, 'my/index.html', {
+        return react_render(request, 'my/index.jsx', {
             'email': request.user.email,
             'is_staff': request.user.is_staff,
-            'customer': customer,
-            'orders': list(customer.orders()) if customer else [],
-            'opposite_privacy_mode': opposite_privacy_mode,
+            'customer': CustomerSerializer(customer).data,
+            'orders': OrderSerializer(customer.orders(), many=True).data,
+            'urls': {
+                'set_privacy_mode': reverse('my:set-privacy-mode'),
+            }
         })
 
 class SetPrivacyModeView(LoginRequiredMixin, View):
