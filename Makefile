@@ -2,13 +2,7 @@ install-dev:
 	pipenv install -d
 
 dev:
-	. ./env.example && ./manage.py runserver
-
-ludwig:
-	TIER=dev ./scripts/ludwig.py
-
-ludwig-lt:
-	lt --port 5200 --subdomain kocherga-dev
+	honcho start -f Procfile.dev
 
 test-types:
 	git submodule init

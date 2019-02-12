@@ -1,0 +1,4 @@
+django: ./manage.py runserver
+render_server: ./scripts/render-server.js
+ludwig: ./scripts/ludwig.py
+ludwig_lt: lt --port 5200 --subdomain kocherga-dev
