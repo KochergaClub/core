@@ -10,16 +10,18 @@ from kocherga.cm.serializers import CustomerSerializer, OrderSerializer
 class MainView(LoginRequiredMixin, View):
     def get(self, request):
         customer = request.user.customer if hasattr(request.user, 'customer') else None
-
-        return react_render(request, 'my/index.jsx', {
+        props = {
             'email': request.user.email,
             'is_staff': request.user.is_staff,
-            'customer': CustomerSerializer(customer).data,
-            'orders': OrderSerializer(customer.orders(), many=True).data,
             'urls': {
                 'set_privacy_mode': reverse('my:set-privacy-mode'),
             }
-        })
+        }
+        if customer:
+            props['customer'] = CustomerSerializer(customer).data
+            props['orders'] = OrderSerializer(customer.orders(), many=True).data,
+
+        return react_render(request, 'my/index.jsx', props)
 
 class SetPrivacyModeView(LoginRequiredMixin, View):
     def post(self, request):
