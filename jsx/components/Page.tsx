@@ -31,7 +31,7 @@ const Main = styled.main`
   margin: 0 auto;
 `;
 
-const Page = ({ title, children }) => {
+const Page = ({ title, children }: { title: string, children: React.ReactNode }) => {
   return (
     <Main>
       <GlobalStyle />

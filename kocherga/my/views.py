@@ -21,7 +21,7 @@ class MainView(LoginRequiredMixin, View):
             props['customer'] = CustomerSerializer(customer).data
             props['orders'] = OrderSerializer(customer.orders(), many=True).data,
 
-        return react_render(request, 'my/index.jsx', props)
+        return react_render(request, 'my/index.tsx', props)
 
 class SetPrivacyModeView(LoginRequiredMixin, View):
     def post(self, request):

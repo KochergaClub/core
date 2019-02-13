@@ -24,8 +24,10 @@ const ReactDOMServer = require('react-dom/server');
 const { ServerStyleSheet } = require('styled-components');
 const { Helmet } = require('react-helmet');
 
-// Ensure support for loading files that contain ES6+7 & JSX
-require('babel-core/register');
+// Transpile TSX
+require('@babel/register')({
+  extensions: ['.js', '.jsx', '.ts', '.tsx'],
+});
 
 var ADDRESS = argv.address;
 var PORT = argv.port;
