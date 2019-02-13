@@ -44,6 +44,7 @@ django-debug-toolbar = "*"
 react = "*"
 honcho = "*"
 tqdm = "*"
+gunicorn = "^19.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
