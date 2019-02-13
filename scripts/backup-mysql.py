@@ -10,6 +10,8 @@ import subprocess
 
 from django.conf import settings
 
+MYSQL_ROOT_PASSWORD='' # FIXME
+
 def main():
     AWS_CONFIG = settings.KOCHERGA_BACKUPS_AWS_CREDENTIALS
     BUCKET_NAME = settings.KOCHERGA_BACKUPS_S3_BUCKET
@@ -25,7 +27,7 @@ def main():
         tmp_file = tmp_dir / f'{db_name}.gz'
 
         logging.info(f'Backing up {db_name} to {tmp_file}')
-        subprocess.run(f'mysqldump {db_name} | gzip >{tmp_file}', shell=True, check=True)
+        subprocess.run(f'mysqldump -uroot --password={MYSQL_ROOT_PASSWORD} {db_name} | gzip >{tmp_file}', shell=True, check=True)
 
         logging.info(f'Uploading {tmp_file} to S3')
         s3.upload_file(str(tmp_file), BUCKET_NAME, f'mysql/{db_name}.gz')
