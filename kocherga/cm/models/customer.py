@@ -19,11 +19,18 @@ class Gender(enum.Enum):
     female = 2
 
 
+class CustomerQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+
 class Customer(models.Model):
     class Meta:
         db_table = 'cm_customers'
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+
+    objects = CustomerQuerySet.as_manager()
 
     # important
     customer_id = models.IntegerField(primary_key=True)
