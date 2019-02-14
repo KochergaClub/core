@@ -126,8 +126,12 @@ const PageHeader = styled.header`
   }
 `;
 
-function groupByDay(schedule) {
-  const scheduleByDay = {};
+interface ActivityType {
+  day: number;
+};
+
+function groupByDay(schedule: ActivityType[]) {
+  const scheduleByDay: { [key: number]: ActivityType[] } = {};
   for (const activity of schedule) {
     if (!scheduleByDay[activity.day]) {
       scheduleByDay[activity.day] = [];
@@ -135,7 +139,7 @@ function groupByDay(schedule) {
     scheduleByDay[activity.day].push(activity);
   }
 
-  const days = Object.keys(scheduleByDay).sort((a, b) => a - b);
+  const days = (Object.keys(scheduleByDay) as unknown as number[]).sort((a, b) => a - b);
 
   const result = [];
   for (const day of days) {

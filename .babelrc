@@ -1,6 +1,13 @@
 {
-    "plugins": [
-        "transform-react-jsx"
-    ],
-    "presets": ["es2015"]
+  "presets": [
+    "@babel/env",
+    "@babel/react",
+    [
+      "@babel/typescript",
+      { "isTSX": true, "allExtensions": true }
+    ]
+  ],
+  "plugins": [
+    "babel-plugin-styled-components"
+  ]
 }

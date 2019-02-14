@@ -20,7 +20,7 @@ class RatioManagerMixin(UserPassesTestMixin):
 class MainView(RatioManagerMixin, View):
     def get(self, request):
         trainings = Training.objects.all()
-        return react_render(request, 'ratio/index.jsx', {
+        return react_render(request, 'ratio/index.tsx', {
             'trainings': serializers.TrainingSerializer(trainings, many=True).data,
         })
 
@@ -30,7 +30,7 @@ class TrainingView(RatioManagerMixin, View):
         training = Training.objects.get(name=name)
         tickets_admin_url = reverse('admin:ratio_ticket_changelist') + '?' + urlencode({ 'training__name__exact': training.name })
 
-        return react_render(request, 'ratio/training.jsx', {
+        return react_render(request, 'ratio/training.tsx', {
             'training': serializers.TrainingSerializer(training).data,
             'tickets': serializers.TicketSerializer(training.tickets, many=True).data,
             'urls': {
@@ -56,7 +56,7 @@ class TrainingPostEmailView(RatioManagerMixin, View):
 class ScheduleView(RatioManagerMixin, View):
     def get(self, request, name):
         training = Training.objects.get(name=name)
-        return react_render(request, 'ratio/schedule.jsx', {
+        return react_render(request, 'ratio/schedule.tsx', {
             'name': training.name,
             'long_name': training.long_name,
             'urls': {

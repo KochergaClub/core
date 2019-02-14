@@ -1,0 +1,19 @@
+{
+  "include": [
+    "jsx"
+  ],
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "jsx": "react",
+    "noEmit": true,
+    "allowJs": true
+  }
+}

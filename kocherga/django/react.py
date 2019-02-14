@@ -3,6 +3,7 @@ import django.middleware.csrf
 from django.conf import settings
 
 import os
+import json
 
 from react.render import render_component
 
@@ -19,4 +20,8 @@ def react_render(request, template, params={}):
         'react_html': str(react_html),
         'react_style': react_html.data.get('style', ''),
         'react_helmet': react_html.data.get('helmet', ''),
+        'store': json.dumps({
+            'component': template,
+            'props': params,
+        }),
     })
