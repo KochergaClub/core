@@ -6,5 +6,8 @@
       "@babel/typescript",
       { "isTSX": true, "allExtensions": true }
     ]
+  ],
+  "plugins": [
+    "babel-plugin-styled-components"
   ]
 }

@@ -7,14 +7,14 @@
     {{ react_helmet | safe }}
   </head>
   <body>
-    <div class="react-app">
-      {{ react_style | safe }}
+    {{ react_style | safe }}
+    <div id="react-app">
       {{ react_html | safe }}
-      <script>
-        // Info stored for re-rendering the app
-        var store = {{ store | tojson | safe }};
-      </script>
-      <script src="./static/js/dist/bundle.js" type="text/javascript"></script>
     </div>
+    <script>
+      // Info stored for re-rendering the app
+      var store = {{ store | safe }};
+    </script>
+    <script src="{{ static('dist/bundle.js') }}" type="text/javascript"></script>
   </body>
 </html>
