@@ -19,7 +19,7 @@ class MainView(LoginRequiredMixin, View):
         }
         if customer:
             props['customer'] = CustomerSerializer(customer).data
-            props['orders'] = OrderSerializer(customer.orders(), many=True).data,
+            props['orders'] = OrderSerializer(customer.orders(), many=True).data
 
         return react_render(request, 'my/index.jsx', props)
 
