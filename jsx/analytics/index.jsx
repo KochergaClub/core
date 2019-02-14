@@ -12,7 +12,6 @@ const BOVStatCard = ({ bovStat }) => (
 
 export default ({ bov_stats }) => (
   <Page title="Аналитика Кочерги">
-    {JSON.stringify(bov_stats)}
     <h1>Аналитика Кочерги</h1>
     <ul>
       <li>
