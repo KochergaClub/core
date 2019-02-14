@@ -12,7 +12,7 @@ const AdminSection = () => (
   </div>
 );
 
-const CustomerSection = ({ customer, orders, csrfToken, urls }) => (
+const CustomerSection = ({ customer, orders_count, csrfToken, urls }) => (
   <div>
     <h2>Посещения</h2>
     <p>
@@ -32,7 +32,7 @@ const CustomerSection = ({ customer, orders, csrfToken, urls }) => (
     )}
 
     <p>
-      Всего вы были в Кочерге <strong>{orders.length}</strong> раз.
+      Всего вы были в Кочерге <strong>{orders_count}</strong> раз.
     </p>
 
     <p>
@@ -74,7 +74,7 @@ const NonCustomerSection = () => (
   </p>
 );
 
-export default ({ email, customer, orders, is_staff, csrfToken, urls }) => (
+export default ({ email, customer, orders_count, is_staff, csrfToken, urls }) => (
   <Page title="Личный кабинет">
     <div>
       <h1>Личный кабинет Кочерги</h1>
@@ -87,7 +87,7 @@ export default ({ email, customer, orders, is_staff, csrfToken, urls }) => (
       {customer ? (
         <CustomerSection
           customer={customer}
-          orders={orders}
+          orders_count={orders_count}
           csrfToken={csrfToken}
           urls={urls}
         />
