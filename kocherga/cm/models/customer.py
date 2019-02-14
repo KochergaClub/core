@@ -1,9 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.timezone import make_aware
 
 import enum
-from datetime import datetime
+from datetime import datetime, time, timedelta
 
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import requests
@@ -22,6 +23,12 @@ class Gender(enum.Enum):
 class CustomerQuerySet(models.QuerySet):
     def active(self):
         return self.filter(is_active=True)
+
+    def from_date(self, d):
+        return self.filter(
+            activity_started__gt=make_aware(datetime.combine(d, time.min)),
+            activity_started__lt=make_aware(datetime.combine(d, time.max)),
+        )
 
 
 class Customer(models.Model):
