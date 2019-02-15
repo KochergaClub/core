@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 
 const MenuItemsNav = styled.nav`
@@ -9,6 +9,7 @@ const MenuItemsList = styled.ul`
   display: flex;
   align-items: center;
   list-style-type: none;
+
   & > li {
     margin-right: 30px;
   }
@@ -21,47 +22,114 @@ const MenuItemsList = styled.ul`
     font-size: 13px;
     font-weight: 500;
   }
+
+  @media screen and (max-width: 980px) {
+    flex-direction: column;
+    margin-bottom: 10px;
+    & > li {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  }
 `;
 
-const menuItems = [
+interface MenuItem {
+  title: string;
+  link?: string;
+  items?: { title: string, link: string }[];
+}
+
+const menuItems: MenuItem[] = [
   {
     title: 'Антикафе',
     items: [
       { link: '/space', title: 'Пространство' },
       { link: '/projects', title: 'Проекты' },
+      { link: '/pricing', title: 'Цены' },
+      { link: '/#schedule', title: 'Расписание' },
+      { link: '/faq', title: 'F.A.Q.' },
     ],
   },
-  { link: '/', title: 'Рациональность' },
+  {
+    title: 'Рациональность',
+    items: [
+      { link: '/rationality', title: 'Прикладная рациональность' },
+      { link: '/rationality/resources', title: 'Ресурсы' },
+      { link: '/rationality/reports', title: 'Отчеты' },
+      { link: '/rationality/aboutus', title: 'О нас говорят' },
+      { link: '/workshop', title: 'Воркшоп' },
+      { link: '/rationality/corporate', title: 'Корпоративные тренинги' },
+      { link: '/blog', title: 'Блог' },
+    ],
+  },
   { link: '/#contacts', title: 'Контакты' },
 ];
 
-interface DropdownProps {
-  item: {
-    title: string;
-    link: string;
-  }
-}
+const MenuItemExpandableContainer = styled.div`
+  position: relative;
+`;
 
-class MenuItemDropdown extends React.Component<DropdownProps, {}> {
+const MenuItemDropdown = styled.ul`
+  position: fixed;
+  z-index: 1;
+
+  padding: 5px 0;
+  list-style-type: none;
+  border: 1px solid white;
+  background: black;
+  color: white;
+
+  & > li {
+    padding: 5px 15px;
+  }
+`;
+
+class MenuItemExpandable extends React.Component<{ item: MenuItem }, {}> {
+  state = {
+    revealed: false,
+  };
+
   revealDropdown = () => {
-    
+    this.setState({
+      revealed: true,
+    })
+  }
+
+  hideDropdown = () => {
+    this.setState({
+      revealed: false,
+    })
+  }
+
+  renderDropdown() {
+    return (
+      <MenuItemDropdown>
+        {
+          this.props.item.items.map(
+            (item, i) => <li key={i}><a href={"https://kocherga-club.ru" + item.link}>{item.title}</a></li>
+          )
+        }
+      </MenuItemDropdown>
+    );
+
   }
 
   render() {
     return (
-      <div>
-        <a href="#" onMouseOver={this.revealDropdown}>{this.props.item.title} ▼</a>
-      </div>
+      <MenuItemExpandableContainer onMouseOver={this.revealDropdown} onMouseLeave={this.hideDropdown}>
+        <a href="#">{this.props.item.title} ▼</a>
+        { this.state.revealed && this.renderDropdown() }
+      </MenuItemExpandableContainer>
     );
   }
 }
 
-const MenuItem = ({ item }) => (
+const MenuItem = ({ item }: { item: MenuItem }) => (
   <li>
     {
       item.items
-      ? <a href="#">{item.title} ▼</a>
-      : <a href={item.link}>{item.title}</a>
+      ? <MenuItemExpandable item={item} />
+      : <a href={"https://kocherga-club.ru" + item.link}>{item.title}</a>
     }
   </li>
 );
