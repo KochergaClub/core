@@ -81,8 +81,10 @@ class Template:
             logger.info('Making screenshot')
             image_bytes = await page.screenshot()
         finally:
+            logger.info('Closing page')
             await page.close()
 
+        logger.info('Returing image bytes')
         return image_bytes
 
 def list_templates():
