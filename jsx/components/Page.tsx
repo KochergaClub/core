@@ -1,8 +1,12 @@
 import React from 'react';
 
+import TildaMenu from './TildaMenu';
+
 import { Helmet } from 'react-helmet';
 
-import styled, { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
+
+import Main from './Main';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -15,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 16px;
     line-height: 24px;
+    -webkit-font-smoothing: antialiased;
   }
 
   p {
@@ -26,21 +31,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Main = styled.main`
-  max-width: 1080px;
-  margin: 0 auto;
-`;
-
 const Page = ({ title, children }: { title: string, children: React.ReactNode }) => {
   return (
-    <Main>
+    <div>
       <GlobalStyle />
       <Helmet>
         <meta charSet="utf-8" />
         <title>{title}</title>
       </Helmet>
-      {children}
-    </Main>
+      <TildaMenu />
+      <Main>
+        {children}
+      </Main>
+    </div>
   );
 };
 
