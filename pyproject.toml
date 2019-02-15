@@ -21,7 +21,7 @@ pyjwt = "*"
 mwclient = "*"
 termcolor = "*"
 pandas = "*"
-pyppeteer = { git = "https://github.com/berekuk/pyppeteer.git" }
+pyppeteer = { git = "https://github.com/berekuk/pyppeteer.git", branch = "dev" }
 werkzeug = "*"
 attrs = "*"
 apscheduler = "*"
