@@ -66,15 +66,19 @@ class Template:
         html = self.generate_html(props)
 
         browser = await get_browser()
+        logger.info('Getting browser page')
         page = await browser.newPage()
 
         try:
             (width, height) = self.sizes
+            logger.info('Setting viewport')
             await page.setViewport(
                 {"width": width, "height": height, "deviceScaleFactor": 2}  # retina
             )
+            logger.info('Setting page html')
             await page.goto(f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000})
 
+            logger.info('Making screenshot')
             image_bytes = await page.screenshot()
         finally:
             await page.close()
