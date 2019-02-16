@@ -18,6 +18,7 @@ import kocherga.events.vk
 import kocherga.vk.tools
 
 from django.db import transaction
+import django.utils.timezone
 
 def job_wrapper(func):
     @transaction.atomic
@@ -27,7 +28,7 @@ def job_wrapper(func):
     return wrap
 
 def main():
-    scheduler = BlockingScheduler(timezone=TZ)
+    scheduler = BlockingScheduler(timezone=django.utils.timezone.get_current_timezone())
 
     scheduler.add_job(
         func=job_wrapper(kocherga.events.vk.update_widget),
