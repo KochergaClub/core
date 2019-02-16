@@ -59,6 +59,7 @@ KOCHERGA_VK = {
     "main_page": {
         "id": "yudkowsky_sect",
     },
+    "daily_page": "yudkowsky_sect_daily",
     "client_id": 6274394,
     "callback_secret": "12345",
 }

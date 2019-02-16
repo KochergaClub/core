@@ -55,6 +55,7 @@ def event(image_file, vk_image_file):
         title='Элиезер проповедь',
         description='chicken chicken chicken. chicken?\n\nchicken chicken chicken.',
         location='ГЭБ',
+        event_type='public',
     )
     event.vk_group = 'event159971736'
     event.fb_group = 'nonexisting_facebook_group'

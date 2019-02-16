@@ -53,7 +53,6 @@ class TestGetEvent:
         assert e.master_id == ''
 
         assert e.get_room() == 'гэб'
-        assert e.event_type == "unknown"
 
 
 class TestImages:
@@ -98,6 +97,16 @@ class TestTags:
         event.delete_tag('foo')
 
 class TestManager:
-    def test_public_events(self):
+    def test_public_events_empty(self):
         public_events = Event.objects.public_events(date=date(2019,1,12))
         assert type(public_events) == django.db.models.query.QuerySet
+        assert public_events.count() == 0
+
+    def test_public_events_single(self, event):
+        event.posted_vk = 'blah' # should be non-empty
+        event.save()
+
+        public_events = Event.objects.public_events(date=event.start_dt.date())
+
+        assert type(public_events) == django.db.models.query.QuerySet
+        assert public_events.count() == 1

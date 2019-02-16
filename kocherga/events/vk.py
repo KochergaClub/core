@@ -6,6 +6,7 @@ from django.conf import settings
 from datetime import datetime, timedelta
 import requests
 import json
+import urllib
 
 import kocherga.vk.api
 from kocherga.vk.helpers import group2id, upload_wall_image
@@ -89,6 +90,31 @@ def create(event):
     )
 
     return VkAnnouncement(group_name, group_id, response["post_id"])
+
+
+def repost_to_daily() -> int:
+    events = Event.objects.public_events(date=datetime.today().date())
+
+    DAILY_GROUP_ID = group2id(settings.KOCHERGA_VK['daily_page'])
+
+    operations = []
+    for event in events:
+        object_id = urllib.parse.parse_qs(urllib.parse.urlparse(event.posted_vk).query)['w']
+        operations.append({
+            'method': 'wall.repost',
+            'params': {
+                'group_id': DAILY_GROUP_ID,
+                'object': object_id,
+            }
+        })
+
+    if len(operations) == 0:
+        logger.info('Nothing to repost')
+    else:
+        result = kocherga.vk.api.bulk_call(operations)
+        logger.info(f'Reposted {len(operations)} events')
+
+    return len(operations)
 
 
 def all_groups():

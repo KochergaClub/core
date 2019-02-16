@@ -8,6 +8,7 @@ import os.path
 
 import kocherga.vk.api
 import kocherga.events.vk
+import kocherga.events.announce
 
 from kocherga.events.event import Event
 
@@ -74,3 +75,16 @@ class TestGroups:
 class TestSchedule():
     def test_schedule_post(self):
         kocherga.events.vk.create_schedule_post('')
+
+
+class TestRepostToDaily():
+    def test_repost_to_daily_empty(self):
+        kocherga.events.vk.repost_to_daily()
+
+    def test_repost_to_daily_single(self, event):
+        event.start_dt = datetime.combine(datetime.today().date(), event.start_dt.time())
+        event.save()
+        kocherga.events.announce.post_to_vk(event)
+
+        with pytest.raises(Exception, match="Access denied: can't publish"):
+            reposted = kocherga.events.vk.repost_to_daily()

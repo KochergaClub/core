@@ -41,6 +41,15 @@ def main():
         minutes=2,
     )
 
+    scheduler.add_job(
+        func=job_wrapper(kocherga.events.vk.repost_to_daily),
+        trigger='cron',
+        name='repost_to_daily',
+        hour=8,
+        minute=0,
+        second=0,
+    )
+
     scheduler.start()
 
 if __name__ == '__main__':

@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 from django.conf import settings
 
 import requests
+import json
 
 from captcha_solver import CaptchaSolver
 
@@ -24,6 +25,8 @@ def group_api_key():
 def check_response(r):
     if "error" in r:
         raise Exception(r["error"])
+    if "execute_errors" in r:
+        raise Exception(r["execute_errors"])
     if "response" not in r:
         raise Exception("Response field is empty in {}".format(str(r)))
 
@@ -39,7 +42,7 @@ def new_token_url():
     return f"https://oauth.vk.com/authorize?client_id={client_id}&display=page&redirect_uri={redirect_uri}&scope={scope}&response_type=token&v={API_VERSION}"
 
 
-def call(method, params, group_token=False):
+def _call(method, params, group_token=False):
     params = dict(params)  # copy - we'll modify it and don't want to affect the args
 
     params["access_token"] = group_api_key() if group_token else api_key()
@@ -71,5 +74,29 @@ def call(method, params, group_token=False):
         break
 
     check_response(r)
+    return r
 
+def call(method, params, group_token=False):
+    r = _call(method, params, group_token)
     return r["response"]  # type: ignore
+
+def bulk_call(operations, group_token=False):
+    lines = [
+        'var result = [];\n'
+    ]
+    for operation in operations:
+        method = operation['method']
+        params = operation['params']
+        line = f'result.push( API.{method}({json.dumps(params)}) );\n'
+        lines.append(line)
+
+    lines.append('return result;')
+
+    r = _call(
+        'execute',
+        {
+            'code': ''.join(lines)
+        },
+        group_token=group_token
+    )
+    return r['response']
