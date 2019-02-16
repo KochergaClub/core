@@ -11,6 +11,7 @@ from datetime import timedelta
 
 from dateutil import tz
 
+# TODO - move to django.utils.timezone
 TZ = tz.tzoffset("MSK", 3600 * 3)
 
 # TODO - base this on TZ

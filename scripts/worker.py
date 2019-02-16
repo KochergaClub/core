@@ -10,6 +10,8 @@ import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
 django.setup()
 
+from kocherga.datetime import TZ
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 import kocherga.events.vk
@@ -25,7 +27,7 @@ def job_wrapper(func):
     return wrap
 
 def main():
-    scheduler = BlockingScheduler()
+    scheduler = BlockingScheduler(timezone=TZ)
 
     scheduler.add_job(
         func=job_wrapper(kocherga.events.vk.update_widget),
