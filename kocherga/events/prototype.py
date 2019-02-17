@@ -143,6 +143,8 @@ class EventPrototype(models.Model):
                     result[field.name] = settings.KOCHERGA_API_ROOT + f"/images/{self.image}"
             elif field.name == 'eventprototypetag':
                 pass
+            elif field.name == 'all_events':
+                pass
             else:
                 result[field.name] = getattr(self, field.name)
 
