@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Page from '../components/Page';
+import TeamMenu from '../components/TeamMenu';
 
 const BOVStatCard = ({ bovStat }) => (
   <div>
@@ -13,6 +14,7 @@ const BOVStatCard = ({ bovStat }) => (
 export default ({ bov_stats }) => (
   <Page title="Аналитика Кочерги">
     <h1>Аналитика Кочерги</h1>
+    <TeamMenu />
     <ul>
       <li>
         <a href="https://metabase.team.kocherga.club">Metabase</a>
