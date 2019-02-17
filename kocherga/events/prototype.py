@@ -52,6 +52,8 @@ class EventPrototype(models.Model):
     def by_id(cls, prototype_id):
         return EventPrototype.objects.get(pk=prototype_id)
 
+    # This is a legacy method, we should replace it with all_events() from Event's FK.
+    # But that method for now doesn't allow limiting, doesn't filter out deleted events and doesn't apply `order_by`.
     def instances(self, limit=None):
         query = Event.objects.filter(prototype_id=self.prototype_id, deleted=False).order_by('-start_ts')
         if limit:

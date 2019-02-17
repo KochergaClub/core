@@ -13,15 +13,14 @@ from django.conf import settings
 import django.dispatch
 
 from kocherga.datetime import TZ, MSK_DATE_FORMAT
+from kocherga.datetime import dts, inflected_weekday, inflected_month
 
 from kocherga.images import image_storage
 import kocherga.room
-import kocherga.events.google
-import kocherga.events.markup
-
 from kocherga.error import PublicError
 
-from kocherga.datetime import dts, inflected_weekday, inflected_month
+import kocherga.events.google
+import kocherga.events.markup
 
 
 def parse_iso8601(s):
@@ -94,7 +93,13 @@ class Event(models.Model):
 
     is_master = models.BooleanField(default=False)
     master_id = models.CharField(max_length=100, blank=True) # deprecated, use prototype_id instead
-    prototype_id = models.IntegerField(null=True, db_index=True)
+
+    prototype = models.ForeignKey(
+        'EventPrototype',
+        on_delete=models.PROTECT,
+        related_name='all_events',
+        null=True, blank=True,
+    )
 
     visitors = models.CharField(
         max_length=100,
