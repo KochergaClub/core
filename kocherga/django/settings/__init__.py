@@ -1,16 +1,11 @@
-import os
-
 def get_tier():
-    hostname = os.uname()[1]
-    if hostname.startswith("mmcleric-osx"):
-        return os.environ.get('TIER', 'dev')
-    return os.environ['TIER']
+    try:
+        with open("tier.txt") as f:
+            tier = f.readline()
+    except FileNotFoundError:
+        tier = "dev"
+    return tier
+
 
 TIER = get_tier()
-
-if TIER == 'prod':
-    from .prod import *
-elif TIER == 'dev':
-    from .dev import *
-else:
-    raise Exception('Unknown tier')
+exec(f"from .{TIER.strip()} import *")
