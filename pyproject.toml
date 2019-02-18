@@ -45,6 +45,7 @@ react = "*"
 honcho = "*"
 tqdm = "*"
 gunicorn = "^19.9"
+aiogram = "^2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
