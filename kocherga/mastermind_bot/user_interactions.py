@@ -1,12 +1,17 @@
 import asyncio
 import logging
-
-from aiogram.types import Update
-
-from . import models as db
+import typing
 from asyncio import Future
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Any, Callable, TypeVar, List
+from io import BytesIO
+from typing import TypeVar, Awaitable
+
+from aiogram import types as at, Bot
+from aiogram.dispatcher.filters import Filter, BoundFilter
+from aiogram.types import Update, PhotoSize
+
+from kocherga.mastermind_bot.models import get_mm_user_by_token
+from . import models as db
 
 disp_event_loop = asyncio.new_event_loop()
 executor = ThreadPoolExecutor()
@@ -16,96 +21,172 @@ disp_event_loop.set_exception_handler(lambda loop, ctx: logging.error("Exception
 _G = TypeVar('_G')
 
 
-def delegate(a: Callable[[], _G], args: List):
-    def on_finish(e: Future):
-        if e.exception() is not None:
-            logging.exception(f"Error while processing future: {e.exception()}")
-
-    executor.submit(a, *args).add_done_callback(on_finish)
-
-
-def upd_filter(pred: BaseFilter): return lambda update: update.message is not None and pred.filter(update.message)
-
-
-is_text = upd_filter(Filters.text)
-is_photo = upd_filter(Filters.photo)
-
-
-def is_from(user: str): return lambda update: update.effective_chat.username is user
-
-
-def is_callback_query(update: Update): return update.callback_query is not None
+def resolve_user(upd: Update):
+    if upd.message:
+        return upd.message.from_user
+    if upd.edited_message:
+        return upd.edited_message.from_user
+    if upd.inline_query:
+        return upd.inline_query.from_user
+    if upd.chosen_inline_result:
+        return upd.chosen_inline_result.from_user
+    if upd.callback_query:
+        return upd.callback_query.from_user
+    if upd.shipping_query:
+        return upd.shipping_query.from_user
+    if upd.pre_checkout_query:
+        return upd.pre_checkout_query.from_user
 
 
-class Context:
-
-    def __init__(self, config: Dict):
-        self.config = config
-
-    futures = []
-
-    def user(self, update: Update) -> db.User:
-        return db.User.objects.get(id=update.effective_chat.username)
+class IsText(Filter):
+    async def check(self, upd: Update) -> bool:
+        msg = upd.message
+        if msg is None:
+            return False
+        return msg.text is not None and len(msg.text) > 0
 
 
-class Interaction(Handler):
+class IsPhoto(BoundFilter):
+    async def check(self, upd: Update) -> bool:
+        msg = upd.message
+        if msg is None:
+            return False
+        return msg.photo is not None
+
+
+class IsCallbackQuery(BoundFilter):
+    async def check(self, upd: Update) -> bool:
+        return upd.callback_query is not None
+
+
+class IsFrom(BoundFilter):
+
+    def __init__(self, username: str):
+        self.username = username
+
+    async def check(self, upd: Update) -> bool:
+        user = resolve_user(upd)
+        return user is not None and user.username == self.username
+
+
+class SessionChanged(BaseException):
+    pass
+
+
+class Interaction:
+    """
+    :type parent Interaction
+    """
     state_class = db.State
+    parent = None
+    awaits = []
 
-    def __init__(self, context: Context):
-        super().__init__(None)
-        self.context = context
+    def __init__(self, parent=None):
+        """
 
-    async def on_update(self, bot: Bot, update: Update):
+        :type parent: Interaction
+        """
+        self.parent = parent
+
+    async def on_update(self, update: Update):
         """
         :return: Interaction to which you want user to be redirected or None
-        :rtype: Union[Interaction, None]
+        :rtype: typing.Optional[Interaction]
         """
         raise NotImplementedError
 
-    async def update_matching(self, pred):
-        future = asyncio.get_event_loop().create_future()
-        self.context.futures.append((pred, future))
-        await future
+    async def receive_update(self, pred: Filter):
+        """
+        Awaits for update matching predicate
+        :param pred: what to match
+        """
+        if self.parent is not None:
+            return await self.parent.receive_update(pred)
+        else:
+            future = asyncio.get_event_loop().create_future()
+            self.awaits.append((pred, future))
+            return await future
 
-    def _handle_update(self, update, dispatcher):
-        async def local_loop():
-            updater = self
-            while updater is not None:
-                updater = await updater.on_update(dispatcher.bot, update)
+    async def handle_update(self, update: Update):
+        for tuple in self.awaits:
+            pred, future = tuple
+            future: Future
+            result = pred(update)
+            if isinstance(result, Awaitable):
+                result = await result
+            if result:
+                self.awaits.remove(tuple)
+                future.set_result(update)
+                return
 
-        asyncio.set_event_loop(disp_event_loop)
-        disp_event_loop.run_until_complete(local_loop())
+        async def mow():
+            dsp = self
+            while dsp:
+                dsp = await dsp.on_update(update)
 
-    def handle_update(self, update, dispatcher):
-        print(f"delegating stuff {update}")
-        delegate(self._handle_update, [update, dispatcher])
+        # noinspection PyAsyncCall
+        asyncio.create_task(mow())
 
 
 class Root(Interaction):
     path = "/"
     state_class = db.State
 
-    def __init__(self, context: Context):
-        super().__init__(context)
+    # noinspection PyUnresolvedReferences
+    def user(self) -> typing.Optional[db.User]:
+        try:
+            return db.User.objects.get(uid=at.User.get_current().username)
+        except db.User.DoesNotExist:
+            return None
 
-    async def on_update(self, bot: Bot, update: Update):
-        message: Message = update.message
-        ctx = self.context
-        user = ctx.user(update)
-        chat = update.effective_chat
-        state = user.get_state(RegistrationState)
+    async def receive_update(self, pred: Filter):
+        pred = IsFrom(self.user().uid).__and__(pred)
 
-        if not user.registered:
-            return Registration(ctx)
+        prev_state = self.user().get_state()
+        upd = await super().receive_update(pred)
+        if prev_state != self.user().get_state():
+            raise SessionChanged()
+        return upd
 
-        return Tinder(ctx)
+    async def reply(self, **kwargs):
+        bot: Bot = Bot.get_current()
+        chat: at.Chat = at.Chat.get_current()
+        kwargs["chat_id"] = chat.id
+        return await bot.send_message(**kwargs)
+
+    async def on_update(self, update: at.Update):
+        msg = update.message
+        user = self.user()
+
+        if (user is None or user.uid is None) and msg.is_command():
+            print(f"Unregistered user: {user}")
+            token = msg.get_args()
+            user = get_mm_user_by_token(token)
+            print(f"resolved as {user}")
+
+            if user is None:
+                await self.reply(text="Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+                return
+
+            user.uid = msg.from_user.username
+            user.save()
+
+        if user is None or user.uid is None:
+            await self.reply(text="Вы не зарегестрированы. Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+
+        reg = user.get_state(RegistrationState)
+
+        if not reg.complete:
+            return Registration(self)
+
+        return Tinder(self)
 
 
 class RegistrationState(db.State):
     def __init__(self):
         super().__init__()
+        self.complete = False
         self.entering_name = False
-
         self.uploading_photo = False
         self.skipped_photo = False
 
@@ -113,115 +194,104 @@ class RegistrationState(db.State):
 class Registration(Root):
     state_class = RegistrationState
 
-    async def on_update(self, bot: Bot, update: Update):
-        ctx = self.context
-        user = ctx.user(update)
-        chat: Chat = update.effective_chat
+    async def on_update(self, update: Update):
+        user = self.user()
         state = user.get_state(RegistrationState)
-        message: Message = update.message
+        message = update.message
+        print(f"state: {user.get_state(RegistrationState)}")
 
         def save():
-            user.state = (state)
+            user.set_state(state)
             user.save()
 
-        if user.name is None:
+        # Getting user's name
 
+        while not user.name:
             def strn(obj):
-                return "" if obj is None else str(obj)
+                return str(obj) if obj else ""
 
-            # fun reformatting bug :з :з :з
-            suggestion_name = f"{strn(chat.first_name)} {strn(chat.last_name)}" \
-                .strip()
-
+            chat = at.Chat.get_current()
+            suggestion_name = " ".join([strn(chat.first_name), strn(chat.last_name)])
             suggestion_nick = chat.username
-            if state.entering_name:
 
-                def set_name(name):
-                    user.name = name
-                    save()
-                    return Registration(ctx)
+            await self.reply(text="Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
+                             reply_markup={
+                                 "inline_keyboard": [[
+                                     {"text": f"{suggestion_name}",
+                                      "callback_data": "use_name"},
+                                     {"text": f"{suggestion_nick}",
+                                      "callback_data": "use_nickname"}
+                                 ]]
+                             })
 
-                if is_callback_query(update):
-                    q: CallbackQuery = update.callback_query
-                    print(q.data)
-                    if q.data == "use_name":
-                        return set_name(suggestion_name)
-                    elif q.data == "use_nickname":
-                        return set_name(suggestion_nick)
-                    else:
-                        return
+            update = await self.receive_update(IsCallbackQuery() | IsText())
 
-                # validating name, kind of?
-                # TODO: Add moar validation
-                if is_text(update):
-                    text = message.text
-                    if '\n' in text:
-                        chat.send_message("Сомневаюсь, что имя у вас занимает несколько строк.")
-                        return
-                    else:
-                        return set_name(text)
-                else:
-                    chat.send_message("Пожалуйста, ответьте текстом.")
+            def set_name(name):
+                user.name = name
+                save()
+
+            if update.callback_query:
+                q = update.callback_query
+                if q.data == "use_name":
+                    set_name(suggestion_name)
+                elif q.data == "use_nickname":
+                    set_name(suggestion_nick)
+                continue
+
+            # TODO: Add moar validation
+            if update.message:
+                text = update.message.text
+                if '\n' in text or len(text) > 100:
+                    await self.reply(text="Сомневаюсь, что имя у вас занимает несколько строк.")
                     return
-
+                else:
+                    return set_name(text)
             else:
-                chat.send_message("Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
-                                  reply_markup={
-                                      "inline_keyboard": [[
-                                          {"text": f"{suggestion_name}",
-                                           "callback_data": "use_name"},
-                                          {"text": f"{suggestion_nick}",
-                                           "callback_data": "use_nickname"}
-                                      ]]
-                                  })
-                state.entering_name = True
-                save()
+                await self.reply(text="Пожалуйста, ответьте текстом.")
                 return
 
-        if user.photo is None and not state.skipped_photo:
+        # Getting user's photo
 
-            if not state.uploading_photo:
-                chat.send_message("Загрузите фото, чтобы другие люди могли легче найти вас на мастермайнде.",
-                                  reply_markup={
-                                      "inline_keyboard": [[
-                                          {"text": "Нет, спасибо.",
-                                           "callback_data": "skip_photo"}
-                                      ]]
-                                  })
-                state.uploading_photo = True
-                save()
-                return
+        while user.photo is None and not state.skipped_photo:
 
-            if is_callback_query(update):
+            await self.reply(text="Загрузите фото, чтобы другие люди могли легче найти вас на мастермайнде.",
+                             reply_markup=
+                             {
+                                 "inline_keyboard": [[
+                                     {"text": f"Нет, спасибо",
+                                      "callback_data": "skip_photo"}
+                                 ]]
+                             }
+                             )
+
+            update = await self.receive_update(IsPhoto() | IsCallbackQuery())
+
+            if update.callback_query:
                 if update.callback_query.data == "skip_photo":
                     state.skipped_photo = True
                     save()
-                    return Registration(ctx)
 
-            if is_photo(update):
-                msg = chat.send_action(action="upload_photo")
-                if message.photo:
-                    photo_limit = 1000 * 1000
-                    selected_file = None
+            if update.message and update.message.photo:
+                photos = update.message.photo
+                photo_limit = 1000 * 1000
+
+                with BytesIO() as bytes:
+                    bytes.getbuffer()
+                    selected_file: PhotoSize = None
                     # Selecting last size below 1M
-                    for photo in message.photo:
-                        file: File = photo.get_file()
-                        if file.file_size > photo_limit:
+                    for photo in photos:
+                        if photo.file_size > photo_limit:
                             break
-                        selected_file = file
+                        selected_file = photo
 
-                    # TODO: this is io bound, should move to async tasks afterwards.
-                    photo_bytes = selected_file.download_as_bytearray()
-                    user.photo = photo_bytes
+                    await selected_file.download(bytes)
+
+                    user.photo = bytes.getbuffer().tobytes()
                     save()
-                    return Registration(ctx)
 
-            return
-
-        chat.send_message("Отлично. Мы узнали от вас всё, что нам было нужно.")
         user.registered = True
-        save()
-        return Root(ctx)
+        await self.reply(text="Отлично. Мы узнали от вас всё, что нам было нужно.")
+        # return Root()
 
 
 class TinderState(db.State):
@@ -230,5 +300,5 @@ class TinderState(db.State):
 
 class Tinder(Root):
 
-    async def on_update(self, bot: Bot, update: Update):
-        update.effective_chat.send_message("tinder tinder")
+    async def on_update(self, update: Update):
+        await update.channel_post.reply("tinder tinder")

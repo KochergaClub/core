@@ -1,7 +1,6 @@
-import base64
+import json
 import logging
-
-from typing import Union
+import typing
 
 import binascii
 from django.core.signing import TimestampSigner, BadSignature
@@ -35,16 +34,40 @@ class State(dict):
 class User(models.Model):
     objects: QuerySet
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
-    uid = models.CharField(max_length=100, null=False)
-    desc = models.CharField(max_length=300)
-    photo = models.BinaryField()
-    state = models.BinaryField(null=True)
+    uid = models.TextField(null=True)
+    name = models.TextField(null=True)
+    desc = models.TextField(null=True)
+    photo = models.BinaryField(null=True)
+    state = models.TextField(null=True)
 
     def generate_token(self) -> str:
         return base64url_encode(bytes(signer.sign(self.user.email), "utf-8"))
 
+    def is_bound(self):
+        return self.uid is not None
 
-def get_user(token) -> Union[User, None]:
+    _S = typing.TypeVar("_S")
+
+    def get_state(self, clazz: typing.Type[_S] = State) -> _S:
+        """
+        :rtype: State
+        """
+        base = clazz()
+        if self.state is not None:
+            base.update(json.loads(self.state))
+        return base
+
+    def set_state(self, state):
+        """
+
+        :type state: State
+        """
+        self.state = json.dumps(state)
+
+
+def get_mm_user_by_token(token) -> typing.Union[User, None]:
+    if token is None or len(token) == 0:
+        return None
     try:
         token = base64url_decode(token)
         email = signer.unsign(str(token, "utf-8"), max_age=600)
