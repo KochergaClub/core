@@ -46,6 +46,7 @@ honcho = "*"
 tqdm = "*"
 gunicorn = "^19.9"
 aiogram = "^2.0"
+aiohttp_socks = "^0.2.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

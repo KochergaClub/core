@@ -10,8 +10,10 @@ from django.db import models
 from django.db.models import QuerySet
 from jwt.utils import base64url_encode, base64url_decode
 
-from kocherga.auth.models import User as KchUser
+from django.contrib.auth import get_user_model
 from kocherga.django import settings
+
+KchUser = get_user_model()
 
 log = logging.getLogger("mmbot_models")
 signer = TimestampSigner()
@@ -84,7 +86,7 @@ class User(models.Model):
         self.state = json.dumps(state)
 
     def generate_link(self):
-        return f"{settings.MASTERMIND_BOT_CONFIG['bot_link']}&start={str(self.generate_token(), 'utf-8')}"
+        return f"{settings.MASTERMIND_BOT_CONFIG['bot_link']}?start={str(self.generate_token(), 'utf-8')}"
 
 
 def get_mm_user_by_token(token) -> typing.Union[User, None]:
