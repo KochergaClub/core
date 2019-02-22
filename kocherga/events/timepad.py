@@ -16,7 +16,7 @@ from kocherga.datetime import dts
 from kocherga.events.announcement import BaseAnnouncement
 import kocherga.events.markup
 
-BASE_URL = "https://api.timepad.ru/v1"
+from kocherga.timepad.api import api_call
 
 TIMEPAD_CONFIG = settings.KOCHERGA_TIMEPAD
 ORGANIZATION = TIMEPAD_CONFIG["organization"]
@@ -35,18 +35,16 @@ class TimepadAnnouncement(BaseAnnouncement):
         return f"https://{ORGANIZATION}.timepad.ru/event/{self.timepad_event_id}"
 
 
-def token():
-    return settings.KOCHERGA_TIMEPAD_TOKEN
-
-
 def check(url):
     match = re.match("https://{}\.timepad\.ru/event/(\d+)/$".format(ORGANIZATION), url)
     if not match:
         raise Exception("Weird url: {}".format(url))
     timepad_id = int(match.group(1))
-    r = requests.get(f"{BASE_URL}/events.json?organization_ids={ORGANIZATION_ID}")
-    r.raise_for_status()
-    events = json.loads(r.text)["values"]
+
+    result = api_call('GET', 'events', {
+        'organization_ids': ORGANIZATION_ID,
+    })
+    events = result["values"]
 
     return timepad_id in [event["id"] for event in events]
 
@@ -105,8 +103,6 @@ def timepad_category_by_code(code):
 
 
 def create(event):
-    url = BASE_URL + "/events.json?token=" + token()
-
     timepad_category = timepad_category_by_code(
         event.timepad_category_code or "other_event"
     )
@@ -173,21 +169,14 @@ def create(event):
         data["poster_image_url"] = image
 
     logger.debug("creating timepad event %s", data)
-    r = requests.post(url, json=data)
-    logger.debug(r.text)
-    r.raise_for_status()
-
-    result = json.loads(r.text)
+    result = api_call('POST', 'events', data)
 
     return TimepadAnnouncement(result["id"])
 
 
 def edit(announcement, patch):
     timepad_event_id = announcement.timepad_event_id
-    url = BASE_URL + "/events/{}.json?token={}".format(timepad_event_id, token())
-
-    r = requests.post(url, data=json.dumps(patch))
-    r.raise_for_status()
+    api_call('POST', f"events/{timepad_event_id}", patch)
 
 def get_all_subscribers():
     URL = f'https://{ORGANIZATION}.timepad.ru/crm/list/{SUBSCRIBERS_LIST_ID}/export/'
