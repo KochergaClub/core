@@ -125,5 +125,5 @@ def nearest_watchman():
     return load_schedule().nearest_watchman()
 
 class Importer(kocherga.importer.base.FullImporter):
-    def do_full_import(self, session):
+    def do_full_import(self):
         load_schedule_from_google().save_to_db()

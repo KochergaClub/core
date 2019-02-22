@@ -80,5 +80,5 @@ def current_cash():
 
 class Importer(kocherga.importer.base.FullImporter):
 
-    def do_full_import(self, session):
+    def do_full_import(self):
         export_to_db()

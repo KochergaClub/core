@@ -12,7 +12,7 @@ class SomeImporter(IncrementalImporter):
     def get_initial_dt(self):
         return datetime.now(TZ) - timedelta(days=10)
 
-    def do_period_import(self, from_dt, to_dt, session):
+    def do_period_import(self, from_dt, to_dt):
         return datetime.now(TZ)
         pass
 
@@ -36,7 +36,7 @@ def test_import_all(db):
 
 
 class BadImporter(SomeImporter):
-    def do_period_import(self, from_dt, to_dt, session):
+    def do_period_import(self, from_dt, to_dt):
         raise Exception("Something went terribly wrong")
 
 @pytest.mark.django_db(transaction=True)

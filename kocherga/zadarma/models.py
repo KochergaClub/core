@@ -138,7 +138,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2016, 11, 1, tzinfo=TZ)
 
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         last_call = None
 
         schedule = kocherga.watchmen.tools.load_schedule()
