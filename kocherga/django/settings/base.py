@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'kocherga.my',
 ]
 
+IGNORE_WEB = False
+
 MIDDLEWARE = [
     'kocherga.django.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
