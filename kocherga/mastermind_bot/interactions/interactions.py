@@ -3,11 +3,11 @@ import typing
 from io import BytesIO
 
 from aiogram import types as at, Bot, Dispatcher
-from aiogram.dispatcher.filters import Filter, BoundFilter
+from aiogram.dispatcher.filters import Filter, BoundFilter, Text
 from aiogram.types import PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 
 from kocherga.mastermind_bot import models as db
-from kocherga.mastermind_bot.models import get_mm_user_by_token
+from kocherga.mastermind_bot.models import get_mm_user_by_token, State
 
 _V = typing.TypeVar("_V")
 
@@ -88,15 +88,15 @@ def register_handlers(dsp: Dispatcher):
     def strn(obj):
         return str(obj) if obj else ""
 
-    entering_name = model_is(lambda a: a.name is None) & state_is(RegistrationState, lambda a: not a.complete)
+    reg_complete = state_is(RegistrationState, lambda a: a.complete)
 
-    entering_desc = model_is(lambda a: a.desc is None) & state_is(RegistrationState, lambda a: not a.complete)
+    entering_name = model_is(lambda a: a.name is None) & ~reg_complete
 
-    def photo_phase(a):
-        print(a)
-        return not a.skipped_photo and not a.complete
+    entering_desc = model_is(lambda a: a.desc is None) & ~reg_complete
 
-    entering_photo = model_is(lambda a: a.photo is None) & state_is(RegistrationState, photo_phase)
+    entering_photo = model_is(lambda a: a.photo is None) \
+                     & state_is(RegistrationState, lambda a: not a.skipped_photo) \
+                     & ~reg_complete
 
     async def start_registration():
         user = get_user()
@@ -192,8 +192,28 @@ def register_handlers(dsp: Dispatcher):
             text="Мы узнали всё, что хотели.",
         )
 
+    # ==--==
 
-# ==--==
+    # todo: time info
+
+    # ==--== Voting
+
+    class VotingState(State):
+        def __init__(self):
+            super().__init__()
+            self.voting_active = True
+
+    voting_active = reg_complete & state_is(VotingState, lambda a: a.voting_active)
+
+    @dsp.callback_query_handler(logged_in, voting_active, Text(startswith="vote"))
+    async def vote(msg: at.CallbackQuery):
+        data = msg.data
+        how, whom = data[4].split("-")
+        whom = db.User.objects.get(uid=whom)
+        vote_obj, _ = db.Vote.objects.get_or_create(whom=whom, who=get_user())
+        vote_obj.how = how
+
+    # ==--==
 
 
 async def send_rate_request(to: int, whom: str):
@@ -205,8 +225,8 @@ async def send_rate_request(to: int, whom: str):
         await bot.send_photo(to, photo)
     await bot.send_message(to, vote_for.desc,
                            reply_markup=InlineKeyboardMarkup()
-                           .insert(InlineKeyboardButton("YY", callback_data=f"voteYY-{vote_for.uid}"))
-                           .insert(InlineKeyboardButton("Y", callback_data=f"voteY-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("YY", callback_data=f"voteY-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("Y", callback_data=f"voteO-{vote_for.uid}"))
                            .insert(InlineKeyboardButton("N", callback_data=f"voteN-{vote_for.uid}"))
                            )
 
