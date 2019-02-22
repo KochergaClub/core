@@ -25,7 +25,7 @@ class Importer(kocherga.importer.base.FullImporter):
         return api_response['values']
 
     def get_orders_data(self, event_id):
-        api_response = api_call('GET', f'events/{event_id}/orders')
+        api_response = api_call('GET', f'events/{event_id}/orders', { 'limit': 100 })
         return api_response.get('values', [])
 
     def do_full_import(self):
@@ -58,6 +58,7 @@ class Importer(kocherga.importer.base.FullImporter):
                     user = KchUser.objects.create_user(email)
 
                     if order_data['subscribed_to_newsletter']:
+                        logger.info(f"{email} agreed to newsletter")
                         mailchimp_users.append(
                             kocherga.email.lists.User(
                                 first_name=first_name,
