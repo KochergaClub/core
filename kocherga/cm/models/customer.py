@@ -14,6 +14,8 @@ from kocherga.datetime import TZ
 from kocherga.cm.scraper import DOMAIN, get_cookies, load_customer_from_html
 from .order import Order
 
+KchUser = get_user_model()
+
 class Gender(enum.Enum):
     unknown = 0
     male = 1
@@ -189,11 +191,10 @@ class Customer(models.Model):
 
         email = params['email']
         if email and params['is_active']:
-            User = get_user_model()
             try:
-                user = User.objects.get(email=email)
-            except User.DoesNotExist:
-                user = User.objects.create_user(email)
+                user = KchUser.objects.get(email=email)
+            except KchUser.DoesNotExist:
+                user = KchUser.objects.create_user(email)
             params['user'] = user
 
         (obj, created) = Customer.objects.update_or_create(
