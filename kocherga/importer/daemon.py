@@ -17,6 +17,7 @@ IMPORTER_MODULES = [
     "money.tochka.models",
     "watchmen.importer",
     "zadarma.models",
+    "timepad.importer",
 ]
 
 
