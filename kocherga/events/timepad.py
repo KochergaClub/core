@@ -16,12 +16,11 @@ from kocherga.datetime import dts
 from kocherga.events.announcement import BaseAnnouncement
 import kocherga.events.markup
 
-from kocherga.timepad.api import api_call
+from kocherga.timepad.api import api_call, ORGANIZATION_ID
 
 TIMEPAD_CONFIG = settings.KOCHERGA_TIMEPAD
 ORGANIZATION = TIMEPAD_CONFIG["organization"]
 SUBSCRIBERS_LIST_ID = TIMEPAD_CONFIG["subscribers_list_id"]
-ORGANIZATION_ID = TIMEPAD_CONFIG["organization_id"]
 DEFAULT_ACCESS_STATUS = TIMEPAD_CONFIG["default_access_status"]
 
 
