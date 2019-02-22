@@ -8,8 +8,10 @@ from django.db import models
 from django.db.models import QuerySet
 from jwt.utils import base64url_encode, base64url_decode
 
-from kocherga.auth.models import User as KchUser
+from django.contrib.auth import get_user_model
 from kocherga.django import settings
+
+KchUser = get_user_model()
 
 log = logging.getLogger("mmbot_models")
 signer = TimestampSigner()
