@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'kocherga.timepad',
 ]
 
+IGNORE_WEB = False
+
 MIDDLEWARE = [
     'kocherga.django.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
