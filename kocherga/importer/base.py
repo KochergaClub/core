@@ -78,12 +78,12 @@ class BaseImporter(ABC):
 class FullImporter(BaseImporter):
 
     @abstractmethod
-    def do_full_import(self, session: Any) -> None:
+    def do_full_import(self) -> None:
         pass
 
     def import_new(self) -> None:
         with ImportContext(self.name, "full") as ic:
-            self.do_full_import(None)
+            self.do_full_import()
 
 
 class IncrementalImporter(BaseImporter):
@@ -95,7 +95,7 @@ class IncrementalImporter(BaseImporter):
     # Should return a datetime of a last imported object or a last datetime that we can be sure won't be needed to be imported again.
     @abstractmethod
     def do_period_import(
-        self, from_dt: datetime, to_dt: datetime, session: object
+        self, from_dt: datetime, to_dt: datetime
     ) -> datetime:
         pass
 
@@ -108,7 +108,7 @@ class IncrementalImporter(BaseImporter):
 
             end_dt = datetime.now(TZ)
 
-            last_dt = self.do_period_import(start_dt, end_dt, None)
+            last_dt = self.do_period_import(start_dt, end_dt)
             if not last_dt:
                 raise Exception(
                     f"{self.name}.do_period_import didn't return a datetime object"
