@@ -10,3 +10,8 @@ __pycache__
 .ipynb_checkpoints
 /notebooks/scratch.ipynb
 /collected_static
+
+*.swp
+.idea/
+tier.txt
+data/
