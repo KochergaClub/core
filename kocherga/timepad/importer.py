@@ -56,6 +56,8 @@ class Importer(kocherga.importer.base.FullImporter):
                     user = KchUser.objects.get(email=email)
                 except KchUser.DoesNotExist:
                     user = KchUser.objects.create_user(email)
+
+                if order_data['subscribed_to_newsletter']:
                     mailchimp_users.append(
                         kocherga.email.lists.User(
                             first_name=first_name,
@@ -64,6 +66,8 @@ class Importer(kocherga.importer.base.FullImporter):
                             card_id=None,
                         )
                     )
+                else:
+                    logger.info(f"{email} is new but doesn't agree to newsletter")
 
                 Order.objects.update_or_create(
                     id=order_data['id'],
