@@ -19,4 +19,4 @@ class Order(models.Model):
     )
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    status = models.CharField(max_length=40, blank=True, null=True)
+    status = models.CharField(max_length=40)
