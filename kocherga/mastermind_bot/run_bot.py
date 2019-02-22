@@ -23,7 +23,14 @@ def init():
 
     log.info("Don't forget to check proxy settings!")
 
-    bot = aiogram.Bot(settings.MASTERMIND_BOT_CONFIG["token"])
+    bot_extra_settings = {}
+    if 'proxy' in settings.MASTERMIND_BOT_CONFIG:
+        bot_extra_settings['proxy'] = settings.MASTERMIND_BOT_CONFIG['proxy']
+
+    bot = aiogram.Bot(
+        settings.MASTERMIND_BOT_CONFIG["token"],
+        **bot_extra_settings,
+    )
 
     dsp = Dispatcher(bot)
     dsp.updates_handler.register(handler=upd_handler)
