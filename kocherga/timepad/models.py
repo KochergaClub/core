@@ -12,9 +12,10 @@ class Event(models.Model):
 class Order(models.Model):
     id = models.IntegerField(primary_key=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
+        related_name='timepad_orders',
     )
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
