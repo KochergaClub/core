@@ -13,10 +13,6 @@ logging.basicConfig(level="INFO")
 log = logging.getLogger("mmbot")
 
 
-async def upd_handler(upd: Update):
-    print(upd)
-
-
 def init():
     evloop = asyncio.new_event_loop()
     asyncio.set_event_loop(evloop)
@@ -26,7 +22,6 @@ def init():
     bot = aiogram.Bot(settings.MASTERMIND_BOT_CONFIG["token"])
 
     dsp = Dispatcher(bot)
-    dsp.updates_handler.register(handler=upd_handler)
     register_handlers(dsp)
     executor.start_polling(dsp)
 

@@ -4,7 +4,7 @@ from asyncio import Future
 from typing import TypeVar, Awaitable
 
 from aiogram.dispatcher.filters import Filter, BoundFilter
-from aiogram.types import Update
+from aiogram.types import Update, Message
 
 from kocherga.mastermind_bot import models as db
 
@@ -12,18 +12,17 @@ _G = TypeVar('_G')
 
 
 class IsText(Filter):
-    async def check(self, upd: Update) -> bool:
-        msg = upd.message
+    async def check(self, msg: Message) -> bool:
         if msg is None:
             return False
         return msg.text is not None and len(msg.text) > 0
 
 
 class IsPhoto(BoundFilter):
-    async def check(self, upd: Update) -> bool:
-        msg = upd.message
+    async def check(self, msg: Message) -> bool:
         if msg is None:
             return False
+        print(msg)
         return msg.photo is not None
 
 

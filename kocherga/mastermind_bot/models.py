@@ -3,6 +3,8 @@ import logging
 import typing
 
 import binascii
+from typing import List
+
 from django.core.signing import TimestampSigner, BadSignature
 from django.db import models
 from django.db.models import QuerySet
@@ -49,6 +51,21 @@ class User(models.Model):
         return self.uid is not None
 
     _S = typing.TypeVar("_S")
+
+    def edit_state(self, type: typing.Type[_S]) -> typing.ContextManager[_S]:
+        user = self
+
+        class EditState:
+
+            def __enter__(self):
+                self.state = user.get_state(type)
+                return self.state
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                user.set_state(self.state)
+                user.save()
+
+        return EditState()
 
     def get_state(self, clazz: typing.Type[_S] = State) -> _S:
         """
