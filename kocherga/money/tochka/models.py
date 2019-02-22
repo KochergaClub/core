@@ -183,7 +183,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2015, 8, 1, tzinfo=TZ)
 
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(
             from_dt, to_dt, step=timedelta(days=28)
         ):

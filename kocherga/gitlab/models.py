@@ -74,7 +74,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def get_initial_dt(self):
         return datetime(2017, 10, 1, tzinfo=TZ)
 
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         issue = None
         for gl_issue in main_project().issues.list(
             updated_after=from_dt.isoformat(),
