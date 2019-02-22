@@ -75,7 +75,8 @@ def get_mm_user_by_token(token) -> typing.Union[User, None]:
         return None
     try:
         token = base64url_decode(token)
-        email = signer.unsign(str(token, "utf-8"), max_age=600)
+        # STOPSHIP: change back to 600
+        email = signer.unsign(str(token, "utf-8"), max_age=6000000)
     except BadSignature:
         return None
     except binascii.Error:

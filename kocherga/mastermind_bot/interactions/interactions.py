@@ -2,13 +2,14 @@ import asyncio
 import typing
 from io import BytesIO
 
-from aiogram import types as at, Bot
+from aiogram import types as at, Bot, Dispatcher
 from aiogram.dispatcher.filters import Filter
+from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.types import Update, PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 
 from kocherga.mastermind_bot import models as db
 from kocherga.mastermind_bot.models import get_mm_user_by_token
-from .utils import Interaction, IsFrom, SessionChanged, IsCallbackQuery, IsText, IsPhoto
+from .utils import Interaction, SessionChanged, IsCallbackQuery, IsText, IsPhoto
 
 
 class Root(Interaction):
@@ -20,15 +21,6 @@ class Root(Interaction):
             return db.User.objects.get(uid=at.User.get_current().username)
         except db.User.DoesNotExist:
             return None
-
-    async def receive_update(self, pred: Filter) -> Update:
-        pred = IsFrom(self.user().uid).__and__(pred)
-
-        prev_state = self.user().get_state()
-        upd = await super().receive_update(pred)
-        if prev_state != self.user().get_state():
-            raise SessionChanged()
-        return upd
 
     async def reply(self, **kwargs):
         bot: Bot = Bot.get_current()
@@ -66,6 +58,127 @@ class Root(Interaction):
         return
 
 
+class UserState(StatesGroup):
+    registration = State()
+    tinder = State()
+
+
+_T = typing.TypeVar("_T")
+
+
+def logged_in(_):
+    teleuser: at.User = at.User.get_current()
+    user: db.User = get_user()
+    return user is not None
+
+
+def state_matches(t: typing.Type[_T], a: typing.Callable[[_T], bool]) -> typing.Callable[[typing.Any], bool]:
+    def filter(_):
+        user: db.User = get_user()
+        if not user:
+            return False
+        return a(user.get_state(t))
+
+    return filter
+
+
+def model_matches(a: typing.Callable[[db.User], bool]) -> typing.Callable[[typing.Any], bool]:
+    def filter(_):
+        user: db.User = get_user()
+        if not user:
+            return False
+        return a(user)
+
+    return filter
+
+
+def register_handlers(dsp: Dispatcher):
+    def strn(obj):
+        return str(obj) if obj else ""
+
+    entering_name = model_matches(lambda a: a.name is None)
+
+    async def start_registration():
+        user = get_user()
+        bot: Bot = Bot.get_current()
+        chat = at.Chat.get_current()
+        state = user.get_state(RegistrationState)
+
+        suggestion_name = " ".join([strn(chat.first_name), strn(chat.last_name)])
+        suggestion_nick = chat.username
+        await bot.send_message(user.chat_id, text="Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
+                               reply_markup=InlineKeyboardMarkup()
+                               .insert(InlineKeyboardButton(suggestion_name, callback_data="use_name"))
+                               .insert(InlineKeyboardButton(suggestion_nick, callback_data="use_nickname"))
+                               )
+        state.entering_name = True
+        user.set_state(state)
+        user.save()
+
+    @dsp.inline_handler(logged_in, entering_name, text=["use_name", "use_nickname"])
+    async def registration_name(u):
+        chat = at.Chat.get_current()
+        suggestion_name = " ".join([strn(chat.first_name), strn(chat.last_name)])
+        suggestion_nick = chat.username
+
+
+    @dsp.message_handler(lambda upd: not logged_in(upd), commands=["start"])
+    async def auth(msg):
+        user = get_user()
+        bot: Bot = Bot.get_current()
+
+        print(f"Unregistered user: {user}")
+        token = msg.get_args()
+        user = get_mm_user_by_token(token)
+        print(f"resolved as {user.user.email}")
+
+        if user is None:
+            await bot.send_message(chat_id=msg.chat.id,
+                                   text="Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+            return
+
+        user.uid = msg.from_user.username
+        user.chat_id = msg.chat.id
+        user.save()
+
+        await start_registration()
+
+
+def get_user() -> typing.Optional[db.User]:
+    try:
+        return db.User.objects.get(uid=at.User.get_current().username)
+    except db.User.DoesNotExist:
+        return None
+
+
+async def register(msg: at.Message):
+    user = get_user()
+    bot: Bot = Bot.get_current()
+
+    if (user is None or user.uid is None) and msg.is_command():
+        print(f"Unregistered user: {user}")
+        token = msg.get_args()
+        user = get_mm_user_by_token(token)
+        print(f"resolved as {user}")
+
+        if user is None:
+            await bot.send_message(chat_id=msg.chat.id,
+                                   text="Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+            return
+
+        user.uid = msg.from_user.username
+        user.chat_id = msg.chat.id
+        user.save()
+
+    if user is None or user.uid is None:
+        await bot.send_message(chat_id=msg.chat.id,
+                               text="Вы не зарегестрированы. Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+        return
+
+    reg = user.get_state(RegistrationState)
+    reg.complete = True
+
+
 class RegistrationState(db.State):
     def __init__(self):
         super().__init__()
@@ -101,14 +214,10 @@ class Registration(Root):
             suggestion_nick = chat.username
 
             await self.reply(text="Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
-                             reply_markup={
-                                 "inline_keyboard": [[
-                                     {"text": f"{suggestion_name}",
-                                      "callback_data": "use_name"},
-                                     {"text": f"{suggestion_nick}",
-                                      "callback_data": "use_nickname"}
-                                 ]]
-                             })
+                             reply_markup=InlineKeyboardMarkup()
+                             .insert(InlineKeyboardButton(suggestion_name, callback_data="use_name"))
+                             .insert(InlineKeyboardButton(suggestion_nick, callback_data="use_nickname"))
+                             )
 
             update = await self.receive_update(IsCallbackQuery() | IsText())
 
@@ -141,13 +250,8 @@ class Registration(Root):
         while user.photo is None and not state.skipped_photo:
 
             await self.reply(text="Загрузите фото, чтобы другие люди могли легче найти вас на мастермайнде.",
-                             reply_markup=
-                             {
-                                 "inline_keyboard": [[
-                                     {"text": f"Нет, спасибо",
-                                      "callback_data": "skip_photo"}
-                                 ]]
-                             }
+                             reply_markup=InlineKeyboardMarkup()
+                             .add(InlineKeyboardButton("Нет, спасибо", "skip_photo"))
                              )
 
             update = await self.receive_update(IsPhoto() | IsCallbackQuery())

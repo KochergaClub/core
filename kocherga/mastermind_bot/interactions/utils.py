@@ -1,7 +1,6 @@
 import asyncio
 import logging
 from asyncio import Future
-from concurrent.futures import ThreadPoolExecutor
 from typing import TypeVar, Awaitable
 
 from aiogram.dispatcher.filters import Filter, BoundFilter
@@ -9,29 +8,7 @@ from aiogram.types import Update
 
 from kocherga.mastermind_bot import models as db
 
-disp_event_loop = asyncio.new_event_loop()
-executor = ThreadPoolExecutor()
-disp_event_loop.set_default_executor(executor)
-disp_event_loop.set_exception_handler(lambda loop, ctx: logging.error("Exception in some update handler", ctx))
-
 _G = TypeVar('_G')
-
-
-def resolve_user(upd: Update):
-    if upd.message:
-        return upd.message.from_user
-    if upd.edited_message:
-        return upd.edited_message.from_user
-    if upd.inline_query:
-        return upd.inline_query.from_user
-    if upd.chosen_inline_result:
-        return upd.chosen_inline_result.from_user
-    if upd.callback_query:
-        return upd.callback_query.from_user
-    if upd.shipping_query:
-        return upd.shipping_query.from_user
-    if upd.pre_checkout_query:
-        return upd.pre_checkout_query.from_user
 
 
 class IsText(Filter):
@@ -53,16 +30,6 @@ class IsPhoto(BoundFilter):
 class IsCallbackQuery(BoundFilter):
     async def check(self, upd: Update) -> bool:
         return upd.callback_query is not None
-
-
-class IsFrom(BoundFilter):
-
-    def __init__(self, username: str):
-        self.username = username
-
-    async def check(self, upd: Update) -> bool:
-        user = resolve_user(upd)
-        return user is not None and user.username == self.username
 
 
 class SessionChanged(BaseException):
