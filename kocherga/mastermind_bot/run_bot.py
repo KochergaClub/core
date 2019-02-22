@@ -6,7 +6,7 @@ from aiogram import types
 from aiogram.types import Update
 
 from kocherga.django import settings
-from kocherga.mastermind_bot.user_interactions import Root
+from kocherga.mastermind_bot.interactions.interactions import Root
 from .models import User, KchUser
 
 logging.basicConfig(level="INFO")
@@ -24,9 +24,6 @@ def init():
     log.info("Don't forget to check proxy settings!")
 
     bot = aiogram.Bot(settings.MASTERMIND_BOT_CONFIG["token"])
-
-    u, _ = User.objects.get_or_create(user=KchUser.objects.get(id=1))
-    print(u.generate_token())
 
     dispatcher = Root()
 

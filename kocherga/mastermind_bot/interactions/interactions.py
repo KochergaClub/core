@@ -1,135 +1,17 @@
 import asyncio
-import logging
 import typing
-from asyncio import Future
-from concurrent.futures import ThreadPoolExecutor
 from io import BytesIO
-from typing import TypeVar, Awaitable
 
 from aiogram import types as at, Bot
-from aiogram.dispatcher.filters import Filter, BoundFilter
-from aiogram.types import Update, PhotoSize
+from aiogram.dispatcher.filters import Filter
+from aiogram.types import Update, PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 
+from kocherga.mastermind_bot import models as db
 from kocherga.mastermind_bot.models import get_mm_user_by_token
-from . import models as db
-
-disp_event_loop = asyncio.new_event_loop()
-executor = ThreadPoolExecutor()
-disp_event_loop.set_default_executor(executor)
-disp_event_loop.set_exception_handler(lambda loop, ctx: logging.error("Exception in some update handler", ctx))
-
-_G = TypeVar('_G')
-
-
-def resolve_user(upd: Update):
-    if upd.message:
-        return upd.message.from_user
-    if upd.edited_message:
-        return upd.edited_message.from_user
-    if upd.inline_query:
-        return upd.inline_query.from_user
-    if upd.chosen_inline_result:
-        return upd.chosen_inline_result.from_user
-    if upd.callback_query:
-        return upd.callback_query.from_user
-    if upd.shipping_query:
-        return upd.shipping_query.from_user
-    if upd.pre_checkout_query:
-        return upd.pre_checkout_query.from_user
-
-
-class IsText(Filter):
-    async def check(self, upd: Update) -> bool:
-        msg = upd.message
-        if msg is None:
-            return False
-        return msg.text is not None and len(msg.text) > 0
-
-
-class IsPhoto(BoundFilter):
-    async def check(self, upd: Update) -> bool:
-        msg = upd.message
-        if msg is None:
-            return False
-        return msg.photo is not None
-
-
-class IsCallbackQuery(BoundFilter):
-    async def check(self, upd: Update) -> bool:
-        return upd.callback_query is not None
-
-
-class IsFrom(BoundFilter):
-
-    def __init__(self, username: str):
-        self.username = username
-
-    async def check(self, upd: Update) -> bool:
-        user = resolve_user(upd)
-        return user is not None and user.username == self.username
-
-
-class SessionChanged(BaseException):
-    pass
-
-
-class Interaction:
-    """
-    :type parent Interaction
-    """
-    state_class = db.State
-    parent = None
-    awaits = []
-
-    def __init__(self, parent=None):
-        """
-
-        :type parent: Interaction
-        """
-        self.parent = parent
-
-    async def on_update(self, update: Update):
-        """
-        :return: Interaction to which you want user to be redirected or None
-        :rtype: typing.Optional[Interaction]
-        """
-        raise NotImplementedError
-
-    async def receive_update(self, pred: Filter):
-        """
-        Awaits for update matching predicate
-        :param pred: what to match
-        """
-        if self.parent is not None:
-            return await self.parent.receive_update(pred)
-        else:
-            future = asyncio.get_event_loop().create_future()
-            self.awaits.append((pred, future))
-            return await future
-
-    async def handle_update(self, update: Update):
-        for tuple in self.awaits:
-            pred, future = tuple
-            future: Future
-            result = pred(update)
-            if isinstance(result, Awaitable):
-                result = await result
-            if result:
-                self.awaits.remove(tuple)
-                future.set_result(update)
-                return
-
-        async def mow():
-            dsp = self
-            while dsp:
-                dsp = await dsp.on_update(update)
-
-        # noinspection PyAsyncCall
-        asyncio.create_task(mow())
+from .utils import Interaction, IsFrom, SessionChanged, IsCallbackQuery, IsText, IsPhoto
 
 
 class Root(Interaction):
-    path = "/"
     state_class = db.State
 
     # noinspection PyUnresolvedReferences
@@ -139,7 +21,7 @@ class Root(Interaction):
         except db.User.DoesNotExist:
             return None
 
-    async def receive_update(self, pred: Filter):
+    async def receive_update(self, pred: Filter) -> Update:
         pred = IsFrom(self.user().uid).__and__(pred)
 
         prev_state = self.user().get_state()
@@ -169,17 +51,19 @@ class Root(Interaction):
                 return
 
             user.uid = msg.from_user.username
+            user.chat_id = msg.chat.id
             user.save()
 
         if user is None or user.uid is None:
             await self.reply(text="Вы не зарегестрированы. Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+            return
 
         reg = user.get_state(RegistrationState)
 
         if not reg.complete:
             return Registration(self)
 
-        return Tinder(self)
+        return
 
 
 class RegistrationState(db.State):
@@ -199,6 +83,8 @@ class Registration(Root):
         state = user.get_state(RegistrationState)
         message = update.message
         print(f"state: {user.get_state(RegistrationState)}")
+
+        await self.reply(text="Вставить сюда интро")
 
         def save():
             user.set_state(state)
@@ -245,7 +131,7 @@ class Registration(Root):
                     await self.reply(text="Сомневаюсь, что имя у вас занимает несколько строк.")
                     return
                 else:
-                    return set_name(text)
+                    set_name(text)
             else:
                 await self.reply(text="Пожалуйста, ответьте текстом.")
                 return
@@ -289,16 +175,60 @@ class Registration(Root):
                     user.photo = bytes.getbuffer().tobytes()
                     save()
 
-        user.registered = True
+        while user.desc is None:
+            await self.reply(text="Опишите себя в паре предложений.")
+
+            update = await self.receive_update(IsText())
+            text = update.message.text
+            # todo: probably validate that too
+            user.desc = text
+
+        state.complete = True
+        save()
         await self.reply(text="Отлично. Мы узнали от вас всё, что нам было нужно.")
-        # return Root()
+        return Root()
 
 
 class TinderState(db.State):
-    pass
+
+    def __init__(self):
+        super().__init__()
+        self.active = False
+
+
+async def send_rate_request(to: int, whom: str):
+    bot: Bot = Bot.get_current()
+    vote_for: db.User = db.User.objects.get(uid=whom)
+    await bot.send_message(to, f"**Голосование за** {vote_for.name}", parse_mode="Markdown")
+    if vote_for.photo is not None:
+        photo = at.InputFile(BytesIO(vote_for.photo))
+        await bot.send_photo(to, photo)
+    await bot.send_message(to, vote_for.desc,
+                           reply_markup=InlineKeyboardMarkup()
+                           .insert(InlineKeyboardButton("YY", callback_data=f"voteYY-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("Y", callback_data=f"voteY-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("N", callback_data=f"voteN-{vote_for.uid}"))
+                           )
+
+
+async def tinder_activate(user: db.User):
+    """
+        Activates voting for some user.
+    :param user:
+    """
+    to_notify = db.User.objects.exclude(uid=user.uid).iterator()
+    tasks = []
+    for to in to_notify:
+        tasks.append(asyncio.create_task(send_rate_request(to.uid, user.uid)))
+
+    for task in tasks:
+        await task
 
 
 class Tinder(Root):
 
     async def on_update(self, update: Update):
-        await update.channel_post.reply("tinder tinder")
+        bot: Bot = Bot.get_current()
+        chat: at.Chat = at.Chat.get_current()
+
+        await bot.send_message(chat.id, "tinder tinder")

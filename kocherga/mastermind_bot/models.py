@@ -40,6 +40,7 @@ class User(models.Model):
     desc = models.TextField(null=True)
     photo = models.BinaryField(null=True)
     state = models.TextField(null=True)
+    chat_id = models.IntegerField(null=True)
 
     def generate_token(self) -> str:
         return base64url_encode(bytes(signer.sign(self.user.email), "utf-8"))
