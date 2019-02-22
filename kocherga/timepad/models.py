@@ -7,6 +7,10 @@ class Event(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f'[{self.id}] {self.name}'
+
+
 # Timepad's own data model includes Tickets inside each Order, and email/first_name/last_name are actually ticket's properties.
 # But we don't use multiregistrations, so it doesn't matter much for now.
 class Order(models.Model):
@@ -20,3 +24,6 @@ class Order(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     status = models.CharField(max_length=40)
+
+    def __str__(self):
+        return f'[{self.id}] {self.user.email} / {self.event.name}'
