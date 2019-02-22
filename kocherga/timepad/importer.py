@@ -53,24 +53,23 @@ class Importer(kocherga.importer.base.FullImporter):
                 last_name = order_data['tickets'][0]['answers']['surname']
                 status = order_data['status']['name']
 
-                if status == 'ok':
-                    try:
-                        user = KchUser.objects.get(email=email)
-                    except KchUser.DoesNotExist:
-                        user = KchUser.objects.create_user(email)
+                try:
+                    user = KchUser.objects.get(email=email)
+                except KchUser.DoesNotExist:
+                    user = KchUser.objects.create_user(email)
 
-                        if order_data['subscribed_to_newsletter']:
-                            logger.info(f"{email} agreed to newsletter")
-                            mailchimp_users.append(
-                                kocherga.email.lists.User(
-                                    first_name=first_name,
-                                    last_name=last_name,
-                                    email=email,
-                                    card_id=None,
-                                )
+                    if order_data['subscribed_to_newsletter']:
+                        logger.info(f"{email} agreed to newsletter")
+                        mailchimp_users.append(
+                            kocherga.email.lists.User(
+                                first_name=first_name,
+                                last_name=last_name,
+                                email=email,
+                                card_id=None,
                             )
-                        else:
-                            logger.info(f"{email} is new but doesn't agree to newsletter")
+                        )
+                    else:
+                        logger.info(f"{email} is new but doesn't agree to newsletter")
 
                 Order.objects.update_or_create(
                     id=order_data['id'],
