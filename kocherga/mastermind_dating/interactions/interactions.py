@@ -437,7 +437,7 @@ async def tinder_activate(user: db.User):
         Activates voting for some user.
     :param user:
     """
-    to_notify = db.User.objects.exclude(telegram_uid=user.telegram_uid).iterator()
+    to_notify = db.User.objects.filter(cohort=user.cohort).exclude(telegram_uid=user.telegram_uid).iterator()
     tasks = []
     for to in to_notify:
         tasks.append(asyncio.create_task(send_rate_request(to.teleram_uid, user.telegram_uid)))
