@@ -198,11 +198,7 @@ def register_handlers(dsp: Dispatcher):
     entering_time = state_is(TimeState, lambda a: not a.confirmed) \
                     & ~reg_complete
 
-    @dsp.message_handler(Text(equals="asdffdsa"))
-    async def testsend(_):
-        await start_time_tables()
-
-    def generate_timetable(selected_cells: typing.List[str]):
+    def generate_timetable(selected_cells: typing.List[str], save_button=True):
         days = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
         times = ["12⁰⁰-16⁰⁰", "16⁰⁰-20⁰⁰", "20⁰⁰-24⁰⁰"]
         markup = InlineKeyboardMarkup(row_width=4)
@@ -217,7 +213,8 @@ def register_handlers(dsp: Dispatcher):
                 timeid += 1
             markup.row()
             dayid += 1
-        markup.add(InlineKeyboardButton(text="Сохранить расписание", callback_data="time-confirm"))
+        if save_button:
+            markup.add(InlineKeyboardButton(text="Сохранить расписание", callback_data="time-confirm"))
         return markup
 
     async def start_time_tables():
@@ -237,19 +234,22 @@ def register_handlers(dsp: Dispatcher):
         if act_command == "confirm":
             with get_user().edit_state(TimeState) as s:
                 s.confirmed = True
-                await registration_complete()
-        else:
-            with get_user().edit_state(TimeState) as state:
-                if act_command in state.selected_time:
-                    state.selected_time.remove(act_command)
-                else:
-                    state.selected_time.append(act_command)
-
-                print(state.selected_time)
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
                     message_id=action.message.message_id,
-                    reply_markup=generate_timetable(state.selected_time)
+                    reply_markup=generate_timetable(s.selected_time, save_button=False)
+                )
+            await registration_complete()
+        else:
+            with get_user().edit_state(TimeState) as s:
+                if act_command in s.selected_time:
+                    s.selected_time.remove(act_command)
+                else:
+                    s.selected_time.append(act_command)
+                await get_bot().edit_message_reply_markup(
+                    chat_id=action.message.chat.id,
+                    message_id=action.message.message_id,
+                    reply_markup=generate_timetable(s.selected_time)
                 )
 
     # ==--== Registration/Complete
