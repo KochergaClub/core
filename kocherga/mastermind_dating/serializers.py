@@ -9,6 +9,8 @@ class CohortSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
     class Meta:
         model = models.User
-        fields = ('user', 'name',)
+        fields = ('user', 'name', 'telegram_link')

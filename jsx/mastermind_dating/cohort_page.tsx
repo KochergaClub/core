@@ -7,7 +7,13 @@ const Users = ({ users }) => (
   <ul>
     {
       users.map(
-        user => <div>TODO</div>
+        user => (
+          <li>
+            <a href={user.telegram_link}>ссылка на бота</a>
+            {' '}
+            <strong>{user.user}</strong>
+          </li>
+        )
       )
     }
   </ul>
