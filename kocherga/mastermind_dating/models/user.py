@@ -48,7 +48,7 @@ class UserManager(models.Manager):
 
 class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
-    uid = models.CharField(max_length=100, null=True, blank=True)
+    telegram_uid = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     desc = models.TextField(null=True, blank=True)
     photo = models.BinaryField(null=True, blank=True)
@@ -64,7 +64,7 @@ class User(models.Model):
         return base64url_encode(bytes(signer.sign(self.user.email), "utf-8"))
 
     def is_bound(self):
-        return self.uid is not None
+        return self.telegram_uid is not None
 
     _S = typing.TypeVar("_S")
 

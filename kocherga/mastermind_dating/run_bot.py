@@ -7,7 +7,7 @@ from aiogram.types import Update
 from aiogram.utils import executor
 
 from kocherga.django import settings
-from kocherga.mastermind_bot.interactions.interactions import register_handlers
+from kocherga.mastermind_dating.interactions.interactions import register_handlers
 
 logging.basicConfig(level="INFO")
 log = logging.getLogger("mmbot")

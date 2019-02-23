@@ -1,9 +1,9 @@
-import logging
 import os
 
-default_app_config = "kocherga.mastermind_bot.apps.Config"
+default_app_config = "kocherga.mastermind_dating.apps.Config"
 
 from django.db.backends.signals import connection_created
+from django.conf import settings
 
 
 def on_connection_created(**_):

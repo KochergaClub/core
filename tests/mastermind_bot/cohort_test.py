@@ -2,7 +2,7 @@ import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
 from django.contrib.auth import get_user_model
-from kocherga.mastermind_bot.models import Cohort, User
+from kocherga.mastermind_dating.models import Cohort, User
 from kocherga.events.models import Event
 from kocherga.timepad.models import Event as TimepadEvent, Order as TimepadOrder
 

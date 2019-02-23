@@ -9,8 +9,8 @@ from aiogram import types as at, Bot, Dispatcher
 from aiogram.dispatcher.filters import Filter, BoundFilter, Text
 from aiogram.types import PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 
-from kocherga.mastermind_bot import models as db
-from kocherga.mastermind_bot.models import State
+from kocherga.mastermind_dating import models as db
+from kocherga.mastermind_dating.models import State
 
 _V = typing.TypeVar("_V")
 
@@ -18,7 +18,7 @@ _V = typing.TypeVar("_V")
 def get_user() -> typing.Optional[db.User]:
     # noinspection PyUnresolvedReferences
     try:
-        return db.User.objects.get(uid=at.User.get_current().username)
+        return db.User.objects.get(telegram_uid=at.User.get_current().username)
     except db.User.DoesNotExist:
         return None
 
@@ -71,7 +71,7 @@ def register_handlers(dsp: Dispatcher):
                                    text="Зайдите в личный кабинет Кочерги и перейдите на бота там.")
             return
 
-        user.uid = msg.from_user.username
+        user.telegram_uid = msg.from_user.username
         user.chat_id = msg.chat.id
         user.save()
 
@@ -410,7 +410,7 @@ def register_handlers(dsp: Dispatcher):
     async def vote(msg: at.CallbackQuery):
         data = msg.data
         how, whom = data[4].split("-", 1)
-        whom = db.User.objects.get(uid=whom)
+        whom = db.User.objects.get(telegram_uid=whom)
         vote_obj, _ = db.Vote.objects.get_or_create(whom=whom, who=get_user())
         vote_obj.how = how
 
@@ -419,16 +419,16 @@ def register_handlers(dsp: Dispatcher):
 
 async def send_rate_request(to: int, whom: str):
     bot: Bot = Bot.get_current()
-    vote_for: db.User = db.User.objects.get(uid=whom)
+    vote_for: db.User = db.User.objects.get(telegram_uid=whom)
     await bot.send_message(to, f"**Голосование за** {vote_for.name}", parse_mode="Markdown")
     if vote_for.photo is not None:
         photo = at.InputFile(BytesIO(vote_for.photo))
         await bot.send_photo(to, photo)
     await bot.send_message(to, vote_for.desc,
                            reply_markup=InlineKeyboardMarkup()
-                           .insert(InlineKeyboardButton("🔥", callback_data=f"voteY-{vote_for.uid}"))
-                           .insert(InlineKeyboardButton("❤️", callback_data=f"voteO-{vote_for.uid}"))
-                           .insert(InlineKeyboardButton("✖️", callback_data=f"voteN-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("🔥", callback_data=f"voteY-{vote_for.telegram_uid}"))
+                           .insert(InlineKeyboardButton("❤️", callback_data=f"voteO-{vote_for.telegram_uid}"))
+                           .insert(InlineKeyboardButton("✖️", callback_data=f"voteN-{vote_for.telegram_uid}"))
                            )
 
 
@@ -437,10 +437,10 @@ async def tinder_activate(user: db.User):
         Activates voting for some user.
     :param user:
     """
-    to_notify = db.User.objects.exclude(uid=user.uid).iterator()
+    to_notify = db.User.objects.exclude(telegram_uid=user.telegram_uid).iterator()
     tasks = []
     for to in to_notify:
-        tasks.append(asyncio.create_task(send_rate_request(to.uid, user.uid)))
+        tasks.append(asyncio.create_task(send_rate_request(to.teleram_uid, user.telegram_uid)))
 
     for task in tasks:
         await task

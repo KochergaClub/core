@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'kocherga.ratio',
     'kocherga.my',
     'kocherga.timepad',
-    'kocherga.mastermind_bot',
+    'kocherga.mastermind_dating',
 ]
 
 IGNORE_WEB = False

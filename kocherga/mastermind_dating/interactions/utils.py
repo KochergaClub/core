@@ -8,7 +8,7 @@ from typing import TypeVar, Awaitable
 from aiogram.dispatcher.filters import Filter, BoundFilter
 from aiogram.types import Update, Message
 
-from kocherga.mastermind_bot import models as db
+from kocherga.mastermind_dating import models as db
 
 _G = TypeVar('_G')
 

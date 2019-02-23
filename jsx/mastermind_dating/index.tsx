@@ -22,7 +22,7 @@ export default ({ cohorts }) => (
     <TeamMenu />
     <h1>Мастермайнд-дейтинг</h1>
     <p>
-    <small><a href="/admin/mastermind_bot/cohort/">Редактировать когорты в админке</a></small>
+    <small><a href="/admin/mastermind_dating/cohort/">Редактировать когорты в админке</a></small>
     </p>
     <Cohorts cohorts={cohorts} />
   </Page>
