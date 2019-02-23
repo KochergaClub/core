@@ -46,13 +46,17 @@ class UserManager(models.Manager):
         user, _ = User.objects.get_or_create(user=KchUser.objects.get(email=email))
         return user
 
+
+def photo_path(instance, filename):
+    return f'mastermind_dating/photos/{instance.user.id}/{filename}'
+
 class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
-    telegram_uid = models.CharField(max_length=100, null=True, blank=True)
-    name = models.CharField(max_length=255, null=True, blank=True)
-    desc = models.TextField(null=True, blank=True)
-    photo = models.BinaryField(null=True, blank=True)
-    state = models.TextField(null=True, blank=True)
+    telegram_uid = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=255, blank=True)
+    desc = models.TextField(null=True)
+    photo = models.ImageField(null=True, blank=True, upload_to=photo_path)
+    state = models.TextField(blank=True)
     chat_id = models.IntegerField(null=True, blank=True)
 
     # TODO - one user can belong to mutliple cohorts
@@ -64,7 +68,7 @@ class User(models.Model):
         return base64url_encode(bytes(signer.sign(self.user.email), "utf-8"))
 
     def is_bound(self):
-        return self.telegram_uid is not None
+        return bool(self.telegram_uid)
 
     _S = typing.TypeVar("_S")
 

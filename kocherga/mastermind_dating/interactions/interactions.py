@@ -40,7 +40,7 @@ def model_is(a: typing.Callable[[db.User], bool]) -> Filter:
             user: db.User = get_user()
             if not user:
                 return False
-            return a(user)
+            return bool(a(user))
 
     return LF()
 
@@ -97,11 +97,11 @@ def register_handlers(dsp: Dispatcher):
 
     reg_complete = state_is(RegistrationState, lambda a: a.complete)
 
-    entering_name = model_is(lambda a: a.name) & ~reg_complete
+    entering_name = model_is(lambda a: not a.name) & ~reg_complete
 
-    entering_desc = model_is(lambda a: a.desc) & ~reg_complete
+    entering_desc = model_is(lambda a: not a.desc) & ~reg_complete
 
-    entering_photo = model_is(lambda a: a.photo is None) \
+    entering_photo = model_is(lambda a: not a.photo) \
                      & state_is(RegistrationState, lambda a: not a.skipped_photo) \
                      & ~reg_complete
 
@@ -143,6 +143,7 @@ def register_handlers(dsp: Dispatcher):
 
     @dsp.callback_query_handler(logged_in, entering_name)
     async def registration_name_inline(u: at.CallbackQuery):
+        logger.info('registration_name_inline')
         user = get_user()
         chat = get_chat()
 
@@ -159,6 +160,7 @@ def register_handlers(dsp: Dispatcher):
 
     @dsp.message_handler(logged_in, entering_name)
     async def registration_name_message(u: at.Message):
+        logger.info('registration_name_message')
         user = get_user()
         user.name = u.text
         user.save()
@@ -191,8 +193,8 @@ def register_handlers(dsp: Dispatcher):
         photos = msg.photo
         photo_limit = 1000 * 1000
 
-        with BytesIO() as file:
-            file.getbuffer()
+        with BytesIO() as fh:
+            fh.getbuffer()
             selected_file: PhotoSize = None
 
             # Selecting last size below 1M
@@ -201,9 +203,9 @@ def register_handlers(dsp: Dispatcher):
                     break
                 selected_file = photo
 
-            await selected_file.download(file)
+            await selected_file.download(fh)
 
-            user.photo = file.getbuffer().tobytes()
+            user.photo.save('photo', fh)
             user.save()
 
         await start_time_tables()
@@ -227,7 +229,7 @@ def register_handlers(dsp: Dispatcher):
 
     def generate_timetable(selected_cells: typing.List[str], save_button=True):
         days = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
-        times = ["12⁰⁰-16⁰⁰", "16⁰⁰-20⁰⁰", "20⁰⁰-24⁰⁰"]
+        times = ["10-14", "14-19", "19-24"]
         markup = InlineKeyboardMarkup(row_width=4)
         dayid = 0
         for day in days:
@@ -427,7 +429,7 @@ async def send_rate_request(to: int, whom: str):
     vote_for: db.User = db.User.objects.get(telegram_uid=whom)
     await bot.send_message(to, f"**Голосование за** {vote_for.name}", parse_mode="Markdown")
     if vote_for.photo is not None:
-        photo = at.InputFile(BytesIO(vote_for.photo))
+        photo = at.InputFile(vote_for.photo.open())
         await bot.send_photo(to, photo)
     await bot.send_message(to, vote_for.desc,
                            reply_markup=InlineKeyboardMarkup()

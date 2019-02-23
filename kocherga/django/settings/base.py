@@ -178,6 +178,8 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
+MEDIA_DIR = '/data/kocherga/upload'
+
 ###### Kocherga settings ######
 
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
