@@ -7,6 +7,7 @@ class UserInline(admin.TabularInline):
 
 @admin.register(models.Cohort)
 class CohortAdmin(admin.ModelAdmin):
+    autocomplete_fields = ('event',)
     inlines = [
         UserInline
     ]
