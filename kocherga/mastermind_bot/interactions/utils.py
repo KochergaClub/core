@@ -1,5 +1,7 @@
-import asyncio
 import logging
+logger = logging.getLogger(__name__)
+
+import asyncio
 from asyncio import Future
 from typing import TypeVar, Awaitable
 
@@ -22,7 +24,7 @@ class IsPhoto(BoundFilter):
     async def check(self, msg: Message) -> bool:
         if msg is None:
             return False
-        print(msg)
+        logger.info(msg)
         return msg.photo is not None
 
 
@@ -88,7 +90,7 @@ class Interaction:
                 while dsp:
                     dsp = await dsp.on_update(update)
             except Exception:
-                logging.exception(f"Exception raised while processing an update {update}")
+                logger.exception(f"Exception raised while processing an update {update}")
 
         # noinspection PyAsyncCall
         asyncio.create_task(mow())

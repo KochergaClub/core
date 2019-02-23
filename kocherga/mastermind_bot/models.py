@@ -1,5 +1,7 @@
-import json
 import logging
+logger = logging.getLogger(__name__)
+
+import json
 import typing
 
 import binascii
@@ -15,7 +17,6 @@ from kocherga.django import settings
 
 KchUser = get_user_model()
 
-log = logging.getLogger("mmbot_models")
 signer = TimestampSigner()
 
 

@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import asyncio
 import typing
 from io import BytesIO
@@ -61,7 +64,7 @@ def register_handlers(dsp: Dispatcher):
 
         token = msg.get_args()
         user = db.User.objects.get_by_token(token)
-        print(f"resolved as {user.user.email}")
+        logger.info(f"resolved as {user.user.email}")
 
         if user is None:
             await bot.send_message(chat_id=msg.chat.id,
@@ -186,6 +189,7 @@ def register_handlers(dsp: Dispatcher):
         with BytesIO() as file:
             file.getbuffer()
             selected_file: PhotoSize = None
+
             # Selecting last size below 1M
             for photo in photos:
                 if photo.file_size > photo_limit:
@@ -265,6 +269,7 @@ def register_handlers(dsp: Dispatcher):
                     s.selected_time.remove(act_command)
                 else:
                     s.selected_time.append(act_command)
+
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
                     message_id=action.message.message_id,
