@@ -37,7 +37,7 @@ class UserManager(models.Manager):
         try:
             token = base64url_decode(token)
             # STOPSHIP: change back to 600
-            email = signer.unsign(str(token, "utf-8"), max_age=6000000)
+            email = signer.unsign(str(token, "utf-8"), max_age=86400 * 7)
         except BadSignature:
             return None
         except binascii.Error:
@@ -88,7 +88,7 @@ class User(models.Model):
         :rtype: State
         """
         base = clazz()
-        if self.state is not None:
+        if self.state:
             base.update(json.loads(self.state))
         return base
 
