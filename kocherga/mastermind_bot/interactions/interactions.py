@@ -179,22 +179,88 @@ def register_handlers(dsp: Dispatcher):
             user.photo = file.getbuffer().tobytes()
             user.save()
 
-        await registration_complete()
+        await start_time_tables()
 
     @dsp.callback_query_handler(logged_in, entering_photo, lambda a: a.data in ["skip_photo"])
-    async def registration_enter_photo(msg: at.Message):
+    async def registration_enter_photo(_):
         with get_user().edit_state(RegistrationState) as s:
             s.skipped_photo = True
+        await start_time_tables()
+
+    # ==--== Time (is it really that time again?)
+
+    class TimeState(State):
+        def __init__(self):
+            super().__init__()
+            self.selected_time = []
+            self.confirmed = False
+
+    entering_time = state_is(TimeState, lambda a: not a.confirmed) \
+                    & ~reg_complete
+
+    @dsp.message_handler(Text(equals="asdffdsa"))
+    async def testsend(_):
+        await start_time_tables()
+
+    def generate_timetable(selected_cells: typing.List[str]):
+        days = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
+        times = ["12⁰⁰-16⁰⁰", "16⁰⁰-20⁰⁰", "20⁰⁰-24⁰⁰"]
+        markup = InlineKeyboardMarkup(row_width=4)
+        dayid = 0
+        for day in days:
+            timeid = 0
+            markup.add(InlineKeyboardButton(day, callback_data=f"void"))
+            for time in times:
+                cell_id = f"{dayid}.{timeid}"
+                marker = "✅" if cell_id in selected_cells else ""
+                markup.insert(InlineKeyboardButton(f"{marker}{time}", callback_data=f"time-{cell_id}"))
+                timeid += 1
+            markup.row()
+            dayid += 1
+        markup.add(InlineKeyboardButton(text="Сохранить расписание", callback_data="time-confirm"))
+        return markup
+
+    async def start_time_tables():
+        bot = get_bot()
+        chat_id = get_chat()
+        await bot.send_message(
+            chat_id.id,
+            text="Выберите все подходящие вам временные интервалы."
+                 "Пожалуйста, постарайтесь выбрать как можно больше.",
+            reply_markup=generate_timetable([])
+        )
+
+    @dsp.callback_query_handler(entering_time, Text(startswith="time"))
+    async def time_on_button_press(action: at.CallbackQuery):
+        act_command: str = action.data.split("-", 2)[-1]
+
+        if act_command == "confirm":
+            with get_user().edit_state(TimeState) as s:
+                s.confirmed = True
+                await registration_complete()
+        else:
+            with get_user().edit_state(TimeState) as state:
+                if act_command in state.selected_time:
+                    state.selected_time.remove(act_command)
+                else:
+                    state.selected_time.append(act_command)
+
+                print(state.selected_time)
+                await get_bot().edit_message_reply_markup(
+                    chat_id=action.message.chat.id,
+                    message_id=action.message.message_id,
+                    reply_markup=generate_timetable(state.selected_time)
+                )
+
+    # ==--== Registration/Complete
 
     async def registration_complete():
+        with get_user().edit_state(RegistrationState) as s:
+            s.complete = True
         await get_bot().send_message(
             chat_id=get_user().chat_id,
             text="Мы узнали всё, что хотели.",
         )
-
-    # ==--==
-
-    # todo: time info
 
     # ==--== Voting
 
@@ -225,9 +291,9 @@ async def send_rate_request(to: int, whom: str):
         await bot.send_photo(to, photo)
     await bot.send_message(to, vote_for.desc,
                            reply_markup=InlineKeyboardMarkup()
-                           .insert(InlineKeyboardButton("YY", callback_data=f"voteY-{vote_for.uid}"))
-                           .insert(InlineKeyboardButton("Y", callback_data=f"voteO-{vote_for.uid}"))
-                           .insert(InlineKeyboardButton("N", callback_data=f"voteN-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("🔥", callback_data=f"voteY-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("❤️", callback_data=f"voteO-{vote_for.uid}"))
+                           .insert(InlineKeyboardButton("✖️", callback_data=f"voteN-{vote_for.uid}"))
                            )
 
 
