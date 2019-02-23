@@ -5,6 +5,7 @@ from .dev_secrets import *
 
 INSTALLED_APPS += [
     "kocherga.events",
+    "kocherga.timepad",
     "kocherga.mastermind_bot",
 ]
 
