@@ -12,6 +12,8 @@ export default () => (
     {' | '}
     <a href="/team/analytics">Аналитика</a>
     {' | '}
+    <a href="/team/mastermind_dating">Мастермайнд</a>
+    {' | '}
     <a href="/admin">Админка</a>
   </Container>
 );

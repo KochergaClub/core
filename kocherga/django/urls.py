@@ -29,6 +29,8 @@ if not settings.IGNORE_WEB:
     urlpatterns = urlpatterns + [
         path('api/', include('kocherga.api.urls')),
         path('team/ratio/', include('kocherga.ratio.urls')),
+        path('team/analytics/', include('kocherga.analytics.urls')),
+        path('team/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
         path('my/', include('kocherga.my.urls')),
         path('', include('kocherga.auth.urls')),
         path('admin/', admin.site.urls),

@@ -1,6 +1,13 @@
 import os
 
 from .dbonly import *
+from .dev_secrets import *
+
+INSTALLED_APPS += [
+    "kocherga.events",
+    "kocherga.timepad",
+    "kocherga.mastermind_dating",
+]
 
 KOCHERGA_TIMEPAD = {
     "organization": "kocherga-dev",
