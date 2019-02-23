@@ -59,10 +59,8 @@ def register_handlers(dsp: Dispatcher):
         user = get_user()
         bot: Bot = Bot.get_current()
 
-        print(f"Unregistered user: {user}")
         token = msg.get_args()
         user = get_mm_user_by_token(token)
-        print(f"resolved as {user.user.email}")
 
         if user is None:
             await bot.send_message(chat_id=msg.chat.id,
@@ -167,7 +165,6 @@ def register_handlers(dsp: Dispatcher):
         with BytesIO() as file:
             file.getbuffer()
             selected_file: PhotoSize = None
-            print(photos)
             # Selecting last size below 1M
             for photo in photos:
                 if photo.file_size > photo_limit:
