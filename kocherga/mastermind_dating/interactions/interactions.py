@@ -97,9 +97,9 @@ def register_handlers(dsp: Dispatcher):
 
     reg_complete = state_is(RegistrationState, lambda a: a.complete)
 
-    entering_name = model_is(lambda a: a.name is None) & ~reg_complete
+    entering_name = model_is(lambda a: a.name) & ~reg_complete
 
-    entering_desc = model_is(lambda a: a.desc is None) & ~reg_complete
+    entering_desc = model_is(lambda a: a.desc) & ~reg_complete
 
     entering_photo = model_is(lambda a: a.photo is None) \
                      & state_is(RegistrationState, lambda a: not a.skipped_photo) \
