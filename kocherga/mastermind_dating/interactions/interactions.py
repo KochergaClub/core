@@ -224,8 +224,7 @@ def register_handlers(dsp: Dispatcher):
             self.selected_time = []
             self.confirmed = False
 
-    entering_time = state_is(TimeState, lambda a: not a.confirmed) \
-                    & ~reg_complete
+    entering_time = ~reg_complete
 
     def generate_timetable(selected_cells: typing.List[str], save_button=True):
         days = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
@@ -280,7 +279,7 @@ def register_handlers(dsp: Dispatcher):
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
                     message_id=action.message.message_id,
-                    reply_markup=generate_timetable(s.selected_time)
+                    reply_markup=generate_timetable(s.selected_time, save_button=(not s.confirmed))
                 )
 
     # ==--== Registration/Complete
