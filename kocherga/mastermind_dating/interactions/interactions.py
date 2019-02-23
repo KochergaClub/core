@@ -73,7 +73,7 @@ def register_handlers(dsp: Dispatcher):
 
         if user is None:
             await bot.send_message(chat_id=msg.chat.id,
-                                   text="Зайдите в личный кабинет Кочерги и перейдите на бота там.")
+                                   text="Найдите письмо от Кочерги и активируйте бота по инструкциям из него.")
             return
 
         user.telegram_uid = msg.from_user.username
@@ -287,7 +287,7 @@ def register_handlers(dsp: Dispatcher):
 
     info_messages = {
         "root": {
-            "text": "*Важная информация — пожалуйста, прочтите заранее:*\n",
+            "text": "*Важная информация — пожалуйста, обязательно прочтите её заранее:*\n",
             "reply_markup":
                 InlineKeyboardMarkup(row_width=2)
                     .add(InlineKeyboardButton("Расписание", callback_data="info-timetables"))
