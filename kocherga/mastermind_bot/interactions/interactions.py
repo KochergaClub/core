@@ -226,7 +226,7 @@ def register_handlers(dsp: Dispatcher):
 
     @dsp.callback_query_handler(entering_time, Text(startswith="time"))
     async def time_on_button_press(action: at.CallbackQuery):
-        act_command: str = action.data.split("-", 2)[-1]
+        act_command: str = action.data.split("-", 1)[-1]
 
         if act_command == "confirm":
             with get_user().edit_state(TimeState) as s:
@@ -271,7 +271,7 @@ def register_handlers(dsp: Dispatcher):
     @dsp.callback_query_handler(logged_in, voting_active, Text(startswith="vote"))
     async def vote(msg: at.CallbackQuery):
         data = msg.data
-        how, whom = data[4].split("-", 2)
+        how, whom = data[4].split("-", 1)
         whom = db.User.objects.get(uid=whom)
         vote_obj, _ = db.Vote.objects.get_or_create(whom=whom, who=get_user())
         vote_obj.how = how
