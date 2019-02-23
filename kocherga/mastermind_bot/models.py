@@ -15,6 +15,8 @@ from jwt.utils import base64url_encode, base64url_decode
 from django.contrib.auth import get_user_model
 from kocherga.django import settings
 
+from kocherga.events.models import Event as KchEvent
+
 KchUser = get_user_model()
 
 signer = TimestampSigner()
@@ -53,6 +55,10 @@ class UserManager(models.Manager):
         return user
 
 
+class Cohort(models.Model):
+    event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+
+
 class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
     uid = models.TextField(null=True)
@@ -61,6 +67,9 @@ class User(models.Model):
     photo = models.BinaryField(null=True)
     state = models.TextField(null=True)
     chat_id = models.IntegerField(null=True)
+
+    # TODO - one user can belong to mutliple cohorts
+    cohort = models.ForeignKey(Cohort, on_delete=models.CASCADE, related_name='users')
 
     objects = UserManager()
 
