@@ -224,8 +224,6 @@ def register_handlers(dsp: Dispatcher):
             self.selected_time = []
             self.confirmed = False
 
-    entering_time = ~reg_complete
-
     def generate_timetable(selected_cells: typing.List[str], save_button=True):
         days = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
         times = ["10-14", "14-19", "19-24"]
@@ -257,11 +255,12 @@ def register_handlers(dsp: Dispatcher):
             reply_markup=generate_timetable([])
         )
 
-    @dsp.callback_query_handler(entering_time, Text(startswith="time"))
+    @dsp.callback_query_handler(Text(startswith="time"))
     async def time_on_button_press(action: at.CallbackQuery):
         act_command: str = action.data.split("-", 1)[-1]
 
         if act_command == "confirm":
+            logger.info('confirming time table')
             with get_user().edit_state(TimeState) as s:
                 s.confirmed = True
                 await get_bot().edit_message_reply_markup(
@@ -271,6 +270,7 @@ def register_handlers(dsp: Dispatcher):
                 )
             await registration_complete()
         else:
+            logger.info('editing time')
             with get_user().edit_state(TimeState) as s:
                 if act_command in s.selected_time:
                     s.selected_time.remove(act_command)
