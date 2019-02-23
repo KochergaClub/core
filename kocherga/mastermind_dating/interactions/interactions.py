@@ -64,7 +64,6 @@ def register_handlers(dsp: Dispatcher):
 
         token = msg.get_args()
         user = db.User.objects.get_by_token(token)
-        logger.info(f"resolved as {user.user.email}")
 
         if user is None:
             await bot.send_message(chat_id=msg.chat.id,
