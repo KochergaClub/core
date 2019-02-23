@@ -1,26 +1,17 @@
-import logging
-logger = logging.getLogger(__name__)
-
-import json
-import typing
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.core.signing import TimestampSigner, BadSignature
 
 import binascii
-from typing import List
-
-from django.core.signing import TimestampSigner, BadSignature
-from django.db import models
-from django.db.models import QuerySet
+import json
+import typing
 from jwt.utils import base64url_encode, base64url_decode
 
-from django.contrib.auth import get_user_model
 from kocherga.django import settings
-
-from kocherga.events.models import Event as KchEvent
 
 KchUser = get_user_model()
 
 signer = TimestampSigner()
-
 
 class State(dict):
 
@@ -38,6 +29,7 @@ class State(dict):
     def __setattr__(self, key, value):
         self[self.__class__.__name__ + "." + key] = value
 
+
 class UserManager(models.Manager):
     def get_by_token(self, token) -> typing.Union['User', None]:
         if token is None or len(token) == 0:
@@ -54,11 +46,6 @@ class UserManager(models.Manager):
         user, _ = User.objects.get_or_create(user=KchUser.objects.get(email=email))
         return user
 
-
-class Cohort(models.Model):
-    event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
-
-
 class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
     uid = models.TextField(null=True)
@@ -69,7 +56,7 @@ class User(models.Model):
     chat_id = models.IntegerField(null=True)
 
     # TODO - one user can belong to mutliple cohorts
-    cohort = models.ForeignKey(Cohort, on_delete=models.CASCADE, related_name='users')
+    cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='users')
 
     objects = UserManager()
 
@@ -114,10 +101,3 @@ class User(models.Model):
 
     def generate_link(self):
         return f"{settings.MASTERMIND_BOT_CONFIG['bot_link']}?start={str(self.generate_token(), 'utf-8')}"
-
-
-class Vote(models.Model):
-    objects: QuerySet
-    who = models.ForeignKey(User, related_name="who", on_delete=models.CASCADE)
-    whom = models.ForeignKey(User, related_name="whom", on_delete=models.CASCADE)
-    how = models.IntegerField()
