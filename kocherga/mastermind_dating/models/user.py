@@ -54,7 +54,7 @@ class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
     telegram_uid = models.CharField(max_length=100, blank=True)
     name = models.CharField(max_length=255, blank=True)
-    desc = models.TextField(null=True)
+    desc = models.TextField(blank=True)
     photo = models.ImageField(null=True, blank=True, upload_to=photo_path)
     state = models.TextField(blank=True)
     chat_id = models.IntegerField(null=True, blank=True)
