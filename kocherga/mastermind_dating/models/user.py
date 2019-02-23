@@ -37,13 +37,13 @@ class UserManager(models.Manager):
         try:
             token = base64url_decode(token)
             # STOPSHIP: change back to 600
-            email = signer.unsign(str(token, "utf-8"), max_age=86400 * 7)
+            user_id = signer.unsign(str(token, "utf-8"), max_age=86400 * 7)
         except BadSignature:
             return None
         except binascii.Error:
             return None
 
-        user, _ = User.objects.get_or_create(user=KchUser.objects.get(email=email))
+        user, _ = User.objects.get_or_create(pk=user_id)
         return user
 
 
@@ -65,7 +65,7 @@ class User(models.Model):
     objects = UserManager()
 
     def generate_token(self) -> str:
-        return base64url_encode(bytes(signer.sign(self.user.email), "utf-8"))
+        return base64url_encode(bytes(signer.sign(self.user_id), "utf-8"))
 
     def is_bound(self):
         return bool(self.telegram_uid)
