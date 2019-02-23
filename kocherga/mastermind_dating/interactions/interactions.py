@@ -57,6 +57,12 @@ def register_handlers(dsp: Dispatcher):
 
     # ==--== Authorization
 
+    @dsp.message_handler()
+    async def test_handler(u):
+        logger.info(u)
+        from aiogram.dispatcher.handler import SkipHandler
+        raise SkipHandler()
+
     @dsp.message_handler(lambda a: not logged_in(a), commands=["start"])
     async def auth(msg):
         user = get_user()

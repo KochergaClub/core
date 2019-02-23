@@ -100,7 +100,7 @@ class User(models.Model):
         self.state = json.dumps(state)
 
     def generate_link(self):
-        return f"{settings.MASTERMIND_BOT_CONFIG['bot_link']}?start={str(self.generate_token(), 'utf-8')}"
+        return f"{settings.MASTERMIND_BOT_CONFIG['bot_link']}&start={str(self.generate_token(), 'utf-8')}"
 
     def telegram_link(self):
         return self.generate_link()
