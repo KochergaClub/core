@@ -417,6 +417,7 @@ def register_handlers(dsp: Dispatcher):
     async def vote(msg: at.CallbackQuery):
         data = msg.data
         how, whom = data[4].split("-", 1)
+        how = ['Y', 'O', 'N'].index(how)
         whom = db.User.objects.get(telegram_uid=whom)
         vote_obj, _ = db.Vote.objects.get_or_create(whom=whom, who=get_user())
         vote_obj.how = how
