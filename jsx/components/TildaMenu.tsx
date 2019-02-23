@@ -86,7 +86,7 @@ class MobileHeader extends React.Component<MobileHeaderProps> {
     return (
       <this.MobileHeaderComponent onClick={this.switchExpand}>
         <div>Антикафе Кочерга</div>
-        <Burger color="white" opened={this.props.expanded} />
+        <Burger color="white" opened={this.props.expanded} flip={this.switchExpand} />
       </this.MobileHeaderComponent>
     );
   }

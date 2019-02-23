@@ -48,12 +48,12 @@ class UserManager(models.Manager):
 
 class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
-    uid = models.TextField(null=True)
-    name = models.TextField(null=True)
-    desc = models.TextField(null=True)
-    photo = models.BinaryField(null=True)
-    state = models.TextField(null=True)
-    chat_id = models.IntegerField(null=True)
+    uid = models.CharField(max_length=100, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    desc = models.TextField(null=True, blank=True)
+    photo = models.BinaryField(null=True, blank=True)
+    state = models.TextField(null=True, blank=True)
+    chat_id = models.IntegerField(null=True, blank=True)
 
     # TODO - one user can belong to mutliple cohorts
     cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='users')
