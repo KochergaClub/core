@@ -4,7 +4,9 @@ from .dbonly import *
 from .dev_secrets import *
 
 INSTALLED_APPS += [
-    "kocherga.mastermind_bot"
+    "kocherga.events",
+    "kocherga.timepad",
+    "kocherga.mastermind_bot",
 ]
 
 KOCHERGA_TIMEPAD = {

@@ -163,7 +163,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
         return datetime.combine(d, datetime.min.time(), tzinfo=TZ)
 
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         from_d = from_dt.date()
         to_d = to_dt.date()
 

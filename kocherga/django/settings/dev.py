@@ -1,6 +1,9 @@
 from .base import *
 from .dev_secrets import *
 
+import logging
+logging.basicConfig(level = logging.INFO)
+
 DATA_DIR = '/Users/berekuk/coding/kocherga/data-dev'
 DEBUG = True
 

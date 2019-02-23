@@ -22,6 +22,8 @@ from kocherga.error import PublicError
 import kocherga.events.google
 import kocherga.events.markup
 
+from kocherga.timepad.models import Event as TimepadEvent
+
 
 def parse_iso8601(s):
     return dateutil.parser.parse(s).astimezone(TZ)
@@ -419,6 +421,24 @@ class Event(models.Model):
     @property
     def attendees(self):
         return getattr(self, '_attendees', [])
+
+    def timepad_event(self):
+        timepad_link = self.posted_timepad
+        if not timepad_link:
+            raise Exception("Event is not posted to timepad")
+
+        return TimepadEvent.objects.get_by_link(timepad_link)
+
+    def registered_users(self):
+        """
+        Uses timepad to determine who registered to the event.
+
+        Unrelated to the `Event.attendees` method.
+        """
+
+        timepad_event = self.timepad_event()
+        for order in timepad_event.orders.filter(status='ok'):
+            yield order.user
 
     def public_object(self):
         # Some precautions against information leaking (although we do more checks in /public_events API route).

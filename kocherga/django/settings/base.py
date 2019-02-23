@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'kocherga.watchmen_routine',
     'kocherga.ratio',
     'kocherga.my',
+    'kocherga.timepad',
+    'kocherga.mastermind_bot',
 ]
 
 IGNORE_WEB = False

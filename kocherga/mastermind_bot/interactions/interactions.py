@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import asyncio
 import typing
 from io import BytesIO
@@ -7,7 +10,7 @@ from aiogram.dispatcher.filters import Filter, BoundFilter, Text
 from aiogram.types import PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 
 from kocherga.mastermind_bot import models as db
-from kocherga.mastermind_bot.models import get_mm_user_by_token, State
+from kocherga.mastermind_bot.models import State
 
 _V = typing.TypeVar("_V")
 
@@ -60,7 +63,8 @@ def register_handlers(dsp: Dispatcher):
         bot: Bot = Bot.get_current()
 
         token = msg.get_args()
-        user = get_mm_user_by_token(token)
+        user = db.User.objects.get_by_token(token)
+        logger.info(f"resolved as {user.user.email}")
 
         if user is None:
             await bot.send_message(chat_id=msg.chat.id,
@@ -185,6 +189,7 @@ def register_handlers(dsp: Dispatcher):
         with BytesIO() as file:
             file.getbuffer()
             selected_file: PhotoSize = None
+
             # Selecting last size below 1M
             for photo in photos:
                 if photo.file_size > photo_limit:
@@ -264,6 +269,7 @@ def register_handlers(dsp: Dispatcher):
                     s.selected_time.remove(act_command)
                 else:
                     s.selected_time.append(act_command)
+
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
                     message_id=action.message.message_id,

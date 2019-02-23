@@ -102,7 +102,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             logger.debug(f'Event {event.google_id}, title {event.title} - new')
             event.save()
 
-    def do_period_import(self, from_dt: datetime, to_dt: datetime, session) -> datetime:
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         google_events = self.load_updated_google_events(from_dt)
 
         last_dt = from_dt
