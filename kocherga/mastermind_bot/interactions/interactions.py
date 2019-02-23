@@ -198,10 +198,6 @@ def register_handlers(dsp: Dispatcher):
     entering_time = state_is(TimeState, lambda a: not a.confirmed) \
                     & ~reg_complete
 
-    @dsp.message_handler(Text(equals="asdffdsa"))
-    async def testsend(_):
-        await start_time_tables()
-
     def generate_timetable(selected_cells: typing.List[str]):
         days = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
         times = ["12⁰⁰-16⁰⁰", "16⁰⁰-20⁰⁰", "20⁰⁰-24⁰⁰"]
