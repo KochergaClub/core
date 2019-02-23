@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters import Filter, BoundFilter, Text
 from aiogram.types import PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 
 from kocherga.mastermind_bot import models as db
-from kocherga.mastermind_bot.models import get_mm_user_by_token, State
+from kocherga.mastermind_bot.models import State
 
 _V = typing.TypeVar("_V")
 
@@ -60,7 +60,8 @@ def register_handlers(dsp: Dispatcher):
         bot: Bot = Bot.get_current()
 
         token = msg.get_args()
-        user = get_mm_user_by_token(token)
+        user = db.User.objects.get_by_token(token)
+        print(f"resolved as {user.user.email}")
 
         if user is None:
             await bot.send_message(chat_id=msg.chat.id,

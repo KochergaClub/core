@@ -35,9 +35,24 @@ class State(dict):
     def __setattr__(self, key, value):
         self[self.__class__.__name__ + "." + key] = value
 
+class UserManager(models.Manager):
+    def get_by_token(self, token) -> typing.Union['User', None]:
+        if token is None or len(token) == 0:
+            return None
+        try:
+            token = base64url_decode(token)
+            # STOPSHIP: change back to 600
+            email = signer.unsign(str(token, "utf-8"), max_age=6000000)
+        except BadSignature:
+            return None
+        except binascii.Error:
+            return None
+
+        user, _ = User.objects.get_or_create(user=KchUser.objects.get(email=email))
+        return user
+
 
 class User(models.Model):
-    objects: QuerySet
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
     uid = models.TextField(null=True)
     name = models.TextField(null=True)
@@ -45,6 +60,8 @@ class User(models.Model):
     photo = models.BinaryField(null=True)
     state = models.TextField(null=True)
     chat_id = models.IntegerField(null=True)
+
+    objects = UserManager()
 
     def generate_token(self) -> str:
         return base64url_encode(bytes(signer.sign(self.user.email), "utf-8"))
@@ -87,22 +104,6 @@ class User(models.Model):
 
     def generate_link(self):
         return f"{settings.MASTERMIND_BOT_CONFIG['bot_link']}?start={str(self.generate_token(), 'utf-8')}"
-
-
-def get_mm_user_by_token(token) -> typing.Union[User, None]:
-    if token is None or len(token) == 0:
-        return None
-    try:
-        token = base64url_decode(token)
-        # STOPSHIP: change back to 600
-        email = signer.unsign(str(token, "utf-8"), max_age=6000000)
-    except BadSignature:
-        return None
-    except binascii.Error:
-        return None
-
-    user, _ = User.objects.get_or_create(user=KchUser.objects.get(email=email))
-    return user
 
 
 class Vote(models.Model):
