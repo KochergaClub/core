@@ -55,5 +55,5 @@ def create_post_draft(training):
 
     logger.info('Filling campaign content')
     kocherga.mailchimp.api_call('PUT', f'campaigns/{campaign_id}/content', {
-        'html': html,
+        'html': mjml,
     })
