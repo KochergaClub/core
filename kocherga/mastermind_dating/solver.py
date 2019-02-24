@@ -52,7 +52,7 @@ def run_solver(cohort: db.Cohort):
     votes.sort(key=lambda v: v.who.telegram_uid)
 
     with open('users.json', 'w') as fh:
-        json.dump(fh, [user.user_id for user in users])
+        json.dump([user.user_id for user in users], fh)
 
     userlist = [users]
 
@@ -94,7 +94,7 @@ async def broadcast_solution(bot: Bot, cohort: db.Cohort):
             for user in json.load(fh)
         ]
 
-    solution = json.load("solution.json")
+    solution = json.load(open("solution.json"))
     log.info(f"Broadcasting solution: {solution}")
 
     ptg = solution["people_to_groups"]
