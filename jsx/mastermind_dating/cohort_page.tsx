@@ -27,6 +27,7 @@ const UserContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  width: 300px;
 `;
 
 const Users = ({ users }) => (
