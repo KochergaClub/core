@@ -114,7 +114,7 @@ async def broadcast_solution(bot: Bot):
         group: typing.List[db.User] = groups[group_id]
 
         for user in group:
-            message = render_to_string("bot/group_assembled.md", {
+            message = render_to_string("mastermind_dating/bot/group_assembled.md", {
                 "users": set(group) - {user}
             })
             tasks.append(asyncio.create_task(bot.send_message(user.chat_id, message)))
