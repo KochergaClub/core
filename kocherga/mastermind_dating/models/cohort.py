@@ -46,7 +46,7 @@ class Cohort(models.Model):
         manager.broadcast_solution(self.id)
 
     def run_solver(self):
-        yall: typing.List[User] = list(self.users.all())
+        yall: typing.List[User] = list(self.users.filter(present=True).all())
 
         users: typing.List[User] = []
         votes = []
