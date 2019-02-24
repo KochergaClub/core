@@ -452,7 +452,7 @@ async def tinder_activate(user_id: int, bot: Bot):
     tasks = []
     logger.info(f"Creating voting tasks")
     for to in to_notify:
-        tasks.append(asyncio.create_task(send_rate_request(to.telegram_uid, user.telegram_uid, bot)))
+        tasks.append(asyncio.create_task(send_rate_request(to.chat_id, user.telegram_uid, bot)))
 
     logger.info(f"Prepared {len(tasks)} voting notifications")
 
