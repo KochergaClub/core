@@ -464,11 +464,11 @@ def register_handlers(dsp: Dispatcher):
 
 
 async def send_rate_request(who: db.User, whom: db.User, bot: Bot):
-    await bot.send_message(who.chat_id, f"**Голосование за** {whom.name}", parse_mode="Markdown")
+    await bot.send_message(who.chat_id, f"**Голосование за** {whom.name}", parse_mode="Markdown", disable_notification=True)
     if whom.photo:
         whom.photo.open()
         photo = at.InputFile(BytesIO(whom.photo.read()))
-        await bot.send_photo(who.chat_id, photo)
+        await bot.send_photo(who.chat_id, photo, disable_notification=True)
 
     await bot.send_message(
         who.chat_id, whom.desc or '(Нет описания)',
