@@ -50,7 +50,9 @@ const Users = ({ users, csrfToken }) => (
           <Photo src={user.photo} />
           <form action={`/team/mastermind_dating/action/tinder_activate/${user.user_id}`} method="post">
             <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-            <Button type="submit" size="small">Активировать голосование</Button>
+            {
+              user.voted_for && <Button type="submit" size="small">Активировать голосование</Button>
+            }
           </form>
         </UserContainer>
       )
