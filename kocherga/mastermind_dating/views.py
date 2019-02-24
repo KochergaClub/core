@@ -40,3 +40,11 @@ def tinder_activate(request, user_id):
     manager.connect()
     manager.tinder_activate(user_id)
     return redirect('mastermind_dating:cohort_page', cohort_id=user.cohort.id)
+
+@staff_member_required
+@require_POST
+def flip_present(request, user_id):
+    user = User.objects.get(user_id=user_id)
+    user.present = not user.present
+    user.save()
+    return redirect('mastermind_dating:cohort_page', cohort_id=user.cohort.id)

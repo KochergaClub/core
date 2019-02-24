@@ -66,6 +66,7 @@ class User(models.Model):
     state = models.TextField(blank=True)
     chat_id = models.IntegerField(null=True, blank=True)
     voted_for = models.BooleanField(default=False)
+    present = models.BooleanField(default=False)
 
     # TODO - one user can belong to mutliple cohorts
     cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='users')

@@ -464,7 +464,7 @@ def register_handlers(dsp: Dispatcher):
 
 
 async def send_rate_request(who: db.User, whom: db.User, bot: Bot):
-    await bot.send_message(who.chat_id, f"**Голосование за** {whom.name}", parse_mode="Markdown", disable_notification=True)
+    await bot.send_message(who.chat_id, f"**Голосование за** {whom.name}", parse_mode="Markdown")
     if whom.photo:
         whom.photo.open()
         photo = at.InputFile(BytesIO(whom.photo.read()))
@@ -472,7 +472,8 @@ async def send_rate_request(who: db.User, whom: db.User, bot: Bot):
 
     await bot.send_message(
         who.chat_id, whom.desc or '(Нет описания)',
-        reply_markup=generate_voting_buttons(who, whom)
+        reply_markup=generate_voting_buttons(who, whom),
+        disable_notification=True
     )
 
 
@@ -485,7 +486,7 @@ async def tinder_activate(user_id: int, bot: Bot):
     user = db.User.objects.get(pk=user_id)
     logger.info(f"Found user {user.user.email}")
 
-    to_notify = db.User.objects.filter(cohort=user.cohort).exclude(user_id=user.user_id).iterator()
+    to_notify = db.User.objects.filter(cohort=user.cohort, present=True).exclude(user_id=user.user_id).iterator()
     tasks = []
     logger.info(f"Creating voting tasks")
     for to in to_notify:

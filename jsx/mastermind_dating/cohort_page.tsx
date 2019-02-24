@@ -44,7 +44,7 @@ const Users = ({ users, csrfToken }) => (
         <UserContainer key={user.user_id}>
           <Column centered>
           <span>{user.user}</span>
-          <strong>{user.name || "НЕЗАРЕГИСТРИРОВАН"}</strong>
+          <strong>{user.name || "НЕ ЗАРЕГИСТРИРОВАН"}</strong>
           <UserDescription>{user.desc}</UserDescription>
           </Column>
           <Column centered>
@@ -55,6 +55,14 @@ const Users = ({ users, csrfToken }) => (
               user.voted_for
               ? (<em>Уже проголосовали</em>)
               : <Button type="submit" size="small">Активировать голосование</Button>
+              }
+            </form>
+            <form action={`/team/mastermind_dating/action/flip_present/${user.user_id}`} method="post">
+              <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+              {
+              user.present
+              ? <Button type="submit" size="small">Тут</Button>
+              : <Button type="submit" size="small">Не тут</Button>
               }
             </form>
           </Column>
