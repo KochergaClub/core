@@ -108,7 +108,7 @@ def save_solution(solution, users):
 async def broadcast_solution(cohort_id: int, bot: Bot):
     log.info(f"Broadcasting solution")
 
-    cohort = Cohort.objects.get(pk=cohort_id)
+    cohort = db.Cohort.objects.get(pk=cohort_id)
 
     tasks: typing.List[typing.Awaitable] = []
 
