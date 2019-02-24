@@ -28,7 +28,7 @@ const UserContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 250px;
-  margin-bottom: 40px;
+  margin-bottom: 80px;
 `;
 
 const UserDescription = styled.small`
@@ -58,8 +58,8 @@ const Users = ({ users, csrfToken }) => (
           <Column centered>
           <span>{user.user}</span>
           <strong>{user.name || "НЕ ЗАРЕГИСТРИРОВАН"}</strong>
-          <UserDescription>{user.desc}</UserDescription>
           </Column>
+          <UserDescription>{user.desc}</UserDescription>
           <Column centered>
             <Photo src={user.photo} />
             <form action={userActionUrl('flip_present', user.user_id)} method="post">
