@@ -429,7 +429,7 @@ async def send_rate_request(to: int, whom: str, bot: Bot):
     vote_for: db.User = db.User.objects.get(telegram_uid=whom)
     await bot.send_message(to, f"**Голосование за** {vote_for.name}", parse_mode="Markdown")
     if vote_for.photo is not None:
-        photo = at.InputFile(vote_for.photo.open())
+        photo = at.InputFile(BytesIO(vote_for.photo.read()))
         await bot.send_photo(to, photo)
     await bot.send_message(to, vote_for.desc,
                            reply_markup=InlineKeyboardMarkup()
