@@ -1,13 +1,20 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db import models
+
+from kocherga.django import settings
 from django.contrib.auth import get_user_model
 from django.core.signing import TimestampSigner, BadSignature
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
+import markdown
 import binascii
 import json
 import typing
 from jwt.utils import base64url_encode, base64url_decode
-
-from kocherga.django import settings
 
 KchUser = get_user_model()
 
@@ -109,3 +116,25 @@ class User(models.Model):
 
     def telegram_link(self):
         return self.generate_link()
+
+    def send_invite_email(self):
+        bot_link = self.telegram_link()
+        bot_token = str(self.generate_token(), 'utf-8')
+
+        message = render_to_string('mastermind_dating/email/bot_link.txt', {
+            'bot_link': bot_link,
+            'bot_token': bot_token,
+        })
+
+        html = markdown.markdown(render_to_string('mastermind_dating/email/bot_link.md', {
+            'bot_link': bot_link,
+            'bot_token': bot_token,
+        }))
+        send_mail(
+            subject='Регистрация на мастермайнд-дейтинг',
+            from_email='Кочерга <info@kocherga-club.ru>',
+            message=message,
+            html_message=html,
+            recipient_list=[self.user.email],
+        )
+        logger.info(f'sent email to {self.user.email}')

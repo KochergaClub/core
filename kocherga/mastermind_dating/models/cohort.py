@@ -1,8 +1,4 @@
 from django.db import models
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-
-import markdown
 
 from kocherga.events.models import Event as KchEvent
 
@@ -28,24 +24,7 @@ class Cohort(models.Model):
             raise Exception("Already sent invite emails")
 
         for user in self.users.all():
-            bot_link = user.telegram_link()
-            bot_token = str(user.generate_token(), 'utf-8')
+            user.send_invite_email()
 
-            message = render_to_string('mastermind_dating/email/bot_link.txt', {
-                'bot_link': bot_link,
-                'bot_token': bot_token,
-            })
-
-            html = markdown.markdown(render_to_string('mastermind_dating/email/bot_link.md', {
-                'bot_link': bot_link,
-                'bot_token': bot_token,
-            }))
-            send_mail(
-                subject='Регистрация на мастермайнд-дейтинг',
-                from_email='Кочерга <info@kocherga-club.ru>',
-                message=message,
-                html_message=html,
-                recipient_list=[user.user.email],
-            )
         self.sent_emails = True
         self.save()
