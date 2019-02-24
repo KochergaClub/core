@@ -1,4 +1,4 @@
 *Мы собрали для вас группу.*
 {% for user in users %}
- - [{{ user.uid }}](tg://user?id={{ user.uid }})
+ - {{ user.name }} [{{ user.telegram_uid }}](tg://user?id={{ user.telegram_uid }})
 {% endfor %}

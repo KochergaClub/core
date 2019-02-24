@@ -117,7 +117,12 @@ async def broadcast_solution(bot: Bot):
             message = render_to_string("mastermind_dating/bot/group_assembled.md", {
                 "users": set(group) - {user}
             })
-            tasks.append(asyncio.create_task(bot.send_message(user.chat_id, message)))
+            tasks.append(asyncio.create_task(
+                bot.send_message(
+                    user.chat_id, message,
+                    parse_mode="Markdown"
+                )
+            ))
 
     log.info(f"Awaiting {len(tasks)} to finish")
     for task in tasks:
