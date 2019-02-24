@@ -454,11 +454,14 @@ def register_handlers(dsp: Dispatcher):
         )
 
         logger.info('editing markup')
-        await get_bot().edit_message_reply_markup(
-            chat_id=msg.message.chat.id,
-            message_id=msg.message.message_id,
-            reply_markup=generate_voting_buttons(who, whom)
-        )
+        try:
+            await get_bot().edit_message_reply_markup(
+                chat_id=msg.message.chat.id,
+                message_id=msg.message.message_id,
+                reply_markup=generate_voting_buttons(who, whom)
+            )
+        except aiogram.utils.exceptions.MessageNotModified:
+            pass # that's ok
 
     # ==--==
 

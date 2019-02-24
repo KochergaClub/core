@@ -36,6 +36,19 @@ const UserDescription = styled.small`
   text-align: center;
 `;
 
+const userActionUrl = (action: string, uid: number) => `/team/mastermind_dating/action/${action}/${uid}`;
+
+const UserVoteForm = ({ user, csrfToken }) => (
+  <form action={userActionUrl('tinder_activate', user.user_id)} method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+    {
+      user.voted_for
+      ? (<em>Уже проголосовали</em>)
+      : <Button type="submit" size="small">Активировать голосование</Button>
+    }
+  </form>
+);
+
 const Users = ({ users, csrfToken }) => (
   <UserList>
   {
@@ -49,15 +62,7 @@ const Users = ({ users, csrfToken }) => (
           </Column>
           <Column centered>
             <Photo src={user.photo} />
-            <form action={`/team/mastermind_dating/action/tinder_activate/${user.user_id}`} method="post">
-              <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-              {
-              user.voted_for
-              ? (<em>Уже проголосовали</em>)
-              : <Button type="submit" size="small">Активировать голосование</Button>
-              }
-            </form>
-            <form action={`/team/mastermind_dating/action/flip_present/${user.user_id}`} method="post">
+            <form action={userActionUrl('flip_present', user.user_id)} method="post">
               <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
               {
               user.present
@@ -65,6 +70,9 @@ const Users = ({ users, csrfToken }) => (
               : <Button type="submit" size="small">Не тут</Button>
               }
             </form>
+            {
+            user.present && <UserVoteForm user={user} csrfToken={csrfToken} />
+            }
           </Column>
         </UserContainer>
       )
