@@ -13,7 +13,8 @@ from typing import Awaitable, Callable
 
 
 from kocherga.django import settings
-from kocherga.mastermind_dating.interactions.interactions import register_handlers, tinder_activate, broadcast_solution
+from .interactions.interactions import register_handlers, tinder_activate
+from .solver import broadcast_solution
 
 # Not in .rpc because of cyclic imports :(
 def get_server(evloop, bot):
@@ -24,7 +25,7 @@ def get_server(evloop, bot):
 
     manager = BaseManager(address=('', 44444), authkey=b"django_sec_key")
     manager.register("tinder_activate", run_async(lambda user_id: tinder_activate(user_id, bot)))
-    manager.register("broadcast_solution", run_async(lambda cohort_id: broadcast_solution(cohort_id, bot)))
+    manager.register("broadcast_solution", run_async(lambda: broadcast_solution(bot)))
     server = manager.get_server()
 
     return server

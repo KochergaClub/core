@@ -87,7 +87,7 @@ def run_solver(cohort: db.Cohort):
     log.info(f"Got solution: {solution}")
 
 
-async def broadcast_solution(bot: Bot, cohort: db.Cohort):
+async def broadcast_solution(bot: Bot):
     with open('users.json') as fh:
         users = [
             db.Users.get(pk=id)
