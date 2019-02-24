@@ -28,7 +28,8 @@ async def broadcast_solution(cohort_id: int, bot: Bot):
                 u
                 for u in user.group.users.all()
                 if u.user_id != user.user_id
-            ]
+            ],
+            "invite_link": user.group.telegram_invite_link,
         })
         tasks.append(asyncio.create_task(
             bot.send_message(
