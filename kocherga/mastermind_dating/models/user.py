@@ -16,6 +16,8 @@ import json
 import typing
 from jwt.utils import base64url_encode, base64url_decode
 
+from .. import rpc
+
 KchUser = get_user_model()
 
 signer = TimestampSigner()
@@ -139,3 +141,7 @@ class User(models.Model):
             recipient_list=[self.user.email],
         )
         logger.info(f'sent email to {self.user.email}')
+
+    def tinder_activate(self):
+        manager = rpc.get_client()
+        manager.tinder_activate(self.user_id)

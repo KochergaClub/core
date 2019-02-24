@@ -4,8 +4,6 @@ from django.shortcuts import redirect
 
 from datetime import datetime
 
-from multiprocessing.managers import BaseManager
-
 from kocherga.django.react import react_render
 
 from .models import Cohort, User
@@ -33,12 +31,8 @@ def cohort_page(request, cohort_id):
 @require_POST
 def tinder_activate(request, user_id):
     user = User.objects.get(user_id=user_id)
+    user.tinder_activate()
 
-    manager = BaseManager(address=('', 44444), authkey=b'django_sec_key')
-
-    manager.register('tinder_activate')
-    manager.connect()
-    manager.tinder_activate(user_id)
     return redirect('mastermind_dating:cohort_page', cohort_id=user.cohort.id)
 
 @staff_member_required

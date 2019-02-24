@@ -7,37 +7,32 @@ from aiogram.types import Update
 from aiogram.utils import executor
 
 import asyncio
-from concurrent.futures.thread import ThreadPoolExecutor
-from multiprocessing.managers import BaseManager
 from threading import Thread
+from multiprocessing.managers import BaseManager
 from typing import Awaitable, Callable
 
+
 from kocherga.django import settings
-from kocherga.mastermind_dating.interactions.interactions import register_handlers, tinder_activate
+from kocherga.mastermind_dating.interactions.interactions import register_handlers, tinder_activate, broadcast_solution
 
-def init_rpc(evloop, bot):
-
-    # pool = ThreadPoolExecutor()
-
-    async def tinder_activate_wrapper(user_id):
-        try:
-            await tinder_activate(user_id, bot)
-        except:
-            logger.exception('Something went wrong during tinder_activate')
-
-
+# Not in .rpc because of cyclic imports :(
+def get_server(evloop, bot):
     def run_async(method: Callable[[], Awaitable]):
         def run(*args, **kwargs):
             evloop.create_task(method(*args, **kwargs))
         return run
 
+    manager = BaseManager(address=('', 44444), authkey=b"django_sec_key")
+    manager.register("tinder_activate", run_async(lambda user_id: tinder_activate(user_id, bot)))
+    manager.register("broadcast_solution", run_async(lambda cohort_id: broadcast_solution(cohort_id, bot)))
+    server = manager.get_server()
 
+    return server
+
+def init_rpc(evloop, bot):
     def run_rpc_server():
-        manager = BaseManager(address=('', 44444), authkey=b"django_sec_key")
-        manager.register("tinder_activate", run_async(tinder_activate_wrapper))
-        server = manager.get_server()
+        server = get_server(evloop, bot)
         server.serve_forever()
-
 
     t1 = Thread(target=run_rpc_server)
     t1.start()

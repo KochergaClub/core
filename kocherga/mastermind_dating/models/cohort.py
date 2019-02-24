@@ -4,6 +4,8 @@ from kocherga.events.models import Event as KchEvent
 
 from .user import User as MmUser
 
+from .. import rpc
+
 class Cohort(models.Model):
     event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     sent_emails = models.BooleanField(default=False)
@@ -28,3 +30,7 @@ class Cohort(models.Model):
 
         self.sent_emails = True
         self.save()
+
+    def broadcast_solution(self):
+        manager = rpc.get_client()
+        manager.broadcast_solution(self.id)
