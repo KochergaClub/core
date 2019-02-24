@@ -68,12 +68,12 @@ def run_solver(cohort: db.Cohort):
         unames = ",".join(map(lambda a: f"p{a}", range(n)))
         dataset = "".join(builder)
 
-        return """
-people={%s};
-max_p_per_group = 5;
-max_Ns = 0;
-marks=[%s];
-        """.strip() % (unames, dataset)
+        return (
+                   f"people={{{unames}}};"
+                   "max_p_per_group = 5;"
+                   f"max_Ns = {n * n};"
+                   f"marks=[{dataset}];"
+               )
 
     with open("data.dzn", mode="w") as f:
         f.write(prepare_data())
