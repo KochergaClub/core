@@ -419,8 +419,12 @@ def register_handlers(dsp: Dispatcher):
         how, whom = data[4:].split("-", 1)
         how = ['Y', 'O', 'N'].index(how)
         whom = db.User.objects.get(telegram_uid=whom)
-        vote_obj, _ = db.Vote.objects.get_or_create(whom=whom, who=get_user())
-        vote_obj.how = how
+        vote_obj, _ = db.Vote.objects.update_or_create(
+            who=get_user(), whom=whom,
+            defaults={
+                'how': how,
+            }
+        )
 
     # ==--==
 
