@@ -18,7 +18,7 @@ _V = typing.TypeVar("_V")
 def get_user() -> typing.Optional[db.User]:
     # noinspection PyUnresolvedReferences
     try:
-        return db.User.objects.get(telegram_uid=at.User.get_current().username)
+        return db.User.objects.get(chat_id=at.Chat.get_current().id)
     except db.User.DoesNotExist:
         return None
 
@@ -44,6 +44,24 @@ def model_is(a: typing.Callable[[db.User], bool]) -> Filter:
 
     return LF()
 
+def generate_voting_buttons(who: db.User, whom: db.User):
+    markup = InlineKeyboardMarkup()
+
+    existing_vote = None
+    try:
+        existing_vote_id = db.Vote.objects.get(who=who, whom=whom).how
+        existing_vote = ['Y', 'O', 'N'][existing_vote_id]
+    except db.Vote.DoesNotExist:
+        pass
+
+    for (emoji, vote_type) in (("🔥", 'Y'), ("❤️", 'O'), ("✖️", 'N')):
+        button = emoji
+        if existing_vote == vote_type:
+            button = "[" + button + "]"
+        markup = markup.insert(InlineKeyboardButton(button, callback_data=f"vote{vote_type}-{whom.telegram_uid}"))
+    logger.info('Voting markup: ' + str(markup))
+    return markup
+
 
 def register_handlers(dsp: Dispatcher):
     def get_chat() -> at.Chat:
@@ -62,6 +80,13 @@ def register_handlers(dsp: Dispatcher):
         logger.info(u)
         from aiogram.dispatcher.handler import SkipHandler
         raise SkipHandler()
+
+    @dsp.callback_query_handler()
+    async def test_handler(u):
+        logger.info(u)
+        from aiogram.dispatcher.handler import SkipHandler
+        raise SkipHandler()
+
 
     @dsp.message_handler(lambda a: not logged_in(a), commands=["start"])
     async def auth(msg):
@@ -415,32 +440,39 @@ def register_handlers(dsp: Dispatcher):
 
     @dsp.callback_query_handler(logged_in, voting_active, Text(startswith="vote"))
     async def vote(msg: at.CallbackQuery):
+        logger.info('voting')
         data = msg.data
         how, whom = data[4:].split("-", 1)
         how = ['Y', 'O', 'N'].index(how)
         whom = db.User.objects.get(telegram_uid=whom)
+        who = get_user()
         vote_obj, _ = db.Vote.objects.update_or_create(
-            who=get_user(), whom=whom,
+            who=who, whom=whom,
             defaults={
                 'how': how,
             }
         )
 
+        logger.info('editing markup')
+        await get_bot().edit_message_reply_markup(
+            chat_id=msg.message.chat.id,
+            message_id=msg.message.message_id,
+            reply_markup=generate_voting_buttons(who, whom)
+        )
+
     # ==--==
 
 
-async def send_rate_request(to: int, whom: str, bot: Bot):
-    vote_for: db.User = db.User.objects.get(telegram_uid=whom)
-    await bot.send_message(to, f"**Голосование за** {vote_for.name}", parse_mode="Markdown")
-    if vote_for.photo is not None:
-        photo = at.InputFile(BytesIO(vote_for.photo.read()))
-        await bot.send_photo(to, photo)
-    await bot.send_message(to, vote_for.desc,
-                           reply_markup=InlineKeyboardMarkup()
-                           .insert(InlineKeyboardButton("🔥", callback_data=f"voteY-{vote_for.telegram_uid}"))
-                           .insert(InlineKeyboardButton("❤️", callback_data=f"voteO-{vote_for.telegram_uid}"))
-                           .insert(InlineKeyboardButton("✖️", callback_data=f"voteN-{vote_for.telegram_uid}"))
-                           )
+async def send_rate_request(who: db.User, whom: db.User, bot: Bot):
+    await bot.send_message(who.chat_id, f"**Голосование за** {whom.name}", parse_mode="Markdown")
+    if whom.photo:
+        photo = at.InputFile(BytesIO(whom.photo.read()))
+        await bot.send_photo(who.chat_id, photo)
+
+    await bot.send_message(
+        who.chat_id, whom.desc or '(Нет описания)',
+        reply_markup=generate_voting_buttons(who, whom)
+    )
 
 
 async def tinder_activate(user_id: int, bot: Bot):
@@ -452,11 +484,11 @@ async def tinder_activate(user_id: int, bot: Bot):
     user = db.User.objects.get(pk=user_id)
     logger.info(f"Found user {user.user.email}")
 
-    to_notify = db.User.objects.filter(cohort=user.cohort).exclude(telegram_uid=user.telegram_uid).iterator()
+    to_notify = db.User.objects.filter(cohort=user.cohort).exclude(user_id=user.user_id).iterator()
     tasks = []
     logger.info(f"Creating voting tasks")
     for to in to_notify:
-        tasks.append(asyncio.create_task(send_rate_request(to.chat_id, user.telegram_uid, bot)))
+        tasks.append(asyncio.create_task(send_rate_request(to, user, bot)))
 
     logger.info(f"Prepared {len(tasks)} voting notifications")
 

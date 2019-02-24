@@ -47,13 +47,17 @@ const Users = ({ users, csrfToken }) => (
           <strong>{user.name || "НЕЗАРЕГИСТРИРОВАН"}</strong>
           <UserDescription>{user.desc}</UserDescription>
           </Column>
-          <Photo src={user.photo} />
-          <form action={`/team/mastermind_dating/action/tinder_activate/${user.user_id}`} method="post">
-            <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-            {
-              user.voted_for && <Button type="submit" size="small">Активировать голосование</Button>
-            }
-          </form>
+          <Column centered>
+            <Photo src={user.photo} />
+            <form action={`/team/mastermind_dating/action/tinder_activate/${user.user_id}`} method="post">
+              <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+              {
+              user.voted_for
+              ? (<em>Уже проголосовали</em>)
+              : <Button type="submit" size="small">Активировать голосование</Button>
+              }
+            </form>
+          </Column>
         </UserContainer>
       )
     )
