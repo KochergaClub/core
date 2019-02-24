@@ -51,6 +51,9 @@ def run_solver(cohort: db.Cohort):
     votes.sort(key=lambda v: v.whom.telegram_uid)
     votes.sort(key=lambda v: v.who.telegram_uid)
 
+    with open('users.json', 'w') as fh:
+        json.dump(fh, [user.user_id for user in users])
+
     userlist = [users]
 
     def prepare_data():
@@ -85,8 +88,11 @@ def run_solver(cohort: db.Cohort):
 
 
 async def broadcast_solution(bot: Bot, cohort: db.Cohort):
-    users = list(db.User.objects.all(cohort=cohort))
-    users.sort(key=lambda u: u.uid)
+    with open('users.json') as fh:
+        users = [
+            db.Users.get(pk=id)
+            for user in json.load(fh)
+        ]
 
     solution = json.load("solution.json")
     log.info(f"Broadcasting solution: {solution}")
