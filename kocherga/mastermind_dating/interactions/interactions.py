@@ -502,6 +502,3 @@ async def tinder_activate(user_id: int, bot: Bot):
 
     user.voted_for = True
     user.save()
-
-async def broadcast_solution(cohort_id, bot):
-    raise Exception("Not implemented")
