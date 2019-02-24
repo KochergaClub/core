@@ -90,7 +90,7 @@ def run_solver(cohort: db.Cohort):
 async def broadcast_solution(bot: Bot):
     with open('users.json') as fh:
         users = [
-            db.Users.get(pk=id)
+            db.User.objects.get(pk=id)
             for user in json.load(fh)
         ]
 
