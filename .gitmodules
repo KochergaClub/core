@@ -1,0 +1,3 @@
+[submodule "mm-bot-model"]
+	path = mm-bot-model
+	url = https://gitlab.com/kocherga-public/mm-dating-matcher-minizn.git
