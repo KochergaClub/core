@@ -1,22 +1,51 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
 import Page from '../components/Page';
 import TeamMenu from '../components/TeamMenu';
 
+import { Column, Row } from '@kocherga/frontkit';
+
+const Photo = styled.img`
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+`;
+
+const UserList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+
+  > * + * {
+    margin-left: 20px;
+  }
+`;
+
+const UserContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const Users = ({ users }) => (
-  <ul>
-    {
-      users.map(
-        user => (
-          <li>
-            <a href={user.telegram_link}>ссылка на бота</a>
-            {' '}
-            <strong>{user.user}</strong>
-          </li>
-        )
+  <UserList>
+  {
+    users.map(
+      user => (
+        <UserContainer>
+          <Column centered>
+          <span>{user.user}</span>
+          <strong>{user.name || "НЕЗАРЕГИСТРИРОВАН"}</strong>
+          <small>{user.desc}</small>
+          </Column>
+          <Photo src={user.photo} />
+        </UserContainer>
       )
-    }
-  </ul>
+    )
+  }
+  </UserList>
 );
 
 export default ({ cohort_id, users }) => (
