@@ -18,7 +18,7 @@ const UserList = styled.div`
   flex-wrap: wrap;
 
   > * + * {
-    margin-left: 20px;
+    margin-left: 15px;
   }
 `;
 
@@ -27,7 +27,13 @@ const UserContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 300px;
+  width: 250px;
+  margin-bottom: 40px;
+`;
+
+const UserDescription = styled.small`
+  line-height: 1.3;
+  text-align: center;
 `;
 
 const Users = ({ users }) => (
@@ -39,7 +45,7 @@ const Users = ({ users }) => (
           <Column centered>
           <span>{user.user}</span>
           <strong>{user.name || "НЕЗАРЕГИСТРИРОВАН"}</strong>
-          <small>{user.desc}</small>
+          <UserDescription>{user.desc}</UserDescription>
           </Column>
           <Photo src={user.photo} />
         </UserContainer>
