@@ -12,3 +12,7 @@ class CohortAdmin(admin.ModelAdmin):
     inlines = [
         UserInline
     ]
+
+@admin.register(models.Group)
+class GroupAdmin(admin.ModelAdmin):
+    pass
