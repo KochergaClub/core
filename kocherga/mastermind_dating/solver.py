@@ -51,9 +51,6 @@ def run_solver(cohort: db.Cohort):
     votes.sort(key=lambda v: v.whom.telegram_uid)
     votes.sort(key=lambda v: v.who.telegram_uid)
 
-    with open('users.json', 'w') as fh:
-        json.dump([user.user_id for user in users], fh)
-
     userlist = [users]
 
     def prepare_data():
@@ -86,17 +83,9 @@ def run_solver(cohort: db.Cohort):
     solution = json.load(open("solution.json", mode="r"))
     log.info(f"Got solution: {solution}")
 
+    save_solution(solution, users)
 
-async def broadcast_solution(bot: Bot):
-    with open('users.json') as fh:
-        users = [
-            db.User.objects.get(pk=user_id)
-            for user_id in json.load(fh)
-        ]
-
-    solution = json.load(open("solution.json"))
-    log.info(f"Broadcasting solution: {solution}")
-
+def save_solution(solution, users):
     ptg = solution["people_to_groups"]
     assert len(ptg) == len(users)
     passoc = dict()
@@ -106,23 +95,42 @@ async def broadcast_solution(bot: Bot):
 
     group_names = set(solution["people_to_groups"])
     groups = {group: [u for u in users if passoc[u] == group] for group in group_names}
-    tasks: typing.List[typing.Awaitable] = []
 
-    # === Broadcast
-    log.info(f"Starting broadcast, final data: {groups}")
     for group_id in groups.keys():
         group: typing.List[db.User] = groups[group_id]
 
+        db_group = db.Group.objects.get_empty()
         for user in group:
-            message = render_to_string("mastermind_dating/bot/group_assembled.md", {
-                "users": set(group) - {user}
-            })
-            tasks.append(asyncio.create_task(
-                bot.send_message(
-                    user.chat_id, message,
-                    parse_mode="Markdown"
-                )
-            ))
+            user.group = db_group
+            user.save()
+
+
+async def broadcast_solution(cohort_id: int, bot: Bot):
+    log.info(f"Broadcasting solution")
+
+    cohort = Cohort.objects.get(pk=cohort_id)
+
+    tasks: typing.List[typing.Awaitable] = []
+
+    log.info(f"Starting broadcast, final data: {groups}")
+    for user in db.User.objects.filter(cohort=cohort):
+        if not user.group:
+            log.warn('No group for user ' + user.telegram_uid)
+            continue
+
+        message = render_to_string("mastermind_dating/bot/group_assembled.md", {
+            "users": [
+                u
+                for u in user.group.users.all()
+                if u.user_id != user.user_id
+            ]
+        })
+        tasks.append(asyncio.create_task(
+            bot.send_message(
+                user.chat_id, message,
+                parse_mode="Markdown"
+            )
+        ))
 
     log.info(f"Awaiting {len(tasks)} to finish")
     for task in tasks:

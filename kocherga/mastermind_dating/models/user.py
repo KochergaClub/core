@@ -73,6 +73,8 @@ class User(models.Model):
     # TODO - one user can belong to mutliple cohorts
     cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='users')
 
+    group = models.ForeignKey('Group', on_delete=models.PROTECT, related_name='users', blank=True, null=True)
+
     objects = UserManager()
 
     def generate_token(self) -> str:

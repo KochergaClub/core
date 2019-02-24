@@ -33,4 +33,4 @@ class Cohort(models.Model):
 
     def broadcast_solution(self):
         manager = rpc.get_client()
-        manager.broadcast_solution()
+        manager.broadcast_solution(self.id)

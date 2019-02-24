@@ -25,7 +25,7 @@ def get_server(evloop, bot):
 
     manager = BaseManager(address=('', 44444), authkey=b"django_sec_key")
     manager.register("tinder_activate", run_async(lambda user_id: tinder_activate(user_id, bot)))
-    manager.register("broadcast_solution", run_async(lambda: broadcast_solution(bot)))
+    manager.register("broadcast_solution", run_async(lambda cohort_id: broadcast_solution(cohort_id, bot)))
     server = manager.get_server()
 
     return server
