@@ -1,11 +1,15 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_POST
+from django.shortcuts import redirect
+
+from datetime import datetime
+
+from multiprocessing.managers import BaseManager
 
 from kocherga.django.react import react_render
 
-from .models import Cohort
+from .models import Cohort, User
 from . import serializers
-
-from datetime import datetime
 
 @staff_member_required
 def index(request):
@@ -24,3 +28,15 @@ def cohort_page(request, cohort_id):
         'users': serializers.UserSerializer(cohort.users.all(), many=True).data
     }
     return react_render(request, 'mastermind_dating/cohort_page.tsx', props)
+
+@staff_member_required
+@require_POST
+def tinder_activate(request, user_id):
+    user = User.objects.get(user_id=user_id)
+
+    manager = BaseManager(address=('', 44444), authkey=b'django_sec_key')
+
+    manager.register('tinder_activate')
+    manager.connect()
+    manager.tinder_activate(user_id)
+    return redirect('mastermind_dating:cohort_page', cohort_id=user.cohort.id)

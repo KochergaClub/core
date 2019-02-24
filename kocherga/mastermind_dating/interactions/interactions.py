@@ -425,8 +425,7 @@ def register_handlers(dsp: Dispatcher):
     # ==--==
 
 
-async def send_rate_request(to: int, whom: str):
-    bot: Bot = Bot.get_current()
+async def send_rate_request(to: int, whom: str, bot: Bot):
     vote_for: db.User = db.User.objects.get(telegram_uid=whom)
     await bot.send_message(to, f"**Голосование за** {vote_for.name}", parse_mode="Markdown")
     if vote_for.photo is not None:
@@ -440,15 +439,25 @@ async def send_rate_request(to: int, whom: str):
                            )
 
 
-async def tinder_activate(user: db.User):
+async def tinder_activate(user_id: int, bot: Bot):
     """
         Activates voting for some user.
     :param user:
     """
+    logger.info(f"Looking for user {user_id} to activate")
+    user = db.User.objects.get(pk=user_id)
+    logger.info(f"Found user {user.user.email}")
+
     to_notify = db.User.objects.filter(cohort=user.cohort).exclude(telegram_uid=user.telegram_uid).iterator()
     tasks = []
+    logger.info(f"Creating voting tasks")
     for to in to_notify:
-        tasks.append(asyncio.create_task(send_rate_request(to.teleram_uid, user.telegram_uid)))
+        tasks.append(asyncio.create_task(send_rate_request(to.telegram_uid, user.telegram_uid, bot)))
+
+    logger.info(f"Prepared {len(tasks)} voting notifications")
 
     for task in tasks:
         await task
+
+    user.voted_for = True
+    user.save()

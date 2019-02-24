@@ -58,6 +58,7 @@ class User(models.Model):
     photo = models.ImageField(null=True, blank=True, upload_to=photo_path)
     state = models.TextField(blank=True)
     chat_id = models.IntegerField(null=True, blank=True)
+    voted_for = models.BooleanField(default=False)
 
     # TODO - one user can belong to mutliple cohorts
     cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='users')
