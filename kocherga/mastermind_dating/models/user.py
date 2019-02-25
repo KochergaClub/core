@@ -153,7 +153,7 @@ class User(models.Model):
             return TimeTable(s.selected_time)
 
 class TimeTable:
-    def __init__(self, selected_time=List[str])
+    def __init__(self, selected_time: typing.List[str]):
         self.selected_time = selected_time
 
     def lliira_line(self):
