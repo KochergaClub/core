@@ -8,3 +8,7 @@ class Group(models.Model):
     telegram_invite_link = models.CharField(max_length=255)
 
     objects = GroupManager()
+
+    def print_lliira_table(self):
+        for user in self.users.all():
+            print(user.name + '\t' + user.timetable().lliira_line())

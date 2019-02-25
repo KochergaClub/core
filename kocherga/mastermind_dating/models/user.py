@@ -147,3 +147,22 @@ class User(models.Model):
     def tinder_activate(self):
         manager = rpc.get_client()
         manager.tinder_activate(self.user_id)
+
+    def timetable(self):
+        with self.edit_state(TimeState) as s:
+            return TimeTable(s.selected_time)
+
+class TimeTable:
+    def __init__(self, selected_time=List[str])
+        self.selected_time = selected_time
+
+    def lliira_line(self):
+        result = []
+        for day in range(7):
+            for slot in range(3):
+                cell = f"{day}.{slot}"
+                if cell in self.selected_time:
+                    result.append(4)
+                else:
+                    result.append(0)
+        return '\t'.join(result)
