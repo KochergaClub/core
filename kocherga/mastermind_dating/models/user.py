@@ -149,7 +149,7 @@ class User(models.Model):
         manager.tinder_activate(self.user_id)
 
     def timetable(self):
-        from .interactions.interactions import TimeState
+        from ..interactions.interactions import TimeState
         with self.edit_state(TimeState) as s:
             return TimeTable(s.selected_time)
 
