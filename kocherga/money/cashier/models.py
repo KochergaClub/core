@@ -53,6 +53,8 @@ def load_df_from_google():
             "Расходы": "spendings",
         }
     )
+    if '' in df.columns:
+        df = df.drop(columns='') # extra comments in empty columns can break the importer
 
     return df
 
