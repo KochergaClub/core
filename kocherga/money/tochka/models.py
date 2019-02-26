@@ -66,13 +66,13 @@ def init_tokens():
             "code": code,
         },
     )
-    print(r.json())
     r.raise_for_status()
 
     save_tokens(r.json())
 
 
 def update_tokens():
+    logger.info(f'Updating tokens in {TOKENS_FILE}')
     credentials = settings.KOCHERGA_MONEY_TOCHKA_CLIENT
     with dbm.open(TOKENS_FILE, 'w') as db:
         r = requests.post(
@@ -97,25 +97,32 @@ def get_access_token():
     return access_token
 
 
-def call(method, url, data={}):
+def call(http_method, url, data={}):
     access_token = get_access_token()
-    if method == "GET":
-        r = requests.get(
+
+    allowed_methods = {'GET': 'get', 'POST': 'post'}
+    if http_method not in allowed_methods:
+        raise Exception(f"Unknown method {http_method}")
+
+    method = allowed_methods[http_method]
+    extra_args = {}
+
+    if method == 'post':
+        extra_args['json'] = data
+
+    def _call():
+        return getattr(requests, method)(
             f"{TOCHKA_API}/{url}",
             headers={
                 "Authorization": f"Bearer {access_token}"
             },
+            **extra_args
         )
-    elif method == "POST":
-        r = requests.post(
-            f"{TOCHKA_API}/{url}",
-            headers={
-                "Authorization": f"Bearer {access_token}",
-            },
-            json=data,
-        )
-    else:
-        raise Exception(f"Unknown method {method}")
+
+    r = _call()
+    if r.status_code == 403:
+        update_tokens()
+        r = _call() # try again just once
 
     r.raise_for_status()
 
