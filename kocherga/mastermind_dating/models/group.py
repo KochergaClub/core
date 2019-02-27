@@ -11,4 +11,4 @@ class Group(models.Model):
 
     def print_lliira_table(self):
         for user in self.users.all():
-            print(user.name + '\t' + user.timetable().lliira_line())
+            print(f'{user.name:<28}' + user.timetable().lliira_line())

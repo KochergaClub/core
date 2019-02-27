@@ -149,7 +149,13 @@ class User(models.Model):
         manager.tinder_activate(self.user_id)
 
     def timetable(self):
-        from ..interactions.interactions import TimeState
+        # copypaste!
+        class TimeState(State):
+            def __init__(self):
+                super().__init__()
+                self.selected_time = []
+                self.confirmed = False
+
         with self.edit_state(TimeState) as s:
             return TimeTable(s.selected_time)
 
@@ -163,7 +169,7 @@ class TimeTable:
             for slot in range(3):
                 cell = f"{day}.{slot}"
                 if cell in self.selected_time:
-                    result.append(4)
+                    result.append('4')
                 else:
-                    result.append(0)
+                    result.append('0')
         return '\t'.join(result)
