@@ -11,7 +11,7 @@ from collections import namedtuple
 from io import StringIO
 import csv
 
-from kocherga.datetime import dts
+from kocherga.dateutils import dts
 
 from kocherga.events.announcement import BaseAnnouncement
 import kocherga.events.markup

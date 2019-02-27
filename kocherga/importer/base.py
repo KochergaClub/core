@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 
 from typing import Any, Optional
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 import django.db
 

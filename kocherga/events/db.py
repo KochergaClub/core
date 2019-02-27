@@ -5,7 +5,7 @@ from typing import List, Dict, Any
 
 from datetime import datetime, timedelta
 
-from kocherga.datetime import TZ, MSK_DATE_FORMAT
+from kocherga.dateutils import TZ, MSK_DATE_FORMAT
 
 from kocherga.error import PublicError
 

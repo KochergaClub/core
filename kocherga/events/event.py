@@ -12,8 +12,8 @@ from django.db import models
 from django.conf import settings
 import django.dispatch
 
-from kocherga.datetime import TZ, MSK_DATE_FORMAT
-from kocherga.datetime import dts, inflected_weekday, inflected_month
+from kocherga.dateutils import TZ, MSK_DATE_FORMAT
+from kocherga.dateutils import dts, inflected_weekday, inflected_month
 
 from kocherga.images import image_storage
 import kocherga.room

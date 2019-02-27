@@ -5,7 +5,7 @@ import random
 import hashlib
 from datetime import datetime, timedelta
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 from kocherga.ludwig.bot import bot
 
 from kocherga.watchmen_routine.models import Task, RewardImage

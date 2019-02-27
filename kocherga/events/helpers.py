@@ -2,7 +2,7 @@ import datetime
 import re
 
 from kocherga.error import PublicError
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 def build_start_end_dt(date_str, start_time, end_time):
     dt = datetime.datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=TZ)

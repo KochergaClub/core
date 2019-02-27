@@ -3,7 +3,7 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 import kocherga.events.db
 from kocherga.events.models import Event
 

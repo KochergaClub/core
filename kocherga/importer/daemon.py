@@ -3,7 +3,7 @@ from apscheduler.executors.pool import ProcessPoolExecutor
 
 from datetime import datetime, timedelta
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 import importlib
 

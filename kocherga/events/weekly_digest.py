@@ -17,8 +17,8 @@ from kocherga.email.tools import get_utmify, mjml2html
 
 from .models import Event
 
-import kocherga.datetime
-from kocherga.datetime import TZ
+import kocherga.dateutils
+from kocherga.dateutils import TZ
 from datetime import timedelta, datetime
 
 IMAGE_FOLDER_NAME = 'Расписание на неделю'
@@ -65,8 +65,8 @@ def generate_content(text, image_url):
         for d in sorted(date2events.keys())
     ]
 
-    start_month = kocherga.datetime.inflected_month(dt)
-    end_month = kocherga.datetime.inflected_month(end_dt)
+    start_month = kocherga.dateutils.inflected_month(dt)
+    end_month = kocherga.dateutils.inflected_month(end_dt)
 
     title_dates = ''
     if start_month == end_month:
@@ -76,8 +76,8 @@ def generate_content(text, image_url):
 
     def date2day(d):
         dt = datetime.strptime(d, '%Y-%m-%d')
-        weekday = kocherga.datetime.weekday(dt).capitalize()
-        month = kocherga.datetime.inflected_month(dt)
+        weekday = kocherga.dateutils.weekday(dt).capitalize()
+        month = kocherga.dateutils.inflected_month(dt)
         return f"{weekday}, {dt.day} {month}"
 
     mjml = render_to_string('events/email/weekly_digest.mjml', {

@@ -22,7 +22,7 @@ from kocherga.events.models import Event, Tag
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
 
-from kocherga.datetime import MSK_DATE_FORMAT
+from kocherga.dateutils import MSK_DATE_FORMAT
 
 from feedgen.feed import FeedGenerator
 
@@ -198,7 +198,7 @@ def r_list_public_atom(request):
         fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{item["event_id"]}')
         dt = datetime.strptime(item["start"], MSK_DATE_FORMAT)
         fe.title(item["title"])
-        dt_str = kocherga.datetime.weekday(dt).capitalize() + ', ' + str(dt.day) + ' ' + kocherga.datetime.inflected_month(dt) + ', ' + dt.strftime('%H:%M')
+        dt_str = kocherga.dateutils.weekday(dt).capitalize() + ', ' + str(dt.day) + ' ' + kocherga.dateutils.inflected_month(dt) + ', ' + dt.strftime('%H:%M')
         fe.summary(dt_str)
         fe.content(dt_str)
         fe.link(href=item["announcements"]["vk"]["link"])

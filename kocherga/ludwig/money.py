@@ -3,7 +3,7 @@ from kocherga.ludwig.bot import bot
 import kocherga.money.cashier.models
 import kocherga.money.salaries
 import kocherga.staff.tools
-from kocherga.datetime import inflected_month
+from kocherga.dateutils import inflected_month
 
 
 def cash_response():

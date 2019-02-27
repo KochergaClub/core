@@ -10,7 +10,7 @@ import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
 django.setup()
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 

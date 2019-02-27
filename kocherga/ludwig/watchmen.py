@@ -3,7 +3,7 @@ import re
 
 from kocherga.ludwig.bot import bot
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 import kocherga.watchmen.tools
 import kocherga.staff.tools

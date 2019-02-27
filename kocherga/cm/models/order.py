@@ -2,7 +2,7 @@ from django.db import models
 
 from datetime import datetime
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 from .util import date_and_time_to_ts
 
 class Order(models.Model):

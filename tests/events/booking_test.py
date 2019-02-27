@@ -6,7 +6,7 @@ import kocherga.events.booking
 import kocherga.events.google
 from kocherga.events.event import Event
 from kocherga.error import PublicError
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 pytestmark = pytest.mark.usefixtures('db')
 

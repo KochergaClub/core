@@ -12,8 +12,8 @@ from typing import Any, List, Iterable
 from django.db import models
 from django.conf import settings
 
-import kocherga.datetime
-from kocherga.datetime import TZ
+import kocherga.dateutils
+from kocherga.dateutils import TZ
 import kocherga.importer.base
 
 # Docs: https://enter.tochka.com/doc/v1/index.html
@@ -191,7 +191,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         return datetime(2015, 8, 1, tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
-        for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(
+        for (chunk_from_dt, chunk_to_dt) in kocherga.dateutils.date_chunks(
             from_dt, to_dt, step=timedelta(days=28)
         ):
             chunk_from_d = (chunk_from_dt - timedelta(days=2)).date()

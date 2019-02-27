@@ -12,8 +12,8 @@ import kocherga.vk.api
 from kocherga.vk.helpers import group2id, upload_wall_image
 from kocherga.error import PublicError
 
-from kocherga.datetime import TZ
-import kocherga.datetime
+from kocherga.dateutils import TZ
+import kocherga.dateutils
 
 from kocherga.events.announcement import BaseAnnouncement
 from kocherga.events.event import Event
@@ -162,7 +162,7 @@ def update_wiki_schedule(from_dt=None):
                 "Воскресенье",
             ]
             weekday = weekdays[event.start_dt.weekday()]
-            month = kocherga.datetime.inflected_month(event.start_dt)
+            month = kocherga.dateutils.inflected_month(event.start_dt)
             result += f"==={weekday}, {event.start_dt.day} {month}===\n"
             prev_date = event.start_dt.date()
 
@@ -224,8 +224,8 @@ def create_schedule_post(prefix_text):
     prev_date = None
     for event in events:
         if event.start_dt.date() != prev_date:
-            weekday = kocherga.datetime.weekday(event.start_dt).upper()
-            month = kocherga.datetime.inflected_month(event.start_dt)
+            weekday = kocherga.dateutils.weekday(event.start_dt).upper()
+            month = kocherga.dateutils.inflected_month(event.start_dt)
             message += f"{weekday}, {event.start_dt.day} {month}\n"
             prev_date = event.start_dt.date()
 

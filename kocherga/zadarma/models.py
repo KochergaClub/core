@@ -16,8 +16,8 @@ import itertools
 
 from typing import Iterator
 
-from kocherga.datetime import TZ
-import kocherga.datetime
+from kocherga.dateutils import TZ
+import kocherga.dateutils
 import kocherga.watchmen.tools
 import kocherga.importer.base
 
@@ -116,7 +116,7 @@ def fetch_all_calls(
     from_dt=datetime(2016, 4, 1, tzinfo=TZ), to_dt=None
 ) -> Iterator[Call]:
     api_requests = 0
-    for (chunk_from_dt, chunk_to_dt) in kocherga.datetime.date_chunks(
+    for (chunk_from_dt, chunk_to_dt) in kocherga.dateutils.date_chunks(
         from_dt, to_dt, timedelta(days=28)
     ):
         logger.info(f"Fetching from {chunk_from_dt} to {chunk_to_dt}")

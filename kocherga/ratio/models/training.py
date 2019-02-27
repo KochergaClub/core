@@ -5,7 +5,7 @@ import hashlib
 from datetime import date
 from collections import OrderedDict
 
-from kocherga.datetime import inflected_month
+from kocherga.dateutils import inflected_month
 
 class TrainingManager(models.Manager):
     def next_training(self):

@@ -29,7 +29,7 @@ def create_bot():
         SLACK_SIGNING_SECRET,
         timezone=pytz.timezone(
             "Europe/Moscow"
-        ),  # can't use kocherga.datetime.TZ - it's based on dateutil.tz now
+        ),  # can't use kocherga.dateutils.TZ - it's based on dateutil.tz now
         alt_names=['людвиг']
     )
 

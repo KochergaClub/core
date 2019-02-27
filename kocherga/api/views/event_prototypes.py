@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from datetime import datetime
 
 from kocherga.error import PublicError
-from kocherga.datetime import dts
+from kocherga.dateutils import dts
 
 from kocherga.events.prototype import EventPrototype
 

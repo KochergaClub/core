@@ -11,7 +11,7 @@ from django.db import models
 from .event import Event
 
 import kocherga.events.google
-from kocherga.datetime import dts, TZ
+from kocherga.dateutils import dts, TZ
 from kocherga.images import image_storage
 
 class EventPrototype(models.Model):

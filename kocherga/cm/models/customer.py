@@ -9,7 +9,7 @@ from datetime import datetime, time, timedelta
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import requests
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 from kocherga.cm.scraper import DOMAIN, get_cookies, load_customer_from_html
 from .order import Order

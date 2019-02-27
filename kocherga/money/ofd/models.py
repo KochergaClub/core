@@ -13,7 +13,7 @@ from django.db import models
 
 from typing import Any, Dict, List
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 import kocherga.importer.base
 
 API_URL = "https://api.ofd-ya.ru/ofdapi/v1"

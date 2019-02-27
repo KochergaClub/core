@@ -1,7 +1,7 @@
 from django.db import models
 
 from datetime import datetime
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 class TaskManager(models.Manager):
     def today_tasks(self):

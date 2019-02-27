@@ -9,7 +9,7 @@ import gitlab
 from django.conf import settings
 from django.db import models
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 import kocherga.importer.base
 
 SERVER = "https://gitlab.com"

@@ -9,7 +9,7 @@ from typing import Dict
 from django.conf import settings
 from django.db import models
 
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 MODERN_SHIFTS_FIRST_DATE = datetime.strptime(
     settings.KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE, "%Y-%m-%d"

@@ -11,7 +11,7 @@ from typing import List, Dict
 import kocherga.importer.base
 
 import kocherga.google
-from kocherga.datetime import TZ
+from kocherga.dateutils import TZ
 
 from .models import Schedule, ScheduleItem, Shift
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-import kocherga.datetime
+import kocherga.dateutils
 
 from .models import Schedule, Task, RewardImage
 
@@ -22,7 +22,7 @@ class WeekdayFilter(admin.SimpleListFilter):
         in the right sidebar.
         """
         return (
-            (str(i+1), kocherga.datetime.WEEKDAY_NAMES[i].capitalize())
+            (str(i+1), kocherga.dateutils.WEEKDAY_NAMES[i].capitalize())
             for i in range(7)
         )
 

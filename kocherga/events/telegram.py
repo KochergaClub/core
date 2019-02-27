@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
-import kocherga.datetime
+import kocherga.dateutils
 
 from kocherga.telegram import post_to_channel
 
@@ -39,8 +39,8 @@ def schedule_message():
     prev_date = None
     for event in events:
         if event.start_dt.date() != prev_date:
-            weekday = kocherga.datetime.weekday(event.start_dt).upper()
-            month = kocherga.datetime.inflected_month(event.start_dt)
+            weekday = kocherga.dateutils.weekday(event.start_dt).upper()
+            month = kocherga.dateutils.inflected_month(event.start_dt)
             message += f"{weekday}, {event.start_dt.day} {month}\n"
             prev_date = event.start_dt.date()
 
