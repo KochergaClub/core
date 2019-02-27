@@ -4,6 +4,7 @@ import kocherga.dateutils
 
 from .models import Schedule, Task, RewardImage
 
+
 class ScheduleInline(admin.TabularInline):
     model = Schedule
 
@@ -22,7 +23,7 @@ class WeekdayFilter(admin.SimpleListFilter):
         in the right sidebar.
         """
         return (
-            (str(i+1), kocherga.dateutils.WEEKDAY_NAMES[i].capitalize())
+            (str(i + 1), kocherga.dateutils.WEEKDAY_NAMES[i].capitalize())
             for i in range(7)
         )
 

@@ -25,7 +25,7 @@ class CashierItem(models.Model):
     total_income = models.IntegerField(null=True)  # could be restored from other data
     current_cash = models.IntegerField(null=True)
     notes = models.TextField()
-    discrepancy = models.IntegerField(null=True) # could be restored from other data
+    discrepancy = models.IntegerField(null=True)  # could be restored from other data
     spendings = models.IntegerField(null=True)
 
 
@@ -54,7 +54,7 @@ def load_df_from_google():
         }
     )
     if '' in df.columns:
-        df = df.drop(columns='') # extra comments in empty columns can break the importer
+        df = df.drop(columns='')  # extra comments in empty columns can break the importer
 
     return df
 
@@ -75,7 +75,7 @@ def export_to_db():
 
 def current_cash():
     item = (
-        CashierItem.objects.exclude(current_cash = None).order_by('-id')[0]
+        CashierItem.objects.exclude(current_cash=None).order_by('-id')[0]
     )
     return item.current_cash
 

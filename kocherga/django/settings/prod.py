@@ -68,7 +68,7 @@ KOCHERGA_EVENT_MARKUP_SELF_MENTION = 'антикафе Кочерга'
 
 KOCHERGA_MONEY_TOCHKA_API = 'https://enter.tochka.com/api/v1'
 
-KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759' # TODO - replaced since 2018-12
+KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759'  # TODO - replaced since 2018-12
 
 KOCHERGA_TIMEPAD = {
     "organization": "kocherga",
@@ -97,7 +97,7 @@ KOCHERGA_FB = {
 KOCHERGA_WIKI = {
     "domain": "wiki.team.kocherga.club",
     "bot": {
-      "username": "Вячеслав Матюхин@Людвиг"
+        "username": "Вячеслав Матюхин@Людвиг",
     }
 }
 
@@ -108,7 +108,7 @@ KOCHERGA_VK = {
     },
     "daily_page": "kocherga_daily",
     "client_id": 6274394,
-    "callback_secret": "UHD9g3yQkhgb9ZjCZ1Q1qWVuDUo", # FIXME - secret??
+    "callback_secret": "UHD9g3yQkhgb9ZjCZ1Q1qWVuDUo",  # FIXME - secret??
 }
 
 KOCHERGA_TELEGRAM = {
@@ -121,7 +121,8 @@ KOCHERGA_TELEGRAM = {
 
 KOCHERGA_BACKUPS_S3_BUCKET = 'kocherga-backups'
 
-KOCHERGA_LUDWIG_SENTRY_DSN = 'https://d6daa44a06a846a98743000040168090:7b1fad4c93454acd90fe9f973934ba90@sentry.io/1161227' # TODO - move to sentry_sdk?
+# TODO - move to sentry_sdk?
+KOCHERGA_LUDWIG_SENTRY_DSN = 'https://d6daa44a06a846a98743000040168090:7b1fad4c93454acd90fe9f973934ba90@sentry.io/1161227'
 
 KOCHERGA_RATIO_USERS_SPREADSHEET_ID = '1mj-YsVklLtlFfy_04lZ5a0NX85iZ3O_IxsUehBeJiFg'
 

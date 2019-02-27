@@ -22,6 +22,7 @@ KchUser = get_user_model()
 
 signer = TimestampSigner()
 
+
 class State(dict):
 
     def __init__(self):
@@ -59,6 +60,10 @@ class UserManager(models.Manager):
 def photo_path(instance, filename):
     return f'mastermind_dating/photos/{instance.user.id}/{filename}'
 
+
+_S = typing.TypeVar("_S")
+
+
 class User(models.Model):
     user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
     telegram_uid = models.CharField(max_length=100, blank=True)
@@ -82,8 +87,6 @@ class User(models.Model):
 
     def is_bound(self):
         return bool(self.telegram_uid)
-
-    _S = typing.TypeVar("_S")
 
     def edit_state(self, type: typing.Type[_S]) -> typing.ContextManager[_S]:
         user = self
@@ -158,6 +161,7 @@ class User(models.Model):
 
         with self.edit_state(TimeState) as s:
             return TimeTable(s.selected_time)
+
 
 class TimeTable:
     def __init__(self, selected_time: typing.List[str]):

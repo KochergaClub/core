@@ -4,8 +4,6 @@ logger = logging.getLogger(__name__)
 from django.conf import settings
 import django.template.loader
 
-from pathlib import Path
-import datetime
 import re
 
 import pyppeteer
@@ -13,6 +11,8 @@ import pyppeteer
 from .config import name2schema
 
 _browser = None
+
+
 async def get_browser(headless=True):
     global _browser
     if not _browser:
@@ -20,6 +20,7 @@ async def get_browser(headless=True):
         _browser = await pyppeteer.launch(headless=headless)
         logger.info("Browser created")
     return _browser
+
 
 class Template:
     def __init__(self, name, schema):
@@ -86,6 +87,7 @@ class Template:
 
         logger.info('Returing image bytes')
         return image_bytes
+
 
 def list_templates():
     return sorted(name2schema.keys())

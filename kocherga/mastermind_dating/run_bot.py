@@ -2,8 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import aiogram
-from aiogram import types as at, Dispatcher
-from aiogram.types import Update
+from aiogram import Dispatcher
 from aiogram.utils import executor
 
 import asyncio
@@ -15,6 +14,7 @@ from typing import Awaitable, Callable
 from kocherga.django import settings
 from .interactions.interactions import register_handlers, tinder_activate
 from .solver import broadcast_solution
+
 
 # Not in .rpc because of cyclic imports :(
 def get_server(evloop, bot):
@@ -29,6 +29,7 @@ def get_server(evloop, bot):
     server = manager.get_server()
 
     return server
+
 
 def init_rpc(evloop, bot):
     def run_rpc_server():

@@ -2,6 +2,7 @@ from django.db import models
 
 from .util import date_and_time_to_ts
 
+
 class SubscriptionOrder(models.Model):
     class Meta:
         unique_together = (
@@ -13,7 +14,7 @@ class SubscriptionOrder(models.Model):
 
     id = models.AutoField(primary_key=True)
     card_id = models.BigIntegerField()
-    ts = models.IntegerField() # TODO - migrate to DateTimeField
+    ts = models.IntegerField()  # TODO - migrate to DateTimeField
     order_value = models.IntegerField()
     payment_type = models.CharField(max_length=20)
     client_name = models.CharField(max_length=255)

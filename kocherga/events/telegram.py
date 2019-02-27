@@ -25,11 +25,11 @@ def schedule_message():
     dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
     query = (
-        Event.objects \
-        .filter(deleted=False) \
-        .filter(start_ts__gt = dt.timestamp()) \
-        .filter(start_ts__lt = (dt + timedelta(weeks=1)).timestamp()) \
-        .exclude(posted_vk__isnull = True) \
+        Event.objects
+        .filter(deleted=False)
+        .filter(start_ts__gt = dt.timestamp())
+        .filter(start_ts__lt = (dt + timedelta(weeks=1)).timestamp())
+        .exclude(posted_vk__isnull = True)
         .exclude(posted_vk = '')
     )
 

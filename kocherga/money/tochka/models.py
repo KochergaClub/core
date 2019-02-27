@@ -1,24 +1,27 @@
+from django.db import models
+
+from datetime import datetime
+
 import logging
 logger = logging.getLogger(__name__)
 
-import requests
-from datetime import date, datetime, timedelta
-import time
-import dbm
-import os.path
 
-from typing import Any, List, Iterable
+class Auth(models.Model):
+    class Meta:
+        db_table = 'tochka_auth'
 
-from django.db import models
-from django.conf import settings
+    id = models.IntegerField(primary_key=True, default=1)
+    access_token = models.CharField(max_length=100)
+    refresh_token = models.CharField(max_length=100)
 
-import kocherga.dateutils
-from kocherga.dateutils import TZ
-import kocherga.importer.base
-
-# Docs: https://enter.tochka.com/doc/v1/index.html
-TOCHKA_API = settings.KOCHERGA_MONEY_TOCHKA_API
-TOKENS_FILE = os.path.join(settings.DATA_DIR, 'tochka.dbm')
+    @classmethod
+    def get(self):
+        result = self.objects.first()
+        if not result:
+            raise Exception(
+                "Tochka auth is not initialized, please call kocherga.money.tochka.auth.init_tokens() manually."
+            )
+        return result
 
 
 class Record(models.Model):
@@ -42,164 +45,3 @@ class Record(models.Model):
             total=float(record.get("payment_amount")),
             document_type=int(record.get("operation_type")),
         )
-
-
-def save_tokens(response_json):
-    with dbm.open(TOKENS_FILE, 'c') as db:
-        db['refresh_token'] = response_json['refresh_token']
-        db['access_token'] = response_json['access_token']
-
-
-# Interactive function, run this from CLI once.
-def init_tokens():
-    credentials = settings.KOCHERGA_MONEY_TOCHKA_CLIENT
-    url = f"{TOCHKA_API}/authorize?response_type=code&client_id={credentials['client_id']}"
-    print(f"Open this url: {url}")
-    code = input("Enter the authorization code here: ")
-
-    r = requests.post(
-        f"{TOCHKA_API}/oauth2/token",
-        json={
-            "client_id": credentials["client_id"],
-            "client_secret": credentials["client_secret"],
-            "grant_type": "authorization_code",
-            "code": code,
-        },
-    )
-    r.raise_for_status()
-
-    save_tokens(r.json())
-
-
-def update_tokens():
-    logger.info(f'Updating tokens in {TOKENS_FILE}')
-    credentials = settings.KOCHERGA_MONEY_TOCHKA_CLIENT
-    with dbm.open(TOKENS_FILE, 'w') as db:
-        r = requests.post(
-            f"{TOCHKA_API}/oauth2/token",
-            json={
-                "client_id": credentials["client_id"],
-                "client_secret": credentials["client_secret"],
-                "grant_type": "refresh_token",
-                "refresh_token": db["refresh_token"].decode('utf-8'),
-            },
-        )
-        r.raise_for_status()
-
-        save_tokens(r.json())
-
-def get_access_token():
-    access_token = None
-    with dbm.open(TOKENS_FILE, 'r') as db:
-        access_token = db['access_token'].decode('utf-8')
-
-    # TODO - check and update if necessary?
-    return access_token
-
-
-def call(http_method, url, data={}):
-    access_token = get_access_token()
-
-    allowed_methods = {'GET': 'get', 'POST': 'post'}
-    if http_method not in allowed_methods:
-        raise Exception(f"Unknown method {http_method}")
-
-    method = allowed_methods[http_method]
-    extra_args = {}
-
-    if method == 'post':
-        extra_args['json'] = data
-
-    def _call():
-        return getattr(requests, method)(
-            f"{TOCHKA_API}/{url}",
-            headers={
-                "Authorization": f"Bearer {access_token}"
-            },
-            **extra_args
-        )
-
-    r = _call()
-    if r.status_code == 403:
-        update_tokens()
-        r = _call() # try again just once
-
-    r.raise_for_status()
-
-    return r.json()
-
-
-def get_account_info() -> str:
-    accounts = call('GET', 'account/list')
-
-    accounts = [
-        a for a in accounts
-        if a['code'][5:8] == '810' # RUB
-    ]
-
-    # sandbox returns multiple RUB accounts
-    if 'sandbox' in TOCHKA_API:
-        accounts = accounts[:1]
-
-    assert len(accounts) == 1
-
-    return (accounts[0]['code'], accounts[0]['bank_code'])
-
-
-def get_statements(from_d: date, to_d: date) -> Iterable[Any]:
-    (account_id, bank_code) = get_account_info()
-
-    response = call('POST', 'statement', {
-        'account_code': account_id,
-        'bank_code': bank_code,
-        'date_start': from_d.strftime('%Y-%m-%d'),
-        'date_end': to_d.strftime('%Y-%m-%d'),
-    })
-    request_id = response['request_id']
-
-    step = 1
-    max_step = 10
-    max_wait = 60
-    total_wait = 0
-    statement = None
-    while total_wait < max_wait:
-        response = call('GET', f'statement/status/{request_id}')
-        state = response['status']
-        logger.info(f"State: {state}")
-        if state == "ready":
-            break
-        elif state == "queued":
-            step = min(step, max_wait - total_wait)
-            logger.info(f"No statement, waiting for {step} seconds")
-            time.sleep(step)
-            total_wait += step
-            if step < max_step:
-                step = min(step + 1, max_step)
-            if step > max_step or total_wait > max_wait:
-                raise Exception(f"Waited for {total_wait} seconds and still got no statement")
-        else:
-            raise Exception(f"Bad or unknown status: {state}")
-
-    response = call('GET', f'statement/result/{request_id}')
-    for payment in response['payments']:
-        yield Record.from_element(payment)
-
-
-class Importer(kocherga.importer.base.IncrementalImporter):
-
-    def get_initial_dt(self):
-        return datetime(2015, 8, 1, tzinfo=TZ)
-
-    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
-        for (chunk_from_dt, chunk_to_dt) in kocherga.dateutils.date_chunks(
-            from_dt, to_dt, step=timedelta(days=28)
-        ):
-            chunk_from_d = (chunk_from_dt - timedelta(days=2)).date()
-            chunk_to_d = chunk_to_dt.date()
-            logger.info(f"Importing from {chunk_from_d} to {chunk_to_d}")
-            for record in get_statements(chunk_from_d, chunk_to_d):
-                record.save()
-
-        return to_dt - timedelta(
-            days=1
-        )  # I'm not sure if tochka statements change after some time or are immutable

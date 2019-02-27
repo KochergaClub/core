@@ -70,7 +70,6 @@ def audit_slack():
         if not kocherga.staff.tools.find_member_by_email(email):
             report_excess(f"Slack user is not a staff member: {email}, {user.get('real_name')}")
 
-
     return ok
 
 

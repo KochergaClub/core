@@ -1,8 +1,5 @@
-from django.conf import settings
-
-import kocherga.slack
-
 from .models import Member
+
 
 def members(include_former=False):
     result = list(Member.objects.all())
@@ -18,7 +15,7 @@ def find_member_by_short_name(short_name):
 
 def find_member_by_cm_login(cm_login):
     if cm_login == 'admin':
-        cm_login = 'berekuk' # FIXME - special case, might shoot us in the foot in case of opensource / etc.
+        cm_login = 'berekuk'  # FIXME - special case, might shoot us in the foot in case of opensource / etc.
     return next(filter(lambda m: m.cm_login == cm_login, members()), None)
 
 
@@ -37,4 +34,4 @@ def add_member(email, role):
     # add to CM
     # add to Google Drive
     # add to calendar
-    raise NotImplemented
+    raise NotImplementedError

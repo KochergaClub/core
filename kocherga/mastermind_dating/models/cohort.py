@@ -16,6 +16,7 @@ from .group import Group
 
 from .. import rpc
 
+
 class Cohort(models.Model):
     event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
     sent_emails = models.BooleanField(default=False)
@@ -54,14 +55,14 @@ class Cohort(models.Model):
             uvotes = list(Vote.objects.filter(who=u).iterator())
             if len(uvotes) == 0:
                 logger.info(
-                    f"User {u.telegram_uid}({u.user.email}) is a {random.choice(['mushroom', 'cow', 'goat', 'user'])} and "
-                    f"didn't vote. Will be skipped."
+                    f"User {u.telegram_uid}({u.user.email}) is a {random.choice(['mushroom', 'cow', 'goat', 'user'])} "
+                    f"and didn't vote. Will be skipped."
                 )
                 continue
             if len(uvotes) < len(yall) - 1:
                 logger.info(
-                    f"User {u.telegram_uid}({u.user.email}) is a {random.choice(['mushroom', 'cow', 'goat', 'user'])} and "
-                    f"skipped some ({len(yall) - 1 - len(uvotes)}) users in voting."
+                    f"User {u.telegram_uid}({u.user.email}) is a {random.choice(['mushroom', 'cow', 'goat', 'user'])} "
+                    f"and skipped some ({len(yall) - 1 - len(uvotes)}) users in voting."
                 )
             else:
                 logger.info(
@@ -80,8 +81,6 @@ class Cohort(models.Model):
         votes.sort(key=lambda v: v.whom.telegram_uid)
         votes.sort(key=lambda v: v.who.telegram_uid)
 
-        userlist = [users]
-
         def prepare_data():
             builder = []
             for i in range(n):
@@ -98,17 +97,22 @@ class Cohort(models.Model):
             dataset = "".join(builder)
 
             return (
-                    f"people={{{unames}}};"
-                    "max_p_per_group = 5;"
-                    f"max_Ns = {n * n};"
-                    f"marks=[{dataset}];"
-                )
+                f"people={{{unames}}};"
+                "max_p_per_group = 5;"
+                f"max_Ns = {n * n};"
+                f"marks=[{dataset}];"
+            )
 
         with open("data.dzn", mode="w") as f:
             f.write(prepare_data())
 
         logger.info("Starting solver.")
-        subprocess.run(["minizinc/minizinc", "mm-bot-model/model.mzn", "data.dzn"], stdout=open("solution.json", mode='w'))
+        subprocess.run([
+            "minizinc/minizinc",
+            "mm-bot-model/model.mzn",
+            "data.dzn"
+        ], stdout=open("solution.json", mode='w'))
+
         solution = json.load(open("solution.json", mode="r"))
         logger.info(f"Got solution: {solution}")
 
@@ -130,4 +134,3 @@ class Cohort(models.Model):
             for user in group:
                 user.group = db_group
                 user.save()
-

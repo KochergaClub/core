@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
+
 class KochergaAuthConfig(AppConfig):
     name = 'kocherga.auth'
     # Our typical convention for label would be 'auth' (which is implicit).

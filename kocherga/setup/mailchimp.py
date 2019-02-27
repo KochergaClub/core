@@ -5,6 +5,7 @@ import kocherga.mailchimp
 import kocherga.events.weekly_digest
 import kocherga.ratio.users
 
+
 def create_mailchimp_file_folder(name):
     folders = kocherga.mailchimp.api_call(
         'GET',
@@ -12,7 +13,8 @@ def create_mailchimp_file_folder(name):
     )['folders']
 
     if name in [f['name'] for f in folders]:
-        return # already exists
+        # already exists
+        return
 
     kocherga.mailchimp.api_call(
         'POST',
@@ -21,6 +23,7 @@ def create_mailchimp_file_folder(name):
             'name': name,
         }
     )
+
 
 def create_mailchimp_interest_group(name, cat_type):
     try:
@@ -36,6 +39,7 @@ def create_mailchimp_interest_group(name, cat_type):
             },
         )
 
+
 def create_mailchimp_interest(category_name, name):
     category = kocherga.mailchimp.interest_category_by_name(category_name)
     category_id = category['id']
@@ -50,6 +54,7 @@ def create_mailchimp_interest(category_name, name):
                 'name': name,
             },
         )
+
 
 def setup_mailchimp():
     kocherga.mailchimp.create_file_folder(kocherga.events.weekly_digest.IMAGE_FOLDER_NAME)

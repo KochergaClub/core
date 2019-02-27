@@ -7,7 +7,7 @@ import re
 import markdown
 import attr
 
-from typing import Any, List
+from typing import List
 
 from kocherga.error import PublicError
 

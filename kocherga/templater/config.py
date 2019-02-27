@@ -9,6 +9,7 @@ class Field:
             'value_type': self.value_type,
         }
 
+
 class Schema:
     def __init__(self, fields):
         self.fields = fields
@@ -20,6 +21,7 @@ class Schema:
                 for f in self.fields
             ]
         }
+
 
 name2schema = {}
 

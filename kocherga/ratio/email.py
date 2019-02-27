@@ -6,8 +6,9 @@ from django.template.loader import render_to_string
 import markdown
 
 import kocherga.mailchimp
-from kocherga.email.tools import get_utmify, mjml2html
+from kocherga.email.tools import get_utmify
 from .users import training_category_id
+
 
 def create_post_draft(training):
     logger.info('Creating campaign draft')
@@ -50,7 +51,7 @@ def create_post_draft(training):
         'title': 'Пострассылка к воркшопу по рациональности',
         'tiny_header': 'Материалы к воркшопу по рациональности',
         'text': main_html,
-        'utmify': get_utmify('post-training', 'post-training'), # TODO - training id
+        'utmify': get_utmify('post-training', 'post-training'),  # TODO - training id
     })
 
     logger.info('Filling campaign content')

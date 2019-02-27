@@ -134,7 +134,7 @@ async def elba_page():
     await page.goto("https://elba.kontur.ru")
     await page.waitForSelector('#Email')
 
-    import time; time.sleep(3) # there's some weird flickering in email field without this line
+    time.sleep(3)  # there's some weird flickering in email field without this line
 
     logger.info("Signing in")
 
@@ -188,7 +188,7 @@ async def get_last_pko_id(page):
 
     await page.waitForXPath('//span[@id="Footer_MovementPeriod" and text()="Итого наличных"]')
 
-    raise NotImplemented
+    raise NotImplementedError
     # for el in await page.JJ('.paymentsList-item .g-col-44'):
     # ...
 

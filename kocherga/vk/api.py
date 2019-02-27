@@ -5,6 +5,7 @@ from django.conf import settings
 
 import requests
 import json
+import urllib.parse
 
 from captcha_solver import CaptchaSolver
 
@@ -17,6 +18,7 @@ API_VERSION = "5.80"
 
 def api_key():
     return settings.KOCHERGA_VK_API_KEY
+
 
 def group_api_key():
     return settings.KOCHERGA_VK_GROUP_API_KEY
@@ -39,7 +41,14 @@ def new_token_url():
     redirect_uri = "https://oauth.vk.com/blank.html"
     scope = "groups,wall,photos,offline"
     client_id = settings.KOCHERGA_VK['client_id']
-    return f"https://oauth.vk.com/authorize?client_id={client_id}&display=page&redirect_uri={redirect_uri}&scope={scope}&response_type=token&v={API_VERSION}"
+    return f"https://oauth.vk.com/authorize?" + urllib.parse.urlencode({
+        "client_id": client_id,
+        "display": "page",
+        "redirect_uri": redirect_uri,
+        "scope": scope,
+        "response_type": "token",
+        "v": API_VERSION,
+    })
 
 
 def _call(method, params, group_token=False):
@@ -76,9 +85,11 @@ def _call(method, params, group_token=False):
     check_response(r)
     return r
 
+
 def call(method, params, group_token=False):
     r = _call(method, params, group_token)
     return r["response"]  # type: ignore
+
 
 def bulk_call(operations, group_token=False):
     lines = [

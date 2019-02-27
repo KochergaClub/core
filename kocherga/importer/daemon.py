@@ -3,18 +3,16 @@ from apscheduler.executors.pool import ProcessPoolExecutor
 
 from datetime import datetime, timedelta
 
-from kocherga.dateutils import TZ
-
 import importlib
 
 IMPORTER_MODULES = [
-#    "analytics.timeclub24.models",
+    # "analytics.timeclub24.models",
     "cm.importer",
     "events.db",
     "gitlab.models",
     "money.cashier.models",
     "money.ofd.models",
-    "money.tochka.models",
+    "money.tochka.importer",
     "watchmen.importer",
     "zadarma.models",
     "timepad.importer",

@@ -8,6 +8,7 @@ import kocherga.events.booking
 from kocherga.api.auth import auth, get_email
 from kocherga.api.common import ok
 
+
 @auth("any")
 @api_view()
 def r_list_my(request):
@@ -31,7 +32,7 @@ def r_list_by_date(request, date_str):
 def r_create(request):
     payload = request.data
 
-    data={}
+    data = {}
     for field in ("date", "room", "people", "startTime", "endTime"):
         if field not in payload:
             raise PublicError("field {} is required".format(field))

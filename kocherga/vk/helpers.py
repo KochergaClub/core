@@ -1,6 +1,7 @@
 """Helper functions for VK which are not specific to Kocherga.
 
-More specific tools (cover generation, widgets, etc.) should go to other modules such as kocherga.events.vk and kocherga.vk.tools.
+More specific tools (cover generation, widgets, etc.) should go to other modules
+such as kocherga.events.vk and kocherga.vk.tools.
 """
 
 import logging
@@ -11,6 +12,7 @@ import json
 import requests
 
 import kocherga.vk.api
+
 
 def group2id(group_name):
     if type(group_name) == int:
@@ -35,7 +37,8 @@ def upload_wall_image(group_id, image_bytes):
     })
     r.raise_for_status()
 
-    # note that image upload doesn't wrap the result in {'response': ...}, do it doesn't need to be checked with kocherga.vk.check_response
+    # note that image upload doesn't wrap the result in {'response': ...},
+    # so it doesn't need to be checked with kocherga.vk.check_response
     upload_response = r.json()
 
     photo = json.loads(upload_response["photo"])
@@ -79,7 +82,8 @@ def upload_cover_image(group_id, image_bytes):
     })
     r.raise_for_status()
 
-    # note that image upload doesn't wrap the result in {'response': ...}, do it doesn't need to be checked with kocherga.vk.check_response
+    # note that image upload doesn't wrap the result in {'response': ...},
+    # so it doesn't need to be checked with kocherga.vk.check_response
     upload_response = r.json()
     print(upload_response)
 

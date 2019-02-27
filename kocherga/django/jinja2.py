@@ -5,9 +5,11 @@ from jinja2 import Environment
 
 import datetime
 
+
 # used in templater templates
 def parse_date(value, fmt):
     return datetime.datetime.strptime(value, fmt)
+
 
 def environment(**options):
     env = Environment(**options)

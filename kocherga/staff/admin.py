@@ -3,8 +3,10 @@ from django.contrib.admin.models import LogEntry
 
 from .models import Member, AltEmail
 
+
 class AltEmailInline(admin.TabularInline):
     model = AltEmail
+
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
@@ -16,6 +18,7 @@ class MemberAdmin(admin.ModelAdmin):
     inlines = [
         AltEmailInline,
     ]
+
 
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):

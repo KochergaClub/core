@@ -1,3 +1,5 @@
+from django.db import models
+
 from datetime import datetime
 
 import math
@@ -6,12 +8,12 @@ import numpy as np
 from tqdm import tqdm
 import random
 import itertools
-import json
 import re
 import requests
 import hashlib
 
-from django.db import models
+from kocherga.dateutils import TZ
+
 
 class Cookie(models.Model):
     class Meta:
@@ -25,8 +27,10 @@ class Cookie(models.Model):
     prodway_page = models.CharField(max_length=255)
     prodway_image = models.CharField(max_length=255)
 
+
 def dt_now():
     return datetime.now(TZ)
+
 
 class CookiePick(models.Model):
     class Meta:
@@ -71,7 +75,8 @@ class CookieCombination(models.Model):
 def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, combination_size=3):
     cookie_picks = CookiePick.objects.all()
 
-    cookies = defaultdict(lambda: len(cookies)) # https://wchargin.github.io/posts/a-cute-autoincrementing-id-table-in-one-line-of-python/
+    # https://wchargin.github.io/posts/a-cute-autoincrementing-id-table-in-one-line-of-python/
+    cookies = defaultdict(lambda: len(cookies))
     votes = defaultdict(list)
 
     for vote in cookie_picks:
@@ -92,7 +97,7 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
     for i, vvv in tqdm(enumerate(votes.values()), total=len(votes)):
         votes_num.append(len(vvv))
         # continue
-        m = len(cookies) #max(max(x, y) for x, y in vvv)
+        m = len(cookies)  # max(max(x, y) for x, y in vvv)
         vvv = vvv[:]
         vvv += [(i, m) for i in range(m)]
         vvv += [(m + 1, i) for i in range(m)]
@@ -106,8 +111,7 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
                 w[m + 1] = 1.0
         marks[i] = w[:len(cookies)]
 
-
-    mean_user_ratings = sorted([(k, marks[:, v].mean()) for k, v in cookies.items()], key=lambda x: -x[1])
+    # mean_user_ratings = sorted([(k, marks[:, v].mean()) for k, v in cookies.items()], key=lambda x: -x[1])
 
     ctuple2rating = {}
 
@@ -116,8 +120,8 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
                 cookies.keys(), combination_size
             ),
             total=(
-                math.factorial(len(cookies)) /
-                (math.factorial(len(cookies) - combination_size) * math.factorial(combination_size))
+                math.factorial(len(cookies))
+                / (math.factorial(len(cookies) - combination_size) * math.factorial(combination_size))
             )
     ):
         happy_users = sum(
@@ -142,6 +146,7 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
         ]
         combination.save()
 
+
 def generate_wiki_rating(limit=10):
     result = '{|class="wikitable"\n'
 
@@ -154,6 +159,7 @@ def generate_wiki_rating(limit=10):
         partials.append(partial)
 
     return result + '|-\n'.join(partials) + '|}'
+
 
 def fetch_cookies_info():
     BASE = 'http://prodway.ru'
@@ -173,7 +179,10 @@ def fetch_cookies_info():
         match = re.search(r'<h1\s+class="header_grey">(.*?)</h1>', r.text)
         title = match.group(1)
 
-        match = re.search(r'<div\s+class="slider-images"\s+id="slider_images">\s+<a\s+rel=\'images\'\s+href="(.*?)"', r.text)
+        match = re.search(
+            r'<div\s+class="slider-images"\s+id="slider_images">\s+<a\s+rel=\'images\'\s+href="(.*?)"',
+            r.text
+        )
         image = match.group(1)
 
         match = re.search(r'<div\s+class="current"\s+id="price">(\d+.\d+) руб</div>', r.text)
@@ -189,7 +198,6 @@ def fetch_cookies_info():
             'price': price,
         }
 
-
     def _process_cookie(data):
         title = data['title']
 
@@ -202,7 +210,7 @@ def fetch_cookies_info():
         weight = weight.replace(',', '.')
         try:
             weight = float(weight)
-        except:
+        except ValueError:
             print(f"Weird weight {weight} for {title}, skipping")
             return
 
@@ -221,13 +229,11 @@ def fetch_cookies_info():
             prodway_image=data['image'],
         )
 
-
     urls = []
     for i in range(1, 6):
         for url in _get_page_urls(i):
             urls.append(url)
 
-    result = []
     for url in urls:
         data = _fetch_page(url)
         cookie = _process_cookie(data)

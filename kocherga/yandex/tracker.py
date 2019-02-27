@@ -12,9 +12,6 @@ ROOT = 'https://api.tracker.yandex.net/v2'
 
 ORG_ID = settings.KOCHERGA_YANDEX_ORD_ID
 
-def token():
-    return settings.KOCHERGA_YANDEX_TOKEN
-
 gl2tracker_users = {
     'berekuk': 'slava',
     'mtmtmt': 'tanya',
@@ -23,8 +20,14 @@ gl2tracker_users = {
 
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.000+03:00"
 
+
+def token():
+    return settings.KOCHERGA_YANDEX_TOKEN
+
+
 class ConflictException(Exception):
     pass
+
 
 def api_call(method, url, data={}):
     if method == "GET":
@@ -54,6 +57,7 @@ def api_call(method, url, data={}):
 
     return r.json()
 
+
 def import_gl_note(gl_note, gl_issue, yandex_issue_id):
     created_by = gl2tracker_users.get(gl_note.author['username'])
     text = gl_note.body
@@ -80,15 +84,16 @@ def import_gl_note(gl_note, gl_issue, yandex_issue_id):
 
     api_call('POST', f'issues/{yandex_issue_id}/comments/_import', payload)
 
-IMPORT_UNIQUE_KEY = 'gitlab6'
+
 def import_gl_issue(gl_issue, target_queue):
+    IMPORT_UNIQUE_KEY = 'gitlab6'
 
     def gl_wiki_link(url):
         name = re.search(r'(\w+/issues/\d+)$', url).group(1)
         return f'(({url} {name}))'
 
-    created_dt=dateutil.parser.parse(gl_issue.attributes["created_at"])
-    updated_dt=dateutil.parser.parse(gl_issue.attributes["updated_at"])
+    created_dt = dateutil.parser.parse(gl_issue.attributes["created_at"])
+    updated_dt = dateutil.parser.parse(gl_issue.attributes["updated_at"])
 
     try:
         logger.info(gl_issue.id)
@@ -102,7 +107,7 @@ def import_gl_issue(gl_issue, target_queue):
             'description': f'{gl_wiki_link(gl_issue.web_url)}\n\n{gl_issue.description}',
             'tags': [s.replace(' ', '_').replace(',', '_') for s in gl_issue.attributes.get('labels', [])],
             'unique': f'{IMPORT_UNIQUE_KEY}-{gl_issue.id}',
-            'status': 1, # can be overriden later
+            'status': 1,  # can be overriden later
         }
         if gl_issue.attributes['assignee']:
             request_body['assignee'] = gl2tracker_users.get(gl_issue.attributes['assignee']['username'], 'info')
@@ -111,15 +116,18 @@ def import_gl_issue(gl_issue, target_queue):
         if gl_issue.state == 'closed':
             request_body['status'] = 8
             request_body['resolution'] = 1
-            close_notes = [n for n in notes if n.body == 'closed' and n.system == True]
+            close_notes = [n for n in notes if n.body == 'closed' and n.system]
             if len(close_notes) == 0:
                 # moved?
-                moved_notes = [n for n in notes if n.body.startswith('moved to ') and n.system == True]
+                moved_notes = [n for n in notes if n.body.startswith('moved to ') and n.system]
                 close_note = moved_notes[0]
             else:
                 close_note = close_notes[0]
 
-            request_body['resolvedAt'] = min(dateutil.parser.parse(close_note.attributes["created_at"]), updated_dt).strftime(DATE_FORMAT)
+            request_body['resolvedAt'] = min(
+                dateutil.parser.parse(close_note.attributes["created_at"]),
+                updated_dt
+            ).strftime(DATE_FORMAT)
             request_body['resolvedBy'] = gl2tracker_users.get(close_note.author['username'], 'info')
 
         result = api_call('POST', 'issues/_import', request_body)
@@ -128,7 +136,8 @@ def import_gl_issue(gl_issue, target_queue):
             import_gl_note(gl_note, gl_issue, result['key'])
 
     except ConflictException:
-        pass # whatever
+        pass  # whatever
+
 
 def import_from_gitlab(gitlab_project_name, tracker_queue_name):
     gitlab_project = kocherga.gitlab.models.get_gl().projects.get(gitlab_project_name)

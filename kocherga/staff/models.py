@@ -1,10 +1,9 @@
 from django.db import models
 from django.conf import settings
 
-import enum
-
 import kocherga.slack
 import kocherga.cm.models
+
 
 class Member(models.Model):
     short_name = models.CharField('Короткое имя', max_length=20, blank=True)

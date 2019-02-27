@@ -6,6 +6,7 @@ import kocherga.mailchimp
 
 URL = 'https://audd.io/hpmor/api/?action=get_subscribed'
 
+
 def import_all():
     LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
 

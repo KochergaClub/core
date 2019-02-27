@@ -3,7 +3,7 @@ from datetime import datetime
 
 from abc import ABC, abstractmethod
 
-from typing import Any, Optional
+from typing import Optional
 
 from kocherga.dateutils import TZ
 
@@ -82,7 +82,7 @@ class FullImporter(BaseImporter):
         pass
 
     def import_new(self) -> None:
-        with ImportContext(self.name, "full") as ic:
+        with ImportContext(self.name, "full"):
             self.do_full_import()
 
 
@@ -92,7 +92,8 @@ class IncrementalImporter(BaseImporter):
     def get_initial_dt(self) -> datetime:
         pass
 
-    # Should return a datetime of a last imported object or a last datetime that we can be sure won't be needed to be imported again.
+    # Should return a datetime of a last imported object or a last datetime
+    # that we can be sure won't be needed to be imported again.
     @abstractmethod
     def do_period_import(
         self, from_dt: datetime, to_dt: datetime

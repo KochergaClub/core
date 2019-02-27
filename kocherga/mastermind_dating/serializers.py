@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from . import models
 
+
 class CohortSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cohort

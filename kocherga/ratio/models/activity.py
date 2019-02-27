@@ -3,6 +3,7 @@ from django.db import models
 from .training import Training
 from .trainer import Trainer
 
+
 # Activities can be of several types:
 # - sections (classes)
 # - breaks
@@ -21,10 +22,15 @@ class Activity(models.Model):
     ))
     name = models.CharField('Название', max_length=255)
 
-    trainer = models.ForeignKey(Trainer, verbose_name='Ведущий', blank=True, null=True, on_delete=models.PROTECT, related_name='+')
+    trainer = models.ForeignKey(
+        Trainer,
+        verbose_name='Ведущий',
+        blank=True, null=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
 
     class Meta:
         ordering = ('day', 'time')
-
 
     # TODO - support foreign key links to the collection of actual activities - slides, workbook bits, etc.

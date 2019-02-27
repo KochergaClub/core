@@ -1,4 +1,7 @@
+"""WIP module, not implemented yet."""
+
 from django.db import models
+
 
 class FinAccount(models.Model):
     class Meta:
@@ -44,17 +47,17 @@ def demo():
     # FinAccount.add('timepad')
 
     # инкассация
-    FinTransaction.add(
-        lines=[
-            Line('cash', debit=5000),
-            Line('slava_cash', credit=5000),
-        ]
-    )
+    # FinTransaction.add(
+    #     lines=[
+    #         Line('cash', debit=5000),
+    #         Line('slava_cash', credit=5000),
+    #     ]
+    # )
 
-    # зарплата
-    add_transaction(
-        lines=[
-            Line(account='cash', credit=5000),
-            Line(account='slava_cash', debit=5000),
-        ]
-    )
+    # # зарплата
+    # add_transaction(
+    #     lines=[
+    #         Line(account='cash', credit=5000),
+    #         Line(account='slava_cash', debit=5000),
+    #     ]
+    # )

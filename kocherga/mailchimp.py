@@ -11,8 +11,10 @@ MAILCHIMP_API = f"https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.api.mailchimp
 MAILCHIMP_API_KEY = settings.KOCHERGA_MAILCHIMP_API_KEY
 MAIN_LIST_ID = settings.KOCHERGA_MAILCHIMP_MAIN_LIST_ID
 
+
 class NotFoundException(Exception):
     pass
+
 
 def api_call(method, url, data={}):
     if method == "GET":
@@ -48,13 +50,15 @@ def api_call(method, url, data={}):
 
     return r.json()
 
+
 def folder_id_by_name(name):
     response = api_call('GET', 'campaign-folders')
     return next(
         f['id']
-        for f in api_call('GET', 'campaign-folders')['folders']
+        for f in response['folders']
         if f['name'] == name
     )
+
 
 def wait_for_batch(batch_id):
     url = MAILCHIMP_API + '/batches/' + batch_id
@@ -76,6 +80,7 @@ def wait_for_batch(batch_id):
             break
         time.sleep(1)
 
+
 # Used in setup only
 def create_campaign_folder(name):
     folders = api_call(
@@ -84,7 +89,8 @@ def create_campaign_folder(name):
     )['folders']
 
     if name in [f['name'] for f in folders]:
-        return # already exists
+        # folder already exists
+        return
 
     api_call(
         'POST',
@@ -93,6 +99,7 @@ def create_campaign_folder(name):
             'name': name,
         }
     )
+
 
 # Used in setup only
 def create_file_folder(name):
@@ -102,7 +109,8 @@ def create_file_folder(name):
     )['folders']
 
     if name in [f['name'] for f in folders]:
-        return # already exists
+        # folder already exists
+        return
 
     api_call(
         'POST',
@@ -112,6 +120,7 @@ def create_file_folder(name):
         }
     )
 
+
 def segment_by_name(name, list_id=MAIN_LIST_ID):
     items = api_call(
         'GET',
@@ -120,8 +129,9 @@ def segment_by_name(name, list_id=MAIN_LIST_ID):
 
     try:
         return next(i for i in items if i['name'] == name)
-    except:
+    except StopIteration:
         raise NotFoundException()
+
 
 def interest_category_by_name(name, list_id=MAIN_LIST_ID):
     items = api_call(
@@ -131,8 +141,9 @@ def interest_category_by_name(name, list_id=MAIN_LIST_ID):
 
     try:
         return next(i for i in items if i['title'] == name)
-    except:
+    except StopIteration:
         raise NotFoundException()
+
 
 def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
     items = api_call(
@@ -142,5 +153,5 @@ def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
 
     try:
         return next(i for i in items if i['name'] == name)
-    except:
+    except StopIteration:
         raise NotFoundException()

@@ -28,6 +28,7 @@ SECTIONS = [
     {"id": "2.5", "name": "Оценки вероятностей"},
 ]
 
+
 def events_root_id():
     # TODO - move to config
     return "1WeeuH0Rtp8ODmJ2vbUKE5FklFkZ96Qn4"
@@ -40,7 +41,8 @@ def workshops_root_id():
 def humanized_event_date(event_name):
     match = re.match(r'(\d+)-(\d+) воркшоп$', event_name)
     (year, month) = match.groups()
-    month_name = 'январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь'.split(' ')[int(month) - 1]
+    month_names = 'январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь'.split(' ')
+    month_name = month_names[int(month) - 1]
     return f'{month_name} {year}'
 
 
@@ -77,7 +79,8 @@ async def build_slides(folder_id, sections=SECTIONS):
                 name = f'{section["id"]} - {section["name"]}.pdf'
 
                 if kocherga.gdrive.find_in_folder(slides_folder_id, name, missing_ok=True):
-                    continue # already exists
+                    # file already exists
+                    continue
 
                 logger.info(f'Section {section["name"]}')
                 await page.goto("http://localhost:8000/" + section["name"])
@@ -123,15 +126,16 @@ def build_handbooks(event_name, sections=SECTIONS):
 
         # TODO - add glossary
 
-        document.save(f'/Users/berekuk/Downloads/Handbook {day}.docx') # TODO - save to gdrive
+        # TODO - save to gdrive
+        document.save(f'/Users/berekuk/Downloads/Handbook {day}.docx')
 
 
 def build_extra_files(folder_id):
     sources_folder_id = kocherga.gdrive.parent_id(folder_id)
-    event_folder_id = kocherga.gdrive.parent_id(sources_folder_id)
 
     # # schedule
-    # TODO - build schedule from html to pdf
+    # # TODO - build schedule from html to pdf
+    # event_folder_id = kocherga.gdrive.parent_id(sources_folder_id)
     # schedule_gdoc_id = kocherga.gdrive.find_in_folder(event_folder_id, "Расписание")
     # filename = kocherga.gdrive.gdoc_to_pdf(schedule_gdoc_id)
     # kocherga.gdrive.upload_file(filename, "Расписание.pdf", folder_id)
@@ -142,9 +146,10 @@ def build_extra_files(folder_id):
     kocherga.gdrive.upload_file(filename, "Материалы.pdf", folder_id)
 
     # feedback form
-    form_filename = 'Впечатления от воркшопа' # TODO - name according to the event
+    form_filename = 'Впечатления от воркшопа'  # TODO - name according to the event
     if kocherga.gdrive.find_in_folder(sources_folder_id, form_filename, missing_ok=True):
-        return # already exists
+        # already exists
+        return
     templates_folder_id = kocherga.gdrive.find_in_folder(workshops_root_id(), 'Шаблоны')
     post_form_id = kocherga.gdrive.find_in_folder(templates_folder_id, 'Впечатления от воркшопа')
 

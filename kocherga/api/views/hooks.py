@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 from django.conf import settings
 from django.http import HttpResponse
 
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 import kocherga.slack
@@ -12,6 +11,7 @@ import kocherga.slack
 # Routes for external hooks.
 
 VK_SECRET = settings.KOCHERGA_VK['callback_secret']
+
 
 @api_view(['POST'])
 def r_vk_callback(request):

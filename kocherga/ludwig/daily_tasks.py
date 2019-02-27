@@ -1,17 +1,14 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import random
-import hashlib
-from datetime import datetime, timedelta
-
-from kocherga.dateutils import TZ
 from kocherga.ludwig.bot import bot
 
 from kocherga.watchmen_routine.models import Task, RewardImage
 
+
 def get_task_by_id(task_id):
     return Task.objects.get(pk=task_id)
+
 
 def task_attachment(task, status='new'):
     if status == 'new':
@@ -46,6 +43,7 @@ def task_attachment(task, status='new'):
             ],
         }
 
+
 def send_daily_tasks():
     tasks = list(Task.objects.today_tasks())
 
@@ -67,17 +65,21 @@ def send_daily_tasks():
             ],
         )
 
+
 @bot.schedule("cron", hour=9, minute=1)
 def daily_tasks_cron():
     send_daily_tasks()
+
 
 @bot.respond_to(r"отправь дневные таски")
 def react_send_daily_tasks(message):
     send_daily_tasks()
 
+
 def get_reward_picture():
     reward_image = RewardImage.objects.filter(is_active=True).order_by('?').first()
     return reward_image.image_link
+
 
 @bot.action(r"daily_tasks/action/(.*)")
 def accept_task_outcome(payload, task_id):

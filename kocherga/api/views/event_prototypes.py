@@ -8,12 +8,12 @@ from rest_framework.decorators import api_view
 from datetime import datetime
 
 from kocherga.error import PublicError
-from kocherga.dateutils import dts
 
 from kocherga.events.prototype import EventPrototype
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
+
 
 class RootView(APIView):
     @auth('kocherga', method=True)
@@ -24,13 +24,20 @@ class RootView(APIView):
             for p in prototypes
         ])
 
-
     @auth('kocherga', method=True)
     def post(self, request):
         payload = request.data
 
         required_fields = ("title", "location", "weekday", "hour", "minute", "length")
-        optional_fields = ("vk_group", "fb_group", "summary", "description", "timepad_category_code", "timepad_prepaid_tickets", "timing_description_override")
+        optional_fields = (
+            "vk_group",
+            "fb_group",
+            "summary",
+            "description",
+            "timepad_category_code",
+            "timepad_prepaid_tickets",
+            "timing_description_override",
+        )
 
         props = {}
         for field in required_fields:

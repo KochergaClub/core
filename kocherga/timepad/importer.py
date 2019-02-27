@@ -13,6 +13,7 @@ from .models import Event, Order
 
 KchUser = get_user_model()
 
+
 class Importer(kocherga.importer.base.FullImporter):
 
     def get_events_data(self):
@@ -25,7 +26,7 @@ class Importer(kocherga.importer.base.FullImporter):
         return api_response['values']
 
     def get_orders_data(self, event_id):
-        api_response = api_call('GET', f'events/{event_id}/orders', { 'limit': 100 })
+        api_response = api_call('GET', f'events/{event_id}/orders', {'limit': 100})
         return api_response.get('values', [])
 
     def do_full_import(self):

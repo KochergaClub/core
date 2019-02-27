@@ -1,6 +1,5 @@
 from django.conf import settings
 
-import os, sys
 from functools import wraps
 import datetime
 import jwt
@@ -15,8 +14,9 @@ import kocherga.staff.tools
 
 JWT_SECRET_KEY = settings.KOCHERGA_JWT_SECRET_KEY
 
+
 # FIXME Potential security issue - any email can be checked for team membership.
-def check_email_for_team(email, team):
+def check_email_for_team(email, team) -> bool:
     if team == "any":
         return True
     elif team == "kocherga":
@@ -45,7 +45,7 @@ def auth(team, method=False):
 
     def check_auth(request):
         email = get_email(request)
-        if check_email_for_team(email, team) == True:
+        if check_email_for_team(email, team) is True:
             return True
         raise Exception("check_email_for_team() returned an unknown value")
 
@@ -59,7 +59,7 @@ def auth(team, method=False):
                 request = args[0]
 
             if not kocherga.api.common.DEV:
-                if check_auth(request) != True:
+                if check_auth(request) is not True:
                     raise PublicError("Access denied", status_code=401)
             return f(*args, **kwargs)
 
@@ -67,10 +67,8 @@ def auth(team, method=False):
 
     return decorator
 
+
 def google_auth(request):
-    CLIENT_ID = (
-        "462291115265-7ft6f9ssdpprl899q1v0le90lrto8th9.apps.googleusercontent.com"
-    )
     request_json = json.loads(request.body)
     token = request_json.get("token", "")
     team = request_json.get("team", "")

@@ -1,27 +1,29 @@
-from django.conf import settings
-
 from django.urls import reverse
-from django.http import HttpResponse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import redirect
 from django.core.mail import send_mail
 from django.contrib.auth import login, logout, get_user_model
+from django.template.loader import render_to_string
 
 from django.core.signing import TimestampSigner
 
 from kocherga.django.react import react_render
 
 import urllib.parse
+import markdown
 
 from .forms import LoginForm
+
 
 def get_magic_token(email):
     return TimestampSigner().sign(email)
 
+
 def check_magic_token(token):
     return TimestampSigner().unsign(token, max_age=600)
+
 
 class LoginView(View):
     def get(self, request):
@@ -48,18 +50,23 @@ class LoginView(View):
         })
         magic_link = request.build_absolute_uri(reverse('auth:magic-link') + '?' + params_str)
 
+        html_email_message = markdown.markdown(
+            render_to_string('auth/email/login.md', {'magic_link': magic_link})
+        )
         send_mail(
-            'Войти на сайт Кочерги',
-            f"Кто-то ввёл ваш email в форму логина на сайте Кочерги. Если это были вы, нажмите эту ссылку, чтобы войти: {magic_link}",
-            'robot@kocherga-club.ru',
-            [email],
+            subject='Войти на сайт Кочерги',
+            from_email='robot@kocherga-club.ru',
+            html_message=html_email_message,
+            recipient_list=[email],
         )
 
         return redirect(reverse('auth:sent-magic-link'))
 
+
 class SentMagicLinkView(View):
     def get(self, request):
         return react_render(request, 'auth/check-your-email.tsx')
+
 
 class MagicLinkView(View):
     def get(self, request):
@@ -72,7 +79,8 @@ class MagicLinkView(View):
         try:
             user = User.objects.get(email=email)
             if not user.last_login:
-                registered = True # existed from external data source, e.g. cm_customers
+                # existed from external data source, e.g. cm_customers
+                registered = True
         except User.DoesNotExist:
             user = User.objects.create_user(email)
             registered = True
@@ -85,11 +93,13 @@ class MagicLinkView(View):
             next_url = request.GET.get('next', reverse('my:index'))
             return redirect(next_url)
 
+
 class RegisteredView(LoginRequiredMixin, View):
     def get(self, request):
         return react_render(request, 'auth/registered.tsx', {
             'index_url': reverse('my:index'),
         })
+
 
 class LogoutView(View):
     def get(self, request):

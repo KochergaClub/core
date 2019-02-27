@@ -9,7 +9,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-import sys
 from datetime import datetime
 import requests
 from werkzeug.contrib.iterio import IterIO
@@ -17,7 +16,7 @@ from werkzeug.contrib.iterio import IterIO
 from kocherga.error import PublicError
 
 import kocherga.events.db
-from kocherga.events.models import Event, Tag
+from kocherga.events.models import Event
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
@@ -25,6 +24,7 @@ from kocherga.api.auth import auth
 from kocherga.dateutils import MSK_DATE_FORMAT
 
 from feedgen.feed import FeedGenerator
+
 
 class RootView(APIView):
     @auth("kocherga", method=True)
@@ -42,7 +42,6 @@ class RootView(APIView):
         )
         return Response([e.to_dict() for e in events])
 
-
     @auth("kocherga", method=True)
     def post(self, request):
         payload = request.data
@@ -51,7 +50,9 @@ class RootView(APIView):
                 raise PublicError("field {} is required".format(field))
 
         title = payload['title']
-        (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(payload['date'], payload['startTime'], payload['endTime'])
+        (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
+            payload['date'], payload['startTime'], payload['endTime']
+        )
 
         event = Event(title=title, start_dt=start_dt, end_dt=end_dt)
 
@@ -66,14 +67,12 @@ class ObjectView(APIView):
         event = Event.by_id(event_id)
         return Response(event.to_dict())
 
-
     @auth("kocherga", method=True)
     def patch(self, request, event_id):
         event = Event.by_id(event_id)
         event.patch(request.data)
 
         return Response(event.to_dict())
-
 
     @auth("kocherga", method=True)
     def delete(self, request, event_id):
@@ -90,7 +89,7 @@ class PropertyView(APIView):
         value = request.data['value']
 
         event = Event.by_id(event_id)
-        event.patch({ key: value })
+        event.patch({key: value})
 
         return Response(ok)
 
@@ -169,6 +168,7 @@ def r_list_public(request):
         for event in events[:1000]
     ])
 
+
 @api_view()
 def r_list_public_today(request):
     events = Event.objects.public_events(
@@ -180,6 +180,7 @@ def r_list_public_today(request):
         for event in events[:1000]
     ])
 
+
 @require_safe
 def r_list_public_atom(request):
     events = Event.objects.public_events(
@@ -188,9 +189,9 @@ def r_list_public_atom(request):
     )
 
     fg = FeedGenerator()
-    fg.id(f'{settings.KOCHERGA_API_ROOT}/public_events_atom') # should we add query params here?
+    fg.id(f'{settings.KOCHERGA_API_ROOT}/public_events_atom')  # should we add query params here?
     fg.title('Публичные мероприятия Кочерги')
-    fg.author({ 'name': 'Кочерга' })
+    fg.author({'name': 'Кочерга'})
 
     for event in reversed(events.all()):
         item = event.public_object()
@@ -198,7 +199,12 @@ def r_list_public_atom(request):
         fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{item["event_id"]}')
         dt = datetime.strptime(item["start"], MSK_DATE_FORMAT)
         fe.title(item["title"])
-        dt_str = kocherga.dateutils.weekday(dt).capitalize() + ', ' + str(dt.day) + ' ' + kocherga.dateutils.inflected_month(dt) + ', ' + dt.strftime('%H:%M')
+
+        dt_str = kocherga.dateutils.weekday(dt).capitalize() \
+            + ', ' + str(dt.day) \
+            + ' ' + kocherga.dateutils.inflected_month(dt) \
+            + ', ' + dt.strftime('%H:%M')
+
         fe.summary(dt_str)
         fe.content(dt_str)
         fe.link(href=item["announcements"]["vk"]["link"])

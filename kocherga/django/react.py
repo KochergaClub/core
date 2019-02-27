@@ -7,6 +7,7 @@ import json
 
 from react.render import render_component
 
+
 def react_render(request, template, params={}):
     params = params.copy()
     params['csrfToken'] = django.middleware.csrf.get_token(request)

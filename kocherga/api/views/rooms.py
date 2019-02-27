@@ -3,6 +3,7 @@ from rest_framework.response import Response
 
 import kocherga.room
 
+
 class RoomsView(APIView):
     def get(self, request):
         return Response([

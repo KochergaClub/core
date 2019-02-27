@@ -15,11 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include, reverse
+from django.urls import path, include
 from django.conf.urls.static import static
-from django.views.generic.base import TemplateView, RedirectView
-
-import kocherga.auth.views
+from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
@@ -40,6 +38,5 @@ if not settings.IGNORE_WEB:
     if settings.DEBUG:
         import debug_toolbar
         urlpatterns = [
-                          path('__debug__/', include(debug_toolbar.urls)),
-                      ] + urlpatterns
-
+            path('__debug__/', include(debug_toolbar.urls)),
+        ] + urlpatterns

@@ -6,13 +6,15 @@ from django.conf import settings
 import kocherga.vk.api
 import kocherga.vk.helpers
 
+
 def get_vk_group_id():
     group = settings.KOCHERGA_VK['main_page']['id']
     return kocherga.vk.helpers.group2id(group)
 
+
 def find_vk_callback_server():
     group_id = get_vk_group_id()
-    response = kocherga.vk.api.call('groups.getCallbackServers', { 'group_id': group_id })
+    response = kocherga.vk.api.call('groups.getCallbackServers', {'group_id': group_id})
     server = next(
         (s for s in response['items'] if s['title'] == 'Kocherga API'),
         None
@@ -42,6 +44,7 @@ def install_vk_callback_api():
         'market_comment_new': 1,
     })
     logger.info(result)
+
 
 def setup_vk():
     install_vk_callback_api()

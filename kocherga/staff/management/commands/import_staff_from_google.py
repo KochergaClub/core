@@ -3,10 +3,10 @@ from django.db import transaction
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 
-import gspread
 import kocherga.google
 
 from kocherga.staff.models import Member, AltEmail
+
 
 @transaction.atomic
 def import_spreadspeet_data():
@@ -85,6 +85,7 @@ def import_spreadspeet_data():
 
     for row in rows:
         row2member(row)
+
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):

@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views import View
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from kocherga.django.react import react_render
 
-from kocherga.cm.serializers import CustomerSerializer, OrderSerializer
+from kocherga.cm.serializers import CustomerSerializer
+
 
 class MainView(LoginRequiredMixin, View):
     def get(self, request):
@@ -22,6 +23,7 @@ class MainView(LoginRequiredMixin, View):
             props['orders_count'] = customer.orders().count()
 
         return react_render(request, 'my/index.tsx', props)
+
 
 class SetPrivacyModeView(LoginRequiredMixin, View):
     def post(self, request):

@@ -5,11 +5,7 @@ from django.template.loader import render_to_string
 
 import markdown
 
-import io
-import subprocess
-import tempfile
 import base64
-from pathlib import Path
 
 import kocherga.mailchimp
 import kocherga.images
@@ -22,6 +18,7 @@ from kocherga.dateutils import TZ
 from datetime import timedelta, datetime
 
 IMAGE_FOLDER_NAME = 'Расписание на неделю'
+
 
 def get_week_boundaries():
     dt = datetime.now(TZ)
@@ -36,14 +33,15 @@ def get_week_boundaries():
 
     return (dt, end_dt)
 
+
 def generate_content(text, image_url):
     (dt, end_dt) = get_week_boundaries()
 
     query = (
         Event.objects
         .filter(
-            start_ts__gt = dt.timestamp(),
-            start_ts__lt = (dt + timedelta(weeks=1)).timestamp(),
+            start_ts__gt=dt.timestamp(),
+            start_ts__lt=(dt + timedelta(weeks=1)).timestamp(),
         )
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
@@ -96,6 +94,7 @@ def generate_content(text, image_url):
         'html': html,
     }
 
+
 def get_image_folder_id():
     folders = kocherga.mailchimp.api_call(
         'GET',
@@ -103,6 +102,7 @@ def get_image_folder_id():
     )['folders']
 
     return next(f for f in folders if f['name'] == IMAGE_FOLDER_NAME)['id']
+
 
 def upload_main_image():
     (dt, _) = get_week_boundaries()
@@ -121,6 +121,7 @@ def upload_main_image():
     )
 
     return result['full_size_url']
+
 
 def create_draft(text=''):
     image_url = upload_main_image()

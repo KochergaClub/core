@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import make_aware
 
 import enum
-from datetime import datetime, time, timedelta
+from datetime import datetime, time
 
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import requests
@@ -15,6 +15,7 @@ from kocherga.cm.scraper import DOMAIN, get_cookies, load_customer_from_html
 from .order import Order
 
 KchUser = get_user_model()
+
 
 class Gender(enum.Enum):
     unknown = 0
@@ -203,7 +204,6 @@ class Customer(models.Model):
         )
         return obj
 
-
     def _http_update_customer(self, data):
         """
         Update customer data in Cafe Manager.
@@ -224,7 +224,6 @@ class Customer(models.Model):
 
         return load_customer_from_html(self.customer_id)
 
-
     def extend_subscription(self, period):
         html_customer = load_customer_from_html(self.customer_id)  # we can't rely on DB cache here
 
@@ -233,7 +232,7 @@ class Customer(models.Model):
             + period
         )
 
-        data={
+        data = {
             "card": html_customer["card"],
             "name": html_customer["name"],
             "family": html_customer["family"],

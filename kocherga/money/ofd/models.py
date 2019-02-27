@@ -46,7 +46,7 @@ class OfdDocument(models.Model):
         ],
     )
     shift_id = models.IntegerField()   # TODO - foreign key
-    request_id = models.IntegerField() # cheque number in current shift
+    request_id = models.IntegerField()  # cheque number in current shift
     operator = models.CharField(max_length=255)
     operator_inn = models.BigIntegerField(null=True)
     fiscal_sign = models.BigIntegerField()
@@ -124,9 +124,9 @@ ofd = OfdYaKkt(FISCAL_DRIVE_NUMBER)
 
 def cash_income_by_date(start_d, end_d):
     docs = OfdDocument.objects.filter(
-        midday_ts__gte = datetime.combine(start_d, datetime.min.time()).timestamp()
+        midday_ts__gte=datetime.combine(start_d, datetime.min.time()).timestamp()
     ).filter(
-        midday_ts__lte = datetime.combine(end_d, datetime.max.time()).timestamp()
+        midday_ts__lte=datetime.combine(end_d, datetime.max.time()).timestamp()
     ).all()
 
     date2income = defaultdict(decimal.Decimal)

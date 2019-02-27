@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 from django.conf import settings
 
 from datetime import datetime, timedelta
-import requests
 import json
 import urllib
 
@@ -40,7 +39,8 @@ def vk_description(event):
 
 def vk_tail(event):
     tail = (
-        f"{event.timing_description} в @kocherga_club (антикафе Кочерга). Оплата участия — по тарифам антикафе: 2,5 руб./минута."
+        f"{event.timing_description} в @kocherga_club (антикафе Кочерга). "
+        + "Оплата участия — по тарифам антикафе: 2,5 руб./минута."
     )
 
     timepad_link = event.posted_timepad
@@ -111,7 +111,7 @@ def repost_to_daily() -> int:
     if len(operations) == 0:
         logger.info('Nothing to repost')
     else:
-        result = kocherga.vk.api.bulk_call(operations)
+        kocherga.vk.api.bulk_call(operations)
         logger.info(f'Reposted {len(operations)} events')
 
     return len(operations)
@@ -138,8 +138,8 @@ def update_wiki_schedule(from_dt=None):
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt = _from_dt.timestamp(),
-            start_ts__lt = (datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
+            start_ts__gt=_from_dt.timestamp(),
+            start_ts__lt=(datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
         )
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
@@ -212,8 +212,8 @@ def create_schedule_post(prefix_text):
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt = dt.timestamp(),
-            start_ts__lt = (datetime.now(TZ) + timedelta(weeks=1)).timestamp(),
+            start_ts__gt=dt.timestamp(),
+            start_ts__lt=(datetime.now(TZ) + timedelta(weeks=1)).timestamp(),
         )
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
@@ -251,16 +251,17 @@ def create_schedule_post(prefix_text):
         },
     )
 
+
 def update_widget():
     from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
     query = (
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt = from_dt.timestamp(),
-            start_ts__lt = (datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
+            start_ts__gt=from_dt.timestamp(),
+            start_ts__lt=(datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
         )
-        .filter(event_type = 'public')
+        .filter(event_type='public')
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
     )

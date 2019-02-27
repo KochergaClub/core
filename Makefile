@@ -11,6 +11,9 @@ test-types:
 test-code:
 	pytest
 
+lint:
+	flake8 kocherga/ --max-line-length=120
+
 release-quick:
 	git push
 	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core-quick'

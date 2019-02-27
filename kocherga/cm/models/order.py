@@ -5,6 +5,7 @@ from datetime import datetime
 from kocherga.dateutils import TZ
 from .util import date_and_time_to_ts
 
+
 class Order(models.Model):
     class Meta:
         db_table = 'cm_orders'
@@ -70,7 +71,8 @@ class Order(models.Model):
                     value = int(float(value.replace(',', '.')))
 
             if field.name == 'card_id' and value > 2147483647:
-                value = 2147483647 # this bad order fails to import to the db: https://kocherga.cafe-manager.ru/order/29541/
+                # this bad order fails to import to the db: https://kocherga.cafe-manager.ru/order/29541/
+                value = 2147483647
 
             params[field.name] = value
 

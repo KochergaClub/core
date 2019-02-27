@@ -5,6 +5,7 @@ import hashlib
 
 from .training import Training
 
+
 class Ticket(models.Model):
     training = models.ForeignKey(Training, verbose_name='Тренинг', on_delete=models.PROTECT, related_name='tickets')
 
@@ -15,7 +16,7 @@ class Ticket(models.Model):
     registration_date = models.DateField('Дата регистрации', null=True)
     status = models.CharField('Статус', max_length=40, default='normal', choices=(
         ('normal', 'Участник'),
-        ('canceled', 'Отказ'), # отказ, перенос, замена, неявка
+        ('canceled', 'Отказ'),  # отказ, перенос, замена, неявка
     ))
     ticket_type = models.CharField('Тип билета', max_length=40, choices=(
         ('normal', 'Обычный'),
@@ -49,7 +50,8 @@ class Ticket(models.Model):
     def __str__(self):
         return f'{self.training} - {self.email}'
 
-    # UID is used for sharing anonymised data with third-party, e.g. with academy crowd when we collect data from rationality tests.
+    # UID is used for sharing anonymised data with third-party,
+    # e.g. with academy crowd when we collect data from rationality tests.
     def uid(self):
         SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]

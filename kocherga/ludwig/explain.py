@@ -1,10 +1,8 @@
-import os
-import mwclient
 import random
-import warnings
 
 from kocherga.ludwig.bot import bot
 from kocherga.wiki import get_wiki, WIKI_DOMAIN
+
 
 def search_wiki(query):
     wiki_site = get_wiki()

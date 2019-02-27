@@ -2,6 +2,7 @@ from apiclient.http import MediaIoBaseDownload, MediaFileUpload
 
 import kocherga.google
 
+
 def gdrive():
     return kocherga.google.service("drive")
 
@@ -37,7 +38,8 @@ def create_folder(parent_id, child_name):
 
 def upload_file(local_filename, google_filename, folder_id):
     if find_in_folder(folder_id, google_filename, missing_ok=True):
-        return # already exists
+        # file already exists
+        return
 
     file_metadata = {
         "name": (google_filename,),
@@ -47,12 +49,11 @@ def upload_file(local_filename, google_filename, folder_id):
     if local_filename.endswith('.pdf'):
         mimetype = 'application/pdf'
     media = MediaFileUpload(local_filename, mimetype=mimetype)
-    result = (
-        gdrive()
+
+    (gdrive()
         .files()
         .create(body=file_metadata, media_body=media)
-        .execute()
-    )
+        .execute())
 
 
 def gdoc_to_pdf(file_id):
@@ -76,4 +77,3 @@ def share_to_public(folder_id):
             'type': 'everyone',
         }
     )
-

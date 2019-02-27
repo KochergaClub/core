@@ -125,7 +125,7 @@ def r_schedule_weekly_image(request):
 
     try:
         filename = image_storage.schedule_file(dt)
-    except:
+    except Exception:
         error = str(sys.exc_info())
         raise PublicError(error)
 

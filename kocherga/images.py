@@ -69,7 +69,8 @@ class ImageStorage:
 
     def get_filename(self, key):
         re.match(r"^\w+$", key)
-        return str(Path(self.main_dir) / f"{key}.jpg") # TODO - check for existence?
+        # TODO - check for existence?
+        return str(Path(self.main_dir) / f"{key}.jpg")
 
     def add_file(self, fh_in):
         bytes = fh_in.read()

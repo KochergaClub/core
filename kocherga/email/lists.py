@@ -1,5 +1,4 @@
 import json
-import requests
 import hashlib
 from collections import namedtuple
 
@@ -9,8 +8,10 @@ import kocherga.mailchimp
 
 User = namedtuple("User", "email first_name last_name card_id")
 
+
 def get_interest_category_id():
     return kocherga.mailchimp.interest_category_by_name('Подписки')['id']
+
 
 def get_all_interests():
     LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
@@ -18,6 +19,7 @@ def get_all_interests():
         'GET',
         f"lists/{LIST_ID}/interest-categories/{get_interest_category_id()}/interests"
     )['interests']
+
 
 def populate_main_list(users: List[User]):
     LIST_ID = kocherga.mailchimp.MAIN_LIST_ID

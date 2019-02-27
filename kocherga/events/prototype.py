@@ -14,6 +14,7 @@ import kocherga.events.google
 from kocherga.dateutils import dts, TZ
 from kocherga.images import image_storage
 
+
 class EventPrototype(models.Model):
     class Meta:
         db_table = 'event_prototypes'
@@ -37,7 +38,7 @@ class EventPrototype(models.Model):
     weekday = models.IntegerField()
     hour = models.IntegerField()
     minute = models.IntegerField()
-    length = models.IntegerField() # in minutes
+    length = models.IntegerField()  # in minutes
 
     image = models.CharField(max_length=32, null=True)
 
@@ -103,7 +104,14 @@ class EventPrototype(models.Model):
         )
         event = Event.from_google(google_event)
 
-        for prop in ('summary', 'vk_group', 'fb_group', 'timepad_prepaid_tickets', 'timepad_category_code', 'timing_description_override'):
+        for prop in (
+                'summary',
+                'vk_group',
+                'fb_group',
+                'timepad_prepaid_tickets',
+                'timepad_category_code',
+                'timing_description_override',
+        ):
             value = getattr(self, prop)
             if value is not None:
                 event.set_field_by_prop(prop, value)
@@ -125,7 +133,7 @@ class EventPrototype(models.Model):
     def set_canceled_dates(self, value):
         self.canceled_dates = ','.join([
             d.strftime('%Y-%m-%d')
-            for d in value # TODO - filter out past dates which we don't care about anymore?
+            for d in value  # TODO - filter out past dates which we don't care about anymore?
         ])
 
     def cancel_date(self, d):

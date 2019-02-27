@@ -10,8 +10,10 @@ from typing import Any, Dict, List
 import kocherga.google
 import kocherga.events.timepad
 
+
 def get_calendar_id():
     return settings.KOCHERGA_GOOGLE_CALENDAR_ID
+
 
 def api():
     return kocherga.google.service("calendar")
@@ -92,9 +94,6 @@ def list_events(
         raise Exception(
             "No more than 1 of `date` and `from_date`/`to_date` should be set"
         )
-
-    timeMin = None
-    timeMax = None
 
     kwargs = {}
 

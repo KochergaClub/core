@@ -3,7 +3,6 @@ from django.db import models
 from datetime import datetime
 from kocherga.dateutils import TZ
 
-from typing import Optional
 
 class State(models.Model):
     name = models.CharField(primary_key=True, max_length=100)
@@ -17,8 +16,10 @@ class State(models.Model):
     def __str__(self):
         return self.name
 
+
 def dt_now():
     return datetime.now(TZ)
+
 
 class LogEntry(models.Model):
     name = models.CharField(max_length=100, db_index=True)

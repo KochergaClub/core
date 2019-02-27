@@ -5,6 +5,7 @@ from kocherga.api.common import ok
 
 from kocherga.supplies.models import CookiePick
 
+
 @api_view(['POST'])
 def r_pick_cookie(request):
     payload = request.data
@@ -19,6 +20,7 @@ def r_pick_cookie(request):
     pick.save()
 
     return Response(ok)
+
 
 @api_view(['POST'])
 def r_pick_neither_cookie(request):

@@ -151,8 +151,7 @@ def list_event_visitors():
         attachments.append(visitors_attachment(event))
 
     return {
-        "text": "Статистика по мероприятиям за сегодня:"
-        + ("" if attachments else " нет данных."),
+        "text": "Статистика по мероприятиям за сегодня:" + ("" if attachments else " нет данных."),
         "attachments": attachments,
     }
 

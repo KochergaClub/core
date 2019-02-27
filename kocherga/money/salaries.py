@@ -1,16 +1,13 @@
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
-import logging
-import copy
 import math
-
-import fire
 
 from kocherga.watchmen.tools import load_schedule
 from kocherga.watchmen.models import Shift
 import kocherga.staff.tools
 from kocherga.cm.models import Order
+
 
 def rate_by_shift(shift):
     if shift in (Shift.MORNING_V1, Shift.EVENING_V1):
@@ -25,6 +22,7 @@ def rate_by_shift(shift):
         return 600
     raise Exception("Unknown shift")
 
+
 def short_name_stat_to_email_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
@@ -34,6 +32,7 @@ def short_name_stat_to_email_stat(stat):
         result[member.user.email] = v
     return result
 
+
 def cm_login_stat_to_email_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
@@ -42,6 +41,7 @@ def cm_login_stat_to_email_stat(stat):
             raise Exception(f"Member {k} not found")
         result[member.user.email] = v
     return result
+
 
 def shift_salaries(start_date, end_date):
     stat = defaultdict(int)
@@ -60,9 +60,10 @@ def shift_salaries(start_date, end_date):
 
     return short_name_stat_to_email_stat(stat)
 
+
 def basic_salaries():
     result = defaultdict(int)
-    return result # no basic salaries
+    return result  # no basic salaries
 
 # def order_discount(order, customers_dict):
 #     discount = 0
@@ -84,12 +85,14 @@ def basic_salaries():
 #
 #     return value
 
+
 def period_orders(start_date, end_date):
     orders = Order.objects.filter(
-        start_ts__gte = datetime.combine(start_date, datetime.min.time()).timestamp(),
-        end_ts__lte = datetime.combine(end_date, datetime.max.time()).timestamp(),
+        start_ts__gte=datetime.combine(start_date, datetime.min.time()).timestamp(),
+        end_ts__lte=datetime.combine(end_date, datetime.max.time()).timestamp(),
     ).all()
     return orders
+
 
 def commission_bonuses(start_date, end_date):
     orders = period_orders(start_date, end_date)
@@ -97,7 +100,7 @@ def commission_bonuses(start_date, end_date):
     commissions = defaultdict(float)
     for order in orders:
         if not order.end_dt:
-            continue # not over yet
+            continue  # not over yet
         if not (start_date <= order.end_dt.date() <= end_date):
             continue
 
@@ -139,6 +142,7 @@ class Salary:
     def for_elba(self):
         return math.ceil((self.shifts + self.commissions) / 0.87 / 115) * 115
 
+
 class SalaryContainer:
     def __init__(self):
         self.salaries = {}
@@ -166,6 +170,7 @@ class SalaryContainer:
             salary = self.salaries[email]
             print(f'{member.short_name:<14} {salary.shifts:<12}{salary.commissions:<8}{salary.total:<8}')
 
+
 def calculate_salaries(start_date, end_date):
     container = SalaryContainer()
 
@@ -182,12 +187,15 @@ def calculate_salaries(start_date, end_date):
             container.add(k, 'basic', v)
 
     if add_bonus_salaries:
-        bonuses_start_date = date(2018,8,4) if start_date == date(2018,8,6) else start_date # temporary fix for one ahead-of-time salaries event
+        # temporary fix for one ahead-of-time salaries event
+        bonuses_start_date = date(2018, 8, 4) if start_date == date(2018, 8, 6) else start_date
+
         stat = commission_bonuses(bonuses_start_date, end_date)
         for k, v in stat.items():
             container.add(k, 'commissions', v)
 
     return container
+
 
 def dates_period(d=None):
     today = d or date.today()

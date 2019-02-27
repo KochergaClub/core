@@ -12,6 +12,7 @@ stats_cached_ts = None
 stats_cached = None
 CACHE_PERIOD = 5
 
+
 @api_view()
 def now(request):
     global stats_cached

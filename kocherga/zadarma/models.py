@@ -21,6 +21,7 @@ import kocherga.dateutils
 import kocherga.watchmen.tools
 import kocherga.importer.base
 
+
 class CallType(enum.Enum):
     incoming = 1
     outcoming = 2
@@ -32,6 +33,7 @@ class CallType(enum.Enum):
         if data['pbx_call_id'].startswith('out_'):
             return cls.outcoming
         raise Exception(f"Can't detect call type by data {data}")
+
 
 class Call(models.Model):
     call_id = models.CharField(primary_key=True, max_length=100)
@@ -74,7 +76,7 @@ class Call(models.Model):
 
 def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
     dt_format = '%Y-%m-%d %H:%M:%S'
-    params=OrderedDict(
+    params = OrderedDict(
         sorted(
             {
                 'start': from_dt.strftime(dt_format),

@@ -1,5 +1,4 @@
 from slackclient import SlackClient
-import os.path
 
 from django.conf import settings
 
@@ -56,6 +55,6 @@ def users_by_email(sc=None):
             continue
         result[email.lower()] = user
 
-    ... # CACHE!
+    # TODO - CACHE!
 
     return result

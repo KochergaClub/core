@@ -6,6 +6,7 @@ import traceback
 from django.http import JsonResponse, HttpResponse
 from kocherga.error import PublicError
 
+
 class JsonExceptionMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response

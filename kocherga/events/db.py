@@ -7,11 +7,8 @@ from datetime import datetime, timedelta
 
 from kocherga.dateutils import TZ, MSK_DATE_FORMAT
 
-from kocherga.error import PublicError
-
 import kocherga.events.google
-from kocherga.events.event import Event, IMAGE_TYPES
-from kocherga.images import image_storage
+from kocherga.events.event import Event
 import kocherga.importer.base
 
 
@@ -23,7 +20,7 @@ def get_event(event_id):
 def list_events(**kwargs):
     google_events = kocherga.events.google.list_events(**kwargs)
 
-    order_arg = None
+    order_args = None
     if kwargs.get("order_by", None) == "updated":
         order_args = 'updated_ts'
     else:

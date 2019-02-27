@@ -1,11 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import re
-from pathlib import Path
 from dateutil.tz import tzutc
 import dateutil.parser
-import shutil
 from datetime import datetime, time
 
 from django.db import models
@@ -39,10 +36,10 @@ def ts_now():
 class EventManager(models.Manager):
     def public_events(self, date=None, from_date=None, to_date=None, tag=None):
         query = super().get_queryset() \
-            .filter(event_type='public') \
+            .filter(event_type = 'public') \
             .exclude(posted_vk__isnull = True) \
             .exclude(posted_vk = '') \
-            .filter(start_ts__gte = datetime(2018, 6, 1).timestamp()) # earlier events are not cleaned up yet
+            .filter(start_ts__gte = datetime(2018, 6, 1).timestamp())  # earlier events are not cleaned up yet
 
         if tag:
             query = query.filter(tags__name = tag)
@@ -85,8 +82,11 @@ class Event(models.Model):
     creator = models.CharField(max_length=255, null=True)
 
     title = models.CharField(max_length=255)
-    # Not a google_event.summary! We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
+
+    # Not a google_event.summary!
+    # We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
     summary = models.TextField()
+
     description = models.TextField()
 
     deleted = models.BooleanField(default=False)
@@ -94,7 +94,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255, blank=True)
 
     is_master = models.BooleanField(default=False)
-    master_id = models.CharField(max_length=100, blank=True) # deprecated, use prototype_id instead
+    master_id = models.CharField(max_length=100, blank=True)  # deprecated, use prototype_id instead
 
     prototype = models.ForeignKey(
         'EventPrototype',
@@ -264,7 +264,6 @@ class Event(models.Model):
         summary = self.description.split("\n\n")[0]
         return kocherga.events.markup.Markup(summary).as_plain()
 
-
     def image_file(self, image_type):
         image_id = None
         if image_type == 'vk':
@@ -278,7 +277,6 @@ class Event(models.Model):
 
         return image_storage.get_filename(image_id)
 
-
     def get_images(self):
         images = {}
 
@@ -288,7 +286,7 @@ class Event(models.Model):
             elif image_type == 'vk':
                 image_id = self.vk_image
             else:
-                raise NotImplemented
+                raise NotImplementedError
 
             if not image_id:
                 continue
@@ -297,7 +295,6 @@ class Event(models.Model):
             images[image_type] = url
 
         return images
-
 
     def add_image(self, image_type, fh):
         if image_type not in IMAGE_TYPES:
@@ -309,9 +306,8 @@ class Event(models.Model):
         elif image_type == 'vk':
             self.vk_image = key
         else:
-            raise NotImplemented
+            raise NotImplementedError
         self.save()
-
 
     def fb_announce_page(self):
         if self.fb_group:
@@ -379,7 +375,8 @@ class Event(models.Model):
         return d
 
     def to_google(self):
-        convert_dt = lambda dt: dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        def convert_dt(dt):
+            return dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
         result = {
             "created": convert_dt(self.created_dt),
@@ -408,7 +405,7 @@ class Event(models.Model):
     def add_tag(self, tag_name):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event")
-        tag = Tag(name=tag_name, event=self).save()
+        Tag.objects.create(name=tag_name, event=self)
 
     def delete_tag(self, tag_name):
         self.tags.get(name=tag_name).delete()
@@ -442,8 +439,10 @@ class Event(models.Model):
 
     def public_object(self):
         # Some precautions against information leaking (although we do more checks in /public_events API route).
-        if self.deleted: return {}
-        if self.event_type != 'public': return {}
+        if self.deleted:
+            return {}
+        if self.event_type != 'public':
+            return {}
 
         announcements = {}
 
@@ -465,7 +464,7 @@ class Event(models.Model):
 
 class Tag(models.Model):
     class Meta:
-        db_table= "event_tags"
+        db_table = "event_tags"
         unique_together = (
             ('event', 'name'),
         )

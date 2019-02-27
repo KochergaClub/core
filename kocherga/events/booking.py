@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 
 import datetime
 import re
-import googleapiclient.errors
 
 from kocherga.dateutils import TZ, MSK_DATE_FORMAT
 from kocherga.error import PublicError

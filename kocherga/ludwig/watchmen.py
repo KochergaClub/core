@@ -232,6 +232,7 @@ def react_tag_admin(message):
     slack_user_id = member.slack_id
     return {"text": f"<@{slack_user_id}>, см. выше."}
 
+
 @bot.schedule("cron", hour=12)
 def roster_check():
     # We have a reason to panic if either of the following is true:

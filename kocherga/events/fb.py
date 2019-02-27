@@ -4,9 +4,6 @@ logger = logging.getLogger(__name__)
 from django.conf import settings
 
 import re
-from collections import namedtuple
-from random import random
-import traceback
 
 import asyncio
 import requests
@@ -33,12 +30,14 @@ class FbAnnouncement(BaseAnnouncement):
     def link(self):
         return self._link
 
+
 def all_groups():
     logger.info("Selecting all fb groups")
     query = Event.objects.values_list('fb_group').distinct()
     groups = [row[0] for row in query.all()]
     logger.info(f"Got {len(groups)} groups")
     return groups
+
 
 async def find_browser_page(endpoint):
     browser = await pyppeteer.launcher.connect({"browserWSEndpoint": endpoint})
@@ -47,7 +46,8 @@ async def find_browser_page(endpoint):
 
 
 def get_image_id(fb_id: str, access_token: str):
-    # Facebook groups have a cover. Facebook pages have a picture. We have to be smart about this because graph API returns an error if we ask a group for a picture.
+    # Facebook groups have a cover. Facebook pages have a picture.
+    # We have to be smart about this because graph API returns an error if we ask a group for a picture.
     for field in ("picture", "cover"):
         r = requests.get(
             f"https://graph.facebook.com/v2.12/{fb_id}",
@@ -68,7 +68,8 @@ def get_image_id(fb_id: str, access_token: str):
             else:
                 url = picture["data"]["url"]
         else:
-            raise NotImplemented
+            raise NotImplementedError
+
         match = re.match(r"https://.*?/v/.*?/p\d+x\d+/(\d+_\d+_\d+)", url)
         if not match:
             raise Exception(f"Unparsable FB image url: {url}")
@@ -125,7 +126,7 @@ class AnnounceSession:
                 await self.page.click(selector)
                 logger.info("Listbox click succeeded")
                 return True
-            except:
+            except Exception:
                 return False
         return False
 
@@ -140,7 +141,7 @@ class AnnounceSession:
             await self.page.keyboard.type(prefix)
             selected = await self.select_from_listbox(entity.fb_id)
             if selected:
-                return # yay
+                return  # yay
 
             logger.info('Listbox failed, rollback and type entity name as is')
             for i in range(len(prefix)):
@@ -159,7 +160,8 @@ class AnnounceSession:
 
         logger.info('Looking for "Другое" item')
         links = await self.page.xpath(
-            '//*[contains(concat(" ", @class, " "), " uiLayer ") and @data-testid="event_category_selector"]//a//span[contains(text(), "Другое")]'
+            '//*[contains(concat(" ", @class, " "), " uiLayer ") and @data-testid="event_category_selector"]'
+            + '//a//span[contains(text(), "Другое")]'
         )
         logger.info(f'Got {len(links)} items')
         if len(links):
@@ -172,7 +174,8 @@ class AnnounceSession:
         description = self.event.description
 
         tail = (
-            f"{self.event.timing_description} в антикафе Кочерга. Оплата участия — по тарифам антикафе: 2,5 руб./минута."
+            f"{self.event.timing_description} в антикафе Кочерга."
+            " Оплата участия — по тарифам антикафе: 2,5 руб./минута."
         )
 
         timepad_link = self.event.posted_timepad
@@ -271,13 +274,14 @@ class AnnounceSession:
             return page
 
         logger.info("Confirming")
-        # This commented code is unstable, although it seems like there *is* a navigation happening, but it doesn't fire for some reason.
+        # This commented code is unstable, although it seems like there *is* a navigation happening,
+        # but it doesn't fire for some reason.
         # (Maybe it doesn't fire because it's emulated via history.pushSate()?)
 
-        #await asyncio.gather(
-        #    page.waitForNavigation(waitUntil="documentloaded", timeout=180000),
-        #    page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000),
-        #)
+        # await asyncio.gather(
+        #     page.waitForNavigation(waitUntil="documentloaded", timeout=180000),
+        #     page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000),
+        # )
         await page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000)
 
         logger.info(f"Clicked confirm button, waiting for title to appear")
@@ -323,9 +327,8 @@ async def create(event, access_token, headless=True, **kwargs):
     try:
         logger.info(f"Trying to create")
         return await session.run()
-    except Exception as e:
-        logger.info(f"Error while creating a FB announcement:\n" + traceback.format_exc())
-        traceback.print_exc()
+    except Exception:
+        logger.exception(f"Error while creating a FB announcement")
         image_bytes = await session.screenshot()
         filename = image_storage.save_screenshot("error", image_bytes)
         logger.info(f"Screenshot saved to {filename}")

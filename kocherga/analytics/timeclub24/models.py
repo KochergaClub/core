@@ -1,6 +1,3 @@
-from telethon import TelegramClient
-import socks
-
 import time
 from datetime import datetime
 import re
@@ -9,11 +6,14 @@ from django.db import models
 
 import kocherga.importer.base
 import kocherga.telegram.core_api
+from kocherga.dateutils import TZ
 
 TIMECLUB_BOT = 'timeclub24_bot'
 
+
 def dt_now():
     return datetime.now(TZ)
+
 
 class Timeclub24Visitors(models.Model):
     class Meta:
@@ -26,6 +26,7 @@ class Timeclub24Visitors(models.Model):
     ts = models.DateTimeField(default=dt_now)
     venue = models.CharField(max_length=100)
     visitors = models.IntegerField()
+
 
 class Importer(kocherga.importer.base.FullImporter):
     def do_full_import(self):

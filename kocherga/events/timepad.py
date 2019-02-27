@@ -3,9 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.conf import settings
 
-import os
 import requests
-import json
 import re
 from collections import namedtuple
 from io import StringIO
@@ -35,7 +33,7 @@ class TimepadAnnouncement(BaseAnnouncement):
 
 
 def check(url):
-    match = re.match("https://{}\.timepad\.ru/event/(\d+)/$".format(ORGANIZATION), url)
+    match = re.match(r"https://{}\.timepad\.ru/event/(\d+)/$".format(ORGANIZATION), url)
     if not match:
         raise Exception("Weird url: {}".format(url))
     timepad_id = int(match.group(1))
@@ -177,11 +175,12 @@ def edit(announcement, patch):
     timepad_event_id = announcement.timepad_event_id
     api_call('POST', f"events/{timepad_event_id}", patch)
 
+
 def get_all_subscribers():
     URL = f'https://{ORGANIZATION}.timepad.ru/crm/list/{SUBSCRIBERS_LIST_ID}/export/'
 
     from pycookiecheat import chrome_cookies
-    r = requests.get(URL, cookies=chrome_cookies(URL)) # hmmm
+    r = requests.get(URL, cookies=chrome_cookies(URL))  # hmmm
 
     fh = StringIO(r.text)
 

@@ -159,7 +159,8 @@ class Schedule:
     def current_watchman(self):
         return self.watchman_by_dt(datetime.now(TZ))
 
-    # Find the last active watchman. The current one or the one before if there's nobody right now (because it's night, probably).
+    # Find the last active watchman. The current one or the one before if there's nobody right now
+    # (because it's night, probably).
     def last_watchman(self):
         dt = datetime.now(TZ)
         for i in range(48):
@@ -169,7 +170,8 @@ class Schedule:
 
         raise Exception("Couldn't find a watchman in the last 48 hours.")
 
-    # Find the nearest active watchman. The current one or the one after if there's nobody right now (because it's night, probably).
+    # Find the nearest active watchman. The current one or the one after if there's nobody right now
+    # (because it's night, probably).
     def nearest_watchman(self):
         dt = datetime.now(TZ)
         for i in range(48):

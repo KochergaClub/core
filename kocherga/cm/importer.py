@@ -69,7 +69,10 @@ def load_users():
     users = []
 
     # needed for OrderLogEntries
-    for i, name in enumerate(["Мальбург", "Андрей Ершов", "Макс", "Лев", "Женя", "Лена", "Маша", "Ринат", "Роман", "Филипп Б.", "Стася", "Юрий"]):
+    for i, name in enumerate([
+            "Мальбург", "Андрей Ершов", "Макс", "Лев", "Женя", "Лена",
+            "Маша", "Ринат", "Роман", "Филипп Б.", "Стася", "Юрий",
+    ]):
         deleted_user = User(id=-i, name=name, login=name, level="deleted")
         users.append(deleted_user)
 
@@ -130,7 +133,6 @@ def load_order_log(order_id):
         if len(u.name) > 15:
             username2login[u.name[:15]] = u.login
     username2login["Анастасия Шафор"] = "AHACTAC"
-
 
     log_html = match.group(1)
     entries = []

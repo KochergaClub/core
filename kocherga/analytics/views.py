@@ -6,6 +6,7 @@ from kocherga.cm.models import Customer
 
 from datetime import datetime
 
+
 @staff_member_required
 def index(request):
     cohort_dates = [

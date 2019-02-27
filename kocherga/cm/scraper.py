@@ -11,6 +11,7 @@ DOMAIN = settings.CAFE_MANAGER_SERVER
 
 COOKIES_FILE = os.path.join(settings.DATA_DIR, 'cafe_manager_cookies.dbm')
 
+
 def get_new_cookies(login, password):
     r = requests.post(DOMAIN, data={"login": login, "pass": password})
     r.raise_for_status()

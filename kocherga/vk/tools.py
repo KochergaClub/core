@@ -8,6 +8,7 @@ from .helpers import upload_cover_image, group2id
 
 group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
 
+
 def update_cover():
     now_total = kocherga.cm.tools.now_stats()['total']
 

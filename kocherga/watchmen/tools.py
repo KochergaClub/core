@@ -6,7 +6,7 @@ from django.conf import settings
 from time import time as clock
 from datetime import datetime, timedelta
 
-from typing import List, Dict
+from typing import List
 
 import kocherga.importer.base
 
@@ -83,8 +83,9 @@ def load_schedule_from_google(worksheet=None):
 
         shift = Shift.by_timestring(fields[FIELD_TIME])
         for day_id in range(1, 8):
-            # Notice that because of a weird quirk in the google sheet, night shifts are assigned to the previous day.
-            # For example, the shift from Friday to Saturday is assigned to Friday, even though the calendar date is Saturday.
+            # Notice that because of a weird quirk in the google sheet, night shifts are assigned to the
+            # previous day. For example, the shift from Friday to Saturday is assigned to Friday, even though
+            # the calendar date is Saturday.
             d = monday + timedelta(days=day_id - 1)
             watchman = fields[day_id]
 
@@ -123,6 +124,7 @@ def last_watchman():
 
 def nearest_watchman():
     return load_schedule().nearest_watchman()
+
 
 class Importer(kocherga.importer.base.FullImporter):
     def do_full_import(self):

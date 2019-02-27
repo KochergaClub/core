@@ -1,15 +1,16 @@
 from django.db import models
 from django.urls import reverse
 
-import hashlib
 from datetime import date
 from collections import OrderedDict
 
 from kocherga.dateutils import inflected_month
 
+
 class TrainingManager(models.Manager):
     def next_training(self):
         return Training.objects.filter(date__gt=date.today()).order_by('date').first()
+
 
 class Training(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
@@ -58,7 +59,10 @@ class Training(models.Model):
 
     @property
     def long_name(self):
-        return f'Воркшоп по прикладной рациональности {self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
+        return (
+            'Воркшоп по прикладной рациональности '
+            + f'{self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
+        )
 
     def get_absolute_url(self):
         return reverse('ratio:training', kwargs={'name': self.name})

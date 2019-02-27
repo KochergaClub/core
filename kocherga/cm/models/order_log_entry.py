@@ -2,6 +2,7 @@ from django.db import models
 
 from .order import Order
 
+
 class OrderLogEntry(models.Model):
     class Meta:
         unique_together = (
