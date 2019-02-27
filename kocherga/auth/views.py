@@ -53,10 +53,13 @@ class LoginView(View):
         html_email_message = markdown.markdown(
             render_to_string('auth/email/login.md', {'magic_link': magic_link})
         )
+        plain_email_message = render_to_string('auth/email/login.txt', {'magic_link': magic_link})
+
         send_mail(
             subject='Войти на сайт Кочерги',
             from_email='robot@kocherga-club.ru',
             html_message=html_email_message,
+            message=plain_email_message,
             recipient_list=[email],
         )
 
