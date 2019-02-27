@@ -330,7 +330,7 @@ def register_handlers(dsp: Dispatcher):
             ),
         },
         "why-so-serious": {
-            "text": render_to_string('mastermind_dating/bot/info-who-so-serious.md'),
+            "text": render_to_string('mastermind_dating/bot/info-why-so-serious.md'),
             "parse_mode": "Markdown",
             "reply_markup": InlineKeyboardMarkup().add(
                 InlineKeyboardButton("« Обратно в информацию", callback_data="info-root")
