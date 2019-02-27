@@ -1,0 +1,6 @@
+image: "python:3.7"
+
+build:
+  script:
+    - pip install poetry
+    - poetry install
