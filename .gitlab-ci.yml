@@ -4,3 +4,7 @@ build:
   script:
     - pip install poetry
     - poetry install
+
+test:
+  script:
+    - poetry run make lint
