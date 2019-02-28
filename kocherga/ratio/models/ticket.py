@@ -38,7 +38,7 @@ class Ticket(models.Model):
     payment_amount = models.IntegerField('Размер оплаты')
     paid = models.BooleanField('Оплачено')
 
-    comment = models.TextField()
+    comment = models.TextField(blank=True)
 
     class Meta:
         verbose_name = 'Участник'
