@@ -3,21 +3,27 @@ import * as React from 'react';
 import Page from '../components/Page';
 import TeamMenu from '../components/TeamMenu';
 
-import Calendar from 'react-big-calendar';
+import Calendar from './Calendar';
 
-import moment from 'moment';
+interface PublicEvent {
+  event_id: string;
+  title: string;
+  room: string;
+  start: string;
+  end: string;
+}
 
-const localizer = Calendar.momentLocalizer(moment);
+const startAccessor = (event: PublicEvent) => new Date(event.start);
+const endAccessor = (event: PublicEvent) => new Date(event.end);
 
-export default ({ events }) => (
+export default ({ events }: { events: PublicEvent[] }) => (
   <Page title="Календарь событий">
     <TeamMenu />
     <h1>Календарь событий</h1>
-    <div style={{height: 400}}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-      />
-    </div>
+    <Calendar
+      events={events}
+      startAccessor={startAccessor}
+      endAccessor={endAccessor}
+    />
   </Page>
 );

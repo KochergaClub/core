@@ -17,11 +17,10 @@ from kocherga.error import PublicError
 
 import kocherga.events.db
 from kocherga.events.models import Event
+from kocherga.events.serializers import PublicEventSerializer
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth
-
-from kocherga.dateutils import MSK_DATE_FORMAT
 
 from feedgen.feed import FeedGenerator
 
@@ -164,7 +163,7 @@ def r_list_public(request):
         tag=request.query_params.get('tag'),
     )
     return Response([
-        event.public_object()
+        PublicEventSerializer(event).data
         for event in events[:1000]
     ])
 
@@ -176,7 +175,7 @@ def r_list_public_today(request):
         tag=request.query_params.get('tag'),
     )
     return Response([
-        event.public_object()
+        PublicEventSerializer(event).data
         for event in events[:1000]
     ])
 
@@ -194,11 +193,10 @@ def r_list_public_atom(request):
     fg.author({'name': 'Кочерга'})
 
     for event in reversed(events.all()):
-        item = event.public_object()
         fe = fg.add_entry()
-        fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{item["event_id"]}')
-        dt = datetime.strptime(item["start"], MSK_DATE_FORMAT)
-        fe.title(item["title"])
+        fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.google_id}')
+        dt = event.start_dt
+        fe.title(event.title)
 
         dt_str = kocherga.dateutils.weekday(dt).capitalize() \
             + ', ' + str(dt.day) \
@@ -207,6 +205,6 @@ def r_list_public_atom(request):
 
         fe.summary(dt_str)
         fe.content(dt_str)
-        fe.link(href=item["announcements"]["vk"]["link"])
+        fe.link(href=event.posted_vk)
 
     return HttpResponse(fg.atom_str(pretty=True))
