@@ -14,7 +14,7 @@ cache:
 build:
   stage: build
   script:
-    - true
+    - echo ok
 
 test:
   stage: test
