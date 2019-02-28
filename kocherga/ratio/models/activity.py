@@ -32,5 +32,7 @@ class Activity(models.Model):
 
     class Meta:
         ordering = ('day', 'time')
+        verbose_name = 'Активность'
+        verbose_name_plural = 'Активности'
 
     # TODO - support foreign key links to the collection of actual activities - slides, workbook bits, etc.

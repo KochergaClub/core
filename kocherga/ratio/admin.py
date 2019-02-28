@@ -7,11 +7,16 @@ class ActivityInline(admin.TabularInline):
     model = Activity
 
 
+class TicketInline(admin.TabularInline):
+    model = Ticket
+
+
 @admin.register(Training)
 class TrainingAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'date', 'tickets_count', 'total_income')
     inlines = [
-        ActivityInline
+        ActivityInline,
+        TicketInline,
     ]
 
 
@@ -19,6 +24,10 @@ class TrainingAdmin(admin.ModelAdmin):
 class TicketAdmin(admin.ModelAdmin):
     list_filter = ('training', 'status', 'ticket_type')
     list_display = ('__str__', 'status', 'ticket_type', 'payment_amount', 'paid')
+    radio_fields = {
+        'status': admin.VERTICAL,
+        'ticket_type': admin.VERTICAL,
+    }
 
 
 @admin.register(Trainer)
