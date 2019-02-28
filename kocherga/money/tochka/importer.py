@@ -4,6 +4,11 @@ import kocherga.dateutils
 from kocherga.dateutils import TZ
 import kocherga.importer.base
 
+from .api import get_statements
+
+import logging
+logger = logging.getLogger(__name__)
+
 
 class Importer(kocherga.importer.base.IncrementalImporter):
 
