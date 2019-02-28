@@ -1,10 +1,20 @@
 image: "python:3.7"
 
+before_script:
+  - pip install poetry
+  - poetry config settings.virtualenvs.path true
+  - poetry install
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - node_modules/
+  - .venv/
+
 build:
   stage: build
   script:
-    - pip install poetry
-    - poetry install
+    - true
 
 test:
   stage: test
