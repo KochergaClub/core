@@ -4,7 +4,6 @@ before_script:
   - pip install poetry
   - poetry config settings.virtualenvs.in-project true
   - poetry install
-  - npm ci
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
