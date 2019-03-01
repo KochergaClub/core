@@ -125,6 +125,7 @@ class TestAddBooking:
 
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
         assert event.location == 'Антикафе Кочерга, комната ГЭБ'
+        assert event.event_type == 'private'
 
     def test_add_booking_midnight(self):
         event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '23:00', '24:00', 'somebody@example.com')
