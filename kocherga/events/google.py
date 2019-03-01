@@ -98,23 +98,15 @@ def list_events(
     kwargs = {}
 
     if date:
-        kwargs["timeMin"] = (
-            datetime.datetime.combine(date, datetime.time()).isoformat() + "Z"
-        )
-        kwargs["timeMax"] = (
-            datetime.datetime.combine(
-                date + datetime.timedelta(days=1), datetime.time()
-            ).isoformat()
-            + "Z"
-        )
+        from_date = to_date = date
 
     if from_date:
         kwargs["timeMin"] = (
-            datetime.datetime.combine(from_date, datetime.time()).isoformat() + "Z"
+            datetime.datetime.combine(from_date, datetime.time.min).isoformat() + "Z"
         )
     if to_date:
         kwargs["timeMax"] = (
-            datetime.datetime.combine(to_date, datetime.time()).isoformat() + "Z"
+            datetime.datetime.combine(to_date, datetime.time.max).isoformat() + "Z"
         )
 
     if q:
