@@ -69,24 +69,26 @@ class ObjectView(APIView):
 
         for (key, value) in payload.items():
             if key in (
-                "title",
-                "description",
-                "summary",
-                "location",
-                "weekday",
-                "hour",
-                "minute",
-                "length",
-                "vk_group",
-                "fb_group",
-                "timepad_category_code",
-                "timepad_prepaid_tickets",
-                "timing_description_override",
+                    "title",
+                    "description",
+                    "summary",
+                    "location",
+                    "weekday",
+                    "hour",
+                    "minute",
+                    "length",
+                    "vk_group",
+                    "fb_group",
+                    "active",
+                    "timepad_category_code",
+                    "timepad_prepaid_tickets",
+                    "timing_description_override",
             ):
                 setattr(prototype, key, value)
             else:
                 raise Exception("Key {} is not allowed in patch".format(key))
 
+        prototype.clean()
         prototype.save()
 
         return Response(prototype.to_dict())
