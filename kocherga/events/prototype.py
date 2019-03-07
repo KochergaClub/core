@@ -63,6 +63,8 @@ class EventPrototype(models.Model):
         return events
 
     def suggested_dates(self, until=None, limit=5):
+        if not self.active:
+            return []
         now = datetime.now(tz=TZ)
 
         dt = now - timedelta(days=now.weekday())
