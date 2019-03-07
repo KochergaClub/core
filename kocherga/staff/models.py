@@ -48,7 +48,7 @@ class Member(models.Model):
     cm_login = models.CharField('Логин в CM', max_length=255, blank=True)
     cm_customer = models.ForeignKey(
         kocherga.cm.models.Customer,
-        null=True,
+        null=True, blank=True,
         on_delete=models.SET_NULL,
         related_name='staff_member',
     )
