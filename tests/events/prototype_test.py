@@ -1,11 +1,13 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
-from kocherga.events.models import EventPrototype, EventPrototypeTag
+from kocherga.events.models import EventPrototype
+
 
 def test_suggestions(common_prototype):
     ep = common_prototype
     assert type(ep.suggested_dates()) == list
+
 
 def test_new_event(common_prototype):
     ep = common_prototype
@@ -13,10 +15,12 @@ def test_new_event(common_prototype):
     event = ep.new_event(dt)
     assert event.prototype_id == ep.prototype_id
 
+
 def test_to_dict(common_prototype):
     ep = common_prototype
     assert type(ep.to_dict()) == dict
     assert type(ep.to_dict(detailed=True)) == dict
+
 
 def test_cancel(common_prototype):
     ep = common_prototype
@@ -30,6 +34,7 @@ def test_cancel(common_prototype):
     assert suggested[2] != suggested2[2]
     assert suggested[3] == suggested2[2]
 
+
 class TestTags:
     def test_list_default_tags(self, common_prototype):
         assert list(common_prototype.tags.all()) == []
@@ -42,5 +47,5 @@ class TestTags:
         common_prototype = EventPrototype.objects.get(pk=prototype_id)
         assert len(list(common_prototype.tags.all())) == 2
         tags = list(common_prototype.tags.all())
-        assert tags[0].name == 'bar' # tags are sorted by name (why?)
+        assert tags[0].name == 'bar'  # tags are sorted by name (why?)
         assert tags[1].name == 'foo'

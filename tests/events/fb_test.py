@@ -3,13 +3,10 @@ pytestmark = pytest.mark.usefixtures('db')
 
 import kocherga.events.fb
 
-import logging
 
 class TestCreate:
     @pytest.mark.asyncio
     async def test_create(self, event):
-        # logging.getLogger('pyppeteer').setLevel(logging.DEBUG)
-
         event.description += 'Чтобы узнавать о новых мероприятиях, вступайте в группу: {{Entity|fb_id=1083453805000382|vk_id=kocherga_club|name=Кочерга}}.'
 
         result = await kocherga.events.fb.create(

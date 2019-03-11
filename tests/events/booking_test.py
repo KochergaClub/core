@@ -10,6 +10,7 @@ from kocherga.dateutils import TZ
 
 pytestmark = pytest.mark.usefixtures('db')
 
+
 @pytest.fixture
 def event1():
     GOOGLE_EVENT = {
@@ -45,9 +46,11 @@ def event1():
 
     return Event.from_google(GOOGLE_EVENT)
 
+
 class TestBooking:
     def test_constructor(self):
-        assert type(kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб', 5)) == kocherga.events.booking.Booking
+        booking = kocherga.events.booking.Booking(datetime.now(TZ), datetime.now(TZ) + timedelta(hours=1), 'гэб', 5)
+        assert type(booking) == kocherga.events.booking.Booking
 
     def test_constructor_wrong_room(self):
         with pytest.raises(PublicError, match='Unknown room'):
@@ -81,12 +84,21 @@ class TestCheckAvailability:
             kocherga.events.booking.check_availability(datetime.now(TZ), datetime.now(TZ) + timedelta(days=1), 'гэб')
 
     def test_normal(self):
-        result = kocherga.events.booking.check_availability(datetime.now(TZ).replace(hour=18), datetime.now(TZ).replace(hour=19), 'гэб')
-        assert result == True
+        result = kocherga.events.booking.check_availability(
+            datetime.now(TZ).replace(hour=18),
+            datetime.now(TZ).replace(hour=19),
+            'гэб'
+        )
+        assert result is True
 
     def test_unknown_room(self):
         with pytest.raises(PublicError, match='Unknown room blah.'):
-            kocherga.events.booking.check_availability(datetime.now(TZ).replace(hour=18), datetime.now(TZ).replace(hour=19), 'blah')
+            kocherga.events.booking.check_availability(
+                datetime.now(TZ).replace(hour=18),
+                datetime.now(TZ).replace(hour=19),
+                'blah'
+            )
+
 
 class TestAddBooking:
     def test_no_params(self):
@@ -118,7 +130,12 @@ class TestAddBooking:
             kocherga.events.booking.add_booking('2020-01-01', 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
 
     def test_add_booking(self):
-        event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+        event = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '12:00', '12:30',
+            'somebody@example.com'
+        )
 
         # cleanup
         kocherga.events.db.delete_event(event.google_id)
@@ -128,7 +145,12 @@ class TestAddBooking:
         assert event.event_type == 'private'
 
     def test_add_booking_midnight(self):
-        event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '23:00', '24:00', 'somebody@example.com')
+        event = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '23:00', '24:00',
+            'somebody@example.com'
+        )
 
         # cleanup
         kocherga.events.db.delete_event(event.google_id)
@@ -136,14 +158,18 @@ class TestAddBooking:
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
 
     def test_add_booking_back_to_back(self):
-        print('add 1')
-        event1 = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '09:00', '09:30', 'somebody1@example.com')
-        print(event1.title)
-        print(event1.google_id)
-        print(event1.start_dt)
-        print(event1.end_dt)
-        print('add 2')
-        event2 = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '09:30', '10:00', 'somebody2@example.com')
+        event1 = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '09:00', '09:30',
+            'somebody1@example.com'
+        )
+        event2 = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '09:30', '10:00',
+            'somebody2@example.com'
+        )
 
         assert event1.title == 'Бронь ГЭБ, 3 человек, somebody1@example.com'
         assert event2.title == 'Бронь ГЭБ, 3 человек, somebody2@example.com'
@@ -154,11 +180,21 @@ class TestAddBooking:
 
     def test_add_booking_unknown(self):
         with pytest.raises(PublicError, match='Unknown room'):
-            kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'unknown', 3, '12:00', '12:30', 'somebody@example.com')
+            kocherga.events.booking.add_booking(
+                (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+                'unknown', 3,
+                '12:00', '12:30',
+                'somebody@example.com'
+            )
 
     def test_add_booking_unknown2(self):
         with pytest.raises(PublicError, match='Unknown room'):
-            kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'неизвестная', 3, '12:00', '12:30', 'somebody@example.com')
+            kocherga.events.booking.add_booking(
+                (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+                'неизвестная', 3,
+                '12:00', '12:30',
+                'somebody@example.com'
+            )
 
     def test_add_duplicate(self):
         event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
@@ -167,6 +203,7 @@ class TestAddBooking:
 
         # cleanup
         kocherga.events.db.delete_event(event.google_id)
+
 
 class TestDeleteBooking:
     def test_delete_booking_unknown(self):
