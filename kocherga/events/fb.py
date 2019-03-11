@@ -16,6 +16,8 @@ import kocherga.events.markup
 from kocherga.images import image_storage
 from kocherga.events.announcement import BaseAnnouncement
 
+import kocherga.fb.api
+
 PASSWORD = settings.KOCHERGA_FB_ANNOUNCER_PASSWORD
 
 FB_CONFIG = settings.KOCHERGA_FB
