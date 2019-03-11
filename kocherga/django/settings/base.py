@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',
+    'kocherga.fb',
     'kocherga.cm',
     'kocherga.supplies',
     'kocherga.watchmen',

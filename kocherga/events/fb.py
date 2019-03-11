@@ -45,24 +45,23 @@ async def find_browser_page(endpoint):
     return page
 
 
-def get_image_id(fb_id: str, access_token: str):
+def get_image_id(fb_id: str):
     # Facebook groups have a cover. Facebook pages have a picture.
     # We have to be smart about this because graph API returns an error if we ask a group for a picture.
     for field in ("picture", "cover"):
-        r = requests.get(
-            f"https://graph.facebook.com/v2.12/{fb_id}",
-            params={"access_token": access_token, "fields": field},
-        )
-        if r.status_code != 200:
-            logger.warn(f"Can't read {fb_id}/{field}: {r.status_code}, {str(r.json())}")
+        try:
+            j = kocherga.fb.api.get_by_id(fb_id, [field])
+        except requests.exceptions.HTTPError:
+            logger.exception(f"Can't read {fb_id}/{field}")
             continue
-        logger.info(f"Got JSON for field {field}: {str(r.json())}")
+
+        logger.info(f"Got JSON for field {field}: {str(j)}")
 
         url = None
         if field == "cover":
-            url = r.json()["cover"]["source"]
+            url = j["cover"]["source"]
         elif field == "picture":
-            picture = r.json()["picture"]
+            picture = j["picture"]
             if type(picture) == str:
                 url = picture
             else:
@@ -86,12 +85,11 @@ class AnnounceSession:
 
     @classmethod
     async def create(
-        cls, browser, access_token, event, auto_confirm=True, select_self_location=True
+        cls, browser, event, auto_confirm=True, select_self_location=True
     ):
         self = cls()
         self.page = await browser.newPage()
         self.event = event
-        self.access_token = access_token
         self.auto_confirm = auto_confirm
         self.select_self_location = select_self_location
         return self
@@ -111,7 +109,7 @@ class AnnounceSession:
         await self.page.keyboard.type(f"{dt.minute:02}")
 
     async def select_from_listbox(self, fb_id):
-        image_id = get_image_id(fb_id, self.access_token)
+        image_id = get_image_id(fb_id)
         if not image_id:
             return False
 
@@ -320,10 +318,10 @@ async def get_browser(headless):
 # so it's not a hack that we usually bring a token from a client side to server to make an announcement.
 #
 # It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
-async def create(event, access_token, headless=True, **kwargs):
+async def create(event, headless=True, **kwargs):
     browser = await get_browser(headless)
 
-    session = await AnnounceSession.create(browser, access_token, event, **kwargs)
+    session = await AnnounceSession.create(browser, event, **kwargs)
     try:
         logger.info(f"Trying to create")
         return await session.run()

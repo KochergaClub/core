@@ -105,10 +105,8 @@ def r_fb_groups(request):
 @auth("kocherga")
 @api_view(['POST'])
 def r_fb_post(request, event_id):
-    access_token = request.data["fb_access_token"]
-
     event = Event.by_id(event_id)
-    announcement = kocherga.events.announce.post_to_fb(event, access_token)
+    announcement = kocherga.events.announce.post_to_fb(event)
 
     return Response({"link": announcement.link})
 

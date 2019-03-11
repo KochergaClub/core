@@ -22,9 +22,9 @@ def post_to_vk(event):
     return announcement
 
 
-def post_to_fb(event, access_token):
+def post_to_fb(event):
     loop = asyncio.get_event_loop()
-    announcement = loop.run_until_complete(kocherga.events.fb.create(event, access_token))
+    announcement = loop.run_until_complete(kocherga.events.fb.create(event))
     event.posted_fb = announcement.link
     event.save()
 
