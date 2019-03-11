@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import kocherga.events.event
+from kocherga.events.models.event import ts_now
 
 
 class Migration(migrations.Migration):
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('google_link', models.CharField(max_length=1024)),
                 ('start_ts', models.IntegerField()),
                 ('end_ts', models.IntegerField()),
-                ('created_ts', models.IntegerField(default=kocherga.events.event.ts_now)),
+                ('created_ts', models.IntegerField(default=ts_now)),
                 ('updated_ts', models.IntegerField()),
                 ('creator', models.CharField(max_length=255)),
                 ('title', models.CharField(max_length=255)),

@@ -3,8 +3,8 @@ pytestmark = pytest.mark.usefixtures('db')
 
 import json
 
-from kocherga.events.event import Event
-from kocherga.error import PublicError
+from kocherga.events.models import Event
+
 
 def test_events(client, imported_events, kocherga_auth_header):
     res = client.get('/api/events', **kocherga_auth_header)

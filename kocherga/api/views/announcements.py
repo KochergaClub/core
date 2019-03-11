@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view
 from kocherga.error import PublicError
 
 from kocherga.images import image_storage
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 import kocherga.events.timepad
 import kocherga.events.vk
 import kocherga.events.telegram

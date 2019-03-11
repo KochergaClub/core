@@ -5,8 +5,7 @@ from django.conf import settings
 from pathlib import Path
 from datetime import datetime, timedelta
 
-from kocherga.events.event import Event
-from kocherga.events.prototype import EventPrototype
+from kocherga.events.models import Event, EventPrototype
 import kocherga.events.db
 import kocherga.images
 

@@ -15,7 +15,7 @@ from kocherga.dateutils import TZ
 import kocherga.dateutils
 
 from kocherga.events.announcement import BaseAnnouncement
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 import kocherga.events.markup
 
 

@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from kocherga.dateutils import TZ, MSK_DATE_FORMAT
 
 import kocherga.events.google
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 import kocherga.importer.base
 
 

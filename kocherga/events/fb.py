@@ -10,7 +10,7 @@ import requests
 
 import pyppeteer
 
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 import kocherga.events.db
 import kocherga.events.markup
 from kocherga.images import image_storage

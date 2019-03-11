@@ -1,7 +1,7 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
-from kocherga.events.prototype import EventPrototype, EventPrototypeTag
+from kocherga.events.models import EventPrototype, EventPrototypeTag
 
 def test_suggestions(common_prototype):
     ep = common_prototype

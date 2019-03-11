@@ -10,7 +10,7 @@ from kocherga.error import PublicError
 
 import kocherga.room
 import kocherga.events.db
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 import kocherga.events.helpers
 
 # types:

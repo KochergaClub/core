@@ -9,7 +9,7 @@ from datetime import datetime
 
 from kocherga.error import PublicError
 
-from kocherga.events.prototype import EventPrototype
+from kocherga.events.models import EventPrototype
 
 from kocherga.api.common import ok
 from kocherga.api.auth import auth

@@ -8,7 +8,7 @@ import kocherga.dateutils
 
 from kocherga.telegram import post_to_channel
 
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 
 
 def schedule_message():

@@ -3,7 +3,7 @@ pytestmark = pytest.mark.usefixtures('db')
 
 import datetime
 
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 import kocherga.events.db
 
 class TestListEvents:

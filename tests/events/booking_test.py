@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import kocherga.events.booking
 import kocherga.events.google
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 

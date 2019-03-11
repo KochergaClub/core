@@ -3,7 +3,7 @@ pytestmark = pytest.mark.usefixtures('db')
 
 import json
 
-from kocherga.events.prototype import EventPrototype
+from kocherga.events.models import EventPrototype
 
 class TestPrototypes:
     def test_list_empty(self, client, kocherga_auth_header):

@@ -10,7 +10,7 @@ import kocherga.vk.api
 import kocherga.events.vk
 import kocherga.events.announce
 
-from kocherga.events.event import Event
+from kocherga.events.models import Event
 
 class TestTexts:
     def test_tail(self, event):
