@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import Page from '../components/Page';
-import TeamMenu from '../components/TeamMenu';
 
 const Cohorts = ({ cohorts }) => (
   <ul>
@@ -18,11 +17,10 @@ const Cohorts = ({ cohorts }) => (
 );
 
 export default ({ cohorts }) => (
-  <Page title="Админка мастермайнд-дейтинга">
-    <TeamMenu />
+  <Page title="Админка мастермайнд-дейтинга" team>
     <h1>Мастермайнд-дейтинг</h1>
     <p>
-    <small><a href="/admin/mastermind_dating/cohort/">Редактировать когорты в админке</a></small>
+      <small><a href="/admin/mastermind_dating/cohort/">Редактировать когорты в админке</a></small>
     </p>
     <Cohorts cohorts={cohorts} />
   </Page>

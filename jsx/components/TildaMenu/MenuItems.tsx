@@ -1,5 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
+
+import { teamColor, MenuItem, publicMenuItems, teamMenuItems } from './constants';
 
 const MenuItemsNav = styled.nav`
   margin-left: 30px;
@@ -33,37 +35,12 @@ const MenuItemsList = styled.ul`
   }
 `;
 
-interface MenuItem {
-  title: string;
-  link?: string;
-  items?: { title: string, link: string }[];
-}
-
-const menuItems: MenuItem[] = [
-  {
-    title: 'Антикафе',
-    items: [
-      { link: '/space', title: 'Пространство' },
-      { link: '/projects', title: 'Проекты' },
-      { link: '/pricing', title: 'Цены' },
-      { link: '/#schedule', title: 'Расписание' },
-      { link: '/faq', title: 'F.A.Q.' },
-    ],
-  },
-  {
-    title: 'Рациональность',
-    items: [
-      { link: '/rationality', title: 'Прикладная рациональность' },
-      { link: '/rationality/resources', title: 'Ресурсы' },
-      { link: '/rationality/reports', title: 'Отчеты' },
-      { link: '/rationality/aboutus', title: 'О нас говорят' },
-      { link: '/workshop', title: 'Воркшоп' },
-      { link: '/rationality/corporate', title: 'Корпоративные тренинги' },
-      { link: '/blog', title: 'Блог' },
-    ],
-  },
-  { link: '/#contacts', title: 'Контакты' },
-];
+const item2link = (item: MenuItem) => {
+  if (item.old) {
+    return 'https://kocherga-club.ru' + item.link;
+  }
+  return item.link;
+};
 
 const MenuItemExpandableContainer = styled.div`
   position: relative;
@@ -76,7 +53,7 @@ const MenuItemDropdown = styled.ul`
   padding: 5px 0;
   list-style-type: none;
   border: 1px solid white;
-  background: black;
+  background: ${props => props.theme.team ? teamColor : 'black'};
   color: white;
 
   & > li {
@@ -106,7 +83,7 @@ class MenuItemExpandable extends React.Component<{ item: MenuItem }, {}> {
       <MenuItemDropdown>
         {
           this.props.item.items.map(
-            (item, i) => <li key={i}><a href={"https://kocherga-club.ru" + item.link}>{item.title}</a></li>
+            (item, i) => <li key={i}><a href={item2link(item)}>{item.title}</a></li>
           )
         }
       </MenuItemDropdown>
@@ -124,28 +101,35 @@ class MenuItemExpandable extends React.Component<{ item: MenuItem }, {}> {
   }
 }
 
-const MenuItem = ({ item }: { item: MenuItem }) => (
+const MenuItemLi = ({ item }: { item: MenuItem }) => (
   <li>
     {
       item.items
       ? <MenuItemExpandable item={item} />
-      : <a href={"https://kocherga-club.ru" + item.link}>{item.title}</a>
+      : <a href={item2link(item)}>{item.title}</a>
     }
   </li>
 );
 
-const TildaMenuItems = () => (
-  <MenuItemsNav>
-    <MenuItemsList>
-      {
-        menuItems.map(
-          (item, i) => (
-            <MenuItem item={item} key={i} />
+interface Props {
+  team: boolean;
+}
+
+const TildaMenuItems = ({ team }: Props) => {
+  const items = team ? teamMenuItems : publicMenuItems;
+  return (
+    <MenuItemsNav>
+      <MenuItemsList>
+        {
+          items.map(
+            (item, i) => (
+              <MenuItemLi item={item} key={i} />
+            )
           )
-        )
-      }
-    </MenuItemsList>
-  </MenuItemsNav>
-);
+        }
+      </MenuItemsList>
+    </MenuItemsNav>
+  );
+};
 
 export default TildaMenuItems;

@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Page = ({ title, children }: { title: string, children: React.ReactNode }) => {
+const Page = ({ title, team, children }: { title: string, team?: boolean, children: React.ReactNode }) => {
   return (
     <div>
       <GlobalStyle />
@@ -39,7 +39,7 @@ const Page = ({ title, children }: { title: string, children: React.ReactNode })
         <meta charSet="utf-8" />
         <title>{title}</title>
       </Helmet>
-      <TildaMenu />
+      <TildaMenu team={team} />
       <Main>
         {children}
       </Main>

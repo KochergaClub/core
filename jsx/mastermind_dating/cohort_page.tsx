@@ -3,7 +3,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import Page from '../components/Page';
-import TeamMenu from '../components/TeamMenu';
 
 import { Column, Button } from '@kocherga/frontkit';
 
@@ -82,8 +81,7 @@ const Users = ({ users, csrfToken }) => (
 );
 
 export default ({ cohort_id, users, csrfToken }) => (
-  <Page title="Аналитика мастермайнд-дейтинга">
-    <TeamMenu />
+  <Page title="Аналитика мастермайнд-дейтинга" team>
     <h1>Мастермайнд-дейтинг</h1>
     <section>
       <a href="/team/mastermind_dating">&larr; к списку когорт</a>
