@@ -50,6 +50,7 @@ class RootView(APIView):
                 props[field] = payload[field]
 
         prototype = EventPrototype(**props)
+        prototype.clean()
         prototype.save()
 
         return Response(ok)
