@@ -44,7 +44,7 @@ const UserVoteForm = ({ user, csrfToken }) => (
     {
       user.voted_for
       ? (<em>Уже проголосовали</em>)
-      : <Button type="submit" size="small">Активировать голосование</Button>
+      : <Button type="submit" small>Активировать голосование</Button>
     }
   </form>
 );
@@ -66,8 +66,8 @@ const Users = ({ users, csrfToken }) => (
               <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
               {
               user.present
-              ? <Button type="submit" size="small">Тут</Button>
-              : <Button type="submit" size="small">Не тут</Button>
+              ? <Button type="submit" small>Тут</Button>
+              : <Button type="submit" small>Не тут</Button>
               }
             </form>
             {
