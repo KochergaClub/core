@@ -41,19 +41,20 @@ export const teamMenuItems: MenuItem[] = [
   {
     title: 'Сервисы',
     items: [
+      { link: '/team/ratio', title: 'Тренинги' },
+      { link: '/team/analytics', title: 'Аналитика' },
+      { link: '/team/mastermind_dating', title: 'Мастермайнд' },
+      { link: '/team/events', title: 'События' },
+    ],
+  },
+  {
+    title: 'Внешние сервисы',
+    items: [
       { link: 'https://wiki.team.kocherga.club', title: 'Вики' },
       { link: 'https://kocherga.slack.com', title: 'Slack' },
       { link: 'https://kocherga.cafe-manager.ru', title: 'Кафе-менеджер' },
       { link: 'https://tracker.yandex.ru', title: 'Трекер' },
       { link: 'https://metabase.team.kocherga.club', title: 'Metabase' },
-    ],
-  },
-  {
-    title: 'Django-сервисы',
-    items: [
-      { link: '/team/ratio', title: 'Тренинги' },
-      { link: '/team/analytics', title: 'Аналитика' },
-      { link: '/team/mastermind_dating', title: 'Мастермайнд' },
     ],
   },
   { link: '/admin', title: 'Админка' },

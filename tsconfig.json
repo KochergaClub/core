@@ -1,6 +1,7 @@
 {
   "include": [
-    "jsx"
+    "jsx",
+    "render"
   ],
   "compilerOptions": {
     "noImplicitAny": false,

@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import Page from '../components/Page';
-import TeamMenu from '../components/TeamMenu';
 
 import Calendar from './Calendar';
 
@@ -17,8 +16,7 @@ const startAccessor = (event: PublicEvent) => new Date(event.start);
 const endAccessor = (event: PublicEvent) => new Date(event.end);
 
 export default ({ events }: { events: PublicEvent[] }) => (
-  <Page title="Календарь событий">
-    <TeamMenu />
+  <Page title="Календарь событий" team>
     <h1>Календарь событий</h1>
     <Calendar
       events={events}
