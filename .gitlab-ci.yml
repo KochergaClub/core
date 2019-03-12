@@ -7,7 +7,7 @@ before_script:
   - npm install
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
+  key: ${CI_COMMIT_REF_SLUG}-2
   paths:
   - node_modules/
   - .venv/
