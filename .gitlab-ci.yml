@@ -1,9 +1,10 @@
-image: "python:3.7"
+image: "berekuk/kocherga-ci"
 
 before_script:
   - pip install poetry
   - poetry config settings.virtualenvs.in-project true
   - poetry install
+  - npm install
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -14,7 +15,7 @@ cache:
 build:
   stage: build
   script:
-    - echo ok
+    - make front
 
 test:
   stage: test
