@@ -25,3 +25,7 @@ release:
 	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core'
 
 test: test-types test-code
+
+front:
+	webpack --config ./webpack/front.config.js -p
+	webpack --config ./webpack/back.config.js -p
