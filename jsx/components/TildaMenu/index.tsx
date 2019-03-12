@@ -29,7 +29,7 @@ const Container = styled('div')<{ hideOnMobile: boolean, team: boolean }>`
 
 const Logo = () => (
   <a href="/">
-    <img src="https://static.tildacdn.com/272f116a-f437-4a32-b57e-679d87acf228/textlogo.png" />
+    <img src="/static/menu-logo.png" width="190" height="50" />
   </a>
 );
 
