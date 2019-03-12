@@ -1,21 +1,17 @@
 from django.shortcuts import render
 import django.middleware.csrf
-from django.conf import settings
 
-import os
 import json
 
-from react.render import render_component
+from react.render_server import render_server
 
 
 def react_render(request, template, params={}):
     params = params.copy()
     params['csrfToken'] = django.middleware.csrf.get_token(request)
 
-    react_html = render_component(
-        os.path.join(settings.BASE_DIR, 'jsx', template),
-        params
-    )
+    # react_html = render_component(template, params)
+    react_html = render_server.render(template, params)
 
     return render(request, 'react-base.html', {
         'react_html': str(react_html),

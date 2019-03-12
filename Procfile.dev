@@ -1,7 +1,8 @@
 django: ./manage.py runserver
-render_server: nodemon --watch jsx -e js,jsx,ts,tsx ./scripts/render-server.js
+webpack_back: webpack --config ./webpack/back.config.js --watch
+render_server: nodemon ./static/dist/render-server.js
+webpack_front: webpack --config ./webpack/front.config.js --watch
+tsc: tsc --watch
 ludwig: ./scripts/ludwig.py
 ludwig_lt: lt --port 5200 --subdomain kocherga-dev
-tsc: tsc --watch
-webpack: webpack --watch
 tgbot: ./scripts/tgbot.py
