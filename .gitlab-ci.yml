@@ -11,10 +11,20 @@ cache:
   - .cache/pip
 
 before_script:
+  ## Setup ssh for deploy.
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+  ## Setup npm.
   - npm config set registry https://npm.team.kocherga.club/
   - echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
-  - npm config get
-  - cat /root/.npmrc
+
+  ## Install deps.
   - npm ci
   - poetry install
 
@@ -22,8 +32,20 @@ build:
   stage: build
   script:
     - make front
+  artifacts:
+    paths:
+      - static/dist/
 
 test:
   stage: test
   script:
     - poetry run make lint
+
+deploy_js:
+  stage: deploy
+  script:
+    - scp static/dist/*.js kocherga-srv@kocherga.club:/srv/kocherga/core/static/dist/
+    - ssh kocherga-srv@kocherga.club 'cd /srv/kocherga/core && /home/kocherga-srv/.poetry/bin/poetry ./manage.py collectstatic'
+    - ssh kocherga-srv@kocherga.club 'systemctl restart kocherga-render-server'
+  only:
+    - master
