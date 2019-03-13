@@ -14,6 +14,8 @@ before_script:
   - poetry install
   - npm config set registry https://npm.team.kocherga.club/
   - echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >/root/.npmrc
+  - npm config get
+  - cat /root/.npmrc
   - npm ci
 
 build:
