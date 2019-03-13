@@ -12,6 +12,7 @@ def index(request):
     cohort_dates = [
         '2019-01-07',
         '2019-02-07',
+        '2019-03-10',
     ]
 
     BOV_stats = []
