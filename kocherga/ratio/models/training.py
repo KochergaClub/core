@@ -57,6 +57,14 @@ class Training(models.Model):
             for key in result
         ]
 
+    def copy_schedule_from(self, src_training):
+        if self.name == src_training.name:
+            raise Exception("Can't copy training's schedule to itself")
+        for activity in src_training.schedule.all():
+            activity.pk = None
+            activity.training = self
+            activity.save()
+
     @property
     def long_name(self):
         return (
