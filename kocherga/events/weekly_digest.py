@@ -145,6 +145,9 @@ def create_draft(text=''):
             'reply_to': 'info@kocherga-club.ru',
             'to_name': '*|FNAME|* *|LNAME|*',
             'folder_id': kocherga.mailchimp.folder_id_by_name('Еженедельная рассылка'),
+        },
+        'tracking': {
+            'google_analytics': f'weekly-digest-{get_week_boundaries()[0]:%Y-%m-%d}',
         }
     })
 
