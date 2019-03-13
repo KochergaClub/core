@@ -1,16 +1,20 @@
 image: "berekuk/kocherga-ci"
 
-before_script:
-  - pip install poetry
-  - poetry config settings.virtualenvs.in-project true
-  - poetry install
-  - npm install
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 cache:
-  key: ${CI_COMMIT_REF_SLUG}-2
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
   - node_modules/
   - .venv/
+  - .cache/pip
+
+before_script:
+  - poetry install
+  - npm config set registry https://npm.team.kocherga.club/
+  - echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >/root/.npmrc
+  - npm ci
 
 build:
   stage: build

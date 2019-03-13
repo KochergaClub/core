@@ -1,4 +1,6 @@
-FROM python:3.7.2-alpine3.9
+FROM python:3.7.2
 
-RUN apk add nodejs
-RUN apk add git
+RUN (curl -sL https://deb.nodesource.com/setup_10.x | bash -) && apt install -y nodejs
+
+RUN pip install poetry
+RUN poetry config settings.virtualenvs.in-project true
