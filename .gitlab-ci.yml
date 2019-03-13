@@ -44,7 +44,7 @@ deploy_js:
   stage: deploy
   script:
     - scp static/dist/*.js kocherga-srv@kocherga.club:/srv/kocherga/core/static/dist/
-    - ssh kocherga-srv@kocherga.club 'cd /srv/kocherga/core && . .env && /home/kocherga-srv/.poetry/bin/poetry run ./manage.py collectstatic'
+    - ssh kocherga-srv@kocherga.club 'cd /srv/kocherga/core && . .env && /home/kocherga-srv/.poetry/bin/poetry run ./manage.py collectstatic --no-input'
     - ssh kocherga-srv@kocherga.club 'systemctl restart kocherga-render-server'
   only:
     - master
