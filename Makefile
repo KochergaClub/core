@@ -27,5 +27,5 @@ release:
 test: test-types test-code
 
 front:
-	webpack --config ./webpack/front.config.js -p
-	webpack --config ./webpack/back.config.js -p
+	npx webpack --config ./webpack/front.config.js -p
+	npx webpack --config ./webpack/back.config.js -p
