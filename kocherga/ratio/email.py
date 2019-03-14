@@ -61,6 +61,7 @@ def create_pre_draft(training):
         'text': main_html,
         'utmify': get_utmify('pre-training', 'pre-training'),  # TODO - training id
     })
+
     html = mjml2html(mjml)
 
     logger.info('Filling campaign content')
