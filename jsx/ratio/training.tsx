@@ -5,7 +5,7 @@ import Page from '../components/Page';
 import { Button } from '@kocherga/frontkit';
 
 export default ({ training, tickets, urls, csrfToken }) => (
-  <Page title="Ratio">
+  <Page title="Ratio" team>
     <h1>{training.name}</h1>
     <p>
       Когда: <strong>{training.date}</strong>

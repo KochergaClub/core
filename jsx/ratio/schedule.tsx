@@ -152,7 +152,7 @@ function groupByDay(schedule: ActivityType[]) {
 }
 
 export default ({ name, long_name, urls, schedule }) => (
-  <Page title={name}>
+  <Page title={name} team>
     <Container>
       <PageHeader>
         <h1>
