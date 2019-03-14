@@ -38,7 +38,7 @@
     <mj-section>
       <mj-column width="75%">
         <mj-text>
-          <a href="{{ "https://kocherga-club.ru" | utmify | e }}&utm_content=footer">Клуб Кочерга</a>
+          <a href="{{ utmify("https://kocherga-club.ru") | e }}&utm_content=footer">Клуб Кочерга</a>
         </mj-text>
       </mj-column>
       <mj-column width="25%">
