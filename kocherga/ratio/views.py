@@ -8,7 +8,7 @@ from kocherga.django.react import react_render
 from .models import Training
 from . import serializers
 from .users import training2mailchimp
-from .email import create_post_draft
+from .email import create_post_draft, create_pre_draft
 
 from urllib.parse import urlencode
 
@@ -40,6 +40,7 @@ class TrainingView(RatioManagerMixin, View):
                 'tickets_admin': tickets_admin_url,
                 'actions': {
                     'to_mailchimp': reverse('ratio:training_to_mailchimp', kwargs={'name': training.name}),
+                    'pre_email': reverse('ratio:training_pre_email', kwargs={'name': training.name}),
                     'post_email': reverse('ratio:training_post_email', kwargs={'name': training.name}),
                 },
                 'schedule': reverse('ratio:schedule', kwargs={'name': training.name}),
@@ -50,6 +51,12 @@ class TrainingView(RatioManagerMixin, View):
 class TrainingToMailchimpView(RatioManagerMixin, View):
     def post(self, request, name):
         training2mailchimp(Training.objects.get(name=name))
+        return redirect('ratio:training', name=name)
+
+
+class TrainingPreEmailView(RatioManagerMixin, View):
+    def post(self, request, name):
+        create_pre_draft(Training.objects.get(name=name))
         return redirect('ratio:training', name=name)
 
 

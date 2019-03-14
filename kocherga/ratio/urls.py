@@ -10,6 +10,10 @@ urlpatterns = [
         views.TrainingToMailchimpView.as_view(), name='training_to_mailchimp'
     ),
     path(
+        'training/<str:name>/action/pre_email',
+        views.TrainingPreEmailView.as_view(), name='training_pre_email'
+    ),
+    path(
         'training/<str:name>/action/post_email',
         views.TrainingPostEmailView.as_view(), name='training_post_email'
     ),

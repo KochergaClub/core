@@ -28,6 +28,13 @@ export default ({ training, tickets, urls, csrfToken }) => (
     </div>
 
     <div>
+      <form method="post" action={urls.actions.pre_email}>
+        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+        <Button type="submit">Создать черновик предрассылки</Button>
+      </form>
+    </div>
+
+    <div>
       <form method="post" action={urls.actions.post_email}>
         <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
         <Button type="submit">Создать черновик пострассылки</Button>
