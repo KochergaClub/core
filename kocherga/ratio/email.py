@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 import markdown
 
 import kocherga.mailchimp
-from kocherga.email.tools import get_utmify
+from kocherga.email.tools import get_utmify, mjml2html
 from .users import training_category_id
 
 
@@ -53,8 +53,9 @@ def create_post_draft(training):
         'text': main_html,
         'utmify': get_utmify('post-training', 'post-training'),  # TODO - training id
     })
+    html = mjml2html(mjml)
 
     logger.info('Filling campaign content')
     kocherga.mailchimp.api_call('PUT', f'campaigns/{campaign_id}/content', {
-        'html': mjml,
+        'html': html,
     })
