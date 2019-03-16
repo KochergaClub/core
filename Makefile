@@ -1,5 +1,5 @@
 install-dev:
-	pipenv install -d
+	poetry install
 
 dev:
 	honcho start -f Procfile.dev
@@ -16,13 +16,13 @@ lint:
 
 release-quick:
 	git push
-	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core-quick'
+	cd ../deploy && poetry run ansible-playbook ./kocherga.yml --tags core-quick
 
 rq: release-quick
 
 release:
 	git push
-	cd ../deploy && pipenv run 'ansible-playbook ./kocherga.yml --tags core'
+	cd ../deploy && poetry run ansible-playbook ./kocherga.yml --tags core
 
 test: test-types test-code
 
