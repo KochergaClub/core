@@ -9,6 +9,7 @@ class Trainer(models.Model):
         related_name='ratio_trainer',
     )
     short_name = models.CharField('Короткое имя', max_length=40)
+    post_survey_collected = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Тренер'
