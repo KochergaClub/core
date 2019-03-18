@@ -34,9 +34,11 @@ def populate_main_list(users: List[User]):
             merge_fields['CARD_ID'] = user.card_id
             merge_fields['HAS_CARD'] = 'True'
 
-        operation = {
-            'method': 'PUT',
-            'path': 'lists/{}/members/{}'.format(LIST_ID, hashlib.md5(user.email.lower().encode()).hexdigest()),
+        subscriber_hash = hashlib.md5(user.email.lower().encode()).hexdigest()
+
+        add_operation = {
+            'method': 'POST',
+            'path': f'lists/{LIST_ID}/members/{subscriber_hash}',
             'body': json.dumps({
                 'email_type': 'html',
                 'email_address': user.email,
@@ -45,10 +47,21 @@ def populate_main_list(users: List[User]):
                     k['id']: True
                     for k in get_all_interests()
                 },
-                'status_if_new': 'subscribed',
             }),
         }
-        operations.append(operation)
+        update_operation = {
+            'method': 'PATCH',
+            'path': f'lists/{LIST_ID}/members/{subscriber_hash}',
+            'body': json.dumps({
+                'email_type': 'html',
+                'email_address': user.email,
+                'merge_fields': merge_fields,
+                # Note that we update merge fields (i.e. cafe-manager's CARD_ID), but not interests,
+                # because users can update those on their own.
+            }),
+        }
+        operations.append(add_operation)
+        operations.append(update_operation)
 
     result = kocherga.mailchimp.api_call('POST', 'batches', {
         'operations': operations
