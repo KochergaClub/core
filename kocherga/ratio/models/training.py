@@ -23,6 +23,8 @@ class Training(models.Model):
 
     mailchimp_interest_id = models.CharField('ID Mailchimp-группы', max_length=20, blank=True)
 
+    post_survey_collected = models.BooleanField(default=False)
+
     objects = TrainingManager()
 
     class Meta:
