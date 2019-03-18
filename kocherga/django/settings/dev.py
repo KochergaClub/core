@@ -4,7 +4,7 @@ from .dev_secrets import *
 import logging
 logging.basicConfig(level=logging.INFO)
 
-DATA_DIR = '/Users/berekuk/coding/kocherga/data-dev'
+DATA_DIR = '/data'
 DEBUG = True
 
 INSTALLED_APPS += ['debug_toolbar']

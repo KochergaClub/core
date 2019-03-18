@@ -1,6 +1,12 @@
-FROM python:3.7.2
+FROM kocherga/code/core/base
 
-RUN (curl -sL https://deb.nodesource.com/setup_10.x | bash -) && apt install -y nodejs
+COPY . /code
+WORKDIR /code
+RUN poetry install
 
-RUN pip install poetry
-RUN poetry config settings.virtualenvs.in-project true
+
+RUN npm config set registry https://npm.team.kocherga.club/
+ARG NPM_TOKEN
+RUN echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
+
+RUN npm ci

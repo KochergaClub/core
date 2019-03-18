@@ -29,3 +29,9 @@ test: test-types test-code
 front:
 	npx webpack --config ./webpack/front.config.js -p
 	npx webpack --config ./webpack/back.config.js -p
+
+base-image:
+	docker build -t kocherga/code/core/base -f Dockerfile.base .
+
+image:
+	TOKEN=$$(cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}') && docker build --build-arg NPM_TOKEN=$${TOKEN} -t kocherga/code/core .
