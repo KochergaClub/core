@@ -17,19 +17,17 @@ test:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make lint
 
-deploy_js:
+deploy_image:
   stage: deploy
-  image: ubuntu:18.04
-  before_script:
-    ## Setup ssh for deploy.
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
+  variables:
+    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
+    DOCKER_TLS_VERIFY: 1
   script:
-    - ssh kocherga-srv@kocherga.club 'echo TODO'
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
+    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
+    - echo "$DOCKER_KEY" > ~/.docker/key.pem
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker stack deploy --with-registry-auth -c docker-compose.yml -c docker-compose.prod.yml kocherga-core
   only:
-    - master
+    - dockerize
