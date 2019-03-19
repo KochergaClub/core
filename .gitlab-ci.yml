@@ -5,16 +5,14 @@ build:
   services:
     - docker:dind
   script:
-    - docker build --build-arg NPM_TOKEN=$NPM_TOKEN -t $CI_REGISTRY_IMAGE:latest .
-    - "[[ -z $CI_COMMIT_TAG ]] && exit 0"
-    - docker tag $CI_REGISTRY_IMAGE:latest $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+    - docker build --build-arg NPM_TOKEN=$NPM_TOKEN -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
 test:
   stage: test
   script:
-    - docker run $CI_REGISTRY_IMAGE:$CI_BUILD_TAG make lint
+    - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make lint
 
 deploy_js:
   stage: deploy
