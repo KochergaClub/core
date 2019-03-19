@@ -1,1 +1,2 @@
-/node_modules
+node_modules
+kocherga/django/settings/*secrets.py

@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  api:
+    command: poetry run ./manage.py runserver 0.0.0.0:80
+    volumes:
+      - .:/code
+
+  tgbot:
+    image: kocherga/code/core
+    volumes:
+      - .:/code
+
+  ludwig:
+    image: kocherga/code/core
+    volumes:
+      - .:/code
+
+  importer:
+    image: kocherga/code/core
+    volumes:
+      - .:/code
+
+  worker:
+    image: kocherga/code/core
+    volumes:
+      - .:/code
+
+  render-server:
+    command: npx nodemon ./static/dist/render-server.js
+    volumes:
+      - .:/code
+    depends_on:
+      - webpack_front
+
+  webpack_back:
+    image: kocherga/code/core
+    command: npx webpack --config ./webpack/back.config.js --watch
+    volumes:
+      - .:/code
+
+  webpack_front:
+    image: kocherga/code/core
+    command: npx webpack --config ./webpack/front.config.js --watch
+    volumes:
+      - .:/code
+
+  tsc:
+    image: kocherga/code/core
+    command: npx tsc --watch
+
+  ludwig_lt:
+    image: kocherga/code/core
+    command: npx lt --port 80 --subdomain kocherga-dev --local-host ludwig
+    volumes:
+      - .:/code
+    depends_on:
+      - ludwig

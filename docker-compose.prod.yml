@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  api:
+    command: poetry run gunicorn -w 4 -t 180 -b 0.0.0.0:80 kocherga.django.wsgi
+    restart: always
+    volumes:
+      - /config/tier.txt:/code/tier.txt
+      - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py
+
+  tgbot:
+    restart: always
+    volumes:
+      - /config/tier.txt:/code/tier.txt
+      - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py
+
+  ludwig:
+    restart: always
+    volumes:
+      - /config/tier.txt:/code/tier.txt
+      - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py
+
+  importer:
+    restart: always
+    volumes:
+      - /config/tier.txt:/code/tier.txt
+      - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py
+
+  worker:
+    restart: always
+    volumes:
+      - /config/tier.txt:/code/tier.txt
+      - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py
+
+  render-server:
+    restart: always
+    command: node ./static/dist/render-server.js
+    volumes:
+      - /config/tier.txt:/code/tier.txt
+      - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py

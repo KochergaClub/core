@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'react',
     'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',
@@ -97,6 +98,10 @@ TEMPLATES = [
         },
     },
 ]
+
+REACT = {
+    'RENDER_URL': 'http://render-server/render',  # DNS mounted with Docker
+}
 
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 
@@ -214,5 +219,5 @@ KOCHERGA_ROOMS = [
 
 KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE = '2016-03-14'
 
-KOCHERGA_LUDWIG_PORT = 5200
+KOCHERGA_LUDWIG_PORT = 80
 KOCHERGA_LUDWIG_SENTRY_DSN = None

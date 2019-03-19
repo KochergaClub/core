@@ -8,48 +8,50 @@ services:
     volumes:
       - /data/kocherga-db:/var/lib/mysql
       - ./mysql.conf.d:/etc/mysql/conf.d
+
   api:
-    image: kocherga/code/core
-    command: poetry run gunicorn -w 4 -t 180 -b 0.0.0.0:8000 kocherga.django.wsgi
+    image: registry.gitlab.com/kocherga/code/core
     ports:
-      - "8000:8000"
+      - "8000:80"
     volumes:
       - /data/kocherga:/data
     depends_on:
       - db
       - render-server
+
   render-server:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: /usr/bin/node ./static/dist/render-server.js
-    ports:
-      - "8001:8001"
+
   tgbot:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: poetry run ./scripts/tgbot.py
     volumes:
       - /data/kocherga:/data
-    ports:
-      - "8002:8002"
+    # TODO - expose RPC port
     depends_on:
       - db
+
   ludwig:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: poetry run ./scripts/ludwig.py
     volumes:
       - /data/kocherga:/data
     ports:
-      - "8003:8003"
+      - "5200:80"
     depends_on:
       - db
+
   worker:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: poetry run ./scripts/worker.py
     volumes:
       - /data/kocherga:/data
     depends_on:
       - db
+
   importer:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: poetry run ./scripts/importer.py
     volumes:
       - /data/kocherga:/data
