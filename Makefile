@@ -1,5 +1,5 @@
-dev:
-	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+dev: image
+	TOKEN=$$(cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}') docker-compose -f docker-compose.dev.yml up
 
 test-types:
 	git submodule init
@@ -19,4 +19,4 @@ front:
 
 image:
 	TOKEN=$$(cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}') \
-		&& docker build --build-arg NPM_TOKEN=$${TOKEN} -t registry.gitlab.com/kocherga/code/core .
+		&& docker build --build-arg NPM_TOKEN=$${TOKEN} -t registry.gitlab.com/kocherga/code/core:dev .

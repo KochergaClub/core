@@ -1,52 +1,93 @@
 version: '3'
 
 services:
+  db:
+    image: mariadb:10.3
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - /data/kocherga-db:/var/lib/mysql
+      - ./mysql.conf.d:/etc/mysql/conf.d
+
   api:
+    image: registry.gitlab.com/kocherga/code/core:dev
+    build:
+      context: .
+      args:
+        NPM_TOKEN: ${TOKEN}
     command: poetry run ./manage.py runserver 0.0.0.0:80
+    ports:
+      - "8000:80"
     volumes:
       - .:/code
-
-  tgbot:
-    volumes:
-      - .:/code
-
-  ludwig:
-    volumes:
-      - .:/code
-
-  importer:
-    volumes:
-      - .:/code
-
-  worker:
-    volumes:
-      - .:/code
+      - /data/kocherga:/data
+    depends_on:
+      - db
+      - render-server
 
   render-server:
+    image: registry.gitlab.com/kocherga/code/core:dev
     command: npx nodemon ./static/dist/render-server.js
-    volumes:
-      - .:/code
     depends_on:
       - webpack_front
 
+  tgbot:
+    image: registry.gitlab.com/kocherga/code/core:dev
+    command: poetry run ./scripts/tgbot.py
+    volumes:
+      - .:/code
+      - /data/kocherga:/data
+    # TODO - expose RPC port
+    depends_on:
+      - db
+
+  ludwig:
+    image: registry.gitlab.com/kocherga/code/core:dev
+    command: poetry run ./scripts/ludwig.py
+    volumes:
+      - .:/code
+      - /data/kocherga:/data
+    ports:
+      - "5200:80"
+    depends_on:
+      - db
+
+  worker:
+    image: registry.gitlab.com/kocherga/code/core:dev
+    command: poetry run ./scripts/worker.py
+    volumes:
+      - .:/code
+      - /data/kocherga:/data
+    depends_on:
+      - db
+
+  importer:
+    image: registry.gitlab.com/kocherga/code/core:dev
+    command: poetry run ./scripts/importer.py
+    volumes:
+      - .:/code
+      - /data/kocherga:/data
+    depends_on:
+      - db
+
   webpack_back:
-    image: registry.gitlab.com/kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core:dev
     command: npx webpack --config ./webpack/back.config.js --watch
     volumes:
       - .:/code
 
   webpack_front:
-    image: registry.gitlab.com/kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core:dev
     command: npx webpack --config ./webpack/front.config.js --watch
     volumes:
       - .:/code
 
   tsc:
-    image: registry.gitlab.com/kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core:dev
     command: npx tsc --watch
 
   ludwig_lt:
-    image: registry.gitlab.com/kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core:dev
     command: npx lt --port 80 --subdomain kocherga-dev --local-host ludwig
     volumes:
       - .:/code
