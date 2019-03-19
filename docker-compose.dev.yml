@@ -7,22 +7,18 @@ services:
       - .:/code
 
   tgbot:
-    image: kocherga/code/core
     volumes:
       - .:/code
 
   ludwig:
-    image: kocherga/code/core
     volumes:
       - .:/code
 
   importer:
-    image: kocherga/code/core
     volumes:
       - .:/code
 
   worker:
-    image: kocherga/code/core
     volumes:
       - .:/code
 
@@ -34,23 +30,23 @@ services:
       - webpack_front
 
   webpack_back:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: npx webpack --config ./webpack/back.config.js --watch
     volumes:
       - .:/code
 
   webpack_front:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: npx webpack --config ./webpack/front.config.js --watch
     volumes:
       - .:/code
 
   tsc:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: npx tsc --watch
 
   ludwig_lt:
-    image: kocherga/code/core
+    image: registry.gitlab.com/kocherga/code/core
     command: npx lt --port 80 --subdomain kocherga-dev --local-host ludwig
     volumes:
       - .:/code
