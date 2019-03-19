@@ -1,20 +1,17 @@
-install-dev:
-	poetry install
-
 dev:
 	docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs poetry run mypy --strict-optional --check-untyped-defs kocherga
 
 test-code:
-	pytest
+	poetry run pytest
 
 lint:
-	flake8 kocherga/ --max-line-length=120
+	poetry run flake8 kocherga/ --max-line-length=120
 
-test: test-types test-code
+test: test-types test-code lint
 
 front:
 	npx webpack --config ./webpack/front.config.js -p
