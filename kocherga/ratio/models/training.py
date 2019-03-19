@@ -74,3 +74,25 @@ class Training(models.Model):
 
     def get_absolute_url(self):
         return reverse('ratio:training', kwargs={'name': self.name})
+
+    def trainer_salary(self, trainer):
+        total = 0
+        trainer_total = 0
+        for activity in self.schedule.all():
+            if activity.activity_type != 'section':
+                continue
+            total += 1
+            if activity.trainer.id != trainer.id:
+                continue
+            trainer_total += 1
+
+        if total == 0:
+            raise Exception(f"Training {self} doesn't have any sections, can't calculate salary")
+
+        activity_share = trainer_total / total
+        income_share = 0.5
+
+        total_income = self.total_income()
+        pure_income = total_income - total_income * 0.035 - total_income * 0.06
+
+        return pure_income * activity_share * income_share
