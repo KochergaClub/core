@@ -1,15 +1,5 @@
 image: "docker:stable"
 
-before_script:
-  ## Setup ssh for deploy.
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-  - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
-
 build:
   stage: build
   services:
@@ -28,9 +18,17 @@ test:
 
 deploy_js:
   stage: deploy
+  image: ubuntu:18.04
+  before_script:
+    ## Setup ssh for deploy.
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - scp static/dist/*.js kocherga-srv@kocherga.club:/srv/kocherga/core/static/dist/
-    - ssh kocherga-srv@kocherga.club 'cd /srv/kocherga/core && . .env && /home/kocherga-srv/.poetry/bin/poetry run ./manage.py collectstatic --no-input'
-    - ssh kocherga-srv@kocherga.club 'sudo systemctl restart kocherga-render-server'
+    - ssh kocherga-srv@kocherga.club 'echo TODO'
   only:
     - master
