@@ -15,12 +15,14 @@ RUN npm config set registry https://npm.team.kocherga.club/ \
 
 RUN pip install poetry
 
-COPY poetry.lock pyproject.toml /code/
 WORKDIR /code
+COPY poetry.lock pyproject.toml /code/
 RUN poetry install
 
-COPY . /code
+COPY package.json package-lock.json /code/
 RUN npm ci
+
+COPY . /code/
 
 RUN npx webpack --config ./webpack/front.config.js -p && \
     npx webpack --config ./webpack/front.config.js -p
