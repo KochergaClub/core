@@ -3,9 +3,9 @@ import pandas as pd
 
 from django.db import models
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 import kocherga.google
-
 import kocherga.importer.base
 
 
@@ -27,6 +27,33 @@ class CashierItem(models.Model):
     notes = models.TextField()
     discrepancy = models.IntegerField(null=True)  # could be restored from other data
     spendings = models.IntegerField(null=True)
+
+
+class Cheque(models.Model):
+    whom = models.ForeignKey(
+        get_user_model(),
+        verbose_name='Кому',
+        on_delete=models.CASCADE,
+        related_name='cheques',
+    )
+    amount = models.IntegerField('Сумма')
+    created_dt = models.DateTimeField('Дата создания', auto_now_add=True)
+    paid_dt = models.DateTimeField('Дата получения', null=True, blank=True)
+    comment = models.TextField('Комментарий', blank=True)
+
+    class Meta:
+        verbose_name = 'Выплата'
+        verbose_name_plural = 'Выплаты'
+
+    def __str__(self):
+        result = f'{self.amount} -> {self.whom}'
+        if self.comment:
+            result += ': ' + self.comment
+        return result
+
+    def is_paid(self):
+        return self.paid_dt is not None
+    is_paid.boolean = True
 
 
 def load_df_from_google():
