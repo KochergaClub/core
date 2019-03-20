@@ -39,13 +39,25 @@ export const publicMenuItems: MenuItem[] = [
 
 export const teamMenuItems: MenuItem[] = [
   {
-    title: 'Сервисы',
+    title: 'Админам',
     items: [
-      { link: '/team/ratio', title: 'Тренинги' },
+      { link: '/team/cashier', title: 'Касса' },
+      { link: '/team/watchmen', title: 'Смены' },
+    ],
+  },
+  {
+    title: 'Менеджерам',
+    items: [
       { link: '/team/analytics', title: 'Аналитика' },
       { link: '/team/mastermind_dating', title: 'Мастермайнд' },
+      { link: '/admin', title: 'Админка' },
+    ],
+  },
+  {
+    title: 'События',
+    items: [
+      { link: '/team/ratio', title: 'Тренинги' },
       { link: '/team/events', title: 'События' },
-      { link: '/team/cashier', title: 'Касса' },
     ],
   },
   {
@@ -58,5 +70,4 @@ export const teamMenuItems: MenuItem[] = [
       { link: 'https://metabase.team.kocherga.club', title: 'Metabase' },
     ],
   },
-  { link: '/admin', title: 'Админка' },
 ];
