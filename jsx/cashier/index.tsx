@@ -28,7 +28,7 @@ export default ({
             <ActionForm
               action={`/team/cashier/cheque/${cheque.id}/action/redeem`}
               csrfToken={csrfToken}
-              title="Выплатить"
+              title="Выплачено"
             />
           )}
         </li>
