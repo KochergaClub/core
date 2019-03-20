@@ -10,4 +10,4 @@ class CashierItemAdmin(admin.ModelAdmin):
 
 @admin.register(Cheque)
 class ChequeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'whom', 'amount', 'is_paid')
+    list_display = ('id', 'whom', 'amount', 'is_redeemed')

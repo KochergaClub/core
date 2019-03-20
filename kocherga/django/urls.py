@@ -31,6 +31,7 @@ if not settings.IGNORE_WEB:
         path('team/analytics/', include('kocherga.analytics.urls')),
         path('team/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
         path('team/events/', include('kocherga.events.urls')),
+        path('team/cashier/', include('kocherga.money.cashier.urls')),
         path('my/', include('kocherga.my.urls')),
         path('', include('kocherga.auth.urls')),
         path('admin/', admin.site.urls),

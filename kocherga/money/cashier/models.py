@@ -1,9 +1,10 @@
-from datetime import datetime
-import pandas as pd
-
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+from datetime import datetime
+import pandas as pd
 
 import kocherga.google
 import kocherga.importer.base
@@ -38,7 +39,7 @@ class Cheque(models.Model):
     )
     amount = models.IntegerField('Сумма')
     created_dt = models.DateTimeField('Дата создания', auto_now_add=True)
-    paid_dt = models.DateTimeField('Дата получения', null=True, blank=True)
+    redeem_dt = models.DateTimeField('Дата получения', null=True, blank=True)
     comment = models.TextField('Комментарий', blank=True)
 
     class Meta:
@@ -51,9 +52,15 @@ class Cheque(models.Model):
             result += ': ' + self.comment
         return result
 
-    def is_paid(self):
-        return self.paid_dt is not None
-    is_paid.boolean = True
+    def is_redeemed(self):
+        return self.redeem_dt is not None
+    is_redeemed.boolean = True
+
+    def redeem(self):
+        if self.is_redeemed():
+            raise Exception("Cheque is already redeemed")
+        self.redeem_dt = timezone.now()
+        self.save()
 
 
 def load_df_from_google():
