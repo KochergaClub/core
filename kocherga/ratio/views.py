@@ -29,6 +29,9 @@ class MainView(RatioManagerMixin, View):
 class TrainingView(RatioManagerMixin, View):
     def get(self, request, name):
         training = Training.objects.get(name=name)
+
+        training_admin_url = reverse('admin:ratio_training_change', args=(training.name,))
+
         tickets_admin_url = reverse('admin:ratio_ticket_changelist') \
             + '?' \
             + urlencode({'training__name__exact': training.name})
@@ -37,6 +40,7 @@ class TrainingView(RatioManagerMixin, View):
             'training': serializers.TrainingSerializer(training).data,
             'tickets': serializers.TicketSerializer(training.tickets, many=True).data,
             'urls': {
+                'training_admin': training_admin_url,
                 'tickets_admin': tickets_admin_url,
                 'actions': {
                     action: reverse('ratio:training_action', kwargs={'name': training.name, 'action': action})
