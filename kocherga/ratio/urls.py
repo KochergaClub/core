@@ -6,16 +6,9 @@ urlpatterns = [
     path('', views.MainView.as_view(), name='index'),
     path('training/<str:name>', views.TrainingView.as_view(), name='training'),
     path(
-        'training/<str:name>/action/to_mailchimp',
-        views.TrainingToMailchimpView.as_view(), name='training_to_mailchimp'
-    ),
-    path(
-        'training/<str:name>/action/pre_email',
-        views.TrainingPreEmailView.as_view(), name='training_pre_email'
-    ),
-    path(
-        'training/<str:name>/action/post_email',
-        views.TrainingPostEmailView.as_view(), name='training_post_email'
+        'training/<str:name>/action/<str:action>',
+        views.TrainingActionView.as_view(),
+        name='training_action'
     ),
     path('training/<str:name>/schedule', views.ScheduleView.as_view(), name='schedule'),
 ]

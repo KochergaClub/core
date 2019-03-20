@@ -2,6 +2,7 @@ import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
 from kocherga.ratio import models
+from kocherga.money.cashier.models import Cheque
 
 
 def test_tickets_count_zero(training):
@@ -21,19 +22,26 @@ def test_total_income(training, ticket):
 
 
 def test_trainer_income(training_with_schedule, trainer):
+    t = training_with_schedule
+
     models.Ticket.objects.create(
-        training=training_with_schedule,
+        training=t,
         email='somebody@example.com',
         payment_amount=15000,
         paid=True,
     )
     models.Ticket.objects.create(
-        training=training_with_schedule,
+        training=t,
         email='somebody2@example.com',
         payment_amount=20000,
         paid=True,
     )
-    assert training_with_schedule.trainer_salary(trainer) == 15837.50
+    assert t.trainer_salary(trainer) == 15837.50
+
+    assert t.salaries_paid is False
+    t.pay_salaries()
+    assert t.salaries_paid is True
+    assert len(Cheque.objects.all()) == 1
 
 
 def test_copy_schedule_from(training, training_with_schedule):

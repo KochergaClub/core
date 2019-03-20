@@ -6,6 +6,8 @@ from collections import OrderedDict
 
 from kocherga.dateutils import inflected_month
 
+from kocherga.money.cashier.models import Cheque
+
 
 class TrainingManager(models.Manager):
     def next_training(self):
@@ -24,6 +26,7 @@ class Training(models.Model):
     mailchimp_interest_id = models.CharField('ID Mailchimp-группы', max_length=20, blank=True)
 
     post_survey_collected = models.BooleanField(default=False)
+    salaries_paid = models.BooleanField(default=False)
 
     objects = TrainingManager()
 
@@ -37,6 +40,9 @@ class Training(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('ratio:training', kwargs={'name': self.name})
 
     def tickets_count(self):
         return sum(1 for ticket in self.tickets.all() if ticket.status == 'normal')
@@ -74,8 +80,13 @@ class Training(models.Model):
             + f'{self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
         )
 
-    def get_absolute_url(self):
-        return reverse('ratio:training', kwargs={'name': self.name})
+    def all_trainers(self):
+        trainers = {}
+        for activity in self.schedule.all():
+            if activity.trainer:
+                trainers[activity.trainer.id] = activity.trainer
+
+        return list(trainers.values())
 
     def trainer_salary(self, trainer):
         total = 0
@@ -98,3 +109,14 @@ class Training(models.Model):
         pure_income = total_income - total_income * 0.035 - total_income * 0.06
 
         return pure_income * activity_share * income_share
+
+    def pay_salaries(self):
+        for trainer in self.all_trainers():
+            salary = self.trainer_salary(trainer)
+            Cheque.objects.create(
+                whom=trainer.user,
+                amount=salary,
+                comment=f'Зарплата за тренинг {self.name}',
+            )
+        self.salaries_paid = True
+        self.save()

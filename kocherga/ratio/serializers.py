@@ -6,7 +6,7 @@ from . import models
 class TrainingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Training
-        fields = ('name', 'url', 'date')
+        fields = ('name', 'url', 'date', 'salaries_paid')
     url = serializers.URLField(source='get_absolute_url')
 
 

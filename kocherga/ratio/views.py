@@ -39,9 +39,8 @@ class TrainingView(RatioManagerMixin, View):
             'urls': {
                 'tickets_admin': tickets_admin_url,
                 'actions': {
-                    'to_mailchimp': reverse('ratio:training_to_mailchimp', kwargs={'name': training.name}),
-                    'pre_email': reverse('ratio:training_pre_email', kwargs={'name': training.name}),
-                    'post_email': reverse('ratio:training_post_email', kwargs={'name': training.name}),
+                    action: reverse('ratio:training_action', kwargs={'name': training.name, 'action': action})
+                    for action in ('to_mailchimp', 'pre_email', 'post_email', 'pay_salaries')
                 },
                 'schedule': reverse('ratio:schedule', kwargs={'name': training.name}),
             },
@@ -63,6 +62,24 @@ class TrainingPreEmailView(RatioManagerMixin, View):
 class TrainingPostEmailView(RatioManagerMixin, View):
     def post(self, request, name):
         create_post_draft(Training.objects.get(name=name))
+        return redirect('ratio:training', name=name)
+
+
+class TrainingActionView(RatioManagerMixin, View):
+    def post(self, request, name, action):
+        training = Training.objects.get(name=name)
+
+        if action == 'to_mailchimp':
+            training2mailchimp(training)
+        elif action == 'pre_email':
+            create_pre_draft(training)
+        elif action == 'post_email':
+            create_post_draft(training)
+        elif action == 'pay_salaries':
+            training.pay_salaries()
+        else:
+            raise Exception(f"Unknown action {action}")
+
         return redirect('ratio:training', name=name)
 
 
