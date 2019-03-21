@@ -45,6 +45,8 @@ class Member(models.Model):
         ],
     )
 
+    color = models.CharField(max_length=7)
+
     cm_login = models.CharField('Логин в CM', max_length=255, blank=True)
     cm_customer = models.ForeignKey(
         kocherga.cm.models.Customer,

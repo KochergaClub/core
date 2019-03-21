@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
 
+from django.forms import ModelForm
+from django.forms.widgets import TextInput
+
 from .models import Member, AltEmail
 
 
@@ -8,8 +11,19 @@ class AltEmailInline(admin.TabularInline):
     model = AltEmail
 
 
+class MemberAdminForm(ModelForm):
+    class Meta:
+        model = Member
+        fields = '__all__'
+        widgets = {
+            'color': TextInput(attrs={'type': 'color'}),
+        }
+
+
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
+    form = MemberAdminForm
+
     list_display = ('__str__', 'role', 'is_current')
     list_filter = ('is_current',)
     ordering = ('-is_current', 'role')

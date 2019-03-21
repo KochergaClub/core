@@ -46,17 +46,36 @@ const Item = styled.div`
   border-bottom: 1px solid #ddd;
 `;
 
+const NightItemContainer = styled(Item)`
+`;
+
+const NightItem = () => (
+  <NightItemContainer>Ночь</NightItemContainer>
+);
+
 const Cell = ({ daySchedule }: { daySchedule: DaySchedule }) => (
   <div>
     {
       SHIFTS.map(
         shift => {
           const item = daySchedule[shift];
+          if (item.watchman === 'Ночь') {
+            return <NightItem />;
+          }
           return <Item>{item.watchman}</Item>
         }
       )
     }
   </div>
+);
+
+const CellHeaderContainer = styled.div`
+`;
+
+const CellHeader = ({ date } : { date: moment.Moment }) => (
+  <CellHeaderContainer>
+    {date.format('D MMMM')}
+  </CellHeaderContainer>
 );
 
 export default ({ schedule: items }: { schedule: ScheduleItem[] }) => {
@@ -68,7 +87,7 @@ export default ({ schedule: items }: { schedule: ScheduleItem[] }) => {
       <div style={{height: 350}}>
         <Calendar
           date={moment().subtract(14, 'day')}
-          renderHeader={d => d.format('D MMMM')}
+          renderHeader={d => <CellHeader date={d} />}
           renderCell={d => <Cell daySchedule={schedule.itemsByDate(d)} />}
           weeks={4}
         />
