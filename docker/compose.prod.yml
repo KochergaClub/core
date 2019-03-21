@@ -21,7 +21,7 @@ services:
     << : *common
     command: poetry run gunicorn -w 4 -t 180 -b 0.0.0.0:80 kocherga.django.wsgi
     ports:
-      - "5300:80"
+      - "127.0.0.1:5300:80"
     depends_on:
       - render-server
 
@@ -37,7 +37,7 @@ services:
     << : *common
     command: poetry run ./scripts/ludwig.py
     ports:
-      - "5200:80"
+      - "127.0.0.1:5200:80"
 
   importer:
     << : *common
