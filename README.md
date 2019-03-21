@@ -15,10 +15,8 @@
 ## Как начать быстрее
 Если нужно просто дописать модель или две и устраивает 
 
-1. ~
-2. `cp kocherga/django/settings/dbonly.py kocherga/django/settings/new_config.py`
-3. `echo new_config > tier.txt`
-4. `./manage.py migrate`
+1. `cp kocherga/django/settings/dbonly.py kocherga/django/settings/new_config.py`
+2. `DOCKER_SETTINGS_MODULE=kocherga.django.settings.new_config ./manage.py migrate`
 
 ## Выкладка изменений
 

@@ -115,11 +115,10 @@ LOGOUT_REDIRECT_URL = '/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kocherga_django',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': 'db',
-        'PORT': '',
     }
 }
 
@@ -187,7 +186,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 MEDIA_ROOT = '/data/kocherga/upload'
 MEDIA_URL = '/media/'
 
-###### Kocherga settings ######
+# ------------- Kocherga settings --------------
 
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
 

@@ -8,6 +8,9 @@ x-common:
     - /data/kocherga:/data
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+    DB_NAME: 'kocherga'
+    DB_USER: 'root'
+    DB_PASSWORD: ''
 
 services:
   db:
