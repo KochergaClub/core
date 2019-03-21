@@ -9,6 +9,7 @@ x-common:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.prod'
     DB_NAME: 'kocherga' # TODO - environment-based databases
     DB_USER: 'kocherga'
+    DB_PASSWORD: "${DB_PASSWORD}"
     # DB_PASSWORD is passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
   volumes:
     - /data/kocherga:/data
