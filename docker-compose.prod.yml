@@ -7,7 +7,7 @@ services:
     ports:
       - "5300:80"
     extra_hosts:
-      - "db:172.20.0.1"
+      - "db:${HOST_IP}"
     volumes:
       - /data/kocherga:/data
       - /config/tier.txt:/code/tier.txt
@@ -23,7 +23,7 @@ services:
     image: registry.gitlab.com/kocherga/code/core:${TAG}
     command: poetry run ./scripts/tgbot.py
     extra_hosts:
-      - "db:172.20.0.1"
+      - "db:${HOST_IP}"
     volumes:
       - /data/kocherga:/data
       - /config/tier.txt:/code/tier.txt
@@ -35,8 +35,9 @@ services:
     ports:
       - "5200:80"
     extra_hosts:
-      - "db:172.20.0.1"
+      - "db:${HOST_IP}"
     volumes:
+      - /data/kocherga:/data
       - /config/tier.txt:/code/tier.txt
       - /config/dev_secrets.py:/code/kocherga/django/settings/dev_secrets.py
 
@@ -44,7 +45,7 @@ services:
     image: registry.gitlab.com/kocherga/code/core:${TAG}
     command: poetry run ./scripts/importer.py
     extra_hosts:
-      - "db:172.20.0.1"
+      - "db:${HOST_IP}"
     volumes:
       - /data/kocherga:/data
       - /config/tier.txt:/code/tier.txt
@@ -54,7 +55,7 @@ services:
     image: registry.gitlab.com/kocherga/code/core:${TAG}
     command: poetry run ./scripts/worker.py
     extra_hosts:
-      - "db:172.20.0.1"
+      - "db:${HOST_IP}"
     volumes:
       - /data/kocherga:/data
       - /config/tier.txt:/code/tier.txt
