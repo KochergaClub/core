@@ -1,5 +1,5 @@
-from .prod_secrets import *  # sets DB_PASSWORD, so this goes first
 from .base import *
+from .prod_secrets import *
 
 import os
 
