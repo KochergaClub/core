@@ -40,6 +40,6 @@ def now(request):
 
     stats_cached = result
     stats_cached_ts = now_ts
-    logger.info("updated now stats")
+    logger.debug("updated now stats")
 
     return Response(result)
