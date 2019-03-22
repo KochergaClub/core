@@ -26,8 +26,6 @@ deploy_image:
     HOST_IP: 172.18.0.1
   script:
     # prepare docker
-    - apk add --no-cache py-pip
-    - pip install docker-compose
     - mkdir -p ~/.docker
     - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
     - echo "$DOCKER_CERT" > ~/.docker/cert.pem
