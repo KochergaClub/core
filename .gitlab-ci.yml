@@ -25,13 +25,18 @@ deploy_image:
     TAG: $CI_COMMIT_REF_NAME
     HOST_IP: 172.18.0.1
   script:
+    # prepare docker
+    - apk add --no-cache py-pip
+    - pip install docker-compose
     - mkdir -p ~/.docker
     - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
     - echo "$DOCKER_CERT" > ~/.docker/cert.pem
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    # migrate
     - docker-compose -c docker/compose.prod.yml run api poetry run ./manage.py migrate
     - docker-compose -c docker/compose.prod.yml run api poetry run ./manage.py collectstatic --no-input
+    # deploy
     - docker stack deploy --with-registry-auth -c docker/compose.prod.yml kocherga-core
   only:
     - master
