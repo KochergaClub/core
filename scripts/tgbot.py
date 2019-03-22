@@ -6,9 +6,11 @@ sys.path.append(
     )
 )
 
+
 def main():
     from kocherga.mastermind_dating.run_bot import init
     init()
+
 
 if __name__ == "__main__":
     import os, django

@@ -31,9 +31,8 @@ deploy_image:
     - echo "$DOCKER_CERT" > ~/.docker/cert.pem
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    # migrate
-    - docker-compose -f docker/compose.prod.yml run api poetry run ./manage.py migrate
-    - docker-compose -f docker/compose.prod.yml run api poetry run ./manage.py collectstatic --no-input
+    # migrate and collect static
+    - docker-compose -f docker/compose.prod.yml run api ./scripts/upgrade.sh
     # deploy
     - docker stack deploy --with-registry-auth -c docker/compose.prod.yml kocherga-core
   only:

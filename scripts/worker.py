@@ -10,8 +10,6 @@ import os, django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
 django.setup()
 
-from kocherga.dateutils import TZ
-
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 import kocherga.events.vk
@@ -20,12 +18,14 @@ import kocherga.vk.tools
 from django.db import transaction
 import django.utils.timezone
 
+
 def job_wrapper(func):
     @transaction.atomic
     def wrap():
         func()
 
     return wrap
+
 
 def main():
     scheduler = BlockingScheduler(timezone=django.utils.timezone.get_current_timezone())
@@ -54,6 +54,7 @@ def main():
     )
 
     scheduler.start()
+
 
 if __name__ == '__main__':
     main()

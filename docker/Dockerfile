@@ -17,13 +17,6 @@ RUN (curl -sL https://deb.nodesource.com/setup_10.x | bash -) && apt install -y 
 #     libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
 #     ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 
-# mysql deps for mysqldump backups
-RUN apt install -y software-properties-common \
-    && apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8 \
-    && add-apt-repository 'deb http://mirror.timeweb.ru/mariadb/repo/10.3/ubuntu bionic main' \
-    && apt-get update \
-    && apt install -y mariadb-client-10.3
-
 ARG NPM_TOKEN
 RUN npm config set registry https://npm.team.kocherga.club/ \
     && echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
