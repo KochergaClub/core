@@ -25,4 +25,4 @@ RUN npm ci
 COPY . /code/
 
 RUN npx webpack --config ./webpack/front.config.js -p && \
-    npx webpack --config ./webpack/front.config.js -p
+    npx webpack --config ./webpack/back.config.js -p
