@@ -32,4 +32,4 @@ deploy_image:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker stack deploy --with-registry-auth -c docker/compose.prod.yml kocherga-core
   only:
-    - dockerize
+    - master
