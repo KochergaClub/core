@@ -11,7 +11,7 @@ from multiprocessing.managers import BaseManager
 from typing import Awaitable, Callable
 
 
-from kocherga.django import settings
+from django.conf import settings
 from .interactions.interactions import register_handlers, tinder_activate
 from .solver import broadcast_solution
 
