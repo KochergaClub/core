@@ -24,7 +24,7 @@ class MemberAdminForm(ModelForm):
 class MemberAdmin(admin.ModelAdmin):
     form = MemberAdminForm
 
-    list_display = ('__str__', 'role', 'is_current')
+    list_display = ('__str__', 'short_name', 'role', 'is_current')
     list_filter = ('is_current',)
     ordering = ('-is_current', 'role')
     autocomplete_fields = ('cm_customer',)

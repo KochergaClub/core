@@ -112,6 +112,8 @@ class ScheduleItem(models.Model):
     watchman = models.CharField(max_length=100, db_index=True)
 
     def color(self):
+        if not self.watchman:
+            return '#ffffff'
         try:
             return kocherga.staff.models.Member.objects.get(short_name=self.watchman)
         except kocherga.staff.models.Member.DoesNotExist:
