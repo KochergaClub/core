@@ -1,50 +1,35 @@
-image: "berekuk/kocherga-ci"
-
-variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-  - .venv/
-  - .cache/pip
-
-before_script:
-  ## Setup ssh for deploy.
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-  - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-  - chmod 644 ~/.ssh/known_hosts
-
-  ## Setup npm.
-  - npm config set registry https://npm.team.kocherga.club/
-  - echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
-
-  ## Install deps.
-  - npm ci
-  - poetry install
+image: "docker:stable"
 
 build:
   stage: build
+  services:
+    - docker:dind
   script:
-    - make front
-  artifacts:
-    paths:
-      - static/dist/
+    - docker build -f docker/Dockerfile --build-arg NPM_TOKEN=$NPM_TOKEN -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
 test:
   stage: test
+  services:
+    - docker:dind
   script:
-    - poetry run make lint
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make lint
 
-deploy_js:
+deploy_image:
   stage: deploy
+  variables:
+    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
+    DOCKER_TLS_VERIFY: 1
+    TAG: $CI_COMMIT_REF_NAME
+    HOST_IP: 172.20.0.1
   script:
-    - scp static/dist/*.js kocherga-srv@kocherga.club:/srv/kocherga/core/static/dist/
-    - ssh kocherga-srv@kocherga.club 'cd /srv/kocherga/core && . .env && /home/kocherga-srv/.poetry/bin/poetry run ./manage.py collectstatic --no-input'
-    - ssh kocherga-srv@kocherga.club 'sudo systemctl restart kocherga-render-server'
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
+    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
+    - echo "$DOCKER_KEY" > ~/.docker/key.pem
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker stack deploy --with-registry-auth -c docker/compose.prod.yml kocherga-core
   only:
-    - master
+    - dockerize

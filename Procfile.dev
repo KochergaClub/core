@@ -1,8 +1,1 @@
-django: ./manage.py runserver
-webpack_back: webpack --config ./webpack/back.config.js --watch
 render_server: nodemon ./static/dist/render-server.js
-webpack_front: webpack --config ./webpack/front.config.js --watch
-tsc: tsc --watch
-ludwig: ./scripts/ludwig.py
-ludwig_lt: lt --port 5200 --subdomain kocherga-dev
-tgbot: ./scripts/tgbot.py

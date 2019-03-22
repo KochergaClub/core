@@ -1,0 +1,48 @@
+version: '3.4'
+
+x-common:
+  &common
+  image: registry.gitlab.com/kocherga/code/core:${TAG}
+  extra_hosts:
+    - "db:${HOST_IP}"
+  environment:
+    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.prod'
+    DB_NAME: 'kocherga_django' # TODO - environment-based databases
+    DB_USER: 'kocherga'
+    DB_PASSWORD: "${DB_PASSWORD}"
+    # DB_PASSWORD is passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
+  volumes:
+    - /data/kocherga:/data
+    - /config/secrets.py:/code/kocherga/django/settings/prod_secrets.py
+
+
+services:
+  api:
+    << : *common
+    command: poetry run gunicorn -w 4 -t 180 -b 0.0.0.0:80 kocherga.django.wsgi
+    ports:
+      - "127.0.0.1:5300:80"
+    depends_on:
+      - render-server
+
+  render-server:
+    << : *common
+    command: /usr/bin/node ./static/dist/render-server.js
+
+  tgbot:
+    << : *common
+    command: poetry run ./scripts/tgbot.py
+
+  ludwig:
+    << : *common
+    command: poetry run ./scripts/ludwig.py
+    ports:
+      - "127.0.0.1:5200:80"
+
+  importer:
+    << : *common
+    command: poetry run ./scripts/importer.py
+
+  worker:
+    << : *common
+    command: poetry run ./scripts/worker.py

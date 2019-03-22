@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'react',
     'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',
@@ -98,6 +99,10 @@ TEMPLATES = [
     },
 ]
 
+REACT = {
+    'RENDER_URL': 'http://render-server/render',  # DNS mounted with Docker
+}
+
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 
 LOGIN_URL = '/login'
@@ -110,11 +115,10 @@ LOGOUT_REDIRECT_URL = '/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kocherga_django',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': 'db',
     }
 }
 
@@ -179,10 +183,10 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
-MEDIA_ROOT = '/data/kocherga/upload'
+MEDIA_ROOT = '/data/upload'
 MEDIA_URL = '/media/'
 
-###### Kocherga settings ######
+# ------------- Kocherga settings --------------
 
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
 
@@ -214,5 +218,5 @@ KOCHERGA_ROOMS = [
 
 KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE = '2016-03-14'
 
-KOCHERGA_LUDWIG_PORT = 5200
+KOCHERGA_LUDWIG_PORT = 80
 KOCHERGA_LUDWIG_SENTRY_DSN = None

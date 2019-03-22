@@ -1,30 +1,32 @@
-install-dev:
-	poetry install
+export TOKEN=$(shell cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}')
 
-dev:
-	honcho start -f Procfile.dev
+image:
+		docker build -f docker/Dockerfile --build-arg NPM_TOKEN=$$TOKEN -t registry.gitlab.com/kocherga/code/core:dev .
+
+dev: image
+	docker-compose -f docker/compose.dev.yml up
+
+dev-full: image
+	docker-compose -f docker/compose.dev.yml -f docker/compose.dev-extra.yml up
+
+dbshell:
+	docker-compose -f docker/compose.dev.yml exec db mysql kocherga
+
+init-dev:
+	docker-compose -f docker/compose.dev.yml exec db mysql -uroot -e 'CREATE DATABASE kocherga'
+	docker-compose -f docker/compose.dev.yml run api poetry run ./manage.py migrate
 
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs poetry run mypy --strict-optional --check-untyped-defs kocherga
 
 test-code:
-	pytest
+	docker-compose -f docker/compose.dev.yml run api poetry run pytest
 
 lint:
-	flake8 kocherga/ --max-line-length=120
+	poetry run flake8 kocherga/ --max-line-length=120
 
-release-quick:
-	git push
-	cd ../deploy && poetry run ansible-playbook ./kocherga.yml --tags core-quick
-
-rq: release-quick
-
-release:
-	git push
-	cd ../deploy && poetry run ansible-playbook ./kocherga.yml --tags core
-
-test: test-types test-code
+test: test-types test-code lint
 
 front:
 	npx webpack --config ./webpack/front.config.js -p

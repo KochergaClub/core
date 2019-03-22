@@ -7,20 +7,16 @@
 ## Как начать
 
 1. Скачать код этого репозитория.
-2. Получить у кого-нибудь архив с тестовым конфигом django.
-3. Открыть config.json в папке с конфигами, поправить в нём переменные `image_storage_dir` и `kocherga_db_file`.
-4. Установить poetry и поставить зависимости c помощью `make install-dev`.
-5. Активировать среду разработки с помощью `poetry shell`.
-6. Выбрать настройки (боевая/тестовая база и т.д.) можно через переменную среды `TIER` (логика выбора django-конфига находится в `kocherga/django/settings/__init__.py`).
-7. Запустить pytest, убедиться, что тесты проходятся.
+2. Получить у кого-нибудь архив с тестовым конфигом секретов, положить в `kocherga.django.settings.dev_secrets.py`.
+4. Установить docker и docker-compose.
+5. Активировать среду разработки с помощью `make dev`.
+6. Запустить `make test`, убедиться, что тесты проходятся.
 
 ## Как начать быстрее
 Если нужно просто дописать модель или две и устраивает 
 
-1. ~
-2. `cp kocherga/django/settings/dbonly.py kocherga/django/settings/new_config.py`
-3. `echo new_config > tier.txt`
-4. `./manage.py migrate`
+1. `cp kocherga/django/settings/dbonly.py kocherga/django/settings/new_config.py`
+2. `DOCKER_SETTINGS_MODULE=kocherga.django.settings.new_config ./manage.py migrate`
 
 ## Выкладка изменений
 

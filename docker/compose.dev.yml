@@ -1,0 +1,53 @@
+version: '3.4'
+
+x-common:
+  &common
+  image: registry.gitlab.com/kocherga/code/core:dev
+  volumes:
+    - ..:/code
+    - /data/kocherga:/data
+  environment:
+    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+    DB_NAME: 'kocherga'
+    DB_USER: 'root'
+    DB_PASSWORD: ''
+
+services:
+  db:
+    image: mariadb:10.3
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - /data/kocherga-db:/var/lib/mysql
+      - ../mysql.conf.d:/etc/mysql/conf.d
+
+  api:
+    << : *common
+    build:
+      context: ..
+      args:
+        NPM_TOKEN: ${TOKEN}
+    command: poetry run ./manage.py runserver 0.0.0.0:80
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+      - render-server
+
+  render-server:
+    << : *common
+    command: npx nodemon ./static/dist/render-server.js
+    depends_on:
+      - webpack_front
+
+  webpack_back:
+    << : *common
+    command: npx webpack --config ./webpack/back.config.js --watch
+
+  webpack_front:
+    << : *common
+    command: npx webpack --config ./webpack/front.config.js --watch
+
+  tsc:
+    << : *common
+    command: npx tsc --watch
