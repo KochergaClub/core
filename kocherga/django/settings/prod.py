@@ -55,8 +55,6 @@ logging.config.dictConfig({
 })
 
 # Kocherga settings
-KOCHERGA_TEAM_SPREADSHEET_KEY = '1mTt7kI9A3CNzhDSKBcyY-PNGd5E2ooBRaGcqXN-t_7g'
-
 KOCHERGA_WATCHMEN_SPREADSHEET_KEY = '1hOdxVC3d7O9gziOLNLz2OPV_lkw0hf0_6jA5L7FA844'
 
 KOCHERGA_GOOGLE_CALENDAR_ID = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
@@ -123,8 +121,6 @@ KOCHERGA_BACKUPS_S3_BUCKET = 'kocherga-backups'
 
 # TODO - move to sentry_sdk?
 KOCHERGA_LUDWIG_SENTRY_DSN = 'https://d6daa44a06a846a98743000040168090:7b1fad4c93454acd90fe9f973934ba90@sentry.io/1161227'
-
-KOCHERGA_RATIO_USERS_SPREADSHEET_ID = '1mj-YsVklLtlFfy_04lZ5a0NX85iZ3O_IxsUehBeJiFg'
 
 KOCHERGA_API_ROOT = 'https://api.kocherga.club'
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'

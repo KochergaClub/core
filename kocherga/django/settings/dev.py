@@ -12,8 +12,6 @@ MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 INTERNAL_IPS = ['127.0.0.1']
 
 # Kocherga settings
-KOCHERGA_TEAM_SPREADSHEET_KEY = '1EqIOneeV4-6qVfVEGDPYS4EAO195PwDbuS0MBvBJkB8'
-
 KOCHERGA_WATCHMEN_SPREADSHEET_KEY = '1Ese_XAW2FgKG75kaUNNArAuqI6Q4xSbQmhoNfQwAqXY'
 
 KOCHERGA_GOOGLE_CALENDAR_ID = "22m4r7l6gl1jn9vqokdeq9b7o4@group.calendar.google.com"
