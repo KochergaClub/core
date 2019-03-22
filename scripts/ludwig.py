@@ -24,9 +24,11 @@ import kocherga.ludwig.daily_tasks
 
 from kocherga.ludwig.bot import bot
 
+from django.conf import settings
+
 
 def main():
-    bot.run(host='0.0.0.0')
+    bot.run(host='0.0.0.0', port=settings.KOCHERGA_LUDWIG_PORT)
 
 
 if __name__ == "__main__":

@@ -1451,7 +1451,7 @@ description = "Slack bot framework"
 name = "slappy"
 optional = false
 python-versions = ">=3.6"
-version = "0.3.5"
+version = "0.4.0"
 
 [package.dependencies]
 apscheduler = "*"
@@ -1647,7 +1647,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "6d8dda3fcff8945de0e1bc3b8f33df1a1a3da14c9e9b2302f80069d8c4add2d2"
+content-hash = "990c367397ba6e36d3525a2160723c2325d5e1370034f5220913cf8c04f431b9"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -1785,7 +1785,7 @@ sentry-sdk = ["131e3b9ac11dffd86fe4f1f5d388d3dab372fc9e30d6611d1fc87096a1d67359"
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 slackclient = ["4d5f2d5b05a8fa717b745efa934d0a4240dfc8442f169fb2a8af4e5adb8297ad", "d06b2105a1044651a7dcefe77c24cade6ae7c98ff53422e970634e62862e7bf3"]
 slackeventsapi = ["d415308981ff26feb9604e3f26f481447604dacec2049a953c261b61a0eb654b"]
-slappy = ["bfaf79d19fa1c18c5aa0cbcb34f2b7dec3301b7ac580784da4ebfca6802d2622", "c4d298f37ae4c22d19a81c0357e01d63c9060c961bc5cc8ecf25ed2d1ab83e05"]
+slappy = ["7998c10347c5701dd64f84000c48b3af2e99e9f7ab285a978b7f69b4099791e5", "d02c5fa39a22eb9ca3d6f0a25dc4eb8d5a9bdf88c037cba2857b15655dd494cb"]
 sqlparse = ["ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec", "d9cf190f51cbb26da0412247dfe4fb5f4098edb73db84e02f9fc21fdca31fed4"]
 telethon-sync = ["45a034066a80cafe1f68fedd9f7d22b451baf7bdf05300cf5b1f1c09cc13423e", "dea56865af7b1adbf0a9bb2337d40bd8395e470e09e1bf61bf456360f177e807"]
 termcolor = ["1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"]

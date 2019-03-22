@@ -15,8 +15,6 @@ import kocherga.slack
 SLACK_SIGNING_SECRET = settings.KOCHERGA_SLACK_SIGNING_SECRET
 SLACK_WORKPLACE_TOKEN = kocherga.slack.token()
 
-PORT = settings.KOCHERGA_LUDWIG_PORT
-
 
 class Bot(slappy.Bot):
     pass
@@ -24,9 +22,8 @@ class Bot(slappy.Bot):
 
 def create_bot():
     bot = Bot(
-        PORT,
-        SLACK_WORKPLACE_TOKEN,
-        SLACK_SIGNING_SECRET,
+        workplace_token=SLACK_WORKPLACE_TOKEN,
+        signing_secret=SLACK_SIGNING_SECRET,
         timezone=pytz.timezone(
             "Europe/Moscow"
         ),  # can't use kocherga.dateutils.TZ - it's based on dateutil.tz now
