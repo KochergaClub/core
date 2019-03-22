@@ -7,7 +7,7 @@ import subprocess
 import os
 from tempfile import TemporaryDirectory
 
-import pyppeteer
+from kocherga.chrome import get_browser
 
 import docx
 
@@ -71,7 +71,7 @@ async def build_slides(folder_id, sections=SECTIONS):
     try:
         slides_folder_id = kocherga.gdrive.create_folder(folder_id, "Слайды")
 
-        browser = await pyppeteer.launch()
+        browser = await get_browser()
         page = await browser.newPage()
 
         with TemporaryDirectory() as tmp_dir:

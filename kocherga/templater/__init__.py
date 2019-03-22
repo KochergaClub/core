@@ -6,20 +6,9 @@ import django.template.loader
 
 import re
 
-import pyppeteer
+from kocherga.chrome import get_browser
 
 from .config import name2schema
-
-_browser = None
-
-
-async def get_browser(headless=True):
-    global _browser
-    if not _browser:
-        logger.info("Launching new headless browser")
-        _browser = await pyppeteer.launch(headless=headless)
-        logger.info("Browser created")
-    return _browser
 
 
 class Template:

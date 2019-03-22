@@ -37,7 +37,8 @@ def r_png(request, name):
     template = Template.by_name(name)
     args = get_args(request.GET)
 
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     image_bytes = loop.run_until_complete(template.generate_png(args))
 
     return HttpResponse(image_bytes, content_type='image/png')

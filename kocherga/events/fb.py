@@ -8,8 +8,7 @@ import re
 import asyncio
 import requests
 
-import pyppeteer
-
+from kocherga.chrome import get_browser
 from kocherga.events.models import Event
 import kocherga.events.db
 import kocherga.events.markup
@@ -39,12 +38,6 @@ def all_groups():
     groups = [row[0] for row in query.all()]
     logger.info(f"Got {len(groups)} groups")
     return groups
-
-
-async def find_browser_page(endpoint):
-    browser = await pyppeteer.launcher.connect({"browserWSEndpoint": endpoint})
-    page = next(p for p in await browser.pages() if "facebook" in p.url)
-    return page
 
 
 def get_image_id(fb_id: str):
@@ -303,17 +296,6 @@ class AnnounceSession:
 
     async def screenshot(self):
         return await self.page.screenshot()
-
-
-async def get_browser(headless):
-    browser = await pyppeteer.launch(
-        headless=headless,
-        args=[
-            "--disable-notifications"
-        ],  # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
-    )
-    logger.info(f"Started browser at {browser.wsEndpoint}")
-    return browser
 
 
 # FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),

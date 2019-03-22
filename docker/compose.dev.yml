@@ -21,6 +21,9 @@ services:
       - /data/kocherga-db:/var/lib/mysql
       - ../mysql.conf.d:/etc/mysql/conf.d
 
+  chrome:
+    image: browserless/chrome
+
   api:
     << : *common
     build:
@@ -33,6 +36,7 @@ services:
     depends_on:
       - db
       - render-server
+      - chrome
 
   render-server:
     << : *common

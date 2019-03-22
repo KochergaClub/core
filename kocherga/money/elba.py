@@ -8,7 +8,7 @@ from datetime import datetime
 import sqlite3
 import re
 
-import pyppeteer
+from kocherga.chrome import get_browser
 
 ELBA_CREDENTIALS = settings.KOCHERGA_ELBA_CREDENTIALS
 
@@ -119,12 +119,7 @@ async def request_anything(page):
 
 async def elba_page():
     logger.info("Starting browser")
-    browser = await pyppeteer.launch(
-        headless=False,
-        args=[
-            "--disable-notifications"
-        ],  # required to avoid the "do you want to enable notifications?" popup which blocks all page interactions
-    )
+    browser = await get_browser()
     page = await browser.newPage()
     await page.setViewport(
         {"width": 1270, "height": 700}
