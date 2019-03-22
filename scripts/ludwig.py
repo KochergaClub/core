@@ -26,7 +26,7 @@ from kocherga.ludwig.bot import bot
 
 
 def main():
-    bot.run()
+    bot.run(host='0.0.0.0')
 
 
 if __name__ == "__main__":
