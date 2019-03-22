@@ -66,6 +66,7 @@ class Template:
                 {"width": width, "height": height, "deviceScaleFactor": 2}  # retina
             )
             logger.info('Setting page html')
+            html = html.replace('#', '%23')
             await page.goto(f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000})
 
             logger.info('Making screenshot')
