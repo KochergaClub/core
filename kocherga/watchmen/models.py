@@ -115,7 +115,7 @@ class ScheduleItem(models.Model):
         if not self.watchman:
             return '#ffffff'
         try:
-            return kocherga.staff.models.Member.objects.get(short_name=self.watchman)
+            return kocherga.staff.models.Member.objects.get(short_name=self.watchman).color
         except kocherga.staff.models.Member.DoesNotExist:
             return '#ff0000'
 
