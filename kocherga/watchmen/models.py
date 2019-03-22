@@ -112,8 +112,10 @@ class ScheduleItem(models.Model):
     watchman = models.CharField(max_length=100, db_index=True)
 
     def color(self):
-        member = kocherga.staff.models.Member.objects.get(short_name=self.watchman)
-        return member.color
+        try:
+            return kocherga.staff.models.Member.objects.get(short_name=self.watchman)
+        except kocherga.staff.models.Member.DoesNotExist:
+            return '#ff0000'
 
     @property
     def shift_obj(self):
