@@ -17,3 +17,4 @@ __pycache__
 /.dir-locals.el
 tier.txt
 data/
+static/dist

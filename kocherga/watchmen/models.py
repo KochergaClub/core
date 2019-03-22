@@ -10,6 +10,7 @@ from django.conf import settings
 from django.db import models
 
 from kocherga.dateutils import TZ
+import kocherga.staff.models
 
 MODERN_SHIFTS_FIRST_DATE = datetime.strptime(
     settings.KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE, "%Y-%m-%d"
@@ -109,6 +110,10 @@ class ScheduleItem(models.Model):
         ],
     )
     watchman = models.CharField(max_length=100, db_index=True)
+
+    def color(self):
+        member = kocherga.staff.models.Member.objects.get(short_name=self.watchman)
+        return member.color
 
     @property
     def shift_obj(self):

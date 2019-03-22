@@ -13,6 +13,7 @@ interface ScheduleItem {
   date: string;
   shift: string;
   watchman: string;
+  color?: string;
 }
 
 const SHIFTS = ['MORNING', 'MIDDAY', 'EVENING', 'NIGHT'];
@@ -59,10 +60,13 @@ const Cell = ({ daySchedule }: { daySchedule: DaySchedule }) => (
       SHIFTS.map(
         shift => {
           const item = daySchedule[shift];
+          if (!item) {
+            return <Item />; // TODO - EmptyItem
+          }
           if (item.watchman === 'Ночь') {
             return <NightItem />;
           }
-          return <Item>{item.watchman}</Item>
+          return <Item style={{backgroundColor: item.color}}>{item.watchman}</Item>
         }
       )
     }
