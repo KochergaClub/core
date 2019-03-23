@@ -38,7 +38,7 @@ def populate_main_list(users: List[User]):
 
         add_operation = {
             'method': 'POST',
-            'path': f'lists/{LIST_ID}/members/{subscriber_hash}',
+            'path': f'lists/{LIST_ID}/members',
             'body': json.dumps({
                 'email_type': 'html',
                 'email_address': user.email,

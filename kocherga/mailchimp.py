@@ -75,7 +75,7 @@ def wait_for_batch(batch_id):
         )
 
         body = json.loads(r.text)
-        print(body)
+        logger.info(body)
         if body['status'] == 'finished':
             break
         time.sleep(1)
