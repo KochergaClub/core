@@ -42,6 +42,7 @@ def populate_main_list(users: List[User]):
             'body': json.dumps({
                 'email_type': 'html',
                 'email_address': user.email,
+                'status': 'subscribed',
                 'merge_fields': merge_fields,
                 'interests': {
                     k['id']: True
