@@ -13,6 +13,7 @@ x-common:
     # DB_PASSWORD is passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
   volumes:
     - /data/kocherga:/data
+    - /data/kocherga-static:/code/collected_static
     - /config/secrets.py:/code/kocherga/django/settings/prod_secrets.py
 
 
