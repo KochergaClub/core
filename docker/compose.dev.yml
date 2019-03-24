@@ -22,7 +22,7 @@ services:
       - ../mysql.conf.d:/etc/mysql/conf.d
 
   chrome:
-    image: registry.gitlab.com/kocherga/code/core/chrome
+    image: registry.gitlab.com/kocherga/code/core/chrome:dev
     build:
       context: .
       dockerfile: ./Dockerfile.chrome

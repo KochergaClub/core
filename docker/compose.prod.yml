@@ -19,7 +19,7 @@ x-common:
 
 services:
   chrome:
-    image: registry.gitlab.com/kocherga/code/core/chrome
+    image: registry.gitlab.com/kocherga/code/core/chrome:${TAG}
     cap_add:
       - SYS_ADMIN
     ports:
