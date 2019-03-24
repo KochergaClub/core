@@ -19,7 +19,10 @@ x-common:
 
 services:
   chrome:
-    image: browserless/chrome
+    image: zenika/alpine-chrome
+    command: --no-sandbox --remote-debugging-address=0.0.0.0 --remote-debugging-port=3001
+    ports:
+      - "3001:3001"
 
   api:
     << : *common

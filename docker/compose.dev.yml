@@ -22,7 +22,10 @@ services:
       - ../mysql.conf.d:/etc/mysql/conf.d
 
   chrome:
-    image: browserless/chrome
+    image: zenika/alpine-chrome
+    command: --no-sandbox --remote-debugging-address=0.0.0.0 --remote-debugging-port=3001
+    ports:
+      - "3001:3001"
 
   api:
     << : *common
@@ -30,7 +33,7 @@ services:
       context: ..
       args:
         NPM_TOKEN: ${TOKEN}
-    command: poetry run ./manage.py runserver 0.0.0.0:80
+    command: poetry run gunicorn -w 4 -t 180 -b 0.0.0.0:80 kocherga.django.wsgi
     ports:
       - "8000:80"
     depends_on:
