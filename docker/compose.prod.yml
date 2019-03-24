@@ -24,6 +24,7 @@ services:
       - SYS_ADMIN
     ports:
       - "127.0.0.1:9222:9222"
+    privileged: true
 
   api:
     << : *common
