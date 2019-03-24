@@ -40,7 +40,7 @@ deploy_stack:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     # migrate and collect static
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
-    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME/chrome
+    - docker pull $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
     - docker-compose -f docker/compose.prod.yml run --rm api ./scripts/upgrade.sh
     # deploy
     - docker-compose -f docker/compose.prod.yml up -d
