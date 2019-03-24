@@ -30,3 +30,9 @@ test: test-types test-code lint
 ##### Helper commands #####
 dbshell:
 	docker-compose -f docker/compose.dev.yml exec db mysql kocherga
+
+shell:
+	docker-compose -f docker/compose.dev.yml exec api bash
+
+pyshell:
+	docker-compose -f docker/compose.dev.yml exec api poetry run ./manage.py shell
