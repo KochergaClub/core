@@ -23,8 +23,7 @@ services:
     cap_add:
       - SYS_ADMIN
     ports:
-      - "9222:9222"
-    privileged: true
+      - "127.0.0.1:9222:9222"
 
   api:
     << : *common
