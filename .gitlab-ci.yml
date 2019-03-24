@@ -32,7 +32,7 @@ deploy_stack:
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     # migrate and collect static
-    - docker-compose -f docker/compose.prod.yml run api ./scripts/upgrade.sh
+    - docker-compose -f docker/compose.prod.yml run --rm api ./scripts/upgrade.sh
     # deploy
     - docker-compose -f docker/compose.prod.yml up -d
   only:
