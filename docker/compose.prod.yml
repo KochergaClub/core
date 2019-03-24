@@ -20,13 +20,11 @@ x-common:
 services:
   chrome:
     image: registry.gitlab.com/kocherga/code/core/chrome
-    build:
-      context: .
-      dockerfile: ./Dockerfile.chrome
     cap_add:
       - SYS_ADMIN
     ports:
       - "9222:9222"
+    privileged: true
 
   api:
     << : *common

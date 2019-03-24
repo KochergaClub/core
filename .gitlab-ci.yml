@@ -17,7 +17,7 @@ test:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make lint
 
-deploy_image:
+deploy_stack:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://$DEPLOY_HOST:2376
