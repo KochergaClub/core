@@ -19,10 +19,14 @@ x-common:
 
 services:
   chrome:
-    image: zenika/alpine-chrome
-    command: --no-sandbox --remote-debugging-address=0.0.0.0 --remote-debugging-port=3001
+    image: registry.gitlab.com/kocherga/code/core/chrome
+    build:
+      context: .
+      dockerfile: ./Dockerfile.chrome
+    cap_add:
+      - SYS_ADMIN
     ports:
-      - "3001:3001"
+      - "9222:9222"
 
   api:
     << : *common

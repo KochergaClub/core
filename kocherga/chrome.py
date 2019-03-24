@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 import pyppeteer
 import requests
 
-ENDPOINT = 'chrome:3001'
+ENDPOINT = 'chrome:9222'
 
 
 def get_websocket():
