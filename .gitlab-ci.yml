@@ -1,5 +1,3 @@
-image: "docker:stable"
-
 build:
   stage: build
   services:
@@ -8,6 +6,15 @@ build:
     - docker build -f docker/Dockerfile --build-arg NPM_TOKEN=$NPM_TOKEN -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+build_chrome:
+  stage: build
+  services:
+    - docker:dind
+  script:
+    - docker build -f docker/Dockerfile.chrome -t $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
 
 test:
   stage: test
