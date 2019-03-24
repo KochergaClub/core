@@ -25,6 +25,7 @@ services:
     ports:
       - "127.0.0.1:9222:9222"
     privileged: true
+    restart: always
 
   api:
     << : *common
@@ -34,25 +35,31 @@ services:
     depends_on:
       - render-server
       - chrome
+    restart: always
 
   render-server:
     << : *common
     command: /usr/bin/node ./static/dist/render-server.js
+    restart: always
 
   tgbot:
     << : *common
     command: poetry run ./scripts/tgbot.py
+    restart: always
 
   ludwig:
     << : *common
     command: poetry run ./scripts/ludwig.py
     ports:
       - "127.0.0.1:5200:80"
+    restart: always
 
   importer:
     << : *common
     command: poetry run ./scripts/importer.py
+    restart: always
 
   worker:
     << : *common
     command: poetry run ./scripts/worker.py
+    restart: always

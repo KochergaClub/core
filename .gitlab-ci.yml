@@ -34,6 +34,6 @@ deploy_stack:
     # migrate and collect static
     - docker-compose -f docker/compose.prod.yml run api ./scripts/upgrade.sh
     # deploy
-    - docker stack deploy --prune --with-registry-auth -c docker/compose.prod.yml kocherga-core
+    - docker-compose -f docker/compose.prod.yml up -d
   only:
     - master
