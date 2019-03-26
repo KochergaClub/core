@@ -1,8 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import pyppeteer
+import contextlib
+
 import requests
+import pyppeteer
 
 ENDPOINT = 'chrome:9222'
 
@@ -27,4 +29,15 @@ def get_websocket():
 # TODO - implement get_page() with context manager which cleans the resources correctly.
 async def get_browser():
     ws = get_websocket()
-    return await pyppeteer.connect({'browserWSEndpoint': ws})
+    browser = await pyppeteer.connect({'browserWSEndpoint': ws})
+    return browser
+
+
+@contextlib.asynccontextmanager
+async def get_context():
+    browser = await get_browser()
+    context = await browser.createIncognitoBrowserContext()
+    try:
+        yield context
+    finally:
+        await context.close()

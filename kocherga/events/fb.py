@@ -8,7 +8,7 @@ import re
 import asyncio
 import requests
 
-from kocherga.chrome import get_browser
+import kocherga.chrome
 from kocherga.events.models import Event
 import kocherga.events.db
 import kocherga.events.markup
@@ -209,6 +209,7 @@ class AnnounceSession:
             page.keyboard.press("Enter"),
             page.waitForNavigation(),
         ])
+        # TODO - waitForSelector
         logger.info("Signed in")
 
     async def run(self):
@@ -222,18 +223,23 @@ class AnnounceSession:
 
         event = self.event
 
-        events_page = event.fb_announce_page() + "/events"
+        events_page = event.fb_announce_page() + "/events/"
         logger.info("Going to page: " + events_page)
         await page.goto(events_page)
+        await page.waitForSelector("[data-testid=event-create-button]", timeout=10000)
 
         logger.info("Opening an event creation form")
         await page.click("[data-testid=event-create-button]")
-        await page.waitForSelector("[data-testid=event-create-dialog-name-field]")
+        await page.waitForSelector("[data-testid=event-create-dialog-name-field]", timeout=10000)
 
         logger.info("Uploading an image")
         await page.waitForSelector("[data-testid=event-create-dialog-image-selector")
         el = await page.J("[data-testid=event-create-dialog-image-selector")
         await el.uploadFile(event.image_file("default"))
+        await page.waitForFunction(
+            'document.querySelector("[data-testid=event-create-dialog]")'
+            '.innerText.includes("Перетащите, чтобы изменить положение")'
+        )
 
         logger.info("Filling title")
         await page.focus("[data-testid=event-create-dialog-name-field]")
@@ -303,15 +309,14 @@ class AnnounceSession:
 #
 # It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
 async def create(event, headless=True, **kwargs):
-    browser = await get_browser()
-
-    session = await AnnounceSession.create(browser, event, **kwargs)
-    try:
-        logger.info(f"Trying to create")
-        return await session.run()
-    except Exception:
-        logger.exception(f"Error while creating a FB announcement")
-        image_bytes = await session.screenshot()
-        filename = image_storage.save_screenshot("error", image_bytes)
-        logger.info(f"Screenshot saved to {filename}")
-        raise
+    async with kocherga.chrome.get_context() as browser:
+        session = await AnnounceSession.create(browser, event, **kwargs)
+        try:
+            logger.info(f"Trying to create")
+            return await session.run()
+        except Exception:
+            logger.exception(f"Error while creating a FB announcement")
+            image_bytes = await session.screenshot()
+            filename = image_storage.save_screenshot("error", image_bytes)
+            logger.info(f"Screenshot saved to {filename}")
+            raise
