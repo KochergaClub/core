@@ -3,7 +3,7 @@ import json
 
 from django.conf import settings
 
-from .models import Auth
+from . import models
 
 DOMAIN = settings.CAFE_MANAGER_SERVER
 
@@ -19,7 +19,7 @@ def update_cookies():
 
     cookies = get_new_cookies(auth["login"], auth["password"])
 
-    Auth.objects.get_or_create(
+    models.Auth.objects.get_or_create(
         id=1,
         defaults={
             'cookies': json.dumps(cookies.get_dict())
@@ -28,7 +28,7 @@ def update_cookies():
 
 
 def get_cookies():
-    cookies_json = Auth.get().cookies
+    cookies_json = models.Auth.get().cookies
     cookies = requests.cookies.RequestsCookieJar()
     cookies.update(json.loads(cookies_json))
 
