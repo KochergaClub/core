@@ -1098,6 +1098,14 @@ python-versions = "*"
 version = "2.3.1"
 
 [[package]]
+category = "dev"
+description = "Linux filesystem events monitoring"
+name = "pyinotify"
+optional = false
+python-versions = "*"
+version = "0.9.6"
+
+[[package]]
 category = "main"
 description = "JSON Web Token implementation in Python"
 name = "pyjwt"
@@ -1647,7 +1655,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "990c367397ba6e36d3525a2160723c2325d5e1370034f5220913cf8c04f431b9"
+content-hash = "f7e3055ce18fb498679ea14f8954efe7050f2cd3d05f28acf1674ae194261211"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -1755,6 +1763,7 @@ pycrypto = ["f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"]
 pyee = ["47f8fa96d6dee61c82001831e1fbba55f3f808003a322d0e6653aa01c59f6b9e", "4ec22817297b7024f89721cc34f790ee2767c5b5ca44284c565ee643abafbe32"]
 pyflakes = ["5e8c00e30c464c99e0b501dc160b13a14af7f27d4dffb529c556e30a159e231d", "f277f9ca3e55de669fba45b7393a1449009cff5a37d1af10ebb76c52765269cd"]
 pygments = ["5ffada19f6203563680669ee7f53b64dabbeb100eb51b61996085e99c03b284a", "e8218dd399a61674745138520d0d4cf2621d7e032439341bc3f647bff125818d"]
+pyinotify = ["9c998a5d7606ca835065cdabc013ae6c66eb9ea76a00a1e3bc6e0cfe2b4f71f4"]
 pyjwt = ["5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e", "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"]
 pyparsing = ["66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a", "f6c5ef0d7480ad048c054c37632c67fca55299990fff127850181659eea33fc3"]
 pyppeteer = []
