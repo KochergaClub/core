@@ -16,13 +16,12 @@ build-chrome:
 test-lint:
   stage: test
   script:
-    - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make lint
+    - docker-compose --build-arg TAG=$CI_COMMIT_REF_NAME -f docker/compose.ci.yml run make lint
 
 test-python:
   stage: test
   script:
-    - docker-compose -f docker/compose.dev.yml run api poetry run pytest
-
+    - docker-compose --build-arg TAG=$CI_COMMIT_REF_NAME -f docker/compose.ci.yml run api poetry run pytest
 
 deploy-stack:
   stage: deploy
