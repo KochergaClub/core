@@ -1,24 +1,29 @@
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
 build:
   stage: build
   script:
     - docker build -f docker/Dockerfile --build-arg NPM_TOKEN=$NPM_TOKEN -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
-build_chrome:
+build-chrome:
   stage: build
   script:
     - docker build -f docker/Dockerfile.chrome -t $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME .
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
 
-test:
+test-lint:
   stage: test
   script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make lint
 
-deploy_stack:
+test-python:
+  stage: test
+  script:
+    - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make test-code
+
+deploy-stack:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://$DEPLOY_HOST:2376
@@ -31,6 +36,7 @@ deploy_stack:
     - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
     - echo "$DOCKER_CERT" > ~/.docker/cert.pem
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
+    # one more login, since we changed the docker endpoint
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     # migrate and collect static
     - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
