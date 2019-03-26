@@ -27,6 +27,8 @@ WORKDIR /code
 COPY poetry.lock pyproject.toml /code/
 RUN poetry install
 
+RUN apt install -y inotify-tools
+
 COPY package.json package-lock.json /code/
 RUN npm ci
 
