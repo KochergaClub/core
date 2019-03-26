@@ -117,9 +117,7 @@ async def request_anything(page):
     logger.info(f"Request submitted")
 
 
-async def elba_page():
-    logger.info("Starting browser")
-    browser = await get_browser()
+async def elba_page(browser):
     page = await browser.newPage()
     await page.setViewport(
         {"width": 1270, "height": 700}
@@ -145,30 +143,31 @@ async def elba_page():
 
 
 async def make_ion_requests(accounting_dates, operation_years, declaration_years):
-    page = await elba_page()
+    async with get_browser() as browser:
+        page = await elba_page(browser)
 
-    for d in accounting_dates:
-        await begin_request(page)
-        await prepare_request_accounting(page, d)
-        await request_anything(page)
+        for d in accounting_dates:
+            await begin_request(page)
+            await prepare_request_accounting(page, d)
+            await request_anything(page)
 
-    for year in operation_years:
-        await begin_request(page)
-        await prepare_request_operations(page, year)
-        await request_anything(page)
+        for year in operation_years:
+            await begin_request(page)
+            await prepare_request_operations(page, year)
+            await request_anything(page)
 
-    for year in declaration_years:
-        await begin_request(page)
-        await prepare_request_declaration(page, year)
-        await request_anything(page)
+        for year in declaration_years:
+            await begin_request(page)
+            await prepare_request_declaration(page, year)
+            await request_anything(page)
 
-    time.sleep(
-        3000
-    )  # we run this on desktop anyway, so let's linger around to check that everything's ok
+        time.sleep(
+            3000
+        )  # we run this on desktop anyway, so let's linger around to check that everything's ok
 
 
-async def payments_page():
-    page = await elba_page()
+async def payments_page(browser):
+    page = await elba_page(browser)
 
     await page.click("#MainMenu_Payments_Link")
     await page.waitForNavigation()
@@ -189,47 +188,48 @@ async def get_last_pko_id(page):
 
 
 async def add_cash_income(data, last_pko_id=None):
-    page = await payments_page()
+    async with get_browser() as browser:
+        page = await payments_page(browser)
 
-    pko_id = last_pko_id or await get_last_pko_id(page)
+        pko_id = last_pko_id or await get_last_pko_id(page)
 
-    for row in data:
-        pko_id += 1
+        for row in data:
+            pko_id += 1
 
-        logger.info(row["date"])
-        income = row["income"]
-        if income == 0:
-            logger.info("No income, skip")
-            continue
-        if income < 0:
-            logger.warn("Negative income! Skip.")
-            continue
-        d = row["date"]
+            logger.info(row["date"])
+            income = row["income"]
+            if income == 0:
+                logger.info("No income, skip")
+                continue
+            if income < 0:
+                logger.warn("Negative income! Skip.")
+                continue
+            d = row["date"]
 
-        await page.click("#CreateDebetButton")
-        await page.waitForSelector(
-            "#ComponentsHost_PaymentEditLightbox_IncomeSum", visible=True
-        )
-        await page.type(
-            "#ComponentsHost_PaymentEditLightbox_IncomeSum", str(row["income"])
-        )
-        await fill_date_input(page, "#ComponentsHost_PaymentEditLightbox_Date", d)
+            await page.click("#CreateDebetButton")
+            await page.waitForSelector(
+                "#ComponentsHost_PaymentEditLightbox_IncomeSum", visible=True
+            )
+            await page.type(
+                "#ComponentsHost_PaymentEditLightbox_IncomeSum", str(row["income"])
+            )
+            await fill_date_input(page, "#ComponentsHost_PaymentEditLightbox_Date", d)
 
-        await page.type(
-            "#ComponentsHost_PaymentEditLightbox_PaymentDescription",
-            f'ОФД: выручка за {d.strftime("%d.%m.%Y")}',
-        )
+            await page.type(
+                "#ComponentsHost_PaymentEditLightbox_PaymentDescription",
+                f'ОФД: выручка за {d.strftime("%d.%m.%Y")}',
+            )
 
-        docnum_el = await page.J("#ComponentsHost_PaymentEditLightbox_DocumentNumber")
-        await docnum_el.focus()
-        for i in range(10):
-            await docnum_el.press("Backspace")
-        await docnum_el.type(str(pko_id))
+            docnum_el = await page.J("#ComponentsHost_PaymentEditLightbox_DocumentNumber")
+            await docnum_el.focus()
+            for i in range(10):
+                await docnum_el.press("Backspace")
+            await docnum_el.type(str(pko_id))
 
-        logger.info(
-            f'Submitting a form for {d.strftime("%Y-%m-%d")}, pko id = {pko_id}'
-        )
-        await page.click("#ComponentsHost_PaymentEditLightbox_AcceptButton")
-        await page.waitForSelector(".c-lightbox-overlay", hidden=True)
+            logger.info(
+                f'Submitting a form for {d.strftime("%Y-%m-%d")}, pko id = {pko_id}'
+            )
+            await page.click("#ComponentsHost_PaymentEditLightbox_AcceptButton")
+            await page.waitForSelector(".c-lightbox-overlay", hidden=True)
 
-    time.sleep(3000)
+        time.sleep(3000)

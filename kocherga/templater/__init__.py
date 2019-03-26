@@ -55,11 +55,10 @@ class Template:
     async def generate_png(self, props):
         html = self.generate_html(props)
 
-        browser = await get_browser()
-        logger.info('Getting browser page')
-        page = await browser.newPage()
+        async with get_browser() as browser:
+            logger.info('Getting browser page')
+            page = await browser.newPage()
 
-        try:
             (width, height) = self.sizes
             logger.info('Setting viewport')
             await page.setViewport(
@@ -71,12 +70,9 @@ class Template:
 
             logger.info('Making screenshot')
             image_bytes = await page.screenshot()
-        finally:
-            logger.info('Closing page')
-            await page.close()
 
-        logger.info('Returing image bytes')
-        return image_bytes
+            logger.info('Returing image bytes')
+            return image_bytes
 
 
 def list_templates():

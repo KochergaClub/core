@@ -6,6 +6,7 @@ import re
 import subprocess
 import os
 from tempfile import TemporaryDirectory
+import contextlib
 
 from kocherga.chrome import get_browser
 
@@ -47,11 +48,15 @@ def humanized_event_date(event_name):
 
 
 # TODO - fetch from google drive via API or make more customizable
+@contextlib.contextmanager
 def serve_slides(
     path=os.environ["HOME"] + "/Google Drive/Rationality/Workshops/Секции"
 ):
     server = subprocess.Popen(["python3", "-m", "http.server"], cwd=path)
-    return server
+    try:
+        yield server
+    finally:
+        server.kill()
 
 
 def prepare_folders(event_name):
@@ -66,15 +71,13 @@ def prepare_folders(event_name):
 
 async def build_slides(folder_id, sections=SECTIONS):
     logger.info("Building slides")
-    server = serve_slides()
 
-    try:
+    with serve_slides(), TemporaryDirectory() as tmp_dir:
         slides_folder_id = kocherga.gdrive.create_folder(folder_id, "Слайды")
 
-        browser = await get_browser()
-        page = await browser.newPage()
+        async with get_browser() as browser:
+            page = await browser.newPage()
 
-        with TemporaryDirectory() as tmp_dir:
             for section in sections:
                 name = f'{section["id"]} - {section["name"]}.pdf'
 
@@ -92,9 +95,6 @@ async def build_slides(folder_id, sections=SECTIONS):
                     fh.write(pdf_bytes)
 
                 kocherga.gdrive.upload_file(tmp_filename, name, slides_folder_id)
-
-    finally:
-        server.kill()
 
 
 def build_handbooks(event_name, sections=SECTIONS):

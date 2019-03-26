@@ -26,16 +26,15 @@ def get_websocket():
     return ws
 
 
-# TODO - implement get_page() with context manager which cleans the resources correctly.
-async def get_browser():
+async def get_full_browser():
     ws = get_websocket()
     browser = await pyppeteer.connect({'browserWSEndpoint': ws})
     return browser
 
 
 @contextlib.asynccontextmanager
-async def get_context():
-    browser = await get_browser()
+async def get_browser():
+    browser = await get_full_browser()
     context = await browser.createIncognitoBrowserContext()
     try:
         yield context
