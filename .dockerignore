@@ -1,5 +1,6 @@
 node_modules
 kocherga/django/settings/*secrets.py
+!kocherga/django/settings/ci_secrets.py
 **/__pycache__
 **/*.pyc
 static/dist
