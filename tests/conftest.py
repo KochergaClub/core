@@ -57,7 +57,7 @@ def event(image_file, vk_image_file):
         event_type='public',
     )
     event.vk_group = 'event159971736'
-    event.fb_group = 'nonexisting_facebook_group'
+    # event.fb_group = 'nonexisting_facebook_group'
 
     event = kocherga.events.db.insert_event(event)
     with open(vk_image_file, 'rb') as fh:
@@ -66,7 +66,8 @@ def event(image_file, vk_image_file):
     with open(image_file, 'rb') as fh:
         event.add_image('default', fh)
 
-    event_id = event.google_id # session can be reset after the test, so we need to store this and don't reference our event after the yield
+    # session can be reset after the test, so we need to store this and don't reference our event after the yield
+    event_id = event.google_id
 
     yield event
 

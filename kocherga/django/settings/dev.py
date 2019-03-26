@@ -38,15 +38,15 @@ KOCHERGA_TIMEPAD = {
 
 KOCHERGA_FB = {
     "main_page": {
-        "id": 180291859485985,
+        "id": 1100858150117942,
         "name": "Кочерга - для разработки",
         "autoreplace": {
             "from": "секта имени Юдковского",
             "to": "имени Юдковского @секта",
         },
-        "announce_page": "https://www.facebook.com/Кочерга-для-разработки-2-180291859485985",
+        "announce_page": "https://www.facebook.com/KchPage-1100858150117942",
     },
-    "announcer_login": "slava+fbtest2@kocherga-club.ru",
+    "announcer_login": "facebook1@kocherga-club.ru",
 }
 
 KOCHERGA_WIKI = {
