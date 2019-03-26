@@ -18,7 +18,7 @@ test-lint:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run make lint
+    - docker-compose -f docker/compose.ci.yml run poetry run flake8 kocherga/ --max-line-length=120
 
 test-python:
   stage: test
