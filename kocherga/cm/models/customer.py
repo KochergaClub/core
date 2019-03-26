@@ -1,17 +1,18 @@
+import enum
+from datetime import datetime, time
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.timezone import make_aware
-
-import enum
-from datetime import datetime, time
 
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import requests
 
 from kocherga.dateutils import TZ
 
-from kocherga.cm.scraper import DOMAIN, get_cookies, load_customer_from_html
+from ..scraper import DOMAIN, load_customer_from_html
+from .. import auth
 from .order import Order
 
 KchUser = get_user_model()
@@ -216,7 +217,7 @@ class Customer(models.Model):
         url = f"{DOMAIN}/customer/{self.customer_id}/edit/"
         r = requests.post(
             url,
-            cookies=get_cookies(),
+            cookies=auth.get_cookies(),
             data=multipart_data,
             headers={"Content-Type": multipart_data.content_type},
         )

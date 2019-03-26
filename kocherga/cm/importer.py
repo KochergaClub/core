@@ -12,7 +12,8 @@ from django.db.models import Q
 import kocherga.importer.base
 import kocherga.email.lists
 
-from .scraper import DOMAIN, get_cookies
+from .scraper import DOMAIN
+from .auth import get_cookies
 from .models import Order, OrderLogEntry, Customer, SubscriptionOrder, User
 
 

@@ -1,43 +1,17 @@
 import requests
 import re
 from datetime import datetime
-import json
-import dbm
-import os.path
 
 from django.conf import settings
 
+from . import auth
+
 DOMAIN = settings.CAFE_MANAGER_SERVER
-
-COOKIES_FILE = os.path.join(settings.DATA_DIR, 'cafe_manager_cookies.dbm')
-
-
-def get_new_cookies(login, password):
-    r = requests.post(DOMAIN, data={"login": login, "pass": password})
-    r.raise_for_status()
-    return r.cookies
-
-
-def update_cookies():
-    auth = settings.CAFE_MANAGER_CREDENTIALS
-
-    cookies = get_new_cookies(auth["login"], auth["password"])
-
-    with dbm.open(COOKIES_FILE, 'c') as db:
-        db['cookies'] = json.dumps(cookies.get_dict())
-
-
-def get_cookies():
-    with dbm.open(COOKIES_FILE) as db:
-        cookies = requests.cookies.RequestsCookieJar()
-        cookies.update(json.loads(db['cookies']))
-
-    return cookies
 
 
 def load_customer_from_html(customer_id):
     url = f"{DOMAIN}/customer/{customer_id}/"
-    r = requests.get(url, cookies=get_cookies(), timeout=10)
+    r = requests.get(url, cookies=auth.get_cookies(), timeout=10)
     r.raise_for_status()
 
     html = r.content.decode("utf-8")

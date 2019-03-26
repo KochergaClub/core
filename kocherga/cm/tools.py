@@ -5,7 +5,8 @@ import re
 import requests
 
 from .models import Customer
-from .scraper import DOMAIN, get_cookies
+from .scraper import DOMAIN
+from .auth import get_cookies
 
 
 def add_customer(card_id, first_name, last_name, email):

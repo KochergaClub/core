@@ -5,30 +5,41 @@ import kocherga.cm.models
 import kocherga.cm.scraper
 import kocherga.cm.tools
 import kocherga.cm.importer
+import kocherga.cm.auth
 
-def test_now_stats():
+
+@pytest.fixture
+def auth():
+    kocherga.cm.auth.update_cookies()
+
+
+def test_now_stats(auth):
     c = kocherga.cm.tools.now_stats()
     assert type(c["total"]) == int
 
-def test_load_customers():
+
+def test_load_customers(auth):
     customers = kocherga.cm.importer.load_customers()
     assert type(customers) == list
     assert len(customers) > 10
     assert customers[0].card_id == 1
 
-def test_load_orders():
+
+def test_load_orders(auth):
     orders = kocherga.cm.importer.load_orders()
     assert type(orders) == list
     assert len(orders) > 10
     assert type(orders[0]) == kocherga.cm.models.Order
 
-def test_load_customer():
+
+def test_load_customer(auth):
     customer = kocherga.cm.scraper.load_customer_from_html(40)
     assert customer
 
+
 @pytest.mark.slow
 @pytest.mark.django_db(transaction=True)
-def test_importer():
+def test_importer(auth):
     kocherga.cm.importer.Importer(log_portion_size=3).import_new()
     assert len(kocherga.cm.models.Order.objects.all()) > 10
     assert len(kocherga.cm.models.Customer.objects.all()) > 10
