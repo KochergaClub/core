@@ -21,7 +21,7 @@ test-lint:
 test-python:
   stage: test
   script:
-    - docker run $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME make test-code
+    - make test-code
 
 deploy-stack:
   stage: deploy
