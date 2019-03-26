@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Page from '../components/Page';
-import TildaMenu from '../components/TildaMenu';
 
 import { Button } from '@kocherga/frontkit';
 
