@@ -18,13 +18,14 @@ test-lint:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run poetry run flake8 kocherga/ --max-line-length=120
+    - docker-compose -f docker/compose.ci.yml run api poetry run flake8 kocherga/ --max-line-length=120
 
 test-python:
   stage: test
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
+    - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
     - docker-compose -f docker/compose.ci.yml run api poetry run pytest
 
 deploy-stack:
