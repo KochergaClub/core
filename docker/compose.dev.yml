@@ -11,6 +11,8 @@ x-common:
     DB_NAME: 'kocherga'
     DB_USER: 'root'
     DB_PASSWORD: ''
+  cap_add:
+    - SYS_PTRACE
 
 services:
   db:
@@ -63,3 +65,5 @@ services:
   tsc:
     << : *common
     command: npx tsc --watch
+    environment:
+      TSC_WATCHFILE: DynamicPriorityPolling
