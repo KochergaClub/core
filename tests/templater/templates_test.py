@@ -2,6 +2,7 @@ import pytest
 
 from kocherga.templater import Template, list_templates
 
+
 @pytest.fixture(params=[
     {
         'name': 'vk-image',
@@ -24,6 +25,7 @@ def html(request):
     template = Template.by_name(request.param['name'])
     html = template.generate_html(request.param['props'])
     return html
+
 
 def test_generate_html(html):
     assert type(html) == str
