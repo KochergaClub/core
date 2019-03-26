@@ -4,7 +4,6 @@ x-common:
   &common
   image: registry.gitlab.com/kocherga/code/core:${TAG}
   volumes:
-    - ..:/code
     - ../data:/data
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.ci'
