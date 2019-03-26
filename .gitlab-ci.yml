@@ -21,7 +21,8 @@ test-lint:
 test-python:
   stage: test
   script:
-    - make test-code
+    - docker-compose -f docker/compose.dev.yml run api poetry run pytest
+
 
 deploy-stack:
   stage: deploy
