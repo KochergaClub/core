@@ -309,7 +309,7 @@ class AnnounceSession:
 #
 # It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
 async def create(event, headless=True, **kwargs):
-    async with kocherga.chrome.get_context() as browser:
+    async with kocherga.chrome.get_browser() as browser:
         session = await AnnounceSession.create(browser, event, **kwargs)
         try:
             logger.info(f"Trying to create")
