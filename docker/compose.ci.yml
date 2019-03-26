@@ -44,5 +44,3 @@ services:
   render-server:
     << : *common
     command: npx nodemon ./static/dist/render-server.js
-    depends_on:
-      - webpack_front
