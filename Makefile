@@ -23,7 +23,7 @@ test-code:
 	docker-compose -f docker/compose.dev.yml run api poetry run pytest
 
 lint:
-	poetry run flake8 kocherga/ --max-line-length=120
+	docker-compose -f docker/compose.dev.yml run api poetry run flake8 kocherga/ --max-line-length=120
 
 test: test-types test-code lint
 
