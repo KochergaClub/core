@@ -26,7 +26,7 @@ test-python:
     TAG: $CI_COMMIT_REF_NAME
   script:
     - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
-    - docker-compose -f docker/compose.ci.yml run api poetry run pytest
+    - docker-compose -f docker/compose.ci.yml run api poetry run pytest -m 'not google and not slack and not mailchimp and not ofd'
 
 deploy-stack:
   stage: deploy
