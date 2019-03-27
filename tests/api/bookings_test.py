@@ -1,7 +1,11 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,  # events require google for now (don't forget to remove this later)
+]
 
 import json
+
 
 from freezegun import freeze_time
 from datetime import datetime, timedelta

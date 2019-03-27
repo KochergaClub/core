@@ -5,6 +5,7 @@ import kocherga.events.fb
 
 
 class TestCreate:
+    @pytest.mark.slow
     @pytest.mark.skip(reason="FB keeps banning our test users")
     @pytest.mark.asyncio
     async def test_create(self, event):

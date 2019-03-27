@@ -1,7 +1,11 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,  # events require google for now (don't forget to remove this later)
+]
 
 import json
+
 
 def test_timepad_categories(client, kocherga_auth_header):
     res = client.get(
@@ -13,6 +17,7 @@ def test_timepad_categories(client, kocherga_auth_header):
 
     assert len(categories) > 5
 
+
 def test_vk_groups(client, event, kocherga_auth_header):
     res = client.get(
         '/api/announcements/vk/groups',
@@ -23,6 +28,7 @@ def test_vk_groups(client, event, kocherga_auth_header):
 
     assert len(groups) == 1
 
+
 def test_fb_groups(client, event, kocherga_auth_header):
     res = client.get(
         '/api/announcements/fb/groups',
@@ -32,6 +38,7 @@ def test_fb_groups(client, event, kocherga_auth_header):
     groups = res.json()
 
     assert len(groups) == 1
+
 
 def test_weekly_digest(client, kocherga_auth_header):
     res = client.post(

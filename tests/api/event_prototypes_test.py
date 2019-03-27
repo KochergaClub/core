@@ -5,6 +5,7 @@ import json
 
 from kocherga.events.models import EventPrototype
 
+
 class TestPrototypes:
     def test_list_empty(self, client, kocherga_auth_header):
         res = client.get('/api/event_prototypes', **kocherga_auth_header)
@@ -13,7 +14,6 @@ class TestPrototypes:
 
         assert type(prototypes) == list
         assert len(prototypes) == 0
-
 
     def test_create(self, client, kocherga_auth_header):
         res = client.post(

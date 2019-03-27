@@ -1,4 +1,8 @@
+import pytest
+pytestmark = pytest.mark.slack
+
 import kocherga.slack
+
 
 class TestSlack:
     def test_token(self):
