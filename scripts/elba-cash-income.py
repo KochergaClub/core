@@ -6,13 +6,13 @@ import fire
 
 import logging
 import asyncio
-import json
 from datetime import datetime, timedelta
 
 import kocherga.money.elba
 import kocherga.money.ofd.models
 
 logging.basicConfig(level=logging.INFO)
+
 
 async def async_main(start_date_str, last_pko_id):
     start_d = datetime.strptime(start_date_str, '%Y-%m-%d').date()
@@ -25,9 +25,11 @@ async def async_main(start_date_str, last_pko_id):
         last_pko_id=last_pko_id,
     )
 
+
 def main(start_date_str, last_pko_id):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(asyncio.wait([async_main(start_date_str, last_pko_id)]))
+
 
 if __name__ == '__main__':
     fire.Fire(main)
