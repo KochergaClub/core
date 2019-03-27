@@ -8,6 +8,10 @@ init-dev:
 	docker-compose -f docker/compose.dev.yml exec db mysql -uroot -e 'CREATE DATABASE kocherga'
 	docker-compose -f docker/compose.dev.yml run api poetry run ./manage.py migrate
 
+dev-mac: image
+# MacOS has problems with inotify, so we run webpack outside of the container
+	npx nf start -j docker/Procfile.mac
+
 dev: image
 	docker-compose -f docker/compose.dev.yml up
 
@@ -36,3 +40,4 @@ shell:
 
 pyshell:
 	docker-compose -f docker/compose.dev.yml exec api poetry run ./manage.py shell
+

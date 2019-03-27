@@ -4,8 +4,9 @@ x-common:
   &common
   image: registry.gitlab.com/kocherga/code/core:dev
   volumes:
-    - ..:/code
-    - /data/kocherga:/data
+    # mac volumes are managed with docker-sync for better performance and inotify fixes
+    - code:/code:nocopy
+    - data:/data:nocopy
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
     DB_NAME: 'kocherga'
@@ -53,16 +54,8 @@ services:
     << : *common
     command: npx nodemon ./static/dist/render-server.js
 
-  webpack_back:
-    << : *common
-    command: npx webpack --config ./webpack/back.config.js --watch
-
-  webpack_front:
-    << : *common
-    command: npx webpack --config ./webpack/front.config.js --watch
-
-  tsc:
-    << : *common
-    command: npx tsc --watch
-    environment:
-      TSC_WATCHFILE: DynamicPriorityPolling
+volumes:
+  code:
+    external: true
+  data:
+    external: true
