@@ -38,8 +38,13 @@ def call(http_method, url, data={}):
 
     r = _call()
     if r.status_code == 403:
+        # This code should help, but it doesn't.
+        # Even though tochka's documentation promises 30 days of life for refresh token,
+        # in reality it declines a refresh_token as soon as access_token stops working (i.e. in 24 hours).
+        #
+        # So we implement an extra update after 12 hours in get_access_token()
         update_tokens()
-        r = _call()  # try again just once
+        r = _call()  # try again
 
     r.raise_for_status()
 

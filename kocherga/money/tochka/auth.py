@@ -2,6 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 
 import requests
 
@@ -57,5 +59,7 @@ def update_tokens():
 
 
 def get_access_token():
-    # TODO - check and update if necessary?
+    if Auth.get().dt < timezone.now() - timedelta(hours=12):
+        update_tokens()
+
     return Auth.get().access_token

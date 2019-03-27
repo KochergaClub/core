@@ -13,6 +13,7 @@ class Auth(models.Model):
     id = models.IntegerField(primary_key=True, default=1)
     access_token = models.CharField(max_length=100)
     refresh_token = models.CharField(max_length=100)
+    dt = models.DateTimeField(auto_now=True)
 
     @classmethod
     def get(self):
