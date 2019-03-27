@@ -1,5 +1,8 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 import datetime
 from freezegun import freeze_time
@@ -7,14 +10,17 @@ from freezegun import freeze_time
 import kocherga.watchmen.tools
 import kocherga.watchmen.models
 
+
 @pytest.fixture()
 def google_schedule():
     return kocherga.watchmen.tools.load_schedule_from_google()
+
 
 @pytest.fixture()
 def db_schedule():
     kocherga.watchmen.tools.load_schedule_from_google().save_to_db()
     return kocherga.watchmen.tools.load_schedule_from_db()
+
 
 @pytest.fixture(params=['google', 'db'])
 def schedule(request, google_schedule, db_schedule):
@@ -22,6 +28,7 @@ def schedule(request, google_schedule, db_schedule):
         return google_schedule
     else:
         return db_schedule
+
 
 class TestSchedule:
     def test_load_schedule(self, schedule):
@@ -39,7 +46,7 @@ class TestSchedule:
         assert watchman == 'Скотт'
 
     def test_save_to_db(self, db, schedule):
-        watchman = schedule.save_to_db()
+        schedule.save_to_db()
 
     def test_current_watchman(self, schedule):
         with freeze_time('2017-12-20 10:00'):

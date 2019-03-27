@@ -1,5 +1,8 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 import kocherga.events.announce
 from kocherga.events.announcement import BaseAnnouncement

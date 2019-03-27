@@ -1,4 +1,5 @@
 import pytest
+pytestmark = pytest.mark.ofd
 
 import datetime
 import logging
@@ -6,11 +7,13 @@ from freezegun import freeze_time
 
 import kocherga.money.ofd.models
 
+
 @pytest.mark.django_db()
 def test_documents():
-    documents = kocherga.money.ofd.models.ofd.documents(datetime.date(2018,3,1))
+    documents = kocherga.money.ofd.models.ofd.documents(datetime.date(2018, 3, 1))
     assert len(documents) > 3
     assert type(documents[0]) == kocherga.money.ofd.models.OfdDocument
+
 
 @pytest.mark.slow
 @pytest.mark.django_db(transaction=True)

@@ -38,6 +38,7 @@ def test_load_customer(auth):
 
 
 @pytest.mark.slow
+@pytest.mark.mailchimp
 @pytest.mark.django_db(transaction=True)
 def test_importer(auth):
     kocherga.cm.importer.Importer(log_portion_size=3).import_new()

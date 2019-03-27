@@ -1,12 +1,15 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 from django.contrib.auth import get_user_model
 from kocherga.mastermind_dating.models import Cohort, User
-from kocherga.events.models import Event
 from kocherga.timepad.models import Event as TimepadEvent, Order as TimepadOrder
 
 KchUser = get_user_model()
+
 
 @pytest.fixture
 def event_with_timepad(event, common_team):
@@ -38,8 +41,10 @@ def event_with_timepad(event, common_team):
 
     return event
 
+
 def test_event_with_timepad(event_with_timepad):
     assert event_with_timepad.timepad_event().id == 111
+
 
 def test_populate_from_event(event_with_timepad):
     cohort = Cohort.objects.create(event=event_with_timepad)

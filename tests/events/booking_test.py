@@ -1,4 +1,8 @@
 import pytest
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 from datetime import datetime, timedelta
 
@@ -8,7 +12,6 @@ from kocherga.events.models import Event
 from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 
-pytestmark = pytest.mark.usefixtures('db')
 
 
 @pytest.fixture
@@ -18,7 +21,10 @@ def event1():
         "etag": "\"2910222046236000\"",
         "id": "9v1o4njhrkg7a86nnd4es51im4",
         "status": "confirmed",
-        "htmlLink": "https://www.google.com/calendar/event?eid=OXYxbzRuamhya2c3YTg2bm5kNGVzNTFpbTQgbHYzOTYzdWRjdHZvaDk0NGM3ZGxpazV0ZDRAZw",
+        "htmlLink": (
+            "https://www.google.com/calendar/event?eid="
+            "OXYxbzRuamhya2c3YTg2bm5kNGVzNTFpbTQgbHYzOTYzdWRjdHZvaDk0NGM3ZGxpazV0ZDRAZw"
+        ),
         "created": "2016-02-10T13:30:13.000Z",
         "updated": "2016-02-10T13:30:23.118Z",
         "summary": "Бронь ГЭБ 6чел Алексанр",

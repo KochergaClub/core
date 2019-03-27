@@ -1,20 +1,23 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 import re
-from datetime import datetime, timedelta
-import shutil
-import os.path
+from datetime import datetime
 
 import kocherga.vk.api
 import kocherga.events.vk
 import kocherga.events.announce
 
-from kocherga.events.models import Event
 
 class TestTexts:
     def test_tail(self, event):
-        assert re.match(r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\. Оплата участия — по тарифам антикафе: 2,5 руб\./минута\.$', kocherga.events.vk.vk_tail(event))
+        assert re.match(
+            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\. Оплата участия — по тарифам антикафе: 2,5 руб\./минута\.$',
+            kocherga.events.vk.vk_tail(event)
+        )
 
 
 class TestCreate:
@@ -37,7 +40,7 @@ class TestCreate:
             event.add_image('vk', fh)
 
         event.vk_group = 159971736
-        event.patch({ 'description': 'Длинный текст.\n' * 100 })
+        event.patch({'description': 'Длинный текст.\n' * 100})
 
         result = kocherga.events.vk.create(event)
 
@@ -51,7 +54,7 @@ class TestCreate:
     def test_create_without_group(self, minimal_event):
         assert minimal_event.vk_group == ''
         with pytest.raises(Exception, match='vk_group is not set'):
-            result = kocherga.events.vk.create(minimal_event)
+            kocherga.events.vk.create(minimal_event)
 
 
 class TestGroups:
@@ -72,6 +75,7 @@ class TestGroups:
         assert len(result) == 1
         assert result[0] == 'blahblah_something'
 
+
 class TestSchedule():
     def test_schedule_post(self):
         kocherga.events.vk.create_schedule_post('')
@@ -87,4 +91,4 @@ class TestRepostToDaily():
         kocherga.events.announce.post_to_vk(event)
 
         with pytest.raises(Exception, match="Access denied: can't publish"):
-            reposted = kocherga.events.vk.repost_to_daily()
+            kocherga.events.vk.repost_to_daily()

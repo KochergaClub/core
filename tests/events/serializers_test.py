@@ -1,5 +1,8 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 from kocherga.events.serializers import PublicEventSerializer
 

@@ -1,5 +1,8 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,  # events require google for now (don't forget to remove this later)
+]
 
 import json
 
@@ -15,6 +18,7 @@ def test_events(client, imported_events, kocherga_auth_header):
 
     assert '2017' in events[0]['start']['dateTime']
 
+
 def test_events_from_date(client, imported_events, kocherga_auth_header):
     res = client.get(
         '/api/events?from_date=2018-01-01&to_date=2018-01-14',
@@ -26,6 +30,7 @@ def test_events_from_date(client, imported_events, kocherga_auth_header):
     assert len(events) > 5
 
     assert '2018' in events[0]['start']['dateTime']
+
 
 def test_upload_image(client, image_storage, event, kocherga_auth_header):
     res = client.post(
@@ -55,6 +60,7 @@ def test_upload_image_from_url(client, image_storage, event, kocherga_auth_heade
 
     assert res.status_code == 200
 
+
 def test_create(client, kocherga_auth_header):
     res = client.post(
         '/api/events',
@@ -81,6 +87,7 @@ def test_create(client, kocherga_auth_header):
     event_json = res.json()
     assert event_json['title'] == 'test event'
 
+
 def test_public_events(client):
     res = client.get('/api/public_events')
     assert res.status_code == 400
@@ -90,6 +97,7 @@ def test_public_events(client):
 
     events = res.json()
     assert type(events) == list
+
 
 def test_add_tag(event, client, kocherga_auth_header):
     res = client.post(

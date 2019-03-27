@@ -1,10 +1,14 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
 import datetime
 
 from kocherga.events.models import Event
 import kocherga.events.db
+
 
 class TestListEvents:
     def test_list(self, db, imported_events):
@@ -19,11 +23,13 @@ class TestListEvents:
         assert 0 < len(out) < 20
         assert type(out[0]) == Event
 
+
 class TestPatchEvent:
     def test_patch(self, db, event_for_edits):
         event = event_for_edits
-        event_for_edits.patch({ 'title': 'blah' })
+        event_for_edits.patch({'title': 'blah'})
         assert event.title == 'blah'
+
 
 @pytest.mark.django_db(transaction=True)
 class TestImporter:
