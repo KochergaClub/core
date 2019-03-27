@@ -38,6 +38,7 @@ services:
     << : *common
     build:
       context: ..
+      dockerfile: ./docker/Dockerfile
       args:
         NPM_TOKEN: ${TOKEN}
     command: poetry run ./manage.py runserver 0.0.0.0:80
