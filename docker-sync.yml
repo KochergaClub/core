@@ -8,5 +8,3 @@ syncs:
   code:
     notify_terminal: true
     src: '.'
-
-
