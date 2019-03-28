@@ -3,5 +3,6 @@ from . import views
 
 app_name = 'zadarma'
 urlpatterns = [
-    path('', views.MainView.as_view(), name='index'),
+    path('', views.MainView.as_view()),
+    path('pbx_call/<str:pbx_call_id>', views.PbxCallView.as_view()),
 ]

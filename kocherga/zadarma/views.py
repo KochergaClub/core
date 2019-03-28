@@ -25,3 +25,12 @@ class MainView(ZadarmaManagerMixin, View):
         return react_render(request, 'zadarma/index.tsx', {
             'pbx_calls': pbx_calls,
         })
+
+
+class PbxCallView(ZadarmaManagerMixin, View):
+    def get(self, request, pbx_call_id):
+        calls = Call.objects.filter(pbx_call_id=pbx_call_id)
+
+        return react_render(request, 'zadarma/pbx_call.tsx', {
+            'pbx_call': serializers.CallSerializer(calls, many=True).data
+        })
