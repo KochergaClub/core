@@ -50,6 +50,7 @@ export const teamMenuItems: MenuItem[] = [
     items: [
       { link: '/team/analytics/', title: 'Аналитика' },
       { link: '/team/mastermind_dating/', title: 'Мастермайнд' },
+      { link: '/team/zadarma/', title: 'Звонки' },
       { link: '/admin/', title: 'Админка' },
     ],
   },
