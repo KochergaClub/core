@@ -2,7 +2,7 @@ version: '3.4'
 
 x-common:
   &common
-  image: registry.gitlab.com/kocherga/code/core:${TAG}
+  image: registry.gitlab.com/kocherga/core:${TAG}
   extra_hosts:
     - "db:${HOST_IP}"
   environment:
@@ -19,7 +19,7 @@ x-common:
 
 services:
   chrome:
-    image: registry.gitlab.com/kocherga/code/core/chrome:${TAG}
+    image: registry.gitlab.com/kocherga/core/chrome:${TAG}
     cap_add:
       - SYS_ADMIN
     ports:

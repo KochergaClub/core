@@ -2,7 +2,7 @@ version: '3.4'
 
 x-common:
   &common
-  image: registry.gitlab.com/kocherga/code/core:${TAG}
+  image: registry.gitlab.com/kocherga/core:${TAG}
   volumes:
     - ../data:/data
   environment:
@@ -23,7 +23,7 @@ services:
       - ../mysql.conf.d:/etc/mysql/conf.d
 
   chrome:
-    image: registry.gitlab.com/kocherga/code/core/chrome:${TAG}
+    image: registry.gitlab.com/kocherga/core/chrome:${TAG}
     cap_add:
       - SYS_ADMIN
     ports:

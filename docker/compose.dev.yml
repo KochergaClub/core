@@ -2,7 +2,7 @@ version: '3.4'
 
 x-common:
   &common
-  image: registry.gitlab.com/kocherga/code/core:dev
+  image: registry.gitlab.com/kocherga/core:dev
   volumes:
     - ..:/code
     - /data/kocherga:/data
@@ -24,7 +24,7 @@ services:
       - ../mysql.conf.d:/etc/mysql/conf.d
 
   chrome:
-    image: registry.gitlab.com/kocherga/code/core/chrome:dev
+    image: registry.gitlab.com/kocherga/core/chrome:dev
     build:
       context: .
       dockerfile: ./Dockerfile.chrome

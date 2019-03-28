@@ -127,7 +127,7 @@ class AnnounceSession:
         if not entity.name:
             raise Exception("Having a name is a must")
 
-        # Problems? See https://gitlab.com/kocherga/code/core/issues/26
+        # Problems? See https://gitlab.com/kocherga/core/issues/26
         if entity.fb_id:
             logger.info(f'Looking for {entity.name} in listbox')
             prefix = '@' + entity.name[:20]
