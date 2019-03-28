@@ -1,5 +1,7 @@
 from itertools import groupby
+from datetime import timedelta
 
+from django.utils import timezone
 from django.views import View
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -16,7 +18,7 @@ class ZadarmaViewerMixin(UserPassesTestMixin):
 
 class MainView(ZadarmaViewerMixin, View):
     def get(self, request):
-        calls = Call.objects.all()
+        calls = Call.objects.filter(ts__gte=timezone.now() - timedelta(days=30))
         pbx_calls = [
             serializers.CallSerializer(g, many=True).data
             for k, g in groupby(calls, key=lambda call: call.pbx_call_id)
