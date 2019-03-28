@@ -127,7 +127,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
     def get_initial_dt(self):
         # return datetime(2016, 11, 1, tzinfo=TZ)
-        return datetime(2019, 3, 1, tzinfo=TZ)
+        return datetime(2019, 3, 23, tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         last_call = None

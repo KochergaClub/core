@@ -33,6 +33,7 @@ if not settings.IGNORE_WEB:
         path('team/events/', include('kocherga.events.urls')),
         path('team/cashier/', include('kocherga.money.cashier.urls')),
         path('team/watchmen/', include('kocherga.watchmen.urls')),
+        path('team/zadarma/', include('kocherga.zadarma.urls')),
         path('my/', include('kocherga.my.urls')),
         path('', include('kocherga.auth.urls')),
         path('admin/', admin.site.urls),
