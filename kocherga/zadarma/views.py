@@ -9,12 +9,12 @@ from .models import Call
 from . import serializers
 
 
-class ZadarmaManagerMixin(UserPassesTestMixin):
+class ZadarmaViewerMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.has_perm('zadarma.manage')
+        return self.request.user.has_perm('zadarma.listen')
 
 
-class MainView(ZadarmaManagerMixin, View):
+class MainView(ZadarmaViewerMixin, View):
     def get(self, request):
         calls = Call.objects.all()
         pbx_calls = [
@@ -27,7 +27,7 @@ class MainView(ZadarmaManagerMixin, View):
         })
 
 
-class PbxCallView(ZadarmaManagerMixin, View):
+class PbxCallView(ZadarmaViewerMixin, View):
     def get(self, request, pbx_call_id):
         calls = Call.objects.filter(pbx_call_id=pbx_call_id)
 

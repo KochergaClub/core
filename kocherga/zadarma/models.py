@@ -56,6 +56,10 @@ class Call(models.Model):
         db_table = 'zadarma_calls'
         verbose_name = 'Звонок'
         verbose_name_plural = 'Звонки'
+        ordering = ['-ts']
+        permissions = (
+            ('listen', 'Может слушать  звонки'),
+        )
 
     def __str__(self):
         return f'[{self.ts}] {self.call_type} {self.clid} ---> {self.destination}'
