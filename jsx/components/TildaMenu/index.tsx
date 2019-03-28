@@ -27,8 +27,8 @@ const Container = styled('div')<{ hideOnMobile: boolean, team: boolean }>`
   }
 `;
 
-const Logo = () => (
-  <a href="/">
+const Logo = ({ team }: Props) => (
+  <a href={team ? '/team/' : ''}>
     <img src="/static/menu-logo.png" width="190" height="50" />
   </a>
 );
@@ -54,7 +54,7 @@ const TildaMenu = ({ team }: Props) => {
         <MobileHeader expanded={expanded} setExpand={setExpanded} />
         <Container hideOnMobile={!expanded} team={team}>
           <Line>
-            <Logo />
+            <Logo team={team} />
             <MenuItems team={team} />
           </Line>
           <SocialIcons />
