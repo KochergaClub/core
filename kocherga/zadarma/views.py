@@ -18,7 +18,7 @@ class ZadarmaViewerMixin(UserPassesTestMixin):
 
 class MainView(ZadarmaViewerMixin, View):
     def get(self, request):
-        calls = Call.objects.filter(ts__gte=timezone.now() - timedelta(days=30))
+        calls = Call.objects.filter(ts__gte=timezone.now() - timedelta(days=30)).limit(100)
         pbx_calls = [
             serializers.CallSerializer(g, many=True).data
             for k, g in groupby(calls, key=lambda call: call.pbx_call_id)
