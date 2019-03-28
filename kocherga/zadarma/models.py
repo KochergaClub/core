@@ -1,25 +1,22 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-from django.db import models
-
-from collections import OrderedDict
 from datetime import datetime, timedelta
-import requests
 import enum
-import hashlib
-import hmac
-import base64
-import urllib
 import itertools
 
 from typing import Iterator
+
+import requests
+
+from django.db import models
 
 from kocherga.dateutils import TZ
 import kocherga.dateutils
 import kocherga.watchmen.tools
 import kocherga.importer.base
+
+from . import api
 
 
 class CallType(enum.Enum):
@@ -35,6 +32,10 @@ class CallType(enum.Enum):
         raise Exception(f"Can't detect call type by data {data}")
 
 
+def call_path(call, filename):
+    return f'zadarma/calls/records/{call.call_id}.mp3'
+
+
 class Call(models.Model):
     call_id = models.CharField(primary_key=True, max_length=100)
     pbx_call_id = models.CharField(max_length=100)
@@ -48,6 +49,8 @@ class Call(models.Model):
     seconds = models.IntegerField()
     is_recorded = models.IntegerField()
     watchman = models.CharField(max_length=100)
+
+    record = models.FileField(blank=True, upload_to=call_path)
 
     class Meta:
         db_table = 'zadarma_calls'
@@ -71,52 +74,37 @@ class Call(models.Model):
             **args,
         )
 
+        if 'record_link' in data:
+            r = requests.get(data['record_link'])
+            r.raise_for_status()
+            from io import BytesIO
+            call.record.save('record.mp3', BytesIO(r.content))
+
         return call
 
 
 def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
     dt_format = '%Y-%m-%d %H:%M:%S'
-    params = OrderedDict(
-        sorted(
-            {
-                'start': from_dt.strftime(dt_format),
-                'end': to_dt.strftime(dt_format),
-                'version': 2,
-                'format': 'json',
-            }.items()
-        )
-    )
 
-    credentials = settings.KOCHERGA_ZADARMA_CREDENTIALS
-    key = credentials['key']
+    response = api.api_call('GET', 'statistics/pbx', {
+        'start': from_dt.strftime(dt_format),
+        'end': to_dt.strftime(dt_format),
+        'version': 2,
+    })
 
-    params_str = urllib.parse.urlencode(params)
-    hmac_value = hmac.new(
-        credentials['secret'].encode('utf-8'),
-        (
-            '/v1/statistics/pbx/'
-            + params_str
-            + hashlib.md5(params_str.encode('utf-8')).hexdigest()
-        ).encode('utf-8'),
-        hashlib.sha1
-    ).hexdigest()
-    signature = base64.b64encode(hmac_value.encode('utf-8')).decode('utf-8')
+    itertools.groupby(response['stats'])
+    for item in response['stats']:
+        if item['is_recorded'] == 'true':
+            record = api.api_call('GET', 'pbx/record/request', {
+                'call_id': item['call_id'],
+            })
+            assert record['status'] == 'success'
+            item['record_link'] = record['link']
 
-    r = requests.get(
-        'https://api.zadarma.com/v1/statistics/pbx/?' + params_str,
-        headers={
-            'Authorization': f'{key}:{signature}'
-        }
-    )
-    r.raise_for_status()
-    itertools.groupby(r.json()['stats'])
-    for item in r.json()['stats']:
         yield Call.from_api_data(item)
 
 
-def fetch_all_calls(
-    from_dt=datetime(2016, 4, 1, tzinfo=TZ), to_dt=None
-) -> Iterator[Call]:
+def fetch_all_calls(from_dt, to_dt) -> Iterator[Call]:
     api_requests = 0
     for (chunk_from_dt, chunk_to_dt) in kocherga.dateutils.date_chunks(
         from_dt, to_dt, timedelta(days=28)
@@ -138,7 +126,8 @@ def fetch_all_calls(
 class Importer(kocherga.importer.base.IncrementalImporter):
 
     def get_initial_dt(self):
-        return datetime(2016, 11, 1, tzinfo=TZ)
+        # return datetime(2016, 11, 1, tzinfo=TZ)
+        return datetime(2019, 3, 1, tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         last_call = None
@@ -146,8 +135,11 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         schedule = kocherga.watchmen.tools.load_schedule()
 
         for call in fetch_all_calls(from_dt, to_dt):
-            watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts.timestamp(), TZ))
-            call.watchman = watchman
+            try:
+                watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts.timestamp(), TZ))
+                call.watchman = watchman
+            except Exception:
+                pass  # that's ok
             call.save()
             last_call = call
 
