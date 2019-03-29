@@ -9,7 +9,7 @@ IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
     "cm.importer",
     "events.db",
-    "gitlab.models",
+    # "gitlab.models",
     "money.cashier.models",
     "money.ofd.models",
     "money.tochka.importer",
