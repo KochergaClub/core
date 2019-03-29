@@ -23,14 +23,15 @@ class WatchmenManagerMixin(UserPassesTestMixin):
 
 @staff_member_required
 def index(request):
-    items = ScheduleItem.objects.items_range(
-        from_date=datetime.today() - timedelta(days=7 * 2),
-        to_date=datetime.today() + timedelta(days=7 * 3),
-    )
+    from_date = datetime.today().date() - timedelta(days=7 * 2)
+    to_date = datetime.today().date() + timedelta(days=7 * 2)
+    items = ScheduleItem.objects.items_range(from_date, to_date)
 
     return react_render(request, 'watchmen/index.tsx', {
         'schedule': serializers.ScheduleItemSerializer(items, many=True).data,
         'editable': True,
+        'from_date': from_date.strftime('%Y-%m-%d'),
+        'to_date': to_date.strftime('%Y-%m-%d'),
         'watchmen': kocherga.staff.serializers.MemberSerializer(
             kocherga.staff.models.Member.objects.filter(is_current=True),
             many=True

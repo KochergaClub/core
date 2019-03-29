@@ -1,8 +1,8 @@
 import React, { useContext, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { ScheduleContext } from './contexts';
-import { ScheduleItem } from './types';
+import { ScheduleContext } from '../contexts';
+import { ScheduleItem } from '../types';
 import Picker from './Picker';
 
 const Container = styled.div`

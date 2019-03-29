@@ -5,10 +5,10 @@ import 'moment/locale/ru';
 
 import Page from '../components/Page';
 
-import Calendar from './Calendar';
+import Calendar from './components/Calendar';
 
 import { ScheduleItem, Schedule, Watchman } from './types';
-import DayContainer from './DayContainer';
+import DayContainer from './components/DayContainer';
 
 import { ScheduleContext } from './contexts';
 
@@ -17,15 +17,17 @@ interface Props {
   editable: boolean;
   watchmen: Watchman[];
   csrfToken: string;
+  from_date: string;
+  to_date: string;
 }
 
-export default ({ schedule: items, editable, watchmen, csrfToken }: Props) => {
-  const schedule = new Schedule(items);
+export default (props: Props) => {
+  const schedule = new Schedule(props.schedule);
 
   const contextValue = {
-    editable,
-    watchmen,
-    csrfToken,
+    editable: props.editable,
+    watchmen: props.watchmen,
+    csrfToken: props.csrfToken,
   };
 
   return (
@@ -34,11 +36,11 @@ export default ({ schedule: items, editable, watchmen, csrfToken }: Props) => {
         <h1>Расписание смен</h1>
         <div style={{ height: 350 }}>
           <Calendar
-            date={moment().subtract(14, 'day')}
-            renderDay={d => (
-              <DayContainer daySchedule={schedule.itemsByDate(d)} />
-            )}
-            weeks={4}
+            fromDate={moment(props.from_date)}
+            toDate={moment(props.to_date)}
+            renderDay={d => {
+              return <DayContainer daySchedule={schedule.itemsByDate(d)} />;
+            }}
           />
         </div>
       </Page>

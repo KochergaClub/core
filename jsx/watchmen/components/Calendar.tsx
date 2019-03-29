@@ -6,22 +6,28 @@ import MonthHeader from './MonthHeader';
 import Week from './Week';
 
 interface Props {
-  date: moment.Moment;
+  fromDate: moment.Moment;
+  toDate: moment.Moment;
   renderDay: (date: moment.Moment) => React.ReactNode;
-  weeks: number;
 }
 
 export default class MonthCalendar extends React.Component<Props> {
   get weeks(): moment.Moment[] {
-    const firstDay = moment(this.props.date).startOf('week');
+    let firstDay = moment(this.props.fromDate);
+    if (this.props.fromDate.day() > 0) {
+      firstDay = firstDay.endOf('week').add(1, 'day');
+    }
 
     const result = [];
     const day = firstDay;
     do {
+      day.startOf('week'); // bad hack - moment.js is mutable
       result.push(moment(day));
       day.add(1, 'week');
-    } while (result.length < this.props.weeks);
+      day.endOf('week'); // bad hack
+    } while (day.isSameOrBefore(this.props.toDate));
 
+    console.log(result);
     return result;
   }
 

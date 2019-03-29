@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DaySchedule, SHIFTS } from './types';
+import { DaySchedule, SHIFTS } from '../types';
 
 import ShiftBox from './ShiftBox';
 

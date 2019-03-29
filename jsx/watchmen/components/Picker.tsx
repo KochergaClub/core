@@ -1,8 +1,8 @@
 import React, { useContext, useCallback } from 'react';
 import styled from 'styled-components';
 
-import { ScheduleContext } from './contexts';
-import { Watchman } from './types';
+import { ScheduleContext } from '../contexts';
+import { Watchman } from '../types';
 
 const PickerContainer = styled.div`
   position: absolute;

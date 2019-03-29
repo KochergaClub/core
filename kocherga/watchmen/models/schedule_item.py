@@ -1,5 +1,9 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from collections import defaultdict
 from datetime import timedelta
+import datetime
 
 from django.db import models
 
@@ -9,7 +13,7 @@ from .shift import Shift
 
 
 class Manager(models.Manager):
-    def items_range(self, from_date, to_date):
+    def items_range(self, from_date: datetime.date, to_date: datetime.date):
         items = self.filter(date__gte=from_date, date__lte=to_date)
 
         date2items = defaultdict(list)
@@ -19,17 +23,17 @@ class Manager(models.Manager):
         d = from_date
         while d <= to_date:
             for shift in Shift.modern_shifts():
-                if shift not in date2items[d]:
+                if shift.name not in (item.shift for item in date2items[d]):
                     date2items[d].append(
                         ScheduleItem(
                             date=d,
-                            shift=shift,
+                            shift=shift.name,
                             watchman='',
                         )
                     )
             d += timedelta(days=1)
 
-        return sum(date2items.values())
+        return sum(date2items.values(), [])
 
 
 class ScheduleItem(models.Model):
