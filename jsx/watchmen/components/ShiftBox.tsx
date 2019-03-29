@@ -66,7 +66,7 @@ const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
         body: formData,
       }).then(() => {
         window.location.reload(); // TODO - update in-memory store instead
-      });
+      }); // TODO - do something on errors
     },
     []
   );
