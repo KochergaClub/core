@@ -28,7 +28,7 @@ def index(request):
         from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
     else:
         # start of last week
-        from_date = datetime.today().date() - timedelta(weeks=1)
+        from_date = datetime.today().date()
         from_date -= timedelta(days=from_date.weekday())
 
     to_date = from_date + timedelta(weeks=4)
