@@ -29,31 +29,24 @@ const PickerItemContainer = styled.div`
 interface Props {
   date: string;
   shift: string;
+  picked: (
+    {
+      date,
+      shift,
+      watchman,
+    }: { date: string; shift: string; watchman: Watchman }
+  ) => void;
 }
 
 interface ItemProps extends Props {
   watchman: Watchman;
 }
 
-const PickerItem = ({ watchman, date, shift }: ItemProps) => {
-  const { csrfToken } = useContext(ScheduleContext);
-
-  const pick = useCallback(() => {
-    const formData = new FormData();
-    formData.append('shift', shift);
-    formData.append('date', date);
-    formData.append('watchman', watchman.short_name);
-    formData.append('csrfmiddlewaretoken', csrfToken);
-
-    fetch('/team/watchmen/action/set_watchman_for_shift', {
-      method: 'POST',
-      body: formData,
-    });
-  }, []);
+const PickerItem = ({ watchman, date, shift, picked }: ItemProps) => {
   return (
     <PickerItemContainer
       style={{ backgroundColor: watchman.color }}
-      onClick={pick}
+      onClick={() => picked({ date, shift, watchman })}
     >
       {watchman.short_name}
     </PickerItemContainer>

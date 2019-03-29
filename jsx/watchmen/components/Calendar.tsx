@@ -1,6 +1,7 @@
 import React from 'react';
 
 import moment from 'moment';
+import 'moment/locale/ru';
 
 import MonthHeader from './MonthHeader';
 import Week from './Week';
@@ -13,9 +14,10 @@ interface Props {
 
 export default class MonthCalendar extends React.Component<Props> {
   get weeks(): moment.Moment[] {
+    // Note: startOf('week') will work correctly only if we use 'ru' locale
     let firstDay = moment(this.props.fromDate);
-    if (this.props.fromDate.day() > 0) {
-      firstDay = firstDay.endOf('week').add(1, 'day');
+    if (firstDay.day() != 1) {
+      firstDay.endOf('week').add(1, 'day');
     }
 
     const result = [];
@@ -27,7 +29,6 @@ export default class MonthCalendar extends React.Component<Props> {
       day.endOf('week'); // bad hack
     } while (day.isSameOrBefore(this.props.toDate));
 
-    console.log(result);
     return result;
   }
 

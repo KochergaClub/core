@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { ScheduleContext } from '../contexts';
-import { ScheduleItem } from '../types';
+import { ScheduleItem, Watchman } from '../types';
 import Picker from './Picker';
 
 const Container = styled.div`
@@ -36,18 +36,47 @@ const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
   const { editable } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
+  const { csrfToken } = useContext(ScheduleContext);
+
   const clicked = useCallback(
     () => {
       setExpanded(!expanded);
     },
     [expanded, editable]
   );
+
+  const pick = useCallback(
+    ({
+      date,
+      shift,
+      watchman,
+    }: {
+      date: string;
+      shift: string;
+      watchman: Watchman;
+    }) => {
+      const formData = new FormData();
+      formData.append('shift', shift);
+      formData.append('date', date);
+      formData.append('watchman', watchman.short_name);
+      formData.append('csrfmiddlewaretoken', csrfToken);
+
+      fetch('/team/watchmen/action/set_watchman_for_shift', {
+        method: 'POST',
+        body: formData,
+      }).then(() => {
+        window.location.reload(); // TODO - update in-memory store instead
+      });
+    },
+    []
+  );
+
   return (
     <Container>
       <div onClick={editable && clicked}>
         <InnerShiftBox item={item} />
       </div>
-      {expanded && <Picker date={item.date} shift={item.shift} />}
+      {expanded && <Picker date={item.date} shift={item.shift} picked={pick} />}
     </Container>
   );
 };

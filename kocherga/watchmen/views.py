@@ -23,8 +23,16 @@ class WatchmenManagerMixin(UserPassesTestMixin):
 
 @staff_member_required
 def index(request):
-    from_date = datetime.today().date() - timedelta(days=7 * 2)
-    to_date = datetime.today().date() + timedelta(days=7 * 2)
+    from_date_str = request.GET.get('from_date', None)
+    if from_date_str:
+        from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
+    else:
+        # start of last week
+        from_date = datetime.today().date() - timedelta(weeks=1)
+        from_date -= timedelta(days=from_date.weekday())
+
+    to_date = from_date + timedelta(weeks=4)
+
     items = ScheduleItem.objects.items_range(from_date, to_date)
 
     return react_render(request, 'watchmen/index.tsx', {
