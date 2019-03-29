@@ -9,8 +9,10 @@ import { nightColor } from '../constants';
 const PickerContainer = styled.div`
   position: absolute;
   top: 2em;
-  border: 1px solid #aaa;
-  box-shadow: 4px 2px 2px #ccc;
+  border: 1px solid #888;
+
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+  user-select: none;
 
   margin-left: 4px;
   width: 100%;
@@ -59,6 +61,7 @@ const PickerItem = ({ watchman, date, shift, picked }: ItemProps) => {
 
 const Picker = (props: Props) => {
   const { watchmen } = useContext(ScheduleContext);
+
   return (
     <PickerContainer>
       {watchmen.map(w => (
