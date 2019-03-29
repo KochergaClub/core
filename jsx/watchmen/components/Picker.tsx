@@ -1,8 +1,10 @@
-import React, { useContext, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
 
 import { ScheduleContext } from '../contexts';
 import { Watchman } from '../types';
+
+import { nightColor } from '../constants';
 
 const PickerContainer = styled.div`
   position: absolute;
@@ -18,11 +20,13 @@ const PickerContainer = styled.div`
 
 const PickerItemContainer = styled.div`
   cursor: pointer;
-  padding-left: 4px;
-  border: 1px solid transparent;
+  color: ${props => (props.theme.color === 'dark' ? 'white' : 'black')};
 
-  &:hover {
-    border: 1px solid black;
+  > div {
+    padding-left: 4px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
   }
 `;
 
@@ -48,7 +52,7 @@ const PickerItem = ({ watchman, date, shift, picked }: ItemProps) => {
       style={{ backgroundColor: watchman.color }}
       onClick={() => picked({ date, shift, watchman })}
     >
-      {watchman.short_name}
+      <div>{watchman.short_name}</div>
     </PickerItemContainer>
   );
 };
@@ -60,6 +64,12 @@ const Picker = (props: Props) => {
       {watchmen.map(w => (
         <PickerItem key={w.short_name} watchman={w} {...props} />
       ))}
+      <ThemeProvider theme={{ color: 'dark' }}>
+        <PickerItem
+          watchman={{ short_name: 'Ночь', color: nightColor }}
+          {...props}
+        />
+      </ThemeProvider>
     </PickerContainer>
   );
 };

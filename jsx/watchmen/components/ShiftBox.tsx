@@ -5,6 +5,8 @@ import { ScheduleContext } from '../contexts';
 import { ScheduleItem, Watchman } from '../types';
 import Picker from './Picker';
 
+import { nightColor } from '../constants';
+
 const Container = styled.div`
   position: relative;
 `;
@@ -14,17 +16,23 @@ const Box = styled.div`
   line-height: 2em;
   vertical-align: center;
   text-align: center;
-  border: 1px solid #ddd;
-  margin: 4px;
+  border: 1px solid white;
 `;
 
-const NightBoxContainer = styled(Box)``;
+const EmptyBox = styled(Box)`
+  background-color: #f0f0f0;
+`;
+
+const NightBoxContainer = styled(Box)`
+  background-color: ${nightColor};
+  color: white;
+`;
 
 const NightBox = () => <NightBoxContainer>Ночь</NightBoxContainer>;
 
 const InnerShiftBox = ({ item }: { item?: ScheduleItem }) => {
-  if (!item) {
-    return <Box />; // TODO - EmptyItem
+  if (!item.watchman) {
+    return <EmptyBox />;
   }
   if (item.watchman === 'Ночь') {
     return <NightBox />;
