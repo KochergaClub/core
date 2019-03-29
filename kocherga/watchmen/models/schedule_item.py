@@ -65,3 +65,6 @@ class ScheduleItem(models.Model):
         unique_together = (
             ('date', 'shift'),
         )
+        permissions = (
+            ('manage', 'Может управлять админским расписанием'),
+        )
