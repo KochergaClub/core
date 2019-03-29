@@ -13,7 +13,7 @@ IMPORTER_MODULES = [
     "money.cashier.models",
     "money.ofd.models",
     "money.tochka.importer",
-    "watchmen.importer",
+    # "watchmen.importer",
     "zadarma.models",
     "timepad.importer",
 ]
