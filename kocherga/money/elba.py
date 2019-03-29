@@ -169,7 +169,10 @@ async def make_ion_requests(accounting_dates, operation_years, declaration_years
 async def payments_page(browser):
     page = await elba_page(browser)
 
+    logger.info('Clicking Payments link')
     await page.click("#MainMenu_Payments_Link")
+
+    logger.info('Waiting for navigation')
     await page.waitForNavigation()
 
     logger.info("Got to Payments page")
@@ -192,6 +195,8 @@ async def add_cash_income(data, last_pko_id=None):
         page = await payments_page(browser)
 
         pko_id = last_pko_id or await get_last_pko_id(page)
+        logger.info(f'Last pko_id: {pko_id}')
+        logger.info(f'Going to fill {len(data)} rows')
 
         for row in data:
             pko_id += 1

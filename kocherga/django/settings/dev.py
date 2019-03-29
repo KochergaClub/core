@@ -23,8 +23,6 @@ KOCHERGA_EVENT_MARKUP_SELF_MENTION = 'секта имени Юдковского
 
 KOCHERGA_MONEY_TOCHKA_API = 'https://enter.tochka.com/sandbox/v1'
 
-KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759'  # same as in prod.py, OFD is read-only anyway
-
 KOCHERGA_TIMEPAD = {
     "organization": "kocherga-dev",
     "organization_id": 121284,

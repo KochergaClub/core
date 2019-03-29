@@ -73,7 +73,7 @@ class OfdDocument(models.Model):
             cash=cash,
             electronic=electronic,
             total=cash + electronic,
-            check_type=CheckType(item["operationType"]),
+            check_type=CheckType(item["operationType"]).name,
             shift_id=int(item["shiftNumber"]),
             request_id=int(item["requestNumber"]),
             operator=item["operator"],

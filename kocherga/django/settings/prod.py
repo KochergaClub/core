@@ -66,8 +66,6 @@ KOCHERGA_EVENT_MARKUP_SELF_MENTION = 'антикафе Кочерга'
 
 KOCHERGA_MONEY_TOCHKA_API = 'https://enter.tochka.com/api/v1'
 
-KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '8712000101056759'  # TODO - replaced since 2018-12
-
 KOCHERGA_TIMEPAD = {
     "organization": "kocherga",
     "organization_id": 53244,
