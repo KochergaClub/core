@@ -37,7 +37,7 @@ def index(request):
 
     return react_render(request, 'watchmen/index.tsx', {
         'schedule': serializers.ScheduleItemSerializer(items, many=True).data,
-        'editable': True,
+        'editable': request.user.has_perm('watchmen.manage'),
         'from_date': from_date.strftime('%Y-%m-%d'),
         'to_date': to_date.strftime('%Y-%m-%d'),
         'watchmen': kocherga.staff.serializers.MemberSerializer(
