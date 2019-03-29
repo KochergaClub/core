@@ -1,5 +1,7 @@
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useRef, useContext, useState, useCallback } from 'react';
 import styled from 'styled-components';
+
+import useOnClickOutside from 'use-onclickoutside';
 
 import { ScheduleContext } from '../contexts';
 import { ScheduleItem, Watchman } from '../types';
@@ -7,8 +9,9 @@ import Picker from './Picker';
 
 import { nightColor } from '../constants';
 
-const Container = styled.div`
+const Container = styled.div<{ editable: boolean }>`
   position: relative;
+  cursor: ${props => (props.editable ? 'pointer' : 'auto')};
 `;
 
 const Box = styled.div`
@@ -46,12 +49,22 @@ const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
 
   const { csrfToken } = useContext(ScheduleContext);
 
-  const clicked = useCallback(
+  const flipExpand = useCallback(
     () => {
       setExpanded(!expanded);
     },
     [expanded, editable]
   );
+
+  const unexpand = useCallback(
+    () => {
+      setExpanded(false);
+    },
+    [expanded, editable]
+  );
+
+  const ref = useRef(null);
+  useOnClickOutside(ref, unexpand);
 
   const pick = useCallback(
     ({
@@ -80,8 +93,8 @@ const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
   );
 
   return (
-    <Container>
-      <div onClick={editable && clicked}>
+    <Container ref={ref} editable={editable}>
+      <div onClick={editable && flipExpand}>
         <InnerShiftBox item={item} />
       </div>
       {expanded && <Picker date={item.date} shift={item.shift} picked={pick} />}
