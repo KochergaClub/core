@@ -50,13 +50,9 @@ export default class MonthCalendar extends React.Component<Props> {
       <div style={{ minHeight: 250 }}>
         <MonthHeader />
         {this.weeks.map((week, i) => (
-          <div>
+          <div key={week.format('D-M')}>
             {this.needsHeader(week, i) && <WeekHeader week={week} />}
-            <Week
-              key={week.format('D-M')}
-              firstDay={week}
-              renderDay={this.props.renderDay}
-            />
+            <Week firstDay={week} renderDay={this.props.renderDay} />
           </div>
         ))}
       </div>
