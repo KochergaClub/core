@@ -274,12 +274,3 @@ def roster_check():
             text=f":exclamation: {empty_total} пустых смен в ближайшие {TOTAL_DAYS} дней.",
             channel=CHANNEL,
         )
-
-
-@bot.flask_app.route('/trigger/watchmen/new_week', methods=['POST'])
-def watchmen_new_week():
-    bot.send_message(
-        text="<!channel>, новая неделя в расписании!",
-        channel="#roster",
-    )
-    return 'ok'

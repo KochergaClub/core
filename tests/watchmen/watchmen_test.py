@@ -1,8 +1,5 @@
 import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,
-]
+pytestmark = pytest.mark.usefixtures('db')
 
 import datetime
 from freezegun import freeze_time
@@ -11,23 +8,8 @@ import kocherga.watchmen.tools
 import kocherga.watchmen.models
 
 
-@pytest.fixture()
-def google_schedule():
-    return kocherga.watchmen.tools.load_schedule_from_google()
-
-
-@pytest.fixture()
-def db_schedule():
-    kocherga.watchmen.tools.load_schedule_from_google().save_to_db()
-    return kocherga.watchmen.tools.load_schedule_from_db()
-
-
-@pytest.fixture(params=['google', 'db'])
 def schedule(request, google_schedule, db_schedule):
-    if request.param == 'google':
-        return google_schedule
-    else:
-        return db_schedule
+    return kocherga.watchmen.tools.load_schedule()
 
 
 class TestSchedule:
