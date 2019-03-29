@@ -5,6 +5,7 @@ import 'moment/locale/ru';
 
 import MonthHeader from './MonthHeader';
 import Week from './Week';
+import WeekHeader from './WeekHeader';
 
 interface Props {
   fromDate: moment.Moment;
@@ -32,16 +33,31 @@ export default class MonthCalendar extends React.Component<Props> {
     return result;
   }
 
+  needsHeader = (week: moment.Moment, i: number) => {
+    if (i === 0) {
+      return true;
+    }
+    const lastDay = moment(week);
+    lastDay.add(6, 'day');
+    if (lastDay.date() <= 7) {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     return (
       <div style={{ minHeight: 250 }}>
         <MonthHeader />
-        {this.weeks.map(week => (
-          <Week
-            key={week.format('D-M')}
-            firstDay={week}
-            renderDay={this.props.renderDay}
-          />
+        {this.weeks.map((week, i) => (
+          <div>
+            {this.needsHeader(week, i) && <WeekHeader week={week} />}
+            <Week
+              key={week.format('D-M')}
+              firstDay={week}
+              renderDay={this.props.renderDay}
+            />
+          </div>
         ))}
       </div>
     );
