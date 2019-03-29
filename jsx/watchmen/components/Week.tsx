@@ -13,32 +13,60 @@ interface Props {
   renderDay: (date: moment.Moment) => React.ReactNode;
 }
 
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+
+  margin-bottom: 10px;
+`;
+
+const DayContainer = styled.div`
+  position: relative;
+`;
+
+const Cell = styled.div<{ today: boolean }>``;
+
+const LeftHighlight = styled.div`
+  position: absolute;
+  left: -20px;
+  width: 3px;
+  height: 100%;
+  background-color: black;
+`;
+
+const RightHighlight = styled.div`
+  position: absolute;
+  right: -20px;
+  width: 3px;
+  height: 100%;
+  background-color: black;
+`;
+
 class Week extends React.Component<Props> {
-  static Container = styled.div`
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-
-    margin-bottom: 10px;
-  `;
-
-  static Cell = styled.div<{ today: boolean }>``;
-
   render() {
     const { firstDay, renderDay } = this.props;
+    const highlight = moment(firstDay)
+      .startOf('week')
+      .isSame(moment().startOf('week'));
+
     return (
-      <Week.Container>
+      <Container>
         {weekMoments(firstDay).map((day, i) => {
           const today = moment(day)
             .startOf('day')
             .isSame(moment().startOf('day'));
           return (
-            <Week.Cell key={i} today={today}>
+            <Cell key={i} today={today}>
               <DayHeader day={day} />
-              <div>{renderDay(day)}</div>
-            </Week.Cell>
+              <DayContainer>
+                {i === 0 && highlight && <LeftHighlight />}
+                {i === 6 && highlight && <RightHighlight />}
+                {renderDay(day)}
+              </DayContainer>
+            </Cell>
           );
         })}
-      </Week.Container>
+      </Container>
     );
   }
 }
