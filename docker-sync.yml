@@ -8,3 +8,6 @@ syncs:
   code:
     notify_terminal: true
     src: '.'
+    sync_excludes:
+      - 'node_modules'
+      - '.git'
