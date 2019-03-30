@@ -30,9 +30,8 @@ class Schedule:
 
         d = dt.date()
         if shift == Shift.NIGHT:
-            d = d - timedelta(
-                days=1
-            )  # See the comment about google sheets quirk below.
+            # Night shifts are assigned to the previous day.
+            d -= timedelta(days=1)
 
         shift_info = self.shifts_by_date(d)
         return shift_info[shift]
