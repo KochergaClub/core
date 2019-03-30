@@ -14,6 +14,7 @@ from django.db import models
 from kocherga.dateutils import TZ
 import kocherga.dateutils
 import kocherga.watchmen.schedule
+import kocherga.watchmen.models
 import kocherga.importer.base
 
 from . import api
@@ -138,12 +139,14 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
         for call in fetch_all_calls(from_dt, to_dt):
             try:
-                watchman = kocherga.watchmen.schedule.watchman_by_dt(
+                shift = kocherga.watchmen.schedule.shift_by_dt(
                     datetime.fromtimestamp(call.ts.timestamp(), TZ)
                 )
-                call.watchman = watchman
-            except Exception:
+                if shift.watchman:
+                    call.watchman = shift.watchman.short_name
+            except kocherga.watchmen.models.Shift.DoesNotExist:
                 pass  # that's ok
+
             call.save()
             last_call = call
 

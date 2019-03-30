@@ -9,18 +9,18 @@ import kocherga.staff.tools
 from kocherga.cm.models import Order
 
 
-def rate_by_shift(shift):
-    if shift in (ShiftType.MORNING_V1, ShiftType.EVENING_V1):
+def rate_by_shift(shift_type: ShiftType) -> int:
+    if shift_type in (ShiftType.MORNING_V1, ShiftType.EVENING_V1):
         return 650
-    elif shift == ShiftType.MORNING:
+    elif shift_type == ShiftType.MORNING:
         return 500
-    elif shift == ShiftType.MIDDAY:
+    elif shift_type == ShiftType.MIDDAY:
         return 500
-    elif shift == ShiftType.EVENING:
+    elif shift_type == ShiftType.EVENING:
         return 600
-    elif shift == ShiftType.NIGHT:
+    elif shift_type == ShiftType.NIGHT:
         return 600
-    raise Exception("Unknown shift")
+    raise Exception(f"Unknown shift type {shift_type}")
 
 
 def short_name_stat_to_email_stat(stat):
@@ -49,11 +49,11 @@ def shift_salaries(start_date, end_date):
     d = start_date
     while d <= end_date:
         shifts = kocherga.watchmen.schedule.shifts_by_date(d)
-        for (shift, watchman) in shifts.items():
-            if watchman in ('Слава', 'Пион', 'Ночь', ''):
+        for (shift_type, shift) in shifts.items():
+            if not shift.watchman:
                 continue
-            rate = rate_by_shift(shift)
-            stat[watchman] += rate
+            rate = rate_by_shift(shift_type)
+            stat[shift.watchman.short_name] += rate
         d += timedelta(days=1)
 
     return short_name_stat_to_email_stat(stat)

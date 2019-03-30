@@ -23,21 +23,27 @@ class TestSchedule:
         by_date = schedule.shifts_by_date(datetime.date(2019, 3, 30))
 
         assert type(by_date) == dict
-        assert by_date[kocherga.watchmen.models.ShiftType.MORNING] == 'Элиезер'
+        assert by_date[kocherga.watchmen.models.ShiftType.MORNING].watchman.short_name == 'Элиезер'
 
-    def test_watchman_by_dt(self):
-        watchman = schedule.watchman_by_dt(datetime.datetime(2019, 3, 30, hour=15, minute=0))
+    def test_shifts_by_empty_date(self):
+        by_date = schedule.shifts_by_date(datetime.date(2018, 1, 1))
 
-        assert watchman == 'Слава'
+        assert type(by_date) == dict
+        assert len(by_date) == 4
 
-    def test_current_watchman(self):
+    def test_shift_by_dt(self):
+        shift = schedule.shift_by_dt(datetime.datetime(2019, 3, 30, hour=15, minute=0))
+
+        assert shift.watchman.short_name == 'Слава'
+
+    def test_current_shift(self):
         with freeze_time('2019-03-30 10:00'):
-            assert schedule.current_watchman() == 'Элиезер'
+            assert schedule.current_shift().watchman.short_name == 'Элиезер'
 
     def test_last_watchman(self):
         with freeze_time('2019-03-31 01:00'):
-            assert schedule.last_watchman() == 'Робин'
+            assert schedule.last_watchman().short_name == 'Робин'
 
     def test_nearest_watchman(self):
         with freeze_time('2019-03-30 01:00'):
-            assert schedule.nearest_watchman() == 'Элиезер'
+            assert schedule.nearest_watchman().short_name == 'Элиезер'

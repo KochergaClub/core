@@ -8,38 +8,33 @@ from kocherga.dateutils import TZ
 from .models import Shift, ShiftType
 
 
-def shifts_by_date(d: date) -> Dict[ShiftType, str]:
+def shifts_by_date(d: date) -> Dict[ShiftType, Shift]:
     query = Shift.objects.filter(date=d)
-    if not len(query):
-        raise Exception(f"Shifts by date {d} not found")
 
     day_schedule = {}
     for shift in query:
-        if shift.watchman:
-            day_schedule[shift.shift_obj] = shift.watchman.short_name
-        elif shift.is_night:
-            day_schedule[shift.shift_obj] = 'Ночь'
-        else:
-            # There can be empty shifts in our DB but we don't care about those.
-            pass
+        day_schedule[shift.shift_obj] = shift
+
+    for shift_type in ShiftType.modern_shifts():
+        if shift_type not in day_schedule:
+            day_schedule[shift_type] = Shift(date=d, shift=shift_type.name)
 
     return day_schedule
 
 
-def watchman_by_dt(dt: datetime) -> str:
-    shift = ShiftType.by_dt(dt)
+def shift_by_dt(dt: datetime) -> Shift:
+    shift_type = ShiftType.by_dt(dt)
 
     d = dt.date()
-    if shift == ShiftType.NIGHT:
+    if shift_type == ShiftType.NIGHT:
         # Night shifts are assigned to the previous day.
         d -= timedelta(days=1)
 
-    shift_info = shifts_by_date(d)
-    return shift_info[shift]
+    return Shift.objects.get(date=d, shift=shift_type.name)
 
 
-def current_watchman():
-    return watchman_by_dt(datetime.now(TZ))
+def current_shift() -> Shift:
+    return shift_by_dt(datetime.now(TZ))
 
 
 # Find the last active watchman. The current one or the one before if there's nobody right now
@@ -47,9 +42,9 @@ def current_watchman():
 def last_watchman():
     dt = datetime.now(TZ)
     for i in range(48):
-        watchman = watchman_by_dt(dt - timedelta(hours=i))
-        if watchman and watchman != "Ночь":
-            return watchman
+        shift = shift_by_dt(dt - timedelta(hours=i))
+        if shift.watchman:
+            return shift.watchman
 
     raise Exception("Couldn't find a watchman in the last 48 hours.")
 
@@ -59,8 +54,8 @@ def last_watchman():
 def nearest_watchman():
     dt = datetime.now(TZ)
     for i in range(48):
-        watchman = watchman_by_dt(dt + timedelta(hours=i))
-        if watchman and watchman != "Ночь":
-            return watchman
+        shift = shift_by_dt(dt + timedelta(hours=i))
+        if shift.watchman:
+            return shift.watchman
 
     raise Exception("Couldn't find a watchman in the next 48 hours.")

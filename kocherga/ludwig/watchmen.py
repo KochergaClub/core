@@ -36,33 +36,27 @@ INFLECTED_MONTH_NAMES = [
 
 
 def get_current_watchman_or_complain(message):
-    watchman = schedule.current_watchman()
-    if not watchman:
+    shift = schedule.current_shift()
+
+    if not shift.watchman and not shift.watchman.is_night:
         message.reply("Админа нет, паникуем!")
         return
-    if watchman == "Ночь":
+
+    if shift.watchman.is_night:
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
-        last = kocherga.staff.tools.find_member_by_short_name(
-            schedule.last_watchman()
-        )
-        nearest = kocherga.staff.tools.find_member_by_short_name(
-            schedule.nearest_watchman()
-        )
+        last = schedule.last_watchman()
+        nearest = schedule.nearest_watchman()
 
         message.reply(
             f"Сейчас ночь. Вечером админил(а) *{last.short_name}*, а утром будет *{nearest.short_name}*."
         )
         return
 
-    member = kocherga.staff.tools.find_member_by_short_name(watchman)
-    if not member:
-        raise ErrorResponse(
-            f"Админит *{watchman}*, но у меня не получилось найти этого человека в базе сотрудников."
-        )
+    member = shift.watchman
 
     if not member.slack_id:
         raise ErrorResponse(
-            f"Админит *{watchman}*, {member.full_name}, но я не знаю, кто это в слаке."
+            f"Админит *{member.short_name}* ({member.full_name}), но я не знаю, кто это в слаке."
         )
 
     return member
@@ -70,35 +64,31 @@ def get_current_watchman_or_complain(message):
 
 def daily_watchmen(d):
     now = datetime.now(TZ)
-    shift_info = schedule.shifts_by_date(d)
+    day_schedule = schedule.shifts_by_date(d)
 
     attachments = []
-    for shift in sorted(shift_info.keys()):
-        watchman = shift_info[shift]
-        if watchman == "Ночь":
+    for shift_type in sorted(day_schedule.keys()):
+        shift = day_schedule[shift_type]
+        if shift.is_night:
             continue
 
-        if watchman == "":
+        if not shift.watchman:
             attachments.append(
-                {"text": f"{shift.when().capitalize()}: *нет админа*!\n"}
+                {"text": f"{shift_type.when().capitalize()}: *нет админа*!\n"}
             )
             continue
 
-        member = kocherga.staff.tools.find_member_by_short_name(watchman)
-        if not member:
-            raise ErrorResponse(f"Не найден сотрудник по имени {shift_info[shift]}.")
-
-        (shift_start, shift_end) = shift.dt_tuple_by_date(d)
+        (shift_start, shift_end) = shift_type.dt_tuple_by_date(d)
 
         if shift_end < now:
-            rel = "админил" if member.gender == 'MALE' else "админила"
+            rel = "админил" if shift.watchman.gender == 'MALE' else "админила"
         elif shift_start > now:
             rel = "будет админить"
         else:
             rel = "админит"
 
         attachments.append(
-            {"text": f"{shift.when().capitalize()} {rel} *{shift_info[shift]}*.\n"}
+            {"text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.short_name}*.\n"}
         )
 
     preposition = "Во" if d.weekday() == 1 else "В"
@@ -249,10 +239,10 @@ def roster_check():
     while d < today + timedelta(days=TOTAL_DAYS):
         empty_for_day = 0
 
-        shift_info = schedule.shifts_by_date(d)
-        for shift in sorted(shift_info.keys()):
-            watchman = shift_info[shift]
-            if watchman == "":
+        day_schedule = schedule.shifts_by_date(d)
+        for shift_type in sorted(day_schedule.keys()):
+            shift = day_schedule[shift_type]
+            if not shift.watchman and not shift.is_night:
                 empty_for_day += 1
 
         if empty_for_day and d <= today + timedelta(days=CRITICAL_DAYS) and not critical_sent:
