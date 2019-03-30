@@ -95,6 +95,9 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'kocherga.django.jinja2.environment',
+            'extensions': [
+                'webpack_loader.contrib.jinja2ext.WebpackExtension',
+            ],
         },
     },
 ]
@@ -185,6 +188,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
 MEDIA_ROOT = '/data/upload'
 MEDIA_URL = '/media/'
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'dist/',  # end with slash
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
 
 # ------------- Kocherga settings --------------
 
