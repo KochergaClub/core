@@ -124,8 +124,8 @@ def create(event):
     else:
         ticket_types = [
             {
-                "name": settings.KOCHERGA_TARIFF,
-                "description": "Оплата по тарифам антикафе",
+                "name": "По тарифам антикафе",
+                "description": settings.KOCHERGA_TARIFF,
                 "price": 0,
                 "limit": 50,
                 "sale_ends_at": dts(event.start_dt),
