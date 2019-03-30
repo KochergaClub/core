@@ -47,7 +47,7 @@ interface ItemProps extends Props {
 
 const PickerItem = ({ date, shift, watchman, is_night, picked }: ItemProps) => {
   let color = 'white';
-  let text = '';
+  let text = 'Очистить';
   if (is_night) {
     text = 'Ночь';
     color = nightColor;
@@ -82,6 +82,7 @@ const Picker = (props: Props) => {
       <ThemeProvider theme={{ color: 'dark' }}>
         <PickerItem is_night={true} {...props} />
       </ThemeProvider>
+      <PickerItem is_night={false} watchman={null} {...props} />
     </PickerContainer>
   );
 };
