@@ -5,6 +5,7 @@ from collections import defaultdict
 from datetime import timedelta
 import datetime
 
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from kocherga.staff.models import Member
@@ -47,20 +48,30 @@ class Shift(models.Model):
         ],
     )
     watchman_name = models.CharField(max_length=100, db_index=True)
+    watchman = models.ForeignKey(
+        Member,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        related_name='+'
+    )
+    is_night = models.BooleanField(default=False)
 
     objects = Manager()
 
     def color(self):
-        if not self.watchman_name:
+        if not self.watchman:
             return '#ffffff'
-        try:
-            return Member.objects.get(short_name=self.watchman_name).color
-        except Member.DoesNotExist:
-            return '#ff0000'
+        return self.watchman.color
 
     @property
     def shift_obj(self):
         return ShiftType[self.shift]
+
+    def clean(self):
+        if self.watchman and self.is_night:
+            raise ValidationError("watchman can't be set when is_night is set")
+        if not self.watchman and not self.is_night:
+            raise ValidationError("one of watchman and is_night must be set")
 
     class Meta:
         db_table = "watchmen_schedule"

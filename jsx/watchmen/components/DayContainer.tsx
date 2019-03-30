@@ -8,7 +8,7 @@ const DayContainer = ({ daySchedule }: { daySchedule: DaySchedule }) => {
   return (
     <div>
       {SHIFT_TYPES.map(shiftType => (
-        <ShiftBox key={shiftType} item={daySchedule[shiftType]} />
+        <ShiftBox key={shiftType} shift={daySchedule[shiftType]} />
       ))}
     </div>
   );

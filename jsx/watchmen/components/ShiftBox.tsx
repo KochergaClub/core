@@ -17,7 +17,6 @@ const Container = styled.div<{ editable: boolean }>`
 const Box = styled.div`
   height: 2em;
   line-height: 2em;
-  vertical-align: center;
   text-align: center;
   border: 1px solid white;
 `;
@@ -34,13 +33,17 @@ const NightBoxContainer = styled(Box)`
 const NightBox = () => <NightBoxContainer>Ночь</NightBoxContainer>;
 
 const InnerShiftBox = ({ shift }: { shift?: Shift }) => {
+  if (shift.is_night) {
+    return <NightBox />;
+  }
   if (!shift.watchman) {
     return <EmptyBox />;
   }
-  if (shift.watchman === 'Ночь') {
-    return <NightBox />;
-  }
-  return <Box style={{ backgroundColor: shift.color }}>{shift.watchman}</Box>;
+  return (
+    <Box style={{ backgroundColor: shift.watchman.color }}>
+      {shift.watchman.short_name}
+    </Box>
+  );
 };
 
 const ShiftBox = ({ shift }: { shift?: Shift }) => {
@@ -66,31 +69,23 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const ref = useRef(null);
   useOnClickOutside(ref, unexpand);
 
-  const pick = useCallback(
-    ({
-      date,
-      shift,
-      watchman,
-    }: {
-      date: string;
-      shift: string;
-      watchman: Watchman;
-    }) => {
-      const formData = new FormData();
-      formData.append('shift', shift);
-      formData.append('date', date);
-      formData.append('watchman', watchman.short_name);
-      formData.append('csrfmiddlewaretoken', csrfToken);
+  const pick = useCallback(({ date, shift, watchman, is_night }: Shift) => {
+    const formData = new FormData();
+    formData.append('shift', shift);
+    formData.append('date', date);
+    formData.append('watchman', watchman ? watchman.short_name : '');
+    if (is_night) {
+      formData.append('is_night', '1');
+    }
+    formData.append('csrfmiddlewaretoken', csrfToken);
 
-      fetch('/team/watchmen/action/set_watchman_for_shift', {
-        method: 'POST',
-        body: formData,
-      }).then(() => {
-        window.location.reload(); // TODO - update in-memory store instead
-      }); // TODO - do something on errors
-    },
-    []
-  );
+    fetch('/team/watchmen/action/set_watchman_for_shift', {
+      method: 'POST',
+      body: formData,
+    }).then(() => {
+      window.location.reload(); // TODO - update in-memory store instead
+    }); // TODO - do something on errors
+  }, []);
 
   return (
     <Container ref={ref} editable={editable}>

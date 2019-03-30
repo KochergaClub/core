@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { ScheduleContext } from '../contexts';
-import { Watchman } from '../types';
+import { Shift, Watchman } from '../types';
 
 import { nightColor } from '../constants';
 
@@ -32,29 +32,36 @@ const PickerItemContainer = styled.div`
   }
 `;
 
+type PickedCb = (shift: Shift) => void;
+
 interface Props {
   date: string;
   shift: string;
-  picked: (
-    {
-      date,
-      shift,
-      watchman,
-    }: { date: string; shift: string; watchman: Watchman }
-  ) => void;
+  picked: PickedCb;
 }
 
 interface ItemProps extends Props {
-  watchman: Watchman;
+  watchman?: Watchman;
+  is_night: boolean;
 }
 
-const PickerItem = ({ watchman, date, shift, picked }: ItemProps) => {
+const PickerItem = ({ date, shift, watchman, is_night, picked }: ItemProps) => {
+  let color = 'white';
+  let text = '';
+  if (is_night) {
+    text = 'Ночь';
+    color = nightColor;
+  } else if (watchman) {
+    text = watchman.short_name;
+    color = watchman.color;
+  }
+
   return (
     <PickerItemContainer
-      style={{ backgroundColor: watchman.color }}
-      onClick={() => picked({ date, shift, watchman })}
+      style={{ backgroundColor: color }}
+      onClick={() => picked({ date, shift, watchman, is_night })}
     >
-      <div>{watchman.short_name}</div>
+      <div>{text}</div>
     </PickerItemContainer>
   );
 };
@@ -65,13 +72,15 @@ const Picker = (props: Props) => {
   return (
     <PickerContainer>
       {watchmen.map(w => (
-        <PickerItem key={w.short_name} watchman={w} {...props} />
-      ))}
-      <ThemeProvider theme={{ color: 'dark' }}>
         <PickerItem
-          watchman={{ short_name: 'Ночь', color: nightColor }}
+          key={w.short_name}
+          watchman={w}
+          is_night={false}
           {...props}
         />
+      ))}
+      <ThemeProvider theme={{ color: 'dark' }}>
+        <PickerItem is_night={true} {...props} />
       </ThemeProvider>
     </PickerContainer>
   );

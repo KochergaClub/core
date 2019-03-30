@@ -1,15 +1,15 @@
 import moment from 'moment';
 
-export interface Shift {
-  date: string;
-  shift: string;
-  watchman: string;
-  color?: string;
-}
-
 export interface Watchman {
   short_name: string;
   color: string;
+}
+
+export interface Shift {
+  date: string;
+  shift: string;
+  watchman?: Watchman;
+  is_night: boolean;
 }
 
 export const SHIFT_TYPES = ['MORNING', 'MIDDAY', 'EVENING', 'NIGHT'];
@@ -33,7 +33,8 @@ export class Schedule {
           this.daySchedules[date][shiftType] = {
             date,
             shift: shiftType,
-            watchman: '',
+            watchman: null,
+            is_night: false,
           };
         }
       });
