@@ -10,7 +10,7 @@ def load_schedule():
     for item in ScheduleItem.objects.all():
         d = item.date
         shift = item.shift_obj
-        watchman = item.watchman
+        watchman = item.watchman_name
         schedule.add_shift_info(d, shift, watchman)
 
     return schedule

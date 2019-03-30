@@ -7,7 +7,7 @@ import datetime
 
 from django.db import models
 
-import kocherga.staff.models
+from kocherga.staff.models import Member
 
 from .shift import Shift
 
@@ -28,7 +28,7 @@ class Manager(models.Manager):
                         ScheduleItem(
                             date=d,
                             shift=shift.name,
-                            watchman='',
+                            watchman_name='',
                         )
                     )
             d += timedelta(days=1)
@@ -44,16 +44,16 @@ class ScheduleItem(models.Model):
             (shift.name, shift.name) for shift in Shift
         ],
     )
-    watchman = models.CharField(max_length=100, db_index=True)
+    watchman_name = models.CharField(max_length=100, db_index=True)
 
     objects = Manager()
 
     def color(self):
-        if not self.watchman:
+        if not self.watchman_name:
             return '#ffffff'
         try:
-            return kocherga.staff.models.Member.objects.get(short_name=self.watchman).color
-        except kocherga.staff.models.Member.DoesNotExist:
+            return Member.objects.get(short_name=self.watchman_name).color
+        except Member.DoesNotExist:
             return '#ff0000'
 
     @property

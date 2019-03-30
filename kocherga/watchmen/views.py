@@ -59,7 +59,7 @@ class SetWatchmanForShift(WatchmenManagerMixin, View):
         ScheduleItem.objects.update_or_create(
             shift=shift,
             date=date,
-            defaults={'watchman': watchman},
+            defaults={'watchman_name': watchman},
         )
 
         return redirect('watchmen:index')

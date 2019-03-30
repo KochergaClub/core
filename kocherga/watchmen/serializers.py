@@ -6,4 +6,4 @@ from . import models
 class ScheduleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ScheduleItem
-        fields = ('date', 'shift', 'watchman', 'color')
+        fields = ('date', 'shift', 'watchman_name', 'color')
