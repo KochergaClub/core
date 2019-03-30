@@ -7,7 +7,6 @@ from datetime import datetime, date, timedelta
 from kocherga.dateutils import TZ
 
 from .shift import Shift
-from .schedule_item import ScheduleItem
 
 
 class Schedule:
