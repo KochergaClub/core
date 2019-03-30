@@ -10,7 +10,7 @@ MODERN_SHIFTS_FIRST_DATE = datetime.strptime(
 ).date()
 
 
-class Shift(IntEnum):
+class ShiftType(IntEnum):
     MORNING_V1 = 1
     EVENING_V1 = 2
     MORNING = 3
@@ -20,37 +20,37 @@ class Shift(IntEnum):
 
     def when(self):
         when_values = {
-            Shift.MORNING: "утром",
-            Shift.MIDDAY: "днём",
-            Shift.EVENING: "вечером",
-            Shift.NIGHT: "ночью (в конце дня)",
+            ShiftType.MORNING: "утром",
+            ShiftType.MIDDAY: "днём",
+            ShiftType.EVENING: "вечером",
+            ShiftType.NIGHT: "ночью (в конце дня)",
         }
         return when_values[self.value]
 
     def start_time(self):
-        if self.value == Shift.MORNING:
+        if self.value == ShiftType.MORNING:
             return time(9)
-        if self.value == Shift.MIDDAY:
+        if self.value == ShiftType.MIDDAY:
             return time(14)
-        if self.value == Shift.EVENING:
+        if self.value == ShiftType.EVENING:
             return time(19)
-        if self.value == Shift.NIGHT:
+        if self.value == ShiftType.NIGHT:
             return time(0)
 
     def end_time(self):
-        if self.value == Shift.MORNING:
+        if self.value == ShiftType.MORNING:
             return time(13, 59, 59, 999999)
-        if self.value == Shift.MIDDAY:
+        if self.value == ShiftType.MIDDAY:
             return time(18, 59, 59, 999999)
-        if self.value == Shift.EVENING:
+        if self.value == ShiftType.EVENING:
             return time(23, 59, 59, 999999)
-        if self.value == Shift.NIGHT:
+        if self.value == ShiftType.NIGHT:
             return time(8, 59, 59, 999999)
 
     def dt_tuple_by_date(self, d):
         assert isinstance(d, date)
 
-        if self.value == Shift.NIGHT:
+        if self.value == ShiftType.NIGHT:
             d += timedelta(days=1)
         return (
             datetime.combine(d, self.start_time(), tzinfo=TZ),

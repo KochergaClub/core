@@ -6,14 +6,14 @@ from datetime import datetime, date, timedelta
 
 from kocherga.dateutils import TZ
 
-from .shift import Shift
+from .shift_type import ShiftType
 
 
 class Schedule:
     def __init__(self):
-        self._data: Dict[date, Dict[Shift, str]] = {}
+        self._data: Dict[date, Dict[ShiftType, str]] = {}
 
-    def add_shift_info(self, d: date, shift: Shift, watchman: str) -> None:
+    def add_shift_info(self, d: date, shift: ShiftType, watchman: str) -> None:
         if d not in self._data:
             self._data[d] = {}
 
@@ -22,14 +22,14 @@ class Schedule:
     def shifts_by_date(self, d):
         shift_info = self._data.get(d, None)
         if not shift_info:
-            raise Exception("Shift by date {} is not found".format(d))
+            raise Exception("Shifts by date {} not found".format(d))
         return shift_info
 
     def watchman_by_dt(self, dt: datetime) -> str:
-        shift = Shift.by_dt(dt)
+        shift = ShiftType.by_dt(dt)
 
         d = dt.date()
-        if shift == Shift.NIGHT:
+        if shift == ShiftType.NIGHT:
             # Night shifts are assigned to the previous day.
             d -= timedelta(days=1)
 

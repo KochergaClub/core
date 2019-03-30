@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
-                ('shift', models.CharField(choices=[(kocherga.watchmen.models.Shift(1), 'MORNING_V1'), (kocherga.watchmen.models.Shift(2), 'EVENING_V1'), (kocherga.watchmen.models.Shift(3), 'MORNING'), (kocherga.watchmen.models.Shift(4), 'MIDDAY'), (kocherga.watchmen.models.Shift(5), 'EVENING'), (kocherga.watchmen.models.Shift(6), 'NIGHT')], max_length=20)),
+                ('shift', models.CharField(choices=[(kocherga.watchmen.models.ShiftType(1), 'MORNING_V1'), (kocherga.watchmen.models.ShiftType(2), 'EVENING_V1'), (kocherga.watchmen.models.ShiftType(3), 'MORNING'), (kocherga.watchmen.models.ShiftType(4), 'MIDDAY'), (kocherga.watchmen.models.ShiftType(5), 'EVENING'), (kocherga.watchmen.models.ShiftType(6), 'NIGHT')], max_length=20)),
                 ('watchman', models.CharField(db_index=True, max_length=100)),
             ],
             options={

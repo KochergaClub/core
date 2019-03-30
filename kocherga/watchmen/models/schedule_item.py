@@ -9,7 +9,7 @@ from django.db import models
 
 from kocherga.staff.models import Member
 
-from .shift import Shift
+from .shift_type import ShiftType
 
 
 class Manager(models.Manager):
@@ -22,7 +22,7 @@ class Manager(models.Manager):
 
         d = from_date
         while d <= to_date:
-            for shift in Shift.modern_shifts():
+            for shift in ShiftType.modern_shifts():
                 if shift.name not in (item.shift for item in date2items[d]):
                     date2items[d].append(
                         ScheduleItem(
@@ -41,7 +41,7 @@ class ScheduleItem(models.Model):
     shift = models.CharField(
         max_length=20,
         choices=[
-            (shift.name, shift.name) for shift in Shift
+            (shift.name, shift.name) for shift in ShiftType
         ],
     )
     watchman_name = models.CharField(max_length=100, db_index=True)
@@ -58,7 +58,7 @@ class ScheduleItem(models.Model):
 
     @property
     def shift_obj(self):
-        return Shift[self.shift]
+        return ShiftType[self.shift]
 
     class Meta:
         db_table = "watchmen_schedule"

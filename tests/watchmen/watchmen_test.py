@@ -29,7 +29,7 @@ class TestSchedule:
         by_date = schedule.shifts_by_date(datetime.date(2019, 3, 30))
 
         assert type(by_date) == dict
-        assert by_date[kocherga.watchmen.models.Shift.MORNING] == 'Элиезер'
+        assert by_date[kocherga.watchmen.models.ShiftType.MORNING] == 'Элиезер'
 
     def test_watchman_by_dt(self, schedule):
         watchman = schedule.watchman_by_dt(datetime.datetime(2019, 3, 30, hour=15, minute=0))
