@@ -22,12 +22,12 @@ class Manager(models.Manager):
 
         d = from_date
         while d <= to_date:
-            for shift in ShiftType.modern_shifts():
-                if shift.name not in (item.shift for item in date2items[d]):
+            for shift_type in ShiftType.modern_shifts():
+                if shift_type.name not in (item.shift for item in date2items[d]):
                     date2items[d].append(
-                        ScheduleItem(
+                        Shift(
                             date=d,
-                            shift=shift.name,
+                            shift=shift_type.name,
                             watchman_name='',
                         )
                     )
@@ -36,12 +36,14 @@ class Manager(models.Manager):
         return sum(date2items.values(), [])
 
 
-class ScheduleItem(models.Model):
+class Shift(models.Model):
     date = models.DateField()
+
+    # TODO - rename to shift_type or shift_type_name
     shift = models.CharField(
         max_length=20,
         choices=[
-            (shift.name, shift.name) for shift in ShiftType
+            (shift_type.name, shift_type.name) for shift_type in ShiftType
         ],
     )
     watchman_name = models.CharField(max_length=100, db_index=True)

@@ -12,7 +12,7 @@ from kocherga.django.react import react_render
 import kocherga.staff.models
 import kocherga.staff.serializers
 
-from .models import ScheduleItem
+from .models import Shift
 from . import serializers
 
 
@@ -33,10 +33,10 @@ def index(request):
 
     to_date = from_date + timedelta(weeks=4)
 
-    items = ScheduleItem.objects.items_range(from_date, to_date)
+    items = Shift.objects.items_range(from_date, to_date)
 
     return react_render(request, 'watchmen/index.tsx', {
-        'schedule': serializers.ScheduleItemSerializer(items, many=True).data,
+        'schedule': serializers.ShiftSerializer(items, many=True).data,
         'editable': request.user.has_perm('watchmen.manage'),
         'from_date': from_date.strftime('%Y-%m-%d'),
         'to_date': to_date.strftime('%Y-%m-%d'),
@@ -49,15 +49,15 @@ def index(request):
 
 class SetWatchmanForShift(WatchmenManagerMixin, View):
     def post(self, request):
-        shift = request.POST['shift']
+        shift_type = request.POST['shift']
         date_str = request.POST['date']
         watchman = request.POST['watchman']
 
         date = datetime.strptime(date_str, '%Y-%m-%d').date()
 
-        logger.info(f"Assigning {date}/{shift} to {watchman}")
-        ScheduleItem.objects.update_or_create(
-            shift=shift,
+        logger.info(f"Assigning {date}/{shift_type} to {watchman}")
+        Shift.objects.update_or_create(
+            shift=shift_type,
             date=date,
             defaults={'watchman_name': watchman},
         )

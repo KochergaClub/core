@@ -5,19 +5,19 @@ from typing import Dict
 from datetime import datetime, date, timedelta
 
 from kocherga.dateutils import TZ
-from .models import ScheduleItem, ShiftType
+from .models import Shift, ShiftType
 
 
 def shifts_by_date(d: date) -> Dict[ShiftType, str]:
-    query = ScheduleItem.objects.filter(date=d)
+    query = Shift.objects.filter(date=d)
     if not len(query):
         raise Exception(f"Shifts by date {d} not found")
 
-    shift_info = {}
-    for schedule_item in query:
-        shift_info[schedule_item.shift_obj] = schedule_item.watchman_name
+    day_schedule = {}
+    for shift in query:
+        day_schedule[shift.shift_obj] = shift.watchman_name
 
-    return shift_info
+    return day_schedule
 
 
 def watchman_by_dt(dt: datetime) -> str:

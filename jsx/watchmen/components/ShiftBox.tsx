@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import useOnClickOutside from 'use-onclickoutside';
 
 import { ScheduleContext } from '../contexts';
-import { ScheduleItem, Watchman } from '../types';
+import { Shift, Watchman } from '../types';
 import Picker from './Picker';
 
 import { nightColor } from '../constants';
@@ -33,17 +33,17 @@ const NightBoxContainer = styled(Box)`
 
 const NightBox = () => <NightBoxContainer>Ночь</NightBoxContainer>;
 
-const InnerShiftBox = ({ item }: { item?: ScheduleItem }) => {
-  if (!item.watchman) {
+const InnerShiftBox = ({ shift }: { shift?: Shift }) => {
+  if (!shift.watchman) {
     return <EmptyBox />;
   }
-  if (item.watchman === 'Ночь') {
+  if (shift.watchman === 'Ночь') {
     return <NightBox />;
   }
-  return <Box style={{ backgroundColor: item.color }}>{item.watchman}</Box>;
+  return <Box style={{ backgroundColor: shift.color }}>{shift.watchman}</Box>;
 };
 
-const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
+const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const { editable } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
@@ -95,9 +95,11 @@ const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
   return (
     <Container ref={ref} editable={editable}>
       <div onClick={editable && flipExpand}>
-        <InnerShiftBox item={item} />
+        <InnerShiftBox shift={shift} />
       </div>
-      {expanded && <Picker date={item.date} shift={item.shift} picked={pick} />}
+      {expanded && (
+        <Picker date={shift.date} shift={shift.shift} picked={pick} />
+      )}
     </Container>
   );
 };

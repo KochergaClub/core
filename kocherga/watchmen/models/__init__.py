@@ -1,4 +1,4 @@
 from .shift_type import ShiftType
-from .schedule_item import ScheduleItem
+from .shift import Shift
 
-__all__ = ['ShiftType', 'ScheduleItem']
+__all__ = ['ShiftType', 'Shift']

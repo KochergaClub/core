@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export interface ScheduleItem {
+export interface Shift {
   date: string;
   shift: string;
   watchman: string;
@@ -12,27 +12,27 @@ export interface Watchman {
   color: string;
 }
 
-export const SHIFTS = ['MORNING', 'MIDDAY', 'EVENING', 'NIGHT'];
+export const SHIFT_TYPES = ['MORNING', 'MIDDAY', 'EVENING', 'NIGHT'];
 
-export type DaySchedule = { [s: string]: ScheduleItem };
+export type DaySchedule = { [s: string]: Shift };
 
 export class Schedule {
   daySchedules: { [date: string]: DaySchedule } = {};
 
-  constructor(items: ScheduleItem[]) {
-    items.forEach(item => {
-      if (!(item.date in this.daySchedules)) {
-        this.daySchedules[item.date] = {};
+  constructor(shifts: Shift[]) {
+    shifts.forEach(shift => {
+      if (!(shift.date in this.daySchedules)) {
+        this.daySchedules[shift.date] = {};
       }
-      this.daySchedules[item.date][item.shift] = item;
+      this.daySchedules[shift.date][shift.shift] = shift;
     });
 
     Object.keys(this.daySchedules).forEach(date => {
-      SHIFTS.forEach(shift => {
-        if (!this.daySchedules[date][shift]) {
-          this.daySchedules[date][shift] = {
+      SHIFT_TYPES.forEach(shiftType => {
+        if (!this.daySchedules[date][shiftType]) {
+          this.daySchedules[date][shiftType] = {
             date,
-            shift,
+            shift: shiftType,
             watchman: '',
           };
         }

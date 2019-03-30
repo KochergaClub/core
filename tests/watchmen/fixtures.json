@@ -1,6 +1,6 @@
 [
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 57,
   "fields": {
     "date": "2019-03-30",
@@ -9,7 +9,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 58,
   "fields": {
     "date": "2019-03-30",
@@ -18,7 +18,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 59,
   "fields": {
     "date": "2019-03-30",
@@ -27,7 +27,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 60,
   "fields": {
     "date": "2019-03-30",
@@ -36,7 +36,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 61,
   "fields": {
     "date": "2019-03-29",
@@ -45,7 +45,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 62,
   "fields": {
     "date": "2019-03-29",
@@ -54,7 +54,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 63,
   "fields": {
     "date": "2019-03-29",
@@ -63,7 +63,7 @@
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 64,
   "fields": {
     "date": "2019-03-29",
