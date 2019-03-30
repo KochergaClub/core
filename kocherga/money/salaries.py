@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 import math
 
-from kocherga.watchmen.tools import load_schedule
+import kocherga.watchmen.schedule
 from kocherga.watchmen.models import ShiftType
 import kocherga.staff.tools
 from kocherga.cm.models import Order
@@ -46,11 +46,9 @@ def cm_login_stat_to_email_stat(stat):
 def shift_salaries(start_date, end_date):
     stat = defaultdict(int)
 
-    schedule = load_schedule()
-
     d = start_date
     while d <= end_date:
-        shifts = schedule.shifts_by_date(d)
+        shifts = kocherga.watchmen.schedule.shifts_by_date(d)
         for (shift, watchman) in shifts.items():
             if watchman in ('Слава', 'Пион', 'Ночь', ''):
                 continue
