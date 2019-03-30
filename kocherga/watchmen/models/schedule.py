@@ -38,12 +38,6 @@ class Schedule:
         shift_info = self.shifts_by_date(d)
         return shift_info[shift]
 
-    def save_to_db(self):
-        ScheduleItem.objects.all().delete()
-        for (d, shift_info) in self._data.items():
-            for (shift, watchman) in shift_info.items():
-                ScheduleItem.objects.create(date=d, shift=shift.name, watchman=watchman)
-
     def current_watchman(self):
         return self.watchman_by_dt(datetime.now(TZ))
 
