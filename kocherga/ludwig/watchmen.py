@@ -6,7 +6,6 @@ from kocherga.ludwig.bot import bot
 from kocherga.dateutils import TZ
 
 from kocherga.watchmen import schedule
-import kocherga.staff.tools
 
 from slappy import ErrorResponse
 
