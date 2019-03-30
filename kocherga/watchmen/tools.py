@@ -14,15 +14,3 @@ def load_schedule():
         schedule.add_shift_info(d, shift, watchman)
 
     return schedule
-
-
-def current_watchman():
-    return load_schedule().current_watchman()
-
-
-def last_watchman():
-    return load_schedule().last_watchman()
-
-
-def nearest_watchman():
-    return load_schedule().nearest_watchman()

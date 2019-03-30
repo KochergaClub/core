@@ -36,17 +36,17 @@ INFLECTED_MONTH_NAMES = [
 
 
 def get_current_watchman_or_complain(message):
-    watchman = kocherga.watchmen.tools.current_watchman()
+    watchman = kocherga.watchmen.tools.load_schedule().current_watchman()
     if not watchman:
         message.reply("Админа нет, паникуем!")
         return
     if watchman == "Ночь":
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
         last = kocherga.staff.tools.find_member_by_short_name(
-            kocherga.watchmen.tools.last_watchman()
+            kocherga.watchmen.tools.load_schedule().last_watchman()
         )
         nearest = kocherga.staff.tools.find_member_by_short_name(
-            kocherga.watchmen.tools.nearest_watchman()
+            kocherga.watchmen.tools.load_schedule().nearest_watchman()
         )
 
         message.reply(
