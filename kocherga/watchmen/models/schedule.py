@@ -7,22 +7,19 @@ from datetime import datetime, date, timedelta
 from kocherga.dateutils import TZ
 
 from .shift_type import ShiftType
+from .schedule_item import ScheduleItem
 
 
 class Schedule:
-    def __init__(self):
-        self._data: Dict[date, Dict[ShiftType, str]] = {}
+    def shifts_by_date(self, d: date) -> Dict[ShiftType, str]:
+        query = ScheduleItem.objects.filter(date=d)
+        if not len(query):
+            raise Exception(f"Shifts by date {d} not found")
 
-    def add_shift_info(self, d: date, shift: ShiftType, watchman: str) -> None:
-        if d not in self._data:
-            self._data[d] = {}
+        shift_info = {}
+        for schedule_item in query:
+            shift_info[schedule_item.shift_obj] = schedule_item.watchman_name
 
-        self._data[d][shift] = watchman
-
-    def shifts_by_date(self, d):
-        shift_info = self._data.get(d, None)
-        if not shift_info:
-            raise Exception("Shifts by date {} not found".format(d))
         return shift_info
 
     def watchman_by_dt(self, dt: datetime) -> str:

@@ -16,6 +16,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         call_command('loaddata', 'tests/watchmen/fixtures.json')
 
+
 @pytest.fixture
 def schedule():
     return kocherga.watchmen.tools.load_schedule()
