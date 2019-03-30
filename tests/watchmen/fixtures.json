@@ -1,74 +1,74 @@
 [
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 57,
   "fields": {
     "date": "2019-03-30",
     "shift": "MORNING",
-    "watchman": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 58,
   "fields": {
     "date": "2019-03-30",
     "shift": "MIDDAY",
-    "watchman": "\u0421\u043b\u0430\u0432\u0430"
+    "watchman_name": "\u0421\u043b\u0430\u0432\u0430"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 59,
   "fields": {
     "date": "2019-03-30",
     "shift": "EVENING",
-    "watchman": "\u0421\u043b\u0430\u0432\u0430"
+    "watchman_name": "\u0421\u043b\u0430\u0432\u0430"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 60,
   "fields": {
     "date": "2019-03-30",
     "shift": "NIGHT",
-    "watchman": "\u0420\u043e\u0431\u0438\u043d"
+    "watchman_name": "\u0420\u043e\u0431\u0438\u043d"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 61,
   "fields": {
     "date": "2019-03-29",
     "shift": "MORNING",
-    "watchman": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 62,
   "fields": {
     "date": "2019-03-29",
     "shift": "MIDDAY",
-    "watchman": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 63,
   "fields": {
     "date": "2019-03-29",
     "shift": "EVENING",
-    "watchman": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
   }
 },
 {
-  "model": "watchmen.scheduleitem",
+  "model": "watchmen.shift",
   "pk": 64,
   "fields": {
     "date": "2019-03-29",
     "shift": "NIGHT",
-    "watchman": "\u041d\u043e\u0447\u044c"
+    "watchman_name": "\u041d\u043e\u0447\u044c"
   }
 }
 ]

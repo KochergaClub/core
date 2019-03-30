@@ -8,13 +8,13 @@ import Page from '../components/Page';
 
 import Calendar from './components/Calendar';
 
-import { ScheduleItem, Schedule, Watchman } from './types';
+import { Shift, Schedule, Watchman } from './types';
 import DayContainer from './components/DayContainer';
 
 import { ScheduleContext } from './contexts';
 
 interface Props {
-  schedule: ScheduleItem[];
+  schedule: Shift[];
   editable: boolean;
   watchmen: Watchman[];
   csrfToken: string;

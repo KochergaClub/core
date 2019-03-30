@@ -13,7 +13,7 @@ from django.db import models
 
 from kocherga.dateutils import TZ
 import kocherga.dateutils
-import kocherga.watchmen.tools
+import kocherga.watchmen.schedule
 import kocherga.importer.base
 
 from . import api
@@ -136,11 +136,11 @@ class Importer(kocherga.importer.base.IncrementalImporter):
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         last_call = None
 
-        schedule = kocherga.watchmen.tools.load_schedule()
-
         for call in fetch_all_calls(from_dt, to_dt):
             try:
-                watchman = schedule.watchman_by_dt(datetime.fromtimestamp(call.ts.timestamp(), TZ))
+                watchman = kocherga.watchmen.schedule.watchman_by_dt(
+                    datetime.fromtimestamp(call.ts.timestamp(), TZ)
+                )
                 call.watchman = watchman
             except Exception:
                 pass  # that's ok

@@ -15,6 +15,6 @@ __pycache__
 *.swp
 .idea/
 /.dir-locals.el
-tier.txt
-data/
-static/dist
+/data/
+/static/dist
+/webpack_stats.json

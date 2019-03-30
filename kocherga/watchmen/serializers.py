@@ -1,9 +1,18 @@
 from rest_framework import serializers
 
 from . import models
+import kocherga.staff.models
 
 
-class ScheduleItemSerializer(serializers.ModelSerializer):
+class WatchmanSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ScheduleItem
-        fields = ('date', 'shift', 'watchman', 'color')
+        model = kocherga.staff.models.Member
+        fields = ('short_name', 'color')
+
+
+class ShiftSerializer(serializers.ModelSerializer):
+    watchman = WatchmanSerializer()
+
+    class Meta:
+        model = models.Shift
+        fields = ('date', 'shift', 'watchman', 'is_night')

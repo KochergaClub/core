@@ -5,7 +5,7 @@ from kocherga.ludwig.bot import bot
 
 from kocherga.dateutils import TZ
 
-import kocherga.watchmen.tools
+from kocherga.watchmen import schedule
 import kocherga.staff.tools
 
 from slappy import ErrorResponse
@@ -36,17 +36,17 @@ INFLECTED_MONTH_NAMES = [
 
 
 def get_current_watchman_or_complain(message):
-    watchman = kocherga.watchmen.tools.current_watchman()
+    watchman = schedule.current_watchman()
     if not watchman:
         message.reply("Админа нет, паникуем!")
         return
     if watchman == "Ночь":
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
         last = kocherga.staff.tools.find_member_by_short_name(
-            kocherga.watchmen.tools.last_watchman()
+            schedule.last_watchman()
         )
         nearest = kocherga.staff.tools.find_member_by_short_name(
-            kocherga.watchmen.tools.nearest_watchman()
+            schedule.nearest_watchman()
         )
 
         message.reply(
@@ -69,8 +69,6 @@ def get_current_watchman_or_complain(message):
 
 
 def daily_watchmen(d):
-    schedule = kocherga.watchmen.tools.load_schedule()
-
     now = datetime.now(TZ)
     shift_info = schedule.shifts_by_date(d)
 
@@ -242,8 +240,6 @@ def roster_check():
     SHIFTS_THRESHOLD = 6
     TOTAL_DAYS = 7
     CHANNEL = '#roster'
-
-    schedule = kocherga.watchmen.tools.load_schedule()
 
     today = datetime.now(TZ).date()
     d = today

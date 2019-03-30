@@ -10,7 +10,7 @@ import kocherga.money.ofd.models
 
 @pytest.mark.django_db()
 def test_documents():
-    documents = kocherga.money.ofd.models.ofd.documents(datetime.date(2018, 3, 1))
+    documents = kocherga.money.ofd.models.ofd.documents(datetime.date(2019, 3, 1))
     assert len(documents) > 3
     assert type(documents[0]) == kocherga.money.ofd.models.OfdDocument
 
@@ -19,5 +19,5 @@ def test_documents():
 @pytest.mark.django_db(transaction=True)
 def test_import_all(db, caplog):
     caplog.set_level(logging.INFO)
-    with freeze_time('2017-12-30 10:00'):
+    with freeze_time('2018-12-30 10:00'):
         kocherga.money.ofd.models.Importer().import_all()

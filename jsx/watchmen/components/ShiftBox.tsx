@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import useOnClickOutside from 'use-onclickoutside';
 
 import { ScheduleContext } from '../contexts';
-import { ScheduleItem, Watchman } from '../types';
+import { Shift, Watchman } from '../types';
 import Picker from './Picker';
 
 import { nightColor } from '../constants';
@@ -17,7 +17,6 @@ const Container = styled.div<{ editable: boolean }>`
 const Box = styled.div`
   height: 2em;
   line-height: 2em;
-  vertical-align: center;
   text-align: center;
   border: 1px solid white;
 `;
@@ -33,17 +32,21 @@ const NightBoxContainer = styled(Box)`
 
 const NightBox = () => <NightBoxContainer>Ночь</NightBoxContainer>;
 
-const InnerShiftBox = ({ item }: { item?: ScheduleItem }) => {
-  if (!item.watchman) {
-    return <EmptyBox />;
-  }
-  if (item.watchman === 'Ночь') {
+const InnerShiftBox = ({ shift }: { shift?: Shift }) => {
+  if (shift.is_night) {
     return <NightBox />;
   }
-  return <Box style={{ backgroundColor: item.color }}>{item.watchman}</Box>;
+  if (!shift.watchman) {
+    return <EmptyBox />;
+  }
+  return (
+    <Box style={{ backgroundColor: shift.watchman.color }}>
+      {shift.watchman.short_name}
+    </Box>
+  );
 };
 
-const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
+const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const { editable } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
@@ -66,38 +69,32 @@ const ShiftBox = ({ item }: { item?: ScheduleItem }) => {
   const ref = useRef(null);
   useOnClickOutside(ref, unexpand);
 
-  const pick = useCallback(
-    ({
-      date,
-      shift,
-      watchman,
-    }: {
-      date: string;
-      shift: string;
-      watchman: Watchman;
-    }) => {
-      const formData = new FormData();
-      formData.append('shift', shift);
-      formData.append('date', date);
-      formData.append('watchman', watchman.short_name);
-      formData.append('csrfmiddlewaretoken', csrfToken);
+  const pick = useCallback(({ date, shift, watchman, is_night }: Shift) => {
+    const formData = new FormData();
+    formData.append('shift', shift);
+    formData.append('date', date);
+    formData.append('watchman', watchman ? watchman.short_name : '');
+    if (is_night) {
+      formData.append('is_night', '1');
+    }
+    formData.append('csrfmiddlewaretoken', csrfToken);
 
-      fetch('/team/watchmen/action/set_watchman_for_shift', {
-        method: 'POST',
-        body: formData,
-      }).then(() => {
-        window.location.reload(); // TODO - update in-memory store instead
-      }); // TODO - do something on errors
-    },
-    []
-  );
+    fetch('/team/watchmen/action/set_watchman_for_shift', {
+      method: 'POST',
+      body: formData,
+    }).then(() => {
+      window.location.reload(); // TODO - update in-memory store instead
+    }); // TODO - do something on errors
+  }, []);
 
   return (
     <Container ref={ref} editable={editable}>
       <div onClick={editable && flipExpand}>
-        <InnerShiftBox item={item} />
+        <InnerShiftBox shift={shift} />
       </div>
-      {expanded && <Picker date={item.date} shift={item.shift} picked={pick} />}
+      {expanded && (
+        <Picker date={shift.date} shift={shift.shift} picked={pick} />
+      )}
     </Container>
   );
 };

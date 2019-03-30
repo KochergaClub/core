@@ -1,98 +1,83 @@
-from enum import IntEnum
-from datetime import datetime, date, time, timedelta
+import logging
+logger = logging.getLogger(__name__)
 
-from django.conf import settings
+from collections import defaultdict
+from datetime import timedelta
+import datetime
 
-from kocherga.dateutils import TZ
+from django.core.exceptions import ValidationError
+from django.db import models
 
-MODERN_SHIFTS_FIRST_DATE = datetime.strptime(
-    settings.KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE, "%Y-%m-%d"
-).date()
+from kocherga.staff.models import Member
+
+from .shift_type import ShiftType
 
 
-class Shift(IntEnum):
-    MORNING_V1 = 1
-    EVENING_V1 = 2
-    MORNING = 3
-    MIDDAY = 4
-    EVENING = 5
-    NIGHT = 6
+class Manager(models.Manager):
+    def items_range(self, from_date: datetime.date, to_date: datetime.date):
+        items = self.filter(date__gte=from_date, date__lte=to_date)
 
-    def when(self):
-        when_values = {
-            Shift.MORNING: "утром",
-            Shift.MIDDAY: "днём",
-            Shift.EVENING: "вечером",
-            Shift.NIGHT: "ночью (в конце дня)",
-        }
-        return when_values[self.value]
+        date2items = defaultdict(list)
+        for item in items:
+            date2items[item.date].append(item)
 
-    def start_time(self):
-        if self.value == Shift.MORNING:
-            return time(9)
-        if self.value == Shift.MIDDAY:
-            return time(14)
-        if self.value == Shift.EVENING:
-            return time(19)
-        if self.value == Shift.NIGHT:
-            return time(0)
-
-    def end_time(self):
-        if self.value == Shift.MORNING:
-            return time(13, 59, 59, 999999)
-        if self.value == Shift.MIDDAY:
-            return time(18, 59, 59, 999999)
-        if self.value == Shift.EVENING:
-            return time(23, 59, 59, 999999)
-        if self.value == Shift.NIGHT:
-            return time(8, 59, 59, 999999)
-
-    def dt_tuple_by_date(self, d):
-        assert isinstance(d, date)
-
-        if self.value == Shift.NIGHT:
+        d = from_date
+        while d <= to_date:
+            for shift_type in ShiftType.modern_shifts():
+                if shift_type.name not in (item.shift for item in date2items[d]):
+                    date2items[d].append(
+                        Shift(
+                            date=d,
+                            shift=shift_type.name,
+                            watchman_name='',
+                        )
+                    )
             d += timedelta(days=1)
-        return (
-            datetime.combine(d, self.start_time(), tzinfo=TZ),
-            datetime.combine(d, self.end_time(), tzinfo=TZ),
+
+        return sum(date2items.values(), [])
+
+
+class Shift(models.Model):
+    date = models.DateField()
+
+    # TODO - rename to shift_type or shift_type_name
+    shift = models.CharField(
+        max_length=20,
+        choices=[
+            (shift_type.name, shift_type.name) for shift_type in ShiftType
+        ],
+    )
+    watchman_name = models.CharField(max_length=100, db_index=True)
+    watchman = models.ForeignKey(
+        Member,
+        null=True, blank=True,
+        on_delete=models.CASCADE,
+        related_name='+'
+    )
+    is_night = models.BooleanField(default=False)
+
+    objects = Manager()
+
+    def color(self):
+        if not self.watchman:
+            return '#ffffff'
+        return self.watchman.color
+
+    @property
+    def shift_obj(self):
+        return ShiftType[self.shift]
+
+    def clean(self):
+        if self.watchman and self.is_night:
+            raise ValidationError("watchman can't be set when is_night is set")
+        if not self.watchman and not self.is_night:
+            raise ValidationError("one of watchman and is_night must be set")
+
+    class Meta:
+        db_table = "watchmen_schedule"
+        unique_together = (
+            ('date', 'shift'),
         )
-
-    @classmethod
-    def by_dt(cls, dt):
-        assert isinstance(dt, datetime)
-
-        t = dt.time()
-
-        if dt.date() < MODERN_SHIFTS_FIRST_DATE:
-            if time(11, 0) <= t < time(17, 30):
-                return cls.MORNING_V1
-            if time(17, 30) <= t <= time.max:
-                return cls.EVENING_V1
-            raise Exception("Invalid time {}".format(t))
-
-        if 0 <= t.hour < 9:
-            return cls.NIGHT
-        if 9 <= t.hour < 14:
-            return cls.MORNING
-        if 14 <= t.hour < 19:
-            return cls.MIDDAY
-        if 19 <= t.hour:
-            return cls.EVENING
-
-        raise Exception("Invalid time {}".format(t))
-
-    @classmethod
-    def by_timestring(cls, timestring):
-        time2shift = {
-            "11:00-17:30": cls.MORNING_V1,
-            "17:30-00:00": cls.EVENING_V1,
-            "09:00-14:00": cls.MORNING,
-            "14:00-19:00": cls.MIDDAY,
-            "19:00-00:00": cls.EVENING,
-            "Ночь": cls.NIGHT,
-        }
-        return time2shift[timestring]
-
-    @classmethod
-    def modern_shifts(cls):
-        return (cls.MORNING, cls.MIDDAY, cls.EVENING, cls.NIGHT)
+        permissions = (
+            ('manage', 'Может управлять админским расписанием'),
+        )

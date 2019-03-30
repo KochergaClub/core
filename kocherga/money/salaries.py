@@ -3,22 +3,22 @@ from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 import math
 
-from kocherga.watchmen.tools import load_schedule
-from kocherga.watchmen.models import Shift
+import kocherga.watchmen.schedule
+from kocherga.watchmen.models import ShiftType
 import kocherga.staff.tools
 from kocherga.cm.models import Order
 
 
 def rate_by_shift(shift):
-    if shift in (Shift.MORNING_V1, Shift.EVENING_V1):
+    if shift in (ShiftType.MORNING_V1, ShiftType.EVENING_V1):
         return 650
-    elif shift == Shift.MORNING:
+    elif shift == ShiftType.MORNING:
         return 500
-    elif shift == Shift.MIDDAY:
+    elif shift == ShiftType.MIDDAY:
         return 500
-    elif shift == Shift.EVENING:
+    elif shift == ShiftType.EVENING:
         return 600
-    elif shift == Shift.NIGHT:
+    elif shift == ShiftType.NIGHT:
         return 600
     raise Exception("Unknown shift")
 
@@ -46,11 +46,9 @@ def cm_login_stat_to_email_stat(stat):
 def shift_salaries(start_date, end_date):
     stat = defaultdict(int)
 
-    schedule = load_schedule()
-
     d = start_date
     while d <= end_date:
-        shifts = schedule.shifts_by_date(d)
+        shifts = kocherga.watchmen.schedule.shifts_by_date(d)
         for (shift, watchman) in shifts.items():
             if watchman in ('Слава', 'Пион', 'Ночь', ''):
                 continue
