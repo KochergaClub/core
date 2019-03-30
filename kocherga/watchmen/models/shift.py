@@ -29,7 +29,6 @@ class Manager(models.Manager):
                         Shift(
                             date=d,
                             shift=shift_type.name,
-                            watchman_name='',
                         )
                     )
             d += timedelta(days=1)
@@ -47,7 +46,6 @@ class Shift(models.Model):
             (shift_type.name, shift_type.name) for shift_type in ShiftType
         ],
     )
-    watchman_name = models.CharField(max_length=100, db_index=True)
     watchman = models.ForeignKey(
         Member,
         null=True, blank=True,

@@ -15,7 +15,13 @@ def shifts_by_date(d: date) -> Dict[ShiftType, str]:
 
     day_schedule = {}
     for shift in query:
-        day_schedule[shift.shift_obj] = shift.watchman_name
+        if shift.watchman:
+            day_schedule[shift.shift_obj] = shift.watchman.short_name
+        elif shift.is_night:
+            day_schedule[shift.shift_obj] = 'Ночь'
+        else:
+            # There can be empty shifts in our DB but we don't care about those.
+            pass
 
     return day_schedule
 

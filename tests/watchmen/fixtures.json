@@ -5,7 +5,8 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "MORNING",
-    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman": 2,
+    "is_night": false
   }
 },
 {
@@ -14,7 +15,8 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "MIDDAY",
-    "watchman_name": "\u0421\u043b\u0430\u0432\u0430"
+    "watchman": 1,
+    "is_night": false
   }
 },
 {
@@ -23,7 +25,8 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "EVENING",
-    "watchman_name": "\u0421\u043b\u0430\u0432\u0430"
+    "watchman": 1,
+    "is_night": false
   }
 },
 {
@@ -32,7 +35,8 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "NIGHT",
-    "watchman_name": "\u0420\u043e\u0431\u0438\u043d"
+    "watchman": 3,
+    "is_night": false
   }
 },
 {
@@ -41,7 +45,8 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "MORNING",
-    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman": 2,
+    "is_night": false
   }
 },
 {
@@ -50,7 +55,8 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "MIDDAY",
-    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman": 2,
+    "is_night": false
   }
 },
 {
@@ -59,7 +65,8 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "EVENING",
-    "watchman_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440"
+    "watchman": 2,
+    "is_night": false
   }
 },
 {
@@ -68,7 +75,8 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "NIGHT",
-    "watchman_name": "\u041d\u043e\u0447\u044c"
+    "watchman": null,
+    "is_night": true
   }
 }
 ]

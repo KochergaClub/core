@@ -1,0 +1,98 @@
+[
+{
+  "model": "kocherga_auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "",
+    "last_login": "2019-03-22T09:16:43.069Z",
+    "is_superuser": true,
+    "email": "me@berekuk.ru",
+    "is_active": true,
+    "is_staff": true,
+    "date_joined": "2019-03-11T21:01:22.192Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "kocherga_auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "eliezer@example.com",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2019-03-27T22:50:52.005Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "kocherga_auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "",
+    "last_login": null,
+    "is_superuser": false,
+    "email": "not_about_email@example.com",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2019-03-27T22:51:49.602Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "staff.member",
+  "pk": 1,
+  "fields": {
+    "short_name": "\u0421\u043b\u0430\u0432\u0430",
+    "full_name": "\u0412\u044f\u0447\u0435\u0441\u043b\u0430\u0432 \u041c\u0430\u0442\u044e\u0445\u0438\u043d",
+    "role": "FOUNDER",
+    "is_current": true,
+    "payment_type": "",
+    "vk": "",
+    "gender": "MALE",
+    "color": "#d2e2f1",
+    "cm_login": "",
+    "cm_customer": null,
+    "user": 1
+  }
+},
+{
+  "model": "staff.member",
+  "pk": 2,
+  "fields": {
+    "short_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440",
+    "full_name": "\u042d\u043b\u0438\u0435\u0437\u0435\u0440 \u042e\u0434\u043a\u043e\u0432\u0441\u043a\u0438\u0439",
+    "role": "MANAGER",
+    "is_current": true,
+    "payment_type": "CASH",
+    "vk": "",
+    "gender": "MALE",
+    "color": "#cdb983",
+    "cm_login": "",
+    "cm_customer": null,
+    "user": 2
+  }
+},
+{
+  "model": "staff.member",
+  "pk": 3,
+  "fields": {
+    "short_name": "\u0420\u043e\u0431\u0438\u043d",
+    "full_name": "\u0420\u043e\u0431\u0438\u043d \u0425\u044d\u043d\u0441\u043e\u043d",
+    "role": "WATCHMAN",
+    "is_current": true,
+    "payment_type": "ELECTRONIC",
+    "vk": "",
+    "gender": "MALE",
+    "color": "#8880a8",
+    "cm_login": "",
+    "cm_customer": null,
+    "user": 3
+  }
+}
+]
