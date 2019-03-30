@@ -35,15 +35,15 @@ def index(request):
 
     items = Shift.objects.items_range(from_date, to_date)
 
+    watchmen = list(kocherga.staff.models.Member.objects.filter(is_current=True).filter(role='WATCHMAN'))
+    watchmen += list(kocherga.staff.models.Member.objects.filter(is_current=True).exclude(role='WATCHMAN'))
+
     return react_render(request, 'watchmen/index.tsx', {
         'schedule': serializers.ShiftSerializer(items, many=True).data,
         'editable': request.user.has_perm('watchmen.manage'),
         'from_date': from_date.strftime('%Y-%m-%d'),
         'to_date': to_date.strftime('%Y-%m-%d'),
-        'watchmen': kocherga.staff.serializers.MemberSerializer(
-            kocherga.staff.models.Member.objects.filter(is_current=True),
-            many=True
-        ).data,
+        'watchmen': kocherga.staff.serializers.MemberSerializer(watchmen, many=True).data,
     })
 
 
