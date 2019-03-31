@@ -1,8 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import Page from '../components/Page';
 import { Column } from '@kocherga/frontkit';
+
+import Page from '../components/Page';
+import { Member } from './types';
 
 const Ex = styled.div`
   background-color: #ddd;
@@ -16,18 +18,8 @@ const Image = styled.img`
   height: auto;
 `;
 
-interface Member {
-  full_name: string;
-  short_name?: string;
-  color?: string;
-  is_current: boolean;
-  slack_image?: string;
-  slack_id?: string;
-  vk?: string;
-}
-
 export default ({ member }: { member: Member }) => (
-  <Page title="Страница сотрудника" team>
+  <Page title={`${member.full_name} | Профиль сотрудника`} team>
     <Column centered gutter={20} style={{ marginBottom: 100 }}>
       <Column centered gutter={0}>
         <h1>{member.full_name}</h1>

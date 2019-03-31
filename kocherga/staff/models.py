@@ -5,6 +5,19 @@ import kocherga.slack
 import kocherga.cm.models
 
 
+class MemberManager(models.Manager):
+    def full_list(self):
+        return sum(
+            [
+                list(self.filter(is_current=True, role='FOUNDER')),
+                list(self.filter(is_current=True, role='MANAGER')),
+                list(self.filter(is_current=True).exclude(role__in=['FOUNDER', 'MANAGER'])),
+                list(self.filter(is_current=False)),
+            ],
+            []
+        )
+
+
 class Member(models.Model):
     short_name = models.CharField('Короткое имя', max_length=20, blank=True)
     full_name = models.CharField('Полное имя', max_length=80)
@@ -60,6 +73,8 @@ class Member(models.Model):
         on_delete=models.CASCADE,
         related_name='staff_member',
     )
+
+    objects = MemberManager()
 
     class Meta:
         verbose_name = 'Сотрудник'
