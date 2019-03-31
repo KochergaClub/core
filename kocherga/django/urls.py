@@ -18,12 +18,19 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
+import kocherga.django.views
 
 handler404 = 'kocherga.django.views.page_not_found_view'
+
 
 urlpatterns = [
     path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
     path('team/', RedirectView.as_view(url='/team/staff/'), name='team_root'),
+
+    # for testing
+    path('403/', kocherga.django.views.view_403, {'exception': Exception()}),
+    path('404/', kocherga.django.views.view_404, {'exception': Exception()}),
+    path('500/', kocherga.django.views.view_500, {'exception': Exception()}),
 ]
 
 if not settings.IGNORE_WEB:

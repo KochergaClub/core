@@ -4,8 +4,8 @@ import ErrorPage from './ErrorPage';
 
 export default () => (
   <ErrorPage
-    title="Страница не найдена"
-    code={404}
-    image="/static/error-pages/404.jpg"
+    title="Нет доступа"
+    code={403}
+    image="/static/error-pages/403.jpg"
   />
 );
