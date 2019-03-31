@@ -32,18 +32,35 @@ const NightBoxContainer = styled(Box)`
 
 const NightBox = () => <NightBoxContainer>Ночь</NightBoxContainer>;
 
-const InnerShiftBox = ({ shift }: { shift?: Shift }) => {
+const WatchmanLink = styled.a`
+  color: black;
+  text-decoration: none;
+`;
+
+const InnerShiftBox = ({
+  shift,
+  editing,
+}: {
+  shift?: Shift;
+  editing: boolean;
+}) => {
   if (shift.is_night) {
     return <NightBox />;
   }
   if (!shift.watchman) {
     return <EmptyBox />;
   }
-  return (
-    <Box style={{ backgroundColor: shift.watchman.color }}>
-      {shift.watchman.short_name}
-    </Box>
-  );
+
+  let content = <>{shift.watchman.short_name}</>;
+  if (!editing) {
+    content = (
+      <WatchmanLink href={`/team/staff/${shift.watchman.id}`}>
+        {content}
+      </WatchmanLink>
+    );
+  }
+
+  return <Box style={{ backgroundColor: shift.watchman.color }}>{content}</Box>;
 };
 
 const ShiftBox = ({ shift }: { shift?: Shift }) => {
@@ -90,7 +107,7 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   return (
     <Container ref={ref} editing={editing}>
       <div onClick={editing && flipExpand}>
-        <InnerShiftBox shift={shift} />
+        <InnerShiftBox shift={shift} editing={editing} />
       </div>
       {expanded && (
         <Picker date={shift.date} shift={shift.shift} picked={pick} />

@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 export interface Watchman {
+  id: number;
   short_name: string;
   color: string;
 }

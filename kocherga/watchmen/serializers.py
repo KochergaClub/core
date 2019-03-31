@@ -7,7 +7,7 @@ import kocherga.staff.models
 class WatchmanSerializer(serializers.ModelSerializer):
     class Meta:
         model = kocherga.staff.models.Member
-        fields = ('short_name', 'color')
+        fields = ('id', 'short_name', 'color')
 
 
 class ShiftSerializer(serializers.ModelSerializer):
