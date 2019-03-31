@@ -22,6 +22,7 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
+    path('team/', RedirectView.as_view(url='/team/staff/'), name='team_root'),
 ]
 
 if not settings.IGNORE_WEB:
