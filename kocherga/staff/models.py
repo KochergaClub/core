@@ -69,7 +69,7 @@ class Member(models.Model):
         return self.full_name
 
     @property
-    def slack_id(self):
+    def slack_user(self):
         slack_users = kocherga.slack.users_by_email()
 
         primary_email = self.user.email.lower()
@@ -77,13 +77,22 @@ class Member(models.Model):
             a.email.lower() for a in self.alt_emails.all()
         ]
 
+        slack_user = None
         for email in [primary_email] + alt_emails:
             slack_user = slack_users.get(email, None)
             if slack_user:
                 break
-        slack_id = slack_user["id"] if slack_user else None
+        return slack_user
 
-        return slack_id
+    @property
+    def slack_id(self):
+        slack_user = self.slack_user
+        return slack_user['id'] if slack_user else None
+
+    @property
+    def slack_image(self):
+        slack_user = self.slack_user
+        return slack_user['profile']['image_512'] if slack_user else None
 
     def update_user_permissions(self):
         self.user.is_staff = self.is_current
