@@ -5,6 +5,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 DATA_DIR = '/data'
+
 DEBUG = True
 
 INSTALLED_APPS += ['debug_toolbar']

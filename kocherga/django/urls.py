@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 
+handler404 = 'kocherga.django.views.page_not_found_view'
 
 urlpatterns = [
     path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
