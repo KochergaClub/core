@@ -20,8 +20,9 @@ from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 import kocherga.django.views
 
-handler404 = 'kocherga.django.views.page_not_found_view'
-
+handler403 = 'kocherga.django.views.view_403'
+handler404 = 'kocherga.django.views.view_404'
+handler500 = 'kocherga.django.views.view_500'
 
 urlpatterns = [
     path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
