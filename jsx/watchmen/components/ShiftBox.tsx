@@ -4,14 +4,14 @@ import styled from 'styled-components';
 import useOnClickOutside from 'use-onclickoutside';
 
 import { ScheduleContext } from '../contexts';
-import { Shift, Watchman } from '../types';
+import { Shift } from '../types';
 import Picker from './Picker';
 
 import { nightColor } from '../constants';
 
-const Container = styled.div<{ editable: boolean }>`
+const Container = styled.div<{ editing: boolean }>`
   position: relative;
-  cursor: ${props => (props.editable ? 'pointer' : 'auto')};
+  cursor: ${props => (props.editing ? 'pointer' : 'auto')};
 `;
 
 const Box = styled.div`
@@ -47,7 +47,7 @@ const InnerShiftBox = ({ shift }: { shift?: Shift }) => {
 };
 
 const ShiftBox = ({ shift }: { shift?: Shift }) => {
-  const { editable } = useContext(ScheduleContext);
+  const { editing } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
   const { csrfToken } = useContext(ScheduleContext);
@@ -56,14 +56,14 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
     () => {
       setExpanded(!expanded);
     },
-    [expanded, editable]
+    [expanded, editing]
   );
 
   const unexpand = useCallback(
     () => {
       setExpanded(false);
     },
-    [expanded, editable]
+    [expanded, editing]
   );
 
   const ref = useRef(null);
@@ -88,8 +88,8 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   }, []);
 
   return (
-    <Container ref={ref} editable={editable}>
-      <div onClick={editable && flipExpand}>
+    <Container ref={ref} editing={editing}>
+      <div onClick={editing && flipExpand}>
         <InnerShiftBox shift={shift} />
       </div>
       {expanded && (

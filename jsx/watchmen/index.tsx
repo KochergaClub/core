@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import moment from 'moment';
 
@@ -6,10 +6,11 @@ import { Column, Row } from '@kocherga/frontkit';
 
 import Page from '../components/Page';
 
-import Calendar from './components/Calendar';
-
 import { Shift, Schedule, Watchman } from './types';
+
+import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
+import EditingSwitch from './components/EditingSwitch';
 
 import { ScheduleContext } from './contexts';
 
@@ -37,10 +38,13 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
 export default (props: Props) => {
   const schedule = new Schedule(props.schedule);
 
+  const [editing, setEditing] = useState(false);
+
   const contextValue = {
-    editable: props.editable,
     watchmen: props.watchmen,
     csrfToken: props.csrfToken,
+    editing,
+    setEditing,
   };
 
   return (
@@ -49,7 +53,10 @@ export default (props: Props) => {
         <Column gutter={16} stretch>
           <Column centered gutter={0}>
             <h1>Расписание смен</h1>
-            <Pager from_date={moment(props.from_date)} />
+            <Column centered>
+              <Pager from_date={moment(props.from_date)} />
+              {props.editable && <EditingSwitch />}
+            </Column>
           </Column>
           <Calendar
             fromDate={moment(props.from_date)}

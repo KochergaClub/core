@@ -1,7 +1,14 @@
 import React from 'react';
 
-export const ScheduleContext = React.createContext({
-  csrfToken: '',
-  editable: false,
-  watchmen: [],
-});
+import { Watchman } from './types';
+
+interface ScheduleContextShape {
+  csrfToken: string;
+  watchmen: Watchman[];
+  editing: boolean;
+  setEditing: (value: boolean) => void;
+}
+
+export const ScheduleContext = React.createContext<ScheduleContextShape | null>(
+  null
+);
