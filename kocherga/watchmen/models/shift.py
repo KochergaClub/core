@@ -37,7 +37,7 @@ class Manager(models.Manager):
 
 
 class Shift(models.Model):
-    date = models.DateField()
+    date = models.DateField(editable=False)
 
     # TODO - rename to shift_type or shift_type_name
     shift = models.CharField(
@@ -45,6 +45,7 @@ class Shift(models.Model):
         choices=[
             (shift_type.name, shift_type.name) for shift_type in ShiftType
         ],
+        editable=False,
     )
     watchman = models.ForeignKey(
         Member,

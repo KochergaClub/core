@@ -1,9 +1,6 @@
-import pytest
-
-import logging
-import os
-import json
 import datetime
+
+import pytest
 import jwt
 
 from django.conf import settings
@@ -17,6 +14,7 @@ def upload(tmpdir):
     )
     kocherga.images.image_storage.set_directory(upload)
 
+
 def _jwt_token(email):
     return jwt.encode(
         payload={
@@ -28,13 +26,16 @@ def _jwt_token(email):
         algorithm="HS256",
     ).decode('utf-8')
 
+
 def _auth_header(email):
     token = _jwt_token(email)
     return {'HTTP_AUTHORIZATION': 'JWT ' + token}
 
+
 @pytest.fixture
 def kocherga_auth_header(common_team):
     return _auth_header('test@kocherga-club.ru')
+
 
 @pytest.fixture
 def user_auth_header(common_team):

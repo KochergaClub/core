@@ -6,9 +6,8 @@ pytestmark = [
 
 import json
 
-
-from freezegun import freeze_time
 from datetime import datetime, timedelta
+
 
 def test_list(client):
     res = client.get('/api/bookings/today')
