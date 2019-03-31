@@ -32,7 +32,7 @@ def classic_client():
 
 _USERS_CACHE = []
 _USERS_CACHED_TS = None
-CACHE_PERIOD = 10
+CACHE_PERIOD = 60
 
 
 def users(sc=None):
