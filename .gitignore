@@ -17,4 +17,4 @@ __pycache__
 /.dir-locals.el
 /data/
 /static/dist
-/webpack_stats.json
+/webpack-stats.json
