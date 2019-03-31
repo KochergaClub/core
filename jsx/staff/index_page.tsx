@@ -42,7 +42,7 @@ export default ({ members }: { members: Member[] }) => (
       <MemberList
         title="Админы"
         members={members.filter(
-          m => m.is_current && ['MANAGER'].includes(m.role)
+          m => m.is_current && ['WATCHMAN'].includes(m.role)
         )}
       />
       <MemberList
