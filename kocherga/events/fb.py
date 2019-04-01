@@ -237,7 +237,7 @@ class AnnounceSession:
         el = await page.J("[data-testid=event-create-dialog-image-selector")
         await el.uploadFile(event.image_file("default"))
         await page.waitForFunction(
-            'document.querySelector("[data-testid=event-create-dialog]")'
+            'document.querySelector("[data-testid=event_create_dialog]")'
             '.innerText.includes("Перетащите, чтобы изменить положение")'
         )
 
