@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 
 import moment from 'moment';
 
@@ -6,7 +6,7 @@ import { Column, Row } from '@kocherga/frontkit';
 
 import Page from '../components/Page';
 
-import { Shift, Schedule, Watchman } from './types';
+import { Shift, Watchman, shifts2schedule, scheduleDispatch } from './types';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
@@ -36,8 +36,11 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
 };
 
 export default (props: Props) => {
-  const schedule = new Schedule(props.schedule);
-
+  const [schedule, setShift] = useReducer(
+    scheduleDispatch,
+    props.schedule,
+    shifts2schedule
+  );
   const [editing, setEditing] = useState(false);
 
   const contextValue = {
@@ -45,6 +48,7 @@ export default (props: Props) => {
     csrfToken: props.csrfToken,
     editing,
     setEditing,
+    setShift,
   };
 
   return (
@@ -62,7 +66,9 @@ export default (props: Props) => {
             fromDate={moment(props.from_date)}
             toDate={moment(props.to_date)}
             renderDay={d => {
-              return <DayContainer daySchedule={schedule.itemsByDate(d)} />;
+              return (
+                <DayContainer daySchedule={schedule[d.format('YYYY-MM-DD')]} />
+              );
             }}
           />
         </Column>

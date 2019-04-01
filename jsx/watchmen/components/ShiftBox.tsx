@@ -64,7 +64,7 @@ const InnerShiftBox = ({
 };
 
 const ShiftBox = ({ shift }: { shift?: Shift }) => {
-  const { editing } = useContext(ScheduleContext);
+  const { editing, setShift } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
   const { csrfToken } = useContext(ScheduleContext);
@@ -86,27 +86,39 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const ref = useRef(null);
   useOnClickOutside(ref, unexpand);
 
-  const pick = useCallback(({ date, shift, watchman, is_night }: Shift) => {
-    const formData = new FormData();
-    formData.append('shift', shift);
-    formData.append('date', date);
-    formData.append('watchman', watchman ? watchman.short_name : '');
-    if (is_night) {
-      formData.append('is_night', '1');
-    }
-    formData.append('csrfmiddlewaretoken', csrfToken);
+  const pick = useCallback(async (shift: Shift) => {
+    const { date, shift: shiftType, watchman, is_night } = shift;
+    try {
+      const response = await fetch(
+        `/api/watchmen/schedule/${date}/${shiftType}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify({
+            watchman: watchman ? watchman.short_name : '',
+            is_night: is_night ? 1 : 0,
+          }),
+        }
+      );
 
-    fetch('/team/watchmen/action/set_watchman_for_shift', {
-      method: 'POST',
-      body: formData,
-    }).then(() => {
-      window.location.reload(); // TODO - update in-memory store instead
-    }); // TODO - do something on errors
+      if (response.ok) {
+        setShift(shift);
+        unexpand();
+      } else {
+        const json = await response.json();
+        window.alert(`Error: ${JSON.stringify(json)}`);
+      }
+    } catch {
+      window.alert('Internal error');
+    }
   }, []);
 
   return (
     <Container ref={ref} editing={editing}>
-      <div onClick={editing && flipExpand}>
+      <div onClick={editing ? flipExpand : null}>
         <InnerShiftBox shift={shift} editing={editing} />
       </div>
       {expanded && (
