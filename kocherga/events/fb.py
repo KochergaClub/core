@@ -233,8 +233,8 @@ class AnnounceSession:
         await page.waitForSelector("[data-testid=event-create-dialog-name-field]", timeout=10000)
 
         logger.info("Uploading an image")
-        await page.waitForSelector("[data-testid=event-create-dialog-image-selector")
-        el = await page.J("[data-testid=event-create-dialog-image-selector")
+        await page.waitForSelector("[data-testid=event-create-dialog-image-selector]")
+        el = await page.J("[data-testid=event-create-dialog-image-selector]")
         await el.uploadFile(event.image_file("default"))
         await page.waitForFunction(
             'document.querySelector("[data-testid=event_create_dialog]")'
