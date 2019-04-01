@@ -3,9 +3,7 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
-from django.views import View
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from kocherga.django.react import react_render
@@ -45,30 +43,3 @@ def index(request):
         'to_date': to_date.strftime('%Y-%m-%d'),
         'watchmen': kocherga.staff.serializers.MemberSerializer(watchmen, many=True).data,
     })
-
-
-class SetWatchmanForShift(WatchmenManagerMixin, View):
-    def post(self, request):
-        # FIXME - django form for validation
-        shift_type = request.POST['shift']
-        date_str = request.POST['date']
-        watchman_name = request.POST['watchman']
-        is_night = request.POST.get('is_night', False) == '1'
-
-        date = datetime.strptime(date_str, '%Y-%m-%d').date()
-
-        watchman = None
-        if watchman_name:
-            watchman = kocherga.staff.models.Member.objects.get(short_name=watchman_name)
-
-        logger.info(f"Assigning {date}/{shift_type} to {watchman or is_night}")
-        Shift.objects.update_or_create(
-            shift=shift_type,
-            date=date,
-            defaults={
-                'watchman': watchman,
-                'is_night': is_night,
-            },
-        )
-
-        return redirect('watchmen:index')
