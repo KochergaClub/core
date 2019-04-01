@@ -86,29 +86,40 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const ref = useRef(null);
   useOnClickOutside(ref, unexpand);
 
-  const pick = useCallback(({ date, shift, watchman, is_night }: Shift) => {
-    fetch(`/api/watchmen/schedule/${date}/${shift}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken,
-      },
-      body: JSON.stringify({
-        watchman: watchman ? watchman.short_name : '',
-        is_night: is_night ? 1 : 0,
-      }),
-    })
-      .then(() => {
-        window.location.reload(); // TODO - update in-memory store instead
-      })
-      .catch(() => {
-        window.location.reload(); // TODO - show error
-      });
-  }, []);
+  const pick = useCallback(
+    async ({ date, shift, watchman, is_night }: Shift) => {
+      try {
+        const response = await fetch(
+          `/api/watchmen/schedule/${date}/${shift}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({
+              watchman: watchman ? watchman.short_name : '',
+              is_night: is_night ? 1 : 0,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          window.location.reload(); // TODO - update in-memory store instead
+        } else {
+          const json = await response.json();
+          window.alert(`Error: ${JSON.stringify(json)}`);
+        }
+      } catch {
+        window.alert('Internal error');
+      }
+    },
+    []
+  );
 
   return (
     <Container ref={ref} editing={editing}>
-      <div onClick={editing && flipExpand}>
+      <div onClick={editing ? flipExpand : null}>
         <InnerShiftBox shift={shift} editing={editing} />
       </div>
       {expanded && (

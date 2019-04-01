@@ -19,7 +19,7 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 
 class UpdateShiftSerializer(serializers.ModelSerializer):
-    watchman = serializers.CharField(max_length=100)
+    watchman = serializers.CharField(max_length=100, allow_blank=True)
 
     class Meta:
         model = models.Shift
@@ -28,10 +28,13 @@ class UpdateShiftSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         watchman_name = validated_data['watchman']
 
-        try:
-            instance.watchman = kocherga.staff.models.Member.objects.get(short_name=watchman_name)
-        except kocherga.staff.models.Member.DoesNotExist:
-            raise serializers.ValidationError(f'Watchman {watchman_name} not found')
+        if watchman_name:
+            try:
+                instance.watchman = kocherga.staff.models.Member.objects.get(short_name=watchman_name)
+            except kocherga.staff.models.Member.DoesNotExist:
+                raise serializers.ValidationError(f'Watchman {watchman_name} not found')
+        else:
+            instance.watchman = None
 
         if 'is_night' in validated_data:
             instance.is_night = validated_data['is_night']
