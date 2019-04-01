@@ -232,10 +232,13 @@ class AnnounceSession:
         await page.click("[data-testid=event-create-button]")
         await page.waitForSelector("[data-testid=event-create-dialog-name-field]", timeout=10000)
 
-        logger.info("Uploading an image")
+        logger.info("Waiting for image selector")
         await page.waitForSelector("[data-testid=event-create-dialog-image-selector]")
         el = await page.J("[data-testid=event-create-dialog-image-selector]")
-        await el.uploadFile(event.image_file("default"))
+        image_file = event.image_file("default")
+        logger.info(f"Uploading image {image_file}")
+        await el.uploadFile(image_file)
+        logger.info("Waiting for image to appear")
         await page.waitForFunction(
             'document.querySelector("[data-testid=event_create_dialog]")'
             '.innerText.includes("Перетащите, чтобы изменить положение")'
