@@ -307,10 +307,11 @@ description = "A high-level Python Web framework that encourages rapid developme
 name = "django"
 optional = false
 python-versions = ">=3.5"
-version = "2.1.7"
+version = "2.2"
 
 [package.dependencies]
 pytz = "*"
+sqlparse = "*"
 
 [[package]]
 category = "main"
@@ -1696,7 +1697,7 @@ cryptography = ["05b3ded5e88747d28ee3ef493f2b92cbb947c1e45cf98cfef22e6d38bb67d4a
 cycler = ["1d8a5ae1ff6c5cf9b93e8811e581232ad8920aeec647c37316ceac982b08cb2d", "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8"]
 decorator = ["33cd704aea07b4c28b3eb2c97d288a06918275dac0ecebdaf1bc8a48d98adb9e", "cabb249f4710888a2fc0e13e9a16c343d932033718ff62e1e9bc93a9d3a9122b"]
 defusedxml = ["24d7f2f94f7f3cb6061acb215685e5125fbcdc40a857eff9de22518820b0a4f4", "702a91ade2968a82beb0db1e0766a6a273f33d4616a6ce8cde475d8e09853b20"]
-django = ["275bec66fd2588dd517ada59b8bfb23d4a9abc5a362349139ddda3c7ff6f5ade", "939652e9d34d7d53d74d5d8ef82a19e5f8bb2de75618f7e5360691b6e9667963"]
+django = ["7c3543e4fb070d14e10926189a7fcf42ba919263b7473dceaefce34d54e8a119", "a2814bffd1f007805b19194eb0b9a331933b82bd5da1c3ba3d7b7ba16e06dc4b"]
 django-cors-headers = ["5545009c9b233ea7e70da7dbab7cb1c12afa01279895086f98ec243d7eab46fa", "c4c2ee97139d18541a1be7d96fe337d1694623816d83f53cb7c00da9b94acae1"]
 django-debug-toolbar = ["89d75b60c65db363fb24688d977e5fbf0e73386c67acf562d278402a10fc3736", "c2b0134119a624f4ac9398b44f8e28a01c7686ac350a12a74793f3dd57a9eea0"]
 django-rest-framework = ["47a8f496fa69e3b6bd79f68dd7a1527d907d6b77f009e9db7cf9bb21cc565e4a"]

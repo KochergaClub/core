@@ -36,7 +36,7 @@ slappy = "0.4.0"
 feedgen = "*"
 telethon-sync = "*"
 pysocks = "*"
-django = "*"
+django = "2.2"
 django-cors-headers = "*"
 django-rest-framework = "*"
 sentry-sdk = {extras = ["flask"],version = "*"}
