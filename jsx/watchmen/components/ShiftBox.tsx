@@ -87,21 +87,23 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   useOnClickOutside(ref, unexpand);
 
   const pick = useCallback(({ date, shift, watchman, is_night }: Shift) => {
-    const formData = new FormData();
-    formData.append('shift', shift);
-    formData.append('date', date);
-    formData.append('watchman', watchman ? watchman.short_name : '');
-    if (is_night) {
-      formData.append('is_night', '1');
-    }
-    formData.append('csrfmiddlewaretoken', csrfToken);
-
-    fetch('/team/watchmen/action/set_watchman_for_shift', {
-      method: 'POST',
-      body: formData,
-    }).then(() => {
-      window.location.reload(); // TODO - update in-memory store instead
-    }); // TODO - do something on errors
+    fetch(`/api/watchmen/schedule/${date}/${shift}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+      },
+      body: JSON.stringify({
+        watchman: watchman ? watchman.short_name : '',
+        is_night: is_night ? 1 : 0,
+      }),
+    })
+      .then(() => {
+        window.location.reload(); // TODO - update in-memory store instead
+      })
+      .catch(() => {
+        window.location.reload(); // TODO - show error
+      });
   }, []);
 
   return (
