@@ -69,8 +69,6 @@ class Shift(models.Model):
     def clean(self):
         if self.watchman and self.is_night:
             raise ValidationError("watchman can't be set when is_night is set")
-        if not self.watchman and not self.is_night:
-            raise ValidationError("one of watchman and is_night must be set")
 
     class Meta:
         db_table = "watchmen_schedule"

@@ -64,7 +64,7 @@ const InnerShiftBox = ({
 };
 
 const ShiftBox = ({ shift }: { shift?: Shift }) => {
-  const { editing } = useContext(ScheduleContext);
+  const { editing, setShift } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
   const { csrfToken } = useContext(ScheduleContext);
@@ -86,36 +86,35 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const ref = useRef(null);
   useOnClickOutside(ref, unexpand);
 
-  const pick = useCallback(
-    async ({ date, shift, watchman, is_night }: Shift) => {
-      try {
-        const response = await fetch(
-          `/api/watchmen/schedule/${date}/${shift}`,
-          {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': csrfToken,
-            },
-            body: JSON.stringify({
-              watchman: watchman ? watchman.short_name : '',
-              is_night: is_night ? 1 : 0,
-            }),
-          }
-        );
-
-        if (response.ok) {
-          window.location.reload(); // TODO - update in-memory store instead
-        } else {
-          const json = await response.json();
-          window.alert(`Error: ${JSON.stringify(json)}`);
+  const pick = useCallback(async (shift: Shift) => {
+    const { date, shift: shiftType, watchman, is_night } = shift;
+    try {
+      const response = await fetch(
+        `/api/watchmen/schedule/${date}/${shiftType}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify({
+            watchman: watchman ? watchman.short_name : '',
+            is_night: is_night ? 1 : 0,
+          }),
         }
-      } catch {
-        window.alert('Internal error');
+      );
+
+      if (response.ok) {
+        setShift(shift);
+        unexpand();
+      } else {
+        const json = await response.json();
+        window.alert(`Error: ${JSON.stringify(json)}`);
       }
-    },
-    []
-  );
+    } catch {
+      window.alert('Internal error');
+    }
+  }, []);
 
   return (
     <Container ref={ref} editing={editing}>
