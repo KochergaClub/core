@@ -12,6 +12,13 @@ const AdminSection = () => (
   </div>
 );
 
+const inflect = (n: number) => {
+  if ((n % 100 < 10 || n % 100 > 20) && [2, 3, 4].includes(n % 10)) {
+    return 'а';
+  }
+  return '';
+};
+
 const CustomerSection = ({ customer, orders_count, csrfToken, urls }) => (
   <div>
     <h2>Посещения</h2>
@@ -32,7 +39,9 @@ const CustomerSection = ({ customer, orders_count, csrfToken, urls }) => (
     )}
 
     <p>
-      Всего вы были в Кочерге <strong>{orders_count}</strong> раз.
+      Всего вы были в Кочерге <strong>{orders_count}</strong> раз{inflect(
+        orders_count
+      )}.
     </p>
 
     <p>
@@ -74,7 +83,14 @@ const NonCustomerSection = () => (
   </p>
 );
 
-export default ({ email, customer, orders_count, is_staff, csrfToken, urls }) => (
+export default ({
+  email,
+  customer,
+  orders_count,
+  is_staff,
+  csrfToken,
+  urls,
+}) => (
   <Page title="Личный кабинет">
     <div>
       <h1>Личный кабинет Кочерги</h1>
