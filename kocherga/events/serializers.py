@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from kocherga.dateutils import MSK_DATE_FORMAT
+from kocherga.dateutils import MSK_DATE_FORMAT, dts
 import kocherga.room
 
 from . import models
@@ -47,3 +47,71 @@ class PublicEventSerializer(serializers.ModelSerializer):
             return {}
 
         return super().to_representation(obj)
+
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Event
+        fields = (
+            'id',
+            'summary',
+            'title',
+            'description',
+            'location',  # deprecated
+            'room',
+            'start',
+            'end',
+            'created',
+            'google_link',
+            'type',
+            'timepad_category_code',
+            'timepad_prepaid_tickets',
+            'timing_description_override',
+            # optional
+            'master_id',
+            'is_master',
+            'prototype_id',
+            'vk_group',
+            'fb_group',
+            'ready_to_post',
+            'visitors',
+            'posted_vk',
+            'posted_fb',
+            'posted_timepad',
+            'deleted',
+            # method-based
+            'images',
+            'tags',
+        )
+
+    id = serializers.CharField(source='google_id')
+    room = serializers.CharField(source='get_room')
+
+    start = serializers.SerializerMethodField()
+    end = serializers.SerializerMethodField()
+
+    def get_start(self, obj):
+        return {
+            'dateTime': obj.start_dt.strftime(MSK_DATE_FORMAT),
+        }
+
+    def get_end(self, obj):
+        return {
+            'dateTime': obj.end_dt.strftime(MSK_DATE_FORMAT),
+        }
+
+    created = serializers.SerializerMethodField()
+
+    def get_created(self, obj):
+        return dts(obj.created_dt)
+
+    type = serializers.CharField(source='event_type')
+
+    images = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
+
+    def get_images(self, obj):
+        return obj.get_images()
+
+    def get_tags(self, obj):
+        return obj.tag_names()

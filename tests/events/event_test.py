@@ -7,6 +7,7 @@ pytestmark = [
 from datetime import datetime, timedelta, date
 
 from kocherga.events.models import Event
+from kocherga.events import serializers
 import kocherga.events.db
 import django.db
 
@@ -39,9 +40,12 @@ def test_default_event_type(google_object):
     assert event.event_type == "unknown"
 
 
-def test_to_dict(google_object):
+def test_serialize(google_object):
     event = Event.from_google(google_object)
-    assert type(event.to_dict()) == dict
+    data = serializers.EventSerializer(event).data
+    assert type(data['start']['dateTime']) == str
+    assert data['posted_vk'] == ''
+    assert data['tags'] == []
 
 
 class TestGetEvent:

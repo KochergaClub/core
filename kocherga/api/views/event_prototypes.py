@@ -11,6 +11,7 @@ from datetime import datetime
 from kocherga.error import PublicError
 
 from kocherga.events.models import EventPrototype
+from kocherga.events.serializers import EventSerializer
 
 from kocherga.api.common import ok
 
@@ -100,7 +101,7 @@ class ObjectView(APIView):
 def r_prototype_instances(request, prototype_id):
     prototype = EventPrototype.by_id(prototype_id)
     events = prototype.instances()
-    return Response([e.to_dict() for e in events])
+    return Response(EventSerializer(events, many=True).data)
 
 
 @permission_classes(IsAdminUser,)
@@ -123,7 +124,7 @@ def r_prototype_new_event(request, prototype_id):
     dt = datetime.fromtimestamp(ts)
     event = prototype.new_event(dt)
 
-    return Response(event.to_dict())
+    return Response(EventSerializer(event).data)
 
 
 @permission_classes(IsAdminUser,)

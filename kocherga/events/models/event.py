@@ -332,48 +332,6 @@ class Event(models.Model):
         self.deleted = True
         self.save()
 
-    # dict for the further serialization (e.g. for api.kocherga.club)
-    def to_dict(self):
-        d = {
-            "id": self.google_id,
-            "summary": self.summary,
-            "title": self.title,
-            "description": self.description,
-            "location": self.location,  # deprecated
-            "room": self.get_room(),
-            "start": {"dateTime": dts(self.start_dt)},
-            "end": {"dateTime": dts(self.end_dt)},
-            "created": dts(self.created_dt),
-            "google_link": self.google_link,
-            "type": self.event_type,
-            "timepad_category_code": self.timepad_category_code,
-            "timepad_prepaid_tickets": self.timepad_prepaid_tickets,
-            "timing_description_override": self.timing_description_override,
-        }
-
-        optional = (
-            "master_id",
-            "is_master",
-            "prototype_id",
-            "vk_group",
-            "fb_group",
-            "ready_to_post",
-            "visitors",
-            "posted_vk",
-            "posted_fb",
-            "posted_timepad",
-            "deleted"
-        )
-        for field in optional:
-            if getattr(self, field):
-                d[field] = getattr(self, field)
-
-        d["images"] = self.get_images()
-
-        d["tags"] = self.tag_names()
-
-        return d
-
     def to_google(self):
         def convert_dt(dt):
             return dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")

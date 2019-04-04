@@ -21,7 +21,7 @@ from kocherga.error import PublicError
 
 import kocherga.events.db
 from kocherga.events.models import Event
-from kocherga.events.serializers import PublicEventSerializer
+from kocherga.events.serializers import PublicEventSerializer, EventSerializer
 
 from kocherga.api.common import ok
 
@@ -41,7 +41,7 @@ class RootView(APIView):
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
         )
-        return Response([e.to_dict() for e in events])
+        return Response(EventSerializer(events, many=True).data)
 
     def post(self, request):
         payload = request.data
@@ -58,7 +58,7 @@ class RootView(APIView):
 
         kocherga.events.db.insert_event(event)
 
-        return Response(event.to_dict())
+        return Response(EventSerializer(event).data)
 
 
 class ObjectView(APIView):
@@ -66,13 +66,13 @@ class ObjectView(APIView):
 
     def get(self, request, event_id):
         event = Event.by_id(event_id)
-        return Response(event.to_dict())
+        return Response(EventSerializer(event).data)
 
     def patch(self, request, event_id):
         event = Event.by_id(event_id)
         event.patch(request.data)
 
-        return Response(event.to_dict())
+        return Response(EventSerializer(event).data)
 
     def delete(self, request, event_id):
         event = Event.by_id(event_id)

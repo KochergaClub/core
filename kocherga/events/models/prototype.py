@@ -14,6 +14,8 @@ import kocherga.events.google
 from kocherga.dateutils import dts, TZ
 from kocherga.images import image_storage
 
+from ..serializers import EventSerializer
+
 
 class EventPrototype(models.Model):
     class Meta:
@@ -160,7 +162,9 @@ class EventPrototype(models.Model):
 
         if detailed:
             result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
-            result['instances'] = [e.to_dict() for e in self.instances(limit=20)]
+            result['instances'] = [
+                EventSerializer(self.instances(limit=20), many=True).data
+            ]
 
         result["tags"] = self.tag_names()
 
