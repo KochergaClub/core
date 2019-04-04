@@ -177,10 +177,6 @@ class Event(models.Model):
         return Event.objects.get(pk=event_id)
 
     @classmethod
-    def query(cls):
-        return Event.objects.filter(deleted=False)
-
-    @classmethod
     def from_google(cls, google_event):
         obj = cls(
             created_dt=parse_iso8601(google_event["created"]),
