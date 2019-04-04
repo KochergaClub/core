@@ -41,6 +41,7 @@ class PublicEventSerializer(serializers.ModelSerializer):
         return obj.end_dt.strftime(MSK_DATE_FORMAT)
 
     def to_representation(self, obj: models.Event):
+        # Some precautions against information leaking (although we do more checks in /public_events API route).
         if obj.deleted:
             return {}
         if obj.event_type != 'public':

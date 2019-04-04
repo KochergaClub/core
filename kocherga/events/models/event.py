@@ -10,7 +10,7 @@ from django.conf import settings
 import django.dispatch
 
 from kocherga.dateutils import TZ, MSK_DATE_FORMAT
-from kocherga.dateutils import dts, inflected_weekday, inflected_month
+from kocherga.dateutils import inflected_weekday, inflected_month
 
 from kocherga.images import image_storage
 import kocherga.room
@@ -394,30 +394,6 @@ class Event(models.Model):
         timepad_event = self.timepad_event()
         for order in timepad_event.orders.filter(status='ok'):
             yield order.user
-
-    def public_object(self):
-        # Some precautions against information leaking (although we do more checks in /public_events API route).
-        if self.deleted:
-            return {}
-        if self.event_type != 'public':
-            return {}
-
-        announcements = {}
-
-        for (key, attr) in [("vk", "posted_vk"), ("fb", "posted_fb"), ("timepad", "posted_timepad")]:
-            if getattr(self, attr):
-                announcements[key] = {
-                    "link": getattr(self, attr),
-                }
-
-        return {
-            "event_id": self.google_id,
-            "title": self.title,
-            "room": kocherga.room.pretty(self.get_room()),
-            "announcements": announcements,
-            "start": self.start_dt.strftime(MSK_DATE_FORMAT),
-            "end": self.end_dt.strftime(MSK_DATE_FORMAT),
-        }
 
 
 class Tag(models.Model):
