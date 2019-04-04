@@ -36,7 +36,7 @@ class RootView(APIView):
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        events = kocherga.events.db.list_events(
+        events = Event.objects.list_events(
             date=request.query_params.get("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),

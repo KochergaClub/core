@@ -34,18 +34,27 @@ def ts_now():
 
 
 class EventManager(models.Manager):
-    def public_events(self, date=None, from_date=None, to_date=None, tag=None):
-        query = super().get_queryset() \
-            .filter(event_type = 'public') \
-            .exclude(posted_vk__isnull = True) \
-            .exclude(posted_vk = '') \
-            .filter(start_ts__gte = datetime(2018, 6, 1).timestamp())  # earlier events are not cleaned up yet
+    def list_events(
+        self,
+        date: datetime.date = None,
+        from_date: datetime.date = None,
+        to_date: datetime.date = None,
+        order_by = None,
+    ):
+        order_args = None
+        if order_by == "updated":
+            order_args = 'updated_ts'
+        else:
+            order_args = 'start_ts'
 
-        if tag:
-            query = query.filter(tags__name = tag)
+        query = (
+            super().get_queryset()
+            .filter(deleted=False)
+            .order_by(order_args)
+        )
 
-        if not from_date and not to_date and not date:
-            raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
+        if date:
+            from_date = to_date = date
 
         if from_date:
             query = query.filter(start_ts__gte = datetime.combine(from_date, time.min).timestamp())
@@ -53,14 +62,25 @@ class EventManager(models.Manager):
         if to_date:
             query = query.filter(start_ts__lte = datetime.combine(to_date, time.max).timestamp())
 
-        if date:
-            query = query.filter(
-                start_ts__gte = datetime.combine(date, time.min).timestamp()
-            ).filter(
-                start_ts__lte = datetime.combine(date, time.max).timestamp()
-            )
+        return query
 
-        query = query.order_by('start_ts')
+    def public_events(self, date=None, from_date=None, to_date=None, tag=None):
+        if not from_date and not to_date and not date:
+            raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
+
+        query = self.list_events(date=date, from_date=from_date, to_date=to_date)
+
+        query = (
+            query
+            .filter(event_type = 'public')
+            .exclude(posted_vk__isnull = True)
+            .exclude(posted_vk = '')
+            .filter(start_ts__gte = datetime(2018, 6, 1).timestamp())  # earlier events are not cleaned up yet
+        )
+
+        if tag:
+            query = query.filter(tags__name = tag)
+
         return query
 
 

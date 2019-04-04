@@ -2,7 +2,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 from typing import List, Dict, Any
-
 from datetime import datetime, timedelta
 
 from kocherga.dateutils import TZ, MSK_DATE_FORMAT
@@ -10,27 +9,6 @@ from kocherga.dateutils import TZ, MSK_DATE_FORMAT
 import kocherga.events.google
 from kocherga.events.models import Event
 import kocherga.importer.base
-
-
-def list_events(**kwargs):
-    google_events = kocherga.events.google.list_events(**kwargs)
-
-    order_args = None
-    if kwargs.get("order_by", None) == "updated":
-        order_args = 'updated_ts'
-    else:
-        order_args = 'start_ts'
-
-    events = (
-        Event.objects
-        .filter(
-            google_id__in=[ge["id"] for ge in google_events],
-            deleted=False,
-        )
-        .order_by(order_args)
-    )
-
-    return events
 
 
 def insert_event(event):

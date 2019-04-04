@@ -53,7 +53,7 @@ class Booking:
 
 
 def day_bookings(date):
-    events = kocherga.events.db.list_events(date=date)
+    events = Event.objects.list_events(date=date)
 
     bookings = [Booking.from_event(event) for event in events]
 
@@ -94,7 +94,7 @@ def check_availability(start_dt, end_dt, room):
 
 
 def bookings_by_email(email):
-    events = kocherga.events.db.list_events(q="Бронь {}".format(email))
+    events = Event.objects.list_events().filter(title__contains=f"Бронь {email}")
 
     bookings = [
         Booking.from_event(event)
