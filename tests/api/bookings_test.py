@@ -13,6 +13,17 @@ def test_list(client):
     res = client.get('/api/bookings/today')
     assert res.status_code == 200
 
+
+def test_list_my_by_anon(client):
+    res = client.get('/api/my/bookings')
+    assert res.status_code == 403
+
+
+def test_list_my_by_user(client, user_auth_header):
+    res = client.get('/api/my/bookings', **user_auth_header)
+    assert res.status_code == 200
+
+
 def test_add(client, user_auth_header):
     dt = datetime.now() + timedelta(days=3)
 

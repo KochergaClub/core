@@ -4,7 +4,10 @@ import pytest
 import jwt
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
 import kocherga.images
+
 
 @pytest.fixture
 def upload(tmpdir):
@@ -39,4 +42,6 @@ def kocherga_auth_header(common_team):
 
 @pytest.fixture
 def user_auth_header(common_team):
-    return _auth_header('somebody@example.com')
+    email = 'somebody@example.com'
+    get_user_model().objects.create_user(email)
+    return _auth_header(email)

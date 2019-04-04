@@ -1,18 +1,19 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from datetime import datetime
 
 from kocherga.error import PublicError
 import kocherga.events.booking
-from kocherga.api.auth import auth, get_email
 from kocherga.api.common import ok
 
 
-@auth("any")
 @api_view()
+@permission_classes((IsAuthenticated,))
 def r_list_my(request):
-    bookings = kocherga.events.booking.bookings_by_email(get_email(request))
+    email = request.user.email
+    bookings = kocherga.events.booking.bookings_by_email(email)
     return Response([b.public_object() for b in bookings])
 
 
@@ -27,9 +28,10 @@ def r_list_by_date(request, date_str):
     return Response([b.public_object() for b in bookings])
 
 
-@auth("any")
 @api_view(['POST'])
+@permission_classes((IsAuthenticated,))
 def r_create(request):
+    email = request.user.email
     payload = request.data
 
     data = {}
@@ -44,16 +46,16 @@ def r_create(request):
         people=data['people'],
         start_time=data['startTime'],
         end_time=data['endTime'],
-        email=get_email(request),
+        email=email,
     )
 
     return Response(ok)
 
 
-@auth("any")
 @api_view(['DELETE'])
+@permission_classes((IsAuthenticated,))
 def r_delete(request, event_id):
-    email = get_email(request)
+    email = request.user.email
     kocherga.events.booking.delete_booking(event_id, email)
 
     return Response(ok)

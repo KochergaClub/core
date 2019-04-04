@@ -7,6 +7,14 @@ from kocherga.events.models import EventPrototype
 
 
 class TestPrototypes:
+    def test_list_as_anon(self, client):
+        res = client.get('/api/event_prototypes')
+        assert res.status_code == 403
+
+    def test_list_as_user(self, client, user_auth_header):
+        res = client.get('/api/event_prototypes', **user_auth_header)
+        assert res.status_code == 403
+
     def test_list_empty(self, client, kocherga_auth_header):
         res = client.get('/api/event_prototypes', **kocherga_auth_header)
         assert res.status_code == 200

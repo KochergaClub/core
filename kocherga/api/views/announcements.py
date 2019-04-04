@@ -9,7 +9,8 @@ from django.views.decorators.http import require_safe
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 from kocherga.error import PublicError
 
@@ -21,7 +22,6 @@ import kocherga.events.telegram
 import kocherga.events.announce
 import kocherga.events.weekly_digest
 
-from kocherga.api.auth import auth
 from kocherga.api.common import ok
 
 # Idea: workflows for announcements.
@@ -31,7 +31,8 @@ from kocherga.api.common import ok
 
 
 class TimepadPostView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def post(self, request, event_id):
         event = Event.objects.get(pk=event_id)
         announcement = kocherga.events.announce.post_to_timepad(event)
@@ -40,7 +41,8 @@ class TimepadPostView(APIView):
 
 
 class TimepadCategoriesView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def get(self, request):
         categories = kocherga.events.timepad.timepad_categories()
         return Response([
@@ -50,35 +52,35 @@ class TimepadCategoriesView(APIView):
         ])
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view()
 def r_vk_groups(request):
     all_groups = kocherga.events.vk.all_groups()
     return Response(all_groups)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_vk_update_wiki_schedule(request):
     kocherga.events.vk.update_wiki_schedule()
     return Response(ok)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_vk_create_schedule_post(request):
     kocherga.events.vk.create_schedule_post('')
     return Response(ok)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_telegram_post_schedule(request):
     kocherga.events.telegram.post_schedule()
     return Response(ok)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_email_post_digest(request):
     text = request.data.get('text', '')
@@ -86,7 +88,7 @@ def r_email_post_digest(request):
     return Response(ok)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_vk_post(request, event_id):
     event = Event.by_id(event_id)
@@ -95,14 +97,14 @@ def r_vk_post(request, event_id):
     return Response({"link": announcement.link})
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view()
 def r_fb_groups(request):
     all_groups = kocherga.events.fb.all_groups()
     return Response(all_groups)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_fb_post(request, event_id):
     event = Event.by_id(event_id)

@@ -133,19 +133,19 @@ def common_team(db):
     from kocherga.staff.models import Member, AltEmail
 
     Member.objects.create(
-        user=get_user_model().objects.create_user('yudkowsky@example.com'),
+        user=get_user_model().objects.create_user('yudkowsky@example.com', is_staff=True),
         short_name='Элиезер',
         is_current=True,
     )
 
     Member.objects.create(
-        user=get_user_model().objects.create_user('ssc@example.com'),
+        user=get_user_model().objects.create_user('ssc@example.com', is_staff=True),
         short_name='Скотт',
         is_current=True,
     )
 
     m = Member.objects.create(
-        user=get_user_model().objects.create_user('test@kocherga-club.ru'),
+        user=get_user_model().objects.create_user('test@kocherga-club.ru', is_staff=True),
         short_name='Слава',
         is_current=True,
     )

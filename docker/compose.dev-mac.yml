@@ -50,6 +50,7 @@ services:
       - db
       - render-server
       - chrome
+    restart: always
 
   render-server:
     << : *common

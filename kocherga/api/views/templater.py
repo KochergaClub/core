@@ -6,13 +6,13 @@ from django.http import HttpResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 import asyncio
 
 import kocherga.templater
 from kocherga.templater import Template
-from kocherga.api.auth import auth
 
 
 def get_args(args):
@@ -44,14 +44,14 @@ def r_png(request, name):
     return HttpResponse(image_bytes, content_type='image/png')
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view()
 def r_schema(request, name):
     template = Template.by_name(name)
     return Response(template.schema.to_dict())
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view()
 def r_list(request):
     names = kocherga.templater.list_templates()

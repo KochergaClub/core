@@ -3,7 +3,8 @@ logger = logging.getLogger(__name__)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 from datetime import datetime
 
@@ -12,11 +13,11 @@ from kocherga.error import PublicError
 from kocherga.events.models import EventPrototype
 
 from kocherga.api.common import ok
-from kocherga.api.auth import auth
 
 
 class RootView(APIView):
-    @auth('kocherga', method=True)
+    permission_classes = (IsAdminUser,)
+
     def get(self, request):
         prototypes = EventPrototype.objects.order_by('weekday').all()
         return Response([
@@ -24,7 +25,6 @@ class RootView(APIView):
             for p in prototypes
         ])
 
-    @auth('kocherga', method=True)
     def post(self, request):
         payload = request.data
 
@@ -57,12 +57,12 @@ class RootView(APIView):
 
 
 class ObjectView(APIView):
-    @auth('kocherga', method=True)
+    permission_classes = (IsAdminUser,)
+
     def get(self, request, prototype_id):
         prototype = EventPrototype.by_id(prototype_id)
         return Response(prototype.to_dict(detailed=True))
 
-    @auth('kocherga', method=True)
     def patch(self, request, prototype_id):
         payload = request.data
 
@@ -95,7 +95,7 @@ class ObjectView(APIView):
         return Response(prototype.to_dict())
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view()
 def r_prototype_instances(request, prototype_id):
     prototype = EventPrototype.by_id(prototype_id)
@@ -103,7 +103,7 @@ def r_prototype_instances(request, prototype_id):
     return Response([e.to_dict() for e in events])
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_prototype_cancel_date(request, prototype_id, date_str):
     prototype = EventPrototype.by_id(prototype_id)
@@ -113,7 +113,7 @@ def r_prototype_cancel_date(request, prototype_id, date_str):
     return Response(ok)
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_prototype_new_event(request, prototype_id):
     payload = request.data
@@ -126,7 +126,7 @@ def r_prototype_new_event(request, prototype_id):
     return Response(event.to_dict())
 
 
-@auth("kocherga")
+@permission_classes(IsAdminUser,)
 @api_view(['POST'])
 def r_upload_image(request, prototype_id):
     files = request.FILES
@@ -144,14 +144,14 @@ def r_upload_image(request, prototype_id):
 
 
 class TagView(APIView):
-    @auth('kocherga', method=True)
+    permission_classes = (IsAdminUser,)
+
     def post(self, prototype_id, tag_name):
         prototype = EventPrototype.by_id(prototype_id)
         prototype.add_tag(tag_name)
 
         return Response(ok)
 
-    @auth('kocherga', method=True)
     def delete(prototype_id, tag_name):
         prototype = EventPrototype.by_id(prototype_id)
         prototype.delete_tag(tag_name)

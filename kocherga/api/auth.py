@@ -1,71 +1,33 @@
-from django.conf import settings
+import logging
+logger = logging.getLogger(__name__)
 
-from functools import wraps
 import datetime
 import jwt
 import json
 
 import requests
 
-import kocherga.api.common
-from kocherga.error import PublicError
+from django.conf import settings
+from django.contrib.auth import get_user_model
+import rest_framework.authentication
+import rest_framework.exceptions
 
-import kocherga.staff.tools
+from kocherga.error import PublicError
 
 JWT_SECRET_KEY = settings.KOCHERGA_JWT_SECRET_KEY
 
 
-# FIXME Potential security issue - any email can be checked for team membership.
-def check_email_for_team(email, team) -> bool:
-    if team == "any":
-        return True
-    elif team == "kocherga":
-        member = kocherga.staff.tools.find_member_by_email(email)
-        if not member:
-            raise PublicError(
-                "Should be a member of the Kocherga team", status_code=403
-            )
-        return True
-    else:
-        raise PublicError("Unknown team {}".format(team))
+def get_or_create_user(email):
+    User = get_user_model()
 
-
-def get_email(request):
-    header = request.META.get('HTTP_AUTHORIZATION', '')
-
-    if not header.startswith("JWT "):
-        raise PublicError("Authentication required", status_code=401)
-
-    decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY, algorithms="HS256")
-
-    return decoded["email"]
-
-
-def auth(team, method=False):
-
-    def check_auth(request):
-        email = get_email(request)
-        if check_email_for_team(email, team) is True:
-            return True
-        raise Exception("check_email_for_team() returned an unknown value")
-
-    def decorator(f):
-
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if method:
-                request = args[1]
-            else:
-                request = args[0]
-
-            if not kocherga.api.common.DEV:
-                if check_auth(request) is not True:
-                    raise PublicError("Access denied", status_code=401)
-            return f(*args, **kwargs)
-
-        return decorated
-
-    return decorator
+    user = None
+    try:
+        logger.info(f'Found user for email {email}')
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        logger.info(f'User for email {email} not found, creating...')
+        user = User.objects.create_user(email)
+    return user
 
 
 def google_auth(request):
@@ -80,8 +42,16 @@ def google_auth(request):
     )
     r.raise_for_status()
     email = r.json()["email"]
+    logger.info(f'Authenticated google email {email}')
 
-    check_email_for_team(email, team)
+    user = get_or_create_user(email)
+
+    if team == 'kocherga':
+        # legacy check, will be removed later when we stop relying on 'team' param
+        if not user.is_staff:
+            raise PublicError(
+                "Should be a member of the Kocherga team", status_code=403
+            )
 
     token = jwt.encode(
         payload={
@@ -93,3 +63,27 @@ def google_auth(request):
         algorithm="HS256",
     )
     return token.decode("utf-8")
+
+
+class JWTAuthentication(rest_framework.authentication.BaseAuthentication):
+    def authenticate(self, request):
+        header = request.META.get('HTTP_AUTHORIZATION', '')
+
+        if not header.startswith("JWT "):
+            # that's ok, we might have other authentication methods
+            logger.debug('no JWT header')
+            return
+
+        logger.debug('decoding JWT header')
+        decoded = jwt.decode(header[4:], key=JWT_SECRET_KEY, algorithms="HS256")
+
+        email = decoded["email"]
+
+        User = get_user_model()
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            logger.warn('use for JWT token not found in database')
+            raise rest_framework.exceptions.AuthenticationFailed('No such user')
+
+        return (user, None)

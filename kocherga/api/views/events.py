@@ -1,6 +1,13 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from io import BytesIO
+from datetime import datetime
+
+import requests
+
+from feedgen.feed import FeedGenerator
+
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.http import require_safe
 from django.conf import settings
@@ -8,10 +15,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
-from datetime import datetime
-import requests
-from werkzeug.contrib.iterio import IterIO
+from rest_framework.permissions import IsAdminUser
 
 from kocherga.error import PublicError
 
@@ -20,13 +24,11 @@ from kocherga.events.models import Event
 from kocherga.events.serializers import PublicEventSerializer
 
 from kocherga.api.common import ok
-from kocherga.api.auth import auth
-
-from feedgen.feed import FeedGenerator
 
 
 class RootView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def get(self, request):
         def arg2date(arg):
             d = request.query_params.get(arg)
@@ -41,7 +43,6 @@ class RootView(APIView):
         )
         return Response([e.to_dict() for e in events])
 
-    @auth("kocherga", method=True)
     def post(self, request):
         payload = request.data
         for field in ("title", "date", "startTime", "endTime"):
@@ -61,19 +62,18 @@ class RootView(APIView):
 
 
 class ObjectView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def get(self, request, event_id):
         event = Event.by_id(event_id)
         return Response(event.to_dict())
 
-    @auth("kocherga", method=True)
     def patch(self, request, event_id):
         event = Event.by_id(event_id)
         event.patch(request.data)
 
         return Response(event.to_dict())
 
-    @auth("kocherga", method=True)
     def delete(self, request, event_id):
         event = Event.by_id(event_id)
         event.delete()
@@ -83,7 +83,8 @@ class ObjectView(APIView):
 
 
 class PropertyView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def post(self, request, event_id, key):
         value = request.data['value']
 
@@ -94,7 +95,8 @@ class PropertyView(APIView):
 
 
 class ImageView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def post(self, request, event_id, image_type):
         files = request.FILES
         if "file" not in files:
@@ -119,28 +121,30 @@ class ImageView(APIView):
 
 
 class ImageFromUrlView(APIView):
-    @auth("kocherga", method=True)
+    permission_classes = (IsAdminUser,)
+
     def post(self, request, event_id, image_type):
         payload = request.data
 
         url = payload["url"]
-        r = requests.get(url, stream=True)
+        r = requests.get(url)
 
         event = Event.by_id(event_id)
-        event.add_image(image_type, IterIO(r.raw.stream(4096, decode_content=True)))
+        fh = BytesIO(r.content)
+        event.add_image(image_type, fh)
 
         return Response(ok)
 
 
 class TagView(APIView):
-    @auth('kocherga', method=True)
+    permission_classes = (IsAdminUser,)
+
     def post(self, request, event_id, tag_name):
         event = Event.by_id(event_id)
         event.add_tag(tag_name)
 
         return Response(ok)
 
-    @auth('kocherga', method=True)
     def delete(self, request, event_id, tag_name):
         event = Event.by_id(event_id)
         event.delete_tag(tag_name)
