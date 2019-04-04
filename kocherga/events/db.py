@@ -12,11 +12,6 @@ from kocherga.events.models import Event
 import kocherga.importer.base
 
 
-def get_event(event_id):
-    event = Event.objects.get(pk=event_id)
-    return event
-
-
 def list_events(**kwargs):
     google_events = kocherga.events.google.list_events(**kwargs)
 
@@ -33,10 +28,9 @@ def list_events(**kwargs):
             deleted=False,
         )
         .order_by(order_args)
-        .all()
     )
 
-    return list(events)
+    return events
 
 
 def insert_event(event):

@@ -9,7 +9,7 @@ from django.db import models
 from django.conf import settings
 import django.dispatch
 
-from kocherga.dateutils import TZ, MSK_DATE_FORMAT
+from kocherga.dateutils import TZ
 from kocherga.dateutils import inflected_weekday, inflected_month
 
 from kocherga.images import image_storage

@@ -8,7 +8,6 @@ from datetime import datetime, timedelta, date
 
 from kocherga.events.models import Event
 from kocherga.events import serializers
-import kocherga.events.db
 import django.db
 
 
@@ -79,7 +78,7 @@ class TestImages:
 
         assert event.image_file('default')
 
-        event = kocherga.events.db.get_event(event.google_id)  # reloading for another check
+        event = Event.objects.get(pk=event.google_id)  # reloading for another check
         assert event.image_file('default')
 
 

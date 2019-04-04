@@ -9,12 +9,13 @@ from kocherga.events.models import Event, EventPrototype
 import kocherga.events.db
 import kocherga.images
 
+
 @pytest.fixture
 def google_object():
     return {
         'created': '2017-09-01T17:59:38.000Z',
         'updated': '2017-10-01T18:00:00.000Z',
-        'creator': { 'email': 'mmcleric@gmail.com' },
+        'creator': {'email': 'mmcleric@gmail.com'},
         'summary': 'бронь итальянский',
         'location': 'летняя',
         'start': {
