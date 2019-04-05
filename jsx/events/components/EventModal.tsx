@@ -15,7 +15,7 @@ interface Props {
   end: Date;
 }
 
-const NewEventModal = ({ isOpen, setOpen, start, end }: Props) => {
+const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
   const dispatch = useContext(EventDispatch);
   const csrfToken = useContext(CSRFTokenContext);
   const inputRef = useRef(null);
@@ -71,4 +71,4 @@ const NewEventModal = ({ isOpen, setOpen, start, end }: Props) => {
   );
 };
 
-export default NewEventModal;
+export default EventModal;

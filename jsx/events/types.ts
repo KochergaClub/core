@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-export interface PublicEvent {
-  event_id: string;
+export interface Event {
+  id: string;
   title: string;
   room: string;
   start: string;
@@ -21,7 +21,7 @@ export interface CreateAction {
 export interface ResizeAction {
   type: 'RESIZE';
   payload: {
-    event: PublicEvent;
+    event: Event;
     start: moment.Moment;
     end: moment.Moment;
   };
@@ -29,7 +29,7 @@ export interface ResizeAction {
 
 export type Action = CreateAction | ResizeAction;
 
-export const reducer = (events: PublicEvent[], action: Action) => {
+export const reducer = (events: Event[], action: Action) => {
   switch (action.type) {
     case 'CREATE':
       return [
@@ -38,13 +38,13 @@ export const reducer = (events: PublicEvent[], action: Action) => {
           start: action.payload.start.format(),
           end: action.payload.end.format(),
           title: action.payload.title,
-          event_id: action.payload.id,
+          id: action.payload.id,
           room: 'TODO',
         },
       ];
     case 'RESIZE':
       return events.map(existingEvent => {
-        return existingEvent.event_id == action.payload.event.event_id
+        return existingEvent.id == action.payload.event.id
           ? {
               ...existingEvent,
               start: action.payload.start.format(),

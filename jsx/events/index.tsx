@@ -5,17 +5,17 @@ import moment from 'moment';
 import Page from '../components/Page';
 
 import Calendar from './components/Calendar';
-import NewEventModal from './components/NewEventModal';
+import EventModal from './components/EventModal';
 
-import { PublicEvent, reducer } from './types';
+import { Event, reducer } from './types';
 import { EventDispatch } from './contexts';
 
-const startAccessor = (event: PublicEvent) => {
+const startAccessor = (event: Event) => {
   return new Date(event.start);
 };
-const endAccessor = (event: PublicEvent) => new Date(event.end);
+const endAccessor = (event: Event) => new Date(event.end);
 
-export default (props: { events: PublicEvent[]; csrfToken: string }) => {
+export default (props: { events: Event[]; csrfToken: string }) => {
   const [events, dispatch] = useReducer(reducer, props.events);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,10 +29,30 @@ export default (props: { events: PublicEvent[]; csrfToken: string }) => {
   }, []);
 
   const resizeEvent = useCallback(
-    ({ event, start, end }: { event: PublicEvent; start: Date; end: Date }) => {
+    async ({ event, start, end }: { event: Event; start: Date; end: Date }) => {
+      const response = await fetch(`/api/event/${event.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': props.csrfToken,
+        },
+        body: JSON.stringify({
+          start,
+          end,
+        }),
+      });
+
+      if (!response.ok) {
+        const json = await response.json(); // FIXME - this line can fail
+        window.alert(`Error: ${JSON.stringify(json)}`);
+        return;
+      }
+
+      const json = await response.json();
+
       dispatch({
         type: 'RESIZE',
-        payload: { event, start: moment(start), end: moment(end) },
+        payload: { event, start: moment(json.start), end: moment(json.end) },
       });
     },
     []
@@ -52,7 +72,7 @@ export default (props: { events: PublicEvent[]; csrfToken: string }) => {
         />
 
         {modalIsOpen && (
-          <NewEventModal
+          <EventModal
             isOpen={modalIsOpen}
             start={editingStart}
             end={editingEnd}
