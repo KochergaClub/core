@@ -31,7 +31,7 @@ var PORT = argv.port;
 var app = express();
 var server = new http.Server(app);
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '2mb' }));
 
 app.get('/', function(_, res) {
   res.end('React render server');
