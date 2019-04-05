@@ -30,7 +30,7 @@ def cm_login_stat_to_id_stat(stat):
         try:
             member = Member.objects.get(cm_login=k)
         except Member.DoesNotExist:
-            raise Exception("Couldn't find member by cm login {k}")
+            raise Exception(f"Couldn't find member by cm login {k}")
 
         result[member.id] = v
     return result
