@@ -31,27 +31,29 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Page = ({
-  title,
-  team,
-  children,
-  noMenu,
-}: {
+interface Props {
   title: string;
   team?: boolean;
   children: React.ReactNode;
   noMenu?: boolean;
-}) => {
+  csrfToken?: string;
+}
+
+export const CSRFTokenContext = React.createContext<string | null>(null);
+
+const Page = ({ title, team, children, noMenu, csrfToken }: Props) => {
   return (
-    <div>
-      <GlobalStyle />
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>{title}</title>
-      </Helmet>
-      {noMenu || <TildaMenu team={team} />}
-      <Main>{children}</Main>
-    </div>
+    <CSRFTokenContext.Provider value={csrfToken}>
+      <div>
+        <GlobalStyle />
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{title}</title>
+        </Helmet>
+        {noMenu || <TildaMenu team={team} />}
+        <Main>{children}</Main>
+      </div>
+    </CSRFTokenContext.Provider>
   );
 };
 
