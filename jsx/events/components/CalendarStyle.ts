@@ -1,15 +1,6 @@
-import * as React from 'react';
-
 import { createGlobalStyle } from 'styled-components';
 
-import Calendar from 'react-big-calendar';
-
-import moment from 'moment';
-moment.locale('ru');
-
-const localizer = Calendar.momentLocalizer(moment);
-
-const CalendarStyle = createGlobalStyle`
+export const CalendarStyle = createGlobalStyle`
 .rbc-btn {
   color: inherit;
   font: inherit;
@@ -644,98 +635,76 @@ button.rbc-input::-moz-focus-inner {
 }
 `;
 
-import { navigate } from 'react-big-calendar/lib/utils/constants';
-
-
-interface ToolbarProps {
-  view: string;
-  views: string[];
-  label: Node;
-  localizer: any;
-  onNavigate: (x: string) => void;
-  onView: (x: string) => void;
-}
-
-class MyToolbar extends React.Component<ToolbarProps> {
-  render() {
-    let {
-      label,
-    } = this.props
-
-    return (
-      <div className="rbc-toolbar">
-        <span className="rbc-btn-group">
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.TODAY)}
-          >
-            Сегодня
-          </button>
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.PREVIOUS)}
-          >
-            Назад
-          </button>
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.NEXT)}
-          >
-            Вперёд
-          </button>
-        </span>
-
-        <span className="rbc-toolbar-label">{label}</span>
-
-        <span className="rbc-btn-group">{this.viewNamesGroup()}</span>
-      </div>
-    )
+export const CalendarDndStyle = createGlobalStyle`
+.rbc-addons-dnd {
+  .rbc-addons-dnd-row-body {
+    position: relative;
   }
 
-  navigate = (action: string) => {
-    this.props.onNavigate(action)
+  .rbc-addons-dnd-drag-row {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
   }
 
-  view = (view: string) => {
-    this.props.onView(view)
+  .rbc-addons-dnd-over {
+    background-color: rgba(0,0,0,0.3);
   }
 
-  viewNamesGroup() {
-    let viewNames = this.props.views
-    const view = this.props.view
+  .rbc-event {
+    transition: opacity 150ms;
 
-    const messages = {
-      'month': 'Месяц',
-      'week': 'Неделя',
-      'day': 'День',
-      'agenda': 'Адженда',
-    };
+    &:hover {
+      .rbc-addons-dnd-resize-ns-icon, .rbc-addons-dnd-resize-ew-icon { display: block; }
+    }
+  }
 
-    if (viewNames.length > 1) {
-      return viewNames.map(name => (
-        <button
-          type="button"
-          key={name}
-          className={view === name ? 'rbc-active' : ''}
-          onClick={this.view.bind(null, name)}
-        >
-          {messages[name]}
-        </button>
-      ))
+  .rbc-addons-dnd-dragged-event {
+    opacity: 0;
+  }
+
+  &.rbc-addons-dnd-is-dragging .rbc-event:not(.rbc-addons-dnd-dragged-event):not(.rbc-addons-dnd-drag-preview) {
+    opacity: .50;
+  }
+
+  .rbc-addons-dnd-resizable {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .rbc-addons-dnd-resize-ns-anchor {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    &:first-child { top: 0; }
+    &:last-child { bottom: 0; }
+
+    .rbc-addons-dnd-resize-ns-icon {
+      display: none;
+      border-top: 3px double;
+      margin: 0 auto;
+      width: 10px;
+      cursor: ns-resize;
+    }
+  }
+
+  .rbc-addons-dnd-resize-ew-anchor {
+    position: absolute;
+    top: 4px;
+    bottom: 0;
+    &:first-child { left: 0; }
+    &:last-child { right: 0; }
+
+    .rbc-addons-dnd-resize-ew-icon {
+      display: none;
+      border-left: 3px double;
+      margin-top: auto;
+      margin-bottom: auto;
+      height: 10px;
+      cursor: ew-resize;
     }
   }
 }
-
-export default (props: any) => (
-  <div style={{height: 780}}>
-    <CalendarStyle />
-    <Calendar
-      localizer={localizer}
-      popup={true}
-      components={{
-        toolbar: MyToolbar,
-      }}
-      {...props}
-    />
-  </div>
-);
+`;
