@@ -6,15 +6,15 @@ from kocherga.django.react import react_render
 from .models import Event
 from .serializers import PublicEventSerializer
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from kocherga.dateutils import TZ
 
 
 class MainView(LoginRequiredMixin, View):
     def get(self, request):
         events = Event.objects.filter(
-            start__gte=datetime.fromtimestamp(1551305473 - 86400 * 7 * 3, TZ),
-            end__lte=datetime.fromtimestamp(1551305473 + 86400 * 7 * 3, TZ),
+            start__gte=datetime.now(TZ) - timedelta(weeks=3),
+            end__lte=datetime.now(TZ) + timedelta(weeks=3),
             event_type='public',
         )
 
