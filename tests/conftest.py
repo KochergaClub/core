@@ -2,19 +2,23 @@ import pytest
 
 from django.conf import settings
 
+import googleapiclient.errors
+
 from pathlib import Path
 from datetime import datetime, timedelta
 
 from kocherga.events.models import Event, EventPrototype
 import kocherga.events.db
 import kocherga.images
+from kocherga.dateutils import TZ
+
 
 @pytest.fixture
 def google_object():
-    return {
+    obj = {
         'created': '2017-09-01T17:59:38.000Z',
         'updated': '2017-10-01T18:00:00.000Z',
-        'creator': { 'email': 'mmcleric@gmail.com' },
+        'creator': {'email': 'mmcleric@gmail.com'},
         'summary': 'бронь итальянский',
         'location': 'летняя',
         'start': {
@@ -23,9 +27,17 @@ def google_object():
         'end': {
             'dateTime': '2017-12-10T12:30:00+03:00',
         },
-        'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
-        'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
+#        'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
+#        'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
     }
+
+    obj = kocherga.events.google.insert_event(obj)
+    yield obj
+
+    try:
+        kocherga.events.google.delete_event(obj)
+    except googleapiclient.errors.HttpError:
+        pass  # might be deleted already
 
 @pytest.fixture(scope='session')
 def vk_image_file():
@@ -45,12 +57,12 @@ def image_storage(tmpdir):
 
 @pytest.fixture
 def event(image_file, vk_image_file):
-    dt = datetime.today() + timedelta(days=3)
+    dt = datetime.now(TZ) + timedelta(days=3)
     event = Event(
-        created_dt=dt - timedelta(days=5),
-        updated_dt=dt - timedelta(days=5),
-        start_dt=dt,
-        end_dt=dt + timedelta(hours=1),
+        created=dt - timedelta(days=5),
+        updated=dt - timedelta(days=5),
+        start=dt,
+        end=dt + timedelta(hours=1),
         title='Элиезер проповедь',
         description='chicken chicken chicken. chicken?\n\nchicken chicken chicken.',
         location='ГЭБ',
@@ -73,19 +85,21 @@ def event(image_file, vk_image_file):
 
     kocherga.events.db.delete_event(event_id)
 
+
 @pytest.fixture
 def event_for_timepad(event):
-    event.image = None # FIXME - timepad can't fetch our local image, unfortunately
+    event.image = None  # FIXME - timepad can't fetch our local image, unfortunately
     return event
+
 
 @pytest.fixture
 def minimal_event():
-    dt = datetime.today() + timedelta(days=1)
+    dt = datetime.now(TZ) + timedelta(days=1)
     event = Event(
-        created_dt=dt - timedelta(days=3),
-        updated_dt=dt - timedelta(days=3),
-        start_dt=dt,
-        end_dt=dt + timedelta(hours=1),
+        created=dt - timedelta(days=3),
+        updated=dt - timedelta(days=3),
+        start=dt,
+        end=dt + timedelta(hours=1),
         title="бронь Летняя",
     )
     event = kocherga.events.db.insert_event(event)
@@ -96,12 +110,12 @@ def minimal_event():
 
 @pytest.fixture
 def event_for_edits():
-    dt = datetime.today() + timedelta(days=2)
+    dt = datetime.now(TZ) + timedelta(days=2)
     event = Event(
-        created_dt=dt - timedelta(days=5),
-        updated_dt=dt - timedelta(days=5),
-        start_dt=dt,
-        end_dt=dt + timedelta(hours=1),
+        created=dt - timedelta(days=5),
+        updated=dt - timedelta(days=5),
+        start=dt,
+        end=dt + timedelta(hours=1),
         title="title doesn't matter",
         description="description doesn't matter"
     )

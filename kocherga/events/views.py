@@ -1,20 +1,27 @@
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from kocherga.django.react import react_render
 
 from .models import Event
-from .serializers import PublicEventSerializer
+from .serializers import EventSerializer
+
+from datetime import datetime, timedelta
+from kocherga.dateutils import TZ
 
 
-class MainView(LoginRequiredMixin, View):
+class FullCalendarViewerMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class MainView(FullCalendarViewerMixin, View):
     def get(self, request):
         events = Event.objects.filter(
-            start_ts__gte=1551305473 - 86400 * 7 * 3,
-            end_ts__lte=1551305473 + 86400 * 7 * 3,
-            event_type='public',
+            start__gte=datetime.now(TZ) - timedelta(weeks=3),
+            end__lte=datetime.now(TZ) + timedelta(weeks=3),
         )
 
         return react_render(request, 'events/index.tsx', {
-            "events": PublicEventSerializer(events, many=True).data,
+            "events": EventSerializer(events, many=True).data,
         })

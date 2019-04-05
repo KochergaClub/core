@@ -84,8 +84,8 @@ def create(event):
         "groups.edit",
         {
             "group_id": group_id,
-            "event_start_date": event.start_dt.timestamp(),
-            "event_finish_date": event.end_dt.timestamp(),
+            "event_start_date": event.start.timestamp(),
+            "event_finish_date": event.end.timestamp(),
         },
     )
 
@@ -138,20 +138,20 @@ def update_wiki_schedule(from_dt=None):
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt=_from_dt.timestamp(),
-            start_ts__lt=(datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
+            start__gt=_from_dt,
+            start__lt=(datetime.now(TZ) + timedelta(weeks=4)),
         )
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
     )
-    events = query.order_by('start_ts').all()
+    events = query.order_by('start').all()
     logger.info(f"Schedule includes {len(events)} events")
 
     result = "=== Лента всех мероприятий: [https://vk.com/kocherga_daily] ===\n\n-----\n<br>\n"
 
     prev_date = None
     for event in events:
-        if event.start_dt.date() != prev_date:
+        if event.start.date() != prev_date:
             weekdays = [
                 "Понедельник",
                 "Вторник",
@@ -161,13 +161,13 @@ def update_wiki_schedule(from_dt=None):
                 "Суббота",
                 "Воскресенье",
             ]
-            weekday = weekdays[event.start_dt.weekday()]
-            month = kocherga.dateutils.inflected_month(event.start_dt)
-            result += f"==={weekday}, {event.start_dt.day} {month}===\n"
-            prev_date = event.start_dt.date()
+            weekday = weekdays[event.start.weekday()]
+            month = kocherga.dateutils.inflected_month(event.start)
+            result += f"==={weekday}, {event.start.day} {month}===\n"
+            prev_date = event.start.date()
 
         result += (
-            f"<blockquote>'''{event.start_dt:%H:%M}''' [{event.posted_vk}|{event.title}]\n"
+            f"<blockquote>'''{event.start:%H:%M}''' [{event.posted_vk}|{event.title}]\n"
         )
         result += f"{event.generate_summary()}</blockquote>\n"
 
@@ -212,27 +212,27 @@ def create_schedule_post(prefix_text):
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt=dt.timestamp(),
-            start_ts__lt=(datetime.now(TZ) + timedelta(weeks=1)).timestamp(),
+            start__gt=dt,
+            start__lt=(datetime.now(TZ) + timedelta(weeks=1)),
         )
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
     )
-    events = query.order_by('start_ts').all()
+    events = query.order_by('start').all()
     logger.info(f"Schedule includes {len(events)} events")
 
     prev_date = None
     for event in events:
-        if event.start_dt.date() != prev_date:
-            weekday = kocherga.dateutils.weekday(event.start_dt).upper()
-            month = kocherga.dateutils.inflected_month(event.start_dt)
-            message += f"{weekday}, {event.start_dt.day} {month}\n"
-            prev_date = event.start_dt.date()
+        if event.start.date() != prev_date:
+            weekday = kocherga.dateutils.weekday(event.start).upper()
+            month = kocherga.dateutils.inflected_month(event.start)
+            message += f"{weekday}, {event.start.day} {month}\n"
+            prev_date = event.start.date()
 
         title = event.title
         if event.vk_group:
             title = f"@{event.vk_group} ({title})"
-        message += f"{event.start_dt:%H:%M} {title}\n"
+        message += f"{event.start:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
     group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
@@ -258,19 +258,19 @@ def update_widget():
         Event.objects
         .exclude(deleted=True)
         .filter(
-            start_ts__gt=from_dt.timestamp(),
-            start_ts__lt=(datetime.now(TZ) + timedelta(weeks=4)).timestamp(),
+            start__gt=from_dt,
+            start__lt=(datetime.now(TZ) + timedelta(weeks=4)),
         )
         .filter(event_type='public')
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
     )
-    events = query.order_by('start_ts')[:3].all()
+    events = query.order_by('start')[:3].all()
 
     def event2time(event):
         day_codes = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-        day = day_codes[event.start_dt.weekday()]
-        return f"{day} {event.start_dt:%H:%M}"
+        day = day_codes[event.start.weekday()]
+        return f"{day} {event.start:%H:%M}"
 
     group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
     page_id = group2id(settings.KOCHERGA_VK["main_page"]["main_wall_page_id"])

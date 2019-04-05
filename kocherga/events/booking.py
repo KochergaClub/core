@@ -39,7 +39,7 @@ class Booking:
         if match:
             people = match.group(1)
         return Booking(
-            event.start_dt, event.end_dt, event.get_room(), people, event.google_id
+            event.start, event.end, event.get_room(), people, event.google_id
         )
 
     def public_object(self):
@@ -53,7 +53,7 @@ class Booking:
 
 
 def day_bookings(date):
-    events = kocherga.events.db.list_events(date=date)
+    events = Event.objects.list_events(date=date)
 
     bookings = [Booking.from_event(event) for event in events]
 
@@ -94,7 +94,7 @@ def check_availability(start_dt, end_dt, room):
 
 
 def bookings_by_email(email):
-    events = kocherga.events.db.list_events(q="Бронь {}".format(email))
+    events = Event.objects.list_events().filter(title__contains=f"Бронь {email}")
 
     bookings = [
         Booking.from_event(event)
@@ -159,12 +159,10 @@ def add_booking(date, room, people, start_time, end_time, email):
 
     # insert
     event = Event(
-        title="Бронь {room}, {people} человек, {email}".format(
-            room=room, people=people, email=email
-        ),
+        title=f"Бронь {room}, {people} человек, {email}",
         location=kocherga.room.to_long_location(room),
-        start_dt=start_dt,
-        end_dt=end_dt,
+        start=start_dt,
+        end=end_dt,
         event_type='private',
     )
     event.set_attendees([email])

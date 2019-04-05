@@ -1,27 +1,85 @@
-import * as React from 'react';
+import React, { useCallback, useState, useReducer } from 'react';
+
+import moment from 'moment';
 
 import Page from '../components/Page';
 
-import Calendar from './Calendar';
+import Calendar from './components/Calendar';
+import EventModal from './components/EventModal';
 
-interface PublicEvent {
-  event_id: string;
-  title: string;
-  room: string;
-  start: string;
-  end: string;
-}
+import { Event, reducer } from './types';
+import { EventDispatch } from './contexts';
 
-const startAccessor = (event: PublicEvent) => new Date(event.start);
-const endAccessor = (event: PublicEvent) => new Date(event.end);
+const startAccessor = (event: Event) => {
+  return new Date(event.start);
+};
+const endAccessor = (event: Event) => new Date(event.end);
 
-export default ({ events }: { events: PublicEvent[] }) => (
-  <Page title="Календарь событий" team>
-    <h1>Календарь событий</h1>
-    <Calendar
-      events={events}
-      startAccessor={startAccessor}
-      endAccessor={endAccessor}
-    />
-  </Page>
-);
+export default (props: { events: Event[]; csrfToken: string }) => {
+  const [events, dispatch] = useReducer(reducer, props.events);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editingStart, setEditingStart] = useState();
+  const [editingEnd, setEditingEnd] = useState();
+
+  const newEvent = useCallback(({ start, end }: { start: Date; end: Date }) => {
+    setEditingStart(start);
+    setEditingEnd(end);
+    setModalIsOpen(true);
+  }, []);
+
+  const resizeEvent = useCallback(
+    async ({ event, start, end }: { event: Event; start: Date; end: Date }) => {
+      const response = await fetch(`/api/event/${event.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': props.csrfToken,
+        },
+        body: JSON.stringify({
+          start,
+          end,
+        }),
+      });
+
+      if (!response.ok) {
+        const json = await response.json(); // FIXME - this line can fail
+        window.alert(`Error: ${JSON.stringify(json)}`);
+        return;
+      }
+
+      const json = await response.json();
+
+      dispatch({
+        type: 'RESIZE',
+        payload: { event, start: moment(json.start), end: moment(json.end) },
+      });
+    },
+    []
+  );
+
+  return (
+    <Page title="Календарь событий" team csrfToken={props.csrfToken}>
+      <h1>Календарь событий</h1>
+      <EventDispatch.Provider value={dispatch}>
+        <Calendar
+          events={events}
+          startAccessor={startAccessor}
+          endAccessor={endAccessor}
+          onSelectSlot={newEvent}
+          onEventResize={resizeEvent}
+          onEventDrop={resizeEvent}
+        />
+
+        {modalIsOpen && (
+          <EventModal
+            isOpen={modalIsOpen}
+            start={editingStart}
+            end={editingEnd}
+            setOpen={setModalIsOpen}
+          />
+        )}
+      </EventDispatch.Provider>
+    </Page>
+  );
+};

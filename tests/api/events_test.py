@@ -16,7 +16,7 @@ def test_events(client, imported_events, kocherga_auth_header):
 
     assert len(events) > 5
 
-    assert '2017' in events[0]['start']['dateTime']
+    assert '2017' in events[0]['start']
 
 
 def test_events_from_date(client, imported_events, kocherga_auth_header):
@@ -29,7 +29,7 @@ def test_events_from_date(client, imported_events, kocherga_auth_header):
 
     assert len(events) > 5
 
-    assert '2018' in events[0]['start']['dateTime']
+    assert '2018' in events[0]['start']
 
 
 def test_upload_image(client, image_storage, event, kocherga_auth_header):
@@ -73,7 +73,7 @@ def test_create(client, kocherga_auth_header):
         content_type='application/json',
         **kocherga_auth_header,
     )
-    assert res.status_code == 200
+    assert res.status_code == 201
     event_json = res.json()
 
     assert event_json['title'] == 'test event'
@@ -108,3 +108,40 @@ def test_add_tag(event, client, kocherga_auth_header):
     assert res.status_code == 200
     event.refresh_from_db()
     assert 'mytag' in event.tag_names()
+
+
+def test_retrieve(event, client, kocherga_auth_header):
+    res = client.get(
+        f'/api/event/{event.google_id}',
+        content_type='application/json',
+        **kocherga_auth_header,
+    )
+    assert res.status_code == 200
+    assert res.json()['title'] == event.title
+
+
+def test_update(event, client, kocherga_auth_header):
+    res = client.patch(
+        f'/api/event/{event.google_id}',
+        json.dumps({
+            'title': 'updated title',
+        }),
+        content_type='application/json',
+        **kocherga_auth_header,
+    )
+    assert res.status_code == 200
+    assert res.json()['title'] == 'updated title'
+
+    assert Event.objects.get(pk=event.google_id).title == 'updated title'
+
+
+def test_forbidden_update(event, client, kocherga_auth_header):
+    client.patch(
+        f'/api/event/{event.google_id}',
+        json.dumps({
+            'prototype_id': 123,
+        }),
+        content_type='application/json',
+        **kocherga_auth_header,
+    )
+    assert Event.objects.get(pk=event.google_id).prototype_id is None

@@ -4,7 +4,9 @@ pytestmark = [
     pytest.mark.google,
 ]
 
-from kocherga.events.serializers import PublicEventSerializer
+from datetime import datetime
+
+from kocherga.events.serializers import PublicEventSerializer, EventSerializer
 
 
 class TestPublicSerializer:
@@ -22,3 +24,31 @@ class TestPublicSerializer:
 
         assert 'title' not in data
         assert len(data) == 0
+
+
+class TestSerializer:
+    def test_serialize(self, event):
+        data = EventSerializer(event).data
+
+        assert data['title'] == event.title
+
+        assert data['room'] == 'гэб'
+        assert data['location'] == 'ГЭБ'
+
+        assert type(data['start']) == str
+        assert '+03:00' in data['start']
+
+        assert data['tags'] == []
+
+    def test_create(self):
+        serializer = EventSerializer(data={
+            'title': 'foo',
+            'start': datetime(2019, 3, 1, 14, 0),
+            'end': datetime(2019, 3, 1, 15, 0),
+            'foo': 'bar',
+        })
+        serializer.is_valid(raise_exception=True)
+        event = serializer.save()
+
+        assert event.title == 'foo'
+        assert event.start

@@ -40,7 +40,8 @@ class TestCreate:
             event.add_image('vk', fh)
 
         event.vk_group = 159971736
-        event.patch({'description': 'Длинный текст.\n' * 100})
+        event.description = 'Длинный текст.\n' * 100
+        event.save()
 
         result = kocherga.events.vk.create(event)
 
@@ -86,7 +87,7 @@ class TestRepostToDaily():
         kocherga.events.vk.repost_to_daily()
 
     def test_repost_to_daily_single(self, event):
-        event.start_dt = datetime.combine(datetime.today().date(), event.start_dt.time())
+        event.start = datetime.combine(datetime.today().date(), event.start.timetz())
         event.save()
         kocherga.events.announce.post_to_vk(event)
 

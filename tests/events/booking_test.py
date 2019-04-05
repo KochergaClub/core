@@ -13,7 +13,6 @@ from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 
 
-
 @pytest.fixture
 def event1():
     GOOGLE_EVENT = {
@@ -203,9 +202,19 @@ class TestAddBooking:
             )
 
     def test_add_duplicate(self):
-        event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+        event = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '12:00', '12:30',
+            'somebody@example.com'
+        )
         with pytest.raises(PublicError, match='This room is not available at that time'):
-            kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+            kocherga.events.booking.add_booking(
+                (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+                'гэб', 3,
+                '12:00', '12:30',
+                'somebody@example.com'
+            )
 
         # cleanup
         kocherga.events.db.delete_event(event.google_id)
@@ -217,12 +226,22 @@ class TestDeleteBooking:
             kocherga.events.booking.delete_booking('blahblah', 'somebody@example.com')
 
     def test_delete_booking(self):
-        event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+        event = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '12:00', '12:30',
+            'somebody@example.com'
+        )
 
         kocherga.events.booking.delete_booking(event.google_id, 'somebody@example.com')
 
     def test_delete_booking_access(self):
-        event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+        event = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '12:00', '12:30',
+            'somebody@example.com'
+        )
 
         with pytest.raises(PublicError, match='Access denied'):
             kocherga.events.booking.delete_booking(event.google_id, 'hacker@example.com')
@@ -231,7 +250,12 @@ class TestDeleteBooking:
         kocherga.events.booking.delete_booking(event.google_id, 'somebody@example.com')
 
     def test_delete_booking_prefix_access(self):
-        event = kocherga.events.booking.add_booking((datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'), 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+        event = kocherga.events.booking.add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '12:00', '12:30',
+            'somebody@example.com'
+        )
 
         with pytest.raises(PublicError, match='Access denied'):
             kocherga.events.booking.delete_booking(event.google_id, 'hack-somebody@example.com')

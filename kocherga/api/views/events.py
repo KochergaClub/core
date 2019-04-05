@@ -13,6 +13,8 @@ from django.views.decorators.http import require_safe
 from django.conf import settings
 
 from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
@@ -21,77 +23,55 @@ from kocherga.error import PublicError
 
 import kocherga.events.db
 from kocherga.events.models import Event
-from kocherga.events.serializers import PublicEventSerializer
+from kocherga.events.serializers import PublicEventSerializer, EventSerializer
 
 from kocherga.api.common import ok
 
 
-class RootView(APIView):
+class RootView(ListCreateAPIView):
     permission_classes = (IsAdminUser,)
+    serializer_class = EventSerializer
 
-    def get(self, request):
+    def get_queryset(self):
         def arg2date(arg):
-            d = request.query_params.get(arg)
+            d = self.request.query_params.get(arg)
             if d:
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        events = kocherga.events.db.list_events(
-            date=request.query_params.get("date"),
+        return Event.objects.list_events(
+            date=self.request.query_params.get("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
         )
-        return Response([e.to_dict() for e in events])
 
-    def post(self, request):
-        payload = request.data
-        for field in ("title", "date", "startTime", "endTime"):
-            if field not in payload:
-                raise PublicError("field {} is required".format(field))
+    # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
+    def post(self, request, *args, **kwargs):
+        if 'date' in request.data:
+            (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
+                self.request.data['date'],
+                self.request.data['startTime'],
+                self.request.data['endTime'],
+            )
+            data = {
+                **request.data,
+                'start': start_dt,
+                'end': end_dt,
+            }
+        else:
+            data = request.data
 
-        title = payload['title']
-        (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
-            payload['date'], payload['startTime'], payload['endTime']
-        )
-
-        event = Event(title=title, start_dt=start_dt, end_dt=end_dt)
-
-        kocherga.events.db.insert_event(event)
-
-        return Response(event.to_dict())
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ObjectView(APIView):
+class ObjectView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
-
-    def get(self, request, event_id):
-        event = Event.by_id(event_id)
-        return Response(event.to_dict())
-
-    def patch(self, request, event_id):
-        event = Event.by_id(event_id)
-        event.patch(request.data)
-
-        return Response(event.to_dict())
-
-    def delete(self, request, event_id):
-        event = Event.by_id(event_id)
-        event.delete()
-        event.patch_google()
-
-        return Response(ok)
-
-
-class PropertyView(APIView):
-    permission_classes = (IsAdminUser,)
-
-    def post(self, request, event_id, key):
-        value = request.data['value']
-
-        event = Event.by_id(event_id)
-        event.patch({key: value})
-
-        return Response(ok)
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
+    lookup_url_kwarg = 'event_id'
 
 
 class ImageView(APIView):
@@ -199,7 +179,7 @@ def r_list_public_atom(request):
     for event in reversed(events.all()):
         fe = fg.add_entry()
         fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.google_id}')
-        dt = event.start_dt
+        dt = event.start
         fe.title(event.title)
 
         dt_str = kocherga.dateutils.weekday(dt).capitalize() \

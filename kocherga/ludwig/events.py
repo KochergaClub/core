@@ -51,12 +51,12 @@ def event_color(event):
 
 
 def list_events():
-    events = kocherga.events.db.list_events(date=datetime.now(TZ).date())
+    events = Event.objects.list_events(date=datetime.now(TZ).date())
 
     attachments = []
     for event in events:
-        start_time = event.start_dt.strftime("%H:%M")
-        end_time = event.end_dt.strftime("%H:%M")
+        start_time = event.start.strftime("%H:%M")
+        end_time = event.end.strftime("%H:%M")
 
         text = f"С {start_time} до {end_time}"
         if event.location:
@@ -141,7 +141,7 @@ def visitors_attachment(event):
 
 
 def list_event_visitors():
-    events = kocherga.events.db.list_events(date=datetime.now().date())
+    events = Event.objects.list_events(date=datetime.now().date())
 
     attachments = []
     for event in events:
@@ -211,7 +211,7 @@ def event_visitors_question(event):
 @bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
     logger.debug("ask_for_event_visitors")
-    events = Event.objects.filter(deleted=False, start_ts__gt=datetime.now(TZ).timestamp() - 86400).all()
+    events = Event.objects.filter(deleted=False, start__gt=datetime.now(TZ) - timedelta(days=1)).all()
     logger.debug(f"Total events: {len(events)}")
 
     events = [
@@ -219,8 +219,8 @@ def ask_for_event_visitors():
         for e in events
         if not (
             e.visitors  # already entered
-            or e.asked_for_visitors_dt  # already asked
-            or datetime.now(tz=TZ) < e.start_dt + timedelta(minutes=30)  # event haven't started yet, let's wait
+            or e.asked_for_visitors  # already asked
+            or datetime.now(tz=TZ) < e.start + timedelta(minutes=30)  # event haven't started yet, let's wait
         )
     ]
     logger.info(f"Events we should ask about: {len(events)}")
@@ -229,7 +229,7 @@ def ask_for_event_visitors():
         return  # nothing to ask about
 
     for e in events:
-        e.asked_for_visitors_dt = datetime.now(TZ)
+        e.asked_for_visitors = datetime.now(TZ)
         bot.send_message(**event_visitors_question(e))
         e.save()
 
