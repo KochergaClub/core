@@ -3,6 +3,7 @@ from kocherga.ludwig.bot import bot
 import kocherga.money.cashier.models
 import kocherga.money.salaries
 import kocherga.staff.tools
+from kocherga.staff.models import Member
 from kocherga.dateutils import inflected_month
 
 
@@ -36,11 +37,11 @@ def salaries_message(with_elba_values=False):
     (start_date, end_date) = kocherga.money.salaries.dates_period()
 
     attachments = []
-    for email, salary in salaries.salaries.items():
+    for member_id, salary in salaries.salaries.items():
         if salary.total == 0:
             continue
 
-        member = kocherga.staff.tools.find_member_by_email(email)
+        member = Member.objects.get(pk=member_id)
 
         payment_emoji = ''
         if member.payment_type == 'CASH':
