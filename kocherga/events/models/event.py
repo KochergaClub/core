@@ -94,15 +94,10 @@ class Event(models.Model):
     google_id = models.CharField(max_length=100, primary_key=True)
     google_link = models.CharField(max_length=1024)
 
-    start_ts = models.IntegerField(null=True, blank=True)
     start = models.DateTimeField()
-    end_ts = models.IntegerField(null=True, blank=True)
     end = models.DateTimeField()
 
-    created_ts = models.IntegerField(default=ts_now)
     created = models.DateTimeField(auto_now_add=True)
-
-    updated_ts = models.IntegerField(null=True, blank=True)
     updated = models.DateTimeField(auto_now=True)
 
     creator = models.CharField(max_length=255, null=True, blank=True)
@@ -135,7 +130,6 @@ class Event(models.Model):
         null=True
     )  # not Integer, because it can take values such as 'no_record' or 'cancelled'
 
-    asked_for_visitors_ts = models.IntegerField(null=True, blank=True)
     asked_for_visitors = models.DateTimeField(null=True, blank=True)
 
     event_type = models.CharField(max_length=40, default="unknown")
