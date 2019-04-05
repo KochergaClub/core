@@ -2,6 +2,8 @@ import pytest
 
 from django.conf import settings
 
+import googleapiclient.errors
+
 from pathlib import Path
 from datetime import datetime, timedelta
 
@@ -12,7 +14,7 @@ import kocherga.images
 
 @pytest.fixture
 def google_object():
-    return {
+    obj = {
         'created': '2017-09-01T17:59:38.000Z',
         'updated': '2017-10-01T18:00:00.000Z',
         'creator': {'email': 'mmcleric@gmail.com'},
@@ -24,9 +26,17 @@ def google_object():
         'end': {
             'dateTime': '2017-12-10T12:30:00+03:00',
         },
-        'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
-        'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
+#        'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
+#        'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
     }
+
+    obj = kocherga.events.google.insert_event(obj)
+    yield obj
+
+    try:
+        kocherga.events.google.delete_event(obj)
+    except googleapiclient.errors.HttpError:
+        pass  # might be deleted already
 
 @pytest.fixture(scope='session')
 def vk_image_file():

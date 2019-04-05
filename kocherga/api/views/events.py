@@ -14,7 +14,7 @@ from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
@@ -67,37 +67,11 @@ class RootView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ObjectView(APIView):
+class ObjectView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
-
-    def get(self, request, event_id):
-        event = Event.by_id(event_id)
-        return Response(EventSerializer(event).data)
-
-    def patch(self, request, event_id):
-        event = Event.by_id(event_id)
-        event.patch(request.data)
-
-        return Response(EventSerializer(event).data)
-
-    def delete(self, request, event_id):
-        event = Event.by_id(event_id)
-        event.delete()
-        event.patch_google()
-
-        return Response(ok)
-
-
-class PropertyView(APIView):
-    permission_classes = (IsAdminUser,)
-
-    def post(self, request, event_id, key):
-        value = request.data['value']
-
-        event = Event.by_id(event_id)
-        event.patch({key: value})
-
-        return Response(ok)
+    serializer_class = EventSerializer
+    queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
+    lookup_url_kwarg = 'event_id'
 
 
 class ImageView(APIView):

@@ -125,16 +125,17 @@ class Event(models.Model):
 
     visitors = models.CharField(
         max_length=100,
+        blank=True,
         null=True
     )  # not Integer, because it can take values such as 'no_record' or 'cancelled'
-    asked_for_visitors_ts = models.IntegerField(null=True)
+    asked_for_visitors_ts = models.IntegerField(null=True, blank=True)
     event_type = models.CharField(max_length=40, default="unknown")
 
     vk_group = models.CharField(max_length=40, blank=True)
     fb_group = models.CharField(max_length=40, blank=True)
 
-    image = models.CharField(max_length=32, null=True)
-    vk_image = models.CharField(max_length=32, null=True)
+    image = models.CharField(max_length=32, null=True, blank=True)
+    vk_image = models.CharField(max_length=32, null=True, blank=True)
 
     ready_to_post = models.BooleanField(default=False)
 
@@ -233,47 +234,6 @@ class Event(models.Model):
 
         return kocherga.room.unknown
 
-    def set_field_by_prop(self, key, value):
-        if key in (
-                "visitors",
-                "vk_group", "fb_group",
-                "posted_fb", "posted_timepad", "posted_vk",
-                "title", "location", "description", "summary",
-                "timepad_category_code",
-                "timing_description_override",
-        ):
-            assert type(value) == str
-            setattr(self, key, value)
-
-        elif key == "type":
-            if value not in ("private", "public"):
-                raise Exception("type can only be set to public or private")
-            self.event_type = value
-
-        elif key == "ready_to_post":
-            self.ready_to_post = value in ("true", True)
-        elif key == "timepad_prepaid_tickets":
-            self.timepad_prepaid_tickets = value in ("true", True)
-        elif key in ("asked_for_visitors", "start", "end"):
-            attr = key + '_ts'
-            ts_value = None
-            if value:
-                ts_value = (
-                    datetime.strptime(value, "%Y-%m-%d %H:%M")
-                    .replace(tzinfo=TZ)
-                    .timestamp()
-                )
-            setattr(self, attr, ts_value)
-        else:
-            raise PublicError(f"Unknown prop {key}")
-
-    def patch(self, data):
-        for (key, value) in data.items():
-            self.set_field_by_prop(key, value)
-
-        self.patch_google()
-        self.save()
-
     def generate_summary(self):
         if self.summary:
             return self.summary
@@ -346,6 +306,7 @@ class Event(models.Model):
     # overrides django method, but that's probably ok
     def delete(self):
         self.deleted = True
+        self.patch_google()
         self.save()
 
     def to_google(self):

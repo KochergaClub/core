@@ -98,21 +98,18 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = tuple(
             # Listing editable fields instead of read-only fields for clearer code.
             f for f in fields if f not in (
-                'title',
-                'location',
-                'description',
-                'summary',
+                'title', 'location', 'description', 'summary',
                 'start_ts',
                 'end_ts',
                 'visitors',
-                'vk_group',
-                'fb_group',
-                'posted_timepad',
-                'posted_fb',
-                'posted_vk',
-                'timepad_category_code',
-                'timepad_description_override',
+                'vk_group', 'fb_group',
+                'posted_timepad', 'posted_fb', 'posted_vk',
+                'timepad_category_code', 'timepad_description_override',
+                'type',
+                'ready_to_post',
+                'timepad_prepaid_tickets',
                 # TODO - other fields from Event.set_field_by_prop()
+                # TODO: `start`, `end`, `asked_for_visitors`
             )
         )
 
@@ -151,4 +148,9 @@ class EventSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         event = models.Event(**validated_data)
         kocherga.events.db.insert_event(event)
+        return event
+
+    def update(self, instance, validated_data):
+        event = super().update(instance, validated_data)
+        event.patch_google()
         return event

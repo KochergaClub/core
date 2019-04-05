@@ -22,13 +22,6 @@ class TestListEvents:
         assert type(out[0]) == Event
 
 
-class TestPatchEvent:
-    def test_patch(self, db, event_for_edits):
-        event = event_for_edits
-        event_for_edits.patch({'title': 'blah'})
-        assert event.title == 'blah'
-
-
 @pytest.mark.django_db(transaction=True)
 class TestImporter:
     def test_importer(self, db):

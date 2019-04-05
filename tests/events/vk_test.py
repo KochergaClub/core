@@ -40,7 +40,8 @@ class TestCreate:
             event.add_image('vk', fh)
 
         event.vk_group = 159971736
-        event.patch({'description': 'Длинный текст.\n' * 100})
+        event.description = 'Длинный текст.\n' * 100
+        event.save()
 
         result = kocherga.events.vk.create(event)
 

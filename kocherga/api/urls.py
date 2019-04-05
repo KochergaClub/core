@@ -42,7 +42,6 @@ urlpatterns = [
 
     path('events', views.events.RootView.as_view()),
     path('event/<event_id>', views.events.ObjectView.as_view()),
-    path('event/<event_id>/property/<key>', views.events.PropertyView.as_view()),
     path('event/<event_id>/image/<image_type>', views.events.ImageView.as_view()),
     path('event/<event_id>/image_from_url/<image_type>', views.events.ImageFromUrlView.as_view()),
     path('event/<event_id>/tag/<tag_name>', views.events.TagView.as_view()),

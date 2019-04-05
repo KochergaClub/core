@@ -118,13 +118,14 @@ class EventPrototype(models.Model):
         ):
             value = getattr(self, prop)
             if value is not None:
-                event.set_field_by_prop(prop, value)
+                setattr(event, prop, value)  # FIXME - this is evil, should we use serializer instead?
 
         event.prototype_id = self.prototype_id
 
         if self.image:
             event.image = self.image
 
+        event.full_clean()
         event.save()
         return event
 
