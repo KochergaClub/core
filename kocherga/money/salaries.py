@@ -6,6 +6,7 @@ import math
 import kocherga.watchmen.schedule
 from kocherga.watchmen.models import ShiftType
 import kocherga.staff.tools
+from kocherga.staff.models import Member
 from kocherga.cm.models import Order
 
 
@@ -23,23 +24,13 @@ def rate_by_shift(shift_type: ShiftType) -> int:
     raise Exception(f"Unknown shift type {shift_type}")
 
 
-def short_name_stat_to_email_stat(stat):
-    result = defaultdict(int)
-    for k, v in stat.items():
-        member = kocherga.staff.tools.find_member_by_short_name(k)
-        if not member:
-            raise Exception(f"Member {k} not found")
-        result[member.user.email] = v
-    return result
-
-
-def cm_login_stat_to_email_stat(stat):
+def cm_login_stat_to_id_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
         member = kocherga.staff.tools.find_member_by_cm_login(k)
         if not member:
             raise Exception(f"Member {k} not found")
-        result[member.user.email] = v
+        result[member.id] = v
     return result
 
 
@@ -53,10 +44,10 @@ def shift_salaries(start_date, end_date):
             if not shift.watchman:
                 continue
             rate = rate_by_shift(shift_type)
-            stat[shift.watchman.short_name] += rate
+            stat[shift.watchman.id] += rate
         d += timedelta(days=1)
 
-    return short_name_stat_to_email_stat(stat)
+    return stat
 
 
 def basic_salaries():
@@ -108,7 +99,7 @@ def commission_bonuses(start_date, end_date):
         commissions[open_manager] += value * 0.01
         commissions[close_manager] += value * 0.01
 
-    return cm_login_stat_to_email_stat(commissions)
+    return cm_login_stat_to_id_stat(commissions)
 
 
 class Salary:
@@ -145,27 +136,25 @@ class SalaryContainer:
     def __init__(self):
         self.salaries = {}
 
-    def add(self, email, kind, value):
-        if email not in self.salaries:
-            self.salaries[email] = Salary()
+    def add(self, member_id, kind, value):
+        if member_id not in self.salaries:
+            self.salaries[member_id] = Salary()
 
-        self.salaries[email].add(kind, value)
+        self.salaries[member_id].add(kind, value)
 
-    def add_salary(self, email, salary):
+    def add_salary(self, member_id, salary):
         for kind in Salary.all_kinds():
-            self.add(email, kind, getattr(salary, kind))
+            self.add(member_id, kind, getattr(salary, kind))
 
-    def remove_salary(self, email):
-        del self.salaries[email]
+    def remove_salary(self, member_id):
+        del self.salaries[member_id]
 
     def print_all(self):
         print(f'{"Имя":<14} {"2%":<8}{"Смены":<12}{"Всего":<8}')
         print('-' * 50)
-        for email in sorted(self.salaries.keys()):
-            member = kocherga.staff.tools.find_member_by_email(email)
-            if not member:
-                raise Exception(f'Person {email} not found')
-            salary = self.salaries[email]
+        for member_id in sorted(self.salaries.keys()):
+            member = Member.objects.get(pk=member_id)
+            salary = self.salaries[member.user.email]
             print(f'{member.short_name:<14} {salary.shifts:<12}{salary.commissions:<8}{salary.total:<8}')
 
 
@@ -185,10 +174,7 @@ def calculate_salaries(start_date, end_date):
             container.add(k, 'basic', v)
 
     if add_bonus_salaries:
-        # temporary fix for one ahead-of-time salaries event
-        bonuses_start_date = date(2018, 8, 4) if start_date == date(2018, 8, 6) else start_date
-
-        stat = commission_bonuses(bonuses_start_date, end_date)
+        stat = commission_bonuses(start_date, end_date)
         for k, v in stat.items():
             container.add(k, 'commissions', v)
 
@@ -219,13 +205,14 @@ def calculate_new_salaries(d=None):
 
     salaries = calculate_salaries(start_date, end_date)
 
-    def once_per_month(email):
-        payment_type = kocherga.staff.tools.find_member_by_email(email).payment_type
+    def once_per_month(member_id):
+        member = Member.objects.get(pk=member_id)
+        payment_type = member.payment_type
         if payment_type == 'ELECTRONIC':
             return True
         if payment_type == 'CASH':
             return False
-        raise Exception(f"Unknown payment type {payment_type} for email {email}")
+        raise Exception(f"Unknown payment type {payment_type} for email {member.user.email}")
 
     if end_date.day == 5:
         # need to add salaries for the previous period for those who get salaries on card once per month on 5th
@@ -233,12 +220,12 @@ def calculate_new_salaries(d=None):
         prev_end_date = start_date - timedelta(days=1)
 
         prev_salaries = calculate_salaries(prev_start_date, prev_end_date)
-        for email, salary in list(prev_salaries.salaries.items()):
-            if once_per_month(email):
-                salaries.add_salary(email, salary)
+        for member_id, salary in list(prev_salaries.salaries.items()):
+            if once_per_month(member_id):
+                salaries.add_salary(member_id, salary)
     else:
-        for email, salary in list(salaries.salaries.items()):
-            if once_per_month(email):
-                salaries.remove_salary(email)
+        for member_id, salary in list(salaries.salaries.items()):
+            if once_per_month(member_id):
+                salaries.remove_salary(member_id)
 
     return salaries
