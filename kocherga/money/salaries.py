@@ -27,9 +27,7 @@ def rate_by_shift(shift_type: ShiftType) -> int:
 def cm_login_stat_to_id_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
-        member = kocherga.staff.tools.find_member_by_cm_login(k)
-        if not member:
-            raise Exception(f"Member {k} not found")
+        member = Member.objects.get(cm_login=k)
         result[member.id] = v
     return result
 

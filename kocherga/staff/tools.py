@@ -13,12 +13,6 @@ def find_member_by_short_name(short_name):
     return next(filter(lambda m: m.short_name == short_name, members()), None)
 
 
-def find_member_by_cm_login(cm_login):
-    if cm_login == 'admin':
-        cm_login = 'berekuk'  # FIXME - special case, might shoot us in the foot in case of opensource / etc.
-    return next(filter(lambda m: m.cm_login == cm_login, members()), None)
-
-
 def find_member_by_email(email):
     for member in members():
         if member.user.email.lower() == email.lower():
