@@ -58,26 +58,6 @@ def basic_salaries():
     result = defaultdict(int)
     return result  # no basic salaries
 
-# def order_discount(order, customers_dict):
-#     discount = 0
-#
-#     if order.card_id in customers_dict:
-#         if customers_dict[order.card_id]['Скидка на время'] == '20%':
-#             discount = 0.2
-#
-#     return discount
-
-# def find_order_value(order, customers_dict):
-#     discount = order_discount(order, customers_dict)
-#     minutes = (order.end_dt - order.start_dt).seconds / 60
-#
-#     value = 0
-#     while minutes > 0:
-#         value += order.people * min(600, 2.5 * minutes * (1 - discount))
-#         minutes -= min(minutes, 12 * 60)
-#
-#     return value
-
 
 def period_orders(start_date, end_date):
     orders = Order.objects.filter(
