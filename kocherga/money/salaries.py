@@ -27,6 +27,8 @@ def rate_by_shift(shift_type: ShiftType) -> int:
 def cm_login_stat_to_id_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
+        if k == 'admin':
+            continue
         try:
             member = Member.objects.get(cm_login=k)
         except Member.DoesNotExist:
