@@ -9,7 +9,9 @@ import Calendar from './components/Calendar';
 import { PublicEvent, reducer } from './types';
 import { EventDispatch } from './contexts';
 
-const startAccessor = (event: PublicEvent) => new Date(event.start);
+const startAccessor = (event: PublicEvent) => {
+  return new Date(event.start);
+};
 const endAccessor = (event: PublicEvent) => new Date(event.end);
 
 export default (props: { events: PublicEvent[]; csrfToken: string }) => {
@@ -24,8 +26,9 @@ export default (props: { events: PublicEvent[]; csrfToken: string }) => {
           'X-CSRFToken': props.csrfToken,
         },
         body: JSON.stringify({
-          start_ts: start.getTime() / 1000,
-          end_ts: end.getTime() / 1000,
+          start: start,
+          end: end,
+          title: 'TODO',
         }),
       });
 
@@ -36,11 +39,15 @@ export default (props: { events: PublicEvent[]; csrfToken: string }) => {
       }
 
       const json = await response.json();
-      console.log(json);
 
       dispatch({
         type: 'CREATE',
-        payload: { start: moment(start), end: moment(end) },
+        payload: {
+          start: moment(json.start),
+          end: moment(json.end),
+          title: json.title,
+          id: json.id,
+        },
       });
     },
     []

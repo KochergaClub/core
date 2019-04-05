@@ -24,6 +24,7 @@ export default (props: any) => {
         localizer={localizer}
         popup={true}
         defaultView={BigCalendar.Views.WEEK}
+        scrollToTime={new Date('2000-01-01 09:00:00')}
         components={{
           toolbar: CalendarToolbar,
         }}

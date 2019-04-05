@@ -13,6 +13,8 @@ export interface CreateAction {
   payload: {
     start: moment.Moment;
     end: moment.Moment;
+    title: string;
+    id: string;
   };
 }
 
@@ -35,8 +37,8 @@ export const reducer = (events: PublicEvent[], action: Action) => {
         {
           start: action.payload.start.format(),
           end: action.payload.end.format(),
-          event_id: 'TODO',
-          title: 'TODO',
+          title: action.payload.title,
+          event_id: action.payload.id,
           room: 'TODO',
         },
       ];
