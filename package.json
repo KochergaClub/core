@@ -22,7 +22,7 @@
     "moment": "^2.24.0",
     "npm-why": "^1.1.6",
     "react": "^16.8.1",
-    "react-big-calendar": "^0.20.3",
+    "react-big-calendar": "^0.20.4",
     "react-dom": "^16.8.1",
     "react-helmet": "^5.2.0",
     "react-render": "^3.0.0",
