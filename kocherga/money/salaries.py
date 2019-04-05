@@ -27,7 +27,11 @@ def rate_by_shift(shift_type: ShiftType) -> int:
 def cm_login_stat_to_id_stat(stat):
     result = defaultdict(int)
     for k, v in stat.items():
-        member = Member.objects.get(cm_login=k)
+        try:
+            member = Member.objects.get(cm_login=k)
+        except Member.DoesNotExist:
+            raise Exception("Couldn't find member by cm login {k}")
+
         result[member.id] = v
     return result
 
