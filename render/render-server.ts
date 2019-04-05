@@ -1,3 +1,5 @@
+process.env.TZ = 'Europe/Moscow';
+
 const argv = require('yargs')
   .option('p', {
     alias: 'port',
