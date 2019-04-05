@@ -45,7 +45,7 @@ class RootView(ListCreateAPIView):
             to_date=arg2date("to_date"),
         )
 
-    # TODO - replace with CreateAPIView after we standardize on `start_dt` / `end_dt` params on client
+    # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
     def post(self, request, *args, **kwargs):
         if 'date' in request.data:
             (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
@@ -55,8 +55,8 @@ class RootView(ListCreateAPIView):
             )
             data = {
                 **request.data,
-                'start_ts': start_dt.timestamp(),
-                'end_ts': start_dt.timestamp(),
+                'start': start_dt,
+                'end': end_dt,
             }
         else:
             data = request.data
@@ -179,7 +179,7 @@ def r_list_public_atom(request):
     for event in reversed(events.all()):
         fe = fg.add_entry()
         fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.google_id}')
-        dt = event.start_dt
+        dt = event.start
         fe.title(event.title)
 
         dt_str = kocherga.dateutils.weekday(dt).capitalize() \

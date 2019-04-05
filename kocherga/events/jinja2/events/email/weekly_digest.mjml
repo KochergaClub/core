@@ -47,7 +47,7 @@
           <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
           {% for event in group['events'] %}
             <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0">
-                {{ event.start_dt.strftime("%H:%M") | e }}. {{ event.title | e }}
+                {{ event.start.strftime("%H:%M") | e }}. {{ event.title | e }}
             </h3>
             <p style="font-size: 14px">{{ event.summary | e }}
             </p>

@@ -111,14 +111,14 @@ def create(event):
                 "description": "оплата ПОСЛЕ мероприятия, по времени",
                 "price": 0,
                 "limit": 30,
-                "sale_ends_at": dts(event.start_dt),
+                "sale_ends_at": dts(event.start),
             },
             {
                 "name": "лекция + посещение",
                 "description": "Оплата ЗАРАНЕЕ, на месте подобный билет приобрести нельзя",
                 "price": 300,
                 "limit": 30,
-                "sale_ends_at": dts(event.start_dt),
+                "sale_ends_at": dts(event.start),
             },
         ]
     else:
@@ -128,14 +128,14 @@ def create(event):
                 "description": settings.KOCHERGA_TARIFF,
                 "price": 0,
                 "limit": 50,
-                "sale_ends_at": dts(event.start_dt),
+                "sale_ends_at": dts(event.start),
             }
         ]
 
     data = {
         "organization": {"id": ORGANIZATION_ID},
-        "starts_at": dts(event.start_dt),
-        "ends_at": dts(event.end_dt),
+        "starts_at": dts(event.start),
+        "ends_at": dts(event.end),
         "name": event.title,
         "description_html": timepad_description(event),
         "description_short": event.generate_summary(),

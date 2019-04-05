@@ -10,7 +10,7 @@ from django.db import models
 
 from .event import Event
 
-import kocherga.events.google
+import kocherga.events.db
 from kocherga.dateutils import dts, TZ
 from kocherga.images import image_storage
 
@@ -58,7 +58,7 @@ class EventPrototype(models.Model):
     # This is a legacy method, we should replace it with all_events() from Event's FK.
     # But that method for now doesn't allow limiting, doesn't filter out deleted events and doesn't apply `order_by`.
     def instances(self, limit=None):
-        query = Event.objects.filter(prototype_id=self.prototype_id, deleted=False).order_by('-start_ts')
+        query = Event.objects.filter(prototype_id=self.prototype_id, deleted=False).order_by('-start')
         if limit:
             query = query[:limit]
         events = query.all()
@@ -77,7 +77,7 @@ class EventPrototype(models.Model):
             dt += timedelta(weeks=1)
 
         existing_dts = set(
-            e.start_dt
+            e.start
             for e in self.instances()
         )
 
@@ -95,18 +95,15 @@ class EventPrototype(models.Model):
 
     def new_event(self, dt):
         tmp_event = Event(
-            start_dt=dt,
-            end_dt=dt + timedelta(minutes=self.length),
+            start=dt,
+            end=dt + timedelta(minutes=self.length),
             **{
                 prop: getattr(self, prop)
                 for prop in ('title', 'location', 'description')
             }
         )
 
-        google_event = kocherga.events.google.insert_event(
-            tmp_event.to_google()
-        )
-        event = Event.from_google(google_event)
+        event = kocherga.events.db.insert_event(tmp_event)
 
         for prop in (
                 'summary',

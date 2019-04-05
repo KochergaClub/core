@@ -40,17 +40,17 @@ def generate_content(text, image_url):
     query = (
         Event.objects
         .filter(
-            start_ts__gt=dt.timestamp(),
-            start_ts__lt=(dt + timedelta(weeks=1)).timestamp(),
+            start__gt=dt,
+            start__lt=(dt + timedelta(weeks=1)),
         )
         .exclude(posted_vk__isnull=True)
         .exclude(posted_vk='')
     )
-    events = query.order_by('start_ts').all()
+    events = query.order_by('start').all()
 
     date2events = {}
     for event in events:
-        d = event.start_dt.strftime('%Y-%m-%d')
+        d = event.start.strftime('%Y-%m-%d')
         if d not in date2events:
             date2events[d] = []
         date2events[d].append(event)

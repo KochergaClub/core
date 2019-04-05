@@ -6,6 +6,7 @@ pytestmark = [
 
 from datetime import datetime, timedelta, date
 
+from kocherga.dateutils import TZ
 from kocherga.events.models import Event
 from kocherga.events import serializers
 import django.db
@@ -13,7 +14,10 @@ import django.db
 
 class TestEventConstructor:
     def test_minimal(self):
-        event = Event(start_dt=datetime.today(), end_dt=datetime.today() + timedelta(hours=1))
+        event = Event(
+            start = datetime.now(TZ),
+            end = datetime.now(TZ) + timedelta(hours=1),
+        )
         assert type(event) == Event
 
 
@@ -24,9 +28,9 @@ class TestEventFromGoogle:
 
     def test_from_google_datatypes(self, google_object):
         event = Event.from_google(google_object)
-        assert type(event.created_dt) == datetime
-        assert type(event.start_dt) == datetime
-        assert type(event.end_dt) == datetime
+        assert type(event.created) == datetime
+        assert type(event.start) == datetime
+        assert type(event.end) == datetime
 
 
 def test_get_room(google_object):
@@ -42,7 +46,7 @@ def test_default_event_type(google_object):
 def test_serialize(google_object):
     event = Event.from_google(google_object)
     data = serializers.EventSerializer(event).data
-    assert type(data['start']['dateTime']) == str
+    assert type(data['start']) == str
     assert data['posted_vk'] == ''
     assert data['tags'] == []
 
@@ -53,9 +57,9 @@ class TestGetEvent:
         assert e
         assert type(e) == Event
 
-        assert type(e.created_dt) == datetime
-        assert type(e.start_dt) == datetime
-        assert type(e.end_dt) == datetime
+        assert type(e.created) == datetime
+        assert type(e.start) == datetime
+        assert type(e.end) == datetime
         assert e.title == 'Элиезер проповедь'
         assert e.description.startswith('chicken')
         assert e.is_master is False
@@ -118,7 +122,7 @@ class TestManager:
         event.posted_vk = 'blah'  # should be non-empty
         event.save()
 
-        public_events = Event.objects.public_events(date=event.start_dt.date())
+        public_events = Event.objects.public_events(date=event.start.date())
 
         assert type(public_events) == django.db.models.query.QuerySet
         assert public_events.count() == 1

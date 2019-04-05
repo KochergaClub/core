@@ -16,7 +16,7 @@ def test_events(client, imported_events, kocherga_auth_header):
 
     assert len(events) > 5
 
-    assert '2017' in events[0]['start']['dateTime']
+    assert '2017' in events[0]['start']
 
 
 def test_events_from_date(client, imported_events, kocherga_auth_header):
@@ -29,7 +29,7 @@ def test_events_from_date(client, imported_events, kocherga_auth_header):
 
     assert len(events) > 5
 
-    assert '2018' in events[0]['start']['dateTime']
+    assert '2018' in events[0]['start']
 
 
 def test_upload_image(client, image_storage, event, kocherga_auth_header):

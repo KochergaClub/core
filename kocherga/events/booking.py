@@ -39,7 +39,7 @@ class Booking:
         if match:
             people = match.group(1)
         return Booking(
-            event.start_dt, event.end_dt, event.get_room(), people, event.google_id
+            event.start, event.end, event.get_room(), people, event.google_id
         )
 
     def public_object(self):
@@ -159,12 +159,10 @@ def add_booking(date, room, people, start_time, end_time, email):
 
     # insert
     event = Event(
-        title="Бронь {room}, {people} человек, {email}".format(
-            room=room, people=people, email=email
-        ),
+        title=f"Бронь {room}, {people} человек, {email}",
         location=kocherga.room.to_long_location(room),
-        start_dt=start_dt,
-        end_dt=end_dt,
+        start=start_dt,
+        end=end_dt,
         event_type='private',
     )
     event.set_attendees([email])

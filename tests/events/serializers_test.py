@@ -35,23 +35,20 @@ class TestSerializer:
         assert data['room'] == 'гэб'
         assert data['location'] == 'ГЭБ'
 
-        assert type(data['start']) == dict
-        assert '+03:00' in data['start']['dateTime']
-
-        assert type(data['start_ts']) == int
+        assert type(data['start']) == str
+        assert '+03:00' in data['start']
 
         assert data['tags'] == []
 
     def test_create(self):
         serializer = EventSerializer(data={
             'title': 'foo',
-            'start_ts': datetime(2019, 3, 1, 14, 0).timestamp(),
-            'end_ts': datetime(2019, 3, 1, 15, 0).timestamp(),
+            'start': datetime(2019, 3, 1, 14, 0),
+            'end': datetime(2019, 3, 1, 15, 0),
             'foo': 'bar',
         })
         serializer.is_valid(raise_exception=True)
         event = serializer.save()
 
         assert event.title == 'foo'
-        assert event.start_ts
-        assert event.start_dt
+        assert event.start

@@ -27,27 +27,27 @@ def schedule_message():
     query = (
         Event.objects
         .filter(deleted=False)
-        .filter(start_ts__gt = dt.timestamp())
-        .filter(start_ts__lt = (dt + timedelta(weeks=1)).timestamp())
+        .filter(start__gt = dt)
+        .filter(start__lt = (dt + timedelta(weeks=1)))
         .exclude(posted_vk__isnull = True)
         .exclude(posted_vk = '')
     )
 
-    events = query.order_by('start_ts').all()
+    events = query.order_by('start').all()
     logger.info(f"Schedule includes {len(events)} events")
 
     prev_date = None
     for event in events:
-        if event.start_dt.date() != prev_date:
-            weekday = kocherga.dateutils.weekday(event.start_dt).upper()
-            month = kocherga.dateutils.inflected_month(event.start_dt)
-            message += f"{weekday}, {event.start_dt.day} {month}\n"
-            prev_date = event.start_dt.date()
+        if event.start.date() != prev_date:
+            weekday = kocherga.dateutils.weekday(event.start).upper()
+            month = kocherga.dateutils.inflected_month(event.start)
+            message += f"{weekday}, {event.start.day} {month}\n"
+            prev_date = event.start.date()
 
         title = event.title
         if event.posted_vk:
             title = f'<a href="{event.posted_vk}">{title}</a>'
-        message += f"{event.start_dt:%H:%M} {title}\n"
+        message += f"{event.start:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
     return message

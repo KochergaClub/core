@@ -260,11 +260,11 @@ class AnnounceSession:
         await page.focus(
             '[data-testid=event-create-dialog-start-time] input[placeholder="дд.мм.гггг"]'
         )
-        await self.fill_date_time(event.start_dt)
+        await self.fill_date_time(event.start)
         await page.focus(
             '[data-testid=event-create-dialog-end-time] input[placeholder="дд.мм.гггг"]'
         )
-        await self.fill_date_time(event.end_dt)
+        await self.fill_date_time(event.end)
 
         logger.info("Filling category if necessary")
         await self.fill_category()
