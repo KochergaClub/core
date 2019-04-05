@@ -105,9 +105,9 @@ class Event(models.Model):
 
     # Not a google_event.summary!
     # We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
-    summary = models.TextField()
+    summary = models.TextField(blank=True)
 
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     deleted = models.BooleanField(default=False)
 

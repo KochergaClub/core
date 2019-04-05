@@ -73,7 +73,7 @@ def test_create(client, kocherga_auth_header):
         content_type='application/json',
         **kocherga_auth_header,
     )
-    assert res.status_code == 200
+    assert res.status_code == 201
     event_json = res.json()
 
     assert event_json['title'] == 'test event'

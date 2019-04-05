@@ -13,6 +13,8 @@ from django.views.decorators.http import require_safe
 from django.conf import settings
 
 from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
@@ -26,39 +28,43 @@ from kocherga.events.serializers import PublicEventSerializer, EventSerializer
 from kocherga.api.common import ok
 
 
-class RootView(APIView):
+class RootView(ListCreateAPIView):
     permission_classes = (IsAdminUser,)
+    serializer_class = EventSerializer
 
-    def get(self, request):
+    def get_queryset(self):
         def arg2date(arg):
-            d = request.query_params.get(arg)
+            d = self.request.query_params.get(arg)
             if d:
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        events = Event.objects.list_events(
-            date=request.query_params.get("date"),
+        return Event.objects.list_events(
+            date=self.request.query_params.get("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
         )
-        return Response(EventSerializer(events, many=True).data)
 
-    def post(self, request):
-        payload = request.data
-        for field in ("title", "date", "startTime", "endTime"):
-            if field not in payload:
-                raise PublicError("field {} is required".format(field))
+    # TODO - replace with CreateAPIView after we standardize on `start_dt` / `end_dt` params on client
+    def post(self, request, *args, **kwargs):
+        if 'date' in request.data:
+            (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
+                self.request.data['date'],
+                self.request.data['startTime'],
+                self.request.data['endTime'],
+            )
+            data = {
+                **request.data,
+                'start_ts': start_dt.timestamp(),
+                'end_ts': start_dt.timestamp(),
+            }
+        else:
+            data = request.data
 
-        title = payload['title']
-        (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
-            payload['date'], payload['startTime'], payload['endTime']
-        )
-
-        event = Event(title=title, start_dt=start_dt, end_dt=end_dt)
-
-        kocherga.events.db.insert_event(event)
-
-        return Response(EventSerializer(event).data)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ObjectView(APIView):

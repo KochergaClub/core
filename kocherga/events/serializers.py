@@ -58,16 +58,26 @@ class EventSerializer(serializers.ModelSerializer):
             'summary',
             'title',
             'description',
-            'location',  # deprecated
-            'room',
+            'location',  # raw location
+            'room',  # cleaned up room value
             'start',
             'end',
+
+            # for updates
+            'start_ts',
+            'end_ts',
+
+            # for future migrations
+            'start_dt',
+            'end_dt',
+
             'created',
             'google_link',
             'type',
             'timepad_category_code',
             'timepad_prepaid_tickets',
             'timing_description_override',
+
             # optional
             'master_id',
             'is_master',
@@ -80,13 +90,34 @@ class EventSerializer(serializers.ModelSerializer):
             'posted_fb',
             'posted_timepad',
             'deleted',
+
             # method-based
             'images',
             'tags',
         )
+        read_only_fields = tuple(
+            # Listing editable fields instead of read-only fields for clearer code.
+            f for f in fields if f not in (
+                'title',
+                'location',
+                'description',
+                'summary',
+                'start_ts',
+                'end_ts',
+                'visitors',
+                'vk_group',
+                'fb_group',
+                'posted_timepad',
+                'posted_fb',
+                'posted_vk',
+                'timepad_category_code',
+                'timepad_description_override',
+                # TODO - other fields from Event.set_field_by_prop()
+            )
+        )
 
-    id = serializers.CharField(source='google_id')
-    room = serializers.CharField(source='get_room')
+    id = serializers.CharField(source='google_id', required=False)
+    room = serializers.CharField(source='get_room', required=False)
 
     start = serializers.SerializerMethodField()
     end = serializers.SerializerMethodField()
@@ -106,7 +137,7 @@ class EventSerializer(serializers.ModelSerializer):
     def get_created(self, obj):
         return dts(obj.created_dt)
 
-    type = serializers.CharField(source='event_type')
+    type = serializers.CharField(source='event_type', required=False)
 
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
@@ -116,3 +147,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_tags(self, obj):
         return obj.tag_names()
+
+    def create(self, validated_data):
+        event = models.Event(**validated_data)
+        kocherga.events.db.insert_event(event)
+        return event
