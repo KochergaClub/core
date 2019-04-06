@@ -7,7 +7,7 @@ TZ = tz.tzoffset("MSK", 3600 * 3)
 
 
 def dts(dt):
-    return dt.astimezone(TZ).isoformat('T')
+    return dt.astimezone(TZ).replace(microsecond=0).isoformat('T')
 
 
 def date_chunks(from_dt, to_dt, step=timedelta(days=28)):
