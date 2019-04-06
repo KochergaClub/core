@@ -148,6 +148,7 @@ class TestAddBooking:
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
         assert event.location == 'Антикафе Кочерга, комната ГЭБ'
         assert event.event_type == 'private'
+        assert event.start.hour == 12  # correct timezone
 
     def test_add_booking_midnight(self):
         event = kocherga.events.booking.add_booking(

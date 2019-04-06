@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
 
-from kocherga.dateutils import TZ, MSK_DATE_FORMAT
+from kocherga.dateutils import TZ, dts
 
 import kocherga.events.google
 from kocherga.events.models import Event
@@ -19,8 +19,8 @@ def insert_event(event):
         "summary": event.title,
         "location": event.location,
         "description": event.description,
-        "start": {"dateTime": event.start.strftime(MSK_DATE_FORMAT)},
-        "end": {"dateTime": event.end.strftime(MSK_DATE_FORMAT)},
+        "start": {"dateTime": dts(event.start)},
+        "end": {"dateTime": dts(event.end)},
         "attendees": [{"email": email} for email in event.attendees],
     })
 

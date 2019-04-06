@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 import datetime
 import re
 
-from kocherga.dateutils import TZ, MSK_DATE_FORMAT
+from kocherga.dateutils import TZ, dts
 from kocherga.error import PublicError
 
 import kocherga.room
@@ -44,8 +44,8 @@ class Booking:
 
     def public_object(self):
         return {
-            "start": self.start_dt.strftime(MSK_DATE_FORMAT),
-            "end": self.end_dt.strftime(MSK_DATE_FORMAT),
+            "start": dts(self.start_dt),
+            "end": dts(self.end_dt),
             "room": kocherga.room.pretty(self.room),
             "people": self.people,
             "event_id": self.event_id,

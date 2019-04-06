@@ -5,12 +5,9 @@ from dateutil import tz
 # TODO - move to django.utils.timezone
 TZ = tz.tzoffset("MSK", 3600 * 3)
 
-# TODO - base this on TZ
-MSK_DATE_FORMAT = "%Y-%m-%dT%H:%M:%S+03:00"
-
 
 def dts(dt):
-    return dt.strftime(MSK_DATE_FORMAT)
+    return dt.astimezone(TZ).isoformat('T')
 
 
 def date_chunks(from_dt, to_dt, step=timedelta(days=28)):
