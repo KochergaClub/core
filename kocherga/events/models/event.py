@@ -265,9 +265,10 @@ class Event(models.Model):
         )
 
     # overrides django method, but that's probably ok
-    def delete(self):
+    def delete(self, update_google=True):
         self.deleted = True
-        self.patch_google()
+        if update_google:
+            self.patch_google()
         self.save()
 
     def to_google(self):

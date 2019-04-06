@@ -84,6 +84,7 @@ def list_events(
     q=None,
     order_by=None,
     updated_min=None,
+    deleted=False,
 ) -> List[Dict[str, Any]]:
     if date and from_date or date and to_date:
         raise Exception(
@@ -112,5 +113,8 @@ def list_events(
 
     if updated_min:
         kwargs["updatedMin"] = updated_min.isoformat()
+
+    if deleted:
+        kwargs["showDeleted"] = True
 
     return events_with_condition(**kwargs)

@@ -50,13 +50,15 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         if too_old:
             logger.info(f"from_dt = {from_dt} is too old, let's reimport everything")
             google_events = kocherga.events.google.list_events(
-                to_date=(datetime.now(tz=TZ) + timedelta(days=7 * 8)).date()
+                to_date=(datetime.now(tz=TZ) + timedelta(days=7 * 8)).date(),
+                deleted=True,
             )
         else:
             google_events = kocherga.events.google.list_events(
                 to_date=(datetime.now(tz=TZ) + timedelta(days=7 * 8)).date(),
                 order_by="updated",
                 updated_min=from_dt,
+                deleted=True,
             )
         return google_events
 
@@ -71,11 +73,22 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             logger.debug(f'Event {event.google_id}, title {event.title} - new')
             event.save()
 
+    def cancel_event_by_id(self, event_id):
+        try:
+            event = Event.objects.get(pk=event_id)
+            event.delete(update_google=False)
+        except Event.DoesNotExist:
+            logger.info(f"Couldn't cancel event {event_id} - not found, probably wasn't imported in time")
+
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         google_events = self.load_updated_google_events(from_dt)
 
         last_dt = from_dt
         for google_event in google_events:
+            if google_event['status'] == 'cancelled':
+                self.cancel_event_by_id(google_event['id'])
+                continue
+
             imported_event = Event.from_google(google_event)
             last_dt = max(last_dt, imported_event.updated)
             self.update_or_create_event(imported_event)
