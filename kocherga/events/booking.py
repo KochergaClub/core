@@ -99,6 +99,7 @@ def bookings_by_email(email):
     bookings = [
         Booking.from_event(event)
         for event in events
+        if event.title.endswith(" " + email)
     ]
 
     return bookings
