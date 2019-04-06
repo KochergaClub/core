@@ -94,12 +94,11 @@ def check_availability(start_dt, end_dt, room):
 
 
 def bookings_by_email(email):
-    events = Event.objects.list_events().filter(title__contains=f"Бронь {email}")
+    events = Event.objects.list_events().filter(title__startswith="Бронь ").filter(title__endswith=" " + email)
 
     bookings = [
         Booking.from_event(event)
         for event in events
-        if event.title.endswith(" " + email)
     ]
 
     return bookings
