@@ -48,6 +48,7 @@ services:
       - db
       - render-server
       - chrome
+    restart: always
 
   render-server:
     << : *common
@@ -64,5 +65,3 @@ services:
   tsc:
     << : *common
     command: npx tsc --watch
-    environment:
-      TSC_WATCHFILE: DynamicPriorityPolling

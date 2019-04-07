@@ -13,7 +13,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 import kocherga.slack
 
 SLACK_SIGNING_SECRET = settings.KOCHERGA_SLACK_SIGNING_SECRET
-SLACK_WORKPLACE_TOKEN = kocherga.slack.token()
+SLACK_BOT_TOKEN = kocherga.slack.token()
 
 
 class Bot(slappy.Bot):
@@ -22,7 +22,7 @@ class Bot(slappy.Bot):
 
 def create_bot():
     bot = Bot(
-        workplace_token=SLACK_WORKPLACE_TOKEN,
+        bot_token=SLACK_BOT_TOKEN,
         signing_secret=SLACK_SIGNING_SECRET,
         timezone=pytz.timezone(
             "Europe/Moscow"
