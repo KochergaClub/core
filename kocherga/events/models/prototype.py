@@ -160,9 +160,7 @@ class EventPrototype(models.Model):
 
         if detailed:
             result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
-            result['instances'] = [
-                EventSerializer(self.instances(limit=20), many=True).data
-            ]
+            result['instances'] = list(EventSerializer(self.instances(limit=20), many=True).data)
 
         result["tags"] = self.tag_names()
 

@@ -24,6 +24,13 @@ def test_to_dict(common_prototype):
     assert type(ep.to_dict()) == dict
     assert type(ep.to_dict(detailed=True)) == dict
 
+    dt = ep.suggested_dates()[0]
+    event = ep.new_event(dt)
+    serialized = ep.to_dict(detailed=True)
+    assert type(serialized['instances']) == list
+    assert len(serialized['instances']) == 1
+    assert serialized['instances'][0]['id'] == event.google_id
+
 
 def test_cancel(common_prototype):
     ep = common_prototype
