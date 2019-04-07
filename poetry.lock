@@ -1161,6 +1161,7 @@ websockets = "*"
 reference = "0f219bb308212e6489189fc879f6f93265ec6061"
 type = "git"
 url = "https://github.com/berekuk/pyppeteer.git"
+
 [[package]]
 category = "dev"
 description = "Persistent/Functional/Immutable data structures"
@@ -1490,7 +1491,7 @@ description = "Slack bot framework"
 name = "slappy"
 optional = false
 python-versions = ">=3.6"
-version = "0.4.0"
+version = "0.5.1"
 
 [package.dependencies]
 apscheduler = "*"
@@ -1686,7 +1687,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "d0e87d8cdba0ae9a561007bd77a9a9aa7927db4dd4810e557ca299ae569f0490"
+content-hash = "c6522bdbb677b2a72b9b68407201ebb5db7ee5aebcf50d5a3ae322248b467376"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -1827,7 +1828,7 @@ sentry-sdk = ["2649400cc6ebf5985d5923997997fb381cf84cf53afd803658e2d734e04f775c"
 six = ["3350809f0555b11f552448330d0b52d5f24c91a322ea4a15ef22629740f3761c", "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73"]
 slackclient = ["ac99b6ad8de027b5f6bdee4b1545d6b95ea1cca9a19ca0e5f3fda51b34d3f9ab"]
 slackeventsapi = ["d415308981ff26feb9604e3f26f481447604dacec2049a953c261b61a0eb654b"]
-slappy = ["7998c10347c5701dd64f84000c48b3af2e99e9f7ab285a978b7f69b4099791e5", "d02c5fa39a22eb9ca3d6f0a25dc4eb8d5a9bdf88c037cba2857b15655dd494cb"]
+slappy = ["21b93fda1adc48c2ca14bfec0a554af12ff98bfc175b146608089c1eeef7500b", "b8b15266410552a6d3a75b0784fe6201bdf2dfdeeedbc85ae975fa590acd205e"]
 sqlparse = ["40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177", "7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"]
 telethon-sync = ["45a034066a80cafe1f68fedd9f7d22b451baf7bdf05300cf5b1f1c09cc13423e", "dea56865af7b1adbf0a9bb2337d40bd8395e470e09e1bf61bf456360f177e807"]
 termcolor = ["1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"]

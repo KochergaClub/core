@@ -9,25 +9,12 @@ from django.conf import settings
 
 
 def token():
-    return settings.KOCHERGA_SLACK_WORKPLACE_TOKEN
-
-
-def classic_token():
     return settings.KOCHERGA_SLACK_BOT_TOKEN
-
-
-def verification_token():
-    return settings.KOCHERGA_SLACK_VERIFICATION_TOKEN
 
 
 # workplace client
 def client():
     return SlackClient(token())
-
-
-# classic bot client - for methods which are not ported to Slack's workplace tokens yet
-def classic_client():
-    return SlackClient(classic_token())
 
 
 _USERS_CACHE = []
@@ -45,7 +32,7 @@ def users(sc=None):
         return _USERS_CACHE
 
     if sc is None:
-        sc = classic_client()
+        sc = client()
 
     response = sc.api_call("users.list")
 
