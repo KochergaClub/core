@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 import markdown
 
@@ -50,7 +51,7 @@ def generate_content(text, image_url):
 
     date2events = {}
     for event in events:
-        d = event.start.strftime('%Y-%m-%d')
+        d = timezone.localtime(event.start).strftime('%Y-%m-%d')
         if d not in date2events:
             date2events[d] = []
         date2events[d].append(event)

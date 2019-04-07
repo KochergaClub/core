@@ -1,4 +1,5 @@
 from django.templatetags.static import static
+from django.utils.timezone import template_localtime
 from django.urls import reverse
 
 from jinja2 import Environment
@@ -13,7 +14,11 @@ def parse_date(value, fmt):
 
 def environment(**options):
     env = Environment(**options)
+    env.filters.update({
+        'localtime': template_localtime,
+    })
     env.globals.update({
+        'localtime': template_localtime,
         'static': static,
         'url': reverse,
     })
