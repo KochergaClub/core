@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
+from django.utils import timezone
 
 import re
 
@@ -97,7 +98,7 @@ class AnnounceSession:
 
     async def fill_date_time(self, dt):
         await self.clean_field(15, both_directions=True)
-        await self.page.keyboard.type(dt.strftime("%d.%m.%Y"))
+        await self.page.keyboard.type(timezone.localtime(dt).strftime("%d.%m.%Y"))
         await self.page.keyboard.press("Tab")
         await self.page.keyboard.type(f"{dt.hour:02}")
         await self.page.keyboard.press("Tab")
