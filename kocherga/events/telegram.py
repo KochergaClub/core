@@ -1,8 +1,9 @@
 import logging
-
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
+
+from django.utils import timezone
 
 import kocherga.dateutils
 
@@ -38,16 +39,17 @@ def schedule_message():
 
     prev_date = None
     for event in events:
-        if event.start.date() != prev_date:
-            weekday = kocherga.dateutils.weekday(event.start).upper()
-            month = kocherga.dateutils.inflected_month(event.start)
-            message += f"{weekday}, {event.start.day} {month}\n"
-            prev_date = event.start.date()
+        start_local = timezone.localtime(event.start)
+        if start_local.date() != prev_date:
+            weekday = kocherga.dateutils.weekday(start_local).upper()
+            month = kocherga.dateutils.inflected_month(start_local)
+            message += f"{weekday}, {start_local.day} {month}\n"
+            prev_date = start_local.date()
 
         title = event.title
         if event.posted_vk:
             title = f'<a href="{event.posted_vk}">{title}</a>'
-        message += f"{event.start:%H:%M} {title}\n"
+        message += f"{start_local:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
     return message

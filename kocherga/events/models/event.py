@@ -7,6 +7,7 @@ from datetime import datetime, time
 
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 from kocherga.dateutils import TZ
 from kocherga.dateutils import inflected_weekday, inflected_month
@@ -152,7 +153,7 @@ class Event(models.Model):
     timing_description_override = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return f'{self.start} - {self.title}'
+        return f'{timezone.localtime(self.start)} - {self.title}'
 
     @classmethod
     def by_id(cls, event_id):
@@ -257,11 +258,12 @@ class Event(models.Model):
         if self.timing_description_override:
             return self.timing_description_override
 
+        start = timezone.localtime(self.start)
         return "Встреча пройдёт в {weekday} {day} {month}, в {time},".format(
-            weekday=inflected_weekday(self.start),
-            day=self.start.day,
-            month=inflected_month(self.start),
-            time=self.start.strftime("%H:%M"),
+            weekday=inflected_weekday(start),
+            day=start.day,
+            month=inflected_month(start),
+            time=start.strftime("%H:%M"),
         )
 
     # overrides django method, but that's probably ok

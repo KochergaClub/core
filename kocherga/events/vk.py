@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
+from django.utils import timezone
 
 from datetime import datetime, timedelta
 import json
@@ -151,7 +152,8 @@ def update_wiki_schedule(from_dt=None):
 
     prev_date = None
     for event in events:
-        if event.start.date() != prev_date:
+        start_local = timezone.localtime(event.start)
+        if start_local.date() != prev_date:
             weekdays = [
                 "Понедельник",
                 "Вторник",
@@ -161,13 +163,13 @@ def update_wiki_schedule(from_dt=None):
                 "Суббота",
                 "Воскресенье",
             ]
-            weekday = weekdays[event.start.weekday()]
-            month = kocherga.dateutils.inflected_month(event.start)
-            result += f"==={weekday}, {event.start.day} {month}===\n"
+            weekday = weekdays[start_local.weekday()]
+            month = kocherga.dateutils.inflected_month(start_local)
+            result += f"==={weekday}, {start_local.day} {month}===\n"
             prev_date = event.start.date()
 
         result += (
-            f"<blockquote>'''{event.start:%H:%M}''' [{event.posted_vk}|{event.title}]\n"
+            f"<blockquote>'''{start_local:%H:%M}''' [{event.posted_vk}|{event.title}]\n"
         )
         result += f"{event.generate_summary()}</blockquote>\n"
 
@@ -223,16 +225,17 @@ def create_schedule_post(prefix_text):
 
     prev_date = None
     for event in events:
-        if event.start.date() != prev_date:
-            weekday = kocherga.dateutils.weekday(event.start).upper()
-            month = kocherga.dateutils.inflected_month(event.start)
-            message += f"{weekday}, {event.start.day} {month}\n"
-            prev_date = event.start.date()
+        start_local = timezone.localtime(event.start)
+        if start_local.date() != prev_date:
+            weekday = kocherga.dateutils.weekday(start_local).upper()
+            month = kocherga.dateutils.inflected_month(start_local)
+            message += f"{weekday}, {start_local.day} {month}\n"
+            prev_date = start_local.date()
 
         title = event.title
         if event.vk_group:
             title = f"@{event.vk_group} ({title})"
-        message += f"{event.start:%H:%M} {title}\n"
+        message += f"{start_local:%H:%M} {title}\n"
         message += f"{event.generate_summary()}\n\n"
 
     group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
@@ -269,8 +272,9 @@ def update_widget():
 
     def event2time(event):
         day_codes = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-        day = day_codes[event.start.weekday()]
-        return f"{day} {event.start:%H:%M}"
+        start_local = timezone.localtime(event.start)
+        day = day_codes[start_local.weekday()]
+        return f"{day} {start_local:%H:%M}"
 
     group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
     page_id = group2id(settings.KOCHERGA_VK["main_page"]["main_wall_page_id"])
