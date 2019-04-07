@@ -84,10 +84,9 @@ class EventSerializer(serializers.ModelSerializer):
                 'visitors',
                 'vk_group', 'fb_group',
                 'posted_timepad', 'posted_fb', 'posted_vk',
-                'timepad_category_code', 'timepad_description_override',
+                'timepad_prepaid_tickets', 'timepad_category_code', 'timing_description_override',
                 'type',
                 'ready_to_post',
-                'timepad_prepaid_tickets',
                 # TODO - other fields from Event.set_field_by_prop()
                 # TODO: `start`, `end`, `asked_for_visitors`
             )
