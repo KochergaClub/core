@@ -240,3 +240,5 @@ KOCHERGA_LUDWIG_SENTRY_DSN = None
 # OFD configuration is the same as in prod.py, OFD is read-only anyway.
 # Note: '8712000101056759' until 2018-12.
 KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '9283440300136748'
+
+GOOGLE_ANALYTICS_ID = None

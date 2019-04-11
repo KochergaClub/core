@@ -124,3 +124,5 @@ KOCHERGA_API_ROOT = 'https://api.kocherga.club'
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
 
 KOCHERGA_YANDEX_ORG_ID = 649407
+
+GOOGLE_ANALYTICS_ID = 'UA-67233667-7'

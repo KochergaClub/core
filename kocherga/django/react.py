@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 import django.middleware.csrf
 
@@ -16,6 +17,7 @@ def react_render(request, template, params={}, status=200):
     return render(
         request, 'react-base.html',
         context={
+            'google_analytics_id': settings.GOOGLE_ANALYTICS_ID,
             'react_html': str(react_html),
             'react_style': react_html.data.get('style', ''),
             'react_helmet': react_html.data.get('helmet', ''),
