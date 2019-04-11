@@ -30,7 +30,10 @@ test-code:
 lint:
 	docker-compose -f docker/compose.dev.yml run api poetry run flake8 kocherga/ --max-line-length=120
 
-test: test-types test-code lint
+test-js:
+	docker-compose -f docker/compose.dev.yml run api npx jest
+
+test: test-types test-code test-js lint
 
 ##### Helper commands #####
 dbshell:

@@ -20,6 +20,13 @@ test-lint:
   script:
     - docker-compose -f docker/compose.ci.yml run api poetry run flake8 kocherga/ --max-line-length=120
 
+test-js:
+  stage: test
+  variables:
+    TAG: $CI_COMMIT_REF_NAME
+  script:
+    - docker-compose -f docker/compose.ci.yml run api npx jest
+
 test-python:
   stage: test
   variables:
