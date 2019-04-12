@@ -10,8 +10,7 @@ init-dev:
 	docker-compose -f docker/compose.dev.yml run api npm ci
 
 dev-mac: image
-# MacOS has problems with inotify, so we run webpack outside of the container
-	npx nf start -j docker/Procfile.mac
+	docker-sync-stack start
 
 dev: image
 	docker-compose -f docker/compose.dev.yml up

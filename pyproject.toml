@@ -47,6 +47,7 @@ gunicorn = "^19.9"
 aiogram = "^2.0"
 aiohttp_socks = "^0.2.2"
 django-webpack-loader = "^0.6.0"
+whitenoise = "^4.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

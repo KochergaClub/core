@@ -1,4 +1,0 @@
-docker_sync: docker-sync-stack start
-webpack_front: npx webpack --config webpack/front.config.js --watch
-webpack_back: npx webpack --config webpack/back.config.js --watch
-tsc: tsc --watch
