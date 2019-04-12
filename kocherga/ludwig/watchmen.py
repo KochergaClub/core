@@ -37,11 +37,11 @@ INFLECTED_MONTH_NAMES = [
 def get_current_watchman_or_complain(message):
     shift = schedule.current_shift()
 
-    if not shift.watchman and not shift.watchman.is_night:
+    if not shift.watchman and not shift.is_night:
         message.reply("Админа нет, паникуем!")
         return
 
-    if shift.watchman.is_night:
+    if shift.is_night:
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
         last = schedule.last_watchman()
         nearest = schedule.nearest_watchman()
