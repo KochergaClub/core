@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, EventPrototype
+from .models import Event, EventPrototype, WeeklyDigest
 
 
 @admin.register(Event)
@@ -9,3 +9,4 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EventPrototype)
+admin.site.register(WeeklyDigest)
