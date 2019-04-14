@@ -9,4 +9,8 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EventPrototype)
-admin.site.register(WeeklyDigest)
+
+
+@admin.register(WeeklyDigest)
+class WeeklyDigestAdmin(admin.ModelAdmin):
+    ordering = ('-start')
