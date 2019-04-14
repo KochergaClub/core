@@ -13,4 +13,4 @@ admin.site.register(EventPrototype)
 
 @admin.register(WeeklyDigest)
 class WeeklyDigestAdmin(admin.ModelAdmin):
-    ordering = ('-start')
+    ordering = ('-start',)
