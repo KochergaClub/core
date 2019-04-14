@@ -46,7 +46,7 @@ class WeeklyDigest(models.Model):
     mailchimp_id = models.CharField('ID кампании в Mailchimp', max_length=100, null=True, blank=True)
     mailchimp_sent = models.BooleanField('Mailchimp-кампания отправлена', default=False)
     telegram_id = models.CharField('ID сообщения в Telegram', max_length=100, null=True, blank=True)
-    vk_id = models.CharField('ID поста в VK', max_length=100)
+    vk_id = models.CharField('ID поста в VK', max_length=100, null=True, blank=True)
 
     objects = WeeklyDigestManager()
 
