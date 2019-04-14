@@ -24,6 +24,8 @@ from .event import Event
 
 MAILCHIMP_IMAGE_FOLDER_NAME = 'Расписание на неделю'
 MAILCHIMP_CAMPAIGN_FOLDER_NAME = 'Еженедельная рассылка'
+TELEGRAM_HASHTAG = 'расписание_кочерги'
+VK_HASHTAG = 'расписание_кочерги'
 
 
 class WeeklyDigestManager(models.Manager):
@@ -173,7 +175,7 @@ class WeeklyDigest(models.Model):
         self.save()
 
     def _telegram_message(self):
-        message = "#расписание_кочерги\nНа этой неделе в Кочерге:"
+        message = f"#{TELEGRAM_HASHTAG}\nНа этой неделе в Кочерге:"
         message += "\n\n"
 
         prev_date = None
@@ -207,7 +209,7 @@ class WeeklyDigest(models.Model):
         if self.vk_id:
             raise Exception("VK digest already posted")
 
-        message = "#расписание_кочерги\n"
+        message = f"#{VK_HASHTAG}\n"
         message += prefix_text
 
         message += "\n\n"
