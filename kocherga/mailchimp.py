@@ -155,3 +155,12 @@ def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
         return next(i for i in items if i['name'] == name)
     except StopIteration:
         raise NotFoundException()
+
+
+def image_folder_by_name(name, list_id=MAIN_LIST_ID):
+    folders = api_call(
+        'GET',
+        '/file-manager/folders',
+    )['folders']
+
+    return next(f for f in folders if f['name'] == name)

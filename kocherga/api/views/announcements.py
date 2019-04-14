@@ -15,12 +15,10 @@ from rest_framework.permissions import IsAdminUser
 from kocherga.error import PublicError
 
 from kocherga.images import image_storage
-from kocherga.events.models import Event
+from kocherga.events.models import Event, WeeklyDigest
 import kocherga.events.timepad
 import kocherga.events.vk
-import kocherga.events.telegram
 import kocherga.events.announce
-import kocherga.events.weekly_digest
 
 from kocherga.api.common import ok
 
@@ -68,23 +66,26 @@ def r_vk_update_wiki_schedule(request):
 
 @permission_classes(IsAdminUser,)
 @api_view(['POST'])
-def r_vk_create_schedule_post(request):
-    kocherga.events.vk.create_schedule_post('')
+def r_weekly_digest_post_vk(request):
+    digest = WeeklyDigest.objects.current_digest()
+    digest.post_vk('')
     return Response(ok)
 
 
 @permission_classes(IsAdminUser,)
 @api_view(['POST'])
-def r_telegram_post_schedule(request):
-    kocherga.events.telegram.post_schedule()
+def r_weekly_digest_post_telegram(request):
+    digest = WeeklyDigest.objects.current_digest()
+    digest.post_telegram()
     return Response(ok)
 
 
 @permission_classes(IsAdminUser,)
 @api_view(['POST'])
-def r_email_post_digest(request):
+def r_weekly_digest_post_mailchimp_draft(request):
     text = request.data.get('text', '')
-    kocherga.events.weekly_digest.create_draft(text)
+    digest = WeeklyDigest.objects.current_digest()
+    digest.post_mailchimp_draft(text)
     return Response(ok)
 
 

@@ -77,11 +77,6 @@ class TestGroups:
         assert result[0] == 'blahblah_something'
 
 
-class TestSchedule():
-    def test_schedule_post(self):
-        kocherga.events.vk.create_schedule_post('')
-
-
 class TestRepostToDaily():
     def test_repost_to_daily_empty(self):
         kocherga.events.vk.repost_to_daily()

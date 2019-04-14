@@ -196,65 +196,6 @@ def update_wiki_schedule(from_dt=None):
     update_widget()
 
 
-def create_schedule_post(prefix_text):
-    message = "#расписание_кочерги\n"
-    message += prefix_text
-
-    message += "\n\n"
-
-    dt = datetime.now(TZ)
-    if dt.weekday() < 2:
-        dt = dt - timedelta(days=dt.weekday())
-    else:
-        dt = dt + timedelta(days=7 - dt.weekday())
-
-    dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
-
-    query = (
-        Event.objects
-        .exclude(deleted=True)
-        .filter(
-            start__gt=dt,
-            start__lt=(datetime.now(TZ) + timedelta(weeks=1)),
-        )
-        .exclude(posted_vk__isnull=True)
-        .exclude(posted_vk='')
-    )
-    events = query.order_by('start').all()
-    logger.info(f"Schedule includes {len(events)} events")
-
-    prev_date = None
-    for event in events:
-        start_local = timezone.localtime(event.start)
-        if start_local.date() != prev_date:
-            weekday = kocherga.dateutils.weekday(start_local).upper()
-            month = kocherga.dateutils.inflected_month(start_local)
-            message += f"{weekday}, {start_local.day} {month}\n"
-            prev_date = start_local.date()
-
-        title = event.title
-        if event.vk_group:
-            title = f"@{event.vk_group} ({title})"
-        message += f"{start_local:%H:%M} {title}\n"
-        message += f"{event.generate_summary()}\n\n"
-
-    group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
-
-    image_bytes = kocherga.images.image_storage.create_mailchimp_image(dt)
-    photo_id = upload_wall_image(group_id, image_bytes)
-
-    kocherga.vk.api.call(
-        "wall.post",
-        {
-            "owner_id": -group_id,
-            "from_group": 1,
-            "message": message,
-            "publish_date": int(datetime.now().timestamp()) + 86400,
-            "attachments": photo_id,
-        },
-    )
-
-
 def update_widget():
     from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
     query = (

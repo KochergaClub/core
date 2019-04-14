@@ -2,7 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import kocherga.mailchimp
-import kocherga.events.weekly_digest
+import kocherga.events.models.weekly_digest
 import kocherga.ratio.users
 
 
@@ -57,8 +57,8 @@ def create_mailchimp_interest(category_name, name):
 
 
 def setup_mailchimp():
-    kocherga.mailchimp.create_file_folder(kocherga.events.weekly_digest.IMAGE_FOLDER_NAME)
-    kocherga.mailchimp.create_campaign_folder('Еженедельная рассылка')
+    kocherga.mailchimp.create_file_folder(kocherga.events.models.weekly_digest.MAILCHIMP_IMAGE_FOLDER_NAME)
+    kocherga.mailchimp.create_campaign_folder(kocherga.events.models.weekly_digest.MAILCHIMP_CAMPAIGN_FOLDER_NAME)
     kocherga.mailchimp.create_campaign_folder('Воркшопы')
     create_mailchimp_interest_group('Подписки', 'checkboxes')
     create_mailchimp_interest_group(kocherga.ratio.users.MAILCHIMP_TRAINING_CATEGORY_NAME, 'hidden')

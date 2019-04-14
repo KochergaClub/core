@@ -23,3 +23,4 @@ def post_to_channel(message):
         },
     )
     r.raise_for_status()
+    return r.json()
