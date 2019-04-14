@@ -52,7 +52,7 @@ class WeeklyDigest(models.Model):
 
     @property
     def end(self):
-        return self.start + timedelta(weeks=6)
+        return self.start + timedelta(days=6)
 
     def events(self):
         query = (
