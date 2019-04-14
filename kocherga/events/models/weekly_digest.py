@@ -50,6 +50,9 @@ class WeeklyDigest(models.Model):
 
     objects = WeeklyDigestManager()
 
+    def __str__(self):
+        return f'{self.start:%Y-%m-%d}'
+
     @property
     def end(self):
         return self.start + timedelta(days=6)
