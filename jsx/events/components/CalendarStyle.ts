@@ -223,6 +223,7 @@ button.rbc-input::-moz-focus-inner {
   cursor: pointer;
   width: 100%;
   text-align: left;
+  font-size: 0.8em;
 }
 
 .rbc-slot-selecting .rbc-event {
@@ -240,6 +241,7 @@ button.rbc-input::-moz-focus-inner {
 
 .rbc-event-label {
   font-size: 80%;
+  line-height: 1.5;
 }
 
 .rbc-event-overlaps {
