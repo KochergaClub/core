@@ -22,6 +22,7 @@ export default (props: any) => {
         selectable
         resizable
         localizer={localizer}
+        showMultiDayTimes={true}
         popup={true}
         defaultView={BigCalendar.Views.WEEK}
         scrollToTime={new Date('2000-01-01 09:00:00')}
