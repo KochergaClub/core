@@ -35,8 +35,8 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
     });
 
     if (!response.ok) {
-      const json = await response.json(); // FIXME - this line can fail
-      window.alert(`Error: ${JSON.stringify(json)}`);
+      const body = await response.text();
+      window.alert(`Error: ${JSON.stringify(body)}`);
       return;
     }
 
@@ -57,9 +57,8 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
   return (
     <Modal isOpen={isOpen} onOpened={() => inputRef.current.focus()}>
       <Modal.Header toggle={() => setOpen(!isOpen)}>
-        Создать событие {moment(start).format('HH:mm')}–{moment(end).format(
-          'HH:mm'
-        )}
+        Создать событие {moment(start).format('DD MMMM')}{' '}
+        {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
         <input type="text" placeholder="Название события" ref={inputRef} />

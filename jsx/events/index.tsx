@@ -74,7 +74,6 @@ export default (props: Props) => {
         `${socketProtocol}//${window.location.host}/ws/events/`
       );
       socket.onmessage = async e => {
-        console.log(e);
         fetchEvents();
       };
 
@@ -91,6 +90,11 @@ export default (props: Props) => {
 
   const resizeEvent = useCallback(
     async ({ event, start, end }: { event: Event; start: Date; end: Date }) => {
+      dispatch({
+        type: 'PRE_RESIZE',
+        payload: { event, start: moment(start), end: moment(end) },
+      });
+
       const response = await fetch(`/api/event/${event.id}`, {
         method: 'PATCH',
         headers: {
@@ -104,8 +108,8 @@ export default (props: Props) => {
       });
 
       if (!response.ok) {
-        const json = await response.json(); // FIXME - this line can fail
-        window.alert(`Error: ${JSON.stringify(json)}`);
+        const body = await response.text();
+        window.alert(`Error: ${JSON.stringify(body)}`);
         return;
       }
 
@@ -119,8 +123,10 @@ export default (props: Props) => {
     []
   );
 
-  const onRangeChange = range => {
-    let start, end;
+  const onRangeChange = (range: any) => {
+    let start: Date | undefined;
+    let end: Date | undefined;
+
     if (Array.isArray(range)) {
       start = range[0];
       end = range[range.length - 1];

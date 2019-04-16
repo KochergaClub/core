@@ -6,6 +6,7 @@ export interface Event {
   room: string;
   start: string;
   end: string;
+  saving?: boolean;
 }
 
 export interface EventStore {
@@ -19,6 +20,15 @@ export interface CreateAction {
     end: moment.Moment;
     title: string;
     id: string;
+  };
+}
+
+export interface PreResizeAction {
+  type: 'PRE_RESIZE';
+  payload: {
+    event: Event;
+    start: moment.Moment;
+    end: moment.Moment;
   };
 }
 
@@ -38,7 +48,11 @@ export interface ReplaceAllAction {
   };
 }
 
-export type Action = CreateAction | ResizeAction | ReplaceAllAction;
+export type Action =
+  | CreateAction
+  | PreResizeAction
+  | ResizeAction
+  | ReplaceAllAction;
 
 export const reducer = (store: EventStore, action: Action) => {
   switch (action.type) {
@@ -56,6 +70,20 @@ export const reducer = (store: EventStore, action: Action) => {
           },
         ],
       };
+    case 'PRE_RESIZE':
+      return {
+        ...store,
+        events: store.events.map(existingEvent => {
+          return existingEvent.id == action.payload.event.id
+            ? {
+                ...existingEvent,
+                start: action.payload.start.format(),
+                end: action.payload.end.format(),
+                saving: true,
+              }
+            : existingEvent;
+        }),
+      };
     case 'RESIZE':
       return {
         ...store,
@@ -65,6 +93,7 @@ export const reducer = (store: EventStore, action: Action) => {
                 ...existingEvent,
                 start: action.payload.start.format(),
                 end: action.payload.end.format(),
+                saving: false,
               }
             : existingEvent;
         }),
