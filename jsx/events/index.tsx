@@ -7,7 +7,7 @@ import Page from '../components/Page';
 import Calendar from './components/Calendar';
 import EventModal from './components/EventModal';
 
-import { Event, EventStore, reducer } from './types';
+import { Event, reducer } from './types';
 import { EventDispatch } from './contexts';
 
 const startAccessor = (event: Event) => {
@@ -21,35 +21,67 @@ declare global {
   }
 }
 
-export default (props: { events: EventStore; csrfToken: string }) => {
-  const [events, dispatch] = useReducer(reducer, props.events);
+interface Props {
+  events: Event[];
+  range: { start: string; end: string };
+  csrfToken: string;
+}
 
+export default (props: Props) => {
+  const [store, dispatch] = useReducer(reducer, {
+    events: props.events,
+  });
+
+  const [range, setRange] = useState(() => ({
+    start: moment(props.range.start),
+    end: moment(props.range.end),
+  }));
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [editingStart, setEditingStart] = useState();
   const [editingEnd, setEditingEnd] = useState();
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.WebSocket) {
-      return;
-    }
-    const socketProtocol =
-      window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const socket = new window.WebSocket(
-      `${socketProtocol}//${window.location.host}/ws/events/`
-    );
-    socket.onmessage = async e => {
+  const fetchEvents = useCallback(
+    async () => {
       const response = await fetch(
-        '/api/events?from_date=2019-04-01&to_date-2019-05-01'
+        `/api/events?from_date=${range.start.format(
+          'YYYY-MM-DD'
+        )}&to_date=${range.end.format('YYYY-MM-DD')}`
       );
       const json = await response.json();
       dispatch({
         type: 'REPLACE_ALL',
         payload: { events: json },
       });
-    };
+    },
+    [range]
+  );
 
-    return () => socket.close();
-  }, []);
+  useEffect(
+    () => {
+      fetchEvents();
+    },
+    [range, fetchEvents]
+  );
+
+  useEffect(
+    () => {
+      if (typeof window === 'undefined' || !window.WebSocket) {
+        return;
+      }
+      const socketProtocol =
+        window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const socket = new window.WebSocket(
+        `${socketProtocol}//${window.location.host}/ws/events/`
+      );
+      socket.onmessage = async e => {
+        console.log(e);
+        fetchEvents();
+      };
+
+      return () => socket.close();
+    },
+    [fetchEvents]
+  );
 
   const newEvent = useCallback(({ start, end }: { start: Date; end: Date }) => {
     setEditingStart(start);
@@ -87,17 +119,30 @@ export default (props: { events: EventStore; csrfToken: string }) => {
     []
   );
 
+  const onRangeChange = range => {
+    let start, end;
+    if (Array.isArray(range)) {
+      start = range[0];
+      end = range[range.length - 1];
+    } else {
+      start = range.start;
+      end = range.end;
+    }
+    setRange({ start: moment(start), end: moment(end) });
+  };
+
   return (
     <Page title="Календарь событий" team csrfToken={props.csrfToken}>
       <h1>Календарь событий</h1>
       <EventDispatch.Provider value={dispatch}>
         <Calendar
-          events={events}
+          events={store.events}
           startAccessor={startAccessor}
           endAccessor={endAccessor}
           onSelectSlot={newEvent}
           onEventResize={resizeEvent}
           onEventDrop={resizeEvent}
+          onRangeChange={onRangeChange}
         />
 
         {modalIsOpen && (
