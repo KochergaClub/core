@@ -8,6 +8,8 @@ export interface Event {
   end: string;
 }
 
+export type EventStore = Event[];
+
 export interface CreateAction {
   type: 'CREATE';
   payload: {
@@ -27,9 +29,16 @@ export interface ResizeAction {
   };
 }
 
-export type Action = CreateAction | ResizeAction;
+export interface ReplaceAllAction {
+  type: 'REPLACE_ALL';
+  payload: {
+    events: Event[];
+  };
+}
 
-export const reducer = (events: Event[], action: Action) => {
+export type Action = CreateAction | ResizeAction | ReplaceAllAction;
+
+export const reducer = (events: EventStore, action: Action) => {
   switch (action.type) {
     case 'CREATE':
       return [
@@ -52,6 +61,8 @@ export const reducer = (events: Event[], action: Action) => {
             }
           : existingEvent;
       });
+    case 'REPLACE_ALL':
+      return action.payload.events;
     default:
       return events;
   }

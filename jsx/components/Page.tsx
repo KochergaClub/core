@@ -46,10 +46,8 @@ const Page = ({ title, team, children, noMenu, csrfToken }: Props) => {
     <CSRFTokenContext.Provider value={csrfToken}>
       <div>
         <GlobalStyle />
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>{title}</title>
-        </Helmet>
+        {/* https://github.com/nfl/react-helmet/issues/373 */}
+        <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
         {noMenu || <TildaMenu team={team} />}
         <Main>{children}</Main>
       </div>
