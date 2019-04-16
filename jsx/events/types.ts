@@ -70,7 +70,10 @@ export const reducer = (store: EventStore, action: Action) => {
         }),
       };
     case 'REPLACE_ALL':
-      return store; // return action.payload.events;
+      return {
+        ...store,
+        events: action.payload.events,
+      };
     default:
       return store;
   }
