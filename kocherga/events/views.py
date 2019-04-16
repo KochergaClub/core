@@ -17,9 +17,9 @@ class FullCalendarViewerMixin(UserPassesTestMixin):
 
 class MainView(FullCalendarViewerMixin, View):
     def get(self, request):
-        events = Event.objects.filter(
-            start__gte=datetime.now(TZ) - timedelta(weeks=3),
-            end__lte=datetime.now(TZ) + timedelta(weeks=3),
+        events = Event.objects.list_events(
+            from_date=(datetime.now(TZ) - timedelta(weeks=3)).date(),
+            to_date=(datetime.now(TZ) + timedelta(weeks=3)).date(),
         )
 
         return react_render(request, 'events/index.tsx', {
