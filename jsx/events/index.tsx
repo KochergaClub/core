@@ -29,12 +29,13 @@ export default (props: { events: EventStore; csrfToken: string }) => {
   const [editingEnd, setEditingEnd] = useState();
 
   useEffect(() => {
-    console.log('useEffect');
     if (typeof window === 'undefined' || !window.WebSocket) {
       return;
     }
+    const socketProtocol =
+      window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const socket = new window.WebSocket(
-      `ws://${window.location.host}/ws/events/`
+      `${socketProtocol}//${window.location.host}/ws/events/`
     );
     socket.onmessage = async e => {
       const response = await fetch(
