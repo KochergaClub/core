@@ -15,6 +15,16 @@ const startAccessor = (event: Event) => {
 };
 const endAccessor = (event: Event) => new Date(event.end);
 
+const eventPropGetter = (event: Event) => {
+  const style = {};
+  if (event.saving) {
+    style['backgroundColor'] = '#888';
+  }
+  return {
+    style,
+  };
+};
+
 declare global {
   interface Window {
     WebSocket: any;
@@ -149,6 +159,7 @@ export default (props: Props) => {
           onEventResize={resizeEvent}
           onEventDrop={resizeEvent}
           onRangeChange={onRangeChange}
+          eventPropGetter={eventPropGetter}
         />
 
         {modalIsOpen && (
