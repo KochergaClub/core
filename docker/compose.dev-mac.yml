@@ -74,21 +74,6 @@ services:
     << : *common
     command: npx tsc --watch
 
-  ludwig:
-    << : *common
-    command: poetry run ./scripts/ludwig.py
-    ports:
-      - "5200:80"
-    depends_on:
-      - db
-    restart: always
-
-  ludwig_lt:
-    << : *common
-    command: npx lt --port 80 --subdomain kocherga-dev2 --local-host ludwig --print-requests
-    depends_on:
-      - ludwig
-
 volumes:
   code:
     external: true

@@ -1,6 +1,7 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useState, useRef } from 'react';
 
 import moment from 'moment';
+import Select from 'react-select';
 
 import { CSRFTokenContext } from '../../components/Page';
 
@@ -15,44 +16,64 @@ interface Props {
   end: Date;
 }
 
+const roomOptions = [
+  { value: '', label: '(не выбрана)' },
+  { value: 'Лекционная', label: 'Лекционная' },
+  { value: 'Летняя', label: 'Летняя' },
+  { value: 'ГЭБ', label: 'ГЭБ' },
+  { value: 'Китайская', label: 'Китайская' },
+];
+
 const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
   const dispatch = useContext(EventDispatch);
   const csrfToken = useContext(CSRFTokenContext);
   const inputRef = useRef(null);
 
-  const create = useCallback(async () => {
-    const response = await fetch('/api/events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken,
-      },
-      body: JSON.stringify({
-        start: start,
-        end: end,
-        title: inputRef.current.value,
-      }),
-    });
+  const [title, setTitle] = useState('');
+  const [room, setRoom] = useState(roomOptions[0]);
 
-    if (!response.ok) {
-      const body = await response.text();
-      window.alert(`Error: ${JSON.stringify(body)}`);
-      return;
-    }
+  const create = useCallback(
+    async () => {
+      const response = await fetch('/api/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+        },
+        body: JSON.stringify({
+          start,
+          end,
+          title,
+          location: room.value,
+        }),
+      });
 
-    const json = await response.json();
+      if (!response.ok) {
+        const body = await response.text();
+        window.alert(`Error: ${JSON.stringify(body)}`);
+        return;
+      }
 
-    dispatch({
-      type: 'CREATE',
-      payload: {
-        start: moment(json.start),
-        end: moment(json.end),
-        title: json.title,
-        id: json.id,
-      },
-    });
-    setOpen(false);
-  }, []);
+      const json = await response.json();
+
+      dispatch({
+        type: 'CREATE',
+        payload: {
+          start: moment(json.start),
+          end: moment(json.end),
+          title: json.title,
+          room: json.location,
+          id: json.id,
+        },
+      });
+      setOpen(false);
+    },
+    [title, room]
+  );
+
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <Modal isOpen={isOpen} onOpened={() => inputRef.current.focus()}>
@@ -61,7 +82,17 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <input type="text" placeholder="Название события" ref={inputRef} />
+        <input
+          type="text"
+          placeholder="Название события"
+          ref={inputRef}
+          onChange={e => setTitle(e.currentTarget.value)}
+        />
+        <Select
+          value={room}
+          onChange={selected => setRoom(selected)}
+          options={roomOptions}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={create}>Создать</Button>

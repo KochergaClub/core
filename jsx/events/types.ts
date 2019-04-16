@@ -19,6 +19,7 @@ export interface CreateAction {
     start: moment.Moment;
     end: moment.Moment;
     title: string;
+    room: string;
     id: string;
   };
 }

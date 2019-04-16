@@ -6,6 +6,7 @@ import Page from '../components/Page';
 
 import Calendar from './components/Calendar';
 import EventModal from './components/EventModal';
+import CalendarEvent from './components/CalendarEvent';
 
 import { Event, reducer } from './types';
 import { EventDispatch } from './contexts';
@@ -160,16 +161,17 @@ export default (props: Props) => {
           onEventDrop={resizeEvent}
           onRangeChange={onRangeChange}
           eventPropGetter={eventPropGetter}
+          components={{
+            event: CalendarEvent,
+          }}
         />
 
-        {modalIsOpen && (
-          <EventModal
-            isOpen={modalIsOpen}
-            start={editingStart}
-            end={editingEnd}
-            setOpen={setModalIsOpen}
-          />
-        )}
+        <EventModal
+          isOpen={modalIsOpen}
+          start={editingStart}
+          end={editingEnd}
+          setOpen={setModalIsOpen}
+        />
       </EventDispatch.Provider>
     </Page>
   );
