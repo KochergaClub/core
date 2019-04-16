@@ -109,9 +109,11 @@ class EventSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         event = models.Event(**validated_data)
         kocherga.events.db.insert_event(event)
+        models.Event.objects.notify_update()  # send notification message to websocket
         return event
 
     def update(self, instance, validated_data):
         event = super().update(instance, validated_data)
         event.patch_google()
+        models.Event.objects.notify_update()  # send notification message to websocket
         return event

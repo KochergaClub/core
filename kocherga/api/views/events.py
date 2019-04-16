@@ -40,7 +40,7 @@ class RootView(ListCreateAPIView):
             return d
 
         return Event.objects.list_events(
-            date=self.request.query_params.get("date"),
+            date=arg2date("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
         )

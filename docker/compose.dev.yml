@@ -34,6 +34,11 @@ services:
       - "9222:9222"
     privileged: true
 
+  redis:
+    image: redis:5.0
+    ports:
+      - 6379:6379
+
   api:
     << : *common
     build:
@@ -41,13 +46,14 @@ services:
       dockerfile: ./docker/Dockerfile
       args:
         NPM_TOKEN: ${TOKEN}
-    command: poetry run ./manage.py runserver 0.0.0.0:80
+    command: npx nodemon -w ./kocherga --exec poetry run ./manage.py runserver --noreload 0.0.0.0:80
     ports:
       - "8000:80"
     depends_on:
       - db
       - render-server
       - chrome
+      - redis
     restart: always
 
   render-server:

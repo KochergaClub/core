@@ -5,6 +5,9 @@ from dateutil.tz import tzutc
 import dateutil.parser
 from datetime import datetime, time
 
+from asgiref.sync import async_to_sync
+import channels.layers
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -34,6 +37,13 @@ def ts_now():
 
 
 class EventManager(models.Manager):
+    def notify_update(self):
+        async_to_sync(channels.layers.get_channel_layer().group_send)(
+            'events_group', {
+                'type': 'notify.update',
+            }
+        )
+
     def list_events(
         self,
         date: datetime.date = None,

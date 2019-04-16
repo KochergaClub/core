@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'react',
     'kocherga.auth',
     'kocherga.zadarma',
@@ -108,6 +109,16 @@ REACT = {
 }
 
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
+ASGI_APPLICATION = 'kocherga.django.routing.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
