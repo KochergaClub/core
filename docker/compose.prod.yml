@@ -46,6 +46,17 @@ services:
       - redis
     restart: always
 
+  api_async:
+    << : *common
+    command: poetry run daphne --port 80 --bind 0.0.0.0 kocherga.django.asgi:application
+    ports:
+      - "127.0.0.1:5301:80"
+    depends_on:
+      - render-server
+      - chrome
+      - redis
+    restart: always
+
   render-server:
     << : *common
     command: /usr/bin/node ./static/dist/render-server.js
