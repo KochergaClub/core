@@ -67,7 +67,7 @@ export const reducer = (store: EventStore, action: Action) => {
             end: action.payload.end.format(),
             title: action.payload.title,
             id: action.payload.id,
-            room: 'TODO',
+            room: action.payload.room,
           },
         ],
       };
