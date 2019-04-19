@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 import moment from 'moment';
 
 import Page from '../components/Page';
-import { getCSRFToken } from '../utils';
+import { getCSRFToken, useListeningWebSocket } from '../utils';
 
 import Calendar from './components/Calendar';
 import EventModal from './components/EventModal';
@@ -74,24 +74,7 @@ export default (props: Props) => {
     [range, fetchEvents]
   );
 
-  useEffect(
-    () => {
-      if (typeof window === 'undefined' || !window.WebSocket) {
-        return;
-      }
-      const socketProtocol =
-        window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const socket = new window.WebSocket(
-        `${socketProtocol}//${window.location.host}/ws/events/`
-      );
-      socket.onmessage = async e => {
-        fetchEvents();
-      };
-
-      return () => socket.close();
-    },
-    [fetchEvents]
-  );
+  useListeningWebSocket('ws/events/', fetchEvents);
 
   const newEvent = useCallback(({ start, end }: { start: Date; end: Date }) => {
     setEditingStart(start);
