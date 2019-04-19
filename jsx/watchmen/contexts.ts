@@ -3,7 +3,6 @@ import React from 'react';
 import { Shift, Watchman } from './types';
 
 interface ScheduleContextShape {
-  csrfToken: string;
   watchmen: Watchman[];
   editing: boolean;
   setEditing: (value: boolean) => void;

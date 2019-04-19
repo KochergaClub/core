@@ -18,7 +18,6 @@ interface Props {
   schedule: Shift[];
   editable: boolean;
   watchmen: Watchman[];
-  csrfToken: string;
   from_date: string;
   to_date: string;
 }
@@ -45,7 +44,6 @@ export default (props: Props) => {
 
   const contextValue = {
     watchmen: props.watchmen,
-    csrfToken: props.csrfToken,
     editing,
     setEditing,
     setShift,

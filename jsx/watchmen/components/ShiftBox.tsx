@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import useOnClickOutside from 'use-onclickoutside';
 
+import { getCSRFToken } from '../../utils';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
 import Picker from './Picker';
@@ -67,8 +68,6 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
   const { editing, setShift } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
-  const { csrfToken } = useContext(ScheduleContext);
-
   const flipExpand = useCallback(
     () => {
       setExpanded(!expanded);
@@ -95,7 +94,7 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
+            'X-CSRFToken': getCSRFToken(),
           },
           body: JSON.stringify({
             watchman: watchman ? watchman.short_name : '',

@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.shortcuts import render
-import django.middleware.csrf
 
 import json
 
@@ -9,7 +8,6 @@ from react.render_server import render_server
 
 def react_render(request, template, params={}, status=200):
     params = params.copy()
-    params['csrfToken'] = django.middleware.csrf.get_token(request)
 
     # react_html = render_component(template, params)
     react_html = render_server.render(template, params)

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 import moment from 'moment';
 
 import Page from '../components/Page';
+import { getCSRFToken } from '../utils';
 
 import Calendar from './components/Calendar';
 import EventModal from './components/EventModal';
@@ -35,7 +36,6 @@ declare global {
 interface Props {
   events: Event[];
   range: { start: string; end: string };
-  csrfToken: string;
 }
 
 export default (props: Props) => {
@@ -110,7 +110,7 @@ export default (props: Props) => {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': props.csrfToken,
+          'X-CSRFToken': getCSRFToken(),
         },
         body: JSON.stringify({
           start,
@@ -149,7 +149,7 @@ export default (props: Props) => {
   };
 
   return (
-    <Page title="Календарь событий" team csrfToken={props.csrfToken}>
+    <Page title="Календарь событий" team>
       <h1>Календарь событий</h1>
       <EventDispatch.Provider value={dispatch}>
         <Calendar

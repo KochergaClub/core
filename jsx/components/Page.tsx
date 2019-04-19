@@ -36,22 +36,17 @@ interface Props {
   team?: boolean;
   children: React.ReactNode;
   noMenu?: boolean;
-  csrfToken?: string;
 }
 
-export const CSRFTokenContext = React.createContext<string | null>(null);
-
-const Page = ({ title, team, children, noMenu, csrfToken }: Props) => {
+const Page = ({ title, team, children, noMenu }: Props) => {
   return (
-    <CSRFTokenContext.Provider value={csrfToken}>
-      <div>
-        <GlobalStyle />
-        {/* https://github.com/nfl/react-helmet/issues/373 */}
-        <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
-        {noMenu || <TildaMenu team={team} />}
-        <Main>{children}</Main>
-      </div>
-    </CSRFTokenContext.Provider>
+    <div>
+      <GlobalStyle />
+      {/* https://github.com/nfl/react-helmet/issues/373 */}
+      <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
+      {noMenu || <TildaMenu team={team} />}
+      <Main>{children}</Main>
+    </div>
   );
 };
 

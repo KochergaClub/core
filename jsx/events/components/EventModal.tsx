@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useState, useRef } from 'react';
 import moment from 'moment';
 import Select from 'react-select';
 
-import { CSRFTokenContext } from '../../components/Page';
+import { getCSRFToken } from '../../utils';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
@@ -26,7 +26,6 @@ const roomOptions = [
 
 const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
   const dispatch = useContext(EventDispatch);
-  const csrfToken = useContext(CSRFTokenContext);
   const inputRef = useRef(null);
 
   const [title, setTitle] = useState('');
@@ -38,7 +37,7 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken,
+          'X-CSRFToken': getCSRFToken(),
         },
         body: JSON.stringify({
           start,

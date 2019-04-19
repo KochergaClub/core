@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Page from '../components/Page';
+import CSRFInput from '../components/CSRFInput';
 
 import { Button } from '@kocherga/frontkit';
 
@@ -19,7 +20,7 @@ const inflect = (n: number) => {
   return '';
 };
 
-const CustomerSection = ({ customer, orders_count, csrfToken, urls }) => (
+const CustomerSection = ({ customer, orders_count, urls }) => (
   <div>
     <h2>Посещения</h2>
     <p>
@@ -58,7 +59,7 @@ const CustomerSection = ({ customer, orders_count, csrfToken, urls }) => (
       на <a href="https://now.kocherga.club">now.kocherga.club</a> и телевизорах
       в Кочерге.
       <form method="post" action={urls.set_privacy_mode}>
-        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+        <CSRFInput />
         <input
           type="hidden"
           value={oppositePrivacyMode(customer.privacy_mode)}
@@ -83,14 +84,7 @@ const NonCustomerSection = () => (
   </p>
 );
 
-export default ({
-  email,
-  customer,
-  orders_count,
-  is_staff,
-  csrfToken,
-  urls,
-}) => (
+export default ({ email, customer, orders_count, is_staff, urls }) => (
   <Page title="Личный кабинет">
     <div>
       <h1>Личный кабинет Кочерги</h1>
@@ -104,7 +98,6 @@ export default ({
         <CustomerSection
           customer={customer}
           orders_count={orders_count}
-          csrfToken={csrfToken}
           urls={urls}
         />
       ) : (

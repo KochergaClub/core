@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import CSRFInput from '../components/CSRFInput';
 import Page from '../components/Page';
 
 import { Button, Column } from '@kocherga/frontkit';
@@ -20,12 +21,12 @@ const LoginForm = styled.form`
   }
 `;
 
-const LoginPage = ({ csrfToken, djangoForm }) => (
+const LoginPage = ({ djangoForm }) => (
   <Page title="Логин">
     <AuthContainer>
       <LoginForm method="post">
         <Column stretch>
-          <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+          <CSRFInput />
           <div dangerouslySetInnerHTML={{ __html: djangoForm }} />
           <Button type="submit">Войти</Button>
         </Column>

@@ -10,13 +10,11 @@ interface Cheque {
   is_redeemed: boolean;
 }
 
-export default ({
-  cheques,
-  csrfToken,
-}: {
+interface Props {
   cheques: Cheque[];
-  csrfToken: string;
-}) => (
+}
+
+export default ({ cheques }: Props) => (
   <Page title="Касса" team>
     <h1>Касса</h1>
     <h2>Выплаты</h2>
@@ -27,7 +25,6 @@ export default ({
           {cheque.is_redeemed || (
             <ActionForm
               action={`/team/cashier/cheque/${cheque.id}/action/redeem`}
-              csrfToken={csrfToken}
               title="Выплачено"
             />
           )}
