@@ -27,12 +27,6 @@ const eventPropGetter = (event: Event) => {
   };
 };
 
-declare global {
-  interface Window {
-    WebSocket: any;
-  }
-}
-
 interface Props {
   events: Event[];
   range: { start: string; end: string };

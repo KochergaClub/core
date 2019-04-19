@@ -10,6 +10,12 @@ export const getCSRFToken = () => {
   );
 };
 
+declare global {
+  interface Window {
+    WebSocket: any;
+  }
+}
+
 export const useListeningWebSocket = (
   path: string,
   onmessage: (e: any) => void
