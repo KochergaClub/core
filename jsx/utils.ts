@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const getCSRFToken = () => {
   if (typeof document === 'undefined') {
@@ -14,6 +14,15 @@ export const useListeningWebSocket = (
   path: string,
   onmessage: (e: any) => void
 ) => {
+  // avoid re-creating websocket when onmessage updates
+  const cbRef = useRef(onmessage);
+  useEffect(
+    () => {
+      cbRef.current = onmessage;
+    },
+    [onmessage]
+  );
+
   useEffect(
     () => {
       if (typeof window === 'undefined' || !window.WebSocket) {
@@ -25,11 +34,11 @@ export const useListeningWebSocket = (
         `${socketProtocol}//${window.location.host}/${path}`
       );
       socket.onmessage = async (e: any) => {
-        onmessage(e);
+        cbRef.current(e);
       };
 
       return () => socket.close();
     },
-    [path, onmessage]
+    [path]
   );
 };
