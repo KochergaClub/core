@@ -4,24 +4,31 @@ export interface Event {
   id: string;
   title: string;
   room: string;
+  start: moment.Moment;
+  end: moment.Moment;
+}
+
+export interface ServerEvent {
+  id: string;
+  title: string;
+  room: string;
   start: string;
   end: string;
+}
+
+// Supports client-side state such as event.saving flag.
+// We store LocalEvent objects in React state but accept Event objects when interacting with API.
+export interface LocalEvent extends Event {
   saving?: boolean;
 }
 
 export interface EventStore {
-  events: Event[];
+  events: LocalEvent[];
 }
 
 export interface CreateAction {
   type: 'CREATE';
-  payload: {
-    start: moment.Moment;
-    end: moment.Moment;
-    title: string;
-    room: string;
-    id: string;
-  };
+  payload: Event;
 }
 
 export interface PreResizeAction {
@@ -55,6 +62,18 @@ export type Action =
   | ResizeAction
   | ReplaceAllAction;
 
+export const serverEventToEvent = (event: ServerEvent): Event => {
+  return {
+    ...event,
+    start: moment(event.start),
+    end: moment(event.end),
+  };
+};
+
+export const getInitialState = (events: ServerEvent[]) => ({
+  events: events.map(serverEventToEvent),
+});
+
 export const reducer = (store: EventStore, action: Action) => {
   switch (action.type) {
     case 'CREATE':
@@ -63,8 +82,8 @@ export const reducer = (store: EventStore, action: Action) => {
         events: [
           ...store.events,
           {
-            start: action.payload.start.format(),
-            end: action.payload.end.format(),
+            start: action.payload.start,
+            end: action.payload.end,
             title: action.payload.title,
             id: action.payload.id,
             room: action.payload.room,
@@ -78,8 +97,8 @@ export const reducer = (store: EventStore, action: Action) => {
           return existingEvent.id == action.payload.event.id
             ? {
                 ...existingEvent,
-                start: action.payload.start.format(),
-                end: action.payload.end.format(),
+                start: action.payload.start,
+                end: action.payload.end,
                 saving: true,
               }
             : existingEvent;
@@ -92,8 +111,8 @@ export const reducer = (store: EventStore, action: Action) => {
           return existingEvent.id == action.payload.event.id
             ? {
                 ...existingEvent,
-                start: action.payload.start.format(),
-                end: action.payload.end.format(),
+                start: action.payload.start,
+                end: action.payload.end,
                 saving: false,
               }
             : existingEvent;
@@ -103,6 +122,47 @@ export const reducer = (store: EventStore, action: Action) => {
       return {
         ...store,
         events: action.payload.events,
+      };
+    default:
+      return store;
+  }
+};
+
+export interface UIStore {
+  modalIsOpen: boolean;
+  editingStart?: moment.Moment;
+  editingEnd?: moment.Moment;
+}
+
+interface StartNewUIAction {
+  type: 'START_NEW';
+  payload: {
+    start: moment.Moment;
+    end: moment.Moment;
+  };
+}
+
+interface CloseNewUIAction {
+  type: 'CLOSE_NEW';
+}
+
+export type UIAction = StartNewUIAction | CloseNewUIAction;
+
+export const uiReducer = (store: UIStore, action: UIAction) => {
+  switch (action.type) {
+    case 'START_NEW':
+      return {
+        ...store,
+        modalIsOpen: true,
+        editingStart: action.payload.start,
+        editingEnd: action.payload.end,
+      };
+    case 'CLOSE_NEW':
+      return {
+        ...store,
+        modalIsOpen: false,
+        editingStart: undefined,
+        editingEnd: undefined,
       };
     default:
       return store;

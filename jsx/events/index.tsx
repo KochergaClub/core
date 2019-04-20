@@ -6,18 +6,26 @@ import Page from '../components/Page';
 import { useListeningWebSocket, apiCall } from '../utils';
 
 import Calendar from './components/Calendar';
-import EventModal from './components/EventModal';
+import UILayer from './components/UILayer';
 import CalendarEvent from './components/CalendarEvent';
 
-import { Event, reducer } from './types';
+import {
+  Event,
+  ServerEvent,
+  LocalEvent,
+  getInitialState,
+  reducer,
+  uiReducer,
+  serverEventToEvent,
+} from './types';
 import { EventDispatch } from './contexts';
 
-const startAccessor = (event: Event) => {
-  return new Date(event.start);
+const startAccessor = (event: LocalEvent) => {
+  return event.start.toDate();
 };
-const endAccessor = (event: Event) => new Date(event.end);
+const endAccessor = (event: LocalEvent) => event.end.toDate();
 
-const eventPropGetter = (event: Event) => {
+const eventPropGetter = (event: LocalEvent) => {
   const style = {};
   if (event.saving) {
     style['backgroundColor'] = '#888';
@@ -28,14 +36,12 @@ const eventPropGetter = (event: Event) => {
 };
 
 interface Props {
-  events: Event[];
+  events: ServerEvent[];
   range: { start: string; end: string };
 }
 
 export default (props: Props) => {
-  const [store, dispatch] = useReducer(reducer, {
-    events: props.events,
-  });
+  const [store, dispatch] = useReducer(reducer, props.events, getInitialState);
 
   const [range, setRange] = useState(() => ({
     start: moment(props.range.start),
@@ -44,16 +50,16 @@ export default (props: Props) => {
 
   const fetchEvents = useCallback(
     async () => {
-      const json = await apiCall(
+      const json = (await apiCall(
         `events?from_date=${range.start.format(
           'YYYY-MM-DD'
         )}&to_date=${range.end.format('YYYY-MM-DD')}`,
         'GET'
-      );
+      )) as ServerEvent[];
 
       dispatch({
         type: 'REPLACE_ALL',
-        payload: { events: json },
+        payload: { events: json.map(serverEventToEvent) },
       });
     },
     [range]
@@ -81,15 +87,24 @@ export default (props: Props) => {
     setRange({ start: moment(start), end: moment(end) });
   };
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [editingStart, setEditingStart] = useState();
-  const [editingEnd, setEditingEnd] = useState();
+  const [uiStore, uiDispatch] = useReducer(uiReducer, {
+    modalIsOpen: false,
+    editingStart: undefined,
+    editingEnd: undefined,
+  });
 
-  const newEvent = useCallback(({ start, end }: { start: Date; end: Date }) => {
-    setEditingStart(start);
-    setEditingEnd(end);
-    setModalIsOpen(true);
-  }, []);
+  const startNewEvent = useCallback(
+    ({ start, end }: { start: Date; end: Date }) => {
+      uiDispatch({
+        type: 'START_NEW',
+        payload: {
+          start: moment(start),
+          end: moment(end),
+        },
+      });
+    },
+    []
+  );
 
   const resizeEvent = useCallback(
     async ({ event, start, end }: { event: Event; start: Date; end: Date }) => {
@@ -119,7 +134,7 @@ export default (props: Props) => {
           events={store.events}
           startAccessor={startAccessor}
           endAccessor={endAccessor}
-          onSelectSlot={newEvent}
+          onSelectSlot={startNewEvent}
           onEventResize={resizeEvent}
           onEventDrop={resizeEvent}
           onRangeChange={onRangeChange}
@@ -129,12 +144,7 @@ export default (props: Props) => {
           }}
         />
 
-        <EventModal
-          isOpen={modalIsOpen}
-          start={editingStart}
-          end={editingEnd}
-          setOpen={setModalIsOpen}
-        />
+        <UILayer uiStore={uiStore} uiDispatch={uiDispatch} />
       </EventDispatch.Provider>
     </Page>
   );

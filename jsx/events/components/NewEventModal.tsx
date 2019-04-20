@@ -1,19 +1,19 @@
-import React, { useCallback, useContext, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 
 import moment from 'moment';
 import Select from 'react-select';
 
 import { apiCall } from '../../utils';
+import { Event, ServerEvent, serverEventToEvent } from '../types';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
-import { EventDispatch } from '../contexts';
-
 interface Props {
   isOpen: boolean;
-  setOpen: (isOpen: boolean) => void;
-  start: Date;
-  end: Date;
+  start: moment.Moment;
+  end: moment.Moment;
+  onCreate: (e: Event) => void;
+  onClose: () => void;
 }
 
 const roomOptions = [
@@ -24,8 +24,7 @@ const roomOptions = [
   { value: 'Китайская', label: 'Китайская' },
 ];
 
-const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
-  const dispatch = useContext(EventDispatch);
+const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   const inputRef = useRef(null);
 
   const [title, setTitle] = useState('');
@@ -33,24 +32,15 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
 
   const create = useCallback(
     async () => {
-      const json = await apiCall('events', 'POST', {
-        start,
-        end,
+      const json = (await apiCall('events', 'POST', {
+        start: start.toDate(),
+        end: end.toDate(),
         title,
         location: room.value,
-      });
+      })) as ServerEvent;
 
-      dispatch({
-        type: 'CREATE',
-        payload: {
-          start: moment(json.start),
-          end: moment(json.end),
-          title: json.title,
-          room: json.location,
-          id: json.id,
-        },
-      });
-      setOpen(false);
+      const event = serverEventToEvent(json);
+      onCreate(event);
     },
     [title, room]
   );
@@ -61,7 +51,7 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
 
   return (
     <Modal isOpen={isOpen} onOpened={() => inputRef.current.focus()}>
-      <Modal.Header toggle={() => setOpen(!isOpen)}>
+      <Modal.Header toggle={onClose}>
         Создать событие {moment(start).format('DD MMMM')}{' '}
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
@@ -74,7 +64,9 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
         />
         <Select
           value={room}
-          onChange={selected => setRoom(selected)}
+          onChange={(selected: { value: string; label: string }) =>
+            setRoom(selected)
+          }
           options={roomOptions}
         />
       </Modal.Body>
@@ -85,4 +77,4 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
   );
 };
 
-export default EventModal;
+export default NewEventModal;

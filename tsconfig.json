@@ -5,6 +5,7 @@
   ],
   "compilerOptions": {
     "noImplicitAny": false,
+    "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "target": "es6",
     "module": "esnext",
