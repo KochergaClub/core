@@ -15,9 +15,11 @@ import {
   LocalEvent,
   getInitialState,
   reducer,
-  uiReducer,
   serverEventToEvent,
 } from './types';
+
+import { uiReducer } from './uiTypes';
+
 import { EventDispatch } from './contexts';
 
 const startAccessor = (event: LocalEvent) => {

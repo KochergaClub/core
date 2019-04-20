@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 
-import { Event, UIStore, UIAction } from '../types';
+import { Event } from '../types';
+import { UIStore, UIAction } from '../uiTypes';
 
 import NewEventModal from './NewEventModal';
 import { EventDispatch } from '../contexts';
