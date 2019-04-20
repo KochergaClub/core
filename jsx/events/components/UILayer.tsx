@@ -4,6 +4,7 @@ import { Event } from '../types';
 import { UIStore, UIAction } from '../uiTypes';
 
 import NewEventModal from './NewEventModal';
+import EditEventModal from './EditEventModal';
 import { EventDispatch } from '../contexts';
 
 interface Props {
@@ -36,6 +37,21 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     [uiDispatch]
   );
 
+  const onSave = useCallback(
+    (event: Event) => {
+      dispatch({
+        type: 'PATCH',
+        payload: {
+          event,
+        },
+      });
+      uiDispatch({
+        type: 'CLOSE_NEW',
+      });
+    },
+    [uiDispatch]
+  );
+
   if (uiStore.mode === 'new') {
     return (
       <NewEventModal
@@ -43,6 +59,17 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         start={uiStore.context.start}
         end={uiStore.context.end}
         onCreate={onCreate}
+        onClose={onClose}
+      />
+    );
+  }
+
+  if (uiStore.mode === 'edit') {
+    return (
+      <EditEventModal
+        isOpen={true}
+        event={uiStore.context.event}
+        onSave={onSave}
         onClose={onClose}
       />
     );

@@ -49,6 +49,13 @@ export interface ResizeAction {
   };
 }
 
+export interface PatchAction {
+  type: 'PATCH';
+  payload: {
+    event: Event;
+  };
+}
+
 export interface ReplaceAllAction {
   type: 'REPLACE_ALL';
   payload: {
@@ -60,6 +67,7 @@ export type Action =
   | CreateAction
   | PreResizeAction
   | ResizeAction
+  | PatchAction
   | ReplaceAllAction;
 
 export const serverEventToEvent = (event: ServerEvent): Event => {
@@ -114,6 +122,18 @@ export const reducer = (store: EventStore, action: Action) => {
                 start: action.payload.start,
                 end: action.payload.end,
                 saving: false,
+              }
+            : existingEvent;
+        }),
+      };
+    case 'PATCH':
+      return {
+        ...store,
+        events: store.events.map(existingEvent => {
+          return existingEvent.id == action.payload.event.id
+            ? {
+                ...action.payload.event,
+                saving: false, // FIXME - race conditions are possible if we get multiple patches out of order
               }
             : existingEvent;
         }),

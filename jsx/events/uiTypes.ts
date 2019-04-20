@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import { LocalEvent } from './types';
+
 interface NewUIStore {
   mode: 'new';
   context: {
@@ -8,11 +10,18 @@ interface NewUIStore {
   };
 }
 
+interface EditUIStore {
+  mode: 'edit';
+  context: {
+    event: LocalEvent;
+  };
+}
+
 interface PassiveUIStore {
   mode: 'passive';
 }
 
-export type UIStore = NewUIStore | PassiveUIStore;
+export type UIStore = NewUIStore | EditUIStore | PassiveUIStore;
 
 interface StartNewUIAction {
   type: 'START_NEW';
@@ -22,16 +31,21 @@ interface StartNewUIAction {
   };
 }
 
+interface StartEditUIAction {
+  type: 'START_EDIT';
+  payload: {
+    event: LocalEvent;
+  };
+}
+
 interface CloseNewUIAction {
   type: 'CLOSE_NEW';
 }
 
-export type UIAction = StartNewUIAction | CloseNewUIAction;
+export type UIAction = StartNewUIAction | StartEditUIAction | CloseNewUIAction;
 
-export const initialUIState = {
-  modalIsOpen: false,
-  editingStart: undefined,
-  editingEnd: undefined,
+export const initialUIState: UIStore = {
+  mode: 'passive',
 };
 
 export const uiReducer = (store: UIStore, action: UIAction): UIStore => {
@@ -46,6 +60,14 @@ export const uiReducer = (store: UIStore, action: UIAction): UIStore => {
     case 'CLOSE_NEW':
       return {
         mode: 'passive',
+      };
+    case 'START_EDIT':
+      // TODO - forbid EDIT if mode is 'new'?
+      return {
+        mode: 'edit',
+        context: {
+          event: action.payload.event,
+        },
       };
     default:
       return store;
