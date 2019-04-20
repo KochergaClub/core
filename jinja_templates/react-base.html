@@ -18,9 +18,7 @@
   </head>
   <body>
     {{ react_style | safe }}
-    <div id="react-app">
-      {{ react_html | safe }}
-    </div>
+    <div id="react-app">{{ react_html | safe }}</div>
     <script>
      // Info stored for re-rendering the app
      var store = {{ store | safe }};
