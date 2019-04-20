@@ -1,9 +1,11 @@
 import React, { useCallback, useState, useRef } from 'react';
 
+import styled from 'styled-components';
+
 import { apiCall } from '../../utils';
 import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
 
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+import { Button, Modal } from '@kocherga/frontkit';
 
 import EventFields from './EventFields';
 
@@ -14,6 +16,11 @@ interface Props {
   onClose: () => void;
   onDelete: (id: string) => void;
 }
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const EditEventModal = ({
   isOpen,
@@ -70,10 +77,14 @@ const EditEventModal = ({
         />
       </Modal.Body>
       <Modal.Footer>
-        <ControlsFooter>
-          <Button onClick={deleteCb}>Удалить</Button>
-          <Button onClick={saveCb}>Сохранить</Button>
-        </ControlsFooter>
+        <Footer>
+          <Button onClick={deleteCb} type="danger">
+            Удалить
+          </Button>
+          <Button onClick={saveCb} type="primary">
+            Сохранить
+          </Button>
+        </Footer>
       </Modal.Footer>
     </Modal>
   );
