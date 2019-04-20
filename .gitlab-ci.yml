@@ -18,14 +18,15 @@ test-lint:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run api poetry run flake8 kocherga/ --max-line-length=120
+    - docker-compose -f docker/compose.ci.yml run --rm api poetry run flake8 kocherga/ --max-line-length=120
 
 test-js:
   stage: test
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run api npx jest
+    - docker-compose -f docker/compose.ci.yml run --rm api npx jest
+    - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
 
 test-python:
   stage: test
@@ -33,7 +34,7 @@ test-python:
     TAG: $CI_COMMIT_REF_NAME
   script:
     - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
-    - docker-compose -f docker/compose.ci.yml run api poetry run pytest -m 'not google and not slack and not mailchimp and not ofd'
+    - docker-compose -f docker/compose.ci.yml run --rm api poetry run pytest -m 'not google and not slack and not mailchimp and not ofd'
 
 deploy-stack:
   stage: deploy
