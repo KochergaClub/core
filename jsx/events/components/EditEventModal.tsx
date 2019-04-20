@@ -10,14 +10,21 @@ interface Props {
   event: LocalEvent;
   onSave: (e: Event) => void;
   onClose: () => void;
+  onDelete: (id: string) => void;
 }
 
-const EditEventModal = ({ isOpen, onSave, onClose, event }: Props) => {
+const EditEventModal = ({
+  isOpen,
+  onSave,
+  onDelete,
+  onClose,
+  event,
+}: Props) => {
   const inputRef = useRef(null);
 
   const [title, setTitle] = useState('');
 
-  const save = useCallback(
+  const saveCb = useCallback(
     async () => {
       const json = (await apiCall(`event/${event.id}`, 'PATCH', {
         title,
@@ -25,7 +32,15 @@ const EditEventModal = ({ isOpen, onSave, onClose, event }: Props) => {
 
       onSave(serverEventToEvent(json));
     },
-    [title]
+    [event.id, title]
+  );
+
+  const deleteCb = useCallback(
+    async () => {
+      await apiCall(`event/${event.id}`, 'DELETE', undefined, false);
+      onDelete(event.id);
+    },
+    [event.id]
   );
 
   if (!isOpen) {
@@ -48,7 +63,8 @@ const EditEventModal = ({ isOpen, onSave, onClose, event }: Props) => {
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={save}>Сохранить</Button>
+        <Button onClick={deleteCb}>Удалить</Button>
+        <Button onClick={saveCb}>Сохранить</Button>
       </Modal.Footer>
     </Modal>
   );

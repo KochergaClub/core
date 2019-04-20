@@ -52,6 +52,21 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     [uiDispatch]
   );
 
+  const onDelete = useCallback(
+    (event_id: string) => {
+      dispatch({
+        type: 'DELETE',
+        payload: {
+          event_id,
+        },
+      });
+      uiDispatch({
+        type: 'CLOSE_NEW',
+      });
+    },
+    [uiDispatch]
+  );
+
   if (uiStore.mode === 'new') {
     return (
       <NewEventModal
@@ -70,6 +85,7 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         isOpen={true}
         event={uiStore.context.event}
         onSave={onSave}
+        onDelete={onDelete}
         onClose={onClose}
       />
     );

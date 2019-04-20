@@ -52,7 +52,8 @@ export const useListeningWebSocket = (
 export const apiCall = async (
   path: string,
   method: string,
-  payload?: object
+  payload?: object,
+  expectJSON: boolean = true
 ) => {
   const params: RequestInit = {
     method,
@@ -73,5 +74,7 @@ export const apiCall = async (
     return;
   }
 
-  return await response.json();
+  if (expectJSON) {
+    return await response.json();
+  }
 };

@@ -47,6 +47,13 @@ export interface PatchAction {
   };
 }
 
+export interface DeleteAction {
+  type: 'DELETE';
+  payload: {
+    event_id: string;
+  };
+}
+
 export interface ReplaceAllAction {
   type: 'REPLACE_ALL';
   payload: {
@@ -58,6 +65,7 @@ export type Action =
   | CreateAction
   | PreResizeAction
   | PatchAction
+  | DeleteAction
   | ReplaceAllAction;
 
 export const serverEventToEvent = (event: ServerEvent): Event => {
@@ -92,7 +100,7 @@ export const reducer = (store: EventStore, action: Action) => {
       return {
         ...store,
         events: store.events.map(existingEvent => {
-          return existingEvent.id == action.payload.event.id
+          return existingEvent.id === action.payload.event.id
             ? {
                 ...existingEvent,
                 start: action.payload.start,
@@ -106,12 +114,19 @@ export const reducer = (store: EventStore, action: Action) => {
       return {
         ...store,
         events: store.events.map(existingEvent => {
-          return existingEvent.id == action.payload.event.id
+          return existingEvent.id === action.payload.event.id
             ? {
                 ...action.payload.event,
                 saving: false, // FIXME - race conditions are possible if we get multiple patches out of order
               }
             : existingEvent;
+        }),
+      };
+    case 'DELETE':
+      return {
+        ...store,
+        events: store.events.filter(event => {
+          return event.id !== action.payload.event_id;
         }),
       };
     case 'REPLACE_ALL':
