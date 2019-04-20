@@ -9,6 +9,13 @@ interface ScheduleContextShape {
   setShift: (shift: Shift) => void;
 }
 
-export const ScheduleContext = React.createContext<ScheduleContextShape | null>(
-  null
-);
+export const ScheduleContext = React.createContext<ScheduleContextShape>({
+  watchmen: [],
+  editing: false,
+  setEditing: () => {
+    throw new Error('not implemented');
+  },
+  setShift: () => {
+    throw new Error('not implemented');
+  },
+});

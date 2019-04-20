@@ -41,7 +41,7 @@ interface Props {
 }
 
 interface ItemProps extends Props {
-  watchman?: Watchman;
+  watchman: Watchman | null;
   is_night: boolean;
 }
 
@@ -80,7 +80,7 @@ const Picker = (props: Props) => {
         />
       ))}
       <ThemeProvider theme={{ color: 'dark' }}>
-        <PickerItem is_night={true} {...props} />
+        <PickerItem is_night={true} watchman={null} {...props} />
       </ThemeProvider>
       <PickerItem is_night={false} watchman={null} {...props} />
     </PickerContainer>

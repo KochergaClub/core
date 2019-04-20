@@ -20,7 +20,7 @@ const EditEventModal = ({
   onClose,
   event,
 }: Props) => {
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState('');
 
@@ -48,7 +48,10 @@ const EditEventModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onOpened={() => inputRef.current.focus()}>
+    <Modal
+      isOpen={isOpen}
+      onOpened={() => inputRef.current && inputRef.current.focus()}
+    >
       <Modal.Header toggle={onClose}>
         Редактировать событие {event.start.format('DD MMMM')}{' '}
         {event.start.format('HH:mm')}–{event.end.format('HH:mm')}

@@ -11,6 +11,7 @@ it('create from empty', () => {
         end: moment('2020-05-01 21:00'),
         title: 'Some event',
         id: 'abcd',
+        room: 'r',
       },
     }
   );
@@ -24,8 +25,8 @@ it('create from non-empty', () => {
     {
       events: [
         {
-          start: moment('2020-04-01 12:00').format(),
-          end: moment('2020-04-01 13:00').format(),
+          start: moment('2020-04-01 12:00'),
+          end: moment('2020-04-01 13:00'),
           title: 'Older event',
           id: 'oldold',
           room: 'TODO',
@@ -39,6 +40,7 @@ it('create from non-empty', () => {
         end: moment('2020-05-01 21:00'),
         title: 'Some event',
         id: 'abcd',
+        room: 'r',
       },
     }
   );
@@ -51,15 +53,15 @@ it('REPLACE_ALL action', () => {
     {
       events: [
         {
-          start: moment('2020-04-01 12:00').format(),
-          end: moment('2020-04-01 13:00').format(),
+          start: moment('2020-04-01 12:00'),
+          end: moment('2020-04-01 13:00'),
           title: 'First event',
           id: 'first',
           room: 'TODO',
         },
         {
-          start: moment('2020-04-01 12:00').format(),
-          end: moment('2020-04-01 13:00').format(),
+          start: moment('2020-04-01 12:00'),
+          end: moment('2020-04-01 13:00'),
           title: 'Second event',
           id: 'second',
           room: 'TODO',
@@ -71,15 +73,15 @@ it('REPLACE_ALL action', () => {
       payload: {
         events: [
           {
-            start: moment('2020-04-01 12:00').format(),
-            end: moment('2020-04-01 13:00').format(),
+            start: moment('2020-04-01 12:00'),
+            end: moment('2020-04-01 13:00'),
             title: 'Third event',
             id: 'third',
             room: 'TODO',
           },
           {
-            start: moment('2020-04-01 12:00').format(),
-            end: moment('2020-04-01 13:00').format(),
+            start: moment('2020-04-01 12:00'),
+            end: moment('2020-04-01 13:00'),
             title: 'Fourth event',
             id: 'fourth',
             room: 'TODO',

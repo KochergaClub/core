@@ -4,6 +4,6 @@ import { Action } from './types';
 
 type EventDispatchShape = (a: Action) => void;
 
-export const EventDispatch = React.createContext<EventDispatchShape | null>(
-  null
+export const EventDispatch = React.createContext<EventDispatchShape>(
+  () => null
 );

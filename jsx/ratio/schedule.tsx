@@ -41,7 +41,7 @@ const ActivityBonus = styled.section`
   font-size: 24px;
 `;
 
-const formatTime = time => time.substr(0, 5);
+const formatTime = (time: string) => time.substr(0, 5);
 
 const Activity = ({ activity }) => {
   if (activity.activity_type == 'section') {
@@ -128,7 +128,7 @@ const PageHeader = styled.header`
 
 interface ActivityType {
   day: number;
-};
+}
 
 function groupByDay(schedule: ActivityType[]) {
   const scheduleByDay: { [key: number]: ActivityType[] } = {};
@@ -139,7 +139,9 @@ function groupByDay(schedule: ActivityType[]) {
     scheduleByDay[activity.day].push(activity);
   }
 
-  const days = (Object.keys(scheduleByDay) as unknown as number[]).sort((a, b) => a - b);
+  const days = ((Object.keys(scheduleByDay) as unknown) as number[]).sort(
+    (a, b) => a - b
+  );
 
   const result = [];
   for (const day of days) {

@@ -25,7 +25,7 @@ const roomOptions = [
 ];
 
 const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState('');
   const [room, setRoom] = useState(roomOptions[0]);
@@ -50,7 +50,10 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   }
 
   return (
-    <Modal isOpen={isOpen} onOpened={() => inputRef.current.focus()}>
+    <Modal
+      isOpen={isOpen}
+      onOpened={() => inputRef.current && inputRef.current.focus()}
+    >
       <Modal.Header toggle={onClose}>
         Создать событие {moment(start).format('DD MMMM')}{' '}
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}

@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export interface Watchman {
   id: number;
   short_name: string;
@@ -9,7 +7,7 @@ export interface Watchman {
 export interface Shift {
   date: string;
   shift: string;
-  watchman?: Watchman;
+  watchman: Watchman | null;
   is_night: boolean;
 }
 

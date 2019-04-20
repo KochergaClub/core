@@ -21,7 +21,7 @@ export default class Calendar extends React.Component<Props> {
       firstDay.endOf('week').add(1, 'day');
     }
 
-    const result = [];
+    const result: moment.Moment[] = [];
     const day = firstDay;
     do {
       day.startOf('week'); // bad hack - moment.js is mutable
