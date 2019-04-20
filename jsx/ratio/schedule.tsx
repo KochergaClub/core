@@ -4,66 +4,14 @@ import styled from 'styled-components';
 
 import Page from '../components/Page';
 
+import Activity from './components/Activity';
+import HR from './components/HR';
+
+import { ActivityType, DayScheduleType } from './types';
+
 const Container = styled.div`
   text-align: center;
 `;
-
-const HR = styled.hr`
-  margin: 32px 0;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ddd;
-`;
-
-const ActivitySection = styled.section`
-  margin-bottom: 32px;
-
-  & > time {
-    font-style: italic;
-    font-size: 24px;
-  }
-
-  & > header {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 8px 0;
-  }
-`;
-
-const ActivityBreak = styled.section`
-  font-style: italic;
-  color: #666;
-  margin-top: 32px;
-  margin-bottom: 32px;
-`;
-
-const ActivityBonus = styled.section`
-  font-size: 24px;
-`;
-
-const formatTime = (time: string) => time.substr(0, 5);
-
-const Activity = ({ activity }) => {
-  if (activity.activity_type == 'section') {
-    return (
-      <ActivitySection>
-        <time>{formatTime(activity.time)}</time>
-        <header>{activity.name}</header>
-        <div>[{activity.trainer}]</div>
-      </ActivitySection>
-    );
-  } else if (activity.activity_type == 'break') {
-    return (
-      <ActivityBreak>
-        <HR />
-        (<time>{formatTime(activity.time)}</time> {activity.name})
-        <HR />
-      </ActivityBreak>
-    );
-  } else if (activity.activity_type == 'bonus') {
-    return <ActivityBonus>Бонус. {activity.name}</ActivityBonus>;
-  }
-};
 
 const DayFooter = styled.footer`
   display: flex;
@@ -103,7 +51,13 @@ const DayHeader = styled.header`
   font-weight: bold;
 `;
 
-const DaySchedule = ({ day_schedule, long_name }) => (
+const DaySchedule = ({
+  day_schedule,
+  long_name,
+}: {
+  day_schedule: DayScheduleType;
+  long_name: string;
+}) => (
   <DayContainer>
     <DayHeader>День {day_schedule.day}</DayHeader>
     <HR />
@@ -126,10 +80,6 @@ const PageHeader = styled.header`
   }
 `;
 
-interface ActivityType {
-  day: number;
-}
-
 function groupByDay(schedule: ActivityType[]) {
   const scheduleByDay: { [key: number]: ActivityType[] } = {};
   for (const activity of schedule) {
@@ -143,7 +93,7 @@ function groupByDay(schedule: ActivityType[]) {
     (a, b) => a - b
   );
 
-  const result = [];
+  const result: DayScheduleType[] = [];
   for (const day of days) {
     result.push({
       day,

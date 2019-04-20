@@ -23,6 +23,9 @@ class MainView(RatioManagerMixin, View):
         trainings = Training.objects.all()
         return react_render(request, 'ratio/index.tsx', {
             'trainings': serializers.TrainingSerializer(trainings, many=True).data,
+            'urls': {
+                'add_training': reverse('admin:ratio_training_add'),
+            },
         })
 
 
