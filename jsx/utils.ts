@@ -1,8 +1,12 @@
 import { useEffect, useRef } from 'react';
 
+// This function is useful for client side only.
+// In most cases you should use GlobalContext.csrfToken or <CSRFInput /> instead.
 export const getCSRFToken = () => {
   if (typeof document === 'undefined') {
-    return ''; // server-side rendering doesn't support CSRF tokens (yet)
+    throw Error(
+      "Server-side rendering doesn't allow CSRF tokens, use GlobalContext instead"
+    );
   }
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
@@ -55,6 +59,12 @@ export const apiCall = async (
   payload?: object,
   expectJSON: boolean = true
 ) => {
+  if (typeof window === 'undefined') {
+    // API calls in SSR can't be done without react hooks / contexts safely.
+    // This can be fixed by replacing apiCall with some kind of custom useAPI hook.
+    throw Error("Server-side rendering doesn't support API calls yet");
+  }
+
   const params: RequestInit = {
     method,
     headers: {

@@ -43,14 +43,26 @@ interface Opts {
 }
 
 async function reactRender(opts: Opts) {
+  const {
+    default: GlobalContext,
+  } = await import('../jsx/components/GlobalContext');
   const { default: component } = await import('../jsx/' + opts.path);
   const props = JSON.parse(opts.serializedProps);
 
   const sheet = new ServerStyleSheet();
 
-  const html = ReactDOMServer.renderToString(
-    sheet.collectStyles(React.createElement(component, props))
+  const el = React.createElement(component, props);
+  const wrapperEl = React.createElement(
+    GlobalContext.Provider,
+    {
+      value: {
+        csrfToken: props.csrf_token,
+      },
+    },
+    [el]
   );
+
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(wrapperEl));
   const helmet = Helmet.renderStatic();
   const styleTags = sheet.getStyleTags();
 

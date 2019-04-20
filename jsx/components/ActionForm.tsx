@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { getCSRFToken } from '../utils';
+import CSRFInput from './CSRFInput';
 
 import { Button } from '@kocherga/frontkit';
 
 const ActionForm = ({ action, title }) => (
   <form method="post" action={action}>
-    <input type="hidden" name="csrfmiddlewaretoken" value={getCSRFToken()} />
+    <CSRFInput />
     <Button type="submit">{title}</Button>
   </form>
 );

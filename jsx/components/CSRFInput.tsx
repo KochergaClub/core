@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { getCSRFToken } from '../utils';
+import GlobalContext from '../components/GlobalContext';
 
-export default () => (
-  <input type="hidden" name="csrfmiddlewaretoken" value={getCSRFToken()} />
-);
+export default () => {
+  const csrfToken = useContext(GlobalContext).csrfToken;
+
+  return <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />;
+};

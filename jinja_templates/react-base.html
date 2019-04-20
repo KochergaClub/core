@@ -24,6 +24,7 @@
     <script>
      // Info stored for re-rendering the app
      var store = {{ store | safe }};
+     var csrfToken = "{{ csrf_token_var }}";
     </script>
     {{ render_bundle('main') }}
   </body>
