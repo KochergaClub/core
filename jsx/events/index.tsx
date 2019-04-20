@@ -126,8 +126,8 @@ export default (props: Props) => {
       });
 
       dispatch({
-        type: 'RESIZE',
-        payload: { event, start: moment(json.start), end: moment(json.end) },
+        type: 'PATCH',
+        payload: { event: serverEventToEvent(json) },
       });
     },
     []

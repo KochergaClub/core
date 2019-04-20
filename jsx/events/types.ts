@@ -40,15 +40,6 @@ export interface PreResizeAction {
   };
 }
 
-export interface ResizeAction {
-  type: 'RESIZE';
-  payload: {
-    event: Event;
-    start: moment.Moment;
-    end: moment.Moment;
-  };
-}
-
 export interface PatchAction {
   type: 'PATCH';
   payload: {
@@ -66,7 +57,6 @@ export interface ReplaceAllAction {
 export type Action =
   | CreateAction
   | PreResizeAction
-  | ResizeAction
   | PatchAction
   | ReplaceAllAction;
 
@@ -108,20 +98,6 @@ export const reducer = (store: EventStore, action: Action) => {
                 start: action.payload.start,
                 end: action.payload.end,
                 saving: true,
-              }
-            : existingEvent;
-        }),
-      };
-    case 'RESIZE':
-      return {
-        ...store,
-        events: store.events.map(existingEvent => {
-          return existingEvent.id == action.payload.event.id
-            ? {
-                ...existingEvent,
-                start: action.payload.start,
-                end: action.payload.end,
-                saving: false,
               }
             : existingEvent;
         }),
