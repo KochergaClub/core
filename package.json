@@ -52,6 +52,7 @@
     "@types/react-select": "^2.0.17",
     "@types/styled-components": "^4.1.8",
     "babel-loader": "^8.0.5",
+    "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.0",
     "foreman": "^3.0.1",
     "jest": "^24.7.1",
