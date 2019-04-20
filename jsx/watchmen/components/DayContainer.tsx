@@ -1,15 +1,13 @@
 import React from 'react';
 
-import { DaySchedule, SHIFT_TYPES } from '../types';
+import { DaySchedule } from '../types';
 
 import ShiftBox from './ShiftBox';
 
 const DayContainer = ({ daySchedule }: { daySchedule: DaySchedule }) => {
   return (
     <div>
-      {SHIFT_TYPES.map(shiftType => (
-        <ShiftBox key={shiftType} shift={daySchedule[shiftType]} />
-      ))}
+      {daySchedule.map(shift => <ShiftBox key={shift.shift} shift={shift} />)}
     </div>
   );
 };

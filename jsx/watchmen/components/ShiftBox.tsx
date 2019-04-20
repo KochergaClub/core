@@ -42,7 +42,7 @@ const InnerShiftBox = ({
   shift,
   editing,
 }: {
-  shift?: Shift;
+  shift: Shift;
   editing: boolean;
 }) => {
   if (shift.is_night) {
@@ -64,7 +64,7 @@ const InnerShiftBox = ({
   return <Box style={{ backgroundColor: shift.watchman.color }}>{content}</Box>;
 };
 
-const ShiftBox = ({ shift }: { shift?: Shift }) => {
+const ShiftBox = ({ shift }: { shift: Shift }) => {
   const { editing, setShift } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
 
@@ -99,7 +99,7 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
 
   return (
     <Container ref={ref} editing={editing}>
-      <div onClick={editing ? flipExpand : null}>
+      <div onClick={editing ? flipExpand : undefined}>
         <InnerShiftBox shift={shift} editing={editing} />
       </div>
       {expanded && (
