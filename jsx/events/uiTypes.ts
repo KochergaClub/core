@@ -1,10 +1,18 @@
 import moment from 'moment';
 
-export interface UIStore {
-  modalIsOpen: boolean;
-  editingStart?: moment.Moment;
-  editingEnd?: moment.Moment;
+interface NewUIStore {
+  mode: 'new';
+  context: {
+    start: moment.Moment;
+    end: moment.Moment;
+  };
 }
+
+interface PassiveUIStore {
+  mode: 'passive';
+}
+
+export type UIStore = NewUIStore | PassiveUIStore;
 
 interface StartNewUIAction {
   type: 'START_NEW';
@@ -26,21 +34,18 @@ export const initialUIState = {
   editingEnd: undefined,
 };
 
-export const uiReducer = (store: UIStore, action: UIAction) => {
+export const uiReducer = (store: UIStore, action: UIAction): UIStore => {
   switch (action.type) {
     case 'START_NEW':
       return {
-        ...store,
-        modalIsOpen: true,
-        editingStart: action.payload.start,
-        editingEnd: action.payload.end,
+        mode: 'new',
+        context: {
+          ...action.payload,
+        },
       };
     case 'CLOSE_NEW':
       return {
-        ...store,
-        modalIsOpen: false,
-        editingStart: undefined,
-        editingEnd: undefined,
+        mode: 'passive',
       };
     default:
       return store;

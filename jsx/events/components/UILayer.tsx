@@ -36,15 +36,18 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     [uiDispatch]
   );
 
-  return (
-    <NewEventModal
-      isOpen={uiStore.modalIsOpen}
-      start={uiStore.editingStart}
-      end={uiStore.editingEnd}
-      onCreate={onCreate}
-      onClose={onClose}
-    />
-  );
+  if (uiStore.mode === 'new') {
+    return (
+      <NewEventModal
+        isOpen={true}
+        start={uiStore.context.start}
+        end={uiStore.context.end}
+        onCreate={onCreate}
+        onClose={onClose}
+      />
+    );
+  }
+  return null;
 };
 
 export default UILayer;
