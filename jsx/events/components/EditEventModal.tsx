@@ -78,10 +78,10 @@ const EditEventModal = ({
       </Modal.Body>
       <Modal.Footer>
         <Footer>
-          <Button onClick={deleteCb} type="danger">
+          <Button onClick={deleteCb} kind="danger">
             Удалить
           </Button>
-          <Button onClick={saveCb} type="primary">
+          <Button onClick={saveCb} kind="primary">
             Сохранить
           </Button>
         </Footer>

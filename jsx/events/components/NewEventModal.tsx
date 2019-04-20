@@ -56,7 +56,7 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
       </Modal.Body>
       <Modal.Footer>
         <ControlsFooter>
-          <Button onClick={create} type="primary">
+          <Button onClick={create} kind="primary">
             Создать
           </Button>
         </ControlsFooter>
