@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useState, useRef } from 'react';
 import moment from 'moment';
 import Select from 'react-select';
 
-import { getCSRFToken } from '../../utils';
+import { apiCall } from '../../utils';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
@@ -33,27 +33,12 @@ const EventModal = ({ isOpen, setOpen, start, end }: Props) => {
 
   const create = useCallback(
     async () => {
-      const response = await fetch('/api/events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCSRFToken(),
-        },
-        body: JSON.stringify({
-          start,
-          end,
-          title,
-          location: room.value,
-        }),
+      const json = await apiCall('events', 'POST', {
+        start,
+        end,
+        title,
+        location: room.value,
       });
-
-      if (!response.ok) {
-        const body = await response.text();
-        window.alert(`Error: ${JSON.stringify(body)}`);
-        return;
-      }
-
-      const json = await response.json();
 
       dispatch({
         type: 'CREATE',

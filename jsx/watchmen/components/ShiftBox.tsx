@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import useOnClickOutside from 'use-onclickoutside';
 
-import { getCSRFToken } from '../../utils';
+import { apiCall } from '../../utils';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
 import Picker from './Picker';
@@ -87,32 +87,14 @@ const ShiftBox = ({ shift }: { shift?: Shift }) => {
 
   const pick = useCallback(async (shift: Shift) => {
     const { date, shift: shiftType, watchman, is_night } = shift;
-    try {
-      const response = await fetch(
-        `/api/watchmen/schedule/${date}/${shiftType}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken(),
-          },
-          body: JSON.stringify({
-            watchman: watchman ? watchman.short_name : '',
-            is_night: is_night ? 1 : 0,
-          }),
-        }
-      );
 
-      if (response.ok) {
-        setShift(shift);
-        unexpand();
-      } else {
-        const json = await response.json();
-        window.alert(`Error: ${JSON.stringify(json)}`);
-      }
-    } catch {
-      window.alert('Internal error');
-    }
+    await apiCall(`watchmen/schedule/${date}/${shiftType}`, 'PUT', {
+      watchman: watchman ? watchman.short_name : '',
+      is_night: is_night ? 1 : 0,
+    });
+
+    setShift(shift);
+    unexpand();
   }, []);
 
   return (

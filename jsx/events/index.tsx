@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 import moment from 'moment';
 
 import Page from '../components/Page';
-import { getCSRFToken, useListeningWebSocket } from '../utils';
+import { useListeningWebSocket, apiCall } from '../utils';
 
 import Calendar from './components/Calendar';
 import EventModal from './components/EventModal';
@@ -47,12 +47,13 @@ export default (props: Props) => {
 
   const fetchEvents = useCallback(
     async () => {
-      const response = await fetch(
-        `/api/events?from_date=${range.start.format(
+      const json = await apiCall(
+        `events?from_date=${range.start.format(
           'YYYY-MM-DD'
-        )}&to_date=${range.end.format('YYYY-MM-DD')}`
+        )}&to_date=${range.end.format('YYYY-MM-DD')}`,
+        'GET'
       );
-      const json = await response.json();
+
       dispatch({
         type: 'REPLACE_ALL',
         payload: { events: json },
@@ -83,25 +84,10 @@ export default (props: Props) => {
         payload: { event, start: moment(start), end: moment(end) },
       });
 
-      const response = await fetch(`/api/event/${event.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCSRFToken(),
-        },
-        body: JSON.stringify({
-          start,
-          end,
-        }),
+      const json = await apiCall(`event/${event.id}`, 'PATCH', {
+        start,
+        end,
       });
-
-      if (!response.ok) {
-        const body = await response.text();
-        window.alert(`Error: ${JSON.stringify(body)}`);
-        return;
-      }
-
-      const json = await response.json();
 
       dispatch({
         type: 'RESIZE',

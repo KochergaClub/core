@@ -48,3 +48,30 @@ export const useListeningWebSocket = (
     [path]
   );
 };
+
+export const apiCall = async (
+  path: string,
+  method: string,
+  payload?: object
+) => {
+  const params: RequestInit = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCSRFToken(),
+    },
+  };
+  if (payload) {
+    params.body = JSON.stringify(payload);
+  }
+
+  const response = await fetch(`/api/${path}`, params);
+
+  if (!response.ok) {
+    const responseBody = await response.text();
+    window.alert(`Error: ${JSON.stringify(responseBody)}`);
+    return;
+  }
+
+  return await response.json();
+};
