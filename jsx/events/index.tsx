@@ -41,9 +41,6 @@ export default (props: Props) => {
     start: moment(props.range.start),
     end: moment(props.range.end),
   }));
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [editingStart, setEditingStart] = useState();
-  const [editingEnd, setEditingEnd] = useState();
 
   const fetchEvents = useCallback(
     async () => {
@@ -61,7 +58,6 @@ export default (props: Props) => {
     },
     [range]
   );
-
   useEffect(
     () => {
       fetchEvents();
@@ -70,6 +66,24 @@ export default (props: Props) => {
   );
 
   useListeningWebSocket('ws/events/', fetchEvents);
+
+  const onRangeChange = (range: any) => {
+    let start: Date | undefined;
+    let end: Date | undefined;
+
+    if (Array.isArray(range)) {
+      start = range[0];
+      end = range[range.length - 1];
+    } else {
+      start = range.start;
+      end = range.end;
+    }
+    setRange({ start: moment(start), end: moment(end) });
+  };
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editingStart, setEditingStart] = useState();
+  const [editingEnd, setEditingEnd] = useState();
 
   const newEvent = useCallback(({ start, end }: { start: Date; end: Date }) => {
     setEditingStart(start);
@@ -96,20 +110,6 @@ export default (props: Props) => {
     },
     []
   );
-
-  const onRangeChange = (range: any) => {
-    let start: Date | undefined;
-    let end: Date | undefined;
-
-    if (Array.isArray(range)) {
-      start = range[0];
-      end = range[range.length - 1];
-    } else {
-      start = range.start;
-      end = range.end;
-    }
-    setRange({ start: moment(start), end: moment(end) });
-  };
 
   return (
     <Page title="Календарь событий" team>
