@@ -22,7 +22,7 @@ function renderApp(props: any) {
         csrfToken,
       },
     },
-    [el]
+    el
   );
 
   ReactDOM.hydrate(wrapperEl, domContainerNode);

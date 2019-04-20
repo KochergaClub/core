@@ -1,5 +1,5 @@
 module.exports = {
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   module: {
     rules: [
       {
@@ -8,12 +8,12 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
-        use: 'babel-loader',
+        use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js'],
   },
 };

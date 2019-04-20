@@ -15,7 +15,8 @@
       "dom"
     ],
     "jsx": "react",
-    "noEmit": true,
-    "allowJs": true
+    "outDir": "./static/dist",
+    "allowJs": true,
+    "sourceMap": true
   }
 }

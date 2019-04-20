@@ -59,7 +59,7 @@ async function reactRender(opts: Opts) {
         csrfToken: props.csrf_token,
       },
     },
-    [el]
+    el
   );
 
   const html = ReactDOMServer.renderToString(sheet.collectStyles(wrapperEl));

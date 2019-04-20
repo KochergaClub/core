@@ -13,6 +13,7 @@ x-common:
     DB_NAME: 'kocherga'
     DB_USER: 'root'
     DB_PASSWORD: ''
+    NODE_ENV: 'development'
   cap_add:
     - SYS_PTRACE
 
@@ -69,10 +70,6 @@ services:
   webpack_front:
     << : *common
     command: npx webpack --config ./webpack/front.config.js --watch
-
-  tsc:
-    << : *common
-    command: npx tsc --watch
 
 volumes:
   code:

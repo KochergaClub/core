@@ -7,6 +7,8 @@ const base = require('./base.config.js');
 
 module.exports = merge(base, {
   entry: path.resolve(__dirname, '..', './render/render-client.ts'),
+  devtool:
+    process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'none',
   output: {
     path: path.resolve(__dirname, '..', './static/dist'),
     filename: 'bundle-[hash].js',
