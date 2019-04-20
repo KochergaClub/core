@@ -18,7 +18,7 @@ import {
   serverEventToEvent,
 } from './types';
 
-import { uiReducer } from './uiTypes';
+import { uiReducer, initialUIState } from './uiTypes';
 
 import { EventDispatch } from './contexts';
 
@@ -89,11 +89,7 @@ export default (props: Props) => {
     setRange({ start: moment(start), end: moment(end) });
   };
 
-  const [uiStore, uiDispatch] = useReducer(uiReducer, {
-    modalIsOpen: false,
-    editingStart: undefined,
-    editingEnd: undefined,
-  });
+  const [uiStore, uiDispatch] = useReducer(uiReducer, initialUIState);
 
   const startNewEvent = useCallback(
     ({ start, end }: { start: Date; end: Date }) => {

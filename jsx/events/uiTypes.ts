@@ -20,6 +20,12 @@ interface CloseNewUIAction {
 
 export type UIAction = StartNewUIAction | CloseNewUIAction;
 
+export const initialUIState = {
+  modalIsOpen: false,
+  editingStart: undefined,
+  editingEnd: undefined,
+};
+
 export const uiReducer = (store: UIStore, action: UIAction) => {
   switch (action.type) {
     case 'START_NEW':
