@@ -3,7 +3,9 @@ import React, { useCallback, useState, useRef } from 'react';
 import { apiCall } from '../../utils';
 import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
 
-import { Button, Modal } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+
+import EventFields from './EventFields';
 
 interface Props {
   isOpen: boolean;
@@ -22,17 +24,19 @@ const EditEventModal = ({
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(event.title);
+  const [room, setRoom] = useState(event.room);
 
   const saveCb = useCallback(
     async () => {
       const json = (await apiCall(`event/${event.id}`, 'PATCH', {
         title,
+        location: room,
       })) as ServerEvent;
 
       onSave(serverEventToEvent(json));
     },
-    [event.id, title]
+    [event.id, title, room]
   );
 
   const deleteCb = useCallback(
@@ -51,23 +55,25 @@ const EditEventModal = ({
     <Modal
       isOpen={isOpen}
       onOpened={() => inputRef.current && inputRef.current.focus()}
+      overflow="visible"
     >
       <Modal.Header toggle={onClose}>
         Редактировать событие {event.start.format('DD MMMM')}{' '}
         {event.start.format('HH:mm')}–{event.end.format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <input
-          type="text"
-          placeholder="Название события"
-          ref={inputRef}
-          defaultValue={event.title}
-          onChange={e => setTitle(e.currentTarget.value)}
+        <EventFields
+          title={title}
+          room={room}
+          setTitle={setTitle}
+          setRoom={setRoom}
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={deleteCb}>Удалить</Button>
-        <Button onClick={saveCb}>Сохранить</Button>
+        <ControlsFooter>
+          <Button onClick={deleteCb}>Удалить</Button>
+          <Button onClick={saveCb}>Сохранить</Button>
+        </ControlsFooter>
       </Modal.Footer>
     </Modal>
   );

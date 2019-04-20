@@ -1,12 +1,13 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import moment from 'moment';
-import Select from 'react-select';
 
 import { apiCall } from '../../utils';
 import { Event, ServerEvent, serverEventToEvent } from '../types';
 
-import { Button, Modal } from '@kocherga/frontkit';
+import EventFields from './EventFields';
+
+import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 interface Props {
   isOpen: boolean;
@@ -16,19 +17,9 @@ interface Props {
   onClose: () => void;
 }
 
-const roomOptions = [
-  { value: '', label: '(не выбрана)' },
-  { value: 'Лекционная', label: 'Лекционная' },
-  { value: 'Летняя', label: 'Летняя' },
-  { value: 'ГЭБ', label: 'ГЭБ' },
-  { value: 'Китайская', label: 'Китайская' },
-];
-
 const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const [title, setTitle] = useState('');
-  const [room, setRoom] = useState(roomOptions[0]);
+  const [room, setRoom] = useState('');
 
   const create = useCallback(
     async () => {
@@ -36,7 +27,7 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
         start: start.toDate(),
         end: end.toDate(),
         title,
-        location: room.value,
+        location: room,
       })) as ServerEvent;
 
       const event = serverEventToEvent(json);
@@ -50,31 +41,23 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onOpened={() => inputRef.current && inputRef.current.focus()}
-    >
+    <Modal isOpen={isOpen} overflow="visible">
       <Modal.Header toggle={onClose}>
         Создать событие {moment(start).format('DD MMMM')}{' '}
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <input
-          type="text"
-          placeholder="Название события"
-          ref={inputRef}
-          onChange={e => setTitle(e.currentTarget.value)}
-        />
-        <Select
-          value={room}
-          onChange={(selected: { value: string; label: string }) =>
-            setRoom(selected)
-          }
-          options={roomOptions}
+        <EventFields
+          title={title}
+          room={room}
+          setTitle={setTitle}
+          setRoom={setRoom}
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={create}>Создать</Button>
+        <ControlsFooter>
+          <Button onClick={create}>Создать</Button>
+        </ControlsFooter>
       </Modal.Footer>
     </Modal>
   );
