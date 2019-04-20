@@ -1,13 +1,19 @@
 export const teamColor = '#417690';
 
-export interface MenuItem {
+export interface SingleItem {
   title: string;
-  link?: string;
+  link: string;
   old?: boolean;
-  items?: { title: string; link: string; old?: boolean }[];
 }
 
-export const publicMenuItems: MenuItem[] = [
+export interface ExpandableItem {
+  title: string;
+  items: SingleItem[];
+}
+
+export type Item = SingleItem | ExpandableItem;
+
+export const publicMenuItems: Item[] = [
   {
     title: 'Антикафе',
     items: [
@@ -37,7 +43,7 @@ export const publicMenuItems: MenuItem[] = [
   { link: '/#contacts', title: 'Контакты', old: true },
 ];
 
-export const teamMenuItems: MenuItem[] = [
+export const teamMenuItems: Item[] = [
   {
     title: 'Админам',
     items: [

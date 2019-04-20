@@ -1,7 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { teamColor, MenuItem, publicMenuItems, teamMenuItems } from './constants';
+import {
+  teamColor,
+  SingleItem,
+  ExpandableItem,
+  Item,
+  publicMenuItems,
+  teamMenuItems,
+} from './constants';
 
 const MenuItemsNav = styled.nav`
   margin-left: 30px;
@@ -35,7 +42,7 @@ const MenuItemsList = styled.ul`
   }
 `;
 
-const item2link = (item: MenuItem) => {
+const item2link = (item: SingleItem) => {
   if (item.old) {
     return 'https://kocherga-club.ru' + item.link;
   }
@@ -53,7 +60,7 @@ const MenuItemDropdown = styled.ul`
   padding: 5px 0;
   list-style-type: none;
   border: 1px solid white;
-  background: ${props => props.theme.team ? teamColor : 'black'};
+  background: ${props => (props.theme.team ? teamColor : 'black')};
   color: white;
 
   & > li {
@@ -61,7 +68,7 @@ const MenuItemDropdown = styled.ul`
   }
 `;
 
-class MenuItemExpandable extends React.Component<{ item: MenuItem }, {}> {
+class MenuItemExpandable extends React.Component<{ item: ExpandableItem }, {}> {
   state = {
     revealed: false,
   };
@@ -69,45 +76,51 @@ class MenuItemExpandable extends React.Component<{ item: MenuItem }, {}> {
   revealDropdown = () => {
     this.setState({
       revealed: true,
-    })
-  }
+    });
+  };
 
   hideDropdown = () => {
     this.setState({
       revealed: false,
-    })
-  }
+    });
+  };
 
   renderDropdown() {
     return (
       <MenuItemDropdown>
-        {
-          this.props.item.items.map(
-            (item, i) => <li key={i}><a href={item2link(item)}>{item.title}</a></li>
-          )
-        }
+        {this.props.item.items.map((item, i) => (
+          <li key={i}>
+            <a href={item2link(item)}>{item.title}</a>
+          </li>
+        ))}
       </MenuItemDropdown>
     );
-
   }
 
   render() {
     return (
-      <MenuItemExpandableContainer onMouseOver={this.revealDropdown} onMouseLeave={this.hideDropdown}>
+      <MenuItemExpandableContainer
+        onMouseOver={this.revealDropdown}
+        onMouseLeave={this.hideDropdown}
+      >
         <a href="#">{this.props.item.title} ▼</a>
-        { this.state.revealed && this.renderDropdown() }
+        {this.state.revealed && this.renderDropdown()}
       </MenuItemExpandableContainer>
     );
   }
 }
 
-const MenuItemLi = ({ item }: { item: MenuItem }) => (
+const isExpandableItem = (item: Item): item is ExpandableItem => {
+  return (item as ExpandableItem).items !== undefined;
+};
+
+const MenuItemLi = ({ item }: { item: Item }) => (
   <li>
-    {
-      item.items
-      ? <MenuItemExpandable item={item} />
-      : <a href={item2link(item)}>{item.title}</a>
-    }
+    {isExpandableItem(item) ? (
+      <MenuItemExpandable item={item} />
+    ) : (
+      <a href={item2link(item)}>{item.title}</a>
+    )}
   </li>
 );
 
@@ -120,13 +133,7 @@ const TildaMenuItems = ({ team }: Props) => {
   return (
     <MenuItemsNav>
       <MenuItemsList>
-        {
-          items.map(
-            (item, i) => (
-              <MenuItemLi item={item} key={i} />
-            )
-          )
-        }
+        {items.map((item, i) => <MenuItemLi item={item} key={i} />)}
       </MenuItemsList>
     </MenuItemsNav>
   );

@@ -44,7 +44,7 @@ const Page = ({ title, team, children, noMenu }: Props) => {
       <GlobalStyle />
       {/* https://github.com/nfl/react-helmet/issues/373 */}
       <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
-      {noMenu || <TildaMenu team={team} />}
+      {noMenu || <TildaMenu team={team || false} />}
       <Main>{children}</Main>
     </div>
   );
