@@ -26,9 +26,16 @@ interface Props {
 const EventFields = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    inputRef.current && inputRef.current.focus();
-  }, []);
+  useEffect(
+    () => {
+      // FIXME - this is bad (but better than nothing).
+      // For some reason this code doesn't work without setTimeout. One possible suspect is Modal and its createPortal magic.
+      setTimeout(() => {
+        inputRef.current && inputRef.current.focus();
+      }, 0);
+    },
+    [inputRef.current]
+  );
 
   return (
     <Column stretch gutter={16}>
