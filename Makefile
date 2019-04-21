@@ -6,8 +6,8 @@ image:
 ##### Dev environment #####
 init-dev:
 	docker-compose -f docker/compose.dev.yml exec db mysql -uroot -e 'CREATE DATABASE kocherga'
-	docker-compose -f docker/compose.dev.yml run api poetry run ./manage.py migrate
-	docker-compose -f docker/compose.dev.yml run api npm ci
+	docker-compose -f docker/compose.dev.yml run --rm api poetry run ./manage.py migrate
+	docker-compose -f docker/compose.dev.yml run --rm api npm ci
 
 dev-mac: image
 	docker-sync-stack start
@@ -21,16 +21,16 @@ dev-full: image
 ##### Tests #####
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs poetry run mypy --strict-optional --check-untyped-defs kocherga # FIXME
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs poetry run --rm mypy --strict-optional --check-untyped-defs kocherga # FIXME
 
 test-code:
-	docker-compose -f docker/compose.dev.yml run api poetry run pytest
+	docker-compose -f docker/compose.dev.yml run --rm api poetry run pytest
 
 lint:
-	docker-compose -f docker/compose.dev.yml run api poetry run flake8 kocherga/ --max-line-length=120
+	docker-compose -f docker/compose.dev.yml run --rm api poetry run flake8 kocherga/ --max-line-length=120
 
 test-js:
-	docker-compose -f docker/compose.dev.yml run api npx jest
+	docker-compose -f docker/compose.dev.yml run --rm api npx jest
 
 test: test-types test-code test-js lint
 

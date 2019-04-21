@@ -57,6 +57,14 @@ services:
       - redis
     restart: always
 
+  channels-worker:
+    << : *common
+    command: ./scripts/channels-worker.sh
+    depends_on:
+      - db
+      - redis
+    restart: always
+
   render-server:
     << : *common
     command: /usr/bin/node ./static/dist/render-server.js

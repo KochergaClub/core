@@ -12,8 +12,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-from kocherga.dateutils import TZ
-from kocherga.dateutils import inflected_weekday, inflected_month
+from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 
 from kocherga.images import image_storage
 import kocherga.room

@@ -59,6 +59,14 @@ services:
       - redis
     restart: always
 
+  channels-worker:
+    << : *common
+    command: npx nodemon -w ./kocherga --exec ./scripts/channels-worker.sh
+    depends_on:
+      - db
+      - redis
+    restart: always
+
   render-server:
     << : *common
     command: npx nodemon ./static/dist/render-server.js
