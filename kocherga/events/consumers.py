@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 from asgiref.sync import async_to_sync
 
 from django.utils import timezone
-from django.core.exceptions import RelatedObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 from channels.generic.websocket import SyncConsumer, WebsocketConsumer
 from reversion.models import Version
@@ -27,6 +27,20 @@ class UpdatesWebsocketConsumer(WebsocketConsumer):
 
 
 class NotifySlackConsumer(SyncConsumer):
+    def version_to_user_text(self, version):
+        user = version.revision.user
+        user_text = user.email
+        try:
+            slack_id = user.staff_member.slack_id
+            if slack_id:
+                user_text = f'<@{slack_id}>'
+            else:
+                user_text = user.staff_member.full_name
+        except ObjectDoesNotExist:
+            pass  # that's ok
+
+        return user_text
+
     def notify_by_version(self, message):
         version_id = message['version_id']
         version = Version.objects.get(pk=version_id)
@@ -55,16 +69,7 @@ class NotifySlackConsumer(SyncConsumer):
             }
         ]
 
-        user = version.revision.user
-        user_text = user.email
-        try:
-            slack_id = user.staff_member.slack_id
-            if slack_id:
-                user_text = f'<@{slack_id}>'
-            else:
-                user_text = user.staff_member.full_name
-        except RelatedObjectDoesNotExist:
-            pass  # that's ok
+        user_text = self.version_to_user_text(version)
 
         async_to_sync(self.channel_layer.send)("slack-notify", {
             "type": "notify",
