@@ -4,12 +4,9 @@ logger = logging.getLogger(__name__)
 from asgiref.sync import async_to_sync
 
 from django.utils import timezone
-from django.dispatch import receiver
 
-import channels.layers
 from channels.generic.websocket import SyncConsumer, WebsocketConsumer
 from reversion.models import Version
-import reversion.signals
 
 from kocherga.dateutils import humanize_date
 
@@ -72,17 +69,3 @@ class NotifySlackConsumer(SyncConsumer):
             "text": f'{text} ({user_text})',
             "attachments": attachments,
         })
-
-
-@receiver(reversion.signals.post_revision_commit)
-def cb_flush_new_revisions(sender, revision, versions, **kwargs):
-    logger.info('Checking for new event revisions')
-    channel_layer = channels.layers.get_channel_layer()
-    for version in versions:
-        if version.content_type.model_class() == Event:
-            logger.info('Notifying about new event revisions')
-            async_to_sync(channel_layer.send)("events-slack-notify", {
-                "type": "notify_by_version",
-                "version_id": version.pk,
-            })
-            break
