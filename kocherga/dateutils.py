@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django.utils import timezone
 
 from dateutil import tz
 
@@ -60,3 +61,14 @@ def inflected_month(dt):
         "ноября",
         "декабря",
     ][dt.month - 1]
+
+
+def humanize_date(dt):
+    dt = timezone.localtime(dt)
+    if dt.date() == timezone.now().date():
+        return 'сегодня'
+    elif dt.date() == timezone.now().date() - timedelta(days=1):
+        return 'вчера'
+    elif dt.date() == timezone.now().date() + timedelta(days=1):
+        return 'завтра'
+    return dt.strftime('%Y-%m-%d')

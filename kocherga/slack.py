@@ -7,6 +7,8 @@ from slackclient import SlackClient
 
 from django.conf import settings
 
+import channels.consumer
+
 
 def token():
     return settings.KOCHERGA_SLACK_BOT_TOKEN
@@ -63,3 +65,21 @@ def users_by_email(sc=None):
         result[email.lower()] = user
 
     return result
+
+
+class NotifyConsumer(channels.consumer.SyncConsumer):
+    def notify(self, message):
+        logger.info(f"Notifying Slack: {message['text']}")
+
+        args = {
+            'text': message['text'],
+            'channel': message['channel'],
+        }
+        if 'attachments' in message:
+            logger.info('Message has attachments')
+            args['attachments'] = message['attachments']
+
+        client().api_call(
+            "chat.postMessage",
+            **args
+        )
