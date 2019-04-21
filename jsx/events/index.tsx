@@ -30,7 +30,7 @@ const endAccessor = (event: LocalEvent) => event.end.toDate();
 const eventPropGetter = (event: LocalEvent) => {
   const style = {};
   if (event.saving) {
-    style['backgroundColor'] = '#888';
+    style['backgroundColor'] = '#ddd';
   }
   return {
     style,
