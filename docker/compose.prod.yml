@@ -61,7 +61,6 @@ services:
     << : *common
     command: ./scripts/channels-worker.sh
     depends_on:
-      - db
       - redis
     restart: always
 
