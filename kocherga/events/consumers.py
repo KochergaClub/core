@@ -1,9 +1,22 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from asgiref.sync import async_to_sync
 
-from channels.generic.websocket import WebsocketConsumer
+from django.utils import timezone
+from django.dispatch import receiver
+
+import channels.layers
+from channels.generic.websocket import SyncConsumer, WebsocketConsumer
+from reversion.models import Version
+import reversion.signals
+
+from kocherga.dateutils import humanize_date
+
+from .models import Event
 
 
-class EventsConsumer(WebsocketConsumer):
+class UpdatesWebsocketConsumer(WebsocketConsumer):
     def connect(self):
         async_to_sync(self.channel_layer.group_add)(
             'events_group',
@@ -13,3 +26,61 @@ class EventsConsumer(WebsocketConsumer):
 
     def notify_update(self, message):
         self.send(text_data='updated')
+
+
+class NotifySlackConsumer(SyncConsumer):
+    def notify_by_version(self, message):
+        version_id = message['version_id']
+        version = Version.objects.get(pk=version_id)
+
+        all_versions = Version.objects.get_for_object_reference(Event, version.object_id)
+        logger.info(f'Total versions: {all_versions.count()}')
+        is_new = all_versions.count() == 1
+
+        logger.info(version.field_dict)
+        text = None
+        if version.field_dict['deleted']:
+            text = "Событие отменено"
+        elif is_new:
+            text = "Новое событие"
+        else:
+            text = "Событие обновлено"
+
+        start = timezone.localtime(version.field_dict['start'])
+        day_str = humanize_date(start).capitalize()
+        room = version.field_dict['location']  # TODO - kocherga.room.pretty(obj.get_room())
+
+        attachments = [
+            {
+                "title": version.field_dict['title'],
+                "text": f"{day_str}, {start:%H:%M} в {room}"
+            }
+        ]
+
+        user = version.revision.user
+        user_text = user.email
+        if user.staff_member:
+            slack_user = user.staff_member.slack_user
+            if slack_user:
+                user_text = f'<@{slack_user}>'
+            else:
+                user_text = user.staff_member.full_name
+
+        async_to_sync(self.channel_layer.send)("slack-notify", {
+            "type": "notify",
+            "channel": "#calendar",
+            "text": f'{text} ({user_text})',
+            "attachments": attachments,
+        })
+
+
+@receiver(reversion.signals.post_revision_commit)
+def cb_flush_new_revisions(sender, revision, versions, **kwargs):
+    channel_layer = channels.layers.get_channel_layer()
+    for version in versions:
+        if version.content_type.model_class() == Event:
+            async_to_sync(channel_layer.send)("events-slack-notify", {
+                "type": "notify_by_version",
+                "version_id": version.pk,
+            })
+            break

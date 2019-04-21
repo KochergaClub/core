@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'reversion',
+    'reversion_compare',
     'react',
     'kocherga.auth',
     'kocherga.zadarma',
@@ -72,6 +73,8 @@ MIDDLEWARE = [
     'kocherga.django.middleware.JsonExceptionMiddleware',
     'reversion.middleware.RevisionMiddleware',
 ]
+
+ADD_REVERSION_ADMIN = True
 
 ROOT_URLCONF = 'kocherga.django.urls'
 

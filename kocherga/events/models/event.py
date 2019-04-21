@@ -12,7 +12,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-from kocherga.dateutils import TZ, inflected_weekday, inflected_month, humanize_date
+from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 
 from kocherga.images import image_storage
 import kocherga.room
@@ -281,37 +281,6 @@ class Event(models.Model):
         if update_google:
             self.patch_google()
         self.save()
-
-    def save(self, *args, **kwargs):
-        is_new = self._state.adding is True
-        super().save(*args, **kwargs)
-
-        channel_layer = channels.layers.get_channel_layer()
-
-        text = None
-        if self.deleted:
-            text = "Событие обменено"
-        elif is_new:
-            text = "Новое событие"
-        else:
-            text = "Событие обновлено"
-
-        start = timezone.localtime(self.start)
-        day_str = humanize_date(start).capitalize()
-
-        attachments = [
-            {
-                "title": self.title,
-                "text": f"{day_str}, {start:%H:%M} в {kocherga.room.pretty(self.get_room())}"
-            }
-        ]
-
-        async_to_sync(channel_layer.send)("slack-notify", {
-            "type": "notify",
-            "channel": "#calendar",
-            "text": text,
-            "attachments": attachments,
-        })
 
     def to_google(self):
         def convert_dt(dt):
