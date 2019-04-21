@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TildaMenu from './TildaMenu';
+import ErrorBoundary from './ErrorBoundary';
 
 import { Helmet } from 'react-helmet';
 
@@ -45,7 +46,9 @@ const Page = ({ title, team, children, noMenu }: Props) => {
       {/* https://github.com/nfl/react-helmet/issues/373 */}
       <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
       {noMenu || <TildaMenu team={team || false} />}
-      <Main>{children}</Main>
+      <Main>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </Main>
     </div>
   );
 };
