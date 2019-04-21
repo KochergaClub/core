@@ -76,9 +76,11 @@ class NotifySlackConsumer(SyncConsumer):
 
 @receiver(reversion.signals.post_revision_commit)
 def cb_flush_new_revisions(sender, revision, versions, **kwargs):
+    logger.info('Checking for new event revisions')
     channel_layer = channels.layers.get_channel_layer()
     for version in versions:
         if version.content_type.model_class() == Event:
+            logger.info('Notifying about new event revisions')
             async_to_sync(channel_layer.send)("events-slack-notify", {
                 "type": "notify_by_version",
                 "version_id": version.pk,
