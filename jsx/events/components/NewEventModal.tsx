@@ -40,9 +40,11 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
     [title, description, room]
   );
 
+  const saveDisabled = saving || !title.length;
+
   const keypress = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.keyCode === 13) {
+      if (e.keyCode === 13 && !saveDisabled) {
         create();
       } else if (e.keyCode === 27) {
         onClose();
@@ -54,8 +56,6 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   if (!isOpen) {
     return null;
   }
-
-  const saveDisabled = saving || !title.length;
 
   return (
     <Modal isOpen={isOpen} overflow="visible">

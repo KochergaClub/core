@@ -58,13 +58,11 @@ const EditEventModal = ({
     [event.id]
   );
 
-  if (!isOpen) {
-    return null;
-  }
+  const saveDisabled = deleting || saving || !title.length;
 
   const keypress = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.keyCode === 13) {
+      if (e.keyCode === 13 && !saveDisabled) {
         saveCb();
       } else if (e.keyCode === 27) {
         onClose();
@@ -73,7 +71,9 @@ const EditEventModal = ({
     [saveCb, onClose]
   );
 
-  const saveDisabled = deleting || saving || !title.length;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <Modal isOpen={isOpen} overflow="visible">
