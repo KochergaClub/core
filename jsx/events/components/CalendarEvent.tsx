@@ -1,12 +1,21 @@
 import * as React from 'react';
 
+import styled from 'styled-components';
+
 import { Event } from '../types';
+
+const EventTitle = styled.div`
+  font-weight: bold;
+  font-size: 0.9em;
+`;
+
+const EventRoom = styled.small``;
 
 const CalendarEvent = ({ event }: { event: Event }) => {
   return (
     <div>
-      <div>{event.title}</div>
-      <small>{event.room}</small>
+      <EventTitle>{event.title}</EventTitle>
+      <EventRoom>{event.room}</EventRoom>
     </div>
   );
 };
