@@ -8,7 +8,7 @@ from datetime import datetime, time
 from asgiref.sync import async_to_sync
 import channels.layers
 
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
@@ -368,11 +368,17 @@ class Tag(models.Model):
 def cb_flush_new_revisions(sender, revision, versions, **kwargs):
     logger.info('Checking for new event revisions')
     channel_layer = channels.layers.get_channel_layer()
-    for version in versions:
-        if version.content_type.model_class() == Event:
-            logger.info('Notifying about new event revisions')
-            async_to_sync(channel_layer.send)("events-slack-notify", {
-                "type": "notify_by_version",
-                "version_id": version.pk,
-            })
-            break
+
+    def flush_after_commit():
+        for version in versions:
+            if version.content_type.model_class() == Event:
+                logger.info('Notifying about new event revisions')
+                async_to_sync(channel_layer.send)("events-slack-notify", {
+                    "type": "notify_by_version",
+                    "version_id": version.pk,
+                })
+                break
+
+    # We use ATOMIC_REQUESTS, so we shouldn't notify the worker until transaction commits.
+    # Otherwise the worker could query the DB too early and won't find the version object.
+    transaction.on_commit(flush_after_commit)
