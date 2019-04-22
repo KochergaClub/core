@@ -62,6 +62,19 @@ const EditEventModal = ({
     return null;
   }
 
+  const keypress = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.keyCode === 13) {
+        saveCb();
+      } else if (e.keyCode === 27) {
+        onClose();
+      }
+    },
+    [saveCb, onClose]
+  );
+
+  const saveDisabled = deleting || saving || !title.length;
+
   return (
     <Modal
       isOpen={isOpen}
@@ -73,13 +86,15 @@ const EditEventModal = ({
         {event.start.format('HH:mm')}–{event.end.format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <EventFields
-          title={title}
-          room={room}
-          setTitle={setTitle}
-          setRoom={setRoom}
-          disabled={deleting || saving}
-        />
+        <div tabIndex={0} onKeyDown={keypress}>
+          <EventFields
+            title={title}
+            room={room}
+            setTitle={setTitle}
+            setRoom={setRoom}
+            disabled={deleting || saving}
+          />
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Footer>
@@ -95,7 +110,7 @@ const EditEventModal = ({
             onClick={saveCb}
             kind="primary"
             loading={saving}
-            disabled={deleting || saving}
+            disabled={saveDisabled}
           >
             Сохранить
           </Button>

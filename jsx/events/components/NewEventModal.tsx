@@ -38,9 +38,22 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
     [title, room]
   );
 
+  const keypress = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.keyCode === 13) {
+        create();
+      } else if (e.keyCode === 27) {
+        onClose();
+      }
+    },
+    [create, onClose]
+  );
+
   if (!isOpen) {
     return null;
   }
+
+  const saveDisabled = saving || !title.length;
 
   return (
     <Modal isOpen={isOpen} overflow="visible">
@@ -49,13 +62,15 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <EventFields
-          title={title}
-          room={room}
-          setTitle={setTitle}
-          setRoom={setRoom}
-          disabled={saving}
-        />
+        <div tabIndex={0} onKeyDown={keypress}>
+          <EventFields
+            title={title}
+            room={room}
+            setTitle={setTitle}
+            setRoom={setRoom}
+            disabled={saving}
+          />
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <ControlsFooter>
@@ -63,7 +78,7 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
             onClick={create}
             kind="primary"
             loading={saving}
-            disabled={saving}
+            disabled={saveDisabled}
           >
             Создать
           </Button>
