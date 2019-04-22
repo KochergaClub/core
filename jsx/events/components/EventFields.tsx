@@ -28,7 +28,7 @@ const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
     };
   }, []);
 
-  return <textarea {...props} ref={ref} />;
+  return <textarea {...props} rows={4} style={{ maxHeight: 200 }} ref={ref} />;
 };
 
 interface Props {
