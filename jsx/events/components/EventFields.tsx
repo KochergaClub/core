@@ -21,6 +21,7 @@ interface Props {
   room: string;
   setTitle: (t: string) => void;
   setRoom: (t: string) => void;
+  disabled?: boolean;
 }
 
 const EventFields = (props: Props) => {
@@ -47,6 +48,7 @@ const EventFields = (props: Props) => {
           defaultValue={props.title}
           ref={inputRef}
           onChange={e => props.setTitle(e.currentTarget.value)}
+          disabled={props.disabled}
         />
       </Column>
       <Column stretch gutter={0}>
@@ -57,6 +59,7 @@ const EventFields = (props: Props) => {
             props.setRoom(selected.value)
           }
           options={roomOptions}
+          isDisabled={props.disabled}
         />
       </Column>
     </Column>

@@ -33,9 +33,12 @@ const EditEventModal = ({
 
   const [title, setTitle] = useState(event.title);
   const [room, setRoom] = useState(event.room);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const saveCb = useCallback(
     async () => {
+      setSaving(true);
       const json = (await apiCall(`event/${event.id}`, 'PATCH', {
         title,
         location: room,
@@ -48,6 +51,7 @@ const EditEventModal = ({
 
   const deleteCb = useCallback(
     async () => {
+      setDeleting(true);
       await apiCall(`event/${event.id}`, 'DELETE', undefined, false);
       onDelete(event.id);
     },
@@ -74,14 +78,25 @@ const EditEventModal = ({
           room={room}
           setTitle={setTitle}
           setRoom={setRoom}
+          disabled={deleting || saving}
         />
       </Modal.Body>
       <Modal.Footer>
         <Footer>
-          <Button onClick={deleteCb} kind="danger">
+          <Button
+            onClick={deleteCb}
+            kind="danger"
+            loading={deleting}
+            disabled={deleting || saving}
+          >
             Удалить
           </Button>
-          <Button onClick={saveCb} kind="primary">
+          <Button
+            onClick={saveCb}
+            kind="primary"
+            loading={saving}
+            disabled={deleting || saving}
+          >
             Сохранить
           </Button>
         </Footer>

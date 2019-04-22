@@ -20,9 +20,11 @@ interface Props {
 const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   const [title, setTitle] = useState('');
   const [room, setRoom] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const create = useCallback(
     async () => {
+      setSaving(true);
       const json = (await apiCall('events', 'POST', {
         start: start.toDate(),
         end: end.toDate(),
@@ -52,11 +54,17 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
           room={room}
           setTitle={setTitle}
           setRoom={setRoom}
+          disabled={saving}
         />
       </Modal.Body>
       <Modal.Footer>
         <ControlsFooter>
-          <Button onClick={create} kind="primary">
+          <Button
+            onClick={create}
+            kind="primary"
+            loading={saving}
+            disabled={saving}
+          >
             Создать
           </Button>
         </ControlsFooter>
