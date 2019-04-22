@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAdminUser
 from datetime import datetime
 
 from kocherga.error import PublicError
+from kocherga.dateutils import TZ
 
 from kocherga.events.models import EventPrototype
 from kocherga.events.serializers import EventSerializer
@@ -121,7 +122,7 @@ def r_prototype_new_event(request, prototype_id):
     ts = payload["ts"]
 
     prototype = EventPrototype.by_id(prototype_id)
-    dt = datetime.fromtimestamp(ts)
+    dt = datetime.fromtimestamp(ts, TZ)
     event = prototype.new_event(dt)
 
     return Response(EventSerializer(event).data)
