@@ -18,10 +18,14 @@ const findRoom = (room: string) => {
 };
 
 const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLTextAreaElement | null>(null);
   useEffect(() => {
-    setTimeout(() => autosize(ref.current), 50); // timers are necessary because we use Modal with portals
-    () => autosize.destroy(ref.current);
+    setTimeout(() => {
+      ref.current && autosize(ref.current);
+    }, 50); // timers are necessary because we use Modal with portals
+    () => {
+      ref.current && autosize.destroy(ref.current);
+    };
   }, []);
 
   return <textarea {...props} ref={ref} />;
