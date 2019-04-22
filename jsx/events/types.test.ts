@@ -10,6 +10,7 @@ it('create from empty', () => {
         start: moment('2020-05-01 19:00'),
         end: moment('2020-05-01 21:00'),
         title: 'Some event',
+        description: '',
         id: 'abcd',
         room: 'r',
       },
@@ -28,6 +29,7 @@ it('create from non-empty', () => {
           start: moment('2020-04-01 12:00'),
           end: moment('2020-04-01 13:00'),
           title: 'Older event',
+          description: '',
           id: 'oldold',
           room: 'TODO',
         },
@@ -39,6 +41,7 @@ it('create from non-empty', () => {
         start: moment('2020-05-01 19:00'),
         end: moment('2020-05-01 21:00'),
         title: 'Some event',
+        description: '',
         id: 'abcd',
         room: 'r',
       },
@@ -56,6 +59,7 @@ it('REPLACE_ALL action', () => {
           start: moment('2020-04-01 12:00'),
           end: moment('2020-04-01 13:00'),
           title: 'First event',
+          description: '',
           id: 'first',
           room: 'TODO',
         },
@@ -63,6 +67,7 @@ it('REPLACE_ALL action', () => {
           start: moment('2020-04-01 12:00'),
           end: moment('2020-04-01 13:00'),
           title: 'Second event',
+          description: '',
           id: 'second',
           room: 'TODO',
         },
@@ -76,6 +81,7 @@ it('REPLACE_ALL action', () => {
             start: moment('2020-04-01 12:00'),
             end: moment('2020-04-01 13:00'),
             title: 'Third event',
+            description: '',
             id: 'third',
             room: 'TODO',
           },
@@ -83,6 +89,7 @@ it('REPLACE_ALL action', () => {
             start: moment('2020-04-01 12:00'),
             end: moment('2020-04-01 13:00'),
             title: 'Fourth event',
+            description: '',
             id: 'fourth',
             room: 'TODO',
           },
@@ -90,6 +97,7 @@ it('REPLACE_ALL action', () => {
       },
     }
   );
+
   expect(result.events.length).toEqual(2);
   expect(result.events[0].title).toEqual('Third event');
   expect(result.events[1].title).toEqual('Fourth event');

@@ -19,6 +19,7 @@ interface Props {
 
 const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -29,13 +30,14 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
         start: start.toDate(),
         end: end.toDate(),
         title,
+        description,
         location: room,
       })) as ServerEvent;
 
       const event = serverEventToEvent(json);
       onCreate(event);
     },
-    [title, room]
+    [title, description, room]
   );
 
   const keypress = useCallback(
@@ -62,12 +64,14 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <div tabIndex={0} onKeyDown={keypress}>
+        <div tabIndex={-1} onKeyDown={keypress}>
           <EventFields
             title={title}
+            description={description}
             room={room}
             setTitle={setTitle}
             setRoom={setRoom}
+            setDescription={setDescription}
             disabled={saving}
           />
         </div>

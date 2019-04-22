@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import Select from 'react-select';
+import autosize from 'autosize';
 
 import { Column, Input } from '@kocherga/frontkit';
 
@@ -16,26 +17,43 @@ const findRoom = (room: string) => {
   return roomOptions.find(el => el.value.toLowerCase() === room.toLowerCase());
 };
 
+const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    setTimeout(() => autosize(ref.current), 50); // timers are necessary because we use Modal with portals
+    () => autosize.destroy(ref.current);
+  }, []);
+
+  return <textarea {...props} ref={ref} />;
+};
+
 interface Props {
   title: string;
+  description: string;
   room: string;
   setTitle: (t: string) => void;
+  setDescription: (t: string) => void;
   setRoom: (t: string) => void;
   disabled?: boolean;
 }
 
 const EventFields = (props: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const firstRender = useRef(true);
 
-  useEffect(
-    () => {
-      // FIXME - this is bad (but better than nothing).
-      // For some reason this code doesn't work without setTimeout. One possible suspect is Modal and its createPortal magic.
-      setTimeout(() => {
-        inputRef.current && inputRef.current.focus();
-      }, 0);
+  const setFocusOnFirstRender = useCallback((el: HTMLInputElement | null) => {
+    if (firstRender.current) {
+      firstRender.current = false; // focus only once, just to avoid nasty errors
+      if (el) {
+        setTimeout(() => el.focus(), 50); // timers are necessary because we use Modal with portals
+      }
+    }
+  }, []);
+
+  const onChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      props.setTitle(e.currentTarget.value);
     },
-    [inputRef.current]
+    [props.setTitle]
   );
 
   return (
@@ -46,8 +64,8 @@ const EventFields = (props: Props) => {
           type="text"
           placeholder="Название события"
           defaultValue={props.title}
-          ref={inputRef}
-          onChange={e => props.setTitle(e.currentTarget.value)}
+          ref={setFocusOnFirstRender}
+          onChange={onChangeTitle}
           disabled={props.disabled}
         />
       </Column>
@@ -60,6 +78,15 @@ const EventFields = (props: Props) => {
           }
           options={roomOptions}
           isDisabled={props.disabled}
+        />
+      </Column>
+      <Column stretch gutter={0}>
+        <label>Описание:</label>
+        <Textarea
+          onChange={e => props.setDescription(e.currentTarget.value)}
+          defaultValue={props.description}
+          onKeyDown={e => e.keyCode == 13 && e.stopPropagation()}
+          disabled={props.disabled}
         />
       </Column>
     </Column>

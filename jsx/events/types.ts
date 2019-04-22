@@ -3,6 +3,7 @@ import moment from 'moment';
 export interface Event {
   id: string;
   title: string;
+  description: string;
   room: string;
   start: moment.Moment;
   end: moment.Moment;
@@ -11,6 +12,7 @@ export interface Event {
 export interface ServerEvent {
   id: string;
   title: string;
+  description: string;
   room: string;
   start: string;
   end: string;
@@ -85,16 +87,7 @@ export const reducer = (store: EventStore, action: Action) => {
     case 'CREATE':
       return {
         ...store, // FIXME - check that new event fits in range
-        events: [
-          ...store.events,
-          {
-            start: action.payload.start,
-            end: action.payload.end,
-            title: action.payload.title,
-            id: action.payload.id,
-            room: action.payload.room,
-          },
-        ],
+        events: [...store.events, action.payload],
       };
     case 'PRE_RESIZE':
       return {

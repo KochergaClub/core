@@ -29,9 +29,8 @@ const EditEventModal = ({
   onClose,
   event,
 }: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const [title, setTitle] = useState(event.title);
+  const [description, setDescription] = useState(event.description);
   const [room, setRoom] = useState(event.room);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -41,12 +40,13 @@ const EditEventModal = ({
       setSaving(true);
       const json = (await apiCall(`event/${event.id}`, 'PATCH', {
         title,
+        description,
         location: room,
       })) as ServerEvent;
 
       onSave(serverEventToEvent(json));
     },
-    [event.id, title, room]
+    [event.id, title, description, room]
   );
 
   const deleteCb = useCallback(
@@ -76,21 +76,19 @@ const EditEventModal = ({
   const saveDisabled = deleting || saving || !title.length;
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onOpened={() => inputRef.current && inputRef.current.focus()}
-      overflow="visible"
-    >
+    <Modal isOpen={isOpen} overflow="visible">
       <Modal.Header toggle={onClose}>
         Редактировать событие {event.start.format('DD MMMM')}{' '}
         {event.start.format('HH:mm')}–{event.end.format('HH:mm')}
       </Modal.Header>
       <Modal.Body>
-        <div tabIndex={0} onKeyDown={keypress}>
+        <div tabIndex={-1} onKeyDown={keypress}>
           <EventFields
             title={title}
+            description={description}
             room={room}
             setTitle={setTitle}
+            setDescription={setDescription}
             setRoom={setRoom}
             disabled={deleting || saving}
           />
