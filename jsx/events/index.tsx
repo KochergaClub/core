@@ -134,7 +134,7 @@ export default (props: Props) => {
   );
 
   return (
-    <Page title="Календарь событий" team>
+    <Page title="Календарь событий" team wide>
       <h1>Календарь событий</h1>
       <EventDispatch.Provider value={dispatch}>
         <Calendar

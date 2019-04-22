@@ -37,16 +37,17 @@ interface Props {
   team?: boolean;
   children: React.ReactNode;
   noMenu?: boolean;
+  wide?: boolean;
 }
 
-const Page = ({ title, team, children, noMenu }: Props) => {
+const Page = ({ title, team, children, noMenu, wide }: Props) => {
   return (
     <div>
       <GlobalStyle />
       {/* https://github.com/nfl/react-helmet/issues/373 */}
       <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
       {noMenu || <TildaMenu team={team || false} />}
-      <Main>
+      <Main wide={wide}>
         <ErrorBoundary>{children}</ErrorBoundary>
       </Main>
     </div>

@@ -105,7 +105,7 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-today {
-  background-color: #eaf6ff;
+  background-color: hsl(67, 0%, 94%);
 }
 
 .rbc-toolbar {
@@ -447,7 +447,8 @@ button.rbc-input::-moz-focus-inner {
   flex: none;
 }
 .rbc-label {
-  padding: 0 5px;
+  padding: 0 8px;
+  font-size: 0.8em;
 }
 .rbc-day-slot {
   position: relative;
@@ -466,6 +467,8 @@ button.rbc-input::-moz-focus-inner {
 }
 .rbc-day-slot .rbc-event {
   border-left: 2px solid hsl(208, 56%, 44%);
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
   display: flex;
   max-height: 100%;
   min-height: 20px;

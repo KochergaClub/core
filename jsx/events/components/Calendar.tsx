@@ -13,9 +13,9 @@ moment.locale('ru');
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
-export default (props: any) => {
+const Calendar = (props: any) => {
   return (
-    <div style={{ height: 780 }}>
+    <div style={{ height: '80vh' }}>
       <CalendarStyle />
       <CalendarDndStyle />
       <DragAndDropCalendar
@@ -26,12 +26,14 @@ export default (props: any) => {
         popup={true}
         defaultView={BigCalendar.Views.WEEK}
         scrollToTime={new Date('2000-01-01 09:00:00')}
-        components={{
-          toolbar: CalendarToolbar,
-          ...(props.components || {}),
-        }}
         {...props}
+        components={{
+          ...(props.components || {}),
+          toolbar: CalendarToolbar,
+        }}
       />
     </div>
   );
 };
+
+export default Calendar;
