@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 import moment from 'moment';
 
 import Page from '../components/Page';
+import PageTitle from '../components/PageTitle';
 import { useListeningWebSocket, apiCall } from '../utils';
 
 import Calendar from './components/Calendar';
@@ -135,7 +136,7 @@ export default (props: Props) => {
 
   return (
     <Page title="Календарь событий" team wide>
-      <h1>Календарь событий</h1>
+      <PageTitle>Календарь событий</PageTitle>
       <EventDispatch.Provider value={dispatch}>
         <Calendar
           events={store.events}
