@@ -7,6 +7,9 @@ export interface Event {
   room: string;
   start: moment.Moment;
   end: moment.Moment;
+  posted_vk?: string;
+  posted_fb?: string;
+  posted_timepad?: string;
 }
 
 export interface ServerEvent {

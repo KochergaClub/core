@@ -19,15 +19,39 @@ interface Props {
 }
 
 const EventTitle = styled.header`
-  font-weight: bold;
-  font-size: 1.3em;
-  line-height: 1.6em;
+  font-size: 1.6em;
+  line-height: 1;
+  margin-bottom: 10px;
+`;
+
+const EventRoom = styled.div``;
+
+const EventDescription = styled.div`
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const EventAnnouncements = ({ event }: { event: LocalEvent }) => {
+  if (!event.posted_vk && !event.posted_fb && !event.posted_timepad) {
+    return null;
+  }
+
+  return (
+    <div>
+      <strong>Анонсы:</strong>{' '}
+      {event.posted_vk && <a href={event.posted_vk}>vk</a>}
+      &nbsp;
+      {event.posted_fb && <a href={event.posted_fb}>fb</a>}
+      &nbsp;
+      {event.posted_timepad && <a href={event.posted_timepad}>timepad</a>}
+    </div>
+  );
+};
 
 const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
   const focus = useFocusOnFirstModalRender();
@@ -48,22 +72,25 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
       <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
-        <div>{event.room}</div>
         <div>
-          {event.start.format('DD MMMM')}, {event.start.format('HH:mm')}-{event.end.format(
-            'HH:mm'
-          )}
+          {event.start.format('dddd, DD MMMM')} ⋅ {event.start.format('HH:mm')}{' '}
+          – {event.end.format('HH:mm')}
         </div>
+        <EventRoom>{event.room}</EventRoom>
         {event.description && (
-          <Markdown source={event.description} plugins={[breaks]} />
+          <EventDescription>
+            <Markdown source={event.description} plugins={[breaks]} />
+          </EventDescription>
         )}
+        <EventAnnouncements event={event} />
       </Modal.Body>
       <Modal.Footer>
         <Footer>
           <small>
             <a href={`https://evenman.team.kocherga.club/event/${event.id}`}>
-              Посмотреть в evenman
-            </a>
+              evenman
+            </a>{' '}
+            ⋅ <a href={`/admin/events/event/${event.id}`}>админка</a>
           </small>
           <Button onClick={editCb}>Редактировать</Button>
         </Footer>
