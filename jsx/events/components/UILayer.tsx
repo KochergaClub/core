@@ -67,30 +67,30 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     [uiDispatch]
   );
 
-  if (uiStore.mode === 'new') {
-    return (
-      <NewEventModal
-        isOpen={true}
-        start={uiStore.context.start}
-        end={uiStore.context.end}
-        onCreate={onCreate}
-        onClose={onClose}
-      />
-    );
+  switch (uiStore.mode) {
+    case 'new':
+      return (
+        <NewEventModal
+          isOpen={true}
+          start={uiStore.context.start}
+          end={uiStore.context.end}
+          onCreate={onCreate}
+          onClose={onClose}
+        />
+      );
+    case 'edit':
+      return (
+        <EditEventModal
+          isOpen={true}
+          event={uiStore.context.event}
+          onSave={onSave}
+          onDelete={onDelete}
+          onClose={onClose}
+        />
+      );
+    default:
+      return null;
   }
-
-  if (uiStore.mode === 'edit') {
-    return (
-      <EditEventModal
-        isOpen={true}
-        event={uiStore.context.event}
-        onSave={onSave}
-        onDelete={onDelete}
-        onClose={onClose}
-      />
-    );
-  }
-  return null;
 };
 
 export default UILayer;
