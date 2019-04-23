@@ -9,5 +9,7 @@ syncs:
     notify_terminal: true
     src: '.'
     sync_excludes:
-      - 'node_modules'
-      - '.git'
+      - 'Path node_modules'
+      - 'Path .git'
+      - 'Name __pycache__'
+    sync_excludes_type: 'none'
