@@ -2,7 +2,10 @@ import React, { useCallback } from 'react';
 
 import styled from 'styled-components';
 
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+import breaks from 'remark-breaks';
+import Markdown from 'react-markdown';
+
+import { Button, Modal } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '../../utils';
 
@@ -17,6 +20,13 @@ interface Props {
 
 const EventTitle = styled.header`
   font-weight: bold;
+  font-size: 1.3em;
+  line-height: 1.6em;
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
@@ -44,22 +54,19 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
             'HH:mm'
           )}
         </div>
-        <div>
-          <a href={`https://evenman.team.kocherga.club/event/${event.id}`}>
-            Посмотреть в evenman
-          </a>
-        </div>
         {event.description && (
-          <>
-            <hr />
-            <div>{event.description}</div>
-          </>
+          <Markdown source={event.description} plugins={[breaks]} />
         )}
       </Modal.Body>
       <Modal.Footer>
-        <ControlsFooter>
+        <Footer>
+          <small>
+            <a href={`https://evenman.team.kocherga.club/event/${event.id}`}>
+              Посмотреть в evenman
+            </a>
+          </small>
           <Button onClick={editCb}>Редактировать</Button>
-        </ControlsFooter>
+        </Footer>
       </Modal.Footer>
     </Modal>
   );

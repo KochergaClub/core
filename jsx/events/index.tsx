@@ -105,15 +105,6 @@ export default (props: Props) => {
     []
   );
 
-  const startEditEvent = useCallback((event: Event) => {
-    uiDispatch({
-      type: 'START_EDIT',
-      payload: {
-        event,
-      },
-    });
-  }, []);
-
   const startViewEvent = useCallback((event: Event) => {
     uiDispatch({
       type: 'START_VIEW',
@@ -156,7 +147,6 @@ export default (props: Props) => {
           onEventDrop={resizeEvent}
           onRangeChange={onRangeChange}
           onSelectEvent={startViewEvent}
-          onDoubleClickEvent={startEditEvent}
           eventPropGetter={eventPropGetter}
           components={{
             event: CalendarEvent,
