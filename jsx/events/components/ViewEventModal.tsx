@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
-import { useFocusOnFirstModalRender } from '../../utils';
+import { useFocusOnFirstModalRender, useCommonHotkeys } from '../../utils';
 
 import { LocalEvent } from '../types';
 
@@ -22,6 +22,10 @@ const EventTitle = styled.header`
 const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
   const focus = useFocusOnFirstModalRender();
 
+  const hotkeys = useCommonHotkeys({
+    onEscape: onClose,
+  });
+
   const editCb = useCallback(
     () => {
       onEdit(event);
@@ -29,19 +33,10 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
     [event, onEdit]
   );
 
-  const keypress = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.keyCode === 27) {
-        onClose();
-      }
-    },
-    [onClose]
-  );
-
   return (
     <Modal isOpen={isOpen}>
       <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
-      <Modal.Body tabIndex={-1} onKeyDown={keypress} ref={focus}>
+      <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
         <div>{event.room}</div>
         <div>

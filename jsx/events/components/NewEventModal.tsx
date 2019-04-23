@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import moment from 'moment';
 
-import { apiCall } from '../../utils';
+import { apiCall, useCommonHotkeys } from '../../utils';
 import { Event, ServerEvent, serverEventToEvent } from '../types';
 
 import EventFields from './EventFields';
@@ -23,8 +23,14 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const saveDisabled = saving || !title.length;
+
   const create = useCallback(
     async () => {
+      if (saveDisabled) {
+        return;
+      }
+
       setSaving(true);
       const json = (await apiCall('events', 'POST', {
         start: start.toDate(),
@@ -37,21 +43,13 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
       const event = serverEventToEvent(json);
       onCreate(event);
     },
-    [title, description, room]
+    [title, description, room, saveDisabled]
   );
 
-  const saveDisabled = saving || !title.length;
-
-  const keypress = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.keyCode === 13 && !saveDisabled) {
-        create();
-      } else if (e.keyCode === 27) {
-        onClose();
-      }
-    },
-    [create, onClose]
-  );
+  const hotkeys = useCommonHotkeys({
+    onEnter: create,
+    onEscape: onClose,
+  });
 
   if (!isOpen) {
     return null;
@@ -63,18 +61,16 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
         Создать событие {moment(start).format('DD MMMM')}{' '}
         {moment(start).format('HH:mm')}–{moment(end).format('HH:mm')}
       </Modal.Header>
-      <Modal.Body>
-        <div tabIndex={-1} onKeyDown={keypress}>
-          <EventFields
-            title={title}
-            description={description}
-            room={room}
-            setTitle={setTitle}
-            setRoom={setRoom}
-            setDescription={setDescription}
-            disabled={saving}
-          />
-        </div>
+      <Modal.Body {...hotkeys}>
+        <EventFields
+          title={title}
+          description={description}
+          room={room}
+          setTitle={setTitle}
+          setRoom={setRoom}
+          setDescription={setDescription}
+          disabled={saving}
+        />
       </Modal.Body>
       <Modal.Footer>
         <ControlsFooter>

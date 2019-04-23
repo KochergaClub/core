@@ -89,6 +89,15 @@ export const apiCall = async (
   }
 };
 
+/*
+ *  Use this hook's result as ref to focus on input in a modal.
+ *  Example:
+ *
+ *    const focus = useFocusOnFirstModalRender();
+ *    <Modal>
+ *      <input ref={focus} ... />
+ *    </Modal>
+ */
 export const useFocusOnFirstModalRender = () => {
   const firstRender = useRef(true);
 
@@ -100,4 +109,37 @@ export const useFocusOnFirstModalRender = () => {
       }
     }
   }, []);
+};
+
+/*
+*  Pass the result from this hook to element's props to make it escapable or enterable.
+*  Example:
+*
+*    const hotkeys = useCommonHotkeys({ onEscape: ..., onEnter: ... });
+*    <div {...hotkeys}>Content</div>;
+*/
+export const useCommonHotkeys = ({
+  onEscape,
+  onEnter,
+}: {
+  onEscape?: () => void;
+  onEnter?: () => void;
+}) => {
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.keyCode === 27) {
+        onEscape && onEscape();
+      }
+      if (e.keyCode === 13) {
+        onEnter && onEnter();
+      }
+    },
+    [onEscape, onEnter]
+  );
+
+  return {
+    onKeyDown,
+    tabIndex: -1,
+    style: { outline: 'none' },
+  };
 };

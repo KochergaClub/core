@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { apiCall } from '../../utils';
+import { apiCall, useCommonHotkeys } from '../../utils';
 import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
 
 import { Button, Modal } from '@kocherga/frontkit';
@@ -35,8 +35,13 @@ const EditEventModal = ({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const saveDisabled = deleting || saving || !title.length;
+
   const saveCb = useCallback(
     async () => {
+      if (saveDisabled) {
+        return;
+      }
       setSaving(true);
       const json = (await apiCall(`event/${event.id}`, 'PATCH', {
         title,
@@ -46,7 +51,7 @@ const EditEventModal = ({
 
       onSave(serverEventToEvent(json));
     },
-    [event.id, title, description, room]
+    [event.id, saveDisabled, title, description, room]
   );
 
   const deleteCb = useCallback(
@@ -58,18 +63,10 @@ const EditEventModal = ({
     [event.id]
   );
 
-  const saveDisabled = deleting || saving || !title.length;
-
-  const keypress = useCallback(
-    (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.keyCode === 13 && !saveDisabled) {
-        saveCb();
-      } else if (e.keyCode === 27) {
-        onClose();
-      }
-    },
-    [saveCb, onClose]
-  );
+  const hotkeys = useCommonHotkeys({
+    onEscape: onClose,
+    onEnter: saveCb,
+  });
 
   if (!isOpen) {
     return null;
@@ -81,18 +78,16 @@ const EditEventModal = ({
         Редактировать событие {event.start.format('DD MMMM')}{' '}
         {event.start.format('HH:mm')}–{event.end.format('HH:mm')}
       </Modal.Header>
-      <Modal.Body>
-        <div tabIndex={-1} onKeyDown={keypress}>
-          <EventFields
-            title={title}
-            description={description}
-            room={room}
-            setTitle={setTitle}
-            setDescription={setDescription}
-            setRoom={setRoom}
-            disabled={deleting || saving}
-          />
-        </div>
+      <Modal.Body {...hotkeys}>
+        <EventFields
+          title={title}
+          description={description}
+          room={room}
+          setTitle={setTitle}
+          setDescription={setDescription}
+          setRoom={setRoom}
+          disabled={deleting || saving}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Footer>
