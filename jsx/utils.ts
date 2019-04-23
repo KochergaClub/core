@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
 // This function is useful for client side only.
 // In most cases you should use GlobalContext.csrfToken or <CSRFInput /> instead.
@@ -87,4 +87,17 @@ export const apiCall = async (
   if (expectJSON) {
     return await response.json();
   }
+};
+
+export const useFocusOnFirstModalRender = () => {
+  const firstRender = useRef(true);
+
+  return useCallback((el: HTMLElement | null) => {
+    if (firstRender.current) {
+      firstRender.current = false; // focus only once, just to avoid nasty errors
+      if (el) {
+        setTimeout(() => el.focus(), 50); // timers are necessary because we use Modal with portals
+      }
+    }
+  }, []);
 };

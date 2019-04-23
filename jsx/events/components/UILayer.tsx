@@ -1,10 +1,11 @@
 import React, { useCallback, useContext } from 'react';
 
-import { Event } from '../types';
+import { Event, LocalEvent } from '../types';
 import { UIStore, UIAction } from '../uiTypes';
 
 import NewEventModal from './NewEventModal';
 import EditEventModal from './EditEventModal';
+import ViewEventModal from './ViewEventModal';
 import { EventDispatch } from '../contexts';
 
 interface Props {
@@ -22,7 +23,7 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         payload: event,
       });
       uiDispatch({
-        type: 'CLOSE_NEW',
+        type: 'CLOSE',
       });
     },
     [dispatch, uiDispatch]
@@ -31,7 +32,17 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
   const onClose = useCallback(
     () => {
       uiDispatch({
-        type: 'CLOSE_NEW',
+        type: 'CLOSE',
+      });
+    },
+    [uiDispatch]
+  );
+
+  const onEdit = useCallback(
+    (event: LocalEvent) => {
+      uiDispatch({
+        type: 'START_EDIT',
+        payload: { event },
       });
     },
     [uiDispatch]
@@ -46,7 +57,7 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         },
       });
       uiDispatch({
-        type: 'CLOSE_NEW',
+        type: 'CLOSE',
       });
     },
     [uiDispatch]
@@ -61,7 +72,7 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         },
       });
       uiDispatch({
-        type: 'CLOSE_NEW',
+        type: 'CLOSE',
       });
     },
     [uiDispatch]
@@ -76,6 +87,15 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
           end={uiStore.context.end}
           onCreate={onCreate}
           onClose={onClose}
+        />
+      );
+    case 'view':
+      return (
+        <ViewEventModal
+          isOpen={true}
+          event={uiStore.context.event}
+          onClose={onClose}
+          onEdit={onEdit}
         />
       );
     case 'edit':

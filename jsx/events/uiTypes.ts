@@ -17,17 +17,31 @@ interface EditUIStore {
   };
 }
 
+interface ViewUIStore {
+  mode: 'view';
+  context: {
+    event: LocalEvent;
+  };
+}
+
 interface PassiveUIStore {
   mode: 'passive';
 }
 
-export type UIStore = NewUIStore | EditUIStore | PassiveUIStore;
+export type UIStore = NewUIStore | EditUIStore | ViewUIStore | PassiveUIStore;
 
 interface StartNewUIAction {
   type: 'START_NEW';
   payload: {
     start: moment.Moment;
     end: moment.Moment;
+  };
+}
+
+interface StartViewUIAction {
+  type: 'START_VIEW';
+  payload: {
+    event: LocalEvent;
   };
 }
 
@@ -38,11 +52,15 @@ interface StartEditUIAction {
   };
 }
 
-interface CloseNewUIAction {
-  type: 'CLOSE_NEW';
+interface CloseUIAction {
+  type: 'CLOSE';
 }
 
-export type UIAction = StartNewUIAction | StartEditUIAction | CloseNewUIAction;
+export type UIAction =
+  | StartNewUIAction
+  | StartViewUIAction
+  | StartEditUIAction
+  | CloseUIAction;
 
 export const initialUIState: UIStore = {
   mode: 'passive',
@@ -57,17 +75,25 @@ export const uiReducer = (store: UIStore, action: UIAction): UIStore => {
           ...action.payload,
         },
       };
-    case 'CLOSE_NEW':
+    case 'START_VIEW':
+      // TODO - forbid if mode is 'new'?
       return {
-        mode: 'passive',
+        mode: 'view',
+        context: {
+          event: action.payload.event,
+        },
       };
     case 'START_EDIT':
-      // TODO - forbid EDIT if mode is 'new'?
+      // TODO - forbid if mode is 'new'?
       return {
         mode: 'edit',
         context: {
           event: action.payload.event,
         },
+      };
+    case 'CLOSE':
+      return {
+        mode: 'passive',
       };
     default:
       return store;

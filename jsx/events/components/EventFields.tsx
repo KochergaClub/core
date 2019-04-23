@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import Select from 'react-select';
 import autosize from 'autosize';
 
+import { useFocusOnFirstModalRender } from '../../utils';
+
 import { Column, Input } from '@kocherga/frontkit';
 
 const roomOptions = [
@@ -42,16 +44,7 @@ interface Props {
 }
 
 const EventFields = (props: Props) => {
-  const firstRender = useRef(true);
-
-  const setFocusOnFirstRender = useCallback((el: HTMLInputElement | null) => {
-    if (firstRender.current) {
-      firstRender.current = false; // focus only once, just to avoid nasty errors
-      if (el) {
-        setTimeout(() => el.focus(), 50); // timers are necessary because we use Modal with portals
-      }
-    }
-  }, []);
+  const focus = useFocusOnFirstModalRender();
 
   const onChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +61,7 @@ const EventFields = (props: Props) => {
           type="text"
           placeholder="Название события"
           defaultValue={props.title}
-          ref={setFocusOnFirstRender}
+          ref={focus}
           onChange={onChangeTitle}
           disabled={props.disabled}
         />

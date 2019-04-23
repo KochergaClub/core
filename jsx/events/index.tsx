@@ -114,6 +114,15 @@ export default (props: Props) => {
     });
   }, []);
 
+  const startViewEvent = useCallback((event: Event) => {
+    uiDispatch({
+      type: 'START_VIEW',
+      payload: {
+        event,
+      },
+    });
+  }, []);
+
   const resizeEvent = useCallback(
     async ({ event, start, end }: { event: Event; start: Date; end: Date }) => {
       dispatch({
@@ -146,6 +155,7 @@ export default (props: Props) => {
           onEventResize={resizeEvent}
           onEventDrop={resizeEvent}
           onRangeChange={onRangeChange}
+          onSelectEvent={startViewEvent}
           onDoubleClickEvent={startEditEvent}
           eventPropGetter={eventPropGetter}
           components={{
