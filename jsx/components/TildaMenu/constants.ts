@@ -63,8 +63,8 @@ export const teamMenuItems: Item[] = [
   {
     title: 'События',
     items: [
+      { link: '/team/events/', title: 'Календарь' },
       { link: '/team/ratio/', title: 'Тренинги' },
-      { link: '/team/events/', title: 'События' },
     ],
   },
   {
