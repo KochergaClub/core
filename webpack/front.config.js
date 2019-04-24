@@ -11,7 +11,14 @@ module.exports = merge(base, {
     process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'none',
   output: {
     path: path.resolve(__dirname, '..', './static/dist'),
+    publicPath: '/static/dist/',
     filename: 'bundle-[hash].js',
+  },
+  devServer: {
+    contentBase: './static/dist',
+    publicPath: '/static/dist/',
+    public: 'localhost:8080',
+    host: '0.0.0.0',
   },
   plugins: [
     new BundleTracker({ filename: './webpack-stats.json' }),

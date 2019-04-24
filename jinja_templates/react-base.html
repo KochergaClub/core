@@ -24,6 +24,11 @@
      var store = {{ store | safe }};
      var csrfToken = "{{ csrf_token_var }}";
     </script>
-    {{ render_bundle('main') }}
+    <!-- {{ webpack_dev_server }} -->
+    {% if webpack_dev_server %}
+      {{ render_bundle('main') | replace("/static/dist/", "http://localhost:8080/static/dist/") }}
+    {% else %}
+      {{ render_bundle('main') }}
+    {% endif %}
   </body>
 </html>

@@ -24,6 +24,7 @@ def react_render(request, template, params={}, status=200):
             'react_style': react_html.data.get('style', ''),
             'react_helmet': react_html.data.get('helmet', ''),
             'csrf_token_var': csrf_token,  # "csrf_token" is overridden by jinja2 even if we provide it in context
+            'webpack_dev_server': settings.WEBPACK_DEV_SERVER,
             'store': json.dumps({
                 'component': template,
                 'props': params,

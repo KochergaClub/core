@@ -75,4 +75,6 @@ services:
 
   webpack_front:
     << : *common
-    command: npx webpack --config ./webpack/front.config.js --watch
+    command: npx webpack-dev-server --config ./webpack/front.config.js
+    ports:
+      - "127.0.0.1:8080:8080"
