@@ -3,6 +3,8 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
+from django.utils import timezone
+
 from kocherga.dateutils import TZ
 from kocherga.events.models import Event
 
@@ -54,8 +56,8 @@ def list_events():
 
     attachments = []
     for event in events:
-        start_time = event.start.strftime("%H:%M")
-        end_time = event.end.strftime("%H:%M")
+        start_time = timezone.localtime(event.start).strftime("%H:%M")
+        end_time = timezone.localtime(event.end).strftime("%H:%M")
 
         text = f"С {start_time} до {end_time}"
         if event.location:
