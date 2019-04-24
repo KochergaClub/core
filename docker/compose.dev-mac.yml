@@ -34,13 +34,13 @@ services:
     cap_add:
       - SYS_ADMIN
     ports:
-      - "9222:9222"
+      - "127.0.0.1:9222:9222"
     privileged: true
 
   redis:
     image: redis:5.0
     ports:
-      - 6379:6379
+      - "127.0.0.1:6379:6379"
 
   api:
     << : *common
@@ -51,7 +51,7 @@ services:
         NPM_TOKEN: ${TOKEN}
     command: npx nodemon -w ./kocherga --exec poetry run ./manage.py runserver --noreload 0.0.0.0:80
     ports:
-      - "8000:80"
+      - "127.0.0.1:8000:80"
     depends_on:
       - db
       - render-server
