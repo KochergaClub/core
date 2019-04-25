@@ -43,7 +43,7 @@ class RootView(ListCreateAPIView):
             date=arg2date("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
-        )
+        ).prefetch_related('tags')
 
     # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
     def post(self, request, *args, **kwargs):
