@@ -1,3 +1,7 @@
+import { hot } from 'react-hot-loader/root';
+
+import React from 'react';
+
 const PAGES = {
   'analytics/index': require('./analytics/index').default,
   'auth/login': require('./auth/login').default,
@@ -22,4 +26,8 @@ const PAGES = {
   'error-pages/500': require('./error-pages/500').default,
 };
 
-export const getPage = (name: string) => PAGES[name];
+const Entrypoint = (props: { name: string; innerProps: any }) => {
+  return React.createElement(PAGES[props.name], props.innerProps);
+};
+
+export default hot(Entrypoint);

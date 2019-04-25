@@ -25,7 +25,7 @@ import 'babel-polyfill';
 import { ServerStyleSheet } from 'styled-components';
 import { Helmet } from 'react-helmet';
 
-import { getPage } from '../jsx/entry';
+import Entrypoint from '../jsx/entry';
 import GlobalContext from '../jsx/components/GlobalContext';
 
 var ADDRESS = argv.address;
@@ -46,13 +46,15 @@ interface Opts {
 }
 
 async function reactRender(opts: Opts) {
-  const component = getPage(opts.path);
-
   const props = JSON.parse(opts.serializedProps);
 
   const sheet = new ServerStyleSheet();
 
-  const el = React.createElement(component, props);
+  const el = React.createElement(Entrypoint, {
+    name: opts.path,
+    innerProps: props,
+  });
+
   const wrapperEl = React.createElement(
     GlobalContext.Provider,
     {

@@ -18,7 +18,10 @@ module.exports = merge(base, {
     contentBase: './static/dist',
     publicPath: '/static/dist/',
     public: 'localhost:8080',
+    port: 8080,
     host: '0.0.0.0',
+    hot: true,
+    writeToDisk: true, // https://github.com/webpack/webpack-dev-server/issues/1591
   },
   plugins: [
     new BundleTracker({ filename: './webpack-stats.json' }),
