@@ -5,8 +5,6 @@ import ReactDOM from 'react-dom';
 
 import Entrypoint from '../jsx/entry';
 
-import GlobalContext from '../jsx/components/GlobalContext';
-
 declare global {
   interface Window {
     csrfToken: string;
@@ -18,21 +16,11 @@ function renderApp(props: any) {
 
   const el = React.createElement(Entrypoint, {
     name: window['store'].component,
+    csrfToken: window.csrfToken, // extract from page
     innerProps: props,
   });
 
-  const csrfToken = window.csrfToken; // extract from page
-  const wrapperEl = React.createElement(
-    GlobalContext.Provider,
-    {
-      value: {
-        csrfToken,
-      },
-    },
-    el
-  );
-
-  ReactDOM.hydrate(wrapperEl, domContainerNode);
+  ReactDOM.hydrate(el, domContainerNode);
 }
 
 renderApp(window['store'].props);

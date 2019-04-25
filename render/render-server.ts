@@ -26,7 +26,6 @@ import { ServerStyleSheet } from 'styled-components';
 import { Helmet } from 'react-helmet';
 
 import Entrypoint from '../jsx/entry';
-import GlobalContext from '../jsx/components/GlobalContext';
 
 var ADDRESS = argv.address;
 var PORT = argv.port;
@@ -52,20 +51,11 @@ async function reactRender(opts: Opts) {
 
   const el = React.createElement(Entrypoint, {
     name: opts.path,
+    csrfToken: props.csrf_token,
     innerProps: props,
   });
 
-  const wrapperEl = React.createElement(
-    GlobalContext.Provider,
-    {
-      value: {
-        csrfToken: props.csrf_token,
-      },
-    },
-    el
-  );
-
-  const html = ReactDOMServer.renderToString(sheet.collectStyles(wrapperEl));
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(el));
   const helmet = Helmet.renderStatic();
   const styleTags = sheet.getStyleTags();
 

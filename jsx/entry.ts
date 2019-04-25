@@ -2,6 +2,8 @@ import { hot } from 'react-hot-loader/root';
 
 import React from 'react';
 
+import GlobalContext from './components/GlobalContext';
+
 const PAGES = {
   'analytics/index': require('./analytics/index').default,
   'auth/login': require('./auth/login').default,
@@ -26,8 +28,24 @@ const PAGES = {
   'error-pages/500': require('./error-pages/500').default,
 };
 
-const Entrypoint = (props: { name: string; innerProps: any }) => {
-  return React.createElement(PAGES[props.name], props.innerProps);
+interface Props {
+  name: string;
+  csrfToken: string;
+  innerProps: any;
+}
+
+const Entrypoint = (props: Props) => {
+  const el = React.createElement(PAGES[props.name], props.innerProps);
+
+  return React.createElement(
+    GlobalContext.Provider,
+    {
+      value: {
+        csrfToken: props.csrfToken,
+      },
+    },
+    el
+  );
 };
 
 export default hot(Entrypoint);
