@@ -36,7 +36,7 @@ def index(request):
     watchmen = list(kocherga.staff.models.Member.objects.filter(is_current=True).filter(role='WATCHMAN'))
     watchmen += list(kocherga.staff.models.Member.objects.filter(is_current=True).exclude(role='WATCHMAN'))
 
-    return react_render(request, 'watchmen/index.tsx', {
+    return react_render(request, 'watchmen/index', {
         'schedule': serializers.ShiftSerializer(items, many=True).data,
         'editable': request.user.has_perm('watchmen.manage'),
         'from_date': from_date.strftime('%Y-%m-%d'),

@@ -24,7 +24,7 @@ class MainView(ZadarmaViewerMixin, View):
             for k, g in groupby(calls, key=lambda call: call.pbx_call_id)
         ]
 
-        return react_render(request, 'zadarma/index.tsx', {
+        return react_render(request, 'zadarma/index', {
             'pbx_calls': pbx_calls,
         })
 
@@ -33,6 +33,6 @@ class PbxCallView(ZadarmaViewerMixin, View):
     def get(self, request, pbx_call_id):
         calls = Call.objects.filter(pbx_call_id=pbx_call_id)
 
-        return react_render(request, 'zadarma/pbx_call.tsx', {
+        return react_render(request, 'zadarma/pbx_call', {
             'pbx_call': serializers.CallSerializer(calls, many=True).data
         })

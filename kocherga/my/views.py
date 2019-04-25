@@ -22,7 +22,7 @@ class MainView(LoginRequiredMixin, View):
             props['customer'] = CustomerSerializer(customer).data
             props['orders_count'] = customer.orders().count()
 
-        return react_render(request, 'my/index.tsx', props)
+        return react_render(request, 'my/index', props)
 
 
 class SetPrivacyModeView(LoginRequiredMixin, View):

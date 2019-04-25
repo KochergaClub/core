@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { getPage } from '../jsx/entry';
+
+import GlobalContext from '../jsx/components/GlobalContext';
+
 declare global {
   interface Window {
     csrfToken: string;
@@ -8,8 +12,7 @@ declare global {
 }
 
 function renderApp(props: any) {
-  const component = require('../jsx/' + window['store'].component).default;
-  const GlobalContext = require('../jsx/components/GlobalContext').default;
+  const component = getPage(window['store'].component);
   const domContainerNode = document.getElementById('react-app');
 
   const el = React.createElement(component, props);

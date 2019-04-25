@@ -25,6 +25,9 @@ import 'babel-polyfill';
 import { ServerStyleSheet } from 'styled-components';
 import { Helmet } from 'react-helmet';
 
+import { getPage } from '../jsx/entry';
+import GlobalContext from '../jsx/components/GlobalContext';
+
 var ADDRESS = argv.address;
 var PORT = argv.port;
 
@@ -43,10 +46,8 @@ interface Opts {
 }
 
 async function reactRender(opts: Opts) {
-  const {
-    default: GlobalContext,
-  } = await import('../jsx/components/GlobalContext');
-  const { default: component } = await import('../jsx/' + opts.path);
+  const component = getPage(opts.path);
+
   const props = JSON.parse(opts.serializedProps);
 
   const sheet = new ServerStyleSheet();
