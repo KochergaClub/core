@@ -56,7 +56,15 @@ INSTALLED_APPS = [
     'kocherga.my',
     'kocherga.timepad',
     'kocherga.mastermind_dating',
-    "wagtail",
+
+    'wagtail.images',
+    'wagtail.users',
+    'wagtail.admin',
+    'wagtail.core',
+
+    'taggit',
+    'modelcluster',
+    
     'wagtail.api.v2',
     'rest_framework',
 ]
