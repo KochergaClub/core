@@ -55,7 +55,8 @@ if not settings.IGNORE_WEB:
         path('admin/', admin.site.urls),
         
         path('api/wagtail/', api_router.urls),
- 
+        path('wagtail/', include('wagtail.admin.urls')),
+        
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
     if settings.DEBUG:

@@ -22,6 +22,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Wagtail
+
+WAGTAIL_SITE_NAME = "Kocherga"
+WAGTAILAPI_BASE_URL = "/api/wagtail"
 
 # Application definition
 
@@ -57,14 +61,21 @@ INSTALLED_APPS = [
     'kocherga.timepad',
     'kocherga.mastermind_dating',
 
-    'wagtail.images',
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
     'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
 
     'taggit',
     'modelcluster',
-    
+
     'wagtail.api.v2',
     'rest_framework',
 ]
