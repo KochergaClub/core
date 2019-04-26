@@ -26,6 +26,8 @@ const PAGES = {
   'error-pages/403': require('./error-pages/403').default,
   'error-pages/404': require('./error-pages/404').default,
   'error-pages/500': require('./error-pages/500').default,
+  'projects/index': require('./projects/index').default,
+  'projects/detail': require('./projects/detail').default,
 };
 
 interface Props {
