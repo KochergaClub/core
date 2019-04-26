@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     'kocherga.my',
     'kocherga.timepad',
     'kocherga.mastermind_dating',
+    "wagtail",
+    'wagtail.api.v2',
+    'rest_framework',
 ]
 
 IGNORE_WEB = False
