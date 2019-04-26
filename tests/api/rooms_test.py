@@ -1,4 +1,7 @@
 import pytest
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+]
 
 def test_rooms(client):
     res = client.get('/api/rooms')
