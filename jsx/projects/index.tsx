@@ -26,7 +26,7 @@ export default () => {
 
   return (
     <Page title="Проекты Кочерги">
-      <PageTitle>Проекты Кочерги</PageTitle>
+      <PageTitle tall>Проекты Кочерги</PageTitle>
       <Grid>
         {projects.map(project => <ProjectCard key={project.id} {...project} />)}
       </Grid>

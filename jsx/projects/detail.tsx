@@ -19,7 +19,14 @@ const Image = styled.img`
 
 const Summary = styled.div`
   margin-top: 20px;
+  font-size: 1.2rem;
   text-align: center;
+`;
+
+const Description = styled.div`
+  margin: 0 auto;
+  max-width: 800px;
+  margin-bottom: 100px;
 `;
 
 export default (props: Props) => {
@@ -32,16 +39,17 @@ export default (props: Props) => {
   if (!project) {
     return (
       <Page title="Загружается... | Проект Кочерги">
-        <PageTitle>Загружается...</PageTitle>
+        <PageTitle tall>Загружается...</PageTitle>
       </Page>
     );
   }
 
   return (
     <Page title={`${project.title} | Проект Кочерги`}>
-      <PageTitle>{project.title}</PageTitle>
+      <PageTitle tall>{project.title}</PageTitle>
       <Image src={project.image.url} />
       <Summary>{project.summary}</Summary>
+      <Description dangerouslySetInnerHTML={{ __html: project.body }} />
     </Page>
   );
 };
