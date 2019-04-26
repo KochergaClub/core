@@ -27,6 +27,7 @@
     "react-big-calendar": "^0.20.4",
     "react-dom": "^16.8.1",
     "react-helmet": "^5.2.0",
+    "react-hot-loader": "^4.8.4",
     "react-markdown": "^4.0.8",
     "react-render": "^3.0.0",
     "react-select": "^2.4.2",

@@ -12,7 +12,7 @@ from . import serializers
 def index(request):
     cheques = Cheque.objects.all()
 
-    return react_render(request, 'cashier/index.tsx', {
+    return react_render(request, 'cashier/index', {
         'cheques': serializers.ChequeSerializer(cheques, many=True).data,
     })
 

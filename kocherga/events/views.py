@@ -25,7 +25,7 @@ class MainView(FullCalendarViewerMixin, View):
             to_date=to_date,
         )
 
-        return react_render(request, 'events/index.tsx', {
+        return react_render(request, 'events/index', {
             "events": EventSerializer(events, many=True).data,
             "range": {
                 "start": from_date.strftime('%Y-%m-%d'),

@@ -1,5 +1,9 @@
+import 'react-hot-loader';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import Entrypoint from '../jsx/entry';
 
 declare global {
   interface Window {
@@ -8,24 +12,15 @@ declare global {
 }
 
 function renderApp(props: any) {
-  const component = require('../jsx/' + window['store'].component).default;
-  const GlobalContext = require('../jsx/components/GlobalContext').default;
   const domContainerNode = document.getElementById('react-app');
 
-  const el = React.createElement(component, props);
+  const el = React.createElement(Entrypoint, {
+    name: window['store'].component,
+    csrfToken: window.csrfToken, // extract from page
+    innerProps: props,
+  });
 
-  const csrfToken = window.csrfToken; // extract from page
-  const wrapperEl = React.createElement(
-    GlobalContext.Provider,
-    {
-      value: {
-        csrfToken,
-      },
-    },
-    el
-  );
-
-  ReactDOM.hydrate(wrapperEl, domContainerNode);
+  ReactDOM.hydrate(el, domContainerNode);
 }
 
 renderApp(window['store'].props);

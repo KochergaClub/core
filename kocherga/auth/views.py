@@ -30,14 +30,14 @@ class LoginView(View):
         if request.user.is_authenticated:
             return redirect('/')
 
-        return react_render(request, 'auth/login.tsx', {
+        return react_render(request, 'auth/login', {
             'djangoForm': str(LoginForm().as_p()),
         })
 
     def post(self, request):
         form = LoginForm(request.POST)
         if not form.is_valid():
-            return react_render(request, 'auth/login.tsx', {
+            return react_render(request, 'auth/login', {
                 'djangoForm': form.as_p(),
             })
 
@@ -68,7 +68,7 @@ class LoginView(View):
 
 class SentMagicLinkView(View):
     def get(self, request):
-        return react_render(request, 'auth/check-your-email.tsx')
+        return react_render(request, 'auth/check-your-email')
 
 
 class MagicLinkView(View):
@@ -99,7 +99,7 @@ class MagicLinkView(View):
 
 class RegisteredView(LoginRequiredMixin, View):
     def get(self, request):
-        return react_render(request, 'auth/registered.tsx', {
+        return react_render(request, 'auth/registered', {
             'index_url': reverse('my:index'),
         })
 

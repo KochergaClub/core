@@ -14,7 +14,7 @@ def index(request):
 
     props = {}
     props['cohorts'] = serializers.CohortSerializer(cohorts, many=True).data
-    return react_render(request, 'mastermind_dating/index.tsx', props)
+    return react_render(request, 'mastermind_dating/index', props)
 
 
 @staff_member_required
@@ -25,7 +25,7 @@ def cohort_page(request, cohort_id):
         'cohort_id': cohort_id,
         'users': serializers.UserSerializer(cohort.users.all(), many=True).data
     }
-    return react_render(request, 'mastermind_dating/cohort_page.tsx', props)
+    return react_render(request, 'mastermind_dating/cohort_page', props)
 
 
 @staff_member_required

@@ -25,6 +25,8 @@ import 'babel-polyfill';
 import { ServerStyleSheet } from 'styled-components';
 import { Helmet } from 'react-helmet';
 
+import Entrypoint from '../jsx/entry';
+
 var ADDRESS = argv.address;
 var PORT = argv.port;
 
@@ -43,26 +45,17 @@ interface Opts {
 }
 
 async function reactRender(opts: Opts) {
-  const {
-    default: GlobalContext,
-  } = await import('../jsx/components/GlobalContext');
-  const { default: component } = await import('../jsx/' + opts.path);
   const props = JSON.parse(opts.serializedProps);
 
   const sheet = new ServerStyleSheet();
 
-  const el = React.createElement(component, props);
-  const wrapperEl = React.createElement(
-    GlobalContext.Provider,
-    {
-      value: {
-        csrfToken: props.csrf_token,
-      },
-    },
-    el
-  );
+  const el = React.createElement(Entrypoint, {
+    name: opts.path,
+    csrfToken: props.csrf_token,
+    innerProps: props,
+  });
 
-  const html = ReactDOMServer.renderToString(sheet.collectStyles(wrapperEl));
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(el));
   const helmet = Helmet.renderStatic();
   const styleTags = sheet.getStyleTags();
 

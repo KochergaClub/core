@@ -26,6 +26,6 @@ def index(request):
             'total_income': total_income,
         })
 
-    return react_render(request, 'analytics/index.tsx', {
+    return react_render(request, 'analytics/index', {
         'bov_stats': BOV_stats,
     })
