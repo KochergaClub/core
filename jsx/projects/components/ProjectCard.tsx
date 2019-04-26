@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Project } from '../constants';
+import { Project } from '../utils';
 
 const Link = styled.a`
   text-decoration: none;
@@ -43,9 +43,9 @@ const Image = styled.img`
 
 const ProjectCard = (props: Project) => {
   return (
-    <Link href={`/projects/${props.slug}`}>
+    <Link href={`/projects/${props.meta.slug}`}>
       <Card>
-        <Image src={props.image} />
+        <Image src={props.image_thumbnail.url} />
         <Inner>
           <Header>{props.title}</Header>
           <Summary>{props.summary}</Summary>

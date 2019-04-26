@@ -1,18 +1,27 @@
-export interface Project {
+import { apiCall } from '../utils';
+
+interface WagtailImage {
+  url: string;
+  width: string;
+  height: string;
+}
+
+interface WagtailItem {
   id: number;
   title: string;
-  image: string;
-  slug: string;
+  meta: {
+    slug: string;
+  };
+}
+
+export interface Project extends WagtailItem {
+  image: WagtailImage;
+  image_thumbnail: WagtailImage;
   summary?: string;
   description?: string;
 }
 
-interface Projects {
-  meta: any;
-  items: Project[];
-}
-
-export const PROJECTS: Projects = {
+const PROJECTS = {
   meta: {
     total_count: 'total number of results',
   },
@@ -56,10 +65,18 @@ export const PROJECTS: Projects = {
   ],
 };
 
-export const GET_PROJECT = (slug: string) => {
-  const project = PROJECTS.items.find(value => value.slug === slug);
-  if (!project) {
-    throw new Error(`Can't find project ${slug}`);
-  }
-  return project;
+export const getAllProjects = async (): Promise<Project[]> => {
+  const json = await apiCall(
+    'wagtail/pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail',
+    'GET'
+  );
+  return json.items;
+};
+
+export const getProject = async (slug: string): Promise<Project> => {
+  const json = await apiCall(
+    `wagtail/pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,image,image_thumbnail`,
+    'GET'
+  );
+  return json.items[0];
 };

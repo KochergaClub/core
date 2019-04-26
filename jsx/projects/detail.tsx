@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
 
-import { GET_PROJECT } from './constants';
+import { Project, getProject } from './utils';
 
 interface Props {
-  name: string;
+  slug: string;
 }
 
 const Image = styled.img`
@@ -17,14 +17,31 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
+const Summary = styled.div`
+  margin-top: 20px;
+  text-align: center;
+`;
+
 export default (props: Props) => {
-  const project = GET_PROJECT(props.name);
+  const [project, setProject] = useState<Project | null>(null);
+
+  useEffect(() => {
+    getProject(props.slug).then(setProject);
+  }, []);
+
+  if (!project) {
+    return (
+      <Page title="Загружается... | Проект Кочерги">
+        <PageTitle>Загружается...</PageTitle>
+      </Page>
+    );
+  }
 
   return (
     <Page title={`${project.title} | Проект Кочерги`}>
       <PageTitle>{project.title}</PageTitle>
-      <Image src={project.image} />
-      <div>{project.summary}</div>
+      <Image src={project.image.url} />
+      <Summary>{project.summary}</Summary>
     </Page>
   );
 };

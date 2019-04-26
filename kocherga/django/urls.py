@@ -58,6 +58,14 @@ if not settings.IGNORE_WEB:
         path('wagtail/', include('wagtail.admin.urls')),
 
         re_path('404/(.*)', RedirectView.as_view(url='https://kocherga-club.ru'), name='wagtail_serve'),
+        path(
+            '404/wagtailsites',
+            include((
+                [
+                    path('404', RedirectView.as_view(url='https://kocherga-club.ru'), name='index')
+                ], 'wagtailsites'
+            ), 'wagtailsites')
+        ),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -66,20 +74,3 @@ if not settings.IGNORE_WEB:
         urlpatterns = [
             path('__debug__/', include(debug_toolbar.urls)),
         ] + urlpatterns
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

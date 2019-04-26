@@ -11,5 +11,5 @@ class MainView(View):
 class DetailView(View):
     def get(self, request, name):
         return react_render(request, 'projects/detail', {
-            'name': name,
+            'slug': name,
         })
