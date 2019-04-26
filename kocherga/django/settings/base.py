@@ -60,11 +60,11 @@ INSTALLED_APPS = [
     'kocherga.my',
     'kocherga.timepad',
     'kocherga.mastermind_dating',
+    'kocherga.projects',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
-    'wagtail.sites',
     'wagtail.users',
     'wagtail.snippets',
     'wagtail.documents',
@@ -94,6 +94,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'kocherga.django.middleware.JsonExceptionMiddleware',
     'reversion.middleware.RevisionMiddleware',
+
+    'wagtail.core.middleware.SiteMiddleware',
+    # 'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 ADD_REVERSION_ADMIN = True
