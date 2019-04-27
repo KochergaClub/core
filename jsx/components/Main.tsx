@@ -10,6 +10,7 @@ const Main = styled.main<Props>`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 40px;
+  min-height: 600px;
 `;
 
 export default Main;
