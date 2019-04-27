@@ -11,6 +11,7 @@ from wagtail.images.api.fields import ImageRenditionField
 class ProjectPage(Page):
     summary = models.TextField()
     activity_summary = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField()
 
     body = RichTextField(blank=True)
     image = models.ForeignKey(
@@ -20,6 +21,7 @@ class ProjectPage(Page):
     )
 
     content_panels = Page.content_panels + [
+        FieldPanel('is_active'),
         FieldPanel('summary'),
         FieldPanel('activity_summary'),
         ImageChooserPanel('image'),
@@ -30,6 +32,7 @@ class ProjectPage(Page):
         APIField('summary'),
         APIField('activity_summary'),
         APIField('body'),
+        APIField('is_active'),
         APIField('image', serializer=ImageRenditionField('fill-1080x400')),
         APIField('image_thumbnail', serializer=ImageRenditionField('fill-500x300', source='image')),
     ]
