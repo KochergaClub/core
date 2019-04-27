@@ -12,6 +12,7 @@ import { Project, getAllProjects } from './utils';
 const Grid = styled.div`
   background-color: #eee;
   padding: 30px 60px;
+  min-height: 500px;
 
   @media (max-width: 640px) {
     padding: 30px;

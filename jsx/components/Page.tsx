@@ -1,6 +1,7 @@
 import React from 'react';
 
 import TildaMenu from './TildaMenu';
+import TildaFooter from './TildaFooter';
 import ErrorBoundary from './ErrorBoundary';
 
 import { Helmet } from 'react-helmet';
@@ -50,6 +51,7 @@ const Page = ({ title, team, children, noMenu, wide }: Props) => {
       <Main wide={wide}>
         <ErrorBoundary>{children}</ErrorBoundary>
       </Main>
+      <TildaFooter />
     </div>
   );
 };
