@@ -10,11 +10,18 @@ const Link = styled.a`
 `;
 
 const Card = styled.div`
-  border: 1px solid #ddd;
+  background-color: white;
   padding-bottom: 10px;
   min-width: 300px;
   max-width: 500px;
   height: 100%;
+
+  img {
+    transition: opacity 0.3s;
+  }
+  &:hover img {
+    opacity: 0.8;
+  }
 `;
 
 const Inner = styled.div`

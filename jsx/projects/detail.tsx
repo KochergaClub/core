@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Page from '../components/Page';
-import PageTitle from '../components/PageTitle';
+
+import TL02 from '../blocks/TL02';
 
 import { Project, getProject } from './utils';
 
@@ -37,18 +38,13 @@ export default (props: Props) => {
   }, []);
 
   if (!project) {
-    return (
-      <Page title="Загружается... | Проект Кочерги">
-        <PageTitle tall>Загружается...</PageTitle>
-      </Page>
-    );
+    return <Page title="Загружается... | Проект Кочерги">&nbsp;</Page>;
   }
 
   return (
     <Page title={`${project.title} | Проект Кочерги`}>
-      <PageTitle tall>{project.title}</PageTitle>
+      <TL02 title={project.title}>{project.summary}</TL02>
       <Image src={project.image.url} />
-      <Summary>{project.summary}</Summary>
       <Description dangerouslySetInnerHTML={{ __html: project.body }} />
     </Page>
   );
