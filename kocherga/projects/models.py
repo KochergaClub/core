@@ -3,6 +3,7 @@ from django.db import models
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
 
@@ -21,7 +22,7 @@ class ProjectPage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('summary'),
         FieldPanel('activity_summary'),
-        FieldPanel('image'),
+        ImageChooserPanel('image'),
         FieldPanel('body'),
     ]
 
