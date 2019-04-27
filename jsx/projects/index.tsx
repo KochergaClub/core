@@ -26,13 +26,11 @@ const Grid = styled.div`
   justify-items: stretch;
 `;
 
-export default () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+interface Props {
+  projects: Project[];
+}
 
-  useEffect(() => {
-    getAllProjects().then(setProjects);
-  }, []);
-
+export default (props: Props) => {
   return (
     <Page title="Проекты Кочерги" wide>
       <TL02 title="Активные проекты">
@@ -41,7 +39,9 @@ export default () => {
         многое другое.
       </TL02>
       <Grid>
-        {projects.map(project => <ProjectCard key={project.id} {...project} />)}
+        {props.projects.map(project => (
+          <ProjectCard key={project.id} {...project} />
+        ))}
       </Grid>
     </Page>
   );

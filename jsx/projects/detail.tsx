@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import styled from 'styled-components';
 
 import Page from '../components/Page';
+import GlobalContext from '../components/GlobalContext';
 
 import TL02 from '../blocks/TL02';
 
-import { Project, getProject } from './utils';
+import { Project } from './utils';
 
 interface Props {
-  slug: string;
+  project: Project;
 }
 
 const Image = styled.img`
@@ -18,29 +19,13 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
-const Summary = styled.div`
-  margin-top: 20px;
-  font-size: 1.2rem;
-  text-align: center;
-`;
-
 const Description = styled.div`
   margin: 0 auto;
   max-width: 800px;
   margin-bottom: 100px;
 `;
 
-export default (props: Props) => {
-  const [project, setProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    getProject(props.slug).then(setProject);
-  }, []);
-
-  if (!project) {
-    return <Page title="Загружается... | Проект Кочерги">&nbsp;</Page>;
-  }
-
+export default ({ project }: Props) => {
   return (
     <Page title={`${project.title} | Проект Кочерги`}>
       <TL02 title={project.title}>

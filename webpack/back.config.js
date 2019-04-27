@@ -8,10 +8,10 @@ const base = require('./base.config.js');
 module.exports = merge(base, {
   target: 'node',
   externals: [nodeExternals()],
-  entry: path.resolve(__dirname, '..', './render/render-server.ts'),
+  entry: path.resolve(__dirname, '..', './render/server.ts'),
   output: {
     path: path.resolve(__dirname, '..', './static/dist'),
-    filename: 'render-server.js',
+    filename: 'server.js',
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({

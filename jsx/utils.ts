@@ -1,5 +1,9 @@
 import { useEffect, useCallback, useRef } from 'react';
 
+const IS_SERVER = typeof window === 'undefined';
+
+const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
+
 // This function is useful for client side only.
 // In most cases you should use GlobalContext.csrfToken or <CSRFInput /> instead.
 export const getCSRFToken = () => {
@@ -35,7 +39,7 @@ export const useListeningWebSocket = (
 
   useEffect(
     () => {
-      if (typeof window === 'undefined' || !window.WebSocket) {
+      if (IS_SERVER || !window.WebSocket) {
         return;
       }
       const socketProtocol =
@@ -53,6 +57,46 @@ export const useListeningWebSocket = (
   );
 };
 
+export class API {
+  csrfToken: string;
+  base: string = '';
+
+  constructor(csrfToken: string, base: string = '') {
+    this.csrfToken = csrfToken;
+    this.base = base;
+  }
+
+  call = async (
+    path: string,
+    method: string,
+    payload?: object,
+    expectJSON: boolean = true
+  ) => {
+    const params: RequestInit = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': this.csrfToken,
+      },
+    };
+    if (payload) {
+      params.body = JSON.stringify(payload);
+    }
+
+    const response = await fetch(`${this.base}/api/${path}`, params);
+
+    if (!response.ok) {
+      const responseBody = await response.text();
+      window.alert(`Error: ${JSON.stringify(responseBody)}`);
+      return;
+    }
+
+    if (expectJSON) {
+      return await response.json();
+    }
+  };
+}
+
 export const apiCall = async (
   path: string,
   method: string,
@@ -60,33 +104,13 @@ export const apiCall = async (
   expectJSON: boolean = true
 ) => {
   if (typeof window === 'undefined') {
-    // API calls in SSR can't be done without react hooks / contexts safely.
-    // This can be fixed by replacing apiCall with some kind of custom useAPI hook.
+    // API calls in SSR can't be done without react hooks / contexts safely, since they require csrfToken.
+    // This can be fixed by replacing apiCall with some global API object which is stored in React context.
     throw Error("Server-side rendering doesn't support API calls yet");
   }
 
-  const params: RequestInit = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCSRFToken(),
-    },
-  };
-  if (payload) {
-    params.body = JSON.stringify(payload);
-  }
-
-  const response = await fetch(`/api/${path}`, params);
-
-  if (!response.ok) {
-    const responseBody = await response.text();
-    window.alert(`Error: ${JSON.stringify(responseBody)}`);
-    return;
-  }
-
-  if (expectJSON) {
-    return await response.json();
-  }
+  const api = new API(getCSRFToken());
+  return await api.call(path, method, payload, expectJSON);
 };
 
 /*

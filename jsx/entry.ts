@@ -2,6 +2,7 @@ import { hot } from 'react-hot-loader/root';
 
 import React from 'react';
 
+import { API } from './utils';
 import GlobalContext from './components/GlobalContext';
 
 const PAGES = {
@@ -37,13 +38,19 @@ interface Props {
 }
 
 const Entrypoint = (props: Props) => {
-  const el = React.createElement(PAGES[props.name], props.innerProps);
+  const component = PAGES[props.name];
+  if (!component) {
+    throw new Error(`Component ${props.name} not found`);
+  }
+
+  const el = React.createElement(component, props.innerProps);
 
   return React.createElement(
     GlobalContext.Provider,
     {
       value: {
-        csrfToken: props.csrfToken,
+        api: new API(props.csrfToken),
+        foo: 'bar',
       },
     },
     el
@@ -51,3 +58,22 @@ const Entrypoint = (props: Props) => {
 };
 
 export default hot(Entrypoint);
+
+import { getAllProjects, getProject } from './projects/utils'; // FIXME - generalize
+
+export const requestParamsToPageProps = async (
+  pageName: string,
+  api: API,
+  params: { [key: string]: string }
+) => {
+  switch (pageName) {
+    case 'projects/index':
+      return {
+        projects: await getAllProjects(api),
+      };
+    case 'projects/detail':
+      return { project: await getProject(params.name, api) };
+    default:
+      return {};
+  }
+};
