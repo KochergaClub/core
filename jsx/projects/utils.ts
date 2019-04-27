@@ -19,6 +19,7 @@ export interface Project extends WagtailItem {
   image: WagtailImage;
   image_thumbnail: WagtailImage;
   summary?: string;
+  activity_summary?: string;
   description?: string;
 }
 
@@ -76,7 +77,7 @@ export const getAllProjects = async (): Promise<Project[]> => {
 
 export const getProject = async (slug: string): Promise<Project> => {
   const json = await apiCall(
-    `wagtail/pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,body,image,image_thumbnail`,
+    `wagtail/pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,activity_summary,body,image,image_thumbnail`,
     'GET'
   );
   return json.items[0];
