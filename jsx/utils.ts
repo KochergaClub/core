@@ -64,7 +64,6 @@ export class API {
   constructor(csrfToken: string, base: string = '') {
     this.csrfToken = csrfToken;
     this.base = base;
-    console.log(base);
   }
 
   call = async (

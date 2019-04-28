@@ -17,6 +17,7 @@ const argv = require('yargs')
 
 import http from 'http';
 import express from 'express';
+import slash from 'express-slash';
 import bodyParser from 'body-parser';
 import httpProxy from 'http-proxy';
 
@@ -32,11 +33,13 @@ import { API } from '../jsx/utils';
 
 import webpackStats from '../webpack-stats.json';
 
-var ADDRESS = argv.address;
-var PORT = argv.port;
+const ADDRESS = argv.address;
+const PORT = argv.port;
 
-var app = express();
-var server = new http.Server(app);
+const app = express();
+
+app.enable('strict routing');
+app.disable('x-powered-by');
 
 app.use(bodyParser.json({ limit: '2mb' }));
 
@@ -141,6 +144,9 @@ app.get(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
   proxy.web(req, res);
 });
 
+app.use(slash());
+
+const server = new http.Server(app);
 server.listen(PORT, ADDRESS, () => {
   console.log(`React render server listening at http://${ADDRESS}:${PORT}`);
 });
