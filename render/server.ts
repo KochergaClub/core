@@ -63,15 +63,13 @@ const getCb = (pageName: string) => async (
 ) => {
   try {
     const csrfToken = 'TODO'; // FIXME - get from django somehow
-    const api = new API(
-      csrfToken,
-      req.protocol + '://' + req.get('host') + ':' + PORT
-    );
-    const props = await requestParamsToPageProps(pageName, api, req.params);
-    const google_analytics_id = 'GOOGLE_TODO'; // FIXME
-    const { html, styleTags, helmet } = render(pageName, props);
+    const api = new API(csrfToken, 'http://api');
 
+    const google_analytics_id = 'GOOGLE_TODO'; // FIXME
     const webpackDevServer = true; // FIXME
+
+    const props = await requestParamsToPageProps(pageName, api, req.params);
+    const { html, styleTags, helmet } = render(pageName, props);
 
     let bundleSrc = webpackStats.publicPath + webpackStats.chunks.main[0].name;
     if (webpackDevServer) {
@@ -132,9 +130,11 @@ const getCb = (pageName: string) => async (
 
 app.get('/projects', getCb('projects/index'));
 app.get('/projects/:name', getCb('projects/detail'));
+app.get('/team/staff', getCb('staff/index_page'));
+app.get('/team/staff/:id', getCb('staff/member_page'));
 
 const proxy = httpProxy.createProxyServer({
-  target: 'http://localhost:8000',
+  target: 'http://api',
 });
 
 app.get(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {

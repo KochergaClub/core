@@ -64,6 +64,7 @@ export class API {
   constructor(csrfToken: string, base: string = '') {
     this.csrfToken = csrfToken;
     this.base = base;
+    console.log(base);
   }
 
   call = async (
@@ -87,7 +88,13 @@ export class API {
 
     if (!response.ok) {
       const responseBody = await response.text();
-      window.alert(`Error: ${JSON.stringify(responseBody)}`);
+
+      const error = `Error: ${JSON.stringify(responseBody)}`;
+      if (IS_SERVER) {
+        throw new Error(error);
+      } else {
+        window.alert(error);
+      }
       return;
     }
 

@@ -1,7 +1,6 @@
 {
   "name": "kocherga-core",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@gitlab.com:kocherga/core.git",
   "author": "Vyacheslav Matyukhin <slava@kocherga-club.ru>",
   "private": true,

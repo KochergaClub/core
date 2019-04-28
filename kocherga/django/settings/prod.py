@@ -15,9 +15,6 @@ sentry_sdk.init(
 DEBUG = False
 DATA_DIR = os.environ.get('DATA_DIR', '/data')
 
-# Doesn't matter, really, since we use nginx as a reverse proxy.
-ALLOWED_HOSTS = ['*']
-
 # Security
 
 # TODO - deploy these; but for now we have HTTP-only iacsv.kocherga.club
