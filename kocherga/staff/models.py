@@ -83,6 +83,9 @@ class Member(models.Model):
     class Meta:
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
+        permissions = (
+            ('manage', 'Может управлять стаффом и доступами'),
+        )
 
     def __str__(self):
         return self.full_name

@@ -1,9 +1,11 @@
-import * as React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-import { Column } from '@kocherga/frontkit';
+import { Button, Column } from '@kocherga/frontkit';
 
 import Page from '../components/Page';
+import { apiCall } from '../utils';
+
 import { Member } from './types';
 
 const Ex = styled.div`
@@ -18,7 +20,38 @@ const Image = styled.img`
   height: auto;
 `;
 
-export default ({ member }: { member: Member }) => (
+interface Props {
+  member: Member;
+  current_user_is_manager: boolean;
+}
+
+const ManagerControls = ({ member }: { member: Member }) => {
+  const [granting, setGranting] = useState(false);
+
+  if (member.role !== 'WATCHMAN') {
+    return null;
+  }
+
+  const grantGoogle = useCallback(
+    async () => {
+      setGranting(true);
+      await apiCall(
+        `staff/member/${member.id}/grant_google_permissions/`,
+        'POST'
+      );
+      setGranting(false);
+    },
+    [member]
+  );
+
+  return (
+    <Button small loading={granting} disabled={granting} onClick={grantGoogle}>
+      Выдать права в Google
+    </Button>
+  );
+};
+
+export default ({ member, current_user_is_manager }: Props) => (
   <Page title={`${member.full_name} | Профиль сотрудника`} team>
     <Column centered gutter={20} style={{ marginBottom: 100 }}>
       <Column centered gutter={0}>
@@ -35,6 +68,11 @@ export default ({ member }: { member: Member }) => (
         )}
         {member.vk && <a href={member.vk}>Профиль VK</a>}
       </Column>
+      {current_user_is_manager && (
+        <Column centered>
+          <ManagerControls member={member} />
+        </Column>
+      )}
     </Column>
   </Page>
 );

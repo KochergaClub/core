@@ -18,5 +18,6 @@ def index_page(request):
 def member_page(request, member_id):
     member = Member.objects.get(pk=member_id)
     return react_render(request, 'staff/member_page', {
+        'current_user_is_manager': request.user.has_perm('staff.manage'),
         'member': serializers.MemberSerializer(member).data
     })
