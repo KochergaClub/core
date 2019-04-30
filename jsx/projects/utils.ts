@@ -1,4 +1,4 @@
-import { API } from '../utils';
+import { API } from '../common/api';
 
 interface WagtailImage {
   url: string;

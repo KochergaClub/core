@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import useOnClickOutside from 'use-onclickoutside';
 
-import { apiCall } from '../../utils';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
+import GlobalContext from '../../components/GlobalContext';
 import Picker from './Picker';
 
 import { nightColor } from '../constants';
@@ -67,6 +67,7 @@ const InnerShiftBox = ({
 const ShiftBox = ({ shift }: { shift: Shift }) => {
   const { editing, setShift } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
+  const api = useContext(GlobalContext).api;
 
   const flipExpand = useCallback(
     () => {
@@ -88,7 +89,7 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
   const pick = useCallback(async (shift: Shift) => {
     const { date, shift: shiftType, watchman, is_night } = shift;
 
-    await apiCall(`watchmen/schedule/${date}/${shiftType}`, 'PUT', {
+    await api.call(`watchmen/schedule/${date}/${shiftType}`, 'PUT', {
       watchman: watchman ? watchman.short_name : '',
       is_night: is_night ? 1 : 0,
     });

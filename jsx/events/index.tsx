@@ -4,7 +4,8 @@ import moment from 'moment';
 
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
-import { useListeningWebSocket, apiCall } from '../utils';
+import { apiCall } from '../common/api';
+import { useListeningWebSocket } from '../common/hooks';
 
 import Calendar from './components/Calendar';
 import UILayer from './components/UILayer';

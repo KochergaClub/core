@@ -28,7 +28,7 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
   return (
     <Row gutter={16}>
       <a href={`?from_date=${prev.format('YYYY-MM-DD')}`}>&larr; назад</a>
-      <a href={`./`}>Текущая неделя</a>
+      <a href={`/team/watchmen`}>Текущая неделя</a>
       <a href={`?from_date=${next.format('YYYY-MM-DD')}`}>вперёд &rarr;</a>
     </Row>
   );

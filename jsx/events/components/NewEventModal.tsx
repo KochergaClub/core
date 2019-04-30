@@ -2,7 +2,8 @@ import React, { useCallback, useState } from 'react';
 
 import moment from 'moment';
 
-import { apiCall, useCommonHotkeys } from '../../utils';
+import { apiCall } from '../../common/api';
+import { useCommonHotkeys } from '../../common/hooks';
 import { Event, ServerEvent, serverEventToEvent } from '../types';
 
 import EventFields from './EventFields';

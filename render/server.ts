@@ -18,7 +18,6 @@ const argv = require('yargs')
 import http from 'http';
 import express from 'express';
 import slash from 'express-slash';
-import bodyParser from 'body-parser';
 import httpProxy from 'http-proxy';
 
 import React from 'react';
@@ -28,8 +27,8 @@ import 'babel-polyfill';
 import { ServerStyleSheet } from 'styled-components';
 import { Helmet } from 'react-helmet';
 
-import Entrypoint, { requestParamsToPageProps } from '../jsx/entry';
-import { API } from '../jsx/utils';
+import Entrypoint, { requestToPageProps } from '../jsx/entry';
+import { API, APIError } from '../jsx/common/api';
 
 import webpackStats from '../webpack-stats.json';
 
@@ -41,7 +40,10 @@ const app = express();
 app.enable('strict routing');
 app.disable('x-powered-by');
 
-app.use(bodyParser.json({ limit: '2mb' }));
+//// TODO - in case we ever need body-parser again, this code breaks app.all(...) proxying to django.
+//// See https://github.com/nodejitsu/node-http-proxy/issues/1142 for the details.
+// import bodyParser from 'body-parser';
+// app.use(bodyParser.json({ limit: '2mb' }));
 
 function render(path: string, props: any) {
   const sheet = new ServerStyleSheet();
@@ -66,12 +68,12 @@ const getCb = (pageName: string) => async (
 ) => {
   try {
     const csrfToken = 'TODO'; // FIXME - get from django somehow
-    const api = new API(csrfToken, 'http://api');
+    const api = new API(csrfToken, 'http://api', req.get('Cookie') || '');
 
     const google_analytics_id = 'GOOGLE_TODO'; // FIXME
     const webpackDevServer = true; // FIXME
 
-    const props = await requestParamsToPageProps(pageName, api, req.params);
+    const props = await requestToPageProps(pageName, api, req);
     const { html, styleTags, helmet } = render(pageName, props);
 
     let bundleSrc = webpackStats.publicPath + webpackStats.chunks.main[0].name;
@@ -133,18 +135,25 @@ const getCb = (pageName: string) => async (
 
 app.get('/projects', getCb('projects/index'));
 app.get('/projects/:name', getCb('projects/detail'));
-app.get('/team/staff', getCb('staff/index_page'));
-app.get('/team/staff/:id', getCb('staff/member_page'));
+app.get('/team/watchmen', getCb('watchmen/index'));
 
 const proxy = httpProxy.createProxyServer({
   target: 'http://api',
 });
 
-app.get(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
+app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
   proxy.web(req, res);
 });
 
 app.use(slash());
+
+app.use((err, req, res, next) => {
+  if (err instanceof APIError) {
+    res.status(err.status).send(`Got error: ${err.status}<br>` + err.stack);
+  } else {
+    res.status(500).send('Something broke!');
+  }
+});
 
 const server = new http.Server(app);
 server.listen(PORT, ADDRESS, () => {

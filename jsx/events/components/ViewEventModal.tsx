@@ -7,7 +7,10 @@ import Markdown from 'react-markdown';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
-import { useFocusOnFirstModalRender, useCommonHotkeys } from '../../utils';
+import {
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '../../common/hooks';
 
 import { LocalEvent } from '../types';
 

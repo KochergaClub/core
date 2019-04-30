@@ -2,7 +2,8 @@ import React, { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { apiCall, useCommonHotkeys } from '../../utils';
+import { apiCall } from '../../common/api';
+import { useCommonHotkeys } from '../../common/hooks';
 import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
 
 import { Button, Modal } from '@kocherga/frontkit';

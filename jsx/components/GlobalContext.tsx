@@ -1,5 +1,5 @@
 import React from 'react';
-import { API } from '../utils';
+import { API } from '../common/api';
 
 interface GlobalContextShape {
   api: API;
