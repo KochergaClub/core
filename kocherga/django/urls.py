@@ -39,6 +39,7 @@ if not settings.IGNORE_WEB:
     urlpatterns = urlpatterns + [
         path('api/', include('kocherga.api.urls')),
         path('api/watchmen/', include('kocherga.watchmen.api_urls')),
+        path('api/staff/', include('kocherga.staff.api_urls')),
 
         path('team/ratio/', include('kocherga.ratio.urls')),
         path('team/analytics/', include('kocherga.analytics.urls')),
