@@ -76,4 +76,4 @@ def share_to_public(folder_id):
             'role': 'reader',
             'type': 'everyone',
         }
-    )
+    ).execute()

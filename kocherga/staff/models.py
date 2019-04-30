@@ -156,7 +156,7 @@ class Member(models.Model):
                 'type': 'user',
                 'emailAddress': email,
             }
-        )
+        ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
 
 
