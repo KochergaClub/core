@@ -76,3 +76,5 @@ KOCHERGA_API_ROOT = 'https://api.kocherga.club'
 KOCHERGA_WEBSITE = 'https://yudkowsky.cult'
 
 WEBPACK_DEV_SERVER = True
+
+GDRIVE_WATCHMEN_FOLDER = '14QJy4SLl-TY-DwyPWktNcCIple75Ppe_'

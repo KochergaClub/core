@@ -9,6 +9,7 @@ from termcolor import colored
 
 import kocherga.staff.tools
 import kocherga.wiki
+import kocherga.google
 
 
 def report_excess(message):

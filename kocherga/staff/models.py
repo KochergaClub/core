@@ -1,8 +1,12 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db import models
 from django.conf import settings
 
 import kocherga.slack
 import kocherga.cm.models
+import kocherga.google
 
 
 class MemberManager(models.Manager):
@@ -112,6 +116,45 @@ class Member(models.Model):
     def update_user_permissions(self):
         self.user.is_staff = self.is_current
         self.user.save()
+
+    def grant_google_permissions(self):
+        if self.role != 'WATCHMAN':
+            raise Exception("Only WATCHMAN google permissions are supported")
+        if not self.is_current:
+            raise Exception("Only current users can get google permissions")
+
+        calendar = kocherga.google.service("calendar")
+
+        email = None
+        for e in [self.user.email] + [a.email for a in self.alt_emails.all()]:
+            if e.endswith('@gmail.com'):
+                email = e
+                break
+        else:
+            raise Exception("Only @gmail.com users can get google permissions")
+
+        calendar.acl().insert(
+            calendarId=settings.KOCHERGA_GOOGLE_CALENDAR_ID,
+            body={
+                'role': 'writer',
+                'scope': {
+                    'type': 'user',
+                    'value': email,
+                }
+            },
+        ).execute()
+        logger.info(f"Granted calendar permissions to {email}")
+
+        gdrive = kocherga.google.service('drive')
+        gdrive.permissions().create(
+            fileId=settings.GDRIVE_WATCHMEN_FOLDER,
+            body={
+                'role': 'writer',
+                'type': 'user',
+                'emailAddress': email,
+            }
+        )
+        logger.info(f"Granted gdrive permissions to {email}")
 
 
 class AltEmail(models.Model):

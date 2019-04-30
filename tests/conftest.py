@@ -161,6 +161,7 @@ def common_team(db):
     m = Member.objects.create(
         user=get_user_model().objects.create_user('test@kocherga-club.ru', is_staff=True),
         short_name='Слава',
+        role='WATCHMAN',
         is_current=True,
     )
     AltEmail.objects.create(member=m, email='mmcleric@gmail.com')
