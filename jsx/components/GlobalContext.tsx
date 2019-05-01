@@ -6,7 +6,7 @@ interface GlobalContextShape {
 }
 
 const GlobalContext = React.createContext<GlobalContextShape>({
-  api: new API('fake token'),
+  api: new API({ csrfToken: 'fake token' }),
 });
 
 export default GlobalContext;

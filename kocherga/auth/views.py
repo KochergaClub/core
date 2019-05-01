@@ -1,3 +1,8 @@
+"""
+These views are deprecated and will be removed after we release `ssr-inverse` branch.
+
+See api_views.py for the modern views.
+"""
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,8 +12,6 @@ from django.core.mail import send_mail
 from django.contrib.auth import login, logout, get_user_model
 from django.template.loader import render_to_string
 
-from django.core.signing import TimestampSigner
-
 from kocherga.django.react import react_render
 
 import urllib.parse
@@ -16,13 +19,8 @@ import markdown
 
 from .forms import LoginForm
 
+from .view_utils import get_magic_token, check_magic_token
 
-def get_magic_token(email):
-    return TimestampSigner().sign(email)
-
-
-def check_magic_token(token):
-    return TimestampSigner().unsign(token, max_age=600)
 
 
 class LoginView(View):

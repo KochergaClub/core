@@ -27,7 +27,18 @@ const LoginPage = ({ djangoForm }) => (
       <LoginForm method="post">
         <Column stretch>
           <CSRFInput />
-          <div dangerouslySetInnerHTML={{ __html: djangoForm }} />
+          <div>
+            <p>
+              <label htmlFor="id_email">Email:</label>
+              <input
+                type="email"
+                name="email"
+                maxLength={255}
+                required
+                id="id_email"
+              />
+            </p>
+          </div>
           <Button type="submit">Войти</Button>
         </Column>
       </LoginForm>

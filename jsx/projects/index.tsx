@@ -8,6 +8,7 @@ import ProjectCard from './components/ProjectCard';
 import TL02 from '../blocks/TL02';
 
 import { Project, getAllProjects } from './utils';
+import { InitialLoader } from '../common/types';
 
 const Grid = styled.div`
   background-color: #eee;
@@ -45,4 +46,10 @@ export default (props: Props) => {
       </Grid>
     </Page>
   );
+};
+
+export const getInitialData: InitialLoader = async api => {
+  return {
+    projects: await getAllProjects(api),
+  };
 };

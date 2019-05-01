@@ -32,15 +32,24 @@ export class APIError extends Error {
   }
 }
 
+interface APIProps {
+  csrfToken: string;
+  base?: string;
+  cookie?: string;
+  realHost?: string;
+}
+
 export class API {
   csrfToken: string;
-  base: string = '';
-  cookie: string = '';
+  base: string;
+  cookie: string;
+  realHost: string;
 
-  constructor(csrfToken: string, base = '', cookie = '') {
-    this.csrfToken = csrfToken;
-    this.base = base;
-    this.cookie = cookie;
+  constructor(props: APIProps) {
+    this.csrfToken = props.csrfToken || '';
+    this.base = props.base || '';
+    this.cookie = props.cookie || '';
+    this.realHost = props.realHost || '';
   }
 
   call = async (
@@ -52,9 +61,13 @@ export class API {
     const headers = {
       'Content-Type': 'application/json',
       'X-CSRFToken': this.csrfToken,
+      'X-Forwarded-Host': 'kocherga.club',
     };
     if (this.cookie) {
       headers['Cookie'] = this.cookie;
+    }
+    if (this.realHost) {
+      headers['X-Forwarded-Host'] = this.realHost;
     }
     const params: RequestInit = {
       method,
@@ -85,6 +98,8 @@ export class API {
 
     if (expectJSON) {
       return await response.json();
+    } else {
+      return response;
     }
   };
 }
@@ -101,6 +116,6 @@ export const apiCall = async (
     throw Error("Server-side rendering doesn't support API calls yet");
   }
 
-  const api = new API(getCSRFToken());
+  const api = new API({ csrfToken: getCSRFToken() });
   return await api.call(path, method, payload, expectJSON);
 };

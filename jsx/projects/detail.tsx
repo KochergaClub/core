@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
 import Page from '../components/Page';
-import GlobalContext from '../components/GlobalContext';
 
 import TL02 from '../blocks/TL02';
 
-import { Project } from './utils';
+import { Project, getProject } from './utils';
+import { InitialLoader } from '../common/types';
 
 interface Props {
   project: Project;
@@ -40,4 +40,8 @@ export default ({ project }: Props) => {
       <Description dangerouslySetInnerHTML={{ __html: project.body }} />
     </Page>
   );
+};
+
+export const getInitialData: InitialLoader = async (api, params) => {
+  return { project: await getProject(params.name, api) };
 };

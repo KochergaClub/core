@@ -20,8 +20,9 @@ BASE_DIR = str(Path(__file__).parent.parent.parent.parent)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Doesn't matter, really, since we use nginx as a reverse proxy in prod and bind addresses to localhost in dev.
-ALLOWED_HOSTS = ['*']
+# We call Django API from the render server and want the API to interpret its own host correctly.
+# For example, this matters when we use request.build_absolute_uri().
+USE_X_FORWARDED_HOST = True
 
 # Wagtail
 

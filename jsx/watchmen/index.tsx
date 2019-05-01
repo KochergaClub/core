@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Column, Row } from '@kocherga/frontkit';
 
 import Page from '../components/Page';
+import { InitialLoader } from '../common/types';
 
 import { Shift, Watchman, shifts2schedule, scheduleDispatch } from './types';
 
@@ -73,4 +74,30 @@ export default (props: Props) => {
       </Page>
     </ScheduleContext.Provider>
   );
+};
+
+export const getInitialData: InitialLoader = async (api, params, query) => {
+  const from_date_str = query.from_date;
+  let from_date: moment.Moment;
+  if (from_date_str) {
+    from_date = moment(from_date_str);
+  } else {
+    from_date = moment().startOf('week');
+  }
+  const to_date = moment(from_date).add(4, 'weeks');
+
+  const format = 'YYYY-MM-DD';
+
+  return {
+    schedule: await api.call(
+      `watchmen/schedule?from_date=${from_date.format(
+        format
+      )}&to_date=${to_date.format(format)}`,
+      'GET'
+    ),
+    editable: true, // FIXME: request.user.has_perm('watchmen.manage'),
+    from_date: from_date.format('YYYY-MM-DD'),
+    to_date: to_date.format('YYYY-MM-DD'),
+    watchmen: await api.call('staff/member', 'GET'), // TODO - reorder - [watchman] + [non-watchman], current only
+  };
 };

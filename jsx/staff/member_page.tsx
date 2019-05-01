@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Button, Column } from '@kocherga/frontkit';
 
 import Page from '../components/Page';
-import { apiCall } from '../utils';
+import { apiCall } from '../common/api';
 
 import { Member } from './types';
 
