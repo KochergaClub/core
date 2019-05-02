@@ -16,6 +16,7 @@ class TrainingManager(models.Manager):
 
 class Training(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
+    slug = models.SlugField(blank=True, null=True)
 
     date = models.DateField('Дата начала', null=True)
     telegram_link = models.URLField('Телеграм-чат', blank=True)
@@ -40,9 +41,6 @@ class Training(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_absolute_url(self):
-        return reverse('ratio:training', kwargs={'name': self.name})
 
     def tickets_count(self):
         return sum(1 for ticket in self.tickets.all() if ticket.status == 'normal')
