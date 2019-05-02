@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 
 import { Column } from '@kocherga/frontkit';
@@ -12,7 +13,7 @@ interface Props {
   pbx_calls: PbxCall[];
 }
 
-export default ({ pbx_calls }: Props) => {
+const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
   return (
     <Page title="Архив звонков" team>
       <h1>Архив звонков</h1>
@@ -24,3 +25,7 @@ export default ({ pbx_calls }: Props) => {
     </Page>
   );
 };
+
+export default {
+  component: ZadarmaIndexPage,
+} as Screen;

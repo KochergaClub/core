@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 
 import Activity from './components/Activity';
@@ -103,7 +104,7 @@ function groupByDay(schedule: ActivityType[]) {
   return result;
 }
 
-export default ({ name, long_name, urls, schedule }) => (
+const RatioSchedulePage = ({ name, long_name, urls, schedule }) => (
   <Page title={name} team>
     <Container>
       <PageHeader>
@@ -123,3 +124,7 @@ export default ({ name, long_name, urls, schedule }) => (
     </Container>
   </Page>
 );
+
+export default {
+  component: RatioSchedulePage,
+} as Screen;

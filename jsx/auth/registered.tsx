@@ -1,9 +1,10 @@
 import React from 'react';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import AuthContainer from './components/AuthContainer';
 
-export default ({ index_url }) => (
+const RegisteredPage = ({ index_url }) => (
   <Page title="Логин">
     <AuthContainer>
       Вы зарегистрировались!<br />
@@ -11,3 +12,7 @@ export default ({ index_url }) => (
     </AuthContainer>
   </Page>
 );
+
+export default {
+  component: RegisteredPage,
+} as Screen;

@@ -62,6 +62,7 @@
     "@types/react-dom": "^16.8.3",
     "@types/react-helmet": "^5.0.8",
     "@types/react-select": "^2.0.17",
+    "@types/set-cookie-parser": "0.0.4",
     "@types/styled-components": "^4.1.8",
     "babel-loader": "^8.0.5",
     "clean-webpack-plugin": "^2.0.1",

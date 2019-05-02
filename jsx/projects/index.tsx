@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import ProjectCard from './components/ProjectCard';
 
@@ -31,7 +32,7 @@ interface Props {
   projects: Project[];
 }
 
-export default (props: Props) => {
+const ProjectsIndexPage = (props: Props) => {
   return (
     <Page title="Проекты Кочерги" wide>
       <TL02 title="Активные проекты">
@@ -48,8 +49,13 @@ export default (props: Props) => {
   );
 };
 
-export const getInitialData: InitialLoader = async api => {
+const getInitialData: InitialLoader = async api => {
   return {
     projects: await getAllProjects(api),
   };
 };
+
+export default {
+  component: ProjectsIndexPage,
+  getInitialData,
+} as Screen;

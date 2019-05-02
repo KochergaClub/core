@@ -32,7 +32,7 @@ import { Helmet } from 'react-helmet';
 import Entrypoint, { requestToPageProps } from '../jsx/entry';
 import { API, APIError } from '../jsx/common/api';
 
-import webpackStats from '../webpack-stats.json';
+const webpackStats = require('../webpack-stats.json');
 
 const ADDRESS = argv.address;
 const PORT = argv.port;
@@ -172,7 +172,7 @@ app.post('/login', async (req, res, next) => {
     const api = getAPI(req);
     await api.call('login/send-magic-link', 'POST', {
       email: req.body.email,
-      // TODO - next
+      next: req.query.next || '/',
     });
 
     res.redirect(301, '/login/check-your-email');
@@ -222,12 +222,19 @@ app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
 
 app.use(slash());
 
+app.use(function(req, res, next) {
+  res.status(404);
+  getCb('error-pages/404')(req, res, next);
+});
+
 app.use((err, req, res, next) => {
-  if (err instanceof APIError) {
-    res.status(err.status).send(`Got error: ${err.status}<br>` + err.stack);
+  console.log(err);
+  if (err instanceof APIError && (err.status === 404 || err.status === 403)) {
+    res.status(err.status);
+    getCb(`error-pages/${err.status}`)(req, res, next);
   } else {
-    console.log(err);
-    res.status(500).send('Something broke!');
+    res.status(500);
+    getCb('error-pages/500')(req, res, next);
   }
 });
 

@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 
 import TL02 from '../blocks/TL02';
@@ -25,7 +26,7 @@ const Description = styled.div`
   margin-bottom: 100px;
 `;
 
-export default ({ project }: Props) => {
+const ProjectsDetailPage = ({ project }: Props) => {
   return (
     <Page title={`${project.title} | Проект Кочерги`}>
       <TL02 title={project.title}>
@@ -42,6 +43,11 @@ export default ({ project }: Props) => {
   );
 };
 
-export const getInitialData: InitialLoader = async (api, params) => {
+const getInitialData: InitialLoader = async (api, params) => {
   return { project: await getProject(params.name, api) };
 };
+
+export default {
+  component: ProjectsDetailPage,
+  getInitialData,
+} as Screen;

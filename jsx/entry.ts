@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader/root';
 import React from 'react';
 
 import { API } from './common/api';
+import { Screen } from './common/types';
 import GlobalContext from './components/GlobalContext';
 
 const PAGES = {
@@ -36,11 +37,20 @@ interface Props {
   innerProps: any;
 }
 
-const Entrypoint = (props: Props) => {
-  const component = PAGES[props.name].default;
-  if (!component) {
-    throw new Error(`Component ${props.name} not found`);
+const getScreen = (name: string) => {
+  if (!PAGES[name]) {
+    throw new Error(`Page ${name} not found`);
   }
+  const screen = PAGES[name].default as Screen;
+  if (!screen.component) {
+    throw new Error(`${name} is not a proper screen`);
+  }
+  return screen;
+};
+
+const Entrypoint = (props: Props) => {
+  const screen = getScreen(props.name);
+  const { component } = screen;
 
   const el = React.createElement(component, props.innerProps);
 
@@ -64,7 +74,8 @@ export const requestToPageProps = async (
   api: API,
   req: express.Request
 ) => {
-  const getInitialData = PAGES[pageName].getInitialData;
+  const screen = getScreen(pageName);
+  const { getInitialData } = screen;
   if (!getInitialData) {
     return {};
   }

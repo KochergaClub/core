@@ -10,7 +10,7 @@ const BOVStatCard = ({ bovStat }) => (
   </div>
 );
 
-export default ({ bov_stats }) => (
+const AnalyticsPage = ({ bov_stats }) => (
   <Page title="Аналитика Кочерги" team>
     <h1>Аналитика Кочерги</h1>
     <ul>
@@ -27,3 +27,7 @@ export default ({ bov_stats }) => (
     {bov_stats.map((bovStat, i) => <BOVStatCard key={i} bovStat={bovStat} />)}
   </Page>
 );
+
+export default {
+  component: AnalyticsPage,
+};

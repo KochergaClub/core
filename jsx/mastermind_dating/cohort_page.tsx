@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import CSRFInput from '../components/CSRFInput';
 import Page from '../components/Page';
 
@@ -85,7 +86,7 @@ const Users = ({ users }) => (
   </UserList>
 );
 
-export default ({ cohort_id, users }) => (
+const MastermindCohortPage = ({ cohort_id, users }) => (
   <Page title="Аналитика мастермайнд-дейтинга" team>
     <h1>Мастермайнд-дейтинг</h1>
     <section>
@@ -95,3 +96,7 @@ export default ({ cohort_id, users }) => (
     <Users users={users} />
   </Page>
 );
+
+export default {
+  component: MastermindCohortPage,
+} as Screen;

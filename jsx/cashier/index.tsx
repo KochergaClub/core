@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Page from '../components/Page';
 import ActionForm from '../components/ActionForm';
+import { Screen } from '../common/types';
 
 interface Cheque {
   id: number;
@@ -14,7 +15,7 @@ interface Props {
   cheques: Cheque[];
 }
 
-export default ({ cheques }: Props) => (
+const CashierPage = ({ cheques }: Props) => (
   <Page title="Касса" team>
     <h1>Касса</h1>
     <h2>Выплаты</h2>
@@ -33,3 +34,7 @@ export default ({ cheques }: Props) => (
     </ul>
   </Page>
 );
+
+export default {
+  component: CashierPage,
+} as Screen;

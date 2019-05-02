@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Button, Column } from '@kocherga/frontkit';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import { apiCall } from '../common/api';
 
@@ -51,7 +52,7 @@ const ManagerControls = ({ member }: { member: Member }) => {
   );
 };
 
-export default ({ member, current_user_is_manager }: Props) => (
+const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
   <Page title={`${member.full_name} | Профиль сотрудника`} team>
     <Column centered gutter={20} style={{ marginBottom: 100 }}>
       <Column centered gutter={0}>
@@ -76,3 +77,7 @@ export default ({ member, current_user_is_manager }: Props) => (
     </Column>
   </Page>
 );
+
+export default {
+  component: StaffMemberPage,
+} as Screen;

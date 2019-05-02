@@ -2,10 +2,11 @@ import React from 'react';
 
 import { Column } from '@kocherga/frontkit';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import ActionForm from '../components/ActionForm';
 
-export default ({ training, tickets, urls }) => (
+const RatioTrainingPage = ({ training, tickets, urls }) => (
   <Page title="Ratio" team>
     <h1>{training.name}</h1>
     <a href={urls.training_admin}>править в админке</a>
@@ -53,3 +54,7 @@ export default ({ training, tickets, urls }) => (
     </Column>
   </Page>
 );
+
+export default {
+  component: RatioTrainingPage,
+} as Screen;

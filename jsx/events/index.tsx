@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 
 import moment from 'moment';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
 import { apiCall } from '../common/api';
@@ -44,7 +45,7 @@ interface Props {
   range: { start: string; end: string };
 }
 
-export default (props: Props) => {
+const EventsPage = (props: Props) => {
   const [store, dispatch] = useReducer(reducer, props.events, getInitialState);
 
   const [range, setRange] = useState(() => ({
@@ -159,3 +160,7 @@ export default (props: Props) => {
     </Page>
   );
 };
+
+export default {
+  component: EventsPage,
+} as Screen;

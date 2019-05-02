@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import CSRFInput from '../components/CSRFInput';
 
@@ -84,7 +85,7 @@ const NonCustomerSection = () => (
   </p>
 );
 
-export default ({ email, customer, orders_count, is_staff, urls }) => (
+const MyPage = ({ email, customer, orders_count, is_staff, urls }) => (
   <Page title="Личный кабинет">
     <div>
       <h1>Личный кабинет Кочерги</h1>
@@ -106,3 +107,7 @@ export default ({ email, customer, orders_count, is_staff, urls }) => (
     </div>
   </Page>
 );
+
+export default {
+  component: MyPage,
+} as Screen;

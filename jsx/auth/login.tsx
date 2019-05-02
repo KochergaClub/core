@@ -46,4 +46,6 @@ const LoginPage = ({ djangoForm }) => (
   </Page>
 );
 
-export default LoginPage;
+export default {
+  component: LoginPage,
+};

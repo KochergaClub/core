@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import { Column, Row } from '@kocherga/frontkit';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import { InitialLoader } from '../common/types';
 
@@ -35,7 +36,7 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
   );
 };
 
-export default (props: Props) => {
+const WatchmenIndexPage = (props: Props) => {
   const [schedule, setShift] = useReducer(
     scheduleDispatch,
     props.schedule,
@@ -76,7 +77,7 @@ export default (props: Props) => {
   );
 };
 
-export const getInitialData: InitialLoader = async (api, params, query) => {
+const getInitialData: InitialLoader = async (api, params, query) => {
   const from_date_str = query.from_date;
   let from_date: moment.Moment;
   if (from_date_str) {
@@ -101,3 +102,8 @@ export const getInitialData: InitialLoader = async (api, params, query) => {
     watchmen: await api.call('staff/member', 'GET'), // TODO - reorder - [watchman] + [non-watchman], current only
   };
 };
+
+export default {
+  component: WatchmenIndexPage,
+  getInitialData,
+} as Screen;

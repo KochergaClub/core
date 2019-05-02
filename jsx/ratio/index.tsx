@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 
 interface Training {
@@ -14,7 +15,7 @@ interface Props {
   };
 }
 
-export default ({ trainings, urls }: Props) => (
+const RatioIndexPage = ({ trainings, urls }: Props) => (
   <Page title="Ratio" team>
     <h1>Воркшопы и тренинги</h1>
     <small>
@@ -30,3 +31,7 @@ export default ({ trainings, urls }: Props) => (
     </ul>
   </Page>
 );
+
+export default {
+  component: RatioIndexPage,
+} as Screen;
