@@ -1,7 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 import { Column } from '@kocherga/frontkit';
 
@@ -62,6 +61,12 @@ const StaffIndexPage = ({ members }: { members: Member[] }) => (
   </Page>
 );
 
+const getInitialData: InitialLoader = async context => {
+  const members = await context.api.call('staff/member', 'GET');
+  return { members };
+};
+
 export default {
   component: StaffIndexPage,
+  getInitialData,
 } as Screen;

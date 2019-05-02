@@ -1,34 +1,35 @@
 import { hot } from 'react-hot-loader/root';
 
 import React from 'react';
+import express from 'express';
 
 import { API } from './common/api';
-import { Screen } from './common/types';
+import { Screen, GlobalContextShape } from './common/types';
 import GlobalContext from './components/GlobalContext';
 
 const PAGES = {
-  'analytics/index': require('./analytics/index'),
-  'auth/login': require('./auth/login'),
-  'auth/check-your-email': require('./auth/check-your-email'),
-  'auth/registered': require('./auth/registered'),
-  'cashier/index': require('./cashier/index'),
-  'events/index': require('./events/index'),
-  'mastermind_dating/index': require('./mastermind_dating/index'),
-  'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'),
-  'my/index': require('./my/index'),
-  'ratio/index': require('./ratio/index'),
-  'ratio/schedule': require('./ratio/schedule'),
-  'ratio/training': require('./ratio/training'),
-  'staff/index_page': require('./staff/index_page'),
-  'staff/member_page': require('./staff/member_page'),
-  'watchmen/index': require('./watchmen/index'),
-  'zadarma/index': require('./zadarma/index'),
-  'zadarma/pbx_call': require('./zadarma/pbx_call'),
-  'error-pages/403': require('./error-pages/403'),
-  'error-pages/404': require('./error-pages/404'),
-  'error-pages/500': require('./error-pages/500'),
-  'projects/index': require('./projects/index'),
-  'projects/detail': require('./projects/detail'),
+  'analytics/index': require('./analytics/index'), // x
+  'auth/login': require('./auth/login'), // x
+  'auth/check-your-email': require('./auth/check-your-email'), // x
+  'auth/registered': require('./auth/registered'), //
+  'cashier/index': require('./cashier/index'), // x
+  'events/index': require('./events/index'), //
+  'mastermind_dating/index': require('./mastermind_dating/index'), //
+  'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'), //
+  'my/index': require('./my/index'), //
+  'ratio/index': require('./ratio/index'), //
+  'ratio/schedule': require('./ratio/schedule'), //
+  'ratio/training': require('./ratio/training'), //
+  'staff/index_page': require('./staff/index_page'), // x
+  'staff/member_page': require('./staff/member_page'), // .
+  'watchmen/index': require('./watchmen/index'), // .
+  'zadarma/index': require('./zadarma/index'), // x
+  'zadarma/pbx_call': require('./zadarma/pbx_call'), // x
+  'error-pages/403': require('./error-pages/403'), // x
+  'error-pages/404': require('./error-pages/404'), // x
+  'error-pages/500': require('./error-pages/500'), // x
+  'projects/index': require('./projects/index'), // x
+  'projects/detail': require('./projects/detail'), // x
 };
 
 interface Props {
@@ -67,11 +68,9 @@ const Entrypoint = (props: Props) => {
 
 export default hot(Entrypoint);
 
-import express from 'express';
-
 export const requestToPageProps = async (
   pageName: string,
-  api: API,
+  context: GlobalContextShape,
   req: express.Request
 ) => {
   const screen = getScreen(pageName);
@@ -79,5 +78,5 @@ export const requestToPageProps = async (
   if (!getInitialData) {
     return {};
   }
-  return await getInitialData(api, req.params, req.query);
+  return await getInitialData(context, req.params, req.query);
 };

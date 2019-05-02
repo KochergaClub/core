@@ -61,7 +61,6 @@ export class API {
     const headers = {
       'Content-Type': 'application/json',
       'X-CSRFToken': this.csrfToken,
-      'X-Forwarded-Host': 'kocherga.club',
     };
     if (this.cookie) {
       headers['Cookie'] = this.cookie;

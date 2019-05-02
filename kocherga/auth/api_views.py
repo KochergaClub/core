@@ -19,6 +19,7 @@ class MeView(APIView):
     def get(self, request):
         return Response({
             'is_authenticated': request.user.is_authenticated,
+            'permissions': request.user.get_all_permissions(),
         })
 
 @method_decorator(csrf_exempt, name='dispatch')

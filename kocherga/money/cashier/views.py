@@ -1,26 +1,36 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import redirect
-from django.views.decorators.http import require_POST
+import logging
+logger = logging.getLogger(__name__)
 
-from kocherga.django.react import react_render
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Cheque
 from . import serializers
 
 
-@staff_member_required
-def index(request):
-    cheques = Cheque.objects.all()
-
-    return react_render(request, 'cashier/index', {
-        'cheques': serializers.ChequeSerializer(cheques, many=True).data,
-    })
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
 
 
-@staff_member_required
-@require_POST
-def cheque_redeem(request, id: int):
-    cheque = Cheque.objects.get(pk=id)
-    cheque.redeem()
+class IsChequeCreator(BasePermission):
+    def has_permission(self, request, view):
+        if view.action != 'create':
+            return False
+        return request.user.has_perm('cheque.create')
 
-    return redirect('cashier:index')
+
+class ChequeViewSet(viewsets.ModelViewSet):
+    queryset = Cheque.objects.all()
+    permission_classes = [(IsAdminUser & ReadOnly) | IsChequeCreator]
+    serializer_class = serializers.ChequeSerializer
+
+    # TODO - cheque.redeem permission
+    @action(detail=True, methods=['post'])
+    def redeem(self, request, pk=None):
+        cheque = self.get_object()
+        cheque.redeem()
+
+        return Response('ok')

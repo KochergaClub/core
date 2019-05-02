@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Button, Column } from '@kocherga/frontkit';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 import { apiCall } from '../common/api';
 
@@ -78,6 +78,15 @@ const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
   </Page>
 );
 
+const getInitialData: InitialLoader = async ({ api }, params) => {
+  const member = await api.call(`staff/member/${params.id}`, 'GET');
+  return {
+    member,
+    // TODO - set `current_user_is_manager`
+  };
+};
+
 export default {
   component: StaffMemberPage,
+  getInitialData,
 } as Screen;

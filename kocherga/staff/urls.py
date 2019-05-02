@@ -1,9 +1,9 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
 
 from . import views
 
-app_name = 'staff'
-urlpatterns = [
-    path('', views.index_page),
-    path('<int:member_id>', views.member_page),
-]
+
+router = SimpleRouter()
+router.register('member', views.MemberViewSet)
+
+urlpatterns = router.urls

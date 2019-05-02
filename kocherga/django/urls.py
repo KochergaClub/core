@@ -39,16 +39,15 @@ if not settings.IGNORE_WEB:
     urlpatterns = urlpatterns + [
         path('api/', include('kocherga.api.urls')),
         path('api/watchmen/', include('kocherga.watchmen.api_urls')),
-        path('api/staff/', include('kocherga.staff.api_urls')),
+        path('api/staff/', include('kocherga.staff.urls')),
+        path('api/analytics/', include('kocherga.analytics.urls')),
+        path('api/zadarma/', include('kocherga.zadarma.urls')),
+        path('api/cashier/', include('kocherga.money.cashier.urls')),
 
         path('team/ratio/', include('kocherga.ratio.urls')),
-        path('team/analytics/', include('kocherga.analytics.urls')),
         path('team/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
         path('team/events/', include('kocherga.events.urls')),
-        path('team/cashier/', include('kocherga.money.cashier.urls')),
         path('team/watchmen/', include('kocherga.watchmen.urls')),
-        path('team/zadarma/', include('kocherga.zadarma.urls')),
-        path('team/staff/', include('kocherga.staff.urls')),
 
         path('my/', include('kocherga.my.urls')),
         path('', include('kocherga.auth.urls')),

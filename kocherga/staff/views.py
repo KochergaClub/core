@@ -1,23 +1,24 @@
-from django.contrib.admin.views.decorators import staff_member_required
-
-from kocherga.django.react import react_render
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework import permissions
+from rest_framework.response import Response
 
 from .models import Member
-from . import serializers
+from .serializers import MemberSerializer
 
 
-@staff_member_required
-def index_page(request):
-    members = Member.objects.full_list()
-    return react_render(request, 'staff/index_page', {
-        'members': serializers.MemberSerializer(members, many=True).data
-    })
+class IsStaffManager(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('staff.manage')
 
 
-@staff_member_required
-def member_page(request, member_id):
-    member = Member.objects.get(pk=member_id)
-    return react_render(request, 'staff/member_page', {
-        'current_user_is_manager': request.user.has_perm('staff.manage'),
-        'member': serializers.MemberSerializer(member).data
-    })
+class MemberViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Member.objects.all()
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = MemberSerializer
+
+    @action(detail=True, methods=['post'], permission_classes=[IsStaffManager])
+    def grant_google_permissions(self, request, pk=None):
+        member = self.get_object()
+        member.grant_google_permissions()
+        return Response({'status': 'ok'})

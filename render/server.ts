@@ -31,6 +31,7 @@ import { Helmet } from 'react-helmet';
 
 import Entrypoint, { requestToPageProps } from '../jsx/entry';
 import { API, APIError } from '../jsx/common/api';
+import { GlobalContextShape } from '../jsx/common/types';
 
 const webpackStats = require('../webpack-stats.json');
 
@@ -41,12 +42,49 @@ const app = express();
 
 app.enable('strict routing');
 app.disable('x-powered-by');
-app.use(express.urlencoded()); // form handling
 
 //// TODO - in case we ever need body-parser again, this code breaks app.all(...) proxying to django.
 //// See https://github.com/nodejitsu/node-http-proxy/issues/1142 for the details.
 // import bodyParser from 'body-parser';
 // app.use(bodyParser.json({ limit: '2mb' }));
+
+const proxy = httpProxy.createProxyServer({});
+app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res, next) => {
+  proxy.web(req, res, { target: 'http://api' }, next);
+});
+proxy.on('error', e => console.log('Error: ' + e));
+
+declare global {
+  namespace Express {
+    interface Request {
+      reactContext: GlobalContextShape;
+    }
+  }
+}
+
+// Custom middleware which injects req.django with api and user fields.
+app.use(async (req, res, next) => {
+  try {
+    const cookies = cookie.parse(req.headers.cookie || '');
+    const csrfToken = cookies.csrftoken as string;
+
+    const api = new API({
+      csrfToken,
+      base: 'http://api',
+      cookie: req.get('Cookie') || '',
+      realHost: req.get('host'),
+    });
+
+    const user = await api.call('me', 'GET');
+    req.reactContext = {
+      api,
+      user,
+    };
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 function render(path: string, props: any) {
   const sheet = new ServerStyleSheet();
@@ -75,30 +113,18 @@ gtag('config', '${id}');
 </script>
 `;
 
-const getAPI = (req: express.Request) => {
-  const cookies = cookie.parse(req.headers.cookie || '');
-  const csrfToken = cookies.csrftoken as string;
-
-  return new API({
-    csrfToken,
-    base: 'http://api',
-    cookie: req.get('Cookie') || '',
-    realHost: req.hostname,
-  });
-};
-
 const getCb = (pageName: string) => async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const api = getAPI(req);
+    const api = req.reactContext.api;
 
     const google_analytics_id = process.env.GOOGLE_ANALYTICS_ID;
     const webpackDevServer = process.env.NODE_ENV === 'development';
 
-    const props = await requestToPageProps(pageName, api, req);
+    const props = await requestToPageProps(pageName, req.reactContext, req);
     const { html, styleTags, helmet } = render(pageName, props);
 
     let bundleSrc = webpackStats.publicPath + webpackStats.chunks.main[0].name;
@@ -151,12 +177,21 @@ const getCb = (pageName: string) => async (
 app.get('/projects', getCb('projects/index'));
 app.get('/projects/:name', getCb('projects/detail'));
 app.get('/team/watchmen', getCb('watchmen/index'));
+app.get('/team/analytics', getCb('analytics/index'));
+app.get('/team/zadarma', getCb('zadarma/index'));
+app.get('/team/zadarma/pbx_call/:id', getCb('zadarma/pbx_call'));
+app.get('/team/staff', getCb('staff/index_page'));
+app.get('/team/staff/:id', getCb('staff/member_page'));
+app.get('/team/cashier', getCb('cashier/index'));
+
+// Form handling.
+// Note: This middleware should be activated after httpProxy
+// (see https://stackoverflow.com/questions/26632854/socket-hangup-while-posting-request-to-node-http-proxy-node-js for details)
+app.use(express.urlencoded());
 
 app.get('/login', async (req, res, next) => {
   try {
-    const api = getAPI(req);
-    const response = await api.call('me', 'GET');
-    if (response.is_authenticated) {
+    if (req.reactContext.user.is_authenticated) {
       console.log('already authenticated');
       res.redirect(301, '/');
       return;
@@ -169,8 +204,7 @@ app.get('/login', async (req, res, next) => {
 
 app.post('/login', async (req, res, next) => {
   try {
-    const api = getAPI(req);
-    await api.call('login/send-magic-link', 'POST', {
+    await req.reactContext.api.call('login/send-magic-link', 'POST', {
       email: req.body.email,
       next: req.query.next || '/',
     });
@@ -185,8 +219,7 @@ app.get('/login/check-your-email', getCb('auth/check-your-email'));
 
 app.get('/login/magic-link', async (req, res, next) => {
   try {
-    const api = getAPI(req);
-    const response = await api.call(
+    const response = await req.reactContext.api.call(
       'login',
       'POST',
       {
@@ -210,14 +243,6 @@ app.get('/login/magic-link', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
-
-const proxy = httpProxy.createProxyServer({
-  target: 'http://api',
-});
-
-app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
-  proxy.web(req, res);
 });
 
 app.use(slash());

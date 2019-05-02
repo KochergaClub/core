@@ -43,8 +43,8 @@ const ProjectsDetailPage = ({ project }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async (api, params) => {
-  return { project: await getProject(params.name, api) };
+const getInitialData: InitialLoader = async (context, params) => {
+  return { project: await getProject(params.name, context.api) };
 };
 
 export default {

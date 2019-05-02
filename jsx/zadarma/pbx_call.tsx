@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
 import { PbxCall } from './types';
@@ -24,6 +24,12 @@ const ZadarmaCallPage = ({ pbx_call }: Props) => {
   );
 };
 
+const getInitialData: InitialLoader = async ({ api }, params) => {
+  const pbx_call = await api.call(`zadarma/pbx_call/${params.id}`, 'GET');
+  return { pbx_call };
+};
+
 export default {
   component: ZadarmaCallPage,
+  getInitialData,
 } as Screen;

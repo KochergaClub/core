@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
 import { Column } from '@kocherga/frontkit';
@@ -26,6 +26,12 @@ const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
   );
 };
 
+const getInitialData: InitialLoader = async ({ api }) => {
+  const pbx_calls = await api.call('zadarma/pbx_call', 'GET');
+  return { pbx_calls };
+};
+
 export default {
   component: ZadarmaIndexPage,
+  getInitialData,
 } as Screen;

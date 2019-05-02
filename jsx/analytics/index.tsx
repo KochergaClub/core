@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
 const BOVStatCard = ({ bovStat }) => (
@@ -10,24 +11,32 @@ const BOVStatCard = ({ bovStat }) => (
   </div>
 );
 
-const AnalyticsPage = ({ bov_stats }) => (
-  <Page title="Аналитика Кочерги" team>
-    <h1>Аналитика Кочерги</h1>
-    <ul>
-      <li>
-        <a href="https://metabase.team.kocherga.club">Metabase</a>
-      </li>
-      <li>
-        <a href="https://wiki.team.kocherga.club/Категория:Аналитика">
-          О аналитике на вики
-        </a>
-      </li>
-    </ul>
-    <h2>Большие открытые встречи</h2>
-    {bov_stats.map((bovStat, i) => <BOVStatCard key={i} bovStat={bovStat} />)}
-  </Page>
-);
+const AnalyticsPage = ({ bov_stats }) => {
+  return (
+    <Page title="Аналитика Кочерги" team>
+      <h1>Аналитика Кочерги</h1>
+      <ul>
+        <li>
+          <a href="https://metabase.team.kocherga.club">Metabase</a>
+        </li>
+        <li>
+          <a href="https://wiki.team.kocherga.club/Категория:Аналитика">
+            О аналитике на вики
+          </a>
+        </li>
+      </ul>
+      <h2>Большие открытые встречи</h2>
+      {bov_stats.map((bovStat, i) => <BOVStatCard key={i} bovStat={bovStat} />)}
+    </Page>
+  );
+};
+
+const getInitialData: InitialLoader = async (context, params, query) => {
+  const bov_stats = await context.api.call('analytics/bov_stats', 'GET');
+  return { bov_stats };
+};
 
 export default {
   component: AnalyticsPage,
-};
+  getInitialData,
+} as Screen;

@@ -77,7 +77,7 @@ const WatchmenIndexPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async (api, params, query) => {
+const getInitialData: InitialLoader = async ({ api }, params, query) => {
   const from_date_str = query.from_date;
   let from_date: moment.Moment;
   if (from_date_str) {
