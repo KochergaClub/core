@@ -1,8 +1,7 @@
-from django.db import models
-from django.urls import reverse
-
 from datetime import date
 from collections import OrderedDict
+
+from django.db import models
 
 from kocherga.dateutils import inflected_month
 
