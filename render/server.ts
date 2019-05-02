@@ -56,9 +56,11 @@ const proxy = httpProxy.createProxyServer({
   },
 });
 app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res, next) => {
-  proxy.web(req, res, {}, next);
+  proxy.web(req, res, {}, e => {
+    console.log(e);
+    res.status(500).send({ error: 'Backend is down' });
+  });
 });
-proxy.on('error', e => console.log('Error: ' + e));
 server.on('upgrade', (req, socket, head) => {
   if (!req.url.startsWith('/ws/')) {
     console.log('not a typical websocket');
@@ -75,24 +77,37 @@ declare global {
   }
 }
 
+const getAPI = (req: express.Request) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const csrfToken = cookies.csrftoken as string;
+
+  const api = new API({
+    csrfToken,
+    base: 'http://api',
+    cookie: req.get('Cookie') || '',
+    realHost: req.get('host'),
+  });
+  return api;
+};
+
+// This should be used for error pages, which can't load the real user.
+const getFallbackContext = (req: express.Request) => {
+  return {
+    api: getAPI(req),
+    user: {
+      is_authenticated: false,
+      permissions: [],
+    },
+  };
+};
+
 // Custom middleware which injects req.django with api and user fields.
 app.use(async (req, res, next) => {
   try {
-    const cookies = cookie.parse(req.headers.cookie || '');
-    const csrfToken = cookies.csrftoken as string;
-
-    const api = new API({
-      csrfToken,
-      base: 'http://api',
-      cookie: req.get('Cookie') || '',
-      realHost: req.get('host'),
-    });
-
+    const api = getAPI(req);
     const user = await api.call('me', 'GET');
-    req.reactContext = {
-      api,
-      user,
-    };
+
+    req.reactContext = { api, user };
     next();
   } catch (err) {
     next(err);
@@ -132,6 +147,9 @@ const getCb = (pageName: string) => async (
   next: express.NextFunction
 ) => {
   try {
+    if (!req.reactContext) {
+      req.reactContext = getFallbackContext(req);
+    }
     const api = req.reactContext.api;
 
     const google_analytics_id = process.env.GOOGLE_ANALYTICS_ID;
