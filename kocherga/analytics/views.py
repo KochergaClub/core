@@ -8,6 +8,8 @@ from datetime import datetime
 
 
 class BovStatsView(APIView):
+    permission_classes = (IsAdminUser,)
+
     def get(self, request):
         cohort_dates = [
             '2019-01-07',
