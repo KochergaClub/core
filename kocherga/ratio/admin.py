@@ -13,7 +13,7 @@ class TicketInline(admin.TabularInline):
 
 @admin.register(Training)
 class TrainingAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'date', 'tickets_count', 'total_income')
+    list_display = ('slug', 'name', 'date', 'tickets_count', 'total_income')
     inlines = [
         ActivityInline,
         TicketInline,
