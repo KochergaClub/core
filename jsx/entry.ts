@@ -8,28 +8,28 @@ import { Screen, GlobalContextShape } from './common/types';
 import GlobalContext from './components/GlobalContext';
 
 const PAGES = {
-  'analytics/index': require('./analytics/index'), // x
-  'auth/login': require('./auth/login'), // x
-  'auth/check-your-email': require('./auth/check-your-email'), // x
-  'auth/registered': require('./auth/registered'), //
-  'cashier/index': require('./cashier/index'), // x
-  'events/index': require('./events/index'), //
-  'mastermind_dating/index': require('./mastermind_dating/index'), // x
-  'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'), // x
-  'my/index': require('./my/index'), // x
-  'ratio/index': require('./ratio/index'), // x
-  'ratio/schedule': require('./ratio/schedule'), // x
-  'ratio/training': require('./ratio/training'), // x
-  'staff/index_page': require('./staff/index_page'), // x
-  'staff/member_page': require('./staff/member_page'), // x
-  'watchmen/index': require('./watchmen/index'), // .
-  'zadarma/index': require('./zadarma/index'), // x
-  'zadarma/pbx_call': require('./zadarma/pbx_call'), // x
-  'projects/index': require('./projects/index'), // x
-  'projects/detail': require('./projects/detail'), // x
-  'error-pages/403': require('./error-pages/403'), // x
-  'error-pages/404': require('./error-pages/404'), // x
-  'error-pages/500': require('./error-pages/500'), // x
+  'analytics/index': require('./analytics/index'),
+  'auth/login': require('./auth/login'),
+  'auth/check-your-email': require('./auth/check-your-email'),
+  'auth/registered': require('./auth/registered'), // TODO
+  'cashier/index': require('./cashier/index'),
+  'events/index': require('./events/index'),
+  'mastermind_dating/index': require('./mastermind_dating/index'),
+  'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'),
+  'my/index': require('./my/index'),
+  'ratio/index': require('./ratio/index'),
+  'ratio/schedule': require('./ratio/schedule'),
+  'ratio/training': require('./ratio/training'),
+  'staff/index_page': require('./staff/index_page'),
+  'staff/member_page': require('./staff/member_page'),
+  'watchmen/index': require('./watchmen/index'),
+  'zadarma/index': require('./zadarma/index'),
+  'zadarma/pbx_call': require('./zadarma/pbx_call'),
+  'projects/index': require('./projects/index'),
+  'projects/detail': require('./projects/detail'),
+  'error-pages/403': require('./error-pages/403'),
+  'error-pages/404': require('./error-pages/404'),
+  'error-pages/500': require('./error-pages/500'),
 };
 
 interface Props {

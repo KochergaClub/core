@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Shift, Watchman } from './types';
+import { Shift, StaffMember } from './types';
 
 interface ScheduleContextShape {
-  watchmen: Watchman[];
+  watchmen: StaffMember[];
   editing: boolean;
   setEditing: (value: boolean) => void;
   setShift: (shift: Shift) => void;

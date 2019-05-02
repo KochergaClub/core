@@ -8,7 +8,7 @@ import { Screen } from '../common/types';
 import Page from '../components/Page';
 import { InitialLoader } from '../common/types';
 
-import { Shift, Watchman, shifts2schedule, scheduleDispatch } from './types';
+import { Shift, StaffMember, shifts2schedule, scheduleDispatch } from './types';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
@@ -19,7 +19,7 @@ import { ScheduleContext } from './contexts';
 interface Props {
   schedule: Shift[];
   editable: boolean;
-  watchmen: Watchman[];
+  watchmen: StaffMember[];
   from_date: string;
   to_date: string;
 }
@@ -89,6 +89,14 @@ const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
 
   const format = 'YYYY-MM-DD';
 
+  const staffMembers = (await api.call('staff/member', 'GET')) as StaffMember[];
+  const watchmen = staffMembers.filter(
+    member => member.is_current && member.role === 'WATCHMAN'
+  );
+  const otherStaff = staffMembers.filter(
+    member => member.is_current && member.role !== 'WATCHMAN'
+  );
+
   return {
     schedule: await api.call(
       `watchmen/schedule?from_date=${from_date.format(
@@ -99,7 +107,7 @@ const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
     editable: user.permissions.indexOf('watchmen.manage') !== -1,
     from_date: from_date.format('YYYY-MM-DD'),
     to_date: to_date.format('YYYY-MM-DD'),
-    watchmen: await api.call('staff/member', 'GET'), // TODO - reorder - [watchman] + [non-watchman], current only
+    watchmen: watchmen.concat(otherStaff),
   };
 };
 
