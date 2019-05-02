@@ -1,52 +1,44 @@
-"""
-These views are deprecated and will be removed after we release `ssr-inverse` branch.
-
-See api_views.py for the modern views.
-"""
-from django.urls import reverse
-from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
-from django.contrib.auth import login, logout, get_user_model
+import django.core.signing
+from django.contrib.auth import login, get_user_model
+
 from django.template.loader import render_to_string
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.exceptions import APIException
 
-from kocherga.django.react import react_render
-
-import urllib.parse
 import markdown
-
-from .forms import LoginForm
+import urllib.parse
 
 from .view_utils import get_magic_token, check_magic_token
 
 
-
-class LoginView(View):
+class MeView(APIView):
     def get(self, request):
+        result = {
+            'is_authenticated': request.user.is_authenticated,
+            'permissions': request.user.get_all_permissions(),
+        }
         if request.user.is_authenticated:
-            return redirect('/')
+            result['email'] = request.user.email
+            result['is_staff'] = request.user.is_staff
 
-        return react_render(request, 'auth/login', {
-            'djangoForm': str(LoginForm().as_p()),
-        })
+        return Response(result)
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SendMagicLinkView(APIView):
     def post(self, request):
-        form = LoginForm(request.POST)
-        if not form.is_valid():
-            return react_render(request, 'auth/login', {
-                'djangoForm': form.as_p(),
-            })
-
-        email = form.cleaned_data['email']
+        email = request.data['email']
 
         magic_token = get_magic_token(email)
         params_str = urllib.parse.urlencode({
             'token': magic_token,
-            'next': request.GET.get('next', reverse('my:index')),
+            'next': request.data.get('next', '/'),
         })
-        magic_link = request.build_absolute_uri(reverse('auth:magic-link') + '?' + params_str)
+        magic_link = request.build_absolute_uri('/login/magic-link' + '?' + params_str)
 
         html_email_message = markdown.markdown(
             render_to_string('auth/email/login.md', {'magic_link': magic_link})
@@ -61,18 +53,29 @@ class LoginView(View):
             recipient_list=[email],
         )
 
-        return redirect(reverse('auth:sent-magic-link'))
+        return Response('ok')
 
 
-class SentMagicLinkView(View):
-    def get(self, request):
-        return react_render(request, 'auth/check-your-email')
+class LoginView(APIView):
+    def post(self, request):
+        if 'credentials' not in request.data:
+            raise APIException('credentials are not set')
+        credentials = request.data['credentials']
 
+        if 'token' not in credentials:
+            raise APIException('token is not set in credentials')
+        magic_token = credentials['token']
 
-class MagicLinkView(View):
-    def get(self, request):
-        magic_token = request.GET['token']
-        email = check_magic_token(magic_token)
+        try:
+            email = check_magic_token(magic_token)
+        except django.core.signing.BadSignature:
+            raise APIException('Invalid token')
+
+        # other results, e.g. access_token, will be supported later
+        if 'result' not in request.data:
+            raise APIException('result parameter is not set')
+        if request.data['result'] != 'cookie':
+            raise APIException('Only `cookie` result is supported')
 
         User = get_user_model()
 
@@ -88,21 +91,6 @@ class MagicLinkView(View):
 
         login(request, user)
 
-        if registered:
-            return redirect(reverse('auth:registered'))
-        else:
-            next_url = request.GET.get('next', reverse('my:index'))
-            return redirect(next_url)
-
-
-class RegisteredView(LoginRequiredMixin, View):
-    def get(self, request):
-        return react_render(request, 'auth/registered', {
-            'index_url': reverse('my:index'),
+        return Response({
+            'registered': registered,
         })
-
-
-class LogoutView(View):
-    def get(self, request):
-        logout(request)
-        return redirect('auth:login')

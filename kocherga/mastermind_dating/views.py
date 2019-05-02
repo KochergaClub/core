@@ -1,46 +1,39 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.http import require_POST
-from django.shortcuts import redirect
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from kocherga.django.react import react_render
-
-from .models import Cohort, User
+from . import models
 from . import serializers
 
 
-@staff_member_required
-def index(request):
-    cohorts = Cohort.objects.all()
+class CohortViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Cohort.objects.all()
+    permission_classes = (IsAdminUser,)  # TODO - more specific permission?
+    serializer_class = serializers.CohortSerializer
 
-    props = {}
-    props['cohorts'] = serializers.CohortSerializer(cohorts, many=True).data
-    return react_render(request, 'mastermind_dating/index', props)
-
-
-@staff_member_required
-def cohort_page(request, cohort_id):
-    cohort = Cohort.objects.get(id=cohort_id)
-
-    props = {
-        'cohort_id': cohort_id,
-        'users': serializers.UserSerializer(cohort.users.all(), many=True).data
-    }
-    return react_render(request, 'mastermind_dating/cohort_page', props)
+    @action(detail=True)
+    def users(self, request, pk=None):
+        cohort = self.get_object()
+        return Response(
+            serializers.UserSerializer(cohort.users, many=True).data
+        )
 
 
-@staff_member_required
-@require_POST
-def tinder_activate(request, user_id):
-    user = User.objects.get(user_id=user_id)
-    user.tinder_activate()
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = models.User.objects.all()
+    permission_classes = (IsAdminUser,)
+    serializer_class = serializers.UserSerializer
 
-    return redirect('mastermind_dating:cohort_page', cohort_id=user.cohort.id)
+    @action(detail=True, methods=['post'])
+    def tinder_activate(self, request, pk=None):
+        user = self.get_object()
+        user.tinder_activate()
+        return Response('ok')
 
-
-@staff_member_required
-@require_POST
-def flip_present(request, user_id):
-    user = User.objects.get(user_id=user_id)
-    user.present = not user.present
-    user.save()
-    return redirect('mastermind_dating:cohort_page', cohort_id=user.cohort.id)
+    @action(detail=True, methods=['post'])
+    def flip_present(self, request, pk=None):
+        user = self.get_object()
+        user.present = not user.present
+        user.save()
+        return Response('ok')

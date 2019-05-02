@@ -1,9 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
-const Cohorts = ({ cohorts }) => (
+import { Cohort } from './types';
+
+const Cohorts = ({ cohorts }: { cohorts: Cohort[] }) => (
   <ul>
     {cohorts.map(cohort => (
       <li>
@@ -13,7 +15,12 @@ const Cohorts = ({ cohorts }) => (
   </ul>
 );
 
-const MastermindIndexPage = ({ cohorts }) => (
+interface Props {
+  cohorts: Cohort[];
+  children?: React.ReactNode;
+}
+
+const MastermindIndexPage = ({ cohorts }: Props) => (
   <Page title="Админка мастермайнд-дейтинга" team>
     <h1>Мастермайнд-дейтинг</h1>
     <p>
@@ -27,6 +34,16 @@ const MastermindIndexPage = ({ cohorts }) => (
   </Page>
 );
 
-export default {
+const getInitialData: InitialLoader = async ({ api }) => {
+  const cohorts = await api.call('mastermind_dating/cohort', 'GET');
+  return {
+    cohorts,
+  };
+};
+
+const screen: Screen = {
   component: MastermindIndexPage,
-} as Screen;
+  getInitialData,
+};
+
+export default screen;

@@ -1,10 +1,5 @@
 import { API } from './api';
 
-export interface GlobalContextShape {
-  api: API;
-  user: User;
-}
-
 export type InitialLoader = (
   context: GlobalContextShape,
   params: any,
@@ -19,4 +14,11 @@ export interface Screen {
 export interface User {
   is_authenticated: boolean;
   permissions: string[];
+  is_staff?: boolean;
+  email?: string;
+}
+
+export interface GlobalContextShape {
+  api: API;
+  user: User;
 }

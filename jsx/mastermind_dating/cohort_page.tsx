@@ -1,12 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import { Screen } from '../common/types';
-import CSRFInput from '../components/CSRFInput';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
+import ActionButton from '../components/ActionButton';
 
-import { Column, Button } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
+
+import { User } from './types';
 
 const Photo = styled.img`
   width: 200px;
@@ -37,23 +39,22 @@ const UserDescription = styled.small`
   text-align: center;
 `;
 
-const userActionUrl = (action: string, uid: number) =>
-  `/team/mastermind_dating/action/${action}/${uid}`;
+const userActionPath = (action: string, uid: number) =>
+  `mastermind_dating/user/${uid}/${action}/`;
 
-const UserVoteForm = ({ user }) => (
-  <form action={userActionUrl('tinder_activate', user.user_id)} method="post">
-    <CSRFInput />
-    {user.voted_for ? (
-      <em>Уже проголосовали</em>
-    ) : (
-      <Button type="submit" small>
-        Активировать голосование
-      </Button>
-    )}
-  </form>
-);
+const UserVoteForm = ({ user }: { user: User }) => {
+  if (user.voted_for) {
+    return <em>Уже проголосовали</em>;
+  }
 
-const Users = ({ users }) => (
+  return (
+    <ActionButton path={userActionPath('tinder_activate', user.user_id)}>
+      Активировать голосование
+    </ActionButton>
+  );
+};
+
+const Users = ({ users }: { users: User[] }) => (
   <UserList>
     {users.map(user => (
       <UserContainer key={user.user_id}>
@@ -64,21 +65,15 @@ const Users = ({ users }) => (
         <UserDescription>{user.desc}</UserDescription>
         <Column centered>
           <Photo src={user.photo} />
-          <form
-            action={userActionUrl('flip_present', user.user_id)}
-            method="post"
+          <ActionButton
+            path={userActionPath('flip_present', user.user_id)}
+            onSuccess={
+              () => window.location.reload()
+              /* There's a race condition here; button becomes enabled again before the page reloads. Also, page reloads suck. */
+            }
           >
-            <CSRFInput />
-            {user.present ? (
-              <Button type="submit" small>
-                Тут
-              </Button>
-            ) : (
-              <Button type="submit" small>
-                Не тут
-              </Button>
-            )}
-          </form>
+            {user.present ? 'Тут' : 'Не тут'}
+          </ActionButton>
           {user.present && <UserVoteForm user={user} />}
         </Column>
       </UserContainer>
@@ -86,7 +81,13 @@ const Users = ({ users }) => (
   </UserList>
 );
 
-const MastermindCohortPage = ({ cohort_id, users }) => (
+interface Props {
+  cohort_id: number;
+  users: User[];
+  children?: React.ReactNode;
+}
+
+const MastermindCohortPage = ({ cohort_id, users }: Props) => (
   <Page title="Аналитика мастермайнд-дейтинга" team>
     <h1>Мастермайнд-дейтинг</h1>
     <section>
@@ -97,6 +98,20 @@ const MastermindCohortPage = ({ cohort_id, users }) => (
   </Page>
 );
 
-export default {
+const getInitialData: InitialLoader = async ({ api }, params) => {
+  const users = await api.call(
+    `mastermind_dating/cohort/${params.id}/users`,
+    'GET'
+  );
+  return {
+    cohort_id: params.id,
+    users,
+  };
+};
+
+const screen: Screen = {
   component: MastermindCohortPage,
-} as Screen;
+  getInitialData,
+};
+
+export default screen;

@@ -14,22 +14,22 @@ const PAGES = {
   'auth/registered': require('./auth/registered'), //
   'cashier/index': require('./cashier/index'), // x
   'events/index': require('./events/index'), //
-  'mastermind_dating/index': require('./mastermind_dating/index'), //
-  'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'), //
-  'my/index': require('./my/index'), //
-  'ratio/index': require('./ratio/index'), //
-  'ratio/schedule': require('./ratio/schedule'), //
-  'ratio/training': require('./ratio/training'), //
+  'mastermind_dating/index': require('./mastermind_dating/index'), // x
+  'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'), // x
+  'my/index': require('./my/index'), // x
+  'ratio/index': require('./ratio/index'), // x
+  'ratio/schedule': require('./ratio/schedule'), // x
+  'ratio/training': require('./ratio/training'), // x
   'staff/index_page': require('./staff/index_page'), // x
   'staff/member_page': require('./staff/member_page'), // x
   'watchmen/index': require('./watchmen/index'), // .
   'zadarma/index': require('./zadarma/index'), // x
   'zadarma/pbx_call': require('./zadarma/pbx_call'), // x
+  'projects/index': require('./projects/index'), // x
+  'projects/detail': require('./projects/detail'), // x
   'error-pages/403': require('./error-pages/403'), // x
   'error-pages/404': require('./error-pages/404'), // x
   'error-pages/500': require('./error-pages/500'), // x
-  'projects/index': require('./projects/index'), // x
-  'projects/detail': require('./projects/detail'), // x
 };
 
 interface Props {

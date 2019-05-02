@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'kocherga.api',
     'kocherga.watchmen_routine',
     'kocherga.ratio',
-    'kocherga.my',
     'kocherga.timepad',
     'kocherga.mastermind_dating',
     'kocherga.projects',

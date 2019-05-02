@@ -186,6 +186,13 @@ app.get('/team/cashier/', getCb('cashier/index'));
 app.get('/team/ratio/', getCb('ratio/index'));
 app.get('/team/ratio/training/:name/', getCb('ratio/training'));
 app.get('/team/ratio/training/:name/schedule/', getCb('ratio/schedule'));
+app.get('/team/mastermind_dating/', getCb('mastermind_dating/index'));
+app.get(
+  '/team/mastermind_dating/cohort/:id/',
+  getCb('mastermind_dating/cohort_page')
+);
+app.get('/team/', (req, res) => res.redirect(301, '/team/staff/'));
+app.get('/my/', getCb('my/index'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy
