@@ -6,6 +6,7 @@ import { Training } from './types';
 
 interface Props {
   trainings: Training[];
+  children?: React.ReactNode;
 }
 
 const RatioIndexPage = ({ trainings }: Props) => (

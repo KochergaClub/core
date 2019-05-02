@@ -191,6 +191,7 @@ app.get(
   '/team/mastermind_dating/cohort/:id/',
   getCb('mastermind_dating/cohort_page')
 );
+app.get('/team/events/', getCb('events/index'));
 app.get('/team/', (req, res) => res.redirect(301, '/team/staff/'));
 app.get('/my/', getCb('my/index'));
 

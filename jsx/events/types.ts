@@ -1,12 +1,13 @@
-import moment from 'moment';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 export interface Event {
   id: string;
   title: string;
   description: string;
   room: string;
-  start: moment.Moment;
-  end: moment.Moment;
+  start: Date;
+  end: Date;
   posted_vk?: string;
   posted_fb?: string;
   posted_timepad?: string;
@@ -40,8 +41,8 @@ export interface PreResizeAction {
   type: 'PRE_RESIZE';
   payload: {
     event: Event;
-    start: moment.Moment;
-    end: moment.Moment;
+    start: Date;
+    end: Date;
   };
 }
 
@@ -76,8 +77,8 @@ export type Action =
 export const serverEventToEvent = (event: ServerEvent): Event => {
   return {
     ...event,
-    start: moment(event.start),
-    end: moment(event.end),
+    start: new Date(event.start),
+    end: new Date(event.end),
   };
 };
 
@@ -134,3 +135,9 @@ export const reducer = (store: EventStore, action: Action) => {
       return store;
   }
 };
+
+// Note that if we get locations in multiple timezones we could load the location timezone from the server.
+export const timezone = 'Europe/Moscow';
+
+export const formatDate = (date: Date, formatStr: string) =>
+  format(date, formatStr, { locale: ru });

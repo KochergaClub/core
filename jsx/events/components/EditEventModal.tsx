@@ -2,9 +2,18 @@ import React, { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { utcToZonedTime } from 'date-fns-tz';
+
 import { apiCall } from '../../common/api';
 import { useCommonHotkeys } from '../../common/hooks';
-import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
+import {
+  Event,
+  LocalEvent,
+  ServerEvent,
+  serverEventToEvent,
+  timezone,
+  formatDate,
+} from '../types';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
@@ -73,11 +82,16 @@ const EditEventModal = ({
     return null;
   }
 
+  const zonedStart = utcToZonedTime(event.start, timezone);
+  const zonedEnd = utcToZonedTime(event.end, timezone);
+
   return (
     <Modal isOpen={isOpen} overflow="visible">
       <Modal.Header toggle={onClose}>
-        Редактировать событие {event.start.format('DD MMMM')}{' '}
-        {event.start.format('HH:mm')}–{event.end.format('HH:mm')}
+        Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–{formatDate(
+          zonedEnd,
+          'HH:mm'
+        )}
       </Modal.Header>
       <Modal.Body {...hotkeys}>
         <EventFields
