@@ -77,7 +77,7 @@ const WatchmenIndexPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async ({ api }, params, query) => {
+const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
   const from_date_str = query.from_date;
   let from_date: moment.Moment;
   if (from_date_str) {
@@ -96,7 +96,7 @@ const getInitialData: InitialLoader = async ({ api }, params, query) => {
       )}&to_date=${to_date.format(format)}`,
       'GET'
     ),
-    editable: true, // FIXME: request.user.has_perm('watchmen.manage'),
+    editable: user.permissions.indexOf('watchmen.manage') !== -1,
     from_date: from_date.format('YYYY-MM-DD'),
     to_date: to_date.format('YYYY-MM-DD'),
     watchmen: await api.call('staff/member', 'GET'), // TODO - reorder - [watchman] + [non-watchman], current only

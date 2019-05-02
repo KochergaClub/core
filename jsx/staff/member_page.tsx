@@ -78,11 +78,11 @@ const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async ({ api }, params) => {
+const getInitialData: InitialLoader = async ({ api, user }, params) => {
   const member = await api.call(`staff/member/${params.id}`, 'GET');
   return {
     member,
-    // TODO - set `current_user_is_manager`
+    current_user_is_manager: user.permissions.indexOf('staff.manage') !== -1,
   };
 };
 

@@ -1,3 +1,15 @@
+export interface Training {
+  name: string;
+  date: string;
+  salaries_paid: boolean;
+}
+
+export interface Ticket {
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
 export interface ActivityType {
   day: number;
   time: string;

@@ -1,37 +1,38 @@
 import React from 'react';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
-
-interface Training {
-  name: string;
-  url: string;
-}
+import { Training } from './types';
 
 interface Props {
   trainings: Training[];
-  urls: {
-    add_training: string;
-  };
 }
 
-const RatioIndexPage = ({ trainings, urls }: Props) => (
+const RatioIndexPage = ({ trainings }: Props) => (
   <Page title="Ratio" team>
     <h1>Воркшопы и тренинги</h1>
     <small>
-      <a href={urls.add_training}>Добавить тренинг</a>
+      <a href="/admin/ratio/training/add/">Добавить тренинг</a>
     </small>
     <hr />
     <ul>
       {trainings.map(training => (
         <li key={training.name}>
-          <a href={training.url}>{training.name}</a>
+          <a href={`training/${training.name}/`}>{training.name}</a>
         </li>
       ))}
     </ul>
   </Page>
 );
 
-export default {
+const getInitialData: InitialLoader = async ({ api }) => {
+  const trainings = await api.call('ratio/training', 'GET');
+  return { trainings };
+};
+
+const screen: Screen = {
   component: RatioIndexPage,
-} as Screen;
+  getInitialData,
+};
+
+export default screen;

@@ -43,8 +43,8 @@ if not settings.IGNORE_WEB:
         path('api/analytics/', include('kocherga.analytics.urls')),
         path('api/zadarma/', include('kocherga.zadarma.urls')),
         path('api/cashier/', include('kocherga.money.cashier.urls')),
+        path('api/ratio/', include('kocherga.ratio.urls')),
 
-        path('team/ratio/', include('kocherga.ratio.urls')),
         path('team/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
         path('team/events/', include('kocherga.events.urls')),
         path('team/watchmen/', include('kocherga.watchmen.urls')),

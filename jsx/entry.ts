@@ -21,7 +21,7 @@ const PAGES = {
   'ratio/schedule': require('./ratio/schedule'), //
   'ratio/training': require('./ratio/training'), //
   'staff/index_page': require('./staff/index_page'), // x
-  'staff/member_page': require('./staff/member_page'), // .
+  'staff/member_page': require('./staff/member_page'), // x
   'watchmen/index': require('./watchmen/index'), // .
   'zadarma/index': require('./zadarma/index'), // x
   'zadarma/pbx_call': require('./zadarma/pbx_call'), // x

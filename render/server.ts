@@ -174,15 +174,17 @@ const getCb = (pageName: string) => async (
   }
 };
 
-app.get('/projects', getCb('projects/index'));
-app.get('/projects/:name', getCb('projects/detail'));
-app.get('/team/watchmen', getCb('watchmen/index'));
-app.get('/team/analytics', getCb('analytics/index'));
-app.get('/team/zadarma', getCb('zadarma/index'));
-app.get('/team/zadarma/pbx_call/:id', getCb('zadarma/pbx_call'));
-app.get('/team/staff', getCb('staff/index_page'));
-app.get('/team/staff/:id', getCb('staff/member_page'));
-app.get('/team/cashier', getCb('cashier/index'));
+app.get('/projects/', getCb('projects/index'));
+app.get('/projects/:name/', getCb('projects/detail'));
+app.get('/team/watchmen/', getCb('watchmen/index'));
+app.get('/team/analytics/', getCb('analytics/index'));
+app.get('/team/zadarma/', getCb('zadarma/index'));
+app.get('/team/zadarma/pbx_call/:id/', getCb('zadarma/pbx_call'));
+app.get('/team/staff/', getCb('staff/index_page'));
+app.get('/team/staff/:id/', getCb('staff/member_page'));
+app.get('/team/cashier/', getCb('cashier/index'));
+app.get('/team/ratio/', getCb('ratio/index'));
+app.get('/team/ratio/training/:name/', getCb('ratio/training'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy
