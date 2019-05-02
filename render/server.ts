@@ -39,6 +39,7 @@ const ADDRESS = argv.address;
 const PORT = argv.port;
 
 const app = express();
+const server = new http.Server(app);
 
 app.enable('strict routing');
 app.disable('x-powered-by');
@@ -48,11 +49,23 @@ app.disable('x-powered-by');
 // import bodyParser from 'body-parser';
 // app.use(bodyParser.json({ limit: '2mb' }));
 
-const proxy = httpProxy.createProxyServer({});
+const proxy = httpProxy.createProxyServer({
+  ws: true,
+  target: {
+    host: 'api',
+  },
+});
 app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res, next) => {
-  proxy.web(req, res, { target: 'http://api' }, next);
+  proxy.web(req, res, {}, next);
 });
 proxy.on('error', e => console.log('Error: ' + e));
+server.on('upgrade', (req, socket, head) => {
+  if (!req.url.startsWith('/ws/')) {
+    console.log('not a typical websocket');
+    socket.end();
+  }
+  proxy.ws(req, socket, head);
+});
 
 declare global {
   namespace Express {
@@ -274,7 +287,6 @@ app.use((err, req, res, next) => {
   }
 });
 
-const server = new http.Server(app);
 server.listen(PORT, ADDRESS, () => {
   console.log(`React render server listening at http://${ADDRESS}:${PORT}`);
 });
