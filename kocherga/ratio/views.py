@@ -21,30 +21,34 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'name'
 
     @action(detail=True, methods=['post'])
-    def to_mailchimp(self, request, pk=None):
+    def to_mailchimp(self, request, name=None):
         training2mailchimp(self.get_object())
+        return Response('ok')
 
     @action(detail=True, methods=['post'])
-    def pre_email(self, request, pk=None):
+    def pre_email(self, request, name=None):
         create_pre_draft(self.get_object())
+        return Response('ok')
 
     @action(detail=True, methods=['post'])
-    def post_email(self, request, pk=None):
+    def post_email(self, request, name=None):
         create_post_draft(self.get_object())
+        return Response('ok')
 
     @action(detail=True, methods=['post'])
-    def pay_salaries(self, request, pk=None):
+    def pay_salaries(self, request, name=None):
         self.get_object().pay_salaries()
+        return Response('ok')
 
     @action(detail=True)
-    def tickets(self, request, pk=None):
-        tickets = self.get_object().tickets
+    def tickets(self, request, name=None):
+        training_tickets = self.get_object().tickets
         return Response(
-            serializers.TicketSerializer(tickets, many=True).data,
+            serializers.TicketSerializer(training_tickets, many=True).data,
         )
 
     @action(detail=True)
-    def schedule(self, request, pk=None):
+    def schedule(self, request, name=None):
         training = self.get_object()
         return Response(
             serializers.ActivitySerializer(training.schedule, many=True).data,

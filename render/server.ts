@@ -185,6 +185,7 @@ app.get('/team/staff/:id/', getCb('staff/member_page'));
 app.get('/team/cashier/', getCb('cashier/index'));
 app.get('/team/ratio/', getCb('ratio/index'));
 app.get('/team/ratio/training/:name/', getCb('ratio/training'));
+app.get('/team/ratio/training/:name/schedule/', getCb('ratio/schedule'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy

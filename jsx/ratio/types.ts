@@ -1,5 +1,6 @@
 export interface Training {
   name: string;
+  long_name: string;
   date: string;
   salaries_paid: boolean;
 }

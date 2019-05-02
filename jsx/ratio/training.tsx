@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 
 import { Button, Column } from '@kocherga/frontkit';
 
@@ -24,13 +24,22 @@ const ActionButton = ({
   children: React.ReactNode;
 }) => {
   const { api } = useContext(GlobalContext);
+  const [loading, setLoading] = useState(false);
+
   const cb = useCallback(
     async () => {
-      await api.call('ratio/training/${training.name}/${action}', 'POST');
+      setLoading(true);
+      const key = encodeURIComponent(training.name); // TODO - change api to accept slug
+      await api.call(`ratio/training/${key}/${action}/`, 'POST');
+      setLoading(false);
     },
     [training, action]
   );
-  return <Button onClick={cb}>{children}</Button>;
+  return (
+    <Button loading={loading} disabled={loading} onClick={cb}>
+      {children}
+    </Button>
+  );
 };
 
 const RatioTrainingPage = ({ training, tickets }: Props) => {
@@ -63,7 +72,7 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
       </section>
 
       <section>
-        <a href="./schedule">Расписание</a>
+        <a href="./schedule/">Расписание</a>
       </section>
 
       <Column>
@@ -88,11 +97,10 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
 };
 
 const getInitialData: InitialLoader = async ({ api }, params, query) => {
-  const training = await api.call(`ratio/training/${params.name}`, 'GET');
-  const tickets = await api.call(
-    `ratio/training/${params.name}/tickets`,
-    'GET'
-  );
+  const key = encodeURIComponent(params.name); // TODO - change api to accept slug
+  console.log(key);
+  const training = await api.call(`ratio/training/${key}`, 'GET');
+  const tickets = await api.call(`ratio/training/${key}/tickets`, 'GET');
   return { training, tickets };
 };
 
