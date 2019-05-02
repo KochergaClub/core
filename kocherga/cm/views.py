@@ -1,14 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import exceptions
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import CustomerSerializer
 
 
 class MeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
-        if not request.user.is_authenticated:
-            raise exceptions.NotAuthenticated()
         if not hasattr(request.user, 'customer'):
             raise exceptions.NotFound()
 
@@ -20,9 +21,9 @@ class MeView(APIView):
 
 
 class SetPrivacyModeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
-        if not request.user.is_authenticated:
-            raise exceptions.NotAuthenticated()
         if not hasattr(request.user, 'customer'):
             raise exceptions.NotFound()
 

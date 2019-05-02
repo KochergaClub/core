@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
+from rest_framework import permissions
 
 import markdown
 import urllib.parse
@@ -16,6 +17,8 @@ from .view_utils import get_magic_token, check_magic_token
 
 
 class MeView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def get(self, request):
         result = {
             'is_authenticated': request.user.is_authenticated,
@@ -30,6 +33,8 @@ class MeView(APIView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class SendMagicLinkView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request):
         email = request.data['email']
 
@@ -57,6 +62,8 @@ class SendMagicLinkView(APIView):
 
 
 class LoginView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request):
         if 'credentials' not in request.data:
             raise APIException('credentials are not set')

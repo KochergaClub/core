@@ -16,8 +16,8 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser, AllowAny
 
 from kocherga.error import PublicError
 
@@ -153,6 +153,7 @@ def r_list_public(request):
 
 
 @api_view()
+@permission_classes(AllowAny,)
 def r_list_public_today(request):
     events = Event.objects.public_events(
         date=datetime.today().date(),
