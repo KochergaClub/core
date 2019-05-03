@@ -1,24 +1,7 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useContext } from 'react';
+import { IS_SERVER } from './utils';
 
-// This function is useful for client side only.
-// In most cases you should use GlobalContext.csrfToken or <CSRFInput /> instead.
-export const getCSRFToken = () => {
-  if (typeof document === 'undefined') {
-    throw Error(
-      "Server-side rendering doesn't allow CSRF tokens, use GlobalContext instead"
-    );
-  }
-  return document.cookie.replace(
-    /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
-    '$1'
-  );
-};
-
-declare global {
-  interface Window {
-    WebSocket: any;
-  }
-}
+import GlobalContext from '../components/GlobalContext';
 
 export const useListeningWebSocket = (
   path: string,
@@ -35,7 +18,7 @@ export const useListeningWebSocket = (
 
   useEffect(
     () => {
-      if (typeof window === 'undefined' || !window.WebSocket) {
+      if (IS_SERVER || !window.WebSocket) {
         return;
       }
       const socketProtocol =
@@ -51,42 +34,6 @@ export const useListeningWebSocket = (
     },
     [path]
   );
-};
-
-export const apiCall = async (
-  path: string,
-  method: string,
-  payload?: object,
-  expectJSON: boolean = true
-) => {
-  if (typeof window === 'undefined') {
-    // API calls in SSR can't be done without react hooks / contexts safely.
-    // This can be fixed by replacing apiCall with some kind of custom useAPI hook.
-    throw Error("Server-side rendering doesn't support API calls yet");
-  }
-
-  const params: RequestInit = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCSRFToken(),
-    },
-  };
-  if (payload) {
-    params.body = JSON.stringify(payload);
-  }
-
-  const response = await fetch(`/api/${path}`, params);
-
-  if (!response.ok) {
-    const responseBody = await response.text();
-    window.alert(`Error: ${JSON.stringify(responseBody)}`);
-    return;
-  }
-
-  if (expectJSON) {
-    return await response.json();
-  }
 };
 
 /*
@@ -142,4 +89,9 @@ export const useCommonHotkeys = ({
     tabIndex: -1,
     style: { outline: 'none' },
   };
+};
+
+export const useAPI = () => {
+  const { api } = useContext(GlobalContext);
+  return api;
 };

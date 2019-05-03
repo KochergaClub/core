@@ -27,10 +27,8 @@ const PartLinks = ({ items }: Props) => {
   return (
     <UL>
       {items.map((item, i) => (
-        <li>
-          <a href={item.link} key={i}>
-            {item.title}
-          </a>
+        <li key={i}>
+          <a href={item.link}>{item.title}</a>
         </li>
       ))}
     </UL>

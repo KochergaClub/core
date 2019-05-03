@@ -51,10 +51,9 @@ services:
         NPM_TOKEN: ${TOKEN}
     command: npx nodemon -w ./kocherga --exec poetry run ./manage.py runserver --noreload 0.0.0.0:80
     ports:
-      - "127.0.0.1:8000:80"
+      - "127.0.0.1:8001:80"
     depends_on:
       - db
-      - render-server
       - chrome
       - redis
     restart: always
@@ -69,7 +68,11 @@ services:
 
   render-server:
     << : *common
-    command: npx nodemon ./static/dist/render-server.js
+    command: npx nodemon -w ./static/dist/server.js ./static/dist/server.js
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:8000:80"
 
   webpack_back:
     << : *common

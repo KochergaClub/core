@@ -1,11 +1,14 @@
 import React from 'react';
 
-interface GlobalContextShape {
-  csrfToken: string;
-}
+import { API } from '../common/api';
+import { GlobalContextShape } from '../common/types';
 
 const GlobalContext = React.createContext<GlobalContextShape>({
-  csrfToken: '',
+  api: new API({ csrfToken: 'fake token' }),
+  user: {
+    is_authenticated: false,
+    permissions: [],
+  },
 });
 
 export default GlobalContext;

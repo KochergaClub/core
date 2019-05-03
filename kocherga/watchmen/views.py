@@ -3,43 +3,41 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.mixins import UserPassesTestMixin
+from rest_framework import generics
+from rest_framework import permissions
 
-from kocherga.django.react import react_render
-import kocherga.staff.models
-import kocherga.staff.serializers
-
-from .models import Shift
 from . import serializers
+from .models import Shift
 
 
-class WatchmenManagerMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.has_perm('watchmen.manage')
+class ShiftList(generics.ListAPIView):
+    serializer_class = serializers.ShiftSerializer
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get_queryset(self):
+        from_date_str = self.request.query_params.get('from_date', None)
+        if from_date_str:
+            from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
+        else:
+            # start of last week
+            from_date = datetime.today().date()
+            from_date -= timedelta(days=from_date.weekday())
+
+        to_date = from_date + timedelta(weeks=4) - timedelta(days=1)
+
+        items = Shift.objects.items_range(from_date, to_date)
+        return items
 
 
-@staff_member_required
-def index(request):
-    from_date_str = request.GET.get('from_date', None)
-    if from_date_str:
-        from_date = datetime.strptime(from_date_str, '%Y-%m-%d').date()
-    else:
-        # start of last week
-        from_date = datetime.today().date()
-        from_date -= timedelta(days=from_date.weekday())
+class IsManagerUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('watchmen.manage')
 
-    to_date = from_date + timedelta(weeks=4)
 
-    items = Shift.objects.items_range(from_date, to_date)
+class ShiftUpdate(generics.UpdateAPIView):
+    serializer_class = serializers.UpdateShiftSerializer
+    permission_classes = (IsManagerUser,)
 
-    watchmen = list(kocherga.staff.models.Member.objects.filter(is_current=True).filter(role='WATCHMAN'))
-    watchmen += list(kocherga.staff.models.Member.objects.filter(is_current=True).exclude(role='WATCHMAN'))
-
-    return react_render(request, 'watchmen/index', {
-        'schedule': serializers.ShiftSerializer(items, many=True).data,
-        'editable': request.user.has_perm('watchmen.manage'),
-        'from_date': from_date.strftime('%Y-%m-%d'),
-        'to_date': to_date.strftime('%Y-%m-%d'),
-        'watchmen': kocherga.staff.serializers.MemberSerializer(watchmen, many=True).data,
-    })
+    def get_object(self):
+        (shift, _) = Shift.objects.get_or_create(date=self.kwargs['date'], shift=self.kwargs['shift'])
+        return shift

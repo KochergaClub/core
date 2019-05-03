@@ -5,11 +5,16 @@ import styled from 'styled-components';
 import breaks from 'remark-breaks';
 import Markdown from 'react-markdown';
 
+import { utcToZonedTime } from 'date-fns-tz';
+
 import { Button, Modal } from '@kocherga/frontkit';
 
-import { useFocusOnFirstModalRender, useCommonHotkeys } from '../../utils';
+import {
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '../../common/hooks';
 
-import { LocalEvent } from '../types';
+import { LocalEvent, timezone, formatDate } from '../types';
 
 interface Props {
   isOpen: boolean;
@@ -67,14 +72,17 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
     [event, onEdit]
   );
 
+  const zonedStart = utcToZonedTime(event.start, timezone);
+  const zonedEnd = utcToZonedTime(event.end, timezone);
+
   return (
     <Modal isOpen={isOpen}>
       <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
         <div>
-          {event.start.format('dddd, DD MMMM')} ⋅ {event.start.format('HH:mm')}{' '}
-          – {event.end.format('HH:mm')}
+          {formatDate(zonedStart, 'cccc, d MMMM')} ⋅{' '}
+          {formatDate(zonedStart, 'HH:mm')} – {formatDate(zonedEnd, 'HH:mm')}
         </div>
         <EventRoom>{event.room}</EventRoom>
         {event.description && (

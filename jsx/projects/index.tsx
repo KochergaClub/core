@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 import ProjectCard from './components/ProjectCard';
 
 import TL02 from '../blocks/TL02';
 
 import { Project, getAllProjects } from './utils';
+import { InitialLoader } from '../common/types';
 
 const Grid = styled.div`
   background-color: #eee;
@@ -26,13 +28,11 @@ const Grid = styled.div`
   justify-items: stretch;
 `;
 
-export default () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+interface Props {
+  projects: Project[];
+}
 
-  useEffect(() => {
-    getAllProjects().then(setProjects);
-  }, []);
-
+const ProjectsIndexPage = (props: Props) => {
   return (
     <Page title="Проекты Кочерги" wide>
       <TL02 title="Активные проекты">
@@ -41,8 +41,21 @@ export default () => {
         многое другое.
       </TL02>
       <Grid>
-        {projects.map(project => <ProjectCard key={project.id} {...project} />)}
+        {props.projects.map(project => (
+          <ProjectCard key={project.id} {...project} />
+        ))}
       </Grid>
     </Page>
   );
 };
+
+const getInitialData: InitialLoader = async context => {
+  return {
+    projects: await getAllProjects(context.api),
+  };
+};
+
+export default {
+  component: ProjectsIndexPage,
+  getInitialData,
+} as Screen;

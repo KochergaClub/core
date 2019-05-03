@@ -3,8 +3,9 @@ import styled from 'styled-components';
 
 import { Button, Column } from '@kocherga/frontkit';
 
+import { Screen, InitialLoader } from '../common/types';
+import { useAPI } from '../common/hooks';
 import Page from '../components/Page';
-import { apiCall } from '../utils';
 
 import { Member } from './types';
 
@@ -27,6 +28,7 @@ interface Props {
 
 const ManagerControls = ({ member }: { member: Member }) => {
   const [granting, setGranting] = useState(false);
+  const api = useAPI();
 
   if (member.role !== 'WATCHMAN') {
     return null;
@@ -35,7 +37,7 @@ const ManagerControls = ({ member }: { member: Member }) => {
   const grantGoogle = useCallback(
     async () => {
       setGranting(true);
-      await apiCall(
+      await api.call(
         `staff/member/${member.id}/grant_google_permissions/`,
         'POST'
       );
@@ -51,7 +53,7 @@ const ManagerControls = ({ member }: { member: Member }) => {
   );
 };
 
-export default ({ member, current_user_is_manager }: Props) => (
+const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
   <Page title={`${member.full_name} | Профиль сотрудника`} team>
     <Column centered gutter={20} style={{ marginBottom: 100 }}>
       <Column centered gutter={0}>
@@ -76,3 +78,16 @@ export default ({ member, current_user_is_manager }: Props) => (
     </Column>
   </Page>
 );
+
+const getInitialData: InitialLoader = async ({ api, user }, params) => {
+  const member = await api.call(`staff/member/${params.id}`, 'GET');
+  return {
+    member,
+    current_user_is_manager: user.permissions.indexOf('staff.manage') !== -1,
+  };
+};
+
+export default {
+  component: StaffMemberPage,
+  getInitialData,
+} as Screen;

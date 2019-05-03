@@ -1,5 +1,4 @@
 import { reducer } from './types';
-import moment from 'moment';
 
 it('create from empty', () => {
   const result = reducer(
@@ -7,8 +6,8 @@ it('create from empty', () => {
     {
       type: 'CREATE',
       payload: {
-        start: moment('2020-05-01 19:00'),
-        end: moment('2020-05-01 21:00'),
+        start: new Date('2020-05-01 19:00'),
+        end: new Date('2020-05-01 21:00'),
         title: 'Some event',
         description: '',
         id: 'abcd',
@@ -26,8 +25,8 @@ it('create from non-empty', () => {
     {
       events: [
         {
-          start: moment('2020-04-01 12:00'),
-          end: moment('2020-04-01 13:00'),
+          start: new Date('2020-04-01 12:00'),
+          end: new Date('2020-04-01 13:00'),
           title: 'Older event',
           description: '',
           id: 'oldold',
@@ -38,8 +37,8 @@ it('create from non-empty', () => {
     {
       type: 'CREATE',
       payload: {
-        start: moment('2020-05-01 19:00'),
-        end: moment('2020-05-01 21:00'),
+        start: new Date('2020-05-01 19:00'),
+        end: new Date('2020-05-01 21:00'),
         title: 'Some event',
         description: '',
         id: 'abcd',
@@ -56,16 +55,16 @@ it('REPLACE_ALL action', () => {
     {
       events: [
         {
-          start: moment('2020-04-01 12:00'),
-          end: moment('2020-04-01 13:00'),
+          start: new Date('2020-04-01 12:00'),
+          end: new Date('2020-04-01 13:00'),
           title: 'First event',
           description: '',
           id: 'first',
           room: 'TODO',
         },
         {
-          start: moment('2020-04-01 12:00'),
-          end: moment('2020-04-01 13:00'),
+          start: new Date('2020-04-01 12:00'),
+          end: new Date('2020-04-01 13:00'),
           title: 'Second event',
           description: '',
           id: 'second',
@@ -78,16 +77,16 @@ it('REPLACE_ALL action', () => {
       payload: {
         events: [
           {
-            start: moment('2020-04-01 12:00'),
-            end: moment('2020-04-01 13:00'),
+            start: new Date('2020-04-01 12:00'),
+            end: new Date('2020-04-01 13:00'),
             title: 'Third event',
             description: '',
             id: 'third',
             room: 'TODO',
           },
           {
-            start: moment('2020-04-01 12:00'),
-            end: moment('2020-04-01 13:00'),
+            start: new Date('2020-04-01 12:00'),
+            end: new Date('2020-04-01 13:00'),
             title: 'Fourth event',
             description: '',
             id: 'fourth',

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 
 import TL02 from '../blocks/TL02';
 
 import { Project, getProject } from './utils';
+import { InitialLoader } from '../common/types';
 
 interface Props {
-  slug: string;
+  project: Project;
 }
 
 const Image = styled.img`
@@ -18,29 +20,13 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
-const Summary = styled.div`
-  margin-top: 20px;
-  font-size: 1.2rem;
-  text-align: center;
-`;
-
 const Description = styled.div`
   margin: 0 auto;
   max-width: 800px;
   margin-bottom: 100px;
 `;
 
-export default (props: Props) => {
-  const [project, setProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    getProject(props.slug).then(setProject);
-  }, []);
-
-  if (!project) {
-    return <Page title="Загружается... | Проект Кочерги">&nbsp;</Page>;
-  }
-
+const ProjectsDetailPage = ({ project }: Props) => {
   return (
     <Page title={`${project.title} | Проект Кочерги`}>
       <TL02 title={project.title}>
@@ -56,3 +42,12 @@ export default (props: Props) => {
     </Page>
   );
 };
+
+const getInitialData: InitialLoader = async (context, params) => {
+  return { project: await getProject(params.name, context.api) };
+};
+
+export default {
+  component: ProjectsDetailPage,
+  getInitialData,
+} as Screen;

@@ -30,6 +30,7 @@ lint:
 	docker-compose -f docker/compose.dev.yml run --rm api poetry run flake8 kocherga/ --max-line-length=120
 
 test-js:
+	docker-compose -f docker/compose.dev.yml run --rm api npx tsc
 	docker-compose -f docker/compose.dev.yml run --rm api npx jest
 
 test: test-types test-code test-js lint

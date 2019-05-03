@@ -2,8 +2,17 @@ import React, { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { apiCall, useCommonHotkeys } from '../../utils';
-import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
+import { utcToZonedTime } from 'date-fns-tz';
+
+import { useCommonHotkeys, useAPI } from '../../common/hooks';
+import {
+  Event,
+  LocalEvent,
+  ServerEvent,
+  serverEventToEvent,
+  timezone,
+  formatDate,
+} from '../types';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
@@ -35,6 +44,8 @@ const EditEventModal = ({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const api = useAPI();
+
   const saveDisabled = deleting || saving || !title.length;
 
   const saveCb = useCallback(
@@ -43,7 +54,7 @@ const EditEventModal = ({
         return;
       }
       setSaving(true);
-      const json = (await apiCall(`event/${event.id}`, 'PATCH', {
+      const json = (await api.call(`event/${event.id}`, 'PATCH', {
         title,
         description,
         location: room,
@@ -57,7 +68,7 @@ const EditEventModal = ({
   const deleteCb = useCallback(
     async () => {
       setDeleting(true);
-      await apiCall(`event/${event.id}`, 'DELETE', undefined, false);
+      await api.call(`event/${event.id}`, 'DELETE', undefined, false);
       onDelete(event.id);
     },
     [event.id]
@@ -72,11 +83,16 @@ const EditEventModal = ({
     return null;
   }
 
+  const zonedStart = utcToZonedTime(event.start, timezone);
+  const zonedEnd = utcToZonedTime(event.end, timezone);
+
   return (
     <Modal isOpen={isOpen} overflow="visible">
       <Modal.Header toggle={onClose}>
-        Редактировать событие {event.start.format('DD MMMM')}{' '}
-        {event.start.format('HH:mm')}–{event.end.format('HH:mm')}
+        Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–{formatDate(
+          zonedEnd,
+          'HH:mm'
+        )}
       </Modal.Header>
       <Modal.Body {...hotkeys}>
         <EventFields

@@ -1,22 +1,26 @@
 from itertools import groupby
 from datetime import timedelta
 
-from django.utils import timezone
-from django.views import View
-from django.contrib.auth.mixins import UserPassesTestMixin
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import permissions
+from rest_framework import exceptions
 
-from kocherga.django.react import react_render
+from django.utils import timezone
 
 from .models import Call
 from . import serializers
 
 
-class ZadarmaViewerMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.has_perm('zadarma.listen')
+class IsZadarmaViewer(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('zadarma.listen')
 
 
-class MainView(ZadarmaViewerMixin, View):
+class CallIndexView(APIView):
+    permission_classes = (IsZadarmaViewer,)
+    serializer_class = serializers.CallSerializer
+
     def get(self, request):
         calls = Call.objects.filter(ts__gte=timezone.now() - timedelta(days=30))[:100]
         pbx_calls = [
@@ -24,15 +28,18 @@ class MainView(ZadarmaViewerMixin, View):
             for k, g in groupby(calls, key=lambda call: call.pbx_call_id)
         ]
 
-        return react_render(request, 'zadarma/index', {
-            'pbx_calls': pbx_calls,
-        })
+        return Response(pbx_calls)
 
 
-class PbxCallView(ZadarmaViewerMixin, View):
+class CallDetailView(APIView):
+    permission_classes = (IsZadarmaViewer,)
+    serializer_class = serializers.CallSerializer
+
     def get(self, request, pbx_call_id):
         calls = Call.objects.filter(pbx_call_id=pbx_call_id)
+        if not len(calls):
+            raise exceptions.NotFound("PBX call not found")
 
-        return react_render(request, 'zadarma/pbx_call', {
-            'pbx_call': serializers.CallSerializer(calls, many=True).data
-        })
+        return Response(
+            serializers.CallSerializer(calls, many=True).data
+        )

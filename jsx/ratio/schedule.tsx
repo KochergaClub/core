@@ -2,12 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
 import Activity from './components/Activity';
 import HR from './components/HR';
 
-import { ActivityType, DayScheduleType } from './types';
+import { ActivityType, DayScheduleType, Training } from './types';
 
 const Container = styled.div`
   text-align: center;
@@ -103,14 +104,23 @@ function groupByDay(schedule: ActivityType[]) {
   return result;
 }
 
-export default ({ name, long_name, urls, schedule }) => (
+interface Props {
+  name: string;
+  long_name: string;
+  schedule: ActivityType[];
+  children?: React.ReactNode;
+}
+
+const RatioSchedulePage = ({ name, long_name, schedule }: Props) => (
   <Page title={name} team>
     <Container>
       <PageHeader>
         <h1>
-          <a href={urls.training}>{name}</a>
+          <a href="../">{name}</a>
         </h1>
-        <a href={urls.actions.change}>(Редактировать расписание)</a>
+        <a href={`/admin/ratio/training/${name}/change/`}>
+          (Редактировать расписание)
+        </a>
       </PageHeader>
 
       {groupByDay(schedule).map(day_schedule => (
@@ -123,3 +133,28 @@ export default ({ name, long_name, urls, schedule }) => (
     </Container>
   </Page>
 );
+
+const getInitialData: InitialLoader = async ({ api }, params) => {
+  const trainingName = params.name;
+  const trainingKey = encodeURIComponent(trainingName);
+  const training = (await api.call(
+    `ratio/training/${trainingKey}`,
+    'GET'
+  )) as Training;
+  const schedule = await api.call(
+    `ratio/training/${trainingKey}/schedule`,
+    'GET'
+  );
+  return {
+    name: training.name,
+    long_name: training.long_name,
+    schedule,
+  };
+};
+
+const screen: Screen = {
+  component: RatioSchedulePage,
+  getInitialData,
+};
+
+export default screen;

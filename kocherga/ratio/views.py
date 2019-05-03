@@ -1,88 +1,55 @@
-from django.views import View
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.contrib.auth.mixins import UserPassesTestMixin
-
-from kocherga.django.react import react_render
+from rest_framework import viewsets
+from rest_framework import permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Training
 from . import serializers
 from .users import training2mailchimp
 from .email import create_post_draft, create_pre_draft
 
-from urllib.parse import urlencode
+
+class IsRatioManager(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('ratio.manage')
 
 
-class RatioManagerMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.has_perm('ratio.manage')
+class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (IsRatioManager,)
+    queryset = Training.objects.all()
+    serializer_class = serializers.TrainingSerializer
+    lookup_field = 'name'
 
+    @action(detail=True, methods=['post'])
+    def to_mailchimp(self, request, name=None):
+        training2mailchimp(self.get_object())
+        return Response('ok')
 
-class MainView(RatioManagerMixin, View):
-    def get(self, request):
-        trainings = Training.objects.all()
-        return react_render(request, 'ratio/index', {
-            'trainings': serializers.TrainingSerializer(trainings, many=True).data,
-            'urls': {
-                'add_training': reverse('admin:ratio_training_add'),
-            },
-        })
+    @action(detail=True, methods=['post'])
+    def pre_email(self, request, name=None):
+        create_pre_draft(self.get_object())
+        return Response('ok')
 
+    @action(detail=True, methods=['post'])
+    def post_email(self, request, name=None):
+        create_post_draft(self.get_object())
+        return Response('ok')
 
-class TrainingView(RatioManagerMixin, View):
-    def get(self, request, name):
-        training = Training.objects.get(name=name)
+    @action(detail=True, methods=['post'])
+    def pay_salaries(self, request, name=None):
+        self.get_object().pay_salaries()
+        return Response('ok')
 
-        training_admin_url = reverse('admin:ratio_training_change', args=(training.name,))
+    @action(detail=True)
+    def tickets(self, request, name=None):
+        training_tickets = self.get_object().tickets
+        return Response(
+            serializers.TicketSerializer(training_tickets, many=True).data,
+        )
 
-        tickets_admin_url = reverse('admin:ratio_ticket_changelist') \
-            + '?' \
-            + urlencode({'training__name__exact': training.name})
-
-        return react_render(request, 'ratio/training', {
-            'training': serializers.TrainingSerializer(training).data,
-            'tickets': serializers.TicketSerializer(training.tickets, many=True).data,
-            'urls': {
-                'training_admin': training_admin_url,
-                'tickets_admin': tickets_admin_url,
-                'actions': {
-                    action: reverse('ratio:training_action', kwargs={'name': training.name, 'action': action})
-                    for action in ('to_mailchimp', 'pre_email', 'post_email', 'pay_salaries')
-                },
-                'schedule': reverse('ratio:schedule', kwargs={'name': training.name}),
-            },
-        })
-
-
-class TrainingActionView(RatioManagerMixin, View):
-    def post(self, request, name, action):
-        training = Training.objects.get(name=name)
-
-        if action == 'to_mailchimp':
-            training2mailchimp(training)
-        elif action == 'pre_email':
-            create_pre_draft(training)
-        elif action == 'post_email':
-            create_post_draft(training)
-        elif action == 'pay_salaries':
-            training.pay_salaries()
-        else:
-            raise Exception(f"Unknown action {action}")
-
-        return redirect('ratio:training', name=name)
-
-
-class ScheduleView(RatioManagerMixin, View):
-    def get(self, request, name):
-        training = Training.objects.get(name=name)
-        return react_render(request, 'ratio/schedule', {
-            'name': training.name,
-            'long_name': training.long_name,
-            'urls': {
-                'training': training.get_absolute_url(),
-                'actions': {
-                    'change': reverse('admin:ratio_training_change', args=[name]),
-                }
-            },
-            'schedule': serializers.ActivitySerializer(training.schedule, many=True).data,
-        })
+    @action(detail=True)
+    def schedule(self, request, name=None):
+        training = self.get_object()
+        return Response(
+            serializers.ActivitySerializer(training.schedule, many=True).data,
+        )

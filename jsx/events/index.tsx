@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState, useReducer } from 'react';
 
-import moment from 'moment';
+import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
+import { addWeeks, subWeeks } from 'date-fns';
 
+import { Screen } from '../common/types';
+import { API } from '../common/api';
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
-import { useListeningWebSocket, apiCall } from '../utils';
+import { useListeningWebSocket, useAPI } from '../common/hooks';
 
 import Calendar from './components/Calendar';
 import UILayer from './components/UILayer';
@@ -17,16 +20,17 @@ import {
   getInitialState,
   reducer,
   serverEventToEvent,
+  timezone,
 } from './types';
 
 import { uiReducer, initialUIState } from './uiTypes';
 
 import { EventDispatch } from './contexts';
 
-const startAccessor = (event: LocalEvent) => {
-  return event.start.toDate();
-};
-const endAccessor = (event: LocalEvent) => event.end.toDate();
+const startAccessor = (event: LocalEvent) =>
+  utcToZonedTime(event.start, timezone);
+
+const endAccessor = (event: LocalEvent) => utcToZonedTime(event.end, timezone);
 
 const eventPropGetter = (event: LocalEvent) => {
   const style = {};
@@ -38,34 +42,47 @@ const eventPropGetter = (event: LocalEvent) => {
   };
 };
 
+interface Range {
+  start: string; // YYYY-MM-DD format; not Date, because it needs to be serializable
+  end: string;
+}
+
+const loadEventsInRange = async (api: API, range: Range) => {
+  return (await api.call(
+    `events?from_date=${range.start}&to_date=${range.end}`,
+    'GET'
+  )) as ServerEvent[];
+};
+
 interface Props {
   events: ServerEvent[];
   range: { start: string; end: string };
+  children?: React.ReactNode;
 }
 
-export default (props: Props) => {
+const EventsPage = (props: Props) => {
   const [store, dispatch] = useReducer(reducer, props.events, getInitialState);
 
+  const api = useAPI();
+
   const [range, setRange] = useState(() => ({
-    start: moment(props.range.start),
-    end: moment(props.range.end),
+    start: new Date(props.range.start),
+    end: new Date(props.range.end),
   }));
 
   const fetchEvents = useCallback(
     async () => {
-      const json = (await apiCall(
-        `events?from_date=${range.start.format(
-          'YYYY-MM-DD'
-        )}&to_date=${range.end.format('YYYY-MM-DD')}`,
-        'GET'
-      )) as ServerEvent[];
+      const json = await loadEventsInRange(api, {
+        start: format(range.start, 'yyyy-MM-dd'),
+        end: format(range.end, 'yyyy-MM-dd'),
+      });
 
       dispatch({
         type: 'REPLACE_ALL',
         payload: { events: json.map(serverEventToEvent) },
       });
     },
-    [range]
+    [api, range]
   );
   useEffect(
     () => {
@@ -77,8 +94,8 @@ export default (props: Props) => {
   useListeningWebSocket('ws/events/', fetchEvents);
 
   const onRangeChange = (range: any) => {
-    let start: Date | undefined;
-    let end: Date | undefined;
+    let start: Date;
+    let end: Date;
 
     if (Array.isArray(range)) {
       start = range[0];
@@ -87,18 +104,25 @@ export default (props: Props) => {
       start = range.start;
       end = range.end;
     }
-    setRange({ start: moment(start), end: moment(end) });
+    // TODO - set wider range to pre-cache previous and next period, for smoother scrolling
+    setRange({ start, end });
   };
 
   const [uiStore, uiDispatch] = useReducer(uiReducer, initialUIState);
 
   const startNewEvent = useCallback(
-    ({ start, end }: { start: Date; end: Date }) => {
+    // Note: start and end are zoned since they come from RBC.
+    ({ start: zonedStart, end: zonedEnd }: { start: Date; end: Date }) => {
+      const { start, end } = {
+        start: zonedTimeToUtc(zonedStart, timezone),
+        end: zonedTimeToUtc(zonedEnd, timezone),
+      };
+
       uiDispatch({
         type: 'START_NEW',
         payload: {
-          start: moment(start),
-          end: moment(end),
+          start,
+          end,
         },
       });
     },
@@ -115,13 +139,31 @@ export default (props: Props) => {
   }, []);
 
   const resizeEvent = useCallback(
-    async ({ event, start, end }: { event: Event; start: Date; end: Date }) => {
+    // Note: start and end are zoned since they come from RBC.
+    async ({
+      event,
+      start: zonedStart,
+      end: zonedEnd,
+    }: {
+      event: Event;
+      start: Date;
+      end: Date;
+    }) => {
+      const { start, end } = {
+        start: zonedTimeToUtc(zonedStart, timezone),
+        end: zonedTimeToUtc(zonedEnd, timezone),
+      };
+
       dispatch({
         type: 'PRE_RESIZE',
-        payload: { event, start: moment(start), end: moment(end) },
+        payload: {
+          event,
+          start,
+          end,
+        },
       });
 
-      const json = await apiCall(`event/${event.id}`, 'PATCH', {
+      const json = await api.call(`event/${event.id}`, 'PATCH', {
         start,
         end,
       });
@@ -140,6 +182,7 @@ export default (props: Props) => {
       <EventDispatch.Provider value={dispatch}>
         <Calendar
           events={store.events}
+          getNow={() => utcToZonedTime(new Date(), timezone)}
           startAccessor={startAccessor}
           endAccessor={endAccessor}
           onSelectSlot={startNewEvent}
@@ -158,3 +201,24 @@ export default (props: Props) => {
     </Page>
   );
 };
+
+const getInitialData = async ({ api }) => {
+  const range = {
+    start: format(subWeeks(new Date(), 3), 'yyyy-MM-dd'),
+    end: format(addWeeks(new Date(), 3), 'yyyy-MM-dd'),
+  };
+
+  const events = await loadEventsInRange(api, range);
+
+  return {
+    events,
+    range,
+  };
+};
+
+const screen: Screen = {
+  component: EventsPage,
+  getInitialData,
+};
+
+export default screen;

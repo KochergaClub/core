@@ -50,38 +50,38 @@ class TimepadCategoriesView(APIView):
         ])
 
 
-@permission_classes(IsAdminUser,)
 @api_view()
+@permission_classes((IsAdminUser,))
 def r_vk_groups(request):
     all_groups = kocherga.events.vk.all_groups()
     return Response(all_groups)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_vk_update_wiki_schedule(request):
     kocherga.events.vk.update_wiki_schedule()
     return Response(ok)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_weekly_digest_post_vk(request):
     digest = WeeklyDigest.objects.current_digest()
     digest.post_vk('')
     return Response(ok)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_weekly_digest_post_telegram(request):
     digest = WeeklyDigest.objects.current_digest()
     digest.post_telegram()
     return Response(ok)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_weekly_digest_post_mailchimp_draft(request):
     text = request.data.get('text', '')
     digest = WeeklyDigest.objects.current_digest()
@@ -89,8 +89,8 @@ def r_weekly_digest_post_mailchimp_draft(request):
     return Response(ok)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_vk_post(request, event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_vk(event)
@@ -98,15 +98,15 @@ def r_vk_post(request, event_id):
     return Response({"link": announcement.link})
 
 
-@permission_classes(IsAdminUser,)
 @api_view()
+@permission_classes((IsAdminUser,))
 def r_fb_groups(request):
     all_groups = kocherga.events.fb.all_groups()
     return Response(all_groups)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_fb_post(request, event_id):
     event = Event.by_id(event_id)
     announcement = kocherga.events.announce.post_to_fb(event)

@@ -45,6 +45,9 @@ class Cheque(models.Model):
     class Meta:
         verbose_name = 'Выплата'
         verbose_name_plural = 'Выплаты'
+        permissions = (
+            ('create', 'Может выписывать новые чеки'),
+        )
 
     def __str__(self):
         result = f'{self.amount} -> {self.whom}'

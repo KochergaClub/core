@@ -5,10 +5,11 @@ from . import views
 
 app_name = 'auth'
 urlpatterns = [
-    path('login', views.LoginView.as_view(), name='login'),
+    # TODO - reimplement as /api/logout
+    # path('logout', views.LogoutView.as_view(), name='logout'),
     path('admin/login/', RedirectView.as_view(url='/login', query_string=True)),
-    path('logout', views.LogoutView.as_view(), name='logout'),
-    path('login/check-your-email', views.SentMagicLinkView.as_view(), name='sent-magic-link'),
-    path('login/magic-link', views.MagicLinkView.as_view(), name='magic-link'),
-    path('login/registered', views.RegisteredView.as_view(), name='registered'),
+
+    path('api/me', views.MeView.as_view()),
+    path('api/login/send-magic-link', views.SendMagicLinkView.as_view()),
+    path('api/login', views.LoginView.as_view()),
 ]

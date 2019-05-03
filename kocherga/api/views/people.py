@@ -2,7 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import permissions
 
 import time
 
@@ -14,6 +15,7 @@ CACHE_PERIOD = 5
 
 
 @api_view()
+@permission_classes((permissions.AllowAny,))
 def now(request):
     global stats_cached
     global stats_cached_ts

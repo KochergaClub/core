@@ -2,7 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import CSRFInput from '../components/CSRFInput';
 import Page from '../components/Page';
 
 import { Button, Column } from '@kocherga/frontkit';
@@ -26,8 +25,18 @@ const LoginPage = ({ djangoForm }) => (
     <AuthContainer>
       <LoginForm method="post">
         <Column stretch>
-          <CSRFInput />
-          <div dangerouslySetInnerHTML={{ __html: djangoForm }} />
+          <div>
+            <p>
+              <label htmlFor="id_email">Email:</label>
+              <input
+                type="email"
+                name="email"
+                maxLength={255}
+                required
+                id="id_email"
+              />
+            </p>
+          </div>
           <Button type="submit">Войти</Button>
         </Column>
       </LoginForm>
@@ -35,4 +44,6 @@ const LoginPage = ({ djangoForm }) => (
   </Page>
 );
 
-export default LoginPage;
+export default {
+  component: LoginPage,
+};

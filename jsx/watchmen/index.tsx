@@ -4,9 +4,11 @@ import moment from 'moment';
 
 import { Column, Row } from '@kocherga/frontkit';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
+import { InitialLoader } from '../common/types';
 
-import { Shift, Watchman, shifts2schedule, scheduleDispatch } from './types';
+import { Shift, StaffMember, shifts2schedule, scheduleDispatch } from './types';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
@@ -17,7 +19,7 @@ import { ScheduleContext } from './contexts';
 interface Props {
   schedule: Shift[];
   editable: boolean;
-  watchmen: Watchman[];
+  watchmen: StaffMember[];
   from_date: string;
   to_date: string;
 }
@@ -28,13 +30,13 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
   return (
     <Row gutter={16}>
       <a href={`?from_date=${prev.format('YYYY-MM-DD')}`}>&larr; назад</a>
-      <a href={`./`}>Текущая неделя</a>
+      <a href={`/team/watchmen`}>Текущая неделя</a>
       <a href={`?from_date=${next.format('YYYY-MM-DD')}`}>вперёд &rarr;</a>
     </Row>
   );
 };
 
-export default (props: Props) => {
+const WatchmenIndexPage = (props: Props) => {
   const [schedule, setShift] = useReducer(
     scheduleDispatch,
     props.schedule,
@@ -74,3 +76,42 @@ export default (props: Props) => {
     </ScheduleContext.Provider>
   );
 };
+
+const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
+  const from_date_str = query.from_date;
+  let from_date: moment.Moment;
+  if (from_date_str) {
+    from_date = moment(from_date_str);
+  } else {
+    from_date = moment().startOf('week');
+  }
+  const to_date = moment(from_date).add(4, 'weeks');
+
+  const format = 'YYYY-MM-DD';
+
+  const staffMembers = (await api.call('staff/member', 'GET')) as StaffMember[];
+  const watchmen = staffMembers.filter(
+    member => member.is_current && member.role === 'WATCHMAN'
+  );
+  const otherStaff = staffMembers.filter(
+    member => member.is_current && member.role !== 'WATCHMAN'
+  );
+
+  return {
+    schedule: await api.call(
+      `watchmen/schedule?from_date=${from_date.format(
+        format
+      )}&to_date=${to_date.format(format)}`,
+      'GET'
+    ),
+    editable: user.permissions.indexOf('watchmen.manage') !== -1,
+    from_date: from_date.format('YYYY-MM-DD'),
+    to_date: to_date.format('YYYY-MM-DD'),
+    watchmen: watchmen.concat(otherStaff),
+  };
+};
+
+export default {
+  component: WatchmenIndexPage,
+  getInitialData,
+} as Screen;

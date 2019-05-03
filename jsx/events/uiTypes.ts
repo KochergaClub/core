@@ -1,12 +1,10 @@
-import moment from 'moment';
-
 import { LocalEvent } from './types';
 
 interface NewUIStore {
   mode: 'new';
   context: {
-    start: moment.Moment;
-    end: moment.Moment;
+    start: Date;
+    end: Date;
   };
 }
 
@@ -33,8 +31,8 @@ export type UIStore = NewUIStore | EditUIStore | ViewUIStore | PassiveUIStore;
 interface StartNewUIAction {
   type: 'START_NEW';
   payload: {
-    start: moment.Moment;
-    end: moment.Moment;
+    start: Date;
+    end: Date;
   };
 }
 

@@ -1,27 +1,49 @@
-import * as React from 'react';
+import React from 'react';
 
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
-const Cohorts = ({ cohorts }) => (
+import { Cohort } from './types';
+
+const Cohorts = ({ cohorts }: { cohorts: Cohort[] }) => (
   <ul>
-    {cohorts.map(
-       cohort => (
-         <li>
-           <a href={`/team/mastermind_dating/cohort/${cohort.id}`}>
-             {cohort.id}
-           </a>
-         </li>
-       )
-    )}
+    {cohorts.map(cohort => (
+      <li>
+        <a href={`/team/mastermind_dating/cohort/${cohort.id}`}>{cohort.id}</a>
+      </li>
+    ))}
   </ul>
 );
 
-export default ({ cohorts }) => (
+interface Props {
+  cohorts: Cohort[];
+  children?: React.ReactNode;
+}
+
+const MastermindIndexPage = ({ cohorts }: Props) => (
   <Page title="Админка мастермайнд-дейтинга" team>
     <h1>Мастермайнд-дейтинг</h1>
     <p>
-      <small><a href="/admin/mastermind_dating/cohort/">Редактировать когорты в админке</a></small>
+      <small>
+        <a href="/admin/mastermind_dating/cohort/">
+          Редактировать когорты в админке
+        </a>
+      </small>
     </p>
     <Cohorts cohorts={cohorts} />
   </Page>
 );
+
+const getInitialData: InitialLoader = async ({ api }) => {
+  const cohorts = await api.call('mastermind_dating/cohort', 'GET');
+  return {
+    cohorts,
+  };
+};
+
+const screen: Screen = {
+  component: MastermindIndexPage,
+  getInitialData,
+};
+
+export default screen;

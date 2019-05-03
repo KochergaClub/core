@@ -1,6 +1,6 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import React from 'react';
 
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 import { Column } from '@kocherga/frontkit';
 
@@ -23,7 +23,7 @@ const MemberList = ({
   </Column>
 );
 
-export default ({ members }: { members: Member[] }) => (
+const StaffIndexPage = ({ members }: { members: Member[] }) => (
   <Page title="Список сотрудников" team>
     <Column centered gutter={20}>
       <h1>Список сотрудников</h1>
@@ -60,3 +60,13 @@ export default ({ members }: { members: Member[] }) => (
     </Column>
   </Page>
 );
+
+const getInitialData: InitialLoader = async context => {
+  const members = await context.api.call('staff/member', 'GET');
+  return { members };
+};
+
+export default {
+  component: StaffIndexPage,
+  getInitialData,
+} as Screen;

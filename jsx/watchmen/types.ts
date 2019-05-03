@@ -1,13 +1,15 @@
-export interface Watchman {
+export interface StaffMember {
   id: number;
   short_name: string;
   color: string;
+  is_current: boolean;
+  role: string;
 }
 
 export interface Shift {
   date: string;
   shift: string;
-  watchman: Watchman | null;
+  watchman: StaffMember | null;
   is_night: boolean;
 }
 

@@ -9,8 +9,9 @@ x-common:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.prod'
     DB_NAME: 'kocherga_django' # TODO - environment-based databases
     DB_USER: 'kocherga'
+    # these variables are passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
     DB_PASSWORD: "${DB_PASSWORD}"
-    # DB_PASSWORD is passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
+    GOOGLE_ANALYTICS_ID: "${GOOGLE_ANALYTICS_ID}"
   volumes:
     - /data/kocherga:/data
     - /data/kocherga-static:/code/collected_static
@@ -39,9 +40,8 @@ services:
     << : *common
     command: poetry run gunicorn -w 4 -t 180 -b 0.0.0.0:80 kocherga.django.wsgi
     ports:
-      - "127.0.0.1:5300:80"
+      - "127.0.0.1:5302:80"
     depends_on:
-      - render-server
       - chrome
       - redis
     restart: always
@@ -52,7 +52,6 @@ services:
     ports:
       - "127.0.0.1:5301:80"
     depends_on:
-      - render-server
       - chrome
       - redis
     restart: always
@@ -66,7 +65,11 @@ services:
 
   render-server:
     << : *common
-    command: /usr/bin/node ./static/dist/render-server.js
+    command: /usr/bin/node ./static/dist/server.js
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:5300:80"
     restart: always
 
   tgbot:

@@ -6,8 +6,7 @@ from . import models
 class TrainingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Training
-        fields = ('name', 'url', 'date', 'salaries_paid')
-    url = serializers.URLField(source='get_absolute_url')
+        fields = ('name', 'date', 'salaries_paid', 'long_name')
 
 
 class TicketSerializer(serializers.ModelSerializer):

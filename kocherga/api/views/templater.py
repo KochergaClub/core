@@ -44,15 +44,15 @@ def r_png(request, name):
     return HttpResponse(image_bytes, content_type='image/png')
 
 
-@permission_classes(IsAdminUser,)
 @api_view()
+@permission_classes((IsAdminUser,))
 def r_schema(request, name):
     template = Template.by_name(name)
     return Response(template.schema.to_dict())
 
 
-@permission_classes(IsAdminUser,)
 @api_view()
+@permission_classes((IsAdminUser,))
 def r_list(request):
     names = kocherga.templater.list_templates()
     return Response([

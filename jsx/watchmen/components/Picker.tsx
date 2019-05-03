@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { ScheduleContext } from '../contexts';
-import { Shift, Watchman } from '../types';
+import { Shift, StaffMember } from '../types';
 
 import { nightColor } from '../constants';
 
@@ -41,7 +41,7 @@ interface Props {
 }
 
 interface ItemProps extends Props {
-  watchman: Watchman | null;
+  watchman: StaffMember | null;
   is_night: boolean;
 }
 

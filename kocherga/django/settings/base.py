@@ -20,7 +20,9 @@ BASE_DIR = str(Path(__file__).parent.parent.parent.parent)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# We call Django API from the render server and want the API to interpret its own host correctly.
+# For example, this matters when we use request.build_absolute_uri().
+USE_X_FORWARDED_HOST = True
 
 # Wagtail
 
@@ -57,7 +59,6 @@ INSTALLED_APPS = [
     'kocherga.api',
     'kocherga.watchmen_routine',
     'kocherga.ratio',
-    'kocherga.my',
     'kocherga.timepad',
     'kocherga.mastermind_dating',
     'kocherga.projects',
@@ -206,6 +207,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'kocherga.api.auth.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',

@@ -1,9 +1,8 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
 
 from . import views
 
-app_name = 'cashier'
-urlpatterns = [
-    path('', views.index, name='index'),
-    path('cheque/<int:id>/action/redeem', views.cheque_redeem, name='index'),
-]
+router = SimpleRouter()
+router.register('cheque', views.ChequeViewSet)
+
+urlpatterns = router.urls
