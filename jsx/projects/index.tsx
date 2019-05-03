@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 import { Screen } from '../common/types';
 import Page from '../components/Page';
-import ProjectCard from './components/ProjectCard';
-
+import WorkInProgress from '../components/WorkInProgress';
 import TL02 from '../blocks/TL02';
+
+import ProjectCard from './components/ProjectCard';
 
 import { Project, getAllProjects } from './utils';
 import { InitialLoader } from '../common/types';
@@ -35,6 +36,7 @@ interface Props {
 const ProjectsIndexPage = (props: Props) => {
   return (
     <Page title="Проекты Кочерги" wide>
+      <WorkInProgress />
       <TL02 title="Активные проекты">
         Регулярные мероприятия и сообщества, которые собираются в Кочерге.<br />
         Рациональность, научно-популярные лектории, критическое мышление и

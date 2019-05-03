@@ -11,6 +11,7 @@ import { timezone, formatDate } from '../common/utils';
 
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
+import WorkInProgress from '../components/WorkInProgress';
 
 import { PublicEvent } from '../events/types';
 
@@ -38,6 +39,7 @@ const EventsList = ({ events }: Props) => {
   }
   return (
     <div>
+      <a id="schedule" />
       <h2>Ближайшие события:</h2>
       <Column stretch gutter={20}>
         {events.map(event => <EventCard key={event.event_id} event={event} />)}
@@ -46,30 +48,10 @@ const EventsList = ({ events }: Props) => {
   );
 };
 
-const AlertCard = styled.div`
-  margin: 40px auto;
-  max-width: 660px;
-  border: 1px solid hsl(40, 50%, 80%);
-  background-color: hsl(40, 50%, 90%);
-  padding: 20px;
-  font-size: 1.3em;
-  line-height: 1.5;
-`;
-
-const WorkInProgressCard = () => (
-  <AlertCard>
-    <p>Сайт kocherga.club находится в разработке.</p>
-    <p>
-      Возможно, вы ищете основной сайт:{' '}
-      <a href="https://kocherga-club.ru">kocherga-club.ru</a>
-    </p>
-  </AlertCard>
-);
-
 const FrontPage = ({ events }: Props) => {
   return (
     <Page title="Кочерга">
-      <WorkInProgressCard />
+      <WorkInProgress />
       <Column gutter={20} stretch>
         <PageTitle>Кочерга</PageTitle>
         <EventsList events={events} />
