@@ -21,7 +21,6 @@ announcement_patterns = [
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='api/index.html')),
-    path('people/now', views.people.now),
 
     path('announcements/', include(announcement_patterns)),
     path('schedule/weekly-image', views.announcements.r_schedule_weekly_image),
