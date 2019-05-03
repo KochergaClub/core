@@ -1,6 +1,5 @@
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
-from rest_framework import routers
 
 from . import views
 
@@ -62,12 +61,4 @@ urlpatterns = [
     path('templater', views.templater.r_list),
 
     path('fb/token', views.fb.TokenView.as_view()),
-]
-
-# Event prototypes
-router = routers.SimpleRouter(trailing_slash=False)
-router.register('event_prototypes', views.event_prototypes.RootViewSet)
-urlpatterns += router.urls
-urlpatterns += [
-    path('event_prototypes/<prototype_id>/tag/<tag_name>', views.event_prototypes.TagView.as_view()),
 ]
