@@ -2,14 +2,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework import mixins, viewsets, exceptions
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 
 from datetime import datetime
 
-from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 
 from kocherga.events.models import EventPrototype
@@ -18,15 +17,15 @@ from kocherga.events.serializers import EventSerializer, EventPrototypeSerialize
 from kocherga.api.common import ok
 
 
-class RootView(generics.ListCreateAPIView):
+class RootViewSet(
+        mixins.CreateModelMixin,
+        mixins.RetrieveModelMixin,
+        mixins.UpdateModelMixin,
+        mixins.ListModelMixin,
+        viewsets.GenericViewSet,
+):
     permission_classes = (IsAdminUser,)
     queryset = EventPrototype.objects.order_by('weekday').all()
-    serializer_class = DetailedEventPrototypeSerializer
-
-
-class ObjectView(generics.RetrieveUpdateAPIView):
-    permission_classes = (IsAdminUser,)
-    queryset = EventPrototype.objects.all()
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -34,53 +33,47 @@ class ObjectView(generics.RetrieveUpdateAPIView):
         else:
             return EventPrototypeSerializer
 
+    @action(detail=True)
+    def instances(self, request, pk=None):
+        prototype = self.get_object()
+        events = prototype.instances()
+        return Response(EventSerializer(events, many=True).data)
 
-@api_view()
-@permission_classes((IsAdminUser,))
-def r_prototype_instances(request, prototype_id):
-    prototype = EventPrototype.by_id(prototype_id)
-    events = prototype.instances()
-    return Response(EventSerializer(events, many=True).data)
+    @action(detail=True, methods=['POST'], url_path=r'cancel_date/(?P<date_str>[^/.]+)')
+    def cancel_date(self, request, date_str, pk=None):
+        prototype = self.get_object()
+        prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
+        prototype.save()
 
+        return Response(ok)
 
-@api_view(['POST'])
-@permission_classes((IsAdminUser,))
-def r_prototype_cancel_date(request, prototype_id, date_str):
-    prototype = EventPrototype.by_id(prototype_id)
-    prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
-    prototype.save()
+    @action(detail=True, methods=['POST'])
+    def new(self, request, pk=None):
+        """Create new event using this prototype."""
+        prototype = self.get_object()
 
-    return Response(ok)
+        payload = request.data
+        ts = payload["ts"]
 
+        dt = datetime.fromtimestamp(ts, TZ)
+        event = prototype.new_event(dt)
 
-@api_view(['POST'])
-@permission_classes((IsAdminUser,))
-def r_prototype_new_event(request, prototype_id):
-    payload = request.data
-    ts = payload["ts"]
+        return Response(EventSerializer(event).data)
 
-    prototype = EventPrototype.by_id(prototype_id)
-    dt = datetime.fromtimestamp(ts, TZ)
-    event = prototype.new_event(dt)
+    @action(detail=True, methods=['POST'])
+    def image(self, request, pk=None):
+        files = request.FILES
+        if "file" not in files:
+            raise exceptions.ValidationError("Expected a file")
+        f = files["file"]
 
-    return Response(EventSerializer(event).data)
+        if f.name == "":
+            raise exceptions.ValidationError("No filename")
 
+        prototype = self.get_object()
+        prototype.add_image(f)
 
-@api_view(['POST'])
-@permission_classes((IsAdminUser,))
-def r_upload_image(request, prototype_id):
-    files = request.FILES
-    if "file" not in files:
-        raise PublicError("Expected a file")
-    f = files["file"]
-
-    if f.name == "":
-        raise PublicError("No filename")
-
-    prototype = EventPrototype.by_id(prototype_id)
-    prototype.add_image(f)
-
-    return Response(ok)
+        return Response(ok)
 
 
 class TagView(APIView):

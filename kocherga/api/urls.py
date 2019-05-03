@@ -38,14 +38,6 @@ urlpatterns = [
     path('bookings', views.bookings.r_create),
     path('bookings/<event_id>', views.bookings.r_delete),
 
-    path('event_prototypes', views.event_prototypes.RootView.as_view()),
-    path('event_prototypes/<prototype_id>', views.event_prototypes.ObjectView.as_view()),
-    path('event_prototypes/<prototype_id>/instances', views.event_prototypes.r_prototype_instances),
-    path('event_prototypes/<prototype_id>/cancel_date/<date_str>', views.event_prototypes.r_prototype_cancel_date),
-    path('event_prototypes/<prototype_id>/new', views.event_prototypes.r_prototype_new_event),
-    path('event_prototypes/<prototype_id>/image', views.event_prototypes.r_upload_image),
-    path('event_prototypes/<prototype_id>/tag/<tag_name>', views.event_prototypes.TagView.as_view()),
-
     path('events', views.events.RootView.as_view()),
     path('event/<event_id>', views.events.ObjectView.as_view()),
     path('event/<event_id>/image/<image_type>', views.events.ImageView.as_view()),
@@ -72,5 +64,10 @@ urlpatterns = [
     path('fb/token', views.fb.TokenView.as_view()),
 ]
 
-#router = routers.SimpleRouter()
-#router.register('event_prototypes', views.event_prototypes.RootViewSet)
+# Event prototypes
+router = routers.SimpleRouter(trailing_slash=False)
+router.register('event_prototypes', views.event_prototypes.RootViewSet)
+urlpatterns += router.urls
+urlpatterns += [
+    path('event_prototypes/<prototype_id>/tag/<tag_name>', views.event_prototypes.TagView.as_view()),
+]
