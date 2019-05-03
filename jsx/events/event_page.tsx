@@ -38,10 +38,6 @@ const TimingsContainer = styled.div`
   color: #999;
 `;
 
-const AnnouncementsContainer = styled.div`
-  text-align: center;
-`;
-
 const EventTimings = ({ event }: { event: PublicEvent }) => {
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);
@@ -54,12 +50,24 @@ const EventTimings = ({ event }: { event: PublicEvent }) => {
   );
 };
 
+const AnnouncementsContainer = styled.div`
+  text-align: center;
+  > *:not(:last-child):after {
+    content: ' \00b7 ';
+  }
+`;
+
 const EventAnnouncements = ({ event }: { event: PublicEvent }) => {
   return (
     <AnnouncementsContainer>
       {(['vk', 'fb', 'timepad'] as AnnouncementKey[])
         .filter(key => event.announcements[key])
-        .map(key => <a href={event.announcements[key].link}>{key}</a>)}
+        .map(key => (
+          <span>
+            {' '}
+            <a href={event.announcements[key].link}>{key}</a>
+          </span>
+        ))}
     </AnnouncementsContainer>
   );
 };
