@@ -33,11 +33,16 @@ const EventCard = ({ event }: { event: PublicEvent }) => {
 };
 
 const EventsList = ({ events }: Props) => {
+  if (!events.length) {
+    return null;
+  }
   return (
-    <Column stretch>
-      {events.length && <h2>Ближайшие события:</h2>}
-      {events.map(event => <EventCard key={event.event_id} event={event} />)}
-    </Column>
+    <div>
+      <h2>Ближайшие события:</h2>
+      <Column stretch gutter={20}>
+        {events.map(event => <EventCard key={event.event_id} event={event} />)}
+      </Column>
+    </div>
   );
 };
 
