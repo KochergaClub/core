@@ -2,8 +2,10 @@ import React, { useCallback } from 'react';
 
 import { Button } from '@kocherga/frontkit';
 
+import { utcToZonedTime } from 'date-fns-tz';
+
 import { useAPI } from '../../common/hooks';
-import { formatDate } from '../../common/utils';
+import { timezone, formatDate } from '../../common/utils';
 
 import { Customer, Order } from '../types';
 
@@ -61,7 +63,10 @@ const CustomerSection = ({ customer, orders_count, orders }: Props) => {
           <ul>
             {orders.map((order, i) => (
               <li key={i}>
-                {formatDate(new Date(order.start_dt), 'yyyy-MM-dd, HH:mm')}
+                {formatDate(
+                  utcToZonedTime(order.start_dt, timezone),
+                  'yyyy-MM-dd, HH:mm'
+                )}
               </li>
             ))}
           </ul>
