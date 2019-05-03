@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
@@ -17,87 +18,21 @@ from kocherga.events.serializers import EventSerializer, EventPrototypeSerialize
 from kocherga.api.common import ok
 
 
-class RootView(APIView):
+class RootView(generics.ListCreateAPIView):
     permission_classes = (IsAdminUser,)
-
-    def get(self, request):
-        prototypes = EventPrototype.objects.order_by('weekday').all()
-        return Response(
-            DetailedEventPrototypeSerializer(prototypes, many=True).data
-        )
-
-    def post(self, request):
-        payload = request.data
-
-        required_fields = ("title", "location", "weekday", "hour", "minute", "length")
-        optional_fields = (
-            "vk_group",
-            "fb_group",
-            "summary",
-            "description",
-            "timepad_category_code",
-            "timepad_prepaid_tickets",
-            "timing_description_override",
-        )
-
-        props = {}
-        for field in required_fields:
-            if field not in required_fields:
-                raise PublicError(f"Field {field} is required")
-
-            props[field] = payload[field]
-        for field in optional_fields:
-            if field in payload:
-                props[field] = payload[field]
-
-        prototype = EventPrototype(**props)
-        prototype.clean()
-        prototype.save()
-
-        return Response(ok)
+    queryset = EventPrototype.objects.order_by('weekday').all()
+    serializer_class = DetailedEventPrototypeSerializer
 
 
-class ObjectView(APIView):
+class ObjectView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAdminUser,)
+    queryset = EventPrototype.objects.all()
 
-    def get(self, request, prototype_id):
-        prototype = EventPrototype.by_id(prototype_id)
-        return Response(
-            DetailedEventPrototypeSerializer(prototype).data
-        )
-
-    def patch(self, request, prototype_id):
-        payload = request.data
-
-        prototype = EventPrototype.by_id(prototype_id)
-
-        for (key, value) in payload.items():
-            if key in (
-                    "title",
-                    "description",
-                    "summary",
-                    "location",
-                    "weekday",
-                    "hour",
-                    "minute",
-                    "length",
-                    "vk_group",
-                    "fb_group",
-                    "active",
-                    "timepad_category_code",
-                    "timepad_prepaid_tickets",
-                    "timing_description_override",
-            ):
-                setattr(prototype, key, value)
-            else:
-                raise Exception("Key {} is not allowed in patch".format(key))
-
-        prototype.clean()
-        prototype.save()
-
-        return Response(
-            EventPrototypeSerializer(prototype).data
-        )
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return DetailedEventPrototypeSerializer
+        else:
+            return EventPrototypeSerializer
 
 
 @api_view()

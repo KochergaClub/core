@@ -45,7 +45,7 @@ class TestPrototypes:
             content_type='application/json',
             **kocherga_auth_header,
         )
-        assert res.status_code == 200
+        assert res.status_code == 201
 
         res = client.get('/api/event_prototypes', **kocherga_auth_header)
         assert res.status_code == 200

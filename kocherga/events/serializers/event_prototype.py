@@ -23,6 +23,7 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EventPrototype
         fields = FIELDS
+        read_only_fields = ('image', 'canceled_dates')
 
     tags = serializers.SerializerMethodField()
 
@@ -45,6 +46,7 @@ class DetailedEventPrototypeSerializer(EventPrototypeSerializer):
             'suggested',
             'instances',
         )
+        read_only_fields = ('image', 'canceled_dates')
 
     suggested = serializers.SerializerMethodField()
 

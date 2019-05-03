@@ -1,5 +1,6 @@
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
+from rest_framework import routers
 
 from . import views
 
@@ -70,3 +71,6 @@ urlpatterns = [
 
     path('fb/token', views.fb.TokenView.as_view()),
 ]
+
+#router = routers.SimpleRouter()
+#router.register('event_prototypes', views.event_prototypes.RootViewSet)
