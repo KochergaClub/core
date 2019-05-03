@@ -5,16 +5,13 @@ from typing import List
 
 from datetime import datetime, timedelta
 
-from django.conf import settings
 from django.db import models
-
-from .event import Event
 
 import kocherga.events.db
 from kocherga.dateutils import TZ
 from kocherga.images import image_storage
 
-# from ..serializers import EventSerializer
+from .event import Event
 
 
 class EventPrototype(models.Model):
