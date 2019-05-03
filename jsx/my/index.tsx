@@ -1,11 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { Screen, InitialLoader } from '../common/types';
-import { useAPI } from '../common/hooks';
-import Page from '../components/Page';
 import { APIError } from '../common/api';
 
-import { Button } from '@kocherga/frontkit';
+import CustomerSection from './components/CustomerSection';
+import NonCustomerSection from './components/NonCustomerSection';
+
+import Page from '../components/Page';
+
+import { Customer, Order } from './types';
 
 const AdminSection = () => (
   <div>
@@ -13,116 +16,16 @@ const AdminSection = () => (
   </div>
 );
 
-const inflect = (n: number) => {
-  if ((n % 100 < 10 || n % 100 > 20) && [2, 3, 4].includes(n % 10)) {
-    return 'а';
-  }
-  return '';
-};
-
-interface Customer {
-  card_id: number;
-  subscription_until?: string;
-  last_visit?: string;
-  total_spent: number;
-  privacy_mode: string;
-}
-
 interface Props {
   email: string;
   is_staff: boolean;
   customer?: Customer;
   orders_count?: number;
+  orders?: Order[];
   children?: React.ReactNode;
 }
 
-const CustomerSection = ({
-  customer,
-  orders_count,
-}: {
-  customer: Customer;
-  orders_count: number;
-}) => {
-  const api = useAPI();
-
-  const oppositePrivacyMode = (mode: string) =>
-    mode == 'private' ? 'public' : 'private';
-
-  const flipPrivacyMode = useCallback(
-    async () => {
-      await api.call('cm/me/set-privacy-mode', 'POST', {
-        privacy_mode: oppositePrivacyMode(customer.privacy_mode),
-      });
-      window.location.reload(); // TODO
-    },
-    [customer.privacy_mode]
-  );
-
-  return (
-    <div>
-      <h2>Посещения</h2>
-      <p>
-        Номер вашей карты: <strong>{customer.card_id}</strong>
-      </p>
-
-      {customer.subscription_until && (
-        <p>
-          Абонемент до <strong>{customer.subscription_until}</strong>.
-        </p>
-      )}
-
-      {customer.last_visit && (
-        <p>
-          Последнее посещение: <strong>{customer.last_visit}</strong>
-        </p>
-      )}
-
-      <p>
-        Всего вы были в Кочерге <strong>{orders_count}</strong> раз{inflect(
-          orders_count
-        )}.
-      </p>
-
-      <p>
-        Суммарно вы потратили в Кочерге <strong>{customer.total_spent}</strong>{' '}
-        руб.
-      </p>
-
-      <section>
-        <h3>Настройки приватности</h3>
-        Ваше присутствие{' '}
-        <strong>
-          {customer.privacy_mode == 'public'
-            ? 'отображается'
-            : 'не отображается'}
-        </strong>{' '}
-        на <a href="https://now.kocherga.club">now.kocherga.club</a> и
-        телевизорах в Кочерге.
-        <Button onClick={flipPrivacyMode}>
-          {customer.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
-        </Button>
-        <input
-          type="hidden"
-          value={oppositePrivacyMode(customer.privacy_mode)}
-          name="privacy_mode"
-        />
-      </section>
-    </div>
-  );
-};
-
-const NonCustomerSection = () => (
-  <p>
-    <i>
-      Этот аккаунт не связан ни с какой клубной картой.
-      <br />
-      Если у вас есть клубная карта, возможно, она не привязана к этому
-      email-адресу. Попросите администратора это исправить.
-    </i>
-  </p>
-);
-
-const MyPage = ({ email, customer, orders_count, is_staff }: Props) => (
+const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
   <Page title="Личный кабинет">
     <div>
       <h1>Личный кабинет Кочерги</h1>
@@ -133,7 +36,11 @@ const MyPage = ({ email, customer, orders_count, is_staff }: Props) => (
 
       {is_staff && <AdminSection />}
       {customer ? (
-        <CustomerSection customer={customer} orders_count={orders_count || 0} />
+        <CustomerSection
+          customer={customer}
+          orders_count={orders_count || 0}
+          orders={orders || []}
+        />
       ) : (
         <NonCustomerSection />
       )}
@@ -153,10 +60,12 @@ const getInitialData: InitialLoader = async ({ api, user }) => {
 
   try {
     const { customer, orders_count } = await api.call('cm/me', 'GET');
+    const orders = (await api.call('cm/me/orders', 'GET')) as Order[];
     data = {
       ...data,
       customer,
       orders_count,
+      orders,
     };
   } catch (e) {
     if (e instanceof APIError && e.status === 404) {

@@ -135,9 +135,3 @@ export const reducer = (store: EventStore, action: Action) => {
       return store;
   }
 };
-
-// Note that if we get locations in multiple timezones we could load the location timezone from the server.
-export const timezone = 'Europe/Moscow';
-
-export const formatDate = (date: Date, formatStr: string) =>
-  format(date, formatStr, { locale: ru });

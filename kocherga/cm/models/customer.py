@@ -67,7 +67,7 @@ class Customer(models.Model):
     is_active = models.BooleanField()  # "Активный" / "В архиве"
 
     # can be restored from subscriptions table.
-    subscription_until = models.DateField(null=True)
+    subscription_until = models.DateField(null=True, blank=True)
 
     # maybe important
     comment = models.TextField(blank=True)
@@ -91,9 +91,9 @@ class Customer(models.Model):
     goods_discount = models.IntegerField()
 
     # can probably be restored from other data
-    activity_started = models.DateTimeField(null=True)
+    activity_started = models.DateTimeField(null=True, blank=True)
     activity_ended = models.DateTimeField(null=True, blank=True)
-    last_visit = models.DateField(null=True)
+    last_visit = models.DateField(null=True, blank=True)
     total_spent = models.IntegerField()
 
     # local fields - not from CM

@@ -14,7 +14,8 @@ import {
   useCommonHotkeys,
 } from '../../common/hooks';
 
-import { LocalEvent, timezone, formatDate } from '../types';
+import { timezone, formatDate } from '../../common/utils';
+import { LocalEvent } from '../types';
 
 interface Props {
   isOpen: boolean;

@@ -3,13 +3,8 @@ import React, { useCallback, useState } from 'react';
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
-import {
-  Event,
-  ServerEvent,
-  serverEventToEvent,
-  timezone,
-  formatDate,
-} from '../types';
+import { timezone, formatDate } from '../../common/utils';
+import { Event, ServerEvent, serverEventToEvent } from '../types';
 
 import EventFields from './EventFields';
 

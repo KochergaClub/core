@@ -4,6 +4,7 @@ import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addWeeks, subWeeks } from 'date-fns';
 
 import { Screen } from '../common/types';
+import { timezone } from '../common/utils';
 import { API } from '../common/api';
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
@@ -20,7 +21,6 @@ import {
   getInitialState,
   reducer,
   serverEventToEvent,
-  timezone,
 } from './types';
 
 import { uiReducer, initialUIState } from './uiTypes';

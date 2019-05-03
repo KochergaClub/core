@@ -5,14 +5,8 @@ import styled from 'styled-components';
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
-import {
-  Event,
-  LocalEvent,
-  ServerEvent,
-  serverEventToEvent,
-  timezone,
-  formatDate,
-} from '../types';
+import { timezone, formatDate } from '../../common/utils';
+import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
