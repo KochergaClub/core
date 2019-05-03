@@ -134,7 +134,7 @@ const RatioSchedulePage = ({ name, long_name, schedule }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async ({ api }, params) => {
+const getInitialData: InitialLoader<Props> = async ({ api }, params) => {
   const trainingName = params.name;
   const trainingKey = encodeURIComponent(trainingName);
   const training = (await api.call(
@@ -152,7 +152,7 @@ const getInitialData: InitialLoader = async ({ api }, params) => {
   };
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: RatioSchedulePage,
   getInitialData,
 };

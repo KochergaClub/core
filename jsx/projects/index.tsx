@@ -49,7 +49,7 @@ const ProjectsIndexPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async context => {
+const getInitialData: InitialLoader<Props> = async context => {
   return {
     projects: await getAllProjects(context.api),
   };
@@ -58,4 +58,4 @@ const getInitialData: InitialLoader = async context => {
 export default {
   component: ProjectsIndexPage,
   getInitialData,
-} as Screen;
+} as Screen<Props>;

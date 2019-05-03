@@ -9,4 +9,4 @@ const Screen500 = () => (
 
 export default {
   component: Screen500,
-} as Screen;
+} as Screen<{}>;

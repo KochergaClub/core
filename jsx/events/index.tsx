@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addWeeks, subWeeks } from 'date-fns';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import { timezone } from '../common/utils';
 import { API } from '../common/api';
 import Page from '../components/Page';
@@ -202,7 +202,7 @@ const EventsPage = (props: Props) => {
   );
 };
 
-const getInitialData = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
   const range = {
     start: format(subWeeks(new Date(), 3), 'yyyy-MM-dd'),
     end: format(addWeeks(new Date(), 3), 'yyyy-MM-dd'),
@@ -216,7 +216,7 @@ const getInitialData = async ({ api }) => {
   };
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: EventsPage,
   getInitialData,
 };

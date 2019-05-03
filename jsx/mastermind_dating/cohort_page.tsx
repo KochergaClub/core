@@ -98,7 +98,7 @@ const MastermindCohortPage = ({ cohort_id, users }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async ({ api }, params) => {
+const getInitialData: InitialLoader<Props> = async ({ api }, params) => {
   const users = await api.call(
     `mastermind_dating/cohort/${params.id}/users`,
     'GET'
@@ -109,7 +109,7 @@ const getInitialData: InitialLoader = async ({ api }, params) => {
   };
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: MastermindCohortPage,
   getInitialData,
 };

@@ -34,14 +34,14 @@ const MastermindIndexPage = ({ cohorts }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
   const cohorts = await api.call('mastermind_dating/cohort', 'GET');
   return {
     cohorts,
   };
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: MastermindIndexPage,
   getInitialData,
 };

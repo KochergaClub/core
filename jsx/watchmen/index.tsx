@@ -110,7 +110,11 @@ const WatchmenIndexPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
+const getInitialData: InitialLoader<Props> = async (
+  { api, user },
+  params,
+  query
+) => {
   const from_date_str = query.from_date;
   let from_date: moment.Moment;
   if (from_date_str) {
@@ -143,7 +147,7 @@ const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
   };
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: WatchmenIndexPage,
   getInitialData,
 };

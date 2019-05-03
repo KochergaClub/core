@@ -4,15 +4,19 @@ import { Screen } from '../common/types';
 import Page from '../components/Page';
 import AuthContainer from './components/AuthContainer';
 
-const RegisteredPage = ({ index_url }) => (
+interface Props {}
+
+const RegisteredPage = () => (
   <Page title="Логин">
     <AuthContainer>
       Вы зарегистрировались!<br />
-      <a href={index_url}>Перейти в личный кабинет</a>
+      <a href="/my/">Перейти в личный кабинет</a>
     </AuthContainer>
   </Page>
 );
 
-export default {
+const screen: Screen<Props> = {
   component: RegisteredPage,
-} as Screen;
+};
+
+export default screen;

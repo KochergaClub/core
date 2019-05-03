@@ -48,7 +48,7 @@ const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async ({ api, user }) => {
+const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
   if (!user.email) {
     throw new APIError('You need to be logged in to see /my', 403);
   }
@@ -77,7 +77,7 @@ const getInitialData: InitialLoader = async ({ api, user }) => {
   return data;
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: MyPage,
   getInitialData,
 };

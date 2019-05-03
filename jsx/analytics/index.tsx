@@ -11,7 +11,11 @@ const BOVStatCard = ({ bovStat }) => (
   </div>
 );
 
-const AnalyticsPage = ({ bov_stats }) => {
+interface Props {
+  bov_stats: any;
+}
+
+const AnalyticsPage = ({ bov_stats }: Props) => {
   return (
     <Page title="Аналитика Кочерги" team>
       <h1>Аналитика Кочерги</h1>
@@ -31,12 +35,14 @@ const AnalyticsPage = ({ bov_stats }) => {
   );
 };
 
-const getInitialData: InitialLoader = async (context, params, query) => {
+const getInitialData: InitialLoader<Props> = async (context, params, query) => {
   const bov_stats = await context.api.call('analytics/bov_stats', 'GET');
   return { bov_stats };
 };
 
-export default {
+const screen: Screen<Props> = {
   component: AnalyticsPage,
   getInitialData,
-} as Screen;
+};
+
+export default screen;

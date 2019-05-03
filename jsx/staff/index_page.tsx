@@ -23,7 +23,11 @@ const MemberList = ({
   </Column>
 );
 
-const StaffIndexPage = ({ members }: { members: Member[] }) => (
+interface Props {
+  members: Member[];
+}
+
+const StaffIndexPage = ({ members }: Props) => (
   <Page title="Список сотрудников" team>
     <Column centered gutter={20}>
       <h1>Список сотрудников</h1>
@@ -61,12 +65,14 @@ const StaffIndexPage = ({ members }: { members: Member[] }) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async context => {
+const getInitialData: InitialLoader<Props> = async context => {
   const members = await context.api.call('staff/member', 'GET');
   return { members };
 };
 
-export default {
+const screen: Screen<Props> = {
   component: StaffIndexPage,
   getInitialData,
-} as Screen;
+};
+
+export default screen;

@@ -43,11 +43,11 @@ const ProjectsDetailPage = ({ project }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async (context, params) => {
+const getInitialData: InitialLoader<Props> = async (context, params) => {
   return { project: await getProject(params.name, context.api) };
 };
 
 export default {
   component: ProjectsDetailPage,
   getInitialData,
-} as Screen;
+} as Screen<Props>;

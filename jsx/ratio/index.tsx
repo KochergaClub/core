@@ -26,12 +26,12 @@ const RatioIndexPage = ({ trainings }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
   const trainings = await api.call('ratio/training', 'GET');
   return { trainings };
 };
 
-const screen: Screen = {
+const screen: Screen<Props> = {
   component: RatioIndexPage,
   getInitialData,
 };

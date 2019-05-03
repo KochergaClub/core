@@ -1,14 +1,14 @@
 import { API } from './api';
 
-export type InitialLoader = (
+export type InitialLoader<P> = (
   context: GlobalContextShape,
   params: any,
   query: any
-) => Promise<any>;
+) => Promise<P>;
 
-export interface Screen {
-  component: React.ComponentType;
-  getInitialData?: InitialLoader;
+export interface Screen<P> {
+  component: React.ComponentType<P>;
+  getInitialData?: InitialLoader<P>;
 }
 
 export interface User {

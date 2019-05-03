@@ -42,7 +42,7 @@ const getScreen = (name: string) => {
   if (!PAGES[name]) {
     throw new Error(`Page ${name} not found`);
   }
-  const screen = PAGES[name].default as Screen;
+  const screen = PAGES[name].default as Screen<{}>;
   if (!screen.component) {
     throw new Error(`${name} is not a proper screen`);
   }

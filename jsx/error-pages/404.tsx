@@ -13,4 +13,4 @@ const Screen404 = () => (
 
 export default {
   component: Screen404,
-} as Screen;
+} as Screen<{}>;

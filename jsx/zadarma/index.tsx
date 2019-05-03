@@ -26,12 +26,14 @@ const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
   const pbx_calls = await api.call('zadarma/pbx_call', 'GET');
   return { pbx_calls };
 };
 
-export default {
+const screen: Screen<Props> = {
   component: ZadarmaIndexPage,
   getInitialData,
-} as Screen;
+};
+
+export default screen;

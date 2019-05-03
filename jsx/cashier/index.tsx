@@ -56,12 +56,13 @@ const CashierPage = ({ cheques }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader = async context => {
+const getInitialData: InitialLoader<Props> = async context => {
   const cheques = await context.api.call('cashier/cheque/', 'GET');
   return { cheques };
 };
 
-export default {
+const screen: Screen<Props> = {
   component: CashierPage,
   getInitialData,
-} as Screen;
+};
+export default screen;
