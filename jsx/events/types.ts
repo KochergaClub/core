@@ -1,7 +1,7 @@
 export type AnnouncementKey = 'vk' | 'fb' | 'timepad';
 
 export interface PublicEvent {
-  id: string;
+  event_id: string;
   title: string;
   summary?: string;
   description?: string;

@@ -28,6 +28,7 @@ const PAGES: { [key: string]: { default: Screen<{}> } } = {
   'projects/index': require('./projects/index'),
   'projects/detail': require('./projects/detail'),
   'events/event_page': require('./events/event_page'),
+  'frontpage/index': require('./frontpage/index'),
   'error-pages/403': require('./error-pages/403'),
   'error-pages/404': require('./error-pages/404'),
   'error-pages/500': require('./error-pages/500'),

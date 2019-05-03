@@ -205,8 +205,6 @@ const getCb = (pageName: string) => async (
   }
 };
 
-app.get('/projects/', getCb('projects/index'));
-app.get('/projects/:name/', getCb('projects/detail'));
 app.get('/team/watchmen/', getCb('watchmen/index'));
 app.get('/team/analytics/', getCb('analytics/index'));
 app.get('/team/zadarma/', getCb('zadarma/index'));
@@ -224,8 +222,12 @@ app.get(
 );
 app.get('/team/events/', getCb('events/index'));
 app.get('/team/', (_, res) => res.redirect(301, '/team/staff/'));
+
+app.get('/projects/', getCb('projects/index'));
+app.get('/projects/:name/', getCb('projects/detail'));
 app.get('/my/', getCb('my/index'));
 app.get('/event/:id/', getCb('events/event_page'));
+app.get('/', getCb('frontpage/index'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy

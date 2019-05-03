@@ -7,12 +7,12 @@ import SocialIcons from './SocialIcons';
 
 import { teamColor } from './constants';
 
-const Container = styled('div')<{ hideOnMobile: boolean, team: boolean }>`
+const Container = styled('div')<{ hideOnMobile: boolean; team: boolean }>`
   width: 100%;
   height: 60px;
   padding: 0 40px;
 
-  background-color: ${props => props.theme.team ? teamColor : 'black'};
+  background-color: ${props => (props.theme.team ? teamColor : 'black')};
   color: white;
 
   display: flex;
@@ -20,7 +20,7 @@ const Container = styled('div')<{ hideOnMobile: boolean, team: boolean }>`
   align-items: center;
 
   @media screen and (max-width: 980px) {
-    display: ${props => props.hideOnMobile ? 'none' : 'flex'};
+    display: ${props => (props.hideOnMobile ? 'none' : 'flex')};
     flex-direction: column;
     height: auto;
     padding: 20px 0;
@@ -28,7 +28,7 @@ const Container = styled('div')<{ hideOnMobile: boolean, team: boolean }>`
 `;
 
 const Logo = ({ team }: Props) => (
-  <a href={team ? '/team/' : ''}>
+  <a href={team ? '/team/' : '/'}>
     <img src="/static/menu-logo.png" width="190" height="50" />
   </a>
 );
@@ -49,7 +49,7 @@ const TildaMenu = ({ team }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <ThemeProvider theme={{team}}>
+    <ThemeProvider theme={{ team }}>
       <div>
         <MobileHeader expanded={expanded} setExpand={setExpanded} />
         <Container hideOnMobile={!expanded} team={team}>
@@ -62,6 +62,6 @@ const TildaMenu = ({ team }: Props) => {
       </div>
     </ThemeProvider>
   );
-}
+};
 
 export default TildaMenu;
