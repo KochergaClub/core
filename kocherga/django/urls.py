@@ -2,10 +2,12 @@
 
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, re_path, include
+from django.urls import path, include
 from django.conf.urls.static import static
-from django.views.generic.base import RedirectView
 from .wagtail_api import api_router
+
+from wagtail.core import urls as wagtail_urls
+
 
 urlpatterns = [
     path('api/', include('kocherga.api.urls')),
@@ -24,18 +26,20 @@ urlpatterns = [
 
     path('api/wagtail/', api_router.urls),
     path('wagtail/', include('wagtail.admin.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
 
-    re_path('404/(.*)', RedirectView.as_view(url='https://kocherga-club.ru'), name='wagtail_serve'),
-    path(
-        '404/wagtailsites',
-        include((
-            [
-                path('404', RedirectView.as_view(url='https://kocherga-club.ru'), name='index')
-            ], 'wagtailsites'
-        ), 'wagtailsites')
-    ),
+    # Pages will be served by server.ts, but we need reversed urls for better wagtail admin experience.
+    path('', include(wagtail_urls)),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # path(
+    #     '404/wagtailsites',
+    #     include((
+    #         [
+    #             path('404', RedirectView.as_view(url='https://kocherga-club.ru'), name='index')
+    #         ], 'wagtailsites'
+    #     ), 'wagtailsites')
+    # ),
+]
 
 # Pretty useless - we use Django for DRF only.
 if settings.DEBUG:

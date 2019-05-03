@@ -12,6 +12,7 @@ x-common:
     # these variables are passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
     DB_PASSWORD: "${DB_PASSWORD}"
     GOOGLE_ANALYTICS_ID: "${GOOGLE_ANALYTICS_ID}"
+    WAGTAIL_API_TOKEN: "${WAGTAIL_API_TOKEN}"
   volumes:
     - /data/kocherga:/data
     - /data/kocherga-static:/code/collected_static

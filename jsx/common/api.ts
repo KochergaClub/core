@@ -37,6 +37,7 @@ interface APIProps {
   base?: string;
   cookie?: string;
   realHost?: string;
+  wagtailAPIToken?: string;
 }
 
 export class API {
@@ -44,12 +45,14 @@ export class API {
   base: string;
   cookie: string;
   realHost: string;
+  wagtailAPIToken: string;
 
   constructor(props: APIProps) {
     this.csrfToken = props.csrfToken || '';
     this.base = props.base || '';
     this.cookie = props.cookie || '';
     this.realHost = props.realHost || '';
+    this.wagtailAPIToken = props.wagtailAPIToken || '';
   }
 
   call = async (
@@ -67,6 +70,9 @@ export class API {
     }
     if (this.realHost) {
       headers['X-Forwarded-Host'] = this.realHost;
+    }
+    if (path.startsWith('wagtail/')) {
+      headers['X-WagtailAPIToken'] = this.wagtailAPIToken;
     }
     const params: RequestInit = {
       method,
@@ -101,20 +107,8 @@ export class API {
       return response;
     }
   };
+
+  callWagtail = async (path: string) => {
+    return await this.call(`wagtail/${path}`, 'GET');
+  };
 }
-
-export const apiCall = async (
-  path: string,
-  method: string,
-  payload?: object,
-  expectJSON: boolean = true
-) => {
-  if (typeof window === 'undefined') {
-    // API calls in SSR can't be done without react hooks / contexts safely, since they require csrfToken.
-    // This can be fixed by replacing apiCall with some global API object which is stored in React context.
-    throw Error("Server-side rendering doesn't support API calls yet");
-  }
-
-  const api = new API({ csrfToken: getCSRFToken() });
-  return await api.call(path, method, payload, expectJSON);
-};

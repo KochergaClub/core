@@ -12,6 +12,7 @@ x-common:
     DB_USER: 'root'
     DB_PASSWORD: ''
     NODE_ENV: 'development'
+    WAGTAIL_API_TOKEN: 'development'
   cap_add:
     - SYS_PTRACE
 

@@ -1,13 +1,12 @@
 import { hot } from 'react-hot-loader/root';
 
 import React from 'react';
-import express from 'express';
 
 import { API } from './common/api';
 import { Screen, GlobalContextShape } from './common/types';
 import GlobalContext from './components/GlobalContext';
 
-const PAGES: { [key: string]: { default: Screen<{}> } } = {
+const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'analytics/index': require('./analytics/index'),
   'auth/login': require('./auth/login'),
   'auth/check-your-email': require('./auth/check-your-email'),
@@ -29,22 +28,23 @@ const PAGES: { [key: string]: { default: Screen<{}> } } = {
   'projects/detail': require('./projects/detail'),
   'events/event_page': require('./events/event_page'),
   'frontpage/index': require('./frontpage/index'),
+  'wagtail/any': require('./wagtail/any'),
   'error-pages/403': require('./error-pages/403'),
   'error-pages/404': require('./error-pages/404'),
   'error-pages/500': require('./error-pages/500'),
 };
 
 interface Props {
-  name: string;
+  screenName: string;
   csrfToken: string;
   innerProps: any;
 }
 
 const getScreen = (name: string) => {
-  if (!PAGES[name]) {
-    throw new Error(`Page ${name} not found`);
+  if (!SCREENS[name]) {
+    throw new Error(`Screen ${name} not found`);
   }
-  const screen = PAGES[name].default as Screen<{}>;
+  const screen = SCREENS[name].default as Screen<{}>;
   if (!screen.component) {
     throw new Error(`${name} is not a proper screen`);
   }
@@ -52,7 +52,7 @@ const getScreen = (name: string) => {
 };
 
 const Entrypoint = (props: Props) => {
-  const screen = getScreen(props.name);
+  const screen = getScreen(props.screenName);
   const { component } = screen;
 
   const el = React.createElement(component, props.innerProps);
@@ -71,14 +71,15 @@ const Entrypoint = (props: Props) => {
 export default hot(Entrypoint);
 
 export const requestToPageProps = async (
-  pageName: string,
+  screenName: string,
   context: GlobalContextShape,
-  req: express.Request
+  params: object,
+  query: object
 ) => {
-  const screen = getScreen(pageName);
+  const screen = getScreen(screenName);
   const { getInitialData } = screen;
   if (!getInitialData) {
     return {};
   }
-  return await getInitialData(context, req.params, req.query);
+  return await getInitialData(context, params, query);
 };

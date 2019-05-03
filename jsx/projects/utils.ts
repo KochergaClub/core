@@ -24,17 +24,15 @@ export interface Project extends WagtailItem {
 }
 
 export const getAllProjects = async (api: API): Promise<Project[]> => {
-  const json = await api.call(
-    'wagtail/pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail',
-    'GET'
+  const json = await api.callWagtail(
+    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail'
   );
   return json.items;
 };
 
 export const getProject = async (slug: string, api: API): Promise<Project> => {
-  const json = await api.call(
-    `wagtail/pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,activity_summary,body,image,image_thumbnail`,
-    'GET'
+  const json = await api.callWagtail(
+    `pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,activity_summary,body,image,image_thumbnail`
   );
   return json.items[0];
 };

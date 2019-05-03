@@ -16,7 +16,7 @@ function renderApp(props: any) {
   const domContainerNode = document.getElementById('react-app');
 
   const el = React.createElement(Entrypoint, {
-    name: window['store'].component,
+    screenName: window['store'].screenName,
     csrfToken: window.csrfToken, // extract from page
     innerProps: props,
   });

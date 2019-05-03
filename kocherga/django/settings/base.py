@@ -27,7 +27,6 @@ USE_X_FORWARDED_HOST = True
 # Wagtail
 
 WAGTAIL_SITE_NAME = "Kocherga"
-WAGTAILAPI_BASE_URL = "/api/wagtail"
 
 # Application definition
 
@@ -61,6 +60,7 @@ INSTALLED_APPS = [
     'kocherga.timepad',
     'kocherga.mastermind_dating',
     'kocherga.projects',
+    'kocherga.pages',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -288,3 +288,5 @@ GOOGLE_ANALYTICS_ID = None
 WEBPACK_DEV_SERVER = False
 
 GDRIVE_WATCHMEN_FOLDER = None
+
+WAGTAIL_API_TOKEN = os.environ.get('WAGTAIL_API_TOKEN', None)

@@ -22,18 +22,19 @@ import setCookie from 'set-cookie-parser';
 import slash from 'express-slash';
 import httpProxy from 'http-proxy';
 
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import 'babel-polyfill';
 
-import { ServerStyleSheet } from 'styled-components';
-import { Helmet } from 'react-helmet';
-
-import Entrypoint, { requestToPageProps } from '../jsx/entry';
 import { API, APIError } from '../jsx/common/api';
 import { GlobalContextShape } from '../jsx/common/types';
 
 const webpackStats = require('../webpack-stats.json');
+
+import {
+  RenderResult,
+  renderEntrypointWithData,
+  renderEntrypoint,
+  getGAScript,
+} from './server/render';
 
 const ADDRESS = argv.address;
 const PORT = argv.port;
@@ -49,10 +50,12 @@ app.disable('x-powered-by');
 // import bodyParser from 'body-parser';
 // app.use(bodyParser.json({ limit: '2mb' }));
 
+const API_HOST = 'api'; // bound through docker-compose
+
 const proxy = httpProxy.createProxyServer({
   ws: true,
   target: {
-    host: 'api',
+    host: API_HOST,
   },
 });
 app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
@@ -83,9 +86,10 @@ const getAPI = (req: express.Request) => {
 
   const api = new API({
     csrfToken,
-    base: 'http://api',
+    base: `http://${API_HOST}`,
     cookie: req.get('Cookie') || '',
     realHost: req.get('host'),
+    wagtailAPIToken: process.env.WAGTAIL_API_TOKEN,
   });
   return api;
 };
@@ -114,64 +118,28 @@ app.use(async (req, _, next) => {
   }
 });
 
-function render(path: string, props: any) {
-  const sheet = new ServerStyleSheet();
-
-  const el = React.createElement(Entrypoint, {
-    name: path,
-    csrfToken: props.csrf_token,
-    innerProps: props,
-  });
-
-  const html = ReactDOMServer.renderToString(sheet.collectStyles(el));
-  const helmet = Helmet.renderStatic();
-  const styleTags = sheet.getStyleTags();
-
-  return { html, styleTags, helmet };
-}
-
-const getGAScript = (
-  id: string
-) => `<script async src="https://www.googletagmanager.com/gtag/js?id=${id}"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${id}');
-</script>
-`;
-
-const getCb = (pageName: string) => async (
+const sendFullHtml = (
+  renderResult: RenderResult,
   req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
+  res: express.Response
 ) => {
-  try {
-    if (!req.reactContext) {
-      req.reactContext = getFallbackContext(req);
-    }
-    const api = req.reactContext.api;
+  const { html, styleTags, helmet, props, screenName } = renderResult;
+  const api = req.reactContext.api;
 
-    const google_analytics_id = process.env.GOOGLE_ANALYTICS_ID;
-    const webpackDevServer = process.env.NODE_ENV === 'development';
+  const google_analytics_id = process.env.GOOGLE_ANALYTICS_ID;
 
-    const props = await requestToPageProps(pageName, req.reactContext, req);
-    const { html, styleTags, helmet } = render(pageName, props);
+  let bundleSrc = webpackStats.publicPath + webpackStats.chunks.main[0].name;
+  const webpackDevServer = process.env.NODE_ENV === 'development';
+  if (webpackDevServer) {
+    bundleSrc = 'http://localhost:8080' + bundleSrc;
+  }
 
-    let bundleSrc = webpackStats.publicPath + webpackStats.chunks.main[0].name;
-    if (webpackDevServer) {
-      bundleSrc = 'http://localhost:8080' + bundleSrc;
-    }
+  const store = {
+    screenName,
+    props,
+  };
 
-    const store = {
-      component: pageName,
-      props: {
-        ...props,
-        csrf_token: api.csrfToken,
-      },
-    };
-
-    const htmlTemplate = `<!DOCTYPE html>
+  const htmlTemplate = `<!DOCTYPE html>
     <html>
       <head>
         <meta charset="utf-8">
@@ -199,7 +167,27 @@ const getCb = (pageName: string) => async (
     </html>
     `;
 
-    res.send(htmlTemplate);
+  res.send(htmlTemplate);
+};
+
+const getCb = (screenName: string) => async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    if (!req.reactContext) {
+      req.reactContext = getFallbackContext(req);
+    }
+
+    const renderResult = await renderEntrypointWithData(
+      screenName,
+      req.reactContext,
+      req.params,
+      req.query
+    );
+
+    sendFullHtml(renderResult, req, res);
   } catch (err) {
     next(err);
   }
@@ -227,7 +215,7 @@ app.get('/projects/', getCb('projects/index'));
 app.get('/projects/:name/', getCb('projects/detail'));
 app.get('/my/', getCb('my/index'));
 app.get('/event/:id/', getCb('events/event_page'));
-app.get('/', getCb('frontpage/index'));
+// app.get('/', getCb('frontpage/index'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy
@@ -292,6 +280,48 @@ app.get('/login/magic-link', async (req, res, next) => {
 
 app.use(slash());
 
+// Let's try Wagtail, maybe the page is in there somewhere.
+app.use(async (req, res, next) => {
+  http.get(
+    {
+      host: API_HOST,
+      path: `/api/wagtail/pages/find/?html_path=${req.path}`,
+      headers: {
+        'X-WagtailAPIToken': req.reactContext.api.wagtailAPIToken,
+        'X-Forwarded-Host': req.reactContext.api.realHost,
+      },
+    },
+    async wagtailFindRes => {
+      try {
+        if (wagtailFindRes.statusCode !== 302) {
+          console.log('no wagtail page');
+          next();
+        } else {
+          console.log('got wagtail page!');
+          const wagtailUrl = wagtailFindRes.headers.location || '';
+          const match = wagtailUrl.match(/(\d+)\/?$/);
+          if (!match) {
+            throw new Error('Unparsable redirected url');
+          }
+          const pageId = match[1];
+
+          const pageProps = await req.reactContext.api.callWagtail(
+            `pages/${pageId}/?fields=*`
+          );
+          sendFullHtml(
+            renderEntrypoint('wagtail/any', req.reactContext, pageProps),
+            req,
+            res
+          );
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+});
+
+// Oh well. Time to give up.
 app.use(function(req, res, next) {
   res.status(404);
   getCb('error-pages/404')(req, res, next);
