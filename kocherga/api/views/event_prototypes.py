@@ -97,16 +97,16 @@ class ObjectView(APIView):
         return Response(prototype.to_dict())
 
 
-@permission_classes(IsAdminUser,)
 @api_view()
+@permission_classes((IsAdminUser,))
 def r_prototype_instances(request, prototype_id):
     prototype = EventPrototype.by_id(prototype_id)
     events = prototype.instances()
     return Response(EventSerializer(events, many=True).data)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_prototype_cancel_date(request, prototype_id, date_str):
     prototype = EventPrototype.by_id(prototype_id)
     prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
@@ -115,8 +115,8 @@ def r_prototype_cancel_date(request, prototype_id, date_str):
     return Response(ok)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_prototype_new_event(request, prototype_id):
     payload = request.data
     ts = payload["ts"]
@@ -128,8 +128,8 @@ def r_prototype_new_event(request, prototype_id):
     return Response(EventSerializer(event).data)
 
 
-@permission_classes(IsAdminUser,)
 @api_view(['POST'])
+@permission_classes((IsAdminUser,))
 def r_upload_image(request, prototype_id):
     files = request.FILES
     if "file" not in files:

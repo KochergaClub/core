@@ -133,6 +133,7 @@ class TagView(APIView):
 
 
 @api_view()
+@permission_classes((AllowAny,))
 def r_list_public(request):
     def arg2date(arg):
         d = request.query_params.get(arg)
@@ -153,7 +154,7 @@ def r_list_public(request):
 
 
 @api_view()
-@permission_classes(AllowAny,)
+@permission_classes((AllowAny,))
 def r_list_public_today(request):
     events = Event.objects.public_events(
         date=datetime.today().date(),

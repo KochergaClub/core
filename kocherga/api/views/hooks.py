@@ -15,7 +15,7 @@ VK_SECRET = settings.KOCHERGA_VK['callback_secret']
 
 
 @api_view(['POST'])
-@permission_classes(permissions.AllowAny,)
+@permission_classes((permissions.AllowAny,))
 def r_vk_callback(request):
     payload = request.data
 

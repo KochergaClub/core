@@ -7,13 +7,13 @@ import kocherga.api.auth
 
 
 @api_view(['POST'])
-@permission_classes(permissions.AllowAny,)
+@permission_classes((permissions.AllowAny,))
 def r_google(request):
     token = kocherga.api.auth.google_auth(request)
     return Response({"jwt_token": token})
 
 
 @api_view()
-@permission_classes(permissions.IsAuthenticated,)
+@permission_classes((permissions.IsAuthenticated,))
 def r_check(request):
     return Response(ok)
