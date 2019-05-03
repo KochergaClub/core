@@ -1,8 +1,7 @@
-{% load static %}
 <!doctype html>
 <head>
   <title>REST API Кочерги | Swagger UI</title>
-  <link rel="stylesheet" href="{% static 'api/swagger-ui.css' %}" />
+  <link rel="stylesheet" href="{{ static('api/swagger-ui.css') }}" />
   <style>
    #swagger-ui {
      margin: 0 auto;
@@ -17,7 +16,7 @@
   <script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
   <script>
   const ui = SwaggerUIBundle({
-    url: "{% static 'api/openapi.yaml' %}",
+    url: "{{ static('api/openapi.yaml') }}",
     dom_id: '#swagger-ui',
   })
   </script>
