@@ -1,14 +1,15 @@
-import React, { useReducer, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 
 import moment from 'moment';
 
 import { Column, Row } from '@kocherga/frontkit';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
-import { InitialLoader } from '../common/types';
+import { useListeningWebSocket, useAPI } from '../common/hooks';
+import { API } from '../common/api';
 
-import { Shift, StaffMember, shifts2schedule, scheduleDispatch } from './types';
+import { Shift, StaffMember, shifts2schedule, scheduleReducer } from './types';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
@@ -16,12 +17,20 @@ import EditingSwitch from './components/EditingSwitch';
 
 import { ScheduleContext } from './contexts';
 
+const loadSchedule = async (api: API, from_date: string, to_date: string) => {
+  return (await api.call(
+    `watchmen/schedule?from_date=${from_date}&to_date=${to_date}`,
+    'GET'
+  )) as Shift[];
+};
+
 interface Props {
   schedule: Shift[];
   editable: boolean;
   watchmen: StaffMember[];
   from_date: string;
   to_date: string;
+  children?: React.ReactNode;
 }
 
 const Pager = ({ from_date }: { from_date: moment.Moment }) => {
@@ -37,12 +46,33 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
 };
 
 const WatchmenIndexPage = (props: Props) => {
-  const [schedule, setShift] = useReducer(
-    scheduleDispatch,
+  const [schedule, scheduleDispatch] = useReducer(
+    scheduleReducer,
     props.schedule,
     shifts2schedule
   );
   const [editing, setEditing] = useState(false);
+
+  const api = useAPI();
+
+  const setShift = useCallback((shift: Shift) => {
+    scheduleDispatch({
+      type: 'UPDATE_SHIFT',
+      payload: { shift },
+    });
+  }, []);
+
+  const fetchSchedule = useCallback(async () => {
+    const shifts = await loadSchedule(api, props.from_date, props.to_date);
+    scheduleDispatch({
+      type: 'REPLACE_SCHEDULE',
+      payload: {
+        schedule: shifts2schedule(shifts),
+      },
+    });
+  }, []);
+
+  useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
   const contextValue = {
     watchmen: props.watchmen,
@@ -98,11 +128,10 @@ const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
   );
 
   return {
-    schedule: await api.call(
-      `watchmen/schedule?from_date=${from_date.format(
-        format
-      )}&to_date=${to_date.format(format)}`,
-      'GET'
+    schedule: await loadSchedule(
+      api,
+      from_date.format(format),
+      to_date.format(format)
     ),
     editable: user.permissions.indexOf('watchmen.manage') !== -1,
     from_date: from_date.format('YYYY-MM-DD'),
@@ -111,7 +140,8 @@ const getInitialData: InitialLoader = async ({ api, user }, params, query) => {
   };
 };
 
-export default {
+const screen: Screen = {
   component: WatchmenIndexPage,
   getInitialData,
-} as Screen;
+};
+export default screen;

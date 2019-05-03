@@ -1,5 +1,8 @@
 from rest_framework import serializers
 
+import channels.layers
+from asgiref.sync import async_to_sync
+
 from . import models
 import kocherga.staff.models
 
@@ -44,5 +47,11 @@ class UpdateShiftSerializer(serializers.ModelSerializer):
         instance.full_clean()
 
         instance.save()
+
+        async_to_sync(channels.layers.get_channel_layer().group_send)(
+            'watchmen_schedule_group', {
+                'type': 'notify.update',
+            }
+        )
 
         return instance

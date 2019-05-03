@@ -3,12 +3,14 @@ from channels.auth import AuthMiddlewareStack
 from django.urls import path
 
 import kocherga.events.consumers
+import kocherga.watchmen.consumers
 import kocherga.slack
 
 application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
         URLRouter([
             path("ws/events/", kocherga.events.consumers.UpdatesWebsocketConsumer),
+            path("ws/watchmen-schedule/", kocherga.watchmen.consumers.ScheduleUpdatesWebsocketConsumer),
         ])
     ),
     "channel": ChannelNameRouter({
