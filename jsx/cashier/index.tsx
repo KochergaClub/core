@@ -4,8 +4,8 @@ import { Button } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
-import ActionForm from '../components/ActionForm';
-import GlobalContext from '../components/GlobalContext';
+import ActionButton from '../components/ActionButton';
+import { useAPI } from '../common/hooks';
 
 interface Cheque {
   id: number;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const CreateCheque = () => {
-  const { api } = React.useContext(GlobalContext);
+  const api = useAPI();
 
   const createTestCheque = async () => {
     await api.call('cashier/cheque/', 'POST', {
@@ -44,10 +44,9 @@ const CashierPage = ({ cheques }: Props) => {
           <li key={cheque.id}>
             {cheque.amount} руб. &rarr; {cheque.whom}
             {cheque.is_redeemed || (
-              <ActionForm
-                action={`/api/cheque/${cheque.id}/redeem`}
-                title="Выплачено"
-              />
+              <ActionButton path={`cheque/${cheque.id}/redeem`} reloadOnSuccess>
+                Выплачено
+              </ActionButton>
             )}
           </li>
         ))}

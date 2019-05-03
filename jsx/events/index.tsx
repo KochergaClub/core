@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  useReducer,
-} from 'react';
+import React, { useCallback, useEffect, useState, useReducer } from 'react';
 
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addWeeks, subWeeks } from 'date-fns';
@@ -13,8 +7,7 @@ import { Screen } from '../common/types';
 import { API } from '../common/api';
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
-import GlobalContext from '../components/GlobalContext';
-import { useListeningWebSocket } from '../common/hooks';
+import { useListeningWebSocket, useAPI } from '../common/hooks';
 
 import Calendar from './components/Calendar';
 import UILayer from './components/UILayer';
@@ -70,7 +63,7 @@ interface Props {
 const EventsPage = (props: Props) => {
   const [store, dispatch] = useReducer(reducer, props.events, getInitialState);
 
-  const { api } = useContext(GlobalContext);
+  const api = useAPI();
 
   const [range, setRange] = useState(() => ({
     start: new Date(props.range.start),

@@ -1,5 +1,7 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useContext } from 'react';
 import { IS_SERVER } from './utils';
+
+import GlobalContext from '../components/GlobalContext';
 
 export const useListeningWebSocket = (
   path: string,
@@ -87,4 +89,9 @@ export const useCommonHotkeys = ({
     tabIndex: -1,
     style: { outline: 'none' },
   };
+};
+
+export const useAPI = () => {
+  const { api } = useContext(GlobalContext);
+  return api;
 };

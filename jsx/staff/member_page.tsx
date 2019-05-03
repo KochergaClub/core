@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { Button, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '../common/types';
+import { useAPI } from '../common/hooks';
 import Page from '../components/Page';
-import { apiCall } from '../common/api';
 
 import { Member } from './types';
 
@@ -28,6 +28,7 @@ interface Props {
 
 const ManagerControls = ({ member }: { member: Member }) => {
   const [granting, setGranting] = useState(false);
+  const api = useAPI();
 
   if (member.role !== 'WATCHMAN') {
     return null;
@@ -36,7 +37,7 @@ const ManagerControls = ({ member }: { member: Member }) => {
   const grantGoogle = useCallback(
     async () => {
       setGranting(true);
-      await apiCall(
+      await api.call(
         `staff/member/${member.id}/grant_google_permissions/`,
         'POST'
       );

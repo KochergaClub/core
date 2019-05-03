@@ -1,9 +1,9 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Button, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '../common/types';
-import GlobalContext from '../components/GlobalContext';
+import { useAPI } from '../common/hooks';
 import Page from '../components/Page';
 
 import { Training, Ticket } from './types';
@@ -23,7 +23,7 @@ const ActionButton = ({
   action: string;
   children: React.ReactNode;
 }) => {
-  const { api } = useContext(GlobalContext);
+  const api = useAPI();
   const [loading, setLoading] = useState(false);
 
   const cb = useCallback(

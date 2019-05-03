@@ -4,8 +4,7 @@ import styled from 'styled-components';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { apiCall } from '../../common/api';
-import { useCommonHotkeys } from '../../common/hooks';
+import { useCommonHotkeys, useAPI } from '../../common/hooks';
 import {
   Event,
   LocalEvent,
@@ -45,6 +44,8 @@ const EditEventModal = ({
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const api = useAPI();
+
   const saveDisabled = deleting || saving || !title.length;
 
   const saveCb = useCallback(
@@ -53,7 +54,7 @@ const EditEventModal = ({
         return;
       }
       setSaving(true);
-      const json = (await apiCall(`event/${event.id}`, 'PATCH', {
+      const json = (await api.call(`event/${event.id}`, 'PATCH', {
         title,
         description,
         location: room,
@@ -67,7 +68,7 @@ const EditEventModal = ({
   const deleteCb = useCallback(
     async () => {
       setDeleting(true);
-      await apiCall(`event/${event.id}`, 'DELETE', undefined, false);
+      await api.call(`event/${event.id}`, 'DELETE', undefined, false);
       onDelete(event.id);
     },
     [event.id]

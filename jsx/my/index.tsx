@@ -1,7 +1,7 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 
 import { Screen, InitialLoader } from '../common/types';
-import GlobalContext from '../components/GlobalContext';
+import { useAPI } from '../common/hooks';
 import Page from '../components/Page';
 import { APIError } from '../common/api';
 
@@ -43,10 +43,11 @@ const CustomerSection = ({
   customer: Customer;
   orders_count: number;
 }) => {
+  const api = useAPI();
+
   const oppositePrivacyMode = (mode: string) =>
     mode == 'private' ? 'public' : 'private';
 
-  const { api } = useContext(GlobalContext);
   const flipPrivacyMode = useCallback(
     async () => {
       await api.call('cm/me/set-privacy-mode', 'POST', {

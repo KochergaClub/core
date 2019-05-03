@@ -2,7 +2,6 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import CSRFInput from '../components/CSRFInput';
 import Page from '../components/Page';
 
 import { Button, Column } from '@kocherga/frontkit';
@@ -26,7 +25,6 @@ const LoginPage = ({ djangoForm }) => (
     <AuthContainer>
       <LoginForm method="post">
         <Column stretch>
-          <CSRFInput />
           <div>
             <p>
               <label htmlFor="id_email">Email:</label>

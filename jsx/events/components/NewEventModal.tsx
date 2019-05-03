@@ -2,8 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { apiCall } from '../../common/api';
-import { useCommonHotkeys } from '../../common/hooks';
+import { useCommonHotkeys, useAPI } from '../../common/hooks';
 import {
   Event,
   ServerEvent,
@@ -30,6 +29,8 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const api = useAPI();
+
   const saveDisabled = saving || !title.length;
 
   const create = useCallback(
@@ -39,7 +40,7 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
       }
 
       setSaving(true);
-      const json = (await apiCall('events', 'POST', {
+      const json = (await api.call('events', 'POST', {
         start,
         end,
         title,

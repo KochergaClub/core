@@ -1,11 +1,11 @@
-import React, { useRef, useContext, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import useOnClickOutside from 'use-onclickoutside';
 
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
-import GlobalContext from '../../components/GlobalContext';
+import { useAPI } from '../../common/hooks';
 import Picker from './Picker';
 
 import { nightColor } from '../constants';
@@ -67,7 +67,7 @@ const InnerShiftBox = ({
 const ShiftBox = ({ shift }: { shift: Shift }) => {
   const { editing, setShift } = useContext(ScheduleContext);
   const [expanded, setExpanded] = useState(false);
-  const api = useContext(GlobalContext).api;
+  const api = useAPI();
 
   const flipExpand = useCallback(
     () => {
