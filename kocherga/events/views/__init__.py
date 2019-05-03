@@ -1,3 +1,4 @@
 from . import event_prototypes
+from . import events
 
-__all__ = ['event_prototypes']
+__all__ = ['events', 'event_prototypes']
