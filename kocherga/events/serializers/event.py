@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 import kocherga.room
 
-from . import models
+from .. import models
 
 
 class PublicEventSerializer(serializers.ModelSerializer):

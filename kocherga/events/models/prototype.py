@@ -11,10 +11,10 @@ from django.db import models
 from .event import Event
 
 import kocherga.events.db
-from kocherga.dateutils import dts, TZ
+from kocherga.dateutils import TZ
 from kocherga.images import image_storage
 
-from ..serializers import EventSerializer
+# from ..serializers import EventSerializer
 
 
 class EventPrototype(models.Model):
@@ -145,26 +145,7 @@ class EventPrototype(models.Model):
         return image_storage.get_filename(self.image)
 
     def to_dict(self, detailed=False):
-        fields = EventPrototype._meta.get_fields()
-        result = {}
-        for field in fields:
-            if field.name == 'image':
-                if self.image:
-                    result[field.name] = settings.KOCHERGA_API_ROOT + f"/images/{self.image}"
-            elif field.name == 'eventprototypetag':
-                pass
-            elif field.name == 'all_events':
-                pass
-            else:
-                result[field.name] = getattr(self, field.name)
-
-        if detailed:
-            result['suggested'] = [dts(dt) for dt in self.suggested_dates(limit=5)]
-            result['instances'] = list(EventSerializer(self.instances(limit=20), many=True).data)
-
-        result["tags"] = self.tag_names()
-
-        return result
+        raise Exception("To be reimplemented")
 
     def add_image(self, fh):
         self.image = image_storage.add_file(fh)

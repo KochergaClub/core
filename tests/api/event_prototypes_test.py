@@ -23,6 +23,14 @@ class TestPrototypes:
         assert type(prototypes) == list
         assert len(prototypes) == 0
 
+    def test_list_populated(self, client, kocherga_auth_header, common_prototype):
+        res = client.get('/api/event_prototypes', **kocherga_auth_header)
+        assert res.status_code == 200
+        prototypes = res.json()
+
+        assert type(prototypes) == list
+        assert len(prototypes) == 1
+
     def test_create(self, client, kocherga_auth_header):
         res = client.post(
             '/api/event_prototypes',

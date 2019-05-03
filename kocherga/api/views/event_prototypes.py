@@ -12,7 +12,7 @@ from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 
 from kocherga.events.models import EventPrototype
-from kocherga.events.serializers import EventSerializer
+from kocherga.events.serializers import EventSerializer, EventPrototypeSerializer, DetailedEventPrototypeSerializer
 
 from kocherga.api.common import ok
 
@@ -22,10 +22,9 @@ class RootView(APIView):
 
     def get(self, request):
         prototypes = EventPrototype.objects.order_by('weekday').all()
-        return Response([
-            p.to_dict(detailed=True)
-            for p in prototypes
-        ])
+        return Response(
+            DetailedEventPrototypeSerializer(prototypes, many=True).data
+        )
 
     def post(self, request):
         payload = request.data
@@ -63,7 +62,9 @@ class ObjectView(APIView):
 
     def get(self, request, prototype_id):
         prototype = EventPrototype.by_id(prototype_id)
-        return Response(prototype.to_dict(detailed=True))
+        return Response(
+            DetailedEventPrototypeSerializer(prototype).data
+        )
 
     def patch(self, request, prototype_id):
         payload = request.data
@@ -94,7 +95,9 @@ class ObjectView(APIView):
         prototype.clean()
         prototype.save()
 
-        return Response(prototype.to_dict())
+        return Response(
+            EventPrototypeSerializer(prototype).data
+        )
 
 
 @api_view()
