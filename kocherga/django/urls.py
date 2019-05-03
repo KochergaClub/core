@@ -19,21 +19,8 @@ from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 from .wagtail_api import api_router
-import kocherga.django.views
 
-handler403 = 'kocherga.django.views.view_403'
-handler404 = 'kocherga.django.views.view_404'
-handler500 = 'kocherga.django.views.view_500'
-
-urlpatterns = [
-    path('', RedirectView.as_view(url='https://kocherga-club.ru'), name='root'),
-    path('team/', RedirectView.as_view(url='/team/staff/'), name='team_root'),
-
-    # for testing
-    path('403/', kocherga.django.views.view_403, {'exception': Exception()}),
-    path('404/', kocherga.django.views.view_404, {'exception': Exception()}),
-    path('500/', kocherga.django.views.view_500, {'exception': Exception()}),
-]
+urlpatterns = []
 
 if not settings.IGNORE_WEB:
     urlpatterns = urlpatterns + [
@@ -46,8 +33,6 @@ if not settings.IGNORE_WEB:
         path('api/ratio/', include('kocherga.ratio.urls')),
         path('api/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
         path('api/cm/', include('kocherga.cm.urls')),
-
-        path('team/events/', include('kocherga.events.urls')),
 
         path('', include('kocherga.auth.urls')),
         path('admin/', admin.site.urls),

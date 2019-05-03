@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'channels',
     'reversion',
     'reversion_compare',
-    'react',
     'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',
@@ -134,10 +133,6 @@ TEMPLATES = [
         },
     },
 ]
-
-REACT = {
-    'RENDER_URL': 'http://render-server/render',  # DNS mounted with Docker
-}
 
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 ASGI_APPLICATION = 'kocherga.django.routing.application'
