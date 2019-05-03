@@ -55,7 +55,7 @@ const proxy = httpProxy.createProxyServer({
     host: 'api',
   },
 });
-app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res, next) => {
+app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
   proxy.web(req, res, {}, e => {
     console.log(e);
     res.status(500).send({ error: 'Backend is down' });
@@ -102,7 +102,7 @@ const getFallbackContext = (req: express.Request) => {
 };
 
 // Custom middleware which injects req.django with api and user fields.
-app.use(async (req, res, next) => {
+app.use(async (req, _, next) => {
   try {
     const api = getAPI(req);
     const user = await api.call('me', 'GET');
@@ -223,7 +223,7 @@ app.get(
   getCb('mastermind_dating/cohort_page')
 );
 app.get('/team/events/', getCb('events/index'));
-app.get('/team/', (req, res) => res.redirect(301, '/team/staff/'));
+app.get('/team/', (_, res) => res.redirect(301, '/team/staff/'));
 app.get('/my/', getCb('my/index'));
 
 // Form handling.
