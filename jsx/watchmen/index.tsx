@@ -62,15 +62,18 @@ const WatchmenIndexPage = (props: Props) => {
     });
   }, []);
 
-  const fetchSchedule = useCallback(async () => {
-    const shifts = await loadSchedule(api, props.from_date, props.to_date);
-    scheduleDispatch({
-      type: 'REPLACE_SCHEDULE',
-      payload: {
-        schedule: shifts2schedule(shifts),
-      },
-    });
-  }, []);
+  const fetchSchedule = useCallback(
+    async () => {
+      const shifts = await loadSchedule(api, props.from_date, props.to_date);
+      scheduleDispatch({
+        type: 'REPLACE_SCHEDULE',
+        payload: {
+          schedule: shifts2schedule(shifts),
+        },
+      });
+    },
+    [api, props.from_date, props.to_date]
+  );
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
