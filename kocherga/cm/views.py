@@ -29,7 +29,7 @@ class SetPrivacyModeView(APIView):
 
         customer = request.user.customer
 
-        customer.privacy_mode = request.POST['privacy_mode']
+        customer.privacy_mode = request.data['privacy_mode']
         customer.full_clean()
         customer.save()
 
