@@ -2,6 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { Screen } from '../common/types';
 import Page from '../components/Page';
 
 import { Button, Column } from '@kocherga/frontkit';
@@ -20,7 +21,7 @@ const LoginForm = styled.form`
   }
 `;
 
-const LoginPage = ({ djangoForm }) => (
+const LoginPage = () => (
   <Page title="Логин">
     <AuthContainer>
       <LoginForm method="post">
@@ -44,6 +45,8 @@ const LoginPage = ({ djangoForm }) => (
   </Page>
 );
 
-export default {
+const screen: Screen<{}> = {
   component: LoginPage,
 };
+
+export default screen;

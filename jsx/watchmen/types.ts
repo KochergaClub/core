@@ -31,7 +31,7 @@ export const shifts2schedule = (shifts: Shift[]): Schedule => {
 
   Object.keys(schedule).forEach(date => {
     const daySchedule = schedule[date];
-    const shiftType2shift = {};
+    const shiftType2shift: { [key: string]: Shift } = {};
     daySchedule.forEach(shift => {
       shiftType2shift[shift.shift] = shift;
     });

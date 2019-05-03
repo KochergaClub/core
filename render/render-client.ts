@@ -7,7 +7,8 @@ import Entrypoint from '../jsx/entry';
 
 declare global {
   interface Window {
-    csrfToken: string;
+    csrfToken: string; // populated by server.ts
+    store: any;
   }
 }
 

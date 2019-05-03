@@ -4,7 +4,7 @@
     "render"
   ],
   "compilerOptions": {
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
@@ -15,6 +15,7 @@
       "es2018",
       "dom"
     ],
+    "typeRoots" : ["./node_modules/@types", "./jsx/@types"],
     "jsx": "react",
     "outDir": "./static/dist",
     "allowJs": true,

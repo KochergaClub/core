@@ -294,7 +294,7 @@ app.use(function(req, res, next) {
   getCb('error-pages/404')(req, res, next);
 });
 
-app.use((err, req, res, next) => {
+const errorHandler: express.ErrorRequestHandler = (err, req, res, next) => {
   console.log(err);
   if (err instanceof APIError && (err.status === 404 || err.status === 403)) {
     res.status(err.status);
@@ -303,7 +303,8 @@ app.use((err, req, res, next) => {
     res.status(500);
     getCb('error-pages/500')(req, res, next);
   }
-});
+};
+app.use(errorHandler);
 
 server.listen(PORT, ADDRESS, () => {
   console.log(`React render server listening at http://${ADDRESS}:${PORT}`);

@@ -33,9 +33,9 @@ const startAccessor = (event: LocalEvent) =>
 const endAccessor = (event: LocalEvent) => utcToZonedTime(event.end, timezone);
 
 const eventPropGetter = (event: LocalEvent) => {
-  const style = {};
+  const style: React.CSSProperties = {};
   if (event.saving) {
-    style['backgroundColor'] = '#ddd';
+    style.backgroundColor = '#ddd';
   }
   return {
     style,

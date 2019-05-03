@@ -7,7 +7,7 @@ import { API } from './common/api';
 import { Screen, GlobalContextShape } from './common/types';
 import GlobalContext from './components/GlobalContext';
 
-const PAGES = {
+const PAGES: { [key: string]: { default: Screen<{}> } } = {
   'analytics/index': require('./analytics/index'),
   'auth/login': require('./auth/login'),
   'auth/check-your-email': require('./auth/check-your-email'),

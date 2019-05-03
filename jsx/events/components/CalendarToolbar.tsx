@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
+/// <reference path="../../@types/react-big-calendar/lib/utils/constants.d.ts" />
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 
 interface ToolbarProps {
@@ -57,7 +58,7 @@ class CalendarToolbar extends React.Component<ToolbarProps> {
     let viewNames = this.props.views;
     const view = this.props.view;
 
-    const messages = {
+    const messages: { [key: string]: string } = {
       month: 'Месяц',
       week: 'Неделя',
       day: 'День',

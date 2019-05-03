@@ -58,7 +58,7 @@ export class API {
     payload?: object,
     expectJSON: boolean = true
   ) => {
-    const headers = {
+    const headers: { [header: string]: string } = {
       'Content-Type': 'application/json',
       'X-CSRFToken': this.csrfToken,
     };

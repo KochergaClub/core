@@ -3,17 +3,23 @@ import React from 'react';
 import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
-const BOVStatCard = ({ bovStat }) => (
+interface BOVStatType {
+  date: string;
+  count: number;
+  total_income: number;
+}
+
+interface Props {
+  bov_stats: BOVStatType[];
+}
+
+const BOVStatCard = ({ bovStat }: { bovStat: BOVStatType }) => (
   <div>
     <h3>{bovStat.date}</h3>
     <p>Всего карт: {bovStat.count}</p>
     <p>Всего доход: {bovStat.total_income}</p>
   </div>
 );
-
-interface Props {
-  bov_stats: any;
-}
 
 const AnalyticsPage = ({ bov_stats }: Props) => {
   return (
