@@ -77,9 +77,6 @@ class EventManager(models.Manager):
         return query
 
     def public_events(self, date=None, from_date=None, to_date=None, tag=None):
-        if not from_date and not to_date and not date:
-            raise PublicError("One of 'date', 'from_date', 'to_date' must be set")
-
         query = self.list_events(date=date, from_date=from_date, to_date=to_date)
 
         query = (

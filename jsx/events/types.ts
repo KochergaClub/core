@@ -1,5 +1,19 @@
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+export type AnnouncementKey = 'vk' | 'fb' | 'timepad';
+
+export interface PublicEvent {
+  id: string;
+  title: string;
+  summary?: string;
+  description?: string;
+  image: string;
+  start: Date;
+  end: Date;
+  announcements: {
+    [key in AnnouncementKey]: {
+      link: string;
+    }
+  };
+}
 
 export interface Event {
   id: string;

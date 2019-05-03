@@ -27,6 +27,7 @@ const PAGES: { [key: string]: { default: Screen<{}> } } = {
   'zadarma/pbx_call': require('./zadarma/pbx_call'),
   'projects/index': require('./projects/index'),
   'projects/detail': require('./projects/detail'),
+  'events/event_page': require('./events/event_page'),
   'error-pages/403': require('./error-pages/403'),
   'error-pages/404': require('./error-pages/404'),
   'error-pages/500': require('./error-pages/500'),

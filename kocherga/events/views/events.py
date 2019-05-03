@@ -14,7 +14,7 @@ from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny
@@ -28,7 +28,7 @@ from kocherga.events.serializers import PublicEventSerializer, EventSerializer
 from kocherga.api.common import ok
 
 
-class RootView(ListCreateAPIView):
+class RootView(generics.ListCreateAPIView):
     permission_classes = (IsAdminUser,)
     serializer_class = EventSerializer
 
@@ -67,7 +67,7 @@ class RootView(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ObjectView(RetrieveUpdateDestroyAPIView):
+class ObjectView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
     serializer_class = EventSerializer
     queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
@@ -132,25 +132,25 @@ class TagView(APIView):
         return Response(ok)
 
 
-@api_view()
-@permission_classes((AllowAny,))
-def r_list_public(request):
-    def arg2date(arg):
-        d = request.query_params.get(arg)
-        if d:
-            d = datetime.strptime(d, "%Y-%m-%d").date()
-        return d
+class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (AllowAny,)
+    serializer_class = PublicEventSerializer
 
-    events = Event.objects.public_events(
-        date=arg2date('date'),
-        from_date=arg2date('from_date'),
-        to_date=arg2date('to_date'),
-        tag=request.query_params.get('tag'),
-    )
-    return Response([
-        PublicEventSerializer(event).data
-        for event in events[:1000]
-    ])
+    def get_queryset(self):
+        def arg2date(arg):
+            d = self.request.query_params.get(arg)
+            if d:
+                d = datetime.strptime(d, "%Y-%m-%d").date()
+            return d
+
+        events = Event.objects.public_events(
+            date=arg2date('date'),
+            from_date=arg2date('from_date'),
+            to_date=arg2date('to_date'),
+            tag=self.request.query_params.get('tag'),
+        )
+        # TODO - pager or limit queryset (but I can't do this right now because DetailView would break)
+        return events
 
 
 @api_view()

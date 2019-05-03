@@ -225,6 +225,7 @@ app.get(
 app.get('/team/events/', getCb('events/index'));
 app.get('/team/', (_, res) => res.redirect(301, '/team/staff/'));
 app.get('/my/', getCb('my/index'));
+app.get('/event/:id/', getCb('events/event_page'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy

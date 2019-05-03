@@ -1,14 +1,29 @@
 from rest_framework import serializers
+from django.conf import settings
 
 import kocherga.room
 
 from .. import models
+from .. import markup
 
 
 class PublicEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Event
-        fields = ('event_id', 'title', 'room', 'announcements', 'start', 'end')
+        fields = ('event_id', 'title', 'summary', 'description', 'room', 'announcements', 'start', 'end', 'image')
+
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if obj.image:
+            return settings.KOCHERGA_API_ROOT + f"/images/{obj.image}"
+        else:
+            return None
+
+    description = serializers.SerializerMethodField()
+
+    def get_description(self, obj):
+        return markup.Markup(obj.description).as_plain()
 
     event_id = serializers.ReadOnlyField(source='google_id')
 
