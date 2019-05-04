@@ -12,14 +12,6 @@ const AnyWagtailPage = (props: WagtailPageType) => {
     default:
       return <h1>Unknown Wagtail page type: ${props.meta.type}</h1>;
   }
-
-  return (
-    <div>
-      <div>
-        <pre>{JSON.stringify(props, null, 2)}</pre>
-      </div>
-    </div>
-  );
 };
 
 const screen: Screen<WagtailPageType> = {

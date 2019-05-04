@@ -2,19 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BlockType } from '../types';
-
-interface Props extends BlockType {
-  value: string;
-}
+import { BasicParagraphBlockType as Props } from '../types';
 
 const Paragraph = styled.div`
   max-width: 1020px;
   margin: 0 auto;
 `;
 
-const ParagraphBlock = (block: Props) => {
+export default function ParagraphBlock(block: Props) {
   return <Paragraph dangerouslySetInnerHTML={{ __html: block.value }} />;
-};
-
-export default ParagraphBlock;
+}

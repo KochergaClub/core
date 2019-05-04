@@ -215,7 +215,7 @@ app.get('/projects/', getCb('projects/index'));
 app.get('/projects/:name/', getCb('projects/detail'));
 app.get('/my/', getCb('my/index'));
 app.get('/event/:id/', getCb('events/event_page'));
-// app.get('/', getCb('frontpage/index'));
+app.get('/', getCb('frontpage/index'));
 
 // Form handling.
 // Note: This middleware should be activated after httpProxy
@@ -294,26 +294,28 @@ app.use(async (req, res, next) => {
     async wagtailFindRes => {
       try {
         if (wagtailFindRes.statusCode !== 302) {
-          console.log('no wagtail page');
+          // no wagtail page
           next();
-        } else {
-          console.log('got wagtail page!');
-          const wagtailUrl = wagtailFindRes.headers.location || '';
-          const match = wagtailUrl.match(/(\d+)\/?$/);
-          if (!match) {
-            throw new Error('Unparsable redirected url');
-          }
-          const pageId = match[1];
-
-          const pageProps = await req.reactContext.api.callWagtail(
-            `pages/${pageId}/?fields=*`
-          );
-          sendFullHtml(
-            renderEntrypoint('wagtail/any', req.reactContext, pageProps),
-            req,
-            res
-          );
+          return;
         }
+
+        const wagtailUrl = wagtailFindRes.headers.location || '';
+        console.log(`Got wagtail page ${wagtailUrl}`);
+
+        const match = wagtailUrl.match(/(\d+)\/?$/);
+        if (!match) {
+          throw new Error('Unparsable redirected url');
+        }
+        const pageId = match[1];
+
+        const pageProps = await req.reactContext.api.callWagtail(
+          `pages/${pageId}/?fields=*`
+        );
+        sendFullHtml(
+          renderEntrypoint('wagtail/any', req.reactContext, pageProps),
+          req,
+          res
+        );
       } catch (err) {
         next(err);
       }

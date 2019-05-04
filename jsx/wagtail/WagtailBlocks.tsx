@@ -1,7 +1,5 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { BlockType } from './types';
 
 // Stream of Wagtail blocks rendered in order based on their type.
@@ -10,33 +8,29 @@ interface Props {
   blocks: BlockType[];
 }
 
-const SBBlock = styled.div`
-  background-color: blue;
-  height: 100px;
-`;
-
-import HeaderBlock from './blocks/HeaderBlock';
-import ParagraphBlock from './blocks/ParagraphBlock';
+import BasicHeaderBlock from './blocks/BasicHeaderBlock';
+import BasicParagraphBlock from './blocks/BasicParagraphBlock';
 import GreyBlock from './blocks/GreyBlock';
+import ColumnsBasicBlock from './blocks/ColumnsBasicBlock';
 import DebugBlock from './blocks/DebugBlock';
 
-const BLOCKS: { [key: string]: React.ComponentType<BlockType> } = {
-  header: HeaderBlock,
-  paragraph: ParagraphBlock,
+// FIXME - derive <any> type from key
+type BlockMap = { [key in BlockType['type']]: React.ComponentType<any> };
+
+const BLOCKS: BlockMap = {
+  basic_header: BasicHeaderBlock,
+  basic_paragraph: BasicParagraphBlock,
   grey: GreyBlock,
-  sb: SBBlock,
+  columns_basic: ColumnsBasicBlock,
 };
 
 const AnyBlock = (block: BlockType) => {
-  const Component = BLOCKS[block.type];
-  // const Component = DebugBlock;
+  const Component = BLOCKS[block.type] || DebugBlock;
   return <Component {...block} />;
 };
 
-const WagtailBlocks = ({ blocks }: Props) => {
+export default function WagtailBlocks({ blocks }: Props) {
   return (
     <div>{blocks.map(block => <AnyBlock key={block.id} {...block} />)}</div>
   );
-};
-
-export default WagtailBlocks;
+}

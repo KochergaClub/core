@@ -2,14 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BlockType } from '../types';
-
-interface Props extends BlockType {
-  value: {
-    header: string;
-    text?: string;
-  };
-}
+import { GreyBlockType as Props } from '../types';
 
 const Container = styled.div`
   background-color: #eee;
@@ -23,7 +16,7 @@ const Header = styled.h2`
 
 const Text = styled.div``;
 
-const GreyBlock = (block: Props) => {
+export default function GreyBlock(block: Props) {
   return (
     <Container>
       <Header>{block.value.header}</Header>
@@ -32,6 +25,4 @@ const GreyBlock = (block: Props) => {
       )}
     </Container>
   );
-};
-
-export default GreyBlock;
+}
