@@ -2,11 +2,13 @@
 
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from .wagtail_api import api_router
 
 from wagtail.core import urls as wagtail_urls
+
+import kocherga.django.drf
 
 
 urlpatterns = [
@@ -23,10 +25,11 @@ urlpatterns = [
 
     path('', include('kocherga.auth.urls')),
     path('admin/', admin.site.urls),
-
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path('api/wagtail/', api_router.urls),
     path('wagtail/', include('wagtail.admin.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
+
+    re_path('api/.*', kocherga.django.drf.view404),
 
     # Pages will be served by server.ts, but we need reversed urls for better wagtail admin experience.
     path('', include(wagtail_urls)),
