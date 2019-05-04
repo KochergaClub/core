@@ -30,7 +30,7 @@ const ActionButton = ({
     async () => {
       setLoading(true);
       const key = encodeURIComponent(training.name); // TODO - change api to accept slug
-      await api.call(`ratio/training/${key}/${action}/`, 'POST');
+      await api.call(`ratio/training/${key}/${action}`, 'POST');
       setLoading(false);
     },
     [training, action]

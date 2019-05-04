@@ -38,7 +38,7 @@ const ManagerControls = ({ member }: { member: Member }) => {
     async () => {
       setGranting(true);
       await api.call(
-        `staff/member/${member.id}/grant_google_permissions/`,
+        `staff/member/${member.id}/grant_google_permissions`,
         'POST'
       );
       setGranting(false);

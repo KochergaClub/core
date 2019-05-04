@@ -22,7 +22,7 @@ const CreateCheque = () => {
   const api = useAPI();
 
   const createTestCheque = async () => {
-    await api.call('cashier/cheque/', 'POST', {
+    await api.call('cashier/cheque', 'POST', {
       amount: 5000,
       comment: 'test comment',
       whom: 'me@berekuk.ru',
@@ -57,7 +57,7 @@ const CashierPage = ({ cheques }: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async context => {
-  const cheques = await context.api.call('cashier/cheque/', 'GET');
+  const cheques = await context.api.call('cashier/cheque', 'GET');
   return { cheques };
 };
 

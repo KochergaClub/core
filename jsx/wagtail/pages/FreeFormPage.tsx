@@ -1,19 +1,13 @@
 import React from 'react';
 
 import Page from '../../components/Page';
-import { WagtailPageType, BlockType } from '../types';
+import { FreeFormPageType as Props } from '../types';
 import WagtailBlocks from '../WagtailBlocks';
 
-interface Props extends WagtailPageType {
-  body: BlockType[];
-}
-
-const HomePage = (props: Props) => {
+export default function FreeFormPage(props: Props) {
   return (
     <Page wide title={props.title}>
       <WagtailBlocks blocks={props.body} />
     </Page>
   );
-};
-
-export default HomePage;
+}

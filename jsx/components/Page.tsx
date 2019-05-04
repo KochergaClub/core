@@ -38,10 +38,11 @@ interface Props {
   team?: boolean;
   children: React.ReactNode;
   noMenu?: boolean;
+  noFooter?: boolean;
   wide?: boolean;
 }
 
-const Page = ({ title, team, children, noMenu, wide }: Props) => {
+const Page = ({ title, team, children, noMenu, noFooter, wide }: Props) => {
   return (
     <div>
       <GlobalStyle />
@@ -51,7 +52,7 @@ const Page = ({ title, team, children, noMenu, wide }: Props) => {
       <Main wide={wide}>
         <ErrorBoundary>{children}</ErrorBoundary>
       </Main>
-      <TildaFooter />
+      {noFooter || <TildaFooter />}
     </div>
   );
 };

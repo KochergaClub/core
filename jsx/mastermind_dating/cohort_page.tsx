@@ -40,7 +40,7 @@ const UserDescription = styled.small`
 `;
 
 const userActionPath = (action: string, uid: number) =>
-  `mastermind_dating/user/${uid}/${action}/`;
+  `mastermind_dating/user/${uid}/${action}`;
 
 const UserVoteForm = ({ user }: { user: User }) => {
   if (user.voted_for) {

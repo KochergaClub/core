@@ -50,12 +50,21 @@ app.disable('x-powered-by');
 // import bodyParser from 'body-parser';
 // app.use(bodyParser.json({ limit: '2mb' }));
 
-const API_HOST = 'api'; // bound through docker-compose
+const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
+
+// Hosts are bound through docker-compose
+const API_HOST = 'api';
+const API_ASYNC_HOST = IS_DEVELOPMENT ? 'api' : 'api-async';
 
 const proxy = httpProxy.createProxyServer({
-  ws: true,
   target: {
     host: API_HOST,
+  },
+});
+const wsProxy = httpProxy.createProxyServer({
+  ws: true,
+  target: {
+    host: API_ASYNC_HOST,
   },
 });
 app.all(/\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
@@ -69,7 +78,7 @@ server.on('upgrade', (req, socket, head) => {
     console.log('not a typical websocket');
     socket.end();
   }
-  proxy.ws(req, socket, head);
+  wsProxy.ws(req, socket, head);
 });
 
 declare global {
@@ -129,8 +138,8 @@ const sendFullHtml = (
   const google_analytics_id = process.env.GOOGLE_ANALYTICS_ID;
 
   let bundleSrc = webpackStats.publicPath + webpackStats.chunks.main[0].name;
-  const webpackDevServer = process.env.NODE_ENV === 'development';
-  if (webpackDevServer) {
+  if (IS_DEVELOPMENT) {
+    // use webpack-dev-server in dev
     bundleSrc = 'http://localhost:8080' + bundleSrc;
   }
 
@@ -289,6 +298,7 @@ app.use(async (req, res, next) => {
       headers: {
         'X-WagtailAPIToken': req.reactContext.api.wagtailAPIToken,
         'X-Forwarded-Host': req.reactContext.api.realHost,
+        Cookie: req.get('Cookie') || '',
       },
     },
     async wagtailFindRes => {
@@ -311,6 +321,7 @@ app.use(async (req, res, next) => {
         const pageProps = await req.reactContext.api.callWagtail(
           `pages/${pageId}/?fields=*`
         );
+        pageProps.meta_type = pageProps.meta.type;
         sendFullHtml(
           renderEntrypoint('wagtail/any', req.reactContext, pageProps),
           req,

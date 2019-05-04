@@ -12,21 +12,38 @@ import BasicHeaderBlock from './blocks/BasicHeaderBlock';
 import BasicParagraphBlock from './blocks/BasicParagraphBlock';
 import GreyBlock from './blocks/GreyBlock';
 import ColumnsBasicBlock from './blocks/ColumnsBasicBlock';
+
+import RatioBriefingBlock from './blocks/RatioBriefingBlock';
+import RatioHeaderBlock from './blocks/RatioHeaderBlock';
+import RatioParagraphBlock from './blocks/RatioParagraphBlock';
+import RatioInsetBlock from './blocks/RatioInsetBlock';
+import RatioExerciseBlock from './blocks/RatioExerciseBlock';
+
 import DebugBlock from './blocks/DebugBlock';
 
-// FIXME - derive <any> type from key
-type BlockMap = { [key in BlockType['type']]: React.ComponentType<any> };
-
-const BLOCKS: BlockMap = {
-  basic_header: BasicHeaderBlock,
-  basic_paragraph: BasicParagraphBlock,
-  grey: GreyBlock,
-  columns_basic: ColumnsBasicBlock,
-};
-
 const AnyBlock = (block: BlockType) => {
-  const Component = BLOCKS[block.type] || DebugBlock;
-  return <Component {...block} />;
+  switch (block.type) {
+    case 'basic_header':
+      return <BasicHeaderBlock {...block} />;
+    case 'basic_paragraph':
+      return <BasicParagraphBlock {...block} />;
+    case 'grey':
+      return <GreyBlock {...block} />;
+    case 'columns_basic':
+      return <ColumnsBasicBlock {...block} />;
+    case 'ratio_briefing':
+      return <RatioBriefingBlock {...block} />;
+    case 'ratio_header':
+      return <RatioHeaderBlock {...block} />;
+    case 'ratio_paragraph':
+      return <RatioParagraphBlock {...block} />;
+    case 'ratio_inset':
+      return <RatioInsetBlock {...block} />;
+    case 'ratio_exercise':
+      return <RatioExerciseBlock {...block} />;
+    default:
+      return <DebugBlock {...block} />;
+  }
 };
 
 export default function WagtailBlocks({ blocks }: Props) {

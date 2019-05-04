@@ -3,14 +3,26 @@ import React from 'react';
 import { Screen } from '../common/types';
 import { WagtailPageType } from './types';
 
-import HomePage from './pages/HomePage';
+import FreeFormPage from './pages/FreeFormPage';
+import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
+import RatioSectionPage from './pages/RatioSectionPage';
+
+const UnknownPage = (props: WagtailPageType) => (
+  <h1>
+    Unknown Wagtail page type: <code>{props.meta.type}</code>
+  </h1>
+);
 
 const AnyWagtailPage = (props: WagtailPageType) => {
-  switch (props.meta.type) {
-    case 'pages.HomePage':
-      return <HomePage {...props} />;
+  switch (props.meta_type) {
+    case 'pages.FreeFormPage':
+      return <FreeFormPage {...props} />;
+    case 'ratio.SectionIndexPage':
+      return <RatioSectionIndexPage {...props} />;
+    case 'ratio.SectionPage':
+      return <RatioSectionPage {...props} />;
     default:
-      return <h1>Unknown Wagtail page type: ${props.meta.type}</h1>;
+      return <UnknownPage {...props} />;
   }
 };
 
