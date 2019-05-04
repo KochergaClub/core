@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path('api/wagtail/', api_router.urls),
+
     path('wagtail/', include('wagtail.admin.urls')),
 
     re_path('api/.*', kocherga.django.drf.view404),
@@ -34,14 +35,6 @@ urlpatterns = [
     # Pages will be served by server.ts, but we need reversed urls for better wagtail admin experience.
     path('', include(wagtail_urls)),
 
-    # path(
-    #     '404/wagtailsites',
-    #     include((
-    #         [
-    #             path('404', RedirectView.as_view(url='https://kocherga-club.ru'), name='index')
-    #         ], 'wagtailsites'
-    #     ), 'wagtailsites')
-    # ),
 ]
 
 # Pretty useless - we use Django for DRF only.
