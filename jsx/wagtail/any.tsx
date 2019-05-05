@@ -8,9 +8,12 @@ import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
 import RatioSectionPage from './pages/RatioSectionPage';
 
 const UnknownPage = (props: WagtailPageType) => (
-  <h1>
-    Unknown Wagtail page type: <code>{props.meta.type}</code>
-  </h1>
+  <div>
+    <h1>
+      Unknown Wagtail page type: <code>{props.meta.type}</code>
+    </h1>
+    <pre>{JSON.stringify(props, null, 2)}</pre>
+  </div>
 );
 
 const AnyWagtailPage = (props: WagtailPageType) => {
