@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 const AuthContainer = styled.div`
   margin: 0 auto;
-  margin-top: 30vh;
-  max-width: 320px;
+  margin-top: 25vh;
+  max-width: 400px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;

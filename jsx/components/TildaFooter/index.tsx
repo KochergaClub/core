@@ -20,6 +20,14 @@ const Parts = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 20px;
+
+  @media screen and (max-width: 980px) {
+    flex-direction: column;
+
+    > * {
+      margin-bottom: 40px;
+    }
+  }
 `;
 
 const Copyright = styled.small`

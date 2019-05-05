@@ -150,8 +150,13 @@ CHANNEL_LAYERS = {
 }
 
 LOGIN_URL = '/login'
+
+WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'nosuchtemplate.html'
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -189,6 +194,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'kocherga_auth.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'kocherga.auth.backends.TokenBackend',
+]
 
 # Email via Amazon SES
 

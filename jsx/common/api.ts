@@ -93,12 +93,10 @@ export class API {
       const responseBody = await response.text();
 
       const error = `Error ${response.status}: ${JSON.stringify(responseBody)}`;
-      if (IS_SERVER) {
-        throw new APIError(error, response.status);
-      } else {
+      if (!IS_SERVER) {
         window.alert(error);
       }
-      return;
+      throw new APIError(error, response.status);
     }
 
     if (expectJSON) {

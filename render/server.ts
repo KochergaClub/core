@@ -218,7 +218,7 @@ app.get(
   getCb('mastermind_dating/cohort_page')
 );
 app.get('/team/events/', getCb('events/index'));
-app.get('/team/', (_, res) => res.redirect(301, '/team/staff/'));
+app.get('/team/', (_, res) => res.redirect(302, '/team/staff/'));
 
 app.get('/projects/', getCb('projects/index'));
 app.get('/projects/:name/', getCb('projects/detail'));
@@ -235,39 +235,33 @@ app.get('/login', async (req, res, next) => {
   try {
     if (req.reactContext.user.is_authenticated) {
       console.log('already authenticated');
-      res.redirect(301, '/');
+      res.redirect(302, '/');
       return;
     }
-    return getCb('auth/login')(req, res, next); // FIXME - pass next from query_params
+    return getCb('auth/login')(req, res, next);
   } catch (err) {
     next(err);
   }
 });
 
-app.post('/login', async (req, res, next) => {
-  try {
-    await req.reactContext.api.call('login/send-magic-link', 'POST', {
-      email: req.body.email,
-      next: req.query.next || '/',
-    });
+interface LoginCredentials {
+  email?: string;
+  password?: string;
+  token?: string;
+}
 
-    res.redirect(301, '/login/check-your-email');
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get('/login/check-your-email', getCb('auth/check-your-email'));
-
-app.get('/login/magic-link', async (req, res, next) => {
+const login = async (
+  credentials: LoginCredentials,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
   try {
     const response = await req.reactContext.api.call(
-      'login',
+      'auth/login',
       'POST',
       {
-        credentials: {
-          token: req.query.token,
-        },
+        credentials,
         result: 'cookie',
       },
       false
@@ -277,11 +271,44 @@ app.get('/login/magic-link', async (req, res, next) => {
       response.headers.get('Set-Cookie')
     );
     if (!splitCookieHeaders.length) {
-      throw new Error('Expected Set-Cookie in /api/login response');
+      throw new Error('Expected Set-Cookie in /api/auth/login response');
     }
     res.set('Set-Cookie', splitCookieHeaders);
 
-    res.redirect(301, req.query.next || '/');
+    res.redirect(302, req.query.next || '/');
+  } catch (err) {
+    next(err);
+  }
+};
+
+app.post('/login', async (req, res, next) => {
+  try {
+    if (req.body.password) {
+      await login(
+        { email: req.body.email, password: req.body.password },
+        req,
+        res,
+        next
+      );
+      return;
+    }
+
+    await req.reactContext.api.call('auth/send-magic-link', 'POST', {
+      email: req.body.email,
+      next: req.query.next || '/',
+    });
+
+    res.redirect(302, '/login/check-your-email');
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/login/check-your-email', getCb('auth/check-your-email'));
+
+app.get('/login/magic-link', async (req, res, next) => {
+  try {
+    await login({ token: req.query.token }, req, res, next);
   } catch (err) {
     next(err);
   }
@@ -342,13 +369,23 @@ app.use(function(req, res, next) {
 
 const errorHandler: express.ErrorRequestHandler = (err, req, res, next) => {
   console.log(err);
+  if (
+    err instanceof APIError &&
+    err.status === 403 &&
+    req.reactContext &&
+    !req.reactContext.user.is_authenticated
+  ) {
+    const nextUrl = encodeURIComponent(req.url);
+    res.redirect(302, `/login?next=${nextUrl}`);
+    return;
+  }
   if (err instanceof APIError && (err.status === 404 || err.status === 403)) {
     res.status(err.status);
     getCb(`error-pages/${err.status}`)(req, res, next);
-  } else {
-    res.status(500);
-    getCb('error-pages/500')(req, res, next);
+    return;
   }
+  res.status(500);
+  getCb('error-pages/500')(req, res, next);
 };
 app.use(errorHandler);
 
