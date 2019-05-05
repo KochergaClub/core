@@ -244,8 +244,55 @@ app.get('/login', async (req, res, next) => {
   }
 });
 
+interface LoginCredentials {
+  email?: string;
+  password?: string;
+  token?: string;
+}
+
+const login = async (
+  credentials: LoginCredentials,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const response = await req.reactContext.api.call(
+      'auth/login',
+      'POST',
+      {
+        credentials,
+        result: 'cookie',
+      },
+      false
+    );
+
+    const splitCookieHeaders = setCookie.splitCookiesString(
+      response.headers.get('Set-Cookie')
+    );
+    if (!splitCookieHeaders.length) {
+      throw new Error('Expected Set-Cookie in /api/auth/login response');
+    }
+    res.set('Set-Cookie', splitCookieHeaders);
+
+    res.redirect(302, req.query.next || '/');
+  } catch (err) {
+    next(err);
+  }
+};
+
 app.post('/login', async (req, res, next) => {
   try {
+    if (req.body.password) {
+      await login(
+        { email: req.body.email, password: req.body.password },
+        req,
+        res,
+        next
+      );
+      return;
+    }
+
     await req.reactContext.api.call('auth/send-magic-link', 'POST', {
       email: req.body.email,
       next: req.query.next || '/',
@@ -261,27 +308,7 @@ app.get('/login/check-your-email', getCb('auth/check-your-email'));
 
 app.get('/login/magic-link', async (req, res, next) => {
   try {
-    const response = await req.reactContext.api.call(
-      'auth/login',
-      'POST',
-      {
-        credentials: {
-          token: req.query.token,
-        },
-        result: 'cookie',
-      },
-      false
-    );
-
-    const splitCookieHeaders = setCookie.splitCookiesString(
-      response.headers.get('Set-Cookie')
-    );
-    if (!splitCookieHeaders.length) {
-      throw new Error('Expected Set-Cookie in /api/auth/login response');
-    }
-    res.set('Set-Cookie', splitCookieHeaders);
-
-    res.redirect(302, req.query.next || '/');
+    await login({ token: req.query.token }, req, res, next);
   } catch (err) {
     next(err);
   }

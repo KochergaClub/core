@@ -21,23 +21,40 @@ const LoginForm = styled.form`
   }
 `;
 
+const SmallNote = styled.small`
+  font-size: 0.6rem;
+  line-height: 1.3;
+  margin-bottom: 8px;
+`;
+
 const LoginPage = () => (
   <Page title="Логин">
     <AuthContainer>
       <LoginForm method="post">
-        <Column stretch>
+        <Column stretch gutter={16}>
           <div>
-            <p>
-              <label htmlFor="id_email">Email:</label>
-              <input
-                type="email"
-                name="email"
-                maxLength={255}
-                required
-                id="id_email"
-              />
-            </p>
+            <label htmlFor="id_email">Email:</label>
+            <input
+              type="email"
+              name="email"
+              maxLength={255}
+              required
+              id="id_email"
+            />
           </div>
+          <Column stretch gutter={0}>
+            <label htmlFor="id_password">Пароль:</label>
+            <SmallNote>
+              (если вы оставите это поле пустым, ссылка для логина придёт на
+              почту)
+            </SmallNote>
+            <input
+              type="password"
+              name="password"
+              maxLength={255}
+              id="id_password"
+            />
+          </Column>
           <Button type="submit">Войти</Button>
         </Column>
       </LoginForm>
