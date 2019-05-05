@@ -1,25 +1,14 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { Screen } from '../common/types';
+import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
-import { Button, Column } from '@kocherga/frontkit';
+import { Button, Input, Column } from '@kocherga/frontkit';
 import AuthContainer from './components/AuthContainer';
 
-const LoginForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-
-  input {
-    height: 32px;
-    width: 100%;
-    border: 1px solid #ddd;
-    padding: 0 4px;
-  }
-`;
+import { useAPI } from '../common/hooks';
 
 const SmallNote = styled.small`
   font-size: 0.6rem;
@@ -27,43 +16,118 @@ const SmallNote = styled.small`
   margin-bottom: 8px;
 `;
 
-const LoginPage = () => (
-  <Page title="Логин">
-    <AuthContainer>
-      <LoginForm method="post">
+interface Props {
+  next: string;
+}
+
+const LoginPage = (props: Props) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // button shouldn't be enabled until we load JS on client
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  const [acting, setActing] = useState(false);
+
+  const api = useAPI();
+
+  useEffect(() => {
+    setInitialLoading(false);
+  }, []);
+
+  const cb = useCallback(
+    async () => {
+      setActing(true);
+
+      if (password) {
+        try {
+          await api.call('auth/login', 'POST', {
+            credentials: {
+              email,
+              password,
+            },
+            result: 'cookie',
+          });
+        } catch (e) {
+          setActing(false);
+          return;
+        }
+
+        window.location.href = props.next;
+      } else {
+        // passwordless login - send magic link and ask to click it
+        try {
+          await api.call('auth/send-magic-link', 'POST', {
+            email,
+            next: props.next,
+          });
+        } catch (e) {
+          setActing(false);
+          return;
+        }
+
+        window.location.href = '/login/check-your-email';
+      }
+    },
+    [email, password]
+  );
+
+  return (
+    <Page title="Логин">
+      <AuthContainer>
         <Column stretch gutter={16}>
-          <div>
+          <Column stretch gutter={0}>
             <label htmlFor="id_email">Email:</label>
-            <input
+            <Input
               type="email"
               name="email"
               maxLength={255}
               required
               id="id_email"
+              disabled={acting || initialLoading}
+              value={email}
+              onChange={e => setEmail(e.currentTarget.value)}
             />
-          </div>
+          </Column>
           <Column stretch gutter={0}>
             <label htmlFor="id_password">Пароль:</label>
             <SmallNote>
               (если вы оставите это поле пустым, ссылка для логина придёт на
               почту)
             </SmallNote>
-            <input
+            <Input
               type="password"
               name="password"
               maxLength={255}
               id="id_password"
+              disabled={acting || initialLoading}
+              value={password}
+              onChange={e => setPassword(e.currentTarget.value)}
             />
           </Column>
-          <Button type="submit">Войти</Button>
+          <Button
+            type="submit"
+            disabled={acting || initialLoading}
+            loading={acting}
+            onClick={cb}
+          >
+            Войти
+          </Button>
         </Column>
-      </LoginForm>
-    </AuthContainer>
-  </Page>
-);
+      </AuthContainer>
+    </Page>
+  );
+};
 
-const screen: Screen<{}> = {
+const getInitialData: InitialLoader<Props> = async (_, __, query) => {
+  return {
+    next: query.next || '/my/',
+  };
+};
+
+const screen: Screen<Props> = {
   component: LoginPage,
+  getInitialData,
 };
 
 export default screen;

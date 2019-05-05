@@ -10,6 +10,7 @@ const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'analytics/index': require('./analytics/index'),
   'auth/login': require('./auth/login'),
   'auth/check-your-email': require('./auth/check-your-email'),
+  'auth/magic-link': require('./auth/magic-link'),
   'auth/registered': require('./auth/registered'), // TODO
   'cashier/index': require('./cashier/index'),
   'events/index': require('./events/index'),
