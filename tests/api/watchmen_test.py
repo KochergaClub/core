@@ -121,4 +121,5 @@ def test_update_invalid(client, manager_user):
         content_type='application/json',
     )
     assert res.status_code == 400
-    assert "watchman can't be set when is_night is set" in res.json()['__all__']
+    print(res.json())
+    assert "watchman can't be set when is_night is set" in res.json()
