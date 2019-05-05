@@ -3,6 +3,9 @@ logger = logging.getLogger(__name__)
 
 from django.db import models
 from django.conf import settings
+from django.forms import widgets
+
+from wagtail.admin import edit_handlers
 
 import kocherga.slack
 import kocherga.cm.models
@@ -42,6 +45,7 @@ class Member(models.Model):
 
     is_current = models.BooleanField('Текущий сотрудник')
     payment_type = models.CharField(
+        'Форма зарплаты',
         max_length=10,
         blank=True,
         choices=[
@@ -64,21 +68,52 @@ class Member(models.Model):
 
     color = models.CharField(max_length=7)
 
-    cm_login = models.CharField('Логин в CM', max_length=255, blank=True)
+    cm_login = models.CharField('Логин в КМ', max_length=255, blank=True)
     cm_customer = models.ForeignKey(
         kocherga.cm.models.Customer,
         null=True, blank=True,
         on_delete=models.SET_NULL,
         related_name='staff_member',
+        verbose_name='Клиент в КМ',
     )
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='staff_member',
+        verbose_name='Учетная запись на сайте',
     )
 
     objects = MemberManager()
+
+    panels = [
+        edit_handlers.MultiFieldPanel([
+            edit_handlers.FieldPanel('user'),
+            edit_handlers.FieldPanel('full_name'),
+            edit_handlers.FieldPanel('short_name'),
+            edit_handlers.FieldPanel(
+                'gender',
+                widget=widgets.RadioSelect(),
+            ),
+            edit_handlers.FieldPanel('vk'),
+            edit_handlers.FieldPanel(
+                'color',
+                widget=widgets.TextInput(attrs={'type': 'color', 'style': 'box-sizing: content-box'}),
+            ),
+        ], heading='Личные данные'),
+        edit_handlers.MultiFieldPanel([
+            edit_handlers.FieldPanel('role'),
+            edit_handlers.FieldPanel('is_current'),
+            edit_handlers.FieldPanel(
+                'payment_type',
+                widget=widgets.RadioSelect(),
+            ),
+        ], heading='Работа'),
+        edit_handlers.MultiFieldPanel([
+            edit_handlers.FieldPanel('cm_login'),
+            edit_handlers.FieldPanel('cm_customer'),
+        ], heading='Кафе-менеджер'),
+    ]
 
     class Meta:
         verbose_name = 'Сотрудник'

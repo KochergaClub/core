@@ -1,6 +1,8 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
+
 from . import models
+from .admin import WeekdayFilter
 
 
 class TaskAdmin(ModelAdmin):
@@ -8,11 +10,15 @@ class TaskAdmin(ModelAdmin):
     menu_label = 'Админские таски'
     menu_icon = 'list-ul'
 
+    list_display = ('__str__', 'days_string')
+    list_filter = (WeekdayFilter,)
+
 
 class RewardImageAdmin(ModelAdmin):
     model = models.RewardImage
     menu_label = 'Добрые мемы'
     menu_icon = 'success'
+    list_display = ('__str__', 'is_active')
 
 
 class WatchmanGroup(ModelAdminGroup):

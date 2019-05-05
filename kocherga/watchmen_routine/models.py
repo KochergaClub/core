@@ -1,5 +1,9 @@
 from django.db import models
 
+from wagtail.admin import edit_handlers
+from modelcluster.models import ClusterableModel
+from modelcluster.fields import ParentalKey
+
 from datetime import datetime
 from kocherga.dateutils import TZ
 
@@ -14,11 +18,17 @@ class TaskManager(models.Manager):
                     continue
 
 
-class Task(models.Model):
+class Task(ClusterableModel):
     name = models.TextField('Название', max_length=1024)
     channel = models.CharField('Канал', default='watchmen', max_length=40)
 
     objects = TaskManager()
+
+    panels = [
+        edit_handlers.FieldPanel('name'),
+        edit_handlers.FieldPanel('channel'),
+        edit_handlers.InlinePanel('schedules', label='Расписание'),
+    ]
 
     class Meta:
         verbose_name = 'Задача'
@@ -47,9 +57,14 @@ class Schedule(models.Model):
                                       (6, 'Воскресенье'),
                                   ))
 
-    period = models.IntegerField('Периодичность', default=1, help_text='Повторять каждые N недель')
+    period = models.IntegerField('Частота', default=1, help_text='Повторять каждые N недель')
 
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='schedules')
+    task = ParentalKey(Task, on_delete=models.CASCADE, related_name='schedules')
+
+    panels = [
+        edit_handlers.FieldPanel('weekday'),
+        edit_handlers.FieldPanel('period'),
+    ]
 
     class Meta:
         verbose_name = 'Расписания'
