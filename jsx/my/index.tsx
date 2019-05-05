@@ -6,6 +6,7 @@ import { APIError } from '../common/api';
 import CustomerSection from './components/CustomerSection';
 import NonCustomerSection from './components/NonCustomerSection';
 import SetPassword from './components/SetPassword';
+import LogoutButton from './components/LogoutButton';
 
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
@@ -31,10 +32,8 @@ const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
   <Page title="Личный кабинет">
     <PageTitle>Личный кабинет Кочерги</PageTitle>
     <div>
-      <SetPassword />
-
       <div>
-        Аккаунт: <code>{email}</code>. <a href="/logout">Выйти</a>
+        Аккаунт: <code>{email}</code>. <LogoutButton />
       </div>
 
       {is_staff && <AdminSection />}
@@ -47,6 +46,7 @@ const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
       ) : (
         <NonCustomerSection />
       )}
+      <SetPassword />
     </div>
   </Page>
 );

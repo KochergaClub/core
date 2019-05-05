@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 
 from django.template.loader import render_to_string
 from rest_framework.response import Response
@@ -117,4 +117,12 @@ class SetPasswordView(APIView):
         user.set_password(new_password)
         user.save()
 
+        return Response('ok')
+
+
+class LogoutView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        logout(request)
         return Response('ok')

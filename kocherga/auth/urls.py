@@ -17,6 +17,7 @@ urlpatterns = [
 
     # modern urls
     path('api/auth/login', views.LoginView.as_view()),
+    path('api/auth/logout', views.LogoutView.as_view()),
     path('api/auth/send-magic-link', views.SendMagicLinkView.as_view()),
     path('api/auth/set-password', views.SetPasswordView.as_view()),
 ]

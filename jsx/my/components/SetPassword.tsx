@@ -33,16 +33,19 @@ export default function SetPassword() {
 
   return (
     <Column centered>
-      <div>
-        <label>Старый пароль:</label>
+      <h2>Сменить или установить пароль</h2>
+      <Column centered>
+        <label>
+          Старый пароль (оставьте пустым, если у вас не было пароля):
+        </label>
         <Input
           type="password"
           id="old_password"
           value={oldPassword}
           onChange={e => setOldPassword(e.currentTarget.value)}
         />
-      </div>
-      <div>
+      </Column>
+      <Column centered>
         <label>Новый пароль:</label>
         <Input
           type="password"
@@ -50,7 +53,7 @@ export default function SetPassword() {
           value={newPassword}
           onChange={e => setNewPassword(e.currentTarget.value)}
         />
-      </div>
+      </Column>
       <Button loading={acting} disabled={acting} onClick={act}>
         Сменить пароль
       </Button>
