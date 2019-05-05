@@ -150,8 +150,13 @@ CHANNEL_LAYERS = {
 }
 
 LOGIN_URL = '/login'
+
+WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'nosuchtemplate.html'
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
