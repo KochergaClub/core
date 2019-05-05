@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { Button, Column, Input } from '@kocherga/frontkit';
-import { useAPI } from '../../common/hooks';
+import { useCommonHotkeys, useAPI } from '../../common/hooks';
 
 export default function SetPassword() {
   const [oldPassword, setOldPassword] = useState('');
@@ -31,8 +31,12 @@ export default function SetPassword() {
     [oldPassword, newPassword]
   );
 
+  const hotkeys = useCommonHotkeys({
+    onEnter: act,
+  });
+
   return (
-    <Column centered>
+    <Column centered {...hotkeys}>
       <h2>Сменить или установить пароль</h2>
       <Column centered>
         <label>

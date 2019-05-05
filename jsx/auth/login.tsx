@@ -8,7 +8,7 @@ import Page from '../components/Page';
 import { Button, Input, Column } from '@kocherga/frontkit';
 import AuthContainer from './components/AuthContainer';
 
-import { useAPI } from '../common/hooks';
+import { useCommonHotkeys, useAPI } from '../common/hooks';
 
 const SmallNote = styled.small`
   font-size: 0.6rem;
@@ -72,9 +72,13 @@ const LoginPage = (props: Props) => {
     [email, password]
   );
 
+  const hotkeys = useCommonHotkeys({
+    onEnter: cb,
+  });
+
   return (
     <Page title="Логин">
-      <AuthContainer>
+      <AuthContainer {...hotkeys}>
         <Column stretch gutter={16}>
           <Column stretch gutter={0}>
             <label htmlFor="id_email">Email:</label>
