@@ -10,3 +10,7 @@ section_blocks = [
         ('lines_count', blocks.IntegerBlock()),
     ])),
 ]
+
+notebook_blocks = [
+    ('ratio_notebook_section', blocks.PageChooserBlock(page_type='ratio.SectionPage')),
+]
