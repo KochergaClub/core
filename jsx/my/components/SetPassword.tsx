@@ -14,10 +14,15 @@ export default function SetPassword() {
   const act = useCallback(
     async () => {
       setActing(true);
-      await api.call('auth/set-password', 'POST', {
-        old_password: oldPassword,
-        new_password: newPassword,
-      });
+      try {
+        await api.call('auth/set-password', 'POST', {
+          old_password: oldPassword,
+          new_password: newPassword,
+        });
+      } catch (e) {
+        setActing(false);
+        return;
+      }
       window.location.reload();
       window.alert(
         'Мы разлогинили вас, чтобы вы смогли проверить свой новый пароль.'
