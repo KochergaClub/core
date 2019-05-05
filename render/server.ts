@@ -379,7 +379,10 @@ const errorHandler: express.ErrorRequestHandler = (err, req, res, next) => {
     res.redirect(302, `/login?next=${nextUrl}`);
     return;
   }
-  if (err instanceof APIError && (err.status === 404 || err.status === 403)) {
+  if (
+    err instanceof APIError &&
+    (err.status === 404 || err.status === 403 || err.status === 400)
+  ) {
     res.status(err.status);
     getCb(`error-pages/${err.status}`)(req, res, next);
     return;

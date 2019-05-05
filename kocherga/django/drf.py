@@ -12,7 +12,7 @@ def exception_handler(exc, context):
     """Handle Django ValidationError as an accepted exception."""
 
     if isinstance(exc, DjangoValidationError):
-        exc = DRFValidationError(detail=exc.message_dict)
+        exc = DRFValidationError(detail=exc.messages)
 
     return drf_exception_handler(exc, context)
 

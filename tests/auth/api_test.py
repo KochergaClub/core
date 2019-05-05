@@ -30,7 +30,6 @@ class TestGetMagicToken:
         assert res.status_code == 200
         assert len(mail.outbox) == 1
         assert mail.outbox[0].subject == 'Войти на сайт Кочерги'
-        print(mail.outbox[0].body)
 
 
 class TestAnyLogin:
@@ -41,7 +40,7 @@ class TestAnyLogin:
             content_type='application/json',
         )
         assert res.json()['detail'] == "credentials are not set"
-        assert res.status_code == 500
+        assert res.status_code == 400
 
     def test_empty_credentials(self, client):
         res = client.post(
@@ -52,7 +51,7 @@ class TestAnyLogin:
             content_type='application/json',
         )
         assert res.json()['detail'].startswith("One of `token`")
-        assert res.status_code == 500
+        assert res.status_code == 400
 
 
 class TestTokenLogin:
@@ -63,11 +62,12 @@ class TestTokenLogin:
                 'credentials': {
                     'token': 'bad',
                 },
+                'result': 'cookie',
             }),
             content_type='application/json',
         )
-        assert res.json()['detail'] == "Authentication failed"
-        assert res.status_code == 500
+        assert res.json()['detail'] == "Некорректные учетные данные."
+        assert res.status_code == 403
 
     def test_result_param_required(self, client):
         res = client.post(
@@ -80,7 +80,7 @@ class TestTokenLogin:
             content_type='application/json',
         )
         assert res.json()['detail'] == "result parameter is not set"
-        assert res.status_code == 500
+        assert res.status_code == 400
 
     def test_result_param(self, client):
         res = client.post(
@@ -94,7 +94,7 @@ class TestTokenLogin:
             content_type='application/json',
         )
         assert res.json()['detail'] == "Only `cookie` result is supported"
-        assert res.status_code == 500
+        assert res.status_code == 400
 
     def test_good(self, client):
         res = client.post(
@@ -143,11 +143,12 @@ class TestPasswordLogin:
                 'credentials': {
                     'email': self.EMAIL,
                 },
+                'result': 'cookie',
             }),
             content_type='application/json',
         )
         assert res.json()['detail'].startswith("One of `token`")
-        assert res.status_code == 500
+        assert res.status_code == 400
 
     def test_bad_password_wrong_user(self, client):
         res = client.post(
@@ -155,13 +156,14 @@ class TestPasswordLogin:
             json.dumps({
                 'credentials': {
                     'email': self.EMAIL,
-                    'password': 'wrong_password'
+                    'password': 'password_for_nonexistent_user'
                 },
+                'result': 'cookie',
             }),
             content_type='application/json',
         )
-        assert res.json()['detail'] == "Authentication failed"
-        assert res.status_code == 500
+        assert res.json()['detail'] == "Некорректные учетные данные."
+        assert res.status_code == 403
 
     def test_bad_password_existing_user(self, client):
         get_user_model().objects.create_user(self.EMAIL)
@@ -177,8 +179,7 @@ class TestPasswordLogin:
             }),
             content_type='application/json',
         )
-        assert res.json()['detail'] == "Authentication failed"
-        assert res.status_code == 500
+        assert res.status_code == 403
 
     def test_success(self, client):
         user = get_user_model().objects.create_user(self.EMAIL)
@@ -199,3 +200,73 @@ class TestPasswordLogin:
         assert res.status_code == 200
         assert res.json()['registered'] is False
         assert client.cookies['sessionid']
+
+
+class TestSetPassword:
+    EMAIL = 'somebody@example.com'
+    PASSWORD = 'axej2d4adr'
+    NEW_PASSWORD = 'qwe83nvf'
+
+    def test_not_signed_in(self, client):
+        user = get_user_model().objects.create_user(self.EMAIL)
+        user.set_password(self.PASSWORD)
+        user.save()
+
+        res = client.post(
+            '/api/auth/set-password',
+            json.dumps({
+                'old_password': self.PASSWORD,
+            }),
+            content_type='application/json',
+        )
+        assert res.status_code == 403
+        assert res.json()['detail'], 'Учетные данные не были предоставлены.'
+
+    def test_set_first_password(self, client):
+        user = get_user_model().objects.create_user(self.EMAIL)
+        client.force_login(user)
+
+        res = client.post(
+            '/api/auth/set-password',
+            json.dumps({
+                'new_password': self.NEW_PASSWORD,
+            }),
+            content_type='application/json',
+        )
+
+        assert res.status_code == 200
+        user.check_password(self.NEW_PASSWORD)
+
+    def test_no_old_password(self, client):
+        user = get_user_model().objects.create_user(self.EMAIL)
+        user.set_password(self.PASSWORD)
+        user.save()
+        client.force_login(user)
+
+        res = client.post(
+            '/api/auth/set-password',
+            json.dumps({
+                'new_password': self.NEW_PASSWORD,
+            }),
+            content_type='application/json',
+        )
+        assert res.status_code == 403
+        assert res.json()['detail'] == '`old_password` is not set but user has a password'
+
+    def test_success(self, client):
+        user = get_user_model().objects.create_user(self.EMAIL)
+        user.set_password(self.PASSWORD)
+        user.save()
+        client.force_login(user)
+
+        res = client.post(
+            '/api/auth/set-password',
+            json.dumps({
+                'old_password': self.PASSWORD,
+                'new_password': self.NEW_PASSWORD,
+            }),
+            content_type='application/json',
+        )
+        assert res.status_code == 200
+
+        user.check_password(self.NEW_PASSWORD)

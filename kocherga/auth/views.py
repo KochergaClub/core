@@ -5,11 +5,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.password_validation import validate_password
 
 from django.template.loader import render_to_string
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import APIException
+from rest_framework import exceptions
 from rest_framework import permissions
 
 import markdown
@@ -68,11 +69,17 @@ class LoginView(APIView):
 
     def post(self, request):
         if 'credentials' not in request.data:
-            raise APIException('credentials are not set')
+            raise exceptions.ParseError('credentials are not set')
         credentials = request.data['credentials']
 
         if 'token' not in credentials and not ('email' in credentials and 'password' in credentials):
-            raise APIException('One of `token` and `email`+`password` must be set')
+            raise exceptions.ParseError('One of `token` and `email`+`password` must be set')
+
+        # other results, e.g. access_token, will be supported later
+        if 'result' not in request.data:
+            raise exceptions.ParseError('result parameter is not set')
+        if request.data['result'] != 'cookie':
+            raise exceptions.ParseError('Only `cookie` result is supported')
 
         user = authenticate(
             request,
@@ -83,13 +90,7 @@ class LoginView(APIView):
 
         if not user:
             logger.info('no user')
-            raise APIException('Authentication failed')
-
-        # other results, e.g. access_token, will be supported later
-        if 'result' not in request.data:
-            raise APIException('result parameter is not set')
-        if request.data['result'] != 'cookie':
-            raise APIException('Only `cookie` result is supported')
+            raise exceptions.AuthenticationFailed()
 
         login(request, user)
 
@@ -102,18 +103,22 @@ class SetPasswordView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
+        old_password = request.data.get('old_password', None)
+
+        if 'new_password' not in request.data:
+            raise exceptions.ParseError('`new_password` should be set')
         new_password = request.data['new_password']
-        old_password = request.data['old_password']
 
         user = request.user
 
         if old_password:
             if not user.check_password(old_password):
-                raise APIException("Invalid `old_password`")
+                raise exceptions.AuthenticationFailed("Invalid `old_password`")
         else:
             if user.has_usable_password():
-                raise APIException("`old_password` is not set but user has a password")
+                raise exceptions.AuthenticationFailed("`old_password` is not set but user has a password")
 
+        validate_password(new_password)
         user.set_password(new_password)
         user.save()
 

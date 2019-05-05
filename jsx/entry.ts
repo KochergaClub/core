@@ -29,6 +29,7 @@ const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'events/event_page': require('./events/event_page'),
   'frontpage/index': require('./frontpage/index'),
   'wagtail/any': require('./wagtail/any'),
+  'error-pages/400': require('./error-pages/500'), // NB - we don't have a proper 400 page yet
   'error-pages/403': require('./error-pages/403'),
   'error-pages/404': require('./error-pages/404'),
   'error-pages/500': require('./error-pages/500'),
