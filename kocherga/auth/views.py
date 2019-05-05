@@ -102,10 +102,19 @@ class SetPasswordView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        new_password = request.data['password']
-        if not request.user.check_password(new_password):
-            ...
+        new_password = request.data['new_password']
+        old_password = request.data['old_password']
 
-        request.user.set_password(new_password)
+        user = request.user
+
+        if old_password:
+            if not user.check_password(old_password):
+                raise APIException("Invalid `old_password`")
+        else:
+            if user.has_usable_password():
+                raise APIException("`old_password` is not set but user has a password")
+
+        user.set_password(new_password)
+        user.save()
 
         return Response('ok')

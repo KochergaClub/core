@@ -5,8 +5,10 @@ import { APIError } from '../common/api';
 
 import CustomerSection from './components/CustomerSection';
 import NonCustomerSection from './components/NonCustomerSection';
+import SetPassword from './components/SetPassword';
 
 import Page from '../components/Page';
+import PageTitle from '../components/PageTitle';
 
 import { Customer, Order } from './types';
 
@@ -27,8 +29,9 @@ interface Props {
 
 const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
   <Page title="Личный кабинет">
+    <PageTitle>Личный кабинет Кочерги</PageTitle>
     <div>
-      <h1>Личный кабинет Кочерги</h1>
+      <SetPassword />
 
       <div>
         Аккаунт: <code>{email}</code>. <a href="/logout">Выйти</a>
@@ -47,6 +50,7 @@ const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
     </div>
   </Page>
 );
+// test
 
 const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
   if (!user.email) {
