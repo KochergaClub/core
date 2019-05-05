@@ -189,6 +189,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'kocherga_auth.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'kocherga.auth.backends.TokenBackend',
+]
 
 # Email via Amazon SES
 

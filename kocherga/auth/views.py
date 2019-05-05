@@ -1,8 +1,10 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
-import django.core.signing
-from django.contrib.auth import login, get_user_model
+from django.contrib.auth import login, authenticate
 
 from django.template.loader import render_to_string
 from rest_framework.response import Response
@@ -13,7 +15,7 @@ from rest_framework import permissions
 import markdown
 import urllib.parse
 
-from .view_utils import get_magic_token, check_magic_token
+from .view_utils import get_magic_token
 
 
 class MeView(APIView):
@@ -69,14 +71,19 @@ class LoginView(APIView):
             raise APIException('credentials are not set')
         credentials = request.data['credentials']
 
-        if 'token' not in credentials:
-            raise APIException('token is not set in credentials')
-        magic_token = credentials['token']
+        if 'token' not in credentials and not ('email' in credentials and 'password' in credentials):
+            raise APIException('One of `token` and `email`+`password` must be set')
 
-        try:
-            email = check_magic_token(magic_token)
-        except django.core.signing.BadSignature:
-            raise APIException('Invalid token')
+        user = authenticate(
+            request,
+            username=credentials.get('email', None),
+            password=credentials.get('password', None),
+            token=credentials.get('token', None),
+        )
+
+        if not user:
+            logger.info('no user')
+            raise APIException('Authentication failed')
 
         # other results, e.g. access_token, will be supported later
         if 'result' not in request.data:
@@ -84,20 +91,21 @@ class LoginView(APIView):
         if request.data['result'] != 'cookie':
             raise APIException('Only `cookie` result is supported')
 
-        User = get_user_model()
-
-        registered = False
-        try:
-            user = User.objects.get(email=email)
-            if not user.last_login:
-                # existed from external data source, e.g. cm_customers
-                registered = True
-        except User.DoesNotExist:
-            user = User.objects.create_user(email)
-            registered = True
-
         login(request, user)
 
         return Response({
-            'registered': registered,
+            'registered': getattr(request, 'registered', False),
         })
+
+
+class SetPasswordView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        new_password = request.data['password']
+        if not request.user.check_password(new_password):
+            ...
+
+        request.user.set_password(new_password)
+
+        return Response('ok')
