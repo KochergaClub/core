@@ -18,7 +18,6 @@ const argv = require('yargs')
 import http from 'http';
 import express from 'express';
 import cookie from 'cookie';
-import setCookie from 'set-cookie-parser';
 import slash from 'express-slash';
 import httpProxy from 'http-proxy';
 
@@ -26,6 +25,7 @@ import 'babel-polyfill';
 
 import { API, APIError } from '../jsx/common/api';
 import { GlobalContextShape } from '../jsx/common/types';
+import { wagtailScreen } from '../jsx/screens';
 
 const webpackStats = require('../webpack-stats.json');
 
@@ -282,8 +282,21 @@ app.use(async (req, res, next) => {
           `pages/${pageId}/?fields=*`
         );
         pageProps.meta_type = pageProps.meta.type;
+
+        let props = {};
+        if (wagtailScreen.getInitialData) {
+          props = await wagtailScreen.getInitialData(
+            req.reactContext,
+            pageProps
+          );
+        }
+
         sendFullHtml(
-          renderEntrypoint('wagtail/any', req.reactContext, pageProps),
+          {
+            ...renderEntrypoint(wagtailScreen, req.reactContext, props),
+            screenName: 'wagtail/any',
+            props,
+          },
           req,
           res
         );

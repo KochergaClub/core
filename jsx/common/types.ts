@@ -1,15 +1,27 @@
 import { API } from './api';
 
-export type InitialLoader<P> = (
+export type AnyInitialLoader<B, P> = (
   context: GlobalContextShape,
-  params: any,
-  query: any
+  source: B
 ) => Promise<P>;
 
-export interface Screen<P> {
-  component: React.ComponentType<P>;
-  getInitialData?: InitialLoader<P>;
+interface ExpressSource {
+  params: any;
+  query: any;
 }
+
+interface WagtailSource {
+  wagtailPage: any;
+}
+
+export type InitialLoader<P> = AnyInitialLoader<ExpressSource, P>;
+
+export interface AnyScreen<B, P> {
+  component: React.ComponentType<P>;
+  getInitialData?: AnyInitialLoader<B, P>;
+}
+
+export type Screen<P> = AnyScreen<ExpressSource, P>;
 
 export interface User {
   is_authenticated: boolean;

@@ -1,12 +1,8 @@
-import { hot } from 'react-hot-loader/root';
+import { Screen } from './common/types';
 
-import React from 'react';
+import importedWagtailScreen from './wagtail/any';
 
-import { API } from './common/api';
-import { Screen, GlobalContextShape } from './common/types';
-import GlobalContext from './components/GlobalContext';
-
-const SCREENS: { [key: string]: { default: Screen<{}> } } = {
+export const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'analytics/index': require('./analytics/index'),
   'auth/login': require('./auth/login'),
   'auth/check-your-email': require('./auth/check-your-email'),
@@ -29,20 +25,13 @@ const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'projects/detail': require('./projects/detail'),
   'events/event_page': require('./events/event_page'),
   'frontpage/index': require('./frontpage/index'),
-  'wagtail/any': require('./wagtail/any'),
   'error-pages/400': require('./error-pages/500'), // NB - we don't have a proper 400 page yet
   'error-pages/403': require('./error-pages/403'),
   'error-pages/404': require('./error-pages/404'),
   'error-pages/500': require('./error-pages/500'),
 };
 
-interface Props {
-  screenName: string;
-  csrfToken: string;
-  innerProps: any;
-}
-
-const getScreen = (name: string) => {
+export const findBasicScreen = (name: string) => {
   if (!SCREENS[name]) {
     throw new Error(`Screen ${name} not found`);
   }
@@ -53,35 +42,13 @@ const getScreen = (name: string) => {
   return screen;
 };
 
-const Entrypoint = (props: Props) => {
-  const screen = getScreen(props.screenName);
-  const { component } = screen;
+export const wagtailScreen = importedWagtailScreen;
 
-  const el = React.createElement(component, props.innerProps);
-
-  return React.createElement(
-    GlobalContext.Provider,
-    {
-      value: {
-        api: new API({ csrfToken: props.csrfToken }),
-      },
-    },
-    el
-  );
-};
-
-export default hot(Entrypoint);
-
-export const requestToPageProps = async (
-  screenName: string,
-  context: GlobalContextShape,
-  params: object,
-  query: object
-) => {
-  const screen = getScreen(screenName);
-  const { getInitialData } = screen;
-  if (!getInitialData) {
-    return {};
+export const findScreen = (name: string) => {
+  if (name === 'wagtail/any') {
+    return wagtailScreen;
   }
-  return await getInitialData(context, params, query);
+  return findBasicScreen(name);
 };
+
+// TODO: renderScreen<B> = (screen: AnyScreen<B>, context: ..., source: B)

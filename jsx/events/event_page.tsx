@@ -90,7 +90,7 @@ const EventPage = ({ event }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, params) => {
+const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
   const event = await api.call(`public_events/${params.id}`, 'GET');
   event.start = new Date(event.start);
   event.end = new Date(event.end);

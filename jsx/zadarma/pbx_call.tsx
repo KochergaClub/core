@@ -24,7 +24,7 @@ const ZadarmaCallPage = ({ pbx_call }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, params) => {
+const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
   const pbx_call = await api.call(`zadarma/pbx_call/${params.id}`, 'GET');
   return { pbx_call };
 };

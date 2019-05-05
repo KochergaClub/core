@@ -92,7 +92,18 @@ export interface RatioSectionPageType extends AnyPageType {
   body: BlockType[];
 }
 
+interface NotebookBlockType extends AnyBlockType {
+  type: 'ratio_notebook_section';
+  value: number;
+}
+
+export interface RatioNotebookPageType extends AnyPageType {
+  meta_type: 'ratio.NotebookPage';
+  sections: NotebookBlockType[];
+}
+
 export type WagtailPageType =
   | FreeFormPageType
   | RatioSectionIndexPageType
-  | RatioSectionPageType;
+  | RatioSectionPageType
+  | RatioNotebookPageType;

@@ -79,7 +79,10 @@ const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader<Props> = async ({ api, user }, params) => {
+const getInitialData: InitialLoader<Props> = async (
+  { api, user },
+  { params }
+) => {
   const member = await api.call(`staff/member/${params.id}`, 'GET');
   return {
     member,

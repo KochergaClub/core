@@ -41,8 +41,8 @@ const AnalyticsPage = ({ bov_stats }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async (context, params, query) => {
-  const bov_stats = await context.api.call('analytics/bov_stats', 'GET');
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
+  const bov_stats = await api.call('analytics/bov_stats', 'GET');
   return { bov_stats };
 };
 

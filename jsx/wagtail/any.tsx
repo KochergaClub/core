@@ -1,11 +1,19 @@
 import React from 'react';
 
-import { Screen } from '../common/types';
-import { WagtailPageType } from './types';
+import { AnyInitialLoader, AnyScreen } from '../common/types';
+import { WagtailPageType, RatioSectionPageType } from './types';
 
 import FreeFormPage from './pages/FreeFormPage';
 import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
 import RatioSectionPage from './pages/RatioSectionPage';
+import RatioNotebookPage from './pages/RatioNotebookPage';
+
+interface Props {
+  wagtailPage: WagtailPageType;
+
+  // FIXME - move to NotebookSectionPage, proxy initial data logic to it
+  ratioSectionPages?: RatioSectionPageType[];
+}
 
 const UnknownPage = (props: WagtailPageType) => (
   <div>
@@ -16,21 +24,56 @@ const UnknownPage = (props: WagtailPageType) => (
   </div>
 );
 
-const AnyWagtailPage = (props: WagtailPageType) => {
-  switch (props.meta_type) {
+const AnyWagtailPage = (props: Props) => {
+  const { wagtailPage } = props;
+  switch (wagtailPage.meta_type) {
     case 'pages.FreeFormPage':
-      return <FreeFormPage {...props} />;
+      return <FreeFormPage {...wagtailPage} />;
     case 'ratio.SectionIndexPage':
-      return <RatioSectionIndexPage {...props} />;
+      return <RatioSectionIndexPage {...wagtailPage} />;
     case 'ratio.SectionPage':
-      return <RatioSectionPage {...props} />;
+      return <RatioSectionPage {...wagtailPage} />;
+    case 'ratio.NotebookPage':
+      return (
+        <RatioNotebookPage
+          wagtailPage={wagtailPage}
+          ratioSectionPages={props.ratioSectionPages || []}
+        />
+      );
     default:
-      return <UnknownPage {...props} />;
+      return <UnknownPage {...wagtailPage} />;
   }
 };
 
-const screen: Screen<WagtailPageType> = {
+type WagtailScreen = AnyScreen<WagtailPageType, Props>;
+type WagtailInitialLoader = AnyInitialLoader<WagtailPageType, Props>;
+
+const getInitialData: WagtailInitialLoader = async (
+  { api },
+  wagtailPage: WagtailPageType
+) => {
+  const props: Props = {
+    wagtailPage,
+  };
+
+  if (wagtailPage.meta_type === 'ratio.NotebookPage') {
+    const ids = wagtailPage.sections.map(section => section.value);
+
+    const sectionPages = [];
+    for (const id of ids) {
+      const sectionPage = await api.callWagtail(`pages/${id}/?fields=*`);
+      sectionPages.push(sectionPage);
+    }
+
+    props.ratioSectionPages = sectionPages;
+  }
+
+  return props;
+};
+
+const screen: WagtailScreen = {
   component: AnyWagtailPage,
+  getInitialData,
 };
 
 export default screen;

@@ -65,8 +65,8 @@ const StaffIndexPage = ({ members }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader<Props> = async context => {
-  const members = await context.api.call('staff/member', 'GET');
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
+  const members = await api.call('staff/member', 'GET');
   return { members };
 };
 

@@ -96,7 +96,10 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, params, query) => {
+const getInitialData: InitialLoader<Props> = async (
+  { api },
+  { params, query }
+) => {
   const key = encodeURIComponent(params.name); // TODO - change api to accept slug
   console.log(key);
   const training = await api.call(`ratio/training/${key}`, 'GET');

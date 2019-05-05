@@ -123,7 +123,7 @@ const LoginPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async (_, __, query) => {
+const getInitialData: InitialLoader<Props> = async ({}, { query }) => {
   return {
     next: query.next || '/my/',
   };

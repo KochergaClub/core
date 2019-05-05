@@ -4,24 +4,28 @@ import ReactDOMServer from 'react-dom/server';
 import { ServerStyleSheet } from 'styled-components';
 import { Helmet, HelmetData } from 'react-helmet';
 
-import Entrypoint, { requestToPageProps } from '../../jsx/entry';
-import { GlobalContextShape } from '../../jsx/common/types';
+import Entrypoint from '../../jsx/entry';
+import { findBasicScreen } from '../../jsx/screens';
+import { AnyScreen, GlobalContextShape } from '../../jsx/common/types';
 
-export interface RenderResult {
+export interface RawRenderResult {
   html: string;
   helmet: HelmetData;
   styleTags: string;
+}
+
+export interface RenderResult extends RawRenderResult {
   props: any;
   screenName: string;
 }
 
-export const renderEntrypoint = (
-  screenName: string,
+export function renderEntrypoint<T>(
+  screen: AnyScreen<any, T>,
   context: GlobalContextShape,
-  props: object
-): RenderResult => {
+  props: T
+): RawRenderResult {
   const el = React.createElement(Entrypoint, {
-    screenName,
+    screen,
     csrfToken: context.api.csrfToken,
     innerProps: props,
   });
@@ -31,8 +35,8 @@ export const renderEntrypoint = (
   const helmet = Helmet.renderStatic();
   const styleTags = sheet.getStyleTags();
 
-  return { html, styleTags, helmet, props, screenName };
-};
+  return { html, styleTags, helmet };
+}
 
 export const renderEntrypointWithData = async (
   screenName: string,
@@ -40,14 +44,21 @@ export const renderEntrypointWithData = async (
   reqParams: object,
   reqQuery: object
 ): Promise<RenderResult> => {
-  const props = await requestToPageProps(
-    screenName,
-    context,
-    reqParams,
-    reqQuery
-  );
+  const screen = findBasicScreen(screenName);
 
-  return renderEntrypoint(screenName, context, props);
+  let props = {};
+  if (screen.getInitialData) {
+    props = await screen.getInitialData(context, {
+      params: reqParams,
+      query: reqQuery,
+    });
+  }
+
+  return {
+    ...renderEntrypoint(screen, context, props),
+    screenName,
+    props,
+  };
 };
 
 export const getGAScript = (

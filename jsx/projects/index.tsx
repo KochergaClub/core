@@ -51,9 +51,9 @@ const ProjectsIndexPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async context => {
+const getInitialData: InitialLoader<Props> = async ({ api }) => {
   return {
-    projects: await getAllProjects(context.api),
+    projects: await getAllProjects(api),
   };
 };
 

@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Entrypoint from '../jsx/entry';
+import { findScreen } from '../jsx/screens';
 
 declare global {
   interface Window {
@@ -15,8 +16,10 @@ declare global {
 function renderApp(props: any) {
   const domContainerNode = document.getElementById('react-app');
 
+  const screen = findScreen(window['store'].screenName);
+
   const el = React.createElement(Entrypoint, {
-    screenName: window['store'].screenName,
+    screen,
     csrfToken: window.csrfToken, // extract from page
     innerProps: props,
   });

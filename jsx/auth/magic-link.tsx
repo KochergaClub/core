@@ -39,7 +39,7 @@ const MagicLinkPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, params, query) => {
+const getInitialData: InitialLoader<Props> = async ({ api }, { query }) => {
   return {
     token: query.token,
     next: query.next || '/my',

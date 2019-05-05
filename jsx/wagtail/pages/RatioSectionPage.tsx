@@ -16,7 +16,7 @@ const Header = styled.h1`
   text-align: center;
 `;
 
-export default function FreeFormPage(props: Props) {
+export default function RatioSectionPage(props: Props) {
   return (
     <Page title={props.title} noMenu noFooter>
       <Container>
