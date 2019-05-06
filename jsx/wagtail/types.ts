@@ -53,6 +53,14 @@ export interface RatioExerciseBlockType extends AnyBlockType {
   value: {
     header: string;
     lines_count: number;
+    enumerate?: boolean;
+  };
+}
+
+export interface RatioExerciseOnelineBlockType extends AnyBlockType {
+  type: 'ratio_exercise_oneline';
+  value: {
+    text: string;
   };
 }
 
@@ -65,7 +73,8 @@ export type BlockType =
   | RatioParagraphBlockType
   | RatioInsetBlockType
   | RatioHeaderBlockType
-  | RatioExerciseBlockType;
+  | RatioExerciseBlockType
+  | RatioExerciseOnelineBlockType;
 
 export interface AnyPageType {
   id: number;
