@@ -6,9 +6,11 @@ import Page from '../../components/Page';
 import { RatioSectionPageType, RatioNotebookPageType } from '../types';
 import RatioSectionPage from './RatioSectionPage';
 
+import SectionTOC from './RatioNotebookPage/SectionTOC';
+
 type AuxPages = { [key: number]: RatioSectionPageType }; // copy-pasted from ../any.tsx
 
-interface Props {
+export interface Props {
   wagtailPage: RatioNotebookPageType;
   ratioSectionPages: AuxPages;
 }
@@ -20,14 +22,17 @@ const SectionContainer = styled.section`
 export default function RatioNotebookPage(props: Props) {
   return (
     <Page title={props.wagtailPage.title} noMenu noFooter>
-      {props.wagtailPage.sections.map(section => (
-        <SectionContainer>
-          <RatioSectionPage
-            key={section.id}
-            {...props.ratioSectionPages[section.value]}
-          />
-        </SectionContainer>
-      ))}
+      <SectionTOC {...props} />
+      <div>
+        {props.wagtailPage.sections.map(section => (
+          <SectionContainer>
+            <RatioSectionPage
+              key={section.id}
+              {...props.ratioSectionPages[section.value]}
+            />
+          </SectionContainer>
+        ))}
+      </div>
     </Page>
   );
 }
