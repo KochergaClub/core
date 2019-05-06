@@ -18,7 +18,7 @@ const Line = styled.a`
   text-decoration: none;
   border-bottom: 1px solid #888;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 `;
 
 export default function SectionTOC(props: Props) {
