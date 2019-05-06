@@ -13,6 +13,13 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = ('email',)
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(None)
+        if commit:
+            user.save()
+        return user
+
 
 class UserChangeForm(forms.ModelForm):
     class Meta:
