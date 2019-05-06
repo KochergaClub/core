@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import MathJax from 'react-mathjax2';
 
-//test
 import { RatioMathBlockType as Props } from '../types';
 
 const Container = styled.div`
@@ -22,7 +21,7 @@ export default function RatioMathBlock(block: Props) {
   const formula = match[1];
 
   return (
-    <MathJax.Context input="ascii">
+    <MathJax.Context input="tex">
       <Container>
         <MathJax.Node>{formula}</MathJax.Node>
       </Container>
