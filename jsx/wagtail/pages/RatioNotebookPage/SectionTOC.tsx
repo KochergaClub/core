@@ -12,7 +12,10 @@ const Container = styled.div`
   }
 `;
 
-const Line = styled.div`
+const Line = styled.a`
+  display: block;
+  color: black;
+  text-decoration: none;
   border-bottom: 1px solid #888;
   text-transform: uppercase;
   margin-bottom: 8px;
@@ -21,9 +24,14 @@ const Line = styled.div`
 export default function SectionTOC(props: Props) {
   return (
     <Container>
-      {props.wagtailPage.sections.map(section => (
-        <Line>{props.ratioSectionPages[section.value].title}</Line>
-      ))}
+      {props.wagtailPage.sections.map(section => {
+        const sectionPage = props.ratioSectionPages[section.value];
+        return (
+          <Line key={section.id} href={`#section-${sectionPage.meta.slug}`}>
+            {sectionPage.title}
+          </Line>
+        );
+      })}
     </Container>
   );
 }

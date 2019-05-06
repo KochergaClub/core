@@ -24,14 +24,15 @@ export default function RatioNotebookPage(props: Props) {
     <Page title={props.wagtailPage.title} noMenu noFooter>
       <SectionTOC {...props} />
       <div>
-        {props.wagtailPage.sections.map(section => (
-          <SectionContainer>
-            <RatioSectionPage
-              key={section.id}
-              {...props.ratioSectionPages[section.value]}
-            />
-          </SectionContainer>
-        ))}
+        {props.wagtailPage.sections.map(section => {
+          const sectionPage = props.ratioSectionPages[section.value];
+          return (
+            <SectionContainer key={section.id}>
+              <a id={`section-${sectionPage.meta.slug}`} />
+              <RatioSectionPage {...sectionPage} />
+            </SectionContainer>
+          );
+        })}
       </div>
     </Page>
   );
