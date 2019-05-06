@@ -14,10 +14,15 @@ class SectionAdmin(ModelAdmin):
     list_filter = ('status',)
 
 
+class NotebookAdmin(ModelAdmin):
+    model = models.NotebookPage
+    list_display = ('__str__',)
+
+
 class RatioGroup(ModelAdminGroup):
     menu_icon = 'group'
     menu_label = 'Рацио'
-    items = (TrainingAdmin, SectionAdmin,)
+    items = (TrainingAdmin, SectionAdmin, NotebookAdmin,)
 
 
 modeladmin_register(RatioGroup)

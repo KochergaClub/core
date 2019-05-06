@@ -25,3 +25,7 @@ class NotebookPage(Page):
 
     parent_page_types = ['ratio.NotebookIndexPage']
     subpage_types = []
+
+    class Meta:
+        verbose_name = 'Рабочая тетрадь'
+        verbose_name_plural = 'Рабочие тетради'
