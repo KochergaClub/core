@@ -53,6 +53,7 @@ django-reversion = "^3.0"
 redis = "^3.2"
 django-reversion-compare = "^0.8.6"
 wagtail = "2.5"
+wagtailmath = { git = "https://github.com/berekuk/wagtailmath.git", branch = "master" }
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

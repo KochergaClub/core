@@ -1,4 +1,5 @@
 from wagtail.core import blocks
+from wagtailmath.blocks import MathBlock
 
 section_blocks = [
     ('ratio_header', blocks.CharBlock(
@@ -45,6 +46,9 @@ section_blocks = [
     ('ratio_briefing', blocks.RichTextBlock(
         label='Вводная часть',
         icon='home',
+    )),
+    ('ratio_math', MathBlock(
+        label='Формула',
     )),
 ]
 

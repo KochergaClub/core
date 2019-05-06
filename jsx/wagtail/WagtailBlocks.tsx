@@ -19,6 +19,7 @@ import RatioParagraphBlock from './blocks/RatioParagraphBlock';
 import RatioInsetBlock from './blocks/RatioInsetBlock';
 import RatioExerciseBlock from './blocks/RatioExerciseBlock';
 import RatioExerciseOnelineBlock from './blocks/RatioExerciseOnelineBlock';
+import RatioMathBlock from './blocks/RatioMathBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
@@ -44,6 +45,8 @@ const AnyBlock = (block: BlockType) => {
       return <RatioExerciseBlock {...block} />;
     case 'ratio_exercise_oneline':
       return <RatioExerciseOnelineBlock {...block} />;
+    case 'ratio_math':
+      return <RatioMathBlock {...block} />;
     default:
       return <DebugBlock {...block} />;
   }

@@ -64,6 +64,11 @@ export interface RatioExerciseOnelineBlockType extends AnyBlockType {
   };
 }
 
+export interface RatioMathBlockType extends AnyBlockType {
+  type: 'ratio_math';
+  value: string;
+}
+
 export type BlockType =
   | BasicHeaderBlockType
   | BasicParagraphBlockType
@@ -74,7 +79,8 @@ export type BlockType =
   | RatioInsetBlockType
   | RatioHeaderBlockType
   | RatioExerciseBlockType
-  | RatioExerciseOnelineBlockType;
+  | RatioExerciseOnelineBlockType
+  | RatioMathBlockType;
 
 export interface AnyPageType {
   id: number;
