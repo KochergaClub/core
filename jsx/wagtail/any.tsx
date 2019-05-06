@@ -8,11 +8,13 @@ import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
 import RatioSectionPage from './pages/RatioSectionPage';
 import RatioNotebookPage from './pages/RatioNotebookPage';
 
+type AuxPages = { [key: number]: RatioSectionPageType };
+
 interface Props {
   wagtailPage: WagtailPageType;
 
   // FIXME - move to NotebookSectionPage, proxy initial data logic to it
-  ratioSectionPages?: RatioSectionPageType[];
+  ratioSectionPages?: AuxPages;
 }
 
 const UnknownPage = (props: WagtailPageType) => (
@@ -37,7 +39,7 @@ const AnyWagtailPage = (props: Props) => {
       return (
         <RatioNotebookPage
           wagtailPage={wagtailPage}
-          ratioSectionPages={props.ratioSectionPages || []}
+          ratioSectionPages={props.ratioSectionPages || {}}
         />
       );
     default:
@@ -59,10 +61,10 @@ const getInitialData: WagtailInitialLoader = async (
   if (wagtailPage.meta_type === 'ratio.NotebookPage') {
     const ids = wagtailPage.sections.map(section => section.value);
 
-    const sectionPages = [];
+    const sectionPages: AuxPages = {};
     for (const id of ids) {
       const sectionPage = await api.callWagtail(`pages/${id}/?fields=*`);
-      sectionPages.push(sectionPage);
+      sectionPages[id] = sectionPage;
     }
 
     props.ratioSectionPages = sectionPages;

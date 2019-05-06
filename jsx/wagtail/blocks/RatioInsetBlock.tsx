@@ -7,7 +7,9 @@ import { RatioInsetBlockType as Props } from '../types';
 const Paragraph = styled.div`
   border: 1px solid #999;
   background-color: #eee;
-  padding: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-style: italic;
 `;
 
 export default function RatioInsetBlock(block: Props) {
