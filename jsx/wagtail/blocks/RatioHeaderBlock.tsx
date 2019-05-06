@@ -9,6 +9,7 @@ const Header = styled.h1`
   line-height: 1.3;
   text-align: left;
   margin-top: 30px;
+  break-after: avoid;
 `;
 
 export default function RatioHeaderBlock(block: Props) {

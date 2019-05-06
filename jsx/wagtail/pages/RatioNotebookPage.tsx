@@ -32,6 +32,10 @@ const Container = styled.div`
     max-width: 840px;
     padding: 0 20px;
   }
+
+  @media print {
+    font-size: 0.9em;
+  }
 `;
 
 export default function RatioNotebookPage(props: Props) {

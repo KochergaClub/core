@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   max-width: 800px;
   position: relative;
-  page-break-after: always;
+  break-after: page;
   height: 100vh;
   @media screen {
     border-bottom: 1px solid #eee;
