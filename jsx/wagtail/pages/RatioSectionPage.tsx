@@ -20,7 +20,6 @@ const Container = styled.div`
 
 const Header = styled.h1`
   text-align: center;
-  text-decoration: underline;
 `;
 
 export default function RatioSectionPage(props: Props) {
