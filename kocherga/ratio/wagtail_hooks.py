@@ -1,6 +1,16 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
+
+from django.utils.html import format_html
+
+from wagtail.core import hooks
+
 from . import models
+
+
+@hooks.register('insert_editor_css')
+def editor_css():
+    return '<style>.fieldname-ratio_inset { padding: 20px; border: 3px dotted #999; }</style>'
 
 
 class TrainingAdmin(ModelAdmin):
