@@ -1,11 +1,11 @@
 import React from 'react';
-
 import styled from 'styled-components';
 
 import Page from '../../components/Page';
+
 import { RatioSectionPageType as Props } from '../types';
 
-import WagtailBlocks from '../WagtailBlocks';
+import Main from './RatioSectionPage/Main';
 
 const Container = styled.div`
   @font-face {
@@ -18,16 +18,11 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const Header = styled.h1`
-  text-align: center;
-`;
-
 export default function RatioSectionPage(props: Props) {
   return (
     <Page title={props.title} noMenu noFooter>
       <Container>
-        <Header>{props.title}</Header>
-        <WagtailBlocks blocks={props.body} />
+        <Main {...props} />
       </Container>
     </Page>
   );

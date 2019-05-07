@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import Page from '../../components/Page';
 import { RatioSectionPageType, RatioNotebookPageType } from '../types';
-import RatioSectionPage from './RatioSectionPage';
+import RatioSection_Main from './RatioSectionPage/Main';
 
 import SectionTOC from './RatioNotebookPage/SectionTOC';
 import PrintDocument from './RatioNotebookPage/PrintDocument';
@@ -35,7 +35,7 @@ export default function RatioNotebookPage(props: Props) {
             return (
               <SectionContainer key={section.id}>
                 <a id={`section-${sectionPage.meta.slug}`} />
-                <RatioSectionPage {...sectionPage} />
+                <RatioSection_Main {...sectionPage} />
               </SectionContainer>
             );
           })}
