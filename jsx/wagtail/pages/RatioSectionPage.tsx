@@ -8,6 +8,12 @@ import { RatioSectionPageType as Props } from '../types';
 import WagtailBlocks from '../WagtailBlocks';
 
 const Container = styled.div`
+  @font-face {
+    font-family: 'Intro Book';
+    src: url('/static/fonts/intro-pack/Intro-Book.otf');
+  }
+
+  font-family: 'Intro Book';
   max-width: 800px;
   margin: 0 auto;
 `;

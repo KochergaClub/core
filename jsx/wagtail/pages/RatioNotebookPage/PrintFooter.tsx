@@ -26,15 +26,16 @@ export default function PrintFooter() {
     <Container>
       {Array.from(new Array(printContext.page.count)).map((_, i) => {
         const pageNumber = i + 1;
+        const top =
+          (printContext.page.height - printContext.page.bottomMargin) *
+            (pageNumber - 1) +
+          8;
+        console.log(top);
         return (
           <Footer
             key={pageNumber}
             style={{
-              top:
-                (printContext.page.height - printContext.page.bottomMargin) *
-                  (pageNumber - 1) +
-                8 +
-                'mm',
+              top: `${top}mm`,
             }}
           >
             {pageNumber} / {printContext.page.count}

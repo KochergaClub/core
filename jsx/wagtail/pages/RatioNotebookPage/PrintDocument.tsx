@@ -27,6 +27,18 @@ const Container = styled.table`
     padding: 0 20px;
   }
 
+  @font-face {
+    font-family: 'Intro Book';
+    src: url('/static/fonts/intro-pack/Intro-Book.otf');
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: 'Intro Book';
+    src: url('/static/fonts/intro-pack/Intro-Bold.otf');
+    font-weight: bold;
+  }
+  font-family: 'Intro Book';
+
   @media print {
     font-size: 0.9em;
     thead {
@@ -41,7 +53,9 @@ const Container = styled.table`
 
   @page {
     size: A4;
-    margin: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
     margin-bottom: 25.4mm;
   }
 `;
