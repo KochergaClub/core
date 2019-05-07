@@ -1,8 +1,6 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
 
-from django.utils.html import format_html
-
 from wagtail.core import hooks
 
 from . import models
