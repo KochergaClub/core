@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import styled from 'styled-components';
 
-const Container = styled.div`
+import PrintContext from './PrintContext';
+
+interface ContainerProps {
+  pageHeight: number;
+}
+
+const Container = styled.div<ContainerProps>`
   max-width: 800px;
   position: relative;
   break-after: page;
-  height: 100vh;
+  height: ${props => props.pageHeight};
   @media screen {
     border-bottom: 1px solid #eee;
     margin-bottom: 20px;
@@ -14,7 +20,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.section`
-  height: 90vh;
+  height: 80vh;
   padding-top: 30vh;
   margin-left: 100px;
   margin-right: 100px;
@@ -46,8 +52,9 @@ const BrandLine = styled.div`
 `;
 
 export default function Frontpage() {
+  const printContext = useContext(PrintContext);
   return (
-    <Container>
+    <Container pageHeight={printContext.page.height}>
       <Header>Прикладная рациональность: рабочая тетрадь</Header>
       <Training>
         <EventTitle>Выездной воркшоп по рациональности</EventTitle>

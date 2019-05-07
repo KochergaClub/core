@@ -5,10 +5,9 @@ import styled from 'styled-components';
 import { RatioParagraphBlockType as Props } from '../types';
 
 const Paragraph = styled.div`
-  page-break-inside: avoid;
-
   > p {
     text-align: justify;
+    page-break-inside: avoid;
   }
 
   ul,
@@ -17,6 +16,7 @@ const Paragraph = styled.div`
 
     > li {
       margin-bottom: 8px;
+      page-break-inside: avoid; // broken <li> elements are especially bad
     }
   }
 `;
