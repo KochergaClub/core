@@ -1,6 +1,9 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
 
+from django.utils.html import format_html
+from django.contrib.staticfiles.templatetags.staticfiles import static
+
 from wagtail.core import hooks
 
 from . import models
@@ -8,7 +11,18 @@ from . import models
 
 @hooks.register('insert_editor_css')
 def editor_css():
-    return '<style>.fieldname-ratio_inset { padding: 20px; border: 3px dotted #999; }</style>'
+    return """
+    <style>
+    .fieldname-ratio_inset {
+        padding: 20px; border: 3px dotted #999;
+    }
+    </style>
+    """
+
+
+@hooks.register('insert_global_admin_css')
+def global_admin_css():
+    return format_html('<link rel="stylesheet" href="{}">', static('kch-wagtail/global.css'))
 
 
 class TrainingAdmin(ModelAdmin):
@@ -20,6 +34,11 @@ class SectionAdmin(ModelAdmin):
     model = models.SectionPage
     list_display = ('__str__', 'status')
     list_filter = ('status',)
+
+    def get_extra_class_names_for_field_col(self, obj, field_name):
+        if field_name == '__str__':
+            return ['kch-ratio-sectionpage-__str__']
+        return []
 
 
 class NotebookAdmin(ModelAdmin):
