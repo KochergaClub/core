@@ -9,6 +9,7 @@ import RatioSection_Main from './RatioSectionPage/Main';
 import SectionTOC from './RatioNotebookPage/SectionTOC';
 import PrintDocument from './RatioNotebookPage/PrintDocument';
 import Frontpage from './RatioNotebookPage/Frontpage';
+import Emptypage from './RatioNotebookPage/Emptypage';
 import PrintFooter from './RatioNotebookPage/PrintFooter';
 
 type AuxPages = { [key: number]: RatioSectionPageType }; // copy-pasted from ../any.tsx
@@ -28,7 +29,9 @@ export default function RatioNotebookPage(props: Props) {
     <Page title={props.wagtailPage.title} noMenu noFooter wide>
       <PrintDocument footer={footer}>
         <Frontpage />
+        <Emptypage />
         <SectionTOC {...props} />
+        <Emptypage />
         <div>
           {props.wagtailPage.sections.map(section => {
             const sectionPage = props.ratioSectionPages[section.value];

@@ -11,11 +11,12 @@ const Container = styled.div`
   }
 `;
 
-const Footer = styled.footer`
+const Footer = styled.footer<{ align: string }>`
   position: absolute;
   width: 100%;
-  text-align: right;
-  padding-right: 8mm;
+  text-align: ${props => props.align};
+  padding-right: 10mm;
+  padding-left: 10mm;
 `;
 
 // this is actually a header
@@ -30,15 +31,18 @@ export default function PrintFooter() {
           (printContext.page.height - printContext.page.bottomMargin) *
             (pageNumber - 1) +
           8;
-        console.log(top);
+        if (pageNumber <= 4) {
+          return null;
+        }
         return (
           <Footer
             key={pageNumber}
             style={{
               top: `${top}mm`,
             }}
+            align={pageNumber % 2 ? 'right' : 'left'}
           >
-            {pageNumber} / {printContext.page.count}
+            {pageNumber}
           </Footer>
         );
       })}

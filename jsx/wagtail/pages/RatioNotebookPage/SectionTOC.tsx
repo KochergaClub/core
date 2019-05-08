@@ -10,6 +10,7 @@ const Container = styled.div`
   @media screen {
     min-height: 600px;
   }
+  break-after: page;
 `;
 
 const Line = styled.a`
