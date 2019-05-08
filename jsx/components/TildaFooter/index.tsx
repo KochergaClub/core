@@ -13,6 +13,10 @@ import { footerParts } from './constants';
 const Footer = styled.footer`
   background-color: #111111;
   padding: 80px 60px;
+
+  @media print {
+    display: none;
+  }
 `;
 
 const Parts = styled.div`

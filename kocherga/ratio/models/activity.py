@@ -16,11 +16,12 @@ class Activity(models.Model):
     time = models.TimeField('Время')
 
     activity_type = models.CharField('Тип', max_length=40, choices=(
-        ('section', 'Cекция'),
+        ('section', 'Секция'),
         ('break', 'Перерыв'),
         ('bonus', 'Бонус'),
     ))
     name = models.CharField('Название', max_length=255)
+    location = models.CharField('Локация', max_length=255, blank=True)
 
     trainer = models.ForeignKey(
         Trainer,

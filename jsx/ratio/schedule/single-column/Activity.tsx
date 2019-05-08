@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import HR from './HR';
 
-import { ActivityType } from '../types';
+import { ActivityType } from '../../types';
 
 const ActivitySection = styled.section`
   margin-bottom: 32px;

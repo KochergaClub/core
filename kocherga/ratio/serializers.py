@@ -16,8 +16,8 @@ class TicketSerializer(serializers.ModelSerializer):
 
 
 class ActivitySerializer(serializers.ModelSerializer):
-    trainer = serializers.SlugRelatedField(slug_field='short_name', read_only=True)
+    trainer = serializers.SlugRelatedField(slug_field='long_name', read_only=True)
 
     class Meta:
         model = models.Activity
-        fields = ('day', 'time', 'activity_type', 'name', 'trainer')
+        fields = ('day', 'time', 'activity_type', 'name', 'trainer', 'location')

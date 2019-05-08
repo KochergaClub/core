@@ -25,6 +25,10 @@ const Container = styled('div')<{ hideOnMobile: boolean; team: boolean }>`
     height: auto;
     padding: 20px 0;
   }
+
+  @media print {
+    display: none;
+  }
 `;
 
 const Logo = ({ team }: Props) => (

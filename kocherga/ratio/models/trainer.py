@@ -9,6 +9,7 @@ class Trainer(models.Model):
         related_name='ratio_trainer',
     )
     short_name = models.CharField('Короткое имя', max_length=40)
+    long_name = models.CharField('Длинное имя', max_length=255)
 
     class Meta:
         verbose_name = 'Тренер'

@@ -17,6 +17,7 @@ export interface ActivityType {
   activity_type: string;
   name: string;
   trainer: string;
+  location?: string;
 }
 
 export interface DayScheduleType {

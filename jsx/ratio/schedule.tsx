@@ -1,108 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
-import Activity from './components/Activity';
-import HR from './components/HR';
+import { ActivityType, Training } from './types';
 
-import { ActivityType, DayScheduleType, Training } from './types';
+import SingleColumnSchedule from './schedule/SingleColumnSchedule';
+import MultiColumnSchedule from './schedule/MultiColumnSchedule';
 
-const Container = styled.div`
-  text-align: center;
-`;
-
-const DayFooter = styled.footer`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: #666;
-
-  @media print {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  }
-`;
-
-const DayFooterBranding = styled.div`
-  display: flex;
-  align-items: center;
-  font-family: Intro;
-
-  img {
-    height: 32px;
-    margin-right: 8px;
-  }
-`;
-
-const DayContainer = styled.section`
-  page-break-after: always;
-
-  @media screen {
-    margin-top: 40px;
-    margin-bottom: 40px;
-  }
-`;
-
-const DayHeader = styled.header`
-  font-size: 32px;
-  font-weight: bold;
-`;
-
-const DaySchedule = ({
-  day_schedule,
-  long_name,
-}: {
-  day_schedule: DayScheduleType;
-  long_name: string;
-}) => (
-  <DayContainer>
-    <DayHeader>День {day_schedule.day}</DayHeader>
-    <HR />
-
-    {day_schedule.activities.map(activity => <Activity activity={activity} />)}
-
-    <DayFooter>
-      <DayFooterBranding>
-        <img src="/static/logo.png" />
-        <div>Кочерга</div>
-      </DayFooterBranding>
-      <div>{long_name}</div>
-    </DayFooter>
-  </DayContainer>
-);
+const Container = styled.div``;
 
 const PageHeader = styled.header`
+  text-align: center;
+
   @media print {
     display: none;
   }
 `;
-
-function groupByDay(schedule: ActivityType[]) {
-  const scheduleByDay: { [key: number]: ActivityType[] } = {};
-  for (const activity of schedule) {
-    if (!scheduleByDay[activity.day]) {
-      scheduleByDay[activity.day] = [];
-    }
-    scheduleByDay[activity.day].push(activity);
-  }
-
-  const days = ((Object.keys(scheduleByDay) as unknown) as number[]).sort(
-    (a, b) => a - b
-  );
-
-  const result: DayScheduleType[] = [];
-  for (const day of days) {
-    result.push({
-      day,
-      activities: scheduleByDay[day],
-    });
-  }
-  return result;
-}
 
 interface Props {
   name: string;
@@ -111,28 +27,37 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const RatioSchedulePage = ({ name, long_name, schedule }: Props) => (
-  <Page title={name} team>
-    <Container>
-      <PageHeader>
-        <h1>
-          <a href="../">{name}</a>
-        </h1>
-        <a href={`/admin/ratio/training/${name}/change/`}>
-          (Редактировать расписание)
-        </a>
-      </PageHeader>
+const RatioSchedulePage = ({ name, long_name, schedule }: Props) => {
+  const [multiColumn, setMultiColumn] = useState(false);
 
-      {groupByDay(schedule).map(day_schedule => (
-        <DaySchedule
-          day_schedule={day_schedule}
-          long_name={long_name}
-          key={day_schedule.day}
-        />
-      ))}
-    </Container>
-  </Page>
-);
+  console.log(multiColumn);
+  const Component = multiColumn ? MultiColumnSchedule : SingleColumnSchedule;
+
+  return (
+    <Page title={name} team>
+      <Container>
+        <PageHeader>
+          <h1>
+            <a href="../">{name}</a>
+          </h1>
+          <a href={`/admin/ratio/training/${name}/change/`}>
+            (Редактировать расписание)
+          </a>
+          <div>
+            <input
+              type="checkbox"
+              checked={multiColumn}
+              onChange={e => setMultiColumn(e.currentTarget.checked)}
+            />
+            несколько колонок
+          </div>
+        </PageHeader>
+
+        <Component schedule={schedule} long_name={long_name} />
+      </Container>
+    </Page>
+  );
+};
 
 const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
   const trainingName = params.name;
