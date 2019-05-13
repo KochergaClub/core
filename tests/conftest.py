@@ -27,8 +27,8 @@ def google_object():
         'end': {
             'dateTime': '2017-12-10T12:30:00+03:00',
         },
-#        'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
-#        'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
+        # 'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
+        # 'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
     }
 
     obj = kocherga.events.google.insert_event(obj)
@@ -39,13 +39,16 @@ def google_object():
     except googleapiclient.errors.HttpError:
         pass  # might be deleted already
 
+
 @pytest.fixture(scope='session')
 def vk_image_file():
     return str(Path(__file__).parent / 'images' / 'vk')
 
+
 @pytest.fixture(scope='session')
 def image_file():
     return str(Path(__file__).parent / 'images' / 'default')
+
 
 @pytest.fixture
 def image_storage(tmpdir):
@@ -54,6 +57,7 @@ def image_storage(tmpdir):
     settings.DATA_DIR = str(tmpdir)
     kocherga.images.image_storage = kocherga.images.init_global_image_storage()
     return kocherga.images.image_storage
+
 
 @pytest.fixture
 def event(image_file, vk_image_file):
@@ -108,6 +112,7 @@ def minimal_event():
 
     kocherga.events.db.delete_event(event.google_id)
 
+
 @pytest.fixture
 def event_for_edits():
     dt = datetime.now(TZ) + timedelta(days=2)
@@ -124,9 +129,11 @@ def event_for_edits():
 
     kocherga.events.db.delete_event(event.google_id)
 
+
 @pytest.fixture
 def imported_events(db, transactional_db):
     kocherga.events.db.Importer().import_all()
+
 
 @pytest.fixture
 def common_prototype(db):
@@ -140,6 +147,7 @@ def common_prototype(db):
     )
     prototype.save()
     return prototype
+
 
 @pytest.fixture
 def common_team(db):
@@ -171,3 +179,26 @@ def common_team(db):
         short_name='Робин',
         is_current=False,
     )
+
+
+# Override pytest-django's admin_user fixture, since it's not compatible
+# with our User.objects.create_superuser(email, password).
+@pytest.fixture
+def admin_user(db):
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+    email = 'admin@example.com'
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        user = User.objects.create_superuser(email=email, password='password')
+
+    return user
+
+
+@pytest.fixture()
+def admin_client(client, admin_user):
+    client.login(username=admin_user.email, password="password")
+    return client

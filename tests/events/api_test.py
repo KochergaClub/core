@@ -9,8 +9,8 @@ import json
 from kocherga.events.models import Event
 
 
-def test_events(client, imported_events, kocherga_auth_header):
-    res = client.get('/api/events', **kocherga_auth_header)
+def test_events(admin_client, imported_events):
+    res = admin_client.get('/api/events')
     assert res.status_code == 200
     events = res.json()
 
@@ -19,10 +19,9 @@ def test_events(client, imported_events, kocherga_auth_header):
     assert '2017' in events[0]['start']
 
 
-def test_events_from_date(client, imported_events, kocherga_auth_header):
-    res = client.get(
+def test_events_from_date(admin_client, imported_events):
+    res = admin_client.get(
         '/api/events?from_date=2018-01-01&to_date=2018-01-14',
-        **kocherga_auth_header
     )
     assert res.status_code == 200
     events = res.json()
@@ -32,13 +31,12 @@ def test_events_from_date(client, imported_events, kocherga_auth_header):
     assert '2018' in events[0]['start']
 
 
-def test_upload_image(client, image_storage, event, kocherga_auth_header):
-    res = client.post(
+def test_upload_image(admin_client, image_storage, event):
+    res = admin_client.post(
         f'/api/event/{event.google_id}/image/vk',
         {
             'file': open('tests/images/vk', 'rb'),
         },
-        **kocherga_auth_header,
     )
 
     assert b'JFIF' in open(Event.by_id(event.google_id).image_file('vk'), 'rb').read()[:10]
@@ -46,14 +44,13 @@ def test_upload_image(client, image_storage, event, kocherga_auth_header):
     assert res.status_code == 200
 
 
-def test_upload_image_from_url(client, image_storage, event, kocherga_auth_header):
-    res = client.post(
+def test_upload_image_from_url(admin_client, image_storage, event):
+    res = admin_client.post(
         f'/api/event/{event.google_id}/image_from_url/default',
         json.dumps({
             'url': 'https://wiki.admin.kocherga.club/resources/assets/kch.png',
         }),
         content_type='application/json',
-        **kocherga_auth_header,
     )
 
     assert b'PNG' in open(Event.by_id(event.google_id).image_file('default'), 'rb').read()[:10]
@@ -61,8 +58,8 @@ def test_upload_image_from_url(client, image_storage, event, kocherga_auth_heade
     assert res.status_code == 200
 
 
-def test_create(client, kocherga_auth_header):
-    res = client.post(
+def test_create(admin_client):
+    res = admin_client.post(
         '/api/events',
         json.dumps({
             'title': 'test event',
@@ -71,16 +68,14 @@ def test_create(client, kocherga_auth_header):
             'endTime': '19:00',
         }),
         content_type='application/json',
-        **kocherga_auth_header,
     )
     assert res.status_code == 201
     event_json = res.json()
 
     assert event_json['title'] == 'test event'
 
-    res = client.get(
+    res = admin_client.get(
         f'/api/event/{event_json["id"]}',
-        **kocherga_auth_header,
     )
     assert res.status_code == 200
 
@@ -90,7 +85,7 @@ def test_create(client, kocherga_auth_header):
 
 def test_public_events(client):
     res = client.get('/api/public_events')
-    assert res.status_code == 400
+    assert res.status_code == 200  # public_events without the specific date is allowed for now
 
     res = client.get('/api/public_events?date=2019-01-12')
     assert res.status_code == 200
@@ -99,35 +94,32 @@ def test_public_events(client):
     assert type(events) == list
 
 
-def test_add_tag(event, client, kocherga_auth_header):
-    res = client.post(
+def test_add_tag(event, admin_client):
+    res = admin_client.post(
         f'/api/event/{event.google_id}/tag/mytag',
         content_type='application/json',
-        **kocherga_auth_header,
     )
     assert res.status_code == 200
     event.refresh_from_db()
     assert 'mytag' in event.tag_names()
 
 
-def test_retrieve(event, client, kocherga_auth_header):
-    res = client.get(
+def test_retrieve(event, admin_client):
+    res = admin_client.get(
         f'/api/event/{event.google_id}',
         content_type='application/json',
-        **kocherga_auth_header,
     )
     assert res.status_code == 200
     assert res.json()['title'] == event.title
 
 
-def test_update(event, client, kocherga_auth_header):
-    res = client.patch(
+def test_update(event, admin_client):
+    res = admin_client.patch(
         f'/api/event/{event.google_id}',
         json.dumps({
             'title': 'updated title',
         }),
         content_type='application/json',
-        **kocherga_auth_header,
     )
     assert res.status_code == 200
     assert res.json()['title'] == 'updated title'
@@ -135,13 +127,12 @@ def test_update(event, client, kocherga_auth_header):
     assert Event.objects.get(pk=event.google_id).title == 'updated title'
 
 
-def test_forbidden_update(event, client, kocherga_auth_header):
-    client.patch(
+def test_forbidden_update(event, admin_client):
+    admin_client.patch(
         f'/api/event/{event.google_id}',
         json.dumps({
             'prototype_id': 123,
         }),
         content_type='application/json',
-        **kocherga_auth_header,
     )
     assert Event.objects.get(pk=event.google_id).prototype_id is None

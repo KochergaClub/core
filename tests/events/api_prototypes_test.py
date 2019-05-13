@@ -11,28 +11,28 @@ class TestPrototypes:
         res = client.get('/api/event_prototypes')
         assert res.status_code == 403
 
-    def test_list_as_user(self, client, user_auth_header):
-        res = client.get('/api/event_prototypes', **user_auth_header)
+    def test_list_as_user(self, client):
+        res = client.get('/api/event_prototypes')
         assert res.status_code == 403
 
-    def test_list_empty(self, client, kocherga_auth_header):
-        res = client.get('/api/event_prototypes', **kocherga_auth_header)
+    def test_list_empty(self, admin_client):
+        res = admin_client.get('/api/event_prototypes')
         assert res.status_code == 200
         prototypes = res.json()
 
         assert type(prototypes) == list
         assert len(prototypes) == 0
 
-    def test_list_populated(self, client, kocherga_auth_header, common_prototype):
-        res = client.get('/api/event_prototypes', **kocherga_auth_header)
+    def test_list_populated(self, admin_client, common_prototype):
+        res = admin_client.get('/api/event_prototypes')
         assert res.status_code == 200
         prototypes = res.json()
 
         assert type(prototypes) == list
         assert len(prototypes) == 1
 
-    def test_create(self, client, kocherga_auth_header):
-        res = client.post(
+    def test_create(self, admin_client):
+        res = admin_client.post(
             '/api/event_prototypes',
             json.dumps({
                 'title': 'hello',
@@ -43,24 +43,22 @@ class TestPrototypes:
                 'length': 120,
             }),
             content_type='application/json',
-            **kocherga_auth_header,
         )
         assert res.status_code == 201
 
-        res = client.get('/api/event_prototypes', **kocherga_auth_header)
+        res = admin_client.get('/api/event_prototypes')
         assert res.status_code == 200
         prototypes = res.json()
 
         assert type(prototypes) == list
         assert len(prototypes) == 1
 
-    def test_upload_image(self, client, image_storage, common_prototype, kocherga_auth_header):
-        res = client.post(
+    def test_upload_image(self, admin_client, image_storage, common_prototype):
+        res = admin_client.post(
             f'/api/event_prototypes/{common_prototype.prototype_id}/image',
             {
                 'file': open('tests/images/default', 'rb'),
             },
-            **kocherga_auth_header,
         )
 
         assert b'JFIF' in open(EventPrototype.by_id(common_prototype.prototype_id).image_file(), 'rb').read()[:10]
