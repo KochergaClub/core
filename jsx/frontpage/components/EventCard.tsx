@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { Row } from '@kocherga/frontkit';
-
 import { timezone, formatDate } from '~/common/utils';
 
 import { PublicEvent } from '../../events/types';

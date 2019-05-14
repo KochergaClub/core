@@ -18,7 +18,7 @@ export const TLHeader = styled.header<{ size: string }>`
   }
 `;
 
-export const TLDescription = styled.div<{ large: boolean }>`
+export const TLDescription = styled.div<{ large?: boolean }>`
   margin: 0 auto;
   max-width: 960px;
   padding: 0 20px;
