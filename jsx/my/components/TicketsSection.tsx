@@ -2,9 +2,12 @@ import React, { useContext, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Button } from '@kocherga/frontkit';
+import { utcToZonedTime } from 'date-fns-tz';
+
+import { Button, Column } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
+import { timezone, formatDate } from '~/common/utils';
 
 import { MyTicket } from '../types';
 import { MyDispatch } from '../store';
@@ -47,9 +50,13 @@ const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
     },
     [ticket.event.event_id]
   );
+
+  const zonedStart = utcToZonedTime(ticket.event.start, timezone);
+
   return (
     <div>
       <a href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</a>
+      <div>{formatDate(zonedStart, 'd MMMM, HH:mm')}</div>
       <Button small loading={loading} disabled={loading} onClick={cancel}>
         Отменить
       </Button>
@@ -67,13 +74,12 @@ const TicketsList = ({ tickets }: Props) => {
   }
 
   return (
-    <div>
+    <Column>
+      <h3>Вы собираетесь на эти события:</h3>
       {tickets.map(ticket => (
-        <div key={ticket.event.event_id}>
-          <TicketCard ticket={ticket} />
-        </div>
+        <TicketCard key={ticket.event.event_id} ticket={ticket} />
       ))}
-    </div>
+    </Column>
   );
 };
 

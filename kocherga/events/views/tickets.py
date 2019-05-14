@@ -1,8 +1,12 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from datetime import datetime, time
+
 import django.http
 from rest_framework import generics, mixins, permissions, exceptions
+
+from kocherga.dateutils import TZ
 
 from .. import models, serializers
 
@@ -53,7 +57,9 @@ class MyEventTicketView(
 
     def get_queryset(self):
         return models.Ticket.objects.filter(
-            user=self.request.user
+            user=self.request.user,
+            # only future event tickets can be operated upon
+            event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
         )
 
     def get(self, request, *args, **kwargs):
@@ -89,5 +95,6 @@ class MyTicketView(
 
     def get_queryset(self):
         return models.Ticket.objects.filter(
-            user=self.request.user
+            user=self.request.user,
+            event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
         )
