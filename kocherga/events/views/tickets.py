@@ -2,7 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from .. import models, serializers
-from rest_framework import generics, permissions, exceptions
+from rest_framework import views, generics, permissions, exceptions
+from rest_framework.response import Response
 
 
 class Permission(permissions.BasePermission):
@@ -46,3 +47,23 @@ class EventTicketView(generics.ListCreateAPIView):
                 user=user,
                 event=event,
             )
+
+
+class MyEventTicketView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_event(self, event_id):
+        # TODO - support tickets for non-public events (with proper permissions handling)
+        return models.Event.objects.public_events().get(
+            pk=event_id
+        )
+
+    def get(self, request, event_id):
+        user = self.request.user
+        event = self.get_event(event_id)
+
+        try:
+            ticket = models.Ticket.objects.get(user=user, event=event)
+            return Response(serializers.EventTicketSerializer(ticket).data)
+        except models.Ticket.DoesNotExist:
+            raise exceptions.NotFound()
