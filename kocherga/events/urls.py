@@ -25,6 +25,8 @@ urlpatterns += [
     path('events/<event_id>/image/<image_type>', views.events.ImageView.as_view()),
     path('events/<event_id>/image_from_url/<image_type>', views.events.ImageFromUrlView.as_view()),
     path('events/<event_id>/tag/<tag_name>', views.events.TagView.as_view()),
+
+    path('my/tickets', views.tickets.MyTicketView.as_view()),
 ]
 
 

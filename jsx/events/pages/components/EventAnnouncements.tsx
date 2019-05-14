@@ -17,7 +17,7 @@ export default function EventAnnouncements({ event }: { event: PublicEvent }) {
       {(['vk', 'fb', 'timepad'] as AnnouncementKey[])
         .filter(key => event.announcements[key])
         .map(key => (
-          <span>
+          <span key={key}>
             {' '}
             <a href={event.announcements[key].link}>{key}</a>
           </span>

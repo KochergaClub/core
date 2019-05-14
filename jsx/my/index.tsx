@@ -5,13 +5,14 @@ import { APIError } from '../common/api';
 
 import CustomerSection from './components/CustomerSection';
 import NonCustomerSection from './components/NonCustomerSection';
+import TicketsSection from './components/TicketsSection';
 import SetPassword from './components/SetPassword';
 import LogoutButton from './components/LogoutButton';
 
 import Page from '../components/Page';
 import PageTitle from '../components/PageTitle';
 
-import { Customer, Order } from './types';
+import { Customer, Order, MyTicket } from './types';
 
 const AdminSection = () => (
   <div>
@@ -25,10 +26,18 @@ interface Props {
   customer?: Customer;
   orders_count?: number;
   orders?: Order[];
+  tickets: MyTicket[];
   children?: React.ReactNode;
 }
 
-const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
+const MyPage = ({
+  email,
+  customer,
+  orders_count,
+  orders,
+  is_staff,
+  tickets,
+}: Props) => (
   <Page title="Личный кабинет">
     <PageTitle>Личный кабинет Кочерги</PageTitle>
     <div>
@@ -47,6 +56,7 @@ const MyPage = ({ email, customer, orders_count, orders, is_staff }: Props) => (
         <NonCustomerSection />
       )}
       <SetPassword />
+      <TicketsSection tickets={tickets} />
     </div>
   </Page>
 );
@@ -60,6 +70,7 @@ const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
   let data: Props = {
     email: user.email,
     is_staff: user.is_staff || false,
+    tickets: [],
   };
 
   try {
@@ -78,6 +89,9 @@ const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
       throw e;
     }
   }
+
+  data.tickets = await api.call('my/tickets', 'GET');
+
   return data;
 };
 

@@ -79,3 +79,15 @@ class MyEventTicketView(
                 user=user,
                 event=event,
             )
+
+
+class MyTicketView(
+        generics.ListAPIView,
+):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = serializers.MyTicketSerializer
+
+    def get_queryset(self):
+        return models.Ticket.objects.filter(
+            user=self.request.user
+        )

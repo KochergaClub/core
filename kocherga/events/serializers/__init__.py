@@ -1,6 +1,6 @@
 from .event import PublicEventSerializer, EventSerializer
 from .event_prototype import EventPrototypeSerializer, DetailedEventPrototypeSerializer
-from .ticket import EventTicketSerializer
+from .ticket import EventTicketSerializer, MyTicketSerializer
 
 __all__ = [
     'PublicEventSerializer',
@@ -8,4 +8,5 @@ __all__ = [
     'EventPrototypeSerializer',
     'DetailedEventPrototypeSerializer',
     'EventTicketSerializer',
+    'MyTicketSerializer',
 ]

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .. import models
+from .event import PublicEventSerializer
 
 
 class EventTicketSerializer(serializers.ModelSerializer):
@@ -9,3 +10,11 @@ class EventTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ticket
         fields = ('id', 'user')
+
+
+class MyTicketSerializer(serializers.ModelSerializer):
+    event = PublicEventSerializer(read_only=True)
+
+    class Meta:
+        model = models.Ticket
+        fields = ('event',)
