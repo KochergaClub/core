@@ -36,8 +36,8 @@ class TestAnyLogin:
     def test_no_credentials(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({}),
-            content_type='application/json',
+            {},
+            format='json',
         )
         assert res.json()['detail'] == "credentials are not set"
         assert res.status_code == 400
@@ -45,10 +45,10 @@ class TestAnyLogin:
     def test_empty_credentials(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {},
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.json()['detail'].startswith("One of `token`")
         assert res.status_code == 400
@@ -58,13 +58,13 @@ class TestTokenLogin:
     def test_bad_token(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'token': 'bad',
                 },
                 'result': 'cookie',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.json()['detail'] == "Некорректные учетные данные."
         assert res.status_code == 403
@@ -72,12 +72,12 @@ class TestTokenLogin:
     def test_result_param_required(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'token': get_magic_token('test@example.com'),
                 },
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.json()['detail'] == "result parameter is not set"
         assert res.status_code == 400
@@ -85,13 +85,13 @@ class TestTokenLogin:
     def test_result_param(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'token': get_magic_token('test@example.com'),
                 },
                 'result': 'unknown',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.json()['detail'] == "Only `cookie` result is supported"
         assert res.status_code == 400
@@ -99,13 +99,13 @@ class TestTokenLogin:
     def test_good(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'token': get_magic_token('test@example.com'),
                 },
                 'result': 'cookie',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 200
         assert res.json()['registered'] is True
@@ -120,13 +120,13 @@ class TestTokenLogin:
         for i in range(2):
             res = client.post(
                 '/api/auth/login',
-                json.dumps({
+                {
                     'credentials': {
                         'token': get_magic_token('test@example.com'),
                     },
                     'result': 'cookie',
-                }),
-                content_type='application/json',
+                },
+                format='json',
             )
         assert res.status_code == 200
         assert res.json()['registered'] is False
@@ -139,13 +139,13 @@ class TestPasswordLogin:
     def test_no_password(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'email': self.EMAIL,
                 },
                 'result': 'cookie',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.json()['detail'].startswith("One of `token`")
         assert res.status_code == 400
@@ -153,14 +153,14 @@ class TestPasswordLogin:
     def test_bad_password_wrong_user(self, client):
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'email': self.EMAIL,
                     'password': 'password_for_nonexistent_user'
                 },
                 'result': 'cookie',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.json()['detail'] == "Некорректные учетные данные."
         assert res.status_code == 403
@@ -170,14 +170,14 @@ class TestPasswordLogin:
 
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'email': self.EMAIL,
                     'password': 'bad_password'
                 },
                 'result': 'cookie',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 403
 
@@ -188,14 +188,14 @@ class TestPasswordLogin:
 
         res = client.post(
             '/api/auth/login',
-            json.dumps({
+            {
                 'credentials': {
                     'email': self.EMAIL,
                     'password': self.PASSWORD,
                 },
                 'result': 'cookie',
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 200
         assert res.json()['registered'] is False
@@ -214,10 +214,10 @@ class TestSetPassword:
 
         res = client.post(
             '/api/auth/set-password',
-            json.dumps({
+            {
                 'old_password': self.PASSWORD,
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 403
         assert res.json()['detail'], 'Учетные данные не были предоставлены.'
@@ -228,10 +228,10 @@ class TestSetPassword:
 
         res = client.post(
             '/api/auth/set-password',
-            json.dumps({
+            {
                 'new_password': self.NEW_PASSWORD,
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
 
         assert res.status_code == 200
@@ -245,10 +245,10 @@ class TestSetPassword:
 
         res = client.post(
             '/api/auth/set-password',
-            json.dumps({
+            {
                 'new_password': self.NEW_PASSWORD,
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 403
         assert res.json()['detail'] == '`old_password` is not set but user has a password'
@@ -261,11 +261,11 @@ class TestSetPassword:
 
         res = client.post(
             '/api/auth/set-password',
-            json.dumps({
+            {
                 'old_password': self.PASSWORD,
                 'new_password': self.NEW_PASSWORD,
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 200
 

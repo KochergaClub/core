@@ -4,8 +4,6 @@ pytestmark = [
     pytest.mark.google,  # events require google for now (don't forget to remove this later)
 ]
 
-import json
-
 
 def test_timepad_categories(client, kocherga_auth_header):
     res = client.get(
@@ -43,8 +41,8 @@ def test_fb_groups(client, event, kocherga_auth_header):
 def test_weekly_digest(client, kocherga_auth_header):
     res = client.post(
         '/api/announcements/email/post_digest',
-        json.dumps({}),
-        content_type='application/json',
+        {},
+        format='json',
         **kocherga_auth_header
     )
     assert res.status_code == 200

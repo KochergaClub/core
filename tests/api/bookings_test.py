@@ -4,8 +4,6 @@ pytestmark = [
     pytest.mark.google,  # events require google for now (don't forget to remove this later)
 ]
 
-import json
-
 from datetime import datetime, timedelta
 
 
@@ -18,14 +16,14 @@ def dt():
 def event18(client, user_auth_header, dt):
     res = client.post(
         '/api/bookings',
-        json.dumps({
+        {
             'date': dt.strftime('%Y-%m-%d'),
             'room': 'Летняя',
             'people': '3',
             'startTime': '18:00',
             'endTime': '19:00',
-        }),
-        content_type='application/json',
+        },
+        format='json',
         **user_auth_header,
     )
     return res

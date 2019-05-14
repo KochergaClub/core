@@ -47,10 +47,10 @@ def test_upload_image(admin_client, image_storage, event):
 def test_upload_image_from_url(admin_client, image_storage, event):
     res = admin_client.post(
         f'/api/event/{event.google_id}/image_from_url/default',
-        json.dumps({
+        {
             'url': 'https://wiki.admin.kocherga.club/resources/assets/kch.png',
-        }),
-        content_type='application/json',
+        },
+        format='json',
     )
 
     assert b'PNG' in open(Event.by_id(event.google_id).image_file('default'), 'rb').read()[:10]
@@ -97,7 +97,6 @@ def test_public_events(client):
 def test_add_tag(event, admin_client):
     res = admin_client.post(
         f'/api/event/{event.google_id}/tag/mytag',
-        content_type='application/json',
     )
     assert res.status_code == 200
     event.refresh_from_db()
@@ -107,7 +106,6 @@ def test_add_tag(event, admin_client):
 def test_retrieve(event, admin_client):
     res = admin_client.get(
         f'/api/event/{event.google_id}',
-        content_type='application/json',
     )
     assert res.status_code == 200
     assert res.json()['title'] == event.title
@@ -116,10 +114,10 @@ def test_retrieve(event, admin_client):
 def test_update(event, admin_client):
     res = admin_client.patch(
         f'/api/event/{event.google_id}',
-        json.dumps({
+        {
             'title': 'updated title',
-        }),
-        content_type='application/json',
+        },
+        format='json',
     )
     assert res.status_code == 200
     assert res.json()['title'] == 'updated title'
@@ -130,9 +128,9 @@ def test_update(event, admin_client):
 def test_forbidden_update(event, admin_client):
     admin_client.patch(
         f'/api/event/{event.google_id}',
-        json.dumps({
+        {
             'prototype_id': 123,
-        }),
-        content_type='application/json',
+        },
+        format='json',
     )
     assert Event.objects.get(pk=event.google_id).prototype_id is None

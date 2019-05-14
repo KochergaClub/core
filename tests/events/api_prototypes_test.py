@@ -1,8 +1,6 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
-import json
-
 from kocherga.events.models import EventPrototype
 
 
@@ -34,15 +32,15 @@ class TestPrototypes:
     def test_create(self, admin_client):
         res = admin_client.post(
             '/api/event_prototypes',
-            json.dumps({
+            {
                 'title': 'hello',
                 'location': 'лекционная',
                 'weekday': 3,
                 'hour': 15,
                 'minute': 30,
                 'length': 120,
-            }),
-            content_type='application/json',
+            },
+            format='json',
         )
         assert res.status_code == 201
 

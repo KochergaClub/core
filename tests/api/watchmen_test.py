@@ -36,7 +36,6 @@ def manager_user(django_user_model):
 def test_list_by_anon(client):
     res = client.get(
         '/api/watchmen/schedule',
-        content_type='application/json',
     )
     assert res.status_code == 403
 
@@ -46,7 +45,6 @@ def test_list_by_basic_user(client, basic_user):
 
     res = client.get(
         '/api/watchmen/schedule',
-        content_type='application/json',
     )
     assert res.status_code == 403
 
@@ -57,7 +55,6 @@ def test_list_by_staff(client, staff_user):
     with freeze_time('2019-03-01 10:00'):
         res = client.get(
             '/api/watchmen/schedule',
-            content_type='application/json',
         )
         assert res.status_code == 200
 
@@ -72,7 +69,7 @@ def test_update_by_staff(client, staff_user):
     res = client.put(
         '/api/watchmen/schedule/2019-03-05/MORNING',
         {},
-        content_type='application/json',
+        format='json',
     )
     assert res.status_code == 403  # staff is not enough, should be manager
 
@@ -83,7 +80,7 @@ def test_update_unknown_watchman(client, manager_user):
     res = client.patch(
         '/api/watchmen/schedule/2019-03-05/MORNING',
         {'watchman': 'hello'},
-        content_type='application/json',
+        format='json',
     )
     assert res.status_code == 400
 
@@ -99,7 +96,7 @@ def test_update(client, manager_user):
     res = client.patch(
         '/api/watchmen/schedule/2019-03-05/MORNING',
         {'watchman': watchman.short_name},
-        content_type='application/json',
+        format='json',
     )
     assert res.status_code == 200
 
@@ -118,7 +115,7 @@ def test_update_invalid(client, manager_user):
     res = client.patch(
         '/api/watchmen/schedule/2019-03-05/MORNING',
         {'watchman': watchman.short_name, 'is_night': True},
-        content_type='application/json',
+        format='json',
     )
     assert res.status_code == 400
     print(res.json())
