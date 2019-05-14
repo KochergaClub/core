@@ -27,6 +27,7 @@ export function renderEntrypoint<T>(
   const el = React.createElement(Entrypoint, {
     screen,
     csrfToken: context.api.csrfToken,
+    user: context.user,
     innerProps: props,
   });
 
