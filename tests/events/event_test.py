@@ -118,11 +118,13 @@ class TestManager:
         assert type(public_events) == django.db.models.query.QuerySet
         assert public_events.count() == 0
 
-    def test_public_events_single(self, event):
-        event.posted_vk = 'blah'  # should be non-empty
-        event.save()
-
+    def test_public_events_only_public(self, event):
         public_events = Event.objects.public_events(date=event.start.date())
+        assert type(public_events) == django.db.models.query.QuerySet
+        assert public_events.count() == 0
+
+    def test_public_events_single(self, public_event):
+        public_events = Event.objects.public_events(date=public_event.start.date())
 
         assert type(public_events) == django.db.models.query.QuerySet
         assert public_events.count() == 1

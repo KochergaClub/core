@@ -61,13 +61,13 @@ def test_upload_image_from_url(admin_client, image_storage, event):
 def test_create(admin_client):
     res = admin_client.post(
         '/api/events',
-        json.dumps({
+        {
             'title': 'test event',
             'date': '2018-06-01',
             'startTime': '18:00',
             'endTime': '19:00',
-        }),
-        content_type='application/json',
+        },
+        format='json',
     )
     assert res.status_code == 201
     event_json = res.json()

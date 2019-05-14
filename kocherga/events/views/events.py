@@ -23,14 +23,14 @@ from kocherga.error import PublicError
 
 import kocherga.events.db
 from kocherga.events.models import Event
-from kocherga.events.serializers import PublicEventSerializer, EventSerializer
+from kocherga.events import serializers
 
 from kocherga.api.common import ok
 
 
 class RootView(generics.ListCreateAPIView):
     permission_classes = (IsAdminUser,)
-    serializer_class = EventSerializer
+    serializer_class = serializers.EventSerializer
 
     def get_queryset(self):
         def arg2date(arg):
@@ -69,7 +69,7 @@ class RootView(generics.ListCreateAPIView):
 
 class ObjectView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
-    serializer_class = EventSerializer
+    serializer_class = serializers.EventSerializer
     queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
     lookup_url_kwarg = 'event_id'
 
@@ -134,7 +134,7 @@ class TagView(APIView):
 
 class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
-    serializer_class = PublicEventSerializer
+    serializer_class = serializers.PublicEventSerializer
 
     def get_queryset(self):
         def arg2date(arg):
@@ -161,7 +161,7 @@ def r_list_public_today(request):
         tag=request.query_params.get('tag'),
     )
     return Response([
-        PublicEventSerializer(event).data
+        serializers.PublicEventSerializer(event).data
         for event in events[:1000]
     ])
 

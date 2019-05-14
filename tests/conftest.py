@@ -1,6 +1,9 @@
 import pytest
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from kocherga.staff.models import Member, AltEmail
+
 
 import googleapiclient.errors
 
@@ -151,9 +154,6 @@ def common_prototype(db):
 
 @pytest.fixture
 def common_team(db):
-    from django.contrib.auth import get_user_model
-    from kocherga.staff.models import Member, AltEmail
-
     Member.objects.create(
         user=get_user_model().objects.create_user('yudkowsky@example.com', is_staff=True),
         short_name='Элиезер',
@@ -185,8 +185,6 @@ def common_team(db):
 # with our User.objects.create_superuser(email, password).
 @pytest.fixture
 def admin_user(db):
-    from django.contrib.auth import get_user_model
-
     User = get_user_model()
     email = 'admin@example.com'
 
@@ -196,6 +194,12 @@ def admin_user(db):
         user = User.objects.create_superuser(email=email, password='password')
 
     return user
+
+
+@pytest.fixture()
+def client():
+    from rest_framework.test import APIClient
+    return APIClient()
 
 
 @pytest.fixture()
