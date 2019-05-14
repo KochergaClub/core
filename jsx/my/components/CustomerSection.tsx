@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 
-import { Button } from '@kocherga/frontkit';
-
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { useAPI } from '../../common/hooks';
-import { timezone, formatDate } from '../../common/utils';
+import { Button } from '@kocherga/frontkit';
+
+import { useAPI } from '~/common/hooks';
+import { timezone, formatDate } from '~/common/utils';
 
 import { Customer, Order } from '../types';
 

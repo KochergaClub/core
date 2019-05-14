@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import { APIError } from '../common/api';
+import { Column, RowNav } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import { APIError } from '~/common/api';
 
 import CustomerSection from './components/CustomerSection';
 import NonCustomerSection from './components/NonCustomerSection';
 import TicketsSection from './components/TicketsSection';
-import SetPassword from './components/SetPassword';
+import SettingsSection from './components/SettingsSection';
 import LogoutButton from './components/LogoutButton';
 
-import Page from '../components/Page';
-import PageTitle from '../components/PageTitle';
+import Page from '~/components/Page';
+import PageTitle from '~/components/PageTitle';
 
 import { Customer, Order, MyTicket } from './types';
 
@@ -37,30 +39,56 @@ const MyPage = ({
   orders,
   is_staff,
   tickets,
-}: Props) => (
-  <Page title="Личный кабинет">
-    <PageTitle>Личный кабинет Кочерги</PageTitle>
-    <div>
-      <div>
-        Аккаунт: <code>{email}</code>. <LogoutButton />
-      </div>
+}: Props) => {
+  const [tab, setTab] = useState('visits');
 
-      {is_staff && <AdminSection />}
-      {customer ? (
-        <CustomerSection
-          customer={customer}
-          orders_count={orders_count || 0}
-          orders={orders || []}
-        />
-      ) : (
-        <NonCustomerSection />
-      )}
-      <SetPassword />
-      <TicketsSection tickets={tickets} />
-    </div>
-  </Page>
-);
-// test
+  const getSection = () => {
+    switch (tab) {
+      case 'visits':
+        if (customer) {
+          return (
+            <CustomerSection
+              customer={customer}
+              orders_count={orders_count || 0}
+              orders={orders || []}
+            />
+          );
+        } else {
+          return <NonCustomerSection />;
+        }
+      case 'tickets':
+        return <TicketsSection tickets={tickets} />;
+      case 'settings':
+        return <SettingsSection />;
+      default:
+        throw new Error('Unknown tab');
+    }
+  };
+
+  return (
+    <Page title="Личный кабинет">
+      <PageTitle>Личный кабинет</PageTitle>
+      <Column centered>
+        <div>
+          Аккаунт: <code>{email}</code>. <LogoutButton />
+        </div>
+        {is_staff && <AdminSection />}
+        <RowNav>
+          {[
+            ['visits', 'Посещения'],
+            ['tickets', 'Регистрации'],
+            ['settings', 'Настройки'],
+          ].map(([t, tName]) => (
+            <RowNav.Item key={t} selected={tab === t} select={() => setTab(t)}>
+              {tName}
+            </RowNav.Item>
+          ))}
+        </RowNav>
+        <div style={{ maxWidth: 600 }}>{getSection()}</div>
+      </Column>
+    </Page>
+  );
+};
 
 const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
   if (!user.email) {
