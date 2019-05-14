@@ -15,6 +15,10 @@
       "es2018",
       "dom"
     ],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["jsx/*"]
+    },
     "typeRoots" : ["./node_modules/@types", "./jsx/@types"],
     "jsx": "react",
     "outDir": "./static/dist",
