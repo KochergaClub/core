@@ -97,4 +97,4 @@ class MyTicketView(
         return models.Ticket.objects.filter(
             user=self.request.user,
             event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
-        )
+        ).order_by('event__start')
