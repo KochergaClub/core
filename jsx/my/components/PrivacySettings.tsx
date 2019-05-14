@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 
 import styled from 'styled-components';
 import { FaGlobe, FaLock } from 'react-icons/fa';
@@ -8,6 +8,8 @@ import { Button, Column } from '@kocherga/frontkit';
 import { useAPI } from '~/common/hooks';
 
 import { Customer } from '../types';
+import { getCmData } from '../api';
+import { MyDispatch } from '../store';
 
 import TVIcon from './TVIcon';
 
@@ -46,13 +48,20 @@ export default function PrivacySettings({ customer }: Props) {
   const [loading, setLoading] = useState(false);
   const api = useAPI();
 
+  const dispatch = useContext(MyDispatch);
+
   const flipPrivacyMode = useCallback(
     async () => {
       setLoading(true);
       await api.call('cm/me/set-privacy-mode', 'POST', {
         privacy_mode: oppositePrivacyMode(customer.privacy_mode),
       });
-      window.location.reload(); // TODO
+      const { customer: newCustomer } = await getCmData(api);
+      dispatch({
+        type: 'REPLACE_CUSTOMER',
+        payload: { customer: newCustomer },
+      });
+      setLoading(false);
     },
     [customer.privacy_mode]
   );

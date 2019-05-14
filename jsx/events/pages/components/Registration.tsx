@@ -60,6 +60,9 @@ export default function Registration({ ticket, event }: Props) {
       {ticket ? (
         <div>
           <div>Вы зарегистрированы.</div>
+          <div>
+            <a href="/my/">Посмотреть в личном кабинете</a>
+          </div>
           <Button loading={acting} disabled={acting} onClick={unregister}>
             Отменить регистрацию
           </Button>

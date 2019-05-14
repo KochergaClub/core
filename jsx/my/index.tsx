@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 
 import styled from 'styled-components';
 
@@ -17,6 +17,10 @@ import Page from '~/components/Page';
 import PageTitle from '~/components/PageTitle';
 
 import { Customer, Order, MyTicket } from './types';
+
+import { getOrders, getCmData, getTickets } from './api';
+
+import { reducer, MyDispatch } from './store';
 
 const AdminSection = () => (
   <div>
@@ -39,34 +43,32 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const MyPage = ({
-  email,
-  customer,
-  orders_count,
-  orders,
-  is_staff,
-  tickets,
-}: Props) => {
+const MyPage = (props: Props) => {
   const [tab, setTab] = useState('tickets');
+
+  const [store, dispatch] = useReducer(reducer, {
+    customer: props.customer,
+    tickets: props.tickets,
+  });
 
   const getSection = () => {
     switch (tab) {
       case 'visits':
-        if (customer) {
+        if (store.customer) {
           return (
             <CustomerSection
-              customer={customer}
-              orders_count={orders_count || 0}
-              orders={orders || []}
+              customer={store.customer}
+              orders_count={props.orders_count || 0}
+              orders={props.orders || []}
             />
           );
         } else {
           return <NonCustomerSection />;
         }
       case 'tickets':
-        return <TicketsSection tickets={tickets} />;
+        return <TicketsSection tickets={store.tickets} />;
       case 'settings':
-        return <SettingsSection customer={customer} />;
+        return <SettingsSection customer={store.customer} />;
       default:
         throw new Error('Unknown tab');
     }
@@ -74,25 +76,31 @@ const MyPage = ({
 
   return (
     <Page title="Личный кабинет">
-      <PageTitle>Личный кабинет</PageTitle>
-      <Column centered>
-        <div>
-          Аккаунт: <code>{email}</code>. <LogoutButton />
-        </div>
-        {is_staff && <AdminSection />}
-        <RowNav>
-          {[
-            ['tickets', 'События'],
-            ['visits', 'Посещения'],
-            ['settings', 'Настройки'],
-          ].map(([t, tName]) => (
-            <RowNav.Item key={t} selected={tab === t} select={() => setTab(t)}>
-              {tName}
-            </RowNav.Item>
-          ))}
-        </RowNav>
-        <SectionWrapper>{getSection()}</SectionWrapper>
-      </Column>
+      <MyDispatch.Provider value={dispatch}>
+        <PageTitle>Личный кабинет</PageTitle>
+        <Column centered>
+          <div>
+            Аккаунт: <code>{props.email}</code>. <LogoutButton />
+          </div>
+          {props.is_staff && <AdminSection />}
+          <RowNav>
+            {[
+              ['tickets', 'События'],
+              ['visits', 'Посещения'],
+              ['settings', 'Настройки'],
+            ].map(([t, tName]) => (
+              <RowNav.Item
+                key={t}
+                selected={tab === t}
+                select={() => setTab(t)}
+              >
+                {tName}
+              </RowNav.Item>
+            ))}
+          </RowNav>
+          <SectionWrapper>{getSection()}</SectionWrapper>
+        </Column>
+      </MyDispatch.Provider>
     </Page>
   );
 };
@@ -109,8 +117,8 @@ const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
   };
 
   try {
-    const { customer, orders_count } = await api.call('cm/me', 'GET');
-    const orders = (await api.call('cm/me/orders', 'GET')) as Order[];
+    const { customer, orders_count } = await getCmData(api);
+    const orders = await getOrders(api);
     data = {
       ...data,
       customer,
@@ -125,7 +133,7 @@ const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
     }
   }
 
-  data.tickets = await api.call('my/tickets', 'GET');
+  data.tickets = await getTickets(api);
 
   return data;
 };

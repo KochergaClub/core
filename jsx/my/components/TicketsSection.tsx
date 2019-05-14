@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -7,6 +7,8 @@ import { Button } from '@kocherga/frontkit';
 import { useAPI } from '~/common/hooks';
 
 import { MyTicket } from '../types';
+import { MyDispatch } from '../store';
+import { getTickets } from '../api';
 
 interface Props {
   tickets: MyTicket[];
@@ -21,29 +23,47 @@ const HR = styled.hr`
 
 const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
   const api = useAPI();
+  const dispatch = useContext(MyDispatch);
+  const [loading, setLoading] = useState(false);
 
   const cancel = React.useCallback(
     async () => {
+      setLoading(true);
       await api.call(
         `events/${ticket.event.event_id}/tickets/my`,
         'DELETE',
         {},
         false
       );
+
+      const tickets = await getTickets(api);
+      dispatch({
+        type: 'REPLACE_TICKETS',
+        payload: {
+          tickets,
+        },
+      });
+      setLoading(false);
     },
     [ticket.event.event_id]
   );
   return (
     <div>
       <a href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</a>
-      <Button onClick={cancel}>Отменить</Button>
+      <Button small loading={loading} disabled={loading} onClick={cancel}>
+        Отменить
+      </Button>
     </div>
   );
 };
 
 const TicketsList = ({ tickets }: Props) => {
   if (!tickets.length) {
-    return <div>Вы не зарегистрированы ни на одно событие.</div>;
+    return (
+      <div>
+        <em>Вы не зарегистрированы ни на одно событие.</em>
+      </div>
+    );
   }
 
   return (
