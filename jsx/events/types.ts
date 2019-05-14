@@ -27,6 +27,10 @@ export interface Event {
   posted_timepad?: string;
 }
 
+export interface EventTicket {
+  id: number;
+}
+
 export interface ServerEvent {
   id: string;
   title: string;

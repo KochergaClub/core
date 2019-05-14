@@ -11,14 +11,19 @@ import { Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '../../common/types';
 import { timezone, formatDate } from '../../common/utils';
+import { APIError } from '../../common/api';
 
 import Page from '../../components/Page';
 import PageTitle from '../../components/PageTitle';
 
-import { AnnouncementKey, PublicEvent } from '../types';
+import { PublicEvent, EventTicket } from '../types';
 
-interface Props {
+import EventAnnouncements from './components/EventAnnouncements';
+import Registration from './components/Registration';
+
+export interface Props {
   event: PublicEvent;
+  ticket?: EventTicket;
 }
 
 const Image = styled.img`
@@ -28,14 +33,16 @@ const Image = styled.img`
 `;
 
 const Summary = styled.div`
-  font-size: 1.2em;
+  font-size: 1.3em;
+  line-height: 1.4;
+  margin-bottom: 20px;
 `;
 
 const TimingsContainer = styled.div`
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
-  color: #999;
+  color: #666;
 `;
 
 const EventTimings = ({ event }: { event: PublicEvent }) => {
@@ -44,37 +51,20 @@ const EventTimings = ({ event }: { event: PublicEvent }) => {
 
   return (
     <TimingsContainer>
-      {formatDate(zonedStart, 'yyyy-MM-dd HH:mm')}–
+      {formatDate(zonedStart, 'd MMMM yyyy, HH:mm')}–
       {formatDate(zonedEnd, 'HH:mm')}
     </TimingsContainer>
   );
 };
 
-const AnnouncementsContainer = styled.div`
-  text-align: center;
-  > *:not(:last-child):after {
-    content: ' \00b7 ';
-  }
-`;
+const EventPage = (props: Props) => {
+  const { event } = props;
 
-const EventAnnouncements = ({ event }: { event: PublicEvent }) => {
-  return (
-    <AnnouncementsContainer>
-      {(['vk', 'fb', 'timepad'] as AnnouncementKey[])
-        .filter(key => event.announcements[key])
-        .map(key => (
-          <span>
-            {' '}
-            <a href={event.announcements[key].link}>{key}</a>
-          </span>
-        ))}
-    </AnnouncementsContainer>
-  );
-};
+  const zonedStart = utcToZonedTime(event.start, timezone);
+  const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
 
-const EventPage = ({ event }: Props) => {
   return (
-    <Page title="Страница события">
+    <Page title={title}>
       <Column gutter={20} stretch>
         <div>
           <PageTitle>{event.title}</PageTitle>
@@ -83,18 +73,36 @@ const EventPage = ({ event }: Props) => {
         </div>
         {event.image && <Image src={event.image} />}
         <Summary>{event.summary}</Summary>
-        <hr />
         <Markdown source={event.description} plugins={[breaks]} />
+        <Registration {...props} />
       </Column>
     </Page>
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
+const getInitialData: InitialLoader<Props> = async (
+  { api, user },
+  { params }
+) => {
   const event = await api.call(`public_events/${params.id}`, 'GET');
   event.start = new Date(event.start);
   event.end = new Date(event.end);
-  return { event };
+
+  const result: Props = { event };
+  if (user.is_authenticated) {
+    try {
+      const ticket = await api.call(`events/${params.id}/tickets/my`, 'GET'); // FIXME - can return 404
+      result.ticket = ticket;
+    } catch (e) {
+      if (e instanceof APIError && e.status === 404) {
+        // that's ok, user is not registered yet
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  return result;
 };
 
 const screen: Screen<Props> = {
