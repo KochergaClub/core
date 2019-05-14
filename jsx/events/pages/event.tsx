@@ -9,13 +9,13 @@ import Markdown from 'react-markdown';
 
 import { Column } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '../common/types';
-import { timezone, formatDate } from '../common/utils';
+import { Screen, InitialLoader } from '../../common/types';
+import { timezone, formatDate } from '../../common/utils';
 
-import Page from '../components/Page';
-import PageTitle from '../components/PageTitle';
+import Page from '../../components/Page';
+import PageTitle from '../../components/PageTitle';
 
-import { AnnouncementKey, PublicEvent } from './types';
+import { AnnouncementKey, PublicEvent } from '../types';
 
 interface Props {
   event: PublicEvent;
