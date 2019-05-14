@@ -12,6 +12,7 @@ const Header = styled.header`
   color: #525252;
   letter-spacing: 1px;
   margin-bottom: 8px;
+  font-weight: 600;
 `;
 
 const Container = styled.div`

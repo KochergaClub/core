@@ -11,6 +11,7 @@ interface Props {
 
 const UL = styled.ul`
   list-style-type: none;
+  padding: 0;
 
   a {
     color: #ddd;
