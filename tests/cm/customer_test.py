@@ -6,9 +6,11 @@ from kocherga.cm.models import Customer
 from django.utils.timezone import make_aware
 from datetime import datetime, date
 
+
 @pytest.fixture
 def make_customer():
     counter = 0
+
     def _make(name, **kwargs):
         nonlocal counter
         counter += 1
@@ -27,6 +29,7 @@ def make_customer():
         Customer.objects.create(**params)
     return _make
 
+
 def test_query_active(make_customer):
     make_customer('foo')
     make_customer('bar')
@@ -38,18 +41,26 @@ def test_query_active(make_customer):
 def test_query_from_date(make_customer):
     make_customer(
         'foo',
-        activity_started=make_aware(datetime(2019,2,1,14,30)),
+        activity_started=make_aware(
+            datetime(2019, 2, 1, 14, 30)
+        ),
     )
     make_customer(
         'foo2',
-        activity_started=make_aware(datetime(2019,2,1,0,30)),
+        activity_started=make_aware(
+            datetime(2019, 2, 1, 0, 30)
+        ),
     )
     make_customer(
         'foo3',
-        activity_started=make_aware(datetime(2019,2,1,23,30)),
+        activity_started=make_aware(
+            datetime(2019, 2, 1, 23, 30)
+        ),
     )
     make_customer(
         'bar',
-        activity_started=make_aware(datetime(2019,2,10,14,30)),
+        activity_started=make_aware(
+            datetime(2019, 2, 10, 14, 30)
+        ),
     )
-    assert Customer.objects.from_date(date(2019,2,1)).count() == 3
+    assert Customer.objects.from_date(date(2019, 2, 1)).count() == 3

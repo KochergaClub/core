@@ -3,6 +3,7 @@ pytestmark = [
     pytest.mark.usefixtures('db'),
 ]
 
+
 def test_rooms(client):
     res = client.get('/api/rooms')
     assert res.status_code == 200

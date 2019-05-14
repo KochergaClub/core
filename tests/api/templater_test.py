@@ -1,6 +1,7 @@
 import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
+
 def test_html(client):
     res = client.get(
         '/api/templater/mailchimp/html?start_date=2017-03-01&end_date=2017-03-08',

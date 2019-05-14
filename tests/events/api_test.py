@@ -4,8 +4,6 @@ pytestmark = [
     pytest.mark.google,  # events require google for now (don't forget to remove this later)
 ]
 
-import json
-
 from kocherga.events.models import Event
 
 

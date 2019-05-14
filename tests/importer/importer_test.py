@@ -3,7 +3,7 @@ import pytest
 
 from datetime import datetime, timedelta
 
-from kocherga.importer.base import IncrementalImporter, State, LogEntry
+from kocherga.importer.base import IncrementalImporter, State
 
 from kocherga.dateutils import TZ
 
@@ -16,14 +16,16 @@ class SomeImporter(IncrementalImporter):
         return datetime.now(TZ)
         pass
 
+
 @pytest.mark.django_db(transaction=True)
 def test_import_new(db):
     importer = SomeImporter()
     importer.import_new()
 
     state = State.objects.get(name='importer_test.SomeImporter')
-    assert state.last_exception == None
-    assert (datetime.now(tz=TZ)- state.last_dt).seconds < 5
+    assert state.last_exception is None
+    assert (datetime.now(tz=TZ) - state.last_dt).seconds < 5
+
 
 @pytest.mark.django_db(transaction=True)
 def test_import_all(db):
@@ -31,7 +33,7 @@ def test_import_all(db):
     importer.import_all()
 
     state = State.objects.get(name='importer_test.SomeImporter')
-    assert state.last_exception == None
+    assert state.last_exception is None
     assert (datetime.now(tz=TZ) - state.last_dt).seconds < 5
 
 
@@ -39,12 +41,13 @@ class BadImporter(SomeImporter):
     def do_period_import(self, from_dt, to_dt):
         raise Exception("Something went terribly wrong")
 
+
 @pytest.mark.django_db(transaction=True)
 def test_import_bad(db):
     importer = BadImporter()
 
     with pytest.raises(Exception, match='.*terribly wrong'):
-      importer.import_all()
+        importer.import_all()
 
     state = State.objects.get(name='importer_test.BadImporter')
     assert 'terribly wrong' in state.last_exception

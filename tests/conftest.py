@@ -30,8 +30,6 @@ def google_object():
         'end': {
             'dateTime': '2017-12-10T12:30:00+03:00',
         },
-        # 'id': '5p28o9767bch5oai1mefg45327_20171210T073000Z',
-        # 'htmlLink': 'https://www.google.com/calendar/event?eid=NXAyOG85NzY3YmNoNW9haTFtZWZnNDUzMjdfMjAxNzEyMTBUMDczMDAwWiBsdjM5NjN1ZGN0dm9oOTQ0YzdkbGlrNXRkNEBn',
     }
 
     obj = kocherga.events.google.insert_event(obj)

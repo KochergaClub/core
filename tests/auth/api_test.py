@@ -3,8 +3,6 @@ pytestmark = [
     pytest.mark.usefixtures('db'),
 ]
 
-import json
-
 from django.conf import settings
 from django.core import mail
 from django.contrib.auth import get_user_model

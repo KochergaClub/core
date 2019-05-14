@@ -3,12 +3,14 @@ import pytest
 import kocherga.room
 from kocherga.error import PublicError
 
+
 class TestAllRooms:
     def test_type(self):
-        assert type(kocherga.room.all_rooms) == type([])
+        assert type(kocherga.room.all_rooms) == list
 
     def test_geb(self):
         assert 'гэб' in kocherga.room.all_rooms
+
 
 class TestPretty:
     def test_pretty_geb(self):
@@ -20,6 +22,7 @@ class TestPretty:
     def test_pretty_unknown(self):
         with pytest.raises(PublicError, match='Unknown room неизвестная'):
             kocherga.room.pretty('неизвестная')
+
 
 class TestNormalize:
     def test_normalize_room(self):
@@ -39,10 +42,11 @@ class TestNormalize:
         with pytest.raises(PublicError, match='Unknown room'):
             kocherga.room.normalize('Зимняя')
 
+
 class TestDetails:
     def test(self):
         with pytest.raises(PublicError, match='Unknown room'):
             assert kocherga.room.details('blah')
 
-    def test(self):
+    def test2(self):
         assert kocherga.room.details('летняя')['area'], 9
