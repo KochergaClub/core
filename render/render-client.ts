@@ -20,6 +20,7 @@ function renderApp(props: any) {
 
   const el = React.createElement(Entrypoint, {
     screen,
+    user: window['store'].user,
     csrfToken: window.csrfToken, // extract from page
     innerProps: props,
   });

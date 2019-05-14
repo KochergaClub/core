@@ -23,7 +23,7 @@ export const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'zadarma/pbx_call': require('./zadarma/pbx_call'),
   'projects/index': require('./projects/index'),
   'projects/detail': require('./projects/detail'),
-  'events/event_page': require('./events/event_page'),
+  'events/event_page': require('./events/pages/event'),
   'frontpage/index': require('./frontpage/index'),
   'error-pages/400': require('./error-pages/500'), // NB - we don't have a proper 400 page yet
   'error-pages/403': require('./error-pages/403'),

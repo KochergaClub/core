@@ -37,7 +37,7 @@ export default function SetPassword() {
 
   return (
     <Column centered {...hotkeys}>
-      <h2>Сменить или установить пароль</h2>
+      <h3>Сменить или установить пароль</h3>
       <Column centered>
         <label>
           Старый пароль (оставьте пустым, если у вас не было пароля):

@@ -20,8 +20,12 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 16px;
-    line-height: 24px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+  }
+
+  ul, ol {
+    padding-left: 40px;
   }
 
   p {

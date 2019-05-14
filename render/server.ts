@@ -146,6 +146,7 @@ const sendFullHtml = (
   const store = {
     screenName,
     props,
+    user: req.reactContext.user,
   };
 
   const htmlTemplate = `<!DOCTYPE html>

@@ -20,7 +20,7 @@ export default function LogoutButton() {
   }, []);
 
   return (
-    <Button loading={acting} disabled={acting} onClick={act}>
+    <Button loading={acting} disabled={acting} onClick={act} small>
       Выйти
     </Button>
   );
