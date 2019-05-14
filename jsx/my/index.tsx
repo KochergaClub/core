@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import styled from 'styled-components';
+
 import { Column, RowNav } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
@@ -22,6 +24,11 @@ const AdminSection = () => (
   </div>
 );
 
+const SectionWrapper = styled.div`
+  max-width: 600px;
+  margin-top: 20px;
+`;
+
 interface Props {
   email: string;
   is_staff: boolean;
@@ -40,7 +47,7 @@ const MyPage = ({
   is_staff,
   tickets,
 }: Props) => {
-  const [tab, setTab] = useState('visits');
+  const [tab, setTab] = useState('tickets');
 
   const getSection = () => {
     switch (tab) {
@@ -59,7 +66,7 @@ const MyPage = ({
       case 'tickets':
         return <TicketsSection tickets={tickets} />;
       case 'settings':
-        return <SettingsSection />;
+        return <SettingsSection customer={customer} />;
       default:
         throw new Error('Unknown tab');
     }
@@ -75,8 +82,8 @@ const MyPage = ({
         {is_staff && <AdminSection />}
         <RowNav>
           {[
+            ['tickets', 'События'],
             ['visits', 'Посещения'],
-            ['tickets', 'Регистрации'],
             ['settings', 'Настройки'],
           ].map(([t, tName]) => (
             <RowNav.Item key={t} selected={tab === t} select={() => setTab(t)}>
@@ -84,7 +91,7 @@ const MyPage = ({
             </RowNav.Item>
           ))}
         </RowNav>
-        <div style={{ maxWidth: 600 }}>{getSection()}</div>
+        <SectionWrapper>{getSection()}</SectionWrapper>
       </Column>
     </Page>
   );

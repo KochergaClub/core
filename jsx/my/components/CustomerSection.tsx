@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { Button } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
 import { Customer, Order } from '../types';
+
+import CustomerCard from './CustomerCard';
 
 const inflect = (n: number) => {
   if ((n % 100 < 10 || n % 100 > 20) && [2, 3, 4].includes(n % 10)) {
@@ -16,9 +17,6 @@ const inflect = (n: number) => {
   return '';
 };
 
-const oppositePrivacyMode = (mode: string) =>
-  mode == 'private' ? 'public' : 'private';
-
 interface Props {
   customer: Customer;
   orders_count: number;
@@ -26,24 +24,9 @@ interface Props {
 }
 
 const CustomerSection = ({ customer, orders_count, orders }: Props) => {
-  const api = useAPI();
-
-  const flipPrivacyMode = useCallback(
-    async () => {
-      await api.call('cm/me/set-privacy-mode', 'POST', {
-        privacy_mode: oppositePrivacyMode(customer.privacy_mode),
-      });
-      window.location.reload(); // TODO
-    },
-    [customer.privacy_mode]
-  );
-
   return (
-    <div>
-      <h2>Посещения</h2>
-      <p>
-        Номер вашей карты: <strong>{customer.card_id}</strong>
-      </p>
+    <Column centered>
+      <CustomerCard id={customer.card_id} />
 
       {customer.subscription_until && (
         <p>
@@ -52,14 +35,14 @@ const CustomerSection = ({ customer, orders_count, orders }: Props) => {
       )}
 
       <p>
-        Всего вы были в Кочерге <strong>{orders_count}</strong> раз{inflect(
+        Вы были в Кочерге <strong>{orders_count}</strong> раз{inflect(
           orders_count
         )}.
       </p>
 
       {orders.length && (
         <div>
-          <p>Последние посещения:</p>
+          <h3>Последние посещения</h3>
           <ul>
             {orders.map((order, i) => (
               <li key={i}>
@@ -72,27 +55,7 @@ const CustomerSection = ({ customer, orders_count, orders }: Props) => {
           </ul>
         </div>
       )}
-
-      <section>
-        <h3>Настройки приватности</h3>
-        Ваше присутствие{' '}
-        <strong>
-          {customer.privacy_mode == 'public'
-            ? 'отображается'
-            : 'не отображается'}
-        </strong>{' '}
-        на <a href="https://now.kocherga.club">now.kocherga.club</a> и
-        телевизорах в Кочерге.
-        <Button onClick={flipPrivacyMode}>
-          {customer.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
-        </Button>
-        <input
-          type="hidden"
-          value={oppositePrivacyMode(customer.privacy_mode)}
-          name="privacy_mode"
-        />
-      </section>
-    </div>
+    </Column>
   );
 };
 
