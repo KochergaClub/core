@@ -30,14 +30,14 @@ class TestList:
         assert len(res.json()) == 0
 
 
-class TestCreate:
+class TestMyCreate:
     def test_create_anon(self, client, public_event):
-        res = client.post(f'/api/event/{public_event.pk}/tickets', {})
+        res = client.post(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 403
 
     def test_create_ok(self, client, admin_user, public_event, user1):
         client.force_login(user1)
-        res = client.post(f'/api/event/{public_event.pk}/tickets', {})
+        res = client.post(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 201
 
         res = client.get(f'/api/event/{public_event.pk}/tickets')
@@ -50,13 +50,13 @@ class TestCreate:
 
     def test_create_double(self, client, public_event, user1):
         client.force_login(user1)
-        res = client.post(f'/api/event/{public_event.pk}/tickets')
+        res = client.post(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 201
-        res = client.post(f'/api/event/{public_event.pk}/tickets')
+        res = client.post(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 400
 
 
-class TestMy:
+class TestMyGet:
     def test_my_anon(self, client, public_event):
         res = client.get(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 403
@@ -69,9 +69,22 @@ class TestMy:
     def test_my_ok(self, client, public_event, user1):
         client.force_login(user1)
 
-        res = client.post(f'/api/event/{public_event.pk}/tickets')
+        res = client.post(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 201
 
         res = client.get(f'/api/event/{public_event.pk}/tickets/my')
         assert res.status_code == 200
-        print(res.json())
+
+
+class TestMyDelete:
+    def test_my_delete(self, client, public_event, user1):
+        client.force_login(user1)
+
+        res = client.post(f'/api/event/{public_event.pk}/tickets/my')
+        assert res.status_code == 201
+
+        res = client.delete(f'/api/event/{public_event.pk}/tickets/my')
+        assert res.status_code == 204
+
+        res = client.delete(f'/api/event/{public_event.pk}/tickets/my')
+        assert res.status_code == 404

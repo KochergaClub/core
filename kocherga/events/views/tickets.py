@@ -1,9 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import django.http
+from rest_framework import generics, mixins, permissions, exceptions
+
 from .. import models, serializers
-from rest_framework import views, generics, permissions, exceptions
-from rest_framework.response import Response
 
 
 class Permission(permissions.BasePermission):
@@ -11,16 +12,18 @@ class Permission(permissions.BasePermission):
         if request.method == 'GET':
             return request.user.has_perm('events.view_tickets')
         else:
-            return request.user.is_authenticated
+            # only superuser can modify all tickets
+            return request.user.is_superuser
+
+
+class TicketAlreadyExistsException(exceptions.APIException):
+    status_code = 400
+    default_detail = 'Ticket already exists'
 
 
 class EventTicketView(generics.ListCreateAPIView):
     permission_classes = (Permission,)
     serializer_class = serializers.EventTicketSerializer
-
-    class TicketAlreadyExists(exceptions.APIException):
-        status_code = 400
-        default_detail = 'Ticket already exists'
 
     def get_event_id(self):
         return self.kwargs['event_id']
@@ -36,34 +39,43 @@ class EventTicketView(generics.ListCreateAPIView):
             event=self.get_event()
         )
 
+
+class MyEventTicketView(
+        mixins.CreateModelMixin,
+        mixins.RetrieveModelMixin,
+        mixins.DestroyModelMixin,
+        generics.GenericAPIView,
+):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = serializers.EventTicketSerializer
+    lookup_field = 'event__pk'
+    lookup_url_kwarg = 'event_id'
+
+    def get_queryset(self):
+        return models.Ticket.objects.filter(
+            user=self.request.user
+        )
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         user = self.request.user
-        event = self.get_event()
+        event = models.Event.objects.public_events().get(
+            pk=self.kwargs['event_id']
+        )
+
         try:
-            models.Ticket.objects.get(user=user, event=event)
-            raise self.TicketAlreadyExists()
-        except models.Ticket.DoesNotExist:
+            self.get_object()
+            raise TicketAlreadyExistsException()
+        except django.http.Http404:
             serializer.save(
                 user=user,
                 event=event,
             )
-
-
-class MyEventTicketView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_event(self, event_id):
-        # TODO - support tickets for non-public events (with proper permissions handling)
-        return models.Event.objects.public_events().get(
-            pk=event_id
-        )
-
-    def get(self, request, event_id):
-        user = self.request.user
-        event = self.get_event(event_id)
-
-        try:
-            ticket = models.Ticket.objects.get(user=user, event=event)
-            return Response(serializers.EventTicketSerializer(ticket).data)
-        except models.Ticket.DoesNotExist:
-            raise exceptions.NotFound()
