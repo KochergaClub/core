@@ -5,9 +5,24 @@ export interface PublicEvent {
   title: string;
   summary?: string;
   description?: string;
-  image: string;
+  image?: string;
   start: Date;
   end: Date;
+  announcements: {
+    [key in AnnouncementKey]: {
+      link: string;
+    }
+  };
+}
+
+export interface ServerPublicEvent {
+  event_id: string;
+  title: string;
+  summary?: string;
+  description?: string;
+  image?: string;
+  start: string; // JSON doesn't support Date objects
+  end: string;
   announcements: {
     [key in AnnouncementKey]: {
       link: string;
