@@ -12,7 +12,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
     "@babel/register": "^7.0.0",
-    "@kocherga/frontkit": "^1.0.1",
+    "@kocherga/frontkit": "^1.0.6",
     "@types/react-big-calendar": "^0.20.11",
     "autosize": "^4.0.2",
     "babel-polyfill": "^6.26.0",

@@ -27,6 +27,8 @@ import { API, APIError } from '../jsx/common/api';
 import { GlobalContextShape } from '../jsx/common/types';
 import { wagtailScreen } from '../jsx/screens';
 
+import { GlobalFontsString } from '@kocherga/frontkit';
+
 const webpackStats = require('../webpack-stats.json');
 
 import {
@@ -161,10 +163,11 @@ const sendFullHtml = (
         ${helmet.meta.toString()}
         ${helmet.link.toString()}
 
+        ${GlobalFontsString}
         ${google_analytics_id ? getGAScript(google_analytics_id) : ''}
+        ${styleTags}
       </head>
       <body>
-        ${styleTags}
         <div id="react-app">${html}</div>
         <script>
         // Info stored for re-rendering the app
