@@ -177,8 +177,8 @@ const EventsPage = (props: Props) => {
   );
 
   return (
-    <Page title="Календарь событий" team wide>
-      <PageTitle>Календарь событий</PageTitle>
+    <Page title="Календарь событий" team>
+      <Page.Title>Календарь событий</Page.Title>
       <EventDispatch.Provider value={dispatch}>
         <Calendar
           events={store.events}

@@ -65,17 +65,19 @@ const EventPage = (props: Props) => {
 
   return (
     <Page title={title}>
-      <Column gutter={20} stretch>
-        <div>
-          <PageTitle>{event.title}</PageTitle>
-          <EventTimings event={event} />
-          <EventAnnouncements event={event} />
-        </div>
-        {event.image && <Image src={event.image} />}
-        <Summary>{event.summary}</Summary>
-        <Markdown source={event.description} plugins={[breaks]} />
-        <Registration {...props} />
-      </Column>
+      <Page.Title>{event.title}</Page.Title>
+      <Page.Main>
+        <Column gutter={20} stretch>
+          <div>
+            <EventTimings event={event} />
+            <EventAnnouncements event={event} />
+          </div>
+          {event.image && <Image src={event.image} />}
+          <Summary>{event.summary}</Summary>
+          <Markdown source={event.description} plugins={[breaks]} />
+          <Registration {...props} />
+        </Column>
+      </Page.Main>
     </Page>
   );
 };

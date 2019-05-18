@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-import { Button, Column, Input } from '@kocherga/frontkit';
+import { Button, Column, Label, Input } from '@kocherga/frontkit';
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
 
 export default function SetPassword() {
@@ -39,9 +39,7 @@ export default function SetPassword() {
     <Column centered {...hotkeys}>
       <h3>Сменить или установить пароль</h3>
       <Column centered>
-        <label>
-          Старый пароль (оставьте пустым, если у вас не было пароля):
-        </label>
+        <Label>Старый пароль (если есть):</Label>
         <Input
           type="password"
           id="old_password"
@@ -50,7 +48,7 @@ export default function SetPassword() {
         />
       </Column>
       <Column centered>
-        <label>Новый пароль:</label>
+        <Label>Новый пароль:</Label>
         <Input
           type="password"
           id="new_password"

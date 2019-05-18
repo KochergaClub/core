@@ -15,11 +15,13 @@ const ZadarmaCallPage = ({ pbx_call }: Props) => {
   const title = `Архивный звонок ${pbx_call[0].pbx_call_id}`;
   return (
     <Page title={title} team>
-      <h1>{title}</h1>
-      <a href="/team/zadarma">&larr; Ко всем звонкам</a>
-      <br />
-      <br />
-      <PbxCallCard pbx_call={pbx_call} />
+      <Page.Title>{title}</Page.Title>
+      <Page.Main>
+        <a href="/team/zadarma">&larr; Ко всем звонкам</a>
+        <br />
+        <br />
+        <PbxCallCard pbx_call={pbx_call} />
+      </Page.Main>
     </Page>
   );
 };

@@ -11,18 +11,20 @@ interface Props {
 
 const RatioIndexPage = ({ trainings }: Props) => (
   <Page title="Ratio" team>
-    <h1>Воркшопы и тренинги</h1>
-    <small>
-      <a href="/admin/ratio/training/add/">Добавить тренинг</a>
-    </small>
-    <hr />
-    <ul>
-      {trainings.map(training => (
-        <li key={training.name}>
-          <a href={`training/${training.name}/`}>{training.name}</a>
-        </li>
-      ))}
-    </ul>
+    <Page.Title>Воркшопы и тренинги</Page.Title>
+    <Page.Main>
+      <small>
+        <a href="/admin/ratio/training/add/">Добавить тренинг</a>
+      </small>
+      <hr />
+      <ul>
+        {trainings.map(training => (
+          <li key={training.name}>
+            <a href={`training/${training.name}/`}>{training.name}</a>
+          </li>
+        ))}
+      </ul>
+    </Page.Main>
   </Page>
 );
 

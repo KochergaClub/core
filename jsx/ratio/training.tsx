@@ -52,67 +52,71 @@ const ActionButton = ({
 const RatioTrainingPage = ({ training, tickets }: Props) => {
   return (
     <Page title={training.name} team>
-      <h1>{training.name}</h1>
-      <a href={`/admin/ratio/training/${training.name}/change/`}>
-        править в админке
-      </a>
-      <p>
-        Когда: <strong>{training.date}</strong>
-      </p>
+      <Page.Title>{training.name}</Page.Title>
+      <Page.Main>
+        <a href={`/admin/ratio/training/${training.name}/change/`}>
+          править в админке
+        </a>
+        <p>
+          Когда: <strong>{training.date}</strong>
+        </p>
 
-      <section>
-        <a href="./schedule/">Расписание</a>
-      </section>
+        <section>
+          <a href="./schedule/">Расписание</a>
+        </section>
 
-      <section>
-        <h2>
-          Участники:{' '}
-          <a
-            href={`/admin/ratio/ticket/?training__name__exact=${training.name}`}
-          >
-            {tickets.length}
-          </a>
-        </h2>
-        <ul>
-          {tickets.map(ticket => (
-            <li key={ticket.email}>
-              {ticket.first_name} {ticket.last_name} ({ticket.email})
-            </li>
-          ))}
-        </ul>
-      </section>
+        <section>
+          <h2>
+            Участники:{' '}
+            <a
+              href={`/admin/ratio/ticket/?training__name__exact=${
+                training.name
+              }`}
+            >
+              {tickets.length}
+            </a>
+          </h2>
+          <ul>
+            {tickets.map(ticket => (
+              <li key={ticket.email}>
+                {ticket.first_name} {ticket.last_name} ({ticket.email})
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <Column>
-        <h2>Рассылки</h2>
-        <ActionButton training={training} action="to_mailchimp">
-          Отправить участников в mailchimp
-        </ActionButton>
-        <CreateEmailButton
-          prototypes={[
-            {
-              title: 'Предрассылка',
-              url: `ratio/training/${trainingToKey(
-                training
-              )}/email_prototype_pre`,
-            },
-            {
-              title: 'Пострассылка',
-              url: `ratio/training/${trainingToKey(
-                training
-              )}/email_prototype_post`,
-            },
-          ]}
-          create={`ratio/training/${trainingToKey(training)}/email`}
-        >
-          Написать
-        </CreateEmailButton>
-
-        {training.salaries_paid || (
-          <ActionButton training={training} action="pay_salaries">
-            Оплатить проведение тренерам
+        <Column>
+          <h2>Рассылки</h2>
+          <ActionButton training={training} action="to_mailchimp">
+            Отправить участников в mailchimp
           </ActionButton>
-        )}
-      </Column>
+          <CreateEmailButton
+            prototypes={[
+              {
+                title: 'Предрассылка',
+                url: `ratio/training/${trainingToKey(
+                  training
+                )}/email_prototype_pre`,
+              },
+              {
+                title: 'Пострассылка',
+                url: `ratio/training/${trainingToKey(
+                  training
+                )}/email_prototype_post`,
+              },
+            ]}
+            create={`ratio/training/${trainingToKey(training)}/email`}
+          >
+            Написать
+          </CreateEmailButton>
+
+          {training.salaries_paid || (
+            <ActionButton training={training} action="pay_salaries">
+              Оплатить проведение тренерам
+            </ActionButton>
+          )}
+        </Column>
+      </Page.Main>
     </Page>
   );
 };

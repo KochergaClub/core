@@ -89,12 +89,14 @@ interface Props {
 
 const MastermindCohortPage = ({ cohort_id, users }: Props) => (
   <Page title="Аналитика мастермайнд-дейтинга" team>
-    <h1>Мастермайнд-дейтинг</h1>
-    <section>
-      <a href="/team/mastermind_dating">&larr; к списку когорт</a>
-    </section>
-    <h1>Когорта {cohort_id}</h1>
-    <Users users={users} />
+    <Page.Title>Мастермайнд-дейтинг</Page.Title>
+    <Page.Main>
+      <section>
+        <a href="/team/mastermind_dating">&larr; к списку когорт</a>
+      </section>
+      <h1>Когорта {cohort_id}</h1>
+      <Users users={users} />
+    </Page.Main>
   </Page>
 );
 

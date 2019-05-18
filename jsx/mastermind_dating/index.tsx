@@ -22,15 +22,17 @@ interface Props {
 
 const MastermindIndexPage = ({ cohorts }: Props) => (
   <Page title="Админка мастермайнд-дейтинга" team>
-    <h1>Мастермайнд-дейтинг</h1>
-    <p>
-      <small>
-        <a href="/admin/mastermind_dating/cohort/">
-          Редактировать когорты в админке
-        </a>
-      </small>
-    </p>
-    <Cohorts cohorts={cohorts} />
+    <Page.Title>Мастермайнд-дейтинг</Page.Title>
+    <Page.Main>
+      <p>
+        <small>
+          <a href="/admin/mastermind_dating/cohort/">
+            Редактировать когорты в админке
+          </a>
+        </small>
+      </p>
+      <Cohorts cohorts={cohorts} />
+    </Page.Main>
   </Page>
 );
 

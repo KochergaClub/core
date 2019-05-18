@@ -35,7 +35,7 @@ interface Props {
 
 const ProjectsIndexPage = (props: Props) => {
   return (
-    <Page title="Проекты Кочерги" wide>
+    <Page title="Проекты Кочерги">
       <WorkInProgress />
       <TL02 title="Активные проекты">
         Регулярные мероприятия и сообщества, которые собираются в Кочерге.<br />

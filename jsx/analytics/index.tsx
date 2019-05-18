@@ -24,19 +24,23 @@ const BOVStatCard = ({ bovStat }: { bovStat: BOVStatType }) => (
 const AnalyticsPage = ({ bov_stats }: Props) => {
   return (
     <Page title="Аналитика Кочерги" team>
-      <h1>Аналитика Кочерги</h1>
-      <ul>
-        <li>
-          <a href="https://metabase.team.kocherga.club">Metabase</a>
-        </li>
-        <li>
-          <a href="https://wiki.team.kocherga.club/Категория:Аналитика">
-            О аналитике на вики
-          </a>
-        </li>
-      </ul>
-      <h2>Большие открытые встречи</h2>
-      {bov_stats.map((bovStat, i) => <BOVStatCard key={i} bovStat={bovStat} />)}
+      <Page.Title>Аналитика Кочерги</Page.Title>
+      <Page.Main>
+        <ul>
+          <li>
+            <a href="https://metabase.team.kocherga.club">Metabase</a>
+          </li>
+          <li>
+            <a href="https://wiki.team.kocherga.club/Категория:Аналитика">
+              О аналитике на вики
+            </a>
+          </li>
+        </ul>
+        <h2>Большие открытые встречи</h2>
+        {bov_stats.map((bovStat, i) => (
+          <BOVStatCard key={i} bovStat={bovStat} />
+        ))}
+      </Page.Main>
     </Page>
   );
 };

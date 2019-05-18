@@ -14,7 +14,6 @@ import SettingsSection from './components/SettingsSection';
 import LogoutButton from './components/LogoutButton';
 
 import Page from '~/components/Page';
-import PageTitle from '~/components/PageTitle';
 
 import { Customer, Order, MyTicket } from './types';
 
@@ -77,29 +76,31 @@ const MyPage = (props: Props) => {
   return (
     <Page title="Личный кабинет">
       <MyDispatch.Provider value={dispatch}>
-        <PageTitle>Личный кабинет</PageTitle>
-        <Column centered>
-          <div>
-            Аккаунт: <code>{props.email}</code>. <LogoutButton />
-          </div>
-          {props.is_staff && <AdminSection />}
-          <RowNav>
-            {[
-              ['tickets', 'События'],
-              ['visits', 'Посещения'],
-              ['settings', 'Настройки'],
-            ].map(([t, tName]) => (
-              <RowNav.Item
-                key={t}
-                selected={tab === t}
-                select={() => setTab(t)}
-              >
-                {tName}
-              </RowNav.Item>
-            ))}
-          </RowNav>
-          <SectionWrapper>{getSection()}</SectionWrapper>
-        </Column>
+        <Page.Title>Личный кабинет</Page.Title>
+        <Page.Main>
+          <Column centered>
+            <div>
+              Аккаунт: <code>{props.email}</code>. <LogoutButton />
+            </div>
+            {props.is_staff && <AdminSection />}
+            <RowNav>
+              {[
+                ['tickets', 'События'],
+                ['visits', 'Посещения'],
+                ['settings', 'Настройки'],
+              ].map(([t, tName]) => (
+                <RowNav.Item
+                  key={t}
+                  selected={tab === t}
+                  select={() => setTab(t)}
+                >
+                  {tName}
+                </RowNav.Item>
+              ))}
+            </RowNav>
+            <SectionWrapper>{getSection()}</SectionWrapper>
+          </Column>
+        </Page.Main>
       </MyDispatch.Provider>
     </Page>
   );

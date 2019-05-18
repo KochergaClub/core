@@ -23,10 +23,12 @@ const FrontPage = ({ events: serverEvents }: Props) => {
   })) as PublicEvent[];
 
   return (
-    <Page title="Кочерга" wide>
-      <WorkInProgress />
-      <PageTitle>Кочерга</PageTitle>
-      <EventsList events={events} />
+    <Page title="Кочерга">
+      <Page.Title>Кочерга</Page.Title>
+      <Page.Main wide>
+        <WorkInProgress />
+        <EventsList events={events} />
+      </Page.Main>
     </Page>
   );
 };

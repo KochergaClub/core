@@ -87,24 +87,28 @@ const WatchmenIndexPage = (props: Props) => {
   return (
     <ScheduleContext.Provider value={contextValue}>
       <Page title="Расписание смен" team>
-        <Column gutter={16} stretch>
-          <Column centered gutter={0}>
-            <h1>Расписание смен</h1>
-            <Column centered>
-              <Pager from_date={moment(props.from_date)} />
-              {props.editable && <EditingSwitch />}
+        <Page.Title>Расписание смен</Page.Title>
+        <Page.Main>
+          <Column gutter={16} stretch>
+            <Column centered gutter={0}>
+              <Column centered>
+                <Pager from_date={moment(props.from_date)} />
+                {props.editable && <EditingSwitch />}
+              </Column>
             </Column>
+            <Calendar
+              fromDate={moment(props.from_date)}
+              toDate={moment(props.to_date)}
+              renderDay={d => {
+                return (
+                  <DayContainer
+                    daySchedule={schedule[d.format('YYYY-MM-DD')]}
+                  />
+                );
+              }}
+            />
           </Column>
-          <Calendar
-            fromDate={moment(props.from_date)}
-            toDate={moment(props.to_date)}
-            renderDay={d => {
-              return (
-                <DayContainer daySchedule={schedule[d.format('YYYY-MM-DD')]} />
-              );
-            }}
-          />
-        </Column>
+        </Page.Main>
       </Page>
     </ScheduleContext.Provider>
   );

@@ -10,8 +10,6 @@ import { ActivityType, Training } from './types';
 import SingleColumnSchedule from './schedule/SingleColumnSchedule';
 import MultiColumnSchedule from './schedule/MultiColumnSchedule';
 
-const Container = styled.div``;
-
 const PageHeader = styled.header`
   text-align: center;
 
@@ -35,7 +33,7 @@ const RatioSchedulePage = ({ name, long_name, schedule }: Props) => {
 
   return (
     <Page title={name} team>
-      <Container>
+      <Page.Main>
         <PageHeader>
           <h1>
             <a href="../">{name}</a>
@@ -54,7 +52,7 @@ const RatioSchedulePage = ({ name, long_name, schedule }: Props) => {
         </PageHeader>
 
         <Component schedule={schedule} long_name={long_name} />
-      </Container>
+      </Page.Main>
     </Page>
   );
 };

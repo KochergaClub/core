@@ -37,21 +37,26 @@ const CreateCheque = () => {
 const CashierPage = ({ cheques }: Props) => {
   return (
     <Page title="Касса" team>
-      <h1>Касса</h1>
-      <h2>Выплаты</h2>
-      <ul>
-        {cheques.map(cheque => (
-          <li key={cheque.id}>
-            {cheque.amount} руб. &rarr; {cheque.whom}
-            {cheque.is_redeemed || (
-              <ActionButton path={`cheque/${cheque.id}/redeem`} reloadOnSuccess>
-                Выплачено
-              </ActionButton>
-            )}
-          </li>
-        ))}
-      </ul>
-      <CreateCheque />
+      <Page.Title>Касса</Page.Title>
+      <Page.Main>
+        <h2>Выплаты</h2>
+        <ul>
+          {cheques.map(cheque => (
+            <li key={cheque.id}>
+              {cheque.amount} руб. &rarr; {cheque.whom}
+              {cheque.is_redeemed || (
+                <ActionButton
+                  path={`cheque/${cheque.id}/redeem`}
+                  reloadOnSuccess
+                >
+                  Выплачено
+                </ActionButton>
+              )}
+            </li>
+          ))}
+        </ul>
+        <CreateCheque />
+      </Page.Main>
     </Page>
   );
 };

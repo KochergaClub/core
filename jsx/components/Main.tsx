@@ -6,7 +6,7 @@ interface Props {
 
 const Main = styled.main<Props>`
   max-width: ${props => (props.wide ? '2000px' : '1080px')};
-  margin-top: 0;
+  margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 40px;

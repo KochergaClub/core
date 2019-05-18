@@ -26,7 +26,7 @@ const SectionContainer = styled.section`
 export default function RatioNotebookPage(props: Props) {
   const footer = <PrintFooter />;
   return (
-    <Page title={props.wagtailPage.title} noMenu noFooter wide>
+    <Page title={props.wagtailPage.title} noMenu noFooter>
       <PrintDocument footer={footer}>
         <Frontpage />
         <Emptypage />

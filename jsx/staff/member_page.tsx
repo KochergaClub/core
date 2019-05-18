@@ -55,27 +55,31 @@ const ManagerControls = ({ member }: { member: Member }) => {
 
 const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
   <Page title={`${member.full_name} | Профиль сотрудника`} team>
-    <Column centered gutter={20} style={{ marginBottom: 100 }}>
-      <Column centered gutter={0}>
-        <h1>{member.full_name}</h1>
-        <h2 style={{ color: member.color || 'black' }}>{member.short_name}</h2>
-        {member.is_current || <Ex>Бывший сотрудник</Ex>}
-      </Column>
-      <Column centered>
-        {member.slack_image && <Image src={member.slack_image} />}
-        {member.slack_id && (
-          <a href={`https://kocherga.slack.com/messages/${member.slack_id}/`}>
-            Написать в Slack
-          </a>
-        )}
-        {member.vk && <a href={member.vk}>Профиль VK</a>}
-      </Column>
-      {current_user_is_manager && (
-        <Column centered>
-          <ManagerControls member={member} />
+    <Page.Main>
+      <Column centered gutter={20} style={{ marginBottom: 100 }}>
+        <Column centered gutter={0}>
+          <h1>{member.full_name}</h1>
+          <h2 style={{ color: member.color || 'black' }}>
+            {member.short_name}
+          </h2>
+          {member.is_current || <Ex>Бывший сотрудник</Ex>}
         </Column>
-      )}
-    </Column>
+        <Column centered>
+          {member.slack_image && <Image src={member.slack_image} />}
+          {member.slack_id && (
+            <a href={`https://kocherga.slack.com/messages/${member.slack_id}/`}>
+              Написать в Slack
+            </a>
+          )}
+          {member.vk && <a href={member.vk}>Профиль VK</a>}
+        </Column>
+        {current_user_is_manager && (
+          <Column centered>
+            <ManagerControls member={member} />
+          </Column>
+        )}
+      </Column>
+    </Page.Main>
   </Page>
 );
 

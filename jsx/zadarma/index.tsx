@@ -16,12 +16,14 @@ interface Props {
 const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
   return (
     <Page title="Архив звонков" team>
-      <h1>Архив звонков</h1>
-      <Column stretch gutter={10}>
-        {pbx_calls.map(pbx_call => (
-          <PbxCallCard pbx_call={pbx_call} key={pbx_call[0].pbx_call_id} />
-        ))}
-      </Column>
+      <Page.Title>Архив звонков</Page.Title>
+      <Page.Main>
+        <Column stretch gutter={10}>
+          {pbx_calls.map(pbx_call => (
+            <PbxCallCard pbx_call={pbx_call} key={pbx_call[0].pbx_call_id} />
+          ))}
+        </Column>
+      </Page.Main>
     </Page>
   );
 };
