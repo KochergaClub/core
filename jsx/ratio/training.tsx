@@ -51,7 +51,7 @@ const ActionButton = ({
 
 const RatioTrainingPage = ({ training, tickets }: Props) => {
   return (
-    <Page title="Ratio" team>
+    <Page title={training.name} team>
       <h1>{training.name}</h1>
       <a href={`/admin/ratio/training/${training.name}/change/`}>
         править в админке
@@ -59,6 +59,10 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
       <p>
         Когда: <strong>{training.date}</strong>
       </p>
+
+      <section>
+        <a href="./schedule/">Расписание</a>
+      </section>
 
       <section>
         <h2>
@@ -78,11 +82,8 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
         </ul>
       </section>
 
-      <section>
-        <a href="./schedule/">Расписание</a>
-      </section>
-
       <Column>
+        <h2>Рассылки</h2>
         <ActionButton training={training} action="to_mailchimp">
           Отправить участников в mailchimp
         </ActionButton>
