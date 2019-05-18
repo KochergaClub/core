@@ -3,12 +3,13 @@ import styled from 'styled-components';
 
 import useOnClickOutside from 'use-onclickoutside';
 
+import { colors } from '@kocherga/frontkit';
+
+import { nightColor } from '../constants';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
 import { useAPI } from '../../common/hooks';
 import Picker from './Picker';
-
-import { nightColor } from '../constants';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -23,7 +24,7 @@ const Box = styled.div`
 `;
 
 const EmptyBox = styled(Box)`
-  background-color: #f0f0f0;
+  background-color: ${colors.grey[100]};
 `;
 
 const NightBoxContainer = styled(Box)`

@@ -1,1 +1,3 @@
-export const nightColor = '#474444';
+import { colors } from '@kocherga/frontkit';
+
+export const nightColor = colors.grey[900];

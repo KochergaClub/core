@@ -179,25 +179,27 @@ const EventsPage = (props: Props) => {
   return (
     <Page title="Календарь событий" team>
       <Page.Title>Календарь событий</Page.Title>
-      <EventDispatch.Provider value={dispatch}>
-        <Calendar
-          events={store.events}
-          getNow={() => utcToZonedTime(new Date(), timezone)}
-          startAccessor={startAccessor}
-          endAccessor={endAccessor}
-          onSelectSlot={startNewEvent}
-          onEventResize={resizeEvent}
-          onEventDrop={resizeEvent}
-          onRangeChange={onRangeChange}
-          onSelectEvent={startViewEvent}
-          eventPropGetter={eventPropGetter}
-          components={{
-            event: CalendarEvent,
-          }}
-        />
+      <Page.Main wide>
+        <EventDispatch.Provider value={dispatch}>
+          <Calendar
+            events={store.events}
+            getNow={() => utcToZonedTime(new Date(), timezone)}
+            startAccessor={startAccessor}
+            endAccessor={endAccessor}
+            onSelectSlot={startNewEvent}
+            onEventResize={resizeEvent}
+            onEventDrop={resizeEvent}
+            onRangeChange={onRangeChange}
+            onSelectEvent={startViewEvent}
+            eventPropGetter={eventPropGetter}
+            components={{
+              event: CalendarEvent,
+            }}
+          />
 
-        <UILayer uiStore={uiStore} uiDispatch={uiDispatch} />
-      </EventDispatch.Provider>
+          <UILayer uiStore={uiStore} uiDispatch={uiDispatch} />
+        </EventDispatch.Provider>
+      </Page.Main>
     </Page>
   );
 };

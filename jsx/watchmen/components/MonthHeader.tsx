@@ -2,10 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { colors } from '@kocherga/frontkit';
+
 const Container = styled.div`
   display: flex;
   width: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid ${colors.grey[200]};
 
   & > div {
     flex: 1;
@@ -15,7 +17,7 @@ const Container = styled.div`
     font-weight: bold;
   }
   & > div + div {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid ${colors.grey[200]};
   }
 `;
 

@@ -29,7 +29,10 @@ const MenuItemsList = styled.ul`
     text-transform: uppercase;
     letter-spacing: 1.5px;
     font-size: 13px;
-    font-weight: 500;
+  }
+
+  a:hover {
+    text-decoration: none;
   }
 
   @media screen and (max-width: 980px) {
