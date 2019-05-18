@@ -164,3 +164,7 @@ def image_folder_by_name(name, list_id=MAIN_LIST_ID):
     )['folders']
 
     return next(f for f in folders if f['name'] == name)
+
+
+def campaign_web_link(campaign_web_id: int):
+    return f'https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.admin.mailchimp.com/campaigns/edit?id={campaign_web_id}'

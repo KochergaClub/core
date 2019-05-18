@@ -8,11 +8,18 @@ import Page from '../components/Page';
 
 import { Training, Ticket } from './types';
 
+import CreateEmailButton from './components/CreateEmailButton';
+
 interface Props {
   training: Training;
   tickets: Ticket[];
   children?: React.ReactNode;
 }
+
+// TODO - change api to accept slug
+const trainingNameToKey = (trainingName: string) =>
+  encodeURIComponent(trainingName);
+const trainingToKey = (training: Training) => trainingNameToKey(training.name);
 
 const ActionButton = ({
   training,
@@ -29,7 +36,7 @@ const ActionButton = ({
   const cb = useCallback(
     async () => {
       setLoading(true);
-      const key = encodeURIComponent(training.name); // TODO - change api to accept slug
+      const key = trainingToKey(training);
       await api.call(`ratio/training/${key}/${action}`, 'POST');
       setLoading(false);
     },
@@ -79,12 +86,25 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
         <ActionButton training={training} action="to_mailchimp">
           Отправить участников в mailchimp
         </ActionButton>
-        <ActionButton training={training} action="pre_email">
-          Создать черновик предрассылки
-        </ActionButton>
-        <ActionButton training={training} action="post_email">
-          Создать черновик пострассылки
-        </ActionButton>
+        <CreateEmailButton
+          prototypes={[
+            {
+              title: 'Предрассылка',
+              url: `ratio/training/${trainingToKey(
+                training
+              )}/email_prototype_pre`,
+            },
+            {
+              title: 'Пострассылка',
+              url: `ratio/training/${trainingToKey(
+                training
+              )}/email_prototype_post`,
+            },
+          ]}
+          create={`ratio/training/${trainingToKey(training)}/email`}
+        >
+          Написать
+        </CreateEmailButton>
 
         {training.salaries_paid || (
           <ActionButton training={training} action="pay_salaries">
@@ -96,11 +116,8 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async (
-  { api },
-  { params, query }
-) => {
-  const key = encodeURIComponent(params.name); // TODO - change api to accept slug
+const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
+  const key = trainingNameToKey(params.name);
   console.log(key);
   const training = await api.call(`ratio/training/${key}`, 'GET');
   const tickets = await api.call(`ratio/training/${key}/tickets`, 'GET');

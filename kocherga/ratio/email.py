@@ -40,8 +40,7 @@ def common_settings(title):
     }
 
 
-def create_pre_draft(training):
-    title = 'Предрассылка к воркшопу по прикладной рациональности'
+def create_any_draft(training, title, main_md, utm_campaign='email', utm_source='email'):
     logger.info('Creating campaign draft')
     campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
         'type': 'regular',
@@ -53,13 +52,12 @@ def create_pre_draft(training):
 
     logger.info('Generating html content')
 
-    main_html = markdown.markdown(render_to_string('ratio/email/pre.md', {
-        'training': training,
-    }))
+    main_html = markdown.markdown(main_md)
+
     mjml = render_to_string('email/layout.mjml', {
         'title': title,
         'text': main_html,
-        'utmify': get_utmify('pre-training', 'pre-training'),  # TODO - training id
+        'utmify': get_utmify(utm_campaign, utm_source),  # TODO - training id
     })
 
     html = mjml2html(mjml)
@@ -69,32 +67,18 @@ def create_pre_draft(training):
         'html': html,
     })
 
+    return {
+        'draft_link': kocherga.mailchimp.campaign_web_link(campaign['web_id']),
+    }
 
-def create_post_draft(training):
-    title = 'Пострассылка к воркшопу по рациональности'
-    logger.info('Creating campaign draft')
-    campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
-        'type': 'regular',
-        'recipients': training_recipients(training),
-        'settings': common_settings(title),
-    })
 
-    campaign_id = campaign['id']
-
-    logger.info('Generating html content')
-
-    main_html = markdown.markdown(render_to_string('ratio/email/post.md', {
+def get_pre_content(training):
+    return render_to_string('ratio/email/pre.md', {
         'training': training,
-    }))
-    mjml = render_to_string('email/layout.mjml', {
-        'title': title,
-        'tiny_header': 'Материалы к воркшопу по рациональности',
-        'text': main_html,
-        'utmify': get_utmify('post-training', 'post-training'),  # TODO - training id
     })
-    html = mjml2html(mjml)
 
-    logger.info('Filling campaign content')
-    kocherga.mailchimp.api_call('PUT', f'campaigns/{campaign_id}/content', {
-        'html': html,
+
+def get_post_content(training):
+    return render_to_string('ratio/email/post.md', {
+        'training': training,
     })

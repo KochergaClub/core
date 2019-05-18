@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .models import Training
 from . import serializers
 from .users import training2mailchimp
-from .email import create_post_draft, create_pre_draft
+from . import email
 
 
 class IsRatioManager(permissions.BasePermission):
@@ -26,14 +26,25 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
         return Response('ok')
 
     @action(detail=True, methods=['post'])
-    def pre_email(self, request, name=None):
-        create_pre_draft(self.get_object())
-        return Response('ok')
+    def email(self, request, name=None):
+        title = request.data['title']
+        content = request.data['content']
+        result = email.create_any_draft(self.get_object(), title, content)
+        return Response({
+            'draft_link': result['draft_link'],
+        })
 
-    @action(detail=True, methods=['post'])
-    def post_email(self, request, name=None):
-        create_post_draft(self.get_object())
-        return Response('ok')
+    @action(detail=True)
+    def email_prototype_pre(self, request, name=None):
+        return Response({
+            'content': email.get_pre_content(self.get_object()),
+        })
+
+    @action(detail=True)
+    def email_prototype_post(self, request, name=None):
+        return Response({
+            'content': email.get_post_content(self.get_object()),
+        })
 
     @action(detail=True, methods=['post'])
     def pay_salaries(self, request, name=None):
