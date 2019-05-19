@@ -139,4 +139,5 @@ export type WagtailPageType =
   | FreeFormPageType
   | RatioSectionIndexPageType
   | RatioSectionPageType
-  | RatioNotebookPageType;
+  | RatioNotebookPageType
+  | BlogPostPageType;
