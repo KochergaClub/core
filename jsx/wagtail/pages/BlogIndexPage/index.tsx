@@ -28,6 +28,7 @@ export interface Props {
 const ListContainer = styled.div`
   max-width: 640px;
   margin: 40px auto 0;
+  padding: 0 20px;
 `;
 
 const BlogIndexPage = (props: Props) => {
