@@ -22,7 +22,7 @@ import { getOrders, getCmData, getTickets } from './api';
 import { reducer, MyDispatch } from './store';
 
 const AdminSection = () => (
-  <div>
+  <div style={{ marginBottom: 10 }}>
     <a href="/team/">Перейти в интранет</a>
   </div>
 );
@@ -80,7 +80,7 @@ const MyPage = (props: Props) => {
         <Page.Main>
           <Column centered>
             <div>
-              Аккаунт: <code>{props.email}</code>. <LogoutButton />
+              <code>{props.email}</code> <LogoutButton />
             </div>
             {props.is_staff && <AdminSection />}
             <RowNav>

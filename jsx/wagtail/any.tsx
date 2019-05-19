@@ -7,6 +7,7 @@ import FreeFormPage from './pages/FreeFormPage';
 import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
 import RatioSectionPage from './pages/RatioSectionPage';
 import RatioNotebookPage from './pages/RatioNotebookPage';
+import BlogPostPage from './pages/BlogPostPage';
 
 type AuxPages = { [key: number]: RatioSectionPageType };
 
@@ -42,6 +43,8 @@ const AnyWagtailPage = (props: Props) => {
           ratioSectionPages={props.ratioSectionPages || {}}
         />
       );
+    case 'blog.BlogPostPage':
+      return <BlogPostPage {...wagtailPage} />;
     default:
       return <UnknownPage {...wagtailPage} />;
   }

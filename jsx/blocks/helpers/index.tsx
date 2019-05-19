@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
+import { colors } from '@kocherga/frontkit';
+
 export const Container = styled.div<{ grey?: boolean }>`
-  background-color: ${props => (props.grey ? '#f0f0f0' : 'inherit')};
+  background-color: ${props => (props.grey ? colors.grey[100] : 'inherit')};
 
   margin: 0 auto;
   padding: 45px 0;

@@ -11,7 +11,7 @@ const PageTitle = styled.h1<Props>`
   width: 100%;
 
   text-align: center;
-  padding: ${props => (props.tall ? '2em' : '0.67em')} 0;
+  padding: ${props => (props.tall ? '2em' : '0.67em')} 20px;
   margin: 0;
   background-color: ${colors.grey[100]};
 `;

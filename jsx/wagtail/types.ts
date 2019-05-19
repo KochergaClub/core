@@ -117,6 +117,24 @@ export interface RatioNotebookPageType extends AnyPageType {
   sections: NotebookBlockType[];
 }
 
+export interface BlogPostAuthorType {
+  id: number;
+  name: string;
+  description?: string;
+  image: {
+    meta: {
+      download_url: string;
+    };
+  };
+}
+
+export interface BlogPostPageType extends AnyPageType {
+  meta_type: 'blog.BlogPostPage';
+  body: string;
+  authors: BlogPostAuthorType[];
+  date: string;
+}
+
 export type WagtailPageType =
   | FreeFormPageType
   | RatioSectionIndexPageType

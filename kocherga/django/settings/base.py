@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'kocherga.mastermind_dating',
     'kocherga.projects',
     'kocherga.pages',
+    'kocherga.blog',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
