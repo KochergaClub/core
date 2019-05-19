@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { RatioParagraphBlockType as Props } from '../types';
+import { RatioParagraphBlockType as Props } from './types';
 
 const Paragraph = styled.div`
   > p {

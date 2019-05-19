@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { RatioExerciseBlockType as Props } from '../types';
+import { RatioExerciseBlockType as Props } from './types';
 
 const Container = styled.div`
   page-break-inside: avoid;

@@ -7,7 +7,7 @@ import Page from '~/components/Page';
 import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
 
-import { BlogPostPageType as Props, BlogPostAuthorType } from '../types';
+import { BlogPostPageType as Props, BlogPostAuthorType } from './types';
 
 const AuthorContainer = styled.div`
   margin: 16px;

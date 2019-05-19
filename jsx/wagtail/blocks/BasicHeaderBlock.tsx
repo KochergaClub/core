@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BasicHeaderBlockType as Props } from '../types';
+import { BasicHeaderBlockType as Props } from './types';
 
 const Header = styled.h1`
   font-size: 3em;

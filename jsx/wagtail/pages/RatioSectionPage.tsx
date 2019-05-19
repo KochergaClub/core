@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Page from '../../components/Page';
+import Page from '~/components/Page';
 
-import { RatioSectionPageType as Props } from '../types';
+import { RatioSectionPageType as Props } from './types';
 
 import Main from './RatioSectionPage/Main';
 

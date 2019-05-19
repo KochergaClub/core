@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { BasicParagraphBlockType as Props } from '../types';
+import { BasicParagraphBlockType as Props } from './types';
 
 const Paragraph = styled.div`
   max-width: 1020px;

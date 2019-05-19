@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Page from '../../components/Page';
-import { FreeFormPageType as Props } from '../types';
+import Page from '~/components/Page';
+import { FreeFormPageType as Props } from './types';
 import WagtailBlocks from '../WagtailBlocks';
 
 export default function FreeFormPage(props: Props) {

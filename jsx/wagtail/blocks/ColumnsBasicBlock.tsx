@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Row } from '@kocherga/frontkit';
-import { ColumnsBasicBlockType as Props } from '../types';
+import { ColumnsBasicBlockType as Props } from './types';
 
 const Header = styled.h2`
   font-size: 1.3em;

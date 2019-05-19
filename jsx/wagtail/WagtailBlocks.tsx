@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BlockType } from './types';
+import { BlockType } from './blocks/types';
 
 // Stream of Wagtail blocks rendered in order based on their type.
 

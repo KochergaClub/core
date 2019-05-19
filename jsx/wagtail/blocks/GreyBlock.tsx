@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { GreyBlockType as Props } from '../types';
+import { GreyBlockType as Props } from './types';
 
 const Container = styled.div`
   background-color: #eee;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import MathJax from 'react-mathjax2';
 
-import { RatioMathBlockType as Props } from '../types';
+import { RatioMathBlockType as Props } from './types';
 
 const Container = styled.div`
   text-align: center;

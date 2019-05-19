@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Page from '../../components/Page';
-import { RatioSectionPageType, RatioNotebookPageType } from '../types';
+import { RatioSectionPageType, RatioNotebookPageType } from './types';
 import RatioSection_Main from './RatioSectionPage/Main';
 
 import SectionTOC from './RatioNotebookPage/SectionTOC';

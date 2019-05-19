@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { RatioHeaderBlockType as Props } from '../types';
+import { RatioHeaderBlockType as Props } from './types';
 
 const Header = styled.h1`
   font-size: 1.5em;

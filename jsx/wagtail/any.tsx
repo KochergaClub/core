@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { AnyInitialLoader, AnyScreen } from '../common/types';
-import { WagtailPageType, RatioSectionPageType } from './types';
+import { WagtailPageType, RatioSectionPageType } from './pages/types';
 
 import FreeFormPage from './pages/FreeFormPage';
 import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
@@ -52,6 +52,11 @@ const AnyWagtailPage = (props: Props) => {
 
 type WagtailScreen = AnyScreen<WagtailPageType, Props>;
 type WagtailInitialLoader = AnyInitialLoader<WagtailPageType, Props>;
+
+// interface AnyPageProps { wagtailPage }
+// NotebookPageProps { wagtailPage, ratioSectionPages }
+// PageProps = SimplePageProps | NotebookPageProps
+// WagtailPageType => { component: Component<PageProps>, loader: ({ api }, page) => PageProps }
 
 const getInitialData: WagtailInitialLoader = async (
   { api },

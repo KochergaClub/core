@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Row } from '@kocherga/frontkit';
 
-import { RatioExerciseOnelineBlockType as Props } from '../types';
+import { RatioExerciseOnelineBlockType as Props } from './types';
 
 const Text = styled.div`
   color: hsl(21, 72%, 44%);
