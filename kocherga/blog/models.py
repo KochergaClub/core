@@ -12,14 +12,26 @@ from wagtail.api import APIField
 class BlogIndexPage(Page):
     subpage_types = ['blog.BlogPostPage']
 
+    subtitle = models.TextField('Подзаголовок')
+
+    content_panels = Page.content_panels + [
+        FieldPanel('subtitle'),
+    ]
+
+    api_fields = [
+        APIField('subtitle'),
+    ]
+
 
 class BlogPostPage(Page):
     body = RichTextField('Текст')
+    summary = models.TextField('Короткое описание', blank=True)
     date = models.DateField('Дата поста')
 
     content_panels = Page.content_panels + [
         FieldPanel('date'),
         InlinePanel('authors', label='Авторы'),
+        FieldPanel('summary'),
         FieldPanel('body', classname='full'),
     ]
 
@@ -27,6 +39,7 @@ class BlogPostPage(Page):
         APIField('date'),
         APIField('authors'),
         APIField('body'),
+        APIField('summary'),
     ]
 
     parent_page_types = ['blog.BlogIndexPage']

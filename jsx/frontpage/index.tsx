@@ -4,7 +4,6 @@ import { Screen, InitialLoader } from '../common/types';
 import { formatDate } from '../common/utils';
 
 import Page from '../components/Page';
-import PageTitle from '../components/PageTitle';
 import WorkInProgress from '../components/WorkInProgress';
 
 import { PublicEvent, ServerPublicEvent } from '../events/types';

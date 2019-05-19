@@ -1,19 +1,23 @@
 import React from 'react';
 
+import styled from 'styled-components';
+
 import Page from '~/components/Page';
 import { API } from '~/common/api';
 
-import { dynamicScreen } from '../types';
+import PageHeader from '~/blocks/PageHeader';
 
-import { AnyPageType } from './types';
+import { dynamicScreen } from '../../types';
 
-interface BlogPostSummary {
-  title: string;
-  slug: string;
-}
+import { AnyPageType } from '../types';
+
+import { BlogPostSummary } from './types';
+
+import Summary from './Summary';
 
 export interface PageType extends AnyPageType {
   meta_type: 'blog.BlogIndexPage';
+  subtitle: string;
 }
 
 export interface Props {
@@ -21,22 +25,24 @@ export interface Props {
   postSummaries: BlogPostSummary[];
 }
 
-const Summary = (summary: BlogPostSummary) => (
-  <li>
-    <a href={`/blog/${summary.slug}`}>{summary.title}</a>
-  </li>
-);
+const ListContainer = styled.div`
+  max-width: 640px;
+  margin: 40px auto 0;
+`;
 
 const BlogIndexPage = (props: Props) => {
   return (
-    <Page title="Блог Кочерги">
-      <Page.Title>Блог Кочерги</Page.Title>
+    <Page title={props.wagtailPage.title}>
+      <PageHeader
+        title={props.wagtailPage.title}
+        bottom={props.wagtailPage.subtitle}
+      />
       <Page.Main>
-        <ul>
+        <ListContainer>
           {props.postSummaries.map((summary, i) => (
             <Summary key={i} {...summary} />
           ))}
-        </ul>
+        </ListContainer>
       </Page.Main>
     </Page>
   );
@@ -46,20 +52,12 @@ export default dynamicScreen(
   BlogIndexPage,
   async ({ api }: { api: API }, wagtailPage: PageType) => {
     const json = await api.callWagtail(
-      `pages/?type=blog.BlogPostPage&fields=date&child_of=${
+      `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${
         wagtailPage.id
       }&order=-date`
     );
 
-    const data = json['items'] as AnyPageType[];
-
-    const summaries: BlogPostSummary[] = [];
-    for (const page of data) {
-      summaries.push({
-        title: page.title,
-        slug: page.meta.slug,
-      });
-    }
+    const summaries = json['items'] as BlogPostSummary[];
 
     const props: Props = {
       wagtailPage,
