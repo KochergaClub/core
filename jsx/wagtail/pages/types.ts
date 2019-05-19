@@ -1,4 +1,4 @@
-import { AnyBlockType, BlockType } from '../blocks/types';
+import { BlockType } from '../blocks/types';
 
 export interface AnyPageType {
   id: number;
@@ -11,28 +11,9 @@ export interface AnyPageType {
   title: string;
 }
 
-export interface FreeFormPageType extends AnyPageType {
-  body: BlockType[];
-  meta_type: 'pages.FreeFormPage';
-}
-
-export interface RatioSectionIndexPageType extends AnyPageType {
-  meta_type: 'ratio.SectionIndexPage';
-}
-
 export interface RatioSectionPageType extends AnyPageType {
   meta_type: 'ratio.SectionPage';
   body: BlockType[];
-}
-
-interface NotebookBlockType extends AnyBlockType {
-  type: 'ratio_notebook_section';
-  value: number;
-}
-
-export interface RatioNotebookPageType extends AnyPageType {
-  meta_type: 'ratio.NotebookPage';
-  sections: NotebookBlockType[];
 }
 
 export interface BlogPostAuthorType {
@@ -46,16 +27,4 @@ export interface BlogPostAuthorType {
   };
 }
 
-export interface BlogPostPageType extends AnyPageType {
-  meta_type: 'blog.BlogPostPage';
-  body: string;
-  authors: BlogPostAuthorType[];
-  date: string;
-}
-
-export type WagtailPageType =
-  | FreeFormPageType
-  | RatioSectionIndexPageType
-  | RatioSectionPageType
-  | RatioNotebookPageType
-  | BlogPostPageType;
+export type WagtailPageType = RatioSectionPageType;

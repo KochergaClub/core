@@ -10,10 +10,6 @@ interface ExpressSource {
   query: any;
 }
 
-interface WagtailSource {
-  wagtailPage: any;
-}
-
 export type InitialLoader<P> = AnyInitialLoader<ExpressSource, P>;
 
 export interface AnyScreen<B, P> {

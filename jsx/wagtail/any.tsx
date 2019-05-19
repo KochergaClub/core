@@ -1,22 +1,33 @@
 import React from 'react';
 
-import { AnyInitialLoader, AnyScreen } from '../common/types';
-import { WagtailPageType, RatioSectionPageType } from './pages/types';
+import { AnyInitialLoader, AnyScreen } from '~/common/types';
+import { WagtailPageType } from './pages/types';
 
-import FreeFormPage from './pages/FreeFormPage';
-import RatioSectionIndexPage from './pages/RatioSectionIndexPage';
-import RatioSectionPage from './pages/RatioSectionPage';
-import RatioNotebookPage from './pages/RatioNotebookPage';
-import BlogPostPage from './pages/BlogPostPage';
+import FreeFormScreen from './pages/FreeFormPage';
+import RatioSectionIndexScreen from './pages/RatioSectionIndexPage';
+import RatioSectionScreen from './pages/RatioSectionPage';
+import RatioNotebookScreen from './pages/RatioNotebookPage';
+import BlogPostScreen from './pages/BlogPostPage';
+import BlogIndexScreen from './pages/BlogIndexPage';
 
-type AuxPages = { [key: number]: RatioSectionPageType };
-
-interface Props {
-  wagtailPage: WagtailPageType;
-
-  // FIXME - move to NotebookSectionPage, proxy initial data logic to it
-  ratioSectionPages?: AuxPages;
-}
+const getWagtailScreen = (meta_type: string) => {
+  switch (meta_type) {
+    case 'pages.FreeFormPage':
+      return FreeFormScreen;
+    case 'ratio.SectionIndexPage':
+      return RatioSectionIndexScreen;
+    case 'ratio.SectionPage':
+      return RatioSectionScreen;
+    case 'ratio.NotebookPage':
+      return RatioNotebookScreen;
+    case 'blog.BlogPostPage':
+      return BlogPostScreen;
+    case 'blog.BlogIndexPage':
+      return BlogIndexScreen;
+    default:
+      return null;
+  }
+};
 
 const UnknownPage = (props: WagtailPageType) => (
   <div>
@@ -27,62 +38,43 @@ const UnknownPage = (props: WagtailPageType) => (
   </div>
 );
 
-const AnyWagtailPage = (props: Props) => {
-  const { wagtailPage } = props;
-  switch (wagtailPage.meta_type) {
-    case 'pages.FreeFormPage':
-      return <FreeFormPage {...wagtailPage} />;
-    case 'ratio.SectionIndexPage':
-      return <RatioSectionIndexPage {...wagtailPage} />;
-    case 'ratio.SectionPage':
-      return <RatioSectionPage {...wagtailPage} />;
-    case 'ratio.NotebookPage':
-      return (
-        <RatioNotebookPage
-          wagtailPage={wagtailPage}
-          ratioSectionPages={props.ratioSectionPages || {}}
-        />
-      );
-    case 'blog.BlogPostPage':
-      return <BlogPostPage {...wagtailPage} />;
-    default:
-      return <UnknownPage {...wagtailPage} />;
+// FIXME!
+type ProxyProps = any;
+
+const ProxyWagtailPage = (props: ProxyProps) => {
+  const wagtailScreen = getWagtailScreen(props.wagtailPage.meta_type);
+  if (!wagtailScreen) {
+    return <UnknownPage {...props} />;
   }
+  return <wagtailScreen.component {...props} />;
 };
 
-type WagtailScreen = AnyScreen<WagtailPageType, Props>;
-type WagtailInitialLoader = AnyInitialLoader<WagtailPageType, Props>;
-
-// interface AnyPageProps { wagtailPage }
-// NotebookPageProps { wagtailPage, ratioSectionPages }
-// PageProps = SimplePageProps | NotebookPageProps
-// WagtailPageType => { component: Component<PageProps>, loader: ({ api }, page) => PageProps }
+type WagtailInitialLoader = AnyInitialLoader<WagtailPageType, ProxyProps>;
 
 const getInitialData: WagtailInitialLoader = async (
-  { api },
+  context,
   wagtailPage: WagtailPageType
 ) => {
-  const props: Props = {
-    wagtailPage,
-  };
-
-  if (wagtailPage.meta_type === 'ratio.NotebookPage') {
-    const ids = wagtailPage.sections.map(section => section.value);
-
-    const sectionPages: AuxPages = {};
-    for (const id of ids) {
-      const sectionPage = await api.callWagtail(`pages/${id}/?fields=*`);
-      sectionPages[id] = sectionPage;
-    }
-
-    props.ratioSectionPages = sectionPages;
+  const wagtailScreen = getWagtailScreen(wagtailPage.meta_type);
+  if (!wagtailScreen) {
+    return { wagtailPage };
   }
+
+  if (!wagtailScreen.getInitialData) {
+    return { wagtailPage };
+  }
+  const props = await wagtailScreen.getInitialData(
+    context,
+    wagtailPage as any // FIXME!
+  );
 
   return props;
 };
 
-const screen: WagtailScreen = {
-  component: AnyWagtailPage,
+type ProxyWagtailScreen = AnyScreen<WagtailPageType, WagtailInitialLoader>;
+
+const screen: ProxyWagtailScreen = {
+  component: ProxyWagtailPage,
   getInitialData,
 };
 
