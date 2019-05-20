@@ -48,6 +48,8 @@ def load_orders():
         for row in csv_reader:
             if row["История"].lower() == "продажа абонемента":
                 order = SubscriptionOrder.from_csv_row(row)
+            elif row["История"].lower() == "пополнение баланса":
+                pass  # skip for now
             else:
                 order = Order.from_csv_row(row)
             orders.append(order)
