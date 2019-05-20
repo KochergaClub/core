@@ -79,6 +79,18 @@ export interface RatioMathBlockType extends AnyBlockType {
   value: string;
 }
 
+import { ServerPublicEvent } from '../../events/types';
+export interface EventsListBlockType extends AnyBlockType {
+  type: 'events_list';
+
+  // FIXME - It'd be better to have two different block types:
+  // 1) unexpanded "block configuration"
+  // 2) expanded "block with async data"
+  data?: {
+    events: ServerPublicEvent[];
+  };
+}
+
 export type BlockType =
   | BasicLeadBlockType
   | BasicParagraphBlockType
@@ -91,4 +103,5 @@ export type BlockType =
   | RatioHeaderBlockType
   | RatioExerciseBlockType
   | RatioExerciseOnelineBlockType
-  | RatioMathBlockType;
+  | RatioMathBlockType
+  | EventsListBlockType;

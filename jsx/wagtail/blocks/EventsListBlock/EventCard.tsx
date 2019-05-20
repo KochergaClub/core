@@ -5,7 +5,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { timezone, formatDate } from '~/common/utils';
 
-import { PublicEvent } from '../../events/types';
+import { PublicEvent } from '~/events/types';
 
 const Container = styled.div`
   margin-bottom: 20px;

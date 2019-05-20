@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { API } from '~/common/api';
+import { formatDate } from '~/common/utils';
+import { PublicEvent, ServerPublicEvent } from '~/events/types';
+
 import { BlockType } from './blocks/types';
 
 // Stream of Wagtail blocks rendered in order based on their type.
@@ -20,6 +24,8 @@ import RatioInsetBlock from './blocks/RatioInsetBlock';
 import RatioExerciseBlock from './blocks/RatioExerciseBlock';
 import RatioExerciseOnelineBlock from './blocks/RatioExerciseOnelineBlock';
 import RatioMathBlock from './blocks/RatioMathBlock';
+
+import EventsListBlock from './blocks/EventsListBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
@@ -47,6 +53,8 @@ const AnyBlock = (block: BlockType) => {
       return <RatioExerciseOnelineBlock {...block} />;
     case 'ratio_math':
       return <RatioMathBlock {...block} />;
+    case 'events_list':
+      return <EventsListBlock {...block} />;
     default:
       return <DebugBlock {...block} />;
   }
@@ -61,3 +69,24 @@ export default function WagtailBlocks({ blocks }: Props) {
     </div>
   );
 }
+
+export const loadBlockData = async (
+  block: BlockType,
+  api: API
+): Promise<BlockType> => {
+  switch (block.type) {
+    case 'events_list':
+      const from_date = new Date();
+      const events = (await api.call(
+        `public_events?from_date=${formatDate(from_date, 'yyyy-MM-dd')}`,
+        'GET'
+      )) as ServerPublicEvent[];
+
+      return {
+        ...block,
+        data: { events },
+      };
+    default:
+      return block;
+  }
+};

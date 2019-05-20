@@ -29,7 +29,7 @@ const Price = ({ value }: { value: number }) => {
   return <PriceContainer>{value} руб.</PriceContainer>;
 };
 
-const Description = styled.div`
+const Description = styled(RichText)`
   margin-bottom: 42px;
 `;
 

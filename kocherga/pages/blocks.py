@@ -37,4 +37,5 @@ all_blocks = [
         group='columns',
         label='Абонементы',
     )),
+    ('events_list', blocks.StaticBlock(group='events', label='Список событий')),
 ]
