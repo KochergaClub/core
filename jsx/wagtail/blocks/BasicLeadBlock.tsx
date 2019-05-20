@@ -2,15 +2,17 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { RichText } from '@kocherga/frontkit';
+import { RichText, fonts } from '@kocherga/frontkit';
 
-import { BasicParagraphBlockType as Props } from './types';
+import { BasicLeadBlockType as Props } from './types';
 
 const Paragraph = styled(RichText)`
   max-width: 1020px;
   margin: 0 auto;
+  text-align: center;
+  font-size: ${fonts.sizes.L};
 `;
 
-export default function BasicParagraphBlock(block: Props) {
+export default function BasicLeadBlock(block: Props) {
   return <Paragraph dangerouslySetInnerHTML={{ __html: block.value }} />;
 }

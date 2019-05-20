@@ -2,8 +2,8 @@ export interface AnyBlockType {
   id: string;
 }
 
-export interface BasicHeaderBlockType extends AnyBlockType {
-  type: 'basic_header';
+export interface BasicLeadBlockType extends AnyBlockType {
+  type: 'basic_lead';
   value: string;
 }
 
@@ -25,6 +25,16 @@ export interface ColumnsBasicBlockType extends AnyBlockType {
   value: {
     header: string;
     text?: string;
+  }[];
+}
+
+export interface ColumnsMembershipsBlockType extends AnyBlockType {
+  type: 'columns_memberships';
+  value: {
+    title: string;
+    subtitle: string;
+    price: number;
+    description: string;
   }[];
 }
 
@@ -70,10 +80,11 @@ export interface RatioMathBlockType extends AnyBlockType {
 }
 
 export type BlockType =
-  | BasicHeaderBlockType
+  | BasicLeadBlockType
   | BasicParagraphBlockType
   | GreyBlockType
   | ColumnsBasicBlockType
+  | ColumnsMembershipsBlockType
   | RatioBriefingBlockType
   | RatioParagraphBlockType
   | RatioInsetBlockType
