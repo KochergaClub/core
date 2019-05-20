@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
-
-import { StaticProps, staticScreen } from '../../types';
+import { RichText, colors } from '@kocherga/frontkit';
 
 import Page from '~/components/Page';
 import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
+
+import { StaticProps, staticScreen } from '../../types';
 
 import { AnyPageType, BlogPostAuthorType } from '../types';
 
@@ -34,7 +34,7 @@ const Container = styled.div`
   margin-top: 20px;
 `;
 
-const TextContainer = styled.div`
+const TextContainer = styled(RichText)`
   max-width: 660px;
   padding: 0 20px;
   margin-bottom: 40px;

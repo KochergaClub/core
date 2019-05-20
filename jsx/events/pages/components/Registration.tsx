@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useContext } from 'react';
 
-import { Button } from '@kocherga/frontkit';
+import { A, Button } from '@kocherga/frontkit';
 
 import GlobalContext from '../../../components/GlobalContext';
 import { useAPI } from '../../../common/hooks';
@@ -22,7 +22,7 @@ export default function Registration({ ticket, event }: Props) {
       <Wrapper>
         <em>
           Чтобы зарегистрироваться на мероприятие, сначала{' '}
-          <a href={`/login`}>войдите на сайт</a>.
+          <A href={`/login`}>войдите на сайт</A>.
         </em>
       </Wrapper>
     );
@@ -61,7 +61,7 @@ export default function Registration({ ticket, event }: Props) {
         <div>
           <div>Вы зарегистрированы.</div>
           <div>
-            <a href="/my/">Посмотреть в личном кабинете</a>
+            <A href="/my/">Посмотреть в личном кабинете</A>
           </div>
           <Button loading={acting} disabled={acting} onClick={unregister}>
             Отменить регистрацию

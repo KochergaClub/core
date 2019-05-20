@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
-import { Column } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
 
 import { Member } from './types';
 
@@ -16,9 +17,9 @@ const MemberList = ({
   <Column centered>
     <h2>{title}</h2>
     {members.map(member => (
-      <a key={member.id} href={`/team/staff/${member.id}`}>
+      <A key={member.id} href={`/team/staff/${member.id}`}>
         {member.full_name}
-      </a>
+      </A>
     ))}
   </Column>
 );

@@ -2,8 +2,10 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Screen } from '../common/types';
-import Page from '../components/Page';
+import { RichText } from '@kocherga/frontkit';
+
+import { Screen } from '~/common/types';
+import Page from '~/components/Page';
 
 import TL02 from '../blocks/TL02';
 
@@ -20,7 +22,7 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
-const Description = styled.div`
+const Description = styled(RichText)`
   margin: 0 auto;
   max-width: 800px;
   margin-bottom: 100px;

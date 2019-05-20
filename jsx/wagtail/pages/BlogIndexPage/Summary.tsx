@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { A, colors } from '@kocherga/frontkit';
 
 import { BlogPostSummary } from './types';
 
@@ -14,7 +14,7 @@ const Header = styled.header`
   margin-bottom: 4px;
 `;
 
-const Link = styled.a`
+const Link = styled(A)`
   font-size: 24px;
 `;
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { A } from '@kocherga/frontkit';
+
 const AlertCard = styled.div`
   margin: 40px auto;
   max-width: 660px;
@@ -16,7 +18,7 @@ const WorkInProgress = () => (
     <p>Сайт kocherga.club находится в разработке.</p>
     <p>
       Возможно, вы ищете основной сайт:{' '}
-      <a href="https://kocherga-club.ru">kocherga-club.ru</a>
+      <A href="https://kocherga-club.ru">kocherga-club.ru</A>
     </p>
   </AlertCard>
 );

@@ -2,9 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { RichText } from '@kocherga/frontkit';
+
 import { GreyBlockType as Props } from './types';
 
-const Container = styled.div`
+const Container = styled(RichText)`
   background-color: #eee;
   padding: 20px 0;
 `;

@@ -11,9 +11,6 @@ const SectionLink = styled.a`
 
   color: black;
   text-decoration: none;
-  &:hover {
-    text-decoration: none;
-  }
 `;
 
 interface Props {

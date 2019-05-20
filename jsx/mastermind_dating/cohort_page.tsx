@@ -2,11 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
-import ActionButton from '../components/ActionButton';
+import { A, Column } from '@kocherga/frontkit';
 
-import { Column } from '@kocherga/frontkit';
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
+import ActionButton from '~/components/ActionButton';
 
 import { User } from './types';
 
@@ -92,7 +92,7 @@ const MastermindCohortPage = ({ cohort_id, users }: Props) => (
     <Page.Title>Мастермайнд-дейтинг</Page.Title>
     <Page.Main>
       <section>
-        <a href="/team/mastermind_dating">&larr; к списку когорт</a>
+        <A href="/team/mastermind_dating">&larr; к списку когорт</A>
       </section>
       <h1>Когорта {cohort_id}</h1>
       <Users users={users} />

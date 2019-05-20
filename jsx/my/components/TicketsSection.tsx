@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { Button, Column } from '@kocherga/frontkit';
+import { A, Button, Column } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
@@ -55,7 +55,7 @@ const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
 
   return (
     <div>
-      <a href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</a>
+      <A href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</A>
       <div>{formatDate(zonedStart, 'd MMMM, HH:mm')}</div>
       <Button small loading={loading} disabled={loading} onClick={cancel}>
         Отменить
@@ -85,7 +85,7 @@ const TicketsList = ({ tickets }: Props) => {
 
 const OtherEvents = () => (
   <div>
-    <a href="/">Посмотреть ближайшие события</a>
+    <A href="/">Посмотреть ближайшие события</A>
   </div>
 );
 

@@ -1,7 +1,10 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { A } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
+
 import { Training } from './types';
 
 interface Props {
@@ -14,13 +17,13 @@ const RatioIndexPage = ({ trainings }: Props) => (
     <Page.Title>Воркшопы и тренинги</Page.Title>
     <Page.Main>
       <small>
-        <a href="/admin/ratio/training/add/">Добавить тренинг</a>
+        <A href="/admin/ratio/training/add/">Добавить тренинг</A>
       </small>
       <hr />
       <ul>
         {trainings.map(training => (
           <li key={training.name}>
-            <a href={`training/${training.name}/`}>{training.name}</a>
+            <A href={`training/${training.name}/`}>{training.name}</A>
           </li>
         ))}
       </ul>

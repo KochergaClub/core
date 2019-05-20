@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Column } from '@kocherga/frontkit';
+import { A, Button, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '../common/types';
 import { useAPI } from '../common/hooks';
@@ -67,11 +67,11 @@ const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
         <Column centered>
           {member.slack_image && <Image src={member.slack_image} />}
           {member.slack_id && (
-            <a href={`https://kocherga.slack.com/messages/${member.slack_id}/`}>
+            <A href={`https://kocherga.slack.com/messages/${member.slack_id}/`}>
               Написать в Slack
-            </a>
+            </A>
           )}
-          {member.vk && <a href={member.vk}>Профиль VK</a>}
+          {member.vk && <A href={member.vk}>Профиль VK</A>}
         </Column>
         {current_user_is_manager && (
           <Column centered>

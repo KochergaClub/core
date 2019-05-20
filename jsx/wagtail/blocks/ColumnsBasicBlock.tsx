@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Row } from '@kocherga/frontkit';
+import { RichText, Row } from '@kocherga/frontkit';
 import { ColumnsBasicBlockType as Props } from './types';
 
 const Header = styled.h2`
@@ -13,7 +13,9 @@ const Header = styled.h2`
 const OneColumn = (column: Props['value'][0]) => (
   <div>
     <Header>{column.header}</Header>
-    {column.text && <div dangerouslySetInnerHTML={{ __html: column.text }} />}
+    {column.text && (
+      <RichText dangerouslySetInnerHTML={{ __html: column.text }} />
+    )}
   </div>
 );
 

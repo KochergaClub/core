@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { A } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
 
 interface BOVStatType {
   date: string;
@@ -28,12 +30,12 @@ const AnalyticsPage = ({ bov_stats }: Props) => {
       <Page.Main>
         <ul>
           <li>
-            <a href="https://metabase.team.kocherga.club">Metabase</a>
+            <A href="https://metabase.team.kocherga.club">Metabase</A>
           </li>
           <li>
-            <a href="https://wiki.team.kocherga.club/Категория:Аналитика">
+            <A href="https://wiki.team.kocherga.club/Категория:Аналитика">
               О аналитике на вики
-            </a>
+            </A>
           </li>
         </ul>
         <h2>Большие открытые встречи</h2>

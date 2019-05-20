@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { Button, Modal } from '@kocherga/frontkit';
+import { A, Button, Modal, RichText } from '@kocherga/frontkit';
 
 import {
   useFocusOnFirstModalRender,
@@ -50,11 +50,11 @@ const EventAnnouncements = ({ event }: { event: LocalEvent }) => {
   return (
     <div>
       <strong>Анонсы:</strong>{' '}
-      {event.posted_vk && <a href={event.posted_vk}>vk</a>}
+      {event.posted_vk && <A href={event.posted_vk}>vk</A>}
       &nbsp;
-      {event.posted_fb && <a href={event.posted_fb}>fb</a>}
+      {event.posted_fb && <A href={event.posted_fb}>fb</A>}
       &nbsp;
-      {event.posted_timepad && <a href={event.posted_timepad}>timepad</a>}
+      {event.posted_timepad && <A href={event.posted_timepad}>timepad</A>}
     </div>
   );
 };
@@ -88,7 +88,9 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
         <EventRoom>{event.room}</EventRoom>
         {event.description && (
           <EventDescription>
-            <Markdown source={event.description} plugins={[breaks]} />
+            <RichText>
+              <Markdown source={event.description} plugins={[breaks]} />
+            </RichText>
           </EventDescription>
         )}
         <EventAnnouncements event={event} />
@@ -96,10 +98,10 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
       <Modal.Footer>
         <Footer>
           <small>
-            <a href={`https://evenman.team.kocherga.club/event/${event.id}`}>
+            <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
               evenman
-            </a>{' '}
-            ⋅ <a href={`/admin/events/event/${event.id}`}>админка</a>
+            </A>{' '}
+            ⋅ <A href={`/admin/events/event/${event.id}`}>админка</A>
           </small>
           <Button onClick={editCb}>Редактировать</Button>
         </Footer>

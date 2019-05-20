@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import moment from 'moment';
 
-import { Row } from '@kocherga/frontkit';
+import { A, Row } from '@kocherga/frontkit';
 
 import { PbxCall } from '../types';
 
@@ -33,7 +33,7 @@ const PbxCallCard = ({ pbx_call }: { pbx_call: PbxCall }) => {
     <Container>
       <header>
         <Row spaced>
-          <a href={`/team/zadarma/pbx_call/${pbx_call_id}`}>{title}</a>
+          <A href={`/team/zadarma/pbx_call/${pbx_call_id}`}>{title}</A>
           <div>{moment(pbx_call[0].ts).format('D MMMM')}</div>
         </Row>
       </header>

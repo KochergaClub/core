@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 
-import { Button, Column } from '@kocherga/frontkit';
+import { A, Button, Column } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '../common/types';
-import { useAPI } from '../common/hooks';
-import Page from '../components/Page';
+import { Screen, InitialLoader } from '~/common/types';
+import { useAPI } from '~/common/hooks';
+import Page from '~/components/Page';
 
 import { Training, Ticket } from './types';
 
@@ -54,27 +54,27 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
     <Page title={training.name} team>
       <Page.Title>{training.name}</Page.Title>
       <Page.Main>
-        <a href={`/admin/ratio/training/${training.name}/change/`}>
+        <A href={`/admin/ratio/training/${training.name}/change/`}>
           править в админке
-        </a>
+        </A>
         <p>
           Когда: <strong>{training.date}</strong>
         </p>
 
         <section>
-          <a href="./schedule/">Расписание</a>
+          <A href="./schedule/">Расписание</A>
         </section>
 
         <section>
           <h2>
             Участники:{' '}
-            <a
+            <A
               href={`/admin/ratio/ticket/?training__name__exact=${
                 training.name
               }`}
             >
               {tickets.length}
-            </a>
+            </A>
           </h2>
           <ul>
             {tickets.map(ticket => (

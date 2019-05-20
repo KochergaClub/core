@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { A } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
 
 import { ActivityType, Training } from './types';
 
@@ -36,11 +38,11 @@ const RatioSchedulePage = ({ name, long_name, schedule }: Props) => {
       <Page.Main>
         <PageHeader>
           <h1>
-            <a href="../">{name}</a>
+            <A href="../">{name}</A>
           </h1>
-          <a href={`/admin/ratio/training/${name}/change/`}>
+          <A href={`/admin/ratio/training/${name}/change/`}>
             (Редактировать расписание)
-          </a>
+          </A>
           <div>
             <input
               type="checkbox"

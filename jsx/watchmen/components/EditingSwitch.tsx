@@ -1,13 +1,15 @@
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-import { Row } from '@kocherga/frontkit';
+import { colors, Row } from '@kocherga/frontkit';
 
 import { ScheduleContext } from '../contexts';
 
 const ItemContainer = styled.a<{ active: boolean }>`
   text-decoration: none;
-  border-bottom: ${props => (props.active ? '1px dashed #888' : 'none')};
+  color: hsl(${colors.hues.blue}, 80%, 50%); // FIXME - replace with colors.link
+  border-bottom: ${props =>
+    props.active ? `1px dashed ${colors.grey[700]}` : 'none'};
 `;
 
 const Item = ({

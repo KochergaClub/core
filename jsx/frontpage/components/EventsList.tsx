@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { A } from '@kocherga/frontkit';
+
 import TL03 from '~/blocks/TL03';
 
 import { PublicEvent } from '../../events/types';
@@ -21,7 +23,7 @@ const Header = () => (
     <p>
       Если хотите забронировать комнату под день рождения, мероприятие или
       просто посиделки, звоните <Phone /> или воспользуйтесь{' '}
-      <a href="https://booking.kocherga.club">формой брони</a>.
+      <A href="https://booking.kocherga.club">формой брони</A>.
     </p>
   </TL03>
 );

@@ -3,7 +3,7 @@ import React, { useCallback, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { FaGlobe, FaLock } from 'react-icons/fa';
 
-import { Button, Column } from '@kocherga/frontkit';
+import { A, Button, Column } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 
@@ -77,7 +77,7 @@ export default function PrivacySettings({ customer }: Props) {
             ? 'отображается'
             : 'не отображается'}
         </strong>{' '}
-        на <a href="https://now.kocherga.club">now.kocherga.club</a> и
+        на <A href="https://now.kocherga.club">now.kocherga.club</A> и
         телевизорах в Кочерге.
       </div>
       <Button onClick={flipPrivacyMode} loading={loading} disabled={loading}>

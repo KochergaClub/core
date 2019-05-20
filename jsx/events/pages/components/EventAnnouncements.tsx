@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { A } from '@kocherga/frontkit';
+
 import { AnnouncementKey, PublicEvent } from '../../types';
 
 const AnnouncementsContainer = styled.div`
@@ -19,7 +21,7 @@ export default function EventAnnouncements({ event }: { event: PublicEvent }) {
         .map(key => (
           <span key={key}>
             {' '}
-            <a href={event.announcements[key].link}>{key}</a>
+            <A href={event.announcements[key].link}>{key}</A>
           </span>
         ))}
     </AnnouncementsContainer>

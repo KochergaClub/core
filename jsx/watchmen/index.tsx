@@ -2,12 +2,12 @@ import React, { useCallback, useReducer, useState } from 'react';
 
 import moment from 'moment';
 
-import { Column, Row } from '@kocherga/frontkit';
+import { A, Column, Row } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
-import { useListeningWebSocket, useAPI } from '../common/hooks';
-import { API } from '../common/api';
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
+import { useListeningWebSocket, useAPI } from '~/common/hooks';
+import { API } from '~/common/api';
 
 import { Shift, StaffMember, shifts2schedule, scheduleReducer } from './types';
 
@@ -38,9 +38,9 @@ const Pager = ({ from_date }: { from_date: moment.Moment }) => {
   const next = moment(from_date).add(1, 'week');
   return (
     <Row gutter={16}>
-      <a href={`?from_date=${prev.format('YYYY-MM-DD')}`}>&larr; назад</a>
-      <a href={`/team/watchmen`}>Текущая неделя</a>
-      <a href={`?from_date=${next.format('YYYY-MM-DD')}`}>вперёд &rarr;</a>
+      <A href={`?from_date=${prev.format('YYYY-MM-DD')}`}>&larr; назад</A>
+      <A href={`/team/watchmen`}>Текущая неделя</A>
+      <A href={`?from_date=${next.format('YYYY-MM-DD')}`}>вперёд &rarr;</A>
     </Row>
   );
 };

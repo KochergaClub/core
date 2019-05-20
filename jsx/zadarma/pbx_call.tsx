@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { A } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
 
 import { PbxCall } from './types';
 
@@ -17,7 +19,7 @@ const ZadarmaCallPage = ({ pbx_call }: Props) => {
     <Page title={title} team>
       <Page.Title>{title}</Page.Title>
       <Page.Main>
-        <a href="/team/zadarma">&larr; Ко всем звонкам</a>
+        <A href="/team/zadarma">&larr; Ко всем звонкам</A>
         <br />
         <br />
         <PbxCallCard pbx_call={pbx_call} />

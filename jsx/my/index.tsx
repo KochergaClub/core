@@ -2,7 +2,7 @@ import React, { useState, useReducer } from 'react';
 
 import styled from 'styled-components';
 
-import { Column, RowNav } from '@kocherga/frontkit';
+import { A, Column, RowNav } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import { APIError } from '~/common/api';
@@ -23,7 +23,7 @@ import { reducer, MyDispatch } from './store';
 
 const AdminSection = () => (
   <div style={{ marginBottom: 10 }}>
-    <a href="/team/">Перейти в интранет</a>
+    <A href="/team/">Перейти в интранет</A>
   </div>
 );
 

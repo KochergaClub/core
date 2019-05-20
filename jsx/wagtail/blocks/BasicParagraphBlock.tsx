@@ -2,9 +2,11 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { RichText } from '@kocherga/frontkit';
+
 import { BasicParagraphBlockType as Props } from './types';
 
-const Paragraph = styled.div`
+const Paragraph = styled(RichText)`
   max-width: 1020px;
   margin: 0 auto;
 `;

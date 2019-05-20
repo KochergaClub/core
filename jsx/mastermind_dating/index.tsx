@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { A } from '@kocherga/frontkit';
+
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
 
 import { Cohort } from './types';
 
@@ -9,7 +11,7 @@ const Cohorts = ({ cohorts }: { cohorts: Cohort[] }) => (
   <ul>
     {cohorts.map(cohort => (
       <li>
-        <a href={`/team/mastermind_dating/cohort/${cohort.id}`}>{cohort.id}</a>
+        <A href={`/team/mastermind_dating/cohort/${cohort.id}`}>{cohort.id}</A>
       </li>
     ))}
   </ul>
@@ -26,9 +28,9 @@ const MastermindIndexPage = ({ cohorts }: Props) => (
     <Page.Main>
       <p>
         <small>
-          <a href="/admin/mastermind_dating/cohort/">
+          <A href="/admin/mastermind_dating/cohort/">
             Редактировать когорты в админке
-          </a>
+          </A>
         </small>
       </p>
       <Cohorts cohorts={cohorts} />

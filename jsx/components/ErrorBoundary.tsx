@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { A } from '@kocherga/frontkit';
+
 interface Props {}
 interface State {
   hasError: boolean;
@@ -24,7 +26,7 @@ class ErrorBoundary extends React.Component<Props, State> {
           <h1>Что-то пошло не так.</h1>
           <h2>
             В коде страницы баг. Зарепортите его в{' '}
-            <a href="https://gitlab.com/kocherga/forum">GitLab</a>, пожалуйста.
+            <A href="https://gitlab.com/kocherga/forum">GitLab</A>, пожалуйста.
             А потом обновите страницу и больше не делайте то, что привело к
             ошибке.
           </h2>
