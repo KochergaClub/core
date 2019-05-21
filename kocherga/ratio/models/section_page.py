@@ -6,13 +6,15 @@ from wagtail.api import APIField
 
 from ..blocks import section_blocks
 
+from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
-class SectionIndexPage(Page):
+
+class SectionIndexPage(HeadlessPreviewMixin, Page):
     # parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.SectionPage']
 
 
-class SectionPage(Page):
+class SectionPage(HeadlessPreviewMixin, Page):
     body = StreamField(section_blocks)
     status = models.CharField('Статус', max_length=40, default='placeholder', choices=(
         ('test', 'Тест'),

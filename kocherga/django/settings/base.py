@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'channels',
     'reversion',
     'reversion_compare',
+
+    'kocherga.wagtail',
+
     'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',

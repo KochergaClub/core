@@ -3,10 +3,12 @@ from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel
 from wagtail.api import APIField
 
+from kocherga.wagtail.mixins import HeadlessPreviewMixin
+
 from .blocks import all_blocks
 
 
-class FreeFormPage(Page):
+class FreeFormPage(HeadlessPreviewMixin, Page):
     body = StreamField(all_blocks)
 
     content_panels = Page.content_panels + [

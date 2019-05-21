@@ -8,8 +8,10 @@ from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.api import APIField
 
+from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
-class BlogIndexPage(Page):
+
+class BlogIndexPage(HeadlessPreviewMixin, Page):
     subpage_types = ['blog.BlogPostPage']
 
     subtitle = models.TextField('Подзаголовок')
@@ -23,7 +25,7 @@ class BlogIndexPage(Page):
     ]
 
 
-class BlogPostPage(Page):
+class BlogPostPage(HeadlessPreviewMixin, Page):
     body = RichTextField('Текст')
     summary = models.TextField('Короткое описание', blank=True)
     date = models.DateField('Дата поста')
