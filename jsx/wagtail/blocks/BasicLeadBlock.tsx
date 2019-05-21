@@ -8,7 +8,7 @@ import { BasicLeadBlockType as Props } from './types';
 
 const Paragraph = styled(RichText)`
   max-width: 1020px;
-  margin: 0 auto;
+  margin: 20px auto;
   text-align: center;
   font-size: ${fonts.sizes.L};
 `;

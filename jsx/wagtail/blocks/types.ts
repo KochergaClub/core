@@ -100,12 +100,27 @@ export interface EventsListBlockType extends AnyBlockType {
   };
 }
 
+export interface BigContactsBlockType extends AnyBlockType {
+  type: 'big_contacts';
+  value: {
+    map: {
+      lat: string;
+      lng: string;
+    };
+    address: string;
+    phone: string;
+    email: string;
+    text: string;
+  };
+}
+
 export type BlockType =
   | BasicLeadBlockType
   | BasicParagraphBlockType
   | GreyBlockType
   | ColumnsBasicBlockType
   | ColumnsMembershipsBlockType
+  | ColumnsButtonsBlockType
   | RatioBriefingBlockType
   | RatioParagraphBlockType
   | RatioInsetBlockType
@@ -113,4 +128,5 @@ export type BlockType =
   | RatioExerciseBlockType
   | RatioExerciseOnelineBlockType
   | RatioMathBlockType
-  | EventsListBlockType;
+  | EventsListBlockType
+  | BigContactsBlockType;

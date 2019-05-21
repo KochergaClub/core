@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'wagtail.core',
     'wagtail.sites',
     'wagtailmath',
+    'wagtailgeowidget',
 
     'taggit',
     'modelcluster',
@@ -300,3 +301,5 @@ GOOGLE_ANALYTICS_ID = None
 GDRIVE_WATCHMEN_FOLDER = None
 
 WAGTAIL_API_TOKEN = os.environ.get('WAGTAIL_API_TOKEN', None)
+
+GOOGLE_MAPS_V3_APIKEY = 'AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI'

@@ -28,6 +28,7 @@ import RatioExerciseOnelineBlock from './blocks/RatioExerciseOnelineBlock';
 import RatioMathBlock from './blocks/RatioMathBlock';
 
 import EventsListBlock from './blocks/EventsListBlock';
+import BigContactsBlock from './blocks/BigContactsBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
@@ -59,6 +60,8 @@ const AnyBlock = (block: BlockType) => {
       return <RatioMathBlock {...block} />;
     case 'events_list':
       return <EventsListBlock {...block} />;
+    case 'big_contacts':
+      return <BigContactsBlock {...block} />;
     default:
       return <DebugBlock {...block} />;
   }

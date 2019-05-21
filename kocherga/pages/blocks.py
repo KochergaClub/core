@@ -1,4 +1,5 @@
 from wagtail.core import blocks
+from wagtailgeowidget.blocks import GeoBlock
 
 all_blocks = [
     ('basic_lead', blocks.RichTextBlock(
@@ -51,4 +52,16 @@ all_blocks = [
         label='Колонки с кнопками',
     )),
     ('events_list', blocks.StaticBlock(group='events', label='Список событий')),
+    ('map', GeoBlock()),
+    ('big_contacts', blocks.StructBlock(
+        [
+            ('map', GeoBlock()),
+            ('address', blocks.CharBlock(label='Адрес')),
+            ('phone', blocks.CharBlock(label='Телефон')),
+            ('email', blocks.CharBlock(label='Email')),
+            ('text', blocks.CharBlock(label='Текст')),
+        ],
+        group='various',
+        label='Карта с адресом',
+    )),
 ]
