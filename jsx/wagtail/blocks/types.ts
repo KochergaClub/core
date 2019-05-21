@@ -38,6 +38,15 @@ export interface ColumnsMembershipsBlockType extends AnyBlockType {
   }[];
 }
 
+export interface ColumnsButtonsBlockType extends AnyBlockType {
+  type: 'columns_buttons';
+  value: {
+    title: string;
+    caption: string;
+    link: string;
+  }[];
+}
+
 export interface RatioBriefingBlockType extends AnyBlockType {
   type: 'ratio_briefing';
   value: string;

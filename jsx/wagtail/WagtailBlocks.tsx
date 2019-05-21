@@ -14,8 +14,10 @@ interface Props {
 
 import BasicLeadBlock from './blocks/BasicLeadBlock';
 import GreyBlock from './blocks/GreyBlock';
+
 import ColumnsBasicBlock from './blocks/ColumnsBasicBlock';
 import ColumnsMembershipsBlock from './blocks/ColumnsMembershipsBlock';
+import ColumnsButtonsBlock from './blocks/ColumnsButtonsBlock';
 
 import RatioBriefingBlock from './blocks/RatioBriefingBlock';
 import RatioHeaderBlock from './blocks/RatioHeaderBlock';
@@ -39,6 +41,8 @@ const AnyBlock = (block: BlockType) => {
       return <ColumnsBasicBlock {...block} />;
     case 'columns_memberships':
       return <ColumnsMembershipsBlock {...block} />;
+    case 'columns_buttons':
+      return <ColumnsButtonsBlock {...block} />;
     case 'ratio_briefing':
       return <RatioBriefingBlock {...block} />;
     case 'ratio_header':

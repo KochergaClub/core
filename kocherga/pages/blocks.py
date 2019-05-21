@@ -18,10 +18,12 @@ all_blocks = [
         label='Заголовок секции',
     )),
     ('columns_basic', blocks.ListBlock(
-        blocks.StructBlock([
-            ('header', blocks.CharBlock()),
-            ('text', blocks.RichTextBlock(required=False)),
-        ]),
+        blocks.StructBlock(
+            [
+                ('header', blocks.CharBlock()),
+                ('text', blocks.RichTextBlock(required=False)),
+            ],
+        ),
         group='columns',
         label='Колонки',
     )),
@@ -32,10 +34,21 @@ all_blocks = [
                 ('subtitle', blocks.CharBlock(label='Подзаголовок')),
                 ('price', blocks.IntegerBlock(label='Стоимость')),
                 ('description', blocks.RichTextBlock(label='Описание')),
-            ]
+            ],
         ),
         group='columns',
         label='Абонементы',
+    )),
+    ('columns_buttons', blocks.ListBlock(
+        blocks.StructBlock(
+            [
+                ('title', blocks.CharBlock(label='Текст')),
+                ('caption', blocks.CharBlock(label='Текст на кнопке')),
+                ('link', blocks.URLBlock(label='Ссылка')),
+            ]
+        ),
+        group='columns',
+        label='Колонки с кнопками',
     )),
     ('events_list', blocks.StaticBlock(group='events', label='Список событий')),
 ]
