@@ -12,6 +12,7 @@ const Container = styled.div`
 
 const Title = styled.div`
   font-size: ${fonts.sizes.XL};
+  line-height: 1.2;
 `;
 
 const Items = styled.div`
@@ -22,7 +23,7 @@ const Items = styled.div`
 const Feature = (props: FeatureType) => (
   <Container>
     <Title>{props.title}</Title>
-    <Items>{props.items.map(item => item.text).join(' * ')}</Items>
+    <Items>{props.items.map(item => item.text).join(' · ')}</Items>
   </Container>
 );
 

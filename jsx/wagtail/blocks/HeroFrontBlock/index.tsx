@@ -18,10 +18,14 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const InnerContainer = styled.div`
+  margin: 0 auto;
+  max-width: 940px;
+`;
+
 const Header = styled.div`
   display: block;
   margin: 0 auto;
-  margin-bottom: 48px;
 
   font-size: 48px;
   font-weight: 700;
@@ -30,14 +34,22 @@ const Header = styled.div`
   text-transform: uppercase;
   text-align: center;
   color: ${colors.primary[900]};
-  border-bottom: 2px solid black;
+`;
+
+const Line = styled.div`
+  margin: 48px 0;
+  border-bottom: 2px solid ${colors.primary[900]};
+  width: 100%;
 `;
 
 export default function HeroFrontBlock(props: Props) {
   return (
     <Container>
-      <Header>{props.value.title}</Header>
-      <LogoWithFeatures features={props.value.features} />
+      <InnerContainer>
+        <Header>{props.value.title}</Header>
+        <Line />
+        <LogoWithFeatures features={props.value.features} />
+      </InnerContainer>
     </Container>
   );
 }

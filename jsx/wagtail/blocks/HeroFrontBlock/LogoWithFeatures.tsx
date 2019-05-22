@@ -13,11 +13,12 @@ const FeaturesList = ({ features }: { features: FeaturesListType }) => (
 );
 
 const Container = styled.div`
-  max-width: 940px;
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   > * + * {
-    margin-left: 40px;
+    margin-left: 80px;
   }
 `;
 
