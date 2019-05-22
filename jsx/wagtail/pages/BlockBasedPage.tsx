@@ -10,12 +10,14 @@ import { BlockType } from '../blocks/types';
 
 import WagtailBlocks, { loadBlockData } from '../WagtailBlocks';
 
-interface FreeFormPageType extends AnyPageType {
+interface BlockBasedPageType extends AnyPageType {
   body: BlockType[];
-  meta_type: 'pages.FreeFormPage';
+  meta_type: 'pages.FreeFormPage' | 'pages.FrontPage';
 }
 
-const FreeFormPage: NextWagtailPage<FreeFormPageType> = ({ wagtailPage }) => {
+const BlockBasedPage: NextWagtailPage<BlockBasedPageType> = ({
+  wagtailPage,
+}) => {
   return (
     <Page title={wagtailPage.title}>
       <WagtailBlocks blocks={wagtailPage.body} />
@@ -23,7 +25,10 @@ const FreeFormPage: NextWagtailPage<FreeFormPageType> = ({ wagtailPage }) => {
   );
 };
 
-FreeFormPage.getInitialProps = async ({ store: { getState }, wagtailPage }) => {
+BlockBasedPage.getInitialProps = async ({
+  store: { getState },
+  wagtailPage,
+}) => {
   const api = selectAPI(getState());
 
   return {
@@ -36,4 +41,4 @@ FreeFormPage.getInitialProps = async ({ store: { getState }, wagtailPage }) => {
   };
 };
 
-export default FreeFormPage;
+export default BlockBasedPage;

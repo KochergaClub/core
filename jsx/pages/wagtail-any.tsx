@@ -11,7 +11,7 @@ import { APIError } from '~/common/api';
 
 import { AnyPageType, WagtailPageType } from '~/wagtail/pages/types';
 
-import FreeFormScreen from '~/wagtail/pages/FreeFormPage';
+import BlockBasedScreen from '~/wagtail/pages/BlockBasedPage';
 import RatioSectionIndexScreen from '~/wagtail/pages/RatioSectionIndexPage';
 import RatioSectionScreen from '~/wagtail/pages/RatioSectionPage';
 import RatioNotebookScreen from '~/wagtail/pages/RatioNotebookPage';
@@ -23,7 +23,8 @@ import { selectAPI } from '~/core/selectors';
 const getWagtailScreen = (meta_type: string) => {
   switch (meta_type) {
     case 'pages.FreeFormPage':
-      return FreeFormScreen;
+    case 'pages.FrontPage':
+      return BlockBasedScreen;
     case 'ratio.SectionIndexPage':
       return RatioSectionIndexScreen;
     case 'ratio.SectionPage':

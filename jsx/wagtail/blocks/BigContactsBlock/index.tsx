@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import SocialIcons from '~/components/TildaMenu/SocialIcons';
+import SocialIcons from '~/components/Page/TildaMenu/SocialIcons';
 
 import { fonts, colors } from '@kocherga/frontkit';
 

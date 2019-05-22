@@ -5,11 +5,23 @@ from wagtail.api import APIField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
-from .blocks import all_blocks
+from .blocks import all_blocks, hero_block
 
 
 class FreeFormPage(HeadlessPreviewMixin, Page):
     body = StreamField(all_blocks)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('body'),
+    ]
+
+    api_fields = [
+        APIField('body'),
+    ]
+
+
+class FrontPage(HeadlessPreviewMixin, Page):
+    body = StreamField(all_blocks + [hero_block])
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),

@@ -53,7 +53,9 @@ const TextWithAuthors = ({
 }) => {
   return (
     <Container>
-      <TextContainer dangerouslySetInnerHTML={{ __html: text }} />
+      <main>
+        <TextContainer dangerouslySetInnerHTML={{ __html: text }} />
+      </main>
       <AuthorsList authors={authors} />
     </Container>
   );

@@ -1,15 +1,7 @@
 from wagtail.core import blocks
 from wagtailgeowidget.blocks import GeoBlock
 
-all_blocks = [
-    ('basic_lead', blocks.RichTextBlock(
-        group='basic',
-        label='Крупный текст',
-    )),
-    ('basic_paragraph', blocks.RichTextBlock(
-        group='basic',
-        label='Обычный текст',
-    )),
+basic_blocks = [
     ('grey', blocks.StructBlock(
         [
             ('header', blocks.CharBlock()),
@@ -17,7 +9,21 @@ all_blocks = [
         ],
         group='basic',
         label='Заголовок секции',
+        icon='title',
     )),
+    ('basic_lead', blocks.RichTextBlock(
+        group='basic',
+        label='Крупный текст',
+        icon='bold',
+    )),
+    ('basic_paragraph', blocks.RichTextBlock(
+        group='basic',
+        label='Обычный текст',
+        icon='doc-full',
+    )),
+]
+
+columns_blocks = [
     ('columns_basic', blocks.ListBlock(
         blocks.StructBlock(
             [
@@ -51,11 +57,17 @@ all_blocks = [
         group='columns',
         label='Колонки с кнопками',
     )),
-    ('events_list', blocks.StaticBlock(group='events', label='Список событий')),
-    ('map', GeoBlock()),
+]
+
+various_blocks = [
+    ('events_list', blocks.StaticBlock(
+        group='various',
+        label='Список событий',
+        icon='list-ul',
+    )),
     ('big_contacts', blocks.StructBlock(
         [
-            ('map', GeoBlock()),
+            ('map', GeoBlock(label='Координаты')),
             ('address', blocks.CharBlock(label='Адрес')),
             ('phone', blocks.CharBlock(label='Телефон')),
             ('email', blocks.CharBlock(label='Email')),
@@ -63,5 +75,32 @@ all_blocks = [
         ],
         group='various',
         label='Карта с адресом',
+        icon='site',
     )),
 ]
+
+all_blocks = basic_blocks + columns_blocks + various_blocks
+
+
+hero_block = (
+    'hero_front',
+    blocks.StructBlock([
+        ('title', blocks.CharBlock(label='Заголовок')),
+        ('features', blocks.ListBlock(
+            blocks.StructBlock(
+                [
+                    ('title', blocks.CharBlock(label='Подзаголовок')),
+                    ('link', blocks.URLBlock(label='Ссылка', required=False)),
+                    ('items', blocks.ListBlock(
+                        blocks.StructBlock(
+                            [
+                                ('text', blocks.CharBlock(label='Элемент')),
+                                ('link', blocks.URLBlock(label='Ссылка', required=False)),
+                            ]
+                        )
+                    )),
+                ]
+            ),
+            label='Фичи',
+        ))
+    ], icon='home', group='various'))

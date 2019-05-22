@@ -114,6 +114,21 @@ export interface BigContactsBlockType extends AnyBlockType {
   };
 }
 
+export interface HeroFrontBlockType extends AnyBlockType {
+  type: 'hero_front';
+  value: {
+    title: string;
+    features: {
+      title: string;
+      link?: string;
+      items: {
+        text: string;
+        link?: string;
+      }[];
+    }[];
+  };
+}
+
 export type BlockType =
   | BasicLeadBlockType
   | BasicParagraphBlockType

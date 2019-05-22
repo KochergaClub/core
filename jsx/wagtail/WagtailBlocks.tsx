@@ -2,7 +2,7 @@ import React from 'react';
 
 import { API } from '~/common/api';
 import { formatDate } from '~/common/utils';
-import { PublicEvent, ServerPublicEvent } from '~/events/types';
+import { ServerPublicEvent } from '~/events/types';
 
 import { BlockType } from './blocks/types';
 
@@ -29,6 +29,7 @@ import RatioMathBlock from './blocks/RatioMathBlock';
 
 import EventsListBlock from './blocks/EventsListBlock';
 import BigContactsBlock from './blocks/BigContactsBlock';
+import HeroFrontBlock from './blocks/HeroFrontBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
@@ -62,6 +63,8 @@ const AnyBlock = (block: BlockType) => {
       return <EventsListBlock {...block} />;
     case 'big_contacts':
       return <BigContactsBlock {...block} />;
+    case 'hero_front':
+      return <HeroFrontBlock {...block} />;
     default:
       return <DebugBlock {...block} />;
   }
