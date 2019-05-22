@@ -38,14 +38,11 @@ const Feature = (props: FeatureType) => (
     </Title>
     <Items>
       {props.items
-        .map(
-          item =>
-            item.link ? (
-              <a href={item.link}>{item.text}</a>
-            ) : (
-              <span>{item.text}</span>
-            )
-        )
+        .map((item, i) => (
+          <span key={i}>
+            {item.link ? <a href={item.link}>{item.text}</a> : item.text}
+          </span>
+        ))
         .reduce(
           (accu, elem) => (accu.length ? [...accu, ' · ', elem] : [elem]),
           []

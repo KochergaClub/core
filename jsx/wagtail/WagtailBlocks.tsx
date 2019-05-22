@@ -30,6 +30,7 @@ import RatioMathBlock from './blocks/RatioMathBlock';
 import EventsListBlock from './blocks/EventsListBlock';
 import BigContactsBlock from './blocks/BigContactsBlock';
 import HeroFrontBlock from './blocks/HeroFrontBlock';
+import PhotoRibbonBlock from './blocks/PhotoRibbonBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
@@ -65,6 +66,8 @@ const AnyBlock = (block: BlockType) => {
       return <BigContactsBlock {...block} />;
     case 'hero_front':
       return <HeroFrontBlock {...block} />;
+    case 'photo_ribbon':
+      return <PhotoRibbonBlock {...block} />;
     default:
       return <DebugBlock {...block} />;
   }

@@ -1,4 +1,9 @@
+from rest_framework import serializers
+
 from wagtail.core import blocks
+from wagtail.images.blocks import ImageChooserBlock
+import wagtail.images
+
 from wagtailgeowidget.blocks import GeoBlock
 
 from kocherga.wagtail.blocks import URLOrAbsolutePathBlock
@@ -61,6 +66,27 @@ columns_blocks = [
     )),
 ]
 
+
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = wagtail.images.models.Image
+        fields = ['file160', 'file320', 'file']
+
+    file160 = serializers.SerializerMethodField()
+    file320 = serializers.SerializerMethodField()
+
+    def get_file160(self, obj):
+        return obj.get_rendition('min-200x160').url
+
+    def get_file320(self, obj):
+        return obj.get_rendition('min-400x320').url
+
+
+class APIImageChooserBlock(ImageChooserBlock):
+    def get_api_representation(self, value, context=None):
+        return ImageSerializer(context=context).to_representation(value)
+
+
 various_blocks = [
     ('events_list', blocks.StaticBlock(
         group='various',
@@ -78,6 +104,11 @@ various_blocks = [
         group='various',
         label='Карта с адресом',
         icon='site',
+    )),
+    ('photo_ribbon', blocks.ListBlock(
+        APIImageChooserBlock(),
+        group='various',
+        label='Лента фоток',
     )),
 ]
 

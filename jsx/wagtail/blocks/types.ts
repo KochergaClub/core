@@ -129,6 +129,15 @@ export interface HeroFrontBlockType extends AnyBlockType {
   };
 }
 
+export interface PhotoRibbonBlockType extends AnyBlockType {
+  type: 'photo_ribbon';
+  value: {
+    file160: string;
+    file320: string;
+    file: string;
+  }[];
+}
+
 export type BlockType =
   | BasicLeadBlockType
   | BasicParagraphBlockType
@@ -144,4 +153,6 @@ export type BlockType =
   | RatioExerciseOnelineBlockType
   | RatioMathBlockType
   | EventsListBlockType
-  | BigContactsBlockType;
+  | BigContactsBlockType
+  | HeroFrontBlockType
+  | PhotoRibbonBlockType;
