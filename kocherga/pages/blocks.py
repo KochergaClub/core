@@ -1,6 +1,8 @@
 from wagtail.core import blocks
 from wagtailgeowidget.blocks import GeoBlock
 
+from kocherga.wagtail.blocks import URLOrAbsolutePathBlock
+
 basic_blocks = [
     ('grey', blocks.StructBlock(
         [
@@ -51,7 +53,7 @@ columns_blocks = [
             [
                 ('title', blocks.CharBlock(label='Текст')),
                 ('caption', blocks.CharBlock(label='Текст на кнопке')),
-                ('link', blocks.URLBlock(label='Ссылка')),
+                ('link', URLOrAbsolutePathBlock(label='Ссылка')),
             ]
         ),
         group='columns',
@@ -90,12 +92,12 @@ hero_block = (
             blocks.StructBlock(
                 [
                     ('title', blocks.CharBlock(label='Подзаголовок')),
-                    ('link', blocks.URLBlock(label='Ссылка', required=False)),
+                    ('link', URLOrAbsolutePathBlock(label='Ссылка', required=False)),
                     ('items', blocks.ListBlock(
                         blocks.StructBlock(
                             [
                                 ('text', blocks.CharBlock(label='Элемент')),
-                                ('link', blocks.URLBlock(label='Ссылка', required=False)),
+                                ('link', URLOrAbsolutePathBlock(label='Ссылка', required=False)),
                             ]
                         )
                     )),
