@@ -13,8 +13,8 @@ def get_task_by_id(task_id):
 def task_attachment(task, status='new'):
     if status == 'new':
         return {
-            "title": task.name,
-            "text": "",
+            "title": task.title,
+            "text": task.name,
             "color": 'danger',
             "callback_id": f"daily_tasks/action/{task.id}",
             "actions": [
@@ -28,9 +28,13 @@ def task_attachment(task, status='new'):
             ],
         }
     else:
+        crossed_out_text = f'~*{task.title}*~\n' + '\n'.join([
+            '~' + part + '~'
+            for part in task.text.split('\n')
+        ])
         return {
             "title": None,
-            "text": '~' + task.name + '~',
+            "text": crossed_out_text,
             "color": 'good',
             "callback_id": f"daily_tasks/action/{task.id}",
             "actions": [
