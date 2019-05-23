@@ -10,7 +10,7 @@ class TaskAdmin(ModelAdmin):
     menu_label = 'Админские таски'
     menu_icon = 'list-ul'
 
-    list_display = ('__str__', 'days_string')
+    list_display = ('title', 'text', 'days_string')
     list_filter = (WeekdayFilter,)
 
 
