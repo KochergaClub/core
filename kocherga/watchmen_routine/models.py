@@ -19,15 +19,15 @@ class TaskManager(models.Manager):
 
 
 class Task(ClusterableModel):
-    title = models.CharField('Название', max_length=80, blank=True)
-    name = models.TextField('Текст', max_length=1024, blank=True)  # TODO - rename to 'text'
+    title = models.CharField('Название', max_length=80, blank=True)  # TODO - make required
+    text = models.TextField('Текст', max_length=1024, blank=True)
     channel = models.CharField('Канал', default='watchmen', max_length=40)
 
     objects = TaskManager()
 
     panels = [
         edit_handlers.FieldPanel('title'),
-        edit_handlers.FieldPanel('name'),
+        edit_handlers.FieldPanel('text'),
         edit_handlers.FieldPanel('channel'),
         edit_handlers.InlinePanel('schedules', label='Расписание'),
     ]
@@ -37,7 +37,7 @@ class Task(ClusterableModel):
         verbose_name_plural = 'Задачи'
 
     def __str__(self):
-        return self.title or self.name
+        return self.title or self.text
 
     def days_string(self):
         return ','.join(

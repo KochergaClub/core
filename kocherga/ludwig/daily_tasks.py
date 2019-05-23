@@ -14,7 +14,7 @@ def task_attachment(task, status='new'):
     if status == 'new':
         return {
             "title": task.title,
-            "text": task.name,
+            "text": task.text,
             "color": 'danger',
             "callback_id": f"daily_tasks/action/{task.id}",
             "actions": [

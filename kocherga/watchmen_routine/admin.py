@@ -42,7 +42,7 @@ class WeekdayFilter(admin.SimpleListFilter):
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'name', 'days_string')
+    list_display = ('__str__', 'text', 'days_string')
     list_filter = (WeekdayFilter,)
     inlines = [
         ScheduleInline
