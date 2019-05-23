@@ -138,6 +138,15 @@ export interface PhotoRibbonBlockType extends AnyBlockType {
   }[];
 }
 
+export interface MailchimpSubscribeBlockType extends AnyBlockType {
+  type: 'mailchimp_subscribe';
+  value: {
+    news: boolean;
+    events: boolean;
+    trainings: boolean;
+  };
+}
+
 export type BlockType =
   | BasicLeadBlockType
   | BasicParagraphBlockType
@@ -155,4 +164,5 @@ export type BlockType =
   | EventsListBlockType
   | BigContactsBlockType
   | HeroFrontBlockType
-  | PhotoRibbonBlockType;
+  | PhotoRibbonBlockType
+  | MailchimpSubscribeBlockType;

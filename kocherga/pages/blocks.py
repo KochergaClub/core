@@ -110,6 +110,15 @@ various_blocks = [
         group='various',
         label='Лента фоток',
     )),
+    ('mailchimp_subscribe', blocks.StructBlock(
+        [
+            ('news', blocks.BooleanBlock(label='Материалы и новости', default=True)),
+            ('events', blocks.BooleanBlock(label='Расписание мероприятий', default=True)),
+            ('trainings', blocks.BooleanBlock(label='Уведомления о новых тренингах', default=True)),
+        ],
+        group='various',
+        label='Форма подписки',
+    )),
 ]
 
 all_blocks = basic_blocks + columns_blocks + various_blocks

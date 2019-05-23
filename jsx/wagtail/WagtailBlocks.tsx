@@ -31,6 +31,7 @@ import EventsListBlock from './blocks/EventsListBlock';
 import BigContactsBlock from './blocks/BigContactsBlock';
 import HeroFrontBlock from './blocks/HeroFrontBlock';
 import PhotoRibbonBlock from './blocks/PhotoRibbonBlock';
+import MailchimpSubscribeBlock from './blocks/MailchimpSubscribeBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
@@ -68,6 +69,8 @@ const AnyBlock = (block: BlockType) => {
       return <HeroFrontBlock {...block} />;
     case 'photo_ribbon':
       return <PhotoRibbonBlock {...block} />;
+    case 'mailchimp_subscribe':
+      return <MailchimpSubscribeBlock {...block} />;
     default:
       return <DebugBlock {...block} />;
   }
