@@ -41,6 +41,21 @@ class PbxCall(models.Model):
     pbx_call_id = models.CharField(primary_key=True, max_length=100)
     ts = models.DateTimeField()
 
+    class Meta:
+        verbose_name = 'АТС-звонок'
+        verbose_name_plural = 'АТС-звонки'
+        ordering = ['-ts']
+
+
+class PbxCallData(models.Model):
+    pbx_call = models.OneToOneField(PbxCall, on_delete=models.PROTECT, related_name='data')
+    staff_member = models.ForeignKey(
+        'staff.Member',
+        null=True, blank=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
+
 
 class Call(models.Model):
     call_id = models.CharField(primary_key=True, max_length=100)

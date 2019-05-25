@@ -52,7 +52,7 @@ const PickerItem = ({ date, shift, watchman, is_night, picked }: ItemProps) => {
     text = 'Ночь';
     color = nightColor;
   } else if (watchman) {
-    text = watchman.short_name;
+    text = watchman.short_name || 'Нет имени';
     color = watchman.color;
   }
 
@@ -72,12 +72,7 @@ const Picker = (props: Props) => {
   return (
     <PickerContainer>
       {watchmen.map(w => (
-        <PickerItem
-          key={w.short_name}
-          watchman={w}
-          is_night={false}
-          {...props}
-        />
+        <PickerItem key={w.id} watchman={w} is_night={false} {...props} />
       ))}
       <ThemeProvider theme={{ color: 'dark' }}>
         <PickerItem is_night={true} watchman={null} {...props} />

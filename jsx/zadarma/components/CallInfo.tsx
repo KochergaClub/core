@@ -17,7 +17,7 @@ const Container = styled.div`
   }
 `;
 
-const CallCard = ({ call }: { call: Call }) => {
+const CallInfo = ({ call }: { call: Call }) => {
   const m = moment.parseZone(call.ts);
   return (
     <Container>
@@ -29,4 +29,4 @@ const CallCard = ({ call }: { call: Call }) => {
   );
 };
 
-export default CallCard;
+export default CallInfo;

@@ -5,16 +5,11 @@ from asgiref.sync import async_to_sync
 
 from . import models
 import kocherga.staff.models
-
-
-class WatchmanSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = kocherga.staff.models.Member
-        fields = ('id', 'short_name', 'color')
+from kocherga.staff.serializers import ShortMemberSerializer
 
 
 class ShiftSerializer(serializers.ModelSerializer):
-    watchman = WatchmanSerializer()
+    watchman = ShortMemberSerializer()
 
     class Meta:
         model = models.Shift
