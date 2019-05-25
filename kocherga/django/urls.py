@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
     path('api/', include('kocherga.cm.urls')),
     path('api/', include('kocherga.events.urls')),
+    path('api/', include('kocherga.templater.urls')),
 
     path('', include('kocherga.auth.urls')),
     path('admin/', admin.site.urls),

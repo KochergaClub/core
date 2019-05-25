@@ -46,10 +46,5 @@ urlpatterns = [
     path('auth/google', views.auth.r_google),
     path('auth/check', views.auth.r_check),
 
-    path('templater/<name>/html', views.templater.r_html),
-    path('templater/<name>/png', views.templater.r_png),
-    path('templater/<name>/schema', views.templater.r_schema),
-    path('templater', views.templater.r_list),
-
     path('fb/token', views.fb.TokenView.as_view()),
 ]

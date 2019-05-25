@@ -11,8 +11,7 @@ from rest_framework.permissions import IsAdminUser
 
 import asyncio
 
-import kocherga.templater
-from kocherga.templater import Template
+from . import models
 
 
 def get_args(args):
@@ -27,14 +26,14 @@ def get_args(args):
 @require_safe
 @xframe_options_exempt  # html templater is used on evenman.team.kocherga.club
 def r_html(request, name):
-    template = Template.by_name(name)
+    template = models.Template.by_name(name)
     args = get_args(request.GET)
     return HttpResponse(template.generate_html(args))
 
 
 @require_safe
 def r_png(request, name):
-    template = Template.by_name(name)
+    template = models.Template.by_name(name)
     args = get_args(request.GET)
 
     loop = asyncio.new_event_loop()
@@ -47,18 +46,35 @@ def r_png(request, name):
 @api_view()
 @permission_classes((IsAdminUser,))
 def r_schema(request, name):
-    template = Template.by_name(name)
+    template = models.Template.by_name(name)
     return Response(template.schema.to_dict())
+
+
+def template2meta(template):
+    (width, height) = template.sizes
+    return {
+        "name": template.name,
+        "schema": template.schema.to_dict(),
+        "sizes": {
+            "width": width,
+            "height": height,
+        },
+    }
+
+
+@api_view()
+@permission_classes((IsAdminUser,))
+def r_meta(request, name):
+    template = models.Template.by_name(name)
+
+    return Response(template2meta(template))
 
 
 @api_view()
 @permission_classes((IsAdminUser,))
 def r_list(request):
-    names = kocherga.templater.list_templates()
+    names = models.list_templates()
     return Response([
-        {
-            "name": name,
-            "schema": Template.by_name(name).schema.to_dict(),
-        }
+        template2meta(models.Template.by_name(name))
         for name in names
     ])

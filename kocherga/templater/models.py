@@ -12,6 +12,8 @@ from .config import name2schema
 
 
 class Template:
+    """This is not really a Django model. Oh well."""
+
     def __init__(self, name, schema):
         self.name = name
         self.schema = schema
