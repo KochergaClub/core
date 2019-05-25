@@ -20,7 +20,7 @@ const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
       <Page.Main>
         <Column stretch gutter={10}>
           {pbx_calls.map(pbx_call => (
-            <PbxCallCard pbx_call={pbx_call} key={pbx_call[0].pbx_call_id} />
+            <PbxCallCard pbx_call={pbx_call} key={pbx_call.pbx_call_id} />
           ))}
         </Column>
       </Page.Main>

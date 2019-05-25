@@ -12,4 +12,8 @@ export interface Call {
   record?: string;
 }
 
-export type PbxCall = Call[];
+export interface PbxCall {
+  pbx_call_id: string;
+  ts: string;
+  calls: Call[];
+}

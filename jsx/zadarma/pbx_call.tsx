@@ -14,7 +14,7 @@ interface Props {
 }
 
 const ZadarmaCallPage = ({ pbx_call }: Props) => {
-  const title = `Архивный звонок ${pbx_call[0].pbx_call_id}`;
+  const title = `Архивный звонок ${pbx_call.pbx_call_id}`;
   return (
     <Page title={title} team>
       <Page.Title>{title}</Page.Title>
