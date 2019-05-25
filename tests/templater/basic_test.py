@@ -1,6 +1,6 @@
 import pytest
 
-from kocherga.templater import Template, list_templates
+from kocherga.templater.models import Template, list_templates
 
 
 @pytest.fixture

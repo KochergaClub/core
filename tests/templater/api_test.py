@@ -10,11 +10,8 @@ def test_html(client):
     assert res.get('X-Frame-Options') is None
 
 
-def test_list(client, kocherga_auth_header):
-    res = client.get(
-        '/api/templater',
-        **kocherga_auth_header
-    )
+def test_list(admin_client):
+    res = admin_client.get('/api/templater')
     assert res.status_code == 200
     data = res.json()
     assert type(data) == list

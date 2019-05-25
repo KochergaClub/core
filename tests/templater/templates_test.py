@@ -1,6 +1,6 @@
 import pytest
 
-from kocherga.templater import Template
+from kocherga.templater.models import Template
 
 
 @pytest.fixture(params=[
