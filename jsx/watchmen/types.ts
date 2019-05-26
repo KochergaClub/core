@@ -1,10 +1,5 @@
-export interface StaffMember {
-  id: number;
-  short_name: string;
-  color: string;
-  is_current: boolean;
-  role: string;
-}
+import { Member as StaffMember } from '../staff/types';
+export { Member as StaffMember } from '../staff/types';
 
 export interface Shift {
   date: string;

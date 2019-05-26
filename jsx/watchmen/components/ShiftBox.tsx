@@ -1,15 +1,15 @@
 import React, { useRef, useState, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-import useOnClickOutside from 'use-onclickoutside';
-
 import { colors } from '@kocherga/frontkit';
+
+import { Member } from '~/staff/types';
+import Picker from '~/staff/components/Picker';
+import { useAPI, useExpandable } from '~/common/hooks';
 
 import { nightColor } from '../constants';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
-import { useAPI } from '../../common/hooks';
-import Picker from './Picker';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -67,37 +67,40 @@ const InnerShiftBox = ({
 
 const ShiftBox = ({ shift }: { shift: Shift }) => {
   const { editing, setShift } = useContext(ScheduleContext);
-  const [expanded, setExpanded] = useState(false);
   const api = useAPI();
 
-  const flipExpand = useCallback(
-    () => {
-      setExpanded(!expanded);
+  const { flipExpand, unexpand, ref, expanded } = useExpandable();
+
+  const { date, shift: shiftType } = shift;
+
+  const updateUrl = `watchmen/schedule/${date}/${shiftType}`;
+
+  const updateShift = useCallback(
+    async (data: { watchman: Member | null; is_night?: boolean }) => {
+      await api.call(updateUrl, 'PUT', {
+        watchman: data.watchman ? data.watchman.short_name : '',
+        is_night: data.is_night,
+      });
+
+      setShift({
+        ...shift,
+        ...data,
+      });
+      unexpand();
     },
-    [expanded, editing]
+    [updateUrl, setShift, unexpand]
   );
 
-  const unexpand = useCallback(
-    () => {
-      setExpanded(false);
-    },
-    [expanded, editing]
-  );
+  const pickMember = async (m: Member) => {
+    await updateShift({ watchman: m, is_night: false });
+  };
 
-  const ref = useRef(null);
-  useOnClickOutside(ref, unexpand);
-
-  const pick = useCallback(async (shift: Shift) => {
-    const { date, shift: shiftType, watchman, is_night } = shift;
-
-    await api.call(`watchmen/schedule/${date}/${shiftType}`, 'PUT', {
-      watchman: watchman ? watchman.short_name : '',
-      is_night: is_night ? 1 : 0,
+  const pickExtra = async (text: string) => {
+    await updateShift({
+      watchman: null,
+      is_night: text === 'Ночь',
     });
-
-    setShift(shift);
-    unexpand();
-  }, []);
+  };
 
   return (
     <Container ref={ref} editing={editing}>
@@ -105,7 +108,14 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
         <InnerShiftBox shift={shift} editing={editing} />
       </div>
       {expanded && (
-        <Picker date={shift.date} shift={shift.shift} picked={pick} />
+        <Picker
+          pickedMember={pickMember}
+          pickedExtra={pickExtra}
+          extra={[
+            { text: 'Ночь', color: nightColor, dark: true },
+            { text: 'Очистить', color: 'white', dark: false },
+          ]}
+        />
       )}
     </Container>
   );

@@ -9,6 +9,8 @@ import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI } from '~/common/hooks';
 import { API } from '~/common/api';
 
+import { StaffContext } from '~/staff/contexts';
+
 import { Shift, StaffMember, shifts2schedule, scheduleReducer } from './types';
 
 import Calendar from './components/Calendar';
@@ -78,7 +80,6 @@ const WatchmenIndexPage = (props: Props) => {
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
   const contextValue = {
-    watchmen: props.watchmen,
     editing,
     setEditing,
     setShift,
@@ -86,30 +87,32 @@ const WatchmenIndexPage = (props: Props) => {
 
   return (
     <ScheduleContext.Provider value={contextValue}>
-      <Page title="Расписание смен" team>
-        <Page.Title>Расписание смен</Page.Title>
-        <Page.Main>
-          <Column gutter={16} stretch>
-            <Column centered gutter={0}>
-              <Column centered>
-                <Pager from_date={moment(props.from_date)} />
-                {props.editable && <EditingSwitch />}
+      <StaffContext.Provider value={{ members: props.watchmen }}>
+        <Page title="Расписание смен" team>
+          <Page.Title>Расписание смен</Page.Title>
+          <Page.Main>
+            <Column gutter={16} stretch>
+              <Column centered gutter={0}>
+                <Column centered>
+                  <Pager from_date={moment(props.from_date)} />
+                  {props.editable && <EditingSwitch />}
+                </Column>
               </Column>
+              <Calendar
+                fromDate={moment(props.from_date)}
+                toDate={moment(props.to_date)}
+                renderDay={d => {
+                  return (
+                    <DayContainer
+                      daySchedule={schedule[d.format('YYYY-MM-DD')]}
+                    />
+                  );
+                }}
+              />
             </Column>
-            <Calendar
-              fromDate={moment(props.from_date)}
-              toDate={moment(props.to_date)}
-              renderDay={d => {
-                return (
-                  <DayContainer
-                    daySchedule={schedule[d.format('YYYY-MM-DD')]}
-                  />
-                );
-              }}
-            />
-          </Column>
-        </Page.Main>
-      </Page>
+          </Page.Main>
+        </Page>
+      </StaffContext.Provider>
     </ScheduleContext.Provider>
   );
 };

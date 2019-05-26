@@ -1,3 +1,5 @@
+import { ShortStaffMember as StaffMember } from '~/staff/types';
+
 export interface Call {
   ts: string;
   call_id: string;
@@ -12,4 +14,13 @@ export interface Call {
   record?: string;
 }
 
-export type PbxCall = Call[];
+export interface PbxCallData {
+  staff_member?: StaffMember;
+}
+
+export interface PbxCall {
+  pbx_call_id: string;
+  ts: string;
+  calls: Call[];
+  data?: PbxCallData;
+}

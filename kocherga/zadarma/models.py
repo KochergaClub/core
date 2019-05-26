@@ -17,6 +17,8 @@ import kocherga.watchmen.schedule
 import kocherga.watchmen.models
 import kocherga.importer.base
 
+from kocherga.staff.models import Member
+
 from . import api
 
 
@@ -37,9 +39,38 @@ def call_path(call, filename):
     return f'zadarma/calls/records/{call.call_id}.mp3'
 
 
+class PbxCall(models.Model):
+    pbx_call_id = models.CharField(primary_key=True, max_length=100)
+    ts = models.DateTimeField()
+
+    class Meta:
+        verbose_name = 'АТС-звонок'
+        verbose_name_plural = 'АТС-звонки'
+        ordering = ['-ts']
+
+    def set_staff_member_by_id(self, member_id):
+        staff_member = Member.objects.get(pk=member_id)
+        try:
+            self.data
+        except PbxCall.data.RelatedObjectDoesNotExist:
+            self.data = PbxCallData(pbx_call=self)
+        self.data.staff_member = staff_member
+        self.data.save()
+
+
+class PbxCallData(models.Model):
+    pbx_call = models.OneToOneField(PbxCall, on_delete=models.PROTECT, related_name='data')
+    staff_member = models.ForeignKey(
+        Member,
+        null=True, blank=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
+
+
 class Call(models.Model):
     call_id = models.CharField(primary_key=True, max_length=100)
-    pbx_call_id = models.CharField(max_length=100)
+    pbx_call = models.ForeignKey(PbxCall, on_delete=models.CASCADE, related_name='calls')
 
     ts = models.DateTimeField()
     call_type = models.CharField(max_length=15)
@@ -59,23 +90,28 @@ class Call(models.Model):
         verbose_name_plural = 'Звонки'
         ordering = ['-ts']
         permissions = (
-            ('listen', 'Может слушать  звонки'),
+            ('listen', 'Может слушать звонки'),  # deprecated
+            ('admin', 'Может администрировать звонки'),
         )
 
     def __str__(self):
         return f'[{self.ts}] {self.call_type} {self.clid} ---> {self.destination}'
 
     @classmethod
-    def from_api_data(cls, data) -> "Call":
+    def from_api_data(cls, pbx_call: PbxCall, data) -> "Call":
         args = {}
-        for arg in ('call_id', 'pbx_call_id', 'disposition', 'clid', 'sip', 'seconds'):
+        for arg in ('call_id', 'disposition', 'clid', 'sip', 'seconds'):
             args[arg] = data[arg]
+
+        if data['pbx_call_id'] != pbx_call.pbx_call_id:
+            raise Exception("Code logic error")
 
         call = Call(
             ts=datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
             call_type=CallType.from_api_data(data).name,
             is_recorded=(data['is_recorded'] == 'true'),
             destination=str(data['destination']),
+            pbx_call=pbx_call,
             **args,
         )
 
@@ -106,7 +142,15 @@ def fetch_calls(from_dt: datetime, to_dt: datetime) -> Iterator[Call]:
             assert record['status'] == 'success'
             item['record_link'] = record['link']
 
-        yield Call.from_api_data(item)
+        (pbx_call, pbx_call_created) = PbxCall.objects.get_or_create(
+            pk=item['pbx_call_id'],
+            defaults={
+                # copy-pasted from Call.from_api_data
+                'ts': datetime.strptime(item['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
+            }
+        )
+        call = Call.from_api_data(pbx_call, item)
+        yield call
 
 
 def fetch_all_calls(from_dt, to_dt) -> Iterator[Call]:
@@ -132,7 +176,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
     def get_initial_dt(self):
         # return datetime(2016, 11, 1, tzinfo=TZ)
-        return datetime(2019, 3, 23, tzinfo=TZ)
+        return datetime(2019, 5, 23, tzinfo=TZ)
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         last_call = None
