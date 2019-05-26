@@ -17,6 +17,8 @@ import kocherga.watchmen.schedule
 import kocherga.watchmen.models
 import kocherga.importer.base
 
+from kocherga.staff.models import Member
+
 from . import api
 
 
@@ -46,11 +48,20 @@ class PbxCall(models.Model):
         verbose_name_plural = 'АТС-звонки'
         ordering = ['-ts']
 
+    def set_staff_member_by_id(self, member_id):
+        staff_member = Member.objects.get(pk=member_id)
+        try:
+            self.data
+        except PbxCall.data.RelatedObjectDoesNotExist:
+            self.data = PbxCallData(pbx_call=self)
+        self.data.staff_member = staff_member
+        self.data.save()
+
 
 class PbxCallData(models.Model):
     pbx_call = models.OneToOneField(PbxCall, on_delete=models.PROTECT, related_name='data')
     staff_member = models.ForeignKey(
-        'staff.Member',
+        Member,
         null=True, blank=True,
         on_delete=models.PROTECT,
         related_name='+'

@@ -1,8 +1,7 @@
-from django.urls import path
-
+from rest_framework.routers import SimpleRouter
 from . import views
 
-urlpatterns = [
-    path('pbx_call', views.CallIndexView.as_view()),
-    path('pbx_call/<str:pk>', views.CallDetailView.as_view()),
-]
+router = SimpleRouter(trailing_slash=False)
+router.register('pbx_call', views.PbxCallViewSet, basename='pbx_call')
+
+urlpatterns = router.urls
