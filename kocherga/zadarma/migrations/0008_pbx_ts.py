@@ -7,8 +7,13 @@ import django.db.models.deletion
 
 def fill_pbx_ts(apps, schema_editor):
     PbxCall = apps.get_model('zadarma', 'PbxCall')
+    Call = apps.get_model('zadarma', 'Call')
     for pbx_call in PbxCall.objects.all():
-        call = pbx_call.calls.get(sip=0)
+        try:
+            call = pbx_call.calls.get(sip=0)
+        except Call.DoesNotExist:
+            call = pbx_call.calls.first()
+
         pbx_call.ts = call.ts
         pbx_call.save()
 
