@@ -90,7 +90,8 @@ class Call(models.Model):
         verbose_name_plural = 'Звонки'
         ordering = ['-ts']
         permissions = (
-            ('listen', 'Может слушать  звонки'),
+            ('listen', 'Может слушать звонки'),  # deprecated
+            ('admin', 'Может администрировать звонки'),
         )
 
     def __str__(self):

@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import { Label } from '@kocherga/frontkit';
 
+import GlobalContext from '~/components/GlobalContext';
+
 import { useAPI, useExpandable } from '~/common/hooks';
 
 import Picker from '~/staff/components/Picker';
@@ -44,6 +46,8 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
 };
 
 const StaffMember: React.FC<Props> = ({ pbx_call }) => {
+  const { user } = useContext(GlobalContext);
+
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
 
   const api = useAPI();
@@ -71,11 +75,14 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
     [api, pbx_call.pbx_call_id]
   );
 
+  const nameEl = <StaffMemberName pbx_call={pbx_call} />;
+  if (!user.permissions.includes('zadarma.admin')) {
+    return nameEl;
+  }
+
   return (
     <Container ref={ref}>
-      <div onClick={flipExpand}>
-        <StaffMemberName pbx_call={pbx_call} />
-      </div>
+      <div onClick={flipExpand}>{nameEl}</div>
       {expanded && <Picker pickedMember={setStaffMember} />}
     </Container>
   );
