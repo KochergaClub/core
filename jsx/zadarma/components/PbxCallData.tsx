@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useContext } from 'react';
 import styled from 'styled-components';
 
 import useOnClickOutside from 'use-onclickoutside';
 
-import { Label } from '@kocherga/frontkit';
+import { colors, Label } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 
@@ -11,6 +11,7 @@ import Picker from '~/staff/components/Picker';
 import { Member } from '~/staff/types';
 
 import { PbxCall } from '../types';
+import { ZadarmaContext } from '../contexts';
 
 interface Props {
   pbx_call: PbxCall;
@@ -46,17 +47,35 @@ const useExpandable = () => {
   };
 };
 
-const StaffMember: React.FC<Props> = ({ pbx_call }) => {
-  let name = 'Неизвестно';
+const NameContainer = styled.div`
+  display: inline;
+  width: auto;
+  padding: 4px;
+`;
+
+const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
   if (pbx_call.data && pbx_call.data.staff_member) {
-    name = pbx_call.data.staff_member.short_name;
+    return (
+      <NameContainer
+        style={{ backgroundColor: pbx_call.data.staff_member.color }}
+      >
+        {pbx_call.data.staff_member.short_name}
+      </NameContainer>
+    );
   } else if (pbx_call.calls[0].watchman) {
-    name = pbx_call.calls[0].watchman + ' (возможно)';
+    return (
+      <NameContainer>{pbx_call.calls[0].watchman} (возможно)</NameContainer>
+    );
   }
+  return <NameContainer>Неизвестно</NameContainer>;
+};
+
+const StaffMember: React.FC<Props> = ({ pbx_call }) => {
+  const { ref, flipExpand, unexpand, expanded } = useExpandable();
 
   const api = useAPI();
 
-  const { ref, flipExpand, unexpand, expanded } = useExpandable();
+  const dispatch = useContext(ZadarmaContext);
 
   const setStaffMember = useCallback(
     async (member: Member) => {
@@ -67,14 +86,23 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
           id: member.id,
         }
       );
-      window.location.reload();
+      dispatch({
+        type: 'UPDATE_STAFF_MEMBER',
+        payload: {
+          pbx_call_id: pbx_call.pbx_call_id,
+          staff_member: member,
+        },
+      });
+      unexpand();
     },
     [api, pbx_call.pbx_call_id]
   );
 
   return (
     <Container ref={ref}>
-      <div onClick={flipExpand}>{name}</div>
+      <div onClick={flipExpand}>
+        <StaffMemberName pbx_call={pbx_call} />
+      </div>
       {expanded && <Picker pickedMember={setStaffMember} />}
     </Container>
   );

@@ -1,4 +1,4 @@
-import { ShortStaffMember as StaffMember } from '../staff/types';
+import { ShortStaffMember as StaffMember } from '~/staff/types';
 
 export interface Call {
   ts: string;
