@@ -11,6 +11,7 @@ import { Member as StaffMember } from '~/staff/types';
 import { PbxCall } from './types';
 import { singleReducer } from './reducers';
 import { ZadarmaContext } from './contexts';
+import { getCall, getStaffMembers } from './api';
 
 import PbxCallCard from './components/PbxCallCard';
 
@@ -41,9 +42,10 @@ const ZadarmaCallPage = (props: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
-  const pbx_call = await api.call(`zadarma/pbx_call/${params.id}`, 'GET');
-  const staffMembers = (await api.call('staff/member', 'GET')) as StaffMember[];
-  return { pbx_call, members: staffMembers };
+  return {
+    pbx_call: await getCall(api, params.id),
+    members: await getStaffMembers(api),
+  };
 };
 
 const screen: Screen<Props> = {
