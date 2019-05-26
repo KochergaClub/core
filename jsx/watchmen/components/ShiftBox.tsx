@@ -1,17 +1,15 @@
 import React, { useRef, useState, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-import useOnClickOutside from 'use-onclickoutside';
-
 import { colors } from '@kocherga/frontkit';
 
 import { Member } from '~/staff/types';
 import Picker from '~/staff/components/Picker';
+import { useAPI, useExpandable } from '~/common/hooks';
 
 import { nightColor } from '../constants';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
-import { useAPI } from '../../common/hooks';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -69,25 +67,9 @@ const InnerShiftBox = ({
 
 const ShiftBox = ({ shift }: { shift: Shift }) => {
   const { editing, setShift } = useContext(ScheduleContext);
-  const [expanded, setExpanded] = useState(false);
   const api = useAPI();
 
-  const flipExpand = useCallback(
-    () => {
-      setExpanded(!expanded);
-    },
-    [expanded, editing]
-  );
-
-  const unexpand = useCallback(
-    () => {
-      setExpanded(false);
-    },
-    [expanded, editing]
-  );
-
-  const ref = useRef(null);
-  useOnClickOutside(ref, unexpand);
+  const { flipExpand, unexpand, ref, expanded } = useExpandable();
 
   const { date, shift: shiftType } = shift;
 

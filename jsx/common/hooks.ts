@@ -1,4 +1,6 @@
-import { useEffect, useCallback, useRef, useContext } from 'react';
+import { useState, useEffect, useCallback, useRef, useContext } from 'react';
+import useOnClickOutside from 'use-onclickoutside';
+
 import { IS_SERVER } from './utils';
 
 import GlobalContext from '../components/GlobalContext';
@@ -94,4 +96,29 @@ export const useCommonHotkeys = ({
 export const useAPI = () => {
   const { api } = useContext(GlobalContext);
   return api;
+};
+
+export const useExpandable = () => {
+  const [expanded, setExpanded] = useState(false);
+
+  const flipExpand = useCallback(
+    () => {
+      setExpanded(!expanded);
+    },
+    [expanded]
+  );
+
+  const unexpand = useCallback(() => {
+    setExpanded(false);
+  }, []);
+
+  const ref = useRef(null);
+  useOnClickOutside(ref, unexpand);
+
+  return {
+    expanded,
+    flipExpand,
+    unexpand,
+    ref,
+  };
 };

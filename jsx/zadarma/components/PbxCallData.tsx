@@ -1,11 +1,9 @@
-import React, { useState, useCallback, useRef, useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-import useOnClickOutside from 'use-onclickoutside';
+import { Label } from '@kocherga/frontkit';
 
-import { colors, Label } from '@kocherga/frontkit';
-
-import { useAPI } from '~/common/hooks';
+import { useAPI, useExpandable } from '~/common/hooks';
 
 import Picker from '~/staff/components/Picker';
 import { Member } from '~/staff/types';
@@ -21,31 +19,6 @@ const Container = styled.div`
   position: relative;
   cursor: pointer;
 `;
-
-const useExpandable = () => {
-  const [expanded, setExpanded] = useState(false);
-
-  const flipExpand = useCallback(
-    () => {
-      setExpanded(!expanded);
-    },
-    [expanded]
-  );
-
-  const unexpand = useCallback(() => {
-    setExpanded(false);
-  }, []);
-
-  const ref = useRef(null);
-  useOnClickOutside(ref, unexpand);
-
-  return {
-    expanded,
-    flipExpand,
-    unexpand,
-    ref,
-  };
-};
 
 const NameContainer = styled.div`
   display: inline;
