@@ -1,2 +1,2 @@
 #!/bin/sh
-exec poetry run ./manage.py runworker slack-notify events-slack-notify
+exec ./manage.py runworker slack-notify events-slack-notify

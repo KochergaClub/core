@@ -48,7 +48,7 @@ services:
       dockerfile: ./docker/Dockerfile
       args:
         NPM_TOKEN: ${TOKEN}
-    command: npx nodemon -w ./kocherga --exec poetry run ./manage.py runserver --noreload 0.0.0.0:80
+    command: npx nodemon -w ./kocherga --exec ./manage.py runserver --noreload 0.0.0.0:80
     ports:
       - "127.0.0.1:8001:80"
     depends_on:

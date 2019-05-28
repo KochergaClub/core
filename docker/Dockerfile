@@ -13,11 +13,11 @@ ARG NPM_TOKEN
 RUN npm config set registry https://npm.team.kocherga.club/ \
     && echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
 
-RUN pip install poetry
+RUN pip install --upgrade pip && pip install pip-tools
 
 WORKDIR /code
-COPY poetry.lock pyproject.toml /code/
-RUN poetry install
+COPY requirements.txt /code/
+RUN pip-sync
 
 RUN apt-get install -y inotify-tools
 

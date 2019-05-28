@@ -6,7 +6,7 @@ image:
 ##### Dev environment #####
 init-dev:
 	docker-compose -f docker/compose.dev.yml exec db mysql -uroot -e 'CREATE DATABASE kocherga'
-	docker-compose -f docker/compose.dev.yml run --rm api poetry run ./manage.py migrate
+	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
 	docker-compose -f docker/compose.dev.yml run --rm api npm ci
 
 dev-mac: image
@@ -21,13 +21,13 @@ dev-full: image
 ##### Tests #####
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs poetry run --rm mypy --strict-optional --check-untyped-defs kocherga # FIXME
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml run --rm mypy --strict-optional --check-untyped-defs kocherga # FIXME
 
 test-code:
-	docker-compose -f docker/compose.dev.yml run --rm api poetry run pytest
+	docker-compose -f docker/compose.dev.yml run --rm api pytest
 
 lint:
-	docker-compose -f docker/compose.dev.yml run --rm api poetry run flake8 kocherga/ --max-line-length=120
+	docker-compose -f docker/compose.dev.yml run --rm api flake8 kocherga/ --max-line-length=120
 
 test-js:
 	docker-compose -f docker/compose.dev.yml run --rm api npx tsc
@@ -43,5 +43,5 @@ shell:
 	docker-compose -f docker/compose.dev.yml exec api bash
 
 pyshell:
-	docker-compose -f docker/compose.dev.yml exec api poetry run ./manage.py shell
+	docker-compose -f docker/compose.dev.yml exec api ./manage.py shell
 

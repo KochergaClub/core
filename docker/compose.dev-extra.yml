@@ -12,26 +12,26 @@ x-common:
 services:
   worker:
     << : *common
-    command: poetry run ./scripts/worker.py
+    command: ./scripts/worker.py
     depends_on:
       - db
 
   importer:
     << : *common
-    command: poetry run ./scripts/importer.py
+    command: ./scripts/importer.py
     depends_on:
       - db
 
   tgbot:
     << : *common
-    command: poetry run ./scripts/tgbot.py
+    command: ./scripts/tgbot.py
     # TODO - expose RPC port
     depends_on:
       - db
 
   ludwig:
     << : *common
-    command: poetry run ./scripts/ludwig.py
+    command: ./scripts/ludwig.py
     ports:
       - "5200:80"
     depends_on:
