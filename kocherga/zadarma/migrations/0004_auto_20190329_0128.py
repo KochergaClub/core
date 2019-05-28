@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import kocherga.zadarma.models
+import kocherga.zadarma.models.call
 
 
 class Migration(migrations.Migration):
@@ -18,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='call',
             name='record',
-            field=models.FileField(blank=True, upload_to=kocherga.zadarma.models.call_path),
+            field=models.FileField(blank=True, upload_to=kocherga.zadarma.models.call.call_path),
         ),
     ]
