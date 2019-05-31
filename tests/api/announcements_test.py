@@ -40,7 +40,7 @@ def test_fb_groups(client, event, kocherga_auth_header):
 
 def test_weekly_digest(client, kocherga_auth_header):
     res = client.post(
-        '/api/announcements/email/post_digest',
+        '/api/weekly-digest/current/mailchimp-draft',
         {},
         format='json',
         **kocherga_auth_header

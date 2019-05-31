@@ -15,7 +15,7 @@ import kocherga.events.announce
 class TestTexts:
     def test_tail(self, event):
         assert re.match(
-            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\.'
+            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\. '
             r'Оплата участия — по тарифам антикафе: 2,5 руб\./минута\.$',
             kocherga.events.vk.vk_tail(event)
         )
