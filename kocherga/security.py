@@ -59,7 +59,7 @@ def audit_slack():
     ok = 0
     for m in staff:
         if not m.slack_id:
-            report_shortage(f"Not found in slack: {m.full_name}, {m.email}")
+            report_shortage(f"Not found in slack: {m.full_name}, {m.user.email}")
             continue
 
         ok += 1
