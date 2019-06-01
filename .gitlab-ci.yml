@@ -35,8 +35,7 @@ test-js:
   script:
     - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
     - ci_env=`bash <(curl -s https://codecov.io/env)`
-      && echo $ci_env
-      && docker-compose -f docker/compose.ci.yml run $ci_env
+      && docker-compose -f docker/compose.ci.yml run $ci_env -e CI_SERVER_NAME
       --rm api
       npx bash -c "
         jest --collect-coverage
@@ -50,7 +49,7 @@ test-python:
   script:
     - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
     - ci_env=`bash <(curl -s https://codecov.io/env)`
-      && docker-compose -f docker/compose.ci.yml run $ci_env
+      && docker-compose -f docker/compose.ci.yml run $ci_env -e CI_SERVER_NAME
       --rm api
       bash -c "
         pytest -m 'not google and not slack and not mailchimp and not ofd' --cov=kocherga
