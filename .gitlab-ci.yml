@@ -29,7 +29,7 @@ test-js:
     - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
   after_script:
     - rm -rf .coverage # python coverage remnants
-    - codecov -t $CODECOV_TOKEN -F js
+    - docker-compose -f docker/compose.ci.yml run --rm api codecov -t $CODECOV_TOKEN -F js
 
 test-python:
   stage: test
@@ -40,7 +40,7 @@ test-python:
     - docker-compose -f docker/compose.ci.yml run --rm api pytest -m 'not google and not slack and not mailchimp and not ofd' --cov=kocherga
   after_script:
     - rm -rf coverage # js coverage remnants
-    - codecov -t $CODECOV_TOKEN -F python
+    - docker-compose -f docker/compose.ci.yml run --rm api codecov -t $CODECOV_TOKEN -F python
 
 deploy-stack:
   stage: deploy
