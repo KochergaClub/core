@@ -133,16 +133,44 @@ class EventSerializer(serializers.ModelSerializer):
         return event
 
     def update(self, instance, validated_data):
+        vk_announcement_data = validated_data.pop('vk_announcement', {})
+        fb_announcement_data = validated_data.pop('fb_announcement', {})
+        timepad_announcement_data = validated_data.pop('timepad_announcement', {})
+
         event = super().update(instance, validated_data)
         event.patch_google()
+
+        if vk_announcement_data:
+            event.vk_announcement.group = vk_announcement_data.get('group', event.vk_announcement.group)
+            event.vk_announcement.link = vk_announcement_data.get('link', event.vk_announcement.link)
+            event.vk_announcement.save()
+
+        if fb_announcement_data:
+            event.fb_announcement.group = fb_announcement_data.get('group', event.fb_announcement.group)
+            event.fb_announcement.link = fb_announcement_data.get('link', event.fb_announcement.link)
+            event.fb_announcement.save()
+
+        if timepad_announcement_data:
+            event.timepad_announcement.group = fb_announcement_data.get(
+                'category_code',
+                event.timepad_announcement.category_code
+            )
+            event.timepad_announcement.link = fb_announcement_data.get(
+                'prepaid_tickets',
+                event.timepad_announcement.prepaid_tickets
+            )
+            event.timepad_announcement.save()
+
         models.Event.objects.notify_update()  # send notification message to websocket
         return event
 
     # Deprecated fields which should be serialized through nested serializers instead.
-    timepad_category_code = serializers.IntegerField(source='timepad_announcement.category_code')
-    timepad_prepaid_tickets = serializers.BooleanField(source='timepad_announcement.prepaid_tickets')
-    vk_group = serializers.CharField(source='vk_announcement.group')
-    fb_group = serializers.CharField(source='fb_announcement.group')
-    posted_vk = serializers.CharField(source='vk_announcement.link')
-    posted_fb = serializers.CharField(source='fb_announcement.link')
-    posted_timepad = serializers.CharField(source='timepad_announcement.link')
+    timepad_category_code = serializers.CharField(source='timepad_announcement.category_code', required=False)
+    timepad_prepaid_tickets = serializers.BooleanField(source='timepad_announcement.prepaid_tickets', required=False)
+    posted_timepad = serializers.CharField(source='timepad_announcement.link', required=False)
+
+    fb_group = serializers.CharField(source='fb_announcement.group', required=False)
+    posted_fb = serializers.CharField(source='fb_announcement.link', required=False)
+
+    vk_group = serializers.CharField(source='vk_announcement.group', required=False)
+    posted_vk = serializers.CharField(source='vk_announcement.link', required=False)

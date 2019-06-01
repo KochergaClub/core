@@ -8,7 +8,6 @@ import datetime
 from typing import Any, Dict, List
 
 import kocherga.google
-import kocherga.events.timepad
 
 
 def get_calendar_id():

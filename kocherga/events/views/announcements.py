@@ -15,10 +15,9 @@ from rest_framework.permissions import IsAdminUser
 from kocherga.error import PublicError
 
 from kocherga.images import image_storage
-from kocherga.events.models import Event, WeeklyDigest
-import kocherga.events.timepad
-import kocherga.events.vk
-import kocherga.events.announce
+from kocherga.events import models
+
+import kocherga.events.models.announcement.timepad
 
 from kocherga.api.common import ok
 
@@ -32,8 +31,9 @@ class TimepadPostView(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request, event_id):
-        event = Event.objects.get(pk=event_id)
-        announcement = kocherga.events.announce.post_to_timepad(event)
+        event = models.Event.objects.get(pk=event_id)
+        announcement = event.timepad_announcement
+        announcement.announce()
 
         return Response({"link": announcement.link})
 
@@ -42,7 +42,7 @@ class TimepadCategoriesView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
-        categories = kocherga.events.timepad.timepad_categories()
+        categories = kocherga.events.models.announcement.timepad.timepad_categories()
         return Response([
             {
                 "id": c.id, "name": c.name, "code": c.code
@@ -53,21 +53,21 @@ class TimepadCategoriesView(APIView):
 @api_view()
 @permission_classes((IsAdminUser,))
 def r_vk_groups(request):
-    all_groups = kocherga.events.vk.all_groups()
+    all_groups = models.VkAnnouncement.objects.all_groups()
     return Response(all_groups)
 
 
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def r_vk_update_wiki_schedule(request):
-    kocherga.events.vk.update_wiki_schedule()
+    models.VkAnnouncement.objects.update_wiki_schedule()
     return Response(ok)
 
 
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def r_weekly_digest_post_vk(request):
-    digest = WeeklyDigest.objects.current_digest()
+    digest = models.WeeklyDigest.objects.current_digest()
     digest.post_vk('')
     return Response(ok)
 
@@ -75,7 +75,7 @@ def r_weekly_digest_post_vk(request):
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def r_weekly_digest_post_telegram(request):
-    digest = WeeklyDigest.objects.current_digest()
+    digest = models.WeeklyDigest.objects.current_digest()
     digest.post_telegram()
     return Response(ok)
 
@@ -84,7 +84,7 @@ def r_weekly_digest_post_telegram(request):
 @permission_classes((IsAdminUser,))
 def r_weekly_digest_post_mailchimp_draft(request):
     text = request.data.get('text', '')
-    digest = WeeklyDigest.objects.current_digest()
+    digest = models.WeeklyDigest.objects.current_digest()
     digest.post_mailchimp_draft(text)
     return Response(ok)
 
@@ -92,8 +92,9 @@ def r_weekly_digest_post_mailchimp_draft(request):
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def r_vk_post(request, event_id):
-    event = Event.by_id(event_id)
-    announcement = kocherga.events.announce.post_to_vk(event)
+    event = models.Event.by_id(event_id)
+    announcement = event.vk_announcement
+    announcement.announce()
 
     return Response({"link": announcement.link})
 
@@ -101,15 +102,16 @@ def r_vk_post(request, event_id):
 @api_view()
 @permission_classes((IsAdminUser,))
 def r_fb_groups(request):
-    all_groups = kocherga.events.fb.all_groups()
+    all_groups = models.FbAnnouncement.objects.all_groups()
     return Response(all_groups)
 
 
 @api_view(['POST'])
 @permission_classes((IsAdminUser,))
 def r_fb_post(request, event_id):
-    event = Event.by_id(event_id)
-    announcement = kocherga.events.announce.post_to_fb(event)
+    event = models.Event.by_id(event_id)
+    announcement = event.fb_announcement
+    announcement.announce()
 
     return Response({"link": announcement.link})
 

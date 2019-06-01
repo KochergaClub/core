@@ -45,6 +45,7 @@ def test_default_event_type(google_object):
 
 def test_serialize(google_object):
     event = Event.from_google(google_object)
+    event.save()
     data = serializers.EventSerializer(event).data
     assert type(data['start']) == str
     assert data['posted_vk'] == ''

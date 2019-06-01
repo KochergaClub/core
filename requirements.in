@@ -45,6 +45,7 @@ redis >= 3.2
 django-reversion-compare >= 0.8.6
 wagtail == 2.5
 git+https://github.com/berekuk/wagtailmath.git@master
+django-annoying
 
 # dev-dependencies
 pytest

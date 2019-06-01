@@ -63,8 +63,7 @@ class WeeklyDigest(models.Model):
                 from_date=self.start,
                 to_date=self.end,
             )
-            .exclude(posted_vk__isnull=True)
-            .exclude(posted_vk='')
+            .exclude(vk_announcement__link='')
         )
         result = list(query.all())
         logger.info(f"Schedule includes {len(result)} events")
@@ -192,8 +191,8 @@ class WeeklyDigest(models.Model):
                 prev_date = start_local.date()
 
             title = event.title
-            if event.posted_vk:
-                title = f'<a href="{event.posted_vk}">{title}</a>'
+            if event.vk_announcement.link:
+                title = f'<a href="{event.vk_announcement.link}">{title}</a>'
             message += f"{start_local:%H:%M} {title}\n"
             message += f"{event.generate_summary()}\n\n"
 

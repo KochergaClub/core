@@ -206,6 +206,6 @@ def r_list_public_atom(request):
 
         fe.summary(dt_str)
         fe.content(dt_str)
-        fe.link(href=event.posted_vk)
+        fe.link(href=event.vk_announcement.link)
 
     return HttpResponse(fg.atom_str(pretty=True))

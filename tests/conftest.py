@@ -73,12 +73,15 @@ def event(image_file, vk_image_file):
         location='ГЭБ',
         event_type='public',
     )
-    event.vk_group = 'event159971736'
-    # event.fb_group = 'nonexisting_facebook_group'
-
     event = kocherga.events.db.insert_event(event)
+
+    event.vk_announcement.group = 'event159971736'
+    event.vk_announcement.save()
+    event.fb_announcement.group = 'nonexisting_facebook_group'
+    event.fb_announcement.save()
+
     with open(vk_image_file, 'rb') as fh:
-        event.add_image('vk', fh)
+        event.vk_announcement.add_image(fh)
 
     with open(image_file, 'rb') as fh:
         event.add_image('default', fh)

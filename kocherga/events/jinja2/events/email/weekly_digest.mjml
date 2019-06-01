@@ -52,9 +52,9 @@
             <p style="font-size: 14px">{{ event.summary | e }}
             </p>
             <p><i>Подробнее:
-              {% if event.posted_vk %}<a href="{{ utmify(event.posted_vk) | e }}">вконтакте</a>{% endif -%}
-              {% if event.posted_fb %}, <a href="{{ utmify(event.posted_fb) | e }}">facebook</a>{% endif -%}
-              {% if event.posted_timepad %}, <a href="{{ utmify(event.posted_timepad) | e }}">timepad</a>{% endif -%}
+              {% if event.vk_announcement.link %}<a href="{{ utmify(event.vk_announcement.link) | e }}">вконтакте</a>{% endif -%}
+              {% if event.fb_announcement.link %}, <a href="{{ utmify(event.fb_announcement.link) | e }}">facebook</a>{% endif -%}
+              {% if event.timepad_announcement.link %}, <a href="{{ utmify(event.timepad_announcement.link) | e }}">timepad</a>{% endif -%}
             </i></p>
           {% endfor %}
         </mj-text>
