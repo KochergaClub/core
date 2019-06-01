@@ -59,10 +59,10 @@ announcement_patterns = [
 
 urlpatterns += [
     path('announcements/', include(announcement_patterns)),
-    path('schedule/weekly-image', views.announcements.r_schedule_weekly_image),
     path('screenshot/error', views.announcements.r_last_screenshot),
 
-    path('weekly-digest/current/vk', views.announcements.r_weekly_digest_post_vk),
-    path('weekly-digest/current/telegram', views.announcements.r_weekly_digest_post_telegram),
-    path('weekly-digest/current/mailchimp-draft', views.announcements.r_weekly_digest_post_mailchimp_draft),
+    path('weekly-digest/current/vk', views.weekly_digest.r_post_vk),
+    path('weekly-digest/current/telegram', views.weekly_digest.r_post_telegram),
+    path('weekly-digest/current/mailchimp-draft', views.weekly_digest.r_post_mailchimp_draft),
+    path('schedule/weekly-image', views.weekly_digest.r_schedule_weekly_image),
 ]
