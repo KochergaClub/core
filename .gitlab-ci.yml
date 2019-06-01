@@ -1,3 +1,11 @@
+# Workaround for codecov-python - see https://github.com/codecov/codecov-python/issues/96
+# Still unpatched as of 2019-06.
+variables:
+  CI_BUILD_REF_NAME: $CI_COMMIT_REF_NAME
+  CI_BUILD_ID: $CI_JOB_ID
+  CI_BUILD_REPO: $CI_REPOSITORY_URL
+  CI_BUILD_REF: $CI_COMMIT_SHA
+
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
@@ -31,7 +39,7 @@ test-js:
       --rm api
       npx bash -c "
         jest --collect-coverage
-        && codecov -F js
+        && codecov -F js -n js 
       "
 
 test-python:
