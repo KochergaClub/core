@@ -21,3 +21,5 @@ __pycache__
 /webpack-stats.json
 /coverage
 /.docker-sync
+/.coverage
+/htmlcov
