@@ -25,11 +25,8 @@ test-js:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run --rm api npx jest --collect-coverage
     - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
-  after_script:
-    - rm -rf .coverage # python coverage remnants
-    - docker-compose -f docker/compose.ci.yml run --rm api codecov -t $CODECOV_TOKEN -F js
+    - docker-compose -f docker/compose.ci.yml run --rm api npx bash -c "jest --collect-coverage && codecov -t $CODECOV_TOKEN -F js"
 
 test-python:
   stage: test
@@ -37,10 +34,7 @@ test-python:
     TAG: $CI_COMMIT_REF_NAME
   script:
     - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
-    - docker-compose -f docker/compose.ci.yml run --rm api pytest -m 'not google and not slack and not mailchimp and not ofd' --cov=kocherga
-  after_script:
-    - rm -rf coverage # js coverage remnants
-    - docker-compose -f docker/compose.ci.yml run --rm api codecov -t $CODECOV_TOKEN -F python
+    - docker-compose -f docker/compose.ci.yml run --rm api bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd' --cov=kocherga && codecov -t $CODECOV_TOKEN -F python"
 
 deploy-stack:
   stage: deploy
