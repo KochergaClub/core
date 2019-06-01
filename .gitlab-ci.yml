@@ -37,8 +37,8 @@ test-js:
     - ci_env=`bash <(curl -s https://codecov.io/env)`
       && docker-compose -f docker/compose.ci.yml run $ci_env -e CI_SERVER_NAME
       --rm api
-      npx bash -c "
-        jest --collect-coverage
+      bash -c "
+        npx jest --collect-coverage
         && codecov -F js -n js 
       "
 
