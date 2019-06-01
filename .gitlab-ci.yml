@@ -35,6 +35,7 @@ test-js:
   script:
     - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
     - ci_env=`bash <(curl -s https://codecov.io/env)`
+      && echo $ci_env
       && docker-compose -f docker/compose.ci.yml run $ci_env
       --rm api
       npx bash -c "
