@@ -39,7 +39,7 @@ test-js:
       --rm api
       bash -c "
         npx jest --collect-coverage
-        && codecov -F js -n js 
+        && codecov -F js
       "
 
 test-python:
@@ -53,6 +53,7 @@ test-python:
       --rm api
       bash -c "
         pytest -m 'not google and not slack and not mailchimp and not ofd' --cov=kocherga
+        && ls -l
         && codecov -F python
       "
 
