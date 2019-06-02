@@ -234,7 +234,7 @@ class AnnounceSession:
         # TODO - waitForSelector
         logger.info("Signed in")
 
-    def announce_page(self, group: Optional[str]) -> str:
+    def announce_page(self, group: str) -> str:
         if group:
             return f"https://www.facebook.com/groups/{group}"
         else:
@@ -251,7 +251,7 @@ class AnnounceSession:
 
         event = self.event
 
-        events_page = self.announce_page() + "/events/"
+        events_page = self.announce_page(group) + "/events/"
         logger.info("Going to page: " + events_page)
         await page.goto(events_page)
         await page.waitForSelector("[data-testid=event-create-button]", timeout=10000)
