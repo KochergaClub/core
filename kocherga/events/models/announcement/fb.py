@@ -106,7 +106,7 @@ class FbAnnouncement(models.Model):
         async with kocherga.chrome.get_browser() as browser:
             session = await AnnounceSession.create(browser)
             try:
-                logger.info(f"Trying to create")
+                logger.info(f"Trying to add to main page")
                 await session.add_to_main_page(self.link)
             except Exception:
                 logger.exception(f"Error while adding to the main page")
@@ -117,7 +117,7 @@ class FbAnnouncement(models.Model):
 
     def add_to_main_page(self):
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(self.create())
+        loop.run_until_complete(self._add_to_main_page())
 
 
 class AnnounceSession:
