@@ -122,9 +122,7 @@ class FbAnnouncement(models.Model):
 
 class AnnounceSession:
     @classmethod
-    async def create(
-        cls, browser, event
-    ):
+    async def create(cls, browser):
         self = cls()
         self.page = await browser.newPage()
         await self.page.setViewport({
