@@ -365,11 +365,11 @@ class AnnounceSession:
         controls_el = await page.J(controls)
 
         PAGE_TITLE = FB_CONFIG["main_page"]["name"]
-        kocherga_items = controls_el.xpath('./@role="menuitemcheckbox"//*[contains(text(), ' + PAGE_TITLE + ')]')
-        if len(kocherga_items) == 0:
+        menu_items = controls_el.xpath('./@role="menuitemcheckbox"//*[contains(text(), ' + PAGE_TITLE + ')]')
+        if len(menu_items) == 0:
             raise Exception(f"Page {PAGE_TITLE} not found in list")
-        kocherga_el = kocherga_elems[0]
-        await kocherga_el.click()
+        menu_el = menu_items[0]
+        await menu_el.click()
 
         button_el = await dialog_el.J('.uiOverlayFooter button.layerConfirm')
         await button_el.click()
