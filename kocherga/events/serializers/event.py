@@ -151,14 +151,15 @@ class EventSerializer(serializers.ModelSerializer):
             event.fb_announcement.save()
 
         if timepad_announcement_data:
-            event.timepad_announcement.group = fb_announcement_data.get(
+            event.timepad_announcement.category_code = timepad_announcement_data.get(
                 'category_code',
                 event.timepad_announcement.category_code
             )
-            event.timepad_announcement.link = fb_announcement_data.get(
+            event.timepad_announcement.prepaid_tickets = timepad_announcement_data.get(
                 'prepaid_tickets',
                 event.timepad_announcement.prepaid_tickets
             )
+            event.timepad_announcement.link = timepad_announcement_data.get('link', timepad_announcement_data.link)
             event.timepad_announcement.save()
 
         models.Event.objects.notify_update()  # send notification message to websocket
