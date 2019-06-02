@@ -79,10 +79,10 @@ class FbAnnouncement(models.Model):
     # FB dosn't have an API for creating an event.
     async def create(self, headless=True, **kwargs):
         async with kocherga.chrome.get_browser() as browser:
-            session = await AnnounceSession.create(browser, self.event, **kwargs)
+            session = await AnnounceSession.create(browser)
             try:
                 logger.info(f"Trying to create")
-                return await session.run(self.group)
+                return await session.run(self.group, self.event, **kwargs)
             except Exception:
                 logger.exception(f"Error while creating a FB announcement")
                 image_bytes = await session.screenshot()
@@ -96,17 +96,41 @@ class FbAnnouncement(models.Model):
         self.link = link
         self.save()
 
+    async def _add_to_main_page(self):
+        if not self.link:
+            raise Exception("Event is not announced yet")
+        if not self.group:
+            raise Exception("Event already belongs to the main page")
+
+        # TODO - copy-pasted; turn AnnounceSession into contextmanager?
+        async with kocherga.chrome.get_browser() as browser:
+            session = await AnnounceSession.create(browser)
+            try:
+                logger.info(f"Trying to create")
+                await session.add_to_main_page(self.link)
+            except Exception:
+                logger.exception(f"Error while adding to the main page")
+                image_bytes = await session.screenshot()
+                filename = image_storage.save_screenshot("error", image_bytes)
+                logger.info(f"Screenshot saved to {filename}")
+                raise
+
+    def add_to_main_page(self):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self.create())
+
 
 class AnnounceSession:
     @classmethod
     async def create(
-        cls, browser, event, auto_confirm=True, select_self_location=True
+        cls, browser, event
     ):
         self = cls()
         self.page = await browser.newPage()
-        self.event = event
-        self.auto_confirm = auto_confirm
-        self.select_self_location = select_self_location
+        await self.page.setViewport({
+            'width': 1280,
+            'height': 800,
+        })
         return self
 
     async def clean_field(self, max_length=20, both_directions=False):
@@ -181,18 +205,18 @@ class AnnounceSession:
         if len(links):
             await links[0].click()
 
-    async def fill_description(self):
+    async def fill_description(self, event):
         details = await self.page.J("[data-testid=event-create-dialog-details-field]")
         await details.click()
 
-        description = self.event.description
+        description = event.description
 
         tail = (
-            f"{self.event.timing_description} в антикафе Кочерга."
+            f"{event.timing_description} в антикафе Кочерга."
             " Оплата участия — по тарифам антикафе: 2,5 руб./минута."
         )
 
-        timepad_link = self.event.timepad_announcement.link
+        timepad_link = event.timepad_announcement.link
         if timepad_link:
             tail += " Регистрация: {}".format(timepad_link)
 
@@ -239,16 +263,9 @@ class AnnounceSession:
         else:
             return settings.KOCHERGA_FB["main_page"]["announce_page"]
 
-    async def run(self, group: str) -> str:
+    async def run(self, group: str, event: Event, auto_confirm=True, select_self_location=True) -> str:
         page = self.page
-        await page.setViewport({
-            'width': 1280,
-            'height': 800,
-        })
-
         await self.sign_in()
-
-        event = self.event
 
         events_page = self.announce_page(group) + "/events/"
         logger.info("Going to page: " + events_page)
@@ -280,7 +297,7 @@ class AnnounceSession:
         await self.clean_field(40)
         await page.keyboard.type(FB_CONFIG["main_page"]["name"])
 
-        if self.select_self_location:
+        if select_self_location:
             await self.select_from_listbox(FB_CONFIG["main_page"]["id"])
 
         logger.info("Filling dates")
@@ -299,19 +316,11 @@ class AnnounceSession:
         logger.info("Filling description")
         await self.fill_description()
 
-        if not self.auto_confirm:
+        if not auto_confirm:
             return page
 
         logger.info("Confirming")
-        # This commented code is unstable, although it seems like there *is* a navigation happening,
-        # but it doesn't fire for some reason.
-        # (Maybe it doesn't fire because it's emulated via history.pushSate()?)
-
-        # await asyncio.gather(
-        #     page.waitForNavigation(waitUntil="documentloaded", timeout=180000),
-        #     page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000),
-        # )
-        await page.click("[data-testid=event-create-dialog-confirm-button]", timeout=180000)
+        await page.click("[data-testid=event-create-dialog-confirm-button]")
 
         logger.info(f"Clicked confirm button, waiting for title to appear")
         await page.waitForSelector("h1#seo_h1_tag[data-testid=event-permalink-event-name]")
@@ -329,6 +338,52 @@ class AnnounceSession:
         event_id = match.group(1)
 
         return f'https://www.facebook.com/events/{event_id}'
+
+    async def add_to_main_page(self, event_url):
+        page = self.page
+        await self.sign_in()
+
+        logger.info("Going to page: " + event_url)
+        await page.goto(event_url)
+
+        await page.click('#admin_button_bar .uiPopover [aria-label="Ещё"]')
+
+        link = '.uiLayer [title="Добавить на Страницу..."]'
+        await page.waitForSelector(link)
+        await page.click(link)
+
+        dialog_el = await page.waitForXPath('//h3[text()="Добавить на Страницу"]/ancestor::*[@role="dialog"]')
+
+        input_el = await dialog_el.J('input[name="target_page_id"]')
+        parent_el = (await input_el.xpath('..'))[0]
+        dropdown_el = await parent_el.J('> a')
+
+        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', dropdown_el)
+        controls = '#' + controls_id
+        await dropdown_el.click()
+        await page.waitForSelector(controls)
+        controls_el = await page.J(controls)
+
+        PAGE_TITLE = FB_CONFIG["main_page"]["name"]
+        kocherga_items = controls_el.xpath('./@role="menuitemcheckbox"//*[contains(text(), ' + PAGE_TITLE + ')]')
+        if len(kocherga_items) == 0:
+            raise Exception(f"Page {PAGE_TITLE} not found in list")
+        kocherga_el = kocherga_elems[0]
+        await kocherga_el.click()
+
+        button_el = await dialog_el.J('.uiOverlayFooter button.layerConfirm')
+        await button_el.click()
+
+        await asyncio.wait([
+            button_el.click(),
+            page.waitForNavigation(),
+        ])
+
+        page_url = await page.evaluate('() => window.location.href')
+        logger.info(f"URL: {page_url}")
+
+        if not page_url.startswith(settings.KOCHERGA_FB["main_page"]["announce_page"]):
+            raise Exception(f"Expected to navigate to main page, got {page_url} instead")
 
     async def screenshot(self):
         return await self.page.screenshot()

@@ -80,6 +80,12 @@ class FbViewSet(AnnouncementViewSet):
         all_groups = models.FbAnnouncement.objects.all_groups()
         return Response(all_groups)  # TODO - serializer
 
+    @action(detail=True, methods=['post'])
+    def add_to_main_page(self, request, **kwargs):
+        announcement = self.get_object()
+        announcement.add_to_main_page()
+        return Response(ok)
+
 
 @require_safe
 def r_last_screenshot(request):
