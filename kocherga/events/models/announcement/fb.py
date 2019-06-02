@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 import re
 import asyncio
 import requests
-from typing import Optional
 
 from django.conf import settings
 from django.utils import timezone
