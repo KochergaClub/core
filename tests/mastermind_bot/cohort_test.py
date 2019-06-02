@@ -13,9 +13,9 @@ KchUser = get_user_model()
 
 @pytest.fixture
 def event_with_timepad(event, common_team):
-    print(event)
-    event.posted_timepad = 'https://kocherga-dev.timepad.ru/event/111'
-    event.save()
+    ann = event.timepad_announcement
+    ann.link = 'https://kocherga-dev.timepad.ru/event/111'
+    ann.save()
 
     timepad_event = TimepadEvent.objects.create(
         id=111,

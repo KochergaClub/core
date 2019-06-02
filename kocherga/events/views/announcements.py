@@ -5,38 +5,47 @@ from django.http import FileResponse
 from django.views.decorators.http import require_safe
 
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
+from rest_framework import viewsets, generics
 
 from kocherga.images import image_storage
 from kocherga.events import models
+from kocherga.events import serializers
 
 import kocherga.events.models.announcement.timepad
 
 from kocherga.api.common import ok
 
-# Idea: workflows for announcements.
-# /workflow/timepad -> returns { 'steps': ['post-draft', 'publish'], 'current-step': ... }
-# /workflow/timepad/post-draft
-# /workflow/timepad/publish
 
-
-class TimepadPostView(APIView):
+class AnnouncementViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAdminUser,)
+    lookup_field = 'event__pk'
 
-    def post(self, request, event_id):
-        event = models.Event.objects.get(pk=event_id)
-        announcement = event.timepad_announcement
+    def get_object(self):
+        event = generics.get_object_or_404(
+            models.Event.objects.all(),
+            pk=self.kwargs[self.lookup_field]
+        )
+        announcement = getattr(event, self.event_field)
+        return announcement
+
+    @action(detail=True, methods=['post'])
+    def announce(self, request, **kwargs):
+        announcement = self.get_object()
         announcement.announce()
 
-        return Response({"link": announcement.link})
+        serializer = self.get_serializer(announcement)
+        return Response(serializer.data)
 
 
-class TimepadCategoriesView(APIView):
-    permission_classes = (IsAdminUser,)
+class TimepadViewSet(AnnouncementViewSet):
+    queryset = models.TimepadAnnouncement.objects.all()
+    serializer_class = serializers.TimepadAnnouncementSerializer
+    event_field = 'timepad_announcement'
 
-    def get(self, request):
+    @action(detail=False)
+    def categories(self, request):
         categories = kocherga.events.models.announcement.timepad.timepad_categories()
         return Response([
             {
@@ -45,45 +54,31 @@ class TimepadCategoriesView(APIView):
         ])
 
 
-@api_view()
-@permission_classes((IsAdminUser,))
-def r_vk_groups(request):
-    all_groups = models.VkAnnouncement.objects.all_groups()
-    return Response(all_groups)
+class VkViewSet(AnnouncementViewSet):
+    queryset = models.VkAnnouncement.objects.all()
+    serializer_class = serializers.VkAnnouncementSerializer
+    event_field = 'vk_announcement'
+
+    @action(detail=False)
+    def groups(self, request):
+        all_groups = models.VkAnnouncement.objects.all_groups()
+        return Response(all_groups)  # TODO - serializer
+
+    @action(detail=False, methods=['post'])
+    def update_wiki_schedule(self, request):
+        models.VkAnnouncement.objects.update_wiki_schedule()
+        return Response(ok)
 
 
-@api_view(['POST'])
-@permission_classes((IsAdminUser,))
-def r_vk_update_wiki_schedule(request):
-    models.VkAnnouncement.objects.update_wiki_schedule()
-    return Response(ok)
+class FbViewSet(AnnouncementViewSet):
+    queryset = models.FbAnnouncement.objects.all()
+    serializer_class = serializers.FbAnnouncementSerializer
+    event_field = 'fb_announcement'
 
-
-@api_view(['POST'])
-@permission_classes((IsAdminUser,))
-def r_vk_post(request, event_id):
-    event = models.Event.by_id(event_id)
-    announcement = event.vk_announcement
-    announcement.announce()
-
-    return Response({"link": announcement.link})
-
-
-@api_view()
-@permission_classes((IsAdminUser,))
-def r_fb_groups(request):
-    all_groups = models.FbAnnouncement.objects.all_groups()
-    return Response(all_groups)
-
-
-@api_view(['POST'])
-@permission_classes((IsAdminUser,))
-def r_fb_post(request, event_id):
-    event = models.Event.by_id(event_id)
-    announcement = event.fb_announcement
-    announcement.announce()
-
-    return Response({"link": announcement.link})
+    @action(detail=False)
+    def groups(self, request):
+        all_groups = models.FbAnnouncement.objects.all_groups()
+        return Response(all_groups)  # TODO - serializer
 
 
 @require_safe
