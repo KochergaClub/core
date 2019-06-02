@@ -1,3 +1,8 @@
+# Workaround for codecov-python - see https://github.com/codecov/codecov-python/issues/96
+# Still unpatched as of 2019-06.
+variables:
+  pass_env: "-e CODECOV_TOKEN -e CI_BUILD_ID=$CI_JOB_ID -e CI_BUILD_REF_NAME=$CI_COMMIT_REF_NAME -e CI_BUILD_ID=$CI_JOB_ID -e CI_REPOSITORY_URL -e CI_BUILD_REF=$CI_COMMIT_SHA -e CI_SERVER_NAME -e CI_PROJECT_DIR=/code"
+
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
@@ -25,8 +30,14 @@ test-js:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run --rm api npx jest
     - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
+    - docker-compose -f docker/compose.ci.yml run $pass_env
+      --rm api
+      bash -c "
+        npx jest --coverage
+        && ls -l
+        && codecov -F js
+      "
 
 test-python:
   stage: test
@@ -34,7 +45,12 @@ test-python:
     TAG: $CI_COMMIT_REF_NAME
   script:
     - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
-    - docker-compose -f docker/compose.ci.yml run --rm api pytest -m 'not google and not slack and not mailchimp and not ofd'
+    - docker-compose -f docker/compose.ci.yml run $pass_env
+      --rm api
+      bash -c "
+        pytest -m 'not google and not slack and not mailchimp and not ofd' --cov=kocherga
+        && codecov -F python
+      "
 
 deploy-stack:
   stage: deploy

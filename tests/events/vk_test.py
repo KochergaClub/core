@@ -8,70 +8,75 @@ import re
 from datetime import datetime
 
 import kocherga.vk.api
-import kocherga.events.vk
-import kocherga.events.announce
+from kocherga.events import models
 
 
 class TestTexts:
     def test_tail(self, event):
         assert re.match(
-            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\.'
+            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\. '
             r'Оплата участия — по тарифам антикафе: 2,5 руб\./минута\.$',
-            kocherga.events.vk.vk_tail(event)
+            event.vk_announcement.get_tail()
         )
 
 
 class TestCreate:
     def test_create(self, event):
 
-        result = kocherga.events.vk.create(event)
+        announcement = event.vk_announcement
+        assert isinstance(announcement, models.VkAnnouncement)
 
-        assert isinstance(result, kocherga.events.vk.VkAnnouncement)
-        print(result.link)
+        assert announcement.link == ''
+
+        announcement.announce()
+        assert announcement.link
 
         kocherga.vk.api.call('wall.delete', {
-            'owner_id': -result.group_id,
-            'post_id': result.post_id,
+            'owner_id': -announcement.group_id(),
+            'post_id': announcement.post_id(),
         })
 
     def test_create_long(self, event_for_edits, image_file):
         event = event_for_edits
+        announcement = event.vk_announcement
 
         with open(image_file, 'rb') as fh:
-            event.add_image('vk', fh)
+            announcement.add_image(fh)
 
-        event.vk_group = 159971736
+        announcement.group = 159971736
         event.description = 'Длинный текст.\n' * 100
         event.save()
+        announcement.save()
 
-        result = kocherga.events.vk.create(event)
+        announcement.announce()
 
-        assert isinstance(result, kocherga.events.vk.VkAnnouncement)
+        assert isinstance(announcement, models.VkAnnouncement)
 
         kocherga.vk.api.call('wall.delete', {
-            'owner_id': -result.group_id,
-            'post_id': result.post_id,
+            'owner_id': -announcement.group_id(),
+            'post_id': announcement.post_id(),
         })
 
     def test_create_without_group(self, minimal_event):
-        assert minimal_event.vk_group == ''
-        with pytest.raises(Exception, match='vk_group is not set'):
-            kocherga.events.vk.create(minimal_event)
+        assert minimal_event.vk_announcement.group == ''
+        with pytest.raises(Exception, match='group is not set'):
+            minimal_event.vk_announcement.announce()
 
 
 class TestGroups:
     def test_groups_none(self):
 
-        result = kocherga.events.vk.all_groups()
+        result = models.VkAnnouncement.objects.all_groups()
 
         assert isinstance(result, list)
         assert len(result) == 0
 
     def test_groups_single(self, event):
-        event.vk_group = 'blahblah_something'
-        event.save()
+        ann = event.vk_announcement
+        ann.group = 'blahblah_something'
+        ann.save()
 
-        result = kocherga.events.vk.all_groups()
+        result = models.VkAnnouncement.objects.all_groups()
 
         assert isinstance(result, list)
         assert len(result) == 1
@@ -80,12 +85,13 @@ class TestGroups:
 
 class TestRepostToDaily():
     def test_repost_to_daily_empty(self):
-        kocherga.events.vk.repost_to_daily()
+        models.VkAnnouncement.objects.repost_to_daily()
 
     def test_repost_to_daily_single(self, event):
         event.start = datetime.combine(datetime.today().date(), event.start.timetz())
         event.save()
-        kocherga.events.announce.post_to_vk(event)
+        event.vk_announcement.announce()
 
+        assert models.VkAnnouncement.objects.count() == 1
         with pytest.raises(Exception, match="Access denied: can't publish"):
-            kocherga.events.vk.repost_to_daily()
+            models.VkAnnouncement.objects.repost_to_daily()

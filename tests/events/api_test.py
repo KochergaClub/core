@@ -123,6 +123,20 @@ def test_update(event, admin_client):
     assert Event.objects.get(pk=event.google_id).title == 'updated title'
 
 
+def test_update_announcement_field(event, admin_client):
+    res = admin_client.patch(
+        f'/api/event/{event.google_id}',
+        {
+            'vk_group': 'some_group',
+        },
+        format='json',
+    )
+    assert res.status_code == 200
+    assert res.json()['vk_group'] == 'some_group'
+
+    assert Event.objects.get(pk=event.google_id).vk_announcement.group == 'some_group'
+
+
 def test_forbidden_update(event, admin_client):
     admin_client.patch(
         f'/api/event/{event.google_id}',

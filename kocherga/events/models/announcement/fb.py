@@ -1,44 +1,26 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-from django.utils import timezone
-
 import re
-
 import asyncio
 import requests
+from typing import Optional
+
+from django.conf import settings
+from django.utils import timezone
+from django.db import models
+from annoying.fields import AutoOneToOneField
 
 import kocherga.chrome
-from kocherga.events.models import Event
-import kocherga.events.db
 import kocherga.events.markup
 from kocherga.images import image_storage
-from kocherga.events.announcement import BaseAnnouncement
-
 import kocherga.fb.api
+
+from ..event import Event
 
 PASSWORD = settings.KOCHERGA_FB_ANNOUNCER_PASSWORD
 
 FB_CONFIG = settings.KOCHERGA_FB
-
-
-class FbAnnouncement(BaseAnnouncement):
-
-    def __init__(self, link):
-        self._link = link
-
-    @property
-    def link(self):
-        return self._link
-
-
-def all_groups():
-    logger.info("Selecting all fb groups")
-    query = Event.objects.values_list('fb_group').distinct()
-    groups = [row[0] for row in query.all()]
-    logger.info(f"Got {len(groups)} groups")
-    return groups
 
 
 def get_image_id(fb_id: str):
@@ -74,11 +56,49 @@ def get_image_id(fb_id: str):
     return None
 
 
+class Manager(models.Manager):
+    def all_groups(self):
+        logger.info("Selecting all fb groups")
+        query = self.values_list('group').distinct()
+        groups = [row[0] for row in query.all()]
+        logger.info(f"Got {len(groups)} groups")
+        return groups
+
+
+class FbAnnouncement(models.Model):
+    event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
+    link = models.CharField(max_length=1024, blank=True)
+
+    group = models.CharField(max_length=40, blank=True)
+
+    objects = Manager()
+
+    # FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),
+    # so it's not a hack that we usually bring a token from a client side to server to make an announcement.
+    #
+    # It _is_ a hack that we use headless Chrome (through pyppeteer), though -
+    # FB dosn't have an API for creating an event.
+    async def create(self, headless=True, **kwargs):
+        async with kocherga.chrome.get_browser() as browser:
+            session = await AnnounceSession.create(browser, self.event, **kwargs)
+            try:
+                logger.info(f"Trying to create")
+                return await session.run(self.group)
+            except Exception:
+                logger.exception(f"Error while creating a FB announcement")
+                image_bytes = await session.screenshot()
+                filename = image_storage.save_screenshot("error", image_bytes)
+                logger.info(f"Screenshot saved to {filename}")
+                raise
+
+    def announce(self):
+        loop = asyncio.get_event_loop()
+        link = loop.run_until_complete(self.create())
+        self.link = link
+        self.save()
+
+
 class AnnounceSession:
-
-    def __init__(self):
-        pass
-
     @classmethod
     async def create(
         cls, browser, event, auto_confirm=True, select_self_location=True
@@ -173,7 +193,7 @@ class AnnounceSession:
             " Оплата участия — по тарифам антикафе: 2,5 руб./минута."
         )
 
-        timepad_link = self.event.posted_timepad
+        timepad_link = self.event.timepad_announcement.link
         if timepad_link:
             tail += " Регистрация: {}".format(timepad_link)
 
@@ -214,7 +234,13 @@ class AnnounceSession:
         # TODO - waitForSelector
         logger.info("Signed in")
 
-    async def run(self):
+    def announce_page(self, group: Optional[str]) -> str:
+        if group:
+            return f"https://www.facebook.com/groups/{group}"
+        else:
+            return settings.KOCHERGA_FB["main_page"]["announce_page"]
+
+    async def run(self, group: str) -> str:
         page = self.page
         await page.setViewport({
             'width': 1280,
@@ -225,7 +251,7 @@ class AnnounceSession:
 
         event = self.event
 
-        events_page = event.fb_announce_page() + "/events/"
+        events_page = self.announce_page() + "/events/"
         logger.info("Going to page: " + events_page)
         await page.goto(events_page)
         await page.waitForSelector("[data-testid=event-create-button]", timeout=10000)
@@ -303,25 +329,7 @@ class AnnounceSession:
 
         event_id = match.group(1)
 
-        return FbAnnouncement(f'https://www.facebook.com/events/{event_id}')
+        return f'https://www.facebook.com/events/{event_id}'
 
     async def screenshot(self):
         return await self.page.screenshot()
-
-
-# FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),
-# so it's not a hack that we usually bring a token from a client side to server to make an announcement.
-#
-# It _is_ a hack that we use headless Chrome (through pyppeteer), though - FB dosn't have an API for creating an event.
-async def create(event, headless=True, **kwargs):
-    async with kocherga.chrome.get_browser() as browser:
-        session = await AnnounceSession.create(browser, event, **kwargs)
-        try:
-            logger.info(f"Trying to create")
-            return await session.run()
-        except Exception:
-            logger.exception(f"Error while creating a FB announcement")
-            image_bytes = await session.screenshot()
-            filename = image_storage.save_screenshot("error", image_bytes)
-            logger.info(f"Screenshot saved to {filename}")
-            raise

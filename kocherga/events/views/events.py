@@ -43,7 +43,10 @@ class RootView(generics.ListCreateAPIView):
             date=arg2date("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
-        ).prefetch_related('tags')
+        ).prefetch_related('tags') \
+         .prefetch_related('vk_announcement') \
+         .prefetch_related('fb_announcement') \
+         .prefetch_related('timepad_announcement')
 
     # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
     def post(self, request, *args, **kwargs):
@@ -148,7 +151,11 @@ class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
             from_date=arg2date('from_date'),
             to_date=arg2date('to_date'),
             tag=self.request.query_params.get('tag'),
-        )
+        ).prefetch_related('tags') \
+         .prefetch_related('vk_announcement') \
+         .prefetch_related('fb_announcement') \
+         .prefetch_related('timepad_announcement')
+
         # TODO - pager or limit queryset (but I can't do this right now because DetailView would break)
         return events
 
@@ -159,7 +166,11 @@ def r_list_public_today(request):
     events = Event.objects.public_events(
         date=datetime.today().date(),
         tag=request.query_params.get('tag'),
-    )
+    ).prefetch_related('tags') \
+        .prefetch_related('vk_announcement') \
+        .prefetch_related('fb_announcement') \
+        .prefetch_related('timepad_announcement')
+
     return Response([
         serializers.PublicEventSerializer(event).data
         for event in events[:1000]
@@ -171,7 +182,11 @@ def r_list_public_atom(request):
     events = Event.objects.public_events(
         from_date=datetime.now().date(),
         tag=request.GET.get('tag'),
-    )
+    ) \
+        .prefetch_related('tags') \
+        .prefetch_related('vk_announcement') \
+        .prefetch_related('fb_announcement') \
+        .prefetch_related('timepad_announcement')
 
     fg = FeedGenerator()
     fg.id(f'{settings.KOCHERGA_API_ROOT}/public_events_atom')  # should we add query params here?
@@ -191,6 +206,6 @@ def r_list_public_atom(request):
 
         fe.summary(dt_str)
         fe.content(dt_str)
-        fe.link(href=event.posted_vk)
+        fe.link(href=event.vk_announcement.link)
 
     return HttpResponse(fg.atom_str(pretty=True))

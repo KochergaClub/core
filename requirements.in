@@ -45,12 +45,14 @@ redis >= 3.2
 django-reversion-compare >= 0.8.6
 wagtail == 2.5
 git+https://github.com/berekuk/wagtailmath.git@master
+django-annoying
 
 # dev-dependencies
 pytest
 pytest-asyncio
 pytest-env
 pytest-django
+pytest-cov
 freezegun
 mypy
 black == 18.6b4
@@ -62,3 +64,4 @@ seaborn
 python-docx
 flake8 >= 3.7
 pyinotify >= 0.9.6
+codecov

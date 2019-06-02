@@ -82,8 +82,7 @@ class EventManager(models.Manager):
         query = (
             query
             .filter(event_type = 'public')
-            .exclude(posted_vk__isnull = True)
-            .exclude(posted_vk = '')
+            .exclude(vk_announcement__link = '')
             .filter(start__gte = datetime(2018, 6, 1))  # earlier events are not cleaned up yet
         )
 
@@ -144,22 +143,23 @@ class Event(models.Model):
 
     event_type = models.CharField(max_length=40, default="unknown")
 
+    image = models.CharField(max_length=32, null=True, blank=True)
+
+    ready_to_post = models.BooleanField(default=False)
+    timing_description_override = models.CharField(max_length=255, blank=True)
+
+    # These fields are deprecated and can be removed in the future
+    vk_image = models.CharField(max_length=32, null=True, blank=True)
+
     vk_group = models.CharField(max_length=40, blank=True)
     fb_group = models.CharField(max_length=40, blank=True)
 
-    image = models.CharField(max_length=32, null=True, blank=True)
-    vk_image = models.CharField(max_length=32, null=True, blank=True)
-
-    ready_to_post = models.BooleanField(default=False)
-
-    # (move these to event_announcements)
     posted_fb = models.CharField(max_length=1024, blank=True)
     posted_timepad = models.CharField(max_length=1024, blank=True)
     posted_vk = models.CharField(max_length=1024, blank=True)
 
     timepad_category_code = models.CharField(max_length=40, blank=True)
     timepad_prepaid_tickets = models.BooleanField(default=False)
-    timing_description_override = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f'{timezone.localtime(self.start)} - {self.title}'
@@ -256,12 +256,6 @@ class Event(models.Model):
             raise NotImplementedError
         self.save()
 
-    def fb_announce_page(self):
-        if self.fb_group:
-            return f"https://www.facebook.com/groups/{self.fb_group}"
-        else:
-            return settings.KOCHERGA_FB["main_page"]["announce_page"]
-
     @property
     def timing_description(self):
         if self.timing_description_override:
@@ -328,7 +322,7 @@ class Event(models.Model):
         return getattr(self, '_attendees', [])
 
     def timepad_event(self):
-        timepad_link = self.posted_timepad
+        timepad_link = self.timepad_announcement.link
         if not timepad_link:
             raise Exception("Event is not posted to timepad")
 

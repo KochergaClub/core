@@ -3,6 +3,6 @@ import pytest
 
 @pytest.fixture
 def public_event(event):
-    event.posted_vk = 'blah'  # should be non-empty
-    event.save()
+    event.vk_announcement.link = 'blah'  # should be non-empty
+    event.vk_announcement.save()
     return event
