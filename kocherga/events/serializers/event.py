@@ -159,7 +159,7 @@ class EventSerializer(serializers.ModelSerializer):
                 'prepaid_tickets',
                 event.timepad_announcement.prepaid_tickets
             )
-            event.timepad_announcement.link = timepad_announcement_data.get('link', timepad_announcement_data.link)
+            event.timepad_announcement.link = timepad_announcement_data.get('link', event.timepad_announcement.link)
             event.timepad_announcement.save()
 
         models.Event.objects.notify_update()  # send notification message to websocket
