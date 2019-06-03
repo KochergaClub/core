@@ -90,7 +90,12 @@ class ImageView(APIView):
             raise PublicError("No filename")
 
         event = Event.by_id(event_id)
-        event.add_image(image_type, f)
+
+        if image_type == 'vk':
+            logger.warning('image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead')
+            event.vk_announcement.add_image(f)
+        else:
+            event.add_image(image_type, f)
 
         return Response(ok)
 

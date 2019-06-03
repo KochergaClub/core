@@ -69,6 +69,19 @@ class VkViewSet(AnnouncementViewSet):
         models.VkAnnouncement.objects.update_wiki_schedule()
         return Response(ok)
 
+    @action(detail=True, methods=['post'])
+    def image(self, request, **kwargs):
+        files = request.FILES
+        if "file" not in files:
+            raise Exception("Expected a file")
+        f = files["file"]
+
+        if f.name == "":
+            raise Exception("No filename")
+
+        self.get_object().add_image(f)
+        return Response(ok)
+
 
 class FbViewSet(AnnouncementViewSet):
     queryset = models.FbAnnouncement.objects.all()
