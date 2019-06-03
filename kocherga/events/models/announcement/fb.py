@@ -381,7 +381,7 @@ class AnnounceSession:
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
-        if not page_url.startswith(settings.KOCHERGA_FB["main_page"]["announce_page"]):
+        if not page_url.startswith('https://www.facebook.com/' + settings.KOCHERGA_FB["main_page"]["slug"] + '/events'):
             raise Exception(f"Expected to navigate to main page, got {page_url} instead")
 
     async def screenshot(self):

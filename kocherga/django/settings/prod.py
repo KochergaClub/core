@@ -85,6 +85,7 @@ KOCHERGA_FB = {
             "to": "антикафе @Кочерга",
         },
         "announce_page": "https://www.facebook.com/pg/kocherga.club",
+        "slug": "kocherga.club",
     },
     "announcer_login": "mmcleric@gmail.com",
 }
