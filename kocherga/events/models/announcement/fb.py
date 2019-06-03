@@ -354,7 +354,7 @@ class AnnounceSession:
 
         input_el = await dialog_el.J('input[name="target_page_id"]')
         parent_el = (await input_el.xpath('..'))[0]
-        dropdown_el = await parent_el.J('> a')
+        dropdown_el = await parent_el.J(':scope > a')
 
         controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', dropdown_el)
         controls = '#' + controls_id
