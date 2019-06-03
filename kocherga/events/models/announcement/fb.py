@@ -355,11 +355,10 @@ class AnnounceSession:
         input_el = await dialog_el.J('input[name="target_page_id"]')
         parent_el = (await input_el.xpath('..'))[0]
         dropdown_el = await parent_el.J(':scope > a')
+        await dropdown_el.click()
 
         controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', dropdown_el)
         controls = '#' + controls_id
-        await dropdown_el.click()
-        await page.waitForSelector(controls)
         controls_el = await page.J(controls)
 
         PAGE_TITLE = FB_CONFIG["main_page"]["name"]
