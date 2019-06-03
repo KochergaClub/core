@@ -121,7 +121,10 @@ class EventSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
 
     def get_images(self, obj):
-        return obj.get_images()
+        result = obj.get_images()
+        if hasattr(obj, 'vk_announcement') and obj.vk_announcement.image:
+            result['vk'] = settings.KOCHERGA_API_ROOT + f"/images/{obj.vk_announcement.image}"
+        return result
 
     def get_tags(self, obj):
         return obj.tag_names()

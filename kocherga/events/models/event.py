@@ -214,7 +214,7 @@ class Event(models.Model):
     def image_file(self, image_type):
         image_id = None
         if image_type == 'vk':
-            image_id = self.vk_image
+            image_id = self.vk_announcement.image
         elif image_type == 'default':
             image_id = self.image
         else:
@@ -227,11 +227,9 @@ class Event(models.Model):
     def get_images(self):
         images = {}
 
-        for image_type in IMAGE_TYPES:
+        for image_type in ('default',):
             if image_type == 'default':
                 image_id = self.image
-            elif image_type == 'vk':
-                image_id = self.vk_image
             else:
                 raise NotImplementedError
 
@@ -250,8 +248,6 @@ class Event(models.Model):
         key = image_storage.add_file(fh)
         if image_type == 'default':
             self.image = key
-        elif image_type == 'vk':
-            self.vk_image = key
         else:
             raise NotImplementedError
         self.save()
