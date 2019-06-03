@@ -312,7 +312,7 @@ class AnnounceSession:
         await self.fill_category()
 
         logger.info("Filling description")
-        await self.fill_description()
+        await self.fill_description(event)
 
         if not auto_confirm:
             return page
