@@ -362,7 +362,7 @@ class AnnounceSession:
         controls_el = await page.J(controls)
 
         PAGE_TITLE = FB_CONFIG["main_page"]["name"]
-        menu_items = await controls_el.xpath('./@role="menuitemcheckbox"//*[contains(text(), ' + PAGE_TITLE + ')]')
+        menu_items = await controls_el.xpath('./@role="menuitemcheckbox"//*[contains(text(), "' + PAGE_TITLE + '")]')
         if len(menu_items) == 0:
             raise Exception(f"Page {PAGE_TITLE} not found in list")
         menu_el = menu_items[0]
