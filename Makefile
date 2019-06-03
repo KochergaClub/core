@@ -21,7 +21,7 @@ dev-full: image
 ##### Tests #####
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml run --rm mypy --strict-optional --check-untyped-defs kocherga # FIXME
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml run --rm api mypy --strict-optional --check-untyped-defs kocherga # FIXME
 
 test-code:
 	docker-compose -f docker/compose.dev.yml run --rm api pytest
