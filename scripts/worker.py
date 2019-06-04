@@ -12,7 +12,7 @@ django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-import kocherga.events.vk
+from kocherga.events.models import VkAnnouncement
 import kocherga.vk.tools
 
 from django.db import transaction
@@ -31,7 +31,7 @@ def main():
     scheduler = BlockingScheduler(timezone=django.utils.timezone.get_current_timezone())
 
     scheduler.add_job(
-        func=job_wrapper(kocherga.events.vk.update_widget),
+        func=job_wrapper(VkAnnouncement.objects.update_widget),
         trigger='interval',
         name='update_vk_widget',
         minutes=1,
@@ -45,7 +45,7 @@ def main():
     )
 
     scheduler.add_job(
-        func=job_wrapper(kocherga.events.vk.repost_to_daily),
+        func=job_wrapper(VkAnnouncement.objects.repost_to_daily),
         trigger='cron',
         name='repost_to_daily',
         hour=8,
