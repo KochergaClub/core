@@ -64,3 +64,11 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(
             serializers.ActivitySerializer(training.schedule, many=True).data,
         )
+
+    @action(detail=True, methods=['post'])
+    def copy_schedule_from(self, request, name=None):
+        training = self.get_object()
+        src_training_slug = request.data['src_training_slug']
+        src_training = Training.objects.get(slug=src_training_slug)
+        training.copy_schedule_from(src_training)
+        return Response('ok')

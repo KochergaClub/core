@@ -6,20 +6,16 @@ import { Screen, InitialLoader } from '~/common/types';
 import { useAPI } from '~/common/hooks';
 import Page from '~/components/Page';
 
-import { Training, Ticket } from './types';
+import { Training, Ticket } from '../types';
+import { trainingToKey, getTraining, getTickets } from '../api';
 
-import CreateEmailButton from './components/CreateEmailButton';
+import CreateEmailButton from '../components/CreateEmailButton';
 
 interface Props {
   training: Training;
   tickets: Ticket[];
   children?: React.ReactNode;
 }
-
-// TODO - change api to accept slug
-const trainingNameToKey = (trainingName: string) =>
-  encodeURIComponent(trainingName);
-const trainingToKey = (training: Training) => trainingNameToKey(training.name);
 
 const ActionButton = ({
   training,
@@ -122,10 +118,8 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
-  const key = trainingNameToKey(params.name);
-  console.log(key);
-  const training = await api.call(`ratio/training/${key}`, 'GET');
-  const tickets = await api.call(`ratio/training/${key}/tickets`, 'GET');
+  const training = await getTraining(api, params.name);
+  const tickets = await getTickets(api, params.name);
   return { training, tickets };
 };
 

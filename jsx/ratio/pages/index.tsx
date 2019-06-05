@@ -5,7 +5,8 @@ import { A } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 
-import { Training } from './types';
+import { Training } from '../types';
+import { getTrainings } from '../api';
 
 interface Props {
   trainings: Training[];
@@ -32,7 +33,7 @@ const RatioIndexPage = ({ trainings }: Props) => (
 );
 
 const getInitialData: InitialLoader<Props> = async ({ api }) => {
-  const trainings = await api.call('ratio/training', 'GET');
+  const trainings = await getTrainings(api);
   return { trainings };
 };
 
