@@ -45,6 +45,7 @@ wagtail == 2.6.1
 git+https://github.com/berekuk/wagtailmath.git@master
 django-annoying
 pywatchman
+wagtailgeowidget >= 5.0
 
 # dev-dependencies
 pytest

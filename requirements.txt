@@ -181,6 +181,7 @@ unidecode==1.1.1          # via wagtail
 uritemplate==3.0.0        # via google-api-python-client
 urllib3==1.25.3           # via botocore, requests, sentry-sdk
 wagtail==2.6.1
+wagtailgeowidget==5.0.2
 git+https://github.com/berekuk/wagtailmath.git@master
 wcwidth==0.1.7            # via prompt-toolkit, pytest
 webencodings==0.5.1       # via bleach, html5lib
