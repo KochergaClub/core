@@ -22,21 +22,18 @@ const ActionButton = ({
   const api = useAPI();
   const [loading, setLoading] = useState(false);
 
-  const cb = useCallback(
-    async () => {
-      setLoading(true);
-      const result = await api.call(path, 'POST');
-      if (reloadOnSuccess) {
-        window.location.reload();
-        return;
-      }
-      if (onSuccess) {
-        onSuccess(result);
-      }
-      setLoading(false);
-    },
-    [path]
-  );
+  const cb = useCallback(async () => {
+    setLoading(true);
+    const result = await api.call(path, 'POST');
+    if (reloadOnSuccess) {
+      window.location.reload();
+      return;
+    }
+    if (onSuccess) {
+      onSuccess(result);
+    }
+    setLoading(false);
+  }, [path]);
   return (
     <Button loading={loading} disabled={loading} onClick={cb}>
       {children}

@@ -29,14 +29,11 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     [dispatch, uiDispatch]
   );
 
-  const onClose = useCallback(
-    () => {
-      uiDispatch({
-        type: 'CLOSE',
-      });
-    },
-    [uiDispatch]
-  );
+  const onClose = useCallback(() => {
+    uiDispatch({
+      type: 'CLOSE',
+    });
+  }, [uiDispatch]);
 
   const onEdit = useCallback(
     (event: LocalEvent) => {

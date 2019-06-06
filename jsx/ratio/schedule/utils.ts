@@ -65,27 +65,25 @@ export const reducer = (store: Store, action: Action): Store => {
     case 'SET_TRAINER':
       return {
         ...store,
-        schedule: store.schedule.map(
-          activity =>
-            activity.id === action.payload.activity_id
-              ? {
-                  ...activity,
-                  trainer: action.payload.trainer,
-                }
-              : activity
+        schedule: store.schedule.map(activity =>
+          activity.id === action.payload.activity_id
+            ? {
+                ...activity,
+                trainer: action.payload.trainer,
+              }
+            : activity
         ),
       };
     case 'UNSET_TRAINER':
       return {
         ...store,
-        schedule: store.schedule.map(
-          activity =>
-            activity.id === action.payload.activity_id
-              ? {
-                  ...activity,
-                  trainer: '',
-                }
-              : activity
+        schedule: store.schedule.map(activity =>
+          activity.id === action.payload.activity_id
+            ? {
+                ...activity,
+                trainer: '',
+              }
+            : activity
         ),
       };
     default:

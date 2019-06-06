@@ -30,21 +30,18 @@ const ManagerControls = ({ member }: { member: Member }) => {
   const [granting, setGranting] = useState(false);
   const api = useAPI();
 
+  const grantGoogle = useCallback(async () => {
+    setGranting(true);
+    await api.call(
+      `staff/member/${member.id}/grant_google_permissions`,
+      'POST'
+    );
+    setGranting(false);
+  }, [member]);
+
   if (member.role !== 'WATCHMAN') {
     return null;
   }
-
-  const grantGoogle = useCallback(
-    async () => {
-      setGranting(true);
-      await api.call(
-        `staff/member/${member.id}/grant_google_permissions`,
-        'POST'
-      );
-      setGranting(false);
-    },
-    [member]
-  );
 
   return (
     <Button small loading={granting} disabled={granting} onClick={grantGoogle}>

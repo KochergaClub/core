@@ -32,28 +32,22 @@ export default function Registration({ ticket, event }: Props) {
 
   const api = useAPI();
 
-  const unregister = useCallback(
-    async () => {
-      setActing(true);
-      await api.call(
-        `events/${event.event_id}/tickets/my`,
-        'DELETE',
-        {},
-        false // don't expect JSON
-      );
-      window.location.reload();
-    },
-    [event.event_id]
-  );
+  const unregister = useCallback(async () => {
+    setActing(true);
+    await api.call(
+      `events/${event.event_id}/tickets/my`,
+      'DELETE',
+      {},
+      false // don't expect JSON
+    );
+    window.location.reload();
+  }, [event.event_id]);
 
-  const register = useCallback(
-    async () => {
-      setActing(true);
-      await api.call(`events/${event.event_id}/tickets/my`, 'POST');
-      window.location.reload();
-    },
-    [event.event_id]
-  );
+  const register = useCallback(async () => {
+    setActing(true);
+    await api.call(`events/${event.event_id}/tickets/my`, 'POST');
+    window.location.reload();
+  }, [event.event_id]);
 
   return (
     <Wrapper>

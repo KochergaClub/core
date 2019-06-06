@@ -63,18 +63,15 @@ const Activity = ({ activity }: Props) => {
     [activity.id]
   );
 
-  const unsetTrainer = useCallback(
-    async () => {
-      await unsetTrainerForActivity(api, activity.id);
-      dispatch({
-        type: 'UNSET_TRAINER',
-        payload: {
-          activity_id: activity.id,
-        },
-      });
-    },
-    [activity.id]
-  );
+  const unsetTrainer = useCallback(async () => {
+    await unsetTrainerForActivity(api, activity.id);
+    dispatch({
+      type: 'UNSET_TRAINER',
+      payload: {
+        activity_id: activity.id,
+      },
+    });
+  }, [activity.id]);
 
   if (activity.activity_type == 'section') {
     return (
@@ -91,8 +88,7 @@ const Activity = ({ activity }: Props) => {
   } else if (activity.activity_type == 'break') {
     return (
       <ActivityBreak>
-        <HR />
-        (<time>{formatTime(activity.time)}</time> {activity.name})
+        <HR />(<time>{formatTime(activity.time)}</time> {activity.name})
         <HR />
       </ActivityBreak>
     );

@@ -22,7 +22,9 @@ const OneColumn = (column: Props['value'][0]) => (
 export default function ColumnsBasicBlock(block: Props) {
   return (
     <Row>
-      {block.value.map((column, i) => <OneColumn {...column} key={i} />)}
+      {block.value.map((column, i) => (
+        <OneColumn {...column} key={i} />
+      ))}
     </Row>
   );
 }

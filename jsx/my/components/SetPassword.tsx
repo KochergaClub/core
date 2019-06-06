@@ -11,25 +11,22 @@ export default function SetPassword() {
 
   const api = useAPI();
 
-  const act = useCallback(
-    async () => {
-      setActing(true);
-      try {
-        await api.call('auth/set-password', 'POST', {
-          old_password: oldPassword,
-          new_password: newPassword,
-        });
-      } catch (e) {
-        setActing(false);
-        return;
-      }
-      window.location.reload();
-      window.alert(
-        'Мы разлогинили вас, чтобы вы смогли проверить свой новый пароль.'
-      );
-    },
-    [oldPassword, newPassword]
-  );
+  const act = useCallback(async () => {
+    setActing(true);
+    try {
+      await api.call('auth/set-password', 'POST', {
+        old_password: oldPassword,
+        new_password: newPassword,
+      });
+    } catch (e) {
+      setActing(false);
+      return;
+    }
+    window.location.reload();
+    window.alert(
+      'Мы разлогинили вас, чтобы вы смогли проверить свой новый пароль.'
+    );
+  }, [oldPassword, newPassword]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: act,

@@ -28,26 +28,23 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
 
   const saveDisabled = saving || !title.length;
 
-  const create = useCallback(
-    async () => {
-      if (saveDisabled) {
-        return;
-      }
+  const create = useCallback(async () => {
+    if (saveDisabled) {
+      return;
+    }
 
-      setSaving(true);
-      const json = (await api.call('events', 'POST', {
-        start,
-        end,
-        title,
-        description,
-        location: room,
-      })) as ServerEvent;
+    setSaving(true);
+    const json = (await api.call('events', 'POST', {
+      start,
+      end,
+      title,
+      description,
+      location: room,
+    })) as ServerEvent;
 
-      const event = serverEventToEvent(json);
-      onCreate(event);
-    },
-    [title, description, room, saveDisabled]
-  );
+    const event = serverEventToEvent(json);
+    onCreate(event);
+  }, [title, description, room, saveDisabled]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: create,
@@ -64,10 +61,8 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   return (
     <Modal isOpen={isOpen} overflow="visible">
       <Modal.Header toggle={onClose}>
-        Создать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–{formatDate(
-          zonedEnd,
-          'HH:mm'
-        )}
+        Создать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
+        {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>
       <Modal.Body {...hotkeys}>
         <EventFields

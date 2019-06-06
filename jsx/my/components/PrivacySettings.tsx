@@ -50,21 +50,18 @@ export default function PrivacySettings({ customer }: Props) {
 
   const dispatch = useContext(MyDispatch);
 
-  const flipPrivacyMode = useCallback(
-    async () => {
-      setLoading(true);
-      await api.call('cm/me/set-privacy-mode', 'POST', {
-        privacy_mode: oppositePrivacyMode(customer.privacy_mode),
-      });
-      const { customer: newCustomer } = await getCmData(api);
-      dispatch({
-        type: 'REPLACE_CUSTOMER',
-        payload: { customer: newCustomer },
-      });
-      setLoading(false);
-    },
-    [customer.privacy_mode]
-  );
+  const flipPrivacyMode = useCallback(async () => {
+    setLoading(true);
+    await api.call('cm/me/set-privacy-mode', 'POST', {
+      privacy_mode: oppositePrivacyMode(customer.privacy_mode),
+    });
+    const { customer: newCustomer } = await getCmData(api);
+    dispatch({
+      type: 'REPLACE_CUSTOMER',
+      payload: { customer: newCustomer },
+    });
+    setLoading(false);
+  }, [customer.privacy_mode]);
 
   return (
     <Column centered>

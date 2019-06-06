@@ -42,31 +42,25 @@ const EditEventModal = ({
 
   const saveDisabled = deleting || saving || !title.length;
 
-  const saveCb = useCallback(
-    async () => {
-      if (saveDisabled) {
-        return;
-      }
-      setSaving(true);
-      const json = (await api.call(`event/${event.id}`, 'PATCH', {
-        title,
-        description,
-        location: room,
-      })) as ServerEvent;
+  const saveCb = useCallback(async () => {
+    if (saveDisabled) {
+      return;
+    }
+    setSaving(true);
+    const json = (await api.call(`event/${event.id}`, 'PATCH', {
+      title,
+      description,
+      location: room,
+    })) as ServerEvent;
 
-      onSave(serverEventToEvent(json));
-    },
-    [event.id, saveDisabled, title, description, room]
-  );
+    onSave(serverEventToEvent(json));
+  }, [event.id, saveDisabled, title, description, room]);
 
-  const deleteCb = useCallback(
-    async () => {
-      setDeleting(true);
-      await api.call(`event/${event.id}`, 'DELETE', undefined, false);
-      onDelete(event.id);
-    },
-    [event.id]
-  );
+  const deleteCb = useCallback(async () => {
+    setDeleting(true);
+    await api.call(`event/${event.id}`, 'DELETE', undefined, false);
+    onDelete(event.id);
+  }, [event.id]);
 
   const hotkeys = useCommonHotkeys({
     onEscape: onClose,
@@ -83,10 +77,8 @@ const EditEventModal = ({
   return (
     <Modal isOpen={isOpen} overflow="visible">
       <Modal.Header toggle={onClose}>
-        Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–{formatDate(
-          zonedEnd,
-          'HH:mm'
-        )}
+        Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
+        {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>
       <Modal.Body {...hotkeys}>
         <EventFields

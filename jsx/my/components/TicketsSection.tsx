@@ -29,27 +29,24 @@ const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
   const dispatch = useContext(MyDispatch);
   const [loading, setLoading] = useState(false);
 
-  const cancel = React.useCallback(
-    async () => {
-      setLoading(true);
-      await api.call(
-        `events/${ticket.event.event_id}/tickets/my`,
-        'DELETE',
-        {},
-        false
-      );
+  const cancel = React.useCallback(async () => {
+    setLoading(true);
+    await api.call(
+      `events/${ticket.event.event_id}/tickets/my`,
+      'DELETE',
+      {},
+      false
+    );
 
-      const tickets = await getTickets(api);
-      dispatch({
-        type: 'REPLACE_TICKETS',
-        payload: {
-          tickets,
-        },
-      });
-      setLoading(false);
-    },
-    [ticket.event.event_id]
-  );
+    const tickets = await getTickets(api);
+    dispatch({
+      type: 'REPLACE_TICKETS',
+      payload: {
+        tickets,
+      },
+    });
+    setLoading(false);
+  }, [ticket.event.event_id]);
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 

@@ -43,24 +43,21 @@ type Item = MemberItem | ExtraItem;
 export default function Picker(props: Props) {
   const { members } = useContext(StaffContext);
 
-  const items = useMemo(
-    () => {
-      const memberItems: Item[] = members.map(
-        member => ({ type: 'member', member } as MemberItem)
-      );
-      const extraItems: Item[] = props.extra
-        ? props.extra.map(
-            extra =>
-              ({
-                type: 'extra',
-                extra,
-              } as ExtraItem)
-          )
-        : [];
-      return memberItems.concat(extraItems);
-    },
-    [members, props.extra]
-  );
+  const items = useMemo(() => {
+    const memberItems: Item[] = members.map(
+      member => ({ type: 'member', member } as MemberItem)
+    );
+    const extraItems: Item[] = props.extra
+      ? props.extra.map(
+          extra =>
+            ({
+              type: 'extra',
+              extra,
+            } as ExtraItem)
+        )
+      : [];
+    return memberItems.concat(extraItems);
+  }, [members, props.extra]);
 
   const picked = useCallback(
     (item: Item) => {

@@ -7,7 +7,6 @@ import { Screen, InitialLoader } from '../common/types';
 import { timezone } from '../common/utils';
 import { API } from '../common/api';
 import Page from '../components/Page';
-import PageTitle from '../components/PageTitle';
 import { useListeningWebSocket, useAPI } from '../common/hooks';
 
 import Calendar from './components/Calendar';
@@ -70,26 +69,20 @@ const EventsPage = (props: Props) => {
     end: new Date(props.range.end),
   }));
 
-  const fetchEvents = useCallback(
-    async () => {
-      const json = await loadEventsInRange(api, {
-        start: format(range.start, 'yyyy-MM-dd'),
-        end: format(range.end, 'yyyy-MM-dd'),
-      });
+  const fetchEvents = useCallback(async () => {
+    const json = await loadEventsInRange(api, {
+      start: format(range.start, 'yyyy-MM-dd'),
+      end: format(range.end, 'yyyy-MM-dd'),
+    });
 
-      dispatch({
-        type: 'REPLACE_ALL',
-        payload: { events: json.map(serverEventToEvent) },
-      });
-    },
-    [api, range]
-  );
-  useEffect(
-    () => {
-      fetchEvents();
-    },
-    [range, fetchEvents]
-  );
+    dispatch({
+      type: 'REPLACE_ALL',
+      payload: { events: json.map(serverEventToEvent) },
+    });
+  }, [api, range]);
+  useEffect(() => {
+    fetchEvents();
+  }, [range, fetchEvents]);
 
   useListeningWebSocket('ws/events/', fetchEvents);
 

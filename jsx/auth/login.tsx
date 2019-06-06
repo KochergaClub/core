@@ -35,42 +35,39 @@ const LoginPage = (props: Props) => {
     setInitialLoading(false);
   }, []);
 
-  const cb = useCallback(
-    async () => {
-      setActing(true);
+  const cb = useCallback(async () => {
+    setActing(true);
 
-      if (password) {
-        try {
-          await api.call('auth/login', 'POST', {
-            credentials: {
-              email,
-              password,
-            },
-            result: 'cookie',
-          });
-        } catch (e) {
-          setActing(false);
-          return;
-        }
-
-        window.location.href = props.next;
-      } else {
-        // passwordless login - send magic link and ask to click it
-        try {
-          await api.call('auth/send-magic-link', 'POST', {
+    if (password) {
+      try {
+        await api.call('auth/login', 'POST', {
+          credentials: {
             email,
-            next: props.next,
-          });
-        } catch (e) {
-          setActing(false);
-          return;
-        }
-
-        window.location.href = '/login/check-your-email';
+            password,
+          },
+          result: 'cookie',
+        });
+      } catch (e) {
+        setActing(false);
+        return;
       }
-    },
-    [email, password]
-  );
+
+      window.location.href = props.next;
+    } else {
+      // passwordless login - send magic link and ask to click it
+      try {
+        await api.call('auth/send-magic-link', 'POST', {
+          email,
+          next: props.next,
+        });
+      } catch (e) {
+        setActing(false);
+        return;
+      }
+
+      window.location.href = '/login/check-your-email';
+    }
+  }, [email, password]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: cb,

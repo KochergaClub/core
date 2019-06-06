@@ -54,6 +54,10 @@ const AnyBlock = (block: BlockType) => {
 
 export default function WagtailBlocks({ blocks }: Props) {
   return (
-    <div>{blocks.map(block => <AnyBlock key={block.id} {...block} />)}</div>
+    <div>
+      {blocks.map(block => (
+        <AnyBlock key={block.id} {...block} />
+      ))}
+    </div>
   );
 }

@@ -32,17 +32,14 @@ const PrototypePicker = ({ prototype, pick }: PrototypePickerProps) => {
 
   const api = useAPI();
 
-  const loadPrototype = useCallback(
-    async () => {
-      setLoading(true);
-      const { content } = (await api.call(prototype.url, 'GET')) as {
-        content: string;
-      };
-      setLoading(false);
-      pick(content);
-    },
-    [prototype.url, pick]
-  );
+  const loadPrototype = useCallback(async () => {
+    setLoading(true);
+    const { content } = (await api.call(prototype.url, 'GET')) as {
+      content: string;
+    };
+    setLoading(false);
+    pick(content);
+  }, [prototype.url, pick]);
 
   return (
     <Button onClick={loadPrototype} loading={loading} disabled={loading}>
@@ -76,18 +73,15 @@ const EmailModal = (props: ModalProps) => {
 
   const api = useAPI();
 
-  const create = useCallback(
-    async () => {
-      setCreating(true);
-      const result = await api.call(props.createUrl, 'POST', {
-        title,
-        content,
-      });
-      alert(result.draft_link);
-      props.close();
-    },
-    [title, content, props.close]
-  );
+  const create = useCallback(async () => {
+    setCreating(true);
+    const result = await api.call(props.createUrl, 'POST', {
+      title,
+      content,
+    });
+    alert(result.draft_link);
+    props.close();
+  }, [title, content, props.close]);
 
   return (
     <Modal isOpen={true}>

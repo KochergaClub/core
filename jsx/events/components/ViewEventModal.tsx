@@ -66,12 +66,9 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
     onEscape: onClose,
   });
 
-  const editCb = useCallback(
-    () => {
-      onEdit(event);
-    },
-    [event, onEdit]
-  );
+  const editCb = useCallback(() => {
+    onEdit(event);
+  }, [event, onEdit]);
 
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);

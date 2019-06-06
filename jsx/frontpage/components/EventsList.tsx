@@ -47,7 +47,9 @@ export default function EventsList({ events }: Props) {
       <a id="schedule" />
       <Header />
       <List>
-        {events.map(event => <EventCard key={event.event_id} event={event} />)}
+        {events.map(event => (
+          <EventCard key={event.event_id} event={event} />
+        ))}
       </List>
     </div>
   );

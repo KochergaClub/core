@@ -136,7 +136,9 @@ const TildaMenuItems = ({ team }: Props) => {
   return (
     <MenuItemsNav>
       <MenuItemsList>
-        {items.map((item, i) => <MenuItemLi item={item} key={i} />)}
+        {items.map((item, i) => (
+          <MenuItemLi item={item} key={i} />
+        ))}
       </MenuItemsList>
     </MenuItemsNav>
   );

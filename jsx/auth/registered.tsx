@@ -12,7 +12,8 @@ interface Props {}
 const RegisteredPage = () => (
   <Page title="Логин">
     <AuthContainer>
-      Вы зарегистрировались!<br />
+      Вы зарегистрировались!
+      <br />
       <A href="/my/">Перейти в личный кабинет</A>
     </AuthContainer>
   </Page>

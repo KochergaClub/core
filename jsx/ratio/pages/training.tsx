@@ -29,15 +29,12 @@ const ActionButton = ({
   const api = useAPI();
   const [loading, setLoading] = useState(false);
 
-  const cb = useCallback(
-    async () => {
-      setLoading(true);
-      const key = trainingToKey(training);
-      await api.call(`ratio/training/${key}/${action}`, 'POST');
-      setLoading(false);
-    },
-    [training, action]
-  );
+  const cb = useCallback(async () => {
+    setLoading(true);
+    const key = trainingToKey(training);
+    await api.call(`ratio/training/${key}/${action}`, 'POST');
+    setLoading(false);
+  }, [training, action]);
   return (
     <Button loading={loading} disabled={loading} onClick={cb}>
       {children}

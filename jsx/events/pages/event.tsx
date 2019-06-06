@@ -14,7 +14,6 @@ import { timezone, formatDate } from '../../common/utils';
 import { APIError } from '../../common/api';
 
 import Page from '../../components/Page';
-import PageTitle from '../../components/PageTitle';
 
 import { PublicEvent, EventTicket } from '../types';
 

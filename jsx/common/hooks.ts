@@ -11,31 +11,25 @@ export const useListeningWebSocket = (
 ) => {
   // avoid re-creating websocket when onmessage updates
   const cbRef = useRef(onmessage);
-  useEffect(
-    () => {
-      cbRef.current = onmessage;
-    },
-    [onmessage]
-  );
+  useEffect(() => {
+    cbRef.current = onmessage;
+  }, [onmessage]);
 
-  useEffect(
-    () => {
-      if (IS_SERVER || !window.WebSocket) {
-        return;
-      }
-      const socketProtocol =
-        window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const socket = new window.WebSocket(
-        `${socketProtocol}//${window.location.host}/${path}`
-      );
-      socket.onmessage = async (e: any) => {
-        cbRef.current(e);
-      };
+  useEffect(() => {
+    if (IS_SERVER || !window.WebSocket) {
+      return;
+    }
+    const socketProtocol =
+      window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const socket = new window.WebSocket(
+      `${socketProtocol}//${window.location.host}/${path}`
+    );
+    socket.onmessage = async (e: any) => {
+      cbRef.current(e);
+    };
 
-      return () => socket.close();
-    },
-    [path]
-  );
+    return () => socket.close();
+  }, [path]);
 };
 
 /*
@@ -61,12 +55,12 @@ export const useFocusOnFirstModalRender = () => {
 };
 
 /*
-*  Pass the result from this hook to element's props to make it escapable or enterable.
-*  Example:
-*
-*    const hotkeys = useCommonHotkeys({ onEscape: ..., onEnter: ... });
-*    <div {...hotkeys}>Content</div>;
-*/
+ *  Pass the result from this hook to element's props to make it escapable or enterable.
+ *  Example:
+ *
+ *    const hotkeys = useCommonHotkeys({ onEscape: ..., onEnter: ... });
+ *    <div {...hotkeys}>Content</div>;
+ */
 export const useCommonHotkeys = ({
   onEscape,
   onEnter,
@@ -101,12 +95,9 @@ export const useAPI = () => {
 export const useExpandable = () => {
   const [expanded, setExpanded] = useState(false);
 
-  const flipExpand = useCallback(
-    () => {
-      setExpanded(!expanded);
-    },
-    [expanded]
-  );
+  const flipExpand = useCallback(() => {
+    setExpanded(!expanded);
+  }, [expanded]);
 
   const unexpand = useCallback(() => {
     setExpanded(false);
