@@ -12,7 +12,14 @@ export interface Ticket {
   last_name: string;
 }
 
+export interface Trainer {
+  id: number;
+  short_name: string;
+  long_name: string;
+}
+
 export interface ActivityType {
+  id: number;
   day: number;
   time: string;
   activity_type: string;

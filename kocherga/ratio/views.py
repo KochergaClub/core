@@ -3,7 +3,7 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Training
+from .models import Training, Activity, Trainer
 from . import serializers
 from .users import training2mailchimp
 from . import email
@@ -72,3 +72,31 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
         src_training = Training.objects.get(slug=src_training_slug)
         training.copy_schedule_from(src_training)
         return Response('ok')
+
+
+class ActivityViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (IsRatioManager,)
+    queryset = Activity.objects.all()
+    serializer_class = serializers.ActivitySerializer
+
+    @action(detail=True, methods=['post'])
+    def set_trainer(self, request, **kwargs):
+        trainer_name = request.data['name']
+        trainer = Trainer.objects.get(long_name=trainer_name)
+        activity = self.get_object()
+        activity.trainer = trainer
+        activity.save()
+        return Response('ok')
+
+    @action(detail=True, methods=['post'])
+    def unset_trainer(self, request, **kwargs):
+        activity = self.get_object()
+        activity.trainer = None
+        activity.save()
+        return Response('ok')
+
+
+class TrainerViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (IsRatioManager,)
+    queryset = Trainer.objects.all()
+    serializer_class = serializers.TrainerSerializer

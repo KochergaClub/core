@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
+
+import { useAPI } from '~/common/hooks';
 
 import HR from './HR';
 
-import { ActivityType } from '../../types';
+import { ActivityType, Trainer } from '../../types';
+import { setTrainerForActivity, unsetTrainerForActivity } from '../../api';
+
+import { ScheduleContext } from '../utils';
+
+import EditableTrainer from './EditableTrainer';
 
 const ActivitySection = styled.section`
   margin-bottom: 32px;
@@ -38,12 +45,47 @@ interface Props {
 }
 
 const Activity = ({ activity }: Props) => {
+  const { dispatch } = useContext(ScheduleContext);
+
+  const api = useAPI();
+
+  const setTrainer = useCallback(
+    async (trainer: Trainer) => {
+      await setTrainerForActivity(api, activity.id, trainer.long_name);
+      dispatch({
+        type: 'SET_TRAINER',
+        payload: {
+          activity_id: activity.id,
+          trainer: trainer.long_name,
+        },
+      });
+    },
+    [activity.id]
+  );
+
+  const unsetTrainer = useCallback(
+    async () => {
+      await unsetTrainerForActivity(api, activity.id);
+      dispatch({
+        type: 'UNSET_TRAINER',
+        payload: {
+          activity_id: activity.id,
+        },
+      });
+    },
+    [activity.id]
+  );
+
   if (activity.activity_type == 'section') {
     return (
       <ActivitySection>
         <time>{formatTime(activity.time)}</time>
         <header>{activity.name}</header>
-        {activity.trainer && <div>[{activity.trainer}]</div>}
+        <EditableTrainer
+          trainer_name={activity.trainer}
+          picked={setTrainer}
+          unpicked={unsetTrainer}
+        />
       </ActivitySection>
     );
   } else if (activity.activity_type == 'break') {

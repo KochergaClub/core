@@ -20,4 +20,10 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Activity
-        fields = ('day', 'time', 'activity_type', 'name', 'trainer', 'location')
+        fields = ('id', 'day', 'time', 'activity_type', 'name', 'trainer', 'location')
+
+
+class TrainerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Trainer
+        fields = ('id', 'short_name', 'long_name')

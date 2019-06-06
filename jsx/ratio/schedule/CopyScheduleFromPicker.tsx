@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Column, Button } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 
-import { copyScheduleFrom, getTrainings } from '../api';
+import { getTrainings } from '../api';
 import { Training } from '../types';
 
 interface Props {
