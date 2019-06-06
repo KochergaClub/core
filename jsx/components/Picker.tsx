@@ -10,7 +10,7 @@ const PickerContainer = styled.div`
   user-select: none;
 
   margin-left: 4px;
-  /* width: 100%; */
+  min-width: 100%;
   z-index: 10;
   background-color: white;
 `;

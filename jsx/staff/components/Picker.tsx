@@ -1,89 +1,106 @@
-import React, { useContext } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import React, { useCallback, useContext, useMemo } from 'react';
+
+import BasicPicker from '~/components/Picker';
 
 import { StaffContext } from '../contexts';
 
 import { Member } from '../types';
 
-const PickerContainer = styled.div`
-  position: absolute;
-  top: 2em;
-  border: 1px solid #888;
+// import { ThemeProvider } from 'styled-components';
+//          <ThemeProvider theme={{ color: e.dark ? 'dark' : 'light' }}>
+//            <PickerItemContainer
+//              style={{ backgroundColor: e.color }}
+//              onClick={() => props.pickedExtra && props.pickedExtra(e.text)}
+//            >
+//              <div>{e.text}</div>
+//            </PickerItemContainer>
+//          </ThemeProvider>
 
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-  user-select: none;
-
-  margin-left: 4px;
-  width: 100%;
-  z-index: 10;
-  background-color: white;
-`;
-
-const PickerItemContainer = styled.div`
-  cursor: pointer;
-  color: ${props => (props.theme.color === 'dark' ? 'white' : 'black')};
-
-  > div {
-    padding-left: 4px;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
-  }
-`;
-
-type PickedMemberCb = (member: Member) => void;
-type PickedExtraCb = (text: string) => void;
+interface Extra {
+  color: string;
+  text: string;
+  dark?: boolean;
+}
 
 interface Props {
-  extra?: {
-    color: string;
-    text: string;
-    dark: boolean;
-  }[];
-  pickedExtra?: PickedExtraCb;
-  pickedMember: PickedMemberCb;
+  extra?: Extra[];
+  pickedExtra?: (text: string) => void;
+  pickedMember: (member: Member) => void;
 }
 
-interface ItemProps {
+interface MemberItem {
+  type: 'member';
   member: Member;
-  picked: PickedMemberCb;
 }
 
-const PickerItem = ({ member, picked }: ItemProps) => {
-  const text = member.short_name || 'Нет имени';
-  const color = member.color;
+interface ExtraItem {
+  type: 'extra';
+  extra: Extra;
+}
 
-  return (
-    <PickerItemContainer
-      style={{ backgroundColor: color }}
-      onClick={() => picked(member)}
-    >
-      <div>{text}</div>
-    </PickerItemContainer>
-  );
-};
+type Item = MemberItem | ExtraItem;
 
-const Picker = (props: Props) => {
+export default function Picker(props: Props) {
   const { members } = useContext(StaffContext);
 
-  return (
-    <PickerContainer>
-      {members.map(m => (
-        <PickerItem key={m.id} member={m} picked={props.pickedMember} />
-      ))}
-      {props.extra &&
-        props.extra.map(e => (
-          <ThemeProvider theme={{ color: e.dark ? 'dark' : 'light' }}>
-            <PickerItemContainer
-              style={{ backgroundColor: e.color }}
-              onClick={() => props.pickedExtra && props.pickedExtra(e.text)}
-            >
-              <div>{e.text}</div>
-            </PickerItemContainer>
-          </ThemeProvider>
-        ))}
-    </PickerContainer>
+  const items = useMemo(
+    () => {
+      const memberItems: Item[] = members.map(
+        member => ({ type: 'member', member } as MemberItem)
+      );
+      const extraItems: Item[] = props.extra
+        ? props.extra.map(
+            extra =>
+              ({
+                type: 'extra',
+                extra,
+              } as ExtraItem)
+          )
+        : [];
+      return memberItems.concat(extraItems);
+    },
+    [members, props.extra]
   );
-};
 
-export default Picker;
+  const picked = useCallback(
+    (item: Item) => {
+      switch (item.type) {
+        case 'member':
+          return props.pickedMember(item.member);
+        case 'extra':
+          if (!props.pickedExtra) {
+            throw new Error("Can't pick extra option without pickedExtra");
+          }
+          return props.pickedExtra(item.extra.text);
+      }
+    },
+    [props.pickedMember, props.pickedExtra]
+  );
+
+  const item2text = useCallback((item: Item) => {
+    switch (item.type) {
+      case 'member':
+        return item.member.short_name || 'Нет имени';
+      case 'extra':
+        return item.extra.text;
+    }
+  }, []);
+
+  const item2color = useCallback((item: Item) => {
+    switch (item.type) {
+      case 'member':
+        return item.member.color;
+      case 'extra':
+        return item.extra.color;
+    }
+  }, []);
+
+  return (
+    <BasicPicker
+      item2text={item2text}
+      item2color={item2color}
+      items={items}
+      picked={picked}
+    />
+  );
+}
