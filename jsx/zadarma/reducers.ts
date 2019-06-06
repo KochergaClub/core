@@ -36,11 +36,10 @@ type ListState = PbxCall[];
 export const listReducer = (state: ListState, action: Action): ListState => {
   switch (action.type) {
     case 'UPDATE_STAFF_MEMBER':
-      return state.map(
-        call =>
-          call.pbx_call_id == action.payload.pbx_call_id
-            ? singleReducer(call, action)
-            : call
+      return state.map(call =>
+        call.pbx_call_id == action.payload.pbx_call_id
+          ? singleReducer(call, action)
+          : call
       );
     default:
       return state;
