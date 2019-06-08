@@ -147,8 +147,7 @@ class AnnounceSession:
         await self.page.keyboard.type(f"{dt.minute:02}")
 
     async def fill_dates(self, event):
-        await self.page.JJ()
-        date_inputs = await self.page.focus('input[placeholder="дд.мм.гггг"]')
+        date_inputs = await self.page.JJ('input[placeholder="дд.мм.гггг"]')
         assert len(date_inputs) == 2  # There might be other date inputs on the page and we don't want to mess it up.
 
         # We assume that start input always precedes the end; this seems reasonable enough.
