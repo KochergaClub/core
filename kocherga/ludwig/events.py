@@ -170,7 +170,7 @@ def command_event_visitors(payload):
 def event_visitors_question(event):
     result = {
         "text": "Сколько человек пришло на событие?",
-        "channel": "#watchmen_bot",
+        "channel": "#space_bot",
     }
     if event.visitors:
         result["attachments"] = [visitors_attachment(event)]

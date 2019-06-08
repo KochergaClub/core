@@ -21,7 +21,7 @@ class TaskManager(models.Manager):
 class Task(ClusterableModel):
     title = models.CharField('Название', max_length=80, blank=True)  # TODO - make required
     text = models.TextField('Текст', max_length=1024, blank=True)
-    channel = models.CharField('Канал', default='watchmen', max_length=40)
+    channel = models.CharField('Канал', default='space_bot', max_length=40)
 
     objects = TaskManager()
 

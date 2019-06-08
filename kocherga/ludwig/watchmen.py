@@ -228,7 +228,7 @@ def roster_check():
     CRITICAL_DAYS = 2
     SHIFTS_THRESHOLD = 6
     TOTAL_DAYS = 7
-    CHANNEL = '#roster'
+    CHANNEL = '#space_staff_shifts'
 
     today = datetime.now(TZ).date()
     d = today
