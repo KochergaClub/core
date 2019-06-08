@@ -146,6 +146,18 @@ class AnnounceSession:
         await self.page.keyboard.press("Tab")
         await self.page.keyboard.type(f"{dt.minute:02}")
 
+    async def fill_dates(self, event):
+        await self.page.JJ()
+        date_inputs = await self.page.focus('input[placeholder="дд.мм.гггг"]')
+        assert len(date_inputs) == 2  # There might be other date inputs on the page and we don't want to mess it up.
+
+        # We assume that start input always precedes the end; this seems reasonable enough.
+        await self.page.focus(date_inputs[0])
+        await self.fill_date_time(event.start)
+
+        await self.page.focus(date_inputs[1])
+        await self.fill_date_time(event.end)
+
     async def select_from_listbox(self, fb_id):
         image_id = get_image_id(fb_id)
         if not image_id:
@@ -272,7 +284,9 @@ class AnnounceSession:
 
         logger.info("Opening an event creation form")
         await page.click("[data-testid=event-create-button]")
-        await page.waitForSelector("[data-testid=event-create-dialog-name-field]", timeout=10000)
+
+        dialog_selector = "[data-testid=event_create_dialog]"
+        await page.waitForSelector(dialog_selector, timeout=10000)
 
         logger.info("Waiting for image selector")
         await page.waitForSelector("[data-testid=event-create-dialog-image-selector]")
@@ -299,14 +313,7 @@ class AnnounceSession:
             await self.select_from_listbox(FB_CONFIG["main_page"]["id"])
 
         logger.info("Filling dates")
-        await page.focus(
-            '[data-testid=event-create-dialog-start-time] input[placeholder="дд.мм.гггг"]'
-        )
-        await self.fill_date_time(event.start)
-        await page.focus(
-            '[data-testid=event-create-dialog-end-time] input[placeholder="дд.мм.гггг"]'
-        )
-        await self.fill_date_time(event.end)
+        await self.fill_dates()
 
         logger.info("Filling category if necessary")
         await self.fill_category()
