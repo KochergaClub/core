@@ -151,10 +151,10 @@ class AnnounceSession:
         assert len(date_inputs) == 2  # There might be other date inputs on the page and we don't want to mess it up.
 
         # We assume that start input always precedes the end; this seems reasonable enough.
-        await self.page.focus(date_inputs[0])
+        await self.page.evaluate('(el) => el.focus()', date_inputs[0])
         await self.fill_date_time(event.start)
 
-        await self.page.focus(date_inputs[1])
+        await self.page.evaluate('(el) => el.focus()', date_inputs[1])
         await self.fill_date_time(event.end)
 
     async def select_from_listbox(self, fb_id):
