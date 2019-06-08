@@ -313,7 +313,7 @@ class AnnounceSession:
             await self.select_from_listbox(FB_CONFIG["main_page"]["id"])
 
         logger.info("Filling dates")
-        await self.fill_dates()
+        await self.fill_dates(event)
 
         logger.info("Filling category if necessary")
         await self.fill_category()
