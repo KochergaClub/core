@@ -101,6 +101,6 @@ def react_send_salaries(message):
         return
 
     bot.send_message(
-        channel="#general",
+        channel="#space_staff_salaries",
         **salaries_message()
     )
