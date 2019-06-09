@@ -79,4 +79,5 @@ add_simple_interactions()
 @bot.schedule("cron", hour=9)
 def morning_events_notification():
     bot.send_message(**kocherga.ludwig.watchmen.today_watchmen(), channel="#space_realtime")
+    bot.send_message(**kocherga.ludwig.watchmen.today_watchmen(), channel="#space_bot")
     bot.send_message(**kocherga.ludwig.events.list_events(), channel="#space_bot")
