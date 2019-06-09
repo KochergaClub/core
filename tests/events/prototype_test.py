@@ -4,7 +4,7 @@ pytestmark = [
     pytest.mark.google,
 ]
 
-from kocherga.events.models import EventPrototype
+from kocherga.events.models import EventPrototype, Event
 
 
 def test_suggestions(common_prototype):
@@ -16,7 +16,10 @@ def test_new_event(common_prototype):
     ep = common_prototype
     dt = ep.suggested_dates()[0]
     event = ep.new_event(dt)
+    event = Event.objects.get(pk=event.pk)  # let's make sure that event was saved
     assert event.prototype_id == ep.prototype_id
+    assert event.vk_announcement.group == ep.vk_group
+    assert event.fb_announcement.group == ep.fb_group
 
 
 def test_cancel(common_prototype):

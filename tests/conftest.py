@@ -148,6 +148,8 @@ def common_prototype(db):
         hour=16,
         minute=30,
         length=120,
+        vk_group='whatever',
+        fb_group='kocherga.whatever',
     )
     prototype.save()
     return prototype

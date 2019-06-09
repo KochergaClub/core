@@ -27,12 +27,14 @@ class EventPrototype(models.Model):
     summary = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
-    timepad_category_code = models.CharField(max_length=40, blank=True)
-    timepad_prepaid_tickets = models.BooleanField(default=False)
     timing_description_override = models.CharField(max_length=255, blank=True)
 
+    # These properties are located in event.TYPE_announcement.PROP on the event's instance,
+    # but we store them directly in prototype model for the sake of simplicity and for legacy reasons.
     vk_group = models.CharField(max_length=40, blank=True)
     fb_group = models.CharField(max_length=40, blank=True)
+    timepad_category_code = models.CharField(max_length=40, blank=True)
+    timepad_prepaid_tickets = models.BooleanField(default=False)
 
     weekday = models.IntegerField()
     hour = models.IntegerField()
@@ -104,10 +106,6 @@ class EventPrototype(models.Model):
 
         for prop in (
                 'summary',
-                'vk_group',
-                'fb_group',
-                'timepad_prepaid_tickets',
-                'timepad_category_code',
                 'timing_description_override',
         ):
             value = getattr(self, prop)
@@ -121,6 +119,20 @@ class EventPrototype(models.Model):
 
         event.full_clean()
         event.save()
+
+        if self.vk_group:
+            event.vk_announcement.group = self.vk_group
+            event.vk_announcement.save()
+
+        if self.fb_group:
+            event.fb_announcement.group = self.fb_group
+            event.fb_announcement.save()
+
+        if self.timepad_prepaid_tickets or self.timepad_category_code:
+            event.timepad_announcement.prepaid_tickets = self.timepad_prepaid_tickets
+            event.timepad_announcement.category_code = self.timepad_category_code
+            event.timepad_announcement.save()
+
         return event
 
     @property
@@ -140,9 +152,6 @@ class EventPrototype(models.Model):
 
     def image_file(self):
         return image_storage.get_filename(self.image)
-
-    def to_dict(self, detailed=False):
-        raise Exception("To be reimplemented")
 
     def add_image(self, fh):
         self.image = image_storage.add_file(fh)
