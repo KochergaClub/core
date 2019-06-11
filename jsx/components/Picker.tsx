@@ -48,7 +48,7 @@ const PickerItem = ({ text, color, picked }: ItemProps) => {
   );
 };
 
-const Picker = <T extends any>(props: Props<T>) => {
+function Picker<T>(props: Props<T>) {
   const { items, item2text, item2color } = props;
   return (
     <PickerContainer>
@@ -62,6 +62,6 @@ const Picker = <T extends any>(props: Props<T>) => {
       ))}
     </PickerContainer>
   );
-};
+}
 
 export default Picker;

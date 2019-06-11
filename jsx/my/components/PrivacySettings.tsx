@@ -61,7 +61,7 @@ export default function PrivacySettings({ customer }: Props) {
       payload: { customer: newCustomer },
     });
     setLoading(false);
-  }, [customer.privacy_mode]);
+  }, [api, dispatch, customer.privacy_mode]);
 
   return (
     <Column centered>

@@ -3,14 +3,7 @@ import React from 'react';
 /// <reference path="../../@types/react-big-calendar/lib/utils/constants.d.ts" />
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 
-interface ToolbarProps {
-  view: string;
-  views: string[];
-  label: Node;
-  localizer: any;
-  onNavigate: (x: string) => void;
-  onView: (x: string) => void;
-}
+import { ToolbarProps, Navigate, View } from 'react-big-calendar';
 
 class CalendarToolbar extends React.Component<ToolbarProps> {
   render() {
@@ -46,16 +39,16 @@ class CalendarToolbar extends React.Component<ToolbarProps> {
     );
   }
 
-  navigate = (action: string) => {
+  navigate = (action: Navigate) => {
     this.props.onNavigate(action);
   };
 
-  view = (view: string) => {
+  view = (view: View) => {
     this.props.onView(view);
   };
 
   viewNamesGroup() {
-    let viewNames = this.props.views;
+    let viewNames = this.props.views as View[];
     const view = this.props.view;
 
     const messages: { [key: string]: string } = {

@@ -67,10 +67,8 @@ const Users = ({ users }: { users: User[] }) => (
           <Photo src={user.photo} />
           <ActionButton
             path={userActionPath('flip_present', user.user_id)}
-            onSuccess={
-              () => window.location.reload()
-              /* There's a race condition here; button becomes enabled again before the page reloads. Also, page reloads suck. */
-            }
+            reloadOnSuccess
+            /* There's a race condition here; button becomes enabled again before the page reloads. Also, page reloads suck. */
           >
             {user.present ? 'Тут' : 'Не тут'}
           </ActionButton>

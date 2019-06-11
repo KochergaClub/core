@@ -46,7 +46,7 @@ const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
       },
     });
     setLoading(false);
-  }, [ticket.event.event_id]);
+  }, [api, dispatch, ticket.event.event_id]);
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 

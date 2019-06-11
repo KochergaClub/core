@@ -44,7 +44,7 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
 
     const event = serverEventToEvent(json);
     onCreate(event);
-  }, [title, description, room, saveDisabled]);
+  }, [api, title, description, room, start, end, saveDisabled, onCreate]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: create,

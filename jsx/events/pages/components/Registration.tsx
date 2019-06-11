@@ -29,13 +29,13 @@ export default function Registration({ ticket, event }: Props) {
       false // don't expect JSON
     );
     window.location.reload();
-  }, [event.event_id]);
+  }, [api, event.event_id]);
 
   const register = useCallback(async () => {
     setActing(true);
     await api.call(`events/${event.event_id}/tickets/my`, 'POST');
     window.location.reload();
-  }, [event.event_id]);
+  }, [api, event.event_id]);
 
   if (!user.is_authenticated) {
     // TODO - set `next` (we'll need to store location/path in global context for this, since we can't use window.location on server)

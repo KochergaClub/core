@@ -60,7 +60,7 @@ const Activity = ({ activity }: Props) => {
         },
       });
     },
-    [activity.id]
+    [dispatch, api, activity.id]
   );
 
   const unsetTrainer = useCallback(async () => {
@@ -71,7 +71,7 @@ const Activity = ({ activity }: Props) => {
         activity_id: activity.id,
       },
     });
-  }, [activity.id]);
+  }, [dispatch, api, activity.id]);
 
   if (activity.activity_type == 'section') {
     return (

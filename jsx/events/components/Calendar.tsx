@@ -3,17 +3,44 @@ import React from 'react';
 import { CalendarStyle, CalendarDndStyle } from './CalendarStyle';
 import CalendarToolbar from './CalendarToolbar';
 
-import BigCalendar from 'react-big-calendar';
+import BigCalendar, {
+  BigCalendarProps,
+  stringOrDate,
+} from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
 const DragAndDropCalendar = withDragAndDrop(BigCalendar);
+
+// copied from dragAndDrop.d.ts because it's not exported
+interface WithDragAndDropProps<TEvent> {
+  onEventDrop?: (args: {
+    event: TEvent;
+    start: stringOrDate;
+    end: stringOrDate;
+    allDay: boolean;
+  }) => void;
+  onEventResize?: (args: {
+    event: TEvent;
+    start: stringOrDate;
+    end: stringOrDate;
+    allDay: boolean;
+  }) => void;
+  resizable?: boolean;
+}
 
 import moment from 'moment';
 moment.locale('ru');
 
 const localizer = BigCalendar.momentLocalizer(moment);
 
-const Calendar = (props: any) => {
+type Props<TEvent extends object, TResource extends object> = Omit<
+  BigCalendarProps<TEvent, TResource> & WithDragAndDropProps<TEvent>,
+  'localizer'
+>;
+
+const Calendar = <TEvent extends object, TResource extends object>(
+  props: Props<TEvent, TResource>
+) => {
   return (
     <div style={{ height: '80vh' }}>
       <CalendarStyle />

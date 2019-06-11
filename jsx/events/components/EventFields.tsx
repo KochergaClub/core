@@ -46,11 +46,13 @@ interface Props {
 const EventFields = (props: Props) => {
   const focus = useFocusOnFirstModalRender();
 
+  const { setTitle } = props;
+
   const onChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      props.setTitle(e.currentTarget.value);
+      setTitle(e.currentTarget.value);
     },
-    [props.setTitle]
+    [setTitle]
   );
 
   return (

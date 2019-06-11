@@ -46,7 +46,7 @@ export default function EditableTrainer({
 
   const { trainers } = useContext(ScheduleContext);
 
-  const items = (trainers as Array<Trainer | undefined>).concat([undefined]);
+  const items = (trainers as (Trainer | undefined)[]).concat([undefined]);
 
   return (
     <OuterContainer>

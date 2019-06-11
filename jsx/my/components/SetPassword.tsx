@@ -26,7 +26,7 @@ export default function SetPassword() {
     window.alert(
       'Мы разлогинили вас, чтобы вы смогли проверить свой новый пароль.'
     );
-  }, [oldPassword, newPassword]);
+  }, [api, oldPassword, newPassword]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: act,

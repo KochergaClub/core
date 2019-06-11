@@ -21,7 +21,7 @@ export default function CopyScheduleFromPicker(props: Props) {
     (async () => {
       setTrainings(await getTrainings(api));
     })();
-  }, []);
+  }, [api]);
 
   if (!trainings.length) {
     return <div>Loading...</div>;

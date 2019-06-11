@@ -65,7 +65,7 @@ const RatioSchedulePage = (props: Props) => {
         },
       });
     },
-    [training]
+    [api, training]
   );
 
   return (

@@ -16,9 +16,16 @@ export const getCSRFToken = () => {
   );
 };
 
+interface WebSocket {
+  onmessage: (e: MessageEvent) => void;
+  close: () => void;
+}
+
 declare global {
   interface Window {
-    WebSocket: any;
+    WebSocket: {
+      new (url: string): WebSocket;
+    };
   }
 }
 

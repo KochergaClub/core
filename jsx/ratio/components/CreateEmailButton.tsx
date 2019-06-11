@@ -39,7 +39,7 @@ const PrototypePicker = ({ prototype, pick }: PrototypePickerProps) => {
     };
     setLoading(false);
     pick(content);
-  }, [prototype.url, pick]);
+  }, [api, prototype.url, pick]);
 
   return (
     <Button onClick={loadPrototype} loading={loading} disabled={loading}>

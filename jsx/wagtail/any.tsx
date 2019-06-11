@@ -71,7 +71,7 @@ const getInitialData: WagtailInitialLoader = async (
   return props;
 };
 
-type ProxyWagtailScreen = AnyScreen<ProxyProps, WagtailPageType>;
+type ProxyWagtailScreen = AnyScreen<WagtailPageType, ProxyProps>;
 
 const screen: ProxyWagtailScreen = {
   component: ProxyWagtailPage,

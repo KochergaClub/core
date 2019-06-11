@@ -17,7 +17,7 @@ export default function LogoutButton() {
       return;
     }
     window.location.href = '/';
-  }, []);
+  }, [api]);
 
   return (
     <Button loading={acting} disabled={acting} onClick={act} small>

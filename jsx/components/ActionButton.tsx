@@ -7,7 +7,7 @@ import { useAPI } from '../common/hooks';
 interface Props {
   path: string;
   children?: React.ReactNode;
-  onSuccess?: (result: any) => void;
+  onSuccess?: () => void;
   // Option for quick-and-dirty solutions - don't have to integrate the state change to the existing page.
   // This option has a higher priority than onSuccess.
   reloadOnSuccess?: boolean;
@@ -24,13 +24,16 @@ const ActionButton = ({
 
   const cb = useCallback(async () => {
     setLoading(true);
-    const result = await api.call(path, 'POST');
+
+    await api.call(path, 'POST');
     if (reloadOnSuccess) {
       window.location.reload();
       return;
     }
     if (onSuccess) {
-      onSuccess(result);
+      // It'd be better to pass POST result, but we don't know its type,
+      // so we'll need to make ActionButton generic first.
+      onSuccess();
     }
     setLoading(false);
   }, [path, api, onSuccess, reloadOnSuccess]);

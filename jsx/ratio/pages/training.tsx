@@ -34,7 +34,8 @@ const ActionButton = ({
     const key = trainingToKey(training);
     await api.call(`ratio/training/${key}/${action}`, 'POST');
     setLoading(false);
-  }, [training, action]);
+  }, [api, training, action]);
+
   return (
     <Button loading={loading} disabled={loading} onClick={cb}>
       {children}

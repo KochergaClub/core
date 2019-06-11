@@ -80,13 +80,14 @@ const EventsPage = (props: Props) => {
       payload: { events: json.map(serverEventToEvent) },
     });
   }, [api, range]);
+
   useEffect(() => {
     fetchEvents();
   }, [range, fetchEvents]);
 
   useListeningWebSocket('ws/events/', fetchEvents);
 
-  const onRangeChange = (range: any) => {
+  const onRangeChange = (range: { start: Date; end: Date }) => {
     let start: Date;
     let end: Date;
 
@@ -105,7 +106,13 @@ const EventsPage = (props: Props) => {
 
   const startNewEvent = useCallback(
     // Note: start and end are zoned since they come from RBC.
-    ({ start: zonedStart, end: zonedEnd }: { start: Date; end: Date }) => {
+    ({
+      start: zonedStart,
+      end: zonedEnd,
+    }: {
+      start: Date | string;
+      end: Date | string;
+    }) => {
       const { start, end } = {
         start: zonedTimeToUtc(zonedStart, timezone),
         end: zonedTimeToUtc(zonedEnd, timezone),
@@ -139,8 +146,8 @@ const EventsPage = (props: Props) => {
       end: zonedEnd,
     }: {
       event: Event;
-      start: Date;
-      end: Date;
+      start: Date | string;
+      end: Date | string;
     }) => {
       const { start, end } = {
         start: zonedTimeToUtc(zonedStart, timezone),
@@ -166,7 +173,7 @@ const EventsPage = (props: Props) => {
         payload: { event: serverEventToEvent(json) },
       });
     },
-    []
+    [api]
   );
 
   return (

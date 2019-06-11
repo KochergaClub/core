@@ -57,7 +57,7 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         type: 'CLOSE',
       });
     },
-    [uiDispatch]
+    [dispatch, uiDispatch]
   );
 
   const onDelete = useCallback(
@@ -72,7 +72,7 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
         type: 'CLOSE',
       });
     },
-    [uiDispatch]
+    [dispatch, uiDispatch]
   );
 
   switch (uiStore.mode) {
