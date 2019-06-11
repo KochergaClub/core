@@ -377,7 +377,6 @@ class AnnounceSession:
         await menu_el.click()
 
         button_el = await dialog_el.J('.uiOverlayFooter button.layerConfirm')
-        await button_el.click()
 
         await asyncio.wait([
             button_el.click(),
