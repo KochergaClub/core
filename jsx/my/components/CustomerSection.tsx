@@ -35,9 +35,8 @@ const CustomerSection = ({ customer, orders_count, orders }: Props) => {
       )}
 
       <p>
-        Вы были в Кочерге <strong>{orders_count}</strong> раз{inflect(
-          orders_count
-        )}.
+        Вы были в Кочерге <strong>{orders_count}</strong> раз
+        {inflect(orders_count)}.
       </p>
 
       {orders.length && (

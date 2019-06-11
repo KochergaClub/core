@@ -10,7 +10,7 @@ import { Cohort } from './types';
 const Cohorts = ({ cohorts }: { cohorts: Cohort[] }) => (
   <ul>
     {cohorts.map(cohort => (
-      <li>
+      <li key={cohort.id}>
         <A href={`/team/mastermind_dating/cohort/${cohort.id}`}>{cohort.id}</A>
       </li>
     ))}

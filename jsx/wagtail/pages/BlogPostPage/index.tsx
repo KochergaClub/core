@@ -22,7 +22,11 @@ export interface PageType extends AnyPageType {
 
 const AuthorsList = ({ authors }: { authors: BlogPostAuthorType[] }) => {
   return (
-    <div>{authors.map((author, i) => <Author key={i} {...author} />)}</div>
+    <div>
+      {authors.map((author, i) => (
+        <Author key={i} {...author} />
+      ))}
+    </div>
   );
 };
 

@@ -18,7 +18,9 @@ import Frontpage from './Frontpage';
 import Emptypage from './Emptypage';
 import PrintFooter from './PrintFooter';
 
-type AuxPages = { [key: number]: RatioSectionPageType };
+interface AuxPages {
+  [key: number]: RatioSectionPageType;
+}
 
 interface NotebookBlockType extends AnyBlockType {
   type: 'ratio_notebook_section';

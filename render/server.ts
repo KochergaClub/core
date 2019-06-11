@@ -26,6 +26,7 @@ import 'babel-polyfill';
 import { API, APIError } from '../jsx/common/api';
 import { GlobalContextShape } from '../jsx/common/types';
 import { wagtailScreen } from '../jsx/screens';
+import { WagtailPageType } from '../jsx/wagtail/pages/types';
 
 import { GlobalFontsString } from '@kocherga/frontkit';
 
@@ -196,8 +197,8 @@ const getCb = (screenName: string) => async (
     const renderResult = await renderEntrypointWithData(
       screenName,
       req.reactContext,
-      req.params,
-      req.query
+      req.params as { [k: string]: string },
+      req.query as { [k: string]: string }
     );
 
     sendFullHtml(renderResult, req, res);
@@ -297,7 +298,11 @@ app.use(async (req, res, next) => {
 
         sendFullHtml(
           {
-            ...renderEntrypoint(wagtailScreen, req.reactContext, props),
+            ...renderEntrypoint(
+              wagtailScreen,
+              req.reactContext,
+              props as WagtailPageType
+            ),
             screenName: 'wagtail/any',
             props,
           },

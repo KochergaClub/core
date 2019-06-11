@@ -7,6 +7,8 @@ const Screen500 = () => (
   <ErrorPage title="Ошибка" code={500} image="/static/error-pages/500.jpg" />
 );
 
-export default {
+const screen: Screen<{}> = {
   component: Screen500,
-} as Screen<{}>;
+};
+
+export default screen;

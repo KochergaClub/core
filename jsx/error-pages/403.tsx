@@ -11,6 +11,8 @@ const Screen403 = () => (
   />
 );
 
-export default {
+const screen: Screen<{}> = {
   component: Screen403,
-} as Screen<{}>;
+};
+
+export default screen;

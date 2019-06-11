@@ -16,18 +16,6 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 
 export default function Registration({ ticket, event }: Props) {
   const { user } = useContext(GlobalContext);
-  if (!user.is_authenticated) {
-    // TODO - set `next` (we'll need to store location/path in global context for this, since we can't use window.location on server)
-    return (
-      <Wrapper>
-        <em>
-          Чтобы зарегистрироваться на мероприятие, сначала{' '}
-          <A href={`/login`}>войдите на сайт</A>.
-        </em>
-      </Wrapper>
-    );
-  }
-
   const [acting, setActing] = useState(false);
 
   const api = useAPI();
@@ -48,6 +36,18 @@ export default function Registration({ ticket, event }: Props) {
     await api.call(`events/${event.event_id}/tickets/my`, 'POST');
     window.location.reload();
   }, [event.event_id]);
+
+  if (!user.is_authenticated) {
+    // TODO - set `next` (we'll need to store location/path in global context for this, since we can't use window.location on server)
+    return (
+      <Wrapper>
+        <em>
+          Чтобы зарегистрироваться на мероприятие, сначала{' '}
+          <A href={`/login`}>войдите на сайт</A>.
+        </em>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>

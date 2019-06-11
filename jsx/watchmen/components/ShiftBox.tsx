@@ -88,7 +88,7 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
       });
       unexpand();
     },
-    [updateUrl, setShift, unexpand]
+    [api, updateUrl, shift, setShift, unexpand]
   );
 
   const pickMember = async (m: Member) => {

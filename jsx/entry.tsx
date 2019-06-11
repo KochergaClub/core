@@ -15,7 +15,7 @@ interface Props<T> {
   innerProps: T;
 }
 
-const Entrypoint = function<T>(props: Props<T>) {
+const Entrypoint = function<T extends {}>(props: Props<T>) {
   const screen = props.screen;
   const { component: Component } = screen;
 
@@ -31,4 +31,6 @@ const Entrypoint = function<T>(props: Props<T>) {
   );
 };
 
-export default hot(Entrypoint);
+const HotEntrypoint = hot(Entrypoint);
+
+export default HotEntrypoint;

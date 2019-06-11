@@ -33,7 +33,8 @@ const ActionButton = ({
       onSuccess(result);
     }
     setLoading(false);
-  }, [path]);
+  }, [path, api, onSuccess, reloadOnSuccess]);
+
   return (
     <Button loading={loading} disabled={loading} onClick={cb}>
       {children}

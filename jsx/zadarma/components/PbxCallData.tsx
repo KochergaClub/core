@@ -72,7 +72,7 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
       });
       unexpand();
     },
-    [api, pbx_call.pbx_call_id]
+    [api, dispatch, unexpand, pbx_call.pbx_call_id]
   );
 
   const nameEl = <StaffMemberName pbx_call={pbx_call} />;

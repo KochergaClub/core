@@ -12,20 +12,19 @@ module.exports = {
   },
   extends: [
     'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
-    'plugin:prettier/recommended',
     'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'prettier/@typescript-eslint',
   ],
   plugins: ['react-hooks'],
   rules: {
-    indent: 'off',
-    '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off', // type inferences are nice
     '@typescript-eslint/explicit-member-accessibility': 'off',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'react/prop-types': 'off',
+    '@typescript-eslint/no-empty-interface': 'off', // interface Props {} is completely legitimate
   },
   settings: {
     react: {

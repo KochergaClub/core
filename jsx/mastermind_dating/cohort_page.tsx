@@ -106,7 +106,7 @@ const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
     'GET'
   );
   return {
-    cohort_id: params.id,
+    cohort_id: parseInt(params.id, 10),
     users,
   };
 };

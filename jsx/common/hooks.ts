@@ -7,7 +7,7 @@ import GlobalContext from '../components/GlobalContext';
 
 export const useListeningWebSocket = (
   path: string,
-  onmessage: (e: any) => void
+  onmessage: (e: MessageEvent) => void
 ) => {
   // avoid re-creating websocket when onmessage updates
   const cbRef = useRef(onmessage);
@@ -24,7 +24,7 @@ export const useListeningWebSocket = (
     const socket = new window.WebSocket(
       `${socketProtocol}//${window.location.host}/${path}`
     );
-    socket.onmessage = async (e: any) => {
+    socket.onmessage = async (e: MessageEvent) => {
       cbRef.current(e);
     };
 

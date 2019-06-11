@@ -26,7 +26,7 @@ const Item = ({
       e.preventDefault();
       action();
     },
-    [active, action]
+    [action]
   );
   return (
     <ItemContainer active={active} href="#" onClick={cb}>

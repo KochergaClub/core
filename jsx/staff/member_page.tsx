@@ -37,7 +37,7 @@ const ManagerControls = ({ member }: { member: Member }) => {
       'POST'
     );
     setGranting(false);
-  }, [member]);
+  }, [api, member]);
 
   if (member.role !== 'WATCHMAN') {
     return null;

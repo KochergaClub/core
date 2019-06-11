@@ -38,7 +38,7 @@ export const dynamicScreen = <
   T extends AnyPageType,
   P extends AnyWagtailPageProps<T>
 >(
-  component: React.ComponentType<P>,
+  component: React.ComponentType<AnyWagtailPageProps<T>>,
   getInitialData: AnyInitialLoader<T, P>
 ): DynamicWagtailScreen<T> => {
   return {

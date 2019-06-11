@@ -67,7 +67,7 @@ const LoginPage = (props: Props) => {
 
       window.location.href = '/login/check-your-email';
     }
-  }, [email, password]);
+  }, [api, email, password, props.next]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: cb,

@@ -30,7 +30,7 @@ const MagicLinkPage = (props: Props) => {
       window.location.href = props.next;
     }
     login();
-  }, []);
+  }, [api, props.next, props.token]);
 
   return (
     <Page title="Магическая ссылка" noMenu noFooter>
@@ -39,7 +39,7 @@ const MagicLinkPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, { query }) => {
+const getInitialData: InitialLoader<Props> = async (_, { query }) => {
   return {
     token: query.token,
     next: query.next || '/my',

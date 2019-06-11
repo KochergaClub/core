@@ -54,13 +54,13 @@ const EditEventModal = ({
     })) as ServerEvent;
 
     onSave(serverEventToEvent(json));
-  }, [event.id, saveDisabled, title, description, room]);
+  }, [api, onSave, event.id, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
     setDeleting(true);
     await api.call(`event/${event.id}`, 'DELETE', undefined, false);
     onDelete(event.id);
-  }, [event.id]);
+  }, [api, onDelete, event.id]);
 
   const hotkeys = useCommonHotkeys({
     onEscape: onClose,

@@ -6,8 +6,8 @@ export type AnyInitialLoader<B, P> = (
 ) => Promise<P>;
 
 interface ExpressSource {
-  params: any;
-  query: any;
+  params: { [k: string]: string };
+  query: { [k: string]: string };
 }
 
 export type InitialLoader<P> = AnyInitialLoader<ExpressSource, P>;

@@ -29,11 +29,14 @@ test-code:
 lint:
 	docker-compose -f docker/compose.dev.yml run --rm api flake8 kocherga/ --max-line-length=120
 
+eslint:
+	docker-compose -f docker/compose.dev.yml run --rm api npx eslint jsx --ext ts,tsx
+
 test-js:
 	docker-compose -f docker/compose.dev.yml run --rm api npx tsc
 	docker-compose -f docker/compose.dev.yml run --rm api npx jest
 
-test: test-types test-code test-js lint
+test: test-types test-code test-js lint eslint
 
 ##### Helper commands #####
 dbshell:

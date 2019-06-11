@@ -11,7 +11,9 @@ export interface Shift {
 export const SHIFT_TYPES = ['MORNING', 'MIDDAY', 'EVENING', 'NIGHT'];
 
 export type DaySchedule = Shift[];
-type Schedule = { [date: string]: DaySchedule };
+interface Schedule {
+  [date: string]: DaySchedule;
+}
 
 export const shifts2schedule = (shifts: Shift[]): Schedule => {
   const schedule: Schedule = {};

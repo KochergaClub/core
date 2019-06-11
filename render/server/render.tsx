@@ -24,12 +24,14 @@ export function renderEntrypoint<T>(
   context: GlobalContextShape,
   props: T
 ): RawRenderResult {
-  const el = React.createElement(Entrypoint, {
-    screen,
-    csrfToken: context.api.csrfToken,
-    user: context.user,
-    innerProps: props,
-  });
+  const el = (
+    <Entrypoint<T>
+      screen={screen}
+      csrfToken={context.api.csrfToken}
+      user={context.user}
+      innerProps={props}
+    />
+  );
 
   const sheet = new ServerStyleSheet();
   const html = ReactDOMServer.renderToString(sheet.collectStyles(el));
@@ -42,8 +44,8 @@ export function renderEntrypoint<T>(
 export const renderEntrypointWithData = async (
   screenName: string,
   context: GlobalContextShape,
-  reqParams: object,
-  reqQuery: object
+  reqParams: { [k: string]: string },
+  reqQuery: { [k: string]: string }
 ): Promise<RenderResult> => {
   const screen = findBasicScreen(screenName);
 
