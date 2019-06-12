@@ -39,7 +39,7 @@ const UnknownPage = (props: WagtailPageType) => (
 );
 
 // FIXME!
-type ProxyProps = any;
+type ProxyProps = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 const ProxyWagtailPage = (props: ProxyProps) => {
   const wagtailScreen = getWagtailScreen(props.wagtailPage.meta_type);
@@ -65,7 +65,7 @@ const getInitialData: WagtailInitialLoader = async (
   }
   const props = await wagtailScreen.getInitialData(
     context,
-    wagtailPage as any // FIXME!
+    wagtailPage as any // eslint-disable-line @typescript-eslint/no-explicit-any
   );
 
   return props;

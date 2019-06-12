@@ -9,7 +9,7 @@ import GlobalContext from './components/GlobalContext';
 import { AnyScreen } from './common/types';
 
 interface Props<T> {
-  screen: AnyScreen<any, T>;
+  screen: AnyScreen<object, T>;
   csrfToken: string;
   user: User;
   innerProps: T;
