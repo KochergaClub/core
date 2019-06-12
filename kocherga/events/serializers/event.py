@@ -121,6 +121,8 @@ class EventSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
+    prototype_id = serializers.IntegerField(source='prototype.id', required=False)
+
     def get_images(self, obj):
         result = obj.get_images()
         if hasattr(obj, 'vk_announcement') and obj.vk_announcement.image:
@@ -137,12 +139,17 @@ class EventSerializer(serializers.ModelSerializer):
         return event
 
     def update(self, instance, validated_data):
+        prototype_data = validated_data.pop('prototype', None)
         vk_announcement_data = validated_data.pop('vk_announcement', {})
         fb_announcement_data = validated_data.pop('fb_announcement', {})
         timepad_announcement_data = validated_data.pop('timepad_announcement', {})
 
         event = super().update(instance, validated_data)
         event.patch_google()
+
+        if prototype_data:
+            event.prototype = models.EventPrototype.objects.get(pk=prototype_data['id'])
+            event.save()
 
         if vk_announcement_data:
             event.vk_announcement.group = vk_announcement_data.get('group', event.vk_announcement.group)

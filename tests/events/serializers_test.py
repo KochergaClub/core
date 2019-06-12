@@ -53,6 +53,25 @@ class TestEventSerializer:
         assert event.title == 'foo'
         assert event.start
 
+    def test_update(self, event):
+        serializer = serializers.EventSerializer(event, data={
+            'title': 'updated',
+        }, partial=True)
+        serializer.is_valid(raise_exception=True)
+        event = serializer.save()
+
+        assert event.title == 'updated'
+
+    def test_update_prototype(self, event, common_prototype):
+        serializer = serializers.EventSerializer(event, data={
+            'prototype_id': common_prototype.pk,
+        }, partial=True)
+
+        serializer.is_valid(raise_exception=True)
+        event = serializer.save()
+
+        assert event.prototype == common_prototype
+
 
 class TestEventPrototypeSerializer:
     def test_serialize(self, common_prototype):
