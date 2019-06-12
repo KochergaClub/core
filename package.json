@@ -15,12 +15,12 @@
     }
   },
   "dependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "@babel/preset-typescript": "^7.1.0",
-    "@babel/register": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@babel/register": "^7.4.4",
     "@kocherga/frontkit": "^1.2.0",
     "@types/react-big-calendar": "^0.20.11",
     "autosize": "^4.0.2",
@@ -61,9 +61,9 @@
     "yargs": "^3.29.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
+    "@babel/cli": "^7.4.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@types/autosize": "^3.0.6",
     "@types/body-parser": "^1.17.0",
     "@types/cookie": "^0.3.2",
@@ -79,7 +79,7 @@
     "@types/styled-components": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.0",
     "eslint": "^5.16.0",
