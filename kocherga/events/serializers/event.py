@@ -121,7 +121,7 @@ class EventSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
-    prototype_id = serializers.IntegerField(source='prototype.id', required=False)
+    prototype_id = serializers.IntegerField(source='prototype.pk', required=False)
 
     def get_images(self, obj):
         result = obj.get_images()
