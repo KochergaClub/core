@@ -49,7 +49,9 @@ const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
   return { project: await getProject(params.name, api) };
 };
 
-export default {
+const screen: Screen<Props> = {
   component: ProjectsDetailPage,
   getInitialData,
-} as Screen<Props>;
+};
+
+export default screen;

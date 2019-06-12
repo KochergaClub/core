@@ -2,11 +2,14 @@ import { BlockType } from '../blocks/types';
 
 export interface AnyPageType {
   id: number;
-  meta: any;
+  meta: {
+    type: string;
+    slug: string;
+  };
 
   // This field doesn't come from the server, we fill it ourselves.
   // It's necessary because TypeScript doesn't support nested tagged unions (yet).
-  meta_type: any;
+  meta_type: string;
 
   title: string;
 }

@@ -40,7 +40,7 @@ interface ExtraItem {
 
 type Item = MemberItem | ExtraItem;
 
-export default function Picker(props: Props) {
+export default function Picker({ extra, pickedMember, pickedExtra }: Props) {
   const { members } = useContext(StaffContext);
 
   const items = useMemo(() => {
@@ -48,29 +48,29 @@ export default function Picker(props: Props) {
       type: 'member' as const,
       member,
     }));
-    const extraItems: ExtraItem[] = props.extra
-      ? props.extra.map(extra => ({
+    const extraItems: ExtraItem[] = extra
+      ? extra.map(value => ({
           type: 'extra' as const,
-          extra,
+          extra: value,
         }))
       : [];
 
     return [...memberItems, ...extraItems];
-  }, [members, props.extra]);
+  }, [members, extra]);
 
   const picked = useCallback(
     (item: Item) => {
       switch (item.type) {
         case 'member':
-          return props.pickedMember(item.member);
+          return pickedMember(item.member);
         case 'extra':
-          if (!props.pickedExtra) {
+          if (!pickedExtra) {
             throw new Error("Can't pick extra option without pickedExtra");
           }
-          return props.pickedExtra(item.extra.text);
+          return pickedExtra(item.extra.text);
       }
     },
-    [props.pickedMember, props.pickedExtra]
+    [pickedMember, pickedExtra]
   );
 
   const item2text = useCallback((item: Item) => {

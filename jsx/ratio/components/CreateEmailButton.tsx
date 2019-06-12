@@ -73,15 +73,16 @@ const EmailModal = (props: ModalProps) => {
 
   const api = useAPI();
 
+  const { close, createUrl } = props;
   const create = useCallback(async () => {
     setCreating(true);
-    const result = await api.call(props.createUrl, 'POST', {
+    const result = await api.call(createUrl, 'POST', {
       title,
       content,
     });
     alert(result.draft_link);
-    props.close();
-  }, [title, content, props.close]);
+    close();
+  }, [api, title, content, close, createUrl]);
 
   return (
     <Modal isOpen={true}>
