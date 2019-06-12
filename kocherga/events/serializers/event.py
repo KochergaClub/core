@@ -107,6 +107,7 @@ class EventSerializer(serializers.ModelSerializer):
                 'timepad_prepaid_tickets', 'timepad_category_code', 'timing_description_override',
                 'type',
                 'ready_to_post',
+                'prototype_id',
                 # TODO - other fields from Event.set_field_by_prop()
                 # TODO: `start`, `end`, `asked_for_visitors`
             )
