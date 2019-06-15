@@ -410,44 +410,56 @@ class AnnounceSession:
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
-        # open dialog
+        # Open dialog.
         await (await controls_el.J('a[target="share_in_newsfeed_option"]')).click()
 
-        # wait for dialog to load
-        selector = 'div[data-testid="react_share_dialog_audience_selector"] > div.uiPopover > a[role="button"]'
-        await page.waitForSelector(selector)
+        # Wait for dialog to load.
+        audience_menu_selector = \
+            'div[data-testid="react_share_dialog_audience_selector"] > div.uiPopover > a[role="button"]'
+        await page.waitForSelector(audience_menu_selector)
         dialog_el = await page.J('[data-testid="react_share_dialog_content"]')
 
-        audience_menu_el = await dialog_el.J(selector)
+        # Expand "pick audience type" menu.
+        audience_menu_el = await dialog_el.J(audience_menu_selector)
         await audience_menu_el.click()
 
+        # Now let's find dropdown element.
+
+        # First, make sure that aria-controls attribute is set;
+        # for this element it's not set initially for some reason.
+        await page.waitForSelector(audience_menu_selector + '[aria-controls]')
         controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', audience_menu_el)
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
+        # Pick "share to page" option.
         item_el = await controls_el.J('[role="menuitemcheckbox"] [data-testid="share_to_page"]')
         await item_el.click()
 
+        # Now let's expand page menu.
         page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
         await page_menu_el.click()
 
+        # Find dropdown...
         controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', page_menu_el)
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
+        # Pick the correct page from the dropdown.
         PAGE_TITLE = FB_CONFIG["main_page"]["name"]
         kocherga_page_el = await controls_el.xpath(
             './/*[@role="menuitemcheckbox"]//*[contains(text(), "' + PAGE_TITLE + '")]'
         )
         kocherga_page_el.click()
 
-        # recreate element just to be sure
+        # Recreate the page menu button element, just to be sure.
         page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
-        # make sure that page picker now refers to the correct page
+        # Check that page menu button now refers to the correct page.
         await page_menu_el.xpath(
             './/*[@role="menuitemcheckbox"]//*[contains(text(), "' + PAGE_TITLE + '")]'
         )
 
+        # Finally, share the event.
         button_el = await dialog_el.J('[data-testid="react_share_dialog_post_button"]')
 
         await asyncio.wait([
@@ -455,6 +467,7 @@ class AnnounceSession:
             page.waitForNavigation(),
         ])
 
+        # Checking that we navigated to the events page after sharing.
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
