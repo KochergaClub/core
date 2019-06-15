@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db import models
 from django.conf import settings
 
@@ -19,11 +22,18 @@ class AuthManager(models.Manager):
         APP_ID = settings.KOCHERGA_FB_APP_CREDENTIALS['id']
         APP_SECRET = settings.KOCHERGA_FB_APP_CREDENTIALS['secret']
 
-        long_term_access_token = requests.get(
+        logger.debug('Exchanging short-term token to long-term token')
+        response = requests.get(
             f"{SERVER}/oauth/access_token?"
             f"grant_type=fb_exchange_token&client_id={APP_ID}&client_secret={APP_SECRET}"
             f"&fb_exchange_token={access_token}"
         )
+        if response.status_code >= 400:
+            raise Exception(f"Failed to exchange token: {response.json()}")
+
+        long_term_access_token = response.json()['access_token']
+        logger.debug(f'Obtained long-term token {long_term_access_token}')
+
         (result, _) = self.update_or_create(
             id=1,
             defaults={
