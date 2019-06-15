@@ -389,10 +389,10 @@ class AnnounceSession:
 
         button_el = await dialog_el.J('.uiOverlayFooter button.layerConfirm')
 
-        await asyncio.wait([
+        await asyncio.gather(
             button_el.click(),
             page.waitForNavigation(),
-        ])
+        )
 
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
