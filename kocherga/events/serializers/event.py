@@ -6,6 +6,21 @@ import kocherga.room
 from .. import models
 from .. import markup
 
+from . import announcement as announcement_serializers
+
+
+class AnnouncementsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Event
+        fields = ('vk', 'fb', 'timepad')
+
+    def get_attribute(self, instance):
+        return instance
+
+    vk = announcement_serializers.VkAnnouncementSerializer(source='vk_announcement')
+    fb = announcement_serializers.FbAnnouncementSerializer(source='fb_announcement')
+    timepad = announcement_serializers.TimepadAnnouncementSerializer(source='timepad_announcement')
+
 
 class PublicEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,6 +90,8 @@ class EventSerializer(serializers.ModelSerializer):
             'type',
             'timing_description_override',
 
+            'announcements',
+
             # optional
             'master_id',
             'is_master',
@@ -123,6 +140,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     prototype_id = serializers.IntegerField(source='prototype.pk', required=False)
 
+    announcements = AnnouncementsSerializer(required=False)
+
     def get_images(self, obj):
         result = obj.get_images()
         if hasattr(obj, 'vk_announcement') and obj.vk_announcement.image:
@@ -148,7 +167,7 @@ class EventSerializer(serializers.ModelSerializer):
         event.patch_google()
 
         if prototype_data:
-            event.prototype = models.EventPrototype.objects.get(pk=prototype_data['id'])
+            event.prototype = models.EventPrototype.objects.get(pk=prototype_data['pk'])
             event.save()
 
         if vk_announcement_data:

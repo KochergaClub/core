@@ -27,7 +27,7 @@ class TestPublicEventSerializer:
 
 
 class TestEventSerializer:
-    def test_serialize(self, event):
+    def test_serialize_event(self, event):
         data = serializers.EventSerializer(event).data
 
         assert data['title'] == event.title
@@ -39,6 +39,9 @@ class TestEventSerializer:
         assert '+03:00' in data['start']
 
         assert data['tags'] == []
+
+        from pprint import pprint
+        pprint(data)
 
     def test_create(self):
         serializer = serializers.EventSerializer(data={

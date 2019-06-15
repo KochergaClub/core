@@ -5,16 +5,16 @@ from .. import models
 class TimepadAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TimepadAnnouncement
-        fields = ('link',)
+        fields = ('link', 'category_code', 'prepaid_tickets')
 
 
 class VkAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.VkAnnouncement
-        fields = ('link',)
+        fields = ('link', 'group', 'image')
 
 
 class FbAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.FbAnnouncement
-        fields = ('link',)
+        fields = ('link', 'group', 'added_to_main_page', 'shared_to_main_page')

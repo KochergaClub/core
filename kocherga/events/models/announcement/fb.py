@@ -22,6 +22,80 @@ PASSWORD = settings.KOCHERGA_FB_ANNOUNCER_PASSWORD
 FB_CONFIG = settings.KOCHERGA_FB
 
 
+class Manager(models.Manager):
+    def all_groups(self):
+        logger.info("Selecting all fb groups")
+        query = self.values_list('group').distinct()
+        groups = [row[0] for row in query.all()]
+        logger.info(f"Got {len(groups)} groups")
+        return groups
+
+
+class FbAnnouncement(models.Model):
+    event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
+    link = models.CharField(max_length=1024, blank=True)
+
+    group = models.CharField(max_length=40, blank=True)
+
+    added_to_main_page = models.BooleanField(default=False)
+    shared_to_main_page = models.BooleanField(default=False)
+
+    objects = Manager()
+
+    async def create(self, headless=True, **kwargs):
+        async with kocherga.chrome.get_browser() as browser:
+            session = await AnnounceSession.create(browser)
+            try:
+                logger.info(f"Trying to create")
+                return await session.run(self.group, self.event, **kwargs)
+            except Exception:
+                logger.exception(f"Error while creating a FB announcement")
+                image_bytes = await session.screenshot()
+                filename = image_storage.save_screenshot("error", image_bytes)
+                logger.info(f"Screenshot saved to {filename}")
+                raise
+
+    def announce(self):
+        loop = asyncio.get_event_loop()
+        link = loop.run_until_complete(self.create())
+        self.link = link
+        if not self.group:
+            self.added_to_main_page = True
+            self.shared_to_main_page = True
+        self.save()
+
+    async def _extra_action(self, action):
+        if not self.link:
+            raise Exception("Event is not announced yet")
+        if not self.group:
+            raise Exception("Event already belongs to the main page")
+
+        # TODO - copy-pasted; turn AnnounceSession into contextmanager?
+        async with kocherga.chrome.get_browser() as browser:
+            session = await AnnounceSession.create(browser)
+            try:
+                logger.info(f"Trying to perform action {action}")
+                await session.extra_action(self.link, action)
+            except Exception:
+                logger.exception(f"Error while performing action {action}")
+                image_bytes = await session.screenshot()
+                filename = image_storage.save_screenshot("error", image_bytes)
+                logger.info(f"Screenshot saved to {filename}")
+                raise
+
+    def add_to_main_page(self):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self._extra_action('add_to_main_page'))
+        self.added_to_main_page = True
+        self.save()
+
+    def share_to_main_page(self):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self._extra_action('share_to_main_page'))
+        self.shared_to_main_page = True
+        self.save()
+
+
 def get_image_id(fb_id: str):
     kocherga.fb.api.available()  # fail quickly if token is invalid
 
@@ -55,75 +129,6 @@ def get_image_id(fb_id: str):
 
     logger.warning("Couldn't find picture or cover")
     return None
-
-
-class Manager(models.Manager):
-    def all_groups(self):
-        logger.info("Selecting all fb groups")
-        query = self.values_list('group').distinct()
-        groups = [row[0] for row in query.all()]
-        logger.info(f"Got {len(groups)} groups")
-        return groups
-
-
-class FbAnnouncement(models.Model):
-    event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
-    link = models.CharField(max_length=1024, blank=True)
-
-    group = models.CharField(max_length=40, blank=True)
-
-    objects = Manager()
-
-    # FB access tokens are portable (see https://developers.facebook.com/docs/facebook-login/access-tokens/portability),
-    # so it's not a hack that we usually bring a token from a client side to server to make an announcement.
-    #
-    # It _is_ a hack that we use headless Chrome (through pyppeteer), though -
-    # FB dosn't have an API for creating an event.
-    async def create(self, headless=True, **kwargs):
-        async with kocherga.chrome.get_browser() as browser:
-            session = await AnnounceSession.create(browser)
-            try:
-                logger.info(f"Trying to create")
-                return await session.run(self.group, self.event, **kwargs)
-            except Exception:
-                logger.exception(f"Error while creating a FB announcement")
-                image_bytes = await session.screenshot()
-                filename = image_storage.save_screenshot("error", image_bytes)
-                logger.info(f"Screenshot saved to {filename}")
-                raise
-
-    def announce(self):
-        loop = asyncio.get_event_loop()
-        link = loop.run_until_complete(self.create())
-        self.link = link
-        self.save()
-
-    async def _extra_action(self, action):
-        if not self.link:
-            raise Exception("Event is not announced yet")
-        if not self.group:
-            raise Exception("Event already belongs to the main page")
-
-        # TODO - copy-pasted; turn AnnounceSession into contextmanager?
-        async with kocherga.chrome.get_browser() as browser:
-            session = await AnnounceSession.create(browser)
-            try:
-                logger.info(f"Trying to perform action {action}")
-                await session.extra_action(self.link, action)
-            except Exception:
-                logger.exception(f"Error while performing action {action}")
-                image_bytes = await session.screenshot()
-                filename = image_storage.save_screenshot("error", image_bytes)
-                logger.info(f"Screenshot saved to {filename}")
-                raise
-
-    def add_to_main_page(self):
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._extra_action('add_to_main_page'))
-
-    def share_to_main_page(self):
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._extra_action('share_to_main_page'))
 
 
 class AnnounceSession:
@@ -476,8 +481,8 @@ class AnnounceSession:
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
-        if not page_url.startswith('https://www.facebook.com/' + settings.KOCHERGA_FB["main_page"]["slug"] + '/events'):
-            raise Exception(f"Expected to navigate to main page, got {page_url} instead")
+        if not page_url.startswith(event_url):
+            raise Exception(f"Expected to navigate back to event page, got {page_url} instead")
 
     async def extra_action(self, event_url, action):
         if action == 'add_to_main_page':
