@@ -99,6 +99,12 @@ class FbViewSet(AnnouncementViewSet):
         announcement.add_to_main_page()
         return Response(ok)
 
+    @action(detail=True, methods=['post'])
+    def share_to_main_page(self, request, **kwargs):
+        announcement = self.get_object()
+        announcement.share_to_main_page()
+        return Response(ok)
+
 
 @require_safe
 def r_last_screenshot(request):

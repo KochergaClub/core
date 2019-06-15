@@ -98,7 +98,7 @@ class FbAnnouncement(models.Model):
         self.link = link
         self.save()
 
-    async def _add_to_main_page(self):
+    async def _extra_action(self, action):
         if not self.link:
             raise Exception("Event is not announced yet")
         if not self.group:
@@ -108,10 +108,10 @@ class FbAnnouncement(models.Model):
         async with kocherga.chrome.get_browser() as browser:
             session = await AnnounceSession.create(browser)
             try:
-                logger.info(f"Trying to add to main page")
-                await session.add_to_main_page(self.link)
+                logger.info(f"Trying to perform action {action}")
+                await session.extra_action(self.link, action)
             except Exception:
-                logger.exception(f"Error while adding to the main page")
+                logger.exception(f"Error while performing action {action}")
                 image_bytes = await session.screenshot()
                 filename = image_storage.save_screenshot("error", image_bytes)
                 logger.info(f"Screenshot saved to {filename}")
@@ -119,7 +119,11 @@ class FbAnnouncement(models.Model):
 
     def add_to_main_page(self):
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(self._add_to_main_page())
+        loop.run_until_complete(self._extra_action('add_to_main_page'))
+
+    def share_to_main_page(self):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(self._extra_action('share_to_main_page'))
 
 
 class AnnounceSession:
@@ -390,6 +394,80 @@ class AnnounceSession:
 
         if not page_url.startswith('https://www.facebook.com/' + settings.KOCHERGA_FB["main_page"]["slug"] + '/events'):
             raise Exception(f"Expected to navigate to main page, got {page_url} instead")
+
+    async def share_to_main_page(self, event_url):
+        page = self.page
+        await self.sign_in()
+
+        logger.info("Going to page: " + event_url)
+        await page.goto(event_url)
+
+        share_menu_el = await page.J('#admin_button_bar .uiPopover [aria-label="Поделиться"]')
+        await share_menu_el.hover()
+
+        # TODO - extract this pattern into method (el -> controls_el)
+        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', share_menu_el)
+        controls = '#' + controls_id
+        controls_el = await page.J(controls)
+
+        # open dialog
+        await (await controls_el.J('a[target="share_in_newsfeed_option"]')).click()
+
+        # wait for dialog to load
+        selector = 'div[data-testid="react_share_dialog_audience_selector"] > div.uiPopover > a[role="button"]'
+        await page.waitForSelector(selector)
+        dialog_el = await page.J('[data-testid="react_share_dialog_content"]')
+
+        audience_menu_el = await dialog_el.J(selector)
+        await audience_menu_el.click()
+
+        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', audience_menu_el)
+        controls = '#' + controls_id
+        controls_el = await page.J(controls)
+
+        item_el = await controls_el.J('[role="menuitemcheckbox"] [data-testid="share_to_page"]')
+        item_el.click()
+
+        page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
+        await page_menu_el.click()
+
+        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', page_menu_el)
+        controls = '#' + controls_id
+        controls_el = await page.J(controls)
+
+        PAGE_TITLE = FB_CONFIG["main_page"]["name"]
+        kocherga_page_el = await controls_el.xpath(
+            './/*[@role="menuitemcheckbox"]//*[contains(text(), "' + PAGE_TITLE + '")]'
+        )
+        kocherga_page_el.click()
+
+        # recreate element just to be sure
+        page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
+        # make sure that page picker now refers to the correct page
+        await page_menu_el.xpath(
+            './/*[@role="menuitemcheckbox"]//*[contains(text(), "' + PAGE_TITLE + '")]'
+        )
+
+        button_el = await dialog_el.J('[data-testid="react_share_dialog_post_button"]')
+
+        await asyncio.wait([
+            button_el.click(),
+            page.waitForNavigation(),
+        ])
+
+        page_url = await page.evaluate('() => window.location.href')
+        logger.info(f"URL: {page_url}")
+
+        if not page_url.startswith('https://www.facebook.com/' + settings.KOCHERGA_FB["main_page"]["slug"] + '/events'):
+            raise Exception(f"Expected to navigate to main page, got {page_url} instead")
+
+    async def extra_action(self, event_url, action):
+        if action == 'add_to_main_page':
+            await self.add_to_main_page(event_url)
+        elif action == 'share_to_main_page':
+            await self.share_to_main_page(event_url)
+        else:
+            raise Exception(f"Unknown action {action}")
 
     async def screenshot(self):
         return await self.page.screenshot()
