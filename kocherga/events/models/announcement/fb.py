@@ -426,7 +426,7 @@ class AnnounceSession:
         controls_el = await page.J(controls)
 
         item_el = await controls_el.J('[role="menuitemcheckbox"] [data-testid="share_to_page"]')
-        item_el.click()
+        await item_el.click()
 
         page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
         await page_menu_el.click()
