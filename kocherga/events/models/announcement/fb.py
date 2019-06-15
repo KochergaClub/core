@@ -23,6 +23,8 @@ FB_CONFIG = settings.KOCHERGA_FB
 
 
 def get_image_id(fb_id: str):
+    kocherga.fb.api.available()  # fail quickly if token is invalid
+
     # Facebook groups have a cover. Facebook pages have a picture.
     # We have to be smart about this because graph API returns an error if we ask a group for a picture.
     for field in ("picture", "cover"):

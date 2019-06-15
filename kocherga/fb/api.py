@@ -4,13 +4,19 @@ from .models import Auth
 
 from typing import List
 
+from .constants import SERVER, API_VERSION
 
-def get_by_id(object_id: str, fields: List[str]) -> dict:
+
+def available():
     auth = Auth.objects.get()
     auth.validate()
 
+
+def get_by_id(object_id: str, fields: List[str]) -> dict:
+    auth = Auth.objects.get()
+
     r = requests.get(
-        f"https://graph.facebook.com/v2.12/{object_id}",
+        f"{SERVER}/{API_VERSION}/{object_id}",
         params={
             "access_token": auth.access_token,
             "fields": ','.join(fields),
