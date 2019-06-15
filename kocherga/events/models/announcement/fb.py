@@ -447,17 +447,22 @@ class AnnounceSession:
 
         # Pick the correct page from the dropdown.
         PAGE_TITLE = FB_CONFIG["main_page"]["name"]
-        kocherga_page_el = await controls_el.xpath(
+        kocherga_item_list = await controls_el.xpath(
             './/*[@role="menuitemcheckbox"]//*[contains(text(), "' + PAGE_TITLE + '")]'
         )
-        kocherga_page_el.click()
+        if len(kocherga_item_list) == 0:
+            raise Exception(f"Page {PAGE_TITLE} not found in list")
+        kocherga_page_el = kocherga_item_list[0]
+        await kocherga_page_el.click()
 
         # Recreate the page menu button element, just to be sure.
         page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
         # Check that page menu button now refers to the correct page.
-        await page_menu_el.xpath(
-            './/*[@role="menuitemcheckbox"]//*[contains(text(), "' + PAGE_TITLE + '")]'
+        text_list = await page_menu_el.xpath(
+            './/*[contains(text(), "' + PAGE_TITLE + '")]'
         )
+        if len(text_list) == 0:
+            raise Exception(f"{PAGE_TITLE} not found on page menu button")
 
         # Finally, share the event.
         button_el = await dialog_el.J('[data-testid="react_share_dialog_post_button"]')
