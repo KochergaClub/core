@@ -229,8 +229,8 @@ class WeeklyDigest(models.Model):
                 prev_date = start_local.date()
 
             title = event.title
-            if event.vk_group:
-                title = f"@{event.vk_group} ({title})"
+            if event.vk_announcement.group:
+                title = f"@{event.vk_announcement.group} ({title})"
             message += f"{start_local:%H:%M} {title}\n"
             message += f"{event.generate_summary()}\n\n"
 
