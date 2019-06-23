@@ -153,9 +153,7 @@ class AnnounceSession:
         await self.clean_field(15, both_directions=True)
         await self.page.keyboard.type(dt.strftime("%d.%m.%Y"))
         await self.page.keyboard.press("Tab")
-        await self.page.keyboard.type(f"{dt.hour:02}")
-        await self.page.keyboard.press("Tab")
-        await self.page.keyboard.type(f"{dt.minute:02}")
+        await self.page.keyboard.type(f"{dt.hour:02}:{dt.minute:02}")
 
     async def fill_dates(self, event):
         date_inputs = await self.page.JJ('input[placeholder="дд.мм.гггг"]')
