@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
+import styled from 'styled-components';
 
-import { A, Button, Column } from '@kocherga/frontkit';
+import { A, Column, Row, colors } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
-import { useAPI } from '~/common/hooks';
 import Page from '~/components/Page';
+import ActionButton from '~/components/ActionButton';
 
 import { Training, Ticket } from '../types';
 import { trainingToKey, getTraining, getTickets } from '../api';
@@ -17,7 +18,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const ActionButton = ({
+const TrainingActionButton = ({
   training,
   action,
   children,
@@ -26,20 +27,42 @@ const ActionButton = ({
   action: string;
   children: React.ReactNode;
 }) => {
-  const api = useAPI();
-  const [loading, setLoading] = useState(false);
+  const key = trainingToKey(training);
+  const path = `ratio/training/${key}/${action}`;
+  return <ActionButton path={path}>{children}</ActionButton>;
+};
 
-  const cb = useCallback(async () => {
-    setLoading(true);
-    const key = trainingToKey(training);
-    await api.call(`ratio/training/${key}/${action}`, 'POST');
-    setLoading(false);
-  }, [api, training, action]);
+export const Badge = styled.div`
+  background-color: ${colors.accent[500]};
+  border-radius: 10px;
+  font-size: 12px;
+  min-width: 20px;
+  padding: 2px 6px;
+  width: auto;
+`;
 
+const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
+
+const TicketItem = ({ ticket }: { ticket: Ticket }) => {
   return (
-    <Button loading={loading} disabled={loading} onClick={cb}>
-      {children}
-    </Button>
+    <li>
+      <Row>
+        <span>
+          {ticket.first_name} {ticket.last_name} ({ticket.email})
+        </span>
+        {ticket.status === 'canceled' && <CanceledBadge />}
+      </Row>
+    </li>
+  );
+};
+
+const TicketList = ({ tickets }: { tickets: Ticket[] }) => {
+  return (
+    <ul>
+      {tickets.map(ticket => (
+        <TicketItem key={ticket.email} ticket={ticket} />
+      ))}
+    </ul>
   );
 };
 
@@ -70,20 +93,14 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
               {tickets.length}
             </A>
           </h2>
-          <ul>
-            {tickets.map(ticket => (
-              <li key={ticket.email}>
-                {ticket.first_name} {ticket.last_name} ({ticket.email})
-              </li>
-            ))}
-          </ul>
+          <TicketList tickets={tickets} />
         </section>
 
         <Column>
           <h2>Рассылки</h2>
-          <ActionButton training={training} action="to_mailchimp">
+          <TrainingActionButton training={training} action="to_mailchimp">
             Отправить участников в mailchimp
-          </ActionButton>
+          </TrainingActionButton>
           <CreateEmailButton
             prototypes={[
               {
@@ -105,9 +122,9 @@ const RatioTrainingPage = ({ training, tickets }: Props) => {
           </CreateEmailButton>
 
           {training.salaries_paid || (
-            <ActionButton training={training} action="pay_salaries">
+            <TrainingActionButton training={training} action="pay_salaries">
               Оплатить проведение тренерам
-            </ActionButton>
+            </TrainingActionButton>
           )}
         </Column>
       </Page.Main>

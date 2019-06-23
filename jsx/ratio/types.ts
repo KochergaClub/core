@@ -10,6 +10,7 @@ export interface Ticket {
   email: string;
   first_name: string;
   last_name: string;
+  status: 'normal' | 'canceled';
 }
 
 export interface Trainer {

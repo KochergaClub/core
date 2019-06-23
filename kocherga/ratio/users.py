@@ -60,6 +60,9 @@ def training2mailchimp(training):
     group_id = create_new_mailchimp_training_group(training_category_id(), training)
 
     for ticket in training.tickets.all():
+        if ticket.status != 'normal':
+            logger.info(f'Skip {ticket.email} - status {ticket.status}')
+            continue
         import_ticket_to_mailchimp(ticket, group_id)
         logger.info(f'Added {ticket.email}')
 

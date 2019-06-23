@@ -12,7 +12,7 @@ class TrainingSerializer(serializers.ModelSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ticket
-        fields = ('email', 'first_name', 'last_name')
+        fields = ('email', 'first_name', 'last_name', 'status')
 
 
 class ActivitySerializer(serializers.ModelSerializer):
