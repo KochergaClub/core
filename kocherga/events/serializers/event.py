@@ -198,10 +198,10 @@ class EventSerializer(serializers.ModelSerializer):
     # Deprecated fields which should be serialized through nested serializers instead.
     timepad_category_code = serializers.CharField(source='timepad_announcement.category_code', required=False)
     timepad_prepaid_tickets = serializers.BooleanField(source='timepad_announcement.prepaid_tickets', required=False)
-    posted_timepad = serializers.CharField(source='timepad_announcement.link', required=False)
+    posted_timepad = serializers.CharField(source='timepad_announcement.link', required=False, allow_blank=True)
 
-    fb_group = serializers.CharField(source='fb_announcement.group', required=False)
-    posted_fb = serializers.CharField(source='fb_announcement.link', required=False)
+    fb_group = serializers.CharField(source='fb_announcement.group', required=False, allow_blank=True)
+    posted_fb = serializers.CharField(source='fb_announcement.link', required=False, allow_blank=True)
 
-    vk_group = serializers.CharField(source='vk_announcement.group', required=False)
-    posted_vk = serializers.CharField(source='vk_announcement.link', required=False)
+    vk_group = serializers.CharField(source='vk_announcement.group', required=False, allow_blank=True)
+    posted_vk = serializers.CharField(source='vk_announcement.link', required=False, allow_blank=True)
