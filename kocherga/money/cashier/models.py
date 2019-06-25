@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -11,12 +14,6 @@ import kocherga.importer.base
 
 
 class CashierItem(models.Model):
-    class Meta:
-        db_table = 'cashier'
-        unique_together = (
-            ("date", "shift"),
-        )
-
     id = models.AutoField(primary_key=True)
     date = models.DateField()
     shift = models.CharField(max_length=40)
@@ -28,6 +25,12 @@ class CashierItem(models.Model):
     notes = models.TextField()
     discrepancy = models.IntegerField(null=True)  # could be restored from other data
     spendings = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'cashier'
+
+    def __str__(self):
+        return f'[{self.date} {self.shift}] {self.cash_income} + {self.electronic_income} = {self.total_income}'
 
 
 class Cheque(models.Model):
@@ -97,17 +100,18 @@ def load_df_from_google():
 
 
 def export_to_db():
+    logger.info('Loading cashier data from google')
     df = load_df_from_google()
-
-    CashierItem.objects.all().delete()
 
     int_fields = [f.name for f in CashierItem._meta.get_fields() if type(f) == models.fields.IntegerField]
 
-    for row in df.to_dict('records'):
+    logger.info('Saving cashier items to DB')
+    for i, row in enumerate(df.to_dict('records')):
         for int_field in int_fields:
             if row[int_field] == '':
                 row[int_field] = None
-        CashierItem.objects.create(**row)
+
+        CashierItem.objects.update_or_create(id=i, defaults=row)
 
 
 def current_cash():
