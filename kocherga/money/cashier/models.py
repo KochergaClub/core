@@ -111,7 +111,8 @@ def export_to_db():
             if row[int_field] == '':
                 row[int_field] = None
 
-        CashierItem.objects.update_or_create(id=i, defaults=row)
+        pk = i + 1  # db ids start from 1
+        CashierItem.objects.update_or_create(id=pk, defaults=row)
 
 
 def current_cash():
