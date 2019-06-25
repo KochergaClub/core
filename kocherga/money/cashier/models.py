@@ -108,7 +108,7 @@ def export_to_db():
     logger.info('Saving cashier items to DB')
     for i, row in enumerate(df.to_dict('records')):
         for int_field in int_fields:
-            if row[int_field] == '':
+            if row[int_field] == '' or row[int_field] == ' ':
                 row[int_field] = None
 
         pk = i + 1  # db ids start from 1
