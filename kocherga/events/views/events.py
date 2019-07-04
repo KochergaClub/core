@@ -194,6 +194,7 @@ def r_list_public_atom(request):
     fg = feedgenerator.Atom1Feed(
         title='Публичные мероприятия Кочерги',
         link=f'{settings.KOCHERGA_API_ROOT}/public_events_atom',  # should we add query params here?
+        description='Публичные мероприятия Кочерги',
         author_name='Кочерга',
     )
 
