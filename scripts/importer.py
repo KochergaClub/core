@@ -10,11 +10,13 @@ import kocherga.importer.daemon
 
 import fire
 
+
 def main(name=None):
     if name:
         kocherga.importer.daemon.run_one(name)
     else:
         kocherga.importer.daemon.run()
+
 
 if __name__ == '__main__':
     import sys, os, django
