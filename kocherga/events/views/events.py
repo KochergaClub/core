@@ -207,4 +207,4 @@ def r_list_public_atom(request):
             pubdate=event.start,
         )
 
-    return HttpResponse(fg.atom_str(pretty=True))
+    return HttpResponse(fg.writeString('utf-8'))
