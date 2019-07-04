@@ -1,3 +1,6 @@
+import concurrent.futures
+from concurrent.futures.process import BrokenProcessPool
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
 
@@ -13,8 +16,6 @@ IMPORTER_MODULES = [
     "money.cashier.models",
     "money.ofd.models",
     "money.tochka.importer",
-    # "watchmen.importer",
-    # "zadarma.models",
     "zadarma.importer",
     "timepad.importer",
 ]
@@ -38,8 +39,27 @@ def run_one(name):
     importer.import_new()
 
 
+# Fix "A process in the process pool was terminated abruptly", via https://github.com/agronholm/apscheduler/issues/362
+class FixedPoolExecutor(ProcessPoolExecutor):
+    def __init__(self, max_workers=10):
+        self._max_workers = max_workers
+        super().__init__(max_workers)
+
+    def _do_submit_job(self, job, run_times):
+        try:
+            return super()._do_submit_job(job, run_times)
+        except BrokenProcessPool:
+            self._logger.warning('Process pool is broken. Restarting executor.')
+            self._pool.shutdown(wait=True)
+            self._pool = concurrent.futures.ProcessPoolExecutor(int(self._max_workers))
+
+            return super()._do_submit_job(job, run_times)
+
+
 def run():
-    scheduler = BlockingScheduler(executors={"default": ProcessPoolExecutor(2)})
+    scheduler = BlockingScheduler(executors={
+        "default": FixedPoolExecutor(2)
+    })
 
     for i, importer in enumerate(all_importers()):
         scheduler.add_job(
