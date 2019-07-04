@@ -6,7 +6,7 @@ from datetime import datetime
 
 import requests
 
-from feedgen.feed import FeedGenerator
+from django.utils import feedgenerator
 
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.http import require_safe
@@ -189,28 +189,21 @@ def r_list_public_atom(request):
         tag=request.GET.get('tag'),
     ) \
         .prefetch_related('tags') \
-        .prefetch_related('vk_announcement') \
-        .prefetch_related('fb_announcement') \
-        .prefetch_related('timepad_announcement')
+        .prefetch_related('vk_announcement')
 
-    fg = FeedGenerator()
-    fg.id(f'{settings.KOCHERGA_API_ROOT}/public_events_atom')  # should we add query params here?
-    fg.title('Публичные мероприятия Кочерги')
-    fg.author({'name': 'Кочерга'})
+    fg = feedgenerator.Atom1Feed(
+        title='Публичные мероприятия Кочерги',
+        link=f'{settings.KOCHERGA_API_ROOT}/public_events_atom',  # should we add query params here?
+        author_name='Кочерга',
+    )
 
     for event in reversed(events.all()):
-        fe = fg.add_entry()
-        fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.google_id}')
-        dt = event.start
-        fe.title(event.title)
-
-        dt_str = kocherga.dateutils.weekday(dt).capitalize() \
-            + ', ' + str(dt.day) \
-            + ' ' + kocherga.dateutils.inflected_month(dt) \
-            + ', ' + dt.strftime('%H:%M')
-
-        fe.summary(dt_str)
-        fe.content(dt_str)
-        fe.link(href=event.vk_announcement.link)
+        # fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.google_id}')
+        fg.add_item(
+            title=event.title,
+            link=event.vk_announcement.link,
+            description=event.summary,
+            pubdate=event.start,
+        )
 
     return HttpResponse(fg.atom_str(pretty=True))
