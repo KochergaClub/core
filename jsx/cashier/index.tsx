@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { Button } from '@kocherga/frontkit';
-
 import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 import ActionButton from '../components/ActionButton';
+import AsyncButton from '../components/AsyncButton';
 import { useAPI, usePermissions } from '../common/hooks';
 
 import { Payment } from './types';
@@ -26,13 +25,13 @@ const CreatePayment = () => {
     });
   };
 
-  if (canCreate) {
-    return (
-      <Button onClick={createTestPayment}>Создать тестовую выплату</Button>
-    ); // TODO - implement real payments
+  if (!canCreate) {
+    return null;
   }
 
-  return null;
+  return (
+    <AsyncButton act={createTestPayment}>Создать тестовую выплату</AsyncButton>
+  ); // TODO - implement real payments
 };
 
 const PaymentItem = ({ payment }: { payment: Payment }) => {
