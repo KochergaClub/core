@@ -9,6 +9,7 @@ export const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'auth/magic-link': require('./auth/magic-link'),
   'auth/registered': require('./auth/registered'), // TODO
   'cashier/index': require('./cashier/index'),
+  'kkm/index': require('./kkm/index'),
   'events/index': require('./events/index'),
   'mastermind_dating/index': require('./mastermind_dating/index'),
   'mastermind_dating/cohort_page': require('./mastermind_dating/cohort_page'),

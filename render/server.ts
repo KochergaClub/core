@@ -214,6 +214,7 @@ app.get('/team/zadarma/pbx_call/:id/', getCb('zadarma/pbx_call'));
 app.get('/team/staff/', getCb('staff/index_page'));
 app.get('/team/staff/:id/', getCb('staff/member_page'));
 app.get('/team/cashier/', getCb('cashier/index'));
+app.get('/team/kkm/', getCb('kkm/index'));
 app.get('/team/ratio/', getCb('ratio/index'));
 app.get('/team/ratio/training/:name/', getCb('ratio/training'));
 app.get('/team/ratio/training/:name/schedule/', getCb('ratio/schedule'));

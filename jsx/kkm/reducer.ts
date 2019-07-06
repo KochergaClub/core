@@ -1,0 +1,137 @@
+import { SignMethodCalculation } from './kkmServer';
+
+export interface State {
+  password: string;
+  cheque: {
+    email: string;
+    title: string;
+    amount: number;
+    method: SignMethodCalculation;
+  };
+  outcome?: {
+    result: object;
+    error: object;
+  };
+  modalOpen: boolean;
+}
+
+interface SetEmailAction {
+  type: 'SET_EMAIL';
+  payload: string;
+}
+
+interface SetTitleAction {
+  type: 'SET_TITLE';
+  payload: string;
+}
+
+interface SetAmountAction {
+  type: 'SET_AMOUNT';
+  payload: number;
+}
+
+interface SetPasswordAction {
+  type: 'SET_PASSWORD';
+  payload: string;
+}
+
+interface SetMethodAction {
+  type: 'SET_METHOD';
+  payload: SignMethodCalculation;
+}
+
+interface StartConfirmationAction {
+  type: 'START_CONFIRMATION';
+}
+
+interface CancelConfirmationAction {
+  type: 'CANCEL_CONFIRMATION';
+}
+
+interface SetOutcomeAction {
+  type: 'SET_OUTCOME';
+  payload: {
+    result: object;
+    error: object;
+  };
+}
+
+export type Action =
+  | SetEmailAction
+  | SetTitleAction
+  | SetAmountAction
+  | SetPasswordAction
+  | SetMethodAction
+  | StartConfirmationAction
+  | CancelConfirmationAction
+  | SetOutcomeAction;
+
+export const isChequeValid = (state: State) => {
+  return (
+    state.cheque.title &&
+    state.cheque.email &&
+    state.cheque.amount &&
+    state.password
+  );
+};
+
+export const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'SET_EMAIL':
+      return {
+        ...state,
+        cheque: {
+          ...state.cheque,
+          email: action.payload,
+        },
+      };
+    case 'SET_TITLE':
+      return {
+        ...state,
+        cheque: {
+          ...state.cheque,
+          title: action.payload,
+        },
+      };
+    case 'SET_AMOUNT':
+      return {
+        ...state,
+        cheque: {
+          ...state.cheque,
+          amount: action.payload,
+        },
+      };
+    case 'SET_PASSWORD':
+      return {
+        ...state,
+        password: action.payload,
+      };
+    case 'SET_METHOD':
+      return {
+        ...state,
+        cheque: {
+          ...state.cheque,
+          method: action.payload,
+        },
+      };
+    case 'START_CONFIRMATION':
+      if (!isChequeValid) {
+        return state; // can't start confirmation if check is not valid
+      }
+      return {
+        ...state,
+        modalOpen: true,
+      };
+    case 'CANCEL_CONFIRMATION':
+      return {
+        ...state,
+        modalOpen: false,
+      };
+    case 'SET_OUTCOME':
+      return {
+        ...state,
+        outcome: action.payload,
+        modalOpen: false,
+      };
+  }
+};
