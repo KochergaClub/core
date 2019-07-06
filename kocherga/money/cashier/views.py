@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Cheque
+from .models import Payment
 from . import serializers
 
 
@@ -15,28 +15,28 @@ class ReadOnly(BasePermission):
         return request.method in SAFE_METHODS
 
 
-class IsChequeCreator(BasePermission):
+class IsPaymentCreator(BasePermission):
     def has_permission(self, request, view):
         if view.action != 'create':
             return False
-        return request.user.has_perm('cheque.create')
+        return request.user.has_perm('cashier.create')
 
 
-class IsChequeRedeemer(BasePermission):
+class IsPaymentRedeemer(BasePermission):
     def has_permission(self, request, view):
         if view.action != 'redeem':
             return False
-        return request.user.has_perm('cheque.redeem')
+        return request.user.has_perm('cashier.redeem')
 
 
-class ChequeViewSet(viewsets.ModelViewSet):
-    queryset = Cheque.objects.all()
-    permission_classes = [(IsAdminUser & ReadOnly) | IsChequeCreator | IsChequeRedeemer]
-    serializer_class = serializers.ChequeSerializer
+class PaymentViewSet(viewsets.ModelViewSet):
+    queryset = Payment.objects.all()
+    permission_classes = [(IsAdminUser & ReadOnly) | IsPaymentCreator | IsPaymentRedeemer]
+    serializer_class = serializers.PaymentSerializer
 
     @action(detail=True, methods=['post'])
     def redeem(self, request, pk=None):
-        cheque = self.get_object()
-        cheque.redeem()
+        payment = self.get_object()
+        payment.redeem()
 
         return Response('ok')

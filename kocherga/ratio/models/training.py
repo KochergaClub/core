@@ -5,7 +5,7 @@ from django.db import models
 
 from kocherga.dateutils import inflected_month
 
-from kocherga.money.cashier.models import Cheque
+from kocherga.money.cashier.models import Payment
 
 
 class TrainingManager(models.Manager):
@@ -113,7 +113,7 @@ class Training(models.Model):
     def pay_salaries(self):
         for trainer in self.all_trainers():
             salary = self.trainer_salary(trainer)
-            Cheque.objects.create(
+            Payment.objects.create(
                 whom=trainer.user,
                 amount=salary,
                 comment=f'Зарплата за тренинг {self.name}',

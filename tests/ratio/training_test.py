@@ -2,7 +2,7 @@ import pytest
 pytestmark = pytest.mark.usefixtures('db')
 
 from kocherga.ratio import models
-from kocherga.money.cashier.models import Cheque
+from kocherga.money.cashier.models import Payment
 
 
 def test_tickets_count_zero(training):
@@ -41,7 +41,7 @@ def test_trainer_income(training_with_schedule, trainer):
     assert t.salaries_paid is False
     t.pay_salaries()
     assert t.salaries_paid is True
-    assert len(Cheque.objects.all()) == 1
+    assert len(Payment.objects.all()) == 1
 
 
 def test_copy_schedule_from(training, training_with_schedule):

@@ -7,23 +7,19 @@ import Page from '../components/Page';
 import ActionButton from '../components/ActionButton';
 import { useAPI, usePermissions } from '../common/hooks';
 
-interface Cheque {
-  id: number;
-  amount: number;
-  whom: string;
-  is_redeemed: boolean;
-}
+import { Payment } from './types';
+import { getPayments } from './api';
 
 interface Props {
-  cheques: Cheque[];
+  payments: Payment[];
 }
 
-const CreateCheque = () => {
+const CreatePayment = () => {
   const api = useAPI();
   const [canCreate] = usePermissions(['cashier.create']);
 
-  const createTestCheque = async () => {
-    await api.call('cashier/cheque', 'POST', {
+  const createTestPayment = async () => {
+    await api.call('cashier/payment', 'POST', {
       amount: 5000,
       comment: 'test comment',
       whom: 'me@berekuk.ru',
@@ -31,22 +27,24 @@ const CreateCheque = () => {
   };
 
   if (canCreate) {
-    return <Button onClick={createTestCheque}>Создать тестовый чек</Button>; // TODO - not implemented yet
+    return (
+      <Button onClick={createTestPayment}>Создать тестовую выплату</Button>
+    ); // TODO - implement real payments
   }
 
   return null;
 };
 
-const ChequeItem = ({ cheque }: { cheque: Cheque }) => {
+const PaymentItem = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
 
   return (
     <div>
-      {cheque.amount} руб. &rarr; {cheque.whom}
+      {payment.amount} руб. &rarr; {payment.whom}
       {canRedeem
-        ? cheque.is_redeemed || (
+        ? payment.is_redeemed || (
             <ActionButton
-              path={`cashier/cheque/${cheque.id}/redeem`}
+              path={`cashier/payment/${payment.id}/redeem`}
               reloadOnSuccess
             >
               Выплачено
@@ -57,28 +55,28 @@ const ChequeItem = ({ cheque }: { cheque: Cheque }) => {
   );
 };
 
-const CashierPage = ({ cheques }: Props) => {
+const CashierPage = ({ payments }: Props) => {
   return (
     <Page title="Касса" team>
       <Page.Title>Касса</Page.Title>
       <Page.Main>
         <h2>Выплаты</h2>
         <ul>
-          {cheques.map(cheque => (
-            <li key={cheque.id}>
-              <ChequeItem cheque={cheque} />
+          {payments.map(payment => (
+            <li key={payment.id}>
+              <PaymentItem payment={payment} />
             </li>
           ))}
         </ul>
-        <CreateCheque />
+        <CreatePayment />
       </Page.Main>
     </Page>
   );
 };
 
 const getInitialData: InitialLoader<Props> = async context => {
-  const cheques = await context.api.call('cashier/cheque', 'GET');
-  return { cheques };
+  const payments = await getPayments(context.api);
+  return { payments };
 };
 
 const screen: Screen<Props> = {

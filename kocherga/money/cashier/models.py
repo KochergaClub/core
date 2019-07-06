@@ -33,12 +33,12 @@ class CashierItem(models.Model):
         return f'[{self.date} {self.shift}] {self.cash_income} + {self.electronic_income} = {self.total_income}'
 
 
-class Cheque(models.Model):
+class Payment(models.Model):
     whom = models.ForeignKey(
         get_user_model(),
         verbose_name='Кому',
         on_delete=models.CASCADE,
-        related_name='cheques',
+        related_name='payments',
     )
     amount = models.IntegerField('Сумма')
     created_dt = models.DateTimeField('Дата создания', auto_now_add=True)
@@ -65,7 +65,7 @@ class Cheque(models.Model):
 
     def redeem(self):
         if self.is_redeemed():
-            raise Exception("Cheque is already redeemed")
+            raise Exception("Payment is already redeemed")
         self.redeem_dt = timezone.now()
         self.save()
 
