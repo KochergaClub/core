@@ -92,6 +92,16 @@ export const useAPI = () => {
   return api;
 };
 
+export const usePermissions = (permissions: string[]) => {
+  const { user } = useContext(GlobalContext);
+
+  const result: boolean[] = [];
+  for (const permission of permissions) {
+    result.push(user.permissions.includes(permission));
+  }
+  return result;
+};
+
 export const useExpandable = () => {
   const [expanded, setExpanded] = useState(false);
 

@@ -50,6 +50,7 @@ class Cheque(models.Model):
         verbose_name_plural = 'Выплаты'
         permissions = (
             ('create', 'Может выписывать новые чеки'),
+            ('redeem', 'Может обналичивать существующие чеки'),
         )
 
     def __str__(self):

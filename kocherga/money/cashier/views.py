@@ -22,12 +22,18 @@ class IsChequeCreator(BasePermission):
         return request.user.has_perm('cheque.create')
 
 
+class IsChequeRedeemer(BasePermission):
+    def has_permission(self, request, view):
+        if view.action != 'redeem':
+            return False
+        return request.user.has_perm('cheque.redeem')
+
+
 class ChequeViewSet(viewsets.ModelViewSet):
     queryset = Cheque.objects.all()
-    permission_classes = [(IsAdminUser & ReadOnly) | IsChequeCreator]
+    permission_classes = [(IsAdminUser & ReadOnly) | IsChequeCreator | IsChequeRedeemer]
     serializer_class = serializers.ChequeSerializer
 
-    # TODO - cheque.redeem permission
     @action(detail=True, methods=['post'])
     def redeem(self, request, pk=None):
         cheque = self.get_object()
