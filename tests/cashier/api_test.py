@@ -3,7 +3,7 @@ pytestmark = [
     pytest.mark.usefixtures('db'),
 ]
 
-from kocherga.cashier.models import Payment
+from kocherga.money.cashier.models import Payment
 
 
 def test_payments(admin_client):
