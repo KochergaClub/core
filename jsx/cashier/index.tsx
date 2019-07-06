@@ -1,38 +1,17 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
-import ActionButton from '../components/ActionButton';
-import AsyncButton from '../components/AsyncButton';
-import { useAPI, usePermissions } from '../common/hooks';
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
+import ActionButton from '~/components/ActionButton';
+import { usePermissions } from '~/common/hooks';
 
 import { Payment } from './types';
 import { getPayments } from './api';
+import CreatePayment from './components/CreatePayment';
 
 interface Props {
   payments: Payment[];
 }
-
-const CreatePayment = () => {
-  const api = useAPI();
-  const [canCreate] = usePermissions(['cashier.create']);
-
-  const createTestPayment = async () => {
-    await api.call('cashier/payment', 'POST', {
-      amount: 5000,
-      comment: 'test comment',
-      whom: 'me@berekuk.ru',
-    });
-  };
-
-  if (!canCreate) {
-    return null;
-  }
-
-  return (
-    <AsyncButton act={createTestPayment}>Создать тестовую выплату</AsyncButton>
-  ); // TODO - implement real payments
-};
 
 const PaymentItem = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);

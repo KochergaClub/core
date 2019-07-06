@@ -4,3 +4,9 @@ export interface Payment {
   whom: string;
   is_redeemed: boolean;
 }
+
+export interface CreatePaymentParams {
+  amount: number;
+  whom: string;
+  comment: string;
+}
