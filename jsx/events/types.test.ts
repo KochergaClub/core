@@ -12,6 +12,7 @@ it('create from empty', () => {
         description: '',
         id: 'abcd',
         room: 'r',
+        type: 'private',
       },
     }
   );
@@ -31,6 +32,7 @@ it('create from non-empty', () => {
           description: '',
           id: 'oldold',
           room: 'TODO',
+          type: 'private',
         },
       ],
     },
@@ -43,6 +45,7 @@ it('create from non-empty', () => {
         description: '',
         id: 'abcd',
         room: 'r',
+        type: 'private',
       },
     }
   );
@@ -61,6 +64,7 @@ it('REPLACE_ALL action', () => {
           description: '',
           id: 'first',
           room: 'TODO',
+          type: 'private',
         },
         {
           start: new Date('2020-04-01 12:00'),
@@ -69,6 +73,7 @@ it('REPLACE_ALL action', () => {
           description: '',
           id: 'second',
           room: 'TODO',
+          type: 'private',
         },
       ],
     },
@@ -83,6 +88,7 @@ it('REPLACE_ALL action', () => {
             description: '',
             id: 'third',
             room: 'TODO',
+            type: 'private',
           },
           {
             start: new Date('2020-04-01 12:00'),
@@ -91,6 +97,7 @@ it('REPLACE_ALL action', () => {
             description: '',
             id: 'fourth',
             room: 'TODO',
+            type: 'private',
           },
         ],
       },
