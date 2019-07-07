@@ -40,6 +40,7 @@ export interface Event {
   posted_vk?: string;
   posted_fb?: string;
   posted_timepad?: string;
+  type: 'public' | 'private' | 'unknown';
 }
 
 export interface EventTicket {
@@ -53,6 +54,7 @@ export interface ServerEvent {
   room: string;
   start: string;
   end: string;
+  type: 'public' | 'private' | 'unknown';
 }
 
 // Supports client-side state such as event.saving flag.

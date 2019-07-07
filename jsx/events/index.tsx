@@ -32,12 +32,15 @@ const startAccessor = (event: LocalEvent) =>
 const endAccessor = (event: LocalEvent) => utcToZonedTime(event.end, timezone);
 
 const eventPropGetter = (event: LocalEvent) => {
-  const style: React.CSSProperties = {};
+  const classNames: string[] = [];
+  if (event.type === 'public') {
+    classNames.push('rbc-kocherga-event-public');
+  }
   if (event.saving) {
-    style.backgroundColor = '#ddd';
+    classNames.push('rbc-kocherga-event-saving');
   }
   return {
-    style,
+    className: classNames.join(' '),
   };
 };
 

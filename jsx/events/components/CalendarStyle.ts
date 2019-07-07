@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
+import { colors } from '@kocherga/frontkit';
+
 export const CalendarStyle = createGlobalStyle`
 .rbc-btn {
   color: inherit;
@@ -217,9 +219,9 @@ button.rbc-input::-moz-focus-inner {
   box-shadow: none;
   margin: 0;
   padding: 2px 5px;
-  background-color: hsl(208, 56%, 90%);
+  background-color: ${colors.primary['100']};
   border-radius: 0px;
-  color: hsl(208, 56%, 20%);
+  color: ${colors.primary['900']};
   cursor: pointer;
   width: 100%;
   text-align: left;
@@ -232,7 +234,7 @@ button.rbc-input::-moz-focus-inner {
 }
 
 .rbc-event.rbc-selected {
-  background-color: hsl(208, 56%, 75%);
+  background-color: ${colors.primary['300']};
 }
 
 .rbc-event:focus {
@@ -466,7 +468,7 @@ button.rbc-input::-moz-focus-inner {
   right: 0;
 }
 .rbc-day-slot .rbc-event {
-  border-left: 2px solid hsl(208, 56%, 44%);
+  border-left: 2px solid ${colors.primary['500']};
   border-bottom: 1px solid white;
   border-top: 1px solid white;
   display: flex;
@@ -637,6 +639,15 @@ button.rbc-input::-moz-focus-inner {
   height: 1px;
   background-color: #74ad31;
   pointer-events: none;
+}
+
+.rbc-day-slot .rbc-event.rbc-kocherga-event-public {
+  background-color: ${colors.accent['100']};
+  border-left: 2px solid ${colors.accent['500']};
+}
+
+.rbc-kocherga-event-saving {
+  background-color: #ddd;
 }
 `;
 
