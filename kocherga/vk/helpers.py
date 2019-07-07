@@ -55,7 +55,6 @@ def upload_wall_image(group_id, image_bytes):
             "photo": upload_response["photo"],
             "server": upload_response["server"],
             "hash": upload_response["hash"],
-            "caption": "Картинка к посту",
         },
     )
 
