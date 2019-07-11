@@ -61,3 +61,13 @@ export const unsetTrainerForActivity = async (
 ) => {
   await api.call(`ratio/activity/${activity_id}/unset_trainer`, 'POST');
 };
+
+export const setTicketFiscalizationStatus = async (
+  api: API,
+  ticket_id: number,
+  fiscalization_status: Ticket['fiscalization_status']
+) => {
+  await api.call(`ratio/ticket/${ticket_id}`, 'PATCH', {
+    fiscalization_status,
+  });
+};

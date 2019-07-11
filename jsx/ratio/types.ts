@@ -7,10 +7,13 @@ export interface Training {
 }
 
 export interface Ticket {
+  id: number;
   email: string;
   first_name: string;
   last_name: string;
   status: 'normal' | 'canceled';
+  payment_amount: number;
+  fiscalization_status: 'todo' | 'not_needed' | 'in_progress' | 'fiscalized';
 }
 
 export interface Trainer {

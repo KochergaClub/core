@@ -1,10 +1,13 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from django.conf import settings
+
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 
 from .models import Payment
 from . import serializers
@@ -13,6 +16,11 @@ from . import serializers
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
         return request.method in SAFE_METHODS
+
+
+class IsKkmUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('cashier.kkm_user')
 
 
 class IsPaymentCreator(BasePermission):
@@ -40,3 +48,11 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payment.redeem()
 
         return Response('ok')
+
+
+@api_view()
+@permission_classes((IsKkmUser,))
+def r_get_kkm_password(request):
+    return Response({
+        'password': settings.KKM_USER_PASSWORD,
+    })

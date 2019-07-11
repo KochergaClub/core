@@ -63,3 +63,5 @@ KOCHERGA_WIKI_PASSWORD = None
 MASTERMIND_BOT_CONFIG = {
     "token": "tg-token-here"
 }
+
+KKM_USER_PASSWORD = 'fake_broken_password'

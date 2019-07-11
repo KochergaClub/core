@@ -1,9 +1,8 @@
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Training, Activity, Trainer
+from .models import Training, Activity, Trainer, Ticket
 from . import serializers
 from .users import training2mailchimp
 from . import email
@@ -100,3 +99,9 @@ class TrainerViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsRatioManager,)
     queryset = Trainer.objects.all()
     serializer_class = serializers.TrainerSerializer
+
+
+class TicketViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsRatioManager,)
+    queryset = Ticket.objects.all()
+    serializer_class = serializers.TicketSerializer

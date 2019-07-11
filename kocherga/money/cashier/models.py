@@ -51,6 +51,7 @@ class Payment(models.Model):
         permissions = (
             ('create', 'Может выписывать новые чеки'),
             ('redeem', 'Может обналичивать существующие чеки'),
+            ('kkm_user', 'Может использовать кассовый аппарат'),
         )
 
     def __str__(self):

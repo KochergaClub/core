@@ -37,6 +37,12 @@ class Ticket(models.Model):
     ))
     payment_amount = models.IntegerField('Размер оплаты')
     paid = models.BooleanField('Оплачено')
+    fiscalization_status = models.CharField('Статус фискального чека', max_length=40, choices=(
+        ('todo', 'todo'),
+        ('not_needed', 'not_needed'),
+        ('in_progress', 'in_progress'),
+        ('fiscalized', 'fiscalized'),
+    ))
 
     comment = models.TextField(blank=True)
 
