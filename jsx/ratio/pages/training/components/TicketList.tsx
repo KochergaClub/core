@@ -60,7 +60,7 @@ const FiscalizeButton = ({ ticket }: { ticket: Ticket }) => {
     );
   }, [
     server,
-    context.store.training.long_name,
+    context.store.training.name,
     ticket.email,
     ticket.payment_amount,
     ticket.id,
