@@ -15,7 +15,7 @@ class TrainingManager(models.Manager):
 
 class Training(models.Model):
     name = models.CharField(max_length=255, primary_key=True)
-    slug = models.SlugField(blank=True, null=True)
+    slug = models.SlugField(unique=True)
 
     date = models.DateField('Дата начала', null=True)
     telegram_link = models.URLField('Телеграм-чат', blank=True)

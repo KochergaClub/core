@@ -6,30 +6,21 @@ export const getTrainings = async (api: API) => {
   return (await api.call('ratio/training', 'GET')) as Training[];
 };
 
-// TODO - change api to accept slug
-const trainingNameToKey = (trainingName: string) =>
-  encodeURIComponent(trainingName);
-export const trainingToKey = (training: Training) =>
-  trainingNameToKey(training.name);
-
-export const getTraining = async (api: API, name: string) => {
-  const key = trainingNameToKey(name);
-  return (await api.call(`ratio/training/${key}`, 'GET')) as Training;
+export const getTraining = async (api: API, slug: string) => {
+  return (await api.call(`ratio/training/${slug}`, 'GET')) as Training;
 };
 
-export const getTickets = async (api: API, name: string) => {
-  const key = trainingNameToKey(name);
-  return (await api.call(`ratio/training/${key}/tickets`, 'GET')) as Ticket[];
+export const getTickets = async (api: API, slug: string) => {
+  return (await api.call(`ratio/training/${slug}/tickets`, 'GET')) as Ticket[];
 };
 
 export const getTrainers = async (api: API) => {
   return (await api.call(`ratio/trainers`, 'GET')) as Trainer[];
 };
 
-export const getSchedule = async (api: API, name: string) => {
-  const key = trainingNameToKey(name);
+export const getSchedule = async (api: API, slug: string) => {
   return (await api.call(
-    `ratio/training/${key}/schedule`,
+    `ratio/training/${slug}/schedule`,
     'GET'
   )) as ActivityType[];
 };
@@ -39,8 +30,7 @@ export const copyScheduleFrom = async (
   training: Training,
   srcTraining: Training
 ) => {
-  const key = trainingToKey(training);
-  await api.call(`ratio/training/${key}/copy_schedule_from`, 'POST', {
+  await api.call(`ratio/training/${training.slug}/copy_schedule_from`, 'POST', {
     src_training_slug: srcTraining.slug,
   });
 };

@@ -34,7 +34,7 @@ const FiscalizeButton = ({ ticket }: { ticket: Ticket }) => {
     await setTicketFiscalizationStatus(api, ticket.id, 'in_progress');
 
     const request = {
-      title: context.store.training.long_name,
+      title: `Участие в мероприятии: ${context.store.training.name}`,
       signMethodCalculation: SignMethodCalculation.PrePayment100,
       email: ticket.email,
       sum: ticket.payment_amount,

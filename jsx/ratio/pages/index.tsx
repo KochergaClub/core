@@ -23,8 +23,10 @@ const RatioIndexPage = ({ trainings }: Props) => (
       <hr />
       <ul>
         {trainings.map(training => (
-          <li key={training.name}>
-            <A href={`training/${training.name}/`}>{training.name}</A>
+          <li key={training.slug}>
+            <A href={`training/${training.slug}/`}>
+              {training.date} {training.name}
+            </A>
           </li>
         ))}
       </ul>

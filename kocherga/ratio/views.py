@@ -17,15 +17,15 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsRatioManager,)
     queryset = Training.objects.all()
     serializer_class = serializers.TrainingSerializer
-    lookup_field = 'name'
+    lookup_field = 'slug'
 
     @action(detail=True, methods=['post'])
-    def to_mailchimp(self, request, name=None):
+    def to_mailchimp(self, request, slug=None):
         training2mailchimp(self.get_object())
         return Response('ok')
 
     @action(detail=True, methods=['post'])
-    def email(self, request, name=None):
+    def email(self, request, slug=None):
         title = request.data['title']
         content = request.data['content']
         result = email.create_any_draft(self.get_object(), title, content)
@@ -34,38 +34,38 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
         })
 
     @action(detail=True)
-    def email_prototype_pre(self, request, name=None):
+    def email_prototype_pre(self, request, slug=None):
         return Response({
             'content': email.get_pre_content(self.get_object()),
         })
 
     @action(detail=True)
-    def email_prototype_post(self, request, name=None):
+    def email_prototype_post(self, request, slug=None):
         return Response({
             'content': email.get_post_content(self.get_object()),
         })
 
     @action(detail=True, methods=['post'])
-    def pay_salaries(self, request, name=None):
+    def pay_salaries(self, request, slug=None):
         self.get_object().pay_salaries()
         return Response('ok')
 
     @action(detail=True)
-    def tickets(self, request, name=None):
+    def tickets(self, request, slug=None):
         training_tickets = self.get_object().tickets
         return Response(
             serializers.TicketSerializer(training_tickets, many=True).data,
         )
 
     @action(detail=True)
-    def schedule(self, request, name=None):
+    def schedule(self, request, slug=None):
         training = self.get_object()
         return Response(
             serializers.ActivitySerializer(training.schedule, many=True).data,
         )
 
     @action(detail=True, methods=['post'])
-    def copy_schedule_from(self, request, name=None):
+    def copy_schedule_from(self, request, slug=None):
         training = self.get_object()
         src_training_slug = request.data['src_training_slug']
         src_training = Training.objects.get(slug=src_training_slug)

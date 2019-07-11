@@ -7,7 +7,7 @@ import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 
 import { Training, Ticket } from '../../types';
-import { trainingToKey, getTraining, getTickets } from '../../api';
+import { getTraining, getTickets } from '../../api';
 
 import CreateEmailButton from '../../components/CreateEmailButton';
 import TicketList from './components/TicketList';
@@ -30,8 +30,7 @@ const TrainingActionButton = ({
   action: string;
   children: React.ReactNode;
 }) => {
-  const key = trainingToKey(training);
-  const path = `ratio/training/${key}/${action}`;
+  const path = `ratio/training/${training.slug}/${action}`;
   return <ActionButton path={path}>{children}</ActionButton>;
 };
 
@@ -48,7 +47,7 @@ const RatioTrainingPage = (props: Props) => {
           <Page.Title>{store.training.name}</Page.Title>
           <Page.Main>
             <A href={`/admin/ratio/training/${store.training.name}/change/`}>
-              править в админке
+              править в django-админке
             </A>
             <p>
               Когда: <strong>{store.training.date}</strong>
@@ -84,18 +83,18 @@ const RatioTrainingPage = (props: Props) => {
                 prototypes={[
                   {
                     title: 'Предрассылка',
-                    url: `ratio/training/${trainingToKey(
-                      store.training
-                    )}/email_prototype_pre`,
+                    url: `ratio/training/${
+                      store.training.slug
+                    }/email_prototype_pre`,
                   },
                   {
                     title: 'Пострассылка',
-                    url: `ratio/training/${trainingToKey(
-                      store.training
-                    )}/email_prototype_post`,
+                    url: `ratio/training/${
+                      store.training.slug
+                    }/email_prototype_post`,
                   },
                 ]}
-                create={`ratio/training/${trainingToKey(store.training)}/email`}
+                create={`ratio/training/${store.training.slug}/email`}
               >
                 Написать
               </CreateEmailButton>
