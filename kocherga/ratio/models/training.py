@@ -14,7 +14,7 @@ class TrainingManager(models.Manager):
 
 
 class Training(models.Model):
-    name = models.CharField(max_length=255, primary_key=True)
+    name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
 
     date = models.DateField('Дата начала', null=True)
