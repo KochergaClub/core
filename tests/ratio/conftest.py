@@ -8,7 +8,7 @@ import datetime
 
 @pytest.fixture
 def training_with_schedule(trainer):
-    result = Training(name='2034-01 воркшоп')
+    result = Training(name='2034-01 воркшоп', slug='w1')
     result.save()
     result.schedule.create(
         day=1,
@@ -29,7 +29,7 @@ def training_with_schedule(trainer):
 
 @pytest.fixture
 def training():
-    result = Training(name='2035-01 воркшоп')
+    result = Training(name='2035-01 воркшоп', slug='w2')
     result.save()
     return result
 
