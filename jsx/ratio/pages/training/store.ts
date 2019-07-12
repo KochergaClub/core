@@ -63,6 +63,7 @@ export const TrainingContext = React.createContext<TrainingContextShape>({
   dispatch: () => null,
   store: {
     training: {
+      id: 0,
       name: 'fake',
       long_name: 'long fake name',
       date: '2000-01-01',
