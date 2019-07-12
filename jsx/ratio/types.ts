@@ -1,4 +1,5 @@
 export interface Training {
+  id: number;
   name: string;
   slug?: string;
   long_name: string;

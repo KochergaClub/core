@@ -46,7 +46,7 @@ const RatioTrainingPage = (props: Props) => {
         <Page title={store.training.name} team>
           <Page.Title>{store.training.name}</Page.Title>
           <Page.Main>
-            <A href={`/admin/ratio/training/${store.training.name}/change/`}>
+            <A href={`/admin/ratio/training/${store.training.id}/change/`}>
               править в django-админке
             </A>
             <p>
@@ -61,8 +61,8 @@ const RatioTrainingPage = (props: Props) => {
               <h2>
                 Участники:{' '}
                 <A
-                  href={`/admin/ratio/ticket/?training__name__exact=${
-                    store.training.name
+                  href={`/admin/ratio/ticket/?training__id__exact=${
+                    store.training.id
                   }`}
                 >
                   {store.tickets.length}
