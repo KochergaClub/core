@@ -265,7 +265,7 @@ def roster_check():
 
 @bot.schedule("cron", hour=9, minute=10)
 def morning_check():
-    CHANNEL = '#space_staff_shifts'
+    CHANNEL = '#space_realtime'
 
     shift = schedule.current_shift()
     if not shift.watchman:
