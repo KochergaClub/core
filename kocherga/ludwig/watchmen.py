@@ -1,13 +1,15 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime, timedelta
 import re
 
-from kocherga.ludwig.bot import bot
-
-from kocherga.dateutils import TZ
-
-from kocherga.watchmen import schedule
-
 from slappy import ErrorResponse
+
+from kocherga.ludwig.bot import bot
+from kocherga.dateutils import TZ
+from kocherga.watchmen import schedule
+import kocherga.cm.tools
 
 INFLECTED_WEEKDAY_NAMES = [
     "понедельник",
@@ -259,3 +261,30 @@ def roster_check():
             text=f":exclamation: {empty_total} пустых смен в ближайшие {TOTAL_DAYS} дней.",
             channel=CHANNEL,
         )
+
+
+@bot.schedule("cron", hour=9, minute=10)
+def morning_check():
+    CHANNEL = '#space_staff_shifts'
+
+    shift = schedule.current_shift()
+    if not shift.watchman:
+        # no watchman in schedule, that's weird but whatever
+        return
+
+    watchman = shift.watchman
+
+    cm_customers = kocherga.cm.tools.now_stats()['customers']
+
+    for customer in cm_customers:
+        if customer.pk == watchman.cm_customer.pk:
+            logger.info(f'Watchman {shift.watchman.cm_customer} is present, everything is ok')
+            return
+
+    inflected = 'готов' if watchman.gender == 'MALE' else 'готова'
+
+    bot.send_message(
+        text=f":exclamation: <@{shift.watchman.slack_id}>, тебя нет в кафе-менеджере.\n"
+        f"Видимо, ты опаздываешь на свою смену. Будь {inflected} ответить на звонок.",
+        channel=CHANNEL,
+    )
