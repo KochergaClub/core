@@ -166,3 +166,14 @@ class TimepadAnnouncement(models.Model):
         timepad_event_id = result['id']
         self.link = f"https://{ORGANIZATION}.timepad.ru/event/{timepad_event_id}"
         self.save()
+
+    def get_timepad_event_id(self):
+        if not self.link:
+            raise Exception("This announcement doesn't have timepad link")
+
+        match = re.match(r"https://(?:.+)\.timepad\.ru/event/(\d+)/?$", self.link)
+        if not match:
+            raise Exception(f"Weird url: {self.link}")
+        timepad_event_id = int(match.group(1))
+
+        return timepad_event_id
