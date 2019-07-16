@@ -19,6 +19,11 @@ def client():
     return SlackClient(token())
 
 
+# client with legacy token - used for invites only
+def legacy_token_client():
+    return SlackClient(settings.KOCHERGA_SLACK_LEGACY_TOKEN)
+
+
 _USERS_CACHE = []
 _USERS_CACHED_TS = None
 CACHE_PERIOD = 60
