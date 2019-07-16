@@ -3,6 +3,8 @@ logger = logging.getLogger(__name__)
 
 import kocherga.wiki
 from django.contrib.auth import get_user_model
+import kocherga.cm.tools
+import kocherga.cm.models
 
 from .models import Member
 
@@ -32,6 +34,9 @@ def add_watchman(short_name, full_name, email, password):
     if not email.endswith('@gmail.com'):
         raise Exception("Only @gmail.com emails are supported")
 
+    # Look up CM customer early to avoid semi-broken outcome when the CM customer doesn't exist.
+    cm_customer = kocherga.cm.models.Customer.objects.get(email=email)
+
     logger.info(f'Add watchman {full_name} with email {email}')
 
     logger.info('Looking for user record')
@@ -52,6 +57,7 @@ def add_watchman(short_name, full_name, email, password):
         is_current=True,
         payment_type='CASH',
         user=user,
+        cm_customer=cm_customer,
     )
 
     logger.info(f'Creating wiki account')
