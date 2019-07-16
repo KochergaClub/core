@@ -6,6 +6,7 @@ from io import StringIO
 import requests
 import re
 from datetime import datetime
+from typing import List
 
 from django.db.models import Q
 
@@ -56,7 +57,7 @@ def load_orders():
     return orders
 
 
-def load_users():
+def load_users() -> List[User]:
     url = DOMAIN + "/config/"
 
     r = requests.get(url, cookies=get_cookies())

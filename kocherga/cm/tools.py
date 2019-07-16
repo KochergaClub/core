@@ -4,9 +4,10 @@ logger = logging.getLogger(__name__)
 import re
 import requests
 
-from .models import Customer
+from .models import Customer, User
 from .scraper import DOMAIN
 from .auth import get_cookies
+from .importer import load_users
 
 
 def add_customer(card_id, first_name, last_name, email):
@@ -51,6 +52,39 @@ def add_customer(card_id, first_name, last_name, email):
 
     print(r.text)
     raise Exception("Expected a message about success in response, got something else")
+
+
+def add_manager(login: str, name: str, password: str, email: str) -> User:
+    url = DOMAIN + "/config/user/new/"
+    params = {
+        'login': login,
+        'name': name,
+        'pass': password,
+        'mail': email,
+        'level': 2,
+    }
+
+    r = requests.post(url, params, cookies=get_cookies())
+    r.raise_for_status()
+
+    r.encoding = "utf-8"
+    if "Данный Логин уже используется!" in r.text:
+        raise Exception(f"User with login {login} already exists")
+
+    if "Пользователь успешно добавлен!" not in r.text:
+        raise Exception("Expected a message about success in response, got something else")
+
+    all_users = load_users()
+    user = next(u for u in all_users if u.login == login)
+    return user
+
+
+# Only for tests.
+# CM users in production should be turned into "viewers" with new password instead.
+def delete_manager(user: User) -> None:
+    url = DOMAIN + f"/config/user/{user.id}/del/"
+    r = requests.get(url, cookies=get_cookies())
+    r.raise_for_status()
 
 
 def now_stats():
