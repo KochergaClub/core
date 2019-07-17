@@ -49,6 +49,9 @@ def add_watchman(short_name, full_name, email, password):
         logger.info(f'User for email {email} not found, creating...')
         user = User.objects.create_user(email)
 
+    user.is_staff = True
+    user.save()
+
     logger.info(f'Creating Member')
     member = Member.objects.create(
         short_name=short_name,
