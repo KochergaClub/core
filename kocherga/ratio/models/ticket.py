@@ -36,7 +36,7 @@ class Ticket(models.Model):
         ('transfer', 'Перевод'),
     ))
     payment_amount = models.IntegerField('Размер оплаты')
-    paid = models.BooleanField('Оплачено')
+    paid = models.BooleanField('Оплачено', default=False)
     fiscalization_status = models.CharField('Статус фискального чека', max_length=40, choices=(
         ('todo', 'todo'),
         ('not_needed', 'not_needed'),

@@ -5,6 +5,8 @@ import { A, Column } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
+import CreateButton from '~/components/crud/CreateButton';
+import { FormField } from '~/components/crud/types';
 
 import { Training, Ticket } from '../../types';
 import { getTraining, getTickets } from '../../api';
@@ -32,6 +34,23 @@ const TrainingActionButton = ({
 }) => {
   const path = `ratio/training/${training.slug}/${action}`;
   return <ActionButton path={path}>{children}</ActionButton>;
+};
+
+const CreateTicketButton = ({ training_id }: { training_id: number }) => {
+  const fields: FormField[] = [
+    { name: 'training', type: 'number', readonly: true, value: training_id },
+    { name: 'email', type: 'string' },
+    { name: 'first_name', type: 'string' },
+    { name: 'last_name', type: 'string' },
+    { name: 'payment_amount', type: 'number' },
+    {
+      name: 'fiscalization_status',
+      type: 'choice',
+      options: ['todo', 'fiscalized'],
+    },
+  ];
+
+  return <CreateButton apiEndpoint="/ratio/ticket" fields={fields} />;
 };
 
 const RatioTrainingPage = (props: Props) => {
@@ -69,6 +88,7 @@ const RatioTrainingPage = (props: Props) => {
                 </A>
               </h2>
               <TicketList tickets={store.tickets} />
+              <CreateTicketButton training_id={store.training.id} />
             </section>
 
             <Column>
