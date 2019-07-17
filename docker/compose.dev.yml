@@ -67,7 +67,7 @@ services:
 
   render-server:
     << : *common
-    command: npx nodemon -w ./static/dist/server.js ./static/dist/server.js
+    command: npx nodemon --verbose --watch static/dist ./static/dist/server.js
     depends_on:
       - api
     ports:
