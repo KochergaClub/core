@@ -12,6 +12,7 @@ def test_now_stats(cm_auth):
     assert type(c["total"]) == int
 
 
+@pytest.mark.slow
 def test_load_customers(cm_auth):
     customers = kocherga.cm.importer.load_customers()
     assert type(customers) == list
@@ -19,6 +20,7 @@ def test_load_customers(cm_auth):
     assert customers[0].card_id == 1
 
 
+@pytest.mark.slow
 def test_load_orders(cm_auth):
     orders = kocherga.cm.importer.load_orders()
     assert type(orders) == list
@@ -26,6 +28,7 @@ def test_load_orders(cm_auth):
     assert type(orders[0]) == kocherga.cm.models.Order
 
 
+@pytest.mark.slow
 def test_load_customer(cm_auth):
     customer = kocherga.cm.scraper.load_customer_from_html(40)
     assert customer
