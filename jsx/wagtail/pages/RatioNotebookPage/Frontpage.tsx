@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import PrintContext from './PrintContext';
 
+import { PageType } from './index';
+
 interface ContainerProps {
   height: number;
 }
@@ -63,7 +65,11 @@ const BrandLine = styled.div`
   }
 `;
 
-export default function Frontpage() {
+interface Props {
+  wagtailPage: PageType;
+}
+
+export default function Frontpage(props: Props) {
   const printContext = useContext(PrintContext);
   return (
     <Container
@@ -72,10 +78,12 @@ export default function Frontpage() {
       }
     >
       <MainArea>
-        <Header>Прикладная рациональность: рабочая тетрадь</Header>
+        <Header>{props.wagtailPage.title}</Header>
       </MainArea>
       <Training>
-        <EventTitle>Выездной воркшоп по рациональности</EventTitle>
+        {/* TODO - add event date line, or maybe picker of a ratio event */}
+        {false && <EventTitle>Выездной воркшоп по рациональности</EventTitle>}
+
         <BrandLine>
           <img src="/static/logo.png" />
           <div>Кочерга</div>

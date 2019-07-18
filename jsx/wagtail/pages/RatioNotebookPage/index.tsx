@@ -46,7 +46,7 @@ const RatioNotebookPage = (props: Props) => {
   return (
     <Page title={props.wagtailPage.title} noMenu noFooter>
       <PrintDocument footer={footer}>
-        <Frontpage />
+        <Frontpage wagtailPage={props.wagtailPage} />
         <Emptypage />
         <SectionTOC {...props} />
         <Emptypage />

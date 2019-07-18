@@ -17,11 +17,11 @@ const Container = styled.div`
   }
 `;
 
-const PageCountEditor = ({
-  setPageCount,
-}: {
+interface Props {
   setPageCount: (c: number) => void;
-}) => {
+}
+
+const PageCountEditor: React.FC<Props> = ({ setPageCount }) => {
   const printContext = useContext(PrintContext);
 
   const cb = () => {
