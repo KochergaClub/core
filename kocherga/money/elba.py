@@ -180,11 +180,6 @@ async def payments_page(browser):
 
 
 async def get_last_pko_id(page):
-    await page.click("#Filter_FormOfMoneyFilter_Caption")
-    await page.click(f'#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
-
-    await page.waitForXPath('//span[@id="Footer_MovementPeriod" and text()="Итого наличных"]')
-
     raise NotImplementedError
     # for el in await page.JJ('.paymentsList-item .g-col-44'):
     # ...
@@ -193,6 +188,11 @@ async def get_last_pko_id(page):
 async def add_cash_income(data, last_pko_id=None):
     async with get_browser() as browser:
         page = await payments_page(browser)
+
+        await page.click("#Filter_FormOfMoneyFilter_Caption")
+        await page.click(f'#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
+
+        await page.waitForXPath('//span[@id="Footer_MovementPeriod" and text()="Итого наличных"]')
 
         pko_id = last_pko_id or await get_last_pko_id(page)
         logger.info(f'Last pko_id: {pko_id}')
