@@ -39,12 +39,12 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
             return None
 
 
+# This serializer is not really necessary since we've removed its `instances` field.
 class DetailedEventPrototypeSerializer(EventPrototypeSerializer):
     class Meta:
         model = models.EventPrototype
         fields = FIELDS + (
             'suggested',
-            'instances',
         )
         read_only_fields = ('image', 'canceled_dates')
 
@@ -52,8 +52,3 @@ class DetailedEventPrototypeSerializer(EventPrototypeSerializer):
 
     def get_suggested(self, obj):
         return [dts(dt) for dt in obj.suggested_dates(limit=5)]
-
-    instances = serializers.SerializerMethodField()
-
-    def get_instances(self, obj):
-        return list(EventSerializer(obj.instances(limit=20), many=True).data)
