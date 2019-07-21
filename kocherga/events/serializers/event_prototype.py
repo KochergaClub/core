@@ -4,7 +4,6 @@ from django.conf import settings
 from kocherga.dateutils import dts
 
 from .. import models
-from .event import EventSerializer
 
 FIELDS = (
     'prototype_id',
