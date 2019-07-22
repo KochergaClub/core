@@ -75,11 +75,11 @@
       <img id="logo" src="{{ static('logo.png') }}" />
       <div class="texts">
         <header>
-          <div class="header-line1">Антикафе</div>
+          <div class="header-line1">Центр рациональности</div>
           <div class="header-line2">Кочерга</div>
         </header>
         <div class="now">
-          Сейчас в антикафе:
+          Сейчас в Кочерге:
           <span class="now-total {{'now-total--large' if now_total >= 20 else ('now-total--medium' if now_total >= 10 else '')}}">{{now_total}}</span>
           человек{{'а' if ((now_total % 100 < 10 or now_total % 100 > 20) and now_total % 10 in [2,3,4]) else ''}}
         </div>
