@@ -7,6 +7,8 @@ import { useAPI } from '~/common/hooks';
 import { FormField } from './types';
 import GenericForm from './GenericForm';
 
+import ButtonWithModal from './ButtonWithModal';
+
 interface Props {
   apiEndpoint: string;
   fields: FormField[];
@@ -58,21 +60,10 @@ const CreateModal = ({
 };
 
 const CreateButton = (props: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-
   return (
-    <>
-      <Button onClick={openModal}>Добавить</Button>
-      {isOpen && <CreateModal {...props} close={closeModal} />}
-    </>
+    <ButtonWithModal title="Добавить">
+      {({ close }) => <CreateModal {...props} close={close} />}
+    </ButtonWithModal>
   );
 };
 

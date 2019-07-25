@@ -113,6 +113,10 @@ export class API {
     }
   };
 
+  callDelete = async (path: string) => {
+    return await this.call(path, 'DELETE', undefined, false);
+  };
+
   callWagtail = async (path: string) => {
     return await this.call(`wagtail/${path}`, 'GET');
   };

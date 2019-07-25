@@ -4,6 +4,7 @@ import { A } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
+import DeleteButton from '~/components/crud/DeleteButton';
 
 import { User } from '../types';
 import { getCohortUsers } from '../api';
@@ -15,11 +16,16 @@ interface Props {
 }
 
 const MastermindCohortPage: React.FC<Props> = ({ cohort_id, users }) => (
-  <Page title="Аналитика мастермайнд-дейтинга" team>
+  <Page title={`Когорта ${cohort_id} | Мастермайнд-дейтинг`} team>
     <Page.Title>Мастермайнд-дейтинг</Page.Title>
     <Page.Main>
       <section>
         <A href="/team/mastermind_dating">&larr; к списку когорт</A>
+        <DeleteButton
+          endpoint="/mastermind_dating/cohort"
+          id={cohort_id}
+          redirectOnDelete="/team/mastermind_dating"
+        />
       </section>
       <h1>Когорта {cohort_id}</h1>
       <UserList users={users} />
