@@ -7,7 +7,7 @@ from . import models
 from . import serializers
 
 
-class CohortViewSet(viewsets.ReadOnlyModelViewSet):
+class CohortViewSet(viewsets.ModelViewSet):
     queryset = models.Cohort.objects.all()
     permission_classes = (IsAdminUser,)  # TODO - more specific permission?
     serializer_class = serializers.CohortSerializer

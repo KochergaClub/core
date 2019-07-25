@@ -5,17 +5,11 @@ import { A } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 
-import { Cohort } from './types';
+import { Cohort } from '../types';
+import { getCohorts } from '../api';
 
-const Cohorts = ({ cohorts }: { cohorts: Cohort[] }) => (
-  <ul>
-    {cohorts.map(cohort => (
-      <li key={cohort.id}>
-        <A href={`/team/mastermind_dating/cohort/${cohort.id}`}>{cohort.id}</A>
-      </li>
-    ))}
-  </ul>
-);
+import CohortList from '../components/CohortList';
+import CreateCohortButton from '../components/CreateCohortButton';
 
 interface Props {
   cohorts: Cohort[];
@@ -33,13 +27,14 @@ const MastermindIndexPage = ({ cohorts }: Props) => (
           </A>
         </small>
       </p>
-      <Cohorts cohorts={cohorts} />
+      <CohortList cohorts={cohorts} />
+      <CreateCohortButton />
     </Page.Main>
   </Page>
 );
 
 const getInitialData: InitialLoader<Props> = async ({ api }) => {
-  const cohorts = await api.call('mastermind_dating/cohort', 'GET');
+  const cohorts = await getCohorts(api);
   return {
     cohorts,
   };

@@ -1,14 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { A, Column } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '~/common/types';
-import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 
-import { User } from './types';
+import { User } from '../types';
 
 const Photo = styled.img`
   width: 200px;
@@ -16,7 +14,7 @@ const Photo = styled.img`
   object-fit: contain;
 `;
 
-const UserList = styled.div`
+const UserListContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 
@@ -54,8 +52,8 @@ const UserVoteForm = ({ user }: { user: User }) => {
   );
 };
 
-const Users = ({ users }: { users: User[] }) => (
-  <UserList>
+const UserList = ({ users }: { users: User[] }) => (
+  <UserListContainer>
     {users.map(user => (
       <UserContainer key={user.user_id}>
         <Column centered>
@@ -76,42 +74,7 @@ const Users = ({ users }: { users: User[] }) => (
         </Column>
       </UserContainer>
     ))}
-  </UserList>
+  </UserListContainer>
 );
 
-interface Props {
-  cohort_id: number;
-  users: User[];
-  children?: React.ReactNode;
-}
-
-const MastermindCohortPage = ({ cohort_id, users }: Props) => (
-  <Page title="Аналитика мастермайнд-дейтинга" team>
-    <Page.Title>Мастермайнд-дейтинг</Page.Title>
-    <Page.Main>
-      <section>
-        <A href="/team/mastermind_dating">&larr; к списку когорт</A>
-      </section>
-      <h1>Когорта {cohort_id}</h1>
-      <Users users={users} />
-    </Page.Main>
-  </Page>
-);
-
-const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
-  const users = await api.call(
-    `mastermind_dating/cohort/${params.id}/users`,
-    'GET'
-  );
-  return {
-    cohort_id: parseInt(params.id, 10),
-    users,
-  };
-};
-
-const screen: Screen<Props> = {
-  component: MastermindCohortPage,
-  getInitialData,
-};
-
-export default screen;
+export default UserList;
