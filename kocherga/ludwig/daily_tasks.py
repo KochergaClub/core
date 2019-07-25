@@ -30,7 +30,7 @@ def task_attachment(task, status='new'):
     else:
         crossed_out_text = f'~*{task.title}*~\n' + '\n'.join([
             '~' + part + '~'
-            for part in task.text.split('\n')
+            for part in task.text.replace('\r\n', '\n').split('\n')
         ])
         return {
             "title": None,
