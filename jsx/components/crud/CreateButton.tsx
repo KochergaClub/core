@@ -13,6 +13,7 @@ interface Props {
   apiEndpoint: string;
   fields: FormField[];
   displayName?: string;
+  onCreate: () => void;
 }
 
 interface ModalProps extends Props {
@@ -24,6 +25,7 @@ const CreateModal = ({
   apiEndpoint,
   close,
   displayName,
+  onCreate,
 }: ModalProps) => {
   const api = useAPI();
   const [fields, setFields] = useState(originalFields);
@@ -38,7 +40,10 @@ const CreateModal = ({
     });
     await api.call(apiEndpoint, 'POST', values);
     close();
-  }, [api, fields]);
+    if (onCreate) {
+      onCreate();
+    }
+  }, [api, fields, apiEndpoint, onCreate]);
 
   return (
     <Modal isOpen={true}>
