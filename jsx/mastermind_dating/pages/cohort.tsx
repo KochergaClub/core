@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { A } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
@@ -20,12 +20,17 @@ const MastermindCohortPage: React.FC<Props> = ({ cohort_id, users }) => (
     <Page.Title>Мастермайнд-дейтинг</Page.Title>
     <Page.Main>
       <section>
-        <A href="/team/mastermind_dating">&larr; к списку когорт</A>
-        <DeleteButton
-          endpoint="/mastermind_dating/cohort"
-          id={cohort_id}
-          redirectOnDelete="/team/mastermind_dating"
-        />
+        <Column>
+          <A href="/team/mastermind_dating">&larr; к списку когорт</A>
+          <A href={`/admin/mastermind_dating/cohort/${cohort_id}/change`}>
+            Редактировать в админке
+          </A>
+          <DeleteButton
+            endpoint="/mastermind_dating/cohort"
+            id={cohort_id}
+            redirectOnDelete="/team/mastermind_dating"
+          />
+        </Column>
       </section>
       <h1>Когорта {cohort_id}</h1>
       <UserList users={users} />

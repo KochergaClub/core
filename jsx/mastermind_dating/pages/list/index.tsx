@@ -1,7 +1,5 @@
 import React, { useReducer } from 'react';
 
-import { A } from '@kocherga/frontkit';
-
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 
@@ -28,13 +26,6 @@ const MastermindIndexPage = ({ cohorts }: Props) => {
       <Page.Title>Мастермайнд-дейтинг</Page.Title>
       <MastermindContext.Provider value={dispatch}>
         <Page.Main>
-          <p>
-            <small>
-              <A href="/admin/mastermind_dating/cohort/">
-                Редактировать когорты в админке
-              </A>
-            </small>
-          </p>
           <CohortList cohorts={store.cohorts} />
           <CreateCohortButton />
         </Page.Main>
