@@ -86,27 +86,26 @@ class Cohort(models.Model):
         (users, votes) = self.get_users_and_votes()
         n = len(users)
 
-        def prepare_data():
-            builder = []
-            for i in range(n):
-                builder.append('|\n')
-                for j in range(n):
-                    if i == j:
-                        vote = 0
-                    else:
-                        vote = votes[(i * n + j) - ((i * n + j) // (n + 1) + 1)].how
-                    builder.append(f"{['Y', 'O', 'N'][vote]},")
-            builder.append('|')
+        builder = []
+        for i in range(n):
+            builder.append('|\n')
+            for j in range(n):
+                if i == j:
+                    vote = 0
+                else:
+                    vote = votes[(i * n + j) - ((i * n + j) // (n + 1) + 1)].how
+                builder.append(f"{['Y', 'O', 'N'][vote]},")
+        builder.append('|')
 
-            unames = ",".join(map(lambda a: f"p{a}", range(n)))
-            dataset = "".join(builder)
+        unames = ",".join(map(lambda a: f"p{a}", range(n)))
+        dataset = "".join(builder)
 
-            return (
-                f"people={{{unames}}};"
-                "max_p_per_group = 5;"
-                f"max_Ns = {n * n};"
-                f"marks=[{dataset}];"
-            )
+        return (
+            f"people={{{unames}}};"
+            "max_p_per_group = 5;"
+            f"max_Ns = {n * n};"
+            f"marks=[{dataset}];"
+        )
 
     def run_solver(self):
         data = self.get_solver_data()
