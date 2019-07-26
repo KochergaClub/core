@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 from django.db import models
 
 import subprocess
-import typing
+from typing import List
 import json
 import random
 
@@ -46,10 +46,10 @@ class Cohort(models.Model):
         manager = rpc.get_client()
         manager.broadcast_solution(self.id)
 
-    def run_solver(self):
-        yall: typing.List[User] = list(self.users.filter(present=True).all())
+    def get_users_and_votes(self):
+        yall: List[User] = list(self.users.filter(present=True).all())
 
-        users: typing.List[User] = []
+        users: List[User] = []
         votes = []
         for u in yall:
             uvotes = list(Vote.objects.filter(who=u).iterator())
@@ -74,12 +74,17 @@ class Cohort(models.Model):
         votes = [vote for vote in votes if vote.whom in users]
         n = len(users)
         if len(votes) != n ** 2 - n:
-            logger.info("Not enough votes to do solving")
-            return None
+            raise Exception("Not enough votes to do solving")
 
         users.sort(key=lambda u: u.telegram_uid)
         votes.sort(key=lambda v: v.whom.telegram_uid)
         votes.sort(key=lambda v: v.who.telegram_uid)
+
+        return (users, votes)
+
+    def get_solver_data(self):
+        (users, votes) = self.get_users_and_votes()
+        n = len(users)
 
         def prepare_data():
             builder = []
@@ -103,8 +108,12 @@ class Cohort(models.Model):
                 f"marks=[{dataset}];"
             )
 
+    def run_solver(self):
+        data = self.get_solver_data()
         with open("data.dzn", mode="w") as f:
-            f.write(prepare_data())
+            f.write(data)
+
+        (users, votes) = self.get_users_and_votes()  # duplicate effort
 
         logger.info("Starting solver.")
         subprocess.run([
@@ -128,7 +137,7 @@ class Cohort(models.Model):
         groups = {group: [u for u in users if passoc[u] == group] for group in group_names}
 
         for group_id in groups.keys():
-            group: typing.List[User] = groups[group_id]
+            group: List[User] = groups[group_id]
 
             db_group = Group.objects.get_empty()
             for user in group:
