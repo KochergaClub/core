@@ -13,8 +13,7 @@ from django.views.decorators.http import require_safe
 from django.conf import settings
 
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework import generics, viewsets
+from rest_framework import status, generics, viewsets, filters
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny
@@ -31,6 +30,8 @@ from kocherga.api.common import ok
 class RootView(generics.ListCreateAPIView):
     permission_classes = (IsAdminUser,)
     serializer_class = serializers.EventSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title',)
 
     def get_queryset(self):
         def arg2date(arg):
@@ -39,7 +40,7 @@ class RootView(generics.ListCreateAPIView):
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        return Event.objects.list_events(
+        qs = Event.objects.list_events(
             date=arg2date("date"),
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
@@ -47,6 +48,7 @@ class RootView(generics.ListCreateAPIView):
          .prefetch_related('vk_announcement') \
          .prefetch_related('fb_announcement') \
          .prefetch_related('timepad_announcement')
+        return qs
 
     # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
     def post(self, request, *args, **kwargs):
