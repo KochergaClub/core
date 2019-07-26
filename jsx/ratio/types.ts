@@ -1,7 +1,7 @@
 export interface Training {
   id: number;
   name: string;
-  slug?: string;
+  slug: string;
   long_name: string;
   date: string;
   salaries_paid: boolean;

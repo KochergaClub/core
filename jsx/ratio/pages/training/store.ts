@@ -2,6 +2,13 @@ import React from 'react';
 
 import { Training, Ticket } from '../../types';
 
+interface ReplaceTicketsAction {
+  type: 'REPLACE_TICKETS';
+  payload: {
+    tickets: Ticket[];
+  };
+}
+
 interface TryTicketFiscalizeAction {
   type: 'TRY_TICKET_FISCALIZE';
   payload: {
@@ -16,7 +23,10 @@ interface TicketFiscalizedAction {
   };
 }
 
-type Action = TryTicketFiscalizeAction | TicketFiscalizedAction;
+type Action =
+  | ReplaceTicketsAction
+  | TryTicketFiscalizeAction
+  | TicketFiscalizedAction;
 
 interface Store {
   training: Training;
@@ -30,6 +40,11 @@ interface TrainingContextShape {
 
 export const reducer = (store: Store, action: Action): Store => {
   switch (action.type) {
+    case 'REPLACE_TICKETS':
+      return {
+        ...store,
+        tickets: action.payload.tickets,
+      };
     case 'TRY_TICKET_FISCALIZE':
       return {
         ...store,
@@ -65,6 +80,7 @@ export const TrainingContext = React.createContext<TrainingContextShape>({
     training: {
       id: 0,
       name: 'fake',
+      slug: 'slug',
       long_name: 'long fake name',
       date: '2000-01-01',
       salaries_paid: false,

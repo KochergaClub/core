@@ -1,8 +1,9 @@
-import React, { useReducer } from 'react';
+import React, { useCallback, useReducer } from 'react';
 
 import { A, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
+import { useAPI } from '~/common/hooks';
 import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 import CreateButton from '~/components/crud/CreateButton';
@@ -36,7 +37,13 @@ const TrainingActionButton = ({
   return <ActionButton path={path}>{children}</ActionButton>;
 };
 
-const CreateTicketButton = ({ training_id }: { training_id: number }) => {
+const CreateTicketButton = ({
+  training_id,
+  onCreate,
+}: {
+  training_id: number;
+  onCreate: () => void;
+}) => {
   const fields: FormField[] = [
     { name: 'training', type: 'number', readonly: true, value: training_id },
     { name: 'email', type: 'string' },
@@ -50,7 +57,13 @@ const CreateTicketButton = ({ training_id }: { training_id: number }) => {
     },
   ];
 
-  return <CreateButton apiEndpoint="/ratio/ticket" fields={fields} />;
+  return (
+    <CreateButton
+      apiEndpoint="/ratio/ticket"
+      fields={fields}
+      onCreate={onCreate}
+    />
+  );
 };
 
 const RatioTrainingPage = (props: Props) => {
@@ -58,6 +71,16 @@ const RatioTrainingPage = (props: Props) => {
     training: props.training,
     tickets: props.tickets,
   });
+
+  const api = useAPI();
+
+  const onCreateTicket = useCallback(async () => {
+    const tickets = await getTickets(api, store.training.slug);
+    dispatch({
+      type: 'REPLACE_TICKETS',
+      payload: { tickets },
+    });
+  }, [api, store.training.slug]);
 
   return (
     <KkmContext.Provider value={{ password: props.kkmPassword }}>
@@ -88,7 +111,10 @@ const RatioTrainingPage = (props: Props) => {
                 </A>
               </h2>
               <TicketList tickets={store.tickets} />
-              <CreateTicketButton training_id={store.training.id} />
+              <CreateTicketButton
+                training_id={store.training.id}
+                onCreate={onCreateTicket}
+              />
             </section>
 
             <Column>
