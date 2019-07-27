@@ -26,7 +26,7 @@ class Cohort(models.Model):
             raise Exception("Cohort doesn't have an associated event")
 
         for kocherga_user in self.event.registered_users():
-            user = User.objects.get_or_create(user=kocherga_user)
+            (user, _) = User.objects.get_or_create(user=kocherga_user)
             user.cohorts.add(self)
         # TODO - remove stale users (people can cancel their registrations)
 

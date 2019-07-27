@@ -12,10 +12,10 @@ def test_get_empty():
 
     assert Group.objects.get_empty().telegram_invite_link == 'abc'
 
-    User.objects.create(
+    user = User.objects.create(
         group=g1,
-        cohort=Cohort.objects.create(),
         user=get_user_model().objects.create_user('test@example.com'),
     )
+    user.cohorts.add(Cohort.objects.create())
 
     assert Group.objects.get_empty().telegram_invite_link == 'def'
