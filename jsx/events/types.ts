@@ -57,6 +57,15 @@ export interface ServerEvent {
   type: 'public' | 'private' | 'unknown';
 }
 
+export interface NewEvent {
+  title: string;
+  description?: string;
+  location: string;
+  start: Date;
+  end: Date;
+  type?: 'public' | 'private' | 'unknown';
+}
+
 // Supports client-side state such as event.saving flag.
 // We store LocalEvent objects in React state but accept Event objects when interacting with API.
 export interface LocalEvent extends Event {

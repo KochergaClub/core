@@ -4,7 +4,8 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
 import { timezone, formatDate } from '../../common/utils';
-import { Event, ServerEvent, serverEventToEvent } from '../types';
+import { Event } from '../types';
+import { createEvent } from '../api';
 
 import EventFields from './EventFields';
 
@@ -34,15 +35,14 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
     }
 
     setSaving(true);
-    const json = (await api.call('events', 'POST', {
+
+    const event = await createEvent(api, {
       start,
       end,
       title,
       description,
       location: room,
-    })) as ServerEvent;
-
-    const event = serverEventToEvent(json);
+    });
     onCreate(event);
   }, [api, title, description, room, start, end, saveDisabled, onCreate]);
 

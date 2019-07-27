@@ -6,7 +6,8 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
 import { timezone, formatDate } from '../../common/utils';
-import { Event, LocalEvent, ServerEvent, serverEventToEvent } from '../types';
+import { Event, LocalEvent } from '../types';
+import { deleteEvent, patchEvent } from '../api';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
@@ -47,18 +48,19 @@ const EditEventModal = ({
       return;
     }
     setSaving(true);
-    const json = (await api.call(`event/${event.id}`, 'PATCH', {
+
+    const patchedEvent = await patchEvent(api, event, {
       title,
       description,
       location: room,
-    })) as ServerEvent;
+    });
 
-    onSave(serverEventToEvent(json));
+    onSave(patchedEvent);
   }, [api, onSave, event.id, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
     setDeleting(true);
-    await api.call(`event/${event.id}`, 'DELETE', undefined, false);
+    await deleteEvent(api, event);
     onDelete(event.id);
   }, [api, onDelete, event.id]);
 

@@ -5,7 +5,6 @@ import { addWeeks, subWeeks } from 'date-fns';
 
 import { Screen, InitialLoader } from '../common/types';
 import { timezone } from '../common/utils';
-import { API } from '../common/api';
 import Page from '../components/Page';
 import { useListeningWebSocket, useAPI } from '../common/hooks';
 
@@ -21,6 +20,8 @@ import {
   reducer,
   serverEventToEvent,
 } from './types';
+
+import { getEventsInRange, patchEvent } from './api';
 
 import { uiReducer, initialUIState } from './uiTypes';
 
@@ -44,18 +45,6 @@ const eventPropGetter = (event: LocalEvent) => {
   };
 };
 
-interface Range {
-  start: string; // YYYY-MM-DD format; not Date, because it needs to be serializable
-  end: string;
-}
-
-const loadEventsInRange = async (api: API, range: Range) => {
-  return (await api.call(
-    `events?from_date=${range.start}&to_date=${range.end}`,
-    'GET'
-  )) as ServerEvent[];
-};
-
 interface Props {
   events: ServerEvent[];
   range: { start: string; end: string };
@@ -73,7 +62,7 @@ const EventsPage = (props: Props) => {
   }));
 
   const fetchEvents = useCallback(async () => {
-    const json = await loadEventsInRange(api, {
+    const json = await getEventsInRange(api, {
       start: format(range.start, 'yyyy-MM-dd'),
       end: format(range.end, 'yyyy-MM-dd'),
     });
@@ -166,14 +155,11 @@ const EventsPage = (props: Props) => {
         },
       });
 
-      const json = await api.call(`event/${event.id}`, 'PATCH', {
-        start,
-        end,
-      });
+      const patchedEvent = await patchEvent(api, event, { start, end });
 
       dispatch({
         type: 'PATCH',
-        payload: { event: serverEventToEvent(json) },
+        payload: { event: patchedEvent },
       });
     },
     [api]
@@ -213,7 +199,7 @@ const getInitialData: InitialLoader<Props> = async ({ api }) => {
     end: format(addWeeks(new Date(), 3), 'yyyy-MM-dd'),
   };
 
-  const events = await loadEventsInRange(api, range);
+  const events = await getEventsInRange(api, range);
 
   return {
     events,
