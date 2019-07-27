@@ -3,7 +3,6 @@ export interface Cohort {
   event_id?: string;
   event_title?: string;
   event_start?: string;
-  sent_emails: boolean;
 }
 
 export interface User {
@@ -14,4 +13,5 @@ export interface User {
   photo: string;
   voted_for: boolean;
   present: boolean;
+  invite_email_sent: boolean;
 }

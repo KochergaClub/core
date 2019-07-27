@@ -19,7 +19,6 @@ from .. import rpc
 
 class Cohort(models.Model):
     event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
-    sent_emails = models.BooleanField(default=False)
 
     def populate_from_event(self):
         if not self.event:
@@ -31,14 +30,9 @@ class Cohort(models.Model):
         # TODO - remove stale users (people can cancel their registrations)
 
     def send_invite_emails(self, force=False):
-        if self.sent_emails and not force:
-            raise Exception("Already sent invite emails")
-
         for user in self.users.all():
-            user.send_invite_email(self)
-
-        self.sent_emails = True
-        self.save()
+            if not user.invite_email_sent:
+                user.send_invite_email(self)
 
     def broadcast_solution(self):
         manager = rpc.get_client()

@@ -1,12 +1,10 @@
-import React, { useCallback, useContext } from 'react';
+import React from 'react';
 
-import { useAPI } from '~/common/hooks';
 import { FormField } from '~/components/crud/types';
 import CreateButton from '~/components/crud/CreateButton';
 
-import { MastermindContext } from '../reducer';
-import { getCohortUsers } from '../../../api';
 import { Cohort } from '../../../types';
+import { useCohortUsersReloader } from '../hooks';
 
 interface Props {
   cohort: Cohort;
@@ -17,25 +15,15 @@ const CreateUserButton = ({ cohort }: Props) => {
     { name: 'cohort_id', type: 'number', readonly: true, value: cohort.id },
     { name: 'email', type: 'string' },
   ];
-  const dispatch = useContext(MastermindContext);
-  const api = useAPI();
 
-  const onCreate = useCallback(async () => {
-    const users = await getCohortUsers(api, cohort.id);
-    dispatch({
-      type: 'REPLACE_USERS',
-      payload: {
-        users,
-      },
-    });
-  }, [api]);
+  const cohortUsersReloader = useCohortUsersReloader(cohort);
 
   return (
     <CreateButton
       apiEndpoint="/mastermind_dating/user"
       fields={fields}
       displayName="Участник дейтинга"
-      onCreate={onCreate}
+      onCreate={cohortUsersReloader}
     />
   );
 };

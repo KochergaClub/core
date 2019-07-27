@@ -74,6 +74,7 @@ class User(models.Model):
     chat_id = models.IntegerField(null=True, blank=True)
     voted_for = models.BooleanField(default=False)
     present = models.BooleanField(default=False)
+    invite_email_sent = models.BooleanField(default=False)
 
     cohorts = models.ManyToManyField('Cohort', related_name='users')
 
@@ -125,6 +126,9 @@ class User(models.Model):
         return self.generate_link()
 
     def send_invite_email(self, cohort):
+        if self.invite_email_sent:
+            raise Exception("Already sent invite email")
+
         bot_link = self.telegram_link()
         bot_token = str(self.generate_token(), 'utf-8')
         start_time = timezone.localtime(cohort.event.start).strftime('%H:%M') if cohort.event else None
@@ -148,6 +152,8 @@ class User(models.Model):
             recipient_list=[self.user.email],
         )
         logger.info(f'sent email to {self.user.email}')
+        self.invite_email_sent = True
+        self.save()
 
     def tinder_activate(self):
         manager = rpc.get_client()

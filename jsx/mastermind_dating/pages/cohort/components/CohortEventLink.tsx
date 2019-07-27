@@ -92,9 +92,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
         <div>
           Связанное событие:{' '}
           <A
-            href={`https://evenman.team.kocherga.club/events/${
-              cohort.event_id
-            }`}
+            href={`https://evenman.team.kocherga.club/event/${cohort.event_id}`}
           >
             {cohort.event_title}
           </A>

@@ -7,8 +7,7 @@ import { Cohort, User } from '../../types';
 import { getCohort, getCohortUsers } from '../../api';
 
 import Controls from './components/Controls';
-import UserList from './components/UserList';
-import CreateUserButton from './components/CreateUserButton';
+import UserSection from './components/UserSection';
 
 import { reducer, MastermindContext } from './reducer';
 
@@ -26,12 +25,14 @@ const MastermindCohortPage: React.FC<Props> = props => {
   return (
     <MastermindContext.Provider value={dispatch}>
       <Page title={`Когорта ${store.cohort.id} | Мастермайнд-дейтинг`} team>
-        <Page.Title>Мастермайнд-дейтинг</Page.Title>
+        <Page.Title>Мастермайнд-дейтинг. Когорта {store.cohort.id}</Page.Title>
         <Page.Main>
           <Controls cohort={store.cohort} />
-          <h1>Когорта {store.cohort.id}</h1>
-          <UserList users={store.users} />
-          <CreateUserButton cohort={store.cohort} />
+          <UserSection cohort={store.cohort} users={store.users} />
+          <section>
+            <h1>Группы</h1>
+            TODO
+          </section>
         </Page.Main>
       </Page>
     </MastermindContext.Provider>
