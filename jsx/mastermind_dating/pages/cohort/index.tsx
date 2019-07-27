@@ -8,6 +8,7 @@ import { getCohort, getCohortUsers } from '../../api';
 
 import Controls from './components/Controls';
 import UserList from './components/UserList';
+import CreateUserButton from './components/CreateUserButton';
 
 import { reducer, MastermindContext } from './reducer';
 
@@ -30,6 +31,7 @@ const MastermindCohortPage: React.FC<Props> = props => {
           <Controls cohort={store.cohort} />
           <h1>Когорта {store.cohort.id}</h1>
           <UserList users={store.users} />
+          <CreateUserButton cohort={store.cohort} />
         </Page.Main>
       </Page>
     </MastermindContext.Provider>

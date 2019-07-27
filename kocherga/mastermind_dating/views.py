@@ -53,7 +53,7 @@ class CohortViewSet(viewsets.ModelViewSet):
         return Response('ok')
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     permission_classes = (IsAdminUser,)
     serializer_class = serializers.UserSerializer

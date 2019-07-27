@@ -24,11 +24,13 @@ const Controls: React.FC<Props> = ({ cohort }) => (
           Загрузить пользователей из события
         </ActionButton>
       )}
-      <ActionButton
-        path={`/mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
-      >
-        Разослать приглашения в бота
-      </ActionButton>
+      {cohort.sent_emails || (
+        <ActionButton
+          path={`/mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
+        >
+          Разослать приглашения в бота
+        </ActionButton>
+      )}
       <DeleteButton
         endpoint="/mastermind_dating/cohort"
         id={cohort.id}

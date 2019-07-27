@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 
 from . import models
@@ -18,4 +20,30 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ('user_id', 'user', 'name', 'desc', 'photo', 'telegram_link', 'voted_for', 'present')
+        fields = (
+            'user_id', 'user', 'name', 'desc', 'photo', 'telegram_link', 'voted_for', 'present', 'cohort_id', 'email'
+        )
+        read_only_fields = (
+            'user_id', 'user', 'name', 'desc', 'photo', 'telegram_link', 'voted_for', 'present'
+        )
+
+    email = serializers.CharField(write_only=True)
+    cohort_id = serializers.IntegerField(write_only=True)
+
+    def create(self, validated_data):
+        email = validated_data['email']
+        cohort_id = validated_data['cohort_id']
+
+        KchUser = get_user_model()
+        try:
+            kocherga_user = KchUser.objects.get(email=email)
+        except KchUser.DoesNotExist:
+            kocherga_user = KchUser.objects.create_user(email)
+
+        (user, _) = models.User.objects.get_or_create(
+            user=kocherga_user
+        )
+        cohort = models.Cohort.objects.get(pk=cohort_id)
+
+        user.cohorts.add(cohort)
+        return user

@@ -35,7 +35,7 @@ class Cohort(models.Model):
             raise Exception("Already sent invite emails")
 
         for user in self.users.all():
-            user.send_invite_email()
+            user.send_invite_email(self)
 
         self.sent_emails = True
         self.save()
