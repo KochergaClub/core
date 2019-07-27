@@ -26,11 +26,9 @@ class Cohort(models.Model):
             raise Exception("Cohort doesn't have an associated event")
 
         for kocherga_user in self.event.registered_users():
-            User.objects.create(
-                user=kocherga_user,
-                cohort=self,
-            )
-            # TODO - remove everyone else (people can cancel their registrations)
+            user = User.objects.get_or_create(user=kocherga_user)
+            user.cohorts.add(self)
+        # TODO - remove stale users (people can cancel their registrations)
 
     def send_invite_emails(self, force=False):
         if self.sent_emails and not force:

@@ -74,8 +74,7 @@ class User(models.Model):
     voted_for = models.BooleanField(default=False)
     present = models.BooleanField(default=False)
 
-    # TODO - one user can belong to mutliple cohorts
-    cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='users')
+    cohorts = models.ManyToManyField('Cohort', related_name='users')
 
     group = models.ForeignKey('Group', on_delete=models.PROTECT, related_name='users', blank=True, null=True)
 
