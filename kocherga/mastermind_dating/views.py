@@ -40,6 +40,18 @@ class CohortViewSet(viewsets.ModelViewSet):
             self.serializer_class(cohort).data
         )
 
+    @action(detail=True, methods=['post'])
+    def populate_from_event(self, request, **kwargs):
+        cohort = self.get_object()
+        cohort.populate_from_event()
+        return Response('ok')
+
+    @action(detail=True, methods=['post'])
+    def send_invite_emails(self, request, **kwargs):
+        cohort = self.get_object()
+        cohort.send_invite_emails()
+        return Response('ok')
+
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.User.objects.all()

@@ -19,6 +19,7 @@ interface Props {
 const MastermindCohortPage: React.FC<Props> = props => {
   const [store, dispatch] = useReducer(reducer, {
     cohort: props.cohort,
+    users: props.users,
   });
 
   return (
@@ -28,7 +29,7 @@ const MastermindCohortPage: React.FC<Props> = props => {
         <Page.Main>
           <Controls cohort={store.cohort} />
           <h1>Когорта {store.cohort.id}</h1>
-          <UserList users={props.users} />
+          <UserList users={store.users} />
         </Page.Main>
       </Page>
     </MastermindContext.Provider>
