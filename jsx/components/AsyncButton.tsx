@@ -4,10 +4,11 @@ import { Button } from '@kocherga/frontkit';
 
 interface Props {
   act: () => Promise<void>;
+  small?: boolean;
   children?: React.ReactNode;
 }
 
-const AsyncButton = ({ act, children }: Props) => {
+const AsyncButton = ({ act, children, small }: Props) => {
   const [loading, setLoading] = useState(false);
 
   const cb = useCallback(async () => {
@@ -21,7 +22,7 @@ const AsyncButton = ({ act, children }: Props) => {
   }, [act]);
 
   return (
-    <Button loading={loading} disabled={loading} onClick={cb}>
+    <Button loading={loading} disabled={loading} onClick={cb} small={small}>
       {children}
     </Button>
   );

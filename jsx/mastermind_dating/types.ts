@@ -1,5 +1,8 @@
 export interface Cohort {
   id: number;
+  event_id?: string;
+  event_title?: string;
+  send_emails: boolean;
 }
 
 export interface User {

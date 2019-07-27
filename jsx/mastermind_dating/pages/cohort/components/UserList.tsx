@@ -6,7 +6,7 @@ import { Column } from '@kocherga/frontkit';
 
 import ActionButton from '~/components/ActionButton';
 
-import { User } from '../types';
+import { User } from '../../../types';
 
 const Photo = styled.img`
   width: 200px;
