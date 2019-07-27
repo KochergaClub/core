@@ -81,15 +81,13 @@ class TimepadAnnouncement(models.Model):
 
     def description(self):
         event = self.event
-        tail = f"*{event.timing_description} в антикафе Кочерга.*\n\n"
-        if event.vk_announcement:
-            tail += "* [Мероприятие вконтакте](https://vk.com/" + event.vk_announcement.group + ")\n"
+        tail = f"*{event.timing_description} в [центре рациональности Кочерга]({settings.KOCHERGA_WEBSITE}).*\n\n"
+        if event.vk_announcement.group:
+            link = "https://vk.com/" + event.vk_announcement.group
+            tail += f'* <a href="{link}" target="_blank">Мероприятие вконтакте</a>\n'
         if event.fb_announcement.group:
-            tail += (
-                "* [Мероприятие в facebook](https://www.facebook.com/groups/"
-                + event.fb_announcement.group
-                + ")\n"
-            )
+            link = "https://www.facebook.com/groups/" + event.fb_announcement.group
+            tail += f'* <a href="{link}" target="_blank">Мероприятие в facebook</a>\n'
 
         text = event.description + "\n\n---\n\n" + tail
         return kocherga.events.markup.Markup(text).as_html()
