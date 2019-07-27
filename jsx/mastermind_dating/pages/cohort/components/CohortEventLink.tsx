@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react';
 import { Async } from 'react-select';
 
-import { format, parseISO } from 'date-fns';
+import { format, subWeeks, parseISO } from 'date-fns';
 
 import { A, Label, Row } from '@kocherga/frontkit';
 import { useAPI } from '~/common/hooks';
@@ -28,8 +28,9 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   const loadEvents = useCallback(
     async (inputValue: string, callback: (options: any[]) => void) => {
       try {
+        const fromDate = format(subWeeks(new Date(), 4), 'yyyy-MM-dd');
         const events = (await api.call(
-          `/events?search=${inputValue}`,
+          `/events?search=${inputValue}&from_date=${fromDate}`,
           'GET'
         )) as ServerEvent[];
         callback(
