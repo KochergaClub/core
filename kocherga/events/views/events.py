@@ -13,7 +13,7 @@ from django.views.decorators.http import require_safe
 from django.conf import settings
 
 from rest_framework.views import APIView
-from rest_framework import status, generics, viewsets, filters
+from rest_framework import status, generics, viewsets, filters, pagination
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, AllowAny
@@ -70,6 +70,16 @@ class RootView(generics.ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class EventsPagination(pagination.PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
+class PagedRootView(RootView):
+    pagination_class = EventsPagination
 
 
 class ObjectView(generics.RetrieveUpdateDestroyAPIView):

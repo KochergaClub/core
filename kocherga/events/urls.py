@@ -9,6 +9,7 @@ router = routers.SimpleRouter(trailing_slash=False)
 # Events
 urlpatterns += [
     path('events', views.events.RootView.as_view()),
+    path('events-paged', views.events.PagedRootView.as_view()),
 
     # legacy
     path('event/<event_id>', views.events.ObjectView.as_view()),
