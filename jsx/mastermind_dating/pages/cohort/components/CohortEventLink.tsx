@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react';
 import { Async } from 'react-select';
 
-import { format, subWeeks, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 
 import { A, Label, Row } from '@kocherga/frontkit';
 import { useAPI } from '~/common/hooks';
@@ -9,6 +9,7 @@ import { useAPI } from '~/common/hooks';
 import ConfirmModal from '~/components/ConfirmModal';
 import AsyncButton from '~/components/AsyncButton';
 import { ServerEvent } from '~/events/types';
+import { searchEvents } from '~/events/api';
 
 import { Cohort } from '../../../types';
 import { MastermindContext } from '../reducer';
@@ -28,17 +29,11 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   const loadEvents = useCallback(
     async (inputValue: string, callback: (options: any[]) => void) => {
       try {
-        const fromDate = format(subWeeks(new Date(), 4), 'yyyy-MM-dd');
-        const events = (await api.call(
-          `/events?search=${inputValue}&from_date=${fromDate}`,
-          'GET'
-        )) as ServerEvent[];
+        const events = await searchEvents(api, { query: inputValue });
+
         callback(
           events.map(event => {
-            const label = `${event.title} ${format(
-              parseISO(event.start),
-              'yyyy-MM-dd'
-            )}`;
+            const label = `${event.title} ${format(event.start, 'yyyy-MM-dd')}`;
             return {
               value: event,
               label,

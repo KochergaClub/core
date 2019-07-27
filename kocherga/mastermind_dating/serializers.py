@@ -6,10 +6,11 @@ from . import models
 class CohortSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cohort
-        fields = ('id', 'sent_emails', 'event_id', 'event_title')
+        fields = ('id', 'sent_emails', 'event_id', 'event_title', 'event_start')
 
-    event_id = serializers.CharField(source='event.pk', required=False)
-    event_title = serializers.CharField(source='event.title', required=False)
+    event_id = serializers.CharField(source='event.pk', required=False, read_only=True)
+    event_title = serializers.CharField(source='event.title', required=False, read_only=True)
+    event_start = serializers.DateTimeField(source='event.start', required=False, read_only=True)
 
 
 class UserSerializer(serializers.ModelSerializer):

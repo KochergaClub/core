@@ -2,6 +2,7 @@ export interface Cohort {
   id: number;
   event_id?: string;
   event_title?: string;
+  event_start?: string;
   send_emails: boolean;
 }
 

@@ -1,12 +1,6 @@
 import { API } from '~/common/api';
 
-import {
-  Event,
-  ServerEvent,
-  LocalEvent,
-  NewEvent,
-  serverEventToEvent,
-} from './types';
+import { Event, ServerEvent, NewEvent, serverEventToEvent } from './types';
 
 export interface Range {
   // YYYY-MM-DD format; not Date, because it needs to be serializable.
@@ -19,6 +13,18 @@ export const getEventsInRange = async (api: API, range: Range) => {
     `events?from_date=${range.start}&to_date=${range.end}`,
     'GET'
   )) as ServerEvent[];
+};
+
+export const searchEvents = async (
+  api: API,
+  { query }: { query: string }
+): Promise<Event[]> => {
+  const { results: serverEvents } = (await api.call(
+    `events-paged?search=${query}`,
+    'GET'
+  )) as { results: ServerEvent[] };
+
+  return serverEvents.map(serverEventToEvent);
 };
 
 // FIXME - EventPatch interface
