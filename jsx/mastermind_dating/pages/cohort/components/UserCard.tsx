@@ -81,7 +81,6 @@ const UserCard: React.FC<Props> = props => {
         <span>{user.user}</span>
         <strong>{user.name || 'НЕ ЗАРЕГИСТРИРОВАН'}</strong>
       </Column>
-      <UserDescription>{user.desc}</UserDescription>
       <Column centered>
         {user.photo ? <Photo src={user.photo} /> : <EmptyPhoto />}
         <ActionButton
@@ -92,6 +91,7 @@ const UserCard: React.FC<Props> = props => {
         </ActionButton>
         {user.present && <UserVoteForm {...props} />}
       </Column>
+      <UserDescription>{user.desc}</UserDescription>
     </UserContainer>
   );
 };
