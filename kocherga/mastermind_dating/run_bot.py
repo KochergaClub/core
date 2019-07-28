@@ -24,7 +24,7 @@ def get_server(evloop, bot):
         return run
 
     manager = BaseManager(address=('', 44444), authkey=b"django_sec_key")
-    manager.register("tinder_activate", run_async(lambda user_id: tinder_activate(user_id, bot)))
+    manager.register("tinder_activate", run_async(lambda participant_id: tinder_activate(participant_id, bot)))
     manager.register("broadcast_solution", run_async(lambda cohort_id: broadcast_solution(cohort_id, bot)))
     server = manager.get_server()
 
@@ -57,6 +57,10 @@ def init():
 
     dsp = Dispatcher(bot)
     register_handlers(dsp)
+
+    # check connection
+    me = evloop.run_until_complete(dsp.bot.me)
+    logger.info(me)
 
     init_rpc(evloop, bot)
     executor.start_polling(dsp)

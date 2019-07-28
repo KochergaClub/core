@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Cohort, User, Group } from '../../types';
+import { Cohort, Participant, Group } from '../../types';
 
 interface ReplaceCohortAction {
   type: 'REPLACE_COHORT';
@@ -9,10 +9,10 @@ interface ReplaceCohortAction {
   };
 }
 
-interface ReplaceUsersAction {
-  type: 'REPLACE_USERS';
+interface ReplaceParticipantsAction {
+  type: 'REPLACE_PARTICIPANTS';
   payload: {
-    users: User[];
+    participants: Participant[];
   };
 }
 
@@ -23,11 +23,14 @@ interface ReplaceGroupsAction {
   };
 }
 
-type Action = ReplaceCohortAction | ReplaceUsersAction | ReplaceGroupsAction;
+type Action =
+  | ReplaceCohortAction
+  | ReplaceParticipantsAction
+  | ReplaceGroupsAction;
 
 interface Store {
   cohort: Cohort;
-  users: User[];
+  participants: Participant[];
   groups: Group[];
 }
 
@@ -38,10 +41,10 @@ export const reducer = (store: Store, action: Action): Store => {
         ...store,
         cohort: action.payload.cohort,
       };
-    case 'REPLACE_USERS':
+    case 'REPLACE_PARTICIPANTS':
       return {
         ...store,
-        users: action.payload.users,
+        participants: action.payload.participants,
       };
     case 'REPLACE_GROUPS':
       return {

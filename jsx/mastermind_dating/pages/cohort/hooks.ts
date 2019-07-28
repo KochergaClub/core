@@ -2,22 +2,22 @@ import { useCallback, useContext } from 'react';
 
 import { useAPI } from '~/common/hooks';
 
-import { getCohortUsers, getCohortGroups } from '../../api';
+import { getCohortParticipants, getCohortGroups } from '../../api';
 
 import { Cohort } from '../../types';
 
 import { MastermindContext } from './reducer';
 
-export const useCohortUsersReloader = (cohort: Cohort) => {
+export const useCohortParticipantsReloader = (cohort: Cohort) => {
   const api = useAPI();
   const dispatch = useContext(MastermindContext);
 
   return useCallback(async () => {
-    const users = await getCohortUsers(api, cohort.id);
+    const participants = await getCohortParticipants(api, cohort.id);
     dispatch({
-      type: 'REPLACE_USERS',
+      type: 'REPLACE_PARTICIPANTS',
       payload: {
-        users,
+        participants,
       },
     });
   }, [api, cohort.id]);

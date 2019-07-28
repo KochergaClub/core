@@ -15,19 +15,19 @@ class CohortSerializer(serializers.ModelSerializer):
     event_start = serializers.DateTimeField(source='event.start', required=False, read_only=True)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ParticipantSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
 
     class Meta:
-        model = models.User
+        model = models.Participant
         fields = (
             'cohort_id', 'email',
-            'user_id', 'user',
+            'id', 'user',
             'name', 'desc', 'photo', 'telegram_link',
             'voted_for', 'present', 'invite_email_sent',
         )
         read_only_fields = (
-            'user_id', 'user',
+            'id', 'user',
             'name', 'desc', 'photo', 'telegram_link',
             'voted_for', 'present', 'invite_email_sent',
         )
@@ -45,13 +45,13 @@ class UserSerializer(serializers.ModelSerializer):
         except KchUser.DoesNotExist:
             kocherga_user = KchUser.objects.create_user(email)
 
-        (user, _) = models.User.objects.get_or_create(
-            user=kocherga_user
-        )
         cohort = models.Cohort.objects.get(pk=cohort_id)
+        (participant, _) = models.Participant.objects.get_or_create(
+            user=kocherga_user,
+            cohort=cohort,
+        )
 
-        user.cohorts.add(cohort)
-        return user
+        return participant
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -60,7 +60,7 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'telegram_invite_link',
-            'users',
+            'participants',
         )
 
-    users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    participants = serializers.PrimaryKeyRelatedField(many=True, read_only=True)

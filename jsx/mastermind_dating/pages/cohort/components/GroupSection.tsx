@@ -4,13 +4,13 @@ import { A } from '@kocherga/frontkit';
 
 import ActionButton from '~/components/ActionButton';
 
-import { Cohort, User, Group } from '../../../types';
+import { Cohort, Participant, Group } from '../../../types';
 
 import { useCohortGroupsReloader } from '../hooks';
 
 interface Props {
   cohort: Cohort;
-  users: User[];
+  participants: Participant[];
   groups: Group[];
 }
 
@@ -20,7 +20,7 @@ const GroupInfo = ({ group }: { group: Group }) => {
       <div>
         <A href={group.telegram_invite_link}>{group.telegram_invite_link}</A>
       </div>
-      <div>Участников: {group.users.length}</div>
+      <div>Участников: {group.participants.length}</div>
     </div>
   );
 };

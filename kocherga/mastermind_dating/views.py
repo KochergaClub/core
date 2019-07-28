@@ -14,10 +14,10 @@ class CohortViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CohortSerializer
 
     @action(detail=True)
-    def users(self, request, pk=None):
+    def participants(self, request, pk=None):
         cohort = self.get_object()
         return Response(
-            serializers.UserSerializer(cohort.users, many=True).data
+            serializers.ParticipantSerializer(cohort.participants, many=True).data
         )
 
     @action(detail=True, methods=['post'])
@@ -68,20 +68,20 @@ class CohortViewSet(viewsets.ModelViewSet):
         )
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = models.User.objects.all()
+class ParticipantViewSet(viewsets.ModelViewSet):
+    queryset = models.Participant.objects.all()
     permission_classes = (IsAdminUser,)
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.ParticipantSerializer
 
     @action(detail=True, methods=['post'])
     def tinder_activate(self, request, pk=None):
-        user = self.get_object()
-        user.tinder_activate()
+        participant = self.get_object()
+        participant.tinder_activate()
         return Response('ok')
 
     @action(detail=True, methods=['post'])
     def flip_present(self, request, pk=None):
-        user = self.get_object()
-        user.present = not user.present
-        user.save()
+        participant = self.get_object()
+        participant.present = not participant.present
+        participant.save()
         return Response('ok')

@@ -85,6 +85,17 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
 
+  tgbot:
+    << : *common
+    command: ./scripts/tgbot.py
+    depends_on:
+      - db
+      - tor
+
+  tor:
+    image: dperson/torproxy
+
+
 volumes:
   code:
     external: true

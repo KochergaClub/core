@@ -10,7 +10,7 @@ import random
 
 from kocherga.events.models import Event as KchEvent
 
-from .user import User
+from .participant import Participant
 from .vote import Vote
 from .group import Group
 
@@ -26,58 +26,61 @@ class Cohort(models.Model):
             raise Exception("Cohort doesn't have an associated event")
 
         for kocherga_user in self.event.registered_users():
-            (user, _) = User.objects.get_or_create(user=kocherga_user)
-            user.cohorts.add(self)
-        # TODO - remove stale users (people can cancel their registrations)
+            (participant, _) = Participant.objects.get_or_create(user=kocherga_user)
+            participant.cohort = self
+            participant.save()
+        # TODO - remove stale participants (people can cancel their registrations)
 
     def send_invite_emails(self, force=False):
-        for user in self.users.all():
-            if not user.invite_email_sent:
-                user.send_invite_email(self)
+        for participant in self.participants.all():
+            if not participant.invite_email_sent:
+                participant.send_invite_email()
 
     def broadcast_solution(self):
         manager = rpc.get_client()
         manager.broadcast_solution(self.id)
 
-    def get_users_and_votes(self):
-        yall: List[User] = list(self.users.filter(present=True).all())
+    def get_participants_and_votes(self):
+        yall: List[Participant] = list(self.participants.filter(present=True).all())
 
-        users: List[User] = []
+        participants: List[Participant] = []
         votes = []
         for u in yall:
             uvotes = list(Vote.objects.filter(who=u).iterator())
             if len(uvotes) == 0:
+                handle = random.choice(['mushroom', 'cow', 'goat', 'participant'])
                 logger.info(
-                    f"User {u.telegram_uid}({u.user.email}) is a {random.choice(['mushroom', 'cow', 'goat', 'user'])} "
+                    f"Participant {u.telegram_uid}({u.user.email}) is a {handle} "
                     f"and didn't vote. Will be skipped."
                 )
                 continue
             if len(uvotes) < len(yall) - 1:
+                handle = random.choice(['mushroom', 'cow', 'goat', 'participant'])
                 logger.info(
-                    f"User {u.telegram_uid}({u.user.email}) is a {random.choice(['mushroom', 'cow', 'goat', 'user'])} "
-                    f"and skipped some ({len(yall) - 1 - len(uvotes)}) users in voting."
+                    f"Participant {u.telegram_uid}({u.user.email}) is a {handle} "
+                    f"and skipped some ({len(yall) - 1 - len(uvotes)}) participants in voting."
                 )
             else:
                 logger.info(
-                    f"User {u.telegram_uid}({u.user.email}) [OK]"
+                    f"Participant {u.telegram_uid}({u.user.email}) [OK]"
                 )
             votes += uvotes
-            users.append(u)
+            participants.append(u)
 
-        votes = [vote for vote in votes if vote.whom in users]
-        n = len(users)
+        votes = [vote for vote in votes if vote.whom in participants]
+        n = len(participants)
         if len(votes) != n ** 2 - n:
             raise Exception("Not enough votes to do solving")
 
-        users.sort(key=lambda u: u.telegram_uid)
+        participants.sort(key=lambda u: u.telegram_uid)
         votes.sort(key=lambda v: v.whom.telegram_uid)
         votes.sort(key=lambda v: v.who.telegram_uid)
 
-        return (users, votes)
+        return (participants, votes)
 
     def get_solver_data(self):
-        (users, votes) = self.get_users_and_votes()
-        n = len(users)
+        (participants, votes) = self.get_participants_and_votes()
+        n = len(participants)
 
         builder = []
         for i in range(n):
@@ -105,7 +108,7 @@ class Cohort(models.Model):
         with open("data.dzn", mode="w") as f:
             f.write(data)
 
-        (users, votes) = self.get_users_and_votes()  # duplicate effort
+        (participants, votes) = self.get_participants_and_votes()  # duplicate effort
 
         logger.info("Starting solver.")
         subprocess.run([
@@ -119,19 +122,19 @@ class Cohort(models.Model):
 
         logger.info(f"Saving solution to db groups")
         ptg = solution["people_to_groups"]
-        assert len(ptg) == len(users)
+        assert len(ptg) == len(participants)
         passoc = dict()
 
         for i in range(len(ptg)):
-            passoc[users[i]] = ptg[i]
+            passoc[participants[i]] = ptg[i]
 
         group_names = set(solution["people_to_groups"])
-        groups = {group: [u for u in users if passoc[u] == group] for group in group_names}
+        groups = {group: [u for u in participants if passoc[u] == group] for group in group_names}
 
         for group_id in groups.keys():
-            group: List[User] = groups[group_id]
+            group: List[Participant] = groups[group_id]
 
             db_group = Group.objects.get_empty()
-            for user in group:
-                user.group = db_group
-                user.save()
+            for participant in group:
+                participant.group = db_group
+                participant.save()

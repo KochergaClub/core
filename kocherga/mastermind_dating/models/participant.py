@@ -40,20 +40,20 @@ class State(dict):
         self[self.__class__.__name__ + "." + key] = value
 
 
-class UserManager(models.Manager):
-    def get_by_token(self, token) -> typing.Union['User', None]:
+class ParticipantManager(models.Manager):
+    def get_by_token(self, token) -> typing.Union['Participant', None]:
         if token is None or len(token) == 0:
             return None
         try:
             token = base64url_decode(token)
-            user_id = signer.unsign(str(token, "utf-8"), max_age=86400 * 7)
+            participant_id = signer.unsign(str(token, "utf-8"), max_age=86400 * 7)
         except BadSignature:
             return None
         except binascii.Error:
             return None
 
-        user, _ = User.objects.get_or_create(pk=user_id)
-        return user
+        participant, _ = Participant.objects.get_or_create(pk=participant_id)
+        return participant
 
 
 def photo_path(instance, filename):
@@ -63,42 +63,53 @@ def photo_path(instance, filename):
 _S = typing.TypeVar("_S")
 
 
-class User(models.Model):
-    user = models.OneToOneField(KchUser, on_delete=models.CASCADE, primary_key=True)
-    telegram_uid = models.CharField(max_length=100, blank=True)
+class Participant(models.Model):
+    """
+    Note that Participant is not a user! It's a user PLUS cohort.
+    """
+    user = models.ForeignKey(KchUser, on_delete=models.CASCADE, related_name='mastermind_dating_participants')
     name = models.CharField(max_length=255, blank=True)
     desc = models.TextField(blank=True)
     photo = models.ImageField(null=True, blank=True, upload_to=photo_path)
     state = models.TextField(blank=True)
-    chat_id = models.IntegerField(null=True, blank=True)
     voted_for = models.BooleanField(default=False)
     present = models.BooleanField(default=False)
     invite_email_sent = models.BooleanField(default=False)
 
-    cohorts = models.ManyToManyField('Cohort', related_name='users')
+    # deprecated - moved to TelegramUser
+    telegram_uid = models.CharField(max_length=100, blank=True)
+    chat_id = models.IntegerField(null=True, blank=True)
 
-    group = models.ForeignKey('Group', on_delete=models.PROTECT, related_name='users', blank=True, null=True)
+    cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='participants')
 
-    objects = UserManager()
+    group = models.ForeignKey('Group', on_delete=models.PROTECT, related_name='participants', blank=True, null=True)
+
+    objects = ParticipantManager()
+
+    def get_telegram_uid(self):
+        return self.user.mastermind_dating_telegram_user.telegram_uid
+
+    def get_chat_id(self):
+        return self.user.mastermind_dating_telegram_user.chat_id
 
     def generate_token(self) -> str:
-        return base64url_encode(bytes(signer.sign(self.user_id), "utf-8"))
+        return base64url_encode(bytes(signer.sign(self.id), "utf-8"))
 
     def is_bound(self):
         return bool(self.telegram_uid)
 
     def edit_state(self, type: typing.Type[_S]) -> typing.ContextManager[_S]:
-        user = self
+        participant = self
 
         class EditState:
 
             def __enter__(self):
-                self.state = user.get_state(type)
+                self.state = participant.get_state(type)
                 return self.state
 
             def __exit__(self, exc_type, exc_val, exc_tb):
-                user.set_state(self.state)
-                user.save()
+                participant.set_state(self.state)
+                participant.save()
 
         return EditState()
 
@@ -124,13 +135,13 @@ class User(models.Model):
     def telegram_link(self):
         return self.generate_link()
 
-    def send_invite_email(self, cohort):
+    def send_invite_email(self):
         if self.invite_email_sent:
             raise Exception("Already sent invite email")
 
         bot_link = self.telegram_link()
         bot_token = str(self.generate_token(), 'utf-8')
-        start_time = timezone.localtime(cohort.event.start).strftime('%H:%M') if cohort.event else None
+        start_time = timezone.localtime(self.cohort.event.start).strftime('%H:%M') if self.cohort.event else None
 
         message = render_to_string('mastermind_dating/email/bot_link.txt', {
             'bot_link': bot_link,
@@ -156,10 +167,10 @@ class User(models.Model):
 
     def tinder_activate(self):
         manager = rpc.get_client()
-        manager.tinder_activate(self.user_id)
+        manager.tinder_activate(self.id)
 
     def timetable(self):
-        # copypaste!
+        # copypaste from interactions!
         class TimeState(State):
             def __init__(self):
                 super().__init__()

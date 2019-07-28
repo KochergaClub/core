@@ -1,6 +1,6 @@
 *Мы собрали для вас группу.*
-{% for user in users %}
- - {{ user.name }} ([@{{ user.telegram_uid }}](tg://user?id={{ user.telegram_uid }}))
+{% for participant in participants %}
+ - {{ participant.name }} ([@{{ participant.telegram_uid }}](tg://user?id={{ participant.telegram_uid }}))
 {%- endfor %}
 
 Заходите в чат группы, который мы создали для вас: {{invite_link}}

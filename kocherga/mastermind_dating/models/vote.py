@@ -1,10 +1,12 @@
 from django.db import models
 
-from .user import User
+from .participant import Participant
 
 
 class Vote(models.Model):
     objects: models.QuerySet
-    who = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
-    whom = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
+
+    who = models.ForeignKey(Participant, related_name="+", on_delete=models.CASCADE, null=True, blank=True)
+    whom = models.ForeignKey(Participant, related_name="+", on_delete=models.CASCADE, null=True, blank=True)
+
     how = models.IntegerField()

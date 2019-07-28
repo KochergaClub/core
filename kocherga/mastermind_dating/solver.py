@@ -18,22 +18,22 @@ async def broadcast_solution(cohort_id: int, bot: Bot):
 
     tasks: typing.List[typing.Awaitable] = []
 
-    for user in cohort.users.all():
-        if not user.group:
-            log.warn('No group for user ' + user.telegram_uid)
+    for participant in cohort.participants.all():
+        if not participant.group:
+            log.warn('No group for participant ' + participant.telegram_uid)
             continue
 
         message = render_to_string("mastermind_dating/bot/group_assembled.md", {
-            "users": [
-                u
-                for u in user.group.users.all()
-                if u.user_id != user.user_id
+            "participants": [
+                p
+                for p in participant.group.participants.all()
+                if p.id != participant.id
             ],
-            "invite_link": user.group.telegram_invite_link,
+            "invite_link": participant.group.telegram_invite_link,
         })
         tasks.append(asyncio.create_task(
             bot.send_message(
-                user.chat_id, message,
+                participant.chat_id, message,
                 parse_mode="Markdown"
             )
         ))

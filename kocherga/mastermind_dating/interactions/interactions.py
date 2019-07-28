@@ -12,24 +12,27 @@ from aiogram.dispatcher.filters import Filter, BoundFilter, Text
 from aiogram.types import PhotoSize, InlineKeyboardMarkup, InlineKeyboardButton
 import aiogram.utils.exceptions
 
-from kocherga.mastermind_dating import models as db
+from kocherga.mastermind_dating import models
 from kocherga.mastermind_dating.models import State
 
 _V = typing.TypeVar("_V")
 
 
-def get_user() -> typing.Optional[db.User]:
-    # noinspection PyUnresolvedReferences
+def get_participant() -> typing.Optional[models.Participant]:
     try:
-        return db.User.objects.get(chat_id=at.Chat.get_current().id)
-    except db.User.DoesNotExist:
+        # FIXME - multiple participants can have the identical chat_id
+        telegram_user = models.TelegramUser.objects.get(chat_id=at.Chat.get_current().id)
+    except models.TelegramUser.DoesNotExist:
         return None
+
+    participant = telegram_user.get_participant()
+    return participant
 
 
 def state_is(t: typing.Type[_V], a: typing.Callable[[_V], bool]) -> BoundFilter:
     class LF(BoundFilter):
         async def check(self, *args):
-            user: db.User = get_user()
+            user: models.Participant = get_participant()
             if not user:
                 return False
             return a(user.get_state(t))
@@ -37,10 +40,10 @@ def state_is(t: typing.Type[_V], a: typing.Callable[[_V], bool]) -> BoundFilter:
     return LF()
 
 
-def model_is(a: typing.Callable[[db.User], bool]) -> Filter:
+def model_is(a: typing.Callable[[models.Participant], bool]) -> Filter:
     class LF(BoundFilter):
         async def check(self, *args):
-            user: db.User = get_user()
+            user: models.Participant = get_participant()
             if not user:
                 return False
             return bool(a(user))
@@ -48,21 +51,21 @@ def model_is(a: typing.Callable[[db.User], bool]) -> Filter:
     return LF()
 
 
-def generate_voting_buttons(who: db.User, whom: db.User):
+def generate_voting_buttons(who: models.Participant, whom: models.Participant):
     markup = InlineKeyboardMarkup()
 
     existing_vote = None
     try:
-        existing_vote_id = db.Vote.objects.get(who=who, whom=whom).how
+        existing_vote_id = models.Vote.objects.get(who=who, whom=whom).how
         existing_vote = ['Y', 'O', 'N'][existing_vote_id]
-    except db.Vote.DoesNotExist:
+    except models.Vote.DoesNotExist:
         pass
 
     for (emoji, vote_type) in (("🔥", 'Y'), ("❤️", 'O'), ("✖️", 'N')):
         button = emoji
         if existing_vote == vote_type:
             button = "[" + button + "]"
-        markup = markup.insert(InlineKeyboardButton(button, callback_data=f"vote{vote_type}-{whom.telegram_uid}"))
+        markup = markup.insert(InlineKeyboardButton(button, callback_data=f"vote{vote_type}-{whom.get_telegram_uid()}"))
     logger.info('Voting markup: ' + str(markup))
     return markup
 
@@ -75,7 +78,7 @@ def register_handlers(dsp: Dispatcher):
         return Bot.get_current()
 
     def logged_in(_):
-        return get_user() is not None
+        return get_participant() is not None
 
     # ==--== Authorization
 
@@ -86,7 +89,7 @@ def register_handlers(dsp: Dispatcher):
 
         token = msg.get_args()
         logger.info('Looking up user by token ' + (token[:10] + '...' if token else 'NONE'))
-        user = db.User.objects.get_by_token(token)
+        user = models.Participant.objects.get_by_token(token)
 
         if user is None:
             logger.info('Looked up user by token but none found')
@@ -95,16 +98,17 @@ def register_handlers(dsp: Dispatcher):
             return
         logger.info('Found user by token')
 
-        user.telegram_uid = msg.from_user.username
-        user.chat_id = msg.chat.id
-        user.save()
+        models.TelegramUser.objects.create(
+            telegram_uid=msg.from_user.username,
+            chat_id=msg.chat.id,
+        )
         logger.info('Saved user telegram info')
 
         await start_registration()
 
     # ==--==
 
-    class RegistrationState(db.State):
+    class RegistrationState(models.State):
         def __init__(self):
             super().__init__()
             self.skipped_photo = False
@@ -126,36 +130,41 @@ def register_handlers(dsp: Dispatcher):
         & ~reg_complete
 
     async def start_registration():
-        user = get_user()
+        user = get_participant()
         chat = get_chat()
         bot = get_bot()
 
         suggestion_name = " ".join([strn(chat.first_name), strn(chat.last_name)])
         suggestion_nick = chat.username
 
-        await bot.send_message(user.chat_id,
-                               text="Привет! Это бот мастермайнд-дейтинга в Кочерге: мероприятия, "
-                                    "на котором вы можете найти партнеров в мастермайнд-группу.",
-                               disable_notification=True
-                               )
-        await bot.send_message(user.chat_id,
-                               text="Сначала пройдите короткую регистрацию.\n"
-                                    "После этого бот отправит вам подробную программу "
-                                    "и расскажет, как все будет устроено.",
-                               disable_notification=True
-                               )
-        await bot.send_message(user.chat_id,
-                               text="Информация о вас и фотография нужны для того, чтобы другие участники "
-                                    "могли узнать вас, когда будут выставлять свои предпочтения.\n"
-                                    "Если мы пришлем им только ваше имя, то они могут перепутать вас с кем-то другим.",
-                               disable_notification=True
-                               )
+        await bot.send_message(
+            user.get_chat_id(),
+            text="Привет! Это бот мастермайнд-дейтинга в Кочерге: мероприятия, "
+            "на котором вы можете найти партнеров в мастермайнд-группу.",
+            disable_notification=True
+        )
+        await bot.send_message(
+            user.get_chat_id(),
+            text="Сначала пройдите короткую регистрацию.\n"
+            "После этого бот отправит вам подробную программу "
+            "и расскажет, как все будет устроено.",
+            disable_notification=True,
+        )
+        await bot.send_message(
+            user.get_chat_id(),
+            text="Информация о вас и фотография нужны для того, чтобы другие участники "
+            "могли узнать вас, когда будут выставлять свои предпочтения.\n"
+            "Если мы пришлем им только ваше имя, то они могут перепутать вас с кем-то другим.",
+            disable_notification=True,
+        )
 
-        await bot.send_message(user.chat_id, text="Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
-                               reply_markup=InlineKeyboardMarkup()
-                               .insert(InlineKeyboardButton(suggestion_name, callback_data="use_name"))
-                               .insert(InlineKeyboardButton(suggestion_nick, callback_data="use_nickname"))
-                               )
+        await bot.send_message(
+            user.get_chat_id(),
+            text="Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
+            reply_markup=InlineKeyboardMarkup()
+            .insert(InlineKeyboardButton(suggestion_name, callback_data="use_name"))
+            .insert(InlineKeyboardButton(suggestion_nick, callback_data="use_nickname"))
+        )
 
         with user.edit_state(RegistrationState) as s:
             s.entering_name = True
@@ -163,7 +172,7 @@ def register_handlers(dsp: Dispatcher):
     @dsp.callback_query_handler(logged_in, entering_name)
     async def registration_name_inline(u: at.CallbackQuery):
         logger.info('registration_name_inline')
-        user = get_user()
+        user = get_participant()
         chat = get_chat()
 
         suggestion_name = " ".join([strn(chat.first_name), strn(chat.last_name)])
@@ -180,7 +189,7 @@ def register_handlers(dsp: Dispatcher):
     @dsp.message_handler(logged_in, entering_name)
     async def registration_name_message(u: at.Message):
         logger.info('registration_name_message')
-        user = get_user()
+        user = get_participant()
         user.name = u.text
         user.save()
         await start_registration_enter_desc()
@@ -188,11 +197,11 @@ def register_handlers(dsp: Dispatcher):
     # ==--== Registration/Description
 
     async def start_registration_enter_desc():
-        await get_bot().send_message(chat_id=get_user().chat_id, text="Опишите себя в паре предложений.")
+        await get_bot().send_message(chat_id=get_participant().get_chat_id(), text="Опишите себя в паре предложений.")
 
     @dsp.message_handler(logged_in, entering_desc)
     async def registration_enter_desc(msg: at.Message):
-        user = get_user()
+        user = get_participant()
         user.desc = msg.text
         user.save()
         await start_registration_enter_photo()
@@ -201,14 +210,14 @@ def register_handlers(dsp: Dispatcher):
 
     async def start_registration_enter_photo():
         await get_bot().send_message(
-            chat_id=get_user().chat_id,
+            chat_id=get_participant().get_chat_id(),
             text="Загрузите фото, чтобы другие люди могли легче найти вас на мастермайнде.",
             # reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton("Нет, спасибо", callback_data="skip_photo"))
         )
 
     @dsp.message_handler(logged_in, entering_photo, content_types=["photo"])
     async def registration_enter_photo(msg: at.Message):
-        user = get_user()
+        user = get_participant()
         photos = msg.photo
         photo_limit = 1000 * 1000
 
@@ -231,7 +240,7 @@ def register_handlers(dsp: Dispatcher):
 
     @dsp.callback_query_handler(logged_in, entering_photo, lambda a: a.data in ["skip_photo"])
     async def registration_skip_photo(_):
-        with get_user().edit_state(RegistrationState) as s:
+        with get_participant().edit_state(RegistrationState) as s:
             s.skipped_photo = True
         await start_time_tables()
 
@@ -282,7 +291,7 @@ def register_handlers(dsp: Dispatcher):
 
         if act_command == "confirm":
             logger.info('confirming time table')
-            with get_user().edit_state(TimeState) as s:
+            with get_participant().edit_state(TimeState) as s:
                 s.confirmed = True
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
@@ -292,7 +301,7 @@ def register_handlers(dsp: Dispatcher):
             await registration_complete()
         else:
             logger.info('editing time')
-            with get_user().edit_state(TimeState) as s:
+            with get_participant().edit_state(TimeState) as s:
                 if act_command in s.selected_time:
                     s.selected_time.remove(act_command)
                 else:
@@ -342,10 +351,10 @@ def register_handlers(dsp: Dispatcher):
     }
 
     async def registration_complete():
-        with get_user().edit_state(RegistrationState) as s:
+        with get_participant().edit_state(RegistrationState) as s:
             s.complete = True
         await get_bot().send_message(
-            chat_id=get_user().chat_id,
+            chat_id=get_participant().get_chat_id(),
             text=("*Спасибо!*\n"
                   "\n"
                   "Это все! Ждем вас в Кочерге в воскресенье, в 13:00.\n"
@@ -358,7 +367,7 @@ def register_handlers(dsp: Dispatcher):
             parse_mode="Markdown"
         )
         await get_bot().send_message(
-            chat_id=get_user().chat_id,
+            chat_id=get_participant().get_chat_id(),
             **info_messages["root"]
         )
 
@@ -383,9 +392,9 @@ def register_handlers(dsp: Dispatcher):
         data = msg.data
         how, whom = data[4:].split("-", 1)
         how = ['Y', 'O', 'N'].index(how)
-        whom = db.User.objects.get(telegram_uid=whom)
-        who = get_user()
-        vote_obj, _ = db.Vote.objects.update_or_create(
+        whom = models.TelegramUser.objects.get(telegram_uid=whom).get_participant()
+        who = get_participant()
+        vote_obj, _ = models.Vote.objects.update_or_create(
             who=who, whom=whom,
             defaults={
                 'how': how,
@@ -403,34 +412,49 @@ def register_handlers(dsp: Dispatcher):
             # that's ok
             pass
 
-    # ==--==
+    # ==--== Debug
+
+    @dsp.message_handler(Text(equals="ping"))
+    async def ping(msg: at.Message):
+        chat_id = msg.chat.id
+
+        response = 'Pong.'
+        user = get_participant()
+        if user:
+            response += '\nВы участвуете в каком-то мастермайнд-дейтинге.'
+        else:
+            response += '\nВы НЕ ЗАРЕГИСТРИРОВАНЫ ни в каком мастермайнд-дейтинге.'
+
+        await get_bot().send_message(
+            chat_id=chat_id,
+            text=response,
+        )
 
 
-async def send_rate_request(who: db.User, whom: db.User, bot: Bot):
-    await bot.send_message(who.chat_id, f"**Голосование за** {whom.name}", parse_mode="Markdown")
+async def send_rate_request(who: models.Participant, whom: models.Participant, bot: Bot):
+    await bot.send_message(who.get_chat_id(), f"**Голосование за** {whom.name}", parse_mode="Markdown")
     if whom.photo:
         whom.photo.open()
         photo = at.InputFile(BytesIO(whom.photo.read()))
-        await bot.send_photo(who.chat_id, photo, disable_notification=True)
+        await bot.send_photo(who.get_chat_id(), photo, disable_notification=True)
 
     await bot.send_message(
-        who.chat_id, whom.desc or '(Нет описания)',
+        who.get_chat_id(), whom.desc or '(Нет описания)',
         reply_markup=generate_voting_buttons(who, whom),
         disable_notification=True
     )
 
 
-async def tinder_activate(user_id: int, bot: Bot):
+async def tinder_activate(participant_id: int, bot: Bot):
     """
         Activates voting for some user.
-    :param user:
     """
-    logger.info(f"Looking for user {user_id} to activate")
-    user = db.User.objects.get(pk=user_id)
+    logger.info(f"Looking for participant {participant_id} to activate")
+    user = models.Participant.objects.get(pk=participant_id)
     logger.info(f"Found user {user.user.email}")
 
     cohort = user.cohorts.first()
-    to_notify = cohort.users.filter(present=True).exclude(user_id=user.user_id).iterator()
+    to_notify = cohort.participants.filter(present=True).exclude(id=user.id).iterator()
     tasks = []
     logger.info(f"Creating voting tasks")
     for to in to_notify:

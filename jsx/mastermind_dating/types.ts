@@ -6,8 +6,8 @@ export interface Cohort {
   leader_telegram_uid?: string;
 }
 
-export interface User {
-  user_id: number;
+export interface Participant {
+  id: number;
   user: string;
   name?: string;
   desc: string;
@@ -20,5 +20,5 @@ export interface User {
 export interface Group {
   id: number;
   telegram_invite_link: string;
-  users: number[];
+  participants: number[];
 }

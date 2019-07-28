@@ -8,7 +8,7 @@ import kocherga.telegram.core_api
 
 class GroupManager(models.Manager):
     def get_empty(self):
-        return self.annotate(user_count=models.Count('users')).filter(user_count=0).first()
+        return self.annotate(participant_count=models.Count('participants')).filter(participant_count=0).first()
 
     async def _async_create_for_cohort(self, cohort):
         if not cohort.leader_telegram_uid:
@@ -58,5 +58,5 @@ class Group(models.Model):
     objects = GroupManager()
 
     def print_lliira_table(self):
-        for user in self.users.all():
-            print(f'{user.name:<28}' + user.timetable().lliira_line())
+        for participant in self.participants.all():
+            print(f'{participant.name:<28}' + participant.timetable().lliira_line())
