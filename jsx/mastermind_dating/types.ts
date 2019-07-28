@@ -3,6 +3,7 @@ export interface Cohort {
   event_id?: string;
   event_title?: string;
   event_start?: string;
+  leader_telegram_uid?: string;
 }
 
 export interface User {
@@ -14,4 +15,10 @@ export interface User {
   voted_for: boolean;
   present: boolean;
   invite_email_sent: boolean;
+}
+
+export interface Group {
+  id: number;
+  telegram_invite_link: string;
+  users: number[];
 }

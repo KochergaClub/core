@@ -33,7 +33,7 @@ const UserSection: React.FC<Props> = ({ cohort, users }) => {
               }/populate_from_event`}
               onSuccess={cohortUsersReloader}
             >
-              Загрузить пользователей из события
+              Загрузить участников из события
             </ActionButton>
           )}
           {uninvitedCount ? (

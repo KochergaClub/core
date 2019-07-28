@@ -52,3 +52,15 @@ class UserSerializer(serializers.ModelSerializer):
 
         user.cohorts.add(cohort)
         return user
+
+
+class GroupSerializer(serializers.GroupSerializer):
+    class Meta:
+        model = models.Group
+        fields = (
+            'id',
+            'telegram_invite_link',
+            'users',
+        )
+
+    users = serializers.PrimaryKeyRelatedfield(many=True)

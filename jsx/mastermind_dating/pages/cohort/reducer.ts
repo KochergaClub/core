@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Cohort, User } from '../../types';
+import { Cohort, User, Group } from '../../types';
 
 interface ReplaceCohortAction {
   type: 'REPLACE_COHORT';
@@ -21,6 +21,7 @@ type Action = ReplaceCohortAction | ReplaceUsersAction;
 interface Store {
   cohort: Cohort;
   users: User[];
+  groups: Group[];
 }
 
 export const reducer = (store: Store, action: Action): Store => {
