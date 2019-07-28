@@ -11,10 +11,16 @@ class GroupManager(models.Manager):
         return self.annotate(user_count=models.Count('users')).filter(user_count=0).first()
 
     async def _async_create_for_cohort(self, cohort):
+        if not cohort.leader_telegram_uid:
+            raise Exception("Can't create group when cohort.leader_telegram_uid is not set")
+
         client = kocherga.telegram.core_api.get_client()
         updates = await client(
             telethon.functions.messages.CreateChatRequest(
-                users=['KochergaMastermindBot', ...],
+                users=[
+                    'KochergaMastermindBot',
+                    cohort.leader_telegram_uid,
+                ],
                 title='Мастермайнд-группа',
             )
         )
@@ -37,6 +43,12 @@ class GroupManager(models.Manager):
 
 class Group(models.Model):
     telegram_invite_link = models.CharField(max_length=255)
+    cohort = models.ForeignKey(
+        'Cohort',
+        on_delete=models.PROTECT,
+        related_name='groups',
+        null=True, blank=True,  # will become required later when we run the first migration
+    )
 
     objects = GroupManager()
 
