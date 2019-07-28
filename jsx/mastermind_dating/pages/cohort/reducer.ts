@@ -16,7 +16,14 @@ interface ReplaceUsersAction {
   };
 }
 
-type Action = ReplaceCohortAction | ReplaceUsersAction;
+interface ReplaceGroupsAction {
+  type: 'REPLACE_GROUPS';
+  payload: {
+    groups: Group[];
+  };
+}
+
+type Action = ReplaceCohortAction | ReplaceUsersAction | ReplaceGroupsAction;
 
 interface Store {
   cohort: Cohort;
@@ -35,6 +42,11 @@ export const reducer = (store: Store, action: Action): Store => {
       return {
         ...store,
         users: action.payload.users,
+      };
+    case 'REPLACE_GROUPS':
+      return {
+        ...store,
+        groups: action.payload.groups,
       };
   }
 };

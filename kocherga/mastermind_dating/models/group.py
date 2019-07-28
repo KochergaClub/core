@@ -15,6 +15,7 @@ class GroupManager(models.Manager):
             raise Exception("Can't create group when cohort.leader_telegram_uid is not set")
 
         client = await kocherga.telegram.core_api.get_client()
+
         updates = await client(
             telethon.functions.messages.CreateChatRequest(
                 users=[
@@ -25,11 +26,14 @@ class GroupManager(models.Manager):
             )
         )
         chat = updates.chats[0]
-        invite_link = await client(
+
+        invite_link_obj = await client(
             telethon.functions.messages.ExportChatInviteRequest(
                 peer=chat.id
             )
         )
+        invite_link = invite_link_obj.link
+
         group = self.create(
             telegram_invite_link=invite_link,
             cohort=cohort,

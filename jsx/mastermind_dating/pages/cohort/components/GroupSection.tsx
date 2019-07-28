@@ -6,6 +6,8 @@ import ActionButton from '~/components/ActionButton';
 
 import { Cohort, User, Group } from '../../../types';
 
+import { useCohortGroupsReloader } from '../hooks';
+
 interface Props {
   cohort: Cohort;
   users: User[];
@@ -24,6 +26,8 @@ const GroupInfo = ({ group }: { group: Group }) => {
 };
 
 const GroupSection: React.FC<Props> = ({ cohort, groups }) => {
+  const cohortGroupsReloader = useCohortGroupsReloader(cohort);
+
   return (
     <section>
       <h1>Группы</h1>
@@ -34,6 +38,7 @@ const GroupSection: React.FC<Props> = ({ cohort, groups }) => {
       {cohort.leader_telegram_uid && (
         <ActionButton
           path={`/mastermind_dating/cohort/${cohort.id}/create_group`}
+          asyncOnSuccess={cohortGroupsReloader}
         >
           Создать группу
         </ActionButton>

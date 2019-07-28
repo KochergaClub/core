@@ -2,7 +2,7 @@ import { useCallback, useContext } from 'react';
 
 import { useAPI } from '~/common/hooks';
 
-import { getCohortUsers } from '../../api';
+import { getCohortUsers, getCohortGroups } from '../../api';
 
 import { Cohort } from '../../types';
 
@@ -18,6 +18,21 @@ export const useCohortUsersReloader = (cohort: Cohort) => {
       type: 'REPLACE_USERS',
       payload: {
         users,
+      },
+    });
+  }, [api, cohort.id]);
+};
+
+export const useCohortGroupsReloader = (cohort: Cohort) => {
+  const api = useAPI();
+  const dispatch = useContext(MastermindContext);
+
+  return useCallback(async () => {
+    const groups = await getCohortGroups(api, cohort.id);
+    dispatch({
+      type: 'REPLACE_GROUPS',
+      payload: {
+        groups,
       },
     });
   }, [api, cohort.id]);

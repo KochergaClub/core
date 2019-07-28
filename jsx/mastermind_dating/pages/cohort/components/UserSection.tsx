@@ -36,7 +36,7 @@ const UserSection: React.FC<Props> = ({ cohort, users }) => {
               path={`/mastermind_dating/cohort/${
                 cohort.id
               }/populate_from_event`}
-              onSuccess={cohortUsersReloader}
+              asyncOnSuccess={cohortUsersReloader}
             >
               Загрузить участников из события
             </ActionButton>
