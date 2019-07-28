@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Row } from '@kocherga/frontkit';
+import { Column, Row } from '@kocherga/frontkit';
 
 import ActionButton from '~/components/ActionButton';
 
@@ -24,26 +24,30 @@ const UserSection: React.FC<Props> = ({ cohort, users }) => {
   return (
     <section>
       <h1>Участники</h1>
-      <Row>
-        {cohort.event_id && (
-          <ActionButton
-            path={`/mastermind_dating/cohort/${cohort.id}/populate_from_event`}
-            onSuccess={cohortUsersReloader}
-          >
-            Загрузить пользователей из события
-          </ActionButton>
-        )}
-        {uninvitedCount ? (
-          <ActionButton
-            path={`/mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
-            onSuccess={cohortUsersReloader}
-          >
-            Разослать приглашения в бота ({uninvitedCount}/{users.length})
-          </ActionButton>
-        ) : null}
-      </Row>
-      <UserList users={users} />
-      <CreateUserButton cohort={cohort} />
+      <Column>
+        <Row>
+          {cohort.event_id && (
+            <ActionButton
+              path={`/mastermind_dating/cohort/${
+                cohort.id
+              }/populate_from_event`}
+              onSuccess={cohortUsersReloader}
+            >
+              Загрузить пользователей из события
+            </ActionButton>
+          )}
+          {uninvitedCount ? (
+            <ActionButton
+              path={`/mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
+              onSuccess={cohortUsersReloader}
+            >
+              Разослать приглашения в бота ({uninvitedCount}/{users.length})
+            </ActionButton>
+          ) : null}
+        </Row>
+        <UserList users={users} />
+        <CreateUserButton cohort={cohort} />
+      </Column>
     </section>
   );
 };
