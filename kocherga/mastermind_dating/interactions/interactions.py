@@ -429,7 +429,9 @@ async def tinder_activate(user_id: int, bot: Bot):
     user = db.User.objects.get(pk=user_id)
     logger.info(f"Found user {user.user.email}")
 
-    to_notify = db.User.objects.filter(cohort=user.cohort, present=True).exclude(user_id=user.user_id).iterator()
+    to_notify = db.User.objects.filter(
+        cohort=user.cohorts.first(), present=True
+    ).exclude(user_id=user.user_id).iterator()
     tasks = []
     logger.info(f"Creating voting tasks")
     for to in to_notify:
