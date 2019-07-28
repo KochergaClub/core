@@ -22,7 +22,7 @@ const MastermindCohortPage: React.FC<Props> = props => {
   const [store, dispatch] = useReducer(reducer, {
     cohort: props.cohort,
     users: props.users,
-    groups: [],
+    groups: props.groups,
   });
 
   return (
