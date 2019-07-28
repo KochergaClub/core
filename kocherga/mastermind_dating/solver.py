@@ -18,7 +18,7 @@ async def broadcast_solution(cohort_id: int, bot: Bot):
 
     tasks: typing.List[typing.Awaitable] = []
 
-    for user in models.User.objects.filter(cohort=cohort):
+    for user in cohort.users.all():
         if not user.group:
             log.warn('No group for user ' + user.telegram_uid)
             continue
