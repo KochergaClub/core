@@ -45,6 +45,7 @@ services:
     depends_on:
       - chrome
       - redis
+      - tgbot
     restart: always
 
   api_async:
@@ -55,6 +56,7 @@ services:
     depends_on:
       - chrome
       - redis
+      - tgbot
     restart: always
 
   channels-worker:
