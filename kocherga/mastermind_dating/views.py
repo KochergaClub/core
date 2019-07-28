@@ -56,12 +56,16 @@ class CohortViewSet(viewsets.ModelViewSet):
     def create_group(self, request, **kwargs):
         cohort = self.get_object()
         group = models.Group.objects.create_for_cohort(cohort)
-        return serializers.GroupSerializer(group).data
+        return Response(
+            serializers.GroupSerializer(group).data
+        )
 
     @action(detail=True)
     def groups(self, request, **kwargs):
         cohort = self.get_object()
-        return serializers.GroupSerializer(cohort.groups.all(), many=True).data
+        return Response(
+            serializers.GroupSerializer(cohort.groups.all(), many=True).data
+        )
 
 
 class UserViewSet(viewsets.ModelViewSet):
