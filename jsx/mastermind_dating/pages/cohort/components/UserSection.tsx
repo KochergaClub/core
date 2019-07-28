@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Column, Row } from '@kocherga/frontkit';
+import { Button, Column, Row } from '@kocherga/frontkit';
 
 import ActionButton from '~/components/ActionButton';
 
@@ -21,11 +21,16 @@ const UserSection: React.FC<Props> = ({ cohort, users }) => {
 
   const cohortUsersReloader = useCohortUsersReloader(cohort);
 
+  const [hideUnregistered, setHideUnregistered] = useState(false);
+
+  const shownUsers = hideUnregistered ? users.filter(user => user.name) : users;
+
   return (
     <section>
       <h1>Участники</h1>
-      <Column>
+      <Column gutter={32}>
         <Row>
+          <CreateUserButton cohort={cohort} />
           {cohort.event_id && (
             <ActionButton
               path={`/mastermind_dating/cohort/${
@@ -44,9 +49,15 @@ const UserSection: React.FC<Props> = ({ cohort, users }) => {
               Разослать приглашения в бота ({uninvitedCount}/{users.length})
             </ActionButton>
           ) : null}
+          {
+            <Button onClick={() => setHideUnregistered(!hideUnregistered)}>
+              {hideUnregistered
+                ? 'Незарегистрировавшиеся скрыты'
+                : 'Незарегистрировавшиеся показаны'}
+            </Button>
+          }
         </Row>
-        <UserList users={users} cohort={cohort} />
-        <CreateUserButton cohort={cohort} />
+        <UserList users={shownUsers} cohort={cohort} />
       </Column>
     </section>
   );

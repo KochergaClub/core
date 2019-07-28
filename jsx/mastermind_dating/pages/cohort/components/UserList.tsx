@@ -15,12 +15,14 @@ const UserListContainer = styled.div`
   }
 `;
 
-const UserList = ({ users, cohort }: { users: User[]; cohort: Cohort }) => (
-  <UserListContainer>
-    {users.map(user => (
-      <UserCard key={user.user_id} user={user} cohort={cohort} />
-    ))}
-  </UserListContainer>
-);
+const UserList = ({ users, cohort }: { users: User[]; cohort: Cohort }) => {
+  return (
+    <UserListContainer>
+      {users.map(user => (
+        <UserCard key={user.user_id} user={user} cohort={cohort} />
+      ))}
+    </UserListContainer>
+  );
+};
 
 export default UserList;
