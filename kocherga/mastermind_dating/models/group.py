@@ -32,6 +32,7 @@ class GroupManager(models.Manager):
         )
         group = self.create(
             telegram_invite_link=invite_link,
+            cohort=cohort,
         )
         return group
 

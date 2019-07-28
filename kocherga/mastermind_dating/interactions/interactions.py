@@ -81,20 +81,24 @@ def register_handlers(dsp: Dispatcher):
 
     @dsp.message_handler(lambda a: not logged_in(a), commands=["start"])
     async def auth(msg):
-        user = get_user()
+        logger.info('/start command called')
         bot: Bot = Bot.get_current()
 
         token = msg.get_args()
+        logger.info('Looking up user by token ' + (token[:10] + '...' if token else 'NONE'))
         user = db.User.objects.get_by_token(token)
 
         if user is None:
+            logger.info('Looked up user by token but none found')
             await bot.send_message(chat_id=msg.chat.id,
                                    text="Найдите письмо от Кочерги и активируйте бота по инструкциям из него.")
             return
+        logger.info('Found user by token')
 
         user.telegram_uid = msg.from_user.username
         user.chat_id = msg.chat.id
         user.save()
+        logger.info('Saved user telegram info')
 
         await start_registration()
 
