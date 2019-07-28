@@ -46,7 +46,6 @@ class UserManager(models.Manager):
             return None
         try:
             token = base64url_decode(token)
-            # STOPSHIP: change back to 600
             user_id = signer.unsign(str(token, "utf-8"), max_age=86400 * 7)
         except BadSignature:
             return None
