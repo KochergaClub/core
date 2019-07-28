@@ -54,7 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class GroupSerializer(serializers.GroupSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Group
         fields = (
