@@ -30,7 +30,11 @@ class Timeclub24Visitors(models.Model):
 
 class Importer(kocherga.importer.base.FullImporter):
     def do_full_import(self):
-        client = kocherga.telegram.core_api.get_client()
+        raise Exception("TODO - support async importers or run temporary loop")
+
+        client_promise = kocherga.telegram.core_api.get_client()
+        client = None or client_promise  # TODO - `await client_promise`, but importers are not async yet
+
         client.send_message(TIMECLUB_BOT, 'Загруженность клубов')
         time.sleep(3)
         message = client.get_messages(TIMECLUB_BOT)[0].message

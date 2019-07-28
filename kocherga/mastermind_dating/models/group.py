@@ -14,7 +14,7 @@ class GroupManager(models.Manager):
         if not cohort.leader_telegram_uid:
             raise Exception("Can't create group when cohort.leader_telegram_uid is not set")
 
-        client = kocherga.telegram.core_api.get_client()
+        client = await kocherga.telegram.core_api.get_client()
         updates = await client(
             telethon.functions.messages.CreateChatRequest(
                 users=[

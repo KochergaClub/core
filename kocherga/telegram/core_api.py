@@ -8,7 +8,7 @@ API_HASH = settings.KOCHERGA_TELEGRAM['core_api']['api_hash']
 SESSION = os.path.join(settings.DATA_DIR, 'telegram_core_api.session')
 
 
-def get_client():
+async def get_client():
     client = TelegramClient(SESSION, API_ID, API_HASH)
-    client.start()
+    await client.start()
     return client
