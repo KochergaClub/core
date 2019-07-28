@@ -166,7 +166,7 @@ const EventsPage = (props: Props) => {
   );
 
   return (
-    <Page title="Календарь событий" team>
+    <Page title="Календарь событий" team noFooter>
       <Page.Title>Календарь событий</Page.Title>
       <Page.Main wide>
         <EventDispatch.Provider value={dispatch}>

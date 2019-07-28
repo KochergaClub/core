@@ -42,7 +42,7 @@ const Calendar = <TEvent extends object, TResource extends object>(
   props: Props<TEvent, TResource>
 ) => {
   return (
-    <div style={{ height: '80vh' }}>
+    <div style={{ height: '90vh' }}>
       <CalendarStyle />
       <CalendarDndStyle />
       <DragAndDropCalendar
