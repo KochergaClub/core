@@ -9,6 +9,8 @@ before_script:
 build:
   stage: build
   script:
+    - git submodule init
+    - git submodule update
     - docker build -f docker/Dockerfile --build-arg NPM_TOKEN=$NPM_TOKEN -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
