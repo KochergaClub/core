@@ -63,4 +63,4 @@ class GroupSerializer(serializers.ModelSerializer):
             'users',
         )
 
-    users = serializers.PrimaryKeyRelatedField(many=True)
+    users = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
