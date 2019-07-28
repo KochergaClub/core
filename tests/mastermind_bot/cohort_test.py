@@ -5,7 +5,7 @@ pytestmark = [
 ]
 
 from django.contrib.auth import get_user_model
-from kocherga.mastermind_dating.models import Cohort, User
+from kocherga.mastermind_dating.models import Cohort, Participant
 from kocherga.timepad.models import Event as TimepadEvent, Order as TimepadOrder
 
 KchUser = get_user_model()
@@ -50,4 +50,4 @@ def test_populate_from_event(event_with_timepad):
     cohort = Cohort.objects.create(event=event_with_timepad)
     cohort.populate_from_event()
 
-    assert User.objects.all().count() == 2
+    assert Participant.objects.all().count() == 2

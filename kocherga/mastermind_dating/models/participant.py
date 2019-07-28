@@ -86,6 +86,11 @@ class Participant(models.Model):
 
     objects = ParticipantManager()
 
+    class Meta:
+        unique_together = (
+            ('user', 'cohort'),
+        )
+
     def get_telegram_uid(self):
         return self.user.mastermind_dating_telegram_user.telegram_uid
 

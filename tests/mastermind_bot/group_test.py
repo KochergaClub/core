@@ -3,7 +3,7 @@ pytestmark = pytest.mark.usefixtures('db')
 
 from django.contrib.auth import get_user_model
 
-from kocherga.mastermind_dating.models import Group, Cohort, User
+from kocherga.mastermind_dating.models import Group, Cohort, Participant
 
 
 def test_get_empty():
@@ -12,10 +12,10 @@ def test_get_empty():
 
     assert Group.objects.get_empty().telegram_invite_link == 'abc'
 
-    user = User.objects.create(
+    Participant.objects.create(
         group=g1,
         user=get_user_model().objects.create_user('test@example.com'),
+        cohort=Cohort.objects.create(),
     )
-    user.cohorts.add(Cohort.objects.create())
 
     assert Group.objects.get_empty().telegram_invite_link == 'def'
