@@ -39,13 +39,13 @@ const UserSection: React.FC<Props> = ({ cohort, users }) => {
           {uninvitedCount ? (
             <ActionButton
               path={`/mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
-              onSuccess={cohortUsersReloader}
+              asyncOnSuccess={cohortUsersReloader}
             >
               Разослать приглашения в бота ({uninvitedCount}/{users.length})
             </ActionButton>
           ) : null}
         </Row>
-        <UserList users={users} />
+        <UserList users={users} cohort={cohort} />
         <CreateUserButton cohort={cohort} />
       </Column>
     </section>
