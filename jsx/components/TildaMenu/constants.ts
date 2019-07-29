@@ -55,7 +55,6 @@ export const teamMenuItems: Item[] = [
     title: 'Менеджерам',
     items: [
       { link: '/team/analytics/', title: 'Аналитика' },
-      { link: '/team/mastermind_dating/', title: 'Мастермайнд' },
       { link: '/team/zadarma/', title: 'Звонки' },
       { link: '/admin/', title: 'Админка' },
     ],
@@ -65,6 +64,7 @@ export const teamMenuItems: Item[] = [
     items: [
       { link: '/team/events/', title: 'Календарь' },
       { link: '/team/ratio/', title: 'Тренинги' },
+      { link: '/team/mastermind_dating/', title: 'Мастермайнд' },
     ],
   },
   {
