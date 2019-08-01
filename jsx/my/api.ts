@@ -1,4 +1,4 @@
-import { Order, Customer, MyTicket } from './types';
+import { Order, Customer, MyTicket, MySubscriptionStatus } from './types';
 
 import { API } from '~/common/api';
 
@@ -19,7 +19,10 @@ export const getTickets = async (api: API) => {
 };
 
 export const getEmailSubscriptionStatus = async (api: API) => {
-  return (await api.call('my/email/subscription_status', 'GET')) as string;
+  return (await api.call(
+    'my/email/subscription_status',
+    'GET'
+  )) as MySubscriptionStatus;
 };
 
 export const callEmailAction = async (
@@ -27,4 +30,14 @@ export const callEmailAction = async (
   action: string
 ): Promise<void> => {
   await api.call(`my/email/${action}`, 'POST');
+};
+
+export const updateInterests = async (
+  api: API,
+  interest_ids: string[]
+): Promise<void> => {
+  await api.call(`my/email/update_interests`, 'POST', {
+    interest_ids,
+  });
+  // TODO - return new subscription status (api already returns it)
 };

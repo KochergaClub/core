@@ -1,22 +1,13 @@
 import React, { useState, useCallback, useContext } from 'react';
-import styled from 'styled-components';
 
-import { Button, Row, colors } from '@kocherga/frontkit';
+import { Button, Row } from '@kocherga/frontkit';
 import { KKMServer, SignMethodCalculation } from '~/kkm/kkmServer';
 import { useAPI } from '~/common/hooks';
+import Badge from '~/components/Badge';
 
 import { Ticket } from '../../../types';
 import { setTicketFiscalizationStatus } from '../../../api';
 import { KkmContext, TrainingContext } from '../store';
-
-export const Badge = styled.div`
-  background-color: ${colors.accent[500]};
-  border-radius: 10px;
-  font-size: 12px;
-  min-width: 20px;
-  padding: 2px 6px;
-  width: auto;
-`;
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 

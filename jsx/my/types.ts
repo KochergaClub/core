@@ -17,3 +17,22 @@ export interface Order {
 export interface MyTicket {
   event: PublicEvent;
 }
+
+export interface MailchimpMemberInterest {
+  id: string;
+  name: string;
+  subscribed: boolean;
+}
+
+interface MySubscriptionStatusEmpty {
+  status: 'none';
+}
+
+interface MySubscriptionStatusNonEmpty {
+  status: 'subscribed' | 'unsubscribed' | 'pending';
+  interests: MailchimpMemberInterest[];
+}
+
+export type MySubscriptionStatus =
+  | MySubscriptionStatusNonEmpty
+  | MySubscriptionStatusEmpty;

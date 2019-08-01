@@ -162,6 +162,14 @@ def interest_category_by_name(name, list_id=MAIN_LIST_ID):
         raise NotFoundException()
 
 
+def get_interests(category_id, list_id=MAIN_LIST_ID):
+    items = api_call(
+        'GET',
+        f'/lists/{list_id}/interest-categories/{category_id}/interests',
+    )['interests']
+    return items
+
+
 def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
     items = api_call(
         'GET',
@@ -189,3 +197,11 @@ def campaign_web_link(campaign_web_id: int):
 
 def subscriber_hash(email: str) -> str:
     return hashlib.md5(email.lower().encode()).hexdigest()
+
+
+def get_member_by_email(email: str):
+    email_hash = subscriber_hash(email)
+    return api_call(
+        'GET',
+        f'lists/{MAIN_LIST_ID}/members/{email_hash}'
+    )
