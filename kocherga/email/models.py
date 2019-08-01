@@ -63,10 +63,8 @@ class MailchimpMember:
         ]
         return obj
 
-
     def get_hash(self):
         return kocherga.mailchimp.subscriber_hash(self.email)
-
 
     def set_status(self, new_status, check_old_status=None):
         if check_old_status:

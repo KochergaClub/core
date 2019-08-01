@@ -1,13 +1,9 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from typing import Optional
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-import kocherga.mailchimp
 
 from .serializers import MailchimpMemberSerializer
 from .models import MailchimpMember
