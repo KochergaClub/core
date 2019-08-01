@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 import subprocess
 import tempfile
 from pathlib import Path
+import hashlib
 
 
 def get_utmify(campaign, source):

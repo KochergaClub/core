@@ -17,3 +17,14 @@ export const getCmData = async (api: API) => {
 export const getTickets = async (api: API) => {
   return (await api.call('my/tickets', 'GET')) as MyTicket[];
 };
+
+export const getEmailSubscriptionStatus = async (api: API) => {
+  return (await api.call('my/email/subscription_status', 'GET')) as string;
+};
+
+export const callEmailAction = async (
+  api: API,
+  action: string
+): Promise<void> => {
+  await api.call(`my/email/${action}`, 'POST');
+};

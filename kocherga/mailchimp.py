@@ -6,6 +6,7 @@ from django.conf import settings
 import time
 import json
 import requests
+import hashlib
 
 MAILCHIMP_API = f"https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.api.mailchimp.com/3.0"
 MAILCHIMP_API_KEY = settings.KOCHERGA_MAILCHIMP_API_KEY
@@ -14,6 +15,12 @@ MAIN_LIST_ID = settings.KOCHERGA_MAILCHIMP_MAIN_LIST_ID
 
 class NotFoundException(Exception):
     pass
+
+
+class MailchimpException(Exception):
+    def __init__(self, message, status_code):
+        super().__init__(message)
+        self.status_code = status_code
 
 
 def api_call(method, url, data={}):
@@ -41,11 +48,21 @@ def api_call(method, url, data={}):
             },
             data=json.dumps(data),
         )
+    elif method == "PATCH":
+        # copy-pasted!
+        r = requests.patch(
+            f"{MAILCHIMP_API}/{url}",
+            headers={
+                "Authorization": f"apikey {MAILCHIMP_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            data=json.dumps(data),
+        )
     else:
         raise Exception(f"Unknown method {method}")
 
     if r.status_code >= 400:
-        raise Exception(f"Error: {r.status_code} {r.reason}\n\n{r.text}")
+        raise MailchimpException(f"Error: {r.status_code} {r.reason}\n\n{r.text}", r.status_code)
     r.raise_for_status()
 
     return r.json()
@@ -168,3 +185,7 @@ def image_folder_by_name(name, list_id=MAIN_LIST_ID):
 
 def campaign_web_link(campaign_web_id: int):
     return f'https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.admin.mailchimp.com/campaigns/edit?id={campaign_web_id}'
+
+
+def subscriber_hash(email: str) -> str:
+    return hashlib.md5(email.lower().encode()).hexdigest()
