@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Customer } from '../types';
 
-import SetPassword from './SetPassword';
-import PrivacySettings from './PrivacySettings';
+import SetPassword from '../components/SetPassword';
+import PrivacySettings from '../components/PrivacySettings';
 
 interface Props {
   customer?: Customer;
 }
 
-export default function SettingsSection(props: Props) {
+export default function SettingsTab(props: Props) {
   return (
     <div>
       <SetPassword />

@@ -7,10 +7,10 @@ import { A, Column, RowNav } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 import { APIError } from '~/common/api';
 
-import CustomerSection from './components/CustomerSection';
-import NonCustomerSection from './components/NonCustomerSection';
-import TicketsSection from './components/TicketsSection';
-import SettingsSection from './components/SettingsSection';
+import VisitsTab from './tabs/VisitsTab';
+import NonCustomerVisitsTab from './tabs/NonCustomerVisitsTab';
+import TicketsTab from './tabs/TicketsTab';
+import SettingsTab from './tabs/SettingsTab';
 import LogoutButton from './components/LogoutButton';
 
 import Page from '~/components/Page';
@@ -55,19 +55,19 @@ const MyPage = (props: Props) => {
       case 'visits':
         if (store.customer) {
           return (
-            <CustomerSection
+            <VisitsTab
               customer={store.customer}
               orders_count={props.orders_count || 0}
               orders={props.orders || []}
             />
           );
         } else {
-          return <NonCustomerSection />;
+          return <NonCustomerVisitsTab />;
         }
       case 'tickets':
-        return <TicketsSection tickets={store.tickets} />;
+        return <TicketsTab tickets={store.tickets} />;
       case 'settings':
-        return <SettingsSection customer={store.customer} />;
+        return <SettingsTab customer={store.customer} />;
       default:
         throw new Error('Unknown tab');
     }

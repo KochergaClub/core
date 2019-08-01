@@ -3,6 +3,8 @@ import React, { useState, useCallback } from 'react';
 import { Button, Column, Label, Input } from '@kocherga/frontkit';
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
 
+import HeadedFragment from './HeadedFragment';
+
 export default function SetPassword() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -33,29 +35,30 @@ export default function SetPassword() {
   });
 
   return (
-    <Column centered {...hotkeys}>
-      <h3>Сменить или установить пароль</h3>
-      <Column centered>
-        <Label>Старый пароль (если есть):</Label>
-        <Input
-          type="password"
-          id="old_password"
-          value={oldPassword}
-          onChange={e => setOldPassword(e.currentTarget.value)}
-        />
+    <HeadedFragment title="Сменить или установить пароль">
+      <Column centered {...hotkeys}>
+        <Column centered>
+          <Label>Старый пароль (если есть):</Label>
+          <Input
+            type="password"
+            id="old_password"
+            value={oldPassword}
+            onChange={e => setOldPassword(e.currentTarget.value)}
+          />
+        </Column>
+        <Column centered>
+          <Label>Новый пароль:</Label>
+          <Input
+            type="password"
+            id="new_password"
+            value={newPassword}
+            onChange={e => setNewPassword(e.currentTarget.value)}
+          />
+        </Column>
+        <Button loading={acting} disabled={acting} onClick={act}>
+          Сменить пароль
+        </Button>
       </Column>
-      <Column centered>
-        <Label>Новый пароль:</Label>
-        <Input
-          type="password"
-          id="new_password"
-          value={newPassword}
-          onChange={e => setNewPassword(e.currentTarget.value)}
-        />
-      </Column>
-      <Button loading={acting} disabled={acting} onClick={act}>
-        Сменить пароль
-      </Button>
-    </Column>
+    </HeadedFragment>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const NonCustomerSection = () => (
+const NonCustomerVisitsTab = () => (
   <p>
     <i>
       Этот аккаунт не связан ни с какой клубной картой.
@@ -11,4 +11,4 @@ const NonCustomerSection = () => (
   </p>
 );
 
-export default NonCustomerSection;
+export default NonCustomerVisitsTab;

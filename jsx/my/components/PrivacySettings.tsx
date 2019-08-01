@@ -13,6 +13,8 @@ import { MyDispatch } from '../store';
 
 import TVIcon from './TVIcon';
 
+import HeadedFragment from './HeadedFragment';
+
 const TvContainer = styled.div`
   position: relative;
 `;
@@ -64,22 +66,23 @@ export default function PrivacySettings({ customer }: Props) {
   }, [api, dispatch, customer.privacy_mode]);
 
   return (
-    <Column centered>
-      <h3>Настройки приватности</h3>
-      <PrivacyTv mode={customer.privacy_mode} />
-      <div>
-        Ваше присутствие{' '}
-        <strong>
-          {customer.privacy_mode == 'public'
-            ? 'отображается'
-            : 'не отображается'}
-        </strong>{' '}
-        на <A href="https://now.kocherga.club">now.kocherga.club</A> и
-        телевизорах в Кочерге.
-      </div>
-      <Button onClick={flipPrivacyMode} loading={loading} disabled={loading}>
-        {customer.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
-      </Button>
-    </Column>
+    <HeadedFragment title="Настройки приватности">
+      <Column centered>
+        <PrivacyTv mode={customer.privacy_mode} />
+        <div>
+          Ваше присутствие{' '}
+          <strong>
+            {customer.privacy_mode == 'public'
+              ? 'отображается'
+              : 'не отображается'}
+          </strong>{' '}
+          на <A href="https://now.kocherga.club">now.kocherga.club</A> и
+          телевизорах в Кочерге.
+        </div>
+        <Button onClick={flipPrivacyMode} loading={loading} disabled={loading}>
+          {customer.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
+        </Button>
+      </Column>
+    </HeadedFragment>
   );
 }

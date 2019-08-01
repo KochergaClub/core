@@ -86,12 +86,12 @@ const OtherEvents = () => (
   </div>
 );
 
-export default function TicketsSection({ tickets }: Props) {
+export default function TicketsTab({ tickets }: Props) {
   return (
-    <section>
+    <article>
       <TicketsList tickets={tickets} />
       <HR />
       <OtherEvents />
-    </section>
+    </article>
   );
 }
