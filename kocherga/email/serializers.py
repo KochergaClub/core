@@ -16,7 +16,3 @@ class MailchimpMemberSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         raise Exception("Not implemented")
-
-        if 'status' in validated_data:
-            new_status = validated_data['status']
-            ...
