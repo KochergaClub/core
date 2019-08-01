@@ -120,7 +120,7 @@ const EmailSettings: React.FC<{}> = () => {
     return null; // TODO - spinner
   }
   return (
-    <HeadedFragment title="Статус подписки">
+    <HeadedFragment title="Рассылки">
       <Column centered>
         <Badge>{status.status}</Badge>
         {status.status === 'unsubscribed' && (
