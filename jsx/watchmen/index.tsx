@@ -2,23 +2,26 @@ import React, { useCallback, useReducer, useState } from 'react';
 
 import moment from 'moment';
 
-import { A, Column, Row } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI } from '~/common/hooks';
 
 import { StaffContext } from '~/staff/contexts';
+import { getMembers } from '~/staff/api';
+import { Member as StaffMember } from '~/staff/types';
 
-import { Shift, StaffMember, shifts2schedule, scheduleReducer } from './types';
+import { Shift, shifts2schedule } from './types';
+import { reducer } from './reducer';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
+import Pager from './components/Pager';
 
 import { ScheduleContext } from './contexts';
-import { loadSchedule } from './api';
-import { getMembers } from '../staff/api';
+import { getSchedule } from './api';
 
 interface Props {
   schedule: Shift[];
@@ -29,21 +32,9 @@ interface Props {
   children?: React.ReactNode;
 }
 
-const Pager = ({ from_date }: { from_date: moment.Moment }) => {
-  const prev = moment(from_date).subtract(1, 'week');
-  const next = moment(from_date).add(1, 'week');
-  return (
-    <Row gutter={16}>
-      <A href={`?from_date=${prev.format('YYYY-MM-DD')}`}>&larr; назад</A>
-      <A href={`/team/watchmen`}>Текущая неделя</A>
-      <A href={`?from_date=${next.format('YYYY-MM-DD')}`}>вперёд &rarr;</A>
-    </Row>
-  );
-};
-
 const WatchmenIndexPage = (props: Props) => {
   const [schedule, scheduleDispatch] = useReducer(
-    scheduleReducer,
+    reducer,
     props.schedule,
     shifts2schedule
   );
@@ -59,7 +50,7 @@ const WatchmenIndexPage = (props: Props) => {
   }, []);
 
   const fetchSchedule = useCallback(async () => {
-    const shifts = await loadSchedule(api, props.from_date, props.to_date);
+    const shifts = await getSchedule(api, props.from_date, props.to_date);
     scheduleDispatch({
       type: 'REPLACE_SCHEDULE',
       payload: {
@@ -133,7 +124,7 @@ const getInitialData: InitialLoader<Props> = async (
   );
 
   return {
-    schedule: await loadSchedule(
+    schedule: await getSchedule(
       api,
       from_date.format(format),
       to_date.format(format)

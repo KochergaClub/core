@@ -1,5 +1,4 @@
-import { Member as StaffMember } from '../staff/types';
-export { Member as StaffMember } from '../staff/types';
+import { Member as StaffMember } from '~/staff/types';
 
 export interface Shift {
   date: string;
@@ -11,7 +10,7 @@ export interface Shift {
 export const SHIFT_TYPES = ['MORNING', 'MIDDAY', 'EVENING', 'NIGHT'];
 
 export type DaySchedule = Shift[];
-interface Schedule {
+export interface Schedule {
   [date: string]: DaySchedule;
 }
 
@@ -47,42 +46,4 @@ export const shifts2schedule = (shifts: Shift[]): Schedule => {
   // Now all day schedules are fully populated and sorted.
 
   return schedule;
-};
-
-interface UpdateShiftAction {
-  type: 'UPDATE_SHIFT';
-  payload: {
-    shift: Shift;
-  };
-}
-
-interface ReplaceScheduleAction {
-  type: 'REPLACE_SCHEDULE';
-  payload: {
-    schedule: Schedule;
-  };
-}
-
-type Action = UpdateShiftAction | ReplaceScheduleAction;
-
-export const scheduleReducer = (
-  schedule: Schedule,
-  action: Action
-): Schedule => {
-  switch (action.type) {
-    case 'UPDATE_SHIFT':
-      const shift = action.payload.shift;
-      return {
-        ...schedule,
-        [shift.date]: schedule[shift.date].map(existingShift => {
-          return existingShift.shift === shift.shift ? shift : existingShift;
-        }),
-      };
-    case 'REPLACE_SCHEDULE':
-      return {
-        ...action.payload.schedule,
-      };
-    default:
-      return schedule;
-  }
 };

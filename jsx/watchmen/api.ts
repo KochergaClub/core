@@ -1,9 +1,8 @@
 import { API } from '~/common/api';
 
 import { Shift } from './types';
-import { Member } from '~/staff/types';
 
-export const loadSchedule = async (
+export const getSchedule = async (
   api: API,
   from_date: string,
   to_date: string
