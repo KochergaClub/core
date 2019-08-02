@@ -18,6 +18,7 @@ import EditingSwitch from './components/EditingSwitch';
 
 import { ScheduleContext } from './contexts';
 import { loadSchedule } from './api';
+import { getMembers } from '../staff/api';
 
 interface Props {
   schedule: Shift[];
@@ -122,7 +123,8 @@ const getInitialData: InitialLoader<Props> = async (
 
   const format = 'YYYY-MM-DD';
 
-  const staffMembers = (await api.call('staff/member', 'GET')) as StaffMember[];
+  const staffMembers = await getMembers(api);
+
   const watchmen = staffMembers.filter(
     member => member.is_current && member.role === 'WATCHMAN'
   );
