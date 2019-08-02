@@ -7,7 +7,6 @@ import { A, Column, Row } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI } from '~/common/hooks';
-import { API } from '~/common/api';
 
 import { StaffContext } from '~/staff/contexts';
 
@@ -18,13 +17,7 @@ import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
 
 import { ScheduleContext } from './contexts';
-
-const loadSchedule = async (api: API, from_date: string, to_date: string) => {
-  return (await api.call(
-    `watchmen/schedule?from_date=${from_date}&to_date=${to_date}`,
-    'GET'
-  )) as Shift[];
-};
+import { loadSchedule } from './api';
 
 interface Props {
   schedule: Shift[];

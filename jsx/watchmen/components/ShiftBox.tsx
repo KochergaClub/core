@@ -11,6 +11,8 @@ import { nightColor } from '../constants';
 import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
 
+import { updateShift } from '../api';
+
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
   cursor: ${props => (props.editing ? 'pointer' : 'auto')};
@@ -73,12 +75,12 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
 
   const { date, shift: shiftType } = shift;
 
-  const updateUrl = `watchmen/schedule/${date}/${shiftType}`;
-
-  const updateShift = useCallback(
-    async (data: { watchman: Member | null; is_night?: boolean }) => {
-      await api.call(updateUrl, 'PUT', {
-        watchman: data.watchman ? data.watchman.short_name : '',
+  const updateShiftCb = useCallback(
+    async (data: { watchman: Member | null; is_night: boolean }) => {
+      await updateShift(api, {
+        date,
+        shift: shiftType,
+        watchman: data.watchman,
         is_night: data.is_night,
       });
 
@@ -88,15 +90,15 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
       });
       unexpand();
     },
-    [api, updateUrl, shift, setShift, unexpand]
+    [api, date, shiftType, shift, setShift, unexpand]
   );
 
   const pickMember = async (m: Member) => {
-    await updateShift({ watchman: m, is_night: false });
+    await updateShiftCb({ watchman: m, is_night: false });
   };
 
   const pickExtra = async (text: string) => {
-    await updateShift({
+    await updateShiftCb({
       watchman: null,
       is_night: text === 'Ночь',
     });
