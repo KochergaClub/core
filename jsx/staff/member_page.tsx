@@ -1,13 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { A, Button, Column } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '../common/types';
-import { useAPI } from '../common/hooks';
-import Page from '../components/Page';
+import { Screen, InitialLoader } from '~/common/types';
+import { useAPI } from '~/common/hooks';
+import Page from '~/components/Page';
+import AsyncButton from '~/components/AsyncButton';
 
 import { Member } from './types';
+
+import { getMember, grantGooglePermissions } from './api';
 
 const Ex = styled.div`
   background-color: #ddd;
@@ -27,26 +30,20 @@ interface Props {
 }
 
 const ManagerControls = ({ member }: { member: Member }) => {
-  const [granting, setGranting] = useState(false);
   const api = useAPI();
 
-  const grantGoogle = useCallback(async () => {
-    setGranting(true);
-    await api.call(
-      `staff/member/${member.id}/grant_google_permissions`,
-      'POST'
-    );
-    setGranting(false);
-  }, [api, member]);
+  const handleGrantGooglePermissions = useCallback(async () => {
+    await grantGooglePermissions(api, member.id);
+  }, [api, member.id]);
 
   if (member.role !== 'WATCHMAN') {
     return null;
   }
 
   return (
-    <Button small loading={granting} disabled={granting} onClick={grantGoogle}>
+    <AsyncButton small act={handleGrantGooglePermissions}>
       Выдать права в Google
-    </Button>
+    </AsyncButton>
   );
 };
 
@@ -84,7 +81,8 @@ const getInitialData: InitialLoader<Props> = async (
   { api, user },
   { params }
 ) => {
-  const member = await api.call(`staff/member/${params.id}`, 'GET');
+  const id = parseInt(params.id);
+  const member = await getMember(api, id);
   return {
     member,
     current_user_is_manager: user.permissions.indexOf('staff.manage') !== -1,

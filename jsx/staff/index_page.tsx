@@ -7,6 +7,8 @@ import Page from '~/components/Page';
 
 import { Member } from './types';
 
+import { getMembers } from './api';
+
 const MemberList = ({
   title,
   members,
@@ -69,7 +71,7 @@ const StaffIndexPage = ({ members }: Props) => (
 );
 
 const getInitialData: InitialLoader<Props> = async ({ api }) => {
-  const members = await api.call('staff/member', 'GET');
+  const members = await getMembers(api);
   return { members };
 };
 
