@@ -1,20 +1,52 @@
 import { Schedule } from './types';
 
-import { Action } from './actions';
+import {
+  UPDATE_SHIFT,
+  REPLACE_SCHEDULE,
+  SET_EDITING,
+  ActionTypes,
+} from './actions';
 
-export const reducer = (schedule: Schedule, action: Action): Schedule => {
+interface State {
+  editing: boolean;
+  schedule?: Schedule;
+}
+
+const initialState: State = {
+  editing: false,
+  schedule: undefined,
+};
+
+const reducer = (state: State = initialState, action: ActionTypes): State => {
   switch (action.type) {
-    case 'UPDATE_SHIFT':
+    case UPDATE_SHIFT:
       const shift = action.payload.shift;
+      if (!state.schedule) {
+        return state;
+      }
+      const schedule = state.schedule;
       return {
-        ...schedule,
-        [shift.date]: schedule[shift.date].map(existingShift => {
-          return existingShift.shift === shift.shift ? shift : existingShift;
-        }),
+        ...state,
+        schedule: {
+          ...schedule,
+          [shift.date]: schedule[shift.date].map(existingShift => {
+            return existingShift.shift === shift.shift ? shift : existingShift;
+          }),
+        },
       };
-    case 'REPLACE_SCHEDULE':
+    case REPLACE_SCHEDULE:
       return {
-        ...action.payload.schedule,
+        ...state,
+        schedule: action.payload.schedule,
       };
+    case SET_EDITING:
+      return {
+        ...state,
+        editing: action.payload,
+      };
+    default:
+      return state;
   }
 };
+
+export default reducer;

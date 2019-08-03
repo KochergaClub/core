@@ -1,9 +1,13 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+
 import styled from 'styled-components';
 
 import { colors, Row } from '@kocherga/frontkit';
 
-import { ScheduleContext } from '../contexts';
+import { State } from '~/redux/store';
+
+import * as actions from '../actions';
 
 const ItemContainer = styled.a<{ active: boolean }>`
   text-decoration: none;
@@ -35,8 +39,12 @@ const Item = ({
   );
 };
 
-const EditingSwitch = () => {
-  const { editing, setEditing } = useContext(ScheduleContext);
+interface Props {
+  editing: boolean;
+  setEditing: (v: boolean) => void;
+}
+
+const EditingSwitch: React.FC<Props> = ({ editing, setEditing }) => {
   return (
     <Row>
       <Item active={!editing} action={() => setEditing(false)}>
@@ -49,4 +57,9 @@ const EditingSwitch = () => {
   );
 };
 
-export default EditingSwitch;
+const mapStateToProps = (state: State) => ({ editing: state.watchmen.editing });
+
+export default connect(
+  mapStateToProps,
+  { setEditing: actions.setEditing }
+)(EditingSwitch);

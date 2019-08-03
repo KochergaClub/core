@@ -1,11 +1,6 @@
 import { Member } from './types';
 
-interface ReplaceMembersAction {
-  type: 'STAFF_REPLACE_MEMBERS';
-  members: Member[];
-}
-
-type ActionTypes = ReplaceMembersAction;
+import { ActionTypes } from './actions';
 
 interface State {
   members: Member[];

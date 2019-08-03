@@ -13,7 +13,7 @@ interface Props {
   renderDay: (date: moment.Moment) => React.ReactNode;
 }
 
-export default class Calendar extends React.Component<Props> {
+class Calendar extends React.Component<Props> {
   get weeks(): moment.Moment[] {
     // Note: startOf('week') will work correctly only if we use 'ru' locale
     let firstDay = moment(this.props.fromDate);
@@ -59,3 +59,5 @@ export default class Calendar extends React.Component<Props> {
     );
   }
 }
+
+export default Calendar;

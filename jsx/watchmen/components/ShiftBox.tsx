@@ -1,4 +1,6 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+
 import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
@@ -6,12 +8,13 @@ import { colors } from '@kocherga/frontkit';
 import { Member } from '~/staff/types';
 import Picker from '~/staff/components/Picker';
 import { useAPI, useExpandable } from '~/common/hooks';
+import { State } from '~/redux/store';
 
 import { nightColor } from '../constants';
-import { ScheduleContext } from '../contexts';
 import { Shift } from '../types';
 
-import { updateShift } from '../api';
+import { updateShift as updateShiftApiCall } from '../api';
+import { updateShift } from '../actions';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -67,30 +70,44 @@ const InnerShiftBox = ({
   return <Box style={{ backgroundColor: shift.watchman.color }}>{content}</Box>;
 };
 
-const ShiftBox = ({ shift }: { shift: Shift }) => {
-  const { editing, setShift } = useContext(ScheduleContext);
+interface OwnProps {
+  shift: Shift;
+}
+
+interface StateProps {
+  editing: boolean;
+}
+
+interface DispatchProps {
+  updateShift: (shift: Shift) => void;
+}
+
+type Props = OwnProps & StateProps & DispatchProps;
+
+const ShiftBox = (props: Props) => {
+  const { editing } = props;
   const api = useAPI();
 
   const { flipExpand, unexpand, ref, expanded } = useExpandable();
 
-  const { date, shift: shiftType } = shift;
+  const { date, shift: shiftType } = props.shift;
 
   const updateShiftCb = useCallback(
     async (data: { watchman: Member | null; is_night: boolean }) => {
-      await updateShift(api, {
+      await updateShiftApiCall(api, {
         date,
         shift: shiftType,
         watchman: data.watchman,
         is_night: data.is_night,
       });
 
-      setShift({
-        ...shift,
+      props.updateShift({
+        ...props.shift,
         ...data,
       });
       unexpand();
     },
-    [api, date, shiftType, shift, setShift, unexpand]
+    [api, date, shiftType, props.shift, props.updateShift, unexpand]
   );
 
   const pickMember = async (m: Member) => {
@@ -107,7 +124,7 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
   return (
     <Container ref={ref} editing={editing}>
       <div onClick={editing ? flipExpand : undefined}>
-        <InnerShiftBox shift={shift} editing={editing} />
+        <InnerShiftBox shift={props.shift} editing={editing} />
       </div>
       {expanded && (
         <Picker
@@ -123,4 +140,7 @@ const ShiftBox = ({ shift }: { shift: Shift }) => {
   );
 };
 
-export default ShiftBox;
+export default connect(
+  (state: State) => ({ editing: state.watchmen.editing }),
+  { updateShift }
+)(ShiftBox);

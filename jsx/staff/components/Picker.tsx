@@ -42,7 +42,7 @@ interface ExtraItem {
 
 type Item = MemberItem | ExtraItem;
 
-function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
+export function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
   const items = useMemo(() => {
     const memberItems: MemberItem[] = members.map(member => ({
       type: 'member' as const,

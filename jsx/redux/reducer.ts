@@ -1,16 +1,11 @@
-import { State } from './types';
+import { combineReducers } from 'redux';
 
-import { ActionTypes } from './actions';
+import staffReducer from '~/staff/reducer';
+import watchmenReducer from '~/watchmen/reducer';
 
-const testReducer = (state: State, action: ActionTypes): State => {
-  switch (action.type) {
-    case 'TEST':
-      return {
-        i: state.i + 1,
-      };
-    default:
-      return state;
-  }
-};
+const reducer = combineReducers({
+  staff: staffReducer,
+  watchmen: watchmenReducer,
+});
 
-export default testReducer;
+export default reducer;
