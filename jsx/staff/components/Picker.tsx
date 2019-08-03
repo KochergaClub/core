@@ -1,8 +1,9 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { connect } from 'react-redux';
+
+import { State } from '~/redux/store';
 
 import BasicPicker from '~/components/Picker';
-
-import { StaffContext } from '../contexts';
 
 import { Member } from '../types';
 
@@ -23,6 +24,7 @@ interface Extra {
 }
 
 interface Props {
+  members: Member[];
   extra?: Extra[];
   pickedExtra?: (text: string) => void;
   pickedMember: (member: Member) => void;
@@ -40,9 +42,7 @@ interface ExtraItem {
 
 type Item = MemberItem | ExtraItem;
 
-export default function Picker({ extra, pickedMember, pickedExtra }: Props) {
-  const { members } = useContext(StaffContext);
-
+function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
   const items = useMemo(() => {
     const memberItems: MemberItem[] = members.map(member => ({
       type: 'member' as const,
@@ -100,3 +100,7 @@ export default function Picker({ extra, pickedMember, pickedExtra }: Props) {
     />
   );
 }
+
+const mapStateToProps = (state: State) => ({ members: state.staff.members });
+
+export default connect(mapStateToProps)(Picker);

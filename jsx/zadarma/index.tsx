@@ -1,12 +1,13 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
 import { Column } from '@kocherga/frontkit';
 
-import { StaffContext } from '~/staff/contexts';
 import { Member as StaffMember } from '~/staff/types';
+import { replaceMembers } from '~/staff/actions';
 
 import { PbxCall } from './types';
 import { listReducer } from './reducers';
@@ -21,20 +22,24 @@ interface Props {
 }
 
 const ZadarmaIndexPage = ({ pbx_calls, members }: Props) => {
-  const [state, dispatch] = useReducer(listReducer, pbx_calls);
+  const [state, zadarmaDispatch] = useReducer(listReducer, pbx_calls);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(replaceMembers(members));
+  }, [members]);
 
   return (
     <Page title="Архив звонков" team>
       <Page.Title>Архив звонков</Page.Title>
       <Page.Main>
-        <ZadarmaContext.Provider value={dispatch}>
-          <StaffContext.Provider value={{ members }}>
-            <Column stretch gutter={10}>
-              {state.map(pbx_call => (
-                <PbxCallCard pbx_call={pbx_call} key={pbx_call.pbx_call_id} />
-              ))}
-            </Column>
-          </StaffContext.Provider>
+        <ZadarmaContext.Provider value={zadarmaDispatch}>
+          <Column stretch gutter={10}>
+            {state.map(pbx_call => (
+              <PbxCallCard pbx_call={pbx_call} key={pbx_call.pbx_call_id} />
+            ))}
+          </Column>
         </ZadarmaContext.Provider>
       </Page.Main>
     </Page>

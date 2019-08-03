@@ -1,4 +1,6 @@
-import React, { useCallback, useReducer, useState } from 'react';
+import React, { useEffect, useCallback, useReducer, useState } from 'react';
+
+import { useDispatch } from 'react-redux';
 
 import moment from 'moment';
 
@@ -8,9 +10,9 @@ import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI } from '~/common/hooks';
 
-import { StaffContext } from '~/staff/contexts';
 import { getMembers } from '~/staff/api';
 import { Member as StaffMember } from '~/staff/types';
+import { replaceMembers } from '~/staff/actions';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
@@ -40,6 +42,12 @@ const WatchmenIndexPage = (props: Props) => {
   );
   const [editing, setEditing] = useState(false);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(replaceMembers(props.watchmen));
+  }, [props.watchmen]);
+
   const api = useAPI();
 
   const setShift = useCallback((shift: Shift) => {
@@ -61,32 +69,30 @@ const WatchmenIndexPage = (props: Props) => {
 
   return (
     <ScheduleContext.Provider value={contextValue}>
-      <StaffContext.Provider value={{ members: props.watchmen }}>
-        <Page title="Расписание смен" team>
-          <Page.Title>Расписание смен</Page.Title>
-          <Page.Main>
-            <Column gutter={16} stretch>
-              <Column centered gutter={0}>
-                <Column centered>
-                  <Pager from_date={moment(props.from_date)} />
-                  {props.editable && <EditingSwitch />}
-                </Column>
+      <Page title="Расписание смен" team>
+        <Page.Title>Расписание смен</Page.Title>
+        <Page.Main>
+          <Column gutter={16} stretch>
+            <Column centered gutter={0}>
+              <Column centered>
+                <Pager from_date={moment(props.from_date)} />
+                {props.editable && <EditingSwitch />}
               </Column>
-              <Calendar
-                fromDate={moment(props.from_date)}
-                toDate={moment(props.to_date)}
-                renderDay={d => {
-                  return (
-                    <DayContainer
-                      daySchedule={schedule[d.format('YYYY-MM-DD')]}
-                    />
-                  );
-                }}
-              />
             </Column>
-          </Page.Main>
-        </Page>
-      </StaffContext.Provider>
+            <Calendar
+              fromDate={moment(props.from_date)}
+              toDate={moment(props.to_date)}
+              renderDay={d => {
+                return (
+                  <DayContainer
+                    daySchedule={schedule[d.format('YYYY-MM-DD')]}
+                  />
+                );
+              }}
+            />
+          </Column>
+        </Page.Main>
+      </Page>
     </ScheduleContext.Provider>
   );
 };

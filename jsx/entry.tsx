@@ -1,10 +1,12 @@
 import { hot } from 'react-hot-loader/root';
 
 import React from 'react';
+import { Provider as ReduxProvider } from 'react-redux';
 
 import { API } from './common/api';
 import { User } from './common/types';
 import GlobalContext from './components/GlobalContext';
+import store from '~/redux/store';
 
 import { AnyScreen } from './common/types';
 
@@ -26,7 +28,9 @@ const Entrypoint = function<T extends {}>(props: Props<T>) {
 
   return (
     <GlobalContext.Provider value={contextValue}>
-      <Component {...props.innerProps} />
+      <ReduxProvider store={store}>
+        <Component {...props.innerProps} />
+      </ReduxProvider>
     </GlobalContext.Provider>
   );
 };
