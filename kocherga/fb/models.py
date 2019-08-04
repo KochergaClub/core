@@ -51,3 +51,8 @@ class Auth(models.Model):
 
     def validate(self):
         requests.get(f"{SERVER}/{API_VERSION}/kocherga.club?fields=picture").raise_for_status()
+
+    class Meta:
+        permissions = (
+            ('marketing', 'Может контролировать ФБ-маркетинг'),
+        )

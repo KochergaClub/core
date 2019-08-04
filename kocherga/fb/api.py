@@ -12,15 +12,34 @@ def available():
     auth.validate()
 
 
-def get_by_id(object_id: str, fields: List[str]) -> dict:
-    auth = Auth.objects.get()
+def get(endpoint: str, fields=None, token=None) -> dict:
+    params = {}
+
+    params['access_token'] = token or Auth.objects.get().access_token
+
+    if fields:
+        params['fields'] = ','.join(fields)
 
     r = requests.get(
-        f"{SERVER}/{API_VERSION}/{object_id}",
-        params={
-            "access_token": auth.access_token,
-            "fields": ','.join(fields),
-        },
+        f"{SERVER}/{API_VERSION}/{endpoint}",
+        params=params,
     )
     r.raise_for_status()
     return r.json()
+
+
+def post(endpoint: str, data={}, token=None) -> dict:
+    params = {}
+    params['access_token'] = token or Auth.objects.get().access_token
+
+    r = requests.post(
+        f"{SERVER}/{API_VERSION}/{endpoint}",
+        params=params,
+        json=data,
+    )
+    r.raise_for_status()
+    return r.json()
+
+
+def get_by_id(object_id: str, fields: List[str]) -> dict:
+    return get(object_id, fields)

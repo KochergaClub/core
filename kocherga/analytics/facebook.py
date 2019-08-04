@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime, timedelta
+from collections import defaultdict
 
 from kocherga.dateutils import TZ
 import kocherga.cm.models
@@ -66,26 +67,5 @@ def export_cm_audience(filename):
                 c.last_name,
                 'RU',
                 c.total_spent,  # TODO - expected LTV estimation
-                'RUB'
-            ])
-
-
-def export_training_audience(filename):
-    tickets = kocherga.ratio.models.Ticket.objects.all()
-
-    with open(filename, 'w') as fh:
-        w = csv.writer(fh)
-        w.writerow(['email', 'fn', 'ln', 'country', 'value', 'currency'])
-        for t in tickets:
-            if not t.email:
-                continue
-            if not t.payment_amount:
-                continue
-            w.writerow([
-                t.email,
-                t.first_name,
-                t.last_name,
-                'RU',
-                t.payment_amount,
                 'RUB'
             ])

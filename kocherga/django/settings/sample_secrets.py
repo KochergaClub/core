@@ -22,7 +22,15 @@ CAFE_MANAGER_CREDENTIALS = {
     'password': 'admin',
 }
 
-KOCHERGA_FB_ANNOUNCER_PASSWORD = None # real FB password, not a token
+KOCHERGA_FB_ANNOUNCER_PASSWORD = None  # real FB password, not a token
+
+KOCHERGA_FB_MARKETING = {
+    "access_token": "",  # Marketing API token (with ads_management permission)
+    "account_id": "",  # Primary ads account id
+    "audiences": {
+        "ratio_tickets": "",  # custom audience id which can be uploaded
+    },
+}
 
 KOCHERGA_GOOGLE_CREDENTIALS = {
     "type": "service_account",
