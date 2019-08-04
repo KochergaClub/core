@@ -5,4 +5,5 @@ export interface Store {
   props: any;
   user: User;
   csrfToken: string;
+  reduxState: any;
 }

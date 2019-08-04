@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { useDispatch } from 'react-redux';
 
@@ -11,10 +11,9 @@ import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI } from '~/common/hooks';
 
 import { getMembers } from '~/staff/api';
-import { Member as StaffMember } from '~/staff/types';
 import { replaceMembers } from '~/staff/actions';
 
-import { Shift, shifts2schedule } from './types';
+import { shifts2schedule } from './types';
 import { replaceSchedule } from './actions';
 
 import Calendar from './components/Calendar';
@@ -25,25 +24,13 @@ import Pager from './components/Pager';
 import { getSchedule } from './api';
 
 interface Props {
-  schedule: Shift[];
   editable: boolean;
-  watchmen: StaffMember[];
   from_date: string;
   to_date: string;
-  children?: React.ReactNode;
 }
 
-const WatchmenIndexPage = (props: Props) => {
+const WatchmenIndexPage: React.FC<Props> = props => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log('setting initial schedule');
-    dispatch(replaceSchedule(shifts2schedule(props.schedule)));
-  }, [props.schedule]);
-
-  useEffect(() => {
-    dispatch(replaceMembers(props.watchmen));
-  }, [props.watchmen]);
 
   const api = useAPI();
 
@@ -80,7 +67,7 @@ const WatchmenIndexPage = (props: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async (
-  { api, user },
+  { api, user, store: { dispatch } },
   { query }
 ) => {
   const from_date_str = query.from_date;
@@ -103,16 +90,23 @@ const getInitialData: InitialLoader<Props> = async (
     member => member.is_current && member.role !== 'WATCHMAN'
   );
 
+  const allMembers = watchmen.concat(otherStaff);
+
+  // FIXME - this replaces the global staff members list, that's not a good idea.
+  dispatch(replaceMembers(allMembers));
+
+  const schedule = await getSchedule(
+    api,
+    from_date.format(format),
+    to_date.format(format)
+  );
+
+  dispatch(replaceSchedule(shifts2schedule(schedule)));
+
   return {
-    schedule: await getSchedule(
-      api,
-      from_date.format(format),
-      to_date.format(format)
-    ),
     editable: user.permissions.indexOf('watchmen.manage') !== -1,
     from_date: from_date.format(format),
     to_date: to_date.format(format),
-    watchmen: watchmen.concat(otherStaff),
   };
 };
 

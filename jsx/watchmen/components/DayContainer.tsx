@@ -32,10 +32,11 @@ const DayContainer: React.FC<Props> = ({ daySchedule }) => {
 const mapStateToProps = (
   state: State,
   ownProps: { date: moment.Moment }
-): StateProps => ({
-  daySchedule: state.watchmen.schedule
-    ? state.watchmen.schedule[ownProps.date.format('YYYY-MM-DD')]
-    : [],
-});
+): StateProps => {
+  const key = ownProps.date.format('YYYY-MM-DD');
+  return {
+    daySchedule: state.watchmen.schedule[key] || [],
+  };
+};
 
 export default connect(mapStateToProps)(DayContainer);

@@ -1,4 +1,5 @@
 import { API } from './api';
+import { Store } from 'redux';
 
 export type AnyInitialLoader<B, P> = (
   context: GlobalContextShape,
@@ -29,4 +30,5 @@ export interface User {
 export interface GlobalContextShape {
   api: API;
   user: User;
+  store: Store;
 }

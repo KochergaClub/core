@@ -3,10 +3,13 @@ import { devToolsEnhancer } from 'redux-devtools-extension';
 
 import reducer from './reducer';
 
-const store = createStore(
-  reducer,
-  devToolsEnhancer({}) // https://github.com/zalmoxisus/redux-devtools-extension#13-use-redux-devtools-extension-package-from-npm
-);
-export default store;
+export const configureStore = (preloadedState = undefined) => {
+  const store = createStore(
+    reducer,
+    preloadedState,
+    devToolsEnhancer({}) // https://github.com/zalmoxisus/redux-devtools-extension#13-use-redux-devtools-extension-package-from-npm
+  );
+  return store;
+};
 
 export type State = ReturnType<typeof reducer>;

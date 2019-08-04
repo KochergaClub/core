@@ -30,6 +30,7 @@ export function renderEntrypoint<T>(
       csrfToken={context.api.csrfToken}
       user={context.user}
       innerProps={props}
+      store={context.store}
     />
   );
 

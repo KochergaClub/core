@@ -21,14 +21,17 @@ import cookie from 'cookie';
 import slash from 'express-slash';
 import httpProxy from 'http-proxy';
 
+import { Store as ReduxStore } from 'redux';
+
 import 'babel-polyfill';
 
+import { GlobalFontsString } from '@kocherga/frontkit';
+
 import { API, APIError } from '../jsx/common/api';
+import { configureStore } from '../jsx/redux/store';
 import { GlobalContextShape } from '../jsx/common/types';
 import { wagtailScreen } from '../jsx/screens';
 import { WagtailPageType } from '../jsx/wagtail/pages/types';
-
-import { GlobalFontsString } from '@kocherga/frontkit';
 
 const webpackStats = require('../webpack-stats.json');
 
@@ -109,13 +112,14 @@ const getAPI = (req: express.Request) => {
 };
 
 // This should be used for error pages, which can't load the real user.
-const getFallbackContext = (req: express.Request) => {
+const getFallbackContext = (req: express.Request): GlobalContextShape => {
   return {
     api: getAPI(req),
     user: {
       is_authenticated: false,
       permissions: [],
     },
+    store: configureStore(),
   };
 };
 
@@ -125,7 +129,8 @@ app.use(async (req, _, next) => {
     const api = getAPI(req);
     const user = await api.call('me', 'GET');
 
-    req.reactContext = { api, user };
+    req.reactContext = { api, user, store: configureStore() };
+
     next();
   } catch (err) {
     next(err);
@@ -153,6 +158,7 @@ const sendFullHtml = (
     props,
     user: req.reactContext.user,
     csrfToken: api.csrfToken,
+    reduxState: req.reactContext.store.getState(),
   };
 
   const htmlTemplate = `<!DOCTYPE html>
