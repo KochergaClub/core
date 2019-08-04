@@ -17,6 +17,13 @@ CAFE_MANAGER_SERVER = "https://demo.cafe-manager.ru"
 
 KOCHERGA_FB_ANNOUNCER_PASSWORD = ""
 
+KOCHERGA_FB_MARKETING = {
+    "access_token": "",
+    "account_id": "",
+    "audiences": {
+        "ratio_tickets": "",
+    },
+}
 KOCHERGA_GOOGLE_CREDENTIALS = {
     "type": "service_account",
     "project_id": "",
