@@ -1,6 +1,5 @@
 import csv
 from datetime import datetime, timedelta
-from collections import defaultdict
 
 from kocherga.dateutils import TZ
 import kocherga.cm.models
