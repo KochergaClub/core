@@ -39,6 +39,8 @@ import {
   getGAScript,
 } from './server/render';
 
+import { Store } from './types';
+
 const ADDRESS = argv.address;
 const PORT = argv.port;
 
@@ -117,7 +119,7 @@ const getFallbackContext = (req: express.Request) => {
   };
 };
 
-// Custom middleware which injects req.django with api and user fields.
+// Custom middleware which injects req.reactContext with api and user fields.
 app.use(async (req, _, next) => {
   try {
     const api = getAPI(req);
@@ -146,10 +148,11 @@ const sendFullHtml = (
     bundleSrc = 'http://localhost:8080' + bundleSrc;
   }
 
-  const store = {
+  const store: Store = {
     screenName,
     props,
     user: req.reactContext.user,
+    csrfToken: api.csrfToken,
   };
 
   const htmlTemplate = `<!DOCTYPE html>
@@ -171,9 +174,8 @@ const sendFullHtml = (
       <body>
         <div id="react-app">${html}</div>
         <script>
-        // Info stored for re-rendering the app
+        // Info stored for app re-rendering
         var store = ${JSON.stringify(store)};
-        var csrfToken = "${api.csrfToken}";
         </script>
 
         <script type="text/javascript" src="${bundleSrc}"></script>

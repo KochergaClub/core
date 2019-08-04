@@ -6,22 +6,23 @@ import ReactDOM from 'react-dom';
 import Entrypoint from '../jsx/entry';
 import { findScreen } from '../jsx/screens';
 
+import { Store } from './types';
+
 declare global {
   interface Window {
-    csrfToken: string; // populated by server.ts
-    store: any;
+    store: Store; // populated by server.ts
   }
 }
 
 function renderApp(props: any) {
   const domContainerNode = document.getElementById('react-app');
 
-  const screen = findScreen(window['store'].screenName);
+  const screen = findScreen(window.store.screenName);
 
   const el = React.createElement(Entrypoint, {
     screen,
-    user: window['store'].user,
-    csrfToken: window.csrfToken, // extract from page
+    user: window.store.user,
+    csrfToken: window.store.csrfToken, // extract from page
     innerProps: props,
   });
 
