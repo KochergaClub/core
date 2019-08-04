@@ -96,6 +96,7 @@
     "jest": "^24.7.1",
     "nodemon": "^1.18.10",
     "prettier": "^1.17.1",
+    "redux-devtools-extension": "^2.13.8",
     "style-loader": "^0.23.1",
     "use-onclickoutside": "^0.3.1",
     "webpack-bundle-tracker": "^0.4.2-beta",
