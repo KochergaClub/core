@@ -47,3 +47,6 @@ shell:
 
 pyshell:
 	docker-compose -f docker/compose.dev.yml exec api ./manage.py shell
+
+deploy_prod_secrets:
+	scp kocherga/django/settings/prod_secrets.py kocherga.club: && ssh kocherga.club 'sudo mv prod_secrets.py /config/secrets.py && sudo chown root:root /config/secrets.py && sudo chmod 600 /config/secrets.py'
