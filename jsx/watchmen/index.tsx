@@ -7,10 +7,9 @@ import { addWeeks, startOfWeek, format, parseISO } from 'date-fns';
 import { Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
-import { State } from '~/redux/store';
 
 import Page from '~/components/Page';
-import { useListeningWebSocket, useAPI } from '~/common/hooks';
+import { useListeningWebSocket, useAPI, usePermissions } from '~/common/hooks';
 import { API } from '~/common/api';
 
 import { getMembers } from '~/staff/api';
@@ -24,7 +23,6 @@ import EditingSwitch from './components/EditingSwitch';
 import Pager from './components/Pager';
 
 interface StateProps {
-  editable: boolean;
   from_date_str: string;
   to_date_str: string;
 }
@@ -37,6 +35,7 @@ const dateFormatString = 'yyyy-MM-dd';
 
 const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
   const api = useAPI();
+  const [editable] = usePermissions(['watchmen.manage']);
 
   const from_date = parseISO(props.from_date_str);
   const to_date = parseISO(props.to_date_str);
@@ -55,7 +54,7 @@ const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
           <Column centered gutter={0}>
             <Column centered>
               <Pager from_date={from_date} />
-              {props.editable && <EditingSwitch />}
+              {editable && <EditingSwitch />}
             </Column>
           </Column>
           <Calendar
@@ -71,14 +70,10 @@ const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
   );
 };
 
-const mapStateToProps = (state: State) => ({
-  schedule: state.watchmen.schedule,
-});
-
 const mapDispatchToProps = { reloadSchedule };
 
 const ConnectedPage = connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(WatchmenIndexPage);
 
@@ -115,7 +110,6 @@ const getInitialData: InitialLoader<StateProps> = async (
   await dispatch(reloadSchedule(api, from_date, to_date));
 
   return {
-    editable: user.permissions.indexOf('watchmen.manage') !== -1,
     from_date_str: format(from_date, dateFormatString),
     to_date_str: format(to_date, dateFormatString),
   };
