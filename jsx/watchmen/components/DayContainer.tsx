@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import moment from 'moment';
+import * as df from 'date-fns';
 
 import { State } from '~/redux/store';
 
@@ -10,7 +10,7 @@ import { DaySchedule } from '../types';
 import ShiftBox from './ShiftBox';
 
 interface OwnProps {
-  date: moment.Moment;
+  date: Date;
 }
 
 interface StateProps {
@@ -31,9 +31,9 @@ const DayContainer: React.FC<Props> = ({ daySchedule }) => {
 
 const mapStateToProps = (
   state: State,
-  ownProps: { date: moment.Moment }
+  ownProps: { date: Date }
 ): StateProps => {
-  const key = ownProps.date.format('YYYY-MM-DD');
+  const key = df.format(ownProps.date, 'yyyy-MM-dd');
   return {
     daySchedule: state.watchmen.schedule[key] || [],
   };

@@ -1,7 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import moment from 'moment';
+import * as df from 'date-fns';
+
+import { formatDate } from '~/common/utils';
 
 const Container = styled.header`
   text-align: center;
@@ -9,15 +11,18 @@ const Container = styled.header`
   line-height: 2.5;
 `;
 
-const WeekHeader = ({ week }: { week: moment.Moment }) => {
-  const lastDay = moment(week);
-  lastDay.add(6, 'day');
+interface Props {
+  week: Date;
+}
 
-  let format = 'MMMM';
-  if (lastDay.year() !== moment().year()) {
-    format = format + ' YYYY';
+const WeekHeader: React.FC<Props> = ({ week }) => {
+  const lastDay = df.addDays(week, 6);
+
+  let format = 'LLLL';
+  if (df.getYear(lastDay) !== df.getYear(new Date())) {
+    format = format + ' yyyy';
   }
-  return <Container>{lastDay.format(format)}</Container>;
+  return <Container>{formatDate(lastDay, format)}</Container>;
 };
 
 export default WeekHeader;

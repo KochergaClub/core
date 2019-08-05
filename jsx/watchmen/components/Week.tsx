@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import moment from 'moment';
+import * as df from 'date-fns';
 
 import DayHeader from './DayHeader';
 
-const weekMoments = (firstDay: moment.Moment) =>
-  [0, 1, 2, 3, 4, 5, 6].map(i => moment(firstDay).add(i, 'day'));
+const weekMoments = (firstDay: Date) =>
+  [0, 1, 2, 3, 4, 5, 6].map(i => df.addDays(firstDay, i));
 
 interface Props {
-  firstDay: moment.Moment;
-  renderDay: (date: moment.Moment) => React.ReactNode;
+  firstDay: Date;
+  renderDay: (date: Date) => React.ReactNode;
 }
 
 const Container = styled.div`
@@ -42,33 +42,30 @@ const RightHighlight = styled.div`
   background-color: black;
 `;
 
-class Week extends React.Component<Props> {
-  render() {
-    const { firstDay, renderDay } = this.props;
-    const highlight = moment(firstDay)
-      .startOf('week')
-      .isSame(moment().startOf('week'));
+const Week: React.FC<Props> = ({ firstDay, renderDay }) => {
+  const highlight = df.isEqual(
+    df.startOfWeek(firstDay),
+    df.startOfWeek(new Date())
+  );
 
-    return (
-      <Container>
-        {weekMoments(firstDay).map((day, i) => {
-          const today = moment(day)
-            .startOf('day')
-            .isSame(moment().startOf('day'));
-          return (
-            <Cell key={i} today={today}>
-              <DayHeader day={day} />
-              <DayContainer>
-                {i === 0 && highlight && <LeftHighlight />}
-                {i === 6 && highlight && <RightHighlight />}
-                {renderDay(day)}
-              </DayContainer>
-            </Cell>
-          );
-        })}
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      {weekMoments(firstDay).map((day, i) => {
+        const today = df.isEqual(df.startOfDay(new Date()), df.startOfDay(day));
+
+        return (
+          <Cell key={i} today={today}>
+            <DayHeader day={day} />
+            <DayContainer>
+              {i === 0 && highlight && <LeftHighlight />}
+              {i === 6 && highlight && <RightHighlight />}
+              {renderDay(day)}
+            </DayContainer>
+          </Cell>
+        );
+      })}
+    </Container>
+  );
+};
 
 export default Week;

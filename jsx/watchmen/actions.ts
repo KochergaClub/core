@@ -28,7 +28,7 @@ export const reloadSchedule = (
   api: API,
   from_date: string,
   to_date: string
-): ThunkAction<void, any, undefined, Action> => {
+): ThunkAction<Promise<void>, any, undefined, Action> => {
   return async dispatch => {
     const shifts = await getSchedule(api, from_date, to_date);
     const schedule = shifts2schedule(shifts);

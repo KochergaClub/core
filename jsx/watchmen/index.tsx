@@ -1,14 +1,17 @@
 import React, { useCallback } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 
 import moment from 'moment';
 
 import { Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
+import { State } from '~/redux/store';
+
 import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI } from '~/common/hooks';
+import { API } from '~/common/api';
 
 import { getMembers } from '~/staff/api';
 import { replaceMembers } from '~/staff/actions';
@@ -20,20 +23,26 @@ import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
 import Pager from './components/Pager';
 
-interface Props {
+interface StateProps {
   editable: boolean;
   from_date: string;
   to_date: string;
 }
 
-const WatchmenIndexPage: React.FC<Props> = props => {
-  const dispatch = useDispatch();
+interface DispatchProps {
+  reloadSchedule: (
+    api: API,
+    from_date: string,
+    to_date: string
+  ) => Promise<void>;
+}
 
+const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
   const api = useAPI();
 
   const fetchSchedule = useCallback(async () => {
-    await dispatch(reloadSchedule(api, props.from_date, props.to_date));
-  }, [api, props.from_date, props.to_date]);
+    await props.reloadSchedule(api, props.from_date, props.to_date);
+  }, [api, props.from_date, props.to_date, props.reloadSchedule]);
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
@@ -44,13 +53,13 @@ const WatchmenIndexPage: React.FC<Props> = props => {
         <Column gutter={16} stretch>
           <Column centered gutter={0}>
             <Column centered>
-              <Pager from_date={moment(props.from_date)} />
+              <Pager from_date={new Date(props.from_date)} />
               {props.editable && <EditingSwitch />}
             </Column>
           </Column>
           <Calendar
-            fromDate={moment(props.from_date)}
-            toDate={moment(props.to_date)}
+            fromDate={new Date(props.from_date)}
+            toDate={new Date(props.to_date)}
             renderDay={d => {
               return <DayContainer date={d} />;
             }}
@@ -61,7 +70,18 @@ const WatchmenIndexPage: React.FC<Props> = props => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async (
+const mapStateToProps = (state: State) => ({
+  schedule: state.watchmen.schedule,
+});
+
+const mapDispatchToProps = { reloadSchedule };
+
+const ConnectedPage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WatchmenIndexPage);
+
+const getInitialData: InitialLoader<StateProps> = async (
   { api, user, store: { dispatch } },
   { query }
 ) => {
@@ -101,8 +121,8 @@ const getInitialData: InitialLoader<Props> = async (
   };
 };
 
-const screen: Screen<Props> = {
-  component: WatchmenIndexPage,
+const screen: Screen<StateProps> = {
+  component: ConnectedPage,
   getInitialData,
 };
 export default screen;

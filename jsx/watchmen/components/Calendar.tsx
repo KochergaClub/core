@@ -1,45 +1,39 @@
 import React from 'react';
 
-import moment from 'moment';
-import 'moment/locale/ru';
+import * as df from 'date-fns';
 
 import MonthHeader from './MonthHeader';
 import Week from './Week';
 import WeekHeader from './WeekHeader';
 
 interface Props {
-  fromDate: moment.Moment;
-  toDate: moment.Moment;
-  renderDay: (date: moment.Moment) => React.ReactNode;
+  fromDate: Date;
+  toDate: Date;
+  renderDay: (date: Date) => React.ReactNode;
 }
 
 class Calendar extends React.Component<Props> {
-  get weeks(): moment.Moment[] {
-    // Note: startOf('week') will work correctly only if we use 'ru' locale
-    let firstDay = moment(this.props.fromDate);
-    if (firstDay.day() != 1) {
-      firstDay.endOf('week').add(1, 'day');
-    }
+  get weeks(): Date[] {
+    const result: Date[] = [];
 
-    const result: moment.Moment[] = [];
-    const day = firstDay;
+    let day = df.startOfWeek(this.props.fromDate, { weekStartsOn: 1 });
     do {
-      day.startOf('week'); // bad hack - moment.js is mutable
-      result.push(moment(day));
-      day.add(1, 'week');
-      day.endOf('week'); // bad hack
-    } while (day.isSameOrBefore(this.props.toDate));
+      result.push(day);
+      day = df.addWeeks(day, 1);
+    } while (
+      df.isBefore(day, this.props.toDate) ||
+      df.isEqual(day, this.props.toDate)
+    );
 
     return result;
   }
 
-  needsHeader = (week: moment.Moment, i: number) => {
+  needsHeader = (week: Date, i: number) => {
     if (i === 0) {
       return true;
     }
-    const lastDay = moment(week);
-    lastDay.add(6, 'day');
-    if (lastDay.date() <= 7) {
+    const lastDay = df.addDays(week, 6);
+    if (df.getDate(lastDay) <= 7) {
       return true;
     }
     return false;
@@ -50,7 +44,7 @@ class Calendar extends React.Component<Props> {
       <div style={{ minHeight: 250 }}>
         <MonthHeader />
         {this.weeks.map((week, i) => (
-          <div key={week.format('D-M')}>
+          <div key={df.format(week, 'dd-MM')}>
             {this.needsHeader(week, i) && <WeekHeader week={week} />}
             <Week firstDay={week} renderDay={this.props.renderDay} />
           </div>

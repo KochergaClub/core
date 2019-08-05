@@ -1,6 +1,6 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, Action } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk, { ThunkMiddleware } from 'redux-thunk';
+import thunk, { ThunkMiddleware, ThunkDispatch } from 'redux-thunk';
 
 import reducer from './reducer';
 
@@ -16,3 +16,4 @@ export const configureStore = (preloadedState = undefined) => {
 
 export type State = ReturnType<typeof reducer>;
 export type Store = ReturnType<typeof configureStore>;
+export type Dispatch = ThunkDispatch<State, undefined, Action>;
