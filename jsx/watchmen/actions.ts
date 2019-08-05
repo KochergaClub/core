@@ -26,8 +26,8 @@ export const setEditing = (value: boolean) => ({
 
 export const reloadSchedule = (
   api: API,
-  from_date: string,
-  to_date: string
+  from_date: Date,
+  to_date: Date
 ): ThunkAction<Promise<void>, any, undefined, Action> => {
   return async dispatch => {
     const shifts = await getSchedule(api, from_date, to_date);

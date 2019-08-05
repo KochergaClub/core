@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { connect } from 'react-redux';
 
-import moment from 'moment';
+import { addWeeks, startOfWeek, format, parseISO } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
@@ -25,24 +25,25 @@ import Pager from './components/Pager';
 
 interface StateProps {
   editable: boolean;
-  from_date: string;
-  to_date: string;
+  from_date_str: string;
+  to_date_str: string;
 }
 
 interface DispatchProps {
-  reloadSchedule: (
-    api: API,
-    from_date: string,
-    to_date: string
-  ) => Promise<void>;
+  reloadSchedule: (api: API, from_date: Date, to_date: Date) => Promise<void>;
 }
+
+const dateFormatString = 'yyyy-MM-dd';
 
 const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
   const api = useAPI();
 
+  const from_date = parseISO(props.from_date_str);
+  const to_date = parseISO(props.to_date_str);
+
   const fetchSchedule = useCallback(async () => {
-    await props.reloadSchedule(api, props.from_date, props.to_date);
-  }, [api, props.from_date, props.to_date, props.reloadSchedule]);
+    await props.reloadSchedule(api, from_date, to_date);
+  }, [api, from_date, to_date, props.reloadSchedule]);
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
@@ -53,13 +54,13 @@ const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
         <Column gutter={16} stretch>
           <Column centered gutter={0}>
             <Column centered>
-              <Pager from_date={new Date(props.from_date)} />
+              <Pager from_date={from_date} />
               {props.editable && <EditingSwitch />}
             </Column>
           </Column>
           <Calendar
-            fromDate={new Date(props.from_date)}
-            toDate={new Date(props.to_date)}
+            fromDate={from_date}
+            toDate={to_date}
             renderDay={d => {
               return <DayContainer date={d} />;
             }}
@@ -85,16 +86,17 @@ const getInitialData: InitialLoader<StateProps> = async (
   { api, user, store: { dispatch } },
   { query }
 ) => {
-  const from_date_str = query.from_date;
-  let from_date: moment.Moment;
-  if (from_date_str) {
-    from_date = moment(from_date_str);
+  let from_date: Date;
+  if (query.from_date) {
+    const match = query.from_date.match(/^\d{4}-\d{2}-\d{2}$/);
+    if (!match) {
+      throw new Error('Invalid from_date query param');
+    }
+    from_date = startOfWeek(new Date(match[0]), { weekStartsOn: 1 });
   } else {
-    from_date = moment().startOf('week');
+    from_date = startOfWeek(new Date(), { weekStartsOn: 1 });
   }
-  const to_date = moment(from_date).add(4, 'weeks');
-
-  const format = 'YYYY-MM-DD';
+  const to_date = addWeeks(from_date, 4);
 
   const staffMembers = await getMembers(api);
 
@@ -110,14 +112,12 @@ const getInitialData: InitialLoader<StateProps> = async (
   // FIXME - this replaces the global staff members list, that's not a good idea.
   dispatch(replaceMembers(allMembers));
 
-  await dispatch(
-    reloadSchedule(api, from_date.format(format), to_date.format(format))
-  );
+  await dispatch(reloadSchedule(api, from_date, to_date));
 
   return {
     editable: user.permissions.indexOf('watchmen.manage') !== -1,
-    from_date: from_date.format(format),
-    to_date: to_date.format(format),
+    from_date_str: format(from_date, dateFormatString),
+    to_date_str: format(to_date, dateFormatString),
   };
 };
 

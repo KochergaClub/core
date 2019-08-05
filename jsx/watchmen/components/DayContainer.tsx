@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as df from 'date-fns';
+import { format } from 'date-fns';
 
 import { State } from '~/redux/store';
 
@@ -33,7 +33,7 @@ const mapStateToProps = (
   state: State,
   ownProps: { date: Date }
 ): StateProps => {
-  const key = df.format(ownProps.date, 'yyyy-MM-dd');
+  const key = format(ownProps.date, 'yyyy-MM-dd');
   return {
     daySchedule: state.watchmen.schedule[key] || [],
   };

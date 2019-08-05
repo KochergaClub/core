@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import * as df from 'date-fns';
+import { isEqual, startOfDay, getDate } from 'date-fns';
 
 import { formatDate } from '~/common/utils';
 
@@ -18,9 +18,9 @@ interface Props {
 }
 
 const DayHeader: React.FC<Props> = ({ day }) => {
-  const today = df.isEqual(df.startOfDay(day), df.startOfDay(new Date()));
+  const today = isEqual(startOfDay(day), startOfDay(new Date()));
 
-  const format = today || df.getDate(day) === 1 ? 'd MMMM' : 'd';
+  const format = today || getDate(day) === 1 ? 'd MMMM' : 'd';
   return <Container today={today}>{formatDate(day, format)}</Container>;
 };
 

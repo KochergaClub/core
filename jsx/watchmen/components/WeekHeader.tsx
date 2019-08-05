@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import * as df from 'date-fns';
+import { addDays, getYear } from 'date-fns';
 
 import { formatDate } from '~/common/utils';
 
@@ -16,10 +16,10 @@ interface Props {
 }
 
 const WeekHeader: React.FC<Props> = ({ week }) => {
-  const lastDay = df.addDays(week, 6);
+  const lastDay = addDays(week, 6);
 
   let format = 'LLLL';
-  if (df.getYear(lastDay) !== df.getYear(new Date())) {
+  if (getYear(lastDay) !== getYear(new Date())) {
     format = format + ' yyyy';
   }
   return <Container>{formatDate(lastDay, format)}</Container>;

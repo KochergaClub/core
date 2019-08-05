@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import * as df from 'date-fns';
+import { addDays, isEqual, startOfWeek, startOfDay } from 'date-fns';
 
 import DayHeader from './DayHeader';
 
 const weekMoments = (firstDay: Date) =>
-  [0, 1, 2, 3, 4, 5, 6].map(i => df.addDays(firstDay, i));
+  [0, 1, 2, 3, 4, 5, 6].map(i => addDays(firstDay, i));
 
 interface Props {
   firstDay: Date;
@@ -43,15 +43,15 @@ const RightHighlight = styled.div`
 `;
 
 const Week: React.FC<Props> = ({ firstDay, renderDay }) => {
-  const highlight = df.isEqual(
-    df.startOfWeek(firstDay),
-    df.startOfWeek(new Date())
+  const highlight = isEqual(
+    startOfWeek(firstDay, { weekStartsOn: 1 }),
+    startOfWeek(new Date(), { weekStartsOn: 1 })
   );
 
   return (
     <Container>
       {weekMoments(firstDay).map((day, i) => {
-        const today = df.isEqual(df.startOfDay(new Date()), df.startOfDay(day));
+        const today = isEqual(startOfDay(new Date()), startOfDay(day));
 
         return (
           <Cell key={i} today={today}>
