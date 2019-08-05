@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 
 import { connect } from 'react-redux';
 
-import { addWeeks, startOfWeek, format, parseISO } from 'date-fns';
+import { addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
@@ -11,34 +11,37 @@ import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI, usePermissions } from '~/common/hooks';
 import { API } from '~/common/api';
+import { State } from '~/redux/store';
 
 import { getMembers } from '~/staff/api';
 import { replaceMembers } from '~/staff/actions';
 
-import { reloadSchedule } from './actions';
+import { reloadSchedule, setDatesWindow } from './actions';
+import { DatesWindow } from './types';
+import { selectDatesWindow } from './selectors';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
 import Pager from './components/Pager';
 
+interface OwnProps {}
+
 interface StateProps {
-  from_date_str: string;
-  to_date_str: string;
+  dates: DatesWindow;
 }
 
 interface DispatchProps {
   reloadSchedule: (api: API, from_date: Date, to_date: Date) => Promise<void>;
 }
 
-const dateFormatString = 'yyyy-MM-dd';
+type Props = OwnProps & StateProps & DispatchProps;
 
-const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
+const WatchmenIndexPage: React.FC<Props> = props => {
   const api = useAPI();
   const [editable] = usePermissions(['watchmen.manage']);
 
-  const from_date = parseISO(props.from_date_str);
-  const to_date = parseISO(props.to_date_str);
+  const [from_date, to_date] = props.dates;
 
   const fetchSchedule = useCallback(async () => {
     await props.reloadSchedule(api, from_date, to_date);
@@ -70,15 +73,19 @@ const WatchmenIndexPage: React.FC<StateProps & DispatchProps> = props => {
   );
 };
 
+const mapStateToProps = (state: State) => ({
+  dates: selectDatesWindow(state),
+});
+
 const mapDispatchToProps = { reloadSchedule };
 
 const ConnectedPage = connect(
-  undefined,
+  mapStateToProps,
   mapDispatchToProps
 )(WatchmenIndexPage);
 
-const getInitialData: InitialLoader<StateProps> = async (
-  { api, user, store: { dispatch } },
+const getInitialData: InitialLoader<OwnProps> = async (
+  { api, store: { dispatch } },
   { query }
 ) => {
   let from_date: Date;
@@ -109,13 +116,12 @@ const getInitialData: InitialLoader<StateProps> = async (
 
   await dispatch(reloadSchedule(api, from_date, to_date));
 
-  return {
-    from_date_str: format(from_date, dateFormatString),
-    to_date_str: format(to_date, dateFormatString),
-  };
+  dispatch(setDatesWindow(from_date, to_date));
+
+  return {};
 };
 
-const screen: Screen<StateProps> = {
+const screen: Screen<OwnProps> = {
   component: ConnectedPage,
   getInitialData,
 };

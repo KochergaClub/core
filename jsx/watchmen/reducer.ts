@@ -6,11 +6,11 @@ import {
   UPDATE_SHIFT,
   REPLACE_SCHEDULE,
   SET_EDITING,
+  SET_DATES_WINDOW,
   ActionTypes,
 } from './actions';
 
 type EditingState = boolean;
-type ScheduleState = Schedule;
 
 const editingReducer = (
   state: EditingState = false,
@@ -23,6 +23,22 @@ const editingReducer = (
       return state;
   }
 };
+
+type WindowState = [string, string];
+
+const windowReducer = (
+  state: WindowState = ['2018-12-31', '2019-01-27'],
+  action: ActionTypes
+): WindowState => {
+  switch (action.type) {
+    case SET_DATES_WINDOW:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+type ScheduleState = Schedule;
 
 const scheduleReducer = (
   schedule: ScheduleState = {},
@@ -50,6 +66,7 @@ const scheduleReducer = (
 const reducer = combineReducers({
   editing: editingReducer,
   schedule: scheduleReducer,
+  datesWindow: windowReducer,
 });
 
 export default reducer;
