@@ -5,7 +5,7 @@ import {
   addWeeks,
   addDays,
   getDate,
-  isBefore,
+  isAfter,
   isEqual,
   format,
 } from 'date-fns';
@@ -29,8 +29,7 @@ class Calendar extends React.Component<Props> {
       result.push(day);
       day = addWeeks(day, 1);
     } while (
-      isBefore(day, this.props.toDate) ||
-      isEqual(day, this.props.toDate)
+      !isAfter(addWeeks(day, 1), this.props.toDate) // next week is later than toDate, time to stop
     );
 
     return result;
