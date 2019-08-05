@@ -2,6 +2,7 @@ import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import { API } from '~/common/api';
+import { State } from '~/redux/store';
 import { getSchedule } from './api';
 import { Shift, Schedule, shifts2schedule } from './types';
 
@@ -28,7 +29,7 @@ export const reloadSchedule = (
   api: API,
   from_date: Date,
   to_date: Date
-): ThunkAction<Promise<void>, any, undefined, Action> => {
+): ThunkAction<Promise<void>, State, undefined, Action> => {
   return async dispatch => {
     const shifts = await getSchedule(api, from_date, to_date);
     const schedule = shifts2schedule(shifts);

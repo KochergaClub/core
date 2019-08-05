@@ -15,6 +15,7 @@ import { Shift } from '../types';
 
 import { updateShift as updateShiftApiCall } from '../api';
 import { updateShift } from '../actions';
+import { selectEditing } from '../selectors';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -141,6 +142,6 @@ const ShiftBox = (props: Props) => {
 };
 
 export default connect(
-  (state: State) => ({ editing: state.watchmen.editing }),
+  (state: State) => ({ editing: selectEditing(state) }),
   { updateShift }
 )(ShiftBox);

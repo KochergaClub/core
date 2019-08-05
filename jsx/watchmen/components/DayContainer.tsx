@@ -1,11 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { format } from 'date-fns';
-
 import { State } from '~/redux/store';
 
 import { DaySchedule } from '../types';
+import { selectDaySchedule } from '../selectors';
 
 import ShiftBox from './ShiftBox';
 
@@ -32,11 +31,8 @@ const DayContainer: React.FC<Props> = ({ daySchedule }) => {
 const mapStateToProps = (
   state: State,
   ownProps: { date: Date }
-): StateProps => {
-  const key = format(ownProps.date, 'yyyy-MM-dd');
-  return {
-    daySchedule: state.watchmen.schedule[key] || [],
-  };
-};
+): StateProps => ({
+  daySchedule: selectDaySchedule(state, ownProps.date),
+});
 
 export default connect(mapStateToProps)(DayContainer);

@@ -8,6 +8,7 @@ import { colors, Row } from '@kocherga/frontkit';
 import { State } from '~/redux/store';
 
 import * as actions from '../actions';
+import { selectEditing } from '../selectors';
 
 const ItemContainer = styled.a<{ active: boolean }>`
   text-decoration: none;
@@ -57,7 +58,7 @@ const EditingSwitch: React.FC<Props> = ({ editing, setEditing }) => {
   );
 };
 
-const mapStateToProps = (state: State) => ({ editing: state.watchmen.editing });
+const mapStateToProps = (state: State) => ({ editing: selectEditing(state) });
 
 export default connect(
   mapStateToProps,
