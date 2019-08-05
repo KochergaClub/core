@@ -21,8 +21,6 @@ import cookie from 'cookie';
 import slash from 'express-slash';
 import httpProxy from 'http-proxy';
 
-import { Store as ReduxStore } from 'redux';
-
 import 'babel-polyfill';
 
 import { GlobalFontsString } from '@kocherga/frontkit';
