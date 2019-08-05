@@ -1,5 +1,5 @@
 import { API } from './api';
-import { Store } from 'redux';
+import { Store } from '~/redux/store';
 
 export type AnyInitialLoader<B, P> = (
   context: GlobalContextShape,

@@ -2,13 +2,13 @@ import { hot } from 'react-hot-loader/root';
 
 import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
-import { Store } from 'redux';
 
-import { API } from './common/api';
-import { User } from './common/types';
-import GlobalContext from './components/GlobalContext';
+import { Store } from '~/redux/store';
+import { API } from '~/common/api';
+import { User } from '~/common/types';
+import GlobalContext from '~/components/GlobalContext';
 
-import { AnyScreen } from './common/types';
+import { AnyScreen } from '~/common/types';
 
 interface Props<T> {
   screen: AnyScreen<object, T>;

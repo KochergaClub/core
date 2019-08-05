@@ -13,15 +13,12 @@ import { useListeningWebSocket, useAPI } from '~/common/hooks';
 import { getMembers } from '~/staff/api';
 import { replaceMembers } from '~/staff/actions';
 
-import { shifts2schedule } from './types';
-import { replaceSchedule } from './actions';
+import { reloadSchedule } from './actions';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
 import Pager from './components/Pager';
-
-import { getSchedule } from './api';
 
 interface Props {
   editable: boolean;
@@ -35,9 +32,7 @@ const WatchmenIndexPage: React.FC<Props> = props => {
   const api = useAPI();
 
   const fetchSchedule = useCallback(async () => {
-    const shifts = await getSchedule(api, props.from_date, props.to_date);
-    const schedule = shifts2schedule(shifts);
-    dispatch(replaceSchedule(schedule));
+    await dispatch(reloadSchedule(api, props.from_date, props.to_date));
   }, [api, props.from_date, props.to_date]);
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
@@ -95,13 +90,9 @@ const getInitialData: InitialLoader<Props> = async (
   // FIXME - this replaces the global staff members list, that's not a good idea.
   dispatch(replaceMembers(allMembers));
 
-  const schedule = await getSchedule(
-    api,
-    from_date.format(format),
-    to_date.format(format)
+  await dispatch(
+    reloadSchedule(api, from_date.format(format), to_date.format(format))
   );
-
-  dispatch(replaceSchedule(shifts2schedule(schedule)));
 
   return {
     editable: user.permissions.indexOf('watchmen.manage') !== -1,
