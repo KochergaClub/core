@@ -12,14 +12,14 @@ import { StaffContext } from '~/staff/contexts';
 import { getMembers } from '~/staff/api';
 import { Member as StaffMember } from '~/staff/types';
 
-import { Shift, shifts2schedule } from './types';
-import { reducer } from './reducer';
-
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
 import Pager from './components/Pager';
 
+import { Shift, shifts2schedule } from './types';
+import { reducer } from './reducer';
+import { updateShift, replaceSchedule } from './actions';
 import { ScheduleContext } from './contexts';
 import { getSchedule } from './api';
 
@@ -43,20 +43,12 @@ const WatchmenIndexPage = (props: Props) => {
   const api = useAPI();
 
   const setShift = useCallback((shift: Shift) => {
-    scheduleDispatch({
-      type: 'UPDATE_SHIFT',
-      payload: { shift },
-    });
+    scheduleDispatch(updateShift(shift));
   }, []);
 
   const fetchSchedule = useCallback(async () => {
     const shifts = await getSchedule(api, props.from_date, props.to_date);
-    scheduleDispatch({
-      type: 'REPLACE_SCHEDULE',
-      payload: {
-        schedule: shifts2schedule(shifts),
-      },
-    });
+    scheduleDispatch(replaceSchedule(shifts2schedule(shifts)));
   }, [api, props.from_date, props.to_date]);
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
@@ -130,8 +122,8 @@ const getInitialData: InitialLoader<Props> = async (
       to_date.format(format)
     ),
     editable: user.permissions.indexOf('watchmen.manage') !== -1,
-    from_date: from_date.format('YYYY-MM-DD'),
-    to_date: to_date.format('YYYY-MM-DD'),
+    from_date: from_date.format(format),
+    to_date: to_date.format(format),
     watchmen: watchmen.concat(otherStaff),
   };
 };

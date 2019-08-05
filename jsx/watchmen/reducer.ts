@@ -1,20 +1,6 @@
-import { Shift, Schedule } from './types';
+import { Schedule } from './types';
 
-interface UpdateShiftAction {
-  type: 'UPDATE_SHIFT';
-  payload: {
-    shift: Shift;
-  };
-}
-
-interface ReplaceScheduleAction {
-  type: 'REPLACE_SCHEDULE';
-  payload: {
-    schedule: Schedule;
-  };
-}
-
-type Action = UpdateShiftAction | ReplaceScheduleAction;
+import { Action } from './actions';
 
 export const reducer = (schedule: Schedule, action: Action): Schedule => {
   switch (action.type) {
@@ -30,7 +16,5 @@ export const reducer = (schedule: Schedule, action: Action): Schedule => {
       return {
         ...action.payload.schedule,
       };
-    default:
-      return schedule;
   }
 };
