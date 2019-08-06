@@ -8,7 +8,9 @@ import thunk, {
 
 import reducer from './reducer';
 
-export const configureStore = (preloadedState = undefined) => {
+export const configureStore = (
+  preloadedState: State | undefined = undefined
+) => {
   // https://github.com/zalmoxisus/redux-devtools-extension#13-use-redux-devtools-extension-package-from-npm
   const enhancer = composeWithDevTools(
     applyMiddleware(thunk as ThunkMiddleware)

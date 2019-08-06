@@ -1,9 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
+
+import { Redirect } from 'react-router';
 
 import styled from 'styled-components';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
+import GlobalContext from '~/components/GlobalContext';
 
 import { Button, Input, Column } from '@kocherga/frontkit';
 import AuthContainer from './components/AuthContainer';
@@ -72,6 +75,12 @@ const LoginPage = (props: Props) => {
   const hotkeys = useCommonHotkeys({
     onEnter: cb,
   });
+
+  // TODO - move this to wrapper for LoginPage to avoid executing all the hooks above
+  const { user } = useContext(GlobalContext);
+  if (user.is_authenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Page title="Логин">

@@ -51,5 +51,3 @@ export const findScreen = (name: string) => {
   }
   return findBasicScreen(name);
 };
-
-// TODO: renderScreen<B> = (screen: AnyScreen<B>, context: ..., source: B)

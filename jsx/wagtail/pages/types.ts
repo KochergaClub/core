@@ -30,4 +30,4 @@ export interface BlogPostAuthorType {
   };
 }
 
-export type WagtailPageType = RatioSectionPageType;
+export type WagtailPageType = RatioSectionPageType; // TODO: list all other types

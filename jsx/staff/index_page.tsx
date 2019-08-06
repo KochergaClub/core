@@ -76,8 +76,11 @@ const ConnectedPage = connect((state: State) => ({
   members: selectMembers(state),
 }))(StaffIndexPage);
 
-const getInitialData: InitialLoader<{}> = async ({ api }) => {
-  await loadMembers(api);
+const getInitialData: InitialLoader<{}> = async ({
+  api,
+  store: { dispatch },
+}) => {
+  await dispatch(loadMembers(api));
   return {};
 };
 
