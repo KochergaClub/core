@@ -1,8 +1,10 @@
+import { createSelector } from 'reselect';
+
 import { format, parseISO } from 'date-fns';
 
 import { State } from '~/redux/store';
 
-import { DaySchedule, DatesWindow } from './types';
+import { DaySchedule } from './types';
 
 export const selectEditing = (state: State): boolean => state.watchmen.editing;
 
@@ -11,9 +13,12 @@ export const selectDaySchedule = (state: State, date: Date): DaySchedule => {
   return state.watchmen.schedule[key] || [];
 };
 
-export const selectDatesWindow = (state: State): DatesWindow => {
-  const from_date = parseISO(state.watchmen.datesWindow[0]);
-  const to_date = parseISO(state.watchmen.datesWindow[1]);
+export const selectDatesWindow = createSelector(
+  (state: State) => state.watchmen.datesWindow,
+  w => {
+    const from_date = parseISO(w[0]);
+    const to_date = parseISO(w[1]);
 
-  return [from_date, to_date];
-};
+    return [from_date, to_date] as [Date, Date];
+  }
+);
