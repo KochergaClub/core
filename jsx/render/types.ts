@@ -1,4 +1,4 @@
-import { User } from '../jsx/common/types';
+import { User } from '~/common/types';
 
 export interface Store {
   screenName: string;
