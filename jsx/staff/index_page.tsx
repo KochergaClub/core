@@ -1,13 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { A, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
+import { State } from '~/redux/store';
 
 import { Member } from './types';
-
-import { getMembers } from './api';
+import { loadMembers } from './actions';
+import { selectMembers } from './selectors';
 
 const MemberList = ({
   title,
@@ -70,13 +72,17 @@ const StaffIndexPage = ({ members }: Props) => (
   </Page>
 );
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
-  const members = await getMembers(api);
-  return { members };
+const ConnectedPage = connect((state: State) => ({
+  members: selectMembers(state),
+}))(StaffIndexPage);
+
+const getInitialData: InitialLoader<{}> = async ({ api }) => {
+  await loadMembers(api);
+  return {};
 };
 
-const screen: Screen<Props> = {
-  component: StaffIndexPage,
+const screen: Screen<{}> = {
+  component: ConnectedPage,
   getInitialData,
 };
 

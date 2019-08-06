@@ -1,10 +1,7 @@
-import { Action } from 'redux';
-import { ThunkAction } from 'redux-thunk';
-
 import { format } from 'date-fns';
 
 import { API } from '~/common/api';
-import { State } from '~/redux/store';
+import { AsyncAction } from '~/redux/store';
 import { getSchedule } from './api';
 import { Shift, Schedule, shifts2schedule } from './types';
 
@@ -32,12 +29,10 @@ export const reloadSchedule = (
   api: API,
   from_date: Date,
   to_date: Date
-): ThunkAction<Promise<void>, State, undefined, Action> => {
-  return async dispatch => {
-    const shifts = await getSchedule(api, from_date, to_date);
-    const schedule = shifts2schedule(shifts);
-    dispatch(replaceSchedule(schedule));
-  };
+): AsyncAction<void> => async dispatch => {
+  const shifts = await getSchedule(api, from_date, to_date);
+  const schedule = shifts2schedule(shifts);
+  dispatch(replaceSchedule(schedule));
 };
 
 export const setDatesWindow = (from_date: Date, to_date: Date) => ({

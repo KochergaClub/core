@@ -1,34 +1,25 @@
-import React, { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useReducer } from 'react';
 
 import { Screen, InitialLoader } from '../common/types';
 import Page from '../components/Page';
 
 import { Column } from '@kocherga/frontkit';
 
-import { Member as StaffMember } from '~/staff/types';
-import { replaceMembers } from '~/staff/actions';
+import { loadMembers } from '~/staff/actions';
 
 import { PbxCall } from './types';
 import { listReducer } from './reducers';
 import { ZadarmaContext } from './contexts';
-import { getAllCalls, getStaffMembers } from './api';
+import { getAllCalls } from './api';
 
 import PbxCallCard from './components/PbxCallCard';
 
 interface Props {
   pbx_calls: PbxCall[];
-  members: StaffMember[];
 }
 
-const ZadarmaIndexPage = ({ pbx_calls, members }: Props) => {
+const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
   const [state, zadarmaDispatch] = useReducer(listReducer, pbx_calls);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(replaceMembers(members));
-  }, [members]);
 
   return (
     <Page title="Архив звонков" team>
@@ -46,10 +37,14 @@ const ZadarmaIndexPage = ({ pbx_calls, members }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({
+  api,
+  store: { dispatch },
+}) => {
+  await dispatch(loadMembers(api));
+
   return {
     pbx_calls: await getAllCalls(api),
-    members: await getStaffMembers(api),
   };
 };
 

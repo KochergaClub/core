@@ -13,8 +13,7 @@ import { useListeningWebSocket, useAPI, usePermissions } from '~/common/hooks';
 import { API } from '~/common/api';
 import { State } from '~/redux/store';
 
-import { getMembers } from '~/staff/api';
-import { replaceMembers } from '~/staff/actions';
+import { loadMembers } from '~/staff/actions';
 
 import { reloadSchedule, setDatesWindow } from './actions';
 import { DatesWindow } from './types';
@@ -100,19 +99,7 @@ const getInitialData: InitialLoader<OwnProps> = async (
   }
   const to_date = addWeeks(from_date, 4);
 
-  const staffMembers = await getMembers(api);
-
-  const watchmen = staffMembers.filter(
-    member => member.is_current && member.role === 'WATCHMAN'
-  );
-  const otherStaff = staffMembers.filter(
-    member => member.is_current && member.role !== 'WATCHMAN'
-  );
-
-  const allMembers = watchmen.concat(otherStaff);
-
-  // FIXME - this replaces the global staff members list, that's not a good idea.
-  dispatch(replaceMembers(allMembers));
+  await dispatch(loadMembers(api));
 
   await dispatch(reloadSchedule(api, from_date, to_date));
 

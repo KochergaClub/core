@@ -1,7 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { connect } from 'react-redux';
-
-import { State } from '~/redux/store';
 
 import BasicPicker from '~/components/Picker';
 
@@ -100,7 +97,3 @@ export function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
     />
   );
 }
-
-const mapStateToProps = (state: State) => ({ members: state.staff.members });
-
-export default connect(mapStateToProps)(Picker);

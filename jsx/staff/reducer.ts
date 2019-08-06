@@ -1,6 +1,6 @@
 import { Member } from './types';
 
-import { ActionTypes } from './actions';
+import { STAFF_MEMBERS_REPLACE, ActionTypes } from './actions';
 
 interface State {
   members: Member[];
@@ -12,7 +12,7 @@ const initialState = {
 
 const reducer = (state: State = initialState, action: ActionTypes): State => {
   switch (action.type) {
-    case 'STAFF_REPLACE_MEMBERS':
+    case STAFF_MEMBERS_REPLACE:
       return {
         ...state,
         members: action.members,

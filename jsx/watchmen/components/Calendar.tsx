@@ -6,7 +6,6 @@ import {
   addDays,
   getDate,
   isAfter,
-  isEqual,
   format,
 } from 'date-fns';
 

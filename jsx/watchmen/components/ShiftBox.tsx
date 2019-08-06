@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import { colors } from '@kocherga/frontkit';
 
 import { Member } from '~/staff/types';
-import Picker from '~/staff/components/Picker';
+import WatchmanPicker from '~/staff/components/WatchmanPicker';
+
 import { useAPI, useExpandable } from '~/common/hooks';
 import { State } from '~/redux/store';
 
@@ -128,7 +129,7 @@ const ShiftBox = (props: Props) => {
         <InnerShiftBox shift={props.shift} editing={editing} />
       </div>
       {expanded && (
-        <Picker
+        <WatchmanPicker
           pickedMember={pickMember}
           pickedExtra={pickExtra}
           extra={[
