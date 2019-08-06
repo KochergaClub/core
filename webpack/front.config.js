@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const base = require('./base.config.js');
 
 module.exports = merge(base, {
-  entry: path.resolve(__dirname, '..', './render/render-client.ts'),
+  entry: path.resolve(__dirname, '..', './jsx/render/client.tsx'),
   devtool:
     process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'none',
   module: {

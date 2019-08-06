@@ -25,22 +25,22 @@ import 'babel-polyfill';
 
 import { GlobalFontsString } from '@kocherga/frontkit';
 
-import { API, APIError } from '../jsx/common/api';
-import { configureStore } from '../jsx/redux/store';
-import { GlobalContextShape } from '../jsx/common/types';
-import { wagtailScreen } from '../jsx/screens';
-import { WagtailPageType } from '../jsx/wagtail/pages/types';
+import { API, APIError } from '~/common/api';
+import { configureStore } from '~/redux/store';
+import { GlobalContextShape } from '~/common/types';
+import { wagtailScreen } from '~/screens';
+import { WagtailPageType } from '~/wagtail/pages/types';
 
-const webpackStats = require('../webpack-stats.json');
+const webpackStats = require('~/../webpack-stats.json');
 
 import {
   RenderResult,
   renderEntrypointWithData,
   renderEntrypoint,
   getGAScript,
-} from './server/render';
+} from './render';
 
-import { Store } from './types';
+import { Store } from '../types';
 
 const ADDRESS = argv.address;
 const PORT = argv.port;

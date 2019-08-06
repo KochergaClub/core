@@ -11,7 +11,7 @@ import { Store } from './types';
 
 declare global {
   interface Window {
-    store: Store; // populated by server.ts
+    store: Store; // populated by server
   }
 }
 
@@ -21,13 +21,15 @@ function renderApp(props: any) {
   const screen = findScreen(window.store.screenName);
   const store = configureStore(window.store.reduxState);
 
-  const el = React.createElement(Entrypoint, {
-    screen,
-    store,
-    user: window.store.user,
-    csrfToken: window.store.csrfToken, // extract from page
-    innerProps: props,
-  });
+  const el = (
+    <Entrypoint
+      screen={screen}
+      store={store}
+      user={window.store.user}
+      csrfToken={window.store.csrfToken}
+      innerProps={props}
+    />
+  );
 
   ReactDOM.hydrate(el, domContainerNode);
 }

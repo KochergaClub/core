@@ -8,7 +8,7 @@ const base = require('./base.config.js');
 module.exports = merge(base, {
   target: 'node',
   externals: [nodeExternals()],
-  entry: path.resolve(__dirname, '..', './render/server.ts'),
+  entry: path.resolve(__dirname, '..', './jsx/render/server/index.ts'),
   output: {
     path: path.resolve(__dirname, '..', './static/dist'),
     filename: 'server.js',

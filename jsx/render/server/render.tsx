@@ -4,9 +4,9 @@ import ReactDOMServer from 'react-dom/server';
 import { ServerStyleSheet } from 'styled-components';
 import { Helmet, HelmetData } from 'react-helmet';
 
-import Entrypoint from '../../jsx/entry';
-import { findBasicScreen } from '../../jsx/screens';
-import { AnyScreen, GlobalContextShape } from '../../jsx/common/types';
+import Entrypoint from '~/entry';
+import { findBasicScreen } from '~/screens';
+import { AnyScreen, GlobalContextShape } from '~/common/types';
 
 export interface RawRenderResult {
   html: string;
