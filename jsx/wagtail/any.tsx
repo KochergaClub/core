@@ -44,7 +44,7 @@ type ProxyProps = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 const ProxyWagtailPage = (props: ProxyProps) => {
   const wagtailScreen = getWagtailScreen(props.wagtailPage.meta_type);
   if (!wagtailScreen) {
-    return <UnknownPage {...props} />;
+    return <UnknownPage {...props.wagtailPage} />;
   }
   return <wagtailScreen.component {...props} />;
 };

@@ -36,7 +36,6 @@ const Entrypoint = function(props: Props) {
       // TODO - keep react-router for wagtail pages too somehow, to support client-side navigation for wagtail pages.
       // (this will require a significant refactoring)
       const WagtailPageComponent = wagtailScreen.component;
-      console.log(pageInfo.props.wagtailPage.meta);
       insides = <WagtailPageComponent {...pageInfo.props} />;
       break;
     case 'react':

@@ -1,4 +1,4 @@
-import { SCREENS } from './screens';
+import { findBasicScreen } from './screens';
 import { Screen } from './common/types';
 
 export interface KochergaRoute {
@@ -7,7 +7,7 @@ export interface KochergaRoute {
 }
 
 const route = (path: string, screenName: string) => ({
-  screen: SCREENS[screenName].default,
+  screen: findBasicScreen(screenName),
   path,
 });
 
@@ -34,18 +34,14 @@ export const routes: KochergaRoute[] = [
   route('/login/check-your-email', 'auth/check-your-email'),
   route('/login/magic-link', 'auth/magic-link'),
   route('/login', 'auth/login'),
-  // TODO - login routes
   // TODO - load screens directly, remove screens.ts
   // TODO - code splitting
-  // TODO - check pages with params
+  // TODO - app.get('/team/', (_, res) => res.redirect(302, '/team/staff/'));
 ];
 
-// app.get('/team/', (_, res) => res.redirect(302, '/team/staff/'));
-//
-
 export const errorPages: { [k: number]: React.ComponentType } = {
-  400: SCREENS['error-pages/400'].default.component,
-  403: SCREENS['error-pages/403'].default.component,
-  404: SCREENS['error-pages/404'].default.component,
-  500: SCREENS['error-pages/500'].default.component,
+  400: findBasicScreen('error-pages/400').component,
+  403: findBasicScreen('error-pages/403').component,
+  404: findBasicScreen('error-pages/404').component,
+  500: findBasicScreen('error-pages/500').component,
 };

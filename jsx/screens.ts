@@ -1,6 +1,6 @@
 import { Screen } from './common/types';
 
-import importedWagtailScreen from './wagtail/any';
+export { default as wagtailScreen } from './wagtail/any';
 
 export const SCREENS: { [key: string]: { default: Screen<{}> } } = {
   'analytics/index': require('./analytics/index'),
@@ -36,18 +36,9 @@ export const findBasicScreen = (name: string) => {
   if (!SCREENS[name]) {
     throw new Error(`Screen ${name} not found`);
   }
-  const screen = SCREENS[name].default as Screen<{}>;
+  const screen = SCREENS[name].default;
   if (!screen.component) {
     throw new Error(`${name} is not a proper screen`);
   }
   return screen;
-};
-
-export const wagtailScreen = importedWagtailScreen;
-
-export const findScreen = (name: string) => {
-  if (name === 'wagtail/any') {
-    return wagtailScreen;
-  }
-  return findBasicScreen(name);
 };
