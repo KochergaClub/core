@@ -29,7 +29,6 @@
     "date-fns": "^2.0.0-alpha.27",
     "date-fns-tz": "^1.0.7",
     "express": "^4.13.3",
-    "express-slash": "^2.0.1",
     "http-proxy": "^1.17.0",
     "localtunnel": "^1.9.1",
     "mjml": "^4.0.5",

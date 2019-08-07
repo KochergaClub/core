@@ -34,6 +34,12 @@ export const wagtailEntrypoint: express.RequestHandler = async (
         const wagtailUrl = wagtailFindRes.headers.location || '';
         console.log(`Got wagtail page ${wagtailUrl}`);
 
+        if (!req.path.endsWith('/')) {
+          // wait, the page url is not normalized properly
+          res.redirect(302, req.path + '/');
+          return;
+        }
+
         const match = wagtailUrl.match(/(\d+)\/?$/);
         if (!match) {
           throw new Error('Unparsable redirected url');

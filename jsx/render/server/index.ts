@@ -17,7 +17,6 @@ const argv = require('yargs')
 
 import http from 'http';
 import express from 'express';
-import slash from 'express-slash';
 import httpProxy from 'http-proxy';
 
 import 'babel-polyfill';
@@ -78,8 +77,6 @@ app.use(reactEntrypoint);
 // Note: This middleware should be activated after httpProxy
 // (see https://stackoverflow.com/questions/26632854/socket-hangup-while-posting-request-to-node-http-proxy-node-js for details)
 app.use(express.urlencoded());
-
-app.use(slash());
 
 // Let's try Wagtail, maybe the page is in there somewhere.
 app.use(wagtailEntrypoint);

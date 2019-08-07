@@ -29,6 +29,37 @@ export const reactEntrypoint: express.RequestHandler = async (
       return;
     }
 
+    // We'd like a strict version of url or redirect to its strict version (trailing slash normalization).
+    if (
+      !matchPath(req.path, {
+        path: selectedRoute.path,
+        exact: true,
+        strict: true,
+      })
+    ) {
+      // Our match is not strict, let's look for strict route.
+      let newPath;
+      if (req.path.endsWith('/')) {
+        newPath = req.path.slice(0, -1);
+      } else {
+        newPath = req.path + '/';
+      }
+      // Let's check if new path is strict, just to be sure that we don't create any infinite loops.
+      if (
+        matchPath(newPath, {
+          path: selectedRoute.path,
+          exact: true,
+          strict: true,
+        })
+      ) {
+        // Great, let's redirect!
+        res.redirect(302, newPath);
+        return;
+      } else {
+        throw new Error(`Tried to find strict path for ${req.path} but failed`);
+      }
+    }
+
     const { screen } = selectedRoute;
     let props = {};
     if (screen.getInitialData) {
