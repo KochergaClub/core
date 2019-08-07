@@ -10,7 +10,7 @@ import { API } from '~/common/api';
 import GlobalContext from '~/components/GlobalContext';
 
 import { routes, errorPages } from './routes';
-import { wagtailScreen } from './screens';
+import wagtailScreen from './wagtail/any';
 
 import { RenderContext } from './render/types';
 

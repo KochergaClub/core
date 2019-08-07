@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http';
 
-import { wagtailScreen } from '~/screens';
+import wagtailScreen from '~/wagtail/any';
 import { AnyPageType } from '~/wagtail/pages/types';
 
 import { API_HOST } from './constants';

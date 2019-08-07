@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { findBasicScreen } from './screens';
 import { Screen } from './common/types';
 
 import { Redirect } from 'react-router';
@@ -10,8 +9,8 @@ export interface KochergaRoute {
   path: string;
 }
 
-const route = (path: string, screenName: string) => ({
-  screen: findBasicScreen(screenName),
+const route = (path: string, module: { default: Screen<{}> }) => ({
+  screen: module.default,
   path,
 });
 
@@ -23,36 +22,41 @@ const redirectRoute = (from: string, to: string) => ({
 });
 
 export const routes: KochergaRoute[] = [
-  route('/team/watchmen/', 'watchmen/index'),
-  route('/team/analytics/', 'analytics/index'),
-  route('/team/zadarma/', 'zadarma/index'),
-  route('/team/zadarma/pbx_call/:id/', 'zadarma/pbx_call'),
-  route('/team/staff/', 'staff/index_page'),
-  route('/team/staff/:id/', 'staff/member_page'),
-  route('/team/cashier/', 'cashier/index'),
-  route('/team/kkm/', 'kkm/index'),
-  route('/team/ratio/', 'ratio/index'),
-  route('/team/ratio/training/:name/', 'ratio/training'),
-  route('/team/ratio/training/:name/schedule/', 'ratio/schedule'),
-  route('/team/mastermind_dating/', 'mastermind_dating/index'),
-  route('/team/mastermind_dating/cohort/:id/', 'mastermind_dating/cohort_page'),
-  route('/team/events/', 'events/index'),
-  route('/projects/', 'projects/index'),
-  route('/projects/:name/', 'projects/detail'),
-  route('/my/', 'my/index'),
-  route('/event/:id/', 'events/event_page'),
-  route('/', 'frontpage/index'),
-  route('/login/check-your-email', 'auth/check-your-email'),
-  route('/login/magic-link', 'auth/magic-link'),
-  route('/login', 'auth/login'),
+  route('/team/watchmen/', require('./watchmen/index')),
+  route('/team/analytics/', require('./analytics/index')),
+  route('/team/zadarma/', require('./zadarma/index')),
+  route('/team/zadarma/pbx_call/:id/', require('./zadarma/pbx_call')),
+  route('/team/staff/', require('./staff/index_page')),
+  route('/team/staff/:id/', require('./staff/member_page')),
+  route('/team/cashier/', require('./cashier/index')),
+  route('/team/kkm/', require('./kkm/index')),
+  route('/team/ratio/', require('./ratio/pages/index')),
+  route('/team/ratio/training/:name/', require('./ratio/pages/training')),
+  route(
+    '/team/ratio/training/:name/schedule/',
+    require('./ratio/pages/schedule')
+  ),
+  route('/team/mastermind_dating/', require('./mastermind_dating/pages/list')),
+  route(
+    '/team/mastermind_dating/cohort/:id/',
+    require('./mastermind_dating/pages/cohort')
+  ),
+  route('/team/events/', require('./events/index')),
+  route('/projects/', require('./projects/index')),
+  route('/projects/:name/', require('./projects/detail')),
+  route('/my/', require('./my/index')),
+  route('/event/:id/', require('./events/pages/event')),
+  route('/', require('./frontpage/index')),
+  route('/login/check-your-email', require('./auth/check-your-email')),
+  route('/login/magic-link', require('./auth/magic-link')),
+  route('/login', require('./auth/login')),
   redirectRoute('/team/', '/team/staff/'),
-  // TODO - load screens directly, remove screens.ts
   // TODO - code splitting
 ];
 
 export const errorPages: { [k: number]: React.ComponentType } = {
-  400: findBasicScreen('error-pages/400').component,
-  403: findBasicScreen('error-pages/403').component,
-  404: findBasicScreen('error-pages/404').component,
-  500: findBasicScreen('error-pages/500').component,
+  400: require('./error-pages/500').default.component,
+  403: require('./error-pages/403').default.component,
+  404: require('./error-pages/404').default.component,
+  500: require('./error-pages/500').default.component,
 };
