@@ -1,5 +1,9 @@
+import React from 'react';
+
 import { findBasicScreen } from './screens';
 import { Screen } from './common/types';
+
+import { Redirect } from 'react-router';
 
 export interface KochergaRoute {
   screen: Screen<{}>;
@@ -9,6 +13,13 @@ export interface KochergaRoute {
 const route = (path: string, screenName: string) => ({
   screen: findBasicScreen(screenName),
   path,
+});
+
+const redirectRoute = (from: string, to: string) => ({
+  path: from,
+  screen: {
+    component: () => <Redirect to={to} />,
+  },
 });
 
 export const routes: KochergaRoute[] = [
@@ -34,9 +45,9 @@ export const routes: KochergaRoute[] = [
   route('/login/check-your-email', 'auth/check-your-email'),
   route('/login/magic-link', 'auth/magic-link'),
   route('/login', 'auth/login'),
+  redirectRoute('/team/', '/team/staff/'),
   // TODO - load screens directly, remove screens.ts
   // TODO - code splitting
-  // TODO - app.get('/team/', (_, res) => res.redirect(302, '/team/staff/'));
 ];
 
 export const errorPages: { [k: number]: React.ComponentType } = {
