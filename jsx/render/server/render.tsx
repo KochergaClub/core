@@ -111,6 +111,7 @@ export const sendEntrypointHtml = (
 
   if (routerContext.url) {
     res.redirect(302, routerContext.url);
+    return;
   }
 
   sendFullHtml(renderResult, renderContext, req, res);
