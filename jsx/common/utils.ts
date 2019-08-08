@@ -8,3 +8,15 @@ export const timezone = 'Europe/Moscow';
 
 export const formatDate = (date: Date, formatStr: string) =>
   format(date, formatStr, { locale: ru });
+
+export const parseQueryString = (
+  queryString: string
+): { [k: string]: string } => {
+  let params = new URLSearchParams(queryString);
+
+  const result: { [k: string]: string } = {};
+  params.forEach((value, key) => {
+    result[key] = value;
+  });
+  return result;
+};

@@ -2,7 +2,7 @@ import express from 'express';
 
 import { matchPath, match as MatchObject } from 'react-router-dom';
 
-import { routes } from '~/routes';
+import { routes } from '~/navigation/routes';
 
 import { sendEntrypointHtml } from './render';
 

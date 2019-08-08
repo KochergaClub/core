@@ -6,19 +6,20 @@ export type AnyInitialLoader<B, P> = (
   source: B
 ) => Promise<P>;
 
-interface ExpressSource {
+// TODO - replace with `location` from react-router
+interface LocationData {
   params: { [k: string]: string };
   query: { [k: string]: string };
 }
 
-export type InitialLoader<P> = AnyInitialLoader<ExpressSource, P>;
+export type InitialLoader<P> = AnyInitialLoader<LocationData, P>;
 
 export interface AnyScreen<B, P> {
   component: React.ComponentType<P>;
   getInitialData?: AnyInitialLoader<B, P>;
 }
 
-export type Screen<P> = AnyScreen<ExpressSource, P>;
+export type Screen<P> = AnyScreen<LocationData, P>;
 
 export interface User {
   is_authenticated: boolean;

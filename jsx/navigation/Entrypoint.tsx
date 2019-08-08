@@ -10,9 +10,11 @@ import { API } from '~/common/api';
 import GlobalContext from '~/components/GlobalContext';
 
 import { routes, errorPages } from './routes';
-import wagtailScreen from './wagtail/any';
+import wagtailScreen from '~/wagtail/any';
 
-import { RenderContext } from './render/types';
+import { RenderContext } from '~/render/types';
+
+import ScreenWrapper from './ScreenWrapper';
 
 interface Props {
   store: Store;
@@ -46,10 +48,13 @@ const Entrypoint = function(props: Props) {
               key={route.path}
               path={route.path}
               exact
-              render={() => {
-                const Component = route.screen.component;
-                return <Component {...pageInfo.props} />;
-              }}
+              render={routeProps => (
+                <ScreenWrapper
+                  screen={route.screen}
+                  preloadedProps={pageInfo.props}
+                  routeProps={routeProps}
+                />
+              )}
             />
           ))}
         </Switch>
