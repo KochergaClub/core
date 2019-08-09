@@ -1,135 +1,115 @@
-import React, { useCallback, useReducer, useState } from 'react';
+import React, { useCallback } from 'react';
 
-import moment from 'moment';
+import { connect } from 'react-redux';
+
+import { addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
-import Page from '~/components/Page';
-import { useListeningWebSocket, useAPI } from '~/common/hooks';
 
-import { StaffContext } from '~/staff/contexts';
-import { getMembers } from '~/staff/api';
-import { Member as StaffMember } from '~/staff/types';
+import Page from '~/components/Page';
+import { useListeningWebSocket, useAPI, usePermissions } from '~/common/hooks';
+import { API } from '~/common/api';
+import { State } from '~/redux/store';
+
+import { loadMembers } from '~/staff/actions';
+
+import { reloadSchedule, setDatesWindow } from './actions';
+import { DatesWindow } from './types';
+import { selectDatesWindow } from './selectors';
 
 import Calendar from './components/Calendar';
 import DayContainer from './components/DayContainer';
 import EditingSwitch from './components/EditingSwitch';
 import Pager from './components/Pager';
 
-import { Shift, shifts2schedule } from './types';
-import { reducer } from './reducer';
-import { updateShift, replaceSchedule } from './actions';
-import { ScheduleContext } from './contexts';
-import { getSchedule } from './api';
+interface OwnProps {}
 
-interface Props {
-  schedule: Shift[];
-  editable: boolean;
-  watchmen: StaffMember[];
-  from_date: string;
-  to_date: string;
-  children?: React.ReactNode;
+interface StateProps {
+  dates: DatesWindow;
 }
 
-const WatchmenIndexPage = (props: Props) => {
-  const [schedule, scheduleDispatch] = useReducer(
-    reducer,
-    props.schedule,
-    shifts2schedule
-  );
-  const [editing, setEditing] = useState(false);
+interface DispatchProps {
+  reloadSchedule: (api: API, from_date: Date, to_date: Date) => Promise<void>;
+}
 
+type Props = OwnProps & StateProps & DispatchProps;
+
+const WatchmenIndexPage: React.FC<Props> = props => {
   const api = useAPI();
+  const [editable] = usePermissions(['watchmen.manage']);
 
-  const setShift = useCallback((shift: Shift) => {
-    scheduleDispatch(updateShift(shift));
-  }, []);
+  const [from_date, to_date] = props.dates;
 
   const fetchSchedule = useCallback(async () => {
-    const shifts = await getSchedule(api, props.from_date, props.to_date);
-    scheduleDispatch(replaceSchedule(shifts2schedule(shifts)));
-  }, [api, props.from_date, props.to_date]);
+    await props.reloadSchedule(api, from_date, to_date);
+  }, [api, from_date, to_date, props.reloadSchedule]);
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
-  const contextValue = {
-    editing,
-    setEditing,
-    setShift,
-  };
-
   return (
-    <ScheduleContext.Provider value={contextValue}>
-      <StaffContext.Provider value={{ members: props.watchmen }}>
-        <Page title="Расписание смен" team>
-          <Page.Title>Расписание смен</Page.Title>
-          <Page.Main>
-            <Column gutter={16} stretch>
-              <Column centered gutter={0}>
-                <Column centered>
-                  <Pager from_date={moment(props.from_date)} />
-                  {props.editable && <EditingSwitch />}
-                </Column>
-              </Column>
-              <Calendar
-                fromDate={moment(props.from_date)}
-                toDate={moment(props.to_date)}
-                renderDay={d => {
-                  return (
-                    <DayContainer
-                      daySchedule={schedule[d.format('YYYY-MM-DD')]}
-                    />
-                  );
-                }}
-              />
+    <Page title="Расписание смен" team>
+      <Page.Title>Расписание смен</Page.Title>
+      <Page.Main>
+        <Column gutter={16} stretch>
+          <Column centered gutter={0}>
+            <Column centered>
+              <Pager from_date={from_date} />
+              {editable && <EditingSwitch />}
             </Column>
-          </Page.Main>
-        </Page>
-      </StaffContext.Provider>
-    </ScheduleContext.Provider>
+          </Column>
+          <Calendar
+            fromDate={from_date}
+            toDate={to_date}
+            renderDay={d => {
+              return <DayContainer date={d} />;
+            }}
+          />
+        </Column>
+      </Page.Main>
+    </Page>
   );
 };
 
-const getInitialData: InitialLoader<Props> = async (
-  { api, user },
+const mapStateToProps = (state: State) => ({
+  dates: selectDatesWindow(state),
+});
+
+const mapDispatchToProps = { reloadSchedule };
+
+const ConnectedPage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WatchmenIndexPage);
+
+const getInitialData: InitialLoader<OwnProps> = async (
+  { api, store: { dispatch } },
   { query }
 ) => {
-  const from_date_str = query.from_date;
-  let from_date: moment.Moment;
-  if (from_date_str) {
-    from_date = moment(from_date_str);
+  let from_date: Date;
+  if (query.from_date) {
+    const match = query.from_date.match(/^\d{4}-\d{2}-\d{2}$/);
+    if (!match) {
+      throw new Error('Invalid from_date query param');
+    }
+    from_date = startOfWeek(new Date(match[0]), { weekStartsOn: 1 });
   } else {
-    from_date = moment().startOf('week');
+    from_date = startOfWeek(new Date(), { weekStartsOn: 1 });
   }
-  const to_date = moment(from_date).add(4, 'weeks');
+  const to_date = addWeeks(from_date, 4);
 
-  const format = 'YYYY-MM-DD';
+  await dispatch(loadMembers(api));
 
-  const staffMembers = await getMembers(api);
+  await dispatch(reloadSchedule(api, from_date, to_date));
 
-  const watchmen = staffMembers.filter(
-    member => member.is_current && member.role === 'WATCHMAN'
-  );
-  const otherStaff = staffMembers.filter(
-    member => member.is_current && member.role !== 'WATCHMAN'
-  );
+  dispatch(setDatesWindow(from_date, to_date));
 
-  return {
-    schedule: await getSchedule(
-      api,
-      from_date.format(format),
-      to_date.format(format)
-    ),
-    editable: user.permissions.indexOf('watchmen.manage') !== -1,
-    from_date: from_date.format(format),
-    to_date: to_date.format(format),
-    watchmen: watchmen.concat(otherStaff),
-  };
+  return {};
 };
 
-const screen: Screen<Props> = {
-  component: WatchmenIndexPage,
+const screen: Screen<OwnProps> = {
+  component: ConnectedPage,
   getInitialData,
 };
 export default screen;

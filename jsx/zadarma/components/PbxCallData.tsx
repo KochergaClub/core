@@ -7,7 +7,7 @@ import GlobalContext from '~/components/GlobalContext';
 
 import { useAPI, useExpandable } from '~/common/hooks';
 
-import Picker from '~/staff/components/Picker';
+import WatchmanPicker from '~/staff/components/WatchmanPicker';
 import { Member } from '~/staff/types';
 
 import { PbxCall } from '../types';
@@ -83,7 +83,7 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
   return (
     <Container ref={ref}>
       <div onClick={flipExpand}>{nameEl}</div>
-      {expanded && <Picker pickedMember={setStaffMember} />}
+      {expanded && <WatchmanPicker pickedMember={setStaffMember} />}
     </Container>
   );
 };

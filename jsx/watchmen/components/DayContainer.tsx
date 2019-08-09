@@ -1,10 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { State } from '~/redux/store';
 
 import { DaySchedule } from '../types';
+import { selectDaySchedule } from '../selectors';
 
 import ShiftBox from './ShiftBox';
 
-const DayContainer = ({ daySchedule }: { daySchedule: DaySchedule }) => {
+interface OwnProps {
+  date: Date;
+}
+
+interface StateProps {
+  daySchedule: DaySchedule;
+}
+
+type Props = OwnProps & StateProps;
+
+const DayContainer: React.FC<Props> = ({ daySchedule }) => {
   return (
     <div>
       {daySchedule.map(shift => (
@@ -14,4 +28,11 @@ const DayContainer = ({ daySchedule }: { daySchedule: DaySchedule }) => {
   );
 };
 
-export default DayContainer;
+const mapStateToProps = (
+  state: State,
+  ownProps: { date: Date }
+): StateProps => ({
+  daySchedule: selectDaySchedule(state, ownProps.date),
+});
+
+export default connect(mapStateToProps)(DayContainer);

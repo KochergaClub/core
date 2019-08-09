@@ -1,17 +1,23 @@
 import React from 'react';
 
-import moment from 'moment';
+import { subWeeks, addWeeks, format } from 'date-fns';
 
 import { A, Row } from '@kocherga/frontkit';
 
-const Pager = ({ from_date }: { from_date: moment.Moment }) => {
-  const prev = moment(from_date).subtract(1, 'week');
-  const next = moment(from_date).add(1, 'week');
+import { Link } from 'react-router-dom';
+
+interface Props {
+  from_date: Date;
+}
+
+const Pager: React.FC<Props> = ({ from_date }) => {
+  const prev = subWeeks(from_date, 1);
+  const next = addWeeks(from_date, 1);
   return (
     <Row gutter={16}>
-      <A href={`?from_date=${prev.format('YYYY-MM-DD')}`}>&larr; назад</A>
+      <Link to={`?from_date=${format(prev, 'yyyy-MM-dd')}`}>&larr; назад</Link>
       <A href={`/team/watchmen`}>Текущая неделя</A>
-      <A href={`?from_date=${next.format('YYYY-MM-DD')}`}>вперёд &rarr;</A>
+      <Link to={`?from_date=${format(next, 'yyyy-MM-dd')}`}>вперёд &rarr;</Link>
     </Row>
   );
 };

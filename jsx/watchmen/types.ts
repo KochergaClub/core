@@ -47,3 +47,5 @@ export const shifts2schedule = (shifts: Shift[]): Schedule => {
 
   return schedule;
 };
+
+export type DatesWindow = [Date, Date];
