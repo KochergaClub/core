@@ -39,7 +39,7 @@ export class APIError extends Error {
   }
 }
 
-interface APIProps {
+export interface APIProps {
   csrfToken: string;
   base?: string;
   cookie?: string;

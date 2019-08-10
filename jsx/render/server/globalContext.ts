@@ -4,7 +4,9 @@ import cookie from 'cookie';
 import { configureStore } from '~/redux/store';
 import { GlobalContextShape } from '~/common/types';
 
-import { API } from '~/common/api';
+import { APIProps } from '~/common/api';
+import { configureAPI } from '~/navigation/actions';
+import { selectAPI } from '~/navigation/selectors';
 
 import { API_HOST } from './constants';
 
@@ -16,18 +18,17 @@ declare global {
   }
 }
 
-const getAPI = (req: express.Request) => {
+const reqToAPIConfig = (req: express.Request): APIProps => {
   const cookies = cookie.parse(req.headers.cookie || '');
   const csrfToken = cookies.csrftoken as string;
 
-  const api = new API({
+  return {
     csrfToken,
     base: `http://${API_HOST}`,
     cookie: req.get('Cookie') || '',
     realHost: req.get('host'),
     wagtailAPIToken: process.env.WAGTAIL_API_TOKEN,
-  });
-  return api;
+  };
 };
 
 // Custom middleware which injects req.reactContext with api and user fields.
@@ -37,10 +38,17 @@ export const globalContext = async (
   next: express.NextFunction
 ) => {
   try {
-    const api = getAPI(req);
+    const store = configureStore();
+
+    store.dispatch(configureAPI(reqToAPIConfig(req)));
+    const api = selectAPI(store.getState());
     const user = await api.call('me', 'GET');
 
-    req.reactContext = { api, user, store: configureStore() };
+    req.reactContext = {
+      store,
+      user, // deprecated, will be removed soon
+      api, // deprecated, will be removed soon
+    };
 
     next();
   } catch (err) {
@@ -48,16 +56,22 @@ export const globalContext = async (
   }
 };
 
-// This should be used for error pages, which can't load the real user.
+// This method should be used for error pages, which can't load the real user.
 export const getFallbackContext = (
   req: express.Request
 ): GlobalContextShape => {
+  // FIXME - copy-pasted from globalContext()
+  const store = configureStore();
+  store.dispatch(configureAPI(reqToAPIConfig(req)));
+  const api = selectAPI(store.getState());
+  const user = {
+    is_authenticated: false,
+    permissions: [],
+  };
+
   return {
-    api: getAPI(req),
-    user: {
-      is_authenticated: false,
-      permissions: [],
-    },
-    store: configureStore(),
+    store,
+    user,
+    api,
   };
 };

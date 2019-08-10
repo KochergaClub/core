@@ -11,6 +11,7 @@ import { Helmet, HelmetData } from 'react-helmet';
 import { GlobalFontsString } from '@kocherga/frontkit';
 
 import Entrypoint from '~/navigation/Entrypoint';
+import { cleanupAPIForClient } from '~/navigation/actions';
 
 import { PageInfo, RenderContext, buildRenderContext } from '../types';
 
@@ -95,6 +96,9 @@ export const sendEntrypointHtml = (
   res: express.Response
 ) => {
   const routerContext: { url?: string } = {};
+
+  // This is critical so that we don't leak wagtail token to the html!
+  req.reactContext.store.dispatch(cleanupAPIForClient());
 
   const renderContext = buildRenderContext(pageInfo, req.reactContext);
 
