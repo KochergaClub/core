@@ -5,7 +5,6 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { A, Column } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
 import AsyncButton from '~/components/AsyncButton';
 import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
@@ -16,11 +15,10 @@ import { selectTickets } from '../selectors';
 
 const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
   const dispatch = useDispatch();
-  const api = useAPI();
 
   const cancel = React.useCallback(async () => {
-    await dispatch(deleteTicket(api, ticket));
-  }, [api, dispatch, ticket]);
+    await dispatch(deleteTicket(ticket));
+  }, [dispatch, ticket]);
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 

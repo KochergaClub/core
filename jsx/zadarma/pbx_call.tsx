@@ -43,7 +43,7 @@ const getInitialData: InitialLoader<Props> = async (
   { params }
 ) => {
   const api = selectAPI(getState());
-  await dispatch(loadMembers(api));
+  await dispatch(loadMembers());
 
   return {
     pbx_call: await getCall(api, params.id),

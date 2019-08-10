@@ -8,7 +8,7 @@ import { A, Column, RowNav } from '@kocherga/frontkit';
 import { APIError } from '~/common/api';
 import { Screen, InitialLoader } from '~/common/types';
 import { State } from '~/redux/store';
-import { selectAPI, selectUser } from '~/core/selectors';
+import { selectUser } from '~/core/selectors';
 import { useUser } from '~/common/hooks';
 
 import VisitsTab from './tabs/VisitsTab';
@@ -101,15 +101,14 @@ const getInitialData: InitialLoader<OwnProps> = async ({
   dispatch,
   getState,
 }) => {
-  const api = selectAPI(getState());
   const user = selectUser(getState());
 
   if (!user.email) {
     throw new APIError('You need to be logged in to see /my', 403);
   }
 
-  await dispatch(actions.loadCmData(api));
-  await dispatch(actions.loadTickets(api));
+  await dispatch(actions.loadCmData());
+  await dispatch(actions.loadTickets());
 
   return {};
 };

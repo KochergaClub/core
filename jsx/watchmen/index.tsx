@@ -9,10 +9,8 @@ import { Column } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 
 import Page from '~/components/Page';
-import { useListeningWebSocket, useAPI, usePermissions } from '~/common/hooks';
-import { API } from '~/common/api';
+import { useListeningWebSocket, usePermissions } from '~/common/hooks';
 import { State } from '~/redux/store';
-import { selectAPI } from '~/core/selectors';
 
 import { loadMembers } from '~/staff/actions';
 
@@ -32,20 +30,19 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  reloadSchedule: (api: API, from_date: Date, to_date: Date) => Promise<void>;
+  reloadSchedule: (from_date: Date, to_date: Date) => Promise<void>;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
 
 const WatchmenIndexPage: React.FC<Props> = props => {
-  const api = useAPI();
   const [editable] = usePermissions(['watchmen.manage']);
 
   const [from_date, to_date] = props.dates;
 
   const fetchSchedule = useCallback(async () => {
-    await props.reloadSchedule(api, from_date, to_date);
-  }, [api, from_date, to_date, props.reloadSchedule]);
+    await props.reloadSchedule(from_date, to_date);
+  }, [from_date, to_date, props.reloadSchedule]);
 
   useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
 
@@ -85,11 +82,9 @@ const ConnectedPage = connect(
 )(WatchmenIndexPage);
 
 const getInitialData: InitialLoader<OwnProps> = async (
-  { dispatch, getState },
+  { dispatch },
   { query }
 ) => {
-  const api = selectAPI(getState());
-
   let from_date: Date;
   if (query.from_date) {
     const match = query.from_date.match(/^\d{4}-\d{2}-\d{2}$/);
@@ -102,9 +97,9 @@ const getInitialData: InitialLoader<OwnProps> = async (
   }
   const to_date = addWeeks(from_date, 4);
 
-  await dispatch(loadMembers(api));
+  await dispatch(loadMembers());
 
-  await dispatch(reloadSchedule(api, from_date, to_date));
+  await dispatch(reloadSchedule(from_date, to_date));
 
   dispatch(setDatesWindow(from_date, to_date));
 

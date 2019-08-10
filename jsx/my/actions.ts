@@ -1,5 +1,7 @@
-import { API, APIError } from '~/common/api';
+import { APIError } from '~/common/api';
 import { AsyncAction } from '~/redux/store';
+import { selectAPI } from '~/core/selectors';
+
 import { getCmData, getOrders, getTickets } from './api';
 import { Order, Customer, MyTicket, PrivacyMode } from './types';
 
@@ -32,7 +34,11 @@ const ticketsLoaded = (tickets: MyTicket[]) => ({
   payload: tickets,
 });
 
-export const loadCmData = (api: API): AsyncAction<void> => async dispatch => {
+export const loadCmData = (): AsyncAction<void> => async (
+  dispatch,
+  getState
+) => {
+  const api = selectAPI(getState());
   try {
     const { customer, orders_count } = await getCmData(api);
     const orders = await getOrders(api);
@@ -46,15 +52,20 @@ export const loadCmData = (api: API): AsyncAction<void> => async dispatch => {
   }
 };
 
-export const loadTickets = (api: API): AsyncAction<void> => async dispatch => {
+export const loadTickets = (): AsyncAction<void> => async (
+  dispatch,
+  getState
+) => {
+  const api = selectAPI(getState());
   const tickets = await getTickets(api);
   dispatch(ticketsLoaded(tickets));
 };
 
-export const deleteTicket = (
-  api: API,
-  ticket: MyTicket
-): AsyncAction<void> => async dispatch => {
+export const deleteTicket = (ticket: MyTicket): AsyncAction<void> => async (
+  dispatch,
+  getState
+) => {
+  const api = selectAPI(getState());
   await api.call(
     `events/${ticket.event.event_id}/tickets/my`,
     'DELETE',
@@ -62,17 +73,20 @@ export const deleteTicket = (
     false
   );
 
-  await dispatch(loadTickets(api));
+  await dispatch(loadTickets());
 };
 
-export const setPrivacyMode = (
-  api: API,
-  mode: PrivacyMode
-): AsyncAction<void> => async dispatch => {
+export const setPrivacyMode = (mode: PrivacyMode): AsyncAction<void> => async (
+  dispatch,
+  getState
+) => {
+  const api = selectAPI(getState());
   await api.call('cm/me/set-privacy-mode', 'POST', {
     privacy_mode: mode,
   });
-  await dispatch(loadCmData(api));
+
+  // TODO - unnecessary, just update the local store instead with PRIVACY_MODE_CHANGED or something
+  await dispatch(loadCmData());
 };
 
 export type Action =

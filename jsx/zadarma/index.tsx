@@ -40,7 +40,7 @@ const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
 
 const getInitialData: InitialLoader<Props> = async ({ getState, dispatch }) => {
   const api = selectAPI(getState());
-  await dispatch(loadMembers(api));
+  await dispatch(loadMembers());
 
   return {
     pbx_calls: await getAllCalls(api),

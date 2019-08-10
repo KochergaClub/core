@@ -6,7 +6,6 @@ import { FaGlobe, FaLock } from 'react-icons/fa';
 
 import { A, Button, Column } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
 import { State } from '~/redux/store';
 
 import { Customer } from '../types';
@@ -50,18 +49,15 @@ interface Props {
 
 const PrivacySettings: React.FC<Props> = ({ customer }) => {
   const [loading, setLoading] = useState(false);
-  const api = useAPI();
 
   const dispatch = useDispatch();
 
   const flipPrivacyMode = useCallback(async () => {
     // TODO - move `loading` state to redux
     setLoading(true);
-    await dispatch(
-      setPrivacyMode(api, oppositePrivacyMode(customer.privacy_mode))
-    );
+    await dispatch(setPrivacyMode(oppositePrivacyMode(customer.privacy_mode)));
     setLoading(false);
-  }, [api, dispatch, customer.privacy_mode]);
+  }, [dispatch, customer.privacy_mode]);
 
   return (
     <HeadedFragment title="Настройки приватности">

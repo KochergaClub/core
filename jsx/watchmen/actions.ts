@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
 
-import { API } from '~/common/api';
 import { AsyncAction } from '~/redux/store';
+import { selectAPI } from '~/core/selectors';
+
 import { getSchedule } from './api';
 import { Shift, Schedule, shifts2schedule } from './types';
 
@@ -26,10 +27,11 @@ export const setEditing = (value: boolean) => ({
 });
 
 export const reloadSchedule = (
-  api: API,
   from_date: Date,
   to_date: Date
-): AsyncAction<void> => async dispatch => {
+): AsyncAction<void> => async (dispatch, getState) => {
+  const api = selectAPI(getState());
+
   const shifts = await getSchedule(api, from_date, to_date);
   const schedule = shifts2schedule(shifts);
   dispatch(replaceSchedule(schedule));

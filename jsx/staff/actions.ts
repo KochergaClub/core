@@ -1,5 +1,5 @@
 import { AsyncAction } from '~/redux/store';
-import { API } from '~/common/api';
+import { selectAPI } from '~/core/selectors';
 
 import { Member } from './types';
 
@@ -12,7 +12,11 @@ export const replaceMembers = (members: Member[]) => ({
   members,
 });
 
-export const loadMembers = (api: API): AsyncAction<void> => async dispatch => {
+export const loadMembers = (): AsyncAction<void> => async (
+  dispatch,
+  getState
+) => {
+  const api = selectAPI(getState());
   const members = await getMembers(api);
   dispatch(replaceMembers(members));
 };
