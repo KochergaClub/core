@@ -14,6 +14,8 @@ import * as selectors from '../selectors';
 import CustomerCard from '../components/CustomerCard';
 import HeadedFragment from '../components/HeadedFragment';
 
+import NonCustomerVisitsTab from './NonCustomerVisitsTab';
+
 const inflect = (n: number) => {
   if ((n % 100 < 10 || n % 100 > 20) && [2, 3, 4].includes(n % 10)) {
     return 'а';
@@ -22,12 +24,15 @@ const inflect = (n: number) => {
 };
 
 interface Props {
-  customer: Customer;
+  customer?: Customer;
   orders_count: number;
   orders: Order[];
 }
 
 const VisitsTab = ({ customer, orders_count, orders }: Props) => {
+  if (!customer) {
+    return <NonCustomerVisitsTab />;
+  }
   return (
     <article>
       <Column centered>

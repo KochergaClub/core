@@ -10,7 +10,7 @@ import { useAPI } from '~/common/hooks';
 import { State } from '~/redux/store';
 
 import { Customer } from '../types';
-import { loadCmData } from '../actions';
+import { setPrivacyMode } from '../actions';
 import { selectCustomer } from '../selectors';
 
 import TVIcon from './TVIcon';
@@ -55,12 +55,11 @@ const PrivacySettings: React.FC<Props> = ({ customer }) => {
   const dispatch = useDispatch();
 
   const flipPrivacyMode = useCallback(async () => {
-    // TODO - move this code to actions
+    // TODO - move `loading` state to redux
     setLoading(true);
-    await api.call('cm/me/set-privacy-mode', 'POST', {
-      privacy_mode: oppositePrivacyMode(customer.privacy_mode),
-    });
-    await dispatch(loadCmData(api));
+    await dispatch(
+      setPrivacyMode(api, oppositePrivacyMode(customer.privacy_mode))
+    );
     setLoading(false);
   }, [api, dispatch, customer.privacy_mode]);
 

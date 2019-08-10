@@ -1,11 +1,13 @@
 import { PublicEvent } from '../events/types';
 
+export type PrivacyMode = 'private' | 'public';
+
 export interface Customer {
   card_id: number;
   subscription_until?: string;
   last_visit?: string;
   total_spent: number;
-  privacy_mode: string;
+  privacy_mode: PrivacyMode;
 }
 
 export interface Order {

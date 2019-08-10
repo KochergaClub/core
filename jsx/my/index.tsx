@@ -11,14 +11,11 @@ import GlobalContext from '~/components/GlobalContext';
 import { State } from '~/redux/store';
 
 import VisitsTab from './tabs/VisitsTab';
-import NonCustomerVisitsTab from './tabs/NonCustomerVisitsTab';
 import TicketsTab from './tabs/TicketsTab';
 import SettingsTab from './tabs/SettingsTab';
 import LogoutButton from './components/LogoutButton';
 
 import Page from '~/components/Page';
-
-import { Customer } from './types';
 
 import * as actions from './actions';
 import * as selectors from './selectors';
@@ -38,21 +35,16 @@ interface OwnProps {}
 
 interface StateProps {
   tab: actions.TabName;
-  customer?: Customer;
 }
 
-const MyPage: React.FC<OwnProps & StateProps> = ({ tab, customer }) => {
+const MyPage: React.FC<OwnProps & StateProps> = ({ tab }) => {
   const { user } = useContext(GlobalContext);
   const dispatch = useDispatch();
 
   const getSection = () => {
     switch (tab) {
       case 'visits':
-        if (customer) {
-          return <VisitsTab />;
-        } else {
-          return <NonCustomerVisitsTab />;
-        }
+        return <VisitsTab />;
       case 'tickets':
         return <TicketsTab />;
       case 'settings':
@@ -95,7 +87,6 @@ const MyPage: React.FC<OwnProps & StateProps> = ({ tab, customer }) => {
 
 const mapStateToProps = (state: State): StateProps => ({
   tab: selectors.selectTab(state),
-  customer: selectors.selectCustomer(state),
 });
 
 const ConnectedPage = connect(

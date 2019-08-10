@@ -1,7 +1,7 @@
 import { API, APIError } from '~/common/api';
 import { AsyncAction } from '~/redux/store';
 import { getCmData, getOrders, getTickets } from './api';
-import { Order, Customer, MyTicket } from './types';
+import { Order, Customer, MyTicket, PrivacyMode } from './types';
 
 export const TAB_OPEN = '[my] TAB_OPEN';
 export const CM_DATA_LOADED = '[my] CM_DATA_LOADED';
@@ -49,6 +49,16 @@ export const loadCmData = (api: API): AsyncAction<void> => async dispatch => {
 export const loadTickets = (api: API): AsyncAction<void> => async dispatch => {
   const tickets = await getTickets(api);
   dispatch(ticketsLoaded(tickets));
+};
+
+export const setPrivacyMode = (
+  api: API,
+  mode: PrivacyMode
+): AsyncAction<void> => async dispatch => {
+  await api.call('cm/me/set-privacy-mode', 'POST', {
+    privacy_mode: mode,
+  });
+  await dispatch(loadCmData(api));
 };
 
 export type Action =
