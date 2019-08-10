@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { selectAPI } from '~/navigation/selectors';
+import { selectAPI } from '~/core/selectors';
 
 const useAPI = () => useSelector(selectAPI);
 

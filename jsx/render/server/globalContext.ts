@@ -5,8 +5,8 @@ import { configureStore } from '~/redux/store';
 import { GlobalContextShape } from '~/common/types';
 
 import { APIProps } from '~/common/api';
-import { configureAPI } from '~/navigation/actions';
-import { selectAPI } from '~/navigation/selectors';
+import { configureAPI } from '~/core/actions';
+import { selectAPI } from '~/core/selectors';
 
 import { API_HOST } from './constants';
 

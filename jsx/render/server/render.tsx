@@ -10,8 +10,8 @@ import { Helmet, HelmetData } from 'react-helmet';
 
 import { GlobalFontsString } from '@kocherga/frontkit';
 
-import Entrypoint from '~/navigation/Entrypoint';
-import { cleanupAPIForClient } from '~/navigation/actions';
+import Entrypoint from '~/core/Entrypoint';
+import { cleanupAPIForClient } from '~/core/actions';
 
 import { PageInfo, RenderContext, buildRenderContext } from '../types';
 
