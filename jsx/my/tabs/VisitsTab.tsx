@@ -1,12 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { Column } from '@kocherga/frontkit';
 
 import { timezone, formatDate } from '~/common/utils';
+import { State } from '~/redux/store';
 
 import { Customer, Order } from '../types';
+import * as selectors from '../selectors';
 
 import CustomerCard from '../components/CustomerCard';
 import HeadedFragment from '../components/HeadedFragment';
@@ -60,4 +63,8 @@ const VisitsTab = ({ customer, orders_count, orders }: Props) => {
   );
 };
 
-export default VisitsTab;
+export default connect((state: State) => ({
+  customer: selectors.selectCustomer(state),
+  orders_count: selectors.selectOrdersCount(state) || 0,
+  orders: selectors.selectOrders(state),
+}))(VisitsTab);
