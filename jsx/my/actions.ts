@@ -51,6 +51,20 @@ export const loadTickets = (api: API): AsyncAction<void> => async dispatch => {
   dispatch(ticketsLoaded(tickets));
 };
 
+export const deleteTicket = (
+  api: API,
+  ticket: MyTicket
+): AsyncAction<void> => async dispatch => {
+  await api.call(
+    `events/${ticket.event.event_id}/tickets/my`,
+    'DELETE',
+    {},
+    false
+  );
+
+  await dispatch(loadTickets(api));
+};
+
 export const setPrivacyMode = (
   api: API,
   mode: PrivacyMode

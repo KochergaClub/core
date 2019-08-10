@@ -1,37 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { A, Button, Column } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
+import AsyncButton from '~/components/AsyncButton';
 import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
 
 import { MyTicket } from '../types';
-import { loadTickets } from '../actions';
+import { deleteTicket } from '../actions';
 import { selectTickets } from '../selectors';
 
 const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
   const dispatch = useDispatch();
   const api = useAPI();
-  const [loading, setLoading] = useState(false); // TODO - track `loading` state in redux?
 
   const cancel = React.useCallback(async () => {
-    setLoading(true);
-
-    // TODO - move to actions
-    await api.call(
-      `events/${ticket.event.event_id}/tickets/my`,
-      'DELETE',
-      {},
-      false
-    );
-
-    await dispatch(loadTickets(api));
-    setLoading(false);
-  }, [api, dispatch, ticket.event.event_id]);
+    await dispatch(deleteTicket(api, ticket));
+  }, [api, dispatch, ticket]);
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 
@@ -39,9 +28,9 @@ const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
     <div>
       <A href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</A>
       <div>{formatDate(zonedStart, 'd MMMM, HH:mm')}</div>
-      <Button small loading={loading} disabled={loading} onClick={cancel}>
+      <AsyncButton small act={cancel}>
         Отменить
-      </Button>
+      </AsyncButton>
     </div>
   );
 };
