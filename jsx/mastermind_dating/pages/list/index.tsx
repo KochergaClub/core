@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
 import { Cohort } from '../../types';
 import { getCohorts } from '../../api';
@@ -34,11 +35,10 @@ const MastermindIndexPage = ({ cohorts }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ getState }) => {
+  const api = selectAPI(getState());
   const cohorts = await getCohorts(api);
-  return {
-    cohorts,
-  };
+  return { cohorts };
 };
 
 const screen: Screen<Props> = {

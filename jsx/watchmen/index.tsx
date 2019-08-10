@@ -12,6 +12,7 @@ import Page from '~/components/Page';
 import { useListeningWebSocket, useAPI, usePermissions } from '~/common/hooks';
 import { API } from '~/common/api';
 import { State } from '~/redux/store';
+import { selectAPI } from '~/core/selectors';
 
 import { loadMembers } from '~/staff/actions';
 
@@ -84,9 +85,11 @@ const ConnectedPage = connect(
 )(WatchmenIndexPage);
 
 const getInitialData: InitialLoader<OwnProps> = async (
-  { api, store: { dispatch } },
+  { dispatch, getState },
   { query }
 ) => {
+  const api = selectAPI(getState());
+
   let from_date: Date;
   if (query.from_date) {
     const match = query.from_date.match(/^\d{4}-\d{2}-\d{2}$/);

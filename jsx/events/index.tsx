@@ -3,10 +3,11 @@ import React, { useCallback, useEffect, useState, useReducer } from 'react';
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addWeeks, subWeeks } from 'date-fns';
 
-import { Screen, InitialLoader } from '../common/types';
-import { timezone } from '../common/utils';
-import Page from '../components/Page';
-import { useListeningWebSocket, useAPI } from '../common/hooks';
+import { Screen, InitialLoader } from '~/common/types';
+import { timezone } from '~/common/utils';
+import Page from '~/components/Page';
+import { useListeningWebSocket, useAPI } from '~/common/hooks';
+import { selectAPI } from '~/core/selectors';
 
 import Calendar from './components/Calendar';
 import UILayer from './components/UILayer';
@@ -193,7 +194,9 @@ const EventsPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ getState }) => {
+  const api = selectAPI(getState());
+
   const range = {
     start: format(subWeeks(new Date(), 3), 'yyyy-MM-dd'),
     end: format(addWeeks(new Date(), 3), 'yyyy-MM-dd'),

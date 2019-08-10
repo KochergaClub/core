@@ -9,11 +9,12 @@ import Markdown from 'react-markdown';
 
 import { Column } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '../../common/types';
-import { timezone, formatDate } from '../../common/utils';
-import { APIError } from '../../common/api';
+import { Screen, InitialLoader } from '~/common/types';
+import { timezone, formatDate } from '~/common/utils';
+import { APIError } from '~/common/api';
+import { selectAPI, selectUser } from '~/core/selectors';
 
-import Page from '../../components/Page';
+import Page from '~/components/Page';
 
 import { PublicEvent, EventTicket } from '../types';
 
@@ -82,9 +83,12 @@ const EventPage = (props: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async (
-  { api, user },
+  { getState },
   { params }
 ) => {
+  const api = selectAPI(getState());
+  const user = selectUser(getState());
+
   const event = await api.call(`public_events/${params.id}`, 'GET');
   event.start = new Date(event.start);
   event.end = new Date(event.end);

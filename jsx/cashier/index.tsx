@@ -4,6 +4,7 @@ import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 import { usePermissions } from '~/common/hooks';
+import { selectAPI } from '~/core/selectors';
 
 import { Payment } from './types';
 import { getPayments } from './api';
@@ -52,8 +53,9 @@ const CashierPage = ({ payments }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async context => {
-  const payments = await getPayments(context.api);
+const getInitialData: InitialLoader<Props> = async ({ getState }) => {
+  const api = selectAPI(getState());
+  const payments = await getPayments(api);
   return { payments };
 };
 

@@ -6,8 +6,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { Switch, Route } from 'react-router';
 
 import { Store } from '~/redux/store';
-import { API } from '~/common/api';
-import GlobalContext from '~/components/GlobalContext';
 
 import { routes, errorPages } from './routes';
 import wagtailScreen from '~/wagtail/any';
@@ -19,17 +17,11 @@ import ScreenWrapper from './ScreenWrapper';
 interface Props {
   store: Store;
 
-  // TODO - move to redux store entirely
+  // TODO - move page props to redux store entirely
   renderContext: RenderContext;
 }
 
 const Entrypoint = function(props: Props) {
-  const globalContextValue = {
-    api: new API({ csrfToken: props.renderContext.csrfToken }),
-    user: props.renderContext.user,
-    store: props.store,
-  };
-
   let insides;
 
   const pageInfo = props.renderContext.page;
@@ -70,11 +62,7 @@ const Entrypoint = function(props: Props) {
     throw new Error('Assertion failed: insides is not set');
   }
 
-  return (
-    <GlobalContext.Provider value={globalContextValue}>
-      <ReduxProvider store={props.store}>{insides}</ReduxProvider>
-    </GlobalContext.Provider>
-  );
+  return <ReduxProvider store={props.store}>{insides}</ReduxProvider>;
 };
 
 const HotEntrypoint = hot(Entrypoint);

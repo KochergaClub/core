@@ -6,6 +6,8 @@ import { A, Column } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 import { Screen, InitialLoader } from '~/common/types';
+import { selectAPI } from '~/core/selectors';
+
 import Page from '~/components/Page';
 
 import { ActivityType, Training, Trainer } from '../types';
@@ -102,7 +104,12 @@ const RatioSchedulePage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
+const getInitialData: InitialLoader<Props> = async (
+  { getState },
+  { params }
+) => {
+  const api = selectAPI(getState());
+
   const training = await getTraining(api, params.name);
   const schedule = await getSchedule(api, params.name);
   const trainers = await getTrainers(api);

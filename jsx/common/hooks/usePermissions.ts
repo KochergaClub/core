@@ -1,9 +1,9 @@
-import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 
-import GlobalContext from '~/components/GlobalContext';
+import { selectUser } from '~/core/selectors';
 
 const usePermissions = (permissions: string[]) => {
-  const { user } = useContext(GlobalContext);
+  const user = useSelector(selectUser);
 
   const result: boolean[] = [];
   for (const permission of permissions) {

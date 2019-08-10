@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useStore } from 'react-redux';
 
 import { RouteComponentProps } from 'react-router';
 
-import GlobalContext from '~/components/GlobalContext';
 import { Screen } from '~/common/types';
 import { parseQueryString } from '~/common/utils';
 
@@ -21,7 +21,7 @@ const ScreenWrapper = ({
   const [props, setProps] = useState(preloadedProps);
   const [loading, setLoading] = useState(false);
 
-  const globalContext = useContext(GlobalContext);
+  const store = useStore();
 
   useEffect(() => {
     if (!hadTransitions) {
@@ -35,7 +35,7 @@ const ScreenWrapper = ({
         return;
       }
       setLoading(true);
-      const loadedProps = await screen.getInitialData(globalContext, {
+      const loadedProps = await screen.getInitialData(store, {
         params: routeProps.match.params,
         query: parseQueryString(routeProps.location.search),
       });

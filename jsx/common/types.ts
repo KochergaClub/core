@@ -1,10 +1,6 @@
-import { API } from './api';
 import { Store } from '~/redux/store';
 
-export type AnyInitialLoader<B, P> = (
-  context: GlobalContextShape,
-  source: B
-) => Promise<P>;
+export type AnyInitialLoader<B, P> = (store: Store, source: B) => Promise<P>;
 
 // TODO - replace with `location` from react-router
 interface LocationData {
@@ -26,10 +22,4 @@ export interface User {
   permissions: string[];
   is_staff?: boolean;
   email?: string;
-}
-
-export interface GlobalContextShape {
-  api: API;
-  user: User;
-  store: Store;
 }

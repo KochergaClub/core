@@ -24,7 +24,7 @@ import 'babel-polyfill';
 import { API_HOST, API_ASYNC_HOST } from './constants';
 
 // middlewares
-import { globalContext } from './globalContext';
+import { setupStore } from './globalContext';
 import { reactEntrypoint } from './reactEntrypoint';
 import { wagtailEntrypoint } from './wagtailEntrypoint';
 import { errorHandler, notFoundHandler } from './errorHandler';
@@ -68,8 +68,8 @@ server.on('upgrade', (req, socket, head) => {
   wsProxy.ws(req, socket, head);
 });
 
-// Inject req.reactContext
-app.use(globalContext);
+// Inject req.reduxStore
+app.use(setupStore);
 
 app.use(reactEntrypoint);
 

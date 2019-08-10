@@ -3,7 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Page from '~/components/Page';
-import { API } from '~/common/api';
+import { Store } from '~/redux/store';
+import { selectAPI } from '~/core/selectors';
 
 import PageHeader from '~/blocks/PageHeader';
 
@@ -51,7 +52,9 @@ const BlogIndexPage = (props: Props) => {
 
 export default dynamicScreen(
   BlogIndexPage,
-  async ({ api }: { api: API }, wagtailPage: PageType) => {
+  async ({ getState }: Store, wagtailPage: PageType) => {
+    const api = selectAPI(getState());
+
     const json = await api.callWagtail(
       `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${
         wagtailPage.id

@@ -1,19 +1,17 @@
 import * as express from 'express';
 import cookie from 'cookie';
 
-import { configureStore } from '~/redux/store';
-import { GlobalContextShape } from '~/common/types';
+import { configureStore, Store } from '~/redux/store';
 
 import { APIProps } from '~/common/api';
-import { configureAPI } from '~/core/actions';
-import { selectAPI } from '~/core/selectors';
+import { configureAPI, loadUser } from '~/core/actions';
 
 import { API_HOST } from './constants';
 
 declare global {
   namespace Express {
     interface Request {
-      reactContext: GlobalContextShape;
+      reduxStore: Store;
     }
   }
 }
@@ -31,8 +29,8 @@ const reqToAPIConfig = (req: express.Request): APIProps => {
   };
 };
 
-// Custom middleware which injects req.reactContext with api and user fields.
-export const globalContext = async (
+// Custom middleware which injects req.reduxStore with api and user.
+export const setupStore = async (
   req: express.Request,
   _: express.Response,
   next: express.NextFunction
@@ -41,14 +39,9 @@ export const globalContext = async (
     const store = configureStore();
 
     store.dispatch(configureAPI(reqToAPIConfig(req)));
-    const api = selectAPI(store.getState());
-    const user = await api.call('me', 'GET');
+    await store.dispatch(loadUser());
 
-    req.reactContext = {
-      store,
-      user, // deprecated, will be removed soon
-      api, // deprecated, will be removed soon
-    };
+    req.reduxStore = store;
 
     next();
   } catch (err) {
@@ -57,21 +50,10 @@ export const globalContext = async (
 };
 
 // This method should be used for error pages, which can't load the real user.
-export const getFallbackContext = (
-  req: express.Request
-): GlobalContextShape => {
+export const setupFallbackStore = (req: express.Request) => {
   // FIXME - copy-pasted from globalContext()
   const store = configureStore();
   store.dispatch(configureAPI(reqToAPIConfig(req)));
-  const api = selectAPI(store.getState());
-  const user = {
-    is_authenticated: false,
-    permissions: [],
-  };
 
-  return {
-    store,
-    user,
-    api,
-  };
+  req.reduxStore = store;
 };

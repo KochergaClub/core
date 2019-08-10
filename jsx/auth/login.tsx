@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Redirect } from 'react-router';
 
@@ -6,7 +7,7 @@ import styled from 'styled-components';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
-import GlobalContext from '~/components/GlobalContext';
+import { selectUser } from '~/core/selectors';
 
 import { Button, Input, Column } from '@kocherga/frontkit';
 import AuthContainer from './components/AuthContainer';
@@ -76,8 +77,8 @@ const LoginPage = (props: Props) => {
     onEnter: cb,
   });
 
-  // TODO - move this to wrapper for LoginPage to avoid executing all the hooks above
-  const { user } = useContext(GlobalContext);
+  // TODO - move this to wrapper for LoginPage to avoid executing all the hooks above?
+  const user = useSelector(selectUser);
   if (user.is_authenticated) {
     return <Redirect to="/" />;
   }

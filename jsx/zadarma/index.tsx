@@ -1,7 +1,8 @@
 import React, { useReducer } from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import Page from '../components/Page';
+import { Screen, InitialLoader } from '~/common/types';
+import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
 import { Column } from '@kocherga/frontkit';
 
@@ -37,10 +38,8 @@ const ZadarmaIndexPage = ({ pbx_calls }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({
-  api,
-  store: { dispatch },
-}) => {
+const getInitialData: InitialLoader<Props> = async ({ getState, dispatch }) => {
+  const api = selectAPI(getState());
   await dispatch(loadMembers(api));
 
   return {

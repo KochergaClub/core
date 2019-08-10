@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Screen, InitialLoader } from '../common/types';
-import { formatDate } from '../common/utils';
+import { Screen, InitialLoader } from '~/common/types';
+import { formatDate } from '~/common/utils';
+import { selectAPI } from '~/core/selectors';
 
-import Page from '../components/Page';
-import WorkInProgress from '../components/WorkInProgress';
+import Page from '~/components/Page';
+import WorkInProgress from '~/components/WorkInProgress';
 
-import { PublicEvent, ServerPublicEvent } from '../events/types';
+import { PublicEvent, ServerPublicEvent } from '~/events/types';
 
 import EventsList from './components/EventsList';
 
@@ -32,7 +33,9 @@ const FrontPage = ({ events: serverEvents }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ getState }) => {
+  const api = selectAPI(getState());
+
   const from_date = new Date();
   const events = await api.call(
     `public_events?from_date=${formatDate(from_date, 'yyyy-MM-dd')}`,

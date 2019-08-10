@@ -3,7 +3,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Page from '~/components/Page';
-import { API } from '~/common/api';
+import { Store } from '~/redux/store';
+import { selectAPI } from '~/core/selectors';
 
 import { dynamicScreen } from '../../types';
 
@@ -68,7 +69,9 @@ const RatioNotebookPage = (props: Props) => {
 
 export default dynamicScreen(
   RatioNotebookPage,
-  async ({ api }: { api: API }, wagtailPage: PageType) => {
+  async ({ getState }: Store, wagtailPage: PageType) => {
+    const api = selectAPI(getState());
+
     const ids = wagtailPage.sections.map(section => section.value);
 
     const sectionPages: AuxPages = {};

@@ -12,3 +12,5 @@ export const selectAPI = createSelector(
     return new API(api);
   }
 );
+
+export const selectUser = (state: State) => state.core.user;

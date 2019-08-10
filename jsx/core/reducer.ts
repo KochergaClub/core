@@ -1,11 +1,24 @@
 import { APIProps } from '~/common/api';
-import { API_CONFIGURE, API_CLEANUP_FOR_CLIENT, Action } from './actions';
+import { User } from '~/common/types';
+
+import {
+  API_CONFIGURE,
+  API_CLEANUP_FOR_CLIENT,
+  USER_LOADED,
+  Action,
+} from './actions';
 
 interface State {
   api?: APIProps;
+  user: User;
 }
 
-const initialState: State = {};
+const initialState: State = {
+  user: {
+    is_authenticated: false,
+    permissions: [],
+  },
+};
 
 const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
@@ -24,6 +37,11 @@ const reducer = (state: State = initialState, action: Action): State => {
         api: {
           csrfToken: state.api.csrfToken,
         },
+      };
+    case USER_LOADED:
+      return {
+        ...state,
+        user: action.payload,
       };
     default:
       return state;

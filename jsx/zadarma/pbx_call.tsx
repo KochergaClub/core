@@ -4,6 +4,7 @@ import { A } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
 import { loadMembers } from '~/staff/actions';
 
@@ -38,9 +39,10 @@ const ZadarmaCallPage = (props: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async (
-  { api, store: { dispatch } },
+  { dispatch, getState },
   { params }
 ) => {
+  const api = selectAPI(getState());
   await dispatch(loadMembers(api));
 
   return {

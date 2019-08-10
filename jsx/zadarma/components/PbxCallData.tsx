@@ -1,11 +1,12 @@
 import React, { useCallback, useContext } from 'react';
+import { useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 
 import { Label } from '@kocherga/frontkit';
 
-import GlobalContext from '~/components/GlobalContext';
-
 import { useAPI, useExpandable } from '~/common/hooks';
+import { selectUser } from '~/core/selectors';
 
 import WatchmanPicker from '~/staff/components/WatchmanPicker';
 import { Member } from '~/staff/types';
@@ -46,7 +47,7 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
 };
 
 const StaffMember: React.FC<Props> = ({ pbx_call }) => {
-  const { user } = useContext(GlobalContext);
+  const user = useSelector(selectUser);
 
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
 

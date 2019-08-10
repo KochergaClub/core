@@ -1,9 +1,8 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { A, Button } from '@kocherga/frontkit';
 
-import GlobalContext from '../../../components/GlobalContext';
-import { useAPI } from '../../../common/hooks';
+import { useAPI, useUser } from '~/common/hooks';
 
 import { Props } from '../event';
 
@@ -15,10 +14,10 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Registration({ ticket, event }: Props) {
-  const { user } = useContext(GlobalContext);
   const [acting, setActing] = useState(false);
 
   const api = useAPI();
+  const user = useUser();
 
   const unregister = useCallback(async () => {
     setActing(true);

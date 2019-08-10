@@ -98,16 +98,13 @@ export const sendEntrypointHtml = (
   const routerContext: { url?: string } = {};
 
   // This is critical so that we don't leak wagtail token to the html!
-  req.reactContext.store.dispatch(cleanupAPIForClient());
+  req.reduxStore.dispatch(cleanupAPIForClient());
 
-  const renderContext = buildRenderContext(pageInfo, req.reactContext);
+  const renderContext = buildRenderContext(pageInfo, req.reduxStore);
 
   const el = (
     <StaticRouter location={req.url} context={routerContext}>
-      <Entrypoint
-        store={req.reactContext.store}
-        renderContext={renderContext}
-      />
+      <Entrypoint store={req.reduxStore} renderContext={renderContext} />
     </StaticRouter>
   );
 

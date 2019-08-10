@@ -63,7 +63,7 @@ export const reactEntrypoint: express.RequestHandler = async (
     const { screen } = selectedRoute;
     let props = {};
     if (screen.getInitialData) {
-      props = await screen.getInitialData(req.reactContext, {
+      props = await screen.getInitialData(req.reduxStore, {
         params: selectedMatch.params,
         query: req.query,
       });

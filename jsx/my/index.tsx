@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 
-import { APIError } from '~/common/api';
 import { A, Column, RowNav } from '@kocherga/frontkit';
 
+import { APIError } from '~/common/api';
 import { Screen, InitialLoader } from '~/common/types';
-import GlobalContext from '~/components/GlobalContext';
 import { State } from '~/redux/store';
+import { selectAPI, selectUser } from '~/core/selectors';
+import { useUser } from '~/common/hooks';
 
 import VisitsTab from './tabs/VisitsTab';
 import TicketsTab from './tabs/TicketsTab';
@@ -38,7 +39,7 @@ interface StateProps {
 }
 
 const MyPage: React.FC<OwnProps & StateProps> = ({ tab }) => {
-  const { user } = useContext(GlobalContext);
+  const user = useUser();
   const dispatch = useDispatch();
 
   const getSection = () => {
@@ -97,10 +98,12 @@ const ConnectedPage = connect(
 )(MyPage);
 
 const getInitialData: InitialLoader<OwnProps> = async ({
-  api,
-  user,
-  store: { dispatch },
+  dispatch,
+  getState,
 }) => {
+  const api = selectAPI(getState());
+  const user = selectUser(getState());
+
   if (!user.email) {
     throw new APIError('You need to be logged in to see /my', 403);
   }

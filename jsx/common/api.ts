@@ -2,20 +2,6 @@ import { IS_SERVER } from './utils';
 
 const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 
-// This function is useful for client side only.
-// In most cases you should use GlobalContext.csrfToken or <CSRFInput /> instead.
-export const getCSRFToken = () => {
-  if (typeof document === 'undefined') {
-    throw Error(
-      "Server-side rendering doesn't allow CSRF tokens, use GlobalContext instead"
-    );
-  }
-  return document.cookie.replace(
-    /(?:(?:^|.*;\s*)csrftoken\s*\=\s*([^;]*).*$)|^.*$/,
-    '$1'
-  );
-};
-
 interface WebSocket {
   onmessage: (e: MessageEvent) => void;
   close: () => void;
