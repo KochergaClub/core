@@ -10,16 +10,17 @@ MAILCHIMP_TRAINING_CATEGORY_NAME = 'Участники тренингов'
 
 
 def create_new_mailchimp_training_group(category_id, training):
+    interest_name = training.slug
     # check if interest already exists
     try:
-        interest = kocherga.mailchimp.interest_by_name(category_id, training.name)
-        logger.info(f"Group {training.name} already exists")
+        interest = kocherga.mailchimp.interest_by_name(category_id, interest_name)
+        logger.info(f"Group {interest_name} already exists")
     except kocherga.mailchimp.NotFoundException:
-        logger.info(f"Creating group {training.name}")
+        logger.info(f"Creating group {interest_name}")
         interest = kocherga.mailchimp.api_call(
             "POST",
             f"lists/{LIST_ID}/interest-categories/{category_id}/interests",
-            {"name": training.name},
+            {"name": interest_name},
         )
 
     logger.info(f'Group id: {interest["id"]}')
