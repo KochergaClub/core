@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -7,7 +7,6 @@ import { A, Column, RowNav } from '@kocherga/frontkit';
 
 import { APIError } from '~/common/api';
 import { Screen, InitialLoader } from '~/common/types';
-import { State } from '~/redux/store';
 import { selectUser } from '~/core/selectors';
 import { useUser } from '~/common/hooks';
 
@@ -34,13 +33,10 @@ const SectionWrapper = styled.div`
 
 interface OwnProps {}
 
-interface StateProps {
-  tab: actions.TabName;
-}
-
-const MyPage: React.FC<OwnProps & StateProps> = ({ tab }) => {
+const MyPage: React.FC<OwnProps> = () => {
   const user = useUser();
   const dispatch = useDispatch();
+  const tab = useSelector(selectors.selectTab);
 
   const getSection = () => {
     switch (tab) {
@@ -86,17 +82,6 @@ const MyPage: React.FC<OwnProps & StateProps> = ({ tab }) => {
   );
 };
 
-const mapStateToProps = (state: State): StateProps => ({
-  tab: selectors.selectTab(state),
-});
-
-const ConnectedPage = connect(
-  mapStateToProps,
-  {
-    openTab: actions.openTab,
-  }
-)(MyPage);
-
 const getInitialData: InitialLoader<OwnProps> = async ({
   dispatch,
   getState,
@@ -114,7 +99,7 @@ const getInitialData: InitialLoader<OwnProps> = async ({
 };
 
 const screen: Screen<OwnProps> = {
-  component: ConnectedPage,
+  component: MyPage,
   getInitialData,
 };
 
