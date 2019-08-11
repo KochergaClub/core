@@ -6,6 +6,7 @@ import { A, Column } from '@kocherga/frontkit';
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
 import { State } from '~/redux/store';
+import { selectAPI } from '~/core/selectors';
 
 import { Member } from './types';
 import { loadMembers } from './actions';
@@ -76,11 +77,8 @@ const ConnectedPage = connect((state: State) => ({
   members: selectMembers(state),
 }))(StaffIndexPage);
 
-const getInitialData: InitialLoader<{}> = async ({
-  api,
-  store: { dispatch },
-}) => {
-  await dispatch(loadMembers(api));
+const getInitialData: InitialLoader<{}> = async ({ dispatch }) => {
+  await dispatch(loadMembers());
   return {};
 };
 

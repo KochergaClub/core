@@ -1,46 +1,47 @@
 import * as express from 'express';
 import cookie from 'cookie';
 
-import { configureStore } from '~/redux/store';
-import { GlobalContextShape } from '~/common/types';
+import { configureStore, Store } from '~/redux/store';
 
-import { API } from '~/common/api';
+import { APIProps } from '~/common/api';
+import { configureAPI, loadUser } from '~/core/actions';
 
 import { API_HOST } from './constants';
 
 declare global {
   namespace Express {
     interface Request {
-      reactContext: GlobalContextShape;
+      reduxStore: Store;
     }
   }
 }
 
-const getAPI = (req: express.Request) => {
+const reqToAPIConfig = (req: express.Request): APIProps => {
   const cookies = cookie.parse(req.headers.cookie || '');
   const csrfToken = cookies.csrftoken as string;
 
-  const api = new API({
+  return {
     csrfToken,
     base: `http://${API_HOST}`,
     cookie: req.get('Cookie') || '',
     realHost: req.get('host'),
     wagtailAPIToken: process.env.WAGTAIL_API_TOKEN,
-  });
-  return api;
+  };
 };
 
-// Custom middleware which injects req.reactContext with api and user fields.
-export const globalContext = async (
+// Custom middleware which injects req.reduxStore with api and user.
+export const setupStore = async (
   req: express.Request,
   _: express.Response,
   next: express.NextFunction
 ) => {
   try {
-    const api = getAPI(req);
-    const user = await api.call('me', 'GET');
+    const store = configureStore();
 
-    req.reactContext = { api, user, store: configureStore() };
+    store.dispatch(configureAPI(reqToAPIConfig(req)));
+    await store.dispatch(loadUser());
+
+    req.reduxStore = store;
 
     next();
   } catch (err) {
@@ -48,16 +49,11 @@ export const globalContext = async (
   }
 };
 
-// This should be used for error pages, which can't load the real user.
-export const getFallbackContext = (
-  req: express.Request
-): GlobalContextShape => {
-  return {
-    api: getAPI(req),
-    user: {
-      is_authenticated: false,
-      permissions: [],
-    },
-    store: configureStore(),
-  };
+// This method should be used for error pages, which can't load the real user.
+export const setupFallbackStore = (req: express.Request) => {
+  // FIXME - copy-pasted from globalContext()
+  const store = configureStore();
+  store.dispatch(configureAPI(reqToAPIConfig(req)));
+
+  req.reduxStore = store;
 };

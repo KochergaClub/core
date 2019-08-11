@@ -1,9 +1,10 @@
 import express from 'express';
 
 import { APIError } from '~/common/api';
+import { selectUser } from '~/core/selectors';
 
 import { sendEntrypointHtml } from './render';
-import { getFallbackContext } from './globalContext';
+import { setupFallbackStore } from './globalContext';
 
 const getSendError = (req: express.Request, res: express.Response) => {
   return (code: number) => {
@@ -26,16 +27,19 @@ export const notFoundHandler: express.RequestHandler = (req, res, _) => {
 export const errorHandler: express.ErrorRequestHandler = (err, req, res, _) => {
   console.error(err);
 
-  if (!req.reactContext) {
-    req.reactContext = getFallbackContext(req);
+  if (!req.reduxStore) {
+    setupFallbackStore(req);
   }
 
-  if (
-    err instanceof APIError &&
-    err.status === 403 &&
-    req.reactContext &&
-    !req.reactContext.user.is_authenticated
-  ) {
+  if (!req.reduxStore) {
+    throw new Error(
+      "Internal code error - setupFallbackStore didn't setup the store"
+    );
+  }
+
+  const user = selectUser(req.reduxStore.getState());
+
+  if (err instanceof APIError && err.status === 403 && !user.is_authenticated) {
     const nextUrl = encodeURIComponent(req.url);
     res.redirect(302, `/login?next=${nextUrl}`);
     return;

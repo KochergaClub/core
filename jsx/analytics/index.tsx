@@ -3,6 +3,7 @@ import React from 'react';
 import { A } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
+import { selectAPI } from '~/core/selectors';
 import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 
@@ -53,7 +54,8 @@ const AnalyticsPage = ({ bov_stats }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ getState }) => {
+  const api = selectAPI(getState());
   const bov_stats = await fetchBovStats(api);
   return { bov_stats };
 };

@@ -7,3 +7,4 @@ export {
 } from './useFocusOnFirstModalRender';
 export { default as useCommonHotkeys } from './useCommonHotkeys';
 export { default as useAPI } from './useAPI';
+export { default as useUser } from './useUser';

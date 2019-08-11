@@ -3,6 +3,7 @@ import http from 'http';
 
 import wagtailScreen from '~/wagtail/any';
 import { AnyPageType } from '~/wagtail/pages/types';
+import { selectAPI } from '~/core/selectors';
 
 import { API_HOST } from './constants';
 
@@ -13,13 +14,15 @@ export const wagtailEntrypoint: express.RequestHandler = async (
   res,
   next
 ) => {
+  const api = selectAPI(req.reduxStore.getState());
+
   http.get(
     {
       host: API_HOST,
       path: `/api/wagtail/pages/find/?html_path=${req.path}`,
       headers: {
-        'X-WagtailAPIToken': req.reactContext.api.wagtailAPIToken,
-        'X-Forwarded-Host': req.reactContext.api.realHost,
+        'X-WagtailAPIToken': api.wagtailAPIToken,
+        'X-Forwarded-Host': api.realHost,
         Cookie: req.get('Cookie') || '',
       },
     },
@@ -46,7 +49,7 @@ export const wagtailEntrypoint: express.RequestHandler = async (
         }
         const pageId = match[1];
 
-        const pageProps = (await req.reactContext.api.callWagtail(
+        const pageProps = (await api.callWagtail(
           `pages/${pageId}/?fields=*`
         )) as AnyPageType;
         pageProps.meta_type = pageProps.meta.type;
@@ -54,7 +57,7 @@ export const wagtailEntrypoint: express.RequestHandler = async (
         let props = {};
         if (wagtailScreen.getInitialData) {
           props = await wagtailScreen.getInitialData(
-            req.reactContext,
+            req.reduxStore,
             pageProps as any // FIXME
           );
         }

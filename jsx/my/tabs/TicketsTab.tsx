@@ -1,21 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 
-import { utcToZonedTime } from 'date-fns-tz';
+import { A } from '@kocherga/frontkit';
 
-import { A, Button, Column } from '@kocherga/frontkit';
-
-import { useAPI } from '~/common/hooks';
-import { timezone, formatDate } from '~/common/utils';
-
-import { MyTicket } from '../types';
-import { MyDispatch } from '../store';
-import { getTickets } from '../api';
-
-interface Props {
-  tickets: MyTicket[];
-}
+import TicketsList from '../components/TicketsList';
 
 const HR = styled.hr`
   margin: 32px 0;
@@ -24,74 +13,20 @@ const HR = styled.hr`
   border-top: 1px solid #ddd;
 `;
 
-const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
-  const api = useAPI();
-  const dispatch = useContext(MyDispatch);
-  const [loading, setLoading] = useState(false);
-
-  const cancel = React.useCallback(async () => {
-    setLoading(true);
-    await api.call(
-      `events/${ticket.event.event_id}/tickets/my`,
-      'DELETE',
-      {},
-      false
-    );
-
-    const tickets = await getTickets(api);
-    dispatch({
-      type: 'REPLACE_TICKETS',
-      payload: {
-        tickets,
-      },
-    });
-    setLoading(false);
-  }, [api, dispatch, ticket.event.event_id]);
-
-  const zonedStart = utcToZonedTime(ticket.event.start, timezone);
-
-  return (
-    <div>
-      <A href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</A>
-      <div>{formatDate(zonedStart, 'd MMMM, HH:mm')}</div>
-      <Button small loading={loading} disabled={loading} onClick={cancel}>
-        Отменить
-      </Button>
-    </div>
-  );
-};
-
-const TicketsList = ({ tickets }: Props) => {
-  if (!tickets.length) {
-    return (
-      <div>
-        <em>Вы не зарегистрированы ни на одно событие.</em>
-      </div>
-    );
-  }
-
-  return (
-    <Column>
-      <h3>Вы собираетесь на эти события:</h3>
-      {tickets.map(ticket => (
-        <TicketCard key={ticket.event.event_id} ticket={ticket} />
-      ))}
-    </Column>
-  );
-};
-
 const OtherEvents = () => (
   <div>
     <A href="/">Посмотреть ближайшие события</A>
   </div>
 );
 
-export default function TicketsTab({ tickets }: Props) {
+const TicketsTab = () => {
   return (
     <article>
-      <TicketsList tickets={tickets} />
+      <TicketsList />
       <HR />
       <OtherEvents />
     </article>
   );
-}
+};
+
+export default TicketsTab;

@@ -10,7 +10,8 @@ import { Helmet, HelmetData } from 'react-helmet';
 
 import { GlobalFontsString } from '@kocherga/frontkit';
 
-import Entrypoint from '~/navigation/Entrypoint';
+import Entrypoint from '~/core/Entrypoint';
+import { cleanupAPIForClient } from '~/core/actions';
 
 import { PageInfo, RenderContext, buildRenderContext } from '../types';
 
@@ -96,14 +97,14 @@ export const sendEntrypointHtml = (
 ) => {
   const routerContext: { url?: string } = {};
 
-  const renderContext = buildRenderContext(pageInfo, req.reactContext);
+  // This is critical so that we don't leak wagtail token to the html!
+  req.reduxStore.dispatch(cleanupAPIForClient());
+
+  const renderContext = buildRenderContext(pageInfo, req.reduxStore);
 
   const el = (
     <StaticRouter location={req.url} context={routerContext}>
-      <Entrypoint
-        store={req.reactContext.store}
-        renderContext={renderContext}
-      />
+      <Entrypoint store={req.reduxStore} renderContext={renderContext} />
     </StaticRouter>
   );
 

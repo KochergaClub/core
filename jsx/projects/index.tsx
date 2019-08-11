@@ -2,10 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Screen } from '../common/types';
-import Page from '../components/Page';
-import WorkInProgress from '../components/WorkInProgress';
-import TL02 from '../blocks/TL02';
+import { Screen } from '~/common/types';
+import { selectAPI } from '~/core/selectors';
+
+import Page from '~/components/Page';
+import WorkInProgress from '~/components/WorkInProgress';
+import TL02 from '~/blocks/TL02';
 
 import ProjectCard from './components/ProjectCard';
 
@@ -52,7 +54,9 @@ const ProjectsIndexPage = (props: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }) => {
+const getInitialData: InitialLoader<Props> = async ({ getState }) => {
+  const api = selectAPI(getState());
+
   return {
     projects: await getAllProjects(api),
   };

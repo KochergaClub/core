@@ -1,25 +1,24 @@
-import React, { useState, useReducer } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
 import { A, Column, RowNav } from '@kocherga/frontkit';
 
-import { Screen, InitialLoader } from '~/common/types';
 import { APIError } from '~/common/api';
+import { Screen, InitialLoader } from '~/common/types';
+import { selectUser } from '~/core/selectors';
+import { useUser } from '~/common/hooks';
 
 import VisitsTab from './tabs/VisitsTab';
-import NonCustomerVisitsTab from './tabs/NonCustomerVisitsTab';
 import TicketsTab from './tabs/TicketsTab';
 import SettingsTab from './tabs/SettingsTab';
 import LogoutButton from './components/LogoutButton';
 
 import Page from '~/components/Page';
 
-import { Customer, Order, MyTicket } from './types';
-
-import { getOrders, getCmData, getTickets } from './api';
-
-import { reducer, MyDispatch } from './store';
+import * as actions from './actions';
+import * as selectors from './selectors';
 
 const AdminSection = () => (
   <div style={{ marginBottom: 10 }}>
@@ -32,42 +31,21 @@ const SectionWrapper = styled.div`
   margin-top: 20px;
 `;
 
-interface Props {
-  email: string;
-  is_staff: boolean;
-  customer?: Customer;
-  orders_count?: number;
-  orders?: Order[];
-  tickets: MyTicket[];
-  children?: React.ReactNode;
-}
+interface OwnProps {}
 
-const MyPage = (props: Props) => {
-  const [tab, setTab] = useState('tickets');
-
-  const [store, dispatch] = useReducer(reducer, {
-    customer: props.customer,
-    tickets: props.tickets,
-  });
+const MyPage: React.FC<OwnProps> = () => {
+  const user = useUser();
+  const dispatch = useDispatch();
+  const tab = useSelector(selectors.selectTab);
 
   const getSection = () => {
     switch (tab) {
       case 'visits':
-        if (store.customer) {
-          return (
-            <VisitsTab
-              customer={store.customer}
-              orders_count={props.orders_count || 0}
-              orders={props.orders || []}
-            />
-          );
-        } else {
-          return <NonCustomerVisitsTab />;
-        }
+        return <VisitsTab />;
       case 'tickets':
-        return <TicketsTab tickets={store.tickets} />;
+        return <TicketsTab />;
       case 'settings':
-        return <SettingsTab customer={store.customer} />;
+        return <SettingsTab />;
       default:
         throw new Error('Unknown tab');
     }
@@ -75,71 +53,52 @@ const MyPage = (props: Props) => {
 
   return (
     <Page title="Личный кабинет">
-      <MyDispatch.Provider value={dispatch}>
-        <Page.Title>Личный кабинет</Page.Title>
-        <Page.Main>
-          <Column centered>
-            <div>
-              <code>{props.email}</code> <LogoutButton />
-            </div>
-            {props.is_staff && <AdminSection />}
-            <RowNav>
-              {[
-                ['tickets', 'События'],
-                ['visits', 'Посещения'],
-                ['settings', 'Настройки'],
-              ].map(([t, tName]) => (
-                <RowNav.Item
-                  key={t}
-                  selected={tab === t}
-                  select={() => setTab(t)}
-                >
-                  {tName}
-                </RowNav.Item>
-              ))}
-            </RowNav>
-            <SectionWrapper>{getSection()}</SectionWrapper>
-          </Column>
-        </Page.Main>
-      </MyDispatch.Provider>
+      <Page.Title>Личный кабинет</Page.Title>
+      <Page.Main>
+        <Column centered>
+          <div>
+            <code>{user.email}</code> <LogoutButton />
+          </div>
+          {user.is_staff && <AdminSection />}
+          <RowNav>
+            {[
+              ['tickets', 'События'],
+              ['visits', 'Посещения'],
+              ['settings', 'Настройки'],
+            ].map(([t, tName]) => (
+              <RowNav.Item
+                key={t}
+                selected={tab === t}
+                select={() => dispatch(actions.openTab(t))}
+              >
+                {tName}
+              </RowNav.Item>
+            ))}
+          </RowNav>
+          <SectionWrapper>{getSection()}</SectionWrapper>
+        </Column>
+      </Page.Main>
     </Page>
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api, user }) => {
+const getInitialData: InitialLoader<OwnProps> = async ({
+  dispatch,
+  getState,
+}) => {
+  const user = selectUser(getState());
+
   if (!user.email) {
     throw new APIError('You need to be logged in to see /my', 403);
   }
 
-  let data: Props = {
-    email: user.email,
-    is_staff: user.is_staff || false,
-    tickets: [],
-  };
+  await dispatch(actions.loadCmData());
+  await dispatch(actions.loadTickets());
 
-  try {
-    const { customer, orders_count } = await getCmData(api);
-    const orders = await getOrders(api);
-    data = {
-      ...data,
-      customer,
-      orders_count,
-      orders,
-    };
-  } catch (e) {
-    if (e instanceof APIError && e.status === 404) {
-      // that's ok, not all users are registered in CM
-    } else {
-      throw e;
-    }
-  }
-
-  data.tickets = await getTickets(api);
-
-  return data;
+  return {};
 };
 
-const screen: Screen<Props> = {
+const screen: Screen<OwnProps> = {
   component: MyPage,
   getInitialData,
 };

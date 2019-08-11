@@ -1,6 +1,4 @@
-import { User, GlobalContextShape } from '~/common/types';
-
-import { State } from '~/redux/store';
+import { State, Store } from '~/redux/store';
 
 export interface ReactPageInfo {
   type: 'react';
@@ -23,20 +21,16 @@ export type PageInfo = ReactPageInfo | WagtailPageInfo | ErrorPageInfo;
 // This data is passed from server to client in window.RENDER_CONTEXT global var.
 // The data in this structure should be JSON-serializable.
 export interface RenderContext {
-  user: User;
-  csrfToken: string;
   reduxState: State;
   page: PageInfo;
 }
 
 export const buildRenderContext = (
   pageInfo: PageInfo,
-  globalContext: GlobalContextShape
+  store: Store
 ): RenderContext => {
   return {
     page: pageInfo,
-    user: globalContext.user,
-    csrfToken: globalContext.api.csrfToken,
-    reduxState: globalContext.store.getState(),
+    reduxState: store.getState(),
   };
 };

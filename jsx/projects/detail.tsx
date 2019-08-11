@@ -6,6 +6,7 @@ import { RichText } from '@kocherga/frontkit';
 
 import { Screen } from '~/common/types';
 import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
 import TL02 from '../blocks/TL02';
 
@@ -45,7 +46,11 @@ const ProjectsDetailPage = ({ project }: Props) => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
+const getInitialData: InitialLoader<Props> = async (
+  { getState },
+  { params }
+) => {
+  const api = selectAPI(getState());
   return { project: await getProject(params.name, api) };
 };
 

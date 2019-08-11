@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
 import { Cohort, Participant, Group } from '../../types';
 import { getCohort, getCohortParticipants, getCohortGroups } from '../../api';
@@ -46,7 +47,12 @@ const MastermindCohortPage: React.FC<Props> = props => {
   );
 };
 
-const getInitialData: InitialLoader<Props> = async ({ api }, { params }) => {
+const getInitialData: InitialLoader<Props> = async (
+  { getState },
+  { params }
+) => {
+  const api = selectAPI(getState());
+
   const cohort_id = parseInt(params.id, 10);
   const cohort = await getCohort(api, cohort_id);
   const participants = await getCohortParticipants(api, cohort_id);

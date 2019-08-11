@@ -7,6 +7,7 @@ import { Screen, InitialLoader } from '~/common/types';
 import { useAPI } from '~/common/hooks';
 import Page from '~/components/Page';
 import AsyncButton from '~/components/AsyncButton';
+import { selectAPI, selectUser } from '~/core/selectors';
 
 import { Member } from './types';
 
@@ -78,9 +79,12 @@ const StaffMemberPage = ({ member, current_user_is_manager }: Props) => (
 );
 
 const getInitialData: InitialLoader<Props> = async (
-  { api, user },
+  { getState },
   { params }
 ) => {
+  const api = selectAPI(getState());
+  const user = selectUser(getState());
+
   const id = parseInt(params.id);
   const member = await getMember(api, id);
   return {

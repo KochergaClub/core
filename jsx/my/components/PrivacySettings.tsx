@@ -1,15 +1,16 @@
-import React, { useCallback, useState, useContext } from 'react';
+import React, { useCallback, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 import { FaGlobe, FaLock } from 'react-icons/fa';
 
 import { A, Button, Column } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
+import { State } from '~/redux/store';
 
 import { Customer } from '../types';
-import { getCmData } from '../api';
-import { MyDispatch } from '../store';
+import { setPrivacyMode } from '../actions';
+import { selectCustomer } from '../selectors';
 
 import TVIcon from './TVIcon';
 
@@ -46,24 +47,17 @@ interface Props {
   customer: Customer;
 }
 
-export default function PrivacySettings({ customer }: Props) {
+const PrivacySettings: React.FC<Props> = ({ customer }) => {
   const [loading, setLoading] = useState(false);
-  const api = useAPI();
 
-  const dispatch = useContext(MyDispatch);
+  const dispatch = useDispatch();
 
   const flipPrivacyMode = useCallback(async () => {
+    // TODO - move `loading` state to redux
     setLoading(true);
-    await api.call('cm/me/set-privacy-mode', 'POST', {
-      privacy_mode: oppositePrivacyMode(customer.privacy_mode),
-    });
-    const { customer: newCustomer } = await getCmData(api);
-    dispatch({
-      type: 'REPLACE_CUSTOMER',
-      payload: { customer: newCustomer },
-    });
+    await dispatch(setPrivacyMode(oppositePrivacyMode(customer.privacy_mode)));
     setLoading(false);
-  }, [api, dispatch, customer.privacy_mode]);
+  }, [dispatch, customer.privacy_mode]);
 
   return (
     <HeadedFragment title="Настройки приватности">
@@ -85,4 +79,17 @@ export default function PrivacySettings({ customer }: Props) {
       </Column>
     </HeadedFragment>
   );
-}
+};
+
+const MaybePrivacySettings: React.FC<{ customer?: Customer }> = ({
+  customer,
+}) => {
+  if (!customer) {
+    return null;
+  }
+  return <PrivacySettings customer={customer} />;
+};
+
+export default connect((state: State) => ({ customer: selectCustomer(state) }))(
+  MaybePrivacySettings
+);

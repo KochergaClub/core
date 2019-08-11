@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import { BrowserRouter } from 'react-router-dom';
 
-import Entrypoint from '~/navigation/Entrypoint';
+import Entrypoint from '~/core/Entrypoint';
 import { configureStore } from '~/redux/store';
 
 import { RenderContext } from './types';

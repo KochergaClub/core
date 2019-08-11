@@ -1,9 +1,7 @@
-import { useContext } from 'react';
-import GlobalContext from '~/components/GlobalContext';
+import { useSelector } from 'react-redux';
 
-const useAPI = () => {
-  const { api } = useContext(GlobalContext);
-  return api;
-};
+import { selectAPI } from '~/core/selectors';
+
+const useAPI = () => useSelector(selectAPI);
 
 export default useAPI;

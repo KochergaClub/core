@@ -4,6 +4,8 @@ import { A, Column } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import { useAPI } from '~/common/hooks';
+import { selectAPI, selectUser } from '~/core/selectors';
+
 import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 import CreateButton from '~/components/crud/CreateButton';
@@ -162,9 +164,12 @@ const RatioTrainingPage = (props: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async (
-  { api, user },
+  { getState },
   { params }
 ) => {
+  const api = selectAPI(getState());
+  const user = selectUser(getState());
+
   const training = await getTraining(api, params.name);
   const tickets = await getTickets(api, params.name);
 

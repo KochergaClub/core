@@ -4,6 +4,7 @@ import { A } from '@kocherga/frontkit';
 
 import { Screen, InitialLoader } from '~/common/types';
 import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
 import { loadMembers } from '~/staff/actions';
 
@@ -38,10 +39,11 @@ const ZadarmaCallPage = (props: Props) => {
 };
 
 const getInitialData: InitialLoader<Props> = async (
-  { api, store: { dispatch } },
+  { dispatch, getState },
   { params }
 ) => {
-  await dispatch(loadMembers(api));
+  const api = selectAPI(getState());
+  await dispatch(loadMembers());
 
   return {
     pbx_call: await getCall(api, params.id),
