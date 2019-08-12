@@ -47,24 +47,24 @@ export const teamMenuItems: Item[] = [
   {
     title: 'Админам',
     items: [
-      { link: '/team/cashier/', title: 'Касса' },
-      { link: '/team/watchmen/', title: 'Смены' },
+      { link: '/team/cashier', title: 'Касса' },
+      { link: '/team/watchmen', title: 'Смены' },
     ],
   },
   {
     title: 'Менеджерам',
     items: [
-      { link: '/team/analytics/', title: 'Аналитика' },
-      { link: '/team/zadarma/', title: 'Звонки' },
+      { link: '/team/analytics', title: 'Аналитика' },
+      { link: '/team/zadarma', title: 'Звонки' },
       { link: '/admin/', title: 'Админка' },
     ],
   },
   {
     title: 'События',
     items: [
-      { link: '/team/events/', title: 'Календарь' },
-      { link: '/team/ratio/', title: 'Тренинги' },
-      { link: '/team/mastermind_dating/', title: 'Мастермайнд' },
+      { link: '/team/events', title: 'Календарь' },
+      { link: '/team/ratio', title: 'Тренинги' },
+      { link: '/team/mastermind_dating', title: 'Мастермайнд' },
     ],
   },
   {
