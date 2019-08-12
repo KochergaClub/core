@@ -21,6 +21,9 @@
     "paths": {
       "~/*": [
         "*"
+      ],
+      "next-redux-wrapper": [
+        "@types/next-redux-wrapper.d.ts"
       ]
     },
     "skipLibCheck": false,
