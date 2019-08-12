@@ -16,14 +16,15 @@ export interface StaticWagtailScreen<T extends AnyPageType> {
   getInitialData: undefined;
 }
 
-export type DynamicWagtailScreen<T extends AnyPageType> = AnyScreen<
-  T,
-  AnyWagtailPageProps<T>
->;
+export type DynamicWagtailScreen<
+  T extends AnyPageType,
+  P extends AnyWagtailPageProps<T>
+> = AnyScreen<T, P>;
 
-export type WagtailScreen<T extends AnyPageType> =
-  | StaticWagtailScreen<T>
-  | DynamicWagtailScreen<T>;
+export type WagtailScreen<
+  T extends AnyPageType,
+  P extends AnyWagtailPageProps<T>
+> = StaticWagtailScreen<T> | DynamicWagtailScreen<T, P>;
 
 export const staticScreen = <T extends AnyPageType>(
   component: React.ComponentType<StaticProps<T>>
@@ -38,9 +39,9 @@ export const dynamicScreen = <
   T extends AnyPageType,
   P extends AnyWagtailPageProps<T>
 >(
-  component: React.ComponentType<AnyWagtailPageProps<T>>,
+  component: React.ComponentType<P>,
   getInitialData: AnyInitialLoader<T, P>
-): DynamicWagtailScreen<T> => {
+): DynamicWagtailScreen<T, P> => {
   return {
     component,
     getInitialData,

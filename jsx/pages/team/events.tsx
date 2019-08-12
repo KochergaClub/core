@@ -80,17 +80,18 @@ const EventsPage: NextPage<Props> = props => {
 
   useListeningWebSocket('ws/events/', fetchEvents);
 
-  const onRangeChange = (range: { start: Date; end: Date }) => {
+  const onRangeChange = (range: {
+    start: string | Date;
+    end: string | Date;
+  }) => {
     let start: Date;
     let end: Date;
 
-    if (Array.isArray(range)) {
-      start = range[0];
-      end = range[range.length - 1];
-    } else {
-      start = range.start;
-      end = range.end;
+    if (typeof range.start === 'string' || typeof range.end === 'string') {
+      throw new Error('Unexpected types in range');
     }
+    start = range.start;
+    end = range.end;
     // TODO - set wider range to pre-cache previous and next period, for smoother scrolling
     setRange({ start, end });
   };

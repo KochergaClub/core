@@ -13,7 +13,7 @@ export const configureStore = (
 ) => {
   // https://github.com/zalmoxisus/redux-devtools-extension#13-use-redux-devtools-extension-package-from-npm
   const enhancer = composeWithDevTools(
-    applyMiddleware(thunk as ThunkMiddleware)
+    applyMiddleware(thunk as ThunkMiddleware<State>)
   );
 
   const store = createStore(reducer, preloadedState, enhancer);

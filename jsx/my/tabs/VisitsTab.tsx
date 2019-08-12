@@ -25,14 +25,19 @@ const inflect = (n: number) => {
 
 interface Props {
   customer?: Customer;
-  orders_count: number;
-  orders: Order[];
+  orders_count?: number;
+  orders?: Order[];
 }
 
 const VisitsTab = ({ customer, orders_count, orders }: Props) => {
   if (!customer) {
     return <NonCustomerVisitsTab />;
   }
+
+  if (!orders || orders_count === undefined) {
+    return <div>Внутренняя ошибка: данные о заказах не загружены</div>;
+  }
+
   return (
     <article>
       <Column centered>
