@@ -1,17 +1,13 @@
 {
   "presets": [
-    "@babel/env",
-    "@babel/react",
     [
-      "@babel/typescript",
-      { "isTSX": true, "allExtensions": true }
+      "next/babel",
+      {
+        "class-properties": {"loose": true}
+      }
     ]
   ],
   "plugins": [
-    "babel-plugin-styled-components",
-    "@babel/plugin-syntax-dynamic-import",
-    ["@babel/plugin-proposal-class-properties", {"loose": true}],
-    "@babel/plugin-transform-runtime",
-    "react-hot-loader/babel"
+    "babel-plugin-styled-components"
   ]
 }

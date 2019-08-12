@@ -4,7 +4,12 @@ import { A, Button } from '@kocherga/frontkit';
 
 import { useAPI, useUser } from '~/common/hooks';
 
-import { Props } from '../event';
+import { PublicEvent, EventTicket } from '~/events/types';
+
+interface Props {
+  event: PublicEvent;
+  ticket?: EventTicket;
+}
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <section>

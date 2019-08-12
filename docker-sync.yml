@@ -10,6 +10,8 @@ syncs:
     src: '.'
     sync_excludes:
       - 'Path node_modules'
+      - 'Path jsx/.next'
       - 'Path .git'
+      - 'Path .docker-sync'
       - 'Name __pycache__'
     sync_excludes_type: 'none'

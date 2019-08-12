@@ -33,6 +33,8 @@
     "localtunnel": "^1.9.1",
     "mjml": "^4.0.5",
     "moment": "^2.24.0",
+    "next": "^9.0.3",
+    "next-redux-wrapper": "^3.0.0-alpha.3",
     "node-fetch": "^2.4.1",
     "npm-why": "^1.1.6",
     "react": "^16.8.1",

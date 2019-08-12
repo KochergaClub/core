@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Project } from '../utils';
 
-const Link = styled.a`
+const ProjectA = styled.a`
   text-decoration: none;
   color: black;
 `;
@@ -49,8 +49,9 @@ const Image = styled.img`
 `;
 
 const ProjectCard = (props: Project) => {
+  // TODO - use <Link> for client-side navigation, but wagtail API is not available on the client-side yet
   return (
-    <Link href={`/projects/${props.meta.slug}`}>
+    <ProjectA href={`/projects/${props.meta.slug}`}>
       <Card>
         <Image src={props.image_thumbnail.url} />
         <Inner>
@@ -58,7 +59,7 @@ const ProjectCard = (props: Project) => {
           <Summary>{props.summary}</Summary>
         </Inner>
       </Card>
-    </Link>
+    </ProjectA>
   );
 };
 

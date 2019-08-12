@@ -26,5 +26,4 @@ RUN npm ci
 
 COPY . /code/
 
-RUN NODE_ENV=production npx webpack --config ./webpack/front.config.js && \
-    NODE_ENV=production npx webpack --config ./webpack/back.config.js
+RUN NODE_ENV=production npx next build jsx/
