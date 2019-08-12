@@ -19,8 +19,12 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["*"]
-    }
+      "~/*": [
+        "*"
+      ]
+    },
+    "skipLibCheck": false,
+    "strict": true
   },
   "exclude": [
     "node_modules"

@@ -72,9 +72,11 @@ const EventFields = (props: Props) => {
         <label>Комната:</label>
         <Select
           value={findRoom(props.room)}
-          onChange={(selected: { value: string; label: string }) =>
-            props.setRoom(selected.value)
-          }
+          onChange={selected => {
+            if (selected && !Array.isArray(selected)) {
+              props.setRoom(selected.value);
+            } // TODO - else?
+          }}
           options={roomOptions}
           isDisabled={props.disabled}
         />
