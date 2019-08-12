@@ -3,7 +3,6 @@ import express from 'express';
 //import { APIError } from '~/common/api';
 //import { selectUser } from '~/core/selectors';
 
-//import { sendEntrypointHtml } from './render';
 //import { setupFallbackStore } from './globalContext';
 
 const getSendError = (req: express.Request, res: express.Response) => {

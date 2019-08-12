@@ -25,7 +25,6 @@ const { API_HOST, API_ASYNC_HOST } = require('./constants');
 
 // middlewares
 // import { setupStore } from './globalContext';
-// import { reactEntrypoint } from './reactEntrypoint';
 const { nextjsEntrypoint } = require('./nextjsEntrypoint');
 // import { wagtailEntrypoint } from './wagtailEntrypoint';
 //import { errorHandler, notFoundHandler } from './errorHandler';
@@ -79,7 +78,6 @@ async function main() {
   // app.use(setupStore);
 
   app.use(nextjsEntrypoint(nextApp));
-  // app.use(reactEntrypoint);
 
   // Form handling.
   // Note: This middleware should be activated after httpProxy

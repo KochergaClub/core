@@ -7,8 +7,6 @@ import { selectAPI } from '~/core/selectors';
 
 import { API_HOST } from './constants';
 
-import { sendEntrypointHtml } from './render';
-
 export const wagtailEntrypoint: express.RequestHandler = async (
   req,
   res,
@@ -62,7 +60,8 @@ export const wagtailEntrypoint: express.RequestHandler = async (
           );
         }
 
-        sendEntrypointHtml({ type: 'wagtail', props }, req, res);
+        res.send('TODO');
+        // sendEntrypointHtml({ type: 'wagtail', props }, req, res);
       } catch (err) {
         next(err);
       }
