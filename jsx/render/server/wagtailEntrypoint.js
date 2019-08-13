@@ -1,17 +1,11 @@
-import express from 'express';
-import http from 'http';
+const http = require('http');
 
-import wagtailScreen from '~/wagtail/any';
-import { AnyPageType } from '~/wagtail/pages/types';
-import { selectAPI } from '~/core/selectors';
+const wagtailScreen = require('~/wagtail/any').default;
+const { selectAPI } = require('~/core/selectors');
 
-import { API_HOST } from './constants';
+const { API_HOST } = require('./constants');
 
-export const wagtailEntrypoint: express.RequestHandler = async (
-  req,
-  res,
-  next
-) => {
+exports.wagtailEntrypoint = async (req, res, next) => {
   const api = selectAPI(req.reduxStore.getState());
 
   http.get(
@@ -47,17 +41,12 @@ export const wagtailEntrypoint: express.RequestHandler = async (
         }
         const pageId = match[1];
 
-        const pageProps = (await api.callWagtail(
-          `pages/${pageId}/?fields=*`
-        )) as AnyPageType;
+        const pageProps = await api.callWagtail(`pages/${pageId}/?fields=*`);
         pageProps.meta_type = pageProps.meta.type;
 
         let props = {};
         if (wagtailScreen.getInitialData) {
-          props = await wagtailScreen.getInitialData(
-            req.reduxStore,
-            pageProps as any // FIXME
-          );
+          props = await wagtailScreen.getInitialData(req.reduxStore, pageProps);
         }
 
         res.send('TODO');

@@ -23,11 +23,8 @@ const httpProxy = require('http-proxy');
 
 const { API_HOST, API_ASYNC_HOST } = require('./constants');
 
-// middlewares
-// import { setupStore } from './globalContext';
 const { nextjsEntrypoint } = require('./nextjsEntrypoint');
-// import { wagtailEntrypoint } from './wagtailEntrypoint';
-//import { errorHandler, notFoundHandler } from './errorHandler';
+
 const next = require('next');
 
 const ADDRESS = argv.address;
@@ -74,23 +71,12 @@ async function main() {
     wsProxy.ws(req, socket, head);
   });
 
-  // Inject req.reduxStore
-  // app.use(setupStore);
-
   app.use(nextjsEntrypoint(nextApp));
 
   // Form handling.
   // Note: This middleware should be activated after httpProxy
   // (see https://stackoverflow.com/questions/26632854/socket-hangup-while-posting-request-to-node-http-proxy-node-js for details)
-  app.use(express.urlencoded());
-
-  // Let's try Wagtail, maybe the page is in there somewhere.
-  // app.use(wagtailEntrypoint);
-
-  // Oh well. Time to give up.
-  //app.use(notFoundHandler);
-
-  //app.use(errorHandler);
+  // app.use(express.urlencoded());
 
   httpServer.listen(PORT, ADDRESS, () => {
     console.log(`React render server listening at http://${ADDRESS}:${PORT}`);

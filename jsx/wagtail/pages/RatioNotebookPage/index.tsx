@@ -3,10 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Page from '~/components/Page';
-import { Store } from '~/redux/store';
 import { selectAPI } from '~/core/selectors';
 
-import { dynamicScreen } from '../../types';
+import { NextWagtailPage } from '../../types';
 
 import { AnyPageType } from '../types';
 import { AnyBlockType } from '../../blocks/types';
@@ -33,8 +32,7 @@ export interface PageType extends AnyPageType {
   sections: NotebookBlockType[];
 }
 
-export interface Props {
-  wagtailPage: PageType;
+export interface ExtraProps {
   ratioSectionPages: AuxPages;
 }
 
@@ -42,7 +40,7 @@ const SectionContainer = styled.section`
   break-before: page;
 `;
 
-const RatioNotebookPage = (props: Props) => {
+const RatioNotebookPage: NextWagtailPage<PageType, ExtraProps> = props => {
   const footer = <PrintFooter />;
   return (
     <Page title={props.wagtailPage.title} noMenu noFooter>
@@ -67,23 +65,24 @@ const RatioNotebookPage = (props: Props) => {
   );
 };
 
-export default dynamicScreen(
-  RatioNotebookPage,
-  async ({ getState }: Store, wagtailPage: PageType) => {
-    const api = selectAPI(getState());
+RatioNotebookPage.getInitialProps = async ({
+  store: { getState },
+  wagtailPage,
+}) => {
+  const api = selectAPI(getState());
 
-    const ids = wagtailPage.sections.map(section => section.value);
+  const ids = wagtailPage.sections.map(section => section.value);
 
-    const sectionPages: AuxPages = {};
-    for (const id of ids) {
-      const sectionPage = await api.callWagtail(`pages/${id}/?fields=*`);
-      sectionPages[id] = sectionPage;
-    }
-
-    const props: Props = {
-      wagtailPage,
-      ratioSectionPages: sectionPages,
-    };
-    return props;
+  const sectionPages: AuxPages = {};
+  for (const id of ids) {
+    const sectionPage = await api.callWagtail(`pages/${id}/?fields=*`);
+    sectionPages[id] = sectionPage;
   }
-);
+
+  const props: ExtraProps = {
+    ratioSectionPages: sectionPages,
+  };
+  return props;
+};
+
+export default RatioNotebookPage;

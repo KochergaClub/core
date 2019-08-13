@@ -2,7 +2,7 @@ import React from 'react';
 
 import Page from '~/components/Page';
 
-import { staticScreen, StaticProps } from '../types';
+import { NextWagtailPage } from '../types';
 
 import { AnyPageType } from './types';
 import { BlockType } from '../blocks/types';
@@ -14,7 +14,7 @@ interface PageType extends AnyPageType {
   meta_type: 'pages.FreeFormPage';
 }
 
-const FreeFormPage = ({ wagtailPage }: StaticProps<PageType>) => {
+const FreeFormPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
     <Page title={wagtailPage.title}>
       <WagtailBlocks blocks={wagtailPage.body} />
@@ -22,4 +22,4 @@ const FreeFormPage = ({ wagtailPage }: StaticProps<PageType>) => {
   );
 };
 
-export default staticScreen(FreeFormPage);
+export default FreeFormPage;
