@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
-import { Redirect } from 'react-router';
 
 import styled from 'styled-components';
 
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
+import { redirect } from '~/components/RedirectPage';
 import { selectUser } from '~/core/selectors';
 import { useCommonHotkeys, useAPI } from '~/common/hooks';
 
@@ -76,12 +74,6 @@ const LoginPage: NextPage<Props> = props => {
     onEnter: cb,
   });
 
-  // TODO - move this to wrapper for LoginPage to avoid executing all the hooks above?
-  const user = useSelector(selectUser);
-  if (user.is_authenticated) {
-    return <Redirect to="/" />;
-  }
-
   return (
     <Page title="Логин">
       <AuthContainer {...hotkeys}>
@@ -129,7 +121,12 @@ const LoginPage: NextPage<Props> = props => {
   );
 };
 
-LoginPage.getInitialProps = async ({ query }) => {
+LoginPage.getInitialProps = async ({ store: { getState }, query, res }) => {
+  const user = selectUser(getState());
+  if (user.is_authenticated) {
+    return redirect('/', res) as any;
+  }
+
   return {
     next: (query.next as string) || '/my/',
   };
