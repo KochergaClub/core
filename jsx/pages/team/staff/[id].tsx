@@ -50,35 +50,39 @@ const ManagerControls = ({ member }: { member: Member }) => {
 const StaffMemberPage: NextPage<Props> = ({
   member,
   current_user_is_manager,
-}) => (
-  <Page title={`${member.full_name} | Профиль сотрудника`} team>
-    <Page.Main>
-      <Column centered gutter={20} style={{ marginBottom: 100 }}>
-        <Column centered gutter={0}>
-          <h1>{member.full_name}</h1>
-          <h2 style={{ color: member.color || 'black' }}>
-            {member.short_name}
-          </h2>
-          {member.is_current || <Ex>Бывший сотрудник</Ex>}
-        </Column>
-        <Column centered>
-          {member.slack_image && <Image src={member.slack_image} />}
-          {member.slack_id && (
-            <A href={`https://kocherga.slack.com/messages/${member.slack_id}/`}>
-              Написать в Slack
-            </A>
-          )}
-          {member.vk && <A href={member.vk}>Профиль VK</A>}
-        </Column>
-        {current_user_is_manager && (
-          <Column centered>
-            <ManagerControls member={member} />
+}) => {
+  return (
+    <Page title={`${member.full_name} | Профиль сотрудника`} team>
+      <Page.Main>
+        <Column centered gutter={20} style={{ marginBottom: 100 }}>
+          <Column centered gutter={0}>
+            <h1>{member.full_name}</h1>
+            <h2 style={{ color: member.color || 'black' }}>
+              {member.short_name}
+            </h2>
+            {member.is_current || <Ex>Бывший сотрудник</Ex>}
           </Column>
-        )}
-      </Column>
-    </Page.Main>
-  </Page>
-);
+          <Column centered>
+            {member.slack_image && <Image src={member.slack_image} />}
+            {member.slack_id && (
+              <A
+                href={`https://kocherga.slack.com/messages/${member.slack_id}/`}
+              >
+                Написать в Slack
+              </A>
+            )}
+            {member.vk && <A href={member.vk}>Профиль VK</A>}
+          </Column>
+          {current_user_is_manager && (
+            <Column centered>
+              <ManagerControls member={member} />
+            </Column>
+          )}
+        </Column>
+      </Page.Main>
+    </Page>
+  );
+};
 
 StaffMemberPage.getInitialProps = async ({ store: { getState }, query }) => {
   const api = selectAPI(getState());

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import cookie from 'cookie';
-import ReactGA from 'react-ga';
 
 import App, { AppContext, Container } from 'next/app';
 import withRedux, { NextJSContext } from 'next-redux-wrapper';
-import getConfig from 'next/config';
+import Router from 'next/router';
 
 import { configureStore, Store } from '~/redux/store';
 import { configureAPI, loadUser, cleanupAPIForClient } from '~/core/actions';
@@ -13,8 +12,9 @@ import { APIProps, APIError } from '~/common/api';
 import { API_HOST } from '~/render/server/constants';
 
 import { selectUser } from '~/core/selectors';
+import * as gtag from '~/common/gtag';
 
-const { publicRuntimeConfig } = getConfig();
+Router.events.on('routeChangeComplete', url => gtag.pageview(url));
 
 class MyApp extends App<{ store: Store }> {
   static async getInitialProps({ Component, ctx, router }: AppContext) {
@@ -70,22 +70,7 @@ class MyApp extends App<{ store: Store }> {
       store.dispatch(cleanupAPIForClient());
     }
 
-    // code from https://github.com/zeit/next.js/issues/160#issuecomment-445750673
-    // client-side only, run on page changes, do not run on server (SSR)
-    if (typeof window === 'object' && ctx.asPath) {
-      ReactGA.pageview(ctx.asPath);
-    }
-
     return { pageProps };
-  }
-
-  componentDidMount() {
-    // code from https://github.com/zeit/next.js/issues/160#issuecomment-445750673
-    // client-side only, run once on mount
-    if (publicRuntimeConfig.googleAnalyticsId) {
-      ReactGA.initialize(publicRuntimeConfig.googleAnalyticsId);
-      ReactGA.pageview(window.location.pathname + window.location.search);
-    }
   }
 
   render() {
