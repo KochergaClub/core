@@ -63,7 +63,7 @@ class Training(models.Model):
         ]
 
     def copy_schedule_from(self, src_training):
-        if self.name == src_training.name:
+        if self.slug == src_training.slug:
             raise Exception("Can't copy training's schedule to itself")
         if self.schedule.count():
             raise Exception("Can't copy schedule when schedule is non-empty")
