@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import cookie from 'cookie';
 
 import App, { AppContext, Container } from 'next/app';
+import Error from 'next/error';
 import withRedux, { NextJSContext } from 'next-redux-wrapper';
 import Router from 'next/router';
 
@@ -16,7 +17,12 @@ import * as gtag from '~/common/gtag';
 
 Router.events.on('routeChangeComplete', url => gtag.pageview(url));
 
-class MyApp extends App<{ store: Store }> {
+interface MyProps {
+  store: Store;
+  errorCode?: number;
+}
+
+class MyApp extends App<MyProps> {
   static async getInitialProps({ Component, ctx, router }: AppContext) {
     const store = ((ctx as any) as NextJSContext).store as Store;
     if (ctx.req) {
@@ -58,8 +64,9 @@ class MyApp extends App<{ store: Store }> {
             router.push(loginUrl);
           }
           return { pageProps: {} };
+        } else if (err instanceof APIError) {
+          return { pageProps: {}, errorCode: err.status };
         } else {
-          // TODO - set errorCode and render <Render> in render() later to support custom error pages again.
           throw err;
         }
       }
@@ -74,7 +81,15 @@ class MyApp extends App<{ store: Store }> {
   }
 
   render() {
-    const { Component, pageProps, store } = this.props;
+    const { Component, pageProps, store, errorCode } = this.props;
+
+    if (errorCode) {
+      return (
+        <Container>
+          <Error statusCode={errorCode} />
+        </Container>
+      );
+    }
     return (
       <Container>
         <Provider store={store}>
