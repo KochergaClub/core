@@ -7,6 +7,7 @@ import { IS_SERVER } from '~/common/utils';
 const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 
 import { NextPage } from '~/common/types';
+import { APIError } from '~/common/api';
 
 import { AnyPageType, WagtailPageType } from '~/wagtail/pages/types';
 
@@ -85,7 +86,9 @@ ProxyWagtailPage.getInitialProps = async context => {
       redirect: 'manual',
     }
   );
-  if (findResponse.status !== 302) {
+  if (findResponse.status === 404) {
+    throw new APIError('Page not found', 404);
+  } else if (findResponse.status !== 302) {
     throw new Error('Expected redirect, got status ' + findResponse.status);
   }
 
