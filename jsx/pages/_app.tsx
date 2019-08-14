@@ -64,7 +64,10 @@ class MyApp extends App<MyProps> {
             router.push(loginUrl);
           }
           return { pageProps: {} };
-        } else if (err instanceof APIError) {
+        } else if (
+          err instanceof APIError &&
+          (err.status === 404 || err.status === 403 || err.status === 400)
+        ) {
           return { pageProps: {}, errorCode: err.status };
         } else {
           throw err;
