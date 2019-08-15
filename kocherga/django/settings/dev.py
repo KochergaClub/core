@@ -75,8 +75,6 @@ KOCHERGA_TELEGRAM = {
 KOCHERGA_API_ROOT = 'https://api.kocherga.club'
 KOCHERGA_WEBSITE = 'https://yudkowsky.cult'
 
-WEBPACK_DEV_SERVER = True
-
 GDRIVE_WATCHMEN_FOLDER = '14QJy4SLl-TY-DwyPWktNcCIple75Ppe_'
 
 WAGTAILAPI_BASE_URL = "http://localhost:8000/api/wagtail"

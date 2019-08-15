@@ -5,11 +5,13 @@ options:
 syncs:
   data:
     src: '/data/kocherga'
-  code:
+  code-jsx:
     notify_terminal: true
-    src: '.'
+    src: './jsx'
+    sync_excludes_type: 'none'
+  code-py:
+    notify_terminal: true
+    src: './kocherga'
     sync_excludes:
-      - 'Path node_modules'
-      - 'Path .git'
       - 'Name __pycache__'
     sync_excludes_type: 'none'

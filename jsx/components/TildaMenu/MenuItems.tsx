@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Link from 'next/link';
+
 import {
   teamColor,
   SingleItem,
@@ -45,11 +47,25 @@ const MenuItemsList = styled.ul`
   }
 `;
 
-const item2link = (item: SingleItem) => {
-  if (item.old) {
-    return 'https://kocherga-club.ru' + item.link;
+const ItemLink = ({ item }: { item: SingleItem }) => {
+  if (item.mode === 'old') {
+    return <a href={`https://kocherga-club.ru + ${item.link}`}>{item.title}</a>;
   }
-  return item.link;
+  if (item.mode === 'next') {
+    return (
+      <Link href={item.link}>
+        <a>{item.title}</a>
+      </Link>
+    );
+  }
+  if (item.mode === 'wagtail') {
+    return (
+      <Link href="/wagtail-api" as={item.link}>
+        <a>{item.title}</a>
+      </Link>
+    );
+  }
+  return <a href={item.link}>{item.title}</a>;
 };
 
 const MenuItemExpandableContainer = styled.div`
@@ -93,7 +109,7 @@ class MenuItemExpandable extends React.Component<{ item: ExpandableItem }, {}> {
       <MenuItemDropdown>
         {this.props.item.items.map((item, i) => (
           <li key={i}>
-            <a href={item2link(item)}>{item.title}</a>
+            <ItemLink item={item} />
           </li>
         ))}
       </MenuItemDropdown>
@@ -122,7 +138,7 @@ const MenuItemLi = ({ item }: { item: Item }) => (
     {isExpandableItem(item) ? (
       <MenuItemExpandable item={item} />
     ) : (
-      <a href={item2link(item)}>{item.title}</a>
+      <ItemLink item={item} />
     )}
   </li>
 );

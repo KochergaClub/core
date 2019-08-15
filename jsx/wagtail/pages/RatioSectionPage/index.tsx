@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Page from '~/components/Page';
 
-import { staticScreen, StaticProps } from '../../types';
+import { NextWagtailPage } from '../../types';
 
 import { BlockType } from '../../blocks/types';
 import { AnyPageType } from '../types';
@@ -26,7 +26,7 @@ export interface PageType extends AnyPageType {
   body: BlockType[];
 }
 
-function RatioSectionPage({ wagtailPage }: StaticProps<PageType>) {
+const RatioSectionPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
     <Page title={wagtailPage.title} noMenu noFooter>
       <Container>
@@ -34,6 +34,6 @@ function RatioSectionPage({ wagtailPage }: StaticProps<PageType>) {
       </Container>
     </Page>
   );
-}
+};
 
-export default staticScreen(RatioSectionPage);
+export default RatioSectionPage;

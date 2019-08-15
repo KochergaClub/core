@@ -13,6 +13,7 @@ x-common:
     DB_PASSWORD: "${DB_PASSWORD}"
     GOOGLE_ANALYTICS_ID: "${GOOGLE_ANALYTICS_ID}"
     WAGTAIL_API_TOKEN: "${WAGTAIL_API_TOKEN}"
+    NODE_ENV: 'production'
   volumes:
     - /data/kocherga:/data
     - /data/kocherga-static:/code/collected_static
@@ -68,7 +69,7 @@ services:
 
   render-server:
     << : *common
-    command: /usr/bin/node ./static/dist/server.js
+    command: bash -c 'cd jsx && node ./render/server/index.js'
     depends_on:
       - api
     ports:

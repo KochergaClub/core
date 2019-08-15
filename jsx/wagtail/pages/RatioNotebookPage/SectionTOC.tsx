@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Props } from '../RatioNotebookPage';
+import { ExtraProps, PageType } from '../RatioNotebookPage';
 
 const Container = styled.div`
   max-width: 800px;
@@ -22,7 +22,9 @@ const Line = styled.a`
   margin-bottom: 12px;
 `;
 
-export default function SectionTOC(props: Props) {
+export default function SectionTOC(
+  props: ExtraProps & { wagtailPage: PageType }
+) {
   return (
     <Container>
       {props.wagtailPage.sections.map(section => {

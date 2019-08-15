@@ -23,3 +23,5 @@ __pycache__
 /.docker-sync
 /.coverage
 /htmlcov
+/jsx/.next
+/jsx-build

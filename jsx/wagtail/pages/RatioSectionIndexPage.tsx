@@ -2,7 +2,7 @@ import React from 'react';
 
 import Page from '~/components/Page';
 
-import { StaticProps, staticScreen } from '../types';
+import { NextWagtailPage } from '../types';
 
 import { AnyPageType } from './types';
 
@@ -10,7 +10,7 @@ export interface PageType extends AnyPageType {
   meta_type: 'ratio.SectionIndexPage';
 }
 
-const RatioSectionIndexPage = ({ wagtailPage }: StaticProps<PageType>) => {
+const RatioSectionIndexPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
     <Page title={wagtailPage.title}>
       <h1>TODO - тут будет список секций</h1>
@@ -18,4 +18,4 @@ const RatioSectionIndexPage = ({ wagtailPage }: StaticProps<PageType>) => {
   );
 };
 
-export default staticScreen(RatioSectionIndexPage);
+export default RatioSectionIndexPage;

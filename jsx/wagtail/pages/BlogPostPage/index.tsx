@@ -7,7 +7,7 @@ import Page from '~/components/Page';
 import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
 
-import { StaticProps, staticScreen } from '../../types';
+import { NextWagtailPage } from '../../types';
 
 import { AnyPageType, BlogPostAuthorType } from '../types';
 
@@ -63,7 +63,7 @@ const HeaderDate = styled.div`
   color: ${colors.grey[500]};
 `;
 
-function BlogPostPage({ wagtailPage }: StaticProps<PageType>) {
+const BlogPostPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
     <Page title={wagtailPage.title}>
       <ItemPageHeader
@@ -78,6 +78,6 @@ function BlogPostPage({ wagtailPage }: StaticProps<PageType>) {
       <TextWithAuthors text={wagtailPage.body} authors={wagtailPage.authors} />
     </Page>
   );
-}
+};
 
-export default staticScreen(BlogPostPage);
+export default BlogPostPage;

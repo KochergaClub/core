@@ -3,12 +3,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Page from '~/components/Page';
-import { Store } from '~/redux/store';
 import { selectAPI } from '~/core/selectors';
 
 import PageHeader from '~/blocks/PageHeader';
 
-import { dynamicScreen } from '../../types';
+import { NextWagtailPage } from '../../types';
 
 import { AnyPageType } from '../types';
 
@@ -21,8 +20,7 @@ export interface PageType extends AnyPageType {
   subtitle: string;
 }
 
-export interface Props {
-  wagtailPage: PageType;
+export interface ExtraProps {
   postSummaries: BlogPostSummary[];
 }
 
@@ -32,7 +30,7 @@ const ListContainer = styled.div`
   padding: 0 20px;
 `;
 
-const BlogIndexPage = (props: Props) => {
+const BlogIndexPage: NextWagtailPage<PageType, ExtraProps> = props => {
   return (
     <Page title={props.wagtailPage.title}>
       <PageHeader
@@ -50,23 +48,24 @@ const BlogIndexPage = (props: Props) => {
   );
 };
 
-export default dynamicScreen(
-  BlogIndexPage,
-  async ({ getState }: Store, wagtailPage: PageType) => {
-    const api = selectAPI(getState());
+BlogIndexPage.getInitialProps = async ({
+  store: { getState },
+  wagtailPage,
+}) => {
+  const api = selectAPI(getState());
 
-    const json = await api.callWagtail(
-      `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${
-        wagtailPage.id
-      }&order=-date`
-    );
+  const json = await api.callWagtail(
+    `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${
+      wagtailPage.id
+    }&order=-date`
+  );
 
-    const summaries = json['items'] as BlogPostSummary[];
+  const summaries = json['items'] as BlogPostSummary[];
 
-    const props: Props = {
-      wagtailPage,
-      postSummaries: summaries,
-    };
-    return props;
-  }
-);
+  const props: ExtraProps = {
+    postSummaries: summaries,
+  };
+  return props;
+};
+
+export default BlogIndexPage;

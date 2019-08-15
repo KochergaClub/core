@@ -33,9 +33,11 @@
     "localtunnel": "^1.9.1",
     "mjml": "^4.0.5",
     "moment": "^2.24.0",
+    "next": "^9.0.3",
+    "next-redux-wrapper": "^3.0.0-alpha.3",
     "node-fetch": "^2.4.1",
     "npm-why": "^1.1.6",
-    "react": "^16.8.1",
+    "react": "^16.9.0",
     "react-big-calendar": "^0.20.4",
     "react-dom": "^16.8.1",
     "react-helmet": "^5.2.0",
@@ -61,7 +63,6 @@
     "ts-loader": "^5.3.3",
     "typescript": "^3.5.1",
     "unified-stream": "^1.0.2",
-    "webpack": "^4.29.3",
     "yargs": "^3.29.0"
   },
   "devDependencies": {
@@ -86,7 +87,6 @@
     "@typescript-eslint/eslint-plugin": "^1.10.2",
     "@typescript-eslint/parser": "^1.10.2",
     "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^2.0.1",
     "css-loader": "^2.1.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
@@ -95,17 +95,11 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
-    "foreman": "^3.0.1",
     "jest": "^24.7.1",
     "nodemon": "^1.18.10",
     "prettier": "^1.17.1",
     "redux-devtools-extension": "^2.13.8",
     "style-loader": "^0.23.1",
-    "use-onclickoutside": "^0.3.1",
-    "webpack-bundle-tracker": "^0.4.2-beta",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.3.1",
-    "webpack-merge": "^4.2.1",
-    "webpack-node-externals": "^1.7.2"
+    "use-onclickoutside": "^0.3.1"
   }
 }

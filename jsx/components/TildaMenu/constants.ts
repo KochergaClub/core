@@ -3,7 +3,7 @@ export const teamColor = '#417690';
 export interface SingleItem {
   title: string;
   link: string;
-  old?: boolean;
+  mode?: 'old' | 'next' | 'wagtail';
 }
 
 export interface ExpandableItem {
@@ -35,36 +35,36 @@ export const publicMenuItems: Item[] = [
       {
         link: '/rationality/corporate',
         title: 'Корпоративные тренинги',
-        old: true,
+        mode: 'old',
       },
-      { link: '/blog', title: 'Блог' },
+      { link: '/blog', title: 'Блог', mode: 'wagtail' },
     ],
   },
-  { link: '/#contacts', title: 'Контакты', old: true },
+  { link: '/#contacts', title: 'Контакты' },
 ];
 
 export const teamMenuItems: Item[] = [
   {
     title: 'Админам',
     items: [
-      { link: '/team/cashier/', title: 'Касса' },
-      { link: '/team/watchmen/', title: 'Смены' },
+      { link: '/team/cashier', title: 'Касса', mode: 'next' },
+      { link: '/team/watchmen', title: 'Смены', mode: 'next' },
     ],
   },
   {
     title: 'Менеджерам',
     items: [
-      { link: '/team/analytics/', title: 'Аналитика' },
-      { link: '/team/zadarma/', title: 'Звонки' },
+      { link: '/team/analytics', title: 'Аналитика', mode: 'next' },
+      { link: '/team/zadarma', title: 'Звонки', mode: 'next' },
       { link: '/admin/', title: 'Админка' },
     ],
   },
   {
     title: 'События',
     items: [
-      { link: '/team/events/', title: 'Календарь' },
-      { link: '/team/ratio/', title: 'Тренинги' },
-      { link: '/team/mastermind_dating/', title: 'Мастермайнд' },
+      { link: '/team/events', title: 'Календарь', mode: 'next' },
+      { link: '/team/ratio', title: 'Тренинги', mode: 'next' },
+      { link: '/team/mastermind_dating', title: 'Мастермайнд', mode: 'next' },
     ],
   },
   {

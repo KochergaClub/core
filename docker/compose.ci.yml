@@ -10,6 +10,7 @@ x-common:
     DB_NAME: 'kocherga'
     DB_USER: 'root'
     DB_PASSWORD: ''
+    NODE_ENV: 'production'
   cap_add:
     - SYS_PTRACE
 
@@ -48,4 +49,4 @@ services:
 
   render-server:
     << : *common
-    command: npx nodemon ./static/dist/server.js
+    command: bash -c 'cd jsx && node ./render/server/index.js'

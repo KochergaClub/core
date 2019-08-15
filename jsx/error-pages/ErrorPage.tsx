@@ -23,4 +23,5 @@ const ErrorPage = ({ code, title, image }: Props) => (
     </Page.Main>
   </Page>
 );
+
 export default ErrorPage;

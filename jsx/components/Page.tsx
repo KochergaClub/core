@@ -7,9 +7,9 @@ import ErrorBoundary from './ErrorBoundary';
 import PageTitle from './PageTitle';
 import Main from './Main';
 
-import { Helmet } from 'react-helmet';
+import Head from 'next/head';
 
-import { GlobalStyle } from '@kocherga/frontkit';
+import { GlobalStyle, GlobalFonts } from '@kocherga/frontkit';
 
 interface Props {
   title: string;
@@ -23,8 +23,16 @@ const Page = ({ title, team, children, noMenu, noFooter }: Props) => {
   return (
     <div>
       <GlobalStyle />
-      {/* https://github.com/nfl/react-helmet/issues/373 */}
-      <Helmet title={title} meta={[{ name: 'charSet', content: 'utf-8' }]} />
+      <Head>
+        <title>{title}</title>
+        <link rel="stylesheet" href="/static/normalize.css" />
+        <link rel="shortcut icon" href="/static/favicon.ico" />
+        {/* NOTE - <GlobalFonts /> doesn't work for some reason */}
+        <link
+          href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=block&subset=cyrillic"
+          rel="stylesheet"
+        />
+      </Head>
       {noMenu || <TildaMenu team={team || false} />}
       <ErrorBoundary>{children}</ErrorBoundary>
       {noFooter || <TildaFooter />}
