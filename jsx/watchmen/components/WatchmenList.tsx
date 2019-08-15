@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Link from 'next/link';
 
+import { FaEdit } from 'react-icons/fa';
+
 import { A, Row, Button } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
@@ -43,8 +45,12 @@ const WatchmanItem = ({ watchman }: { watchman: Watchman }) => {
       <Row>
         <div>Грейд: {grade ? grade.code : 'нет'}</div>
         {canManage && (
-          <Button small onClick={editGradeCb}>
-            Редактировать
+          <Button
+            small
+            onClick={editGradeCb}
+            style={{ verticalAlign: 'middle' }}
+          >
+            <FaEdit /> Редактировать
           </Button>
         )}
       </Row>
