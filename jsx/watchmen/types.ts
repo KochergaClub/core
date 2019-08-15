@@ -3,6 +3,7 @@ export interface Watchman {
   member_id: number;
   color: string;
   short_name: string;
+  grade_id?: number;
 }
 
 export interface Shift {
@@ -54,3 +55,9 @@ export const shifts2schedule = (shifts: Shift[]): Schedule => {
 };
 
 export type DatesWindow = [Date, Date];
+
+export interface Grade {
+  id: number;
+  code: string;
+  multiplier: number;
+}

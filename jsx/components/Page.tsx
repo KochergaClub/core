@@ -9,7 +9,7 @@ import Main from './Main';
 
 import Head from 'next/head';
 
-import { GlobalStyle, GlobalFonts } from '@kocherga/frontkit';
+import { GlobalStyle } from '@kocherga/frontkit';
 
 interface Props {
   title: string;

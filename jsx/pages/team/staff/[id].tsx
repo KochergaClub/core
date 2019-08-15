@@ -60,6 +60,7 @@ const StaffMemberPage: NextPage<Props> = ({
             <h2 style={{ color: member.color || 'black' }}>
               {member.short_name}
             </h2>
+            <div>{member.email}</div>
             {member.is_current || <Ex>Бывший сотрудник</Ex>}
           </Column>
           <Column centered>

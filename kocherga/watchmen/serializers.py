@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from rest_framework import serializers
 
 import channels.layers
@@ -9,11 +12,29 @@ from . import models
 class WatchmanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Watchman
-        fields = ('id', 'member_id', 'short_name', 'color')
+        fields = ('id', 'member_id', 'short_name', 'color', 'grade_id')
 
     member_id = serializers.CharField(source='member.pk', read_only=True)
     short_name = serializers.CharField(source='member.short_name', read_only=True)
     color = serializers.CharField(source='member.color', read_only=True)
+    grade_id = serializers.IntegerField(source='grade.id', required=False)
+
+    def update(self, instance, validated_data):
+        logger.info(validated_data)
+        grade_id = validated_data.pop('grade', {}).get('id', None)
+
+        if grade_id:
+            try:
+                instance.grade = models.Grade.objects.get(pk=grade_id)
+            except models.Watchman.DoesNotExist:
+                raise serializers.ValidationError(f"Grade {grade_id} not found")
+        else:
+            instance.grade = None
+
+        instance.full_clean()
+        instance.save()
+
+        return instance
 
 
 class ShiftSerializer(serializers.ModelSerializer):
@@ -25,7 +46,7 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 
 class UpdateShiftSerializer(serializers.ModelSerializer):
-    watchman_id = serializers.IntegerField()
+    watchman_id = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
         model = models.Shift
@@ -59,3 +80,9 @@ class UpdateShiftSerializer(serializers.ModelSerializer):
         )
 
         return instance
+
+
+class GradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Grade
+        fields = ('id', 'code', 'multiplier')

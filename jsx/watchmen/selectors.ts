@@ -4,7 +4,7 @@ import { format, parseISO } from 'date-fns';
 
 import { State } from '~/redux/store';
 
-import { DaySchedule } from './types';
+import { DaySchedule, Watchman } from './types';
 
 export const selectEditing = (state: State): boolean => state.watchmen.editing;
 
@@ -24,3 +24,23 @@ export const selectDatesWindow = createSelector(
 );
 
 export const selectWatchmen = (state: State) => state.watchmen.watchmen;
+
+export const selectGrades = (state: State) => state.watchmen.grades;
+
+export const selectWatchmanById = (
+  state: State,
+  id: number
+): Watchman | undefined => state.watchmen.watchmen.find(w => w.id === id);
+
+export const selectAskingForGradeWatchman = (
+  state: State
+): Watchman | undefined => {
+  const id = state.watchmen.gradeUI.askingForWatchmanGrade;
+  if (!id) {
+    return;
+  }
+  return selectWatchmanById(state, id);
+};
+
+export const selectPickingWatchmanGrade = (state: State): number | undefined =>
+  state.watchmen.gradeUI.pickingWatchmanGrade;
