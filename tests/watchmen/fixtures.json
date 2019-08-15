@@ -1,11 +1,32 @@
 [
 {
+  "model": "watchmen.Watchman",
+  "pk": 5,
+  "fields": {
+    "member": 1
+  }
+},
+{
+  "model": "watchmen.Watchman",
+  "pk": 6,
+  "fields": {
+    "member": 2
+  }
+},
+{
+  "model": "watchmen.Watchman",
+  "pk": 7,
+  "fields": {
+    "member": 3
+  }
+},
+{
   "model": "watchmen.shift",
   "pk": 57,
   "fields": {
     "date": "2019-03-30",
     "shift": "MORNING",
-    "watchman": 2,
+    "watchman": 6,
     "is_night": false
   }
 },
@@ -15,7 +36,7 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "MIDDAY",
-    "watchman": 1,
+    "watchman": 5,
     "is_night": false
   }
 },
@@ -25,7 +46,7 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "EVENING",
-    "watchman": 1,
+    "watchman": 5,
     "is_night": false
   }
 },
@@ -35,7 +56,7 @@
   "fields": {
     "date": "2019-03-30",
     "shift": "NIGHT",
-    "watchman": 3,
+    "watchman": 7,
     "is_night": false
   }
 },
@@ -45,7 +66,7 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "MORNING",
-    "watchman": 2,
+    "watchman": 6,
     "is_night": false
   }
 },
@@ -55,7 +76,7 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "MIDDAY",
-    "watchman": 2,
+    "watchman": 6,
     "is_night": false
   }
 },
@@ -65,7 +86,7 @@
   "fields": {
     "date": "2019-03-29",
     "shift": "EVENING",
-    "watchman": 2,
+    "watchman": 6,
     "is_night": false
   }
 },
