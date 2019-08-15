@@ -1,99 +1,36 @@
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
-
-import { A, Column } from '@kocherga/frontkit';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { NextPage } from '~/common/types';
-import { useAPI } from '~/common/hooks';
 import Page from '~/components/Page';
-import AsyncButton from '~/components/AsyncButton';
-import { selectAPI, selectUser } from '~/core/selectors';
 
-import { Member } from '~/staff/types';
-import { getMember, grantGooglePermissions } from '~/staff/api';
+import { fetchAndViewMember } from '~/staff/actions';
+import { selectViewingMember } from '~/staff/selectors';
 
-const Ex = styled.div`
-  background-color: #ddd;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
-`;
+import MemberProfile from '~/staff/components/MemberProfile';
 
-const Image = styled.img`
-  width: 300px;
-  height: auto;
-`;
+interface Props {}
 
-interface Props {
-  member: Member;
-  current_user_is_manager: boolean;
-}
+const StaffMemberPage: NextPage<Props> = () => {
+  const member = useSelector(selectViewingMember);
 
-const ManagerControls = ({ member }: { member: Member }) => {
-  const api = useAPI();
-
-  const handleGrantGooglePermissions = useCallback(async () => {
-    await grantGooglePermissions(api, member.id);
-  }, [api, member.id]);
-
-  if (member.role !== 'WATCHMAN') {
-    return null;
+  if (!member) {
+    return <div>Внутренняя ошибка. Не удалось загрузить сотрудника.</div>;
   }
 
   return (
-    <AsyncButton small act={handleGrantGooglePermissions}>
-      Выдать права в Google
-    </AsyncButton>
-  );
-};
-
-const StaffMemberPage: NextPage<Props> = ({
-  member,
-  current_user_is_manager,
-}) => {
-  return (
     <Page title={`${member.full_name} | Профиль сотрудника`} team>
       <Page.Main>
-        <Column centered gutter={20} style={{ marginBottom: 100 }}>
-          <Column centered gutter={0}>
-            <h1>{member.full_name}</h1>
-            <h2 style={{ color: member.color || 'black' }}>
-              {member.short_name}
-            </h2>
-            {member.is_current || <Ex>Бывший сотрудник</Ex>}
-          </Column>
-          <Column centered>
-            {member.slack_image && <Image src={member.slack_image} />}
-            {member.slack_id && (
-              <A
-                href={`https://kocherga.slack.com/messages/${member.slack_id}/`}
-              >
-                Написать в Slack
-              </A>
-            )}
-            {member.vk && <A href={member.vk}>Профиль VK</A>}
-          </Column>
-          {current_user_is_manager && (
-            <Column centered>
-              <ManagerControls member={member} />
-            </Column>
-          )}
-        </Column>
+        <MemberProfile />
       </Page.Main>
     </Page>
   );
 };
 
-StaffMemberPage.getInitialProps = async ({ store: { getState }, query }) => {
-  const api = selectAPI(getState());
-  const user = selectUser(getState());
-
+StaffMemberPage.getInitialProps = async ({ store: { dispatch }, query }) => {
   const id = parseInt(query.id as string);
-  const member = await getMember(api, id);
-  return {
-    member,
-    current_user_is_manager: user.permissions.indexOf('staff.manage') !== -1,
-  };
+  await dispatch(fetchAndViewMember(id));
+  return {};
 };
 
 export default StaffMemberPage;

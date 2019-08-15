@@ -3,7 +3,10 @@ import styled from 'styled-components';
 
 import moment from 'moment';
 
-import { A, colors } from '@kocherga/frontkit';
+import { A } from '@kocherga/frontkit';
+
+//test
+import Card from '~/components/Card';
 
 import { PbxCall } from '../types';
 
@@ -11,9 +14,6 @@ import CallInfo from './CallInfo';
 import PbxCallData from './PbxCallData';
 
 const Container = styled.div`
-  border: 1px solid ${colors.grey[200]};
-  padding: 10px 20px;
-
   display: flex;
   > * + * {
     margin-left: 40px;
@@ -47,18 +47,22 @@ const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
   }
 
   return (
-    <Container>
-      <div>
-        <header>
-          <Date>{moment(pbx_call.ts).format('D MMMM')}</Date>
-          <A href={`/team/zadarma/pbx_call/${pbx_call.pbx_call_id}`}>{title}</A>
-        </header>
-        {pbx_call.calls.map(call => (
-          <CallInfo key={call.call_id} call={call} />
-        ))}
-      </div>
-      <PbxCallData pbx_call={pbx_call} />
-    </Container>
+    <Card>
+      <Container>
+        <div>
+          <header>
+            <Date>{moment(pbx_call.ts).format('D MMMM')}</Date>
+            <A href={`/team/zadarma/pbx_call/${pbx_call.pbx_call_id}`}>
+              {title}
+            </A>
+          </header>
+          {pbx_call.calls.map(call => (
+            <CallInfo key={call.call_id} call={call} />
+          ))}
+        </div>
+        <PbxCallData pbx_call={pbx_call} />
+      </Container>
+    </Card>
   );
 };
 

@@ -9,7 +9,7 @@ from .models import Shift, ShiftType
 
 
 def shifts_by_date(d: date) -> Dict[ShiftType, Shift]:
-    query = Shift.objects.filter(date=d)
+    query = Shift.objects.filter(date=d).prefetch_related('watchman__member')
 
     day_schedule = {}
     for shift in query:

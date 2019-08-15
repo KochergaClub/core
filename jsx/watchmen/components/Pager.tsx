@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { UrlObject } from 'url';
 import { subWeeks, addWeeks, format } from 'date-fns';
 
 import { A, Row } from '@kocherga/frontkit';
@@ -17,7 +16,7 @@ const PagerLink: React.FC<{ query: { [key: string]: any } }> = ({
 }) => (
   <Link
     href={{
-      pathname: '/team/watchmen',
+      pathname: '/team/space/staff/shifts',
       query,
     }}
     scroll={false}

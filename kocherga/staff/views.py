@@ -22,3 +22,9 @@ class MemberViewSet(viewsets.ReadOnlyModelViewSet):
         member = self.get_object()
         member.grant_google_permissions()
         return Response({'status': 'ok'})
+
+    @action(detail=True, methods=['post'], permission_classes=[IsStaffManager])
+    def fire(self, request, pk=None):
+        member = self.get_object()
+        member.fire()
+        return Response({'status': 'ok'})

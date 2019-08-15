@@ -1,9 +1,16 @@
-import { Member as StaffMember } from '~/staff/types';
+export interface Watchman {
+  id: number;
+  member_id: number;
+  color: string;
+  short_name: string;
+  is_current: boolean;
+  grade_id?: number;
+}
 
 export interface Shift {
   date: string;
   shift: string;
-  watchman: StaffMember | null;
+  watchman: Watchman | null;
   is_night: boolean;
 }
 
@@ -49,3 +56,9 @@ export const shifts2schedule = (shifts: Shift[]): Schedule => {
 };
 
 export type DatesWindow = [Date, Date];
+
+export interface Grade {
+  id: number;
+  code: string;
+  multiplier: number;
+}

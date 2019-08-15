@@ -49,7 +49,7 @@ def shift_salaries(start_date, end_date):
             if not shift.watchman:
                 continue
             rate = rate_by_shift(shift_type)
-            stat[shift.watchman.id] += rate
+            stat[shift.watchman.member.id] += rate
         d += timedelta(days=1)
 
     return stat

@@ -1,18 +1,39 @@
+import { createSelector, Selector } from 'reselect';
+
 import { State } from '~/redux/store';
 
 import { Member } from './types';
 
-export const selectMembers = (state: State): Member[] => state.staff.members;
+export const selectMembers: Selector<State, Member[]> = createSelector(
+  [state => state.staff.members, state => state.staff.memberIdsList],
+  (members, memberIdsList) => memberIdsList.map(id => members[id])
+);
 
-export const selectStaffMembersWatchmenFirst = (state: State): Member[] => {
-  const staffMembers = selectMembers(state);
+export const selectStaffMembersWatchmenFirst: Selector<
+  State,
+  Member[]
+> = createSelector(
+  selectMembers,
+  staffMembers => {
+    const watchmen = staffMembers.filter(
+      member => member.is_current && member.role === 'WATCHMAN'
+    );
+    const otherStaff = staffMembers.filter(
+      member => member.is_current && member.role !== 'WATCHMAN'
+    );
+    return watchmen.concat(otherStaff);
+  }
+);
 
-  const watchmen = staffMembers.filter(
-    member => member.is_current && member.role === 'WATCHMAN'
-  );
-  const otherStaff = staffMembers.filter(
-    member => member.is_current && member.role !== 'WATCHMAN'
-  );
-
-  return watchmen.concat(otherStaff);
-};
+export const selectViewingMember: Selector<
+  State,
+  Member | undefined
+> = createSelector(
+  [state => state.staff.members, state => state.staff.viewingMember],
+  (members, viewingMember) => {
+    if (!viewingMember) {
+      return;
+    }
+    return members[viewingMember];
+  }
+);

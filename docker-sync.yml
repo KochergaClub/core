@@ -15,3 +15,9 @@ syncs:
     sync_excludes:
       - 'Name __pycache__'
     sync_excludes_type: 'none'
+  code-pytest:
+    notify_terminal: true
+    src: './tests'
+    sync_excludes:
+      - 'Name __pycache__'
+    sync_excludes_type: 'none'

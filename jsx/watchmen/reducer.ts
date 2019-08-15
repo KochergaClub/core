@@ -1,12 +1,17 @@
 import { combineReducers } from 'redux';
 
-import { Schedule } from './types';
+import { Schedule, Watchman, Grade } from './types';
 
 import {
   UPDATE_SHIFT,
   REPLACE_SCHEDULE,
   SET_EDITING,
   SET_DATES_WINDOW,
+  WATCHMEN_REPLACE,
+  GRADES_REPLACE,
+  WATCHMAN_ASK_FOR_GRADE,
+  WATCHMAN_PICKING_GRADE,
+  WATCHMAN_STOP_ASKING_FOR_GRADE,
   ActionTypes,
 } from './actions';
 
@@ -63,10 +68,72 @@ const scheduleReducer = (
   }
 };
 
+type WatchmenState = Watchman[];
+
+const watchmenReducer = (
+  state: WatchmenState = [],
+  action: ActionTypes
+): WatchmenState => {
+  switch (action.type) {
+    case WATCHMEN_REPLACE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+type GradesState = Grade[];
+
+const gradesReducer = (
+  state: GradesState = [],
+  action: ActionTypes
+): GradesState => {
+  switch (action.type) {
+    case GRADES_REPLACE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+type GradeUIState = {
+  askingForWatchmanGrade?: number;
+  pickingWatchmanGrade?: number;
+};
+
+const gradeUIReducer = (
+  state: GradeUIState = {},
+  action: ActionTypes
+): GradeUIState => {
+  switch (action.type) {
+    case WATCHMAN_ASK_FOR_GRADE:
+      return {
+        ...state,
+        askingForWatchmanGrade: action.payload,
+      };
+    case WATCHMAN_PICKING_GRADE:
+      return {
+        ...state,
+        pickingWatchmanGrade: action.payload,
+      };
+    case WATCHMAN_STOP_ASKING_FOR_GRADE:
+      return {
+        ...state,
+        askingForWatchmanGrade: undefined,
+        pickingWatchmanGrade: undefined,
+      };
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
   editing: editingReducer,
   schedule: scheduleReducer,
   datesWindow: windowReducer,
+  watchmen: watchmenReducer,
+  grades: gradesReducer,
+  gradeUI: gradeUIReducer,
 });
 
 export default reducer;

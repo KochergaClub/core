@@ -7,7 +7,7 @@ from django.forms import widgets
 
 from wagtail.admin import edit_handlers
 
-import kocherga.slack
+from kocherga.slack.models import User as SlackUser
 import kocherga.cm.models
 import kocherga.google
 
@@ -127,8 +127,6 @@ class Member(models.Model):
 
     @property
     def slack_user(self):
-        slack_users = kocherga.slack.users_by_email()
-
         primary_email = self.user.email.lower()
         alt_emails = [
             a.email.lower() for a in self.alt_emails.all()
@@ -136,20 +134,23 @@ class Member(models.Model):
 
         slack_user = None
         for email in [primary_email] + alt_emails:
-            slack_user = slack_users.get(email, None)
-            if slack_user:
+            try:
+                slack_user = SlackUser.objects.get(email=email)
                 break
+            except SlackUser.DoesNotExist:
+                continue
+
         return slack_user
 
     @property
     def slack_id(self):
         slack_user = self.slack_user
-        return slack_user['id'] if slack_user else None
+        return slack_user.slack_id if slack_user else None
 
     @property
     def slack_image(self):
         slack_user = self.slack_user
-        return slack_user['profile']['image_512'] if slack_user else None
+        return slack_user.image_url if slack_user else None
 
     def update_user_permissions(self):
         self.user.is_staff = self.is_current
@@ -193,6 +194,14 @@ class Member(models.Model):
             }
         ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
+
+    def fire(self):
+        if not self.is_current:
+            raise Exception("Already fired")
+        self.is_current = False
+        self.user.is_staff = False
+        self.user.save()
+        self.save()
 
 
 class AltEmail(models.Model):

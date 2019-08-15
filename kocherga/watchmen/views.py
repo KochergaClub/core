@@ -3,16 +3,23 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
-from rest_framework import generics
-from rest_framework import permissions
+from rest_framework import generics, permissions, mixins, viewsets
 
 from . import serializers
-from .models import Shift
+from .models import Shift, Watchman, Grade
+
+
+class IsManagerOrStaffRO(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return request.user.is_staff
+
+        return request.user.has_perm('watchmen.manage')
 
 
 class ShiftList(generics.ListAPIView):
     serializer_class = serializers.ShiftSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsManagerOrStaffRO,)
 
     def get_queryset(self):
         from_date_str = self.request.query_params.get('from_date', None)
@@ -29,15 +36,27 @@ class ShiftList(generics.ListAPIView):
         return items
 
 
-class IsManagerUser(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.has_perm('watchmen.manage')
-
-
 class ShiftUpdate(generics.UpdateAPIView):
     serializer_class = serializers.UpdateShiftSerializer
-    permission_classes = (IsManagerUser,)
+    permission_classes = (IsManagerOrStaffRO,)
 
     def get_object(self):
         (shift, _) = Shift.objects.get_or_create(date=self.kwargs['date'], shift=self.kwargs['shift'])
+        logger.info(self.request.data)
         return shift
+
+
+class WatchmenViewSet(
+        mixins.UpdateModelMixin,
+        mixins.ListModelMixin,
+        viewsets.GenericViewSet,
+):
+    serializer_class = serializers.WatchmanSerializer
+    permission_classes = (IsManagerOrStaffRO,)
+    queryset = Watchman.objects.all()
+
+
+class GradesView(generics.ListAPIView):
+    serializer_class = serializers.GradeSerializer
+    permission_classes = (IsManagerOrStaffRO,)
+    queryset = Grade.objects.all()

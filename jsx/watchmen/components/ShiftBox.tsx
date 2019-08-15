@@ -5,14 +5,13 @@ import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
 
-import { Member } from '~/staff/types';
-import WatchmanPicker from '~/staff/components/WatchmanPicker';
+import WatchmanPicker from './WatchmanPicker';
 
 import { useAPI, useExpandable } from '~/common/hooks';
 import { State } from '~/redux/store';
 
 import { nightColor } from '../constants';
-import { Shift } from '../types';
+import { Shift, Watchman } from '../types';
 
 import { updateShift as updateShiftApiCall } from '../api';
 import { updateShift } from '../actions';
@@ -95,7 +94,7 @@ const ShiftBox = (props: Props) => {
   const { date, shift: shiftType } = props.shift;
 
   const updateShiftCb = useCallback(
-    async (data: { watchman: Member | null; is_night: boolean }) => {
+    async (data: { watchman: Watchman | null; is_night: boolean }) => {
       await updateShiftApiCall(api, {
         date,
         shift: shiftType,
@@ -112,8 +111,8 @@ const ShiftBox = (props: Props) => {
     [api, date, shiftType, props.shift, props.updateShift, unexpand]
   );
 
-  const pickMember = async (m: Member) => {
-    await updateShiftCb({ watchman: m, is_night: false });
+  const pickWatchman = async (watchman: Watchman) => {
+    await updateShiftCb({ watchman, is_night: false });
   };
 
   const pickExtra = async (text: string) => {
@@ -130,7 +129,7 @@ const ShiftBox = (props: Props) => {
       </div>
       {expanded && (
         <WatchmanPicker
-          pickedMember={pickMember}
+          pickedWatchman={pickWatchman}
           pickedExtra={pickExtra}
           extra={[
             { text: 'Ночь', color: nightColor, dark: true },

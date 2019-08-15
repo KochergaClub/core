@@ -10,10 +10,10 @@ import pytz
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-import kocherga.slack
+import kocherga.slack.client
 
 SLACK_SIGNING_SECRET = settings.KOCHERGA_SLACK_SIGNING_SECRET
-SLACK_BOT_TOKEN = kocherga.slack.token()
+SLACK_BOT_TOKEN = kocherga.slack.client.token()
 
 
 class Bot(slappy.Bot):

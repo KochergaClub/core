@@ -20,11 +20,4 @@ class RewardImageAdmin(ModelAdmin):
     menu_icon = 'success'
     list_display = ('__str__', 'is_active')
 
-
-class WatchmanGroup(ModelAdminGroup):
-    menu_icon = 'group'
-    menu_label = 'Админы'
-    items = (TaskAdmin, RewardImageAdmin, )
-
-
-modeladmin_register(WatchmanGroup)
+# These admins are wired to the group in kocherga.watchmen app, not here.

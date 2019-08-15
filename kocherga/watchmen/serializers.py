@@ -1,15 +1,45 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from rest_framework import serializers
 
 import channels.layers
 from asgiref.sync import async_to_sync
 
 from . import models
-import kocherga.staff.models
-from kocherga.staff.serializers import ShortMemberSerializer
+
+
+class WatchmanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Watchman
+        fields = ('id', 'member_id', 'short_name', 'color', 'grade_id', 'is_current')
+
+    member_id = serializers.CharField(source='member.pk', read_only=True)
+    short_name = serializers.CharField(source='member.short_name', read_only=True)
+    color = serializers.CharField(source='member.color', read_only=True)
+    is_current = serializers.BooleanField(source='member.is_current', read_only=True)
+    grade_id = serializers.IntegerField(source='grade.id', required=False)
+
+    def update(self, instance, validated_data):
+        logger.info(validated_data)
+        grade_id = validated_data.pop('grade', {}).get('id', None)
+
+        if grade_id:
+            try:
+                instance.grade = models.Grade.objects.get(pk=grade_id)
+            except models.Watchman.DoesNotExist:
+                raise serializers.ValidationError(f"Grade {grade_id} not found")
+        else:
+            instance.grade = None
+
+        instance.full_clean()
+        instance.save()
+
+        return instance
 
 
 class ShiftSerializer(serializers.ModelSerializer):
-    watchman = ShortMemberSerializer()
+    watchman = WatchmanSerializer()
 
     class Meta:
         model = models.Shift
@@ -17,20 +47,21 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 
 class UpdateShiftSerializer(serializers.ModelSerializer):
-    watchman = serializers.CharField(max_length=100, allow_blank=True)
+    watchman_id = serializers.IntegerField(required=False, allow_null=True)
 
     class Meta:
         model = models.Shift
-        fields = ('date', 'shift', 'watchman', 'is_night')
+        fields = ('date', 'shift', 'watchman_id', 'is_night')
+        read_only_fields = ('date', 'shift')
 
     def update(self, instance, validated_data):
-        watchman_name = validated_data['watchman']
+        watchman_id = validated_data.pop('watchman_id', None)
 
-        if watchman_name:
+        if watchman_id:
             try:
-                instance.watchman = kocherga.staff.models.Member.objects.get(short_name=watchman_name)
-            except kocherga.staff.models.Member.DoesNotExist:
-                raise serializers.ValidationError(f'Watchman {watchman_name} not found')
+                instance.watchman = models.Watchman.objects.get(pk=watchman_id)
+            except models.Watchman.DoesNotExist:
+                raise serializers.ValidationError(f"Watchman {watchman_id} not found")
         else:
             instance.watchman = None
 
@@ -50,3 +81,9 @@ class UpdateShiftSerializer(serializers.ModelSerializer):
         )
 
         return instance
+
+
+class GradeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Grade
+        fields = ('id', 'code', 'multiplier')

@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 
-import kocherga.slack
+import kocherga.slack.client
 
 # Routes for external hooks.
 
@@ -32,7 +32,7 @@ def r_vk_callback(request):
     group_id = payload["group_id"]
 
     def notify(prefix, link):
-        result = kocherga.slack.client().api_call(
+        result = kocherga.slack.client.client().api_call(
             "chat.postMessage",
             text=f'{prefix}: {link}\n>>> {obj["text"]}',
             channel=channel,

@@ -79,7 +79,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                     datetime.fromtimestamp(call.ts.timestamp(), TZ)
                 )
                 if shift.watchman:
-                    call.watchman = shift.watchman.short_name
+                    call.watchman = shift.watchman.member.short_name
             except kocherga.watchmen.models.Shift.DoesNotExist:
                 pass  # that's ok
 

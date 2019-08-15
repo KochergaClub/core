@@ -7,6 +7,7 @@ x-common:
     # mac volumes are managed with docker-sync for better performance and inotify fixes
     - code-jsx:/code/jsx:nocopy
     - code-py:/code/kocherga:nocopy
+    - code-pytest:/code/tests:nocopy
     - data:/data:nocopy
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
@@ -89,6 +90,8 @@ volumes:
   code-jsx:
     external: true
   code-py:
+    external: true
+  code-pytest:
     external: true
   data:
     external: true

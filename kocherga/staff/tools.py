@@ -5,6 +5,7 @@ import kocherga.wiki
 from django.contrib.auth import get_user_model
 import kocherga.cm.tools
 import kocherga.cm.models
+import kocherga.slack.client
 
 from .models import Member
 
@@ -82,7 +83,7 @@ def add_watchman(short_name, full_name, email, password):
     )
 
     logger.info(f'Inviting to slack')
-    sc = kocherga.slack.legacy_token_client()
+    sc = kocherga.slack.client.legacy_token_client()
 
     # undocumented api - see https://github.com/ErikKalkoken/slackApiDoc/blob/master/users.admin.invite.md
     sc.api_call(
