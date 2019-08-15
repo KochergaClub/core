@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
+import Link from 'next/link';
+
 import MenuItems from './MenuItems';
 import MobileHeader from './MobileHeader';
 import SocialIcons from './SocialIcons';
@@ -32,9 +34,11 @@ const Container = styled('div')<{ hideOnMobile: boolean; team: boolean }>`
 `;
 
 const Logo = ({ team }: Props) => (
-  <a href={team ? '/team/' : '/'}>
-    <img src="/static/menu-logo.png" width="190" height="50" />
-  </a>
+  <Link href={team ? '/team' : '/'}>
+    <a>
+      <img src="/static/menu-logo.png" width="190" height="50" />
+    </a>
+  </Link>
 );
 
 const Line = styled.div`
