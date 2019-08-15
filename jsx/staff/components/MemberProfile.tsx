@@ -7,6 +7,7 @@ import { A, Column, Row } from '@kocherga/frontkit';
 
 import { useAPI, usePermissions } from '~/common/hooks';
 import AsyncButton from '~/components/AsyncButton';
+import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 
 import { Member } from '../types';
 import { grantGooglePermissions } from '../api';
@@ -55,9 +56,9 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
         Выдать права в Google
       </AsyncButton>
 
-      <AsyncButton small act={fire}>
+      <AsyncButtonWithConfirm small act={fire} confirmText="Точно уволить?">
         Уволить
-      </AsyncButton>
+      </AsyncButtonWithConfirm>
     </Row>
   );
 };
