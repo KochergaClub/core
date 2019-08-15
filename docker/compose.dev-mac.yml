@@ -70,7 +70,6 @@ services:
   render-server:
     << : *common
     environment:
-      NODE_ENV: 'production'
     command: bash -c 'cd jsx && node ./render/server/index.js'
     depends_on:
       - api
