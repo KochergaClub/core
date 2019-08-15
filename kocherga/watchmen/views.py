@@ -26,7 +26,6 @@ class ShiftList(generics.ListAPIView):
         to_date = from_date + timedelta(weeks=4) - timedelta(days=1)
 
         items = Shift.objects.items_range(from_date, to_date)
-        items = items.prefetch_related('watchman')
         return items
 
 

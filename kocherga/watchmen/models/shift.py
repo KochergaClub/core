@@ -16,6 +16,7 @@ from .shift_type import ShiftType
 class Manager(models.Manager):
     def items_range(self, from_date: datetime.date, to_date: datetime.date):
         items = self.filter(date__gte=from_date, date__lte=to_date)
+        items = items.prefetch_related('watchman')
 
         date2items = defaultdict(list)
         for item in items:
