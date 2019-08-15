@@ -62,7 +62,7 @@ const InnerShiftBox = ({
   let content = <>{shift.watchman.short_name}</>;
   if (!editing) {
     content = (
-      <WatchmanLink href={`/team/staff/${shift.watchman.id}`}>
+      <WatchmanLink href={`/team/staff/${shift.watchman.member_id}`}>
         {content}
       </WatchmanLink>
     );
