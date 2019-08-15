@@ -8,8 +8,6 @@ import datetime
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from kocherga.staff.models import Member
-
 from .shift_type import ShiftType
 from .watchman import Watchman
 
@@ -17,7 +15,7 @@ from .watchman import Watchman
 class Manager(models.Manager):
     def items_range(self, from_date: datetime.date, to_date: datetime.date):
         items = self.filter(date__gte=from_date, date__lte=to_date)
-        items = items.prefetch_related('watchman')
+        items = items.prefetch_related('watchman__member')
 
         date2items = defaultdict(list)
         for item in items:
