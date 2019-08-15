@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Button, Column, Row, Modal } from '@kocherga/frontkit';
 
+import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
+
 import { pickWatchmanGrade, stopAskingForWatchmanGrade } from '../actions';
 import {
   selectGrades,
@@ -48,20 +50,25 @@ const PickGradeModal = () => {
   const watchman = useSelector(selectAskingForGradeWatchman);
   const grades = useSelector(selectGrades);
 
-  if (!watchman) {
-    return null;
-  }
-
   const closeCb = useCallback(() => {
     dispatch(stopAskingForWatchmanGrade());
   }, [dispatch, stopAskingForWatchmanGrade]);
+
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({
+    onEscape: closeCb,
+  });
+
+  if (!watchman) {
+    return null;
+  }
 
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={closeCb}>
         {watchman.short_name}. Выбрать грейд:
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body ref={focus} {...hotkeys}>
         <Column stretch>
           {grades.map(grade => (
             <GradeItem grade={grade} key={grade.id} />
