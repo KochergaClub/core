@@ -4,7 +4,7 @@ from django.urls import path
 
 import kocherga.events.consumers
 import kocherga.watchmen.consumers
-import kocherga.slack
+import kocherga.slack.consumers
 
 application = ProtocolTypeRouter({
     "websocket": AuthMiddlewareStack(
@@ -14,7 +14,7 @@ application = ProtocolTypeRouter({
         ])
     ),
     "channel": ChannelNameRouter({
-        "slack-notify": kocherga.slack.NotifyConsumer,
+        "slack-notify": kocherga.slack.consumers.NotifyConsumer,
         "events-slack-notify": kocherga.events.consumers.NotifySlackConsumer,
     }),
     # (http->django views is added by default)

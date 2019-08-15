@@ -64,12 +64,12 @@ def audit_slack():
 
         ok += 1
 
-    for user in kocherga.slack.users():
+    for user in kocherga.slack.models.User.objects.all():
         email = user.get("profile", {}).get("email", None)
         if not email:
             continue
-        if not kocherga.staff.tools.find_member_by_email(email):
-            report_excess(f"Slack user is not a staff member: {email}, {user.get('real_name')}")
+        if not kocherga.staff.tools.find_member_by_email(user.email):
+            report_excess(f"Slack user is not a staff member: {user.email}, {user.real_name}")
 
     return ok
 

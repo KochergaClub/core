@@ -18,6 +18,7 @@ IMPORTER_MODULES = [
     "money.tochka.importer",
     "zadarma.importer",
     "timepad.importer",
+    "slack.importer",
 ]
 
 

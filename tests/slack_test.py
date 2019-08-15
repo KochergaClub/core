@@ -1,25 +1,24 @@
 import pytest
-pytestmark = pytest.mark.slack
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.slack,
+]
 
-import kocherga.slack
+import kocherga.slack.client
+from kocherga.slack.models import User as SlackUser
 
 
 class TestSlack:
     def test_token(self):
-        token = kocherga.slack.token()
+        token = kocherga.slack.client.token()
         assert token[-1] != '\n'
 
     def test_client(self):
-        sc = kocherga.slack.client()
+        sc = kocherga.slack.client.client()
         assert sc
 
-    def test_users(self):
-        users = kocherga.slack.users()
-        assert type(users) == list
-        assert len(users) > 3
-
-    def test_users_by_email(self):
-        users = kocherga.slack.users_by_email()
-        assert type(users) == dict
-        assert len(users) >= 1
-        assert 'slava@kocherga-club.ru' in users
+    def test_import(self):
+        SlackUser.objects.import_from_slack()
+        users = list(SlackUser.objects.all())
+        assert len(users) > 0
+        assert 'slava@kocherga-club.ru' in [u.email for u in users]
