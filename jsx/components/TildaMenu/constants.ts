@@ -45,18 +45,12 @@ export const publicMenuItems: Item[] = [
 
 export const teamMenuItems: Item[] = [
   {
-    title: 'Админам',
+    title: 'Пространство',
     items: [
-      { link: '/team/cashier', title: 'Касса', mode: 'next' },
       { link: '/team/watchmen', title: 'Смены', mode: 'next' },
-    ],
-  },
-  {
-    title: 'Менеджерам',
-    items: [
-      { link: '/team/analytics', title: 'Аналитика', mode: 'next' },
+      { link: '/team/watchmen/admin', title: 'Админы', mode: 'next' },
       { link: '/team/zadarma', title: 'Звонки', mode: 'next' },
-      { link: '/admin/', title: 'Админка' },
+      { link: '/team/cashier', title: 'Касса', mode: 'next' },
     ],
   },
   {
@@ -65,6 +59,14 @@ export const teamMenuItems: Item[] = [
       { link: '/team/events', title: 'Календарь', mode: 'next' },
       { link: '/team/ratio', title: 'Тренинги', mode: 'next' },
       { link: '/team/mastermind_dating', title: 'Мастермайнд', mode: 'next' },
+    ],
+  },
+  {
+    title: 'Прочее',
+    items: [
+      { link: '/team/analytics', title: 'Аналитика', mode: 'next' },
+      { link: '/admin/', title: 'Django-админка' },
+      { link: '/wagtail/', title: 'Wagtail-админка' },
     ],
   },
   {
