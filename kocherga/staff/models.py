@@ -195,6 +195,14 @@ class Member(models.Model):
         ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
 
+    def fire(self):
+        if not self.is_current:
+            raise Exception("Already fired")
+        self.is_current = False
+        self.user.is_staff = False
+        self.user.save()
+        self.save()
+
 
 class AltEmail(models.Model):
     email = models.EmailField()
