@@ -24,21 +24,22 @@ const GradeItem = ({ grade }: { grade: Grade }) => {
     await dispatch(pickWatchmanGrade(watchman, grade));
   }, [dispatch, pickWatchmanGrade, watchman, grade]);
 
+  if (!watchman) {
+    throw new Error('Redux logic error');
+  }
+
   return (
-    <Row spaced>
-      <Row>
+    <Button
+      onClick={pickGrade}
+      loading={pickingGradeId === grade.id}
+      disabled={Boolean(pickingGradeId)}
+      kind={watchman.grade_id === grade.id ? 'primary' : undefined}
+    >
+      <Row centered>
         <div>{grade.code}</div>
-        <div>({grade.multiplier})</div>
+        <div>(x{grade.multiplier})</div>
       </Row>
-      <Button
-        small
-        onClick={pickGrade}
-        loading={pickingGradeId === grade.id}
-        disabled={Boolean(pickingGradeId)}
-      >
-        выбрать
-      </Button>
-    </Row>
+    </Button>
   );
 };
 
@@ -58,10 +59,10 @@ const PickGradeModal = () => {
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={closeCb}>
-        Грейд для: {watchman.short_name}
+        {watchman.short_name}. Выбрать грейд:
       </Modal.Header>
       <Modal.Body>
-        <Column gutter={10}>
+        <Column stretch>
           {grades.map(grade => (
             <GradeItem grade={grade} key={grade.id} />
           ))}
