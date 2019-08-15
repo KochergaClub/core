@@ -47,8 +47,8 @@ export const teamMenuItems: Item[] = [
   {
     title: 'Пространство',
     items: [
-      { link: '/team/watchmen', title: 'Смены', mode: 'next' },
-      { link: '/team/watchmen/admin', title: 'Админы', mode: 'next' },
+      { link: '/team/space/staff/shifts', title: 'Смены', mode: 'next' },
+      { link: '/team/space/staff', title: 'Админы', mode: 'next' },
       { link: '/team/zadarma', title: 'Звонки', mode: 'next' },
       { link: '/team/cashier', title: 'Касса', mode: 'next' },
     ],

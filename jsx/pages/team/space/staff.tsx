@@ -1,5 +1,9 @@
 import React from 'react';
 
+import Link from 'next/link';
+
+import { A } from '@kocherga/frontkit';
+
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
@@ -10,22 +14,26 @@ import GradesList from '~/watchmen/components/GradesList';
 
 interface Props {}
 
-const WatchmenAdminPage: NextPage<Props> = () => {
+const SpaceStaffPage: NextPage<Props> = () => {
   return (
-    <Page title="Управление админами" team>
-      <Page.Title>Управление админами</Page.Title>
+    <Page title="Админы Кочерги" team>
+      <Page.Title>Админы Кочерги</Page.Title>
       <Page.Main>
         <WatchmenList />
         <GradesList />
+        <h2>Расписание смен</h2>
+        <Link href="/team/space/staff/shifts" passHref>
+          <A>Смотреть</A>
+        </Link>
       </Page.Main>
     </Page>
   );
 };
 
-WatchmenAdminPage.getInitialProps = async ({ store: { dispatch } }) => {
+SpaceStaffPage.getInitialProps = async ({ store: { dispatch } }) => {
   await dispatch(loadGrades());
   await dispatch(loadWatchmen());
   return {};
 };
 
-export default WatchmenAdminPage;
+export default SpaceStaffPage;
