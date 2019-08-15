@@ -10,7 +10,7 @@ import Page from '~/components/Page';
 import { useListeningWebSocket, usePermissions } from '~/common/hooks';
 import { NextPage } from '~/common/types';
 
-import { loadMembers } from '~/staff/actions';
+import { loadWatchmen } from '~/watchmen/actions';
 
 import { reloadSchedule, setDatesWindow } from '~/watchmen/actions';
 import { selectDatesWindow } from '~/watchmen/selectors';
@@ -73,7 +73,7 @@ WatchmenIndexPage.getInitialProps = async ({ query, store }) => {
   }
   const to_date = addWeeks(from_date, 4);
 
-  await dispatch(loadMembers());
+  await dispatch(loadWatchmen());
 
   await dispatch(reloadSchedule(from_date, to_date));
 

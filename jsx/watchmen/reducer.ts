@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 
-import { Schedule } from './types';
+import { Schedule, Watchman } from './types';
 
 import {
   UPDATE_SHIFT,
   REPLACE_SCHEDULE,
   SET_EDITING,
   SET_DATES_WINDOW,
+  WATCHMEN_REPLACE,
   ActionTypes,
 } from './actions';
 
@@ -63,10 +64,25 @@ const scheduleReducer = (
   }
 };
 
+type WatchmenState = Watchman[];
+
+const watchmenReducer = (
+  state: WatchmenState = [],
+  action: ActionTypes
+): WatchmenState => {
+  switch (action.type) {
+    case WATCHMEN_REPLACE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
   editing: editingReducer,
   schedule: scheduleReducer,
   datesWindow: windowReducer,
+  watchmen: watchmenReducer,
 });
 
 export default reducer;

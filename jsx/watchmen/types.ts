@@ -1,9 +1,14 @@
-import { Member as StaffMember } from '~/staff/types';
+export interface Watchman {
+  id: number;
+  member_id: number;
+  color: string;
+  short_name: string;
+}
 
 export interface Shift {
   date: string;
   shift: string;
-  watchman: StaffMember | null;
+  watchman: Watchman | null;
   is_night: boolean;
 }
 

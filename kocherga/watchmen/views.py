@@ -7,7 +7,7 @@ from rest_framework import generics
 from rest_framework import permissions
 
 from . import serializers
-from .models import Shift
+from .models import Shift, Watchman
 
 
 class ShiftList(generics.ListAPIView):
@@ -40,4 +40,11 @@ class ShiftUpdate(generics.UpdateAPIView):
 
     def get_object(self):
         (shift, _) = Shift.objects.get_or_create(date=self.kwargs['date'], shift=self.kwargs['shift'])
+        logger.info(self.request.data)
         return shift
+
+
+class WatchmenView(generics.ListAPIView):
+    serializer_class = serializers.WatchmanSerializer
+    permission_classes = (permissions.IsAdminUser,)
+    queryset = Watchman.objects.all()

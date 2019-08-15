@@ -11,6 +11,7 @@ from django.db import models
 from kocherga.staff.models import Member
 
 from .shift_type import ShiftType
+from .watchman import Watchman
 
 
 class Manager(models.Manager):
@@ -49,7 +50,7 @@ class Shift(models.Model):
         editable=False,
     )
     watchman = models.ForeignKey(
-        Member,
+        Watchman,
         null=True, blank=True,
         on_delete=models.CASCADE,
         related_name='+'

@@ -4,12 +4,20 @@ import channels.layers
 from asgiref.sync import async_to_sync
 
 from . import models
-import kocherga.staff.models
-from kocherga.staff.serializers import ShortMemberSerializer
+
+
+class WatchmanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Watchman
+        fields = ('id', 'member_id', 'short_name', 'color')
+
+    member_id = serializers.CharField(source='member.pk', read_only=True)
+    short_name = serializers.CharField(source='member.short_name', read_only=True)
+    color = serializers.CharField(source='member.color', read_only=True)
 
 
 class ShiftSerializer(serializers.ModelSerializer):
-    watchman = ShortMemberSerializer()
+    watchman = WatchmanSerializer()
 
     class Meta:
         model = models.Shift
@@ -17,20 +25,21 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 
 class UpdateShiftSerializer(serializers.ModelSerializer):
-    watchman = serializers.CharField(max_length=100, allow_blank=True)
+    watchman_id = serializers.IntegerField()
 
     class Meta:
         model = models.Shift
-        fields = ('date', 'shift', 'watchman', 'is_night')
+        fields = ('date', 'shift', 'watchman_id', 'is_night')
+        read_only_fields = ('date', 'shift')
 
     def update(self, instance, validated_data):
-        watchman_name = validated_data['watchman']
+        watchman_id = validated_data.pop('watchman_id', None)
 
-        if watchman_name:
+        if watchman_id:
             try:
-                instance.watchman = kocherga.staff.models.Member.objects.get(short_name=watchman_name)
-            except kocherga.staff.models.Member.DoesNotExist:
-                raise serializers.ValidationError(f'Watchman {watchman_name} not found')
+                instance.watchman = models.Watchman.objects.get(pk=watchman_id)
+            except models.Watchman.DoesNotExist:
+                raise serializers.ValidationError(f"Watchman {watchman_id} not found")
         else:
             instance.watchman = None
 

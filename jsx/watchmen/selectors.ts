@@ -22,3 +22,5 @@ export const selectDatesWindow = createSelector(
     return [from_date, to_date] as [Date, Date];
   }
 );
+
+export const selectWatchmen = (state: State) => state.watchmen.watchmen;

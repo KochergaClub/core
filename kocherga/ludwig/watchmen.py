@@ -9,6 +9,7 @@ from slappy import ErrorResponse
 from kocherga.ludwig.bot import bot
 from kocherga.dateutils import TZ
 from kocherga.watchmen import schedule
+from kocherga.staff.models import Member
 import kocherga.cm.tools
 
 INFLECTED_WEEKDAY_NAMES = [
@@ -45,15 +46,15 @@ def get_current_watchman_or_complain(message):
 
     if shift.is_night:
         # We could tag them both, but we won't, because it's night and people might want to stay asleep.
-        last = schedule.last_watchman()
-        nearest = schedule.nearest_watchman()
+        last = schedule.last_watchman().member
+        nearest = schedule.nearest_watchman().member
 
         message.reply(
             f"Сейчас ночь. Вечером админил(а) *{last.short_name}*, а утром будет *{nearest.short_name}*."
         )
         return
 
-    member = shift.watchman
+    member: Member = shift.watchman.member
 
     if not member.slack_id:
         raise ErrorResponse(
@@ -82,14 +83,14 @@ def daily_watchmen(d):
         (shift_start, shift_end) = shift_type.dt_tuple_by_date(d)
 
         if shift_end < now:
-            rel = "админил" if shift.watchman.gender == 'MALE' else "админила"
+            rel = "админил" if shift.watchman.member.gender == 'MALE' else "админила"
         elif shift_start > now:
             rel = "будет админить"
         else:
             rel = "админит"
 
         attachments.append(
-            {"text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.short_name}*.\n"}
+            {"text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.member.short_name}*.\n"}
         )
 
     preposition = "Во" if d.weekday() == 1 else "В"
@@ -272,19 +273,19 @@ def morning_check():
         # no watchman in schedule, that's weird but whatever
         return
 
-    watchman = shift.watchman
+    member: Member = shift.watchman.member
 
     cm_customers = kocherga.cm.tools.now_stats()['customers']
 
     for customer in cm_customers:
-        if customer.pk == watchman.cm_customer.pk:
-            logger.info(f'Watchman {shift.watchman.cm_customer} is present, everything is ok')
+        if customer.pk == member.cm_customer.pk:
+            logger.info(f'Watchman {member.cm_customer} is present, everything is ok')
             return
 
-    inflected = 'готов' if watchman.gender == 'MALE' else 'готова'
+    inflected = 'готов' if member.gender == 'MALE' else 'готова'
 
     bot.send_message(
-        text=f":exclamation: <@{shift.watchman.slack_id}>, тебя нет в кафе-менеджере.\n"
+        text=f":exclamation: <@{member.slack_id}>, тебя нет в кафе-менеджере.\n"
         f"Видимо, ты опаздываешь на свою смену. Будь {inflected} ответить на звонок.",
         channel=CHANNEL,
     )

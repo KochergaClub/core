@@ -3,11 +3,12 @@ import { format } from 'date-fns';
 import { AsyncAction } from '~/redux/store';
 import { selectAPI } from '~/core/selectors';
 
-import { getSchedule } from './api';
-import { Shift, Schedule, shifts2schedule } from './types';
+import { getSchedule, getWatchmen } from './api';
+import { Shift, Schedule, Watchman, shifts2schedule } from './types';
 
 export const UPDATE_SHIFT = '[watchmen] UPDATE_SHIFT';
 export const REPLACE_SCHEDULE = '[watchmen] REPLACE_SCHEDULE';
+export const WATCHMEN_REPLACE = '[watchmen] WATCHMEN_REPLACE';
 export const SET_EDITING = '[watchmen] SET_EDITING';
 export const SET_DATES_WINDOW = '[watchmen] SET_DATES_WINDOW';
 
@@ -45,8 +46,23 @@ export const setDatesWindow = (from_date: Date, to_date: Date) => ({
   ],
 });
 
+export const replaceWatchmen = (watchmen: Watchman[]) => ({
+  type: WATCHMEN_REPLACE as typeof WATCHMEN_REPLACE,
+  payload: watchmen,
+});
+
+export const loadWatchmen = (): AsyncAction<void> => async (
+  dispatch,
+  getState
+) => {
+  const api = selectAPI(getState());
+  const watchmen = await getWatchmen(api);
+  dispatch(replaceWatchmen(watchmen));
+};
+
 export type ActionTypes =
   | ReturnType<typeof updateShift>
   | ReturnType<typeof replaceSchedule>
   | ReturnType<typeof setEditing>
-  | ReturnType<typeof setDatesWindow>;
+  | ReturnType<typeof setDatesWindow>
+  | ReturnType<typeof replaceWatchmen>;
