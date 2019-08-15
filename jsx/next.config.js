@@ -3,7 +3,7 @@ module.exports = {
     config.resolve.alias['~'] = __dirname;
     return config;
   },
-  // Will be available on both server and client
+  distDir: '../jsx-build',
   publicRuntimeConfig: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
   },

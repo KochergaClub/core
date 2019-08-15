@@ -118,9 +118,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'kocherga.django.jinja2.environment',
-            'extensions': [
-                'webpack_loader.contrib.jinja2ext.WebpackExtension',
-            ],
+            'extensions': [],
         },
     },
     # needed for admin
@@ -252,13 +250,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 MEDIA_ROOT = '/data/upload'
 MEDIA_URL = '/media/'
 
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'dist/',  # end with slash
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-    }
-}
-
 # ------------- Kocherga settings --------------
 
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
@@ -299,8 +290,6 @@ KOCHERGA_LUDWIG_SENTRY_DSN = None
 KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER = '9283440300136748'
 
 GOOGLE_ANALYTICS_ID = None
-
-WEBPACK_DEV_SERVER = False
 
 GDRIVE_WATCHMEN_FOLDER = None
 

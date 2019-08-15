@@ -24,3 +24,4 @@ __pycache__
 /.coverage
 /htmlcov
 /jsx/.next
+/jsx-build

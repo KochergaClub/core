@@ -67,18 +67,8 @@ services:
 
   render-server:
     << : *common
-    command: npx nodemon --verbose --watch static/dist ./static/dist/server.js
+    command: bash -c 'cd jsx && node ./render/server/index.js'
     depends_on:
       - api
     ports:
       - "127.0.0.1:8000:80"
-
-  webpack_back:
-    << : *common
-    command: npx webpack --config ./webpack/back.config.js --watch
-
-  webpack_front:
-    << : *common
-    command: npx webpack-dev-server --config ./webpack/front.config.js
-    ports:
-      - "127.0.0.1:8080:8080"
