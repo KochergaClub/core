@@ -11,7 +11,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
 from kocherga.staff.models import Member
-from kocherga.watchmen.models import Shift
+from kocherga.watchmen.models import Shift, Watchman
 
 
 @pytest.fixture
@@ -79,7 +79,7 @@ def test_update_unknown_watchman(client, manager_user):
 
     res = client.patch(
         '/api/watchmen/schedule/2019-03-05/MORNING',
-        {'watchman': 'hello'},
+        {'watchman_id': 123},
         format='json',
     )
     assert res.status_code == 400
@@ -87,34 +87,36 @@ def test_update_unknown_watchman(client, manager_user):
 
 def test_update(client, manager_user):
     client.force_login(manager_user)
-    watchman = Member.objects.create(
+    member = Member.objects.create(
         user=manager_user,
         short_name='abc',
         is_current=True,
     )
+    watchman = Watchman.objects.create(member=member)
 
     res = client.patch(
         '/api/watchmen/schedule/2019-03-05/MORNING',
-        {'watchman': watchman.short_name},
+        {'watchman_id': watchman.id},
         format='json',
     )
     assert res.status_code == 200
 
     shift = Shift.objects.get(date=date(2019, 3, 5), shift='MORNING')
-    assert shift.watchman.short_name == 'abc'
+    assert shift.watchman.member.short_name == 'abc'
 
 
 def test_update_invalid(client, manager_user):
     client.force_login(manager_user)
-    watchman = Member.objects.create(
+    member = Member.objects.create(
         user=manager_user,
         short_name='abc',
         is_current=True,
     )
+    watchman = Watchman.objects.create(member=member)
 
     res = client.patch(
         '/api/watchmen/schedule/2019-03-05/MORNING',
-        {'watchman': watchman.short_name, 'is_night': True},
+        {'watchman_id': watchman.id, 'is_night': True},
         format='json',
     )
     assert res.status_code == 400

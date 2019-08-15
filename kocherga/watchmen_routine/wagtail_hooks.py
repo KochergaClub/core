@@ -1,5 +1,4 @@
-from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, ModelAdminGroup, modeladmin_register)
+from wagtail.contrib.modeladmin.options import ModelAdmin
 
 from . import models
 from .admin import WeekdayFilter
