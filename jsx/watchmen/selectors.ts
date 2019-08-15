@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector, Selector } from 'reselect';
 
 import { format, parseISO } from 'date-fns';
 
@@ -23,7 +23,13 @@ export const selectDatesWindow = createSelector(
   }
 );
 
-export const selectWatchmen = (state: State) => state.watchmen.watchmen;
+export const selectAllWatchmen = (state: State) => state.watchmen.watchmen;
+
+// current only
+export const selectWatchmen: Selector<State, Watchman[]> = createSelector(
+  selectAllWatchmen,
+  watchmen => watchmen.filter(w => w.is_current)
+);
 
 export const selectGrades = (state: State) => state.watchmen.grades;
 

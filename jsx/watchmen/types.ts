@@ -3,6 +3,7 @@ export interface Watchman {
   member_id: number;
   color: string;
   short_name: string;
+  is_current: boolean;
   grade_id?: number;
 }
 
