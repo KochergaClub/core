@@ -43,23 +43,25 @@ const AsyncButtonWithConfirm = ({
       >
         {children}
       </Button>
-      <Modal isOpen={confirming}>
-        <Modal.Header toggle={closeConfirm}>Точно?</Modal.Header>
-        <Modal.Body>{confirmText}</Modal.Body>
-        <Modal.Footer>
-          <ControlsFooter>
-            <Button onClick={closeConfirm}>Отменить</Button>
-            <Button
-              onClick={confirm}
-              loading={loading}
-              disabled={loading}
-              kind="primary"
-            >
-              {children}
-            </Button>
-          </ControlsFooter>
-        </Modal.Footer>
-      </Modal>
+      {confirming && (
+        <Modal isOpen={confirming}>
+          <Modal.Header toggle={closeConfirm}>Точно?</Modal.Header>
+          <Modal.Body>{confirmText}</Modal.Body>
+          <Modal.Footer>
+            <ControlsFooter>
+              <Button onClick={closeConfirm}>Отменить</Button>
+              <Button
+                onClick={confirm}
+                loading={loading}
+                disabled={loading}
+                kind="primary"
+              >
+                {children}
+              </Button>
+            </ControlsFooter>
+          </Modal.Footer>
+        </Modal>
+      )}
     </React.Fragment>
   );
 };
