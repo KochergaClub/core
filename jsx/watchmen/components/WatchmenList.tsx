@@ -1,16 +1,18 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
 import Link from 'next/link';
 
 import { FaEdit } from 'react-icons/fa';
 
-import { A, Row, Button } from '@kocherga/frontkit';
+import { A, Row, Button, Label } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 import Card, { CardList } from '~/components/Card';
+import AsyncButton from '~/components/AsyncButton';
 
-import { askForWatchmanGrade } from '../actions';
+import { askForWatchmanGrade, setWatchmanPriority } from '../actions';
 import {
   selectWatchmen,
   selectGrades,
@@ -19,6 +21,37 @@ import {
 import { Watchman } from '../types';
 
 import PickGradeModal from './PickGradeModal';
+
+const priority2name: { [k: number]: string } = {
+  1: 'Регулярный админ',
+  2: 'Эпизодический админ',
+  3: 'Не админ',
+};
+
+const FixedRow = styled(Row)`
+  align-items: center;
+`;
+
+const WatchmanPriorityButton: React.FC<{
+  watchman: Watchman;
+  priority: number;
+}> = ({ watchman, priority, children }) => {
+  const dispatch = useDispatch();
+
+  const cb = useCallback(async () => {
+    await dispatch(setWatchmanPriority(watchman, priority));
+  }, [watchman, priority, setWatchmanPriority]);
+
+  if (watchman.priority === priority) {
+    return null;
+  }
+
+  return (
+    <AsyncButton small act={cb}>
+      {children}
+    </AsyncButton>
+  );
+};
 
 const WatchmanItem = ({ watchman }: { watchman: Watchman }) => {
   const grades = useSelector(selectGrades);
@@ -43,33 +76,63 @@ const WatchmanItem = ({ watchman }: { watchman: Watchman }) => {
         </Link>
       </strong>
       <Row>
-        <div>Грейд: {grade ? grade.code : 'нет'}</div>
+        <FixedRow>
+          <Label>Грейд:</Label> <strong>{grade ? grade.code : 'нет'}</strong>
+        </FixedRow>
         {canManage && (
-          <Button
-            small
-            onClick={editGradeCb}
-            style={{ verticalAlign: 'middle' }}
-          >
+          <Button small onClick={editGradeCb}>
             <FaEdit /> Редактировать
           </Button>
+        )}
+      </Row>
+      <Row>
+        <FixedRow gutter={8}>
+          <Label>Приоритет:</Label>
+          <div>{priority2name[watchman.priority]}</div>
+        </FixedRow>
+        {canManage && (
+          <Row>
+            <WatchmanPriorityButton watchman={watchman} priority={1}>
+              Сделать регулярным
+            </WatchmanPriorityButton>
+            <WatchmanPriorityButton watchman={watchman} priority={2}>
+              Сделать эпизодическим
+            </WatchmanPriorityButton>
+            <WatchmanPriorityButton watchman={watchman} priority={3}>
+              Не админит никогда
+            </WatchmanPriorityButton>
+          </Row>
         )}
       </Row>
     </Card>
   );
 };
 
+const WatchmenSublist: React.FC<{ watchmen: Watchman[] }> = ({ watchmen }) => (
+  <CardList>
+    {watchmen.map(watchman => (
+      <WatchmanItem watchman={watchman} key={watchman.id} />
+    ))}
+  </CardList>
+);
+
 const WatchmenList = () => {
   const watchmen = useSelector(selectWatchmen);
   const askingForGradeWatchman = useSelector(selectAskingForGradeWatchman);
+
+  const firstPriorityWatchmen = watchmen.filter(w => w.priority === 1);
+  const secondPriorityWatchmen = watchmen.filter(w => w.priority === 2);
+  const thirdPriorityWatchmen = watchmen.filter(w => w.priority === 3);
   return (
     <div>
       <h2>Админы</h2>
-      <CardList>
-        {watchmen.map(watchman => (
-          <WatchmanItem watchman={watchman} key={watchman.id} />
-        ))}
-        {askingForGradeWatchman && <PickGradeModal />}
-      </CardList>
+      <h3>Регулярные админы</h3>
+      <WatchmenSublist watchmen={firstPriorityWatchmen} />
+      <h3>Эпизодические админы</h3>
+      <WatchmenSublist watchmen={secondPriorityWatchmen} />
+      <h3>Не админы</h3>
+      <WatchmenSublist watchmen={thirdPriorityWatchmen} />
+      {askingForGradeWatchman && <PickGradeModal />}
     </div>
   );
 };

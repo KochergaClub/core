@@ -32,7 +32,7 @@ export const getGrades = async (api: API) => {
 export const patchWatchman = async (
   api: API,
   watchman: Watchman,
-  patch: { grade_id: number }
+  patch: { grade_id?: number; priority?: number }
 ) => {
   await api.call(`watchmen/watchmen/${watchman.id}`, 'PATCH', patch);
 };

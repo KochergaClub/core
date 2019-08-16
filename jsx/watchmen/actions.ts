@@ -106,6 +106,17 @@ export const pickWatchmanGrade = (
   dispatch(stopAskingForWatchmanGrade());
 };
 
+export const setWatchmanPriority = (
+  watchman: Watchman,
+  priority: number
+): AsyncAction<void> => async (dispatch, getState) => {
+  const api = selectAPI(getState());
+  await patchWatchman(api, watchman, {
+    priority,
+  });
+  await dispatch(loadWatchmen());
+};
+
 export type ActionTypes =
   | ReturnType<typeof updateShift>
   | ReturnType<typeof replaceSchedule>

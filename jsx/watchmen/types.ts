@@ -5,6 +5,7 @@ export interface Watchman {
   short_name: string;
   is_current: boolean;
   grade_id?: number;
+  priority: number;
 }
 
 export interface Shift {

@@ -12,13 +12,14 @@ from . import models
 class WatchmanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Watchman
-        fields = ('id', 'member_id', 'short_name', 'color', 'grade_id', 'is_current')
+        fields = ('id', 'member_id', 'short_name', 'color', 'grade_id', 'is_current', 'priority')
 
     member_id = serializers.CharField(source='member.pk', read_only=True)
     short_name = serializers.CharField(source='member.short_name', read_only=True)
     color = serializers.CharField(source='member.color', read_only=True)
     is_current = serializers.BooleanField(source='member.is_current', read_only=True)
     grade_id = serializers.IntegerField(source='grade.id', required=False)
+    priority = serializers.IntegerField()
 
     def update(self, instance, validated_data):
         logger.info(validated_data)
@@ -29,8 +30,10 @@ class WatchmanSerializer(serializers.ModelSerializer):
                 instance.grade = models.Grade.objects.get(pk=grade_id)
             except models.Watchman.DoesNotExist:
                 raise serializers.ValidationError(f"Grade {grade_id} not found")
-        else:
-            instance.grade = None
+
+        priority = validated_data.pop('priority', None)
+        if priority is not None:
+            instance.priority = priority
 
         instance.full_clean()
         instance.save()

@@ -31,6 +31,15 @@ export const selectWatchmen: Selector<State, Watchman[]> = createSelector(
   watchmen => watchmen.filter(w => w.is_current)
 );
 
+// only current and with priority 1 or 2
+export const selectActiveWatchmen: Selector<State, Watchman[]> = createSelector(
+  selectWatchmen,
+  watchmen =>
+    [...watchmen]
+      .filter(w => w.priority <= 2)
+      .sort((a, b) => a.priority - b.priority)
+);
+
 export const selectGrades = (state: State) => state.watchmen.grades;
 
 export const selectWatchmanById = (

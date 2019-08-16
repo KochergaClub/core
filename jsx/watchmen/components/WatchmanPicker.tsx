@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { Watchman } from '../types';
 
-import { selectWatchmen } from '../selectors';
+import { selectActiveWatchmen } from '../selectors';
 import BasicPicker from '~/components/Picker';
 
 interface Extra {
@@ -35,7 +35,7 @@ const WatchmanPicker: React.FC<Props> = ({
   pickedExtra,
   pickedWatchman,
 }) => {
-  const watchmen = useSelector(selectWatchmen) as Watchman[];
+  const watchmen = useSelector(selectActiveWatchmen) as Watchman[];
 
   const items = useMemo(() => {
     const watchmanItems: WatchmanItem[] = watchmen.map(watchman => ({
