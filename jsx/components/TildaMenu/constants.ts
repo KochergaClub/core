@@ -65,6 +65,11 @@ export const teamMenuItems: Item[] = [
     title: 'Прочее',
     items: [
       { link: '/team/analytics', title: 'Аналитика', mode: 'next' },
+      {
+        link: '/team/image-templater',
+        title: 'Генератор картинок',
+        mode: 'next',
+      },
       { link: '/admin/', title: 'Django-админка' },
       { link: '/wagtail/', title: 'Wagtail-админка' },
     ],

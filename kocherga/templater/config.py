@@ -26,11 +26,20 @@ class Schema:
 name2schema = {}
 
 name2schema['vk-image'] = Schema(
-    [Field(x) for x in ('header', 'title', 'date', 'time', 'background_image')]
+    [
+        Field('header'),
+        Field('title'),
+        Field('date', 'date'),
+        Field('time'),
+        Field('background_image'),
+    ]
 )
 
 name2schema['mailchimp'] = Schema(
-    [Field(x) for x in ('start_date', 'end_date')]
+    [
+        Field('start_date', 'date'),
+        Field('end_date', 'date'),
+    ]
 )
 
 name2schema['workshop-badge'] = Schema(

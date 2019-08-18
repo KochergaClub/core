@@ -23,4 +23,9 @@ export const configureStore = (
 export type State = ReturnType<typeof reducer>;
 export type Store = ReturnType<typeof configureStore>;
 export type Dispatch = ThunkDispatch<State, undefined, Action>;
-export type AsyncAction<T> = ThunkAction<Promise<T>, State, undefined, Action>;
+export type AsyncAction<T = void> = ThunkAction<
+  Promise<T>,
+  State,
+  undefined,
+  Action
+>;
