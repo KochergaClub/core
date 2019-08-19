@@ -77,9 +77,11 @@ const RatioSchedulePage: NextPage<Props> = props => {
           <PageHeader>
             <Column centered>
               <h1>
-                <A href="../">{training.name}</A>
+                <A href={`/team/ratio/training/${training.slug}`}>
+                  {training.name}
+                </A>
               </h1>
-              <A href={`/admin/ratio/training/${training.name}/change/`}>
+              <A href={`/admin/ratio/training/${training.id}/change/`}>
                 (Редактировать расписание)
               </A>
               <CenteredRow>
