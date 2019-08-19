@@ -53,3 +53,11 @@ name2schema['workshop-thin'] = Schema(
 name2schema['vk-cover'] = Schema(
     [Field('now_total', 'int')]
 )
+
+name2schema['integration'] = Schema(
+    [Field('date_text')]
+)
+
+name2schema['integration-fb'] = Schema(
+    [Field('date_text')]
+)

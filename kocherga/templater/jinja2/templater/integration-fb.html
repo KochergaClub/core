@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <base href="{{ url_root }}">
+    <style>
+     @font-face {
+       font-family: 'Intro';
+       src: local('Intro'), url('{{ static("fonts/intro.woff2") }}') format('woff2'), url('{{ static("fonts/intro.woff") }}') format('woff');
+     }
+     * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+     }
+
+     body {
+       font-family: 'Intro';
+       color: white;
+     }
+
+     main {
+       width: 837px;
+       height: 442px;
+       background-image: url("{{ static('images/integration-background.jpg') }}");
+       background-repeat: no-repeat;
+       background-size: cover;
+       background-position: center;
+       position: relative;
+
+       text-align: center;
+     }
+
+     .Darken {
+       position: absolute;
+       width: 100%;
+       height: 100%;
+       background: radial-gradient(hsla(0, 0%, 0%, 30%), hsla(0, 0%, 0%, 70%));
+       mix-blend-mode: multiply;
+     }
+
+     .Texts {
+       z-align: 1;
+       position:relative;
+       display: flex;
+       flex-direction: column;
+       justify-content: center;
+       height: 100%;
+     }
+
+     .Pre-Title {
+       font-size: 40px;
+       line-height: 3;
+     }
+
+     .Title {
+       font-size: 100px;
+     }
+
+     .Dates {
+       line-height: 4;
+       font-size: 32px;
+     }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="Darken"></div>
+      <div class="Texts">
+        <div class="Pre-Title">Однодневный тренинг</div>
+        <div class="Title">Интеграция</div>
+        <div class="Dates">{{ date_text }}</div>
+      </div>
+    </main>
+  </body>
+</html>
+<!-- width=837 height=442 -->

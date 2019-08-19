@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'kocherga.blog',
     'kocherga.email',
     'kocherga.slack',
+    'kocherga.templater',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',

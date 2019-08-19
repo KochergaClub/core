@@ -31,9 +31,7 @@ const state2link = ({
   name: string;
   state: FormState;
   type: 'html' | 'png';
-}) =>
-  `https://kocherga.club/api/templater/${name}/${type}` +
-  jsonToQueryString(state);
+}) => `/api/templater/${name}/${type}` + jsonToQueryString(state);
 
 const template2initialValues = (template: ImageTemplate) => {
   const result: { [k: string]: string } = {};

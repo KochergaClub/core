@@ -72,7 +72,7 @@ KOCHERGA_TELEGRAM = {
     },
 }
 
-KOCHERGA_API_ROOT = 'https://api.kocherga.club'
+KOCHERGA_API_ROOT = 'http://localhost:8000'
 KOCHERGA_WEBSITE = 'https://yudkowsky.cult'
 
 GDRIVE_WATCHMEN_FOLDER = '14QJy4SLl-TY-DwyPWktNcCIple75Ppe_'
