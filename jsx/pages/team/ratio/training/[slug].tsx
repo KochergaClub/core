@@ -102,7 +102,7 @@ const RatioTrainingPage: NextPage<Props> = props => {
             </p>
 
             <section>
-              <A href={`/team/ratio/${store.training.slug}/schedule/`}>
+              <A href={`/team/ratio/training/${store.training.slug}/schedule`}>
                 Расписание
               </A>
             </section>
