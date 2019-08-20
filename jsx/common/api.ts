@@ -48,12 +48,7 @@ export class API {
     this.wagtailAPIToken = props.wagtailAPIToken || '';
   }
 
-  call = async (
-    path: string,
-    method: string,
-    payload?: object,
-    expectJSON: boolean = true
-  ) => {
+  getHeaders = (): { [header: string]: string } => {
     const headers: { [header: string]: string } = {
       'Content-Type': 'application/json',
       'X-CSRFToken': this.csrfToken,
@@ -64,9 +59,17 @@ export class API {
     if (this.realHost) {
       headers['X-Forwarded-Host'] = this.realHost;
     }
-    if (path.startsWith('wagtail/')) {
-      headers['X-WagtailAPIToken'] = this.wagtailAPIToken;
-    }
+    return headers;
+  };
+
+  call = async (
+    path: string,
+    method: string,
+    payload?: object,
+    expectJSON: boolean = true
+  ) => {
+    const headers = this.getHeaders();
+
     const params: RequestInit = {
       method,
       headers,

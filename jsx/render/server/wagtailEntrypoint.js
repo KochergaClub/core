@@ -1,7 +1,13 @@
 const express = require('express');
-const { parse } = require('url');
 
-const wagtailRoutes = ['/blog', '/blog/*'];
+const wagtailRoutes = [
+  '/blog',
+  '/blog/*',
+  '/team/ratio/workbooks',
+  '/team/ratio/workbooks/*',
+  '/team/ratio/sections',
+  '/team/ratio/sections/*',
+];
 
 exports.default = nextApp => {
   const router = express.Router();

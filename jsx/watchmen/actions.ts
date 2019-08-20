@@ -51,7 +51,7 @@ export const setDatesWindow = (from_date: Date, to_date: Date) => ({
   ],
 });
 
-export const replaceWatchmen = (watchmen: Watchman[]) => ({
+const replaceWatchmen = (watchmen: Watchman[]) => ({
   type: WATCHMEN_REPLACE as typeof WATCHMEN_REPLACE,
   payload: watchmen,
 });
@@ -65,7 +65,7 @@ export const loadWatchmen = (): AsyncAction<void> => async (
   dispatch(replaceWatchmen(watchmen));
 };
 
-export const replaceGrades = (grades: Grade[]) => ({
+const replaceGrades = (grades: Grade[]) => ({
   type: GRADES_REPLACE as typeof GRADES_REPLACE,
   payload: grades,
 });

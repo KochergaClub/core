@@ -78,11 +78,7 @@ ProxyWagtailPage.getInitialProps = async context => {
     `${api.base}/api/wagtail/pages/find/?html_path=${asPath}`,
     {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': api.csrfToken,
-        'X-Forwarded-Host': api.realHost,
-      },
+      headers: api.getHeaders(),
       redirect: 'manual',
     }
   );
