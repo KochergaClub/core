@@ -40,7 +40,6 @@ interface Props {
   training: Training;
   trainers: Trainer[];
   schedule: ActivityType[];
-  children?: React.ReactNode;
 }
 
 const RatioSchedulePage: NextPage<Props> = props => {
