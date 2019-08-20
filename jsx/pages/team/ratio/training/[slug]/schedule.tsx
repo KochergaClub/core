@@ -71,7 +71,7 @@ const RatioSchedulePage: NextPage<Props> = props => {
 
   return (
     <ScheduleContext.Provider value={{ dispatch, trainers }}>
-      <Page title={training.name} team>
+      <Page title={`Расписание | ${training.name}`} team>
         <Page.Main>
           <PageHeader>
             <Column centered>
