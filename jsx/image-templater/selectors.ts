@@ -1,13 +1,23 @@
-import { Selector } from 'reselect';
+import slice from './slice';
+
+import { createSelector, Selector } from 'reselect';
 
 import { State } from '~/redux/store';
 
 import { ImageTemplate } from './types';
 
-export const selectTemplates: Selector<State, ImageTemplate[]> = state =>
-  state.imageTemplater.templates;
+const selectSlice: Selector<State, ReturnType<typeof slice.reducer>> = state =>
+  state.imageTemplater;
+
+export const selectTemplates: Selector<State, ImageTemplate[]> = createSelector(
+  selectSlice,
+  slice.selectors.selectAll
+);
 
 export const selectViewingTemplate: Selector<
   State,
   ImageTemplate | undefined
-> = state => state.imageTemplater.viewingTemplate;
+> = createSelector(
+  selectSlice,
+  slice.selectors.selectViewing
+);
