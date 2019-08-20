@@ -26,6 +26,7 @@ export interface ListSlice<Item> {
     selectAll: (state: ListState<Item>) => Item[];
     selectViewing: (state: ListState<Item>) => Item | undefined;
   };
+  initialState: ListState<Item>;
 }
 
 export interface ListSliceProps<Item> {
@@ -43,10 +44,9 @@ export const createListSlice = <Item>(
   const replaceAllActionType = props.actionPrefix + '_REPLACE_ALL';
   const setAndViewActionType = props.actionPrefix + '_SET_AND_VIEW';
 
-  const reducer = (
-    state: State = { byId: {}, ids: [], viewingId: undefined },
-    action: AnyAction
-  ): State => {
+  const initialState: State = { byId: {}, ids: [], viewingId: undefined };
+
+  const reducer = (state: State = initialState, action: AnyAction): State => {
     if (action.type === replaceAllActionType) {
       const byId: { [k: string]: Item } = {};
       const payload = (action as ReplaceAllAction<Item>).payload;
@@ -100,5 +100,6 @@ export const createListSlice = <Item>(
       selectAll,
       selectViewing,
     },
+    initialState,
   };
 };

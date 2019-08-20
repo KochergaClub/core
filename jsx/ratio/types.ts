@@ -9,6 +9,7 @@ export interface Training {
 
 export interface Ticket {
   id: number;
+  training: number;
   email: string;
   first_name: string;
   last_name: string;
