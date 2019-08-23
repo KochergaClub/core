@@ -1,8 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import kocherga.wiki
 from django.contrib.auth import get_user_model
+from rest_framework.exceptions import APIException
+
+import kocherga.wiki
 import kocherga.cm.tools
 import kocherga.cm.models
 import kocherga.slack.client
@@ -33,10 +35,16 @@ def find_member_by_email(email):
 
 def add_watchman(short_name, full_name, email, password):
     if not email.endswith('@gmail.com'):
-        raise Exception("Only @gmail.com emails are supported")
+        raise APIException("Only @gmail.com emails are supported")
 
     # Look up CM customer early to avoid semi-broken outcome when the CM customer doesn't exist.
-    cm_customer = kocherga.cm.models.Customer.objects.get(email=email)
+    try:
+        cm_customer = kocherga.cm.models.Customer.objects.get(email=email)
+    except kocherga.cm.models.Customer.DoesNotExist:
+        raise APIException(
+            f"Cafe Manager customer with email {email} not found, please add the customer first"
+            f"(and wait ~30 minutes for the sync)"
+        )
 
     logger.info(f'Add watchman {full_name} with email {email}')
 

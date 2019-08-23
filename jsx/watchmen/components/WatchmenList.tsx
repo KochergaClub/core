@@ -21,6 +21,7 @@ import {
 import { Watchman } from '../types';
 
 import PickGradeModal from './PickGradeModal';
+import AddWatchman from './AddWatchman';
 
 const priority2name: { [k: number]: string } = {
   1: 'Регулярный админ',
@@ -119,13 +120,18 @@ const WatchmenSublist: React.FC<{ watchmen: Watchman[] }> = ({ watchmen }) => (
 const WatchmenList = () => {
   const watchmen = useSelector(selectWatchmen);
   const askingForGradeWatchman = useSelector(selectAskingForGradeWatchman);
+  const [canManage] = usePermissions(['watchmen.manage']);
 
   const firstPriorityWatchmen = watchmen.filter(w => w.priority === 1);
   const secondPriorityWatchmen = watchmen.filter(w => w.priority === 2);
   const thirdPriorityWatchmen = watchmen.filter(w => w.priority === 3);
+
   return (
     <div>
-      <h2>Админы</h2>
+      <Row>
+        <h2>Админы</h2>
+        {canManage && <AddWatchman />}
+      </Row>
       <h3>Регулярные админы</h3>
       <WatchmenSublist watchmen={firstPriorityWatchmen} />
       <h3>Эпизодические админы</h3>

@@ -5,11 +5,17 @@ from rest_framework.response import Response
 
 from .models import Member
 from .serializers import MemberSerializer
+import kocherga.staff.tools
 
 
 class IsStaffManager(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.has_perm('staff.manage')
+
+
+class IsWatchmenManager(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('watchmen.manage')
 
 
 class MemberViewSet(viewsets.ReadOnlyModelViewSet):
@@ -27,4 +33,15 @@ class MemberViewSet(viewsets.ReadOnlyModelViewSet):
     def fire(self, request, pk=None):
         member = self.get_object()
         member.fire()
+        return Response({'status': 'ok'})
+
+    @action(detail=False, methods=['post'], permission_classes=[IsWatchmenManager])
+    def add_watchman(self, request, pk=None):
+        kocherga.staff.tools.add_watchman(
+            short_name=request.data['short_name'],
+            full_name=request.data['full_name'],
+            email=request.data['email'],
+            password=request.data['password'],
+        )
+
         return Response({'status': 'ok'})
