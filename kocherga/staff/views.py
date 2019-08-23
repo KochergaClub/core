@@ -42,6 +42,8 @@ class MemberViewSet(viewsets.ReadOnlyModelViewSet):
             full_name=request.data['full_name'],
             email=request.data['email'],
             password=request.data['password'],
+            vk=request.data['vk'],
+            gender=request.data['gender'],
         )
 
         return Response({'status': 'ok'})

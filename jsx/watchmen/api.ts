@@ -37,14 +37,15 @@ export const patchWatchman = async (
   await api.call(`watchmen/watchmen/${watchman.id}`, 'PATCH', patch);
 };
 
-export const addWatchman = async (
-  api: API,
-  props: {
-    full_name: string;
-    short_name: string;
-    email: string;
-    password: string;
-  }
-) => {
+export interface AddWatchmanProps {
+  full_name: string;
+  short_name: string;
+  email: string;
+  password: string;
+  vk: string;
+  gender: 'MALE' | 'FEMALE';
+}
+
+export const addWatchman = async (api: API, props: AddWatchmanProps) => {
   await api.call(`staff/member/add_watchman`, 'POST', props);
 };

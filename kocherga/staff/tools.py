@@ -2,12 +2,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from rest_framework.exceptions import APIException
 
 import kocherga.wiki
 import kocherga.cm.tools
 import kocherga.cm.models
 import kocherga.slack.client
+import kocherga.watchmen.models
 
 from .models import Member
 
@@ -33,7 +36,7 @@ def find_member_by_email(email):
     return None
 
 
-def add_watchman(short_name, full_name, email, password):
+def add_watchman(short_name, full_name, email, password, vk, gender):
     if not email.endswith('@gmail.com'):
         raise APIException("Only @gmail.com emails are supported")
 
@@ -62,6 +65,7 @@ def add_watchman(short_name, full_name, email, password):
     user.save()
 
     logger.info(f'Creating Member')
+    # FIXME - serializer for validation
     member = Member.objects.create(
         short_name=short_name,
         full_name=full_name,
@@ -70,6 +74,8 @@ def add_watchman(short_name, full_name, email, password):
         payment_type='CASH',
         user=user,
         cm_customer=cm_customer,
+        vk=vk,
+        gender=gender,
     )
 
     logger.info(f'Creating wiki account')
@@ -102,12 +108,37 @@ def add_watchman(short_name, full_name, email, password):
     )
 
     logger.info(f'Adding to Cafe Manager')
-    kocherga.cm.tools.add_manager(
+    cm_user = kocherga.cm.tools.add_manager(
         login=email.split('@')[0],
         name=full_name,
         password=password,
         email=email,
     )
+    member.cm_login = cm_user.login
+    member.save()
 
     logger.info(f'Granting Google Drive and Calendar permissions')
     member.grant_google_permissions()
+
+    kocherga.watchmen.models.Watchman.objects.create(member=member)
+
+    logger.info("Success! Time to send notifications")
+    message = render_to_string('ratio/email/new_watchman.md', {
+        'full_name': full_name,
+        'password': password,
+        'cm_login': cm_user.login,
+    })
+    send_mail(
+        subject='Доступы в Кочергу',
+        from_email='Кочерга <info@kocherga-club.ru>',
+        message=message,
+        recipient_list=[email],
+    )
+
+    kocherga.slack.client.client().api_call(
+        "chat.postMessage",
+        {
+            'text': f'Новый админ: {short_name} / {full_name} / {email}',
+            'channel': '#space_management',
+        }
+    )

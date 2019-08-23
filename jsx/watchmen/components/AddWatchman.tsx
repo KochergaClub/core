@@ -21,7 +21,7 @@ import {
   Input,
 } from '@kocherga/frontkit';
 
-import { addWatchman } from '../api';
+import { addWatchman, AddWatchmanProps } from '../api';
 import { loadWatchmen } from '../actions';
 
 import { useAPI } from '~/common/hooks';
@@ -48,22 +48,19 @@ const LabeledField: React.FC<{
   </div>
 );
 
-interface FormValues {
-  full_name: string;
-  short_name: string;
-  email: string;
-  password: string;
-}
-
 const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
   const api = useAPI();
   const dispatch = useDispatch();
 
   const submit = useCallback(
-    async (values: FormValues, actions: FormikActions<FormValues>) => {
+    async (
+      values: AddWatchmanProps,
+      actions: FormikActions<AddWatchmanProps>
+    ) => {
       await addWatchman(api, values);
       await dispatch(loadWatchmen());
       actions.setSubmitting(false);
+      close();
     },
     [close]
   );
@@ -73,11 +70,13 @@ const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
     return errors;
   };
 
-  const initialValues: FormValues = {
+  const initialValues: AddWatchmanProps = {
     full_name: '',
     short_name: '',
     email: '',
     password: '',
+    vk: '',
+    gender: 'FEMALE',
   };
 
   return (
@@ -96,6 +95,12 @@ const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
                 <LabeledField name="short_name" />
                 <LabeledField name="full_name" />
                 <LabeledField name="password" type="password" />
+                <LabeledField name="vk" />
+                <Label>Пол</Label>
+                <Field component="select" name="gender">
+                  <option value="MALE">М</option>
+                  <option value="FEMALE">Ж</option>
+                </Field>
               </Column>
             </Modal.Body>
             <Modal.Footer>
