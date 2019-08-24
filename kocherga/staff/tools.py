@@ -123,7 +123,7 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
     kocherga.watchmen.models.Watchman.objects.create(member=member)
 
     logger.info("Success! Time to send notifications")
-    message = render_to_string('ratio/email/new_watchman.md', {
+    message = render_to_string('staff/email/new_watchman.md', {
         'full_name': full_name,
         'password': password,
         'cm_login': cm_user.login,
