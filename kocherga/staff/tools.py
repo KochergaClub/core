@@ -100,12 +100,14 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
     sc = kocherga.slack.client.legacy_token_client()
 
     # undocumented api - see https://github.com/ErikKalkoken/slackApiDoc/blob/master/users.admin.invite.md
-    sc.api_call(
+    sc_response = sc.api_call(
         'users.admin.invite',
         email=email,
         first_name=full_name.split(' ')[0],
         last_name=full_name.split(' ')[-1],
     )
+    if not sc_response["ok"]:
+        raise APIException("Couldn't invite to Slack: " + sc_response.get('error', 'unknown error'))
 
     logger.info(f'Adding to Cafe Manager')
     cm_user = kocherga.cm.tools.add_manager(
