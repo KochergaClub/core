@@ -2,12 +2,16 @@ import React, { useCallback, useState } from 'react';
 
 import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
+import {
+  useAPI,
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '~/common/hooks';
 
 import { FormField } from './types';
 import GenericForm from './GenericForm';
 
-import ButtonWithModal from './ButtonWithModal';
+import ButtonWithModal from '../ButtonWithModal';
 
 interface Props {
   apiEndpoint: string;
@@ -45,12 +49,17 @@ const CreateModal = ({
     }
   }, [api, fields, apiEndpoint, onCreate]);
 
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({
+    onEscape: close,
+  });
+
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={close}>
         Добавить{displayName && ': ' + displayName}
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body ref={focus} {...hotkeys}>
         <GenericForm fields={fields} onChange={setFields} />
       </Modal.Body>
       <Modal.Footer>

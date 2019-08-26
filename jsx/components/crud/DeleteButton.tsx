@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 
 import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
-import ButtonWithModal from './ButtonWithModal';
+import ButtonWithModal from '../ButtonWithModal';
 
 import { useAPI } from '~/common/hooks';
 

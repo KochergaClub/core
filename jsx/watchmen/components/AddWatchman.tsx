@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -21,10 +21,16 @@ import {
   Input,
 } from '@kocherga/frontkit';
 
+import ButtonWithModal from '~/components/ButtonWithModal';
+
 import { addWatchman, AddWatchmanProps } from '../api';
 import { loadWatchmen } from '../actions';
 
-import { useAPI } from '~/common/hooks';
+import {
+  useAPI,
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '~/common/hooks';
 
 // FIXME - copy-pasted from ViewingTemplateScreen
 const ErrorLabel = styled.div`
@@ -79,6 +85,11 @@ const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
     gender: 'FEMALE',
   };
 
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({
+    onEscape: close,
+  });
+
   return (
     <Modal isOpen={true}>
       <Formik
@@ -89,7 +100,7 @@ const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
         {({ isSubmitting }) => (
           <Form>
             <Modal.Header toggle={close}>Создать админа</Modal.Header>
-            <Modal.Body>
+            <Modal.Body ref={focus} {...hotkeys}>
               <Column>
                 <LabeledField name="email" type="email" />
                 <LabeledField name="short_name" />
@@ -121,19 +132,12 @@ const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
   );
 };
 
-const AddWatchman: React.FC = () => {
-  const [addingWatchman, setAddingWatchman] = useState(false);
-
-  return (
-    <div>
-      <Button small onClick={() => setAddingWatchman(true)}>
-        Добавить
-      </Button>
-      {addingWatchman && (
-        <AddWatchmanModal close={() => setAddingWatchman(false)} />
-      )}
-    </div>
-  );
-};
+const AddWatchman: React.FC = () => (
+  <div>
+    <ButtonWithModal title="Добавить">
+      {({ close }) => <AddWatchmanModal close={close} />}
+    </ButtonWithModal>
+  </div>
+);
 
 export default AddWatchman;
