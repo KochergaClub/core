@@ -256,10 +256,13 @@ class AnnounceSession:
                 raise Exception("unknown part encountered while parsing: " + str(part))
 
     async def configure_invitations(self):
-        invite_checkbox = await self.page.J(
-            "[role=dialog] .uiOverlayFooter .uiOverlayFooterMessage .uiInputLabelCheckbox"
-        )
-        await invite_checkbox.click()  # disable invites (hopefully... should be check `checked` state first?)
+        try:
+            invite_checkbox = await self.page.J(
+                "[role=dialog] .uiOverlayFooter .uiOverlayFooterMessage .uiInputLabelCheckbox"
+            )
+            await invite_checkbox.click()  # disable invites (hopefully... should be check `checked` state first?)
+        except Exception:
+            pass  # whatever
 
     async def sign_in(self):
         page = self.page
