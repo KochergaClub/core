@@ -1,5 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.dispatch import receiver
+from django.core.mail import send_mail
+from django.db.models.signals import post_save
+from django.template.loader import render_to_string
 
 import hashlib
 
@@ -61,3 +65,18 @@ class Ticket(models.Model):
     def uid(self):
         SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]
+
+
+@receiver(post_save, sender=Ticket)
+def first_email(sender, instance, created, **kwargs):
+    # TODO - notify consumer for async
+    message = render_to_string('ratio/email/new_ticket.md', {
+        "ticket": instance,
+        "training": instance.training,
+    })
+    send_mail(
+        subject='Регистрация на событие',
+        from_email='Кочерга <workshop@kocherga-club.ru>',
+        message=message,
+        recipient_list=[instance.email],
+    )
