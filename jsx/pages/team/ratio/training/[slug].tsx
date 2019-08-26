@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column, Row } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import { selectUser } from '~/core/selectors';
@@ -100,16 +100,22 @@ const RatioTrainingPage: NextPage<Props> = () => {
 
         <section>
           <h2>
-            Участники:{' '}
-            <A href={`/admin/ratio/ticket/?training__id__exact=${training.id}`}>
-              {tickets.length}
-            </A>
+            <Row>
+              <div>Участники:</div>
+              <A
+                href={`/admin/ratio/ticket/?training__id__exact=${training.id}`}
+              >
+                {tickets.length}
+              </A>
+              <CreateTicketButton
+                training_id={training.id}
+                onCreate={onCreateTicket}
+              />
+            </Row>
           </h2>
-          <TicketList tickets={tickets} />
-          <CreateTicketButton
-            training_id={training.id}
-            onCreate={onCreateTicket}
-          />
+          <Column stretch>
+            <TicketList tickets={tickets} />
+          </Column>
         </section>
 
         <Column>

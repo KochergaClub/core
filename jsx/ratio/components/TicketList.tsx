@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Row } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
 import Badge from '~/components/Badge';
 import AsyncButton from '~/components/AsyncButton';
+
+import Card, { CardList } from '~/components/Card';
 
 import { selectKkmPassword } from '~/kkm/selectors';
 
@@ -35,29 +37,32 @@ const FiscalizeButton = ({ ticket }: { ticket: Ticket }) => {
 
 const TicketItem = ({ ticket }: { ticket: Ticket }) => {
   return (
-    <li>
-      <Row>
-        <span>
-          {ticket.first_name} {ticket.last_name} ({ticket.email})
-        </span>
+    <Card>
+      <Column>
+        <div>
+          <strong>
+            {ticket.first_name} {ticket.last_name}
+          </strong>
+        </div>
+        <div>{ticket.email}</div>
         {ticket.status === 'canceled' && <CanceledBadge />}
         {ticket.fiscalization_status === 'todo' ? (
           <FiscalizeButton ticket={ticket} />
         ) : (
           <Badge>{ticket.fiscalization_status}</Badge>
         )}
-      </Row>
-    </li>
+      </Column>
+    </Card>
   );
 };
 
 const TicketList = ({ tickets }: { tickets: Ticket[] }) => {
   return (
-    <ul>
+    <CardList>
       {tickets.map(ticket => (
         <TicketItem key={ticket.email} ticket={ticket} />
       ))}
-    </ul>
+    </CardList>
   );
 };
 
