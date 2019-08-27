@@ -1,6 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
+import { Formik, Form, Field, FormikActions, FieldProps } from 'formik';
+
+import { Row, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
 import {
   useAPI,
@@ -9,9 +11,9 @@ import {
 } from '~/common/hooks';
 
 import { FormField } from './types';
-import GenericForm from './GenericForm';
 
 import ButtonWithModal from '../ButtonWithModal';
+import LabeledFormField from '../LabeledFormField';
 
 interface Props {
   apiEndpoint: string;
@@ -24,30 +26,81 @@ interface ModalProps extends Props {
   close: () => void;
 }
 
+interface FieldInputProps {
+  field: FormField;
+}
+
+const FieldInput: React.FC<FieldInputProps> = ({ field }) => {
+  if (field.readonly) {
+    return <div>{field.value}</div>;
+  }
+  switch (field.type) {
+    case 'string':
+      return <LabeledFormField name={field.name} title={field.name} />;
+    case 'number':
+      return (
+        <LabeledFormField name={field.name} title={field.name} type="number" />
+      );
+    case 'choice':
+      return (
+        <div>
+          <Field
+            name={field.name}
+            render={({ field: formikField }: FieldProps<any>) => {
+              return (
+                <div>
+                  {field.options.map(option => (
+                    <Row key={option}>
+                      <input
+                        type="radio"
+                        {...formikField}
+                        checked={formikField.value === option}
+                        value={option}
+                      />
+                      <span>{option}</span>
+                    </Row>
+                  ))}
+                </div>
+              );
+            }}
+          />
+        </div>
+      );
+  }
+};
+
 const CreateModal = ({
-  fields: originalFields,
+  fields,
   apiEndpoint,
   close,
   displayName,
   onCreate,
 }: ModalProps) => {
   const api = useAPI();
-  const [fields, setFields] = useState(originalFields);
-  const [creating, setCreating] = useState(false);
 
-  const create = useCallback(async () => {
-    setCreating(true);
-
-    const values: { [k: string]: string | number | undefined } = {};
-    fields.forEach(field => {
-      values[field.name] = field.value;
-    });
-    await api.call(apiEndpoint, 'POST', values);
-    close();
-    if (onCreate) {
-      onCreate();
+  const initialValues = useMemo(() => {
+    const result: { [k: string]: string | number } = {};
+    for (const field of fields) {
+      result[field.name] = field.value || '';
     }
-  }, [api, fields, apiEndpoint, onCreate]);
+    return result;
+  }, [fields]);
+
+  const submit = useCallback(
+    async (values: any, actions: FormikActions<any>) => {
+      const postValues = { ...values };
+      for (const field of fields.filter(f => f.readonly)) {
+        postValues[field.name] = field.value || '';
+      }
+      await api.call(apiEndpoint, 'POST', postValues);
+      actions.setSubmitting(false);
+      close();
+      if (onCreate) {
+        onCreate();
+      }
+    },
+    [api, fields, apiEndpoint, onCreate]
+  );
 
   const focus = useFocusOnFirstModalRender();
   const hotkeys = useCommonHotkeys({
@@ -59,16 +112,28 @@ const CreateModal = ({
       <Modal.Header toggle={close}>
         Добавить{displayName && ': ' + displayName}
       </Modal.Header>
-      <Modal.Body ref={focus} {...hotkeys}>
-        <GenericForm fields={fields} onChange={setFields} />
-      </Modal.Body>
-      <Modal.Footer>
-        <ControlsFooter>
-          <Button onClick={create} loading={creating} disabled={creating}>
-            Добавить
-          </Button>
-        </ControlsFooter>
-      </Modal.Footer>
+      <Formik initialValues={initialValues} onSubmit={submit}>
+        {({ isSubmitting }) => (
+          <Form>
+            <Modal.Body ref={focus} {...hotkeys}>
+              {fields.map(field => (
+                <FieldInput key={field.name} field={field} />
+              ))}
+            </Modal.Body>
+            <Modal.Footer>
+              <ControlsFooter>
+                <Button
+                  type="submit"
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                >
+                  Добавить
+                </Button>
+              </ControlsFooter>
+            </Modal.Footer>
+          </Form>
+        )}
+      </Formik>
     </Modal>
   );
 };

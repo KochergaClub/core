@@ -1,27 +1,18 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
+
+import { Formik, Field, Form, FormikActions } from 'formik';
 
 import {
-  Formik,
-  Field,
-  FieldProps,
-  Form,
-  ErrorMessage,
-  FormikActions,
-} from 'formik';
-
-import {
-  colors,
   Button,
   Modal,
   ControlsFooter,
   Column,
   Label,
-  Input,
 } from '@kocherga/frontkit';
 
 import ButtonWithModal from '~/components/ButtonWithModal';
+import LabeledFormField from '~/components/LabeledFormField';
 
 import { addWatchman, AddWatchmanProps } from '../api';
 import { loadWatchmen } from '../actions';
@@ -31,28 +22,6 @@ import {
   useFocusOnFirstModalRender,
   useCommonHotkeys,
 } from '~/common/hooks';
-
-// FIXME - copy-pasted from ViewingTemplateScreen
-const ErrorLabel = styled.div`
-  color: ${colors.accent[900]};
-`;
-
-const LabeledField: React.FC<{
-  name: string;
-  title?: string;
-  type?: string;
-}> = ({ name, title, type }) => (
-  <div>
-    <Label>{title || name}</Label>
-    <Field
-      name={name}
-      render={({ field }: FieldProps<any>) => (
-        <Input {...field} type={type || 'text'} />
-      )}
-    />
-    <ErrorMessage name={name} component={ErrorLabel} />
-  </div>
-);
 
 const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
   const api = useAPI();
@@ -102,11 +71,11 @@ const AddWatchmanModal: React.FC<{ close: () => void }> = ({ close }) => {
             <Modal.Header toggle={close}>Создать админа</Modal.Header>
             <Modal.Body ref={focus} {...hotkeys}>
               <Column>
-                <LabeledField name="email" type="email" />
-                <LabeledField name="short_name" />
-                <LabeledField name="full_name" />
-                <LabeledField name="password" type="password" />
-                <LabeledField name="vk" />
+                <LabeledFormField name="email" type="email" />
+                <LabeledFormField name="short_name" />
+                <LabeledFormField name="full_name" />
+                <LabeledFormField name="password" type="password" />
+                <LabeledFormField name="vk" />
                 <Label>Пол</Label>
                 <Field component="select" name="gender">
                   <option value="MALE">М</option>
