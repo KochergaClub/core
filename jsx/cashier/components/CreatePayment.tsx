@@ -1,33 +1,43 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useAPI, usePermissions } from '~/common/hooks';
-import AsyncButton from '~/components/AsyncButton';
+import { usePermissions } from '~/common/hooks';
+import ModalFormButton from '~/components/crud/ModalFormButton';
+import { FormField } from '~/components/crud/types';
 
-import { createPayment } from '../api';
-import { loadPayments } from '../actions';
+import { addPayment } from '../actions';
+import { CreatePaymentParams } from '../types';
+
+const fields: FormField[] = [
+  { name: 'amount', type: 'number' },
+  { name: 'comment', type: 'string' },
+  { name: 'whom', type: 'email' },
+];
 
 const CreatePayment = () => {
-  const api = useAPI();
   const dispatch = useDispatch();
   const [canCreate] = usePermissions(['cashier.create']);
 
-  const createTestPayment = useCallback(async () => {
-    await createPayment(api, {
-      amount: 5000,
-      comment: 'test comment',
-      whom: 'me@berekuk.ru',
-    });
-    await dispatch(loadPayments());
-  }, [api]);
+  const postCb = useCallback(
+    async (values: CreatePaymentParams) => {
+      await dispatch(addPayment(values));
+    },
+    [dispatch, addPayment]
+  );
 
   if (!canCreate) {
     return null;
   }
 
   return (
-    <AsyncButton act={createTestPayment}>Создать тестовую выплату</AsyncButton>
-  ); // TODO - implement real payments
+    <ModalFormButton
+      post={postCb}
+      buttonName="Создать выплату"
+      modalButtonName="Создать"
+      modalTitle="Создать выплату"
+      fields={fields}
+    />
+  );
 };
 
 export default CreatePayment;

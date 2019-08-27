@@ -2,6 +2,7 @@ export interface Payment {
   id: number;
   amount: number;
   whom: string;
+  comment: string;
   is_redeemed: boolean;
 }
 

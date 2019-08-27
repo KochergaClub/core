@@ -21,17 +21,18 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
 
   return (
     <Card>
-      {payment.amount} руб. &rarr; {payment.whom}
-      {canRedeem
-        ? payment.is_redeemed || (
-            <ActionButton
-              path={`cashier/payment/${payment.id}/redeem`}
-              asyncOnSuccess={reload}
-            >
-              Выплачено
-            </ActionButton>
-          )
-        : null}
+      <div>
+        {payment.amount} руб. &rarr; {payment.whom}
+      </div>
+      {canRedeem && !payment.is_redeemed ? (
+        <ActionButton
+          path={`cashier/payment/${payment.id}/redeem`}
+          asyncOnSuccess={reload}
+        >
+          Выплачено
+        </ActionButton>
+      ) : null}
+      {payment.comment ? <div>{payment.comment}</div> : null}
     </Card>
   );
 };
