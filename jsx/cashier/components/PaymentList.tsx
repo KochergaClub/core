@@ -24,6 +24,7 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
       <div>
         {payment.amount} руб. &rarr; {payment.whom}
       </div>
+      {payment.comment ? <div>{payment.comment}</div> : null}
       {canRedeem && !payment.is_redeemed ? (
         <ActionButton
           path={`cashier/payment/${payment.id}/redeem`}
@@ -32,7 +33,6 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
           Выплачено
         </ActionButton>
       ) : null}
-      {payment.comment ? <div>{payment.comment}</div> : null}
     </Card>
   );
 };
