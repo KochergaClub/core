@@ -22,7 +22,7 @@ class Ticket(models.Model):
         ('normal', 'Участник'),
         ('canceled', 'Отказ'),  # отказ, перенос, замена, неявка
     ))
-    ticket_type = models.CharField('Тип билета', max_length=40, choices=(
+    ticket_type = models.CharField('Тип билета', max_length=40, default='normal', choices=(
         ('normal', 'Обычный'),
         ('stipend', 'Стипендия'),
         ('staff', 'Стафф'),
@@ -30,7 +30,7 @@ class Ticket(models.Model):
         ('carry-over', 'Перенос (с прошлого мероприятия)'),
     ))
 
-    payment_type = models.CharField('Вид оплаты', max_length=40, choices=(
+    payment_type = models.CharField('Вид оплаты', max_length=40, default='website', choices=(
         ('none', '-'),
         ('timepad', 'Timepad'),
         ('website', 'Сайт'),

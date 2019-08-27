@@ -51,6 +51,19 @@ const CreateTicketButton = ({
       name: 'fiscalization_status',
       type: 'choice',
       options: ['todo', 'fiscalized'],
+      value: 'todo',
+    },
+    {
+      name: 'ticket_type',
+      type: 'choice',
+      options: ['normal', 'stipend', 'staff'],
+      value: 'normal',
+    },
+    {
+      name: 'payment_type',
+      type: 'choice',
+      options: ['website', 'invoice', 'transfer'],
+      value: 'website',
     },
   ];
 

@@ -13,7 +13,10 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ticket
         fields = (
-            'id', 'training', 'email', 'first_name', 'last_name', 'status', 'payment_amount', 'fiscalization_status'
+            'id',
+            'training',
+            'email', 'first_name', 'last_name',
+            'status', 'payment_amount', 'fiscalization_status', 'ticket_type', 'payment_type',
         )
 
 
