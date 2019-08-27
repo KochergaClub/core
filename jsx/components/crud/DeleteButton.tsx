@@ -4,7 +4,11 @@ import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
 import ButtonWithModal from '../ButtonWithModal';
 
-import { useAPI } from '~/common/hooks';
+import {
+  useAPI,
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '~/common/hooks';
 
 interface Props {
   endpoint: string;
@@ -33,10 +37,16 @@ const DeleteModal: React.FC<ModalProps> = ({
     window.location.href = redirectOnDelete;
   }, [api, close, endpoint, id]);
 
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({
+    onEscape: close,
+    onEnter: act,
+  });
+
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={close}>Подтвердите действие</Modal.Header>
-      <Modal.Footer>
+      <Modal.Footer ref={focus} {...hotkeys}>
         <ControlsFooter>
           <Button onClick={close}>Отмена</Button>
           <Button
