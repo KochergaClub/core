@@ -9,6 +9,7 @@ import myReducer from '~/my/reducer';
 import imageTemplaterReducer from '~/image-templater/reducer';
 import ratioReducer from '~/ratio/reducer';
 import kkmReducer from '~/kkm/redux-reducer';
+import cashierReducer from '~/cashier/reducer';
 
 const reducer = combineReducers({
   staff: staffReducer,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   imageTemplater: imageTemplaterReducer,
   ratio: ratioReducer,
   kkm: kkmReducer,
+  cashier: cashierReducer,
 });
 
 export default reducer;

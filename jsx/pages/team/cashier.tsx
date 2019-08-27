@@ -4,26 +4,20 @@ import { Column } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
-import { selectAPI } from '~/core/selectors';
 
-import { Payment } from '~/cashier/types';
-import { getPayments } from '~/cashier/api';
+import { loadPayments } from '~/cashier/actions';
 
 import CreatePayment from '~/cashier/components/CreatePayment';
 import PaymentList from '~/cashier/components/PaymentList';
 
-interface Props {
-  payments: Payment[];
-}
-
-const CashierPage: NextPage<Props> = ({ payments }) => {
+const CashierPage: NextPage = () => {
   return (
     <Page title="Касса" team>
       <Page.Title>Касса</Page.Title>
       <Page.Main>
         <h2>Выплаты</h2>
         <Column stretch>
-          <PaymentList payments={payments} />
+          <PaymentList />
           <div>
             <CreatePayment />
           </div>
@@ -33,10 +27,9 @@ const CashierPage: NextPage<Props> = ({ payments }) => {
   );
 };
 
-CashierPage.getInitialProps = async ({ store: { getState } }) => {
-  const api = selectAPI(getState());
-  const payments = await getPayments(api);
-  return { payments };
+CashierPage.getInitialProps = async ({ store: { dispatch } }) => {
+  await dispatch(loadPayments());
+  return {};
 };
 
 export default CashierPage;

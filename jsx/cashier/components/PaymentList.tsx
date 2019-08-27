@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { usePermissions } from '~/common/hooks';
 
@@ -6,13 +7,17 @@ import ActionButton from '~/components/ActionButton';
 import Card, { CardList } from '~/components/Card';
 
 import { Payment } from '../types';
-
-interface Props {
-  payments: Payment[];
-}
+import { loadPayments } from '../actions';
+import { selectPayments } from '../selectors';
 
 const PaymentItem = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
+
+  const dispatch = useDispatch();
+
+  const reload = useCallback(async () => {
+    await dispatch(loadPayments());
+  }, [dispatch]);
 
   return (
     <Card>
@@ -21,7 +26,7 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
         ? payment.is_redeemed || (
             <ActionButton
               path={`cashier/payment/${payment.id}/redeem`}
-              reloadOnSuccess
+              asyncOnSuccess={reload}
             >
               Выплачено
             </ActionButton>
@@ -31,7 +36,9 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
   );
 };
 
-const PaymentList: React.FC<Props> = ({ payments }) => {
+const PaymentList: React.FC = () => {
+  const payments = useSelector(selectPayments);
+
   return (
     <CardList>
       {payments.map(payment => (
