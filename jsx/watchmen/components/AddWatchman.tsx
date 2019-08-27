@@ -6,22 +6,23 @@ import { loadWatchmen } from '../actions';
 import CreateButton from '~/components/crud/CreateButton';
 import { FormField } from '~/components/crud/types';
 
-const AddWatchman: React.FC = () => {
-  const fields: FormField[] = [
-    { name: 'email', type: 'email' },
-    { name: 'short_name', type: 'string' },
-    { name: 'full_name', type: 'string' },
-    { name: 'password', type: 'password' },
-    { name: 'vk', type: 'string' },
-    {
-      name: 'gender',
-      type: 'choice',
-      options: ['MALE', 'FEMALE'],
-      value: 'FEMALE',
-    },
-  ];
+const fields: FormField[] = [
+  { name: 'email', type: 'email' },
+  { name: 'short_name', type: 'string' },
+  { name: 'full_name', type: 'string' },
+  { name: 'password', type: 'password' },
+  { name: 'vk', type: 'string' },
+  {
+    name: 'gender',
+    type: 'choice',
+    options: ['MALE', 'FEMALE'],
+    value: 'FEMALE',
+  },
+];
 
+const AddWatchman: React.FC = () => {
   const dispatch = useDispatch();
+
   const onCreate = useCallback(async () => {
     await dispatch(loadWatchmen());
   }, [loadWatchmen]);
