@@ -203,8 +203,8 @@ class WeeklyDigest(models.Model):
             raise Exception("Telegram message is already sent")
 
         text = self._telegram_message()
-        posted_message = kocherga.telegram.post_to_channel(text)
-        self.telegram_id = posted_message['message_id']
+        posted_messages = kocherga.telegram.post_to_channel(text)
+        self.telegram_id = posted_messages[0]['message_id']
         self.save()
 
     def post_vk(self, prefix_text):
