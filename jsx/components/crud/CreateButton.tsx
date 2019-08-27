@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { Formik, Form, Field, FormikActions, FieldProps } from 'formik';
 
-import { Label, Row, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
+import { Label, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
 import {
   useAPI,
@@ -18,7 +18,10 @@ import LabeledFormField from '../LabeledFormField';
 interface Props {
   apiEndpoint: string;
   fields: FormField[];
-  displayName?: string;
+  entityName?: string;
+  buttonName?: string;
+  modalButtonName?: string;
+  modalTitle?: string;
   onCreate: () => void;
 }
 
@@ -42,6 +45,18 @@ const FieldInput: React.FC<FieldInputProps> = ({ field }) => {
   switch (field.type) {
     case 'string':
       return <LabeledFormField name={field.name} title={field.name} />;
+    case 'email':
+      return (
+        <LabeledFormField name={field.name} title={field.name} type="email" />
+      );
+    case 'password':
+      return (
+        <LabeledFormField
+          name={field.name}
+          title={field.name}
+          type="password"
+        />
+      );
     case 'number':
       return (
         <LabeledFormField name={field.name} title={field.name} type="number" />
@@ -83,7 +98,10 @@ const CreateModal = ({
   fields,
   apiEndpoint,
   close,
-  displayName,
+  entityName,
+  modalButtonName,
+  buttonName,
+  modalTitle,
   onCreate,
 }: ModalProps) => {
   const api = useAPI();
@@ -103,11 +121,11 @@ const CreateModal = ({
         postValues[field.name] = field.value || '';
       }
       await api.call(apiEndpoint, 'POST', postValues);
-      actions.setSubmitting(false);
-      close();
       if (onCreate) {
         onCreate();
       }
+      actions.setSubmitting(false);
+      close();
     },
     [api, fields, apiEndpoint, onCreate]
   );
@@ -120,7 +138,7 @@ const CreateModal = ({
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={close}>
-        Добавить{displayName && ': ' + displayName}
+        {modalTitle || 'Добавить' + (entityName ? ': ' + entityName : '')}
       </Modal.Header>
       <Formik initialValues={initialValues} onSubmit={submit}>
         {({ isSubmitting }) => (
@@ -137,7 +155,7 @@ const CreateModal = ({
                   loading={isSubmitting}
                   disabled={isSubmitting}
                 >
-                  Добавить
+                  {modalButtonName || buttonName || 'Добавить'}
                 </Button>
               </ControlsFooter>
             </Modal.Footer>
@@ -150,7 +168,7 @@ const CreateModal = ({
 
 const CreateButton = (props: Props) => {
   return (
-    <ButtonWithModal title="Добавить">
+    <ButtonWithModal title={props.buttonName || 'Добавить'}>
       {({ close }) => <CreateModal {...props} close={close} />}
     </ButtonWithModal>
   );

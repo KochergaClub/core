@@ -22,7 +22,7 @@ const CreateParticipantButton = ({ cohort }: Props) => {
     <CreateButton
       apiEndpoint="/mastermind_dating/participant"
       fields={fields}
-      displayName="Участник дейтинга"
+      entityName="Участник дейтинга"
       onCreate={cohortParticipantsReloader}
     />
   );

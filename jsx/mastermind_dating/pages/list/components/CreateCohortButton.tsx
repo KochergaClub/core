@@ -27,7 +27,7 @@ const CreateCohortButton = () => {
     <CreateButton
       apiEndpoint="/mastermind_dating/cohort"
       fields={fields}
-      displayName="Когорта"
+      entityName="Когорта"
       onCreate={onCreate}
     />
   );
