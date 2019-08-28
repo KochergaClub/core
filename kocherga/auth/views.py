@@ -4,14 +4,15 @@ logger = logging.getLogger(__name__)
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.password_validation import validate_password
 
 from django.template.loader import render_to_string
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import exceptions, permissions, generics
+from rest_framework.decorators import action
+from rest_framework import exceptions, permissions, viewsets
 
 import markdown
 import urllib.parse
@@ -140,13 +141,21 @@ class IsAuthAuditor(permissions.BasePermission):
         return request.user.has_perm('auth.audit')
 
 
-class GroupsView(generics.ListAPIView):
+class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthAuditor,)
     serializer_class = serializers.GroupSerializer
     queryset = Group.objects.all()  # TODO - prefetch users
 
+    @action(detail=True, methods=['post'])
+    def remove_user(self, request, **kwargs):
+        user_id = request.data['user_id']
+        group = self.get_object()
+        user = get_user_model().objects.get(pk=user_id)
+        group.user_set.remove(user)
+        return Response('ok')
 
-class PermissionsView(generics.ListAPIView):
+
+class PermissionsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthAuditor,)
     serializer_class = serializers.PermissionSerializer
     queryset = Permission.objects.all()  # TODO - prefetch users

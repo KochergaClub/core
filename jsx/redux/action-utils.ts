@@ -1,8 +1,9 @@
 import { AnyAction } from 'redux';
 
 import { selectAPI } from '~/core/selectors';
+import { API } from '~/common/api';
 
-import { AsyncAction } from './store';
+import { Dispatch, State, AsyncAction } from './store';
 
 export const createLoadAction = <T>(
   url: string,
@@ -14,4 +15,13 @@ export const createLoadAction = <T>(
     dispatch(postLoadAction(data));
   };
   return action;
+};
+
+export const apiThunk = (
+  body: (api: API, dispatch: Dispatch, getState: () => State) => Promise<void>
+) => {
+  return async (dispatch: Dispatch, getState: () => State) => {
+    const api = selectAPI(getState());
+    await body(api, dispatch, getState);
+  };
 };
