@@ -16,7 +16,7 @@ const fields: FormField[] = [
 
 const AddTrainingButton = () => {
   const dispatch = useDispatch();
-  const [canCreate] = usePermissions(['cashier.create']);
+  const [canCreate] = usePermissions(['ratio.manage']);
 
   const postCb = useCallback(
     async (values: CreateTrainingParams) => {

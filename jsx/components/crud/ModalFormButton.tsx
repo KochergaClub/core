@@ -2,7 +2,13 @@ import React, { useCallback, useMemo } from 'react';
 
 import { Formik, Form, Field, FormikActions, FieldProps } from 'formik';
 
-import { Label, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
+import {
+  Column,
+  Label,
+  Button,
+  Modal,
+  ControlsFooter,
+} from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
@@ -132,9 +138,11 @@ const CreateModal = ({
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body ref={focus} {...hotkeys}>
-              {fields.map(field => (
-                <FieldInput key={field.name} field={field} />
-              ))}
+              <Column>
+                {fields.map(field => (
+                  <FieldInput key={field.name} field={field} />
+                ))}
+              </Column>
             </Modal.Body>
             <Modal.Footer>
               <ControlsFooter>
