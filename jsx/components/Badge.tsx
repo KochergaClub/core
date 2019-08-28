@@ -2,8 +2,15 @@ import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
 
-const Badge = styled.div`
-  background-color: ${colors.accent[500]};
+interface Props {
+  type?: 'accent' | 'default';
+}
+
+const Badge = styled.div<Props>`
+  background-color: ${props =>
+    props.type && props.type === 'accent'
+      ? colors.accent[500]
+      : colors.primary[300]};
   border-radius: 10px;
   font-size: 12px;
   min-width: 20px;

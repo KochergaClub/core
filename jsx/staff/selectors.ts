@@ -4,6 +4,10 @@ import { State } from '~/redux/store';
 
 import { Member } from './types';
 
+export const selectMemberById = (state: State, id: number): Member => {
+  return state.staff.members[id];
+};
+
 export const selectMembers: Selector<State, Member[]> = createSelector(
   [state => state.staff.members, state => state.staff.memberIdsList],
   (members, memberIdsList) => memberIdsList.map(id => members[id])
