@@ -1,14 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { Column, Row, Label } from '@kocherga/frontkit';
 
-import { Permission } from '../types';
-
 import UserInfo from './UserInfo';
 
-const SinglePermissionsList: React.FC<{ permissions: Permission[] }> = ({
-  permissions,
-}) => {
+import { selectPermissions } from '../selectors';
+
+const SinglePermissionsList: React.FC = () => {
+  const permissions = useSelector(selectPermissions);
+
   const permissionsWithUsers = permissions.filter(p => p.user_set.length > 0);
 
   if (!permissionsWithUsers.length) {

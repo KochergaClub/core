@@ -1,45 +1,34 @@
 import React from 'react';
 
 import { NextPage } from '~/common/types';
-import { selectAPI } from '~/core/selectors';
 
 import Page from '~/components/Page';
 
 import { loadMembers } from '~/staff/actions';
-import { Group, Permission } from '~/audit/types';
+import { loadGroups, loadPermissions } from '~/audit/actions';
 
 import SinglePermissionsList from '~/audit/components/SinglePermissionsList';
 import GroupsList from '~/audit/components/GroupsList';
 
-interface Props {
-  groups: Group[];
-  permissions: Permission[];
-}
-
-const AdminPage: NextPage<Props> = ({ groups, permissions }) => {
+const AdminPage: NextPage = () => {
   return (
     <Page title="Внутренняя админка" team>
       <Page.Title>Админка доступов</Page.Title>
       <Page.Main>
-        <SinglePermissionsList permissions={permissions} />
+        <SinglePermissionsList />
         <h2>Группы</h2>
-        <GroupsList permissions={permissions} groups={groups} />
+        <GroupsList />
       </Page.Main>
     </Page>
   );
 };
 
-AdminPage.getInitialProps = async ({ store: { getState, dispatch } }) => {
-  const api = selectAPI(getState());
-
-  const groups = await api.call('auth/groups', 'GET');
-  const permissions = await api.call('auth/permissions', 'GET');
+AdminPage.getInitialProps = async ({ store: { dispatch } }) => {
+  await dispatch(loadGroups());
+  await dispatch(loadPermissions());
   await dispatch(loadMembers());
 
-  return {
-    groups,
-    permissions,
-  };
+  return {};
 };
 
 export default AdminPage;

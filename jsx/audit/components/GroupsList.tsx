@@ -1,19 +1,20 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import Card, { CardList } from '~/components/Card';
 import Badge from '~/components/Badge';
 
-import { Group, Permission } from '../types';
+import { Permission } from '../types';
 import UserInfo from './UserInfo';
 
-interface Props {
-  groups: Group[];
-  permissions: Permission[];
-}
+import { selectGroups, selectPermissions } from '../selectors';
 
-const GroupsList: React.FC<Props> = ({ groups, permissions }) => {
+const GroupsList: React.FC = () => {
+  const groups = useSelector(selectGroups);
+  const permissions = useSelector(selectPermissions);
+
   const permissionsObj: { [k: number]: Permission } = {};
   permissions.forEach(permission => {
     permissionsObj[permission.id] = permission;
