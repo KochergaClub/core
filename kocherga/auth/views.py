@@ -5,18 +5,19 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.password_validation import validate_password
 
 from django.template.loader import render_to_string
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import exceptions
-from rest_framework import permissions
+from rest_framework import exceptions, permissions, generics
 
 import markdown
 import urllib.parse
 
 from .view_utils import get_magic_token
+from . import serializers
 
 
 class MeView(APIView):
@@ -30,6 +31,7 @@ class MeView(APIView):
         if request.user.is_authenticated:
             result['email'] = request.user.email
             result['is_staff'] = request.user.is_staff
+            result['is_superuser'] = request.user.is_superuser
 
         return Response(result)
 
@@ -131,3 +133,20 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response('ok')
+
+
+class IsAuthAuditor(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('auth.audit')
+
+
+class GroupsView(generics.ListAPIView):
+    permission_classes = (IsAuthAuditor,)
+    serializer_class = serializers.GroupSerializer
+    queryset = Group.objects.all()  # TODO - prefetch users
+
+
+class PermissionsView(generics.ListAPIView):
+    permission_classes = (IsAuthAuditor,)
+    serializer_class = serializers.PermissionSerializer
+    queryset = Permission.objects.all()  # TODO - prefetch users
