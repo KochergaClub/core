@@ -109,13 +109,24 @@ const WatchmanItem = ({ watchman }: { watchman: Watchman }) => {
   );
 };
 
-const WatchmenSublist: React.FC<{ watchmen: Watchman[] }> = ({ watchmen }) => (
-  <CardList>
-    {watchmen.map(watchman => (
-      <WatchmanItem watchman={watchman} key={watchman.id} />
-    ))}
-  </CardList>
-);
+const WatchmenSublist: React.FC<{ watchmen: Watchman[]; title: string }> = ({
+  watchmen,
+  title,
+}) => {
+  if (!watchmen.length) {
+    return null;
+  }
+  return (
+    <section>
+      <h3>{title}</h3>
+      <CardList>
+        {watchmen.map(watchman => (
+          <WatchmanItem watchman={watchman} key={watchman.id} />
+        ))}
+      </CardList>
+    </section>
+  );
+};
 
 const WatchmenList = () => {
   const watchmen = useSelector(selectWatchmen);
@@ -128,16 +139,19 @@ const WatchmenList = () => {
 
   return (
     <div>
-      <Row>
+      <Row vCentered>
         <h2>Админы</h2>
         {canManage && <AddWatchman />}
       </Row>
-      <h3>Регулярные админы</h3>
-      <WatchmenSublist watchmen={firstPriorityWatchmen} />
-      <h3>Эпизодические админы</h3>
-      <WatchmenSublist watchmen={secondPriorityWatchmen} />
-      <h3>Не админы</h3>
-      <WatchmenSublist watchmen={thirdPriorityWatchmen} />
+      <WatchmenSublist
+        watchmen={firstPriorityWatchmen}
+        title="Регулярные админы"
+      />
+      <WatchmenSublist
+        watchmen={secondPriorityWatchmen}
+        title="Эпизодические админы"
+      />
+      <WatchmenSublist watchmen={thirdPriorityWatchmen} title="Не админы" />
       {askingForGradeWatchman && <PickGradeModal />}
     </div>
   );
