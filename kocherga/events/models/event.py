@@ -123,9 +123,6 @@ class Event(models.Model):
 
     location = models.CharField(max_length=255, blank=True)
 
-    is_master = models.BooleanField(default=False)
-    master_id = models.CharField(max_length=100, blank=True)  # deprecated, use prototype_id instead
-
     prototype = models.ForeignKey(
         'EventPrototype',
         on_delete=models.PROTECT,
@@ -168,8 +165,6 @@ class Event(models.Model):
             location=google_event.get("location", ""),
             google_id=google_event["id"],
             google_link=google_event["htmlLink"],
-            is_master=("recurrence" in google_event),
-            master_id=google_event.get("recurringEventId", ""),
         )
 
         return obj

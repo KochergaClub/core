@@ -93,8 +93,6 @@ class EventSerializer(serializers.ModelSerializer):
             'announcements',
 
             # optional
-            'master_id',
-            'is_master',
             'prototype_id',
             'ready_to_post',
             'visitors',

@@ -63,8 +63,6 @@ class TestGetEvent:
         assert type(e.end) == datetime
         assert e.title == 'Элиезер проповедь'
         assert e.description.startswith('chicken')
-        assert e.is_master is False
-        assert e.master_id == ''
 
         assert e.get_room() == 'гэб'
 
