@@ -148,19 +148,6 @@ class Event(models.Model):
     ready_to_post = models.BooleanField(default=False)
     timing_description_override = models.CharField(max_length=255, blank=True)
 
-    # These fields are deprecated and can be removed in the future
-    vk_image = models.CharField(max_length=32, null=True, blank=True)
-
-    vk_group = models.CharField(max_length=40, blank=True)
-    fb_group = models.CharField(max_length=40, blank=True)
-
-    posted_fb = models.CharField(max_length=1024, blank=True)
-    posted_timepad = models.CharField(max_length=1024, blank=True)
-    posted_vk = models.CharField(max_length=1024, blank=True)
-
-    timepad_category_code = models.CharField(max_length=40, blank=True)
-    timepad_prepaid_tickets = models.BooleanField(default=False)
-
     def __str__(self):
         return f'{timezone.localtime(self.start)} - {self.title}'
 
