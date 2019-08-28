@@ -21,18 +21,19 @@ export interface Project extends WagtailItem {
   summary?: string;
   activity_summary?: string;
   description?: string;
+  is_active: boolean;
 }
 
 export const getAllProjects = async (api: API): Promise<Project[]> => {
   const json = await api.callWagtail(
-    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail&limit=100'
+    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail,is_active&limit=100'
   );
   return json.items;
 };
 
 export const getProject = async (slug: string, api: API): Promise<Project> => {
   const json = await api.callWagtail(
-    `pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,activity_summary,body,image,image_thumbnail`
+    `pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,activity_summary,body,image,image_thumbnail,is_active`
   );
   return json.items[0];
 };
