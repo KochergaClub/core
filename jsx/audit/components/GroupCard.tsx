@@ -9,7 +9,7 @@ import AsyncButton from '~/components/AsyncButton';
 import ButtonWithModal from '~/components/ButtonWithModal';
 
 import UserInfo from './UserInfo';
-import AddUserToGroupModal from './AddUserToGroupModal';
+import AddMemberToGroupModal from './AddMemberToGroupModal';
 
 import { Group, User, Permission } from '../types';
 
@@ -60,7 +60,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
           </Row>
         ))}
         <ButtonWithModal title="Добавить сотрудника" small>
-          {({ close }) => <AddUserToGroupModal close={close} group={group} />}
+          {({ close }) => <AddMemberToGroupModal close={close} group={group} />}
         </ButtonWithModal>
       </Column>
     </Card>

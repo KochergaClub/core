@@ -16,7 +16,7 @@ interface Props {
   group: Group;
 }
 
-const AddUserToGroupModal: React.FC<Props> = ({ close, group }) => {
+const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
   const members = useSelector(selectMembers);
   const dispatch = useDispatch();
 
@@ -42,4 +42,4 @@ const AddUserToGroupModal: React.FC<Props> = ({ close, group }) => {
   );
 };
 
-export default AddUserToGroupModal;
+export default AddMemberToGroupModal;
