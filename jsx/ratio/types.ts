@@ -5,6 +5,8 @@ export interface Training {
   long_name: string;
   date: string;
   salaries_paid: boolean;
+  tickets_count: number;
+  total_income: number;
 }
 
 export interface CreateTrainingParams {

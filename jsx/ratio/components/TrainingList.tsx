@@ -30,6 +30,14 @@ const TrainingCard: React.FC<{ training: Training }> = ({ training }) => {
         <Label>Дата:</Label>
         <div>{training.date}</div>
       </Row>
+      <Row vCentered>
+        <Label>Билетов:</Label>
+        <div>{training.tickets_count}</div>
+      </Row>
+      <Row vCentered>
+        <Label>Суммарный доход:</Label>
+        <div>{training.total_income}</div>
+      </Row>
     </Wrapper>
   );
 };
