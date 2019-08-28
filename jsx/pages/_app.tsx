@@ -7,6 +7,8 @@ import Error from 'next/error';
 import withRedux, { NextJSContext } from 'next-redux-wrapper';
 import Router from 'next/router';
 
+import NProgress from 'nprogress';
+
 import { configureStore, Store } from '~/redux/store';
 import { configureAPI, loadUser, cleanupAPIForClient } from '~/core/actions';
 import { APIProps, APIError } from '~/common/api';
@@ -15,7 +17,14 @@ import { API_HOST } from '~/render/server/constants';
 import { selectUser } from '~/core/selectors';
 import * as gtag from '~/common/gtag';
 
-Router.events.on('routeChangeComplete', url => gtag.pageview(url));
+Router.events.on('routeChangeStart', () => {
+  NProgress.start();
+});
+Router.events.on('routeChangeComplete', url => {
+  NProgress.done();
+  gtag.pageview(url);
+});
+Router.events.on('routeChangeError', () => NProgress.done());
 
 interface MyProps {
   store: Store;

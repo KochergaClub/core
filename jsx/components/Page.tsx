@@ -1,5 +1,9 @@
 import React from 'react';
 
+import Head from 'next/head';
+
+import { GlobalStyle } from '@kocherga/frontkit';
+
 import TildaMenu from './TildaMenu';
 import TildaFooter from './TildaFooter';
 import ErrorBoundary from './ErrorBoundary';
@@ -7,9 +11,7 @@ import ErrorBoundary from './ErrorBoundary';
 import PageTitle from './PageTitle';
 import Main from './Main';
 
-import Head from 'next/head';
-
-import { GlobalStyle } from '@kocherga/frontkit';
+import NProgressStyle from './NProgressStyle';
 
 interface Props {
   title: string;
@@ -23,6 +25,7 @@ const Page = ({ title, team, children, noMenu, noFooter }: Props) => {
   return (
     <div>
       <GlobalStyle />
+      <NProgressStyle />
       <Head>
         <title>{title}</title>
         <link rel="stylesheet" href="/static/normalize.css" />
