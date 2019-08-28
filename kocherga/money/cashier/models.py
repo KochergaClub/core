@@ -41,7 +41,7 @@ class Payment(models.Model):
         related_name='payments',
     )
     amount = models.IntegerField('Сумма')
-    created_dt = models.DateTimeField('Дата создания', auto_now_add=True)
+    created_dt = models.DateTimeField('Дата создания', auto_now_add=True, db_index=True)
     redeem_dt = models.DateTimeField('Дата получения', null=True, blank=True)
     comment = models.TextField('Комментарий', blank=True)
 
@@ -53,6 +53,7 @@ class Payment(models.Model):
             ('redeem', 'Может обналичивать существующие чеки'),
             ('kkm_user', 'Может использовать кассовый аппарат'),
         )
+        ordering = ('-created_dt',)
 
     def __str__(self):
         result = f'{self.amount} -> {self.whom}'

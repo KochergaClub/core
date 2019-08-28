@@ -4,6 +4,8 @@ export interface Payment {
   whom: string;
   comment: string;
   is_redeemed: boolean;
+  created_dt: string;
+  redeem_dt?: string;
 }
 
 export interface CreatePaymentParams {

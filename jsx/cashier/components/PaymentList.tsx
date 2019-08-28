@@ -1,39 +1,65 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 
-import { usePermissions } from '~/common/hooks';
+import { formatDate } from '~/common/utils';
 
-import ActionButton from '~/components/ActionButton';
+import { colors, Row, Label } from '@kocherga/frontkit';
+
+import { useAPI, usePermissions } from '~/common/hooks';
+
+import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import Card, { CardList } from '~/components/Card';
 
 import { Payment } from '../types';
 import { loadPayments } from '../actions';
 import { selectPayments } from '../selectors';
 
+const MutedCard = styled(Card)`
+  color: ${colors.grey[700]};
+  background-color: ${colors.grey[100]};
+`;
+
 const PaymentItem = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
 
   const dispatch = useDispatch();
+  const api = useAPI();
 
-  const reload = useCallback(async () => {
+  const redeem = useCallback(async () => {
+    await api.call(`cashier/payment/${payment.id}/redeem`, 'POST');
     await dispatch(loadPayments());
-  }, [dispatch]);
+  }, [api, payment.id, dispatch]);
+
+  const Wrapper = payment.is_redeemed ? MutedCard : Card;
 
   return (
-    <Card>
+    <Wrapper>
       <div>
-        {payment.amount} руб. &rarr; {payment.whom}
+        <strong>
+          {payment.amount} руб. &rarr; {payment.whom}
+        </strong>
       </div>
       {payment.comment ? <div>{payment.comment}</div> : null}
+      <Row vCentered>
+        <Label>Создано:</Label>
+        <div>{formatDate(new Date(payment.created_dt), 'd MMMM yyyy')}</div>
+      </Row>
+      {payment.redeem_dt && (
+        <Row vCentered>
+          <Label>Выплачено:</Label>
+          <div>{formatDate(new Date(payment.redeem_dt), 'd MMMM yyyy')}</div>
+        </Row>
+      )}
       {canRedeem && !payment.is_redeemed ? (
-        <ActionButton
-          path={`cashier/payment/${payment.id}/redeem`}
-          asyncOnSuccess={reload}
+        <AsyncButtonWithConfirm
+          act={redeem}
+          confirmText="Наличные деньги выплачены из кассы и вы внесли запись в таблицу расходов?"
         >
           Выплачено
-        </ActionButton>
+        </AsyncButtonWithConfirm>
       ) : null}
-    </Card>
+    </Wrapper>
   );
 };
 

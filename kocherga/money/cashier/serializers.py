@@ -12,4 +12,4 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Payment
-        fields = ('id', 'amount', 'whom', 'comment', 'is_redeemed')
+        fields = ('id', 'amount', 'whom', 'comment', 'is_redeemed', 'created_dt', 'redeem_dt')

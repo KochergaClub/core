@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Column } from '@kocherga/frontkit';
+import { Row, Column } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
@@ -15,12 +15,14 @@ const CashierPage: NextPage = () => {
     <Page title="Касса" team>
       <Page.Title>Касса</Page.Title>
       <Page.Main>
-        <h2>Выплаты</h2>
+        <h2>
+          <Row vCentered>
+            <div>Выплаты</div>
+            <CreatePayment />
+          </Row>
+        </h2>
         <Column stretch>
           <PaymentList />
-          <div>
-            <CreatePayment />
-          </div>
         </Column>
       </Page.Main>
     </Page>
