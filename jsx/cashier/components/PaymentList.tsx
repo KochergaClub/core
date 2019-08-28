@@ -1,24 +1,19 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
 import { formatDate } from '~/common/utils';
 
-import { colors, Row, Label } from '@kocherga/frontkit';
+import { Row, Label } from '@kocherga/frontkit';
 
 import { useAPI, usePermissions } from '~/common/hooks';
 
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import Card, { CardList } from '~/components/Card';
+import MutedCard from '~/components/MutedCard';
 
 import { Payment } from '../types';
 import { loadPayments } from '../actions';
 import { selectPayments } from '../selectors';
-
-const MutedCard = styled(Card)`
-  color: ${colors.grey[700]};
-  background-color: ${colors.grey[100]};
-`;
 
 const PaymentItem = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
