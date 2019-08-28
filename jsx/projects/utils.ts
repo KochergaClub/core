@@ -25,7 +25,7 @@ export interface Project extends WagtailItem {
 
 export const getAllProjects = async (api: API): Promise<Project[]> => {
   const json = await api.callWagtail(
-    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail'
+    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail&ilimit=100'
   );
   return json.items;
 };
