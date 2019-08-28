@@ -15,8 +15,8 @@ import Badge from '~/components/Badge';
 import { User } from '../types';
 
 const UserInfo: React.FC<{ user: User }> = ({ user }) => {
-  const staffMember = useSelector<State, Member>(state =>
-    selectMemberById(state, user.id)
+  const staffMember = useSelector<State, Member | undefined>(state =>
+    user.staff_member ? selectMemberById(state, user.staff_member) : undefined
   );
 
   if (staffMember) {
