@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { A, Column, Row } from '@kocherga/frontkit';
@@ -7,8 +6,10 @@ import { A, Column, Row } from '@kocherga/frontkit';
 import Card from '~/components/Card';
 import Badge from '~/components/Badge';
 import AsyncButton from '~/components/AsyncButton';
+import ButtonWithModal from '~/components/ButtonWithModal';
 
 import UserInfo from './UserInfo';
+import AddUserToGroupModal from './AddUserToGroupModal';
 
 import { Group, User, Permission } from '../types';
 
@@ -58,6 +59,9 @@ const GroupCard: React.FC<Props> = ({ group }) => {
             </AsyncButton>
           </Row>
         ))}
+        <ButtonWithModal title="Добавить сотрудника" small>
+          {({ close }) => <AddUserToGroupModal close={close} group={group} />}
+        </ButtonWithModal>
       </Column>
     </Card>
   );

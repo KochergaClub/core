@@ -4,16 +4,6 @@ import BasicPicker from '~/components/Picker';
 
 import { Member } from '../types';
 
-// import { ThemeProvider } from 'styled-components';
-//          <ThemeProvider theme={{ color: e.dark ? 'dark' : 'light' }}>
-//            <PickerItemContainer
-//              style={{ backgroundColor: e.color }}
-//              onClick={() => props.pickedExtra && props.pickedExtra(e.text)}
-//            >
-//              <div>{e.text}</div>
-//            </PickerItemContainer>
-//          </ThemeProvider>
-
 interface Extra {
   color: string;
   text: string;

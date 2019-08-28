@@ -154,6 +154,14 @@ class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
         group.user_set.remove(user)
         return Response('ok')
 
+    @action(detail=True, methods=['post'])
+    def add_user(self, request, **kwargs):
+        user_id = request.data['user_id']
+        group = self.get_object()
+        user = get_user_model().objects.get(pk=user_id)
+        group.user_set.add(user)
+        return Response('ok')
+
 
 class PermissionsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthAuditor,)

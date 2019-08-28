@@ -1,5 +1,6 @@
 export interface Member {
   id: number;
+  user_id: number;
   full_name: string;
   short_name: string;
   email: string;

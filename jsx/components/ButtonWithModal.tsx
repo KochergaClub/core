@@ -5,8 +5,9 @@ import { Button } from '@kocherga/frontkit';
 interface Props {
   title: string;
   children: ({ close }: { close: () => void }) => React.ReactNode;
+  small?: boolean;
 }
-const ButtonWithModal: React.FC<Props> = ({ children, title }) => {
+const ButtonWithModal: React.FC<Props> = ({ children, title, small }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = useCallback(() => {
@@ -19,7 +20,9 @@ const ButtonWithModal: React.FC<Props> = ({ children, title }) => {
 
   return (
     <>
-      <Button onClick={openModal}>{title}</Button>
+      <Button onClick={openModal} small={small}>
+        {title}
+      </Button>
       {isOpen && children({ close: closeModal })}
     </>
   );

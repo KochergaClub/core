@@ -14,9 +14,11 @@ class MemberSerializer(serializers.ModelSerializer):
             'color',
             'slack_id', 'slack_image',
             'vk',
+            'user_id',
         )
 
     email = serializers.CharField(source='user.email')
+    user_id = serializers.IntegerField(source='user.id')
 
 
 class ShortMemberSerializer(serializers.ModelSerializer):
