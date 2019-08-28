@@ -15,29 +15,30 @@ export type Item = SingleItem | ExpandableItem;
 
 export const publicMenuItems: Item[] = [
   {
-    title: 'Антикафе',
+    title: 'Пространство',
     items: [
       { link: '/space', title: 'Пространство' },
-      { link: '/projects', title: 'Проекты' },
       { link: '/pricing', title: 'Цены' },
-      { link: '/#schedule', title: 'Расписание' },
       { link: '/faq', title: 'F.A.Q.' },
     ],
   },
   {
-    title: 'Рациональность',
+    title: 'Сообщество',
     items: [
-      { link: '/rationality', title: 'Прикладная рациональность' },
-      { link: '/rationality/resources', title: 'Ресурсы' },
-      { link: '/rationality/reports', title: 'Отчеты' },
-      { link: '/rationality/aboutus', title: 'О нас говорят' },
-      { link: '/workshop', title: 'Воркшоп' },
-      {
-        link: '/rationality/corporate',
-        title: 'Корпоративные тренинги',
-        mode: 'old',
-      },
+      { link: '/projects', title: 'Проекты' },
+      { link: '/#schedule', title: 'Расписание мероприятий' },
       { link: '/blog', title: 'Блог', mode: 'wagtail' },
+    ],
+  },
+  {
+    title: 'Обучение',
+    items: [
+      { link: '/rationality', title: 'Рациональность' },
+      { link: '/rationality/dojo', title: 'Додзё' },
+      { link: '/rationality/3week', title: 'Трёхнедельный курс' },
+      { link: '/workshop/country', title: 'Выездной воркшоп' },
+      { link: '/rationality/integration', title: '"Интеграция"' },
+      { link: '/rationality/corporate', title: 'Для бизнеса' },
     ],
   },
   { link: '/#contacts', title: 'Контакты' },
