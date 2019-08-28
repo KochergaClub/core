@@ -16,7 +16,7 @@ interface Props {
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
-  post: (values: any) => Promise<void>;
+  post: (values: any) => Promise<void>; // FIXME - derive values from fields using `fields = ... as const` and derived types tricks!
 }
 
 interface ModalProps extends Props {
@@ -42,6 +42,10 @@ const FieldInput: React.FC<FieldInputProps> = ({ field }) => {
     case 'email':
       return (
         <LabeledFormField name={field.name} title={field.name} type="email" />
+      );
+    case 'date':
+      return (
+        <LabeledFormField name={field.name} title={field.name} type="date" />
       );
     case 'password':
       return (

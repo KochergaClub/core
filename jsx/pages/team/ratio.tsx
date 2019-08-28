@@ -1,41 +1,25 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import Link from 'next/link';
 
-import { A } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
 import { loadTrainings } from '~/ratio/actions';
-import { selectTrainings } from '~/ratio/selectors';
+import TrainingList from '~/ratio/components/TrainingList';
+import AddTrainingButton from '~/ratio/components/AddTrainingButton';
 
 const RatioIndexPage: NextPage = () => {
-  const trainings = useSelector(selectTrainings);
-
   return (
     <Page title="Ratio" team>
       <Page.Title>Воркшопы и тренинги</Page.Title>
       <Page.Main>
-        <small>
-          <A href="/admin/ratio/training/add/">Добавить тренинг</A>
-        </small>
-        <hr />
-        <ul>
-          {trainings.map(training => (
-            <li key={training.slug}>
-              <Link
-                href="/team/ratio/training/[slug]"
-                as={`/team/ratio/training/${training.slug}`}
-                passHref
-              >
-                <A>
-                  {training.date} {training.name}
-                </A>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Column stretch>
+          <div>
+            <AddTrainingButton />
+          </div>
+          <TrainingList />
+        </Column>
       </Page.Main>
     </Page>
   );

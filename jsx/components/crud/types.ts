@@ -2,8 +2,9 @@ interface AnyFormField {
   name: string;
   readonly?: boolean;
 }
+
 export interface StringFormField extends AnyFormField {
-  type: 'string' | 'email' | 'password';
+  type: 'string' | 'email' | 'password' | 'date';
   value?: string;
 }
 

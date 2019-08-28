@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -13,7 +13,7 @@ class IsRatioManager(permissions.BasePermission):
         return request.user.has_perm('ratio.manage')
 
 
-class TrainingViewSet(viewsets.ReadOnlyModelViewSet):
+class TrainingViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
     permission_classes = (IsRatioManager,)
     queryset = Training.objects.all()
     serializer_class = serializers.TrainingSerializer

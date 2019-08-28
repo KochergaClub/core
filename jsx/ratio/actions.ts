@@ -9,7 +9,7 @@ import { setTicketFiscalizationStatus } from './api';
 import { trainingsSlice, ticketsSlice } from './slices';
 import { selectTicketById, selectTrainingById } from './selectors';
 
-import { Ticket } from './types';
+import { Ticket, CreateTrainingParams } from './types';
 
 export const TICKET_TRY_FISCALIZE = '[ratio] TICKET_TRY_FISCALIZE';
 export const TICKET_FISCALIZED = '[ratio] TICKET_FISCALIZED';
@@ -79,3 +79,12 @@ export const fiscalizeTicket = (ticket_id: number): AsyncAction => async (
 
 export const loadTrainings = trainingsSlice.actions.loadAll;
 export const loadTrainingBySlug = trainingsSlice.actions.loadAndView;
+
+export const addTraining = (
+  values: CreateTrainingParams
+): AsyncAction => async (dispatch, getState) => {
+  const api = selectAPI(getState());
+
+  await api.call('ratio/training', 'POST', values);
+  await dispatch(loadTrainings());
+};

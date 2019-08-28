@@ -7,6 +7,12 @@ export interface Training {
   salaries_paid: boolean;
 }
 
+export interface CreateTrainingParams {
+  name: string;
+  slug: string;
+  date: string;
+}
+
 export interface Ticket {
   id: number;
   training: number;
