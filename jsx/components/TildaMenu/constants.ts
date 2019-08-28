@@ -4,6 +4,7 @@ export interface SingleItem {
   title: string;
   link: string;
   mode?: 'old' | 'next' | 'wagtail';
+  permissions?: string[];
 }
 
 export interface ExpandableItem {
@@ -66,6 +67,12 @@ export const teamMenuItems: Item[] = [
     title: 'Прочее',
     items: [
       { link: '/team/analytics', title: 'Аналитика', mode: 'next' },
+      {
+        link: '/team/audit',
+        title: 'Аудит',
+        mode: 'next',
+        permissions: ['kocherga_auth.audit'],
+      },
       {
         link: '/team/image-templater',
         title: 'Генератор картинок',

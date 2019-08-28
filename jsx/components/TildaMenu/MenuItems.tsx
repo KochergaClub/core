@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import Link from 'next/link';
 
+import { usePermissions } from '~/common/hooks';
+
 import {
   teamColor,
   SingleItem,
@@ -68,7 +70,24 @@ const ItemLink = ({ item }: { item: SingleItem }) => {
   return <a href={item.link}>{item.title}</a>;
 };
 
-const MenuItemExpandableContainer = styled.div`
+const MenuSingleItem: React.FC<{ item: SingleItem }> = ({ item }) => {
+  const permissions = usePermissions(item.permissions || []);
+
+  if (
+    permissions.length &&
+    permissions.length !== permissions.filter(p => p === true).length
+  ) {
+    return null;
+  }
+
+  return (
+    <li>
+      <ItemLink item={item} />
+    </li>
+  );
+};
+
+const MenuItemExpandableContainer = styled.li`
   position: relative;
 `;
 
@@ -108,9 +127,7 @@ class MenuItemExpandable extends React.Component<{ item: ExpandableItem }, {}> {
     return (
       <MenuItemDropdown>
         {this.props.item.items.map((item, i) => (
-          <li key={i}>
-            <ItemLink item={item} />
-          </li>
+          <MenuSingleItem key={i} item={item} />
         ))}
       </MenuItemDropdown>
     );
@@ -133,15 +150,12 @@ const isExpandableItem = (item: Item): item is ExpandableItem => {
   return (item as ExpandableItem).items !== undefined;
 };
 
-const MenuItemLi = ({ item }: { item: Item }) => (
-  <li>
-    {isExpandableItem(item) ? (
-      <MenuItemExpandable item={item} />
-    ) : (
-      <ItemLink item={item} />
-    )}
-  </li>
-);
+const MenuItemMaybeExpandable = ({ item }: { item: Item }) =>
+  isExpandableItem(item) ? (
+    <MenuItemExpandable item={item} />
+  ) : (
+    <ItemLink item={item} />
+  );
 
 interface Props {
   team: boolean;
@@ -153,7 +167,7 @@ const TildaMenuItems = ({ team }: Props) => {
     <MenuItemsNav>
       <MenuItemsList>
         {items.map((item, i) => (
-          <MenuItemLi item={item} key={i} />
+          <MenuItemMaybeExpandable item={item} key={i} />
         ))}
       </MenuItemsList>
     </MenuItemsNav>
