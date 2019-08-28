@@ -45,12 +45,12 @@ const SinglePermissionsList: React.FC<{ permissions: Permission[] }> = ({
     <section>
       <h2>ВНИМАНИЕ: есть пользователи с доступами вне групп</h2>
       {permissionsWithUsers.map(permission => (
-        <Column>
+        <Column key={permission.id}>
           <strong>{permission.name}</strong>
           <Label>Пользователи с этим доступом:</Label>
           <Row>
             {permission.user_set.map(user => (
-              <div>{user.email}</div>
+              <div key={user.id}>{user.email}</div>
             ))}
           </Row>
         </Column>
@@ -71,11 +71,11 @@ const GroupsList: React.FC<Props> = ({ groups, permissions }) => {
           <Column>
             <strong>{group.name}</strong>
             {group.user_set.map(user => (
-              <div>{user.email}</div>
+              <div key={user.id}>{user.email}</div>
             ))}
             <Row>
               {group.permissions.map(id => (
-                <Badge>{permissionsObj[id].name}</Badge>
+                <Badge key={id}>{permissionsObj[id].name}</Badge>
               ))}
             </Row>
           </Column>
