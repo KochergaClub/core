@@ -1,8 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+
+import { configureStore } from '~/redux/store';
+
 import Page from './Page';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Page title="test">test</Page>, div);
+  const store = configureStore();
+  ReactDOM.render(
+    <Provider store={store}>
+      <Page title="test">test</Page>
+    </Provider>,
+    div
+  );
 });
