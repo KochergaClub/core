@@ -67,7 +67,7 @@ const ItemLink = ({ item }: { item: SingleItem }) => {
   }
   if (item.mode === 'wagtail') {
     return (
-      <Link href="/wagtail-api" as={item.link}>
+      <Link href="/wagtail-any" as={item.link}>
         <a>{item.title}</a>
       </Link>
     );
