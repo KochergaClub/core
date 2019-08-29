@@ -1,6 +1,9 @@
 import React from 'react';
+import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
+
+import Card, { CardList } from '~/components/Card';
 
 import { Cohort } from '../../../types';
 
@@ -13,19 +16,25 @@ const CohortItem = ({ cohort }: { cohort: Cohort }) => {
     title += ' ' + ` (${start})`;
   }
   return (
-    <li>
-      <A href={`/team/mastermind_dating/cohort/${cohort.id}`}>{title}</A>
-    </li>
+    <Card>
+      <Link
+        href="/team/mastermind_dating/cohort/[id]"
+        as={`/team/mastermind_dating/cohort/${cohort.id}`}
+        passHref
+      >
+        <A>{title}</A>
+      </Link>
+    </Card>
   );
 };
 
 const CohortList = ({ cohorts }: { cohorts: Cohort[] }) => {
   return (
-    <ul>
+    <CardList>
       {cohorts.map(cohort => (
         <CohortItem key={cohort.id} cohort={cohort} />
       ))}
-    </ul>
+    </CardList>
   );
 };
 

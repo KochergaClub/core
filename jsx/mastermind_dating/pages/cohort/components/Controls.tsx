@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 import { A, Column, Row } from '@kocherga/frontkit';
 
@@ -14,7 +15,9 @@ interface Props {
 
 const Controls: React.FC<Props> = ({ cohort }) => (
   <Column>
-    <A href="/team/mastermind_dating">&larr; к списку когорт</A>
+    <Link href="/team/mastermind_dating" passHref>
+      <A>&larr; к списку когорт</A>
+    </Link>
     <Row>
       <DeleteButton
         endpoint="/mastermind_dating/cohort"
