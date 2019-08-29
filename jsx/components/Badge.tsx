@@ -16,6 +16,7 @@ const Badge = styled.div<Props>`
   min-width: 20px;
   padding: 2px 6px;
   width: auto;
+  white-space: nowrap;
 `;
 
 export default Badge;

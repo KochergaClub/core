@@ -3,10 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { A, Column, Row } from '@kocherga/frontkit';
 
+import DropdownMenu, {
+  ActionContainer,
+  ModalAction,
+} from '~/components/DropdownMenu';
 import Card from '~/components/Card';
 import Badge from '~/components/Badge';
 import AsyncButton from '~/components/AsyncButton';
-import ButtonWithModal from '~/components/ButtonWithModal';
 
 import UserInfo from './UserInfo';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
@@ -40,11 +43,20 @@ const GroupCard: React.FC<Props> = ({ group }) => {
   return (
     <Card>
       <Column>
-        <Row vCentered stretch>
+        <Row stretch>
           <strong>{group.name}</strong>
-          <small>
-            <A href={`/wagtail/groups/${group.id}/`}>редактировать в wagtail</A>
-          </small>
+          <DropdownMenu>
+            <ActionContainer>
+              <A href={`/wagtail/groups/${group.id}/`}>
+                редактировать в wagtail
+              </A>
+            </ActionContainer>
+            <ModalAction title="Добавить сотрудника">
+              {({ close }) => (
+                <AddMemberToGroupModal close={close} group={group} />
+              )}
+            </ModalAction>
+          </DropdownMenu>
         </Row>
         <Row>
           {group.permissions.map(id => (
@@ -52,16 +64,13 @@ const GroupCard: React.FC<Props> = ({ group }) => {
           ))}
         </Row>
         {group.user_set.map(user => (
-          <Row>
-            <UserInfo key={user.id} user={user} />
+          <Row key={user.id}>
+            <UserInfo user={user} />
             <AsyncButton small act={async () => removeUserCb(user)}>
               удалить
             </AsyncButton>
           </Row>
         ))}
-        <ButtonWithModal title="Добавить сотрудника" small>
-          {({ close }) => <AddMemberToGroupModal close={close} group={group} />}
-        </ButtonWithModal>
       </Column>
     </Card>
   );

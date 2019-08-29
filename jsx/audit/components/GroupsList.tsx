@@ -13,7 +13,7 @@ const GroupsList: React.FC = () => {
   return (
     <CardList>
       {groups.map(group => (
-        <GroupCard group={group} />
+        <GroupCard key={group.id} group={group} />
       ))}
     </CardList>
   );
