@@ -17,7 +17,6 @@ interface Props {
 const ProjectsIndexPage: NextPage<Props> = (props: Props) => {
   return (
     <Page title="Проекты Кочерги">
-      <WorkInProgress />
       <ProjectIndex projects={props.projects} />
     </Page>
   );
