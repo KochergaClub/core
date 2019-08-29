@@ -16,6 +16,9 @@ import {
 
 const MenuItemsNav = styled.nav`
   margin-left: 30px;
+  @media screen and (max-width: 980px) {
+    margin-left: 0;
+  }
 `;
 
 const MenuItemsList = styled.ul`
@@ -40,11 +43,13 @@ const MenuItemsList = styled.ul`
   }
 
   @media screen and (max-width: 980px) {
+    padding-left: 0;
     flex-direction: column;
     margin-bottom: 10px;
     & > li {
       margin-top: 10px;
       margin-bottom: 10px;
+      margin-right: 0;
     }
   }
 `;
@@ -92,7 +97,7 @@ const MenuItemExpandableContainer = styled.li`
 `;
 
 const MenuItemDropdown = styled.ul`
-  position: fixed;
+  position: absolute;
   z-index: 1;
 
   padding: 5px 0;
@@ -154,7 +159,7 @@ const MenuItemMaybeExpandable = ({ item }: { item: Item }) =>
   isExpandableItem(item) ? (
     <MenuItemExpandable item={item} />
   ) : (
-    <ItemLink item={item} />
+    <MenuSingleItem item={item} />
   );
 
 interface Props {

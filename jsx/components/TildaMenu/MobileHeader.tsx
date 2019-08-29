@@ -36,7 +36,7 @@ export default class MobileHeader extends React.Component<Props> {
   render() {
     return (
       <this.MobileHeaderComponent onClick={this.switchExpand}>
-        <div>Антикафе Кочерга</div>
+        <div>Кочерга</div>
         <Burger
           color="white"
           opened={this.props.expanded}
