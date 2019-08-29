@@ -4,7 +4,6 @@ import { NextPage } from '~/common/types';
 import { selectAPI } from '~/core/selectors';
 
 import Page from '~/components/Page';
-import WorkInProgress from '~/components/WorkInProgress';
 
 import ProjectIndex from '~/projects/components/ProjectIndex';
 
