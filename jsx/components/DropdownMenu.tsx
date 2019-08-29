@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 import { FaCaretDown } from 'react-icons/fa';
 
-import { colors } from '@kocherga/frontkit';
+import { colors, fonts } from '@kocherga/frontkit';
+
+import { useExpandable } from '~/common/hooks';
 
 type ModalCreator = ({ close }: { close: () => void }) => React.ReactNode;
 
@@ -26,13 +28,10 @@ const Container = styled.div`
 
 const Dropdown = styled.div`
   position: absolute;
-  z-index: 1;
 
-  // FIXME - copy-pasted from Picker
-  border: 1px solid #888;
-
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   user-select: none;
+  border-radius: 4px;
 
   margin-left: 4px;
   z-index: 10;
@@ -40,20 +39,10 @@ const Dropdown = styled.div`
 `;
 
 const DropdownMenu: React.FC = ({ children }) => {
-  const [revealed, setRevealed] = useState(false);
-
   // we need to wrap ModalCreator function in an object because useState behaves funky otherwise
   const [modalWrapper, setModalWrapper] = useState<
     { modal: ModalCreator } | undefined
   >(undefined);
-
-  const revealDropdown = useCallback(() => {
-    setRevealed(true);
-  }, []);
-
-  const hideDropdown = useCallback(() => {
-    setRevealed(false);
-  }, []);
 
   const closeModal = useCallback(() => {
     setModalWrapper(undefined);
@@ -63,13 +52,18 @@ const DropdownMenu: React.FC = ({ children }) => {
     setModalWrapper({ modal });
   }, []);
 
+  const { ref, flipExpand, unexpand, expanded } = useExpandable();
+
   return (
     <React.Fragment>
       {modalWrapper ? modalWrapper.modal({ close: closeModal }) : null}
-      <DropdownMenuContext.Provider value={{ close: hideDropdown, setModal }}>
-        <Container onMouseOver={revealDropdown} onMouseLeave={hideDropdown}>
-          <FaCaretDown color={colors.grey[revealed ? 900 : 500]} />
-          {revealed && <Dropdown>{children}</Dropdown>}
+      <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
+        <Container ref={ref}>
+          <FaCaretDown
+            color={colors.grey[expanded ? 900 : 500]}
+            onClick={flipExpand}
+          />
+          {expanded && <Dropdown>{children}</Dropdown>}
         </Container>
       </DropdownMenuContext.Provider>
     </React.Fragment>
@@ -77,7 +71,8 @@ const DropdownMenu: React.FC = ({ children }) => {
 };
 
 export const ActionContainer = styled.div`
-  padding: 8px;
+  padding: 4px 8px;
+  font-size: ${fonts.sizes.S};
   &:hover {
     background-color: ${colors.grey[100]};
   }
@@ -120,6 +115,21 @@ export const ModalAction: React.FC<ModalActionProps> = ({
   }, [close, setModal]);
 
   return <ActionContainer onClick={openModal}>{title}</ActionContainer>;
+};
+
+interface LinkActionProps {
+  href: string;
+}
+const LinkActionA = styled.a`
+  color: black;
+  text-decoration: none;
+`;
+export const LinkAction: React.FC<LinkActionProps> = ({ children, href }) => {
+  return (
+    <LinkActionA href={href}>
+      <ActionContainer>{children}</ActionContainer>
+    </LinkActionA>
+  );
 };
 
 export default DropdownMenu;

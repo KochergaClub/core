@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { A, Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '@kocherga/frontkit';
 
 import DropdownMenu, {
-  ActionContainer,
+  LinkAction,
   ModalAction,
 } from '~/components/DropdownMenu';
 import Card from '~/components/Card';
@@ -46,11 +46,9 @@ const GroupCard: React.FC<Props> = ({ group }) => {
         <Row stretch>
           <strong>{group.name}</strong>
           <DropdownMenu>
-            <ActionContainer>
-              <A href={`/wagtail/groups/${group.id}/`}>
-                редактировать в wagtail
-              </A>
-            </ActionContainer>
+            <LinkAction href={`/wagtail/groups/${group.id}/`}>
+              Редактировать в Wagtail
+            </LinkAction>
             <ModalAction title="Добавить сотрудника">
               {({ close }) => (
                 <AddMemberToGroupModal close={close} group={group} />
