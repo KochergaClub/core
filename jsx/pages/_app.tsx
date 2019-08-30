@@ -15,14 +15,14 @@ import { APIProps, APIError } from '~/common/api';
 import { API_HOST } from '~/render/server/constants';
 
 import { selectUser } from '~/core/selectors';
-import { gaPageview } from '~/components/analytics';
+import { trackPageview } from '~/components/analytics';
 
 Router.events.on('routeChangeStart', () => {
   NProgress.start();
 });
 Router.events.on('routeChangeComplete', url => {
   NProgress.done();
-  gaPageview(url);
+  trackPageview(url);
 });
 Router.events.on('routeChangeError', () => NProgress.done());
 
