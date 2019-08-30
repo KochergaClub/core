@@ -10,6 +10,8 @@ import { ServerStyleSheet } from 'styled-components';
 import {
   GoogleAnalyticsScript,
   FacebookPixelScript,
+  YandexMetrikaScript,
+  VkRetargetingScript,
 } from '~/components/analytics';
 
 export default class MyDocument extends Document<{}> {
@@ -44,6 +46,8 @@ export default class MyDocument extends Document<{}> {
         <Head>
           <GoogleAnalyticsScript />
           <FacebookPixelScript />
+          <YandexMetrikaScript />
+          <VkRetargetingScript />
         </Head>
         <body>
           <Main />

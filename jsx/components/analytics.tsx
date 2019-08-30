@@ -6,6 +6,7 @@ const { publicRuntimeConfig } = getConfig();
 export const GA_TRACKING_ID = publicRuntimeConfig.googleAnalyticsId;
 export const FB_PIXEL_ID = publicRuntimeConfig.facebookPixelId;
 export const YANDEX_METRIKA_ID = publicRuntimeConfig.yandexMetrikaId;
+export const VK_RETARGETING_ID = publicRuntimeConfig.vkRetragetingId;
 
 declare global {
   interface Window {
@@ -72,6 +73,20 @@ export const YandexMetrikaScript = () => {
         accurateTrackBounce:true,
         webvisor:true
       });`,
+      }}
+    />
+  );
+};
+
+export const VkRetargetingScript = () => {
+  if (!VK_RETARGETING_ID) {
+    return null;
+  }
+
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(window.Image ? (new Image()) : document.createElement('img')).src = location.protocol + '//vk.com/rtrg?r=${VK_RETARGETING_ID}';`,
       }}
     />
   );
