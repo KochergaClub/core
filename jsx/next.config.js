@@ -6,5 +6,6 @@ module.exports = {
   distDir: '../jsx-build',
   publicRuntimeConfig: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+    facebookPixelId: process.env.FACEBOOK_PIXEL_ID,
   },
 };
