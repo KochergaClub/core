@@ -7,8 +7,10 @@ import Document, {
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-import { ScriptTags as GtagScriptTags } from '~/common/gtag';
-import FacebookPixel from '~/components/FacebookPixel';
+import {
+  GoogleAnalyticsScript,
+  FacebookPixelScript,
+} from '~/components/analytics';
 
 export default class MyDocument extends Document<{}> {
   static async getInitialProps(ctx: DocumentContext) {
@@ -40,8 +42,8 @@ export default class MyDocument extends Document<{}> {
     return (
       <html>
         <Head>
-          <GtagScriptTags />
-          <FacebookPixel />
+          <GoogleAnalyticsScript />
+          <FacebookPixelScript />
         </Head>
         <body>
           <Main />
