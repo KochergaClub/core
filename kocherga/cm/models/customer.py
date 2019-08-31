@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import enum
 from datetime import datetime, time
 
@@ -199,10 +202,15 @@ class Customer(models.Model):
                 user = KchUser.objects.create_user(email)
             params['user'] = user
 
-        (obj, created) = Customer.objects.update_or_create(
-            customer_id=params['customer_id'],
-            defaults=params,
-        )
+        try:
+            (obj, created) = Customer.objects.update_or_create(
+                customer_id=params['customer_id'],
+                defaults=params,
+            )
+        except Exception as e:
+            logger.error(f"Failed to create or update customer {params['customer_id']}, probably an email collision")
+            raise e
+
         return obj
 
     def _http_update_customer(self, data):
