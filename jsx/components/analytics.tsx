@@ -6,7 +6,7 @@ const { publicRuntimeConfig } = getConfig();
 export const GA_TRACKING_ID = publicRuntimeConfig.googleAnalyticsId;
 export const FB_PIXEL_ID = publicRuntimeConfig.facebookPixelId;
 export const YANDEX_METRIKA_ID = publicRuntimeConfig.yandexMetrikaId;
-export const VK_RETARGETING_ID = publicRuntimeConfig.vkRetragetingId;
+export const VK_RETARGETING_ID = publicRuntimeConfig.vkRetargetingId;
 
 declare global {
   interface Window {
