@@ -1,7 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
 import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
 
 declare global {
   interface Window {
@@ -10,14 +9,14 @@ declare global {
 }
 
 const VkMessagesWidget: React.FC = () => {
-  if (!publicRuntimeConfig.vkMessagesWidgetId) {
+  if (!getConfig().vkMessagesWidgetId) {
     return null;
   }
 
   React.useEffect(() => {
     window.VK.Widgets.CommunityMessages(
       'vk_community_messages',
-      publicRuntimeConfig.vkMessagesWidgetId,
+      getConfig().vkMessagesWidgetId,
       {
         disableExpandChatSound: '1',
         tooltipButtonText: 'Есть вопрос?',
