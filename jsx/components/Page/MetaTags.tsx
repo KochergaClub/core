@@ -22,7 +22,7 @@ const MetaTags: React.FC<Props> = ({ og, title, description }) => {
         property="og:image"
         content={og ? og.image || DEFAULT_IMAGE : DEFAULT_IMAGE}
       />
-      <meta name="og:url" content={router.asPath} />
+      <meta name="og:url" content={router.pathname} />
       <meta name="og:type" content="website" />
       {description ? (
         <React.Fragment>
