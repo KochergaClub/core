@@ -133,7 +133,7 @@ const ViewingTemplateScreen: React.FC<Props> = ({}) => {
             <Form>
               <Column>
                 <Fields template={template} />
-                {isValid && (
+                {(isValid || !template.schema.fields.length) && (
                   <Column centered>
                     <Preview state={values} template={template} />
                     <A

@@ -13,21 +13,59 @@ import Main from './Main';
 
 import NProgressStyle from './NProgressStyle';
 
+const DEFAULT_IMAGE = '/static/menu-logo'; // TODO - replace with a better image
+
+interface OpenGraph {
+  title?: string;
+  image?: string;
+}
+
 interface Props {
   title: string;
+  description?: string;
   team?: boolean;
   children: React.ReactNode;
   noMenu?: boolean;
   noFooter?: boolean;
+  og?: OpenGraph;
 }
 
-const Page = ({ title, team, children, noMenu, noFooter }: Props) => {
+const MetaTags: React.FC<{
+  og: OpenGraph;
+  title: string;
+  description?: string;
+}> = ({ og, title, description }) => (
+  <React.Fragment>
+    <title>{title}</title>
+    <meta property="og:title" content={og ? og.title || title : title} />
+    <meta
+      property="og:image"
+      content={og ? og.image || DEFAULT_IMAGE : DEFAULT_IMAGE}
+    />
+    {description ? (
+      <React.Fragment>
+        <meta property="og:description" content={description} />
+        <meta name="description" content={description} />
+      </React.Fragment>
+    ) : null}
+  </React.Fragment>
+);
+
+const Page = ({
+  title,
+  description,
+  team,
+  children,
+  noMenu,
+  noFooter,
+  og,
+}: Props) => {
   return (
     <div>
       <GlobalStyle />
       <NProgressStyle />
       <Head>
-        <title>{title}</title>
+        <MetaTags title={title} description={description} og={og || {}} />
         <link rel="stylesheet" href="/static/normalize.css" />
         <link rel="shortcut icon" href="/static/favicon.ico" />
         {/* NOTE - <GlobalFonts /> doesn't work for some reason */}

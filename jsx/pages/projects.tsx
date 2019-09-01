@@ -15,7 +15,11 @@ interface Props {
 
 const ProjectsIndexPage: NextPage<Props> = (props: Props) => {
   return (
-    <Page title="Проекты Кочерги">
+    <Page
+      title="Проекты Кочерги"
+      description="Регулярные мероприятия и сообщества, которые собираются в Кочерге.
+      Рациональность, научно-популярные лектории, критическое мышление и многое другое."
+    >
       <ProjectIndex projects={props.projects} />
     </Page>
   );

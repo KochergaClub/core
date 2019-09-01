@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <base href="{{ url_root }}">
+    <style>
+     @font-face {
+       font-family: 'Intro';
+       src: local('Intro'), url('{{ static("fonts/intro.woff2") }}') format('woff2'), url('{{ static("fonts/intro.woff") }}') format('woff');
+     }
+     * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+     }
+
+     body {
+       width: 600px;
+       height: 315px;
+       font-family: 'Intro';
+       color: white;
+       background-color: black;
+     }
+
+     main {
+       display: flex;
+       flex-direction: row;
+       max-width: 500px;
+       margin: 0 auto;
+       height: 100%;
+       align-items: center;
+       background-color: black;
+     }
+
+     #logo {
+       width: 150px;
+       height: 150px;
+     }
+
+     .texts {
+       margin-left: 40px;
+       font-size: 0.8em;
+       text-align: center;
+     }
+
+     .header-line1 {
+       margin-bottom: 10px;
+       font-size: 20px;
+     }
+     .header-line2 {
+       font-size: 60px;
+     }
+
+    </style>
+  </head>
+  <body>
+    <main>
+      <img id="logo" src="{{ static('logo.png') }}" />
+      <div class="texts">
+        <header>
+          <div class="header-line1">Центр рациональности</div>
+          <div class="header-line2">Кочерга</div>
+        </header>
+      </div>
+    </main>
+  </body>
+</html>
+<!-- width=600 height=315 -->

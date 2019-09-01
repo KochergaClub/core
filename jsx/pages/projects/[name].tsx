@@ -13,7 +13,11 @@ interface Props {
 
 const ProjectsDetailPage: NextPage<Props> = ({ project }) => {
   return (
-    <Page title={`${project.title} | Проект Кочерги`}>
+    <Page
+      title={project.title}
+      og={{ image: project.image.url }}
+      description={project.summary}
+    >
       <ProjectDetails project={project} />
     </Page>
   );

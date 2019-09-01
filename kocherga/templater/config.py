@@ -61,3 +61,5 @@ name2schema['integration'] = Schema(
 name2schema['integration-fb'] = Schema(
     [Field('date_text')]
 )
+
+name2schema['og-image'] = Schema([])
