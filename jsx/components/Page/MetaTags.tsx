@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 
 import { OpenGraph } from './types';
 
@@ -9,11 +8,10 @@ interface Props {
   og: OpenGraph;
   title: string;
   description?: string;
+  url: string;
 }
 
-const MetaTags: React.FC<Props> = ({ og, title, description }) => {
-  const router = useRouter();
-
+const MetaTags: React.FC<Props> = ({ og, title, description, url }) => {
   return (
     <React.Fragment>
       <title>{title}</title>
@@ -22,7 +20,7 @@ const MetaTags: React.FC<Props> = ({ og, title, description }) => {
         property="og:image"
         content={og ? og.image || DEFAULT_IMAGE : DEFAULT_IMAGE}
       />
-      <meta name="og:url" content={router.pathname} />
+      <meta name="og:url" content={url} />
       <meta name="og:type" content="website" />
       {description ? (
         <React.Fragment>

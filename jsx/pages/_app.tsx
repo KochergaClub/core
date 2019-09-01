@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import cookie from 'cookie';
 
-import App, { AppContext, Container } from 'next/app';
+import App, { AppContext } from 'next/app';
 import Error from 'next/error';
 import withRedux, { NextJSContext } from 'next-redux-wrapper';
 import Router from 'next/router';
@@ -96,18 +96,12 @@ class MyApp extends App<MyProps> {
     const { Component, pageProps, store, errorCode } = this.props;
 
     if (errorCode) {
-      return (
-        <Container>
-          <Error statusCode={errorCode} />
-        </Container>
-      );
+      return <Error statusCode={errorCode} />;
     }
     return (
-      <Container>
-        <Provider store={store}>
-          <Component {...pageProps} />
-        </Provider>
-      </Container>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     );
   }
 }

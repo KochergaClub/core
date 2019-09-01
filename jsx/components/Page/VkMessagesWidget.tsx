@@ -9,20 +9,26 @@ declare global {
 }
 
 const VkMessagesWidget: React.FC = () => {
-  if (!getConfig().vkMessagesWidgetId) {
+  const widgetId = getConfig().publicRuntimeConfig.vkMessagesWidgetId;
+
+  React.useEffect(() => {
+    if (!widgetId) {
+      return;
+    }
+    if (!window.VK) {
+      console.error('window.VK is not loaded for some reason');
+      return;
+    }
+    window.VK.Widgets.CommunityMessages('vk_community_messages', widgetId, {
+      disableExpandChatSound: '1',
+      tooltipButtonText: 'Есть вопрос?',
+    });
+  }, []);
+
+  if (!widgetId) {
     return null;
   }
 
-  React.useEffect(() => {
-    window.VK.Widgets.CommunityMessages(
-      'vk_community_messages',
-      getConfig().vkMessagesWidgetId,
-      {
-        disableExpandChatSound: '1',
-        tooltipButtonText: 'Есть вопрос?',
-      }
-    );
-  }, []);
   return (
     <React.Fragment>
       <script src="https://vk.com/js/api/openapi.js?158" />

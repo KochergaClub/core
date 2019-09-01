@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 import { GlobalStyle } from '@kocherga/frontkit';
@@ -42,12 +43,16 @@ const Page: PageType = ({
   noFooter,
   og,
 }) => {
+  const router = useRouter();
   return (
     <div>
-      <GlobalStyle />
-      <NProgressStyle />
       <Head>
-        <MetaTags title={title} description={description} og={og || {}} />
+        <MetaTags
+          title={title}
+          description={description}
+          og={og || {}}
+          url={router.pathname}
+        />
         <link rel="stylesheet" href="/static/normalize.css" />
         <link rel="shortcut icon" href="/static/favicon.ico" />
         {/* NOTE - <GlobalFonts /> doesn't work for some reason */}
@@ -56,6 +61,8 @@ const Page: PageType = ({
           rel="stylesheet"
         />
       </Head>
+      <GlobalStyle />
+      <NProgressStyle />
       {noMenu || <TildaMenu team={team || false} />}
       <ErrorBoundary>{children}</ErrorBoundary>
       {noFooter || <TildaFooter />}
