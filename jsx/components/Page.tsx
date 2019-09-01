@@ -51,6 +51,18 @@ const MetaTags: React.FC<{
   </React.Fragment>
 );
 
+const VkMessagesWidget: React.FC = () => (
+  <React.Fragment>
+    <script src="https://vk.com/js/api/openapi.js?158" />
+    <div id="vk_community_messages" />
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `VK.Widgets.CommunityMessages("vk_community_messages", 99973027, {disableExpandChatSound: "1",tooltipButtonText: "Есть вопрос?"});`,
+      }}
+    />
+  </React.Fragment>
+);
+
 const Page = ({
   title,
   description,
@@ -77,6 +89,7 @@ const Page = ({
       {noMenu || <TildaMenu team={team || false} />}
       <ErrorBoundary>{children}</ErrorBoundary>
       {noFooter || <TildaFooter />}
+      {!team && <VkMessagesWidget />}
     </div>
   );
 };
