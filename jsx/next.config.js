@@ -9,5 +9,6 @@ module.exports = {
     facebookPixelId: process.env.FACEBOOK_PIXEL_ID,
     yandexMetrikaId: process.env.YANDEX_METRIKA_ID,
     vkRetargetingId: process.env.VK_RETARGETING_ID,
+    vkMessagesWidgetId: 99973027,
   },
 };

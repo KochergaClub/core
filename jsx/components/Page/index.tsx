@@ -4,21 +4,19 @@ import Head from 'next/head';
 
 import { GlobalStyle } from '@kocherga/frontkit';
 
-import TildaMenu from './TildaMenu';
-import TildaFooter from './TildaFooter';
 import ErrorBoundary from './ErrorBoundary';
 
 import PageTitle from './PageTitle';
 import Main from './Main';
+import MetaTags from './MetaTags';
 
+import TildaMenu from './TildaMenu';
+import TildaFooter from './TildaFooter';
 import NProgressStyle from './NProgressStyle';
 
-const DEFAULT_IMAGE = '/static/menu-logo'; // TODO - replace with a better image
+import VkMessagesWidget from './VkMessagesWidget';
 
-interface OpenGraph {
-  title?: string;
-  image?: string;
-}
+import { OpenGraph } from './types';
 
 interface Props {
   title: string;
@@ -30,40 +28,12 @@ interface Props {
   og?: OpenGraph;
 }
 
-const MetaTags: React.FC<{
-  og: OpenGraph;
-  title: string;
-  description?: string;
-}> = ({ og, title, description }) => (
-  <React.Fragment>
-    <title>{title}</title>
-    <meta property="og:title" content={og ? og.title || title : title} />
-    <meta
-      property="og:image"
-      content={og ? og.image || DEFAULT_IMAGE : DEFAULT_IMAGE}
-    />
-    {description ? (
-      <React.Fragment>
-        <meta property="og:description" content={description} />
-        <meta name="description" content={description} />
-      </React.Fragment>
-    ) : null}
-  </React.Fragment>
-);
+type PageType = React.FC<Props> & {
+  Title: typeof PageTitle;
+  Main: typeof Main;
+};
 
-const VkMessagesWidget: React.FC = () => (
-  <React.Fragment>
-    <script src="https://vk.com/js/api/openapi.js?158" />
-    <div id="vk_community_messages" />
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `VK.Widgets.CommunityMessages("vk_community_messages", 99973027, {disableExpandChatSound: "1",tooltipButtonText: "Есть вопрос?"});`,
-      }}
-    />
-  </React.Fragment>
-);
-
-const Page = ({
+const Page: PageType = ({
   title,
   description,
   team,
@@ -71,7 +41,7 @@ const Page = ({
   noMenu,
   noFooter,
   og,
-}: Props) => {
+}) => {
   return (
     <div>
       <GlobalStyle />
