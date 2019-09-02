@@ -149,6 +149,7 @@ pytz==2019.1
 pyzmq==18.0.1             # via jupyter-client, notebook
 qtconsole==4.5.1          # via jupyter
 redis==3.2.1
+pywatchman==1.4.1
 requests-oauthlib==1.2.0  # via mwclient
 requests-toolbelt==0.9.1
 requests==2.22.0

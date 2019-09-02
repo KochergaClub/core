@@ -15,11 +15,15 @@ RUN npm config set registry https://npm.team.kocherga.club/ \
 
 RUN pip install --upgrade pip && pip install pip-tools
 
+RUN apt-get install -y inotify-tools && \
+    git clone https://github.com/facebook/watchman.git /tmp/watchman-src && \
+    cd /tmp/watchman-src && \
+    git checkout v4.9.0 && \
+    ./autogen.sh && ./configure && make && make install
+
 WORKDIR /code
 COPY requirements.txt /code/
 RUN pip-sync
-
-RUN apt-get install -y inotify-tools
 
 COPY package.json package-lock.json /code/
 RUN npm ci
