@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/analytics/', include('kocherga.analytics.urls')),
     path('api/zadarma/', include('kocherga.zadarma.urls')),
     path('api/cashier/', include('kocherga.money.cashier.urls')),
+    path('api/tochka/', include('kocherga.money.tochka.urls')),
     path('api/ratio/', include('kocherga.ratio.urls')),
     path('api/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
     path('api/', include('kocherga.cm.urls')),
