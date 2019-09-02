@@ -11,4 +11,5 @@ module.exports = {
     vkRetargetingId: process.env.VK_RETARGETING_ID,
     vkMessagesWidgetId: 99973027,
   },
+  poweredByHeader: false,
 };
