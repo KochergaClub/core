@@ -6,6 +6,10 @@ import { configureStore } from '~/redux/store';
 
 import Page from './index';
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({ pathname: 'whatever' }),
+}));
+
 it('renders without crashing', () => {
   const div = document.createElement('div');
   const store = configureStore();
