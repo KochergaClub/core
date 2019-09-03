@@ -32,7 +32,7 @@ test-js:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run --rm api npx tsc
+    - docker-compose -f docker/compose.ci.yml run --rm api bash -c "cd jsx && npx tsc"
     - docker-compose -f docker/compose.ci.yml run $pass_env
       --rm api
       bash -c "
