@@ -33,13 +33,27 @@ const Container = styled('div')<{ hideOnMobile: boolean; team: boolean }>`
   }
 `;
 
-const Logo = ({ team }: Props) => (
-  <Link href={team ? '/team' : '/'}>
-    <a>
-      <img src="/static/menu-logo.png" width="190" height="50" />
-    </a>
-  </Link>
+const LogoImage = () => (
+  <img src="/static/menu-logo.png" width="190" height="50" />
 );
+
+const Logo = ({ team }: Props) => {
+  if (team) {
+    return (
+      <Link href="/team" passHref>
+        <a>
+          <LogoImage />
+        </a>
+      </Link>
+    );
+  }
+
+  return (
+    <a href="/">
+      <LogoImage />
+    </a>
+  );
+};
 
 const Line = styled.div`
   display: flex;
