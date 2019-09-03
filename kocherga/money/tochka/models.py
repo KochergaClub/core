@@ -35,14 +35,31 @@ class Record(models.Model):
     document_type = models.IntegerField()
     total = models.DecimalField(max_digits=10, decimal_places=2)
 
+    counterparty_name = models.CharField(max_length=1024, blank=True)
+    counterparty_inn = models.CharField(max_length=20, blank=True)
+    counterparty_bank_bic = models.CharField(max_length=20, blank=True)
+    counterparty_bank_account_number = models.CharField(max_length=40, blank=True)
+    counterparty_bank_name = models.CharField(max_length=1024, blank=True)
+
     @classmethod
     def from_element(cls, record):
         dt = datetime.strptime(record['payment_date'], '%d.%m.%Y')
 
-        return cls(
-            id=record.get("x_payment_id"),
-            ts=dt.timestamp(),
-            purpose=record.get("payment_purpose"),
-            total=float(record.get("payment_amount")),
-            document_type=int(record.get("operation_type")),
-        )
+        fields = {
+            'id': record.get("x_payment_id"),
+            'ts': dt.timestamp(),
+            'purpose': record.get("payment_purpose"),
+            'total': float(record.get("payment_amount")),
+            'document_type': int(record.get("operation_type")),
+        }
+
+        for f in (
+                'counterparty_name',
+                'counterparty_inn',
+                'counterparty_bank_bic',
+                'counterparty_bank_account_number',
+                'counterparty_bank_name',
+        ):
+            fields[f] = record.get(f, '')
+
+        return cls(**fields)
