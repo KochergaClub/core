@@ -36,7 +36,7 @@ test-js:
     - docker-compose -f docker/compose.ci.yml run $pass_env
       --rm api
       bash -c "
-        npx jest --coverage
+        npx jest --no-watchman --coverage
         && ls -l
         && codecov -F js
       "

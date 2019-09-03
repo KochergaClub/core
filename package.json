@@ -12,7 +12,12 @@
     "moduleNameMapper": {
       "^~/(.*)$": "<rootDir>/jsx/$1"
     },
-    "setupFiles": ["<rootDir>/jsx/jest.setup.ts"]
+    "setupFiles": [
+      "<rootDir>/jsx/jest.setup.ts"
+    ],
+    "testMatch": [
+      "<rootDir>/jsx/**/*.test.(ts|tsx)"
+    ]
   },
   "dependencies": {
     "@babel/core": "^7.4.5",
