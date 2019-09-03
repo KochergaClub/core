@@ -29,7 +29,7 @@ pysocks
 django == 2.2.5
 django-cors-headers
 django-rest-framework
-sentry-sdk
+sentry-sdk[flask]
 django-debug-toolbar
 tqdm
 gunicorn >= 19.9
