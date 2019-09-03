@@ -88,3 +88,7 @@ export const addTraining = (
   await api.call('ratio/training', 'POST', values);
   await dispatch(loadTrainings());
 };
+
+export type ActionTypes =
+  | ReturnType<typeof tryFiscalizeTicket>
+  | ReturnType<typeof fiscalizedTicket>;

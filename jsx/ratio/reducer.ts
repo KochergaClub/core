@@ -1,23 +1,28 @@
 import { AnyAction, Reducer, combineReducers } from 'redux';
 
 import { ticketsSlice, trainingsSlice } from './slices';
-import { TICKET_TRY_FISCALIZE, TICKET_FISCALIZED } from './actions';
+import {
+  TICKET_TRY_FISCALIZE,
+  TICKET_FISCALIZED,
+  ActionTypes,
+} from './actions';
 
 type TicketsState = ReturnType<typeof ticketsSlice.reducer>;
 
 const ticketsReducer: Reducer<TicketsState> = (
   prevState = ticketsSlice.initialState,
-  action: AnyAction
+  anyAction: AnyAction
 ) => {
-  const state = ticketsSlice.reducer(prevState, action);
+  const state = ticketsSlice.reducer(prevState, anyAction);
+  const action = anyAction as ActionTypes;
   switch (action.type) {
     case TICKET_FISCALIZED:
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.payload.ticket_id]: {
-            ...state.byId[action.payload.ticket_id],
+          [action.payload]: {
+            ...state.byId[action.payload],
             fiscalization_status: 'fiscalized',
           },
         },
@@ -27,8 +32,8 @@ const ticketsReducer: Reducer<TicketsState> = (
         ...state,
         byId: {
           ...state.byId,
-          [action.payload.ticket_id]: {
-            ...state.byId[action.payload.ticket_id],
+          [action.payload]: {
+            ...state.byId[action.payload],
             fiscalization_status: 'in_progress',
           },
         },
