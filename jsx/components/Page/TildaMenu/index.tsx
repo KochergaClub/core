@@ -6,6 +6,7 @@ import Link from 'next/link';
 import MenuItems from './MenuItems';
 import MobileHeader from './MobileHeader';
 import SocialIcons from './SocialIcons';
+import MenuButton from './MenuButton';
 
 import { teamColor } from './constants';
 
@@ -63,6 +64,11 @@ const Line = styled.div`
   }
 `;
 
+const LoginButton = styled.button`
+  background-color: white;
+  color: black;
+`;
+
 interface Props {
   team: boolean;
 }
@@ -80,6 +86,7 @@ const TildaMenu = ({ team }: Props) => {
             <MenuItems team={team} />
           </Line>
           <SocialIcons />
+          {team ? null : <MenuButton href="/my">Войти</MenuButton>}
         </Container>
       </div>
     </ThemeProvider>
