@@ -173,12 +173,7 @@ const NowPage: NextPage<Props> = props => {
   if (!nowData) {
     throw new Error('now data is not loaded');
   }
-  const { total } = nowData;
-
-  let customers = [];
-  customers.push({ first_name: 'Антон', last_name: 'Чайников' });
-  customers.push({ first_name: 'Татьяна', last_name: 'Миропольская' });
-  customers.push({ first_name: 'Майя', last_name: 'Плисова' });
+  const { total, customers } = nowData;
 
   useEffect(() => {
     const id = setInterval(() => {
