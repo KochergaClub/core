@@ -76,6 +76,7 @@ const LoginPage: NextPage<Props> = props => {
 
   return (
     <Page title="Логин">
+      <Page.Title>Войти или зарегистрироваться</Page.Title>
       <AuthContainer {...hotkeys}>
         <Column stretch gutter={16}>
           <Column stretch gutter={0}>
