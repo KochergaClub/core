@@ -11,6 +11,7 @@ import ratioReducer from '~/ratio/reducer';
 import kkmReducer from '~/kkm/redux-reducer';
 import cashierReducer from '~/cashier/reducer';
 import auditReducer from '~/audit/reducer';
+import nowReducer from '~/now/reducer';
 
 const reducer = combineReducers({
   staff: staffReducer,
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   kkm: kkmReducer,
   cashier: cashierReducer,
   audit: auditReducer,
+  now: nowReducer,
 });
 
 export default reducer;

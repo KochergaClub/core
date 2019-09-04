@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
-import { GlobalStyle } from '@kocherga/frontkit';
+import GlobalStyle from './GlobalStyle';
 
 import ErrorBoundary from './ErrorBoundary';
 
@@ -26,6 +26,7 @@ interface Props {
   children: React.ReactNode;
   noMenu?: boolean;
   noFooter?: boolean;
+  noVkWidget?: boolean;
   og?: OpenGraph;
 }
 
@@ -41,6 +42,7 @@ const Page: PageType = ({
   children,
   noMenu,
   noFooter,
+  noVkWidget,
   og,
 }) => {
   const router = useRouter();
@@ -53,20 +55,14 @@ const Page: PageType = ({
           og={og || {}}
           url={router.pathname}
         />
-        <link rel="stylesheet" href="/static/normalize.css" />
         <link rel="shortcut icon" href="/static/favicon.ico" />
-        {/* NOTE - <GlobalFonts /> doesn't work for some reason */}
-        <link
-          href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i&display=block&subset=cyrillic"
-          rel="stylesheet"
-        />
       </Head>
       <GlobalStyle />
       <NProgressStyle />
       {noMenu || <TildaMenu team={team || false} />}
       <ErrorBoundary>{children}</ErrorBoundary>
       {noFooter || <TildaFooter />}
-      {!team && <VkMessagesWidget />}
+      {!team && !noVkWidget && <VkMessagesWidget />}
     </div>
   );
 };
