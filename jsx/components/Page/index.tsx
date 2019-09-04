@@ -1,7 +1,13 @@
 import React from 'react';
 
 import { useRouter } from 'next/router';
-import Head from 'next/head';
+
+import {
+  GoogleAnalyticsScript,
+  FacebookPixelScript,
+  YandexMetrikaScript,
+  VkRetargetingScript,
+} from '~/components/analytics';
 
 import GlobalStyle from './GlobalStyle';
 
@@ -9,7 +15,7 @@ import ErrorBoundary from './ErrorBoundary';
 
 import PageTitle from './PageTitle';
 import Main from './Main';
-import MetaTags from './MetaTags';
+import HtmlHead from './HtmlHead';
 
 import TildaMenu from './TildaMenu';
 import TildaFooter from './TildaFooter';
@@ -48,15 +54,16 @@ const Page: PageType = ({
   const router = useRouter();
   return (
     <div>
-      <Head>
-        <MetaTags
-          title={title}
-          description={description}
-          og={og || {}}
-          url={router.pathname}
-        />
-        <link rel="shortcut icon" href="/static/favicon.ico" />
-      </Head>
+      <HtmlHead
+        title={title}
+        description={description}
+        og={og || {}}
+        url={router.pathname}
+      />
+      <GoogleAnalyticsScript />
+      <FacebookPixelScript />
+      <YandexMetrikaScript />
+      <VkRetargetingScript />
       <GlobalStyle />
       <NProgressStyle />
       {noMenu || <TildaMenu team={team || false} />}

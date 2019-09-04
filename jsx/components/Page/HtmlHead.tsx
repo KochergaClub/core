@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 
 import { OpenGraph } from './types';
 
@@ -13,7 +14,7 @@ interface Props {
 
 const MetaTags: React.FC<Props> = ({ og, title, description, url }) => {
   return (
-    <React.Fragment>
+    <Head>
       <title>{title}</title>
       <meta property="og:title" content={og ? og.title || title : title} />
       <meta
@@ -28,7 +29,8 @@ const MetaTags: React.FC<Props> = ({ og, title, description, url }) => {
           <meta name="description" content={description} />
         </React.Fragment>
       ) : null}
-    </React.Fragment>
+      <link rel="shortcut icon" href="/static/favicon.ico" />
+    </Head>
   );
 };
 

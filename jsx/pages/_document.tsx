@@ -7,13 +7,6 @@ import Document, {
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-import {
-  GoogleAnalyticsScript,
-  FacebookPixelScript,
-  YandexMetrikaScript,
-  VkRetargetingScript,
-} from '~/components/analytics';
-
 export default class MyDocument extends Document<{}> {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet();
@@ -43,12 +36,7 @@ export default class MyDocument extends Document<{}> {
   render() {
     return (
       <html>
-        <Head>
-          <GoogleAnalyticsScript />
-          <FacebookPixelScript />
-          <YandexMetrikaScript />
-          <VkRetargetingScript />
-        </Head>
+        <Head />
         <body>
           <Main />
           <NextScript />
