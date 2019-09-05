@@ -33,9 +33,13 @@ const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
       <Modal.Header toggle={close}>Выбрать сотрудника</Modal.Header>
       <Modal.Body>
         <Column stretch>
-          {members.map(member => (
-            <AsyncButton act={() => cb(member)}>{member.full_name}</AsyncButton>
-          ))}
+          {members
+            .filter(m => m.is_current)
+            .map(member => (
+              <AsyncButton act={() => cb(member)}>
+                {member.full_name}
+              </AsyncButton>
+            ))}
         </Column>
       </Modal.Body>
     </Modal>
