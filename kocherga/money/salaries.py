@@ -237,7 +237,7 @@ def salaries_to_payments(salaries: SalaryContainer):
 
         comment = f"{comment_prefix}. Смены: {salary.shifts}, бонус: {salary.commissions}"
         if member.watchman and member.watchman.grade:
-            comment += ". Грейд: {member.watchman.grade.code}"
+            comment += f". Грейд: {member.watchman.grade.code}"
 
         Payment.objects.create(
             whom=member.user,
