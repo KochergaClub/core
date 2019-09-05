@@ -1,11 +1,8 @@
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { Modal, Column } from '@kocherga/frontkit';
+import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
 
-import AsyncButton from '~/components/AsyncButton';
-
-import { selectMembers } from '~/staff/selectors';
 import { Member } from '~/staff/types';
 
 import { Group } from '../types';
@@ -17,7 +14,6 @@ interface Props {
 }
 
 const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
-  const members = useSelector(selectMembers);
   const dispatch = useDispatch();
 
   const cb = useCallback(
@@ -28,22 +24,7 @@ const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
     [dispatch, group, close]
   );
 
-  return (
-    <Modal isOpen={true}>
-      <Modal.Header toggle={close}>Выбрать сотрудника</Modal.Header>
-      <Modal.Body>
-        <Column stretch>
-          {members
-            .filter(m => m.is_current)
-            .map(member => (
-              <AsyncButton act={() => cb(member)}>
-                {member.full_name}
-              </AsyncButton>
-            ))}
-        </Column>
-      </Modal.Body>
-    </Modal>
-  );
+  return <ModalMemberPicker close={close} pick={cb} />;
 };
 
 export default AddMemberToGroupModal;
