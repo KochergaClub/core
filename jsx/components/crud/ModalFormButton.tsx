@@ -1,21 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Formik, Form, Field, FormikActions, FieldProps } from 'formik';
+import { Formik, Form, FormikActions } from 'formik';
 
-import {
-  Column,
-  Label,
-  Button,
-  Modal,
-  ControlsFooter,
-} from '@kocherga/frontkit';
+import { Column, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
 import { FormField } from './types';
 
 import ButtonWithModal from '../ButtonWithModal';
-import LabeledFormField from '../LabeledFormField';
+
+import FieldInput from './FieldInput';
 
 interface Props {
   fields: FormField[];
@@ -28,75 +23,6 @@ interface Props {
 interface ModalProps extends Props {
   close: () => void;
 }
-
-interface FieldInputProps {
-  field: FormField;
-}
-
-const FieldInput: React.FC<FieldInputProps> = ({ field }) => {
-  if (field.readonly) {
-    return (
-      <div>
-        <Label>{field.name}</Label>
-        <div>{field.value}</div>
-      </div>
-    );
-  }
-  switch (field.type) {
-    case 'string':
-      return <LabeledFormField name={field.name} title={field.name} />;
-    case 'email':
-      return (
-        <LabeledFormField name={field.name} title={field.name} type="email" />
-      );
-    case 'date':
-      return (
-        <LabeledFormField name={field.name} title={field.name} type="date" />
-      );
-    case 'password':
-      return (
-        <LabeledFormField
-          name={field.name}
-          title={field.name}
-          type="password"
-        />
-      );
-    case 'number':
-      return (
-        <LabeledFormField name={field.name} title={field.name} type="number" />
-      );
-    case 'choice':
-      return (
-        <div>
-          <Field
-            name={field.name}
-            render={({ field: formikField }: FieldProps<any>) => {
-              return (
-                <div>
-                  <Label>{field.name}</Label>
-                  {field.options.map(option => {
-                    return (
-                      <div>
-                        <label key={option}>
-                          <input
-                            type="radio"
-                            {...formikField}
-                            checked={formikField.value === option}
-                            value={option}
-                          />{' '}
-                          {option}
-                        </label>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            }}
-          />
-        </div>
-      );
-  }
-};
 
 const CreateModal = ({
   fields,
