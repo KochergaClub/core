@@ -11,6 +11,8 @@ import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import Card, { CardList } from '~/components/Card';
 import MutedCard from '~/components/MutedCard';
 
+import UserInfo from '~/audit/components/UserInfo';
+
 import { Payment } from '../types';
 import { loadPayments } from '../actions';
 import { selectPayments } from '../selectors';
@@ -30,11 +32,10 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
 
   return (
     <Wrapper>
-      <div>
-        <strong>
-          {payment.amount} руб. &rarr; {payment.whom}
-        </strong>
-      </div>
+      <Row>
+        <strong>{payment.amount} руб. &rarr; </strong>
+        <UserInfo user={payment.whom} />
+      </Row>
       {payment.comment ? <div>{payment.comment}</div> : null}
       <Row vCentered>
         <Label>Создано:</Label>

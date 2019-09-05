@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Row, Column } from '@kocherga/frontkit';
 
+import { loadMembers } from '~/staff/actions';
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
@@ -31,6 +32,7 @@ const CashierPage: NextPage = () => {
 
 CashierPage.getInitialProps = async ({ store: { dispatch } }) => {
   await dispatch(loadPayments());
+  await dispatch(loadMembers());
   return {};
 };
 

@@ -11,10 +11,10 @@ import { CreatePaymentParams } from '../types';
 const fields: FormField[] = [
   { name: 'amount', type: 'number' },
   { name: 'comment', type: 'string' },
-  { name: 'whom', type: 'email' },
+  { name: 'whom_id', type: 'number' },
 ];
 
-const CreatePayment = () => {
+const CreatePayment: React.FC = () => {
   const dispatch = useDispatch();
   const [canCreate] = usePermissions(['cashier.create']);
 

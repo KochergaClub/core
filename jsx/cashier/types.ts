@@ -1,7 +1,9 @@
+import { User } from '~/audit/types';
+
 export interface Payment {
   id: number;
   amount: number;
-  whom: string;
+  whom: User;
   comment: string;
   is_redeemed: boolean;
   created_dt: string;
@@ -10,6 +12,6 @@ export interface Payment {
 
 export interface CreatePaymentParams {
   amount: number;
-  whom: string;
+  whom_id: number;
   comment: string;
 }
