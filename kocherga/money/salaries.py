@@ -8,7 +8,8 @@ from kocherga.watchmen.models import ShiftType
 import kocherga.staff.tools
 from kocherga.staff.models import Member
 from kocherga.cm.models import Order
-from kocherga.dateutils import TZ
+from kocherga.dateutils import TZ, inflected_month
+from kocherga.money.cashier.models import Payment
 
 
 def rate_by_shift(shift_type: ShiftType) -> int:
@@ -118,8 +119,10 @@ class Salary:
 
 
 class SalaryContainer:
-    def __init__(self):
+    def __init__(self, start_date, end_date):
         self.salaries = {}
+        self.start_date = start_date
+        self.end_date = end_date
 
     def add(self, member_id, kind, value):
         if member_id not in self.salaries:
@@ -144,7 +147,7 @@ class SalaryContainer:
 
 
 def calculate_salaries(start_date, end_date):
-    container = SalaryContainer()
+    container = SalaryContainer(start_date, end_date)
 
     add_basic_salaries = True
     add_bonus_salaries = True
@@ -214,3 +217,30 @@ def calculate_new_salaries(d=None):
                 salaries.remove_salary(member_id)
 
     return salaries
+
+
+def salaries_to_payments(salaries: SalaryContainer):
+    start_date = salaries.start_date
+    end_date = salaries.end_date
+    comment_prefix = "Зарплата за "
+    if start_date.month == end_date.month:
+        comment_prefix += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
+    else:
+        comment_prefix += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}"
+
+    for member_id, salary in salaries.salaries.items():
+        if salary.total == 0:
+            continue
+        member = Member.objects.get(pk=member_id)
+        if member.payment_type != 'CASH':
+            continue
+
+        comment = f"{comment_prefix}. Смены: {salary.shifts}, бонус: {salary.commissions}"
+        if member.watchman and member.watchman.grade:
+            comment += ". Грейд: {member.watchman.grade.code}"
+
+        Payment.objects.create(
+            whom=member.user,
+            amount=salary.total,
+            comment=comment,
+        )

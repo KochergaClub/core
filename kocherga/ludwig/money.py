@@ -2,6 +2,7 @@ from kocherga.ludwig.bot import bot
 
 import kocherga.money.cashier.models
 import kocherga.money.salaries
+from kocherga.money.salaries import SalaryContainer
 import kocherga.staff.tools
 from kocherga.staff.models import Member
 from kocherga.dateutils import inflected_month
@@ -32,10 +33,7 @@ def is_slava(message):
     return email == "slava@kocherga-club.ru"
 
 
-def salaries_message(with_elba_values=False):
-    salaries = kocherga.money.salaries.calculate_new_salaries()
-    (start_date, end_date) = kocherga.money.salaries.dates_period()
-
+def salaries_message(salaries: SalaryContainer, with_elba_values=False):
     attachments = []
     for member_id, salary in salaries.salaries.items():
         if salary.total == 0:
@@ -72,6 +70,7 @@ def salaries_message(with_elba_values=False):
             })
         attachments.append(member_attachment)
 
+    (start_date, end_date) = kocherga.money.salaries.dates_period()
     header = ":moneybag: Зарплаты за "
     if start_date.month == end_date.month:
         header += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
@@ -91,7 +90,8 @@ def react_show_salaries(message):
         message.reply("Только Слава может управлять зарплатами.")
         return
 
-    message.reply(**salaries_message(with_elba_values=True))
+    salaries: SalaryContainer = kocherga.money.salaries.calculate_new_salaries()
+    message.reply(**salaries_message(salaries, with_elba_values=True))
 
 
 @bot.listen_to(r"отправь зарплаты")
@@ -100,7 +100,9 @@ def react_send_salaries(message):
         message.reply("Только Слава может управлять зарплатами.")
         return
 
+    salaries: SalaryContainer = kocherga.money.salaries.calculate_new_salaries()
+    kocherga.money.salaries.salaries_to_payments(salaries)
     bot.send_message(
         channel="#space_staff_salaries",
-        **salaries_message()
+        **salaries_message(salaries)
     )
