@@ -21,7 +21,7 @@ DATA_DIR = os.environ.get('DATA_DIR', '/data')
 # SECURE_HSTS_SECONDS = 86400 # TODO - increase
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-ALLOWED_HOSTS = ['kocherga.club', 'api.kocherga.club']
+ALLOWED_HOSTS = ['kocherga.club', 'api.kocherga.club', 'kocherga-club.ru']
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
