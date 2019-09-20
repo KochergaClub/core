@@ -7,7 +7,7 @@ import { IS_SERVER } from '~/common/utils';
 const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 
 import { NextPage } from '~/common/types';
-import { APIError } from '~/common/api';
+import { API, APIError } from '~/common/api';
 
 import { AnyPageType, WagtailPageType } from '~/wagtail/pages/types';
 
@@ -61,22 +61,21 @@ const ProxyWagtailPage: NextPage<ProxyProps> = props => {
   return <WagtailScreen {...props} />;
 };
 
-ProxyWagtailPage.getInitialProps = async context => {
-  const {
-    asPath,
-    store: { getState },
-    res,
-  } = context;
+const getWagtailPreviewPage = async (
+  api: API,
+  token: string
+): Promise<AnyPageType> => {
+  const wagtailPage = (await api.callWagtail(
+    `page_preview/find/?token=${token}`
+  )) as AnyPageType;
 
-  const api = selectAPI(getState());
+  return wagtailPage;
+};
 
-  if (!asPath) {
-    throw new Error('asPath is empty');
-  }
-
+const getWagtailPageId = async (api: API, path: string): Promise<number> => {
   // FIXME: copy-pasted from api.ts
   const findResponse = await fetch(
-    `${api.base}/api/wagtail/pages/find/?html_path=${asPath}`,
+    `${api.base}/api/wagtail/pages/find/?html_path=${path}`,
     {
       method: 'GET',
       headers: api.getHeaders(),
@@ -92,30 +91,70 @@ ProxyWagtailPage.getInitialProps = async context => {
   const wagtailUrl = findResponse.headers.get('location') || '';
   console.log(`Got wagtail page ${wagtailUrl}`);
 
-  if (!asPath.endsWith('/')) {
-    // FIXME - check for query string
-    // wait, the page url is not normalized properly
-    const redirectUrl = asPath + '/';
-    if (res) {
-      res.writeHead(302, {
-        Location: redirectUrl,
-      });
-      res.end();
-    } else {
-      Router.push(redirectUrl);
-    }
-    return;
-  }
-
   const match = wagtailUrl.match(/(\d+)\/?$/);
   if (!match) {
     throw new Error('Unparsable redirected url');
   }
   const pageId = match[1];
 
+  return pageId;
+};
+
+const getWagtailPage = async (
+  api: API,
+  pageId: number
+): Promise<AnyPageType> => {
   const wagtailPage = (await api.callWagtail(
     `pages/${pageId}/?fields=*`
   )) as AnyPageType;
+
+  return wagtailPage;
+};
+
+ProxyWagtailPage.getInitialProps = async context => {
+  const {
+    asPath,
+    query,
+    store: { getState },
+    res,
+  } = context;
+
+  const api = selectAPI(getState());
+
+  if (!asPath) {
+    throw new Error('asPath is empty');
+  }
+
+  console.log(asPath);
+
+  let wagtailPage: AnyPageType;
+  if (asPath.startsWith('/preview?')) {
+    if (!query.token) {
+      throw new Error("Can't preview without token");
+    }
+    wagtailPage = await getWagtailPreviewPage(api, query.token as string);
+  } else {
+    // first, let's check that page exists
+    const wagtailPageId = await getWagtailPageId(api, asPath);
+
+    if (!asPath.endsWith('/')) {
+      // FIXME - check for query string
+      // wait, the page url is not normalized properly
+      const redirectUrl = asPath + '/';
+      if (res) {
+        res.writeHead(302, {
+          Location: redirectUrl,
+        });
+        res.end();
+      } else {
+        Router.push(redirectUrl);
+      }
+      return;
+    }
+
+    wagtailPage = await getWagtailPage(api, wagtailPageId);
+  }
+
   wagtailPage.meta_type = wagtailPage.meta.type;
 
   const wagtailScreen = getWagtailScreen(wagtailPage.meta_type);
