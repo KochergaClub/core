@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import Page from '~/components/Page';
 import { selectAPI } from '~/core/selectors';
 
-import { NextWagtailPage } from '../../types';
+import { NextWagtailPage } from '~/wagtail/types';
 
-import { AnyPageType } from '../types';
-import { AnyBlockType } from '../../blocks/types';
-import { PageType as RatioSectionPageType } from '../RatioSectionPage';
-import RatioSection_Main from '../RatioSectionPage/Main';
+import { AnyPageType } from '~/wagtail/pages/types';
+import { AnyBlockType } from '~/wagtail/blocks/types';
+import { PageType as SectionPageType } from '../SectionPage';
+import RatioSection_Main from '../SectionPage/Main';
 
 import SectionTOC from './SectionTOC';
 import PrintDocument from './PrintDocument';
@@ -19,7 +19,7 @@ import Emptypage from './Emptypage';
 import PrintFooter from './PrintFooter';
 
 interface AuxPages {
-  [key: number]: RatioSectionPageType;
+  [key: number]: SectionPageType;
 }
 
 interface NotebookBlockType extends AnyBlockType {
@@ -40,7 +40,7 @@ const SectionContainer = styled.section`
   break-before: page;
 `;
 
-const RatioNotebookPage: NextWagtailPage<PageType, ExtraProps> = props => {
+const NotebookPage: NextWagtailPage<PageType, ExtraProps> = props => {
   const footer = <PrintFooter />;
   return (
     <Page title={props.wagtailPage.title} noMenu noFooter team>
@@ -65,10 +65,7 @@ const RatioNotebookPage: NextWagtailPage<PageType, ExtraProps> = props => {
   );
 };
 
-RatioNotebookPage.getInitialProps = async ({
-  store: { getState },
-  wagtailPage,
-}) => {
+NotebookPage.getInitialProps = async ({ store: { getState }, wagtailPage }) => {
   const api = selectAPI(getState());
 
   const ids = wagtailPage.sections.map(section => section.value);
@@ -85,4 +82,4 @@ RatioNotebookPage.getInitialProps = async ({
   return props;
 };
 
-export default RatioNotebookPage;
+export default NotebookPage;

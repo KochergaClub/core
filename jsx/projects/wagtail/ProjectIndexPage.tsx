@@ -3,13 +3,22 @@ import React from 'react';
 import styled from 'styled-components';
 
 import TL02 from '~/blocks/TL02';
+import Page from '~/components/Page';
+import { selectAPI } from '~/core/selectors';
 
-import { Project } from '../utils';
+import { NextWagtailPage } from '~/wagtail/types';
+import { AnyPageType } from '~/wagtail/pages/types';
 
-import ProjectCard from './ProjectCard';
+import ProjectCard from '../components/ProjectCard';
 
-interface Props {
-  projects: Project[];
+import { ProjectPageType } from '../utils';
+
+export interface ExtraProps {
+  projects: ProjectPageType[];
+}
+
+export interface PageType extends AnyPageType {
+  meta_type: 'projects.ProjectIndexPage';
 }
 
 const Grid = styled.div`
@@ -28,9 +37,15 @@ const Grid = styled.div`
   justify-items: stretch;
 `;
 
-const ProjectIndex: React.FC<Props> = ({ projects }) => {
+const ProjectIndexPage: NextWagtailPage<PageType, ExtraProps> = ({
+  projects,
+}) => {
   return (
-    <React.Fragment>
+    <Page
+      title="Проекты Кочерги"
+      description="Регулярные мероприятия и сообщества, которые собираются в Кочерге.
+      Рациональность, научно-популярные лектории, критическое мышление и многое другое."
+    >
       <TL02 title="Активные проекты">
         Регулярные мероприятия и сообщества, которые собираются в Кочерге.
         <br />
@@ -52,8 +67,17 @@ const ProjectIndex: React.FC<Props> = ({ projects }) => {
             <ProjectCard key={project.id} {...project} />
           ))}
       </Grid>
-    </React.Fragment>
+    </Page>
   );
 };
 
-export default ProjectIndex;
+ProjectIndexPage.getInitialProps = async ({ store: { getState } }) => {
+  const api = selectAPI(getState());
+
+  const json = await api.callWagtail(
+    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail,is_active&limit=100'
+  );
+  return { projects: json.items };
+};
+
+export default ProjectIndexPage;

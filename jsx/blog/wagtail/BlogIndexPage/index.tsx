@@ -7,9 +7,9 @@ import { selectAPI } from '~/core/selectors';
 
 import PageHeader from '~/blocks/PageHeader';
 
-import { NextWagtailPage } from '../../types';
+import { NextWagtailPage } from '~/wagtail/types';
 
-import { AnyPageType } from '../types';
+import { AnyPageType } from '~/wagtail/pages/types';
 
 import { BlogPostSummary } from './types';
 

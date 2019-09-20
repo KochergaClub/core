@@ -1,4 +1,4 @@
-import { AnyPageType } from '../types';
+import { AnyPageType } from '~/wagtail/pages/types';
 
 export interface BlogPostSummary extends AnyPageType {
   date: string;

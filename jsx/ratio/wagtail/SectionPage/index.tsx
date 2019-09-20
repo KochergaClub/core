@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 import Page from '~/components/Page';
 
-import { NextWagtailPage } from '../../types';
+import { NextWagtailPage } from '~/wagtail/types';
 
-import { BlockType } from '../../blocks/types';
-import { AnyPageType } from '../types';
+import { BlockType } from '~/wagtail/blocks/types';
+import { AnyPageType } from '~/wagtail/pages/types';
 
 import Main from './Main';
 
@@ -26,7 +26,7 @@ export interface PageType extends AnyPageType {
   body: BlockType[];
 }
 
-const RatioSectionPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
+const SectionPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
     <Page title={wagtailPage.title} noMenu noFooter team>
       <Container>
@@ -36,4 +36,4 @@ const RatioSectionPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   );
 };
 
-export default RatioSectionPage;
+export default SectionPage;

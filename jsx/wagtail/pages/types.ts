@@ -1,4 +1,4 @@
-import { BlockType } from '../blocks/types';
+import { SectionPageType as RatioSectionPageType } from '~/ratio/wagtail/types';
 
 export interface AnyPageType {
   id: number;
@@ -7,27 +7,11 @@ export interface AnyPageType {
     slug: string;
   };
 
-  // This field doesn't come from the server, we fill it ourselves.
+  // This field doesn't come from the server, we fill it in pages/wagtail-any.
   // It's necessary because TypeScript doesn't support nested tagged unions (yet).
   meta_type: string;
 
   title: string;
-}
-
-export interface RatioSectionPageType extends AnyPageType {
-  meta_type: 'ratio.SectionPage';
-  body: BlockType[];
-}
-
-export interface BlogPostAuthorType {
-  id: number;
-  name: string;
-  description?: string;
-  image: {
-    meta: {
-      download_url: string;
-    };
-  };
 }
 
 export type WagtailPageType = RatioSectionPageType; // TODO: list all other types

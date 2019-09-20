@@ -7,9 +7,10 @@ import Page from '~/components/Page';
 import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
 
-import { NextWagtailPage } from '../../types';
+import { NextWagtailPage } from '~/wagtail/types';
+import { AnyPageType } from '~/wagtail/pages/types';
 
-import { AnyPageType, BlogPostAuthorType } from '../types';
+import { BlogPostAuthorType } from '../types';
 
 import Author from './Author';
 

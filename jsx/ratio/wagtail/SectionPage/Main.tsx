@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { RatioSectionPageType as Props } from '../types';
+import { SectionPageType as Props } from '../types';
 
-import WagtailBlocks from '../../WagtailBlocks';
+import WagtailBlocks from '~/wagtail/WagtailBlocks';
 
 const Header = styled.h1`
   text-align: center;

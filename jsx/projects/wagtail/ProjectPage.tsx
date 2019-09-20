@@ -4,9 +4,12 @@ import styled from 'styled-components';
 
 import { RichText } from '@kocherga/frontkit';
 
-import { Project } from '../utils';
-
+import Page from '~/components/Page';
 import TL02 from '~/blocks/TL02';
+
+import { NextWagtailPage } from '~/wagtail/types';
+
+import { ProjectPageType } from '../utils';
 
 const Image = styled.img`
   width: 100%;
@@ -20,13 +23,15 @@ const Description = styled(RichText)`
   margin-bottom: 100px;
 `;
 
-interface Props {
-  project: Project;
-}
-
-const ProjectDetails: React.FC<Props> = ({ project }) => {
+const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
+  wagtailPage: project,
+}) => {
   return (
-    <React.Fragment>
+    <Page
+      title={project.title}
+      og={{ image: project.image.url }}
+      description={project.summary}
+    >
       <TL02 title={project.title}>
         {project.summary}
         {project.activity_summary && (
@@ -37,7 +42,7 @@ const ProjectDetails: React.FC<Props> = ({ project }) => {
       </TL02>
       <Image src={project.image.url} />
       <Description dangerouslySetInnerHTML={{ __html: project.body }} />
-    </React.Fragment>
+    </Page>
   );
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ExtraProps, PageType } from '../RatioNotebookPage';
+import { ExtraProps, PageType } from '.';
 
 const Container = styled.div`
   max-width: 800px;

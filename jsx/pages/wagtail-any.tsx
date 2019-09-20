@@ -9,14 +9,14 @@ const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 import { NextPage } from '~/common/types';
 import { API, APIError } from '~/common/api';
 
-import { AnyPageType, WagtailPageType } from '~/wagtail/pages/types';
+import { AnyPageType } from '~/wagtail/pages/types';
 
-import BlockBasedScreen from '~/wagtail/pages/BlockBasedPage';
-import RatioSectionIndexScreen from '~/wagtail/pages/RatioSectionIndexPage';
-import RatioSectionScreen from '~/wagtail/pages/RatioSectionPage';
-import RatioNotebookScreen from '~/wagtail/pages/RatioNotebookPage';
-import BlogPostScreen from '~/wagtail/pages/BlogPostPage';
-import BlogIndexScreen from '~/wagtail/pages/BlogIndexPage';
+import BlockBasedPage from '~/wagtail/pages/BlockBasedPage';
+
+// TODO - async load or other trick to reduce the bundle size for wagtail pages
+import * as RatioPages from '~/ratio/wagtail';
+import * as BlogPages from '~/blog/wagtail';
+import * as ProjectsPages from '~/projects/wagtail';
 
 import { selectAPI } from '~/core/selectors';
 
@@ -24,23 +24,31 @@ const getWagtailScreen = (meta_type: string) => {
   switch (meta_type) {
     case 'pages.FreeFormPage':
     case 'pages.FrontPage':
-      return BlockBasedScreen;
+      return BlockBasedPage;
+
     case 'ratio.SectionIndexPage':
-      return RatioSectionIndexScreen;
+      return RatioPages.SectionIndexPage;
     case 'ratio.SectionPage':
-      return RatioSectionScreen;
+      return RatioPages.SectionPage;
     case 'ratio.NotebookPage':
-      return RatioNotebookScreen;
+      return RatioPages.NotebookPage;
+
     case 'blog.BlogPostPage':
-      return BlogPostScreen;
+      return BlogPages.BlogPostPage;
     case 'blog.BlogIndexPage':
-      return BlogIndexScreen;
+      return BlogPages.BlogIndexPage;
+
+    case 'projects.ProjectPage':
+      return ProjectsPages.ProjectPage;
+    case 'projects.ProjectIndexPage':
+      return ProjectsPages.ProjectIndexPage;
+
     default:
       return null;
   }
 };
 
-const UnknownPage = (props: WagtailPageType) => (
+const UnknownPage = (props: AnyPageType) => (
   <div>
     <h1>
       Unknown Wagtail page type: <code>{props.meta.type}</code>
