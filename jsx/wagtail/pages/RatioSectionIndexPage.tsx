@@ -12,7 +12,7 @@ export interface PageType extends AnyPageType {
 
 const RatioSectionIndexPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
-    <Page title={wagtailPage.title}>
+    <Page title={wagtailPage.title} team>
       <h1>TODO - тут будет список секций</h1>
     </Page>
   );

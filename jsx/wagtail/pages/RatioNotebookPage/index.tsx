@@ -43,7 +43,7 @@ const SectionContainer = styled.section`
 const RatioNotebookPage: NextWagtailPage<PageType, ExtraProps> = props => {
   const footer = <PrintFooter />;
   return (
-    <Page title={props.wagtailPage.title} noMenu noFooter>
+    <Page title={props.wagtailPage.title} noMenu noFooter team>
       <PrintDocument footer={footer}>
         <Frontpage wagtailPage={props.wagtailPage} />
         <Emptypage />
