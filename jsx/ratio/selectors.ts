@@ -2,18 +2,19 @@ import { createSelector, Selector } from 'reselect';
 
 import { State } from '~/redux/store';
 
-import { ticketsSlice, trainingsSlice } from './slices';
-import { Training, Ticket } from './types';
+import { ticketsSlice, trainingsSlice, trainersSlice } from './slices';
+import { Training, Ticket, Trainer } from './types';
+
+// Weird helper.
+// Is it really impossible to write createSelector in any other way?
+const selectId = (_: State, id: number) => id;
+
+// Trainings
 
 export const selectTrainingsSlice: Selector<
   State,
   ReturnType<typeof trainingsSlice.reducer>
 > = state => state.ratio.trainings;
-
-const selectTicketsSlice: Selector<
-  State,
-  ReturnType<typeof ticketsSlice.reducer>
-> = state => state.ratio.tickets;
 
 export const selectTrainings: Selector<State, Training[]> = createSelector(
   selectTrainingsSlice,
@@ -27,6 +28,18 @@ export const selectViewingTraining: Selector<
   selectTrainingsSlice,
   trainingsSlice.selectors.selectViewing
 );
+
+export const selectTrainingById = createSelector(
+  [selectTrainingsSlice, selectId],
+  (slice, id: number) => slice.byId[id]
+);
+
+// Tickets
+
+const selectTicketsSlice: Selector<
+  State,
+  ReturnType<typeof ticketsSlice.reducer>
+> = state => state.ratio.tickets;
 
 export const selectViewingTrainingTickets: Selector<
   State,
@@ -43,15 +56,19 @@ export const selectViewingTrainingTickets: Selector<
   }
 );
 
-// wat. is it really impossible to write createSelector in any other way?
-const selectId = (_: State, id: number) => id;
-
-export const selectTrainingById = createSelector(
-  [selectTrainingsSlice, selectId],
-  (slice, id: number) => slice.byId[id]
-);
-
 export const selectTicketById = createSelector(
   [selectTicketsSlice, selectId],
   (slice, id: number) => slice.byId[id]
+);
+
+// Trainers
+
+const selectTrainersSlice: Selector<
+  State,
+  ReturnType<typeof trainersSlice.reducer>
+> = state => state.ratio.trainers;
+
+export const selectTrainers: Selector<State, Trainer[]> = createSelector(
+  selectTrainersSlice,
+  trainersSlice.selectors.selectAll
 );

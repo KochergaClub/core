@@ -6,7 +6,7 @@ import { KKMServer, SignMethodCalculation } from '~/kkm/kkmServer';
 import { selectKkmPassword } from '~/kkm/selectors';
 
 import { setTicketFiscalizationStatus } from './api';
-import { trainingsSlice, ticketsSlice } from './slices';
+import { trainingsSlice, ticketsSlice, trainersSlice } from './slices';
 import { selectTicketById, selectTrainingById } from './selectors';
 
 import { Ticket, CreateTrainingParams } from './types';
@@ -88,6 +88,8 @@ export const addTraining = (
   await api.call('ratio/training', 'POST', values);
   await dispatch(loadTrainings());
 };
+
+export const loadTrainers = trainersSlice.actions.loadAll;
 
 export type ActionTypes =
   | ReturnType<typeof tryFiscalizeTicket>

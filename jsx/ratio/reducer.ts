@@ -1,6 +1,6 @@
 import { AnyAction, Reducer, combineReducers } from 'redux';
 
-import { ticketsSlice, trainingsSlice } from './slices';
+import { ticketsSlice, trainingsSlice, trainersSlice } from './slices';
 import {
   TICKET_TRY_FISCALIZE,
   TICKET_FISCALIZED,
@@ -46,4 +46,5 @@ const ticketsReducer: Reducer<TicketsState> = (
 export default combineReducers({
   tickets: ticketsReducer,
   trainings: trainingsSlice.reducer,
+  trainers: trainersSlice.reducer,
 });

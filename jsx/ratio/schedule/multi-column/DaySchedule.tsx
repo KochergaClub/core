@@ -32,15 +32,18 @@ const time2minute = (time: string) => {
   return parseInt(match[1]) * 60 + parseInt(match[2]);
 };
 
-const Positioner = ({
-  activity,
-  children,
-}: {
+interface PositionerProps {
   activity: ActivityType;
-  children: React.ReactNode;
+  minTime: string;
+  maxTime: string;
+}
+
+const Positioner: React.FC<PositionerProps> = ({
+  activity,
+  minTime,
+  maxTime,
+  children,
 }) => {
-  const minTime = '09:00';
-  const maxTime = '23:59';
   const height = 1000;
   const top =
     ((time2minute(activity.time) - time2minute(minTime)) /
@@ -52,21 +55,42 @@ const Positioner = ({
   );
 };
 
-const PositionedActivity = ({ activity }: { activity: ActivityType }) => (
-  <Positioner activity={activity}>
+interface PositionedActivityProps {
+  activity: ActivityType;
+  minTime: string;
+  maxTime: string;
+}
+
+const PositionedActivity: React.FC<PositionedActivityProps> = ({
+  activity,
+  minTime,
+  maxTime,
+}) => (
+  <Positioner activity={activity} minTime={minTime} maxTime={maxTime}>
     <Activity activity={activity} />
   </Positioner>
 );
 
-export default function DaySchedule({ day_schedule }: Props) {
+const DaySchedule: React.FC<Props> = ({ day_schedule }) => {
+  const minTime = day_schedule.activities[0].time;
+  const maxTime =
+    day_schedule.activities[day_schedule.activities.length - 1].time;
+
   return (
     <div>
       <Header>День {day_schedule.day}</Header>
       <Container>
         {day_schedule.activities.map((activity, i) => (
-          <PositionedActivity key={i} activity={activity} />
+          <PositionedActivity
+            key={i}
+            activity={activity}
+            minTime={minTime}
+            maxTime={maxTime}
+          />
         ))}
       </Container>
     </div>
   );
-}
+};
+
+export default DaySchedule;

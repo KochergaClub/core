@@ -18,7 +18,6 @@ import { loadTrainingBySlug, loadTrainingTickets } from '~/ratio/actions';
 import {
   selectViewingTraining,
   selectViewingTrainingTickets,
-  selectTrainingsSlice,
 } from '~/ratio/selectors';
 
 import CreateEmailButton from '~/ratio/components/CreateEmailButton';
@@ -80,8 +79,6 @@ const RatioTrainingPage: NextPage<Props> = () => {
   const dispatch = useDispatch();
   const training = useSelector(selectViewingTraining);
   const tickets = useSelector(selectViewingTrainingTickets);
-
-  console.log(useSelector(selectTrainingsSlice));
 
   const onCreateTicket = useCallback(async () => {
     if (!training) {

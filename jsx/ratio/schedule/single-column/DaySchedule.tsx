@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { DayScheduleType } from '../../types';
+import { DayScheduleType } from '~/ratio/types';
 
 import Activity from './Activity';
 import HR from './HR';

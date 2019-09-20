@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 
 import Picker from '~/components/Picker';
 import { useExpandable } from '~/common/hooks';
 
-import { ScheduleContext } from '../utils';
-
-import { Trainer } from '../../types';
+import { selectTrainers } from '~/ratio/selectors';
+import { Trainer } from '~/ratio/types';
 
 interface Props {
   trainer_name?: string;
@@ -44,7 +45,7 @@ export default function EditableTrainer({
 }: Props) {
   const { expanded, unexpand, flipExpand, ref } = useExpandable();
 
-  const { trainers } = useContext(ScheduleContext);
+  const trainers = useSelector(selectTrainers);
 
   const items = (trainers as (Trainer | undefined)[]).concat([undefined]);
 

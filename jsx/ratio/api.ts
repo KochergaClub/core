@@ -1,6 +1,6 @@
 import { API } from '~/common/api';
 
-import { Training, ActivityType, Ticket, Trainer } from './types';
+import { Training, ActivityType, Ticket } from './types';
 
 export const getTrainings = async (api: API) => {
   return (await api.call('ratio/training', 'GET')) as Training[];
@@ -12,10 +12,6 @@ export const getTraining = async (api: API, slug: string) => {
 
 export const getTickets = async (api: API, slug: string) => {
   return (await api.call(`ratio/training/${slug}/tickets`, 'GET')) as Ticket[];
-};
-
-export const getTrainers = async (api: API) => {
-  return (await api.call(`ratio/trainers`, 'GET')) as Trainer[];
 };
 
 export const getSchedule = async (api: API, slug: string) => {

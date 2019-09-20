@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ActivityType, DayScheduleType, Trainer } from '../types';
+import { ActivityType, DayScheduleType } from '../types';
 
 export function groupByDay(schedule: ActivityType[]) {
   const scheduleByDay: { [key: number]: ActivityType[] } = {};
@@ -27,7 +27,6 @@ export function groupByDay(schedule: ActivityType[]) {
 
 interface Store {
   schedule: ActivityType[];
-  trainers: string[];
 }
 
 interface ReplaceScheduleAction {
@@ -93,10 +92,8 @@ export const reducer = (store: Store, action: Action): Store => {
 
 interface ContextShape {
   dispatch: React.Dispatch<Action>;
-  trainers: Trainer[];
 }
 
 export const ScheduleContext = React.createContext<ContextShape>({
   dispatch: () => null,
-  trainers: [],
 });
