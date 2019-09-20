@@ -45,7 +45,7 @@ const Feature = (props: FeatureType) => (
         ))
         .reduce(
           (accu, elem) => (accu.length ? [...accu, ' · ', elem] : [elem]),
-          []
+          [] as (JSX.Element | string)[]
         )}
     </Items>
   </Container>
