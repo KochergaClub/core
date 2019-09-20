@@ -9,6 +9,7 @@ async def test_blank():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_initial_browser():
     browser = await kocherga.chrome.get_full_browser()
     assert browser.wsEndpoint.startswith('ws://')
@@ -19,6 +20,7 @@ async def test_initial_browser():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_get_browser():
     full_browser = await kocherga.chrome.get_full_browser()
 
