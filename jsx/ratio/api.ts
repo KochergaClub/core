@@ -2,18 +2,6 @@ import { API } from '~/common/api';
 
 import { Training, ActivityType, Ticket } from './types';
 
-export const getTrainings = async (api: API) => {
-  return (await api.call('ratio/training', 'GET')) as Training[];
-};
-
-export const getTraining = async (api: API, slug: string) => {
-  return (await api.call(`ratio/training/${slug}`, 'GET')) as Training;
-};
-
-export const getTickets = async (api: API, slug: string) => {
-  return (await api.call(`ratio/training/${slug}/tickets`, 'GET')) as Ticket[];
-};
-
 export const getSchedule = async (api: API, slug: string) => {
   return (await api.call(
     `ratio/training/${slug}/schedule`,

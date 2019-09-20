@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Column, Button } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
-
-import { getTrainings } from '../api';
+import { loadTrainings } from '../actions';
+import { selectTrainings } from '../selectors';
 import { Training } from '../types';
 
 interface Props {
@@ -13,15 +13,12 @@ interface Props {
 }
 
 export default function CopyScheduleFromPicker(props: Props) {
-  const api = useAPI();
-
-  const [trainings, setTrainings] = useState<Training[]>([]);
+  const trainings = useSelector(selectTrainings);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      setTrainings(await getTrainings(api));
-    })();
-  }, [api]);
+    dispatch(loadTrainings());
+  }, [dispatch]);
 
   if (!trainings.length) {
     return <div>Loading...</div>;
