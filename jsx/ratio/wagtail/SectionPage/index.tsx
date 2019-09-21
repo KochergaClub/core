@@ -6,7 +6,7 @@ import Page from '~/components/Page';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import { BlockType } from '~/wagtail/blocks/types';
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
 import Main from './Main';
 
@@ -21,7 +21,7 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-export interface PageType extends AnyPageType {
+export interface PageType extends WagtailPageProps {
   meta_type: 'ratio.SectionPage';
   body: BlockType[];
 }

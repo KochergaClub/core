@@ -5,12 +5,12 @@ import { selectAPI } from '~/core/selectors';
 
 import { NextWagtailPage } from '../types';
 
-import { AnyPageType } from './types';
+import { WagtailPageProps } from '../types';
 import { BlockType } from '../blocks/types';
 
 import WagtailBlocks, { loadBlockData } from '../WagtailBlocks';
 
-interface BlockBasedPageType extends AnyPageType {
+interface BlockBasedPageType extends WagtailPageProps {
   body: BlockType[];
   meta_type: 'pages.FreeFormPage' | 'pages.FrontPage';
 }

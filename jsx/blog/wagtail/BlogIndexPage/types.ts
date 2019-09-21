@@ -1,6 +1,6 @@
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
-export interface BlogPostSummary extends AnyPageType {
+export interface BlogPostSummary extends WagtailPageProps {
   date: string;
   summary: string;
 }

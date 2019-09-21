@@ -9,7 +9,7 @@ const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 import { NextPage } from '~/common/types';
 import { API, APIError } from '~/common/api';
 
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
 import BlockBasedPage from '~/wagtail/pages/BlockBasedPage';
 
@@ -48,7 +48,7 @@ const getWagtailScreen = (meta_type: string) => {
   }
 };
 
-const UnknownPage = (props: AnyPageType) => (
+const UnknownPage = (props: WagtailPageProps) => (
   <div>
     <h1>
       Unknown Wagtail page type: <code>{props.meta.type}</code>
@@ -72,10 +72,10 @@ const ProxyWagtailPage: NextPage<ProxyProps> = props => {
 const getWagtailPreviewPage = async (
   api: API,
   token: string
-): Promise<AnyPageType> => {
+): Promise<WagtailPageProps> => {
   const wagtailPage = (await api.callWagtail(
     `page_preview/find/?token=${token}`
-  )) as AnyPageType;
+  )) as WagtailPageProps;
 
   return wagtailPage;
 };
@@ -111,10 +111,10 @@ const getWagtailPageId = async (api: API, path: string): Promise<number> => {
 const getWagtailPage = async (
   api: API,
   pageId: number
-): Promise<AnyPageType> => {
+): Promise<WagtailPageProps> => {
   const wagtailPage = (await api.callWagtail(
     `pages/${pageId}/?fields=*`
-  )) as AnyPageType;
+  )) as WagtailPageProps;
 
   return wagtailPage;
 };
@@ -135,7 +135,7 @@ ProxyWagtailPage.getInitialProps = async context => {
 
   console.log(asPath);
 
-  let wagtailPage: AnyPageType;
+  let wagtailPage: WagtailPageProps;
   if (asPath.startsWith('/preview?')) {
     if (!query.token) {
       throw new Error("Can't preview without token");

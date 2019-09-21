@@ -1,4 +1,4 @@
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
 interface WagtailImage {
   url: string;
@@ -6,7 +6,7 @@ interface WagtailImage {
   height: string;
 }
 
-export interface ProjectPageType extends AnyPageType {
+export interface ProjectPageType extends WagtailPageProps {
   meta_type: 'projects.ProjectPage';
   body: string;
   image: WagtailImage;

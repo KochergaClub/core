@@ -4,9 +4,9 @@ import Page from '~/components/Page';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
-export interface PageType extends AnyPageType {
+export interface PageType extends WagtailPageProps {
   meta_type: 'ratio.SectionIndexPage';
 }
 

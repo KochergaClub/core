@@ -7,7 +7,7 @@ import { selectAPI } from '~/core/selectors';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 import { AnyBlockType } from '~/wagtail/blocks/types';
 import { PageType as SectionPageType } from '../SectionPage';
 import RatioSection_Main from '../SectionPage/Main';
@@ -27,7 +27,7 @@ interface NotebookBlockType extends AnyBlockType {
   value: number;
 }
 
-export interface PageType extends AnyPageType {
+export interface PageType extends WagtailPageProps {
   meta_type: 'ratio.NotebookPage';
   sections: NotebookBlockType[];
 }

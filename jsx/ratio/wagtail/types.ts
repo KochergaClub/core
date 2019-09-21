@@ -1,7 +1,7 @@
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 import { BlockType } from '~/wagtail/blocks/types';
 
-export interface SectionPageType extends AnyPageType {
+export interface SectionPageType extends WagtailPageProps {
   meta_type: 'ratio.SectionPage';
   body: BlockType[];
 }

@@ -8,13 +8,13 @@ import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
 
 import { NextWagtailPage } from '~/wagtail/types';
-import { AnyPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
 import { BlogPostAuthorType } from '../types';
 
 import Author from './Author';
 
-export interface PageType extends AnyPageType {
+export interface PageType extends WagtailPageProps {
   meta_type: 'blog.BlogPostPage';
   body: string;
   authors: BlogPostAuthorType[];
