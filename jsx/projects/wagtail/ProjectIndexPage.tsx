@@ -38,11 +38,12 @@ const Grid = styled.div`
 `;
 
 const ProjectIndexPage: NextWagtailPage<PageType, ExtraProps> = ({
+  wagtailPage,
   projects,
 }) => {
   return (
     <Page
-      title="Проекты Кочерги"
+      title={wagtailPage.title}
       description="Регулярные мероприятия и сообщества, которые собираются в Кочерге.
       Рациональность, научно-популярные лектории, критическое мышление и многое другое."
     >
