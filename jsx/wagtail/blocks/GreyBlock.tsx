@@ -2,21 +2,28 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { RichText } from '@kocherga/frontkit';
+import { colors, fonts, RichText } from '@kocherga/frontkit';
 
 import { GreyBlockType as Props } from './types';
 
 const Container = styled(RichText)`
-  background-color: #eee;
-  padding: 20px 0;
+  background-color: ${colors.grey[100]};
+  padding: 48px 0 40px;
 `;
 
 const Header = styled.h2`
-  font-size: 2em;
+  font-size: ${fonts.sizes.XL};
+  font-weight: 700;
   text-align: center;
+  margin: 0;
+  line-height: 1.2;
 `;
 
-const Text = styled.div``;
+const Text = styled(RichText)`
+  max-width: 800px;
+  text-align: center;
+  margin: 0 auto;
+`;
 
 export default function GreyBlock(block: Props) {
   return (

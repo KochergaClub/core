@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Project } from '../utils';
+import { ProjectPageType } from '../utils';
 
 const ProjectA = styled.a`
   text-decoration: none;
@@ -48,7 +48,7 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
-const ProjectCard = (props: Project) => {
+const ProjectCard = (props: ProjectPageType) => {
   // TODO - use <Link> for client-side navigation, but wagtail API is not available on the client-side yet
   return (
     <ProjectA href={`/projects/${props.meta.slug}`}>

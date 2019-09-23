@@ -3,11 +3,25 @@ from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel
 from wagtail.api import APIField
 
-from .blocks import all_blocks
+from kocherga.wagtail.mixins import HeadlessPreviewMixin
+
+from .blocks import all_blocks, hero_block
 
 
-class FreeFormPage(Page):
+class FreeFormPage(HeadlessPreviewMixin, Page):
     body = StreamField(all_blocks)
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('body'),
+    ]
+
+    api_fields = [
+        APIField('body'),
+    ]
+
+
+class FrontPage(HeadlessPreviewMixin, Page):
+    body = StreamField(all_blocks + [hero_block])
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),

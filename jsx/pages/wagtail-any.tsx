@@ -7,39 +7,48 @@ import { IS_SERVER } from '~/common/utils';
 const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 
 import { NextPage } from '~/common/types';
-import { APIError } from '~/common/api';
+import { API, APIError } from '~/common/api';
 
-import { AnyPageType, WagtailPageType } from '~/wagtail/pages/types';
+import { WagtailPageProps } from '~/wagtail/types';
 
-import FreeFormScreen from '~/wagtail/pages/FreeFormPage';
-import RatioSectionIndexScreen from '~/wagtail/pages/RatioSectionIndexPage';
-import RatioSectionScreen from '~/wagtail/pages/RatioSectionPage';
-import RatioNotebookScreen from '~/wagtail/pages/RatioNotebookPage';
-import BlogPostScreen from '~/wagtail/pages/BlogPostPage';
-import BlogIndexScreen from '~/wagtail/pages/BlogIndexPage';
+import BlockBasedPage from '~/wagtail/pages/BlockBasedPage';
+
+// TODO - async load or other trick to reduce the bundle size for wagtail pages
+import * as RatioPages from '~/ratio/wagtail';
+import * as BlogPages from '~/blog/wagtail';
+import * as ProjectsPages from '~/projects/wagtail';
 
 import { selectAPI } from '~/core/selectors';
 
 const getWagtailScreen = (meta_type: string) => {
   switch (meta_type) {
     case 'pages.FreeFormPage':
-      return FreeFormScreen;
+    case 'pages.FrontPage':
+      return BlockBasedPage;
+
     case 'ratio.SectionIndexPage':
-      return RatioSectionIndexScreen;
+      return RatioPages.SectionIndexPage;
     case 'ratio.SectionPage':
-      return RatioSectionScreen;
+      return RatioPages.SectionPage;
     case 'ratio.NotebookPage':
-      return RatioNotebookScreen;
+      return RatioPages.NotebookPage;
+
     case 'blog.BlogPostPage':
-      return BlogPostScreen;
+      return BlogPages.BlogPostPage;
     case 'blog.BlogIndexPage':
-      return BlogIndexScreen;
+      return BlogPages.BlogIndexPage;
+
+    case 'projects.ProjectPage':
+      return ProjectsPages.ProjectPage;
+    case 'projects.ProjectIndexPage':
+      return ProjectsPages.ProjectIndexPage;
+
     default:
       return null;
   }
 };
 
-const UnknownPage = (props: WagtailPageType) => (
+const UnknownPage = (props: WagtailPageProps) => (
   <div>
     <h1>
       Unknown Wagtail page type: <code>{props.meta.type}</code>
@@ -60,22 +69,21 @@ const ProxyWagtailPage: NextPage<ProxyProps> = props => {
   return <WagtailScreen {...props} />;
 };
 
-ProxyWagtailPage.getInitialProps = async context => {
-  const {
-    asPath,
-    store: { getState },
-    res,
-  } = context;
+const getWagtailPreviewPage = async (
+  api: API,
+  token: string
+): Promise<WagtailPageProps> => {
+  const wagtailPage = (await api.callWagtail(
+    `page_preview/find/?token=${token}`
+  )) as WagtailPageProps;
 
-  const api = selectAPI(getState());
+  return wagtailPage;
+};
 
-  if (!asPath) {
-    throw new Error('asPath is empty');
-  }
-
+const getWagtailPageId = async (api: API, path: string): Promise<number> => {
   // FIXME: copy-pasted from api.ts
   const findResponse = await fetch(
-    `${api.base}/api/wagtail/pages/find/?html_path=${asPath}`,
+    `${api.base}/api/wagtail/pages/find/?html_path=${path}`,
     {
       method: 'GET',
       headers: api.getHeaders(),
@@ -91,30 +99,70 @@ ProxyWagtailPage.getInitialProps = async context => {
   const wagtailUrl = findResponse.headers.get('location') || '';
   console.log(`Got wagtail page ${wagtailUrl}`);
 
-  if (!asPath.endsWith('/')) {
-    // FIXME - check for query string
-    // wait, the page url is not normalized properly
-    const redirectUrl = asPath + '/';
-    if (res) {
-      res.writeHead(302, {
-        Location: redirectUrl,
-      });
-      res.end();
-    } else {
-      Router.push(redirectUrl);
-    }
-    return;
-  }
-
   const match = wagtailUrl.match(/(\d+)\/?$/);
   if (!match) {
     throw new Error('Unparsable redirected url');
   }
   const pageId = match[1];
 
+  return pageId;
+};
+
+const getWagtailPage = async (
+  api: API,
+  pageId: number
+): Promise<WagtailPageProps> => {
   const wagtailPage = (await api.callWagtail(
     `pages/${pageId}/?fields=*`
-  )) as AnyPageType;
+  )) as WagtailPageProps;
+
+  return wagtailPage;
+};
+
+ProxyWagtailPage.getInitialProps = async context => {
+  const {
+    asPath,
+    query,
+    store: { getState },
+    res,
+  } = context;
+
+  const api = selectAPI(getState());
+
+  if (!asPath) {
+    throw new Error('asPath is empty');
+  }
+
+  console.log(asPath);
+
+  let wagtailPage: WagtailPageProps;
+  if (asPath.startsWith('/preview?')) {
+    if (!query.token) {
+      throw new Error("Can't preview without token");
+    }
+    wagtailPage = await getWagtailPreviewPage(api, query.token as string);
+  } else {
+    // first, let's check that page exists
+    const wagtailPageId = await getWagtailPageId(api, asPath);
+
+    if (!asPath.endsWith('/')) {
+      // FIXME - check for query string
+      // wait, the page url is not normalized properly
+      const redirectUrl = asPath + '/';
+      if (res) {
+        res.writeHead(302, {
+          Location: redirectUrl,
+        });
+        res.end();
+      } else {
+        Router.push(redirectUrl);
+      }
+      return;
+    }
+
+    wagtailPage = await getWagtailPage(api, wagtailPageId);
+  }
+
   wagtailPage.meta_type = wagtailPage.meta.type;
 
   const wagtailScreen = getWagtailScreen(wagtailPage.meta_type);

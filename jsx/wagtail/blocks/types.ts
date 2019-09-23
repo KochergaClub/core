@@ -2,8 +2,8 @@ export interface AnyBlockType {
   id: string;
 }
 
-export interface BasicHeaderBlockType extends AnyBlockType {
-  type: 'basic_header';
+export interface BasicLeadBlockType extends AnyBlockType {
+  type: 'basic_lead';
   value: string;
 }
 
@@ -25,6 +25,25 @@ export interface ColumnsBasicBlockType extends AnyBlockType {
   value: {
     header: string;
     text?: string;
+  }[];
+}
+
+export interface ColumnsMembershipsBlockType extends AnyBlockType {
+  type: 'columns_memberships';
+  value: {
+    title: string;
+    subtitle: string;
+    price: number;
+    description: string;
+  }[];
+}
+
+export interface ColumnsButtonsBlockType extends AnyBlockType {
+  type: 'columns_buttons';
+  value: {
+    title: string;
+    caption: string;
+    link: string;
   }[];
 }
 
@@ -69,15 +88,81 @@ export interface RatioMathBlockType extends AnyBlockType {
   value: string;
 }
 
+import { ServerPublicEvent } from '../../events/types';
+export interface EventsListBlockType extends AnyBlockType {
+  type: 'events_list';
+
+  // FIXME - It'd be better to have two different block types:
+  // 1) unexpanded "block configuration"
+  // 2) expanded "block with async data"
+  data?: {
+    events: ServerPublicEvent[];
+  };
+}
+
+export interface BigContactsBlockType extends AnyBlockType {
+  type: 'big_contacts';
+  value: {
+    map: {
+      lat: string;
+      lng: string;
+    };
+    address: string;
+    phone: string;
+    email: string;
+    text: string;
+  };
+}
+
+export interface HeroFrontBlockType extends AnyBlockType {
+  type: 'hero_front';
+  value: {
+    title: string;
+    features: {
+      title: string;
+      link?: string;
+      items: {
+        text: string;
+        link?: string;
+      }[];
+    }[];
+  };
+}
+
+export interface PhotoRibbonBlockType extends AnyBlockType {
+  type: 'photo_ribbon';
+  value: {
+    file160: string;
+    file320: string;
+    file: string;
+  }[];
+}
+
+export interface MailchimpSubscribeBlockType extends AnyBlockType {
+  type: 'mailchimp_subscribe';
+  value: {
+    news: boolean;
+    events: boolean;
+    trainings: boolean;
+  };
+}
+
 export type BlockType =
-  | BasicHeaderBlockType
+  | BasicLeadBlockType
   | BasicParagraphBlockType
   | GreyBlockType
   | ColumnsBasicBlockType
+  | ColumnsMembershipsBlockType
+  | ColumnsButtonsBlockType
   | RatioBriefingBlockType
   | RatioParagraphBlockType
   | RatioInsetBlockType
   | RatioHeaderBlockType
   | RatioExerciseBlockType
   | RatioExerciseOnelineBlockType
-  | RatioMathBlockType;
+  | RatioMathBlockType
+  | EventsListBlockType
+  | BigContactsBlockType
+  | HeroFrontBlockType
+  | PhotoRibbonBlockType
+  | MailchimpSubscribeBlockType;

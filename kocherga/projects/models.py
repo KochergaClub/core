@@ -7,8 +7,14 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
 
+from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
-class ProjectPage(Page):
+
+class ProjectIndexPage(HeadlessPreviewMixin, Page):
+    subpage_types = ['projects.ProjectPage']
+
+
+class ProjectPage(HeadlessPreviewMixin, Page):
     summary = models.TextField()
     activity_summary = models.TextField(blank=True, null=True)
     is_active = models.BooleanField()

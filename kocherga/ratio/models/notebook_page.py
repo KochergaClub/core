@@ -5,13 +5,15 @@ from wagtail.api import APIField
 
 from ..blocks import notebook_blocks
 
+from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
-class NotebookIndexPage(Page):
+
+class NotebookIndexPage(HeadlessPreviewMixin, Page):
     parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.NotebookPage']
 
 
-class NotebookPage(Page):
+class NotebookPage(HeadlessPreviewMixin, Page):
     # training = ...
     sections = StreamField(notebook_blocks)
 

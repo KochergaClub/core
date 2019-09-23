@@ -1,8 +1,12 @@
 const express = require('express');
 
 const wagtailRoutes = [
+  '/',
+  '/preview',
   '/blog',
   '/blog/*',
+  '/projects',
+  '/projects/*',
   '/team/ratio/workbooks',
   '/team/ratio/workbooks/*',
   '/team/ratio/sections',

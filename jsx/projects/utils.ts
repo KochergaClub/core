@@ -1,4 +1,4 @@
-import { API } from '../common/api';
+import { WagtailPageProps } from '~/wagtail/types';
 
 interface WagtailImage {
   url: string;
@@ -6,16 +6,9 @@ interface WagtailImage {
   height: string;
 }
 
-interface WagtailItem {
-  id: number;
-  title: string;
+export interface ProjectPageType extends WagtailPageProps {
+  meta_type: 'projects.ProjectPage';
   body: string;
-  meta: {
-    slug: string;
-  };
-}
-
-export interface Project extends WagtailItem {
   image: WagtailImage;
   image_thumbnail: WagtailImage;
   summary?: string;
@@ -23,17 +16,3 @@ export interface Project extends WagtailItem {
   description?: string;
   is_active: boolean;
 }
-
-export const getAllProjects = async (api: API): Promise<Project[]> => {
-  const json = await api.callWagtail(
-    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail,is_active&limit=100'
-  );
-  return json.items;
-};
-
-export const getProject = async (slug: string, api: API): Promise<Project> => {
-  const json = await api.callWagtail(
-    `pages/?type=projects.ProjectPage&slug=${slug}&fields=summary,activity_summary,body,image,image_thumbnail,is_active`
-  );
-  return json.items[0];
-};

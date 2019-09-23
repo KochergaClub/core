@@ -40,6 +40,25 @@ INSTALLED_APPS = [
     'channels',
     'reversion',
     'reversion_compare',
+
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.contrib.modeladmin',
+    'wagtail.contrib.styleguide',
+    'wagtail.embeds',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail.core',
+    'wagtail.sites',
+    'wagtailmath',
+    'wagtailgeowidget',
+
+    'kocherga.wagtail',
+
     'kocherga.auth',
     'kocherga.zadarma',
     'kocherga.importer',
@@ -65,21 +84,6 @@ INSTALLED_APPS = [
     'kocherga.email',
     'kocherga.slack',
     'kocherga.templater',
-
-    'wagtail.contrib.forms',
-    'wagtail.contrib.redirects',
-    'wagtail.contrib.modeladmin',
-    'wagtail.contrib.styleguide',
-    'wagtail.embeds',
-    'wagtail.users',
-    'wagtail.snippets',
-    'wagtail.documents',
-    'wagtail.images',
-    'wagtail.search',
-    'wagtail.admin',
-    'wagtail.core',
-    'wagtail.sites',
-    'wagtailmath',
 
     'taggit',
     'modelcluster',
@@ -297,3 +301,5 @@ GOOGLE_ANALYTICS_ID = None
 GDRIVE_WATCHMEN_FOLDER = None
 
 WAGTAIL_API_TOKEN = os.environ.get('WAGTAIL_API_TOKEN', None)
+
+GOOGLE_MAPS_V3_APIKEY = 'AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI'
