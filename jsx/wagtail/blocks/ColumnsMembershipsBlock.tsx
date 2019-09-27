@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { colors, fonts, RichText } from '@kocherga/frontkit';
-
-import ColumnsBlock from '~/components/ColumnsBlock';
+import { colors, fonts, RichText, ColumnsBlock } from '@kocherga/frontkit';
 
 import { ColumnsMembershipsBlockType as Props } from './types';
 
@@ -45,7 +43,9 @@ const MembershipCard = (membership: Props['value'][0]) => (
 export default function ColumnsBasicBlock(block: Props) {
   return (
     <ColumnsBlock>
-      {block.value.map((column, i) => <MembershipCard {...column} key={i} />)}
+      {block.value.map((column, i) => (
+        <MembershipCard {...column} key={i} />
+      ))}
     </ColumnsBlock>
   );
 }

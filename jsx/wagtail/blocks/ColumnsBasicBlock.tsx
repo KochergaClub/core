@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { fonts, RichText } from '@kocherga/frontkit';
-
-import ColumnsBlock from '~/components/ColumnsBlock';
+import { fonts, RichText, ColumnsBlock } from '@kocherga/frontkit';
 
 import { ColumnsBasicBlockType as Props } from './types';
 

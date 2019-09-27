@@ -2,9 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Button } from '@kocherga/frontkit';
-
-import ColumnsBlock from '~/components/ColumnsBlock';
+import { Button, ColumnsBlock } from '@kocherga/frontkit';
 
 import { ColumnsButtonsBlockType as Props } from './types';
 
@@ -31,7 +29,9 @@ const OneColumn = (column: Props['value'][0]) => (
 export default function ColumnsBasicBlock(block: Props) {
   return (
     <ColumnsBlock>
-      {block.value.map((column, i) => <OneColumn {...column} key={i} />)}
+      {block.value.map((column, i) => (
+        <OneColumn {...column} key={i} />
+      ))}
     </ColumnsBlock>
   );
 }

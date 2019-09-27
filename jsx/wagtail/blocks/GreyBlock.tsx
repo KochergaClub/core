@@ -8,7 +8,7 @@ import { GreyBlockType as Props } from './types';
 
 const Container = styled(RichText)`
   background-color: ${colors.grey[100]};
-  padding: 48px 0 40px;
+  padding: 48px 20px 40px;
 `;
 
 const Header = styled.h2`
