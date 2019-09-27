@@ -41,11 +41,11 @@ class EventPrototype(models.Model):
     minute = models.IntegerField()
     length = models.IntegerField()  # in minutes
 
-    image = models.CharField(max_length=32, null=True)
+    image = models.CharField(max_length=32, null=True, blank=True)
 
     active = models.BooleanField(default=True)
 
-    canceled_dates = models.TextField()
+    canceled_dates = models.TextField(blank=True)
 
     def __str__(self):
         return self.title
