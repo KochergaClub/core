@@ -72,7 +72,7 @@ def period_orders(start_date, end_date):
 def commission_bonuses(start_date, end_date):
     orders = period_orders(start_date, end_date)
 
-    if abs((end_date - orders[-1].end_dt).seconds) > 86400:
+    if not orders or abs((end_date - orders[-1].end_dt).seconds) > 86400:
         raise Exception("Something is wrong with orders, check that cm importer is not broken")
 
     commissions = defaultdict(float)
