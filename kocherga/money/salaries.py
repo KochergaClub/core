@@ -62,10 +62,10 @@ def basic_salaries():
 
 
 def period_orders(start_date, end_date):
-    orders = Order.objects.filter(
+    orders = list(Order.objects.filter(
         start_ts__gte=datetime.combine(start_date, datetime.min.time(), tzinfo=TZ).timestamp(),
         end_ts__lte=datetime.combine(end_date, datetime.max.time(), tzinfo=TZ).timestamp(),
-    ).all()
+    ).all())
     return orders
 
 
