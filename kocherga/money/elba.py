@@ -192,7 +192,7 @@ async def add_cash_income(data, last_pko_id=None):
         await page.click("#Filter_FormOfMoneyFilter_Caption")
         await page.click(f'#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
 
-        await page.waitForXPath('//span[@id="Footer_MovementPeriod" and text()="Итого наличных"]')
+        await page.waitForXPath('//span[@id="Footer_SelectedPeriod" and text()="Наличные"]')
 
         pko_id = last_pko_id or await get_last_pko_id(page)
         logger.info(f'Last pko_id: {pko_id}')
