@@ -10,6 +10,7 @@ from kocherga.staff.models import Member
 from kocherga.cm.models import Order
 from kocherga.dateutils import TZ, inflected_month
 from kocherga.money.cashier.models import Payment
+import kocherga.importer.daemon
 
 
 def rate_by_shift(shift_type: ShiftType) -> int:
@@ -62,18 +63,19 @@ def basic_salaries():
 
 
 def period_orders(start_date, end_date):
-    orders = list(Order.objects.filter(
+    orders = Order.objects.filter(
         start_ts__gte=datetime.combine(start_date, datetime.min.time(), tzinfo=TZ).timestamp(),
         end_ts__lte=datetime.combine(end_date, datetime.max.time(), tzinfo=TZ).timestamp(),
-    ).all())
+    ).all()
     return orders
 
 
 def commission_bonuses(start_date, end_date):
     orders = period_orders(start_date, end_date)
 
-    if not orders or abs((end_date - orders[-1].end_dt).seconds) > 86400:
-        raise Exception("Something is wrong with orders, check that cm importer is not broken")
+    last_cm_import_dt = kocherga.importer.daemon.get_importer('cm.importer').last_dt
+    if (datetime.now(TZ) - last_cm_import_dt).seconds > 86400:
+        raise Exception("Something is wrong with cm importer, can't calculate bonuses correctly")
 
     commissions = defaultdict(float)
     for order in orders:

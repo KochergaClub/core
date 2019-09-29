@@ -59,13 +59,13 @@ class BaseImporter(ABC):
         pass
 
     @property
-    def last_dt(self) -> Optional[datetime]:
-        try:
-            state = State.objects.get(name=self.name)
-        except State.DoesNotExist:
-            return None
+    def state(self) -> State:
+        (state, _) = State.objects.get_or_create(name=self.name)
+        return state
 
-        return state.last_dt
+    @property
+    def last_dt(self) -> Optional[datetime]:
+        return self.state.last_dt
 
     @property
     def name(self):
