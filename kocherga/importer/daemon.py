@@ -13,7 +13,7 @@ IMPORTER_MODULES = [
     "cm.importer",
     "events.db",
     # "gitlab.models",
-    "money.cashier.models",
+    "money.cashier.importer",
     "money.ofd.models",
     "money.tochka.importer",
     "zadarma.importer",
