@@ -5,12 +5,13 @@ import datetime
 import logging
 from freezegun import freeze_time
 
-import kocherga.money.ofd.models
+import kocherga.money.ofd.api
+import kocherga.money.ofd.importer
 
 
 @pytest.mark.django_db()
 def test_documents():
-    documents = kocherga.money.ofd.models.ofd.documents(datetime.date(2019, 3, 1))
+    documents = kocherga.money.ofd.api.ofd.documents(datetime.date(2019, 3, 1))
     assert len(documents) > 3
     assert type(documents[0]) == kocherga.money.ofd.models.OfdDocument
 
@@ -20,4 +21,4 @@ def test_documents():
 def test_import_all(db, caplog):
     caplog.set_level(logging.INFO)
     with freeze_time('2018-12-30 10:00'):
-        kocherga.money.ofd.models.Importer().import_all()
+        kocherga.money.ofd.importer.Importer().import_all()

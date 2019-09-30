@@ -14,7 +14,7 @@ IMPORTER_MODULES = [
     "events.db",
     # "gitlab.models",
     "money.cashier.importer",
-    "money.ofd.models",
+    "money.ofd.importer",
     "money.tochka.importer",
     "zadarma.importer",
     "timepad.importer",

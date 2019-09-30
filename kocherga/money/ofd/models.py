@@ -1,25 +1,14 @@
-import logging
-logger = logging.getLogger(__name__)
-
-from datetime import datetime, timedelta, date
-import requests
+from datetime import datetime, timedelta
 from collections import defaultdict
 import decimal
 
 import enum
 
-from django.conf import settings
 from django.db import models
 
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from kocherga.dateutils import TZ
-import kocherga.importer.base
-
-API_URL = "https://api.ofd-ya.ru/ofdapi/v1"
-FISCAL_DRIVE_NUMBER = settings.KOCHERGA_MONEY_OFD_FISCAL_DRIVE_NUMBER
-TOKEN = settings.KOCHERGA_MONEY_OFD_YA_TOKEN
-DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 class CheckType(enum.Enum):
@@ -83,45 +72,6 @@ class OfdDocument(models.Model):
         )
 
 
-class OfdYaKkt:
-
-    def __init__(self, fiscal_drive_number: int) -> None:
-        self.fdnum = fiscal_drive_number
-
-    def request(self, method: str, params: Dict[str, Any]):
-        r = requests.post(
-            f"{API_URL}/{method}",
-            headers={"Ofdapitoken": TOKEN, "Content-Type": "application/json"},
-            json=params,
-        )
-        r.raise_for_status()
-        return r.json()
-
-    def documents(self, d: date) -> List[OfdDocument]:
-        items = self.request(
-            "documents",
-            {"fiscalDriveNumber": self.fdnum, "date": d.strftime("%Y-%m-%d")},
-        ).get("items", [])
-
-        return [OfdDocument.from_json(item) for item in items]
-
-    def shift_opened(self, shift_id: int) -> datetime:
-        items = self.request(
-            "documentsShift",
-            {
-                "fiscalDriveNumber": self.fdnum,
-                "shiftNumber": str(shift_id),
-                "docType": ["open_shift"],
-            },
-        ).get("items", [])
-
-        assert len(items) == 1
-        return datetime.strptime(items[0]["dateTime"], DT_FORMAT)
-
-
-ofd = OfdYaKkt(FISCAL_DRIVE_NUMBER)
-
-
 def cash_income_by_date(start_d, end_d):
     docs = OfdDocument.objects.filter(
         midday_ts__gte=datetime.combine(start_d, datetime.min.time()).timestamp()
@@ -141,40 +91,3 @@ def cash_income_by_date(start_d, end_d):
         {'date': d, 'income': date2income[d]}
         for d in sorted(date2income.keys())
     ]
-
-
-def import_date(d: date) -> None:
-    documents = ofd.documents(d)
-
-    for document in documents:
-        document.save()
-
-    # TODO - import shifts
-
-
-class Importer(kocherga.importer.base.IncrementalImporter):
-
-    def get_initial_dt(self):
-        # take the first shift's date
-        d = ofd.shift_opened(1).date()
-
-        # scroll back a few more days just in case
-        d -= timedelta(days=2)
-
-        return datetime.combine(d, datetime.min.time(), tzinfo=TZ)
-
-    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
-        from_d = from_dt.date()
-        to_d = to_dt.date()
-
-        d = from_d
-
-        while d <= to_d:
-            logger.info("importing " + d.strftime("%Y-%m-%d"))
-            import_date(d)
-            d += timedelta(days=1)
-
-        return datetime.combine(to_d, datetime.min.time(), tzinfo=TZ)
-
-    def interval(self):
-        return {"minutes": 5}
