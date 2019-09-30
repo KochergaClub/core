@@ -17,6 +17,8 @@ class EventManager(models.Manager):
 class Event(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
+    starts_at = models.DateTimeField(null=True)
+    ends_at = models.DateTimeField(null=True)
 
     objects = EventManager()
 
@@ -39,6 +41,9 @@ class Order(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     status = models.CharField(max_length=40)
+
+    created_at = models.DateTimeField(null=True)
+    subscribed_to_newsletter = models.BooleanField(null=True)
 
     def __str__(self):
         return f'[{self.id}] {self.user.email} / {self.event.name}'

@@ -1,6 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import dateutil.parser
+
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
@@ -22,12 +24,62 @@ class Importer(kocherga.importer.base.FullImporter):
             'sort': '-starts_at',
             'organization_ids': ORGANIZATION_ID,
             'access_statuses': settings.KOCHERGA_TIMEPAD['default_access_status'],
+            # ends_at is not returned by default; name and starts_at are always returned
+            'fields': 'name,starts_at,ends_at',
+            # 'starts_at_min': '2019-05-01', # TODO - necessary for importing past events
         })
         return api_response['values']
 
     def get_orders_data(self, event_id):
         api_response = api_call('GET', f'events/{event_id}/orders', {'limit': 100})
         return api_response.get('values', [])
+
+    def import_orders(self, event):
+        """Fetches and creates timepad orders; yields mailchimp users."""
+
+        orders_data = self.get_orders_data(event.id)
+
+        logger.info(f'Importing {len(orders_data)} orders for event {event.id}')
+
+        for order_data in orders_data:
+
+            order_id = order_data['id']
+            email = order_data['tickets'][0]['answers']['mail']
+            first_name = order_data['tickets'][0]['answers']['name']
+            last_name = order_data['tickets'][0]['answers']['surname']
+            status = order_data['status']['name']
+            created_at = dateutil.parser.parse(order_data['created_at'])
+            subscribed_to_newsletter = order_data['subscribed_to_newsletter']
+
+            try:
+                user = KchUser.objects.get(email=email)
+            except KchUser.DoesNotExist:
+                user = KchUser.objects.create_user(email)
+
+                if subscribed_to_newsletter:
+                    logger.info(f"{email} agreed to newsletter")
+                    mailchimp_user = kocherga.email.lists.User(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        card_id=None,
+                    )
+                    yield mailchimp_user
+                else:
+                    logger.info(f"{email} is new but doesn't agree to newsletter")
+
+            Order.objects.update_or_create(
+                id=order_id,
+                event=event,
+                defaults={
+                    'user': user,
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'status': status,
+                    'created_at': created_at,
+                    'subscribed_to_newsletter': subscribed_to_newsletter,
+                }
+            )
 
     def do_full_import(self):
         events_data = self.get_events_data()
@@ -40,48 +92,12 @@ class Importer(kocherga.importer.base.FullImporter):
                 id=event_id,
                 defaults={
                     'name': event_data['name'],
+                    'starts_at': dateutil.parser.parse(event_data['starts_at']),
+                    'ends_at': dateutil.parser.parse(event_data['ends_at']),
                 }
             )
-
-            orders_data = self.get_orders_data(event_id)
-
-            logger.info(f'Importing {len(orders_data)} orders for event {event_id}')
-
-            for order_data in orders_data:
-
-                email = order_data['tickets'][0]['answers']['mail']
-                first_name = order_data['tickets'][0]['answers']['name']
-                last_name = order_data['tickets'][0]['answers']['surname']
-                status = order_data['status']['name']
-
-                try:
-                    user = KchUser.objects.get(email=email)
-                except KchUser.DoesNotExist:
-                    user = KchUser.objects.create_user(email)
-
-                    if order_data['subscribed_to_newsletter']:
-                        logger.info(f"{email} agreed to newsletter")
-                        mailchimp_users.append(
-                            kocherga.email.lists.User(
-                                first_name=first_name,
-                                last_name=last_name,
-                                email=email,
-                                card_id=None,
-                            )
-                        )
-                    else:
-                        logger.info(f"{email} is new but doesn't agree to newsletter")
-
-                Order.objects.update_or_create(
-                    id=order_data['id'],
-                    event=event,
-                    defaults={
-                        'user': user,
-                        'first_name': first_name,
-                        'last_name': last_name,
-                        'status': status,
-                    }
-                )
+            for mailchimp_user in self.import_orders(event):
+                mailchimp_users.append(mailchimp_user)
 
         if mailchimp_users:
             logger.info(f'Importing {len(mailchimp_users)} users to our mailing list')
