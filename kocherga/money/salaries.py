@@ -73,7 +73,7 @@ def period_orders(start_date, end_date):
 def commission_bonuses(start_date, end_date):
     orders = period_orders(start_date, end_date)
 
-    last_cm_import_dt = kocherga.importer.daemon.get_importer('cm.importer').last_dt
+    last_cm_import_dt = kocherga.importer.daemon.get_importer('cm').last_dt
     if (datetime.now(TZ) - last_cm_import_dt).seconds > 86400:
         raise Exception("Something is wrong with cm importer, can't calculate bonuses correctly")
 

@@ -10,20 +10,20 @@ import importlib
 
 IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
-    "cm.importer",
-    "events.importer",
     # "gitlab.models",
-    "money.cashier.importer",
-    "money.ofd.importer",
-    "money.tochka.importer",
-    "zadarma.importer",
-    "timepad.importer",
-    "slack.importer",
+    "cm",
+    "events",
+    "money.cashier",
+    "money.ofd",
+    "money.tochka",
+    "zadarma",
+    "timepad",
+    "slack",
 ]
 
 
 def get_importer(module_name):
-    module = importlib.import_module(f"kocherga.{module_name}")
+    module = importlib.import_module(f"kocherga.{module_name}.importer")
     return module.Importer()
 
 
