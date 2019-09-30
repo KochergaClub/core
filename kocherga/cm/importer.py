@@ -31,6 +31,8 @@ def load_customers():
         for row in customer_reader:
             if row['Фамилия'] == '%3cscript3ealert(docum':
                 continue
+            if row['Имя'] == r'апр' and row['id'] == '110':
+                continue  # another invalid customer from demo.cafe-manager.ru
             customer = Customer.from_csv_row(row)
             customers.append(customer)
     return customers

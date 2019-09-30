@@ -11,7 +11,7 @@ import importlib
 IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
     "cm.importer",
-    "events.db",
+    "events.importer",
     # "gitlab.models",
     "money.cashier.importer",
     "money.ofd.importer",

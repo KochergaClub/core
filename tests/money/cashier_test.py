@@ -4,15 +4,18 @@ pytestmark = [
     pytest.mark.google,
 ]
 
-from kocherga.money.cashier.models import export_to_db, current_cash
+from kocherga.money.cashier.models import current_cash
+from kocherga.money.cashier.importer import Importer
 
 
-def test_export_to_db(db):
-    export_to_db()
+@pytest.mark.django_db(transaction=True)
+def test_importer():
+    Importer().import_new()
 
 
+@pytest.mark.django_db(transaction=True)
 def test_current_cash(db):
-    export_to_db()
+    Importer().import_new()
     cc = current_cash()
     assert isinstance(cc, int)
     assert cc > 100

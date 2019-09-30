@@ -12,6 +12,7 @@ from datetime import datetime, timedelta
 
 from kocherga.events.models import Event, EventPrototype
 import kocherga.events.db
+import kocherga.events.importer
 import kocherga.images
 from kocherga.dateutils import TZ
 
@@ -136,7 +137,7 @@ def event_for_edits():
 
 @pytest.fixture
 def imported_events(db, transactional_db):
-    kocherga.events.db.Importer().import_all()
+    kocherga.events.importer.Importer().import_all()
 
 
 @pytest.fixture

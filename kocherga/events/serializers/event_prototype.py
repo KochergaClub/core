@@ -39,6 +39,8 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
 
 
 # This serializer is not really necessary since we've removed its `instances` field.
+# But it still provides `suggested` field which depends on instances. Huh.
+# TODO - think about this some more and redesign the APIs.
 class DetailedEventPrototypeSerializer(EventPrototypeSerializer):
     class Meta:
         model = models.EventPrototype

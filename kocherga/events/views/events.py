@@ -66,6 +66,8 @@ class RootView(generics.ListCreateAPIView):
         else:
             data = request.data
 
+        data['creator'] = request.user.email
+
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

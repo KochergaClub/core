@@ -6,7 +6,8 @@ from django.conf import settings
 from datetime import timedelta
 from pathlib import Path
 import re
-import requests
+import asyncio
+import kocherga.templater.models
 import hashlib
 import os.path
 
@@ -56,16 +57,15 @@ class ImageStorage:
         return str(image_file)
 
     def create_mailchimp_image(self, start_date):
-        api_root = settings.KOCHERGA_API_ROOT
-        r = requests.get(
-            f"{api_root}/templater/mailchimp/png",
-            params={
-                "start_date": start_date.strftime("%Y-%m-%d"),
-                "end_date": (start_date + timedelta(days=6)).strftime("%Y-%m-%d"),
-            },
-        )
-        r.raise_for_status()
-        return r.content
+        params = {
+            "start_date": start_date.strftime("%Y-%m-%d"),
+            "end_date": (start_date + timedelta(days=6)).strftime("%Y-%m-%d"),
+        }
+        template = kocherga.templater.models.Template.by_name('mailchimp')
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        image_bytes = loop.run_until_complete(template.generate_png(params))
+        return image_bytes
 
     def get_filename(self, key):
         re.match(r"^\w+$", key)

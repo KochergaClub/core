@@ -142,6 +142,7 @@ class Customer(models.Model):
             'last_visit': 'Последний визит',
             'total_spent': 'Всего денег',
         }
+
         for field in cls._meta.get_fields():
             ru_title = field_map.get(field.name, None)
             if not ru_title:
@@ -157,7 +158,7 @@ class Customer(models.Model):
                 elif value == '':
                     pass
                 else:
-                    raise Exception(f"Unparsable gender value {value}")
+                    raise Exception(f"Unparsable gender value {value} (name: {csv_row['Имя']})")
             elif isinstance(field, models.fields.CharField):
                 pass
             elif isinstance(field, models.fields.TextField):
@@ -186,7 +187,9 @@ class Customer(models.Model):
                 elif value in ("Нет", "false", "В Архиве"):
                     value = False
                 else:
-                    raise Exception(f"Unparsable boolean value {value}")
+                    if csv_row['Имя'] == r'апр':
+                        continue  # invalid customer from demo.cafe-manager.ru which has invalid gender
+                    raise Exception(f"Unparsable boolean value {value} (name: {csv_row['Имя']})")
             else:
                 raise Exception(
                     f"Don't know how to to parse value to {field}"

@@ -86,6 +86,7 @@ class EventSerializer(serializers.ModelSerializer):
             'start',
             'end',
             'created',
+            'creator',
             'google_link',
             'type',
             'timing_description_override',

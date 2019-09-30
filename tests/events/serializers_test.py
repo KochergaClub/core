@@ -82,18 +82,3 @@ class TestEventPrototypeSerializer:
         data = serializers.EventPrototypeSerializer(ep).data
 
         assert data['title'] == ep.title
-
-
-class TestDetailedEventPrototypeSerializer:
-    def test_serialize(self, common_prototype):
-        ep = common_prototype
-        data = serializers.DetailedEventPrototypeSerializer(ep).data
-
-        assert data['title'] == ep.title
-
-        dt = ep.suggested_dates()[0]
-        event = ep.new_event(dt)
-        data = serializers.DetailedEventPrototypeSerializer(ep).data
-        assert type(data['instances']) == list
-        assert len(data['instances']) == 1
-        assert data['instances'][0]['id'] == event.google_id
