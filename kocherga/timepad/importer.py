@@ -111,12 +111,13 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         mailchimp_users = []
         for event_data in events_data:
             event_id = event_data['id']
+            logger.info(f'Updating or creating event {event_id}')
             (event, _) = Event.objects.update_or_create(
                 id=event_id,
                 defaults={
                     'name': event_data['name'],
                     'starts_at': dateutil.parser.parse(event_data['starts_at']),
-                    'ends_at': dateutil.parser.parse(event_data['ends_at']),
+                    'ends_at': dateutil.parser.parse(event_data['ends_at']) if 'ends_at' in event_data else None,
                 }
             )
             for mailchimp_user in self.import_orders(event):
