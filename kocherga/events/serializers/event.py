@@ -116,7 +116,7 @@ class EventSerializer(serializers.ModelSerializer):
             # Listing editable fields instead of read-only fields for clearer code.
             f for f in fields if f not in (
                 'title', 'location', 'description', 'summary',
-                'start', 'end',
+                'start', 'end', 'creator',
                 'visitors',
                 'vk_group', 'fb_group',
                 'posted_timepad', 'posted_fb', 'posted_vk',

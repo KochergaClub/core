@@ -71,6 +71,7 @@ def test_create(admin_client):
     event_json = res.json()
 
     assert event_json['title'] == 'test event'
+    assert event_json['creator'] == 'admin@example.com'
 
     res = admin_client.get(
         f'/api/event/{event_json["id"]}',
