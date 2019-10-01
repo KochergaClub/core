@@ -66,7 +66,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             last_name = order_data['tickets'][0]['answers']['surname']
             status = order_data['status']['name']
             created_at = dateutil.parser.parse(order_data['created_at'])
-            subscribed_to_newsletter = order_data['subscribed_to_newsletter']
+            subscribed_to_newsletter = order_data.get('subscribed_to_newsletter', False)
 
             try:
                 user = KchUser.objects.get(email=email)
@@ -74,14 +74,17 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                 user = KchUser.objects.create_user(email)
 
                 if subscribed_to_newsletter:
-                    logger.info(f"{email} agreed to newsletter")
-                    mailchimp_user = kocherga.email.lists.User(
-                        first_name=first_name,
-                        last_name=last_name,
-                        email=email,
-                        card_id=None,
-                    )
-                    yield mailchimp_user
+                    if (datetime.now(tz=TZ) - created_at).seconds > 86400 * 14:
+                        logger.info(f"{email} wants to subscribe to the newsletter but order is too old")
+                    else:
+                        logger.info(f"{email} agreed to newsletter")
+                        mailchimp_user = kocherga.email.lists.User(
+                            first_name=first_name,
+                            last_name=last_name,
+                            email=email,
+                            card_id=None,
+                        )
+                        yield mailchimp_user
                 else:
                     logger.info(f"{email} is new but doesn't agree to newsletter")
 
