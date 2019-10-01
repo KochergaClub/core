@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { A, Button, Modal, RichText } from '@kocherga/frontkit';
+import { A, Button, Modal, RichText, Row } from '@kocherga/frontkit';
 
 import {
   useFocusOnFirstModalRender,
@@ -30,16 +30,10 @@ const EventTitle = styled.header`
   margin-bottom: 10px;
 `;
 
-const EventRoom = styled.div``;
-
 const EventDescription = styled.div`
   border-top: 1px solid #ddd;
   margin-top: 20px;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: space-between;
+  overflow: auto;
 `;
 
 const EventAnnouncements = ({ event }: { event: LocalEvent }) => {
@@ -82,7 +76,7 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
           {formatDate(zonedStart, 'cccc, d MMMM')} ⋅{' '}
           {formatDate(zonedStart, 'HH:mm')} – {formatDate(zonedEnd, 'HH:mm')}
         </div>
-        <EventRoom>{event.room}</EventRoom>
+        <div>{event.room}</div>
         {event.description && (
           <EventDescription>
             <RichText>
@@ -93,7 +87,7 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
         <EventAnnouncements event={event} />
       </Modal.Body>
       <Modal.Footer>
-        <Footer>
+        <Row vCentered spaced>
           <small>
             <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
               evenman
@@ -101,7 +95,7 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
             ⋅ <A href={`/admin/events/event/${event.id}`}>админка</A>
           </small>
           <Button onClick={editCb}>Редактировать</Button>
-        </Footer>
+        </Row>
       </Modal.Footer>
     </Modal>
   );

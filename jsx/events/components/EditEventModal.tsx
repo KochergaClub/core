@@ -1,7 +1,5 @@
 import React, { useCallback, useState } from 'react';
 
-import styled from 'styled-components';
-
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { useCommonHotkeys, useAPI } from '../../common/hooks';
@@ -9,7 +7,7 @@ import { timezone, formatDate } from '../../common/utils';
 import { Event, LocalEvent } from '../types';
 import { deleteEvent, patchEvent } from '../api';
 
-import { Button, Modal } from '@kocherga/frontkit';
+import { Button, Modal, Row } from '@kocherga/frontkit';
 
 import EventFields from './EventFields';
 
@@ -20,11 +18,6 @@ interface Props {
   onClose: () => void;
   onDelete: (id: string) => void;
 }
-
-const Footer = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
 
 const EditEventModal = ({
   isOpen,
@@ -77,7 +70,7 @@ const EditEventModal = ({
   const zonedEnd = utcToZonedTime(event.end, timezone);
 
   return (
-    <Modal isOpen={isOpen} overflow="visible">
+    <Modal isOpen={isOpen} overflow="auto">
       <Modal.Header toggle={onClose}>
         Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
@@ -94,7 +87,7 @@ const EditEventModal = ({
         />
       </Modal.Body>
       <Modal.Footer>
-        <Footer>
+        <Row spaced>
           <Button
             onClick={deleteCb}
             kind="danger"
@@ -111,7 +104,7 @@ const EditEventModal = ({
           >
             Сохранить
           </Button>
-        </Footer>
+        </Row>
       </Modal.Footer>
     </Modal>
   );

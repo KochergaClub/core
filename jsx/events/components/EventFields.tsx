@@ -5,7 +5,7 @@ import autosize from 'autosize';
 
 import { useFocusOnFirstModalRender } from '../../common/hooks';
 
-import { Column, Input } from '@kocherga/frontkit';
+import { Column, Input, Label } from '@kocherga/frontkit';
 
 const roomOptions = [
   { value: '', label: '(не выбрана)' },
@@ -30,7 +30,7 @@ const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
     };
   }, []);
 
-  return <textarea {...props} rows={4} style={{ maxHeight: 200 }} ref={ref} />;
+  return <textarea {...props} rows={4} style={{ width: '100%' }} ref={ref} />;
 };
 
 interface Props {
@@ -58,7 +58,7 @@ const EventFields = (props: Props) => {
   return (
     <Column stretch gutter={16}>
       <Column stretch gutter={0}>
-        <label>Название события:</label>
+        <Label>Название события</Label>
         <Input
           type="text"
           placeholder="Название события"
@@ -69,7 +69,7 @@ const EventFields = (props: Props) => {
         />
       </Column>
       <Column stretch gutter={0}>
-        <label>Комната:</label>
+        <Label>Комната</Label>
         <Select
           value={findRoom(props.room)}
           onChange={selected => {
@@ -82,7 +82,7 @@ const EventFields = (props: Props) => {
         />
       </Column>
       <Column stretch gutter={0}>
-        <label>Описание:</label>
+        <Label>Описание</Label>
         <Textarea
           onChange={e => props.setDescription(e.currentTarget.value)}
           defaultValue={props.description}
