@@ -35,6 +35,7 @@ export interface Event {
   title: string;
   description: string;
   room: string;
+  creator?: string;
   start: Date;
   end: Date;
   posted_vk?: string;
@@ -52,6 +53,7 @@ export interface ServerEvent {
   title: string;
   description: string;
   room: string;
+  creator?: string;
   start: string;
   end: string;
   type: 'public' | 'private' | 'unknown';

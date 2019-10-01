@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { A, Button, Modal, RichText, Row } from '@kocherga/frontkit';
+import { A, Button, Modal, RichText, Row, Label } from '@kocherga/frontkit';
 
 import {
   useFocusOnFirstModalRender,
@@ -72,11 +72,21 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
       <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
-        <div>
-          {formatDate(zonedStart, 'cccc, d MMMM')} ⋅{' '}
-          {formatDate(zonedStart, 'HH:mm')} – {formatDate(zonedEnd, 'HH:mm')}
-        </div>
-        <div>{event.room}</div>
+        <Row vCentered>
+          <Label>Когда:</Label>
+          <div>
+            {formatDate(zonedStart, 'cccc, d MMMM')} ⋅{' '}
+            {formatDate(zonedStart, 'HH:mm')} – {formatDate(zonedEnd, 'HH:mm')}
+          </div>
+        </Row>
+        <Row vCentered>
+          <Label>Где:</Label>
+          <div>{event.room}</div>
+        </Row>
+        <Row vCentered>
+          <Label>Создатель:</Label>
+          <div>{event.creator || 'неизвестно'}</div>
+        </Row>
         {event.description && (
           <EventDescription>
             <RichText>
