@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from datetime import datetime
 import dateutil.parser
 
 from django.contrib.auth import get_user_model
@@ -8,6 +9,7 @@ from django.conf import settings
 
 import kocherga.importer.base
 import kocherga.email.lists
+from kocherga.dateutils import TZ
 
 from .api import api_call, ORGANIZATION_ID
 
@@ -16,19 +18,34 @@ from .models import Event, Order
 KchUser = get_user_model()
 
 
-class Importer(kocherga.importer.base.FullImporter):
+class Importer(kocherga.importer.base.IncrementalImporter):
 
-    def get_events_data(self):
-        api_response = api_call('GET', 'events', {
-            'limit': 30,
-            'sort': '-starts_at',
-            'organization_ids': ORGANIZATION_ID,
-            'access_statuses': settings.KOCHERGA_TIMEPAD['default_access_status'],
-            # ends_at is not returned by default; name and starts_at are always returned
-            'fields': 'name,starts_at,ends_at',
-            # 'starts_at_min': '2019-05-01', # TODO - necessary for importing past events
-        })
-        return api_response['values']
+    def get_events_data(self, from_dt: datetime):
+        LIMIT = 100
+        skip = 0
+        items = []
+        while True:
+            starts_at_min = from_dt.strftime('%Y-%m-%d')
+            logger.info(f'Importing chunk from {starts_at_min} with skip={skip}')
+            api_response = api_call('GET', 'events', {
+                'limit': LIMIT,
+                'skip': skip,
+                'sort': 'starts_at',
+                'organization_ids': ORGANIZATION_ID,
+                'access_statuses': settings.KOCHERGA_TIMEPAD['default_access_status'],
+                # ends_at is not returned by default; name and starts_at are always returned
+                'fields': 'name,starts_at,ends_at',
+                'starts_at_min': starts_at_min,
+            })
+            chunk_items = api_response['values']
+            items += chunk_items
+            total = api_response['total']
+            logger.info(f'Got {len(items)} / {total}')
+            if api_response['total'] <= skip + len(chunk_items):
+                break  # that's all!
+            skip += len(chunk_items)
+
+        return items
 
     def get_orders_data(self, event_id):
         api_response = api_call('GET', f'events/{event_id}/orders', {'limit': 100})
@@ -81,8 +98,11 @@ class Importer(kocherga.importer.base.FullImporter):
                 }
             )
 
-    def do_full_import(self):
-        events_data = self.get_events_data()
+    def get_initial_dt(self):
+        return datetime(2015, 8, 1, tzinfo=TZ)
+
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
+        events_data = self.get_events_data(from_dt)
         logger.info(f'Importing {len(events_data)} events from Timepad')
 
         mailchimp_users = []
@@ -102,3 +122,5 @@ class Importer(kocherga.importer.base.FullImporter):
         if mailchimp_users:
             logger.info(f'Importing {len(mailchimp_users)} users to our mailing list')
             kocherga.email.lists.populate_main_list(mailchimp_users)
+
+        return datetime.now(tz=TZ)
