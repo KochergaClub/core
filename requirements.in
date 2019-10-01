@@ -46,6 +46,7 @@ git+https://github.com/berekuk/wagtailmath.git@master
 django-annoying
 pywatchman
 wagtailgeowidget >= 5.0
+pyee == 5.0.0 # avoids warnings from pyppeteer; required by slackeventsapi (6.0.0 works too but prints annoying warnings)
 
 # dev-dependencies
 pytest
