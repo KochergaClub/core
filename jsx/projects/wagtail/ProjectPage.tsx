@@ -1,20 +1,12 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import Page from '~/components/Page';
-import TL02 from '~/blocks/TL02';
 import RichTextBlock from '~/blocks/RichTextBlock';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
+import ProjectHeroBlock from '../components/ProjectHeroBlock';
 import { ProjectPageType } from '../utils';
-
-const Image = styled.img`
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-`;
 
 const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
   wagtailPage: project,
@@ -25,15 +17,7 @@ const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
       og={{ image: project.image.url }}
       description={project.summary}
     >
-      <TL02 title={project.title}>
-        {project.summary}
-        {project.activity_summary && (
-          <div>
-            <small>{project.activity_summary}</small>
-          </div>
-        )}
-      </TL02>
-      <Image src={project.image.url} />
+      <ProjectHeroBlock project={project} />
       <RichTextBlock html={project.body} />
     </Page>
   );
