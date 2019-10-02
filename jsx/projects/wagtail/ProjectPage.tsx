@@ -2,10 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { RichText } from '@kocherga/frontkit';
-
 import Page from '~/components/Page';
 import TL02 from '~/blocks/TL02';
+import RichTextBlock from '~/blocks/RichTextBlock';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
@@ -15,12 +14,6 @@ const Image = styled.img`
   width: 100%;
   height: 300px;
   object-fit: cover;
-`;
-
-const Description = styled(RichText)`
-  margin: 0 auto;
-  max-width: 800px;
-  margin-bottom: 100px;
 `;
 
 const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
@@ -41,7 +34,7 @@ const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
         )}
       </TL02>
       <Image src={project.image.url} />
-      <Description dangerouslySetInnerHTML={{ __html: project.body }} />
+      <RichTextBlock html={project.body} />
     </Page>
   );
 };
