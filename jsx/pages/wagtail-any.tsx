@@ -82,7 +82,11 @@ const getWagtailPreviewPage = async (
 
 const getWagtailPageId = async (api: API, path: string): Promise<number> => {
   // FIXME: copy-pasted from api.ts
-  const url = `${api.base}/api/wagtail/pages/find/?html_path=${path}`;
+  let base = api.base;
+  if (!base && !IS_SERVER) {
+    base = window.location.origin;
+  }
+  const url = `${base}/api/wagtail/pages/find/?html_path=${path}`;
   console.log(`fetching wagtail url: ${url}`);
   console.log(api.getHeaders());
   const findResponse = await fetch(url, {
