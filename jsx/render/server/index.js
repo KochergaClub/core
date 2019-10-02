@@ -23,6 +23,7 @@ const httpProxy = require('http-proxy');
 
 const { API_HOST, API_ASYNC_HOST } = require('./constants');
 
+const trailingSlashEndpoint = require('./trailingSlashEndpoint').default;
 const nextjsEntrypoint = require('./nextjsEntrypoint').default;
 const wagtailEntrypoint = require('./wagtailEntrypoint').default;
 
@@ -72,6 +73,7 @@ async function main() {
     wsProxy.ws(req, socket, head);
   });
 
+  app.use(trailingSlashEndpoint);
   app.use(wagtailEntrypoint(nextApp));
   app.use(nextjsEntrypoint(nextApp));
 

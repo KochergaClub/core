@@ -1,38 +1,22 @@
 import logging
 logger = logging.getLogger(__name__)
 
-# from django.conf import settings
+from django.conf.urls import url
+from django.http import Http404
 
 from rest_framework import permissions
 from rest_framework.response import Response
 
 from wagtail.api.v2.router import WagtailAPIRouter
 
-from wagtail.api.v2.endpoints import PagesAPIEndpoint
+import wagtail.api.v2.endpoints
 # from wagtail.images.api.v2.endpoints import ImagesAPIEndpoint
 # from wagtail.documents.api.v2.endpoints import DocumentsAPIEndpoint
 
 from .models import PagePreview
 
 
-# Create the router. "wagtailapi" is the URL namespace
-api_router = WagtailAPIRouter('wagtailapi')
-
-
-# class HasWagtailAPIToken(permissions.BasePermission):
-#     """`X-WagtailAPIToken` is a secret header which is known to only to server.ts.
-#
-#     It's necessary to avoid leaking hidden pages.
-#     In the future we'll need to implement a more sophisticated permission.
-#
-#     It's not a query param (even though query param would be easier to debug in browser),
-#     because we use /api/wagtail/pages/find/?html_path redirects which don't keep the query param intact.
-#     """
-#     def has_permission(self, request, view):
-#         return request.META.get('HTTP_X_WAGTAILAPITOKEN', 'unset') == settings.WAGTAIL_API_TOKEN
-
-
-class PagesView(PagesAPIEndpoint):
+class PagesAPIEndpoint(wagtail.api.v2.endpoints.PagesAPIEndpoint):
     permission_classes = (permissions.AllowAny,)
 
     def filter_queryset_by_page_permissions(self, queryset):
@@ -87,6 +71,26 @@ class PagesView(PagesAPIEndpoint):
 
         return queryset
 
+    def locate_view(self, request):
+        """Similar to Wagtail's native /api/v2/pages/find, but returns JSON instead of HTTP redirect."""
+        queryset = self.get_queryset()
+
+        try:
+            obj = self.find_object(queryset, request)
+
+            if obj is None:
+                raise self.model.DoesNotExist
+
+        except self.model.DoesNotExist:
+            raise Http404("not found")
+
+        return Response({'id': obj.pk})
+
+    @classmethod
+    def get_urlpatterns(cls):
+        return super().get_urlpatterns() + [
+            url(r'^locate/$', cls.as_view({'get': 'locate_view'}), name='locate'),
+        ]
 
 # class ImagesView(ImagesAPIEndpoint):
 #     permission_classes = (HasWagtailAPIToken,)
@@ -120,12 +124,15 @@ class PagePreviewAPIEndpoint(PagesAPIEndpoint):
         return page
 
 
+# Create the router. "wagtailapi" is the URL namespace
+api_router = WagtailAPIRouter('wagtailapi')
+
 # Add the three endpoints using the "register_endpoint" method.
 # The first parameter is the name of the endpoint (eg. pages, images). This
 # is used in the URL of the endpoint
 # The second parameter is the endpoint class that handles the requests
 
-api_router.register_endpoint('pages', PagesView)
+api_router.register_endpoint('pages', PagesAPIEndpoint)
 
 api_router.register_endpoint('page_preview', PagePreviewAPIEndpoint)
 

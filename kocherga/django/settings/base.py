@@ -24,10 +24,6 @@ DEBUG = True
 # For example, this matters when we use request.build_absolute_uri().
 USE_X_FORWARDED_HOST = True
 
-# Wagtail
-
-WAGTAIL_SITE_NAME = "Kocherga"
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -159,8 +155,12 @@ CHANNEL_LAYERS = {
 
 LOGIN_URL = '/login'
 
+# Wagtail
+
+WAGTAIL_SITE_NAME = "Kocherga"
 WAGTAIL_FRONTEND_LOGIN_URL = LOGIN_URL
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'nosuchtemplate.html'
+WAGTAIL_APPEND_SLASH = False
 WAGTAILAPI_LIMIT_MAX = None
 
 LOGIN_REDIRECT_URL = '/'
