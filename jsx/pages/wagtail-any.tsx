@@ -82,14 +82,14 @@ const getWagtailPreviewPage = async (
 
 const getWagtailPageId = async (api: API, path: string): Promise<number> => {
   // FIXME: copy-pasted from api.ts
-  const findResponse = await fetch(
-    `${api.base}/api/wagtail/pages/find/?html_path=${path}`,
-    {
-      method: 'GET',
-      headers: api.getHeaders(),
-      redirect: 'manual',
-    }
-  );
+  const url = `${api.base}/api/wagtail/pages/find/?html_path=${path}`;
+  console.log(`fetching wagtail url: ${url}`);
+  console.log(api.getHeaders());
+  const findResponse = await fetch(url, {
+    method: 'GET',
+    headers: api.getHeaders(),
+    redirect: 'manual',
+  });
   if (findResponse.status === 404) {
     throw new APIError('Page not found', 404);
   } else if (findResponse.status !== 302) {
@@ -132,8 +132,6 @@ ProxyWagtailPage.getInitialProps = async context => {
   if (!asPath) {
     throw new Error('asPath is empty');
   }
-
-  console.log(asPath);
 
   let wagtailPage: WagtailPageProps;
   if (asPath.startsWith('/preview?')) {
