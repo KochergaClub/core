@@ -120,7 +120,7 @@ KOCHERGA_BACKUPS_S3_BUCKET = 'kocherga-backups'
 # TODO - move to sentry_sdk?
 KOCHERGA_LUDWIG_SENTRY_DSN = 'https://d6daa44a06a846a98743000040168090:7b1fad4c93454acd90fe9f973934ba90@sentry.io/1161227'
 
-KOCHERGA_API_ROOT = 'https://api.kocherga.club'
+KOCHERGA_API_ROOT = 'https://kocherga-club.ru/api'
 KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
 
 KOCHERGA_YANDEX_ORG_ID = 649407
@@ -129,4 +129,4 @@ GOOGLE_ANALYTICS_ID = 'UA-67233667-7'
 
 GDRIVE_WATCHMEN_FOLDER = '0B3eXnAACJCqlOUlEWUU2bkRlMkE'
 
-WAGTAILAPI_BASE_URL = "http://kocherga.club/api/wagtail"
+WAGTAILAPI_BASE_URL = f"{KOCHERGA_API_ROOT}/wagtail"

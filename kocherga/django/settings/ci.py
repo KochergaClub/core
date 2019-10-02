@@ -73,5 +73,5 @@ KOCHERGA_TELEGRAM = {
     },
 }
 
-KOCHERGA_API_ROOT = 'https://api.kocherga.club'
+KOCHERGA_API_ROOT = 'http://localhost:8000/api'
 KOCHERGA_WEBSITE = 'https://yudkowsky.cult'

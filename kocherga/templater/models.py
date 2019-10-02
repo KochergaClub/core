@@ -50,7 +50,7 @@ class Template:
                     value = int(value)
                 props[field.name] = value
 
-        props['url_root'] = settings.KOCHERGA_API_ROOT
+        props['url_root'] = settings.KOCHERGA_WEBSITE
 
         return self.template.render(props)
 
