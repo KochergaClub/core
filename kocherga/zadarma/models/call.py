@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime
 import enum
 from io import BytesIO
@@ -6,6 +9,8 @@ import requests
 from django.db import models
 
 from kocherga.dateutils import TZ
+import kocherga.watchmen.schedule
+import kocherga.watchmen.models
 
 from .pbx_call import PbxCall
 
@@ -56,27 +61,46 @@ class Call(models.Model):
     def __str__(self):
         return f'[{self.ts}] {self.call_type} {self.clid} ---> {self.destination}'
 
+    # TODO - move to Manager
     @classmethod
     def from_api_data(cls, pbx_call: PbxCall, data) -> "Call":
         args = {}
-        for arg in ('call_id', 'disposition', 'clid', 'sip', 'seconds'):
+        for arg in ('disposition', 'clid', 'sip', 'seconds'):
             args[arg] = data[arg]
 
         if data['pbx_call_id'] != pbx_call.pbx_call_id:
-            raise Exception("Code logic error")
+            raise Exception("Code logic error - pbx_call doesn't match data")
 
-        call = Call(
-            ts=datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
-            call_type=CallType.from_api_data(data).name,
-            is_recorded=(data['is_recorded'] == 'true'),
-            destination=str(data['destination']),
-            pbx_call=pbx_call,
-            **args,
+        call_id = data['call_id']
+        (call, _) = Call.objects.update_or_create(
+            call_id=call_id,
+            defaults={
+                'ts': datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
+                'call_type': CallType.from_api_data(data).name,
+                'is_recorded': (data['is_recorded'] == 'true'),
+                'destination': str(data['destination']),
+                'pbx_call': pbx_call,
+                **args,
+            }
         )
 
-        if 'record_link' in data:
+        if 'record_link' in data and not call.record:
+            logger.info(f'Fetching recording for {call_id}')
             r = requests.get(data['record_link'])
             r.raise_for_status()
             call.record.save('record.mp3', BytesIO(r.content))
 
+        # TODO - move `watchman` from Call to PbxCall, since it's the same for all calls.
+        # (We store the actual responder in PbxCallData model.)
+        # Also, voice recognition would be nice to have :)
+        try:
+            shift = kocherga.watchmen.schedule.shift_by_dt(
+                datetime.fromtimestamp(call.ts.timestamp(), TZ)
+            )
+            if shift.watchman:
+                call.watchman = shift.watchman.member.short_name
+        except kocherga.watchmen.models.Shift.DoesNotExist:
+            pass  # that's ok
+
+        call.save()
         return call
