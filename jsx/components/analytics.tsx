@@ -60,6 +60,10 @@ export const FacebookPixelScript = () => {
 };
 
 export const YandexMetrikaScript = () => {
+  if (!YANDEX_METRIKA_ID) {
+    return null;
+  }
+
   return (
     <script
       dangerouslySetInnerHTML={{
