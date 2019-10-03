@@ -120,7 +120,7 @@ def load_order_log(order_id):
     html = r.content.decode("utf-8")
 
     match = re.search(
-        r"История изменения заказа:\s*<div.*?>(.*?)</div>",
+        r"История изменения заказа1?:\s*<div.*?>(.*?)</div>",
         html,
         re.DOTALL,
     )
