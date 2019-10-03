@@ -15,6 +15,7 @@ x-common:
     DB_USER: 'root'
     DB_PASSWORD: ''
     NODE_ENV: 'development'
+    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
     DJANGO_WATCHMAN_TIMEOUT: 60
   cap_add:
     - SYS_PTRACE

@@ -19,7 +19,7 @@ RUN apt-get install -y inotify-tools && \
     git clone https://github.com/facebook/watchman.git /tmp/watchman-src && \
     cd /tmp/watchman-src && \
     git checkout v4.9.0 && \
-    ./autogen.sh && ./configure && make && make install
+    ./autogen.sh && ./configure && make && make install && rm -rf /tmp/watchman-src
 
 WORKDIR /code
 COPY requirements.txt /code/

@@ -17,6 +17,7 @@ x-common:
     VK_RETARGETING_ID: "${VK_RETARGETING_ID}"
     SENTRY_DSN_FRONTEND: "${SENTRY_DSN_FRONTEND}"
     NODE_ENV: 'production'
+    prometheus_multiproc_dir: /tmp # TODO - create empty dir to avoid file name collisions etc.
   volumes:
     - /data/kocherga:/data
     - /data/kocherga-static:/code/collected_static
