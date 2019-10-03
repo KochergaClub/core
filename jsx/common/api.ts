@@ -30,7 +30,6 @@ export interface APIProps {
   base?: string;
   cookie?: string;
   realHost?: string;
-  wagtailAPIToken?: string;
 }
 
 export class API {
@@ -38,14 +37,12 @@ export class API {
   base: string;
   cookie: string;
   realHost: string;
-  wagtailAPIToken: string;
 
   constructor(props: APIProps) {
     this.csrfToken = props.csrfToken || '';
     this.base = props.base || '';
     this.cookie = props.cookie || '';
     this.realHost = props.realHost || '';
-    this.wagtailAPIToken = props.wagtailAPIToken || '';
   }
 
   getHeaders = (): { [header: string]: string } => {

@@ -50,7 +50,6 @@ class MyApp extends App<MyProps> {
         base: `http://${API_HOST}`,
         cookie: ctx.req.headers.cookie || '',
         realHost: ctx.req.headers.host,
-        wagtailAPIToken: process.env.WAGTAIL_API_TOKEN,
       };
       store.dispatch(configureAPI(apiConfig));
       await store.dispatch(loadUser());

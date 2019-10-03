@@ -15,7 +15,6 @@ x-common:
     DB_USER: 'root'
     DB_PASSWORD: ''
     NODE_ENV: 'development'
-    WAGTAIL_API_TOKEN: 'development'
     DJANGO_WATCHMAN_TIMEOUT: 60
   cap_add:
     - SYS_PTRACE
