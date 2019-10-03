@@ -2,6 +2,8 @@ import React from 'react';
 
 import { A } from '@kocherga/frontkit';
 
+import * as Sentry from '@sentry/node';
+
 interface Props {}
 interface State {
   hasError: boolean;
@@ -13,7 +15,8 @@ class ErrorBoundary extends React.Component<Props, State> {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(err: any) {
+    Sentry.captureException(err);
     // Update state so the next render will show the fallback UI.
     return { hasError: true };
   }

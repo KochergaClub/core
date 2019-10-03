@@ -6,8 +6,11 @@ import App, { AppContext } from 'next/app';
 import Error from 'next/error';
 import withRedux, { NextJSContext } from 'next-redux-wrapper';
 import Router from 'next/router';
+import getConfig from 'next/config';
 
 import NProgress from 'nprogress';
+
+import * as Sentry from '@sentry/node';
 
 import { configureStore, Store } from '~/redux/store';
 import { configureAPI, loadUser, cleanupAPIForClient } from '~/core/actions';
@@ -16,6 +19,10 @@ import { API_HOST } from '~/render/server/constants';
 
 import { selectUser } from '~/core/selectors';
 import { trackPageview } from '~/components/analytics';
+
+Sentry.init({
+  dsn: getConfig().publicRuntimeConfig.sentryDSN,
+});
 
 Router.events.on('routeChangeStart', () => {
   NProgress.start();
@@ -54,6 +61,7 @@ class MyApp extends App<MyProps> {
       try {
         pageProps = await Component.getInitialProps(ctx);
       } catch (err) {
+        Sentry.captureException(err);
         const user = selectUser(store.getState());
         if (
           err instanceof APIError &&
