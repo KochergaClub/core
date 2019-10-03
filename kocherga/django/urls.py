@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/', include('kocherga.email.urls')),
     path('api/', include('kocherga.fb.urls')),
 
+    path('api/prometheus/', include('django_prometheus.urls')),
+
     path('', include('kocherga.auth.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [

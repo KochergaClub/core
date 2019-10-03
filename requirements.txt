@@ -46,6 +46,7 @@ django-annoying==0.10.4
 django-cors-headers==3.1.0
 django-debug-toolbar==2.0
 django-modelcluster==4.4  # via wagtail
+django-prometheus==1.1.0
 django-rest-framework==0.1.0
 django-reversion-compare==0.8.6
 django-reversion==3.0.4
@@ -115,7 +116,7 @@ pexpect==4.7.0            # via ipython
 pickleshare==0.7.5        # via ipython
 pillow==5.4.1             # via wagtail
 pluggy==0.12.0            # via pytest
-prometheus-client==0.7.1  # via notebook
+prometheus-client==0.7.1  # via django-prometheus, notebook
 prompt-toolkit==2.0.9     # via ipython, jupyter-console
 ptyprocess==0.6.0         # via pexpect, terminado
 py==1.8.0                 # via pytest
@@ -196,4 +197,4 @@ zipp==0.6.0               # via importlib-metadata
 zope.interface==4.6.0     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.2.0        # via apscheduler, ipython, jsonschema, kiwisolver, markdown, pyhamcrest, zope.interface
+# setuptools==41.2.0        # via apscheduler, ipython, jsonschema, kiwisolver, markdown, pyhamcrest, zope.interface[201~
