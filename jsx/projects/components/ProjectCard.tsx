@@ -48,7 +48,8 @@ const Image = styled.img`
 `;
 
 const ActivitySummary = styled(Label)`
-  margin-top: 10px;
+  margin-top: 4px;
+  margin-bottom: 10px;
 `;
 
 const ProjectCard = (props: ProjectPageType) => {
@@ -59,8 +60,8 @@ const ProjectCard = (props: ProjectPageType) => {
         <Image src={props.image_thumbnail.url} />
         <Inner>
           <Header>{props.title}</Header>
-          <Summary>{props.summary}</Summary>
           <ActivitySummary>{props.activity_summary}</ActivitySummary>
+          <Summary>{props.summary}</Summary>
         </Inner>
       </Card>
     </ProjectA>
