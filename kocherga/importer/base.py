@@ -8,6 +8,7 @@ from typing import Optional
 from kocherga.dateutils import TZ
 
 import django.db
+from django.db import transaction
 
 from .models import State, LogEntry
 
@@ -19,8 +20,6 @@ class ImportContext:
         self.mode = mode
 
     def __enter__(self):
-        django.db.transaction.set_autocommit(False)
-
         self.log_entry = LogEntry(name=self.name)
 
         try:
@@ -46,17 +45,13 @@ class ImportContext:
 
         self.state.save()
         self.log_entry.save()
-
-        django.db.transaction.set_autocommit(True)
-        django.db.transaction.commit()
-
         logging.info(f"{self.name} imported")
 
 
 class BaseImporter(ABC):
     @abstractmethod
     def import_new(self) -> None:
-        pass
+        ...
 
     @property
     def state(self) -> State:
@@ -79,10 +74,11 @@ class FullImporter(BaseImporter):
 
     @abstractmethod
     def do_full_import(self) -> None:
-        pass
+        ...
 
     def import_new(self) -> None:
-        with ImportContext(self.name, "full"):
+        # with ImportContext(self.name, "full"):
+        with transaction.atomic():
             self.do_full_import()
 
 
@@ -90,15 +86,13 @@ class IncrementalImporter(BaseImporter):
 
     @abstractmethod
     def get_initial_dt(self) -> datetime:
-        pass
+        ...
 
     # Should return a datetime of a last imported object or a last datetime
     # that we can be sure won't be needed to be imported again.
     @abstractmethod
-    def do_period_import(
-        self, from_dt: datetime, to_dt: datetime
-    ) -> datetime:
-        pass
+    def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
+        ...
 
     def _import(self, mode: str) -> None:
         with ImportContext(self.name, mode) as ic:
