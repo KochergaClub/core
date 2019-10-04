@@ -159,7 +159,7 @@ def calculate_salaries(start_date, end_date):
         for k, v in stat.items():
             container.add(k, 'commissions', v)
 
-    if end_date == date(2019, 10, 4):
+    if end_date == date(2019, 10, 5):
         # missed bonuses due to broken cm import
         stat = commission_bonuses(date(2019, 9, 10), date(2019, 9, 20))
         for k, v in stat.items():
