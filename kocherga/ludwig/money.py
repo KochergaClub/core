@@ -60,6 +60,11 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
                     "value": f"{salary.commissions} руб.",
                     "short": True,
                 },
+                {
+                    "title": "Грейд",
+                    "value": member.watchman.grade.code,
+                    "short": True,
+                },
             ],
         }
         if with_elba_values:
