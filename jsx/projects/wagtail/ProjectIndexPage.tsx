@@ -76,7 +76,7 @@ ProjectIndexPage.getInitialProps = async ({ store: { getState } }) => {
   const api = selectAPI(getState());
 
   const json = await api.callWagtail(
-    'pages/?type=projects.ProjectPage&fields=summary,image,image_thumbnail,is_active&limit=100'
+    'pages/?type=projects.ProjectPage&fields=summary,activity_summary,image,image_thumbnail,is_active&limit=100'
   );
   return { projects: json.items };
 };

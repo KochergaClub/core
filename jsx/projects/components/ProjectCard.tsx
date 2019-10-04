@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ProjectPageType } from '../utils';
+import { Label } from '@kocherga/frontkit';
 
 const ProjectA = styled.a`
   text-decoration: none;
@@ -25,15 +26,13 @@ const Card = styled.div`
 `;
 
 const Inner = styled.div`
-  padding: 20px;
-  padding-top: 10px;
+  padding: 10px 20px;
 `;
 
 const Header = styled.header`
   font-size: 1.3rem;
   line-height: 1.3;
   font-weight: 600;
-  margin-bottom: 10px;
 `;
 
 const Summary = styled.div`
@@ -48,6 +47,10 @@ const Image = styled.img`
   object-fit: cover;
 `;
 
+const ActivitySummary = styled(Label)`
+  margin-top: 10px;
+`;
+
 const ProjectCard = (props: ProjectPageType) => {
   // TODO - use <Link> for client-side navigation, but wagtail API is not available on the client-side yet
   return (
@@ -57,6 +60,7 @@ const ProjectCard = (props: ProjectPageType) => {
         <Inner>
           <Header>{props.title}</Header>
           <Summary>{props.summary}</Summary>
+          <ActivitySummary>{props.activity_summary}</ActivitySummary>
         </Inner>
       </Card>
     </ProjectA>
