@@ -14,9 +14,7 @@ import kocherga.importer.daemon
 
 
 def rate_by_shift(shift_type: ShiftType) -> int:
-    if shift_type in (ShiftType.MORNING_V1, ShiftType.EVENING_V1):
-        return 650
-    elif shift_type == ShiftType.MORNING:
+    if shift_type == ShiftType.MORNING:
         return 500
     elif shift_type == ShiftType.MIDDAY:
         return 500
@@ -24,6 +22,10 @@ def rate_by_shift(shift_type: ShiftType) -> int:
         return 600
     elif shift_type == ShiftType.NIGHT:
         return 600
+    # old 2015-2016 shifts
+    elif shift_type in (ShiftType.MORNING_V1, ShiftType.EVENING_V1):
+        return 650
+
     raise Exception(f"Unknown shift type {shift_type}")
 
 
@@ -51,15 +53,10 @@ def shift_salaries(start_date, end_date):
             if not shift.watchman:
                 continue
             rate = rate_by_shift(shift_type)
-            stat[shift.watchman.member.id] += rate
+            stat[shift.watchman.member.id] += rate * shift.watchman.grade.multiplier
         d += timedelta(days=1)
 
     return stat
-
-
-def basic_salaries():
-    result = defaultdict(int)
-    return result  # no basic salaries
 
 
 def period_orders(start_date, end_date):
@@ -97,11 +94,10 @@ class Salary:
     def __init__(self):
         self.shifts = 0
         self.commissions = 0
-        self.basic = 0
 
     @classmethod
     def all_kinds(cls):
-        return ('shifts', 'commissions', 'basic')
+        return ('shifts', 'commissions')
 
     def add(self, kind, value):
         value = int(value)
@@ -109,8 +105,6 @@ class Salary:
             self.shifts += value
         elif kind == 'commissions':
             self.commissions += value
-        elif kind == 'basic':
-            self.basic += value
         else:
             raise Exception(f"Unknown kind {kind}")
 
@@ -154,20 +148,20 @@ class SalaryContainer:
 def calculate_salaries(start_date, end_date):
     container = SalaryContainer(start_date, end_date)
 
-    add_basic_salaries = True
     add_bonus_salaries = True
 
     stat = shift_salaries(start_date, end_date)
     for k, v in stat.items():
         container.add(k, 'shifts', v)
 
-    if add_basic_salaries:
-        stat = basic_salaries()
-        for k, v in stat.items():
-            container.add(k, 'basic', v)
-
     if add_bonus_salaries:
         stat = commission_bonuses(start_date, end_date)
+        for k, v in stat.items():
+            container.add(k, 'commissions', v)
+
+    if end_date == date(2019, 10, 4):
+        # missed bonuses due to broken cm import
+        stat = commission_bonuses(date(2019, 9, 10), date(2019, 9, 20))
         for k, v in stat.items():
             container.add(k, 'commissions', v)
 
