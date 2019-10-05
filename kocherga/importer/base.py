@@ -1,4 +1,6 @@
 import logging
+logger = logging.getLogger(__name__)
+
 from datetime import datetime
 import sys
 from abc import ABC, abstractmethod
@@ -9,6 +11,7 @@ from kocherga.dateutils import TZ
 from django.db import transaction
 
 from .models import State, LogEntry
+from .prometheus import success_counter, failure_counter
 
 
 class ImportSession:
@@ -28,8 +31,12 @@ class ImportSession:
         if exc_info:
             # roll back everything done by importer
             self.state.last_exception = str(exc_info[1])
+            logger.info('Incrementing failure_counter')
+            failure_counter.labels(importer=self.name).inc()
         else:
             self.state.last_exception = None
+            logger.info('Incrementing success_counter')
+            success_counter.labels(importer=self.name).inc()
 
         self.state.last_dt = datetime.now(TZ)
 

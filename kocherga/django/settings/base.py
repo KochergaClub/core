@@ -86,13 +86,11 @@ INSTALLED_APPS = [
 
     'wagtail.api.v2',
     'rest_framework',
-    'django_prometheus',
 ]
 
 IGNORE_WEB = False
 
 MIDDLEWARE = [
-    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'kocherga.django.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -107,9 +105,16 @@ MIDDLEWARE = [
 
     'wagtail.core.middleware.SiteMiddleware',
     # 'wagtail.contrib.redirects.middleware.RedirectMiddleware',
-
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
+
+# NO_DJANGO_PROMETHEUS is used to disable prometheus for importer.py and worker.py.
+if not os.environ.get('NO_DJANGO_PROMETHEUS'):
+    MIDDLEWARE = (
+        ['django_prometheus.middleware.PrometheusBeforeMiddleware']
+        + MIDDLEWARE
+        + ['django_prometheus.middleware.PrometheusAfterMiddleware']
+    )
+    INSTALLED_APPS = INSTALLED_APPS + ['django_prometheus']
 
 ADD_REVERSION_ADMIN = True
 

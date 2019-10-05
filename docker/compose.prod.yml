@@ -95,6 +95,8 @@ services:
   importer:
     << : *common
     command: ./scripts/importer.py
+    ports:
+      - "127.0.0.1:5303:8000" # for prometheus metrics
     restart: always
 
   worker:

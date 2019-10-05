@@ -12,6 +12,8 @@ x-common:
     DB_USER: 'root'
     DB_PASSWORD: ''
     NODE_ENV: 'development'
+    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+    DJANGO_WATCHMAN_TIMEOUT: 60
   cap_add:
     - SYS_PTRACE
 
@@ -47,7 +49,7 @@ services:
       dockerfile: ./docker/Dockerfile
       args:
         NPM_TOKEN: ${TOKEN}
-    command: npx nodemon -w ./kocherga --exec ./manage.py runserver --noreload 0.0.0.0:80
+    command: ./manage.py runserver 0.0.0.0:80
     ports:
       - "127.0.0.1:8001:80"
     depends_on:
@@ -58,7 +60,7 @@ services:
 
   channels-worker:
     << : *common
-    command: npx nodemon -w ./kocherga --exec ./scripts/channels-worker.sh
+    command: ./scripts/channels-worker.sh
     depends_on:
       - db
       - redis

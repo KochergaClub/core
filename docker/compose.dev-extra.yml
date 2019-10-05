@@ -1,13 +1,15 @@
 version: '3.4'
 
-x-common:
-  &common
+x-environment: &environment
+  DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+
+x-common: &common
   image: registry.gitlab.com/kocherga/core:dev
   volumes:
     - ..:/code
     - /data/kocherga:/data
   environment:
-    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+    <<: *environment
 
 services:
   worker:
@@ -19,15 +21,24 @@ services:
   importer:
     << : *common
     command: ./scripts/importer.py
+    ports:
+      - "127.0.0.1:5303:8000" # for prometheus metrics
+    environment:
+      << : *environment
+      NO_DJANGO_PROMETHEUS: 1
     depends_on:
       - db
+    restart: always
 
   tgbot:
     << : *common
     command: ./scripts/tgbot.py
-    # TODO - expose RPC port
     depends_on:
       - db
+      - tor
+
+  tor:
+    image: dperson/torproxy
 
   ludwig:
     << : *common

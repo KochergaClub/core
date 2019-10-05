@@ -1,7 +1,15 @@
 version: '3.4'
 
-x-common:
-  &common
+x-environment: &environment
+  DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+  DB_NAME: 'kocherga'
+  DB_USER: 'root'
+  DB_PASSWORD: ''
+  NODE_ENV: 'development'
+  prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+  DJANGO_WATCHMAN_TIMEOUT: 60
+
+x-common: &common
   image: registry.gitlab.com/kocherga/core:dev
   volumes:
     # mac volumes are managed with docker-sync for better performance and inotify fixes
@@ -10,13 +18,7 @@ x-common:
     - code-pytest:/code/tests:nocopy
     - data:/data:nocopy
   environment:
-    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
-    DB_NAME: 'kocherga'
-    DB_USER: 'root'
-    DB_PASSWORD: ''
-    NODE_ENV: 'development'
-    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
-    DJANGO_WATCHMAN_TIMEOUT: 60
+    <<: *environment
   cap_add:
     - SYS_PTRACE
 
@@ -76,16 +78,6 @@ services:
       - api
     ports:
       - "127.0.0.1:8000:80"
-
-  tgbot:
-    << : *common
-    command: ./scripts/tgbot.py
-    depends_on:
-      - db
-      - tor
-
-  tor:
-    image: dperson/torproxy
 
 volumes:
   code-jsx:
