@@ -59,7 +59,9 @@ const ProjectCard = (props: ProjectPageType) => {
         <Image src={props.image_thumbnail.url} />
         <Inner>
           <Header>{props.title}</Header>
-          <ActivitySummary>{props.activity_summary}</ActivitySummary>
+          {props.activity_summary && props.is_active && (
+            <ActivitySummary>{props.activity_summary}</ActivitySummary>
+          )}
           <Summary>{props.summary}</Summary>
         </Inner>
       </Card>
