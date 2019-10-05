@@ -1,23 +1,25 @@
 version: '3.4'
 
-x-common:
-  &common
+x-environment: &environment
+  DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.prod'
+  DB_NAME: 'kocherga_django' # TODO - environment-based databases
+  DB_USER: 'kocherga'
+  # these variables are passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
+  DB_PASSWORD: "${DB_PASSWORD}"
+  GOOGLE_ANALYTICS_ID: "${GOOGLE_ANALYTICS_ID}"
+  FACEBOOK_PIXEL_ID: "${FACEBOOK_PIXEL_ID}"
+  YANDEX_METRIKA_ID: "${YANDEX_METRIKA_ID}"
+  VK_RETARGETING_ID: "${VK_RETARGETING_ID}"
+  SENTRY_DSN_FRONTEND: "${SENTRY_DSN_FRONTEND}"
+  NODE_ENV: 'production'
+  prometheus_multiproc_dir: /tmp # TODO - create empty dir to avoid file name collisions etc.
+
+x-common: &common
   image: registry.gitlab.com/kocherga/core:${TAG}
   extra_hosts:
     - "db:${HOST_IP}"
   environment:
-    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.prod'
-    DB_NAME: 'kocherga_django' # TODO - environment-based databases
-    DB_USER: 'kocherga'
-    # these variables are passed from the outside (usually from gitlab secret variables, see .gitlab-ci config)
-    DB_PASSWORD: "${DB_PASSWORD}"
-    GOOGLE_ANALYTICS_ID: "${GOOGLE_ANALYTICS_ID}"
-    FACEBOOK_PIXEL_ID: "${FACEBOOK_PIXEL_ID}"
-    YANDEX_METRIKA_ID: "${YANDEX_METRIKA_ID}"
-    VK_RETARGETING_ID: "${VK_RETARGETING_ID}"
-    SENTRY_DSN_FRONTEND: "${SENTRY_DSN_FRONTEND}"
-    NODE_ENV: 'production'
-    prometheus_multiproc_dir: /tmp # TODO - create empty dir to avoid file name collisions etc.
+    <<: *environment
   volumes:
     - /data/kocherga:/data
     - /data/kocherga-static:/code/collected_static
@@ -95,6 +97,9 @@ services:
   importer:
     << : *common
     command: ./scripts/importer.py
+    environment:
+      << : *environment
+      NO_DJANGO_PROMETHEUS: 1
     ports:
       - "127.0.0.1:5303:8000" # for prometheus metrics
     restart: always
