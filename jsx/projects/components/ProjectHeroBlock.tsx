@@ -70,9 +70,9 @@ const ProjectHeroBlock: React.FC<Props> = ({ project }) => (
       <Header>{project.title}</Header>
       <Summary>{project.summary}</Summary>
     </div>
-    {project.activity_summary && (
-      <ActivitySummary>{project.activity_summary}</ActivitySummary>
-    )}
+    <ActivitySummary>
+      {project.is_active ? project.activity_summary : 'Неактивный проект'}
+    </ActivitySummary>
   </Container>
 );
 
