@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import cookie from 'cookie';
 
 import App, { AppContext } from 'next/app';
-import Error from 'next/error';
 import withRedux, { NextJSContext } from 'next-redux-wrapper';
 import Router from 'next/router';
 import getConfig from 'next/config';
@@ -19,6 +18,8 @@ import { API_HOST } from '~/render/server/constants';
 
 import { selectUser } from '~/core/selectors';
 import { trackPageview } from '~/components/analytics';
+
+import Error from './_error';
 
 Sentry.init({
   dsn: getConfig().publicRuntimeConfig.sentryDSN,
@@ -84,6 +85,9 @@ class MyApp extends App<MyProps> {
           err instanceof APIError &&
           (err.status === 404 || err.status === 403 || err.status === 400)
         ) {
+          if (ctx.res) {
+            ctx.res.statusCode = err.status;
+          }
           return { pageProps: {}, errorCode: err.status };
         } else {
           throw err;
