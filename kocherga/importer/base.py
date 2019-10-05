@@ -1,25 +1,22 @@
 import logging
 from datetime import datetime
-
+import sys
 from abc import ABC, abstractmethod
-
 from typing import Optional
 
 from kocherga.dateutils import TZ
 
-import django.db
 from django.db import transaction
 
 from .models import State, LogEntry
 
 
-class ImportContext:
+class ImportSession:
 
     def __init__(self, name, mode):
         self.name = name
         self.mode = mode
 
-    def __enter__(self):
         self.log_entry = LogEntry(name=self.name)
 
         try:
@@ -27,16 +24,12 @@ class ImportContext:
         except State.DoesNotExist:
             self.state = State(name=self.name)
 
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_value:
+    def save(self, exc_info=None):
+        if exc_info:
             # roll back everything done by importer
-            self.state.last_exception = str(exc_value)
-            django.db.transaction.rollback()
+            self.state.last_exception = str(exc_info[1])
         else:
             self.state.last_exception = None
-            django.db.transaction.commit()
 
         self.state.last_dt = datetime.now(TZ)
 
@@ -77,9 +70,15 @@ class FullImporter(BaseImporter):
         ...
 
     def import_new(self) -> None:
-        # with ImportContext(self.name, "full"):
-        with transaction.atomic():
-            self.do_full_import()
+        session = ImportSession(self.name, 'full')
+
+        try:
+            with transaction.atomic():
+                self.do_full_import()
+            session.save()
+        except BaseException:
+            session.save(sys.exc_info())
+            raise
 
 
 class IncrementalImporter(BaseImporter):
@@ -95,20 +94,27 @@ class IncrementalImporter(BaseImporter):
         ...
 
     def _import(self, mode: str) -> None:
-        with ImportContext(self.name, mode) as ic:
-            if mode == "all" or not ic.state.until_dt:
-                start_dt = self.get_initial_dt()
-            else:
-                start_dt = ic.state.until_dt
+        session = ImportSession(self.name, mode)
 
-            end_dt = datetime.now(TZ)
+        try:
+            with transaction.atomic():
+                if mode == "all" or not session.state.until_dt:
+                    start_dt = self.get_initial_dt()
+                else:
+                    start_dt = session.state.until_dt
 
-            last_dt = self.do_period_import(start_dt, end_dt)
-            if not last_dt:
-                raise Exception(
-                    f"{self.name}.do_period_import didn't return a datetime object"
-                )
-            ic.state.until_dt = last_dt
+                end_dt = datetime.now(TZ)
+
+                last_dt = self.do_period_import(start_dt, end_dt)
+                if not last_dt:
+                    raise Exception(
+                        f"{self.name}.do_period_import didn't return a datetime object"
+                    )
+                session.state.until_dt = last_dt
+            session.save()
+        except BaseException:
+            session.save(sys.exc_info())
+            raise
 
     def import_all(self) -> None:
         self._import("all")
