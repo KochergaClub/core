@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
+
 import TL02 from '~/blocks/TL02';
 import Page from '~/components/Page';
 import { selectAPI } from '~/core/selectors';
@@ -25,13 +27,17 @@ const Grid = styled.div`
   background-color: #eee;
   padding: 30px 60px;
 
-  @media (max-width: 640px) {
+  ${deviceMediaQueries.mobile(`
+    padding: 30px 0;
+  `)}
+
+  ${deviceMediaQueries.tablet(`
     padding: 30px;
-  }
+  `)}
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, auto));
-  grid-auto-columns: auto;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-columns: minmax(300px, auto);
   grid-gap: 40px;
   align-items: stretch;
   justify-items: stretch;

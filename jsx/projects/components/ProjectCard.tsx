@@ -12,9 +12,6 @@ const ProjectA = styled.a`
 
 const Card = styled.div`
   background-color: white;
-  padding-bottom: 10px;
-  min-width: 300px;
-  max-width: 500px;
   height: 100%;
 
   img {
@@ -26,7 +23,8 @@ const Card = styled.div`
 `;
 
 const Inner = styled.div`
-  padding: 10px 20px;
+  padding: 20px;
+  padding-top: 10px;
 `;
 
 const Header = styled.header`
@@ -50,6 +48,7 @@ const Image = styled.img`
 const ActivitySummary = styled(Label)`
   margin-top: 4px;
   margin-bottom: 10px;
+  cursor: inherit; // Label overrides cursor, but ActivitySummary is wrapped in Link so we'd prefer to inherit "pointer"
 `;
 
 const ProjectCard = (props: ProjectPageType) => {
