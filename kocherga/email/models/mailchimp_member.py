@@ -29,6 +29,7 @@ class BadMailchimpStatus(APIException):
 
 @dataclass
 class MemberInterest:
+    # TODO - replace interest data with FK to MailchimpInterest model
     id: str
     name: str
     subscribed: bool

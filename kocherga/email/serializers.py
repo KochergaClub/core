@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from . import models
 
 
 class MemberInterestSerializer(serializers.Serializer):
@@ -16,3 +17,31 @@ class MailchimpMemberSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         raise Exception("Not implemented")
+
+
+class MailchimpInterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MailchimpInterest
+        fields = (
+            'id', 'interest_id', 'name', 'subscriber_count'
+        )
+
+
+class MailchimpCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MailchimpCategory
+        fields = (
+            'id', 'category_id', 'title', 'interests'
+        )
+
+    interests = MailchimpInterestSerializer(many=True)
+
+
+class SubscribeChannelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SubscribeChannel
+        fields = (
+            'slug', 'interests'
+        )
+
+    interests = MailchimpInterestSerializer(many=True)
