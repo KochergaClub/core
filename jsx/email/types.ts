@@ -1,8 +1,3 @@
-export interface SubscribeChannel {
-  id: number;
-  slug: string;
-}
-
 export interface MailchimpInterest {
   id: number;
   interest_id: string;
@@ -15,4 +10,15 @@ export interface MailchimpCategory {
   category_id: string;
   title: string;
   interests: MailchimpInterest[];
+}
+
+export interface SubscribeChannel {
+  id: number;
+  slug: string;
+  interests: string[];
+}
+
+export interface CreateSubscribeChannelParams {
+  slug: string;
+  interests: string[];
 }

@@ -1,34 +1,48 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { selectMailchimpCategories } from '../selectors';
+import { CreateSubscribeChannelParams } from '../types';
+
+import { selectMailchimpInterests } from '../selectors';
+import { addSubscribeChannel } from '../actions';
 
 const CreateSubscribeChannelButton: React.FC = () => {
-  const mailchimpCategories = useSelector(selectMailchimpCategories);
+  const dispatch = useDispatch();
+  const mailchimpInterests = useSelector(selectMailchimpInterests);
 
   const formShape = useMemo(() => {
     const result: FormShape = [{ name: 'slug', type: 'string' }];
 
-    for (const mailchimpCategory of mailchimpCategories) {
-      for (const mailchimpInterest of mailchimpCategory.interests) {
-        result.push({
-          type: 'boolean',
-          name: mailchimpInterest.interest_id,
-          title: mailchimpInterest.name,
-        });
-      }
+    for (const mailchimpInterest of mailchimpInterests) {
+      result.push({
+        type: 'boolean',
+        name: mailchimpInterest.interest_id,
+        title: mailchimpInterest.name,
+      });
     }
 
     return result;
-  }, [mailchimpCategories]);
+  }, [mailchimpInterests]);
 
-  const postCb = useCallback(async (values: any) => {
-    // TODO - call API with checked interests
-    window.alert('Not implemented. ' + JSON.stringify(values));
-  }, []);
+  const postCb = useCallback(
+    async (values: { [k: string]: string | boolean }) => {
+      const slug = values.slug as string;
+      const interest_ids = mailchimpInterests
+        .map(i => i.interest_id)
+        .filter(i => values[i]);
+
+      await dispatch(
+        addSubscribeChannel({
+          slug,
+          interests: interest_ids,
+        })
+      );
+    },
+    [mailchimpInterests]
+  );
 
   return (
     <ModalFormButton

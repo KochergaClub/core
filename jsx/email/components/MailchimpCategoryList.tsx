@@ -13,7 +13,7 @@ const MailchimpCategoryCard: React.FC<{
     <header>{mailchimpCategory.title}</header>
     <ul>
       {mailchimpCategory.interests.map(interest => (
-        <li>{interest.name}</li>
+        <li key={interest.interest_id}>{interest.name}</li>
       ))}
     </ul>
   </Card>

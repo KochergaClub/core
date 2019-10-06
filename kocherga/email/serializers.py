@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from rest_framework import serializers
 from . import models
 
@@ -40,8 +43,10 @@ class MailchimpCategorySerializer(serializers.ModelSerializer):
 class SubscribeChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SubscribeChannel
-        fields = (
-            'slug', 'interests'
-        )
+        fields = ('id', 'slug', 'interests')
 
-    interests = MailchimpInterestSerializer(many=True)
+    interests = serializers.SlugRelatedField(
+        many=True,
+        slug_field='interest_id',
+        queryset=models.MailchimpInterest.objects.all(),
+    )

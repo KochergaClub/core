@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, mixins
 
 from . import serializers
 from . import models
@@ -65,7 +65,7 @@ class UpdateInterestsView(APIView):
         )
 
 
-class SubscribeChannelViewSet(viewsets.ReadOnlyModelViewSet):
+class SubscribeChannelViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
     queryset = models.SubscribeChannel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.SubscribeChannelSerializer
