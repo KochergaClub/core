@@ -18,6 +18,7 @@ IMPORTER_MODULES = [
     "zadarma",
     "timepad",
     "slack",
+    "email",
 ]
 
 
