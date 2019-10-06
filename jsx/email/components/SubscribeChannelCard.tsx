@@ -2,7 +2,7 @@ import React from 'react';
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Row } from '@kocherga/frontkit';
+import { Row, Label } from '@kocherga/frontkit';
 import Card, { CardHeader } from '~/components/Card';
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import ModalFormButton from '~/components/forms/ModalFormButton';
@@ -21,22 +21,29 @@ const SubscribeChannelCard: React.FC<{
   const dispatch = useDispatch();
 
   const deleteCb = useCallback(async () => {
-    await dispatch(deleteSubscribeChannel(subscribeChannel.id));
-  }, [dispatch, subscribeChannel.id]);
+    await dispatch(deleteSubscribeChannel(subscribeChannel.slug));
+  }, [dispatch, subscribeChannel.slug]);
 
   const manualSubscribeCb = useCallback(
     async (values: any) => {
       const email: string = values.email;
       await dispatch(
-        subscribeEmailToSubscribeChannel(subscribeChannel.id, email)
+        subscribeEmailToSubscribeChannel(subscribeChannel.slug, email)
       );
     },
-    [dispatch, subscribeChannel.id]
+    [dispatch, subscribeChannel.slug]
   );
 
   return (
     <Card>
       <CardHeader>{subscribeChannel.slug}</CardHeader>
+      <Row vCentered>
+        <Label>Webhook:</Label>
+        <code>
+          https://kocherga-club.ru/api/email/subscribe_channel/
+          {subscribeChannel.slug}/subscribe
+        </code>
+      </Row>
       <ul>
         {subscribeChannel.interests.map(id => (
           <li>{mailchimpInterestsDict[id].name}</li>

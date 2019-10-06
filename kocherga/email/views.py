@@ -74,10 +74,15 @@ class SubscribeChannelViewSet(viewsets.ModelViewSet):
     queryset = models.SubscribeChannel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.SubscribeChannelSerializer
+    lookup_field = 'slug'
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.AllowAny])
-    def subscribe(self, request, pk):
+    def subscribe(self, request, slug):
         channel = self.get_object()
+
+        # Tilda sends test response when adding new webhooks
+        if request.data.get('test', '') == 'test':
+            return Response('test response')
 
         email = request.data.get('EMAIL') or request.data.get('email')
         if not email:
