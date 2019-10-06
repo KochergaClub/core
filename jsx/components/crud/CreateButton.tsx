@@ -4,11 +4,11 @@ import ModalFormButton from './ModalFormButton';
 
 import { useAPI } from '~/common/hooks';
 
-import { FormField } from './types';
+import { FormShape } from '~/components/forms/types';
 
 interface Props {
   apiEndpoint: string;
-  fields: FormField[];
+  fields: FormShape;
   entityName?: string;
   buttonName?: string;
   modalButtonName?: string;

@@ -6,14 +6,13 @@ import { Column, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
-import { FormField } from './types';
+import { FormShape } from '~/components/forms/types';
+import FieldInput from '~/components/forms/FieldInput';
 
 import ButtonWithModal from '../ButtonWithModal';
 
-import FieldInput from './FieldInput';
-
 interface Props {
-  fields: FormField[];
+  fields: FormShape;
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;

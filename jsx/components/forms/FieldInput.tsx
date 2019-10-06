@@ -4,7 +4,7 @@ import { Field, FieldProps } from 'formik';
 
 import { Label } from '@kocherga/frontkit';
 
-import LabeledFormField from '../LabeledFormField';
+import LabeledFormField from './LabeledFormField';
 
 import { FormField } from './types';
 
