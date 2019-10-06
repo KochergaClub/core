@@ -2,36 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Column } from '@kocherga/frontkit';
-import Card, { CardList } from '~/components/Card';
+import { CardList } from '~/components/Card';
 
-import { SubscribeChannel } from '../types';
-import {
-  selectSubscribeChannels,
-  selectMailchimpInterestsDict,
-} from '../selectors';
+import { selectSubscribeChannels } from '../selectors';
 
 import CreateSubscribeChannelButton from './CreateSubscribeChannelButton';
-
-const SubscribeChannelCard: React.FC<{
-  subscribeChannel: SubscribeChannel;
-}> = ({ subscribeChannel }) => {
-  const mailchimpInterestsDict = useSelector(selectMailchimpInterestsDict);
-  return (
-    <Card>
-      <header>{subscribeChannel.slug}</header>
-      <ul>
-        {subscribeChannel.interests.map(id => (
-          <li>{mailchimpInterestsDict[id].name}</li>
-        ))}
-      </ul>
-    </Card>
-  );
-};
+import SubscribeChannelCard from './SubscribeChannelCard';
 
 const SubscribeChannelList: React.FC = () => {
   const subscribeChannels = useSelector(selectSubscribeChannels);
-
-  console.log(subscribeChannels);
 
   return (
     <div>

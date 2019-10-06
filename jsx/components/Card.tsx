@@ -7,6 +7,12 @@ const Card = styled.div`
   padding: 10px 20px;
 `;
 
+export const CardHeader: React.FC = ({ children }) => (
+  <header>
+    <strong>{children}</strong>
+  </header>
+);
+
 export const CardList: React.FC = ({ children }) => (
   <Column stretch gutter={10}>
     {children}

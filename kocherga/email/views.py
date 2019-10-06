@@ -65,15 +65,16 @@ class UpdateInterestsView(APIView):
         )
 
 
-class SubscribeChannelViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
+class SubscribeChannelViewSet(viewsets.ModelViewSet):
     queryset = models.SubscribeChannel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.SubscribeChannelSerializer
 
     @action(detail=True, methods=['post'])
-    def subscribe(self, request, slug):
-        # channel = models.SubscribeChannel.objects.get(slug=slug)
-        raise Exception("Not implemented")
+    def subscribe(self, request, pk):
+        channel = self.get_object()
+        channel.subscribe_email(request.data['email'])
+        return Response('ok')
 
 
 class MailchimpCategoryViewSet(viewsets.ReadOnlyModelViewSet):

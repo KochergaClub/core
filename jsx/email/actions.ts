@@ -18,12 +18,24 @@ export const addSubscribeChannel = (
   await dispatch(loadSubscribeChannels());
 };
 
-export const deleteSubscribeChannel = (id: string): AsyncAction => async (
+export const deleteSubscribeChannel = (id: number): AsyncAction => async (
   dispatch,
   getState
 ) => {
   const api = selectAPI(getState());
 
-  await api.call(`email/subscribe_channel/${id}`, 'DELETE');
+  await api.callDelete(`email/subscribe_channel/${id}`);
+  await dispatch(loadSubscribeChannels());
+};
+
+export const subscribeEmailToSubscribeChannel = (
+  channel_id: number,
+  email: string
+): AsyncAction => async (dispatch, getState) => {
+  const api = selectAPI(getState());
+
+  await api.call(`email/subscribe_channel/${channel_id}/subscribe`, 'POST', {
+    email,
+  });
   await dispatch(loadSubscribeChannels());
 };

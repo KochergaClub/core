@@ -16,6 +16,7 @@ interface Props {
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
+  small?: boolean;
   post: (values: any) => Promise<void>; // FIXME - derive values from fields using `fields = ... as const` and derived types tricks!
 }
 
@@ -98,7 +99,7 @@ const ModalForm = ({
 
 const ModalFormButton = (props: Props) => {
   return (
-    <ButtonWithModal title={props.buttonName}>
+    <ButtonWithModal title={props.buttonName} small={props.small}>
       {({ close }) => <ModalForm {...props} close={close} />}
     </ButtonWithModal>
   );
