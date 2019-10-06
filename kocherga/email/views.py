@@ -75,7 +75,7 @@ class SubscribeChannelViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.SubscribeChannelSerializer
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[permissions.AllowAny])
     def subscribe(self, request, pk):
         channel = self.get_object()
 
