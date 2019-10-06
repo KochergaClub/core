@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework import viewsets, permissions, mixins
+from rest_framework import viewsets, permissions, mixins, exceptions
 
 from . import serializers
 from . import models
@@ -65,6 +65,11 @@ class UpdateInterestsView(APIView):
         )
 
 
+class EmptyEmailException(exceptions.APIException):
+    status_code = 400
+    default_detail = 'Email is not set'
+
+
 class SubscribeChannelViewSet(viewsets.ModelViewSet):
     queryset = models.SubscribeChannel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
@@ -73,7 +78,12 @@ class SubscribeChannelViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def subscribe(self, request, pk):
         channel = self.get_object()
-        channel.subscribe_email(request.data['email'])
+
+        email = request.data.get('EMAIL') or request.data.get('email')
+        if not email:
+            raise EmptyEmailException()
+
+        channel.subscribe_email(email)
         return Response('ok')
 
 
