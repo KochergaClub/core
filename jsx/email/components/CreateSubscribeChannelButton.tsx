@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
-import ModalFormButton from '~/components/crud/ModalFormButton';
-import { FormField } from '~/components/crud/types';
+import ModalFormButton from '~/components/forms/ModalFormButton';
+import { FormShape } from '~/components/forms/types';
 
 const CreateSubscribeChannelButton: React.FC = () => {
-  const fields: FormField[] = [{ name: 'slug', type: 'string' }];
+  const fields: FormShape = [{ name: 'slug', type: 'string' }];
 
   const postCb = useCallback(async () => {
     // TODO - call API with checked interests

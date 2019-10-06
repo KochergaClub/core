@@ -6,10 +6,10 @@ import { Column, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
-import { FormShape } from '~/components/forms/types';
-import FieldInput from '~/components/forms/FieldInput';
-
 import ButtonWithModal from '../ButtonWithModal';
+
+import { FormShape } from './types';
+import FieldInput from './FieldInput';
 
 interface Props {
   fields: FormShape;
@@ -23,7 +23,7 @@ interface ModalProps extends Props {
   close: () => void;
 }
 
-const CreateModal = ({
+const ModalForm = ({
   fields,
   post,
   close,
@@ -90,7 +90,7 @@ const CreateModal = ({
 const ModalFormButton = (props: Props) => {
   return (
     <ButtonWithModal title={props.buttonName}>
-      {({ close }) => <CreateModal {...props} close={close} />}
+      {({ close }) => <ModalForm {...props} close={close} />}
     </ButtonWithModal>
   );
 };

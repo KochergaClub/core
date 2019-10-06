@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { usePermissions } from '~/common/hooks';
-import ModalFormButton from '~/components/crud/ModalFormButton';
-import { FormField } from '~/components/crud/types';
+import ModalFormButton from '~/components/forms/ModalFormButton';
+import { FormShape } from '~/components/forms/types';
 
 import { addTraining } from '../actions';
 import { CreateTrainingParams } from '../types';
 
-const fields: FormField[] = [
+const fields: FormShape = [
   { name: 'name', type: 'string' },
   { name: 'slug', type: 'string' },
   { name: 'date', type: 'date' },

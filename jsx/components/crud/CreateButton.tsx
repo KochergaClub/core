@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 
-import ModalFormButton from './ModalFormButton';
-
 import { useAPI } from '~/common/hooks';
 
+import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
 interface Props {
