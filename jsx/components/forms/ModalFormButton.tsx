@@ -31,7 +31,7 @@ const ModalForm = ({
   modalTitle,
 }: ModalProps) => {
   const initialValues = useMemo(() => {
-    const result: { [k: string]: string | number } = {};
+    const result: { [k: string]: string | number | boolean } = {};
     for (const field of fields) {
       result[field.name] = field.value || '';
     }
@@ -42,7 +42,16 @@ const ModalForm = ({
     async (values: any, actions: FormikActions<any>) => {
       const postValues = { ...values };
       for (const field of fields.filter(f => f.readonly)) {
-        postValues[field.name] = field.value || '';
+        if (field.value) {
+          postValues[field.name] = field.value;
+          continue;
+        }
+
+        if (field.type === 'boolean') {
+          postValues[field.name] = false;
+        } else {
+          postValues[field.name] = '';
+        }
       }
       await post(postValues);
       actions.setSubmitting(false);

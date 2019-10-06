@@ -23,14 +23,14 @@ const FieldInput: React.FC<Props> = ({ field }) => {
   }
   switch (field.type) {
     case 'string':
-      return <LabeledFormField name={field.name} title={field.name} />;
+      return <LabeledFormField name={field.name} title={field.title} />;
     case 'email':
       return (
-        <LabeledFormField name={field.name} title={field.name} type="email" />
+        <LabeledFormField name={field.name} title={field.title} type="email" />
       );
     case 'date':
       return (
-        <LabeledFormField name={field.name} title={field.name} type="date" />
+        <LabeledFormField name={field.name} title={field.title} type="date" />
       );
     case 'password':
       return (
@@ -42,7 +42,7 @@ const FieldInput: React.FC<Props> = ({ field }) => {
       );
     case 'number':
       return (
-        <LabeledFormField name={field.name} title={field.name} type="number" />
+        <LabeledFormField name={field.name} title={field.title} type="number" />
       );
     case 'choice':
       return (
@@ -65,12 +65,20 @@ const FieldInput: React.FC<Props> = ({ field }) => {
                         {option}
                       </label>
                     </div>
-                  );
+                  ); // FIXME - error message???
                 })}
               </div>
             )}
           />
         </div>
+      );
+    case 'boolean':
+      return (
+        <LabeledFormField
+          name={field.name}
+          title={field.title}
+          type="checkbox"
+        />
       );
   }
 };

@@ -1,26 +1,41 @@
 interface AnyFormField {
-  name: string;
+  readonly name: string;
+  readonly title?: string;
   readonly?: boolean;
 }
 
 export interface StringFormField extends AnyFormField {
-  type: 'string' | 'email' | 'password' | 'date';
-  value?: string;
+  readonly type: 'string' | 'email' | 'password' | 'date';
+  readonly value?: string;
 }
 
 export interface NumberFormField extends AnyFormField {
-  type: 'number';
-  value?: number;
+  readonly type: 'number';
+  readonly value?: number;
 }
 
 export interface ChoiceFormField extends AnyFormField {
-  type: 'choice';
-  value?: string;
-  options: string[];
+  readonly type: 'choice';
+  readonly value?: string;
+  readonly options: string[];
 }
 
-export type FormField = StringFormField | NumberFormField | ChoiceFormField;
+export interface BooleanField extends AnyFormField {
+  readonly type: 'boolean';
+  readonly value?: boolean;
+}
+
+//export interface ListField extends AnyFormField {
+//  readonly type: 'list';
+//  readonly items: FormField[];
+//}
+
+export type FormField =
+  | StringFormField
+  | NumberFormField
+  | ChoiceFormField
+  | BooleanField;
 
 export type FormShape = FormField[];
 
-export type Values = { [k: string]: string | number };
+export type Values = { [k: string]: string | number | boolean };

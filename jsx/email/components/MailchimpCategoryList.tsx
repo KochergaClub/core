@@ -27,7 +27,7 @@ const MailchimpCategoryList: React.FC = () => {
       <h2>Mailchimp-группы</h2>
       <CardList>
         {mailchimpCategories.map(c => (
-          <MailchimpCategoryCard mailchimpCategory={c} />
+          <MailchimpCategoryCard key={c.category_id} mailchimpCategory={c} />
         ))}
       </CardList>
     </div>
