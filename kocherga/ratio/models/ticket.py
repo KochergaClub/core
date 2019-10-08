@@ -69,6 +69,9 @@ class Ticket(models.Model):
 
 @receiver(post_save, sender=Ticket)
 def first_email(sender, instance, created, **kwargs):
+    if not created:
+        return
+
     # TODO - notify consumer for async
     message = render_to_string('ratio/email/new_ticket.md', {
         "ticket": instance,
