@@ -159,7 +159,7 @@ def segment_by_name(name, list_id=MAIN_LIST_ID):
 
 
 def interest_category_by_name(name, list_id=MAIN_LIST_ID):
-    items = api_call(f'/lists/{list_id}/interest-categories', 'categories')
+    items = api_call_get_paginated(f'/lists/{list_id}/interest-categories', 'categories')
 
     try:
         return next(i for i in items if i['title'] == name)
