@@ -68,11 +68,28 @@ def api_call(method, url, data={}):
     return r.json()
 
 
+def api_call_get_paginated(url, key):
+    items = []
+    COUNT = 1000
+    offset = 0
+
+    while True:
+        response = api_call('GET', url, params={'count': COUNT, 'offset': offset})
+        items += response[key]
+
+        if response['total_items'] > offset + COUNT:
+            offset += COUNT
+            continue
+        break
+
+    return items
+
+
 def folder_id_by_name(name):
-    response = api_call('GET', 'campaign-folders')
+    folders = api_call_get_paginated('campaign-folders', 'folders')
     return next(
         f['id']
-        for f in response['folders']
+        for f in folders
         if f['name'] == name
     )
 
@@ -100,10 +117,7 @@ def wait_for_batch(batch_id):
 
 # Used in setup only
 def create_campaign_folder(name):
-    folders = api_call(
-        'GET',
-        '/campaign-folders',
-    )['folders']
+    folders = api_call_get_paginated('/campaign-folders', 'folders')
 
     if name in [f['name'] for f in folders]:
         # folder already exists
@@ -120,10 +134,7 @@ def create_campaign_folder(name):
 
 # Used in setup only
 def create_file_folder(name):
-    folders = api_call(
-        'GET',
-        '/file-manager/folders',
-    )['folders']
+    folders = api_call_get_paginated('/file-manager/folders', 'folders')
 
     if name in [f['name'] for f in folders]:
         # folder already exists
@@ -139,10 +150,7 @@ def create_file_folder(name):
 
 
 def segment_by_name(name, list_id=MAIN_LIST_ID):
-    items = api_call(
-        'GET',
-        f'/lists/{list_id}/segments',
-    )['segments']
+    items = api_call_get_paginated(f'/lists/{list_id}/segments', 'segments')
 
     try:
         return next(i for i in items if i['name'] == name)
@@ -151,10 +159,7 @@ def segment_by_name(name, list_id=MAIN_LIST_ID):
 
 
 def interest_category_by_name(name, list_id=MAIN_LIST_ID):
-    items = api_call(
-        'GET',
-        f'/lists/{list_id}/interest-categories',
-    )['categories']
+    items = api_call(f'/lists/{list_id}/interest-categories', 'categories')
 
     try:
         return next(i for i in items if i['title'] == name)
@@ -163,18 +168,18 @@ def interest_category_by_name(name, list_id=MAIN_LIST_ID):
 
 
 def get_interests(category_id, list_id=MAIN_LIST_ID):
-    items = api_call(
-        'GET',
+    items = api_call_get_paginated(
         f'/lists/{list_id}/interest-categories/{category_id}/interests',
-    )['interests']
+        'interests'
+    )
     return items
 
 
 def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
-    items = api_call(
-        'GET',
+    items = api_call_get_paginated(
         f'/lists/{list_id}/interest-categories/{category_id}/interests',
-    )['interests']
+        'interests'
+    )
 
     try:
         return next(i for i in items if i['name'] == name)
@@ -183,10 +188,7 @@ def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
 
 
 def image_folder_by_name(name, list_id=MAIN_LIST_ID):
-    folders = api_call(
-        'GET',
-        '/file-manager/folders',
-    )['folders']
+    folders = api_call_get_paginated('/file-manager/folders', 'folders')
 
     return next(f for f in folders if f['name'] == name)
 
