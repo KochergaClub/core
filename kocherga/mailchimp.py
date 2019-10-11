@@ -27,6 +27,7 @@ def api_call(method, url, data={}):
     if method == "GET":
         r = requests.get(
             f"{MAILCHIMP_API}/{url}",
+            params=data,
             headers={"Authorization": f"apikey {MAILCHIMP_API_KEY}"},
         )
     elif method == "POST":
@@ -74,7 +75,7 @@ def api_call_get_paginated(url, key):
     offset = 0
 
     while True:
-        response = api_call('GET', url, params={'count': COUNT, 'offset': offset})
+        response = api_call('GET', url, {'count': COUNT, 'offset': offset})
         items += response[key]
 
         if response['total_items'] > offset + COUNT:
