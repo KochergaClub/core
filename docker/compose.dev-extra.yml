@@ -7,7 +7,7 @@ x-common: &common
   image: registry.gitlab.com/kocherga/core:dev
   volumes:
     - ..:/code
-    - /data/kocherga:/data
+    - data/volume:/data
   environment:
     <<: *environment
 

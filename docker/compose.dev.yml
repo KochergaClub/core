@@ -5,7 +5,7 @@ x-common:
   image: registry.gitlab.com/kocherga/core:dev
   volumes:
     - ..:/code
-    - /data/kocherga:/data
+    - ../data/volume:/data
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
     DB_NAME: 'kocherga'
@@ -22,8 +22,9 @@ services:
     image: mariadb:10.3
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: kocherga
     volumes:
-      - /data/kocherga-db:/var/lib/mysql
+      - ../data/db-volume:/var/lib/mysql
       - ../mysql.conf.d:/etc/mysql/conf.d
 
   chrome:

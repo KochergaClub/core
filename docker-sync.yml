@@ -4,7 +4,7 @@ options:
   compose-file-path: 'docker/compose.dev-mac.yml'
 syncs:
   data:
-    src: '/data/kocherga'
+    src: 'data/volume'
   code-jsx:
     notify_terminal: true
     src: './jsx'
