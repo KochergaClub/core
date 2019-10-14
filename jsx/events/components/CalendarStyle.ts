@@ -649,6 +649,16 @@ button.rbc-input::-moz-focus-inner {
 .rbc-kocherga-event-saving {
   background-color: #ddd;
 }
+
+.rbc-kocherga-event-has-description .rbc-event-label:after {
+  position: absolute;
+  right: 4px;
+  top: 0;
+  line-height: 0.6;
+  content: '…';
+  font-weight: bold;
+}
+
 `;
 
 export const CalendarDndStyle = createGlobalStyle`

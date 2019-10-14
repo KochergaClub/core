@@ -41,6 +41,10 @@ const eventPropGetter = (event: LocalEvent) => {
   if (event.saving) {
     classNames.push('rbc-kocherga-event-saving');
   }
+  if (event.description) {
+    classNames.push('rbc-kocherga-event-has-description');
+  }
+
   return {
     className: classNames.join(' '),
   };
