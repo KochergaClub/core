@@ -25,7 +25,7 @@ def event_emoji(event):
     elif event.event_type == "public":
         return ":globe_with_meridians:"
     else:
-        return ":grey_question:"
+        return ":question:"
 
 
 def event_instructions(event):
@@ -54,33 +54,81 @@ def event_color(event):
 def list_events():
     events = Event.objects.list_events(date=datetime.now(TZ).date())
 
-    attachments = []
-    for event in events:
-        start_time = timezone.localtime(event.start).strftime("%H:%M")
-        end_time = timezone.localtime(event.end).strftime("%H:%M")
+    word_form = plural_form(len(events), ("событие", "события", "событий"))
+    intro_text = f"Сегодня *{len(events)}* {word_form}"
 
-        text = f"С {start_time} до {end_time}"
-        if event.location:
-            text += ", " + event.location
-        text += '.'
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": intro_text + ':',
+            },
+        },
+        {
+            "type": "divider",
+        },
+    ]
+
+    for event in events:
+        blocks.append({
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": '<' + event.google_link + '|' + event.title + '>',
+            },
+        })
 
         instructions = event_instructions(event)
         if instructions:
-            text += '\n' + instructions
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": instructions,
+                },
+            })
 
-        attachments.append(
-            {
-                "text": text,
-                "title": event_emoji(event) + ' ' + event.title,
-                "title_link": event.google_link,
-                "color": event_color(event),
-                "mrkdwn_in": ["text"],
-            }
-        )
+        start_time = timezone.localtime(event.start).strftime("%H:%M")
+        end_time = timezone.localtime(event.end).strftime("%H:%M")
 
-    word_form = plural_form(len(events), ("событие", "события", "событий"))
+        blocks.append({
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"*Время:* с {start_time} до {end_time}",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": "*Тип:* " + event_emoji(event),
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": "*Комната:* " + event.location,
+                },
+            ],
+        })
+        if event.description:
+            blocks.append({
+                "type": "context",
+                "elements": [
+                    {
+                        # TODO - convert description markdown to slack markdown
+                        "type": "plain_text",
+                        "text": event.description,
+                    },
+                ],
+            })
 
-    return {"text": f"Сегодня *{len(events)}* {word_form}:", "attachments": attachments}
+        blocks.append({
+            "type": "divider"
+        })
+
+    return {
+        "text": intro_text,
+        "blocks": blocks,
+    }
 
 
 @bot.listen_to(r"какие сегодня события\?")
