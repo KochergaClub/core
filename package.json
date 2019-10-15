@@ -39,7 +39,7 @@
     "express": "^4.13.3",
     "formik": "^1.5.8",
     "http-proxy": "^1.17.0",
-    "localtunnel": "^1.9.1",
+    "localtunnel": "^2.0.0",
     "mjml": "^4.0.5",
     "moment": "^2.24.0",
     "next": "^9.0.5",
