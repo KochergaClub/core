@@ -4,6 +4,8 @@ logger = logging.getLogger(__name__)
 from datetime import datetime, timedelta
 import re
 
+from django.conf import settings
+
 from slappy import ErrorResponse
 
 from kocherga.ludwig.bot import bot
@@ -68,16 +70,35 @@ def daily_watchmen(d):
     now = datetime.now(TZ)
     day_schedule = schedule.shifts_by_date(d)
 
-    attachments = []
+    blocks = []
+
+    preposition = "Во" if d.weekday() == 1 else "В"
+    weekday_str = INFLECTED_WEEKDAY_NAMES[d.weekday()]
+    date_str = f"{d.day} {INFLECTED_MONTH_NAMES[d.month - 1]} {d.year}"
+    date_str = f"<{settings.KOCHERGA_WEBSITE}/team/space/staff/shifts|{date_str}>"
+    intro_text = f":female-astronaut: {preposition} {weekday_str} {date_str}:\n"
+
+    blocks.append({
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": intro_text,
+        }
+    })
+
     for shift_type in sorted(day_schedule.keys()):
         shift = day_schedule[shift_type]
         if shift.is_night:
             continue
 
         if not shift.watchman:
-            attachments.append(
-                {"text": f"{shift_type.when().capitalize()}: *нет админа*!\n"}
-            )
+            blocks.append({
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"{shift_type.when().capitalize()}: *нет админа*!\n",
+                }
+            })
             continue
 
         (shift_start, shift_end) = shift_type.dt_tuple_by_date(d)
@@ -89,16 +110,32 @@ def daily_watchmen(d):
         else:
             rel = "админит"
 
-        attachments.append(
-            {"text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.member.short_name}*.\n"}
-        )
+        blocks.append({
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.member.short_name}*.\n",
+            }
+        })
 
-    preposition = "Во" if d.weekday() == 1 else "В"
-    weekday_str = INFLECTED_WEEKDAY_NAMES[d.weekday()]
-    date_str = f"{d.day} {INFLECTED_MONTH_NAMES[d.month - 1]} {d.year}"
-    text = f"{preposition} {weekday_str} {date_str}:\n"
+    blocks.append({
+        "type": "divider"
+    })
+    blocks.append({
+        "type": "context",
+        "elements": [
+            {
+                "type": "mrkdwn",
+                "text": "Посмотреть админов на сегодня: `/watchmen`\n"
+                        "Посмотреть админов на вчера или завтра: `/watchmen +1`, `/watchmen +1`"
+            }
+        ]
+    })
 
-    return {"text": text, "attachments": attachments}
+    return {
+        "text": intro_text,
+        "blocks": blocks,
+    }
 
 
 def today_watchmen():
