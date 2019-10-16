@@ -17,7 +17,8 @@ class Ticket(models.Model):
     first_name = models.CharField('Имя', max_length=255)
     last_name = models.CharField('Фамилия', max_length=255, null=True, blank=True)
 
-    registration_date = models.DateField('Дата регистрации', null=True, blank=True)
+    registration_date = models.DateField('Дата регистрации', auto_now_add=True, null=True)
+
     status = models.CharField('Статус', max_length=40, default='normal', choices=(
         ('normal', 'Участник'),
         ('canceled', 'Отказ'),  # отказ, перенос, замена, неявка
