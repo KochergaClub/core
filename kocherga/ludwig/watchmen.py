@@ -126,8 +126,7 @@ def daily_watchmen(d):
         "elements": [
             {
                 "type": "mrkdwn",
-                "text": "Посмотреть админов на сегодня: `/watchmen`\n"
-                        "Посмотреть админов на вчера или завтра: `/watchmen +1`, `/watchmen +1`"
+                "text": "Посмотреть админов на сегодня: `/watchmen`\n",
             }
         ]
     })
