@@ -74,7 +74,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                 user = KchUser.objects.create_user(email)
 
                 if subscribed_to_newsletter:
-                    if (datetime.now(tz=TZ) - created_at).seconds < 86400 * 14:
+                    if (datetime.now(tz=TZ) - created_at).total_seconds() > 86400 * 14:
                         logger.info(f"{email} wants to subscribe to the newsletter but order is too old")
                     else:
                         logger.info(f"{email} agreed to newsletter")
