@@ -314,7 +314,7 @@ class Event(models.Model):
         """
 
         timepad_event = self.timepad_event()
-        for order in timepad_event.orders.filter(status='ok'):
+        for order in timepad_event.orders.filter(status__in=['ok', 'paid']):
             yield order.user
 
 
