@@ -99,6 +99,7 @@ def register_handlers(dsp: Dispatcher):
         logger.info('Found user by token')
 
         models.TelegramUser.objects.create(
+            user=user.user,
             telegram_uid=msg.from_user.username,
             chat_id=msg.chat.id,
         )
