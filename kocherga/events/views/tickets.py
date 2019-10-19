@@ -35,7 +35,7 @@ class EventTicketView(generics.ListCreateAPIView):
     def get_event(self):
         # TODO - support tickets for non-public events (with proper permissions handling)
         return models.Event.objects.public_events().get(
-            pk=self.get_event_id()
+            google_id=self.get_event_id()
         )
 
     def get_queryset(self):

@@ -98,9 +98,8 @@ class TestTags:
     def test_set_tags(self, event):
         event.add_tag('foo')
         event.add_tag('bar')
-        event_id = event.google_id
 
-        event = Event.objects.get(pk=event_id)
+        event = Event.objects.get(pk=event.pk)
         tags = event.tags.all()
         assert len(tags) == 2
         assert tags[0].name == 'bar'  # tags are sorted by name

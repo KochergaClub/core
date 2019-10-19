@@ -163,8 +163,8 @@ class Event(models.Model):
         return f'{timezone.localtime(self.start)} - {self.title}'
 
     @classmethod
-    def by_id(cls, event_id):
-        return Event.objects.get(pk=event_id)
+    def by_id(cls, google_id):
+        return Event.objects.get(google_id=google_id)
 
     @classmethod
     def from_google(cls, google_event):

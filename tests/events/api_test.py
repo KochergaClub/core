@@ -121,7 +121,7 @@ def test_update(event, admin_client):
     assert res.status_code == 200
     assert res.json()['title'] == 'updated title'
 
-    assert Event.objects.get(pk=event.google_id).title == 'updated title'
+    assert Event.objects.get(pk=event.pk).title == 'updated title'
 
 
 def test_update_announcement_field(event, admin_client):
@@ -135,7 +135,7 @@ def test_update_announcement_field(event, admin_client):
     assert res.status_code == 200
     assert res.json()['vk_group'] == 'some_group'
 
-    assert Event.objects.get(pk=event.google_id).vk_announcement.group == 'some_group'
+    assert Event.objects.get(pk=event.pk).vk_announcement.group == 'some_group'
 
 
 def test_forbidden_update(event, admin_client):
@@ -146,4 +146,4 @@ def test_forbidden_update(event, admin_client):
         },
         format='json',
     )
-    assert Event.objects.get(pk=event.google_id).prototype_id is None
+    assert Event.objects.get(pk=event.pk).prototype_id is None

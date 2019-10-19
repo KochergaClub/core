@@ -35,7 +35,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
     def update_or_create_event(self, event):
         try:
-            existing_event = Event.objects.get(pk=event.google_id)
+            existing_event = Event.objects.get(google_id=event.google_id)
             logger.debug(f'Event {event.google_id}, title {event.title} - existing')
             for prop in ('title', 'description', 'location', 'start', 'end', 'updated'):
                 setattr(existing_event, prop, getattr(event, prop))
@@ -44,12 +44,12 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             logger.debug(f'Event {event.google_id}, title {event.title} - new')
             event.save()
 
-    def cancel_event_by_id(self, event_id):
+    def cancel_event_by_id(self, google_id):
         try:
-            event = Event.objects.get(pk=event_id)
+            event = Event.objects.get(google_id=google_id)
             event.delete(update_google=False)
         except Event.DoesNotExist:
-            logger.info(f"Couldn't cancel event {event_id} - not found, probably wasn't imported in time")
+            logger.info(f"Couldn't cancel event {google_id} - not found, probably wasn't imported in time")
 
     def do_period_import(self, from_dt: datetime, to_dt: datetime) -> datetime:
         google_events = self.load_updated_google_events(from_dt)

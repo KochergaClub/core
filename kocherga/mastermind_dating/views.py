@@ -24,7 +24,7 @@ class CohortViewSet(viewsets.ModelViewSet):
     def set_event(self, request, **kwargs):
         cohort = self.get_object()
         event_id = request.data['event_id']
-        event = Event.objects.get(pk=event_id)
+        event = Event.objects.get(google_id=event_id)
         cohort.event = event
         cohort.save()
         return Response(

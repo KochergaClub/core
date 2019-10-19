@@ -55,8 +55,8 @@ def r_create(request):
 
 @api_view(['DELETE'])
 @permission_classes((IsAuthenticated,))
-def r_delete(request, event_id):
+def r_delete(request, google_id):
     email = request.user.email
-    kocherga.events.booking.delete_booking(event_id, email)
+    kocherga.events.booking.delete_booking(google_id, email)
 
     return Response(ok)

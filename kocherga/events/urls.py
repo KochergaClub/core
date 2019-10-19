@@ -45,14 +45,15 @@ urlpatterns += [
 ]
 
 # Announcements
+# (TODO - check if these are working at all - I don't understand how event__google_id is populated)
 router.register(r'announcements/timepad', views.announcements.TimepadViewSet, basename='announcements-timepad')
 router.register(r'announcements/vk', views.announcements.VkViewSet, basename='announcements-vk')
 router.register(r'announcements/fb', views.announcements.FbViewSet, basename='announcements-fb')
 
 old_announcement_patterns = [
-    path('timepad/event/<event__pk>', views.announcements.TimepadViewSet.as_view({'post': 'announce'})),
-    path('vk/event/<event__pk>', views.announcements.VkViewSet.as_view({'post': 'announce'})),
-    path('fb/event/<event__pk>', views.announcements.FbViewSet.as_view({'post': 'announce'})),
+    path('timepad/event/<event__google_id>', views.announcements.TimepadViewSet.as_view({'post': 'announce'})),
+    path('vk/event/<event__google_id>', views.announcements.VkViewSet.as_view({'post': 'announce'})),
+    path('fb/event/<event__google_id>', views.announcements.FbViewSet.as_view({'post': 'announce'})),
 ]
 
 urlpatterns += [

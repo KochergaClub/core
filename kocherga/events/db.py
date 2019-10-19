@@ -23,10 +23,10 @@ def insert_event(event):
     return event
 
 
-def delete_event(event_id):
-    kocherga.events.google.delete_event(event_id)
+def delete_event(google_id):
+    kocherga.events.google.delete_event(google_id)
     try:
-        event = Event.objects.get(pk=event_id)
+        event = Event.objects.get(google_id=google_id)
         event.delete()
     except Event.DoesNotExist:
         pass
