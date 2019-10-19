@@ -98,6 +98,7 @@ def register_handlers(dsp: Dispatcher):
             return
         logger.info('Found user by token')
 
+        # TODO - create_or_update
         models.TelegramUser.objects.create(
             user=user.user,
             telegram_uid=msg.from_user.username,
