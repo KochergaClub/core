@@ -22,6 +22,13 @@ class EventPrototype(models.Model):
 
     prototype_id = models.AutoField(primary_key=True)
 
+    project = models.ForeignKey(
+        'projects.ProjectPage',
+        on_delete=models.SET_NULL,
+        related_name='+',
+        null=True, blank=True,
+    )
+
     title = models.CharField(max_length=255)
     location = models.CharField(max_length=255, blank=True)
     summary = models.TextField(blank=True)
@@ -112,7 +119,8 @@ class EventPrototype(models.Model):
             if value is not None:
                 setattr(event, prop, value)  # FIXME - this is evil, should we use serializer instead?
 
-        event.prototype_id = self.prototype_id
+        event.prototype = self
+        event.project = self.project
 
         if self.image:
             event.image = self.image

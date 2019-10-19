@@ -3,10 +3,13 @@ from django.conf import settings
 
 from kocherga.dateutils import dts
 
+import kocherga.projects.models
+
 from .. import models
 
 FIELDS = (
     'prototype_id',
+    'project_slug',
     'title', 'location', 'summary', 'description',
     'timepad_category_code', 'timepad_prepaid_tickets', 'timing_description_override',
     'vk_group', 'fb_group',
@@ -24,6 +27,8 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
         fields = FIELDS
         read_only_fields = ('image', 'canceled_dates')
 
+    project_slug = serializers.CharField(source='project.slug', required=False, allow_blank=True)
+
     tags = serializers.SerializerMethodField()
 
     def get_tags(self, obj):
@@ -36,6 +41,20 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
             return settings.KOCHERGA_API_ROOT + f"/images/{obj.image}"
         else:
             return None
+
+    def update(self, instance, validated_data):
+        project_data = validated_data.pop('project', None)
+        prototype = super().update(instance, validated_data)
+
+        if project_data:
+            project_slug = project_data['slug']
+            if project_slug == '':
+                prototype.project = None
+            else:
+                prototype.project = kocherga.projects.models.ProjectPage.objects.get(slug=project_slug)
+            prototype.save()
+
+        return prototype
 
 
 # This serializer is not really necessary since we've removed its `instances` field.

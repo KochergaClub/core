@@ -155,6 +155,9 @@ class EventSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
 
     prototype_id = serializers.IntegerField(source='prototype.pk', required=False)
+
+    # It'd be better if this was SlugRelatedField.
+    # But it causes circular import issues which I wasn't able to figure out yet.
     project_slug = serializers.CharField(source='project.slug', required=False, allow_blank=True)
 
     announcements = AnnouncementsSerializer(required=False)
@@ -175,8 +178,6 @@ class EventSerializer(serializers.ModelSerializer):
         return event
 
     def update(self, instance, validated_data):
-        logger.info(validated_data)
-
         prototype_data = validated_data.pop('prototype', None)
         project_data = validated_data.pop('project', None)
         vk_announcement_data = validated_data.pop('vk_announcement', {})
