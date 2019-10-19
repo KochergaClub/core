@@ -46,7 +46,9 @@ const EventCard: React.FC<Props> = ({ event, mode }) => {
   }
 
   const title = (
-    <Title>{href ? <TitleLink>{event.title}</TitleLink> : event.title}</Title>
+    <Title>
+      {href ? <TitleLink href={href}>{event.title}</TitleLink> : event.title}
+    </Title>
   );
 
   return (
