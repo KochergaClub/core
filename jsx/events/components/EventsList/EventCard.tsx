@@ -55,7 +55,7 @@ const EventCard: React.FC<Props> = ({ event, mode }) => {
     <Container>
       {title}
       <Time dateTime={event.start.toISOString()}>
-        {formatDate(zonedStart, 'd MMMM, HH:mm')}
+        {formatDate(zonedStart, 'EEEE, d MMMM, HH:mm')}
       </Time>
       <div>{event.summary}</div>
     </Container>
