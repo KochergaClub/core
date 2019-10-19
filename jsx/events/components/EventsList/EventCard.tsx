@@ -5,15 +5,20 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { timezone, formatDate } from '~/common/utils';
 
-import { PublicEvent } from '~/events/types';
+import { PublicEvent } from '../../types';
 
 const Container = styled.div`
   margin-bottom: 20px;
 `;
 
-const Title = styled.a`
-  color: black;
+const Title = styled.h3`
   font-size: 24px;
+  margin: 0;
+  padding: 0;
+`;
+
+const TitleLink = styled.a`
+  color: black;
 `;
 
 const Time = styled.time`
@@ -22,12 +27,31 @@ const Time = styled.time`
   font-style: italic;
 `;
 
-const EventCard = ({ event }: { event: PublicEvent }) => {
+interface Props {
+  event: PublicEvent;
+  mode?: 'timepad';
+}
+
+const EventCard: React.FC<Props> = ({ event, mode }) => {
   const zonedStart = utcToZonedTime(event.start, timezone);
+
+  let href = `/event/${event.event_id}/`;
+
+  if (mode === 'timepad') {
+    if (!event.announcements.timepad || !event.announcements.timepad.link) {
+      href = '';
+    } else {
+      href = event.announcements.timepad.link;
+    }
+  }
+
+  const title = (
+    <Title>{href ? <TitleLink>{event.title}</TitleLink> : event.title}</Title>
+  );
 
   return (
     <Container>
-      <Title href={`/event/${event.event_id}/`}>{event.title}</Title>
+      {title}
       <Time dateTime={event.start.toISOString()}>
         {formatDate(zonedStart, 'd MMMM, HH:mm')}
       </Time>

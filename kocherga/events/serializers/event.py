@@ -1,7 +1,12 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from rest_framework import serializers
 from django.conf import settings
 
 import kocherga.room
+
+import kocherga.projects.models
 
 from .. import models
 from .. import markup
@@ -25,7 +30,17 @@ class AnnouncementsSerializer(serializers.ModelSerializer):
 class PublicEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Event
-        fields = ('event_id', 'title', 'summary', 'description', 'room', 'announcements', 'start', 'end', 'image')
+        fields = (
+            'event_id',
+            'title',
+            'summary',
+            'description',
+            'room',
+            'announcements',
+            'start',
+            'end',
+            'image',
+        )
 
     image = serializers.SerializerMethodField()
 
@@ -98,6 +113,7 @@ class EventSerializer(serializers.ModelSerializer):
             'ready_to_post',
             'visitors',
             'deleted',
+            'project_slug',
 
             # announcement-related
             'timepad_category_code',
@@ -124,6 +140,7 @@ class EventSerializer(serializers.ModelSerializer):
                 'type',
                 'ready_to_post',
                 'prototype_id',
+                'project_slug',
                 # TODO - other fields from Event.set_field_by_prop()
                 # TODO: `start`, `end`, `asked_for_visitors`
             )
@@ -138,6 +155,7 @@ class EventSerializer(serializers.ModelSerializer):
     tags = serializers.SerializerMethodField()
 
     prototype_id = serializers.IntegerField(source='prototype.pk', required=False)
+    project_slug = serializers.CharField(source='project.slug', required=False, allow_blank=True)
 
     announcements = AnnouncementsSerializer(required=False)
 
@@ -157,7 +175,10 @@ class EventSerializer(serializers.ModelSerializer):
         return event
 
     def update(self, instance, validated_data):
+        logger.info(validated_data)
+
         prototype_data = validated_data.pop('prototype', None)
+        project_data = validated_data.pop('project', None)
         vk_announcement_data = validated_data.pop('vk_announcement', {})
         fb_announcement_data = validated_data.pop('fb_announcement', {})
         timepad_announcement_data = validated_data.pop('timepad_announcement', {})
@@ -167,6 +188,15 @@ class EventSerializer(serializers.ModelSerializer):
 
         if prototype_data:
             event.prototype = models.EventPrototype.objects.get(pk=prototype_data['pk'])
+            event.save()
+
+        if project_data:
+            project_slug = project_data['slug']
+            if project_slug == '':
+                event.project = None
+            else:
+                event.project = kocherga.projects.models.ProjectPage.objects.get(slug=project_slug)
+
             event.save()
 
         if vk_announcement_data:

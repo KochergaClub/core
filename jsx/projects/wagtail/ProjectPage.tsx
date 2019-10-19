@@ -5,8 +5,10 @@ import RichTextBlock from '~/blocks/RichTextBlock';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import ProjectHeroBlock from '../components/ProjectHeroBlock';
 import { ProjectPageType } from '../utils';
+
+import ProjectHeroBlock from '../components/ProjectHeroBlock';
+import UpcomingEventsBlock from '../components/UpcomingEventsBlock';
 
 const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
   wagtailPage: project,
@@ -19,6 +21,7 @@ const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
     >
       <ProjectHeroBlock project={project} />
       <RichTextBlock html={project.body} />
+      <UpcomingEventsBlock project={project} />
     </Page>
   );
 };

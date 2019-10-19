@@ -130,6 +130,13 @@ class Event(models.Model):
         null=True, blank=True,
     )
 
+    project = models.ForeignKey(
+        'projects.ProjectPage',
+        on_delete=models.SET_NULL,
+        related_name='events',
+        null=True, blank=True,
+    )
+
     visitors = models.CharField(
         max_length=100,
         blank=True,
@@ -138,7 +145,14 @@ class Event(models.Model):
 
     asked_for_visitors = models.DateTimeField(null=True, blank=True)
 
-    event_type = models.CharField(max_length=40, default="unknown")
+    event_type = models.CharField(
+        max_length=40,
+        choices=[
+            (x, x)
+            for x in ('public', 'private', 'unknown')
+        ],
+        default="unknown"
+    )
 
     image = models.CharField(max_length=32, null=True, blank=True)
 

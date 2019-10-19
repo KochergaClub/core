@@ -1,4 +1,5 @@
 import { WagtailPageProps } from '~/wagtail/types';
+import { ServerPublicEvent } from '~/events/types';
 
 interface WagtailImage {
   url: string;
@@ -15,4 +16,5 @@ export interface ProjectPageType extends WagtailPageProps {
   activity_summary?: string;
   description?: string;
   is_active: boolean;
+  upcoming_events?: ServerPublicEvent[];
 }
