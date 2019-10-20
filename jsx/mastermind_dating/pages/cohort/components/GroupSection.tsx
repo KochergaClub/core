@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { A } from '@kocherga/frontkit';
+import { A, Label } from '@kocherga/frontkit';
 
 import ActionButton from '~/components/ActionButton';
 
@@ -20,7 +20,20 @@ const GroupInfo = ({ group }: { group: Group }) => {
       <div>
         <A href={group.telegram_invite_link}>{group.telegram_invite_link}</A>
       </div>
-      <div>Участников: {group.participants.length}</div>
+      <div>
+        {group.participants.length ? (
+          <React.Fragment>
+            <Label>Участники:</Label>
+            <ul>
+              {group.participants.map(id => (
+                <li key={id}>{id}</li>
+              ))}
+            </ul>
+          </React.Fragment>
+        ) : (
+          <Label>Пустая группа</Label>
+        )}
+      </div>
     </div>
   );
 };
