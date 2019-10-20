@@ -23,8 +23,8 @@ class CohortViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def set_event(self, request, **kwargs):
         cohort = self.get_object()
-        event_id = request.data['event_id']
-        event = Event.objects.get(google_id=event_id)
+        event_uuid = request.data['event_id']
+        event = Event.objects.get(uuid=event_uuid)
         cohort.event = event
         cohort.save()
         return Response(

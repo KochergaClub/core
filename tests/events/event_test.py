@@ -54,7 +54,7 @@ def test_serialize(google_object):
 
 class TestGetEvent:
     def test_get(self, db, event, imported_events):
-        e = Event.by_id(event.google_id)
+        e = Event.objects.get(pk=event.pk)
         assert e
         assert type(e) == Event
 
@@ -81,7 +81,7 @@ class TestImages:
 
         assert event.image_file('default')
 
-        event = Event.objects.get(pk=event.google_id)  # reloading for another check
+        event = Event.objects.get(pk=event.pk)  # reloading for another check
         assert event.image_file('default')
 
 

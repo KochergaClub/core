@@ -31,13 +31,13 @@ def test_fb_groups(admin_client, event):
 
 def test_vk_announce(admin_client, event):
     res = admin_client.post(
-        f'/api/announcements/vk/{event.google_id}/announce',
+        f'/api/announcements/vk/{event.uuid}/announce',
         {},
         format='json',
     )
     assert res.status_code == 200
 
-    res = admin_client.get(f'/api/event/{event.google_id}')
+    res = admin_client.get(f'/api/event/{event.uuid}')
     assert res.status_code == 200
     print(res.json())
     assert res.json()['posted_vk']
@@ -45,13 +45,13 @@ def test_vk_announce(admin_client, event):
 
 def test_vk_announce_old(admin_client, event):
     res = admin_client.post(
-        f'/api/announcements/vk/event/{event.google_id}',
+        f'/api/announcements/vk/event/{event.uuid}',
         {},
         format='json',
     )
     assert res.status_code == 200
 
-    res = admin_client.get(f'/api/event/{event.google_id}')
+    res = admin_client.get(f'/api/event/{event.uuid}')
     assert res.status_code == 200
     print(res.json())
     assert res.json()['posted_vk']

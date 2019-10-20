@@ -1,7 +1,6 @@
 from kocherga.dateutils import dts
 
 import kocherga.events.google
-from .models import Event
 
 
 def insert_event(event):
@@ -21,12 +20,3 @@ def insert_event(event):
     event.google_link = result['htmlLink']
     event.save()
     return event
-
-
-def delete_event(google_id):
-    kocherga.events.google.delete_event(google_id)
-    try:
-        event = Event.objects.get(google_id=google_id)
-        event.delete()
-    except Event.DoesNotExist:
-        pass

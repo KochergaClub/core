@@ -7,7 +7,6 @@ pytestmark = [
 from datetime import datetime, timedelta
 
 from kocherga.events.booking import Booking, add_booking, delete_booking, day_bookings, check_availability
-import kocherga.events.google
 from kocherga.events.models import Event
 from kocherga.error import PublicError
 from kocherga.dateutils import TZ
@@ -106,9 +105,9 @@ class TestDayBookings:
         assert len(result) == 2
 
         # cleanups
-        delete_booking(e1.google_id, 'first@example.com')
-        delete_booking(e2.google_id, 'second@example.com')
-        delete_booking(e3.google_id, 'other@example.com')
+        delete_booking(e1.uuid, 'first@example.com')
+        delete_booking(e2.uuid, 'second@example.com')
+        delete_booking(e3.uuid, 'other@example.com')
 
 
 class TestCheckAvailability:
@@ -175,7 +174,7 @@ class TestAddBooking:
         )
 
         # cleanup
-        kocherga.events.db.delete_event(event.google_id)
+        event.delete()
 
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
         assert event.location == 'Антикафе Кочерга, комната ГЭБ'
@@ -191,7 +190,7 @@ class TestAddBooking:
         )
 
         # cleanup
-        kocherga.events.db.delete_event(event.google_id)
+        event.delete()
 
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
 
@@ -214,7 +213,7 @@ class TestAddBooking:
 
         # cleanup
         for event in (event1, event2):
-            kocherga.events.db.delete_event(event.google_id)
+            event.delete()
 
     def test_add_booking_unknown(self):
         with pytest.raises(PublicError, match='Unknown room'):
@@ -250,7 +249,7 @@ class TestAddBooking:
             )
 
         # cleanup
-        kocherga.events.db.delete_event(event.google_id)
+        event.delete()
 
 
 class TestDeleteBooking:
@@ -266,7 +265,7 @@ class TestDeleteBooking:
             'somebody@example.com'
         )
 
-        delete_booking(event.google_id, 'somebody@example.com')
+        delete_booking(event.uuid, 'somebody@example.com')
 
     def test_delete_booking_access(self):
         event = add_booking(
@@ -277,10 +276,10 @@ class TestDeleteBooking:
         )
 
         with pytest.raises(PublicError, match='Access denied'):
-            delete_booking(event.google_id, 'hacker@example.com')
+            delete_booking(event.uuid, 'hacker@example.com')
 
         # cleanup
-        delete_booking(event.google_id, 'somebody@example.com')
+        delete_booking(event.uuid, 'somebody@example.com')
 
     def test_delete_booking_prefix_access(self):
         event = add_booking(
@@ -291,7 +290,7 @@ class TestDeleteBooking:
         )
 
         with pytest.raises(PublicError, match='Access denied'):
-            delete_booking(event.google_id, 'hack-somebody@example.com')
+            delete_booking(event.uuid, 'hack-somebody@example.com')
 
         # cleanup
-        delete_booking(event.google_id, 'somebody@example.com')
+        delete_booking(event.uuid, 'somebody@example.com')

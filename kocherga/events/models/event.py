@@ -1,6 +1,9 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import base64
+import uuid
+
 from dateutil.tz import tzutc
 import dateutil.parser
 from datetime import datetime, time
@@ -92,6 +95,10 @@ class EventManager(models.Manager):
         return query
 
 
+def generate_uuid():
+    return base64.b32encode(uuid.uuid4().bytes)[:26].lower().decode('ascii')
+
+
 class Event(models.Model):
     class Meta:
         db_table = "events"
@@ -100,8 +107,10 @@ class Event(models.Model):
 
     objects = EventManager()
 
-    google_id = models.CharField(max_length=100, unique=True)
-    google_link = models.CharField(max_length=1024)
+    uuid = models.SlugField(default=generate_uuid, unique=True)
+
+    google_id = models.CharField(max_length=100, unique=True, blank=True)
+    google_link = models.CharField(max_length=1024, blank=True)
 
     start = models.DateTimeField()
     end = models.DateTimeField()
@@ -114,7 +123,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
 
     # Not a google_event.summary!
-    # We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
+    # This is for the short schedule/timepad/email summaries.
     summary = models.TextField(blank=True)
 
     description = models.TextField(blank=True)
@@ -161,10 +170,6 @@ class Event(models.Model):
 
     def __str__(self):
         return f'{timezone.localtime(self.start)} - {self.title}'
-
-    @classmethod
-    def by_id(cls, google_id):
-        return Event.objects.get(google_id=google_id)
 
     @classmethod
     def from_google(cls, google_event):

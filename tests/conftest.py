@@ -87,12 +87,9 @@ def event(image_file, vk_image_file):
     with open(image_file, 'rb') as fh:
         event.add_image('default', fh)
 
-    # session can be reset after the test, so we need to store this and don't reference our event after the yield
-    event_id = event.google_id
-
     yield event
 
-    kocherga.events.db.delete_event(event_id)
+    event.delete()
 
 
 @pytest.fixture
@@ -115,7 +112,7 @@ def minimal_event():
 
     yield event
 
-    kocherga.events.db.delete_event(event.google_id)
+    event.delete()
 
 
 @pytest.fixture
@@ -132,7 +129,7 @@ def event_for_edits():
     event = kocherga.events.db.insert_event(event)
     yield event
 
-    kocherga.events.db.delete_event(event.google_id)
+    event.delete()
 
 
 @pytest.fixture

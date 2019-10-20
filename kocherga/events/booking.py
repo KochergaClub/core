@@ -24,13 +24,13 @@ MAX_BOOKING_DELAY = datetime.timedelta(days=60)
 
 class Booking:
 
-    def __init__(self, start_dt, end_dt, room, people, google_id=None):
+    def __init__(self, start_dt, end_dt, room, people, event_uuid=None):
         self.start_dt = start_dt
         self.end_dt = end_dt
         kocherga.room.validate(room)
         self.room = room
         self.people = people
-        self.google_id = google_id
+        self.event_uuid = event_uuid
 
     @classmethod
     def from_event(self, event):
@@ -39,7 +39,7 @@ class Booking:
         if match:
             people = match.group(1)
         return Booking(
-            event.start, event.end, event.get_room(), people, event.google_id
+            event.start, event.end, event.get_room(), people, event.uuid
         )
 
     def public_object(self):
@@ -48,7 +48,7 @@ class Booking:
             "end": dts(self.end_dt),
             "room": kocherga.room.pretty(self.room),
             "people": self.people,
-            "google_id": self.google_id,
+            "event_id": self.event_uuid,
         }
 
 
@@ -105,8 +105,8 @@ def bookings_by_email(email):
     return bookings
 
 
-def delete_booking(google_id, email):
-    event = Event.by_id(google_id)
+def delete_booking(event_uuid, email):
+    event = Event.objects.get(uuid=event_uuid)
     if not event:
         raise PublicError("Not found")
 
@@ -116,7 +116,7 @@ def delete_booking(google_id, email):
     if not event.title.endswith(" " + email):
         raise PublicError("Access denied")
 
-    kocherga.events.db.delete_event(google_id)
+    event.delete()
 
 
 def add_booking(date, room, people, start_time, end_time, email):

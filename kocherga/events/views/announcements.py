@@ -20,12 +20,12 @@ from kocherga.api.common import ok
 
 class AnnouncementViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAdminUser,)
-    lookup_field = 'event__google_id'
+    lookup_field = 'event__uuid'
 
     def get_object(self):
         event = generics.get_object_or_404(
             models.Event.objects.all(),
-            google_id=self.kwargs[self.lookup_field]
+            uuid=self.kwargs[self.lookup_field]
         )
         announcement = getattr(event, self.event_field)
         return announcement

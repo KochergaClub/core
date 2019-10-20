@@ -55,7 +55,7 @@ class PublicEventSerializer(serializers.ModelSerializer):
     def get_description(self, obj):
         return markup.Markup(obj.description).as_plain()
 
-    event_id = serializers.ReadOnlyField(source='google_id')
+    event_id = serializers.ReadOnlyField(source='uuid')
 
     room = serializers.SerializerMethodField()
 
@@ -146,7 +146,7 @@ class EventSerializer(serializers.ModelSerializer):
             )
         )
 
-    id = serializers.CharField(source='google_id', required=False)
+    id = serializers.CharField(source='uuid', required=False)
     room = serializers.CharField(source='get_room', required=False)
 
     type = serializers.CharField(source='event_type', required=False)
@@ -185,7 +185,7 @@ class EventSerializer(serializers.ModelSerializer):
         timepad_announcement_data = validated_data.pop('timepad_announcement', {})
 
         event = super().update(instance, validated_data)
-        event.patch_google()
+        event.patch_google()  # TODO - add event into async export queue?
 
         if prototype_data:
             event.prototype = models.EventPrototype.objects.get(pk=prototype_data['pk'])
