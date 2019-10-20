@@ -17,7 +17,7 @@ tee minizinc > /dev/null << "EOF"
 export PATH=`dirname $0`/ide/bin:$PATH
 export LD_LIBRARY_PATH=`dirname $0`/ide/lib:${LD_LIBRARY_PATH}
 export QT_PLUGIN_PATH=`dirname $0`/ide/plugins:${QT_PLUGIN_PATH}
-minizinc --output-mode json $@ | head -n -2
+minizinc --output-mode json $@ | head -n -1
 EOF
 
 chmod +x minizinc
