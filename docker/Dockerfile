@@ -22,6 +22,9 @@ RUN apt-get install -y inotify-tools && \
     ./autogen.sh && ./configure && make && make install && rm -rf /tmp/watchman-src
 
 WORKDIR /code
+COPY prepare_solver_linux.sh /code/
+RUN ./prepare_solver_linux.sh
+
 COPY requirements.txt /code/
 RUN pip-sync
 
