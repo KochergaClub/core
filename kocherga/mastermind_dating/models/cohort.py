@@ -115,7 +115,7 @@ class Cohort(models.Model):
         subprocess.run([
             "minizinc/minizinc",
             "mm-bot-model/model.mzn",
-            "data.dzn"
+            "data.dzn",
             "--time-limit",
             "30000",
         ], stdout=open("solution.json", mode='w'))
