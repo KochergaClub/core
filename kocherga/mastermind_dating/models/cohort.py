@@ -41,6 +41,17 @@ class Cohort(models.Model):
         manager = rpc.get_client()
         manager.broadcast_solution(self.id)
 
+    def has_populated_groups(self) -> bool:
+        for participant in self.participants.all():
+            if participant.group is not None:
+                return False
+        return True
+
+    def clear_all_groups(self):
+        for participant in self.participants.all():
+            participant.group = None
+            participant.save()
+
     def get_participants_and_votes(self):
         yall: List[Participant] = list(self.participants.filter(present=True).all())
 
@@ -105,6 +116,10 @@ class Cohort(models.Model):
         )
 
     def run_solver(self):
+        if self.has_populated_groups():
+            raise Exception("Can't run solver when groups are already populated. "
+                            "If you want to re-run solver, call clear_all_groups() first.")
+
         data = self.get_solver_data()
         with open("data.dzn", mode="w") as f:
             f.write(data)
