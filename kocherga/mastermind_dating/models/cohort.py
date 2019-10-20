@@ -116,6 +116,8 @@ class Cohort(models.Model):
             "minizinc/minizinc",
             "mm-bot-model/model.mzn",
             "data.dzn"
+            "--time-limit",
+            "30000",
         ], stdout=open("solution.json", mode='w'))
 
         solution = json.load(open("solution.json", mode="r"))
