@@ -67,6 +67,18 @@ class CohortViewSet(viewsets.ModelViewSet):
             serializers.GroupSerializer(cohort.groups.all(), many=True).data
         )
 
+    @action(detail=True, methods=['post'])
+    def clear_all_groups(self, request, **kwargs):
+        cohort = self.get_object()
+        cohort.clear_all_groups()
+        return Response('ok')
+
+    @action(detail=True, methods=['post'])
+    def run_solver(self, request, **kwargs):
+        cohort = self.get_object()
+        cohort.run_solver()
+        return Response('ok')
+
 
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = models.Participant.objects.all()
