@@ -20,7 +20,7 @@ async def broadcast_solution(cohort_id: int, bot: Bot):
 
     for participant in cohort.participants.all():
         if not participant.group:
-            log.warn('No group for participant ' + participant.telegram_uid)
+            log.warn('No group for participant ' + participant.id)
             continue
 
         message = render_to_string("mastermind_dating/bot/group_assembled.md", {
