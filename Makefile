@@ -5,9 +5,7 @@ image:
 
 ##### Dev environment #####
 init-dev:
-	docker-compose -f docker/compose.dev.yml exec db mysql -uroot -e 'CREATE DATABASE kocherga'
 	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
-	docker-compose -f docker/compose.dev.yml run --rm api npm ci
 
 dev-mac: image
 	docker-sync-stack start
