@@ -98,6 +98,14 @@ def register_handlers(dsp: Dispatcher):
             return
         logger.info('Found user by token')
 
+        if not msg.from_user.username:
+            await bot.send_message(
+                chat_id=msg.chat.id,
+                text="Перед регистрацией вам нужно зайти в настройки Telegram "
+                     "и выбрать себе username (имя пользователя)."
+            )
+            return
+
         # TODO - create_or_update
         models.TelegramUser.objects.create(
             user=user.user,
