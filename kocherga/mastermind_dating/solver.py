@@ -33,8 +33,9 @@ async def broadcast_solution(cohort_id: int, bot: Bot):
         })
         tasks.append(asyncio.create_task(
             bot.send_message(
-                participant.get_chat_id(), message,
-                parse_mode="Markdown"
+                participant.get_chat_id(),
+                message,
+                # parse_mode="Markdown"
             )
         ))
 
