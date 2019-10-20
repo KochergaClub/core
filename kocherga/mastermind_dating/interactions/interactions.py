@@ -463,7 +463,7 @@ async def tinder_activate(participant_id: int, bot: Bot):
     user = models.Participant.objects.get(pk=participant_id)
     logger.info(f"Found user {user.user.email}")
 
-    cohort = user.cohorts.first()
+    cohort = user.cohort
     to_notify = cohort.participants.filter(present=True).exclude(id=user.id).iterator()
     tasks = []
     logger.info(f"Creating voting tasks")
