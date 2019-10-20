@@ -104,7 +104,7 @@ KOCHERGA_VK = {
     },
     "daily_page": "kocherga_daily",
     "client_id": 6274394,
-    "callback_secret": "UHD9g3yQkhgb9ZjCZ1Q1qWVuDUo",  # FIXME - secret??
+    "callback_secret": KOCHERGA_VK_CALLBACK_SECRET,
 }
 
 KOCHERGA_TELEGRAM = {
