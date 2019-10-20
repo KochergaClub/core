@@ -3,6 +3,8 @@
 if [[ -e minizinc ]]; then exit 0; fi
 mkdir minizinc 2>/dev/null
 
+apt-get install -y libglu1-mesa
+
 pushd minizinc
 wget -q 'https://github.com/MiniZinc/MiniZincIDE/releases/download/2.2.3/MiniZincIDE-2.2.3-bundle-linux-x86_64.tgz' -O mz.tgz
 tar -xzf mz.tgz
