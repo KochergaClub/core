@@ -98,10 +98,10 @@ class Cohort(models.Model):
         dataset = "".join(builder)
 
         return (
-            f"people={{{unames}}};"
-            "max_p_per_group = 5;"
-            f"max_Ns = {n * n};"
-            f"marks=[{dataset}];"
+            f"people={{{unames}}};\n"
+            "max_p_per_group = 5;\n"
+            f"max_Ns = 0;\n"
+            f"marks=[{dataset}];\n"
         )
 
     def run_solver(self):
