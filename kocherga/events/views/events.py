@@ -32,6 +32,7 @@ class RootView(generics.ListCreateAPIView):
     serializer_class = serializers.EventSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('title',)
+    lookup_field = 'google_id'
 
     def get_queryset(self):
         def arg2date(arg):
@@ -89,6 +90,7 @@ class ObjectView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.EventSerializer
     queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
     lookup_url_kwarg = 'event_id'
+    lookup_field = 'google_id'
 
 
 class ImageView(APIView):
@@ -157,6 +159,7 @@ class TagView(APIView):
 class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = serializers.PublicEventSerializer
+    lookup_field = 'google_id'
 
     def get_queryset(self):
         def arg2date(arg):

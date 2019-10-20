@@ -100,7 +100,7 @@ class Event(models.Model):
 
     objects = EventManager()
 
-    google_id = models.CharField(max_length=100, primary_key=True)
+    google_id = models.CharField(max_length=100, unique=True)
     google_link = models.CharField(max_length=1024)
 
     start = models.DateTimeField()

@@ -74,6 +74,7 @@ def timepad_category_by_code(code):
 
 class TimepadAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='timepad_announcement')
+
     link = models.CharField(max_length=1024, blank=True)
 
     category_code = models.CharField(max_length=40, blank=True)

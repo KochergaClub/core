@@ -19,6 +19,7 @@ from .. import rpc
 
 class Cohort(models.Model):
     event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+
     leader_telegram_uid = models.CharField(max_length=100, blank=True)  # will be added to the newly created groups
 
     def populate_from_event(self):

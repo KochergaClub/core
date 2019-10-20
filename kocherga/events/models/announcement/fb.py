@@ -33,6 +33,7 @@ class Manager(models.Manager):
 
 class FbAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
+
     link = models.CharField(max_length=1024, blank=True)
 
     group = models.CharField(max_length=40, blank=True)

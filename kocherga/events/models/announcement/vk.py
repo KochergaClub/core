@@ -167,6 +167,7 @@ class Manager(models.Manager):
 
 class VkAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='vk_announcement')
+
     link = models.CharField(max_length=1024, blank=True)
 
     group = models.CharField(max_length=40, blank=True)
