@@ -44,8 +44,8 @@ class Cohort(models.Model):
     def has_populated_groups(self) -> bool:
         for participant in self.participants.all():
             if participant.group is not None:
-                return False
-        return True
+                return True
+        return False
 
     def clear_all_groups(self):
         for participant in self.participants.all():
