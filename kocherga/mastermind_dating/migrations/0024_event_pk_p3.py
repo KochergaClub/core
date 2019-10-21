@@ -10,6 +10,8 @@ def fill_event_fk(apps, schema_editor):
     for model_name in ('Cohort', ):
         model_class = apps.get_model('mastermind_dating', model_name)
         for obj in model_class.objects.all():
+            if not obj.event_google_id:
+                continue
             event = Event.objects.get(google_id=obj.event_google_id)
             obj.event = event
             obj.save()
