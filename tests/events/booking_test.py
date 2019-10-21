@@ -258,5 +258,5 @@ def test_google_export(test_google_calendar_id):
     attendees = google_data['attendees']
     assert len(attendees) == 1
     assert attendees[0]['email'] == 'somebody@example.com'
-    assert google_data['location'] == 'Антикафе Кочерга, комната ГЭБ'
+    assert google_data['location'] == 'Кочерга, комната ГЭБ'
     assert event.location == 'ГЭБ'

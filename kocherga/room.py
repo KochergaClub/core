@@ -64,4 +64,4 @@ def from_long_location(location):
 
 def to_long_location(room):
     room = normalize(room)
-    return f'Антикафе Кочерга, комната {pretty(room)}'
+    return f'Кочерга, комната {pretty(room)}'
