@@ -14,36 +14,6 @@ def get_calendar_id():
     return settings.KOCHERGA_GOOGLE_CALENDAR_ID
 
 
-def api():
-    return kocherga.google.service("calendar")
-
-
-def get_event(event_id):
-    return api().events().get(calendarId=get_calendar_id(), eventId=event_id).execute()
-
-
-def delete_event(event_id):
-    return api().events().delete(calendarId=get_calendar_id(), eventId=event_id).execute()
-
-
-def insert_event(params):
-    return api().events().insert(
-        calendarId=get_calendar_id(),
-        sendNotifications=True,
-        body=params
-    ).execute()
-
-
-def patch_event(event_id, patch):
-    logger.info(f"Patching {event_id} with {str(patch)}")
-    return (
-        api()
-        .events()
-        .patch(calendarId=get_calendar_id(), eventId=event_id, body=patch)
-        .execute()
-    )
-
-
 def events_with_condition(**kwargs) -> List[Dict[str, Any]]:
     kw = {
         "calendarId": get_calendar_id(),

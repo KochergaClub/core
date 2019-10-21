@@ -45,7 +45,7 @@ urlpatterns += [
 ]
 
 # Announcements
-# (TODO - check if these are working at all - I don't understand how event__google_id is populated)
+# (TODO - check if these are working at all - I don't understand how event__uuid is populated)
 router.register(r'announcements/timepad', views.announcements.TimepadViewSet, basename='announcements-timepad')
 router.register(r'announcements/vk', views.announcements.VkViewSet, basename='announcements-vk')
 router.register(r'announcements/fb', views.announcements.FbViewSet, basename='announcements-fb')

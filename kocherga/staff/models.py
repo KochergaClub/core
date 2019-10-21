@@ -175,7 +175,7 @@ class Member(models.Model):
         calendar.acl().insert(
             calendarId=settings.KOCHERGA_GOOGLE_CALENDAR_ID,
             body={
-                'role': 'writer',
+                'role': 'reader',
                 'scope': {
                     'type': 'user',
                     'value': email,

@@ -86,7 +86,7 @@ class EventManager(models.Manager):
         query = (
             query
             .filter(event_type = 'public')
-            .exclude(vk_announcement__link = '')
+            .exclude(vk_announcement__link = '')  # public events can contain raw description initially
             .filter(start__gte = datetime(2018, 6, 1))  # earlier events are not cleaned up yet
         )
 

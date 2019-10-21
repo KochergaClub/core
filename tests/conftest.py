@@ -5,39 +5,12 @@ from django.contrib.auth import get_user_model
 from kocherga.staff.models import Member, AltEmail
 
 
-import googleapiclient.errors
-
 from pathlib import Path
 from datetime import datetime, timedelta
 
 from kocherga.events.models import Event, EventPrototype
 import kocherga.images
 from kocherga.dateutils import TZ
-
-
-@pytest.fixture
-def google_object():
-    obj = {
-        'created': '2017-09-01T17:59:38.000Z',
-        'updated': '2017-10-01T18:00:00.000Z',
-        'creator': {'email': 'mmcleric@gmail.com'},
-        'summary': 'бронь итальянский',
-        'location': 'летняя',
-        'start': {
-            'dateTime': '2017-12-10T10:30:00+03:00',
-        },
-        'end': {
-            'dateTime': '2017-12-10T12:30:00+03:00',
-        },
-    }
-
-    obj = kocherga.events.google.insert_event(obj)
-    yield obj
-
-    try:
-        kocherga.events.google.delete_event(obj)
-    except googleapiclient.errors.HttpError:
-        pass  # might be deleted already
 
 
 @pytest.fixture(scope='session')

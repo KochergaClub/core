@@ -1,27 +1,38 @@
 import pytest
-pytestmark = pytest.mark.google
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
-import datetime
-
-import kocherga.events.google
-
-
-class TestGet:
-    def test_get(self):
-        e = kocherga.events.google.get_event("63hhg4l8a6gkejpfaqfkbigape")
-        assert e
-        assert type(e) == dict
-
-    def test_get_unknown(self):
-        with pytest.raises(Exception):  # TODO - special exception for EventNotFound
-            kocherga.events.google.get_event("abcdef")
+from kocherga.events.models import GoogleCalendar, GoogleEvent
 
 
-class TestList:
-    def test_list_all(self):
-        events = kocherga.events.google.list_events(
-            from_date=datetime.date(2015, 1, 1),
-            to_date=datetime.date(2020, 1, 1)
+class TestExport:
+    def test_export_once(self, event):
+        google_calendar = GoogleCalendar.objects.create(
+            # TODO - create temporary calendar through API instead
+            calendar_id="22m4r7l6gl1jn9vqokdeq9b7o4@group.calendar.google.com"
         )
-        assert type(events) == list
-        assert len(events) > 300
+
+        google_calendar.export_event(event)
+
+        google_events = list(GoogleEvent.objects.all())
+        assert len(google_events) == 1
+        assert google_events[0].google_calendar == google_calendar
+        assert google_events[0].event == event
+
+    def test_export_twice(self, event):
+        google_calendar = GoogleCalendar.objects.create(
+            # TODO - create temporary calendar through API instead
+            calendar_id="22m4r7l6gl1jn9vqokdeq9b7o4@group.calendar.google.com"
+        )
+
+        google_calendar.export_event(event)
+
+        event.refresh_from_db()
+        google_calendar.export_event(event)
+
+        google_events = list(GoogleEvent.objects.all())
+        assert len(google_events) == 1
+        assert google_events[0].google_calendar == google_calendar
+        assert google_events[0].event == event

@@ -11,9 +11,7 @@ from reversion.models import Version
 
 from kocherga.dateutils import humanize_date, dts
 
-import kocherga.events.google
-
-from .models import Event
+from .models import Event, GoogleCalendar
 
 
 class UpdatesWebsocketConsumer(WebsocketConsumer):
@@ -95,23 +93,6 @@ class GoogleExportConsumer(SyncConsumer):
         event_pk = message['event_pk']
         event = Event.objects.get(pk=event_pk)
 
-        if event.google_id:
-            logger.info(f'Updating event {event_pk}')
-
-            patch = self.event_to_google(event)
-            if event.deleted:
-                patch['status'] = 'cancelled'
-
-            kocherga.events.google.patch_event(event.google_id, patch)
-
-        else:
-            logger.info(f'Inserting event {event_pk}')
-
-            data = self.event_to_google(event)
-            data["attendees"] = [{"email": email} for email in event.attendees]
-
-            result = kocherga.events.google.insert_event(data)
-
-            event.google_id = result['id']
-            event.google_link = result['htmlLink']
-            event.save()
+        for google_calendar in GoogleCalendar.objects.all():
+            # TODO - try/catch?
+            google_calendar.export_event(event)
