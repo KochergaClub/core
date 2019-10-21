@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useReducer } from 'react';
 
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
-import { addWeeks, subWeeks } from 'date-fns';
+import { addDays, addWeeks, subWeeks } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
@@ -84,18 +84,33 @@ const EventsPage: NextPage<Props> = props => {
 
   useListeningWebSocket('ws/events/', fetchEvents);
 
-  const onRangeChange = (range: {
-    start: string | Date;
-    end: string | Date;
-  }) => {
+  const onRangeChange = (
+    range:
+      | {
+          start: string | Date;
+          end: string | Date;
+        }
+      | Date[]
+  ) => {
     let start: Date;
     let end: Date;
 
-    if (typeof range.start === 'string' || typeof range.end === 'string') {
+    if (range instanceof Array) {
+      start = range[0];
+      end = range[range.length - 1];
+    } else if (
+      typeof range.start === 'string' ||
+      typeof range.end === 'string'
+    ) {
       throw new Error('Unexpected types in range');
+    } else {
+      start = range.start;
+      end = range.end;
     }
-    start = range.start;
-    end = range.end;
+
+    // react-big-calendar sometimes returns the range for which the end is last day's midnight
+    end = addDays(end, 1);
+
     // TODO - set wider range to pre-cache previous and next period, for smoother scrolling
     setRange({ start, end });
   };
