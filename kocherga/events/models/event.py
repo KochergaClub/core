@@ -13,10 +13,7 @@ import channels.layers
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 
-import reversion.signals
 
 from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 
@@ -301,36 +298,3 @@ class Tag(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tags')
 
     name = models.CharField(max_length=40)
-
-
-@receiver(reversion.signals.post_revision_commit)
-def cb_flush_new_revisions(sender, revision, versions, **kwargs):
-    logger.info('Checking for new event revisions')
-    channel_layer = channels.layers.get_channel_layer()
-
-    def flush_after_commit():
-        for version in versions:
-            if version.content_type.model_class() == Event:
-                logger.info('Notifying about new event revisions')
-                async_to_sync(channel_layer.send)("events-slack-notify", {
-                    "type": "notify_by_version",
-                    "version_id": version.pk,
-                })
-                break
-
-    # We use ATOMIC_REQUESTS, so we shouldn't notify the worker until transaction commits.
-    # Otherwise the worker could query the DB too early and won't find the version object.
-    transaction.on_commit(flush_after_commit)
-
-
-@receiver(post_save, sender=Event)
-def first_email(sender, instance, created, **kwargs):
-    channel_layer = channels.layers.get_channel_layer()
-
-    def flush_after_commit():
-        async_to_sync(channel_layer.send)("events-google-export", {
-            "type": "export_event",
-            "event_pk": instance.pk,
-        })
-
-    transaction.on_commit(flush_after_commit)
