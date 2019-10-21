@@ -42,11 +42,13 @@ def ts_now():
 
 class EventManager(models.Manager):
     def notify_update(self):
-        async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'events_group', {
-                'type': 'notify.update',
-            }
-        )
+        def send_update():
+            async_to_sync(channels.layers.get_channel_layer().group_send)(
+                'events_group', {
+                    'type': 'notify.update',
+                }
+            )
+        transaction.on_commit(send_update)
 
     def list_events(
         self,
