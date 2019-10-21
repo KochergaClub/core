@@ -9,7 +9,6 @@ from kocherga.dateutils import TZ, dts
 from kocherga.error import PublicError
 
 import kocherga.room
-import kocherga.events.db
 from kocherga.events.models import Event
 import kocherga.events.helpers
 
@@ -167,4 +166,5 @@ def add_booking(date, room, people, start_time, end_time, email):
     )
     event.set_attendees([email])
 
-    return kocherga.events.db.insert_event(event)
+    event.save()
+    return event

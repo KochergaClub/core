@@ -16,6 +16,7 @@ application = ProtocolTypeRouter({
     "channel": ChannelNameRouter({
         "slack-notify": kocherga.slack.consumers.NotifyConsumer,
         "events-slack-notify": kocherga.events.consumers.NotifySlackConsumer,
+        "events-google-export": kocherga.events.consumers.GoogleExportConsumer,
     }),
     # (http->django views is added by default)
 })

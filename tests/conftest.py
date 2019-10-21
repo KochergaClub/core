@@ -11,8 +11,6 @@ from pathlib import Path
 from datetime import datetime, timedelta
 
 from kocherga.events.models import Event, EventPrototype
-import kocherga.events.db
-import kocherga.events.importer
 import kocherga.images
 from kocherga.dateutils import TZ
 
@@ -74,7 +72,7 @@ def event(image_file, vk_image_file):
         location='ГЭБ',
         event_type='public',
     )
-    event = kocherga.events.db.insert_event(event)
+    event.save()
 
     event.vk_announcement.group = 'event159971736'
     event.vk_announcement.save()
@@ -108,7 +106,7 @@ def minimal_event():
         end=dt + timedelta(hours=1),
         title="бронь Летняя",
     )
-    event = kocherga.events.db.insert_event(event)
+    event.save()
 
     yield event
 
@@ -126,15 +124,22 @@ def event_for_edits():
         title="title doesn't matter",
         description="description doesn't matter"
     )
-    event = kocherga.events.db.insert_event(event)
+    event.save()
+
     yield event
 
     event.delete()
 
 
 @pytest.fixture
-def imported_events(db, transactional_db):
-    kocherga.events.importer.Importer().import_all()
+def common_events(db):
+    for i in range(5):
+        dt = datetime.now(TZ) + timedelta(days=i)
+        Event.objects.create(
+            start=dt,
+            end=dt + timedelta(hours=1),
+            title='test event',
+        )
 
 
 @pytest.fixture

@@ -20,7 +20,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny
 
 from kocherga.error import PublicError
 
-import kocherga.events.db
+import kocherga.events.helpers
 from kocherga.events.models import Event
 from kocherga.events import serializers
 

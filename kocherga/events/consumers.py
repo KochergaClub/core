@@ -9,7 +9,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from channels.generic.websocket import SyncConsumer, WebsocketConsumer
 from reversion.models import Version
 
-from kocherga.dateutils import humanize_date
+from kocherga.dateutils import humanize_date, dts
+
+import kocherga.events.google
 
 from .models import Event
 
@@ -77,3 +79,39 @@ class NotifySlackConsumer(SyncConsumer):
             "text": f'{text} ({user_text})',
             "attachments": attachments,
         })
+
+
+class GoogleExportConsumer(SyncConsumer):
+    def event_to_google(self, event):
+        return {
+            "summary": event.title,
+            "description": event.description,
+            "location": event.location,
+            "start": {"dateTime": dts(event.start)},
+            "end": {"dateTime": dts(event.end)},
+        }
+
+    def export_event(self, message):
+        event_pk = message['event_pk']
+        event = Event.objects.get(pk=event_pk)
+
+        if event.google_id:
+            logger.info(f'Updating event {event_pk}')
+
+            patch = self.event_to_google(event)
+            if event.deleted:
+                patch['status'] = 'cancelled'
+
+            kocherga.events.google.patch_event(event.google_id, patch)
+
+        else:
+            logger.info(f'Inserting event {event_pk}')
+
+            data = self.event_to_google(event)
+            data["attendees"] = [{"email": email} for email in event.attendees]
+
+            result = kocherga.events.google.insert_event(data)
+
+            event.google_id = result['id']
+            event.google_link = result['htmlLink']
+            event.save()

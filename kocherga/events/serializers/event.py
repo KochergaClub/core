@@ -172,8 +172,7 @@ class EventSerializer(serializers.ModelSerializer):
         return obj.tag_names()
 
     def create(self, validated_data):
-        event = models.Event(**validated_data)
-        kocherga.events.db.insert_event(event)
+        event = models.Event.objects.create(**validated_data)
         models.Event.objects.notify_update()  # send notification message to websocket
         return event
 
@@ -185,7 +184,6 @@ class EventSerializer(serializers.ModelSerializer):
         timepad_announcement_data = validated_data.pop('timepad_announcement', {})
 
         event = super().update(instance, validated_data)
-        event.patch_google()  # TODO - add event into async export queue?
 
         if prototype_data:
             event.prototype = models.EventPrototype.objects.get(pk=prototype_data['pk'])

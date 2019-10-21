@@ -14,41 +14,11 @@ from kocherga.dateutils import TZ
 
 @pytest.fixture
 def event1():
-    GOOGLE_EVENT = {
-        "kind": "calendar#event",
-        "etag": "\"2910222046236000\"",
-        "id": "9v1o4njhrkg7a86nnd4es51im4",
-        "status": "confirmed",
-        "htmlLink": (
-            "https://www.google.com/calendar/event?eid="
-            "OXYxbzRuamhya2c3YTg2bm5kNGVzNTFpbTQgbHYzOTYzdWRjdHZvaDk0NGM3ZGxpazV0ZDRAZw"
-        ),
-        "created": "2016-02-10T13:30:13.000Z",
-        "updated": "2016-02-10T13:30:23.118Z",
-        "summary": "Бронь ГЭБ 6чел Алексанр",
-        "creator": {
-            "email": "blah@gmail.com",
-            "displayName": "Blah Blah"
-        },
-        "organizer": {
-            "email": "lv3963udctvoh944c7dlik5td4@group.calendar.google.com",
-            "displayName": "Kocherga",
-            "self": True,
-        },
-        "start": {
-            "dateTime": "2016-02-10T19:00:00+03:00"
-        },
-        "end": {
-            "dateTime": "2016-02-10T20:00:00+03:00"
-        },
-        "iCalUID": "9v1o4njhrkg7a86nnd4es51im4@google.com",
-        "sequence": 0,
-        "reminders": {
-            "useDefault": True,
-        }
-    }
-
-    return Event.from_google(GOOGLE_EVENT)
+    return Event.objects.create(
+        title="Бронь ГЭБ 6чел Алексанр",
+        start=datetime(2016, 2, 10, 19, tzinfo=TZ),
+        end=datetime(2016, 2, 10, 20, tzinfo=TZ),
+    )
 
 
 class TestBooking:
@@ -74,10 +44,6 @@ class TestBooking:
 
 class TestDayBookings:
     def test_empty(self):
-        result = day_bookings(datetime.now(TZ))
-        assert type(result) == list
-
-    def test_imported(self, imported_events):
         result = day_bookings(datetime.now(TZ))
         assert type(result) == list
 

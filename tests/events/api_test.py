@@ -4,29 +4,38 @@ pytestmark = [
     pytest.mark.google,  # events require google for now (don't forget to remove this later)
 ]
 
+from datetime import datetime, timedelta
+
+from kocherga.dateutils import TZ
+
 from kocherga.events.models import Event
 
 
-def test_events(admin_client, imported_events):
+def test_events(admin_client, common_events):
     res = admin_client.get('/api/events')
     assert res.status_code == 200
     events = res.json()
 
-    assert len(events) > 5
-
-    assert '2017' in events[0]['start']
+    assert len(events) > 3
 
 
-def test_events_from_date(admin_client, imported_events):
+def test_events_from_date(admin_client, common_events):
+    dt = datetime(2017, 5, 1, tzinfo=TZ)
+    Event.objects.create(
+        start=dt,
+        end=dt + timedelta(hours=1),
+        title='old event',
+    )
+
     res = admin_client.get(
-        '/api/events?from_date=2018-01-01&to_date=2018-01-14',
+        '/api/events?from_date=2017-01-01&to_date=2018-01-01',
     )
     assert res.status_code == 200
     events = res.json()
 
-    assert len(events) > 5
+    assert len(events) == 1
 
-    assert '2018' in events[0]['start']
+    assert '2017' in events[0]['start']
 
 
 def test_upload_image(admin_client, image_storage, event):

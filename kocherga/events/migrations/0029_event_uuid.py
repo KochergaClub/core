@@ -3,6 +3,17 @@
 from django.db import migrations, models
 import kocherga.events.models.event
 
+import base64
+import uuid
+
+
+def populate_uuids(apps, schema_editor):
+    Event = apps.get_model('events', 'Event')
+
+    for obj in Event.objects.all():
+        obj.uuid = base64.b32encode(uuid.uuid4().bytes)[:26].lower().decode('ascii')
+        obj.save()
+
 
 class Migration(migrations.Migration):
 
@@ -16,4 +27,5 @@ class Migration(migrations.Migration):
             name='uuid',
             field=models.SlugField(default=kocherga.events.models.event.generate_uuid),
         ),
+        migrations.RunPython(populate_uuids, lambda x, y: None),
     ]

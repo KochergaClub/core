@@ -11,7 +11,6 @@ IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
     # "gitlab.models",
     "cm",
-    "events",
     "money.cashier",
     "money.ofd",
     "money.tochka",

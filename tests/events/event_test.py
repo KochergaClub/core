@@ -1,7 +1,6 @@
 import pytest
 pytestmark = [
     pytest.mark.usefixtures('db'),
-    pytest.mark.google,
 ]
 
 from datetime import datetime, timedelta, date
@@ -21,31 +20,21 @@ class TestEventConstructor:
         assert type(event) == Event
 
 
-class TestEventFromGoogle:
-    def test_from_google(self, google_object):
-        event = Event.from_google(google_object)
-        assert type(event) == Event
-
-    def test_from_google_datatypes(self, google_object):
-        event = Event.from_google(google_object)
-        assert type(event.created) == datetime
-        assert type(event.start) == datetime
-        assert type(event.end) == datetime
+def test_get_room(event):
+    assert event.get_room() == 'гэб'
 
 
-def test_get_room(google_object):
-    event = Event.from_google(google_object)
-    assert event.get_room() == 'летняя'
-
-
-def test_default_event_type(google_object):
-    event = Event.from_google(google_object)
+def test_default_event_type():
+    dt = datetime.now(TZ)
+    event = Event.objects.create(
+        start=dt,
+        end=dt + timedelta(hours=1),
+        title='test event',
+    )
     assert event.event_type == "unknown"
 
 
-def test_serialize(google_object):
-    event = Event.from_google(google_object)
-    event.save()
+def test_serialize(event):
     data = serializers.EventSerializer(event).data
     assert type(data['start']) == str
     assert data['posted_vk'] == ''
@@ -53,7 +42,7 @@ def test_serialize(google_object):
 
 
 class TestGetEvent:
-    def test_get(self, db, event, imported_events):
+    def test_get(self, db, event):
         e = Event.objects.get(pk=event.pk)
         assert e
         assert type(e) == Event
@@ -68,9 +57,7 @@ class TestGetEvent:
 
 
 class TestImages:
-    def test_get_images(self, google_object):
-        event = Event.from_google(google_object)
-
+    def test_get_images(self, event):
         assert event.get_images() is not None
 
     def test_add_image(self, event_for_edits, image_file):
@@ -85,10 +72,10 @@ class TestImages:
         assert event.image_file('default')
 
 
-def test_delete(google_object):
-    event = Event.from_google(dict(google_object, summary='лекция'))
+def test_delete(event):
     event.delete()
-    assert event.to_google()['status'] == 'cancelled'
+    event = Event.objects.get(pk=event.pk)
+    assert event.deleted is True
 
 
 class TestTags:

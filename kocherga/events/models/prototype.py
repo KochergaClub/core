@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 
 from django.db import models
 
-import kocherga.events.db
 from kocherga.dateutils import TZ
 from kocherga.images import image_storage
 
@@ -100,7 +99,7 @@ class EventPrototype(models.Model):
         return result
 
     def new_event(self, dt):
-        tmp_event = Event(
+        event = Event(
             start=dt,
             end=dt + timedelta(minutes=self.length),
             **{
@@ -109,7 +108,7 @@ class EventPrototype(models.Model):
             }
         )
 
-        event = kocherga.events.db.insert_event(tmp_event)
+        event.save()
 
         for prop in (
                 'summary',
