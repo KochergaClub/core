@@ -12,20 +12,45 @@ const useListeningWebSocket = (
     cbRef.current = onmessage;
   }, [onmessage]);
 
+  const closingRef = useRef(false);
+
   useEffect(() => {
     if (IS_SERVER || !window.WebSocket) {
       return;
     }
+
     const socketProtocol =
       window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const socket = new window.WebSocket(
-      `${socketProtocol}//${window.location.host}/${path}`
-    );
-    socket.onmessage = async (e: MessageEvent) => {
-      cbRef.current(e);
+    const url = `${socketProtocol}//${window.location.host}/${path}`;
+
+    let socket: WebSocket | undefined;
+    const RECONNECT_DELAY = 500;
+
+    const initSocket = () => {
+      socket = new window.WebSocket(url);
+
+      socket.onmessage = async (e: MessageEvent) => {
+        cbRef.current(e);
+      };
+      socket.onclose = () => {
+        setTimeout(() => {
+          if (closingRef.current) {
+            return;
+          }
+          initSocket();
+        }, RECONNECT_DELAY);
+      };
     };
 
-    return () => socket.close();
+    initSocket();
+
+    return () => {
+      if (!socket) {
+        return;
+      }
+      closingRef.current = true;
+      socket.close();
+    };
   }, [path]);
 };
 
