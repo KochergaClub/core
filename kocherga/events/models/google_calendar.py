@@ -11,6 +11,7 @@ import kocherga.room
 
 from kocherga.events.google import api as google_api
 from .google_event import GoogleEvent
+from .event import Event
 
 
 def event_to_google_dict(event):
@@ -19,9 +20,13 @@ def event_to_google_dict(event):
     if location.lower() in kocherga.room.all_rooms:
         location = kocherga.room.to_long_location(location)
 
+    description = kocherga.events.markup.Markup(event.description or '').as_plain()
+    if event.timepad_announcement.link:
+        description = event.timepad_announcement.link + "\n\n" + description
+
     result = {
         "summary": event.title,
-        "description": event.description,
+        "description": description,
         "location": location,
         "start": {"dateTime": dts(event.start)},
         "end": {"dateTime": dts(event.end)},
@@ -58,13 +63,17 @@ class GoogleCalendar(models.Model):
 
     def should_export(self, event) -> bool:
         if self.public_only:
-            # This condition is copy-pasted from Event.objects.public_events.
+            # This condition is adapted from Event.objects.public_events.
             return (
                 event.event_type == 'public'
-                and event.vk_announcement.link
+                and event.timepad_announcement.link
                 and event.start > datetime(2018, 6, 1, tzinfo=TZ)
             )
         return True
+
+    def export_all_events(self):
+        for event in Event.objects.all():
+            self.export_event(event)
 
     def export_event(self, event):
         google_dict = event_to_google_dict(event)
