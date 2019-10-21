@@ -159,7 +159,7 @@ def add_booking(date, room, people, start_time, end_time, email):
     # insert
     event = Event(
         title=f"Бронь {room}, {people} человек, {email}",
-        location=kocherga.room.to_long_location(room),
+        location=room,
         start=start_dt,
         end=end_dt,
         event_type='private',

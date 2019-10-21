@@ -238,23 +238,25 @@ class TestDeleteBooking:
             delete_booking(event.uuid, 'hack-somebody@example.com')
 
 
-class TestGoogle:
-    @pytest.mark.google
-    def test_attendees(self, test_google_calendar_id):
-        event = add_booking(
-            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
-            'гэб', 3,
-            '12:00', '12:30',
-            'somebody@example.com'
-        )
+@pytest.mark.google
+def test_google_export(test_google_calendar_id):
+    event = add_booking(
+        (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+        'гэб', 3,
+        '12:00', '12:30',
+        'somebody@example.com'
+    )
 
-        google_calendar = GoogleCalendar.objects.create(
-            calendar_id=test_google_calendar_id,
-            public_only=False,
-        )
-        google_calendar.export_event(event)
+    google_calendar = GoogleCalendar.objects.create(
+        calendar_id=test_google_calendar_id,
+        public_only=False,
+    )
+    google_calendar.export_event(event)
 
-        google_event = google_calendar.google_events.get(event=event)
-        attendees = google_event.load_google_data()['attendees']
-        assert len(attendees) == 1
-        assert attendees[0]['email'] == 'somebody@example.com'
+    google_event = google_calendar.google_events.get(event=event)
+    google_data = google_event.load_google_data()
+    attendees = google_data['attendees']
+    assert len(attendees) == 1
+    assert attendees[0]['email'] == 'somebody@example.com'
+    assert google_data['location'] == 'Антикафе Кочерга, комната ГЭБ'
+    assert event.location == 'ГЭБ'

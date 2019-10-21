@@ -7,16 +7,22 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 
 from kocherga.dateutils import dts, TZ
+import kocherga.room
 
 from kocherga.events.google import api as google_api
 from .google_event import GoogleEvent
 
 
 def event_to_google_dict(event):
+    location = event.location
+
+    if location.lower() in kocherga.room.all_rooms:
+        location = kocherga.room.to_long_location(location)
+
     result = {
         "summary": event.title,
         "description": event.description,
-        "location": event.location,
+        "location": location,
         "start": {"dateTime": dts(event.start)},
         "end": {"dateTime": dts(event.end)},
     }
