@@ -35,7 +35,7 @@ class EventTicketView(generics.ListCreateAPIView):
     def get_event(self):
         # TODO - support tickets for non-public events (with proper permissions handling)
         return models.Event.objects.public_events().get(
-            pk=self.get_event_id()
+            uuid=self.get_event_id()
         )
 
     def get_queryset(self):
@@ -52,7 +52,7 @@ class MyEventTicketView(
 ):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = serializers.EventTicketSerializer
-    lookup_field = 'event__pk'
+    lookup_field = 'event__uuid'
     lookup_url_kwarg = 'event_id'
 
     def get_queryset(self):
@@ -74,7 +74,7 @@ class MyEventTicketView(
     def perform_create(self, serializer):
         user = self.request.user
         event = models.Event.objects.public_events().get(
-            pk=self.kwargs['event_id']
+            uuid=self.kwargs[self.lookup_url_kwarg]
         )
 
         try:

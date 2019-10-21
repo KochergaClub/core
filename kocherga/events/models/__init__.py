@@ -3,6 +3,8 @@ from .prototype import EventPrototype, EventPrototypeTag
 from .weekly_digest import WeeklyDigest
 from .ticket import Ticket
 from .announcement import VkAnnouncement, FbAnnouncement, TimepadAnnouncement
+from .google_calendar import GoogleCalendar
+from .google_event import GoogleEvent
 
 __all__ = [
     'Event', 'Tag',
@@ -10,4 +12,5 @@ __all__ = [
     'WeeklyDigest',
     'Ticket',
     'VkAnnouncement', 'FbAnnouncement', 'TimepadAnnouncement',
+    'GoogleCalendar', 'GoogleEvent',
 ]

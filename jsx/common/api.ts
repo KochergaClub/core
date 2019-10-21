@@ -2,11 +2,6 @@ import { IS_SERVER } from './utils';
 
 const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
 
-interface WebSocket {
-  onmessage: (e: MessageEvent) => void;
-  close: () => void;
-}
-
 declare global {
   interface Window {
     WebSocket: {

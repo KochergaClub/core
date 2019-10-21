@@ -1,7 +1,9 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from dateutil.tz import tzutc
+import base64
+import uuid
+
 import dateutil.parser
 from datetime import datetime, time
 
@@ -11,9 +13,7 @@ import channels.layers
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
-from django.dispatch import receiver
 
-import reversion.signals
 
 from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 
@@ -21,7 +21,6 @@ from kocherga.images import image_storage
 import kocherga.room
 from kocherga.error import PublicError
 
-import kocherga.events.google
 import kocherga.events.markup
 
 from kocherga.timepad.models import Event as TimepadEvent
@@ -40,11 +39,13 @@ def ts_now():
 
 class EventManager(models.Manager):
     def notify_update(self):
-        async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'events_group', {
-                'type': 'notify.update',
-            }
-        )
+        def send_update():
+            async_to_sync(channels.layers.get_channel_layer().group_send)(
+                'events_group', {
+                    'type': 'notify.update',
+                }
+            )
+        transaction.on_commit(send_update)
 
     def list_events(
         self,
@@ -82,7 +83,7 @@ class EventManager(models.Manager):
         query = (
             query
             .filter(event_type = 'public')
-            .exclude(vk_announcement__link = '')
+            .exclude(vk_announcement__link = '')  # public events can contain raw description initially
             .filter(start__gte = datetime(2018, 6, 1))  # earlier events are not cleaned up yet
         )
 
@@ -90,6 +91,10 @@ class EventManager(models.Manager):
             query = query.filter(tags__name = tag)
 
         return query
+
+
+def generate_uuid():
+    return base64.b32encode(uuid.uuid4().bytes)[:26].lower().decode('ascii')
 
 
 class Event(models.Model):
@@ -100,8 +105,10 @@ class Event(models.Model):
 
     objects = EventManager()
 
-    google_id = models.CharField(max_length=100, primary_key=True)
-    google_link = models.CharField(max_length=1024)
+    uuid = models.SlugField(default=generate_uuid, unique=True)
+
+    google_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    google_link = models.CharField(max_length=1024, blank=True)
 
     start = models.DateTimeField()
     end = models.DateTimeField()
@@ -111,10 +118,12 @@ class Event(models.Model):
 
     creator = models.CharField(max_length=255, null=True, blank=True)
 
+    invite_creator = models.BooleanField(default=False)
+
     title = models.CharField(max_length=255)
 
     # Not a google_event.summary!
-    # We don't store this field on google at all. This is for the short schedule/timepad/email summaries.
+    # This is for the short schedule/timepad/email summaries.
     summary = models.TextField(blank=True)
 
     description = models.TextField(blank=True)
@@ -161,27 +170,6 @@ class Event(models.Model):
 
     def __str__(self):
         return f'{timezone.localtime(self.start)} - {self.title}'
-
-    @classmethod
-    def by_id(cls, event_id):
-        return Event.objects.get(pk=event_id)
-
-    @classmethod
-    def from_google(cls, google_event):
-        obj = cls(
-            created=parse_iso8601(google_event["created"]),
-            updated=parse_iso8601(google_event["updated"]),
-            creator=google_event["creator"].get("email", "UNKNOWN"),
-            title=google_event.get("summary", ""),
-            description=google_event.get("description", ""),
-            start=parse_iso8601(google_event["start"]["dateTime"]),
-            end=parse_iso8601(google_event["end"]["dateTime"]),
-            location=google_event.get("location", ""),
-            google_id=google_event["id"],
-            google_link=google_event["htmlLink"],
-        )
-
-        return obj
 
     def get_room(self):
         maybe_long_location = kocherga.room.from_long_location(self.location)
@@ -262,33 +250,9 @@ class Event(models.Model):
         )
 
     # overrides django method, but that's probably ok
-    def delete(self, update_google=True):
+    def delete(self):
         self.deleted = True
-        if update_google:
-            self.patch_google()
         self.save()
-
-    def to_google(self):
-        def convert_dt(dt):
-            return dt.astimezone(tzutc()).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-
-        result = {
-            "created": convert_dt(self.created),
-            "updated": convert_dt(self.updated),
-            "creator": {"email": self.creator},
-            "summary": self.title,
-            "description": self.description,
-            "location": self.location,
-            "start": {"dateTime": convert_dt(self.start)},
-            "end": {"dateTime": convert_dt(self.end)},
-        }
-        if self.deleted:
-            result['status'] = 'cancelled'
-        return result
-
-    def patch_google(self):
-        logger.info("Saving to google")
-        kocherga.events.google.patch_event(self.google_id, self.to_google())
 
     def tag_names(self):
         return [
@@ -304,15 +268,6 @@ class Event(models.Model):
     def delete_tag(self, tag_name):
         self.tags.get(name=tag_name).delete()
 
-    def set_attendees(self, attendees):
-        # Attendees not stored anywhere yet - used in .booking to pass to google.
-        # TODO: store attendees in related event_attendees table.
-        self._attendees = attendees
-
-    @property
-    def attendees(self):
-        return getattr(self, '_attendees', [])
-
     def timepad_event(self):
         timepad_link = self.timepad_announcement.link
         if not timepad_link:
@@ -323,8 +278,6 @@ class Event(models.Model):
     def registered_users(self):
         """
         Uses timepad to determine who registered to the event.
-
-        Unrelated to the `Event.attendees` method.
         """
 
         timepad_event = self.timepad_event()
@@ -345,23 +298,3 @@ class Tag(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='tags')
 
     name = models.CharField(max_length=40)
-
-
-@receiver(reversion.signals.post_revision_commit)
-def cb_flush_new_revisions(sender, revision, versions, **kwargs):
-    logger.info('Checking for new event revisions')
-    channel_layer = channels.layers.get_channel_layer()
-
-    def flush_after_commit():
-        for version in versions:
-            if version.content_type.model_class() == Event:
-                logger.info('Notifying about new event revisions')
-                async_to_sync(channel_layer.send)("events-slack-notify", {
-                    "type": "notify_by_version",
-                    "version_id": version.pk,
-                })
-                break
-
-    # We use ATOMIC_REQUESTS, so we shouldn't notify the worker until transaction commits.
-    # Otherwise the worker could query the DB too early and won't find the version object.
-    transaction.on_commit(flush_after_commit)

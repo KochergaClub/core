@@ -5,3 +5,6 @@ kocherga/django/settings/*secrets.py
 **/*.pyc
 static/dist
 jsx/.next
+data
+htmlcov
+coverage

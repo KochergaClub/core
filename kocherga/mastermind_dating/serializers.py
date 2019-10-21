@@ -10,7 +10,7 @@ class CohortSerializer(serializers.ModelSerializer):
         model = models.Cohort
         fields = ('id', 'event_id', 'event_title', 'event_start', 'leader_telegram_uid')
 
-    event_id = serializers.CharField(source='event.pk', required=False, read_only=True)
+    event_id = serializers.CharField(source='event.uuid', required=False, read_only=True)
     event_title = serializers.CharField(source='event.title', required=False, read_only=True)
     event_start = serializers.DateTimeField(source='event.start', required=False, read_only=True)
 

@@ -177,7 +177,7 @@ def visitors_attachment(event):
         "title_link": event.google_link,
         "color": event_color(event),
         "mrkdwn_in": ["text"],
-        "callback_id": f"event_visitors/{event.google_id}/reset",
+        "callback_id": f"event_visitors/{event.uuid}/reset",
         "actions": [
             {
                 "name": "reset",
@@ -228,7 +228,7 @@ def event_visitors_question(event):
                 "title": event.title,
                 "title_link": event.google_link,
                 "color": event_color(event),
-                "callback_id": f"event_visitors/{event.google_id}",
+                "callback_id": f"event_visitors/{event.uuid}",
                 "actions": [
                     {
                         "name": "visitors",
@@ -284,8 +284,8 @@ def ask_for_event_visitors():
 
 
 @bot.action(r"event_visitors/(.*)/reset")
-def reset_event_visitors(payload, event_id):
-    event = Event.objects.get(pk=event_id)
+def reset_event_visitors(payload, event_uuid):
+    event = Event.objects.get(uuid=event_uuid)
     event.visitors = None
     event.save()
 
@@ -293,7 +293,7 @@ def reset_event_visitors(payload, event_id):
 
 
 @bot.action(r"event_visitors/(.*)/submit/(.*)")
-def submit_event_visitors_dialog(payload, event_id, original_message_path):
+def submit_event_visitors_dialog(payload, event_uuid, original_message_path):
     (original_message_id, original_channel_id) = original_message_path.split('@')
     assert payload["type"] == "dialog_submission"
 
@@ -309,7 +309,7 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
             ]
         }
 
-    event = Event.objects.get(pk=event_id)
+    event = Event.objects.get(uuid=event_uuid)
     event.visitors = value
     event.save()
 
@@ -331,15 +331,16 @@ def submit_event_visitors_dialog(payload, event_id, original_message_path):
 
 
 @bot.action(r"event_visitors/(.*)")
-def accept_event_visitors(payload, event_id):
+def accept_event_visitors(payload, event_uuid):
     value = payload["actions"][0]["value"]
 
     if value == 'dialog':
+        callback_id = f"event_visitors/{event_uuid}/submit/{payload['message_ts']}@{payload['channel']['id']}"
         response = bot.sc.api_call(
             'dialog.open',
             trigger_id=payload["trigger_id"],
             dialog={
-                "callback_id": f"event_visitors/{event_id}/submit/{payload['message_ts']}@{payload['channel']['id']}",
+                "callback_id": callback_id,
                 "title": "Статистика мероприятия",
                 "submit_label": "Сохранить",
                 "elements": [
@@ -359,7 +360,7 @@ def accept_event_visitors(payload, event_id):
 
         return
 
-    event = Event.objects.get(pk=event_id)
+    event = Event.objects.get(uuid=event_uuid)
 
     if value == 'no_record':
         event.visitors = 'no_record'

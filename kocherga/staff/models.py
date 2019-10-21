@@ -162,8 +162,6 @@ class Member(models.Model):
         if not self.is_current:
             raise Exception("Only current users can get google permissions")
 
-        calendar = kocherga.google.service("calendar")
-
         email = None
         for e in [self.user.email] + [a.email for a in self.alt_emails.all()]:
             if e.endswith('@gmail.com'):
@@ -171,18 +169,6 @@ class Member(models.Model):
                 break
         else:
             raise Exception("Only @gmail.com users can get google permissions")
-
-        calendar.acl().insert(
-            calendarId=settings.KOCHERGA_GOOGLE_CALENDAR_ID,
-            body={
-                'role': 'writer',
-                'scope': {
-                    'type': 'user',
-                    'value': email,
-                }
-            },
-        ).execute()
-        logger.info(f"Granted calendar permissions to {email}")
 
         gdrive = kocherga.google.service('drive')
         gdrive.permissions().create(

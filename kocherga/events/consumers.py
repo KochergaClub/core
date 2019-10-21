@@ -9,9 +9,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from channels.generic.websocket import SyncConsumer, WebsocketConsumer
 from reversion.models import Version
 
-from kocherga.dateutils import humanize_date
+from kocherga.dateutils import humanize_date, dts
 
-from .models import Event
+from .models import Event, GoogleCalendar
 
 
 class UpdatesWebsocketConsumer(WebsocketConsumer):
@@ -77,3 +77,22 @@ class NotifySlackConsumer(SyncConsumer):
             "text": f'{text} ({user_text})',
             "attachments": attachments,
         })
+
+
+class GoogleExportConsumer(SyncConsumer):
+    def event_to_google(self, event):
+        return {
+            "summary": event.title,
+            "description": event.description,
+            "location": event.location,
+            "start": {"dateTime": dts(event.start)},
+            "end": {"dateTime": dts(event.end)},
+        }
+
+    def export_event(self, message):
+        event_pk = message['event_pk']
+        event = Event.objects.get(pk=event_pk)
+
+        for google_calendar in GoogleCalendar.objects.all():
+            # TODO - try/catch?
+            google_calendar.export_event(event)

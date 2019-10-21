@@ -4,54 +4,65 @@ pytestmark = [
     pytest.mark.google,  # events require google for now (don't forget to remove this later)
 ]
 
+from datetime import datetime, timedelta
+
+from kocherga.dateutils import TZ
+
 from kocherga.events.models import Event
 
 
-def test_events(admin_client, imported_events):
+def test_events(admin_client, common_events):
     res = admin_client.get('/api/events')
     assert res.status_code == 200
     events = res.json()
 
-    assert len(events) > 5
-
-    assert '2017' in events[0]['start']
+    assert len(events) > 3
 
 
-def test_events_from_date(admin_client, imported_events):
+def test_events_from_date(admin_client, common_events):
+    dt = datetime(2017, 5, 1, tzinfo=TZ)
+    Event.objects.create(
+        start=dt,
+        end=dt + timedelta(hours=1),
+        title='old event',
+    )
+
     res = admin_client.get(
-        '/api/events?from_date=2018-01-01&to_date=2018-01-14',
+        '/api/events?from_date=2017-01-01&to_date=2018-01-01',
     )
     assert res.status_code == 200
     events = res.json()
 
-    assert len(events) > 5
+    assert len(events) == 1
 
-    assert '2018' in events[0]['start']
+    assert '2017' in events[0]['start']
 
 
 def test_upload_image(admin_client, image_storage, event):
     res = admin_client.post(
-        f'/api/event/{event.google_id}/image/vk',
+        f'/api/event/{event.uuid}/image/vk',
         {
             'file': open('tests/images/vk', 'rb'),
         },
     )
 
-    assert b'JFIF' in open(Event.by_id(event.google_id).image_file('vk'), 'rb').read()[:10]
+    event.refresh_from_db()
+    assert b'JFIF' in open(event.image_file('vk'), 'rb').read()[:10]
 
     assert res.status_code == 200
 
 
 def test_upload_image_from_url(admin_client, image_storage, event):
     res = admin_client.post(
-        f'/api/event/{event.google_id}/image_from_url/default',
+        f'/api/event/{event.uuid}/image_from_url/default',
         {
             'url': 'https://wiki.admin.kocherga.club/resources/assets/kch.png',
         },
         format='json',
     )
 
-    assert b'PNG' in open(Event.by_id(event.google_id).image_file('default'), 'rb').read()[:10]
+    event.refresh_from_db()
+    assert b'PNG' in open(event.image_file('default'), 'rb').read()[:10]
 
     assert res.status_code == 200
 
@@ -95,7 +106,7 @@ def test_public_events(client):
 
 def test_add_tag(event, admin_client):
     res = admin_client.post(
-        f'/api/event/{event.google_id}/tag/mytag',
+        f'/api/event/{event.uuid}/tag/mytag',
     )
     assert res.status_code == 200
     event.refresh_from_db()
@@ -104,7 +115,7 @@ def test_add_tag(event, admin_client):
 
 def test_retrieve(event, admin_client):
     res = admin_client.get(
-        f'/api/event/{event.google_id}',
+        f'/api/event/{event.uuid}',
     )
     assert res.status_code == 200
     assert res.json()['title'] == event.title
@@ -112,7 +123,7 @@ def test_retrieve(event, admin_client):
 
 def test_update(event, admin_client):
     res = admin_client.patch(
-        f'/api/event/{event.google_id}',
+        f'/api/event/{event.uuid}',
         {
             'title': 'updated title',
         },
@@ -121,12 +132,12 @@ def test_update(event, admin_client):
     assert res.status_code == 200
     assert res.json()['title'] == 'updated title'
 
-    assert Event.objects.get(pk=event.google_id).title == 'updated title'
+    assert Event.objects.get(pk=event.pk).title == 'updated title'
 
 
 def test_update_announcement_field(event, admin_client):
     res = admin_client.patch(
-        f'/api/event/{event.google_id}',
+        f'/api/event/{event.uuid}',
         {
             'vk_group': 'some_group',
         },
@@ -135,15 +146,15 @@ def test_update_announcement_field(event, admin_client):
     assert res.status_code == 200
     assert res.json()['vk_group'] == 'some_group'
 
-    assert Event.objects.get(pk=event.google_id).vk_announcement.group == 'some_group'
+    assert Event.objects.get(pk=event.pk).vk_announcement.group == 'some_group'
 
 
 def test_forbidden_update(event, admin_client):
     admin_client.patch(
-        f'/api/event/{event.google_id}',
+        f'/api/event/{event.uuid}',
         {
             'prototype_id': 123,
         },
         format='json',
     )
-    assert Event.objects.get(pk=event.google_id).prototype_id is None
+    assert Event.objects.get(pk=event.pk).prototype_id is None

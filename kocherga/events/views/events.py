@@ -20,7 +20,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny
 
 from kocherga.error import PublicError
 
-import kocherga.events.db
+import kocherga.events.helpers
 from kocherga.events.models import Event
 from kocherga.events import serializers
 
@@ -32,6 +32,7 @@ class RootView(generics.ListCreateAPIView):
     serializer_class = serializers.EventSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('title',)
+    lookup_field = 'uuid'
 
     def get_queryset(self):
         def arg2date(arg):
@@ -89,6 +90,7 @@ class ObjectView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.EventSerializer
     queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
     lookup_url_kwarg = 'event_id'
+    lookup_field = 'uuid'
 
 
 class ImageView(APIView):
@@ -103,7 +105,7 @@ class ImageView(APIView):
         if f.name == "":
             raise PublicError("No filename")
 
-        event = Event.by_id(event_id)
+        event = Event.objects.get(uuid=event_id)
 
         if image_type == 'vk':
             logger.warning('image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead')
@@ -116,7 +118,7 @@ class ImageView(APIView):
     def get(self, request, event_id, image_type):
         return FileResponse(
             open(
-                Event.by_id(event_id).image_file(image_type),
+                Event.objects.get(uuid=event_id).image_file(image_type),
                 'rb'
             )
         )
@@ -131,7 +133,7 @@ class ImageFromUrlView(APIView):
         url = payload["url"]
         r = requests.get(url)
 
-        event = Event.by_id(event_id)
+        event = Event.objects.get(uuid=event_id)
         fh = BytesIO(r.content)
         event.add_image(image_type, fh)
 
@@ -142,13 +144,13 @@ class TagView(APIView):
     permission_classes = (IsAdminUser,)
 
     def post(self, request, event_id, tag_name):
-        event = Event.by_id(event_id)
+        event = Event.objects.get(uuid=event_id)
         event.add_tag(tag_name)
 
         return Response(ok)
 
     def delete(self, request, event_id, tag_name):
-        event = Event.by_id(event_id)
+        event = Event.objects.get(uuid=event_id)
         event.delete_tag(tag_name)
 
         return Response(ok)
@@ -157,6 +159,7 @@ class TagView(APIView):
 class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
     serializer_class = serializers.PublicEventSerializer
+    lookup_field = 'uuid'
 
     def get_queryset(self):
         def arg2date(arg):
@@ -213,7 +216,7 @@ def r_list_public_atom(request):
     )
 
     for event in reversed(events.all()):
-        # fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.google_id}')
+        # fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.uuid}')
         fg.add_item(
             title=event.title,
             link=event.vk_announcement.link,

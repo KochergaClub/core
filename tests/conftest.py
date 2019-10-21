@@ -5,41 +5,12 @@ from django.contrib.auth import get_user_model
 from kocherga.staff.models import Member, AltEmail
 
 
-import googleapiclient.errors
-
 from pathlib import Path
 from datetime import datetime, timedelta
 
 from kocherga.events.models import Event, EventPrototype
-import kocherga.events.db
-import kocherga.events.importer
 import kocherga.images
 from kocherga.dateutils import TZ
-
-
-@pytest.fixture
-def google_object():
-    obj = {
-        'created': '2017-09-01T17:59:38.000Z',
-        'updated': '2017-10-01T18:00:00.000Z',
-        'creator': {'email': 'mmcleric@gmail.com'},
-        'summary': 'бронь итальянский',
-        'location': 'летняя',
-        'start': {
-            'dateTime': '2017-12-10T10:30:00+03:00',
-        },
-        'end': {
-            'dateTime': '2017-12-10T12:30:00+03:00',
-        },
-    }
-
-    obj = kocherga.events.google.insert_event(obj)
-    yield obj
-
-    try:
-        kocherga.events.google.delete_event(obj)
-    except googleapiclient.errors.HttpError:
-        pass  # might be deleted already
 
 
 @pytest.fixture(scope='session')
@@ -74,7 +45,7 @@ def event(image_file, vk_image_file):
         location='ГЭБ',
         event_type='public',
     )
-    event = kocherga.events.db.insert_event(event)
+    event.save()
 
     event.vk_announcement.group = 'event159971736'
     event.vk_announcement.save()
@@ -87,12 +58,9 @@ def event(image_file, vk_image_file):
     with open(image_file, 'rb') as fh:
         event.add_image('default', fh)
 
-    # session can be reset after the test, so we need to store this and don't reference our event after the yield
-    event_id = event.google_id
-
     yield event
 
-    kocherga.events.db.delete_event(event_id)
+    event.delete()
 
 
 @pytest.fixture
@@ -111,11 +79,11 @@ def minimal_event():
         end=dt + timedelta(hours=1),
         title="бронь Летняя",
     )
-    event = kocherga.events.db.insert_event(event)
+    event.save()
 
     yield event
 
-    kocherga.events.db.delete_event(event.google_id)
+    event.delete()
 
 
 @pytest.fixture
@@ -129,15 +97,22 @@ def event_for_edits():
         title="title doesn't matter",
         description="description doesn't matter"
     )
-    event = kocherga.events.db.insert_event(event)
+    event.save()
+
     yield event
 
-    kocherga.events.db.delete_event(event.google_id)
+    event.delete()
 
 
 @pytest.fixture
-def imported_events(db, transactional_db):
-    kocherga.events.importer.Importer().import_all()
+def common_events(db):
+    for i in range(5):
+        dt = datetime.now(TZ) + timedelta(days=i)
+        Event.objects.create(
+            start=dt,
+            end=dt + timedelta(hours=1),
+            title='test event',
+        )
 
 
 @pytest.fixture

@@ -1,27 +1,56 @@
 import pytest
-pytestmark = pytest.mark.google
+pytestmark = [
+    pytest.mark.usefixtures('db'),
+    pytest.mark.google,
+]
 
-import datetime
-
-import kocherga.events.google
-
-
-class TestGet:
-    def test_get(self):
-        e = kocherga.events.google.get_event("63hhg4l8a6gkejpfaqfkbigape")
-        assert e
-        assert type(e) == dict
-
-    def test_get_unknown(self):
-        with pytest.raises(Exception):  # TODO - special exception for EventNotFound
-            kocherga.events.google.get_event("abcdef")
+from kocherga.events.models import GoogleCalendar, GoogleEvent
 
 
-class TestList:
-    def test_list_all(self):
-        events = kocherga.events.google.list_events(
-            from_date=datetime.date(2015, 1, 1),
-            to_date=datetime.date(2020, 1, 1)
+class TestExport:
+    def test_export_once(self, event, test_google_calendar_id):
+        google_calendar = GoogleCalendar.objects.create(
+            calendar_id=test_google_calendar_id,
+            public_only=False,
         )
-        assert type(events) == list
-        assert len(events) > 300
+
+        google_calendar.export_event(event)
+
+        google_events = list(GoogleEvent.objects.all())
+        assert len(google_events) == 1
+        assert google_events[0].google_calendar == google_calendar
+        assert google_events[0].event == event
+
+    def test_export_twice(self, event, test_google_calendar_id):
+        google_calendar = GoogleCalendar.objects.create(
+            calendar_id=test_google_calendar_id,
+            public_only=False,
+        )
+
+        google_calendar.export_event(event)
+
+        event.refresh_from_db()
+        google_calendar.export_event(event)
+
+        google_events = list(GoogleEvent.objects.all())
+        assert len(google_events) == 1
+        google_event = google_events[0]
+        assert google_event.google_calendar == google_calendar
+        assert google_event.event == event
+
+        # no accidental invites
+        # (compare with booking test and see Event.invite_creator for details)
+        assert 'attendees' not in google_event.load_google_data()
+
+    def test_export_to_public(self, event, test_google_calendar_id):
+        google_calendar = GoogleCalendar.objects.create(
+            calendar_id=test_google_calendar_id,
+        )
+
+        google_calendar.export_event(event)
+
+        event.refresh_from_db()
+        google_calendar.export_event(event)
+
+        google_events = list(GoogleEvent.objects.all())
+        assert len(google_events) == 0  # event doesn't have vk announcement so it won't be exported
