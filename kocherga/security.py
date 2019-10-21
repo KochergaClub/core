@@ -1,9 +1,7 @@
-# Audit staff access permissions.
+"""Audit staff access permissions."""
 
 import logging
 logger = logging.getLogger(__name__)
-
-from django.conf import settings
 
 from termcolor import colored
 
