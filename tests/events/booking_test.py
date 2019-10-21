@@ -134,7 +134,7 @@ class TestAddBooking:
         )
 
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
-        assert event.location == 'Антикафе Кочерга, комната ГЭБ'
+        assert event.location == 'ГЭБ'
         assert event.event_type == 'private'
         assert event.start.hour == 12  # correct timezone
         assert event.creator == 'somebody@example.com'
