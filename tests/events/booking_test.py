@@ -1,13 +1,12 @@
 import pytest
 pytestmark = [
     pytest.mark.django_db(transaction=True),
-    pytest.mark.google,
 ]
 
 from datetime import datetime, timedelta
 
 from kocherga.events.booking import Booking, add_booking, delete_booking, day_bookings, check_availability
-from kocherga.events.models import Event
+from kocherga.events.models import Event, GoogleCalendar
 from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 
@@ -49,19 +48,19 @@ class TestDayBookings:
 
     def test_returns_all(self):
         d = datetime.now(TZ) + timedelta(days=1)
-        e1 = add_booking(
+        add_booking(
             d.strftime('%Y-%m-%d'),
             'гэб', 3,
             '12:00', '12:30',
             'first@example.com'
         )
-        e2 = add_booking(
+        add_booking(
             d.strftime('%Y-%m-%d'),
             'гэб', 3,
             '13:00', '13:30',
             'second@example.com'
         )
-        e3 = add_booking(
+        add_booking(
             (d + timedelta(days=1)).strftime('%Y-%m-%d'),
             'гэб', 3,
             '13:00', '13:30',
@@ -69,11 +68,6 @@ class TestDayBookings:
         )
         result = day_bookings(d)
         assert len(result) == 2
-
-        # cleanups
-        delete_booking(e1.uuid, 'first@example.com')
-        delete_booking(e2.uuid, 'second@example.com')
-        delete_booking(e3.uuid, 'other@example.com')
 
 
 class TestCheckAvailability:
@@ -139,13 +133,11 @@ class TestAddBooking:
             'somebody@example.com'
         )
 
-        # cleanup
-        event.delete()
-
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
         assert event.location == 'Антикафе Кочерга, комната ГЭБ'
         assert event.event_type == 'private'
         assert event.start.hour == 12  # correct timezone
+        assert event.creator == 'somebody@example.com'
 
     def test_add_booking_midnight(self):
         event = add_booking(
@@ -154,9 +146,6 @@ class TestAddBooking:
             '23:00', '24:00',
             'somebody@example.com'
         )
-
-        # cleanup
-        event.delete()
 
         assert event.title == 'Бронь ГЭБ, 3 человек, somebody@example.com'
 
@@ -177,10 +166,6 @@ class TestAddBooking:
         assert event1.title == 'Бронь ГЭБ, 3 человек, somebody1@example.com'
         assert event2.title == 'Бронь ГЭБ, 3 человек, somebody2@example.com'
 
-        # cleanup
-        for event in (event1, event2):
-            event.delete()
-
     def test_add_booking_unknown(self):
         with pytest.raises(PublicError, match='Unknown room'):
             add_booking(
@@ -200,7 +185,7 @@ class TestAddBooking:
             )
 
     def test_add_duplicate(self):
-        event = add_booking(
+        add_booking(
             (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
             'гэб', 3,
             '12:00', '12:30',
@@ -213,9 +198,6 @@ class TestAddBooking:
                 '12:00', '12:30',
                 'somebody@example.com'
             )
-
-        # cleanup
-        event.delete()
 
 
 class TestDeleteBooking:
@@ -244,9 +226,6 @@ class TestDeleteBooking:
         with pytest.raises(PublicError, match='Access denied'):
             delete_booking(event.uuid, 'hacker@example.com')
 
-        # cleanup
-        delete_booking(event.uuid, 'somebody@example.com')
-
     def test_delete_booking_prefix_access(self):
         event = add_booking(
             (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
@@ -258,5 +237,24 @@ class TestDeleteBooking:
         with pytest.raises(PublicError, match='Access denied'):
             delete_booking(event.uuid, 'hack-somebody@example.com')
 
-        # cleanup
-        delete_booking(event.uuid, 'somebody@example.com')
+
+class TestGoogle:
+    @pytest.mark.google
+    def test_attendees(self, test_google_calendar_id):
+        event = add_booking(
+            (datetime.now(TZ) + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'гэб', 3,
+            '12:00', '12:30',
+            'somebody@example.com'
+        )
+
+        google_calendar = GoogleCalendar.objects.create(
+            calendar_id=test_google_calendar_id,
+            public_only=False,
+        )
+        google_calendar.export_event(event)
+
+        google_event = google_calendar.google_events.get(event=event)
+        attendees = google_event.load_google_data()['attendees']
+        assert len(attendees) == 1
+        assert attendees[0]['email'] == 'somebody@example.com'

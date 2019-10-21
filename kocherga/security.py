@@ -9,7 +9,8 @@ from termcolor import colored
 
 import kocherga.staff.tools
 import kocherga.wiki
-import kocherga.google
+import kocherga.events.models
+import kocherga.events.google
 
 
 def report_excess(message):
@@ -76,29 +77,33 @@ def audit_slack():
 
 def audit_calendar():
     logger.info("Audit calendar permissions")
-    calendar = kocherga.google.service("calendar")
-    acl = calendar.acl().list(calendarId=settings.KOCHERGA_GOOGLE_CALENDAR_ID).execute()
+    private_google_calendars = kocherga.events.models.GoogleCalendar.objects.filter(public_only=False)
+    api = kocherga.events.google.api()
 
-    email2role = {}
-    for item in acl["items"]:
-        email = item["scope"]["value"].lower()
-        if email.endswith(".gserviceaccount.com") or email.endswith(
-            ".calendar.google.com"
-        ):
-            continue
+    for google_calendar in private_google_calendars:
+        acl = api.acl().list(calendarId=google_calendar.calendar_id).execute()
 
-        role = item["role"]
+        email2role = {}
+        for item in acl["items"]:
+            email = item["scope"]["value"].lower()
+            if email.endswith(".gserviceaccount.com") or email.endswith(
+                ".calendar.google.com"
+            ):
+                continue
 
-        email2role[email] = role
+            role = item["role"]
 
-    email2member = {}
-    for m in kocherga.staff.tools.members():
-        email2member[m.email] = m
+            email2role[email] = role
 
-    for email in set(email2role.keys()) - set(email2member.keys()):
-        report_excess(
-            f"Extra user with the {email2role[email]} calendar access: {email}"
-        )
+        email2member = {}
+        for m in kocherga.staff.tools.members():
+            email2member[m.email] = m
 
-    for email in set(email2member.keys()) - set(email2role.keys()):
-        report_shortage(f"No calendar access: {email}")
+        for email in set(email2role.keys()) - set(email2member.keys()):
+            report_excess(
+                f"Extra user with the {email2role[email]} access to calendar {google_calendar.pk}: {email}"
+            )
+
+        for email in set(email2member.keys()) - set(email2role.keys()):
+            pass  # shortage doesn't matter - staff doesn't need private google calendar anymore
+            # report_shortage(f"No calendar access: {email}")

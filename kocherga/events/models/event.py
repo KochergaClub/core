@@ -121,6 +121,8 @@ class Event(models.Model):
 
     creator = models.CharField(max_length=255, null=True, blank=True)
 
+    invite_creator = models.BooleanField(default=False)
+
     title = models.CharField(max_length=255)
 
     # Not a google_event.summary!
@@ -269,15 +271,6 @@ class Event(models.Model):
     def delete_tag(self, tag_name):
         self.tags.get(name=tag_name).delete()
 
-    def set_attendees(self, attendees):
-        # Attendees not stored anywhere yet - used in .booking to pass to google.
-        # TODO: store attendees in related event_attendees table.
-        self._attendees = attendees
-
-    @property
-    def attendees(self):
-        return getattr(self, '_attendees', [])
-
     def timepad_event(self):
         timepad_link = self.timepad_announcement.link
         if not timepad_link:
@@ -288,8 +281,6 @@ class Event(models.Model):
     def registered_users(self):
         """
         Uses timepad to determine who registered to the event.
-
-        Unrelated to the `Event.attendees` method.
         """
 
         timepad_event = self.timepad_event()

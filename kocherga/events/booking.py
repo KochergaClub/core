@@ -163,8 +163,9 @@ def add_booking(date, room, people, start_time, end_time, email):
         start=start_dt,
         end=end_dt,
         event_type='private',
+        creator=email,
+        invite_creator=True,
     )
-    event.set_attendees([email])
 
     event.save()
     return event

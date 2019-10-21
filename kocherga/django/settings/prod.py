@@ -56,8 +56,6 @@ logging.config.dictConfig({
 # Kocherga settings
 KOCHERGA_WATCHMEN_SPREADSHEET_KEY = '1hOdxVC3d7O9gziOLNLz2OPV_lkw0hf0_6jA5L7FA844'
 
-KOCHERGA_GOOGLE_CALENDAR_ID = 'lv3963udctvoh944c7dlik5td4@group.calendar.google.com'
-
 KOCHERGA_MAILCHIMP_MAIN_LIST_ID = 'd73cd4de36'
 KOCHERGA_MAILCHIMP_DATACENTER = 'us11'
 

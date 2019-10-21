@@ -7,23 +7,25 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 
 from kocherga.dateutils import dts, TZ
-import kocherga.google
 
+from kocherga.events.google import api as google_api
 from .google_event import GoogleEvent
 
 
-def google_api():
-    return kocherga.google.service("calendar")
-
-
 def event_to_google_dict(event):
-    return {
+    result = {
         "summary": event.title,
         "description": event.description,
         "location": event.location,
         "start": {"dateTime": dts(event.start)},
         "end": {"dateTime": dts(event.end)},
     }
+    if event.invite_creator:
+        # TODO - this could lead to multiple invites if we create several full calendars.
+        # Need to figure out how to avoid such problem.
+        result['attendees'] = [{"email": event.creator}]
+
+    return result
 
 
 class GoogleCalendarManager(models.Manager):
@@ -44,6 +46,9 @@ class GoogleCalendar(models.Model):
     public_only = models.BooleanField(default=True)
 
     objects = GoogleCalendarManager()
+
+    def __str__(self):
+        return self.calendar_id + (' (public)' if self.public_only else ' (private)')
 
     def should_export(self, event) -> bool:
         if self.public_only:
@@ -82,6 +87,7 @@ class GoogleCalendar(models.Model):
 
         except GoogleEvent.DoesNotExist:
             if not should_export:
+                logger.info(f"Shouldn't export {event.pk} to {self.pk}")
                 return
 
             logger.info(f'Inserting event {event.pk}')
