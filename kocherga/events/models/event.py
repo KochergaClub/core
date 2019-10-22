@@ -253,6 +253,7 @@ class Event(models.Model):
     def delete(self):
         self.deleted = True
         self.save()
+        Event.objects.notify_update()
 
     def tag_names(self):
         return [
