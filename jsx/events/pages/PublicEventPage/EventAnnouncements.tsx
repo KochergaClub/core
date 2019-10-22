@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { A } from '@kocherga/frontkit';
 
-import { AnnouncementKey, PublicEvent } from '../../types';
+import { AnnouncementKey, PublicEvent } from '~/events/types';
 
 const AnnouncementsContainer = styled.div`
   text-align: center;

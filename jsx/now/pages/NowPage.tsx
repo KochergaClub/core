@@ -6,7 +6,7 @@ import baseStyled, {
   ThemeProvider,
 } from 'styled-components';
 
-import { NextPage } from 'next';
+import { NextPage } from '~/common/types';
 
 import Page from '~/components/Page';
 
@@ -233,6 +233,16 @@ const NowPage: NextPage<Props> = props => {
       </ThemeProvider>
     </Page>
   );
+};
+
+NowPage.getInitialProps = async ({ query, store: { dispatch } }) => {
+  let theme: ThemeName = 'default';
+  if (query.theme === 'tv') {
+    theme = query.theme;
+  }
+  await dispatch(loadNowData());
+
+  return { theme };
 };
 
 export default NowPage;
