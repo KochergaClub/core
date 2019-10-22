@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 
 import styled from 'styled-components';
 
+import { FaExternalLinkAlt } from 'react-icons/fa';
+
 import { A, Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
@@ -22,6 +24,12 @@ const EventTitle = styled.header`
   line-height: 1;
   margin-bottom: 10px;
 `;
+
+const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
+  <A href={href} target="_blank">
+    <FaExternalLinkAlt />
+  </A>
+);
 
 const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
   const focus = useFocusOnFirstModalRender();
@@ -44,10 +52,13 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
       <Modal.Footer>
         <Row vCentered spaced>
           <small>
-            <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
-              evenman
-            </A>{' '}
-            ⋅ <A href={`/admin/events/event/${event.id}`}>админка</A>
+            <Row vCentered>
+              <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
+                evenman
+              </A>
+              <span> ⋅ </span>
+              <ExpandLink href={`/team/events/view/${event.id}`} />
+            </Row>
           </small>
           <Button onClick={editCb}>Редактировать</Button>
         </Row>
