@@ -30,6 +30,7 @@ def event_to_google_dict(event):
         "location": location,
         "start": {"dateTime": dts(event.start)},
         "end": {"dateTime": dts(event.end)},
+        "status": "confirmed",
     }
     if event.invite_creator:
         # TODO - this could lead to multiple invites if we create several full calendars.
@@ -99,6 +100,7 @@ class GoogleCalendar(models.Model):
                     calendarId=self.calendar_id,
                     eventId=google_event.google_id,
                 ).execute()
+                google_event.delete()
 
         except GoogleEvent.DoesNotExist:
             if not should_export:
