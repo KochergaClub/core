@@ -107,9 +107,6 @@ class Event(models.Model):
 
     uuid = models.SlugField(default=generate_uuid, unique=True)
 
-    google_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    google_link = models.CharField(max_length=1024, blank=True)
-
     start = models.DateTimeField()
     end = models.DateTimeField()
 

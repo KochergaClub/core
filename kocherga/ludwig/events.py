@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.utils import timezone
 
 from kocherga.dateutils import TZ
@@ -26,6 +27,10 @@ def event_emoji(event):
         return ":globe_with_meridians:"
     else:
         return ":question:"
+
+
+def internal_event_link(event):
+    return f'{settings.KOCHERGA_WEBSITE}/team/events/view/{event.uuid}'
 
 
 def event_instructions(event):
@@ -75,7 +80,7 @@ def list_events():
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": '<' + event.google_link + '|' + event.title + '>',
+                "text": '<' + internal_event_link(event) + '|' + event.title + '>',
             },
         })
 
@@ -174,7 +179,7 @@ def visitors_attachment(event):
         "fallback": "",
         "text": humanized_visitors(event.visitors),
         "title": event.title,
-        "title_link": event.google_link,
+        "title_link": internal_event_link(event),
         "color": event_color(event),
         "mrkdwn_in": ["text"],
         "callback_id": f"event_visitors/{event.uuid}/reset",
@@ -226,7 +231,7 @@ def event_visitors_question(event):
         result["attachments"] = [
             {
                 "title": event.title,
-                "title_link": event.google_link,
+                "title_link": internal_event_link(event),
                 "color": event_color(event),
                 "callback_id": f"event_visitors/{event.uuid}",
                 "actions": [
