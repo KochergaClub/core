@@ -15,6 +15,10 @@ export const getEventsInRange = async (api: API, range: Range) => {
   )) as ServerEvent[];
 };
 
+export const getEvent = async (api: API, uuid: string) => {
+  return (await api.call(`events/${uuid}`, 'GET')) as ServerEvent;
+};
+
 export const searchEvents = async (
   api: API,
   { query }: { query: string }
