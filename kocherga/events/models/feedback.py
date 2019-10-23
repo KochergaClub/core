@@ -39,4 +39,4 @@ class Feedback(models.Model):
         blank=True,
     )
 
-    comment = models.TextField()
+    comment = models.TextField(blank=True)
