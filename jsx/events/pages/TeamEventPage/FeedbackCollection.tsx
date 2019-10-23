@@ -19,17 +19,18 @@ import { addEventFeedback } from '~/events/actions';
 import { CreateFeedbackParams } from '~/events/types';
 
 const feedbackShape: FormShape = [
-  { name: 'overall_score', type: 'number' },
-  { name: 'recommend_score', type: 'number' },
-  { name: 'content_score', type: 'number' },
-  { name: 'conductor_score', type: 'number' },
+  { name: 'overall_score', type: 'number', optional: true },
+  { name: 'recommend_score', type: 'number', optional: true },
+  { name: 'content_score', type: 'number', optional: true },
+  { name: 'conductor_score', type: 'number', optional: true },
   {
     name: 'source',
     type: 'choice',
     options: ['FRIEND', 'VK', 'FB', 'TIMEPAD', 'EMAIL', 'WEBSITE'],
+    optional: true,
   },
-  { name: 'custom_source', type: 'string' },
-  { name: 'comment', type: 'string' },
+  { name: 'custom_source', type: 'string', optional: true },
+  { name: 'comment', type: 'string', optional: true },
 ];
 
 const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({

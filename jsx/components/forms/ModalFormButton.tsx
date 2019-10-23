@@ -42,16 +42,26 @@ const ModalForm = ({
   const submit = useCallback(
     async (values: any, actions: FormikActions<any>) => {
       const postValues = { ...values };
-      for (const field of fields.filter(f => f.readonly)) {
-        if (field.value) {
-          postValues[field.name] = field.value;
-          continue;
-        }
 
-        if (field.type === 'boolean') {
-          postValues[field.name] = false;
+      for (const field of fields) {
+        if (field.readonly) {
+          // set readonly fields
+          if (field.value) {
+            postValues[field.name] = field.value;
+            continue;
+          }
+
+          if (field.type === 'boolean') {
+            postValues[field.name] = false;
+          } else {
+            postValues[field.name] = '';
+          }
         } else {
-          postValues[field.name] = '';
+          console.log(field.type, ' ', field.name);
+          if (field.type === 'number' && postValues[field.name] === '') {
+            console.log('deleting ' + field.name);
+            delete postValues[field.name]; // TODO - check if the field is optional?
+          }
         }
       }
       await post(postValues);
@@ -59,6 +69,19 @@ const ModalForm = ({
       close();
     },
     [fields, post]
+  );
+
+  const validate = useCallback(
+    values => {
+      let errors: { [k: string]: string } = {};
+      for (const field of fields) {
+        if (values[field.name] === '' && !field.optional) {
+          errors[field.name] = 'Required';
+        }
+      }
+      return errors;
+    },
+    [fields]
   );
 
   const focus = useFocusOnFirstModalRender();
@@ -69,7 +92,11 @@ const ModalForm = ({
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={close}>{modalTitle}</Modal.Header>
-      <Formik initialValues={initialValues} onSubmit={submit}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={submit}
+        validate={validate}
+      >
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body ref={focus} {...hotkeys}>

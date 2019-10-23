@@ -54,7 +54,7 @@ const FieldInput: React.FC<Props> = ({ field }) => {
                 <Label>{field.name}</Label>
                 {field.options.map(option => {
                   return (
-                    <div>
+                    <div key={option}>
                       <label key={option}>
                         <input
                           type="radio"

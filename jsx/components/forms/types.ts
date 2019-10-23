@@ -2,6 +2,7 @@ interface AnyFormField {
   readonly name: string;
   readonly title?: string;
   readonly?: boolean;
+  optional?: boolean;
 }
 
 export interface StringFormField extends AnyFormField {
