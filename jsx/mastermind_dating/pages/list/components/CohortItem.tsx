@@ -3,9 +3,7 @@ import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import Card, { CardList } from '~/components/Card';
-
-import { Cohort } from '../../../types';
+import { Cohort } from '~/mastermind_dating/types';
 
 import { format, parseISO } from 'date-fns';
 
@@ -16,7 +14,7 @@ const CohortItem = ({ cohort }: { cohort: Cohort }) => {
     title += ' ' + ` (${start})`;
   }
   return (
-    <Card>
+    <div>
       <Link
         href="/team/mastermind_dating/cohort/[id]"
         as={`/team/mastermind_dating/cohort/${cohort.id}`}
@@ -24,18 +22,8 @@ const CohortItem = ({ cohort }: { cohort: Cohort }) => {
       >
         <A>{title}</A>
       </Link>
-    </Card>
+    </div>
   );
 };
 
-const CohortList = ({ cohorts }: { cohorts: Cohort[] }) => {
-  return (
-    <CardList>
-      {cohorts.map(cohort => (
-        <CohortItem key={cohort.id} cohort={cohort} />
-      ))}
-    </CardList>
-  );
-};
-
-export default CohortList;
+export default CohortItem;
