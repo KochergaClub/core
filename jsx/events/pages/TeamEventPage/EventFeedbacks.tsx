@@ -1,16 +1,36 @@
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Row, Column, Label } from '@kocherga/frontkit';
+import Collection from '~/components/collections/Collection';
+import CardListView from '~/components/collections/CardListView';
 
-import Card, { CardList } from '~/components/Card';
+import { Row, Label } from '@kocherga/frontkit';
+
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 
 import { deleteEventFeedback } from '~/events/actions';
 import { selectFeedbacks } from '~/events/selectors';
 
 import { Feedback } from '~/events/types';
-import CreateFeedback from './CreateFeedback';
+
+import { FormShape } from '~/components/forms/types';
+
+import { addEventFeedback } from '~/events/actions';
+import { CreateFeedbackParams } from '~/events/types';
+
+const feedbackShape: FormShape = [
+  { name: 'overall_score', type: 'number' },
+  { name: 'recommend_score', type: 'number' },
+  { name: 'content_score', type: 'number' },
+  { name: 'conductor_score', type: 'number' },
+  {
+    name: 'source',
+    type: 'choice',
+    options: ['FRIEND', 'VK', 'FB', 'TIMEPAD', 'EMAIL', 'WEBSITE'],
+  },
+  { name: 'custom_source', type: 'string' },
+  { name: 'comment', type: 'string' },
+];
 
 const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({
   feedback,
@@ -22,7 +42,7 @@ const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({
     await dispatch(deleteEventFeedback(event_id, feedback.id));
   }, [feedback.id, event_id]);
   return (
-    <Card>
+    <div>
       <header>{feedback.id}</header>
       <Row vCentered>
         <Label>overall_score:</Label>
@@ -41,7 +61,7 @@ const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({
           Удалить
         </AsyncButtonWithConfirm>
       </Row>
-    </Card>
+    </div>
   );
 };
 
@@ -52,27 +72,29 @@ interface Props {
 const EventFeedbacks: React.FC<Props> = ({ event_id }) => {
   // FIXME - we store current event's feedbacks globally instead of separating them by event
   const feedbacks = useSelector(selectFeedbacks);
+  const dispatch = useDispatch();
+
+  const add = useCallback(
+    async (values: CreateFeedbackParams) => {
+      await dispatch(addEventFeedback(event_id, values));
+    },
+    [dispatch, addEventFeedback]
+  );
+
+  const renderItem = (feedback: Feedback) => (
+    <FeedbackCard feedback={feedback} event_id={event_id} />
+  );
 
   return (
-    <section>
-      <h2>
-        <Row vCentered>
-          <div>Отзывы</div>
-          <CreateFeedback event_id={event_id} />
-        </Row>
-      </h2>
-      <Column stretch>
-        <CardList>
-          {feedbacks.map(feedback => (
-            <FeedbackCard
-              key={feedback.id}
-              feedback={feedback}
-              event_id={event_id}
-            />
-          ))}
-        </CardList>
-      </Column>
-    </section>
+    <Collection
+      title="Отзывы"
+      entityName="отзыв"
+      items={feedbacks}
+      add={add}
+      shape={feedbackShape}
+      renderItem={renderItem}
+      view={CardListView}
+    />
   );
 };
 
