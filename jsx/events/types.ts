@@ -74,6 +74,20 @@ export interface LocalEvent extends Event {
   saving?: boolean;
 }
 
+export interface CreateFeedbackParams {
+  overall_score?: number;
+  recommend_score?: number;
+  content_score?: number;
+  conductor_score?: number;
+  source?: string;
+  custom_source?: string;
+  comment?: string;
+}
+
+export interface Feedback extends CreateFeedbackParams {
+  id: number;
+}
+
 export interface EventStore {
   events: LocalEvent[];
 }

@@ -70,7 +70,9 @@ async function main() {
       console.log('not a typical websocket');
       socket.end();
     }
-    wsProxy.ws(req, socket, head);
+    wsProxy.ws(req, socket, head, e => {
+      console.error(e);
+    });
   });
 
   app.use(trailingSlashEndpoint);

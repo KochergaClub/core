@@ -9,6 +9,9 @@ import { getEvent } from '~/events/api';
 import { Event, serverEventToEvent } from '~/events/types';
 
 import EventInfo from '~/events/components/EventInfo';
+import EventFeedbacks from './EventFeedbacks';
+
+import { loadEventFeedbacks } from '~/events/actions';
 
 interface Props {
   event: Event;
@@ -20,17 +23,23 @@ const TeamEventPage: NextPage<Props> = ({ event }) => {
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
         <EventInfo event={event} />
+        <EventFeedbacks event_id={event.id} />
       </Page.Main>
     </Page>
   );
 };
 
-TeamEventPage.getInitialProps = async ({ store: { getState }, query }) => {
+TeamEventPage.getInitialProps = async ({
+  store: { getState, dispatch },
+  query,
+}) => {
   const uuid = query.uuid as string;
 
   const api = selectAPI(getState());
   const serverEvent = await getEvent(api, uuid);
   const event = serverEventToEvent(serverEvent);
+
+  await dispatch(loadEventFeedbacks(uuid));
 
   return { event };
 };

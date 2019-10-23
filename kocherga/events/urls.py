@@ -26,6 +26,7 @@ urlpatterns += [
     path('events/<event_id>/image/<image_type>', views.events.ImageView.as_view()),
     path('events/<event_id>/image_from_url/<image_type>', views.events.ImageFromUrlView.as_view()),
     path('events/<event_id>/tag/<tag_name>', views.events.TagView.as_view()),
+    path('events/<event_id>/feedbacks', views.events.EventFeedbackView.as_view()),
 
     path('my/tickets', views.tickets.MyTicketView.as_view()),
 ]
@@ -55,6 +56,8 @@ old_announcement_patterns = [
     path('vk/event/<event__uuid>', views.announcements.VkViewSet.as_view({'post': 'announce'})),
     path('fb/event/<event__uuid>', views.announcements.FbViewSet.as_view({'post': 'announce'})),
 ]
+
+router.register(r'event_feedbacks', views.feedback.FeedbackViewSet, basename='event-feedbacks')
 
 urlpatterns += [
     path('announcements/', include(old_announcement_patterns)),

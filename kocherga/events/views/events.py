@@ -15,7 +15,7 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework import status, generics, viewsets, filters, pagination
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import IsAdminUser, AllowAny
 
 from kocherga.error import PublicError
@@ -225,3 +225,14 @@ def r_list_public_atom(request):
         )
 
     return HttpResponse(fg.writeString('utf-8'))
+
+
+class EventFeedbackView(APIView):
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, event_id):
+        event = Event.objects.list_events().get(uuid=event_id)
+        feedbacks = event.feedbacks.all()
+        return Response(
+            serializers.FeedbackSerializer(feedbacks, many=True).data
+        )
