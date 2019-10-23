@@ -3,8 +3,10 @@ import React from 'react';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
+import { EntityNames } from './types';
+
 interface Props<A> {
-  entityName: string;
+  names?: EntityNames;
   shape: FormShape;
   add: (item: A) => Promise<void>;
 }
@@ -15,7 +17,9 @@ function CreateItemButton<A>(props: Props<A>) {
       post={props.add}
       buttonName="Создать"
       modalButtonName="Создать"
-      modalTitle={`Создать ${props.entityName}`}
+      modalTitle={`Создать${
+        props.names && props.names.genitive ? ' ' + props.names.genitive : ''
+      }`}
       fields={props.shape}
     />
   );

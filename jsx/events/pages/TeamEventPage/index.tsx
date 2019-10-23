@@ -9,7 +9,7 @@ import { getEvent } from '~/events/api';
 import { Event, serverEventToEvent } from '~/events/types';
 
 import EventInfo from '~/events/components/EventInfo';
-import EventFeedbacks from './EventFeedbacks';
+import FeedbackCollection from './FeedbackCollection';
 
 import { loadEventFeedbacks } from '~/events/actions';
 
@@ -23,7 +23,7 @@ const TeamEventPage: NextPage<Props> = ({ event }) => {
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
         <EventInfo event={event} />
-        <EventFeedbacks event_id={event.id} />
+        <FeedbackCollection event_id={event.id} />
       </Page.Main>
     </Page>
   );

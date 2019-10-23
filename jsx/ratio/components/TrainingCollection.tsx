@@ -46,8 +46,10 @@ const TrainingCollection: React.FC = () => {
 
   return (
     <Collection
-      title="Тренинги"
-      entityName="тренинг"
+      names={{
+        plural: 'тренинги',
+        genitive: 'тренинг',
+      }}
       items={trainings}
       add={canCreate ? add : undefined}
       shape={trainingShape}

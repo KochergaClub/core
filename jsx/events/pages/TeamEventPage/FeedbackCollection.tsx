@@ -69,7 +69,7 @@ interface Props {
   event_id: string;
 }
 
-const EventFeedbacks: React.FC<Props> = ({ event_id }) => {
+const FeedbackCollection: React.FC<Props> = ({ event_id }) => {
   // FIXME - we store current event's feedbacks globally instead of separating them by event
   const feedbacks = useSelector(selectFeedbacks);
   const dispatch = useDispatch();
@@ -87,8 +87,10 @@ const EventFeedbacks: React.FC<Props> = ({ event_id }) => {
 
   return (
     <Collection
-      title="Отзывы"
-      entityName="отзыв"
+      names={{
+        plural: 'отзывы',
+        genitive: 'отзыв',
+      }}
       items={feedbacks}
       add={add}
       shape={feedbackShape}
@@ -98,4 +100,4 @@ const EventFeedbacks: React.FC<Props> = ({ event_id }) => {
   );
 };
 
-export default EventFeedbacks;
+export default FeedbackCollection;

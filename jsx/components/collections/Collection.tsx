@@ -7,17 +7,18 @@ import { FormShape } from '~/components/forms/types';
 import CreateItemButton from './CreateItemButton';
 import ListView from './ListView';
 
-import { AnyViewProps } from './types';
+import { AnyViewProps, EntityNames } from './types';
 
 interface Props<I, A extends {}> {
-  title: string;
-  entityName: string;
+  names?: EntityNames;
   shape: FormShape;
   items: I[];
   renderItem: (item: I) => React.ReactElement;
   add?: (addParams: A) => Promise<void>;
   view?: (props: AnyViewProps<I>) => React.ReactElement;
 }
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 function Collection<I, A>(props: Props<I, A>) {
   const View = props.view || ListView;
@@ -26,12 +27,14 @@ function Collection<I, A>(props: Props<I, A>) {
     <section>
       <h2>
         <Row vCentered>
-          <div>{props.title}</div>
+          {props.names && props.names.plural && (
+            <div>{capitalize(props.names.plural)}</div>
+          )}
           {props.add && (
             <CreateItemButton
               add={props.add}
               shape={props.shape}
-              entityName={props.entityName}
+              names={props.names}
             />
           )}
         </Row>
