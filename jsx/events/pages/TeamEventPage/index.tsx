@@ -21,7 +21,7 @@ interface Props {
 
 const TeamEventPage: NextPage<Props> = ({ event }) => {
   return (
-    <Page title="Событие" team>
+    <Page title={event.title} team>
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
         <EventInfo event={event} />
