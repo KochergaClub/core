@@ -34,18 +34,19 @@ const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({
   return (
     <div>
       <header>{feedback.id}</header>
-      <Row vCentered>
-        <Label>overall_score:</Label>
-        {feedback.overall_score}
-      </Row>
-      <Row vCentered>
-        <Label>conductor_score:</Label>
-        {feedback.conductor_score}
-      </Row>
-      <div>
-        <Label>Комментарий:</Label>
-        {feedback.comment}
-      </div>
+      {feedbackShape.map(field => {
+        const value = (feedback as any)[field.name];
+
+        if (value === undefined || value === '' || value === null) {
+          return null;
+        }
+        return (
+          <Row vCentered key={field.name}>
+            <Label>{field.title}:</Label>
+            <div>{value}</div>
+          </Row>
+        );
+      })}
       <Row>
         <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
           Удалить
