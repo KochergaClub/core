@@ -13,13 +13,22 @@ def convert_field(field):
         'optional': field.blank,
     }
 
+    if field.verbose_name:
+        result['title'] = field.verbose_name
+
     if field_cls == fields.TextField:
         result['type'] = 'string'
+    elif field_cls == fields.CharField:
+        if field.choices:
+            result['type'] = 'choice'
+            result['options'] = [c[0] for c in field.choices]
+        else:
+            result['type'] = 'string'
     elif issubclass(field_cls, fields.IntegerField):
         result['type'] = 'number'
-    elif field_cls == fields.AutoField:
-        result['type'] = 'number'
-        result['readonly'] = True
+    # elif field_cls == fields.AutoField:
+    #     result['type'] = 'number'
+    #     result['readonly'] = True
     else:
         print("Unknown field class " + str(field_cls))
         return
@@ -30,6 +39,7 @@ def convert_field(field):
 def generate_shapes_to_fh(fh):
     serializers = [FeedbackSerializer]
 
+    print("import { FormShape } from '~/components/forms/types';", file=fh)
     print("const shapes: { [k: string]: { [k: string]: FormShape } } = ", end='', file=fh)
 
     shapes = {}
@@ -52,7 +62,11 @@ def generate_shapes_to_fh(fh):
             shapes[app_label] = {}
         shapes[app_label][model_name] = shape
 
-    print(json.dumps(shapes, indent=2), end='', file=fh)
+    print(
+        json.dumps(shapes, indent=2, ensure_ascii=False),
+        end='',
+        file=fh,
+    )
     print(';', file=fh)
     print('export default shapes;', file=fh)
 

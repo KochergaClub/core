@@ -1,35 +1,55 @@
+import { FormShape } from '~/components/forms/types';
 const shapes: { [k: string]: { [k: string]: FormShape } } = {
   "events": {
     "feedback": [
       {
-        "name": "id",
-        "optional": true,
-        "type": "number",
-        "readonly": true
-      },
-      {
         "name": "overall_score",
         "optional": true,
+        "title": "Насколько вам понравилось мероприятие в целом?",
         "type": "number"
       },
       {
         "name": "recommend_score",
         "optional": true,
+        "title": "Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?",
         "type": "number"
       },
       {
         "name": "content_score",
         "optional": true,
+        "title": "Насколько вам было интересно содержание?",
         "type": "number"
       },
       {
         "name": "conductor_score",
         "optional": true,
+        "title": "Насколько вы довольны работой ведущих?",
         "type": "number"
+      },
+      {
+        "name": "source",
+        "optional": true,
+        "title": "Откуда вы узнали про мероприятие?",
+        "type": "choice",
+        "options": [
+          "FRIEND",
+          "VK",
+          "FB",
+          "TIMEPAD",
+          "EMAIL",
+          "WEBSITE"
+        ]
+      },
+      {
+        "name": "custom_source",
+        "optional": true,
+        "title": "Откуда вы узнали про мероприятие? (свой вариант)",
+        "type": "string"
       },
       {
         "name": "comment",
         "optional": true,
+        "title": "Что можно улучшить?",
         "type": "string"
       }
     ]

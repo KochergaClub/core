@@ -16,12 +16,13 @@ class ScoreField(models.IntegerField):
 class Feedback(models.Model):
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='feedbacks')
 
-    overall_score = ScoreField()
-    recommend_score = ScoreField()
-    content_score = ScoreField()
-    conductor_score = ScoreField()
+    overall_score = ScoreField('Насколько вам понравилось мероприятие в целом?')
+    recommend_score = ScoreField('Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?')
+    content_score = ScoreField('Насколько вам было интересно содержание?')
+    conductor_score = ScoreField('Насколько вы довольны работой ведущих?')
 
     source = models.CharField(
+        'Откуда вы узнали про мероприятие?',
         max_length=20,
         choices=[
             ('FRIEND', 'Знакомые'),
@@ -35,8 +36,12 @@ class Feedback(models.Model):
     )
 
     custom_source = models.CharField(
+        'Откуда вы узнали про мероприятие? (свой вариант)',
         max_length=1024,
         blank=True,
     )
 
-    comment = models.TextField(blank=True)
+    comment = models.TextField(
+        'Что можно улучшить?',
+        blank=True,
+    )
