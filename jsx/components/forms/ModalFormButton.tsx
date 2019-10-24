@@ -34,7 +34,16 @@ const ModalForm = ({
   const initialValues = useMemo(() => {
     const result: { [k: string]: string | number | boolean } = {};
     for (const field of fields) {
-      result[field.name] = field.value || '';
+      let value: string | number | boolean = '';
+      if (field.value) {
+        value = field.value;
+      } else {
+        if (field.type === 'boolean') {
+          // Without this special case the initial value of boolean field becomes '', which leads to "Required" errors for untouched fields.
+          value = false;
+        }
+      }
+      result[field.name] = value;
     }
     return result;
   }, [fields]);

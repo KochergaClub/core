@@ -35,18 +35,40 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "max": 10
       },
       {
-        "name": "source",
-        "optional": true,
-        "title": "Откуда вы узнали про мероприятие?",
-        "type": "choice",
-        "options": [
-          "FRIEND",
-          "VK",
-          "FB",
-          "TIMEPAD",
-          "EMAIL",
-          "WEBSITE"
-        ]
+        "name": "source_friend",
+        "optional": false,
+        "title": "Откуда / Знакомые",
+        "type": "boolean"
+      },
+      {
+        "name": "source_vk",
+        "optional": false,
+        "title": "Откуда / ВКонтакте",
+        "type": "boolean"
+      },
+      {
+        "name": "source_fb",
+        "optional": false,
+        "title": "Откуда / Facebook",
+        "type": "boolean"
+      },
+      {
+        "name": "source_timepad",
+        "optional": false,
+        "title": "Откуда / Timepad",
+        "type": "boolean"
+      },
+      {
+        "name": "source_email",
+        "optional": false,
+        "title": "Откуда / Почтовая рассылка",
+        "type": "boolean"
+      },
+      {
+        "name": "source_website",
+        "optional": false,
+        "title": "Откуда / Сайт Кочерги",
+        "type": "boolean"
       },
       {
         "name": "custom_source",

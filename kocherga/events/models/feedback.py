@@ -21,19 +21,12 @@ class Feedback(models.Model):
     content_score = ScoreField('Насколько вам было интересно содержание?')
     conductor_score = ScoreField('Насколько вы довольны работой ведущих?')
 
-    source = models.CharField(
-        'Откуда вы узнали про мероприятие?',
-        max_length=20,
-        choices=[
-            ('FRIEND', 'Знакомые'),
-            ('VK', 'ВКонтакте'),
-            ('FB', 'Facebook'),
-            ('TIMEPAD', 'Timepad'),
-            ('EMAIL', 'Почтовая рассылка'),
-            ('WEBSITE', 'Сайт Кочерги'),
-        ],
-        blank=True
-    )
+    source_friend = models.BooleanField('Откуда / Знакомые')
+    source_vk = models.BooleanField('Откуда / ВКонтакте')
+    source_fb = models.BooleanField('Откуда / Facebook')
+    source_timepad = models.BooleanField('Откуда / Timepad')
+    source_email = models.BooleanField('Откуда / Почтовая рассылка')
+    source_website = models.BooleanField('Откуда / Сайт Кочерги')
 
     custom_source = models.CharField(
         'Откуда вы узнали про мероприятие? (свой вариант)',

@@ -26,6 +26,8 @@ def convert_field(field):
             result['options'] = [c[0] for c in field.choices]
         else:
             result['type'] = 'string'
+    elif field_cls == fields.BooleanField:
+        result['type'] = 'boolean'
     elif issubclass(field_cls, ScoreField):
         result['type'] = 'number'
         result['min'] = 0

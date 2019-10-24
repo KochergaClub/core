@@ -13,7 +13,12 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'recommend_score',
             'content_score',
             'conductor_score',
-            'source',
+            'source_friend',
+            'source_vk',
+            'source_fb',
+            'source_timepad',
+            'source_email',
+            'source_website',
             'custom_source',
             'comment',
         )
