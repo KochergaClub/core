@@ -51,3 +51,6 @@ deploy_prod_secrets:
 
 update_npm_packages:
 	for c in render-server webpack_front webpack_back; do docker exec -it docker_$${c}_1 npm i; done
+
+shapes:
+	docker-compose -f docker/compose.dev.yml exec api ./scripts/generate-frontend-shapes.py
