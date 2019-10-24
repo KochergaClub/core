@@ -2,6 +2,8 @@ import json
 
 from django.db.models import fields
 
+from kocherga.events.models.feedback import ScoreField
+
 from kocherga.events.serializers import FeedbackSerializer
 
 
@@ -24,6 +26,10 @@ def convert_field(field):
             result['options'] = [c[0] for c in field.choices]
         else:
             result['type'] = 'string'
+    elif issubclass(field_cls, ScoreField):
+        result['type'] = 'number'
+        result['min'] = 0
+        result['max'] = 10
     elif issubclass(field_cls, fields.IntegerField):
         result['type'] = 'number'
     # elif field_cls == fields.AutoField:

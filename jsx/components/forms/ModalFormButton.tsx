@@ -57,9 +57,7 @@ const ModalForm = ({
             postValues[field.name] = '';
           }
         } else {
-          console.log(field.type, ' ', field.name);
           if (field.type === 'number' && postValues[field.name] === '') {
-            console.log('deleting ' + field.name);
             delete postValues[field.name]; // TODO - check if the field is optional?
           }
         }
@@ -75,8 +73,20 @@ const ModalForm = ({
     values => {
       let errors: { [k: string]: string } = {};
       for (const field of fields) {
-        if (values[field.name] === '' && !field.optional) {
+        const value = values[field.name];
+        if (value === '' && !field.optional) {
           errors[field.name] = 'Required';
+        }
+        if (field.type === 'number' && value !== '') {
+          const numValue = parseInt(value, 10);
+          if (field.max !== undefined && numValue > field.max) {
+            errors[field.name] = `Значение превышает максимальное: ${
+              field.max
+            }`;
+          }
+          if (field.min !== undefined && numValue < field.min) {
+            errors[field.name] = `Значение меньше минимального: ${field.min}`;
+          }
         }
       }
       return errors;

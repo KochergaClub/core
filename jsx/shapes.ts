@@ -6,25 +6,33 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "name": "overall_score",
         "optional": true,
         "title": "Насколько вам понравилось мероприятие в целом?",
-        "type": "number"
+        "type": "number",
+        "min": 0,
+        "max": 10
       },
       {
         "name": "recommend_score",
         "optional": true,
         "title": "Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?",
-        "type": "number"
+        "type": "number",
+        "min": 0,
+        "max": 10
       },
       {
         "name": "content_score",
         "optional": true,
         "title": "Насколько вам было интересно содержание?",
-        "type": "number"
+        "type": "number",
+        "min": 0,
+        "max": 10
       },
       {
         "name": "conductor_score",
         "optional": true,
         "title": "Насколько вы довольны работой ведущих?",
-        "type": "number"
+        "type": "number",
+        "min": 0,
+        "max": 10
       },
       {
         "name": "source",
