@@ -2,9 +2,7 @@ import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Collection from '~/components/collections/Collection';
-import CardListView from '~/components/collections/CardListView';
-
-import { Row, Label } from '@kocherga/frontkit';
+import TableView from '~/components/collections/TableView';
 
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 
@@ -22,7 +20,7 @@ import shapes from '~/shapes';
 
 const feedbackShape: FormShape = shapes.events.feedback;
 
-const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({
+const DeleteFeedback: React.FC<{ feedback: Feedback; event_id: string }> = ({
   feedback,
   event_id,
 }) => {
@@ -31,28 +29,11 @@ const FeedbackCard: React.FC<{ feedback: Feedback; event_id: string }> = ({
   const deleteCb = useCallback(async () => {
     await dispatch(deleteEventFeedback(event_id, feedback.id));
   }, [feedback.id, event_id]);
-  return (
-    <div>
-      <header>{feedback.id}</header>
-      {feedbackShape.map(field => {
-        const value = (feedback as any)[field.name];
 
-        if (value === undefined || value === '' || value === null) {
-          return null;
-        }
-        return (
-          <Row vCentered key={field.name}>
-            <Label>{field.title}:</Label>
-            <div>{value}</div>
-          </Row>
-        );
-      })}
-      <Row>
-        <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
-          Удалить
-        </AsyncButtonWithConfirm>
-      </Row>
-    </div>
+  return (
+    <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
+      Удалить
+    </AsyncButtonWithConfirm>
   );
 };
 
@@ -72,8 +53,8 @@ const FeedbackCollection: React.FC<Props> = ({ event_id }) => {
     [dispatch, addEventFeedback]
   );
 
-  const renderItem = (feedback: Feedback) => (
-    <FeedbackCard feedback={feedback} event_id={event_id} />
+  const renderExtraColumn = (feedback: Feedback) => (
+    <DeleteFeedback feedback={feedback} event_id={event_id} />
   );
 
   return (
@@ -85,8 +66,14 @@ const FeedbackCollection: React.FC<Props> = ({ event_id }) => {
       items={feedbacks}
       add={add}
       shape={feedbackShape}
-      renderItem={renderItem}
-      view={CardListView}
+      renderItem={() => <div>UNUSED</div>}
+      view={props => (
+        <TableView
+          {...props}
+          extraColumns={['Удалить']}
+          renderExtraColumn={renderExtraColumn}
+        />
+      )}
     />
   );
 };

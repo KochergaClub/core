@@ -40,7 +40,11 @@ function Collection<I, A>(props: Props<I, A>) {
         </Row>
       </h2>
       <Column stretch>
-        <View items={props.items} renderItem={props.renderItem} />
+        <View
+          items={props.items}
+          renderItem={props.renderItem}
+          shape={props.shape}
+        />
       </Column>
     </section>
   );
