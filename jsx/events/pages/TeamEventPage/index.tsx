@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { A } from '@kocherga/frontkit';
+
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
@@ -23,6 +25,11 @@ const TeamEventPage: NextPage<Props> = ({ event }) => {
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
         <EventInfo event={event} />
+        <div>
+          <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
+            Событие в evenman
+          </A>
+        </div>
         <FeedbackCollection event_id={event.id} />
       </Page.Main>
     </Page>
