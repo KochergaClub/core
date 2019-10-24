@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import { FaCheck } from 'react-icons/fa';
+
 import { Label, colors } from '@kocherga/frontkit';
 
 import { FormField, FormShape } from '~/components/forms/types';
@@ -31,7 +33,10 @@ function TableViewCell<I>({ field, item }: CellProps<I>) {
   let value = (item as any)[field.name];
 
   if (field.type === 'boolean') {
-    value = value ? '1' : '0'; // TODO - v/x icon
+    if (value) {
+      // do we need various boolean value styles for different requirements?
+      value = <FaCheck />;
+    }
   }
 
   return <td>{value}</td>;
