@@ -27,7 +27,7 @@ const EventTitle = styled.header`
 
 const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   <A href={href} target="_blank">
-    <FaExternalLinkAlt />
+    Подробнее <FaExternalLinkAlt />
   </A>
 );
 
@@ -52,13 +52,7 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
       <Modal.Footer>
         <Row vCentered spaced>
           <small>
-            <Row vCentered>
-              <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
-                evenman
-              </A>
-              <span> ⋅ </span>
-              <ExpandLink href={`/team/events/view/${event.id}`} />
-            </Row>
+            <ExpandLink href={`/team/events/view/${event.id}`} />
           </small>
           <Button onClick={editCb}>Редактировать</Button>
         </Row>

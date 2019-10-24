@@ -19,20 +19,20 @@ dev-full: image
 ##### Tests #####
 test-types:
 	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml run --rm api mypy --strict-optional --check-untyped-defs kocherga # FIXME
+	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml exec api mypy --strict-optional --check-untyped-defs kocherga # FIXME
 
 test-code:
-	docker-compose -f docker/compose.dev.yml run --rm api pytest
+	docker-compose -f docker/compose.dev.yml exec api pytest
 
 lint:
-	docker-compose -f docker/compose.dev.yml run --rm api flake8 kocherga/ --max-line-length=120
+	docker-compose -f docker/compose.dev.yml exec api flake8 kocherga/ --max-line-length=120
 
 eslint:
-	docker-compose -f docker/compose.dev.yml run --rm api npx eslint jsx --ext ts,tsx
+	docker-compose -f docker/compose.dev.yml exec api npx eslint jsx --ext ts,tsx
 
 test-js:
-	docker-compose -f docker/compose.dev.yml run --rm api npx tsc
-	docker-compose -f docker/compose.dev.yml run --rm api npx jest
+	docker-compose -f docker/compose.dev.yml exec api npx tsc
+	docker-compose -f docker/compose.dev.yml exec api npx jest
 
 test: test-types test-code test-js lint eslint
 
@@ -51,3 +51,6 @@ deploy_prod_secrets:
 
 update_npm_packages:
 	for c in render-server webpack_front webpack_back; do docker exec -it docker_$${c}_1 npm i; done
+
+shapes:
+	docker-compose -f docker/compose.dev.yml exec api ./scripts/generate-frontend-shapes.py

@@ -2,6 +2,7 @@ interface AnyFormField {
   readonly name: string;
   readonly title?: string;
   readonly?: boolean;
+  optional?: boolean;
 }
 
 export interface StringFormField extends AnyFormField {
@@ -12,6 +13,8 @@ export interface StringFormField extends AnyFormField {
 export interface NumberFormField extends AnyFormField {
   readonly type: 'number';
   readonly value?: number;
+  readonly min?: number;
+  readonly max?: number;
 }
 
 export interface ChoiceFormField extends AnyFormField {

@@ -51,10 +51,10 @@ const FieldInput: React.FC<Props> = ({ field }) => {
             name={field.name}
             render={({ field: formikField }: FieldProps<any>) => (
               <div>
-                <Label>{field.name}</Label>
+                <Label>{field.title || field.name}</Label>
                 {field.options.map(option => {
                   return (
-                    <div>
+                    <div key={option}>
                       <label key={option}>
                         <input
                           type="radio"

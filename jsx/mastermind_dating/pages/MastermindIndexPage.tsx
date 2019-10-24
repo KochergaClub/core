@@ -7,8 +7,7 @@ import { selectAPI } from '~/core/selectors';
 import { Cohort } from '~/mastermind_dating/types';
 import { getCohorts } from '~/mastermind_dating/api';
 
-import CohortList from '~/mastermind_dating/pages/list/components/CohortList';
-import CreateCohortButton from '~/mastermind_dating/pages/list/components/CreateCohortButton';
+import CohortCollection from '~/mastermind_dating/pages/list/components/CohortCollection';
 
 import {
   reducer,
@@ -17,7 +16,6 @@ import {
 
 interface Props {
   cohorts: Cohort[];
-  children?: React.ReactNode;
 }
 
 const MastermindIndexPage: NextPage<Props> = ({ cohorts }) => {
@@ -30,8 +28,7 @@ const MastermindIndexPage: NextPage<Props> = ({ cohorts }) => {
       <Page.Title>Мастермайнд-дейтинг</Page.Title>
       <MastermindContext.Provider value={dispatch}>
         <Page.Main>
-          <CohortList cohorts={store.cohorts} />
-          <CreateCohortButton />
+          <CohortCollection cohorts={store.cohorts} />
         </Page.Main>
       </MastermindContext.Provider>
     </Page>

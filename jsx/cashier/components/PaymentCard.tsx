@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { formatDate } from '~/common/utils';
 
@@ -8,16 +8,13 @@ import { Row, Label } from '@kocherga/frontkit';
 import { useAPI, usePermissions } from '~/common/hooks';
 
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
-import Card, { CardList } from '~/components/Card';
-import MutedCard from '~/components/MutedCard';
 
 import UserInfo from '~/audit/components/UserInfo';
 
 import { Payment } from '../types';
 import { loadPayments } from '../actions';
-import { selectPayments } from '../selectors';
 
-const PaymentItem = ({ payment }: { payment: Payment }) => {
+const PaymentCard = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
 
   const dispatch = useDispatch();
@@ -28,10 +25,8 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
     await dispatch(loadPayments());
   }, [api, payment.id, dispatch]);
 
-  const Wrapper = payment.is_redeemed ? MutedCard : Card;
-
   return (
-    <Wrapper>
+    <div>
       <Row>
         <strong>{payment.amount} руб. &rarr; </strong>
         <UserInfo user={payment.whom} />
@@ -55,20 +50,8 @@ const PaymentItem = ({ payment }: { payment: Payment }) => {
           Выплачено
         </AsyncButtonWithConfirm>
       ) : null}
-    </Wrapper>
+    </div>
   );
 };
 
-const PaymentList: React.FC = () => {
-  const payments = useSelector(selectPayments);
-
-  return (
-    <CardList>
-      {payments.map(payment => (
-        <PaymentItem payment={payment} key={payment.id} />
-      ))}
-    </CardList>
-  );
-};
-
-export default PaymentList;
+export default PaymentCard;

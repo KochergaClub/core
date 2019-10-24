@@ -225,3 +225,14 @@ def r_list_public_atom(request):
         )
 
     return HttpResponse(fg.writeString('utf-8'))
+
+
+class EventFeedbackView(APIView):
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, event_id):
+        event = Event.objects.list_events().get(uuid=event_id)
+        feedbacks = event.feedbacks.all()
+        return Response(
+            serializers.FeedbackSerializer(feedbacks, many=True).data
+        )
