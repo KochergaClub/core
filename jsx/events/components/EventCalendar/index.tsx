@@ -52,7 +52,6 @@ const eventPropGetter = (event: LocalEvent) => {
 interface Props {
   events: ServerEvent[];
   range: { start: string; end: string };
-  children?: React.ReactNode;
 }
 
 const EventCalendar: NextPage<Props> = props => {

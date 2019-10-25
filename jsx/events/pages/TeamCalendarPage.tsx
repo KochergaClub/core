@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { format } from 'date-fns-tz';
-import { addWeeks, subWeeks } from 'date-fns';
+import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
@@ -34,8 +34,14 @@ TeamCalendarPage.getInitialProps = async ({ store: { getState } }) => {
   const api = selectAPI(getState());
 
   const range = {
-    start: format(subWeeks(new Date(), 3), 'yyyy-MM-dd'),
-    end: format(addWeeks(new Date(), 3), 'yyyy-MM-dd'),
+    start: format(
+      subDays(startOfWeek(new Date(), { weekStartsOn: 1 }), 1),
+      'yyyy-MM-dd'
+    ),
+    end: format(
+      addDays(endOfWeek(new Date(), { weekStartsOn: 1 }), 1),
+      'yyyy-MM-dd'
+    ),
   };
 
   const events = await getEventsInRange(api, range);
