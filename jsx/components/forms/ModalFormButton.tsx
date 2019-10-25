@@ -84,7 +84,7 @@ const ModalForm = ({
       for (const field of fields) {
         const value = values[field.name];
         if (value === '' && !field.optional) {
-          errors[field.name] = 'Required';
+          errors[field.name] = 'Обязательное поле';
         }
         if (field.type === 'number' && value !== '') {
           const numValue = parseInt(value, 10);
