@@ -116,6 +116,8 @@ button.rbc-input::-moz-focus-inner {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   font-size: 16px;
 }
 

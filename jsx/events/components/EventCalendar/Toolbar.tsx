@@ -5,7 +5,7 @@ import { navigate } from 'react-big-calendar/lib/utils/constants';
 
 import { ToolbarProps, Navigate, View } from 'react-big-calendar';
 
-class CalendarToolbar extends React.Component<ToolbarProps> {
+class Toolbar extends React.Component<ToolbarProps> {
   render() {
     let { label } = this.props;
 
@@ -73,4 +73,4 @@ class CalendarToolbar extends React.Component<ToolbarProps> {
   }
 }
 
-export default CalendarToolbar;
+export default Toolbar;

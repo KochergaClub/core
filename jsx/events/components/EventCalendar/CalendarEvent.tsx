@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { EventProps } from 'react-big-calendar';
 
-import { Event } from '../types';
+import { Event } from '../../types';
 
 const EventTitle = styled.div`
   font-weight: bold;

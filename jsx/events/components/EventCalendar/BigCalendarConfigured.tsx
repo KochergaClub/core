@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CalendarStyle, CalendarDndStyle } from './CalendarStyle';
-import CalendarToolbar from './CalendarToolbar';
+import Toolbar from './Toolbar';
 
 import BigCalendar, {
   BigCalendarProps,
@@ -38,7 +38,7 @@ type Props<TEvent extends object, TResource extends object> = Omit<
   'localizer'
 >;
 
-const Calendar = <TEvent extends object, TResource extends object>(
+const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
   props: Props<TEvent, TResource>
 ) => {
   return (
@@ -56,11 +56,11 @@ const Calendar = <TEvent extends object, TResource extends object>(
         {...props}
         components={{
           ...(props.components || {}),
-          toolbar: CalendarToolbar,
+          toolbar: Toolbar,
         }}
       />
     </div>
   );
 };
 
-export default Calendar;
+export default BigCalendarConfigured;
