@@ -46,9 +46,11 @@ class RootView(generics.ListCreateAPIView):
             from_date=arg2date("from_date"),
             to_date=arg2date("to_date"),
         ).prefetch_related('tags') \
-         .prefetch_related('vk_announcement') \
-         .prefetch_related('fb_announcement') \
-         .prefetch_related('timepad_announcement')
+         .prefetch_related('project') \
+         .prefetch_related('prototype') \
+         .select_related('vk_announcement') \
+         .select_related('fb_announcement') \
+         .select_related('timepad_announcement')
         return qs
 
     # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
