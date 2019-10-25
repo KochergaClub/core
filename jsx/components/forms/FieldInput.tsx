@@ -1,10 +1,8 @@
 import React from 'react';
 
-import { Field, FieldProps } from 'formik';
+import { Label, Input } from '@kocherga/frontkit';
 
-import { Label } from '@kocherga/frontkit';
-
-import LabeledFormField from './LabeledFormField';
+import LabeledField from './LabeledField';
 
 import { FormField } from './types';
 
@@ -23,62 +21,71 @@ const FieldInput: React.FC<Props> = ({ field }) => {
   }
   switch (field.type) {
     case 'string':
-      return <LabeledFormField name={field.name} title={field.title} />;
+      return (
+        <LabeledField for={field}>
+          {({ field }) => <Input {...field} type="text" />}
+        </LabeledField>
+      );
     case 'email':
       return (
-        <LabeledFormField name={field.name} title={field.title} type="email" />
+        <LabeledField for={field}>
+          {({ field }) => <Input {...field} type="email" />}
+        </LabeledField>
       );
     case 'date':
       return (
-        <LabeledFormField name={field.name} title={field.title} type="date" />
+        <LabeledField for={field}>
+          {({ field }) => <Input {...field} type="date" />}
+        </LabeledField>
       );
     case 'password':
       return (
-        <LabeledFormField
-          name={field.name}
-          title={field.name}
-          type="password"
-        />
+        <LabeledField for={field}>
+          {({ field }) => <Input {...field} type="password" />}
+        </LabeledField>
       );
     case 'number':
       return (
-        <LabeledFormField name={field.name} title={field.title} type="number" />
+        <LabeledField for={field}>
+          {({ field: formikField }) => (
+            <Input
+              {...formikField}
+              type="number"
+              min={field.min}
+              max={field.max}
+            />
+          )}
+        </LabeledField>
       );
     case 'choice':
       return (
-        <div>
-          <Field
-            name={field.name}
-            render={({ field: formikField }: FieldProps<any>) => (
-              <div>
-                <Label>{field.title || field.name}</Label>
-                {field.options.map(option => {
-                  return (
-                    <div key={option}>
-                      <label key={option}>
-                        <input
-                          type="radio"
-                          {...formikField}
-                          checked={formikField.value === option}
-                          value={option}
-                        />{' '}
-                        {option}
-                      </label>
-                    </div>
-                  ); // FIXME - error message???
-                })}
-              </div>
-            )}
-          />
-        </div>
+        <LabeledField for={field}>
+          {({ field: formikField }) => (
+            <React.Fragment>
+              {field.options.map(option => {
+                return (
+                  <div key={option}>
+                    <label key={option}>
+                      <input
+                        type="radio"
+                        {...formikField}
+                        checked={formikField.value === option}
+                        value={option}
+                      />{' '}
+                      {option}
+                    </label>
+                  </div>
+                );
+              })}
+            </React.Fragment>
+          )}
+        </LabeledField>
       );
     case 'boolean':
       return (
-        <LabeledFormField
-          name={field.name}
-          title={field.title}
-          type="checkbox"
-        />
+        <LabeledField for={field}>
+          {({ field }) => <Input {...field} type="checkbox" />}
+        </LabeledField>
       );
   }
 };

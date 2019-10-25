@@ -1,4 +1,4 @@
-interface AnyFormField {
+export interface AnyFormField {
   readonly name: string;
   readonly title?: string;
   readonly?: boolean;
