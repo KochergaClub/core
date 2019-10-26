@@ -19,7 +19,9 @@ import Page from '~/components/Page';
 import { PublicEvent, EventTicket } from '~/events/types';
 
 import EventAnnouncements from './EventAnnouncements';
-import Registration from './Registration';
+import EventHeroBlock from './EventHeroBlock';
+// import Registration from './Registration';
+import TimepadRegistration from './TimepadRegistration';
 
 export interface Props {
   event: PublicEvent;
@@ -38,25 +40,6 @@ const Summary = styled.div`
   margin-bottom: 20px;
 `;
 
-const TimingsContainer = styled.div`
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-  color: #666;
-`;
-
-const EventTimings = ({ event }: { event: PublicEvent }) => {
-  const zonedStart = utcToZonedTime(event.start, timezone);
-  const zonedEnd = utcToZonedTime(event.end, timezone);
-
-  return (
-    <TimingsContainer>
-      {formatDate(zonedStart, 'd MMMM yyyy, HH:mm')}–
-      {formatDate(zonedEnd, 'HH:mm')}
-    </TimingsContainer>
-  );
-};
-
 const PublicEventPage: NextPage<Props> = props => {
   const { event } = props;
 
@@ -65,19 +48,16 @@ const PublicEventPage: NextPage<Props> = props => {
 
   return (
     <Page title={title}>
-      <Page.Title>{event.title}</Page.Title>
-      <Page.Main>
-        <Column gutter={20} stretch>
-          <div>
-            <EventTimings event={event} />
-            <EventAnnouncements event={event} />
-          </div>
-          {event.image && <Image src={event.image} />}
-          <Summary>{event.summary}</Summary>
-          <Markdown source={event.description} plugins={[breaks]} />
-          <Registration {...props} />
-        </Column>
-      </Page.Main>
+      <EventHeroBlock event={event} />
+      <Column gutter={20} stretch>
+        <div>
+          <EventAnnouncements event={event} />
+        </div>
+        {event.image && <Image src={event.image} />}
+        <Summary>{event.summary}</Summary>
+        <Markdown source={event.description} plugins={[breaks]} />
+        <TimepadRegistration event={event} />
+      </Column>
     </Page>
   );
 };
