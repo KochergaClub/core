@@ -1,11 +1,13 @@
-import React from 'react';
+import { useRef } from 'react';
+
+import styled from 'styled-components';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
 import breaks from 'remark-breaks';
 import Markdown from 'react-markdown';
 
-import { Column, RichText } from '@kocherga/frontkit';
+import { RichText } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import { timezone, formatDate } from '~/common/utils';
@@ -27,6 +29,10 @@ import EventHeroBlock from './EventHeroBlock';
 // import Registration from './Registration';
 import TimepadRegistration from './TimepadRegistration';
 
+const Smooth = styled.div`
+  scroll-behavior: smooth;
+`;
+
 export interface Props {
   serverEvent: ServerPublicEvent;
   ticket?: EventTicket;
@@ -38,23 +44,25 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
   const zonedStart = utcToZonedTime(event.start, timezone);
   const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
 
+  const registrationRef = useRef<HTMLElement | null>(null);
+
   return (
     <Page title={title}>
-      <EventHeroBlock event={event} />
-      <Column gutter={20} stretch>
+      <Smooth>
+        <EventHeroBlock event={event} registrationRef={registrationRef} />
         <EventAnnouncements event={event} />
         <PaddedBlock>
           <RichText>
             <Markdown source={event.description} plugins={[breaks]} />
           </RichText>
         </PaddedBlock>
-        <section>
+        <section ref={registrationRef}>
           <TL03 title="Регистрация" grey />
           <PaddedBlock>
             <TimepadRegistration event={event} />
           </PaddedBlock>
         </section>
-      </Column>
+      </Smooth>
     </Page>
   );
 };
