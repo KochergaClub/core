@@ -45,8 +45,8 @@ const BottomRowContainer = styled.div`
   ${deviceMediaQueries.desktop(`
       flex-direction: row;
       flex-wrap: wrap;
-      align-items: end;
-    font-size: ${fonts.sizes.L};
+      align-items: center;
+      font-size: ${fonts.sizes.L};
     `)}
 
   > :first-child,
@@ -112,7 +112,9 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
   return (
     <BottomRowContainer>
       <HumanizedDateTime date={event.start} />
-      <Button onClick={registerCb}>Зарегистрироваться</Button>
+      <Button kind="primary" size="big" onClick={registerCb}>
+        Зарегистрироваться
+      </Button>
       <div>{daysText}</div>
     </BottomRowContainer>
   );
