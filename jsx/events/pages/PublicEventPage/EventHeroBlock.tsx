@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { Button, fonts } from '@kocherga/frontkit';
+import { A, Button, Label, fonts } from '@kocherga/frontkit';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import HeroWithImage from '~/components/HeroWithImage';
@@ -18,13 +18,23 @@ const Container = styled.div`
   justify-content: space-between;
 
   padding: 24px;
+
+  > :nth-child(2) {
+    flex: 1;
+  }
+`;
+
+const HeroLabel = styled(Label)`
+  color: white;
+  cursor: pointer;
 `;
 
 const BottomRowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: end;
   width: 100%;
 
   font-size: ${fonts.sizes.L};
@@ -65,6 +75,9 @@ const ProjectHeroBlock: React.FC<Props> = ({ event }) => {
   return (
     <HeroWithImage image={imageUrl}>
       <Container>
+        <A href="/#schedule">
+          <HeroLabel>Событие в Кочерге</HeroLabel>
+        </A>
         <HeroHeader>{event.title}</HeroHeader>
         <BottomRow event={event} />
       </Container>

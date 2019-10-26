@@ -8,7 +8,7 @@ import Page from '~/components/Page';
 import { selectAPI } from '~/core/selectors';
 
 import { getEvent } from '~/events/api';
-import { Event, serverEventToEvent } from '~/events/types';
+import { ServerEvent, serverEventToEvent } from '~/events/types';
 
 import EventInfo from '~/events/components/EventInfo';
 import FeedbackCollection from './FeedbackCollection';
@@ -16,10 +16,12 @@ import FeedbackCollection from './FeedbackCollection';
 import { loadEventFeedbacks } from '~/events/actions';
 
 interface Props {
-  event: Event;
+  serverEvent: ServerEvent;
 }
 
-const TeamEventPage: NextPage<Props> = ({ event }) => {
+const TeamEventPage: NextPage<Props> = ({ serverEvent }) => {
+  const event = serverEventToEvent(serverEvent);
+
   return (
     <Page title={event.title} team>
       <Page.Title>{event.title}</Page.Title>
@@ -44,11 +46,10 @@ TeamEventPage.getInitialProps = async ({
 
   const api = selectAPI(getState());
   const serverEvent = await getEvent(api, uuid);
-  const event = serverEventToEvent(serverEvent);
 
   await dispatch(loadEventFeedbacks(uuid));
 
-  return { event };
+  return { serverEvent };
 };
 
 export default TeamEventPage;

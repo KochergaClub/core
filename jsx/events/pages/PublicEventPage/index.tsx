@@ -1,22 +1,26 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { utcToZonedTime } from 'date-fns-tz';
 
 import breaks from 'remark-breaks';
 import Markdown from 'react-markdown';
 
-import { Column } from '@kocherga/frontkit';
+import { Column, RichText } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import { timezone, formatDate } from '~/common/utils';
 import { APIError } from '~/common/api';
 import { selectAPI, selectUser } from '~/core/selectors';
 
+import PaddedBlock from '~/components/PaddedBlock';
 import Page from '~/components/Page';
+import TL03 from '~/blocks/TL03';
 
-import { PublicEvent, EventTicket } from '~/events/types';
+import {
+  ServerPublicEvent,
+  serverPublicEventToEvent,
+  EventTicket,
+} from '~/events/types';
 
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
@@ -24,24 +28,12 @@ import EventHeroBlock from './EventHeroBlock';
 import TimepadRegistration from './TimepadRegistration';
 
 export interface Props {
-  event: PublicEvent;
+  serverEvent: ServerPublicEvent;
   ticket?: EventTicket;
 }
 
-const Image = styled.img`
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-`;
-
-const Summary = styled.div`
-  font-size: 1.3em;
-  line-height: 1.4;
-  margin-bottom: 20px;
-`;
-
-const PublicEventPage: NextPage<Props> = props => {
-  const { event } = props;
+const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
+  const event = serverPublicEventToEvent(serverEvent);
 
   const zonedStart = utcToZonedTime(event.start, timezone);
   const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
@@ -50,13 +42,18 @@ const PublicEventPage: NextPage<Props> = props => {
     <Page title={title}>
       <EventHeroBlock event={event} />
       <Column gutter={20} stretch>
-        <div>
-          <EventAnnouncements event={event} />
-        </div>
-        {event.image && <Image src={event.image} />}
-        <Summary>{event.summary}</Summary>
-        <Markdown source={event.description} plugins={[breaks]} />
-        <TimepadRegistration event={event} />
+        <EventAnnouncements event={event} />
+        <PaddedBlock>
+          <RichText>
+            <Markdown source={event.description} plugins={[breaks]} />
+          </RichText>
+        </PaddedBlock>
+        <section>
+          <TL03 title="Регистрация" grey />
+          <PaddedBlock>
+            <TimepadRegistration event={event} />
+          </PaddedBlock>
+        </section>
       </Column>
     </Page>
   );
@@ -68,11 +65,9 @@ PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
 
   const event_id = query.id as string;
 
-  const event = await api.call(`public_events/${event_id}`, 'GET');
-  event.start = new Date(event.start);
-  event.end = new Date(event.end);
+  const serverEvent = await api.call(`public_events/${event_id}`, 'GET');
 
-  const result: Props = { event };
+  const result: Props = { serverEvent };
   if (user.is_authenticated) {
     try {
       const ticket = await api.call(`events/${event_id}/tickets/my`, 'GET'); // FIXME - can return 404

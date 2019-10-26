@@ -46,7 +46,11 @@ const TimepadRegistration: React.FC<Props> = ({ event }) => {
     el.appendChild(script);
   });
 
-  return <div id="timepad-registration-widget" />;
+  return (
+    <div>
+      <div id="timepad-registration-widget" />
+    </div>
+  );
 };
 
 export default TimepadRegistration;
