@@ -29,8 +29,8 @@ import {
 
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
-// import Registration from './Registration';
-import TimepadRegistration from './TimepadRegistration';
+import Registration from './Registration';
+// import TimepadRegistration from './TimepadRegistration';
 
 const Smooth = styled.div`
   scroll-behavior: smooth;
@@ -41,7 +41,7 @@ export interface Props {
   ticket?: EventTicket;
 }
 
-const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
+const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
   const event = serverPublicEventToEvent(serverEvent);
 
   const zonedStart = utcToZonedTime(event.start, timezone);
@@ -65,7 +65,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
           <section ref={registrationRef}>
             <TL03 title="Регистрация" grey />
             <PaddedBlock>
-              <TimepadRegistration event={event} />
+              <Registration event={event} ticket={ticket} />
             </PaddedBlock>
           </section>
         ) : (
@@ -94,7 +94,7 @@ PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
   const result: Props = { serverEvent };
   if (user.is_authenticated) {
     try {
-      const ticket = await api.call(`events/${event_id}/tickets/my`, 'GET'); // FIXME - can return 404
+      const ticket = await api.call(`events/${event_id}/my_ticket`, 'GET'); // FIXME - can return 404
       result.ticket = ticket;
     } catch (e) {
       if (e instanceof APIError && e.status === 404) {

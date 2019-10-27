@@ -6,19 +6,16 @@ import { useAPI, useUser } from '~/common/hooks';
 
 import { PublicEvent, EventTicket } from '~/events/types';
 
+import AnonRegistration from './AnonRegistration';
+
 interface Props {
   event: PublicEvent;
   ticket?: EventTicket;
 }
 
-const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <section>
-    <h2>Регистрация</h2>
-    {children}
-  </section>
-);
+export default function Registration(props: Props) {
+  const { event, ticket } = props;
 
-export default function Registration({ ticket, event }: Props) {
   const [acting, setActing] = useState(false);
 
   const api = useAPI();
@@ -26,55 +23,49 @@ export default function Registration({ ticket, event }: Props) {
 
   const unregister = useCallback(async () => {
     setActing(true);
-    await api.call(
-      `events/${event.event_id}/tickets/my`,
-      'DELETE',
-      {},
-      false // don't expect JSON
-    );
+    await api.call(`events/${event.event_id}/my_ticket/unregister`, 'POST');
     window.location.reload();
   }, [api, event.event_id]);
 
   const register = useCallback(async () => {
     setActing(true);
-    await api.call(`events/${event.event_id}/tickets/my`, 'POST');
+    await api.call(`events/${event.event_id}/my_ticket/register`, 'POST');
     window.location.reload();
   }, [api, event.event_id]);
 
   if (!user.is_authenticated) {
-    // TODO - set `next` (we'll need to store location/path in global context for this, since we can't use window.location on server)
+    return <AnonRegistration {...props} />;
+  }
+
+  if (user.is_authenticated) {
+    // TODO - registration for logged-in users is not ready yet
+    return <AnonRegistration {...props} />;
+  }
+
+  if (ticket) {
     return (
-      <Wrapper>
-        <em>
-          Чтобы зарегистрироваться на мероприятие, сначала{' '}
-          <A href={`/login`}>войдите на сайт</A>.
-        </em>
-      </Wrapper>
+      <div>
+        <div>Вы зарегистрированы.</div>
+        <div>
+          <A href="/my/">Посмотреть в личном кабинете</A>
+        </div>
+        <Button loading={acting} disabled={acting} onClick={unregister}>
+          Отменить регистрацию
+        </Button>
+      </div>
     );
   }
 
   return (
-    <Wrapper>
-      {ticket ? (
-        <div>
-          <div>Вы зарегистрированы.</div>
-          <div>
-            <A href="/my/">Посмотреть в личном кабинете</A>
-          </div>
-          <Button loading={acting} disabled={acting} onClick={unregister}>
-            Отменить регистрацию
-          </Button>
-        </div>
-      ) : (
-        <Button
-          kind="primary"
-          loading={acting}
-          disabled={acting}
-          onClick={register}
-        >
-          Зарегистрироваться
-        </Button>
-      )}
-    </Wrapper>
+    <div>
+      <Button
+        kind="primary"
+        loading={acting}
+        disabled={acting}
+        onClick={register}
+      >
+        Зарегистрироваться
+      </Button>
+    </div>
   );
 }
