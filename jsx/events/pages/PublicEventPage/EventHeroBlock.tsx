@@ -54,10 +54,6 @@ const BottomRowContainer = styled.div`
     flex: 1;
     text-align: center;
   }
-
-  > :nth-child(2) {
-    margin: 0 32px;
-  }
 `;
 
 interface Props {
@@ -66,36 +62,36 @@ interface Props {
 }
 
 const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
-  const inDays = differenceInDays(event.start, new Date());
+  const daysUntil = differenceInDays(event.start, new Date());
 
   let daysText = '';
 
-  if (inDays === 0) {
+  if (daysUntil === 0) {
     daysText = 'Сегодня';
-  } else if (inDays < 0) {
+  } else if (daysUntil < 0) {
     daysText = 'Это событие прошло';
-  } else if (inDays === 1) {
+  } else if (daysUntil === 1) {
     daysText = 'Завтра';
-  } else if (inDays === 2) {
+  } else if (daysUntil === 2) {
     daysText = 'Послезавтра';
-  } else if (inDays === 3) {
+  } else if (daysUntil === 3) {
     daysText = 'Через 3 дня';
-  } else if (inDays === 4) {
+  } else if (daysUntil === 4) {
     daysText = 'Через 4 дня';
-  } else if (inDays === 5) {
+  } else if (daysUntil === 5) {
     daysText = 'Через 5 дней';
-  } else if (inDays === 6) {
+  } else if (daysUntil === 6) {
     daysText = 'Через 6 дней';
   } else {
     // more than 6 days
-    const inWeeks = differenceInCalendarWeeks(event.start, new Date(), {
+    const weeksUntil = differenceInCalendarWeeks(event.start, new Date(), {
       weekStartsOn: 1,
     });
 
-    if (inWeeks === 1) {
+    if (weeksUntil === 1) {
       daysText = 'На следующей неделе';
-    } else if (inWeeks === 2 || inWeeks == 3 || inWeeks === 4) {
-      daysText = `Через ${inWeeks} недели`;
+    } else if (weeksUntil === 2 || weeksUntil == 3 || weeksUntil === 4) {
+      daysText = `Через ${weeksUntil} недели`;
     }
   }
 
@@ -112,9 +108,11 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
   return (
     <BottomRowContainer>
       <HumanizedDateTime date={event.start} />
-      <Button kind="primary" size="big" onClick={registerCb}>
-        Зарегистрироваться
-      </Button>
+      {daysUntil >= 0 && (
+        <Button kind="primary" size="big" onClick={registerCb}>
+          Зарегистрироваться
+        </Button>
+      )}
       <div>{daysText}</div>
     </BottomRowContainer>
   );

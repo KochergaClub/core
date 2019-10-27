@@ -2,6 +2,8 @@ import { useRef } from 'react';
 
 import styled from 'styled-components';
 
+import { differenceInDays } from 'date-fns';
+
 import { utcToZonedTime } from 'date-fns-tz';
 
 import breaks from 'remark-breaks';
@@ -14,6 +16,7 @@ import { timezone, formatDate } from '~/common/utils';
 import { APIError } from '~/common/api';
 import { selectAPI, selectUser } from '~/core/selectors';
 
+import AlertCard from '~/components/AlertCard';
 import PaddedBlock from '~/components/PaddedBlock';
 import Page from '~/components/Page';
 import TL03 from '~/blocks/TL03';
@@ -46,6 +49,8 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
 
   const registrationRef = useRef<HTMLElement | null>(null);
 
+  const daysUntil = differenceInDays(event.start, new Date());
+
   return (
     <Page title={title}>
       <Smooth>
@@ -56,12 +61,23 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
             <Markdown source={event.description} plugins={[breaks]} />
           </RichText>
         </PaddedBlock>
-        <section ref={registrationRef}>
-          <TL03 title="Регистрация" grey />
-          <PaddedBlock>
-            <TimepadRegistration event={event} />
-          </PaddedBlock>
-        </section>
+        {daysUntil >= 0 ? (
+          <section ref={registrationRef}>
+            <TL03 title="Регистрация" grey />
+            <PaddedBlock>
+              <TimepadRegistration event={event} />
+            </PaddedBlock>
+          </section>
+        ) : (
+          <AlertCard>
+            <RichText>
+              Это событие прошло.
+              <br />
+              Посмотрите, что будет в Кочерге{' '}
+              <a href="/#schedule">в ближайшие дни.</a>
+            </RichText>
+          </AlertCard>
+        )}
       </Smooth>
     </Page>
   );
