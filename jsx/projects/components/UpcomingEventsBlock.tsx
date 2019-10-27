@@ -1,17 +1,12 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
-import { ProjectPageType } from '../utils';
+import TL03 from '~/blocks/TL03';
+import PaddedBlock from '~/components/PaddedBlock';
 
 import { PublicEvent } from '~/events/types';
 import EventsList from '~/events/components/EventsList';
 
-const Container = styled.section`
-  padding: 40px 20px;
-  margin: 0 auto;
-  max-width: 800px;
-`;
+import { ProjectPageType } from '../utils';
 
 const UpcomingEventsBlock: React.FC<{ project: ProjectPageType }> = ({
   project,
@@ -27,10 +22,12 @@ const UpcomingEventsBlock: React.FC<{ project: ProjectPageType }> = ({
   })) as PublicEvent[];
 
   return (
-    <Container>
-      <h2>Ближайшие события:</h2>
-      <EventsList events={events} />
-    </Container>
+    <section>
+      <TL03 title="Ближайшие события" grey />
+      <PaddedBlock>
+        <EventsList events={events} />
+      </PaddedBlock>
+    </section>
   );
 };
 
