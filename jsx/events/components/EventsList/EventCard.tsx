@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { utcToZonedTime } from 'date-fns-tz';
-
-import { timezone, formatDate } from '~/common/utils';
+import HumanizedDateTime from '~/components/HumanizedDateTime';
 
 import { PublicEvent } from '../../types';
 
@@ -21,8 +19,7 @@ const TitleLink = styled.a`
   color: black;
 `;
 
-const Time = styled.time`
-  display: block;
+const TimeWrapper = styled.div`
   font-weight: bold;
   font-style: italic;
 `;
@@ -33,9 +30,7 @@ interface Props {
 }
 
 const EventCard: React.FC<Props> = ({ event, mode }) => {
-  const zonedStart = utcToZonedTime(event.start, timezone);
-
-  let href = `/event/${event.event_id}/`;
+  let href = `/events/${event.event_id}/`;
 
   if (mode === 'timepad') {
     if (!event.announcements.timepad || !event.announcements.timepad.link) {
@@ -54,9 +49,9 @@ const EventCard: React.FC<Props> = ({ event, mode }) => {
   return (
     <Container>
       {title}
-      <Time dateTime={event.start.toISOString()}>
-        {formatDate(zonedStart, 'EEEE, d MMMM, HH:mm')}
-      </Time>
+      <TimeWrapper>
+        <HumanizedDateTime date={event.start} />
+      </TimeWrapper>
       <div>{event.summary}</div>
     </Container>
   );

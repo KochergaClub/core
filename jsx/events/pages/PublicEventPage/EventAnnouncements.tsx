@@ -14,6 +14,9 @@ const AnnouncementsContainer = styled.div`
 `;
 
 export default function EventAnnouncements({ event }: { event: PublicEvent }) {
+  // temporarily disabled
+  return null;
+
   return (
     <AnnouncementsContainer>
       {(['vk', 'fb', 'timepad'] as AnnouncementKey[])

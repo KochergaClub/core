@@ -29,7 +29,7 @@ const UpcomingEventsBlock: React.FC<{ project: ProjectPageType }> = ({
   return (
     <Container>
       <h2>Ближайшие события:</h2>
-      <EventsList events={events} mode="timepad" />
+      <EventsList events={events} />
     </Container>
   );
 };

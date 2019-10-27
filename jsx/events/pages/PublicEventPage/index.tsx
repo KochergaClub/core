@@ -1,83 +1,84 @@
-import React from 'react';
+import { useRef } from 'react';
 
 import styled from 'styled-components';
+
+import { differenceInDays } from 'date-fns';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
 import breaks from 'remark-breaks';
 import Markdown from 'react-markdown';
 
-import { Column } from '@kocherga/frontkit';
+import { RichText } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import { timezone, formatDate } from '~/common/utils';
 import { APIError } from '~/common/api';
 import { selectAPI, selectUser } from '~/core/selectors';
 
+import AlertCard from '~/components/AlertCard';
+import PaddedBlock from '~/components/PaddedBlock';
 import Page from '~/components/Page';
+import TL03 from '~/blocks/TL03';
 
-import { PublicEvent, EventTicket } from '~/events/types';
+import {
+  ServerPublicEvent,
+  serverPublicEventToEvent,
+  EventTicket,
+} from '~/events/types';
 
 import EventAnnouncements from './EventAnnouncements';
-import Registration from './Registration';
+import EventHeroBlock from './EventHeroBlock';
+// import Registration from './Registration';
+import TimepadRegistration from './TimepadRegistration';
+
+const Smooth = styled.div`
+  scroll-behavior: smooth;
+`;
 
 export interface Props {
-  event: PublicEvent;
+  serverEvent: ServerPublicEvent;
   ticket?: EventTicket;
 }
 
-const Image = styled.img`
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-`;
-
-const Summary = styled.div`
-  font-size: 1.3em;
-  line-height: 1.4;
-  margin-bottom: 20px;
-`;
-
-const TimingsContainer = styled.div`
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-  color: #666;
-`;
-
-const EventTimings = ({ event }: { event: PublicEvent }) => {
-  const zonedStart = utcToZonedTime(event.start, timezone);
-  const zonedEnd = utcToZonedTime(event.end, timezone);
-
-  return (
-    <TimingsContainer>
-      {formatDate(zonedStart, 'd MMMM yyyy, HH:mm')}–
-      {formatDate(zonedEnd, 'HH:mm')}
-    </TimingsContainer>
-  );
-};
-
-const PublicEventPage: NextPage<Props> = props => {
-  const { event } = props;
+const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
+  const event = serverPublicEventToEvent(serverEvent);
 
   const zonedStart = utcToZonedTime(event.start, timezone);
   const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
 
+  const registrationRef = useRef<HTMLElement | null>(null);
+
+  const daysUntil = differenceInDays(event.start, new Date());
+
   return (
     <Page title={title}>
-      <Page.Title>{event.title}</Page.Title>
-      <Page.Main>
-        <Column gutter={20} stretch>
-          <div>
-            <EventTimings event={event} />
-            <EventAnnouncements event={event} />
-          </div>
-          {event.image && <Image src={event.image} />}
-          <Summary>{event.summary}</Summary>
-          <Markdown source={event.description} plugins={[breaks]} />
-          <Registration {...props} />
-        </Column>
-      </Page.Main>
+      <Smooth>
+        <EventHeroBlock event={event} registrationRef={registrationRef} />
+        <EventAnnouncements event={event} />
+        <PaddedBlock>
+          <RichText>
+            <Markdown source={event.description} plugins={[breaks]} />
+          </RichText>
+        </PaddedBlock>
+        {daysUntil >= 0 ? (
+          <section ref={registrationRef}>
+            <TL03 title="Регистрация" grey />
+            <PaddedBlock>
+              <TimepadRegistration event={event} />
+            </PaddedBlock>
+          </section>
+        ) : (
+          <AlertCard>
+            <RichText>
+              Это событие прошло.
+              <br />
+              Посмотрите, что будет в Кочерге{' '}
+              <a href="/#schedule">в ближайшие дни.</a>
+            </RichText>
+          </AlertCard>
+        )}
+      </Smooth>
     </Page>
   );
 };
@@ -88,11 +89,9 @@ PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
 
   const event_id = query.id as string;
 
-  const event = await api.call(`public_events/${event_id}`, 'GET');
-  event.start = new Date(event.start);
-  event.end = new Date(event.end);
+  const serverEvent = await api.call(`public_events/${event_id}`, 'GET');
 
-  const result: Props = { event };
+  const result: Props = { serverEvent };
   if (user.is_authenticated) {
     try {
       const ticket = await api.call(`events/${event_id}/tickets/my`, 'GET'); // FIXME - can return 404

@@ -142,6 +142,16 @@ export const serverEventToEvent = (event: ServerEvent): Event => {
   };
 };
 
+export const serverPublicEventToEvent = (
+  event: ServerPublicEvent
+): PublicEvent => {
+  return {
+    ...event,
+    start: new Date(event.start),
+    end: new Date(event.end),
+  };
+};
+
 export const getInitialState = (events: ServerEvent[]) => ({
   events: events.map(serverEventToEvent),
 });
