@@ -14,7 +14,7 @@ interface UIState {
 }
 
 const uiReducer: Reducer<UIState, Action> = (
-  state = { tab: 'tickets' },
+  state = { tab: 'visits' },
   action
 ) => {
   switch (action.type) {

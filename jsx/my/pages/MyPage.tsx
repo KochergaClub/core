@@ -61,19 +61,17 @@ const MyPage: NextPage<OwnProps> = () => {
           </div>
           {user.is_staff && <AdminSection />}
           <RowNav>
-            {[
-              ['tickets', 'События'],
-              ['visits', 'Посещения'],
-              ['settings', 'Настройки'],
-            ].map(([t, tName]) => (
-              <RowNav.Item
-                key={t}
-                selected={tab === t}
-                select={() => dispatch(actions.openTab(t))}
-              >
-                {tName}
-              </RowNav.Item>
-            ))}
+            {[['visits', 'Посещения'], ['settings', 'Настройки']].map(
+              ([t, tName]) => (
+                <RowNav.Item
+                  key={t}
+                  selected={tab === t}
+                  select={() => dispatch(actions.openTab(t))}
+                >
+                  {tName}
+                </RowNav.Item>
+              )
+            )}
           </RowNav>
           <SectionWrapper>{getSection()}</SectionWrapper>
         </Column>
