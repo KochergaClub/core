@@ -52,7 +52,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
   const daysUntil = differenceInDays(event.start, new Date());
 
   return (
-    <Page title={title}>
+    <Page title={title} og={{ image: event.image }}>
       <Smooth>
         <EventHeroBlock event={event} registrationRef={registrationRef} />
         <EventAnnouncements event={event} />
