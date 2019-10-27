@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Row, Column } from '@kocherga/frontkit';
 
+import { capitalize } from '~/common/utils';
 import { FormShape } from '~/components/forms/types';
 
 import CreateItemButton from './CreateItemButton';
@@ -17,8 +18,6 @@ interface Props<I, A extends {}> {
   add?: (addParams: A) => Promise<void>;
   view?: (props: AnyViewProps<I>) => React.ReactElement;
 }
-
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 function Collection<I, A>(props: Props<I, A>) {
   const View = props.view || ListView;

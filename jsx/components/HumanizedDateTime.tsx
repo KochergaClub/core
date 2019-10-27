@@ -2,7 +2,7 @@ import React from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { timezone, formatDate } from '~/common/utils';
+import { timezone, formatDate, capitalize } from '~/common/utils';
 
 interface Props {
   date: Date;
@@ -13,7 +13,7 @@ const HumanizedDateTime: React.FC<Props> = ({ date }) => {
 
   return (
     <time dateTime={date.toISOString()}>
-      {formatDate(zonedDate, 'EEEE, d MMMM, HH:mm')}
+      {capitalize(formatDate(zonedDate, 'EEEE, d MMMM, HH:mm'))}
     </time>
   );
 };
