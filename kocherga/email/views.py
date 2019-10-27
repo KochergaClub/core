@@ -84,7 +84,7 @@ class SubscribeChannelViewSet(viewsets.ModelViewSet):
         if request.data.get('test', '') == 'test':
             return Response('test response')
 
-        email = request.data.get('EMAIL') or request.data.get('email')
+        email = request.data.get('EMAIL') or request.data.get('email') or request.data.get('Email')
         if not email:
             raise EmptyEmailException()
 
