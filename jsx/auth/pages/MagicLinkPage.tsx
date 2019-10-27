@@ -33,7 +33,7 @@ const MagicLinkPage: NextPage<Props> = props => {
   }, [api, props.next, props.token]);
 
   return (
-    <Page title="Магическая ссылка" noMenu noFooter>
+    <Page title="Магическая ссылка" noMenu noFooter noAnalytics noVkWidget>
       <AuthContainer>Проверяем доступ...</AuthContainer>
     </Page>
   );

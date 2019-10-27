@@ -33,6 +33,7 @@ interface Props {
   noMenu?: boolean;
   noFooter?: boolean;
   noVkWidget?: boolean;
+  noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
   og?: OpenGraph;
 }
 
@@ -49,6 +50,7 @@ const Page: PageType = ({
   noMenu,
   noFooter,
   noVkWidget,
+  noAnalytics,
   og,
 }) => {
   const router = useRouter();
@@ -60,10 +62,14 @@ const Page: PageType = ({
         og={og || {}}
         url={router.pathname}
       />
-      <GoogleAnalyticsScript />
-      <FacebookPixelScript />
-      <YandexMetrikaScript />
-      <VkRetargetingScript />
+      {noAnalytics || (
+        <React.Fragment>
+          <GoogleAnalyticsScript />
+          <FacebookPixelScript />
+          <YandexMetrikaScript />
+          <VkRetargetingScript />
+        </React.Fragment>
+      )}
       <GlobalStyle />
       <NProgressStyle />
       {noMenu || <TildaMenu team={team || false} />}
