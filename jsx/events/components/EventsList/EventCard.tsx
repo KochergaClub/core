@@ -30,7 +30,7 @@ interface Props {
 }
 
 const EventCard: React.FC<Props> = ({ event, mode }) => {
-  let href = `/event/${event.event_id}/`;
+  let href = `/events/${event.event_id}/`;
 
   if (mode === 'timepad') {
     if (!event.announcements.timepad || !event.announcements.timepad.link) {
