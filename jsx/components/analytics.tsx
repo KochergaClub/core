@@ -118,3 +118,25 @@ export const trackPageview = (url: string) => {
     // no need to track FB Pixel - it supports SPA already (TODO - check if that's true)
   }, 0);
 };
+
+interface GTagEventParams {
+  category?: string;
+  label?: string;
+  value?: number;
+}
+
+export const trackEvent = (action: string, params?: GTagEventParams) => {
+  const { category, label, value } = params || {
+    category: undefined,
+    label: undefined,
+    value: undefined,
+  };
+
+  if (GA_TRACKING_ID) {
+    window.gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value,
+    });
+  }
+};

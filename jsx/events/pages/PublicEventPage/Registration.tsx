@@ -6,6 +6,8 @@ import { useAPI, useUser } from '~/common/hooks';
 
 import { PublicEvent, EventTicket } from '~/events/types';
 
+import { trackEvent } from '~/components/analytics';
+
 import AnonRegistration from './AnonRegistration';
 
 interface Props {
@@ -22,12 +24,20 @@ export default function Registration(props: Props) {
   const user = useUser();
 
   const unregister = useCallback(async () => {
+    trackEvent('event_unregister', {
+      label: event.title,
+    });
+
     setActing(true);
     await api.call(`events/${event.event_id}/my_ticket/unregister`, 'POST');
     window.location.reload();
   }, [api, event.event_id]);
 
   const register = useCallback(async () => {
+    trackEvent('event_register', {
+      label: event.title,
+    });
+
     setActing(true);
     await api.call(`events/${event.event_id}/my_ticket/register`, 'POST');
     window.location.reload();
