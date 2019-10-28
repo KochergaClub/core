@@ -3,6 +3,7 @@ from channels.auth import AuthMiddlewareStack
 from django.urls import path
 
 import kocherga.events.consumers
+import kocherga.email.consumers
 import kocherga.watchmen.consumers
 import kocherga.slack.consumers
 
@@ -17,6 +18,7 @@ application = ProtocolTypeRouter({
         "slack-notify": kocherga.slack.consumers.NotifyConsumer,
         "events-slack-notify": kocherga.events.consumers.NotifySlackConsumer,
         "events-google-export": kocherga.events.consumers.GoogleExportConsumer,
+        "mailchimp-subscribe": kocherga.email.consumers.MailchimpSubscribeConsumer,
     }),
     # (http->django views is added by default)
 })

@@ -11,9 +11,17 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
+import channels.layers
+from asgiref.sync import async_to_sync
+
 import kocherga.dateutils
 from kocherga.dateutils import TZ
-import kocherga.email.lists
+
+
+# FIXME - copy-pasted from kocherga.events.signals, extract into common module
+def channel_send(channel: str, message):
+    channel_layer = channels.layers.get_channel_layer()
+    async_to_sync(channel_layer.send)(channel, message)
 
 
 class TicketManager(models.Manager):
@@ -147,11 +155,9 @@ class Ticket(models.Model):
             return  # not necessary
 
         email = self.user.email
-        mailchimp_user = kocherga.email.lists.User(
-            email=email,
-            first_name=None,
-            last_name=None,
-            card_id=None,
-        )
-        kocherga.email.lists.populate_main_list([mailchimp_user])
-        logger.info(f'Subscribed {email}')
+
+        channel_send("mailchimp-subscribe", {
+            "type": "subscribe_to_main_list",
+            "email": email,
+        })
+        logger.info(f'Scheduled subscription of {email}')
