@@ -13,17 +13,22 @@ from django.template.loader import render_to_string
 
 import kocherga.dateutils
 from kocherga.dateutils import TZ
+import kocherga.email.lists
 
 
 class TicketManager(models.Manager):
-    def register(self, user, event) -> None:
+    def register(self, user, event, subscribed_to_newsletter=False) -> None:
         (ticket, _) = self.update_or_create(
             user=user,
             event=event,
-            defaults={'status': 'ok'},
+            defaults={
+                'status': 'ok',
+                'subscribed_to_newsletter': subscribed_to_newsletter,
+            },
         )
 
         ticket.send_confirmation_email()
+        ticket.subscribe_to_newsletter_if_necessary()  # TODO - do asynchronously for faster response
 
     def unregister(self, user, event) -> None:
         ticket = self.get(
@@ -66,6 +71,7 @@ class Ticket(models.Model):
         default='ok',
     )
 
+    subscribed_to_newsletter = models.BooleanField(default=False)
     day_before_notification_sent = models.BooleanField(default=False)
 
     objects = TicketManager()
@@ -98,7 +104,7 @@ class Ticket(models.Model):
         html_body = markdown.markdown(render_to_string('events/email/registered.md', template_vars))
 
         send_mail(
-            subject='Регистрация на событие',
+            subject=f'Регистрация на событие: {self.event.title}',
             from_email='Кочерга <info@kocherga-club.ru>',
             message=text_body,
             html_message=html_body,
@@ -134,3 +140,18 @@ class Ticket(models.Model):
             html_message=html_body,
             recipient_list=[self.user.email],
         )
+
+    def subscribe_to_newsletter_if_necessary(self):
+        if not self.subscribed_to_newsletter:
+            logger.info('Not necessary to subscribe')
+            return  # not necessary
+
+        email = self.user.email
+        mailchimp_user = kocherga.email.lists.User(
+            email=email,
+            first_name=None,
+            last_name=None,
+            card_id=None,
+        )
+        kocherga.email.lists.populate_main_list([mailchimp_user])
+        logger.info(f'Subscribed {email}')

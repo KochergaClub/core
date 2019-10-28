@@ -4,6 +4,6 @@
 
 **Информация о событии**
 
-Название: {{event.title}}<br>
+Название: [{{event.title}}]({{event_link}})<br>
 Дата и время: {{humanized_dt}}<br>
 Место проведения: {{address_text}}

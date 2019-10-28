@@ -9,18 +9,19 @@ from django.conf import settings
 from django.core import mail
 from django.contrib.auth import get_user_model
 
+import kocherga.mailchimp
 from kocherga.dateutils import TZ
 from kocherga.events.models import Event, Ticket
 
 
 @pytest.fixture
 def user1():
-    return get_user_model().objects.create_user('u1@example.com')
+    return get_user_model().objects.create_user('kocherga-test@berekuk.ru')
 
 
 @pytest.fixture
 def user2():
-    return get_user_model().objects.create_user('u2@example.com')
+    return get_user_model().objects.create_user('kocherga-test@berekuk.ru')
 
 
 @pytest.fixture
@@ -71,3 +72,11 @@ def test_send_reminders(user1, user2, tomorrow_event, future_event):
 
     Ticket.objects.send_reminders()
     assert len(mail.outbox) == 5  # no additional reminders
+
+
+def test_newsletter(user1, event):
+    Ticket.objects.register(user=user1, event=event, subscribed_to_newsletter=True)
+
+    # TODO - reset member before registering
+    member = kocherga.mailchimp.get_member_by_email(user1.email)
+    print(member)

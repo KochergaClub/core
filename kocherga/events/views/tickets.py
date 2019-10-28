@@ -69,7 +69,10 @@ class MyEventTicketRegisterView(views.APIView):
         user = self.request.user
         event = models.Event.objects.public_events().get(uuid=self.kwargs['event_id'])
 
-        models.Ticket.objects.register(user=user, event=event)
+        models.Ticket.objects.register(
+            user=user,
+            event=event,
+        )
 
         return response.Response('ok')
 
@@ -97,11 +100,14 @@ class AnonEventTicketRegisterView(views.APIView):
             user = KchUser.objects.get(email=email)
         except KchUser.DoesNotExist:
             user = KchUser.objects.create_user(email)
-        # TODO - subscribe to newsletter (see kocherga.timepad.importer code)
 
         event = models.Event.objects.public_events().get(uuid=self.kwargs['event_id'])
 
-        models.Ticket.objects.register(user=user, event=event)
+        models.Ticket.objects.register(
+            user=user,
+            event=event,
+            subscribed_to_newsletter=request.data.get('subscribed_to_newsletter', False),
+        )
 
         return response.Response('ok')
 
