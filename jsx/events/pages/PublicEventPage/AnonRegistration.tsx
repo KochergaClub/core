@@ -30,7 +30,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
     });
     setComplete(true);
     setActing(false);
-  }, [api, event.event_id, email]);
+  }, [api, event.event_id, email, subscribedToNewsletter]);
 
   if (complete) {
     return (
