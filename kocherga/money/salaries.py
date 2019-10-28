@@ -137,11 +137,11 @@ class SalaryContainer:
         del self.salaries[member_id]
 
     def print_all(self):
-        print(f'{"Имя":<14} {"2%":<8}{"Смены":<12}{"Всего":<8}')
+        print(f'{"Имя":<14} {"Смены":<12}{"2%":<8}{"Всего":<8}')
         print('-' * 50)
         for member_id in sorted(self.salaries.keys()):
             member = Member.objects.get(pk=member_id)
-            salary = self.salaries[member.user.email]
+            salary = self.salaries[member_id]
             print(f'{member.short_name:<14} {salary.shifts:<12}{salary.commissions:<8}{salary.total:<8}')
 
 
