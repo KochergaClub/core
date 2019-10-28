@@ -77,6 +77,4 @@ def test_send_reminders(user1, user2, tomorrow_event, future_event):
 def test_newsletter(user1, event):
     Ticket.objects.register(user=user1, event=event, subscribed_to_newsletter=True)
 
-    # TODO - reset member before registering
-    member = kocherga.mailchimp.get_member_by_email(user1.email)
-    print(member)
+    # TODO - reset that subscription task is scheduled in channel
