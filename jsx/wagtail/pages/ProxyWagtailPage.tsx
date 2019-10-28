@@ -93,6 +93,7 @@ const getWagtailPage = async (
 ProxyWagtailPage.getInitialProps = async context => {
   const {
     asPath,
+    pathname,
     query,
     store: { getState },
   } = context;
@@ -100,7 +101,7 @@ ProxyWagtailPage.getInitialProps = async context => {
   const api = selectAPI(getState());
 
   if (!asPath) {
-    throw new Error('asPath is empty');
+    throw new Error('asPath or pathname is empty');
   }
 
   let wagtailPage: WagtailPageProps;
@@ -110,7 +111,9 @@ ProxyWagtailPage.getInitialProps = async context => {
     }
     wagtailPage = await getWagtailPreviewPage(api, query.token as string);
   } else {
-    const wagtailPageId = await getWagtailPageId(api, asPath);
+    const asPathWithoutQuery = asPath.split('?')[0];
+
+    const wagtailPageId = await getWagtailPageId(api, asPathWithoutQuery);
     wagtailPage = await getWagtailPage(api, wagtailPageId);
   }
 
