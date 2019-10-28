@@ -45,6 +45,13 @@ def main():
     )
 
     scheduler.add_job(
+        func=job_wrapper(kocherga.events.models.Ticket.objects.send_reminders),
+        trigger='interval',
+        name='send_ticket_reminders',
+        minutes=30,
+    )
+
+    scheduler.add_job(
         func=job_wrapper(VkAnnouncement.objects.repost_to_daily),
         trigger='cron',
         name='repost_to_daily',
