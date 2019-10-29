@@ -111,6 +111,7 @@ class ImageView(APIView):
         event = Event.objects.get(uuid=event_id)
 
         if image_type == 'vk':
+            # TODO - is /announcements/vk/... even implemented?
             logger.warning('image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead')
             event.vk_announcement.add_image(f)
         else:
