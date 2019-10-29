@@ -29,6 +29,8 @@ urlpatterns += [
     path('events/<event_id>/feedbacks', views.events.EventFeedbackView.as_view()),
 
     path('my/tickets', views.tickets.MyTicketView.as_view()),
+
+    path('sitemap/events', views.events.SitemapView.as_view()),
 ]
 
 

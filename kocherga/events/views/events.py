@@ -9,6 +9,7 @@ import requests
 from django.utils import feedgenerator
 
 from django.http import HttpResponse, FileResponse
+from django.views.generic import View
 from django.views.decorators.http import require_safe
 from django.conf import settings
 
@@ -238,3 +239,12 @@ class EventFeedbackView(APIView):
         return Response(
             serializers.FeedbackSerializer(feedbacks, many=True).data
         )
+
+
+class SitemapView(View):
+    def get(self, request):
+        events = Event.objects.public_events()
+        return HttpResponse(''.join([
+            f'https://kocherga-club.ru/events/{event.uuid}\n'
+            for event in events
+        ]), content_type='text/plain')
