@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { FaCheck } from 'react-icons/fa';
 import { A, Button, Input, Column, Label, Row } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
@@ -17,8 +18,25 @@ const CheckboxLabel = styled(Label)`
   cursor: pointer;
 `;
 
-// TODO - formik
-const AnonRegistration: React.FC<Props> = ({ event }) => {
+const Success: React.FC<{ email: string, restart: () => void }> = ({ email, restart }) => {
+  return (
+  <Column gutter={16}>
+    <Row vCentered gutter={16}>
+      <FaCheck size={32} />
+      <Column stretch>
+        Регистрация завершена успешно!
+        <br />
+        Мы отправили вам письмо с подтверждением на ящик {email}.
+      </Column>
+    </Row>
+    <A href="#" onClick={restart} style={{ textDecorationStyle: 'dashed' }}>
+      <small>Ещё одна регистрация</small>
+    </A>
+  </Column>
+  );
+}
+
+const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   const [acting, setActing] = useState(false);
   const [email, setEmail] = useState('');
   const [complete, setComplete] = useState(false);
@@ -38,13 +56,20 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
     setActing(false);
   }, [api, event.event_id, email, subscribedToNewsletter]);
 
+  const restart = useCallback(async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    // TODO - reducer
+    setActing(false);
+    setEmail('');
+    setComplete(false);
+    setSubscribedToNewsletter(true);
+    setAgreedToTerms(false);
+  }, []);
+
   if (complete) {
     return (
-      <Column stretch>
-        Регистрация завершена успешно!
-        <br />
-        Мы отправили вам письмо с подтверждением на ящик {email}.
-      </Column>
+      <Success email={email} restart={restart}>
     );
   }
 
@@ -56,10 +81,6 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
 
   return (
     <Column stretch>
-      <p>
-        Участие по <A href="/pricing">обычным тарифам пространства Кочерги</A> —
-        2,5 руб./минута, для владельцев абонементов — без доплаты.
-      </p>
       <Column stretch gutter={0}>
         <Label>E-mail</Label>
         <Input
@@ -104,6 +125,19 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
           Зарегистрироваться
         </Button>
       </div>
+    </Column>
+  );
+};
+
+// TODO - formik
+const AnonRegistration: React.FC<Props> = ({ event }) => {
+  return (
+    <Column stretch>
+      <p>
+        Участие по <A href="/pricing">обычным тарифам пространства Кочерги</A> —
+        2,5 руб./минута, для владельцев абонементов — без доплаты.
+      </p>
+      <AnonRegistrationForm event={event} />
     </Column>
   );
 };
