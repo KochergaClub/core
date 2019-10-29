@@ -30,6 +30,7 @@ import {
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
 import Registration from './Registration';
+import Map from './Map';
 // import TimepadRegistration from './TimepadRegistration';
 
 const Container = styled.div`
@@ -63,12 +64,18 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
           </RichText>
         </PaddedBlock>
         {daysUntil >= 0 ? (
-          <section ref={registrationRef}>
-            <TL03 title="Регистрация" grey />
-            <PaddedBlock>
-              <Registration event={event} ticket={ticket} />
-            </PaddedBlock>
-          </section>
+          <div>
+            <section ref={registrationRef}>
+              <TL03 title="Регистрация" grey />
+              <PaddedBlock>
+                <Registration event={event} ticket={ticket} />
+              </PaddedBlock>
+            </section>
+            <section>
+              <TL03 title="Как добраться" grey />
+              <Map />
+            </section>
+          </div>
         ) : (
           <AlertCard>
             <RichText>

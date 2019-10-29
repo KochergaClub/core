@@ -154,7 +154,8 @@ const TariffsContainer = styled.div`
 const Tariffs: React.FC = () => (
   <TariffsContainer>
     Участие по <A href="/pricing">обычным тарифам пространства Кочерги</A> — 2,5
-    руб./минута, для владельцев абонементов — без доплаты.
+    руб./минута, для владельцев абонементов — без доплаты. Оплата по факту
+    участия.
   </TariffsContainer>
 );
 
