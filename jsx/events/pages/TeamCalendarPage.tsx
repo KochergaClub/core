@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { format } from 'date-fns-tz';
 import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 

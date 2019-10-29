@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { A } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
@@ -12,8 +10,9 @@ import { ServerEvent, serverEventToEvent } from '~/events/types';
 
 import EventInfo from '~/events/components/EventInfo';
 import FeedbackCollection from './FeedbackCollection';
+import TicketsCollection from './TicketsCollection';
 
-import { loadEventFeedbacks } from '~/events/actions';
+import { loadEventFeedbacks, loadEventTickets } from '~/events/actions';
 
 interface Props {
   serverEvent: ServerEvent;
@@ -33,6 +32,7 @@ const TeamEventPage: NextPage<Props> = ({ serverEvent }) => {
           </A>
         </div>
         <FeedbackCollection event_id={event.id} />
+        <TicketsCollection event_id={event.id} />
       </Page.Main>
     </Page>
   );
@@ -48,6 +48,7 @@ TeamEventPage.getInitialProps = async ({
   const serverEvent = await getEvent(api, uuid);
 
   await dispatch(loadEventFeedbacks(uuid));
+  await dispatch(loadEventTickets(uuid));
 
   return { serverEvent };
 };

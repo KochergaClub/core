@@ -46,6 +46,13 @@ export interface Event {
 
 export interface EventTicket {
   id: number;
+  user: string; // email
+  status: string; // 'ok' | 'cancelled'
+}
+
+export interface EventTicketIdsList {
+  id: string;
+  ticket_ids: number[];
 }
 
 export interface ServerEvent {
