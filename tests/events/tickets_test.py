@@ -53,7 +53,7 @@ def email_backend_setup():
 def test_register(user1, event):
     Ticket.objects.register(user=user1, event=event)
     assert len(mail.outbox) == 1
-    assert mail.outbox[0].subject == 'Регистрация на событие'
+    assert mail.outbox[0].subject.startswith('Регистрация на событие')
 
 
 def test_send_reminders(user1, user2, tomorrow_event, future_event):
