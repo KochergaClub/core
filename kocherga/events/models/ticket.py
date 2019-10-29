@@ -101,7 +101,7 @@ class Ticket(models.Model):
         return {
             'event': self.event,
             'humanized_dt': humanized_dt,
-            'event_link': f'https://kocherga-club.ru/events/{self.event.uuid}',
+            'event_link': f'{settings.KOCHERGA_WEBSITE}/events/{self.event.uuid}',
             'address_text': 'Москва, ул. Большая Дорогомиловская, д.5к2',  # TODO - move to config
         }
 

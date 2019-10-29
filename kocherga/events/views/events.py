@@ -245,6 +245,6 @@ class SitemapView(View):
     def get(self, request):
         events = Event.objects.public_events()
         return HttpResponse(''.join([
-            f'https://kocherga-club.ru/events/{event.uuid}\n'
+            f'{settings.KOCHERGA_WEBSITE}/events/{event.uuid}\n'
             for event in events
         ]), content_type='text/plain')
