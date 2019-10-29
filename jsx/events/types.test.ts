@@ -1,18 +1,25 @@
 import { reducer } from './types';
 
+const announcements = {
+  vk: { link: '' },
+  fb: { link: '' },
+  timepad: { link: '' },
+};
+
 it('create from empty', () => {
   const result = reducer(
     { events: [] },
     {
       type: 'CREATE',
       payload: {
+        id: 'abcd',
         start: new Date('2020-05-01 19:00'),
         end: new Date('2020-05-01 21:00'),
         title: 'Some event',
         description: '',
-        id: 'abcd',
         room: 'r',
         type: 'private',
+        announcements,
       },
     }
   );
@@ -33,6 +40,7 @@ it('create from non-empty', () => {
           id: 'oldold',
           room: 'TODO',
           type: 'private',
+          announcements,
         },
       ],
     },
@@ -46,6 +54,7 @@ it('create from non-empty', () => {
         id: 'abcd',
         room: 'r',
         type: 'private',
+        announcements,
       },
     }
   );
@@ -65,6 +74,7 @@ it('REPLACE_ALL action', () => {
           id: 'first',
           room: 'TODO',
           type: 'private',
+          announcements,
         },
         {
           start: new Date('2020-04-01 12:00'),
@@ -74,6 +84,7 @@ it('REPLACE_ALL action', () => {
           id: 'second',
           room: 'TODO',
           type: 'private',
+          announcements,
         },
       ],
     },
@@ -89,6 +100,7 @@ it('REPLACE_ALL action', () => {
             id: 'third',
             room: 'TODO',
             type: 'private',
+            announcements,
           },
           {
             start: new Date('2020-04-01 12:00'),
@@ -98,6 +110,7 @@ it('REPLACE_ALL action', () => {
             id: 'fourth',
             room: 'TODO',
             type: 'private',
+            announcements,
           },
         ],
       },

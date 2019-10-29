@@ -1,64 +1,41 @@
 export type AnnouncementKey = 'vk' | 'fb' | 'timepad';
 
-export interface PublicEvent {
-  event_id: string;
+interface CommonEventProps {
   title: string;
   summary?: string;
-  description?: string;
+  description: string;
+  announcements: {
+    [key in AnnouncementKey]: {
+      link: string;
+    }
+  };
+}
+
+export interface PublicEvent extends CommonEventProps {
+  event_id: string;
   image?: string;
   start: Date;
   end: Date;
-  announcements: {
-    [key in AnnouncementKey]: {
-      link: string;
-    }
-  };
 }
 
-export interface ServerPublicEvent {
+export interface ServerPublicEvent extends CommonEventProps {
   event_id: string;
-  title: string;
-  summary?: string;
-  description?: string;
   image?: string;
   start: string; // JSON doesn't support Date objects
   end: string;
-  announcements: {
-    [key in AnnouncementKey]: {
-      link: string;
-    }
-  };
 }
 
-export interface Event {
+export interface Event extends CommonEventProps {
   id: string;
-  title: string;
-  description: string;
   room: string;
   creator?: string;
   start: Date;
   end: Date;
-  posted_vk?: string;
-  posted_fb?: string;
-  posted_timepad?: string;
   type: 'public' | 'private' | 'unknown';
 }
 
-export interface EventTicket {
-  id: number;
-  user: string; // email
-  status: string; // 'ok' | 'cancelled'
-}
-
-export interface EventTicketIdsList {
+export interface ServerEvent extends CommonEventProps {
   id: string;
-  ticket_ids: number[];
-}
-
-export interface ServerEvent {
-  id: string;
-  title: string;
-  description: string;
   room: string;
   creator?: string;
   start: string;
@@ -93,6 +70,17 @@ export interface CreateFeedbackParams {
 
 export interface Feedback extends CreateFeedbackParams {
   id: number;
+}
+
+export interface EventTicket {
+  id: number;
+  user: string; // email
+  status: string; // 'ok' | 'cancelled'
+}
+
+export interface EventTicketIdsList {
+  id: string;
+  ticket_ids: number[];
 }
 
 export interface EventStore {
