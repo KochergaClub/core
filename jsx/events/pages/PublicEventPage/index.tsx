@@ -32,8 +32,9 @@ import EventHeroBlock from './EventHeroBlock';
 import Registration from './Registration';
 // import TimepadRegistration from './TimepadRegistration';
 
-const Smooth = styled.div`
+const Container = styled.div`
   scroll-behavior: smooth;
+  margin-bottom: 120px;
 `;
 
 export interface Props {
@@ -53,7 +54,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
 
   return (
     <Page title={title} og={{ image: event.image }}>
-      <Smooth>
+      <Container>
         <EventHeroBlock event={event} registrationRef={registrationRef} />
         <EventAnnouncements event={event} />
         <PaddedBlock>
@@ -78,7 +79,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
             </RichText>
           </AlertCard>
         )}
-      </Smooth>
+      </Container>
     </Page>
   );
 };

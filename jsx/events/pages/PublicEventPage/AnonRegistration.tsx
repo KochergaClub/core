@@ -2,8 +2,16 @@ import { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { FaCheck } from 'react-icons/fa';
-import { A, Button, Input, Column, Label, Row } from '@kocherga/frontkit';
+import { FaCheck, FaHeart } from 'react-icons/fa';
+import {
+  A,
+  Button,
+  Input,
+  Column,
+  Label,
+  Row,
+  colors,
+} from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 
@@ -18,23 +26,28 @@ const CheckboxLabel = styled(Label)`
   cursor: pointer;
 `;
 
-const Success: React.FC<{ email: string, restart: () => void }> = ({ email, restart }) => {
+const Success: React.FC<{
+  email: string;
+  restart: (e: React.SyntheticEvent) => void;
+}> = ({ email, restart }) => {
   return (
-  <Column gutter={16}>
-    <Row vCentered gutter={16}>
-      <FaCheck size={32} />
-      <Column stretch>
-        Регистрация завершена успешно!
-        <br />
-        Мы отправили вам письмо с подтверждением на ящик {email}.
-      </Column>
-    </Row>
-    <A href="#" onClick={restart} style={{ textDecorationStyle: 'dashed' }}>
-      <small>Ещё одна регистрация</small>
-    </A>
-  </Column>
+    <Column gutter={16}>
+      <Row vCentered gutter={16}>
+        <FaCheck size={32} />
+        <Column stretch>
+          <Row vCentered>
+            <div>Регистрация завершена успешно!</div>
+            <FaHeart style={{ color: 'red' }} />
+          </Row>
+          <div>Мы отправили вам письмо с подтверждением на ящик {email}.</div>
+        </Column>
+      </Row>
+      <A href="#" onClick={restart} style={{ textDecorationStyle: 'dashed' }}>
+        <small>Ещё одна регистрация</small>
+      </A>
+    </Column>
   );
-}
+};
 
 const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   const [acting, setActing] = useState(false);
@@ -68,9 +81,7 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   }, []);
 
   if (complete) {
-    return (
-      <Success email={email} restart={restart}>
-    );
+    return <Success email={email} restart={restart} />;
   }
 
   const canSubmit =
@@ -80,44 +91,48 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   return (
-    <Column stretch>
+    <Column stretch gutter={16}>
       <Column stretch gutter={0}>
         <Label>E-mail</Label>
         <Input
           type="email"
           name="email"
+          scale="big"
           value={email}
           onChange={e => setEmail(e.currentTarget.value)}
         />
       </Column>
-      <Row vCentered gutter={8}>
-        <Input
-          type="checkbox"
-          id="subscribed_to_newsletter"
-          name="subscribed_to_newsletter"
-          checked={subscribedToNewsletter}
-          onChange={e => setSubscribedToNewsletter(e.currentTarget.checked)}
-        />
-        <CheckboxLabel htmlFor="subscribed_to_newsletter">
-          Я хочу получать анонсы событий Кочерги по электронной почте
-        </CheckboxLabel>
-      </Row>
-      <Row vCentered gutter={8}>
-        <Input
-          type="checkbox"
-          name="agreed_to_terms"
-          id="agreed_to_terms"
-          checked={agreedToTerms}
-          onChange={e => setAgreedToTerms(e.currentTarget.checked)}
-        />
-        <CheckboxLabel htmlFor="agreed_to_terms">
-          Я даю согласие на обработку моих персональных данных (
-          <A href="/terms">подробности</A>)
-        </CheckboxLabel>
-      </Row>
+      <div>
+        <Row vCentered gutter={8}>
+          <Input
+            type="checkbox"
+            id="subscribed_to_newsletter"
+            name="subscribed_to_newsletter"
+            checked={subscribedToNewsletter}
+            onChange={e => setSubscribedToNewsletter(e.currentTarget.checked)}
+          />
+          <CheckboxLabel htmlFor="subscribed_to_newsletter">
+            Я хочу получать анонсы событий Кочерги по электронной почте
+          </CheckboxLabel>
+        </Row>
+        <Row vCentered gutter={8}>
+          <Input
+            type="checkbox"
+            name="agreed_to_terms"
+            id="agreed_to_terms"
+            checked={agreedToTerms}
+            onChange={e => setAgreedToTerms(e.currentTarget.checked)}
+          />
+          <CheckboxLabel htmlFor="agreed_to_terms">
+            Я даю согласие на обработку моих персональных данных (
+            <A href="/terms">подробности</A>)
+          </CheckboxLabel>
+        </Row>
+      </div>
       <div>
         <Button
           kind="primary"
+          size="big"
           loading={acting}
           disabled={!canSubmit}
           onClick={anonRegister}
@@ -129,14 +144,25 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   );
 };
 
+const TariffsContainer = styled.div`
+  border: 1px solid ${colors.grey[300]};
+  background-color: ${colors.grey[100]};
+  padding: 20px;
+  margin-bottom: 32px;
+`;
+
+const Tariffs: React.FC = () => (
+  <TariffsContainer>
+    Участие по <A href="/pricing">обычным тарифам пространства Кочерги</A> — 2,5
+    руб./минута, для владельцев абонементов — без доплаты.
+  </TariffsContainer>
+);
+
 // TODO - formik
 const AnonRegistration: React.FC<Props> = ({ event }) => {
   return (
     <Column stretch>
-      <p>
-        Участие по <A href="/pricing">обычным тарифам пространства Кочерги</A> —
-        2,5 руб./минута, для владельцев абонементов — без доплаты.
-      </p>
+      <Tariffs />
       <AnonRegistrationForm event={event} />
     </Column>
   );
