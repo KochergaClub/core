@@ -89,7 +89,10 @@ PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
 
   const event_id = query.id as string;
 
-  const serverEvent = await api.call(`public_events/${event_id}`, 'GET');
+  const serverEvent = (await api.call(
+    `public_events/${event_id}`,
+    'GET'
+  )) as ServerPublicEvent;
 
   const result: Props = { serverEvent };
   if (user.is_authenticated) {

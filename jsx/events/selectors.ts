@@ -2,8 +2,15 @@ import { createSelector, Selector } from 'reselect';
 
 import { State } from '~/redux/store';
 
-import { feedbacksSlice, ticketsSlice, events2ticketsSlice } from './slices';
-import { Feedback, EventTicket } from './types';
+import {
+  eventsSlice,
+  feedbacksSlice,
+  ticketsSlice,
+  events2ticketsSlice,
+} from './slices';
+import { Event, Feedback, EventTicket, serverEventToEvent } from './types';
+
+export const selectEventsSlice = (state: State) => state.events.events;
 
 export const selectFeedbacksSlice = (state: State) => state.events.feedbacks;
 
@@ -16,6 +23,20 @@ export const selectFeedbacks: Selector<State, Feedback[]> = createSelector(
   selectFeedbacksSlice,
   feedbacksSlice.selectors.selectAll
 );
+
+// TODO - reselect
+export const selectEventById = (state: State, event_id: string): Event => {
+  const serverEvent = eventsSlice.selectors.selectById(
+    selectEventsSlice(state),
+    event_id
+  );
+
+  if (!serverEvent) {
+    throw new Error(`Event ${event_id} not found in store`);
+  }
+
+  return serverEventToEvent(serverEvent);
+};
 
 // TODO - reselect
 export const selectEventTickets = (

@@ -5,20 +5,34 @@ import { AsyncAction } from '~/redux/store';
 import { selectAPI } from '~/core/selectors';
 import { apiThunk } from '~/redux/action-utils';
 
-import { feedbacksSlice, ticketsSlice, events2ticketsSlice } from './slices';
-import { Feedback, EventTicket, CreateFeedbackParams } from './types';
+import {
+  eventsSlice,
+  feedbacksSlice,
+  ticketsSlice,
+  events2ticketsSlice,
+} from './slices';
+import {
+  ServerEvent,
+  Feedback,
+  EventTicket,
+  CreateFeedbackParams,
+} from './types';
 
-export const loadEventFeedbacks = (event_id: string): AsyncAction => async (
-  dispatch,
-  getState
-) => {
-  const api = selectAPI(getState());
-  const tickets = (await api.call(
-    `events/${event_id}/feedbacks`,
-    'GET'
-  )) as Feedback[];
-  dispatch(feedbacksSlice.actions.replaceAll(tickets));
-};
+export const loadEvent = (event_id: string): AsyncAction =>
+  apiThunk(async (api, dispatch) => {
+    const event = (await api.call(`events/${event_id}`, 'GET')) as ServerEvent;
+
+    dispatch(eventsSlice.actions.add(event));
+  });
+
+export const loadEventFeedbacks = (event_id: string): AsyncAction =>
+  apiThunk(async (api, dispatch) => {
+    const tickets = (await api.call(
+      `events/${event_id}/feedbacks`,
+      'GET'
+    )) as Feedback[];
+    dispatch(feedbacksSlice.actions.replaceAll(tickets));
+  });
 
 export const addEventFeedback = (
   event_id: string,

@@ -10,7 +10,8 @@ import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
 import { LocalEvent } from '../types';
 
-import EventInfo from './EventInfo';
+// not redux-connected version! TeamCalendarPage is not migrated to redux yet
+import { EventInfo } from './EventInfo';
 
 interface Props {
   isOpen: boolean;

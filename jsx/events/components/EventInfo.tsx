@@ -1,4 +1,4 @@
-import React from 'react';
+import { connect } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -9,8 +9,10 @@ import Markdown from 'react-markdown';
 
 import { A, RichText, Row, Label } from '@kocherga/frontkit';
 
+import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
 
+import { selectEventById } from '../selectors';
 import { Event } from '../types';
 
 interface Props {
@@ -23,7 +25,7 @@ const EventDescription = styled.div`
   overflow: auto;
 `;
 
-const EventAnnouncements = ({ event }: { event: Event }) => {
+const EventAnnouncements: React.FC<Props> = ({ event }) => {
   if (!event.posted_vk && !event.posted_fb && !event.posted_timepad) {
     return null;
   }
@@ -40,7 +42,7 @@ const EventAnnouncements = ({ event }: { event: Event }) => {
   );
 };
 
-const EventInfo: React.FC<Props> = ({ event }) => {
+export const EventInfo: React.FC<Props> = ({ event }) => {
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);
 
@@ -73,4 +75,8 @@ const EventInfo: React.FC<Props> = ({ event }) => {
   );
 };
 
-export default EventInfo;
+const mapStateToProps = (state: State, ownProps: { event_id: string }) => ({
+  event: selectEventById(state, ownProps.event_id),
+});
+
+export default connect(mapStateToProps)(EventInfo);

@@ -9,6 +9,11 @@ type ReplaceAllAction<Item> = {
   payload: Item[];
 };
 
+type AddAction<Item> = {
+  type: string;
+  payload: Item;
+};
+
 type AddItemsAction<Item> = {
   type: string;
   payload: Item[];
@@ -19,6 +24,7 @@ export interface BagSlice<Item> {
   actions: {
     replaceAll: (items: Item[]) => ReplaceAllAction<Item>;
     addItems: (items: Item[]) => AddItemsAction<Item>;
+    add: (item: Item) => AddAction<Item>;
   };
   selectors: {
     selectById: (
@@ -46,6 +52,7 @@ export const createBagSlice = <Item>(
   const getId = props.getId || ((item: Item) => (item as any)['id'] as string);
 
   const replaceAllActionType = props.actionPrefix + '_REPLACE_ALL';
+  const addActionType = props.actionPrefix + '_ADD';
   const addItemsActionType = props.actionPrefix + '_ADD_ITEMS';
 
   const initialState: State = { byId: {} };
@@ -61,10 +68,20 @@ export const createBagSlice = <Item>(
         ...state,
         byId,
       };
+    } else if (action.type === addActionType) {
+      const item = (action as AddAction<Item>).payload;
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [getId(item)]: item,
+        },
+      };
     } else if (action.type === addItemsActionType) {
       const payload = (action as ReplaceAllAction<Item>).payload;
 
-      const newById: { [k: string]: Item } = { ...state.byId };
+      const newById: { [k: string]: Item } = {};
       for (const item of payload) {
         newById[getId(item)] = item;
       }
@@ -90,7 +107,12 @@ export const createBagSlice = <Item>(
     payload: items,
   });
 
-  const actions: BagSlice<Item>['actions'] = { replaceAll, addItems };
+  const add = (item: Item) => ({
+    type: addActionType,
+    payload: item,
+  });
+
+  const actions: BagSlice<Item>['actions'] = { replaceAll, addItems, add };
 
   const selectById = (state: State, id: string | number): Item | undefined =>
     state.byId[id];

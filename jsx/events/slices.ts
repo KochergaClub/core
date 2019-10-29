@@ -1,7 +1,16 @@
 import { createListSlice } from '~/redux/slices/list';
 import { createBagSlice } from '~/redux/slices/bag';
 
-import { Feedback, EventTicket, EventTicketIdsList } from './types';
+import {
+  ServerEvent,
+  Feedback,
+  EventTicket,
+  EventTicketIdsList,
+} from './types';
+
+export const eventsSlice = createBagSlice<ServerEvent>({
+  actionPrefix: '[events/event] ',
+});
 
 export const feedbacksSlice = createListSlice<Feedback>({
   actionPrefix: '[events/feedback] ',
