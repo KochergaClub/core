@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, time
+from typing import Optional
 
 from django.contrib.auth import get_user_model
 from rest_framework import generics, permissions, exceptions, views, response
@@ -32,16 +33,20 @@ class EventTicketView(generics.ListCreateAPIView):
     def get_event_id(self):
         return self.kwargs['event_id']
 
-    def get_event(self):
+    def get_event(self) -> Optional[models.Event]:
         # TODO - support tickets for non-public events (with proper permissions handling)
-        return models.Event.objects.public_events().get(
-            uuid=self.get_event_id()
-        )
+        try:
+            return models.Event.objects.public_events().get(
+                uuid=self.get_event_id()
+            )
+        except models.Event.DoesNotExist:
+            return None
 
     def get_queryset(self):
-        return models.Ticket.objects.filter(
-            event=self.get_event()
-        )
+        event = self.get_event()
+        if not event:
+            return models.Ticket.objects.none()
+        return models.Ticket.objects.filter(event=event)
 
 
 class MyEventTicketView(generics.RetrieveAPIView):

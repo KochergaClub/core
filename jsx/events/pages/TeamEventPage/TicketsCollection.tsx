@@ -20,7 +20,7 @@ const TicketsCollection: React.FC<Props> = ({ event_id }) => {
 
   return (
     <section>
-      <h2>Билеты</h2>
+      <h2>Билеты ({tickets.length})</h2>
       <CardList>
         {tickets.map(ticket => (
           <Card>
