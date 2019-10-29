@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
 
+import styled from 'styled-components';
+
 import { A, Button, Input, Column, Label, Row } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
@@ -10,6 +12,10 @@ interface Props {
   event: PublicEvent;
   ticket?: EventTicket;
 }
+
+const CheckboxLabel = styled(Label)`
+  cursor: pointer;
+`;
 
 // TODO - formik
 const AnonRegistration: React.FC<Props> = ({ event }) => {
@@ -42,7 +48,11 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
     );
   }
 
-  const canSubmit = !acting && email.length > 0 && agreedToTerms;
+  const canSubmit =
+    !acting &&
+    email.length > 0 &&
+    agreedToTerms &&
+    /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
 
   return (
     <Column stretch>
@@ -67,9 +77,9 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
           checked={subscribedToNewsletter}
           onChange={e => setSubscribedToNewsletter(e.currentTarget.checked)}
         />
-        <Label htmlFor="subscribed_to_newsletter">
+        <CheckboxLabel htmlFor="subscribed_to_newsletter">
           Я хочу получать анонсы событий Кочерги по электронной почте
-        </Label>
+        </CheckboxLabel>
       </Row>
       <Row vCentered gutter={8}>
         <Input
@@ -79,9 +89,10 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
           checked={agreedToTerms}
           onChange={e => setAgreedToTerms(e.currentTarget.checked)}
         />
-        <Label htmlFor="agreed_to_terms">
-          Я подтверждаю свое согласие с условиями Пользовательского соглашения
-        </Label>
+        <CheckboxLabel htmlFor="agreed_to_terms">
+          Я даю согласие на обработку моих персональных данных (
+          <A href="/terms">подробности</A>)
+        </CheckboxLabel>
       </Row>
       <div>
         <Button
