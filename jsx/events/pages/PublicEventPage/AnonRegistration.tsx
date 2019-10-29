@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Button, Input, Column, Label, Row } from '@kocherga/frontkit';
+import { A, Button, Input, Column, Label, Row } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 
@@ -46,6 +46,10 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
 
   return (
     <Column stretch>
+      <p>
+        Участие по <A href="/pricing">обычным тарифам пространства Кочерги</A> —
+        2,5 руб./минута, для владельцев абонементов — без доплаты.
+      </p>
       <Column stretch gutter={0}>
         <Label>E-mail</Label>
         <Input
