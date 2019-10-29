@@ -26,10 +26,14 @@ def populate_main_list(users: List[User]):
 
     operations = []
     for user in users:
-        merge_fields = {
-            'FNAME': user.first_name or '',
-            'LNAME': user.last_name or '',
-        }
+        merge_fields = {}
+
+        if user.first_name:
+            merge_fields['FNAME'] = user.first_name
+
+        if user.last_name:
+            merge_fields['LNAME'] = user.last_name
+
         if user.card_id:
             merge_fields['CARD_ID'] = user.card_id
             merge_fields['HAS_CARD'] = 'True'

@@ -2,9 +2,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, time
+from typing import Optional
 
-import django.http
-from rest_framework import generics, mixins, permissions, exceptions
+from django.contrib.auth import get_user_model
+from rest_framework import generics, permissions, exceptions, views, response
 
 from kocherga.dateutils import TZ
 
@@ -32,24 +33,23 @@ class EventTicketView(generics.ListCreateAPIView):
     def get_event_id(self):
         return self.kwargs['event_id']
 
-    def get_event(self):
+    def get_event(self) -> Optional[models.Event]:
         # TODO - support tickets for non-public events (with proper permissions handling)
-        return models.Event.objects.public_events().get(
-            uuid=self.get_event_id()
-        )
+        try:
+            return models.Event.objects.public_events().get(
+                uuid=self.get_event_id()
+            )
+        except models.Event.DoesNotExist:
+            return None
 
     def get_queryset(self):
-        return models.Ticket.objects.filter(
-            event=self.get_event()
-        )
+        event = self.get_event()
+        if not event:
+            return models.Ticket.objects.none()
+        return models.Ticket.objects.filter(event=event)
 
 
-class MyEventTicketView(
-        mixins.CreateModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.DestroyModelMixin,
-        generics.GenericAPIView,
-):
+class MyEventTicketView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = serializers.EventTicketSerializer
     lookup_field = 'event__uuid'
@@ -60,31 +60,61 @@ class MyEventTicketView(
             user=self.request.user,
             # only future event tickets can be operated upon
             event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
+            status='ok'
         )
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+
+class MyEventTicketRegisterView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
         user = self.request.user
-        event = models.Event.objects.public_events().get(
-            uuid=self.kwargs[self.lookup_url_kwarg]
+        event = models.Event.objects.public_events().get(uuid=self.kwargs['event_id'])
+
+        models.Ticket.objects.register(
+            user=user,
+            event=event,
         )
 
+        return response.Response('ok')
+
+
+class MyEventTicketUnregisterView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        event = models.Event.objects.public_events().get(uuid=self.kwargs['event_id'])
+
+        models.Ticket.objects.unregister(user=user, event=event)
+
+        return response.Response('ok')
+
+
+class AnonEventTicketRegisterView(views.APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        KchUser = get_user_model()
+        email = request.data.get('email')
+
         try:
-            self.get_object()
-            raise TicketAlreadyExistsException()
-        except django.http.Http404:
-            serializer.save(
-                user=user,
-                event=event,
-            )
+            user = KchUser.objects.get(email=email)
+        except KchUser.DoesNotExist:
+            user = KchUser.objects.create_user(email)
+
+        event = models.Event.objects.public_events().get(uuid=self.kwargs['event_id'])
+
+        models.Ticket.objects.register(
+            user=user,
+            event=event,
+            subscribed_to_newsletter=request.data.get('subscribed_to_newsletter', False),
+        )
+
+        return response.Response('ok')
 
 
 class MyTicketView(

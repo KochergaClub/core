@@ -1,4 +1,4 @@
-import React from 'react';
+import { connect } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -9,8 +9,10 @@ import Markdown from 'react-markdown';
 
 import { A, RichText, Row, Label } from '@kocherga/frontkit';
 
+import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
 
+import { selectEventById } from '../selectors';
 import { Event } from '../types';
 
 interface Props {
@@ -23,24 +25,28 @@ const EventDescription = styled.div`
   overflow: auto;
 `;
 
-const EventAnnouncements = ({ event }: { event: Event }) => {
-  if (!event.posted_vk && !event.posted_fb && !event.posted_timepad) {
+const EventAnnouncements: React.FC<Props> = ({ event }) => {
+  const posted_vk = event.announcements.vk && event.announcements.vk.link;
+  const posted_fb = event.announcements.fb && event.announcements.fb.link;
+  const posted_timepad =
+    event.announcements.timepad && event.announcements.timepad.link;
+
+  if (!posted_vk && !posted_fb && !posted_timepad) {
     return null;
   }
 
   return (
     <div>
-      <strong>Анонсы:</strong>{' '}
-      {event.posted_vk && <A href={event.posted_vk}>vk</A>}
+      <strong>Анонсы:</strong> {posted_vk && <A href={posted_vk}>vk</A>}
       &nbsp;
-      {event.posted_fb && <A href={event.posted_fb}>fb</A>}
+      {posted_fb && <A href={posted_fb}>fb</A>}
       &nbsp;
-      {event.posted_timepad && <A href={event.posted_timepad}>timepad</A>}
+      {posted_timepad && <A href={posted_timepad}>timepad</A>}
     </div>
   );
 };
 
-const EventInfo: React.FC<Props> = ({ event }) => {
+export const EventInfo: React.FC<Props> = ({ event }) => {
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);
 
@@ -73,4 +79,8 @@ const EventInfo: React.FC<Props> = ({ event }) => {
   );
 };
 
-export default EventInfo;
+const mapStateToProps = (state: State, ownProps: { event_id: string }) => ({
+  event: selectEventById(state, ownProps.event_id),
+});
+
+export default connect(mapStateToProps)(EventInfo);

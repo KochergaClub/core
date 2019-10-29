@@ -29,11 +29,13 @@ import {
 
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
-// import Registration from './Registration';
-import TimepadRegistration from './TimepadRegistration';
+import Registration from './Registration';
+import Map from './Map';
+// import TimepadRegistration from './TimepadRegistration';
 
-const Smooth = styled.div`
+const Container = styled.div`
   scroll-behavior: smooth;
+  margin-bottom: 120px;
 `;
 
 export interface Props {
@@ -41,7 +43,7 @@ export interface Props {
   ticket?: EventTicket;
 }
 
-const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
+const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
   const event = serverPublicEventToEvent(serverEvent);
 
   const zonedStart = utcToZonedTime(event.start, timezone);
@@ -53,7 +55,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
 
   return (
     <Page title={title} og={{ image: event.image }}>
-      <Smooth>
+      <Container>
         <EventHeroBlock event={event} registrationRef={registrationRef} />
         <EventAnnouncements event={event} />
         <PaddedBlock>
@@ -62,12 +64,18 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
           </RichText>
         </PaddedBlock>
         {daysUntil >= 0 ? (
-          <section ref={registrationRef}>
-            <TL03 title="Регистрация" grey />
-            <PaddedBlock>
-              <TimepadRegistration event={event} />
-            </PaddedBlock>
-          </section>
+          <div>
+            <section ref={registrationRef}>
+              <TL03 title="Регистрация" grey />
+              <PaddedBlock>
+                <Registration event={event} ticket={ticket} />
+              </PaddedBlock>
+            </section>
+            <section>
+              <TL03 title="Как добраться" grey />
+              <Map />
+            </section>
+          </div>
         ) : (
           <AlertCard>
             <RichText>
@@ -78,7 +86,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent }) => {
             </RichText>
           </AlertCard>
         )}
-      </Smooth>
+      </Container>
     </Page>
   );
 };
@@ -89,12 +97,15 @@ PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
 
   const event_id = query.id as string;
 
-  const serverEvent = await api.call(`public_events/${event_id}`, 'GET');
+  const serverEvent = (await api.call(
+    `public_events/${event_id}`,
+    'GET'
+  )) as ServerPublicEvent;
 
   const result: Props = { serverEvent };
   if (user.is_authenticated) {
     try {
-      const ticket = await api.call(`events/${event_id}/tickets/my`, 'GET'); // FIXME - can return 404
+      const ticket = await api.call(`events/${event_id}/my_ticket`, 'GET'); // FIXME - can return 404
       result.ticket = ticket;
     } catch (e) {
       if (e instanceof APIError && e.status === 404) {

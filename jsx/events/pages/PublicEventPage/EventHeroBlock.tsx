@@ -7,6 +7,8 @@ import { differenceInDays, differenceInCalendarWeeks } from 'date-fns';
 import { Button, Label, fonts } from '@kocherga/frontkit';
 import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
 
+import { trackEvent } from '~/components/analytics';
+
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import HeroWithImage from '~/components/HeroWithImage';
 import HeroHeader from '~/components/HeroHeader';
@@ -96,9 +98,14 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
   }
 
   const registerCb = useCallback(() => {
+    trackEvent('event_top_register_button', {
+      label: event.title,
+    });
+
     if (!registrationRef.current) {
       return;
     }
+
     window.scrollTo({
       top: registrationRef.current.offsetTop,
       behavior: 'smooth',

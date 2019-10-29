@@ -50,7 +50,10 @@ deploy_prod_secrets:
 	scp kocherga/django/settings/prod_secrets.py kocherga.club: && ssh kocherga.club 'sudo mv prod_secrets.py /config/secrets.py && sudo chown root:root /config/secrets.py && sudo chmod 600 /config/secrets.py'
 
 update_npm_packages:
-	for c in render-server webpack_front webpack_back; do docker exec -it docker_$${c}_1 npm i; done
+	docker cp package.json docker_render-server_1:/code/package.json
+	docker cp package-lock.json docker_render-server_1:/code/package-lock.json
+	docker exec -it docker_render-server_1 npm i
+	docker restart docker_render-server_1
 
 shapes:
 	docker-compose -f docker/compose.dev.yml exec api ./scripts/generate-frontend-shapes.py

@@ -111,6 +111,7 @@ class ImageView(APIView):
         event = Event.objects.get(uuid=event_id)
 
         if image_type == 'vk':
+            # TODO - is /announcements/vk/... even implemented?
             logger.warning('image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead')
             event.vk_announcement.add_image(f)
         else:
@@ -245,6 +246,6 @@ class SitemapView(View):
     def get(self, request):
         events = Event.objects.public_events()
         return HttpResponse(''.join([
-            f'https://kocherga-club.ru/events/{event.uuid}\n'
+            f'{settings.KOCHERGA_WEBSITE}/events/{event.uuid}\n'
             for event in events
         ]), content_type='text/plain')
