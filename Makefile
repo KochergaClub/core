@@ -60,3 +60,8 @@ shapes:
 
 kassa_localtunnel:
 	npx lt --port 8000 --subdomain kassa --host https://lt.berekuk.ru
+
+update_requirements:
+	docker cp requirements.in docker_api_1:/code/requirements.in
+	docker-compose -f docker/compose.dev.yml exec api pip-compile
+	docker cp docker_api_1:/code/requirements.txt ./requirements.txt
