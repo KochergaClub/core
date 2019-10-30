@@ -24,6 +24,7 @@ const httpProxy = require('http-proxy');
 const { API_HOST, API_ASYNC_HOST } = require('./constants');
 
 const trailingSlashEndpoint = require('./trailingSlashEndpoint').default;
+const tildaEndpoint = require('./tildaEndpoint').default;
 const nextjsEntrypoint = require('./nextjsEntrypoint').default;
 const wagtailEntrypoint = require('./wagtailEntrypoint').default;
 
@@ -76,6 +77,7 @@ async function main() {
   });
 
   app.use(trailingSlashEndpoint);
+  app.use(tildaEndpoint);
   app.use(wagtailEntrypoint(nextApp));
   app.use(nextjsEntrypoint(nextApp));
 

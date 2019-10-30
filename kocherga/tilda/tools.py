@@ -3,9 +3,9 @@ import json
 from . import api
 
 
-def export_all(directory):
+def export_all(directory='/data/tilda'):
     pages = api.get_pages_list()
-    alias2filename = {}
+    config = []
 
     for page in pages:
         page_id = page['id']
@@ -17,8 +17,11 @@ def export_all(directory):
         with open(directory + '/' + filename, 'w') as fh:
             fh.write(html)
 
-        alias2filename[alias] = filename
+        config.append({
+            'alias': alias,
+            'filename': filename,
+        })
         break
 
-    with open(directory + '/' + 'alias2filename.json', 'w') as fh:
-        fh.write(json.dumps(alias2filename))
+    with open(directory + '/' + 'config.json', 'w') as fh:
+        fh.write(json.dumps(config))
