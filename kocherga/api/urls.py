@@ -20,6 +20,7 @@ urlpatterns = [
     path('images/<image_id>', views.images.r_image),
 
     path('hooks/vk_callback', views.hooks.r_vk_callback),
+    path('hooks/tilda_webhook', views.hooks.r_tilda_webhook),
     path('auth/google', views.auth.r_google),
     path('auth/check', views.auth.r_check),
 
