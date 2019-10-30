@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 
 import reversion.signals
 
-from .models import Event, VkAnnouncement
+from .models import Event, TimepadAnnouncement
 
 
 def channel_send(channel: str, message):
@@ -53,8 +53,8 @@ def cb_google_export(sender, instance, created, **kwargs):
     transaction.on_commit(on_commit)
 
 
-@receiver(post_save, sender=VkAnnouncement)
-def cb_google_export_on_vk_announcement(sender, instance, created, **kwargs):
+@receiver(post_save, sender=TimepadAnnouncement)
+def cb_google_export_on_timepad_announcement(sender, instance, created, **kwargs):
 
     def on_commit():
         channel_send_google_export(instance.event.pk)
