@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'kocherga.money.ofd',
     'kocherga.money.tochka',
     'kocherga.money.cashier',
+    'kocherga.money.kassa',
     'kocherga.analytics.timeclub24',
     'kocherga.gitlab',
     'kocherga.events',

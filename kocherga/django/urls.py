@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/', include('kocherga.templater.urls')),
     path('api/', include('kocherga.email.urls')),
     path('api/', include('kocherga.fb.urls')),
+    path('api/', include('kocherga.money.kassa.urls')),
 
     path('api/prometheus/', include('django_prometheus.urls')),
 
