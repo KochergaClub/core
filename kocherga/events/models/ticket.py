@@ -3,6 +3,8 @@ logger = logging.getLogger(__name__)
 
 import markdown
 
+from datetime import datetime
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -13,6 +15,7 @@ import channels.layers
 from asgiref.sync import async_to_sync
 
 import kocherga.dateutils
+from kocherga.dateutils import TZ
 
 
 # FIXME - copy-pasted from kocherga.events.signals, extract into common module
@@ -46,7 +49,7 @@ class TicketManager(models.Manager):
     def send_reminders(self):
         tickets = self.filter(
             status='ok',
-            event__start__gte=timezone.now(),
+            event__start__gte=datetime.now(TZ),
             day_before_notification_sent=False,
         )
 
@@ -120,12 +123,12 @@ class Ticket(models.Model):
         if self.day_before_notification_sent:
             return
 
-        now = timezone.now()
+        now = datetime.now(TZ)
 
         if self.event.start < now:
             return  # should never send reminders about future events
 
-        delta = self.event.start.date() - now.date()
+        delta = timezone.localtime(self.event.start).date() - now.date()
         if delta.days != 1:
             return  # too early or too late
 
