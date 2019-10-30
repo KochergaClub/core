@@ -92,6 +92,9 @@ class TestRepostToDaily():
         event.save()
         event.vk_announcement.announce()
 
+        event.timepad_announcement.link = 'fake'
+        event.timepad_announcement.save()  # necessary for repost_to_daily logic :(
+
         assert models.VkAnnouncement.objects.count() == 1
         with pytest.raises(Exception, match="Access denied: can't publish"):
             models.VkAnnouncement.objects.repost_to_daily()
