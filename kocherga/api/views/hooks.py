@@ -83,7 +83,7 @@ def r_vk_callback(request):
 @api_view()
 @permission_classes((permissions.AllowAny,))
 def r_tilda_webhook(request):
-    page_id = request.query_params.get('page_id', None)
+    page_id = request.query_params.get('pageid', None)
     if page_id is not None:
         kocherga.tilda.tools.export_page(page_id)
     return HttpResponse("ok")
