@@ -13,6 +13,7 @@ import {
   colors,
 } from '@kocherga/frontkit';
 
+import { trackEvent } from '~/components/analytics';
 import { useAPI } from '~/common/hooks';
 
 import { PublicEvent, EventTicket } from '~/events/types';
@@ -60,6 +61,10 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   const api = useAPI();
 
   const anonRegister = useCallback(async () => {
+    trackEvent('event_register', {
+      label: event.title,
+    });
+
     setActing(true);
     await api.call(`events/${event.event_id}/anon_ticket/register`, 'POST', {
       email,
@@ -71,6 +76,10 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
 
   const restart = useCallback(async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
+    trackEvent('event_register_restart', {
+      label: event.title,
+    });
 
     // TODO - reducer
     setActing(false);
