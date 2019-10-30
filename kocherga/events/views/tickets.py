@@ -12,22 +12,13 @@ from kocherga.dateutils import TZ
 from .. import models, serializers
 
 
-class Permission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method == 'GET':
-            return request.user.has_perm('events.view_tickets')
-        else:
-            # only superuser can modify all tickets
-            return request.user.is_superuser
-
-
 class TicketAlreadyExistsException(exceptions.APIException):
     status_code = 400
     default_detail = 'Ticket already exists'
 
 
 class EventTicketView(generics.ListCreateAPIView):
-    permission_classes = (Permission,)
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.EventTicketSerializer
 
     def get_event_id(self):
