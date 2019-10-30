@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 
 import kocherga.slack.client
+import kocherga.tilda.tools
 
 # Routes for external hooks.
 
@@ -76,4 +77,11 @@ def r_vk_callback(request):
             f'https://vk.com/club{group_id}?w=product-{group_id}_{obj["item_id"]}'
         )
 
+    return HttpResponse("ok")
+
+
+@api_view()
+@permission_classes((permissions.AllowAny,))
+def r_tilda_webhook(request):
+    kocherga.tilda.tools.export_page(request.query_params['page_id'])
     return HttpResponse("ok")
