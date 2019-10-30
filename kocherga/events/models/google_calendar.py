@@ -21,8 +21,8 @@ def event_to_google_dict(event):
         location = kocherga.room.to_long_location(location)
 
     description = kocherga.events.markup.Markup(event.description or '').as_plain()
-    if event.timepad_announcement.link:
-        description = event.timepad_announcement.link + "\n\n" + description
+    if event.event_type == 'public':
+        description = event.public_link() + "\n\n" + description
 
     result = {
         "summary": event.title,

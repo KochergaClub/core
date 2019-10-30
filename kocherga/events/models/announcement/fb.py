@@ -231,13 +231,11 @@ class AnnounceSession:
         description = event.description
 
         tail = (
-            f"{event.timing_description} в антикафе Кочерга."
+            f"{event.timing_description} в центре рациональности Кочерга."
             " Оплата участия — по тарифам антикафе: 2,5 руб./минута."
+            " Оплата участия — по тарифам антикафе: 2,5 руб./минута."
+            f" Регистрация: {event.public_link()}"
         )
-
-        timepad_link = event.timepad_announcement.link
-        if timepad_link:
-            tail += " Регистрация: {}".format(timepad_link)
 
         markup_parts = kocherga.events.markup.parse_to_parts(
             description + "\n\n***\n" + tail

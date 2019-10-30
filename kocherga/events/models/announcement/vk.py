@@ -114,7 +114,7 @@ class Manager(models.Manager):
         )
 
         position = r["source"].index(
-            """</blockquote>\n\n-----\n\n[https://kocherga.timepad.ru/events/past/"""
+            """</blockquote>\n\n-----\n\n[https://"""
         )
         position += len("</blockquote>\n")
 
@@ -177,13 +177,10 @@ class VkAnnouncement(models.Model):
 
     def get_tail(self):
         tail = (
-            f"{self.event.timing_description} в @kocherga_club (антикафе Кочерга). "
-            + "Оплата участия — по тарифам антикафе: 2,5 руб./минута."
+            f"{self.event.timing_description} в @kocherga_club (центре рациональности Кочерга). "
+            + "Оплата участия — по тарифам антикафе: 2,5 руб./минута. "
+            + " Регистрация: {self.event.public_link()}"
         )
-
-        timepad_link = self.event.timepad_announcement.link
-        if timepad_link:
-            tail += " Регистрация: {}".format(timepad_link)
 
         return tail
 

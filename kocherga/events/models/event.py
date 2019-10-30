@@ -280,10 +280,14 @@ class Event(models.Model):
         """
         Uses timepad to determine who registered to the event.
         """
+        # TODO - modify to use the native tickets system.
 
         timepad_event = self.timepad_event()
         for order in timepad_event.orders.filter(status__in=['ok', 'paid']):
             yield order.user
+
+    def public_link(self):
+        return f'{settings.KOCHERGA_WEBSITE}/events/{self.uuid}'
 
 
 class Tag(models.Model):
