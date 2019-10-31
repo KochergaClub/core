@@ -20,6 +20,8 @@ def save_config(config):
 
 def _get_and_save(page_id):
     page_full = api.get_page_full(page_id)
+    if not page_full['published']:
+        return  # not published, should be timestamp
 
     html = page_full['html']
     alias = page_full['alias']
@@ -41,6 +43,8 @@ def export_all():
     for page in pages:
         page_id = page['id']
         config_item = _get_and_save(page_id)
+        if not config_item:
+            continue
         config.append(config_item)
 
     save_config(config)
@@ -49,10 +53,12 @@ def export_all():
 def export_page(page_id):
     logger.info(f'Exporting Tilda page {page_id}')
 
+    updated_config_item = _get_and_save(page_id)
+    if not updated_config_item:
+        return
+
     with open(config_filename()) as fh:
         config = json.loads(fh.read())
-
-    updated_config_item = _get_and_save(page_id)
 
     new_config = []
     found = False
