@@ -88,11 +88,20 @@ export const VkRetargetingScript = () => {
   }
 
   return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `(window.Image ? (new Image()) : document.createElement('img')).src = location.protocol + '//vk.com/rtrg?r=${VK_RETARGETING_ID}';`,
-      }}
-    />
+    <React.Fragment>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?162",t.onload=function(){VK.Retargeting.Init("${VK_RETARGETING_ID}"),VK.Retargeting.Hit()},document.head.appendChild(t)}();`,
+        }}
+      />
+      <noscript>
+        <img
+          src={`https://vk.com/rtrg?p=${VK_RETARGETING_ID}`}
+          style={{ position: 'fixed', left: -999 }}
+          alt=""
+        />
+      </noscript>
+    </React.Fragment>
   );
 };
 
