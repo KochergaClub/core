@@ -9,6 +9,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.api import APIField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.fields import APIRichTextField
 
 
 class BlogIndexPage(HeadlessPreviewMixin, Page):
@@ -40,7 +41,7 @@ class BlogPostPage(HeadlessPreviewMixin, Page):
     api_fields = [
         APIField('date'),
         APIField('authors'),
-        APIField('body'),
+        APIRichTextField('body'),
         APIField('summary'),
     ]
 

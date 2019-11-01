@@ -15,6 +15,7 @@ from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.fields import APIRichTextField
 from kocherga.dateutils import TZ
 from kocherga.events.serializers import PublicEventSerializer
 
@@ -57,7 +58,7 @@ class ProjectPage(HeadlessPreviewMixin, Page):
     api_fields = [
         APIField('summary'),
         APIField('activity_summary'),
-        APIField('body'),
+        APIRichTextField('body'),
         APIField('is_active'),
         APIField('image', serializer=ImageRenditionField('fill-1080x400')),
         APIField('image_thumbnail', serializer=ImageRenditionField('fill-500x300', source='image')),
