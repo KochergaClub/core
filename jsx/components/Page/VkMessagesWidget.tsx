@@ -20,7 +20,8 @@ const VkMessagesWidget: React.FC = () => {
       return;
     }
     window.VK.Widgets.CommunityMessages('vk_community_messages', widgetId, {
-      disableExpandChatSound: '1',
+      disableExpandChatSound: 1,
+      disableButtonTooltip: 1,
       tooltipButtonText: 'Есть вопрос?',
     });
   }, []);
