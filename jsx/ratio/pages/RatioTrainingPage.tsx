@@ -9,7 +9,7 @@ import { selectUser } from '~/core/selectors';
 import Page from '~/components/Page';
 import ActionButton from '~/components/ActionButton';
 import CreateButton from '~/components/crud/CreateButton';
-import { FormField } from '~/components/crud/types';
+import { FormShape } from '~/components/forms/types';
 
 import { loadKkmPassword } from '~/kkm/actions';
 
@@ -40,7 +40,7 @@ const CreateTicketButton = ({
   training_id: number;
   onCreate: () => void;
 }) => {
-  const fields: FormField[] = [
+  const fields: FormShape = [
     { name: 'training', type: 'number', readonly: true, value: training_id },
     { name: 'email', type: 'string' },
     { name: 'first_name', type: 'string' },

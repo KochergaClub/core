@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FormField } from '~/components/crud/types';
+import { FormShape } from '~/components/forms/types';
 import CreateButton from '~/components/crud/CreateButton';
 
 import { Cohort } from '../../../types';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const CreateParticipantButton = ({ cohort }: Props) => {
-  const fields: FormField[] = [
+  const fields: FormShape = [
     { name: 'cohort_id', type: 'number', readonly: true, value: cohort.id },
     { name: 'email', type: 'string' },
   ];

@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux';
 import { loadWatchmen } from '../actions';
 
 import CreateButton from '~/components/crud/CreateButton';
-import { FormField } from '~/components/crud/types';
+import { FormShape } from '~/components/forms/types';
 
-const fields: FormField[] = [
+const fields: FormShape = [
   { name: 'email', type: 'email' },
   { name: 'short_name', type: 'string' },
   { name: 'full_name', type: 'string' },
