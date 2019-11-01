@@ -9,6 +9,7 @@ class APIRichTextSerializer(fields.CharField):
         return expand_db_html(representation)
 
 
+# via https://github.com/wagtail/wagtail/issues/2695 - fixing <embed> in RichTextFields
 class APIRichTextField(APIField):
     def __init__(self, name):
         serializer = APIRichTextSerializer()
