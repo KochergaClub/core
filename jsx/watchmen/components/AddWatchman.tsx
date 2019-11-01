@@ -11,7 +11,7 @@ const fields: FormShape = [
   { name: 'short_name', type: 'string' },
   { name: 'full_name', type: 'string' },
   { name: 'password', type: 'password' },
-  { name: 'vk', type: 'string' },
+  { name: 'vk', type: 'string', optional: true },
   {
     name: 'gender',
     type: 'choice',
