@@ -201,7 +201,7 @@ class WeeklyDigest(models.Model):
 
         text = self._telegram_message()
         posted_messages = kocherga.telegram.post_to_channel(text)
-        self.telegram_id = posted_messages[0]['message_id']
+        self.telegram_id = posted_messages[0]['result']['message_id']
         self.save()
 
     def post_vk(self, prefix_text):
