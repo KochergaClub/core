@@ -109,7 +109,8 @@ class EventSerializer(serializers.ModelSerializer):
 
             # optional
             'prototype_id',
-            'ready_to_post',
+            'published',
+            'ready_to_post',  # deprecated
             'visitors',
             'deleted',
             'project_slug',
@@ -133,11 +134,13 @@ class EventSerializer(serializers.ModelSerializer):
                 'title', 'location', 'description', 'summary',
                 'start', 'end', 'creator',
                 'visitors',
+                'published',
+                'timing_description_override',
                 'vk_group', 'fb_group',
                 'posted_timepad', 'posted_fb', 'posted_vk',
-                'timepad_prepaid_tickets', 'timepad_category_code', 'timing_description_override',
+                'timepad_prepaid_tickets', 'timepad_category_code',
                 'type',
-                'ready_to_post',
+                'ready_to_post',  # deprecated
                 'prototype_id',
                 'project_slug',
                 # TODO - other fields from Event.set_field_by_prop()
@@ -158,6 +161,9 @@ class EventSerializer(serializers.ModelSerializer):
     # It'd be better if this was SlugRelatedField.
     # But it causes circular import issues which I wasn't able to figure out yet.
     project_slug = serializers.CharField(source='project.slug', required=False, allow_blank=True)
+
+    # deprecated
+    ready_to_post = serializers.BooleanField(source='published', required=False)
 
     announcements = AnnouncementsSerializer(required=False)
 

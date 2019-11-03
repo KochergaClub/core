@@ -165,7 +165,7 @@ class Event(models.Model):
 
     image = models.CharField(max_length=32, null=True, blank=True)
 
-    ready_to_post = models.BooleanField(default=False)
+    published = models.BooleanField(default=False)
     timing_description_override = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
