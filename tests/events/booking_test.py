@@ -123,7 +123,7 @@ class TestAddBooking:
 
     def test_too_far_date(self):
         with pytest.raises(PublicError, match='too far'):
-            add_booking('2020-01-01', 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
+            add_booking('2025-01-01', 'гэб', 3, '12:00', '12:30', 'somebody@example.com')
 
     def test_add_booking(self):
         event = add_booking(

@@ -6,6 +6,7 @@ pytestmark = [
 
 import re
 from datetime import datetime
+import time
 
 import kocherga.vk.api
 from kocherga.events import models
@@ -14,8 +15,8 @@ from kocherga.events import models
 class TestTexts:
     def test_tail(self, event):
         assert re.match(
-            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(антикафе Кочерга\)\. '
-            r'Оплата участия — по тарифам антикафе: 2,5 руб\./минута\.$',
+            r'Встреча пройдёт в \w+ \d+ \w+, в \d+:\d+, в @kocherga_club \(центре рациональности Кочерга\)\. '
+            r'Оплата участия — по тарифам антикафе: 2,5 руб\./минута\. Регистрация: http.*',
             event.vk_announcement.get_tail()
         )
 
@@ -89,11 +90,10 @@ class TestRepostToDaily():
 
     def test_repost_to_daily_single(self, event):
         event.start = datetime.combine(datetime.today().date(), event.start.timetz())
+        event.published = True
         event.save()
         event.vk_announcement.announce()
-
-        event.timepad_announcement.link = 'fake'
-        event.timepad_announcement.save()  # necessary for repost_to_daily logic :(
+        time.sleep(1)
 
         assert models.VkAnnouncement.objects.count() == 1
         with pytest.raises(Exception, match="Access denied: can't publish"):

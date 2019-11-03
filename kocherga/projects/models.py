@@ -22,9 +22,8 @@ from kocherga.events.serializers import PublicEventSerializer
 
 class UpcomingEventsField(Field):
     def to_representation(self, value):
-        qs = value.filter(event_type='public') \
+        qs = value.filter(event_type='public', published=True) \
                   .filter(start__gte = datetime.now(TZ)) \
-                  .exclude(timepad_announcement__link = '') \
                   .order_by('start')
 
         return PublicEventSerializer(qs, many=True).data

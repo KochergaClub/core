@@ -3,8 +3,8 @@ import pytest
 
 @pytest.fixture
 def public_event(event):
-    event.timepad_announcement.link = 'blah'  # should be non-empty
-    event.timepad_announcement.save()
+    event.published = True
+    event.save()
     return event
 
 

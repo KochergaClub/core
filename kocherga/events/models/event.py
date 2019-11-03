@@ -82,12 +82,10 @@ class EventManager(models.Manager):
 
         query = (
             query
-            .filter(event_type = 'public')
-            # public events can contain raw description initially
-            # TODO - replace with flag `published`
-            .exclude(timepad_announcement__link = '')
-            .exclude(timepad_announcement__link__isnull = True)
-            .filter(start__gte = datetime(2018, 6, 1))  # earlier events are not cleaned up yet
+            # public events can contain raw description initially, so we rely on `published` flag
+            .filter(event_type = 'public', published = True)
+            # earlier events are not cleaned up yet
+            .filter(start__gte = datetime(2018, 6, 1))
         )
 
         if tag:

@@ -67,7 +67,7 @@ class GoogleCalendar(models.Model):
             # This condition is adapted from Event.objects.public_events.
             return (
                 event.event_type == 'public'
-                and event.timepad_announcement.link
+                and event.published
                 and event.start > datetime(2018, 6, 1, tzinfo=TZ)
             )
         return True
