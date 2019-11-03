@@ -1,8 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 
 import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
+import { Button, Row } from '@kocherga/frontkit';
 
 import TL02 from '~/blocks/TL02';
 import Page from '~/components/Page';
@@ -43,6 +44,34 @@ const Grid = styled.div`
   justify-items: stretch;
 `;
 
+const InactiveContainer = styled.div`
+  margin-bottom: 80px;
+`;
+
+const InactiveProjects: React.FC<ExtraProps> = ({ projects }) => {
+  const [revealed, setRevealed] = useState(false);
+
+  return (
+    <InactiveContainer>
+      {revealed ? (
+        <Grid>
+          {projects
+            .filter(project => !project.is_active)
+            .map(project => (
+              <ProjectCard key={project.id} {...project} />
+            ))}
+        </Grid>
+      ) : (
+        <Row centered>
+          <Button size="big" onClick={() => setRevealed(true)}>
+            Показать
+          </Button>
+        </Row>
+      )}
+    </InactiveContainer>
+  );
+};
+
 const ProjectIndexPage: NextWagtailPage<PageType, ExtraProps> = ({
   wagtailPage,
   projects,
@@ -67,13 +96,7 @@ const ProjectIndexPage: NextWagtailPage<PageType, ExtraProps> = ({
           ))}
       </Grid>
       <TL02 title="Неактивные проекты" />
-      <Grid>
-        {projects
-          .filter(project => !project.is_active)
-          .map(project => (
-            <ProjectCard key={project.id} {...project} />
-          ))}
-      </Grid>
+      <InactiveProjects projects={projects} />
     </Page>
   );
 };
