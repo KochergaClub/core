@@ -179,7 +179,7 @@ class VkAnnouncement(models.Model):
         tail = (
             f"{self.event.timing_description} в @kocherga_club (центре рациональности Кочерга). "
             + "Оплата участия — по тарифам антикафе: 2,5 руб./минута. "
-            + " Регистрация: {self.event.public_link()}"
+            + f" Регистрация: {self.event.public_link()}"
         )
 
         return tail
