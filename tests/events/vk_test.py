@@ -22,7 +22,7 @@ class TestTexts:
 
 
 class TestCreate:
-    def test_create(self, event):
+    def test_create_short(self, event):
 
         announcement = event.vk_announcement
         assert isinstance(announcement, models.VkAnnouncement)
@@ -53,6 +53,7 @@ class TestCreate:
 
         assert isinstance(announcement, models.VkAnnouncement)
 
+        time.sleep(1)
         kocherga.vk.api.call('wall.delete', {
             'owner_id': -announcement.group_id(),
             'post_id': announcement.post_id(),

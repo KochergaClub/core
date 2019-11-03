@@ -211,9 +211,14 @@ class VkAnnouncement(models.Model):
     def announce(self):
         group_id = self.group_id()
 
-        image_file = self.image_file()
+        # link = self.event.public_link()
+        # kocherga.vk.api.call("pages.clearCache", {
+        #     "url": link,
+        # })
 
+        image_file = self.image_file()
         photo_id = upload_wall_image(group_id, open(image_file, 'rb').read())
+
         message = self.get_text()
 
         response = kocherga.vk.api.call(
@@ -222,8 +227,8 @@ class VkAnnouncement(models.Model):
                 "owner_id": -group_id,
                 "from_group": 1,
                 "message": message,
-                # "publish_date": int(datetime.now().timestamp()) + 86400,
-                "attachments": photo_id,
+                # "attachments": f'{photo_id},{link}',
+                "attachments": f'{photo_id}',
             },
         )
 
