@@ -47,7 +47,7 @@ def init():
     logger.info("Don't forget to check proxy settings!")
 
     bot_extra_settings = {}
-    if getattr(settings, 'TELEGRAM_PROXY'):
+    if settings.TELEGRAM_PROXY:
         bot_extra_settings['proxy'] = settings.TELEGRAM_PROXY
 
     bot = aiogram.Bot(

@@ -56,7 +56,7 @@ def post_to_channel(message):
     result = []
 
     proxies = None
-    if getattr(settings, 'TELEGRAM_PROXY'):
+    if settings.TELEGRAM_PROXY:
         proxies = {
             'http': settings.TELEGRAM_PROXY,
             'https': settings.TELEGRAM_PROXY,
