@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 
 import reversion.signals
 
-from .models import Event, TimepadAnnouncement
+from . import models
 
 
 def channel_send(channel: str, message):
@@ -24,7 +24,7 @@ def cb_flush_new_revisions(sender, revision, versions, **kwargs):
     def on_commit():
         logger.info('Checking for new event revisions')
         for version in versions:
-            if version.content_type.model_class() == Event:
+            if version.content_type.model_class() == models.Event:
                 logger.info('Notifying about new event revisions')
                 channel_send("events-slack-notify", {
                     "type": "notify_by_version",
@@ -44,19 +44,10 @@ def channel_send_google_export(event_pk):
     })
 
 
-@receiver(post_save, sender=Event)
+@receiver(post_save, sender=models.Event)
 def cb_google_export(sender, instance, created, **kwargs):
 
     def on_commit():
         channel_send_google_export(instance.pk)
-
-    transaction.on_commit(on_commit)
-
-
-@receiver(post_save, sender=TimepadAnnouncement)
-def cb_google_export_on_timepad_announcement(sender, instance, created, **kwargs):
-
-    def on_commit():
-        channel_send_google_export(instance.event.pk)
 
     transaction.on_commit(on_commit)
