@@ -7,6 +7,12 @@ pytestmark = [
 import kocherga.events.models.announcement.timepad
 
 
+@pytest.fixture
+def event_for_timepad(event):
+    event.image = None  # FIXME - timepad can't fetch our local image, unfortunately
+    return event
+
+
 class TestCreate:
     def test_create(self, event_for_timepad):
         ann = event_for_timepad.timepad_announcement

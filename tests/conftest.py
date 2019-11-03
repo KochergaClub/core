@@ -64,12 +64,6 @@ def event(image_file, vk_image_file):
 
 
 @pytest.fixture
-def event_for_timepad(event):
-    event.image = None  # FIXME - timepad can't fetch our local image, unfortunately
-    return event
-
-
-@pytest.fixture
 def minimal_event():
     dt = datetime.now(TZ) + timedelta(days=1)
     event = Event(
