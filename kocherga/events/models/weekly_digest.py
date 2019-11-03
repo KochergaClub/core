@@ -59,11 +59,10 @@ class WeeklyDigest(models.Model):
 
     def events(self):
         query = (
-            Event.objects.list_events(
+            Event.objects.public_events(
                 from_date=self.start,
                 to_date=self.end,
             )
-            .exclude(vk_announcement__link='')
         )
         result = list(query.all())
         logger.info(f"Schedule includes {len(result)} events")
@@ -190,9 +189,7 @@ class WeeklyDigest(models.Model):
                 message += f"{weekday}, {start_local.day} {month}\n"
                 prev_date = start_local.date()
 
-            title = event.title
-            if event.vk_announcement.link:
-                title = f'<a href="{event.vk_announcement.link}">{title}</a>'
+            title = f'<a href="{event.public_link()}">{event.title}</a>'
             message += f"{start_local:%H:%M} {title}\n"
             message += f"{event.generate_summary()}\n\n"
 
@@ -221,6 +218,9 @@ class WeeklyDigest(models.Model):
 
         prev_date = None
         for event in events:
+            if not event.vk_announcement.link:
+                continue  # TODO - throw error?
+
             start_local = timezone.localtime(event.start)
             if start_local.date() != prev_date:
                 weekday = kocherga.dateutils.weekday(start_local).upper()

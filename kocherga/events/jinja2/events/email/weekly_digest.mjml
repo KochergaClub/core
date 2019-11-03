@@ -12,6 +12,27 @@
         color: #3498DB;
         text-decoration: none;
       }
+
+      .button {
+        background-color: #4d8ccb;
+        padding: 4px 16px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
+      }
+      .register-button {
+        background-color: #b0cce8;
+        padding: 4px 16px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        color: #17334f;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
+      }
     </mj-style>
   </mj-head>
   <mj-body>
@@ -43,21 +64,23 @@
 {% for group in events_by_date %}
     <mj-section>
       <mj-column width="100%">
-        <mj-text>
-          <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
-          {% for event in group['events'] %}
+        {% for event in group['events'] %}
+          <mj-text>
+            <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
             <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0">
                 {{ localtime(event.start).strftime("%H:%M") | e }}. {{ event.title | e }}
             </h3>
-            <p style="font-size: 14px">{{ event.summary | e }}
+            <p style="font-size: 14px">
+              {{ event.summary | e }}
             </p>
-            <p><i>Подробнее:
-              {% if event.vk_announcement.link %}<a href="{{ utmify(event.vk_announcement.link) | e }}">вконтакте</a>{% endif -%}
-              {% if event.fb_announcement.link %}, <a href="{{ utmify(event.fb_announcement.link) | e }}">facebook</a>{% endif -%}
-              {% if event.timepad_announcement.link %}, <a href="{{ utmify(event.timepad_announcement.link) | e }}">timepad</a>{% endif -%}
-            </i></p>
-          {% endfor %}
-        </mj-text>
+            <a href="{{ utmify(event.public_link()) | e }}" class="button">
+              Подробности
+            </a>
+            <a href="{{ utmify(event.public_link()) | e }}#register" class="register-button">
+              Зарегистрироваться
+            </a>
+          </mj-text>
+        {% endfor %}
       </mj-column>
     </mj-section>
 {% endfor %}
@@ -69,7 +92,7 @@
     <mj-section>
       <mj-column width="75%">
         <mj-text>
-          <a href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=footer">Клуб Кочерга</a>
+          <a href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=footer">Центр рационалности Кочерга</a>
         </mj-text>
       </mj-column>
       <mj-column width="25%">
