@@ -15,22 +15,9 @@
 
       .button {
         background-color: #4d8ccb;
-        padding: 4px 16px;
-        margin-right: 8px;
-        margin-bottom: 8px;
+        padding: 8px 16px;
+        margin-right: 12px;
         color: white;
-        font-size: 14px;
-        font-weight: 500;
-        border-radius: 4px;
-      }
-      .register-button {
-        background-color: #b0cce8;
-        padding: 4px 16px;
-        margin-right: 8px;
-        margin-bottom: 8px;
-        color: #17334f;
-        font-size: 14px;
-        font-weight: 500;
         border-radius: 4px;
       }
     </mj-style>
@@ -76,10 +63,11 @@
             <a href="{{ utmify(event.public_link()) | e }}" class="button">
               Подробности
             </a>
-            <a href="{{ utmify(event.public_link()) | e }}#register" class="register-button">
+            <a href="{{ utmify(event.public_link()) | e }}#register">
               Зарегистрироваться
             </a>
           </mj-text>
+          <mj-spacer height="16px" />
         {% endfor %}
       </mj-column>
     </mj-section>
@@ -92,7 +80,7 @@
     <mj-section>
       <mj-column width="75%">
         <mj-text>
-          <a href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=footer">Центр рационалности Кочерга</a>
+          <a href="https://kocherga-club.ru?utm_campaign=weekly-digest&utm_medium=email&utm_source=kocherga-newsletter&utm_content=footer">Центр рациональности Кочерга</a>
         </mj-text>
       </mj-column>
       <mj-column width="25%">
