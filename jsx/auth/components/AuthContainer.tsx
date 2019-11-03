@@ -15,8 +15,8 @@ const Box = styled.div`
   box-shadow: 0px 2px 4px 0 #bbb;
 `;
 
-const AuthContainer: React.FC = ({ children }) => (
-  <Wrapper>
+const AuthContainer: React.FC = ({ children, ...props }) => (
+  <Wrapper {...props}>
     <Box>{children}</Box>
   </Wrapper>
 );
