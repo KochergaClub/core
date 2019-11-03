@@ -47,8 +47,8 @@ def init():
     logger.info("Don't forget to check proxy settings!")
 
     bot_extra_settings = {}
-    if 'proxy' in settings.MASTERMIND_BOT_CONFIG:
-        bot_extra_settings['proxy'] = settings.MASTERMIND_BOT_CONFIG['proxy']
+    if getattr(settings, 'TELEGRAM_PROXY'):
+        bot_extra_settings['proxy'] = settings.TELEGRAM_PROXY
 
     bot = aiogram.Bot(
         settings.MASTERMIND_BOT_CONFIG["token"],

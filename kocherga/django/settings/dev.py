@@ -79,3 +79,5 @@ GDRIVE_WATCHMEN_FOLDER = '14QJy4SLl-TY-DwyPWktNcCIple75Ppe_'
 WAGTAILAPI_BASE_URL = "http://localhost:8000/api/wagtail"
 
 TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
+
+TELEGRAM_PROXY = "socks5://tor:9050"

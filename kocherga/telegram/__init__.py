@@ -54,6 +54,14 @@ def post_to_channel(message):
 
     chunks = split_message_into_chunks(message)
     result = []
+
+    proxies = None
+    if getattr(settings, 'TELEGRAM_PROXY'):
+        proxies = {
+            'http': settings.TELEGRAM_PROXY,
+            'https': settings.TELEGRAM_PROXY,
+        }
+
     for chunk in chunks:
         r = requests.get(
             f"https://api.telegram.org/bot{token}/sendMessage",
@@ -63,7 +71,9 @@ def post_to_channel(message):
                 "parse_mode": "html",
                 "disable_web_page_preview": "true",
             },
+            proxies=proxies,
         )
         r.raise_for_status()
         result.append(r.json())
+
     return result

@@ -67,5 +67,4 @@ YANDEX_KASSA = {
 MASTERMIND_BOT_CONFIG = {
     "token": "",
     "bot_link": "",
-    "proxy": "",
 }
