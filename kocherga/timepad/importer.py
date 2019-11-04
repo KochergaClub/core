@@ -73,20 +73,18 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             except KchUser.DoesNotExist:
                 user = KchUser.objects.create_user(email)
 
-                if subscribed_to_newsletter:
-                    if (datetime.now(tz=TZ) - created_at).total_seconds() > 86400 * 14:
-                        logger.info(f"{email} wants to subscribe to the newsletter but order is too old")
-                    else:
-                        logger.info(f"{email} agreed to newsletter")
-                        mailchimp_user = kocherga.email.lists.User(
-                            first_name=first_name,
-                            last_name=last_name,
-                            email=email,
-                            card_id=None,
-                        )
-                        yield mailchimp_user
+            if subscribed_to_newsletter:
+                if (datetime.now(tz=TZ) - created_at).total_seconds() > 86400 * 14:
+                    logger.info(f"{email} wants to subscribe to the newsletter but order is too old")
                 else:
-                    logger.info(f"{email} is new but doesn't agree to newsletter")
+                    logger.info(f"{email} agreed to newsletter")
+                    mailchimp_user = kocherga.email.lists.User(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        card_id=None,
+                    )
+                    yield mailchimp_user
 
             (order, _) = Order.objects.update_or_create(
                 id=order_id,
