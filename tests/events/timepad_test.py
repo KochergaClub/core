@@ -1,4 +1,7 @@
 import pytest
+pytestmark = [
+    pytest.mark.timepad,
+]
 
 import kocherga.events.models.announcement.timepad
 

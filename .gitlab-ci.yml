@@ -50,7 +50,7 @@ test-python:
     - docker-compose -f docker/compose.ci.yml run $pass_env
       --rm api
       bash -c "
-        pytest -m 'not google and not slack and not mailchimp and not ofd and not slow' --cov=kocherga
+        pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow' --cov=kocherga
         && codecov -F python
       "
 

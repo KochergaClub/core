@@ -1,3 +1,11 @@
+import pytest
+pytestmark = [
+    pytest.mark.vk,
+    pytest.mark.timepad,
+    pytest.mark.mailchimp,
+]
+
+
 def test_timepad_categories(admin_client):
     res = admin_client.get('/api/announcements/timepad/categories')
     assert res.status_code == 200
