@@ -1,7 +1,15 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db import models
 from django.conf import settings
 
 import re
+
+import kocherga.events.models
+
+
+ORGANIZATION = settings.KOCHERGA_TIMEPAD["organization"]
 
 
 class EventManager(models.Manager):
@@ -25,6 +33,13 @@ class Event(models.Model):
     def __str__(self):
         return f'[{self.id}] {self.name}'
 
+    def get_kocherga_event(self):
+        announcement = kocherga.events.models.TimepadAnnouncement.objects.find_by_timepad_id(self.id)
+        return announcement.event
+
+    def link(self):
+        return f'https://{ORGANIZATION}.timepad.ru/event/{self.id}'
+
 
 # Timepad's own data model includes Tickets inside each Order,
 # and email/first_name/last_name are actually ticket's properties.
@@ -47,3 +62,18 @@ class Order(models.Model):
 
     def __str__(self):
         return f'[{self.id}] {self.user.email} / {self.event.name}'
+
+    def create_native_ticket(self):
+        kocherga_event = self.event.get_kocherga_event()
+        (ticket, created) = kocherga.events.models.Ticket.objects.get_or_create(
+            user=self.user,
+            event=kocherga_event,
+            defaults={
+                'from_timepad': True,
+                'created': self.created_at,
+            }
+        )
+        if created:
+            logger.info(f'Created native ticket {ticket.pk} from order {self}')
+        else:
+            logger.info('Native ticket {ticket.pk} already exists for order {self}')

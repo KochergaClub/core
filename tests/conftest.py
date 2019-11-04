@@ -1,4 +1,5 @@
 import pytest
+import freezegun
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -11,6 +12,11 @@ from datetime import datetime, timedelta
 from kocherga.events.models import Event, EventPrototype
 import kocherga.images
 from kocherga.dateutils import TZ
+
+
+@pytest.fixture(autouse=True)
+def enable_db_access_for_all_tests(db):
+    pass
 
 
 @pytest.fixture(scope='session')
@@ -179,3 +185,15 @@ def client():
 def admin_client(client, admin_user):
     client.login(username=admin_user.email, password="password")
     return client
+
+
+@pytest.fixture()
+def frozen_time():
+    with freezegun.freeze_time(datetime(
+            year=2019,
+            month=11,
+            day=1,
+            hour=9,
+            tzinfo=TZ
+    )) as f:
+        yield f
