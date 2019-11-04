@@ -57,6 +57,8 @@ djangorestframework==3.10.2  # via django-rest-framework, wagtail
 docutils==0.15.2          # via botocore
 draftjs-exporter==2.1.6   # via wagtail
 entrypoints==0.3          # via flake8, nbconvert
+factory-boy==2.12.0
+faker==2.0.3              # via factory-boy
 feedgen==0.7.0
 fire==0.2.1
 flake8==3.7.8
@@ -160,7 +162,7 @@ seaborn==0.9.0
 secretstorage==3.1.1      # via keyring
 send2trash==1.5.0         # via notebook
 sentry-sdk[flask]==0.11.2
-six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, mwclient, packaging, prompt-toolkit, pyhamcrest, pyrsistent, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, wagtail, websocket-client
+six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, faker, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, mwclient, packaging, prompt-toolkit, pyhamcrest, pyrsistent, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, wagtail, websocket-client
 slackclient==1.3.2
 slackeventsapi==2.1.0
 slappy==0.5.1
@@ -169,6 +171,7 @@ telethon==1.9.0
 termcolor==1.1.0
 terminado==0.8.2          # via notebook
 testpath==0.4.2           # via nbconvert
+text-unidecode==1.3       # via faker
 toml==0.10.0              # via black
 tornado==6.0.3            # via ipykernel, jupyter-client, notebook, terminado
 tqdm==4.35.0
@@ -197,4 +200,4 @@ zipp==0.6.0               # via importlib-metadata
 zope.interface==4.6.0     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.2.0        # via apscheduler, ipython, jsonschema, kiwisolver, markdown, pyhamcrest, zope.interface[201~
+# setuptools==41.6.0        # via apscheduler, ipython, jsonschema, kiwisolver, markdown, pyhamcrest, zope.interface

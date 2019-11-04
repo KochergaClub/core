@@ -4,7 +4,9 @@ pytestmark = [
 ]
 
 from datetime import datetime, timedelta
+
 import freezegun
+import factory
 
 from django.conf import settings
 from django.core import mail
@@ -16,34 +18,35 @@ from kocherga.events.models import Event, Ticket
 
 @pytest.fixture
 def user1():
-    return get_user_model().objects.create_user('kocherga-test@berekuk.ru')
+    return get_user_model().objects.create_user('kocherga-test@example.com')
 
 
 @pytest.fixture
 def user2():
-    return get_user_model().objects.create_user('kocherga-test2@berekuk.ru')
+    return get_user_model().objects.create_user('kocherga-test2@example.com')
+
+
+class EventFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Event
+
+    title = factory.Faker('sentence', nb_words=4)
+    event_type = 'public'
+    end = factory.LazyAttribute(
+        lambda o: o.start + timedelta(hours=1)
+    )
 
 
 @pytest.fixture
 def tomorrow_event() -> Event:
     dt = datetime.now(TZ) + timedelta(days=1)
-    return Event.objects.create(
-        start=dt,
-        end=dt + timedelta(hours=1),
-        title='Завтрашнее событие',
-        event_type='public',
-    )
+    return EventFactory.create(start=dt)
 
 
 @pytest.fixture
 def future_event() -> Event:
     dt = datetime.now(TZ) + timedelta(days=3)
-    return Event.objects.create(
-        start=dt,
-        end=dt + timedelta(hours=1),
-        title='Будущее событие',
-        event_type='public',
-    )
+    return EventFactory.create(start=dt)
 
 
 @pytest.fixture(autouse=True)
