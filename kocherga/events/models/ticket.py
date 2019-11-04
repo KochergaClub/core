@@ -53,6 +53,11 @@ class TicketManager(models.Manager):
             day_before_notification_sent=False,
         )
 
+        now = datetime.now(TZ)
+        if now.hour < 14:
+            logger.info('Too early for day-before reminders')
+            return
+
         logger.info(f'Trying {len(tickets)} tickets for day-before reminders')
         for ticket in tickets:
             ticket.send_day_before_reminder()
@@ -125,22 +130,30 @@ class Ticket(models.Model):
 
         now = datetime.now(TZ)
 
+        # shouldn't send the reminder at the same day as registration
+        if (now.date() - timezone.localtime(self.created).date()).days < 1:
+            logger.info('Skip reminder - ticket created today')
+            return
+
+        # should never send reminders about past events
         if self.event.start < now:
-            return  # should never send reminders about future events
+            logger.info('Skip reminder - event is in the past')
+            return
 
-        delta = timezone.localtime(self.event.start).date() - now.date()
-        if delta.days != 1:
-            return  # too early or too late
+        # too early or too late
+        if (timezone.localtime(self.event.start).date() - now.date()).days != 1:
+            return
 
+        # guarantee that we never send an email twice
         self.day_before_notification_sent = True
-        self.save()  # guarantee that we never send an email twice
+        self.save()
 
         template_vars = self._common_email_vars()
 
         text_body = render_to_string('events/email/day_before_reminder.txt', template_vars)
         html_body = markdown.markdown(render_to_string('events/email/day_before_reminder.md', template_vars))
 
-        logger.info(f'Sending reminder to {self.user.email} about {self.event.id}')
+        logger.info(f'Sending reminder to {self.user.email} about {self.event.id} ({self.event.title})')
         send_mail(
             subject=f'Напоминание о событии: {self.event.title}',
             from_email='Кочерга <info@kocherga-club.ru>',
