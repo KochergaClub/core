@@ -20,6 +20,15 @@ SUBSCRIBERS_LIST_ID = TIMEPAD_CONFIG["subscribers_list_id"]
 DEFAULT_ACCESS_STATUS = TIMEPAD_CONFIG["default_access_status"]
 
 
+class TimepadAnnouncementManager(models.Manager):
+    def find_by_timepad_id(self, id: int):
+        link = f'https://{ORGANIZATION}.timepad.ru/event/{id}'
+        announcement = self.get(
+            link__in=[link, link + '/']
+        )
+        return announcement
+
+
 def check(url):
     match = re.match(r"https://{}\.timepad\.ru/event/(\d+)/$".format(ORGANIZATION), url)
     if not match:
@@ -79,6 +88,8 @@ class TimepadAnnouncement(models.Model):
 
     category_code = models.CharField(max_length=40, blank=True)
     prepaid_tickets = models.BooleanField(default=False)
+
+    objects = TimepadAnnouncementManager()
 
     def description(self):
         event = self.event

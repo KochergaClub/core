@@ -9,6 +9,9 @@ import re
 import kocherga.events.models
 
 
+ORGANIZATION = settings.KOCHERGA_TIMEPAD["organization"]
+
+
 class EventManager(models.Manager):
     def get_by_link(self, link):
         match = re.match(r'https://[^.]+\.timepad\.ru/event/(\d+)$', link)
@@ -29,6 +32,13 @@ class Event(models.Model):
 
     def __str__(self):
         return f'[{self.id}] {self.name}'
+
+    def get_kocherga_event(self):
+        announcement = kocherga.events.models.TimepadAnnouncement.objects.find_by_timepad_id(self.id)
+        return announcement.event
+
+    def link(self):
+        return f'https://{ORGANIZATION}.timepad.ru/event/{self.id}'
 
 
 # Timepad's own data model includes Tickets inside each Order,
@@ -54,11 +64,13 @@ class Order(models.Model):
         return f'[{self.id}] {self.user.email} / {self.event.name}'
 
     def create_native_ticket(self):
+        kocherga_event = self.event.get_kocherga_event()
         (ticket, created) = kocherga.events.models.Ticket.objects.get_or_create(
             user=self.user,
-            event=self.event,
+            event=kocherga_event,
             defaults={
                 'from_timepad': True,
+                'created': self.created_at,
             }
         )
         if created:
