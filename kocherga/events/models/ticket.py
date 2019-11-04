@@ -87,6 +87,8 @@ class Ticket(models.Model):
     subscribed_to_newsletter = models.BooleanField(default=False)
     day_before_notification_sent = models.BooleanField(default=False)
 
+    from_timepad = models.BooleanField(default=False)
+
     objects = TicketManager()
 
     class Meta:
@@ -111,6 +113,9 @@ class Ticket(models.Model):
         }
 
     def send_confirmation_email(self):
+        if self.from_timepad:
+            return
+
         template_vars = self._common_email_vars()
 
         text_body = render_to_string('events/email/registered.txt', template_vars)
@@ -126,6 +131,9 @@ class Ticket(models.Model):
 
     def send_day_before_reminder(self):
         if self.day_before_notification_sent:
+            return
+
+        if self.from_timepad:
             return
 
         now = datetime.now(TZ)

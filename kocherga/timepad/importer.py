@@ -88,7 +88,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                 else:
                     logger.info(f"{email} is new but doesn't agree to newsletter")
 
-            Order.objects.update_or_create(
+            (order, _) = Order.objects.update_or_create(
                 id=order_id,
                 event=event,
                 defaults={
@@ -100,6 +100,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                     'subscribed_to_newsletter': subscribed_to_newsletter,
                 }
             )
+            order.create_native_ticket()
 
     def get_initial_dt(self):
         return datetime(2015, 8, 1, tzinfo=TZ)

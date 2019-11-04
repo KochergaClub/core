@@ -1,7 +1,12 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from django.db import models
 from django.conf import settings
 
 import re
+
+import kocherga.events.models
 
 
 class EventManager(models.Manager):
@@ -47,3 +52,16 @@ class Order(models.Model):
 
     def __str__(self):
         return f'[{self.id}] {self.user.email} / {self.event.name}'
+
+    def create_native_ticket(self):
+        (ticket, created) = kocherga.events.models.Ticket.objects.get_or_create(
+            user=self.user,
+            event=self.event,
+            defaults={
+                'from_timepad': True,
+            }
+        )
+        if created:
+            logger.info(f'Created native ticket {ticket.pk} from order {self}')
+        else:
+            logger.info('Native ticket {ticket.pk} already exists for order {self}')
