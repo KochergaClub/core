@@ -42,8 +42,8 @@ class Order(models.Model):
     last_name = models.CharField(max_length=255)
     status = models.CharField(max_length=40)
 
-    created_at = models.DateTimeField(null=True)
-    subscribed_to_newsletter = models.BooleanField(null=True)
+    created_at = models.DateTimeField()
+    subscribed_to_newsletter = models.BooleanField()
 
     def __str__(self):
         return f'[{self.id}] {self.user.email} / {self.event.name}'
