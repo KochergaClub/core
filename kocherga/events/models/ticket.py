@@ -25,7 +25,7 @@ def channel_send(channel: str, message):
 
 
 class TicketManager(models.Manager):
-    def register(self, user, event, subscribed_to_newsletter=False) -> None:
+    def register(self, user, event, subscribed_to_newsletter=False) -> 'Ticket':
         (ticket, _) = self.update_or_create(
             user=user,
             event=event,
@@ -37,16 +37,18 @@ class TicketManager(models.Manager):
 
         ticket.send_confirmation_email()
         ticket.subscribe_to_newsletter_if_necessary()  # TODO - do asynchronously for faster response
+        return ticket
 
-    def unregister(self, user, event) -> None:
+    def unregister(self, user, event) -> 'Ticket':
         ticket = self.get(
             user=user,
             event=event,
         )
         ticket.status = 'cancelled'
         ticket.save()
+        return ticket
 
-    def send_reminders(self):
+    def send_reminders(self) -> None:
         tickets = self.filter(
             status='ok',
             event__start__gte=datetime.now(TZ),
@@ -112,7 +114,7 @@ class Ticket(models.Model):
             'address_text': 'Москва, ул. Большая Дорогомиловская, д.5к2',  # TODO - move to config
         }
 
-    def send_confirmation_email(self):
+    def send_confirmation_email(self) -> None:
         if self.from_timepad:
             return
 
@@ -129,27 +131,33 @@ class Ticket(models.Model):
             recipient_list=[self.user.email],
         )
 
-    def send_day_before_reminder(self):
+    def should_send_reminder(self) -> bool:
         if self.day_before_notification_sent:
-            return
+            return False
 
         if self.from_timepad:
-            return
+            return False
 
         now = datetime.now(TZ)
 
         # shouldn't send the reminder at the same day as registration
         if (now.date() - timezone.localtime(self.created).date()).days < 1:
             logger.info('Skip reminder - ticket created today')
-            return
+            return False
 
         # should never send reminders about past events
         if self.event.start < now:
             logger.info('Skip reminder - event is in the past')
-            return
+            return False
 
         # too early or too late
         if (timezone.localtime(self.event.start).date() - now.date()).days != 1:
+            return False
+
+        return True
+
+    def send_day_before_reminder(self) -> None:
+        if not self.should_send_reminder():
             return
 
         # guarantee that we never send an email twice
@@ -170,10 +178,10 @@ class Ticket(models.Model):
             recipient_list=[self.user.email],
         )
 
-    def subscribe_to_newsletter_if_necessary(self):
+    def subscribe_to_newsletter_if_necessary(self) -> None:
         if not self.subscribed_to_newsletter:
             logger.info('Not necessary to subscribe')
-            return  # not necessary
+            return
 
         email = self.user.email
 
