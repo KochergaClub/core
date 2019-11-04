@@ -38,6 +38,10 @@ const Container = styled.div`
   margin-bottom: 120px;
 `;
 
+const RegistrationSection = styled.section`
+  margin-bottom: 120px;
+`;
+
 export interface Props {
   serverEvent: ServerPublicEvent;
   ticket?: EventTicket;
@@ -65,12 +69,12 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
         </PaddedBlock>
         {daysUntil >= 0 ? (
           <div>
-            <section ref={registrationRef}>
+            <RegistrationSection ref={registrationRef}>
               <TL03 title="Регистрация" grey />
               <PaddedBlock>
                 <Registration event={event} ticket={ticket} />
               </PaddedBlock>
-            </section>
+            </RegistrationSection>
             <section>
               <TL03 title="Как добраться" grey />
               <Map />
