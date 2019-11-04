@@ -22,7 +22,7 @@ from kocherga.events.serializers import PublicEventSerializer
 
 class UpcomingEventsField(Field):
     def to_representation(self, value):
-        qs = value.filter(event_type='public', published=True) \
+        qs = value.filter(event_type='public', published=True, deleted=False) \
                   .filter(start__gte = datetime.now(TZ)) \
                   .order_by('start')
 
