@@ -1,9 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,
-]
-
 from datetime import datetime
 
 from kocherga.events import serializers

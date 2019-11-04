@@ -1,8 +1,4 @@
 import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,  # events require google for now (don't forget to remove this later)
-]
 
 from django.contrib.auth import get_user_model
 

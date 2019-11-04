@@ -1,8 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-]
-
 import datetime
 
 from kocherga.events.models import Event

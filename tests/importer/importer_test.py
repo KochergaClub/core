@@ -17,7 +17,6 @@ class SomeImporter(IncrementalImporter):
         pass
 
 
-@pytest.mark.django_db(transaction=True)
 def test_import_new(db):
     importer = SomeImporter()
     importer.import_new()
@@ -27,7 +26,6 @@ def test_import_new(db):
     assert (datetime.now(tz=TZ) - state.last_dt).seconds < 5
 
 
-@pytest.mark.django_db(transaction=True)
 def test_import_all(db):
     importer = SomeImporter()
     importer.import_all()
@@ -42,7 +40,6 @@ class BadImporter(SomeImporter):
         raise Exception("Something went terribly wrong")
 
 
-@pytest.mark.django_db(transaction=True)
 def test_import_bad(db):
     importer = BadImporter()
 

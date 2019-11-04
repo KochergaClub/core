@@ -10,7 +10,6 @@ def user_exists(login):
 
 
 @pytest.mark.slow
-@pytest.mark.django_db(transaction=True)
 def test_add_manager(cm_auth):
     login = 'test1'
     assert not user_exists(login)

@@ -1,8 +1,4 @@
 import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,
-]
 
 import kocherga.events.models.announcement.timepad
 

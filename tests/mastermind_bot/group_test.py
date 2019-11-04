@@ -1,6 +1,3 @@
-import pytest
-pytestmark = pytest.mark.usefixtures('db')
-
 from django.contrib.auth import get_user_model
 
 from kocherga.mastermind_dating.models import Group, Cohort, Participant

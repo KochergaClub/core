@@ -1,7 +1,4 @@
 import pytest
-pytestmark = [
-    pytest.mark.django_db(transaction=True),
-]
 
 from datetime import datetime, timedelta
 

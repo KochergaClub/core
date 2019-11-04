@@ -1,5 +1,4 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
 
 from kocherga.fb.models import Auth
 

@@ -1,6 +1,3 @@
-import pytest
-pytestmark = pytest.mark.django_db
-
 from freezegun import freeze_time
 
 from django.utils import timezone

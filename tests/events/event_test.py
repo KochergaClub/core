@@ -1,8 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-]
-
 from datetime import datetime, timedelta, date
 
 from kocherga.dateutils import TZ

@@ -1,5 +1,4 @@
 import pytest
-# pytestmark = pytest.mark.usefixtures('db')
 pytestmark = pytest.mark.skip("we keep tochka tokens in DB, so there's no way to test this")
 
 from datetime import date

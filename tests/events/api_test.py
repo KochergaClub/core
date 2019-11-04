@@ -1,9 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,  # events require google for now (don't forget to remove this later)
-]
-
 from datetime import datetime, timedelta
 
 from kocherga.dateutils import TZ

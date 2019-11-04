@@ -1,9 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,
-]
-
 from kocherga.events.models import EventPrototype, Event
 
 

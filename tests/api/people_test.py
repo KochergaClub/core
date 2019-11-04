@@ -1,5 +1,4 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
 
 import kocherga.cm.auth
 

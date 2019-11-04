@@ -1,6 +1,3 @@
-import pytest
-pytestmark = pytest.mark.usefixtures('db')
-
 import datetime
 
 

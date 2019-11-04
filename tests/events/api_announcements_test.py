@@ -1,10 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-    pytest.mark.google,  # events require google for now (don't forget to remove this later)
-]
-
-
 def test_timepad_categories(admin_client):
     res = admin_client.get('/api/announcements/timepad/categories')
     assert res.status_code == 200

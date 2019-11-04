@@ -1,9 +1,3 @@
-import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-]
-
-
 def test_options(client):
     res = client.options('/api/rooms')
     assert res.status_code == 200

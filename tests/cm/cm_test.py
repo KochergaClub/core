@@ -1,5 +1,4 @@
 import pytest
-pytestmark = pytest.mark.usefixtures('db')
 
 import kocherga.cm.models
 import kocherga.cm.scraper
@@ -36,7 +35,6 @@ def test_load_customer(cm_auth):
 
 @pytest.mark.slow
 @pytest.mark.mailchimp
-@pytest.mark.django_db(transaction=True)
 def test_importer(cm_auth):
     kocherga.cm.importer.Importer(log_portion_size=3).import_new()
     assert len(kocherga.cm.models.Order.objects.all()) > 10

@@ -1,7 +1,4 @@
 import pytest
-pytestmark = [
-    pytest.mark.usefixtures('db'),
-]
 
 from django.conf import settings
 from django.core import mail

@@ -1,6 +1,3 @@
-import pytest
-pytestmark = pytest.mark.usefixtures('db')
-
 from kocherga.ratio import models
 from kocherga.money.cashier.models import Payment
 
