@@ -72,12 +72,15 @@ class Order(models.Model):
             event=kocherga_event,
             defaults={
                 'from_timepad': True,
-                'created': self.created_at,
                 'subscribed_to_newsletter': self.subscribed_to_newsletter,
                 'status': self.status,
             }
         )
         if created:
+            # created field can't be overriden through `defaults` for some reason
+            ticket.created = self.created_at
+            ticket.save()
+
             logger.info(f'Created native ticket {ticket.pk} from order {self}')
         else:
-            logger.info('Native ticket {ticket.pk} already exists for order {self}')
+            logger.info(f'Native ticket {ticket.pk} already exists for order {self}')
