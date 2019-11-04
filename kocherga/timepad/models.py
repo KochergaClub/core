@@ -65,12 +65,16 @@ class Order(models.Model):
 
     def create_native_ticket(self):
         kocherga_event = self.event.get_kocherga_event()
+
+        # TODO - this doesn't update native tickets, but timepad registrations can become cancelled.
         (ticket, created) = kocherga.events.models.Ticket.objects.get_or_create(
             user=self.user,
             event=kocherga_event,
             defaults={
                 'from_timepad': True,
                 'created': self.created_at,
+                'subscribed_to_newsletter': self.subscribed_to_newsletter,
+                'status': self.status,
             }
         )
         if created:
