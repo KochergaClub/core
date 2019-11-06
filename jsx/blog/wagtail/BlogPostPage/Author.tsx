@@ -37,10 +37,10 @@ const AuthorDescription = styled.div`
   line-height: 1.35;
 `;
 
-const Author = ({ name, description, image }: BlogPostAuthorType) => {
+const Author = ({ name, description, image_200px }: BlogPostAuthorType) => {
   return (
     <AuthorContainer>
-      <AuthorImage src={image.meta.download_url} />
+      <AuthorImage src={image_200px.url} />
       <AuthorName>{name}</AuthorName>
       <AuthorDescription>{description}</AuthorDescription>
     </AuthorContainer>
