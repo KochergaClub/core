@@ -7,6 +7,7 @@ from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.api import APIField
+from wagtail.images.api.fields import ImageRenditionField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
 from kocherga.wagtail.fields import APIRichTextField
@@ -69,4 +70,5 @@ class BlogPostAuthor(Orderable):
         APIField('name'),
         APIField('description'),
         APIField('image'),
+        APIField('image_200px', serializer=ImageRenditionField('fill-200x200', source='image')),
     ]

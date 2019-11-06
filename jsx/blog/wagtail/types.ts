@@ -2,9 +2,7 @@ export interface BlogPostAuthorType {
   id: number;
   name: string;
   description?: string;
-  image: {
-    meta: {
-      download_url: string;
-    };
+  image_200px: {
+    url: string;
   };
 }
