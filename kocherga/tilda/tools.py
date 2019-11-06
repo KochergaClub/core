@@ -26,6 +26,11 @@ def _get_and_save(page_id):
     html = page_full['html']
     alias = page_full['alias']
     filename = page_full['filename']
+
+    if alias == 'blog' or alias.startswith('blog/'):
+        logger.info('/blog got moved to Wagtail')
+        return
+
     with open(EXPORT_DIR + '/' + filename, 'w') as fh:
         fh.write(html)
 
