@@ -1,8 +1,8 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from rest_framework import serializers
 from django.conf import settings
+from rest_framework import serializers
 
 import kocherga.room
 
@@ -40,6 +40,7 @@ class PublicEventSerializer(serializers.ModelSerializer):
             'start',
             'end',
             'image',
+            'project',
         )
 
     image = serializers.SerializerMethodField()
