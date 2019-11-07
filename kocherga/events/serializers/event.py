@@ -188,6 +188,14 @@ class EventSerializer(serializers.ModelSerializer):
         fb_announcement_data = validated_data.pop('fb_announcement', {})
         timepad_announcement_data = validated_data.pop('timepad_announcement', {})
 
+        announcements = validated_data.pop('announcements', {})
+        if 'vk_announcement' in announcements:
+            vk_announcement_data = announcements['vk_announcement']
+        if 'fb_announcement' in announcements:
+            fb_announcement_data = announcements['fb_announcement']
+        if 'timepad_announcement' in announcements:
+            timepad_announcement_data = announcements['timepad_announcement']
+
         event = super().update(instance, validated_data)
 
         if prototype_data:
