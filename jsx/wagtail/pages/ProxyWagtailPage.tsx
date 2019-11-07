@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { NextPage } from '~/common/types';
-import { API } from '~/common/api';
 
 import { WagtailPageProps } from '~/wagtail/types';
 
@@ -13,6 +12,12 @@ import * as BlogPages from '~/blog/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
 
 import { selectAPI } from '~/core/selectors';
+
+import {
+  getWagtailPreviewPage,
+  getWagtailPageId,
+  getWagtailPage,
+} from '../utils';
 
 const getWagtailScreen = (meta_type: string) => {
   switch (meta_type) {
@@ -61,33 +66,6 @@ const ProxyWagtailPage: NextPage<ProxyProps> = props => {
   }
 
   return <WagtailScreen {...props} />;
-};
-
-const getWagtailPreviewPage = async (
-  api: API,
-  token: string
-): Promise<WagtailPageProps> => {
-  const wagtailPage = (await api.callWagtail(
-    `page_preview/find/?token=${token}`
-  )) as WagtailPageProps;
-
-  return wagtailPage;
-};
-
-const getWagtailPageId = async (api: API, path: string): Promise<number> => {
-  const locateResult = await api.callWagtail(`pages/locate/?html_path=${path}`);
-  return locateResult.id as number;
-};
-
-const getWagtailPage = async (
-  api: API,
-  pageId: number
-): Promise<WagtailPageProps> => {
-  const wagtailPage = (await api.callWagtail(
-    `pages/${pageId}/?fields=*`
-  )) as WagtailPageProps;
-
-  return wagtailPage;
 };
 
 ProxyWagtailPage.getInitialProps = async context => {

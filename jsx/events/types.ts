@@ -16,6 +16,7 @@ export interface PublicEvent extends CommonEventProps {
   image?: string;
   start: Date;
   end: Date;
+  project?: number;
 }
 
 export interface ServerPublicEvent extends CommonEventProps {
@@ -23,6 +24,7 @@ export interface ServerPublicEvent extends CommonEventProps {
   image?: string;
   start: string; // JSON doesn't support Date objects
   end: string;
+  project?: number;
 }
 
 export interface Event extends CommonEventProps {

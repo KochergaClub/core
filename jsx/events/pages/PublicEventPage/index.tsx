@@ -27,6 +27,10 @@ import {
   EventTicket,
 } from '~/events/types';
 
+import { getWagtailPage } from '~/wagtail/utils';
+import { ProjectPageType } from '~/projects/utils';
+
+import ProjectInfo from './ProjectInfo';
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
 import Registration from './Registration';
@@ -45,9 +49,10 @@ const RegistrationSection = styled.section`
 export interface Props {
   serverEvent: ServerPublicEvent;
   ticket?: EventTicket;
+  project?: ProjectPageType;
 }
 
-const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
+const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
   const event = serverPublicEventToEvent(serverEvent);
 
   const zonedStart = utcToZonedTime(event.start, timezone);
@@ -56,18 +61,21 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
   const registrationRef = useRef<HTMLElement | null>(null);
 
   const daysUntil = differenceInDays(event.start, new Date());
+  const inFuture = daysUntil >= 0;
 
   return (
     <Page title={title} og={{ image: event.image }}>
       <Container>
         <EventHeroBlock event={event} registrationRef={registrationRef} />
+
+        {project ? <ProjectInfo event={event} project={project} /> : null}
         <EventAnnouncements event={event} />
         <PaddedBlock>
           <RichText>
             <Markdown source={event.description} plugins={[breaks]} />
           </RichText>
         </PaddedBlock>
-        {daysUntil >= 0 ? (
+        {inFuture ? (
           <div>
             <RegistrationSection ref={registrationRef}>
               <TL03 title="Регистрация" grey />
@@ -80,16 +88,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket }) => {
               <Map />
             </section>
           </div>
-        ) : (
-          <AlertCard>
-            <RichText>
-              Это событие прошло.
-              <br />
-              Посмотрите, что будет в Кочерге{' '}
-              <a href="/#schedule">в ближайшие дни.</a>
-            </RichText>
-          </AlertCard>
-        )}
+        ) : null}
       </Container>
     </Page>
   );
@@ -106,7 +105,16 @@ PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
     'GET'
   )) as ServerPublicEvent;
 
-  const result: Props = { serverEvent };
+  let project: ProjectPageType | undefined;
+  if (serverEvent.project) {
+    project = (await getWagtailPage(
+      api,
+      serverEvent.project
+    )) as ProjectPageType;
+  }
+
+  const result: Props = { serverEvent, project };
+
   if (user.is_authenticated) {
     try {
       const ticket = await api.call(`events/${event_id}/my_ticket`, 'GET'); // FIXME - can return 404
