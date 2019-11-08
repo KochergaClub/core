@@ -16,7 +16,6 @@ import { timezone, formatDate } from '~/common/utils';
 import { APIError } from '~/common/api';
 import { selectAPI, selectUser } from '~/core/selectors';
 
-import AlertCard from '~/components/AlertCard';
 import PaddedBlock from '~/components/PaddedBlock';
 import Page from '~/components/Page';
 import TL03 from '~/blocks/TL03';
