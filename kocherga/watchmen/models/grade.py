@@ -3,7 +3,7 @@ from wagtail.admin import edit_handlers
 
 
 class Grade(models.Model):
-    code = models.CharField('Код', max_length=1)
+    code = models.CharField('Код', max_length=5)
     multiplier = models.FloatField('Повышающий коэффициент', default=1)
 
     panels = [
