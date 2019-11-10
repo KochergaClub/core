@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from django.conf import settings
 
+import time
 import requests
 import json
 import urllib.parse
@@ -84,6 +85,16 @@ def _call(method, params, group_token=False):
 
     check_response(r)
     return r
+
+
+THROTTLE_COUNTER = 0
+
+
+def throttle():
+    global THROTTLE_COUNTER
+    THROTTLE_COUNTER += 1
+    if THROTTLE_COUNTER % 2 == 0:
+        time.sleep(1)
 
 
 def call(method, params, group_token=False):
