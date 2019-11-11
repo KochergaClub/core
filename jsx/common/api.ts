@@ -56,7 +56,7 @@ export class API {
 
   call = async (
     path: string,
-    method: string,
+    method: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT',
     payload?: object,
     expectJSON: boolean = true
   ) => {
