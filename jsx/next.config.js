@@ -30,4 +30,8 @@ module.exports = {
     googleMapsKey: 'AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI',
   },
   poweredByHeader: false,
+  onDemandEntries: {
+    maxInactiveAge: 60 * 60 * 1000,
+    pagesBufferLength: 10,
+  },
 };
