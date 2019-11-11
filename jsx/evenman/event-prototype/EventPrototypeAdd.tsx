@@ -97,7 +97,7 @@ export default class EventPrototypeAdd extends React.Component<Props, {}> {
     this.length = parseInt(e.currentTarget.value, 10);
   }
 
-  render() {
+  renderModal() {
     const weekdays = [
       'Понедельник',
       'Вторник',
@@ -107,71 +107,80 @@ export default class EventPrototypeAdd extends React.Component<Props, {}> {
       'Суббота',
       'Воскресенье',
     ];
+
+    if (!this.isOpen) {
+      return null;
+    }
+
+    return (
+      <Modal>
+        <Modal.Header toggle={this.toggleModal}>Создать прототип</Modal.Header>
+        <Modal.Body>
+          <Column stretch>
+            <Input
+              type="text"
+              placeholder="Название"
+              value={this.title}
+              onChange={this.updateTitle}
+            />
+            <Input
+              type="text"
+              placeholder="Комната"
+              value={this.location}
+              onChange={this.updateLocation}
+            />
+            <ReactSelect
+              placeholder="День недели"
+              options={[0, 1, 2, 3, 4, 5, 6].map(n => ({
+                value: n,
+                label: weekdays[n],
+              }))}
+              value={
+                this.weekday === undefined
+                  ? null
+                  : { value: this.weekday, label: weekdays[this.weekday] }
+              }
+              onChange={(option: any) => this.updateWeekday(option)}
+            />
+            <Input
+              type="number"
+              placeholder="Час"
+              value={this.hour}
+              onChange={this.updateHour}
+            />
+            <Input
+              type="number"
+              placeholder="Минута"
+              value={this.minute}
+              onChange={this.updateMinute}
+            />
+            <Input
+              type="number"
+              placeholder="Продолжительность (в минутах)"
+              value={this.length}
+              onChange={this.updateLength}
+            />
+          </Column>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={this.create}
+            loading={this.props.store.creating}
+            disabled={!this.canCreate()}
+            primary
+          >
+            Создать
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+
+  render() {
     return (
       <React.Fragment>
         <Button onClick={this.openModal}>Создать прототип</Button>
-        <Modal isOpen={this.isOpen}>
-          <Modal.Header toggle={this.toggleModal}>
-            Создать прототип
-          </Modal.Header>
-          <Modal.Body>
-            <Column stretch>
-              <Input
-                type="text"
-                placeholder="Название"
-                value={this.title}
-                onChange={this.updateTitle}
-              />
-              <Input
-                type="text"
-                placeholder="Комната"
-                value={this.location}
-                onChange={this.updateLocation}
-              />
-              <ReactSelect
-                placeholder="День недели"
-                options={[0, 1, 2, 3, 4, 5, 6].map(n => ({
-                  value: n,
-                  label: weekdays[n],
-                }))}
-                value={
-                  this.weekday === undefined
-                    ? null
-                    : { value: this.weekday, label: weekdays[this.weekday] }
-                }
-                onChange={(option: any) => this.updateWeekday(option)}
-              />
-              <Input
-                type="number"
-                placeholder="Час"
-                value={this.hour}
-                onChange={this.updateHour}
-              />
-              <Input
-                type="number"
-                placeholder="Минута"
-                value={this.minute}
-                onChange={this.updateMinute}
-              />
-              <Input
-                type="number"
-                placeholder="Продолжительность (в минутах)"
-                value={this.length}
-                onChange={this.updateLength}
-              />
-            </Column>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={this.create}
-              loading={this.props.store.creating}
-              disabled={!this.canCreate()}
-              primary
-            >
-              Создать
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        {this.renderModal()}
       </React.Fragment>
     );
   }

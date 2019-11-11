@@ -6,7 +6,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 moment.locale('ru');
 
-import { FaGlobe, FaLock } from 'react-icons/fa';
+import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
 import Toggle from 'react-toggle';
 
@@ -72,7 +72,7 @@ export default class EventCard extends React.Component<Props, {}> {
         <Row gutter={4}>
           <div>Выберите тип:</div>
           <Button small onClick={() => event.setType('public')}>
-            <FaGlobe style={{ color: 'green' }} />
+            <FaGlobeAfrica style={{ color: 'green' }} />
           </Button>
           <Button small onClick={() => event.setType('private')}>
             <FaLock style={{ color: 'red' }} />
@@ -86,7 +86,7 @@ export default class EventCard extends React.Component<Props, {}> {
         <Toggle
           checked={event.type === 'public'}
           icons={{
-            checked: <FaGlobe size={11} style={{ color: 'white' }} />,
+            checked: <FaGlobeAfrica size={11} style={{ color: 'white' }} />,
             unchecked: <FaLock size={11} style={{ color: 'white' }} />,
           }}
           onChange={() => event.invertType()}

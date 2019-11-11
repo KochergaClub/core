@@ -1,10 +1,12 @@
 import { observer } from 'mobx-react-lite';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+
+import Link from 'next/link';
+import Router from 'next/router';
 
 import styled from 'styled-components';
 
-import { FaSignOutAlt } from 'react-icons/fa';
-import { Button, Column, ColumnNav } from '@kocherga/frontkit';
+import { A, Column, ColumnNav } from '@kocherga/frontkit';
 import { useRootStore } from './common';
 
 const LogoLink = styled.a`
@@ -20,23 +22,26 @@ const LogoLink = styled.a`
 `;
 
 const tabs = [
-  ['Schedule', 'Расписание'],
-  ['Event', 'События'],
-  ['EventPrototype', 'Прототипы событий'],
-  ['Templater', 'Шаблоны картинок'],
+  { path: '/schedule', title: 'Расписание', viewName: 'Schedule' },
+  { path: '', title: 'События', viewName: 'Event' },
+  {
+    path: '/event-prototypes',
+    title: 'Прототипы событий',
+    viewName: 'EventPrototype',
+  },
 ];
 
 const MainNav = observer(() => {
   const store = useRootStore();
   return (
     <ColumnNav>
-      {tabs.map(tab => (
+      {tabs.map(({ path, title, viewName }) => (
         <ColumnNav.Item
-          key={tab[0]}
-          selected={tab[0] === store!.currentView.name}
-          select={() => store!.switchView(tab[0])}
+          key={path}
+          selected={viewName === store!.currentView.name}
+          select={() => Router.push(`/team/evenman${path}`)}
         >
-          {tab[1]}
+          {title}
         </ColumnNav.Item>
       ))}
     </ColumnNav>
@@ -44,29 +49,16 @@ const MainNav = observer(() => {
 });
 
 export const Sidebar = observer(() => {
-  const store = useRootStore();
-
-  const clickLogo = useCallback(
-    (e: React.SyntheticEvent<EventTarget>) => {
-      e.preventDefault();
-      store!.switchView('Event'); // FIXME
-    },
-    [store]
-  );
-
   return (
     <Column stretch spaced>
       <Column stretch>
         <header>
-          <LogoLink href="#" onClick={clickLogo}>
-            Event Manager
-          </LogoLink>
+          <Link href="/team/evenman" passHref>
+            <LogoLink>Event Manager</LogoLink>
+          </Link>
         </header>
         <MainNav />
       </Column>
-      <div style={{ padding: 10 }}>
-        <FaSignOutAlt />
-      </div>
     </Column>
   );
 });

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 
 import styled from 'styled-components';
 
-import { FaGlobe, FaLock } from 'react-icons/fa';
+import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
 import { Event } from '../stores/Event';
 
@@ -125,7 +125,9 @@ export default class EventCalendarItem extends React.Component<Props> {
         {this.renderProgress()}
         <Icon>
           {event.type === 'public' ? (
-            <FaGlobe style={{ color: 'green', verticalAlign: 'inherit' }} />
+            <FaGlobeAfrica
+              style={{ color: 'green', verticalAlign: 'inherit' }}
+            />
           ) : (
             <FaLock style={{ color: 'black', verticalAlign: 'inherit' }} />
           )}

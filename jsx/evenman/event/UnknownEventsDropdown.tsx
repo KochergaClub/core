@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import EventView from '../views/EventView';
 
 import { A, Button, Column, Row } from '@kocherga/frontkit';
-import { FaGlobe, FaLock } from 'react-icons/fa';
+import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
 import { Event } from '../stores/Event';
 
@@ -43,7 +43,7 @@ const ListItem = observer(({ event }: { event: Event }) => {
       <small>{event.title}</small>
       <Row>
         <ControlButton onClick={setPublic}>
-          <FaGlobe style={{ color: 'green' }} />
+          <FaGlobeAfrica style={{ color: 'green' }} />
         </ControlButton>
         <ControlButton onClick={setPrivate}>
           <FaLock style={{ color: 'red' }} />

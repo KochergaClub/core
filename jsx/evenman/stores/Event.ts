@@ -354,7 +354,9 @@ export class Event extends EventShape {
 
     if (updatedEvent.id !== this.id) {
       throw new Error(
-        `Server returned the invalid event, let's panic (${updatedEvent.id} != ${this.id})`
+        `Server returned the invalid event, let's panic (${
+          updatedEvent.id
+        } != ${this.id})`
       );
     }
 
@@ -402,8 +404,7 @@ export class Event extends EventShape {
     const date = m.format('YYYY-MM-DD');
     const time = m.format('HH:mm');
     const image = this.getImage('default');
-    const server = this.apiStore.server;
-    return `${server}/templater/vk-image/${mode}?date=${date}&time=${time}&title=${title}&header=${header}&background_image=${image}`;
+    return `/api/templater/vk-image/${mode}?date=${date}&time=${time}&title=${title}&header=${header}&background_image=${image}`;
   }
 
   @action

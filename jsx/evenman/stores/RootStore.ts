@@ -4,6 +4,8 @@ configure({
   enforceActions: 'observed',
 });
 
+import { API } from '~/common/api';
+
 import { AnnouncementToolsStore } from './AnnouncementToolsStore';
 import { ApiStore } from './ApiStore';
 import { ErrorStore } from './ErrorStore';
@@ -32,8 +34,8 @@ export class RootStore {
 
   @observable currentView: View;
 
-  constructor() {
-    this.apiStore = new ApiStore(this);
+  constructor(api: API) {
+    this.apiStore = new ApiStore(this, api);
     this.eventStore = new EventStore(this.apiStore);
     this.eventPrototypeStore = new EventPrototypeStore(this.apiStore);
     this.fbStore = new FbStore(this.apiStore);
@@ -92,7 +94,7 @@ export class RootStore {
   }
 
   weeklyScheduleImage() {
-    return `${this.apiStore.server}/schedule/weekly-image`;
+    return `/api/schedule/weekly-image`;
   }
 
   addError(text: string) {
