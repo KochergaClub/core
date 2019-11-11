@@ -21,4 +21,11 @@ export const parseQueryString = (
   return result;
 };
 
+export const buildQueryString = (params: { [s: string]: string | boolean }) => {
+  const esc = encodeURIComponent;
+  return Object.keys(params)
+    .map(k => esc(k) + '=' + esc(params[k] as string))
+    .join('&');
+};
+
 export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
