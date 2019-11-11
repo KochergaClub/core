@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 import { useDropzone } from 'react-dropzone';
 
+const PreviewLink = styled.a`
+  line-height: 0;
+`;
+
 const PreviewImg = styled.img`
   max-width: 236px;
   max-height: auto;
@@ -10,9 +14,9 @@ const PreviewImg = styled.img`
 `;
 
 export const ImagePreview = ({ url }: { url: string }) => (
-  <a target="_blank" href={url} download>
+  <PreviewLink target="_blank" href={url} download>
     <PreviewImg src={url} alt="Превью картинки" />
-  </a>
+  </PreviewLink>
 );
 
 interface Props {
@@ -24,7 +28,7 @@ const Placeholder = styled.div`
   font-size: 0.7rem;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ active: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,32 +41,21 @@ const Container = styled.div`
   background-color: #f8f8f8;
   cursor: pointer;
 
-  .ImageDropzone a {
-    line-height: 0;
-  }
-
-  .ImageDropzone_active {
-    border-style: solid;
-    border-color: #6c6;
-    background-color: #eee;
-  }
-
-  .ImageDropzone_reject {
-    border-style: solid;
-    border-color: #c66;
-    background-color: #eee;
-  }
-
-  .ImageDropzone_disabled {
-    opacity: 0.5;
-  }
+  ${props =>
+    props.active
+      ? `
+      border-style: solid;
+      border-color: #6c6;
+      background-color: #eee;
+    `
+      : ''}
 `;
 
 const ImageDropzone = ({ onDrop, url }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <Container {...getRootProps()}>
+    <Container {...getRootProps()} active={isDragActive}>
       <input {...getInputProps()} />
       {url ? (
         <ImagePreview url={url || ''} />
@@ -71,29 +64,6 @@ const ImageDropzone = ({ onDrop, url }: Props) => {
       )}
     </Container>
   );
-
-  //test
-  //  return (
-  //    <Container>
-  //    <Dropzone
-  //    multiple={false}
-  //    accept="image/*"
-  //        className="ImageDropzone"
-  //        activeClassName="ImageDropzone_active"
-  //        acceptClassName="ImageDropzone_accept"
-  //        rejectClassName="ImageDropzone_reject"
-  //        disabledClassName="ImageDropzone_disabled"
-  //      >
-  //        {() =>
-  //          url !== undefined ? (
-  //            <ImagePreview url={url} />
-  //          ) : (
-  //            <Placeholder>Сюда можно бросить файл</Placeholder>
-  //          )
-  //        }
-  //      </Dropzone>
-  //    </Container>
-  //  );
 };
 
 export default ImageDropzone;
