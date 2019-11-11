@@ -5,8 +5,6 @@ import { createTransformer } from 'mobx-utils';
 
 import moment from 'moment';
 
-import { IS_SERVER } from '~/common/utils';
-
 import { Event, EventType } from './Event';
 import { EventStore } from './EventStore';
 
@@ -46,14 +44,6 @@ export class EventFilter {
     autorun(() => {
       this.eventStore.updateRange(this.startDate, this.endDate);
     });
-
-    if (!IS_SERVER) {
-      const socket = this.api.getWebsocket('events/');
-      socket.onmessage = async (e: any) => {
-        this.eventStore.updateRange(this.startDate, this.endDate);
-      };
-      // TODO - destroy?
-    }
   }
 
   @computed
@@ -115,7 +105,7 @@ export class EventFilter {
 
   @computed
   get api() {
-    return this.eventStore.apiStore;
+    return this.eventStore.root.api;
   }
 
   @computed

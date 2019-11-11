@@ -65,7 +65,7 @@ const AnnounceLinkFb = observer(({ event }: { event: Event }) => (
         создать
       </Button>
     ) : null}
-    <FbTokenEditor store={event.apiStore.rootStore.fbStore} />
+    <FbTokenEditor store={event.root.fbStore} />
   </Row>
 ));
 

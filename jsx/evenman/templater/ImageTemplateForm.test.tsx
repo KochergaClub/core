@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+
 import ImageTemplateForm from './ImageTemplateForm';
 
-import { RootStore } from '../stores/RootStore';
 import ImageTemplate from '../stores/ImageTemplate';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  const root = new RootStore();
-  const template = new ImageTemplate(root.apiStore, {
+
+  const template = new ImageTemplate({
     name: 'test',
     sizes: {
       width: 600,

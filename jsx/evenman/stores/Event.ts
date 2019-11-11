@@ -2,7 +2,7 @@ import { action, computed, observable, runInAction } from 'mobx';
 
 import moment from 'moment';
 
-import { ApiStore } from './ApiStore';
+import { RootStore } from './RootStore';
 
 import EventShape from './EventShape';
 
@@ -88,8 +88,8 @@ export class Event extends EventShape {
 
   @observable announcements: Announcements;
 
-  constructor(apiStore: ApiStore, json: EventJSON) {
-    super(apiStore);
+  constructor(root: RootStore, json: EventJSON) {
+    super(root);
 
     // set mandatory fields immediately
     this.id = json.id;
@@ -108,7 +108,7 @@ export class Event extends EventShape {
     this.updateFromJSON(json);
   }
 
-  static fromJSON(json: any, store: ApiStore): Event {
+  static fromJSON(json: any, store: RootStore): Event {
     const event = new Event(store, json);
     return event;
   }
@@ -164,9 +164,9 @@ export class Event extends EventShape {
   async _patch(patch: object) {
     this.isLoading = true;
 
-    const updatedEvent = (await this.apiStore.call(
-      'PATCH',
+    const updatedEvent = (await this.root.api.call(
       `events/${this.id}`,
+      'PATCH',
       patch
     )) as EventJSON;
 
@@ -188,7 +188,7 @@ export class Event extends EventShape {
 
   @action
   async delete() {
-    await this._act(() => this.apiStore.call('DELETE', `events/${this.id}`));
+    await this._act(() => this.root.api.call(`events/${this.id}`, 'DELETE'));
   }
 
   setPublished(value: boolean) {
@@ -289,16 +289,16 @@ export class Event extends EventShape {
   @action
   async announceToFbMainPage() {
     await this._act(() =>
-      this.apiStore.call('POST', `announcements/fb/${this.id}/add_to_main_page`)
+      this.root.api.call(`announcements/fb/${this.id}/add_to_main_page`, 'POST')
     );
   }
 
   @action
   async shareToFbMainPage() {
     await this._act(() =>
-      this.apiStore.call(
-        'POST',
-        `announcements/fb/${this.id}/share_to_main_page`
+      this.root.api.call(
+        `announcements/fb/${this.id}/share_to_main_page`,
+        'POST'
       )
     );
   }
@@ -306,7 +306,7 @@ export class Event extends EventShape {
   @action
   async setImageFromUrl(url: string) {
     await this._act(() =>
-      this.apiStore.call('POST', `events/${this.id}/image_from_url/default`, {
+      this.root.api.call(`events/${this.id}/image_from_url/default`, 'POST', {
         url,
       })
     );
@@ -318,11 +318,11 @@ export class Event extends EventShape {
       const formData = new FormData();
       formData.append('file', file);
 
-      await this.apiStore.call(
-        'POST',
+      await this.root.api.call(
         `events/${this.id}/image/${imageType}`,
+        'POST',
         formData,
-        false
+        { expectJSON: false, stringifyPayload: false }
       );
     });
   }
@@ -347,9 +347,9 @@ export class Event extends EventShape {
   async reload() {
     // TODO - set 'isLoading' state - this function can be called not just from _patch
 
-    const updatedEvent = (await this.apiStore.call(
-      'GET',
-      `events/${this.id}`
+    const updatedEvent = (await this.root.api.call(
+      `events/${this.id}`,
+      'GET'
     )) as EventJSON;
 
     if (updatedEvent.id !== this.id) {
@@ -421,9 +421,9 @@ export class Event extends EventShape {
   @action
   private async announceTo(target: EventAnnounceTarget, body = {}) {
     await this._act(() =>
-      this.apiStore.call(
-        'POST',
+      this.root.api.call(
         `announcements/${target}/event/${this.id}`,
+        'POST',
         body
       )
     );

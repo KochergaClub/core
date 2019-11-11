@@ -1,14 +1,14 @@
 import { action, computed, observable, runInAction } from 'mobx';
 
-import { ApiStore } from './ApiStore';
+import { RootStore } from './RootStore';
 
 import EventPrototype, { NewEventPrototypeJSON } from './EventPrototype';
 
 export default class EventPrototypeStore {
-  apiStore: ApiStore;
+  root: RootStore;
 
   @observable eventPrototypes = observable.map<number, EventPrototype>();
-  @observable state: string = "empty";
+  @observable state: string = 'empty';
   @observable creating: boolean = false;
 
   @computed
@@ -17,8 +17,8 @@ export default class EventPrototypeStore {
     return result;
   }
 
-  constructor(apiStore: ApiStore) {
-    this.apiStore = apiStore;
+  constructor(root: RootStore) {
+    this.root = root;
   }
 
   getById(id: number) {
@@ -27,23 +27,23 @@ export default class EventPrototypeStore {
 
   @action
   async loadAll() {
-    this.state = "fetching";
-    const json = await this.apiStore.call('GET', 'event_prototypes');
+    this.state = 'fetching';
+    const json = await this.root.api.call('event_prototypes', 'GET');
 
     runInAction(() => {
       for (const item of json) {
-        const prototype = EventPrototype.fromJSON(item, this.apiStore);
+        const prototype = EventPrototype.fromJSON(item, this.root);
         this.eventPrototypes.set(prototype.id, prototype);
       }
-      this.state = "full";
+      this.state = 'full';
     });
   }
 
   @action
   async create(params: NewEventPrototypeJSON) {
     this.creating = true;
-    await this.apiStore.call('POST', 'event_prototypes', params);
+    await this.root.api.call('event_prototypes', 'POST', params);
     await this.loadAll();
-    runInAction(() => this.creating = false);
+    runInAction(() => (this.creating = false));
   }
 }

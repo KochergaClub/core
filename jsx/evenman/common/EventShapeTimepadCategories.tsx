@@ -17,7 +17,7 @@ export default class EventShapeTimepadCategories extends React.Component<
 > {
   @computed
   get toolsStore() {
-    return this.props.event.apiStore.rootStore.announcementToolsStore;
+    return this.props.event.root.announcementToolsStore;
   }
 
   category2option(category: TimepadCategory) {

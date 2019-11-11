@@ -1,7 +1,8 @@
-import { observer } from 'mobx-react';
-import * as React from 'react';
+import { observer } from 'mobx-react-lite';
 
 import styled from 'styled-components';
+
+import { useListeningWebSocket } from '~/common/hooks';
 
 import EventView from '../views/EventView';
 
@@ -19,10 +20,15 @@ const Container = styled.div`
   margin-top: 10px;
 `;
 
-@observer
-export default class EventScreen extends React.Component<Props, {}> {
-  renderEventCard() {
-    const { view } = this.props;
+const EventScreen: React.FC<Props> = observer(({ view }) => {
+  useListeningWebSocket('ws/events/', () => {
+    view.root.eventStore.updateRange(
+      view.filter.startDate,
+      view.filter.endDate
+    );
+  });
+
+  const renderEventCard = () => {
     if (!view.selectedEvent) {
       return <EmptyCard>Выберите событие</EmptyCard>;
     }
@@ -31,15 +37,15 @@ export default class EventScreen extends React.Component<Props, {}> {
       rejected: () => <EmptyCard>Ошибка</EmptyCard>,
       fulfilled: value => <EventCard event={value} />,
     });
-  }
+  };
 
-  render() {
-    return (
-      <Container>
-        <EventCalendar view={this.props.view} />
-        {this.renderEventCard()}
-        <NewEventModal view={this.props.view} />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <EventCalendar view={view} />
+      {renderEventCard()}
+      <NewEventModal view={view} />
+    </Container>
+  );
+});
+
+export default EventScreen;

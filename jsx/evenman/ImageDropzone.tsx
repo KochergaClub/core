@@ -25,19 +25,17 @@ const Placeholder = styled.div`
 `;
 
 const Container = styled.div`
-  .ImageDropzone {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 240px;
-    min-height: 50px;
-    border-width: 2px;
-    border-color: #666;
-    border-style: dashed;
-    border-radius: 5px;
-    background-color: #f8f8f8;
-    cursor: pointer;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 240px;
+  min-height: 50px;
+  border-width: 2px;
+  border-color: #666;
+  border-style: dashed;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  cursor: pointer;
 
   .ImageDropzone a {
     line-height: 0;
@@ -63,8 +61,18 @@ const Container = styled.div`
 const ImageDropzone = ({ onDrop, url }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  return <div>FIXME</div>;
+  return (
+    <Container {...getRootProps()}>
+      <input {...getInputProps()} />
+      {url ? (
+        <ImagePreview url={url || ''} />
+      ) : (
+        <Placeholder>Сюда можно бросить файл</Placeholder>
+      )}
+    </Container>
+  );
 
+  //test
   //  return (
   //    <Container>
   //    <Dropzone

@@ -1,6 +1,6 @@
 import { action, observable, runInAction } from 'mobx';
 
-import { ApiStore } from './ApiStore';
+import { RootStore } from './RootStore';
 
 // tslint:disable:variable-name
 
@@ -19,10 +19,10 @@ export default abstract class EventShape {
 
   @observable inTransaction: boolean = false;
 
-  apiStore: ApiStore;
+  root: RootStore;
 
-  constructor(store: ApiStore) {
-    this.apiStore = store;
+  constructor(root: RootStore) {
+    this.root = root;
   }
 
   abstract async _patch(patch: object): Promise<void>;
@@ -79,9 +79,9 @@ export default abstract class EventShape {
   @action
   async addTag(value: string) {
     this._transaction(async () => {
-      await this.apiStore.call(
-        'POST',
-        `${this.apiEntity}/${this.idString}/tag/${value}`
+      await this.root.api.call(
+        `${this.apiEntity}/${this.idString}/tag/${value}`,
+        'POST'
       );
       runInAction(() => {
         this.tags.push(value);
@@ -92,9 +92,9 @@ export default abstract class EventShape {
   @action
   async deleteTag(value: string) {
     this._transaction(async () => {
-      await this.apiStore.call(
-        'DELETE',
-        `${this.apiEntity}/${this.idString}/tag/${value}`
+      await this.root.api.call(
+        `${this.apiEntity}/${this.idString}/tag/${value}`,
+        'DELETE'
       );
       runInAction(() => {
         this.tags = this.tags.filter(v => v !== value);

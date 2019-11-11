@@ -14,7 +14,7 @@ interface Props {
 
 const Picker = observer(({ event }: Props) => {
   // FIXME - can be not loaded!
-  const { eventPrototypeStore } = event.apiStore.rootStore;
+  const { eventPrototypeStore } = event.root;
 
   if (eventPrototypeStore.state === 'empty') {
     eventPrototypeStore.loadAll();

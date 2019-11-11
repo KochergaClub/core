@@ -70,7 +70,7 @@ export const deleteTicket = (ticket: MyTicket): AsyncAction<void> => async (
     `events/${ticket.event.event_id}/tickets/my`,
     'DELETE',
     {},
-    false
+    { expectJSON: false }
   );
 
   await dispatch(loadTickets());

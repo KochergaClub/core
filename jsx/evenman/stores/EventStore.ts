@@ -2,17 +2,19 @@ import { action, observable } from 'mobx';
 
 import moment from 'moment';
 
+import { buildQueryString } from '~/common/utils';
+
 import { Event, EventJSON } from './Event';
 
-import { ApiStore } from './ApiStore';
+import { RootStore } from './RootStore';
 
 export class EventStore {
   @observable events = observable.map<string, Event>();
 
-  apiStore: ApiStore;
+  root: RootStore;
 
-  constructor(apiStore: ApiStore) {
-    this.apiStore = apiStore;
+  constructor(root: RootStore) {
+    this.root = root;
   }
 
   findEvent(id: string): Event | undefined {
@@ -23,7 +25,7 @@ export class EventStore {
     let event = this.findEvent(id);
     if (event) return event;
 
-    event = Event.fromJSON({ id }, this.apiStore);
+    event = Event.fromJSON({ id }, this.root);
     await event.reload();
     return event;
   }
@@ -35,21 +37,21 @@ export class EventStore {
       if (event) {
         event.updateFromJSON(json);
       } else {
-        this.events.set(json.id, Event.fromJSON(json, this.apiStore));
+        this.events.set(json.id, Event.fromJSON(json, this.root));
       }
     }
   }
 
   @action
   async updateRange(startDate: moment.Moment, endDate: moment.Moment) {
-    const query = this.apiStore.getQueryString({
+    const query = buildQueryString({
       from_date: startDate.format('YYYY-MM-DD'),
       to_date: endDate.format('YYYY-MM-DD'),
     });
 
-    const json = (await this.apiStore.call(
-      'GET',
-      `events?${query}`
+    const json = (await this.root.api.call(
+      `events?${query}`,
+      'GET'
     )) as EventJSON[];
     this.addEventsFromJSON(json);
     // TODO - remove stale events
@@ -62,9 +64,9 @@ export class EventStore {
     startTime: string;
     endTime: string;
   }) {
-    const json = (await this.apiStore.call(
-      'POST',
+    const json = (await this.root.api.call(
       'events',
+      'POST',
       params
     )) as EventJSON;
     this.addEventsFromJSON([json]);

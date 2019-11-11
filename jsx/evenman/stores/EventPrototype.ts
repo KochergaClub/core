@@ -2,7 +2,7 @@ import { action, observable, runInAction, computed } from 'mobx';
 
 import moment from 'moment';
 
-import { ApiStore } from './ApiStore';
+import { RootStore } from './RootStore';
 
 import { Event, EventJSON } from './Event';
 
@@ -35,11 +35,11 @@ export interface EventPrototypeJSON extends NewEventPrototypeJSON {
 class PrototypeInstances {
   @observable items: Event[] = [];
   @observable state: 'not_loaded' | 'loading' | 'loaded' = 'not_loaded';
-  apiStore: ApiStore;
+  root: RootStore;
   prototype_id: number;
 
-  constructor(prototype_id: number, store: ApiStore) {
-    this.apiStore = store;
+  constructor(prototype_id: number, root: RootStore) {
+    this.root = root;
     this.prototype_id = prototype_id;
   }
 
@@ -47,11 +47,11 @@ class PrototypeInstances {
     this.state = 'loading';
 
     // TODO - store events in EventStore by id
-    const json = (await this.apiStore.call(
-      'GET',
-      `event_prototypes/${this.prototype_id}/instances`
+    const json = (await this.root.api.call(
+      `event_prototypes/${this.prototype_id}/instances`,
+      'GET'
     )) as EventJSON[];
-    this.items = json.map(j => Event.fromJSON(j, this.apiStore));
+    this.items = json.map(j => Event.fromJSON(j, this.root));
 
     runInAction(() => (this.state = 'loaded'));
   }
@@ -78,8 +78,8 @@ export default class EventPrototype extends EventShape {
 
   @observable state: string = 'normal';
 
-  constructor(apiStore: ApiStore, json: EventPrototypeJSON) {
-    super(apiStore);
+  constructor(root: RootStore, json: EventPrototypeJSON) {
+    super(root);
 
     // set mandatory fields immediately - needed for typescript (but this is messy and we should figure out a better way)
     this.id = json.prototype_id;
@@ -89,14 +89,14 @@ export default class EventPrototype extends EventShape {
     this.length = json.length;
     this.active = json.active;
     this.timepad_prepaid_tickets = json.timepad_prepaid_tickets;
-    this.instances = new PrototypeInstances(this.id, apiStore);
+    this.instances = new PrototypeInstances(this.id, root);
 
     // set remaining fields using the common code
     this.updateFromJSON(json);
   }
 
-  static fromJSON(json: EventPrototypeJSON, store: ApiStore): EventPrototype {
-    const prototype = new EventPrototype(store, json);
+  static fromJSON(json: EventPrototypeJSON, root: RootStore): EventPrototype {
+    const prototype = new EventPrototype(root, json);
     return prototype;
   }
 
@@ -139,14 +139,16 @@ export default class EventPrototype extends EventShape {
 
   @action
   async reload() {
-    const updated = (await this.apiStore.call(
-      'GET',
-      `event_prototypes/${this.id}`
+    const updated = (await this.root.api.call(
+      `event_prototypes/${this.id}`,
+      'GET'
     )) as EventPrototypeJSON;
 
     if (updated.prototype_id.toString() !== this.id.toString()) {
       throw new Error(
-        `Server returned an invalid event prototype, let's panic (${updated.prototype_id} != ${this.id})`
+        `Server returned an invalid event prototype, let's panic (${
+          updated.prototype_id
+        } != ${this.id})`
       );
     }
 
@@ -156,7 +158,7 @@ export default class EventPrototype extends EventShape {
   @action
   async newEvent(m: moment.Moment) {
     this.state = 'creating';
-    await this.apiStore.call('POST', `event_prototypes/${this.id}/new`, {
+    await this.root.api.call(`event_prototypes/${this.id}/new`, 'POST', {
       ts: m.unix(),
     });
     await this.reload();
@@ -166,9 +168,9 @@ export default class EventPrototype extends EventShape {
   @action
   async cancelDate(m: moment.Moment) {
     this.state = 'canceling_date';
-    await this.apiStore.call(
-      'POST',
-      `event_prototypes/${this.id}/cancel_date/${m.format('YYYY-MM-DD')}`
+    await this.root.api.call(
+      `event_prototypes/${this.id}/cancel_date/${m.format('YYYY-MM-DD')}`,
+      'POST'
     );
     await this.reload();
     runInAction(() => (this.state = 'normal'));
@@ -178,7 +180,7 @@ export default class EventPrototype extends EventShape {
   async _patch(patch: object) {
     this.state = 'saving';
 
-    await this.apiStore.call('PATCH', `event_prototypes/${this.id}`, patch);
+    await this.root.api.call(`event_prototypes/${this.id}`, 'PATCH', patch);
 
     await this.reload();
     runInAction(() => (this.state = 'normal'));
@@ -202,11 +204,11 @@ export default class EventPrototype extends EventShape {
     const formData = new FormData();
     formData.append('file', file);
 
-    await this.apiStore.call(
-      'POST',
+    await this.root.api.call(
       `event_prototypes/${this.id}/image`,
+      'POST',
       formData,
-      false
+      { expectJSON: false, stringifyPayload: false }
     );
 
     await this.reload();

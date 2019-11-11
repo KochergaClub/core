@@ -14,6 +14,7 @@ export class EventImageDropzone extends React.Component<Props> {
   render() {
     const { event, imageType } = this.props;
     const onDrop = (acceptedFiles: File[]) => {
+      console.log(acceptedFiles);
       event.uploadImage(acceptedFiles[0], imageType);
     };
 

@@ -1,7 +1,5 @@
 import { observable } from 'mobx';
 
-import { ApiStore } from './ApiStore';
-
 interface Field {
   name: string;
   type: string;
@@ -27,7 +25,7 @@ export default class ImageTemplate {
   @observable schema: Schema;
   @observable sizes: Sizes;
 
-  constructor(store: ApiStore, json: TemplateJSON) {
+  constructor(json: TemplateJSON) {
     this.name = json.name;
     this.schema = json.schema as Schema;
     this.sizes = json.sizes as Sizes;

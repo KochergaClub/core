@@ -1,18 +1,18 @@
 import { action, computed, observable, runInAction } from 'mobx';
 
-import { ApiStore } from './ApiStore';
+import { API } from '~/common/api';
 
 import ImageTemplate from './ImageTemplate';
 
 export default class TemplaterStore {
-  apiStore: ApiStore;
+  api: API;
 
   @observable imageTemplates = observable.map<string, ImageTemplate>();
-  @observable state: string = "empty";
+  @observable state: string = 'empty';
 
   @computed
   get list(): ImageTemplate[] {
-    if (this.state === "empty") {
+    if (this.state === 'empty') {
       this.loadAll(); // lazy loading
     }
 
@@ -20,8 +20,8 @@ export default class TemplaterStore {
     return result;
   }
 
-  constructor(apiStore: ApiStore) {
-    this.apiStore = apiStore;
+  constructor(api: API) {
+    this.api = api;
   }
 
   getByName(name: string) {
@@ -30,15 +30,15 @@ export default class TemplaterStore {
 
   @action
   async loadAll() {
-    this.state = "fetching";
-    const json = await this.apiStore.call('GET', 'templater');
+    this.state = 'fetching';
+    const json = await this.api.call('templater', 'GET');
 
     runInAction(() => {
       for (const item of json) {
-        const template = new ImageTemplate(this.apiStore, item);
+        const template = new ImageTemplate(item);
         this.imageTemplates.set(template.name, template);
       }
-      this.state = "full";
+      this.state = 'full';
     });
   }
 }

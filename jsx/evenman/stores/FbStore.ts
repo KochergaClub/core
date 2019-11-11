@@ -1,8 +1,7 @@
 import { action, observable } from 'mobx';
 
 import { IS_SERVER } from '~/common/utils';
-
-import { ApiStore } from './ApiStore';
+import { API } from '~/common/api';
 
 declare global {
   interface Window {
@@ -15,14 +14,14 @@ declare global {
 }
 
 export class FbStore {
-  apiStore: ApiStore;
+  api: API;
 
   appId = '1685764725047458';
 
   @observable status: string = 'starting';
 
-  constructor(apiStore: ApiStore) {
-    this.apiStore = apiStore;
+  constructor(api: API) {
+    this.api = api;
 
     if (IS_SERVER) {
       return;
@@ -61,7 +60,7 @@ export class FbStore {
 
   @action
   async saveToken(token: string) {
-    await this.apiStore.call('POST', 'fb/token', { access_token: token });
+    await this.api.call('fb/token', 'POST', { access_token: token });
   }
 
   @action

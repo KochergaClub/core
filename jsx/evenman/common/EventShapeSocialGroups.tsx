@@ -15,7 +15,7 @@ interface Props {
 export default class EventSocialGroups extends React.Component<Props> {
   @computed
   get toolsStore() {
-    return this.props.event.apiStore.rootStore.announcementToolsStore;
+    return this.props.event.root.announcementToolsStore;
   }
 
   render() {

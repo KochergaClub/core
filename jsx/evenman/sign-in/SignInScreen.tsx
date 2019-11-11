@@ -24,7 +24,7 @@ const Container = styled.div`
 @observer
 export default class SignInScreen extends React.Component<Props, {}> {
   async onGoogleLogin(googleUser: GoogleLoginResponse) {
-    await this.props.view.root.apiStore.auth(googleUser);
+    // await this.props.view.root.apiStore.auth(googleUser);
   }
 
   onGoogleFailure(arg: any) {

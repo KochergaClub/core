@@ -1,4 +1,4 @@
-import { action, computed, observable, configure, when } from 'mobx';
+import { action, computed, observable, configure } from 'mobx';
 
 configure({
   enforceActions: 'observed',
@@ -7,7 +7,6 @@ configure({
 import { API } from '~/common/api';
 
 import { AnnouncementToolsStore } from './AnnouncementToolsStore';
-import { ApiStore } from './ApiStore';
 import { ErrorStore } from './ErrorStore';
 import { EventStore } from './EventStore';
 import EventPrototypeStore from './EventPrototypeStore';
@@ -24,7 +23,7 @@ import ScheduleView from '../views/ScheduleView';
 import TemplaterView from '../views/TemplaterView';
 
 export class RootStore {
-  apiStore: ApiStore;
+  api: API;
   eventStore: EventStore;
   eventPrototypeStore: EventPrototypeStore;
   templaterStore: TemplaterStore;
@@ -35,13 +34,13 @@ export class RootStore {
   @observable currentView: View;
 
   constructor(api: API) {
-    this.apiStore = new ApiStore(this, api);
-    this.eventStore = new EventStore(this.apiStore);
-    this.eventPrototypeStore = new EventPrototypeStore(this.apiStore);
-    this.fbStore = new FbStore(this.apiStore);
+    this.api = api;
+    this.eventStore = new EventStore(this);
+    this.eventPrototypeStore = new EventPrototypeStore(this);
+    this.fbStore = new FbStore(this.api);
     this.errorStore = new ErrorStore();
-    this.announcementToolsStore = new AnnouncementToolsStore(this.apiStore);
-    this.templaterStore = new TemplaterStore(this.apiStore);
+    this.announcementToolsStore = new AnnouncementToolsStore(this.api);
+    this.templaterStore = new TemplaterStore(this.api);
 
     this.currentView = new SignInView(this);
   }

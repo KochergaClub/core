@@ -22,7 +22,7 @@ const PrototypeLink = observer(({ event }: Props) => {
       href={`/event-prototypes/${prototypeId}`}
       onClick={e => {
         e.preventDefault();
-        event.apiStore.rootStore.setEventPrototypeView({
+        event.root.setEventPrototypeView({
           id: prototypeId,
         });
       }}

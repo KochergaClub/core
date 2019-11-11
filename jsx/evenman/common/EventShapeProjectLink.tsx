@@ -13,7 +13,7 @@ interface Props {
 }
 
 const EventShapeProjectLink = observer(({ event }: Props) => {
-  const toolsStore = event.apiStore.rootStore.announcementToolsStore;
+  const toolsStore = event.root.announcementToolsStore;
   const projectsPromise = toolsStore.projectSlugs;
 
   return projectsPromise.case({

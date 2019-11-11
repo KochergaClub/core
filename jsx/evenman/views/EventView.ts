@@ -1,6 +1,8 @@
 import { action, computed, observable, runInAction } from 'mobx';
 import { fromPromise } from 'mobx-utils';
 
+import { buildQueryString } from '~/common/utils';
+
 import { RootStore } from '../stores/RootStore';
 import { EventFilter } from '../stores/EventFilter';
 
@@ -86,7 +88,7 @@ class NewEventSubview {
       date: this.date,
       startTime: this.time,
       endTime,
-    }
+    };
   }
 
   created() {
@@ -106,7 +108,7 @@ export default class EventView implements View {
 
   constructor(root: RootStore, props: EventViewProps) {
     this.root = root;
-    this.name = "Event";
+    this.name = 'Event';
     this.filter = new EventFilter(this.root.eventStore);
 
     this.update(props);
@@ -152,7 +154,9 @@ export default class EventView implements View {
 
     const query = this.filter.asQuery;
     if (Object.keys(query).length) {
-      queryString = this.root.apiStore.getQueryString(query as unknown as { [s: string]: string | boolean });
+      queryString = buildQueryString((query as unknown) as {
+        [s: string]: string | boolean;
+      });
     }
 
     return '/' + path + (queryString ? '?' + queryString : '');
@@ -166,8 +170,6 @@ export default class EventView implements View {
     }
     this.newEvent.creating = true;
     await this.root.eventStore.createEvent(createParams);
-    runInAction(
-      () => this.newEvent.created()
-    );
+    runInAction(() => this.newEvent.created());
   }
 }
