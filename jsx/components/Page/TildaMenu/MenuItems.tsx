@@ -36,6 +36,7 @@ const MenuItemsList = styled.ul`
     text-transform: uppercase;
     letter-spacing: 1.5px;
     font-size: 13px;
+    display: block;
   }
 
   a:hover {
