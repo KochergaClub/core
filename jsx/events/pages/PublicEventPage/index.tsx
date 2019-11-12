@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import styled from 'styled-components';
 
-import { differenceInDays } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -59,7 +59,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
 
   const registrationRef = useRef<HTMLElement | null>(null);
 
-  const daysUntil = differenceInDays(event.start, new Date());
+  const daysUntil = differenceInCalendarDays(event.start, new Date());
   const inFuture = daysUntil >= 0;
 
   return (

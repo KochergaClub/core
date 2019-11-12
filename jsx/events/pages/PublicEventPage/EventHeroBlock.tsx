@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
-import { differenceInDays, differenceInCalendarWeeks } from 'date-fns';
+import { differenceInCalendarDays, differenceInCalendarWeeks } from 'date-fns';
 
 import { Button, Label, fonts } from '@kocherga/frontkit';
 import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
@@ -64,7 +64,7 @@ interface Props {
 }
 
 const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
-  const daysUntil = differenceInDays(event.start, new Date());
+  const daysUntil = differenceInCalendarDays(event.start, new Date());
 
   let daysText = '';
 

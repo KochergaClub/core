@@ -1,4 +1,4 @@
-import { differenceInDays } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 
 import { RichText } from '@kocherga/frontkit';
 
@@ -28,7 +28,7 @@ const ProjectLink: React.FC<{ project: ProjectPageType }> = ({ project }) => (
 );
 
 const ProjectInfo: React.FC<Props> = ({ event, project }) => {
-  const daysUntil = differenceInDays(event.start, new Date());
+  const daysUntil = differenceInCalendarDays(event.start, new Date());
 
   if (daysUntil >= 0) {
     return null; // TODO - show project info even for future events
