@@ -4,26 +4,27 @@ import { observer } from 'mobx-react-lite';
 
 import Page from '~/components/Page';
 
+import { selectUser } from '~/core/selectors';
 import { NextPage } from '~/common/types';
 import { useAPI } from '~/common/hooks';
+import { APIError } from '~/common/api';
 
 import GlobalStyle from './GlobalStyle';
 
 import ErrorList from './ErrorList';
 import Main from './Main';
 
-import SignInScreen from './sign-in/SignInScreen';
-import SignInView from './views/SignInView';
-
 import { RootStore } from './stores/RootStore';
 
 import { Context } from './common';
+import { ParsedUrlQuery } from 'querystring';
 
 interface Props {
   route: string;
+  query: ParsedUrlQuery;
 }
 
-const App: NextPage<Props> = observer(({ route }) => {
+const App: NextPage<Props> = observer(({ route, query }) => {
   const api = useAPI();
   const [store] = useState(() => new RootStore(api));
 
@@ -37,17 +38,14 @@ const App: NextPage<Props> = observer(({ route }) => {
     store.setEventPrototypeView({ id: undefined });
   } else if (route === '/team/evenman/schedule') {
     store.setScheduleView();
+  } else if (route === '/team/evenman/event-prototypes/[id]') {
+    store.setEventPrototypeView({ id: parseInt(query.id as string, 10) });
+  } else if (route === '/team/evenman/event/[id]') {
+    store.setEventView({
+      id: query.id as string,
+      filter: query,
+    });
   } else {
-    // TODO
-    // '/event/:id': (id: string) => {
-    //   store.setEventView({
-    //     id,
-    //     filter: queryObj(),
-    //   });
-    // },
-    // '/event-prototypes/:id': (id: string) => {
-    //   store.setEventPrototypeView({ id: parseInt(id, 10) });
-    // },
     /*
       }).configure({
         notfound: () => store.switchView('Event'), // FIXME
@@ -57,10 +55,6 @@ const App: NextPage<Props> = observer(({ route }) => {
   }
 
   const renderInsides = () => {
-    if (store.currentView.name === 'SignIn') {
-      return <SignInScreen view={store.currentView as SignInView} />;
-    }
-
     return <Main />;
   };
 
@@ -81,9 +75,16 @@ const App: NextPage<Props> = observer(({ route }) => {
   );
 });
 
-App.getInitialProps = async ({ pathname }) => {
+App.getInitialProps = async ({ store: { getState }, pathname, query }) => {
+  const user = selectUser(getState());
+
+  if (!user.email) {
+    throw new APIError('You need to be logged in to see /my', 403);
+  }
+
   return {
     route: pathname,
+    query,
   };
 };
 

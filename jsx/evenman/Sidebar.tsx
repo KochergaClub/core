@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react-lite';
-import { useCallback } from 'react';
 
 import Link from 'next/link';
 import Router from 'next/router';
 
 import styled from 'styled-components';
 
-import { A, Column, ColumnNav } from '@kocherga/frontkit';
+import { Column, ColumnNav } from '@kocherga/frontkit';
 import { useRootStore } from './common';
 
 const LogoLink = styled.a`

@@ -14,7 +14,6 @@ import TemplaterStore from './TemplaterStore';
 import { FbStore } from './FbStore';
 
 import View from '../views/View';
-import SignInView from '../views/SignInView';
 import EventView, { EventViewProps } from '../views/EventView';
 import EventPrototypeView, {
   EventPrototypeViewProps,
@@ -42,7 +41,7 @@ export class RootStore {
     this.announcementToolsStore = new AnnouncementToolsStore(this.api);
     this.templaterStore = new TemplaterStore(this.api);
 
-    this.currentView = new SignInView(this);
+    this.currentView = new EventView(this, {});
   }
 
   @action

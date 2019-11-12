@@ -33,12 +33,9 @@ export default class Sidebar extends React.Component<Props, {}> {
     return (
       <Container>
         <LoadingOverlay progress={view.store.state === 'fetching'}>
-          <EventPrototypeList
-            selectedId={view.eventPrototypeId}
-            select={ (id: number) => view.selectEventPrototype(id) }
-          />
+          <EventPrototypeList selectedId={view.eventPrototypeId} />
         </LoadingOverlay>
-        <div style={{textAlign: 'center'}}>
+        <div style={{ textAlign: 'center' }}>
           <EventPrototypeAdd store={view.root.eventPrototypeStore} />
         </div>
       </Container>

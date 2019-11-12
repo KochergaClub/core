@@ -9,7 +9,6 @@ import PrototypeNavList from './PrototypeNavList';
 
 interface Props {
   selectedId?: number;
-  select: (id: number) => void;
 }
 
 const EventPrototypeList = observer((props: Props) => {
@@ -28,13 +27,11 @@ const EventPrototypeList = observer((props: Props) => {
               title="Активные"
               items={store.list.filter(p => p.active)}
               selectedId={props.selectedId}
-              select={id => props.select(id)}
             />
             <PrototypeNavList
               title="Неактивные"
               items={store.list.filter(p => !p.active)}
               selectedId={props.selectedId}
-              select={id => props.select(id)}
             />
           </Column>
         </div>

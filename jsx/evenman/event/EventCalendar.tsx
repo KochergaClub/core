@@ -1,5 +1,8 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { observer, Observer } from 'mobx-react';
+import { observer as liteObserver } from 'mobx-react-lite';
+
+import Router from 'next/router';
 
 import styled from 'styled-components';
 
@@ -29,28 +32,34 @@ interface CalendarCellProps {
   view: EventView;
 }
 
-@observer
-class CalendarCell extends React.Component<CalendarCellProps> {
-  static Container = styled.div`
-    height: 3em;
-    overflow: scroll;
-  `;
+const CalendarCellContainer = styled.div`
+  height: 3em;
+  overflow: scroll;
+`;
 
-  render() {
+const CalendarCell: React.FC<CalendarCellProps> = liteObserver(
+  ({ events, view }) => {
+    const selectCb = useCallback(
+      (id: string) => {
+        Router.push('/team/evenman/event/[id]', `/team/evenman/event/${id}`);
+      },
+      [Router]
+    );
+
     return (
-      <CalendarCell.Container>
-        {this.props.events.map(event => (
+      <CalendarCellContainer>
+        {events.map(event => (
           <EventCalendarItem
             key={event.id}
             event={event}
-            selected={event.id === this.props.view.eventId}
-            onSelect={this.props.view.selectEvent}
+            selected={event.id === view.eventId}
+            onSelect={selectCb}
           />
         ))}
-      </CalendarCell.Container>
+      </CalendarCellContainer>
     );
   }
-}
+);
 
 class CalendarCellHeader extends React.Component<{
   date: moment.Moment;
