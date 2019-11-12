@@ -98,7 +98,7 @@ const MenuItemExpandableContainer = styled.li`
 
 const MenuItemDropdown = styled.ul`
   position: absolute;
-  z-index: 1;
+  z-index: 2000;
 
   padding: 5px 0;
   list-style-type: none;

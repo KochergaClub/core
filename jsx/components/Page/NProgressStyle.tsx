@@ -12,7 +12,7 @@ export default createGlobalStyle`
   background: ${colors.accent[900]};
 
   position: fixed;
-  z-index: 1031;
+  z-index: 9000;
   top: 0;
   left: 0;
 
@@ -39,7 +39,7 @@ export default createGlobalStyle`
 #nprogress .spinner {
   display: block;
   position: fixed;
-  z-index: 1031;
+  z-index: 9000;
   top: 21px;
   right: 12px;
 }
