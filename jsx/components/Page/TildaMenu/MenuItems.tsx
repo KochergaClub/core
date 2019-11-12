@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import Link from 'next/link';
 
+import { colors } from '@kocherga/frontkit';
 import { usePermissions } from '~/common/hooks';
 
 import {
@@ -41,6 +42,7 @@ const MenuItemsList = styled.ul`
 
   a:hover {
     text-decoration: none;
+    color: ${colors.grey[200]};
   }
 
   @media screen and (max-width: 980px) {
