@@ -10,7 +10,6 @@ import { AnnouncementToolsStore } from './AnnouncementToolsStore';
 import { ErrorStore } from './ErrorStore';
 import { EventStore } from './EventStore';
 import EventPrototypeStore from './EventPrototypeStore';
-import TemplaterStore from './TemplaterStore';
 import { FbStore } from './FbStore';
 
 import View from '../views/View';
@@ -19,13 +18,11 @@ import EventPrototypeView, {
   EventPrototypeViewProps,
 } from '../views/EventPrototypeView';
 import ScheduleView from '../views/ScheduleView';
-import TemplaterView from '../views/TemplaterView';
 
 export class RootStore {
   api: API;
   eventStore: EventStore;
   eventPrototypeStore: EventPrototypeStore;
-  templaterStore: TemplaterStore;
   fbStore: FbStore;
   errorStore: ErrorStore;
   announcementToolsStore: AnnouncementToolsStore;
@@ -39,7 +36,6 @@ export class RootStore {
     this.fbStore = new FbStore(this.api);
     this.errorStore = new ErrorStore();
     this.announcementToolsStore = new AnnouncementToolsStore(this.api);
-    this.templaterStore = new TemplaterStore(this.api);
 
     this.currentView = new EventView(this, {});
   }
@@ -67,11 +63,6 @@ export class RootStore {
     this.currentView = new ScheduleView(this);
   }
 
-  @action
-  setTemplaterView() {
-    this.currentView = new TemplaterView(this);
-  }
-
   @action.bound
   switchView(name: string) {
     console.log(`switching to ${name}`);
@@ -84,9 +75,6 @@ export class RootStore {
         break;
       case 'EventPrototype':
         this.setEventPrototypeView({});
-        break;
-      case 'Templater':
-        this.setTemplaterView();
         break;
     }
   }
