@@ -46,7 +46,9 @@ export const patchEvent = async (
 };
 
 export const deleteEvent = async (api: API, event: Event) => {
-  await api.call(`event/${event.id}`, 'DELETE', undefined, false);
+  await api.call(`event/${event.id}`, 'DELETE', undefined, {
+    expectJSON: false,
+  });
 };
 
 export const createEvent = async (

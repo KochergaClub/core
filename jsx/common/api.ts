@@ -27,6 +27,11 @@ export interface APIProps {
   realHost?: string;
 }
 
+export interface APICallOptions {
+  expectJSON?: boolean;
+  stringifyPayload?: boolean;
+}
+
 export class API {
   csrfToken: string;
   base: string;
@@ -56,18 +61,33 @@ export class API {
 
   call = async (
     path: string,
-    method: string,
+    method: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT',
     payload?: object,
-    expectJSON: boolean = true
+    options: APICallOptions = {}
   ) => {
     const headers = this.getHeaders();
+
+    const defaultOptions: APICallOptions = {
+      expectJSON: true,
+      stringifyPayload: true,
+    };
+
+    const mergedOptions: APICallOptions = {
+      ...defaultOptions,
+      ...options,
+    };
 
     const params: RequestInit = {
       method,
       headers,
     };
     if (payload) {
-      params.body = JSON.stringify(payload);
+      if (mergedOptions.stringifyPayload) {
+        params.body = JSON.stringify(payload);
+      } else {
+        params.body = payload as any;
+        delete headers['Content-Type']; // FIXME - move this logic to getHeaders
+      }
     }
 
     const startStamp = Date.now();
@@ -87,7 +107,7 @@ export class API {
       throw new APIError(error, response.status);
     }
 
-    if (expectJSON) {
+    if (mergedOptions.expectJSON) {
       return await response.json();
     } else {
       return response;
@@ -95,7 +115,7 @@ export class API {
   };
 
   callDelete = async (path: string) => {
-    return await this.call(path, 'DELETE', undefined, false);
+    return await this.call(path, 'DELETE', undefined, { expectJSON: false });
   };
 
   callWagtail = async (path: string) => {
