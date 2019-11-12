@@ -60,7 +60,7 @@ const ExistingEvents: React.FC<Props> = observer(({ prototype }) => {
               >
                 <td>{e.startMoment.format('D MMMM')} </td>
                 <td>
-                  <A href={`/event/${e.id}`}>{e.title}</A>
+                  <A href={`/team/evenman/event/${e.id}`}>{e.title}</A>
                 </td>
                 <td>{e.visitors}</td>
               </EventsTableRow>
