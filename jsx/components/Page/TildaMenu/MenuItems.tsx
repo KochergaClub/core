@@ -58,9 +58,6 @@ const MenuItemsList = styled.ul`
 `;
 
 const ItemLink: React.FC<{ item: SingleItem }> = ({ item }) => {
-  if (item.mode === 'old') {
-    return <a href={`https://kocherga-club.ru + ${item.link}`}>{item.title}</a>;
-  }
   if (item.mode === 'next') {
     return (
       <Link href={item.link}>

@@ -3,7 +3,7 @@ export const teamColor = '#417690';
 export interface SingleItem {
   title: string;
   link: string;
-  mode?: 'old' | 'next' | 'wagtail';
+  mode?: 'next' | 'wagtail';
   permissions?: string[];
 }
 
