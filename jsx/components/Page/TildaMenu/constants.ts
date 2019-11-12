@@ -61,6 +61,7 @@ export const teamMenuItems: Item[] = [
       { link: '/team/events', title: 'Календарь', mode: 'next' },
       { link: '/team/ratio', title: 'Тренинги', mode: 'next' },
       { link: '/team/mastermind_dating', title: 'Мастермайнд', mode: 'next' },
+      { link: '/team/evenman', title: 'Evenman', mode: 'next' },
     ],
   },
   {
