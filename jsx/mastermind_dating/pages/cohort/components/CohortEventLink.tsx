@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { Async } from 'react-select';
+import Async from 'react-select/async';
 
 import { format } from 'date-fns';
 

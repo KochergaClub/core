@@ -3,7 +3,7 @@ import React from 'react';
 /// <reference path="../../@types/react-big-calendar/lib/utils/constants.d.ts" />
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 
-import { ToolbarProps, Navigate, View } from 'react-big-calendar';
+import { ToolbarProps, NavigateAction, View } from 'react-big-calendar';
 
 class Toolbar extends React.Component<ToolbarProps> {
   render() {
@@ -39,7 +39,7 @@ class Toolbar extends React.Component<ToolbarProps> {
     );
   }
 
-  navigate = (action: Navigate) => {
+  navigate = (action: NavigateAction) => {
     this.props.onNavigate(action);
   };
 

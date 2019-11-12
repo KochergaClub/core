@@ -72,7 +72,8 @@ const EventFields = (props: Props) => {
         <Label>Комната</Label>
         <Select
           value={findRoom(props.room)}
-          onChange={selected => {
+          onChange={(selected: any) => {
+            // FIXME - fix type
             if (selected && !Array.isArray(selected)) {
               props.setRoom(selected.value);
             } // TODO - else?

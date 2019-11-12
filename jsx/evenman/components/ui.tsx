@@ -1,4 +1,5 @@
 import * as Select from 'react-select';
+import Creatable from 'react-select/src/Creatable';
 
 import styled from 'styled-components';
 
@@ -29,7 +30,7 @@ export const ReactSelect = styled(Select.default)`
   flex: 1;
 `;
 
-export const ReactSelectCreatable = styled(Select.Creatable)`
+export const ReactSelectCreatable = styled(Creatable)`
   flex: 1;
 `;
 
