@@ -1,5 +1,5 @@
-import * as Select from 'react-select';
-import Creatable from 'react-select/src/Creatable';
+import Select from 'react-select';
+import Creatable from 'react-select/creatable';
 
 import styled from 'styled-components';
 
@@ -26,7 +26,7 @@ export const IconLink = styled.a`
   }
 `;
 
-export const ReactSelect = styled(Select.default)`
+export const ReactSelect = styled(Select)`
   flex: 1;
 `;
 
