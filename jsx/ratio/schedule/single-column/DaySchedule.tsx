@@ -1,10 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
+
+import { HR } from '@kocherga/frontkit';
 
 import { DayScheduleType } from '~/ratio/types';
 
 import Activity from './Activity';
-import HR from './HR';
 
 const DayFooter = styled.footer`
   display: flex;

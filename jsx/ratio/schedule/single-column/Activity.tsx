@@ -1,9 +1,9 @@
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-import { useAPI } from '~/common/hooks';
+import { HR } from '@kocherga/frontkit';
 
-import HR from './HR';
+import { useAPI } from '~/common/hooks';
 
 import { ActivityType, Trainer } from '../../types';
 import { setTrainerForActivity, unsetTrainerForActivity } from '../../api';

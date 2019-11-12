@@ -106,7 +106,13 @@ export default class EventCard extends React.Component<Props, {}> {
           checked={isPublished}
           onChange={() => this.props.event.setPublished(!isPublished)}
         />
-        <div>Опубликовано</div>
+        <div>
+          {isPublished ? (
+            <a href={`/events/${this.props.event.id}`}>Опубликовано</a>
+          ) : (
+            'Опубликовано'
+          )}
+        </div>
       </Row>
     );
   }
