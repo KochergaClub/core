@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Link from 'next/link';
@@ -114,45 +114,33 @@ const MenuItemDropdown = styled.ul`
   }
 `;
 
-class MenuItemExpandable extends React.Component<{ item: ExpandableItem }, {}> {
-  state = {
-    revealed: false,
-  };
+const MenuItemExpandable: React.FC<{ item: ExpandableItem }> = ({ item }) => {
+  const [revealed, setRevealed] = useState(false);
 
-  revealDropdown = () => {
-    this.setState({
-      revealed: true,
-    });
-  };
+  const revealDropdown = useCallback(() => setRevealed(true), []);
 
-  hideDropdown = () => {
-    this.setState({
-      revealed: false,
-    });
-  };
+  const hideDropdown = useCallback(() => setRevealed(false), []);
 
-  renderDropdown() {
+  const renderDropdown = () => {
     return (
       <MenuItemDropdown>
-        {this.props.item.items.map((item, i) => (
+        {item.items.map((item, i) => (
           <MenuSingleItem key={i} item={item} />
         ))}
       </MenuItemDropdown>
     );
-  }
+  };
 
-  render() {
-    return (
-      <MenuItemExpandableContainer
-        onMouseOver={this.revealDropdown}
-        onMouseLeave={this.hideDropdown}
-      >
-        <a href="#">{this.props.item.title} ▼</a>
-        {this.state.revealed && this.renderDropdown()}
-      </MenuItemExpandableContainer>
-    );
-  }
-}
+  return (
+    <MenuItemExpandableContainer
+      onMouseOver={revealDropdown}
+      onMouseLeave={hideDropdown}
+    >
+      <a href="#">{item.title} ▼</a>
+      {revealed && renderDropdown()}
+    </MenuItemExpandableContainer>
+  );
+};
 
 const isExpandableItem = (item: Item): item is ExpandableItem => {
   return (item as ExpandableItem).items !== undefined;
