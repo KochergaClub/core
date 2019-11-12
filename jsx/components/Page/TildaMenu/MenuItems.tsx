@@ -57,7 +57,7 @@ const MenuItemsList = styled.ul`
   }
 `;
 
-const ItemLink = ({ item }: { item: SingleItem }) => {
+const ItemLink: React.FC<{ item: SingleItem }> = ({ item }) => {
   if (item.mode === 'old') {
     return <a href={`https://kocherga-club.ru + ${item.link}`}>{item.title}</a>;
   }
@@ -158,7 +158,7 @@ const isExpandableItem = (item: Item): item is ExpandableItem => {
   return (item as ExpandableItem).items !== undefined;
 };
 
-const MenuItemMaybeExpandable = ({ item }: { item: Item }) =>
+const MenuItemMaybeExpandable: React.FC<{ item: Item }> = ({ item }) =>
   isExpandableItem(item) ? (
     <MenuItemExpandable item={item} />
   ) : (
@@ -169,7 +169,7 @@ interface Props {
   team: boolean;
 }
 
-const TildaMenuItems = ({ team }: Props) => {
+const TildaMenuItems: React.FC<Props> = ({ team }) => {
   const items = team ? teamMenuItems : publicMenuItems;
   return (
     <MenuItemsNav>
