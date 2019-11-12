@@ -1,5 +1,5 @@
 import { Store } from '~/redux/store';
-import { NextPageContext as OriginalNextPageContext } from 'next-server/dist/lib/utils';
+import { NextPageContext as OriginalNextPageContext } from 'next/dist/next-server/lib/utils';
 
 export interface User {
   is_authenticated: boolean;

@@ -6,7 +6,7 @@ import { Label } from '@kocherga/frontkit';
 import EventShape from '../stores/EventShape';
 
 import Select from 'react-select';
-import { ActionTypes } from 'react-select/lib/types';
+import { ActionTypes } from 'react-select/src/types';
 
 interface Props {
   event: EventShape;

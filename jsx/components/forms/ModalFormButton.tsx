@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Formik, Form, FormikActions } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 
 import { Column, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
@@ -49,7 +49,7 @@ const ModalForm = ({
   }, [fields]);
 
   const submit = useCallback(
-    async (values: any, actions: FormikActions<any>) => {
+    async (values: any, actions: FormikHelpers<any>) => {
       const postValues = { ...values };
 
       for (const field of fields) {
@@ -89,9 +89,9 @@ const ModalForm = ({
         if (field.type === 'number' && value !== '') {
           const numValue = parseInt(value, 10);
           if (field.max !== undefined && numValue > field.max) {
-            errors[field.name] = `Значение превышает максимальное: ${
-              field.max
-            }`;
+            errors[
+              field.name
+            ] = `Значение превышает максимальное: ${field.max}`;
           }
           if (field.min !== undefined && numValue < field.min) {
             errors[field.name] = `Значение меньше минимального: ${field.min}`;
