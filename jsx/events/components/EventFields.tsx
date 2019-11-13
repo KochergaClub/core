@@ -80,6 +80,10 @@ const EventFields = (props: Props) => {
           }}
           options={roomOptions}
           isDisabled={props.disabled}
+          menuPortalTarget={document.body}
+          styles={{
+            menuPortal: provided => ({ ...provided, zIndex: 1100 }),
+          }}
         />
       </Column>
       <Column stretch gutter={0}>
