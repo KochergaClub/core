@@ -54,22 +54,16 @@ const App: NextPage<Props> = observer(({ route, query }) => {
     */
   }
 
-  const renderInsides = () => {
-    return <Main />;
-  };
-
   return (
-    <Page title="Event Manager" team noFooter>
+    <Page title="Event Manager" team noFooter fullScreen>
       <Context.Provider value={store}>
         <Head>
           <link rel="stylesheet" href="/static/react-toggle/style.css" />
           <link rel="stylesheet" href="/static/react-dates/datepicker.css" />
         </Head>
-        <div>
-          <GlobalStyle />
-          <ErrorList />
-          {renderInsides()}
-        </div>
+        <GlobalStyle />
+        <ErrorList />
+        <Main />
       </Context.Provider>
     </Page>
   );

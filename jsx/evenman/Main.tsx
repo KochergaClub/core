@@ -6,7 +6,7 @@ import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import ScheduleScreen from './schedule/ScheduleScreen';
 
 import { Sidebar } from './Sidebar';
-import { WithSidebar } from '@kocherga/frontkit';
+import { WithSidebar } from './WithSidebar';
 
 // import { FbLoginModal } from './FbLoginModal';
 

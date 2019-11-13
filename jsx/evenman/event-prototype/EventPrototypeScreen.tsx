@@ -8,7 +8,7 @@ import Sidebar from './Sidebar';
 import { EmptyCard } from '../components/Card';
 import LoadingOverlay from '../components/LoadingOverlay';
 
-import { WithSidebar } from '@kocherga/frontkit';
+import { WithSidebar } from '../WithSidebar';
 
 interface Props {
   view: EventPrototypeView;
@@ -21,7 +21,7 @@ export default class EventPrototypeScreen extends React.Component<Props, {}> {
 
     const selected = view.selectedEventPrototype;
     if (selected) {
-      return <EventPrototypeCard prototype={selected} />
+      return <EventPrototypeCard prototype={selected} />;
     }
 
     return (
