@@ -133,11 +133,13 @@ button.rbc-input::-moz-focus-inner {
   margin: 0;
   text-align: center;
   vertical-align: middle;
-  background: none;
+  background: ${colors.primary[100]};
   background-image: none;
   border: 1px solid #ccc;
+  font-size: 12px;
+  font-weight: 500;
   padding: .375rem 1rem;
-  border-radius: 4px;
+  border-radius: 0;
   line-height: normal;
   white-space: nowrap;
 }
@@ -174,32 +176,6 @@ button.rbc-input::-moz-focus-inner {
 .rbc-btn-group {
   display: inline-block;
   white-space: nowrap;
-}
-
-.rbc-btn-group > button:first-child:not(:last-child) {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.rbc-btn-group > button:last-child:not(:first-child) {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.rbc-rtl .rbc-btn-group > button:first-child:not(:last-child) {
-  border-radius: 4px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.rbc-rtl .rbc-btn-group > button:last-child:not(:first-child) {
-  border-radius: 4px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.rbc-btn-group > button:not(:first-child):not(:last-child) {
-  border-radius: 0;
 }
 
 .rbc-btn-group button + button {
