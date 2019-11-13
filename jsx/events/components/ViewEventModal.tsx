@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
@@ -32,7 +32,12 @@ const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   </A>
 );
 
-const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
+const ViewEventModal: React.FC<Props> = ({
+  isOpen,
+  onEdit,
+  onClose,
+  event,
+}) => {
   const focus = useFocusOnFirstModalRender();
 
   const hotkeys = useCommonHotkeys({
@@ -43,8 +48,12 @@ const ViewEventModal = ({ isOpen, onEdit, onClose, event }: Props) => {
     onEdit(event);
   }, [event, onEdit]);
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <Modal isOpen={isOpen}>
+    <Modal>
       <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
