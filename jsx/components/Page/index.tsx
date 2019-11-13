@@ -30,10 +30,7 @@ interface Props {
   title: string;
   description?: string;
   team?: boolean;
-  children: React.ReactNode;
-  noMenu?: boolean;
-  noFooter?: boolean;
-  fullScreen?: boolean;
+  chrome?: 'default' | 'none' | 'fullscreen';
   noVkWidget?: boolean;
   noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
   og?: OpenGraph;
@@ -59,11 +56,15 @@ const Page: PageType = props => {
   const router = useRouter();
 
   const renderContent = () => {
-    const menu = props.noMenu ? null : <TildaMenu team={props.team || false} />;
-    const footer = props.noFooter ? null : <TildaFooter />;
+    const chrome = props.chrome || 'default';
+    const showMenu = chrome !== 'none';
+    const showFooter = chrome === 'default';
+
+    const menu = showMenu ? <TildaMenu team={props.team || false} /> : null;
+    const footer = showFooter ? <TildaFooter /> : null;
     const body = <ErrorBoundary>{props.children}</ErrorBoundary>;
 
-    if (props.fullScreen) {
+    if (chrome === 'fullscreen') {
       return (
         <FullScreenContainer>
           {menu}

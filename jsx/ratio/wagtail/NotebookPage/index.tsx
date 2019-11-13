@@ -43,7 +43,7 @@ const SectionContainer = styled.section`
 const NotebookPage: NextWagtailPage<PageType, ExtraProps> = props => {
   const footer = <PrintFooter />;
   return (
-    <Page title={props.wagtailPage.title} noMenu noFooter team>
+    <Page title={props.wagtailPage.title} chrome="none" team>
       <PrintDocument footer={footer}>
         <Frontpage wagtailPage={props.wagtailPage} />
         <Emptypage />

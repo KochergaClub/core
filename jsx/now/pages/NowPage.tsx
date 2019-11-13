@@ -187,7 +187,7 @@ const NowPage: NextPage<Props> = props => {
     [2, 3, 4].indexOf(total % 10) >= 0;
 
   return (
-    <Page title="Сейчас в Кочерге" noMenu noFooter noVkWidget>
+    <Page title="Сейчас в Кочерге" chrome="none" noVkWidget>
       <ThemeProvider theme={THEMES[theme]}>
         <Container>
           <Main>

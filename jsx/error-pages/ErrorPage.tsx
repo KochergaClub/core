@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ErrorPage = ({ code, title, image }: Props) => (
-  <Page title={title} noMenu>
+  <Page title={title}>
     <Page.Main>
       <Column centered style={{ marginTop: 20, marginBottom: 50 }} gutter={40}>
         <h1 style={{ fontSize: 40 }}>{code}</h1>

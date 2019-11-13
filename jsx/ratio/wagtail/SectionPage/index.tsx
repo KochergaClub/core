@@ -28,7 +28,7 @@ export interface PageType extends WagtailPageProps {
 
 const SectionPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
-    <Page title={wagtailPage.title} noMenu noFooter team>
+    <Page title={wagtailPage.title} chrome="none" team>
       <Container>
         <Main {...wagtailPage} />
       </Container>

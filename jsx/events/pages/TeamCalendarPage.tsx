@@ -33,7 +33,7 @@ interface Props {
 
 const TeamCalendarPage: NextPage<Props> = ({ events, range }) => {
   return (
-    <Page title="Календарь событий" team noFooter fullScreen>
+    <Page title="Календарь событий" team chrome="fullscreen">
       <OuterContainer>
         <Page.Title>Календарь событий</Page.Title>
         <Container>
