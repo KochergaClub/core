@@ -52,6 +52,10 @@ const FullScreenContainerInner = styled.div`
   overflow: scroll;
 `;
 
+const Whitespace = styled.div`
+  height: 80px;
+`;
+
 const Page: PageType = props => {
   const router = useRouter();
 
@@ -59,6 +63,7 @@ const Page: PageType = props => {
     const chrome = props.chrome || 'default';
     const showMenu = chrome !== 'none';
     const showFooter = chrome === 'default';
+    const showWhitespace = chrome !== 'fullscreen';
 
     const menu = showMenu ? <TildaMenu team={props.team || false} /> : null;
     const footer = showFooter ? <TildaFooter /> : null;
@@ -77,6 +82,7 @@ const Page: PageType = props => {
       <React.Fragment>
         {menu}
         {body}
+        {showWhitespace && <Whitespace />}
         {footer}
       </React.Fragment>
     );

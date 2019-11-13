@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { PublicEvent } from '../../types';
@@ -7,17 +5,16 @@ import { PublicEvent } from '../../types';
 import EventCard from './EventCard';
 
 const List = styled.div`
-  padding: 40px 20px;
-  margin: 0 auto;
-  max-width: 800px;
+  > * + * {
+    margin-top: 40px;
+  }
 `;
 
 interface Props {
   events: PublicEvent[];
-  mode?: 'timepad';
 }
 
-export default function EventsList({ events, mode }: Props) {
+export default function EventsList({ events }: Props) {
   if (!events.length) {
     return <List>Ни одного события не запланировано.</List>;
   }
@@ -25,7 +22,7 @@ export default function EventsList({ events, mode }: Props) {
   return (
     <List>
       {events.map(event => (
-        <EventCard key={event.event_id} event={event} mode={mode} />
+        <EventCard key={event.event_id} event={event} />
       ))}
     </List>
   );

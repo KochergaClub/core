@@ -76,6 +76,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
         </PaddedBlock>
         {inFuture ? (
           <div>
+            <a id="register" />
             <RegistrationSection ref={registrationRef}>
               <TL03 title="Регистрация" grey />
               <PaddedBlock>
