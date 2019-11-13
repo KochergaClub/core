@@ -28,9 +28,7 @@ const TeamEventPage: NextPage<Props> = ({ event_id }) => {
       <Page.Main>
         <EventInfo event_id={event_id} />
         <div>
-          <A href={`https://evenman.team.kocherga.club/event/${event.id}`}>
-            Событие в evenman
-          </A>
+          <A href={`/team/evenman/event/${event.id}`}>Событие в evenman</A>
         </div>
         <FeedbackCollection event_id={event.id} />
         <TicketsCollection event_id={event.id} />
