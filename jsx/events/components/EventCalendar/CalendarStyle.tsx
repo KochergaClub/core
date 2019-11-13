@@ -561,6 +561,10 @@ button.rbc-input::-moz-focus-inner {
 .rbc-time-view .rbc-time-gutter {
   white-space: nowrap;
 }
+
+.rbc-allday-cell {
+  display: none;
+}
 .rbc-time-view .rbc-allday-cell {
   box-sizing: content-box;
   width: 100%;

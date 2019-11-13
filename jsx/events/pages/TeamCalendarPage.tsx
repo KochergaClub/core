@@ -1,3 +1,5 @@
+import styled from 'styled-components';
+
 import { format } from 'date-fns-tz';
 import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 
@@ -11,6 +13,18 @@ import { ServerEvent } from '~/events/types';
 
 import { getEventsInRange } from '~/events/api';
 
+const OuterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: stretch;
+`;
+
+const Container = styled.div`
+  flex: 1;
+  overflow: auto;
+`;
+
 interface Props {
   events: ServerEvent[];
   range: { start: string; end: string };
@@ -19,11 +33,13 @@ interface Props {
 
 const TeamCalendarPage: NextPage<Props> = ({ events, range }) => {
   return (
-    <Page title="Календарь событий" team noFooter>
-      <Page.Title>Календарь событий</Page.Title>
-      <Page.Main wide>
-        <EventCalendar events={events} range={range} />
-      </Page.Main>
+    <Page title="Календарь событий" team noFooter fullScreen>
+      <OuterContainer>
+        <Page.Title>Календарь событий</Page.Title>
+        <Container>
+          <EventCalendar events={events} range={range} />
+        </Container>
+      </OuterContainer>
     </Page>
   );
 };

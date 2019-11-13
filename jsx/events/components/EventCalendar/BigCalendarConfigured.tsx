@@ -1,4 +1,4 @@
-import React from 'react';
+import styled from 'styled-components';
 
 import { CalendarStyle, CalendarDndStyle } from './CalendarStyle';
 import Toolbar from './Toolbar';
@@ -40,6 +40,14 @@ moment.locale('ru');
 
 const localizer = momentLocalizer(moment);
 
+const Container = styled.div`
+  height: 100%;
+  max-width: 2000px;
+  padding-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 type Props<TEvent extends object, TResource extends object> = Omit<
   CalendarProps<TEvent, TResource> & WithDragAndDropProps<TEvent>,
   'localizer'
@@ -49,7 +57,7 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
   props: Props<TEvent, TResource>
 ) => {
   return (
-    <div style={{ height: '90vh' }}>
+    <Container>
       <CalendarStyle />
       <CalendarDndStyle />
       <DragAndDropCalendar
@@ -66,7 +74,7 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
           toolbar: Toolbar,
         }}
       />
-    </div>
+    </Container>
   );
 };
 
