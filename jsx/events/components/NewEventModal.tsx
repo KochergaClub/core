@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -19,7 +19,13 @@ interface Props {
   onClose: () => void;
 }
 
-const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
+const NewEventModal: React.FC<Props> = ({
+  isOpen,
+  onCreate,
+  onClose,
+  start,
+  end,
+}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [room, setRoom] = useState('');
@@ -59,7 +65,7 @@ const NewEventModal = ({ isOpen, onCreate, onClose, start, end }: Props) => {
   const zonedEnd = utcToZonedTime(end, timezone);
 
   return (
-    <Modal isOpen={isOpen} overflow="visible">
+    <Modal>
       <Modal.Header toggle={onClose}>
         Создать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
