@@ -79,7 +79,6 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     case 'new':
       return (
         <NewEventModal
-          isOpen={true}
           start={uiStore.context.start}
           end={uiStore.context.end}
           onCreate={onCreate}
@@ -89,7 +88,6 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     case 'view':
       return (
         <ViewEventModal
-          isOpen={true}
           event={uiStore.context.event}
           onClose={onClose}
           onEdit={onEdit}
@@ -98,7 +96,6 @@ const UILayer = ({ uiStore, uiDispatch }: Props) => {
     case 'edit':
       return (
         <EditEventModal
-          isOpen={true}
           event={uiStore.context.event}
           onSave={onSave}
           onDelete={onDelete}

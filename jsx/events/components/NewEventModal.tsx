@@ -12,20 +12,13 @@ import EventFields from './EventFields';
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 interface Props {
-  isOpen: boolean;
   start: Date;
   end: Date;
   onCreate: (e: Event) => void;
   onClose: () => void;
 }
 
-const NewEventModal: React.FC<Props> = ({
-  isOpen,
-  onCreate,
-  onClose,
-  start,
-  end,
-}) => {
+const NewEventModal: React.FC<Props> = ({ onCreate, onClose, start, end }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [room, setRoom] = useState('');
@@ -56,10 +49,6 @@ const NewEventModal: React.FC<Props> = ({
     onEnter: create,
     onEscape: onClose,
   });
-
-  if (!isOpen) {
-    return null;
-  }
 
   const zonedStart = utcToZonedTime(start, timezone);
   const zonedEnd = utcToZonedTime(end, timezone);

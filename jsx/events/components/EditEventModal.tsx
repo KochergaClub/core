@@ -12,7 +12,6 @@ import { Button, Modal, Row } from '@kocherga/frontkit';
 import EventFields from './EventFields';
 
 interface Props {
-  isOpen: boolean;
   event: LocalEvent;
   onSave: (e: Event) => void;
   onClose: () => void;
@@ -20,7 +19,6 @@ interface Props {
 }
 
 const EditEventModal: React.FC<Props> = ({
-  isOpen,
   onSave,
   onDelete,
   onClose,
@@ -61,10 +59,6 @@ const EditEventModal: React.FC<Props> = ({
     onEscape: onClose,
     onEnter: saveCb,
   });
-
-  if (!isOpen) {
-    return null;
-  }
 
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);

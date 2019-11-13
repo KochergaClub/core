@@ -14,7 +14,6 @@ import { LocalEvent } from '../types';
 import { EventInfo } from './EventInfo';
 
 interface Props {
-  isOpen: boolean;
   event: LocalEvent;
   onClose: () => void;
   onEdit: (e: LocalEvent) => void;
@@ -32,12 +31,7 @@ const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   </A>
 );
 
-const ViewEventModal: React.FC<Props> = ({
-  isOpen,
-  onEdit,
-  onClose,
-  event,
-}) => {
+const ViewEventModal: React.FC<Props> = ({ onEdit, onClose, event }) => {
   const focus = useFocusOnFirstModalRender();
 
   const hotkeys = useCommonHotkeys({
@@ -47,10 +41,6 @@ const ViewEventModal: React.FC<Props> = ({
   const editCb = useCallback(() => {
     onEdit(event);
   }, [event, onEdit]);
-
-  if (!isOpen) {
-    return null;
-  }
 
   return (
     <Modal>
