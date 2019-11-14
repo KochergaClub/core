@@ -98,7 +98,8 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
   }
 
   const registerCb = useCallback(() => {
-    trackEvent('event_top_register_button', {
+    trackEvent('top_register_button', {
+      category: 'events',
       label: event.title,
     });
 

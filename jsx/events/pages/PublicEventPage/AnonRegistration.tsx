@@ -61,7 +61,8 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   const api = useAPI();
 
   const anonRegister = useCallback(async () => {
-    trackEvent('event_register', {
+    trackEvent('register', {
+      category: 'events',
       label: event.title,
     });
 
@@ -77,7 +78,8 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   const restart = useCallback(async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    trackEvent('event_register_restart', {
+    trackEvent('register_restart', {
+      category: 'events',
       label: event.title,
     });
 

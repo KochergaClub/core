@@ -24,7 +24,8 @@ export default function Registration(props: Props) {
   const user = useUser();
 
   const unregister = useCallback(async () => {
-    trackEvent('event_unregister', {
+    trackEvent('unregister', {
+      category: 'events',
       label: event.title,
     });
 
@@ -34,7 +35,8 @@ export default function Registration(props: Props) {
   }, [api, event.event_id]);
 
   const register = useCallback(async () => {
-    trackEvent('event_register', {
+    trackEvent('register', {
+      category: 'events',
       label: event.title,
     });
 
