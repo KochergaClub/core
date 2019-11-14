@@ -75,7 +75,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
       </TimeWrapper>
       <Padded>{event.summary}</Padded>
       <Padded>
-        <form action={href + '#register'}>
+        <form action={href + '#register'} target="_top">
           <Button>Зарегистрироваться</Button>
         </form>
       </Padded>
