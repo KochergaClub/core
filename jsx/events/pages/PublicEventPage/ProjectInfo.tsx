@@ -39,8 +39,7 @@ const ProjectInfo: React.FC<Props> = ({ event, project }) => {
       <Wrapper>
         Это событие прошло.
         <br />
-        Посмотрите, что будет в Кочерге{' '}
-        <a href="/#schedule">в ближайшие дни.</a>
+        Посмотрите, что будет в Кочерге <a href="/events">в ближайшие дни.</a>
       </Wrapper>
     );
   }
@@ -50,7 +49,7 @@ const ProjectInfo: React.FC<Props> = ({ event, project }) => {
       <Wrapper>
         Проект <ProjectLink project={project} /> больше не активен, но вы можете
         посмотреть на <a href="/projects">другие проекты Кочерги</a> или на{' '}
-        <a href="/#schedule">расписание ближайших событий</a>.
+        <a href="/events">расписание ближайших событий</a>.
       </Wrapper>
     );
   }

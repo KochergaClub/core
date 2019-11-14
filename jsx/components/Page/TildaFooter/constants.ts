@@ -4,9 +4,9 @@ export const footerParts = [
     items: [
       { link: '/space/', title: 'Пространство' },
       { link: '/pricing/', title: 'Цены' },
-      { link: 'https://now.kocherga.club', title: 'Сколько человек сейчас' },
+      { link: '/now', title: 'Сколько человек сейчас' },
       { link: 'https://booking.kocherga.club', title: 'Форма брони' },
-      { link: '/#schedule', title: 'Мероприятия' },
+      { link: '/events', title: 'Мероприятия' },
     ],
   },
   {

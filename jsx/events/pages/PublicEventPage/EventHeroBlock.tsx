@@ -133,7 +133,7 @@ const ProjectHeroBlock: React.FC<Props> = props => {
   return (
     <HeroWithImage image={imageUrl}>
       <Container>
-        <HeroTopLink href="/#schedule">
+        <HeroTopLink href="/events">
           <HeroLabel>Событие в Кочерге</HeroLabel>
         </HeroTopLink>
         <HeroHeader>{event.title}</HeroHeader>

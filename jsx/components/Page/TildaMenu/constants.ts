@@ -27,7 +27,7 @@ export const publicMenuItems: Item[] = [
     title: 'Сообщество',
     items: [
       { link: '/projects', title: 'Проекты' },
-      { link: '/#schedule', title: 'Расписание мероприятий' },
+      { link: '/events', title: 'Расписание мероприятий' },
       { link: '/blog', title: 'Блог' }, // TODO - mode: 'wagtail', but can't enable it until old blog is disabled
     ],
   },
