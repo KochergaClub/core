@@ -16,7 +16,7 @@ const PublicEventIndexPage: NextPage<Props> = ({ events: serverEvents }) => {
   const events = serverEvents.map(serverPublicEventToEvent);
 
   return (
-    <Page title="Расписание мероприятий - iframe" chrome="none">
+    <Page title="Расписание мероприятий - iframe" chrome="none" noVkWidget>
       <PaddedBlock>
         <EventsList events={events} />
       </PaddedBlock>
