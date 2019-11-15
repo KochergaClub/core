@@ -31,6 +31,10 @@ def _get_and_save(page_id):
         logger.info('/blog got moved to Wagtail')
         return
 
+    if alias == '' and str(page_id) != '44270':
+        logger.info('Empty alias but probably not frontpage')
+        return
+
     with open(EXPORT_DIR + '/' + filename, 'w') as fh:
         fh.write(html)
 
