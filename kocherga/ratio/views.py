@@ -1,11 +1,11 @@
+import datetime
+
 from rest_framework import viewsets, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Training, Activity, Trainer, Ticket
-from . import serializers
+from . import serializers, models, email
 from .users import training2mailchimp
-from . import email
 
 
 class IsRatioManager(permissions.BasePermission):
@@ -15,7 +15,7 @@ class IsRatioManager(permissions.BasePermission):
 
 class TrainingViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
     permission_classes = (IsRatioManager,)
-    queryset = Training.objects.all()
+    queryset = models.Training.objects.all()
     serializer_class = serializers.TrainingSerializer
     lookup_field = 'slug'
 
@@ -61,27 +61,43 @@ class TrainingViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
     def schedule(self, request, slug=None):
         training = self.get_object()
         return Response(
-            serializers.ActivitySerializer(training.schedule, many=True).data,
+            serializers.TrainingDaySerializer(training.days, many=True).data,
+        )
+
+    @action(detail=True, methods=['post'])
+    def add_day(self, request, slug=None):
+        training = self.get_object()
+        date_str = request.data['date']
+        date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
+        training_day = training.add_day(date)
+        return Response(
+            serializers.TrainingDaySerializer(training_day).data,
         )
 
     @action(detail=True, methods=['post'])
     def copy_schedule_from(self, request, slug=None):
         training = self.get_object()
         src_training_slug = request.data['src_training_slug']
-        src_training = Training.objects.get(slug=src_training_slug)
+        src_training = models.Training.objects.get(slug=src_training_slug)
         training.copy_schedule_from(src_training)
         return Response('ok')
 
 
+class TrainingDayViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsRatioManager,)
+    queryset = models.TrainingDay.objects.all()
+    serializer_class = serializers.TrainingDaySerializer
+
+
 class ActivityViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsRatioManager,)
-    queryset = Activity.objects.all()
+    queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
 
     @action(detail=True, methods=['post'])
     def set_trainer(self, request, **kwargs):
         trainer_name = request.data['name']
-        trainer = Trainer.objects.get(long_name=trainer_name)
+        trainer = models.Trainer.objects.get(long_name=trainer_name)
         activity = self.get_object()
         activity.trainer = trainer
         activity.save()
@@ -97,11 +113,11 @@ class ActivityViewSet(viewsets.ReadOnlyModelViewSet):
 
 class TrainerViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsRatioManager,)
-    queryset = Trainer.objects.all()
+    queryset = models.Trainer.objects.all()
     serializer_class = serializers.TrainerSerializer
 
 
 class TicketViewSet(viewsets.ModelViewSet):
     permission_classes = (IsRatioManager,)
-    queryset = Ticket.objects.all()
+    queryset = models.Ticket.objects.all()
     serializer_class = serializers.TicketSerializer

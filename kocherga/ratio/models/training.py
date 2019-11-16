@@ -1,5 +1,4 @@
 from datetime import date
-from collections import OrderedDict
 
 from django.db import models
 
@@ -17,7 +16,7 @@ class Training(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
 
-    date = models.DateField('Дата начала', null=True)
+    date = models.DateField('Дата начала')
     telegram_link = models.URLField('Телеграм-чат', blank=True)
     pre_survey_link = models.URLField('Форма предрассылки', blank=True)
     post_survey_link = models.URLField('Форма пострассылки', blank=True)
@@ -49,29 +48,35 @@ class Training(models.Model):
         return sum(ticket.payment_amount for ticket in self.tickets.all())
     total_income.short_description = 'Суммарный доход'
 
-    def schedule_by_day(self):
-        result = OrderedDict()
-        for activity in self.schedule.all():
-            day = activity.day
-            if day not in result:
-                result[day] = []
-            result[day].append(activity)
+    def add_day(self, date):
+        if date < self.date:
+            raise Exception("Can't add day for date which is earlier than training's start date")
 
-        return [
-            {'day': key, 'activities': result[key]}
-            for key in result
-        ]
+        from .training_day import TrainingDay
+        day = TrainingDay.objects.create(
+            training=self,
+            date=date,
+        )
+        return day
 
     def copy_schedule_from(self, src_training):
+        # late import - avoiding circular dependency
+        from .training_day import TrainingDay
+
         if self.id == src_training.id:
             raise Exception("Can't copy training's schedule to itself")
-        if self.schedule.count():
-            raise Exception("Can't copy schedule when schedule is non-empty")
+        if self.days.count():
+            raise Exception("Can't copy schedule when days are already set")
 
-        for activity in src_training.schedule.all():
-            activity.pk = None
-            activity.training = self
-            activity.save()
+        for src_day in src_training.days.all():
+            day = TrainingDay.objects.create(
+                training=self,
+                date=src_day.date - src_training.date + self.date,
+            )
+            for activity in src_day.schedule.all():
+                activity.pk = None
+                activity.day_fk = day
+                activity.save()
 
     @property
     def long_name(self):

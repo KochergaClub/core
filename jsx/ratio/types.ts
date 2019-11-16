@@ -34,7 +34,6 @@ export interface Trainer {
 
 export interface ActivityType {
   id: number;
-  day: number;
   time: string;
   activity_type: string;
   name: string;
@@ -42,7 +41,8 @@ export interface ActivityType {
   location?: string;
 }
 
-export interface DayScheduleType {
-  day: number;
-  activities: ActivityType[];
+export interface TrainingDay {
+  id: number;
+  date: string; // TODO - decode
+  schedule: ActivityType[];
 }

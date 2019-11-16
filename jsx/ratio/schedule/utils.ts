@@ -1,38 +1,15 @@
 import React from 'react';
 
-import { ActivityType, DayScheduleType } from '../types';
-
-export function groupByDay(schedule: ActivityType[]) {
-  const scheduleByDay: { [key: number]: ActivityType[] } = {};
-  for (const activity of schedule) {
-    if (!scheduleByDay[activity.day]) {
-      scheduleByDay[activity.day] = [];
-    }
-    scheduleByDay[activity.day].push(activity);
-  }
-
-  const days = ((Object.keys(scheduleByDay) as unknown) as number[]).sort(
-    (a, b) => a - b
-  );
-
-  const result: DayScheduleType[] = [];
-  for (const day of days) {
-    result.push({
-      day,
-      activities: scheduleByDay[day],
-    });
-  }
-  return result;
-}
+import { TrainingDay } from '../types';
 
 interface Store {
-  schedule: ActivityType[];
+  schedule: TrainingDay[];
 }
 
 interface ReplaceScheduleAction {
   type: 'REPLACE_SCHEDULE';
   payload: {
-    schedule: ActivityType[];
+    schedule: TrainingDay[];
   };
 }
 
@@ -64,26 +41,33 @@ export const reducer = (store: Store, action: Action): Store => {
     case 'SET_TRAINER':
       return {
         ...store,
-        schedule: store.schedule.map(activity =>
-          activity.id === action.payload.activity_id
-            ? {
-                ...activity,
-                trainer: action.payload.trainer,
-              }
-            : activity
-        ),
+        schedule: store.schedule.map(day => ({
+          ...day,
+          schedule: day.schedule.map(activity =>
+            activity.id === action.payload.activity_id
+              ? {
+                  ...activity,
+                  trainer: action.payload.trainer,
+                }
+              : activity
+          ),
+        })),
       };
     case 'UNSET_TRAINER':
       return {
         ...store,
-        schedule: store.schedule.map(activity =>
-          activity.id === action.payload.activity_id
-            ? {
-                ...activity,
-                trainer: '',
-              }
-            : activity
-        ),
+        // FIXME - copypaste
+        schedule: store.schedule.map(day => ({
+          ...day,
+          schedule: day.schedule.map(activity =>
+            activity.id === action.payload.activity_id
+              ? {
+                  ...activity,
+                  trainer: '',
+                }
+              : activity
+          ),
+        })),
       };
     default:
       return store;

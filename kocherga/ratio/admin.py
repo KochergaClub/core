@@ -1,26 +1,33 @@
 from django.contrib import admin
 
-from .models import Training, Ticket, Trainer, Activity
+from . import models
 
 
 class ActivityInline(admin.TabularInline):
-    model = Activity
+    model = models.Activity
 
 
 class TicketInline(admin.TabularInline):
-    model = Ticket
+    model = models.Ticket
 
 
-@admin.register(Training)
+@admin.register(models.Training)
 class TrainingAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name', 'date', 'tickets_count', 'total_income')
     inlines = [
-        ActivityInline,
         TicketInline,
     ]
 
 
-@admin.register(Ticket)
+@admin.register(models.TrainingDay)
+class TrainingDayAdmin(admin.ModelAdmin):
+    list_display = ('date',)
+    inlines = [
+        ActivityInline,
+    ]
+
+
+@admin.register(models.Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_filter = ('training', 'status', 'ticket_type')
     list_display = ('__str__', 'status', 'ticket_type', 'payment_amount', 'paid')
@@ -30,6 +37,6 @@ class TicketAdmin(admin.ModelAdmin):
     }
 
 
-@admin.register(Trainer)
+@admin.register(models.Trainer)
 class TrainerAdmin(admin.ModelAdmin):
     pass

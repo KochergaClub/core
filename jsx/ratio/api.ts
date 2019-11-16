@@ -1,12 +1,12 @@
 import { API } from '~/common/api';
 
-import { Training, ActivityType, Ticket } from './types';
+import { Training, TrainingDay, Ticket } from './types';
 
 export const getSchedule = async (api: API, slug: string) => {
   return (await api.call(
     `ratio/training/${slug}/schedule`,
     'GET'
-  )) as ActivityType[];
+  )) as TrainingDay[];
 };
 
 export const copyScheduleFrom = async (

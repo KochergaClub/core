@@ -1,23 +1,23 @@
 import React from 'react';
 
-import { ActivityType } from '../types';
+import { TrainingDay } from '../types';
 
-import { groupByDay } from './utils';
 import DaySchedule from './single-column/DaySchedule';
 
 interface Props {
   long_name: string;
-  schedule: ActivityType[];
+  schedule: TrainingDay[];
 }
 
 export default function SingleColumnSchedule({ schedule, long_name }: Props) {
   return (
     <div>
-      {groupByDay(schedule).map(day_schedule => (
+      {schedule.map((day_schedule, i) => (
         <DaySchedule
           day_schedule={day_schedule}
+          index={i + 1}
+          key={i}
           long_name={long_name}
-          key={day_schedule.day}
         />
       ))}
     </div>

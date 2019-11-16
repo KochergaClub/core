@@ -1,30 +1,40 @@
-import React from 'react';
 import styled from 'styled-components';
 
-import { ActivityType, DayScheduleType } from '../../types';
+import { colors, Column } from '@kocherga/frontkit';
 
+import { ActivityType, TrainingDay } from '../../types';
+
+import EditDayInAdmin from '../EditDayInAdmin';
 import Activity from './Activity';
 
+import { formatDate } from '~/common/utils';
+
 interface Props {
-  day_schedule: DayScheduleType;
+  day_schedule: TrainingDay;
+  index: number;
   long_name: string;
 }
 
 const Container = styled.div`
   position: relative;
-  height: 1400px;
 `;
 
 const Header = styled.div`
   @font-face {
-    font-family: 'Intro Light';
-    src: url('/static/fonts/intro-pack/Intro-Light.otf');
+    font-family: 'Intro Book';
+    src: url('/static/fonts/intro-pack/Intro-book.otf');
   }
-  font-family: 'Intro Light';
-  font-size: 1.3em;
+  font-family: 'Intro Book';
+  font-weight: bold;
+  color: ${colors.grey[600]};
 `;
 
-const time2minute = (time: string) => {
+const HeaderFirstLine = styled.div`
+  font-size: 1.3em;
+  line-height: 1.2;
+`;
+
+const time2minute = (time: string): number => {
   const match = time.match(/^(\d+):(\d+)/);
   if (!match) {
     throw new Error(`Unparsable time ${time}`);
@@ -35,20 +45,14 @@ const time2minute = (time: string) => {
 interface PositionerProps {
   activity: ActivityType;
   minTime: string;
-  maxTime: string;
 }
 
 const Positioner: React.FC<PositionerProps> = ({
   activity,
   minTime,
-  maxTime,
   children,
 }) => {
-  const height = 1000;
-  const top =
-    ((time2minute(activity.time) - time2minute(minTime)) /
-      (time2minute(maxTime) - time2minute(minTime))) *
-    height;
+  const top = ((time2minute(activity.time) - time2minute(minTime)) * 36) / 30;
 
   return (
     <div style={{ position: 'absolute', width: '100%', top }}>{children}</div>
@@ -58,38 +62,45 @@ const Positioner: React.FC<PositionerProps> = ({
 interface PositionedActivityProps {
   activity: ActivityType;
   minTime: string;
-  maxTime: string;
 }
 
 const PositionedActivity: React.FC<PositionedActivityProps> = ({
   activity,
   minTime,
-  maxTime,
 }) => (
-  <Positioner activity={activity} minTime={minTime} maxTime={maxTime}>
+  <Positioner activity={activity} minTime={minTime}>
     <Activity activity={activity} />
   </Positioner>
 );
 
-const DaySchedule: React.FC<Props> = ({ day_schedule }) => {
-  const minTime = day_schedule.activities[0].time;
-  const maxTime =
-    day_schedule.activities[day_schedule.activities.length - 1].time;
+const ActivitiesList: React.FC<Props> = ({ day_schedule }) => {
+  if (!day_schedule.schedule.length) {
+    return null;
+  }
+
+  const minTime = day_schedule.schedule[0].time;
 
   return (
-    <div>
-      <Header>День {day_schedule.day}</Header>
+    <>
+      {day_schedule.schedule.map((activity, i) => (
+        <PositionedActivity key={i} activity={activity} minTime={minTime} />
+      ))}
+    </>
+  );
+};
+
+const DaySchedule: React.FC<Props> = props => {
+  return (
+    <Column stretch gutter={24}>
+      <Header>
+        <HeaderFirstLine>День {props.index}</HeaderFirstLine>
+        <div>{formatDate(new Date(props.day_schedule.date), 'd MMMM')}</div>
+        <EditDayInAdmin day_schedule={props.day_schedule} />
+      </Header>
       <Container>
-        {day_schedule.activities.map((activity, i) => (
-          <PositionedActivity
-            key={i}
-            activity={activity}
-            minTime={minTime}
-            maxTime={maxTime}
-          />
-        ))}
+        <ActivitiesList {...props} />
       </Container>
-    </div>
+    </Column>
   );
 };
 

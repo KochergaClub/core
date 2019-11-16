@@ -6,7 +6,7 @@ import { selectAPI } from '~/core/selectors';
 
 import Page from '~/components/Page';
 
-import { ActivityType } from '~/ratio/types';
+import { TrainingDay } from '~/ratio/types';
 import { getSchedule } from '~/ratio/api';
 import { loadTrainingBySlug, loadTrainers } from '~/ratio/actions';
 import { selectViewingTraining } from '~/ratio/selectors';
@@ -14,7 +14,7 @@ import { selectViewingTraining } from '~/ratio/selectors';
 import SchedulePage from '~/ratio/schedule';
 
 interface Props {
-  schedule: ActivityType[];
+  schedule: TrainingDay[];
 }
 
 const RatioSchedulePage: NextPage<Props> = props => {

@@ -1,6 +1,6 @@
 from django.db import models
 
-from .training import Training
+from .training_day import TrainingDay
 from .trainer import Trainer
 
 
@@ -10,9 +10,8 @@ from .trainer import Trainer
 # - bonuses
 # TODO - add 'type' field or figure out some other way to make activities polymorphic.
 class Activity(models.Model):
-    training = models.ForeignKey(Training, verbose_name='Тренинг', on_delete=models.CASCADE, related_name='schedule')
+    training_day = models.ForeignKey(TrainingDay, on_delete=models.CASCADE, related_name='schedule', null=True)
 
-    day = models.PositiveSmallIntegerField('День')
     time = models.TimeField('Время')
 
     activity_type = models.CharField('Тип', max_length=40, choices=(
@@ -32,7 +31,7 @@ class Activity(models.Model):
     )
 
     class Meta:
-        ordering = ('day', 'time')
+        ordering = ('training_day__training__date', 'training_day__date', 'time',)
         verbose_name = 'Активность'
         verbose_name_plural = 'Активности'
 

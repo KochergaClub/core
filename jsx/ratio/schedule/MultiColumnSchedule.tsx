@@ -2,14 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 
-import { ActivityType } from '../types';
+import { TrainingDay } from '../types';
 
-import { groupByDay } from './utils';
 import DaySchedule from './multi-column/DaySchedule';
 
 interface Props {
   long_name: string;
-  schedule: ActivityType[];
+  schedule: TrainingDay[];
 }
 
 const Columns = styled.div`
@@ -27,11 +26,12 @@ const Columns = styled.div`
 export default function MultiColumnSchedule({ schedule, long_name }: Props) {
   return (
     <Columns>
-      {groupByDay(schedule).map(day_schedule => (
+      {schedule.map((day, i) => (
         <DaySchedule
-          day_schedule={day_schedule}
+          day_schedule={day}
           long_name={long_name}
-          key={day_schedule.day}
+          key={i}
+          index={i + 1}
         />
       ))}
     </Columns>

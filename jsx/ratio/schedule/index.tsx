@@ -7,25 +7,46 @@ import { A, Column, Row } from '@kocherga/frontkit';
 
 import { useAPI } from '~/common/hooks';
 
-import { ActivityType, Training } from '~/ratio/types';
+import { TrainingDay, Training } from '~/ratio/types';
 import { getSchedule, copyScheduleFrom } from '~/ratio/api';
 import { selectViewingTraining } from '~/ratio/selectors';
 
+import Unprintable from './Unprintable';
+
+import CreateDayButton from './CreateDayButton';
 import SingleColumnSchedule from './SingleColumnSchedule';
 import MultiColumnSchedule from './MultiColumnSchedule';
 import CopyScheduleFromPicker from './CopyScheduleFromPicker';
 import { reducer, ScheduleContext } from './utils';
 
-const PageHeader = styled.header`
-  text-align: center;
+const Header = styled.header``;
 
-  @media print {
-    display: none;
+const HeaderTexts = styled.div`
+  @font-face {
+    font-family: 'Intro Book';
+    src: url('/static/fonts/intro-pack/Intro-book.otf');
+  }
+  font-family: 'Intro Book';
+  letter-spacing: 0.08em;
+
+  a {
+    @media print {
+      color: black;
+    }
+  }
+
+  h1 {
+    line-height: 1.2;
+    margin: 0;
+  }
+  h2 {
+    margin: 0;
+    margin-bottom: 16px;
   }
 `;
 
 interface Props {
-  schedule: ActivityType[];
+  schedule: TrainingDay[];
 }
 
 const SchedulePage: React.FC<Props> = props => {
@@ -51,7 +72,7 @@ const SchedulePage: React.FC<Props> = props => {
       dispatch({
         type: 'REPLACE_SCHEDULE',
         payload: {
-          schedule: await getSchedule(api, training.name),
+          schedule: await getSchedule(api, training.slug),
         },
       });
     },
@@ -64,34 +85,39 @@ const SchedulePage: React.FC<Props> = props => {
 
   return (
     <ScheduleContext.Provider value={{ dispatch }}>
-      <div>
-        <PageHeader>
-          <Column centered>
-            <h1>
-              <A href={`/team/ratio/training/${training.slug}`}>
-                {training.name}
-              </A>
-            </h1>
-            <A href={`/admin/ratio/training/${training.id}/change/`}>
-              (Редактировать расписание)
-            </A>
-            <Row vCentered>
-              <input
-                type="checkbox"
-                checked={multiColumn}
-                onChange={e => setMultiColumn(e.currentTarget.checked)}
-              />
-              несколько колонок
-            </Row>
-          </Column>
-        </PageHeader>
+      <Column stretch gutter={32}>
+        <Header>
+          <Row spaced>
+            <HeaderTexts>
+              <h1>
+                <A href={`/team/ratio/training/${training.slug}`}>
+                  {training.name}
+                </A>
+              </h1>
+              <h2>Расписание занятий</h2>
+            </HeaderTexts>
+            <Unprintable>
+              <Column centered>
+                <CreateDayButton />
+                <Row vCentered>
+                  <input
+                    type="checkbox"
+                    checked={multiColumn}
+                    onChange={e => setMultiColumn(e.currentTarget.checked)}
+                  />
+                  несколько колонок
+                </Row>
+              </Column>
+            </Unprintable>
+          </Row>
+        </Header>
 
         {schedule.length ? (
           <Component schedule={schedule} long_name={training.long_name} />
         ) : (
           <CopyScheduleFromPicker training={training} pick={pickSrcForCopy} />
         )}
-      </div>
+      </Column>
     </ScheduleContext.Provider>
   );
 };

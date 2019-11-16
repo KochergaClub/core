@@ -2,9 +2,10 @@ import styled from 'styled-components';
 
 import { HR } from '@kocherga/frontkit';
 
-import { DayScheduleType } from '~/ratio/types';
+import { TrainingDay } from '~/ratio/types';
 
 import Activity from './Activity';
+import EditDayInAdmin from '../EditDayInAdmin';
 
 const DayFooter = styled.footer`
   display: flex;
@@ -46,18 +47,19 @@ const DayHeader = styled.header`
   font-weight: bold;
 `;
 
-const DaySchedule = ({
-  day_schedule,
-  long_name,
-}: {
-  day_schedule: DayScheduleType;
+interface Props {
+  index: number;
+  day_schedule: TrainingDay;
   long_name: string;
-}) => (
+}
+
+const DaySchedule: React.FC<Props> = ({ day_schedule, long_name, index }) => (
   <DayContainer>
-    <DayHeader>День {day_schedule.day}</DayHeader>
+    <DayHeader>День {index}</DayHeader>
+    <EditDayInAdmin day_schedule={day_schedule} />
     <HR />
 
-    {day_schedule.activities.map((activity, i) => (
+    {day_schedule.schedule.map((activity, i) => (
       <Activity key={i} activity={activity} />
     ))}
 
