@@ -12,7 +12,7 @@ def fill_training_day(apps, schema_editor):
 
     for activity in Activity.objects.all():
         first_date = activity.training.date
-        date = first_date + timedelta(days=activity.day - 1),
+        date = first_date + timedelta(days=activity.day - 1)
 
         (day, _) = TrainingDay.objects.get_or_create(
             training=activity.training,
