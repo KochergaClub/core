@@ -42,6 +42,6 @@ def test_trainer_income(training_with_schedule, trainer):
 
 
 def test_copy_schedule_from(training, training_with_schedule):
-    assert training.schedule.count() == 0
+    assert len(list(training.all_activities())) == 0
     training.copy_schedule_from(training_with_schedule)
-    assert training.schedule.count() == 2
+    assert len(list(training.all_activities())) == 2

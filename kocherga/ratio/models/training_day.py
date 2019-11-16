@@ -12,3 +12,6 @@ class TrainingDay(models.Model):
         verbose_name = 'День тренинга'
         verbose_name_plural = 'Дни тренинга'
         unique_together = ('date', 'training')
+
+    def __str__(self):
+        return f'[{self.pk}] {self.training.slug} / {self.date:%Y-%m-%d}'

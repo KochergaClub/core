@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from datetime import date
 
 from django.db import models
@@ -69,13 +72,14 @@ class Training(models.Model):
             raise Exception("Can't copy schedule when days are already set")
 
         for src_day in src_training.days.all():
+            logger.info(f'Copying day {src_day}')
             day = TrainingDay.objects.create(
                 training=self,
                 date=src_day.date - src_training.date + self.date,
             )
             for activity in src_day.schedule.all():
                 activity.pk = None
-                activity.day_fk = day
+                activity.training_day = day
                 activity.save()
 
     @property
@@ -85,9 +89,14 @@ class Training(models.Model):
             + f'{self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'
         )
 
+    def all_activities(self):
+        for day in self.days.all():
+            for activity in day.schedule.all():
+                yield activity
+
     def all_trainers(self):
         trainers = {}
-        for activity in self.schedule.all():
+        for activity in self.all_activities():
             if activity.trainer:
                 trainers[activity.trainer.id] = activity.trainer
 
@@ -96,7 +105,7 @@ class Training(models.Model):
     def trainer_salary(self, trainer):
         total = 0
         trainer_total = 0
-        for activity in self.schedule.all():
+        for activity in self.all_activities():
             if activity.activity_type != 'section':
                 continue
             total += 1
