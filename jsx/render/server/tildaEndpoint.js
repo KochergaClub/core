@@ -1,6 +1,8 @@
 const express = require('express');
 
-const ROOT = '/data/tilda';
+const ROOT = process.env.NO_DOCKER_DEV
+  ? '../../../data/volume/tilda'
+  : '/data/tilda';
 
 const config = require(ROOT + '/config.json');
 

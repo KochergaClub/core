@@ -73,15 +73,6 @@ services:
       - redis
     restart: always
 
-  render-server:
-    << : *common
-    command: bash -c 'cd jsx && node ./render/server/index.js'
-    depends_on:
-      - api
-    ports:
-      - "127.0.0.1:8000:80"
-    restart: always
-
   tor:
     image: dperson/torproxy
 

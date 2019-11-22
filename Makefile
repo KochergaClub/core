@@ -7,6 +7,9 @@ image:
 init-dev:
 	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
 
+dev-mixed: image
+	nf start -j ./docker/Procfile.mixed
+
 dev-mac: image
 	docker-sync-stack start
 

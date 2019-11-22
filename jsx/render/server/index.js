@@ -51,13 +51,15 @@ async function main() {
 
   const proxy = httpProxy.createProxyServer({
     target: {
-      host: API_HOST,
+      host: API_HOST.split(':', 2)[0],
+      port: API_HOST.split(':', 2)[1] || 80,
     },
   });
   const wsProxy = httpProxy.createProxyServer({
     ws: true,
     target: {
-      host: API_ASYNC_HOST,
+      host: API_ASYNC_HOST.split(':', 2)[0],
+      port: API_ASYNC_HOST.split(':', 2)[1] || 80,
     },
   });
   app.all(/^\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
