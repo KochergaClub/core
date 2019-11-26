@@ -10,6 +10,7 @@ export type EventAnnounceTarget = 'vk' | 'fb' | 'timepad';
 export type EventImageType = 'default' | 'vk';
 export type TemplaterMode = 'html' | 'png';
 export type EventType = 'private' | 'public' | 'unknown';
+export type RegistrationType = 'native' | 'timepad';
 
 // tslint:disable:variable-name
 
@@ -43,6 +44,7 @@ export interface EventJSON {
   description?: string;
   summary?: string;
   type: EventType;
+  registration_type: RegistrationType;
   location?: string;
   start: string;
   end: string;
@@ -67,6 +69,7 @@ export interface EventJSON {
 export class Event extends EventShape {
   @observable id: string;
   @observable type: EventType;
+  @observable registration_type: RegistrationType;
 
   @observable start: string;
   @observable end: string;
@@ -94,6 +97,7 @@ export class Event extends EventShape {
     // set mandatory fields immediately
     this.id = json.id;
     this.type = json.type;
+    this.registration_type = json.registration_type;
     this.title = json.title;
 
     this.start = json.start;
@@ -333,6 +337,11 @@ export class Event extends EventShape {
   }
 
   @action
+  async setRegistrationType(registration_type: RegistrationType) {
+    await this._patch({ registration_type });
+  }
+
+  @action
   async invertType() {
     const oppositeTypes: { [key in EventType]: EventType } = {
       public: 'private',
@@ -354,9 +363,7 @@ export class Event extends EventShape {
 
     if (updatedEvent.id !== this.id) {
       throw new Error(
-        `Server returned the invalid event, let's panic (${
-          updatedEvent.id
-        } != ${this.id})`
+        `Server returned the invalid event, let's panic (${updatedEvent.id} != ${this.id})`
       );
     }
 
@@ -370,6 +377,7 @@ export class Event extends EventShape {
       'description',
       'summary',
       'type',
+      'registration_type',
       'location',
       'start',
       'end',

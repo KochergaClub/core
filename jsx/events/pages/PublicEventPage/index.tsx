@@ -32,9 +32,8 @@ import { ProjectPageType } from '~/projects/utils';
 import ProjectInfo from './ProjectInfo';
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
-import Registration from './Registration';
+import AnyRegistration from './AnyRegistration';
 import Map from './Map';
-// import TimepadRegistration from './TimepadRegistration';
 
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -80,7 +79,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
             <RegistrationSection ref={registrationRef}>
               <TL03 title="Регистрация" grey />
               <PaddedBlock>
-                <Registration event={event} ticket={ticket} />
+                <AnyRegistration event={event} ticket={ticket} />
               </PaddedBlock>
             </RegistrationSection>
             <section>
