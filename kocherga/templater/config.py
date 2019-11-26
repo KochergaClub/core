@@ -1,12 +1,14 @@
 class Field:
-    def __init__(self, name, value_type='str'):
+    def __init__(self, name, value_type='str', default=None):
         self.name = name
         self.value_type = value_type
+        self.default = default
 
     def to_dict(self):
         return {
             'name': self.name,
             'value_type': self.value_type,
+            'default': self.default,
         }
 
 
@@ -63,3 +65,13 @@ name2schema['integration-fb'] = Schema(
 )
 
 name2schema['og-image'] = Schema([])
+
+name2schema['training'] = Schema(
+    [
+        Field('date_text'),
+        Field('title'),
+        Field('title_scale', value_type='number', default=1),
+        Field('subtitle'),
+        Field('background_url'),
+    ],
+)

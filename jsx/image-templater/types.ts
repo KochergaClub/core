@@ -1,6 +1,7 @@
 interface Field {
   name: string;
   value_type: string;
+  default?: string;
 }
 
 interface Sizes {

@@ -48,6 +48,8 @@ class Template:
                 value = str(args[field.name])
                 if field.value_type == 'int':
                     value = int(value)
+                elif field.value_type == 'number':
+                    value = float(value)
                 props[field.name] = value
 
         props['url_root'] = settings.KOCHERGA_WEBSITE

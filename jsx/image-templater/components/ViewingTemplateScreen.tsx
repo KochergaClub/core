@@ -36,7 +36,7 @@ const state2link = ({
 const template2initialValues = (template: ImageTemplate) => {
   const result: { [k: string]: string } = {};
   template.schema.fields.forEach(field => {
-    result[field.name] = '';
+    result[field.name] = field.default || '';
   });
   return result;
 };
