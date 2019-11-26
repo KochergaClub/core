@@ -1,6 +1,6 @@
 interface Field {
   name: string;
-  value_type: string;
+  value_type: 'str' | 'int' | 'number' | 'date';
   default?: string;
 }
 

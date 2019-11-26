@@ -48,10 +48,17 @@ const validateValues = (template: ImageTemplate, values: FormState) => {
       case 'str':
         break;
       case 'int':
-        if (!values[field.name].length) {
+        if (!String(values[field.name]).length) {
           errors[field.name] = 'Обязательное поле';
-        } else if (!values[field.name].match(/^\d+$/)) {
+        } else if (!String(values[field.name]).match(/^\d+$/)) {
           errors[field.name] = 'Должно быть целым числом';
+        }
+        break;
+      case 'number':
+        if (!String(values[field.name]).length) {
+          errors[field.name] = 'Обязательное поле';
+        } else if (!String(values[field.name]).match(/^\d+(?:\.\d+)?$/)) {
+          errors[field.name] = 'Должно быть числом';
         }
         break;
       case 'date':
