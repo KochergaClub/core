@@ -41,6 +41,7 @@ class PublicEventSerializer(serializers.ModelSerializer):
             'end',
             'image',
             'project',
+            'registration_type',
         )
 
     image = serializers.SerializerMethodField()
@@ -104,6 +105,7 @@ class EventSerializer(serializers.ModelSerializer):
             'created',
             'creator',
             'type',
+            'registration_type',
             'timing_description_override',
 
             'announcements',
@@ -140,7 +142,7 @@ class EventSerializer(serializers.ModelSerializer):
                 'vk_group', 'fb_group',
                 'posted_timepad', 'posted_fb', 'posted_vk',
                 'timepad_prepaid_tickets', 'timepad_category_code',
-                'type',
+                'type', 'registration_type',
                 'ready_to_post',  # deprecated
                 'prototype_id',
                 'project_slug',

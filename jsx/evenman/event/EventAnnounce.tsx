@@ -106,6 +106,19 @@ export default class EventAnnounce extends React.Component<Props> {
             />
             <div>Разрешить предоплату билетов</div>
           </Row>
+
+          <Row gutter={4}>
+            <div>Нативная регистрация</div>
+            <Toggle
+              checked={event.registration_type === 'timepad'}
+              onChange={e =>
+                event.setRegistrationType(
+                  e.target.checked ? 'timepad' : 'native'
+                )
+              }
+            />
+            <div>Регистрация через Timepad</div>
+          </Row>
           <EditableOrElement
             title="Timepad"
             value={event.getAnnounceLink('timepad')}
