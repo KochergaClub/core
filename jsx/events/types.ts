@@ -7,8 +7,9 @@ interface CommonEventProps {
   announcements: {
     [key in AnnouncementKey]: {
       link: string;
-    }
+    };
   };
+  registration_type: 'native' | 'timepad';
 }
 
 export interface PublicEvent extends CommonEventProps {

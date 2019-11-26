@@ -161,6 +161,15 @@ class Event(models.Model):
         default="unknown"
     )
 
+    registration_type = models.CharField(
+        max_length=20,
+        choices=[
+            (x, x)
+            for x in ('native', 'timepad')
+        ],
+        default='native'
+    )
+
     image = models.CharField(max_length=32, null=True, blank=True)
 
     published = models.BooleanField(default=False)

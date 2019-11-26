@@ -41,6 +41,7 @@ class PublicEventSerializer(serializers.ModelSerializer):
             'end',
             'image',
             'project',
+            'registration_type',
         )
 
     image = serializers.SerializerMethodField()
@@ -104,6 +105,7 @@ class EventSerializer(serializers.ModelSerializer):
             'created',
             'creator',
             'type',
+            'registration_type',
             'timing_description_override',
 
             'announcements',
