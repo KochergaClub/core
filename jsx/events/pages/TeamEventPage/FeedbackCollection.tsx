@@ -18,7 +18,9 @@ import { CreateFeedbackParams } from '~/events/types';
 
 import shapes from '~/shapes';
 
-const feedbackShape: FormShape = shapes.events.feedback;
+const feedbackShape: FormShape = shapes.events.feedback.filter(
+  f => f.name !== 'event_id' && f.name !== 'id'
+);
 
 const DeleteFeedback: React.FC<{ feedback: Feedback; event_id: string }> = ({
   feedback,

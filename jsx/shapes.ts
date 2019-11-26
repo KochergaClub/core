@@ -3,6 +3,17 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
   "events": {
     "feedback": [
       {
+        "name": "id",
+        "optional": true,
+        "title": "ID",
+        "type": "number",
+        "readonly": true
+      },
+      {
+        "name": "event_id",
+        "type": "string"
+      },
+      {
         "name": "overall_score",
         "optional": true,
         "title": "Насколько вам понравилось мероприятие в целом?",
@@ -81,6 +92,54 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "optional": true,
         "title": "Что можно улучшить?",
         "type": "string"
+      }
+    ],
+    "event": [
+      {
+        "name": "uuid",
+        "optional": false,
+        "title": "uuid",
+        "type": "string"
+      },
+      {
+        "name": "title",
+        "optional": false,
+        "title": "title",
+        "type": "string"
+      },
+      {
+        "name": "summary",
+        "optional": true,
+        "title": "summary",
+        "type": "string"
+      },
+      {
+        "name": "start",
+        "optional": false,
+        "title": "start",
+        "type": "string"
+      },
+      {
+        "name": "end",
+        "optional": false,
+        "title": "end",
+        "type": "string"
+      },
+      {
+        "name": "project",
+        "optional": true,
+        "title": "project",
+        "type": "number"
+      },
+      {
+        "name": "registration_type",
+        "optional": false,
+        "title": "registration type",
+        "type": "choice",
+        "options": [
+          "native",
+          "timepad"
+        ]
       }
     ]
   }
