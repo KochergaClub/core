@@ -1,42 +1,34 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { Formik, Field, FieldProps, Form, ErrorMessage } from 'formik';
 import styled from 'styled-components';
 
+import { useRouter } from 'next/router';
+import { ParsedUrlQuery } from 'querystring';
 import Link from 'next/link';
+
+import { Formik, Field, FieldProps, Form, ErrorMessage } from 'formik';
 
 import { A, Column, Label, Input, Row, colors } from '@kocherga/frontkit';
 
 import { selectViewingTemplate } from '../selectors';
 import { ImageTemplate } from '../types';
+import { FormState, state2link } from '../utils';
+
+import Preview from './Preview';
 
 interface Props {}
 
-type FormState = { [k: string]: string };
-
-const jsonToQueryString = (json: { [k: string]: string }) => {
-  return (
-    '?' +
-    Object.keys(json)
-      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(json[key]))
-      .join('&')
-  );
-};
-
-const state2link = ({
-  name,
-  state,
-  type,
-}: {
-  name: string;
-  state: FormState;
-  type: 'html' | 'png';
-}) => `/api/templater/${name}/${type}` + jsonToQueryString(state);
-
-const template2initialValues = (template: ImageTemplate) => {
+const template2initialValues = (
+  template: ImageTemplate,
+  query: ParsedUrlQuery
+) => {
   const result: { [k: string]: string } = {};
   template.schema.fields.forEach(field => {
-    result[field.name] = field.default || '';
+    let value = field.default;
+    const queryValue = query[field.name];
+    if (queryValue) {
+      value = Array.isArray(queryValue) ? queryValue[0] : queryValue;
+    }
+    result[field.name] = value || '';
   });
   return result;
 };
@@ -88,12 +80,9 @@ const Fields = ({ template }: { template: ImageTemplate }) => {
         <div key={field.name}>
           <Label>{field.name}</Label>
           <CenteredRow gutter={16}>
-            <Field
-              name={field.name}
-              render={({ field }: FieldProps<any>) => (
-                <Input {...field} type="text" />
-              )}
-            />
+            <Field name={field.name}>
+              {({ field }: FieldProps<any>) => <Input {...field} type="text" />}
+            </Field>
             <ErrorMessage name={field.name} component={ErrorLabel} />
           </CenteredRow>
         </div>
@@ -102,23 +91,9 @@ const Fields = ({ template }: { template: ImageTemplate }) => {
   );
 };
 
-const Preview: React.FC<{ state: FormState; template: ImageTemplate }> = ({
-  state,
-  template,
-}) => {
-  const src = state2link({
-    name: template.name,
-    state,
-    type: 'html',
-  });
-
-  const { width, height } = template.sizes;
-
-  return <iframe src={src} style={{ width, height, border: 0 }} />;
-};
-
 const ViewingTemplateScreen: React.FC<Props> = ({}) => {
   const template = useSelector(selectViewingTemplate);
+  const router = useRouter();
 
   if (!template) {
     throw new Error('Internal logic error');
@@ -132,31 +107,36 @@ const ViewingTemplateScreen: React.FC<Props> = ({}) => {
       <h2>{template.name}</h2>
       <Column>
         <Formik
-          initialValues={template2initialValues(template)}
+          initialValues={template2initialValues(template, router.query)}
           onSubmit={() => null}
           validate={values => validateValues(template, values)}
         >
-          {({ values, isValid }) => (
-            <Form>
-              <Column>
-                <Fields template={template} />
-                {(isValid || !template.schema.fields.length) && (
-                  <Column centered>
-                    <Preview state={values} template={template} />
-                    <A
-                      href={state2link({
-                        name: template.name,
-                        state: values,
-                        type: 'png',
-                      })}
-                    >
-                      Скачать png
-                    </A>
-                  </Column>
-                )}
-              </Column>
-            </Form>
-          )}
+          {({ values, isValid }) => {
+            console.log(router.route);
+            console.log(router.pathname);
+            // router.push(router.href, router.as, { shallow: true });
+            return (
+              <Form>
+                <Column>
+                  <Fields template={template} />
+                  {(isValid || !template.schema.fields.length) && (
+                    <Column centered>
+                      <Preview state={values} template={template} />
+                      <A
+                        href={state2link({
+                          name: template.name,
+                          state: values,
+                          type: 'png',
+                        })}
+                      >
+                        Скачать png
+                      </A>
+                    </Column>
+                  )}
+                </Column>
+              </Form>
+            );
+          }}
         </Formik>
       </Column>
     </div>
