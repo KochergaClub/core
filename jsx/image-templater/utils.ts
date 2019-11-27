@@ -1,6 +1,6 @@
 export type FormState = { [k: string]: string };
 
-const jsonToQueryString = (json: { [k: string]: string }) => {
+export const jsonToQueryString = (json: { [k: string]: string }) => {
   return (
     '?' +
     Object.keys(json)

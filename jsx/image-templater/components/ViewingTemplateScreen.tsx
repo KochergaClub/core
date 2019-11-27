@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -11,7 +12,7 @@ import { A, Column, Label, Input, Row, colors } from '@kocherga/frontkit';
 
 import { selectViewingTemplate } from '../selectors';
 import { ImageTemplate } from '../types';
-import { FormState, state2link } from '../utils';
+import { FormState, state2link, jsonToQueryString } from '../utils';
 
 import Preview from './Preview';
 
@@ -99,6 +100,17 @@ const ViewingTemplateScreen: React.FC<Props> = ({}) => {
     throw new Error('Internal logic error');
   }
 
+  const validate = useCallback(
+    (values: { [k: string]: string }) => {
+      validateValues(template, values);
+
+      const path = router.asPath.split('?')[0];
+      const query = jsonToQueryString(values);
+      window.history.replaceState(window.history.state, '', path + query);
+    },
+    [template, router]
+  );
+
   return (
     <div>
       <Link href="/team/image-templater" passHref>
@@ -109,12 +121,9 @@ const ViewingTemplateScreen: React.FC<Props> = ({}) => {
         <Formik
           initialValues={template2initialValues(template, router.query)}
           onSubmit={() => null}
-          validate={values => validateValues(template, values)}
+          validate={validate}
         >
           {({ values, isValid }) => {
-            console.log(router.route);
-            console.log(router.pathname);
-            // router.push(router.href, router.as, { shallow: true });
             return (
               <Form>
                 <Column>
