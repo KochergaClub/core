@@ -46,7 +46,7 @@ test-js:
       bash -c "
         npx jest --no-watchman --coverage
         && ls -l
-        && codecov -F js
+        && bash <(curl -s https://codecov.io/bash)
       "
 
 test-python:
@@ -59,7 +59,7 @@ test-python:
       --rm api
       bash -c "
         pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow' --cov=kocherga
-        && codecov -F python
+        && bash <(curl -s https://codecov.io/bash)
       "
 
 deploy-stack:
