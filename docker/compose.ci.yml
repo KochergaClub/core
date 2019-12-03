@@ -1,8 +1,8 @@
 version: '3.4'
 
-x-common:
-  &common
-  image: registry.gitlab.com/kocherga/core:${TAG}
+x-backend:
+  &backend
+  image: registry.gitlab.com/kocherga/core/backend:${TAG}
   volumes:
     - ../data:/data
   environment:
@@ -10,6 +10,15 @@ x-common:
     DB_NAME: 'kocherga'
     DB_USER: 'root'
     DB_PASSWORD: ''
+  cap_add:
+    - SYS_PTRACE
+
+x-frontend:
+  &frontend
+  image: registry.gitlab.com/kocherga/core/frontend:${TAG}
+  volumes:
+    - ../data:/data
+  environment:
     NODE_ENV: 'production'
   cap_add:
     - SYS_PTRACE
@@ -37,7 +46,7 @@ services:
       - "127.0.0.1:6379:6379"
 
   api:
-    << : *common
+    << : *backend
     command: ./manage.py runserver --noreload 0.0.0.0:80
     ports:
       - "127.0.0.1:8000:80"
@@ -48,5 +57,5 @@ services:
       - redis
 
   render-server:
-    << : *common
+    << : *frontend
     command: bash -c 'cd jsx && node ./render/server/index.js'

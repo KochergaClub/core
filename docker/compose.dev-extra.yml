@@ -1,15 +1,12 @@
 version: '3.4'
 
-x-environment: &environment
-  DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
-
 x-common: &common
   image: registry.gitlab.com/kocherga/core:dev
   volumes:
     - ..:/code
     - ../data/volume:/data
   environment:
-    <<: *environment
+    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
 
 services:
   worker:
@@ -23,8 +20,6 @@ services:
     command: ./scripts/importer.py
     ports:
       - "127.0.0.1:5303:8000" # for prometheus metrics
-    environment:
-      << : *environment
       NO_DJANGO_PROMETHEUS: 1
     depends_on:
       - db

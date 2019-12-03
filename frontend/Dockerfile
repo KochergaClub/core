@@ -13,20 +13,7 @@ ARG NPM_TOKEN
 RUN npm config set registry https://npm.team.kocherga.club/ \
     && echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
 
-RUN pip install --upgrade pip && pip install pip-tools
-
-RUN apt-get install -y inotify-tools && \
-    git clone https://github.com/facebook/watchman.git /tmp/watchman-src && \
-    cd /tmp/watchman-src && \
-    git checkout v4.9.0 && \
-    ./autogen.sh && ./configure && make && make install && rm -rf /tmp/watchman-src
-
 WORKDIR /code
-COPY prepare_solver_linux.sh /code/
-RUN ./prepare_solver_linux.sh
-
-COPY requirements.txt /code/
-RUN pip-sync
 
 COPY package.json package-lock.json /code/
 RUN npm ci
