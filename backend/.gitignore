@@ -1,0 +1,13 @@
+.ipynb_checkpoints
+__pycache__
+/.pytest_cache
+/.mypy_cache
+
+/minizinc
+/upload/event_image
+/upload/mailchimp
+/notebooks/scratch.ipynb
+/collected_static
+/data/
+/static/dist
+/.coverage

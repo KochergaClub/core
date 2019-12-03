@@ -1,0 +1,13 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+  - image: registry.gitlab.com/kocherga/core/backend
+    kaniko:
+      buildContext:
+        localDir: {}
+  cluster: {}
+deploy:
+  kubectl:
+    manifests:
+      - k8s-*
