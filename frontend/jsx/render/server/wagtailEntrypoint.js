@@ -5,6 +5,8 @@ const wagtailRoutes = [
   '/preview',
   '/blog',
   '/blog/*',
+  '/faq',
+  '/faq/*',
   '/projects',
   '/projects/*',
   '/team/ratio/workbooks',

@@ -1,22 +1,19 @@
 export TOKEN=$(shell cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}')
 
-image:
-		docker build -f docker/Dockerfile --build-arg NPM_TOKEN=$$TOKEN -t registry.gitlab.com/kocherga/core:dev .
-
 ##### Dev environment #####
 init-dev:
 	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
 
-dev-mixed: image
+dev-mixed:
 	nf start -j ./docker/Procfile.mixed
 
-dev-mac: image
+dev-mac:
 	docker-sync-stack start
 
-dev: image
+dev:
 	docker-compose -f docker/compose.dev.yml up
 
-dev-full: image
+dev-full:
 	docker-compose -f docker/compose.dev.yml -f docker/compose.dev-extra.yml up
 
 ##### Tests #####
@@ -65,6 +62,6 @@ kassa_localtunnel:
 	npx lt --port 8000 --subdomain kassa --host https://lt.berekuk.ru
 
 update_requirements:
-	docker cp requirements.in docker_api_1:/code/requirements.in
+	docker cp backend/requirements.in docker_api_1:/code/requirements.in
 	docker-compose -f docker/compose.dev.yml exec api pip-compile
-	docker cp docker_api_1:/code/requirements.txt ./requirements.txt
+	docker cp docker_api_1:/code/requirements.txt ./backend/requirements.txt

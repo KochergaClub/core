@@ -107,8 +107,13 @@ class MyApp extends App<MyProps> {
     const { Component, pageProps, store, errorCode } = this.props;
 
     if (errorCode) {
-      return <Error statusCode={errorCode} />;
+      return (
+        <Provider store={store}>
+          <Error statusCode={errorCode} />
+        </Provider>
+      );
     }
+
     return (
       <Provider store={store}>
         <Component {...pageProps} />

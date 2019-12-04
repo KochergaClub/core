@@ -10,6 +10,7 @@ import BlockBasedPage from '~/wagtail/wagtail/BlockBasedPage';
 import * as RatioPages from '~/ratio/wagtail';
 import * as BlogPages from '~/blog/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
+import * as FAQPages from '~/faq/wagtail';
 
 import { selectAPI } from '~/core/selectors';
 
@@ -41,6 +42,9 @@ const getWagtailScreen = (meta_type: string) => {
       return ProjectsPages.ProjectPage;
     case 'projects.ProjectIndexPage':
       return ProjectsPages.ProjectIndexPage;
+
+    case 'faq.FAQPage':
+      return FAQPages.FAQPage;
 
     default:
       return null;

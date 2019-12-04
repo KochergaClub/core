@@ -1,17 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
+import { ParentLinkInHeader } from '~/components';
 
 import PageHeader from './PageHeader';
-
-const SectionLink = styled.a`
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-
-  color: black;
-  text-decoration: none;
-`;
 
 interface Props {
   title: string;
@@ -26,6 +15,8 @@ export default function ItemPageHeader({
   sectionLink,
   children,
 }: Props) {
-  const top = <SectionLink href={sectionLink}>{sectionTitle}</SectionLink>;
+  const top = (
+    <ParentLinkInHeader href={sectionLink}>{sectionTitle}</ParentLinkInHeader>
+  );
   return <PageHeader top={top} bottom={children} title={title} />;
 }

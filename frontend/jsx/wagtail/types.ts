@@ -5,6 +5,7 @@ export interface WagtailPageProps {
   meta: {
     type: string;
     slug: string;
+    html_url: string;
   };
 
   // This field doesn't come from the server, we fill it in pages/wagtail-any.

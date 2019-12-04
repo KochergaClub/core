@@ -1,8 +1,5 @@
-import React from 'react';
-
-import styled from 'styled-components';
-
 import Page from '~/components/Page';
+import PaddedBlock from '~/components/PaddedBlock';
 import { selectAPI } from '~/core/selectors';
 
 import PageHeader from '~/blocks/PageHeader';
@@ -24,12 +21,6 @@ export interface ExtraProps {
   postSummaries: BlogPostSummary[];
 }
 
-const ListContainer = styled.div`
-  max-width: 640px;
-  margin: 40px auto 0;
-  padding: 0 20px;
-`;
-
 const BlogIndexPage: NextWagtailPage<PageType, ExtraProps> = props => {
   return (
     <Page title={props.wagtailPage.title}>
@@ -38,11 +29,11 @@ const BlogIndexPage: NextWagtailPage<PageType, ExtraProps> = props => {
         bottom={props.wagtailPage.subtitle}
       />
       <Page.Main>
-        <ListContainer>
+        <PaddedBlock width="small">
           {props.postSummaries.map((summary, i) => (
             <Summary key={i} {...summary} />
           ))}
-        </ListContainer>
+        </PaddedBlock>
       </Page.Main>
     </Page>
   );
@@ -55,9 +46,7 @@ BlogIndexPage.getInitialProps = async ({
   const api = selectAPI(getState());
 
   const json = await api.callWagtail(
-    `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${
-      wagtailPage.id
-    }&order=-date`
+    `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${wagtailPage.id}&order=-date`
   );
 
   const summaries = json['items'] as BlogPostSummary[];

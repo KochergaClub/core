@@ -200,4 +200,4 @@ zipp==0.6.0               # via importlib-metadata
 zope.interface==4.6.0     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.6.0        # via apscheduler, ipython, jsonschema, kiwisolver, markdown, pyhamcrest, zope.interface
+# setuptools
