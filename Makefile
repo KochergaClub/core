@@ -1,19 +1,22 @@
 export TOKEN=$(shell cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}')
 
+image:
+	docker-compose -f docker/compose.dev.yml build
+
 ##### Dev environment #####
 init-dev:
 	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
 
-dev-mixed:
+dev-mixed: image
 	nf start -j ./docker/Procfile.mixed
 
-dev-mac:
+dev-mac: image
 	docker-sync-stack start
 
-dev:
+dev: image
 	docker-compose -f docker/compose.dev.yml up
 
-dev-full:
+dev-full: image
 	docker-compose -f docker/compose.dev.yml -f docker/compose.dev-extra.yml up
 
 ##### Tests #####
