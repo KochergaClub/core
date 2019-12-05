@@ -9,6 +9,7 @@ import EntryIndexBlock from '../components/EntryIndexBlock';
 import SubpagesBlock from '../components/SubpagesBlock';
 import FAQPageHeader from '../components/FAQPageHeader';
 import NavigationBlock from '../components/NavigationBlock';
+import NoEntriesBlock from '../components/NoEntriesBlock';
 
 export interface PageType extends WagtailPageProps {
   meta_type: 'faq.FAQPage';
@@ -29,7 +30,11 @@ const FAQPage: NextWagtailPage<PageType, ExtraProps> = props => {
       <Page.Main>
         <SubpagesBlock subpages={props.subpages} />
         <EntryIndexBlock entries={props.entries} />
-        <EntryListBlock entries={props.entries} />
+        {props.entries.length ? (
+          <EntryListBlock entries={props.entries} />
+        ) : !props.subpages.length ? (
+          <NoEntriesBlock />
+        ) : null}
         <NavigationBlock wagtailPage={props.wagtailPage} />
       </Page.Main>
     </Page>

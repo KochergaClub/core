@@ -22,10 +22,6 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => (
 );
 
 const EntryList: React.FC<Props> = ({ entries }) => {
-  if (!entries.length) {
-    return <em>Вопросов в этом FAQ пока нет.</em>;
-  }
-
   return (
     <div>
       {entries.map(entry => (
