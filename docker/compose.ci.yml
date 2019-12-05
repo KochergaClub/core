@@ -4,7 +4,7 @@ x-backend:
   &backend
   image: registry.gitlab.com/kocherga/core/backend:${TAG}
   volumes:
-    - ../backend/data/volume:/data
+    - ../backend/data:/data
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.ci'
     DB_NAME: 'kocherga'
@@ -17,7 +17,7 @@ x-frontend:
   &frontend
   image: registry.gitlab.com/kocherga/core/frontend:${TAG}
   volumes:
-    - ../backend/data/volume:/data
+    - ../backend/data:/data
   environment:
     NODE_ENV: 'production'
   cap_add:
