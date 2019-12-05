@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'wagtail.sites',
     'wagtailmath',
     'wagtailgeowidget',
+    'condensedinlinepanel',
 
     'kocherga.wagtail',
 

@@ -47,11 +47,13 @@ pyshell:
 	docker-compose -f docker/compose.dev.yml exec api ./manage.py shell
 
 deploy_prod_secrets:
-	scp kocherga/django/settings/prod_secrets.py kocherga.club: && ssh kocherga.club 'sudo mv prod_secrets.py /config/secrets.py && sudo chown root:root /config/secrets.py && sudo chmod 600 /config/secrets.py'
+	scp backend/kocherga/django/settings/prod_secrets.py kocherga.club:
+	ssh kocherga.club 'sudo mv prod_secrets.py /config/secrets.py && sudo chown root:root /config/secrets.py && sudo chmod 600 /config/secrets.py'
+	ssh kocherga.club 'docker restart docker_api_1'
 
 update_npm_packages:
-	docker cp package.json docker_render-server_1:/code/package.json
-	docker cp package-lock.json docker_render-server_1:/code/package-lock.json
+	docker cp frontend/package.json docker_render-server_1:/code/package.json
+	docker cp frontend/package-lock.json docker_render-server_1:/code/package-lock.json
 	docker exec -it docker_render-server_1 npm i
 	docker restart docker_render-server_1
 
@@ -64,4 +66,5 @@ kassa_localtunnel:
 update_requirements:
 	docker cp backend/requirements.in docker_api_1:/code/requirements.in
 	docker-compose -f docker/compose.dev.yml exec api pip-compile
+	docker-compose -f docker/compose.dev.yml exec api pip-sync
 	docker cp docker_api_1:/code/requirements.txt ./backend/requirements.txt

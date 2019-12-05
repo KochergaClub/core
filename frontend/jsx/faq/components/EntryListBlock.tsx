@@ -21,12 +21,26 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => (
   </div>
 );
 
-const EntryListBlock: React.FC<Props> = ({ entries }) => (
-  <PaddedBlock>
-    {entries.map(entry => (
-      <EntryCard entry={entry} />
-    ))}
-  </PaddedBlock>
-);
+const EntryList: React.FC<Props> = ({ entries }) => {
+  if (!entries.length) {
+    return <em>Вопросов в этом FAQ пока нет.</em>;
+  }
+
+  return (
+    <div>
+      {entries.map(entry => (
+        <EntryCard entry={entry} />
+      ))}
+    </div>
+  );
+};
+
+const EntryListBlock: React.FC<Props> = props => {
+  return (
+    <PaddedBlock>
+      <EntryList {...props} />
+    </PaddedBlock>
+  );
+};
 
 export default EntryListBlock;
