@@ -1,24 +1,31 @@
 version: '3.4'
 
-x-environment: &environment
-  DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
-  DB_NAME: 'kocherga'
-  DB_USER: 'root'
-  DB_PASSWORD: ''
-  NODE_ENV: 'development'
-  prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
-  DJANGO_WATCHMAN_TIMEOUT: 60
-
-x-common: &common
-  image: registry.gitlab.com/kocherga/core:dev
+x-backend:
+  &backend
+  image: registry.gitlab.com/kocherga/core/backend:dev
   volumes:
-    # mac volumes are managed with docker-sync for better performance and inotify fixes
-    - code-jsx:/code/jsx:nocopy
     - code-py:/code/kocherga:nocopy
     - code-pytest:/code/tests:nocopy
     - data:/data:nocopy
   environment:
-    <<: *environment
+    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+    DB_NAME: 'kocherga'
+    DB_USER: 'root'
+    DB_PASSWORD: ''
+    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+    DJANGO_WATCHMAN_TIMEOUT: 60
+  cap_add:
+    - SYS_PTRACE
+
+x-frontend:
+  &frontend
+  image: registry.gitlab.com/kocherga/core/frontend:dev
+  volumes:
+    - code-jsx:/code/jsx:nocopy
+    - data:/data:nocopy
+  environment:
+    NODE_ENV: 'development'
+    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
   cap_add:
     - SYS_PTRACE
 
@@ -29,7 +36,7 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: kocherga
     volumes:
-      - ../data/db-volume:/var/lib/mysql
+      - ../backend/data/db-volume:/var/lib/mysql
       - ../mysql.conf.d:/etc/mysql/conf.d
 
   chrome:
@@ -49,12 +56,10 @@ services:
       - "127.0.0.1:6379:6379"
 
   api:
-    << : *common
+    << : *backend
     build:
-      context: ..
-      dockerfile: ./docker/Dockerfile
-      args:
-        NPM_TOKEN: ${TOKEN}
+      context: ../backend
+      dockerfile: ./Dockerfile
     command: ./manage.py runserver 0.0.0.0:80
     ports:
       - "127.0.0.1:8001:80"
@@ -62,19 +67,28 @@ services:
       - db
       - chrome
       - redis
-      - tor
     restart: always
 
   channels-worker:
-    << : *common
+    << : *backend
     command: ./scripts/channels-worker.sh
     depends_on:
       - db
       - redis
     restart: always
 
-  tor:
-    image: dperson/torproxy
+  render-server:
+    << : *frontend
+    build:
+      context: ../frontend
+      dockerfile: ./Dockerfile
+      args:
+        NPM_TOKEN: ${TOKEN}
+    command: bash -c 'cd jsx && node ./render/server/index.js'
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:8000:80"
 
 volumes:
   code-jsx:

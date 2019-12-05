@@ -4,20 +4,20 @@ options:
   compose-file-path: 'docker/compose.dev-mac.yml'
 syncs:
   data:
-    src: 'data/volume'
+    src: 'backend/data/volume'
   code-jsx:
     notify_terminal: true
-    src: './jsx'
+    src: './frontend/jsx'
     sync_excludes_type: 'none'
   code-py:
     notify_terminal: true
-    src: './kocherga'
+    src: './backend/kocherga'
     sync_excludes:
       - 'Name __pycache__'
     sync_excludes_type: 'none'
   code-pytest:
     notify_terminal: true
-    src: './tests'
+    src: './backend/tests'
     sync_excludes:
       - 'Name __pycache__'
     sync_excludes_type: 'none'

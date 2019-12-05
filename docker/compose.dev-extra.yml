@@ -1,32 +1,55 @@
 version: '3.4'
 
-x-common: &common
-  image: registry.gitlab.com/kocherga/core:dev
+x-backend:
+  &backend
+  image: registry.gitlab.com/kocherga/core/backend:dev
   volumes:
-    - ..:/code
-    - ../data/volume:/data
+    - ../backend/kocherga:/code/kocherga
+    - ../backend/tests:/code/tests
+    - ../backend/data/volume:/data
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+    DB_NAME: 'kocherga'
+    DB_USER: 'root'
+    DB_PASSWORD: ''
+    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+    DJANGO_WATCHMAN_TIMEOUT: 60
+  cap_add:
+    - SYS_PTRACE
+
+x-frontend:
+  &frontend
+  image: registry.gitlab.com/kocherga/core/frontend:dev
+  volumes:
+    - ../frontend/jsx:/code/jsx
+    - ../backend/data/volume:/data
+  environment:
+    NODE_ENV: 'development'
+    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+  cap_add:
+    - SYS_PTRACE
 
 services:
   worker:
-    << : *common
+    << : *backend
     command: ./scripts/worker.py
     depends_on:
       - db
 
   importer:
-    << : *common
+    << : *backend
     command: ./scripts/importer.py
     ports:
       - "127.0.0.1:5303:8000" # for prometheus metrics
+    environment:
+      DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
       NO_DJANGO_PROMETHEUS: 1
     depends_on:
       - db
     restart: always
 
   tgbot:
-    << : *common
+    << : *backend
     command: ./scripts/tgbot.py
     depends_on:
       - db
@@ -36,7 +59,7 @@ services:
     image: dperson/torproxy
 
   ludwig:
-    << : *common
+    << : *backend
     command: ./scripts/ludwig.py
     ports:
       - "5200:80"
@@ -44,7 +67,7 @@ services:
       - db
 
   ludwig_lt:
-    << : *common
+    << : *frontend
     command: npx lt --port 80 --subdomain kocherga-dev --local-host ludwig
     depends_on:
       - ludwig
