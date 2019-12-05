@@ -184,6 +184,7 @@ tzlocal==2.0.0            # via apscheduler
 unidecode==1.1.1          # via wagtail
 uritemplate==3.0.0        # via google-api-python-client
 urllib3==1.25.3           # via botocore, requests, sentry-sdk
+wagtail-condensedinlinepanel==0.5.2
 wagtail==2.7
 wagtailgeowidget==5.0.2
 git+https://github.com/berekuk/wagtailmath.git@master

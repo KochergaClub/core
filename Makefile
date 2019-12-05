@@ -64,4 +64,5 @@ kassa_localtunnel:
 update_requirements:
 	docker cp backend/requirements.in docker_api_1:/code/requirements.in
 	docker-compose -f docker/compose.dev.yml exec api pip-compile
+	docker-compose -f docker/compose.dev.yml exec api pip-sync
 	docker cp docker_api_1:/code/requirements.txt ./backend/requirements.txt

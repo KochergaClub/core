@@ -1,10 +1,12 @@
 from django.db import models
 
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
 from wagtail.api import APIField
 from modelcluster.fields import ParentalKey
+
+from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
@@ -17,7 +19,7 @@ class FAQPage(HeadlessPreviewMixin, Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('summary'),
-        InlinePanel('entries', label="Вопросы и ответы"),
+        CondensedInlinePanel('entries', label="Вопросы и ответы"),
     ]
 
     api_fields = [
