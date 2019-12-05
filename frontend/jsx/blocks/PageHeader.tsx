@@ -1,7 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors, fonts } from '@kocherga/frontkit';
+import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
 
 const Container = styled.div`
   background-color: ${colors.grey[100]};
@@ -21,9 +21,17 @@ const Bottom = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 64px;
-  line-height: 1.2;
   margin: 24px 0;
+  line-height: 1.2;
+
+  font-size: ${fonts.sizes.XXL};
+
+  ${deviceMediaQueries.mobile(`
+font-size: ${fonts.sizes.L};
+`)}
+  ${deviceMediaQueries.tablet(`
+font-size: ${fonts.sizes.XL};
+`)}
 `;
 
 interface Props {
