@@ -1,9 +1,9 @@
 export const footerParts = [
   {
-    title: 'Антикафе',
+    title: 'Пространство',
     items: [
-      { link: '/space/', title: 'Пространство' },
-      { link: '/pricing/', title: 'Цены' },
+      { link: '/space', title: 'Пространство' },
+      { link: '/pricing', title: 'Цены' },
       { link: '/now', title: 'Сколько человек сейчас' },
       { link: 'https://booking.kocherga.club', title: 'Форма брони' },
       { link: '/events', title: 'Мероприятия' },
@@ -12,8 +12,8 @@ export const footerParts = [
   {
     title: 'Рациональность',
     items: [
-      { link: '/workshop/', title: 'Воркшопы' },
-      { link: '/rationality/formats/', title: 'Форматы' },
+      { link: '/workshop/country', title: 'Воркшопы' },
+      { link: '/rationality/formats', title: 'Форматы' },
       { link: 'https://lesswrong.ru', title: 'Lesswrong.ru' },
     ],
   },
