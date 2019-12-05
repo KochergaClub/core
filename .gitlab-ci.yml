@@ -54,7 +54,7 @@ test-python:
   variables:
     TAG: $CI_COMMIT_REF_NAME
   script:
-    - mkdir -p data/upload/mailchimp data/upload/assets data/upload/fonts data/upload/images
+    - mkdir -p backend/data/upload/{mailchimp,assets,fonts,images}
     - docker-compose -f docker/compose.ci.yml run $pass_env
       --rm api
       bash -c "
