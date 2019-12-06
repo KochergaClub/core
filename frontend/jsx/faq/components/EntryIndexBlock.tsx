@@ -1,6 +1,6 @@
 import { A } from '@kocherga/frontkit';
 
-import PaddedBlock from '~/components/PaddedBlock';
+import { PaddedBlock } from '~/components';
 
 import { Entry } from '../types';
 
@@ -17,7 +17,7 @@ const EntryLink: React.FC<{ entry: Entry }> = ({ entry }) => (
 const EntryIndexBlock: React.FC<Props> = ({ entries }) => (
   <PaddedBlock>
     {entries.map(entry => (
-      <EntryLink entry={entry} />
+      <EntryLink key={entry.id} entry={entry} />
     ))}
   </PaddedBlock>
 );
