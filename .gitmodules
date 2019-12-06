@@ -1,0 +1,6 @@
+[submodule "backend/stubs/sqlalchemy-stubs"]
+	path = backend/stubs/sqlalchemy-stubs
+	url = https://github.com/JelleZijlstra/sqlalchemy-stubs
+[submodule "backend/mm-bot-model"]
+	path = backend/mm-bot-model
+	url = https://gitlab.com/kocherga-public/mm-dating-matcher-minizn.git
