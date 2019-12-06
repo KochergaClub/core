@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { useRouter } from 'next/router';
-
 import {
   GoogleAnalyticsScript,
   FacebookPixelScript,
@@ -57,8 +55,6 @@ const Whitespace = styled.div`
 `;
 
 const Page: PageType = props => {
-  const router = useRouter();
-
   const renderContent = () => {
     const chrome = props.chrome || 'default';
     const showMenu = chrome !== 'none';
@@ -94,7 +90,6 @@ const Page: PageType = props => {
         title={props.title}
         description={props.description}
         og={props.og || {}}
-        url={router.pathname}
       />
       {props.noAnalytics || (
         <React.Fragment>
