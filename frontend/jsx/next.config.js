@@ -1,4 +1,10 @@
-module.exports = {
+const webpack = require('webpack');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
   webpack: (config, options) => {
     config.resolve.alias['~'] = __dirname;
 
@@ -6,6 +12,8 @@ module.exports = {
     if (!options.isServer) {
       config.resolve.alias['@sentry/node'] = '@sentry/browser';
     }
+
+    config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
     return config;
   },
@@ -34,4 +42,4 @@ module.exports = {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,
   },
-};
+});
