@@ -12,7 +12,7 @@ import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import UserInfo from '~/audit/components/UserInfo';
 
 import { Payment } from '../types';
-import { loadPayments } from '../actions';
+import { loadPayments } from '../features/payment';
 
 const PaymentCard = ({ payment }: { payment: Payment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);

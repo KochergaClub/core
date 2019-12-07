@@ -4,7 +4,7 @@ import { loadMembers } from '~/staff/actions';
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
-import { loadPayments } from '~/cashier/actions';
+import { loadPayments } from '~/cashier/features/payment';
 
 import PaymentCollection from '~/cashier/components/PaymentCollection';
 

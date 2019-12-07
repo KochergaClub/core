@@ -7,8 +7,7 @@ import Collection from '~/components/collections/Collection';
 import CardListView from '~/components/collections/CardListView';
 import { FormShape } from '~/components/forms/types';
 
-import { addPayment } from '../actions';
-import { selectPayments } from '../selectors';
+import { addPayment, selectPayments } from '../features/payment';
 import { Payment, CreatePaymentParams } from '../types';
 
 import PaymentCard from './PaymentCard';
