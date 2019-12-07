@@ -10,7 +10,7 @@ import { Formik, Field, FieldProps, Form, ErrorMessage } from 'formik';
 
 import { A, Column, Label, Input, Row, colors } from '@kocherga/frontkit';
 
-import { selectViewingTemplate } from '../selectors';
+import { selectTemplate } from '../features/templateItem';
 import { ImageTemplate } from '../types';
 import { FormState, state2link, jsonToQueryString } from '../utils';
 
@@ -93,7 +93,7 @@ const Fields = ({ template }: { template: ImageTemplate }) => {
 };
 
 const ViewingTemplateScreen: React.FC<Props> = ({}) => {
-  const template = useSelector(selectViewingTemplate);
+  const template = useSelector(selectTemplate);
   const router = useRouter();
 
   if (!template) {

@@ -1,9 +1,8 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Column } from '@kocherga/frontkit';
 
-import { selectTemplates } from '../selectors';
+import { selectTemplates } from '../features/templates';
 
 import TemplateCard from './TemplateCard';
 

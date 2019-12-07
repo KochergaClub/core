@@ -20,7 +20,7 @@ const reducer = combineReducers({
   watchmen: watchmenReducer,
   my: myReducer,
   core: coreReducer,
-  imageTemplater: imageTemplaterReducer,
+  'image-templater': imageTemplaterReducer,
   ratio: ratioReducer,
   kkm: kkmReducer,
   cashier: cashierReducer,
