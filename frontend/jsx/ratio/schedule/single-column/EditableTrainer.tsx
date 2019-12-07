@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
@@ -6,7 +5,7 @@ import styled from 'styled-components';
 import Picker from '~/components/Picker';
 import { useExpandable } from '~/common/hooks';
 
-import { selectTrainers } from '~/ratio/selectors';
+import { selectTrainers } from '~/ratio/features/trainers';
 import { Trainer } from '~/ratio/types';
 
 interface Props {

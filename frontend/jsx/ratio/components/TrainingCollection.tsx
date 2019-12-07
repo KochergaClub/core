@@ -10,10 +10,8 @@ import CardListView from '~/components/collections/CardListView';
 
 import { FormShape } from '~/components/forms/types';
 
-import { addTraining } from '../actions';
+import { addTraining, selectTrainings } from '../features/trainings';
 import { Training, CreateTrainingParams } from '../types';
-
-import { selectTrainings } from '../selectors';
 
 import TrainingCard from './TrainingCard';
 

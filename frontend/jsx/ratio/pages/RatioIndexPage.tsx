@@ -1,9 +1,7 @@
-import React from 'react';
-
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
-import { loadTrainings } from '~/ratio/actions';
+import { loadTrainings } from '~/ratio/features/trainings';
 
 import TrainingCollection from '~/ratio/components/TrainingCollection';
 

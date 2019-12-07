@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Button, Row, Column, Input, Modal } from '@kocherga/frontkit';
 

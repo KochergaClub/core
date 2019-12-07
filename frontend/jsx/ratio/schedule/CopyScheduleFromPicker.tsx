@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Column, Button } from '@kocherga/frontkit';
 
-import { loadTrainings } from '../actions';
-import { selectTrainings } from '../selectors';
+import { loadTrainings, selectTrainings } from '../features/trainings';
 import { Training } from '../types';
 
 interface Props {

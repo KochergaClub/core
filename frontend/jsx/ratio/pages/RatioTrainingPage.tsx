@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { A, Column, Row } from '@kocherga/frontkit';
@@ -6,19 +6,19 @@ import { A, Column, Row } from '@kocherga/frontkit';
 import { NextPage } from '~/common/types';
 import { selectUser } from '~/core/selectors';
 
-import Page from '~/components/Page';
-import ActionButton from '~/components/ActionButton';
+import { Page, ActionButton } from '~/components';
+
 import CreateButton from '~/components/crud/CreateButton';
 import { FormShape } from '~/components/forms/types';
 
 import { loadKkmPassword } from '~/kkm/actions';
 
 import { Training } from '~/ratio/types';
-import { loadTrainingBySlug, loadTrainingTickets } from '~/ratio/actions';
+import { loadTraining, selectTraining } from '~/ratio/features/trainingItem';
 import {
-  selectViewingTraining,
-  selectViewingTrainingTickets,
-} from '~/ratio/selectors';
+  loadTrainingTickets,
+  selectTrainingTickets,
+} from '~/ratio/features/trainingTickets';
 
 import CreateEmailButton from '~/ratio/components/CreateEmailButton';
 import TicketList from '~/ratio/components/TicketList';
@@ -77,8 +77,8 @@ const CreateTicketButton = ({
 
 const RatioTrainingPage: NextPage<Props> = () => {
   const dispatch = useDispatch();
-  const training = useSelector(selectViewingTraining);
-  const tickets = useSelector(selectViewingTrainingTickets);
+  const training = useSelector(selectTraining);
+  const tickets = useSelector(selectTrainingTickets);
 
   const onCreateTicket = useCallback(async () => {
     if (!training) {
@@ -167,7 +167,7 @@ RatioTrainingPage.getInitialProps = async ({
   const user = selectUser(getState());
 
   const slug = query.slug as string;
-  await dispatch(loadTrainingBySlug(slug));
+  await dispatch(loadTraining(slug));
   await dispatch(loadTrainingTickets(slug));
 
   if (user.permissions.includes('cashier.kkm_user')) {

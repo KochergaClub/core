@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Column } from '@kocherga/frontkit';
-import Badge from '~/components/Badge';
-import AsyncButton from '~/components/AsyncButton';
+import { Badge, AsyncButton } from '~/components';
 
 import Card, { CardList } from '~/components/Card';
 
@@ -11,7 +10,7 @@ import { selectKkmPassword } from '~/kkm/selectors';
 
 import { Ticket } from '../types';
 
-import { fiscalizeTicket } from '../actions';
+import { fiscalizeTicket } from '../features/trainingTickets';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 

@@ -5,7 +5,7 @@ import { useAPI } from '~/common/hooks';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { selectViewingTraining } from '~/ratio/selectors';
+import { selectTraining } from '~/ratio/features/trainingItem';
 import { getSchedule } from '~/ratio/api';
 
 import { ScheduleContext } from './utils';
@@ -23,7 +23,7 @@ const shape: FormShape = [
 
 const CreateItemButton: React.FC = () => {
   const { dispatch } = useContext(ScheduleContext);
-  const training = useSelector(selectViewingTraining);
+  const training = useSelector(selectTraining);
   const api = useAPI();
 
   const create = useCallback(
