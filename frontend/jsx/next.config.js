@@ -18,6 +18,9 @@ module.exports = withBundleAnalyzer({
     return config;
   },
   distDir: '../jsx-build',
+  experimental: {
+    granularChunks: true,
+  },
   publicRuntimeConfig: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
     facebookPixelId: process.env.FACEBOOK_PIXEL_ID,
