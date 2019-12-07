@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ModalFormButton from '~/components/forms/ModalFormButton';
@@ -6,8 +6,8 @@ import { FormShape } from '~/components/forms/types';
 
 import { CreateSubscribeChannelParams } from '../types';
 
-import { selectMailchimpInterests } from '../selectors';
-import { addSubscribeChannel } from '../actions';
+import { selectMailchimpInterests } from '../features/mailchimpCategories';
+import { addSubscribeChannel } from '../features/subscribeChannels';
 
 const CreateSubscribeChannelButton: React.FC = () => {
   const dispatch = useDispatch();
