@@ -22,8 +22,6 @@ const windowSlice = createExtendedSlice({
   },
 });
 
-export default windowSlice;
-
 export const selectDatesWindow = createSelector(
   windowSlice.selectors.self,
   w => {
@@ -35,3 +33,5 @@ export const selectDatesWindow = createSelector(
 );
 
 export const { set: setDatesWindow } = windowSlice.actions;
+
+export default windowSlice;

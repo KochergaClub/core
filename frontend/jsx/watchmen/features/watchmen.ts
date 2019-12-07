@@ -1,20 +1,21 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { createValueSlice } from '~/redux/slices/value';
-import { AsyncAction, State } from '~/redux/store';
-import { selectAPI } from '~/core/selectors';
+import { createResourceFeature } from '~/redux/features';
 
-import { getWatchmen, patchWatchman } from '../api';
+import { State } from '~/redux/store';
+import { apiThunk } from '~/redux/action-utils';
+
+import { patchWatchman } from '../api';
 import { Watchman } from '../types';
 
-const watchmenSlice = createValueSlice({
+const feature = createResourceFeature<Watchman>({
   name: 'watchmen/watchmen',
-  initialState: [] as Watchman[],
+  endpoint: 'watchmen/watchmen',
 });
 
-export default watchmenSlice;
+export const loadWatchmen = feature.thunks.load;
 
-export const selectAllWatchmen = watchmenSlice.selectors.self;
+export const selectAllWatchmen = feature.selectors.asList;
 
 // current only
 export const selectWatchmen = createSelector(selectAllWatchmen, watchmen =>
@@ -33,19 +34,12 @@ export const selectWatchmanById = (
   id: number
 ): Watchman | undefined => state.watchmen.watchmen.find(w => w.id === id);
 
-export const loadWatchmen = (): AsyncAction => async (dispatch, getState) => {
-  const api = selectAPI(getState());
-  const watchmen = await getWatchmen(api);
-  dispatch(watchmenSlice.actions.set(watchmen));
-};
-
-export const setWatchmanPriority = (
-  watchman: Watchman,
-  priority: number
-): AsyncAction => async (dispatch, getState) => {
-  const api = selectAPI(getState());
-  await patchWatchman(api, watchman, {
-    priority,
+export const setWatchmanPriority = (watchman: Watchman, priority: number) =>
+  apiThunk(async (api, dispatch) => {
+    await patchWatchman(api, watchman, {
+      priority,
+    });
+    await dispatch(loadWatchmen());
   });
-  await dispatch(loadWatchmen());
-};
+
+export default feature.slice;

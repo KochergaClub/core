@@ -1,8 +1,8 @@
 import { PayloadAction, createSelector } from '@reduxjs/toolkit';
 
 import { createExtendedSlice } from '~/redux/slices/utils';
-import { AsyncAction, State } from '~/redux/store';
-import { selectAPI } from '~/core/selectors';
+import { State } from '~/redux/store';
+import { apiThunk } from '~/redux/action-utils';
 
 import { Watchman, Grade } from '../types';
 import { patchWatchman } from '../api';
@@ -41,8 +41,6 @@ const gradesUISlice = createExtendedSlice({
   },
 });
 
-export default gradesUISlice;
-
 export const selectPickingWatchmanGrade = createSelector(
   gradesUISlice.selectors.self,
   gradesUI => gradesUI.pickingWatchmanGrade
@@ -54,18 +52,15 @@ export const {
   stopAskingForWatchmanGrade,
 } = gradesUISlice.actions;
 
-export const pickWatchmanGrade = (
-  watchman: Watchman,
-  grade: Grade
-): AsyncAction => async (dispatch, getState) => {
-  const api = selectAPI(getState());
-  dispatch(pickingWatchmanGrade(grade));
-  await patchWatchman(api, watchman, {
-    grade_id: grade.id,
+export const pickWatchmanGrade = (watchman: Watchman, grade: Grade) =>
+  apiThunk(async (api, dispatch) => {
+    dispatch(pickingWatchmanGrade(grade));
+    await patchWatchman(api, watchman, {
+      grade_id: grade.id,
+    });
+    await dispatch(loadWatchmen());
+    dispatch(stopAskingForWatchmanGrade());
   });
-  await dispatch(loadWatchmen());
-  dispatch(stopAskingForWatchmanGrade());
-};
 
 export const selectAskingForGradeWatchman = (
   state: State
@@ -76,3 +71,5 @@ export const selectAskingForGradeWatchman = (
   }
   return selectWatchmanById(state, id);
 };
+
+export default gradesUISlice;

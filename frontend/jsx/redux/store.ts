@@ -29,3 +29,11 @@ export type AsyncAction<T = void> = ThunkAction<
   undefined,
   Action
 >;
+
+// Used to avoid recursive types in features/* thunks.
+export type AsyncActionWeaklyTyped<T = void> = ThunkAction<
+  Promise<T>,
+  any, // TODO - replace with State's subset which includes API slice only
+  undefined,
+  Action
+>;

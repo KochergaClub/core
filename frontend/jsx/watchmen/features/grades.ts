@@ -1,25 +1,14 @@
-import { createValueSlice } from '~/redux/slices/value';
-import { AsyncAction } from '~/redux/store';
-import { selectAPI } from '~/core/selectors';
-import { API } from '~/common/api';
+import { createResourceFeature } from '~/redux/features';
 
 import { Grade } from '../types';
 
-const gradesSlice = createValueSlice({
+const feature = createResourceFeature<Grade>({
   name: 'watchmen/grades',
-  initialState: [] as Grade[],
+  endpoint: 'watchmen/grades',
 });
 
-export default gradesSlice;
+export const selectGrades = feature.selectors.asList;
 
-export const selectGrades = gradesSlice.selectors.self;
+export const loadGrades = feature.thunks.load;
 
-const getGrades = async (api: API) => {
-  return (await api.call('watchmen/grades', 'GET')) as Grade[];
-};
-
-export const loadGrades = (): AsyncAction => async (dispatch, getState) => {
-  const api = selectAPI(getState());
-  const grades = await getGrades(api);
-  dispatch(gradesSlice.actions.set(grades));
-};
+export default feature.slice;

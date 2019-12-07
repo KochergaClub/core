@@ -13,10 +13,6 @@ export const getSchedule = async (api: API, from_date: Date, to_date: Date) => {
   )) as Shift[];
 };
 
-export const getWatchmen = async (api: API) => {
-  return (await api.call('watchmen/watchmen', 'GET')) as Watchman[];
-};
-
 export const patchWatchman = async (
   api: API,
   watchman: Watchman,

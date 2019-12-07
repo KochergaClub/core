@@ -62,7 +62,7 @@ type ExtraOptions = {
 type ExtraSlice<State> = {
   thunks?: any; // FIXME
   selectors: {
-    self: Selector<GlobalState, State>;
+    self: Selector<any, State>;
   };
 };
 
@@ -81,15 +81,15 @@ export function createExtendedSlice<
 
   const nameParts = slice.name.split('/');
 
-  const selfSelector: Selector<
-    GlobalState,
-    ReturnType<typeof slice.reducer>
-  > = state => {
+  // Can't type it stricter because it causes recursive type issues:
+  // state -> slice -> selector -> state -> ...
+  // So we can't mention GlobalState type here.
+  const selfSelector = (state: any) => {
     let result = state;
     for (const part of nameParts) {
       result = (result as any)[part];
     }
-    return result as any;
+    return (result as any) as ReturnType<typeof slice.reducer>;
   };
 
   return {
