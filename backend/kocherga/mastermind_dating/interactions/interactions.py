@@ -194,6 +194,9 @@ def register_handlers(dsp: Dispatcher):
             user.name = suggestion_nick
 
         user.save()
+        with user.edit_state(RegistrationState) as s:
+            s.entering_name = False
+
         await start_registration_enter_desc()
 
     @dsp.message_handler(logged_in, entering_name)
@@ -201,7 +204,11 @@ def register_handlers(dsp: Dispatcher):
         logger.info('registration_name_message')
         user = get_participant()
         user.name = u.text
+
         user.save()
+        with user.edit_state(RegistrationState) as s:
+            s.entering_name = False
+
         await start_registration_enter_desc()
 
     # ==--== Registration/Description
