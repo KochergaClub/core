@@ -214,7 +214,7 @@ def register_handlers(dsp: Dispatcher):
     # ==--== Registration/Description
 
     async def start_registration_enter_desc():
-        await get_bot().send_message(chat_id=get_participant().get_chat_id(), text="Опишите себя в паре предложений.")
+        await get_bot().send_message(chat_id=get_participant().get_chat_id(), text="Опишите себя в одном или двух предложениях.")
 
     @dsp.message_handler(logged_in, entering_desc)
     async def registration_enter_desc(msg: at.Message):
@@ -228,7 +228,7 @@ def register_handlers(dsp: Dispatcher):
     async def start_registration_enter_photo():
         await get_bot().send_message(
             chat_id=get_participant().get_chat_id(),
-            text="Загрузите фото, чтобы другие люди могли легче найти вас на мастермайнде.",
+            text="Загрузите фото, чтобы при выставлении предпочтений людям было легче идентифицировать вас.",
             # reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton("Нет, спасибо", callback_data="skip_photo"))
         )
 
@@ -253,7 +253,8 @@ def register_handlers(dsp: Dispatcher):
             user.photo.save('photo', fh)
             user.save()
 
-        await start_time_tables()
+        # await start_time_tables()  # TODO - timetables are not implemented.
+        await registration_complete()
 
     @dsp.callback_query_handler(logged_in, entering_photo, lambda a: a.data in ["skip_photo"])
     async def registration_skip_photo(_):
@@ -374,7 +375,8 @@ def register_handlers(dsp: Dispatcher):
             chat_id=get_participant().get_chat_id(),
             text=("*Спасибо!*\n"
                   "\n"
-                  "Это все! Ждем вас в Кочерге в воскресенье, в 14:00.\n"
+                  "Это все! Ждем вас в Кочерге в воскресенье. Мероприятие начнется в 14:00, но "
+                  "мы очень рекомендуем вам прийти на 10-15 минут раньше.\n"
                   "Приготовьтесь: мероприятие будет интересным, интенсивным и возможно "
                   "немного сложным; но мы надеемся, что ценность, которую вы получите "
                   "от вашей будущей мастермайнд-группы, многократно окупит труд, "
