@@ -1,11 +1,17 @@
+import { createResourceFeature } from '~/redux/features';
 import { apiThunk } from '~/redux/action-utils';
 
-import { groupsSlice, permissionsSlice } from './slices';
-import { User, Group } from './types';
 import { Member } from '~/staff/types';
 
-export const loadGroups = groupsSlice.actions.loadAll;
-export const loadPermissions = permissionsSlice.actions.loadAll;
+import { User, Group } from '../types';
+
+const feature = createResourceFeature<Group>({
+  name: 'audit/groups',
+  endpoint: 'auth/groups',
+});
+
+/**************** thunks **************/
+export const loadGroups = feature.thunks.load;
 
 export const removeUserFromGroup = (group: Group, user: User) =>
   apiThunk(async (api, dispatch) => {
@@ -22,3 +28,8 @@ export const addMemberToGroup = (group: Group, member: Member) =>
     });
     await dispatch(loadGroups());
   });
+
+/**************** selectors **************/
+export const selectGroups = feature.selectors.asList;
+
+export default feature.slice;

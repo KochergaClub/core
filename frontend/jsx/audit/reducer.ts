@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { permissionsSlice, groupsSlice } from './slices';
+import permissions from './features/permissions';
+import groups from './features/groups';
 
 export default combineReducers({
-  groups: groupsSlice.reducer,
-  permissions: permissionsSlice.reducer,
+  groups: groups.reducer,
+  permissions: permissions.reducer,
 });

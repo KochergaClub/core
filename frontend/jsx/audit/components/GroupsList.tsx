@@ -1,9 +1,8 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { CardList } from '~/components/Card';
 
-import { selectGroups } from '../selectors';
+import { selectGroups } from '../features/groups';
 
 import GroupCard from './GroupCard';
 
