@@ -79,6 +79,11 @@ export const teamMenuItems: Item[] = [
         title: 'Генератор картинок',
         mode: 'next',
       },
+      {
+        link: '/team/email',
+        title: 'Каналы подписок',
+        mode: 'next',
+      },
       { link: '/admin/', title: 'Django-админка' },
       { link: '/wagtail/', title: 'Wagtail-админка' },
     ],
