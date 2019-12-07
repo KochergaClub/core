@@ -1,4 +1,4 @@
-import { createResourceSlice } from '~/redux/slices/resource';
+import { createResourceSlice } from '~/redux/slices-old/resource';
 
 import { SubscribeChannel, MailchimpCategory } from './types';
 

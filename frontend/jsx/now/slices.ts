@@ -1,4 +1,4 @@
-import { createSingletonResourceSlice } from '~/redux/slices/singleton-resource';
+import { createSingletonResourceSlice } from '~/redux/slices-old/singleton-resource';
 
 import { NowData } from './types';
 

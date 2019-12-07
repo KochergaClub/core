@@ -1,5 +1,5 @@
-import { createListSlice } from '~/redux/slices/list';
-import { createResourceSlice } from '~/redux/slices/resource';
+import { createListSlice } from '~/redux/slices-old/list';
+import { createResourceSlice } from '~/redux/slices-old/resource';
 
 import { Ticket, Training, Trainer } from './types';
 

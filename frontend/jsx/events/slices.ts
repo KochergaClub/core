@@ -1,5 +1,5 @@
-import { createListSlice } from '~/redux/slices/list';
-import { createBagSlice } from '~/redux/slices/bag';
+import { createListSlice } from '~/redux/slices-old/list';
+import { createBagSlice } from '~/redux/slices-old/bag';
 
 import {
   ServerEvent,
