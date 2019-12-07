@@ -214,7 +214,10 @@ def register_handlers(dsp: Dispatcher):
     # ==--== Registration/Description
 
     async def start_registration_enter_desc():
-        await get_bot().send_message(chat_id=get_participant().get_chat_id(), text="Опишите себя в одном или двух предложениях.")
+        await get_bot().send_message(
+            chat_id=get_participant().get_chat_id(),
+            text="Опишите себя в одном или двух предложениях."
+        )
 
     @dsp.message_handler(logged_in, entering_desc)
     async def registration_enter_desc(msg: at.Message):
