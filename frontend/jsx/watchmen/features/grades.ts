@@ -1,9 +1,9 @@
 import { createValueSlice } from '~/redux/slices/value';
 import { AsyncAction } from '~/redux/store';
 import { selectAPI } from '~/core/selectors';
+import { API } from '~/common/api';
 
 import { Grade } from '../types';
-import { getGrades } from '../api';
 
 const gradesSlice = createValueSlice({
   name: 'watchmen/grades',
@@ -13,6 +13,10 @@ const gradesSlice = createValueSlice({
 export default gradesSlice;
 
 export const selectGrades = gradesSlice.selectors.self;
+
+const getGrades = async (api: API) => {
+  return (await api.call('watchmen/grades', 'GET')) as Grade[];
+};
 
 export const loadGrades = (): AsyncAction => async (dispatch, getState) => {
   const api = selectAPI(getState());
