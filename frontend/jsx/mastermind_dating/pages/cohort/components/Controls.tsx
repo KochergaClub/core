@@ -4,10 +4,13 @@ import Link from 'next/link';
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
+import { useAPI } from '~/common/hooks';
 
 import DeleteButton from '~/components/crud/DeleteButton';
 
 import { Cohort } from '../../../types';
+
+import { useCohortGroupsReloader } from '../hooks';
 
 import CohortEventLink from './CohortEventLink';
 
@@ -16,9 +19,14 @@ interface Props {
 }
 
 const Controls: React.FC<Props> = ({ cohort }) => {
+  const api = useAPI();
+  const cohortGroupsReloader = useCohortGroupsReloader(cohort);
+
   const cbRunSolver = useCallback(async () => {
-    window.alert('TODO');
-  }, []);
+    await api.call(`/mastermind_dating/cohort/${cohort.id}/run_solver`, 'POST');
+    await cohortGroupsReloader();
+  }, [api, cohortGroupsReloader, cohort.id]);
+
   return (
     <Column>
       <Link href="/team/mastermind_dating" passHref>
