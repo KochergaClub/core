@@ -79,6 +79,12 @@ class CohortViewSet(viewsets.ModelViewSet):
         cohort.run_solver()
         return Response('ok')
 
+    @action(detail=True, methods=['post'])
+    def broadcast_solution(self, request, **kwargs):
+        cohort = self.get_object()
+        cohort.broadcast_solution()
+        return Response('ok')
+
 
 class ParticipantViewSet(viewsets.ModelViewSet):
     queryset = models.Participant.objects.all()
