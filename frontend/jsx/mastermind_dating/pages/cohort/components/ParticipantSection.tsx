@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Toggle from 'react-toggle';
 
-import { Button, Column, Row } from '@kocherga/frontkit';
+import Head from 'next/head';
 
-import ActionButton from '~/components/ActionButton';
+import { Column, Row } from '@kocherga/frontkit';
+
+import { ActionButton } from '~/components';
 
 import { Cohort, Participant } from '../../../types';
 
@@ -35,9 +38,7 @@ const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
           <CreateParticipantButton cohort={cohort} />
           {cohort.event_id && (
             <ActionButton
-              path={`/mastermind_dating/cohort/${
-                cohort.id
-              }/populate_from_event`}
+              path={`/mastermind_dating/cohort/${cohort.id}/populate_from_event`}
               asyncOnSuccess={cohortParticipantsReloader}
             >
               Загрузить участников из события
@@ -52,13 +53,22 @@ const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
               {participants.length})
             </ActionButton>
           ) : null}
-          {
-            <Button onClick={() => setHideUnregistered(!hideUnregistered)}>
-              {hideUnregistered
-                ? 'Незарегистрировавшиеся скрыты'
-                : 'Незарегистрировавшиеся показаны'}
-            </Button>
-          }
+        </Row>
+        <Row gutter={4}>
+          <Head>
+            <link rel="stylesheet" href="/static/react-toggle/style.css" />
+          </Head>
+          <Toggle
+            checked={hideUnregistered}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setHideUnregistered(e.target.checked)
+            }
+          />
+          <div>
+            {hideUnregistered
+              ? 'Незарегистрировавшиеся скрыты'
+              : 'Незарегистрировавшиеся показаны'}
+          </div>
         </Row>
         <ParticipantList participants={shownParticipants} cohort={cohort} />
       </Column>
