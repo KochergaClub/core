@@ -29,7 +29,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'id', 'user',
             'name', 'desc', 'photo', 'telegram_link',
-            'voted_for', 'present', 'invite_email_sent',
+            'voted_for', 'invite_email_sent',
         )
 
     email = serializers.CharField(write_only=True)

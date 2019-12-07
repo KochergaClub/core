@@ -1,10 +1,13 @@
-import React from 'react';
+import { useCallback } from 'react';
+import Toggle from 'react-toggle';
 
 import styled from 'styled-components';
 
-import { Column, colors, fonts } from '@kocherga/frontkit';
+import { Column, Row, colors, fonts } from '@kocherga/frontkit';
 
 import ActionButton from '~/components/ActionButton';
+
+import { useAPI } from '~/common/hooks';
 
 import { Participant, Cohort } from '../../../types';
 
@@ -73,7 +76,20 @@ const VoteForm: React.FC<Props> = ({ participant, cohort }) => {
 const ParticipantCard: React.FC<Props> = props => {
   const { participant, cohort } = props;
 
+  const api = useAPI();
   const cohortParticipantsReloader = useCohortParticipantsReloader(cohort);
+
+  const onPresenceChange = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      await api.call(
+        `mastermind_dating/participant/${participant.id}`,
+        'PATCH',
+        { present: e.target.checked }
+      );
+      await cohortParticipantsReloader();
+    },
+    [api, cohortParticipantsReloader, participant.id]
+  );
 
   return (
     <Container key={participant.id}>
@@ -83,12 +99,11 @@ const ParticipantCard: React.FC<Props> = props => {
       </Column>
       <Column centered>
         {participant.photo ? <Photo src={participant.photo} /> : <EmptyPhoto />}
-        <ActionButton
-          path={actionPath('flip_present', participant.id)}
-          asyncOnSuccess={cohortParticipantsReloader}
-        >
-          {participant.present ? 'Тут' : 'Не тут'}
-        </ActionButton>
+        <Row>
+          <span>Не тут</span>
+          <Toggle checked={participant.present} onChange={onPresenceChange} />
+          <span>Тут</span>
+        </Row>
         {participant.present && <VoteForm {...props} />}
       </Column>
       <Description>{participant.desc}</Description>

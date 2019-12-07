@@ -96,10 +96,3 @@ class ParticipantViewSet(viewsets.ModelViewSet):
         participant = self.get_object()
         participant.tinder_activate()
         return Response('ok')
-
-    @action(detail=True, methods=['post'])
-    def flip_present(self, request, pk=None):
-        participant = self.get_object()
-        participant.present = not participant.present
-        participant.save()
-        return Response('ok')
