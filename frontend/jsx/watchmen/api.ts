@@ -13,14 +13,6 @@ export const getSchedule = async (api: API, from_date: Date, to_date: Date) => {
   )) as Shift[];
 };
 
-export const updateShift = async (api: API, shift: Shift) => {
-  const updateUrl = `watchmen/schedule/${shift.date}/${shift.shift}`;
-  await api.call(updateUrl, 'PUT', {
-    watchman_id: shift.watchman ? shift.watchman.id : null,
-    is_night: shift.is_night,
-  });
-};
-
 export const getWatchmen = async (api: API) => {
   return (await api.call('watchmen/watchmen', 'GET')) as Watchman[];
 };

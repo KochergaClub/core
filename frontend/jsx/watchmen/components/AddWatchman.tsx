@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { loadWatchmen } from '../actions';
+import { loadWatchmen } from '../features/watchmen';
 
 import CreateButton from '~/components/crud/CreateButton';
 import { FormShape } from '~/components/forms/types';

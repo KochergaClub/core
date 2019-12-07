@@ -1,5 +1,3 @@
-import React, { useCallback } from 'react';
-
 import { useSelector, useDispatch } from 'react-redux';
 
 import { addWeeks, startOfWeek } from 'date-fns';
@@ -10,10 +8,12 @@ import Page from '~/components/Page';
 import { useListeningWebSocket, usePermissions } from '~/common/hooks';
 import { NextPage } from '~/common/types';
 
-import { loadWatchmen } from '~/watchmen/actions';
-
-import { reloadSchedule, setDatesWindow } from '~/watchmen/actions';
-import { selectDatesWindow } from '~/watchmen/selectors';
+import { loadWatchmen } from '~/watchmen/features/watchmen';
+import { reloadSchedule } from '~/watchmen/features/schedule';
+import {
+  setDatesWindow,
+  selectDatesWindow,
+} from '~/watchmen/features/datesWindow';
 
 import Calendar from '~/watchmen/components/Calendar';
 import DayContainer from '~/watchmen/components/DayContainer';
@@ -28,11 +28,9 @@ const SpaceStaffShiftsPage: NextPage<Props> = () => {
   const [from_date, to_date] = useSelector(selectDatesWindow);
   const dispatch = useDispatch();
 
-  const fetchSchedule = useCallback(async () => {
+  useListeningWebSocket('ws/watchmen-schedule/', async () => {
     await dispatch(reloadSchedule(from_date, to_date));
-  }, [from_date, to_date, dispatch, reloadSchedule]);
-
-  useListeningWebSocket('ws/watchmen-schedule/', fetchSchedule);
+  });
 
   return (
     <Page title="Расписание смен" team>

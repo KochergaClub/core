@@ -7,7 +7,8 @@ import { A } from '@kocherga/frontkit';
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
-import { loadWatchmen, loadGrades } from '~/watchmen/actions';
+import { loadWatchmen } from '~/watchmen/features/watchmen';
+import { loadGrades } from '~/watchmen/features/grades';
 
 import WatchmenList from '~/watchmen/components/WatchmenList';
 import GradesList from '~/watchmen/components/GradesList';

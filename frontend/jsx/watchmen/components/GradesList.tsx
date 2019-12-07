@@ -5,7 +5,7 @@ import { Column } from '@kocherga/frontkit';
 
 import Card, { CardList } from '~/components/Card';
 
-import { selectGrades } from '../selectors';
+import { selectGrades } from '../features/grades';
 import { Grade } from '../types';
 
 const GradeItem = ({ grade }: { grade: Grade }) => (

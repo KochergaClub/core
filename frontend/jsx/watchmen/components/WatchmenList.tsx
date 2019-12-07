@@ -12,12 +12,13 @@ import { usePermissions } from '~/common/hooks';
 import Card, { CardList } from '~/components/Card';
 import AsyncButton from '~/components/AsyncButton';
 
-import { askForWatchmanGrade, setWatchmanPriority } from '../actions';
+import { selectWatchmen, setWatchmanPriority } from '../features/watchmen';
 import {
-  selectWatchmen,
-  selectGrades,
+  askForWatchmanGrade,
   selectAskingForGradeWatchman,
-} from '../selectors';
+} from '../features/gradesUI';
+import { selectGrades } from '../features/grades';
+
 import { Watchman } from '../types';
 
 import PickGradeModal from './PickGradeModal';

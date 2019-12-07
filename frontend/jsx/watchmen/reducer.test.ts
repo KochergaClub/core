@@ -1,5 +1,7 @@
 import reducer from './reducer';
-import * as actions from './actions';
+import { setEditing } from './features/editing';
+import { replaceSchedule } from './features/schedule';
+
 import { Shift } from './types';
 
 it('initial state', () => {
@@ -9,11 +11,11 @@ it('initial state', () => {
 });
 
 it('setEditing', () => {
-  expect(reducer(undefined, actions.setEditing(true))).toMatchObject({
+  expect(reducer(undefined, setEditing(true))).toMatchObject({
     editing: true,
   });
 
-  expect(reducer(undefined, actions.setEditing(false))).toMatchObject({
+  expect(reducer(undefined, setEditing(false))).toMatchObject({
     editing: false,
   });
 });
@@ -33,7 +35,7 @@ it('replaceSchedule', () => {
   } as Shift;
 
   expect(
-    reducer(undefined, actions.replaceSchedule({ '2019-04-01': [s1, s2] }))
+    reducer(undefined, replaceSchedule({ '2019-04-01': [s1, s2] }))
   ).toMatchObject({
     schedule: { '2019-04-01': [s1, s2] },
   });
