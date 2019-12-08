@@ -1,15 +1,13 @@
 import { combineReducers } from 'redux';
 
-import {
-  eventsSlice,
-  feedbacksSlice,
-  ticketsSlice,
-  events2ticketsSlice,
-} from './slices';
+import events from './features/events';
+import eventPage from './features/eventPage';
+import eventPageFeedbacks from './features/eventPageFeedbacks';
+import eventPageTickets from './features/eventPageTickets';
 
 export default combineReducers({
-  events: eventsSlice.reducer,
-  feedbacks: feedbacksSlice.reducer,
-  tickets: ticketsSlice.reducer,
-  events2tickets: events2ticketsSlice.reducer,
+  events: events.reducer,
+  eventPage: eventPage.reducer,
+  eventPageFeedbacks: eventPageFeedbacks.reducer,
+  eventPageTickets: eventPageTickets.reducer,
 });

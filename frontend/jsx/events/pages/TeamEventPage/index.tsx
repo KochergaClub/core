@@ -4,34 +4,30 @@ import { A } from '@kocherga/frontkit';
 
 import { State } from '~/redux/store';
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
-import { loadEvent } from '~/events/actions';
-import { selectEventById } from '~/events/selectors';
+import { loadEvent, selectEvent } from '~/events/features/eventPage';
 
 import EventInfo from '~/events/components/EventInfo';
 import FeedbackCollection from './FeedbackCollection';
 import TicketsCollection from './TicketsCollection';
 
-import { loadEventFeedbacks, loadEventTickets } from '~/events/actions';
+import { loadEventFeedbacks } from '~/events/features/eventPageFeedbacks';
+import { loadEventTickets } from '~/events/features/eventPageTickets';
 
-interface Props {
-  event_id: string;
-}
-
-const TeamEventPage: NextPage<Props> = ({ event_id }) => {
-  const event = useSelector((state: State) => selectEventById(state, event_id));
+const TeamEventPage: NextPage = () => {
+  const event = useSelector((state: State) => selectEvent(state));
 
   return (
     <Page title={event.title} team>
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
-        <EventInfo event_id={event_id} />
+        <EventInfo />
         <div>
           <A href={`/team/evenman/event/${event.id}`}>Событие в evenman</A>
         </div>
-        <FeedbackCollection event_id={event.id} />
-        <TicketsCollection event_id={event.id} />
+        <FeedbackCollection />
+        <TicketsCollection />
       </Page.Main>
     </Page>
   );
@@ -41,8 +37,8 @@ TeamEventPage.getInitialProps = async ({ store: { dispatch }, query }) => {
   const uuid = query.uuid as string;
 
   await dispatch(loadEvent(uuid));
-  await dispatch(loadEventFeedbacks(uuid));
-  await dispatch(loadEventTickets(uuid));
+  await dispatch(loadEventFeedbacks());
+  await dispatch(loadEventTickets());
 
   return { event_id: uuid };
 };

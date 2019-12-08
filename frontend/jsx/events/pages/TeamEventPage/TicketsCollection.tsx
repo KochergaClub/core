@@ -5,18 +5,12 @@ import { Row } from '@kocherga/frontkit';
 import { State } from '~/redux/store';
 
 import Card, { CardList } from '~/components/Card';
-import Badge from '~/components/Badge';
+import { Badge } from '~/components';
 
-import { selectEventTickets } from '../../selectors';
+import { selectEventTickets } from '../../features/eventPageTickets';
 
-interface Props {
-  event_id: string;
-}
-
-const TicketsCollection: React.FC<Props> = ({ event_id }) => {
-  const tickets = useSelector((state: State) =>
-    selectEventTickets(state, event_id)
-  );
+const TicketsCollection: React.FC = () => {
+  const tickets = useSelector((state: State) => selectEventTickets(state));
 
   return (
     <section>
