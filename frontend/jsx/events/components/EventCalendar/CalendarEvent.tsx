@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { EventProps } from 'react-big-calendar';
 
-import { Event } from '../../types';
+import { LocalEventWithMetadata } from '../../types';
 
 const EventTitle = styled.div`
   font-weight: bold;
@@ -13,11 +11,13 @@ const EventTitle = styled.div`
 
 const EventRoom = styled.small``;
 
-const CalendarEvent = ({ event }: EventProps<Event>) => {
+const CalendarEvent = ({
+  event: eventWithMetadata,
+}: EventProps<LocalEventWithMetadata>) => {
   return (
     <div>
-      <EventTitle>{event.title}</EventTitle>
-      <EventRoom>{event.room}</EventRoom>
+      <EventTitle>{eventWithMetadata.event.title}</EventTitle>
+      <EventRoom>{eventWithMetadata.event.room}</EventRoom>
     </div>
   );
 };

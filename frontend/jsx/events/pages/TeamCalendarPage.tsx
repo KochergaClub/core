@@ -4,14 +4,14 @@ import { format } from 'date-fns-tz';
 import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
 import { selectAPI } from '~/core/selectors';
+
+import { Page } from '~/components';
 
 import EventCalendar from '~/events/components/EventCalendar';
 
-import { ServerEvent } from '~/events/types';
-
 import { getEventsInRange } from '~/events/api';
+import { replaceEvents } from '~/events/features/events';
 
 const OuterContainer = styled.div`
   display: flex;
@@ -26,25 +26,25 @@ const Container = styled.div`
 `;
 
 interface Props {
-  events: ServerEvent[];
   range: { start: string; end: string };
-  children?: React.ReactNode;
 }
 
-const TeamCalendarPage: NextPage<Props> = ({ events, range }) => {
+const TeamCalendarPage: NextPage<Props> = ({ range }) => {
   return (
     <Page title="Календарь событий" team chrome="fullscreen">
       <OuterContainer>
         <Page.Title>Календарь событий</Page.Title>
         <Container>
-          <EventCalendar events={events} range={range} />
+          <EventCalendar range={range} />
         </Container>
       </OuterContainer>
     </Page>
   );
 };
 
-TeamCalendarPage.getInitialProps = async ({ store: { getState } }) => {
+TeamCalendarPage.getInitialProps = async ({
+  store: { getState, dispatch },
+}) => {
   const api = selectAPI(getState());
 
   const range = {
@@ -59,9 +59,9 @@ TeamCalendarPage.getInitialProps = async ({ store: { getState } }) => {
   };
 
   const events = await getEventsInRange(api, range);
+  dispatch(replaceEvents(events));
 
   return {
-    events,
     range,
   };
 };

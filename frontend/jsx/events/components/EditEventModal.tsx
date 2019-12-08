@@ -1,29 +1,27 @@
 import { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { useCommonHotkeys, useAPI } from '../../common/hooks';
-import { timezone, formatDate } from '../../common/utils';
-import { Event, LocalEvent } from '../types';
-import { deleteEvent, patchEvent } from '../api';
-
 import { Button, Modal, Row } from '@kocherga/frontkit';
+
+import { useCommonHotkeys, useAPI } from '~/common/hooks';
+import { timezone, formatDate } from '~/common/utils';
+import { State } from '~/redux/store';
+
+import { deleteEvent, patchEvent, selectEventById } from '../features/events';
+import { closeUI } from '../features/calendarUI';
 
 import EventFields from './EventFields';
 
 interface Props {
-  event: LocalEvent;
-  onSave: (e: Event) => void;
-  onClose: () => void;
-  onDelete: (id: string) => void;
+  eventId: string;
 }
 
-const EditEventModal: React.FC<Props> = ({
-  onSave,
-  onDelete,
-  onClose,
-  event,
-}) => {
+const EditEventModal: React.FC<Props> = ({ eventId }) => {
+  const dispatch = useDispatch();
+  const event = useSelector((state: State) => selectEventById(state, eventId));
+
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);
   const [room, setRoom] = useState(event.room);
@@ -40,23 +38,28 @@ const EditEventModal: React.FC<Props> = ({
     }
     setSaving(true);
 
-    const patchedEvent = await patchEvent(api, event, {
-      title,
-      description,
-      location: room,
-    });
-
-    onSave(patchedEvent);
-  }, [api, onSave, event.id, saveDisabled, title, description, room]);
+    await dispatch(
+      patchEvent(event.id, {
+        title,
+        description,
+        location: room,
+      })
+    );
+    dispatch(closeUI());
+  }, [api, event.id, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
     setDeleting(true);
-    await deleteEvent(api, event);
-    onDelete(event.id);
-  }, [api, onDelete, event.id]);
+    await dispatch(deleteEvent(event.id));
+    dispatch(closeUI());
+  }, [api, event.id]);
+
+  const closeCb = useCallback(() => {
+    dispatch(closeUI());
+  }, [dispatch]);
 
   const hotkeys = useCommonHotkeys({
-    onEscape: onClose,
+    onEscape: closeCb,
     onEnter: saveCb,
   });
 
@@ -65,7 +68,7 @@ const EditEventModal: React.FC<Props> = ({
 
   return (
     <Modal>
-      <Modal.Header toggle={onClose}>
+      <Modal.Header toggle={closeCb}>
         Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>

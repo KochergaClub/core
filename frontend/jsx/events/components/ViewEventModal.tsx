@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -7,16 +8,16 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import { A, Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
+import { State } from '~/redux/store';
 
-import { LocalEvent } from '../types';
+import { selectEventById } from '../features/events';
+import { closeUI, startEditUI } from '../features/calendarUI';
 
 // not redux-connected version! TeamCalendarPage is not migrated to redux yet
 import { EventInfo } from './EventInfo';
 
 interface Props {
-  event: LocalEvent;
-  onClose: () => void;
-  onEdit: (e: LocalEvent) => void;
+  eventId: string;
 }
 
 const EventTitle = styled.header`
@@ -31,20 +32,27 @@ const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   </A>
 );
 
-const ViewEventModal: React.FC<Props> = ({ onEdit, onClose, event }) => {
+const ViewEventModal: React.FC<Props> = ({ eventId }) => {
+  const dispatch = useDispatch();
+
+  const event = useSelector((state: State) => selectEventById(state, eventId));
   const focus = useFocusOnFirstModalRender();
 
-  const hotkeys = useCommonHotkeys({
-    onEscape: onClose,
-  });
-
   const editCb = useCallback(() => {
-    onEdit(event);
-  }, [event, onEdit]);
+    dispatch(startEditUI(eventId));
+  }, [dispatch]);
+
+  const closeCb = useCallback(() => {
+    dispatch(closeUI());
+  }, [dispatch]);
+
+  const hotkeys = useCommonHotkeys({
+    onEscape: closeCb,
+  });
 
   return (
     <Modal>
-      <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
+      <Modal.Header toggle={closeCb}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
         <EventInfo event={event} />
