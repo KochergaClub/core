@@ -16,6 +16,12 @@ RUN apt-get install -y inotify-tools && \
     ./autogen.sh && ./configure && make && make install && rm -rf /tmp/watchman-src
 
 WORKDIR /code
+
+# necessary for mjml
+RUN (curl -sL https://deb.nodesource.com/setup_10.x | bash -) && apt-get install -y nodejs
+COPY package.json package-lock.json /code/
+RUN npm ci
+
 COPY prepare_solver_linux.sh /code/
 RUN ./prepare_solver_linux.sh
 

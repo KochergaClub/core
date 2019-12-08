@@ -1,10 +1,10 @@
 {
-  "name": "kocherga-core",
+  "name": "kocherga-frontend",
   "version": "1.0.0",
   "repository": "git@gitlab.com:kocherga/core.git",
   "author": "Vyacheslav Matyukhin <slava@kocherga-club.ru>",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "AGPL-3.0-only",
   "jest": {
     "collectCoverageFrom": [
       "jsx/**/*.{ts,tsx}"
