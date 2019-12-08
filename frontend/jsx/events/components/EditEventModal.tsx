@@ -17,21 +17,20 @@ const EditEventModal: React.FC = () => {
   const dispatch = useDispatch();
   const event = useSelector(selectActiveEvent);
 
-  if (!event) {
-    throw new Error("Editing event is empty but shouldn't be");
-  }
-
-  const [title, setTitle] = useState(event.title);
-  const [description, setDescription] = useState(event.description);
-  const [room, setRoom] = useState(event.room);
+  const [title, setTitle] = useState(event?.title || '');
+  const [description, setDescription] = useState(event?.description || '');
+  const [room, setRoom] = useState(event?.room || '');
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const api = useAPI();
 
-  const saveDisabled = deleting || saving || !title.length;
+  const saveDisabled = deleting || saving || !title || !title.length;
 
   const saveCb = useCallback(async () => {
+    if (!event) {
+      return;
+    }
     if (saveDisabled) {
       return;
     }
@@ -45,13 +44,16 @@ const EditEventModal: React.FC = () => {
       })
     );
     dispatch(closeUI());
-  }, [api, event.id, saveDisabled, title, description, room]);
+  }, [api, event, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
+    if (!event) {
+      return;
+    }
     setDeleting(true);
     await dispatch(deleteEvent(event.id));
     dispatch(closeUI());
-  }, [api, event.id]);
+  }, [api, event]);
 
   const closeCb = useCallback(() => {
     dispatch(closeUI());
@@ -61,6 +63,14 @@ const EditEventModal: React.FC = () => {
     onEscape: closeCb,
     onEnter: saveCb,
   });
+
+  if (!event) {
+    if (deleting) {
+      return null; // that's ok, we're probably deleting it ourselves
+    }
+    dispatch(closeUI()); // somebody else deleted the event and we got websocket notification? probably...
+    return null;
+  }
 
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);
