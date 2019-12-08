@@ -1,10 +1,14 @@
 import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
+import { useDispatch } from '~/common/hooks';
 
 import Collection from '~/components/collections/Collection';
 import TableView from '~/components/collections/TableView';
 
-import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
+import { AsyncButtonWithConfirm } from '~/components';
+
+import { FormShape } from '~/components/forms/types';
 
 import {
   selectEventFeedbacks,
@@ -13,8 +17,6 @@ import {
 } from '~/events/features/eventPageFeedbacks';
 
 import { Feedback, CreateFeedbackParams } from '~/events/types';
-
-import { FormShape } from '~/components/forms/types';
 
 import shapes from '~/shapes';
 

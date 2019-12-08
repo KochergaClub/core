@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
@@ -7,7 +7,11 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { A, Button, Modal, Row } from '@kocherga/frontkit';
 
-import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
+import {
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+  useDispatch,
+} from '~/common/hooks';
 import { State } from '~/redux/store';
 
 import { selectEventById } from '../features/events';

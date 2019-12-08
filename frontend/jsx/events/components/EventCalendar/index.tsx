@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addDays } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
-import { useListeningWebSocket, useAPI } from '~/common/hooks';
+import { useListeningWebSocket, useAPI, useDispatch } from '~/common/hooks';
 
 import BigCalendarConfigured from './BigCalendarConfigured';
 import UILayer from '~/events/components/UILayer';

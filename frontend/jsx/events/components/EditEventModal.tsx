@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { Button, Modal, Row } from '@kocherga/frontkit';
 
-import { useCommonHotkeys, useAPI } from '~/common/hooks';
+import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 import { State } from '~/redux/store';
 
