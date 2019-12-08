@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -8,22 +9,18 @@ import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
 import { createEvent } from '~/events/features/events';
-import { closeUI } from '~/events/features/calendarUI';
+import { closeUI, selectRangeForNewEvent } from '~/events/features/calendarUI';
 
 import EventFields from './EventFields';
 
-interface Props {
-  start: Date;
-  end: Date;
-}
-
-const NewEventModal: React.FC<Props> = ({ start, end }) => {
+const NewEventModal: React.FC = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
 
   const dispatch = useDispatch();
+  const { start, end } = useSelector(selectRangeForNewEvent);
 
   const api = useAPI();
 

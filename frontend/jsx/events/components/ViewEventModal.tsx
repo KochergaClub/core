@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import styled from 'styled-components';
 
@@ -7,21 +7,19 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import { A, Button, Modal, Row } from '@kocherga/frontkit';
 
-import {
-  useFocusOnFirstModalRender,
-  useCommonHotkeys,
-  useDispatch,
-} from '~/common/hooks';
-import { State } from '~/redux/store';
+import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
-import { selectEventById } from '../features/events';
-import { closeUI, startEditUI } from '../features/calendarUI';
+import { Event } from '../types';
+
+import * as calendarUI from '../features/calendarUI';
 
 // not redux-connected version! TeamCalendarPage is not migrated to redux yet
 import { EventInfo } from './EventInfo';
 
 interface Props {
-  eventId: string;
+  event: Event | null;
+  closeCb: () => void;
+  editCb: () => void;
 }
 
 const EventTitle = styled.header`
@@ -36,23 +34,16 @@ const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   </A>
 );
 
-const ViewEventModal: React.FC<Props> = ({ eventId }) => {
-  const dispatch = useDispatch();
-
-  const event = useSelector((state: State) => selectEventById(state, eventId));
+const ViewEventModal: React.FC<Props> = ({ event, closeCb, editCb }) => {
   const focus = useFocusOnFirstModalRender();
-
-  const editCb = useCallback(() => {
-    dispatch(startEditUI(eventId));
-  }, [dispatch]);
-
-  const closeCb = useCallback(() => {
-    dispatch(closeUI());
-  }, [dispatch]);
 
   const hotkeys = useCommonHotkeys({
     onEscape: closeCb,
   });
+
+  if (!event) {
+    return null; // shouldn't happen
+  }
 
   return (
     <Modal>
@@ -73,4 +64,13 @@ const ViewEventModal: React.FC<Props> = ({ eventId }) => {
   );
 };
 
-export default ViewEventModal;
+const mapStateToProps = createStructuredSelector({
+  event: calendarUI.selectActiveEvent,
+});
+
+const mapDispatchToProps = {
+  closeCb: calendarUI.closeUI,
+  editCb: calendarUI.switchFromViewToEditUI,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewEventModal);

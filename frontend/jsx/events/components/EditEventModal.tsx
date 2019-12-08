@@ -7,20 +7,19 @@ import { Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
-import { State } from '~/redux/store';
 
-import { deleteEvent, patchEvent, selectEventById } from '../features/events';
-import { closeUI } from '../features/calendarUI';
+import { deleteEvent, patchEvent } from '../features/events';
+import { closeUI, selectActiveEvent } from '../features/calendarUI';
 
 import EventFields from './EventFields';
 
-interface Props {
-  eventId: string;
-}
-
-const EditEventModal: React.FC<Props> = ({ eventId }) => {
+const EditEventModal: React.FC = () => {
   const dispatch = useDispatch();
-  const event = useSelector((state: State) => selectEventById(state, eventId));
+  const event = useSelector(selectActiveEvent);
+
+  if (!event) {
+    throw new Error("Editing event is empty but shouldn't be");
+  }
 
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description);

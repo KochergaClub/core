@@ -11,16 +11,11 @@ const UILayer: React.FC = () => {
 
   switch (uiState.mode) {
     case 'new':
-      return (
-        <NewEventModal
-          start={uiState.context.start}
-          end={uiState.context.end}
-        />
-      );
+      return <NewEventModal />;
     case 'view':
-      return <ViewEventModal eventId={uiState.context.event_id} />;
+      return <ViewEventModal />;
     case 'edit':
-      return <EditEventModal eventId={uiState.context.event_id} />;
+      return <EditEventModal />;
     default:
       return null;
   }

@@ -64,10 +64,14 @@ const slice = createExtendedSlice({
 });
 
 /**************** selectors ****************/
-// TODO - reselect
+export const selectServerEvents = createSelector(
+  slice.selectors.self,
+  sliceState => sliceState.byId
+);
+
 export const selectEventById = (state: State, event_id: string): Event => {
-  const sliceState = slice.selectors.self(state);
-  const serverEvent = sliceState.byId[event_id];
+  const serverEvents = selectServerEvents(state);
+  const serverEvent = serverEvents[event_id];
 
   if (!serverEvent) {
     throw new Error(`Event ${event_id} not found in store`);
