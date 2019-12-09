@@ -1,2 +1,2 @@
 compose: docker-sync-stack start
-front: cd jsx && NODE_ENV=development NO_DOCKER_DEV=1 node ./render/server/index.js --port 8000
+front: cd frontend/jsx && NODE_ENV=development NO_DOCKER_DEV=1 node ./render/server/index.js --port 8000
