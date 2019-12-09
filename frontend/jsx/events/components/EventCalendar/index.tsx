@@ -162,7 +162,7 @@ const EventCalendar: NextPage<Props> = props => {
   const events = useSelector(selectEventsWithMetadata);
 
   return (
-    <div>
+    <>
       <BigCalendarConfigured
         events={events}
         getNow={() => utcToZonedTime(new Date(), timezone)}
@@ -179,7 +179,7 @@ const EventCalendar: NextPage<Props> = props => {
         }}
       />
       <UILayer />
-    </div>
+    </>
   );
 };
 
