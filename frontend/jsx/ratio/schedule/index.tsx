@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useReducer } from 'react';
+import { useState, useCallback, useReducer } from 'react';
 import { useSelector } from 'react-redux';
 
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ import { useAPI } from '~/common/hooks';
 
 import { TrainingDay, Training } from '~/ratio/types';
 import { getSchedule, copyScheduleFrom } from '~/ratio/api';
-import { selectViewingTraining } from '~/ratio/selectors';
+import { selectTraining } from '~/ratio/features/trainingItem';
 
 import Unprintable from './Unprintable';
 
@@ -50,7 +50,7 @@ interface Props {
 }
 
 const SchedulePage: React.FC<Props> = props => {
-  const training = useSelector(selectViewingTraining);
+  const training = useSelector(selectTraining);
 
   const [store, dispatch] = useReducer(reducer, {
     schedule: props.schedule,

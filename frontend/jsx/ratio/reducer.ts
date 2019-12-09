@@ -1,50 +1,15 @@
-import { AnyAction, Reducer, combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 
-import { ticketsSlice, trainingsSlice, trainersSlice } from './slices';
-import {
-  TICKET_TRY_FISCALIZE,
-  TICKET_FISCALIZED,
-  ActionTypes,
-} from './actions';
+import trainers from './features/trainers';
+import trainings from './features/trainings';
+import trainingItem from './features/trainingItem';
+import trainingTickets from './features/trainingTickets';
 
-type TicketsState = ReturnType<typeof ticketsSlice.reducer>;
-
-const ticketsReducer: Reducer<TicketsState> = (
-  prevState = ticketsSlice.initialState,
-  anyAction: AnyAction
-) => {
-  const state = ticketsSlice.reducer(prevState, anyAction);
-  const action = anyAction as ActionTypes;
-  switch (action.type) {
-    case TICKET_FISCALIZED:
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.payload]: {
-            ...state.byId[action.payload],
-            fiscalization_status: 'fiscalized',
-          },
-        },
-      };
-    case TICKET_TRY_FISCALIZE:
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.payload]: {
-            ...state.byId[action.payload],
-            fiscalization_status: 'in_progress',
-          },
-        },
-      };
-    default:
-      return state;
-  }
-};
-
-export default combineReducers({
-  tickets: ticketsReducer,
-  trainings: trainingsSlice.reducer,
-  trainers: trainersSlice.reducer,
+const reducer = combineReducers({
+  trainers: trainers.reducer,
+  trainings: trainings.reducer,
+  trainingItem: trainingItem.reducer,
+  trainingTickets: trainingTickets.reducer,
 });
+
+export default reducer;

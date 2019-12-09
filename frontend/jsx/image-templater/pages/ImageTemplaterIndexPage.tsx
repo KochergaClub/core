@@ -1,12 +1,10 @@
-import React from 'react';
-
 import { NextPage } from '~/common/types';
 
 import Page from '~/components/Page';
 
 import TemplateList from '~/image-templater/components/TemplateList';
 
-import { loadTemplates } from '~/image-templater/actions';
+import { loadTemplates } from '~/image-templater/features/templates';
 
 const ImageTemplaterIndexPage: NextPage = () => {
   return (

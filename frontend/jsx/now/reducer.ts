@@ -1,16 +1,9 @@
-import { createSelector, Selector } from 'reselect';
+import { combineReducers } from '@reduxjs/toolkit';
 
-import { State } from '~/redux/store';
+import data from './features/data';
 
-import { nowDataSlice as slice } from './slices';
-import { NowData } from './types';
+const reducer = combineReducers({
+  data: data.reducer,
+});
 
-const selectApp: Selector<State, ReturnType<typeof slice.reducer>> = state =>
-  state.now;
-
-export const selectNowData: Selector<State, NowData | null> = createSelector(
-  selectApp,
-  slice.selectors.selectData
-);
-
-export default slice.reducer;
+export default reducer;

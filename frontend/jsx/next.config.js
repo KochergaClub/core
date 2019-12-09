@@ -1,4 +1,10 @@
-module.exports = {
+const webpack = require('webpack');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
   webpack: (config, options) => {
     config.resolve.alias['~'] = __dirname;
 
@@ -7,9 +13,14 @@ module.exports = {
       config.resolve.alias['@sentry/node'] = '@sentry/browser';
     }
 
+    config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+
     return config;
   },
   distDir: '../jsx-build',
+  experimental: {
+    granularChunks: true,
+  },
   publicRuntimeConfig: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
     facebookPixelId: process.env.FACEBOOK_PIXEL_ID,
@@ -34,4 +45,4 @@ module.exports = {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,
   },
-};
+});

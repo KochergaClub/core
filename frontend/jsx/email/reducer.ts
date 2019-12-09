@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { subscribeChannelsSlice, mailchimpCategoriesSlice } from './slices';
+import subscribeChannels from './features/subscribeChannels';
+import mailchimpCategories from './features/mailchimpCategories';
 
 export default combineReducers({
-  subscribeChannels: subscribeChannelsSlice.reducer,
-  mailchimpCategories: mailchimpCategoriesSlice.reducer,
+  subscribeChannels: subscribeChannels.reducer,
+  mailchimpCategories: mailchimpCategories.reducer,
 });

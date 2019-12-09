@@ -1,71 +1,83 @@
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { useCommonHotkeys, useAPI } from '../../common/hooks';
-import { timezone, formatDate } from '../../common/utils';
-import { Event, LocalEvent } from '../types';
-import { deleteEvent, patchEvent } from '../api';
-
 import { Button, Modal, Row } from '@kocherga/frontkit';
+
+import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
+import { timezone, formatDate } from '~/common/utils';
+
+import { deleteEvent, patchEvent } from '../features/events';
+import { closeUI, selectActiveEvent } from '../features/calendarUI';
 
 import EventFields from './EventFields';
 
-interface Props {
-  event: LocalEvent;
-  onSave: (e: Event) => void;
-  onClose: () => void;
-  onDelete: (id: string) => void;
-}
+const EditEventModal: React.FC = () => {
+  const dispatch = useDispatch();
+  const event = useSelector(selectActiveEvent);
 
-const EditEventModal: React.FC<Props> = ({
-  onSave,
-  onDelete,
-  onClose,
-  event,
-}) => {
-  const [title, setTitle] = useState(event.title);
-  const [description, setDescription] = useState(event.description);
-  const [room, setRoom] = useState(event.room);
+  const [title, setTitle] = useState(event?.title || '');
+  const [description, setDescription] = useState(event?.description || '');
+  const [room, setRoom] = useState(event?.room || '');
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const api = useAPI();
 
-  const saveDisabled = deleting || saving || !title.length;
+  const saveDisabled = deleting || saving || !title || !title.length;
 
   const saveCb = useCallback(async () => {
+    if (!event) {
+      return;
+    }
     if (saveDisabled) {
       return;
     }
     setSaving(true);
 
-    const patchedEvent = await patchEvent(api, event, {
-      title,
-      description,
-      location: room,
-    });
-
-    onSave(patchedEvent);
-  }, [api, onSave, event.id, saveDisabled, title, description, room]);
+    await dispatch(
+      patchEvent(event.id, {
+        title,
+        description,
+        location: room,
+      })
+    );
+    dispatch(closeUI());
+  }, [api, event, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
+    if (!event) {
+      return;
+    }
     setDeleting(true);
-    await deleteEvent(api, event);
-    onDelete(event.id);
-  }, [api, onDelete, event.id]);
+    await dispatch(deleteEvent(event.id));
+    dispatch(closeUI());
+  }, [api, event]);
+
+  const closeCb = useCallback(() => {
+    dispatch(closeUI());
+  }, [dispatch]);
 
   const hotkeys = useCommonHotkeys({
-    onEscape: onClose,
+    onEscape: closeCb,
     onEnter: saveCb,
   });
+
+  if (!event) {
+    if (deleting) {
+      return null; // that's ok, we're probably deleting it ourselves
+    }
+    dispatch(closeUI()); // somebody else deleted the event and we got websocket notification? probably...
+    return null;
+  }
 
   const zonedStart = utcToZonedTime(event.start, timezone);
   const zonedEnd = utcToZonedTime(event.end, timezone);
 
   return (
     <Modal>
-      <Modal.Header toggle={onClose}>
+      <Modal.Header toggle={closeCb}>
         Редактировать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>

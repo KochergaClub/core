@@ -12,7 +12,7 @@ import { A, RichText, Row, Label } from '@kocherga/frontkit';
 import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
 
-import { selectEventById } from '../selectors';
+import { selectEvent } from '../features/eventPage';
 import { Event } from '../types';
 
 interface Props {
@@ -79,8 +79,8 @@ export const EventInfo: React.FC<Props> = ({ event }) => {
   );
 };
 
-const mapStateToProps = (state: State, ownProps: { event_id: string }) => ({
-  event: selectEventById(state, ownProps.event_id),
+const mapStateToProps = (state: State) => ({
+  event: selectEvent(state),
 });
 
 export default connect(mapStateToProps)(EventInfo);

@@ -1,28 +1,26 @@
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
-import { useCommonHotkeys, useAPI } from '../../common/hooks';
-import { timezone, formatDate } from '../../common/utils';
-import { Event } from '../types';
-import { createEvent } from '../api';
+import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+
+import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
+import { timezone, formatDate } from '~/common/utils';
+
+import { createEvent } from '~/events/features/events';
+import { closeUI, selectRangeForNewEvent } from '~/events/features/calendarUI';
 
 import EventFields from './EventFields';
 
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
-
-interface Props {
-  start: Date;
-  end: Date;
-  onCreate: (e: Event) => void;
-  onClose: () => void;
-}
-
-const NewEventModal: React.FC<Props> = ({ onCreate, onClose, start, end }) => {
+const NewEventModal: React.FC = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
+
+  const dispatch = useDispatch();
+  const { start, end } = useSelector(selectRangeForNewEvent);
 
   const api = useAPI();
 
@@ -35,19 +33,25 @@ const NewEventModal: React.FC<Props> = ({ onCreate, onClose, start, end }) => {
 
     setSaving(true);
 
-    const event = await createEvent(api, {
-      start,
-      end,
-      title,
-      description,
-      location: room,
-    });
-    onCreate(event);
-  }, [api, title, description, room, start, end, saveDisabled, onCreate]);
+    await dispatch(
+      createEvent({
+        start,
+        end,
+        title,
+        description,
+        location: room,
+      })
+    );
+    dispatch(closeUI());
+  }, [api, title, description, room, start, end, saveDisabled]);
+
+  const closeCb = useCallback(() => {
+    dispatch(closeUI());
+  }, [dispatch]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: create,
-    onEscape: onClose,
+    onEscape: closeCb,
   });
 
   const zonedStart = utcToZonedTime(start, timezone);
@@ -55,7 +59,7 @@ const NewEventModal: React.FC<Props> = ({ onCreate, onClose, start, end }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={onClose}>
+      <Modal.Header toggle={closeCb}>
         Создать событие {formatDate(zonedStart, 'd MMMM HH:mm')}–
         {formatDate(zonedEnd, 'HH:mm')}
       </Modal.Header>

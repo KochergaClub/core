@@ -5,7 +5,8 @@ import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
 import { loadMembers } from '~/staff/actions';
-import { loadGroups, loadPermissions } from '~/audit/actions';
+import { loadGroups } from '~/audit/features/groups';
+import { loadPermissions } from '~/audit/features/permissions';
 
 import SinglePermissionsList from '~/audit/components/SinglePermissionsList';
 import GroupsList from '~/audit/components/GroupsList';

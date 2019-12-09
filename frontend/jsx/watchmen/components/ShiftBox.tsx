@@ -7,15 +7,14 @@ import { colors } from '@kocherga/frontkit';
 
 import WatchmanPicker from './WatchmanPicker';
 
-import { useAPI, useExpandable } from '~/common/hooks';
+import { useExpandable } from '~/common/hooks';
 import { State } from '~/redux/store';
 
 import { nightColor } from '../constants';
 import { Shift, Watchman } from '../types';
 
-import { updateShift as updateShiftApiCall } from '../api';
-import { updateShift } from '../actions';
-import { selectEditing } from '../selectors';
+import { updateShift } from '../features/schedule';
+import { selectEditing } from '../features/editing';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -80,35 +79,25 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  updateShift: (shift: Shift) => void;
+  updateShift: (shift: Shift) => Promise<void>;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
 
 const ShiftBox = (props: Props) => {
   const { editing } = props;
-  const api = useAPI();
 
   const { flipExpand, unexpand, ref, expanded } = useExpandable();
 
-  const { date, shift: shiftType } = props.shift;
-
   const updateShiftCb = useCallback(
     async (data: { watchman: Watchman | null; is_night: boolean }) => {
-      await updateShiftApiCall(api, {
-        date,
-        shift: shiftType,
-        watchman: data.watchman,
-        is_night: data.is_night,
-      });
-
-      props.updateShift({
+      await props.updateShift({
         ...props.shift,
         ...data,
       });
       unexpand();
     },
-    [api, date, shiftType, props.shift, props.updateShift, unexpand]
+    [props.shift, props.updateShift, unexpand]
   );
 
   const pickWatchman = async (watchman: Watchman) => {
@@ -141,7 +130,6 @@ const ShiftBox = (props: Props) => {
   );
 };
 
-export default connect(
-  (state: State) => ({ editing: selectEditing(state) }),
-  { updateShift }
-)(ShiftBox);
+export default connect((state: State) => ({ editing: selectEditing(state) }), {
+  updateShift,
+})(ShiftBox);

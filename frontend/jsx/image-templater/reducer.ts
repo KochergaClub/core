@@ -1,3 +1,11 @@
-import slice from './slice';
+import { combineReducers } from '@reduxjs/toolkit';
 
-export default slice.reducer;
+import templates from './features/templates';
+import templateItem from './features/templateItem';
+
+const reducer = combineReducers({
+  templates: templates.reducer,
+  templateItem: templateItem.reducer,
+});
+
+export default reducer;

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
@@ -6,7 +6,7 @@ import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
 import { Member } from '~/staff/types';
 
 import { Group } from '../types';
-import { addMemberToGroup } from '../actions';
+import { addMemberToGroup } from '../features/groups';
 
 interface Props {
   close: () => void;

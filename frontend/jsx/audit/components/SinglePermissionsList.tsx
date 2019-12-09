@@ -1,11 +1,10 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Column, Row, Label } from '@kocherga/frontkit';
 
 import UserInfo from './UserInfo';
 
-import { selectPermissions } from '../selectors';
+import { selectPermissions } from '../features/permissions';
 
 const SinglePermissionsList: React.FC = () => {
   const permissions = useSelector(selectPermissions);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import baseStyled, {
@@ -8,10 +8,9 @@ import baseStyled, {
 
 import { NextPage } from '~/common/types';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
-import { selectNowData } from '../reducer';
-import { loadNowData } from '../actions';
+import { selectNowData, loadNowData } from '../features/data';
 
 export type ThemeName = 'default' | 'tv';
 

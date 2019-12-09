@@ -1,20 +1,22 @@
 import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
+import { useDispatch } from '~/common/hooks';
 
 import Collection from '~/components/collections/Collection';
 import TableView from '~/components/collections/TableView';
 
-import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
-
-import { deleteEventFeedback } from '~/events/actions';
-import { selectFeedbacks } from '~/events/selectors';
-
-import { Feedback } from '~/events/types';
+import { AsyncButtonWithConfirm } from '~/components';
 
 import { FormShape } from '~/components/forms/types';
 
-import { addEventFeedback } from '~/events/actions';
-import { CreateFeedbackParams } from '~/events/types';
+import {
+  selectEventFeedbacks,
+  deleteEventFeedback,
+  addEventFeedback,
+} from '~/events/features/eventPageFeedbacks';
+
+import { Feedback, CreateFeedbackParams } from '~/events/types';
 
 import shapes from '~/shapes';
 
@@ -22,15 +24,12 @@ const feedbackShape: FormShape = shapes.events.feedback.filter(
   f => f.name !== 'event_id' && f.name !== 'id'
 );
 
-const DeleteFeedback: React.FC<{ feedback: Feedback; event_id: string }> = ({
-  feedback,
-  event_id,
-}) => {
+const DeleteFeedback: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
   const dispatch = useDispatch();
 
   const deleteCb = useCallback(async () => {
-    await dispatch(deleteEventFeedback(event_id, feedback.id));
-  }, [feedback.id, event_id]);
+    await dispatch(deleteEventFeedback(feedback.id));
+  }, [feedback.id]);
 
   return (
     <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
@@ -39,24 +38,20 @@ const DeleteFeedback: React.FC<{ feedback: Feedback; event_id: string }> = ({
   );
 };
 
-interface Props {
-  event_id: string;
-}
-
-const FeedbackCollection: React.FC<Props> = ({ event_id }) => {
+const FeedbackCollection: React.FC = () => {
   // FIXME - we store current event's feedbacks globally instead of separating them by event
-  const feedbacks = useSelector(selectFeedbacks);
+  const feedbacks = useSelector(selectEventFeedbacks);
   const dispatch = useDispatch();
 
   const add = useCallback(
     async (values: CreateFeedbackParams) => {
-      await dispatch(addEventFeedback(event_id, values));
+      await dispatch(addEventFeedback(values));
     },
     [dispatch, addEventFeedback]
   );
 
   const renderExtraColumn = (feedback: Feedback) => (
-    <DeleteFeedback feedback={feedback} event_id={event_id} />
+    <DeleteFeedback feedback={feedback} />
   );
 
   return (

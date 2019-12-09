@@ -1,12 +1,9 @@
-import React from 'react';
-
 import { NextPage } from '~/common/types';
 import Page from '~/components/Page';
 
-import {
-  loadSubscribeChannels,
-  loadMailchimpCategories,
-} from '~/email/actions';
+import { loadSubscribeChannels } from '~/email/features/subscribeChannels';
+import { loadMailchimpCategories } from '~/email/features/mailchimpCategories';
+
 import SubscribeChannelList from '~/email/components/SubscribeChannelList';
 import MailchimpCategoryList from '~/email/components/MailchimpCategoryList';
 

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Column, Row } from '@kocherga/frontkit';
@@ -16,8 +16,8 @@ import AddMemberToGroupModal from './AddMemberToGroupModal';
 
 import { Group, User, Permission } from '../types';
 
-import { selectPermissions } from '../selectors';
-import { removeUserFromGroup } from '../actions';
+import { selectPermissions } from '../features/permissions';
+import { removeUserFromGroup } from '../features/groups';
 
 interface Props {
   group: Group;

@@ -1,18 +1,16 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
-import { loadTemplateByName } from '~/image-templater/actions';
-import { selectViewingTemplate } from '~/image-templater/selectors';
+import { loadTemplate, selectTemplate } from '../features/templateItem';
 
-import ViewingTemplateScreen from '~/image-templater/components/ViewingTemplateScreen';
+import ViewingTemplateScreen from '../components/ViewingTemplateScreen';
 
 interface Props {}
 
 const ImageTemplaterDetailsPage: NextPage<Props> = () => {
-  const template = useSelector(selectViewingTemplate);
+  const template = useSelector(selectTemplate);
 
   if (!template) {
     return <div>Внутренняя ошибка. Не удалось загрузить шаблон.</div>;
@@ -32,7 +30,7 @@ ImageTemplaterDetailsPage.getInitialProps = async ({
   query,
 }) => {
   const slug = query.slug as string;
-  await dispatch(loadTemplateByName(slug));
+  await dispatch(loadTemplate(slug));
   return {};
 };
 

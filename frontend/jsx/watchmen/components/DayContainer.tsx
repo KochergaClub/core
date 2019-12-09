@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { State } from '~/redux/store';
 
 import { DaySchedule } from '../types';
-import { selectDaySchedule } from '../selectors';
+import { selectDaySchedule } from '../features/schedule';
 
 import ShiftBox from './ShiftBox';
 

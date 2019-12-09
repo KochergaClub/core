@@ -1,107 +1,21 @@
-import React, { useCallback, useContext } from 'react';
-
-import { Event, LocalEvent } from '../types';
-import { UIStore, UIAction } from '../uiTypes';
+import { useSelector } from 'react-redux';
 
 import NewEventModal from './NewEventModal';
 import EditEventModal from './EditEventModal';
 import ViewEventModal from './ViewEventModal';
-import { EventDispatch } from '../contexts';
 
-interface Props {
-  uiStore: UIStore;
-  uiDispatch: React.Dispatch<UIAction>;
-}
+import { selectUIState } from '../features/calendarUI';
 
-const UILayer = ({ uiStore, uiDispatch }: Props) => {
-  const dispatch = useContext(EventDispatch);
+const UILayer: React.FC = () => {
+  const uiState = useSelector(selectUIState);
 
-  const onCreate = useCallback(
-    (event: Event) => {
-      dispatch({
-        type: 'CREATE',
-        payload: event,
-      });
-      uiDispatch({
-        type: 'CLOSE',
-      });
-    },
-    [dispatch, uiDispatch]
-  );
-
-  const onClose = useCallback(() => {
-    uiDispatch({
-      type: 'CLOSE',
-    });
-  }, [uiDispatch]);
-
-  const onEdit = useCallback(
-    (event: LocalEvent) => {
-      uiDispatch({
-        type: 'START_EDIT',
-        payload: { event },
-      });
-    },
-    [uiDispatch]
-  );
-
-  const onSave = useCallback(
-    (event: Event) => {
-      dispatch({
-        type: 'PATCH',
-        payload: {
-          event,
-        },
-      });
-      uiDispatch({
-        type: 'CLOSE',
-      });
-    },
-    [dispatch, uiDispatch]
-  );
-
-  const onDelete = useCallback(
-    (event_id: string) => {
-      dispatch({
-        type: 'DELETE',
-        payload: {
-          event_id,
-        },
-      });
-      uiDispatch({
-        type: 'CLOSE',
-      });
-    },
-    [dispatch, uiDispatch]
-  );
-
-  switch (uiStore.mode) {
+  switch (uiState.mode) {
     case 'new':
-      return (
-        <NewEventModal
-          start={uiStore.context.start}
-          end={uiStore.context.end}
-          onCreate={onCreate}
-          onClose={onClose}
-        />
-      );
+      return <NewEventModal />;
     case 'view':
-      return (
-        <ViewEventModal
-          event={uiStore.context.event}
-          onClose={onClose}
-          onEdit={onEdit}
-        />
-      );
+      return <ViewEventModal />;
     case 'edit':
-      return (
-        <EditEventModal
-          event={uiStore.context.event}
-          onSave={onSave}
-          onDelete={onDelete}
-          onClose={onClose}
-        />
-      );
+      return <EditEventModal />;
     default:
       return null;
   }

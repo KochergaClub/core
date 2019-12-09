@@ -1,10 +1,9 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Column } from '@kocherga/frontkit';
 import { CardList } from '~/components/Card';
 
-import { selectSubscribeChannels } from '../selectors';
+import { selectSubscribeChannels } from '../features/subscribeChannels';
 
 import CreateSubscribeChannelButton from './CreateSubscribeChannelButton';
 import SubscribeChannelCard from './SubscribeChannelCard';

@@ -1,6 +1,6 @@
 import { API } from '~/common/api';
 
-import { Event, ServerEvent, NewEvent, serverEventToEvent } from './types';
+import { Event, ServerEvent, serverEventToEvent } from './types';
 
 export interface Range {
   // YYYY-MM-DD format; not Date, because it needs to be serializable.
@@ -29,33 +29,4 @@ export const searchEvents = async (
   )) as { results: ServerEvent[] };
 
   return serverEvents.map(serverEventToEvent);
-};
-
-// FIXME - EventPatch interface
-export const patchEvent = async (
-  api: API,
-  event: Event,
-  patch: any
-): Promise<Event> => {
-  const json = (await api.call(
-    `event/${event.id}`,
-    'PATCH',
-    patch
-  )) as ServerEvent;
-  return serverEventToEvent(json);
-};
-
-export const deleteEvent = async (api: API, event: Event) => {
-  await api.call(`event/${event.id}`, 'DELETE', undefined, {
-    expectJSON: false,
-  });
-};
-
-export const createEvent = async (
-  api: API,
-  params: NewEvent
-): Promise<Event> => {
-  const json = (await api.call('events', 'POST', params)) as ServerEvent;
-  const event = serverEventToEvent(json);
-  return event;
 };

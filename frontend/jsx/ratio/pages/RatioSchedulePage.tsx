@@ -1,15 +1,16 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { NextPage } from '~/common/types';
 import { selectAPI } from '~/core/selectors';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
 import { TrainingDay } from '~/ratio/types';
 import { getSchedule } from '~/ratio/api';
-import { loadTrainingBySlug, loadTrainers } from '~/ratio/actions';
-import { selectViewingTraining } from '~/ratio/selectors';
+
+import { loadTrainers } from '~/ratio/features/trainers';
+import { loadTraining } from '~/ratio/features/trainingItem';
+import { selectTraining } from '~/ratio/features/trainingItem';
 
 import SchedulePage from '~/ratio/schedule';
 
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const RatioSchedulePage: NextPage<Props> = props => {
-  const training = useSelector(selectViewingTraining);
+  const training = useSelector(selectTraining);
 
   if (!training) {
     throw new Error('No training');
@@ -40,7 +41,7 @@ RatioSchedulePage.getInitialProps = async ({
   const api = selectAPI(getState());
   const slug = query.slug as string;
 
-  await dispatch(loadTrainingBySlug(slug));
+  await dispatch(loadTraining(slug));
   await dispatch(loadTrainers());
 
   const schedule = await getSchedule(api, slug);

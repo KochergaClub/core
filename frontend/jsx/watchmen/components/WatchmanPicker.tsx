@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { Watchman } from '../types';
 
-import { selectActiveWatchmen } from '../selectors';
+import { selectActiveWatchmen } from '../features/watchmen';
 import BasicPicker from '~/components/Picker';
 
 interface Extra {

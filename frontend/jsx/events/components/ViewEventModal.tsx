@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import styled from 'styled-components';
 
@@ -8,15 +9,17 @@ import { A, Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
-import { LocalEvent } from '../types';
+import { Event } from '../types';
+
+import * as calendarUI from '../features/calendarUI';
 
 // not redux-connected version! TeamCalendarPage is not migrated to redux yet
 import { EventInfo } from './EventInfo';
 
 interface Props {
-  event: LocalEvent;
-  onClose: () => void;
-  onEdit: (e: LocalEvent) => void;
+  event: Event | null;
+  closeCb: () => void;
+  editCb: () => void;
 }
 
 const EventTitle = styled.header`
@@ -31,20 +34,20 @@ const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
   </A>
 );
 
-const ViewEventModal: React.FC<Props> = ({ onEdit, onClose, event }) => {
+const ViewEventModal: React.FC<Props> = ({ event, closeCb, editCb }) => {
   const focus = useFocusOnFirstModalRender();
 
   const hotkeys = useCommonHotkeys({
-    onEscape: onClose,
+    onEscape: closeCb,
   });
 
-  const editCb = useCallback(() => {
-    onEdit(event);
-  }, [event, onEdit]);
+  if (!event) {
+    return null; // shouldn't happen
+  }
 
   return (
     <Modal>
-      <Modal.Header toggle={onClose}>&nbsp;</Modal.Header>
+      <Modal.Header toggle={closeCb}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
         <EventInfo event={event} />
@@ -61,4 +64,13 @@ const ViewEventModal: React.FC<Props> = ({ onEdit, onClose, event }) => {
   );
 };
 
-export default ViewEventModal;
+const mapStateToProps = createStructuredSelector({
+  event: calendarUI.selectActiveEvent,
+});
+
+const mapDispatchToProps = {
+  closeCb: calendarUI.closeUI,
+  editCb: calendarUI.switchFromViewToEditUI,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewEventModal);

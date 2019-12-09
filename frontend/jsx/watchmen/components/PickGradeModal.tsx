@@ -5,12 +5,13 @@ import { Button, Column, Row, Modal } from '@kocherga/frontkit';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
-import { pickWatchmanGrade, stopAskingForWatchmanGrade } from '../actions';
+import { selectGrades } from '../features/grades';
 import {
-  selectGrades,
   selectAskingForGradeWatchman,
   selectPickingWatchmanGrade,
-} from '../selectors';
+  pickWatchmanGrade,
+  stopAskingForWatchmanGrade,
+} from '../features/gradesUI';
 import { Grade } from '../types';
 
 const GradeItem = ({ grade }: { grade: Grade }) => {

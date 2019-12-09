@@ -1,43 +1,41 @@
-import React from 'react';
-import { useCallback, useEffect, useState, useReducer } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addDays } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
-import { useListeningWebSocket, useAPI } from '~/common/hooks';
+import { useListeningWebSocket, useAPI, useDispatch } from '~/common/hooks';
 
 import BigCalendarConfigured from './BigCalendarConfigured';
 import UILayer from '~/events/components/UILayer';
 import CalendarEvent from './CalendarEvent';
 
+import { LocalEventWithMetadata } from '~/events/types';
+
+import { getEventsInRange } from '~/events/api';
+
 import {
-  Event,
-  ServerEvent,
-  LocalEvent,
-  getInitialState,
-  reducer,
-  serverEventToEvent,
-} from '~/events/types';
+  replaceEvents,
+  selectEventsWithMetadata,
+  patchEvent,
+} from '~/events/features/events';
+import { startNewUI, startViewUI } from '~/events/features/calendarUI';
 
-import { getEventsInRange, patchEvent } from '~/events/api';
+const startAccessor = (eventWithMetadata: LocalEventWithMetadata) =>
+  utcToZonedTime(eventWithMetadata.event.start, timezone);
 
-import { uiReducer, initialUIState } from '~/events/uiTypes';
+const endAccessor = (eventWithMetadata: LocalEventWithMetadata) =>
+  utcToZonedTime(eventWithMetadata.event.end, timezone);
 
-import { EventDispatch } from '~/events/contexts';
-
-const startAccessor = (event: LocalEvent) =>
-  utcToZonedTime(event.start, timezone);
-
-const endAccessor = (event: LocalEvent) => utcToZonedTime(event.end, timezone);
-
-const eventPropGetter = (event: LocalEvent) => {
+const eventPropGetter = (eventWithMetadata: LocalEventWithMetadata) => {
   const classNames: string[] = [];
+  const event = eventWithMetadata.event;
   if (event.type === 'public') {
     classNames.push('rbc-kocherga-event-public');
   }
-  if (event.saving) {
+  if (eventWithMetadata.saving) {
     classNames.push('rbc-kocherga-event-saving');
   }
   if (event.description) {
@@ -50,12 +48,11 @@ const eventPropGetter = (event: LocalEvent) => {
 };
 
 interface Props {
-  events: ServerEvent[];
   range: { start: string; end: string };
 }
 
 const EventCalendar: NextPage<Props> = props => {
-  const [store, dispatch] = useReducer(reducer, props.events, getInitialState);
+  const dispatch = useDispatch();
 
   const api = useAPI();
 
@@ -70,15 +67,12 @@ const EventCalendar: NextPage<Props> = props => {
       end: format(range.end, 'yyyy-MM-dd'),
     });
 
-    dispatch({
-      type: 'REPLACE_ALL',
-      payload: { events: json.map(serverEventToEvent) },
-    });
+    dispatch(replaceEvents(json));
   }, [api, range]);
 
   useEffect(() => {
     fetchEvents();
-  }, [range, fetchEvents]);
+  }, [fetchEvents]);
 
   useListeningWebSocket('ws/events/', fetchEvents);
 
@@ -113,8 +107,6 @@ const EventCalendar: NextPage<Props> = props => {
     setRange({ start, end });
   };
 
-  const [uiStore, uiDispatch] = useReducer(uiReducer, initialUIState);
-
   const startNewEvent = useCallback(
     // Note: start and end are zoned since they come from RBC.
     ({
@@ -129,34 +121,26 @@ const EventCalendar: NextPage<Props> = props => {
         end: zonedTimeToUtc(zonedEnd, timezone),
       };
 
-      uiDispatch({
-        type: 'START_NEW',
-        payload: {
-          start,
-          end,
-        },
-      });
+      dispatch(startNewUI({ start, end }));
     },
     []
   );
 
-  const startViewEvent = useCallback((event: Event) => {
-    uiDispatch({
-      type: 'START_VIEW',
-      payload: {
-        event,
-      },
-    });
-  }, []);
+  const startViewEvent = useCallback(
+    (eventWithMetadata: LocalEventWithMetadata) => {
+      dispatch(startViewUI(eventWithMetadata.event.id));
+    },
+    []
+  );
 
   const resizeEvent = useCallback(
     // Note: start and end are zoned since they come from RBC.
     async ({
-      event,
+      event: eventWithMetadata,
       start: zonedStart,
       end: zonedEnd,
     }: {
-      event: Event;
+      event: LocalEventWithMetadata;
       start: Date | string;
       end: Date | string;
     }) => {
@@ -165,29 +149,22 @@ const EventCalendar: NextPage<Props> = props => {
         end: zonedTimeToUtc(zonedEnd, timezone),
       };
 
-      dispatch({
-        type: 'PRE_RESIZE',
-        payload: {
-          event,
-          start,
-          end,
-        },
-      });
-
-      const patchedEvent = await patchEvent(api, event, { start, end });
-
-      dispatch({
-        type: 'PATCH',
-        payload: { event: patchedEvent },
-      });
+      await dispatch(
+        patchEvent(eventWithMetadata.event.id, {
+          start: start.toISOString(),
+          end: end.toISOString(),
+        })
+      );
     },
-    [api]
+    []
   );
 
+  const events = useSelector(selectEventsWithMetadata);
+
   return (
-    <EventDispatch.Provider value={dispatch}>
+    <>
       <BigCalendarConfigured
-        events={store.events}
+        events={events}
         getNow={() => utcToZonedTime(new Date(), timezone)}
         startAccessor={startAccessor}
         endAccessor={endAccessor}
@@ -201,9 +178,8 @@ const EventCalendar: NextPage<Props> = props => {
           event: CalendarEvent,
         }}
       />
-
-      <UILayer uiStore={uiStore} uiDispatch={uiDispatch} />
-    </EventDispatch.Provider>
+      <UILayer />
+    </>
   );
 };
 

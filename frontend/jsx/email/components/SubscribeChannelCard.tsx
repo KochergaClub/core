@@ -1,4 +1,3 @@
-import React from 'react';
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -8,11 +7,11 @@ import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 
 import { SubscribeChannel } from '../types';
-import { selectMailchimpInterestsDict } from '../selectors';
+import { selectMailchimpInterestsDict } from '../features/mailchimpCategories';
 import {
   deleteSubscribeChannel,
   subscribeEmailToSubscribeChannel,
-} from '../actions';
+} from '../features/subscribeChannels';
 
 const SubscribeChannelCard: React.FC<{
   subscribeChannel: SubscribeChannel;
