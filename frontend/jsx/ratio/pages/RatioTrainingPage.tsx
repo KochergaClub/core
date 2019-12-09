@@ -5,7 +5,14 @@ import { A, Column, Row, Label } from '@kocherga/frontkit';
 import { NextPage } from '~/common/types';
 import { selectUser } from '~/core/selectors';
 
-import { Page, ActionButton, PaddedBlock } from '~/components';
+import {
+  Page,
+  ActionButton,
+  PaddedBlock,
+  ParentLinkInHeader,
+} from '~/components';
+
+import PageHeader from '~/blocks/PageHeader';
 
 import { loadKkmPassword } from '~/kkm/actions';
 
@@ -35,7 +42,14 @@ const RatioTrainingPage: NextPage<Props> = () => {
 
   return (
     <Page title={training.name} team>
-      <Page.Title>{training.name}</Page.Title>
+      <PageHeader
+        top={
+          <ParentLinkInHeader href="/team/ratio">
+            Рацио-тренинг
+          </ParentLinkInHeader>
+        }
+        title={training.name}
+      />
       <Page.Main>
         <PaddedBlock width="max">
           <Column>
