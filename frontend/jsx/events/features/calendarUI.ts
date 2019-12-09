@@ -1,7 +1,7 @@
 import { PayloadAction, createSelector } from '@reduxjs/toolkit';
 import { createExtendedSlice } from '~/redux/slices/utils';
 
-import { selectServerEvents } from './events';
+import { default as eventsSlice, selectServerEvents } from './events';
 
 import { serverEventToEvent } from '../types';
 
@@ -74,7 +74,7 @@ const slice = createExtendedSlice({
         if (state.mode !== 'view') {
           return;
         }
-        state = {
+        return {
           ...state,
           mode: 'edit',
         };
@@ -84,6 +84,26 @@ const slice = createExtendedSlice({
       return { mode: 'passive' };
     },
   },
+  extraReducers: builder =>
+    builder
+      .addCase(eventsSlice.actions.replaceAll, (state, action) => {
+        if (state.mode !== 'edit' && state.mode !== 'view') {
+          return;
+        }
+        if (action.payload.map(e => e.id).includes(state.context.event_id)) {
+          return;
+        }
+        // current event is missing from new events list
+        return { mode: 'passive' };
+      })
+      .addCase(eventsSlice.actions.deleteOne, (state, action) => {
+        if (state.mode !== 'edit' && state.mode !== 'view') {
+          return;
+        }
+        if (action.payload === state.context.event_id) {
+          return { mode: 'passive' };
+        }
+      }),
 });
 
 /***************** actions ********************/
@@ -110,6 +130,9 @@ export const selectActiveEvent = createSelector(
       return null;
     }
     const serverEvent = serverEvents[uiState.context.event_id];
+    if (!serverEvent) {
+      return null;
+    }
     return serverEventToEvent(serverEvent);
   }
 );
