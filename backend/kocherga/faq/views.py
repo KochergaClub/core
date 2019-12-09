@@ -3,7 +3,7 @@ from . import models, serializers
 
 
 class EntryViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.AllowAny]
     serializer_class = serializers.EntrySerializer
 
     def get_queryset(self):
