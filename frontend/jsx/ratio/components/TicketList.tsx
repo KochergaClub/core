@@ -1,12 +1,13 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { Column } from '@kocherga/frontkit';
+import { Row, Column } from '@kocherga/frontkit';
 import { Badge, AsyncButton } from '~/components';
 
 import Card, { CardList } from '~/components/Card';
 
 import { selectKkmPassword } from '~/kkm/selectors';
+import { useDispatch } from '~/common/hooks';
 
 import { Ticket } from '../types';
 
@@ -38,12 +39,13 @@ const TicketItem = ({ ticket }: { ticket: Ticket }) => {
   return (
     <Card>
       <Column>
-        <div>
+        <Row gutter={10}>
           <strong>
             {ticket.first_name} {ticket.last_name}
           </strong>
-        </div>
-        <div>{ticket.email}</div>
+          <div>{ticket.email}</div>
+        </Row>
+        <div>{ticket.payment_amount} руб.</div>
         {ticket.status === 'canceled' && <CanceledBadge />}
         {ticket.fiscalization_status === 'todo' ? (
           <FiscalizeButton ticket={ticket} />
