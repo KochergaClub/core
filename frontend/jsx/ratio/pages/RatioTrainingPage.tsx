@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column, Row, Label } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import { selectUser } from '~/core/selectors';
@@ -38,18 +38,20 @@ const RatioTrainingPage: NextPage<Props> = () => {
       <Page.Title>{training.name}</Page.Title>
       <Page.Main>
         <PaddedBlock width="max">
-          <A href={`/admin/ratio/training/${training.id}/change/`}>
-            править в django-админке
-          </A>
-          <p>
-            Когда: <strong>{training.date}</strong>
-          </p>
+          <Column>
+            <Row vCentered>
+              <Label>Когда:</Label>
+              <strong>{training.date}</strong>
+            </Row>
 
-          <div>
+            <A href={`/admin/ratio/training/${training.id}/change/`}>
+              Править в django-админке
+            </A>
+
             <A href={`/team/ratio/training/${training.slug}/schedule`}>
               Расписание
             </A>
-          </div>
+          </Column>
         </PaddedBlock>
 
         <TrainingTicketsBlock />
