@@ -292,6 +292,40 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
           ]
         ]
       }
+    ],
+    "training": [
+      {
+        "name": "id",
+        "optional": true,
+        "title": "ID",
+        "type": "number",
+        "readonly": true
+      },
+      {
+        "name": "name",
+        "optional": false,
+        "title": "Название",
+        "type": "string"
+      },
+      {
+        "name": "slug",
+        "optional": false,
+        "title": "slug",
+        "type": "string"
+      },
+      {
+        "name": "date",
+        "optional": false,
+        "title": "Дата начала",
+        "type": "date"
+      },
+      {
+        "name": "salaries_paid",
+        "optional": false,
+        "title": "salaries paid",
+        "type": "boolean",
+        "readonly": true
+      }
     ]
   }
 };

@@ -1,10 +1,13 @@
-import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import { isBefore } from 'date-fns';
 
-import { usePermissions } from '~/common/hooks';
+import shapes from '~/shapes';
 
+import { usePermissions, useDispatch } from '~/common/hooks';
+
+import { PaddedBlock } from '~/components';
 import Collection from '~/components/collections/Collection';
 import CardListView from '~/components/collections/CardListView';
 
@@ -15,16 +18,14 @@ import { Training, CreateTrainingParams } from '../types';
 
 import TrainingCard from './TrainingCard';
 
-const trainingShape: FormShape = [
-  { name: 'name', type: 'string' },
-  { name: 'slug', type: 'string' },
-  { name: 'date', type: 'date' },
-];
+const trainingShape: FormShape = shapes.ratio.training.filter(
+  field => !field.readonly
+);
 
 const isMuted = (training: Training) =>
   isBefore(new Date(training.date), new Date());
 
-const TrainingCollection: React.FC = () => {
+const TrainingCollectionBlock: React.FC = () => {
   const dispatch = useDispatch();
   const [canCreate] = usePermissions(['ratio.manage']);
 
@@ -43,18 +44,20 @@ const TrainingCollection: React.FC = () => {
   );
 
   return (
-    <Collection
-      names={{
-        plural: 'тренинги',
-        genitive: 'тренинг',
-      }}
-      items={trainings}
-      add={canCreate ? add : undefined}
-      shape={trainingShape}
-      renderItem={renderItem}
-      view={props => <CardListView {...props} isMuted={isMuted} />}
-    />
+    <PaddedBlock width="max">
+      <Collection
+        names={{
+          plural: 'тренинги',
+          genitive: 'тренинг',
+        }}
+        items={trainings}
+        add={canCreate ? add : undefined}
+        shape={trainingShape}
+        renderItem={renderItem}
+        view={props => <CardListView {...props} isMuted={isMuted} />}
+      />
+    </PaddedBlock>
   );
 };
 
-export default TrainingCollection;
+export default TrainingCollectionBlock;

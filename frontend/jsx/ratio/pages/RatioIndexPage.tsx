@@ -1,16 +1,16 @@
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
 import { loadTrainings } from '~/ratio/features/trainings';
 
-import TrainingCollection from '~/ratio/components/TrainingCollection';
+import TrainingCollectionBlock from '~/ratio/components/TrainingCollectionBlock';
 
 const RatioIndexPage: NextPage = () => {
   return (
     <Page title="Рацио-тренинги" team>
       <Page.Title>Воркшопы, курсы, тренинги</Page.Title>
       <Page.Main>
-        <TrainingCollection />
+        <TrainingCollectionBlock />
       </Page.Main>
     </Page>
   );

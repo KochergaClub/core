@@ -1,6 +1,7 @@
 import json
 
 from django.db.models import fields
+from django.core.exceptions import FieldDoesNotExist
 import rest_framework.serializers
 
 from kocherga.events.models.feedback import ScoreField
@@ -22,6 +23,8 @@ def convert_field(field):
 
     if field_cls in (fields.TextField, fields.SlugField, fields.DateTimeField):
         result['type'] = 'string'
+    elif field_cls == fields.DateField:
+        result['type'] = 'date'
     elif field_cls == fields.CharField:
         if field.choices:
             result['type'] = 'choice'
@@ -53,6 +56,8 @@ def build_shape(serializer_class):
 
     shape = []
 
+    read_only_fields = getattr(serializer_class.Meta, 'read_only_fields', [])
+
     for (field_name, field) in serializer_class().fields.items():
         if field.source == '*':
             continue  # skip for now, probably SerializerMethodField or something
@@ -64,10 +69,19 @@ def build_shape(serializer_class):
                 'type': 'string',
             }
         else:
-            model_field = model._meta.get_field(field.source)
+            try:
+                model_field = model._meta.get_field(field.source)
+            except FieldDoesNotExist:
+                if hasattr(model, field.source):
+                    # probably a method field
+                    continue
+
             frontend_field = convert_field(model_field)
             if not frontend_field:
                 continue  # skip for now
+
+        if field_name in read_only_fields:
+            frontend_field['readonly'] = True
         shape.append(frontend_field)
 
     return shape
@@ -78,6 +92,7 @@ def generate_shapes_to_fh(fh):
         kocherga.events.serializers.FeedbackSerializer,
         kocherga.events.serializers.PublicEventSerializer,
         kocherga.ratio.serializers.TicketSerializer,
+        kocherga.ratio.serializers.TrainingSerializer,
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)
