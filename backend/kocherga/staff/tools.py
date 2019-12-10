@@ -41,13 +41,11 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
         raise APIException("Only @gmail.com emails are supported")
 
     # Look up CM customer early to avoid semi-broken outcome when the CM customer doesn't exist.
+    cm_customer = None
     try:
         cm_customer = kocherga.cm.models.Customer.objects.get(email=email)
     except kocherga.cm.models.Customer.DoesNotExist:
-        raise APIException(
-            f"Cafe Manager customer with email {email} not found, please add the customer first"
-            f"(and wait ~30 minutes for the sync)"
-        )
+        logger.warning(f"Cafe Manager customer with email {email} not found")
 
     logger.info(f'Add watchman {full_name} with email {email}')
 
