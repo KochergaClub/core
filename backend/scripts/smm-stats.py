@@ -18,6 +18,7 @@ import kocherga.vk.helpers
 
 SMM_SPREADSHEET_KEY = '1CrUc7axlvKg67_lIG_dth5EvYeZp_WDjir4fDfAYe6o'
 
+
 def parse_old_sheet_html():
     filename = '/Users/berekuk/Downloads/Информационные партнеры/ВК.html'
     html = open(filename).read()
@@ -72,7 +73,7 @@ def get_scitopus_list():
     response = kocherga.vk.api.call('pages.get', {
         'owner_id': -112289703,
         'page_id': 52694501,
-        'need_html': True, # we don't have enough permissions ask for source, unfortunately
+        'need_html': True,  # we don't have enough permissions ask for source, unfortunately
     })
     html = response['html']
 
@@ -88,12 +89,13 @@ def get_scitopus_list():
         if link in link2title:
             known_title = link2title[link]
             if title == known_title:
-                continue # full duplicate
+                continue  # full duplicate
             raise Exception(f"Duplicate for {link}: {known_title} and {title}")
         else:
             link2title[link] = title
 
     return link2title
+
 
 def get_sheet():
     gc = kocherga.google.gspread_client()
@@ -101,6 +103,7 @@ def get_sheet():
 
     worksheet = spreadsheet.worksheet("ВК")
     return worksheet
+
 
 def fix_sheet():
     sheet = get_sheet()
@@ -114,6 +117,7 @@ def fix_sheet():
         sheet.update_cell(row['row_id'], 1, row['title'])
         sheet.update_cell(row['row_id'], 2, row['link'])
 
+
 def update_with_retry(sheet, row, column, value):
     for i in range(10):
         try:
@@ -123,13 +127,14 @@ def update_with_retry(sheet, row, column, value):
             logger.info(f"APIError, sleep for {2**i} seconds")
             time.sleep(2 ** i)
 
+
 def main():
     sheet = get_sheet()
 
     def round2(x):
         if x == 0:
             return 0
-        return round(x, 1-int(math.floor(math.log10(abs(x)))))
+        return round(x, 1 - int(math.floor(math.log10(abs(x)))))
 
     for (i, link) in enumerate(sheet.col_values(2)):
         if i == 0:
@@ -160,6 +165,7 @@ def main():
 
         update_with_retry(sheet, row, 4, round2(median_views))
         update_with_retry(sheet, row, 5, round2(views_variance))
+
 
 if __name__ == '__main__':
     main()

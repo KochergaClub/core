@@ -13,8 +13,7 @@ def main():
 
 
 if __name__ == "__main__":
-    import os, django
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+    import django
     django.setup()
 
     main()

@@ -6,8 +6,7 @@ sys.path.append(
     )
 )
 
-import os, django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+import django
 django.setup()
 
 import fire

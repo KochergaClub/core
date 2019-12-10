@@ -23,8 +23,7 @@ def main(name=None):
 
 
 if __name__ == '__main__':
-    import sys, os, django
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kocherga.django.settings")
+    import django
     django.setup()
 
     fire.Fire(main)
