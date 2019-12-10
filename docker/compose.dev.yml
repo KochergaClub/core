@@ -25,7 +25,6 @@ x-frontend:
     - ../backend/data/volume:/data
   environment:
     NODE_ENV: 'development'
-    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
   cap_add:
     - SYS_PTRACE
 

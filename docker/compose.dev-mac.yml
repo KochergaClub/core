@@ -25,7 +25,6 @@ x-frontend:
     - data:/data:nocopy
   environment:
     NODE_ENV: 'development'
-    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
   cap_add:
     - SYS_PTRACE
 

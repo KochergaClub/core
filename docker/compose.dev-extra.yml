@@ -1,5 +1,16 @@
 version: '3.4'
 
+x-backend-environment: &backend-environment
+  DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+  DB_NAME: 'kocherga'
+  DB_USER: 'root'
+  DB_PASSWORD: ''
+  prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+  DJANGO_WATCHMAN_TIMEOUT: 60
+
+x-frontend-environment: &frontend-environment
+  NODE_ENV: 'development'
+
 x-backend:
   &backend
   image: registry.gitlab.com/kocherga/core/backend:dev
@@ -8,12 +19,7 @@ x-backend:
     - ../backend/tests:/code/tests
     - ../backend/data/volume:/data
   environment:
-    DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
-    DB_NAME: 'kocherga'
-    DB_USER: 'root'
-    DB_PASSWORD: ''
-    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
-    DJANGO_WATCHMAN_TIMEOUT: 60
+    <<: *backend-environment
   cap_add:
     - SYS_PTRACE
 
@@ -24,32 +30,31 @@ x-frontend:
     - ../frontend/jsx:/code/jsx
     - ../backend/data/volume:/data
   environment:
-    NODE_ENV: 'development'
-    prometheus_multiproc_dir: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+    <<: *frontend-environment
   cap_add:
     - SYS_PTRACE
 
 services:
   worker:
-    << : *backend
+    <<: *backend
     command: ./scripts/worker.py
     depends_on:
       - db
 
   importer:
-    << : *backend
+    <<: *backend
     command: ./scripts/importer.py
     ports:
       - "127.0.0.1:5303:8000" # for prometheus metrics
     environment:
-      DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
+      <<: *backend-environment
       NO_DJANGO_PROMETHEUS: 1
     depends_on:
       - db
     restart: always
 
   tgbot:
-    << : *backend
+    <<: *backend
     command: ./scripts/tgbot.py
     depends_on:
       - db
@@ -59,7 +64,7 @@ services:
     image: dperson/torproxy
 
   ludwig:
-    << : *backend
+    <<: *backend
     command: ./scripts/ludwig.py
     ports:
       - "5200:80"
@@ -67,7 +72,7 @@ services:
       - db
 
   ludwig_lt:
-    << : *frontend
-    command: npx lt --port 80 --subdomain kocherga-dev --local-host ludwig
+    <<: *frontend
+    command: npx lt --port 80 --subdomain kocherga-dev --local-host ludwig --host https://lt.berekuk.ru
     depends_on:
       - ludwig
