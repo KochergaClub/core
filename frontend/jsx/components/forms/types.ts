@@ -24,7 +24,7 @@ export interface ChoiceFormField extends AnyFormField {
   readonly options: string[];
 }
 
-export interface BooleanField extends AnyFormField {
+export interface BooleanFormField extends AnyFormField {
   readonly type: 'boolean';
   readonly value?: boolean;
 }
@@ -38,7 +38,7 @@ export type FormField =
   | StringFormField
   | NumberFormField
   | ChoiceFormField
-  | BooleanField;
+  | BooleanFormField;
 
 export type FormShape = FormField[];
 
