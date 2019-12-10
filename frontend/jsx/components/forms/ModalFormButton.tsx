@@ -119,7 +119,7 @@ const ModalForm = ({
         {({ isSubmitting }) => (
           <Form>
             <Modal.Body ref={focus} {...hotkeys}>
-              <Column>
+              <Column stretch>
                 {fields.map(field => (
                   <FieldInput key={field.name} field={field} />
                 ))}

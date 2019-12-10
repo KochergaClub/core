@@ -19,6 +19,7 @@ export interface NumberFormField extends AnyFormField {
 
 export interface ChoiceFormField extends AnyFormField {
   readonly type: 'choice';
+  readonly widget?: 'radio' | 'dropdown';
   readonly value?: string;
   readonly options: string[];
 }

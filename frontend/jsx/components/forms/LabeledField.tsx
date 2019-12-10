@@ -19,7 +19,7 @@ interface Props {
 const LabeledField: React.FC<Props> = ({ for: field, children }) => (
   <div>
     <Label>{field.title || field.name}</Label>
-    <Field name={field.name} render={children} />
+    <Field name={field.name}>{children}</Field>
     <ErrorMessage name={field.name} component={ErrorLabel} />
   </div>
 );

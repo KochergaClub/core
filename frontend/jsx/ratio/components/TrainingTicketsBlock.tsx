@@ -4,10 +4,12 @@ import { useSelector } from 'react-redux';
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { useDispatch } from '~/common/hooks';
+import shapes from '~/shapes';
 
 import { PaddedBlock } from '~/components';
 import CreateButton from '~/components/crud/CreateButton';
-import { FormShape } from '~/components/forms/types';
+import { FormField } from '~/components/forms/types';
+import { transformShape } from '~/components/forms/utils';
 
 import { selectTraining } from '~/ratio/features/trainingItem';
 import {
@@ -24,31 +26,21 @@ const CreateTicketButton = ({
   training_id: number;
   onCreate: () => void;
 }) => {
-  const fields: FormShape = [
-    { name: 'training', type: 'number', readonly: true, value: training_id },
-    { name: 'email', type: 'string' },
-    { name: 'first_name', type: 'string' },
-    { name: 'last_name', type: 'string' },
-    { name: 'payment_amount', type: 'number' },
-    {
-      name: 'fiscalization_status',
-      type: 'choice',
-      options: ['todo', 'fiscalized'],
-      value: 'todo',
+  const fields = transformShape(shapes.ratio.ticket, {
+    exclude: ['id'],
+    transform: {
+      training: f =>
+        ({
+          ...f,
+          value: training_id,
+          readonly: true,
+        } as FormField),
+      status: f => ({ ...f, value: 'normal' } as FormField),
+      fiscalization_status: f => ({ ...f, value: 'todo' } as FormField),
+      ticket_type: f => ({ ...f, value: 'normal' } as FormField),
+      payment_type: f => ({ ...f, value: 'website' } as FormField),
     },
-    {
-      name: 'ticket_type',
-      type: 'choice',
-      options: ['normal', 'stipend', 'staff'],
-      value: 'normal',
-    },
-    {
-      name: 'payment_type',
-      type: 'choice',
-      options: ['website', 'invoice', 'transfer'],
-      value: 'website',
-    },
-  ];
+  });
 
   return (
     <CreateButton
