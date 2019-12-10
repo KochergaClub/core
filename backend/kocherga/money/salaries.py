@@ -71,8 +71,10 @@ def commission_bonuses(start_date, end_date):
     orders = period_orders(start_date, end_date)
 
     last_cm_import_dt = kocherga.importer.daemon.get_importer('cm').last_dt
+    if not last_cm_import_dt:
+        raise Exception("cm importer never ever executed, can't calculate bonuses correctly")
     if (datetime.now(TZ) - last_cm_import_dt).seconds > 86400:
-        raise Exception("Something is wrong with cm importer, can't calculate bonuses correctly")
+        raise Exception("cm importer is behind schedule, can't calculate bonuses correctly")
 
     commissions = defaultdict(float)
     for order in orders:
