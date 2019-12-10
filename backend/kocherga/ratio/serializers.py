@@ -16,8 +16,8 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'training',
-            'email', 'first_name', 'last_name',
-            'status', 'payment_amount', 'fiscalization_status', 'ticket_type', 'payment_type',
+            'email', 'first_name', 'last_name', 'payment_amount',
+            'status', 'fiscalization_status', 'ticket_type', 'payment_type',
         )
 
 

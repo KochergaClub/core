@@ -183,6 +183,12 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "type": "string"
       },
       {
+        "name": "payment_amount",
+        "optional": false,
+        "title": "Размер оплаты",
+        "type": "number"
+      },
+      {
         "name": "status",
         "optional": false,
         "title": "Статус",
@@ -197,12 +203,6 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
             "Отказ"
           ]
         ]
-      },
-      {
-        "name": "payment_amount",
-        "optional": false,
-        "title": "Размер оплаты",
-        "type": "number"
       },
       {
         "name": "fiscalization_status",
