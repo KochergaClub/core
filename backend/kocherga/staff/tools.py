@@ -105,7 +105,10 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
         last_name=full_name.split(' ')[-1],
     )
     if not sc_response["ok"]:
-        raise APIException("Couldn't invite to Slack: " + sc_response.get('error', 'unknown error'))
+        if sc_response.get("error") == "already_in_team_invited_user":
+            logger.info("Couldn't invite to Slack, already in team or invited")
+        else:
+            raise APIException("Couldn't invite to Slack: " + sc_response.get('error', 'unknown error'))
 
     logger.info(f'Adding to Cafe Manager')
     cm_user = kocherga.cm.tools.add_manager(
