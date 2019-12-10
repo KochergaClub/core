@@ -57,6 +57,7 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
     })
     blocks.append({"type": "divider"})
 
+    total_cash_payments = 0
     for member_id, salary in salaries.salaries.items():
         if salary.total == 0:
             continue
@@ -66,6 +67,7 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
         payment_emoji = ''
         if member.payment_type == 'CASH':
             payment_emoji = ':dollar:'
+            total_cash_payments += salary.total
         elif member.payment_type == 'ELECTRONIC':
             payment_emoji = ':credit_card:'
 
@@ -110,7 +112,11 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
             },
             {
                 "type": "mrkdwn",
-                "text": f"Не забудьте отметить зарплаты в {settings.KOCHERGA_WEBSITE}/team/cashier.",
+                "text": f"Всего к выдаче наличными: {total_cash_payments} руб.",
+            },
+            {
+                "type": "mrkdwn",
+                "text": f"Не забудьте отметить выданные деньги в {settings.KOCHERGA_WEBSITE}/team/cashier.",
             },
         ]
     })
