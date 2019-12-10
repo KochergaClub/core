@@ -137,8 +137,14 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "title": "registration type",
         "type": "choice",
         "options": [
-          "native",
-          "timepad"
+          [
+            "native",
+            "native"
+          ],
+          [
+            "timepad",
+            "timepad"
+          ]
         ]
       }
     ]
@@ -182,8 +188,14 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "title": "Статус",
         "type": "choice",
         "options": [
-          "normal",
-          "canceled"
+          [
+            "normal",
+            "Участник"
+          ],
+          [
+            "canceled",
+            "Отказ"
+          ]
         ]
       },
       {
@@ -198,10 +210,22 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "title": "Статус фискального чека",
         "type": "choice",
         "options": [
-          "todo",
-          "not_needed",
-          "in_progress",
-          "fiscalized"
+          [
+            "todo",
+            "todo"
+          ],
+          [
+            "not_needed",
+            "not_needed"
+          ],
+          [
+            "in_progress",
+            "in_progress"
+          ],
+          [
+            "fiscalized",
+            "fiscalized"
+          ]
         ]
       },
       {
@@ -210,11 +234,26 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "title": "Тип билета",
         "type": "choice",
         "options": [
-          "normal",
-          "stipend",
-          "staff",
-          "replacement",
-          "carry-over"
+          [
+            "normal",
+            "Обычный"
+          ],
+          [
+            "stipend",
+            "Стипендия"
+          ],
+          [
+            "staff",
+            "Стафф"
+          ],
+          [
+            "replacement",
+            "Замена (заменяет другого участника)"
+          ],
+          [
+            "carry-over",
+            "Перенос (с прошлого мероприятия)"
+          ]
         ]
       },
       {
@@ -223,13 +262,34 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "title": "Вид оплаты",
         "type": "choice",
         "options": [
-          "none",
-          "timepad",
-          "website",
-          "crowdfunding",
-          "cash",
-          "invoice",
-          "transfer"
+          [
+            "none",
+            "-"
+          ],
+          [
+            "timepad",
+            "Timepad"
+          ],
+          [
+            "website",
+            "Сайт"
+          ],
+          [
+            "crowdfunding",
+            "Краудфандинг"
+          ],
+          [
+            "cash",
+            "Нал"
+          ],
+          [
+            "invoice",
+            "Счёт"
+          ],
+          [
+            "transfer",
+            "Перевод"
+          ]
         ]
       }
     ]

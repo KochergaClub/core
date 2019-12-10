@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback } from 'react';
 
-import { loadWatchmen } from '../features/watchmen';
-
+import { useDispatch } from '~/common/hooks';
 import CreateButton from '~/components/crud/CreateButton';
 import { FormShape } from '~/components/forms/types';
+
+import { loadWatchmen } from '../features/watchmen';
 
 const fields: FormShape = [
   { name: 'email', type: 'email' },
@@ -15,7 +15,10 @@ const fields: FormShape = [
   {
     name: 'gender',
     type: 'choice',
-    options: ['MALE', 'FEMALE'],
+    options: [
+      ['MALE', 'М'],
+      ['FEMALE', 'Ж'],
+    ],
     value: 'FEMALE',
   },
 ];

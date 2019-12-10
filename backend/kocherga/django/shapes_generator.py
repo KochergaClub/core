@@ -25,7 +25,7 @@ def convert_field(field):
     elif field_cls == fields.CharField:
         if field.choices:
             result['type'] = 'choice'
-            result['options'] = [c[0] for c in field.choices]
+            result['options'] = field.choices
         else:
             result['type'] = 'string'
     elif field_cls == fields.EmailField:

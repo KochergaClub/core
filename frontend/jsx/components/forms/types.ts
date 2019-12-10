@@ -21,7 +21,7 @@ export interface ChoiceFormField extends AnyFormField {
   readonly type: 'choice';
   readonly widget?: 'radio' | 'dropdown';
   readonly value?: string;
-  readonly options: string[];
+  readonly options: [string, string][];
 }
 
 export interface BooleanFormField extends AnyFormField {

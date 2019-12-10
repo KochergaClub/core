@@ -28,15 +28,15 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
             <>
               {field.options.map(option => {
                 return (
-                  <div key={option}>
-                    <label key={option}>
+                  <div key={option[0]}>
+                    <label>
                       <input
                         type="radio"
                         {...formikField}
-                        checked={formikField.value === option}
-                        value={option}
+                        checked={formikField.value === option[0]}
+                        value={option[0]}
                       />{' '}
-                      {option}
+                      {option[1]}
                     </label>
                   </div>
                 );
@@ -48,26 +48,33 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
     default:
       return (
         <LabeledField for={field}>
-          {({ field: formikField, form }) => (
-            <Select
-              value={{ value: formikField.value, label: formikField.value }}
-              onChange={(selected: any) => {
-                // FIXME - fix type
-                if (selected && !Array.isArray(selected)) {
-                  form.setFieldValue(formikField.name, selected.value);
-                } // TODO - else?
-              }}
-              options={field.options.map(option => ({
-                value: option,
-                label: option,
-              }))}
-              menuPlacement="auto"
-              styles={{
-                menuPortal: provided => ({ ...provided, zIndex: 1100 }),
-                container: provided => ({ ...provided, width: '100%' }),
-              }}
-            />
-          )}
+          {({ field: formikField, form }) => {
+            const option = field.options.find(
+              option => option[0] === formikField.value
+            );
+            return (
+              <Select
+                value={
+                  option ? { value: option[0], label: option[1] } : undefined
+                }
+                onChange={(selected: any) => {
+                  // FIXME - fix type
+                  if (selected && !Array.isArray(selected)) {
+                    form.setFieldValue(formikField.name, selected.value);
+                  } // TODO - else?
+                }}
+                options={field.options.map(option => ({
+                  value: option[0],
+                  label: option[1],
+                }))}
+                menuPlacement="auto"
+                styles={{
+                  menuPortal: provided => ({ ...provided, zIndex: 1100 }),
+                  container: provided => ({ ...provided, width: '100%' }),
+                }}
+              />
+            );
+          }}
         </LabeledField>
       );
   }
