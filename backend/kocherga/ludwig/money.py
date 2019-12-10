@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from kocherga.ludwig.bot import bot
 
 import kocherga.money.cashier.models
@@ -6,6 +8,8 @@ from kocherga.money.salaries import SalaryContainer
 import kocherga.staff.tools
 from kocherga.staff.models import Member
 from kocherga.dateutils import inflected_month
+
+SALARIES_CHANNEL = '#space_staff_salaries'
 
 
 def cash_response():
@@ -34,7 +38,25 @@ def is_slava(message):
 
 
 def salaries_message(salaries: SalaryContainer, with_elba_values=False):
-    attachments = []
+    blocks = []
+
+    (start_date, end_date) = kocherga.money.salaries.dates_period()
+    header = ":moneybag: Зарплаты за "
+    if start_date.month == end_date.month:
+        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
+    else:
+        header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}"
+    header += ":"
+
+    blocks.append({
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": header,
+        }
+    })
+    blocks.append({"type": "divider"})
+
     for member_id, salary in salaries.salaries.items():
         if salary.total == 0:
             continue
@@ -47,45 +69,55 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
         elif member.payment_type == 'ELECTRONIC':
             payment_emoji = ':credit_card:'
 
-        member_attachment = {
-            "text": f"{member.short_name} <@{member.slack_id}>: {payment_emoji}*{salary.total}* руб.",
-            "fields": [
-                {
-                    "title": "Смены",
-                    "value": f"{salary.shifts} руб.",
-                    "short": True,
-                },
-                {
-                    "title": "2% бонус",
-                    "value": f"{salary.commissions} руб.",
-                    "short": True,
-                },
-                {
-                    "title": "Грейд",
-                    "value": member.watchman.grade.code,
-                    "short": True,
-                },
-            ],
+        member_block = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"{member.short_name} <@{member.slack_id}>\n{payment_emoji}*{salary.total}* руб.",
+            },
         }
+        if member.slack_image:
+            member_block["accessory"] = {
+                "type": "image",
+                "image_url": member.slack_image,
+                "alt_text": member.short_name,
+            }
         if with_elba_values:
-            member_attachment['fields'].append({
-                "title": "В Эльбу",
-                "value": f"{salary.for_elba} руб.",
-                "short": True,
-            })
-        attachments.append(member_attachment)
+            member_block["text"]["text"] += f"\nВ Эльбу: {salary.for_elba} руб."
 
-    (start_date, end_date) = kocherga.money.salaries.dates_period()
-    header = ":moneybag: Зарплаты за "
-    if start_date.month == end_date.month:
-        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
-    else:
-        header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}"
-    header += ":"
+        comment_block = {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"Смены: {salary.shifts} руб."
+                            f" 2% бонус: {salary.commissions} руб."
+                            f" Грейд: {member.watchman.grade.code}",
+                }
+            ]
+        }
+
+        blocks.append(member_block)
+        blocks.append(comment_block)
+        blocks.append({"type": "divider"})
+
+    blocks.append({
+        "type": "context",
+        "elements": [
+            {
+                "type": "mrkdwn",
+                "text": f"Всего наличных в кассе: {kocherga.money.cashier.models.current_cash()} руб.",
+            },
+            {
+                "type": "mrkdwn",
+                "text": f"Не забудьте отметить зарплаты в {settings.KOCHERGA_WEBSITE}/team/cashier.",
+            },
+        ]
+    })
 
     return {
         "text": header,
-        "attachments": attachments,
+        "blocks": blocks,
     }
 
 
@@ -108,6 +140,6 @@ def react_send_salaries(message):
     salaries: SalaryContainer = kocherga.money.salaries.calculate_new_salaries()
     kocherga.money.salaries.salaries_to_payments(salaries)
     bot.send_message(
-        channel="#space_staff_salaries",
+        channel=SALARIES_CHANNEL,
         **salaries_message(salaries)
     )
