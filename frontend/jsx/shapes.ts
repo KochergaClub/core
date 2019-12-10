@@ -142,6 +142,97 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         ]
       }
     ]
+  },
+  "ratio": {
+    "ticket": [
+      {
+        "name": "id",
+        "optional": true,
+        "title": "ID",
+        "type": "number",
+        "readonly": true
+      },
+      {
+        "name": "training",
+        "optional": false,
+        "title": "Тренинг",
+        "type": "number"
+      },
+      {
+        "name": "email",
+        "optional": false,
+        "title": "email",
+        "type": "email"
+      },
+      {
+        "name": "first_name",
+        "optional": false,
+        "title": "Имя",
+        "type": "string"
+      },
+      {
+        "name": "last_name",
+        "optional": true,
+        "title": "Фамилия",
+        "type": "string"
+      },
+      {
+        "name": "status",
+        "optional": false,
+        "title": "Статус",
+        "type": "choice",
+        "options": [
+          "normal",
+          "canceled"
+        ]
+      },
+      {
+        "name": "payment_amount",
+        "optional": false,
+        "title": "Размер оплаты",
+        "type": "number"
+      },
+      {
+        "name": "fiscalization_status",
+        "optional": false,
+        "title": "Статус фискального чека",
+        "type": "choice",
+        "options": [
+          "todo",
+          "not_needed",
+          "in_progress",
+          "fiscalized"
+        ]
+      },
+      {
+        "name": "ticket_type",
+        "optional": false,
+        "title": "Тип билета",
+        "type": "choice",
+        "options": [
+          "normal",
+          "stipend",
+          "staff",
+          "replacement",
+          "carry-over"
+        ]
+      },
+      {
+        "name": "payment_type",
+        "optional": false,
+        "title": "Вид оплаты",
+        "type": "choice",
+        "options": [
+          "none",
+          "timepad",
+          "website",
+          "crowdfunding",
+          "cash",
+          "invoice",
+          "transfer"
+        ]
+      }
+    ]
   }
 };
 export default shapes;

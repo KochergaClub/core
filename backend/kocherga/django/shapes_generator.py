@@ -6,6 +6,7 @@ import rest_framework.serializers
 from kocherga.events.models.feedback import ScoreField
 
 import kocherga.events.serializers
+import kocherga.ratio.serializers
 
 
 def convert_field(field):
@@ -27,6 +28,8 @@ def convert_field(field):
             result['options'] = [c[0] for c in field.choices]
         else:
             result['type'] = 'string'
+    elif field_cls == fields.EmailField:
+        result['type'] = 'email'
     elif field_cls == fields.BooleanField:
         result['type'] = 'boolean'
     elif issubclass(field_cls, ScoreField):
@@ -74,6 +77,7 @@ def generate_shapes_to_fh(fh):
     serializers = [
         kocherga.events.serializers.FeedbackSerializer,
         kocherga.events.serializers.PublicEventSerializer,
+        kocherga.ratio.serializers.TicketSerializer,
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)
@@ -103,5 +107,5 @@ def generate_shapes_to_fh(fh):
 
 
 def generate_shapes():
-    with open('./jsx/shapes.ts', 'w') as fh:
+    with open('/tmp/shapes.ts', 'w') as fh:
         generate_shapes_to_fh(fh)

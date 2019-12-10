@@ -59,6 +59,7 @@ update_npm_packages:
 
 shapes:
 	docker-compose -f docker/compose.dev.yml exec api ./scripts/generate-frontend-shapes.py
+	docker cp docker_api_1:/tmp/shapes.ts ./frontend/jsx/shapes.ts
 
 kassa_localtunnel:
 	npx lt --port 8000 --subdomain kassa --host https://lt.berekuk.ru
