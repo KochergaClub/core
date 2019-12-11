@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import django.core.signing
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
 from .view_utils import check_magic_token
@@ -16,15 +17,15 @@ class TokenBackend:
 
         try:
             email = check_magic_token(token)
+        except django.core.signing.SignatureExpired:
+            raise ValidationError(f"Token has expired")
         except django.core.signing.BadSignature:
-            logger.warning(f"Invalid token {token}")
-            return None
+            raise ValidationError(f"Invalid token")
 
         try:
             user = UserModel.objects.get(email=email)
             if not user.is_active:
-                logger.warning(f"User {email} is inactive, can't be authenticated")
-                return None
+                raise ValidationError(f"User is inactive, can't be authenticated")
 
             if not user.last_login:
                 # existed from external data source, e.g. cm_customers

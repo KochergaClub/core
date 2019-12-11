@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import django.core.exceptions
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
@@ -84,12 +85,15 @@ class LoginView(APIView):
         if request.data['result'] != 'cookie':
             raise exceptions.ParseError('Only `cookie` result is supported')
 
-        user = authenticate(
-            request,
-            username=credentials.get('email', None),
-            password=credentials.get('password', None),
-            token=credentials.get('token', None),
-        )
+        try:
+            user = authenticate(
+                request,
+                username=credentials.get('email', None),
+                password=credentials.get('password', None),
+                token=credentials.get('token', None),
+            )
+        except django.core.exceptions.ValidationError as e:
+            raise exceptions.AuthenticationFailed(e.message)
 
         if not user:
             logger.info('no user')
