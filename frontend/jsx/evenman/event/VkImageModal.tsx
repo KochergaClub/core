@@ -24,7 +24,7 @@ export class VkImageModal extends React.Component<Props, {}> {
   constructor(props: Props) {
     super(props);
     const fillVars = autorun(() => {
-      this.header = this.props.event.title;
+      this.header = '';
       this.title = this.props.event.title;
     });
 
