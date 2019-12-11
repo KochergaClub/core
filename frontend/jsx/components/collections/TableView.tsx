@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { FaCheck } from 'react-icons/fa';
 
-import { Label, colors } from '@kocherga/frontkit';
+import { colors } from '@kocherga/frontkit';
 
 import { FormField, FormShape } from '~/components/forms/types';
 import { AnyViewProps } from './types';
@@ -22,6 +22,14 @@ const Table = styled.table`
     border: 1px solid ${colors.grey[300]};
     padding: 4px;
   }
+`;
+
+const TableHeaderCell = styled.th`
+  font-weight: 500;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: ${colors.grey[700]};
 `;
 
 interface CellProps<I> {
@@ -81,14 +89,10 @@ function TableView<I>(props: Props<I>) {
       <thead>
         <tr>
           {props.shape.map(field => (
-            <th key={field.name}>
-              <Label>{field.title}</Label>
-            </th>
+            <TableHeaderCell key={field.name}>{field.title}</TableHeaderCell>
           ))}
           {(props.extraColumns || []).map((extraColumn, i) => (
-            <th key={i}>
-              <Label>{extraColumn}</Label>
-            </th>
+            <TableHeaderCell key={i}>{extraColumn}</TableHeaderCell>
           ))}
         </tr>
       </thead>
