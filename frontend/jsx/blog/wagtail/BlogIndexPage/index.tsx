@@ -23,7 +23,10 @@ export interface ExtraProps {
 
 const BlogIndexPage: NextWagtailPage<PageType, ExtraProps> = props => {
   return (
-    <Page title={props.wagtailPage.title}>
+    <Page
+      title={props.wagtailPage.title}
+      description={props.wagtailPage.subtitle}
+    >
       <PageHeader
         title={props.wagtailPage.title}
         bottom={props.wagtailPage.subtitle}
