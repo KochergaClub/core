@@ -25,7 +25,10 @@ export interface ExtraProps {
 
 const FAQPage: NextWagtailPage<PageType, ExtraProps> = props => {
   return (
-    <Page title={props.wagtailPage.title}>
+    <Page
+      title={props.wagtailPage.title}
+      description={props.wagtailPage.summary}
+    >
       <FAQPageHeader wagtailPage={props.wagtailPage} />
       <Page.Main>
         <SubpagesBlock subpages={props.subpages} />
