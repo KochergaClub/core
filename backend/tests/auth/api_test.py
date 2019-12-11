@@ -61,7 +61,7 @@ class TestTokenLogin:
             },
             format='json',
         )
-        assert res.json()['detail'] == "Некорректные учетные данные."
+        assert res.json()['detail'] == "Invalid token"
         assert res.status_code == 403
 
     def test_result_param_required(self, client):
