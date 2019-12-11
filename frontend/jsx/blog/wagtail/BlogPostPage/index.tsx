@@ -16,9 +16,10 @@ import Author from './Author';
 
 export interface PageType extends WagtailPageProps {
   meta_type: 'blog.BlogPostPage';
-  body: string;
-  authors: BlogPostAuthorType[];
   date: string;
+  authors: BlogPostAuthorType[];
+  body: string;
+  summary: string;
 }
 
 const AuthorsList = ({ authors }: { authors: BlogPostAuthorType[] }) => {
@@ -68,7 +69,7 @@ const HeaderDate = styled.div`
 
 const BlogPostPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
   return (
-    <Page title={wagtailPage.title}>
+    <Page title={wagtailPage.title} description={wagtailPage.summary}>
       <ItemPageHeader
         title={wagtailPage.title}
         sectionTitle="Блог Кочерги"
