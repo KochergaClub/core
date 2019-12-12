@@ -4,7 +4,7 @@ import { A } from '@kocherga/frontkit';
 
 import { State } from '~/redux/store';
 import { NextPage } from '~/common/types';
-import { Page } from '~/components';
+import { Page, PaddedBlock } from '~/components';
 
 import { loadEvent, selectEvent } from '~/events/features/eventPage';
 
@@ -22,12 +22,18 @@ const TeamEventPage: NextPage = () => {
     <Page title={event.title} team>
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
-        <EventInfo />
-        <div>
-          <A href={`/team/evenman/event/${event.id}`}>Событие в evenman</A>
-        </div>
-        <FeedbackCollection />
-        <TicketsCollection />
+        <PaddedBlock width="max">
+          <EventInfo />
+          <div>
+            <A href={`/team/evenman/event/${event.id}`}>Событие в evenman</A>
+          </div>
+        </PaddedBlock>
+        <PaddedBlock width="max">
+          <FeedbackCollection />
+        </PaddedBlock>
+        <PaddedBlock width="max">
+          <TicketsCollection />
+        </PaddedBlock>
       </Page.Main>
     </Page>
   );
