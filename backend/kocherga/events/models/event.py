@@ -170,6 +170,15 @@ class Event(models.Model):
         default='native'
     )
 
+    pricing_type = models.CharField(
+        max_length=20,
+        choices=[
+            (x, x)
+            for x in ('anticafe', 'free')
+        ],
+        default='anticafe'
+    )
+
     image = models.CharField(max_length=32, null=True, blank=True)
 
     published = models.BooleanField(default=False)

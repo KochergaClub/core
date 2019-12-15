@@ -10,6 +10,7 @@ interface CommonEventProps {
     };
   };
   registration_type: 'native' | 'timepad';
+  pricing_type: 'anticafe' | 'free';
 }
 
 export interface PublicEvent extends CommonEventProps {

@@ -127,15 +127,28 @@ class TimepadAnnouncement(models.Model):
                 },
             ]
         else:
-            ticket_types = [
-                {
-                    "name": "По тарифам антикафе",
-                    "description": settings.KOCHERGA_TARIFF,
-                    "price": 0,
-                    "limit": 50,
-                    "sale_ends_at": dts(self.event.start),
-                }
-            ]
+            if self.event.pricing_type == 'anticafe':
+                ticket_types = [
+                    {
+                        "name": "По тарифам антикафе",
+                        "description": settings.KOCHERGA_TARIFF,
+                        "price": 0,
+                        "limit": 50,
+                        "sale_ends_at": dts(self.event.start),
+                    }
+                ]
+            elif self.event.pricing_type == 'free':
+                ticket_types = [
+                    {
+                        "name": "Бесплатный вход",
+                        "description": "",
+                        "price": 0,
+                        "limit": 50,
+                        "sale_ends_at": dts(self.event.start),
+                    }
+                ]
+            else:
+                raise Exception(f"Unknown pricing_type {self.event.pricing_type}")
 
         data = {
             "organization": {"id": ORGANIZATION_ID},

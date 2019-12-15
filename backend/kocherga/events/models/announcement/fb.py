@@ -224,17 +224,26 @@ class AnnounceSession:
         if len(links):
             await links[0].click()
 
+    def get_tail(self, event):
+        # FIXME - copy-paste from vk.py
+        tail = f"{event.timing_description} в центре рациональности Кочерга. "
+
+        if event.pricing_type == 'anticafe':
+            tail += "Оплата участия — по тарифам антикафе: 2,5 руб./минута. "
+        elif event.pricing_type == 'free':
+            tail += "Вход на встречу бесплатный. "
+
+        tail += f"Регистрация: {event.public_link()}"
+
+        return tail
+
     async def fill_description(self, event):
         details = await self.page.J("[data-testid=event-create-dialog-details-field]")
         await details.click()
 
         description = event.description
 
-        tail = (
-            f"{event.timing_description} в центре рациональности Кочерга."
-            " Оплата участия — по тарифам антикафе: 2,5 руб./минута."
-            f" Регистрация: {event.public_link()}"
-        )
+        tail = self.get_tail(event)
 
         markup_parts = kocherga.events.markup.parse_to_parts(
             description + "\n\n***\n" + tail

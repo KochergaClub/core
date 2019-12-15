@@ -50,6 +50,7 @@ const Success: React.FC<{
   );
 };
 
+// TODO - formik
 const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
   const [acting, setActing] = useState(false);
   const [email, setEmail] = useState('');
@@ -162,22 +163,31 @@ const TariffsContainer = styled.div`
   margin-bottom: 32px;
 `;
 
-const Tariffs: React.FC = () => (
-  <TariffsContainer>
-    Участие по{' '}
-    <A href="/pricing" target="_blank">
-      обычным тарифам пространства Кочерги
-    </A>{' '}
-    — 2,5 руб./минута, для владельцев абонементов — без доплаты. Оплата по факту
-    участия.
-  </TariffsContainer>
-);
+const Tariffs: React.FC<Props> = ({ event }) => {
+  if (event.pricing_type === 'anticafe') {
+    return (
+      <TariffsContainer>
+        Участие по{' '}
+        <A href="/pricing" target="_blank">
+          обычным тарифам пространства Кочерги
+        </A>{' '}
+        — 2,5 руб./минута, для владельцев абонементов — без доплаты. Оплата по
+        факту участия.
+      </TariffsContainer>
+    );
+  }
 
-// TODO - formik
+  if (event.pricing_type === 'free') {
+    return <TariffsContainer>Вход на встречу — бесплатный.</TariffsContainer>;
+  }
+
+  throw new Error('Unknown pricing type');
+};
+
 const AnonRegistration: React.FC<Props> = ({ event }) => {
   return (
     <Column stretch>
-      <Tariffs />
+      <Tariffs event={event} />
       <AnonRegistrationForm event={event} />
     </Column>
   );
