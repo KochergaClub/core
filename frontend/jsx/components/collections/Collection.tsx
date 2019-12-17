@@ -3,18 +3,14 @@ import React from 'react';
 import { Row, Column } from '@kocherga/frontkit';
 
 import { capitalize } from '~/common/utils';
-import { FormShape } from '~/components/forms/types';
 
 import CreateItemButton from './CreateItemButton';
 import ListView from './ListView';
 
 import { AnyViewProps, EntityNames } from './types';
 
-interface Props<I, A extends {}> {
+interface Props<I, A extends {}> extends AnyViewProps<I> {
   names?: EntityNames;
-  shape: FormShape;
-  items: I[];
-  renderItem: (item: I) => React.ReactElement;
   add?: (addParams: A) => Promise<void>;
   view?: (props: AnyViewProps<I>) => React.ReactElement;
 }
