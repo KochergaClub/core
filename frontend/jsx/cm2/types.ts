@@ -23,5 +23,13 @@ export const parseServerOrder = (serverOrder: ServerOrder): Order => {
 };
 
 export const orderShape: FormShape = [
-  { type: 'number', name: 'id', readonly: true, optional: true },
+  { type: 'number', name: 'id', title: 'ID', readonly: true },
+  { type: 'date', name: 'start', title: 'Время открытия', readonly: true },
+  {
+    type: 'date',
+    name: 'end',
+    title: 'Время закрытия',
+    readonly: true,
+    optional: true,
+  },
 ];

@@ -47,6 +47,12 @@ function TableViewCell<I>({ field, item }: CellProps<I>) {
     }
   }
 
+  if (field.type === 'date') {
+    if (value) {
+      value = value.toString();
+    }
+  }
+
   return <td>{value}</td>;
 }
 
