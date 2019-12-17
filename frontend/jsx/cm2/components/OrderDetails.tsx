@@ -31,6 +31,12 @@ export const OrderDetails: React.FC = () => {
           <div>{formatDate(order.end, 'yyyy-MM-dd')}</div>
         </div>
       )}
+      {order.value && (
+        <div>
+          <Label>Стоимость</Label>
+          <div>{order.value}</div>
+        </div>
+      )}
       {order.end ? null : (
         <div>
           <AsyncButton act={close}>Закрыть</AsyncButton>

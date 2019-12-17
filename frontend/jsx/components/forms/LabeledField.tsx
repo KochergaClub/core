@@ -1,14 +1,9 @@
-import styled from 'styled-components';
-
 import { Field, FieldProps, ErrorMessage } from 'formik';
 
-import { colors, Row, Label } from '@kocherga/frontkit';
+import { Row, Label } from '@kocherga/frontkit';
 
 import { AnyFormField, FormField } from './types';
-
-const ErrorLabel = styled.div`
-  color: ${colors.accent[900]};
-`;
+import ErrorLabel from './ErrorLabel';
 
 interface Props {
   for: AnyFormField;

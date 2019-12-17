@@ -6,5 +6,5 @@ from . import models
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
-        fields = ('id', 'start', 'end')
-        read_only_fields = ('id', 'start', 'end')
+        fields = ('id', 'start', 'end', 'value')
+        read_only_fields = ('id', 'start', 'end', 'value')

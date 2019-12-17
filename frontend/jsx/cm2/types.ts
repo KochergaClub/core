@@ -4,6 +4,7 @@ export interface ServerOrder {
   id: number;
   start: string;
   end?: string;
+  value?: number;
 }
 
 export interface CreateOrderParams {}
@@ -12,6 +13,7 @@ export interface Order {
   id: number;
   start: Date;
   end?: Date;
+  value?: number;
 }
 
 export const parseServerOrder = (serverOrder: ServerOrder): Order => {
@@ -32,4 +34,5 @@ export const orderShape: FormShape = [
     readonly: true,
     optional: true,
   },
+  { type: 'number', name: 'value', title: 'Стоимость', readonly: true },
 ];

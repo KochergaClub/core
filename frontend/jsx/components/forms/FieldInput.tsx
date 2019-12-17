@@ -1,10 +1,13 @@
 import Select from 'react-select';
 
+import { ErrorMessage } from 'formik';
+
 import { Label, Input } from '@kocherga/frontkit';
 
-import LabeledField from './LabeledField';
-
 import { FormField, ChoiceFormField } from './types';
+
+import LabeledField from './LabeledField';
+import ErrorLabel from './ErrorLabel';
 
 interface Props {
   field: FormField;
@@ -86,6 +89,7 @@ const FieldInput: React.FC<Props> = ({ field }) => {
       <div>
         <Label>{field.name}</Label>
         <div>{field.value}</div>
+        <ErrorMessage name={field.name} component={ErrorLabel} />
       </div>
     );
   }

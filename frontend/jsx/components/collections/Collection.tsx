@@ -18,6 +18,8 @@ interface Props<I, A extends {}> extends AnyViewProps<I> {
 function Collection<I, A>(props: Props<I, A>) {
   const View = props.view || ListView;
 
+  const addShape = props.shape.filter(field => !field.readonly);
+
   return (
     <section>
       <h2>
@@ -28,7 +30,7 @@ function Collection<I, A>(props: Props<I, A>) {
           {props.add && (
             <CreateItemButton
               add={props.add}
-              shape={props.shape}
+              shape={addShape}
               names={props.names}
             />
           )}

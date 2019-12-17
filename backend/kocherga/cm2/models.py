@@ -19,14 +19,31 @@ class Order(models.Model):
     start = models.DateTimeField(auto_now_add=True, db_index=True)
     end = models.DateTimeField(db_index=True, null=True, blank=True)
 
+    stored_value = models.IntegerField(null=True, blank=True)
+
     objects = OrderQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
+    @property
+    def value(self):
+        if self.end:
+            # already closed
+            return self.stored_value
+
+        age = (datetime.now(TZ) - self.start).seconds / 60
+
+        # TODO - support custom tariffs and subscribers
+        # TODO - round up
+        return int(age * 2.5)
+
     def close(self):
         if self.end:
             raise Exception("Already closed")
+
+        self.stored_value = self.value
         self.end = datetime.now(TZ)
+
         self.save()
