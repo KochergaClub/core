@@ -2,7 +2,7 @@ import { Field, FieldProps, ErrorMessage } from 'formik';
 
 import { Row, Label } from '@kocherga/frontkit';
 
-import { AnyFormField, FormField } from './types';
+import { AnyFormField, FormField } from '../types';
 import ErrorLabel from './ErrorLabel';
 
 interface Props {

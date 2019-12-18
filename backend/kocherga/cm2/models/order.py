@@ -4,6 +4,8 @@ from django.db import models
 
 from kocherga.dateutils import TZ
 
+from .customer import Customer
+
 
 class OrderQuerySet(models.QuerySet):
     def filter_by_status(self, status):
@@ -20,6 +22,14 @@ class Order(models.Model):
     end = models.DateTimeField(db_index=True, null=True, blank=True)
 
     stored_value = models.IntegerField(null=True, blank=True)
+
+    customer = models.ForeignKey(
+        Customer,
+        on_delete=models.PROTECT,
+        related_name='orders',
+        null=True,
+        blank=True,
+    )
 
     objects = OrderQuerySet.as_manager()
 

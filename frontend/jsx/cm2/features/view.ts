@@ -50,6 +50,7 @@ const slice = createExtendedSlice({
 });
 
 export const viewOpen = (): AsyncAction => async dispatch => {
+  await dispatch(loadCustomers()); // FIXME - always preloading all customers
   await dispatch(loadOpenOrders());
   dispatch(slice.actions.viewOpen());
 };
@@ -60,6 +61,7 @@ export const viewClosed = (): AsyncAction => async dispatch => {
 };
 
 export const viewDetails = (id: number): AsyncAction => async dispatch => {
+  await dispatch(loadCustomers()); // FIXME - always preloading all customers
   await dispatch(loadOrderDetails(id));
   dispatch(slice.actions.viewOrder(id));
 };
@@ -74,12 +76,14 @@ export const updateView = (): AsyncAction => async (dispatch, getState) => {
   const selfState = slice.selectors.self(state);
   switch (selfState.mode) {
     case 'open':
+      await dispatch(loadCustomers()); // FIXME - always preloading all customers
       await dispatch(loadOpenOrders());
       break;
     case 'closed':
       await dispatch(loadClosedOrders());
       break;
     case 'order':
+      await dispatch(loadCustomers()); // FIXME - always preloading all customers
       await dispatch(loadOrderDetails((selfState as OrderViewState).id));
       break;
     case 'customers':

@@ -29,6 +29,16 @@ export interface BooleanFormField extends AnyFormField {
   readonly value?: boolean;
 }
 
+export interface ForeignKeyFormField extends AnyFormField {
+  readonly type: 'fk';
+  readonly value?: number;
+  readonly widget?: {
+    type: 'async';
+    display: (item: any) => string;
+    load: () => Promise<any[]>;
+    getValue: (item: any) => number;
+  };
+}
 //export interface ListField extends AnyFormField {
 //  readonly type: 'list';
 //  readonly items: FormField[];
@@ -38,7 +48,8 @@ export type FormField =
   | StringFormField
   | NumberFormField
   | ChoiceFormField
-  | BooleanFormField;
+  | BooleanFormField
+  | ForeignKeyFormField;
 
 export type FormShape = FormField[];
 

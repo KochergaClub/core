@@ -1,8 +1,15 @@
+import { createSelector, Selector } from 'reselect';
 import { createValueSlice } from '~/redux/slices/value';
 import { apiThunk } from '~/redux/action-utils';
 import { State } from '~/redux/store';
 
-import { ServerOrder, Order, parseServerOrder } from '../types';
+import {
+  ServerOrder,
+  OrderAux,
+  parseServerOrder,
+  orderToOrderAux,
+} from '../types';
+import { selectCustomersAsObject } from './customers';
 
 const slice = createValueSlice<ServerOrder | null>({
   name: 'cm2/orderDetails',
@@ -19,13 +26,16 @@ export const loadOrderDetails = (order_id: number) =>
     dispatch(slice.actions.set(order));
   });
 
-export const selectOrderDetails = (state: State): Order => {
-  const serverOrder = slice.selectors.self(state);
-  if (serverOrder === null) {
-    throw new Error("Can't select order details - none is being viewed");
-  }
+export const selectOrderDetails: Selector<State, OrderAux> = createSelector(
+  [slice.selectors.self, selectCustomersAsObject],
+  (serverOrder, customersObject) => {
+    if (serverOrder === null) {
+      throw new Error("Can't select order details - none is being viewed");
+    }
+    const order = parseServerOrder(serverOrder);
 
-  return parseServerOrder(serverOrder);
-};
+    return orderToOrderAux(order, customersObject);
+  }
+);
 
 export default slice;

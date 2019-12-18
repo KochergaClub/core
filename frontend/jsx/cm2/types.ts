@@ -5,6 +5,7 @@ export interface ServerOrder {
   start: string;
   end?: string;
   value?: number;
+  customer?: number;
 }
 
 export interface CreateOrderParams {}
@@ -14,6 +15,7 @@ export interface Order {
   start: Date;
   end?: Date;
   value?: number;
+  customer?: number;
 }
 
 export const parseServerOrder = (serverOrder: ServerOrder): Order => {
@@ -44,8 +46,29 @@ export interface Customer {
   last_name: string;
 }
 
+export type CustomersObject = { [k: number]: Customer };
+
 export interface CreateCustomerParams {
   card_id: number;
   first_name: string;
   last_name: string;
 }
+
+export interface OrderAux {
+  order: Order;
+  customer?: Customer;
+}
+
+export const orderToOrderAux = (
+  order: Order,
+  customersObject: CustomersObject
+): OrderAux => {
+  if (!order.customer) {
+    return { order };
+  }
+  const customer = customersObject[order.customer];
+  return {
+    order,
+    customer,
+  };
+};

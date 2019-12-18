@@ -9,7 +9,7 @@ import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 import ButtonWithModal from '../ButtonWithModal';
 
 import { FormShape } from './types';
-import FieldInput from './FieldInput';
+import FieldWidget from './FieldWidget';
 
 interface Props {
   fields: FormShape;
@@ -121,7 +121,7 @@ const ModalForm = ({
             <Modal.Body ref={focus} {...hotkeys}>
               <Column stretch>
                 {fields.map(field => (
-                  <FieldInput key={field.name} field={field} />
+                  <FieldWidget key={field.name} field={field} />
                 ))}
               </Column>
             </Modal.Body>

@@ -12,12 +12,12 @@ import { selectOrderDetails } from '../features/orderDetails';
 import { closeOrder } from '../features/orderActions';
 
 export const OrderDetails: React.FC = () => {
-  const order = useSelector(selectOrderDetails);
+  const { order, customer } = useSelector(selectOrderDetails);
   const dispatch = useDispatch();
 
   const close = useCallback(async () => {
     await dispatch(closeOrder(order.id));
-  }, [dispatch]);
+  }, [dispatch, order.id]);
 
   return (
     <Column>
@@ -37,6 +37,14 @@ export const OrderDetails: React.FC = () => {
           <div>{order.value}</div>
         </div>
       )}
+      {customer ? (
+        <div>
+          <Label>Клиент</Label>
+          <div>
+            {customer.first_name} {customer.last_name}
+          </div>
+        </div>
+      ) : null}
       {order.end ? null : (
         <div>
           <AsyncButton act={close}>Закрыть</AsyncButton>
