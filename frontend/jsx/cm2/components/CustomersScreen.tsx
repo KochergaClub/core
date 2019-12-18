@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
-import Collection from '~/components/collections/Collection';
+import { Collection } from '~/components/collections';
 import { useDispatch } from '~/common/hooks';
 
 import { addCustomer, selectCustomers } from '../features/customers';
@@ -26,8 +26,10 @@ const CustomersScreen: React.FC = () => {
         plural: 'клиенты',
         genitive: 'клиент',
       }}
-      add={add}
-      shape={shapes.cm2.customer}
+      add={{
+        cb: add,
+        shape: shapes.cm2.customer,
+      }}
       items={customers}
     />
   );

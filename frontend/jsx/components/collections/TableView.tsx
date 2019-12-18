@@ -10,6 +10,8 @@ import { FormField, FormShape } from '~/components/forms/types';
 import { AnyViewProps } from './types';
 
 interface Props<I> extends AnyViewProps<I> {
+  renderItem?: (item: I) => React.ReactElement;
+  shape: FormShape;
   extraColumns?: string[];
   renderExtraColumn?: (item: I, id: number) => React.ReactElement;
 }

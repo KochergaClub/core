@@ -3,22 +3,25 @@ import React from 'react';
 import { Row, Column } from '@kocherga/frontkit';
 
 import { capitalize } from '~/common/utils';
+import { FormShape } from '~/components/forms/types';
 
 import CreateItemButton from './CreateItemButton';
-import ListView from './ListView';
+import DumpJSONView from './DumpJSONView';
 
 import { AnyViewProps, EntityNames } from './types';
 
-interface Props<I, A extends {}> extends AnyViewProps<I> {
+interface Props<I, A extends {}> {
+  items: I[];
   names?: EntityNames;
-  add?: (addParams: A) => Promise<void>;
+  add?: {
+    shape: FormShape;
+    cb: (values: A) => Promise<void>;
+  };
   view?: (props: AnyViewProps<I>) => React.ReactElement;
 }
 
 function Collection<I, A>(props: Props<I, A>) {
-  const View = props.view || ListView;
-
-  const addShape = props.shape.filter(field => !field.readonly);
+  const View = props.view || DumpJSONView;
 
   return (
     <section>
@@ -29,19 +32,15 @@ function Collection<I, A>(props: Props<I, A>) {
           )}
           {props.add && (
             <CreateItemButton
-              add={props.add}
-              shape={addShape}
+              add={props.add.cb}
+              shape={props.add.shape}
               names={props.names}
             />
           )}
         </Row>
       </h2>
       <Column stretch>
-        <View
-          items={props.items}
-          renderItem={props.renderItem}
-          shape={props.shape}
-        />
+        <View items={props.items} />
       </Column>
     </section>
   );

@@ -8,8 +8,7 @@ import shapes from '~/shapes';
 import { usePermissions, useDispatch } from '~/common/hooks';
 
 import { PaddedBlock } from '~/components';
-import Collection from '~/components/collections/Collection';
-import CardListView from '~/components/collections/CardListView';
+import { Collection, CustomCardListView } from '~/components/collections';
 
 import { FormShape } from '~/components/forms/types';
 
@@ -51,10 +50,14 @@ const TrainingCollectionBlock: React.FC = () => {
           genitive: 'тренинг',
         }}
         items={trainings}
-        add={canCreate ? add : undefined}
-        shape={trainingShape}
-        renderItem={renderItem}
-        view={props => <CardListView {...props} isMuted={isMuted} />}
+        add={canCreate ? { cb: add, shape: trainingShape } : undefined}
+        view={props => (
+          <CustomCardListView
+            {...props}
+            renderItem={renderItem}
+            isMuted={isMuted}
+          />
+        )}
       />
     </PaddedBlock>
   );

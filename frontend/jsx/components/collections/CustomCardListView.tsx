@@ -5,10 +5,9 @@ import MutedCard from '~/components/MutedCard';
 
 import { AnyViewProps } from './types';
 
-import ItemDump from './ItemDump';
-
 interface Props<I> extends AnyViewProps<I> {
   isMuted?: (item: I) => boolean;
+  renderItem: (item: I) => React.ReactElement;
 }
 
 function CardListView<I>(props: Props<I>) {
@@ -22,15 +21,7 @@ function CardListView<I>(props: Props<I>) {
           : Card;
 
         /* TODO - props.item2key */
-        return (
-          <Wrapper key={i}>
-            {props.renderItem ? (
-              props.renderItem(item)
-            ) : (
-              <ItemDump item={item} shape={props.shape} />
-            )}
-          </Wrapper>
-        );
+        return <Wrapper key={i}>{props.renderItem(item)} </Wrapper>;
       })}
     </CardList>
   );

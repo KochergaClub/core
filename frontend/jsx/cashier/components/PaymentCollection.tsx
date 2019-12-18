@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
-import { usePermissions } from '~/common/hooks';
+import { usePermissions, useDispatch } from '~/common/hooks';
 
-import Collection from '~/components/collections/Collection';
-import CardListView from '~/components/collections/CardListView';
+import { Collection, CustomCardListView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import { addPayment, selectPayments } from '../features/payment';
@@ -43,11 +42,15 @@ const PaymentCollection: React.FC = () => {
         plural: 'выплаты',
         genitive: 'выплату',
       }}
-      shape={paymentShape}
       items={payments}
-      add={canCreate ? add : undefined}
-      renderItem={renderItem}
-      view={props => <CardListView {...props} isMuted={isMuted} />}
+      add={canCreate ? { cb: add, shape: paymentShape } : undefined}
+      view={props => (
+        <CustomCardListView
+          {...props}
+          isMuted={isMuted}
+          renderItem={renderItem}
+        />
+      )}
     />
   );
 };

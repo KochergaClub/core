@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback } from 'react';
 
 import { formatDate } from '~/common/utils';
 
 import { Row, Label } from '@kocherga/frontkit';
 
-import { useAPI, usePermissions } from '~/common/hooks';
+import { useAPI, usePermissions, useDispatch } from '~/common/hooks';
 
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 

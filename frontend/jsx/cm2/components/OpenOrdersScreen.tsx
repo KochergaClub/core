@@ -5,8 +5,7 @@ import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import Collection from '~/components/collections/Collection';
-import TableView from '~/components/collections/TableView';
+import { Collection, TableView } from '~/components/collections';
 import { useDispatch } from '~/common/hooks';
 import { selectAPI } from '~/core/selectors';
 
@@ -22,7 +21,6 @@ const OpenOrdersScreen: React.FC = () => {
 
   const add = useCallback(
     async values => {
-      console.log(values);
       await dispatch(addOrder(values));
     },
     [dispatch]
@@ -49,12 +47,15 @@ const OpenOrdersScreen: React.FC = () => {
         plural: 'заказы',
         genitive: 'заказ',
       }}
-      shape={addShape}
       items={ordersAux.map(orderAux => orderAux.order)}
-      add={add}
+      add={{
+        cb: add,
+        shape: addShape,
+      }}
       view={props => (
         <TableView
           {...props}
+          shape={orderShape}
           extraColumns={['Заказ']}
           renderExtraColumn={item => (
             <Link

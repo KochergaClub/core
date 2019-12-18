@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import Collection from '~/components/collections/Collection';
+import { Collection, ListView } from '~/components/collections';
 
 import { selectClosedOrders } from '../features/closedOrders';
 import { Order, orderShape } from '../types';
@@ -27,8 +27,6 @@ const OrderItem: React.FC<{ order: Order }> = ({ order }) => {
 const ClosedOrdersScreen: React.FC = () => {
   const orders = useSelector(selectClosedOrders);
 
-  const getId = useCallback((item: Order) => item.id, []);
-
   const renderItem = useCallback(
     (item: Order) => <OrderItem order={item} />,
     []
@@ -40,10 +38,8 @@ const ClosedOrdersScreen: React.FC = () => {
         plural: 'заказы',
         genitive: 'заказ',
       }}
-      shape={orderShape}
       items={orders}
-      getId={getId}
-      renderItem={renderItem}
+      view={props => <ListView {...props} renderItem={renderItem} />}
     />
   );
 };
