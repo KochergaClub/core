@@ -2,10 +2,10 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createExtendedSlice } from '~/redux/slices/utils';
 import { AsyncAction } from '~/redux/store';
 
-import { loadOpenOrders } from './openOrders';
+import { loadOpenOrders, reloadOpenOrders } from './openOrders';
 import { loadClosedOrders, reloadClosedOrders } from './closedOrders';
 import { loadOrderDetails } from './orderDetails';
-import { loadCustomers } from './customers';
+import { loadCustomers, reloadCustomers } from './customers';
 import { loadCustomerDetails } from './customerDetails';
 
 interface OpenViewState {
@@ -60,7 +60,7 @@ const slice = createExtendedSlice({
 });
 
 export const viewOpen = (): AsyncAction => async dispatch => {
-  await dispatch(loadOpenOrders());
+  await dispatch(loadOpenOrders(1));
   dispatch(slice.actions.viewOpen());
 };
 
@@ -75,7 +75,7 @@ export const viewDetails = (id: number): AsyncAction => async dispatch => {
 };
 
 export const viewCustomers = (): AsyncAction => async dispatch => {
-  await dispatch(loadCustomers());
+  await dispatch(loadCustomers(1));
   dispatch(slice.actions.viewCustomers());
 };
 
@@ -91,7 +91,7 @@ export const updateView = (): AsyncAction => async (dispatch, getState) => {
   const selfState = slice.selectors.self(state);
   switch (selfState.mode) {
     case 'open':
-      await dispatch(loadOpenOrders());
+      await dispatch(reloadOpenOrders());
       break;
     case 'closed':
       await dispatch(reloadClosedOrders());
@@ -100,7 +100,7 @@ export const updateView = (): AsyncAction => async (dispatch, getState) => {
       await dispatch(loadOrderDetails((selfState as OrderViewState).id));
       break;
     case 'customers':
-      await dispatch(loadCustomers());
+      await dispatch(reloadCustomers());
       break;
     case 'customer-details':
       await dispatch(

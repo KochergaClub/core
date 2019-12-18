@@ -4,13 +4,14 @@ import { useSelector } from 'react-redux';
 import { Collection } from '~/components/collections';
 import { useDispatch } from '~/common/hooks';
 
-import { addCustomer, selectCustomers } from '../features/customers';
+import { customersFeature, addCustomer } from '../features/customers';
 import { CreateCustomerParams } from '../types';
 
 import shapes from '../../shapes';
 
+import PagedCollection from './PagedCollection';
+
 const CustomersScreen: React.FC = () => {
-  const customers = useSelector(selectCustomers);
   const dispatch = useDispatch();
 
   const add = useCallback(
@@ -21,7 +22,8 @@ const CustomersScreen: React.FC = () => {
   );
 
   return (
-    <Collection
+    <PagedCollection
+      feature={customersFeature}
       names={{
         plural: 'клиенты',
         genitive: 'клиент',
@@ -30,7 +32,6 @@ const CustomersScreen: React.FC = () => {
         cb: add,
         shape: shapes.cm2.customer,
       }}
-      items={customers}
     />
   );
 };

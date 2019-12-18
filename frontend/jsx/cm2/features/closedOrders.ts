@@ -1,35 +1,29 @@
-import { createSelector } from '@reduxjs/toolkit';
 import { createPagedResourceFeature } from '~/redux/features';
-import { AsyncAction } from '~/redux/store';
 
-import { ServerOrder, parseServerOrder } from '../types';
+import { ServerOrder, Order, parseServerOrder } from '../types';
 
 import { orderBagFeature } from './orderBag';
 
-const feature = createPagedResourceFeature<ServerOrder>({
+const feature = createPagedResourceFeature<ServerOrder, Order>({
   name: 'cm2/closedOrders',
-  query: { status: 'closed', page_size: '5' },
+  query: { status: 'closed' },
   bag: orderBagFeature,
+  enhancers: [],
+  enhance(serverOrders: ServerOrder[]) {
+    return serverOrders.map(parseServerOrder);
+  },
 });
 
-export const { loadPage: loadClosedOrders } = feature.thunks;
+export const {
+  loadPage: loadClosedOrders,
+  reload: reloadClosedOrders,
+} = feature.thunks;
 
-export const { pager: selectClosedOrdersPager } = feature.selectors;
+export const {
+  pager: selectClosedOrdersPager,
+  asList: selectClosedOrders,
+} = feature.selectors;
 
-export const reloadClosedOrders = (): AsyncAction => async (
-  dispatch,
-  getState
-) => {
-  const pager = selectClosedOrdersPager(getState());
-  if (!pager) {
-    return;
-  }
-  await dispatch(loadClosedOrders(pager.page));
-};
-
-export const selectClosedOrders = createSelector(
-  feature.selectors.asList,
-  serverOrders => (serverOrders ? serverOrders.map(parseServerOrder) : [])
-);
+export const closedOrdersFeature = feature;
 
 export default feature.slice;

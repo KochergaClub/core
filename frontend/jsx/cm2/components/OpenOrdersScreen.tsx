@@ -9,12 +9,14 @@ import { A } from '@kocherga/frontkit';
 import { useDispatch } from '~/common/hooks';
 import { selectAPI } from '~/core/selectors';
 
-import { Collection, CustomTableView } from '~/components/collections';
+import { CustomTableView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import { addOrder } from '../features/orderActions';
-import { selectOpenOrders } from '../features/openOrders';
+import { openOrdersFeature } from '../features/openOrders';
 import { OrderAux, Customer } from '../types';
+
+import PagedCollection from './PagedCollection';
 
 const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
   // TODO - better typing
@@ -89,7 +91,6 @@ const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
 };
 
 const OpenOrdersScreen: React.FC = () => {
-  const ordersAux = useSelector(selectOpenOrders);
   const dispatch = useDispatch();
 
   const api = useSelector(selectAPI);
@@ -110,7 +111,7 @@ const OpenOrdersScreen: React.FC = () => {
         type: 'async',
         display: (c: Customer) => `${c.first_name} ${c.last_name}`,
         load: async () => {
-          const customers = (await api.call('cm2/customer', 'GET')).results; // TODO - pager or customer-all route
+          const customers = (await api.call('cm2/customer', 'GET')).results; // TODO - search method or customer-all route
           return customers;
         },
         getValue: (c: Customer) => c.id,
@@ -119,12 +120,12 @@ const OpenOrdersScreen: React.FC = () => {
   ];
 
   return (
-    <Collection
+    <PagedCollection
+      feature={openOrdersFeature}
       names={{
         plural: 'заказы',
         genitive: 'заказ',
       }}
-      items={ordersAux}
       add={{
         cb: add,
         shape: addShape,
