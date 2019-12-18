@@ -1,23 +1,35 @@
+import { Selector, createSelector } from 'reselect';
 import { createValueSlice } from '~/redux/slices/value';
-import { apiThunk } from '~/redux/action-utils';
+import { State, AsyncAction } from '~/redux/store';
 
 import { Customer } from '../types';
 
-const slice = createValueSlice<Customer | null>({
+import { customerBagFeature } from './customerBag';
+
+const slice = createValueSlice<number | null>({
   name: 'cm2/customerDetails',
   initialState: null,
 });
 
-export const loadCustomerDetails = (customer_id: number) =>
-  apiThunk(async (api, dispatch) => {
-    const customer = (await api.call(
-      `cm2/customer/${customer_id}`,
-      'GET'
-    )) as Customer;
+export const loadCustomerDetails = (
+  customer_id: number
+): AsyncAction => async dispatch => {
+  await dispatch(customerBagFeature.thunks.loadByIds([customer_id]));
 
-    dispatch(slice.actions.set(customer));
-  });
+  dispatch(slice.actions.set(customer_id));
+};
 
-export const selectCustomerDetails = slice.selectors.self;
+export const selectCustomerDetails: Selector<
+  State,
+  Customer | null
+> = createSelector(
+  [slice.selectors.self, customerBagFeature.selectors.byId],
+  (state, customerById) => {
+    if (state === null) {
+      return null;
+    }
+    return customerById(state);
+  }
+);
 
 export default slice;

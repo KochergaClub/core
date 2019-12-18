@@ -61,12 +61,12 @@ export interface OrderAux {
 
 export const orderToOrderAux = (
   order: Order,
-  customersObject: CustomersObject
+  customerById: (id: number) => Customer
 ): OrderAux => {
   if (!order.customer) {
     return { order };
   }
-  const customer = customersObject[order.customer];
+  const customer = customerById(order.customer);
   return {
     order,
     customer,

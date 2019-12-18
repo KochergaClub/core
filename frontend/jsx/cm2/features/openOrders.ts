@@ -1,7 +1,7 @@
 import { createSelector, Selector } from 'reselect';
 
 import { createPagedResourceFeature } from '~/redux/features';
-import { State } from '~/redux/store';
+import { State, AsyncAction } from '~/redux/store';
 
 import {
   ServerOrder,
@@ -10,8 +10,8 @@ import {
   orderToOrderAux,
 } from '../types';
 
-import { selectCustomersAsObject } from './customers';
 import { orderBagFeature } from './orderBag';
+import { customerBagFeature } from './customerBag';
 
 const feature = createPagedResourceFeature<ServerOrder>({
   name: 'cm2/openOrders',
@@ -19,18 +19,27 @@ const feature = createPagedResourceFeature<ServerOrder>({
   bag: orderBagFeature,
 });
 
-export const loadOpenOrders = () => feature.thunks.loadPage(1); // TODO - pager
+export const loadOpenOrders = (): AsyncAction => async (dispatch, getState) => {
+  await dispatch(feature.thunks.loadPage(1)); // TODO - pager
+
+  const customerIds = feature.selectors
+    .asList(getState())
+    .map(order => order.customer)
+    .filter(id => id) as number[];
+
+  await dispatch(customerBagFeature.thunks.loadByIds(customerIds));
+};
 
 export const selectOpenOrders: Selector<State, OrderAux[]> = createSelector(
-  [feature.selectors.asList, selectCustomersAsObject],
-  (serverOrders, customersObject) => {
+  [feature.selectors.asList, customerBagFeature.selectors.byId],
+  (serverOrders, customerById) => {
     if (!serverOrders) {
       return [];
     }
 
     const orders = serverOrders.map(parseServerOrder);
 
-    return orders.map(order => orderToOrderAux(order, customersObject));
+    return orders.map(order => orderToOrderAux(order, customerById));
   }
 );
 
