@@ -62,6 +62,13 @@ const createResourceBagSlice = <T extends AnyItem>({
   });
 };
 
+interface LoadPageResult {
+  ids: number[];
+  totalCount: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
 export interface ResourceBagFeature<T extends AnyItem> {
   // TODO - figure out the correct slice type
   // Unfortunately, we can't use ReturnType<typeof createResourceBagSlice>, since it's generic and TypeScript doesn't support typeof for generics.
@@ -82,7 +89,7 @@ export interface ResourceBagFeature<T extends AnyItem> {
     loadPage: (
       page_id: number,
       query?: { [k: string]: string }
-    ) => AsyncActionWeaklyTyped<{ ids: number[]; totalCount: number }>;
+    ) => AsyncActionWeaklyTyped<LoadPageResult>;
     loadByIds: (ids: number[]) => AsyncActionWeaklyTyped;
   };
 }
@@ -112,10 +119,7 @@ const createResourceBagFeature = <T extends AnyItem>({
   const loadPage = (
     page_id: number,
     query: { [k: string]: string } = {}
-  ): AsyncActionWeaklyTyped<{ ids: number[]; totalCount: number }> => async (
-    dispatch,
-    getState
-  ) => {
+  ): AsyncActionWeaklyTyped<LoadPageResult> => async (dispatch, getState) => {
     const api = selectAPI(getState());
     if (!paged) {
       throw new Error('Resource is not paged');
@@ -133,6 +137,8 @@ const createResourceBagFeature = <T extends AnyItem>({
     return {
       ids: items.map(item => item.id),
       totalCount: response.count,
+      hasNext: Boolean(response.next),
+      hasPrevious: Boolean(response.previous),
     };
   };
 

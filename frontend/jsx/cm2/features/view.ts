@@ -3,7 +3,7 @@ import { createExtendedSlice } from '~/redux/slices/utils';
 import { AsyncAction } from '~/redux/store';
 
 import { loadOpenOrders } from './openOrders';
-import { loadClosedOrders } from './closedOrders';
+import { loadClosedOrders, reloadClosedOrders } from './closedOrders';
 import { loadOrderDetails } from './orderDetails';
 import { loadCustomers } from './customers';
 import { loadCustomerDetails } from './customerDetails';
@@ -65,7 +65,7 @@ export const viewOpen = (): AsyncAction => async dispatch => {
 };
 
 export const viewClosed = (): AsyncAction => async dispatch => {
-  await dispatch(loadClosedOrders());
+  await dispatch(loadClosedOrders(1));
   dispatch(slice.actions.viewClosed());
 };
 
@@ -94,7 +94,7 @@ export const updateView = (): AsyncAction => async (dispatch, getState) => {
       await dispatch(loadOpenOrders());
       break;
     case 'closed':
-      await dispatch(loadClosedOrders());
+      await dispatch(reloadClosedOrders());
       break;
     case 'order':
       await dispatch(loadOrderDetails((selfState as OrderViewState).id));

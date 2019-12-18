@@ -6,9 +6,10 @@ interface Props {
   act: () => Promise<void>;
   small?: boolean;
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
-const AsyncButton = ({ act, children, small }: Props) => {
+const AsyncButton = ({ act, children, small, disabled }: Props) => {
   const [loading, setLoading] = useState(false);
 
   const cb = useCallback(async () => {
@@ -22,7 +23,12 @@ const AsyncButton = ({ act, children, small }: Props) => {
   }, [act]);
 
   return (
-    <Button loading={loading} disabled={loading} onClick={cb} small={small}>
+    <Button
+      loading={loading}
+      disabled={disabled || loading}
+      onClick={cb}
+      small={small}
+    >
       {children}
     </Button>
   );

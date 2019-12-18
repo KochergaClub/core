@@ -14,6 +14,8 @@ interface LoadedFeatureState {
   ids: number[];
   page: number;
   totalCount: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
   loaded: true;
 }
 
@@ -40,7 +42,7 @@ const createPagedResourceFeature = <T extends AnyItem>({
   const loadPage = (
     page_id: number
   ): AsyncActionWeaklyTyped => async dispatch => {
-    const { ids, totalCount } = await dispatch(
+    const { ids, totalCount, hasNext, hasPrevious } = await dispatch(
       bag.thunks.loadPage(page_id, query || {})
     );
 
@@ -49,6 +51,8 @@ const createPagedResourceFeature = <T extends AnyItem>({
         loaded: true,
         ids,
         totalCount,
+        hasNext,
+        hasPrevious,
         page: page_id,
       })
     );
@@ -68,6 +72,26 @@ const createPagedResourceFeature = <T extends AnyItem>({
     slice,
     selectors: {
       asList: selectItems,
+      page: createSelector(slice.selectors.self, state =>
+        state.loaded ? state.page : null
+      ),
+      hasPrevious: createSelector(
+        slice.selectors.self,
+        state => state.loaded && state.hasPrevious
+      ),
+      hasNext: createSelector(
+        slice.selectors.self,
+        state => state.loaded && state.hasNext
+      ),
+      pager: createSelector(slice.selectors.self, state =>
+        state.loaded
+          ? {
+              page: state.page,
+              hasNext: state.hasNext,
+              hasPrevious: state.hasPrevious,
+            }
+          : null
+      ),
     },
     thunks: {
       loadPage,
