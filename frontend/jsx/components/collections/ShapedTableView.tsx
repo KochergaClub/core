@@ -1,38 +1,17 @@
 import React from 'react';
 
-import styled from 'styled-components';
-
 import { FaCheck } from 'react-icons/fa';
-
-import { colors } from '@kocherga/frontkit';
 
 import { FormField, FormShape } from '~/components/forms/types';
 import { AnyViewProps } from './types';
 
+import { Table, TableHeaderCell } from './tables';
+
 interface Props<I> extends AnyViewProps<I> {
-  renderItem?: (item: I) => React.ReactElement;
   shape: FormShape;
   extraColumns?: string[];
   renderExtraColumn?: (item: I, id: number) => React.ReactElement;
 }
-
-const Table = styled.table`
-  border-collapse: collapse;
-
-  td,
-  th {
-    border: 1px solid ${colors.grey[300]};
-    padding: 4px;
-  }
-`;
-
-const TableHeaderCell = styled.th`
-  font-weight: 500;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: ${colors.grey[700]};
-`;
 
 interface CellProps<I> {
   field: FormField;
@@ -87,7 +66,7 @@ function TableViewRow<I>({
   );
 }
 
-function TableView<I>(props: Props<I>) {
+function ShapedTableView<I>(props: Props<I>) {
   if (!props.items.length) {
     return <div>Нет данных.</div>;
   }
@@ -117,4 +96,4 @@ function TableView<I>(props: Props<I>) {
   );
 }
 
-export default TableView;
+export default ShapedTableView;

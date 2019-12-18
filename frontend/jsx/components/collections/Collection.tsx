@@ -17,7 +17,7 @@ interface Props<I, A extends {}> {
     shape: FormShape;
     cb: (values: A) => Promise<void>;
   };
-  view?: (props: AnyViewProps<I>) => React.ReactElement;
+  view?: React.ElementType<AnyViewProps<I>>;
 }
 
 function Collection<I, A>(props: Props<I, A>) {
