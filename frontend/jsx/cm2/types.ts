@@ -36,3 +36,16 @@ export const orderShape: FormShape = [
   },
   { type: 'number', name: 'value', title: 'Стоимость', readonly: true },
 ];
+
+export interface Customer {
+  id: number;
+  card_id: number;
+  first_name: string;
+  last_name: string;
+}
+
+export interface CreateCustomerParams {
+  card_id: number;
+  first_name: string;
+  last_name: string;
+}

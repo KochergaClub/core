@@ -7,6 +7,7 @@ import { selectView } from '../features/view';
 import OpenOrdersScreen from './OpenOrdersScreen';
 import ClosedOrdersScreen from './ClosedOrdersScreen';
 import OrderDetails from './OrderDetails';
+import CustomersScreen from './CustomersScreen';
 import Navigation from './Navigation';
 
 const CmApp: React.FC = () => {
@@ -19,6 +20,8 @@ const CmApp: React.FC = () => {
       ? 'Закрытые заказы | Cafe Manager'
       : view.mode === 'order'
       ? `Заказ #${view.id}`
+      : view.mode === 'customers'
+      ? 'Клиенты'
       : 'UNKNOWN';
 
   const title =
@@ -28,12 +31,15 @@ const CmApp: React.FC = () => {
       ? 'Cafe Manager. Закрытые заказы'
       : view.mode === 'order'
       ? `Cafe Manager. Заказ #${view.id}`
+      : view.mode === 'customers'
+      ? 'Cafe Manager. Клиенты'
       : 'UNKNOWN';
 
   const mode2screen = {
     open: OpenOrdersScreen,
     closed: ClosedOrdersScreen,
     order: OrderDetails,
+    customers: CustomersScreen,
   };
 
   const Screen = mode2screen[view.mode];

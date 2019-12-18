@@ -5,6 +5,7 @@ import { AsyncAction } from '~/redux/store';
 import { loadOpenOrders } from './openOrders';
 import { loadClosedOrders } from './closedOrders';
 import { loadOrderDetails } from './orderDetails';
+import { loadCustomers } from './customers';
 
 interface OpenViewState {
   mode: 'open';
@@ -19,7 +20,15 @@ interface OrderViewState {
   id: number;
 }
 
-type ViewState = OpenViewState | ClosedViewState | OrderViewState;
+interface CustomersViewState {
+  mode: 'customers';
+}
+
+type ViewState =
+  | OpenViewState
+  | ClosedViewState
+  | OrderViewState
+  | CustomersViewState;
 
 const slice = createExtendedSlice({
   name: 'cm2/view',
@@ -33,6 +42,9 @@ const slice = createExtendedSlice({
     },
     viewOrder(_, action: PayloadAction<number>) {
       return { mode: 'order', id: action.payload };
+    },
+    viewCustomers() {
+      return { mode: 'customers' };
     },
   },
 });
@@ -52,6 +64,11 @@ export const viewDetails = (id: number): AsyncAction => async dispatch => {
   dispatch(slice.actions.viewOrder(id));
 };
 
+export const viewCustomers = (): AsyncAction => async dispatch => {
+  await dispatch(loadCustomers());
+  dispatch(slice.actions.viewCustomers());
+};
+
 export const updateView = (): AsyncAction => async (dispatch, getState) => {
   const state = getState();
   const selfState = slice.selectors.self(state);
@@ -64,6 +81,9 @@ export const updateView = (): AsyncAction => async (dispatch, getState) => {
       break;
     case 'order':
       await dispatch(loadOrderDetails((selfState as OrderViewState).id));
+      break;
+    case 'customers':
+      await dispatch(loadCustomers());
       break;
   }
 };

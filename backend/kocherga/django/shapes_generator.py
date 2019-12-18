@@ -72,12 +72,32 @@ def build_shape(serializer_class):
         else:
             try:
                 model_field = model._meta.get_field(field.source)
+                frontend_field = convert_field(model_field)
             except FieldDoesNotExist:
-                if hasattr(model, field.source):
-                    # probably a method field
-                    continue
+                if not hasattr(model, field.source):
+                    raise Exception(f"Model doesn't have field {field.source}")
 
-            frontend_field = convert_field(model_field)
+                method = getattr(model, field.source)
+                if type(method) == property:
+                    method = method.fget
+
+                if 'return' not in method.__annotations__:
+                    raise Exception("Got method field but no annotations")
+
+                return_type = method.__annotations__['return']
+
+                frontend_field = {
+                    'name': field.source,
+                    'readonly': True,
+                    # TODO - support Optional[...]
+                }
+                if return_type == int:
+                    frontend_field['type'] = 'number'
+                elif return_type == str:
+                    frontend_field['type'] = 'string'
+                else:
+                    raise Exception("Got method field but can't interpret type. Return type: " + str(return_type))
+
             if not frontend_field:
                 continue  # skip for now
 
@@ -95,6 +115,7 @@ def generate_shapes_to_fh(fh):
         kocherga.ratio.serializers.TicketSerializer,
         kocherga.ratio.serializers.TrainingSerializer,
         kocherga.cm2.serializers.OrderSerializer,
+        kocherga.cm2.serializers.CustomerSerializer,
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)

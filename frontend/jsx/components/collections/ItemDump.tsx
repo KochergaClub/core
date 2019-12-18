@@ -1,3 +1,5 @@
+import { Row, Label } from '@kocherga/frontkit';
+
 import { FormShape } from '~/components/forms/types';
 
 interface Props<Item> {
@@ -11,7 +13,10 @@ export default function ItemDump<I>(props: Props<I>) {
   return (
     <div>
       {shape.map(field => (
-        <div key={field.name}>{(item as any)[field.name] || 'undefined'}</div>
+        <Row key={field.name} vCentered>
+          <Label>{field.title || field.name}:</Label>
+          <div>{(item as any)[field.name] || 'undefined'}</div>
+        </Row>
       ))}
     </div>
   );

@@ -7,6 +7,9 @@ const Navigation: React.FC = () => (
     <Link href="/team/cm" passHref>
       <A>Открытые заказы</A>
     </Link>
+    <Link href="/team/cm/customers" passHref>
+      <A>Клиенты</A>
+    </Link>
     <Link href="/team/cm/orders/closed" passHref>
       <A>Закрытые заказы</A>
     </Link>

@@ -51,7 +51,7 @@ const createPagedResourceFeature = <T>({ name, endpoint }: Params) => {
   };
 
   const selectItems = createSelector(slice.selectors.self, featureState =>
-    featureState.loaded ? featureState.items : undefined
+    featureState.loaded ? featureState.items : []
   );
 
   return {

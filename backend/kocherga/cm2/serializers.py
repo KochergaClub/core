@@ -8,3 +8,10 @@ class OrderSerializer(serializers.ModelSerializer):
         model = models.Order
         fields = ('id', 'start', 'end', 'value')
         read_only_fields = ('id', 'start', 'end', 'value')
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Customer
+        fields = ('id', 'card_id', 'first_name', 'last_name')
+        read_only_fields = ('id',)

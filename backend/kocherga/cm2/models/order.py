@@ -28,7 +28,7 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
     @property
-    def value(self):
+    def value(self) -> int:
         if self.end:
             # already closed
             return self.stored_value

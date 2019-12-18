@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from . import models, serializers
 
 
-class OrderPagination(pagination.PageNumberPagination):
+class CommonPagination(pagination.PageNumberPagination):
     page_size = 100
     page_size_query_param = 'page_size'
     max_page_size = 1000
@@ -14,7 +14,7 @@ class OrderPagination(pagination.PageNumberPagination):
 class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
     serializer_class = serializers.OrderSerializer
     permission_classes = [permissions.IsAdminUser]
-    pagination_class = OrderPagination
+    pagination_class = CommonPagination
 
     def get_queryset(self):
         qs = models.Order.objects.all()
@@ -29,3 +29,14 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
         order.close()
 
         return Response('ok')
+
+
+class CustomerViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
+    serializer_class = serializers.CustomerSerializer
+    permission_classes = [permissions.IsAdminUser]
+    pagination_class = CommonPagination
+
+    def get_queryset(self):
+        qs = models.Customer.objects.all()
+        # TODO - join with users
+        return qs
