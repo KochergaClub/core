@@ -1,15 +1,12 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
-import { Collection } from '~/components/collections';
+import { PagedCollection } from '~/components/collections';
 import { useDispatch } from '~/common/hooks';
 
 import { customersFeature, addCustomer } from '../features/customers';
 import { CreateCustomerParams } from '../types';
 
 import shapes from '../../shapes';
-
-import PagedCollection from './PagedCollection';
 
 const CustomersScreen: React.FC = () => {
   const dispatch = useDispatch();

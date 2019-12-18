@@ -4,12 +4,10 @@ import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import { ListView } from '~/components/collections';
+import { PagedCollection, ListView } from '~/components/collections';
 
 import { closedOrdersFeature } from '../features/closedOrders';
 import { Order } from '../types';
-
-import PagedCollection from './PagedCollection';
 
 const OrderItem: React.FC<{ order: Order }> = ({ order }) => {
   return (

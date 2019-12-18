@@ -9,14 +9,12 @@ import { A } from '@kocherga/frontkit';
 import { useDispatch } from '~/common/hooks';
 import { selectAPI } from '~/core/selectors';
 
-import { CustomTableView } from '~/components/collections';
+import { PagedCollection, CustomTableView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import { addOrder } from '../features/orderActions';
 import { openOrdersFeature } from '../features/openOrders';
 import { OrderAux, Customer } from '../types';
-
-import PagedCollection from './PagedCollection';
 
 const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
   // TODO - better typing

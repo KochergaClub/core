@@ -1,21 +1,31 @@
-import { createResourceFeature } from '~/redux/features';
+import { createPagedResourceFeature } from '~/redux/features';
 import { apiThunk } from '~/redux/action-utils';
 
 import { Training, CreateTrainingParams } from '../types';
 
-const feature = createResourceFeature<Training>({
+import { trainingBagFeature } from './trainingBag';
+
+const feature = createPagedResourceFeature<Training>({
   name: 'ratio/trainings',
-  endpoint: 'ratio/training',
+  bag: trainingBagFeature,
+  query: { page_size: '10' },
+  enhancers: [],
+  enhance: items => items,
 });
 
-export const loadTrainings = feature.thunks.load;
+export const { asList: selectTrainings } = feature.selectors;
+
+export const {
+  loadPage: loadTrainings,
+  reload: reloadTrainings,
+} = feature.thunks;
 
 export const addTraining = (values: CreateTrainingParams) =>
   apiThunk(async (api, dispatch) => {
     await api.call('ratio/training', 'POST', values);
-    await dispatch(loadTrainings());
+    await dispatch(reloadTrainings());
   });
 
-export const selectTrainings = feature.selectors.asList;
+export const trainingsFeature = feature;
 
 export default feature.slice;

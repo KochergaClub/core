@@ -1,14 +1,10 @@
-from rest_framework import viewsets, mixins, permissions, pagination
+from rest_framework import viewsets, mixins, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from . import models, serializers
 
-
-class CommonPagination(pagination.PageNumberPagination):
-    page_size = 100
-    page_size_query_param = 'page_size'
-    max_page_size = 1000
+from kocherga.django.pagination import CommonPagination
 
 
 class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
