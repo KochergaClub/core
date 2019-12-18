@@ -8,8 +8,6 @@ import {
   CreateSliceOptions,
 } from '@reduxjs/toolkit';
 
-import { State as GlobalState } from '~/redux/store';
-
 // FIXME - type definitions from @reduxjs/toolkit which are not exported had to be copy-pasted here.
 
 type PayloadActions<Types extends keyof any = string> = Record<
@@ -55,28 +53,24 @@ type SliceCaseReducerDefinitions<State, PA extends PayloadActions> = {
     | CaseReducerWithPrepare<State, PA[ActionType]>;
 };
 
-type ExtraOptions = {
-  thunks?: any; // FIXME
-};
-
 type ExtraSlice<State> = {
-  thunks?: any; // FIXME
   selectors: {
     self: Selector<any, State>;
   };
 };
+
+export type ExtendedSlice<
+  State,
+  CaseReducers extends SliceCaseReducerDefinitions<State, PayloadActions>
+> = Slice<State, CaseReducers> & ExtraSlice<State>;
 
 export function createExtendedSlice<
   State,
   CaseReducers extends SliceCaseReducerDefinitions<State, any>
 >(
   options: CreateSliceOptions<State, CaseReducers> &
-    RestrictCaseReducerDefinitionsToMatchReducerAndPrepare<
-      State,
-      CaseReducers
-    > &
-    ExtraOptions
-): Slice<State, CaseReducers> & ExtraSlice<State> {
+    RestrictCaseReducerDefinitionsToMatchReducerAndPrepare<State, CaseReducers>
+): ExtendedSlice<State, CaseReducers> {
   const slice = createSlice(options);
 
   const nameParts = slice.name.split('/');
@@ -94,7 +88,6 @@ export function createExtendedSlice<
 
   return {
     ...slice,
-    thunks: options.thunks,
     selectors: {
       self: selfSelector,
     },

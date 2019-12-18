@@ -5,9 +5,11 @@ import { apiThunk } from '~/redux/action-utils';
 import { Customer, CreateCustomerParams, CustomersObject } from '../types';
 import { updateView } from './view';
 
+import { customerBagFeature } from './customerBag';
+
 const feature = createPagedResourceFeature<Customer>({
   name: 'cm2/customers',
-  endpoint: 'cm2/customer',
+  bag: customerBagFeature,
 });
 
 export const loadCustomers = () => feature.thunks.loadPage(1); // TODO - pager

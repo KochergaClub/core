@@ -1,40 +1,50 @@
 import { createSelector, Selector } from 'reselect';
 import { createValueSlice } from '~/redux/slices/value';
-import { apiThunk } from '~/redux/action-utils';
-import { State } from '~/redux/store';
+import { State, AsyncAction } from '~/redux/store';
 
-import {
-  ServerOrder,
-  OrderAux,
-  parseServerOrder,
-  orderToOrderAux,
-} from '../types';
-import { selectCustomersAsObject } from './customers';
+import { OrderAux, parseServerOrder } from '../types';
 
-const slice = createValueSlice<ServerOrder | null>({
+import { orderBagFeature } from './orderBag';
+import { customerBagFeature } from './customerBag';
+
+const slice = createValueSlice<number | null>({
   name: 'cm2/orderDetails',
   initialState: null,
 });
 
-export const loadOrderDetails = (order_id: number) =>
-  apiThunk(async (api, dispatch) => {
-    const order = (await api.call(
-      `cm2/orders/${order_id}`,
-      'GET'
-    )) as ServerOrder;
+export const loadOrderDetails = (order_id: number): AsyncAction => async (
+  dispatch,
+  getState
+) => {
+  await dispatch(orderBagFeature.thunks.loadByIds([order_id]));
+  const order = orderBagFeature.selectors.byId(getState())(order_id);
 
-    dispatch(slice.actions.set(order));
-  });
+  if (order.customer) {
+    await dispatch(customerBagFeature.thunks.loadByIds([order.customer]));
+  }
+
+  dispatch(slice.actions.set(order_id));
+};
 
 export const selectOrderDetails: Selector<State, OrderAux> = createSelector(
-  [slice.selectors.self, selectCustomersAsObject],
-  (serverOrder, customersObject) => {
-    if (serverOrder === null) {
+  [
+    slice.selectors.self,
+    orderBagFeature.selectors.byId,
+    customerBagFeature.selectors.byId,
+  ],
+  (order_id, orderById, customerById) => {
+    if (order_id === null) {
       throw new Error("Can't select order details - none is being viewed");
     }
-    const order = parseServerOrder(serverOrder);
+    const order = parseServerOrder(orderById(order_id));
 
-    return orderToOrderAux(order, customersObject);
+    const orderAux: OrderAux = { order };
+    if (order.customer) {
+      const customer = customerById(order.customer);
+      orderAux.customer = customer;
+    }
+
+    return orderAux;
   }
 );
 

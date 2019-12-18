@@ -1,16 +1,17 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { createValueSlice } from '~/redux/slices/value';
 import { AsyncActionWeaklyTyped } from '~/redux/store';
-import { selectAPI } from '~/core/selectors';
-import { PagedAPIResponse } from '~/common/api';
 
-interface Params {
+import { AnyItem, ResourceBagFeature } from './resourceBag';
+
+interface Params<T extends AnyItem> {
   name: string;
-  endpoint: string;
+  query?: { [k: string]: string };
+  bag: ResourceBagFeature<T>;
 }
 
-interface LoadedFeatureState<T> {
-  items: T[];
+interface LoadedFeatureState {
+  ids: number[];
   page: number;
   totalCount: number;
   loaded: true;
@@ -20,38 +21,47 @@ interface UnloadedFeatureState {
   loaded: false;
 }
 
-type FeatureState<T> = LoadedFeatureState<T> | UnloadedFeatureState;
+type FeatureState = LoadedFeatureState | UnloadedFeatureState;
 
-const createPagedResourceFeature = <T>({ name, endpoint }: Params) => {
-  const initialState: FeatureState<T> = {
+const createPagedResourceFeature = <T extends AnyItem>({
+  name,
+  bag,
+  query,
+}: Params<T>) => {
+  const initialState: FeatureState = {
     loaded: false,
   };
 
-  const slice = createValueSlice<FeatureState<T>>({
+  const slice = createValueSlice<FeatureState>({
     name,
     initialState,
   });
 
-  const loadPage = (page: number): AsyncActionWeaklyTyped => async (
-    dispatch,
-    getState
-  ) => {
-    const api = selectAPI(getState());
-    const response = (await api.call(endpoint, 'GET')) as PagedAPIResponse<T>;
-    const items = response.results;
+  const loadPage = (
+    page_id: number
+  ): AsyncActionWeaklyTyped => async dispatch => {
+    const { ids, totalCount } = await dispatch(
+      bag.thunks.loadPage(page_id, query || {})
+    );
 
     dispatch(
       slice.actions.set({
         loaded: true,
-        items,
-        page,
-        totalCount: response.count,
+        ids,
+        totalCount,
+        page: page_id,
       })
     );
   };
 
-  const selectItems = createSelector(slice.selectors.self, featureState =>
-    featureState.loaded ? featureState.items : []
+  const selectItems = createSelector(
+    [slice.selectors.self, bag.selectors.byId],
+    (featureState: FeatureState, byId) => {
+      if (!featureState.loaded) {
+        return [];
+      }
+      return featureState.ids.map(id => byId(id));
+    }
   );
 
   return {

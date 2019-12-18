@@ -3,9 +3,12 @@ import { createPagedResourceFeature } from '~/redux/features';
 
 import { ServerOrder, parseServerOrder } from '../types';
 
+import { orderBagFeature } from './orderBag';
+
 const feature = createPagedResourceFeature<ServerOrder>({
   name: 'cm2/closedOrders',
-  endpoint: 'cm2/orders?status=closed',
+  query: { status: 'closed' },
+  bag: orderBagFeature,
 });
 
 export const loadClosedOrders = () => feature.thunks.loadPage(1);

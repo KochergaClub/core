@@ -9,11 +9,14 @@ import {
   parseServerOrder,
   orderToOrderAux,
 } from '../types';
+
 import { selectCustomersAsObject } from './customers';
+import { orderBagFeature } from './orderBag';
 
 const feature = createPagedResourceFeature<ServerOrder>({
   name: 'cm2/openOrders',
-  endpoint: 'cm2/orders?status=open',
+  query: { status: 'open' },
+  bag: orderBagFeature,
 });
 
 export const loadOpenOrders = () => feature.thunks.loadPage(1); // TODO - pager
