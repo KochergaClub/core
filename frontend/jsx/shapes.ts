@@ -129,7 +129,7 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "name": "project",
         "optional": true,
         "title": "project",
-        "type": "number"
+        "type": "fk"
       },
       {
         "name": "registration_type",
@@ -178,7 +178,7 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "name": "training",
         "optional": false,
         "title": "Тренинг",
-        "type": "number"
+        "type": "fk"
       },
       {
         "name": "email",
@@ -386,6 +386,12 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "name": "value",
         "readonly": true,
         "type": "number"
+      },
+      {
+        "name": "customer",
+        "optional": true,
+        "title": "customer",
+        "type": "fk"
       }
     ],
     "customer": [

@@ -9,6 +9,7 @@ from kocherga.events.models.feedback import ScoreField
 import kocherga.events.serializers
 import kocherga.ratio.serializers
 import kocherga.cm2.serializers
+import kocherga.money.cashier.serializers
 
 
 def convert_field(field):
@@ -40,7 +41,9 @@ def convert_field(field):
         result['type'] = 'number'
         result['min'] = 0
         result['max'] = 10
-    elif issubclass(field_cls, fields.IntegerField) or field_cls == fields.related.ForeignKey:
+    elif field_cls == fields.related.ForeignKey:
+        result['type'] = 'fk'  # FIXME - not all foreign keys are numbers (but they probably should be)
+    elif issubclass(field_cls, fields.IntegerField):
         result['type'] = 'number'
     elif field_cls == fields.AutoField:
         result['type'] = 'number'
@@ -95,6 +98,8 @@ def build_shape(serializer_class):
                     frontend_field['type'] = 'number'
                 elif return_type == str:
                     frontend_field['type'] = 'string'
+                elif return_type == bool:
+                    frontend_field['type'] = 'boolean'
                 else:
                     raise Exception("Got method field but can't interpret type. Return type: " + str(return_type))
 
@@ -116,6 +121,7 @@ def generate_shapes_to_fh(fh):
         kocherga.ratio.serializers.TrainingSerializer,
         kocherga.cm2.serializers.OrderSerializer,
         kocherga.cm2.serializers.CustomerSerializer,
+        # kocherga.money.cashier.serializers.PaymentSerializer,  # FIXME - leads to double `whom` fk
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)

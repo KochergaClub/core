@@ -19,7 +19,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'whom', 'is_redeemed', 'created_dt', 'redeem_dt')
 
     def create(self, validated_data):
-        logger.info(validated_data)
         user_id = validated_data.pop('whom_id')
         user = get_user_model().objects.get(pk=user_id)
 
