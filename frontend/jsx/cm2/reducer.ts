@@ -6,6 +6,7 @@ import closedOrders from './features/closedOrders';
 import orderDetails from './features/orderDetails';
 import orderActions from './features/orderActions';
 import customers from './features/customers';
+import customerDetails from './features/customerDetails';
 
 export default combineReducers({
   openOrders: openOrders.reducer,
@@ -13,5 +14,6 @@ export default combineReducers({
   orderDetails: orderDetails.reducer,
   orderActions: orderActions.reducer,
   customers: customers.reducer,
+  customerDetails: customerDetails.reducer,
   view: view.reducer,
 });

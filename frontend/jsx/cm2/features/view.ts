@@ -6,6 +6,7 @@ import { loadOpenOrders } from './openOrders';
 import { loadClosedOrders } from './closedOrders';
 import { loadOrderDetails } from './orderDetails';
 import { loadCustomers } from './customers';
+import { loadCustomerDetails } from './customerDetails';
 
 interface OpenViewState {
   mode: 'open';
@@ -24,11 +25,17 @@ interface CustomersViewState {
   mode: 'customers';
 }
 
+interface CustomerDetailsViewState {
+  mode: 'customer-details';
+  id: number;
+}
+
 type ViewState =
   | OpenViewState
   | ClosedViewState
   | OrderViewState
-  | CustomersViewState;
+  | CustomersViewState
+  | CustomerDetailsViewState;
 
 const slice = createExtendedSlice({
   name: 'cm2/view',
@@ -45,6 +52,9 @@ const slice = createExtendedSlice({
     },
     viewCustomers() {
       return { mode: 'customers' };
+    },
+    viewCustomerDetails(_, action: PayloadAction<number>) {
+      return { mode: 'customer-details', id: action.payload };
     },
   },
 });
@@ -71,6 +81,14 @@ export const viewCustomers = (): AsyncAction => async dispatch => {
   dispatch(slice.actions.viewCustomers());
 };
 
+export const viewCustomerDetails = (
+  id: number
+): AsyncAction => async dispatch => {
+  await dispatch(loadCustomers()); // FIXME - always preloading all customers
+  await dispatch(loadCustomerDetails(id));
+  dispatch(slice.actions.viewCustomerDetails(id));
+};
+
 export const updateView = (): AsyncAction => async (dispatch, getState) => {
   const state = getState();
   const selfState = slice.selectors.self(state);
@@ -88,6 +106,12 @@ export const updateView = (): AsyncAction => async (dispatch, getState) => {
       break;
     case 'customers':
       await dispatch(loadCustomers());
+      break;
+    case 'customer-details':
+      await dispatch(loadCustomers());
+      await dispatch(
+        loadCustomerDetails((selfState as CustomerDetailsViewState).id)
+      );
       break;
   }
 };

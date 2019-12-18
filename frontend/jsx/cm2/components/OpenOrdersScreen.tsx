@@ -67,9 +67,17 @@ const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
           case 'customer':
             return (
               <div>
-                {item.customer
-                  ? `${item.customer.first_name} ${item.customer.last_name}`
-                  : 'гость'}
+                {item.customer ? (
+                  <Link
+                    href="/team/cm/customers/[id]"
+                    as={`/team/cm/customers/${item.customer.id}`}
+                    passHref
+                  >
+                    <A>
+                      {item.customer.first_name} {item.customer.last_name}
+                    </A>
+                  </Link>
+                ) : null}
               </div>
             );
           default:
