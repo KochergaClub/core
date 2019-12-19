@@ -23,6 +23,7 @@ const httpProxy = require('http-proxy');
 
 const { API_HOST, API_ASYNC_HOST } = require('./constants');
 
+const apolloServer = require('./apolloServer').default;
 const trailingSlashEndpoint = require('./trailingSlashEndpoint').default;
 const tildaEndpoint = require('./tildaEndpoint').default;
 const nextjsEntrypoint = require('./nextjsEntrypoint').default;
@@ -77,6 +78,8 @@ async function main() {
       console.error(e);
     });
   });
+
+  apolloServer.applyMiddleware({ app, path: '/graphql' });
 
   app.use(trailingSlashEndpoint);
   app.use(tildaEndpoint);

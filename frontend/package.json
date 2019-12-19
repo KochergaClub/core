@@ -50,6 +50,8 @@
     "@types/styled-components": "4.1.8",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
+    "apollo-datasource-rest": "^0.6.10",
+    "apollo-server-express": "^2.9.14",
     "autosize": "^4.0.2",
     "cookie": "^0.4.0",
     "date-fns": "^2.0.0-alpha.27",
