@@ -6,6 +6,7 @@ export const customerBagFeature = createResourceBagFeature<Customer>({
   name: 'cm2/customerBag',
   endpoint: 'cm2/customer',
   paged: true,
+  bulk: true,
 });
 
 export default customerBagFeature.slice;

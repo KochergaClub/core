@@ -25,6 +25,7 @@ interface Params {
   name: string;
   endpoint: string;
   paged?: boolean;
+  bulk?: boolean;
 }
 
 interface FeatureState<I extends AnyItem> {
@@ -98,6 +99,7 @@ const createResourceBagFeature = <T extends AnyItem>({
   name,
   endpoint,
   paged,
+  bulk,
 }: Params): ResourceBagFeature<T> => {
   const slice = createResourceBagSlice<T>({ name });
 
@@ -151,9 +153,25 @@ const createResourceBagFeature = <T extends AnyItem>({
     // TODO - bulk (for endpoints which support it)
 
     const items: T[] = [];
-    for (const id of ids) {
-      const item = (await api.call(`${endpoint}/${id}`, 'GET')) as T;
-      items.push(item);
+
+    if (bulk) {
+      let hasNext = true;
+      let page = 1;
+      do {
+        const response = (await api.call(
+          `${endpoint}?ids=${ids.join(',')}&page=${page}`,
+          'GET'
+        )) as PagedAPIResponse<T>;
+        items.push(...response.results);
+
+        hasNext = Boolean(response.next);
+        page += 1;
+      } while (hasNext);
+    } else {
+      for (const id of ids) {
+        const item = (await api.call(`${endpoint}/${id}`, 'GET')) as T;
+        items.push(item);
+      }
     }
 
     dispatch(slice.actions.addMultiple(items));

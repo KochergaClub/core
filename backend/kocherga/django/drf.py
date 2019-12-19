@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError as DRFValidationError, Not
 from rest_framework.views import exception_handler as drf_exception_handler
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework import filters
 
 
 def exception_handler(exc, context):
@@ -21,3 +22,13 @@ def exception_handler(exc, context):
 @permission_classes((AllowAny,))
 def view404(request):
     raise NotFound()
+
+
+class BulkRetrieveFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        ids_str = request.query_params.get('ids')
+        if not ids_str:
+            return queryset
+        ids = [int(s) for s in ids_str.split(',')]
+
+        return queryset.filter(pk__in=ids)
