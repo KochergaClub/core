@@ -1,5 +1,4 @@
 import { API } from '~/common/api';
-import { Member as StaffMember } from '~/staff/types';
 
 import { PbxCall } from './types';
 

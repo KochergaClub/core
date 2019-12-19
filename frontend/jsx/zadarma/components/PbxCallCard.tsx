@@ -1,11 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import moment from 'moment';
 
 import { A } from '@kocherga/frontkit';
 
-//test
 import Card from '~/components/Card';
 
 import { PbxCall } from '../types';

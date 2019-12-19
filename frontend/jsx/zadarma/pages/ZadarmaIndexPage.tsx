@@ -1,10 +1,10 @@
-import React, { useReducer } from 'react';
+import { useReducer } from 'react';
+
+import { Page } from '~/components';
+import { CardList } from '~/components/Card';
 
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
 import { selectAPI } from '~/core/selectors';
-
-import { Column } from '@kocherga/frontkit';
 
 import { loadMembers } from '~/staff/actions';
 
@@ -27,11 +27,11 @@ const ZadarmaIndexPage: NextPage<Props> = ({ pbx_calls }) => {
       <Page.Title>Архив звонков</Page.Title>
       <Page.Main>
         <ZadarmaContext.Provider value={zadarmaDispatch}>
-          <Column stretch gutter={10}>
+          <CardList>
             {state.map(pbx_call => (
               <PbxCallCard pbx_call={pbx_call} key={pbx_call.pbx_call_id} />
             ))}
-          </Column>
+          </CardList>
         </ZadarmaContext.Provider>
       </Page.Main>
     </Page>
