@@ -122,3 +122,10 @@ export class API {
     return await this.call(`wagtail/${path}`, 'GET');
   };
 }
+
+export interface PagedAPIResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}

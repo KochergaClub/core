@@ -8,6 +8,8 @@ from kocherga.events.models.feedback import ScoreField
 
 import kocherga.events.serializers
 import kocherga.ratio.serializers
+import kocherga.cm2.serializers
+import kocherga.money.cashier.serializers
 
 
 def convert_field(field):
@@ -39,7 +41,9 @@ def convert_field(field):
         result['type'] = 'number'
         result['min'] = 0
         result['max'] = 10
-    elif issubclass(field_cls, fields.IntegerField) or field_cls == fields.related.ForeignKey:
+    elif field_cls == fields.related.ForeignKey:
+        result['type'] = 'fk'  # FIXME - not all foreign keys are numbers (but they probably should be)
+    elif issubclass(field_cls, fields.IntegerField):
         result['type'] = 'number'
     elif field_cls == fields.AutoField:
         result['type'] = 'number'
@@ -71,12 +75,34 @@ def build_shape(serializer_class):
         else:
             try:
                 model_field = model._meta.get_field(field.source)
+                frontend_field = convert_field(model_field)
             except FieldDoesNotExist:
-                if hasattr(model, field.source):
-                    # probably a method field
-                    continue
+                if not hasattr(model, field.source):
+                    raise Exception(f"Model doesn't have field {field.source}")
 
-            frontend_field = convert_field(model_field)
+                method = getattr(model, field.source)
+                if type(method) == property:
+                    method = method.fget
+
+                if 'return' not in method.__annotations__:
+                    raise Exception("Got method field but no annotations")
+
+                return_type = method.__annotations__['return']
+
+                frontend_field = {
+                    'name': field.source,
+                    'readonly': True,
+                    # TODO - support Optional[...]
+                }
+                if return_type == int:
+                    frontend_field['type'] = 'number'
+                elif return_type == str:
+                    frontend_field['type'] = 'string'
+                elif return_type == bool:
+                    frontend_field['type'] = 'boolean'
+                else:
+                    raise Exception("Got method field but can't interpret type. Return type: " + str(return_type))
+
             if not frontend_field:
                 continue  # skip for now
 
@@ -93,6 +119,9 @@ def generate_shapes_to_fh(fh):
         kocherga.events.serializers.PublicEventSerializer,
         kocherga.ratio.serializers.TicketSerializer,
         kocherga.ratio.serializers.TrainingSerializer,
+        kocherga.cm2.serializers.OrderSerializer,
+        kocherga.cm2.serializers.CustomerSerializer,
+        # kocherga.money.cashier.serializers.PaymentSerializer,  # FIXME - leads to double `whom` fk
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)

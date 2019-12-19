@@ -51,7 +51,7 @@ class Payment(models.Model):
             result += ': ' + self.comment
         return result
 
-    def is_redeemed(self):
+    def is_redeemed(self) -> bool:
         return self.redeem_dt is not None
     is_redeemed.boolean = True
 

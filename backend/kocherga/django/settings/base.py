@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'kocherga.importer',
     'kocherga.fb',
     'kocherga.cm',
+    'kocherga.cm2',
     'kocherga.supplies',
     'kocherga.watchmen',
     'kocherga.money.ofd',

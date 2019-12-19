@@ -1,9 +1,8 @@
-import React, { useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { useAPI } from '~/common/hooks';
 
-import Collection from '~/components/collections/Collection';
-import CardListView from '~/components/collections/CardListView';
+import { Collection, CustomCardListView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import { Cohort } from '~/mastermind_dating/types';
@@ -45,11 +44,12 @@ const CohortCollection: React.FC<Props> = ({ cohorts }) => {
         plural: 'когорты',
         genitive: 'когорту',
       }}
-      shape={cohortShape}
       items={cohorts}
-      renderItem={renderItem}
-      add={add}
-      view={CardListView}
+      add={{
+        cb: add,
+        shape: cohortShape,
+      }}
+      view={props => <CustomCardListView {...props} renderItem={renderItem} />}
     />
   );
 };

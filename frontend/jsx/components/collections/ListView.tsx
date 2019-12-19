@@ -2,11 +2,19 @@ import React from 'react';
 
 import { Column } from '@kocherga/frontkit';
 
-import { AnyViewProps as Props } from './types';
+import { AnyViewProps } from './types';
+
+interface Props<I> extends AnyViewProps<I> {
+  renderItem: (item: I) => React.ReactElement;
+}
 
 function ListView<I>(props: Props<I>) {
   return (
-    <Column stretch>{props.items.map(item => props.renderItem(item))}</Column>
+    <Column stretch>
+      {props.items.map((item, i) => (
+        <div key={i}>{props.renderItem(item)}</div>
+      ))}
+    </Column>
   );
 }
 

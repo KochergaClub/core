@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { useDispatch } from '~/common/hooks';
 
-import Collection from '~/components/collections/Collection';
-import TableView from '~/components/collections/TableView';
+import { Collection, ShapedTableView } from '~/components/collections';
 
 import { AsyncButtonWithConfirm } from '~/components';
 
@@ -61,12 +60,14 @@ const FeedbackCollection: React.FC = () => {
         genitive: 'отзыв',
       }}
       items={feedbacks}
-      add={add}
-      shape={feedbackShape}
-      renderItem={() => <div>UNUSED</div>}
+      add={{
+        cb: add,
+        shape: feedbackShape,
+      }}
       view={props => (
-        <TableView
+        <ShapedTableView
           {...props}
+          shape={feedbackShape}
           extraColumns={['Удалить']}
           renderExtraColumn={renderExtraColumn}
         />

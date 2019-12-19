@@ -7,6 +7,7 @@ import { AnyViewProps } from './types';
 
 interface Props<I> extends AnyViewProps<I> {
   isMuted?: (item: I) => boolean;
+  renderItem: (item: I) => React.ReactElement;
 }
 
 function CardListView<I>(props: Props<I>) {
@@ -20,7 +21,7 @@ function CardListView<I>(props: Props<I>) {
           : Card;
 
         /* TODO - props.item2key */
-        return <Wrapper key={i}>{props.renderItem(item)}</Wrapper>;
+        return <Wrapper key={i}>{props.renderItem(item)} </Wrapper>;
       })}
     </CardList>
   );

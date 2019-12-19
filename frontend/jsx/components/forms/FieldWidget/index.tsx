@@ -1,10 +1,14 @@
 import Select from 'react-select';
 
+import { ErrorMessage } from 'formik';
+
 import { Label, Input } from '@kocherga/frontkit';
 
-import LabeledField from './LabeledField';
+import { FormField, ChoiceFormField } from '../types';
 
-import { FormField, ChoiceFormField } from './types';
+import LabeledField from './LabeledField';
+import ErrorLabel from './ErrorLabel';
+import ForeignKeyWidget from './ForeignKeyWidget';
 
 interface Props {
   field: FormField;
@@ -80,12 +84,13 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
   }
 };
 
-const FieldInput: React.FC<Props> = ({ field }) => {
+const FieldWidget: React.FC<Props> = ({ field }) => {
   if (field.readonly) {
     return (
       <div>
         <Label>{field.name}</Label>
         <div>{field.value}</div>
+        <ErrorMessage name={field.name} component={ErrorLabel} />
       </div>
     );
   }
@@ -115,7 +120,13 @@ const FieldInput: React.FC<Props> = ({ field }) => {
       return <ChoiceFieldInput field={field} />;
     case 'boolean':
       return <FieldInputForType field={field} type="checkbox" />;
+    case 'fk':
+      if (field.widget) {
+        return <ForeignKeyWidget field={field} />;
+      } else {
+        return <FieldInputForType field={field} type="number" />;
+      }
   }
 };
 
-export default FieldInput;
+export default FieldWidget;

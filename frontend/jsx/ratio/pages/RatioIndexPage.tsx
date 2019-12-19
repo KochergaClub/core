@@ -17,7 +17,7 @@ const RatioIndexPage: NextPage = () => {
 };
 
 RatioIndexPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadTrainings());
+  await dispatch(loadTrainings(1));
   return {};
 };
 

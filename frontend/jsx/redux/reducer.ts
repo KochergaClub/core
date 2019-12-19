@@ -14,6 +14,7 @@ import auditReducer from '~/audit/reducer';
 import nowReducer from '~/now/reducer';
 import emailReducer from '~/email/reducer';
 import eventsReducer from '~/events/reducer';
+import cm2Reducer from '~/cm2/reducer';
 
 const reducer = combineReducers({
   staff: staffReducer,
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   now: nowReducer,
   email: emailReducer,
   events: eventsReducer,
+  cm2: cm2Reducer,
 });
 
 export default reducer;

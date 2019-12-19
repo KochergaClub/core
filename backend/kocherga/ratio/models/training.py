@@ -43,11 +43,11 @@ class Training(models.Model):
     def __str__(self):
         return self.name
 
-    def tickets_count(self):
+    def tickets_count(self) -> int:
         return sum(1 for ticket in self.tickets.all() if ticket.status == 'normal')
     tickets_count.short_description = 'Число билетов'
 
-    def total_income(self):
+    def total_income(self) -> int:
         return sum(ticket.payment_amount for ticket in self.tickets.all())
     total_income.short_description = 'Суммарный доход'
 
@@ -83,7 +83,7 @@ class Training(models.Model):
                 activity.save()
 
     @property
-    def long_name(self):
+    def long_name(self) -> str:
         return (
             'Воркшоп по прикладной рациональности '
             + f'{self.date.day}–{self.date.day + 1} {inflected_month(self.date)} {self.date.year}'

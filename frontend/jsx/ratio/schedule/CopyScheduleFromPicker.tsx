@@ -16,7 +16,7 @@ export default function CopyScheduleFromPicker(props: Props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadTrainings());
+    dispatch(loadTrainings(1));
   }, [dispatch]);
 
   if (!trainings.length) {

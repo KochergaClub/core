@@ -129,7 +129,7 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "name": "project",
         "optional": true,
         "title": "project",
-        "type": "number"
+        "type": "fk"
       },
       {
         "name": "registration_type",
@@ -144,6 +144,22 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
           [
             "timepad",
             "timepad"
+          ]
+        ]
+      },
+      {
+        "name": "pricing_type",
+        "optional": false,
+        "title": "pricing type",
+        "type": "choice",
+        "options": [
+          [
+            "anticafe",
+            "anticafe"
+          ],
+          [
+            "free",
+            "free"
           ]
         ]
       }
@@ -162,7 +178,7 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "name": "training",
         "optional": false,
         "title": "Тренинг",
-        "type": "number"
+        "type": "fk"
       },
       {
         "name": "email",
@@ -325,6 +341,84 @@ const shapes: { [k: string]: { [k: string]: FormShape } } = {
         "title": "salaries paid",
         "type": "boolean",
         "readonly": true
+      },
+      {
+        "name": "long_name",
+        "readonly": true,
+        "type": "string"
+      },
+      {
+        "name": "tickets_count",
+        "readonly": true,
+        "type": "number"
+      },
+      {
+        "name": "total_income",
+        "readonly": true,
+        "type": "number"
+      }
+    ]
+  },
+  "cm2": {
+    "order": [
+      {
+        "name": "id",
+        "optional": true,
+        "title": "ID",
+        "type": "number",
+        "readonly": true
+      },
+      {
+        "name": "start",
+        "optional": true,
+        "title": "start",
+        "type": "string",
+        "readonly": true
+      },
+      {
+        "name": "end",
+        "optional": true,
+        "title": "end",
+        "type": "string",
+        "readonly": true
+      },
+      {
+        "name": "value",
+        "readonly": true,
+        "type": "number"
+      },
+      {
+        "name": "customer",
+        "optional": true,
+        "title": "customer",
+        "type": "fk"
+      }
+    ],
+    "customer": [
+      {
+        "name": "id",
+        "optional": true,
+        "title": "ID",
+        "type": "number",
+        "readonly": true
+      },
+      {
+        "name": "card_id",
+        "optional": false,
+        "title": "Номер карты",
+        "type": "number"
+      },
+      {
+        "name": "first_name",
+        "optional": false,
+        "title": "Имя",
+        "type": "string"
+      },
+      {
+        "name": "last_name",
+        "optional": false,
+        "title": "Фамилия",
+        "type": "string"
       }
     ]
   }
