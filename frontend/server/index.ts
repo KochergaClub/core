@@ -1,10 +1,12 @@
 process.env.TZ = 'Europe/Moscow';
 
-const argv = require('yargs')
+import * as yargs from 'yargs';
+
+const argv = yargs
   .option('p', {
     alias: 'port',
     description: "Specify the server's port",
-    default: 80,
+    default: '80',
   })
   .option('a', {
     alias: 'address',
@@ -15,24 +17,22 @@ const argv = require('yargs')
   .alias('h', 'help')
   .strict().argv;
 
-const http = require('http');
-const express = require('express');
-const httpProxy = require('http-proxy');
+import http from 'http';
+import express from 'express';
+import httpProxy from 'http-proxy';
 
-//import 'babel-polyfill';
+import { API_HOST, API_ASYNC_HOST } from './constants';
 
-const { API_HOST, API_ASYNC_HOST } = require('./constants');
+import apolloServer from './apolloServer';
+import trailingSlashEndpoint from './trailingSlashEndpoint';
+import tildaEndpoint from './tildaEndpoint';
+import nextjsEntrypoint from './nextjsEntrypoint';
+import wagtailEntrypoint from './wagtailEntrypoint';
 
-const apolloServer = require('./apolloServer').default;
-const trailingSlashEndpoint = require('./trailingSlashEndpoint').default;
-const tildaEndpoint = require('./tildaEndpoint').default;
-const nextjsEntrypoint = require('./nextjsEntrypoint').default;
-const wagtailEntrypoint = require('./wagtailEntrypoint').default;
+import next from 'next';
 
-const next = require('next');
-
-const ADDRESS = argv.address;
-const PORT = argv.port;
+const ADDRESS = argv.address as string;
+const PORT = parseInt(argv.port as string);
 
 async function main() {
   const dev = process.env.NODE_ENV !== 'production';
@@ -53,14 +53,14 @@ async function main() {
   const proxy = httpProxy.createProxyServer({
     target: {
       host: API_HOST.split(':', 2)[0],
-      port: API_HOST.split(':', 2)[1] || 80,
+      port: API_HOST.split(':', 2)[1] || '80',
     },
   });
   const wsProxy = httpProxy.createProxyServer({
     ws: true,
     target: {
       host: API_ASYNC_HOST.split(':', 2)[0],
-      port: API_ASYNC_HOST.split(':', 2)[1] || 80,
+      port: API_ASYNC_HOST.split(':', 2)[1] || '80',
     },
   });
   app.all(/^\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
@@ -74,7 +74,7 @@ async function main() {
       console.log('not a typical websocket');
       socket.end();
     }
-    wsProxy.ws(req, socket, head, e => {
+    wsProxy.ws(req, socket, head, {}, e => {
       console.error(e);
     });
   });

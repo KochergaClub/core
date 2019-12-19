@@ -21,7 +21,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": [
-        "*"
+        "src/*"
       ],
       "next-redux-wrapper": [
         "@types/next-redux-wrapper.d.ts"
@@ -31,11 +31,16 @@
     "strict": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next",
+    "next.config.js",
+    "next.raw-config.js",
+    "dist",
+    "src/server"
   ],
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ]
 }

@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
   webpack: (config, options) => {
-    config.resolve.alias['~'] = __dirname;
+    config.resolve.alias['~'] = __dirname + '/src';
 
     // via https://github.com/zeit/next.js/blob/canary/examples/with-sentry-simple/next.config.js
     if (!options.isServer) {
@@ -13,7 +13,6 @@ module.exports = {
 
     return config;
   },
-  distDir: '../jsx-build',
   experimental: {
     granularChunks: true,
   },

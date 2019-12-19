@@ -1,7 +1,7 @@
-const { ApolloServer } = require('apollo-server-express');
-const { typeDefs, resolvers } = require('../../apollo/schema');
+import { ApolloServer } from 'apollo-server-express';
+import { typeDefs, resolvers } from '../src/apollo/schema';
 
-const { RESTDataSource } = require('apollo-datasource-rest');
+import { RESTDataSource } from 'apollo-datasource-rest';
 
 class KochergaAPI extends RESTDataSource {
   constructor() {
@@ -11,11 +11,7 @@ class KochergaAPI extends RESTDataSource {
 
   async getAllRooms() {
     const response = await this.get('rooms');
-    return response.map(room => this.roomReducer(room));
-  }
-
-  roomReducer(room) {
-    return room;
+    return response;
   }
 }
 
@@ -27,4 +23,4 @@ const apolloServer = new ApolloServer({
   }),
 });
 
-exports.default = apolloServer;
+export default apolloServer;

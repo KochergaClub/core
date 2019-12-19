@@ -1,4 +1,6 @@
-const express = require('express');
+import * as express from 'express';
+
+import Server from 'next/dist/next-server/server/next-server';
 
 const wagtailRoutes = [
   '/',
@@ -15,7 +17,7 @@ const wagtailRoutes = [
   '/team/ratio/sections/*',
 ];
 
-exports.default = nextApp => {
+export default (nextApp: Server) => {
   const router = express.Router();
 
   wagtailRoutes.forEach(route => {

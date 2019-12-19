@@ -1,4 +1,3 @@
-import React from 'react';
 import { Provider } from 'react-redux';
 import cookie from 'cookie';
 
@@ -14,7 +13,7 @@ import * as Sentry from '@sentry/node';
 import { configureStore, Store } from '~/redux/store';
 import { configureAPI, loadUser, cleanupAPIForClient } from '~/core/actions';
 import { APIProps, APIError } from '~/common/api';
-import { API_HOST } from '~/render/server/constants';
+import { API_HOST } from '../../server/constants';
 
 import { selectUser } from '~/core/selectors';
 import { trackPageview } from '~/components/analytics';

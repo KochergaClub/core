@@ -1,5 +1,8 @@
-import { Store } from '~/redux/store';
 import { NextPageContext as OriginalNextPageContext } from 'next/dist/next-server/lib/utils';
+
+import { Store } from '~/redux/store';
+import { ApolloClient } from 'apollo-client';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 
 export interface User {
   is_authenticated: boolean;
@@ -8,7 +11,10 @@ export interface User {
   email?: string;
 }
 
-export type NextPageContext = OriginalNextPageContext & { store: Store };
+export type NextPageContext = OriginalNextPageContext & {
+  store: Store;
+  apolloClient?: ApolloClient<NormalizedCacheObject>;
+};
 
 // copy-pasted from next-js types to patch getInitialProps context type
 export type NextPage<P = {}, IP = P> = {
