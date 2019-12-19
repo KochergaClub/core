@@ -109,4 +109,4 @@ class FbViewSet(AnnouncementViewSet):
 @require_safe
 def r_last_screenshot(request):
     filename = image_storage.screenshot_file("error")
-    return FileResponse(open(filename, 'rb'))
+    return FileResponse(open(filename, 'rb'), filename='error.png')
