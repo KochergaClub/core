@@ -16,11 +16,16 @@ import { addOrder } from '../features/orderActions';
 import { openOrdersFeature } from '../features/openOrders';
 import { OrderAux, Customer } from '../types';
 
-const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
+import CustomerLink from './CustomerLink';
+
+export const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({
+  items,
+}) => {
   // TODO - better typing
-  type ColumnNames = 'id' | 'time' | 'value' | 'customer';
-  const columns: ColumnNames[] = ['id', 'time', 'value', 'customer'];
+  type ColumnNames = 'card_id' | 'id' | 'time' | 'value' | 'customer';
+  const columns: ColumnNames[] = ['card_id', 'id', 'time', 'value', 'customer'];
   const columnLabels: { [k: string]: string } = {
+    card_id: 'Карта',
     id: 'Заказ',
     time: 'Время',
     value: 'Сумма',
@@ -34,6 +39,12 @@ const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
       renderHeaderCell={column => <div>{columnLabels[column]}</div>}
       renderCell={(item, column) => {
         switch (column) {
+          case 'card_id':
+            return item.customer ? (
+              <strong>{item.customer.card_id}</strong>
+            ) : (
+              <div>&nbsp;</div>
+            );
           case 'id':
             return (
               <Link
@@ -45,7 +56,10 @@ const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
               </Link>
             );
           case 'time':
-            const diff = differenceInMinutes(new Date(), item.order.start);
+            const diff = differenceInMinutes(
+              item.order.end || new Date(),
+              item.order.start
+            );
             const hours = Math.floor(diff / 60);
             const minutes = diff % 60;
             return (
@@ -68,15 +82,7 @@ const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({ items }) => {
             return (
               <div>
                 {item.customer ? (
-                  <Link
-                    href="/team/cm/customers/[id]"
-                    as={`/team/cm/customers/${item.customer.id}`}
-                    passHref
-                  >
-                    <A>
-                      {item.customer.first_name} {item.customer.last_name}
-                    </A>
-                  </Link>
+                  <CustomerLink customer={item.customer} />
                 ) : null}
               </div>
             );
@@ -107,9 +113,12 @@ const OpenOrdersScreen: React.FC = () => {
       title: 'Клиент',
       widget: {
         type: 'async',
-        display: (c: Customer) => `${c.first_name} ${c.last_name}`,
-        load: async () => {
-          const customers = (await api.call('cm2/customer', 'GET')).results; // TODO - search method or customer-all route
+        display: (c: Customer) =>
+          `№${c.card_id} ${c.first_name} ${c.last_name}`,
+        load: async (inputValue: string) => {
+          const customers = (
+            await api.call(`cm2/customer?search=${inputValue}`, 'GET')
+          ).results; // TODO - search method or customer-all route
           return customers;
         },
         getValue: (c: Customer) => c.id,

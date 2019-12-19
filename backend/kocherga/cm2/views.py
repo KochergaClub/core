@@ -12,6 +12,8 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
     serializer_class = serializers.OrderSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = CommonPagination
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['id']
 
     def get_queryset(self):
         qs = models.Order.objects.all()

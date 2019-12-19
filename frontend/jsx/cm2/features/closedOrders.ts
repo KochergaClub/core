@@ -1,17 +1,8 @@
-import { createPagedResourceFeature } from '~/redux/features';
+import { createOrderFeature } from './utils';
 
-import { ServerOrder, Order, parseServerOrder } from '../types';
-
-import { orderBagFeature } from './orderBag';
-
-const feature = createPagedResourceFeature<ServerOrder, Order>({
+const feature = createOrderFeature({
   name: 'cm2/closedOrders',
-  query: { status: 'closed' },
-  bag: orderBagFeature,
-  enhancers: [],
-  enhance(serverOrders: ServerOrder[]) {
-    return serverOrders.map(parseServerOrder);
-  },
+  query: { status: 'closed', ordering: '-id' },
 });
 
 export const {

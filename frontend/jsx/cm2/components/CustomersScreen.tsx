@@ -1,12 +1,28 @@
 import { useCallback } from 'react';
 
-import { PagedCollection } from '~/components/collections';
+import { Row, Label } from '@kocherga/frontkit';
+
+import { PagedCollection, CustomCardListView } from '~/components/collections';
 import { useDispatch } from '~/common/hooks';
 
 import { customersFeature, addCustomer } from '../features/customers';
-import { CreateCustomerParams } from '../types';
+import { CreateCustomerParams, Customer } from '../types';
 
 import shapes from '../../shapes';
+
+import CustomerLink from './CustomerLink';
+
+const CustomerCard: React.FC<{ customer: Customer }> = ({ customer }) => {
+  return (
+    <div>
+      <Row vCentered>
+        <Label>Карта:</Label>
+        <div>{customer.card_id}</div>
+      </Row>
+      <CustomerLink customer={customer} />
+    </div>
+  );
+};
 
 const CustomersScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -16,6 +32,11 @@ const CustomersScreen: React.FC = () => {
       await dispatch(addCustomer(values));
     },
     [dispatch]
+  );
+
+  const renderItem = useCallback(
+    (customer: Customer) => <CustomerCard customer={customer} />,
+    []
   );
 
   return (
@@ -29,6 +50,7 @@ const CustomersScreen: React.FC = () => {
         cb: add,
         shape: shapes.cm2.customer,
       }}
+      view={props => <CustomCardListView {...props} renderItem={renderItem} />}
     />
   );
 };

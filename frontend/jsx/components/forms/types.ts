@@ -35,7 +35,7 @@ export interface ForeignKeyFormField extends AnyFormField {
   readonly widget?: {
     type: 'async';
     display: (item: any) => string;
-    load: () => Promise<any[]>;
+    load: (inputValue: string) => Promise<any[]>;
     getValue: (item: any) => number;
   };
 }

@@ -16,9 +16,9 @@ const CmApp: React.FC = () => {
 
   const htmlTitle =
     view.mode === 'open'
-      ? 'Открытые заказы | Cafe Manager'
+      ? 'Открытые заказы | Cafe Menagerie'
       : view.mode === 'closed'
-      ? 'Закрытые заказы | Cafe Manager'
+      ? 'Закрытые заказы | Cafe Menagerie'
       : view.mode === 'order'
       ? `Заказ #${view.id}`
       : view.mode === 'customers'
@@ -27,18 +27,7 @@ const CmApp: React.FC = () => {
       ? `Клиент #${view.id}`
       : 'UNKNOWN';
 
-  const title =
-    view.mode === 'open'
-      ? 'Cafe Manager'
-      : view.mode === 'closed'
-      ? 'Cafe Manager. Закрытые заказы'
-      : view.mode === 'order'
-      ? `Cafe Manager. Заказ #${view.id}`
-      : view.mode === 'customers'
-      ? 'Cafe Manager. Клиенты'
-      : view.mode === 'customer-details'
-      ? `Cafe Manager. Клиент #${view.id}`
-      : 'UNKNOWN';
+  const title = 'Cafe Menagerie';
 
   const mode2screen = {
     open: OpenOrdersScreen,

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import Select from 'react-select';
+import { useCallback } from 'react';
+import AsyncSelect from 'react-select/async';
 
 import { ForeignKeyFormField } from '../types';
 import LabeledField from './LabeledField';
@@ -20,36 +20,24 @@ const ForeignKeyWidget: React.FC<Props> = ({ field }) => {
     label: string;
   }
 
-  const [options, setOptions] = useState([] as OptionType[]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const asyncEffect = async () => {
-      const items = await widget.load();
+  const loadOptions = useCallback(
+    async inputValue => {
+      const items = await widget.load(inputValue);
       const options = items.map(item => ({
         value: widget.getValue(item),
         label: widget.display(item),
       }));
-      setOptions(options);
-      setLoading(false);
-    };
-    asyncEffect();
-  }, []);
-
-  if (loading) {
-    return <div>loading...</div>;
-  }
+      return options;
+    },
+    [widget]
+  );
 
   return (
     <LabeledField for={field}>
       {({ field: formikField, form }) => {
-        const selectedOption = options.find(
-          option => option.value === formikField.value
-        );
         return (
-          <Select
-            value={selectedOption}
-            options={options}
+          <AsyncSelect
+            loadOptions={loadOptions}
             onChange={selected => {
               if (!selected) {
                 return;

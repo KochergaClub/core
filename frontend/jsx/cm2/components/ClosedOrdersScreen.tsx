@@ -1,34 +1,10 @@
-import { useCallback } from 'react';
-
-import Link from 'next/link';
-
-import { A } from '@kocherga/frontkit';
-
-import { PagedCollection, ListView } from '~/components/collections';
+import { PagedCollection } from '~/components/collections';
 
 import { closedOrdersFeature } from '../features/closedOrders';
-import { Order } from '../types';
 
-const OrderItem: React.FC<{ order: Order }> = ({ order }) => {
-  return (
-    <div>
-      <Link
-        href="/team/cm/orders/[id]"
-        as={`/team/cm/orders/${order.id}`}
-        passHref
-      >
-        <A>{order.id}</A>
-      </Link>
-    </div>
-  );
-};
+import { OpenOrdersTableView } from './OpenOrdersScreen';
 
 const ClosedOrdersScreen: React.FC = () => {
-  const renderItem = useCallback(
-    (item: Order) => <OrderItem order={item} />,
-    []
-  );
-
   return (
     <PagedCollection
       feature={closedOrdersFeature}
@@ -36,7 +12,7 @@ const ClosedOrdersScreen: React.FC = () => {
         plural: 'заказы',
         genitive: 'заказ',
       }}
-      view={props => <ListView {...props} renderItem={renderItem} />}
+      view={OpenOrdersTableView}
     />
   );
 };
