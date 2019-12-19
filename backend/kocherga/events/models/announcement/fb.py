@@ -304,7 +304,12 @@ class AnnounceSession:
         events_page = self.announce_page(group) + "/events/"
         logger.info("Going to page: " + events_page)
         await page.goto(events_page)
+
+        logger.info("Waiting for create event button to appear")
         await page.waitForSelector("[data-testid=event-create-button]", timeout=10000)
+
+        logger.info("Sleeping (ugly fix attempt)")
+        await asyncio.sleep(5)
 
         logger.info("Opening an event creation form")
         await page.click("[data-testid=event-create-button]")
