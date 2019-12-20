@@ -41,12 +41,11 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
     blocks = []
 
     (start_date, end_date) = kocherga.money.salaries.dates_period()
-    header = ":moneybag: Зарплаты за "
+    header = ":moneybag: *Зарплаты за "
     if start_date.month == end_date.month:
-        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
+        header += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}*"
     else:
-        header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}"
-    header += ":"
+        header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}*"
 
     blocks.append({
         "type": "section",
@@ -75,7 +74,7 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"{member.short_name} <@{member.slack_id}>\n{payment_emoji}*{salary.total}* руб.",
+                "text": f"{member.short_name} <@{member.slack_id}>\n{payment_emoji} *{salary.total}* руб.",
             },
         }
         if member.slack_image:
