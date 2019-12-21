@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { makeExecutableSchema, IResolvers } from 'graphql-tools';
+import { buildQueryString } from '../common/utils';
 
 export const typeDefs = gql`
   type Query {
@@ -74,59 +75,71 @@ export class KochergaAPI extends RESTDataSource {
     }
   }
 
-  async getAllRooms() {
-    const response = await this.get('rooms');
-    return response;
+  // generic methods
+  async list({
+    resource,
+    query,
+  }: {
+    resource: string;
+    query?: { [s: string]: string };
+  }) {
+    let url = resource;
+    if (query) {
+      url += '?' + buildQueryString(query);
+    }
+    return await this.get(url);
   }
 
-  async cm2OrderById(id: string) {
-    const response = await this.get(`cm2/orders/${id}`);
-    return response;
-  }
-
-  async cm2Orders({ status }: { status?: string }) {
-    let url = 'cm2/orders';
-    if (status) {
-      url += `?status=${status}`;
+  async listPage({
+    resource,
+    query,
+  }: {
+    resource: string;
+    query?: { [s: string]: string };
+  }) {
+    let url = resource;
+    if (query) {
+      url += '?' + buildQueryString(query);
     }
     const response = await this.get(url);
     return response.results;
   }
 
-  async cm2CustomerById(id: string) {
-    const response = await this.get(`cm2/customer/${id}`);
+  async retrieve({ resource, id }: { resource: string; id: string }) {
+    const response = await this.get(`${resource}/${id}`);
     return response;
   }
 
-  async cm2Customers({ search }: { search?: string }) {
-    let url = 'cm2/customer';
-    if (search) {
-      url += `?search=${search}`;
-    }
-    const response = await this.get(url);
-    return response.results;
-  }
-
-  async cm2CreateOrder({ customer }: Cm2CreateOrderInput) {
-    const response = await this.post('cm2/orders', { customer });
+  async create({ resource, params }: { resource: string; params: object }) {
+    const response = await this.post(resource, params);
     return response;
   }
 
-  async cm2CloseOrder(id: string) {
-    await this.post(`cm2/orders/${id}/close`);
-    return true;
+  async postAction({
+    resource,
+    action,
+    params,
+  }: {
+    resource: string;
+    action: string;
+    params?: object;
+  }) {
+    const response = await this.post(`${resource}/${action}`, params);
+    return response;
   }
 
-  async cm2CreateCustomer({
-    card_id,
-    first_name,
-    last_name,
-  }: Cm2CreateCustomerInput) {
-    const response = await this.post('cm2/customer', {
-      card_id,
-      first_name,
-      last_name,
-    });
+  async postDetailsAction({
+    resource,
+    id,
+    action,
+    params,
+  }: {
+    resource: string;
+    id: string;
+    action: string;
+    params?: object;
+  }) {
+    const response = await this.post(`${resource}/${id}/${action}`, params);
     return response;
   }
 }
@@ -139,36 +152,56 @@ interface TContext {
 
 export const resolvers: IResolvers<any, TContext> = {
   Query: {
-    rooms: (_, __, { dataSources }) => dataSources.kochergaAPI.getAllRooms(),
+    rooms: (_, __, { dataSources }) =>
+      dataSources.kochergaAPI.list({ resource: 'rooms' }),
     cm2Customers: (_, { search }: { search?: string }, { dataSources }) =>
-      dataSources.kochergaAPI.cm2Customers({ search }),
+      dataSources.kochergaAPI.listPage({
+        resource: 'cm2/customer',
+        query: {
+          ...(search ? { search } : {}),
+        },
+      }),
     cm2Orders: (_, { status }: { status?: string }, { dataSources }) =>
-      dataSources.kochergaAPI.cm2Orders({ status }),
+      dataSources.kochergaAPI.listPage({
+        resource: 'cm2/orders',
+        query: {
+          ...(status ? { status } : {}),
+        },
+      }),
     cm2Customer: (_, { id }: { id: string }, { dataSources }) =>
-      dataSources.kochergaAPI.cm2CustomerById(id),
+      dataSources.kochergaAPI.retrieve({ resource: 'cm2/customer', id }),
     cm2Order: (_, { id }: { id: string }, { dataSources }) =>
-      dataSources.kochergaAPI.cm2OrderById(id),
+      dataSources.kochergaAPI.retrieve({ resource: 'cm2/orders', id }),
   },
   Mutation: {
     cm2CreateOrder: (
       _,
       { params }: { params: Cm2CreateOrderInput },
       { dataSources }
-    ) => dataSources.kochergaAPI.cm2CreateOrder(params),
+    ) => dataSources.kochergaAPI.create({ resource: 'cm2/orders', params }),
     cm2CreateCustomer: (
       _,
       { params }: { params: Cm2CreateCustomerInput },
       { dataSources }
-    ) => dataSources.kochergaAPI.cm2CreateCustomer(params),
-    cm2CloseOrder: (_, { id }: { id: string }, { dataSources }) =>
-      dataSources.kochergaAPI.cm2CloseOrder(id),
+    ) => dataSources.kochergaAPI.create({ resource: 'cm2/customer', params }),
+    cm2CloseOrder: (_, { id }: { id: string }, { dataSources }) => {
+      dataSources.kochergaAPI.postDetailsAction({
+        resource: 'cm2/orders',
+        id,
+        action: 'close',
+      });
+      return true;
+    },
   },
   Cm2Order: {
     customer: (parent, _, { dataSources }) => {
       if (!parent.customer) {
         return null;
       }
-      return dataSources.kochergaAPI.cm2CustomerById(parent.customer); // TODO - dataloader for batching
+      return dataSources.kochergaAPI.retrieve({
+        resource: 'cm2/customer',
+        id: parent.customer,
+      }); // TODO - dataloader for batching
     },
   },
 };
