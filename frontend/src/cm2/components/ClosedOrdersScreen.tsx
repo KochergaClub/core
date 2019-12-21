@@ -15,9 +15,13 @@ const ClosedOrdersScreen: React.FC = () => {
   return (
     <PaddedBlock width="max">
       <ApolloQueryResults {...queryResults}>
-        {({ data: { cm2Orders }, loading }) => (
+        {({
+          data: {
+            cm2Orders: { items: orders },
+          },
+        }) => (
           <Collection
-            items={cm2Orders}
+            items={orders}
             names={{
               plural: 'заказы',
               genitive: 'заказ',

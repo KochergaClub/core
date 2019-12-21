@@ -29,6 +29,12 @@ export type Cm2Customer = {
   last_name: Scalars['String'],
 };
 
+export type Cm2CustomerConnection = {
+   __typename?: 'Cm2CustomerConnection',
+  hasNextPage: Scalars['Boolean'],
+  items: Array<Cm2Customer>,
+};
+
 export type Cm2Order = {
    __typename?: 'Cm2Order',
   id: Scalars['ID'],
@@ -36,6 +42,12 @@ export type Cm2Order = {
   end?: Maybe<Scalars['String']>,
   value?: Maybe<Scalars['Int']>,
   customer?: Maybe<Cm2Customer>,
+};
+
+export type Cm2OrderConnection = {
+   __typename?: 'Cm2OrderConnection',
+  hasNextPage: Scalars['Boolean'],
+  items: Array<Cm2Order>,
 };
 
 export type Mutation = {
@@ -63,8 +75,8 @@ export type MutationCm2CloseOrderArgs = {
 export type Query = {
    __typename?: 'Query',
   rooms: Array<Maybe<Room>>,
-  cm2Customers: Array<Cm2Customer>,
-  cm2Orders: Array<Cm2Order>,
+  cm2Customers: Cm2CustomerConnection,
+  cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
 };
@@ -117,10 +129,14 @@ export type GetCm2OrdersQueryVariables = {
 
 export type GetCm2OrdersQuery = (
   { __typename?: 'Query' }
-  & { cm2Orders: Array<(
-    { __typename?: 'Cm2Order' }
-    & OrderWithCustomerFragment
-  )> }
+  & { cm2Orders: (
+    { __typename?: 'Cm2OrderConnection' }
+    & Pick<Cm2OrderConnection, 'hasNextPage'>
+    & { items: Array<(
+      { __typename?: 'Cm2Order' }
+      & OrderWithCustomerFragment
+    )> }
+  ) }
 );
 
 export type Cm2OrderQueryVariables = {
@@ -159,10 +175,14 @@ export type SearchCm2CustomersQueryVariables = {
 
 export type SearchCm2CustomersQuery = (
   { __typename?: 'Query' }
-  & { cm2Customers: Array<(
-    { __typename?: 'Cm2Customer' }
-    & CustomerFragment
-  )> }
+  & { cm2Customers: (
+    { __typename?: 'Cm2CustomerConnection' }
+    & Pick<Cm2CustomerConnection, 'hasNextPage'>
+    & { items: Array<(
+      { __typename?: 'Cm2Customer' }
+      & CustomerFragment
+    )> }
+  ) }
 );
 
 export type Cm2CustomersQueryVariables = {};
@@ -170,10 +190,14 @@ export type Cm2CustomersQueryVariables = {};
 
 export type Cm2CustomersQuery = (
   { __typename?: 'Query' }
-  & { cm2Customers: Array<(
-    { __typename?: 'Cm2Customer' }
-    & CustomerFragment
-  )> }
+  & { cm2Customers: (
+    { __typename?: 'Cm2CustomerConnection' }
+    & Pick<Cm2CustomerConnection, 'hasNextPage'>
+    & { items: Array<(
+      { __typename?: 'Cm2Customer' }
+      & CustomerFragment
+    )> }
+  ) }
 );
 
 export type Cm2CreateCustomerMutationVariables = {
@@ -234,7 +258,10 @@ export const OrderWithCustomerFragmentDoc = gql`
 export const GetCm2OrdersDocument = gql`
     query GetCm2Orders($status: String!) {
   cm2Orders(status: $status) {
-    ...OrderWithCustomer
+    hasNextPage
+    items {
+      ...OrderWithCustomer
+    }
   }
 }
     ${OrderWithCustomerFragmentDoc}`;
@@ -334,7 +361,10 @@ export type Cm2CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOption
 export const SearchCm2CustomersDocument = gql`
     query SearchCm2Customers($search: String!) {
   cm2Customers(search: $search) {
-    ...Customer
+    hasNextPage
+    items {
+      ...Customer
+    }
   }
 }
     ${CustomerFragmentDoc}`;
@@ -367,7 +397,10 @@ export type SearchCm2CustomersQueryResult = ApolloReactCommon.QueryResult<Search
 export const Cm2CustomersDocument = gql`
     query Cm2Customers {
   cm2Customers {
-    ...Customer
+    hasNextPage
+    items {
+      ...Customer
+    }
   }
 }
     ${CustomerFragmentDoc}`;

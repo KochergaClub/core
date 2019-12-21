@@ -25,7 +25,10 @@ const orderWithCustomerFragment = gql`
 export const GET_ORDERS = gql`
   query GetCm2Orders($status: String!) {
     cm2Orders(status: $status) {
-      ...OrderWithCustomer
+      hasNextPage
+      items {
+        ...OrderWithCustomer
+      }
     }
   }
 
@@ -55,7 +58,10 @@ export const CREATE_ORDER = gql`
 export const SEARCH_CUSTOMERS = gql`
   query SearchCm2Customers($search: String!) {
     cm2Customers(search: $search) {
-      ...Customer
+      hasNextPage
+      items {
+        ...Customer
+      }
     }
   }
   ${customerFragment}
@@ -64,7 +70,10 @@ export const SEARCH_CUSTOMERS = gql`
 const GET_CUSTOMERS = gql`
   query Cm2Customers {
     cm2Customers {
-      ...Customer
+      hasNextPage
+      items {
+        ...Customer
+      }
     }
     ${customerFragment}
   }

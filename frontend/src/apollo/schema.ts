@@ -6,8 +6,8 @@ import { buildQueryString } from '../common/utils';
 export const typeDefs = gql`
   type Query {
     rooms: [Room]!
-    cm2Customers(search: String): [Cm2Customer!]!
-    cm2Orders(status: String): [Cm2Order!]!
+    cm2Customers(search: String): Cm2CustomerConnection!
+    cm2Orders(status: String): Cm2OrderConnection!
     cm2Customer(id: ID): Cm2Customer!
     cm2Order(id: ID): Cm2Order!
   }
@@ -18,11 +18,21 @@ export const typeDefs = gql`
     area: Int
   }
 
+  type Cm2CustomerConnection {
+    hasNextPage: Boolean!
+    items: [Cm2Customer!]!
+  }
+
   type Cm2Customer {
     id: ID!
     card_id: Int!
     first_name: String!
     last_name: String!
+  }
+
+  type Cm2OrderConnection {
+    hasNextPage: Boolean!
+    items: [Cm2Order!]!
   }
 
   type Cm2Order {
@@ -102,7 +112,10 @@ export class KochergaAPI extends RESTDataSource {
       url += '?' + buildQueryString(query);
     }
     const response = await this.get(url);
-    return response.results;
+    return {
+      hasNextPage: Boolean(response.next),
+      items: response.results,
+    };
   }
 
   async retrieve({ resource, id }: { resource: string; id: string }) {

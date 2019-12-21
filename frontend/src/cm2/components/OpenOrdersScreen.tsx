@@ -139,7 +139,7 @@ const OpenOrdersScreen: React.FC = () => {
           if (!customersData) {
             return []; // TODO - proper error handling
           }
-          return customersData.cm2Customers;
+          return customersData.cm2Customers.items;
         },
         getValue: (c: CustomerFragment) => parseInt(c.id),
       },
@@ -149,7 +149,11 @@ const OpenOrdersScreen: React.FC = () => {
   return (
     <PaddedBlock width="max">
       <ApolloQueryResults {...queryResults}>
-        {({ data: { cm2Orders: orders }, loading }) => (
+        {({
+          data: {
+            cm2Orders: { items: orders },
+          },
+        }) => (
           <Collection
             items={orders}
             names={{

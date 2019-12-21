@@ -68,9 +68,13 @@ const CustomersScreen: React.FC = () => {
 
   return (
     <ApolloQueryResults {...queryResults}>
-      {({ data: { cm2Customers } }) => (
+      {({
+        data: {
+          cm2Customers: { items: customers },
+        },
+      }) => (
         <Collection
-          items={cm2Customers}
+          items={customers}
           names={{
             plural: 'клиенты',
             genitive: 'клиент',
