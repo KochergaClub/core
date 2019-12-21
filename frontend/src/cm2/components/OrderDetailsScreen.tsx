@@ -1,32 +1,23 @@
 import { useCallback } from 'react';
 
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
-
 import { Column, Label } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
 import { formatDate } from '~/common/utils';
 
-import { useOrderQuery } from '../hooks';
+import { useCm2OrderQuery, useCm2CloseOrderMutation } from '../codegen';
 
 import CustomerLink from './CustomerLink';
 import ApolloQueryResults from './ApolloQueryResults';
 
 interface Props {
-  id: number;
+  id: string;
 }
 
-const CLOSE_ORDER = gql`
-  mutation Cm2CloseOrder($id: ID!) {
-    cm2CloseOrder(id: $id)
-  }
-`;
-
 export const OrderDetailsScreen: React.FC<Props> = ({ id }) => {
-  const queryResults = useOrderQuery({ id });
+  const queryResults = useCm2OrderQuery({ variables: { id } });
 
-  const [closeMutation] = useMutation(CLOSE_ORDER);
+  const [closeMutation] = useCm2CloseOrderMutation();
 
   const close = useCallback(async () => {
     await closeMutation({ variables: { id } });
@@ -35,7 +26,7 @@ export const OrderDetailsScreen: React.FC<Props> = ({ id }) => {
 
   return (
     <ApolloQueryResults {...queryResults}>
-      {({ data: { cm2Order: order }, loading }) => (
+      {({ data: { cm2Order: order } }) => (
         <Column>
           <h2>Заказ №{order.id}</h2>
           <div>

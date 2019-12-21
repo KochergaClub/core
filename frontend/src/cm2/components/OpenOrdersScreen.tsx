@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
-import gql from 'graphql-tag';
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import { differenceInMinutes } from 'date-fns';
 
@@ -13,37 +12,22 @@ import { FormShape } from '~/components/forms/types';
 
 import { PaddedBlock } from '~/components';
 
-import { CreateOrderParams, Customer } from '../types';
-
-import { OrderWithCustomer, useOrdersQuery } from '../hooks';
+import {
+  OrderWithCustomerFragment,
+  CustomerFragment,
+  useGetCm2OrdersQuery,
+  useCm2CreateOrderMutation,
+  SearchCm2CustomersQuery,
+  SearchCm2CustomersQueryVariables,
+} from '../codegen';
+import { SEARCH_CUSTOMERS } from '../queries';
 
 import CustomerLink from './CustomerLink';
 import ApolloQueryResults from './ApolloQueryResults';
 
-const SEARCH_CUSTOMERS = gql`
-  query SearchCm2Customers($search: String!) {
-    cm2Customers(search: $search) {
-      id
-      first_name
-      last_name
-      card_id
-    }
-  }
-`;
-
-const CREATE_ORDER = gql`
-  mutation Cm2CreateOrder($params: Cm2CreateOrderInput!) {
-    cm2CreateOrder(params: $params) {
-      customer {
-        id
-      }
-    }
-  }
-`;
-
-export const OpenOrdersTableView: React.FC<{ items: OrderWithCustomer[] }> = ({
-  items,
-}) => {
+export const OpenOrdersTableView: React.FC<{
+  items: OrderWithCustomerFragment[];
+}> = ({ items }) => {
   // TODO - better typing
   type ColumnNames = 'card_id' | 'id' | 'time' | 'value' | 'customer';
   const columns: ColumnNames[] = ['card_id', 'id', 'time', 'value', 'customer'];
@@ -118,13 +102,17 @@ export const OpenOrdersTableView: React.FC<{ items: OrderWithCustomer[] }> = ({
 };
 
 const OpenOrdersScreen: React.FC = () => {
-  const queryResults = useOrdersQuery({ status: 'open' });
+  const queryResults = useGetCm2OrdersQuery({ variables: { status: 'open' } });
   const apolloClient = useApolloClient();
 
-  const [addMutation] = useMutation(CREATE_ORDER);
+  const [addMutation] = useCm2CreateOrderMutation();
+
+  interface CreateOrderFormParams {
+    customer?: string;
+  }
 
   const add = useCallback(
-    async (data: CreateOrderParams) => {
+    async (data: CreateOrderFormParams) => {
       await addMutation({ variables: { params: data } });
       await queryResults.refetch();
     },
@@ -138,10 +126,13 @@ const OpenOrdersScreen: React.FC = () => {
       title: 'Клиент',
       widget: {
         type: 'async',
-        display: (c: Customer) =>
+        display: (c: CustomerFragment) =>
           `№${c.card_id} ${c.first_name} ${c.last_name}`,
         load: async (inputValue: string) => {
-          const { data: customersData } = await apolloClient.query({
+          const { data: customersData } = await apolloClient.query<
+            SearchCm2CustomersQuery,
+            SearchCm2CustomersQueryVariables
+          >({
             query: SEARCH_CUSTOMERS,
             variables: { search: inputValue },
           });
@@ -150,7 +141,7 @@ const OpenOrdersScreen: React.FC = () => {
           }
           return customersData.cm2Customers;
         },
-        getValue: (c: Customer) => c.id,
+        getValue: (c: CustomerFragment) => parseInt(c.id),
       },
     },
   ];

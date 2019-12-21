@@ -5,10 +5,10 @@ import { makeExecutableSchema, IResolvers } from 'graphql-tools';
 export const typeDefs = gql`
   type Query {
     rooms: [Room]!
-    cm2Customers(search: String): [Cm2Customer]
-    cm2Orders(status: String): [Cm2Order]
-    cm2Customer(id: ID): Cm2Customer
-    cm2Order(id: ID): Cm2Order
+    cm2Customers(search: String): [Cm2Customer!]!
+    cm2Orders(status: String): [Cm2Order!]!
+    cm2Customer(id: ID): Cm2Customer!
+    cm2Order(id: ID): Cm2Order!
   }
 
   type Room {

@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { A } from '@kocherga/frontkit';
 
-import { Customer } from '../types';
+import { CustomerFragment } from '../codegen';
 
 interface Props {
-  customer: Customer;
+  customer: CustomerFragment;
 }
 
 const CustomerLink: React.FC<Props> = ({ customer }) => (

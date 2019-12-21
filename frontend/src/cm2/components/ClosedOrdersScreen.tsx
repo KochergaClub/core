@@ -2,13 +2,15 @@ import { Collection } from '~/components/collections';
 
 import { PaddedBlock } from '~/components';
 
-import { useOrdersQuery } from '../hooks';
+import { useGetCm2OrdersQuery } from '../codegen';
 
 import { OpenOrdersTableView } from './OpenOrdersScreen';
 import ApolloQueryResults from './ApolloQueryResults';
 
 const ClosedOrdersScreen: React.FC = () => {
-  const queryResults = useOrdersQuery({ status: 'closed' });
+  const queryResults = useGetCm2OrdersQuery({
+    variables: { status: 'closed' },
+  });
 
   return (
     <PaddedBlock width="max">

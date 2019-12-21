@@ -1,38 +1,23 @@
 import { useCallback } from 'react';
 
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-
 import { Row, Label } from '@kocherga/frontkit';
 
 import { Collection, CustomCardListView } from '~/components/collections';
+import { FormShape } from '~/components/forms/types';
 
-import { Customer } from '../types';
+import ApolloQueryResults from './ApolloQueryResults';
 
-import shapes from '../../shapes';
+import {
+  useCm2CustomersQuery,
+  useCm2CreateCustomerMutation,
+  CustomerFragment,
+} from '../codegen';
 
 import CustomerLink from './CustomerLink';
 
-const GET_CUSTOMERS = gql`
-  query {
-    cm2Customers {
-      id
-      first_name
-      last_name
-      card_id
-    }
-  }
-`;
-
-const CREATE_CUSTOMER = gql`
-  mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
-    cm2CreateCustomer(params: $params) {
-      id
-    }
-  }
-`;
-
-const CustomerCard: React.FC<{ customer: Customer }> = ({ customer }) => {
+const CustomerCard: React.FC<{ customer: CustomerFragment }> = ({
+  customer,
+}) => {
   return (
     <div>
       <Row vCentered>
@@ -45,34 +30,61 @@ const CustomerCard: React.FC<{ customer: Customer }> = ({ customer }) => {
 };
 
 const CustomersScreen: React.FC = () => {
-  const { data } = useQuery(GET_CUSTOMERS);
+  const queryResults = useCm2CustomersQuery();
 
-  const [add] = useMutation(CREATE_CUSTOMER);
+  const [add] = useCm2CreateCustomerMutation();
 
   const renderItem = useCallback(
-    (customer: Customer) => <CustomerCard customer={customer} />,
+    (customer: CustomerFragment) => <CustomerCard customer={customer} />,
     []
   );
 
-  if (!data) {
-    return null; // FIXME
+  interface FormData {
+    card_id: number;
+    first_name: string;
+    last_name: string;
   }
 
-  const items = data.cm2Customers as Customer[];
+  const addShape: FormShape = [
+    {
+      name: 'card_id',
+      optional: false,
+      title: 'Номер карты',
+      type: 'number',
+    },
+    {
+      name: 'first_name',
+      optional: false,
+      title: 'Имя',
+      type: 'string',
+    },
+    {
+      name: 'last_name',
+      optional: false,
+      title: 'Фамилия',
+      type: 'string',
+    },
+  ];
 
   return (
-    <Collection
-      items={items}
-      names={{
-        plural: 'клиенты',
-        genitive: 'клиент',
-      }}
-      add={{
-        cb: data => add({ variables: { params: data } }),
-        shape: shapes.cm2.customer,
-      }}
-      view={props => <CustomCardListView {...props} renderItem={renderItem} />}
-    />
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { cm2Customers } }) => (
+        <Collection
+          items={cm2Customers}
+          names={{
+            plural: 'клиенты',
+            genitive: 'клиент',
+          }}
+          add={{
+            cb: (data: FormData) => add({ variables: { params: data } }),
+            shape: addShape,
+          }}
+          view={props => (
+            <CustomCardListView {...props} renderItem={renderItem} />
+          )}
+        />
+      )}
+    </ApolloQueryResults>
   );
 };
 

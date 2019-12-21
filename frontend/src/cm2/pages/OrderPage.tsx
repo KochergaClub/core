@@ -5,7 +5,7 @@ import CmApp from '../components/CmApp';
 import OrderDetailsScreen from '../components/OrderDetailsScreen';
 
 interface Props {
-  id: number;
+  id: string;
 }
 
 const OrderPage: NextPage<Props> = ({ id }) => (
@@ -15,7 +15,7 @@ const OrderPage: NextPage<Props> = ({ id }) => (
 );
 
 OrderPage.getInitialProps = async ({ query }) => {
-  const id = parseInt(query.id as string);
+  const id = query.id as string;
   return { id };
 };
 

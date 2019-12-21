@@ -1,39 +1,22 @@
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
-
 import { FaSpinner } from 'react-icons/fa';
 
 import { Row, Label } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
+import { useCm2CustomerQuery } from '../codegen';
+
 import ApolloQueryResults from './ApolloQueryResults';
-
-import { Customer } from '../types';
-
-const GET_CUSTOMER = gql`
-  query Cm2Customer($id: ID!) {
-    cm2Customer(id: $id) {
-      id
-      first_name
-      last_name
-      card_id
-    }
-  }
-`;
 
 interface Props {
   id: string;
 }
 
 const CustomerDetailsScreen: React.FC<Props> = ({ id }) => {
-  const queryResults = useQuery<{ cm2Customer: Customer }, { id: string }>(
-    GET_CUSTOMER,
-    {
-      variables: { id },
-      fetchPolicy: 'cache-and-network',
-    }
-  );
+  const queryResults = useCm2CustomerQuery({
+    variables: { id },
+    fetchPolicy: 'cache-and-network',
+  });
 
   return (
     <PaddedBlock width="max">

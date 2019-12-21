@@ -1,0 +1,13 @@
+schema: src/apollo/schema.ts
+generates:
+  ./src/cm2/codegen.tsx:
+    documents:
+      - src/cm2/queries.ts
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withComponent: false
+      withHOC: false
+      withHooks: true
