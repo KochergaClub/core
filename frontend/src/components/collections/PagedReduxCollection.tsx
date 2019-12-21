@@ -69,7 +69,7 @@ interface Props<T, A extends {}> {
   view?: React.ElementType<AnyViewProps<T>>;
 }
 
-function PagedCollection<T, A extends {}>(props: Props<T, A>) {
+function PagedReduxCollection<T, A extends {}>(props: Props<T, A>) {
   const items = useSelector(props.feature.selectors.asList);
 
   return (
@@ -85,4 +85,4 @@ function PagedCollection<T, A extends {}>(props: Props<T, A>) {
   );
 }
 
-export default PagedCollection;
+export default PagedReduxCollection;

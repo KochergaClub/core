@@ -7,7 +7,10 @@ import shapes from '~/shapes';
 import { usePermissions, useDispatch } from '~/common/hooks';
 
 import { PaddedBlock } from '~/components';
-import { PagedCollection, CustomCardListView } from '~/components/collections';
+import {
+  PagedReduxCollection,
+  CustomCardListView,
+} from '~/components/collections';
 
 import { FormShape } from '~/components/forms/types';
 
@@ -41,7 +44,7 @@ const TrainingCollectionBlock: React.FC = () => {
 
   return (
     <PaddedBlock width="max">
-      <PagedCollection
+      <PagedReduxCollection
         feature={trainingsFeature}
         names={{
           plural: 'тренинги',

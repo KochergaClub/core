@@ -1,5 +1,5 @@
 export { default as Collection } from './Collection';
-export { default as PagedCollection } from './PagedCollection';
+export { default as PagedReduxCollection.tsx } from './PagedReduxCollection';
 
 export { default as DumpJSONView } from './DumpJSONView';
 export { default as ListView } from './ListView';
