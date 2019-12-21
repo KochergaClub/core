@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import gql from 'graphql-tag';
-import { useQuery, useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 
 import { differenceInMinutes } from 'date-fns';
 
@@ -11,11 +11,14 @@ import { A } from '@kocherga/frontkit';
 import { Collection, CustomTableView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
+import { PaddedBlock } from '~/components';
+
 import { CreateOrderParams, Customer } from '../types';
 
-import { OrderWithCustomer, orderWithCustomerFragment } from '../queries';
+import { OrderWithCustomer, useOrdersQuery } from '../hooks';
 
 import CustomerLink from './CustomerLink';
+import ApolloQueryResults from './ApolloQueryResults';
 
 const SEARCH_CUSTOMERS = gql`
   query SearchCm2Customers($search: String!) {
@@ -26,16 +29,6 @@ const SEARCH_CUSTOMERS = gql`
       card_id
     }
   }
-`;
-
-const GET_OPEN_ORDERS = gql`
-  query {
-    cm2Orders(status: "open") {
-      ...OrderWithCustomer
-    }
-  }
-
-  ${orderWithCustomerFragment}
 `;
 
 const CREATE_ORDER = gql`
@@ -125,9 +118,7 @@ export const OpenOrdersTableView: React.FC<{ items: OrderWithCustomer[] }> = ({
 };
 
 const OpenOrdersScreen: React.FC = () => {
-  const { data, loading, error, refetch } = useQuery(GET_OPEN_ORDERS, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const queryResults = useOrdersQuery({ status: 'open' });
   const apolloClient = useApolloClient();
 
   const [addMutation] = useMutation(CREATE_ORDER);
@@ -135,9 +126,9 @@ const OpenOrdersScreen: React.FC = () => {
   const add = useCallback(
     async (data: CreateOrderParams) => {
       await addMutation({ variables: { params: data } });
-      await refetch();
+      await queryResults.refetch();
     },
-    [addMutation, refetch]
+    [addMutation, queryResults.refetch]
   );
 
   const addShape: FormShape = [
@@ -164,33 +155,25 @@ const OpenOrdersScreen: React.FC = () => {
     },
   ];
 
-  if (error) {
-    return <div>error: {JSON.stringify(error)}</div>;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data) {
-    return <div>error: no data</div>;
-  }
-
-  const items = data.cm2Orders as OrderWithCustomer[];
-
   return (
-    <Collection
-      items={items}
-      names={{
-        plural: 'заказы',
-        genitive: 'заказ',
-      }}
-      add={{
-        cb: add,
-        shape: addShape,
-      }}
-      view={OpenOrdersTableView}
-    />
+    <PaddedBlock width="max">
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { cm2Orders: orders }, loading }) => (
+          <Collection
+            items={orders}
+            names={{
+              plural: 'заказы',
+              genitive: 'заказ',
+            }}
+            add={{
+              cb: add,
+              shape: addShape,
+            }}
+            view={OpenOrdersTableView}
+          />
+        )}
+      </ApolloQueryResults>
+    </PaddedBlock>
   );
 };
 

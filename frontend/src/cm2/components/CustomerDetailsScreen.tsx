@@ -1,7 +1,15 @@
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 
+import { FaSpinner } from 'react-icons/fa';
+
 import { Row, Label } from '@kocherga/frontkit';
+
+import { PaddedBlock } from '~/components';
+
+import ApolloQueryResults from './ApolloQueryResults';
+
+import { Customer } from '../types';
 
 const GET_CUSTOMER = gql`
   query Cm2Customer($id: ID!) {
@@ -15,42 +23,35 @@ const GET_CUSTOMER = gql`
 `;
 
 interface Props {
-  id: number;
+  id: string;
 }
 
 const CustomerDetailsScreen: React.FC<Props> = ({ id }) => {
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {
-    variables: { id },
-  });
-
-  if (error) {
-    return <div>Error: {JSON.stringify(error)}</div>;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data) {
-    return null; // FIXME
-  }
-
-  const customer = data.cm2Customer;
-
-  if (!customer) {
-    throw new Error('Customer is not loaded');
-  }
+  const queryResults = useQuery<{ cm2Customer: Customer }, { id: string }>(
+    GET_CUSTOMER,
+    {
+      variables: { id },
+      fetchPolicy: 'cache-and-network',
+    }
+  );
 
   return (
-    <div>
-      <h2>
-        {customer.first_name} {customer.last_name}
-      </h2>
-      <Row vCentered>
-        <Label>Карта:</Label>
-        <div>{customer.card_id}</div>
-      </Row>
-    </div>
+    <PaddedBlock width="max">
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { cm2Customer: customer }, loading }) => (
+          <div>
+            <h2>
+              {customer.first_name} {customer.last_name}
+              {loading ? <FaSpinner /> : null}
+            </h2>
+            <Row vCentered>
+              <Label>Карта:</Label>
+              <div>{customer.card_id}</div>
+            </Row>
+          </div>
+        )}
+      </ApolloQueryResults>
+    </PaddedBlock>
   );
 };
 

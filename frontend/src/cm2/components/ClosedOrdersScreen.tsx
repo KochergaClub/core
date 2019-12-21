@@ -1,48 +1,30 @@
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
-
 import { Collection } from '~/components/collections';
 
+import { PaddedBlock } from '~/components';
+
+import { useOrdersQuery } from '../hooks';
+
 import { OpenOrdersTableView } from './OpenOrdersScreen';
-
-import { OrderWithCustomer, orderWithCustomerFragment } from '../queries';
-
-const GET_CLOSED_ORDERS = gql`
-  query {
-    cm2Orders(status: "closed") {
-      ...OrderWithCustomer
-    }
-  }
-
-  ${orderWithCustomerFragment}
-`;
+import ApolloQueryResults from './ApolloQueryResults';
 
 const ClosedOrdersScreen: React.FC = () => {
-  const { data, loading, error } = useQuery(GET_CLOSED_ORDERS);
-
-  if (error) {
-    return <div>error: {JSON.stringify(error)}</div>;
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data) {
-    return <div>error: no data</div>;
-  }
-
-  const items = data.cm2Orders as OrderWithCustomer[];
+  const queryResults = useOrdersQuery({ status: 'closed' });
 
   return (
-    <Collection
-      items={items}
-      names={{
-        plural: 'заказы',
-        genitive: 'заказ',
-      }}
-      view={OpenOrdersTableView}
-    />
+    <PaddedBlock width="max">
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { cm2Orders }, loading }) => (
+          <Collection
+            items={cm2Orders}
+            names={{
+              plural: 'заказы',
+              genitive: 'заказ',
+            }}
+            view={OpenOrdersTableView}
+          />
+        )}
+      </ApolloQueryResults>
+    </PaddedBlock>
   );
 };
 
