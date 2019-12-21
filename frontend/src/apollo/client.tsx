@@ -3,8 +3,9 @@ import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import cookie from 'cookie';
 
-import { NextPage } from '~/common/types';
+import { NextPage, NextPageContext } from '~/common/types';
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
 
@@ -13,7 +14,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
  * to a next.js PageTree. Use it by wrapping
  * your PageComponent via HOC pattern.
  */
-export function withApollo(PageComponent: NextPage, { ssr = true } = {}) {
+export function withApollo(PageComponent: NextPage<any>, { ssr = true } = {}) {
   const WithApollo: NextPage<any> = ({
     apolloClient,
     apolloState,
@@ -45,7 +46,10 @@ export function withApollo(PageComponent: NextPage, { ssr = true } = {}) {
 
       // Initialize ApolloClient, add it to the ctx object so
       // we can use it in `PageComponent.getInitialProp`.
-      const apolloClient = (ctx.apolloClient = initApolloClient());
+      const apolloClient = (ctx.apolloClient = initApolloClient(
+        undefined,
+        ctx.req
+      ));
 
       // Run wrapped getInitialProps methods
       let pageProps = {};
@@ -104,11 +108,14 @@ export function withApollo(PageComponent: NextPage, { ssr = true } = {}) {
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  */
-function initApolloClient(initialState = undefined) {
+function initApolloClient(
+  initialState = undefined,
+  req: NextPageContext['req'] = undefined
+) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
-    return createApolloClient(initialState);
+    return createApolloClient(initialState, req);
   }
 
   // Reuse client on the client-side
@@ -122,28 +129,72 @@ function initApolloClient(initialState = undefined) {
 /**
  * Creates and configures the ApolloClient
  */
-function createApolloClient(initialState = {}) {
+function createApolloClient(
+  initialState = {},
+  req: NextPageContext['req'] = undefined
+) {
   const ssrMode = typeof window === 'undefined';
   const cache = new InMemoryCache().restore(initialState);
 
-  // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient({
     ssrMode,
-    link: createIsomorphLink(),
+    link: ssrMode ? createServerLink(req) : createClientLink(),
     cache,
   });
 }
 
-function createIsomorphLink() {
+function createServerLink(req: NextPageContext['req']) {
+  // this is important for webpack to remove this code on client
   if (typeof window === 'undefined') {
     const { SchemaLink } = require('apollo-link-schema');
-    const { schema } = require('./schema');
-    return new SchemaLink({ schema });
-  } else {
-    const { HttpLink } = require('apollo-link-http');
-    return new HttpLink({
-      uri: '/graphql',
-      credentials: 'same-origin',
+    const { schema, KochergaAPI } = require('./schema');
+    const { API_HOST } = require('../../server/constants');
+
+    // req can be empty when we do the last styled-components-extracting rendering pass in _document.
+    // Note that we can't pass always `apolloClient` to WithApollo props, since it can't be serialized.
+    // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
+    const cookieHeader = req ? req.headers.cookie : undefined;
+
+    const cookies = cookie.parse(cookieHeader || '');
+    const csrfToken = cookies.csrftoken as string;
+
+    const authContext = {
+      csrfToken,
+      cookie: cookieHeader,
+    };
+
+    return new SchemaLink({
+      schema,
+      context() {
+        const kochergaAPI = new KochergaAPI(API_HOST);
+        kochergaAPI.initialize({ context: authContext });
+        return {
+          dataSources: {
+            kochergaAPI,
+          },
+          ...authContext,
+        };
+      },
     });
+  } else {
+    throw new Error("Shouldn't be called on client side");
   }
+}
+
+function createClientLink() {
+  if (typeof window === 'undefined') {
+    throw new Error('Should be called on client side');
+  }
+
+  const cookies = cookie.parse(document.cookie || '');
+  const csrfToken = cookies.csrftoken as string;
+
+  const { HttpLink } = require('apollo-link-http');
+  return new HttpLink({
+    uri: '/graphql',
+    credentials: 'same-origin',
+    headers: {
+      'X-CSRFToken': csrfToken,
+    },
+  });
 }

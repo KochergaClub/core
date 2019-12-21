@@ -1,24 +1,54 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+
+import gql from 'graphql-tag';
+import { useQuery, useApolloClient, useMutation } from '@apollo/react-hooks';
 
 import { differenceInMinutes } from 'date-fns';
 
 import Link from 'next/link';
 import { A } from '@kocherga/frontkit';
 
-import { useDispatch } from '~/common/hooks';
-import { selectAPI } from '~/core/selectors';
-
-import { PagedCollection, CustomTableView } from '~/components/collections';
+import { Collection, CustomTableView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
-import { addOrder } from '../features/orderActions';
-import { openOrdersFeature } from '../features/openOrders';
-import { OrderAux, Customer } from '../types';
+import { CreateOrderParams, Customer } from '../types';
+
+import { OrderWithCustomer, orderWithCustomerFragment } from '../queries';
 
 import CustomerLink from './CustomerLink';
 
-export const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({
+const SEARCH_CUSTOMERS = gql`
+  query SearchCm2Customers($search: String!) {
+    cm2Customers(search: $search) {
+      id
+      first_name
+      last_name
+      card_id
+    }
+  }
+`;
+
+const GET_OPEN_ORDERS = gql`
+  query {
+    cm2Orders(status: "open") {
+      ...OrderWithCustomer
+    }
+  }
+
+  ${orderWithCustomerFragment}
+`;
+
+const CREATE_ORDER = gql`
+  mutation Cm2CreateOrder($params: Cm2CreateOrderInput!) {
+    cm2CreateOrder(params: $params) {
+      customer {
+        id
+      }
+    }
+  }
+`;
+
+export const OpenOrdersTableView: React.FC<{ items: OrderWithCustomer[] }> = ({
   items,
 }) => {
   // TODO - better typing
@@ -49,16 +79,16 @@ export const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({
             return (
               <Link
                 href="/team/cm/orders/[id]"
-                as={`/team/cm/orders/${item.order.id}`}
+                as={`/team/cm/orders/${item.id}`}
                 passHref
               >
-                <A>{item.order.id}</A>
+                <A>{item.id}</A>
               </Link>
             );
           case 'time':
             const diff = differenceInMinutes(
-              item.order.end || new Date(),
-              item.order.start
+              item.end ? new Date(item.end) : new Date(),
+              new Date(item.start)
             );
             const hours = Math.floor(diff / 60);
             const minutes = diff % 60;
@@ -77,7 +107,7 @@ export const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({
               </div>
             );
           case 'value':
-            return <div>{item.order.value} руб.</div>;
+            return <div>{item.value} руб.</div>;
           case 'customer':
             return (
               <div>
@@ -95,15 +125,19 @@ export const OpenOrdersTableView: React.FC<{ items: OrderAux[] }> = ({
 };
 
 const OpenOrdersScreen: React.FC = () => {
-  const dispatch = useDispatch();
+  const { data, loading, error, refetch } = useQuery(GET_OPEN_ORDERS, {
+    fetchPolicy: 'cache-and-network',
+  });
+  const apolloClient = useApolloClient();
 
-  const api = useSelector(selectAPI);
+  const [addMutation] = useMutation(CREATE_ORDER);
 
   const add = useCallback(
-    async values => {
-      await dispatch(addOrder(values));
+    async (data: CreateOrderParams) => {
+      await addMutation({ variables: { params: data } });
+      await refetch();
     },
-    [dispatch]
+    [addMutation, refetch]
   );
 
   const addShape: FormShape = [
@@ -116,19 +150,37 @@ const OpenOrdersScreen: React.FC = () => {
         display: (c: Customer) =>
           `№${c.card_id} ${c.first_name} ${c.last_name}`,
         load: async (inputValue: string) => {
-          const customers = (
-            await api.call(`cm2/customer?search=${inputValue}`, 'GET')
-          ).results; // TODO - search method or customer-all route
-          return customers;
+          const { data: customersData } = await apolloClient.query({
+            query: SEARCH_CUSTOMERS,
+            variables: { search: inputValue },
+          });
+          if (!customersData) {
+            return []; // TODO - proper error handling
+          }
+          return customersData.cm2Customers;
         },
         getValue: (c: Customer) => c.id,
       },
     },
   ];
 
+  if (error) {
+    return <div>error: {JSON.stringify(error)}</div>;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data) {
+    return <div>error: no data</div>;
+  }
+
+  const items = data.cm2Orders as OrderWithCustomer[];
+
   return (
-    <PagedCollection
-      feature={openOrdersFeature}
+    <Collection
+      items={items}
       names={{
         plural: 'заказы',
         genitive: 'заказ',

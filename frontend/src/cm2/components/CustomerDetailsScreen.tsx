@@ -1,11 +1,41 @@
-import { useSelector } from 'react-redux';
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 
 import { Row, Label } from '@kocherga/frontkit';
 
-import { selectCustomerDetails } from '../features/customerDetails';
+const GET_CUSTOMER = gql`
+  query Cm2Customer($id: ID!) {
+    cm2Customer(id: $id) {
+      id
+      first_name
+      last_name
+      card_id
+    }
+  }
+`;
 
-const CustomerDetailsScreen: React.FC = () => {
-  const customer = useSelector(selectCustomerDetails);
+interface Props {
+  id: number;
+}
+
+const CustomerDetailsScreen: React.FC<Props> = ({ id }) => {
+  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+    variables: { id },
+  });
+
+  if (error) {
+    return <div>Error: {JSON.stringify(error)}</div>;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data) {
+    return null; // FIXME
+  }
+
+  const customer = data.cm2Customer;
 
   if (!customer) {
     throw new Error('Customer is not loaded');

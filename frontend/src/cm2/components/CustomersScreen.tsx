@@ -1,16 +1,36 @@
 import { useCallback } from 'react';
 
+import gql from 'graphql-tag';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
 import { Row, Label } from '@kocherga/frontkit';
 
-import { PagedCollection, CustomCardListView } from '~/components/collections';
-import { useDispatch } from '~/common/hooks';
+import { Collection, CustomCardListView } from '~/components/collections';
 
-import { customersFeature, addCustomer } from '../features/customers';
-import { CreateCustomerParams, Customer } from '../types';
+import { Customer } from '../types';
 
 import shapes from '../../shapes';
 
 import CustomerLink from './CustomerLink';
+
+const GET_CUSTOMERS = gql`
+  query {
+    cm2Customers {
+      id
+      first_name
+      last_name
+      card_id
+    }
+  }
+`;
+
+const CREATE_CUSTOMER = gql`
+  mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
+    cm2CreateCustomer(params: $params) {
+      id
+    }
+  }
+`;
 
 const CustomerCard: React.FC<{ customer: Customer }> = ({ customer }) => {
   return (
@@ -25,29 +45,30 @@ const CustomerCard: React.FC<{ customer: Customer }> = ({ customer }) => {
 };
 
 const CustomersScreen: React.FC = () => {
-  const dispatch = useDispatch();
+  const { data } = useQuery(GET_CUSTOMERS);
 
-  const add = useCallback(
-    async (values: CreateCustomerParams) => {
-      await dispatch(addCustomer(values));
-    },
-    [dispatch]
-  );
+  const [add] = useMutation(CREATE_CUSTOMER);
 
   const renderItem = useCallback(
     (customer: Customer) => <CustomerCard customer={customer} />,
     []
   );
 
+  if (!data) {
+    return null; // FIXME
+  }
+
+  const items = data.cm2Customers as Customer[];
+
   return (
-    <PagedCollection
-      feature={customersFeature}
+    <Collection
+      items={items}
       names={{
         plural: 'клиенты',
         genitive: 'клиент',
       }}
       add={{
-        cb: add,
+        cb: data => add({ variables: { params: data } }),
         shape: shapes.cm2.customer,
       }}
       view={props => <CustomCardListView {...props} renderItem={renderItem} />}

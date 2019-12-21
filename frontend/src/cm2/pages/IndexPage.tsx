@@ -1,14 +1,13 @@
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
 
-import { viewOpen } from '../features/view';
-
 import CmApp from '../components/CmApp';
+import OpenOrdersScreen from '../components/OpenOrdersScreen';
 
-const IndexPage: NextPage = () => <CmApp />;
+const IndexPage: NextPage = () => (
+  <CmApp htmlTitle="Открытые заказы">
+    <OpenOrdersScreen />
+  </CmApp>
+);
 
-IndexPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(viewOpen());
-  return {};
-};
-
-export default IndexPage;
+export default withApollo(IndexPage);

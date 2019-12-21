@@ -1,15 +1,22 @@
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
 
-import { viewCustomerDetails } from '../features/view';
-
 import CmApp from '../components/CmApp';
+import CustomerDetailsScreen from '../components/CustomerDetailsScreen';
 
-const OrderPage: NextPage = () => <CmApp />;
+interface Props {
+  id: number;
+}
 
-OrderPage.getInitialProps = async ({ store: { dispatch }, query }) => {
-  const customer_id = parseInt(query.id as string);
-  await dispatch(viewCustomerDetails(customer_id));
-  return {};
+const CustomerDetailsPage: NextPage<Props> = ({ id }) => (
+  <CmApp htmlTitle="Клиент #{id}">
+    <CustomerDetailsScreen id={id} />
+  </CmApp>
+);
+
+CustomerDetailsPage.getInitialProps = async ({ query }) => {
+  const id = parseInt(query.id as string);
+  return { id };
 };
 
-export default OrderPage;
+export default withApollo(CustomerDetailsPage);

@@ -15,7 +15,7 @@ interface Props<I, A extends {}> {
   names?: EntityNames;
   add?: {
     shape: FormShape;
-    cb: (values: A) => Promise<void>;
+    cb: (values: A) => Promise<any>;
   };
   view?: React.ElementType<AnyViewProps<I>>;
 }

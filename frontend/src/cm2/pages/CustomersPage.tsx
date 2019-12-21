@@ -1,14 +1,13 @@
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
 
-import { viewCustomers } from '../features/view';
-
 import CmApp from '../components/CmApp';
+import CustomersScreen from '../components/CustomersScreen';
 
-const ClosedOrdersPage: NextPage = () => <CmApp />;
+const CustomersPage: NextPage = () => (
+  <CmApp htmlTitle="Клиенты">
+    <CustomersScreen />
+  </CmApp>
+);
 
-ClosedOrdersPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(viewCustomers());
-  return {};
-};
-
-export default ClosedOrdersPage;
+export default withApollo(CustomersPage);

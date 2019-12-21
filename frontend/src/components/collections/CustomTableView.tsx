@@ -20,13 +20,15 @@ function CustomTableView<I>(props: Props<I>) {
           ))}
         </tr>
       </thead>
-      {props.items.map((item, i) => (
-        <tr key={i}>
-          {props.columns.map(column => (
-            <td key={column}>{props.renderCell(item, column)}</td>
-          ))}
-        </tr>
-      ))}
+      <tbody>
+        {props.items.map((item, i) => (
+          <tr key={i}>
+            {props.columns.map(column => (
+              <td key={column}>{props.renderCell(item, column)}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
     </Table>
   );
 }

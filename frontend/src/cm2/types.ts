@@ -8,23 +8,9 @@ export interface ServerOrder {
   customer?: number;
 }
 
-export interface CreateOrderParams {}
-
-export interface Order {
-  id: number;
-  start: Date;
-  end?: Date;
-  value?: number;
-  customer?: number;
+export interface CreateOrderParams {
+  card_id?: number;
 }
-
-export const parseServerOrder = (serverOrder: ServerOrder): Order => {
-  return {
-    ...serverOrder,
-    start: new Date(serverOrder.start),
-    end: serverOrder.end ? new Date(serverOrder.end) : undefined,
-  };
-};
 
 export const orderShape: FormShape = [
   { type: 'number', name: 'id', title: 'ID', readonly: true },
@@ -46,29 +32,8 @@ export interface Customer {
   last_name: string;
 }
 
-export type CustomersObject = { [k: number]: Customer };
-
 export interface CreateCustomerParams {
   card_id: number;
   first_name: string;
   last_name: string;
 }
-
-export interface OrderAux {
-  order: Order;
-  customer?: Customer;
-}
-
-export const orderToOrderAux = (
-  order: Order,
-  customerById: (id: number) => Customer
-): OrderAux => {
-  if (!order.customer) {
-    return { order };
-  }
-  const customer = customerById(order.customer);
-  return {
-    order,
-    customer,
-  };
-};
