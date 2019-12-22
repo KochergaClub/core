@@ -35,7 +35,10 @@ const CustomerCard: React.FC<{ customer: CustomerFragment }> = ({
 const CustomersScreen: React.FC = () => {
   const queryResults = useCm2CustomersQuery();
 
-  const [add] = useCm2CreateCustomerMutation();
+  const [add] = useCm2CreateCustomerMutation({
+    refetchQueries: ['Cm2Customers'],
+    awaitRefetchQueries: true,
+  });
 
   const renderItem = useCallback(
     (customer: CustomerFragment) => <CustomerCard customer={customer} />,

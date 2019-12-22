@@ -9,6 +9,7 @@ import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
 import {
   MemberFragment,
+  StaffMemberDocument,
   useStaffGrantGooglePermissionsToMemberMutation,
   useStaffFireMemberMutation,
 } from '../codegen';
@@ -30,19 +31,27 @@ interface Props {
 }
 
 const ManagerControls: React.FC<Props> = ({ member }) => {
+  const refetchConfig = {
+    refetchQueries: [
+      {
+        query: StaffMemberDocument,
+        variables: { id: member.id },
+      },
+    ],
+    awaitRefetchQueries: true,
+  };
+
   const [
     grantGooglePermissionsMutation,
-  ] = useStaffGrantGooglePermissionsToMemberMutation();
-  const [fireMutation] = useStaffFireMemberMutation();
+  ] = useStaffGrantGooglePermissionsToMemberMutation(refetchConfig);
+  const [fireMutation] = useStaffFireMemberMutation(refetchConfig);
 
   const grantGooglePermissions = useCallback(async () => {
     await grantGooglePermissionsMutation({ variables: { id: member.id } });
-    // TODO - check cache invalidation
   }, [grantGooglePermissionsMutation, member.id]);
 
   const fire = useCallback(async () => {
     await fireMutation({ variables: { id: member.id } });
-    // TODO - check cache invalidation
   }, [fireMutation, member.id]);
 
   if (member.role !== 'WATCHMAN') {

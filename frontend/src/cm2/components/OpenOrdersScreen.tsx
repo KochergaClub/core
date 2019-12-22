@@ -25,7 +25,10 @@ const OpenOrdersScreen: React.FC = () => {
   });
   const apolloClient = useApolloClient();
 
-  const [addMutation] = useCm2CreateOrderMutation();
+  const [addMutation] = useCm2CreateOrderMutation({
+    refetchQueries: ['Cm2Orders'],
+    awaitRefetchQueries: true,
+  });
 
   interface CreateOrderFormParams {
     customer?: string;
@@ -34,9 +37,8 @@ const OpenOrdersScreen: React.FC = () => {
   const add = useCallback(
     async (data: CreateOrderFormParams) => {
       await addMutation({ variables: { params: data } });
-      await queryResults.refetch();
     },
-    [addMutation, queryResults.refetch]
+    [addMutation]
   );
 
   const addShape: FormShape = [

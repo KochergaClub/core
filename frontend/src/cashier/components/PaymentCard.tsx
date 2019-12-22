@@ -15,7 +15,10 @@ import { PaymentFragment, useCashierRedeemPaymentMutation } from '../codegen';
 const PaymentCard = ({ payment }: { payment: PaymentFragment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
 
-  const [redeemMutation] = useCashierRedeemPaymentMutation();
+  const [redeemMutation] = useCashierRedeemPaymentMutation({
+    refetchQueries: ['CashierPayments'],
+    awaitRefetchQueries: true,
+  });
 
   const redeem = useCallback(async () => {
     await redeemMutation({ variables: { id: payment.id } });

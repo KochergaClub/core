@@ -15,6 +15,7 @@ import AddMemberToGroupModal from './AddMemberToGroupModal';
 
 import {
   AuthGroupsQuery,
+  AuthGroupsDocument,
   MaybeStaffUserFragment,
   useAuthRemoveUserFromGroupMutation,
 } from '../codegen';
@@ -24,7 +25,10 @@ interface Props {
 }
 
 const GroupCard: React.FC<Props> = ({ group }) => {
-  const [removeUserFromGroupMutation] = useAuthRemoveUserFromGroupMutation();
+  const [removeUserFromGroupMutation] = useAuthRemoveUserFromGroupMutation({
+    refetchQueries: [{ query: AuthGroupsDocument }],
+    awaitRefetchQueries: true,
+  });
 
   const removeUserCb = useCallback(
     async (user: MaybeStaffUserFragment) => {

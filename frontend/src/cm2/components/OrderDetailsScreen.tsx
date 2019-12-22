@@ -5,7 +5,11 @@ import { Column, Label } from '@kocherga/frontkit';
 import { ApolloQueryResults, AsyncButton } from '~/components';
 import { formatDate } from '~/common/utils';
 
-import { useCm2OrderQuery, useCm2CloseOrderMutation } from '../codegen';
+import {
+  useCm2OrderQuery,
+  Cm2OrderDocument,
+  useCm2CloseOrderMutation,
+} from '../codegen';
 
 import CustomerLink from './CustomerLink';
 
@@ -16,12 +20,19 @@ interface Props {
 export const OrderDetailsScreen: React.FC<Props> = ({ id }) => {
   const queryResults = useCm2OrderQuery({ variables: { id } });
 
-  const [closeMutation] = useCm2CloseOrderMutation();
+  const [closeMutation] = useCm2CloseOrderMutation({
+    refetchQueries: [
+      {
+        query: Cm2OrderDocument,
+        variables: { id },
+      },
+    ],
+    awaitRefetchQueries: true,
+  });
 
   const close = useCallback(async () => {
     await closeMutation({ variables: { id } });
-    await queryResults.refetch();
-  }, [closeMutation, id, queryResults.refetch]);
+  }, [closeMutation, id]);
 
   return (
     <ApolloQueryResults {...queryResults}>

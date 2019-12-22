@@ -19,6 +19,7 @@ import {
 
 import {
   useCashierPaymentsQuery,
+  CashierPaymentsDocument,
   useCashierCreatePaymentMutation,
   PaymentFragment,
 } from '../codegen';
@@ -27,7 +28,14 @@ import PaymentCard from './PaymentCard';
 
 const PaymentCollection: React.FC = () => {
   const queryResults = useCashierPaymentsQuery();
-  const [createPaymentMutation] = useCashierCreatePaymentMutation();
+  const [createPaymentMutation] = useCashierCreatePaymentMutation({
+    refetchQueries: [
+      {
+        query: CashierPaymentsDocument,
+      },
+    ],
+    awaitRefetchQueries: true,
+  });
 
   const apolloClient = useApolloClient();
 

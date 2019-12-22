@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
 import { MemberFragment } from '~/staff/codegen';
 
-import { useAuthAddUserToGroupMutation } from '../codegen';
+import { AuthGroupsDocument, useAuthAddUserToGroupMutation } from '../codegen';
 
 interface Props {
   close: () => void;
@@ -11,7 +11,10 @@ interface Props {
 }
 
 const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
-  const [addMutation] = useAuthAddUserToGroupMutation();
+  const [addMutation] = useAuthAddUserToGroupMutation({
+    refetchQueries: [{ query: AuthGroupsDocument }],
+    awaitRefetchQueries: true,
+  });
 
   const cb = useCallback(
     async (member: MemberFragment) => {
