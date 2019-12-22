@@ -63,16 +63,10 @@ export class KochergaAPI extends RESTDataSource {
 
     return {
       pageInfo: {
-        endCursor: response.results.length
-          ? response.results[response.results.length - 1].id
-          : undefined,
         hasNextPage: Boolean(response.next),
         pageNumber: page || 1,
       },
-      edges: response.results.map((result: any) => ({
-        cursor: result.id, // TODO - base64?
-        node: result,
-      })),
+      nodes: response.results,
     };
   }
 

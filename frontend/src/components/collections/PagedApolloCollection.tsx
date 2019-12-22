@@ -44,9 +44,7 @@ interface Props<T, A extends {}> {
       hasNextPage: boolean;
       pageNumber: number;
     };
-    edges: {
-      node: T;
-    }[];
+    nodes: T[];
   };
   fetchPage: (page: number) => Promise<void>;
   names: EntityNames;
@@ -58,12 +56,11 @@ interface Props<T, A extends {}> {
 }
 
 function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
-  const items = props.connection.edges.map(edge => edge.node);
   return (
     <div>
       <Collection
         names={props.names}
-        items={items}
+        items={props.connection.nodes}
         add={props.add}
         view={props.view}
       />

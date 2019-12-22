@@ -23,16 +23,14 @@ const orderWithCustomerFragment = gql`
 `;
 
 export const GET_ORDERS = gql`
-  query GetCm2Orders($status: String, $page: Int) {
+  query Cm2Orders($status: String, $page: Int) {
     cm2Orders(status: $status, page: $page) {
       pageInfo {
         hasNextPage
         pageNumber
       }
-      edges {
-        node {
-          ...OrderWithCustomer
-        }
+      nodes {
+        ...OrderWithCustomer
       }
     }
   }
@@ -61,39 +59,32 @@ export const CREATE_ORDER = gql`
 `;
 
 export const SEARCH_CUSTOMERS = gql`
-  query SearchCm2Customers($search: String!) {
+  query Cm2SearchCustomers($search: String!) {
     cm2Customers(search: $search, first: 10) {
-      pageInfo {
-        hasNextPage
-      }
-      edges {
-        node {
-          ...Customer
-        }
+      nodes {
+        ...Customer
       }
     }
   }
   ${customerFragment}
 `;
 
-const GET_CUSTOMERS = gql`
+export const GET_CUSTOMERS = gql`
   query Cm2Customers($page: Int) {
     cm2Customers(page: $page) {
       pageInfo {
         hasNextPage
         pageNumber
       }
-      edges {
-        node {
-          ...Customer
-        }
+      nodes {
+        ...Customer
       }
     }
   }
   ${customerFragment}
 `;
 
-const CREATE_CUSTOMER = gql`
+export const CREATE_CUSTOMER = gql`
   mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
     cm2CreateCustomer(params: $params) {
       id
@@ -101,22 +92,20 @@ const CREATE_CUSTOMER = gql`
   }
 `;
 
-const CLOSE_ORDER = gql`
+export const CLOSE_ORDER = gql`
   mutation Cm2CloseOrder($id: ID!) {
     cm2CloseOrder(id: $id)
   }
 `;
 
-const GET_CUSTOMER = gql`
+export const GET_CUSTOMER = gql`
   query Cm2CustomerPage($id: ID!) {
     cm2Customer(id: $id) {
       ...Customer
       orders {
-        edges {
-          node {
-            id
-            start
-          }
+        nodes {
+          id
+          start
         }
       }
     }

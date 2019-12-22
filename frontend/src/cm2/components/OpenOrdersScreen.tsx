@@ -9,10 +9,10 @@ import { PaddedBlock } from '~/components';
 
 import {
   CustomerFragment,
-  useGetCm2OrdersQuery,
+  useCm2OrdersQuery,
   useCm2CreateOrderMutation,
-  SearchCm2CustomersQuery,
-  SearchCm2CustomersQueryVariables,
+  Cm2SearchCustomersQuery,
+  Cm2SearchCustomersQueryVariables,
 } from '../codegen';
 import { SEARCH_CUSTOMERS } from '../queries';
 
@@ -20,7 +20,7 @@ import ApolloQueryResults from './ApolloQueryResults';
 import OrdersTableView from './OrdersTableView';
 
 const OpenOrdersScreen: React.FC = () => {
-  const queryResults = useGetCm2OrdersQuery({
+  const queryResults = useCm2OrdersQuery({
     variables: { status: 'open' },
     fetchPolicy: 'cache-and-network',
   });
@@ -51,8 +51,8 @@ const OpenOrdersScreen: React.FC = () => {
           `№${c.card_id} ${c.first_name} ${c.last_name}`,
         load: async (inputValue: string) => {
           const { data: customersData } = await apolloClient.query<
-            SearchCm2CustomersQuery,
-            SearchCm2CustomersQueryVariables
+            Cm2SearchCustomersQuery,
+            Cm2SearchCustomersQueryVariables
           >({
             query: SEARCH_CUSTOMERS,
             variables: { search: inputValue },
@@ -60,7 +60,7 @@ const OpenOrdersScreen: React.FC = () => {
           if (!customersData) {
             return []; // TODO - proper error handling
           }
-          return customersData.cm2Customers.edges.map(edge => edge.node);
+          return customersData.cm2Customers.nodes;
         },
         getValue: (c: CustomerFragment) => parseInt(c.id),
       },
@@ -72,10 +72,9 @@ const OpenOrdersScreen: React.FC = () => {
       <ApolloQueryResults {...queryResults}>
         {({
           data: {
-            cm2Orders: { edges },
+            cm2Orders: { nodes: orders },
           },
         }) => {
-          const orders = edges.map(edge => edge.node);
           return (
             <Collection
               items={orders}

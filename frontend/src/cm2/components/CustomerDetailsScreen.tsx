@@ -16,7 +16,7 @@ interface Props {
 const CustomerOrders: React.FC<{
   orders: Cm2CustomerPageQuery['cm2Customer']['orders'];
 }> = ({ orders }) => {
-  const nodes = orders.edges.map(edge => edge.node);
+  const nodes = orders.nodes;
 
   if (!nodes.length) {
     return null;

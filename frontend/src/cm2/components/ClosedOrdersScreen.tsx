@@ -2,13 +2,13 @@ import { Collection } from '~/components/collections';
 
 import { PaddedBlock } from '~/components';
 
-import { useGetCm2OrdersQuery } from '../codegen';
+import { useCm2OrdersQuery } from '../codegen';
 
 import OrdersTableView from './OrdersTableView';
 import ApolloQueryResults from './ApolloQueryResults';
 
 const ClosedOrdersScreen: React.FC = () => {
-  const queryResults = useGetCm2OrdersQuery({
+  const queryResults = useCm2OrdersQuery({
     variables: { status: 'closed' },
     fetchPolicy: 'cache-and-network',
   });
@@ -18,10 +18,9 @@ const ClosedOrdersScreen: React.FC = () => {
       <ApolloQueryResults {...queryResults}>
         {({
           data: {
-            cm2Orders: { edges },
+            cm2Orders: { nodes: orders },
           },
         }) => {
-          const orders = edges.map(edge => edge.node);
           return (
             <Collection
               items={orders}

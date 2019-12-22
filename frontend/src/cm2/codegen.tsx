@@ -30,17 +30,10 @@ export type Cm2Customer = {
   orders: Cm2OrderConnection,
 };
 
-/** TODO - generate connection+edge string with helper */
 export type Cm2CustomerConnection = {
    __typename?: 'Cm2CustomerConnection',
   pageInfo: PageInfo,
-  edges: Array<Cm2CustomerEdge>,
-};
-
-export type Cm2CustomerEdge = {
-   __typename?: 'Cm2CustomerEdge',
-  cursor: Scalars['String'],
-  node: Cm2Customer,
+  nodes: Array<Cm2Customer>,
 };
 
 export type Cm2Order = {
@@ -55,17 +48,12 @@ export type Cm2Order = {
 export type Cm2OrderConnection = {
    __typename?: 'Cm2OrderConnection',
   pageInfo: PageInfo,
-  edges: Array<Cm2OrderEdge>,
-};
-
-export type Cm2OrderEdge = {
-   __typename?: 'Cm2OrderEdge',
-  cursor: Scalars['String'],
-  node: Cm2Order,
+  nodes: Array<Cm2Order>,
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
+  _empty?: Maybe<Scalars['String']>,
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
@@ -86,32 +74,23 @@ export type MutationCm2CloseOrderArgs = {
   id: Scalars['ID']
 };
 
-/** TODO - move outside of cm2 */
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
-  endCursor?: Maybe<Scalars['String']>,
   hasNextPage: Scalars['Boolean'],
 };
 
-/** 
- * FIXME - Can't use 'extend type Query' in separate files because of
- * https://github.com/dotansimha/graphql-code-generator/issues/2731
- */
 export type Query = {
    __typename?: 'Query',
+  _empty?: Maybe<Scalars['String']>,
+  rooms: Array<Maybe<Room>>,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
-  rooms: Array<Maybe<Room>>,
 };
 
 
-/** 
- * FIXME - Can't use 'extend type Query' in separate files because of
- * https://github.com/dotansimha/graphql-code-generator/issues/2731
- */
 export type QueryCm2CustomersArgs = {
   search?: Maybe<Scalars['String']>,
   after?: Maybe<Scalars['String']>,
@@ -120,10 +99,6 @@ export type QueryCm2CustomersArgs = {
 };
 
 
-/** 
- * FIXME - Can't use 'extend type Query' in separate files because of
- * https://github.com/dotansimha/graphql-code-generator/issues/2731
- */
 export type QueryCm2OrdersArgs = {
   status?: Maybe<Scalars['String']>,
   after?: Maybe<Scalars['String']>,
@@ -132,19 +107,11 @@ export type QueryCm2OrdersArgs = {
 };
 
 
-/** 
- * FIXME - Can't use 'extend type Query' in separate files because of
- * https://github.com/dotansimha/graphql-code-generator/issues/2731
- */
 export type QueryCm2CustomerArgs = {
   id?: Maybe<Scalars['ID']>
 };
 
 
-/** 
- * FIXME - Can't use 'extend type Query' in separate files because of
- * https://github.com/dotansimha/graphql-code-generator/issues/2731
- */
 export type QueryCm2OrderArgs = {
   id?: Maybe<Scalars['ID']>
 };
@@ -170,25 +137,22 @@ export type OrderWithCustomerFragment = (
   )> }
 );
 
-export type GetCm2OrdersQueryVariables = {
+export type Cm2OrdersQueryVariables = {
   status?: Maybe<Scalars['String']>,
   page?: Maybe<Scalars['Int']>
 };
 
 
-export type GetCm2OrdersQuery = (
+export type Cm2OrdersQuery = (
   { __typename?: 'Query' }
   & { cm2Orders: (
     { __typename?: 'Cm2OrderConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
       & Pick<PageInfo, 'hasNextPage' | 'pageNumber'>
-    ), edges: Array<(
-      { __typename?: 'Cm2OrderEdge' }
-      & { node: (
-        { __typename?: 'Cm2Order' }
-        & OrderWithCustomerFragment
-      ) }
+    ), nodes: Array<(
+      { __typename?: 'Cm2Order' }
+      & OrderWithCustomerFragment
     )> }
   ) }
 );
@@ -222,24 +186,18 @@ export type Cm2CreateOrderMutation = (
   ) }
 );
 
-export type SearchCm2CustomersQueryVariables = {
+export type Cm2SearchCustomersQueryVariables = {
   search: Scalars['String']
 };
 
 
-export type SearchCm2CustomersQuery = (
+export type Cm2SearchCustomersQuery = (
   { __typename?: 'Query' }
   & { cm2Customers: (
     { __typename?: 'Cm2CustomerConnection' }
-    & { pageInfo: (
-      { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'hasNextPage'>
-    ), edges: Array<(
-      { __typename?: 'Cm2CustomerEdge' }
-      & { node: (
-        { __typename?: 'Cm2Customer' }
-        & CustomerFragment
-      ) }
+    & { nodes: Array<(
+      { __typename?: 'Cm2Customer' }
+      & CustomerFragment
     )> }
   ) }
 );
@@ -256,12 +214,9 @@ export type Cm2CustomersQuery = (
     & { pageInfo: (
       { __typename?: 'PageInfo' }
       & Pick<PageInfo, 'hasNextPage' | 'pageNumber'>
-    ), edges: Array<(
-      { __typename?: 'Cm2CustomerEdge' }
-      & { node: (
-        { __typename?: 'Cm2Customer' }
-        & CustomerFragment
-      ) }
+    ), nodes: Array<(
+      { __typename?: 'Cm2Customer' }
+      & CustomerFragment
     )> }
   ) }
 );
@@ -300,12 +255,9 @@ export type Cm2CustomerPageQuery = (
     { __typename?: 'Cm2Customer' }
     & { orders: (
       { __typename?: 'Cm2OrderConnection' }
-      & { edges: Array<(
-        { __typename?: 'Cm2OrderEdge' }
-        & { node: (
-          { __typename?: 'Cm2Order' }
-          & Pick<Cm2Order, 'id' | 'start'>
-        ) }
+      & { nodes: Array<(
+        { __typename?: 'Cm2Order' }
+        & Pick<Cm2Order, 'id' | 'start'>
       )> }
     ) }
     & CustomerFragment
@@ -331,48 +283,46 @@ export const OrderWithCustomerFragmentDoc = gql`
   }
 }
     ${CustomerFragmentDoc}`;
-export const GetCm2OrdersDocument = gql`
-    query GetCm2Orders($status: String, $page: Int) {
+export const Cm2OrdersDocument = gql`
+    query Cm2Orders($status: String, $page: Int) {
   cm2Orders(status: $status, page: $page) {
     pageInfo {
       hasNextPage
       pageNumber
     }
-    edges {
-      node {
-        ...OrderWithCustomer
-      }
+    nodes {
+      ...OrderWithCustomer
     }
   }
 }
     ${OrderWithCustomerFragmentDoc}`;
 
 /**
- * __useGetCm2OrdersQuery__
+ * __useCm2OrdersQuery__
  *
- * To run a query within a React component, call `useGetCm2OrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCm2OrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useCm2OrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCm2OrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCm2OrdersQuery({
+ * const { data, loading, error } = useCm2OrdersQuery({
  *   variables: {
  *      status: // value for 'status'
  *      page: // value for 'page'
  *   },
  * });
  */
-export function useGetCm2OrdersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCm2OrdersQuery, GetCm2OrdersQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetCm2OrdersQuery, GetCm2OrdersQueryVariables>(GetCm2OrdersDocument, baseOptions);
+export function useCm2OrdersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<Cm2OrdersQuery, Cm2OrdersQueryVariables>) {
+        return ApolloReactHooks.useQuery<Cm2OrdersQuery, Cm2OrdersQueryVariables>(Cm2OrdersDocument, baseOptions);
       }
-export function useGetCm2OrdersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCm2OrdersQuery, GetCm2OrdersQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetCm2OrdersQuery, GetCm2OrdersQueryVariables>(GetCm2OrdersDocument, baseOptions);
+export function useCm2OrdersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<Cm2OrdersQuery, Cm2OrdersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<Cm2OrdersQuery, Cm2OrdersQueryVariables>(Cm2OrdersDocument, baseOptions);
         }
-export type GetCm2OrdersQueryHookResult = ReturnType<typeof useGetCm2OrdersQuery>;
-export type GetCm2OrdersLazyQueryHookResult = ReturnType<typeof useGetCm2OrdersLazyQuery>;
-export type GetCm2OrdersQueryResult = ApolloReactCommon.QueryResult<GetCm2OrdersQuery, GetCm2OrdersQueryVariables>;
+export type Cm2OrdersQueryHookResult = ReturnType<typeof useCm2OrdersQuery>;
+export type Cm2OrdersLazyQueryHookResult = ReturnType<typeof useCm2OrdersLazyQuery>;
+export type Cm2OrdersQueryResult = ApolloReactCommon.QueryResult<Cm2OrdersQuery, Cm2OrdersQueryVariables>;
 export const Cm2OrderDocument = gql`
     query Cm2Order($id: ID!) {
   cm2Order(id: $id) {
@@ -440,46 +390,41 @@ export function useCm2CreateOrderMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type Cm2CreateOrderMutationHookResult = ReturnType<typeof useCm2CreateOrderMutation>;
 export type Cm2CreateOrderMutationResult = ApolloReactCommon.MutationResult<Cm2CreateOrderMutation>;
 export type Cm2CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<Cm2CreateOrderMutation, Cm2CreateOrderMutationVariables>;
-export const SearchCm2CustomersDocument = gql`
-    query SearchCm2Customers($search: String!) {
+export const Cm2SearchCustomersDocument = gql`
+    query Cm2SearchCustomers($search: String!) {
   cm2Customers(search: $search, first: 10) {
-    pageInfo {
-      hasNextPage
-    }
-    edges {
-      node {
-        ...Customer
-      }
+    nodes {
+      ...Customer
     }
   }
 }
     ${CustomerFragmentDoc}`;
 
 /**
- * __useSearchCm2CustomersQuery__
+ * __useCm2SearchCustomersQuery__
  *
- * To run a query within a React component, call `useSearchCm2CustomersQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchCm2CustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useCm2SearchCustomersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCm2SearchCustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useSearchCm2CustomersQuery({
+ * const { data, loading, error } = useCm2SearchCustomersQuery({
  *   variables: {
  *      search: // value for 'search'
  *   },
  * });
  */
-export function useSearchCm2CustomersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchCm2CustomersQuery, SearchCm2CustomersQueryVariables>) {
-        return ApolloReactHooks.useQuery<SearchCm2CustomersQuery, SearchCm2CustomersQueryVariables>(SearchCm2CustomersDocument, baseOptions);
+export function useCm2SearchCustomersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>) {
+        return ApolloReactHooks.useQuery<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>(Cm2SearchCustomersDocument, baseOptions);
       }
-export function useSearchCm2CustomersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchCm2CustomersQuery, SearchCm2CustomersQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SearchCm2CustomersQuery, SearchCm2CustomersQueryVariables>(SearchCm2CustomersDocument, baseOptions);
+export function useCm2SearchCustomersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>(Cm2SearchCustomersDocument, baseOptions);
         }
-export type SearchCm2CustomersQueryHookResult = ReturnType<typeof useSearchCm2CustomersQuery>;
-export type SearchCm2CustomersLazyQueryHookResult = ReturnType<typeof useSearchCm2CustomersLazyQuery>;
-export type SearchCm2CustomersQueryResult = ApolloReactCommon.QueryResult<SearchCm2CustomersQuery, SearchCm2CustomersQueryVariables>;
+export type Cm2SearchCustomersQueryHookResult = ReturnType<typeof useCm2SearchCustomersQuery>;
+export type Cm2SearchCustomersLazyQueryHookResult = ReturnType<typeof useCm2SearchCustomersLazyQuery>;
+export type Cm2SearchCustomersQueryResult = ApolloReactCommon.QueryResult<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>;
 export const Cm2CustomersDocument = gql`
     query Cm2Customers($page: Int) {
   cm2Customers(page: $page) {
@@ -487,10 +432,8 @@ export const Cm2CustomersDocument = gql`
       hasNextPage
       pageNumber
     }
-    edges {
-      node {
-        ...Customer
-      }
+    nodes {
+      ...Customer
     }
   }
 }
@@ -588,11 +531,9 @@ export const Cm2CustomerPageDocument = gql`
   cm2Customer(id: $id) {
     ...Customer
     orders {
-      edges {
-        node {
-          id
-          start
-        }
+      nodes {
+        id
+        start
       }
     }
   }
