@@ -2,11 +2,10 @@ import { FaSpinner } from 'react-icons/fa';
 
 import { Row, Label } from '@kocherga/frontkit';
 
-import { PaddedBlock } from '~/components';
+import { ApolloQueryResults, PaddedBlock } from '~/components';
 
 import { Cm2CustomerPageQuery, useCm2CustomerPageQuery } from '../codegen';
 
-import ApolloQueryResults from './ApolloQueryResults';
 import OrderLink from './OrderLink';
 
 interface Props {

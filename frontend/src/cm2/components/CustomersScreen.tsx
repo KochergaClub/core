@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 
 import { Row, Label } from '@kocherga/frontkit';
 
+import { ApolloQueryResults } from '~/components';
+
 import {
   PagedApolloCollection,
   CustomCardListView,
 } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
-
-import ApolloQueryResults from './ApolloQueryResults';
 
 import {
   useCm2CustomersQuery,

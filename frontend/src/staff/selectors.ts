@@ -16,28 +16,12 @@ export const selectMembers: Selector<State, Member[]> = createSelector(
 export const selectStaffMembersWatchmenFirst: Selector<
   State,
   Member[]
-> = createSelector(
-  selectMembers,
-  staffMembers => {
-    const watchmen = staffMembers.filter(
-      member => member.is_current && member.role === 'WATCHMAN'
-    );
-    const otherStaff = staffMembers.filter(
-      member => member.is_current && member.role !== 'WATCHMAN'
-    );
-    return watchmen.concat(otherStaff);
-  }
-);
-
-export const selectViewingMember: Selector<
-  State,
-  Member | undefined
-> = createSelector(
-  [state => state.staff.members, state => state.staff.viewingMember],
-  (members, viewingMember) => {
-    if (!viewingMember) {
-      return;
-    }
-    return members[viewingMember];
-  }
-);
+> = createSelector(selectMembers, staffMembers => {
+  const watchmen = staffMembers.filter(
+    member => member.is_current && member.role === 'WATCHMAN'
+  );
+  const otherStaff = staffMembers.filter(
+    member => member.is_current && member.role !== 'WATCHMAN'
+  );
+  return watchmen.concat(otherStaff);
+});

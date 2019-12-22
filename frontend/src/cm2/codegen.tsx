@@ -57,6 +57,8 @@ export type Mutation = {
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
+  staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
+  staffFireMember?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -74,6 +76,16 @@ export type MutationCm2CloseOrderArgs = {
   id: Scalars['ID']
 };
 
+
+export type MutationStaffGrantGooglePermissionsToMemberArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationStaffFireMemberArgs = {
+  id: Scalars['ID']
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
@@ -83,11 +95,13 @@ export type PageInfo = {
 export type Query = {
    __typename?: 'Query',
   _empty?: Maybe<Scalars['String']>,
-  rooms: Array<Maybe<Room>>,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
+  rooms: Array<Maybe<Room>>,
+  staffMembersAll: Array<StaffMember>,
+  staffMember: StaffMember,
 };
 
 
@@ -116,11 +130,31 @@ export type QueryCm2OrderArgs = {
   id?: Maybe<Scalars['ID']>
 };
 
+
+export type QueryStaffMemberArgs = {
+  id: Scalars['ID']
+};
+
 export type Room = {
    __typename?: 'Room',
   name?: Maybe<Scalars['String']>,
   max_people?: Maybe<Scalars['Int']>,
   area?: Maybe<Scalars['Int']>,
+};
+
+export type StaffMember = {
+   __typename?: 'StaffMember',
+  id: Scalars['ID'],
+  user_id: Scalars['Int'],
+  full_name: Scalars['String'],
+  short_name?: Maybe<Scalars['String']>,
+  email: Scalars['String'],
+  role: Scalars['String'],
+  color?: Maybe<Scalars['String']>,
+  is_current?: Maybe<Scalars['Boolean']>,
+  slack_image?: Maybe<Scalars['String']>,
+  slack_id?: Maybe<Scalars['String']>,
+  vk?: Maybe<Scalars['String']>,
 };
 
 export type CustomerFragment = (

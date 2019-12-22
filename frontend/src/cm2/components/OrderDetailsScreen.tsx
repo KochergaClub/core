@@ -2,13 +2,12 @@ import { useCallback } from 'react';
 
 import { Column, Label } from '@kocherga/frontkit';
 
-import { AsyncButton } from '~/components';
+import { ApolloQueryResults, AsyncButton } from '~/components';
 import { formatDate } from '~/common/utils';
 
 import { useCm2OrderQuery, useCm2CloseOrderMutation } from '../codegen';
 
 import CustomerLink from './CustomerLink';
-import ApolloQueryResults from './ApolloQueryResults';
 
 interface Props {
   id: string;

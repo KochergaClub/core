@@ -1,18 +1,17 @@
-import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
 import { A, Column, Row } from '@kocherga/frontkit';
 
-import { useAPI, usePermissions } from '~/common/hooks';
-import AsyncButton from '~/components/AsyncButton';
-import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
+import { usePermissions } from '~/common/hooks';
+import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
-import { Member } from '../types';
-import { grantGooglePermissions } from '../api';
-import { fireMember } from '../actions';
-import { selectViewingMember } from '../selectors';
+import {
+  MemberFragment,
+  useStaffGrantGooglePermissionsToMemberMutation,
+  useStaffFireMemberMutation,
+} from '../codegen';
 
 const Ex = styled.div`
   background-color: #ddd;
@@ -27,20 +26,24 @@ const Image = styled.img`
 `;
 
 interface Props {
-  member: Member;
+  member: MemberFragment;
 }
 
 const ManagerControls: React.FC<Props> = ({ member }) => {
-  const api = useAPI();
-  const dispatch = useDispatch();
+  const [
+    grantGooglePermissionsMutation,
+  ] = useStaffGrantGooglePermissionsToMemberMutation();
+  const [fireMutation] = useStaffFireMemberMutation();
 
-  const handleGrantGooglePermissions = useCallback(async () => {
-    await grantGooglePermissions(api, member.id);
-  }, [api, member.id]);
+  const grantGooglePermissions = useCallback(async () => {
+    await grantGooglePermissionsMutation({ variables: { id: member.id } });
+    // TODO - check cache invalidation
+  }, [grantGooglePermissionsMutation, member.id]);
 
   const fire = useCallback(async () => {
-    await dispatch(fireMember(member));
-  }, [api, member.id]);
+    await fireMutation({ variables: { id: member.id } });
+    // TODO - check cache invalidation
+  }, [fireMutation, member.id]);
 
   if (member.role !== 'WATCHMAN') {
     return null;
@@ -52,7 +55,7 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
 
   return (
     <Row>
-      <AsyncButton small act={handleGrantGooglePermissions}>
+      <AsyncButton small act={grantGooglePermissions}>
         Выдать права в Google
       </AsyncButton>
 
@@ -63,13 +66,8 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
   );
 };
 
-const MemberProfile: React.FC<{}> = () => {
-  const member = useSelector(selectViewingMember);
+const MemberProfile: React.FC<Props> = ({ member }) => {
   const [current_user_is_manager] = usePermissions(['staff.manage']);
-
-  if (!member) {
-    throw new Error('Redux logic error');
-  }
 
   return (
     <Column centered gutter={20} style={{ marginBottom: 100 }}>

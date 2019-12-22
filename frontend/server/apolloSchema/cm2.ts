@@ -56,8 +56,8 @@ export const resolvers: Resolvers = {
       { params }: { params: Cm2CreateCustomerInput },
       { dataSources }
     ) => dataSources.kochergaAPI.create({ resource: CUSTOMER, params }),
-    cm2CloseOrder: (_, { id }: { id: string }, { dataSources }) => {
-      dataSources.kochergaAPI.postDetailsAction({
+    cm2CloseOrder: async (_, { id }: { id: string }, { dataSources }) => {
+      await dataSources.kochergaAPI.postDetailsAction({
         resource: ORDER,
         id,
         action: 'close',

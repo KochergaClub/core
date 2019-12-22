@@ -1,7 +1,5 @@
 type Query {
   _empty: String
-
-  rooms: [Room]!
 }
 
 type Mutation {

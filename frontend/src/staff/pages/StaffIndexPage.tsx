@@ -1,23 +1,20 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-
 import Link from 'next/link';
 
 import { A, Column } from '@kocherga/frontkit';
 
-import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
+import { withApollo } from '~/apollo/client';
 
-import { Member } from '~/staff/types';
-import { loadMembers } from '~/staff/actions';
-import { selectMembers } from '~/staff/selectors';
+import { NextPage } from '~/common/types';
+import { Page, ApolloQueryResults } from '~/components';
+
+import { MemberFragment, useStaffMembersQuery } from '../codegen';
 
 const MemberList = ({
   title,
   members,
 }: {
   title: string;
-  members: Member[];
+  members: MemberFragment[];
 }) => (
   <Column centered>
     <h2>{title}</h2>
@@ -34,54 +31,54 @@ const MemberList = ({
   </Column>
 );
 
-interface Props {}
+const StaffIndexPage: NextPage = () => {
+  const queryResults = useStaffMembersQuery();
 
-const StaffIndexPage: NextPage<Props> = ({}) => {
-  const members = useSelector(selectMembers);
   return (
     <Page title="Список сотрудников" team>
       <Page.Main>
-        <Column centered gutter={20}>
-          <h1>Список сотрудников</h1>
-          <MemberList
-            title="Менеджеры"
-            members={members.filter(
-              m => m.is_current && ['FOUNDER', 'MANAGER'].includes(m.role)
-            )}
-          />
-          <MemberList
-            title="Рацио"
-            members={members.filter(
-              m => m.is_current && ['TRAINER'].includes(m.role)
-            )}
-          />
-          <MemberList
-            title="Админы"
-            members={members.filter(
-              m => m.is_current && ['WATCHMAN'].includes(m.role)
-            )}
-          />
-          <MemberList
-            title="Прочие"
-            members={members.filter(
-              m =>
-                m.is_current &&
-                !['WATCHMAN', 'FOUNDER', 'MANAGER', 'TRAINER'].includes(m.role)
-            )}
-          />
-          <MemberList
-            title="Бывшие сотрудники"
-            members={members.filter(m => !m.is_current)}
-          />
-        </Column>
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { staffMembersAll: members } }) => (
+            <Column centered gutter={20}>
+              <h1>Список сотрудников</h1>
+              <MemberList
+                title="Менеджеры"
+                members={members.filter(
+                  m => m.is_current && ['FOUNDER', 'MANAGER'].includes(m.role)
+                )}
+              />
+              <MemberList
+                title="Рацио"
+                members={members.filter(
+                  m => m.is_current && ['TRAINER'].includes(m.role)
+                )}
+              />
+              <MemberList
+                title="Админы"
+                members={members.filter(
+                  m => m.is_current && ['WATCHMAN'].includes(m.role)
+                )}
+              />
+              <MemberList
+                title="Прочие"
+                members={members.filter(
+                  m =>
+                    m.is_current &&
+                    !['WATCHMAN', 'FOUNDER', 'MANAGER', 'TRAINER'].includes(
+                      m.role
+                    )
+                )}
+              />
+              <MemberList
+                title="Бывшие сотрудники"
+                members={members.filter(m => !m.is_current)}
+              />
+            </Column>
+          )}
+        </ApolloQueryResults>
       </Page.Main>
     </Page>
   );
 };
 
-StaffIndexPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadMembers());
-  return {};
-};
-
-export default StaffIndexPage;
+export default withApollo(StaffIndexPage);

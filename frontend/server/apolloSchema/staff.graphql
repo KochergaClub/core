@@ -1,0 +1,23 @@
+extend type Query {
+  staffMembersAll: [StaffMember!]!
+  staffMember(id: ID!): StaffMember!
+}
+
+extend type Mutation {
+  staffGrantGooglePermissionsToMember(id: ID!): Boolean
+  staffFireMember(id: ID!): Boolean
+}
+
+type StaffMember {
+  id: ID!
+  user_id: Int!
+  full_name: String!
+  short_name: String
+  email: String!
+  role: String!
+  color: String
+  is_current: Boolean
+  slack_image: String
+  slack_id: String
+  vk: String
+}

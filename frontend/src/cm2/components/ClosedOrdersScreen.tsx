@@ -1,11 +1,10 @@
 import { Collection } from '~/components/collections';
 
-import { PaddedBlock } from '~/components';
+import { PaddedBlock, ApolloQueryResults } from '~/components';
 
 import { useCm2OrdersQuery } from '../codegen';
 
 import OrdersTableView from './OrdersTableView';
-import ApolloQueryResults from './ApolloQueryResults';
 
 const ClosedOrdersScreen: React.FC = () => {
   const queryResults = useCm2OrdersQuery({

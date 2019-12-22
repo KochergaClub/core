@@ -9,3 +9,4 @@ export { default as AsyncButtonWithConfirm } from './AsyncButtonWithConfirm';
 export { default as Badge } from './Badge';
 export { default as ButtonWithModal } from './ButtonWithModal';
 export { default as DropdownMenu } from './DropdownMenu';
+export { default as ApolloQueryResults } from './ApolloQueryResults';

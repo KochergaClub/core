@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/react-hooks';
 import { Collection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
-import { PaddedBlock } from '~/components';
+import { PaddedBlock, ApolloQueryResults } from '~/components';
 
 import {
   CustomerFragment,
@@ -16,7 +16,6 @@ import {
 } from '../codegen';
 import { SEARCH_CUSTOMERS } from '../queries';
 
-import ApolloQueryResults from './ApolloQueryResults';
 import OrdersTableView from './OrdersTableView';
 
 const OpenOrdersScreen: React.FC = () => {
