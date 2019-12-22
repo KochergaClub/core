@@ -10,11 +10,11 @@ export default class ScheduleView implements View {
 
   constructor(root: RootStore) {
     this.root = root;
-    this.name = "Schedule";
+    this.name = 'Schedule';
   }
 
   @action
-  update(props: {}) {
+  update(_: {}) {
     return;
   }
 

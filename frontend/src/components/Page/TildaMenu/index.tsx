@@ -64,11 +64,6 @@ const Line = styled.div`
   }
 `;
 
-const LoginButton = styled.button`
-  background-color: white;
-  color: black;
-`;
-
 interface Props {
   team: boolean;
 }

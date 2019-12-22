@@ -1,5 +1,4 @@
 import { createResourceFeature } from '~/redux/features';
-import { apiThunk } from '~/redux/action-utils';
 
 import { Trainer } from '../types';
 
