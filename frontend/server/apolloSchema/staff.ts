@@ -1,4 +1,4 @@
-import { Resolvers } from './types';
+import { Resolvers } from './gen-types';
 
 // endpoints
 const MEMBER = 'staff/member';
@@ -9,18 +9,14 @@ export const resolvers: Resolvers = {
       dataSources.kochergaAPI.list({
         resource: MEMBER,
       }),
-    staffMember: (_, { id }: { id: string }, { dataSources }) =>
+    staffMember: (_, { id }, { dataSources }) =>
       dataSources.kochergaAPI.retrieve({
         resource: MEMBER,
         id,
       }),
   },
   Mutation: {
-    staffGrantGooglePermissionsToMember: async (
-      _,
-      { id }: { id: string },
-      { dataSources }
-    ) => {
+    staffGrantGooglePermissionsToMember: async (_, { id }, { dataSources }) => {
       await dataSources.kochergaAPI.postDetailsAction({
         resource: MEMBER,
         id,
@@ -28,7 +24,7 @@ export const resolvers: Resolvers = {
       });
       return true;
     },
-    staffFireMember: async (_, { id }: { id: string }, { dataSources }) => {
+    staffFireMember: async (_, { id }, { dataSources }) => {
       await dataSources.kochergaAPI.postDetailsAction({
         resource: MEMBER,
         id,

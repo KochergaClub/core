@@ -1,14 +1,4 @@
-import { Resolvers } from './types';
-
-interface Cm2CreateOrderInput {
-  customer?: number;
-}
-
-interface Cm2CreateCustomerInput {
-  card_id: number;
-  first_name: string;
-  last_name: string;
-}
+import { Resolvers } from './gen-types';
 
 // endpoints
 const CUSTOMER = 'cm2/customer';
@@ -16,11 +6,7 @@ const ORDER = 'cm2/orders';
 
 export const resolvers: Resolvers = {
   Query: {
-    cm2Customers: (
-      _,
-      { search, page }: { search?: string; page?: number },
-      { dataSources }
-    ) =>
+    cm2Customers: (_, { search, page }, { dataSources }) =>
       dataSources.kochergaAPI.listPage({
         resource: CUSTOMER,
         query: {
@@ -28,11 +14,7 @@ export const resolvers: Resolvers = {
         },
         page,
       }),
-    cm2Orders: (
-      _,
-      { status, page }: { status?: string; page?: number },
-      { dataSources }
-    ) =>
+    cm2Orders: (_, { status, page }, { dataSources }) =>
       dataSources.kochergaAPI.listPage({
         resource: ORDER,
         query: {
@@ -40,23 +22,17 @@ export const resolvers: Resolvers = {
         },
         page,
       }),
-    cm2Customer: (_, { id }: { id: string }, { dataSources }) =>
+    cm2Customer: (_, { id }, { dataSources }) =>
       dataSources.kochergaAPI.retrieve({ resource: CUSTOMER, id }),
-    cm2Order: (_, { id }: { id: string }, { dataSources }) =>
+    cm2Order: (_, { id }, { dataSources }) =>
       dataSources.kochergaAPI.retrieve({ resource: ORDER, id }),
   },
   Mutation: {
-    cm2CreateOrder: (
-      _,
-      { params }: { params: Cm2CreateOrderInput },
-      { dataSources }
-    ) => dataSources.kochergaAPI.create({ resource: ORDER, params }),
-    cm2CreateCustomer: (
-      _,
-      { params }: { params: Cm2CreateCustomerInput },
-      { dataSources }
-    ) => dataSources.kochergaAPI.create({ resource: CUSTOMER, params }),
-    cm2CloseOrder: async (_, { id }: { id: string }, { dataSources }) => {
+    cm2CreateOrder: (_, { params }, { dataSources }) =>
+      dataSources.kochergaAPI.create({ resource: ORDER, params }),
+    cm2CreateCustomer: (_, { params }, { dataSources }) =>
+      dataSources.kochergaAPI.create({ resource: CUSTOMER, params }),
+    cm2CloseOrder: async (_, { id }, { dataSources }) => {
       await dataSources.kochergaAPI.postDetailsAction({
         resource: ORDER,
         id,

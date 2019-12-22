@@ -1,6 +1,13 @@
 schema: server/apolloSchema/*.graphql
 generates:
-  ./src/cm2/codegen.tsx:
+  server/apolloSchema/gen-types.ts:
+    config: 
+      useIndexSignature: true
+    plugins: 
+      - typescript
+      - typescript-resolvers
+
+  src/cm2/codegen.tsx:
     documents:
       - src/cm2/queries.ts
     plugins:
@@ -11,7 +18,8 @@ generates:
       withComponent: false
       withHOC: false
       withHooks: true
-  ./src/staff/codegen.tsx:
+
+  src/staff/codegen.tsx:
     documents:
       - src/staff/queries.ts
     plugins:
