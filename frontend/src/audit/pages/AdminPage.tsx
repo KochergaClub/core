@@ -1,12 +1,7 @@
-import React from 'react';
-
 import { NextPage } from '~/common/types';
+import { withApollo } from '~/apollo/client';
 
-import Page from '~/components/Page';
-
-import { loadMembers } from '~/staff/actions';
-import { loadGroups } from '~/audit/features/groups';
-import { loadPermissions } from '~/audit/features/permissions';
+import { Page } from '~/components';
 
 import SinglePermissionsList from '~/audit/components/SinglePermissionsList';
 import GroupsList from '~/audit/components/GroupsList';
@@ -24,12 +19,4 @@ const AdminPage: NextPage = () => {
   );
 };
 
-AdminPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadGroups());
-  await dispatch(loadPermissions());
-  await dispatch(loadMembers());
-
-  return {};
-};
-
-export default AdminPage;
+export default withApollo(AdminPage);

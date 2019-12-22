@@ -1,10 +1,7 @@
-import React from 'react';
-
-import { loadMembers } from '~/staff/actions';
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
+import { withApollo } from '~/apollo/client';
 
-import { loadPayments } from '~/cashier/features/payment';
+import { Page } from '~/components';
 
 import PaymentCollection from '~/cashier/components/PaymentCollection';
 
@@ -19,10 +16,4 @@ const CashierPage: NextPage = () => {
   );
 };
 
-CashierPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadPayments());
-  await dispatch(loadMembers());
-  return {};
-};
-
-export default CashierPage;
+export default withApollo(CashierPage);

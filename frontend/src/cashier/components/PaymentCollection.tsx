@@ -1,70 +1,101 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
-import { usePermissions, useDispatch, useAPI } from '~/common/hooks';
+import { useApolloClient } from '@apollo/react-hooks';
 
-import { Collection, CustomCardListView } from '~/components/collections';
+import { usePermissions } from '~/common/hooks';
+
+import { ApolloQueryResults } from '~/components';
+import {
+  PagedApolloCollection,
+  CustomCardListView,
+} from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
-import { Member } from '~/staff/types';
+import {
+  StaffMembersDocument,
+  StaffMembersQuery,
+  MemberFragment,
+} from '~/staff/codegen';
 
-import { addPayment, selectPayments } from '../features/payment';
-import { Payment, CreatePaymentParams } from '../types';
+import {
+  useCashierPaymentsQuery,
+  useCashierCreatePaymentMutation,
+  PaymentFragment,
+} from '../codegen';
 
 import PaymentCard from './PaymentCard';
 
 const PaymentCollection: React.FC = () => {
-  const dispatch = useDispatch();
-  const payments = useSelector(selectPayments);
+  const queryResults = useCashierPaymentsQuery();
+  const [createPaymentMutation] = useCashierCreatePaymentMutation();
+
+  const apolloClient = useApolloClient();
+
   const [canCreate] = usePermissions(['cashier.create']);
-
-  const api = useAPI();
-
-  const isMuted = (payment: Payment) => payment.is_redeemed;
 
   const paymentShape: FormShape = [
     { name: 'amount', type: 'number' },
     { name: 'comment', type: 'string' },
     {
-      name: 'whom_id',
+      name: 'whom',
       type: 'fk',
       widget: {
         type: 'async',
-        load: async () => (await api.call('staff/member', 'GET')) as Member[],
-        display: (member: Member) => member.full_name,
-        getValue: (member: Member) => member.user_id,
+        load: async () => {
+          const {
+            data: { staffMembersAll: members },
+          } = await apolloClient.query<StaffMembersQuery>({
+            query: StaffMembersDocument,
+          });
+          return members;
+        },
+        display: (member: MemberFragment) => member.full_name,
+        getValue: (member: MemberFragment) => parseInt(member.user_id),
       },
     },
   ];
 
+  interface CreatePaymentParams {
+    amount: number;
+    comment: string;
+    whom: string;
+  }
+
   const renderItem = useCallback(
-    (payment: Payment) => <PaymentCard payment={payment} />,
+    (payment: PaymentFragment) => <PaymentCard payment={payment} />,
     []
   );
 
   const add = useCallback(
     async (values: CreatePaymentParams) => {
-      await dispatch(addPayment(values));
+      await createPaymentMutation({ variables: { params: values } });
     },
-    [dispatch, addPayment]
+    [createPaymentMutation]
   );
 
   return (
-    <Collection
-      names={{
-        plural: 'выплаты',
-        genitive: 'выплату',
-      }}
-      items={payments}
-      add={canCreate ? { cb: add, shape: paymentShape } : undefined}
-      view={props => (
-        <CustomCardListView
-          {...props}
-          isMuted={isMuted}
-          renderItem={renderItem}
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { payments } }) => (
+        <PagedApolloCollection
+          connection={payments}
+          fetchPage={async (page: number) => {
+            await queryResults.refetch({ page });
+          }}
+          names={{
+            plural: 'выплаты',
+            genitive: 'выплату',
+          }}
+          add={canCreate ? { cb: add, shape: paymentShape } : undefined}
+          view={props => (
+            <CustomCardListView
+              {...props}
+              isMuted={payment => payment.is_redeemed}
+              renderItem={renderItem}
+            />
+          )}
         />
       )}
-    />
+    </ApolloQueryResults>
   );
 };
 

@@ -13,15 +13,17 @@ class UserSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('id', 'name', 'permissions', 'user_set',)
+        fields = ('id', 'name', 'permissions', 'user_set', 'users')
 
     permissions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    user_set = UserSerializer(many=True, read_only=True)
+    user_set = UserSerializer(many=True, read_only=True)  # deprecated
+    users = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='user_set')
 
 
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = ('id', 'name', 'user_set')
+        fields = ('id', 'name', 'user_set', 'users')
 
-    user_set = UserSerializer(many=True, read_only=True)
+    user_set = UserSerializer(many=True, read_only=True)  # deprecated
+    users = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='user_set')

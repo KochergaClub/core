@@ -4,25 +4,22 @@ import { formatDate } from '~/common/utils';
 
 import { Row, Label } from '@kocherga/frontkit';
 
-import { useAPI, usePermissions, useDispatch } from '~/common/hooks';
+import { usePermissions } from '~/common/hooks';
 
-import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
+import { AsyncButtonWithConfirm } from '~/components';
 
 import UserInfo from '~/audit/components/UserInfo';
 
-import { Payment } from '../types';
-import { loadPayments } from '../features/payment';
+import { PaymentFragment, useCashierRedeemPaymentMutation } from '../codegen';
 
-const PaymentCard = ({ payment }: { payment: Payment }) => {
+const PaymentCard = ({ payment }: { payment: PaymentFragment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
 
-  const dispatch = useDispatch();
-  const api = useAPI();
+  const [redeemMutation] = useCashierRedeemPaymentMutation();
 
   const redeem = useCallback(async () => {
-    await api.call(`cashier/payment/${payment.id}/redeem`, 'POST');
-    await dispatch(loadPayments());
-  }, [api, payment.id, dispatch]);
+    await redeemMutation({ variables: { id: payment.id } });
+  }, [payment.id, redeemMutation]);
 
   return (
     <div>

@@ -171,3 +171,9 @@ class PermissionsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthAuditor,)
     serializer_class = serializers.PermissionSerializer
     queryset = Permission.objects.all()  # TODO - prefetch users
+
+
+class UsersViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (IsAuthAuditor,)
+    serializer_class = serializers.UserSerializer
+    queryset = get_user_model().objects.all()

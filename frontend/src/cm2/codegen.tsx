@@ -11,6 +11,59 @@ export type Scalars = {
   Float: number,
 };
 
+export type AuthCurrentUser = {
+   __typename?: 'AuthCurrentUser',
+  is_authenticated: Scalars['Boolean'],
+  permissions: Array<Scalars['String']>,
+  is_staff?: Maybe<Scalars['Boolean']>,
+  email?: Maybe<Scalars['String']>,
+};
+
+export type AuthGroup = {
+   __typename?: 'AuthGroup',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  permissions: Array<AuthPermission>,
+  users: Array<AuthUser>,
+};
+
+export type AuthPermission = {
+   __typename?: 'AuthPermission',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  users: Array<AuthUser>,
+};
+
+export type AuthUser = {
+   __typename?: 'AuthUser',
+  id: Scalars['ID'],
+  email: Scalars['String'],
+  staff_member?: Maybe<StaffMember>,
+};
+
+export type CashierCreatePaymentInput = {
+  amount: Scalars['Int'],
+  whom: Scalars['ID'],
+  comment?: Maybe<Scalars['String']>,
+};
+
+export type CashierPayment = {
+   __typename?: 'CashierPayment',
+  id: Scalars['ID'],
+  amount: Scalars['Int'],
+  whom: AuthUser,
+  comment: Scalars['String'],
+  is_redeemed: Scalars['Boolean'],
+  created_dt: Scalars['String'],
+  redeem_dt?: Maybe<Scalars['String']>,
+};
+
+export type CashierPaymentConnection = {
+   __typename?: 'CashierPaymentConnection',
+  pageInfo: PageInfo,
+  nodes: Array<CashierPayment>,
+};
+
 export type Cm2CreateCustomerInput = {
   card_id: Scalars['Int'],
   first_name: Scalars['String'],
@@ -53,12 +106,38 @@ export type Cm2OrderConnection = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  authAddUserToGroup?: Maybe<Scalars['Boolean']>,
+  authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>,
   _empty?: Maybe<Scalars['String']>,
+  cashierCreatePayment?: Maybe<Scalars['Boolean']>,
+  cashierRedeemPayment?: Maybe<Scalars['Boolean']>,
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+};
+
+
+export type MutationAuthAddUserToGroupArgs = {
+  user_id: Scalars['ID'],
+  group_id: Scalars['ID']
+};
+
+
+export type MutationAuthRemoveUserFromGroupArgs = {
+  user_id: Scalars['ID'],
+  group_id: Scalars['ID']
+};
+
+
+export type MutationCashierCreatePaymentArgs = {
+  params: CashierCreatePaymentInput
+};
+
+
+export type MutationCashierRedeemPaymentArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -94,7 +173,11 @@ export type PageInfo = {
 
 export type Query = {
    __typename?: 'Query',
+  currentUser: AuthCurrentUser,
+  authGroupsAll: Array<AuthGroup>,
+  authPermissionsAll: Array<AuthPermission>,
   _empty?: Maybe<Scalars['String']>,
+  cashierPayments: CashierPaymentConnection,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
@@ -102,6 +185,11 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+};
+
+
+export type QueryCashierPaymentsArgs = {
+  page?: Maybe<Scalars['Int']>
 };
 
 
@@ -145,7 +233,7 @@ export type Room = {
 export type StaffMember = {
    __typename?: 'StaffMember',
   id: Scalars['ID'],
-  user_id: Scalars['Int'],
+  user_id: Scalars['ID'],
   full_name: Scalars['String'],
   short_name?: Maybe<Scalars['String']>,
   email: Scalars['String'],

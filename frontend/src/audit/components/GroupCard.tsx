@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { Column, Row } from '@kocherga/frontkit';
 
@@ -7,37 +6,36 @@ import DropdownMenu, {
   LinkAction,
   ModalAction,
 } from '~/components/DropdownMenu';
+
+import { Badge, AsyncButton } from '~/components';
 import Card from '~/components/Card';
-import Badge from '~/components/Badge';
-import AsyncButton from '~/components/AsyncButton';
 
 import UserInfo from './UserInfo';
 import AddMemberToGroupModal from './AddMemberToGroupModal';
 
-import { Group, User, Permission } from '../types';
-
-import { selectPermissions } from '../features/permissions';
-import { removeUserFromGroup } from '../features/groups';
+import {
+  AuthGroupsQuery,
+  MaybeStaffUserFragment,
+  useAuthRemoveUserFromGroupMutation,
+} from '../codegen';
 
 interface Props {
-  group: Group;
+  group: AuthGroupsQuery['groups'][0];
 }
 
 const GroupCard: React.FC<Props> = ({ group }) => {
-  const dispatch = useDispatch();
-  const permissions = useSelector(selectPermissions);
-
-  // FIXME - move to selector
-  const permissionsObj: { [k: number]: Permission } = {};
-  permissions.forEach(permission => {
-    permissionsObj[permission.id] = permission;
-  });
+  const [removeUserFromGroupMutation] = useAuthRemoveUserFromGroupMutation();
 
   const removeUserCb = useCallback(
-    async (user: User) => {
-      await dispatch(removeUserFromGroup(group, user));
+    async (user: MaybeStaffUserFragment) => {
+      await removeUserFromGroupMutation({
+        variables: {
+          group_id: group.id,
+          user_id: user.id,
+        },
+      });
     },
-    [dispatch, group]
+    [group]
   );
 
   return (
@@ -57,11 +55,11 @@ const GroupCard: React.FC<Props> = ({ group }) => {
           </DropdownMenu>
         </Row>
         <Row>
-          {group.permissions.map(id => (
-            <Badge key={id}>{permissionsObj[id].name}</Badge>
+          {group.permissions.map(permission => (
+            <Badge key={permission.id}>{permission.name}</Badge>
           ))}
         </Row>
-        {group.user_set.map(user => (
+        {group.users.map(user => (
           <Row key={user.id}>
             <UserInfo user={user} />
             <AsyncButton small act={async () => removeUserCb(user)}>

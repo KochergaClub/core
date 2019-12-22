@@ -1,32 +1,21 @@
-import { useSelector } from 'react-redux';
-
 import Link from 'next/link';
 
 import { A, Row } from '@kocherga/frontkit';
 
-import { State } from '~/redux/store';
+import { Badge } from '~/components';
 
-import { selectMemberById } from '~/staff/selectors';
-import { Member } from '~/staff/types';
+import { MaybeStaffUserFragment } from '../codegen';
 
-import Badge from '~/components/Badge';
-
-import { User } from '../types';
-
-const UserInfo: React.FC<{ user: User }> = ({ user }) => {
-  const staffMember = useSelector<State, Member | undefined>(state =>
-    user.staff_member ? selectMemberById(state, user.staff_member) : undefined
-  );
-
-  if (staffMember) {
+const UserInfo: React.FC<{ user: MaybeStaffUserFragment }> = ({ user }) => {
+  if (user.staff_member) {
     return (
       <div>
         <Link
           href="/team/staff/[id]"
-          as={`/team/staff/${staffMember.id}`}
+          as={`/team/staff/${user.staff_member.id}`}
           passHref
         >
-          <A>{staffMember.full_name}</A>
+          <A>{user.staff_member.full_name}</A>
         </Link>
       </div>
     );

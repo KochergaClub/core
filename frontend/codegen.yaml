@@ -2,7 +2,7 @@ schema: server/apolloSchema/*.graphql
 generates:
   server/apolloSchema/gen-types.ts:
     config: 
-      useIndexSignature: true
+#      useIndexSignature: true
     plugins: 
       - typescript
       - typescript-resolvers
@@ -22,6 +22,30 @@ generates:
   src/staff/codegen.tsx:
     documents:
       - src/staff/queries.ts
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withComponent: false
+      withHOC: false
+      withHooks: true
+
+  src/audit/codegen.tsx:
+    documents:
+      - src/audit/queries.ts
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withComponent: false
+      withHOC: false
+      withHooks: true
+
+  src/cashier/codegen.tsx:
+    documents:
+      - src/cashier/queries.ts
     plugins:
       - typescript
       - typescript-operations

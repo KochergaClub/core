@@ -10,6 +10,59 @@ export type Scalars = {
   Float: number,
 };
 
+export type AuthCurrentUser = {
+   __typename?: 'AuthCurrentUser',
+  is_authenticated: Scalars['Boolean'],
+  permissions: Array<Scalars['String']>,
+  is_staff?: Maybe<Scalars['Boolean']>,
+  email?: Maybe<Scalars['String']>,
+};
+
+export type AuthGroup = {
+   __typename?: 'AuthGroup',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  permissions: Array<AuthPermission>,
+  users: Array<AuthUser>,
+};
+
+export type AuthPermission = {
+   __typename?: 'AuthPermission',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  users: Array<AuthUser>,
+};
+
+export type AuthUser = {
+   __typename?: 'AuthUser',
+  id: Scalars['ID'],
+  email: Scalars['String'],
+  staff_member?: Maybe<StaffMember>,
+};
+
+export type CashierCreatePaymentInput = {
+  amount: Scalars['Int'],
+  whom: Scalars['ID'],
+  comment?: Maybe<Scalars['String']>,
+};
+
+export type CashierPayment = {
+   __typename?: 'CashierPayment',
+  id: Scalars['ID'],
+  amount: Scalars['Int'],
+  whom: AuthUser,
+  comment: Scalars['String'],
+  is_redeemed: Scalars['Boolean'],
+  created_dt: Scalars['String'],
+  redeem_dt?: Maybe<Scalars['String']>,
+};
+
+export type CashierPaymentConnection = {
+   __typename?: 'CashierPaymentConnection',
+  pageInfo: PageInfo,
+  nodes: Array<CashierPayment>,
+};
+
 export type Cm2CreateCustomerInput = {
   card_id: Scalars['Int'],
   first_name: Scalars['String'],
@@ -52,12 +105,38 @@ export type Cm2OrderConnection = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  authAddUserToGroup?: Maybe<Scalars['Boolean']>,
+  authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>,
   _empty?: Maybe<Scalars['String']>,
+  cashierCreatePayment?: Maybe<Scalars['Boolean']>,
+  cashierRedeemPayment?: Maybe<Scalars['Boolean']>,
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+};
+
+
+export type MutationAuthAddUserToGroupArgs = {
+  user_id: Scalars['ID'],
+  group_id: Scalars['ID']
+};
+
+
+export type MutationAuthRemoveUserFromGroupArgs = {
+  user_id: Scalars['ID'],
+  group_id: Scalars['ID']
+};
+
+
+export type MutationCashierCreatePaymentArgs = {
+  params: CashierCreatePaymentInput
+};
+
+
+export type MutationCashierRedeemPaymentArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -93,7 +172,11 @@ export type PageInfo = {
 
 export type Query = {
    __typename?: 'Query',
+  currentUser: AuthCurrentUser,
+  authGroupsAll: Array<AuthGroup>,
+  authPermissionsAll: Array<AuthPermission>,
   _empty?: Maybe<Scalars['String']>,
+  cashierPayments: CashierPaymentConnection,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
@@ -101,6 +184,11 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+};
+
+
+export type QueryCashierPaymentsArgs = {
+  page?: Maybe<Scalars['Int']>
 };
 
 
@@ -144,7 +232,7 @@ export type Room = {
 export type StaffMember = {
    __typename?: 'StaffMember',
   id: Scalars['ID'],
-  user_id: Scalars['Int'],
+  user_id: Scalars['ID'],
   full_name: Scalars['String'],
   short_name?: Maybe<Scalars['String']>,
   email: Scalars['String'],
@@ -156,8 +244,7 @@ export type StaffMember = {
   vk?: Maybe<Scalars['String']>,
 };
 
-export type WithIndex<TObject> = TObject & Record<string, any>;
-export type ResolversObject<TObject> = WithIndex<TObject>;
+
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -227,85 +314,148 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = ResolversObject<{
+export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
-  Cm2CustomerConnection: ResolverTypeWrapper<Cm2CustomerConnection>,
-  PageInfo: ResolverTypeWrapper<PageInfo>,
+  AuthCurrentUser: ResolverTypeWrapper<AuthCurrentUser>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Cm2Customer: ResolverTypeWrapper<Cm2Customer>,
+  String: ResolverTypeWrapper<Scalars['String']>,
+  AuthGroup: ResolverTypeWrapper<AuthGroup>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  AuthPermission: ResolverTypeWrapper<AuthPermission>,
+  AuthUser: ResolverTypeWrapper<AuthUser>,
+  StaffMember: ResolverTypeWrapper<StaffMember>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
+  CashierPaymentConnection: ResolverTypeWrapper<CashierPaymentConnection>,
+  PageInfo: ResolverTypeWrapper<PageInfo>,
+  CashierPayment: ResolverTypeWrapper<CashierPayment>,
+  Cm2CustomerConnection: ResolverTypeWrapper<Cm2CustomerConnection>,
+  Cm2Customer: ResolverTypeWrapper<Cm2Customer>,
   Cm2OrderConnection: ResolverTypeWrapper<Cm2OrderConnection>,
   Cm2Order: ResolverTypeWrapper<Cm2Order>,
   Room: ResolverTypeWrapper<Room>,
-  StaffMember: ResolverTypeWrapper<StaffMember>,
   Mutation: ResolverTypeWrapper<{}>,
+  CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
-}>;
+};
 
 /** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = ResolversObject<{
+export type ResolversParentTypes = {
   Query: {},
-  String: Scalars['String'],
-  Int: Scalars['Int'],
-  Cm2CustomerConnection: Cm2CustomerConnection,
-  PageInfo: PageInfo,
+  AuthCurrentUser: AuthCurrentUser,
   Boolean: Scalars['Boolean'],
-  Cm2Customer: Cm2Customer,
+  String: Scalars['String'],
+  AuthGroup: AuthGroup,
   ID: Scalars['ID'],
+  AuthPermission: AuthPermission,
+  AuthUser: AuthUser,
+  StaffMember: StaffMember,
+  Int: Scalars['Int'],
+  CashierPaymentConnection: CashierPaymentConnection,
+  PageInfo: PageInfo,
+  CashierPayment: CashierPayment,
+  Cm2CustomerConnection: Cm2CustomerConnection,
+  Cm2Customer: Cm2Customer,
   Cm2OrderConnection: Cm2OrderConnection,
   Cm2Order: Cm2Order,
   Room: Room,
-  StaffMember: StaffMember,
   Mutation: {},
+  CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
-}>;
+};
 
-export type Cm2CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2Customer'] = ResolversParentTypes['Cm2Customer']> = ResolversObject<{
+export type AuthCurrentUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthCurrentUser'] = ResolversParentTypes['AuthCurrentUser']> = {
+  is_authenticated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  permissions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  is_staff?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type AuthGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthGroup'] = ResolversParentTypes['AuthGroup']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  permissions?: Resolver<Array<ResolversTypes['AuthPermission']>, ParentType, ContextType>,
+  users?: Resolver<Array<ResolversTypes['AuthUser']>, ParentType, ContextType>,
+};
+
+export type AuthPermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPermission'] = ResolversParentTypes['AuthPermission']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  users?: Resolver<Array<ResolversTypes['AuthUser']>, ParentType, ContextType>,
+};
+
+export type AuthUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthUser'] = ResolversParentTypes['AuthUser']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  staff_member?: Resolver<Maybe<ResolversTypes['StaffMember']>, ParentType, ContextType>,
+};
+
+export type CashierPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['CashierPayment'] = ResolversParentTypes['CashierPayment']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  whom?: Resolver<ResolversTypes['AuthUser'], ParentType, ContextType>,
+  comment?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  is_redeemed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  created_dt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  redeem_dt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type CashierPaymentConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CashierPaymentConnection'] = ResolversParentTypes['CashierPaymentConnection']> = {
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
+  nodes?: Resolver<Array<ResolversTypes['CashierPayment']>, ParentType, ContextType>,
+};
+
+export type Cm2CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2Customer'] = ResolversParentTypes['Cm2Customer']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   card_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   first_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   last_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   orders?: Resolver<ResolversTypes['Cm2OrderConnection'], ParentType, ContextType>,
-}>;
+};
 
-export type Cm2CustomerConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2CustomerConnection'] = ResolversParentTypes['Cm2CustomerConnection']> = ResolversObject<{
+export type Cm2CustomerConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2CustomerConnection'] = ResolversParentTypes['Cm2CustomerConnection']> = {
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   nodes?: Resolver<Array<ResolversTypes['Cm2Customer']>, ParentType, ContextType>,
-}>;
+};
 
-export type Cm2OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2Order'] = ResolversParentTypes['Cm2Order']> = ResolversObject<{
+export type Cm2OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2Order'] = ResolversParentTypes['Cm2Order']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   start?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   customer?: Resolver<Maybe<ResolversTypes['Cm2Customer']>, ParentType, ContextType>,
-}>;
+};
 
-export type Cm2OrderConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2OrderConnection'] = ResolversParentTypes['Cm2OrderConnection']> = ResolversObject<{
+export type Cm2OrderConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2OrderConnection'] = ResolversParentTypes['Cm2OrderConnection']> = {
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   nodes?: Resolver<Array<ResolversTypes['Cm2Order']>, ParentType, ContextType>,
-}>;
+};
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  authAddUserToGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthAddUserToGroupArgs, 'user_id' | 'group_id'>>,
+  authRemoveUserFromGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthRemoveUserFromGroupArgs, 'user_id' | 'group_id'>>,
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  cashierCreatePayment?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCashierCreatePaymentArgs, 'params'>>,
+  cashierRedeemPayment?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCashierRedeemPaymentArgs, 'id'>>,
   cm2CreateOrder?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, RequireFields<MutationCm2CreateOrderArgs, 'params'>>,
   cm2CreateCustomer?: Resolver<ResolversTypes['Cm2Customer'], ParentType, ContextType, RequireFields<MutationCm2CreateCustomerArgs, 'params'>>,
   cm2CloseOrder?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCm2CloseOrderArgs, 'id'>>,
   staffGrantGooglePermissionsToMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffGrantGooglePermissionsToMemberArgs, 'id'>>,
   staffFireMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffFireMemberArgs, 'id'>>,
-}>;
+};
 
-export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
+export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
   pageNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-}>;
+};
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  currentUser?: Resolver<ResolversTypes['AuthCurrentUser'], ParentType, ContextType>,
+  authGroupsAll?: Resolver<Array<ResolversTypes['AuthGroup']>, ParentType, ContextType>,
+  authPermissionsAll?: Resolver<Array<ResolversTypes['AuthPermission']>, ParentType, ContextType>,
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  cashierPayments?: Resolver<ResolversTypes['CashierPaymentConnection'], ParentType, ContextType, QueryCashierPaymentsArgs>,
   cm2Customers?: Resolver<ResolversTypes['Cm2CustomerConnection'], ParentType, ContextType, QueryCm2CustomersArgs>,
   cm2Orders?: Resolver<ResolversTypes['Cm2OrderConnection'], ParentType, ContextType, QueryCm2OrdersArgs>,
   cm2Customer?: Resolver<ResolversTypes['Cm2Customer'], ParentType, ContextType, QueryCm2CustomerArgs>,
@@ -313,17 +463,17 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   rooms?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType>,
   staffMembersAll?: Resolver<Array<ResolversTypes['StaffMember']>, ParentType, ContextType>,
   staffMember?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType, RequireFields<QueryStaffMemberArgs, 'id'>>,
-}>;
+};
 
-export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = ResolversObject<{
+export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   max_people?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   area?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-}>;
+};
 
-export type StaffMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['StaffMember'] = ResolversParentTypes['StaffMember']> = ResolversObject<{
+export type StaffMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['StaffMember'] = ResolversParentTypes['StaffMember']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  user_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  user_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   full_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   short_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -333,9 +483,15 @@ export type StaffMemberResolvers<ContextType = any, ParentType extends Resolvers
   slack_image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   slack_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   vk?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-}>;
+};
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = any> = {
+  AuthCurrentUser?: AuthCurrentUserResolvers<ContextType>,
+  AuthGroup?: AuthGroupResolvers<ContextType>,
+  AuthPermission?: AuthPermissionResolvers<ContextType>,
+  AuthUser?: AuthUserResolvers<ContextType>,
+  CashierPayment?: CashierPaymentResolvers<ContextType>,
+  CashierPaymentConnection?: CashierPaymentConnectionResolvers<ContextType>,
   Cm2Customer?: Cm2CustomerResolvers<ContextType>,
   Cm2CustomerConnection?: Cm2CustomerConnectionResolvers<ContextType>,
   Cm2Order?: Cm2OrderResolvers<ContextType>,
@@ -345,7 +501,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>,
   Room?: RoomResolvers<ContextType>,
   StaffMember?: StaffMemberResolvers<ContextType>,
-}>;
+};
 
 
 /**

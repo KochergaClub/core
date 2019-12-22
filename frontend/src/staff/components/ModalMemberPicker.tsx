@@ -1,33 +1,34 @@
-import { useSelector } from 'react-redux';
-
 import { Modal, Column } from '@kocherga/frontkit';
 
-import AsyncButton from '~/components/AsyncButton';
+import { AsyncButton, ApolloQueryResults } from '~/components';
 
-import { selectMembers } from '../selectors';
-import { Member } from '../types';
+import { useStaffMembersQuery, MemberFragment } from '../codegen';
 
 interface Props {
   close: () => void;
-  pick: (member: Member) => Promise<void>;
+  pick: (member: MemberFragment) => Promise<void>;
 }
 
 const ModalMemberPicker: React.FC<Props> = ({ close, pick }) => {
-  const members = useSelector(selectMembers);
+  const queryResults = useStaffMembersQuery();
 
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={close}>Выбрать сотрудника</Modal.Header>
       <Modal.Body>
-        <Column stretch>
-          {members
-            .filter(m => m.is_current)
-            .map(member => (
-              <AsyncButton act={() => pick(member)}>
-                {member.full_name}
-              </AsyncButton>
-            ))}
-        </Column>
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { staffMembersAll: members } }) => (
+            <Column stretch>
+              {members
+                .filter(m => m.is_current)
+                .map(member => (
+                  <AsyncButton act={() => pick(member)}>
+                    {member.full_name}
+                  </AsyncButton>
+                ))}
+            </Column>
+          )}
+        </ApolloQueryResults>
       </Modal.Body>
     </Modal>
   );

@@ -18,7 +18,7 @@ interface Props<D> {
   }: {
     data: NonNullable<D>;
     loading: boolean;
-  }) => React.ReactElement;
+  }) => React.ReactElement | null;
 }
 
 function ApolloQueryResults<D>({ loading, error, data, children }: Props<D>) {

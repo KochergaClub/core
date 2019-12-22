@@ -10,7 +10,7 @@ extend type Mutation {
 
 type StaffMember {
   id: ID!
-  user_id: Int!
+  user_id: ID!
   full_name: String!
   short_name: String
   email: String!

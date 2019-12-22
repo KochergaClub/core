@@ -1,27 +1,26 @@
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 
 import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
+import { MemberFragment } from '~/staff/codegen';
 
-import { Member } from '~/staff/types';
-
-import { Group } from '../types';
-import { addMemberToGroup } from '../features/groups';
+import { useAuthAddUserToGroupMutation } from '../codegen';
 
 interface Props {
   close: () => void;
-  group: Group;
+  group: { id: string };
 }
 
 const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
-  const dispatch = useDispatch();
+  const [addMutation] = useAuthAddUserToGroupMutation();
 
   const cb = useCallback(
-    async (member: Member) => {
-      await dispatch(addMemberToGroup(group, member));
+    async (member: MemberFragment) => {
+      await addMutation({
+        variables: { user_id: member.user_id, group_id: group.id },
+      });
       close();
     },
-    [dispatch, group, close]
+    [group, addMutation, close]
   );
 
   return <ModalMemberPicker close={close} pick={cb} />;
