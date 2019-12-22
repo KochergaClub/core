@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
-import moment from 'moment';
-import 'moment/locale/ru';
+import { utcToZonedTime } from 'date-fns-tz';
+import { timezone, formatDate } from '~/common/utils';
 
-import { Call } from '../types';
 import DispositionLabel from './DispositionLabel';
+
+import { CommonZadarmaPbxCallFragment } from '../codegen';
 
 const Container = styled.div`
   display: flex;
@@ -16,11 +17,14 @@ const Container = styled.div`
   }
 `;
 
+type Call = CommonZadarmaPbxCallFragment['calls'][0];
+
 const CallInfo = ({ call }: { call: Call }) => {
-  const m = moment.parseZone(call.ts);
+  const zonedDate = utcToZonedTime(new Date(call.ts), timezone);
+
   return (
     <Container>
-      <time dateTime={call.ts}>{m.format('HH:mm:ss')}</time>
+      <time dateTime={call.ts}>{formatDate(zonedDate, 'HH:mm:ss')}</time>
       <DispositionLabel>{call.disposition}</DispositionLabel>
       <div>{call.sip}</div>
       {call.record && <audio controls src={call.record} />}

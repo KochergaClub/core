@@ -1,21 +1,21 @@
-import { useCallback, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
 import { Label } from '@kocherga/frontkit';
 
-import { useAPI, useExpandable } from '~/common/hooks';
-import { selectUser } from '~/core/selectors';
+import { usePermissions, useExpandable } from '~/common/hooks';
 
-import WatchmanPicker from '~/staff/components/WatchmanPicker';
-import { Member } from '~/staff/types';
+import WatchmanPicker from '~/watchmen/components/WatchmanPicker';
+import { Watchman } from '~/watchmen/types';
 
-import { PbxCall } from '../types';
-import { ZadarmaContext } from '../contexts';
+import {
+  CommonZadarmaPbxCallFragment,
+  useZadarmaSetMemberForPbxCallMutation,
+} from '../codegen';
 
 interface Props {
-  pbx_call: PbxCall;
+  pbx_call: CommonZadarmaPbxCallFragment;
 }
 
 const Container = styled.div`
@@ -33,7 +33,7 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
   if (pbx_call.data && pbx_call.data.staff_member) {
     return (
       <NameContainer
-        style={{ backgroundColor: pbx_call.data.staff_member.color }}
+        style={{ backgroundColor: pbx_call.data.staff_member.color || 'white' }}
       >
         {pbx_call.data.staff_member.short_name}
       </NameContainer>
@@ -47,44 +47,33 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
 };
 
 const StaffMember: React.FC<Props> = ({ pbx_call }) => {
-  const user = useSelector(selectUser);
+  const [isZadarmaAdmin] = usePermissions(['zadarma.admin']);
+  const [setStaffMemberMutation] = useZadarmaSetMemberForPbxCallMutation();
 
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
 
-  const api = useAPI();
-
-  const dispatch = useContext(ZadarmaContext);
-
-  const setStaffMember = useCallback(
-    async (member: Member) => {
-      await api.call(
-        `zadarma/pbx_call/${pbx_call.pbx_call_id}/set_staff_member`,
-        'POST',
-        {
-          id: member.id,
-        }
-      );
-      dispatch({
-        type: 'UPDATE_STAFF_MEMBER',
-        payload: {
+  const setWatchman = useCallback(
+    async (watchman: Watchman) => {
+      await setStaffMemberMutation({
+        variables: {
+          member_id: String(watchman.member_id),
           pbx_call_id: pbx_call.pbx_call_id,
-          staff_member: member,
         },
       });
       unexpand();
     },
-    [api, dispatch, unexpand, pbx_call.pbx_call_id]
+    [unexpand, pbx_call.pbx_call_id]
   );
 
   const nameEl = <StaffMemberName pbx_call={pbx_call} />;
-  if (!user.permissions.includes('zadarma.admin')) {
+  if (!isZadarmaAdmin) {
     return nameEl;
   }
 
   return (
     <Container ref={ref}>
       <div onClick={flipExpand}>{nameEl}</div>
-      {expanded && <WatchmanPicker pickedMember={setStaffMember} />}
+      {expanded && <WatchmanPicker pickedWatchman={setWatchman} />}
     </Container>
   );
 };

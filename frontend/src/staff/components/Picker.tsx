@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import BasicPicker from '~/components/Picker';
 
-import { Member } from '../types';
+import { StaffMemberForPickerFragment as Member } from '../codegen';
 
 interface Extra {
   color: string;
@@ -11,6 +11,7 @@ interface Extra {
 }
 
 interface Props {
+  loading?: boolean;
   members: Member[];
   extra?: Extra[];
   pickedExtra?: (text: string) => void;
@@ -29,7 +30,13 @@ interface ExtraItem {
 
 type Item = MemberItem | ExtraItem;
 
-export function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
+export function Picker({
+  loading,
+  members,
+  extra,
+  pickedMember,
+  pickedExtra,
+}: Props) {
   const items = useMemo(() => {
     const memberItems: MemberItem[] = members.map(member => ({
       type: 'member' as const,
@@ -72,7 +79,7 @@ export function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
   const item2color = useCallback((item: Item) => {
     switch (item.type) {
       case 'member':
-        return item.member.color;
+        return item.member.color || 'white';
       case 'extra':
         return item.extra.color;
     }
@@ -80,6 +87,7 @@ export function Picker({ members, extra, pickedMember, pickedExtra }: Props) {
 
   return (
     <BasicPicker
+      loading={loading}
       item2text={item2text}
       item2color={item2color}
       items={items}

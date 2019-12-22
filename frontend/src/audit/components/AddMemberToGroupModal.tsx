@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
-import { MemberFragment } from '~/staff/codegen';
+import { StaffMemberForPickerFragment } from '~/staff/codegen';
 
 import { AuthGroupsDocument, useAuthAddUserToGroupMutation } from '../codegen';
 
@@ -17,7 +17,7 @@ const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
   });
 
   const cb = useCallback(
-    async (member: MemberFragment) => {
+    async (member: StaffMemberForPickerFragment) => {
       await addMutation({
         variables: { user_id: member.user_id, group_id: group.id },
       });

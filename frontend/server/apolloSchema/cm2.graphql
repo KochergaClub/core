@@ -1,8 +1,8 @@
 extend type Query {
   cm2Customers(search: String, after: String, first: Int, page: Int): Cm2CustomerConnection!
   cm2Orders(status: String, after: String, first: Int, page: Int): Cm2OrderConnection!
-  cm2Customer(id: ID): Cm2Customer!
-  cm2Order(id: ID): Cm2Order!
+  cm2Customer(id: ID!): Cm2Customer!
+  cm2Order(id: ID!): Cm2Order!
 }
 
 extend type Mutation {

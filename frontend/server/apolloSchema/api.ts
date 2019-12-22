@@ -1,13 +1,13 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 
 type Query = {
-  [s: string]: string | boolean | number | undefined;
+  [s: string]: string | boolean | number | undefined | null;
 };
 
 const buildQueryString = (params: Query) => {
   const esc = encodeURIComponent;
   return Object.keys(params)
-    .filter(k => params[k] !== undefined)
+    .filter(k => params[k] !== undefined && params[k] !== null)
     .map(k => esc(k) + '=' + esc(params[k] as string))
     .join('&');
 };
@@ -40,23 +40,23 @@ export class KochergaAPI extends RESTDataSource {
     resource,
     query,
     page,
+    page_size,
   }: {
     resource: string;
     query?: Query;
-    page?: number;
+    page?: number | null;
+    page_size?: number | null;
   }) {
     let url = resource;
-    if (query) {
-      url += '?' + buildQueryString({ ...query, page });
+    if (query || page || page_size) {
+      url += '?' + buildQueryString({ ...(query || {}), page, page_size });
     }
 
     interface DRFPaginatedResponse {
       count: number;
       next: string | null;
       previous: string | null;
-      results: {
-        id: number;
-      }[];
+      results: any[];
     }
 
     const response = (await this.get(url)) as DRFPaginatedResponse;
@@ -72,6 +72,11 @@ export class KochergaAPI extends RESTDataSource {
 
   async retrieve({ resource, id }: { resource: string; id: string }) {
     const response = await this.get(`${resource}/${id}`);
+    return response;
+  }
+
+  async retrieveSingleton({ resource }: { resource: string }) {
+    const response = await this.get(resource);
     return response;
   }
 

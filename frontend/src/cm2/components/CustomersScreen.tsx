@@ -83,7 +83,7 @@ const CustomersScreen: React.FC = () => {
             }}
             names={{
               plural: 'клиенты',
-              genitive: 'клиент',
+              genitive: 'клиента',
             }}
             add={{
               cb: async (data: FormData) => {

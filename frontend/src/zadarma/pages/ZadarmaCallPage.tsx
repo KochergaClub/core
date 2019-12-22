@@ -1,53 +1,33 @@
-import React, { useReducer } from 'react';
-
 import { A } from '@kocherga/frontkit';
 
+import { withApollo } from '~/apollo/client';
+
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
-import { selectAPI } from '~/core/selectors';
+import { Page } from '~/components';
 
-import { loadMembers } from '~/staff/actions';
-
-import { PbxCall } from '~/zadarma/types';
-import { singleReducer } from '~/zadarma/reducers';
-import { ZadarmaContext } from '~/zadarma/contexts';
-import { getCall } from '~/zadarma/api';
-
-import PbxCallCard from '~/zadarma/components/PbxCallCard';
+import PbxCallDetails from '~/zadarma/components/PbxCallDetails';
 
 interface Props {
-  pbx_call: PbxCall;
+  pbx_call_id: string;
 }
 
-const ZadarmaCallPage: NextPage<Props> = props => {
-  const [state, zadarmaDispatch] = useReducer(singleReducer, props.pbx_call);
-
-  const title = `Архивный звонок ${state.pbx_call_id}`;
+const ZadarmaCallPage: NextPage<Props> = ({ pbx_call_id }) => {
+  const title = `Архивный звонок ${pbx_call_id}`;
   return (
     <Page title={title} team>
       <Page.Title>{title}</Page.Title>
       <Page.Main>
-        <ZadarmaContext.Provider value={zadarmaDispatch}>
-          <A href="/team/zadarma">&larr; Ко всем звонкам</A>
-          <br />
-          <br />
-          <PbxCallCard pbx_call={state} />
-        </ZadarmaContext.Provider>
+        <A href="/team/zadarma">&larr; Ко всем звонкам</A>
+        <br />
+        <br />
+        <PbxCallDetails pbx_call_id={pbx_call_id} />
       </Page.Main>
     </Page>
   );
 };
 
-ZadarmaCallPage.getInitialProps = async ({
-  store: { dispatch, getState },
-  query,
-}) => {
-  const api = selectAPI(getState());
-  await dispatch(loadMembers());
+ZadarmaCallPage.getInitialProps = async ({ query }) => ({
+  pbx_call_id: query.id as string,
+});
 
-  return {
-    pbx_call: await getCall(api, query.id as string),
-  };
-};
-
-export default ZadarmaCallPage;
+export default withApollo(ZadarmaCallPage);

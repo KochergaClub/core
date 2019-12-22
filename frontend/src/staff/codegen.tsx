@@ -116,6 +116,7 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+  zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -165,6 +166,12 @@ export type MutationStaffFireMemberArgs = {
   id: Scalars['ID']
 };
 
+
+export type MutationZadarmaSetMemberForPbxCallArgs = {
+  pbx_call_id: Scalars['ID'],
+  member_id: Scalars['ID']
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
@@ -185,6 +192,8 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+  zadarmaPbxCalls: ZadarmaPbxCallConnection,
+  zadarmaPbxCall: ZadarmaPbxCall,
 };
 
 
@@ -210,17 +219,28 @@ export type QueryCm2OrdersArgs = {
 
 
 export type QueryCm2CustomerArgs = {
-  id?: Maybe<Scalars['ID']>
+  id: Scalars['ID']
 };
 
 
 export type QueryCm2OrderArgs = {
-  id?: Maybe<Scalars['ID']>
+  id: Scalars['ID']
 };
 
 
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryZadarmaPbxCallsArgs = {
+  page?: Maybe<Scalars['Int']>,
+  page_size?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryZadarmaPbxCallArgs = {
+  pbx_call_id: Scalars['ID']
 };
 
 export type Room = {
@@ -245,9 +265,46 @@ export type StaffMember = {
   vk?: Maybe<Scalars['String']>,
 };
 
-export type MemberFragment = (
+export type ZadarmaCall = {
+   __typename?: 'ZadarmaCall',
+  call_id: Scalars['ID'],
+  ts: Scalars['String'],
+  watchman?: Maybe<Scalars['String']>,
+  call_type: Scalars['String'],
+  disposition: Scalars['String'],
+  clid: Scalars['String'],
+  destination: Scalars['String'],
+  sip: Scalars['String'],
+  record?: Maybe<Scalars['String']>,
+};
+
+export type ZadarmaData = {
+   __typename?: 'ZadarmaData',
+  staff_member?: Maybe<StaffMember>,
+};
+
+export type ZadarmaPbxCall = {
+   __typename?: 'ZadarmaPbxCall',
+  pbx_call_id: Scalars['ID'],
+  ts: Scalars['String'],
+  calls: Array<ZadarmaCall>,
+  data?: Maybe<ZadarmaData>,
+};
+
+export type ZadarmaPbxCallConnection = {
+   __typename?: 'ZadarmaPbxCallConnection',
+  pageInfo: PageInfo,
+  nodes: Array<ZadarmaPbxCall>,
+};
+
+export type StaffMemberFullFragment = (
   { __typename?: 'StaffMember' }
   & Pick<StaffMember, 'id' | 'user_id' | 'full_name' | 'short_name' | 'email' | 'role' | 'color' | 'is_current' | 'slack_image' | 'slack_id' | 'vk'>
+);
+
+export type StaffMemberForPickerFragment = (
+  { __typename?: 'StaffMember' }
+  & Pick<StaffMember, 'id' | 'user_id' | 'full_name' | 'short_name' | 'color'>
 );
 
 export type StaffMembersQueryVariables = {};
@@ -257,7 +314,18 @@ export type StaffMembersQuery = (
   { __typename?: 'Query' }
   & { staffMembersAll: Array<(
     { __typename?: 'StaffMember' }
-    & MemberFragment
+    & StaffMemberFullFragment
+  )> }
+);
+
+export type StaffMembersForPickerQueryVariables = {};
+
+
+export type StaffMembersForPickerQuery = (
+  { __typename?: 'Query' }
+  & { members: Array<(
+    { __typename?: 'StaffMember' }
+    & StaffMemberForPickerFragment
   )> }
 );
 
@@ -270,7 +338,7 @@ export type StaffMemberQuery = (
   { __typename?: 'Query' }
   & { staffMember: (
     { __typename?: 'StaffMember' }
-    & MemberFragment
+    & StaffMemberFullFragment
   ) }
 );
 
@@ -294,8 +362,8 @@ export type StaffFireMemberMutation = (
   & Pick<Mutation, 'staffFireMember'>
 );
 
-export const MemberFragmentDoc = gql`
-    fragment Member on StaffMember {
+export const StaffMemberFullFragmentDoc = gql`
+    fragment StaffMemberFull on StaffMember {
   id
   user_id
   full_name
@@ -309,13 +377,22 @@ export const MemberFragmentDoc = gql`
   vk
 }
     `;
+export const StaffMemberForPickerFragmentDoc = gql`
+    fragment StaffMemberForPicker on StaffMember {
+  id
+  user_id
+  full_name
+  short_name
+  color
+}
+    `;
 export const StaffMembersDocument = gql`
     query StaffMembers {
   staffMembersAll {
-    ...Member
+    ...StaffMemberFull
   }
 }
-    ${MemberFragmentDoc}`;
+    ${StaffMemberFullFragmentDoc}`;
 
 /**
  * __useStaffMembersQuery__
@@ -341,13 +418,45 @@ export function useStaffMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type StaffMembersQueryHookResult = ReturnType<typeof useStaffMembersQuery>;
 export type StaffMembersLazyQueryHookResult = ReturnType<typeof useStaffMembersLazyQuery>;
 export type StaffMembersQueryResult = ApolloReactCommon.QueryResult<StaffMembersQuery, StaffMembersQueryVariables>;
+export const StaffMembersForPickerDocument = gql`
+    query StaffMembersForPicker {
+  members: staffMembersAll {
+    ...StaffMemberForPicker
+  }
+}
+    ${StaffMemberForPickerFragmentDoc}`;
+
+/**
+ * __useStaffMembersForPickerQuery__
+ *
+ * To run a query within a React component, call `useStaffMembersForPickerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStaffMembersForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStaffMembersForPickerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStaffMembersForPickerQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<StaffMembersForPickerQuery, StaffMembersForPickerQueryVariables>) {
+        return ApolloReactHooks.useQuery<StaffMembersForPickerQuery, StaffMembersForPickerQueryVariables>(StaffMembersForPickerDocument, baseOptions);
+      }
+export function useStaffMembersForPickerLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<StaffMembersForPickerQuery, StaffMembersForPickerQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<StaffMembersForPickerQuery, StaffMembersForPickerQueryVariables>(StaffMembersForPickerDocument, baseOptions);
+        }
+export type StaffMembersForPickerQueryHookResult = ReturnType<typeof useStaffMembersForPickerQuery>;
+export type StaffMembersForPickerLazyQueryHookResult = ReturnType<typeof useStaffMembersForPickerLazyQuery>;
+export type StaffMembersForPickerQueryResult = ApolloReactCommon.QueryResult<StaffMembersForPickerQuery, StaffMembersForPickerQueryVariables>;
 export const StaffMemberDocument = gql`
     query StaffMember($id: ID!) {
   staffMember(id: $id) {
-    ...Member
+    ...StaffMemberFull
   }
 }
-    ${MemberFragmentDoc}`;
+    ${StaffMemberFullFragmentDoc}`;
 
 /**
  * __useStaffMemberQuery__

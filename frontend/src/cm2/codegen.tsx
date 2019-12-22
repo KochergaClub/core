@@ -116,6 +116,7 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+  zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -165,6 +166,12 @@ export type MutationStaffFireMemberArgs = {
   id: Scalars['ID']
 };
 
+
+export type MutationZadarmaSetMemberForPbxCallArgs = {
+  pbx_call_id: Scalars['ID'],
+  member_id: Scalars['ID']
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
@@ -185,6 +192,8 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+  zadarmaPbxCalls: ZadarmaPbxCallConnection,
+  zadarmaPbxCall: ZadarmaPbxCall,
 };
 
 
@@ -210,17 +219,28 @@ export type QueryCm2OrdersArgs = {
 
 
 export type QueryCm2CustomerArgs = {
-  id?: Maybe<Scalars['ID']>
+  id: Scalars['ID']
 };
 
 
 export type QueryCm2OrderArgs = {
-  id?: Maybe<Scalars['ID']>
+  id: Scalars['ID']
 };
 
 
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryZadarmaPbxCallsArgs = {
+  page?: Maybe<Scalars['Int']>,
+  page_size?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryZadarmaPbxCallArgs = {
+  pbx_call_id: Scalars['ID']
 };
 
 export type Room = {
@@ -243,6 +263,38 @@ export type StaffMember = {
   slack_image?: Maybe<Scalars['String']>,
   slack_id?: Maybe<Scalars['String']>,
   vk?: Maybe<Scalars['String']>,
+};
+
+export type ZadarmaCall = {
+   __typename?: 'ZadarmaCall',
+  call_id: Scalars['ID'],
+  ts: Scalars['String'],
+  watchman?: Maybe<Scalars['String']>,
+  call_type: Scalars['String'],
+  disposition: Scalars['String'],
+  clid: Scalars['String'],
+  destination: Scalars['String'],
+  sip: Scalars['String'],
+  record?: Maybe<Scalars['String']>,
+};
+
+export type ZadarmaData = {
+   __typename?: 'ZadarmaData',
+  staff_member?: Maybe<StaffMember>,
+};
+
+export type ZadarmaPbxCall = {
+   __typename?: 'ZadarmaPbxCall',
+  pbx_call_id: Scalars['ID'],
+  ts: Scalars['String'],
+  calls: Array<ZadarmaCall>,
+  data?: Maybe<ZadarmaData>,
+};
+
+export type ZadarmaPbxCallConnection = {
+   __typename?: 'ZadarmaPbxCallConnection',
+  pageInfo: PageInfo,
+  nodes: Array<ZadarmaPbxCall>,
 };
 
 export type CustomerFragment = (

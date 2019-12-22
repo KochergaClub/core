@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { TContext } from './types';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -115,6 +116,7 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+  zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -164,6 +166,12 @@ export type MutationStaffFireMemberArgs = {
   id: Scalars['ID']
 };
 
+
+export type MutationZadarmaSetMemberForPbxCallArgs = {
+  pbx_call_id: Scalars['ID'],
+  member_id: Scalars['ID']
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
@@ -184,6 +192,8 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+  zadarmaPbxCalls: ZadarmaPbxCallConnection,
+  zadarmaPbxCall: ZadarmaPbxCall,
 };
 
 
@@ -209,17 +219,28 @@ export type QueryCm2OrdersArgs = {
 
 
 export type QueryCm2CustomerArgs = {
-  id?: Maybe<Scalars['ID']>
+  id: Scalars['ID']
 };
 
 
 export type QueryCm2OrderArgs = {
-  id?: Maybe<Scalars['ID']>
+  id: Scalars['ID']
 };
 
 
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryZadarmaPbxCallsArgs = {
+  page?: Maybe<Scalars['Int']>,
+  page_size?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryZadarmaPbxCallArgs = {
+  pbx_call_id: Scalars['ID']
 };
 
 export type Room = {
@@ -242,6 +263,38 @@ export type StaffMember = {
   slack_image?: Maybe<Scalars['String']>,
   slack_id?: Maybe<Scalars['String']>,
   vk?: Maybe<Scalars['String']>,
+};
+
+export type ZadarmaCall = {
+   __typename?: 'ZadarmaCall',
+  call_id: Scalars['ID'],
+  ts: Scalars['String'],
+  watchman?: Maybe<Scalars['String']>,
+  call_type: Scalars['String'],
+  disposition: Scalars['String'],
+  clid: Scalars['String'],
+  destination: Scalars['String'],
+  sip: Scalars['String'],
+  record?: Maybe<Scalars['String']>,
+};
+
+export type ZadarmaData = {
+   __typename?: 'ZadarmaData',
+  staff_member?: Maybe<StaffMember>,
+};
+
+export type ZadarmaPbxCall = {
+   __typename?: 'ZadarmaPbxCall',
+  pbx_call_id: Scalars['ID'],
+  ts: Scalars['String'],
+  calls: Array<ZadarmaCall>,
+  data?: Maybe<ZadarmaData>,
+};
+
+export type ZadarmaPbxCallConnection = {
+   __typename?: 'ZadarmaPbxCallConnection',
+  pageInfo: PageInfo,
+  nodes: Array<ZadarmaPbxCall>,
 };
 
 
@@ -333,6 +386,10 @@ export type ResolversTypes = {
   Cm2OrderConnection: ResolverTypeWrapper<Cm2OrderConnection>,
   Cm2Order: ResolverTypeWrapper<Cm2Order>,
   Room: ResolverTypeWrapper<Room>,
+  ZadarmaPbxCallConnection: ResolverTypeWrapper<ZadarmaPbxCallConnection>,
+  ZadarmaPbxCall: ResolverTypeWrapper<ZadarmaPbxCall>,
+  ZadarmaCall: ResolverTypeWrapper<ZadarmaCall>,
+  ZadarmaData: ResolverTypeWrapper<ZadarmaData>,
   Mutation: ResolverTypeWrapper<{}>,
   CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
@@ -359,39 +416,43 @@ export type ResolversParentTypes = {
   Cm2OrderConnection: Cm2OrderConnection,
   Cm2Order: Cm2Order,
   Room: Room,
+  ZadarmaPbxCallConnection: ZadarmaPbxCallConnection,
+  ZadarmaPbxCall: ZadarmaPbxCall,
+  ZadarmaCall: ZadarmaCall,
+  ZadarmaData: ZadarmaData,
   Mutation: {},
   CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
 };
 
-export type AuthCurrentUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthCurrentUser'] = ResolversParentTypes['AuthCurrentUser']> = {
+export type AuthCurrentUserResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['AuthCurrentUser'] = ResolversParentTypes['AuthCurrentUser']> = {
   is_authenticated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   permissions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
   is_staff?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
-export type AuthGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthGroup'] = ResolversParentTypes['AuthGroup']> = {
+export type AuthGroupResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['AuthGroup'] = ResolversParentTypes['AuthGroup']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   permissions?: Resolver<Array<ResolversTypes['AuthPermission']>, ParentType, ContextType>,
   users?: Resolver<Array<ResolversTypes['AuthUser']>, ParentType, ContextType>,
 };
 
-export type AuthPermissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPermission'] = ResolversParentTypes['AuthPermission']> = {
+export type AuthPermissionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['AuthPermission'] = ResolversParentTypes['AuthPermission']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   users?: Resolver<Array<ResolversTypes['AuthUser']>, ParentType, ContextType>,
 };
 
-export type AuthUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthUser'] = ResolversParentTypes['AuthUser']> = {
+export type AuthUserResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['AuthUser'] = ResolversParentTypes['AuthUser']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   staff_member?: Resolver<Maybe<ResolversTypes['StaffMember']>, ParentType, ContextType>,
 };
 
-export type CashierPaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['CashierPayment'] = ResolversParentTypes['CashierPayment']> = {
+export type CashierPaymentResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['CashierPayment'] = ResolversParentTypes['CashierPayment']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   whom?: Resolver<ResolversTypes['AuthUser'], ParentType, ContextType>,
@@ -401,12 +462,12 @@ export type CashierPaymentResolvers<ContextType = any, ParentType extends Resolv
   redeem_dt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
-export type CashierPaymentConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CashierPaymentConnection'] = ResolversParentTypes['CashierPaymentConnection']> = {
+export type CashierPaymentConnectionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['CashierPaymentConnection'] = ResolversParentTypes['CashierPaymentConnection']> = {
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   nodes?: Resolver<Array<ResolversTypes['CashierPayment']>, ParentType, ContextType>,
 };
 
-export type Cm2CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2Customer'] = ResolversParentTypes['Cm2Customer']> = {
+export type Cm2CustomerResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Cm2Customer'] = ResolversParentTypes['Cm2Customer']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   card_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   first_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -414,12 +475,12 @@ export type Cm2CustomerResolvers<ContextType = any, ParentType extends Resolvers
   orders?: Resolver<ResolversTypes['Cm2OrderConnection'], ParentType, ContextType>,
 };
 
-export type Cm2CustomerConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2CustomerConnection'] = ResolversParentTypes['Cm2CustomerConnection']> = {
+export type Cm2CustomerConnectionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Cm2CustomerConnection'] = ResolversParentTypes['Cm2CustomerConnection']> = {
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   nodes?: Resolver<Array<ResolversTypes['Cm2Customer']>, ParentType, ContextType>,
 };
 
-export type Cm2OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2Order'] = ResolversParentTypes['Cm2Order']> = {
+export type Cm2OrderResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Cm2Order'] = ResolversParentTypes['Cm2Order']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   start?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   end?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -427,12 +488,12 @@ export type Cm2OrderResolvers<ContextType = any, ParentType extends ResolversPar
   customer?: Resolver<Maybe<ResolversTypes['Cm2Customer']>, ParentType, ContextType>,
 };
 
-export type Cm2OrderConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cm2OrderConnection'] = ResolversParentTypes['Cm2OrderConnection']> = {
+export type Cm2OrderConnectionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Cm2OrderConnection'] = ResolversParentTypes['Cm2OrderConnection']> = {
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   nodes?: Resolver<Array<ResolversTypes['Cm2Order']>, ParentType, ContextType>,
 };
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+export type MutationResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   authAddUserToGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthAddUserToGroupArgs, 'user_id' | 'group_id'>>,
   authRemoveUserFromGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthRemoveUserFromGroupArgs, 'user_id' | 'group_id'>>,
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -443,14 +504,15 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   cm2CloseOrder?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCm2CloseOrderArgs, 'id'>>,
   staffGrantGooglePermissionsToMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffGrantGooglePermissionsToMemberArgs, 'id'>>,
   staffFireMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffFireMemberArgs, 'id'>>,
+  zadarmaSetMemberForPbxCall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationZadarmaSetMemberForPbxCallArgs, 'pbx_call_id' | 'member_id'>>,
 };
 
-export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
+export type PageInfoResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
   pageNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   currentUser?: Resolver<ResolversTypes['AuthCurrentUser'], ParentType, ContextType>,
   authGroupsAll?: Resolver<Array<ResolversTypes['AuthGroup']>, ParentType, ContextType>,
   authPermissionsAll?: Resolver<Array<ResolversTypes['AuthPermission']>, ParentType, ContextType>,
@@ -458,20 +520,22 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cashierPayments?: Resolver<ResolversTypes['CashierPaymentConnection'], ParentType, ContextType, QueryCashierPaymentsArgs>,
   cm2Customers?: Resolver<ResolversTypes['Cm2CustomerConnection'], ParentType, ContextType, QueryCm2CustomersArgs>,
   cm2Orders?: Resolver<ResolversTypes['Cm2OrderConnection'], ParentType, ContextType, QueryCm2OrdersArgs>,
-  cm2Customer?: Resolver<ResolversTypes['Cm2Customer'], ParentType, ContextType, QueryCm2CustomerArgs>,
-  cm2Order?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, QueryCm2OrderArgs>,
+  cm2Customer?: Resolver<ResolversTypes['Cm2Customer'], ParentType, ContextType, RequireFields<QueryCm2CustomerArgs, 'id'>>,
+  cm2Order?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, RequireFields<QueryCm2OrderArgs, 'id'>>,
   rooms?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType>,
   staffMembersAll?: Resolver<Array<ResolversTypes['StaffMember']>, ParentType, ContextType>,
   staffMember?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType, RequireFields<QueryStaffMemberArgs, 'id'>>,
+  zadarmaPbxCalls?: Resolver<ResolversTypes['ZadarmaPbxCallConnection'], ParentType, ContextType, QueryZadarmaPbxCallsArgs>,
+  zadarmaPbxCall?: Resolver<ResolversTypes['ZadarmaPbxCall'], ParentType, ContextType, RequireFields<QueryZadarmaPbxCallArgs, 'pbx_call_id'>>,
 };
 
-export type RoomResolvers<ContextType = any, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
+export type RoomResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   max_people?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   area?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
 };
 
-export type StaffMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['StaffMember'] = ResolversParentTypes['StaffMember']> = {
+export type StaffMemberResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['StaffMember'] = ResolversParentTypes['StaffMember']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   user_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   full_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -485,7 +549,35 @@ export type StaffMemberResolvers<ContextType = any, ParentType extends Resolvers
   vk?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
-export type Resolvers<ContextType = any> = {
+export type ZadarmaCallResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ZadarmaCall'] = ResolversParentTypes['ZadarmaCall']> = {
+  call_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  ts?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  watchman?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  call_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  disposition?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  clid?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  destination?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  sip?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  record?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type ZadarmaDataResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ZadarmaData'] = ResolversParentTypes['ZadarmaData']> = {
+  staff_member?: Resolver<Maybe<ResolversTypes['StaffMember']>, ParentType, ContextType>,
+};
+
+export type ZadarmaPbxCallResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ZadarmaPbxCall'] = ResolversParentTypes['ZadarmaPbxCall']> = {
+  pbx_call_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  ts?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  calls?: Resolver<Array<ResolversTypes['ZadarmaCall']>, ParentType, ContextType>,
+  data?: Resolver<Maybe<ResolversTypes['ZadarmaData']>, ParentType, ContextType>,
+};
+
+export type ZadarmaPbxCallConnectionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ZadarmaPbxCallConnection'] = ResolversParentTypes['ZadarmaPbxCallConnection']> = {
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
+  nodes?: Resolver<Array<ResolversTypes['ZadarmaPbxCall']>, ParentType, ContextType>,
+};
+
+export type Resolvers<ContextType = TContext> = {
   AuthCurrentUser?: AuthCurrentUserResolvers<ContextType>,
   AuthGroup?: AuthGroupResolvers<ContextType>,
   AuthPermission?: AuthPermissionResolvers<ContextType>,
@@ -501,6 +593,10 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>,
   Room?: RoomResolvers<ContextType>,
   StaffMember?: StaffMemberResolvers<ContextType>,
+  ZadarmaCall?: ZadarmaCallResolvers<ContextType>,
+  ZadarmaData?: ZadarmaDataResolvers<ContextType>,
+  ZadarmaPbxCall?: ZadarmaPbxCallResolvers<ContextType>,
+  ZadarmaPbxCallConnection?: ZadarmaPbxCallConnectionResolvers<ContextType>,
 };
 
 
@@ -508,4 +604,4 @@ export type Resolvers<ContextType = any> = {
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
 */
-export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type IResolvers<ContextType = TContext> = Resolvers<ContextType>;

@@ -8,7 +8,7 @@ import { usePermissions } from '~/common/hooks';
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
 import {
-  MemberFragment,
+  StaffMemberFullFragment,
   StaffMemberDocument,
   useStaffGrantGooglePermissionsToMemberMutation,
   useStaffFireMemberMutation,
@@ -27,7 +27,7 @@ const Image = styled.img`
 `;
 
 interface Props {
-  member: MemberFragment;
+  member: StaffMemberFullFragment;
 }
 
 const ManagerControls: React.FC<Props> = ({ member }) => {

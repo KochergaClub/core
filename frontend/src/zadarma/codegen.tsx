@@ -297,169 +297,187 @@ export type ZadarmaPbxCallConnection = {
   nodes: Array<ZadarmaPbxCall>,
 };
 
-export type PaymentFragment = (
-  { __typename?: 'CashierPayment' }
-  & Pick<CashierPayment, 'id' | 'amount' | 'comment' | 'is_redeemed' | 'created_dt' | 'redeem_dt'>
-  & { whom: (
-    { __typename?: 'AuthUser' }
-    & Pick<AuthUser, 'id' | 'email'>
+export type CommonZadarmaPbxCallFragment = (
+  { __typename?: 'ZadarmaPbxCall' }
+  & Pick<ZadarmaPbxCall, 'pbx_call_id' | 'ts'>
+  & { calls: Array<(
+    { __typename?: 'ZadarmaCall' }
+    & Pick<ZadarmaCall, 'call_id' | 'ts' | 'call_type' | 'destination' | 'disposition' | 'clid' | 'sip' | 'record' | 'watchman'>
+  )>, data: Maybe<(
+    { __typename?: 'ZadarmaData' }
     & { staff_member: Maybe<(
       { __typename?: 'StaffMember' }
-      & Pick<StaffMember, 'id' | 'full_name'>
+      & Pick<StaffMember, 'color' | 'short_name'>
     )> }
-  ) }
+  )> }
 );
 
-export type CashierPaymentsQueryVariables = {};
+export type ZadarmaPbxCallsQueryVariables = {
+  page?: Maybe<Scalars['Int']>
+};
 
 
-export type CashierPaymentsQuery = (
+export type ZadarmaPbxCallsQuery = (
   { __typename?: 'Query' }
-  & { payments: (
-    { __typename?: 'CashierPaymentConnection' }
+  & { pbxCalls: (
+    { __typename?: 'ZadarmaPbxCallConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<PageInfo, 'hasNextPage' | 'pageNumber'>
+      & Pick<PageInfo, 'pageNumber' | 'hasNextPage'>
     ), nodes: Array<(
-      { __typename?: 'CashierPayment' }
-      & PaymentFragment
+      { __typename?: 'ZadarmaPbxCall' }
+      & CommonZadarmaPbxCallFragment
     )> }
   ) }
 );
 
-export type CashierCreatePaymentMutationVariables = {
-  params: CashierCreatePaymentInput
+export type ZadarmaPbxCallQueryVariables = {
+  pbx_call_id: Scalars['ID']
 };
 
 
-export type CashierCreatePaymentMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'cashierCreatePayment'>
+export type ZadarmaPbxCallQuery = (
+  { __typename?: 'Query' }
+  & { pbxCall: (
+    { __typename?: 'ZadarmaPbxCall' }
+    & CommonZadarmaPbxCallFragment
+  ) }
 );
 
-export type CashierRedeemPaymentMutationVariables = {
-  id: Scalars['ID']
+export type ZadarmaSetMemberForPbxCallMutationVariables = {
+  member_id: Scalars['ID'],
+  pbx_call_id: Scalars['ID']
 };
 
 
-export type CashierRedeemPaymentMutation = (
+export type ZadarmaSetMemberForPbxCallMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'cashierRedeemPayment'>
+  & Pick<Mutation, 'zadarmaSetMemberForPbxCall'>
 );
 
-export const PaymentFragmentDoc = gql`
-    fragment Payment on CashierPayment {
-  id
-  amount
-  whom {
-    id
-    email
+export const CommonZadarmaPbxCallFragmentDoc = gql`
+    fragment CommonZadarmaPbxCall on ZadarmaPbxCall {
+  pbx_call_id
+  ts
+  calls {
+    call_id
+    ts
+    call_type
+    destination
+    disposition
+    clid
+    sip
+    record
+    watchman
+  }
+  data {
     staff_member {
-      id
-      full_name
+      color
+      short_name
     }
   }
-  comment
-  is_redeemed
-  created_dt
-  redeem_dt
 }
     `;
-export const CashierPaymentsDocument = gql`
-    query CashierPayments {
-  payments: cashierPayments {
+export const ZadarmaPbxCallsDocument = gql`
+    query ZadarmaPbxCalls($page: Int) {
+  pbxCalls: zadarmaPbxCalls(page: $page, page_size: 20) {
     pageInfo {
-      hasNextPage
       pageNumber
+      hasNextPage
     }
     nodes {
-      ...Payment
+      ...CommonZadarmaPbxCall
     }
   }
 }
-    ${PaymentFragmentDoc}`;
+    ${CommonZadarmaPbxCallFragmentDoc}`;
 
 /**
- * __useCashierPaymentsQuery__
+ * __useZadarmaPbxCallsQuery__
  *
- * To run a query within a React component, call `useCashierPaymentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCashierPaymentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useZadarmaPbxCallsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useZadarmaPbxCallsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCashierPaymentsQuery({
+ * const { data, loading, error } = useZadarmaPbxCallsQuery({
  *   variables: {
+ *      page: // value for 'page'
  *   },
  * });
  */
-export function useCashierPaymentsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CashierPaymentsQuery, CashierPaymentsQueryVariables>) {
-        return ApolloReactHooks.useQuery<CashierPaymentsQuery, CashierPaymentsQueryVariables>(CashierPaymentsDocument, baseOptions);
+export function useZadarmaPbxCallsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ZadarmaPbxCallsQuery, ZadarmaPbxCallsQueryVariables>) {
+        return ApolloReactHooks.useQuery<ZadarmaPbxCallsQuery, ZadarmaPbxCallsQueryVariables>(ZadarmaPbxCallsDocument, baseOptions);
       }
-export function useCashierPaymentsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CashierPaymentsQuery, CashierPaymentsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CashierPaymentsQuery, CashierPaymentsQueryVariables>(CashierPaymentsDocument, baseOptions);
+export function useZadarmaPbxCallsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ZadarmaPbxCallsQuery, ZadarmaPbxCallsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ZadarmaPbxCallsQuery, ZadarmaPbxCallsQueryVariables>(ZadarmaPbxCallsDocument, baseOptions);
         }
-export type CashierPaymentsQueryHookResult = ReturnType<typeof useCashierPaymentsQuery>;
-export type CashierPaymentsLazyQueryHookResult = ReturnType<typeof useCashierPaymentsLazyQuery>;
-export type CashierPaymentsQueryResult = ApolloReactCommon.QueryResult<CashierPaymentsQuery, CashierPaymentsQueryVariables>;
-export const CashierCreatePaymentDocument = gql`
-    mutation CashierCreatePayment($params: CashierCreatePaymentInput!) {
-  cashierCreatePayment(params: $params)
+export type ZadarmaPbxCallsQueryHookResult = ReturnType<typeof useZadarmaPbxCallsQuery>;
+export type ZadarmaPbxCallsLazyQueryHookResult = ReturnType<typeof useZadarmaPbxCallsLazyQuery>;
+export type ZadarmaPbxCallsQueryResult = ApolloReactCommon.QueryResult<ZadarmaPbxCallsQuery, ZadarmaPbxCallsQueryVariables>;
+export const ZadarmaPbxCallDocument = gql`
+    query ZadarmaPbxCall($pbx_call_id: ID!) {
+  pbxCall: zadarmaPbxCall(pbx_call_id: $pbx_call_id) {
+    ...CommonZadarmaPbxCall
+  }
 }
-    `;
-export type CashierCreatePaymentMutationFn = ApolloReactCommon.MutationFunction<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>;
+    ${CommonZadarmaPbxCallFragmentDoc}`;
 
 /**
- * __useCashierCreatePaymentMutation__
+ * __useZadarmaPbxCallQuery__
  *
- * To run a mutation, you first call `useCashierCreatePaymentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCashierCreatePaymentMutation` returns a tuple that includes:
+ * To run a query within a React component, call `useZadarmaPbxCallQuery` and pass it any options that fit your needs.
+ * When your component renders, `useZadarmaPbxCallQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useZadarmaPbxCallQuery({
+ *   variables: {
+ *      pbx_call_id: // value for 'pbx_call_id'
+ *   },
+ * });
+ */
+export function useZadarmaPbxCallQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ZadarmaPbxCallQuery, ZadarmaPbxCallQueryVariables>) {
+        return ApolloReactHooks.useQuery<ZadarmaPbxCallQuery, ZadarmaPbxCallQueryVariables>(ZadarmaPbxCallDocument, baseOptions);
+      }
+export function useZadarmaPbxCallLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ZadarmaPbxCallQuery, ZadarmaPbxCallQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ZadarmaPbxCallQuery, ZadarmaPbxCallQueryVariables>(ZadarmaPbxCallDocument, baseOptions);
+        }
+export type ZadarmaPbxCallQueryHookResult = ReturnType<typeof useZadarmaPbxCallQuery>;
+export type ZadarmaPbxCallLazyQueryHookResult = ReturnType<typeof useZadarmaPbxCallLazyQuery>;
+export type ZadarmaPbxCallQueryResult = ApolloReactCommon.QueryResult<ZadarmaPbxCallQuery, ZadarmaPbxCallQueryVariables>;
+export const ZadarmaSetMemberForPbxCallDocument = gql`
+    mutation ZadarmaSetMemberForPbxCall($member_id: ID!, $pbx_call_id: ID!) {
+  zadarmaSetMemberForPbxCall(member_id: $member_id, pbx_call_id: $pbx_call_id)
+}
+    `;
+export type ZadarmaSetMemberForPbxCallMutationFn = ApolloReactCommon.MutationFunction<ZadarmaSetMemberForPbxCallMutation, ZadarmaSetMemberForPbxCallMutationVariables>;
+
+/**
+ * __useZadarmaSetMemberForPbxCallMutation__
+ *
+ * To run a mutation, you first call `useZadarmaSetMemberForPbxCallMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useZadarmaSetMemberForPbxCallMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [cashierCreatePaymentMutation, { data, loading, error }] = useCashierCreatePaymentMutation({
+ * const [zadarmaSetMemberForPbxCallMutation, { data, loading, error }] = useZadarmaSetMemberForPbxCallMutation({
  *   variables: {
- *      params: // value for 'params'
+ *      member_id: // value for 'member_id'
+ *      pbx_call_id: // value for 'pbx_call_id'
  *   },
  * });
  */
-export function useCashierCreatePaymentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>) {
-        return ApolloReactHooks.useMutation<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>(CashierCreatePaymentDocument, baseOptions);
+export function useZadarmaSetMemberForPbxCallMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ZadarmaSetMemberForPbxCallMutation, ZadarmaSetMemberForPbxCallMutationVariables>) {
+        return ApolloReactHooks.useMutation<ZadarmaSetMemberForPbxCallMutation, ZadarmaSetMemberForPbxCallMutationVariables>(ZadarmaSetMemberForPbxCallDocument, baseOptions);
       }
-export type CashierCreatePaymentMutationHookResult = ReturnType<typeof useCashierCreatePaymentMutation>;
-export type CashierCreatePaymentMutationResult = ApolloReactCommon.MutationResult<CashierCreatePaymentMutation>;
-export type CashierCreatePaymentMutationOptions = ApolloReactCommon.BaseMutationOptions<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>;
-export const CashierRedeemPaymentDocument = gql`
-    mutation CashierRedeemPayment($id: ID!) {
-  cashierRedeemPayment(id: $id)
-}
-    `;
-export type CashierRedeemPaymentMutationFn = ApolloReactCommon.MutationFunction<CashierRedeemPaymentMutation, CashierRedeemPaymentMutationVariables>;
-
-/**
- * __useCashierRedeemPaymentMutation__
- *
- * To run a mutation, you first call `useCashierRedeemPaymentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCashierRedeemPaymentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [cashierRedeemPaymentMutation, { data, loading, error }] = useCashierRedeemPaymentMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useCashierRedeemPaymentMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CashierRedeemPaymentMutation, CashierRedeemPaymentMutationVariables>) {
-        return ApolloReactHooks.useMutation<CashierRedeemPaymentMutation, CashierRedeemPaymentMutationVariables>(CashierRedeemPaymentDocument, baseOptions);
-      }
-export type CashierRedeemPaymentMutationHookResult = ReturnType<typeof useCashierRedeemPaymentMutation>;
-export type CashierRedeemPaymentMutationResult = ApolloReactCommon.MutationResult<CashierRedeemPaymentMutation>;
-export type CashierRedeemPaymentMutationOptions = ApolloReactCommon.BaseMutationOptions<CashierRedeemPaymentMutation, CashierRedeemPaymentMutationVariables>;
+export type ZadarmaSetMemberForPbxCallMutationHookResult = ReturnType<typeof useZadarmaSetMemberForPbxCallMutation>;
+export type ZadarmaSetMemberForPbxCallMutationResult = ApolloReactCommon.MutationResult<ZadarmaSetMemberForPbxCallMutation>;
+export type ZadarmaSetMemberForPbxCallMutationOptions = ApolloReactCommon.BaseMutationOptions<ZadarmaSetMemberForPbxCallMutation, ZadarmaSetMemberForPbxCallMutationVariables>;

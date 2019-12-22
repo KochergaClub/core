@@ -7,6 +7,8 @@ from rest_framework.response import Response
 
 from django.utils import timezone
 
+from kocherga.django.pagination import CommonPagination
+
 from . import models
 from . import serializers
 
@@ -31,3 +33,7 @@ class PbxCallViewSet(viewsets.ReadOnlyModelViewSet):
         pbx_call = self.get_object()
         pbx_call.set_staff_member_by_id(request.data['id'])
         return Response({'status': 'ok'})
+
+
+class PagedPbxCallViewSet(PbxCallViewSet):
+    pagination_class = CommonPagination

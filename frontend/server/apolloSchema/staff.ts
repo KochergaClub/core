@@ -1,7 +1,7 @@
 import { Resolvers } from './gen-types';
 
 // endpoints
-const MEMBER = 'staff/member';
+export const MEMBER = 'staff/member';
 
 export const resolvers: Resolvers = {
   Query: {

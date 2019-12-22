@@ -7,14 +7,14 @@ import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
 import { Page, ApolloQueryResults } from '~/components';
 
-import { MemberFragment, useStaffMembersQuery } from '../codegen';
+import { StaffMemberFullFragment, useStaffMembersQuery } from '../codegen';
 
 const MemberList = ({
   title,
   members,
 }: {
   title: string;
-  members: MemberFragment[];
+  members: StaffMemberFullFragment[];
 }) => (
   <Column centered>
     <h2>{title}</h2>

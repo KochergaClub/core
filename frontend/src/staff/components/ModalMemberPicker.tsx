@@ -2,11 +2,11 @@ import { Modal, Column } from '@kocherga/frontkit';
 
 import { AsyncButton, ApolloQueryResults } from '~/components';
 
-import { useStaffMembersQuery, MemberFragment } from '../codegen';
+import { useStaffMembersQuery, StaffMemberForPickerFragment } from '../codegen';
 
 interface Props {
   close: () => void;
-  pick: (member: MemberFragment) => Promise<void>;
+  pick: (member: StaffMemberForPickerFragment) => Promise<void>;
 }
 
 const ModalMemberPicker: React.FC<Props> = ({ close, pick }) => {

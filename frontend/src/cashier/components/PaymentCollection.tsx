@@ -14,7 +14,7 @@ import { FormShape } from '~/components/forms/types';
 import {
   StaffMembersDocument,
   StaffMembersQuery,
-  MemberFragment,
+  StaffMemberFullFragment,
 } from '~/staff/codegen';
 
 import {
@@ -57,8 +57,8 @@ const PaymentCollection: React.FC = () => {
           });
           return members;
         },
-        display: (member: MemberFragment) => member.full_name,
-        getValue: (member: MemberFragment) => parseInt(member.user_id),
+        display: (member: StaffMemberFullFragment) => member.full_name,
+        getValue: (member: StaffMemberFullFragment) => parseInt(member.user_id),
       },
     },
   ];

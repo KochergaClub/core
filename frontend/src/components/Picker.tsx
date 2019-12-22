@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const PickerContainer = styled.div`
@@ -28,6 +27,7 @@ const PickerItemContainer = styled.div`
 `;
 
 interface Props<T> {
+  loading?: boolean;
   picked: (item: T) => void;
   item2text: (item: T) => string;
   item2color?: (item: T) => string;
@@ -49,17 +49,21 @@ const PickerItem = ({ text, color, picked }: ItemProps) => {
 };
 
 function Picker<T>(props: Props<T>) {
-  const { items, item2text, item2color } = props;
+  const { loading, items, item2text, item2color } = props;
   return (
     <PickerContainer>
-      {items.map((item, i) => (
-        <PickerItem
-          key={i}
-          text={item2text(item)}
-          color={item2color ? item2color(item) : 'white'}
-          picked={() => props.picked(item)}
-        />
-      ))}
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+        items.map((item, i) => (
+          <PickerItem
+            key={i}
+            text={item2text(item)}
+            color={item2color ? item2color(item) : 'white'}
+            picked={() => props.picked(item)}
+          />
+        ))
+      )}
     </PickerContainer>
   );
 }

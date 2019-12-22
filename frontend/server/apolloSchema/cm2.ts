@@ -48,7 +48,7 @@ export const resolvers: Resolvers = {
       }
       return dataSources.kochergaAPI.retrieve({
         resource: CUSTOMER,
-        id: parent.customer,
+        id: (parent.customer as any) as string,
       }); // TODO - dataloader for batching
     },
   },

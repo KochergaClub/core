@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 
-import moment from 'moment';
+import { utcToZonedTime } from 'date-fns-tz';
+import { timezone, formatDate } from '~/common/utils';
 
 import { A } from '@kocherga/frontkit';
 
-import Card from '~/components/Card';
-
-import { PbxCall } from '../types';
+import { CommonZadarmaPbxCallFragment } from '../codegen';
 
 import CallInfo from './CallInfo';
 import PbxCallData from './PbxCallData';
@@ -21,12 +20,12 @@ const Container = styled.div`
   }
 `;
 
-const Date = styled.div`
+const DateDiv = styled.div`
   font-weight: bold;
 `;
 
 interface Props {
-  pbx_call: PbxCall;
+  pbx_call: CommonZadarmaPbxCallFragment;
 }
 
 const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
@@ -44,12 +43,14 @@ const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
     title = `${clid} → Кочерга`;
   }
 
+  const zonedDate = utcToZonedTime(new Date(pbx_call.ts), timezone);
+
   return (
-    <Card>
+    <div>
       <Container>
         <div>
           <header>
-            <Date>{moment(pbx_call.ts).format('D MMMM')}</Date>
+            <DateDiv>{formatDate(zonedDate, 'd MMMM')}</DateDiv>
             <A href={`/team/zadarma/pbx_call/${pbx_call.pbx_call_id}`}>
               {title}
             </A>
@@ -60,7 +61,7 @@ const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
         </div>
         <PbxCallData pbx_call={pbx_call} />
       </Container>
-    </Card>
+    </div>
   );
 };
 
