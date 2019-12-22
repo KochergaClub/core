@@ -1,0 +1,15 @@
+# FIXME - Can't use 'extend type Query' in separate files because of https://github.com/dotansimha/graphql-code-generator/issues/2731
+type Query {
+  cm2Customers(search: String, after: String, first: Int, page: Int): Cm2CustomerConnection!
+  cm2Orders(status: String, after: String, first: Int, page: Int): Cm2OrderConnection!
+  cm2Customer(id: ID): Cm2Customer!
+  cm2Order(id: ID): Cm2Order!
+
+  rooms: [Room]!
+}
+
+type Mutation {
+  cm2CreateOrder(params: Cm2CreateOrderInput!): Cm2Order!
+  cm2CreateCustomer(params: Cm2CreateCustomerInput!): Cm2Customer!
+  cm2CloseOrder(id: ID!): Boolean
+}

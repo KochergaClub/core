@@ -23,11 +23,16 @@ const orderWithCustomerFragment = gql`
 `;
 
 export const GET_ORDERS = gql`
-  query GetCm2Orders($status: String!) {
-    cm2Orders(status: $status) {
-      hasNextPage
-      items {
-        ...OrderWithCustomer
+  query GetCm2Orders($status: String, $page: Int) {
+    cm2Orders(status: $status, page: $page) {
+      pageInfo {
+        hasNextPage
+        pageNumber
+      }
+      edges {
+        node {
+          ...OrderWithCustomer
+        }
       }
     }
   }
@@ -57,10 +62,14 @@ export const CREATE_ORDER = gql`
 
 export const SEARCH_CUSTOMERS = gql`
   query SearchCm2Customers($search: String!) {
-    cm2Customers(search: $search) {
-      hasNextPage
-      items {
-        ...Customer
+    cm2Customers(search: $search, first: 10) {
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        node {
+          ...Customer
+        }
       }
     }
   }
@@ -68,15 +77,20 @@ export const SEARCH_CUSTOMERS = gql`
 `;
 
 const GET_CUSTOMERS = gql`
-  query Cm2Customers {
-    cm2Customers {
-      hasNextPage
-      items {
-        ...Customer
+  query Cm2Customers($page: Int) {
+    cm2Customers(page: $page) {
+      pageInfo {
+        hasNextPage
+        pageNumber
+      }
+      edges {
+        node {
+          ...Customer
+        }
       }
     }
-    ${customerFragment}
   }
+  ${customerFragment}
 `;
 
 const CREATE_CUSTOMER = gql`

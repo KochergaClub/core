@@ -1,7 +1,9 @@
+import fs from 'fs';
+
 import * as express from 'express';
 
 const ROOT = process.env.NO_DOCKER_DEV
-  ? '../../../backend/data/volume/tilda'
+  ? '../backend/data/volume/tilda'
   : '/data/tilda';
 
 const router = express.Router();
@@ -13,7 +15,9 @@ interface ConfigItem {
 
 type Config = ConfigItem[];
 
-const config = require(ROOT + '/config.json') as Config;
+const config = JSON.parse(
+  fs.readFileSync(ROOT + '/config.json', 'utf8')
+) as Config;
 
 config.forEach(configItem => {
   router.get('/' + configItem.alias, (_, res) => {

@@ -1,10 +1,10 @@
 import { ApolloServer } from 'apollo-server-express';
-import { typeDefs, resolvers, KochergaAPI } from '../src/apollo/schema';
+import { schema } from './apolloSchema';
+import { KochergaAPI } from './apolloSchema/api';
 import { API_HOST } from './constants';
 
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   dataSources: () => ({
     kochergaAPI: new KochergaAPI(API_HOST),
   }),

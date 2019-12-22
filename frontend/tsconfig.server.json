@@ -15,8 +15,6 @@
     "dist"
   ],
   "include": [
-    "next-env.d.ts",
-    "server/**/*.ts",
-    "src/apollo/**/*.ts"
+    "server/**/*.ts"
   ]
 }

@@ -2,7 +2,10 @@ import { useCallback } from 'react';
 
 import { Row, Label } from '@kocherga/frontkit';
 
-import { Collection, CustomCardListView } from '~/components/collections';
+import {
+  PagedApolloCollection,
+  CustomCardListView,
+} from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import ApolloQueryResults from './ApolloQueryResults';
@@ -68,26 +71,29 @@ const CustomersScreen: React.FC = () => {
 
   return (
     <ApolloQueryResults {...queryResults}>
-      {({
-        data: {
-          cm2Customers: { items: customers },
-        },
-      }) => (
-        <Collection
-          items={customers}
-          names={{
-            plural: 'клиенты',
-            genitive: 'клиент',
-          }}
-          add={{
-            cb: (data: FormData) => add({ variables: { params: data } }),
-            shape: addShape,
-          }}
-          view={props => (
-            <CustomCardListView {...props} renderItem={renderItem} />
-          )}
-        />
-      )}
+      {({ data: { cm2Customers } }) => {
+        return (
+          <PagedApolloCollection
+            connection={cm2Customers}
+            fetchPage={async page => {
+              await queryResults.refetch({ page });
+            }}
+            names={{
+              plural: 'клиенты',
+              genitive: 'клиент',
+            }}
+            add={{
+              cb: async (data: FormData) => {
+                await add({ variables: { params: data } });
+              },
+              shape: addShape,
+            }}
+            view={props => (
+              <CustomCardListView {...props} renderItem={renderItem} />
+            )}
+          />
+        );
+      }}
     </ApolloQueryResults>
   );
 };

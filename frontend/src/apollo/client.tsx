@@ -147,7 +147,7 @@ function createServerLink(req: NextPageContext['req']) {
   // this is important for webpack to remove this code on client
   if (typeof window === 'undefined') {
     const { SchemaLink } = require('apollo-link-schema');
-    const { schema, KochergaAPI } = require('./schema');
+    const { schema, KochergaAPI } = require('../../server/apolloSchema');
     const { API_HOST } = require('../../server/constants');
 
     // req can be empty when we do the last styled-components-extracting rendering pass in _document.

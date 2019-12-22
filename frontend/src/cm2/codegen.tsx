@@ -29,10 +29,17 @@ export type Cm2Customer = {
   last_name: Scalars['String'],
 };
 
+/** TODO - generate connection+edge string with helper */
 export type Cm2CustomerConnection = {
    __typename?: 'Cm2CustomerConnection',
-  hasNextPage: Scalars['Boolean'],
-  items: Array<Cm2Customer>,
+  pageInfo: PageInfo,
+  edges: Array<Cm2CustomerEdge>,
+};
+
+export type Cm2CustomerEdge = {
+   __typename?: 'Cm2CustomerEdge',
+  cursor: Scalars['String'],
+  node: Cm2Customer,
 };
 
 export type Cm2Order = {
@@ -46,8 +53,14 @@ export type Cm2Order = {
 
 export type Cm2OrderConnection = {
    __typename?: 'Cm2OrderConnection',
-  hasNextPage: Scalars['Boolean'],
-  items: Array<Cm2Order>,
+  pageInfo: PageInfo,
+  edges: Array<Cm2OrderEdge>,
+};
+
+export type Cm2OrderEdge = {
+   __typename?: 'Cm2OrderEdge',
+  cursor: Scalars['String'],
+  node: Cm2Order,
 };
 
 export type Mutation = {
@@ -72,31 +85,65 @@ export type MutationCm2CloseOrderArgs = {
   id: Scalars['ID']
 };
 
+/** TODO - move outside of cm2 */
+export type PageInfo = {
+   __typename?: 'PageInfo',
+  pageNumber: Scalars['Int'],
+  endCursor?: Maybe<Scalars['String']>,
+  hasNextPage: Scalars['Boolean'],
+};
+
+/** 
+ * FIXME - Can't use 'extend type Query' in separate files because of
+ * https://github.com/dotansimha/graphql-code-generator/issues/2731
+ */
 export type Query = {
    __typename?: 'Query',
-  rooms: Array<Maybe<Room>>,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
+  rooms: Array<Maybe<Room>>,
 };
 
 
+/** 
+ * FIXME - Can't use 'extend type Query' in separate files because of
+ * https://github.com/dotansimha/graphql-code-generator/issues/2731
+ */
 export type QueryCm2CustomersArgs = {
-  search?: Maybe<Scalars['String']>
+  search?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  page?: Maybe<Scalars['Int']>
 };
 
 
+/** 
+ * FIXME - Can't use 'extend type Query' in separate files because of
+ * https://github.com/dotansimha/graphql-code-generator/issues/2731
+ */
 export type QueryCm2OrdersArgs = {
-  status?: Maybe<Scalars['String']>
+  status?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  page?: Maybe<Scalars['Int']>
 };
 
 
+/** 
+ * FIXME - Can't use 'extend type Query' in separate files because of
+ * https://github.com/dotansimha/graphql-code-generator/issues/2731
+ */
 export type QueryCm2CustomerArgs = {
   id?: Maybe<Scalars['ID']>
 };
 
 
+/** 
+ * FIXME - Can't use 'extend type Query' in separate files because of
+ * https://github.com/dotansimha/graphql-code-generator/issues/2731
+ */
 export type QueryCm2OrderArgs = {
   id?: Maybe<Scalars['ID']>
 };
@@ -123,7 +170,8 @@ export type OrderWithCustomerFragment = (
 );
 
 export type GetCm2OrdersQueryVariables = {
-  status: Scalars['String']
+  status?: Maybe<Scalars['String']>,
+  page?: Maybe<Scalars['Int']>
 };
 
 
@@ -131,10 +179,15 @@ export type GetCm2OrdersQuery = (
   { __typename?: 'Query' }
   & { cm2Orders: (
     { __typename?: 'Cm2OrderConnection' }
-    & Pick<Cm2OrderConnection, 'hasNextPage'>
-    & { items: Array<(
-      { __typename?: 'Cm2Order' }
-      & OrderWithCustomerFragment
+    & { pageInfo: (
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'hasNextPage' | 'pageNumber'>
+    ), edges: Array<(
+      { __typename?: 'Cm2OrderEdge' }
+      & { node: (
+        { __typename?: 'Cm2Order' }
+        & OrderWithCustomerFragment
+      ) }
     )> }
   ) }
 );
@@ -177,25 +230,37 @@ export type SearchCm2CustomersQuery = (
   { __typename?: 'Query' }
   & { cm2Customers: (
     { __typename?: 'Cm2CustomerConnection' }
-    & Pick<Cm2CustomerConnection, 'hasNextPage'>
-    & { items: Array<(
-      { __typename?: 'Cm2Customer' }
-      & CustomerFragment
+    & { pageInfo: (
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'hasNextPage'>
+    ), edges: Array<(
+      { __typename?: 'Cm2CustomerEdge' }
+      & { node: (
+        { __typename?: 'Cm2Customer' }
+        & CustomerFragment
+      ) }
     )> }
   ) }
 );
 
-export type Cm2CustomersQueryVariables = {};
+export type Cm2CustomersQueryVariables = {
+  page?: Maybe<Scalars['Int']>
+};
 
 
 export type Cm2CustomersQuery = (
   { __typename?: 'Query' }
   & { cm2Customers: (
     { __typename?: 'Cm2CustomerConnection' }
-    & Pick<Cm2CustomerConnection, 'hasNextPage'>
-    & { items: Array<(
-      { __typename?: 'Cm2Customer' }
-      & CustomerFragment
+    & { pageInfo: (
+      { __typename?: 'PageInfo' }
+      & Pick<PageInfo, 'hasNextPage' | 'pageNumber'>
+    ), edges: Array<(
+      { __typename?: 'Cm2CustomerEdge' }
+      & { node: (
+        { __typename?: 'Cm2Customer' }
+        & CustomerFragment
+      ) }
     )> }
   ) }
 );
@@ -256,11 +321,16 @@ export const OrderWithCustomerFragmentDoc = gql`
 }
     ${CustomerFragmentDoc}`;
 export const GetCm2OrdersDocument = gql`
-    query GetCm2Orders($status: String!) {
-  cm2Orders(status: $status) {
-    hasNextPage
-    items {
-      ...OrderWithCustomer
+    query GetCm2Orders($status: String, $page: Int) {
+  cm2Orders(status: $status, page: $page) {
+    pageInfo {
+      hasNextPage
+      pageNumber
+    }
+    edges {
+      node {
+        ...OrderWithCustomer
+      }
     }
   }
 }
@@ -279,6 +349,7 @@ export const GetCm2OrdersDocument = gql`
  * const { data, loading, error } = useGetCm2OrdersQuery({
  *   variables: {
  *      status: // value for 'status'
+ *      page: // value for 'page'
  *   },
  * });
  */
@@ -360,10 +431,14 @@ export type Cm2CreateOrderMutationResult = ApolloReactCommon.MutationResult<Cm2C
 export type Cm2CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<Cm2CreateOrderMutation, Cm2CreateOrderMutationVariables>;
 export const SearchCm2CustomersDocument = gql`
     query SearchCm2Customers($search: String!) {
-  cm2Customers(search: $search) {
-    hasNextPage
-    items {
-      ...Customer
+  cm2Customers(search: $search, first: 10) {
+    pageInfo {
+      hasNextPage
+    }
+    edges {
+      node {
+        ...Customer
+      }
     }
   }
 }
@@ -395,11 +470,16 @@ export type SearchCm2CustomersQueryHookResult = ReturnType<typeof useSearchCm2Cu
 export type SearchCm2CustomersLazyQueryHookResult = ReturnType<typeof useSearchCm2CustomersLazyQuery>;
 export type SearchCm2CustomersQueryResult = ApolloReactCommon.QueryResult<SearchCm2CustomersQuery, SearchCm2CustomersQueryVariables>;
 export const Cm2CustomersDocument = gql`
-    query Cm2Customers {
-  cm2Customers {
-    hasNextPage
-    items {
-      ...Customer
+    query Cm2Customers($page: Int) {
+  cm2Customers(page: $page) {
+    pageInfo {
+      hasNextPage
+      pageNumber
+    }
+    edges {
+      node {
+        ...Customer
+      }
     }
   }
 }
@@ -417,6 +497,7 @@ export const Cm2CustomersDocument = gql`
  * @example
  * const { data, loading, error } = useCm2CustomersQuery({
  *   variables: {
+ *      page: // value for 'page'
  *   },
  * });
  */

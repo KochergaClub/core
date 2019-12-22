@@ -1,0 +1,52 @@
+# TODO - move outside of cm2
+type PageInfo {
+  pageNumber: Int!  # supported until we move to cursor-based pagination entirely
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+# TODO - generate connection+edge string with helper
+type Cm2CustomerConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2CustomerEdge!]!
+}
+
+type Cm2CustomerEdge {
+  cursor: String!
+  node: Cm2Customer!
+}
+
+type Cm2Customer {
+  id: ID!
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+type Cm2OrderConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2OrderEdge!]!
+}
+
+type Cm2OrderEdge {
+  cursor: String!
+  node: Cm2Order!
+}
+
+type Cm2Order {
+  id: ID!
+  start: String! # FIXME
+  end: String # FIXME
+  value: Int
+  customer: Cm2Customer
+}
+
+input Cm2CreateOrderInput {
+  customer: ID
+}
+
+input Cm2CreateCustomerInput {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}

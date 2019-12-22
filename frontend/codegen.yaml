@@ -1,4 +1,4 @@
-schema: src/apollo/schema.ts
+schema: server/apolloSchema/*.graphql
 generates:
   ./src/cm2/codegen.tsx:
     documents:
