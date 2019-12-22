@@ -108,9 +108,17 @@ const CLOSE_ORDER = gql`
 `;
 
 const GET_CUSTOMER = gql`
-  query Cm2Customer($id: ID!) {
+  query Cm2CustomerPage($id: ID!) {
     cm2Customer(id: $id) {
       ...Customer
+      orders {
+        edges {
+          node {
+            id
+            start
+          }
+        }
+      }
     }
   }
   ${customerFragment}

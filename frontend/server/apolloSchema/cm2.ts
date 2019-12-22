@@ -10,6 +10,10 @@ interface Cm2CreateCustomerInput {
   last_name: string;
 }
 
+// endpoints
+const CUSTOMER = 'cm2/customer';
+const ORDER = 'cm2/orders';
+
 export const resolvers: Resolvers = {
   Query: {
     cm2Customers: (
@@ -18,7 +22,7 @@ export const resolvers: Resolvers = {
       { dataSources }
     ) =>
       dataSources.kochergaAPI.listPage({
-        resource: 'cm2/customer',
+        resource: CUSTOMER,
         query: {
           search,
         },
@@ -30,31 +34,31 @@ export const resolvers: Resolvers = {
       { dataSources }
     ) =>
       dataSources.kochergaAPI.listPage({
-        resource: 'cm2/orders',
+        resource: ORDER,
         query: {
           status,
         },
         page,
       }),
     cm2Customer: (_, { id }: { id: string }, { dataSources }) =>
-      dataSources.kochergaAPI.retrieve({ resource: 'cm2/customer', id }),
+      dataSources.kochergaAPI.retrieve({ resource: CUSTOMER, id }),
     cm2Order: (_, { id }: { id: string }, { dataSources }) =>
-      dataSources.kochergaAPI.retrieve({ resource: 'cm2/orders', id }),
+      dataSources.kochergaAPI.retrieve({ resource: ORDER, id }),
   },
   Mutation: {
     cm2CreateOrder: (
       _,
       { params }: { params: Cm2CreateOrderInput },
       { dataSources }
-    ) => dataSources.kochergaAPI.create({ resource: 'cm2/orders', params }),
+    ) => dataSources.kochergaAPI.create({ resource: ORDER, params }),
     cm2CreateCustomer: (
       _,
       { params }: { params: Cm2CreateCustomerInput },
       { dataSources }
-    ) => dataSources.kochergaAPI.create({ resource: 'cm2/customer', params }),
+    ) => dataSources.kochergaAPI.create({ resource: CUSTOMER, params }),
     cm2CloseOrder: (_, { id }: { id: string }, { dataSources }) => {
       dataSources.kochergaAPI.postDetailsAction({
-        resource: 'cm2/orders',
+        resource: ORDER,
         id,
         action: 'close',
       });
@@ -67,9 +71,18 @@ export const resolvers: Resolvers = {
         return null;
       }
       return dataSources.kochergaAPI.retrieve({
-        resource: 'cm2/customer',
+        resource: CUSTOMER,
         id: parent.customer,
       }); // TODO - dataloader for batching
     },
+  },
+  Cm2Customer: {
+    orders: (parent, _, { dataSources }) =>
+      dataSources.kochergaAPI.listPage({
+        resource: ORDER,
+        query: {
+          customer_id: parent.id,
+        },
+      }),
   },
 };

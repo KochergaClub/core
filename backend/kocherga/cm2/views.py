@@ -20,6 +20,9 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
         status = self.request.query_params.get('status')
         if status:
             qs = qs.filter_by_status(status)
+        customer_id = self.request.query_params.get('customer_id')
+        if customer_id:
+            qs = qs.filter_by_customer_id(customer_id)
         return qs
 
     @action(detail=True, methods=['POST'])

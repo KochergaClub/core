@@ -9,6 +9,10 @@ import { resolvers as cm2Resolvers } from './cm2';
 import Room from './rooms.graphql';
 import { resolvers as roomResolvers } from './rooms';
 
+// /// <reference path="./graphql.d.ts" />
+// import Cashier from './cashier.graphql';
+// import { resolvers as cashierResolvers } from './cashier';
+
 /// <reference path="./graphql.d.ts" />
 import { default as Base } from './base.graphql';
 

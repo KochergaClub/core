@@ -1,13 +1,11 @@
 import { differenceInMinutes } from 'date-fns';
 
-import Link from 'next/link';
-import { A } from '@kocherga/frontkit';
-
 import { CustomTableView } from '~/components/collections';
 
 import { OrderWithCustomerFragment } from '../codegen';
 
 import CustomerLink from './CustomerLink';
+import OrderLink from './OrderLink';
 
 const OrdersTableView: React.FC<{
   items: OrderWithCustomerFragment[];
@@ -37,15 +35,7 @@ const OrdersTableView: React.FC<{
               <div>&nbsp;</div>
             );
           case 'id':
-            return (
-              <Link
-                href="/team/cm/orders/[id]"
-                as={`/team/cm/orders/${item.id}`}
-                passHref
-              >
-                <A>{item.id}</A>
-              </Link>
-            );
+            return <OrderLink order={item} />;
           case 'time':
             const diff = differenceInMinutes(
               item.end ? new Date(item.end) : new Date(),

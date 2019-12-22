@@ -21,6 +21,7 @@ type Cm2Customer {
   card_id: Int!
   first_name: String!
   last_name: String!
+  orders: Cm2OrderConnection!
 }
 
 type Cm2OrderConnection {

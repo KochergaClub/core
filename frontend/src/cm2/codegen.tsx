@@ -27,6 +27,7 @@ export type Cm2Customer = {
   card_id: Scalars['Int'],
   first_name: Scalars['String'],
   last_name: Scalars['String'],
+  orders: Cm2OrderConnection,
 };
 
 /** TODO - generate connection+edge string with helper */
@@ -288,15 +289,25 @@ export type Cm2CloseOrderMutation = (
   & Pick<Mutation, 'cm2CloseOrder'>
 );
 
-export type Cm2CustomerQueryVariables = {
+export type Cm2CustomerPageQueryVariables = {
   id: Scalars['ID']
 };
 
 
-export type Cm2CustomerQuery = (
+export type Cm2CustomerPageQuery = (
   { __typename?: 'Query' }
   & { cm2Customer: (
     { __typename?: 'Cm2Customer' }
+    & { orders: (
+      { __typename?: 'Cm2OrderConnection' }
+      & { edges: Array<(
+        { __typename?: 'Cm2OrderEdge' }
+        & { node: (
+          { __typename?: 'Cm2Order' }
+          & Pick<Cm2Order, 'id' | 'start'>
+        ) }
+      )> }
+    ) }
     & CustomerFragment
   ) }
 );
@@ -572,36 +583,44 @@ export function useCm2CloseOrderMutation(baseOptions?: ApolloReactHooks.Mutation
 export type Cm2CloseOrderMutationHookResult = ReturnType<typeof useCm2CloseOrderMutation>;
 export type Cm2CloseOrderMutationResult = ApolloReactCommon.MutationResult<Cm2CloseOrderMutation>;
 export type Cm2CloseOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<Cm2CloseOrderMutation, Cm2CloseOrderMutationVariables>;
-export const Cm2CustomerDocument = gql`
-    query Cm2Customer($id: ID!) {
+export const Cm2CustomerPageDocument = gql`
+    query Cm2CustomerPage($id: ID!) {
   cm2Customer(id: $id) {
     ...Customer
+    orders {
+      edges {
+        node {
+          id
+          start
+        }
+      }
+    }
   }
 }
     ${CustomerFragmentDoc}`;
 
 /**
- * __useCm2CustomerQuery__
+ * __useCm2CustomerPageQuery__
  *
- * To run a query within a React component, call `useCm2CustomerQuery` and pass it any options that fit your needs.
- * When your component renders, `useCm2CustomerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useCm2CustomerPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCm2CustomerPageQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCm2CustomerQuery({
+ * const { data, loading, error } = useCm2CustomerPageQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useCm2CustomerQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<Cm2CustomerQuery, Cm2CustomerQueryVariables>) {
-        return ApolloReactHooks.useQuery<Cm2CustomerQuery, Cm2CustomerQueryVariables>(Cm2CustomerDocument, baseOptions);
+export function useCm2CustomerPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<Cm2CustomerPageQuery, Cm2CustomerPageQueryVariables>) {
+        return ApolloReactHooks.useQuery<Cm2CustomerPageQuery, Cm2CustomerPageQueryVariables>(Cm2CustomerPageDocument, baseOptions);
       }
-export function useCm2CustomerLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<Cm2CustomerQuery, Cm2CustomerQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<Cm2CustomerQuery, Cm2CustomerQueryVariables>(Cm2CustomerDocument, baseOptions);
+export function useCm2CustomerPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<Cm2CustomerPageQuery, Cm2CustomerPageQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<Cm2CustomerPageQuery, Cm2CustomerPageQueryVariables>(Cm2CustomerPageDocument, baseOptions);
         }
-export type Cm2CustomerQueryHookResult = ReturnType<typeof useCm2CustomerQuery>;
-export type Cm2CustomerLazyQueryHookResult = ReturnType<typeof useCm2CustomerLazyQuery>;
-export type Cm2CustomerQueryResult = ApolloReactCommon.QueryResult<Cm2CustomerQuery, Cm2CustomerQueryVariables>;
+export type Cm2CustomerPageQueryHookResult = ReturnType<typeof useCm2CustomerPageQuery>;
+export type Cm2CustomerPageLazyQueryHookResult = ReturnType<typeof useCm2CustomerPageLazyQuery>;
+export type Cm2CustomerPageQueryResult = ApolloReactCommon.QueryResult<Cm2CustomerPageQuery, Cm2CustomerPageQueryVariables>;

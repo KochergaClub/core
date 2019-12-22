@@ -16,6 +16,9 @@ class OrderQuerySet(models.QuerySet):
         else:
             raise Exception(f"Unknown status {status}")
 
+    def filter_by_customer_id(self, customer_id):
+        return self.filter(customer__pk=customer_id)
+
 
 class Order(models.Model):
     start = models.DateTimeField(auto_now_add=True, db_index=True)
