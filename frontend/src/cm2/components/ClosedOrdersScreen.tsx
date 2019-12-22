@@ -10,6 +10,7 @@ import ApolloQueryResults from './ApolloQueryResults';
 const ClosedOrdersScreen: React.FC = () => {
   const queryResults = useGetCm2OrdersQuery({
     variables: { status: 'closed' },
+    fetchPolicy: 'cache-and-network',
   });
 
   return (

@@ -20,7 +20,10 @@ import ApolloQueryResults from './ApolloQueryResults';
 import OrdersTableView from './OrdersTableView';
 
 const OpenOrdersScreen: React.FC = () => {
-  const queryResults = useGetCm2OrdersQuery({ variables: { status: 'open' } });
+  const queryResults = useGetCm2OrdersQuery({
+    variables: { status: 'open' },
+    fetchPolicy: 'cache-and-network',
+  });
   const apolloClient = useApolloClient();
 
   const [addMutation] = useCm2CreateOrderMutation();
