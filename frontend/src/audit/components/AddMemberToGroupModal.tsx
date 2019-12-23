@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 
 import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
-import { StaffMemberForPickerFragment } from '~/staff/codegen';
+import { StaffMemberForPickerFragment } from '~/staff/queries.generated';
 
-import { AuthGroupsDocument, useAuthAddUserToGroupMutation } from '../codegen';
+import {
+  AuthGroupsDocument,
+  useAuthAddUserToGroupMutation,
+} from '../queries.generated';
 
 interface Props {
   close: () => void;

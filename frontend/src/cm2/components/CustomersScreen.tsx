@@ -14,7 +14,7 @@ import {
   useCm2CustomersQuery,
   useCm2CreateCustomerMutation,
   CustomerFragment,
-} from '../codegen';
+} from '../queries.generated';
 
 import CustomerLink from './CustomerLink';
 

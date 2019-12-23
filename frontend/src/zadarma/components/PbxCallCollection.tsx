@@ -11,7 +11,7 @@ import PbxCallCard from './PbxCallCard';
 import {
   CommonZadarmaPbxCallFragment,
   useZadarmaPbxCallsQuery,
-} from '../codegen';
+} from '../queries.generated';
 
 const PbxCallCollection: React.FC = () => {
   const queryResults = useZadarmaPbxCallsQuery();

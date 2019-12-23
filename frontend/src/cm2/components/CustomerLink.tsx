@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { A } from '@kocherga/frontkit';
 
-import { CustomerFragment } from '../codegen';
+import { CustomerFragment } from '../queries.generated';
 
 interface Props {
   customer: CustomerFragment;

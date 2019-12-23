@@ -15,14 +15,14 @@ import {
   StaffMembersDocument,
   StaffMembersQuery,
   StaffMemberFullFragment,
-} from '~/staff/codegen';
+} from '~/staff/queries.generated';
 
 import {
   useCashierPaymentsQuery,
   CashierPaymentsDocument,
   useCashierCreatePaymentMutation,
   PaymentFragment,
-} from '../codegen';
+} from '../queries.generated';
 
 import PaymentCard from './PaymentCard';
 

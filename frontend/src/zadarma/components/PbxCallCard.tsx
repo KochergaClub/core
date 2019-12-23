@@ -5,7 +5,7 @@ import { timezone, formatDate } from '~/common/utils';
 
 import { A } from '@kocherga/frontkit';
 
-import { CommonZadarmaPbxCallFragment } from '../codegen';
+import { CommonZadarmaPbxCallFragment } from '../queries.generated';
 
 import CallInfo from './CallInfo';
 import PbxCallData from './PbxCallData';

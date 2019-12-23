@@ -5,7 +5,7 @@ import { timezone, formatDate } from '~/common/utils';
 
 import DispositionLabel from './DispositionLabel';
 
-import { CommonZadarmaPbxCallFragment } from '../codegen';
+import { CommonZadarmaPbxCallFragment } from '../queries.generated';
 
 const Container = styled.div`
   display: flex;

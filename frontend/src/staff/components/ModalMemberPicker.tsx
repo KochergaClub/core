@@ -2,7 +2,10 @@ import { Modal, Column } from '@kocherga/frontkit';
 
 import { AsyncButton, ApolloQueryResults } from '~/components';
 
-import { useStaffMembersQuery, StaffMemberForPickerFragment } from '../codegen';
+import {
+  useStaffMembersQuery,
+  StaffMemberForPickerFragment,
+} from '../queries.generated';
 
 interface Props {
   close: () => void;

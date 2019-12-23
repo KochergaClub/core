@@ -9,7 +9,7 @@ import {
   useCm2OrderQuery,
   Cm2OrderDocument,
   useCm2CloseOrderMutation,
-} from '../codegen';
+} from '../queries.generated';
 
 import CustomerLink from './CustomerLink';
 

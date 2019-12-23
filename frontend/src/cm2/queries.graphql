@@ -1,0 +1,84 @@
+fragment Customer on Cm2Customer {
+  id
+  first_name
+  last_name
+  card_id
+}
+
+fragment OrderWithCustomer on Cm2Order {
+  id
+  start
+  end
+  value
+  customer {
+    ...Customer
+  }
+}
+
+query Cm2Orders($status: String, $page: Int) {
+  cm2Orders(status: $status, page: $page) {
+    pageInfo {
+      hasNextPage
+      pageNumber
+    }
+    nodes {
+      ...OrderWithCustomer
+    }
+  }
+}
+
+query Cm2Order($id: ID!) {
+  cm2Order(id: $id) {
+    ...OrderWithCustomer
+  }
+}
+
+mutation Cm2CreateOrder($params: Cm2CreateOrderInput!) {
+  cm2CreateOrder(params: $params) {
+    customer {
+      id
+    }
+  }
+}
+
+query Cm2SearchCustomers($search: String!) {
+  cm2Customers(search: $search, first: 10) {
+    nodes {
+      ...Customer
+    }
+  }
+}
+
+query Cm2Customers($page: Int) {
+  cm2Customers(page: $page) {
+    pageInfo {
+      hasNextPage
+      pageNumber
+    }
+    nodes {
+      ...Customer
+    }
+  }
+}
+
+mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
+  cm2CreateCustomer(params: $params) {
+    id
+  }
+}
+
+mutation Cm2CloseOrder($id: ID!) {
+  cm2CloseOrder(id: $id)
+}
+
+query Cm2CustomerPage($id: ID!) {
+  cm2Customer(id: $id) {
+    ...Customer
+    orders {
+      nodes {
+        id
+        start
+      }
+    }
+  }
+}

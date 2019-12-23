@@ -1,7 +1,7 @@
 import { ApolloQueryResults } from '~/components';
 import { CardList } from '~/components/Card';
 
-import { useAuthGroupsQuery } from '../codegen';
+import { useAuthGroupsQuery } from '../queries.generated';
 
 import GroupCard from './GroupCard';
 

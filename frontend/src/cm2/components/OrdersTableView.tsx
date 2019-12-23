@@ -2,7 +2,7 @@ import { differenceInMinutes } from 'date-fns';
 
 import { CustomTableView } from '~/components/collections';
 
-import { OrderWithCustomerFragment } from '../codegen';
+import { OrderWithCustomerFragment } from '../queries.generated';
 
 import CustomerLink from './CustomerLink';
 import OrderLink from './OrderLink';

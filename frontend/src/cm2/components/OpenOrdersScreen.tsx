@@ -12,9 +12,9 @@ import {
   useCm2OrdersQuery,
   useCm2CreateOrderMutation,
   Cm2SearchCustomersQuery,
+  Cm2SearchCustomersDocument,
   Cm2SearchCustomersQueryVariables,
-} from '../codegen';
-import { SEARCH_CUSTOMERS } from '../queries';
+} from '../queries.generated';
 
 import OrdersTableView from './OrdersTableView';
 
@@ -55,7 +55,7 @@ const OpenOrdersScreen: React.FC = () => {
             Cm2SearchCustomersQuery,
             Cm2SearchCustomersQueryVariables
           >({
-            query: SEARCH_CUSTOMERS,
+            query: Cm2SearchCustomersDocument,
             variables: { search: inputValue },
           });
           if (!customersData) {

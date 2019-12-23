@@ -4,7 +4,10 @@ import { Row, Label } from '@kocherga/frontkit';
 
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 
-import { Cm2CustomerPageQuery, useCm2CustomerPageQuery } from '../codegen';
+import {
+  Cm2CustomerPageQuery,
+  useCm2CustomerPageQuery,
+} from '../queries.generated';
 
 import OrderLink from './OrderLink';
 

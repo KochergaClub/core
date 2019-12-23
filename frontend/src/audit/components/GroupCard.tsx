@@ -18,7 +18,7 @@ import {
   AuthGroupsDocument,
   MaybeStaffUserFragment,
   useAuthRemoveUserFromGroupMutation,
-} from '../codegen';
+} from '../queries.generated';
 
 interface Props {
   group: AuthGroupsQuery['groups'][0];

@@ -10,7 +10,10 @@ import { AsyncButtonWithConfirm } from '~/components';
 
 import UserInfo from '~/audit/components/UserInfo';
 
-import { PaymentFragment, useCashierRedeemPaymentMutation } from '../codegen';
+import {
+  PaymentFragment,
+  useCashierRedeemPaymentMutation,
+} from '../queries.generated';
 
 const PaymentCard = ({ payment }: { payment: PaymentFragment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);

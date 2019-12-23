@@ -12,7 +12,7 @@ import { Watchman } from '~/watchmen/types';
 import {
   CommonZadarmaPbxCallFragment,
   useZadarmaSetMemberForPbxCallMutation,
-} from '../codegen';
+} from '../queries.generated';
 
 interface Props {
   pbx_call: CommonZadarmaPbxCallFragment;

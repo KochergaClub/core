@@ -1,6 +1,6 @@
 import { ApolloQueryResults } from '~/components';
 
-import { useZadarmaPbxCallQuery } from '../codegen';
+import { useZadarmaPbxCallQuery } from '../queries.generated';
 
 import Card from '~/components/Card';
 

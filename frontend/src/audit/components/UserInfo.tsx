@@ -4,7 +4,7 @@ import { A, Row } from '@kocherga/frontkit';
 
 import { Badge } from '~/components';
 
-import { MaybeStaffUserFragment } from '../codegen';
+import { MaybeStaffUserFragment } from '../queries.generated';
 
 const UserInfo: React.FC<{ user: MaybeStaffUserFragment }> = ({ user }) => {
   if (user.staff_member) {

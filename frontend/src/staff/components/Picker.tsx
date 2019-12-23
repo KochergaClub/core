@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import BasicPicker from '~/components/Picker';
 
-import { StaffMemberForPickerFragment as Member } from '../codegen';
+import { StaffMemberForPickerFragment as Member } from '../queries.generated';
 
 interface Extra {
   color: string;

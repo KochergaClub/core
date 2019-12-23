@@ -3,7 +3,7 @@ import { ApolloQueryResults } from '~/components';
 
 import UserInfo from './UserInfo';
 
-import { useAuthPermissionsQuery } from '../codegen';
+import { useAuthPermissionsQuery } from '../queries.generated';
 
 const SinglePermissionsList: React.FC = () => {
   const queryResults = useAuthPermissionsQuery();

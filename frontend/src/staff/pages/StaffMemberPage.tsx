@@ -5,7 +5,7 @@ import { Page, ApolloQueryResults } from '~/components';
 
 import MemberProfile from '~/staff/components/MemberProfile';
 
-import { useStaffMemberQuery } from '../codegen';
+import { useStaffMemberQuery } from '../queries.generated';
 
 interface Props {
   id: string;

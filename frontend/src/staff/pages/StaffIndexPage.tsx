@@ -7,7 +7,10 @@ import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
 import { Page, ApolloQueryResults } from '~/components';
 
-import { StaffMemberFullFragment, useStaffMembersQuery } from '../codegen';
+import {
+  StaffMemberFullFragment,
+  useStaffMembersQuery,
+} from '../queries.generated';
 
 const MemberList = ({
   title,

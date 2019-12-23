@@ -12,7 +12,7 @@ import {
   StaffMemberDocument,
   useStaffGrantGooglePermissionsToMemberMutation,
   useStaffFireMemberMutation,
-} from '../codegen';
+} from '../queries.generated';
 
 const Ex = styled.div`
   background-color: #ddd;

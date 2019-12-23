@@ -2,7 +2,7 @@ import { Collection } from '~/components/collections';
 
 import { PaddedBlock, ApolloQueryResults } from '~/components';
 
-import { useCm2OrdersQuery } from '../codegen';
+import { useCm2OrdersQuery } from '../queries.generated';
 
 import OrdersTableView from './OrdersTableView';
 
