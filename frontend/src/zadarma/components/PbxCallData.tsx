@@ -7,7 +7,7 @@ import { Label } from '@kocherga/frontkit';
 import { usePermissions, useExpandable } from '~/common/hooks';
 
 import WatchmanPicker from '~/watchmen/components/WatchmanPicker';
-import { Watchman } from '~/watchmen/types';
+import { WatchmanForPickerFragment } from '~/watchmen/queries.generated';
 
 import {
   CommonZadarmaPbxCallFragment,
@@ -53,10 +53,10 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
 
   const setWatchman = useCallback(
-    async (watchman: Watchman) => {
+    async (watchman: WatchmanForPickerFragment) => {
       await setStaffMemberMutation({
         variables: {
-          member_id: String(watchman.member_id),
+          member_id: String(watchman.member.id),
           pbx_call_id: pbx_call.pbx_call_id,
         },
       });

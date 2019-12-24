@@ -1,6 +1,7 @@
 extend type Query {
   watchmenWatchmenAll: [WatchmenWatchman!]!
   watchmenGradesAll: [WatchmenGrade!]!
+  watchmenShifts(from_date: String): [WatchmenShift!]!
 }
 
 type WatchmenWatchman {
@@ -14,6 +15,14 @@ type WatchmenGrade {
   id: ID!
   code: String!
   multiplier: Float!
+}
+
+type WatchmenShift {
+  id: ID!
+  date: String!
+  shift: String!
+  watchman: WatchmenWatchman
+  is_night: Boolean!
 }
 
 extend type Mutation {

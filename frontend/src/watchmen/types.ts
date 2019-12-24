@@ -1,11 +1,8 @@
 export interface Watchman {
-  id: number;
-  member_id: number;
+  id: string;
+  member_id: string;
   color: string;
   short_name: string;
-  is_current: boolean;
-  grade_id?: number;
-  priority: number;
 }
 
 export interface Shift {

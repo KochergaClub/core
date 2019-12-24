@@ -3,47 +3,18 @@ import { Resolvers } from './gen-types';
 import { MEMBER as STAFF_MEMBER } from './staff';
 
 // endpoints
-const WATCHMEN = 'watchmen/watchmen';
-const GRADES = 'watchmen/grades';
+const WATCHMAN = 'watchmen/watchmen';
+const GRADE = 'watchmen/grades';
+const SHIFT = 'watchmen/schedule';
 
 export const resolvers: Resolvers = {
   Query: {
     watchmenWatchmenAll: (_, __, { dataSources }) =>
-      dataSources.kochergaAPI.list({ resource: WATCHMEN }),
+      dataSources.kochergaAPI.list({ resource: WATCHMAN }),
     watchmenGradesAll: (_, __, { dataSources }) =>
-      dataSources.kochergaAPI.list({ resource: GRADES }),
-  },
-  Mutation: {
-    watchmenSetWatchmanPriority: async (_, { params }, { dataSources }) => {
-      const { watchman_id, priority } = params;
-      await dataSources.kochergaAPI.update({
-        resource: WATCHMEN,
-        id: watchman_id,
-        patch: {
-          priority,
-        },
-      });
-      return true;
-    },
-    watchmenSetWatchmanGrade: async (_, { params }, { dataSources }) => {
-      const { watchman_id, grade_id } = params;
-      await dataSources.kochergaAPI.update({
-        resource: WATCHMEN,
-        id: watchman_id,
-        patch: {
-          grade_id,
-        },
-      });
-      return true;
-    },
-    watchmenCreateWatchman: async (_, { params }, { dataSources }) => {
-      await dataSources.kochergaAPI.postResourceAction({
-        resource: STAFF_MEMBER,
-        action: 'add_watchman',
-        params,
-      });
-      return true;
-    },
+      dataSources.kochergaAPI.list({ resource: GRADE }),
+    watchmenShifts: (_, { from_date }, { dataSources }) =>
+      dataSources.kochergaAPI.list({ resource: SHIFT, query: { from_date } }),
   },
   WatchmenWatchman: {
     member: async (parent, _, { dataSources }) => {
@@ -62,9 +33,53 @@ export const resolvers: Resolvers = {
         return null;
       }
       return await dataSources.kochergaAPI.retrieve({
-        resource: GRADES,
+        resource: GRADE,
         id: grade_id,
       });
+    },
+  },
+  WatchmenShift: {
+    watchman: async (parent, _, { dataSources }) => {
+      const watchman_id = (parent as any).watchman_id as string | undefined;
+      if (!watchman_id) {
+        return null;
+      }
+      return await dataSources.kochergaAPI.retrieve({
+        resource: WATCHMAN,
+        id: watchman_id,
+      });
+    },
+  },
+  Mutation: {
+    watchmenSetWatchmanPriority: async (_, { params }, { dataSources }) => {
+      const { watchman_id, priority } = params;
+      await dataSources.kochergaAPI.update({
+        resource: WATCHMAN,
+        id: watchman_id,
+        patch: {
+          priority,
+        },
+      });
+      return true;
+    },
+    watchmenSetWatchmanGrade: async (_, { params }, { dataSources }) => {
+      const { watchman_id, grade_id } = params;
+      await dataSources.kochergaAPI.update({
+        resource: WATCHMAN,
+        id: watchman_id,
+        patch: {
+          grade_id,
+        },
+      });
+      return true;
+    },
+    watchmenCreateWatchman: async (_, { params }, { dataSources }) => {
+      await dataSources.kochergaAPI.postResourceAction({
+        resource: STAFF_MEMBER,
+        action: 'add_watchman',
+        params,
+      });
+      return true;
     },
   },
 };

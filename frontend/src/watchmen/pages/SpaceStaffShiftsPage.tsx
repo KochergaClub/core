@@ -1,10 +1,11 @@
+import { withApollo } from '~/apollo/client';
 import { useSelector } from 'react-redux';
 
 import { addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 import {
   useListeningWebSocket,
   usePermissions,
@@ -12,7 +13,6 @@ import {
 } from '~/common/hooks';
 import { NextPage } from '~/common/types';
 
-import { loadWatchmen } from '~/watchmen/features/watchmen';
 import { reloadSchedule } from '~/watchmen/features/schedule';
 import {
   setDatesWindow,
@@ -75,8 +75,6 @@ SpaceStaffShiftsPage.getInitialProps = async ({ query, store }) => {
   }
   const to_date = addWeeks(from_date, 4);
 
-  await dispatch(loadWatchmen());
-
   await dispatch(reloadSchedule(from_date, to_date));
 
   dispatch(setDatesWindow(from_date, to_date));
@@ -84,4 +82,4 @@ SpaceStaffShiftsPage.getInitialProps = async ({ query, store }) => {
   return {};
 };
 
-export default SpaceStaffShiftsPage;
+export default withApollo(SpaceStaffShiftsPage);

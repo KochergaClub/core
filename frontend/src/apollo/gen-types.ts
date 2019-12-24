@@ -209,6 +209,7 @@ export type Query = {
   staffMember: StaffMember,
   watchmenWatchmenAll: Array<WatchmenWatchman>,
   watchmenGradesAll: Array<WatchmenGrade>,
+  watchmenShifts: Array<WatchmenShift>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
 };
@@ -247,6 +248,11 @@ export type QueryCm2OrderArgs = {
 
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryWatchmenShiftsArgs = {
+  from_date?: Maybe<Scalars['String']>
 };
 
 
@@ -309,6 +315,15 @@ export type WatchmenSetWatchmanGradeInput = {
 export type WatchmenSetWatchmanPriorityInput = {
   watchman_id: Scalars['ID'],
   priority: Scalars['Int'],
+};
+
+export type WatchmenShift = {
+   __typename?: 'WatchmenShift',
+  id: Scalars['ID'],
+  date: Scalars['String'],
+  shift: Scalars['String'],
+  watchman?: Maybe<WatchmenWatchman>,
+  is_night: Scalars['Boolean'],
 };
 
 export type WatchmenWatchman = {

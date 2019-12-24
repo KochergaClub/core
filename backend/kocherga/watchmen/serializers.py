@@ -42,8 +42,8 @@ class WatchmanSerializer(serializers.ModelSerializer):
 
 
 class ShiftSerializer(serializers.ModelSerializer):
-    watchman = WatchmanSerializer()  # deprecated
-    watchman_id = serializers.IntegerField(source='watchman')
+    watchman = WatchmanSerializer()  # deprecated, will be removed after we move frontend to GraphQL
+    watchman_id = serializers.IntegerField(source='watchman.pk', required=False)
 
     class Meta:
         model = models.Shift

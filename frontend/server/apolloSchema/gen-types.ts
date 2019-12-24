@@ -212,6 +212,7 @@ export type Query = {
   staffMember: StaffMember,
   watchmenWatchmenAll: Array<WatchmenWatchman>,
   watchmenGradesAll: Array<WatchmenGrade>,
+  watchmenShifts: Array<WatchmenShift>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
 };
@@ -250,6 +251,11 @@ export type QueryCm2OrderArgs = {
 
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryWatchmenShiftsArgs = {
+  from_date?: Maybe<Scalars['String']>
 };
 
 
@@ -312,6 +318,15 @@ export type WatchmenSetWatchmanGradeInput = {
 export type WatchmenSetWatchmanPriorityInput = {
   watchman_id: Scalars['ID'],
   priority: Scalars['Int'],
+};
+
+export type WatchmenShift = {
+   __typename?: 'WatchmenShift',
+  id: Scalars['ID'],
+  date: Scalars['String'],
+  shift: Scalars['String'],
+  watchman?: Maybe<WatchmenWatchman>,
+  is_night: Scalars['Boolean'],
 };
 
 export type WatchmenWatchman = {
@@ -446,6 +461,7 @@ export type ResolversTypes = {
   WatchmenWatchman: ResolverTypeWrapper<WatchmenWatchman>,
   WatchmenGrade: ResolverTypeWrapper<WatchmenGrade>,
   Float: ResolverTypeWrapper<Scalars['Float']>,
+  WatchmenShift: ResolverTypeWrapper<WatchmenShift>,
   ZadarmaPbxCallConnection: ResolverTypeWrapper<ZadarmaPbxCallConnection>,
   ZadarmaPbxCall: ResolverTypeWrapper<ZadarmaPbxCall>,
   ZadarmaCall: ResolverTypeWrapper<ZadarmaCall>,
@@ -482,6 +498,7 @@ export type ResolversParentTypes = {
   WatchmenWatchman: WatchmenWatchman,
   WatchmenGrade: WatchmenGrade,
   Float: Scalars['Float'],
+  WatchmenShift: WatchmenShift,
   ZadarmaPbxCallConnection: ZadarmaPbxCallConnection,
   ZadarmaPbxCall: ZadarmaPbxCall,
   ZadarmaCall: ZadarmaCall,
@@ -599,6 +616,7 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   staffMember?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType, RequireFields<QueryStaffMemberArgs, 'id'>>,
   watchmenWatchmenAll?: Resolver<Array<ResolversTypes['WatchmenWatchman']>, ParentType, ContextType>,
   watchmenGradesAll?: Resolver<Array<ResolversTypes['WatchmenGrade']>, ParentType, ContextType>,
+  watchmenShifts?: Resolver<Array<ResolversTypes['WatchmenShift']>, ParentType, ContextType, QueryWatchmenShiftsArgs>,
   zadarmaPbxCalls?: Resolver<ResolversTypes['ZadarmaPbxCallConnection'], ParentType, ContextType, QueryZadarmaPbxCallsArgs>,
   zadarmaPbxCall?: Resolver<ResolversTypes['ZadarmaPbxCall'], ParentType, ContextType, RequireFields<QueryZadarmaPbxCallArgs, 'pbx_call_id'>>,
 };
@@ -627,6 +645,14 @@ export type WatchmenGradeResolvers<ContextType = TContext, ParentType extends Re
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   multiplier?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
+};
+
+export type WatchmenShiftResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['WatchmenShift'] = ResolversParentTypes['WatchmenShift']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  shift?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  watchman?: Resolver<Maybe<ResolversTypes['WatchmenWatchman']>, ParentType, ContextType>,
+  is_night?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
 };
 
 export type WatchmenWatchmanResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['WatchmenWatchman'] = ResolversParentTypes['WatchmenWatchman']> = {
@@ -681,6 +707,7 @@ export type Resolvers<ContextType = TContext> = {
   Room?: RoomResolvers<ContextType>,
   StaffMember?: StaffMemberResolvers<ContextType>,
   WatchmenGrade?: WatchmenGradeResolvers<ContextType>,
+  WatchmenShift?: WatchmenShiftResolvers<ContextType>,
   WatchmenWatchman?: WatchmenWatchmanResolvers<ContextType>,
   ZadarmaCall?: ZadarmaCallResolvers<ContextType>,
   ZadarmaData?: ZadarmaDataResolvers<ContextType>,

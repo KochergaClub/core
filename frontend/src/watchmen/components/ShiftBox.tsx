@@ -16,6 +16,8 @@ import { Shift, Watchman } from '../types';
 import { updateShift } from '../features/schedule';
 import { selectEditing } from '../features/editing';
 
+import { WatchmanForPickerFragment } from '../queries.generated';
+
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
   cursor: ${props => (props.editing ? 'pointer' : 'auto')};
@@ -100,8 +102,16 @@ const ShiftBox = (props: Props) => {
     [props.shift, props.updateShift, unexpand]
   );
 
-  const pickWatchman = async (watchman: Watchman) => {
-    await updateShiftCb({ watchman, is_night: false });
+  const pickWatchman = async (watchman: WatchmanForPickerFragment) => {
+    await updateShiftCb({
+      watchman: {
+        id: watchman.id,
+        member_id: watchman.member.id,
+        color: watchman.member.color || 'white',
+        short_name: watchman.member.short_name || 'НЕТ ИМЕНИ',
+      },
+      is_night: false,
+    });
   };
 
   const pickExtra = async (text: string) => {

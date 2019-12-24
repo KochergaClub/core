@@ -49,6 +49,7 @@ class ShiftUpdate(generics.UpdateAPIView):
 class WatchmenViewSet(
         mixins.UpdateModelMixin,
         mixins.ListModelMixin,
+        mixins.RetrieveModelMixin,
         viewsets.GenericViewSet,
 ):
     serializer_class = serializers.WatchmanSerializer
