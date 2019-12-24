@@ -1,10 +1,12 @@
 import { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Row, Label } from '@kocherga/frontkit';
+
 import Card, { CardHeader } from '~/components/Card';
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
 import ModalFormButton from '~/components/forms/ModalFormButton';
+import { useDispatch } from '~/common/hooks';
 
 import { SubscribeChannel } from '../types';
 import { selectMailchimpInterestsDict } from '../features/mailchimpCategories';

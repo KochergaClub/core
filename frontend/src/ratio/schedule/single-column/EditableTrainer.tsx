@@ -10,8 +10,8 @@ import { Trainer } from '~/ratio/types';
 
 interface Props {
   trainer_name?: string;
-  picked: (name: Trainer) => void;
-  unpicked: () => void;
+  picked: (name: Trainer) => Promise<void>;
+  unpicked: () => Promise<void>;
 }
 
 const OuterContainer = styled.div`

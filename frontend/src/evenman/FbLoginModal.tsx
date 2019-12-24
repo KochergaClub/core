@@ -3,8 +3,6 @@ import { observer } from 'mobx-react';
 
 import { Button, Modal } from '@kocherga/frontkit';
 
-import { IS_SERVER } from '~/common/utils';
-
 import { Context } from './common';
 
 @observer

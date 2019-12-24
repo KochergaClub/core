@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -8,6 +8,7 @@ import { A, Column } from '@kocherga/frontkit';
 import AsyncButton from '~/components/AsyncButton';
 import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
+import { useDispatch } from '~/common/hooks';
 
 import { MyTicket } from '../types';
 import { deleteTicket } from '../actions';

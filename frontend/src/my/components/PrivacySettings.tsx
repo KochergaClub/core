@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useCallback, useState } from 'react';
+import { connect } from 'react-redux';
 
 import styled from 'styled-components';
 import { FaGlobe, FaLock } from 'react-icons/fa';
@@ -7,6 +7,7 @@ import { FaGlobe, FaLock } from 'react-icons/fa';
 import { A, Button, Column } from '@kocherga/frontkit';
 
 import { State } from '~/redux/store';
+import { useDispatch } from '~/common/hooks';
 
 import { Customer } from '../types';
 import { setPrivacyMode } from '../actions';
