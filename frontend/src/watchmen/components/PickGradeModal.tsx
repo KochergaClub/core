@@ -1,80 +1,89 @@
-import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useCallback, useState } from 'react';
 
-import { Button, Column, Row, Modal } from '@kocherga/frontkit';
+import { Column, Row, Modal } from '@kocherga/frontkit';
+import { AsyncButton, ApolloQueryResults } from '~/components';
 
 import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
 
-import { selectGrades } from '../features/grades';
 import {
-  selectAskingForGradeWatchman,
-  selectPickingWatchmanGrade,
-  pickWatchmanGrade,
-  stopAskingForWatchmanGrade,
-} from '../features/gradesUI';
-import { Grade } from '../types';
+  useWatchmenGradesListQuery,
+  GradeFragment,
+  WatchmanFragment,
+} from '../queries.generated';
 
-const GradeItem = ({ grade }: { grade: Grade }) => {
-  const dispatch = useDispatch();
+interface GradeItemProps {
+  grade: GradeFragment;
+  highlight?: boolean;
+  disabled?: boolean;
+  pick: () => Promise<void>;
+}
 
-  const watchman = useSelector(selectAskingForGradeWatchman);
-  const pickingGradeId = useSelector(selectPickingWatchmanGrade);
-
-  const pickGrade = useCallback(async () => {
-    if (!watchman) {
-      return;
-    }
-    await dispatch(pickWatchmanGrade(watchman, grade));
-  }, [dispatch, pickWatchmanGrade, watchman, grade]);
-
-  if (!watchman) {
-    throw new Error('Redux logic error');
-  }
-
+const GradeItem: React.FC<GradeItemProps> = ({
+  grade,
+  pick,
+  highlight,
+  disabled,
+}) => {
   return (
-    <Button
-      onClick={pickGrade}
-      loading={pickingGradeId === grade.id}
-      disabled={Boolean(pickingGradeId)}
-      kind={watchman.grade_id === grade.id ? 'primary' : undefined}
+    <AsyncButton
+      act={pick}
+      disabled={disabled}
+      kind={highlight ? 'primary' : undefined}
     >
       <Row centered>
         <div>{grade.code}</div>
         <div>(x{grade.multiplier})</div>
       </Row>
-    </Button>
+    </AsyncButton>
   );
 };
 
-const PickGradeModal = () => {
-  const dispatch = useDispatch();
-  const watchman = useSelector(selectAskingForGradeWatchman);
-  const grades = useSelector(selectGrades);
+interface Props {
+  watchman: WatchmanFragment;
+  close: () => void;
+  pick: (grade: GradeFragment) => Promise<void>;
+}
 
-  const closeCb = useCallback(() => {
-    dispatch(stopAskingForWatchmanGrade());
-  }, [dispatch, stopAskingForWatchmanGrade]);
+const PickGradeModal: React.FC<Props> = ({ watchman, close, pick }) => {
+  const [acting, setActing] = useState(false);
+  const gradesQueryResults = useWatchmenGradesListQuery();
 
   const focus = useFocusOnFirstModalRender();
   const hotkeys = useCommonHotkeys({
-    onEscape: closeCb,
+    onEscape: close,
   });
 
-  if (!watchman) {
-    return null;
-  }
+  const pickCb = useCallback(
+    async (grade: GradeFragment) => {
+      setActing(true);
+      await pick(grade);
+    },
+    [pick]
+  );
 
   return (
-    <Modal isOpen={true}>
-      <Modal.Header toggle={closeCb}>
-        {watchman.short_name}. Выбрать грейд:
+    <Modal>
+      <Modal.Header toggle={close}>
+        {watchman.member.short_name}. Выбрать грейд:
       </Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
-        <Column stretch>
-          {grades.map(grade => (
-            <GradeItem grade={grade} key={grade.id} />
-          ))}
-        </Column>
+        <ApolloQueryResults {...gradesQueryResults}>
+          {({ data: { grades } }) => (
+            <Column stretch>
+              {grades.map(grade => (
+                <GradeItem
+                  key={grade.id}
+                  grade={grade}
+                  pick={() => pickCb(grade)}
+                  disabled={acting}
+                  highlight={
+                    watchman.grade ? grade.id === watchman.grade.id : false
+                  }
+                />
+              ))}
+            </Column>
+          )}
+        </ApolloQueryResults>
       </Modal.Body>
     </Modal>
   );

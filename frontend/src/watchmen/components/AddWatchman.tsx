@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 
-import { useDispatch } from '~/common/hooks';
-import CreateButton from '~/components/crud/CreateButton';
+import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { loadWatchmen } from '../features/watchmen';
+import { GraphQLError } from 'graphql';
+
+import { useWatchmenCreateWatchmanMutation } from '../queries.generated';
 
 const fields: FormShape = [
   { name: 'email', type: 'email' },
@@ -21,22 +22,71 @@ const fields: FormShape = [
     ],
     value: 'FEMALE',
   },
+  { name: 'skip_wiki', title: 'Не добавлять на вики', type: 'boolean' },
+  {
+    name: 'skip_cm_customer',
+    title: 'Не проверять клиента в КМ',
+    type: 'boolean',
+  },
+  {
+    name: 'skip_cm_user',
+    title: 'Не добавлять пользователя в КМ',
+    type: 'boolean',
+  },
 ];
 
-const AddWatchman: React.FC = () => {
-  const dispatch = useDispatch();
+interface FormResult {
+  email: string;
+  short_name: string;
+  full_name: string;
+  password: string;
+  vk?: string;
+  gender: string;
+}
 
-  const onCreate = useCallback(async () => {
-    await dispatch(loadWatchmen());
-  }, [loadWatchmen]);
+const AddWatchman: React.FC = () => {
+  const [createMutation, createResults] = useWatchmenCreateWatchmanMutation({
+    refetchQueries: ['WatchmenWatchmenList'],
+    awaitRefetchQueries: true,
+  });
+  console.log(createResults);
+
+  const cb = useCallback(
+    async (values: FormResult) => {
+      try {
+        await createMutation({
+          variables: {
+            params: values,
+          },
+        });
+        return;
+      } catch (e) {
+        const errors = e.graphQLErrors as GraphQLError[];
+        const error = errors
+          .map(
+            e =>
+              e.message +
+              ': ' +
+              JSON.stringify(e.extensions?.response?.body || 'unknown reason')
+          )
+          .join('. ');
+        return {
+          close: false,
+          error,
+        };
+      }
+    },
+    [createMutation]
+  );
 
   return (
     <div>
-      <CreateButton
-        apiEndpoint="staff/member/add_watchman"
+      <ModalFormButton
+        post={cb}
         fields={fields}
-        onCreate={onCreate}
         modalTitle="Добавить админа"
+        modalButtonName="Добавить"
+        buttonName="Добавить"
       />
     </div>
   );

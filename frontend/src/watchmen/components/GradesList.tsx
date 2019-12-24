@@ -1,14 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-
 import { Column } from '@kocherga/frontkit';
 
 import Card, { CardList } from '~/components/Card';
+import { ApolloQueryResults } from '~/components';
 
-import { selectGrades } from '../features/grades';
-import { Grade } from '../types';
+import {
+  useWatchmenGradesListQuery,
+  GradeFragment,
+} from '../queries.generated';
 
-const GradeItem = ({ grade }: { grade: Grade }) => (
+const GradeItem = ({ grade }: { grade: GradeFragment }) => (
   <Card>
     <Column>
       <strong>{grade.code}</strong>
@@ -18,15 +18,20 @@ const GradeItem = ({ grade }: { grade: Grade }) => (
 );
 
 const GradesList = () => {
-  const grades = useSelector(selectGrades);
+  const gradesQueryResults = useWatchmenGradesListQuery();
+
   return (
     <div>
       <h2>Грейды</h2>
-      <CardList>
-        {grades.map(grade => (
-          <GradeItem grade={grade} key={grade.id} />
-        ))}
-      </CardList>
+      <ApolloQueryResults {...gradesQueryResults}>
+        {({ data: { grades } }) => (
+          <CardList>
+            {grades.map(grade => (
+              <GradeItem grade={grade} key={grade.id} />
+            ))}
+          </CardList>
+        )}
+      </ApolloQueryResults>
     </div>
   );
 };

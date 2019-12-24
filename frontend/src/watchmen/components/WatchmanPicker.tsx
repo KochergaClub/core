@@ -1,10 +1,11 @@
-import React, { useMemo, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useMemo, useCallback } from 'react';
 
-import { Watchman } from '../types';
+import Picker from '~/components/Picker';
 
-import { selectActiveWatchmen } from '../features/watchmen';
-import BasicPicker from '~/components/Picker';
+import {
+  useWatchmenWatchmenListForPickerQuery,
+  WatchmanForPickerFragment,
+} from '../queries.generated';
 
 interface Extra {
   color: string;
@@ -15,12 +16,12 @@ interface Extra {
 interface Props {
   extra?: Extra[];
   pickedExtra?: (text: string) => void;
-  pickedWatchman: (watchman: Watchman) => void;
+  pickedWatchman: (watchman: WatchmanForPickerFragment) => void;
 }
 
 interface WatchmanItem {
   type: 'watchman';
-  watchman: Watchman;
+  watchman: WatchmanForPickerFragment;
 }
 
 interface ExtraItem {
@@ -35,13 +36,25 @@ const WatchmanPicker: React.FC<Props> = ({
   pickedExtra,
   pickedWatchman,
 }) => {
-  const watchmen = useSelector(selectActiveWatchmen) as Watchman[];
+  const queryResults = useWatchmenWatchmenListForPickerQuery();
 
   const items = useMemo(() => {
-    const watchmanItems: WatchmanItem[] = watchmen.map(watchman => ({
-      type: 'watchman' as const,
-      watchman,
-    }));
+    if (queryResults.loading) {
+      return [];
+    }
+    if (!queryResults.data) {
+      return []; // TODO - pass error
+    }
+    const { watchmen } = queryResults.data;
+
+    const watchmanItems: WatchmanItem[] = watchmen
+      .filter(w => w.priority <= 2)
+      .sort((a, b) => a.priority - b.priority)
+      .map(watchman => ({
+        type: 'watchman' as const,
+        watchman,
+      }));
+
     const extraItems: ExtraItem[] = extra
       ? extra.map(value => ({
           type: 'extra' as const,
@@ -50,7 +63,7 @@ const WatchmanPicker: React.FC<Props> = ({
       : [];
 
     return [...watchmanItems, ...extraItems];
-  }, [watchmen, extra]);
+  }, [queryResults, extra]);
 
   const picked = useCallback(
     (item: Item) => {
@@ -70,7 +83,7 @@ const WatchmanPicker: React.FC<Props> = ({
   const item2text = useCallback((item: Item) => {
     switch (item.type) {
       case 'watchman':
-        return item.watchman.short_name || 'Нет имени';
+        return item.watchman.member.short_name || 'Нет имени';
       case 'extra':
         return item.extra.text;
     }
@@ -79,14 +92,15 @@ const WatchmanPicker: React.FC<Props> = ({
   const item2color = useCallback((item: Item) => {
     switch (item.type) {
       case 'watchman':
-        return item.watchman.color;
+        return item.watchman.member.color || 'white';
       case 'extra':
         return item.extra.color;
     }
   }, []);
 
   return (
-    <BasicPicker
+    <Picker
+      loading={queryResults.loading}
       item2text={item2text}
       item2color={item2color}
       items={items}

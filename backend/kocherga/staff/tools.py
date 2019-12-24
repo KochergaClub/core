@@ -36,16 +36,24 @@ def find_member_by_email(email):
     return None
 
 
-def add_watchman(short_name, full_name, email, password, vk, gender):
+def add_watchman(
+        short_name,
+        full_name,
+        email,
+        password,
+        vk,
+        gender,
+        skip_wiki=False,
+        skip_cm_customer=False,
+        skip_cm_user=False
+):
     if not email.endswith('@gmail.com'):
         raise APIException("Only @gmail.com emails are supported")
 
     # Look up CM customer early to avoid semi-broken outcome when the CM customer doesn't exist.
     cm_customer = None
-    try:
+    if not skip_cm_customer:
         cm_customer = kocherga.cm.models.Customer.objects.get(email=email)
-    except kocherga.cm.models.Customer.DoesNotExist:
-        logger.warning(f"Cafe Manager customer with email {email} not found")
 
     logger.info(f'Add watchman {full_name} with email {email}')
 
@@ -76,23 +84,24 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
         gender=gender,
     )
 
-    logger.info(f'Creating wiki account')
-    wiki = kocherga.wiki.get_wiki()
-    wiki.api(action='query', meta='tokens', type='createaccount')
-    wiki_token = wiki.api(
-        action='query',
-        meta='tokens',
-        type='createaccount'
-    )['query']['tokens']['createaccounttoken']
+    if not skip_wiki:
+        logger.info(f'Creating wiki account')
+        wiki = kocherga.wiki.get_wiki()
+        wiki.api(action='query', meta='tokens', type='createaccount')
+        wiki_token = wiki.api(
+            action='query',
+            meta='tokens',
+            type='createaccount'
+        )['query']['tokens']['createaccounttoken']
 
-    wiki.post(
-        action='createaccount',
-        createtoken=wiki_token,
-        username=full_name,
-        password=password,
-        retype=password,
-        createreturnurl='https://kocherga.club',
-    )
+        wiki.post(
+            action='createaccount',
+            createtoken=wiki_token,
+            username=full_name,
+            password=password,
+            retype=password,
+            createreturnurl='https://kocherga.club',
+        )
 
     logger.info(f'Inviting to slack')
     sc = kocherga.slack.client.legacy_token_client()
@@ -110,14 +119,16 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
         else:
             raise APIException("Couldn't invite to Slack: " + sc_response.get('error', 'unknown error'))
 
-    logger.info(f'Adding to Cafe Manager')
-    cm_user = kocherga.cm.tools.add_manager(
-        login=email.split('@')[0],
-        name=full_name,
-        password=password,
-        email=email,
-    )
-    member.cm_login = cm_user.login
+    cm_user = None
+    if not skip_cm_user:
+        logger.info(f'Adding to Cafe Manager')
+        cm_user = kocherga.cm.tools.add_manager(
+            login=email.split('@')[0],
+            name=full_name,
+            password=password,
+            email=email,
+        )
+        member.cm_login = cm_user.login
     member.save()
 
     logger.info(f'Granting Google Drive and Calendar permissions')
@@ -129,7 +140,7 @@ def add_watchman(short_name, full_name, email, password, vk, gender):
     message = render_to_string('staff/email/new_watchman.md', {
         'full_name': full_name,
         'password': password,
-        'cm_login': cm_user.login,
+        'cm_login': cm_user.login if cm_user else 'UNDEFINED',
     })
     send_mail(
         subject='Доступы в Кочергу',

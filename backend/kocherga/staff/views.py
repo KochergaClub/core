@@ -44,6 +44,9 @@ class MemberViewSet(viewsets.ReadOnlyModelViewSet):
             password=request.data['password'],
             vk=request.data['vk'],
             gender=request.data['gender'],
+            skip_wiki=bool(request.data.get('skip_wiki')),
+            skip_cm_customer=bool(request.data.get('skip_cm_customer')),
+            skip_cm_user=bool(request.data.get('skip_cm_user')),
         )
 
         return Response({'status': 'ok'})

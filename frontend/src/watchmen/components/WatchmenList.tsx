@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 
 import Link from 'next/link';
@@ -10,16 +9,15 @@ import { A, Row, Button, Label } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 import Card, { CardList } from '~/components/Card';
-import AsyncButton from '~/components/AsyncButton';
+import { AsyncButton, ApolloQueryResults } from '~/components';
 
-import { selectWatchmen, setWatchmanPriority } from '../features/watchmen';
 import {
-  askForWatchmanGrade,
-  selectAskingForGradeWatchman,
-} from '../features/gradesUI';
-import { selectGrades } from '../features/grades';
-
-import { Watchman } from '../types';
+  GradeFragment,
+  WatchmanFragment,
+  useWatchmenWatchmenListQuery,
+  useWatchmenSetWatchmanPriorityMutation,
+  useWatchmenSetWatchmanGradeMutation,
+} from '../queries.generated';
 
 import PickGradeModal from './PickGradeModal';
 import AddWatchman from './AddWatchman';
@@ -35,14 +33,24 @@ const FixedRow = styled(Row)`
 `;
 
 const WatchmanPriorityButton: React.FC<{
-  watchman: Watchman;
+  watchman: WatchmanFragment;
   priority: number;
 }> = ({ watchman, priority, children }) => {
-  const dispatch = useDispatch();
+  const [setPriorityMutation] = useWatchmenSetWatchmanPriorityMutation({
+    refetchQueries: ['WatchmenWatchmenList'],
+    awaitRefetchQueries: true,
+  });
 
   const cb = useCallback(async () => {
-    await dispatch(setWatchmanPriority(watchman, priority));
-  }, [watchman, priority, setWatchmanPriority]);
+    await setPriorityMutation({
+      variables: {
+        params: {
+          watchman_id: watchman.id,
+          priority,
+        },
+      },
+    });
+  }, [watchman, priority, setPriorityMutation]);
 
   if (watchman.priority === priority) {
     return null;
@@ -55,36 +63,67 @@ const WatchmanPriorityButton: React.FC<{
   );
 };
 
-const WatchmanItem = ({ watchman }: { watchman: Watchman }) => {
-  const grades = useSelector(selectGrades);
-  const dispatch = useDispatch();
+const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
   const [canManage] = usePermissions(['watchmen.manage']);
+  const [askingForGrade, setAskingForGrade] = useState(false);
 
-  const grade = grades.find(grade => grade.id === watchman.grade_id);
+  const [setGradeMutation] = useWatchmenSetWatchmanGradeMutation({
+    refetchQueries: ['WatchmenWatchmenList'],
+    awaitRefetchQueries: true,
+  });
 
-  const editGradeCb = useCallback(() => {
-    dispatch(askForWatchmanGrade(watchman));
-  }, [dispatch, askForWatchmanGrade, watchman]);
+  const askForGrade = useCallback(() => {
+    setAskingForGrade(true);
+  }, []);
+
+  const stopAskingForGrade = useCallback(() => {
+    setAskingForGrade(false);
+  }, []);
+
+  const pickGrade = useCallback(
+    async (grade: GradeFragment) => {
+      await setGradeMutation({
+        variables: {
+          params: {
+            watchman_id: watchman.id,
+            grade_id: grade.id,
+          },
+        },
+      });
+      stopAskingForGrade();
+    },
+    [stopAskingForGrade, setGradeMutation, watchman.id]
+  );
 
   return (
     <Card>
       <strong>
         <Link
           href="/team/staff/[id]"
-          as={`/team/staff/${watchman.member_id}`}
+          as={`/team/staff/${watchman.member.id}`}
           passHref
         >
-          <A>{watchman.short_name}</A>
+          <A>{watchman.member.short_name}</A>
         </Link>
       </strong>
       <Row>
         <FixedRow>
-          <Label>Грейд:</Label> <strong>{grade ? grade.code : 'нет'}</strong>
+          <Label>Грейд:</Label>{' '}
+          <strong>{watchman.grade ? watchman.grade.code : 'нет'}</strong>
         </FixedRow>
         {canManage && (
-          <Button small onClick={editGradeCb}>
-            <FaEdit /> Редактировать
-          </Button>
+          <>
+            <Button small onClick={askForGrade}>
+              <FaEdit /> Редактировать
+            </Button>
+            {askingForGrade && (
+              <PickGradeModal
+                watchman={watchman}
+                close={stopAskingForGrade}
+                pick={pickGrade}
+              />
+            )}
+          </>
         )}
       </Row>
       <Row>
@@ -110,10 +149,10 @@ const WatchmanItem = ({ watchman }: { watchman: Watchman }) => {
   );
 };
 
-const WatchmenSublist: React.FC<{ watchmen: Watchman[]; title: string }> = ({
-  watchmen,
-  title,
-}) => {
+const WatchmenSublist: React.FC<{
+  watchmen: WatchmanFragment[];
+  title: string;
+}> = ({ watchmen, title }) => {
   if (!watchmen.length) {
     return null;
   }
@@ -129,21 +168,15 @@ const WatchmenSublist: React.FC<{ watchmen: Watchman[]; title: string }> = ({
   );
 };
 
-const WatchmenList = () => {
-  const watchmen = useSelector(selectWatchmen);
-  const askingForGradeWatchman = useSelector(selectAskingForGradeWatchman);
-  const [canManage] = usePermissions(['watchmen.manage']);
-
+const WatchmenListResults: React.FC<{ watchmen: WatchmanFragment[] }> = ({
+  watchmen,
+}) => {
   const firstPriorityWatchmen = watchmen.filter(w => w.priority === 1);
   const secondPriorityWatchmen = watchmen.filter(w => w.priority === 2);
   const thirdPriorityWatchmen = watchmen.filter(w => w.priority === 3);
 
   return (
     <div>
-      <Row vCentered>
-        <h2>Админы</h2>
-        {canManage && <AddWatchman />}
-      </Row>
       <WatchmenSublist
         watchmen={firstPriorityWatchmen}
         title="Регулярные админы"
@@ -153,7 +186,26 @@ const WatchmenList = () => {
         title="Эпизодические админы"
       />
       <WatchmenSublist watchmen={thirdPriorityWatchmen} title="Не админы" />
-      {askingForGradeWatchman && <PickGradeModal />}
+    </div>
+  );
+};
+
+const WatchmenList = () => {
+  const queryResults = useWatchmenWatchmenListQuery();
+
+  const [canManage] = usePermissions(['watchmen.manage']);
+
+  return (
+    <div>
+      <Row vCentered>
+        <h2>Админы</h2>
+        {canManage && <AddWatchman />}
+      </Row>
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { watchmen } }) => (
+          <WatchmenListResults watchmen={watchmen} />
+        )}
+      </ApolloQueryResults>
     </div>
   );
 };

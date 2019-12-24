@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Formik, Form, FormikHelpers } from 'formik';
 
@@ -10,27 +10,35 @@ import ButtonWithModal from '../ButtonWithModal';
 
 import { FormShape } from './types';
 import FieldWidget from './FieldWidget';
+import ErrorLabel from './FieldWidget/ErrorLabel'; // TODO - move ErrorLabel to one level up?
 
-interface Props {
-  fields: FormShape;
+interface PostResult {
+  close: boolean;
+  error?: string;
+}
+
+interface Props<Values extends {}> {
+  fields: FormShape; // FormShape should match Values!
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
   small?: boolean;
-  post: (values: any) => Promise<void>; // FIXME - derive values from fields using `fields = ... as const` and derived types tricks!
+  post: (values: Values) => Promise<PostResult | void>;
 }
 
-interface ModalProps extends Props {
+interface ModalProps<Values> extends Props<Values> {
   close: () => void;
 }
 
-const ModalForm = ({
+function ModalForm<Values>({
   fields,
   post,
   close,
   modalButtonName,
   modalTitle,
-}: ModalProps) => {
+}: ModalProps<Values>) {
+  const [submitError, setSubmitError] = useState('');
+
   const initialValues = useMemo(() => {
     const result: { [k: string]: string | number | boolean } = {};
     for (const field of fields) {
@@ -40,17 +48,19 @@ const ModalForm = ({
       } else {
         if (field.type === 'boolean') {
           // Without this special case the initial value of boolean field becomes '', which leads to "Required" errors for untouched fields.
+          // TODO - check if this was fixed in formik v2
           value = false;
         }
       }
       result[field.name] = value;
     }
-    return result;
+    return (result as any) as Values;
   }, [fields]);
 
   const submit = useCallback(
-    async (values: any, actions: FormikHelpers<any>) => {
-      const postValues = { ...values };
+    async (values: Values, actions: FormikHelpers<Values>) => {
+      // Values should match FormShape, so this should be ok (but it still feels ugly)
+      const postValues = { ...values } as any;
 
       for (const field of fields) {
         if (field.readonly) {
@@ -71,9 +81,14 @@ const ModalForm = ({
           }
         }
       }
-      await post(postValues);
+      const postResult = (await post(postValues as Values)) || { close: true };
       actions.setSubmitting(false);
-      close();
+      if (postResult.close) {
+        close();
+      }
+      if (postResult.error) {
+        setSubmitError(postResult.error);
+      }
     },
     [fields, post]
   );
@@ -126,6 +141,11 @@ const ModalForm = ({
               </Column>
             </Modal.Body>
             <Modal.Footer>
+              {submitError ? (
+                <div>
+                  <ErrorLabel>{submitError}</ErrorLabel>
+                </div>
+              ) : null}
               <ControlsFooter>
                 <Button
                   type="submit"
@@ -141,14 +161,14 @@ const ModalForm = ({
       </Formik>
     </Modal>
   );
-};
+}
 
-const ModalFormButton = (props: Props) => {
+function ModalFormButton<Values>(props: Props<Values>) {
   return (
     <ButtonWithModal title={props.buttonName} small={props.small}>
       {({ close }) => <ModalForm {...props} close={close} />}
     </ButtonWithModal>
   );
-};
+}
 
 export default ModalFormButton;

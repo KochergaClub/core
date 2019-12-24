@@ -56,7 +56,7 @@ class WatchmenViewSet(
     queryset = Watchman.objects.all()
 
 
-class GradesView(generics.ListAPIView):
+class GradesViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.GradeSerializer
     permission_classes = (IsManagerOrStaffRO,)
     queryset = Grade.objects.all()

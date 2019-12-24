@@ -116,6 +116,9 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+  watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
+  watchmenSetWatchmanGrade?: Maybe<Scalars['Boolean']>,
+  watchmenCreateWatchman?: Maybe<Scalars['Boolean']>,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
@@ -167,6 +170,21 @@ export type MutationStaffFireMemberArgs = {
 };
 
 
+export type MutationWatchmenSetWatchmanPriorityArgs = {
+  params: WatchmenSetWatchmanPriorityInput
+};
+
+
+export type MutationWatchmenSetWatchmanGradeArgs = {
+  params: WatchmenSetWatchmanGradeInput
+};
+
+
+export type MutationWatchmenCreateWatchmanArgs = {
+  params: WatchmenCreateWatchmanInput
+};
+
+
 export type MutationZadarmaSetMemberForPbxCallArgs = {
   pbx_call_id: Scalars['ID'],
   member_id: Scalars['ID']
@@ -192,6 +210,8 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+  watchmenWatchmenAll: Array<WatchmenWatchman>,
+  watchmenGradesAll: Array<WatchmenGrade>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
 };
@@ -263,6 +283,43 @@ export type StaffMember = {
   slack_image?: Maybe<Scalars['String']>,
   slack_id?: Maybe<Scalars['String']>,
   vk?: Maybe<Scalars['String']>,
+};
+
+export type WatchmenCreateWatchmanInput = {
+  email: Scalars['String'],
+  short_name: Scalars['String'],
+  full_name: Scalars['String'],
+  password: Scalars['String'],
+  vk?: Maybe<Scalars['String']>,
+  gender: Scalars['String'],
+  skip_wiki?: Maybe<Scalars['Boolean']>,
+  skip_cm_user?: Maybe<Scalars['Boolean']>,
+  skip_cm_customer?: Maybe<Scalars['Boolean']>,
+};
+
+export type WatchmenGrade = {
+   __typename?: 'WatchmenGrade',
+  id: Scalars['ID'],
+  code: Scalars['String'],
+  multiplier: Scalars['Float'],
+};
+
+export type WatchmenSetWatchmanGradeInput = {
+  watchman_id: Scalars['ID'],
+  grade_id: Scalars['ID'],
+};
+
+export type WatchmenSetWatchmanPriorityInput = {
+  watchman_id: Scalars['ID'],
+  priority: Scalars['Int'],
+};
+
+export type WatchmenWatchman = {
+   __typename?: 'WatchmenWatchman',
+  id: Scalars['ID'],
+  priority: Scalars['Int'],
+  member: StaffMember,
+  grade?: Maybe<WatchmenGrade>,
 };
 
 export type ZadarmaCall = {
@@ -386,6 +443,9 @@ export type ResolversTypes = {
   Cm2OrderConnection: ResolverTypeWrapper<Cm2OrderConnection>,
   Cm2Order: ResolverTypeWrapper<Cm2Order>,
   Room: ResolverTypeWrapper<Room>,
+  WatchmenWatchman: ResolverTypeWrapper<WatchmenWatchman>,
+  WatchmenGrade: ResolverTypeWrapper<WatchmenGrade>,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   ZadarmaPbxCallConnection: ResolverTypeWrapper<ZadarmaPbxCallConnection>,
   ZadarmaPbxCall: ResolverTypeWrapper<ZadarmaPbxCall>,
   ZadarmaCall: ResolverTypeWrapper<ZadarmaCall>,
@@ -394,6 +454,9 @@ export type ResolversTypes = {
   CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
+  WatchmenSetWatchmanPriorityInput: WatchmenSetWatchmanPriorityInput,
+  WatchmenSetWatchmanGradeInput: WatchmenSetWatchmanGradeInput,
+  WatchmenCreateWatchmanInput: WatchmenCreateWatchmanInput,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -416,6 +479,9 @@ export type ResolversParentTypes = {
   Cm2OrderConnection: Cm2OrderConnection,
   Cm2Order: Cm2Order,
   Room: Room,
+  WatchmenWatchman: WatchmenWatchman,
+  WatchmenGrade: WatchmenGrade,
+  Float: Scalars['Float'],
   ZadarmaPbxCallConnection: ZadarmaPbxCallConnection,
   ZadarmaPbxCall: ZadarmaPbxCall,
   ZadarmaCall: ZadarmaCall,
@@ -424,6 +490,9 @@ export type ResolversParentTypes = {
   CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
+  WatchmenSetWatchmanPriorityInput: WatchmenSetWatchmanPriorityInput,
+  WatchmenSetWatchmanGradeInput: WatchmenSetWatchmanGradeInput,
+  WatchmenCreateWatchmanInput: WatchmenCreateWatchmanInput,
 };
 
 export type AuthCurrentUserResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['AuthCurrentUser'] = ResolversParentTypes['AuthCurrentUser']> = {
@@ -504,6 +573,9 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   cm2CloseOrder?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCm2CloseOrderArgs, 'id'>>,
   staffGrantGooglePermissionsToMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffGrantGooglePermissionsToMemberArgs, 'id'>>,
   staffFireMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffFireMemberArgs, 'id'>>,
+  watchmenSetWatchmanPriority?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenSetWatchmanPriorityArgs, 'params'>>,
+  watchmenSetWatchmanGrade?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenSetWatchmanGradeArgs, 'params'>>,
+  watchmenCreateWatchman?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenCreateWatchmanArgs, 'params'>>,
   zadarmaSetMemberForPbxCall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationZadarmaSetMemberForPbxCallArgs, 'pbx_call_id' | 'member_id'>>,
 };
 
@@ -525,6 +597,8 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   rooms?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType>,
   staffMembersAll?: Resolver<Array<ResolversTypes['StaffMember']>, ParentType, ContextType>,
   staffMember?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType, RequireFields<QueryStaffMemberArgs, 'id'>>,
+  watchmenWatchmenAll?: Resolver<Array<ResolversTypes['WatchmenWatchman']>, ParentType, ContextType>,
+  watchmenGradesAll?: Resolver<Array<ResolversTypes['WatchmenGrade']>, ParentType, ContextType>,
   zadarmaPbxCalls?: Resolver<ResolversTypes['ZadarmaPbxCallConnection'], ParentType, ContextType, QueryZadarmaPbxCallsArgs>,
   zadarmaPbxCall?: Resolver<ResolversTypes['ZadarmaPbxCall'], ParentType, ContextType, RequireFields<QueryZadarmaPbxCallArgs, 'pbx_call_id'>>,
 };
@@ -547,6 +621,19 @@ export type StaffMemberResolvers<ContextType = TContext, ParentType extends Reso
   slack_image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   slack_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   vk?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type WatchmenGradeResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['WatchmenGrade'] = ResolversParentTypes['WatchmenGrade']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  multiplier?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
+};
+
+export type WatchmenWatchmanResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['WatchmenWatchman'] = ResolversParentTypes['WatchmenWatchman']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  priority?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  member?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType>,
+  grade?: Resolver<Maybe<ResolversTypes['WatchmenGrade']>, ParentType, ContextType>,
 };
 
 export type ZadarmaCallResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ZadarmaCall'] = ResolversParentTypes['ZadarmaCall']> = {
@@ -593,6 +680,8 @@ export type Resolvers<ContextType = TContext> = {
   Query?: QueryResolvers<ContextType>,
   Room?: RoomResolvers<ContextType>,
   StaffMember?: StaffMemberResolvers<ContextType>,
+  WatchmenGrade?: WatchmenGradeResolvers<ContextType>,
+  WatchmenWatchman?: WatchmenWatchmanResolvers<ContextType>,
   ZadarmaCall?: ZadarmaCallResolvers<ContextType>,
   ZadarmaData?: ZadarmaDataResolvers<ContextType>,
   ZadarmaPbxCall?: ZadarmaPbxCallResolvers<ContextType>,

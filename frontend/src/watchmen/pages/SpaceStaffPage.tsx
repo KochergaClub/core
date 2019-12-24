@@ -1,17 +1,13 @@
-import React from 'react';
-
+import { withApollo } from '~/apollo/client';
 import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
-import { loadWatchmen } from '~/watchmen/features/watchmen';
-import { loadGrades } from '~/watchmen/features/grades';
-
-import WatchmenList from '~/watchmen/components/WatchmenList';
-import GradesList from '~/watchmen/components/GradesList';
+import WatchmenList from '../components/WatchmenList';
+import GradesList from '../components/GradesList';
 
 interface Props {}
 
@@ -31,10 +27,4 @@ const SpaceStaffPage: NextPage<Props> = () => {
   );
 };
 
-SpaceStaffPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadGrades());
-  await dispatch(loadWatchmen());
-  return {};
-};
-
-export default SpaceStaffPage;
+export default withApollo(SpaceStaffPage);

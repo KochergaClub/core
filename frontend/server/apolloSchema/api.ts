@@ -85,7 +85,20 @@ export class KochergaAPI extends RESTDataSource {
     return response;
   }
 
-  async postAction({
+  async update({
+    resource,
+    id,
+    patch,
+  }: {
+    resource: string;
+    id: string;
+    patch: object;
+  }) {
+    const response = await this.patch(`${resource}/${id}`, patch);
+    return response;
+  }
+
+  async postResourceAction({
     resource,
     action,
     params,

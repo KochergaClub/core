@@ -113,6 +113,9 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+  watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
+  watchmenSetWatchmanGrade?: Maybe<Scalars['Boolean']>,
+  watchmenCreateWatchman?: Maybe<Scalars['Boolean']>,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
@@ -164,6 +167,21 @@ export type MutationStaffFireMemberArgs = {
 };
 
 
+export type MutationWatchmenSetWatchmanPriorityArgs = {
+  params: WatchmenSetWatchmanPriorityInput
+};
+
+
+export type MutationWatchmenSetWatchmanGradeArgs = {
+  params: WatchmenSetWatchmanGradeInput
+};
+
+
+export type MutationWatchmenCreateWatchmanArgs = {
+  params: WatchmenCreateWatchmanInput
+};
+
+
 export type MutationZadarmaSetMemberForPbxCallArgs = {
   pbx_call_id: Scalars['ID'],
   member_id: Scalars['ID']
@@ -189,6 +207,8 @@ export type Query = {
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
+  watchmenWatchmenAll: Array<WatchmenWatchman>,
+  watchmenGradesAll: Array<WatchmenGrade>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
 };
@@ -260,6 +280,43 @@ export type StaffMember = {
   slack_image?: Maybe<Scalars['String']>,
   slack_id?: Maybe<Scalars['String']>,
   vk?: Maybe<Scalars['String']>,
+};
+
+export type WatchmenCreateWatchmanInput = {
+  email: Scalars['String'],
+  short_name: Scalars['String'],
+  full_name: Scalars['String'],
+  password: Scalars['String'],
+  vk?: Maybe<Scalars['String']>,
+  gender: Scalars['String'],
+  skip_wiki?: Maybe<Scalars['Boolean']>,
+  skip_cm_user?: Maybe<Scalars['Boolean']>,
+  skip_cm_customer?: Maybe<Scalars['Boolean']>,
+};
+
+export type WatchmenGrade = {
+   __typename?: 'WatchmenGrade',
+  id: Scalars['ID'],
+  code: Scalars['String'],
+  multiplier: Scalars['Float'],
+};
+
+export type WatchmenSetWatchmanGradeInput = {
+  watchman_id: Scalars['ID'],
+  grade_id: Scalars['ID'],
+};
+
+export type WatchmenSetWatchmanPriorityInput = {
+  watchman_id: Scalars['ID'],
+  priority: Scalars['Int'],
+};
+
+export type WatchmenWatchman = {
+   __typename?: 'WatchmenWatchman',
+  id: Scalars['ID'],
+  priority: Scalars['Int'],
+  member: StaffMember,
+  grade?: Maybe<WatchmenGrade>,
 };
 
 export type ZadarmaCall = {

@@ -42,11 +42,12 @@ class WatchmanSerializer(serializers.ModelSerializer):
 
 
 class ShiftSerializer(serializers.ModelSerializer):
-    watchman = WatchmanSerializer()
+    watchman = WatchmanSerializer()  # deprecated
+    watchman_id = serializers.IntegerField(source='watchman')
 
     class Meta:
         model = models.Shift
-        fields = ('date', 'shift', 'watchman', 'is_night')
+        fields = ('date', 'shift', 'watchman', 'watchman_id', 'is_night')
 
 
 class UpdateShiftSerializer(serializers.ModelSerializer):

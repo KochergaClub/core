@@ -1,0 +1,58 @@
+fragment Watchman on WatchmenWatchman {
+  id
+  priority
+  grade {
+    id
+    code
+  }
+  member {
+    id
+    short_name
+  }
+}
+
+fragment WatchmanForPicker on WatchmenWatchman {
+  id
+  priority
+  member {
+    id
+    short_name
+    color
+  }
+}
+
+fragment Grade on WatchmenGrade {
+  id
+  code
+  multiplier
+}
+
+query WatchmenWatchmenList {
+  watchmen: watchmenWatchmenAll {
+    ...Watchman
+  }
+}
+
+query WatchmenWatchmenListForPicker {
+  watchmen: watchmenWatchmenAll {
+    ...WatchmanForPicker
+  }
+}
+
+mutation WatchmenSetWatchmanPriority($params: WatchmenSetWatchmanPriorityInput!) {
+  watchmenSetWatchmanPriority(params: $params)
+}
+
+mutation WatchmenSetWatchmanGrade($params: WatchmenSetWatchmanGradeInput!) {
+  watchmenSetWatchmanGrade(params: $params)
+}
+
+mutation WatchmenCreateWatchman($params: WatchmenCreateWatchmanInput!) {
+  watchmenCreateWatchman(params: $params)
+}
+
+query WatchmenGradesList {
+  grades: watchmenGradesAll {
+    ...Grade
+  }
+}

@@ -1,11 +1,15 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
 import Page from '~/components/Page';
-import { useListeningWebSocket, usePermissions } from '~/common/hooks';
+import {
+  useListeningWebSocket,
+  usePermissions,
+  useDispatch,
+} from '~/common/hooks';
 import { NextPage } from '~/common/types';
 
 import { loadWatchmen } from '~/watchmen/features/watchmen';
