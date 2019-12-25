@@ -48,7 +48,10 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
 
 const StaffMember: React.FC<Props> = ({ pbx_call }) => {
   const [isZadarmaAdmin] = usePermissions(['zadarma.admin']);
-  const [setStaffMemberMutation] = useZadarmaSetMemberForPbxCallMutation();
+  const [setStaffMemberMutation] = useZadarmaSetMemberForPbxCallMutation({
+    refetchQueries: ['ZadarmaPbxCalls', 'ZadarmaPbxCall'],
+    awaitRefetchQueries: true,
+  });
 
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
 
