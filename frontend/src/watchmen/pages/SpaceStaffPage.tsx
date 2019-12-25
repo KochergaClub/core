@@ -1,9 +1,11 @@
-import { withApollo } from '~/apollo/client';
 import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 import { NextPage } from '~/common/types';
+
 import { Page } from '~/components';
 
 import WatchmenList from '../components/WatchmenList';
@@ -27,4 +29,4 @@ const SpaceStaffPage: NextPage<Props> = () => {
   );
 };
 
-export default withApollo(SpaceStaffPage);
+export default withApollo(withStaff(SpaceStaffPage));

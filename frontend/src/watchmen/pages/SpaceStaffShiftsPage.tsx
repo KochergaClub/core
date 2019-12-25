@@ -1,10 +1,9 @@
-import { withApollo } from '~/apollo/client';
-
-import { format, parseISO } from 'date-fns';
-
-import { addWeeks, startOfWeek } from 'date-fns';
+import { format, parseISO, addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
+
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
 import { Page, ApolloQueryResults } from '~/components';
 
@@ -85,4 +84,4 @@ SpaceStaffShiftsPage.getInitialProps = async ({ query }) => {
   };
 };
 
-export default withApollo(SpaceStaffShiftsPage);
+export default withApollo(withStaff(SpaceStaffShiftsPage));

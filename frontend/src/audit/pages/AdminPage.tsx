@@ -1,5 +1,6 @@
 import { NextPage } from '~/common/types';
 import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
 import { Page } from '~/components';
 
@@ -19,4 +20,4 @@ const AdminPage: NextPage = () => {
   );
 };
 
-export default withApollo(AdminPage);
+export default withApollo(withStaff(AdminPage));

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { A, Column } from '@kocherga/frontkit';
 
 import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
 import { NextPage } from '~/common/types';
 import { Page, ApolloQueryResults } from '~/components';
@@ -84,4 +85,4 @@ const StaffIndexPage: NextPage = () => {
   );
 };
 
-export default withApollo(StaffIndexPage);
+export default withApollo(withStaff(StaffIndexPage));

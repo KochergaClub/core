@@ -1,5 +1,6 @@
-import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
 import CmApp from '../components/CmApp';
 import ClosedOrdersScreen from '../components/ClosedOrdersScreen';
@@ -10,4 +11,4 @@ const ClosedOrdersPage: NextPage = () => (
   </CmApp>
 );
 
-export default withApollo(ClosedOrdersPage);
+export default withApollo(withStaff(ClosedOrdersPage));

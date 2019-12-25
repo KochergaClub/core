@@ -1,5 +1,6 @@
-import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
 import CmApp from '../components/CmApp';
 import OrderDetailsScreen from '../components/OrderDetailsScreen';
@@ -19,4 +20,4 @@ OrderPage.getInitialProps = async ({ query }) => {
   return { id };
 };
 
-export default withApollo(OrderPage);
+export default withApollo(withStaff(OrderPage));

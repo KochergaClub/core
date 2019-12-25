@@ -1,23 +1,28 @@
-import React from 'react';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 
 import KochergaApolloCache from './cache';
-import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import cookie from 'cookie';
 
-import { NextPage, NextPageContext } from '~/common/types';
+import {
+  KochergaApolloClient,
+  NextApolloPage,
+  NextApolloPageContext,
+} from './types';
 
-let apolloClient: ApolloClient<NormalizedCacheObject> | null = null;
+let apolloClient: KochergaApolloClient | null = null;
 
 /**
  * Creates and provides the apolloContext
  * to a next.js PageTree. Use it by wrapping
  * your PageComponent via HOC pattern.
  */
-export function withApollo(PageComponent: NextPage<any>, { ssr = true } = {}) {
-  const WithApollo: NextPage<any> = ({
+export function withApollo(
+  PageComponent: NextApolloPage<any>,
+  { ssr = true } = {}
+) {
+  const WithApollo: NextApolloPage<any> = ({
     apolloClient,
     apolloState,
     ...pageProps
@@ -112,7 +117,7 @@ export function withApollo(PageComponent: NextPage<any>, { ssr = true } = {}) {
  */
 function initApolloClient(
   initialState = undefined,
-  req: NextPageContext['req'] = undefined
+  req: NextApolloPageContext['req'] = undefined
 ) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
@@ -133,7 +138,7 @@ function initApolloClient(
  */
 function createApolloClient(
   initialState = {},
-  req: NextPageContext['req'] = undefined
+  req: NextApolloPageContext['req'] = undefined
 ) {
   const ssrMode = typeof window === 'undefined';
   const cache = new KochergaApolloCache().restore(initialState);
@@ -146,7 +151,7 @@ function createApolloClient(
   });
 }
 
-function createServerLink(req: NextPageContext['req']) {
+function createServerLink(req: NextApolloPageContext['req']) {
   // this is important for webpack to remove this code on client
   if (typeof window === 'undefined') {
     const { SchemaLink } = require('apollo-link-schema');

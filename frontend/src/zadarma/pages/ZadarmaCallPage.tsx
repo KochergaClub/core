@@ -1,8 +1,9 @@
 import { A } from '@kocherga/frontkit';
 
 import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
+import { NextApolloPage } from '~/apollo/types';
 
-import { NextPage } from '~/common/types';
 import { Page } from '~/components';
 
 import PbxCallDetails from '~/zadarma/components/PbxCallDetails';
@@ -11,7 +12,7 @@ interface Props {
   pbx_call_id: string;
 }
 
-const ZadarmaCallPage: NextPage<Props> = ({ pbx_call_id }) => {
+const ZadarmaCallPage: NextApolloPage<Props> = ({ pbx_call_id }) => {
   const title = `Архивный звонок ${pbx_call_id}`;
   return (
     <Page title={title} team>
@@ -26,8 +27,10 @@ const ZadarmaCallPage: NextPage<Props> = ({ pbx_call_id }) => {
   );
 };
 
-ZadarmaCallPage.getInitialProps = async ({ query }) => ({
-  pbx_call_id: query.id as string,
-});
+ZadarmaCallPage.getInitialProps = async ({ query }) => {
+  return {
+    pbx_call_id: query.id as string,
+  };
+};
 
-export default withApollo(ZadarmaCallPage);
+export default withApollo(withStaff(ZadarmaCallPage));

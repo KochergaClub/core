@@ -1,6 +1,7 @@
-import { withApollo } from '~/apollo/client';
-
 import { NextPage } from '~/common/types';
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
+
 import { Page, ApolloQueryResults } from '~/components';
 
 import MemberProfile from '~/staff/components/MemberProfile';
@@ -38,4 +39,4 @@ StaffMemberPage.getInitialProps = async ({ query }) => {
   return { id };
 };
 
-export default withApollo(StaffMemberPage);
+export default withApollo(withStaff(StaffMemberPage));
