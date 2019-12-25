@@ -54,8 +54,8 @@ query WatchmenGradesList {
   }
 }
 
-query WatchmenShifts($from_date: String!) {
-  shifts: watchmenShifts(from_date: $from_date) {
+query WatchmenShifts($from_date: String!, $to_date: String!) {
+  shifts: watchmenShifts(from_date: $from_date, to_date: $to_date) {
     ...Shift
   }
 }

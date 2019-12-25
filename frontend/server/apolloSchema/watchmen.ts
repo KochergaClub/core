@@ -13,8 +13,11 @@ export const resolvers: Resolvers = {
       dataSources.kochergaAPI.list({ resource: WATCHMAN }),
     watchmenGradesAll: (_, __, { dataSources }) =>
       dataSources.kochergaAPI.list({ resource: GRADE }),
-    watchmenShifts: (_, { from_date }, { dataSources }) =>
-      dataSources.kochergaAPI.list({ resource: SHIFT, query: { from_date } }),
+    watchmenShifts: (_, { from_date, to_date }, { dataSources }) =>
+      dataSources.kochergaAPI.list({
+        resource: SHIFT,
+        query: { from_date, to_date },
+      }),
   },
   WatchmenWatchman: {
     member: async (parent, _, { dataSources }) => {

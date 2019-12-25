@@ -73,7 +73,8 @@ export type WatchmenGradesListQuery = (
 );
 
 export type WatchmenShiftsQueryVariables = {
-  from_date: Types.Scalars['String']
+  from_date: Types.Scalars['String'],
+  to_date: Types.Scalars['String']
 };
 
 
@@ -267,8 +268,8 @@ export type WatchmenGradesListQueryHookResult = ReturnType<typeof useWatchmenGra
 export type WatchmenGradesListLazyQueryHookResult = ReturnType<typeof useWatchmenGradesListLazyQuery>;
 export type WatchmenGradesListQueryResult = ApolloReactCommon.QueryResult<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>;
 export const WatchmenShiftsDocument = gql`
-    query WatchmenShifts($from_date: String!) {
-  shifts: watchmenShifts(from_date: $from_date) {
+    query WatchmenShifts($from_date: String!, $to_date: String!) {
+  shifts: watchmenShifts(from_date: $from_date, to_date: $to_date) {
     ...Shift
   }
 }
@@ -287,6 +288,7 @@ export const WatchmenShiftsDocument = gql`
  * const { data, loading, error } = useWatchmenShiftsQuery({
  *   variables: {
  *      from_date: // value for 'from_date'
+ *      to_date: // value for 'to_date'
  *   },
  * });
  */

@@ -31,6 +31,7 @@ const SpaceStaffShiftsPage: NextPage<Props> = props => {
   const queryResults = useWatchmenShiftsQuery({
     variables: {
       from_date: props.from_date,
+      to_date: props.to_date,
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -76,7 +77,7 @@ SpaceStaffShiftsPage.getInitialProps = async ({ query }) => {
   } else {
     from_date = startOfWeek(new Date(), { weekStartsOn: 1 });
   }
-  const to_date = addWeeks(from_date, 4);
+  const to_date = addWeeks(from_date, 5);
 
   return {
     from_date: format(from_date, 'yyyy-MM-dd'),

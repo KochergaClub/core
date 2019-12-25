@@ -1,7 +1,7 @@
 extend type Query {
   watchmenWatchmenAll: [WatchmenWatchman!]!
   watchmenGradesAll: [WatchmenGrade!]!
-  watchmenShifts(from_date: String): [WatchmenShift!]!
+  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]!
 }
 
 type WatchmenWatchman {
