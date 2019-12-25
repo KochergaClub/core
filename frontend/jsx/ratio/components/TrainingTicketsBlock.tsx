@@ -44,7 +44,7 @@ const CreateTicketButton = ({
 
   return (
     <CreateButton
-      apiEndpoint="/ratio/ticket"
+      apiEndpoint="ratio/ticket"
       fields={fields}
       onCreate={onCreate}
     />
