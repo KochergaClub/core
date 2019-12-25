@@ -1,3 +1,5 @@
+import DataLoader from 'dataloader';
+
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 
 type Query = {
@@ -13,6 +15,8 @@ const buildQueryString = (params: Query) => {
 };
 
 export class KochergaAPI extends RESTDataSource {
+  private loaders: { [k: string]: DataLoader<string, any> } = {};
+
   constructor(host: string) {
     super();
     this.baseURL = 'http://' + host + '/api';
@@ -124,5 +128,26 @@ export class KochergaAPI extends RESTDataSource {
   }) {
     const response = await this.post(`${resource}/${id}/${action}`, params);
     return response;
+  }
+
+  loader({ resource, paged }: { resource: string; paged: boolean }) {
+    if (!this.loaders[resource]) {
+      this.loaders[resource] = new DataLoader(
+        async ids => {
+          const response = await this.get(`${resource}?ids=${ids.join(',')}`);
+          const results = paged ? response.results : response;
+          const resultsObj: { [k: string]: any } = {};
+          for (const result of results) {
+            resultsObj[result.id] = result;
+          }
+
+          return ids.map(
+            id => resultsObj[id] || new Error(`No result for ${id}`)
+          );
+        },
+        { maxBatchSize: 100 }
+      );
+    }
+    return this.loaders[resource];
   }
 }

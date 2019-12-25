@@ -4,9 +4,9 @@ import { MEMBER as STAFF_MEMBER } from './staff';
 
 // endpoints
 const CURRENT_USER = 'me';
-const GROUPS = 'auth/groups';
-const PERMISSIONS = 'auth/permissions';
-const USERS = 'auth/users';
+const GROUP = 'auth/groups';
+const PERMISSION = 'auth/permissions';
+const USER = 'auth/users';
 
 export const resolvers: Resolvers = {
   Query: {
@@ -14,17 +14,17 @@ export const resolvers: Resolvers = {
       dataSources.kochergaAPI.retrieveSingleton({ resource: CURRENT_USER }),
     authGroupsAll: (_, __, { dataSources }) =>
       dataSources.kochergaAPI.list({
-        resource: GROUPS,
+        resource: GROUP,
       }),
     authPermissionsAll: (_, __, { dataSources }) =>
       dataSources.kochergaAPI.list({
-        resource: PERMISSIONS,
+        resource: PERMISSION,
       }),
   },
   Mutation: {
     authAddUserToGroup: async (_, { user_id, group_id }, { dataSources }) => {
       await dataSources.kochergaAPI.postDetailsAction({
-        resource: GROUPS,
+        resource: GROUP,
         id: group_id,
         action: 'add_user',
         params: { user_id },
@@ -37,7 +37,7 @@ export const resolvers: Resolvers = {
       { dataSources }
     ) => {
       await dataSources.kochergaAPI.postDetailsAction({
-        resource: GROUPS,
+        resource: GROUP,
         id: group_id,
         action: 'remove_user',
         params: { user_id },
@@ -64,7 +64,7 @@ export const resolvers: Resolvers = {
       return parent.permissions.map(
         id =>
           dataSources.kochergaAPI.retrieve({
-            resource: PERMISSIONS,
+            resource: PERMISSION,
             id: (id as any) as string,
           }) // TODO - dataloader for batching
       );
@@ -76,7 +76,7 @@ export const resolvers: Resolvers = {
       return parent.users.map(
         id =>
           dataSources.kochergaAPI.retrieve({
-            resource: USERS,
+            resource: USER,
             id: (id as any) as string,
           }) // TODO - dataloader for batching
       );
@@ -90,7 +90,7 @@ export const resolvers: Resolvers = {
       return parent.users.map(
         id =>
           dataSources.kochergaAPI.retrieve({
-            resource: USERS,
+            resource: USER,
             id: (id as any) as string,
           }) // TODO - dataloader for batching
       );

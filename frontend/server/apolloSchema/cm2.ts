@@ -42,14 +42,13 @@ export const resolvers: Resolvers = {
     },
   },
   Cm2Order: {
-    customer: (parent, _, { dataSources }) => {
+    customer: async (parent, _, { dataSources }) => {
       if (!parent.customer) {
         return null;
       }
-      return dataSources.kochergaAPI.retrieve({
-        resource: CUSTOMER,
-        id: (parent.customer as any) as string,
-      }); // TODO - dataloader for batching
+      return await dataSources.kochergaAPI
+        .loader({ resource: CUSTOMER, paged: true })
+        .load((parent.customer as any) as string);
     },
   },
   Cm2Customer: {
