@@ -2,7 +2,9 @@ import React from 'react';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+
+import KochergaApolloCache from './cache';
+import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import cookie from 'cookie';
 
 import { NextPage, NextPageContext } from '~/common/types';
@@ -134,7 +136,7 @@ function createApolloClient(
   req: NextPageContext['req'] = undefined
 ) {
   const ssrMode = typeof window === 'undefined';
-  const cache = new InMemoryCache().restore(initialState);
+  const cache = new KochergaApolloCache().restore(initialState);
 
   return new ApolloClient({
     ssrMode,

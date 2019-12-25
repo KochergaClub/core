@@ -116,6 +116,7 @@ export type Mutation = {
   watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
   watchmenSetWatchmanGrade?: Maybe<Scalars['Boolean']>,
   watchmenCreateWatchman?: Maybe<Scalars['Boolean']>,
+  watchmenUpdateShift: WatchmenShift,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
@@ -179,6 +180,11 @@ export type MutationWatchmenSetWatchmanGradeArgs = {
 
 export type MutationWatchmenCreateWatchmanArgs = {
   params: WatchmenCreateWatchmanInput
+};
+
+
+export type MutationWatchmenUpdateShiftArgs = {
+  params: WatchmenUpdateShiftInput
 };
 
 
@@ -319,11 +325,17 @@ export type WatchmenSetWatchmanPriorityInput = {
 
 export type WatchmenShift = {
    __typename?: 'WatchmenShift',
-  id: Scalars['ID'],
   date: Scalars['String'],
   shift: Scalars['String'],
   watchman?: Maybe<WatchmenWatchman>,
   is_night: Scalars['Boolean'],
+};
+
+export type WatchmenUpdateShiftInput = {
+  date: Scalars['String'],
+  shift: Scalars['String'],
+  watchman_id?: Maybe<Scalars['ID']>,
+  is_night?: Maybe<Scalars['Boolean']>,
 };
 
 export type WatchmenWatchman = {

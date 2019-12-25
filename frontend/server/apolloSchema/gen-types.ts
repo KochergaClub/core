@@ -119,6 +119,7 @@ export type Mutation = {
   watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
   watchmenSetWatchmanGrade?: Maybe<Scalars['Boolean']>,
   watchmenCreateWatchman?: Maybe<Scalars['Boolean']>,
+  watchmenUpdateShift: WatchmenShift,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
 };
 
@@ -182,6 +183,11 @@ export type MutationWatchmenSetWatchmanGradeArgs = {
 
 export type MutationWatchmenCreateWatchmanArgs = {
   params: WatchmenCreateWatchmanInput
+};
+
+
+export type MutationWatchmenUpdateShiftArgs = {
+  params: WatchmenUpdateShiftInput
 };
 
 
@@ -322,11 +328,17 @@ export type WatchmenSetWatchmanPriorityInput = {
 
 export type WatchmenShift = {
    __typename?: 'WatchmenShift',
-  id: Scalars['ID'],
   date: Scalars['String'],
   shift: Scalars['String'],
   watchman?: Maybe<WatchmenWatchman>,
   is_night: Scalars['Boolean'],
+};
+
+export type WatchmenUpdateShiftInput = {
+  date: Scalars['String'],
+  shift: Scalars['String'],
+  watchman_id?: Maybe<Scalars['ID']>,
+  is_night?: Maybe<Scalars['Boolean']>,
 };
 
 export type WatchmenWatchman = {
@@ -473,6 +485,7 @@ export type ResolversTypes = {
   WatchmenSetWatchmanPriorityInput: WatchmenSetWatchmanPriorityInput,
   WatchmenSetWatchmanGradeInput: WatchmenSetWatchmanGradeInput,
   WatchmenCreateWatchmanInput: WatchmenCreateWatchmanInput,
+  WatchmenUpdateShiftInput: WatchmenUpdateShiftInput,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -510,6 +523,7 @@ export type ResolversParentTypes = {
   WatchmenSetWatchmanPriorityInput: WatchmenSetWatchmanPriorityInput,
   WatchmenSetWatchmanGradeInput: WatchmenSetWatchmanGradeInput,
   WatchmenCreateWatchmanInput: WatchmenCreateWatchmanInput,
+  WatchmenUpdateShiftInput: WatchmenUpdateShiftInput,
 };
 
 export type AuthCurrentUserResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['AuthCurrentUser'] = ResolversParentTypes['AuthCurrentUser']> = {
@@ -593,6 +607,7 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   watchmenSetWatchmanPriority?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenSetWatchmanPriorityArgs, 'params'>>,
   watchmenSetWatchmanGrade?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenSetWatchmanGradeArgs, 'params'>>,
   watchmenCreateWatchman?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenCreateWatchmanArgs, 'params'>>,
+  watchmenUpdateShift?: Resolver<ResolversTypes['WatchmenShift'], ParentType, ContextType, RequireFields<MutationWatchmenUpdateShiftArgs, 'params'>>,
   zadarmaSetMemberForPbxCall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationZadarmaSetMemberForPbxCallArgs, 'pbx_call_id' | 'member_id'>>,
 };
 
@@ -648,7 +663,6 @@ export type WatchmenGradeResolvers<ContextType = TContext, ParentType extends Re
 };
 
 export type WatchmenShiftResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['WatchmenShift'] = ResolversParentTypes['WatchmenShift']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   date?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   shift?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   watchman?: Resolver<Maybe<ResolversTypes['WatchmenWatchman']>, ParentType, ContextType>,

@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { connect } from 'react-redux';
 
 import styled from 'styled-components';
@@ -11,12 +10,15 @@ import { useExpandable } from '~/common/hooks';
 import { State } from '~/redux/store';
 
 import { nightColor } from '../constants';
-import { Shift, Watchman } from '../types';
 
-import { updateShift } from '../features/schedule';
 import { selectEditing } from '../features/editing';
 
-import { WatchmanForPickerFragment } from '../queries.generated';
+import {
+  ShiftFragment,
+  ShiftFragmentDoc,
+  WatchmanForPickerFragment,
+  useWatchmenUpdateShiftMutation,
+} from '../queries.generated';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -50,7 +52,7 @@ const InnerShiftBox = ({
   shift,
   editing,
 }: {
-  shift: Shift;
+  shift: ShiftFragment;
   editing: boolean;
 }) => {
   if (shift.is_night) {
@@ -60,65 +62,77 @@ const InnerShiftBox = ({
     return <EmptyBox />;
   }
 
-  let content = <>{shift.watchman.short_name}</>;
+  let content = <>{shift.watchman.member.short_name}</>;
   if (!editing) {
     content = (
-      <WatchmanLink href={`/team/staff/${shift.watchman.member_id}`}>
+      <WatchmanLink href={`/team/staff/${shift.watchman.member.id}`}>
         {content}
       </WatchmanLink>
     );
   }
 
-  return <Box style={{ backgroundColor: shift.watchman.color }}>{content}</Box>;
+  return (
+    <Box style={{ backgroundColor: shift.watchman.member.color || 'white' }}>
+      {content}
+    </Box>
+  );
 };
 
 interface OwnProps {
-  shift: Shift;
+  shift: ShiftFragment;
 }
 
 interface StateProps {
   editing: boolean;
 }
 
-interface DispatchProps {
-  updateShift: (shift: Shift) => Promise<void>;
-}
-
-type Props = OwnProps & StateProps & DispatchProps;
+type Props = OwnProps & StateProps;
 
 const ShiftBox = (props: Props) => {
   const { editing } = props;
+  const [updateMutation] = useWatchmenUpdateShiftMutation({
+    update(cache, { data }) {
+      if (!data) {
+        return;
+      }
+      const shift = data.shift;
+
+      cache.writeFragment({
+        id: 'WatchmenShift:' + shift.date + '/' + shift.shift, // should match dataIdFromObject
+        fragment: ShiftFragmentDoc,
+        fragmentName: 'Shift',
+        data: shift,
+      });
+    },
+  });
 
   const { flipExpand, unexpand, ref, expanded } = useExpandable();
 
-  const updateShiftCb = useCallback(
-    async (data: { watchman: Watchman | null; is_night: boolean }) => {
-      await props.updateShift({
-        ...props.shift,
-        ...data,
-      });
-      unexpand();
-    },
-    [props.shift, props.updateShift, unexpand]
-  );
-
   const pickWatchman = async (watchman: WatchmanForPickerFragment) => {
-    await updateShiftCb({
-      watchman: {
-        id: watchman.id,
-        member_id: watchman.member.id,
-        color: watchman.member.color || 'white',
-        short_name: watchman.member.short_name || 'НЕТ ИМЕНИ',
+    await updateMutation({
+      variables: {
+        params: {
+          date: props.shift.date,
+          shift: props.shift.shift,
+          watchman_id: watchman.id,
+          is_night: false,
+        },
       },
-      is_night: false,
     });
+    unexpand();
   };
 
   const pickExtra = async (text: string) => {
-    await updateShiftCb({
-      watchman: null,
-      is_night: text === 'Ночь',
+    await updateMutation({
+      variables: {
+        params: {
+          date: props.shift.date,
+          shift: props.shift.shift,
+          is_night: text === 'Ночь',
+        },
+      },
     });
+    unexpand();
   };
 
   return (
@@ -140,6 +154,6 @@ const ShiftBox = (props: Props) => {
   );
 };
 
-export default connect((state: State) => ({ editing: selectEditing(state) }), {
-  updateShift,
-})(ShiftBox);
+export default connect((state: State) => ({ editing: selectEditing(state) }))(
+  ShiftBox
+);

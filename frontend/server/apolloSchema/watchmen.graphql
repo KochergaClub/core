@@ -18,7 +18,6 @@ type WatchmenGrade {
 }
 
 type WatchmenShift {
-  id: ID!
   date: String!
   shift: String!
   watchman: WatchmenWatchman
@@ -29,6 +28,7 @@ extend type Mutation {
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean
   watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean
   watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean
+  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
 }
 
 input WatchmenSetWatchmanPriorityInput {
@@ -51,4 +51,11 @@ input WatchmenCreateWatchmanInput {
   skip_wiki: Boolean
   skip_cm_user: Boolean
   skip_cm_customer: Boolean
+}
+
+input WatchmenUpdateShiftInput {
+  date: String!
+  shift: String!
+  watchman_id: ID
+  is_night: Boolean
 }

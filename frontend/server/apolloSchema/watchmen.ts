@@ -81,5 +81,15 @@ export const resolvers: Resolvers = {
       });
       return true;
     },
+    watchmenUpdateShift: async (_, { params }, { dataSources }) => {
+      return await dataSources.kochergaAPI.update({
+        resource: SHIFT,
+        id: `${params.date}/${params.shift}`,
+        patch: {
+          watchman_id: params.watchman_id,
+          is_night: params.is_night,
+        },
+      });
+    },
   },
 };

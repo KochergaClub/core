@@ -30,6 +30,15 @@ export type GradeFragment = (
   & Pick<Types.WatchmenGrade, 'id' | 'code' | 'multiplier'>
 );
 
+export type ShiftFragment = (
+  { __typename?: 'WatchmenShift' }
+  & Pick<Types.WatchmenShift, 'date' | 'shift' | 'is_night'>
+  & { watchman: Types.Maybe<(
+    { __typename?: 'WatchmenWatchman' }
+    & WatchmanForPickerFragment
+  )> }
+);
+
 export type WatchmenWatchmenListQueryVariables = {};
 
 
@@ -49,6 +58,30 @@ export type WatchmenWatchmenListForPickerQuery = (
   & { watchmen: Array<(
     { __typename?: 'WatchmenWatchman' }
     & WatchmanForPickerFragment
+  )> }
+);
+
+export type WatchmenGradesListQueryVariables = {};
+
+
+export type WatchmenGradesListQuery = (
+  { __typename?: 'Query' }
+  & { grades: Array<(
+    { __typename?: 'WatchmenGrade' }
+    & GradeFragment
+  )> }
+);
+
+export type WatchmenShiftsQueryVariables = {
+  from_date: Types.Scalars['String']
+};
+
+
+export type WatchmenShiftsQuery = (
+  { __typename?: 'Query' }
+  & { shifts: Array<(
+    { __typename?: 'WatchmenShift' }
+    & ShiftFragment
   )> }
 );
 
@@ -82,15 +115,17 @@ export type WatchmenCreateWatchmanMutation = (
   & Pick<Types.Mutation, 'watchmenCreateWatchman'>
 );
 
-export type WatchmenGradesListQueryVariables = {};
+export type WatchmenUpdateShiftMutationVariables = {
+  params: Types.WatchmenUpdateShiftInput
+};
 
 
-export type WatchmenGradesListQuery = (
-  { __typename?: 'Query' }
-  & { grades: Array<(
-    { __typename?: 'WatchmenGrade' }
-    & GradeFragment
-  )> }
+export type WatchmenUpdateShiftMutation = (
+  { __typename?: 'Mutation' }
+  & { shift: (
+    { __typename?: 'WatchmenShift' }
+    & ShiftFragment
+  ) }
 );
 
 export const WatchmanFragmentDoc = gql`
@@ -107,6 +142,13 @@ export const WatchmanFragmentDoc = gql`
   }
 }
     `;
+export const GradeFragmentDoc = gql`
+    fragment Grade on WatchmenGrade {
+  id
+  code
+  multiplier
+}
+    `;
 export const WatchmanForPickerFragmentDoc = gql`
     fragment WatchmanForPicker on WatchmenWatchman {
   id
@@ -118,13 +160,16 @@ export const WatchmanForPickerFragmentDoc = gql`
   }
 }
     `;
-export const GradeFragmentDoc = gql`
-    fragment Grade on WatchmenGrade {
-  id
-  code
-  multiplier
+export const ShiftFragmentDoc = gql`
+    fragment Shift on WatchmenShift {
+  date
+  shift
+  watchman {
+    ...WatchmanForPicker
+  }
+  is_night
 }
-    `;
+    ${WatchmanForPickerFragmentDoc}`;
 export const WatchmenWatchmenListDocument = gql`
     query WatchmenWatchmenList {
   watchmen: watchmenWatchmenAll {
@@ -189,6 +234,71 @@ export function useWatchmenWatchmenListForPickerLazyQuery(baseOptions?: ApolloRe
 export type WatchmenWatchmenListForPickerQueryHookResult = ReturnType<typeof useWatchmenWatchmenListForPickerQuery>;
 export type WatchmenWatchmenListForPickerLazyQueryHookResult = ReturnType<typeof useWatchmenWatchmenListForPickerLazyQuery>;
 export type WatchmenWatchmenListForPickerQueryResult = ApolloReactCommon.QueryResult<WatchmenWatchmenListForPickerQuery, WatchmenWatchmenListForPickerQueryVariables>;
+export const WatchmenGradesListDocument = gql`
+    query WatchmenGradesList {
+  grades: watchmenGradesAll {
+    ...Grade
+  }
+}
+    ${GradeFragmentDoc}`;
+
+/**
+ * __useWatchmenGradesListQuery__
+ *
+ * To run a query within a React component, call `useWatchmenGradesListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWatchmenGradesListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWatchmenGradesListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useWatchmenGradesListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>) {
+        return ApolloReactHooks.useQuery<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>(WatchmenGradesListDocument, baseOptions);
+      }
+export function useWatchmenGradesListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>(WatchmenGradesListDocument, baseOptions);
+        }
+export type WatchmenGradesListQueryHookResult = ReturnType<typeof useWatchmenGradesListQuery>;
+export type WatchmenGradesListLazyQueryHookResult = ReturnType<typeof useWatchmenGradesListLazyQuery>;
+export type WatchmenGradesListQueryResult = ApolloReactCommon.QueryResult<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>;
+export const WatchmenShiftsDocument = gql`
+    query WatchmenShifts($from_date: String!) {
+  shifts: watchmenShifts(from_date: $from_date) {
+    ...Shift
+  }
+}
+    ${ShiftFragmentDoc}`;
+
+/**
+ * __useWatchmenShiftsQuery__
+ *
+ * To run a query within a React component, call `useWatchmenShiftsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWatchmenShiftsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWatchmenShiftsQuery({
+ *   variables: {
+ *      from_date: // value for 'from_date'
+ *   },
+ * });
+ */
+export function useWatchmenShiftsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WatchmenShiftsQuery, WatchmenShiftsQueryVariables>) {
+        return ApolloReactHooks.useQuery<WatchmenShiftsQuery, WatchmenShiftsQueryVariables>(WatchmenShiftsDocument, baseOptions);
+      }
+export function useWatchmenShiftsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WatchmenShiftsQuery, WatchmenShiftsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WatchmenShiftsQuery, WatchmenShiftsQueryVariables>(WatchmenShiftsDocument, baseOptions);
+        }
+export type WatchmenShiftsQueryHookResult = ReturnType<typeof useWatchmenShiftsQuery>;
+export type WatchmenShiftsLazyQueryHookResult = ReturnType<typeof useWatchmenShiftsLazyQuery>;
+export type WatchmenShiftsQueryResult = ApolloReactCommon.QueryResult<WatchmenShiftsQuery, WatchmenShiftsQueryVariables>;
 export const WatchmenSetWatchmanPriorityDocument = gql`
     mutation WatchmenSetWatchmanPriority($params: WatchmenSetWatchmanPriorityInput!) {
   watchmenSetWatchmanPriority(params: $params)
@@ -279,35 +389,35 @@ export function useWatchmenCreateWatchmanMutation(baseOptions?: ApolloReactHooks
 export type WatchmenCreateWatchmanMutationHookResult = ReturnType<typeof useWatchmenCreateWatchmanMutation>;
 export type WatchmenCreateWatchmanMutationResult = ApolloReactCommon.MutationResult<WatchmenCreateWatchmanMutation>;
 export type WatchmenCreateWatchmanMutationOptions = ApolloReactCommon.BaseMutationOptions<WatchmenCreateWatchmanMutation, WatchmenCreateWatchmanMutationVariables>;
-export const WatchmenGradesListDocument = gql`
-    query WatchmenGradesList {
-  grades: watchmenGradesAll {
-    ...Grade
+export const WatchmenUpdateShiftDocument = gql`
+    mutation WatchmenUpdateShift($params: WatchmenUpdateShiftInput!) {
+  shift: watchmenUpdateShift(params: $params) {
+    ...Shift
   }
 }
-    ${GradeFragmentDoc}`;
+    ${ShiftFragmentDoc}`;
+export type WatchmenUpdateShiftMutationFn = ApolloReactCommon.MutationFunction<WatchmenUpdateShiftMutation, WatchmenUpdateShiftMutationVariables>;
 
 /**
- * __useWatchmenGradesListQuery__
+ * __useWatchmenUpdateShiftMutation__
  *
- * To run a query within a React component, call `useWatchmenGradesListQuery` and pass it any options that fit your needs.
- * When your component renders, `useWatchmenGradesListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
+ * To run a mutation, you first call `useWatchmenUpdateShiftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWatchmenUpdateShiftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useWatchmenGradesListQuery({
+ * const [watchmenUpdateShiftMutation, { data, loading, error }] = useWatchmenUpdateShiftMutation({
  *   variables: {
+ *      params: // value for 'params'
  *   },
  * });
  */
-export function useWatchmenGradesListQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>) {
-        return ApolloReactHooks.useQuery<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>(WatchmenGradesListDocument, baseOptions);
+export function useWatchmenUpdateShiftMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<WatchmenUpdateShiftMutation, WatchmenUpdateShiftMutationVariables>) {
+        return ApolloReactHooks.useMutation<WatchmenUpdateShiftMutation, WatchmenUpdateShiftMutationVariables>(WatchmenUpdateShiftDocument, baseOptions);
       }
-export function useWatchmenGradesListLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>(WatchmenGradesListDocument, baseOptions);
-        }
-export type WatchmenGradesListQueryHookResult = ReturnType<typeof useWatchmenGradesListQuery>;
-export type WatchmenGradesListLazyQueryHookResult = ReturnType<typeof useWatchmenGradesListLazyQuery>;
-export type WatchmenGradesListQueryResult = ApolloReactCommon.QueryResult<WatchmenGradesListQuery, WatchmenGradesListQueryVariables>;
+export type WatchmenUpdateShiftMutationHookResult = ReturnType<typeof useWatchmenUpdateShiftMutation>;
+export type WatchmenUpdateShiftMutationResult = ApolloReactCommon.MutationResult<WatchmenUpdateShiftMutation>;
+export type WatchmenUpdateShiftMutationOptions = ApolloReactCommon.BaseMutationOptions<WatchmenUpdateShiftMutation, WatchmenUpdateShiftMutationVariables>;

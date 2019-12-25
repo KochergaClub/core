@@ -1,39 +1,41 @@
 import { withApollo } from '~/apollo/client';
-import { useSelector } from 'react-redux';
+
+import { format, parseISO } from 'date-fns';
 
 import { addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
-import { Page } from '~/components';
-import {
-  useListeningWebSocket,
-  usePermissions,
-  useDispatch,
-} from '~/common/hooks';
+import { Page, ApolloQueryResults } from '~/components';
+
+import { useListeningWebSocket, usePermissions } from '~/common/hooks';
 import { NextPage } from '~/common/types';
 
-import { reloadSchedule } from '~/watchmen/features/schedule';
-import {
-  setDatesWindow,
-  selectDatesWindow,
-} from '~/watchmen/features/datesWindow';
+import { useWatchmenShiftsQuery } from '../queries.generated';
 
-import Calendar from '~/watchmen/components/Calendar';
-import DayContainer from '~/watchmen/components/DayContainer';
-import EditingSwitch from '~/watchmen/components/EditingSwitch';
-import Pager from '~/watchmen/components/Pager';
+import ShiftsCalendar from '../components/ShiftsCalendar';
+import EditingSwitch from '../components/EditingSwitch';
+import Pager from '../components/Pager';
 
-interface Props {}
+interface Props {
+  from_date: string;
+  to_date: string;
+}
 
-const SpaceStaffShiftsPage: NextPage<Props> = () => {
+const SpaceStaffShiftsPage: NextPage<Props> = props => {
   const [editable] = usePermissions(['watchmen.manage']);
 
-  const [from_date, to_date] = useSelector(selectDatesWindow);
-  const dispatch = useDispatch();
+  const from_date = parseISO(props.from_date);
+  const to_date = parseISO(props.to_date);
+
+  const queryResults = useWatchmenShiftsQuery({
+    variables: {
+      from_date: props.from_date,
+    },
+  });
 
   useListeningWebSocket('ws/watchmen-schedule/', async () => {
-    await dispatch(reloadSchedule(from_date, to_date));
+    queryResults.refetch();
   });
 
   return (
@@ -47,22 +49,22 @@ const SpaceStaffShiftsPage: NextPage<Props> = () => {
               {editable && <EditingSwitch />}
             </Column>
           </Column>
-          <Calendar
-            fromDate={from_date}
-            toDate={to_date}
-            renderDay={d => {
-              return <DayContainer date={d} />;
-            }}
-          />
+          <ApolloQueryResults {...queryResults}>
+            {({ data: { shifts } }) => (
+              <ShiftsCalendar
+                shifts={shifts}
+                fromDate={from_date}
+                toDate={to_date}
+              />
+            )}
+          </ApolloQueryResults>
         </Column>
       </Page.Main>
     </Page>
   );
 };
 
-SpaceStaffShiftsPage.getInitialProps = async ({ query, store }) => {
-  const { dispatch } = store;
-
+SpaceStaffShiftsPage.getInitialProps = async ({ query }) => {
   let from_date: Date;
   if (typeof query.from_date === 'string') {
     const match = query.from_date.match(/^\d{4}-\d{2}-\d{2}$/);
@@ -75,11 +77,10 @@ SpaceStaffShiftsPage.getInitialProps = async ({ query, store }) => {
   }
   const to_date = addWeeks(from_date, 4);
 
-  await dispatch(reloadSchedule(from_date, to_date));
-
-  dispatch(setDatesWindow(from_date, to_date));
-
-  return {};
+  return {
+    from_date: format(from_date, 'yyyy-MM-dd'),
+    to_date: format(to_date, 'yyyy-MM-dd'),
+  };
 };
 
 export default withApollo(SpaceStaffShiftsPage);

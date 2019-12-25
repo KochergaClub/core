@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { subWeeks, addWeeks, format } from 'date-fns';
 
 import { A, Row } from '@kocherga/frontkit';

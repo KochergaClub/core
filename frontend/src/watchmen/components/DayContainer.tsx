@@ -1,38 +1,19 @@
-import React from 'react';
-import { connect } from 'react-redux';
-
-import { State } from '~/redux/store';
-
-import { DaySchedule } from '../types';
-import { selectDaySchedule } from '../features/schedule';
+import { ShiftFragment } from '../queries.generated';
 
 import ShiftBox from './ShiftBox';
 
-interface OwnProps {
-  date: Date;
+interface Props {
+  shifts: ShiftFragment[];
 }
 
-interface StateProps {
-  daySchedule: DaySchedule;
-}
-
-type Props = OwnProps & StateProps;
-
-const DayContainer: React.FC<Props> = ({ daySchedule }) => {
+const DayContainer: React.FC<Props> = ({ shifts }) => {
   return (
     <div>
-      {daySchedule.map(shift => (
+      {shifts.map(shift => (
         <ShiftBox key={shift.shift} shift={shift} />
       ))}
     </div>
   );
 };
 
-const mapStateToProps = (
-  state: State,
-  ownProps: { date: Date }
-): StateProps => ({
-  daySchedule: selectDaySchedule(state, ownProps.date),
-});
-
-export default connect(mapStateToProps)(DayContainer);
+export default DayContainer;

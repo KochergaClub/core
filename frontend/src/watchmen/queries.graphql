@@ -27,6 +27,15 @@ fragment Grade on WatchmenGrade {
   multiplier
 }
 
+fragment Shift on WatchmenShift {
+  date
+  shift
+  watchman {
+    ...WatchmanForPicker
+  }
+  is_night
+}
+
 query WatchmenWatchmenList {
   watchmen: watchmenWatchmenAll {
     ...Watchman
@@ -36,6 +45,18 @@ query WatchmenWatchmenList {
 query WatchmenWatchmenListForPicker {
   watchmen: watchmenWatchmenAll {
     ...WatchmanForPicker
+  }
+}
+
+query WatchmenGradesList {
+  grades: watchmenGradesAll {
+    ...Grade
+  }
+}
+
+query WatchmenShifts($from_date: String!) {
+  shifts: watchmenShifts(from_date: $from_date) {
+    ...Shift
   }
 }
 
@@ -51,8 +72,8 @@ mutation WatchmenCreateWatchman($params: WatchmenCreateWatchmanInput!) {
   watchmenCreateWatchman(params: $params)
 }
 
-query WatchmenGradesList {
-  grades: watchmenGradesAll {
-    ...Grade
+mutation WatchmenUpdateShift($params: WatchmenUpdateShiftInput!) {
+  shift: watchmenUpdateShift(params: $params) {
+    ...Shift
   }
 }
