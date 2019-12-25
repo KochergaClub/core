@@ -9,18 +9,18 @@ import Card, { CardList } from '~/components/Card';
 import { selectKkmPassword } from '~/kkm/selectors';
 import { useDispatch } from '~/common/hooks';
 
-import { Ticket } from '../types';
+import { TicketFragment } from '../queries.generated';
 
 import { fiscalizeTicket } from '../features/trainingTickets';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
-const FiscalizeButton = ({ ticket }: { ticket: Ticket }) => {
+const FiscalizeButton = ({ ticket }: { ticket: TicketFragment }) => {
   const dispatch = useDispatch();
   const kkmPassword = useSelector(selectKkmPassword);
 
   const click = useCallback(async () => {
-    await dispatch(fiscalizeTicket(ticket.id));
+    await dispatch(fiscalizeTicket(parseInt(ticket.id)));
   }, [ticket.id, fiscalizeTicket, dispatch]);
 
   if (!kkmPassword) {
@@ -35,7 +35,7 @@ const FiscalizeButton = ({ ticket }: { ticket: Ticket }) => {
   );
 };
 
-const TicketItem = ({ ticket }: { ticket: Ticket }) => {
+const TicketItem = ({ ticket }: { ticket: TicketFragment }) => {
   return (
     <Card>
       <Column>
@@ -57,7 +57,7 @@ const TicketItem = ({ ticket }: { ticket: Ticket }) => {
   );
 };
 
-const TicketList = ({ tickets }: { tickets: Ticket[] }) => {
+const TicketList = ({ tickets }: { tickets: TicketFragment[] }) => {
   return (
     <CardList>
       {tickets.map(ticket => (

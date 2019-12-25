@@ -2,9 +2,11 @@ import Link from 'next/link';
 
 import { A, Row, Label } from '@kocherga/frontkit';
 
-import { Training } from '../types';
+import { TrainingFragment } from '../queries.generated';
 
-const TrainingCard: React.FC<{ training: Training }> = ({ training }) => {
+const TrainingCard: React.FC<{ training: TrainingFragment }> = ({
+  training,
+}) => {
   return (
     <div>
       <Link

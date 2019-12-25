@@ -1,9 +1,5 @@
-import { useCallback } from 'react';
-
-import ModalFormButton from '~/components/forms/ModalFormButton';
+import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
-
-import { GraphQLError } from 'graphql';
 
 import { useWatchmenCreateWatchmanMutation } from '../queries.generated';
 
@@ -34,55 +30,16 @@ const fields: FormShape = [
     type: 'boolean',
   },
 ];
-
-interface FormResult {
-  email: string;
-  short_name: string;
-  full_name: string;
-  password: string;
-  vk?: string;
-  gender: string;
-}
-
 const AddWatchman: React.FC = () => {
-  const [createMutation, createResults] = useWatchmenCreateWatchmanMutation({
+  const [createMutation] = useWatchmenCreateWatchmanMutation({
     refetchQueries: ['WatchmenWatchmenList'],
     awaitRefetchQueries: true,
   });
-  console.log(createResults);
-
-  const cb = useCallback(
-    async (values: FormResult) => {
-      try {
-        await createMutation({
-          variables: {
-            params: values,
-          },
-        });
-        return;
-      } catch (e) {
-        const errors = e.graphQLErrors as GraphQLError[];
-        const error = errors
-          .map(
-            e =>
-              e.message +
-              ': ' +
-              JSON.stringify(e.extensions?.response?.body || 'unknown reason')
-          )
-          .join('. ');
-        return {
-          close: false,
-          error,
-        };
-      }
-    },
-    [createMutation]
-  );
 
   return (
     <div>
-      <ModalFormButton
-        post={cb}
+      <ApolloModalFormButton
+        mutation={createMutation}
         fields={fields}
         modalTitle="Добавить админа"
         modalButtonName="Добавить"

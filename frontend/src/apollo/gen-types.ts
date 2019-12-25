@@ -111,6 +111,8 @@ export type Mutation = {
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
+  ratioAddTraining: RatioTraining,
+  ratioAddTicket: RatioTicket,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
@@ -155,6 +157,16 @@ export type MutationCm2CreateCustomerArgs = {
 
 export type MutationCm2CloseOrderArgs = {
   id: Scalars['ID']
+};
+
+
+export type MutationRatioAddTrainingArgs = {
+  params: RatioAddTrainingInput
+};
+
+
+export type MutationRatioAddTicketArgs = {
+  params: RatioAddTicketInput
 };
 
 
@@ -210,6 +222,8 @@ export type Query = {
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
+  ratioTrainings: RatioTrainingConnection,
+  ratioTrainingBySlug: RatioTraining,
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
@@ -252,6 +266,16 @@ export type QueryCm2OrderArgs = {
 };
 
 
+export type QueryRatioTrainingsArgs = {
+  page?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryRatioTrainingBySlugArgs = {
+  slug: Scalars['String']
+};
+
+
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
 };
@@ -271,6 +295,57 @@ export type QueryZadarmaPbxCallsArgs = {
 
 export type QueryZadarmaPbxCallArgs = {
   pbx_call_id: Scalars['ID']
+};
+
+export type RatioAddTicketInput = {
+  training_id: Scalars['ID'],
+  email: Scalars['String'],
+  first_name: Scalars['String'],
+  last_name: Scalars['String'],
+  payment_amount: Scalars['Int'],
+  status: Scalars['String'],
+  fiscalization_status: Scalars['String'],
+  ticket_type: Scalars['String'],
+  payment_type: Scalars['String'],
+};
+
+export type RatioAddTrainingInput = {
+  name: Scalars['String'],
+  slug: Scalars['String'],
+  date: Scalars['String'],
+};
+
+export type RatioTicket = {
+   __typename?: 'RatioTicket',
+  id: Scalars['ID'],
+  training: RatioTraining,
+  email: Scalars['String'],
+  first_name: Scalars['String'],
+  last_name?: Maybe<Scalars['String']>,
+  payment_amount: Scalars['Int'],
+  status: Scalars['String'],
+  fiscalization_status: Scalars['String'],
+  ticket_type: Scalars['String'],
+  payment_type: Scalars['String'],
+  registration_date?: Maybe<Scalars['String']>,
+  comment?: Maybe<Scalars['String']>,
+};
+
+export type RatioTraining = {
+   __typename?: 'RatioTraining',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  slug: Scalars['String'],
+  date: Scalars['String'],
+  tickets: Array<RatioTicket>,
+  tickets_count: Scalars['Int'],
+  total_income: Scalars['Int'],
+};
+
+export type RatioTrainingConnection = {
+   __typename?: 'RatioTrainingConnection',
+  pageInfo: PageInfo,
+  nodes: Array<RatioTraining>,
 };
 
 export type Room = {

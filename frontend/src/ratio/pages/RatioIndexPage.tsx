@@ -1,7 +1,7 @@
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 import { NextPage } from '~/common/types';
 import { Page } from '~/components';
-
-import { loadTrainings } from '~/ratio/features/trainings';
 
 import TrainingCollectionBlock from '~/ratio/components/TrainingCollectionBlock';
 
@@ -16,9 +16,4 @@ const RatioIndexPage: NextPage = () => {
   );
 };
 
-RatioIndexPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadTrainings(1));
-  return {};
-};
-
-export default RatioIndexPage;
+export default withApollo(withStaff(RatioIndexPage));

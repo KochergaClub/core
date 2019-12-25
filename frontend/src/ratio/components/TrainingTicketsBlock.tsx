@@ -1,31 +1,25 @@
-import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-
 import { A, Column, Row } from '@kocherga/frontkit';
 
-import { useDispatch } from '~/common/hooks';
 import shapes from '~/shapes';
 
 import { PaddedBlock } from '~/components';
-import CreateButton from '~/components/crud/CreateButton';
 import { FormField } from '~/components/forms/types';
+import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { transformShape } from '~/components/forms/utils';
-
-import { selectTraining } from '~/ratio/features/trainingItem';
-import {
-  loadTrainingTickets,
-  selectTrainingTickets,
-} from '~/ratio/features/trainingTickets';
 
 import TicketList from './TicketList';
 
-const CreateTicketButton = ({
-  training_id,
-  onCreate,
-}: {
-  training_id: number;
-  onCreate: () => void;
-}) => {
+import {
+  TrainingFragment,
+  useRatioAddTicketMutation,
+} from '../queries.generated';
+
+const CreateTicketButton = ({ training_id }: { training_id: string }) => {
+  const [addMutation] = useRatioAddTicketMutation({
+    refetchQueries: ['RatioTrainingBySlug'],
+    awaitRefetchQueries: true,
+  });
+
   const fields = transformShape(shapes.ratio.ticket, {
     exclude: ['id'],
     transform: {
@@ -43,47 +37,34 @@ const CreateTicketButton = ({
   });
 
   return (
-    <CreateButton
-      apiEndpoint="/ratio/ticket"
+    <ApolloModalFormButton
+      mutation={addMutation}
       fields={fields}
-      onCreate={onCreate}
+      buttonName="Добавить"
+      modalButtonName="Добавить"
+      modalTitle="Добавить билет"
     />
   );
 };
 
-const TrainingTicketsBlock = () => {
-  const dispatch = useDispatch();
+interface Props {
+  training: TrainingFragment;
+}
 
-  const tickets = useSelector(selectTrainingTickets);
-  const training = useSelector(selectTraining);
-
-  if (!training) {
-    throw new Error('No training');
-  }
-
-  const onCreateTicket = useCallback(async () => {
-    if (!training) {
-      throw new Error('No training');
-    }
-    await dispatch(loadTrainingTickets(training.slug));
-  }, [training]);
-
+const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
   return (
     <PaddedBlock width="max">
       <h2>
         <Row>
           <div>Участники:</div>
           <A href={`/admin/ratio/ticket/?training__id__exact=${training.id}`}>
-            {tickets.length}
+            {training.tickets.length}
           </A>
-          <CreateTicketButton
-            training_id={training.id}
-            onCreate={onCreateTicket}
-          />
+          <CreateTicketButton training_id={training.id} />
         </Row>
       </h2>
       <Column stretch>
-        <TicketList tickets={tickets} />
+        <TicketList tickets={training.tickets} />
       </Column>
     </PaddedBlock>
   );

@@ -1,0 +1,57 @@
+extend type Query {
+  ratioTrainings(page: Int): RatioTrainingConnection!
+  ratioTrainingBySlug(slug: String!): RatioTraining!
+}
+
+type RatioTrainingConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTraining!]!
+}
+
+type RatioTraining {
+  id: ID!
+  name: String!
+  slug: String!
+  date: String!
+  tickets: [RatioTicket!]!
+  tickets_count: Int!
+  total_income: Int!
+}
+
+type RatioTicket {
+  id: ID!
+  training: RatioTraining!
+  email: String!
+  first_name: String!
+  last_name: String
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+  registration_date: String
+  comment: String
+}
+
+extend type Mutation {
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  ratioAddTicket(params: RatioAddTicketInput!): RatioTicket!
+}
+
+input RatioAddTrainingInput {
+  name: String!
+  slug: String!
+  date: String!
+}
+
+input RatioAddTicketInput {
+  training: ID!
+  email: String!
+  first_name: String!
+  last_name: String!
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+}

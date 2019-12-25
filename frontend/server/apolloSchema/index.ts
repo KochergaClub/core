@@ -24,11 +24,14 @@ import { resolvers as zadarmaResolvers } from './zadarma';
 import Watchmen from './watchmen.graphql';
 import { resolvers as watchmenResolvers } from './watchmen';
 
+import Ratio from './ratio.graphql';
+import { resolvers as ratioResolvers } from './ratio';
+
 import { default as Base } from './base.graphql';
 
 // https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2
 export const schema = makeExecutableSchema({
-  typeDefs: [Base, Cm2, Room, Staff, Auth, Cashier, Zadarma, Watchmen],
+  typeDefs: [Base, Cm2, Room, Staff, Auth, Cashier, Zadarma, Watchmen, Ratio],
   // NB: there's a mismatch between codegen's Resolvers type and apollo Resolvers type.
   // It could be fixed with `useIndexSignature = true` config option to typescript-resolvers codegen plugin,
   // but it makes types too weak, so this is a lesser evil.
@@ -40,6 +43,7 @@ export const schema = makeExecutableSchema({
     authResolvers,
     cashierResolvers,
     zadarmaResolvers,
-    watchmenResolvers
+    watchmenResolvers,
+    ratioResolvers
   ) as any,
 });

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Provider } from 'react-redux';
 import cookie from 'cookie';
 
@@ -105,18 +106,16 @@ class MyApp extends App<MyProps> {
   render() {
     const { Component, pageProps, store, errorCode } = this.props;
 
-    if (errorCode) {
-      return (
-        <Provider store={store}>
-          <Error statusCode={errorCode} />
-        </Provider>
-      );
-    }
-
     return (
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
+      <React.StrictMode>
+        <Provider store={store}>
+          {errorCode ? (
+            <Error statusCode={errorCode} />
+          ) : (
+            <Component {...pageProps} />
+          )}
+        </Provider>
+      </React.StrictMode>
     );
   }
 }

@@ -18,6 +18,7 @@ class TicketSerializer(serializers.ModelSerializer):
             'training',
             'email', 'first_name', 'last_name', 'payment_amount',
             'status', 'fiscalization_status', 'ticket_type', 'payment_type',
+            'registration_date', 'comment',
         )
 
 
