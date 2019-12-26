@@ -83,7 +83,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         NPM_TOKEN: ${TOKEN}
-    command: bash -c 'cd jsx && node ./render/server/index.js'
+    command: node ./dist/index.js
     depends_on:
       - api
     ports:
