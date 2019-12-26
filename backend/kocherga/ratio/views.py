@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from kocherga.django.pagination import CommonPagination
+from kocherga.django.drf import BulkRetrieveMixin
 
 from kocherga.money.cashier.views import IsKkmUser
 
@@ -116,7 +117,10 @@ class ActivityViewSet(viewsets.ReadOnlyModelViewSet):
         return Response('ok')
 
 
-class TrainerViewSet(viewsets.ReadOnlyModelViewSet):
+class TrainerViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     permission_classes = (IsRatioManager,)
     queryset = models.Trainer.objects.all()
     serializer_class = serializers.TrainerSerializer

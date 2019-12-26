@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from . import models, serializers
 
 from kocherga.django.pagination import CommonPagination
-from kocherga.django.drf import BulkRetrieveFilter
+from kocherga.django.drf import BulkRetrieveMixin
 
 
 class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
@@ -33,11 +33,15 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
         return Response('ok')
 
 
-class CustomerViewSet(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
+class CustomerViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        mixins.CreateModelMixin,
+        BulkRetrieveMixin,
+):
     serializer_class = serializers.CustomerSerializer
     permission_classes = [permissions.IsAdminUser]
     pagination_class = CommonPagination
-    filter_backends = [filters.SearchFilter, BulkRetrieveFilter]
+    filter_backends = [filters.SearchFilter]
     search_fields = ['first_name', 'last_name', '=card_id']
 
     def get_queryset(self):

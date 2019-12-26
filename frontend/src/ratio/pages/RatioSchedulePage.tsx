@@ -13,7 +13,9 @@ interface Props {
 }
 
 const RatioSchedulePage: NextPage<Props> = ({ slug }) => {
-  const queryResults = useRatioTrainingWithScheduleQuery();
+  const queryResults = useRatioTrainingWithScheduleQuery({
+    variables: { slug },
+  });
 
   return (
     <Page

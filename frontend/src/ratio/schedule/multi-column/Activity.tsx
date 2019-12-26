@@ -57,7 +57,7 @@ export default function Activity({ activity }: Props) {
         {activity.location ? <Location>{activity.location}</Location> : null}
       </Row>
       <Name>{activity.name}</Name>
-      {activity.trainer && <Trainer>{activity.trainer}</Trainer>}
+      {activity.trainer && <Trainer>{activity.trainer.long_name}</Trainer>}
     </Container>
   );
 }

@@ -22,26 +22,32 @@ export const resolvers: Resolvers = {
       dataSources.kochergaAPI.create({ resource: TRAINING, params }),
     ratioAddTicket: (_, { params }, { dataSources }) =>
       dataSources.kochergaAPI.create({ resource: TICKET, params }),
-    ratioTrainingCopyScheduleFrom: (_, { params }, { dataSources }) =>
-      dataSources.kochergaAPI.postDetailsAction({
+    ratioTrainingCopyScheduleFrom: async (_, { params }, { dataSources }) => {
+      await dataSources.kochergaAPI.postDetailsAction({
         resource: TRAINING,
         id: params.to_training_slug,
         action: 'copy_schedule_from',
         params: { src_training_slug: params.from_training_slug },
-      }),
-    ratioTrainingAddDay: (_, { params }, { dataSources }) =>
-      dataSources.kochergaAPI.postDetailsAction({
+      });
+      return true;
+    },
+    ratioTrainingAddDay: async (_, { params }, { dataSources }) => {
+      await dataSources.kochergaAPI.postDetailsAction({
         resource: TRAINING,
         id: params.training_slug,
         action: 'add_day',
         params: { date: params.date },
-      }),
-    ratioTicketFiscalize: (_, { ticket_id }, { dataSources }) =>
-      dataSources.kochergaAPI.postDetailsAction({
+      });
+      return true;
+    },
+    ratioTicketFiscalize: async (_, { ticket_id }, { dataSources }) => {
+      await dataSources.kochergaAPI.postDetailsAction({
         resource: TICKET,
         id: ticket_id,
         action: 'fiscalize',
-      }),
+      });
+      return true;
+    },
   },
   RatioTraining: {
     tickets: (parent, _, { dataSources }) =>

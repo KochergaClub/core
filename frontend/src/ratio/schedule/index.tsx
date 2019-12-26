@@ -103,7 +103,10 @@ const SchedulePage: React.FC<Props> = ({ training }) => {
       {schedule.length ? (
         <Component schedule={schedule} long_name={training.name} />
       ) : (
-        <CopyScheduleFromPicker pick={pickSrcForCopy} />
+        <CopyScheduleFromPicker
+          pick={pickSrcForCopy}
+          excludeSlug={training.slug}
+        />
       )}
     </Column>
   );

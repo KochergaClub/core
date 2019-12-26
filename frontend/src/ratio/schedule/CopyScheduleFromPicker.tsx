@@ -1,6 +1,6 @@
-import { Column, Button } from '@kocherga/frontkit';
+import { Column } from '@kocherga/frontkit';
 
-import { ApolloQueryResults } from '~/components';
+import { AsyncButton, ApolloQueryResults } from '~/components';
 
 import {
   TrainingForPickerFragment,
@@ -8,37 +8,36 @@ import {
 } from '../queries.generated';
 
 interface Props {
-  pick: (srcTraining: TrainingForPickerFragment) => void;
+  pick: (srcTraining: TrainingForPickerFragment) => Promise<void>;
+  excludeSlug: string;
 }
 
 export default function CopyScheduleFromPicker(props: Props) {
   const queryResults = useRatioTrainingsForPickerQuery();
 
-  if (queryResults.loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <ApolloQueryResults {...queryResults}>
-      {({
-        data: {
-          trainings: { nodes: trainings },
-        },
-      }) => (
-        <div>
-          <header>Расписания нет. Скопировать?</header>
+    <div>
+      <header>Расписания нет. Скопировать?</header>
+      <ApolloQueryResults {...queryResults}>
+        {({
+          data: {
+            trainings: { nodes: trainings },
+          },
+        }) => (
           <Column>
-            {trainings.map(srcTraining => (
-              <Button
-                key={srcTraining.slug}
-                onClick={() => props.pick(srcTraining)}
-              >
-                {srcTraining.name}
-              </Button>
-            ))}
+            {trainings
+              .filter(training => training.slug !== props.excludeSlug)
+              .map(srcTraining => (
+                <AsyncButton
+                  key={srcTraining.slug}
+                  act={() => props.pick(srcTraining)}
+                >
+                  {srcTraining.name}
+                </AsyncButton>
+              ))}
           </Column>
-        </div>
-      )}
-    </ApolloQueryResults>
+        )}
+      </ApolloQueryResults>
+    </div>
   );
 }
