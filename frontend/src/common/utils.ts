@@ -12,7 +12,7 @@ export const formatDate = (date: Date, formatStr: string) =>
 export const parseQueryString = (
   queryString: string
 ): { [k: string]: string } => {
-  let params = new URLSearchParams(queryString);
+  const params = new URLSearchParams(queryString);
 
   const result: { [k: string]: string } = {};
   params.forEach((value, key) => {

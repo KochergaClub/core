@@ -27,9 +27,9 @@ const CustomerOrders: React.FC<{
   return (
     <div>
       <h3>Заказы</h3>
-      {nodes.map(node => (
-        <div>
-          <OrderLink order={node} /> / {node.start}
+      {nodes.map(order => (
+        <div key={order.id}>
+          <OrderLink order={order} /> / {order.start}
         </div>
       ))}
     </div>

@@ -7,7 +7,7 @@ import { ToolbarProps, NavigateAction, View } from 'react-big-calendar';
 
 class Toolbar extends React.Component<ToolbarProps> {
   render() {
-    let { label } = this.props;
+    const { label } = this.props;
 
     return (
       <div className="rbc-toolbar">
@@ -48,7 +48,7 @@ class Toolbar extends React.Component<ToolbarProps> {
   };
 
   viewNamesGroup() {
-    let viewNames = this.props.views as View[];
+    const viewNames = this.props.views as View[];
     const view = this.props.view;
 
     const messages: { [key: string]: string } = {

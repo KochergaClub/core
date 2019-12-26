@@ -94,7 +94,7 @@ export const Action: React.FC<ActionProps> = ({ act, syncAct, children }) => {
       await act();
     }
     close();
-  }, [act]);
+  }, [act, syncAct, close]);
 
   return <ActionContainer onClick={cb}>{children}</ActionContainer>;
 };
@@ -112,7 +112,7 @@ export const ModalAction: React.FC<ModalActionProps> = ({
   const openModal = useCallback(() => {
     setModal(children);
     close();
-  }, [close, setModal]);
+  }, [close, setModal, children]);
 
   return <ActionContainer onClick={openModal}>{title}</ActionContainer>;
 };

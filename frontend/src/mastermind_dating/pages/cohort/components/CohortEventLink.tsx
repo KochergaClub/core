@@ -71,7 +71,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
         cohort: updatedCohort,
       },
     });
-  }, [api, cohort.id, confirming]);
+  }, [api, dispatch, cohort.id, confirming]);
 
   const unsetEvent = useCallback(async () => {
     const updatedCohort = await api.call(
@@ -84,7 +84,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
         cohort: updatedCohort,
       },
     });
-  }, [cohort.id]);
+  }, [dispatch, cohort.id]);
 
   if (cohort.event_id) {
     return (

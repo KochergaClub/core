@@ -76,7 +76,7 @@ const EmailSettings: React.FC<{}> = () => {
 
   useEffect(() => {
     fetchStatus();
-  }, []);
+  }, [fetchStatus]);
 
   const resubscribeCb = useCallback(async () => {
     await callEmailAction(api, 'resubscribe');
@@ -86,7 +86,7 @@ const EmailSettings: React.FC<{}> = () => {
   const unsubscribeCb = useCallback(async () => {
     await callEmailAction(api, 'unsubscribe');
     await fetchStatus();
-  }, [api]);
+  }, [api, fetchStatus]);
 
   const setInterestStatus = useCallback(
     async (id: string, newStatus: boolean) => {
@@ -113,7 +113,7 @@ const EmailSettings: React.FC<{}> = () => {
       await updateInterests(api, interestIds);
       await fetchStatus();
     },
-    [api, status]
+    [api, status, fetchStatus]
   );
 
   if (status === undefined) {

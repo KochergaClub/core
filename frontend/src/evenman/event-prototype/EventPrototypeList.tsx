@@ -37,7 +37,7 @@ const EventPrototypeList = observer((props: Props) => {
         </div>
       );
     default:
-      return <span>'wat? ' + store.state</span>;
+      return <span>{'wat? ' + store.state}</span>;
   }
 });
 

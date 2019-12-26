@@ -74,23 +74,26 @@ const AnonRegistrationForm: React.FC<Props> = ({ event }) => {
     });
     setComplete(true);
     setActing(false);
-  }, [api, event.event_id, email, subscribedToNewsletter]);
+  }, [api, event.title, event.event_id, email, subscribedToNewsletter]);
 
-  const restart = useCallback(async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const restart = useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault();
 
-    trackEvent('register_restart', {
-      category: 'events',
-      label: event.title,
-    });
+      trackEvent('register_restart', {
+        category: 'events',
+        label: event.title,
+      });
 
-    // TODO - reducer
-    setActing(false);
-    setEmail('');
-    setComplete(false);
-    setSubscribedToNewsletter(true);
-    setAgreedToTerms(false);
-  }, []);
+      // TODO - reducer
+      setActing(false);
+      setEmail('');
+      setComplete(false);
+      setSubscribedToNewsletter(true);
+      setAgreedToTerms(false);
+    },
+    [event.title]
+  );
 
   if (complete) {
     return <Success email={email} restart={restart} />;

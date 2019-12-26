@@ -34,7 +34,7 @@ class EditableString extends React.Component<Props, {}> {
     }
   }
 
-  componentDidUpdate(_: Props) {
+  componentDidUpdate() {
     if (this.editing) {
       this.input!.focus();
       this.input!.select();

@@ -43,7 +43,7 @@ const ActionButton = ({
       await asyncOnSuccess();
     }
     setLoading(false);
-  }, [path, api, onSuccess, reloadOnSuccess]);
+  }, [path, api, onSuccess, reloadOnSuccess, asyncOnSuccess]);
 
   return (
     <Button loading={loading} disabled={loading} onClick={cb}>

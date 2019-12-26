@@ -76,7 +76,7 @@ export default class EventPrototype extends EventShape {
   @observable timepad_category_code?: string;
   @observable timepad_prepaid_tickets: boolean;
 
-  @observable state: string = 'normal';
+  @observable state = 'normal';
 
   constructor(root: RootStore, json: EventPrototypeJSON) {
     super(root);
@@ -146,9 +146,7 @@ export default class EventPrototype extends EventShape {
 
     if (updated.prototype_id.toString() !== this.id.toString()) {
       throw new Error(
-        `Server returned an invalid event prototype, let's panic (${
-          updated.prototype_id
-        } != ${this.id})`
+        `Server returned an invalid event prototype, let's panic (${updated.prototype_id} != ${this.id})`
       );
     }
 

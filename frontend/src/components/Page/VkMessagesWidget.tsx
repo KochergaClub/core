@@ -24,7 +24,7 @@ const VkMessagesWidget: React.FC = () => {
       disableButtonTooltip: 1,
       tooltipButtonText: 'Есть вопрос?',
     });
-  }, []);
+  }, [widgetId]);
 
   if (!widgetId) {
     return null;

@@ -44,7 +44,7 @@ const EditEventModal: React.FC = () => {
       })
     );
     dispatch(closeUI());
-  }, [api, event, saveDisabled, title, description, room]);
+  }, [api, dispatch, event, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
     if (!event) {
@@ -53,7 +53,7 @@ const EditEventModal: React.FC = () => {
     setDeleting(true);
     await dispatch(deleteEvent(event.id));
     dispatch(closeUI());
-  }, [api, event]);
+  }, [api, dispatch, event]);
 
   const closeCb = useCallback(() => {
     dispatch(closeUI());

@@ -43,7 +43,7 @@ const NewEventModal: React.FC = () => {
       })
     );
     dispatch(closeUI());
-  }, [api, title, description, room, start, end, saveDisabled]);
+  }, [api, dispatch, title, description, room, start, end, saveDisabled]);
 
   const closeCb = useCallback(() => {
     dispatch(closeUI());

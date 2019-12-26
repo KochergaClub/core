@@ -20,7 +20,7 @@ export const useCohortParticipantsReloader = (cohort: Cohort) => {
         participants,
       },
     });
-  }, [api, cohort.id]);
+  }, [api, dispatch, cohort.id]);
 };
 
 export const useCohortGroupsReloader = (cohort: Cohort) => {
@@ -35,5 +35,5 @@ export const useCohortGroupsReloader = (cohort: Cohort) => {
         groups,
       },
     });
-  }, [api, cohort.id]);
+  }, [api, dispatch, cohort.id]);
 };

@@ -32,7 +32,7 @@ const EditableMomentSpan = ({
 
   const onFocusChange = useCallback(
     ({ focused }: { focused: boolean | null }) => setFocused(Boolean(focused)),
-    [focused]
+    []
   );
 
   const onExpand = useCallback(

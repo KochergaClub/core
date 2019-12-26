@@ -32,7 +32,7 @@ export default function Registration(props: Props) {
     setActing(true);
     await api.call(`events/${event.event_id}/my_ticket/unregister`, 'POST');
     window.location.reload();
-  }, [api, event.event_id]);
+  }, [api, event.title, event.event_id]);
 
   const register = useCallback(async () => {
     trackEvent('register', {
@@ -43,7 +43,7 @@ export default function Registration(props: Props) {
     setActing(true);
     await api.call(`events/${event.event_id}/my_ticket/register`, 'POST');
     window.location.reload();
-  }, [api, event.event_id]);
+  }, [api, event.title, event.event_id]);
 
   if (!user.is_authenticated) {
     return <AnonRegistration {...props} />;

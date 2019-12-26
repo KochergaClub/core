@@ -24,7 +24,7 @@ const Centered = styled.div`
 
 @observer
 export class InputModal extends React.Component<Props, {}> {
-  @observable value: string = '';
+  @observable value = '';
   private input: HTMLInputElement | null = null;
 
   @action.bound

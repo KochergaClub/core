@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
 
 import Head from 'next/head';
 
-import { GlobalStyle } from '@kocherga/frontkit';
+import { GlobalStyle as FrontkitGlobalStyle } from '@kocherga/frontkit';
 
 export const IntroStyle = createGlobalStyle`
   @font-face {
@@ -14,8 +13,8 @@ export const IntroStyle = createGlobalStyle`
   }
 `;
 
-export default () => (
-  <React.Fragment>
+const GlobalStyle = () => (
+  <>
     <Head>
       <link rel="stylesheet" href="/static/normalize.css" />
       {/* NOTE - <GlobalFonts /> doesn't work for some reason */}
@@ -24,7 +23,9 @@ export default () => (
         rel="stylesheet"
       />
     </Head>
-    <GlobalStyle />
+    <FrontkitGlobalStyle />
     <IntroStyle />
-  </React.Fragment>
+  </>
 );
+
+export default GlobalStyle;

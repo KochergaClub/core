@@ -8,8 +8,8 @@ export default class EventPrototypeStore {
   root: RootStore;
 
   @observable eventPrototypes = observable.map<number, EventPrototype>();
-  @observable state: string = 'empty';
-  @observable creating: boolean = false;
+  @observable state = 'empty';
+  @observable creating = false;
 
   @computed
   get list(): EventPrototype[] {

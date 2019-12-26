@@ -111,7 +111,7 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
       top: registrationRef.current.offsetTop,
       behavior: 'smooth',
     });
-  }, [registrationRef]);
+  }, [registrationRef, event.title]);
 
   return (
     <BottomRowContainer>

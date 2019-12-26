@@ -28,7 +28,7 @@ const DeleteFeedback: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
 
   const deleteCb = useCallback(async () => {
     await dispatch(deleteEventFeedback(feedback.id));
-  }, [feedback.id]);
+  }, [dispatch, feedback.id]);
 
   return (
     <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
@@ -46,7 +46,7 @@ const FeedbackCollection: React.FC = () => {
     async (values: CreateFeedbackParams) => {
       await dispatch(addEventFeedback(values));
     },
-    [dispatch, addEventFeedback]
+    [dispatch]
   );
 
   const renderExtraColumn = (feedback: Feedback) => (

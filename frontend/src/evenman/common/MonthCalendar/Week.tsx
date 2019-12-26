@@ -73,14 +73,9 @@ const Week: React.FC<Props> = ({
 }) => {
   const [resizeListener, sizes] = useResizeAware();
 
-  React.useEffect(
-    () => {
-      console.log(firstDay);
-      console.log(sizes);
-      setHeight(firstDay, sizes.height);
-    },
-    [firstDay, sizes.height]
-  );
+  React.useEffect(() => {
+    setHeight(firstDay, sizes.height);
+  }, [firstDay, sizes.height, setHeight, sizes.height]);
 
   return (
     <Container>

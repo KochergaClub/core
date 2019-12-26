@@ -39,12 +39,9 @@ const CalendarCellContainer = styled.div`
 
 const CalendarCell: React.FC<CalendarCellProps> = liteObserver(
   ({ events, view }) => {
-    const selectCb = useCallback(
-      (id: string) => {
-        Router.push('/team/evenman/event/[id]', `/team/evenman/event/${id}`);
-      },
-      [Router]
-    );
+    const selectCb = useCallback((id: string) => {
+      Router.push('/team/evenman/event/[id]', `/team/evenman/event/${id}`);
+    }, []);
 
     return (
       <CalendarCellContainer>

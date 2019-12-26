@@ -90,12 +90,12 @@ function ModalForm<Values>({
         setSubmitError(postResult.error);
       }
     },
-    [fields, post]
+    [fields, post, close]
   );
 
   const validate = useCallback(
     values => {
-      let errors: { [k: string]: string } = {};
+      const errors: { [k: string]: string } = {};
       for (const field of fields) {
         const value = values[field.name];
         if (value === '' && !field.optional) {

@@ -61,7 +61,7 @@ interface Props {
 }
 
 const EventCard: React.FC<Props> = ({ event }) => {
-  let href = `/events/${event.event_id}`;
+  const href = `/events/${event.event_id}`;
 
   // target="_top" attributes can be removed after we roll out the new frontpage and disable the schedule iframe (necessary for Tilda).
   return (

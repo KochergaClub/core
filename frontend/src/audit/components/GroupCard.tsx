@@ -39,7 +39,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
         },
       });
     },
-    [group]
+    [group, removeUserFromGroupMutation]
   );
 
   return (

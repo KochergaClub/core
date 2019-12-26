@@ -18,7 +18,7 @@ export class FbStore {
 
   appId = '1685764725047458';
 
-  @observable status: string = 'starting';
+  @observable status = 'starting';
 
   constructor(api: API) {
     this.api = api;

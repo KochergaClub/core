@@ -68,7 +68,7 @@ const EventCalendar: NextPage<Props> = props => {
     });
 
     dispatch(replaceEvents(json));
-  }, [api, range]);
+  }, [api, dispatch, range]);
 
   useEffect(() => {
     fetchEvents();
@@ -123,14 +123,14 @@ const EventCalendar: NextPage<Props> = props => {
 
       dispatch(startNewUI({ start, end }));
     },
-    []
+    [dispatch]
   );
 
   const startViewEvent = useCallback(
     (eventWithMetadata: LocalEventWithMetadata) => {
       dispatch(startViewUI(eventWithMetadata.event.id));
     },
-    []
+    [dispatch]
   );
 
   const resizeEvent = useCallback(
@@ -156,7 +156,7 @@ const EventCalendar: NextPage<Props> = props => {
         })
       );
     },
-    []
+    [dispatch]
   );
 
   const events = useSelector(selectEventsWithMetadata);

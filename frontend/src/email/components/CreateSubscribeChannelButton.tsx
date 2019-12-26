@@ -41,7 +41,7 @@ const CreateSubscribeChannelButton: React.FC = () => {
         })
       );
     },
-    [mailchimpInterests]
+    [mailchimpInterests, dispatch]
   );
 
   return (

@@ -70,7 +70,7 @@ const slice = createExtendedSlice({
     },
     switchFromViewToEditUI: {
       prepare: () => ({ payload: null }),
-      reducer: (state, _) => {
+      reducer: state => {
         if (state.mode !== 'view') {
           return;
         }

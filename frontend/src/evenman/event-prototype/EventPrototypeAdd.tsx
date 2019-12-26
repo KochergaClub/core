@@ -15,8 +15,8 @@ interface Props {
 export default class EventPrototypeAdd extends React.Component<Props, {}> {
   @observable isOpen = false;
 
-  @observable title: string = '';
-  @observable location: string = '';
+  @observable title = '';
+  @observable location = '';
   @observable weekday?: number;
   @observable hour?: number;
   @observable minute?: number;

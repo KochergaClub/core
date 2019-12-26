@@ -25,7 +25,7 @@ const ModalMemberPicker: React.FC<Props> = ({ close, pick }) => {
               {members
                 .filter(m => m.is_current)
                 .map(member => (
-                  <AsyncButton act={() => pick(member)}>
+                  <AsyncButton act={() => pick(member)} key={member.id}>
                     {member.full_name}
                   </AsyncButton>
                 ))}

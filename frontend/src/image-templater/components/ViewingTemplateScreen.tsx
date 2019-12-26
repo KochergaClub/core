@@ -35,7 +35,7 @@ const template2initialValues = (
 };
 
 const validateValues = (template: ImageTemplate, values: FormState) => {
-  let errors: { [k: string]: string } = {};
+  const errors: { [k: string]: string } = {};
   for (const field of template.schema.fields) {
     switch (field.value_type) {
       case 'str':

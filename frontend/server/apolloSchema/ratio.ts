@@ -72,7 +72,7 @@ export const resolvers: Resolvers = {
         return null;
       }
       return await dataSources.kochergaAPI
-        .loader({ resource: TRAINER, paged: false })
+        .loader({ resource: TRAINER })
         .load(trainer_id);
     },
   },

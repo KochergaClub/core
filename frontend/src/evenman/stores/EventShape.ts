@@ -7,7 +7,7 @@ import { RootStore } from './RootStore';
 // both Event and EventPrototype extend this
 export default abstract class EventShape {
   // This initialization bad. But we can't init title meaningfully in constructor() and don't want to pass title in args separately.
-  @observable title: string = '';
+  @observable title = '';
 
   @observable location?: string;
   @observable summary?: string;
@@ -17,7 +17,7 @@ export default abstract class EventShape {
 
   @observable tags: string[] = [];
 
-  @observable inTransaction: boolean = false;
+  @observable inTransaction = false;
 
   root: RootStore;
 

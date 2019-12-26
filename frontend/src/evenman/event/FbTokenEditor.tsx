@@ -15,7 +15,7 @@ class FbTokenEditor extends React.Component<Props> {
   @observable isOpen = false;
   @observable isSaving = false;
 
-  @observable accessToken: string = '';
+  @observable accessToken = '';
 
   @action.bound
   toggle() {

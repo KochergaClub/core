@@ -14,7 +14,7 @@ export default class ScheduleView implements View {
   }
 
   @action
-  update(_: {}) {
+  update() {
     return;
   }
 

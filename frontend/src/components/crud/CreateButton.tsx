@@ -19,12 +19,15 @@ const CreateButton = (props: Props) => {
   const api = useAPI();
   const { apiEndpoint, onCreate } = props;
 
-  const post = useCallback(async values => {
-    await api.call(apiEndpoint, 'POST', values);
-    if (onCreate) {
-      onCreate();
-    }
-  }, []);
+  const post = useCallback(
+    async values => {
+      await api.call(apiEndpoint, 'POST', values);
+      if (onCreate) {
+        onCreate();
+      }
+    },
+    [api, apiEndpoint, onCreate]
+  );
 
   const modalTitle =
     props.modalTitle ||

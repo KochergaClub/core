@@ -12,7 +12,7 @@ const FAQPageHeader: React.FC<Props> = ({ wagtailPage }) => {
   const root = '/faq';
   const isRoot = new URL(wagtailPage.meta.html_url).pathname === root;
 
-  let top = <ParentLinkInHeader href={root}>FAQ</ParentLinkInHeader>;
+  const top = <ParentLinkInHeader href={root}>FAQ</ParentLinkInHeader>;
 
   return <PageHeader top={isRoot ? null : top} title={wagtailPage.title} />;
 };

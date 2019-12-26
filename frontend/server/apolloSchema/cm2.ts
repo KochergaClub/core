@@ -47,7 +47,7 @@ export const resolvers: Resolvers = {
         return null;
       }
       return await dataSources.kochergaAPI
-        .loader({ resource: CUSTOMER, paged: true })
+        .loader({ resource: CUSTOMER })
         .load((parent.customer as any) as string);
     },
   },

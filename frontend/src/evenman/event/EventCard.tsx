@@ -46,7 +46,7 @@ const MomentSpan = ({ m }: { m: moment.Moment }) => (
 
 @observer
 export default class EventCard extends React.Component<Props, {}> {
-  @observable collapseDescription: boolean = false;
+  @observable collapseDescription = false;
 
   moment() {
     return this.props.event.startMoment;

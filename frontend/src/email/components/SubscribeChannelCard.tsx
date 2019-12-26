@@ -47,7 +47,7 @@ const SubscribeChannelCard: React.FC<{
       </Row>
       <ul>
         {subscribeChannel.interests.map(id => (
-          <li>{mailchimpInterestsDict[id].name}</li>
+          <li key={id}>{mailchimpInterestsDict[id].name}</li>
         ))}
       </ul>
       <Row>

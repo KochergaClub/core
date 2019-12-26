@@ -17,7 +17,7 @@ const TicketsCollection: React.FC = () => {
       <h2>Билеты ({tickets.length})</h2>
       <CardList>
         {tickets.map(ticket => (
-          <Card>
+          <Card key={ticket.id}>
             <Row>
               <div>{ticket.user}</div>
               <Badge>{ticket.status}</Badge>

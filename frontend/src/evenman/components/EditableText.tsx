@@ -28,7 +28,7 @@ interface Props {
 
 @observer
 export default class EditableText extends React.Component<Props, {}> {
-  @observable editing: boolean = false;
+  @observable editing = false;
 
   @observable textarea?: HTMLTextAreaElement;
 

@@ -13,8 +13,10 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
-    'plugin:prettier/recommended',
+    'prettier',
     'prettier/@typescript-eslint',
+    //    'plugin:prettier/recommended',
+    //    'prettier/@typescript-eslint',
   ],
   plugins: ['react-hooks'],
   rules: {
@@ -25,6 +27,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'react/prop-types': 'off',
     '@typescript-eslint/no-empty-interface': 'off', // interface Props {} is completely legitimate
+    'react/react-in-jsx-scope': 'off', // allowed by NextJS
   },
   settings: {
     react: {

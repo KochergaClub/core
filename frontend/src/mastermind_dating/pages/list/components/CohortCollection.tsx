@@ -36,7 +36,7 @@ const CohortCollection: React.FC<Props> = ({ cohorts }) => {
         cohorts,
       },
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <Collection

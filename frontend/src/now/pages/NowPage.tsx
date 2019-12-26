@@ -179,7 +179,7 @@ const NowPage: NextPage<Props> = props => {
       dispatch(loadNowData());
     }, 10000);
     return () => clearInterval(id);
-  }, [dispatch, loadNowData]);
+  }, [dispatch]);
 
   const inflect =
     (total % 100 < 10 || total % 100 > 20) &&
@@ -209,8 +209,8 @@ const NowPage: NextPage<Props> = props => {
                 <NowCustomersLine>
                   <Small>В том числе:</Small>
                   <NowCustomers>
-                    {customers.map(customer => (
-                      <li>
+                    {customers.map((customer, i) => (
+                      <li key={i}>
                         {customer.first_name} {customer.last_name}
                       </li>
                     ))}
