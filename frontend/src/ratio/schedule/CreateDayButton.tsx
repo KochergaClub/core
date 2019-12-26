@@ -1,48 +1,37 @@
-import { useCallback, useContext } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useAPI } from '~/common/hooks';
-import ModalFormButton from '~/components/forms/ModalFormButton';
+import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { selectTraining } from '~/ratio/features/trainingItem';
-import { getSchedule } from '~/ratio/api';
+import {
+  TrainingFragment,
+  useRatioTrainingAddDayMutation,
+} from '../queries.generated';
 
-import { ScheduleContext } from './utils';
-
-interface CreateParams {
-  date: string;
+interface Props {
+  training: TrainingFragment;
 }
 
-const shape: FormShape = [
-  {
-    name: 'date',
-    type: 'date',
-  },
-];
+const CreateDayButton: React.FC<Props> = ({ training }) => {
+  const [createMutation] = useRatioTrainingAddDayMutation({
+    refetchQueries: ['RatioTrainingWithSchedule'],
+    awaitRefetchQueries: true,
+  });
 
-const CreateItemButton: React.FC = () => {
-  const { dispatch } = useContext(ScheduleContext);
-  const training = useSelector(selectTraining);
-  const api = useAPI();
-
-  const create = useCallback(
-    async ({ date }: CreateParams) => {
-      await api.call(`ratio/training/${training!.slug}/add_day`, 'POST', {
-        date,
-      });
-      dispatch({
-        type: 'REPLACE_SCHEDULE',
-        payload: {
-          schedule: await getSchedule(api, training!.slug),
-        },
-      });
+  const shape: FormShape = [
+    {
+      name: 'training_slug',
+      type: 'string',
+      value: training.slug,
+      readonly: true,
     },
-    [training]
-  );
+    {
+      name: 'date',
+      type: 'date',
+    },
+  ];
+
   return (
-    <ModalFormButton
-      post={create}
+    <ApolloModalFormButton
+      mutation={createMutation}
       buttonName="Добавить день"
       modalButtonName="Добавить"
       modalTitle="Добавить день"
@@ -51,4 +40,4 @@ const CreateItemButton: React.FC = () => {
   );
 };
 
-export default CreateItemButton;
+export default CreateDayButton;

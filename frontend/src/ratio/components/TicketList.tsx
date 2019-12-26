@@ -1,30 +1,35 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Row, Column } from '@kocherga/frontkit';
 import { Badge, AsyncButton } from '~/components';
 
 import Card, { CardList } from '~/components/Card';
 
-import { selectKkmPassword } from '~/kkm/selectors';
-import { useDispatch } from '~/common/hooks';
+import { usePermissions } from '~/common/hooks';
 
-import { TicketFragment } from '../queries.generated';
-
-import { fiscalizeTicket } from '../features/trainingTickets';
+import {
+  useRatioTicketFiscalizeMutation,
+  TicketFragment,
+} from '../queries.generated';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
 const FiscalizeButton = ({ ticket }: { ticket: TicketFragment }) => {
-  const dispatch = useDispatch();
-  const kkmPassword = useSelector(selectKkmPassword);
+  const [isKkmUser] = usePermissions(['cashier.kkm_user']);
+  const [fiscalizeMutation] = useRatioTicketFiscalizeMutation({
+    refetchQueries: ['RatioTrainingBySlug'],
+    awaitRefetchQueries: true,
+  });
 
   const click = useCallback(async () => {
-    await dispatch(fiscalizeTicket(parseInt(ticket.id)));
-  }, [ticket.id, fiscalizeTicket, dispatch]);
+    await fiscalizeMutation({
+      variables: {
+        ticket_id: ticket.id,
+      },
+    });
+  }, [ticket.id, fiscalizeMutation]);
 
-  if (!kkmPassword) {
-    // no password -> no button
+  if (!isKkmUser) {
     return null;
   }
 

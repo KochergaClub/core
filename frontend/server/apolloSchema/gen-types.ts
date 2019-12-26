@@ -116,6 +116,9 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
+  ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
+  ratioTrainingAddDay?: Maybe<Scalars['Boolean']>,
+  ratioTicketFiscalize?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
@@ -173,6 +176,21 @@ export type MutationRatioAddTicketArgs = {
 };
 
 
+export type MutationRatioTrainingCopyScheduleFromArgs = {
+  params: RatioTrainingCopyScheduleFromInput
+};
+
+
+export type MutationRatioTrainingAddDayArgs = {
+  params: RatioTrainingAddDayInput
+};
+
+
+export type MutationRatioTicketFiscalizeArgs = {
+  ticket_id: Scalars['ID']
+};
+
+
 export type MutationStaffGrantGooglePermissionsToMemberArgs = {
   id: Scalars['ID']
 };
@@ -227,6 +245,7 @@ export type Query = {
   cm2Order: Cm2Order,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
+  ratioTrainersAll: Array<RatioTrainer>,
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
@@ -300,8 +319,18 @@ export type QueryZadarmaPbxCallArgs = {
   pbx_call_id: Scalars['ID']
 };
 
+export type RatioActivity = {
+   __typename?: 'RatioActivity',
+  id: Scalars['ID'],
+  time: Scalars['String'],
+  activity_type: Scalars['String'],
+  name: Scalars['String'],
+  trainer?: Maybe<RatioTrainer>,
+  location?: Maybe<Scalars['String']>,
+};
+
 export type RatioAddTicketInput = {
-  training_id: Scalars['ID'],
+  training: Scalars['ID'],
   email: Scalars['String'],
   first_name: Scalars['String'],
   last_name: Scalars['String'],
@@ -334,6 +363,13 @@ export type RatioTicket = {
   comment?: Maybe<Scalars['String']>,
 };
 
+export type RatioTrainer = {
+   __typename?: 'RatioTrainer',
+  id: Scalars['ID'],
+  short_name: Scalars['String'],
+  long_name: Scalars['String'],
+};
+
 export type RatioTraining = {
    __typename?: 'RatioTraining',
   id: Scalars['ID'],
@@ -343,12 +379,30 @@ export type RatioTraining = {
   tickets: Array<RatioTicket>,
   tickets_count: Scalars['Int'],
   total_income: Scalars['Int'],
+  schedule: Array<RatioTrainingDay>,
+};
+
+export type RatioTrainingAddDayInput = {
+  training_slug: Scalars['String'],
+  date: Scalars['String'],
 };
 
 export type RatioTrainingConnection = {
    __typename?: 'RatioTrainingConnection',
   pageInfo: PageInfo,
   nodes: Array<RatioTraining>,
+};
+
+export type RatioTrainingCopyScheduleFromInput = {
+  from_training_slug: Scalars['String'],
+  to_training_slug: Scalars['String'],
+};
+
+export type RatioTrainingDay = {
+   __typename?: 'RatioTrainingDay',
+  id: Scalars['ID'],
+  date: Scalars['String'],
+  activities: Array<RatioActivity>,
 };
 
 export type Room = {
@@ -548,6 +602,9 @@ export type ResolversTypes = {
   RatioTrainingConnection: ResolverTypeWrapper<RatioTrainingConnection>,
   RatioTraining: ResolverTypeWrapper<RatioTraining>,
   RatioTicket: ResolverTypeWrapper<RatioTicket>,
+  RatioTrainingDay: ResolverTypeWrapper<RatioTrainingDay>,
+  RatioActivity: ResolverTypeWrapper<RatioActivity>,
+  RatioTrainer: ResolverTypeWrapper<RatioTrainer>,
   Room: ResolverTypeWrapper<Room>,
   WatchmenWatchman: ResolverTypeWrapper<WatchmenWatchman>,
   WatchmenGrade: ResolverTypeWrapper<WatchmenGrade>,
@@ -563,6 +620,8 @@ export type ResolversTypes = {
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
   RatioAddTrainingInput: RatioAddTrainingInput,
   RatioAddTicketInput: RatioAddTicketInput,
+  RatioTrainingCopyScheduleFromInput: RatioTrainingCopyScheduleFromInput,
+  RatioTrainingAddDayInput: RatioTrainingAddDayInput,
   WatchmenSetWatchmanPriorityInput: WatchmenSetWatchmanPriorityInput,
   WatchmenSetWatchmanGradeInput: WatchmenSetWatchmanGradeInput,
   WatchmenCreateWatchmanInput: WatchmenCreateWatchmanInput,
@@ -591,6 +650,9 @@ export type ResolversParentTypes = {
   RatioTrainingConnection: RatioTrainingConnection,
   RatioTraining: RatioTraining,
   RatioTicket: RatioTicket,
+  RatioTrainingDay: RatioTrainingDay,
+  RatioActivity: RatioActivity,
+  RatioTrainer: RatioTrainer,
   Room: Room,
   WatchmenWatchman: WatchmenWatchman,
   WatchmenGrade: WatchmenGrade,
@@ -606,6 +668,8 @@ export type ResolversParentTypes = {
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
   RatioAddTrainingInput: RatioAddTrainingInput,
   RatioAddTicketInput: RatioAddTicketInput,
+  RatioTrainingCopyScheduleFromInput: RatioTrainingCopyScheduleFromInput,
+  RatioTrainingAddDayInput: RatioTrainingAddDayInput,
   WatchmenSetWatchmanPriorityInput: WatchmenSetWatchmanPriorityInput,
   WatchmenSetWatchmanGradeInput: WatchmenSetWatchmanGradeInput,
   WatchmenCreateWatchmanInput: WatchmenCreateWatchmanInput,
@@ -690,6 +754,9 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   cm2CloseOrder?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCm2CloseOrderArgs, 'id'>>,
   ratioAddTraining?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<MutationRatioAddTrainingArgs, 'params'>>,
   ratioAddTicket?: Resolver<ResolversTypes['RatioTicket'], ParentType, ContextType, RequireFields<MutationRatioAddTicketArgs, 'params'>>,
+  ratioTrainingCopyScheduleFrom?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRatioTrainingCopyScheduleFromArgs, 'params'>>,
+  ratioTrainingAddDay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRatioTrainingAddDayArgs, 'params'>>,
+  ratioTicketFiscalize?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRatioTicketFiscalizeArgs, 'ticket_id'>>,
   staffGrantGooglePermissionsToMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffGrantGooglePermissionsToMemberArgs, 'id'>>,
   staffFireMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationStaffFireMemberArgs, 'id'>>,
   watchmenSetWatchmanPriority?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenSetWatchmanPriorityArgs, 'params'>>,
@@ -716,6 +783,7 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   cm2Order?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, RequireFields<QueryCm2OrderArgs, 'id'>>,
   ratioTrainings?: Resolver<ResolversTypes['RatioTrainingConnection'], ParentType, ContextType, QueryRatioTrainingsArgs>,
   ratioTrainingBySlug?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<QueryRatioTrainingBySlugArgs, 'slug'>>,
+  ratioTrainersAll?: Resolver<Array<ResolversTypes['RatioTrainer']>, ParentType, ContextType>,
   rooms?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType>,
   staffMembersAll?: Resolver<Array<ResolversTypes['StaffMember']>, ParentType, ContextType>,
   staffMember?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType, RequireFields<QueryStaffMemberArgs, 'id'>>,
@@ -724,6 +792,15 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   watchmenShifts?: Resolver<Array<ResolversTypes['WatchmenShift']>, ParentType, ContextType, QueryWatchmenShiftsArgs>,
   zadarmaPbxCalls?: Resolver<ResolversTypes['ZadarmaPbxCallConnection'], ParentType, ContextType, QueryZadarmaPbxCallsArgs>,
   zadarmaPbxCall?: Resolver<ResolversTypes['ZadarmaPbxCall'], ParentType, ContextType, RequireFields<QueryZadarmaPbxCallArgs, 'pbx_call_id'>>,
+};
+
+export type RatioActivityResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['RatioActivity'] = ResolversParentTypes['RatioActivity']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  time?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  activity_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  trainer?: Resolver<Maybe<ResolversTypes['RatioTrainer']>, ParentType, ContextType>,
+  location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type RatioTicketResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['RatioTicket'] = ResolversParentTypes['RatioTicket']> = {
@@ -741,6 +818,12 @@ export type RatioTicketResolvers<ContextType = TContext, ParentType extends Reso
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
+export type RatioTrainerResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['RatioTrainer'] = ResolversParentTypes['RatioTrainer']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  short_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  long_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
 export type RatioTrainingResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['RatioTraining'] = ResolversParentTypes['RatioTraining']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -749,11 +832,18 @@ export type RatioTrainingResolvers<ContextType = TContext, ParentType extends Re
   tickets?: Resolver<Array<ResolversTypes['RatioTicket']>, ParentType, ContextType>,
   tickets_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   total_income?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  schedule?: Resolver<Array<ResolversTypes['RatioTrainingDay']>, ParentType, ContextType>,
 };
 
 export type RatioTrainingConnectionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['RatioTrainingConnection'] = ResolversParentTypes['RatioTrainingConnection']> = {
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   nodes?: Resolver<Array<ResolversTypes['RatioTraining']>, ParentType, ContextType>,
+};
+
+export type RatioTrainingDayResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['RatioTrainingDay'] = ResolversParentTypes['RatioTrainingDay']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  activities?: Resolver<Array<ResolversTypes['RatioActivity']>, ParentType, ContextType>,
 };
 
 export type RoomResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Room'] = ResolversParentTypes['Room']> = {
@@ -838,9 +928,12 @@ export type Resolvers<ContextType = TContext> = {
   Mutation?: MutationResolvers<ContextType>,
   PageInfo?: PageInfoResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  RatioActivity?: RatioActivityResolvers<ContextType>,
   RatioTicket?: RatioTicketResolvers<ContextType>,
+  RatioTrainer?: RatioTrainerResolvers<ContextType>,
   RatioTraining?: RatioTrainingResolvers<ContextType>,
   RatioTrainingConnection?: RatioTrainingConnectionResolvers<ContextType>,
+  RatioTrainingDay?: RatioTrainingDayResolvers<ContextType>,
   Room?: RoomResolvers<ContextType>,
   StaffMember?: StaffMemberResolvers<ContextType>,
   WatchmenGrade?: WatchmenGradeResolvers<ContextType>,

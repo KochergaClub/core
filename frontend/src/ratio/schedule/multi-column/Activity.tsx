@@ -1,12 +1,11 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { Row } from '@kocherga/frontkit';
 
-import { ActivityType } from '../../types';
+import { ActivityFragment } from '../../queries.generated';
 
 interface Props {
-  activity: ActivityType;
+  activity: ActivityFragment;
 }
 
 const timeWithoutSections = (time: string) => {
@@ -55,7 +54,7 @@ export default function Activity({ activity }: Props) {
     <Container outline={outline}>
       <Row>
         <Time>{time}</Time>
-        {activity.location && <Location>{activity.location}</Location>}
+        {activity.location ? <Location>{activity.location}</Location> : null}
       </Row>
       <Name>{activity.name}</Name>
       {activity.trainer && <Trainer>{activity.trainer}</Trainer>}

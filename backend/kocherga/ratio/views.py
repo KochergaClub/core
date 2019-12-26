@@ -6,6 +6,8 @@ from rest_framework.response import Response
 
 from kocherga.django.pagination import CommonPagination
 
+from kocherga.money.cashier.views import IsKkmUser
+
 from . import serializers, models, email
 from .users import training2mailchimp
 
@@ -124,3 +126,8 @@ class TicketViewSet(viewsets.ModelViewSet):
     permission_classes = (IsRatioManager,)
     queryset = models.Ticket.objects.all()
     serializer_class = serializers.TicketSerializer
+
+    @action(detail=True, methods=['post'], permission_classes=[IsRatioManager, IsKkmUser])
+    def fiscalize(self, request, pk=None):
+        self.get_object().fiscalize()
+        return Response('ok')

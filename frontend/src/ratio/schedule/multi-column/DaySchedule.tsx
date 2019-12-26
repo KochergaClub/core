@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { colors, Column } from '@kocherga/frontkit';
 
-import { ActivityType, TrainingDay } from '../../types';
+import { ActivityFragment, TrainingDayFragment } from '../../queries.generated';
 
 import EditDayInAdmin from '../EditDayInAdmin';
 import Activity from './Activity';
@@ -10,7 +10,7 @@ import Activity from './Activity';
 import { formatDate } from '~/common/utils';
 
 interface Props {
-  day_schedule: TrainingDay;
+  day_schedule: TrainingDayFragment;
   index: number;
   long_name: string;
 }
@@ -43,7 +43,7 @@ const time2minute = (time: string): number => {
 };
 
 interface PositionerProps {
-  activity: ActivityType;
+  activity: ActivityFragment;
   minTime: string;
 }
 
@@ -60,7 +60,7 @@ const Positioner: React.FC<PositionerProps> = ({
 };
 
 interface PositionedActivityProps {
-  activity: ActivityType;
+  activity: ActivityFragment;
   minTime: string;
 }
 
@@ -74,15 +74,15 @@ const PositionedActivity: React.FC<PositionedActivityProps> = ({
 );
 
 const ActivitiesList: React.FC<Props> = ({ day_schedule }) => {
-  if (!day_schedule.schedule.length) {
+  if (!day_schedule.activities.length) {
     return null;
   }
 
-  const minTime = day_schedule.schedule[0].time;
+  const minTime = day_schedule.activities[0].time;
 
   return (
     <>
-      {day_schedule.schedule.map((activity, i) => (
+      {day_schedule.activities.map((activity, i) => (
         <PositionedActivity key={i} activity={activity} minTime={minTime} />
       ))}
     </>

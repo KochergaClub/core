@@ -6,7 +6,6 @@ import coreReducer from '~/core/reducer';
 import watchmenReducer from '~/watchmen/reducer';
 import myReducer from '~/my/reducer';
 import imageTemplaterReducer from '~/image-templater/reducer';
-import ratioReducer from '~/ratio/reducer';
 import kkmReducer from '~/kkm/redux-reducer';
 import nowReducer from '~/now/reducer';
 import emailReducer from '~/email/reducer';
@@ -17,7 +16,6 @@ const reducer = combineReducers({
   my: myReducer,
   core: coreReducer,
   'image-templater': imageTemplaterReducer,
-  ratio: ratioReducer,
   kkm: kkmReducer,
   now: nowReducer,
   email: emailReducer,

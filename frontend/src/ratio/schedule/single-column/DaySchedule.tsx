@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { HR } from '@kocherga/frontkit';
 
-import { TrainingDay } from '~/ratio/types';
+import { TrainingDayFragment } from '../../queries.generated';
 
 import Activity from './Activity';
 import EditDayInAdmin from '../EditDayInAdmin';
@@ -49,7 +49,7 @@ const DayHeader = styled.header`
 
 interface Props {
   index: number;
-  day_schedule: TrainingDay;
+  day_schedule: TrainingDayFragment;
   long_name: string;
 }
 
@@ -59,7 +59,7 @@ const DaySchedule: React.FC<Props> = ({ day_schedule, long_name, index }) => (
     <EditDayInAdmin day_schedule={day_schedule} />
     <HR />
 
-    {day_schedule.schedule.map((activity, i) => (
+    {day_schedule.activities.map((activity, i) => (
       <Activity key={i} activity={activity} />
     ))}
 

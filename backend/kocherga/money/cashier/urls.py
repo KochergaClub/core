@@ -11,4 +11,5 @@ router.register('payment', views.PaymentViewSet)
 
 urlpatterns = router.urls + [
     path('kkm/password', views.r_get_kkm_password),
+    path('kkm/server', views.KkmServerView.as_view()),
 ]

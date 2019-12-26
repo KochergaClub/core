@@ -20,4 +20,4 @@ RUN npm ci
 
 COPY . /code/
 
-RUN NODE_ENV=production npx next build jsx/
+RUN NODE_ENV=production npx next build

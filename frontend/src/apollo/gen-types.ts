@@ -113,6 +113,9 @@ export type Mutation = {
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
+  ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
+  ratioTrainingAddDay?: Maybe<Scalars['Boolean']>,
+  ratioTicketFiscalize?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
@@ -170,6 +173,21 @@ export type MutationRatioAddTicketArgs = {
 };
 
 
+export type MutationRatioTrainingCopyScheduleFromArgs = {
+  params: RatioTrainingCopyScheduleFromInput
+};
+
+
+export type MutationRatioTrainingAddDayArgs = {
+  params: RatioTrainingAddDayInput
+};
+
+
+export type MutationRatioTicketFiscalizeArgs = {
+  ticket_id: Scalars['ID']
+};
+
+
 export type MutationStaffGrantGooglePermissionsToMemberArgs = {
   id: Scalars['ID']
 };
@@ -224,6 +242,7 @@ export type Query = {
   cm2Order: Cm2Order,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
+  ratioTrainersAll: Array<RatioTrainer>,
   rooms: Array<Maybe<Room>>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
@@ -297,8 +316,18 @@ export type QueryZadarmaPbxCallArgs = {
   pbx_call_id: Scalars['ID']
 };
 
+export type RatioActivity = {
+   __typename?: 'RatioActivity',
+  id: Scalars['ID'],
+  time: Scalars['String'],
+  activity_type: Scalars['String'],
+  name: Scalars['String'],
+  trainer?: Maybe<RatioTrainer>,
+  location?: Maybe<Scalars['String']>,
+};
+
 export type RatioAddTicketInput = {
-  training_id: Scalars['ID'],
+  training: Scalars['ID'],
   email: Scalars['String'],
   first_name: Scalars['String'],
   last_name: Scalars['String'],
@@ -331,6 +360,13 @@ export type RatioTicket = {
   comment?: Maybe<Scalars['String']>,
 };
 
+export type RatioTrainer = {
+   __typename?: 'RatioTrainer',
+  id: Scalars['ID'],
+  short_name: Scalars['String'],
+  long_name: Scalars['String'],
+};
+
 export type RatioTraining = {
    __typename?: 'RatioTraining',
   id: Scalars['ID'],
@@ -340,12 +376,30 @@ export type RatioTraining = {
   tickets: Array<RatioTicket>,
   tickets_count: Scalars['Int'],
   total_income: Scalars['Int'],
+  schedule: Array<RatioTrainingDay>,
+};
+
+export type RatioTrainingAddDayInput = {
+  training_slug: Scalars['String'],
+  date: Scalars['String'],
 };
 
 export type RatioTrainingConnection = {
    __typename?: 'RatioTrainingConnection',
   pageInfo: PageInfo,
   nodes: Array<RatioTraining>,
+};
+
+export type RatioTrainingCopyScheduleFromInput = {
+  from_training_slug: Scalars['String'],
+  to_training_slug: Scalars['String'],
+};
+
+export type RatioTrainingDay = {
+   __typename?: 'RatioTrainingDay',
+  id: Scalars['ID'],
+  date: Scalars['String'],
+  activities: Array<RatioActivity>,
 };
 
 export type Room = {

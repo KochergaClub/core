@@ -1,9 +1,9 @@
 import { A } from '@kocherga/frontkit';
 
-import { TrainingDay } from '../types';
+import { TrainingDayFragment } from '../queries.generated';
 import Unprintable from './Unprintable';
 
-const EditDayInAdmin: React.FC<{ day_schedule: TrainingDay }> = ({
+const EditDayInAdmin: React.FC<{ day_schedule: TrainingDayFragment }> = ({
   day_schedule,
 }) => (
   <Unprintable>

@@ -1,14 +1,8 @@
-import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import { HR } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
-
-import { ActivityType, Trainer } from '../../types';
-import { setTrainerForActivity, unsetTrainerForActivity } from '../../api';
-
-import { ScheduleContext } from '../utils';
+import { ActivityFragment } from '../../queries.generated';
 
 import EditableTrainer from './EditableTrainer';
 
@@ -41,47 +35,19 @@ const ActivityBonus = styled.section`
 const formatTime = (time: string) => time.substr(0, 5);
 
 interface Props {
-  activity: ActivityType;
+  activity: ActivityFragment;
 }
 
 const Activity = ({ activity }: Props) => {
-  const { dispatch } = useContext(ScheduleContext);
-
-  const api = useAPI();
-
-  const setTrainer = useCallback(
-    async (trainer: Trainer) => {
-      await setTrainerForActivity(api, activity.id, trainer.long_name);
-      dispatch({
-        type: 'SET_TRAINER',
-        payload: {
-          activity_id: activity.id,
-          trainer: trainer.long_name,
-        },
-      });
-    },
-    [dispatch, api, activity.id]
-  );
-
-  const unsetTrainer = useCallback(async () => {
-    await unsetTrainerForActivity(api, activity.id);
-    dispatch({
-      type: 'UNSET_TRAINER',
-      payload: {
-        activity_id: activity.id,
-      },
-    });
-  }, [dispatch, api, activity.id]);
-
   if (activity.activity_type == 'section') {
     return (
       <ActivitySection>
         <time>{formatTime(activity.time)}</time>
         <header>{activity.name}</header>
         <EditableTrainer
-          trainer_name={activity.trainer}
-          picked={setTrainer}
-          unpicked={unsetTrainer}
+          trainer_name={activity.trainer?.long_name}
+          picked={async () => window.alert('not implemented')}
+          unpicked={async () => window.alert('not implemented')}
         />
       </ActivitySection>
     );

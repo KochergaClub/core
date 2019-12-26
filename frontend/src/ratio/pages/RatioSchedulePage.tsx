@@ -1,53 +1,44 @@
-import { useSelector } from 'react-redux';
-
 import { NextPage } from '~/common/types';
-import { selectAPI } from '~/core/selectors';
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
-import { Page } from '~/components';
+import { Page, ApolloQueryResults } from '~/components';
 
-import { TrainingDay } from '~/ratio/types';
-import { getSchedule } from '~/ratio/api';
-
-import { loadTrainers } from '~/ratio/features/trainers';
-import { loadTraining } from '~/ratio/features/trainingItem';
-import { selectTraining } from '~/ratio/features/trainingItem';
+import { useRatioTrainingWithScheduleQuery } from '~/ratio/queries.generated';
 
 import SchedulePage from '~/ratio/schedule';
 
 interface Props {
-  schedule: TrainingDay[];
+  slug: string;
 }
 
-const RatioSchedulePage: NextPage<Props> = props => {
-  const training = useSelector(selectTraining);
-
-  if (!training) {
-    throw new Error('No training');
-  }
+const RatioSchedulePage: NextPage<Props> = ({ slug }) => {
+  const queryResults = useRatioTrainingWithScheduleQuery();
 
   return (
-    <Page title={`Расписание | ${training.name}`} team>
+    <Page
+      title={
+        queryResults.data
+          ? `Расписание | ${queryResults.data.training.name}`
+          : 'Загружается...'
+      }
+      team
+    >
       <Page.Main>
-        <SchedulePage schedule={props.schedule} />
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { training } }) => <SchedulePage training={training} />}
+        </ApolloQueryResults>
       </Page.Main>
     </Page>
   );
 };
 
-RatioSchedulePage.getInitialProps = async ({
-  store: { getState, dispatch },
-  query,
-}) => {
-  const api = selectAPI(getState());
+RatioSchedulePage.getInitialProps = async ({ query }) => {
   const slug = query.slug as string;
 
-  await dispatch(loadTraining(slug));
-  await dispatch(loadTrainers());
-
-  const schedule = await getSchedule(api, slug);
   return {
-    schedule,
+    slug,
   };
 };
 
-export default RatioSchedulePage;
+export default withApollo(withStaff(RatioSchedulePage));

@@ -1,15 +1,14 @@
-import { useState, useCallback, useReducer } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useCallback } from 'react';
 
 import styled from 'styled-components';
 
 import { A, Column, Row } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
-
-import { TrainingDay, Training } from '~/ratio/types';
-import { getSchedule, copyScheduleFrom } from '~/ratio/api';
-import { selectTraining } from '~/ratio/features/trainingItem';
+import {
+  TrainingWithScheduleFragment,
+  TrainingForPickerFragment,
+  useRatioTrainingCopyScheduleFromMutation,
+} from '../queries.generated';
 
 import Unprintable from './Unprintable';
 
@@ -17,7 +16,6 @@ import CreateDayButton from './CreateDayButton';
 import SingleColumnSchedule from './SingleColumnSchedule';
 import MultiColumnSchedule from './MultiColumnSchedule';
 import CopyScheduleFromPicker from './CopyScheduleFromPicker';
-import { reducer, ScheduleContext } from './utils';
 
 const Header = styled.header``;
 
@@ -46,79 +44,68 @@ const HeaderTexts = styled.div`
 `;
 
 interface Props {
-  schedule: TrainingDay[];
+  training: TrainingWithScheduleFragment;
 }
 
-const SchedulePage: React.FC<Props> = props => {
-  const training = useSelector(selectTraining);
-
-  const [store, dispatch] = useReducer(reducer, {
-    schedule: props.schedule,
+const SchedulePage: React.FC<Props> = ({ training }) => {
+  const { schedule } = training;
+  const [copyScheduleFromMutation] = useRatioTrainingCopyScheduleFromMutation({
+    refetchQueries: ['RatioTrainingWithSchedule'],
+    awaitRefetchQueries: true,
   });
-
-  const { schedule } = store;
 
   const [multiColumn, setMultiColumn] = useState(true);
 
   const Component = multiColumn ? MultiColumnSchedule : SingleColumnSchedule;
-  const api = useAPI();
 
   const pickSrcForCopy = useCallback(
-    async (srcTraining: Training) => {
-      if (!training) {
-        throw new Error('Training is not in store');
-      }
-      await copyScheduleFrom(api, training, srcTraining);
-      dispatch({
-        type: 'REPLACE_SCHEDULE',
-        payload: {
-          schedule: await getSchedule(api, training.slug),
+    async (srcTraining: TrainingForPickerFragment) => {
+      await copyScheduleFromMutation({
+        variables: {
+          params: {
+            from_training_slug: srcTraining.slug,
+            to_training_slug: training.slug,
+          },
         },
       });
     },
-    [api, training]
+    [training.slug, copyScheduleFromMutation]
   );
 
-  if (!training) {
-    throw new Error('No training');
-  }
-
   return (
-    <ScheduleContext.Provider value={{ dispatch }}>
-      <Column stretch gutter={32}>
-        <Header>
-          <Row spaced>
-            <HeaderTexts>
-              <h1>
-                <A href={`/team/ratio/training/${training.slug}`}>
-                  {training.name}
-                </A>
-              </h1>
-              <h2>Расписание занятий</h2>
-            </HeaderTexts>
-            <Unprintable>
-              <Column centered>
-                <CreateDayButton />
-                <Row vCentered>
-                  <input
-                    type="checkbox"
-                    checked={multiColumn}
-                    onChange={e => setMultiColumn(e.currentTarget.checked)}
-                  />
-                  несколько колонок
-                </Row>
-              </Column>
-            </Unprintable>
-          </Row>
-        </Header>
+    <Column stretch gutter={32}>
+      <Header>
+        <Row spaced>
+          <HeaderTexts>
+            <h1>
+              <A href={`/team/ratio/training/${training.slug}`}>
+                {training.name}
+              </A>
+            </h1>
+            <h2>Расписание занятий</h2>
+          </HeaderTexts>
+          <Unprintable>
+            <Column centered>
+              <CreateDayButton training={training} />
+              <Row vCentered>
+                <input
+                  type="checkbox"
+                  checked={multiColumn}
+                  onChange={e => setMultiColumn(e.currentTarget.checked)}
+                />
+                несколько колонок
+              </Row>
+            </Column>
+          </Unprintable>
+        </Row>
+      </Header>
 
-        {schedule.length ? (
-          <Component schedule={schedule} long_name={training.long_name} />
-        ) : (
-          <CopyScheduleFromPicker training={training} pick={pickSrcForCopy} />
-        )}
-      </Column>
-    </ScheduleContext.Provider>
+      {schedule.length ? (
+        <Component schedule={schedule} long_name={training.name} />
+      ) : (
+        <CopyScheduleFromPicker pick={pickSrcForCopy} />
+      )}
+    </Column>
   );
 };
 

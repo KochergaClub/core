@@ -1,16 +1,16 @@
-import { useSelector } from 'react-redux';
-
 import styled from 'styled-components';
 
 import Picker from '~/components/Picker';
 import { useExpandable } from '~/common/hooks';
 
-import { selectTrainers } from '~/ratio/features/trainers';
-import { Trainer } from '~/ratio/types';
+import {
+  useRatioTrainersQuery,
+  TrainerFragment,
+} from '../../queries.generated';
 
 interface Props {
   trainer_name?: string;
-  picked: (name: Trainer) => Promise<void>;
+  picked: (name: TrainerFragment) => Promise<void>;
   unpicked: () => Promise<void>;
 }
 
@@ -44,9 +44,7 @@ export default function EditableTrainer({
 }: Props) {
   const { expanded, unexpand, flipExpand, ref } = useExpandable();
 
-  const trainers = useSelector(selectTrainers);
-
-  const items = (trainers as (Trainer | undefined)[]).concat([undefined]);
+  const queryResults = useRatioTrainersQuery();
 
   return (
     <OuterContainer>
@@ -60,11 +58,12 @@ export default function EditableTrainer({
         </div>
         {expanded && (
           <Picker
-            items={items}
+            loading={queryResults.loading}
+            items={queryResults.data ? queryResults.data.trainers : []}
             item2text={maybeTrainer =>
               maybeTrainer ? maybeTrainer.long_name : 'Очистить'
             }
-            picked={async (t?: Trainer) => {
+            picked={async (t?: TrainerFragment) => {
               if (t) {
                 await picked(t);
               } else {

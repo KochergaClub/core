@@ -1,14 +1,12 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { TrainingDay } from '../types';
+import { TrainingDayFragment } from '../queries.generated';
 
 import DaySchedule from './multi-column/DaySchedule';
 
 interface Props {
   long_name: string;
-  schedule: TrainingDay[];
+  schedule: TrainingDayFragment[];
 }
 
 const Columns = styled.div`

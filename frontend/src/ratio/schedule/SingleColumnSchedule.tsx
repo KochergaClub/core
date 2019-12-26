@@ -1,12 +1,10 @@
-import React from 'react';
-
-import { TrainingDay } from '../types';
+import { TrainingDayFragment } from '../queries.generated';
 
 import DaySchedule from './single-column/DaySchedule';
 
 interface Props {
   long_name: string;
-  schedule: TrainingDay[];
+  schedule: TrainingDayFragment[];
 }
 
 export default function SingleColumnSchedule({ schedule, long_name }: Props) {
