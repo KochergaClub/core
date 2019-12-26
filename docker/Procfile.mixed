@@ -1,2 +1,3 @@
 compose: docker-sync-stack start
-front: cd frontend && NODE_ENV=development webpack --config webpack.server.js && NODE_ENV=development NO_DOCKER_DEV=1 node ./dist/index.js --port 8000
+webpack: cd frontend && NODE_ENV=development webpack -w --config webpack.server.js
+front: cd frontend && NODE_ENV=development NO_DOCKER_DEV=1 nodemon --watch dist ./dist/index.js --port 8000
