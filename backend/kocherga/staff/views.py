@@ -3,8 +3,11 @@ from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.response import Response
 
+from kocherga.django.drf import BulkRetrieveMixin
+
 from .models import Member
 from .serializers import MemberSerializer
+
 import kocherga.staff.tools
 
 
@@ -18,7 +21,10 @@ class IsWatchmenManager(permissions.BasePermission):
         return request.user.has_perm('watchmen.manage')
 
 
-class MemberViewSet(viewsets.ReadOnlyModelViewSet):
+class MemberViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     queryset = Member.objects.all()
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = MemberSerializer

@@ -50,10 +50,9 @@ export const resolvers: Resolvers = {
       if (!parent.staff_member) {
         return null;
       }
-      return dataSources.kochergaAPI.retrieve({
-        resource: STAFF_MEMBER,
-        id: (parent.staff_member as any) as string,
-      }); // TODO - dataloader for batching
+      return dataSources.kochergaAPI
+        .loader({ resource: STAFF_MEMBER })
+        .load((parent.staff_member as any) as string);
     },
   },
   AuthGroup: {
@@ -61,24 +60,20 @@ export const resolvers: Resolvers = {
       if (!parent.permissions) {
         return [];
       }
-      return parent.permissions.map(
-        id =>
-          dataSources.kochergaAPI.retrieve({
-            resource: PERMISSION,
-            id: (id as any) as string,
-          }) // TODO - dataloader for batching
+      return parent.permissions.map(id =>
+        dataSources.kochergaAPI
+          .loader({ resource: PERMISSION })
+          .load((id as any) as string)
       );
     },
     users: (parent, _, { dataSources }) => {
       if (!parent.users) {
         return [];
       }
-      return parent.users.map(
-        id =>
-          dataSources.kochergaAPI.retrieve({
-            resource: USER,
-            id: (id as any) as string,
-          }) // TODO - dataloader for batching
+      return parent.users.map(id =>
+        dataSources.kochergaAPI
+          .loader({ resource: USER })
+          .load((id as any) as string)
       );
     },
   },
@@ -87,12 +82,10 @@ export const resolvers: Resolvers = {
       if (!parent.users) {
         return [];
       }
-      return parent.users.map(
-        id =>
-          dataSources.kochergaAPI.retrieve({
-            resource: USER,
-            id: (id as any) as string,
-          }) // TODO - dataloader for batching
+      return parent.users.map(id =>
+        dataSources.kochergaAPI
+          .loader({ resource: USER })
+          .load((id as any) as string)
       );
     },
   },

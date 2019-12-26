@@ -130,14 +130,13 @@ export class KochergaAPI extends RESTDataSource {
     return response;
   }
 
-  loader({ resource, paged }: { resource: string; paged: boolean }) {
+  loader({ resource }: { resource: string }) {
     if (!this.loaders[resource]) {
       this.loaders[resource] = new DataLoader(
         async ids => {
-          const response = await this.get(
+          const results = await this.get(
             `${resource}/bulk?ids=${ids.join(',')}`
           );
-          const results = paged ? response.results : response;
           const resultsObj: { [k: string]: any } = {};
           for (const result of results) {
             resultsObj[result.id] = result;

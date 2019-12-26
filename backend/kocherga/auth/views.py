@@ -1,6 +1,9 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import markdown
+import urllib.parse
+
 import django.core.exceptions
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -15,8 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework import exceptions, permissions, viewsets
 
-import markdown
-import urllib.parse
+from kocherga.django.drf import BulkRetrieveMixin
 
 from .view_utils import get_magic_token
 from . import serializers
@@ -145,7 +147,10 @@ class IsAuthAuditor(permissions.BasePermission):
         return request.user.has_perm('auth.audit')
 
 
-class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
+class GroupsViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     permission_classes = (IsAuthAuditor,)
     serializer_class = serializers.GroupSerializer
     queryset = Group.objects.all()  # TODO - prefetch users
@@ -167,13 +172,19 @@ class GroupsViewSet(viewsets.ReadOnlyModelViewSet):
         return Response('ok')
 
 
-class PermissionsViewSet(viewsets.ReadOnlyModelViewSet):
+class PermissionsViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     permission_classes = (IsAuthAuditor,)
     serializer_class = serializers.PermissionSerializer
     queryset = Permission.objects.all()  # TODO - prefetch users
 
 
-class UsersViewSet(viewsets.ReadOnlyModelViewSet):
+class UsersViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     permission_classes = (IsAuthAuditor,)
     serializer_class = serializers.UserSerializer
     queryset = get_user_model().objects.all()
