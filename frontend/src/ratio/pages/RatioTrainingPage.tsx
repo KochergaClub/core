@@ -51,7 +51,7 @@ const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
       }
       team
     >
-      <ApolloQueryResults {...queryResults}>
+      <ApolloQueryResults {...queryResults} size="block">
         {({ data: { training } }) => (
           <>
             <PageHeader

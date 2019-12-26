@@ -1,17 +1,12 @@
 import { ApolloError } from 'apollo-client';
 
-import { FaSpinner } from 'react-icons/fa';
-
-const BigSpinner = () => (
-  <h1>
-    <FaSpinner />
-  </h1>
-);
+import Spinner, { Size } from './Spinner';
 
 interface Props<D> {
   loading: boolean;
   error?: ApolloError;
   data?: NonNullable<D>;
+  size?: Size;
   children: ({
     data,
     loading,
@@ -21,7 +16,13 @@ interface Props<D> {
   }) => React.ReactElement | null;
 }
 
-function ApolloQueryResults<D>({ loading, error, data, children }: Props<D>) {
+function ApolloQueryResults<D>({
+  loading,
+  error,
+  data,
+  size,
+  children,
+}: Props<D>) {
   if (error) {
     return (
       <pre style={{ overflow: 'auto' }}>{JSON.stringify(error, null, 2)}</pre>
@@ -30,7 +31,7 @@ function ApolloQueryResults<D>({ loading, error, data, children }: Props<D>) {
 
   if (!data) {
     if (loading) {
-      return <BigSpinner />;
+      return <Spinner size={size || 'div'} />;
     }
 
     throw new Error('No data and not loading');
