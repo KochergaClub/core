@@ -9,7 +9,6 @@ import { useImageTemplatesQuery } from '../queries.generated';
 const TemplateList: React.FC = () => {
   const queryResults = useImageTemplatesQuery();
 
-  //test
   return (
     <ApolloQueryResults {...queryResults}>
       {({ data: { templates } }) => (
