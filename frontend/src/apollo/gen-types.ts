@@ -101,6 +101,34 @@ export type Cm2OrderConnection = {
   nodes: Array<Cm2Order>,
 };
 
+export type EmailMailchimpCategory = {
+   __typename?: 'EmailMailchimpCategory',
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  category_id: Scalars['String'],
+  interests: Array<EmailMailchimpInterest>,
+};
+
+export type EmailMailchimpInterest = {
+   __typename?: 'EmailMailchimpInterest',
+  id: Scalars['ID'],
+  interest_id: Scalars['String'],
+  name: Scalars['String'],
+  subscriber_count: Scalars['Int'],
+};
+
+export type EmailSubscribeChannel = {
+   __typename?: 'EmailSubscribeChannel',
+  id: Scalars['ID'],
+  slug: Scalars['String'],
+  interests: Array<EmailMailchimpInterest>,
+};
+
+export type EmailSubscribeChannelCreateInput = {
+  slug: Scalars['String'],
+  interest_ids: Array<Scalars['ID']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
@@ -111,6 +139,9 @@ export type Mutation = {
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
+  emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
+  emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
+  emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
   ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
@@ -160,6 +191,22 @@ export type MutationCm2CreateCustomerArgs = {
 
 export type MutationCm2CloseOrderArgs = {
   id: Scalars['ID']
+};
+
+
+export type MutationEmailSubscribeChannelDeleteArgs = {
+  slug: Scalars['String']
+};
+
+
+export type MutationEmailSubscribeChannelCreateArgs = {
+  params: EmailSubscribeChannelCreateInput
+};
+
+
+export type MutationEmailSubscribeChannelAddEmailArgs = {
+  slug: Scalars['String'],
+  email: Scalars['String']
 };
 
 
@@ -240,6 +287,8 @@ export type Query = {
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
+  emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
+  emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,

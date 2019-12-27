@@ -89,6 +89,10 @@ export class KochergaAPI extends RESTDataSource {
     return response;
   }
 
+  async destroy({ resource, id }: { resource: string; id: string }) {
+    await this.delete(`${resource}/${id}`);
+  }
+
   async update({
     resource,
     id,

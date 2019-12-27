@@ -1,0 +1,44 @@
+fragment MailchimpInterest on EmailMailchimpInterest {
+  id
+  name
+}
+
+fragment SubscribeChannel on EmailSubscribeChannel {
+  id
+  slug
+  interests {
+    ...MailchimpInterest
+  }
+}
+
+fragment MailchimpCategory on EmailMailchimpCategory {
+  id
+  title
+  interests {
+    ...MailchimpInterest
+  }
+}
+
+query EmailSubscribeChannels {
+  subscribeChannels: emailSubscribeChannelsAll {
+    ...SubscribeChannel
+  }
+}
+
+query EmailMailchimpCategories {
+  mailchimpCategories: emailMailchimpCategoriesAll {
+    ...MailchimpCategory
+  }
+}
+
+mutation EmailSubscribeChannelDelete($slug: String!) {
+  emailSubscribeChannelDelete(slug: $slug)
+}
+
+mutation EmailSubscribeChannelAddEmail($slug: String!, $email: String!) {
+  emailSubscribeChannelAddEmail(slug: $slug, email: $email)
+}
+
+mutation EmailSubscribeChannelCreate($params: EmailSubscribeChannelCreateInput!) {
+  emailSubscribeChannelCreate(params: $params)
+}

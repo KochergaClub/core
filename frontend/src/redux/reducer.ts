@@ -8,7 +8,6 @@ import myReducer from '~/my/reducer';
 import imageTemplaterReducer from '~/image-templater/reducer';
 import kkmReducer from '~/kkm/redux-reducer';
 import nowReducer from '~/now/reducer';
-import emailReducer from '~/email/reducer';
 import eventsReducer from '~/events/reducer';
 
 const reducer = combineReducers({
@@ -18,7 +17,6 @@ const reducer = combineReducers({
   'image-templater': imageTemplaterReducer,
   kkm: kkmReducer,
   now: nowReducer,
-  email: emailReducer,
   events: eventsReducer,
 });
 

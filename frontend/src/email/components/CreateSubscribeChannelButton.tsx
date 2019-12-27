@@ -1,47 +1,57 @@
 import { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useDispatch } from '~/common/hooks';
 
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { selectMailchimpInterests } from '../features/mailchimpCategories';
-import { addSubscribeChannel } from '../features/subscribeChannels';
+import {
+  useEmailMailchimpCategoriesQuery,
+  useEmailSubscribeChannelCreateMutation,
+} from '../queries.generated';
 
 const CreateSubscribeChannelButton: React.FC = () => {
-  const dispatch = useDispatch();
-  const mailchimpInterests = useSelector(selectMailchimpInterests);
+  const queryResults = useEmailMailchimpCategoriesQuery();
+  const [createMutation] = useEmailSubscribeChannelCreateMutation({
+    refetchQueries: ['EmailSubscribeChannels'],
+    awaitRefetchQueries: true,
+  });
 
   const formShape = useMemo(() => {
     const result: FormShape = [{ name: 'slug', type: 'string' }];
+    if (!queryResults.data) {
+      return result;
+    }
 
-    for (const mailchimpInterest of mailchimpInterests) {
-      result.push({
-        type: 'boolean',
-        name: mailchimpInterest.interest_id,
-        title: mailchimpInterest.name,
-      });
+    for (const mailchimpCategory of queryResults.data.mailchimpCategories) {
+      for (const mailchimpInterest of mailchimpCategory.interests) {
+        result.push({
+          type: 'boolean',
+          name: mailchimpInterest.id,
+          title: mailchimpInterest.name,
+        });
+      }
     }
 
     return result;
-  }, [mailchimpInterests]);
+  }, [queryResults.data]);
 
   const postCb = useCallback(
     async (values: { [k: string]: string | boolean }) => {
       const slug = values.slug as string;
-      const interest_ids = mailchimpInterests
-        .map(i => i.interest_id)
-        .filter(i => values[i]);
+      const interest_ids = formShape
+        .filter(field => field.type === 'boolean')
+        .filter(field => values[field.name])
+        .map(field => field.name);
 
-      await dispatch(
-        addSubscribeChannel({
-          slug,
-          interests: interest_ids,
-        })
-      );
+      await createMutation({
+        variables: {
+          params: {
+            slug,
+            interest_ids,
+          },
+        },
+      });
     },
-    [mailchimpInterests, dispatch]
+    [createMutation, formShape]
   );
 
   return (

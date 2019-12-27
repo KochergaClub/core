@@ -104,6 +104,34 @@ export type Cm2OrderConnection = {
   nodes: Array<Cm2Order>,
 };
 
+export type EmailMailchimpCategory = {
+   __typename?: 'EmailMailchimpCategory',
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  category_id: Scalars['String'],
+  interests: Array<EmailMailchimpInterest>,
+};
+
+export type EmailMailchimpInterest = {
+   __typename?: 'EmailMailchimpInterest',
+  id: Scalars['ID'],
+  interest_id: Scalars['String'],
+  name: Scalars['String'],
+  subscriber_count: Scalars['Int'],
+};
+
+export type EmailSubscribeChannel = {
+   __typename?: 'EmailSubscribeChannel',
+  id: Scalars['ID'],
+  slug: Scalars['String'],
+  interests: Array<EmailMailchimpInterest>,
+};
+
+export type EmailSubscribeChannelCreateInput = {
+  slug: Scalars['String'],
+  interest_ids: Array<Scalars['ID']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
@@ -114,6 +142,9 @@ export type Mutation = {
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
+  emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
+  emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
+  emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
   ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
@@ -163,6 +194,22 @@ export type MutationCm2CreateCustomerArgs = {
 
 export type MutationCm2CloseOrderArgs = {
   id: Scalars['ID']
+};
+
+
+export type MutationEmailSubscribeChannelDeleteArgs = {
+  slug: Scalars['String']
+};
+
+
+export type MutationEmailSubscribeChannelCreateArgs = {
+  params: EmailSubscribeChannelCreateInput
+};
+
+
+export type MutationEmailSubscribeChannelAddEmailArgs = {
+  slug: Scalars['String'],
+  email: Scalars['String']
 };
 
 
@@ -243,6 +290,8 @@ export type Query = {
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
+  emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
+  emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
@@ -599,6 +648,9 @@ export type ResolversTypes = {
   Cm2Customer: ResolverTypeWrapper<Cm2Customer>,
   Cm2OrderConnection: ResolverTypeWrapper<Cm2OrderConnection>,
   Cm2Order: ResolverTypeWrapper<Cm2Order>,
+  EmailMailchimpCategory: ResolverTypeWrapper<EmailMailchimpCategory>,
+  EmailMailchimpInterest: ResolverTypeWrapper<EmailMailchimpInterest>,
+  EmailSubscribeChannel: ResolverTypeWrapper<EmailSubscribeChannel>,
   RatioTrainingConnection: ResolverTypeWrapper<RatioTrainingConnection>,
   RatioTraining: ResolverTypeWrapper<RatioTraining>,
   RatioTicket: ResolverTypeWrapper<RatioTicket>,
@@ -618,6 +670,7 @@ export type ResolversTypes = {
   CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
+  EmailSubscribeChannelCreateInput: EmailSubscribeChannelCreateInput,
   RatioAddTrainingInput: RatioAddTrainingInput,
   RatioAddTicketInput: RatioAddTicketInput,
   RatioTrainingCopyScheduleFromInput: RatioTrainingCopyScheduleFromInput,
@@ -647,6 +700,9 @@ export type ResolversParentTypes = {
   Cm2Customer: Cm2Customer,
   Cm2OrderConnection: Cm2OrderConnection,
   Cm2Order: Cm2Order,
+  EmailMailchimpCategory: EmailMailchimpCategory,
+  EmailMailchimpInterest: EmailMailchimpInterest,
+  EmailSubscribeChannel: EmailSubscribeChannel,
   RatioTrainingConnection: RatioTrainingConnection,
   RatioTraining: RatioTraining,
   RatioTicket: RatioTicket,
@@ -666,6 +722,7 @@ export type ResolversParentTypes = {
   CashierCreatePaymentInput: CashierCreatePaymentInput,
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
+  EmailSubscribeChannelCreateInput: EmailSubscribeChannelCreateInput,
   RatioAddTrainingInput: RatioAddTrainingInput,
   RatioAddTicketInput: RatioAddTicketInput,
   RatioTrainingCopyScheduleFromInput: RatioTrainingCopyScheduleFromInput,
@@ -743,6 +800,26 @@ export type Cm2OrderConnectionResolvers<ContextType = TContext, ParentType exten
   nodes?: Resolver<Array<ResolversTypes['Cm2Order']>, ParentType, ContextType>,
 };
 
+export type EmailMailchimpCategoryResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['EmailMailchimpCategory'] = ResolversParentTypes['EmailMailchimpCategory']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  category_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  interests?: Resolver<Array<ResolversTypes['EmailMailchimpInterest']>, ParentType, ContextType>,
+};
+
+export type EmailMailchimpInterestResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['EmailMailchimpInterest'] = ResolversParentTypes['EmailMailchimpInterest']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  interest_id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  subscriber_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+};
+
+export type EmailSubscribeChannelResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['EmailSubscribeChannel'] = ResolversParentTypes['EmailSubscribeChannel']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  interests?: Resolver<Array<ResolversTypes['EmailMailchimpInterest']>, ParentType, ContextType>,
+};
+
 export type MutationResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   authAddUserToGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthAddUserToGroupArgs, 'user_id' | 'group_id'>>,
   authRemoveUserFromGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthRemoveUserFromGroupArgs, 'user_id' | 'group_id'>>,
@@ -752,6 +829,9 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   cm2CreateOrder?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, RequireFields<MutationCm2CreateOrderArgs, 'params'>>,
   cm2CreateCustomer?: Resolver<ResolversTypes['Cm2Customer'], ParentType, ContextType, RequireFields<MutationCm2CreateCustomerArgs, 'params'>>,
   cm2CloseOrder?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCm2CloseOrderArgs, 'id'>>,
+  emailSubscribeChannelDelete?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelDeleteArgs, 'slug'>>,
+  emailSubscribeChannelCreate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelCreateArgs, 'params'>>,
+  emailSubscribeChannelAddEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelAddEmailArgs, 'slug' | 'email'>>,
   ratioAddTraining?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<MutationRatioAddTrainingArgs, 'params'>>,
   ratioAddTicket?: Resolver<ResolversTypes['RatioTicket'], ParentType, ContextType, RequireFields<MutationRatioAddTicketArgs, 'params'>>,
   ratioTrainingCopyScheduleFrom?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRatioTrainingCopyScheduleFromArgs, 'params'>>,
@@ -781,6 +861,8 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   cm2Orders?: Resolver<ResolversTypes['Cm2OrderConnection'], ParentType, ContextType, QueryCm2OrdersArgs>,
   cm2Customer?: Resolver<ResolversTypes['Cm2Customer'], ParentType, ContextType, RequireFields<QueryCm2CustomerArgs, 'id'>>,
   cm2Order?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, RequireFields<QueryCm2OrderArgs, 'id'>>,
+  emailMailchimpCategoriesAll?: Resolver<Array<ResolversTypes['EmailMailchimpCategory']>, ParentType, ContextType>,
+  emailSubscribeChannelsAll?: Resolver<Array<ResolversTypes['EmailSubscribeChannel']>, ParentType, ContextType>,
   ratioTrainings?: Resolver<ResolversTypes['RatioTrainingConnection'], ParentType, ContextType, QueryRatioTrainingsArgs>,
   ratioTrainingBySlug?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<QueryRatioTrainingBySlugArgs, 'slug'>>,
   ratioTrainersAll?: Resolver<Array<ResolversTypes['RatioTrainer']>, ParentType, ContextType>,
@@ -925,6 +1007,9 @@ export type Resolvers<ContextType = TContext> = {
   Cm2CustomerConnection?: Cm2CustomerConnectionResolvers<ContextType>,
   Cm2Order?: Cm2OrderResolvers<ContextType>,
   Cm2OrderConnection?: Cm2OrderConnectionResolvers<ContextType>,
+  EmailMailchimpCategory?: EmailMailchimpCategoryResolvers<ContextType>,
+  EmailMailchimpInterest?: EmailMailchimpInterestResolvers<ContextType>,
+  EmailSubscribeChannel?: EmailSubscribeChannelResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   PageInfo?: PageInfoResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,

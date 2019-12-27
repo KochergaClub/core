@@ -1,34 +1,41 @@
-import { useSelector } from 'react-redux';
-
 import Card, { CardList } from '~/components/Card';
+import { ApolloQueryResults } from '~/components';
 
-import { selectMailchimpCategories } from '../features/mailchimpCategories';
-import { MailchimpCategory } from '../types';
+import {
+  useEmailMailchimpCategoriesQuery,
+  MailchimpCategoryFragment,
+} from '../queries.generated';
 
-const MailchimpCategoryCard: React.FC<{
-  mailchimpCategory: MailchimpCategory;
-}> = ({ mailchimpCategory }) => (
+interface Props {
+  mailchimpCategory: MailchimpCategoryFragment;
+}
+
+const MailchimpCategoryCard: React.FC<Props> = ({ mailchimpCategory }) => (
   <Card>
     <header>{mailchimpCategory.title}</header>
     <ul>
       {mailchimpCategory.interests.map(interest => (
-        <li key={interest.interest_id}>{interest.name}</li>
+        <li key={interest.id}>{interest.name}</li>
       ))}
     </ul>
   </Card>
 );
 
 const MailchimpCategoryList: React.FC = () => {
-  const mailchimpCategories = useSelector(selectMailchimpCategories);
+  const queryResults = useEmailMailchimpCategoriesQuery();
 
   return (
     <div>
       <h2>Mailchimp-группы</h2>
-      <CardList>
-        {mailchimpCategories.map(c => (
-          <MailchimpCategoryCard key={c.category_id} mailchimpCategory={c} />
-        ))}
-      </CardList>
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { mailchimpCategories } }) => (
+          <CardList>
+            {mailchimpCategories.map(c => (
+              <MailchimpCategoryCard key={c.id} mailchimpCategory={c} />
+            ))}
+          </CardList>
+        )}
+      </ApolloQueryResults>
     </div>
   );
 };

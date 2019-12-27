@@ -1,38 +1,58 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Row, Label } from '@kocherga/frontkit';
 
 import Card, { CardHeader } from '~/components/Card';
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
+
 import ModalFormButton from '~/components/forms/ModalFormButton';
-import { useDispatch } from '~/common/hooks';
+import { FormShape } from '~/components/forms/types';
 
-import { SubscribeChannel } from '../types';
-import { selectMailchimpInterestsDict } from '../features/mailchimpCategories';
 import {
-  deleteSubscribeChannel,
-  subscribeEmailToSubscribeChannel,
-} from '../features/subscribeChannels';
+  useEmailSubscribeChannelDeleteMutation,
+  useEmailSubscribeChannelAddEmailMutation,
+  SubscribeChannelFragment,
+} from '../queries.generated';
 
-const SubscribeChannelCard: React.FC<{
-  subscribeChannel: SubscribeChannel;
-}> = ({ subscribeChannel }) => {
-  const mailchimpInterestsDict = useSelector(selectMailchimpInterestsDict);
-  const dispatch = useDispatch();
+interface ManualSubscribeFormResults {
+  email: string;
+}
+
+const manualSubscribeFormShape: FormShape = [{ name: 'email', type: 'email' }];
+
+interface Props {
+  subscribeChannel: SubscribeChannelFragment;
+}
+
+const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
+  const [deleteMutation] = useEmailSubscribeChannelDeleteMutation({
+    refetchQueries: ['EmailSubscribeChannels'],
+    awaitRefetchQueries: true,
+  });
+  const [subscribeMutation] = useEmailSubscribeChannelAddEmailMutation({
+    refetchQueries: ['EmailSubscribeChannels'],
+    awaitRefetchQueries: true,
+  });
 
   const deleteCb = useCallback(async () => {
-    await dispatch(deleteSubscribeChannel(subscribeChannel.slug));
-  }, [dispatch, subscribeChannel.slug]);
+    await deleteMutation({
+      variables: {
+        slug: subscribeChannel.slug,
+      },
+    });
+  }, [subscribeChannel.slug, deleteMutation]);
 
   const manualSubscribeCb = useCallback(
-    async (values: any) => {
+    async (values: ManualSubscribeFormResults) => {
       const email: string = values.email;
-      await dispatch(
-        subscribeEmailToSubscribeChannel(subscribeChannel.slug, email)
-      );
+      await subscribeMutation({
+        variables: {
+          email,
+          slug: subscribeChannel.slug,
+        },
+      });
     },
-    [dispatch, subscribeChannel.slug]
+    [subscribeMutation, subscribeChannel.slug]
   );
 
   return (
@@ -46,8 +66,8 @@ const SubscribeChannelCard: React.FC<{
         </code>
       </Row>
       <ul>
-        {subscribeChannel.interests.map(id => (
-          <li key={id}>{mailchimpInterestsDict[id].name}</li>
+        {subscribeChannel.interests.map(interest => (
+          <li key={interest.id}>{interest.name}</li>
         ))}
       </ul>
       <Row>
@@ -59,7 +79,7 @@ const SubscribeChannelCard: React.FC<{
           Удалить
         </AsyncButtonWithConfirm>
         <ModalFormButton
-          fields={[{ name: 'email', type: 'email' }]}
+          fields={manualSubscribeFormShape}
           small
           buttonName="Подписать вручную"
           modalTitle="Подписать вручную"

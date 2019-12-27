@@ -13,5 +13,6 @@ urlpatterns = [
 router = SimpleRouter(trailing_slash=False)
 router.register('email/subscribe_channel', views.SubscribeChannelViewSet)
 router.register('email/mailchimp_category', views.MailchimpCategoryViewSet)
+router.register('email/mailchimp_interest', views.MailchimpInterestViewSet)
 
 urlpatterns += router.urls
