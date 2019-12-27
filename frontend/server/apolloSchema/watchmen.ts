@@ -25,10 +25,9 @@ export const resolvers: Resolvers = {
       if (!member_id) {
         throw new Error('Expected member_id');
       }
-      return await dataSources.kochergaAPI.retrieve({
-        resource: STAFF_MEMBER,
-        id: member_id,
-      });
+      return await dataSources.kochergaAPI
+        .loader({ resource: STAFF_MEMBER })
+        .load(member_id);
     },
     grade: async (parent, _, { dataSources }) => {
       const grade_id = (parent as any).grade_id as string | undefined;
@@ -47,10 +46,9 @@ export const resolvers: Resolvers = {
       if (!watchman_id) {
         return null;
       }
-      return await dataSources.kochergaAPI.retrieve({
-        resource: WATCHMAN,
-        id: watchman_id,
-      });
+      return await dataSources.kochergaAPI
+        .loader({ resource: WATCHMAN })
+        .load(watchman_id);
     },
   },
   Mutation: {

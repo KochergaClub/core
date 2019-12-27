@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 
 from rest_framework import generics, permissions, mixins, viewsets
 
+from kocherga.django.drf import BulkRetrieveMixin
+
 from . import serializers
 from .models import Shift, Watchman, Grade
 
@@ -57,6 +59,7 @@ class WatchmenViewSet(
         mixins.ListModelMixin,
         mixins.RetrieveModelMixin,
         viewsets.GenericViewSet,
+        BulkRetrieveMixin,
 ):
     serializer_class = serializers.WatchmanSerializer
     permission_classes = (IsManagerOrStaffRO,)
