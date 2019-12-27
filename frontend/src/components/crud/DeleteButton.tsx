@@ -35,7 +35,7 @@ const DeleteModal: React.FC<ModalProps> = ({
     await api.callDelete(url);
 
     window.location.href = redirectOnDelete;
-  }, [api, close, endpoint, id, redirectOnDelete]);
+  }, [api, endpoint, id, redirectOnDelete]);
 
   const focus = useFocusOnFirstModalRender();
   const hotkeys = useCommonHotkeys({

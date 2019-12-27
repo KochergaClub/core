@@ -75,7 +75,7 @@ const Week: React.FC<Props> = ({
 
   React.useEffect(() => {
     setHeight(firstDay, sizes.height);
-  }, [firstDay, sizes.height, setHeight, sizes.height]);
+  }, [firstDay, sizes.height, setHeight]);
 
   return (
     <Container>

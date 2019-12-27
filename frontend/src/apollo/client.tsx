@@ -13,6 +13,103 @@ import {
 
 let apolloClient: KochergaApolloClient | null = null;
 
+const createServerLink = (req: NextApolloPageContext['req']) => {
+  // this is important for webpack to remove this code on client
+  if (typeof window === 'undefined') {
+    const { SchemaLink } = require('apollo-link-schema');
+    const { KochergaAPI } = require('../../server/apolloSchema/api');
+    const { schema } = require('../../server/apolloSchema');
+    const { API_HOST } = require('../../server/constants');
+
+    // req can be empty when we do the last styled-components-extracting rendering pass in _document.
+    // Note that we can't pass always `apolloClient` to WithApollo props, since it can't be serialized.
+    // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
+    const cookieHeader = req ? req.headers.cookie : undefined;
+
+    const cookies = cookie.parse(cookieHeader || '');
+    const csrfToken = cookies.csrftoken as string;
+
+    const authContext = {
+      csrfToken,
+      cookie: cookieHeader,
+    };
+
+    return new SchemaLink({
+      schema,
+      context() {
+        const kochergaAPI = new KochergaAPI(API_HOST);
+        kochergaAPI.initialize({ context: authContext });
+        return {
+          dataSources: {
+            kochergaAPI,
+          },
+          ...authContext,
+        };
+      },
+    });
+  } else {
+    throw new Error("Shouldn't be called on client side");
+  }
+};
+
+function createClientLink() {
+  if (typeof window === 'undefined') {
+    throw new Error('Should be called on client side');
+  }
+
+  const cookies = cookie.parse(document.cookie || '');
+  const csrfToken = cookies.csrftoken as string;
+
+  const { HttpLink } = require('apollo-link-http');
+  return new HttpLink({
+    uri: '/graphql',
+    credentials: 'same-origin',
+    headers: {
+      'X-CSRFToken': csrfToken,
+    },
+  });
+}
+
+/**
+ * Creates and configures the ApolloClient
+ */
+const createApolloClient = (
+  initialState = {},
+  req: NextApolloPageContext['req'] = undefined
+) => {
+  const ssrMode = typeof window === 'undefined';
+  const cache = new KochergaApolloCache().restore(initialState);
+
+  return new ApolloClient({
+    ssrMode,
+    link: ssrMode ? createServerLink(req) : createClientLink(),
+    cache,
+    assumeImmutableResults: true, // see https://blog.apollographql.com/whats-new-in-apollo-client-2-6-b3acf28ecad1
+  });
+};
+
+/**
+ * Always creates a new apollo client on the server
+ * Creates or reuses apollo client in the browser.
+ */
+const initApolloClient = (
+  initialState = undefined,
+  req: NextApolloPageContext['req'] = undefined
+) => {
+  // Make sure to create a new client for every server-side request so that data
+  // isn't shared between connections (which would be bad)
+  if (typeof window === 'undefined') {
+    return createApolloClient(initialState, req);
+  }
+
+  // Reuse client on the client-side
+  if (!apolloClient) {
+    apolloClient = createApolloClient(initialState);
+  }
+
+  return apolloClient;
+};
+
 /**
  * Creates and provides the apolloContext
  * to a next.js PageTree. Use it by wrapping
@@ -109,101 +206,4 @@ export function withApollo(
   }
 
   return WithApollo;
-}
-
-/**
- * Always creates a new apollo client on the server
- * Creates or reuses apollo client in the browser.
- */
-function initApolloClient(
-  initialState = undefined,
-  req: NextApolloPageContext['req'] = undefined
-) {
-  // Make sure to create a new client for every server-side request so that data
-  // isn't shared between connections (which would be bad)
-  if (typeof window === 'undefined') {
-    return createApolloClient(initialState, req);
-  }
-
-  // Reuse client on the client-side
-  if (!apolloClient) {
-    apolloClient = createApolloClient(initialState);
-  }
-
-  return apolloClient;
-}
-
-/**
- * Creates and configures the ApolloClient
- */
-function createApolloClient(
-  initialState = {},
-  req: NextApolloPageContext['req'] = undefined
-) {
-  const ssrMode = typeof window === 'undefined';
-  const cache = new KochergaApolloCache().restore(initialState);
-
-  return new ApolloClient({
-    ssrMode,
-    link: ssrMode ? createServerLink(req) : createClientLink(),
-    cache,
-    assumeImmutableResults: true, // see https://blog.apollographql.com/whats-new-in-apollo-client-2-6-b3acf28ecad1
-  });
-}
-
-function createServerLink(req: NextApolloPageContext['req']) {
-  // this is important for webpack to remove this code on client
-  if (typeof window === 'undefined') {
-    const { SchemaLink } = require('apollo-link-schema');
-    const { KochergaAPI } = require('../../server/apolloSchema/api');
-    const { schema } = require('../../server/apolloSchema');
-    const { API_HOST } = require('../../server/constants');
-
-    // req can be empty when we do the last styled-components-extracting rendering pass in _document.
-    // Note that we can't pass always `apolloClient` to WithApollo props, since it can't be serialized.
-    // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
-    const cookieHeader = req ? req.headers.cookie : undefined;
-
-    const cookies = cookie.parse(cookieHeader || '');
-    const csrfToken = cookies.csrftoken as string;
-
-    const authContext = {
-      csrfToken,
-      cookie: cookieHeader,
-    };
-
-    return new SchemaLink({
-      schema,
-      context() {
-        const kochergaAPI = new KochergaAPI(API_HOST);
-        kochergaAPI.initialize({ context: authContext });
-        return {
-          dataSources: {
-            kochergaAPI,
-          },
-          ...authContext,
-        };
-      },
-    });
-  } else {
-    throw new Error("Shouldn't be called on client side");
-  }
-}
-
-function createClientLink() {
-  if (typeof window === 'undefined') {
-    throw new Error('Should be called on client side');
-  }
-
-  const cookies = cookie.parse(document.cookie || '');
-  const csrfToken = cookies.csrftoken as string;
-
-  const { HttpLink } = require('apollo-link-http');
-  return new HttpLink({
-    uri: '/graphql',
-    credentials: 'same-origin',
-    headers: {
-      'X-CSRFToken': csrfToken,
-    },
-  });
 }

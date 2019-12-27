@@ -5,7 +5,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { Button, Modal, Row } from '@kocherga/frontkit';
 
-import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
+import { useCommonHotkeys, useDispatch } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
 import { deleteEvent, patchEvent } from '../features/events';
@@ -22,8 +22,6 @@ const EditEventModal: React.FC = () => {
   const [room, setRoom] = useState(event?.room || '');
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-
-  const api = useAPI();
 
   const saveDisabled = deleting || saving || !title || !title.length;
 
@@ -44,7 +42,7 @@ const EditEventModal: React.FC = () => {
       })
     );
     dispatch(closeUI());
-  }, [api, dispatch, event, saveDisabled, title, description, room]);
+  }, [dispatch, event, saveDisabled, title, description, room]);
 
   const deleteCb = useCallback(async () => {
     if (!event) {
@@ -53,7 +51,7 @@ const EditEventModal: React.FC = () => {
     setDeleting(true);
     await dispatch(deleteEvent(event.id));
     dispatch(closeUI());
-  }, [api, dispatch, event]);
+  }, [dispatch, event]);
 
   const closeCb = useCallback(() => {
     dispatch(closeUI());

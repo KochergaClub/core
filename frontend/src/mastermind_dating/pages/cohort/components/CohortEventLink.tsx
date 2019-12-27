@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useContext } from 'react';
 import Async from 'react-select/async';
+import { ValueType } from 'react-select';
 
 import { format } from 'date-fns';
 
@@ -8,7 +9,7 @@ import { useAPI } from '~/common/hooks';
 
 import ConfirmModal from '~/components/ConfirmModal';
 import AsyncButton from '~/components/AsyncButton';
-import { ServerEvent } from '~/events/types';
+import { Event } from '~/events/types';
 import { searchEvents } from '~/events/api';
 
 import { Cohort } from '../../../types';
@@ -18,16 +19,19 @@ interface Props {
   cohort: Cohort;
 }
 
+interface OptionType {
+  value: Event;
+  label: string;
+}
+
 const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   const api = useAPI();
   const dispatch = useContext(MastermindContext);
 
-  const [confirming, setConfirming] = useState<ServerEvent | undefined>(
-    undefined
-  );
+  const [confirming, setConfirming] = useState<Event | undefined>(undefined);
 
   const loadEvents = useCallback(
-    async (inputValue: string, callback: (options: any[]) => void) => {
+    async (inputValue: string, callback: (options: OptionType[]) => void) => {
       try {
         const events = await searchEvents(api, { query: inputValue });
 
@@ -48,8 +52,14 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
     [api]
   );
 
-  const pickEventForConfirming = useCallback((v: any) => {
-    setConfirming(v.value);
+  const pickEventForConfirming = useCallback((v: ValueType<OptionType>) => {
+    if (!v) {
+      return;
+    }
+    if (v instanceof Array) {
+      return;
+    }
+    setConfirming((v as OptionType).value);
   }, []);
 
   const cancelConfirming = useCallback(() => setConfirming(undefined), []);
@@ -84,7 +94,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
         cohort: updatedCohort,
       },
     });
-  }, [dispatch, cohort.id]);
+  }, [api, dispatch, cohort.id]);
 
   if (cohort.event_id) {
     return (

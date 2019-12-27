@@ -23,7 +23,7 @@ class EditableString extends React.Component<Props, {}> {
   private input: HTMLInputElement | null = null;
   private valueRef: HTMLElement | null = null;
 
-  componentWillReceiveProps(nextProps: Props) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props) {
     if (
       this.saving &&
       (nextProps.value === this.input!.value ||

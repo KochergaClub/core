@@ -130,8 +130,7 @@ export default class EventPrototype extends EventShape {
       'fb_group',
       'tags',
     ]) {
-      // @ts-ignore
-      this[key] = json[key];
+      (this as any)[key] = (json as any)[key];
     }
 
     this.suggested = json.suggested.map(d => moment(d));
