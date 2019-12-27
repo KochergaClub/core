@@ -1,16 +1,8 @@
-import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
 import { colors, Row } from '@kocherga/frontkit';
-
-import { State } from '~/redux/store';
-
-import {
-  selectEditing,
-  setEditing as setEditingAction,
-} from '../features/editing';
 
 const ItemContainer = styled.a<{ active: boolean }>`
   text-decoration: none;
@@ -43,25 +35,21 @@ const Item = ({
 };
 
 interface Props {
-  editing: boolean;
-  setEditing: (v: boolean) => void;
+  value: boolean;
+  set: (v: boolean) => void;
 }
 
-const EditingSwitch: React.FC<Props> = ({ editing, setEditing }) => {
+const EditingSwitch: React.FC<Props> = ({ value, set }) => {
   return (
     <Row>
-      <Item active={!editing} action={() => setEditing(false)}>
+      <Item active={!value} action={() => set(false)}>
         смотреть
       </Item>
-      <Item active={editing} action={() => setEditing(true)}>
+      <Item active={value} action={() => set(true)}>
         редактировать
       </Item>
     </Row>
   );
 };
 
-const mapStateToProps = (state: State) => ({ editing: selectEditing(state) });
-
-export default connect(mapStateToProps, { setEditing: setEditingAction })(
-  EditingSwitch
-);
+export default EditingSwitch;

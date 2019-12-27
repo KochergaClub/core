@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { format, parseISO, addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
@@ -16,6 +18,8 @@ import ShiftsCalendar from '../components/ShiftsCalendar';
 import EditingSwitch from '../components/EditingSwitch';
 import Pager from '../components/Pager';
 
+import { EditingContext } from '../contexts';
+
 interface Props {
   from_date: string;
   to_date: string;
@@ -23,6 +27,8 @@ interface Props {
 
 const SpaceStaffShiftsPage: NextPage<Props> = props => {
   const [editable] = usePermissions(['watchmen.manage']);
+
+  const [editing, setEditing] = useState(false);
 
   const from_date = parseISO(props.from_date);
   const to_date = parseISO(props.to_date);
@@ -46,16 +52,18 @@ const SpaceStaffShiftsPage: NextPage<Props> = props => {
           <Column centered gutter={0}>
             <Column centered>
               <Pager from_date={from_date} />
-              {editable && <EditingSwitch />}
+              {editable && <EditingSwitch set={setEditing} value={editing} />}
             </Column>
           </Column>
           <ApolloQueryResults {...queryResults}>
             {({ data: { shifts } }) => (
-              <ShiftsCalendar
-                shifts={shifts}
-                fromDate={from_date}
-                toDate={to_date}
-              />
+              <EditingContext.Provider value={{ editing }}>
+                <ShiftsCalendar
+                  shifts={shifts}
+                  fromDate={from_date}
+                  toDate={to_date}
+                />
+              </EditingContext.Provider>
             )}
           </ApolloQueryResults>
         </Column>

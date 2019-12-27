@@ -1,5 +1,4 @@
-import { connect } from 'react-redux';
-
+import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
@@ -7,11 +6,9 @@ import { colors } from '@kocherga/frontkit';
 import WatchmanPicker from './WatchmanPicker';
 
 import { useExpandable } from '~/common/hooks';
-import { State } from '~/redux/store';
 
 import { nightColor } from '../constants';
-
-import { selectEditing } from '../features/editing';
+import { EditingContext } from '../contexts';
 
 import {
   ShiftFragment,
@@ -78,18 +75,12 @@ const InnerShiftBox = ({
   );
 };
 
-interface OwnProps {
+interface Props {
   shift: ShiftFragment;
 }
 
-interface StateProps {
-  editing: boolean;
-}
-
-type Props = OwnProps & StateProps;
-
 const ShiftBox = (props: Props) => {
-  const { editing } = props;
+  const { editing } = useContext(EditingContext);
   const [updateMutation] = useWatchmenUpdateShiftMutation({
     update(cache, { data }) {
       if (!data) {
@@ -154,6 +145,4 @@ const ShiftBox = (props: Props) => {
   );
 };
 
-export default connect((state: State) => ({ editing: selectEditing(state) }))(
-  ShiftBox
-);
+export default ShiftBox;
