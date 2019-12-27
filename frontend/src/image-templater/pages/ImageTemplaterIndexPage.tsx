@@ -1,10 +1,10 @@
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 import { NextPage } from '~/common/types';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
 import TemplateList from '~/image-templater/components/TemplateList';
-
-import { loadTemplates } from '~/image-templater/features/templates';
 
 const ImageTemplaterIndexPage: NextPage = () => {
   return (
@@ -17,9 +17,4 @@ const ImageTemplaterIndexPage: NextPage = () => {
   );
 };
 
-ImageTemplaterIndexPage.getInitialProps = async ({ store: { dispatch } }) => {
-  await dispatch(loadTemplates());
-  return {};
-};
-
-export default ImageTemplaterIndexPage;
+export default withApollo(withStaff(ImageTemplaterIndexPage));

@@ -1,7 +1,7 @@
 import { FormState, state2link } from '../utils';
-import { ImageTemplate } from '../types';
+import { TemplateFragment } from '../queries.generated';
 
-const Preview: React.FC<{ state: FormState; template: ImageTemplate }> = ({
+const Preview: React.FC<{ state: FormState; template: TemplateFragment }> = ({
   state,
   template,
 }) => {

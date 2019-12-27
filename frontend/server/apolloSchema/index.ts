@@ -30,6 +30,9 @@ import { resolvers as ratioResolvers } from './ratio';
 import Email from './email.graphql';
 import { resolvers as emailResolvers } from './email';
 
+import ImageTemplater from './image-templater.graphql';
+import { resolvers as imageTemplaterResolvers } from './image-templater';
+
 import { default as Base } from './base.graphql';
 
 // https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2
@@ -45,6 +48,7 @@ export const schema = makeExecutableSchema({
     Watchmen,
     Ratio,
     Email,
+    ImageTemplater,
   ],
   // NB: there's a mismatch between codegen's Resolvers type and apollo Resolvers type.
   // It could be fixed with `useIndexSignature = true` config option to typescript-resolvers codegen plugin,
@@ -59,6 +63,7 @@ export const schema = makeExecutableSchema({
     zadarmaResolvers,
     watchmenResolvers,
     ratioResolvers,
-    emailResolvers
+    emailResolvers,
+    imageTemplaterResolvers
   ) as any,
 });

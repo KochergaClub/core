@@ -4,10 +4,10 @@ import { A } from '@kocherga/frontkit';
 
 import Card from '~/components/Card';
 
-import { ImageTemplate } from '../types';
+import { TemplateFragment } from '../queries.generated';
 
 interface Props {
-  template: ImageTemplate;
+  template: TemplateFragment;
 }
 
 const TemplateCard: React.FC<Props> = ({ template }) => {

@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { useRouter } from 'next/router';
@@ -10,16 +9,13 @@ import { Formik, Field, FieldProps, Form, ErrorMessage } from 'formik';
 
 import { A, Column, Label, Input, Row, colors } from '@kocherga/frontkit';
 
-import { selectTemplate } from '../features/templateItem';
-import { ImageTemplate } from '../types';
+import { TemplateFragment } from '../queries.generated';
 import { FormState, state2link, jsonToQueryString } from '../utils';
 
 import Preview from './Preview';
 
-interface Props {}
-
 const template2initialValues = (
-  template: ImageTemplate,
+  template: TemplateFragment,
   query: ParsedUrlQuery
 ) => {
   const result: { [k: string]: string } = {};
@@ -34,7 +30,7 @@ const template2initialValues = (
   return result;
 };
 
-const validateValues = (template: ImageTemplate, values: FormState) => {
+const validateValues = (template: TemplateFragment, values: FormState) => {
   const errors: { [k: string]: string } = {};
   for (const field of template.schema.fields) {
     switch (field.value_type) {
@@ -74,7 +70,7 @@ const ErrorLabel = styled.div`
   color: ${colors.accent[900]};
 `;
 
-const Fields = ({ template }: { template: ImageTemplate }) => {
+const Fields = ({ template }: { template: TemplateFragment }) => {
   return (
     <div>
       {template.schema.fields.map(field => (
@@ -92,8 +88,11 @@ const Fields = ({ template }: { template: ImageTemplate }) => {
   );
 };
 
-const ViewingTemplateScreen: React.FC<Props> = ({}) => {
-  const template = useSelector(selectTemplate);
+interface Props {
+  template: TemplateFragment;
+}
+
+const ViewingTemplateScreen: React.FC<Props> = ({ template }) => {
   const router = useRouter();
 
   if (!template) {

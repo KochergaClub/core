@@ -1,37 +1,47 @@
-import { useSelector } from 'react-redux';
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
+import { NextApolloPage } from '~/apollo/types';
 
-import { NextPage } from '~/common/types';
-import { Page } from '~/components';
+import { ApolloQueryResults, Page } from '~/components';
 
-import { loadTemplate, selectTemplate } from '../features/templateItem';
+import { useImageTemplateBySlugQuery } from '../queries.generated';
 
 import ViewingTemplateScreen from '../components/ViewingTemplateScreen';
 
-interface Props {}
+interface Props {
+  slug: string;
+}
 
-const ImageTemplaterDetailsPage: NextPage<Props> = () => {
-  const template = useSelector(selectTemplate);
-
-  if (!template) {
-    return <div>Внутренняя ошибка. Не удалось загрузить шаблон.</div>;
-  }
+const ImageTemplaterDetailsPage: NextApolloPage<Props> = ({ slug }) => {
+  const queryResults = useImageTemplateBySlugQuery({
+    variables: {
+      slug,
+    },
+  });
 
   return (
-    <Page title={`${template.name} | Шаблон картинки`} team>
+    <Page
+      title={
+        queryResults.data
+          ? `${queryResults.data.template.name} | Шаблон картинки`
+          : 'Загружается...'
+      }
+      team
+    >
       <Page.Main>
-        <ViewingTemplateScreen />
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { template } }) => (
+            <ViewingTemplateScreen template={template} />
+          )}
+        </ApolloQueryResults>
       </Page.Main>
     </Page>
   );
 };
 
-ImageTemplaterDetailsPage.getInitialProps = async ({
-  store: { dispatch },
-  query,
-}) => {
+ImageTemplaterDetailsPage.getInitialProps = async ({ query }) => {
   const slug = query.slug as string;
-  await dispatch(loadTemplate(slug));
-  return {};
+  return { slug };
 };
 
-export default ImageTemplaterDetailsPage;
+export default withApollo(withStaff(ImageTemplaterDetailsPage));

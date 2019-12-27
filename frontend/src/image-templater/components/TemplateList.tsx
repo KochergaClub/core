@@ -1,22 +1,25 @@
-import { useSelector } from 'react-redux';
-
 import { Column } from '@kocherga/frontkit';
 
-import { selectTemplates } from '../features/templates';
+import { ApolloQueryResults } from '~/components';
 
 import TemplateCard from './TemplateCard';
 
-interface Props {}
+import { useImageTemplatesQuery } from '../queries.generated';
 
-const TemplateList: React.FC<Props> = ({}) => {
-  const templates = useSelector(selectTemplates);
+const TemplateList: React.FC = () => {
+  const queryResults = useImageTemplatesQuery();
 
+  //test
   return (
-    <Column stretch>
-      {templates.map(template => (
-        <TemplateCard key={template.name} template={template} />
-      ))}
-    </Column>
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { templates } }) => (
+        <Column stretch>
+          {templates.map(template => (
+            <TemplateCard key={template.name} template={template} />
+          ))}
+        </Column>
+      )}
+    </ApolloQueryResults>
   );
 };
 

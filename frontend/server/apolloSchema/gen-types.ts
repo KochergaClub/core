@@ -132,6 +132,32 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type ImageTemplate = {
+   __typename?: 'ImageTemplate',
+  name: Scalars['ID'],
+  schema: ImageTemplateSchema,
+  sizes: ImageTemplateSizes,
+};
+
+export type ImageTemplateSchema = {
+   __typename?: 'ImageTemplateSchema',
+  fields: Array<ImageTemplateSchemaField>,
+};
+
+/** TODO - interfaces / unions for different field types */
+export type ImageTemplateSchemaField = {
+   __typename?: 'ImageTemplateSchemaField',
+  name: Scalars['String'],
+  value_type: Scalars['String'],
+  default?: Maybe<Scalars['String']>,
+};
+
+export type ImageTemplateSizes = {
+   __typename?: 'ImageTemplateSizes',
+  width: Scalars['Int'],
+  height: Scalars['Int'],
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
@@ -292,6 +318,8 @@ export type Query = {
   cm2Order: Cm2Order,
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
+  imageTemplatesAll: Array<ImageTemplate>,
+  imageTemplateBySlug: ImageTemplate,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
@@ -334,6 +362,11 @@ export type QueryCm2CustomerArgs = {
 
 export type QueryCm2OrderArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryImageTemplateBySlugArgs = {
+  slug: Scalars['String']
 };
 
 
@@ -651,6 +684,10 @@ export type ResolversTypes = {
   EmailMailchimpCategory: ResolverTypeWrapper<EmailMailchimpCategory>,
   EmailMailchimpInterest: ResolverTypeWrapper<EmailMailchimpInterest>,
   EmailSubscribeChannel: ResolverTypeWrapper<EmailSubscribeChannel>,
+  ImageTemplate: ResolverTypeWrapper<ImageTemplate>,
+  ImageTemplateSchema: ResolverTypeWrapper<ImageTemplateSchema>,
+  ImageTemplateSchemaField: ResolverTypeWrapper<ImageTemplateSchemaField>,
+  ImageTemplateSizes: ResolverTypeWrapper<ImageTemplateSizes>,
   RatioTrainingConnection: ResolverTypeWrapper<RatioTrainingConnection>,
   RatioTraining: ResolverTypeWrapper<RatioTraining>,
   RatioTicket: ResolverTypeWrapper<RatioTicket>,
@@ -703,6 +740,10 @@ export type ResolversParentTypes = {
   EmailMailchimpCategory: EmailMailchimpCategory,
   EmailMailchimpInterest: EmailMailchimpInterest,
   EmailSubscribeChannel: EmailSubscribeChannel,
+  ImageTemplate: ImageTemplate,
+  ImageTemplateSchema: ImageTemplateSchema,
+  ImageTemplateSchemaField: ImageTemplateSchemaField,
+  ImageTemplateSizes: ImageTemplateSizes,
   RatioTrainingConnection: RatioTrainingConnection,
   RatioTraining: RatioTraining,
   RatioTicket: RatioTicket,
@@ -820,6 +861,27 @@ export type EmailSubscribeChannelResolvers<ContextType = TContext, ParentType ex
   interests?: Resolver<Array<ResolversTypes['EmailMailchimpInterest']>, ParentType, ContextType>,
 };
 
+export type ImageTemplateResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ImageTemplate'] = ResolversParentTypes['ImageTemplate']> = {
+  name?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  schema?: Resolver<ResolversTypes['ImageTemplateSchema'], ParentType, ContextType>,
+  sizes?: Resolver<ResolversTypes['ImageTemplateSizes'], ParentType, ContextType>,
+};
+
+export type ImageTemplateSchemaResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ImageTemplateSchema'] = ResolversParentTypes['ImageTemplateSchema']> = {
+  fields?: Resolver<Array<ResolversTypes['ImageTemplateSchemaField']>, ParentType, ContextType>,
+};
+
+export type ImageTemplateSchemaFieldResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ImageTemplateSchemaField'] = ResolversParentTypes['ImageTemplateSchemaField']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  value_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  default?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type ImageTemplateSizesResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ImageTemplateSizes'] = ResolversParentTypes['ImageTemplateSizes']> = {
+  width?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  height?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+};
+
 export type MutationResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   authAddUserToGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthAddUserToGroupArgs, 'user_id' | 'group_id'>>,
   authRemoveUserFromGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthRemoveUserFromGroupArgs, 'user_id' | 'group_id'>>,
@@ -863,6 +925,8 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   cm2Order?: Resolver<ResolversTypes['Cm2Order'], ParentType, ContextType, RequireFields<QueryCm2OrderArgs, 'id'>>,
   emailMailchimpCategoriesAll?: Resolver<Array<ResolversTypes['EmailMailchimpCategory']>, ParentType, ContextType>,
   emailSubscribeChannelsAll?: Resolver<Array<ResolversTypes['EmailSubscribeChannel']>, ParentType, ContextType>,
+  imageTemplatesAll?: Resolver<Array<ResolversTypes['ImageTemplate']>, ParentType, ContextType>,
+  imageTemplateBySlug?: Resolver<ResolversTypes['ImageTemplate'], ParentType, ContextType, RequireFields<QueryImageTemplateBySlugArgs, 'slug'>>,
   ratioTrainings?: Resolver<ResolversTypes['RatioTrainingConnection'], ParentType, ContextType, QueryRatioTrainingsArgs>,
   ratioTrainingBySlug?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<QueryRatioTrainingBySlugArgs, 'slug'>>,
   ratioTrainersAll?: Resolver<Array<ResolversTypes['RatioTrainer']>, ParentType, ContextType>,
@@ -1010,6 +1074,10 @@ export type Resolvers<ContextType = TContext> = {
   EmailMailchimpCategory?: EmailMailchimpCategoryResolvers<ContextType>,
   EmailMailchimpInterest?: EmailMailchimpInterestResolvers<ContextType>,
   EmailSubscribeChannel?: EmailSubscribeChannelResolvers<ContextType>,
+  ImageTemplate?: ImageTemplateResolvers<ContextType>,
+  ImageTemplateSchema?: ImageTemplateSchemaResolvers<ContextType>,
+  ImageTemplateSchemaField?: ImageTemplateSchemaFieldResolvers<ContextType>,
+  ImageTemplateSizes?: ImageTemplateSizesResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   PageInfo?: PageInfoResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,

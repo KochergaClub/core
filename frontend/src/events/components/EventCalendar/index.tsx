@@ -159,13 +159,15 @@ const EventCalendar: NextPage<Props> = props => {
     [dispatch]
   );
 
+  const getNow = useCallback(() => utcToZonedTime(new Date(), timezone), []);
+
   const events = useSelector(selectEventsWithMetadata);
 
   return (
     <>
       <BigCalendarConfigured
         events={events}
-        getNow={() => utcToZonedTime(new Date(), timezone)}
+        getNow={getNow}
         startAccessor={startAccessor}
         endAccessor={endAccessor}
         onSelectSlot={startNewEvent}

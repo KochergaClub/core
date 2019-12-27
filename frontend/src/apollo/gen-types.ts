@@ -129,6 +129,32 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type ImageTemplate = {
+   __typename?: 'ImageTemplate',
+  name: Scalars['ID'],
+  schema: ImageTemplateSchema,
+  sizes: ImageTemplateSizes,
+};
+
+export type ImageTemplateSchema = {
+   __typename?: 'ImageTemplateSchema',
+  fields: Array<ImageTemplateSchemaField>,
+};
+
+/** TODO - interfaces / unions for different field types */
+export type ImageTemplateSchemaField = {
+   __typename?: 'ImageTemplateSchemaField',
+  name: Scalars['String'],
+  value_type: Scalars['String'],
+  default?: Maybe<Scalars['String']>,
+};
+
+export type ImageTemplateSizes = {
+   __typename?: 'ImageTemplateSizes',
+  width: Scalars['Int'],
+  height: Scalars['Int'],
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
@@ -289,6 +315,8 @@ export type Query = {
   cm2Order: Cm2Order,
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
+  imageTemplatesAll: Array<ImageTemplate>,
+  imageTemplateBySlug: ImageTemplate,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
@@ -331,6 +359,11 @@ export type QueryCm2CustomerArgs = {
 
 export type QueryCm2OrderArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryImageTemplateBySlugArgs = {
+  slug: Scalars['String']
 };
 
 

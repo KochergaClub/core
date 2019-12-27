@@ -1,0 +1,26 @@
+fragment Template on ImageTemplate {
+  name
+  schema {
+    fields {
+      name
+      value_type
+      default
+    }
+  }
+  sizes {
+    width
+    height
+  }
+}
+
+query ImageTemplates {
+  templates: imageTemplatesAll {
+    ...Template
+  }
+}
+
+query ImageTemplateBySlug($slug: String!) {
+  template: imageTemplateBySlug(slug: $slug) {
+    ...Template
+  }
+}

@@ -1,0 +1,26 @@
+extend type Query {
+  imageTemplatesAll: [ImageTemplate!]!
+  imageTemplateBySlug(slug: String!): ImageTemplate!
+}
+
+type ImageTemplate {
+  name: ID!
+  schema: ImageTemplateSchema!
+  sizes: ImageTemplateSizes!
+}
+
+type ImageTemplateSchema {
+  fields: [ImageTemplateSchemaField!]!
+}
+
+# TODO - interfaces / unions for different field types
+type ImageTemplateSchemaField {
+  name: String!
+  value_type: String!
+  default: String
+}
+
+type ImageTemplateSizes {
+  width: Int!
+  height: Int!
+}
