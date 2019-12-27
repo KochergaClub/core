@@ -86,6 +86,14 @@ const createApolloClient = (
     link: ssrMode ? createServerLink(req) : createClientLink(),
     cache,
     assumeImmutableResults: true, // see https://blog.apollographql.com/whats-new-in-apollo-client-2-6-b3acf28ecad1
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+      },
+      query: {
+        fetchPolicy: 'network-only',
+      },
+    },
   });
 };
 
