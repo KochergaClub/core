@@ -1,5 +1,5 @@
 extend type Query {
-  watchmenWatchmenAll: [WatchmenWatchman!]!
+  watchmenWatchmenAll(current: Boolean): [WatchmenWatchman!]!
   watchmenGradesAll: [WatchmenGrade!]!
   watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]!
 }

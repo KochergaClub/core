@@ -4,7 +4,7 @@ from rest_framework.routers import SimpleRouter
 from . import views
 
 router = SimpleRouter(trailing_slash=False)
-router.register('watchmen', views.WatchmenViewSet)
+router.register('watchmen', views.WatchmenViewSet, basename='watchmen-watchmen')
 router.register('grades', views.GradesViewSet)
 
 urlpatterns = [

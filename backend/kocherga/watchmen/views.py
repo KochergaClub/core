@@ -63,10 +63,19 @@ class WatchmenViewSet(
 ):
     serializer_class = serializers.WatchmanSerializer
     permission_classes = (IsManagerOrStaffRO,)
-    queryset = Watchman.objects.all()
+
+    def get_queryset(self):
+        queryset = Watchman.objects.all()
+        if self.request.query_params.get('current'):
+            queryset = queryset.filter(member__is_current=True).filter(priority__lt=3)
+
+        return queryset
 
 
-class GradesViewSet(viewsets.ReadOnlyModelViewSet):
+class GradesViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     serializer_class = serializers.GradeSerializer
     permission_classes = (IsManagerOrStaffRO,)
     queryset = Grade.objects.all()

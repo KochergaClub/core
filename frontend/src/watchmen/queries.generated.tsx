@@ -205,7 +205,7 @@ export type WatchmenWatchmenListLazyQueryHookResult = ReturnType<typeof useWatch
 export type WatchmenWatchmenListQueryResult = ApolloReactCommon.QueryResult<WatchmenWatchmenListQuery, WatchmenWatchmenListQueryVariables>;
 export const WatchmenWatchmenListForPickerDocument = gql`
     query WatchmenWatchmenListForPicker {
-  watchmen: watchmenWatchmenAll {
+  watchmen: watchmenWatchmenAll(current: true) {
     ...WatchmanForPicker
   }
 }

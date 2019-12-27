@@ -43,7 +43,7 @@ query WatchmenWatchmenList {
 }
 
 query WatchmenWatchmenListForPicker {
-  watchmen: watchmenWatchmenAll {
+  watchmen: watchmenWatchmenAll(current: true) {
     ...WatchmanForPicker
   }
 }

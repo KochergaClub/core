@@ -382,6 +382,11 @@ export type QueryStaffMemberArgs = {
 };
 
 
+export type QueryWatchmenWatchmenAllArgs = {
+  current?: Maybe<Scalars['Boolean']>
+};
+
+
 export type QueryWatchmenShiftsArgs = {
   from_date?: Maybe<Scalars['String']>,
   to_date?: Maybe<Scalars['String']>

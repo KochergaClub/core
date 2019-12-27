@@ -12,12 +12,9 @@ from . import models
 class WatchmanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Watchman
-        fields = ('id', 'member_id', 'short_name', 'color', 'grade_id', 'is_current', 'priority')
+        fields = ('id', 'member_id', 'grade_id', 'priority')
 
     member_id = serializers.CharField(source='member.pk', read_only=True)
-    short_name = serializers.CharField(source='member.short_name', read_only=True)
-    color = serializers.CharField(source='member.color', read_only=True)
-    is_current = serializers.BooleanField(source='member.is_current', read_only=True)
     grade_id = serializers.IntegerField(source='grade.id', required=False)
     priority = serializers.IntegerField()
 

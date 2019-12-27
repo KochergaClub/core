@@ -385,6 +385,11 @@ export type QueryStaffMemberArgs = {
 };
 
 
+export type QueryWatchmenWatchmenAllArgs = {
+  current?: Maybe<Scalars['Boolean']>
+};
+
+
 export type QueryWatchmenShiftsArgs = {
   from_date?: Maybe<Scalars['String']>,
   to_date?: Maybe<Scalars['String']>
@@ -933,7 +938,7 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   rooms?: Resolver<Array<Maybe<ResolversTypes['Room']>>, ParentType, ContextType>,
   staffMembersAll?: Resolver<Array<ResolversTypes['StaffMember']>, ParentType, ContextType>,
   staffMember?: Resolver<ResolversTypes['StaffMember'], ParentType, ContextType, RequireFields<QueryStaffMemberArgs, 'id'>>,
-  watchmenWatchmenAll?: Resolver<Array<ResolversTypes['WatchmenWatchman']>, ParentType, ContextType>,
+  watchmenWatchmenAll?: Resolver<Array<ResolversTypes['WatchmenWatchman']>, ParentType, ContextType, QueryWatchmenWatchmenAllArgs>,
   watchmenGradesAll?: Resolver<Array<ResolversTypes['WatchmenGrade']>, ParentType, ContextType>,
   watchmenShifts?: Resolver<Array<ResolversTypes['WatchmenShift']>, ParentType, ContextType, QueryWatchmenShiftsArgs>,
   zadarmaPbxCalls?: Resolver<ResolversTypes['ZadarmaPbxCallConnection'], ParentType, ContextType, QueryZadarmaPbxCallsArgs>,

@@ -9,8 +9,11 @@ const SHIFT = 'watchmen/schedule';
 
 export const resolvers: Resolvers = {
   Query: {
-    watchmenWatchmenAll: (_, __, { dataSources }) =>
-      dataSources.kochergaAPI.list({ resource: WATCHMAN }),
+    watchmenWatchmenAll: (_, { current }, { dataSources }) =>
+      dataSources.kochergaAPI.list({
+        resource: WATCHMAN,
+        query: current ? { current: 1 } : {},
+      }),
     watchmenGradesAll: (_, __, { dataSources }) =>
       dataSources.kochergaAPI.list({ resource: GRADE }),
     watchmenShifts: (_, { from_date, to_date }, { dataSources }) =>
