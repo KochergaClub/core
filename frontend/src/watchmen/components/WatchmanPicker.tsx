@@ -36,7 +36,9 @@ const WatchmanPicker: React.FC<Props> = ({
   pickedExtra,
   pickedWatchman,
 }) => {
-  const queryResults = useWatchmenWatchmenListForPickerQuery();
+  const queryResults = useWatchmenWatchmenListForPickerQuery({
+    fetchPolicy: 'cache-first',
+  });
 
   const items = useMemo(() => {
     if (queryResults.loading) {

@@ -32,7 +32,6 @@ const SpaceStaffShiftsPage: NextPage<Props> = props => {
       from_date: props.from_date,
       to_date: props.to_date,
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   useListeningWebSocket('ws/watchmen-schedule/', async () => {
