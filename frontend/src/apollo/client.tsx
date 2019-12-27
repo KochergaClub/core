@@ -32,6 +32,7 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
     const authContext = {
       csrfToken,
       cookie: cookieHeader,
+      realHost: req ? req.headers.host : undefined,
     };
 
     return new SchemaLink({

@@ -29,6 +29,9 @@ export class KochergaAPI extends RESTDataSource {
     if (this.context.csrfToken) {
       request.headers.set('X-CSRFToken', this.context.csrfToken);
     }
+    if (this.context.realHost) {
+      request.headers.set('X-Forwarded-Host', this.context.realHost);
+    }
   }
 
   // generic methods

@@ -12,6 +12,7 @@ const apolloServer = new ApolloServer({
     return {
       csrfToken: req.headers['x-csrftoken'],
       cookie: req.headers['cookie'],
+      realHost: req.headers['host'],
     };
   },
 });
