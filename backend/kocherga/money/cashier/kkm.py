@@ -167,7 +167,7 @@ def getCheckRequest(check: OnlineCheck):
                     # 110 (НДС 10/110)
                     'Tax': -1,
 
-                    'SignMethodCalculation': check.signMethodCalculation,
+                    'SignMethodCalculation': check.signMethodCalculation.value,
 
                     # Признак предмета расчета. тег ОФД 1212. Для ФФД.1.05 и выше обязательное поле
                     # 1: "ТОВАР (наименование и иные сведения, описывающие товар)"
