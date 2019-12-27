@@ -4,9 +4,9 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 
 from rest_framework.exceptions import ValidationError as DRFValidationError, NotFound
 from rest_framework.views import exception_handler as drf_exception_handler
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import AllowAny
-from rest_framework import filters
+from rest_framework import response
 
 
 def exception_handler(exc, context):
@@ -24,11 +24,17 @@ def view404(request):
     raise NotFound()
 
 
-class BulkRetrieveFilter(filters.BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
+class BulkRetrieveMixin:
+    @action(detail=False)
+    def bulk(self, request):
         ids_str = request.query_params.get('ids')
         if not ids_str:
-            return queryset
-        ids = [int(s) for s in ids_str.split(',')]
+            raise Exception("Expected ids query param")
 
-        return queryset.filter(pk__in=ids)
+        ids = [int(s) for s in ids_str.split(',')]
+        if len(ids) > 100:
+            raise Exception("Only 100 items per bulk operation are allowed")
+
+        queryset = self.get_queryset().filter(pk__in=ids)
+        serializer = self.get_serializer(queryset, many=True)
+        return response.Response(serializer.data)

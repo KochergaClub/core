@@ -1,0 +1,8 @@
+query CurrentUser {
+  currentUser {
+    is_authenticated
+    is_staff
+    permissions
+    email
+  }
+}

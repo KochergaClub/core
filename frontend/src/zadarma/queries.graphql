@@ -1,0 +1,43 @@
+fragment CommonZadarmaPbxCall on ZadarmaPbxCall {
+  pbx_call_id
+  ts
+  calls {
+    call_id
+    ts
+    call_type
+    destination
+    disposition
+    clid
+    sip
+    record
+    watchman
+  }
+  data {
+    staff_member {
+      color
+      short_name
+    }
+  }
+}
+
+query ZadarmaPbxCalls($page: Int) {
+  pbxCalls: zadarmaPbxCalls(page: $page, page_size: 20) {
+    pageInfo {
+      pageNumber
+      hasNextPage
+    }
+    nodes {
+      ...CommonZadarmaPbxCall
+    }
+  }
+}
+
+query ZadarmaPbxCall($pbx_call_id: ID!) {
+  pbxCall: zadarmaPbxCall(pbx_call_id: $pbx_call_id) {
+    ...CommonZadarmaPbxCall
+  }
+}
+
+mutation ZadarmaSetMemberForPbxCall($member_id: ID!, $pbx_call_id: ID!) {
+  zadarmaSetMemberForPbxCall(member_id: $member_id, pbx_call_id: $pbx_call_id)
+}

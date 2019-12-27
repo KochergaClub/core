@@ -28,7 +28,7 @@ lint:
 	docker-compose -f docker/compose.dev.yml exec api flake8 kocherga/ --max-line-length=120
 
 eslint:
-	docker-compose -f docker/compose.dev.yml exec api npx eslint jsx --ext ts,tsx
+	docker-compose -f docker/compose.dev.yml exec api npx eslint src --ext ts,tsx
 
 test-js:
 	docker-compose -f docker/compose.dev.yml exec api npx tsc
@@ -59,7 +59,10 @@ update_npm_packages:
 
 shapes:
 	docker-compose -f docker/compose.dev.yml exec api ./scripts/generate-frontend-shapes.py
-	docker cp docker_api_1:/tmp/shapes.ts ./frontend/jsx/shapes.ts
+	docker cp docker_api_1:/tmp/shapes.ts ./frontend/src/shapes.ts
+
+graphql:
+	cd frontend && npx graphql-codegen
 
 kassa_localtunnel:
 	npx lt --port 8000 --subdomain kassa --host https://lt.berekuk.ru

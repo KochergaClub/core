@@ -1,0 +1,12 @@
+type Query {
+  _empty: String
+}
+
+type Mutation {
+  _empty: String
+}
+
+type PageInfo {
+  pageNumber: Int!  # supported until we move to cursor-based pagination entirely
+  hasNextPage: Boolean!
+}

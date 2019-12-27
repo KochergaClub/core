@@ -1,0 +1,36 @@
+fragment Payment on CashierPayment {
+  id
+  amount
+  whom {
+    id
+    email
+    staff_member {
+      id
+      full_name
+    }
+  }
+  comment
+  is_redeemed
+  created_dt
+  redeem_dt
+}
+
+query CashierPayments {
+  payments: cashierPayments {
+    pageInfo {
+      hasNextPage
+      pageNumber
+    }
+    nodes {
+      ...Payment
+    }
+  }
+}
+
+mutation CashierCreatePayment($params: CashierCreatePaymentInput!) {
+  cashierCreatePayment(params: $params)
+}
+
+mutation CashierRedeemPayment($id: ID!) {
+  cashierRedeemPayment(id: $id)
+}

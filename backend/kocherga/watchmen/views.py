@@ -30,7 +30,13 @@ class ShiftList(generics.ListAPIView):
             from_date = datetime.today().date()
             from_date -= timedelta(days=from_date.weekday())
 
-        to_date = from_date + timedelta(weeks=4) - timedelta(days=1)
+        to_date_str = self.request.query_params.get('to_date', None)
+        if to_date_str:
+            to_date = datetime.strptime(to_date_str, '%Y-%m-%d').date()
+            if (to_date - from_date).days > 12 * 7:
+                raise Exception("12 weeks max is allowed")
+        else:
+            to_date = from_date + timedelta(weeks=4) - timedelta(days=1)
 
         items = Shift.objects.items_range(from_date, to_date)
         return items
@@ -49,6 +55,7 @@ class ShiftUpdate(generics.UpdateAPIView):
 class WatchmenViewSet(
         mixins.UpdateModelMixin,
         mixins.ListModelMixin,
+        mixins.RetrieveModelMixin,
         viewsets.GenericViewSet,
 ):
     serializer_class = serializers.WatchmanSerializer
@@ -56,7 +63,7 @@ class WatchmenViewSet(
     queryset = Watchman.objects.all()
 
 
-class GradesView(generics.ListAPIView):
+class GradesViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.GradeSerializer
     permission_classes = (IsManagerOrStaffRO,)
     queryset = Grade.objects.all()

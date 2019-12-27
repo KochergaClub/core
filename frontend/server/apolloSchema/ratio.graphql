@@ -1,0 +1,93 @@
+extend type Query {
+  ratioTrainings(page: Int): RatioTrainingConnection!
+  ratioTrainingBySlug(slug: String!): RatioTraining!
+  ratioTrainersAll: [RatioTrainer!]!
+}
+
+type RatioTrainingConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioTraining!]!
+}
+
+type RatioTraining {
+  id: ID!
+  name: String!
+  slug: String!
+  date: String!
+  tickets: [RatioTicket!]!
+  tickets_count: Int!
+  total_income: Int!
+  schedule: [RatioTrainingDay!]!
+}
+
+type RatioTrainingDay {
+  id: ID!
+  date: String!
+  activities: [RatioActivity!]!
+}
+
+type RatioActivity {
+  id: ID!
+  time: String!
+  activity_type: String!
+  name: String!
+  trainer: RatioTrainer
+  location: String
+}
+
+type RatioTrainer {
+  id: ID!
+  short_name: String!
+  long_name: String!
+}
+
+type RatioTicket {
+  id: ID!
+  training: RatioTraining!
+  email: String!
+  first_name: String!
+  last_name: String
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+  registration_date: String
+  comment: String
+}
+
+extend type Mutation {
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  ratioAddTicket(params: RatioAddTicketInput!): RatioTicket!
+  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean
+  ratioTicketFiscalize(ticket_id: ID!): Boolean
+}
+
+input RatioAddTrainingInput {
+  name: String!
+  slug: String!
+  date: String!
+}
+
+input RatioAddTicketInput {
+  training: ID!
+  email: String!
+  first_name: String!
+  last_name: String!
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+}
+
+input RatioTrainingCopyScheduleFromInput {
+  from_training_slug: String!
+  to_training_slug: String!
+}
+
+input RatioTrainingAddDayInput {
+  training_slug: String!
+  date: String!
+}

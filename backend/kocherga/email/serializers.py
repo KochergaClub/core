@@ -34,19 +34,19 @@ class MailchimpCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MailchimpCategory
         fields = (
-            'id', 'category_id', 'title', 'interests'
+            'id', 'category_id', 'title', 'interest_ids'
         )
 
-    interests = MailchimpInterestSerializer(many=True)
+    interest_ids = serializers.PrimaryKeyRelatedField(source='interests', many=True, read_only=True)
 
 
 class SubscribeChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SubscribeChannel
-        fields = ('id', 'slug', 'interests')
+        fields = ('id', 'slug', 'interest_ids')
 
-    interests = serializers.SlugRelatedField(
+    interest_ids = serializers.PrimaryKeyRelatedField(
+        source='interests',
         many=True,
-        slug_field='interest_id',
         queryset=models.MailchimpInterest.objects.all(),
     )

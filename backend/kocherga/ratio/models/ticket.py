@@ -9,6 +9,8 @@ import hashlib
 
 from .training import Training
 
+from kocherga.money.cashier import kkm
+
 
 class Ticket(models.Model):
     training = models.ForeignKey(Training, verbose_name='Тренинг', on_delete=models.PROTECT, related_name='tickets')
@@ -66,6 +68,27 @@ class Ticket(models.Model):
     def uid(self):
         SALT = settings.KOCHERGA_MAILCHIMP_UID_SALT.encode()
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]
+
+    def fiscalize(self):
+        if self.fiscalization_status != 'todo':
+            raise Exception("fiscalization_status must be `todo`")
+
+        self.fiscalization_status = 'in_progress'
+        self.save()
+
+        kkm.execute(
+            kkm.getCheckRequest(
+                kkm.OnlineCheck(
+                    title=f"Участие в мероприятии: {self.training.name}",
+                    signMethodCalculation=kkm.SignMethodCalculation.PrePayment100,
+                    email=self.email,
+                    sum=self.payment_amount,
+                )
+            )
+        )
+
+        self.fiscalization_status = 'fiscalized'
+        self.save()
 
 
 @receiver(post_save, sender=Ticket)

@@ -6,6 +6,7 @@ from . import views
 router = SimpleRouter(trailing_slash=False)
 router.register('api/auth/groups', views.GroupsViewSet)
 router.register('api/auth/permissions', views.PermissionsViewSet)
+router.register('api/auth/users', views.UsersViewSet)
 
 app_name = 'auth'
 urlpatterns = router.urls + [

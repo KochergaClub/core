@@ -1,0 +1,128 @@
+fragment TrainingForPicker on RatioTraining {
+  id
+  slug
+  name
+}
+
+fragment Ticket on RatioTicket {
+  id
+  email
+  first_name
+  last_name
+  payment_amount
+  status
+  fiscalization_status
+  ticket_type
+  payment_type
+}
+
+fragment Training on RatioTraining {
+  id
+  slug
+  name
+  date
+  tickets_count
+  total_income
+  tickets {
+    ...Ticket
+  }
+}
+
+fragment Trainer on RatioTrainer {
+  id
+  short_name
+  long_name
+}
+
+fragment Activity on RatioActivity {
+  id
+  time
+  activity_type
+  name
+  location
+  trainer {
+    ...Trainer
+  }
+}
+
+fragment TrainingDay on RatioTrainingDay {
+  id
+  date
+  activities {
+    ...Activity
+  }
+}
+
+fragment TrainingWithSchedule on RatioTraining {
+  ...Training
+  schedule {
+    ...TrainingDay
+  }
+}
+
+query RatioTrainings($page: Int) {
+  trainings: ratioTrainings(page: $page) {
+    pageInfo {
+      pageNumber
+      hasNextPage
+    }
+    nodes {
+      ...Training
+    }
+  }
+}
+
+query RatioTrainingsForPicker {
+  trainings: ratioTrainings(page: 1) {
+    pageInfo {
+      pageNumber
+      hasNextPage
+    }
+    nodes {
+      ...TrainingForPicker
+    }
+  }
+}
+
+query RatioTrainingBySlug($slug: String!) {
+  training: ratioTrainingBySlug(slug: $slug) {
+    ...Training
+  }
+}
+
+query RatioTrainingWithSchedule($slug: String!) {
+  training: ratioTrainingBySlug(slug: $slug) {
+    ...TrainingWithSchedule
+  }
+}
+
+query RatioTrainers {
+  trainers: ratioTrainersAll {
+    ...Trainer
+  }
+}
+
+mutation RatioAddTraining($params: RatioAddTrainingInput!) {
+  ratioAddTraining(params: $params) {
+    ...Training
+  }
+}
+
+mutation RatioAddTicket($params: RatioAddTicketInput!) {
+  ratioAddTicket(params: $params) {
+    ...Ticket
+  }
+}
+
+mutation RatioTicketFiscalize($ticket_id: ID!) {
+  ratioTicketFiscalize(ticket_id: $ticket_id)
+}
+
+
+mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
+  ratioTrainingAddDay(params: $params)
+}
+
+mutation RatioTrainingCopyScheduleFrom($params: RatioTrainingCopyScheduleFromInput!) {
+  ratioTrainingCopyScheduleFrom(params: $params)
+}

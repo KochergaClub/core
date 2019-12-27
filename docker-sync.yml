@@ -7,7 +7,7 @@ syncs:
     src: 'backend/data/volume'
   code-jsx:
     notify_terminal: true
-    src: './frontend/jsx'
+    src: './frontend/src'
     sync_excludes_type: 'none'
   code-py:
     notify_terminal: true

@@ -130,3 +130,6 @@ GDRIVE_WATCHMEN_FOLDER = '0B3eXnAACJCqlOUlEWUU2bkRlMkE'
 WAGTAILAPI_BASE_URL = f"{KOCHERGA_API_ROOT}/wagtail"
 
 TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
+
+KKM_SERVER = 'https://inside.kocherga.club:5893'
+KKM_SERVER_CERT = '/data/KKMServer.pem'

@@ -3,14 +3,16 @@ logger = logging.getLogger(__name__)
 
 from django.conf import settings
 
-from rest_framework import viewsets
+from rest_framework import viewsets, views
 from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 
+from kocherga.django.pagination import CommonPagination
+
 from .models import Payment
-from . import serializers
+from . import serializers, kkm
 
 
 class ReadOnly(BasePermission):
@@ -50,9 +52,20 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return Response('ok')
 
 
+class PagedPaymentViewSet(PaymentViewSet):
+    pagination_class = CommonPagination
+
+
 @api_view()
 @permission_classes((IsKkmUser,))
 def r_get_kkm_password(request):
     return Response({
         'password': settings.KKM_USER_PASSWORD,
     })
+
+
+class KkmServerView(views.APIView):
+    permission_classes = [IsKkmUser]
+
+    def post(self, request):
+        kkm.execute(request.data)

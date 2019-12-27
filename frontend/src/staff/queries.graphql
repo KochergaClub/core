@@ -1,0 +1,47 @@
+fragment StaffMemberFull on StaffMember {
+  id
+  user_id
+  full_name
+  short_name
+  email
+  role
+  color
+  is_current
+  slack_image
+  slack_id
+  vk
+}
+
+fragment StaffMemberForPicker on StaffMember {
+  id
+  user_id
+  full_name
+  short_name
+  color
+}
+
+query StaffMembers {
+  staffMembersAll {
+    ...StaffMemberFull
+  }
+}
+
+query StaffMembersForPicker {
+  members: staffMembersAll {
+    ...StaffMemberForPicker
+  }
+}
+
+query StaffMember($id: ID!) {
+  staffMember(id: $id) {
+    ...StaffMemberFull
+  }
+}
+
+mutation StaffGrantGooglePermissionsToMember($id: ID!) {
+  staffGrantGooglePermissionsToMember(id: $id)
+}
+
+mutation StaffFireMember($id: ID!) {
+  staffFireMember(id: $id)
+}

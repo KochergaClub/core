@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import viewsets, permissions, exceptions
 
+from kocherga.django.drf import BulkRetrieveMixin
+
 from . import serializers
 from . import models
 
@@ -70,7 +72,10 @@ class EmptyEmailException(exceptions.APIException):
     default_detail = 'Email is not set'
 
 
-class SubscribeChannelViewSet(viewsets.ModelViewSet):
+class SubscribeChannelViewSet(
+        viewsets.ModelViewSet,
+        BulkRetrieveMixin,
+):
     queryset = models.SubscribeChannel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.SubscribeChannelSerializer
@@ -92,7 +97,19 @@ class SubscribeChannelViewSet(viewsets.ModelViewSet):
         return Response('ok')
 
 
-class MailchimpCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class MailchimpCategoryViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
     queryset = models.MailchimpCategory.objects.all()
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = serializers.MailchimpCategorySerializer
+
+
+class MailchimpInterestViewSet(
+        viewsets.ReadOnlyModelViewSet,
+        BulkRetrieveMixin,
+):
+    queryset = models.MailchimpInterest.objects.all()
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = serializers.MailchimpInterestSerializer
