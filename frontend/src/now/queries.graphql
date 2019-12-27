@@ -1,0 +1,13 @@
+fragment Now on NowInfo {
+  total
+  customers {
+    first_name
+    last_name
+  }
+}
+
+query Now {
+  now {
+    ...Now
+  }
+}

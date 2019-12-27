@@ -296,6 +296,19 @@ export type MutationZadarmaSetMemberForPbxCallArgs = {
   member_id: Scalars['ID']
 };
 
+export type NowCustomer = {
+   __typename?: 'NowCustomer',
+  card_id: Scalars['Int'],
+  first_name: Scalars['String'],
+  last_name: Scalars['String'],
+};
+
+export type NowInfo = {
+   __typename?: 'NowInfo',
+  total: Scalars['Int'],
+  customers: Array<NowCustomer>,
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
@@ -317,6 +330,7 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
   imageTemplateBySlug: ImageTemplate,
+  now: NowInfo,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,

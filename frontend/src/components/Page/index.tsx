@@ -31,6 +31,7 @@ interface Props {
   chrome?: 'default' | 'none' | 'fullscreen';
   noVkWidget?: boolean;
   noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
+  noWhitespace?: boolean; // useful e.g. for /now page where we don't want a white whitespace, especially in black tv mode
   og?: OpenGraph;
 }
 
@@ -59,7 +60,7 @@ const Page: PageType = props => {
     const chrome = props.chrome || 'default';
     const showMenu = chrome !== 'none';
     const showFooter = chrome === 'default';
-    const showWhitespace = chrome !== 'fullscreen';
+    const showWhitespace = chrome !== 'fullscreen' && !props.noWhitespace;
 
     const menu = showMenu ? <TildaMenu team={props.team || false} /> : null;
     const footer = showFooter ? <TildaFooter /> : null;

@@ -299,6 +299,19 @@ export type MutationZadarmaSetMemberForPbxCallArgs = {
   member_id: Scalars['ID']
 };
 
+export type NowCustomer = {
+   __typename?: 'NowCustomer',
+  card_id: Scalars['Int'],
+  first_name: Scalars['String'],
+  last_name: Scalars['String'],
+};
+
+export type NowInfo = {
+   __typename?: 'NowInfo',
+  total: Scalars['Int'],
+  customers: Array<NowCustomer>,
+};
+
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
@@ -320,6 +333,7 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
   imageTemplateBySlug: ImageTemplate,
+  now: NowInfo,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
@@ -693,6 +707,8 @@ export type ResolversTypes = {
   ImageTemplateSchema: ResolverTypeWrapper<ImageTemplateSchema>,
   ImageTemplateSchemaField: ResolverTypeWrapper<ImageTemplateSchemaField>,
   ImageTemplateSizes: ResolverTypeWrapper<ImageTemplateSizes>,
+  NowInfo: ResolverTypeWrapper<NowInfo>,
+  NowCustomer: ResolverTypeWrapper<NowCustomer>,
   RatioTrainingConnection: ResolverTypeWrapper<RatioTrainingConnection>,
   RatioTraining: ResolverTypeWrapper<RatioTraining>,
   RatioTicket: ResolverTypeWrapper<RatioTicket>,
@@ -749,6 +765,8 @@ export type ResolversParentTypes = {
   ImageTemplateSchema: ImageTemplateSchema,
   ImageTemplateSchemaField: ImageTemplateSchemaField,
   ImageTemplateSizes: ImageTemplateSizes,
+  NowInfo: NowInfo,
+  NowCustomer: NowCustomer,
   RatioTrainingConnection: RatioTrainingConnection,
   RatioTraining: RatioTraining,
   RatioTicket: RatioTicket,
@@ -913,6 +931,17 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   zadarmaSetMemberForPbxCall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationZadarmaSetMemberForPbxCallArgs, 'pbx_call_id' | 'member_id'>>,
 };
 
+export type NowCustomerResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['NowCustomer'] = ResolversParentTypes['NowCustomer']> = {
+  card_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  first_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  last_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
+export type NowInfoResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['NowInfo'] = ResolversParentTypes['NowInfo']> = {
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  customers?: Resolver<Array<ResolversTypes['NowCustomer']>, ParentType, ContextType>,
+};
+
 export type PageInfoResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
   pageNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
@@ -932,6 +961,7 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   emailSubscribeChannelsAll?: Resolver<Array<ResolversTypes['EmailSubscribeChannel']>, ParentType, ContextType>,
   imageTemplatesAll?: Resolver<Array<ResolversTypes['ImageTemplate']>, ParentType, ContextType>,
   imageTemplateBySlug?: Resolver<ResolversTypes['ImageTemplate'], ParentType, ContextType, RequireFields<QueryImageTemplateBySlugArgs, 'slug'>>,
+  now?: Resolver<ResolversTypes['NowInfo'], ParentType, ContextType>,
   ratioTrainings?: Resolver<ResolversTypes['RatioTrainingConnection'], ParentType, ContextType, QueryRatioTrainingsArgs>,
   ratioTrainingBySlug?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<QueryRatioTrainingBySlugArgs, 'slug'>>,
   ratioTrainersAll?: Resolver<Array<ResolversTypes['RatioTrainer']>, ParentType, ContextType>,
@@ -1084,6 +1114,8 @@ export type Resolvers<ContextType = TContext> = {
   ImageTemplateSchemaField?: ImageTemplateSchemaFieldResolvers<ContextType>,
   ImageTemplateSizes?: ImageTemplateSizesResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  NowCustomer?: NowCustomerResolvers<ContextType>,
+  NowInfo?: NowInfoResolvers<ContextType>,
   PageInfo?: PageInfoResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   RatioActivity?: RatioActivityResolvers<ContextType>,

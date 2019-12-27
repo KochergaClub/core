@@ -1,0 +1,14 @@
+extend type Query {
+  now: NowInfo!
+}
+
+type NowInfo {
+  total: Int!
+  customers: [NowCustomer!]!
+}
+
+type NowCustomer {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
