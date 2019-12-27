@@ -21,4 +21,4 @@ RUN npm ci
 COPY . /code/
 
 RUN NODE_ENV=production npx next build
-RUN NODE_ENV=production webpack --config webpack.server.js
+RUN NODE_ENV=production npx webpack --config webpack.server.js
