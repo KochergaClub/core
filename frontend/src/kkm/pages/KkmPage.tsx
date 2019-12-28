@@ -1,21 +1,22 @@
-import React, { useCallback, useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 
-import Page from '~/components/Page';
+import { Page, PaddedBlock } from '~/components';
 
-import MainForm from '~/kkm/MainForm';
-import MainModal from '~/kkm/MainModal';
+import MainForm from '../components/MainForm';
+import MainModal from '../components/MainModal';
 
-import { Button } from '@kocherga/frontkit';
+import { Button, Column } from '@kocherga/frontkit';
 
-import { SignMethodCalculation } from '~/kkm/kkmServer';
+import { SignMethodCalculation } from '../kkmServer';
 
-import { reducer, isChequeValid } from '~/kkm/reducer';
+import { reducer, isChequeValid } from '../reducer';
 
 interface Props {}
 
-const KkmPage = ({  }: Props): JSX.Element => {
+const KkmPage = ({}: Props): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, {
-    password: '',
     cheque: {
       email: '',
       title: '',
@@ -33,22 +34,26 @@ const KkmPage = ({  }: Props): JSX.Element => {
     <Page title="Электронные чеки" team>
       <Page.Title>Электронные чеки</Page.Title>
       <Page.Main>
-        <MainForm dispatch={dispatch} state={state} />
-        {state.modalOpen && <MainModal dispatch={dispatch} state={state} />}
-        <Button onClick={click} disabled={!isChequeValid(state)} kind="danger">
-          Пробить
-        </Button>
-        {state.outcome && (
-          <section>
-            <h2>Результат</h2>
-            <pre>{JSON.stringify(state.outcome.result, null, 2)}</pre>
-            <h2>Ошибка</h2>
-            <pre>{JSON.stringify(state.outcome.error, null, 2)}</pre>
-          </section>
-        )}
+        <PaddedBlock>
+          <Column stretch>
+            <MainForm dispatch={dispatch} state={state} />
+            <Button onClick={click} disabled={!isChequeValid(state)} size="big">
+              Пробить
+            </Button>
+          </Column>
+          {state.modalOpen && <MainModal dispatch={dispatch} state={state} />}
+          {state.outcome && (
+            <section>
+              <h2>Результат</h2>
+              <pre>{JSON.stringify(state.outcome.result, null, 2)}</pre>
+              <h2>Ошибка</h2>
+              <pre>{JSON.stringify(state.outcome.error, null, 2)}</pre>
+            </section>
+          )}
+        </PaddedBlock>
       </Page.Main>
     </Page>
   );
 };
 
-export default KkmPage;
+export default withApollo(withStaff(KkmPage));

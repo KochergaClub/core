@@ -166,6 +166,20 @@ export type ImageTemplateSizes = {
   height: Scalars['Int'],
 };
 
+export type KkmRegisterCheckInput = {
+  email: Scalars['String'],
+  title: Scalars['String'],
+  sum: Scalars['Int'],
+  sign_method_calculation: Scalars['Int'],
+};
+
+export type KkmRegisterCheckResult = {
+   __typename?: 'KkmRegisterCheckResult',
+  status: Scalars['Int'],
+  url?: Maybe<Scalars['String']>,
+  error?: Maybe<Scalars['String']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
@@ -179,6 +193,7 @@ export type Mutation = {
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
+  kkmRegisterCheck: KkmRegisterCheckResult,
   myEmailResubscribe?: Maybe<Scalars['Boolean']>,
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>,
   myEmailSubscribeToInterest?: Maybe<Scalars['Boolean']>,
@@ -250,6 +265,11 @@ export type MutationEmailSubscribeChannelCreateArgs = {
 export type MutationEmailSubscribeChannelAddEmailArgs = {
   slug: Scalars['String'],
   email: Scalars['String']
+};
+
+
+export type MutationKkmRegisterCheckArgs = {
+  params: KkmRegisterCheckInput
 };
 
 
@@ -818,6 +838,8 @@ export type ResolversTypes = {
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
   EmailSubscribeChannelCreateInput: EmailSubscribeChannelCreateInput,
+  KkmRegisterCheckInput: KkmRegisterCheckInput,
+  KkmRegisterCheckResult: ResolverTypeWrapper<KkmRegisterCheckResult>,
   RatioAddTrainingInput: RatioAddTrainingInput,
   RatioAddTicketInput: RatioAddTicketInput,
   RatioTrainingCopyScheduleFromInput: RatioTrainingCopyScheduleFromInput,
@@ -883,6 +905,8 @@ export type ResolversParentTypes = {
   Cm2CreateOrderInput: Cm2CreateOrderInput,
   Cm2CreateCustomerInput: Cm2CreateCustomerInput,
   EmailSubscribeChannelCreateInput: EmailSubscribeChannelCreateInput,
+  KkmRegisterCheckInput: KkmRegisterCheckInput,
+  KkmRegisterCheckResult: KkmRegisterCheckResult,
   RatioAddTrainingInput: RatioAddTrainingInput,
   RatioAddTicketInput: RatioAddTicketInput,
   RatioTrainingCopyScheduleFromInput: RatioTrainingCopyScheduleFromInput,
@@ -1007,6 +1031,12 @@ export type ImageTemplateSizesResolvers<ContextType = TContext, ParentType exten
   height?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
 };
 
+export type KkmRegisterCheckResultResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['KkmRegisterCheckResult'] = ResolversParentTypes['KkmRegisterCheckResult']> = {
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
 export type MutationResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   authAddUserToGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthAddUserToGroupArgs, 'user_id' | 'group_id'>>,
   authRemoveUserFromGroup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAuthRemoveUserFromGroupArgs, 'user_id' | 'group_id'>>,
@@ -1019,6 +1049,7 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   emailSubscribeChannelDelete?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelDeleteArgs, 'slug'>>,
   emailSubscribeChannelCreate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelCreateArgs, 'params'>>,
   emailSubscribeChannelAddEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelAddEmailArgs, 'slug' | 'email'>>,
+  kkmRegisterCheck?: Resolver<ResolversTypes['KkmRegisterCheckResult'], ParentType, ContextType, RequireFields<MutationKkmRegisterCheckArgs, 'params'>>,
   myEmailResubscribe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   myEmailUnsubscribe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   myEmailSubscribeToInterest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMyEmailSubscribeToInterestArgs, 'interest_id'>>,
@@ -1264,6 +1295,7 @@ export type Resolvers<ContextType = TContext> = {
   ImageTemplateSchema?: ImageTemplateSchemaResolvers<ContextType>,
   ImageTemplateSchemaField?: ImageTemplateSchemaFieldResolvers<ContextType>,
   ImageTemplateSizes?: ImageTemplateSizesResolvers<ContextType>,
+  KkmRegisterCheckResult?: KkmRegisterCheckResultResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   My?: MyResolvers<ContextType>,
   MyEmailSubscription?: MyEmailSubscriptionResolvers<ContextType>,

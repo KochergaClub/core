@@ -1,13 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.conf import settings
-
-from rest_framework import viewsets, views
+from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, BasePermission, SAFE_METHODS
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
 
 from kocherga.django.pagination import CommonPagination
 
@@ -43,6 +40,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     permission_classes = [(IsAdminUser & ReadOnly) | IsPaymentCreator | IsPaymentRedeemer]
     serializer_class = serializers.PaymentSerializer
+    pagination_class = CommonPagination
 
     @action(detail=True, methods=['post'])
     def redeem(self, request, pk=None):
@@ -52,20 +50,25 @@ class PaymentViewSet(viewsets.ModelViewSet):
         return Response('ok')
 
 
-class PagedPaymentViewSet(PaymentViewSet):
-    pagination_class = CommonPagination
-
-
-@api_view()
-@permission_classes((IsKkmUser,))
-def r_get_kkm_password(request):
-    return Response({
-        'password': settings.KKM_USER_PASSWORD,
-    })
-
-
-class KkmServerView(views.APIView):
+class KkmViewSet(viewsets.ViewSet):
     permission_classes = [IsKkmUser]
 
-    def post(self, request):
+    @action(detail=False, methods=['post'])
+    def register_check(self, request):
+        # TODO - serializer
+        return Response(
+            kkm.execute(
+                kkm.getCheckRequest(
+                    kkm.OnlineCheck(
+                        email=request.data['email'],
+                        title=request.data['title'],
+                        sum=int(request.data['sum']),
+                        signMethodCalculation=request.data['sign_method_calculation'],
+                    )
+                )
+            )
+        )
+
+    @action(detail=False, methods=['post'])
+    def execute(self, request):
         kkm.execute(request.data)

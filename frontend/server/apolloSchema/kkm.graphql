@@ -1,0 +1,16 @@
+extend type Mutation {
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+}
+
+input KkmRegisterCheckInput {
+  email: String!
+  title: String!
+  sum: Int!
+  sign_method_calculation: Int!
+}
+
+type KkmRegisterCheckResult {
+  status: Int!
+  url: String
+  error: String
+}

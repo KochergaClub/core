@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
-import { Action, State } from './reducer';
-import { SignMethodCalculation } from './kkmServer';
+import { Action, State } from '../reducer';
+import { SignMethodCalculation } from '../kkmServer';
 
-import { KKMServer } from './kkmServer';
+import { useKkmRegisterCheckMutation } from '../queries.generated';
 
 interface Props {
   state: State;
@@ -13,8 +13,8 @@ interface Props {
 }
 
 export default function MainModal({ state, dispatch }: Props) {
+  const [registerMutation] = useKkmRegisterCheckMutation();
   const [loading, setLoading] = useState(false);
-  const [server] = useState(() => new KKMServer());
 
   const close = () => {
     dispatch({
@@ -22,43 +22,42 @@ export default function MainModal({ state, dispatch }: Props) {
     });
   };
 
-  const click = (): void => {
+  const click = async () => {
     const request = {
       title: state.cheque.title,
-      signMethodCalculation: state.cheque.method,
+      sign_method_calculation: state.cheque.method,
       email: state.cheque.email,
       sum: state.cheque.amount,
     };
 
     setLoading(true);
 
-    server.setPassword(state.password);
-
-    server.call(
-      server.getCheckRequest(request),
-      (result: object) => {
-        dispatch({
-          type: 'SET_OUTCOME',
-          payload: {
-            result,
-            error: {},
-          },
-        });
-      },
-      (error: object) => {
-        dispatch({
-          type: 'SET_OUTCOME',
-          payload: {
-            result: {},
-            error,
-          },
-        });
-      }
-    );
+    try {
+      const result = await registerMutation({
+        variables: {
+          params: request,
+        },
+      });
+      dispatch({
+        type: 'SET_OUTCOME',
+        payload: {
+          result: result.data || {},
+          error: {},
+        },
+      });
+    } catch (e) {
+      dispatch({
+        type: 'SET_OUTCOME',
+        payload: {
+          result: {},
+          error: e,
+        },
+      });
+    }
   };
 
   return (
-    <Modal isOpen={true}>
+    <Modal>
       <Modal.Header toggle={close}>Напечатать чек</Modal.Header>
       <Modal.Body>
         <header>{state.cheque.title}</header>

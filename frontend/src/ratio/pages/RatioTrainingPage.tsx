@@ -6,8 +6,6 @@ import { A, Column, Row, Label } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
-import { selectUser } from '~/core/selectors';
-
 import {
   Page,
   ActionButton,
@@ -16,8 +14,6 @@ import {
 } from '~/components';
 
 import PageHeader from '~/blocks/PageHeader';
-
-import { loadKkmPassword } from '~/kkm/actions';
 
 import {
   TrainingFragment,
@@ -116,17 +112,8 @@ const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
   );
 };
 
-RatioTrainingPage.getInitialProps = async ({
-  store: { dispatch, getState },
-  query,
-}) => {
-  const user = selectUser(getState());
-
+RatioTrainingPage.getInitialProps = async ({ query }) => {
   const slug = query.slug as string;
-
-  if (user.permissions.includes('cashier.kkm_user')) {
-    await dispatch(loadKkmPassword());
-  }
 
   return { slug };
 };

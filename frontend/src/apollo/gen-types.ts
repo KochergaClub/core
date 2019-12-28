@@ -163,6 +163,20 @@ export type ImageTemplateSizes = {
   height: Scalars['Int'],
 };
 
+export type KkmRegisterCheckInput = {
+  email: Scalars['String'],
+  title: Scalars['String'],
+  sum: Scalars['Int'],
+  sign_method_calculation: Scalars['Int'],
+};
+
+export type KkmRegisterCheckResult = {
+   __typename?: 'KkmRegisterCheckResult',
+  status: Scalars['Int'],
+  url?: Maybe<Scalars['String']>,
+  error?: Maybe<Scalars['String']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
@@ -176,6 +190,7 @@ export type Mutation = {
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
+  kkmRegisterCheck: KkmRegisterCheckResult,
   myEmailResubscribe?: Maybe<Scalars['Boolean']>,
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>,
   myEmailSubscribeToInterest?: Maybe<Scalars['Boolean']>,
@@ -247,6 +262,11 @@ export type MutationEmailSubscribeChannelCreateArgs = {
 export type MutationEmailSubscribeChannelAddEmailArgs = {
   slug: Scalars['String'],
   email: Scalars['String']
+};
+
+
+export type MutationKkmRegisterCheckArgs = {
+  params: KkmRegisterCheckInput
 };
 
 

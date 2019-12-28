@@ -1,0 +1,7 @@
+mutation KkmRegisterCheck($params: KkmRegisterCheckInput!) {
+  kkmRegisterCheck(params: $params) {
+    url
+    error
+    status
+  }
+}

@@ -4,8 +4,8 @@ import { Input, Column, Label } from '@kocherga/frontkit';
 
 import Suggestions from './Suggestions';
 
-import { Action, State } from './reducer';
-import { SignMethodCalculation } from './kkmServer';
+import { Action, State } from '../reducer';
+import { SignMethodCalculation } from '../kkmServer';
 
 const FormSection = styled.section`
   width: 100%;
@@ -20,7 +20,7 @@ interface Props {
   dispatch: (a: Action) => void;
 }
 
-export default function MainForm({ dispatch, state }: Props) {
+const MainForm: React.FC<Props> = ({ dispatch, state }) => {
   return (
     <Column gutter={16}>
       <FormSection>
@@ -54,7 +54,7 @@ export default function MainForm({ dispatch, state }: Props) {
           value={state.cheque.amount}
         />
         <Suggestions
-          values={[2000, 12000, 30000, 36000]}
+          values={[3000, 12000, 30000, 36000]}
           current={state.cheque.amount}
           setValue={value => dispatch({ type: 'SET_AMOUNT', payload: value })}
         />
@@ -73,16 +73,6 @@ export default function MainForm({ dispatch, state }: Props) {
         />
       </FormSection>
       <FormSection>
-        <Label>Пароль:</Label>
-        <Input
-          type="password"
-          value={state.password}
-          onChange={e =>
-            dispatch({ type: 'SET_PASSWORD', payload: e.currentTarget.value })
-          }
-        />
-      </FormSection>
-      <FormSection>
         <Label>e-mail:</Label>
         <Input
           type="email"
@@ -94,4 +84,6 @@ export default function MainForm({ dispatch, state }: Props) {
       </FormSection>
     </Column>
   );
-}
+};
+
+export default MainForm;

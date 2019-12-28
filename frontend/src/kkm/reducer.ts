@@ -1,7 +1,6 @@
 import { SignMethodCalculation } from './kkmServer';
 
 export interface State {
-  password: string;
   cheque: {
     email: string;
     title: string;
@@ -30,11 +29,6 @@ interface SetAmountAction {
   payload: number;
 }
 
-interface SetPasswordAction {
-  type: 'SET_PASSWORD';
-  payload: string;
-}
-
 interface SetMethodAction {
   type: 'SET_METHOD';
   payload: SignMethodCalculation;
@@ -60,19 +54,13 @@ export type Action =
   | SetEmailAction
   | SetTitleAction
   | SetAmountAction
-  | SetPasswordAction
   | SetMethodAction
   | StartConfirmationAction
   | CancelConfirmationAction
   | SetOutcomeAction;
 
 export const isChequeValid = (state: State) => {
-  return (
-    state.cheque.title &&
-    state.cheque.email &&
-    state.cheque.amount &&
-    state.password
-  );
+  return state.cheque.title && state.cheque.email && state.cheque.amount;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -100,11 +88,6 @@ export const reducer = (state: State, action: Action): State => {
           ...state.cheque,
           amount: action.payload,
         },
-      };
-    case 'SET_PASSWORD':
-      return {
-        ...state,
-        password: action.payload,
       };
     case 'SET_METHOD':
       return {

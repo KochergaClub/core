@@ -17,12 +17,14 @@ def execute(data):
     if not settings.KKM_SERVER:
         raise Exception("KKM_SERVER is not set in settings")
 
-    requests.post(
+    r = requests.post(
         settings.KKM_SERVER + '/Execute',
         verify=settings.KKM_SERVER_CERT,
         auth=('User', settings.KKM_USER_PASSWORD),
         json=data,
     )
+    r.raise_for_status()
+    return r.json()
 
 
 def getTextRequest(text):
