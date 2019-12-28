@@ -1,21 +1,18 @@
 import { useCallback, useState } from 'react';
-import { connect } from 'react-redux';
-
 import styled from 'styled-components';
+
 import { FaGlobe, FaLock } from 'react-icons/fa';
 
 import { A, Button, Column } from '@kocherga/frontkit';
 
-import { State } from '~/redux/store';
-import { useDispatch } from '~/common/hooks';
-
-import { Customer } from '../types';
-import { setPrivacyMode } from '../actions';
-import { selectCustomer } from '../selectors';
-
 import TVIcon from './TVIcon';
 
 import HeadedFragment from './HeadedFragment';
+
+import {
+  MembershipFragment,
+  useMyPrivacyModeSetMutation,
+} from '../queries.generated';
 
 const TvContainer = styled.div`
   position: relative;
@@ -45,52 +42,43 @@ const oppositePrivacyMode = (mode: string) =>
   mode == 'private' ? 'public' : 'private';
 
 interface Props {
-  customer: Customer;
+  membership: MembershipFragment;
 }
 
-const PrivacySettings: React.FC<Props> = ({ customer }) => {
+const PrivacySettings: React.FC<Props> = ({ membership }) => {
   const [loading, setLoading] = useState(false);
-
-  const dispatch = useDispatch();
+  const [setPrivacyModeMutation] = useMyPrivacyModeSetMutation();
 
   const flipPrivacyMode = useCallback(async () => {
     // TODO - move `loading` state to redux
     setLoading(true);
-    await dispatch(setPrivacyMode(oppositePrivacyMode(customer.privacy_mode)));
+    await setPrivacyModeMutation({
+      variables: {
+        mode: oppositePrivacyMode(membership.privacy_mode),
+      },
+    });
     setLoading(false);
-  }, [dispatch, customer.privacy_mode]);
+  }, [setPrivacyModeMutation, membership.privacy_mode]);
 
   return (
     <HeadedFragment title="Настройки приватности">
       <Column centered>
-        <PrivacyTv mode={customer.privacy_mode} />
+        <PrivacyTv mode={membership.privacy_mode} />
         <div>
           Ваше присутствие{' '}
           <strong>
-            {customer.privacy_mode == 'public'
+            {membership.privacy_mode == 'public'
               ? 'отображается'
               : 'не отображается'}
           </strong>{' '}
-          на <A href="https://now.kocherga.club">now.kocherga.club</A> и
-          телевизорах в Кочерге.
+          на странице <A href="/now">/now</A> и телевизорах в Кочерге.
         </div>
         <Button onClick={flipPrivacyMode} loading={loading} disabled={loading}>
-          {customer.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
+          {membership.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
         </Button>
       </Column>
     </HeadedFragment>
   );
 };
 
-const MaybePrivacySettings: React.FC<{ customer?: Customer }> = ({
-  customer,
-}) => {
-  if (!customer) {
-    return null;
-  }
-  return <PrivacySettings customer={customer} />;
-};
-
-export default connect((state: State) => ({ customer: selectCustomer(state) }))(
-  MaybePrivacySettings
-);
+export default PrivacySettings;

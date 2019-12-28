@@ -2,16 +2,22 @@ import { A, HR } from '@kocherga/frontkit';
 
 import TicketsList from '../components/TicketsList';
 
+import { MyPageFragment } from '../queries.generated';
+
 const OtherEvents = () => (
   <div>
     <A href="/">Посмотреть ближайшие события</A>
   </div>
 );
 
-const TicketsTab = () => {
+interface Props {
+  my: MyPageFragment;
+}
+
+const TicketsTab: React.FC<Props> = ({ my }) => {
   return (
     <article>
-      <TicketsList />
+      <TicketsList my={my} />
       <HR />
       <OtherEvents />
     </article>

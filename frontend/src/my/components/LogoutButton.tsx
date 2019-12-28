@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Button } from '@kocherga/frontkit';
-import { useAPI } from '../../common/hooks';
+import { useAPI } from '~/common/hooks';
 
 export default function LogoutButton() {
   const [acting, setActing] = useState(false);

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TVIcon = () => (
   <svg
     enableBackground="new 0 0 50 50"

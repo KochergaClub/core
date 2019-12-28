@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Button, Column, Label, Input } from '@kocherga/frontkit';
-import { useCommonHotkeys, useAPI } from '../../common/hooks';
+import { useCommonHotkeys, useAPI } from '~/common/hooks';
 
 import HeadedFragment from './HeadedFragment';
 
-export default function SetPassword() {
+const SetPassword: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
@@ -61,4 +61,6 @@ export default function SetPassword() {
       </Column>
     </HeadedFragment>
   );
-}
+};
+
+export default SetPassword;

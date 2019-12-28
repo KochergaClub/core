@@ -132,6 +132,14 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+/** TODO - move to events.graphql */
+export type EventsPublicEvent = {
+   __typename?: 'EventsPublicEvent',
+  event_id: Scalars['ID'],
+  start: Scalars['String'],
+  title: Scalars['String'],
+};
+
 export type ImageTemplate = {
    __typename?: 'ImageTemplate',
   name: Scalars['ID'],
@@ -171,6 +179,12 @@ export type Mutation = {
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
+  myEmailResubscribe?: Maybe<Scalars['Boolean']>,
+  myEmailUnsubscribe?: Maybe<Scalars['Boolean']>,
+  myEmailSubscribeToInterest?: Maybe<Scalars['Boolean']>,
+  myEmailUnsubscribeFromInterest?: Maybe<Scalars['Boolean']>,
+  myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
+  myTicketDelete?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
   ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
@@ -239,6 +253,26 @@ export type MutationEmailSubscribeChannelAddEmailArgs = {
 };
 
 
+export type MutationMyEmailSubscribeToInterestArgs = {
+  interest_id: Scalars['ID']
+};
+
+
+export type MutationMyEmailUnsubscribeFromInterestArgs = {
+  interest_id: Scalars['ID']
+};
+
+
+export type MutationMyPrivacyModeSetArgs = {
+  mode: Scalars['String']
+};
+
+
+export type MutationMyTicketDeleteArgs = {
+  event_id: Scalars['ID']
+};
+
+
 export type MutationRatioAddTrainingArgs = {
   params: RatioAddTrainingInput
 };
@@ -299,6 +333,53 @@ export type MutationZadarmaSetMemberForPbxCallArgs = {
   member_id: Scalars['ID']
 };
 
+export type My = {
+   __typename?: 'My',
+  email?: Maybe<Scalars['String']>,
+  is_authenticated: Scalars['Boolean'],
+  is_staff?: Maybe<Scalars['Boolean']>,
+  permissions: Array<Scalars['String']>,
+  membership?: Maybe<MyMembership>,
+  tickets: Array<MyTicket>,
+  email_subscription: MyEmailSubscription,
+};
+
+export type MyEmailSubscription = {
+   __typename?: 'MyEmailSubscription',
+  status: Scalars['String'],
+  interests?: Maybe<Array<MyEmailSubscriptionInterest>>,
+};
+
+export type MyEmailSubscriptionInterest = {
+   __typename?: 'MyEmailSubscriptionInterest',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  subscribed?: Maybe<Scalars['Boolean']>,
+};
+
+export type MyMembership = {
+   __typename?: 'MyMembership',
+  card_id: Scalars['Int'],
+  subscription_until?: Maybe<Scalars['String']>,
+  last_visit?: Maybe<Scalars['String']>,
+  total_spent: Scalars['Int'],
+  privacy_mode: Scalars['String'],
+  orders_count: Scalars['Int'],
+  orders: Array<MyOrder>,
+};
+
+export type MyOrder = {
+   __typename?: 'MyOrder',
+  order_id: Scalars['ID'],
+  start_dt: Scalars['String'],
+  end_dt?: Maybe<Scalars['String']>,
+};
+
+export type MyTicket = {
+   __typename?: 'MyTicket',
+  event: EventsPublicEvent,
+};
+
 export type NowCustomer = {
    __typename?: 'NowCustomer',
   card_id: Scalars['Int'],
@@ -333,6 +414,7 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
   imageTemplateBySlug: ImageTemplate,
+  my: My,
   now: NowInfo,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
@@ -707,6 +789,13 @@ export type ResolversTypes = {
   ImageTemplateSchema: ResolverTypeWrapper<ImageTemplateSchema>,
   ImageTemplateSchemaField: ResolverTypeWrapper<ImageTemplateSchemaField>,
   ImageTemplateSizes: ResolverTypeWrapper<ImageTemplateSizes>,
+  My: ResolverTypeWrapper<My>,
+  MyMembership: ResolverTypeWrapper<MyMembership>,
+  MyOrder: ResolverTypeWrapper<MyOrder>,
+  MyTicket: ResolverTypeWrapper<MyTicket>,
+  EventsPublicEvent: ResolverTypeWrapper<EventsPublicEvent>,
+  MyEmailSubscription: ResolverTypeWrapper<MyEmailSubscription>,
+  MyEmailSubscriptionInterest: ResolverTypeWrapper<MyEmailSubscriptionInterest>,
   NowInfo: ResolverTypeWrapper<NowInfo>,
   NowCustomer: ResolverTypeWrapper<NowCustomer>,
   RatioTrainingConnection: ResolverTypeWrapper<RatioTrainingConnection>,
@@ -765,6 +854,13 @@ export type ResolversParentTypes = {
   ImageTemplateSchema: ImageTemplateSchema,
   ImageTemplateSchemaField: ImageTemplateSchemaField,
   ImageTemplateSizes: ImageTemplateSizes,
+  My: My,
+  MyMembership: MyMembership,
+  MyOrder: MyOrder,
+  MyTicket: MyTicket,
+  EventsPublicEvent: EventsPublicEvent,
+  MyEmailSubscription: MyEmailSubscription,
+  MyEmailSubscriptionInterest: MyEmailSubscriptionInterest,
   NowInfo: NowInfo,
   NowCustomer: NowCustomer,
   RatioTrainingConnection: RatioTrainingConnection,
@@ -884,6 +980,12 @@ export type EmailSubscribeChannelResolvers<ContextType = TContext, ParentType ex
   interests?: Resolver<Array<ResolversTypes['EmailMailchimpInterest']>, ParentType, ContextType>,
 };
 
+export type EventsPublicEventResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['EventsPublicEvent'] = ResolversParentTypes['EventsPublicEvent']> = {
+  event_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  start?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+};
+
 export type ImageTemplateResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['ImageTemplate'] = ResolversParentTypes['ImageTemplate']> = {
   name?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   schema?: Resolver<ResolversTypes['ImageTemplateSchema'], ParentType, ContextType>,
@@ -917,6 +1019,12 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   emailSubscribeChannelDelete?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelDeleteArgs, 'slug'>>,
   emailSubscribeChannelCreate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelCreateArgs, 'params'>>,
   emailSubscribeChannelAddEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationEmailSubscribeChannelAddEmailArgs, 'slug' | 'email'>>,
+  myEmailResubscribe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  myEmailUnsubscribe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  myEmailSubscribeToInterest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMyEmailSubscribeToInterestArgs, 'interest_id'>>,
+  myEmailUnsubscribeFromInterest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMyEmailUnsubscribeFromInterestArgs, 'interest_id'>>,
+  myPrivacyModeSet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMyPrivacyModeSetArgs, 'mode'>>,
+  myTicketDelete?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationMyTicketDeleteArgs, 'event_id'>>,
   ratioAddTraining?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<MutationRatioAddTrainingArgs, 'params'>>,
   ratioAddTicket?: Resolver<ResolversTypes['RatioTicket'], ParentType, ContextType, RequireFields<MutationRatioAddTicketArgs, 'params'>>,
   ratioTrainingCopyScheduleFrom?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRatioTrainingCopyScheduleFromArgs, 'params'>>,
@@ -929,6 +1037,47 @@ export type MutationResolvers<ContextType = TContext, ParentType extends Resolve
   watchmenCreateWatchman?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationWatchmenCreateWatchmanArgs, 'params'>>,
   watchmenUpdateShift?: Resolver<ResolversTypes['WatchmenShift'], ParentType, ContextType, RequireFields<MutationWatchmenUpdateShiftArgs, 'params'>>,
   zadarmaSetMemberForPbxCall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationZadarmaSetMemberForPbxCallArgs, 'pbx_call_id' | 'member_id'>>,
+};
+
+export type MyResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['My'] = ResolversParentTypes['My']> = {
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  is_authenticated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  is_staff?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  permissions?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>,
+  membership?: Resolver<Maybe<ResolversTypes['MyMembership']>, ParentType, ContextType>,
+  tickets?: Resolver<Array<ResolversTypes['MyTicket']>, ParentType, ContextType>,
+  email_subscription?: Resolver<ResolversTypes['MyEmailSubscription'], ParentType, ContextType>,
+};
+
+export type MyEmailSubscriptionResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['MyEmailSubscription'] = ResolversParentTypes['MyEmailSubscription']> = {
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  interests?: Resolver<Maybe<Array<ResolversTypes['MyEmailSubscriptionInterest']>>, ParentType, ContextType>,
+};
+
+export type MyEmailSubscriptionInterestResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['MyEmailSubscriptionInterest'] = ResolversParentTypes['MyEmailSubscriptionInterest']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  subscribed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+};
+
+export type MyMembershipResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['MyMembership'] = ResolversParentTypes['MyMembership']> = {
+  card_id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  subscription_until?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  last_visit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  total_spent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  privacy_mode?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  orders_count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  orders?: Resolver<Array<ResolversTypes['MyOrder']>, ParentType, ContextType>,
+};
+
+export type MyOrderResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['MyOrder'] = ResolversParentTypes['MyOrder']> = {
+  order_id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  start_dt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  end_dt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type MyTicketResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['MyTicket'] = ResolversParentTypes['MyTicket']> = {
+  event?: Resolver<ResolversTypes['EventsPublicEvent'], ParentType, ContextType>,
 };
 
 export type NowCustomerResolvers<ContextType = TContext, ParentType extends ResolversParentTypes['NowCustomer'] = ResolversParentTypes['NowCustomer']> = {
@@ -961,6 +1110,7 @@ export type QueryResolvers<ContextType = TContext, ParentType extends ResolversP
   emailSubscribeChannelsAll?: Resolver<Array<ResolversTypes['EmailSubscribeChannel']>, ParentType, ContextType>,
   imageTemplatesAll?: Resolver<Array<ResolversTypes['ImageTemplate']>, ParentType, ContextType>,
   imageTemplateBySlug?: Resolver<ResolversTypes['ImageTemplate'], ParentType, ContextType, RequireFields<QueryImageTemplateBySlugArgs, 'slug'>>,
+  my?: Resolver<ResolversTypes['My'], ParentType, ContextType>,
   now?: Resolver<ResolversTypes['NowInfo'], ParentType, ContextType>,
   ratioTrainings?: Resolver<ResolversTypes['RatioTrainingConnection'], ParentType, ContextType, QueryRatioTrainingsArgs>,
   ratioTrainingBySlug?: Resolver<ResolversTypes['RatioTraining'], ParentType, ContextType, RequireFields<QueryRatioTrainingBySlugArgs, 'slug'>>,
@@ -1109,11 +1259,18 @@ export type Resolvers<ContextType = TContext> = {
   EmailMailchimpCategory?: EmailMailchimpCategoryResolvers<ContextType>,
   EmailMailchimpInterest?: EmailMailchimpInterestResolvers<ContextType>,
   EmailSubscribeChannel?: EmailSubscribeChannelResolvers<ContextType>,
+  EventsPublicEvent?: EventsPublicEventResolvers<ContextType>,
   ImageTemplate?: ImageTemplateResolvers<ContextType>,
   ImageTemplateSchema?: ImageTemplateSchemaResolvers<ContextType>,
   ImageTemplateSchemaField?: ImageTemplateSchemaFieldResolvers<ContextType>,
   ImageTemplateSizes?: ImageTemplateSizesResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  My?: MyResolvers<ContextType>,
+  MyEmailSubscription?: MyEmailSubscriptionResolvers<ContextType>,
+  MyEmailSubscriptionInterest?: MyEmailSubscriptionInterestResolvers<ContextType>,
+  MyMembership?: MyMembershipResolvers<ContextType>,
+  MyOrder?: MyOrderResolvers<ContextType>,
+  MyTicket?: MyTicketResolvers<ContextType>,
   NowCustomer?: NowCustomerResolvers<ContextType>,
   NowInfo?: NowInfoResolvers<ContextType>,
   PageInfo?: PageInfoResolvers<ContextType>,

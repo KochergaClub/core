@@ -1,40 +1,54 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { Row, Column } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
-import AsyncButton from '~/components/AsyncButton';
-import Badge from '~/components/Badge';
+import { AsyncButton, Badge } from '~/components';
 
 import {
-  getEmailSubscriptionStatus,
-  callEmailAction,
-  updateInterests,
-} from '../api';
-import { MySubscriptionStatus, MailchimpMemberInterest } from '../types';
+  EmailSubscriptionFragment,
+  EmailSubscriptionInterestFragment,
+  useMyEmailUnsubscribeMutation,
+  useMyEmailResubscribeMutation,
+  useMyEmailUnsubscribeFromInterestMutation,
+  useMyEmailSubscribeToInterestMutation,
+} from '../queries.generated';
 
 import HeadedFragment from './HeadedFragment';
 
-type SetInterestStatusCb = (id: string, status: boolean) => Promise<void>;
-
 interface InterestProps {
-  interest: MailchimpMemberInterest;
-  setInterestStatus: SetInterestStatusCb;
+  interest: EmailSubscriptionInterestFragment;
 }
 
-const InterestCheckbox: React.FC<InterestProps> = ({
-  interest,
-  setInterestStatus,
-}) => {
+const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
+  const [subscribeMutation] = useMyEmailSubscribeToInterestMutation({
+    refetchQueries: ['MyPage'],
+    awaitRefetchQueries: true,
+  });
+  const [unsubscribeMutation] = useMyEmailUnsubscribeFromInterestMutation({
+    refetchQueries: ['MyPage'],
+    awaitRefetchQueries: true,
+  });
+
+  const act = useCallback(async () => {
+    const mutation = interest.subscribed
+      ? unsubscribeMutation
+      : subscribeMutation;
+    await mutation({
+      variables: {
+        interest_id: interest.id,
+      },
+    });
+  }, [
+    interest.subscribed,
+    interest.id,
+    subscribeMutation,
+    unsubscribeMutation,
+  ]);
+
   return (
     <Row spaced>
       <div>{interest.name}</div>
-      <AsyncButton
-        act={async () =>
-          await setInterestStatus(interest.id, !interest.subscribed)
-        }
-        small
-      >
+      <AsyncButton act={act} small>
         {interest.subscribed ? 'subscribed' : 'unsubscribed'}
       </AsyncButton>
     </Row>
@@ -42,97 +56,56 @@ const InterestCheckbox: React.FC<InterestProps> = ({
 };
 
 interface InterestListProps {
-  interests: MailchimpMemberInterest[];
-  setInterestStatus: SetInterestStatusCb;
+  interests: EmailSubscriptionInterestFragment[];
 }
 
-const InterestList: React.FC<InterestListProps> = ({
-  interests,
-  setInterestStatus,
-}) => {
+const InterestList: React.FC<InterestListProps> = ({ interests }) => {
   return (
     <Column>
       {interests.map(interest => (
-        <InterestCheckbox
-          key={interest.id}
-          interest={interest}
-          setInterestStatus={setInterestStatus}
-        />
+        <InterestCheckbox key={interest.id} interest={interest} />
       ))}
     </Column>
   );
 };
 
-const EmailSettings: React.FC<{}> = () => {
-  const [status, setStatus] = useState<MySubscriptionStatus | undefined>(
-    undefined
-  );
+interface Props {
+  email_subscription: EmailSubscriptionFragment;
+}
 
-  const api = useAPI();
+const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
+  const [resubscribeCb] = useMyEmailResubscribeMutation({
+    refetchQueries: ['MyPage'],
+    awaitRefetchQueries: true,
+  });
+  const [unsubscribeCb] = useMyEmailUnsubscribeMutation({
+    refetchQueries: ['MyPage'],
+    awaitRefetchQueries: true,
+  });
 
-  const fetchStatus = useCallback(async () => {
-    setStatus(await getEmailSubscriptionStatus(api));
-  }, [api]);
-
-  useEffect(() => {
-    fetchStatus();
-  }, [fetchStatus]);
-
-  const resubscribeCb = useCallback(async () => {
-    await callEmailAction(api, 'resubscribe');
-    await fetchStatus();
-  }, [api, fetchStatus]);
-
-  const unsubscribeCb = useCallback(async () => {
-    await callEmailAction(api, 'unsubscribe');
-    await fetchStatus();
-  }, [api, fetchStatus]);
-
-  const setInterestStatus = useCallback(
-    async (id: string, newStatus: boolean) => {
-      console.log(`setting interest status for ${id} -> ${newStatus}`);
-      const interestIds: string[] = [];
-
-      if (!status || status.status === 'none') {
-        return;
-      }
-
-      status.interests.forEach(interest => {
-        if (interest.id === id) {
-          if (newStatus) {
-            interestIds.push(interest.id);
-          }
-        } else {
-          if (interest.subscribed) {
-            interestIds.push(interest.id);
-          }
-        }
-      });
-      console.log(interestIds);
-
-      await updateInterests(api, interestIds);
-      await fetchStatus();
-    },
-    [api, status, fetchStatus]
-  );
-
-  if (status === undefined) {
-    return null; // TODO - spinner
-  }
   return (
     <HeadedFragment title="Рассылки">
       <Column centered>
-        <Badge>{status.status}</Badge>
-        {status.status === 'unsubscribed' && (
-          <AsyncButton act={resubscribeCb}>Подписаться заново</AsyncButton>
+        <Badge>{email_subscription.status}</Badge>
+        {email_subscription.status === 'unsubscribed' && (
+          <AsyncButton
+            act={async () => {
+              await resubscribeCb();
+            }}
+          >
+            Подписаться заново
+          </AsyncButton>
         )}
-        {status.status === 'subscribed' && (
+        {email_subscription.status === 'subscribed' && (
           <Column centered gutter={20}>
-            <InterestList
-              interests={status.interests}
-              setInterestStatus={setInterestStatus}
-            />
-            <AsyncButton act={unsubscribeCb}>
+            {email_subscription.interests ? (
+              <InterestList interests={email_subscription.interests} />
+            ) : null}
+            <AsyncButton
+              act={async () => {
+                await unsubscribeCb();
+              }}
+            >
               Отписаться от всех писем
             </AsyncButton>
           </Column>

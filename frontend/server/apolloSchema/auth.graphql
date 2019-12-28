@@ -1,5 +1,5 @@
 extend type Query {
-  currentUser: AuthCurrentUser!
+  currentUser: AuthCurrentUser! # deprecated, see `me` in `me.graphql` instead
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
 }

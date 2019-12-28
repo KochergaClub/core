@@ -2,13 +2,10 @@ import { combineReducers } from 'redux';
 
 import coreReducer from '~/core/reducer';
 
-// TODO - lazy-load non-core reducers instead of using everything; replace with replaceReducer()
-import myReducer from '~/my/reducer';
 import kkmReducer from '~/kkm/redux-reducer';
 import eventsReducer from '~/events/reducer';
 
 const reducer = combineReducers({
-  my: myReducer,
   core: coreReducer,
   kkm: kkmReducer,
   events: eventsReducer,

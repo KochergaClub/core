@@ -1,24 +1,20 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { useState } from 'react';
 import styled from 'styled-components';
+
+import { withApollo } from '~/apollo/client';
+import { NextApolloPage } from '~/apollo/types';
+import { requireAuth } from '~/auth/utils';
 
 import { A, Column, RowNav } from '@kocherga/frontkit';
 
-import { NextPage } from '~/common/types';
-import { APIError } from '~/common/api';
-import { selectUser } from '~/core/selectors';
-import { useUser } from '~/common/hooks';
+import { ApolloQueryResults, Page } from '~/components';
 
-import VisitsTab from '~/my/tabs/VisitsTab';
-import TicketsTab from '~/my/tabs/TicketsTab';
-import SettingsTab from '~/my/tabs/SettingsTab';
-import LogoutButton from '~/my/components/LogoutButton';
+import VisitsTab from '../tabs/VisitsTab';
+import TicketsTab from '../tabs/TicketsTab';
+import SettingsTab from '../tabs/SettingsTab';
+import LogoutButton from '../components/LogoutButton';
 
-import Page from '~/components/Page';
-
-import * as actions from '~/my/actions';
-import * as selectors from '~/my/selectors';
+import { useMyPageQuery, MyPageFragment } from '../queries.generated';
 
 const AdminSection = () => (
   <div style={{ marginBottom: 10 }}>
@@ -31,66 +27,68 @@ const SectionWrapper = styled.div`
   margin-top: 20px;
 `;
 
-interface OwnProps {}
+type TabCode = 'visits' | 'tickets' | 'settings';
 
-const MyPage: NextPage<OwnProps> = () => {
-  const user = useUser();
-  const dispatch = useDispatch();
-  const tab = useSelector(selectors.selectTab);
+interface Props {}
 
-  const getSection = () => {
+const MyPage: NextApolloPage<Props> = () => {
+  const queryResults = useMyPageQuery();
+
+  const [tab, setTab] = useState<TabCode>('visits');
+
+  const getSection = (my: MyPageFragment) => {
     switch (tab) {
       case 'visits':
-        return <VisitsTab />;
+        return <VisitsTab my={my} />;
       case 'tickets':
-        return <TicketsTab />;
+        return <TicketsTab my={my} />;
       case 'settings':
-        return <SettingsTab />;
+        return <SettingsTab my={my} />;
       default:
         throw new Error('Unknown tab');
     }
   };
 
+  const tabsWithNames = [
+    ['visits', 'Посещения'],
+    ['settings', 'Настройки'],
+  ] as [TabCode, string][];
+
   return (
     <Page title="Личный кабинет">
       <Page.Title>Личный кабинет</Page.Title>
       <Page.Main>
-        <Column centered>
-          <div>
-            <code>{user.email}</code> <LogoutButton />
-          </div>
-          {user.is_staff && <AdminSection />}
-          <RowNav>
-            {[['visits', 'Посещения'], ['settings', 'Настройки']].map(
-              ([t, tName]) => (
-                <RowNav.Item
-                  key={t}
-                  selected={tab === t}
-                  select={() => dispatch(actions.openTab(t))}
-                >
-                  {tName}
-                </RowNav.Item>
-              )
-            )}
-          </RowNav>
-          <SectionWrapper>{getSection()}</SectionWrapper>
-        </Column>
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { my } }) => (
+            <Column centered>
+              <div>
+                <code>{my.email}</code> <LogoutButton />
+              </div>
+              {my.is_staff && <AdminSection />}
+              <RowNav>
+                {tabsWithNames.map(([t, tName]) => (
+                  <RowNav.Item
+                    key={t}
+                    selected={tab === t}
+                    select={() => setTab(t)}
+                  >
+                    {tName}
+                  </RowNav.Item>
+                ))}
+              </RowNav>
+              <SectionWrapper>{getSection(my)}</SectionWrapper>
+            </Column>
+          )}
+        </ApolloQueryResults>
       </Page.Main>
     </Page>
   );
 };
 
-MyPage.getInitialProps = async ({ store: { dispatch, getState } }) => {
-  const user = selectUser(getState());
-
-  if (!user.email) {
-    throw new APIError('You need to be logged in to see /my', 403);
-  }
-
-  await dispatch(actions.loadCmData());
-  await dispatch(actions.loadTickets());
+MyPage.getInitialProps = async ({ apolloClient }) => {
+  await requireAuth(apolloClient, { is_authenticated: true });
 
   return {};
 };
 
-export default MyPage;
+export default withApollo(MyPage);

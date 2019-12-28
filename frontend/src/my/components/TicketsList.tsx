@@ -1,25 +1,28 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useCallback } from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { A, Column } from '@kocherga/frontkit';
 
-import AsyncButton from '~/components/AsyncButton';
-import { State } from '~/redux/store';
+import { AsyncButton } from '~/components';
 import { timezone, formatDate } from '~/common/utils';
-import { useDispatch } from '~/common/hooks';
 
-import { MyTicket } from '../types';
-import { deleteTicket } from '../actions';
-import { selectTickets } from '../selectors';
+import {
+  MyPageFragment,
+  MyTicketFragment,
+  useMyTicketDeleteMutation,
+} from '../queries.generated';
 
-const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
-  const dispatch = useDispatch();
+const TicketCard = ({ ticket }: { ticket: MyTicketFragment }) => {
+  const [deleteMutation] = useMyTicketDeleteMutation();
 
-  const cancel = React.useCallback(async () => {
-    await dispatch(deleteTicket(ticket));
-  }, [dispatch, ticket]);
+  const cancel = useCallback(async () => {
+    await deleteMutation({
+      variables: {
+        event_id: ticket.event.event_id,
+      },
+    });
+  }, [deleteMutation, ticket.event.event_id]);
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 
@@ -35,10 +38,12 @@ const TicketCard = ({ ticket }: { ticket: MyTicket }) => {
 };
 
 interface Props {
-  tickets: MyTicket[];
+  my: MyPageFragment;
 }
 
-const TicketsList = ({ tickets }: Props) => {
+const TicketsList: React.FC<Props> = ({ my }) => {
+  const { tickets } = my;
+
   if (!tickets.length) {
     return (
       <div>
@@ -60,6 +65,4 @@ const TicketsList = ({ tickets }: Props) => {
   );
 };
 
-export default connect((state: State) => ({ tickets: selectTickets(state) }))(
-  TicketsList
-);
+export default TicketsList;

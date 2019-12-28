@@ -129,6 +129,14 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+/** TODO - move to events.graphql */
+export type EventsPublicEvent = {
+   __typename?: 'EventsPublicEvent',
+  event_id: Scalars['ID'],
+  start: Scalars['String'],
+  title: Scalars['String'],
+};
+
 export type ImageTemplate = {
    __typename?: 'ImageTemplate',
   name: Scalars['ID'],
@@ -168,6 +176,12 @@ export type Mutation = {
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
+  myEmailResubscribe?: Maybe<Scalars['Boolean']>,
+  myEmailUnsubscribe?: Maybe<Scalars['Boolean']>,
+  myEmailSubscribeToInterest?: Maybe<Scalars['Boolean']>,
+  myEmailUnsubscribeFromInterest?: Maybe<Scalars['Boolean']>,
+  myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
+  myTicketDelete?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
   ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
@@ -236,6 +250,26 @@ export type MutationEmailSubscribeChannelAddEmailArgs = {
 };
 
 
+export type MutationMyEmailSubscribeToInterestArgs = {
+  interest_id: Scalars['ID']
+};
+
+
+export type MutationMyEmailUnsubscribeFromInterestArgs = {
+  interest_id: Scalars['ID']
+};
+
+
+export type MutationMyPrivacyModeSetArgs = {
+  mode: Scalars['String']
+};
+
+
+export type MutationMyTicketDeleteArgs = {
+  event_id: Scalars['ID']
+};
+
+
 export type MutationRatioAddTrainingArgs = {
   params: RatioAddTrainingInput
 };
@@ -296,6 +330,53 @@ export type MutationZadarmaSetMemberForPbxCallArgs = {
   member_id: Scalars['ID']
 };
 
+export type My = {
+   __typename?: 'My',
+  email?: Maybe<Scalars['String']>,
+  is_authenticated: Scalars['Boolean'],
+  is_staff?: Maybe<Scalars['Boolean']>,
+  permissions: Array<Scalars['String']>,
+  membership?: Maybe<MyMembership>,
+  tickets: Array<MyTicket>,
+  email_subscription: MyEmailSubscription,
+};
+
+export type MyEmailSubscription = {
+   __typename?: 'MyEmailSubscription',
+  status: Scalars['String'],
+  interests?: Maybe<Array<MyEmailSubscriptionInterest>>,
+};
+
+export type MyEmailSubscriptionInterest = {
+   __typename?: 'MyEmailSubscriptionInterest',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  subscribed?: Maybe<Scalars['Boolean']>,
+};
+
+export type MyMembership = {
+   __typename?: 'MyMembership',
+  card_id: Scalars['Int'],
+  subscription_until?: Maybe<Scalars['String']>,
+  last_visit?: Maybe<Scalars['String']>,
+  total_spent: Scalars['Int'],
+  privacy_mode: Scalars['String'],
+  orders_count: Scalars['Int'],
+  orders: Array<MyOrder>,
+};
+
+export type MyOrder = {
+   __typename?: 'MyOrder',
+  order_id: Scalars['ID'],
+  start_dt: Scalars['String'],
+  end_dt?: Maybe<Scalars['String']>,
+};
+
+export type MyTicket = {
+   __typename?: 'MyTicket',
+  event: EventsPublicEvent,
+};
+
 export type NowCustomer = {
    __typename?: 'NowCustomer',
   card_id: Scalars['Int'],
@@ -330,6 +411,7 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
   imageTemplateBySlug: ImageTemplate,
+  my: My,
   now: NowInfo,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,

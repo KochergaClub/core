@@ -1,20 +1,15 @@
-import React from 'react';
-import { connect } from 'react-redux';
-
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { Column } from '@kocherga/frontkit';
 
 import { timezone, formatDate } from '~/common/utils';
-import { State } from '~/redux/store';
-
-import { Customer, Order } from '../types';
-import * as selectors from '../selectors';
 
 import CustomerCard from '../components/CustomerCard';
 import HeadedFragment from '../components/HeadedFragment';
 
 import NonCustomerVisitsTab from './NonCustomerVisitsTab';
+
+import { MyPageFragment } from '../queries.generated';
 
 const inflect = (n: number) => {
   if ((n % 100 < 10 || n % 100 > 20) && [2, 3, 4].includes(n % 10)) {
@@ -24,40 +19,38 @@ const inflect = (n: number) => {
 };
 
 interface Props {
-  customer?: Customer;
-  orders_count?: number;
-  orders?: Order[];
+  my: MyPageFragment;
 }
 
-const VisitsTab = ({ customer, orders_count, orders }: Props) => {
-  if (!customer) {
+const VisitsTab = ({ my }: Props) => {
+  if (!my.membership) {
     return <NonCustomerVisitsTab />;
   }
 
-  if (!orders || orders_count === undefined) {
+  if (!my.membership.orders || my.membership.orders_count === undefined) {
     return <div>Внутренняя ошибка: данные о заказах не загружены</div>;
   }
 
   return (
     <article>
       <Column centered>
-        <CustomerCard id={customer.card_id} />
+        <CustomerCard id={my.membership.card_id} />
 
-        {customer.subscription_until && (
+        {my.membership.subscription_until && (
           <p>
-            Абонемент до <strong>{customer.subscription_until}</strong>.
+            Абонемент до <strong>{my.membership.subscription_until}</strong>.
           </p>
         )}
 
         <p>
-          Вы были в Кочерге <strong>{orders_count}</strong> раз
-          {inflect(orders_count)}.
+          Вы были в Кочерге <strong>{my.membership.orders_count}</strong> раз
+          {inflect(my.membership.orders_count)}.
         </p>
 
-        {orders.length && (
+        {my.membership.orders.length && (
           <HeadedFragment title="Последние посещения">
             <ul>
-              {orders.map((order, i) => (
+              {my.membership.orders.map((order, i) => (
                 <li key={i}>
                   {formatDate(
                     utcToZonedTime(order.start_dt, timezone),
@@ -73,8 +66,4 @@ const VisitsTab = ({ customer, orders_count, orders }: Props) => {
   );
 };
 
-export default connect((state: State) => ({
-  customer: selectors.selectCustomer(state),
-  orders_count: selectors.selectOrdersCount(state) || 0,
-  orders: selectors.selectOrders(state),
-}))(VisitsTab);
+export default VisitsTab;

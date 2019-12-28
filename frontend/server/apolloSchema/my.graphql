@@ -1,0 +1,61 @@
+extend type Query {
+  my: My!
+}
+
+type My {
+  email: String
+  is_authenticated: Boolean!
+  is_staff: Boolean
+  permissions: [String!]!
+
+  membership: MyMembership
+  tickets: [MyTicket!]!
+  email_subscription: MyEmailSubscription!
+}
+
+type MyMembership {
+  card_id: Int!
+  subscription_until: String
+  last_visit: String
+  total_spent: Int!
+  privacy_mode: String!
+  orders_count: Int!
+  orders: [MyOrder!]!
+}
+
+type MyOrder {
+  order_id: ID!
+  start_dt: String!
+  end_dt: String
+}
+
+# TODO - move to events.graphql
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  title: String!
+}
+
+type MyTicket {
+  event: EventsPublicEvent!
+}
+
+type MyEmailSubscription {
+  status: String!
+  interests: [MyEmailSubscriptionInterest!]
+}
+
+type MyEmailSubscriptionInterest {
+  id: ID!
+  name: String!
+  subscribed: Boolean
+}
+
+extend type Mutation {
+  myEmailResubscribe: Boolean
+  myEmailUnsubscribe: Boolean
+  myEmailSubscribeToInterest(interest_id: ID!): Boolean
+  myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean
+  myPrivacyModeSet(mode: String!): Boolean
+  myTicketDelete(event_id: ID!): Boolean
+}

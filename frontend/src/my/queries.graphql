@@ -1,0 +1,74 @@
+fragment Membership on MyMembership {
+  card_id
+  orders_count
+  subscription_until
+  privacy_mode
+  orders {
+    start_dt
+  }
+}
+
+fragment EmailSubscriptionInterest on MyEmailSubscriptionInterest {
+  id
+  name
+  subscribed
+}
+
+fragment EmailSubscription on MyEmailSubscription {
+  status
+  interests {
+    ...EmailSubscriptionInterest
+  }
+}
+
+fragment MyTicket on MyTicket {
+  event {
+    event_id
+    start
+    title
+  }
+}
+
+fragment MyPage on My {
+  email
+  is_staff
+  membership {
+    ...Membership
+  }
+  tickets {
+    ...MyTicket
+  }
+  email_subscription {
+    ...EmailSubscription
+  }
+}
+
+query MyPage {
+  my {
+    ...MyPage
+  }
+}
+
+mutation MyEmailResubscribe {
+  myEmailResubscribe
+}
+
+mutation MyEmailUnsubscribe {
+  myEmailUnsubscribe
+}
+
+mutation MyEmailSubscribeToInterest($interest_id: ID!) {
+  myEmailSubscribeToInterest(interest_id: $interest_id)
+}
+
+mutation MyEmailUnsubscribeFromInterest($interest_id: ID!) {
+  myEmailUnsubscribeFromInterest(interest_id: $interest_id)
+}
+
+mutation MyPrivacyModeSet($mode: String!) {
+  myPrivacyModeSet(mode: $mode)
+}
+
+mutation MyTicketDelete($event_id: ID!) {
+  myTicketDelete(event_id: $event_id)
+}

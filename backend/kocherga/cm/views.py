@@ -21,10 +21,7 @@ class MeView(APIView):
             raise exceptions.NotFound()
 
         customer = request.user.customer
-        return Response({
-            'customer': CustomerSerializer(customer).data,
-            'orders_count': customer.orders().count(),
-        })
+        return Response(CustomerSerializer(customer).data)
 
 
 class MyOrdersView(APIView):
