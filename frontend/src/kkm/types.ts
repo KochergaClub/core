@@ -15,3 +15,10 @@ export enum SignMethodCalculation {
   CreditTransfer = 6,
   CreditPayment = 7,
 }
+
+export interface FormValues {
+  email: string;
+  title: string;
+  amount: number;
+  method: SignMethodCalculation;
+}

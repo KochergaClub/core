@@ -39,6 +39,9 @@ import { resolvers as nowResolvers } from './now';
 import My from './my.graphql';
 import { resolvers as myResolvers } from './my';
 
+import Kkm from './kkm.graphql';
+import { resolvers as kkmResolvers } from './kkm';
+
 import { default as Base } from './base.graphql';
 
 // https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2
@@ -57,6 +60,7 @@ export const schema = makeExecutableSchema({
     ImageTemplater,
     Now,
     My,
+    Kkm,
   ],
   // NB: there's a mismatch between codegen's Resolvers type and apollo Resolvers type.
   // It could be fixed with `useIndexSignature = true` config option to typescript-resolvers codegen plugin,
@@ -75,5 +79,6 @@ export const schema = makeExecutableSchema({
     imageTemplaterResolvers,
     nowResolvers,
     myResolvers,
+    kkmResolvers
   ) as any,
 });

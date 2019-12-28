@@ -1,69 +1,31 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
 
-import { Action, State } from '../reducer';
-import { SignMethodCalculation } from '../kkmServer';
-
-import { useKkmRegisterCheckMutation } from '../queries.generated';
+import { FormValues, SignMethodCalculation } from '../types';
 
 interface Props {
-  state: State;
-  dispatch: (a: Action) => void;
+  values: FormValues;
+  submit: () => Promise<void>;
+  close: () => void;
 }
 
-export default function MainModal({ state, dispatch }: Props) {
-  const [registerMutation] = useKkmRegisterCheckMutation();
+export default function MainModal({ values, submit, close }: Props) {
   const [loading, setLoading] = useState(false);
 
-  const close = () => {
-    dispatch({
-      type: 'CANCEL_CONFIRMATION',
-    });
-  };
-
-  const click = async () => {
-    const request = {
-      title: state.cheque.title,
-      sign_method_calculation: state.cheque.method,
-      email: state.cheque.email,
-      sum: state.cheque.amount,
-    };
-
+  const wrappedSubmit = useCallback(async () => {
     setLoading(true);
-
-    try {
-      const result = await registerMutation({
-        variables: {
-          params: request,
-        },
-      });
-      dispatch({
-        type: 'SET_OUTCOME',
-        payload: {
-          result: result.data || {},
-          error: {},
-        },
-      });
-    } catch (e) {
-      dispatch({
-        type: 'SET_OUTCOME',
-        payload: {
-          result: {},
-          error: e,
-        },
-      });
-    }
-  };
+    await submit();
+  }, [submit]);
 
   return (
     <Modal>
       <Modal.Header toggle={close}>Напечатать чек</Modal.Header>
       <Modal.Body>
-        <header>{state.cheque.title}</header>
-        <div>{state.cheque.amount} руб.</div>
-        <div>{SignMethodCalculation[state.cheque.method]}</div>
-        <div>{state.cheque.email}</div>
+        <header>{values.title}</header>
+        <div>{values.amount} руб.</div>
+        <div>{SignMethodCalculation[values.method]}</div>
+        <div>{values.email}</div>
       </Modal.Body>
       <Modal.Footer>
         <ControlsFooter>
@@ -72,7 +34,7 @@ export default function MainModal({ state, dispatch }: Props) {
           </Button>
           <Button
             kind="danger"
-            onClick={click}
+            onClick={wrappedSubmit}
             loading={loading}
             disabled={loading}
           >

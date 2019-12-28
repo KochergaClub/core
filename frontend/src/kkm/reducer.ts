@@ -1,4 +1,4 @@
-import { SignMethodCalculation } from './kkmServer';
+import { SignMethodCalculation } from './types';
 
 export interface State {
   cheque: {
