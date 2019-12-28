@@ -3,6 +3,7 @@ import { Resolvers } from './gen-types';
 // endpoints
 const ME = 'me';
 const MEMBERSHIP = 'cm/me';
+const ORDERS = 'cm/me/orders';
 const TICKETS = 'my/tickets';
 const EMAIL_SUBSCRIPTION = 'my/email';
 
@@ -33,6 +34,13 @@ export const resolvers: Resolvers = {
     email_subscription: async (_, __, { dataSources }) => {
       return await dataSources.kochergaAPI.retrieveSingleton({
         resource: EMAIL_SUBSCRIPTION,
+      });
+    },
+  },
+  MyMembership: {
+    orders: async (_, __, { dataSources }) => {
+      return await dataSources.kochergaAPI.list({
+        resource: ORDERS,
       });
     },
   },
