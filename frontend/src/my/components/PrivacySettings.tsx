@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { FaGlobe, FaLock } from 'react-icons/fa';
 
-import { A, Button, Column } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
+
+import { AsyncButton } from '~/components';
 
 import TVIcon from './TVIcon';
 
@@ -46,18 +48,17 @@ interface Props {
 }
 
 const PrivacySettings: React.FC<Props> = ({ membership }) => {
-  const [loading, setLoading] = useState(false);
-  const [setPrivacyModeMutation] = useMyPrivacyModeSetMutation();
+  const [setPrivacyModeMutation] = useMyPrivacyModeSetMutation({
+    refetchQueries: ['MyPage'],
+    awaitRefetchQueries: true,
+  });
 
   const flipPrivacyMode = useCallback(async () => {
-    // TODO - move `loading` state to redux
-    setLoading(true);
     await setPrivacyModeMutation({
       variables: {
         mode: oppositePrivacyMode(membership.privacy_mode),
       },
     });
-    setLoading(false);
   }, [setPrivacyModeMutation, membership.privacy_mode]);
 
   return (
@@ -73,9 +74,9 @@ const PrivacySettings: React.FC<Props> = ({ membership }) => {
           </strong>{' '}
           на странице <A href="/now">/now</A> и телевизорах в Кочерге.
         </div>
-        <Button onClick={flipPrivacyMode} loading={loading} disabled={loading}>
+        <AsyncButton act={flipPrivacyMode}>
           {membership.privacy_mode == 'public' ? 'Отключить' : 'Включить'}
-        </Button>
+        </AsyncButton>
       </Column>
     </HeadedFragment>
   );
