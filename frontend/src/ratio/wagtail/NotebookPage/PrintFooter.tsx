@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 
 import styled from 'styled-components';
 
+import { colors } from '@kocherga/frontkit';
+
 import PrintContext from './PrintContext';
 
 const Container = styled.div`
@@ -17,6 +19,7 @@ const Footer = styled.footer<{ align: string }>`
   text-align: ${props => props.align};
   padding-right: 10mm;
   padding-left: 10mm;
+  color: ${colors.grey[500]};
 `;
 
 // this is actually a header
