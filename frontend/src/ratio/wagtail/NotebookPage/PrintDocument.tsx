@@ -79,7 +79,7 @@ export default function PrintDocument(props: Props) {
     <PrintContext.Provider value={printContext}>
       <Background>
         <PageCountEditor setPageCount={setPageCount} />
-        {/*props.footer ||*/ null}
+        {props.footer || null}
         <Container>
           <thead>
             {/* thead is needed for tfoot to work, see https://stackoverflow.com/a/43942456 */}
