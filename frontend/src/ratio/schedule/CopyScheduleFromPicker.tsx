@@ -21,22 +21,26 @@ export default function CopyScheduleFromPicker(props: Props) {
       <ApolloQueryResults {...queryResults}>
         {({
           data: {
-            trainings: { nodes: trainings },
+            trainings: { edges: trainingEdges },
           },
-        }) => (
-          <Column>
-            {trainings
-              .filter(training => training.slug !== props.excludeSlug)
-              .map(srcTraining => (
-                <AsyncButton
-                  key={srcTraining.slug}
-                  act={() => props.pick(srcTraining)}
-                >
-                  {srcTraining.name}
-                </AsyncButton>
-              ))}
-          </Column>
-        )}
+        }) => {
+          const trainings = trainingEdges.map(edge => edge.node);
+
+          return (
+            <Column>
+              {trainings
+                .filter(training => training.slug !== props.excludeSlug)
+                .map(srcTraining => (
+                  <AsyncButton
+                    key={srcTraining.slug}
+                    act={() => props.pick(srcTraining)}
+                  >
+                    {srcTraining.name}
+                  </AsyncButton>
+                ))}
+            </Column>
+          );
+        }}
       </ApolloQueryResults>
     </div>
   );

@@ -81,9 +81,7 @@ const TrainingCollectionBlock: React.FC = () => {
         {({ data: { trainings } }) => (
           <PagedApolloCollection
             connection={trainings}
-            fetchPage={async page => {
-              await queryResults.refetch({ page });
-            }}
+            fetchPage={queryResults.refetch}
             names={{
               plural: 'тренинги',
               genitive: 'тренинг',

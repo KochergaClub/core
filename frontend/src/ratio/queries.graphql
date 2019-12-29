@@ -60,26 +60,28 @@ fragment TrainingWithSchedule on RatioTraining {
   }
 }
 
-query RatioTrainings($page: Int) {
-  trainings: ratioTrainings(page: $page) {
+query RatioTrainings($before: String, $after: String) {
+  trainings: ratioTrainings(before: $before, after: $after, first: 20, last: 20) {
     pageInfo {
-      pageNumber
-      hasNextPage
+      ...PageInfo
     }
-    nodes {
-      ...Training
+    edges {
+      node {
+        ...Training
+      }
     }
   }
 }
 
-query RatioTrainingsForPicker {
-  trainings: ratioTrainings(page: 1) {
+query RatioTrainingsForPicker($before: String, $after: String) {
+  trainings: ratioTrainings(before: $before, after: $after, first: 20, last: 20) {
     pageInfo {
-      pageNumber
-      hasNextPage
+      ...PageInfo
     }
-    nodes {
-      ...TrainingForPicker
+    edges {
+      node {
+        ...TrainingForPicker
+      }
     }
   }
 }
@@ -109,20 +111,28 @@ mutation RatioAddTraining($params: RatioAddTrainingInput!) {
 }
 
 mutation RatioAddTicket($params: RatioAddTicketInput!) {
-  ratioAddTicket(params: $params) {
-    ...Ticket
+  ratioAddTicket(input: $params) {
+    ticket {
+      ...Ticket
+    }
   }
 }
 
 mutation RatioTicketFiscalize($ticket_id: ID!) {
-  ratioTicketFiscalize(ticket_id: $ticket_id)
+  ratioTicketFiscalize(ticket_id: $ticket_id) {
+    ok
+  }
 }
 
 
 mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
-  ratioTrainingAddDay(params: $params)
+  ratioTrainingAddDay(params: $params) {
+    ok
+  }
 }
 
 mutation RatioTrainingCopyScheduleFrom($params: RatioTrainingCopyScheduleFromInput!) {
-  ratioTrainingCopyScheduleFrom(params: $params)
+  ratioTrainingCopyScheduleFrom(params: $params) {
+    ok
+  }
 }

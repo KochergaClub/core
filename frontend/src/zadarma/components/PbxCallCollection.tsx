@@ -32,9 +32,7 @@ const PbxCallCollection: React.FC = () => {
             plural: 'звонки',
             genitive: 'звонок',
           }}
-          fetchPage={async page => {
-            await queryResults.refetch({ page });
-          }}
+          fetchPage={queryResults.refetch}
           view={props => (
             <CustomCardListView {...props} renderItem={renderItem} />
           )}

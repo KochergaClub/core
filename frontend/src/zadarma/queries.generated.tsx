@@ -20,7 +20,8 @@ export type CommonZadarmaPbxCallFragment = (
 );
 
 export type ZadarmaPbxCallsQueryVariables = {
-  page?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>,
+  after?: Types.Maybe<Types.Scalars['String']>
 };
 
 
@@ -30,10 +31,13 @@ export type ZadarmaPbxCallsQuery = (
     { __typename?: 'ZadarmaPbxCallConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<Types.PageInfo, 'pageNumber' | 'hasNextPage'>
-    ), nodes: Array<(
-      { __typename?: 'ZadarmaPbxCall' }
-      & CommonZadarmaPbxCallFragment
+      & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
+    ), edges: Array<(
+      { __typename?: 'ZadarmaPbxCallEdge' }
+      & { node: (
+        { __typename?: 'ZadarmaPbxCall' }
+        & CommonZadarmaPbxCallFragment
+      ) }
     )> }
   ) }
 );
@@ -59,7 +63,10 @@ export type ZadarmaSetMemberForPbxCallMutationVariables = {
 
 export type ZadarmaSetMemberForPbxCallMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'zadarmaSetMemberForPbxCall'>
+  & { zadarmaSetMemberForPbxCall: Types.Maybe<(
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  )> }
 );
 
 export const CommonZadarmaPbxCallFragmentDoc = gql`
@@ -86,14 +93,18 @@ export const CommonZadarmaPbxCallFragmentDoc = gql`
 }
     `;
 export const ZadarmaPbxCallsDocument = gql`
-    query ZadarmaPbxCalls($page: Int) {
-  pbxCalls: zadarmaPbxCalls(page: $page, page_size: 20) {
+    query ZadarmaPbxCalls($before: String, $after: String) {
+  pbxCalls: zadarmaPbxCalls(before: $before, after: $after, first: 20, last: 20) {
     pageInfo {
-      pageNumber
       hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
     }
-    nodes {
-      ...CommonZadarmaPbxCall
+    edges {
+      node {
+        ...CommonZadarmaPbxCall
+      }
     }
   }
 }
@@ -111,7 +122,8 @@ export const ZadarmaPbxCallsDocument = gql`
  * @example
  * const { data, loading, error } = useZadarmaPbxCallsQuery({
  *   variables: {
- *      page: // value for 'page'
+ *      before: // value for 'before'
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -159,7 +171,9 @@ export type ZadarmaPbxCallLazyQueryHookResult = ReturnType<typeof useZadarmaPbxC
 export type ZadarmaPbxCallQueryResult = ApolloReactCommon.QueryResult<ZadarmaPbxCallQuery, ZadarmaPbxCallQueryVariables>;
 export const ZadarmaSetMemberForPbxCallDocument = gql`
     mutation ZadarmaSetMemberForPbxCall($member_id: ID!, $pbx_call_id: ID!) {
-  zadarmaSetMemberForPbxCall(member_id: $member_id, pbx_call_id: $pbx_call_id)
+  zadarmaSetMemberForPbxCall(member_id: $member_id, pbx_call_id: $pbx_call_id) {
+    ok
+  }
 }
     `;
 export type ZadarmaSetMemberForPbxCallMutationFn = ApolloReactCommon.MutationFunction<ZadarmaSetMemberForPbxCallMutation, ZadarmaSetMemberForPbxCallMutationVariables>;

@@ -17,7 +17,10 @@ export type PaymentFragment = (
   ) }
 );
 
-export type CashierPaymentsQueryVariables = {};
+export type CashierPaymentsQueryVariables = {
+  before?: Types.Maybe<Types.Scalars['String']>,
+  after?: Types.Maybe<Types.Scalars['String']>
+};
 
 
 export type CashierPaymentsQuery = (
@@ -26,10 +29,13 @@ export type CashierPaymentsQuery = (
     { __typename?: 'CashierPaymentConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<Types.PageInfo, 'hasNextPage' | 'pageNumber'>
-    ), nodes: Array<(
-      { __typename?: 'CashierPayment' }
-      & PaymentFragment
+      & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
+    ), edges: Array<(
+      { __typename?: 'CashierPaymentEdge' }
+      & { node: (
+        { __typename?: 'CashierPayment' }
+        & PaymentFragment
+      ) }
     )> }
   ) }
 );
@@ -41,7 +47,10 @@ export type CashierCreatePaymentMutationVariables = {
 
 export type CashierCreatePaymentMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'cashierCreatePayment'>
+  & { cashierCreatePayment: Types.Maybe<(
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  )> }
 );
 
 export type CashierRedeemPaymentMutationVariables = {
@@ -51,7 +60,10 @@ export type CashierRedeemPaymentMutationVariables = {
 
 export type CashierRedeemPaymentMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'cashierRedeemPayment'>
+  & { cashierRedeemPayment: Types.Maybe<(
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  )> }
 );
 
 export const PaymentFragmentDoc = gql`
@@ -73,14 +85,18 @@ export const PaymentFragmentDoc = gql`
 }
     `;
 export const CashierPaymentsDocument = gql`
-    query CashierPayments {
-  payments: cashierPayments {
+    query CashierPayments($before: String, $after: String) {
+  payments: cashierPayments(before: $before, after: $after, first: 20, last: 20) {
     pageInfo {
       hasNextPage
-      pageNumber
+      hasPreviousPage
+      startCursor
+      endCursor
     }
-    nodes {
-      ...Payment
+    edges {
+      node {
+        ...Payment
+      }
     }
   }
 }
@@ -98,6 +114,8 @@ export const CashierPaymentsDocument = gql`
  * @example
  * const { data, loading, error } = useCashierPaymentsQuery({
  *   variables: {
+ *      before: // value for 'before'
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -112,7 +130,9 @@ export type CashierPaymentsLazyQueryHookResult = ReturnType<typeof useCashierPay
 export type CashierPaymentsQueryResult = ApolloReactCommon.QueryResult<CashierPaymentsQuery, CashierPaymentsQueryVariables>;
 export const CashierCreatePaymentDocument = gql`
     mutation CashierCreatePayment($params: CashierCreatePaymentInput!) {
-  cashierCreatePayment(params: $params)
+  cashierCreatePayment(params: $params) {
+    ok
+  }
 }
     `;
 export type CashierCreatePaymentMutationFn = ApolloReactCommon.MutationFunction<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>;
@@ -142,7 +162,9 @@ export type CashierCreatePaymentMutationResult = ApolloReactCommon.MutationResul
 export type CashierCreatePaymentMutationOptions = ApolloReactCommon.BaseMutationOptions<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>;
 export const CashierRedeemPaymentDocument = gql`
     mutation CashierRedeemPayment($id: ID!) {
-  cashierRedeemPayment(id: $id)
+  cashierRedeemPayment(id: $id) {
+    ok
+  }
 }
     `;
 export type CashierRedeemPaymentMutationFn = ApolloReactCommon.MutationFunction<CashierRedeemPaymentMutation, CashierRedeemPaymentMutationVariables>;

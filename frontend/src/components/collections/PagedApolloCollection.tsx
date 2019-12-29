@@ -7,8 +7,8 @@ import { FormShape } from '~/components/forms/types';
 
 interface PagerProps {
   pageInfo: {
+    hasPreviousPage: boolean;
     hasNextPage: boolean;
-    pageNumber: number;
   };
   next: () => Promise<void>;
   previous: () => Promise<void>;
@@ -16,7 +16,7 @@ interface PagerProps {
 
 function Pager(props: PagerProps) {
   const hasNext = props.pageInfo.hasNextPage;
-  const hasPrevious = props.pageInfo.pageNumber > 1;
+  const hasPrevious = props.pageInfo.hasPreviousPage;
 
   if (!hasNext && !hasPrevious) {
     return null; // everything fits on a single page
@@ -29,7 +29,6 @@ function Pager(props: PagerProps) {
         <AsyncButton act={props.previous} disabled={!hasPrevious}>
           &larr; Предыдущая страница
         </AsyncButton>
-        <div>Страница {props.pageInfo.pageNumber}</div>
         <AsyncButton act={props.next} disabled={!hasNext}>
           Cледующая страница &rarr;
         </AsyncButton>
@@ -41,12 +40,23 @@ function Pager(props: PagerProps) {
 interface Props<T, A extends {}> {
   connection: {
     pageInfo: {
+      // TODO - PageInfoGragment
+      hasPreviousPage: boolean;
       hasNextPage: boolean;
-      pageNumber: number;
+      startCursor?: string | null;
+      endCursor?: string | null;
     };
-    nodes: T[];
+    edges: {
+      node: T;
+    }[];
   };
-  fetchPage: (page: number) => Promise<void>;
+  fetchPage: ({
+    before,
+    after,
+  }: {
+    before?: string | null;
+    after?: string | null;
+  }) => Promise<any>;
   names: EntityNames;
   add?: {
     shape: FormShape;
@@ -60,17 +70,19 @@ function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
     <div>
       <Collection
         names={props.names}
-        items={props.connection.nodes}
+        items={props.connection.edges.map(edge => edge.node)}
         add={props.add}
         view={props.view}
       />
       <Pager
         pageInfo={props.connection.pageInfo}
         next={async () => {
-          await props.fetchPage(props.connection.pageInfo.pageNumber + 1);
+          await props.fetchPage({ after: props.connection.pageInfo.endCursor });
         }}
         previous={async () => {
-          await props.fetchPage(props.connection.pageInfo.pageNumber - 1);
+          await props.fetchPage({
+            before: props.connection.pageInfo.startCursor,
+          });
         }}
       />
     </div>

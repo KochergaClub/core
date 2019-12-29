@@ -15,14 +15,15 @@ fragment OrderWithCustomer on Cm2Order {
   }
 }
 
-query Cm2Orders($status: String, $page: Int) {
-  cm2Orders(status: $status, page: $page) {
+query Cm2Orders($status: String, $after: String, $before: String) {
+  cm2Orders(status: $status, after: $after, before: $before) {
     pageInfo {
-      hasNextPage
-      pageNumber
+      ...PageInfo
     }
-    nodes {
-      ...OrderWithCustomer
+    edges {
+      node {
+        ...OrderWithCustomer
+      }
     }
   }
 }
@@ -34,7 +35,7 @@ query Cm2Order($id: ID!) {
 }
 
 mutation Cm2CreateOrder($params: Cm2CreateOrderInput!) {
-  cm2CreateOrder(params: $params) {
+  cm2CreateOrder(input: $params) {
     customer {
       id
     }
@@ -43,41 +44,48 @@ mutation Cm2CreateOrder($params: Cm2CreateOrderInput!) {
 
 query Cm2SearchCustomers($search: String!) {
   cm2Customers(search: $search, first: 10) {
-    nodes {
-      ...Customer
+    edges {
+      node {
+        ...Customer
+      }
     }
   }
 }
 
-query Cm2Customers($page: Int) {
-  cm2Customers(page: $page) {
+query Cm2Customers($after: String, $before: String) {
+  cm2Customers(after: $after, before: $before) {
     pageInfo {
-      hasNextPage
-      pageNumber
+      ...PageInfo
     }
-    nodes {
-      ...Customer
+    edges {
+      node {
+        ...Customer
+      }
     }
   }
 }
 
 mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
-  cm2CreateCustomer(params: $params) {
+  cm2CreateCustomer(input: $params) {
     id
   }
 }
 
 mutation Cm2CloseOrder($id: ID!) {
-  cm2CloseOrder(id: $id)
+  cm2CloseOrder(id: $id) {
+    ok
+  }
 }
 
 query Cm2CustomerPage($id: ID!) {
   cm2Customer(id: $id) {
     ...Customer
     orders {
-      nodes {
-        id
-        start
+      edges {
+        node {
+          id
+          start
+        }
       }
     }
   }

@@ -93,7 +93,10 @@ export type WatchmenSetWatchmanPriorityMutationVariables = {
 
 export type WatchmenSetWatchmanPriorityMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'watchmenSetWatchmanPriority'>
+  & { watchmenSetWatchmanPriority: (
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  ) }
 );
 
 export type WatchmenSetWatchmanGradeMutationVariables = {
@@ -103,7 +106,10 @@ export type WatchmenSetWatchmanGradeMutationVariables = {
 
 export type WatchmenSetWatchmanGradeMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'watchmenSetWatchmanGrade'>
+  & { watchmenSetWatchmanGrade: (
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  ) }
 );
 
 export type WatchmenCreateWatchmanMutationVariables = {
@@ -113,7 +119,10 @@ export type WatchmenCreateWatchmanMutationVariables = {
 
 export type WatchmenCreateWatchmanMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'watchmenCreateWatchman'>
+  & { watchmenCreateWatchman: (
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  ) }
 );
 
 export type WatchmenUpdateShiftMutationVariables = {
@@ -303,7 +312,9 @@ export type WatchmenShiftsLazyQueryHookResult = ReturnType<typeof useWatchmenShi
 export type WatchmenShiftsQueryResult = ApolloReactCommon.QueryResult<WatchmenShiftsQuery, WatchmenShiftsQueryVariables>;
 export const WatchmenSetWatchmanPriorityDocument = gql`
     mutation WatchmenSetWatchmanPriority($params: WatchmenSetWatchmanPriorityInput!) {
-  watchmenSetWatchmanPriority(params: $params)
+  watchmenSetWatchmanPriority(params: $params) {
+    ok
+  }
 }
     `;
 export type WatchmenSetWatchmanPriorityMutationFn = ApolloReactCommon.MutationFunction<WatchmenSetWatchmanPriorityMutation, WatchmenSetWatchmanPriorityMutationVariables>;
@@ -333,7 +344,9 @@ export type WatchmenSetWatchmanPriorityMutationResult = ApolloReactCommon.Mutati
 export type WatchmenSetWatchmanPriorityMutationOptions = ApolloReactCommon.BaseMutationOptions<WatchmenSetWatchmanPriorityMutation, WatchmenSetWatchmanPriorityMutationVariables>;
 export const WatchmenSetWatchmanGradeDocument = gql`
     mutation WatchmenSetWatchmanGrade($params: WatchmenSetWatchmanGradeInput!) {
-  watchmenSetWatchmanGrade(params: $params)
+  watchmenSetWatchmanGrade(params: $params) {
+    ok
+  }
 }
     `;
 export type WatchmenSetWatchmanGradeMutationFn = ApolloReactCommon.MutationFunction<WatchmenSetWatchmanGradeMutation, WatchmenSetWatchmanGradeMutationVariables>;
@@ -363,7 +376,9 @@ export type WatchmenSetWatchmanGradeMutationResult = ApolloReactCommon.MutationR
 export type WatchmenSetWatchmanGradeMutationOptions = ApolloReactCommon.BaseMutationOptions<WatchmenSetWatchmanGradeMutation, WatchmenSetWatchmanGradeMutationVariables>;
 export const WatchmenCreateWatchmanDocument = gql`
     mutation WatchmenCreateWatchman($params: WatchmenCreateWatchmanInput!) {
-  watchmenCreateWatchman(params: $params)
+  watchmenCreateWatchman(params: $params) {
+    ok
+  }
 }
     `;
 export type WatchmenCreateWatchmanMutationFn = ApolloReactCommon.MutationFunction<WatchmenCreateWatchmanMutation, WatchmenCreateWatchmanMutationVariables>;

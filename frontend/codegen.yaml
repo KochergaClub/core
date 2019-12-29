@@ -1,16 +1,19 @@
-schema: server/apolloSchema/*.graphql
+schema:
+  - schema.graphql
+  - server/apolloSchema/*.graphql
 documents: 'src/**/*.graphql'
 
 generates:
   server/apolloSchema/gen-types.ts:
-    config: 
-      contextType: ./types#TContext
     plugins: 
       - typescript
       - typescript-resolvers
+    config: 
+      contextType: ./types#TContext
 
   src/apollo/gen-types.ts:
-    - typescript
+    plugins:
+      - typescript
 
   src/:
     preset: near-operation-file

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import { Row } from '@kocherga/frontkit';
 
+import { ActivityActivityType } from '~/apollo/gen-types';
+
 import { ActivityFragment } from '../../queries.generated';
 
 interface Props {
@@ -49,7 +51,7 @@ const Location = styled.div`
 
 export default function Activity({ activity }: Props) {
   const time = timeWithoutSections(activity.time);
-  const outline = activity.activity_type === 'break';
+  const outline = activity.activity_type === ActivityActivityType.Break;
   return (
     <Container outline={outline}>
       <Row>

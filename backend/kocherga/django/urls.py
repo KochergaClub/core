@@ -9,21 +9,20 @@ from kocherga.wagtail.api import api_router
 
 from wagtail.core import urls as wagtail_urls
 
+from graphene_django.views import GraphQLView
+
 import kocherga.django.drf
 
-
 urlpatterns = [
+    path("api/graphql", GraphQLView.as_view(graphiql=True)),
+
     path('api/', include('kocherga.api.urls')),
-    path('api/watchmen/', include('kocherga.watchmen.urls')),
-    path('api/staff/', include('kocherga.staff.urls')),
     path('api/analytics/', include('kocherga.analytics.urls')),
-    path('api/zadarma/', include('kocherga.zadarma.urls')),
     path('api/cashier/', include('kocherga.money.cashier.urls')),
     path('api/tochka/', include('kocherga.money.tochka.urls')),
     path('api/ratio/', include('kocherga.ratio.urls')),
     path('api/mastermind_dating/', include('kocherga.mastermind_dating.urls')),
     path('api/', include('kocherga.cm.urls')),
-    path('api/', include('kocherga.cm2.urls')),
     path('api/', include('kocherga.events.urls')),
     path('api/', include('kocherga.templater.urls')),
     path('api/', include('kocherga.email.urls')),

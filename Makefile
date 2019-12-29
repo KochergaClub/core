@@ -72,3 +72,8 @@ update_requirements:
 	docker-compose -f docker/compose.dev.yml exec api pip-compile
 	docker-compose -f docker/compose.dev.yml exec api pip-sync
 	docker cp docker_api_1:/code/requirements.txt ./backend/requirements.txt
+
+update_schema:
+	docker-compose -f docker/compose.dev.yml exec api ./manage.py graphql_schema --out schema.json
+	docker cp docker_api_1:/code/schema.json /tmp/schema.json
+	cd frontend && (cat /tmp/schema.json | node ./generate-graphql-schema.js)

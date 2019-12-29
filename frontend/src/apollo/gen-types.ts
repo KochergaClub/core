@@ -6,14 +6,42 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  /** 
+ * The `DateTime` scalar type represents a DateTime
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+ */
+  DateTime: any,
+  /** 
+ * The `Date` scalar type represents a Date
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+ */
+  Date: any,
+  /** 
+ * The `Time` scalar type represents a Time value as
+   * specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+ */
+  Time: any,
 };
+
+/** An enumeration. */
+export enum ActivityActivityType {
+  /** Секция */
+  Section = 'SECTION',
+  /** Перерыв */
+  Break = 'BREAK',
+  /** Бонус */
+  Bonus = 'BONUS'
+}
 
 export type AuthCurrentUser = {
    __typename?: 'AuthCurrentUser',
   is_authenticated: Scalars['Boolean'],
-  permissions: Array<Scalars['String']>,
-  is_staff?: Maybe<Scalars['Boolean']>,
   email?: Maybe<Scalars['String']>,
+  is_staff?: Maybe<Scalars['Boolean']>,
+  permissions: Array<Scalars['String']>,
 };
 
 export type AuthGroup = {
@@ -41,24 +69,34 @@ export type AuthUser = {
 export type CashierCreatePaymentInput = {
   amount: Scalars['Int'],
   whom: Scalars['ID'],
-  comment?: Maybe<Scalars['String']>,
+  comment: Scalars['String'],
 };
 
-export type CashierPayment = {
+export type CashierPayment = Node & {
    __typename?: 'CashierPayment',
+  /** The ID of the object. */
   id: Scalars['ID'],
-  amount: Scalars['Int'],
   whom: AuthUser,
+  amount: Scalars['Int'],
+  created_dt: Scalars['DateTime'],
+  redeem_dt?: Maybe<Scalars['DateTime']>,
   comment: Scalars['String'],
   is_redeemed: Scalars['Boolean'],
-  created_dt: Scalars['String'],
-  redeem_dt?: Maybe<Scalars['String']>,
 };
 
 export type CashierPaymentConnection = {
    __typename?: 'CashierPaymentConnection',
+  /** Pagination data for this connection. */
   pageInfo: PageInfo,
-  nodes: Array<CashierPayment>,
+  edges: Array<CashierPaymentEdge>,
+};
+
+export type CashierPaymentEdge = {
+   __typename?: 'CashierPaymentEdge',
+  /** The item at the end of the edge */
+  node: CashierPayment,
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'],
 };
 
 export type Cm2CreateCustomerInput = {
@@ -71,8 +109,9 @@ export type Cm2CreateOrderInput = {
   customer?: Maybe<Scalars['ID']>,
 };
 
-export type Cm2Customer = {
+export type Cm2Customer = Node & {
    __typename?: 'Cm2Customer',
+  /** The ID of the object. */
   id: Scalars['ID'],
   card_id: Scalars['Int'],
   first_name: Scalars['String'],
@@ -80,26 +119,55 @@ export type Cm2Customer = {
   orders: Cm2OrderConnection,
 };
 
-export type Cm2CustomerConnection = {
-   __typename?: 'Cm2CustomerConnection',
-  pageInfo: PageInfo,
-  nodes: Array<Cm2Customer>,
+
+export type Cm2CustomerOrdersArgs = {
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
 };
 
-export type Cm2Order = {
+export type Cm2CustomerConnection = {
+   __typename?: 'Cm2CustomerConnection',
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo,
+  edges: Array<Cm2CustomerEdge>,
+};
+
+export type Cm2CustomerEdge = {
+   __typename?: 'Cm2CustomerEdge',
+  /** The item at the end of the edge */
+  node: Cm2Customer,
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'],
+};
+
+export type Cm2Order = Node & {
    __typename?: 'Cm2Order',
+  /** The ID of the object. */
   id: Scalars['ID'],
-  start: Scalars['String'],
-  end?: Maybe<Scalars['String']>,
-  value?: Maybe<Scalars['Int']>,
+  start: Scalars['DateTime'],
+  end?: Maybe<Scalars['DateTime']>,
   customer?: Maybe<Cm2Customer>,
+  value: Scalars['Int'],
 };
 
 export type Cm2OrderConnection = {
    __typename?: 'Cm2OrderConnection',
+  /** Pagination data for this connection. */
   pageInfo: PageInfo,
-  nodes: Array<Cm2Order>,
+  edges: Array<Cm2OrderEdge>,
 };
+
+export type Cm2OrderEdge = {
+   __typename?: 'Cm2OrderEdge',
+  /** The item at the end of the edge */
+  node: Cm2Order,
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'],
+};
+
+
 
 export type EmailMailchimpCategory = {
    __typename?: 'EmailMailchimpCategory',
@@ -149,7 +217,6 @@ export type ImageTemplateSchema = {
   fields: Array<ImageTemplateSchemaField>,
 };
 
-/** TODO - interfaces / unions for different field types */
 export type ImageTemplateSchemaField = {
    __typename?: 'ImageTemplateSchemaField',
   name: Scalars['String'],
@@ -177,16 +244,27 @@ export type KkmRegisterCheckResult = {
   error?: Maybe<Scalars['String']>,
 };
 
+/** An enumeration. */
+export enum MemberRole {
+  /** Основатель */
+  Founder = 'FOUNDER',
+  /** Менеджер */
+  Manager = 'MANAGER',
+  /** Видеоменеджер */
+  Videomanager = 'VIDEOMANAGER',
+  /** Админ */
+  Watchman = 'WATCHMAN',
+  /** Тренер */
+  Trainer = 'TRAINER',
+  /** Внешний консультант */
+  Consultant = 'CONSULTANT',
+  /** Волонтёр */
+  Volunteer = 'VOLUNTEER'
+}
+
 export type Mutation = {
    __typename?: 'Mutation',
-  authAddUserToGroup?: Maybe<Scalars['Boolean']>,
-  authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>,
   _empty?: Maybe<Scalars['String']>,
-  cashierCreatePayment?: Maybe<Scalars['Boolean']>,
-  cashierRedeemPayment?: Maybe<Scalars['Boolean']>,
-  cm2CreateOrder: Cm2Order,
-  cm2CreateCustomer: Cm2Customer,
-  cm2CloseOrder?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
@@ -197,55 +275,25 @@ export type Mutation = {
   myEmailUnsubscribeFromInterest?: Maybe<Scalars['Boolean']>,
   myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
   myTicketDelete?: Maybe<Scalars['Boolean']>,
+  cm2CreateOrder: Cm2Order,
+  cm2CreateCustomer: Cm2Customer,
+  cm2CloseOrder: Ok,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
-  ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
-  ratioTrainingAddDay?: Maybe<Scalars['Boolean']>,
-  ratioTicketFiscalize?: Maybe<Scalars['Boolean']>,
-  staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
-  staffFireMember?: Maybe<Scalars['Boolean']>,
-  watchmenSetWatchmanPriority?: Maybe<Scalars['Boolean']>,
-  watchmenSetWatchmanGrade?: Maybe<Scalars['Boolean']>,
-  watchmenCreateWatchman?: Maybe<Scalars['Boolean']>,
+  ratioTrainingCopyScheduleFrom: Ok,
+  ratioTrainingAddDay: Ok,
+  ratioTicketFiscalize: Ok,
+  cashierCreatePayment?: Maybe<Ok>,
+  cashierRedeemPayment?: Maybe<Ok>,
+  watchmenCreateWatchman: Ok,
   watchmenUpdateShift: WatchmenShift,
-  zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
-};
-
-
-export type MutationAuthAddUserToGroupArgs = {
-  user_id: Scalars['ID'],
-  group_id: Scalars['ID']
-};
-
-
-export type MutationAuthRemoveUserFromGroupArgs = {
-  user_id: Scalars['ID'],
-  group_id: Scalars['ID']
-};
-
-
-export type MutationCashierCreatePaymentArgs = {
-  params: CashierCreatePaymentInput
-};
-
-
-export type MutationCashierRedeemPaymentArgs = {
-  id: Scalars['ID']
-};
-
-
-export type MutationCm2CreateOrderArgs = {
-  params: Cm2CreateOrderInput
-};
-
-
-export type MutationCm2CreateCustomerArgs = {
-  params: Cm2CreateCustomerInput
-};
-
-
-export type MutationCm2CloseOrderArgs = {
-  id: Scalars['ID']
+  watchmenSetWatchmanPriority: Ok,
+  watchmenSetWatchmanGrade: Ok,
+  zadarmaSetMemberForPbxCall?: Maybe<Ok>,
+  staffGrantGooglePermissionsToMember?: Maybe<Ok>,
+  staffFireMember?: Maybe<Ok>,
+  authAddUserToGroup?: Maybe<Ok>,
+  authRemoveUserFromGroup?: Maybe<Ok>,
 };
 
 
@@ -290,13 +338,28 @@ export type MutationMyTicketDeleteArgs = {
 };
 
 
+export type MutationCm2CreateOrderArgs = {
+  input: Cm2CreateOrderInput
+};
+
+
+export type MutationCm2CreateCustomerArgs = {
+  input: Cm2CreateCustomerInput
+};
+
+
+export type MutationCm2CloseOrderArgs = {
+  id: Scalars['ID']
+};
+
+
 export type MutationRatioAddTrainingArgs = {
   params: RatioAddTrainingInput
 };
 
 
 export type MutationRatioAddTicketArgs = {
-  params: RatioAddTicketInput
+  input: RatioAddTicketInput
 };
 
 
@@ -315,23 +378,13 @@ export type MutationRatioTicketFiscalizeArgs = {
 };
 
 
-export type MutationStaffGrantGooglePermissionsToMemberArgs = {
+export type MutationCashierCreatePaymentArgs = {
+  params: CashierCreatePaymentInput
+};
+
+
+export type MutationCashierRedeemPaymentArgs = {
   id: Scalars['ID']
-};
-
-
-export type MutationStaffFireMemberArgs = {
-  id: Scalars['ID']
-};
-
-
-export type MutationWatchmenSetWatchmanPriorityArgs = {
-  params: WatchmenSetWatchmanPriorityInput
-};
-
-
-export type MutationWatchmenSetWatchmanGradeArgs = {
-  params: WatchmenSetWatchmanGradeInput
 };
 
 
@@ -345,9 +398,41 @@ export type MutationWatchmenUpdateShiftArgs = {
 };
 
 
+export type MutationWatchmenSetWatchmanPriorityArgs = {
+  params: WatchmenSetWatchmanPriorityInput
+};
+
+
+export type MutationWatchmenSetWatchmanGradeArgs = {
+  params: WatchmenSetWatchmanGradeInput
+};
+
+
 export type MutationZadarmaSetMemberForPbxCallArgs = {
-  pbx_call_id: Scalars['ID'],
-  member_id: Scalars['ID']
+  member_id: Scalars['ID'],
+  pbx_call_id: Scalars['ID']
+};
+
+
+export type MutationStaffGrantGooglePermissionsToMemberArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationStaffFireMemberArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationAuthAddUserToGroupArgs = {
+  group_id: Scalars['ID'],
+  user_id: Scalars['ID']
+};
+
+
+export type MutationAuthRemoveUserFromGroupArgs = {
+  group_id: Scalars['ID'],
+  user_id: Scalars['ID']
 };
 
 export type My = {
@@ -397,6 +482,12 @@ export type MyTicket = {
   event: EventsPublicEvent,
 };
 
+/** An object with an ID */
+export type Node = {
+  /** The ID of the object. */
+  id: Scalars['ID'],
+};
+
 export type NowCustomer = {
    __typename?: 'NowCustomer',
   card_id: Scalars['Int'],
@@ -410,61 +501,71 @@ export type NowInfo = {
   customers: Array<NowCustomer>,
 };
 
+export type Ok = {
+   __typename?: 'Ok',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+/** The Relay compliant `PageInfo` type, containing data necessary to paginate this connection. */
 export type PageInfo = {
    __typename?: 'PageInfo',
   pageNumber: Scalars['Int'],
+  /** When paginating forwards, are there more items? */
   hasNextPage: Scalars['Boolean'],
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean'],
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']>,
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']>,
 };
 
 export type Query = {
    __typename?: 'Query',
-  currentUser: AuthCurrentUser,
-  authGroupsAll: Array<AuthGroup>,
-  authPermissionsAll: Array<AuthPermission>,
   _empty?: Maybe<Scalars['String']>,
-  cashierPayments: CashierPaymentConnection,
+  emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
+  emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
+  my: My,
+  now: NowInfo,
+  rooms: Array<Maybe<Room>>,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
   cm2Order: Cm2Order,
-  emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
-  emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
-  imageTemplatesAll: Array<ImageTemplate>,
-  imageTemplateBySlug: ImageTemplate,
-  my: My,
-  now: NowInfo,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
-  rooms: Array<Maybe<Room>>,
-  staffMembersAll: Array<StaffMember>,
-  staffMember: StaffMember,
+  cashierPayments: CashierPaymentConnection,
   watchmenWatchmenAll: Array<WatchmenWatchman>,
   watchmenGradesAll: Array<WatchmenGrade>,
   watchmenShifts: Array<WatchmenShift>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
-};
-
-
-export type QueryCashierPaymentsArgs = {
-  page?: Maybe<Scalars['Int']>
+  imageTemplatesAll: Array<ImageTemplate>,
+  imageTemplateBySlug: ImageTemplate,
+  staffMembersAll: Array<StaffMember>,
+  staffMember: StaffMember,
+  currentUser: AuthCurrentUser,
+  authGroupsAll: Array<AuthGroup>,
+  authPermissionsAll: Array<AuthPermission>,
 };
 
 
 export type QueryCm2CustomersArgs = {
   search?: Maybe<Scalars['String']>,
+  before?: Maybe<Scalars['String']>,
   after?: Maybe<Scalars['String']>,
   first?: Maybe<Scalars['Int']>,
-  page?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
 };
 
 
 export type QueryCm2OrdersArgs = {
   status?: Maybe<Scalars['String']>,
+  before?: Maybe<Scalars['String']>,
   after?: Maybe<Scalars['String']>,
   first?: Maybe<Scalars['Int']>,
-  page?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
 };
 
 
@@ -478,13 +579,11 @@ export type QueryCm2OrderArgs = {
 };
 
 
-export type QueryImageTemplateBySlugArgs = {
-  slug: Scalars['String']
-};
-
-
 export type QueryRatioTrainingsArgs = {
-  page?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
 };
 
 
@@ -493,8 +592,11 @@ export type QueryRatioTrainingBySlugArgs = {
 };
 
 
-export type QueryStaffMemberArgs = {
-  id: Scalars['ID']
+export type QueryCashierPaymentsArgs = {
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
 };
 
 
@@ -510,8 +612,10 @@ export type QueryWatchmenShiftsArgs = {
 
 
 export type QueryZadarmaPbxCallsArgs = {
-  page?: Maybe<Scalars['Int']>,
-  page_size?: Maybe<Scalars['Int']>
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
 };
 
 
@@ -519,26 +623,38 @@ export type QueryZadarmaPbxCallArgs = {
   pbx_call_id: Scalars['ID']
 };
 
+
+export type QueryImageTemplateBySlugArgs = {
+  slug: Scalars['String']
+};
+
+
+export type QueryStaffMemberArgs = {
+  id: Scalars['ID']
+};
+
 export type RatioActivity = {
    __typename?: 'RatioActivity',
   id: Scalars['ID'],
-  time: Scalars['String'],
-  activity_type: Scalars['String'],
+  time: Scalars['Time'],
+  activity_type: ActivityActivityType,
   name: Scalars['String'],
+  location: Scalars['String'],
   trainer?: Maybe<RatioTrainer>,
-  location?: Maybe<Scalars['String']>,
 };
 
 export type RatioAddTicketInput = {
   training: Scalars['ID'],
   email: Scalars['String'],
   first_name: Scalars['String'],
-  last_name: Scalars['String'],
+  last_name?: Maybe<Scalars['String']>,
   payment_amount: Scalars['Int'],
   status: Scalars['String'],
   fiscalization_status: Scalars['String'],
   ticket_type: Scalars['String'],
   payment_type: Scalars['String'],
+  comment?: Maybe<Scalars['String']>,
+  clientMutationId?: Maybe<Scalars['String']>,
 };
 
 export type RatioAddTrainingInput = {
@@ -554,13 +670,13 @@ export type RatioTicket = {
   email: Scalars['String'],
   first_name: Scalars['String'],
   last_name?: Maybe<Scalars['String']>,
+  registration_date?: Maybe<Scalars['Date']>,
+  status: TicketStatus,
+  ticket_type: TicketTicketType,
+  payment_type: TicketPaymentType,
   payment_amount: Scalars['Int'],
-  status: Scalars['String'],
-  fiscalization_status: Scalars['String'],
-  ticket_type: Scalars['String'],
-  payment_type: Scalars['String'],
-  registration_date?: Maybe<Scalars['String']>,
-  comment?: Maybe<Scalars['String']>,
+  fiscalization_status: TicketFiscalizationStatus,
+  comment: Scalars['String'],
 };
 
 export type RatioTrainer = {
@@ -575,10 +691,12 @@ export type RatioTraining = {
   id: Scalars['ID'],
   name: Scalars['String'],
   slug: Scalars['String'],
-  date: Scalars['String'],
+  date: Scalars['Date'],
+  salaries_paid: Scalars['Boolean'],
   tickets: Array<RatioTicket>,
-  tickets_count: Scalars['Int'],
   total_income: Scalars['Int'],
+  tickets_count: Scalars['Int'],
+  long_name: Scalars['String'],
   schedule: Array<RatioTrainingDay>,
 };
 
@@ -589,8 +707,9 @@ export type RatioTrainingAddDayInput = {
 
 export type RatioTrainingConnection = {
    __typename?: 'RatioTrainingConnection',
+  /** Pagination data for this connection. */
   pageInfo: PageInfo,
-  nodes: Array<RatioTraining>,
+  edges: Array<RatioTrainingEdge>,
 };
 
 export type RatioTrainingCopyScheduleFromInput = {
@@ -601,8 +720,16 @@ export type RatioTrainingCopyScheduleFromInput = {
 export type RatioTrainingDay = {
    __typename?: 'RatioTrainingDay',
   id: Scalars['ID'],
-  date: Scalars['String'],
+  date: Scalars['Date'],
   activities: Array<RatioActivity>,
+};
+
+export type RatioTrainingEdge = {
+   __typename?: 'RatioTrainingEdge',
+  /** The item at the end of the edge */
+  node: RatioTraining,
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'],
 };
 
 export type Room = {
@@ -612,20 +739,93 @@ export type Room = {
   area?: Maybe<Scalars['Int']>,
 };
 
+/** An enumeration. */
+export enum ShiftShift {
+  /** MORNING_V1 */
+  MorningV1 = 'MORNING_V1',
+  /** EVENING_V1 */
+  EveningV1 = 'EVENING_V1',
+  /** MORNING */
+  Morning = 'MORNING',
+  /** MIDDAY */
+  Midday = 'MIDDAY',
+  /** EVENING */
+  Evening = 'EVENING',
+  /** NIGHT */
+  Night = 'NIGHT'
+}
+
+export type SlackUser = {
+   __typename?: 'SlackUser',
+  slack_id: Scalars['String'],
+  image_url: Scalars['String'],
+};
+
 export type StaffMember = {
    __typename?: 'StaffMember',
   id: Scalars['ID'],
-  user_id: Scalars['ID'],
+  short_name: Scalars['String'],
   full_name: Scalars['String'],
-  short_name?: Maybe<Scalars['String']>,
-  email: Scalars['String'],
-  role: Scalars['String'],
-  color?: Maybe<Scalars['String']>,
-  is_current?: Maybe<Scalars['Boolean']>,
-  slack_image?: Maybe<Scalars['String']>,
-  slack_id?: Maybe<Scalars['String']>,
-  vk?: Maybe<Scalars['String']>,
+  role: MemberRole,
+  is_current: Scalars['Boolean'],
+  vk: Scalars['String'],
+  color: Scalars['String'],
+  user: AuthUser,
+  slack_user?: Maybe<SlackUser>,
 };
+
+/** An enumeration. */
+export enum TicketFiscalizationStatus {
+  /** todo */
+  Todo = 'TODO',
+  /** not_needed */
+  NotNeeded = 'NOT_NEEDED',
+  /** in_progress */
+  InProgress = 'IN_PROGRESS',
+  /** fiscalized */
+  Fiscalized = 'FISCALIZED'
+}
+
+/** An enumeration. */
+export enum TicketPaymentType {
+  /** - */
+  None = 'NONE',
+  /** Timepad */
+  Timepad = 'TIMEPAD',
+  /** Сайт */
+  Website = 'WEBSITE',
+  /** Краудфандинг */
+  Crowdfunding = 'CROWDFUNDING',
+  /** Нал */
+  Cash = 'CASH',
+  /** Счёт */
+  Invoice = 'INVOICE',
+  /** Перевод */
+  Transfer = 'TRANSFER'
+}
+
+/** An enumeration. */
+export enum TicketStatus {
+  /** Участник */
+  Normal = 'NORMAL',
+  /** Отказ */
+  Canceled = 'CANCELED'
+}
+
+/** An enumeration. */
+export enum TicketTicketType {
+  /** Обычный */
+  Normal = 'NORMAL',
+  /** Стипендия */
+  Stipend = 'STIPEND',
+  /** Стафф */
+  Staff = 'STAFF',
+  /** Замена (заменяет другого участника) */
+  Replacement = 'REPLACEMENT',
+  /** Перенос (с прошлого мероприятия) */
+  CarryOver = 'CARRY_OVER'
+}
+
 
 export type WatchmenCreateWatchmanInput = {
   email: Scalars['String'],
@@ -635,8 +835,8 @@ export type WatchmenCreateWatchmanInput = {
   vk?: Maybe<Scalars['String']>,
   gender: Scalars['String'],
   skip_wiki?: Maybe<Scalars['Boolean']>,
-  skip_cm_user?: Maybe<Scalars['Boolean']>,
   skip_cm_customer?: Maybe<Scalars['Boolean']>,
+  skip_cm_user?: Maybe<Scalars['Boolean']>,
 };
 
 export type WatchmenGrade = {
@@ -658,8 +858,8 @@ export type WatchmenSetWatchmanPriorityInput = {
 
 export type WatchmenShift = {
    __typename?: 'WatchmenShift',
-  date: Scalars['String'],
-  shift: Scalars['String'],
+  date: Scalars['Date'],
+  shift: ShiftShift,
   watchman?: Maybe<WatchmenWatchman>,
   is_night: Scalars['Boolean'],
 };
@@ -674,22 +874,23 @@ export type WatchmenUpdateShiftInput = {
 export type WatchmenWatchman = {
    __typename?: 'WatchmenWatchman',
   id: Scalars['ID'],
-  priority: Scalars['Int'],
   member: StaffMember,
   grade?: Maybe<WatchmenGrade>,
+  priority: Scalars['Int'],
 };
 
 export type ZadarmaCall = {
    __typename?: 'ZadarmaCall',
-  call_id: Scalars['ID'],
-  ts: Scalars['String'],
-  watchman?: Maybe<Scalars['String']>,
+  call_id: Scalars['String'],
+  ts: Scalars['DateTime'],
   call_type: Scalars['String'],
   disposition: Scalars['String'],
   clid: Scalars['String'],
   destination: Scalars['String'],
   sip: Scalars['String'],
-  record?: Maybe<Scalars['String']>,
+  is_recorded: Scalars['Int'],
+  watchman: Scalars['String'],
+  record: Scalars['String'],
 };
 
 export type ZadarmaData = {
@@ -697,16 +898,27 @@ export type ZadarmaData = {
   staff_member?: Maybe<StaffMember>,
 };
 
-export type ZadarmaPbxCall = {
+export type ZadarmaPbxCall = Node & {
    __typename?: 'ZadarmaPbxCall',
-  pbx_call_id: Scalars['ID'],
-  ts: Scalars['String'],
-  calls: Array<ZadarmaCall>,
+  pbx_call_id: Scalars['String'],
+  ts: Scalars['DateTime'],
   data?: Maybe<ZadarmaData>,
+  calls: Array<ZadarmaCall>,
+  /** The ID of the object. */
+  id: Scalars['ID'],
 };
 
 export type ZadarmaPbxCallConnection = {
    __typename?: 'ZadarmaPbxCallConnection',
+  /** Pagination data for this connection. */
   pageInfo: PageInfo,
-  nodes: Array<ZadarmaPbxCall>,
+  edges: Array<ZadarmaPbxCallEdge>,
+};
+
+export type ZadarmaPbxCallEdge = {
+   __typename?: 'ZadarmaPbxCallEdge',
+  /** The item at the end of the edge */
+  node: ZadarmaPbxCall,
+  /** A cursor for use in pagination */
+  cursor: Scalars['String'],
 };

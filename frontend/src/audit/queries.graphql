@@ -22,11 +22,15 @@ query AuthGroups {
 }
 
 mutation AuthAddUserToGroup($user_id: ID!, $group_id: ID!) {
-  authAddUserToGroup(user_id: $user_id, group_id: $group_id)
+  authAddUserToGroup(user_id: $user_id, group_id: $group_id) {
+    ok
+  }
 }
 
 mutation AuthRemoveUserFromGroup($user_id: ID!, $group_id: ID!) {
-  authRemoveUserFromGroup(user_id: $user_id, group_id: $group_id)
+  authRemoveUserFromGroup(user_id: $user_id, group_id: $group_id) {
+    ok
+  }
 }
 
 query AuthPermissions {

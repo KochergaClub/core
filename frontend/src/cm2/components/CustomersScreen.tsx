@@ -78,9 +78,7 @@ const CustomersScreen: React.FC = () => {
         return (
           <PagedApolloCollection
             connection={cm2Customers}
-            fetchPage={async page => {
-              await queryResults.refetch({ page });
-            }}
+            fetchPage={queryResults.refetch}
             names={{
               plural: 'клиенты',
               genitive: 'клиента',

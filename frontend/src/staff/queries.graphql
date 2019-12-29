@@ -1,20 +1,26 @@
 fragment StaffMemberFull on StaffMember {
   id
-  user_id
   full_name
   short_name
-  email
   role
   color
   is_current
-  slack_image
-  slack_id
+  slack_user {
+    slack_id
+    image_url
+  }
   vk
+  user {
+    id
+    email
+  }
 }
 
 fragment StaffMemberForPicker on StaffMember {
   id
-  user_id
+  user {
+    id
+  }
   full_name
   short_name
   color
@@ -39,9 +45,13 @@ query StaffMember($id: ID!) {
 }
 
 mutation StaffGrantGooglePermissionsToMember($id: ID!) {
-  staffGrantGooglePermissionsToMember(id: $id)
+  staffGrantGooglePermissionsToMember(id: $id) {
+    ok
+  }
 }
 
 mutation StaffFireMember($id: ID!) {
-  staffFireMember(id: $id)
+  staffFireMember(id: $id) {
+    ok
+  }
 }

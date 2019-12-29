@@ -6,12 +6,23 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type StaffMemberFullFragment = (
   { __typename?: 'StaffMember' }
-  & Pick<Types.StaffMember, 'id' | 'user_id' | 'full_name' | 'short_name' | 'email' | 'role' | 'color' | 'is_current' | 'slack_image' | 'slack_id' | 'vk'>
+  & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'role' | 'color' | 'is_current' | 'vk'>
+  & { slack_user: Types.Maybe<(
+    { __typename?: 'SlackUser' }
+    & Pick<Types.SlackUser, 'slack_id' | 'image_url'>
+  )>, user: (
+    { __typename?: 'AuthUser' }
+    & Pick<Types.AuthUser, 'id' | 'email'>
+  ) }
 );
 
 export type StaffMemberForPickerFragment = (
   { __typename?: 'StaffMember' }
-  & Pick<Types.StaffMember, 'id' | 'user_id' | 'full_name' | 'short_name' | 'color'>
+  & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'color'>
+  & { user: (
+    { __typename?: 'AuthUser' }
+    & Pick<Types.AuthUser, 'id'>
+  ) }
 );
 
 export type StaffMembersQueryVariables = {};
@@ -56,7 +67,10 @@ export type StaffGrantGooglePermissionsToMemberMutationVariables = {
 
 export type StaffGrantGooglePermissionsToMemberMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'staffGrantGooglePermissionsToMember'>
+  & { staffGrantGooglePermissionsToMember: Types.Maybe<(
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  )> }
 );
 
 export type StaffFireMemberMutationVariables = {
@@ -66,28 +80,37 @@ export type StaffFireMemberMutationVariables = {
 
 export type StaffFireMemberMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'staffFireMember'>
+  & { staffFireMember: Types.Maybe<(
+    { __typename?: 'Ok' }
+    & Pick<Types.Ok, 'ok'>
+  )> }
 );
 
 export const StaffMemberFullFragmentDoc = gql`
     fragment StaffMemberFull on StaffMember {
   id
-  user_id
   full_name
   short_name
-  email
   role
   color
   is_current
-  slack_image
-  slack_id
+  slack_user {
+    slack_id
+    image_url
+  }
   vk
+  user {
+    id
+    email
+  }
 }
     `;
 export const StaffMemberForPickerFragmentDoc = gql`
     fragment StaffMemberForPicker on StaffMember {
   id
-  user_id
+  user {
+    id
+  }
   full_name
   short_name
   color
@@ -192,7 +215,9 @@ export type StaffMemberLazyQueryHookResult = ReturnType<typeof useStaffMemberLaz
 export type StaffMemberQueryResult = ApolloReactCommon.QueryResult<StaffMemberQuery, StaffMemberQueryVariables>;
 export const StaffGrantGooglePermissionsToMemberDocument = gql`
     mutation StaffGrantGooglePermissionsToMember($id: ID!) {
-  staffGrantGooglePermissionsToMember(id: $id)
+  staffGrantGooglePermissionsToMember(id: $id) {
+    ok
+  }
 }
     `;
 export type StaffGrantGooglePermissionsToMemberMutationFn = ApolloReactCommon.MutationFunction<StaffGrantGooglePermissionsToMemberMutation, StaffGrantGooglePermissionsToMemberMutationVariables>;
@@ -222,7 +247,9 @@ export type StaffGrantGooglePermissionsToMemberMutationResult = ApolloReactCommo
 export type StaffGrantGooglePermissionsToMemberMutationOptions = ApolloReactCommon.BaseMutationOptions<StaffGrantGooglePermissionsToMemberMutation, StaffGrantGooglePermissionsToMemberMutationVariables>;
 export const StaffFireMemberDocument = gql`
     mutation StaffFireMember($id: ID!) {
-  staffFireMember(id: $id)
+  staffFireMember(id: $id) {
+    ok
+  }
 }
     `;
 export type StaffFireMemberMutationFn = ApolloReactCommon.MutationFunction<StaffFireMemberMutation, StaffFireMemberMutationVariables>;

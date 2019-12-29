@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { HR } from '@kocherga/frontkit';
 
 import { ActivityFragment } from '../../queries.generated';
+import { ActivityActivityType } from '~/apollo/gen-types';
 
 import EditableTrainer from './EditableTrainer';
 
@@ -39,29 +40,30 @@ interface Props {
 }
 
 const Activity = ({ activity }: Props) => {
-  if (activity.activity_type == 'section') {
-    return (
-      <ActivitySection>
-        <time>{formatTime(activity.time)}</time>
-        <header>{activity.name}</header>
-        <EditableTrainer
-          trainer_name={activity.trainer?.long_name}
-          picked={async () => window.alert('not implemented')}
-          unpicked={async () => window.alert('not implemented')}
-        />
-      </ActivitySection>
-    );
-  } else if (activity.activity_type == 'break') {
-    return (
-      <ActivityBreak>
-        <HR />(<time>{formatTime(activity.time)}</time> {activity.name})
-        <HR />
-      </ActivityBreak>
-    );
-  } else if (activity.activity_type == 'bonus') {
-    return <ActivityBonus>Бонус. {activity.name}</ActivityBonus>;
-  } else {
-    return <div>НЕОПОЗНАННАЯ СЕКЦИЯ</div>;
+  switch (activity.activity_type) {
+    case ActivityActivityType.Section:
+      return (
+        <ActivitySection>
+          <time>{formatTime(activity.time)}</time>
+          <header>{activity.name}</header>
+          <EditableTrainer
+            trainer_name={activity.trainer?.long_name}
+            picked={async () => window.alert('not implemented')}
+            unpicked={async () => window.alert('not implemented')}
+          />
+        </ActivitySection>
+      );
+    case ActivityActivityType.Break:
+      return (
+        <ActivityBreak>
+          <HR />(<time>{formatTime(activity.time)}</time> {activity.name})
+          <HR />
+        </ActivityBreak>
+      );
+    case ActivityActivityType.Bonus:
+      return <ActivityBonus>Бонус. {activity.name}</ActivityBonus>;
+    default:
+      return <div>НЕОПОЗНАННАЯ СЕКЦИЯ</div>;
   }
 };
 

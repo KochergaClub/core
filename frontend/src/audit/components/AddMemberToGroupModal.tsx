@@ -22,7 +22,7 @@ const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
   const cb = useCallback(
     async (member: StaffMemberForPickerFragment) => {
       await addMutation({
-        variables: { user_id: member.user_id, group_id: group.id },
+        variables: { user_id: member.user.id, group_id: group.id },
       });
       close();
     },
