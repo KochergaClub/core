@@ -30,10 +30,10 @@ export default function PrintFooter() {
     <Container>
       {Array.from(new Array(printContext.page.count)).map((_, i) => {
         const pageNumber = i + 1;
-        const top =
-          (printContext.page.height - printContext.page.bottomMargin) *
-            (pageNumber - 1) +
-          8;
+        const pageHeight =
+          printContext.page.height - printContext.page.bottomMargin;
+        const pageTop = pageHeight * (pageNumber - 1);
+        const top = pageTop + pageHeight - 8;
         if (pageNumber <= 4) {
           return null;
         }
