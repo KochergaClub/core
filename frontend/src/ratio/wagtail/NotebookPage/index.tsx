@@ -1,13 +1,10 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 import { selectAPI } from '~/core/selectors';
 
-import { NextWagtailPage } from '~/wagtail/types';
+import { NextWagtailPage, WagtailPageProps } from '~/wagtail/types';
 
-import { WagtailPageProps } from '~/wagtail/types';
 import { AnyBlockType } from '~/wagtail/blocks/types';
 import { PageType as SectionPageType } from '../SectionPage';
 import RatioSection_Main from '../SectionPage/Main';
