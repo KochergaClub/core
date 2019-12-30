@@ -18,11 +18,9 @@ import { resolvers as myResolvers } from './my';
 import Kkm from './kkm.graphql';
 import { resolvers as kkmResolvers } from './kkm';
 
-import { default as Base } from './base.graphql';
-
 // https://blog.apollographql.com/modularizing-your-graphql-schema-code-d7f71d5ed5f2
 export const schema = makeExecutableSchema({
-  typeDefs: [Base, Room, Email, Now, My, Kkm],
+  typeDefs: [Room, Email, Now, My, Kkm],
   // NB: there's a mismatch between codegen's Resolvers type and apollo Resolvers type.
   // It could be fixed with `useIndexSignature = true` config option to typescript-resolvers codegen plugin,
   // but it makes types too weak, so this is a lesser evil.
