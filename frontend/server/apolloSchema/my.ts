@@ -1,3 +1,4 @@
+export default 42;
 /*
 import { Resolvers } from './gen-types';
 
