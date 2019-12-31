@@ -52,7 +52,7 @@ django-reversion-compare==0.8.6
 django-reversion==3.0.4
 django-taggit==1.1.0      # via wagtail
 django-treebeard==4.3     # via wagtail
-django==2.2.5
+django==2.2.8
 djangorestframework==3.10.2  # via django-rest-framework, wagtail
 docutils==0.15.2          # via botocore
 draftjs-exporter==2.1.6   # via wagtail
