@@ -72,9 +72,7 @@ mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
 }
 
 mutation Cm2CloseOrder($id: ID!) {
-  cm2CloseOrder(id: $id) {
-    ok
-  }
+  cm2CloseOrder(id: $id)
 }
 
 query Cm2CustomerPage($id: ID!) {

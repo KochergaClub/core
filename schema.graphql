@@ -1,0 +1,482 @@
+
+  type Query {
+    rooms: [Room]!
+  }
+
+  type Room {
+    name: String
+    max_people: Int
+    area: Int
+  }
+
+  type Mutation {
+    _empty: Boolean
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+  }
+
+
+extend type Query {
+  currentUser: AuthCurrentUser!
+  authGroupsAll: [AuthGroup!]!
+  authPermissionsAll: [AuthPermission!]!
+}
+
+type AuthCurrentUser {
+  is_authenticated: Boolean!
+  email: String
+  is_staff: Boolean
+  permissions: [String!]!
+}
+
+type AuthGroup {
+  id: ID!
+  name: String!
+  permissions: [AuthPermission!]!
+  users: [AuthUser!]!
+}
+
+type AuthPermission {
+  id: ID!
+  name: String!
+  users: [AuthUser!]!
+}
+
+type AuthUser {
+  id: ID!
+  email: String!
+  staff_member: StaffMember
+}
+
+extend type Mutation {
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean
+}
+
+extend type Query {
+  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
+  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
+}
+
+type ZadarmaCall {
+  call_id: String!
+  ts: String!
+  call_type: String!
+  disposition: String!
+  clid: String!
+  destination: String!
+  sip: String!
+  is_recorded: Int!
+  watchman: String!
+  record: String!
+}
+
+type ZadarmaData {
+  staff_member: StaffMember
+}
+
+type ZadarmaPbxCall {
+  pbx_call_id: String!
+  ts: String!
+  data: ZadarmaData
+  calls: [ZadarmaCall!]!
+}
+
+type ZadarmaPbxCallEdge {
+  node: ZadarmaPbxCall!
+}
+
+type ZadarmaPbxCallConnection {
+  pageInfo: PageInfo!
+  nodes: [ZadarmaPbxCall!]!
+  edges: [ZadarmaPbxCallEdge!]!
+}
+
+extend type Mutation {
+  zadarmaSetMemberForPbxCall(member_id: ID!, pbx_call_id: ID!): Boolean
+}
+
+extend type Query {
+  now: NowInfo!
+}
+
+type NowInfo {
+  total: Int!
+  customers: [NowCustomer!]!
+}
+
+type NowCustomer {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+extend type Query {
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
+  cm2Customer(id: ID!): Cm2Customer!
+  cm2Order(id: ID!): Cm2Order!
+}
+
+type Cm2Customer {
+  id: ID!
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
+}
+
+type Cm2CustomerConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2CustomerEdge!]!
+}
+
+type Cm2CustomerEdge {
+  node: Cm2Customer!
+}
+
+type Cm2Order {
+  id: ID!
+  start: String!
+  end: String
+  customer: Cm2Customer
+  value: Int!
+}
+
+type Cm2OrderConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2OrderEdge!]!
+}
+
+type Cm2OrderEdge {
+  node: Cm2Order!
+}
+
+extend type Mutation {
+  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order!
+  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer!
+  cm2CloseOrder(id: ID!): Boolean
+}
+
+input Cm2CreateCustomerInput {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+input Cm2CreateOrderInput {
+  customer: ID
+}
+
+extend type Query {
+  watchmenWatchmenAll(current: Boolean): [WatchmenWatchman!]!
+  watchmenGradesAll: [WatchmenGrade!]!
+  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]!
+}
+
+extend type Mutation {
+  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean
+  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
+  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean
+  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean
+}
+
+input WatchmenCreateWatchmanInput {
+  email: String!
+  short_name: String!
+  full_name: String!
+  password: String!
+  vk: String
+  gender: String!
+  skip_wiki: Boolean
+  skip_cm_customer: Boolean
+  skip_cm_user: Boolean
+}
+
+type WatchmenGrade {
+  id: ID!
+  code: String!
+  multiplier: Float!
+}
+
+input WatchmenSetWatchmanGradeInput {
+  watchman_id: ID!
+  grade_id: ID!
+}
+
+input WatchmenSetWatchmanPriorityInput {
+  watchman_id: ID!
+  priority: Int!
+}
+
+type WatchmenShift {
+  date: String!
+  shift: String!
+  watchman: WatchmenWatchman
+  is_night: Boolean!
+}
+
+input WatchmenUpdateShiftInput {
+  date: String!
+  shift: String!
+  watchman_id: ID
+  is_night: Boolean
+}
+
+type WatchmenWatchman {
+  id: ID!
+  member: StaffMember!
+  grade: WatchmenGrade
+  priority: Int!
+}
+
+extend type Query {
+  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
+}
+
+type CashierPayment {
+  id: ID!
+  whom: AuthUser!
+  amount: Int!
+  created_dt: String!
+  redeem_dt: String
+  comment: String!
+  is_redeemed: Boolean!
+}
+
+type CashierPaymentEdge {
+  node: CashierPayment!
+}
+
+type CashierPaymentConnection {
+  pageInfo: PageInfo!
+  nodes: [CashierPayment!]!
+  edges: [CashierPaymentEdge!]!
+}
+
+extend type Mutation {
+  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
+  cashierRedeemPayment(id: ID!): Boolean
+}
+
+input CashierCreatePaymentInput {
+  amount: Int!
+  whom: ID!
+  comment: String!
+}
+
+# KKM-related methods; TODO - move to kocherga.kkm app
+
+extend type Mutation {
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+}
+
+input KkmRegisterCheckInput {
+  email: String!
+  title: String!
+  sum: Int!
+  sign_method_calculation: Int!
+}
+
+type KkmRegisterCheckResult {
+  status: Int!
+  url: String
+  error: String
+}
+
+extend type Query {
+  staffMembersAll: [StaffMember!]!
+  staffMember(id: ID!): StaffMember!
+}
+
+extend type Mutation {
+  staffGrantGooglePermissionsToMember(id: ID!): Boolean
+  staffFireMember(id: ID!): Boolean
+}
+
+type StaffMember {
+  id: ID!
+  short_name: String!
+  full_name: String!
+  role: String!
+  is_current: Boolean!
+  vk: String!
+  color: String!
+  user: AuthUser!
+  slack_user: SlackUser
+}
+
+extend type Query {
+  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection!
+  ratioTrainingBySlug(slug: String!): RatioTraining!
+  ratioTrainersAll: [RatioTrainer!]!
+}
+
+type RatioActivity {
+  id: ID!
+  time: String!
+  activity_type: String!
+  name: String!
+  location: String!
+  trainer: RatioTrainer
+}
+
+type RatioTicket {
+  id: ID!
+  training: RatioTraining!
+  email: String!
+  first_name: String!
+  last_name: String
+  registration_date: String
+  status: String!
+  ticket_type: String!
+  payment_type: String!
+  payment_amount: Int!
+  fiscalization_status: String!
+  comment: String!
+}
+
+type RatioTrainer {
+  id: ID!
+  short_name: String!
+  long_name: String!
+}
+
+type RatioTraining {
+  id: ID!
+  name: String!
+  slug: String!
+  date: String!
+  salaries_paid: Boolean!
+  tickets: [RatioTicket!]!
+  total_income: Int!
+  tickets_count: Int!
+  long_name: String!
+  schedule: [RatioTrainingDay!]!
+}
+
+type RatioTrainingEdge {
+  node: RatioTraining!
+}
+
+type RatioTrainingConnection {
+  pageInfo: PageInfo!
+  edges: [RatioTrainingEdge!]!
+  nodes: [RatioTraining!]!
+}
+
+type RatioTrainingDay {
+  id: ID!
+  date: String!
+  activities: [RatioActivity!]!
+}
+
+extend type Mutation {
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean
+  ratioTicketFiscalize(ticket_id: ID!): Boolean
+}
+
+input RatioTrainingAddDayInput {
+  training_slug: String!
+  date: String!
+}
+
+input RatioTrainingCopyScheduleFromInput {
+  from_training_slug: String!
+  to_training_slug: String!
+}
+
+input RatioAddTicketInput {
+  training: ID!
+  email: String!
+  first_name: String!
+  last_name: String
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+  comment: String
+  clientMutationId: String
+}
+
+input RatioAddTrainingInput {
+  name: String!
+  slug: String!
+  date: String!
+}
+
+extend type Query {
+  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]!
+  emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
+}
+
+type EmailMailchimpCategory {
+  id: ID!
+  title: String!
+  category_id: String!
+  interests: [EmailMailchimpInterest!]!
+}
+
+type EmailSubscribeChannel {
+  id: ID!
+  slug: String!
+  interests: [EmailMailchimpInterest!]!
+}
+
+type EmailMailchimpInterest {
+  id: ID!
+  interest_id: String!
+  name: String!
+  subscriber_count: Int!
+}
+
+extend type Mutation {
+  emailSubscribeChannelDelete(slug: String!): Boolean
+  emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean
+  emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean
+}
+
+input EmailSubscribeChannelCreateInput {
+  slug: String!
+  interest_ids: [ID!]!
+}
+
+type SlackUser {
+  slack_id: String!
+  image_url: String!
+}
+
+extend type Query {
+  imageTemplatesAll: [ImageTemplate!]!
+  imageTemplateBySlug(slug: String!): ImageTemplate!
+}
+
+type ImageTemplate {
+  name: ID!
+  schema: ImageTemplateSchema!
+  sizes: ImageTemplateSizes!
+}
+
+type ImageTemplateSchema {
+  fields: [ImageTemplateSchemaField!]!
+}
+
+type ImageTemplateSchemaField {
+  name: String!
+  value_type: String!
+  default: String
+}
+
+type ImageTemplateSizes {
+  width: Int!
+  height: Int!
+}

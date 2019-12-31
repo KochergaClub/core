@@ -1,0 +1,36 @@
+extend type Query {
+  currentUser: AuthCurrentUser!
+  authGroupsAll: [AuthGroup!]!
+  authPermissionsAll: [AuthPermission!]!
+}
+
+type AuthCurrentUser {
+  is_authenticated: Boolean!
+  email: String
+  is_staff: Boolean
+  permissions: [String!]!
+}
+
+type AuthGroup {
+  id: ID!
+  name: String!
+  permissions: [AuthPermission!]!
+  users: [AuthUser!]!
+}
+
+type AuthPermission {
+  id: ID!
+  name: String!
+  users: [AuthUser!]!
+}
+
+type AuthUser {
+  id: ID!
+  email: String!
+  staff_member: StaffMember
+}
+
+extend type Mutation {
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean
+}

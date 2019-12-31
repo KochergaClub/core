@@ -39,10 +39,7 @@ export type AuthAddUserToGroupMutationVariables = {
 
 export type AuthAddUserToGroupMutation = (
   { __typename?: 'Mutation' }
-  & { authAddUserToGroup: Types.Maybe<(
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  )> }
+  & Pick<Types.Mutation, 'authAddUserToGroup'>
 );
 
 export type AuthRemoveUserFromGroupMutationVariables = {
@@ -53,10 +50,7 @@ export type AuthRemoveUserFromGroupMutationVariables = {
 
 export type AuthRemoveUserFromGroupMutation = (
   { __typename?: 'Mutation' }
-  & { authRemoveUserFromGroup: Types.Maybe<(
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  )> }
+  & Pick<Types.Mutation, 'authRemoveUserFromGroup'>
 );
 
 export type AuthPermissionsQueryVariables = {};
@@ -126,9 +120,7 @@ export type AuthGroupsLazyQueryHookResult = ReturnType<typeof useAuthGroupsLazyQ
 export type AuthGroupsQueryResult = ApolloReactCommon.QueryResult<AuthGroupsQuery, AuthGroupsQueryVariables>;
 export const AuthAddUserToGroupDocument = gql`
     mutation AuthAddUserToGroup($user_id: ID!, $group_id: ID!) {
-  authAddUserToGroup(user_id: $user_id, group_id: $group_id) {
-    ok
-  }
+  authAddUserToGroup(user_id: $user_id, group_id: $group_id)
 }
     `;
 export type AuthAddUserToGroupMutationFn = ApolloReactCommon.MutationFunction<AuthAddUserToGroupMutation, AuthAddUserToGroupMutationVariables>;
@@ -159,9 +151,7 @@ export type AuthAddUserToGroupMutationResult = ApolloReactCommon.MutationResult<
 export type AuthAddUserToGroupMutationOptions = ApolloReactCommon.BaseMutationOptions<AuthAddUserToGroupMutation, AuthAddUserToGroupMutationVariables>;
 export const AuthRemoveUserFromGroupDocument = gql`
     mutation AuthRemoveUserFromGroup($user_id: ID!, $group_id: ID!) {
-  authRemoveUserFromGroup(user_id: $user_id, group_id: $group_id) {
-    ok
-  }
+  authRemoveUserFromGroup(user_id: $user_id, group_id: $group_id)
 }
     `;
 export type AuthRemoveUserFromGroupMutationFn = ApolloReactCommon.MutationFunction<AuthRemoveUserFromGroupMutation, AuthRemoveUserFromGroupMutationVariables>;

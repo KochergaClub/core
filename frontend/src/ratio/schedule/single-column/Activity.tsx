@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { HR } from '@kocherga/frontkit';
 
 import { ActivityFragment } from '../../queries.generated';
-import { ActivityActivityType } from '~/apollo/gen-types';
 
 import EditableTrainer from './EditableTrainer';
 
@@ -41,7 +40,7 @@ interface Props {
 
 const Activity = ({ activity }: Props) => {
   switch (activity.activity_type) {
-    case ActivityActivityType.Section:
+    case 'section':
       return (
         <ActivitySection>
           <time>{formatTime(activity.time)}</time>
@@ -53,14 +52,14 @@ const Activity = ({ activity }: Props) => {
           />
         </ActivitySection>
       );
-    case ActivityActivityType.Break:
+    case 'break':
       return (
         <ActivityBreak>
           <HR />(<time>{formatTime(activity.time)}</time> {activity.name})
           <HR />
         </ActivityBreak>
       );
-    case ActivityActivityType.Bonus:
+    case 'bonus':
       return <ActivityBonus>Бонус. {activity.name}</ActivityBonus>;
     default:
       return <div>НЕОПОЗНАННАЯ СЕКЦИЯ</div>;

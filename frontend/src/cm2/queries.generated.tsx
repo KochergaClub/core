@@ -136,10 +136,7 @@ export type Cm2CloseOrderMutationVariables = {
 
 export type Cm2CloseOrderMutation = (
   { __typename?: 'Mutation' }
-  & { cm2CloseOrder: (
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  ) }
+  & Pick<Types.Mutation, 'cm2CloseOrder'>
 );
 
 export type Cm2CustomerPageQueryVariables = {
@@ -407,9 +404,7 @@ export type Cm2CreateCustomerMutationResult = ApolloReactCommon.MutationResult<C
 export type Cm2CreateCustomerMutationOptions = ApolloReactCommon.BaseMutationOptions<Cm2CreateCustomerMutation, Cm2CreateCustomerMutationVariables>;
 export const Cm2CloseOrderDocument = gql`
     mutation Cm2CloseOrder($id: ID!) {
-  cm2CloseOrder(id: $id) {
-    ok
-  }
+  cm2CloseOrder(id: $id)
 }
     `;
 export type Cm2CloseOrderMutationFn = ApolloReactCommon.MutationFunction<Cm2CloseOrderMutation, Cm2CloseOrderMutationVariables>;

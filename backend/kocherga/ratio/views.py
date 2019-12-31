@@ -7,10 +7,13 @@ from rest_framework.response import Response
 from kocherga.django.pagination import CommonPagination
 from kocherga.django.drf import BulkRetrieveMixin
 
-from kocherga.money.cashier.views import IsKkmUser
-
 from . import serializers, models, email
 from .users import training2mailchimp
+
+
+class IsKkmUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('cashier.kkm_user')
 
 
 class IsRatioManager(permissions.BasePermission):

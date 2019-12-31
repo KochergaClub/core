@@ -1,18 +1,13 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from datetime import date
-
 from django.db import models
 
 from kocherga.dateutils import inflected_month
 
 from kocherga.money.cashier.models import Payment
 
-
-class TrainingManager(models.Manager):
-    def next_training(self):
-        return Training.objects.filter(date__gt=date.today()).order_by('date').first()
+from kocherga.django.managers import RelayQuerySet
 
 
 class Training(models.Model):
@@ -30,7 +25,7 @@ class Training(models.Model):
     post_survey_collected = models.BooleanField(default=False)
     salaries_paid = models.BooleanField(default=False)
 
-    objects = TrainingManager()
+    objects = RelayQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Тренинг'

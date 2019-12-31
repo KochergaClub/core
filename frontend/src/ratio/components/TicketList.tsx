@@ -7,8 +7,6 @@ import Card, { CardList } from '~/components/Card';
 
 import { usePermissions } from '~/common/hooks';
 
-import { TicketStatus, TicketFiscalizationStatus } from '~/apollo/gen-types';
-
 import {
   useRatioTicketFiscalizeMutation,
   TicketFragment,
@@ -53,8 +51,8 @@ const TicketItem = ({ ticket }: { ticket: TicketFragment }) => {
           <div>{ticket.email}</div>
         </Row>
         <div>{ticket.payment_amount} руб.</div>
-        {ticket.status === TicketStatus.Canceled && <CanceledBadge />}
-        {ticket.fiscalization_status === TicketFiscalizationStatus.Todo ? (
+        {ticket.status === 'canceled' && <CanceledBadge />}
+        {ticket.fiscalization_status === 'todo' ? (
           <FiscalizeButton ticket={ticket} />
         ) : (
           <Badge>{ticket.fiscalization_status}</Badge>

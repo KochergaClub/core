@@ -21,7 +21,7 @@ fragment CommonZadarmaPbxCall on ZadarmaPbxCall {
 }
 
 query ZadarmaPbxCalls($before: String, $after: String) {
-  pbxCalls: zadarmaPbxCalls(before: $before, after: $after, first: 20, last: 20) {
+  pbxCalls: zadarmaPbxCalls(before: $before, after: $after) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -43,7 +43,5 @@ query ZadarmaPbxCall($pbx_call_id: ID!) {
 }
 
 mutation ZadarmaSetMemberForPbxCall($member_id: ID!, $pbx_call_id: ID!) {
-  zadarmaSetMemberForPbxCall(member_id: $member_id, pbx_call_id: $pbx_call_id) {
-    ok
-  }
+  zadarmaSetMemberForPbxCall(member_id: $member_id, pbx_call_id: $pbx_call_id)
 }

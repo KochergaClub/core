@@ -1,5 +1,5 @@
 schema:
-  - schema.graphql
+  - ../schema.graphql
   - server/apolloSchema/*.graphql
 documents: 'src/**/*.graphql'
 

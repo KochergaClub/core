@@ -174,10 +174,7 @@ export type RatioTicketFiscalizeMutationVariables = {
 
 export type RatioTicketFiscalizeMutation = (
   { __typename?: 'Mutation' }
-  & { ratioTicketFiscalize: (
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  ) }
+  & Pick<Types.Mutation, 'ratioTicketFiscalize'>
 );
 
 export type RatioTrainingAddDayMutationVariables = {
@@ -187,10 +184,7 @@ export type RatioTrainingAddDayMutationVariables = {
 
 export type RatioTrainingAddDayMutation = (
   { __typename?: 'Mutation' }
-  & { ratioTrainingAddDay: (
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  ) }
+  & Pick<Types.Mutation, 'ratioTrainingAddDay'>
 );
 
 export type RatioTrainingCopyScheduleFromMutationVariables = {
@@ -200,10 +194,7 @@ export type RatioTrainingCopyScheduleFromMutationVariables = {
 
 export type RatioTrainingCopyScheduleFromMutation = (
   { __typename?: 'Mutation' }
-  & { ratioTrainingCopyScheduleFrom: (
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  ) }
+  & Pick<Types.Mutation, 'ratioTrainingCopyScheduleFrom'>
 );
 
 export const TrainingForPickerFragmentDoc = gql`
@@ -278,7 +269,7 @@ export const TrainingWithScheduleFragmentDoc = gql`
 ${TrainingDayFragmentDoc}`;
 export const RatioTrainingsDocument = gql`
     query RatioTrainings($before: String, $after: String) {
-  trainings: ratioTrainings(before: $before, after: $after, first: 20, last: 20) {
+  trainings: ratioTrainings(before: $before, after: $after) {
     pageInfo {
       ...PageInfo
     }
@@ -320,7 +311,7 @@ export type RatioTrainingsLazyQueryHookResult = ReturnType<typeof useRatioTraini
 export type RatioTrainingsQueryResult = ApolloReactCommon.QueryResult<RatioTrainingsQuery, RatioTrainingsQueryVariables>;
 export const RatioTrainingsForPickerDocument = gql`
     query RatioTrainingsForPicker($before: String, $after: String) {
-  trainings: ratioTrainings(before: $before, after: $after, first: 20, last: 20) {
+  trainings: ratioTrainings(before: $before, after: $after) {
     pageInfo {
       ...PageInfo
     }
@@ -524,9 +515,7 @@ export type RatioAddTicketMutationResult = ApolloReactCommon.MutationResult<Rati
 export type RatioAddTicketMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioAddTicketMutation, RatioAddTicketMutationVariables>;
 export const RatioTicketFiscalizeDocument = gql`
     mutation RatioTicketFiscalize($ticket_id: ID!) {
-  ratioTicketFiscalize(ticket_id: $ticket_id) {
-    ok
-  }
+  ratioTicketFiscalize(ticket_id: $ticket_id)
 }
     `;
 export type RatioTicketFiscalizeMutationFn = ApolloReactCommon.MutationFunction<RatioTicketFiscalizeMutation, RatioTicketFiscalizeMutationVariables>;
@@ -556,9 +545,7 @@ export type RatioTicketFiscalizeMutationResult = ApolloReactCommon.MutationResul
 export type RatioTicketFiscalizeMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioTicketFiscalizeMutation, RatioTicketFiscalizeMutationVariables>;
 export const RatioTrainingAddDayDocument = gql`
     mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
-  ratioTrainingAddDay(params: $params) {
-    ok
-  }
+  ratioTrainingAddDay(params: $params)
 }
     `;
 export type RatioTrainingAddDayMutationFn = ApolloReactCommon.MutationFunction<RatioTrainingAddDayMutation, RatioTrainingAddDayMutationVariables>;
@@ -588,9 +575,7 @@ export type RatioTrainingAddDayMutationResult = ApolloReactCommon.MutationResult
 export type RatioTrainingAddDayMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioTrainingAddDayMutation, RatioTrainingAddDayMutationVariables>;
 export const RatioTrainingCopyScheduleFromDocument = gql`
     mutation RatioTrainingCopyScheduleFrom($params: RatioTrainingCopyScheduleFromInput!) {
-  ratioTrainingCopyScheduleFrom(params: $params) {
-    ok
-  }
+  ratioTrainingCopyScheduleFrom(params: $params)
 }
     `;
 export type RatioTrainingCopyScheduleFromMutationFn = ApolloReactCommon.MutationFunction<RatioTrainingCopyScheduleFromMutation, RatioTrainingCopyScheduleFromMutationVariables>;

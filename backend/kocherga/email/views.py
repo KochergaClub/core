@@ -72,6 +72,8 @@ class EmptyEmailException(exceptions.APIException):
     default_detail = 'Email is not set'
 
 
+# still needed for Tilda hook
+# TODO - move to kocherga.api.hooks
 class SubscribeChannelViewSet(
         viewsets.ModelViewSet,
         BulkRetrieveMixin,
@@ -95,21 +97,3 @@ class SubscribeChannelViewSet(
 
         channel.subscribe_email(email)
         return Response('ok')
-
-
-class MailchimpCategoryViewSet(
-        viewsets.ReadOnlyModelViewSet,
-        BulkRetrieveMixin,
-):
-    queryset = models.MailchimpCategory.objects.all()
-    permission_classes = (permissions.IsAdminUser,)
-    serializer_class = serializers.MailchimpCategorySerializer
-
-
-class MailchimpInterestViewSet(
-        viewsets.ReadOnlyModelViewSet,
-        BulkRetrieveMixin,
-):
-    queryset = models.MailchimpInterest.objects.all()
-    permission_classes = (permissions.IsAdminUser,)
-    serializer_class = serializers.MailchimpInterestSerializer

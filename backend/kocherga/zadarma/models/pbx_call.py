@@ -1,11 +1,14 @@
 from django.db import models
 
+from kocherga.django.managers import RelayQuerySet
 from kocherga.staff.models import Member
 
 
 class PbxCall(models.Model):
     pbx_call_id = models.CharField(primary_key=True, max_length=100)
     ts = models.DateTimeField()
+
+    objects = RelayQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'АТС-звонок'

@@ -1,3 +1,4 @@
+/*
 import { Resolvers } from './gen-types';
 
 // endpoints
@@ -129,3 +130,5 @@ export const resolvers: Resolvers = {
     },
   },
 };
+
+*/

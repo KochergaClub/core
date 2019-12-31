@@ -8,6 +8,7 @@ x-backend:
     - code-pytest:/code/tests:nocopy
     - data:/data:nocopy
   environment:
+    PYTHONUNBUFFERED: '0'  # fix runserver output on compilation issues
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.dev'
     DB_NAME: 'kocherga'
     DB_USER: 'root'

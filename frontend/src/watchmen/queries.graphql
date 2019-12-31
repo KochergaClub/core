@@ -61,21 +61,15 @@ query WatchmenShifts($from_date: String!, $to_date: String!) {
 }
 
 mutation WatchmenSetWatchmanPriority($params: WatchmenSetWatchmanPriorityInput!) {
-  watchmenSetWatchmanPriority(params: $params) {
-    ok
-  }
+  watchmenSetWatchmanPriority(params: $params)
 }
 
 mutation WatchmenSetWatchmanGrade($params: WatchmenSetWatchmanGradeInput!) {
-  watchmenSetWatchmanGrade(params: $params) {
-    ok
-  }
+  watchmenSetWatchmanGrade(params: $params)
 }
 
 mutation WatchmenCreateWatchman($params: WatchmenCreateWatchmanInput!) {
-  watchmenCreateWatchman(params: $params) {
-    ok
-  }
+  watchmenCreateWatchman(params: $params)
 }
 
 mutation WatchmenUpdateShift($params: WatchmenUpdateShiftInput!) {

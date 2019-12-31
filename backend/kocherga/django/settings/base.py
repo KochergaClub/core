@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'wagtailgeowidget',
     'condensedinlinepanel',
 
-    'graphene_django',
+    'ariadne.contrib.django',
 
     'kocherga.wagtail',
     'kocherga.auth',
@@ -270,10 +270,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
 MEDIA_ROOT = '/data/upload'
 MEDIA_URL = '/media/'
-
-GRAPHENE = {
-    'SCHEMA': 'kocherga.django.schema.schema'
-}
 
 # ------------- Kocherga settings --------------
 

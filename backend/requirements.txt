@@ -5,13 +5,14 @@
 #    pip-compile
 #
 aioconsole==0.1.15
+aiodataloader==0.1.2
 aiogram==2.3
 aiohttp-socks==0.2.2
 aiohttp==3.5.4            # via aiogram, aiohttp-socks
 aioredis==1.2.0           # via channels-redis
-aniso8601==7.0.0          # via graphene
 appdirs==1.4.3            # via black
 apscheduler==3.6.1
+ariadne==0.9.0
 asgiref==3.2.2            # via channels, channels-redis, daphne
 asn1crypto==0.24.0        # via cryptography
 async-timeout==3.0.1      # via aiohttp, aioredis
@@ -68,10 +69,7 @@ freezegun==0.3.12
 google-api-python-client==1.7.11
 google-auth-httplib2==0.0.3
 google-auth==1.6.3
-graphene-django==2.7.1
-graphene==2.1.8           # via graphene-django
-graphql-core==2.2.1       # via graphene, graphene-django, graphql-relay
-graphql-relay==2.0.1      # via graphene
+graphql-core==3.0.1       # via ariadne
 gspread==3.1.0
 gunicorn==19.9.0
 hiredis==1.0.0            # via aioredis
@@ -124,7 +122,6 @@ pickleshare==0.7.5        # via ipython
 pillow==5.4.1             # via wagtail
 pluggy==0.12.0            # via pytest
 prometheus-client==0.7.1  # via django-prometheus, notebook
-promise==2.3              # via graphene-django, graphql-core, graphql-relay
 prompt-toolkit==2.0.9     # via ipython, jupyter-console
 ptyprocess==0.6.0         # via pexpect, terminado
 py==1.8.0                 # via pytest
@@ -162,19 +159,18 @@ requests-oauthlib==1.2.0  # via mwclient
 requests-toolbelt==0.9.1
 requests==2.22.0
 rsa==4.0                  # via google-auth, telethon
-rx==1.6.1                 # via graphql-core
 s3transfer==0.2.1         # via boto3
 scipy==1.3.1              # via seaborn
 seaborn==0.9.0
 secretstorage==3.1.1      # via keyring
 send2trash==1.5.0         # via notebook
 sentry-sdk[flask]==0.11.2
-singledispatch==3.4.0.3   # via graphene-django
-six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, faker, fire, freezegun, google-api-python-client, google-auth, graphene, graphene-django, graphql-core, graphql-relay, html5lib, jsonschema, mwclient, packaging, promise, prompt-toolkit, pyhamcrest, pyrsistent, python-dateutil, python-gitlab, singledispatch, slackclient, slackeventsapi, traitlets, txaio, wagtail, websocket-client
+six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, faker, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, mwclient, packaging, prompt-toolkit, pyhamcrest, pyrsistent, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, wagtail, websocket-client
 slackclient==1.3.2
 slackeventsapi==2.1.0
 slappy==0.5.1
 sqlparse==0.3.0           # via django, django-debug-toolbar
+starlette==0.13.0         # via ariadne
 telethon==1.9.0
 termcolor==1.1.0
 terminado==0.8.2          # via notebook
@@ -187,7 +183,7 @@ traitlets==4.3.2          # via ipykernel, ipython, ipywidgets, jupyter-client, 
 twisted==19.7.0           # via daphne
 txaio==18.8.1             # via autobahn
 typed-ast==1.4.0          # via mypy
-typing-extensions==3.7.4  # via mypy
+typing-extensions==3.7.4  # via ariadne, mypy
 tzlocal==2.0.0            # via apscheduler
 unidecode==1.1.1          # via wagtail
 uritemplate==3.0.0        # via google-api-python-client

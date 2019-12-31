@@ -45,13 +45,9 @@ query StaffMember($id: ID!) {
 }
 
 mutation StaffGrantGooglePermissionsToMember($id: ID!) {
-  staffGrantGooglePermissionsToMember(id: $id) {
-    ok
-  }
+  staffGrantGooglePermissionsToMember(id: $id)
 }
 
 mutation StaffFireMember($id: ID!) {
-  staffFireMember(id: $id) {
-    ok
-  }
+  staffFireMember(id: $id)
 }

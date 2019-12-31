@@ -47,10 +47,7 @@ export type CashierCreatePaymentMutationVariables = {
 
 export type CashierCreatePaymentMutation = (
   { __typename?: 'Mutation' }
-  & { cashierCreatePayment: Types.Maybe<(
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  )> }
+  & Pick<Types.Mutation, 'cashierCreatePayment'>
 );
 
 export type CashierRedeemPaymentMutationVariables = {
@@ -60,10 +57,7 @@ export type CashierRedeemPaymentMutationVariables = {
 
 export type CashierRedeemPaymentMutation = (
   { __typename?: 'Mutation' }
-  & { cashierRedeemPayment: Types.Maybe<(
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  )> }
+  & Pick<Types.Mutation, 'cashierRedeemPayment'>
 );
 
 export const PaymentFragmentDoc = gql`
@@ -86,7 +80,7 @@ export const PaymentFragmentDoc = gql`
     `;
 export const CashierPaymentsDocument = gql`
     query CashierPayments($before: String, $after: String) {
-  payments: cashierPayments(before: $before, after: $after, first: 20, last: 20) {
+  payments: cashierPayments(before: $before, after: $after) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -130,9 +124,7 @@ export type CashierPaymentsLazyQueryHookResult = ReturnType<typeof useCashierPay
 export type CashierPaymentsQueryResult = ApolloReactCommon.QueryResult<CashierPaymentsQuery, CashierPaymentsQueryVariables>;
 export const CashierCreatePaymentDocument = gql`
     mutation CashierCreatePayment($params: CashierCreatePaymentInput!) {
-  cashierCreatePayment(params: $params) {
-    ok
-  }
+  cashierCreatePayment(params: $params)
 }
     `;
 export type CashierCreatePaymentMutationFn = ApolloReactCommon.MutationFunction<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>;
@@ -162,9 +154,7 @@ export type CashierCreatePaymentMutationResult = ApolloReactCommon.MutationResul
 export type CashierCreatePaymentMutationOptions = ApolloReactCommon.BaseMutationOptions<CashierCreatePaymentMutation, CashierCreatePaymentMutationVariables>;
 export const CashierRedeemPaymentDocument = gql`
     mutation CashierRedeemPayment($id: ID!) {
-  cashierRedeemPayment(id: $id) {
-    ok
-  }
+  cashierRedeemPayment(id: $id)
 }
     `;
 export type CashierRedeemPaymentMutationFn = ApolloReactCommon.MutationFunction<CashierRedeemPaymentMutation, CashierRedeemPaymentMutationVariables>;

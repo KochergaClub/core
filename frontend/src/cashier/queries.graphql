@@ -16,7 +16,7 @@ fragment Payment on CashierPayment {
 }
 
 query CashierPayments($before: String, $after: String) {
-  payments: cashierPayments(before: $before, after: $after, first: 20, last: 20) {
+  payments: cashierPayments(before: $before, after: $after) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -32,13 +32,9 @@ query CashierPayments($before: String, $after: String) {
 }
 
 mutation CashierCreatePayment($params: CashierCreatePaymentInput!) {
-  cashierCreatePayment(params: $params) {
-    ok
-  }
+  cashierCreatePayment(params: $params)
 }
 
 mutation CashierRedeemPayment($id: ID!) {
-  cashierRedeemPayment(id: $id) {
-    ok
-  }
+  cashierRedeemPayment(id: $id)
 }

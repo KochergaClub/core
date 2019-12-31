@@ -1,10 +1,5 @@
-import graphene
-from graphene_django.types import DjangoObjectType
+from ariadne import ObjectType
 
-from . import models
+SlackUser = ObjectType('SlackUser')
 
-
-class SlackUser(DjangoObjectType):
-    class Meta:
-        model = models.User
-        fields = ('slack_id', 'image_url')
+types = [SlackUser]

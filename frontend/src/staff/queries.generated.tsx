@@ -67,10 +67,7 @@ export type StaffGrantGooglePermissionsToMemberMutationVariables = {
 
 export type StaffGrantGooglePermissionsToMemberMutation = (
   { __typename?: 'Mutation' }
-  & { staffGrantGooglePermissionsToMember: Types.Maybe<(
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  )> }
+  & Pick<Types.Mutation, 'staffGrantGooglePermissionsToMember'>
 );
 
 export type StaffFireMemberMutationVariables = {
@@ -80,10 +77,7 @@ export type StaffFireMemberMutationVariables = {
 
 export type StaffFireMemberMutation = (
   { __typename?: 'Mutation' }
-  & { staffFireMember: Types.Maybe<(
-    { __typename?: 'Ok' }
-    & Pick<Types.Ok, 'ok'>
-  )> }
+  & Pick<Types.Mutation, 'staffFireMember'>
 );
 
 export const StaffMemberFullFragmentDoc = gql`
@@ -215,9 +209,7 @@ export type StaffMemberLazyQueryHookResult = ReturnType<typeof useStaffMemberLaz
 export type StaffMemberQueryResult = ApolloReactCommon.QueryResult<StaffMemberQuery, StaffMemberQueryVariables>;
 export const StaffGrantGooglePermissionsToMemberDocument = gql`
     mutation StaffGrantGooglePermissionsToMember($id: ID!) {
-  staffGrantGooglePermissionsToMember(id: $id) {
-    ok
-  }
+  staffGrantGooglePermissionsToMember(id: $id)
 }
     `;
 export type StaffGrantGooglePermissionsToMemberMutationFn = ApolloReactCommon.MutationFunction<StaffGrantGooglePermissionsToMemberMutation, StaffGrantGooglePermissionsToMemberMutationVariables>;
@@ -247,9 +239,7 @@ export type StaffGrantGooglePermissionsToMemberMutationResult = ApolloReactCommo
 export type StaffGrantGooglePermissionsToMemberMutationOptions = ApolloReactCommon.BaseMutationOptions<StaffGrantGooglePermissionsToMemberMutation, StaffGrantGooglePermissionsToMemberMutationVariables>;
 export const StaffFireMemberDocument = gql`
     mutation StaffFireMember($id: ID!) {
-  staffFireMember(id: $id) {
-    ok
-  }
+  staffFireMember(id: $id)
 }
     `;
 export type StaffFireMemberMutationFn = ApolloReactCommon.MutationFunction<StaffFireMemberMutation, StaffFireMemberMutationVariables>;

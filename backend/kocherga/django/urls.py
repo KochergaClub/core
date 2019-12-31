@@ -9,16 +9,16 @@ from kocherga.wagtail.api import api_router
 
 from wagtail.core import urls as wagtail_urls
 
-from graphene_django.views import GraphQLView
+from ariadne.contrib.django.views import GraphQLView
 
 import kocherga.django.drf
+from .schema import schema
 
 urlpatterns = [
-    path("api/graphql", GraphQLView.as_view(graphiql=True)),
+    path('api/graphql', GraphQLView.as_view(schema=schema), name='graphql'),
 
     path('api/', include('kocherga.api.urls')),
     path('api/analytics/', include('kocherga.analytics.urls')),
-    path('api/cashier/', include('kocherga.money.cashier.urls')),
     path('api/tochka/', include('kocherga.money.tochka.urls')),
     path('api/ratio/', include('kocherga.ratio.urls')),
     path('api/mastermind_dating/', include('kocherga.mastermind_dating.urls')),

@@ -1,9 +1,0 @@
-extend type Query {
-  rooms: [Room]!
-}
-
-type Room {
-  name: String
-  max_people: Int
-  area: Int
-}
