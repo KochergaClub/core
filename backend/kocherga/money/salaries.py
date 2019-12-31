@@ -170,8 +170,8 @@ def calculate_salaries(start_date, end_date):
     return container
 
 
-def dates_period(d=None):
-    today = d or date.today()
+def dates_period():
+    today = date.today()
 
     year = today.year
     month = today.month
@@ -189,8 +189,11 @@ def dates_period(d=None):
     return (start_date, end_date)
 
 
-def calculate_new_salaries(d=None):
-    (start_date, end_date) = dates_period(d)
+def calculate_new_salaries(override_period=None):
+    if override_period:
+        (start_date, end_date) = override_period
+    else:
+        (start_date, end_date) = dates_period()
 
     salaries = calculate_salaries(start_date, end_date)
 
