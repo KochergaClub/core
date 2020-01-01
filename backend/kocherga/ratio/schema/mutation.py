@@ -2,14 +2,11 @@ import datetime
 
 from ariadne import MutationType
 
-from kocherga.django.schema_utils import require_permission
-
 from .. import models
 
 Mutation = MutationType()
 
 
-@require_permission('ratio.manage')
 @Mutation.field('ratioAddTraining')
 def resolve_ratioAddTraining(_, info, params):
     date_str = params['date']
@@ -21,7 +18,6 @@ def resolve_ratioAddTraining(_, info, params):
     )
 
 
-@require_permission('ratio.manage')
 @Mutation.field('ratioAddTicket')
 def resolve_ratioAddTicket(_, info, input):
     training_id = input.pop('training')
@@ -33,7 +29,6 @@ def resolve_ratioAddTicket(_, info, input):
     return ticket
 
 
-@require_permission('ratio.manage')
 @Mutation.field('ratioTrainingCopyScheduleFrom')
 def resolve_ratioTrainingCopyScheduleFrom(_, info, params):
     from_training = models.Training.objects.get(slug=params['from_training_slug'])
@@ -42,7 +37,6 @@ def resolve_ratioTrainingCopyScheduleFrom(_, info, params):
     return True
 
 
-@require_permission('ratio.manage')
 @Mutation.field('ratioTrainingAddDay')
 def resolve_ratioTrainingAddDay(_, info, params):
     training = models.Training.objects.get(slug=params['training_slug'])
@@ -52,8 +46,6 @@ def resolve_ratioTrainingAddDay(_, info, params):
     return True
 
 
-@require_permission('ratio.manage')
-@require_permission('cashier.kkm_user')
 @Mutation.field('ratioTicketFiscalize')
 def resolve_ratioTicketFiscalize(_, info, ticket_id):
     ticket = models.Ticket.objects.get(pk=ticket_id)

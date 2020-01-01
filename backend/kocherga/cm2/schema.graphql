@@ -1,8 +1,8 @@
 extend type Query {
-  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
-  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
-  cm2Customer(id: ID!): Cm2Customer!
-  cm2Order(id: ID!): Cm2Order!
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection! @staffonly
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection! @staffonly
+  cm2Customer(id: ID!): Cm2Customer! @staffonly
+  cm2Order(id: ID!): Cm2Order! @staffonly
 }
 
 type Cm2Customer {
@@ -40,9 +40,9 @@ type Cm2OrderEdge {
 }
 
 extend type Mutation {
-  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order!
-  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer!
-  cm2CloseOrder(id: ID!): Boolean
+  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order! @staffonly
+  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer! @staffonly
+  cm2CloseOrder(id: ID!): Boolean @staffonly
 }
 
 input Cm2CreateCustomerInput {

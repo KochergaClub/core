@@ -12,7 +12,7 @@ from wagtail.core import urls as wagtail_urls
 from ariadne.contrib.django.views import GraphQLView
 
 import kocherga.django.drf
-from .schema import schema
+from kocherga.graphql.schema import schema
 
 urlpatterns = [
     path('api/graphql', GraphQLView.as_view(schema=schema), name='graphql'),

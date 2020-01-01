@@ -1,7 +1,7 @@
 extend type Query {
-  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection!
-  ratioTrainingBySlug(slug: String!): RatioTraining!
-  ratioTrainersAll: [RatioTrainer!]!
+  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
+  ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
 }
 
 type RatioActivity {
@@ -64,11 +64,11 @@ type RatioTrainingDay {
 }
 
 extend type Mutation {
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
-  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
-  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean
-  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean
-  ratioTicketFiscalize(ticket_id: ID!): Boolean
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining! @auth(permission: "ratio.manage")
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket! @auth(permission: "ratio.manage")
+  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTicketFiscalize(ticket_id: ID!): Boolean @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
 }
 
 input RatioTrainingAddDayInput {

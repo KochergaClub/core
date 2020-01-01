@@ -2,14 +2,13 @@ from datetime import datetime, timedelta
 
 from ariadne import QueryType
 
-from kocherga.django.schema_utils import require_staff
+from kocherga.graphql.utils import require_staff
 
 from .. import models
 
 Query = QueryType()
 
 
-@require_staff
 @Query.field('watchmenWatchmenAll')
 def resolve_watchmenWatchmenAll(_, info, current=False):
     queryset = models.Watchman.objects.all()
@@ -19,13 +18,11 @@ def resolve_watchmenWatchmenAll(_, info, current=False):
     return queryset.all()
 
 
-@require_staff
 @Query.field('watchmenGradesAll')
 def resolve_watchmenGradesAll(self, info):
     return models.Grade.objects.all()
 
 
-@require_staff
 @Query.field('watchmenShifts')
 def resolve_watchmenShifts(self, info, from_date=None, to_date=None):
     # FIXME - move filtering to model's manager

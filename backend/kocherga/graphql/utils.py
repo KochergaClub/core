@@ -1,6 +1,3 @@
-# TODO - move these helpers to kocherga.ariadne
-
-
 def require_permission(permission_name):
     def decorator(func):
         def wrapper(*args, **kwargs):

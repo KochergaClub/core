@@ -1,6 +1,6 @@
 extend type Query {
-  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
-  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
+  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection! @staffonly
+  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall! @staffonly
 }
 
 type ZadarmaCall {
@@ -38,5 +38,5 @@ type ZadarmaPbxCallConnection {
 }
 
 extend type Mutation {
-  zadarmaSetMemberForPbxCall(member_id: ID!, pbx_call_id: ID!): Boolean
+  zadarmaSetMemberForPbxCall(member_id: ID!, pbx_call_id: ID!): Boolean @auth(permission: "zadarma.admin")
 }

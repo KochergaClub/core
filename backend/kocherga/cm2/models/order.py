@@ -2,12 +2,14 @@ from datetime import datetime
 
 from django.db import models
 
+from kocherga.django.managers import RelayQuerySetMixin
+
 from kocherga.dateutils import TZ
 
 from .customer import Customer
 
 
-class OrderQuerySet(models.QuerySet):
+class OrderQuerySet(RelayQuerySetMixin, models.QuerySet):
     def filter_by_status(self, status):
         if status == 'open':
             return self.filter(end__isnull=True)

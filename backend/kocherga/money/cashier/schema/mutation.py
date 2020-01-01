@@ -1,14 +1,11 @@
 from ariadne import MutationType
 from django.contrib.auth import get_user_model
 
-from kocherga.django.schema_utils import require_permission
-
 from .. import models, kkm
 
 Mutation = MutationType()
 
 
-@require_permission('cashier.create')
 @Mutation.field('cashierCreatePayment')
 def cashierCreatePayment(_, info, params):
     user = get_user_model().objects.get(pk=params['whom'])
@@ -20,7 +17,6 @@ def cashierCreatePayment(_, info, params):
     return True
 
 
-@require_permission('cashier.redeem')
 @Mutation.field('cashierRedeemPayment')
 def cashierRedeemPayment(_, info, id):
     payment = models.Payment.objects.get(pk=id)
@@ -28,7 +24,6 @@ def cashierRedeemPayment(_, info, id):
     return True
 
 
-@require_permission('cashier.kkm_user')
 @Mutation.field('kkmRegisterCheck')
 def kkmRegisterCheck(_, info, params):
     return kkm.execute(

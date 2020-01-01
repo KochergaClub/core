@@ -1,11 +1,11 @@
 extend type Query {
-  staffMembersAll: [StaffMember!]!
-  staffMember(id: ID!): StaffMember!
+  staffMembersAll: [StaffMember!]! @staffonly
+  staffMember(id: ID!): StaffMember! @staffonly
 }
 
 extend type Mutation {
-  staffGrantGooglePermissionsToMember(id: ID!): Boolean
-  staffFireMember(id: ID!): Boolean
+  staffGrantGooglePermissionsToMember(id: ID!): Boolean @auth(permission: "staff.manage")
+  staffFireMember(id: ID!): Boolean @auth(permission: "staff.manage")
 }
 
 type StaffMember {

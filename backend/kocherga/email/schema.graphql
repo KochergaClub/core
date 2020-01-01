@@ -1,6 +1,6 @@
 extend type Query {
-  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]!
-  emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
+  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]! @staffonly
+  emailSubscribeChannelsAll: [EmailSubscribeChannel!]! @staffonly
 }
 
 type EmailMailchimpCategory {
@@ -24,9 +24,9 @@ type EmailMailchimpInterest {
 }
 
 extend type Mutation {
-  emailSubscribeChannelDelete(slug: String!): Boolean
-  emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean
-  emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean
+  emailSubscribeChannelDelete(slug: String!): Boolean @staffonly
+  emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean @staffonly
+  emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean @staffonly
 }
 
 input EmailSubscribeChannelCreateInput {

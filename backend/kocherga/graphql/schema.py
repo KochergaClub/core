@@ -7,18 +7,17 @@ from importlib import import_module
 import django.apps
 from django.utils.module_loading import module_has_submodule
 
-import graphql
-
-from ariadne import make_executable_schema, QueryType, gql, SchemaDirectiveVisitor
+from ariadne import make_executable_schema, QueryType, gql
 from ariadne.load_schema import read_graphql_file
 
 import kocherga.room
 
-import kocherga.auth.schema
+from . import directives
 
 
 core_type_defs = gql("""
   directive @staffonly on FIELD_DEFINITION
+  directive @auth(permission: String, permissions: [String!]) on FIELD_DEFINITION
 
   type Query {
     rooms: [Room]!
@@ -81,22 +80,11 @@ def load_all_types():
     return type_defs_list
 
 
-class StaffOnlyDirective(SchemaDirectiveVisitor):
-    def visit_field_definition(self, field, object_type):
-        original_resolver = field.resolve or graphql.default_field_resolver
-
-        def resolve_protected(obj, info, **kwargs):
-            if not info.context.user.is_staff:
-                raise Exception("Forbidden")
-
-            return original_resolver(obj, info, **kwargs)
-
-        field.resolve = resolve_protected
-        return field
-
-
 schema = make_executable_schema(
     load_all_typedefs(),
     *load_all_types(),
-    directives={"staffonly": StaffOnlyDirective}
+    directives={
+        "staffonly": directives.StaffOnlyDirective,
+        "auth": directives.AuthDirective,
+    }
 )

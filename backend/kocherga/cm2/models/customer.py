@@ -1,8 +1,10 @@
 from django.db import models
 from django.conf import settings
 
+from kocherga.django.managers import RelayQuerySetMixin
 
-class CustomerQuerySet(models.QuerySet):
+
+class CustomerQuerySet(RelayQuerySetMixin, models.QuerySet):
     def search(self, query):
         qs = self
 

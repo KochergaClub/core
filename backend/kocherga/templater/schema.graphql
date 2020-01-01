@@ -1,6 +1,6 @@
 extend type Query {
-  imageTemplatesAll: [ImageTemplate!]!
-  imageTemplateBySlug(slug: String!): ImageTemplate!
+  imageTemplatesAll: [ImageTemplate!]! @staffonly
+  imageTemplateBySlug(slug: String!): ImageTemplate! @staffonly
 }
 
 type ImageTemplate {

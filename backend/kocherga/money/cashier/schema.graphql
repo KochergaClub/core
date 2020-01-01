@@ -1,5 +1,5 @@
 extend type Query {
-  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
+  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection! @staffonly
 }
 
 type CashierPayment {
@@ -23,8 +23,8 @@ type CashierPaymentConnection {
 }
 
 extend type Mutation {
-  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
-  cashierRedeemPayment(id: ID!): Boolean
+  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean @auth(permission: "cashier.create")
+  cashierRedeemPayment(id: ID!): Boolean @auth(permission: "cashier.redeem")
 }
 
 input CashierCreatePaymentInput {
@@ -36,7 +36,7 @@ input CashierCreatePaymentInput {
 # KKM-related methods; TODO - move to kocherga.kkm app
 
 extend type Mutation {
-  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult! @auth(permission: "cashier.kkm_user")
 }
 
 input KkmRegisterCheckInput {

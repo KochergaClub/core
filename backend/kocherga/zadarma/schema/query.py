@@ -1,13 +1,10 @@
 from ariadne import QueryType
 
-from kocherga.django.schema_utils import require_staff
-
 from .. import models
 
 Query = QueryType()
 
 
-@require_staff
 @Query.field('zadarmaPbxCalls')
 def resolve_zadarmaPbxCalls(_, info, **pager):
     qs = models.PbxCall.objects.all()
@@ -20,7 +17,6 @@ def resolve_zadarmaPbxCalls(_, info, **pager):
     )
 
 
-@require_staff
 @Query.field('zadarmaPbxCall')
 def resolve_zadarmaPbxCall(_, info, pbx_call_id):
     return models.PbxCall.objects.get(pk=pbx_call_id)

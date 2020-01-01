@@ -1,14 +1,14 @@
 extend type Query {
-  watchmenWatchmenAll(current: Boolean): [WatchmenWatchman!]!
-  watchmenGradesAll: [WatchmenGrade!]!
-  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]!
+  watchmenWatchmenAll(current: Boolean): [WatchmenWatchman!]! @staffonly
+  watchmenGradesAll: [WatchmenGrade!]! @staffonly
+  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]! @staffonly
 }
 
 extend type Mutation {
-  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean
-  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
-  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean
-  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean
+  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean @auth(permission: "watchmen.manage")
+  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift! @auth(permission: "watchmen.manage")
+  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean @auth(permission: "watchmen.manage")
+  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean @auth(permission: "watchmen.manage")
 }
 
 input WatchmenCreateWatchmanInput {

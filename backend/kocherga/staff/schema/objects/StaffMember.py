@@ -1,6 +1,6 @@
 from ariadne import ObjectType
 
-from kocherga.django.schema_utils import require_staff
+from kocherga.graphql.utils import require_staff
 
 StaffMember = ObjectType('StaffMember')
 

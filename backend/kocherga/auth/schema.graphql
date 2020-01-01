@@ -1,7 +1,7 @@
 extend type Query {
   currentUser: AuthCurrentUser!
-  authGroupsAll: [AuthGroup!]!
-  authPermissionsAll: [AuthPermission!]!
+  authGroupsAll: [AuthGroup!]! @auth(permission: "auth.audit")
+  authPermissionsAll: [AuthPermission!]! @auth(permission: "auth.audit")
 }
 
 type AuthCurrentUser {
@@ -31,6 +31,6 @@ type AuthUser {
 }
 
 extend type Mutation {
-  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean
-  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
 }
