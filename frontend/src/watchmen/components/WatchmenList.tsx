@@ -49,6 +49,7 @@ const WatchmanPriorityButton: React.FC<{
           priority,
         },
       },
+      awaitRefetchQueries: true,
     });
   }, [watchman, priority, setPriorityMutation]);
 
@@ -191,7 +192,9 @@ const WatchmenListResults: React.FC<{ watchmen: WatchmanFragment[] }> = ({
 };
 
 const WatchmenList = () => {
-  const queryResults = useWatchmenWatchmenListQuery();
+  const queryResults = useWatchmenWatchmenListQuery({
+    fetchPolicy: 'network-only',
+  });
 
   const [canManage] = usePermissions(['watchmen.manage']);
 
