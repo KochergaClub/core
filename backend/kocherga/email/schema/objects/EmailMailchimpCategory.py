@@ -1,4 +1,4 @@
-from kocherga.graphql.ariadne import DjangoObjectType
+from kocherga.graphql.types import DjangoObjectType
 
 from ... import models
 
