@@ -119,6 +119,7 @@ class Training(models.Model):
 
         return pure_income * activity_share * income_share
 
+    # unused for now
     def pay_salaries(self):
         for trainer in self.all_trainers():
             salary = self.trainer_salary(trainer)

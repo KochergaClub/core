@@ -8,38 +8,3 @@ class TrainingSerializer(serializers.ModelSerializer):
         model = models.Training
         fields = ('id', 'name', 'slug', 'date', 'salaries_paid', 'long_name', 'tickets_count', 'total_income')
         read_only_fields = ('id', 'salaries_paid', 'long_name', 'tickets_count', 'total_income')
-
-
-class TicketSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Ticket
-        fields = (
-            'id',
-            'training',
-            'email', 'first_name', 'last_name', 'payment_amount',
-            'status', 'fiscalization_status', 'ticket_type', 'payment_type',
-            'registration_date', 'comment',
-        )
-
-
-class ActivitySerializer(serializers.ModelSerializer):
-    trainer = serializers.SlugRelatedField(slug_field='long_name', read_only=True)
-    trainer_id = serializers.IntegerField(source='trainer.pk', read_only=True)
-
-    class Meta:
-        model = models.Activity
-        fields = ('id', 'time', 'activity_type', 'name', 'trainer', 'trainer_id', 'location')
-
-
-class TrainingDaySerializer(serializers.ModelSerializer):
-    schedule = ActivitySerializer(many=True)
-
-    class Meta:
-        model = models.TrainingDay
-        fields = ('id', 'date', 'schedule')
-
-
-class TrainerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Trainer
-        fields = ('id', 'short_name', 'long_name')
