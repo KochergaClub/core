@@ -1,0 +1,17 @@
+extend type My {
+  tickets: [EventsMyTicket!]! @auth(authenticated: true)
+}
+
+type EventsMyTicket {
+  event: EventsPublicEvent!
+}
+
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  title: String!
+}
+
+extend type Mutation {
+  myTicketDelete(event_id: ID!): Boolean @auth(authenticated: true)
+}

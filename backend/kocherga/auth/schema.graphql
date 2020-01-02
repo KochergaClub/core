@@ -1,5 +1,5 @@
 extend type Query {
-  currentUser: AuthCurrentUser!
+  currentUser: AuthCurrentUser! @deprecated(reason: "Use `my { user }` instead.")
   authGroupsAll: [AuthGroup!]! @auth(permission: "auth.audit")
   authPermissionsAll: [AuthPermission!]! @auth(permission: "auth.audit")
 }
@@ -28,6 +28,10 @@ type AuthUser {
   id: ID!
   email: String!
   staff_member: StaffMember
+}
+
+extend type My {
+  user: AuthCurrentUser!
 }
 
 extend type Mutation {

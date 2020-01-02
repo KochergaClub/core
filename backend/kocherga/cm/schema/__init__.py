@@ -1,13 +1,7 @@
 from ariadne import QueryType
 
-from ..tools import now_stats_cached
+from .query import Query
+from .mutation import Mutation
+from .types import types
 
-Query = QueryType()
-
-
-@Query.field('now')
-def resolve_now(_, info):
-    return now_stats_cached()
-
-
-types = [Query]
+types = [Query, Mutation, *types]

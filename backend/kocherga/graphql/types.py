@@ -27,6 +27,7 @@ class DjangoObjectType(ariadne.ObjectType):
             # validate!
             # TODO - compare field types
             # TODO - special handling for FK fields
+            # TODO - support methods and properties
             _meta.get_field(name)
 
     def related_field(self, field_name):
@@ -42,3 +43,10 @@ class DjangoObjectType(ariadne.ObjectType):
         @self.field(field_name)
         def resolve(obj, info):
             return getattr(obj, field_name)()
+
+    def simple_property_field(self, field_name):
+        # TODO - check that it's actually a property on model
+
+        @self.field(field_name)
+        def resolve(obj, info):
+            return getattr(obj, field_name)

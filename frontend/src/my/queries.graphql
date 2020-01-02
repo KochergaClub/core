@@ -1,4 +1,4 @@
-fragment Membership on MyMembership {
+fragment Membership on MyCmCustomer {
   card_id
   orders_count
   subscription_until
@@ -30,8 +30,10 @@ fragment MyTicket on MyTicket {
 }
 
 fragment MyPage on My {
-  email
-  is_staff
+  user {
+    email
+    is_staff
+  }
   membership {
     ...Membership
   }

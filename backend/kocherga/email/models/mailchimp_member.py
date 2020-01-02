@@ -84,6 +84,23 @@ class MailchimpMember:
         self.status = new_status
         logger.info('Updated to status: ' + self.status)
 
+    def get_interest_ids(self):
+        return [interest.id for interest in self.interests]
+
+    def subscribe_to_interest(self, interest_id):
+        self.set_interests(
+            list(
+                set(self.get_interest_ids()) & set([interest_id])
+            )
+        )
+
+    def unsubscribe_from_interest(self, interest_id):
+        self.set_interests(
+            list(
+                set(self.get_interest_ids()) - set([interest_id])
+            )
+        )
+
     def set_interests(self, interest_ids):
         if self.status != 'subscribed':
             raise BadMailchimpStatus()

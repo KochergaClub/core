@@ -40,24 +40,6 @@ class EventTicketView(generics.ListCreateAPIView):
         return models.Ticket.objects.filter(event=event)
 
 
-class MyEventTicketView(generics.RetrieveAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = serializers.EventTicketSerializer
-    lookup_field = 'event__uuid'
-    lookup_url_kwarg = 'event_id'
-
-    def get_queryset(self):
-        return models.Ticket.objects.filter(
-            user=self.request.user,
-            # only future event tickets can be operated upon
-            event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
-            status='ok'
-        )
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-
 class MyEventTicketRegisterView(views.APIView):
     permission_classes = (permissions.IsAuthenticated,)
 

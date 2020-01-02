@@ -17,10 +17,16 @@ from . import directives
 
 core_type_defs = gql("""
   directive @staffonly on FIELD_DEFINITION
-  directive @auth(permission: String, permissions: [String!]) on FIELD_DEFINITION
+  directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
 
   type Query {
     rooms: [Room]!
+    my: My!
+  }
+
+  # To be extended by specific backend apps.
+  type My {
+    _: Boolean
   }
 
   type Room {
@@ -55,11 +61,11 @@ def load_all_typedefs():
     return '\n'.join(type_defs_list)
 
 
+Query = QueryType()
+
+
 # FIXME - move rooms query code somewhere else
-query = QueryType()
-
-
-@query.field("rooms")
+@Query.field("rooms")
 def resolve_rooms(_, info):
     return [
         kocherga.room.details(room)
@@ -67,8 +73,13 @@ def resolve_rooms(_, info):
     ]
 
 
+@Query.field('my')
+def resolve_my(_, info):
+    return 'my'
+
+
 def load_all_types():
-    type_defs_list = [query]
+    type_defs_list = [Query]
     # based on django.apps.config.import_models
     for app in django.apps.apps.get_app_configs():
         SCHEMA_MODULE_NAME = 'schema'

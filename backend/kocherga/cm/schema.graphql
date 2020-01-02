@@ -12,3 +12,27 @@ type NowCustomer {
   first_name: String!
   last_name: String!
 }
+
+extend type My {
+  membership: CmMyCustomer @auth(authenticated: true)
+}
+
+type CmMyCustomer {
+  card_id: Int!
+  subscription_until: String
+  last_visit: String
+  total_spent: Int!
+  privacy_mode: String!
+  orders_count: Int!
+  orders: [CmMyOrder!]!
+}
+
+type CmMyOrder {
+  order_id: ID!
+  start_dt: String!
+  end_dt: String
+}
+
+extend type Mutation {
+  myPrivacyModeSet(mode: String!): Boolean @auth(authenticated: true)
+}

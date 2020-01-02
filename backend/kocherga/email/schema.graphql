@@ -33,3 +33,25 @@ input EmailSubscribeChannelCreateInput {
   slug: String!
   interest_ids: [ID!]!
 }
+
+extend type My {
+  email_subscription: MyEmailSubscription! @auth(authenticated: true)
+}
+
+type MyEmailSubscription {
+  status: String!
+  interests: [MyEmailSubscriptionInterest!]
+}
+
+type MyEmailSubscriptionInterest {
+  id: ID!
+  name: String!
+  subscribed: Boolean
+}
+
+extend type Mutation {
+  myEmailResubscribe: Boolean @auth(authenticated: true)
+  myEmailUnsubscribe: Boolean @auth(authenticated: true)
+  myEmailSubscribeToInterest(interest_id: ID!): Boolean @auth(authenticated: true)
+  myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean @auth(authenticated: true)
+}

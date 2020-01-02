@@ -11,17 +11,6 @@ class MemberInterestSerializer(serializers.Serializer):
     subscribed = serializers.BooleanField()
 
 
-class MailchimpMemberSerializer(serializers.Serializer):
-    status = serializers.CharField(max_length=100)
-    interests = MemberInterestSerializer(many=True)
-
-    def create(self, validated_data):
-        raise Exception("Not implemented")
-
-    def update(self, instance, validated_data):
-        raise Exception("Not implemented")
-
-
 class MailchimpInterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MailchimpInterest
