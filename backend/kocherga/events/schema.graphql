@@ -1,8 +1,8 @@
 extend type My {
-  tickets: [EventsMyTicket!]! @auth(authenticated: true)
+  tickets: [MyEventsTicket!]! @auth(authenticated: true)
 }
 
-type EventsMyTicket {
+type MyEventsTicket {
   event: EventsPublicEvent!
 }
 

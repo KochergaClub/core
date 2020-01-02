@@ -1,6 +1,15 @@
 
+  directive @staffonly on FIELD_DEFINITION
+  directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
+
   type Query {
     rooms: [Room]!
+    my: My!
+  }
+
+  # To be extended by specific backend apps.
+  type My {
+    _: Boolean
   }
 
   type Room {
@@ -22,9 +31,9 @@
 
 
 extend type Query {
-  currentUser: AuthCurrentUser!
-  authGroupsAll: [AuthGroup!]!
-  authPermissionsAll: [AuthPermission!]!
+  currentUser: AuthCurrentUser! @deprecated(reason: "Use `my { user }` instead.")
+  authGroupsAll: [AuthGroup!]! @auth(permission: "auth.audit")
+  authPermissionsAll: [AuthPermission!]! @auth(permission: "auth.audit")
 }
 
 type AuthCurrentUser {
@@ -53,14 +62,18 @@ type AuthUser {
   staff_member: StaffMember
 }
 
+extend type My {
+  user: AuthCurrentUser!
+}
+
 extend type Mutation {
-  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean
-  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
 }
 
 extend type Query {
-  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
-  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
+  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection! @staffonly
+  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall! @staffonly
 }
 
 type ZadarmaCall {
@@ -98,7 +111,7 @@ type ZadarmaPbxCallConnection {
 }
 
 extend type Mutation {
-  zadarmaSetMemberForPbxCall(member_id: ID!, pbx_call_id: ID!): Boolean
+  zadarmaSetMemberForPbxCall(member_id: ID!, pbx_call_id: ID!): Boolean @auth(permission: "zadarma.admin")
 }
 
 extend type Query {
@@ -116,11 +129,35 @@ type NowCustomer {
   last_name: String!
 }
 
+extend type My {
+  membership: MyCmCustomer @auth(authenticated: true)
+}
+
+type MyCmCustomer {
+  card_id: Int!
+  subscription_until: String
+  last_visit: String
+  total_spent: Int!
+  privacy_mode: String!
+  orders_count: Int!
+  orders: [MyCmOrder!]!
+}
+
+type MyCmOrder {
+  order_id: ID!
+  start_dt: String!
+  end_dt: String
+}
+
+extend type Mutation {
+  myPrivacyModeSet(mode: String!): Boolean @auth(authenticated: true)
+}
+
 extend type Query {
-  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
-  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
-  cm2Customer(id: ID!): Cm2Customer!
-  cm2Order(id: ID!): Cm2Order!
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection! @staffonly
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection! @staffonly
+  cm2Customer(id: ID!): Cm2Customer! @staffonly
+  cm2Order(id: ID!): Cm2Order! @staffonly
 }
 
 type Cm2Customer {
@@ -158,9 +195,9 @@ type Cm2OrderEdge {
 }
 
 extend type Mutation {
-  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order!
-  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer!
-  cm2CloseOrder(id: ID!): Boolean
+  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order! @staffonly
+  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer! @staffonly
+  cm2CloseOrder(id: ID!): Boolean @staffonly
 }
 
 input Cm2CreateCustomerInput {
@@ -174,16 +211,19 @@ input Cm2CreateOrderInput {
 }
 
 extend type Query {
-  watchmenWatchmenAll(current: Boolean): [WatchmenWatchman!]!
-  watchmenGradesAll: [WatchmenGrade!]!
-  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]!
+  watchmenWatchmenAll(
+    currentStaff: Boolean,
+    currentRole: Boolean
+  ): [WatchmenWatchman!]! @staffonly
+  watchmenGradesAll: [WatchmenGrade!]! @staffonly
+  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]! @staffonly
 }
 
 extend type Mutation {
-  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean
-  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
-  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean
-  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean
+  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean @auth(permission: "watchmen.manage")
+  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift! @auth(permission: "watchmen.manage")
+  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean @auth(permission: "watchmen.manage")
+  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean @auth(permission: "watchmen.manage")
 }
 
 input WatchmenCreateWatchmanInput {
@@ -236,7 +276,7 @@ type WatchmenWatchman {
 }
 
 extend type Query {
-  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
+  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection! @staffonly
 }
 
 type CashierPayment {
@@ -260,8 +300,8 @@ type CashierPaymentConnection {
 }
 
 extend type Mutation {
-  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
-  cashierRedeemPayment(id: ID!): Boolean
+  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean @auth(permission: "cashier.create")
+  cashierRedeemPayment(id: ID!): Boolean @auth(permission: "cashier.redeem")
 }
 
 input CashierCreatePaymentInput {
@@ -273,7 +313,7 @@ input CashierCreatePaymentInput {
 # KKM-related methods; TODO - move to kocherga.kkm app
 
 extend type Mutation {
-  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult! @auth(permission: "cashier.kkm_user")
 }
 
 input KkmRegisterCheckInput {
@@ -289,14 +329,33 @@ type KkmRegisterCheckResult {
   error: String
 }
 
-extend type Query {
-  staffMembersAll: [StaffMember!]!
-  staffMember(id: ID!): StaffMember!
+extend type My {
+  tickets: [MyEventsTicket!]! @auth(authenticated: true)
+}
+
+type MyEventsTicket {
+  event: EventsPublicEvent!
+}
+
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  title: String!
 }
 
 extend type Mutation {
-  staffGrantGooglePermissionsToMember(id: ID!): Boolean
-  staffFireMember(id: ID!): Boolean
+  myTicketDelete(event_id: ID!): Boolean @auth(authenticated: true)
+}
+
+extend type Query {
+  staffMembersAll: [StaffMember!]! @staffonly
+  staffMember(id: ID!): StaffMember! @staffonly
+}
+
+extend type Mutation {
+  staffGrantGooglePermissionsToMember(id: ID!): Boolean @auth(permission: "staff.manage")
+  staffFireMember(id: ID!): Boolean @auth(permission: "staff.manage")
+  staffUnfireMember(id: ID!): Boolean @auth(permission: "staff.manage")
 }
 
 type StaffMember {
@@ -312,9 +371,9 @@ type StaffMember {
 }
 
 extend type Query {
-  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection!
-  ratioTrainingBySlug(slug: String!): RatioTraining!
-  ratioTrainersAll: [RatioTrainer!]!
+  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
+  ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
 }
 
 type RatioActivity {
@@ -377,11 +436,11 @@ type RatioTrainingDay {
 }
 
 extend type Mutation {
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
-  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
-  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean
-  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean
-  ratioTicketFiscalize(ticket_id: ID!): Boolean
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining! @auth(permission: "ratio.manage")
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket! @auth(permission: "ratio.manage")
+  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTicketFiscalize(ticket_id: ID!): Boolean @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
 }
 
 input RatioTrainingAddDayInput {
@@ -415,8 +474,8 @@ input RatioAddTrainingInput {
 }
 
 extend type Query {
-  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]!
-  emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
+  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]! @staffonly
+  emailSubscribeChannelsAll: [EmailSubscribeChannel!]! @staffonly
 }
 
 type EmailMailchimpCategory {
@@ -440,14 +499,36 @@ type EmailMailchimpInterest {
 }
 
 extend type Mutation {
-  emailSubscribeChannelDelete(slug: String!): Boolean
-  emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean
-  emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean
+  emailSubscribeChannelDelete(slug: String!): Boolean @staffonly
+  emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean @staffonly
+  emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean @staffonly
 }
 
 input EmailSubscribeChannelCreateInput {
   slug: String!
   interest_ids: [ID!]!
+}
+
+extend type My {
+  email_subscription: MyEmailSubscription! @auth(authenticated: true)
+}
+
+type MyEmailSubscription {
+  status: String!
+  interests: [MyEmailSubscriptionInterest!]
+}
+
+type MyEmailSubscriptionInterest {
+  id: ID!
+  name: String!
+  subscribed: Boolean
+}
+
+extend type Mutation {
+  myEmailResubscribe: Boolean @auth(authenticated: true)
+  myEmailUnsubscribe: Boolean @auth(authenticated: true)
+  myEmailSubscribeToInterest(interest_id: ID!): Boolean @auth(authenticated: true)
+  myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean @auth(authenticated: true)
 }
 
 type SlackUser {
@@ -456,8 +537,8 @@ type SlackUser {
 }
 
 extend type Query {
-  imageTemplatesAll: [ImageTemplate!]!
-  imageTemplateBySlug(slug: String!): ImageTemplate!
+  imageTemplatesAll: [ImageTemplate!]! @staffonly
+  imageTemplateBySlug(slug: String!): ImageTemplate! @staffonly
 }
 
 type ImageTemplate {

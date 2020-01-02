@@ -2,20 +2,24 @@ from datetime import datetime, timedelta
 
 from ariadne import QueryType
 
-from kocherga.graphql.utils import require_staff
-
 from .. import models
 
 Query = QueryType()
 
 
 @Query.field('watchmenWatchmenAll')
-def resolve_watchmenWatchmenAll(_, info, current=False):
+def resolve_watchmenWatchmenAll(_, info, current=False, currentStaff=False, currentRole=False):
     queryset = models.Watchman.objects.all()
-    if current:
-        # TODO - move to model's manager
-        queryset = queryset.filter(member__is_current=True).filter(priority__lt=3)
-    return queryset.all()
+
+    # TODO - move to model's manager
+    if currentStaff:
+        queryset = queryset.filter(
+            member__is_current=True
+        )
+    if currentRole:
+        queryset = queryset.filter(priority__lt=3)
+
+    return list(queryset)
 
 
 @Query.field('watchmenGradesAll')

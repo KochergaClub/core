@@ -5,11 +5,11 @@ import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type MembershipFragment = (
-  { __typename?: 'MyMembership' }
-  & Pick<Types.MyMembership, 'card_id' | 'orders_count' | 'subscription_until' | 'privacy_mode'>
+  { __typename?: 'MyCmCustomer' }
+  & Pick<Types.MyCmCustomer, 'card_id' | 'orders_count' | 'subscription_until' | 'privacy_mode'>
   & { orders: Array<(
-    { __typename?: 'MyOrder' }
-    & Pick<Types.MyOrder, 'start_dt'>
+    { __typename?: 'MyCmOrder' }
+    & Pick<Types.MyCmOrder, 'start_dt'>
   )> }
 );
 
@@ -28,7 +28,7 @@ export type EmailSubscriptionFragment = (
 );
 
 export type MyTicketFragment = (
-  { __typename?: 'MyTicket' }
+  { __typename?: 'MyEventsTicket' }
   & { event: (
     { __typename?: 'EventsPublicEvent' }
     & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
@@ -37,12 +37,14 @@ export type MyTicketFragment = (
 
 export type MyPageFragment = (
   { __typename?: 'My' }
-  & Pick<Types.My, 'email' | 'is_staff'>
-  & { membership: Types.Maybe<(
-    { __typename?: 'MyMembership' }
+  & { user: (
+    { __typename?: 'AuthCurrentUser' }
+    & Pick<Types.AuthCurrentUser, 'email' | 'is_staff'>
+  ), membership: Types.Maybe<(
+    { __typename?: 'MyCmCustomer' }
     & MembershipFragment
   )>, tickets: Array<(
-    { __typename?: 'MyTicket' }
+    { __typename?: 'MyEventsTicket' }
     & MyTicketFragment
   )>, email_subscription: (
     { __typename?: 'MyEmailSubscription' }
@@ -118,7 +120,7 @@ export type MyTicketDeleteMutation = (
 );
 
 export const MembershipFragmentDoc = gql`
-    fragment Membership on MyMembership {
+    fragment Membership on MyCmCustomer {
   card_id
   orders_count
   subscription_until
@@ -129,7 +131,7 @@ export const MembershipFragmentDoc = gql`
 }
     `;
 export const MyTicketFragmentDoc = gql`
-    fragment MyTicket on MyTicket {
+    fragment MyTicket on MyEventsTicket {
   event {
     event_id
     start
@@ -154,8 +156,10 @@ export const EmailSubscriptionFragmentDoc = gql`
     ${EmailSubscriptionInterestFragmentDoc}`;
 export const MyPageFragmentDoc = gql`
     fragment MyPage on My {
-  email
-  is_staff
+  user {
+    email
+    is_staff
+  }
   membership {
     ...Membership
   }

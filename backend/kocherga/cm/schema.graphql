@@ -14,20 +14,20 @@ type NowCustomer {
 }
 
 extend type My {
-  membership: CmMyCustomer @auth(authenticated: true)
+  membership: MyCmCustomer @auth(authenticated: true)
 }
 
-type CmMyCustomer {
+type MyCmCustomer {
   card_id: Int!
   subscription_until: String
   last_visit: String
   total_spent: Int!
   privacy_mode: String!
   orders_count: Int!
-  orders: [CmMyOrder!]!
+  orders: [MyCmOrder!]!
 }
 
-type CmMyOrder {
+type MyCmOrder {
   order_id: ID!
   start_dt: String!
   end_dt: String

@@ -17,3 +17,10 @@ def resolve_fire_member(obj, info, id):
     member = models.Member.objects.get(pk=id)
     member.fire()
     return True
+
+
+@Mutation.field('staffUnfireMember')
+def resolve_unfire_member(obj, info, id):
+    member = models.Member.objects.get(pk=id)
+    member.unfire()
+    return True

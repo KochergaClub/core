@@ -81,3 +81,6 @@ update_requirements:
 update_schema:
 	docker-compose -f docker/compose.dev.yml exec api ./scripts/export-schema.py schema.graphql
 	docker cp docker_api_1:/code/schema.graphql ./schema.graphql
+
+update_types:
+	cd frontend && gql-gen

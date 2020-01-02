@@ -80,6 +80,16 @@ export type StaffFireMemberMutation = (
   & Pick<Types.Mutation, 'staffFireMember'>
 );
 
+export type StaffUnfireMemberMutationVariables = {
+  id: Types.Scalars['ID']
+};
+
+
+export type StaffUnfireMemberMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Types.Mutation, 'staffUnfireMember'>
+);
+
 export const StaffMemberFullFragmentDoc = gql`
     fragment StaffMemberFull on StaffMember {
   id
@@ -267,3 +277,33 @@ export function useStaffFireMemberMutation(baseOptions?: ApolloReactHooks.Mutati
 export type StaffFireMemberMutationHookResult = ReturnType<typeof useStaffFireMemberMutation>;
 export type StaffFireMemberMutationResult = ApolloReactCommon.MutationResult<StaffFireMemberMutation>;
 export type StaffFireMemberMutationOptions = ApolloReactCommon.BaseMutationOptions<StaffFireMemberMutation, StaffFireMemberMutationVariables>;
+export const StaffUnfireMemberDocument = gql`
+    mutation StaffUnfireMember($id: ID!) {
+  staffUnfireMember(id: $id)
+}
+    `;
+export type StaffUnfireMemberMutationFn = ApolloReactCommon.MutationFunction<StaffUnfireMemberMutation, StaffUnfireMemberMutationVariables>;
+
+/**
+ * __useStaffUnfireMemberMutation__
+ *
+ * To run a mutation, you first call `useStaffUnfireMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStaffUnfireMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [staffUnfireMemberMutation, { data, loading, error }] = useStaffUnfireMemberMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useStaffUnfireMemberMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StaffUnfireMemberMutation, StaffUnfireMemberMutationVariables>) {
+        return ApolloReactHooks.useMutation<StaffUnfireMemberMutation, StaffUnfireMemberMutationVariables>(StaffUnfireMemberDocument, baseOptions);
+      }
+export type StaffUnfireMemberMutationHookResult = ReturnType<typeof useStaffUnfireMemberMutation>;
+export type StaffUnfireMemberMutationResult = ApolloReactCommon.MutationResult<StaffUnfireMemberMutation>;
+export type StaffUnfireMemberMutationOptions = ApolloReactCommon.BaseMutationOptions<StaffUnfireMemberMutation, StaffUnfireMemberMutationVariables>;

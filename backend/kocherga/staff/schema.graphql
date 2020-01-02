@@ -6,6 +6,7 @@ extend type Query {
 extend type Mutation {
   staffGrantGooglePermissionsToMember(id: ID!): Boolean @auth(permission: "staff.manage")
   staffFireMember(id: ID!): Boolean @auth(permission: "staff.manage")
+  staffUnfireMember(id: ID!): Boolean @auth(permission: "staff.manage")
 }
 
 type StaffMember {

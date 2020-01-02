@@ -8,6 +8,8 @@ export type Scalars = {
   Float: number,
 };
 
+
+
 export type AuthCurrentUser = {
    __typename?: 'AuthCurrentUser',
   is_authenticated: Scalars['Boolean'],
@@ -153,7 +155,6 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
-/** TODO - move to events.graphql */
 export type EventsPublicEvent = {
    __typename?: 'EventsPublicEvent',
   event_id: Scalars['ID'],
@@ -206,6 +207,7 @@ export type Mutation = {
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
   authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
+  myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,
   cm2CloseOrder?: Maybe<Scalars['Boolean']>,
@@ -215,8 +217,11 @@ export type Mutation = {
   watchmenSetWatchmanGrade?: Maybe<Scalars['Boolean']>,
   cashierCreatePayment?: Maybe<Scalars['Boolean']>,
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>,
+  kkmRegisterCheck: KkmRegisterCheckResult,
+  myTicketDelete?: Maybe<Scalars['Boolean']>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
+  staffUnfireMember?: Maybe<Scalars['Boolean']>,
   ratioAddTraining: RatioTraining,
   ratioAddTicket: RatioTicket,
   ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
@@ -225,13 +230,10 @@ export type Mutation = {
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
-  kkmRegisterCheck: KkmRegisterCheckResult,
   myEmailResubscribe?: Maybe<Scalars['Boolean']>,
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>,
   myEmailSubscribeToInterest?: Maybe<Scalars['Boolean']>,
   myEmailUnsubscribeFromInterest?: Maybe<Scalars['Boolean']>,
-  myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
-  myTicketDelete?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -250,6 +252,11 @@ export type MutationAuthRemoveUserFromGroupArgs = {
 export type MutationZadarmaSetMemberForPbxCallArgs = {
   member_id: Scalars['ID'],
   pbx_call_id: Scalars['ID']
+};
+
+
+export type MutationMyPrivacyModeSetArgs = {
+  mode: Scalars['String']
 };
 
 
@@ -298,12 +305,27 @@ export type MutationCashierRedeemPaymentArgs = {
 };
 
 
+export type MutationKkmRegisterCheckArgs = {
+  params: KkmRegisterCheckInput
+};
+
+
+export type MutationMyTicketDeleteArgs = {
+  event_id: Scalars['ID']
+};
+
+
 export type MutationStaffGrantGooglePermissionsToMemberArgs = {
   id: Scalars['ID']
 };
 
 
 export type MutationStaffFireMemberArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationStaffUnfireMemberArgs = {
   id: Scalars['ID']
 };
 
@@ -349,11 +371,6 @@ export type MutationEmailSubscribeChannelAddEmailArgs = {
 };
 
 
-export type MutationKkmRegisterCheckArgs = {
-  params: KkmRegisterCheckInput
-};
-
-
 export type MutationMyEmailSubscribeToInterestArgs = {
   interest_id: Scalars['ID']
 };
@@ -363,25 +380,31 @@ export type MutationMyEmailUnsubscribeFromInterestArgs = {
   interest_id: Scalars['ID']
 };
 
-
-export type MutationMyPrivacyModeSetArgs = {
-  mode: Scalars['String']
-};
-
-
-export type MutationMyTicketDeleteArgs = {
-  event_id: Scalars['ID']
-};
-
 export type My = {
    __typename?: 'My',
-  email?: Maybe<Scalars['String']>,
-  is_authenticated: Scalars['Boolean'],
-  is_staff?: Maybe<Scalars['Boolean']>,
-  permissions: Array<Scalars['String']>,
-  membership?: Maybe<MyMembership>,
-  tickets: Array<MyTicket>,
+  _?: Maybe<Scalars['Boolean']>,
+  user: AuthCurrentUser,
+  membership?: Maybe<MyCmCustomer>,
+  tickets: Array<MyEventsTicket>,
   email_subscription: MyEmailSubscription,
+};
+
+export type MyCmCustomer = {
+   __typename?: 'MyCmCustomer',
+  card_id: Scalars['Int'],
+  subscription_until?: Maybe<Scalars['String']>,
+  last_visit?: Maybe<Scalars['String']>,
+  total_spent: Scalars['Int'],
+  privacy_mode: Scalars['String'],
+  orders_count: Scalars['Int'],
+  orders: Array<MyCmOrder>,
+};
+
+export type MyCmOrder = {
+   __typename?: 'MyCmOrder',
+  order_id: Scalars['ID'],
+  start_dt: Scalars['String'],
+  end_dt?: Maybe<Scalars['String']>,
 };
 
 export type MyEmailSubscription = {
@@ -397,26 +420,8 @@ export type MyEmailSubscriptionInterest = {
   subscribed?: Maybe<Scalars['Boolean']>,
 };
 
-export type MyMembership = {
-   __typename?: 'MyMembership',
-  card_id: Scalars['Int'],
-  subscription_until?: Maybe<Scalars['String']>,
-  last_visit?: Maybe<Scalars['String']>,
-  total_spent: Scalars['Int'],
-  privacy_mode: Scalars['String'],
-  orders_count: Scalars['Int'],
-  orders: Array<MyOrder>,
-};
-
-export type MyOrder = {
-   __typename?: 'MyOrder',
-  order_id: Scalars['ID'],
-  start_dt: Scalars['String'],
-  end_dt?: Maybe<Scalars['String']>,
-};
-
-export type MyTicket = {
-   __typename?: 'MyTicket',
+export type MyEventsTicket = {
+   __typename?: 'MyEventsTicket',
   event: EventsPublicEvent,
 };
 
@@ -444,11 +449,13 @@ export type PageInfo = {
 export type Query = {
    __typename?: 'Query',
   rooms: Array<Maybe<Room>>,
+  my: My,
   currentUser: AuthCurrentUser,
   authGroupsAll: Array<AuthGroup>,
   authPermissionsAll: Array<AuthPermission>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
+  now: NowInfo,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,
   cm2Customer: Cm2Customer,
@@ -462,12 +469,10 @@ export type Query = {
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
-  imageTemplatesAll: Array<ImageTemplate>,
-  imageTemplateBySlug: ImageTemplate,
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
-  my: My,
-  now: NowInfo,
+  imageTemplatesAll: Array<ImageTemplate>,
+  imageTemplateBySlug: ImageTemplate,
 };
 
 
@@ -513,7 +518,8 @@ export type QueryCm2OrderArgs = {
 
 
 export type QueryWatchmenWatchmenAllArgs = {
-  current?: Maybe<Scalars['Boolean']>
+  currentStaff?: Maybe<Scalars['Boolean']>,
+  currentRole?: Maybe<Scalars['Boolean']>
 };
 
 
@@ -629,6 +635,7 @@ export type RatioTrainingConnection = {
    __typename?: 'RatioTrainingConnection',
   pageInfo: PageInfo,
   edges: Array<RatioTrainingEdge>,
+  nodes: Array<RatioTraining>,
 };
 
 export type RatioTrainingCopyScheduleFromInput = {

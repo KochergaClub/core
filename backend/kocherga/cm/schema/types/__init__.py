@@ -1,4 +1,4 @@
-from .CmMyCustomer import CmMyCustomer
-from .CmMyOrder import CmMyOrder
+from .MyCmCustomer import MyCmCustomer
+from .MyCmOrder import MyCmOrder
 
-types = [CmMyCustomer, CmMyOrder]
+types = [MyCmCustomer, MyCmOrder]

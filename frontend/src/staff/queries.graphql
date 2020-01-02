@@ -51,3 +51,7 @@ mutation StaffGrantGooglePermissionsToMember($id: ID!) {
 mutation StaffFireMember($id: ID!) {
   staffFireMember(id: $id)
 }
+
+mutation StaffUnfireMember($id: ID!) {
+  staffUnfireMember(id: $id)
+}

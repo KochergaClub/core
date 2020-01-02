@@ -11,7 +11,7 @@ django.setup()
 
 import fire
 
-from kocherga.django.schema import load_all_typedefs
+from kocherga.graphql.schema import load_all_typedefs
 
 
 def main(out):

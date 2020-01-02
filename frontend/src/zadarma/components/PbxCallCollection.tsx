@@ -14,7 +14,9 @@ import {
 } from '../queries.generated';
 
 const PbxCallCollection: React.FC = () => {
-  const queryResults = useZadarmaPbxCallsQuery();
+  const queryResults = useZadarmaPbxCallsQuery({
+    fetchPolicy: 'network-only',
+  });
 
   const renderItem = useCallback(
     (pbxCall: CommonZadarmaPbxCallFragment) => (
@@ -24,7 +26,7 @@ const PbxCallCollection: React.FC = () => {
   );
 
   return (
-    <ApolloQueryResults {...queryResults}>
+    <ApolloQueryResults {...queryResults} size="block">
       {({ data: { pbxCalls } }) => (
         <PagedApolloCollection
           connection={pbxCalls}

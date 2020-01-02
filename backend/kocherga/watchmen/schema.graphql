@@ -1,5 +1,8 @@
 extend type Query {
-  watchmenWatchmenAll(current: Boolean): [WatchmenWatchman!]! @staffonly
+  watchmenWatchmenAll(
+    currentStaff: Boolean,
+    currentRole: Boolean
+  ): [WatchmenWatchman!]! @staffonly
   watchmenGradesAll: [WatchmenGrade!]! @staffonly
   watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]! @staffonly
 }

@@ -12,6 +12,7 @@ import {
   StaffMemberDocument,
   useStaffGrantGooglePermissionsToMemberMutation,
   useStaffFireMemberMutation,
+  useStaffUnfireMemberMutation,
 } from '../queries.generated';
 
 const Ex = styled.div`
@@ -45,6 +46,7 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
     grantGooglePermissionsMutation,
   ] = useStaffGrantGooglePermissionsToMemberMutation(refetchConfig);
   const [fireMutation] = useStaffFireMemberMutation(refetchConfig);
+  const [unfireMutation] = useStaffUnfireMemberMutation(refetchConfig);
 
   const grantGooglePermissions = useCallback(async () => {
     await grantGooglePermissionsMutation({ variables: { id: member.id } });
@@ -54,12 +56,22 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
     await fireMutation({ variables: { id: member.id } });
   }, [fireMutation, member.id]);
 
+  const unfire = useCallback(async () => {
+    await unfireMutation({ variables: { id: member.id } });
+  }, [unfireMutation, member.id]);
+
   if (member.role !== 'WATCHMAN') {
     return null;
   }
 
   if (!member.is_current) {
-    return null;
+    return (
+      <Row>
+        <AsyncButton small act={unfire}>
+          Восстановить
+        </AsyncButton>
+      </Row>
+    );
   }
 
   return (
