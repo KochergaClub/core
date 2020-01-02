@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
+from kocherga.django.managers import RelayQuerySet
+
 
 class CashierItem(models.Model):
     id = models.AutoField(primary_key=True)
@@ -34,6 +36,8 @@ class Payment(models.Model):
     created_dt = models.DateTimeField('Дата создания', auto_now_add=True, db_index=True)
     redeem_dt = models.DateTimeField('Дата получения', null=True, blank=True)
     comment = models.TextField('Комментарий', blank=True)
+
+    objects = RelayQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Выплата'
