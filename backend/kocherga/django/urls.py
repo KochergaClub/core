@@ -18,7 +18,6 @@ urlpatterns = [
     path('api/graphql', GraphQLView.as_view(schema=schema), name='graphql'),
 
     path('api/', include('kocherga.api.urls')),
-    path('api/analytics/', include('kocherga.analytics.urls')),
     path('api/tochka/', include('kocherga.money.tochka.urls')),
     path('api/ratio/', include('kocherga.ratio.urls')),
     path('api/mastermind_dating/', include('kocherga.mastermind_dating.urls')),

@@ -329,6 +329,16 @@ type KkmRegisterCheckResult {
   error: String
 }
 
+extend type Query {
+  analyticsBovStats: [AnalyticsBovStat!]! @staffonly
+}
+
+type AnalyticsBovStat {
+  date: String!
+  count: Int!
+  total_income: Int!
+}
+
 extend type My {
   tickets: [MyEventsTicket!]! @auth(authenticated: true)
 }

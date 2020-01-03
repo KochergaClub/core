@@ -10,6 +10,13 @@ export type Scalars = {
 
 
 
+export type AnalyticsBovStat = {
+   __typename?: 'AnalyticsBovStat',
+  date: Scalars['String'],
+  count: Scalars['Int'],
+  total_income: Scalars['Int'],
+};
+
 export type AuthCurrentUser = {
    __typename?: 'AuthCurrentUser',
   is_authenticated: Scalars['Boolean'],
@@ -464,6 +471,7 @@ export type Query = {
   watchmenGradesAll: Array<WatchmenGrade>,
   watchmenShifts: Array<WatchmenShift>,
   cashierPayments: CashierPaymentConnection,
+  analyticsBovStats: Array<AnalyticsBovStat>,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
   ratioTrainings: RatioTrainingConnection,
