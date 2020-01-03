@@ -234,6 +234,8 @@ export type Mutation = {
   ratioTrainingCopyScheduleFrom?: Maybe<Scalars['Boolean']>,
   ratioTrainingAddDay?: Maybe<Scalars['Boolean']>,
   ratioTicketFiscalize?: Maybe<Scalars['Boolean']>,
+  ratioTrainingSyncParticipantsToMailchimp?: Maybe<Scalars['Boolean']>,
+  ratioTrainingSendEmail: RatioTrainingSendEmailResult,
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
@@ -362,6 +364,16 @@ export type MutationRatioTicketFiscalizeArgs = {
 };
 
 
+export type MutationRatioTrainingSyncParticipantsToMailchimpArgs = {
+  training_id: Scalars['ID']
+};
+
+
+export type MutationRatioTrainingSendEmailArgs = {
+  input: RatioTrainingSendEmailInput
+};
+
+
 export type MutationEmailSubscribeChannelDeleteArgs = {
   slug: Scalars['String']
 };
@@ -477,6 +489,7 @@ export type Query = {
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
+  ratioTrainingEmailPrototype: Scalars['String'],
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
@@ -560,6 +573,12 @@ export type QueryRatioTrainingsArgs = {
 
 export type QueryRatioTrainingBySlugArgs = {
   slug: Scalars['String']
+};
+
+
+export type QueryRatioTrainingEmailPrototypeArgs = {
+  training_id: Scalars['ID'],
+  type: Scalars['String']
 };
 
 
@@ -661,6 +680,17 @@ export type RatioTrainingDay = {
 export type RatioTrainingEdge = {
    __typename?: 'RatioTrainingEdge',
   node: RatioTraining,
+};
+
+export type RatioTrainingSendEmailInput = {
+  training_id: Scalars['ID'],
+  title: Scalars['String'],
+  content: Scalars['String'],
+};
+
+export type RatioTrainingSendEmailResult = {
+   __typename?: 'RatioTrainingSendEmailResult',
+  draft_link: Scalars['String'],
 };
 
 export type Room = {

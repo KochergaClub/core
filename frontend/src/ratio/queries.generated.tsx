@@ -141,6 +141,17 @@ export type RatioTrainersQuery = (
   )> }
 );
 
+export type RatioTrainingEmailPrototypeQueryVariables = {
+  training_id: Types.Scalars['ID'],
+  type: Types.Scalars['String']
+};
+
+
+export type RatioTrainingEmailPrototypeQuery = (
+  { __typename?: 'Query' }
+  & { content: Types.Query['ratioTrainingEmailPrototype'] }
+);
+
 export type RatioAddTrainingMutationVariables = {
   params: Types.RatioAddTrainingInput
 };
@@ -195,6 +206,29 @@ export type RatioTrainingCopyScheduleFromMutationVariables = {
 export type RatioTrainingCopyScheduleFromMutation = (
   { __typename?: 'Mutation' }
   & Pick<Types.Mutation, 'ratioTrainingCopyScheduleFrom'>
+);
+
+export type RatioTrainingSendEmailMutationVariables = {
+  input: Types.RatioTrainingSendEmailInput
+};
+
+
+export type RatioTrainingSendEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { email: (
+    { __typename?: 'RatioTrainingSendEmailResult' }
+    & Pick<Types.RatioTrainingSendEmailResult, 'draft_link'>
+  ) }
+);
+
+export type RatioTrainingSyncParticipantsToMailchimpMutationVariables = {
+  training_id: Types.Scalars['ID']
+};
+
+
+export type RatioTrainingSyncParticipantsToMailchimpMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Types.Mutation, 'ratioTrainingSyncParticipantsToMailchimp'>
 );
 
 export const TrainingForPickerFragmentDoc = gql`
@@ -449,6 +483,38 @@ export function useRatioTrainersLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type RatioTrainersQueryHookResult = ReturnType<typeof useRatioTrainersQuery>;
 export type RatioTrainersLazyQueryHookResult = ReturnType<typeof useRatioTrainersLazyQuery>;
 export type RatioTrainersQueryResult = ApolloReactCommon.QueryResult<RatioTrainersQuery, RatioTrainersQueryVariables>;
+export const RatioTrainingEmailPrototypeDocument = gql`
+    query RatioTrainingEmailPrototype($training_id: ID!, $type: String!) {
+  content: ratioTrainingEmailPrototype(training_id: $training_id, type: $type)
+}
+    `;
+
+/**
+ * __useRatioTrainingEmailPrototypeQuery__
+ *
+ * To run a query within a React component, call `useRatioTrainingEmailPrototypeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRatioTrainingEmailPrototypeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRatioTrainingEmailPrototypeQuery({
+ *   variables: {
+ *      training_id: // value for 'training_id'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useRatioTrainingEmailPrototypeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables>) {
+        return ApolloReactHooks.useQuery<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables>(RatioTrainingEmailPrototypeDocument, baseOptions);
+      }
+export function useRatioTrainingEmailPrototypeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables>(RatioTrainingEmailPrototypeDocument, baseOptions);
+        }
+export type RatioTrainingEmailPrototypeQueryHookResult = ReturnType<typeof useRatioTrainingEmailPrototypeQuery>;
+export type RatioTrainingEmailPrototypeLazyQueryHookResult = ReturnType<typeof useRatioTrainingEmailPrototypeLazyQuery>;
+export type RatioTrainingEmailPrototypeQueryResult = ApolloReactCommon.QueryResult<RatioTrainingEmailPrototypeQuery, RatioTrainingEmailPrototypeQueryVariables>;
 export const RatioAddTrainingDocument = gql`
     mutation RatioAddTraining($params: RatioAddTrainingInput!) {
   ratioAddTraining(params: $params) {
@@ -603,3 +669,65 @@ export function useRatioTrainingCopyScheduleFromMutation(baseOptions?: ApolloRea
 export type RatioTrainingCopyScheduleFromMutationHookResult = ReturnType<typeof useRatioTrainingCopyScheduleFromMutation>;
 export type RatioTrainingCopyScheduleFromMutationResult = ApolloReactCommon.MutationResult<RatioTrainingCopyScheduleFromMutation>;
 export type RatioTrainingCopyScheduleFromMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioTrainingCopyScheduleFromMutation, RatioTrainingCopyScheduleFromMutationVariables>;
+export const RatioTrainingSendEmailDocument = gql`
+    mutation RatioTrainingSendEmail($input: RatioTrainingSendEmailInput!) {
+  email: ratioTrainingSendEmail(input: $input) {
+    draft_link
+  }
+}
+    `;
+export type RatioTrainingSendEmailMutationFn = ApolloReactCommon.MutationFunction<RatioTrainingSendEmailMutation, RatioTrainingSendEmailMutationVariables>;
+
+/**
+ * __useRatioTrainingSendEmailMutation__
+ *
+ * To run a mutation, you first call `useRatioTrainingSendEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioTrainingSendEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ratioTrainingSendEmailMutation, { data, loading, error }] = useRatioTrainingSendEmailMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRatioTrainingSendEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioTrainingSendEmailMutation, RatioTrainingSendEmailMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioTrainingSendEmailMutation, RatioTrainingSendEmailMutationVariables>(RatioTrainingSendEmailDocument, baseOptions);
+      }
+export type RatioTrainingSendEmailMutationHookResult = ReturnType<typeof useRatioTrainingSendEmailMutation>;
+export type RatioTrainingSendEmailMutationResult = ApolloReactCommon.MutationResult<RatioTrainingSendEmailMutation>;
+export type RatioTrainingSendEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioTrainingSendEmailMutation, RatioTrainingSendEmailMutationVariables>;
+export const RatioTrainingSyncParticipantsToMailchimpDocument = gql`
+    mutation RatioTrainingSyncParticipantsToMailchimp($training_id: ID!) {
+  ratioTrainingSyncParticipantsToMailchimp(training_id: $training_id)
+}
+    `;
+export type RatioTrainingSyncParticipantsToMailchimpMutationFn = ApolloReactCommon.MutationFunction<RatioTrainingSyncParticipantsToMailchimpMutation, RatioTrainingSyncParticipantsToMailchimpMutationVariables>;
+
+/**
+ * __useRatioTrainingSyncParticipantsToMailchimpMutation__
+ *
+ * To run a mutation, you first call `useRatioTrainingSyncParticipantsToMailchimpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioTrainingSyncParticipantsToMailchimpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ratioTrainingSyncParticipantsToMailchimpMutation, { data, loading, error }] = useRatioTrainingSyncParticipantsToMailchimpMutation({
+ *   variables: {
+ *      training_id: // value for 'training_id'
+ *   },
+ * });
+ */
+export function useRatioTrainingSyncParticipantsToMailchimpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioTrainingSyncParticipantsToMailchimpMutation, RatioTrainingSyncParticipantsToMailchimpMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioTrainingSyncParticipantsToMailchimpMutation, RatioTrainingSyncParticipantsToMailchimpMutationVariables>(RatioTrainingSyncParticipantsToMailchimpDocument, baseOptions);
+      }
+export type RatioTrainingSyncParticipantsToMailchimpMutationHookResult = ReturnType<typeof useRatioTrainingSyncParticipantsToMailchimpMutation>;
+export type RatioTrainingSyncParticipantsToMailchimpMutationResult = ApolloReactCommon.MutationResult<RatioTrainingSyncParticipantsToMailchimpMutation>;
+export type RatioTrainingSyncParticipantsToMailchimpMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioTrainingSyncParticipantsToMailchimpMutation, RatioTrainingSyncParticipantsToMailchimpMutationVariables>;

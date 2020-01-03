@@ -2,6 +2,7 @@ extend type Query {
   ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
   ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
   ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
+  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String! @auth(permission: "ratio.manage")
 }
 
 type RatioActivity {
@@ -69,6 +70,8 @@ extend type Mutation {
   ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean @auth(permission: "ratio.manage")
   ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean @auth(permission: "ratio.manage")
   ratioTicketFiscalize(ticket_id: ID!): Boolean @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
+  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
 }
 
 input RatioTrainingAddDayInput {
@@ -99,4 +102,14 @@ input RatioAddTrainingInput {
   name: String!
   slug: String!
   date: String!
+}
+
+input RatioTrainingSendEmailInput {
+  training_id: ID!
+  title: String!
+  content: String!
+}
+
+type RatioTrainingSendEmailResult {
+  draft_link: String!
 }

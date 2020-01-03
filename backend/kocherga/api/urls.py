@@ -7,8 +7,6 @@ from . import views
 urlpatterns = [
     path('', TemplateView.as_view(template_name='api/index.html')),
 
-    path('rooms', views.rooms.RoomsView.as_view()),
-
     path('my/bookings', views.bookings.r_list_my),
     re_path(r'bookings/(?P<date_str>(?:\d{4}-\d{2}-\d{2}|today))', views.bookings.r_list_by_date),
     path('bookings', views.bookings.r_create),

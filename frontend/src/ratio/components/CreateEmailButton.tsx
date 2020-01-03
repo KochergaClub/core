@@ -1,64 +1,81 @@
 import { useCallback, useState } from 'react';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import { Button, Row, Column, Input, Modal } from '@kocherga/frontkit';
 
-import { useAPI } from '~/common/hooks';
+import { AsyncButton, ButtonWithModal } from '~/components';
+
+import {
+  RatioTrainingEmailPrototypeQuery,
+  RatioTrainingEmailPrototypeQueryVariables,
+  RatioTrainingEmailPrototypeDocument,
+  useRatioTrainingSendEmailMutation,
+} from '../queries.generated';
 
 interface PrototypeParams {
   title: string;
-  url: string;
+  type: string;
 }
 
 interface Props {
+  training_id: string;
   prototypes: PrototypeParams[];
-  create: string;
-  children: React.ReactNode;
 }
 
 interface ModalProps {
+  training_id: string;
   prototypes: PrototypeParams[];
-  createUrl: string;
   close: () => void;
 }
 
 interface PrototypePickerProps {
+  training_id: string;
   prototype: PrototypeParams;
   pick: (value: string) => void;
   children: React.ReactNode;
 }
 
-const PrototypePicker = ({ prototype, pick }: PrototypePickerProps) => {
-  const [loading, setLoading] = useState(false);
-
-  const api = useAPI();
+const PrototypePicker: React.FC<PrototypePickerProps> = ({
+  training_id,
+  prototype,
+  pick,
+}) => {
+  const apolloClient = useApolloClient();
 
   const loadPrototype = useCallback(async () => {
-    setLoading(true);
-    const { content } = (await api.call(prototype.url, 'GET')) as {
-      content: string;
-    };
-    setLoading(false);
+    const {
+      data: { content },
+    } = await apolloClient.query<
+      RatioTrainingEmailPrototypeQuery,
+      RatioTrainingEmailPrototypeQueryVariables
+    >({
+      query: RatioTrainingEmailPrototypeDocument,
+      variables: { training_id, type: prototype.type },
+    });
     pick(content);
-  }, [api, prototype.url, pick]);
+  }, [apolloClient, prototype.type, training_id, pick]);
 
-  return (
-    <Button onClick={loadPrototype} loading={loading} disabled={loading}>
-      {prototype.title}
-    </Button>
-  );
+  return <AsyncButton act={loadPrototype}>{prototype.title}</AsyncButton>;
 };
 
 const PrototypePickerList = ({
   prototypes,
   pick,
+  training_id,
 }: {
   prototypes: PrototypeParams[];
   pick: (v: string) => void;
+  training_id: string;
 }) => {
   return (
     <Row>
       {prototypes.map((prototype, i) => (
-        <PrototypePicker key={i} prototype={prototype} pick={pick}>
+        <PrototypePicker
+          key={i}
+          prototype={prototype}
+          pick={pick}
+          training_id={training_id}
+        >
           {prototype.title}
         </PrototypePicker>
       ))}
@@ -71,27 +88,37 @@ const EmailModal = (props: ModalProps) => {
   const [title, setTitle] = useState('');
   const [creating, setCreating] = useState(false);
 
-  const api = useAPI();
+  const [sendEmailMutation] = useRatioTrainingSendEmailMutation();
 
-  const { close, createUrl } = props;
+  const { close } = props;
   const create = useCallback(async () => {
     setCreating(true);
-    const result = await api.call(createUrl, 'POST', {
-      title,
-      content,
+    const result = await sendEmailMutation({
+      variables: {
+        input: {
+          training_id: props.training_id,
+          title,
+          content,
+        },
+      },
     });
-    alert(result.draft_link);
-    close();
-  }, [api, title, content, close, createUrl]);
+    if (result.data) {
+      alert(result.data.email.draft_link);
+      close();
+    } else {
+      alert(JSON.stringify(result.errors));
+    }
+  }, [sendEmailMutation, props.training_id, title, content, close]);
 
   return (
-    <Modal isOpen={true}>
+    <Modal>
       <Modal.Header toggle={props.close}>Создать рассылку</Modal.Header>
       <Modal.Body>
         <Column>
           <PrototypePickerList
             prototypes={props.prototypes}
             pick={setContent}
+            training_id={props.training_id}
           />
           <Input
             type="text"
@@ -116,22 +143,15 @@ const EmailModal = (props: ModalProps) => {
 };
 
 export default function CreateEmailButton(props: Props) {
-  const [open, setOpen] = useState(false);
-
-  const closeModal = useCallback(() => {
-    setOpen(false);
-  }, []);
-
   return (
-    <div>
-      <Button onClick={() => setOpen(true)}>{props.children}</Button>
-      {open && (
+    <ButtonWithModal title="Написать">
+      {({ close }) => (
         <EmailModal
-          createUrl={props.create}
           prototypes={props.prototypes}
-          close={closeModal}
+          close={close}
+          training_id={props.training_id}
         />
       )}
-    </div>
+    </ButtonWithModal>
   );
 }
