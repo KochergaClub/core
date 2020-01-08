@@ -1,0 +1,12 @@
+fragment MastermindDatingCohortSummary on MastermindDatingCohort {
+  id
+  event {
+    start
+  }
+}
+
+query MastermindDatingCohorts {
+  cohorts: mastermindDatingCohorts {
+    ...MastermindDatingCohortSummary
+  }
+}

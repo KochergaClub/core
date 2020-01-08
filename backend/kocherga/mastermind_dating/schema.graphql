@@ -1,0 +1,46 @@
+extend type Query {
+  mastermindDatingCohorts: [MastermindDatingCohort!]! @staffonly
+  mastermindDatingCohortById(id: ID!): MastermindDatingCohort! @staffonly
+}
+
+type MastermindDatingCohort {
+  id: ID!
+  leader_telegram_uid: String
+
+  event: EventsEvent
+
+  participants: [MastermindDatingParticipant!]!
+  groups: [MastermindDatingGroup!]!
+}
+
+type MastermindDatingParticipant {
+  id: ID!
+  cohort: MastermindDatingCohort!
+  user: AuthUser!
+  name: String
+  desc: String
+  photo: String
+  voted_for: Boolean!
+  present: Boolean!
+  invite_email_sent: Boolean!
+}
+
+type MastermindDatingGroup {
+  id: ID!
+  telegram_invite_link: String!
+  participants: [MastermindDatingParticipant!]!
+}
+
+extend type Mutation {
+  mastermindDatingCreateCohort: MastermindDatingCohort! @staffonly
+  mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): Boolean @staffonly
+  mastermindDatingSetEventForCohort(cohort_id: ID!, event_id: String!): Boolean @staffonly
+  mastermindDatingUnsetEventForCohort(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingSendInviteEmails(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingCreateGroup(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingClearAllGroups(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingRunSolver(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingBroadcastSolution(cohort_id: ID!): Boolean @staffonly
+  mastermindDatingActivateVoting(participant_id: ID!): Boolean @staffonly
+}

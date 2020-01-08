@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import Async from 'react-select/async';
 import { ValueType } from 'react-select';
 

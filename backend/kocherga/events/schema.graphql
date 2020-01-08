@@ -2,6 +2,12 @@ extend type My {
   tickets: [MyEventsTicket!]! @auth(authenticated: true)
 }
 
+type EventsEvent {
+  event_id: ID!  # uuid field, renamed for client
+  title: String!
+  start: String!
+}
+
 type MyEventsTicket {
   event: EventsPublicEvent!
 }

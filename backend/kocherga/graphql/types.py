@@ -50,3 +50,58 @@ class DjangoObjectType(ariadne.ObjectType):
         @self.field(field_name)
         def resolve(obj, info):
             return getattr(obj, field_name)
+
+
+class PrefixedMixin:
+    """Mixing for QueryType and MutationType (don't use on ObjectType!)"""
+    def __init__(self, prefix):
+        self._kch_prefix = prefix
+        super().__init__()
+
+    def field(self, name: str):
+        def wrapper(f):
+            self.set_field(self._kch_prefix + name, f)
+            return f
+
+        return wrapper
+
+
+class PrefixedQueryType(PrefixedMixin, ariadne.QueryType):
+    pass
+
+
+class PrefixedMutationType(PrefixedMixin, ariadne.MutationType):
+    pass
+
+
+class DjangoObjectMutationType(ariadne.MutationType):
+    def __init__(self, id_argument, prefix, model):
+        self._kch_id_argument = id_argument
+        self._kch_prefix = prefix
+        self._kch_model = model
+        super().__init__()
+
+    def field(self, *args, **kwargs):
+        raise Exception("Please use @object_field instead when using DjangoObjectMutationType.")
+
+    def _get_resolver(self, f):
+        """Wraps given resolver function into another function which turns given obj_id into obj."""
+        def resolver(_, info, obj_id, **kwargs):
+            obj = self._kch_model.objects.get(pk=obj_id)
+            return f(_, info, obj, **kwargs)
+
+        return resolver
+
+    def object_field(self, name: str):
+        def wrapper(f):
+            resolver = self._get_resolver(f)
+            self.set_field(self._kch_prefix + name, resolver)
+            return resolver
+
+        return wrapper
+
+    def create_simple_method_field_wtih_boolean_result(self, field_name, method_name):
+        def resolver(_, info, obj):
+            obj.getattr(method_name)()
+            return True
+        self.set_field(self._kch_prefix + field_name, self._get_resolver(resolver))

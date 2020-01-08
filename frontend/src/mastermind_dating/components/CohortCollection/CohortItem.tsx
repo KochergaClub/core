@@ -1,16 +1,15 @@
-import React from 'react';
 import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import { Cohort } from '~/mastermind_dating/types';
+import { MastermindDatingCohortSummaryFragment as CohortFragment } from '../../queries.generated';
 
 import { format, parseISO } from 'date-fns';
 
-const CohortItem = ({ cohort }: { cohort: Cohort }) => {
+const CohortItem = ({ cohort }: { cohort: CohortFragment }) => {
   let title = String(cohort.id);
-  if (cohort.event_title && cohort.event_start) {
-    const start = format(parseISO(cohort.event_start), 'yyyy-MM-dd');
+  if (cohort.event?.start) {
+    const start = format(parseISO(cohort.event.start), 'yyyy-MM-dd');
     title += ' ' + ` (${start})`;
   }
   return (
