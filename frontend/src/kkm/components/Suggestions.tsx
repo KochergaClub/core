@@ -16,6 +16,7 @@ const Suggestions: <T extends string | number>(
       {props.values.map(value => (
         <Button
           key={value}
+          type="button"
           small
           onClick={() => props.setValue(value)}
           kind={props.current === value ? 'primary' : 'default'}

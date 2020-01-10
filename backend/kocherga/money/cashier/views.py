@@ -63,7 +63,7 @@ class KkmViewSet(viewsets.ViewSet):
                         email=request.data['email'],
                         title=request.data['title'],
                         sum=int(request.data['sum']),
-                        signMethodCalculation=request.data['sign_method_calculation'],
+                        signMethodCalculation=kkm.SignMethodCalculation(request.data['sign_method_calculation']),
                     )
                 )
             )
