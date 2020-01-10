@@ -86,7 +86,8 @@ class DjangoObjectMutationType(ariadne.MutationType):
 
     def _get_resolver(self, f):
         """Wraps given resolver function into another function which turns given obj_id into obj."""
-        def resolver(_, info, obj_id, **kwargs):
+        def resolver(_, info, **kwargs):
+            obj_id = kwargs.pop(self._kch_id_argument)
             obj = self._kch_model.objects.get(pk=obj_id)
             return f(_, info, obj, **kwargs)
 
@@ -100,8 +101,26 @@ class DjangoObjectMutationType(ariadne.MutationType):
 
         return wrapper
 
-    def create_simple_method_field_wtih_boolean_result(self, field_name, method_name):
+    def create_simple_method_field(self, field_name: str, method_name: str, result_format, result_key=None):
+        assert result_format in ('boolean', 'ok', 'obj', 'wrapped_obj')
+        assert result_key or result_format != 'wrapped_obj'
+
         def resolver(_, info, obj):
-            obj.getattr(method_name)()
-            return True
+            getattr(obj, method_name)()
+            if result_format == 'boolean':
+                # Discouraged. Please use at least `ok` result_format for future extensibility.
+                return True
+            elif result_format == 'ok':
+                # Ok to use for `delete` mutations or for mutations which don't change anything.
+                return {'ok': True}
+            elif result_format == 'obj':
+                # Discouraged. Please use `wrapped_obj` instead for future extensibility.
+                return obj
+            elif result_format == 'wrapped_obj':
+                if not result_key:
+                    raise Exception("result_key must be set when result_format is `wrapped_obj`")
+                return {result_key: obj}
+            else:
+                raise Exception(f"Impossible result_format {result_format}")
+
         self.set_field(self._kch_prefix + field_name, self._get_resolver(resolver))

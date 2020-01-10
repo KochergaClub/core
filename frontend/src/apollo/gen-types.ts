@@ -162,6 +162,25 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventsEvent = {
+   __typename?: 'EventsEvent',
+  event_id: Scalars['ID'],
+  title: Scalars['String'],
+  start: Scalars['String'],
+};
+
+export type EventsEventConnection = {
+   __typename?: 'EventsEventConnection',
+  pageInfo: PageInfo,
+  edges: Array<EventsEventEdge>,
+  nodes: Array<EventsEvent>,
+};
+
+export type EventsEventEdge = {
+   __typename?: 'EventsEventEdge',
+  node: EventsEvent,
+};
+
 export type EventsPublicEvent = {
    __typename?: 'EventsPublicEvent',
   event_id: Scalars['ID'],
@@ -208,6 +227,50 @@ export type KkmRegisterCheckResult = {
   error?: Maybe<Scalars['String']>,
 };
 
+export type MastermindDatingCohort = {
+   __typename?: 'MastermindDatingCohort',
+  id: Scalars['ID'],
+  leader_telegram_uid?: Maybe<Scalars['String']>,
+  event?: Maybe<EventsEvent>,
+  participants: Array<MastermindDatingParticipant>,
+  groups: Array<MastermindDatingGroup>,
+};
+
+export type MastermindDatingCohortMutationResult = {
+   __typename?: 'MastermindDatingCohortMutationResult',
+  cohort: MastermindDatingCohort,
+};
+
+export type MastermindDatingGroup = {
+   __typename?: 'MastermindDatingGroup',
+  id: Scalars['ID'],
+  telegram_invite_link: Scalars['String'],
+  participants: Array<MastermindDatingParticipant>,
+};
+
+export type MastermindDatingParticipant = {
+   __typename?: 'MastermindDatingParticipant',
+  id: Scalars['ID'],
+  cohort: MastermindDatingCohort,
+  user: AuthUser,
+  name?: Maybe<Scalars['String']>,
+  desc?: Maybe<Scalars['String']>,
+  photo?: Maybe<Scalars['String']>,
+  voted_for: Scalars['Boolean'],
+  present: Scalars['Boolean'],
+  invite_email_sent: Scalars['Boolean'],
+};
+
+export type MastermindDatingParticipantMutationResult = {
+   __typename?: 'MastermindDatingParticipantMutationResult',
+  participant: MastermindDatingParticipant,
+};
+
+export type MastermindDatingTrivialMutationResult = {
+   __typename?: 'MastermindDatingTrivialMutationResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type Mutation = {
    __typename?: 'Mutation',
   _empty?: Maybe<Scalars['Boolean']>,
@@ -236,6 +299,19 @@ export type Mutation = {
   ratioTicketFiscalize?: Maybe<Scalars['Boolean']>,
   ratioTrainingSyncParticipantsToMailchimp?: Maybe<Scalars['Boolean']>,
   ratioTrainingSendEmail: RatioTrainingSendEmailResult,
+  mastermindDatingCreateCohort: MastermindDatingCohortMutationResult,
+  mastermindDatingSetEventForCohort: MastermindDatingCohortMutationResult,
+  mastermindDatingUnsetEventForCohort: MastermindDatingCohortMutationResult,
+  mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult,
+  mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult,
+  mastermindDatingCreateGroup: MastermindDatingCohortMutationResult,
+  mastermindDatingClearAllGroups: MastermindDatingCohortMutationResult,
+  mastermindDatingRunSolver: MastermindDatingCohortMutationResult,
+  mastermindDatingBroadcastSolution: MastermindDatingCohortMutationResult,
+  mastermindDatingDeleteCohort: MastermindDatingTrivialMutationResult,
+  mastermindDatingCreateParticipant: MastermindDatingParticipantMutationResult,
+  mastermindDatingActivateVoting: MastermindDatingParticipantMutationResult,
+  mastermindDatingSetPresenceStatus: MastermindDatingParticipantMutationResult,
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>,
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>,
@@ -374,6 +450,69 @@ export type MutationRatioTrainingSendEmailArgs = {
 };
 
 
+export type MutationMastermindDatingSetEventForCohortArgs = {
+  cohort_id: Scalars['ID'],
+  event_id: Scalars['String']
+};
+
+
+export type MutationMastermindDatingUnsetEventForCohortArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingPopulateCohortFromEventArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingSendInviteEmailsArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingCreateGroupArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingClearAllGroupsArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingRunSolverArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingBroadcastSolutionArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingDeleteCohortArgs = {
+  cohort_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingCreateParticipantArgs = {
+  cohort_id: Scalars['ID'],
+  email: Scalars['String']
+};
+
+
+export type MutationMastermindDatingActivateVotingArgs = {
+  participant_id: Scalars['ID']
+};
+
+
+export type MutationMastermindDatingSetPresenceStatusArgs = {
+  participant_id: Scalars['ID'],
+  present: Scalars['Boolean']
+};
+
+
 export type MutationEmailSubscribeChannelDeleteArgs = {
   slug: Scalars['String']
 };
@@ -484,12 +623,15 @@ export type Query = {
   watchmenShifts: Array<WatchmenShift>,
   cashierPayments: CashierPaymentConnection,
   analyticsBovStats: Array<AnalyticsBovStat>,
+  events: EventsEventConnection,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
   ratioTrainings: RatioTrainingConnection,
   ratioTrainingBySlug: RatioTraining,
   ratioTrainersAll: Array<RatioTrainer>,
   ratioTrainingEmailPrototype: Scalars['String'],
+  mastermindDatingCohorts: Array<MastermindDatingCohort>,
+  mastermindDatingCohortById: MastermindDatingCohort,
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
@@ -558,6 +700,15 @@ export type QueryCashierPaymentsArgs = {
 };
 
 
+export type QueryEventsArgs = {
+  search?: Maybe<Scalars['String']>,
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
 };
@@ -579,6 +730,11 @@ export type QueryRatioTrainingBySlugArgs = {
 export type QueryRatioTrainingEmailPrototypeArgs = {
   training_id: Scalars['ID'],
   type: Scalars['String']
+};
+
+
+export type QueryMastermindDatingCohortByIdArgs = {
+  id: Scalars['ID']
 };
 
 

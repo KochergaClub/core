@@ -1,8 +1,6 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { Participant, Cohort } from '../../../types';
+import { MastermindDatingParticipantFragment as Participant } from '../../queries.generated';
 
 import ParticipantCard from './ParticipantCard';
 
@@ -17,18 +15,13 @@ const ListContainer = styled.div`
 
 interface Props {
   participants: Participant[];
-  cohort: Cohort;
 }
 
-const ParticipantList: React.FC<Props> = ({ participants, cohort }) => {
+const ParticipantList: React.FC<Props> = ({ participants }) => {
   return (
     <ListContainer>
       {participants.map(participant => (
-        <ParticipantCard
-          key={participant.id}
-          participant={participant}
-          cohort={cohort}
-        />
+        <ParticipantCard key={participant.id} participant={participant} />
       ))}
     </ListContainer>
   );

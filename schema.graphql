@@ -339,6 +339,26 @@ type AnalyticsBovStat {
   total_income: Int!
 }
 
+extend type Query {
+  events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+}
+
+type EventsEventEdge {
+  node: EventsEvent!
+}
+
+type EventsEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsEventEdge!]!
+  nodes: [EventsEvent!]!
+}
+
+type EventsEvent {
+  event_id: ID!  # uuid field, renamed for client
+  title: String!
+  start: String!
+}
+
 extend type My {
   tickets: [MyEventsTicket!]! @auth(authenticated: true)
 }
@@ -494,6 +514,69 @@ input RatioTrainingSendEmailInput {
 
 type RatioTrainingSendEmailResult {
   draft_link: String!
+}
+
+extend type Query {
+  mastermindDatingCohorts: [MastermindDatingCohort!]! @staffonly
+  mastermindDatingCohortById(id: ID!): MastermindDatingCohort! @staffonly
+}
+
+type MastermindDatingCohort {
+  id: ID!
+  leader_telegram_uid: String
+
+  event: EventsEvent
+
+  participants: [MastermindDatingParticipant!]!
+  groups: [MastermindDatingGroup!]!
+}
+
+type MastermindDatingParticipant {
+  id: ID!
+  cohort: MastermindDatingCohort!
+  user: AuthUser!
+  name: String
+  desc: String
+  photo: String
+  voted_for: Boolean!
+  present: Boolean!
+  invite_email_sent: Boolean!
+}
+
+type MastermindDatingGroup {
+  id: ID!
+  telegram_invite_link: String!
+  participants: [MastermindDatingParticipant!]!
+}
+
+extend type Mutation {
+  mastermindDatingCreateCohort: MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingSetEventForCohort(cohort_id: ID!, event_id: String!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingUnsetEventForCohort(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingCreateGroup(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingClearAllGroups(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingRunSolver(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingBroadcastSolution(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+
+  mastermindDatingDeleteCohort(cohort_id: ID!): MastermindDatingTrivialMutationResult! @staffonly
+
+  mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): MastermindDatingParticipantMutationResult! @staffonly
+  mastermindDatingActivateVoting(participant_id: ID!): MastermindDatingParticipantMutationResult! @staffonly
+  mastermindDatingSetPresenceStatus(participant_id: ID!, present: Boolean!): MastermindDatingParticipantMutationResult! @staffonly
+}
+
+type MastermindDatingTrivialMutationResult {
+  ok: Boolean
+}
+
+type MastermindDatingCohortMutationResult {
+  cohort: MastermindDatingCohort!
+}
+
+type MastermindDatingParticipantMutationResult {
+  participant: MastermindDatingParticipant!
 }
 
 extend type Query {

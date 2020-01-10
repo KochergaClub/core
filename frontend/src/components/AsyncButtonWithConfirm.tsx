@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
@@ -34,7 +34,7 @@ const AsyncButtonWithConfirm = ({
   }, [act, closeConfirm]);
 
   return (
-    <React.Fragment>
+    <>
       <Button
         loading={confirming}
         disabled={confirming}
@@ -62,7 +62,7 @@ const AsyncButtonWithConfirm = ({
           </Modal.Footer>
         </Modal>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

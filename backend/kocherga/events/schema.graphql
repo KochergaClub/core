@@ -1,11 +1,25 @@
-extend type My {
-  tickets: [MyEventsTicket!]! @auth(authenticated: true)
+extend type Query {
+  events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+}
+
+type EventsEventEdge {
+  node: EventsEvent!
+}
+
+type EventsEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsEventEdge!]!
+  nodes: [EventsEvent!]!
 }
 
 type EventsEvent {
   event_id: ID!  # uuid field, renamed for client
   title: String!
   start: String!
+}
+
+extend type My {
+  tickets: [MyEventsTicket!]! @auth(authenticated: true)
 }
 
 type MyEventsTicket {

@@ -13,7 +13,10 @@ def create_mutations():
 
     @Mutation.field('CreateCohort')
     def resolve_CreateCohort(_, info):
-        return models.Cohort.objects.create()
+        cohort = models.Cohort.objects.create()
+        return {
+            'cohort': cohort
+        }
 
     return Mutation
 
@@ -25,29 +28,39 @@ def create_cohort_mutations():
         model=models.Cohort,
     )
 
-    CohortMutation.create_simple_method_field_wtih_boolean_result('PopulateCohortFromEvent', 'populate_from_event')
-    CohortMutation.create_simple_method_field_wtih_boolean_result('SendInviteEmails', 'send_invite_emails')
-    CohortMutation.create_simple_method_field_wtih_boolean_result('ClearAllGroups', 'clear_all_groups')
-    CohortMutation.create_simple_method_field_wtih_boolean_result('RunSolver', 'run_solver')
-    CohortMutation.create_simple_method_field_wtih_boolean_result('BroadcastSolution', 'broadcast_solution')
+    for (field, method) in [
+            ('PopulateCohortFromEvent', 'populate_from_event'),
+            ('SendInviteEmails', 'send_invite_emails'),
+            ('ClearAllGroups', 'clear_all_groups'),
+            ('RunSolver', 'run_solver'),
+            ('BroadcastSolution', 'broadcast_solution'),
+    ]:
+        CohortMutation.create_simple_method_field(
+            field_name=field,
+            method_name=method,
+            result_format='wrapped_obj',
+            result_key='cohort',
+        )
+
+    CohortMutation.create_simple_method_field('DeleteCohort', 'delete', result_format='ok')
 
     @CohortMutation.object_field('CreateGroup')
     def resolve_cohort_CreateGroup(_, info, cohort):
         models.Group.objects.create_for_cohort(cohort)
-        return True
+        return {'cohort': cohort}
 
     @CohortMutation.object_field('SetEventForCohort')
     def resolve_cohort_SetEventForCohort(_, info, cohort, event_id):
         event = Event.objects.get(uuid=event_id)
         cohort.event = event
         cohort.save()
-        return True
+        return {'cohort': cohort}
 
     @CohortMutation.object_field('UnsetEventForCohort')
     def resolve_cohort_UnsetEventForCohort(_, info, cohort):
         cohort.event = None
         cohort.save()
-        return True
+        return {'cohort': cohort}
 
     @CohortMutation.object_field('CreateParticipant')
     def resolve_CreateParticipant(_, info, cohort, email):
@@ -62,7 +75,7 @@ def create_cohort_mutations():
             cohort=cohort,
         )
 
-        return participant
+        return {'participant': participant}
 
     return CohortMutation
 
@@ -74,7 +87,13 @@ def create_participant_mutations():
         model=models.Participant,
     )
 
-    ParticipantMutation.create_simple_method_field_wtih_boolean_result('ActivateVoting', 'tinder_activate')
+    ParticipantMutation.create_simple_method_field('ActivateVoting', 'tinder_activate', result_format='wrapped_obj', result_key='participant')
+
+    @ParticipantMutation.object_field('SetPresenceStatus')
+    def resolve_SetPresenseStatus(_, info, participant, present):
+        participant.present = present
+        participant.save()
+        return {'participant': participant}
 
     return ParticipantMutation
 

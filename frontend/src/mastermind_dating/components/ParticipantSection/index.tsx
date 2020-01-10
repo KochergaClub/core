@@ -5,30 +5,44 @@ import Head from 'next/head';
 
 import { Column, Row } from '@kocherga/frontkit';
 
-import { ActionButton } from '~/components';
+import { AsyncButton } from '~/components';
 
-import { Cohort, Participant } from '../../../types';
-
-import { useCohortParticipantsReloader } from '../hooks';
+import {
+  MastermindDatingCohortDetailsFragment as Cohort,
+  useMastermindDatingPopulateCohortFromEventMutation,
+  useMastermindDatingSendInviteEmailsMutation,
+} from '../../queries.generated';
 
 import ParticipantList from './ParticipantList';
 import CreateParticipantButton from './CreateParticipantButton';
 
 interface Props {
   cohort: Cohort;
-  participants: Participant[];
 }
 
-const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
-  const uninvitedCount = participants.filter(p => !p.invite_email_sent).length;
+const ParticipantSection: React.FC<Props> = ({ cohort }) => {
+  const [
+    populateFromEvent,
+  ] = useMastermindDatingPopulateCohortFromEventMutation({
+    variables: {
+      cohort_id: cohort.id,
+    },
+  });
 
-  const cohortParticipantsReloader = useCohortParticipantsReloader(cohort);
+  const [sendInviteEmails] = useMastermindDatingSendInviteEmailsMutation({
+    variables: {
+      cohort_id: cohort.id,
+    },
+  });
+
+  const uninvitedCount = cohort.participants.filter(p => !p.invite_email_sent)
+    .length;
 
   const [hideUnregistered, setHideUnregistered] = useState(false);
 
   const shownParticipants = hideUnregistered
-    ? participants.filter(p => p.name)
-    : participants;
+    ? cohort.participants.filter(p => p.name)
+    : cohort.participants;
 
   return (
     <section>
@@ -36,22 +50,16 @@ const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
       <Column gutter={32}>
         <Row>
           <CreateParticipantButton cohort={cohort} />
-          {cohort.event_id && (
-            <ActionButton
-              path={`mastermind_dating/cohort/${cohort.id}/populate_from_event`}
-              asyncOnSuccess={cohortParticipantsReloader}
-            >
+          {cohort.event && (
+            <AsyncButton act={populateFromEvent}>
               Загрузить участников из события
-            </ActionButton>
+            </AsyncButton>
           )}
           {uninvitedCount ? (
-            <ActionButton
-              path={`mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
-              asyncOnSuccess={cohortParticipantsReloader}
-            >
+            <AsyncButton act={sendInviteEmails}>
               Разослать приглашения в бота ({uninvitedCount}/
-              {participants.length})
-            </ActionButton>
+              {cohort.participants.length})
+            </AsyncButton>
           ) : null}
         </Row>
         <Row gutter={4}>
@@ -70,7 +78,7 @@ const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
               : 'Незарегистрировавшиеся показаны'}
           </div>
         </Row>
-        <ParticipantList participants={shownParticipants} cohort={cohort} />
+        <ParticipantList participants={shownParticipants} />
       </Column>
     </section>
   );

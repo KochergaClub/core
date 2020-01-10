@@ -5,7 +5,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
-import { useCommonHotkeys, useAPI, useDispatch } from '~/common/hooks';
+import { useCommonHotkeys, useDispatch } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
 import { createEvent } from '~/events/features/events';
@@ -21,8 +21,6 @@ const NewEventModal: React.FC = () => {
 
   const dispatch = useDispatch();
   const { start, end } = useSelector(selectRangeForNewEvent);
-
-  const api = useAPI();
 
   const saveDisabled = saving || !title.length;
 

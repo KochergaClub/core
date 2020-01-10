@@ -32,15 +32,31 @@ type MastermindDatingGroup {
 }
 
 extend type Mutation {
-  mastermindDatingCreateCohort: MastermindDatingCohort! @staffonly
-  mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): Boolean @staffonly
-  mastermindDatingSetEventForCohort(cohort_id: ID!, event_id: String!): Boolean @staffonly
-  mastermindDatingUnsetEventForCohort(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingSendInviteEmails(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingCreateGroup(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingClearAllGroups(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingRunSolver(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingBroadcastSolution(cohort_id: ID!): Boolean @staffonly
-  mastermindDatingActivateVoting(participant_id: ID!): Boolean @staffonly
+  mastermindDatingCreateCohort: MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingSetEventForCohort(cohort_id: ID!, event_id: String!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingUnsetEventForCohort(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingCreateGroup(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingClearAllGroups(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingRunSolver(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingBroadcastSolution(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+
+  mastermindDatingDeleteCohort(cohort_id: ID!): MastermindDatingTrivialMutationResult! @staffonly
+
+  mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): MastermindDatingParticipantMutationResult! @staffonly
+  mastermindDatingActivateVoting(participant_id: ID!): MastermindDatingParticipantMutationResult! @staffonly
+  mastermindDatingSetPresenceStatus(participant_id: ID!, present: Boolean!): MastermindDatingParticipantMutationResult! @staffonly
+}
+
+type MastermindDatingTrivialMutationResult {
+  ok: Boolean
+}
+
+type MastermindDatingCohortMutationResult {
+  cohort: MastermindDatingCohort!
+}
+
+type MastermindDatingParticipantMutationResult {
+  participant: MastermindDatingParticipant!
 }

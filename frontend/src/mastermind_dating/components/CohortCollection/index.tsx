@@ -17,7 +17,10 @@ const cohortShape: FormShape = [];
 
 const CohortCollection: React.FC = () => {
   const queryResults = useMastermindDatingCohortsQuery();
-  const [createMutation] = useMastermindDatingCreateCohortMutation();
+  const [createMutation] = useMastermindDatingCreateCohortMutation({
+    refetchQueries: ['MastermindDatingCohorts'],
+    awaitRefetchQueries: true,
+  });
 
   const renderItem = useCallback(
     (cohort: CohortFragment) => <CohortItem cohort={cohort} />,

@@ -3,15 +3,15 @@ import Toggle from 'react-toggle';
 
 import styled from 'styled-components';
 
+import { AsyncButton } from '~/components';
+
 import { Column, Row, colors, fonts } from '@kocherga/frontkit';
 
-import ActionButton from '~/components/ActionButton';
-
-import { useAPI } from '~/common/hooks';
-
-import { Participant, Cohort } from '../../../types';
-
-import { useCohortParticipantsReloader } from '../hooks';
+import {
+  MastermindDatingParticipantFragment as Participant,
+  useMastermindDatingActivateVotingMutation,
+  useMastermindDatingSetPresenceStatusMutation,
+} from '../../queries.generated';
 
 const Photo = styled.img`
   width: 200px;
@@ -48,53 +48,47 @@ const Description = styled.small`
   text-align: center;
 `;
 
-const actionPath = (action: string, uid: number) =>
-  `mastermind_dating/participant/${uid}/${action}`;
-
 interface Props {
   participant: Participant;
-  cohort: Cohort;
 }
 
-const VoteForm: React.FC<Props> = ({ participant, cohort }) => {
-  const cohortParticipantsReloader = useCohortParticipantsReloader(cohort);
+const VoteForm: React.FC<Props> = ({ participant }) => {
+  const [mutation] = useMastermindDatingActivateVotingMutation({
+    variables: {
+      participant_id: participant.id,
+    },
+  });
 
   if (participant.voted_for) {
     return <em>Уже проголосовали</em>;
   }
 
-  return (
-    <ActionButton
-      path={actionPath('tinder_activate', participant.id)}
-      asyncOnSuccess={cohortParticipantsReloader}
-    >
-      Активировать голосование
-    </ActionButton>
-  );
+  return <AsyncButton act={mutation}>Активировать голосование</AsyncButton>;
 };
 
 const ParticipantCard: React.FC<Props> = props => {
-  const { participant, cohort } = props;
+  const { participant } = props;
 
-  const api = useAPI();
-  const cohortParticipantsReloader = useCohortParticipantsReloader(cohort);
+  const [
+    setPresenceStatusMutation,
+  ] = useMastermindDatingSetPresenceStatusMutation();
 
   const onPresenceChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      await api.call(
-        `mastermind_dating/participant/${participant.id}`,
-        'PATCH',
-        { present: e.target.checked }
-      );
-      await cohortParticipantsReloader();
+      await setPresenceStatusMutation({
+        variables: {
+          participant_id: participant.id,
+          present: e.target.checked,
+        },
+      });
     },
-    [api, cohortParticipantsReloader, participant.id]
+    [setPresenceStatusMutation, participant.id]
   );
 
   return (
     <Container key={participant.id}>
       <Column centered>
-        <span>{participant.user}</span>
+        <span>{participant.user.email}</span>
         <strong>{participant.name || 'НЕ ЗАРЕГИСТРИРОВАН'}</strong>
       </Column>
       <Column centered>

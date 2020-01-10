@@ -62,9 +62,9 @@ const MyPage: NextApolloPage<Props> = () => {
           {({ data: { my } }) => (
             <Column centered>
               <div>
-                <code>{my.email}</code> <LogoutButton />
+                <code>{my.user.email}</code> <LogoutButton />
               </div>
-              {my.is_staff && <AdminSection />}
+              {my.user.is_staff && <AdminSection />}
               <RowNav>
                 {tabsWithNames.map(([t, tName]) => (
                   <RowNav.Item
