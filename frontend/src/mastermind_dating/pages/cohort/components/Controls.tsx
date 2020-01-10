@@ -23,7 +23,7 @@ const Controls: React.FC<Props> = ({ cohort }) => {
   const cohortGroupsReloader = useCohortGroupsReloader(cohort);
 
   const cbRunSolver = useCallback(async () => {
-    await api.call(`/mastermind_dating/cohort/${cohort.id}/run_solver`, 'POST');
+    await api.call(`mastermind_dating/cohort/${cohort.id}/run_solver`, 'POST');
     await cohortGroupsReloader();
   }, [api, cohortGroupsReloader, cohort.id]);
 
@@ -37,7 +37,7 @@ const Controls: React.FC<Props> = ({ cohort }) => {
       </div>
       <Row>
         <DeleteButton
-          endpoint="/mastermind_dating/cohort"
+          endpoint="mastermind_dating/cohort"
           id={cohort.id}
           redirectOnDelete="/team/mastermind_dating"
         />

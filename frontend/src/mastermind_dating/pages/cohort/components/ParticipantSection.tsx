@@ -38,7 +38,7 @@ const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
           <CreateParticipantButton cohort={cohort} />
           {cohort.event_id && (
             <ActionButton
-              path={`/mastermind_dating/cohort/${cohort.id}/populate_from_event`}
+              path={`mastermind_dating/cohort/${cohort.id}/populate_from_event`}
               asyncOnSuccess={cohortParticipantsReloader}
             >
               Загрузить участников из события
@@ -46,7 +46,7 @@ const ParticipantSection: React.FC<Props> = ({ cohort, participants }) => {
           )}
           {uninvitedCount ? (
             <ActionButton
-              path={`/mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
+              path={`mastermind_dating/cohort/${cohort.id}/send_invite_emails`}
               asyncOnSuccess={cohortParticipantsReloader}
             >
               Разослать приглашения в бота ({uninvitedCount}/

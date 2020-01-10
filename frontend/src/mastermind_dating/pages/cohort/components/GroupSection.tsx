@@ -50,7 +50,7 @@ const GroupSection: React.FC<Props> = ({ cohort, groups }) => {
 
       {cohort.leader_telegram_uid && (
         <ActionButton
-          path={`/mastermind_dating/cohort/${cohort.id}/create_group`}
+          path={`mastermind_dating/cohort/${cohort.id}/create_group`}
           asyncOnSuccess={cohortGroupsReloader}
         >
           Создать группу
