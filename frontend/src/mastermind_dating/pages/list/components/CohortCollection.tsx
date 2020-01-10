@@ -28,7 +28,7 @@ const CohortCollection: React.FC<Props> = ({ cohorts }) => {
   );
 
   const add = useCallback(async () => {
-    await api.call('/mastermind_dating/cohort', 'POST', {});
+    await api.call('mastermind_dating/cohort', 'POST', {});
     const cohorts = await getCohorts(api);
     dispatch({
       type: 'REPLACE_COHORTS_ACTION',
