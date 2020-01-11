@@ -5,6 +5,7 @@ from django.contrib.auth import models as auth_models
 Query = QueryType()
 
 
+# deprecated, use my { user } instead
 @Query.field("currentUser")
 def resolve_current_user(_, info):
     return info.context.user

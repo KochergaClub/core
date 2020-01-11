@@ -13,6 +13,6 @@ def resolve_email_subscription(_, info):
     # structure here instead of relying on GraphQL schema.
     # (I might change my mind about best practices later, but this is early days.)
     return {
-        'status': subscription['status'],
-        'interests': subscription.get('interests'),
+        'status': subscription.status,
+        'interests': subscription.interests,
     }
