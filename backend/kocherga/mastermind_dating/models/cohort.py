@@ -85,9 +85,9 @@ class Cohort(models.Model):
         if len(votes) != n ** 2 - n:
             raise Exception("Not enough votes to do solving")
 
-        participants.sort(key=lambda u: u.telegram_uid)
-        votes.sort(key=lambda v: v.whom.telegram_uid)
-        votes.sort(key=lambda v: v.who.telegram_uid)
+        participants.sort(key=lambda u: u.id)
+        votes.sort(key=lambda v: v.whom.id)
+        votes.sort(key=lambda v: v.who.id)
 
         return (participants, votes)
 
