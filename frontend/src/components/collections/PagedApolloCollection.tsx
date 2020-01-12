@@ -50,12 +50,17 @@ interface Props<T, A extends {}> {
       node: T;
     }[];
   };
+  pageSize?: number;
   fetchPage: ({
     before,
     after,
+    first,
+    last,
   }: {
     before?: string | null;
     after?: string | null;
+    first?: number | null;
+    last?: number | null;
   }) => Promise<any>;
   names: EntityNames;
   add?: {
@@ -66,6 +71,7 @@ interface Props<T, A extends {}> {
 }
 
 function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
+  const DEFAULT_PAGE_SIZE = 20;
   return (
     <div>
       <Collection
@@ -77,11 +83,19 @@ function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
       <Pager
         pageInfo={props.connection.pageInfo}
         next={async () => {
-          await props.fetchPage({ after: props.connection.pageInfo.endCursor });
+          await props.fetchPage({
+            after: props.connection.pageInfo.endCursor,
+            before: null,
+            first: props.pageSize || DEFAULT_PAGE_SIZE,
+            last: null,
+          });
         }}
         previous={async () => {
           await props.fetchPage({
+            after: null,
             before: props.connection.pageInfo.startCursor,
+            first: null,
+            last: props.pageSize || DEFAULT_PAGE_SIZE,
           });
         }}
       />

@@ -19,7 +19,9 @@ export type PaymentFragment = (
 
 export type CashierPaymentsQueryVariables = {
   before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>
+  after?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -79,8 +81,8 @@ export const PaymentFragmentDoc = gql`
 }
     `;
 export const CashierPaymentsDocument = gql`
-    query CashierPayments($before: String, $after: String) {
-  payments: cashierPayments(before: $before, after: $after) {
+    query CashierPayments($before: String, $after: String, $first: Int, $last: Int) {
+  payments: cashierPayments(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -110,6 +112,8 @@ export const CashierPaymentsDocument = gql`
  *   variables: {
  *      before: // value for 'before'
  *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */

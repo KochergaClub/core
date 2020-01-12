@@ -60,8 +60,8 @@ fragment TrainingWithSchedule on RatioTraining {
   }
 }
 
-query RatioTrainings($before: String, $after: String) {
-  trainings: ratioTrainings(before: $before, after: $after) {
+query RatioTrainings($before: String, $after: String, $first: Int, $last: Int) {
+  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -73,8 +73,8 @@ query RatioTrainings($before: String, $after: String) {
   }
 }
 
-query RatioTrainingsForPicker($before: String, $after: String) {
-  trainings: ratioTrainings(before: $before, after: $after) {
+query RatioTrainingsForPicker($before: String, $after: String, $first: Int, $last: Int) {
+  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }

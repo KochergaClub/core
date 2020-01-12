@@ -60,7 +60,9 @@ export type TrainingWithScheduleFragment = (
 
 export type RatioTrainingsQueryVariables = {
   before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>
+  after?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -83,7 +85,9 @@ export type RatioTrainingsQuery = (
 
 export type RatioTrainingsForPickerQueryVariables = {
   before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>
+  after?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -302,8 +306,8 @@ export const TrainingWithScheduleFragmentDoc = gql`
     ${TrainingFragmentDoc}
 ${TrainingDayFragmentDoc}`;
 export const RatioTrainingsDocument = gql`
-    query RatioTrainings($before: String, $after: String) {
-  trainings: ratioTrainings(before: $before, after: $after) {
+    query RatioTrainings($before: String, $after: String, $first: Int, $last: Int) {
+  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -331,6 +335,8 @@ ${TrainingFragmentDoc}`;
  *   variables: {
  *      before: // value for 'before'
  *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */
@@ -344,8 +350,8 @@ export type RatioTrainingsQueryHookResult = ReturnType<typeof useRatioTrainingsQ
 export type RatioTrainingsLazyQueryHookResult = ReturnType<typeof useRatioTrainingsLazyQuery>;
 export type RatioTrainingsQueryResult = ApolloReactCommon.QueryResult<RatioTrainingsQuery, RatioTrainingsQueryVariables>;
 export const RatioTrainingsForPickerDocument = gql`
-    query RatioTrainingsForPicker($before: String, $after: String) {
-  trainings: ratioTrainings(before: $before, after: $after) {
+    query RatioTrainingsForPicker($before: String, $after: String, $first: Int, $last: Int) {
+  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -373,6 +379,8 @@ ${TrainingForPickerFragmentDoc}`;
  *   variables: {
  *      before: // value for 'before'
  *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */

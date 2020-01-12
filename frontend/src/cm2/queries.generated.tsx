@@ -24,7 +24,9 @@ export type OrderWithCustomerFragment = (
 export type Cm2OrdersQueryVariables = {
   status?: Types.Maybe<Types.Scalars['String']>,
   after?: Types.Maybe<Types.Scalars['String']>,
-  before?: Types.Maybe<Types.Scalars['String']>
+  before?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -95,7 +97,9 @@ export type Cm2SearchCustomersQuery = (
 
 export type Cm2CustomersQueryVariables = {
   after?: Types.Maybe<Types.Scalars['String']>,
-  before?: Types.Maybe<Types.Scalars['String']>
+  before?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -182,8 +186,8 @@ export const OrderWithCustomerFragmentDoc = gql`
 }
     ${CustomerFragmentDoc}`;
 export const Cm2OrdersDocument = gql`
-    query Cm2Orders($status: String, $after: String, $before: String) {
-  cm2Orders(status: $status, after: $after, before: $before) {
+    query Cm2Orders($status: String, $after: String, $before: String, $first: Int, $last: Int) {
+  cm2Orders(status: $status, after: $after, before: $before, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -212,6 +216,8 @@ ${OrderWithCustomerFragmentDoc}`;
  *      status: // value for 'status'
  *      after: // value for 'after'
  *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */
@@ -329,8 +335,8 @@ export type Cm2SearchCustomersQueryHookResult = ReturnType<typeof useCm2SearchCu
 export type Cm2SearchCustomersLazyQueryHookResult = ReturnType<typeof useCm2SearchCustomersLazyQuery>;
 export type Cm2SearchCustomersQueryResult = ApolloReactCommon.QueryResult<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>;
 export const Cm2CustomersDocument = gql`
-    query Cm2Customers($after: String, $before: String) {
-  cm2Customers(after: $after, before: $before) {
+    query Cm2Customers($after: String, $before: String, $first: Int, $last: Int) {
+  cm2Customers(after: $after, before: $before, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -358,6 +364,8 @@ ${CustomerFragmentDoc}`;
  *   variables: {
  *      after: // value for 'after'
  *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */
@@ -436,7 +444,7 @@ export const Cm2CustomerPageDocument = gql`
     query Cm2CustomerPage($id: ID!) {
   cm2Customer(id: $id) {
     ...Customer
-    orders {
+    orders(first: 20) {
       edges {
         node {
           id

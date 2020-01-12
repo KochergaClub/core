@@ -15,8 +15,8 @@ fragment Payment on CashierPayment {
   redeem_dt
 }
 
-query CashierPayments($before: String, $after: String) {
-  payments: cashierPayments(before: $before, after: $after) {
+query CashierPayments($before: String, $after: String, $first: Int, $last: Int) {
+  payments: cashierPayments(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       hasNextPage
       hasPreviousPage

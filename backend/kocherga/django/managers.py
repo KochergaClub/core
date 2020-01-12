@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from dataclasses import dataclass
 from typing import Optional, List, Any
 
@@ -24,11 +27,9 @@ class RelayQuerySetMixin:
     MAX_PAGE_SIZE = 100
 
     def relay_page(self, order=None, before=None, after=None, first=None, last=None):
-        # supported param combinations:
-        # - all none
-        # - before+last
-        # - after+first
-        # - first
+        if not first and not last:
+            # This is required by https://facebook.github.io/relay/graphql/connections.htm
+            raise Exception("One of `first` or `last` must be set")
 
         if first and first > self.MAX_PAGE_SIZE or last and last > self.MAX_PAGE_SIZE:
             raise Exception(f'Max page size is {self.MAX_PAGE_SIZE}')
@@ -41,40 +42,71 @@ class RelayQuerySetMixin:
         qs = self
         qs = qs.order_by(order)
 
+        # TODO - base64-decode `before` and `after`
+        # TODO - validate that `before` and `after` include the compatible ordering
         if before:
-            # paging backward
-            if first or after:
-                raise Exception('only "last" is compatible with "before"')
+            if order[0] == '-':
+                key = f'{unsigned_order}__gt'
+            else:
+                key = f'{unsigned_order}__lt'
 
-            raise Exception("Not implemented yet")
+            qs = qs.filter(
+                **{
+                    key: before
+                }
+            )
 
-            qs = qs.reverse()[:(last or self.DEFAULT_PAGE_SIZE)]
+        if after:
+            if order[0] == '-':
+                key = f'{unsigned_order}__lt'
+            else:
+                key = f'{unsigned_order}__gt'
+
+            qs = qs.filter(
+                **{
+                    key: after
+                }
+            )
+
+        nodes = None
+        has_more_forward = False
+        if first and last:
+            raise Exception('Only one of "first" and "last" should be set')
+        elif first:
+            limit = first
+            nodes = list(qs[:limit + 1])
+            if len(nodes) > limit:
+                nodes = nodes[:limit]
+                has_more_forward = True
+        elif last:
+            limit = last
+            nodes = list(reversed(qs.reverse()[:limit + 1]))
+            if len(nodes) > limit:
+                nodes = nodes[-limit:]
+                has_more_forward = True
         else:
-            # paging forward
-            if last or before:
-                raise Exception('only "first" is compatible with forward paging')
+            raise Exception("Huh? This case was already excluded above")
 
-            if after:
-                # TODO - base64-encode `after`
-                # TODO - validate that `after` includes the compatible ordering
-                if order[0] == '-':
-                    key = f'{unsigned_order}__lt'
-                else:
-                    key = f'{unsigned_order}__gt'
+        has_previous_page = False
+        if last:
+            if has_more_forward:
+                has_previous_page = True
+        elif after:
+            # FIXME - violates the standard, which says:
+            # "If the server can efficiently determine that elements exist prior to after, return true."
+            has_previous_page = True
 
-                qs = qs.filter(
-                    **{
-                        key: after
-                    }
-                )
-
-            qs = qs[:(first or self.DEFAULT_PAGE_SIZE)]
-
-        nodes = list(qs)
+        has_next_page = False
+        if first:
+            if has_more_forward:
+                has_next_page = True
+        elif before:
+            # FIXME - see the note above
+            has_next_page = True
 
         page_info = PageInfo(
-            hasNextPage=True,  # FIXME - ask for one more element and set accordingly
-            hasPreviousPage=False,  # FIXME - how?
+            hasPreviousPage=has_previous_page,
+            hasNextPage=has_next_page,
             startCursor=getattr(nodes[0], unsigned_order) if len(nodes) else None,
             endCursor=getattr(nodes[-1], unsigned_order) if len(nodes) else None,
         )

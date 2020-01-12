@@ -33,7 +33,11 @@ const CustomerCard: React.FC<{ customer: CustomerFragment }> = ({
 };
 
 const CustomersScreen: React.FC = () => {
-  const queryResults = useCm2CustomersQuery();
+  const queryResults = useCm2CustomersQuery({
+    variables: {
+      first: 20,
+    },
+  });
 
   const [add] = useCm2CreateCustomerMutation({
     refetchQueries: ['Cm2Customers'],

@@ -21,7 +21,9 @@ export type CommonZadarmaPbxCallFragment = (
 
 export type ZadarmaPbxCallsQueryVariables = {
   before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>
+  after?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -90,8 +92,8 @@ export const CommonZadarmaPbxCallFragmentDoc = gql`
 }
     `;
 export const ZadarmaPbxCallsDocument = gql`
-    query ZadarmaPbxCalls($before: String, $after: String) {
-  pbxCalls: zadarmaPbxCalls(before: $before, after: $after) {
+    query ZadarmaPbxCalls($before: String, $after: String, $first: Int, $last: Int) {
+  pbxCalls: zadarmaPbxCalls(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       hasNextPage
       hasPreviousPage
@@ -121,6 +123,8 @@ export const ZadarmaPbxCallsDocument = gql`
  *   variables: {
  *      before: // value for 'before'
  *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */

@@ -27,7 +27,11 @@ import {
 import PaymentCard from './PaymentCard';
 
 const PaymentCollection: React.FC = () => {
-  const queryResults = useCashierPaymentsQuery();
+  const queryResults = useCashierPaymentsQuery({
+    variables: {
+      first: 20,
+    },
+  });
   const [createPaymentMutation] = useCashierCreatePaymentMutation({
     refetchQueries: [
       {

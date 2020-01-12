@@ -16,6 +16,9 @@ import {
 const PbxCallCollection: React.FC = () => {
   const queryResults = useZadarmaPbxCallsQuery({
     fetchPolicy: 'network-only',
+    variables: {
+      first: 20,
+    },
   });
 
   const renderItem = useCallback(

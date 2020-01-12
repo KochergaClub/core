@@ -53,7 +53,11 @@ const isMuted = (training: TrainingFragment) =>
 const TrainingCollectionBlock: React.FC = () => {
   const [canCreate] = usePermissions(['ratio.manage']);
 
-  const queryResults = useRatioTrainingsQuery();
+  const queryResults = useRatioTrainingsQuery({
+    variables: {
+      first: 20,
+    },
+  });
   const [addTrainingMutation] = useRatioAddTrainingMutation({
     refetchQueries: ['RatioTrainings'],
     awaitRefetchQueries: true,
@@ -77,7 +81,7 @@ const TrainingCollectionBlock: React.FC = () => {
 
   return (
     <PaddedBlock width="max">
-      <ApolloQueryResults {...queryResults}>
+      <ApolloQueryResults {...queryResults} size="block">
         {({ data: { trainings } }) => (
           <PagedApolloCollection
             connection={trainings}

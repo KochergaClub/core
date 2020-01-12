@@ -15,8 +15,8 @@ fragment OrderWithCustomer on Cm2Order {
   }
 }
 
-query Cm2Orders($status: String, $after: String, $before: String) {
-  cm2Orders(status: $status, after: $after, before: $before) {
+query Cm2Orders($status: String, $after: String, $before: String, $first: Int, $last: Int) {
+  cm2Orders(status: $status, after: $after, before: $before, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -52,8 +52,8 @@ query Cm2SearchCustomers($search: String!) {
   }
 }
 
-query Cm2Customers($after: String, $before: String) {
-  cm2Customers(after: $after, before: $before) {
+query Cm2Customers($after: String, $before: String, $first: Int, $last: Int) {
+  cm2Customers(after: $after, before: $before, first: $first, last: $last) {
     pageInfo {
       ...PageInfo
     }
@@ -78,7 +78,7 @@ mutation Cm2CloseOrder($id: ID!) {
 query Cm2CustomerPage($id: ID!) {
   cm2Customer(id: $id) {
     ...Customer
-    orders {
+    orders(first: 20) {
       edges {
         node {
           id
