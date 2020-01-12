@@ -114,7 +114,7 @@ def add_watchman(
         last_name=full_name.split(' ')[-1],
     )
     if not sc_response["ok"]:
-        if sc_response.get("error") == "already_in_team_invited_user":
+        if sc_response.get("error") in ("already_in_team_invited_user", "already_in_team"):
             logger.info("Couldn't invite to Slack, already in team or invited")
         else:
             raise APIException("Couldn't invite to Slack: " + sc_response.get('error', 'unknown error'))
