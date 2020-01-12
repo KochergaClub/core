@@ -19,7 +19,6 @@ urlpatterns = [
 
     path('api/', include('kocherga.api.urls')),
     path('api/tochka/', include('kocherga.money.tochka.urls')),
-    path('api/', include('kocherga.cm.urls')),
     path('api/', include('kocherga.events.urls')),
     path('api/', include('kocherga.templater.urls')),
     path('api/', include('kocherga.email.urls')),
