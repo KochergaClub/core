@@ -1,23 +1,23 @@
 from tests.helpers.graphql import run_query
 
 
-def test_ratioEmptyTrainings():
-    (success, response) = run_query("{ ratioTrainings { edges { node { id } } } }")
+def test_empty_trainings(client, admin_user):
+    client.force_login(admin_user)
+    run_query(client, "{ ratioTrainings(first: 10) { edges { node { id } } } }")
 
-    assert(success)
 
-
-def test_ratioTrainings():
-    (success, response) = run_query("""
-    mutation Foo {
-      ratioAddTraining {
-        ...
+def test_nonempty_trainings(client, admin_user):
+    client.force_login(admin_user)
+    run_query(client, """
+    mutation AppliedSolstice {
+      ratioAddTraining(params: {
+        name: "Прикладное солнцестояние"
+        slug: "solstice-training"
+        date: "2020-12-21"
+      }) {
+        id
       }
     }
  """)
 
-    assert(success)
-
-    (success, response) = run_query("{ ratioTrainings { edges { node { id } } } }")
-
-    assert(success)
+    run_query(client, "{ ratioTrainings(first: 10) { edges { node { id } } } }")

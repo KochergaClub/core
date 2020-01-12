@@ -1,15 +1,25 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
-import { redirect } from '~/components/RedirectPage';
-import { selectUser } from '~/core/selectors';
-import { useCommonHotkeys, useAPI } from '~/common/hooks';
-
 import { Button, Input, Column } from '@kocherga/frontkit';
-import AuthContainer from '~/auth/components/AuthContainer';
+
+import { withApollo } from '~/apollo/client';
+import { NextApolloPage } from '~/apollo/types';
+
+import { Page } from '~/components';
+import { redirect } from '~/components/RedirectPage';
+import { useCommonHotkeys } from '~/common/hooks';
+import { APIError } from '~/common/api';
+
+import AuthContainer from '../components/AuthContainer';
+
+import {
+  CurrentUserQuery,
+  CurrentUserDocument,
+  useLoginMutation,
+  useSendMagicLinkMutation,
+} from '../queries.generated';
 
 const SmallNote = styled.small`
   font-size: 0.6rem;
@@ -21,7 +31,10 @@ interface Props {
   next: string;
 }
 
-const LoginPage: NextPage<Props> = props => {
+const LoginPage: NextApolloPage<Props> = props => {
+  const [loginMutation] = useLoginMutation();
+  const [sendMagicLinkMutation] = useSendMagicLinkMutation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -29,8 +42,6 @@ const LoginPage: NextPage<Props> = props => {
   const [initialLoading, setInitialLoading] = useState(true);
 
   const [acting, setActing] = useState(false);
-
-  const api = useAPI();
 
   useEffect(() => {
     setInitialLoading(false);
@@ -40,35 +51,40 @@ const LoginPage: NextPage<Props> = props => {
     setActing(true);
 
     if (password) {
-      try {
-        await api.call('auth/login', 'POST', {
-          credentials: {
-            email,
-            password,
-          },
-          result: 'cookie',
-        });
-      } catch (e) {
+      const { data } = await loginMutation({
+        variables: { email, password },
+      });
+
+      if (!data) {
         setActing(false);
-        return;
+        throw new Error('Login failed');
+      }
+
+      if (data.result.error) {
+        setActing(false);
+        throw new Error(data.result.error);
+      }
+
+      if (!data?.result.user?.is_authenticated) {
+        setActing(false);
+        throw new Error('not authenticated');
       }
 
       window.location.href = props.next;
     } else {
       // passwordless login - send magic link and ask to click it
-      try {
-        await api.call('auth/send-magic-link', 'POST', {
-          email,
-          next: props.next,
-        });
-      } catch (e) {
+      const { data } = await sendMagicLinkMutation({
+        variables: { email, next: props.next },
+      });
+
+      if (!data || !data.result.ok) {
         setActing(false);
-        return;
+        throw new Error('Failed for unknown reason');
       }
 
       window.location.href = '/login/check-your-email';
     }
-  }, [api, email, password, props.next]);
+  }, [loginMutation, sendMagicLinkMutation, email, password, props.next]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: cb,
@@ -122,15 +138,24 @@ const LoginPage: NextPage<Props> = props => {
   );
 };
 
-LoginPage.getInitialProps = async ({ store: { getState }, query, res }) => {
-  const user = selectUser(getState());
+LoginPage.getInitialProps = async ({ apolloClient, query, res }) => {
+  const result = await apolloClient.query<CurrentUserQuery>({
+    query: CurrentUserDocument,
+  });
+
+  if (!result.data) {
+    throw new APIError('Expected query data', 500);
+  }
+
+  const user = result.data.my.user;
+
   if (user.is_authenticated) {
     return redirect('/', res) as any;
   }
 
   return {
-    next: (query.next as string) || '/my/',
+    next: (query.next as string) || '/my',
   };
 };
 
-export default LoginPage;
+export default withApollo(LoginPage);

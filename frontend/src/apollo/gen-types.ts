@@ -33,11 +33,63 @@ export type AuthGroup = {
   users: Array<AuthUser>,
 };
 
+/** 
+ * Either `token` or `email`+`password` must be set.
+ * (GraphQL doesn't support union inputs yet; see
+ * https://github.com/graphql/graphql-spec/blob/master/rfcs/InputUnion.md for details.)
+ */
+export type AuthLoginCredentialsInput = {
+  email?: Maybe<Scalars['String']>,
+  password?: Maybe<Scalars['String']>,
+  token?: Maybe<Scalars['String']>,
+};
+
+export type AuthLoginInput = {
+  credentials: AuthLoginCredentialsInput,
+  /** Must be `cookie`; other results, e.g. `access_token` or `jwt`, might be supported later. */
+  result: Scalars['String'],
+};
+
+export type AuthLoginResult = {
+   __typename?: 'AuthLoginResult',
+  error?: Maybe<Scalars['String']>,
+  user?: Maybe<AuthCurrentUser>,
+  registered?: Maybe<Scalars['Boolean']>,
+};
+
+export type AuthLogoutResult = {
+   __typename?: 'AuthLogoutResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type AuthPermission = {
    __typename?: 'AuthPermission',
   id: Scalars['ID'],
   name: Scalars['String'],
   users: Array<AuthUser>,
+};
+
+export type AuthSendMagicLinkInput = {
+  email: Scalars['String'],
+  next?: Maybe<Scalars['String']>,
+};
+
+export type AuthSendMagicLinkResult = {
+   __typename?: 'AuthSendMagicLinkResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type AuthSetPasswordInput = {
+  /** required if old password exists */
+  old_password?: Maybe<Scalars['String']>,
+  new_password: Scalars['String'],
+};
+
+/** TODO - generalize into "SimpleMutationResult"? */
+export type AuthSetPasswordResult = {
+   __typename?: 'AuthSetPasswordResult',
+  error?: Maybe<Scalars['String']>,
+  ok?: Maybe<Scalars['Boolean']>,
 };
 
 export type AuthUser = {
@@ -276,6 +328,10 @@ export type Mutation = {
   _empty?: Maybe<Scalars['Boolean']>,
   authAddUserToGroup?: Maybe<Scalars['Boolean']>,
   authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>,
+  authLogin: AuthLoginResult,
+  authSetPassword: AuthSetPasswordResult,
+  authLogout: AuthLogoutResult,
+  authSendMagicLink: AuthSendMagicLinkResult,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
   myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
   cm2CreateOrder: Cm2Order,
@@ -331,6 +387,21 @@ export type MutationAuthAddUserToGroupArgs = {
 export type MutationAuthRemoveUserFromGroupArgs = {
   group_id: Scalars['ID'],
   user_id: Scalars['ID']
+};
+
+
+export type MutationAuthLoginArgs = {
+  input: AuthLoginInput
+};
+
+
+export type MutationAuthSetPasswordArgs = {
+  input: AuthSetPasswordInput
+};
+
+
+export type MutationAuthSendMagicLinkArgs = {
+  input: AuthSendMagicLinkInput
 };
 
 
@@ -608,7 +679,6 @@ export type Query = {
    __typename?: 'Query',
   rooms: Array<Maybe<Room>>,
   my: My,
-  currentUser: AuthCurrentUser,
   authGroupsAll: Array<AuthGroup>,
   authPermissionsAll: Array<AuthPermission>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,

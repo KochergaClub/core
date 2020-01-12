@@ -1,23 +1,24 @@
 import { useState, useCallback } from 'react';
 
 import { Button } from '@kocherga/frontkit';
-import { useAPI } from '~/common/hooks';
+
+import { useLogoutMutation } from '../queries.generated';
 
 export default function LogoutButton() {
   const [acting, setActing] = useState(false);
 
-  const api = useAPI();
+  const [logoutMutation] = useLogoutMutation();
 
   const act = useCallback(async () => {
     setActing(true);
-    try {
-      await api.call('auth/logout', 'POST');
-    } catch (e) {
+    const { data } = await logoutMutation();
+    if (!data?.result?.ok) {
+      // TODO - show error
       setActing(false);
       return;
     }
     window.location.href = '/';
-  }, [api]);
+  }, [logoutMutation]);
 
   return (
     <Button loading={acting} disabled={acting} onClick={act} small>

@@ -74,3 +74,19 @@ mutation MyPrivacyModeSet($mode: String!) {
 mutation MyTicketDelete($event_id: ID!) {
   myTicketDelete(event_id: $event_id)
 }
+
+mutation Logout {
+  result: authLogout {
+    ok
+  }
+}
+
+mutation SetPassword($old_password: String, $new_password: String!) {
+  result: authSetPassword(input: {
+      old_password: $old_password
+      new_password: $new_password
+  }) {
+    ok
+    error
+  }
+}

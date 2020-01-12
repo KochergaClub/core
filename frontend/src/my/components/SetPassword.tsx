@@ -1,34 +1,55 @@
 import { useState, useCallback } from 'react';
 
-import { Button, Column, Label, Input } from '@kocherga/frontkit';
-import { useCommonHotkeys, useAPI } from '~/common/hooks';
+import styled from 'styled-components';
+
+import { Button, Column, Label, Input, colors } from '@kocherga/frontkit';
+import { useCommonHotkeys } from '~/common/hooks';
+
+import { useSetPasswordMutation } from '../queries.generated';
 
 import HeadedFragment from './HeadedFragment';
+
+// TODO - consolidate with ErrorMessage from ~/components/forms
+const ErrorMessage = styled(Label)`
+  color: ${colors.accent[500]};
+`;
 
 const SetPassword: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
   const [acting, setActing] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
 
-  const api = useAPI();
+  const [setPasswordMutation] = useSetPasswordMutation();
 
   const act = useCallback(async () => {
     setActing(true);
-    try {
-      await api.call('auth/set-password', 'POST', {
+
+    const { data } = await setPasswordMutation({
+      variables: {
         old_password: oldPassword,
         new_password: newPassword,
-      });
-    } catch (e) {
+      },
+    });
+
+    if (data?.result.error) {
+      setError(data.result.error);
       setActing(false);
       return;
     }
+
+    if (!data?.result?.ok) {
+      setError('Неизвестная ошибка');
+      setActing(false);
+      return;
+    }
+
     window.location.reload();
     window.alert(
       'Мы разлогинили вас, чтобы вы смогли проверить свой новый пароль.'
     );
-  }, [api, oldPassword, newPassword]);
+  }, [setPasswordMutation, oldPassword, newPassword]);
 
   const hotkeys = useCommonHotkeys({
     onEnter: act,
@@ -58,6 +79,7 @@ const SetPassword: React.FC = () => {
         <Button loading={acting} disabled={acting} onClick={act}>
           Сменить пароль
         </Button>
+        {error ? <ErrorMessage>{error}</ErrorMessage> : null}
       </Column>
     </HeadedFragment>
   );

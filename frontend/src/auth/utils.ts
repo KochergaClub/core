@@ -23,7 +23,7 @@ export const requireAuth = async (
     throw new APIError('Expected query data', 500);
   }
 
-  const currentUser = result.data.currentUser;
+  const currentUser = result.data.my.user;
 
   if (params.is_authenticated && !currentUser.is_authenticated) {
     throw new APIError('Need to be logged in', 403);

@@ -1,7 +1,8 @@
-from tests.helpers.graphql import run_query
+import pytest
+from tests.helpers.graphql import run_query, QueryException
 
 
-my_tickets_query = """
+MY_TICKETS_QUERY = """
 {
   my {
     tickets {
@@ -15,13 +16,13 @@ my_tickets_query = """
 """
 
 
-def test_my_tickets_anon():
-    (success, response) = run_query(my_tickets_query)
-    assert success
-    assert not response['data']
-    assert 'Forbidden' in response['errors'][0]['message']
+def test_my_tickets_anon(client):
+    with pytest.raises(QueryException) as excinfo:
+        run_query(client, MY_TICKETS_QUERY)
+
+    assert 'Forbidden' in excinfo.value.errors[0]['message']
 
 
-def test_my_tickets(basic_user):
-    (success, response) = run_query(my_tickets_query, basic_user)
-    assert response['data']
+def test_my_tickets(client, basic_user):
+    client.force_login(basic_user)
+    run_query(client, MY_TICKETS_QUERY)
