@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
 import { Label, fonts } from '@kocherga/frontkit';
 
-import { ProjectPageType } from '../utils';
+import { ProjectPageFragment } from '../queries.generated';
 
 const Container = styled.div<{ image: string }>`
   min-height: 400px;
@@ -61,7 +59,7 @@ const ActivitySummary = styled(Label)`
 `;
 
 interface Props {
-  project: ProjectPageType;
+  project: ProjectPageFragment;
 }
 
 const ProjectHeroBlock: React.FC<Props> = ({ project }) => (

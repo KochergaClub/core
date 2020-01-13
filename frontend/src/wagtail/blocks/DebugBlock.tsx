@@ -1,7 +1,7 @@
-import React from 'react';
+interface Props {
+  typename: string;
+}
 
-import { BlockType } from './types';
-
-export default function DebugBlock(props: BlockType) {
-  return <pre>{JSON.stringify(props, null, 2)}</pre>;
+export default function DebugBlock(props: Props) {
+  return <pre>Блок неизвестного типа: {props.typename}</pre>;
 }

@@ -1,3 +1,4 @@
 from .EventsEvent import EventsEvent
+from .EventsPublicEvent import EventsPublicEvent
 
-types = [EventsEvent]
+types = [EventsEvent, EventsPublicEvent]

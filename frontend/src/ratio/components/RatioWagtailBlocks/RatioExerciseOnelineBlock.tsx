@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { Row } from '@kocherga/frontkit';
 
-import { RatioExerciseOnelineBlockType as Props } from './types';
+import { RatioExerciseOnelineBlockFragment as Props } from './fragments.generated';
 
 const Text = styled.div`
   color: hsl(21, 72%, 44%);
@@ -22,7 +20,7 @@ const Value = styled.div`
 export default function RatioExerciseOnelineBlock(block: Props) {
   return (
     <Row stretch>
-      <Text>{block.value.text}:</Text>
+      <Text>{block.exercise_oneline.text}:</Text>
       <Value />
     </Row>
   );

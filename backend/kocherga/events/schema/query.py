@@ -10,3 +10,19 @@ def resolve_events(self, info, search, **pager):
     if search:
         qs = qs.filter(title__icontains=search)
     return qs.relay_page(**pager)
+
+@Query.field('publicEvents')
+def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
+    qs = Event.objects.public_events(
+        from_date=datetime.strptime(from_date, '%Y-%m-%d').date() if from_date else None,
+    )
+
+    if project_id is not None:
+        qs = qs.filter(project_id=project_id)
+
+    return qs.relay_page(**pager)
+
+@Query.field('publicEvent')
+def resolve_publicEvent(self, info, event_id):
+    event = Event.objects.public_events().get(uuid=event_id)
+    return event

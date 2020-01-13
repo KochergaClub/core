@@ -22,9 +22,11 @@ class BlogIndexPage(HeadlessPreviewMixin, Page):
         FieldPanel('subtitle'),
     ]
 
-    api_fields = [
-        APIField('subtitle'),
-    ]
+    @property
+    def posts(self):
+        return self.get_children().type(BlogPostPage).live().order_by('-date')
+
+    graphql_type = 'BlogIndexPage'
 
 
 class BlogPostPage(HeadlessPreviewMixin, Page):
@@ -39,12 +41,15 @@ class BlogPostPage(HeadlessPreviewMixin, Page):
         FieldPanel('body', classname='full'),
     ]
 
+    # legacy
     api_fields = [
         APIField('date'),
         APIField('authors'),
         APIRichTextField('body'),
         APIField('summary'),
     ]
+
+    graphql_type = 'BlogPostPage'
 
     parent_page_types = ['blog.BlogIndexPage']
 

@@ -13,6 +13,8 @@ class SectionIndexPage(HeadlessPreviewMixin, Page):
     # parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.SectionPage']
 
+    graphql_type = 'RatioSectionIndexPage'
+
 
 class SectionPage(HeadlessPreviewMixin, Page):
     body = StreamField(section_blocks)
@@ -32,6 +34,8 @@ class SectionPage(HeadlessPreviewMixin, Page):
     api_fields = [
         APIField('body'),
     ]
+
+    graphql_type = 'RatioSectionPage'
 
     parent_page_types = ['ratio.SectionIndexPage']
     subpage_types = []

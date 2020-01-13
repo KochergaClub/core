@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { IS_SERVER } from '~/common/utils';
 
-import { PublicEvent } from '~/events/types';
+import { CommonProps } from './types';
 
-interface Props {
-  event: PublicEvent;
-}
-
-const TimepadRegistration: React.FC<Props> = ({ event }) => {
+const TimepadRegistration: React.FC<CommonProps> = ({ event }) => {
   useEffect(() => {
     if (IS_SERVER) {
       return;

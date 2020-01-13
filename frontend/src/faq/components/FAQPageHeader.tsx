@@ -2,10 +2,10 @@ import { ParentLinkInHeader } from '~/components';
 
 import PageHeader from '~/blocks/PageHeader';
 
-import { PageType } from '../wagtail/FAQPage';
+import { FaqPageFragment } from '../fragments.generated';
 
 interface Props {
-  wagtailPage: PageType;
+  wagtailPage: FaqPageFragment;
 }
 
 const FAQPageHeader: React.FC<Props> = ({ wagtailPage }) => {

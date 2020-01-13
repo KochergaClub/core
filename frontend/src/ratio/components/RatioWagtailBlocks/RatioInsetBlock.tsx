@@ -1,8 +1,6 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { RatioInsetBlockType as Props } from './types';
+import { RatioInsetBlockFragment as Props } from './fragments.generated';
 
 const Paragraph = styled.div`
   padding-left: 12px;

@@ -113,3 +113,73 @@ input RatioTrainingSendEmailInput {
 type RatioTrainingSendEmailResult {
   draft_link: String!
 }
+
+type RatioSectionIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
+type RatioSectionPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  body: [WagtailBlock!]!
+}
+
+type RatioNotebookPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  sections: [RatioNotebookSectionBlock!]!
+}
+
+type RatioNotebookSectionBlock implements WagtailBlock {
+  id: ID!
+  value: RatioSectionPage!
+}
+
+type RatioHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioParagraphBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioInsetBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioExerciseBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseBlockValue!
+}
+
+type RatioExerciseBlockValue {
+  header: String!
+  lines_count: Int!
+  enumerate: Boolean
+}
+
+type RatioExerciseOnelineBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseOnelineBlockValue!
+}
+
+type RatioExerciseOnelineBlockValue {
+  text: String!
+}
+
+type RatioBriefingBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioMathBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}

@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { colors, fonts, RichText } from '@kocherga/frontkit';
 
-import { GreyBlockType as Props } from './types';
+import { GreyBlockFragment as Props } from './fragments.generated';
 
 const Container = styled(RichText)`
   background-color: ${colors.grey[100]};
@@ -28,9 +26,9 @@ const Text = styled(RichText)`
 export default function GreyBlock(block: Props) {
   return (
     <Container>
-      <Header>{block.value.header}</Header>
-      {block.value.text && (
-        <Text dangerouslySetInnerHTML={{ __html: block.value.text }} />
+      <Header>{block.grey_value.header}</Header>
+      {block.grey_value.text && (
+        <Text dangerouslySetInnerHTML={{ __html: block.grey_value.text }} />
       )}
     </Container>
   );

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { A } from '@kocherga/frontkit';
 
-import { AnnouncementKey, PublicEvent } from '~/events/types';
+import { CommonProps } from './types';
 
 const AnnouncementsContainer = styled.div`
   text-align: center;
@@ -11,20 +11,20 @@ const AnnouncementsContainer = styled.div`
   }
 `;
 
-export default function EventAnnouncements({ event }: { event: PublicEvent }) {
+export default function EventAnnouncements({ event }: CommonProps) {
   // temporarily disabled
   return null;
 
-  return (
-    <AnnouncementsContainer>
-      {(['vk', 'fb', 'timepad'] as AnnouncementKey[])
-        .filter(key => event.announcements[key])
-        .map(key => (
-          <span key={key}>
-            {' '}
-            <A href={event.announcements[key].link}>{key}</A>
-          </span>
-        ))}
-    </AnnouncementsContainer>
-  );
+  // return (
+  //   <AnnouncementsContainer>
+  //     {(['vk', 'fb', 'timepad'] as AnnouncementKey[])
+  //       .filter(key => event.announcements[key])
+  //       .map(key => (
+  //         <span key={key}>
+  //           {' '}
+  //           <A href={event.announcements[key].link}>{key}</A>
+  //         </span>
+  //       ))}
+  //   </AnnouncementsContainer>
+  // );
 }

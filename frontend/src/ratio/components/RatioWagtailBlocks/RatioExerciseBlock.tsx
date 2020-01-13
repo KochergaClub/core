@@ -1,8 +1,6 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { RatioExerciseBlockType as Props } from './types';
+import { RatioExerciseBlockFragment as Props } from './fragments.generated';
 
 const Container = styled.div`
   page-break-inside: avoid;
@@ -31,12 +29,14 @@ const Line = styled.li`
 `;
 
 export default function RatioExerciseBlock(block: Props) {
-  const ListComponent = block.value.enumerate ? EnumeratedLineList : LineList;
+  const ListComponent = block.exercise.enumerate
+    ? EnumeratedLineList
+    : LineList;
   return (
     <Container>
-      <Header>{block.value.header}</Header>
+      <Header>{block.exercise.header}</Header>
       <ListComponent>
-        {Array.from(new Array(block.value.lines_count)).map((_, i) => (
+        {Array.from(new Array(block.exercise.lines_count)).map((_, i) => (
           <Line key={i}>&nbsp;</Line>
         ))}
       </ListComponent>

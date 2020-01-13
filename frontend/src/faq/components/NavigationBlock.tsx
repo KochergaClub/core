@@ -2,10 +2,10 @@ import { Row, A, HR } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { PageType } from '../wagtail/FAQPage';
+import { FaqPageFragment } from '../fragments.generated';
 
 interface Props {
-  wagtailPage: PageType;
+  wagtailPage: FaqPageFragment;
 }
 
 const NavigationBlock: React.FC<Props> = ({ wagtailPage }) => {

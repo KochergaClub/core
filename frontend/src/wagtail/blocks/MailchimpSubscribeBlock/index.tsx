@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { A, Button, Input, Row, Column } from '@kocherga/frontkit';
 
-import { MailchimpSubscribeBlockType as Props } from '../types';
+import { MailchimpSubscribeBlockFragment as Props } from '../fragments.generated';
 
 const GROUP_ID = 21289;
 
@@ -40,9 +38,12 @@ export default function MailchimpSubscribeBlock(props: Props) {
       target="_blank"
     >
       <div style={{ display: 'none' }}>
-        <InterestCheckbox interest="news" value={props.value.news} />
-        <InterestCheckbox interest="events" value={props.value.events} />
-        <InterestCheckbox interest="trainings" value={props.value.trainings} />
+        <InterestCheckbox interest="news" value={props.mailchimp.news} />
+        <InterestCheckbox interest="events" value={props.mailchimp.events} />
+        <InterestCheckbox
+          interest="trainings"
+          value={props.mailchimp.trainings}
+        />
       </div>
 
       <div style={{ position: 'absolute', left: -5000 }} aria-hidden="true">

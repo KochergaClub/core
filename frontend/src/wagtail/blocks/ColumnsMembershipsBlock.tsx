@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { colors, fonts, RichText, ColumnsBlock } from '@kocherga/frontkit';
 
-import { ColumnsMembershipsBlockType as Props } from './types';
+import { ColumnsMembershipsBlockFragment as Props } from './fragments.generated';
 
 const Card = styled.div`
   border: 1px solid ${colors.grey[300]};
@@ -31,7 +29,7 @@ const Description = styled(RichText)`
   margin-bottom: 42px;
 `;
 
-const MembershipCard = (membership: Props['value'][0]) => (
+const MembershipCard = (membership: Props['membership_columns'][0]) => (
   <Card>
     <Title>{membership.title}</Title>
     <Subtitle>{membership.subtitle}</Subtitle>
@@ -43,7 +41,7 @@ const MembershipCard = (membership: Props['value'][0]) => (
 export default function ColumnsBasicBlock(block: Props) {
   return (
     <ColumnsBlock>
-      {block.value.map((column, i) => (
+      {block.membership_columns.map((column, i) => (
         <MembershipCard {...column} key={i} />
       ))}
     </ColumnsBlock>

@@ -1,0 +1,40 @@
+fragment RatioHeaderBlock on RatioHeaderBlock {
+  id
+  value
+}
+
+fragment RatioParagraphBlock on RatioParagraphBlock {
+  id
+  value
+}
+
+fragment RatioInsetBlock on RatioInsetBlock {
+  id
+  value
+}
+
+fragment RatioExerciseBlock on RatioExerciseBlock {
+  id
+  exercise: value {
+    enumerate
+    header
+    lines_count
+  }
+}
+
+fragment RatioExerciseOnelineBlock on RatioExerciseOnelineBlock {
+  id
+  exercise_oneline: value {
+    text
+  }
+}
+
+fragment RatioBriefingBlock on RatioBriefingBlock {
+  id
+  value
+}
+
+fragment RatioMathBlock on RatioMathBlock {
+  id
+  value
+}

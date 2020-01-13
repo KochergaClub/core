@@ -1,8 +1,6 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { RatioBriefingBlockType as Props } from './types';
+import { RatioBriefingBlockFragment as Props } from './fragments.generated';
 
 const Container = styled.div`
   font-size: 1.2em;

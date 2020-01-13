@@ -1,8 +1,6 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { RatioParagraphBlockType as Props } from './types';
+import { RatioParagraphBlockFragment as Props } from './fragments.generated';
 
 const Paragraph = styled.div`
   > p {

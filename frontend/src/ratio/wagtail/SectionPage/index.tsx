@@ -1,12 +1,13 @@
-import React from 'react';
 import styled from 'styled-components';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { BlockType } from '~/wagtail/blocks/types';
-import { WagtailPageProps } from '~/wagtail/types';
+import {
+  RatioSectionPageFragment,
+  RatioSectionPageFragmentDoc,
+} from '../fragments.generated';
 
 import Main from './Main';
 
@@ -21,19 +22,16 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-export interface PageType extends WagtailPageProps {
-  meta_type: 'ratio.SectionPage';
-  body: BlockType[];
-}
-
-const SectionPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
+const SectionPage: NextWagtailPage<RatioSectionPageFragment> = ({ page }) => {
   return (
-    <Page title={wagtailPage.title} chrome="none" team>
+    <Page title={page.title} chrome="none" team>
       <Container>
-        <Main {...wagtailPage} />
+        <Main {...page} />
       </Container>
     </Page>
   );
 };
+
+SectionPage.fragment = RatioSectionPageFragmentDoc;
 
 export default SectionPage;

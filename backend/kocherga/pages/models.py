@@ -19,6 +19,8 @@ class FreeFormPage(HeadlessPreviewMixin, Page):
         APIField('body'),
     ]
 
+    graphql_type = 'FreeFormPage'
+
 
 class FrontPage(HeadlessPreviewMixin, Page):
     body = StreamField(all_blocks + [hero_block])
@@ -30,6 +32,8 @@ class FrontPage(HeadlessPreviewMixin, Page):
     api_fields = [
         APIField('body'),
     ]
+
+    graphql_type = 'FreeFormPage'
 
 
 # fake model for wagtail folders

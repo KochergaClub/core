@@ -1,36 +1,29 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { withStaff } from '~/apollo/withStaff';
+import { withApollo } from '~/apollo/client';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
 import { NextPage } from '~/common/types';
-import { selectIsStaff } from '~/core/selectors';
 
-import WagtailBlocks from '~/wagtail/WagtailBlocks';
-import { BlockType } from '~/wagtail/blocks/types';
+import WagtailBlocks, { AnyBlockFragment } from '~/wagtail/WagtailBlocks';
 
 const WagtailBlocksDemoPage: NextPage = () => {
-  const isStaff = useSelector(selectIsStaff);
-  if (!isStaff) {
-    throw new Error('Access denied');
-  }
-
-  const blocks: BlockType[] = [
+  const blocks: AnyBlockFragment[] = [
     {
       id: '',
-      type: 'basic_lead',
+      __typename: 'BasicLeadBlock',
       value: 'Базовый заголовок',
     },
     {
       id: '',
-      type: 'basic_paragraph',
+      __typename: 'BasicParagraphBlock',
       value:
         'Обычный текст. Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
     },
     {
       id: '',
-      type: 'grey',
-      value: {
+      __typename: 'GreyBlock',
+      grey_value: {
         header: 'Серый блок',
         text:
           'Текст поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
@@ -38,8 +31,8 @@ const WagtailBlocksDemoPage: NextPage = () => {
     },
     {
       id: '',
-      type: 'columns_basic',
-      value: [
+      __typename: 'ColumnsBasicBlock',
+      basic_columns: [
         {
           header: 'Колонка 1',
         },
@@ -51,8 +44,8 @@ const WagtailBlocksDemoPage: NextPage = () => {
     },
     {
       id: '',
-      type: 'columns_memberships',
-      value: [
+      __typename: 'ColumnsMembershipsBlock',
+      membership_columns: [
         {
           title: 'Колонка 1',
           subtitle: 'Подзаголовок 1',
@@ -69,8 +62,8 @@ const WagtailBlocksDemoPage: NextPage = () => {
     },
     {
       id: '',
-      type: 'columns_buttons',
-      value: [
+      __typename: 'ColumnsButtonsBlock',
+      button_columns: [
         {
           title: 'Колонка 1',
           caption: 'Заголовок 1',
@@ -85,8 +78,8 @@ const WagtailBlocksDemoPage: NextPage = () => {
     },
     {
       id: '',
-      type: 'big_contacts',
-      value: {
+      __typename: 'BigContactsBlock',
+      contacts: {
         map: {
           lat: '100',
           lng: '100',
@@ -99,8 +92,8 @@ const WagtailBlocksDemoPage: NextPage = () => {
     },
     {
       id: '',
-      type: 'mailchimp_subscribe',
-      value: {
+      __typename: 'MailchimpSubscribeBlock',
+      mailchimp: {
         news: true,
         events: true,
         trainings: true,
@@ -113,15 +106,18 @@ const WagtailBlocksDemoPage: NextPage = () => {
       [
         {
           id: '',
-          type: 'basic_lead',
-          value: block.type + ':',
+          __typename: 'BasicLeadBlock',
+          value: block.__typename + ':',
         },
         block,
-      ] as BlockType[]
+      ] as AnyBlockFragment[]
   );
 
   // can't use [].flat yet - not supported by node
-  const blocksWithHeaders = ([] as BlockType[]).concat.apply([], headedPairs);
+  const blocksWithHeaders = ([] as AnyBlockFragment[]).concat.apply(
+    [],
+    headedPairs
+  );
 
   return (
     <Page title="Примеры Wagtail-блоков" team>
@@ -131,4 +127,4 @@ const WagtailBlocksDemoPage: NextPage = () => {
   );
 };
 
-export default WagtailBlocksDemoPage;
+export default withApollo(withStaff(WagtailBlocksDemoPage));

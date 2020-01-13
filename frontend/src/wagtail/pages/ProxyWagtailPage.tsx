@@ -1,10 +1,11 @@
-import React from 'react';
+import gql from 'graphql-tag';
 
-import { NextPage } from '~/common/types';
+import { withApollo } from '~/apollo/client';
+import { NextApolloPage, KochergaApolloClient } from '~/apollo/types';
 
-import { WagtailPageProps } from '~/wagtail/types';
+import { APIError } from '~/common/api';
 
-import BlockBasedPage from '~/wagtail/wagtail/BlockBasedPage';
+import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
 // TODO - async load or other trick to reduce the bundle size for wagtail pages
 import * as RatioPages from '~/ratio/wagtail';
@@ -12,108 +13,145 @@ import * as BlogPages from '~/blog/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
 import * as FAQPages from '~/faq/wagtail';
 
-import { selectAPI } from '~/core/selectors';
+import { NextWagtailPage } from '../types';
 
 import {
-  getWagtailPreviewPage,
-  getWagtailPageId,
-  getWagtailPage,
-} from '../utils';
+  WagtailPageTypeQuery,
+  WagtailPageTypeDocument,
+} from '../queries.generated';
 
-const getWagtailScreen = (meta_type: string) => {
-  switch (meta_type) {
-    case 'pages.FreeFormPage':
-    case 'pages.FrontPage':
-      return BlockBasedPage;
+function typename2component(typename: string): NextWagtailPage<any> | null {
+  switch (typename) {
+    case 'FreeFormPage':
+      return FreeFormPage;
 
-    case 'ratio.SectionIndexPage':
+    case 'RatioSectionIndexPage':
       return RatioPages.SectionIndexPage;
-    case 'ratio.SectionPage':
+    case 'RatioSectionPage':
       return RatioPages.SectionPage;
-    case 'ratio.NotebookPage':
+    case 'RatioNotebookPage':
       return RatioPages.NotebookPage;
 
-    case 'blog.BlogPostPage':
+    case 'BlogPostPage':
       return BlogPages.BlogPostPage;
-    case 'blog.BlogIndexPage':
+    case 'BlogIndexPage':
       return BlogPages.BlogIndexPage;
 
-    case 'projects.ProjectPage':
+    case 'ProjectPage':
       return ProjectsPages.ProjectPage;
-    case 'projects.ProjectIndexPage':
+    case 'ProjectIndexPage':
       return ProjectsPages.ProjectIndexPage;
 
-    case 'faq.FAQPage':
+    case 'FaqPage':
       return FAQPages.FAQPage;
-
     default:
       return null;
   }
-};
+}
 
-const UnknownPage = (props: WagtailPageProps) => (
-  <div>
-    <h1>
-      Unknown Wagtail page type: <code>{props.meta.type}</code>
-    </h1>
-    <pre>{JSON.stringify(props, null, 2)}</pre>
-  </div>
-);
+interface ProxyProps {
+  typename: string;
+  path: string;
+  page: any;
+}
 
-// FIXME!
-type ProxyProps = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+const ProxyWagtailPage: NextApolloPage<ProxyProps> = ({ typename, page }) => {
+  const Component = typename2component(typename);
 
-const ProxyWagtailPage: NextPage<ProxyProps> = props => {
-  const WagtailScreen = getWagtailScreen(props.wagtailPage.meta_type);
-  if (!WagtailScreen) {
-    return <UnknownPage {...props.wagtailPage} />;
+  if (!Component) {
+    return <div>oops</div>;
   }
 
-  return <WagtailScreen {...props} />;
+  return <Component page={page} />;
+};
+
+const path2typename = async (
+  path: string,
+  apolloClient: KochergaApolloClient
+) => {
+  const { data, errors } = await apolloClient.query<WagtailPageTypeQuery>({
+    query: WagtailPageTypeDocument,
+    variables: { path },
+  });
+
+  if (errors) {
+    throw new APIError('GraphQL error', 500);
+  }
+
+  if (!data) {
+    throw new APIError('No data (huh?)', 500);
+  }
+
+  const wagtailPage = data.wagtailPage;
+
+  if (!wagtailPage) {
+    throw new APIError('Page not found', 404);
+  }
+
+  return wagtailPage.__typename;
 };
 
 ProxyWagtailPage.getInitialProps = async context => {
-  const {
-    asPath,
-    query,
-    store: { getState },
-  } = context;
+  const { apolloClient } = context;
 
-  const api = selectAPI(getState());
-
-  if (!asPath) {
+  if (!context.asPath) {
     throw new Error('asPath is empty');
   }
 
-  let wagtailPage: WagtailPageProps;
-  if (asPath.startsWith('/preview?')) {
-    if (!query.token) {
-      throw new Error("Can't preview without token");
-    }
-    wagtailPage = await getWagtailPreviewPage(api, query.token as string);
-  } else {
-    const asPathWithoutQuery = asPath.split('?')[0];
+  const path = context.asPath.split('?')[0];
 
-    const wagtailPageId = await getWagtailPageId(api, asPathWithoutQuery);
-    wagtailPage = await getWagtailPage(api, wagtailPageId);
+  const typename = await path2typename(path, apolloClient);
+  const component = typename2component(typename);
+
+  if (!component) {
+    throw new APIError('Unknown typename', 500);
   }
 
-  wagtailPage.meta_type = wagtailPage.meta.type;
+  // we assume that specific wagtail page component defines the fragment with name identical to GraphQL type.
+  // For example, if ProjectIndexPage should define `fragment ProjectIndexPage on ProjectIndexPage` in its queries.graphql file.
 
-  const wagtailScreen = getWagtailScreen(wagtailPage.meta_type);
-  if (!wagtailScreen) {
-    return { wagtailPage };
+  const fragmentDoc = component.fragment;
+  const fragmentName = fragmentDoc.definitions[0].name.value;
+  const objectName = fragmentDoc.definitions[0].typeCondition.name.value;
+
+  if (objectName !== typename) {
+    throw new APIError(
+      `Invalid fragment - typename is ${objectName}, should be ${typename}`,
+      500
+    );
   }
 
-  if (!wagtailScreen.getInitialProps) {
-    return { wagtailPage };
+  // TODO - global cache for typename -> query?
+  const query = gql`
+query Get${fragmentName}($path: String!) {
+  wagtailPage(path: $path) {
+    ...${fragmentName}
   }
-  const extraProps = await wagtailScreen.getInitialProps({
-    ...context,
-    wagtailPage: wagtailPage as any,
+}
+${fragmentDoc}
+  `;
+
+  console.log(query);
+
+  const { data, errors } = await apolloClient.query({
+    query,
+    variables: { path },
   });
 
-  return { wagtailPage, ...extraProps };
+  if (errors) {
+    throw new APIError('Error while querying for full wagtail page', 500);
+  }
+
+  const page = data?.wagtailPage;
+
+  if (!page) {
+    throw new APIError(
+      'Wagtail page in GraphQL response is empty for some reason',
+      500
+    );
+  }
+
+  return { typename, path, page };
 };
 
-export default ProxyWagtailPage;
+export default withApollo(ProxyWagtailPage);

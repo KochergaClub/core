@@ -99,6 +99,65 @@ export type AuthUser = {
   staff_member?: Maybe<StaffMember>,
 };
 
+export type BasicLeadBlock = WagtailBlock & {
+   __typename?: 'BasicLeadBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type BasicParagraphBlock = WagtailBlock & {
+   __typename?: 'BasicParagraphBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type BigContactsBlock = WagtailBlock & {
+   __typename?: 'BigContactsBlock',
+  id: Scalars['ID'],
+  value: BigContactsBlockValue,
+};
+
+export type BigContactsBlockValue = {
+   __typename?: 'BigContactsBlockValue',
+  map: WagtailGeo,
+  address: Scalars['String'],
+  phone: Scalars['String'],
+  email: Scalars['String'],
+  text: Scalars['String'],
+};
+
+export type BlogIndexPage = WagtailPage & {
+   __typename?: 'BlogIndexPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  subtitle: Scalars['String'],
+  posts: Array<BlogPostPage>,
+};
+
+export type BlogPostAuthor = {
+   __typename?: 'BlogPostAuthor',
+  name: Scalars['String'],
+  description: Scalars['String'],
+  image: WagtailImage,
+};
+
+
+export type BlogPostAuthorImageArgs = {
+  spec: Scalars['String']
+};
+
+export type BlogPostPage = WagtailPage & {
+   __typename?: 'BlogPostPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  date: Scalars['String'],
+  authors: Array<BlogPostAuthor>,
+  body: Scalars['String'],
+  summary: Scalars['String'],
+};
+
 export type CashierCreatePaymentInput = {
   amount: Scalars['Int'],
   whom: Scalars['ID'],
@@ -186,6 +245,45 @@ export type Cm2OrderEdge = {
   node: Cm2Order,
 };
 
+export type ColumnsBasicBlock = WagtailBlock & {
+   __typename?: 'ColumnsBasicBlock',
+  id: Scalars['ID'],
+  value: Array<ColumnsBasicBlockColumn>,
+};
+
+export type ColumnsBasicBlockColumn = {
+   __typename?: 'ColumnsBasicBlockColumn',
+  header: Scalars['String'],
+  text?: Maybe<Scalars['String']>,
+};
+
+export type ColumnsButtonsBlock = WagtailBlock & {
+   __typename?: 'ColumnsButtonsBlock',
+  id: Scalars['ID'],
+  value: Array<ColumnsButtonsBlockColumn>,
+};
+
+export type ColumnsButtonsBlockColumn = {
+   __typename?: 'ColumnsButtonsBlockColumn',
+  title: Scalars['String'],
+  caption: Scalars['String'],
+  link: Scalars['String'],
+};
+
+export type ColumnsMembershipsBlock = WagtailBlock & {
+   __typename?: 'ColumnsMembershipsBlock',
+  id: Scalars['ID'],
+  value: Array<ColumnsMembershipsBlockColumn>,
+};
+
+export type ColumnsMembershipsBlockColumn = {
+   __typename?: 'ColumnsMembershipsBlockColumn',
+  title: Scalars['String'],
+  subtitle: Scalars['String'],
+  price: Scalars['Int'],
+  description: Scalars['String'],
+};
+
 export type EmailMailchimpCategory = {
    __typename?: 'EmailMailchimpCategory',
   id: Scalars['ID'],
@@ -214,6 +312,11 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventsAnnouncements = {
+   __typename?: 'EventsAnnouncements',
+  timepad?: Maybe<EventsTimepadAnnouncement>,
+};
+
 export type EventsEvent = {
    __typename?: 'EventsEvent',
   event_id: Scalars['ID'],
@@ -233,11 +336,107 @@ export type EventsEventEdge = {
   node: EventsEvent,
 };
 
+export type EventsListBlock = WagtailBlock & {
+   __typename?: 'EventsListBlock',
+  id: Scalars['ID'],
+};
+
 export type EventsPublicEvent = {
    __typename?: 'EventsPublicEvent',
   event_id: Scalars['ID'],
   start: Scalars['String'],
+  end: Scalars['String'],
   title: Scalars['String'],
+  summary: Scalars['String'],
+  description: Scalars['String'],
+  image?: Maybe<Scalars['String']>,
+  registration_type: Scalars['String'],
+  pricing_type: Scalars['String'],
+  project?: Maybe<ProjectPage>,
+  announcements: EventsAnnouncements,
+  /** note that there's no @auth directive - we don't want any errors if user is not authenticated */
+  my_ticket?: Maybe<MyEventsTicket>,
+};
+
+export type EventsPublicEventConnection = {
+   __typename?: 'EventsPublicEventConnection',
+  pageInfo: PageInfo,
+  edges: Array<EventsPublicEventEdge>,
+  nodes: Array<EventsPublicEvent>,
+};
+
+export type EventsPublicEventEdge = {
+   __typename?: 'EventsPublicEventEdge',
+  node: EventsPublicEvent,
+};
+
+export type EventsTimepadAnnouncement = {
+   __typename?: 'EventsTimepadAnnouncement',
+  link: Scalars['String'],
+};
+
+export type FaqEntry = {
+   __typename?: 'FaqEntry',
+  id: Scalars['ID'],
+  question: Scalars['String'],
+  answer: Scalars['String'],
+};
+
+export type FaqPage = WagtailPage & {
+   __typename?: 'FaqPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  summary: Scalars['String'],
+  prev_page?: Maybe<FaqPage>,
+  next_page?: Maybe<FaqPage>,
+  entries: Array<FaqEntry>,
+  subpages: Array<FaqPage>,
+};
+
+export type FreeFormPage = WagtailPage & {
+   __typename?: 'FreeFormPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  body: Array<WagtailBlock>,
+};
+
+export type GreyBlock = WagtailBlock & {
+   __typename?: 'GreyBlock',
+  id: Scalars['ID'],
+  value: GreyBlockValue,
+};
+
+export type GreyBlockValue = {
+   __typename?: 'GreyBlockValue',
+  header: Scalars['String'],
+  text?: Maybe<Scalars['String']>,
+};
+
+export type HeroFrontBlock = WagtailBlock & {
+   __typename?: 'HeroFrontBlock',
+  id: Scalars['ID'],
+  value: HeroFrontBlockValue,
+};
+
+export type HeroFrontBlockFeature = {
+   __typename?: 'HeroFrontBlockFeature',
+  title: Scalars['String'],
+  link?: Maybe<Scalars['String']>,
+  items: Array<HeroFrontBlockItem>,
+};
+
+export type HeroFrontBlockItem = {
+   __typename?: 'HeroFrontBlockItem',
+  text: Scalars['String'],
+  link?: Maybe<Scalars['String']>,
+};
+
+export type HeroFrontBlockValue = {
+   __typename?: 'HeroFrontBlockValue',
+  title: Scalars['String'],
+  features: Array<HeroFrontBlockFeature>,
 };
 
 export type ImageTemplate = {
@@ -277,6 +476,19 @@ export type KkmRegisterCheckResult = {
   status: Scalars['Int'],
   url?: Maybe<Scalars['String']>,
   error?: Maybe<Scalars['String']>,
+};
+
+export type MailchimpSubscribeBlock = WagtailBlock & {
+   __typename?: 'MailchimpSubscribeBlock',
+  id: Scalars['ID'],
+  value: MailchimpSubscribeBlockValue,
+};
+
+export type MailchimpSubscribeBlockValue = {
+   __typename?: 'MailchimpSubscribeBlockValue',
+  news: Scalars['Boolean'],
+  events: Scalars['Boolean'],
+  trainings: Scalars['Boolean'],
 };
 
 export type MastermindDatingCohort = {
@@ -652,6 +864,7 @@ export type MyEmailSubscriptionInterest = {
 export type MyEventsTicket = {
    __typename?: 'MyEventsTicket',
   event: EventsPublicEvent,
+  created?: Maybe<Scalars['String']>,
 };
 
 export type NowCustomer = {
@@ -675,10 +888,48 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>,
 };
 
+export type PhotoRibbonBlock = WagtailBlock & {
+   __typename?: 'PhotoRibbonBlock',
+  id: Scalars['ID'],
+  value: Array<WagtailImage>,
+};
+
+
+export type PhotoRibbonBlockValueArgs = {
+  spec: Scalars['String']
+};
+
+export type ProjectIndexPage = WagtailPage & {
+   __typename?: 'ProjectIndexPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  projects: Array<ProjectPage>,
+};
+
+export type ProjectPage = WagtailPage & {
+   __typename?: 'ProjectPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  summary: Scalars['String'],
+  activity_summary?: Maybe<Scalars['String']>,
+  body: Scalars['String'],
+  is_active: Scalars['Boolean'],
+  upcoming_events: Array<EventsPublicEvent>,
+  image: WagtailImage,
+};
+
+
+export type ProjectPageImageArgs = {
+  spec: Scalars['String']
+};
+
 export type Query = {
    __typename?: 'Query',
   rooms: Array<Maybe<Room>>,
   my: My,
+  wagtailPage?: Maybe<WagtailPage>,
   authGroupsAll: Array<AuthGroup>,
   authPermissionsAll: Array<AuthPermission>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
@@ -694,6 +945,8 @@ export type Query = {
   cashierPayments: CashierPaymentConnection,
   analyticsBovStats: Array<AnalyticsBovStat>,
   events: EventsEventConnection,
+  publicEvents: EventsPublicEventConnection,
+  publicEvent: EventsPublicEvent,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
   ratioTrainings: RatioTrainingConnection,
@@ -706,6 +959,11 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
   imageTemplateBySlug: ImageTemplate,
+};
+
+
+export type QueryWagtailPageArgs = {
+  path: Scalars['String']
 };
 
 
@@ -779,6 +1037,21 @@ export type QueryEventsArgs = {
 };
 
 
+export type QueryPublicEventsArgs = {
+  from_date?: Maybe<Scalars['String']>,
+  project_id?: Maybe<Scalars['ID']>,
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryPublicEventArgs = {
+  event_id: Scalars['ID']
+};
+
+
 export type QueryStaffMemberArgs = {
   id: Scalars['ID']
 };
@@ -840,6 +1113,89 @@ export type RatioAddTrainingInput = {
   name: Scalars['String'],
   slug: Scalars['String'],
   date: Scalars['String'],
+};
+
+export type RatioBriefingBlock = WagtailBlock & {
+   __typename?: 'RatioBriefingBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type RatioExerciseBlock = WagtailBlock & {
+   __typename?: 'RatioExerciseBlock',
+  id: Scalars['ID'],
+  value: RatioExerciseBlockValue,
+};
+
+export type RatioExerciseBlockValue = {
+   __typename?: 'RatioExerciseBlockValue',
+  header: Scalars['String'],
+  lines_count: Scalars['Int'],
+  enumerate?: Maybe<Scalars['Boolean']>,
+};
+
+export type RatioExerciseOnelineBlock = WagtailBlock & {
+   __typename?: 'RatioExerciseOnelineBlock',
+  id: Scalars['ID'],
+  value: RatioExerciseOnelineBlockValue,
+};
+
+export type RatioExerciseOnelineBlockValue = {
+   __typename?: 'RatioExerciseOnelineBlockValue',
+  text: Scalars['String'],
+};
+
+export type RatioHeaderBlock = WagtailBlock & {
+   __typename?: 'RatioHeaderBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type RatioInsetBlock = WagtailBlock & {
+   __typename?: 'RatioInsetBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type RatioMathBlock = WagtailBlock & {
+   __typename?: 'RatioMathBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type RatioNotebookPage = WagtailPage & {
+   __typename?: 'RatioNotebookPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  sections: Array<RatioNotebookSectionBlock>,
+};
+
+export type RatioNotebookSectionBlock = WagtailBlock & {
+   __typename?: 'RatioNotebookSectionBlock',
+  id: Scalars['ID'],
+  value: RatioSectionPage,
+};
+
+export type RatioParagraphBlock = WagtailBlock & {
+   __typename?: 'RatioParagraphBlock',
+  id: Scalars['ID'],
+  value: Scalars['String'],
+};
+
+export type RatioSectionIndexPage = WagtailPage & {
+   __typename?: 'RatioSectionIndexPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+};
+
+export type RatioSectionPage = WagtailPage & {
+   __typename?: 'RatioSectionPage',
+  id: Scalars['ID'],
+  meta: WagtailPageMeta,
+  title: Scalars['String'],
+  body: Array<WagtailBlock>,
 };
 
 export type RatioTicket = {
@@ -943,6 +1299,35 @@ export type StaffMember = {
   color: Scalars['String'],
   user: AuthUser,
   slack_user?: Maybe<SlackUser>,
+};
+
+export type WagtailBlock = {
+  id: Scalars['ID'],
+};
+
+export type WagtailGeo = {
+   __typename?: 'WagtailGeo',
+  lat: Scalars['String'],
+  lng: Scalars['String'],
+};
+
+export type WagtailImage = {
+   __typename?: 'WagtailImage',
+  url: Scalars['String'],
+  width: Scalars['Int'],
+  height: Scalars['Int'],
+};
+
+export type WagtailPage = {
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  meta: WagtailPageMeta,
+};
+
+export type WagtailPageMeta = {
+   __typename?: 'WagtailPageMeta',
+  slug: Scalars['String'],
+  html_url: Scalars['String'],
 };
 
 export type WatchmenCreateWatchmanInput = {

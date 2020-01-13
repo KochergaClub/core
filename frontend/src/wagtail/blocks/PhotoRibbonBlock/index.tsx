@@ -1,8 +1,6 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { PhotoRibbonBlockType as Props } from '../types';
+import { PhotoRibbonBlockFragment as Props } from '../fragments.generated';
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +17,9 @@ const Image = styled.img`
 export default function PhotoRibbonBlock(props: Props) {
   return (
     <Container>
-      {props.value.map((photo, i) => <Image key={i} src={photo.file320} />)}
+      {props.photos.map((photo, i) => (
+        <Image key={i} src={photo.url} />
+      ))}
     </Container>
   );
 }

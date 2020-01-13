@@ -1,17 +1,18 @@
-import React from 'react';
-
-import Page from '~/components/Page';
+import { Page } from '~/components';
 import RichTextBlock from '~/blocks/RichTextBlock';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { ProjectPageType } from '../utils';
+import {
+  ProjectPageFragment,
+  ProjectPageFragmentDoc,
+} from '../queries.generated';
 
 import ProjectHeroBlock from '../components/ProjectHeroBlock';
 import UpcomingEventsBlock from '../components/UpcomingEventsBlock';
 
-const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
-  wagtailPage: project,
+const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
+  page: project,
 }) => {
   return (
     <Page
@@ -26,4 +27,6 @@ const ProjectDetails: NextWagtailPage<ProjectPageType> = ({
   );
 };
 
-export default ProjectDetails;
+ProjectPage.fragment = ProjectPageFragmentDoc;
+
+export default ProjectPage;

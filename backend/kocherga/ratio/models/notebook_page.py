@@ -25,6 +25,8 @@ class NotebookPage(HeadlessPreviewMixin, Page):
         APIField('sections'),
     ]
 
+    graphql_type = 'RatioNotebookPage'
+
     parent_page_types = ['ratio.NotebookIndexPage']
     subpage_types = []
 

@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import MathJax from 'react-mathjax2';
 
-import { RatioMathBlockType as Props } from './types';
+import { RatioMathBlockFragment as Props } from './fragments.generated';
 
 const Container = styled.div`
   text-align: center;

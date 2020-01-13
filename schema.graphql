@@ -31,6 +31,37 @@
 
 
 extend type Query {
+  wagtailPage(path: String!): WagtailPage
+}
+
+interface WagtailPage {
+  id: ID!
+  title: String!
+  meta: WagtailPageMeta!
+}
+
+type WagtailPageMeta {
+  slug: String!
+  html_url: String!
+}
+
+type WagtailImage {
+  url: String!
+  width: Int!
+  height: Int!
+}
+
+interface WagtailBlock {
+  id: ID!
+  # Note that there's no `type` field - there's no point in duplicating it since it can be restored from GraphQL's __typename.
+}
+
+type WagtailGeo {
+  lat: String!
+  lng: String!
+}
+
+extend type Query {
   authGroupsAll: [AuthGroup!]! @auth(permission: "auth.audit")
   authPermissionsAll: [AuthPermission!]! @auth(permission: "auth.audit")
 }
@@ -401,10 +432,8 @@ type AnalyticsBovStat {
 
 extend type Query {
   events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
-}
-
-type EventsEventEdge {
-  node: EventsEvent!
+  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvent(event_id: ID!): EventsPublicEvent!
 }
 
 type EventsEventConnection {
@@ -413,10 +442,52 @@ type EventsEventConnection {
   nodes: [EventsEvent!]!
 }
 
+type EventsEventEdge {
+  node: EventsEvent!
+}
+
 type EventsEvent {
   event_id: ID!  # uuid field, renamed for client
   title: String!
   start: String!
+}
+
+type EventsPublicEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsPublicEventEdge!]!
+  nodes: [EventsPublicEvent!]!
+}
+
+type EventsPublicEventEdge {
+  node: EventsPublicEvent!
+}
+
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  end: String!
+
+  title: String!
+  summary: String!
+  description: String!
+  image: String
+
+  registration_type: String!
+  pricing_type: String!
+
+  project: ProjectPage
+  announcements: EventsAnnouncements!
+
+  # note that there's no @auth directive - we don't want any errors if user is not authenticated
+  my_ticket: MyEventsTicket
+}
+
+type EventsAnnouncements {
+  timepad: EventsTimepadAnnouncement
+}
+
+type EventsTimepadAnnouncement {
+  link: String!
 }
 
 extend type My {
@@ -425,12 +496,7 @@ extend type My {
 
 type MyEventsTicket {
   event: EventsPublicEvent!
-}
-
-type EventsPublicEvent {
-  event_id: ID!
-  start: String!
-  title: String!
+  created: String
 }
 
 extend type Mutation {
@@ -576,6 +642,76 @@ type RatioTrainingSendEmailResult {
   draft_link: String!
 }
 
+type RatioSectionIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
+type RatioSectionPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  body: [WagtailBlock!]!
+}
+
+type RatioNotebookPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  sections: [RatioNotebookSectionBlock!]!
+}
+
+type RatioNotebookSectionBlock implements WagtailBlock {
+  id: ID!
+  value: RatioSectionPage!
+}
+
+type RatioHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioParagraphBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioInsetBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioExerciseBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseBlockValue!
+}
+
+type RatioExerciseBlockValue {
+  header: String!
+  lines_count: Int!
+  enumerate: Boolean
+}
+
+type RatioExerciseOnelineBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseOnelineBlockValue!
+}
+
+type RatioExerciseOnelineBlockValue {
+  text: String!
+}
+
+type RatioBriefingBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioMathBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
 extend type Query {
   mastermindDatingCohorts: [MastermindDatingCohort!]! @staffonly
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort! @staffonly
@@ -637,6 +773,170 @@ type MastermindDatingCohortMutationResult {
 
 type MastermindDatingParticipantMutationResult {
   participant: MastermindDatingParticipant!
+}
+
+type ProjectIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  projects: [ProjectPage!]!
+}
+
+type ProjectPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  summary: String!
+  activity_summary: String
+  body: String!
+  is_active: Boolean!
+  upcoming_events: [EventsPublicEvent!]!
+
+  image(spec: String!): WagtailImage!
+}
+
+type FreeFormPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  body: [WagtailBlock!]!
+}
+
+type GreyBlock implements WagtailBlock {
+  id: ID!
+  value: GreyBlockValue!
+}
+
+type GreyBlockValue {
+  header: String!
+  text: String
+}
+
+type BasicLeadBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type BasicParagraphBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type ColumnsBasicBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsBasicBlockColumn!]!
+}
+
+type ColumnsBasicBlockColumn {
+  header: String!
+  text: String
+}
+
+type ColumnsMembershipsBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsMembershipsBlockColumn!]!
+}
+
+type ColumnsMembershipsBlockColumn {
+  title: String!
+  subtitle: String!
+  price: Int!
+  description: String!
+}
+
+type ColumnsButtonsBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsButtonsBlockColumn!]!
+}
+
+type ColumnsButtonsBlockColumn {
+  title: String!
+  caption: String!
+  link: String!
+}
+
+type EventsListBlock implements WagtailBlock {
+  id: ID!
+  # TODO - events node
+}
+
+type BigContactsBlock implements WagtailBlock {
+  id: ID!
+  value: BigContactsBlockValue!
+}
+
+type BigContactsBlockValue {
+  map: WagtailGeo!
+  address: String!
+  phone: String!
+  email: String!
+  text: String!
+}
+
+type PhotoRibbonBlock implements WagtailBlock {
+  id: ID!
+  value(spec: String!): [WagtailImage!]!
+}
+
+type MailchimpSubscribeBlock implements WagtailBlock {
+  id: ID!
+  value: MailchimpSubscribeBlockValue!
+}
+
+type MailchimpSubscribeBlockValue {
+  news: Boolean!
+  events: Boolean!
+  trainings: Boolean!
+}
+
+type HeroFrontBlock implements WagtailBlock {
+  id: ID!
+  value: HeroFrontBlockValue!
+}
+
+type HeroFrontBlockValue {
+  title: String!
+  features: [HeroFrontBlockFeature!]!
+}
+
+type HeroFrontBlockFeature {
+  title: String!
+  link: String
+  items: [HeroFrontBlockItem!]!
+}
+
+type HeroFrontBlockItem {
+  text: String!
+  link: String
+}
+
+type BlogPostPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  date: String!
+  authors: [BlogPostAuthor!]!
+  body: String!
+  summary: String!
+}
+
+type BlogIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  subtitle: String!
+  posts: [BlogPostPage!]!
+}
+
+type BlogPostAuthor {
+  name: String!
+  description: String!
+  image(spec: String!): WagtailImage!
 }
 
 extend type Query {
@@ -726,4 +1026,22 @@ type ImageTemplateSchemaField {
 type ImageTemplateSizes {
   width: Int!
   height: Int!
+}
+
+type FaqPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  summary: String!
+  prev_page: FaqPage
+  next_page: FaqPage
+  entries: [FaqEntry!]!
+  subpages: [FaqPage!]!
+}
+
+type FaqEntry {
+  id: ID!
+  question: String!
+  answer: String!
 }

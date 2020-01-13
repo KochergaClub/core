@@ -6,23 +6,17 @@ import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
 import { Button, Row } from '@kocherga/frontkit';
 
 import TL02 from '~/blocks/TL02';
-import Page from '~/components/Page';
-import { selectAPI } from '~/core/selectors';
+import { Page } from '~/components';
 
 import { NextWagtailPage } from '~/wagtail/types';
-import { WagtailPageProps } from '~/wagtail/types';
 
 import ProjectCard from '../components/ProjectCard';
 
-import { ProjectPageType } from '../utils';
-
-export interface ExtraProps {
-  projects: ProjectPageType[];
-}
-
-export interface PageType extends WagtailPageProps {
-  meta_type: 'projects.ProjectIndexPage';
-}
+import {
+  ProjectIndexPageFragment,
+  ProjectIndexPageFragmentDoc,
+  ProjectPage_SummaryFragment,
+} from '../queries.generated';
 
 const Grid = styled.div`
   background-color: #eee;
@@ -48,19 +42,25 @@ const InactiveContainer = styled.div`
   margin-bottom: 80px;
 `;
 
-const InactiveProjects: React.FC<ExtraProps> = ({ projects }) => {
+interface ProjectsGridProps {
+  projects: ProjectPage_SummaryFragment[];
+}
+
+const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => (
+  <Grid>
+    {projects.map(project => (
+      <ProjectCard key={project.id} {...project} />
+    ))}
+  </Grid>
+);
+
+const InactiveProjects: React.FC<ProjectsGridProps> = ({ projects }) => {
   const [revealed, setRevealed] = useState(false);
 
   return (
     <InactiveContainer>
       {revealed ? (
-        <Grid>
-          {projects
-            .filter(project => !project.is_active)
-            .map(project => (
-              <ProjectCard key={project.id} {...project} />
-            ))}
-        </Grid>
+        <ProjectsGrid projects={projects} />
       ) : (
         <Row centered>
           <Button size="big" onClick={() => setRevealed(true)}>
@@ -72,13 +72,12 @@ const InactiveProjects: React.FC<ExtraProps> = ({ projects }) => {
   );
 };
 
-const ProjectIndexPage: NextWagtailPage<PageType, ExtraProps> = ({
-  wagtailPage,
-  projects,
+const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
+  page,
 }) => {
   return (
     <Page
-      title={wagtailPage.title}
+      title={page.title}
       description="Регулярные мероприятия и сообщества, которые собираются в Кочерге.
       Рациональность, научно-популярные лектории, критическое мышление и многое другое."
     >
@@ -88,26 +87,17 @@ const ProjectIndexPage: NextWagtailPage<PageType, ExtraProps> = ({
         Рациональность, научно-популярные лектории, критическое мышление и
         многое другое.
       </TL02>
-      <Grid>
-        {projects
-          .filter(project => project.is_active)
-          .map(project => (
-            <ProjectCard key={project.id} {...project} />
-          ))}
-      </Grid>
+      <ProjectsGrid
+        projects={page.projects.filter(project => project.is_active)}
+      />
       <TL02 title="Неактивные проекты" />
-      <InactiveProjects projects={projects} />
+      <InactiveProjects
+        projects={page.projects.filter(project => !project.is_active)}
+      />
     </Page>
   );
 };
 
-ProjectIndexPage.getInitialProps = async ({ store: { getState } }) => {
-  const api = selectAPI(getState());
-
-  const json = await api.callWagtail(
-    'pages/?type=projects.ProjectPage&fields=summary,activity_summary,image,image_thumbnail,is_active&limit=100'
-  );
-  return { projects: json.items };
-};
+ProjectIndexPage.fragment = ProjectIndexPageFragmentDoc;
 
 export default ProjectIndexPage;

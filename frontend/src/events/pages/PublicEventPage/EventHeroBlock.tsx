@@ -13,7 +13,7 @@ import HumanizedDateTime from '~/components/HumanizedDateTime';
 import HeroWithImage from '~/components/HeroWithImage';
 import HeroHeader from '~/components/HeroHeader';
 
-import { PublicEvent } from '~/events/types';
+import { CommonProps } from './types';
 
 // TODO - redo with grid layout
 const Container = styled.div`
@@ -58,13 +58,15 @@ const BottomRowContainer = styled.div`
   }
 `;
 
-interface Props {
-  event: PublicEvent;
+interface ExtraProps {
   registrationRef: React.MutableRefObject<HTMLElement | null>;
 }
 
-const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
-  const daysUntil = differenceInCalendarDays(event.start, new Date());
+const BottomRow: React.FC<CommonProps & ExtraProps> = ({
+  event,
+  registrationRef,
+}) => {
+  const daysUntil = differenceInCalendarDays(new Date(event.start), new Date());
 
   let daysText = '';
 
@@ -86,9 +88,13 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
     daysText = 'Через 6 дней';
   } else {
     // more than 6 days
-    const weeksUntil = differenceInCalendarWeeks(event.start, new Date(), {
-      weekStartsOn: 1,
-    });
+    const weeksUntil = differenceInCalendarWeeks(
+      new Date(event.start),
+      new Date(),
+      {
+        weekStartsOn: 1,
+      }
+    );
 
     if (weeksUntil === 1) {
       daysText = 'На следующей неделе';
@@ -115,7 +121,7 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
 
   return (
     <BottomRowContainer>
-      <HumanizedDateTime date={event.start} />
+      <HumanizedDateTime date={new Date(event.start)} />
       {daysUntil >= 0 && (
         <Button kind="primary" size="big" onClick={registerCb}>
           Зарегистрироваться
@@ -126,7 +132,7 @@ const BottomRow: React.FC<Props> = ({ event, registrationRef }) => {
   );
 };
 
-const ProjectHeroBlock: React.FC<Props> = props => {
+const EventHeroBlock: React.FC<CommonProps & ExtraProps> = props => {
   const { event } = props;
 
   const imageUrl = event.image || ''; // TODO - default image url?
@@ -144,4 +150,4 @@ const ProjectHeroBlock: React.FC<Props> = props => {
   );
 };
 
-export default ProjectHeroBlock;
+export default EventHeroBlock;

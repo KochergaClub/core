@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { ExtraProps, PageType } from '.';
+import { RatioNotebookPageFragment } from '../fragments.generated';
 
 const Container = styled.div`
   max-width: 800px;
@@ -20,15 +20,13 @@ const Line = styled.a`
   margin-bottom: 12px;
 `;
 
-export default function SectionTOC(
-  props: ExtraProps & { wagtailPage: PageType }
-) {
+export default function SectionTOC(props: { page: RatioNotebookPageFragment }) {
   return (
     <Container>
-      {props.wagtailPage.sections.map(section => {
-        const sectionPage = props.ratioSectionPages[section.value];
+      {props.page.sections.map(section => {
+        const sectionPage = section.value;
         return (
-          <Line key={section.id} href={`#section-${sectionPage.meta.slug}`}>
+          <Line key={sectionPage.id} href={`#section-${sectionPage.meta.slug}`}>
             {sectionPage.title}
           </Line>
         );

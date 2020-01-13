@@ -1,9 +1,9 @@
-import Page from '~/components/Page';
-import { selectAPI } from '~/core/selectors';
+import { Page } from '~/components';
 
-import { NextWagtailPage, WagtailPageProps } from '~/wagtail/types';
+import { NextWagtailPage } from '~/wagtail/types';
 
-import { Entry } from '../types';
+import { FaqPageFragment, FaqPageFragmentDoc } from '../fragments.generated';
+
 import EntryListBlock from '../components/EntryListBlock';
 import EntryIndexBlock from '../components/EntryIndexBlock';
 import SubpagesBlock from '../components/SubpagesBlock';
@@ -11,58 +11,24 @@ import FAQPageHeader from '../components/FAQPageHeader';
 import NavigationBlock from '../components/NavigationBlock';
 import NoEntriesBlock from '../components/NoEntriesBlock';
 
-export interface PageType extends WagtailPageProps {
-  meta_type: 'faq.FAQPage';
-  summary?: string;
-  prev_page?: WagtailPageProps;
-  next_page?: WagtailPageProps;
-}
-
-export interface ExtraProps {
-  entries: Entry[];
-  subpages: PageType[];
-}
-
-const FAQPage: NextWagtailPage<PageType, ExtraProps> = props => {
+const FAQPage: NextWagtailPage<FaqPageFragment> = ({ page }) => {
   return (
-    <Page
-      title={props.wagtailPage.title}
-      description={props.wagtailPage.summary}
-    >
-      <FAQPageHeader wagtailPage={props.wagtailPage} />
+    <Page title={page.title} description={page.summary}>
+      <FAQPageHeader wagtailPage={page} />
       <Page.Main>
-        <SubpagesBlock subpages={props.subpages} />
-        <EntryIndexBlock entries={props.entries} />
-        {props.entries.length ? (
-          <EntryListBlock entries={props.entries} />
-        ) : !props.subpages.length ? (
+        <SubpagesBlock subpages={page.subpages} />
+        <EntryIndexBlock entries={page.entries} />
+        {page.entries.length ? (
+          <EntryListBlock entries={page.entries} />
+        ) : !page.subpages.length ? (
           <NoEntriesBlock />
         ) : null}
-        <NavigationBlock wagtailPage={props.wagtailPage} />
+        <NavigationBlock wagtailPage={page} />
       </Page.Main>
     </Page>
   );
 };
 
-FAQPage.getInitialProps = async ({ store: { getState }, wagtailPage }) => {
-  const api = selectAPI(getState());
-
-  const entries = (await api.call(
-    `faq/entry?page_id=${wagtailPage.id}`,
-    'GET'
-  )) as Entry[];
-
-  const subpages = (
-    await api.callWagtail(
-      `pages/?child_of=${wagtailPage.id}&type=faq.FAQPage&fields=summary`
-    )
-  ).items as PageType[];
-
-  for (const subpage of subpages) {
-    subpage.meta_type = 'faq.FAQPage'; // TODO - move to common function
-  }
-
-  return { entries, subpages };
-};
+FAQPage.fragment = FaqPageFragmentDoc;
 
 export default FAQPage;

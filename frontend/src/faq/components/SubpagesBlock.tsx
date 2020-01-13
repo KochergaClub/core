@@ -1,9 +1,9 @@
 import { PaddedBlock, AnotherPageSummary } from '~/components';
 
-import { PageType } from '../wagtail/FAQPage';
+import { FaqPage_SummaryFragment } from '../fragments.generated';
 
 interface Props {
-  subpages: PageType[];
+  subpages: FaqPage_SummaryFragment[];
 }
 
 const SubpagesBlock: React.FC<Props> = ({ subpages }) => (

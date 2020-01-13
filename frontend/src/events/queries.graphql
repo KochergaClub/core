@@ -1,0 +1,18 @@
+fragment EventsPublicEvent_Summary on EventsPublicEvent {
+  event_id
+  title
+  summary
+  image
+  start
+}
+
+query UpcomingPublicEvents($today: String!, $project_id: ID) {
+  publicEvents(from_date: $today, project_id: $project_id, first: 20) {
+    pageInfo {
+      hasNextPage
+    }
+    nodes {
+      ...EventsPublicEvent_Summary
+    }
+  }
+}

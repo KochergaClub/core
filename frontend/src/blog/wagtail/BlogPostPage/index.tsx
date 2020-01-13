@@ -1,28 +1,22 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { RichText, colors } from '@kocherga/frontkit';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 import ItemPageHeader from '~/blocks/ItemPageHeader';
 import { formatDate } from '~/common/utils';
 
 import { NextWagtailPage } from '~/wagtail/types';
-import { WagtailPageProps } from '~/wagtail/types';
 
-import { BlogPostAuthorType } from '../types';
+import {
+  BlogPostPageFragment,
+  BlogPostPageFragmentDoc,
+  BlogPostAuthorFragment,
+} from '../fragments.generated';
 
 import Author from './Author';
 
-export interface PageType extends WagtailPageProps {
-  meta_type: 'blog.BlogPostPage';
-  date: string;
-  authors: BlogPostAuthorType[];
-  body: string;
-  summary: string;
-}
-
-const AuthorsList = ({ authors }: { authors: BlogPostAuthorType[] }) => {
+const AuthorsList = ({ authors }: { authors: BlogPostAuthorFragment[] }) => {
   return (
     <div>
       {authors.map((author, i) => (
@@ -51,7 +45,7 @@ const TextWithAuthors = ({
   authors,
 }: {
   text: string;
-  authors: BlogPostAuthorType[];
+  authors: BlogPostAuthorFragment[];
 }) => {
   return (
     <Container>
@@ -67,21 +61,23 @@ const HeaderDate = styled.div`
   color: ${colors.grey[500]};
 `;
 
-const BlogPostPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
+const BlogPostPage: NextWagtailPage<BlogPostPageFragment> = ({ page }) => {
   return (
-    <Page title={wagtailPage.title} description={wagtailPage.summary}>
+    <Page title={page.title} description={page.summary}>
       <ItemPageHeader
-        title={wagtailPage.title}
+        title={page.title}
         sectionTitle="Блог Кочерги"
         sectionLink="/blog"
       >
         <HeaderDate>
-          {formatDate(new Date(wagtailPage.date), 'd MMMM yyyy')}
+          {formatDate(new Date(page.date), 'd MMMM yyyy')}
         </HeaderDate>
       </ItemPageHeader>
-      <TextWithAuthors text={wagtailPage.body} authors={wagtailPage.authors} />
+      <TextWithAuthors text={page.body} authors={page.authors} />
     </Page>
   );
 };
+
+BlogPostPage.fragment = BlogPostPageFragmentDoc;
 
 export default BlogPostPage;

@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { RichText, fonts } from '@kocherga/frontkit';
 
-import { BasicLeadBlockType as Props } from './types';
+import { BasicLeadBlockFragment as Props } from './fragments.generated';
 
 const Paragraph = styled(RichText)`
   max-width: 1020px;

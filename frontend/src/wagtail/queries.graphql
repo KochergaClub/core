@@ -1,0 +1,25 @@
+fragment FreeFormPage on FreeFormPage {
+  id
+  title
+  body {
+    __typename
+    id
+    ...BasicLeadBlock
+    ...BasicParagraphBlock
+    ...GreyBlock
+    ...ColumnsBasicBlock
+    ...ColumnsMembershipsBlock
+    ...ColumnsButtonsBlock
+    ...EventsListBlock
+    ...BigContactsBlock
+    ...PhotoRibbonBlock
+    ...MailchimpSubscribeBlock
+    ...HeroFrontBlock
+  }
+}
+
+query WagtailPageType($path: String!) {
+  wagtailPage(path: $path) {
+    __typename
+  }
+}

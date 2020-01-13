@@ -1,9 +1,7 @@
 extend type Query {
   events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
-}
-
-type EventsEventEdge {
-  node: EventsEvent!
+  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvent(event_id: ID!): EventsPublicEvent!
 }
 
 type EventsEventConnection {
@@ -12,10 +10,52 @@ type EventsEventConnection {
   nodes: [EventsEvent!]!
 }
 
+type EventsEventEdge {
+  node: EventsEvent!
+}
+
 type EventsEvent {
   event_id: ID!  # uuid field, renamed for client
   title: String!
   start: String!
+}
+
+type EventsPublicEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsPublicEventEdge!]!
+  nodes: [EventsPublicEvent!]!
+}
+
+type EventsPublicEventEdge {
+  node: EventsPublicEvent!
+}
+
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  end: String!
+
+  title: String!
+  summary: String!
+  description: String!
+  image: String
+
+  registration_type: String!
+  pricing_type: String!
+
+  project: ProjectPage
+  announcements: EventsAnnouncements!
+
+  # note that there's no @auth directive - we don't want any errors if user is not authenticated
+  my_ticket: MyEventsTicket
+}
+
+type EventsAnnouncements {
+  timepad: EventsTimepadAnnouncement
+}
+
+type EventsTimepadAnnouncement {
+  link: String!
 }
 
 extend type My {
@@ -24,12 +64,7 @@ extend type My {
 
 type MyEventsTicket {
   event: EventsPublicEvent!
-}
-
-type EventsPublicEvent {
-  event_id: ID!
-  start: String!
-  title: String!
+  created: String
 }
 
 extend type Mutation {

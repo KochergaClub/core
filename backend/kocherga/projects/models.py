@@ -33,6 +33,8 @@ class ProjectIndexPage(HeadlessPreviewMixin, Page):
     subpage_types = ['projects.ProjectPage']
     parent_page_types = ['pages.FrontPage']
 
+    graphql_type = 'ProjectIndexPage'
+
 
 class ProjectPage(HeadlessPreviewMixin, Page):
     summary = models.TextField()
@@ -54,6 +56,7 @@ class ProjectPage(HeadlessPreviewMixin, Page):
         FieldPanel('body'),
     ]
 
+    # legacy, to be removed
     api_fields = [
         APIField('summary'),
         APIField('activity_summary'),
@@ -65,3 +68,5 @@ class ProjectPage(HeadlessPreviewMixin, Page):
     ]
 
     parent_page_types = ['projects.ProjectIndexPage']
+
+    graphql_type = 'ProjectPage'

@@ -1,0 +1,39 @@
+fragment ProjectPage_SummaryForEvent on ProjectPage {
+  id
+  meta {
+    slug
+  }
+  title
+  is_active
+  upcoming_events {
+    event_id
+    title
+  }
+}
+
+fragment EventsPublicEvent on EventsPublicEvent {
+  event_id
+  start
+  title
+  description
+  image
+  registration_type
+  pricing_type
+  project {
+    ...ProjectPage_SummaryForEvent
+  }
+  my_ticket {
+    created
+  }
+  announcements {
+    timepad {
+      link
+    }
+  }
+}
+
+query GetPublicEvent($event_id: ID!) {
+  publicEvent(event_id: $event_id) {
+    ...EventsPublicEvent
+  }
+}

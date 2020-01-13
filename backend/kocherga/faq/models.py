@@ -40,6 +40,10 @@ class FAQPage(HeadlessPreviewMixin, Page):
     def next_page(self):
         return self.get_next_siblings().type(self.__class__).live().first()
 
+    @property
+    def subpages(self):
+        return self.get_children().type(self.__class__).live()
+
     content_panels = Page.content_panels + [
         FieldPanel('summary'),
         CondensedInlinePanel('entries', label="Вопросы и ответы"),
@@ -52,6 +56,8 @@ class FAQPage(HeadlessPreviewMixin, Page):
     ]
     # We could add `entries` to `api_fields` here, but the naive implementation causes circular import issues.
     # So we'll rely on /api/faq/entry REST call for now.
+
+    graphql_type = 'FaqPage'
 
 
 class Entry(Orderable, models.Model):

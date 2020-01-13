@@ -4,7 +4,7 @@ import { colors, Column, Button } from '@kocherga/frontkit';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 
-import { PublicEvent } from '../../types';
+import { EventsPublicEvent_SummaryFragment } from '../../queries.generated';
 
 const padding = css`
   padding-left: 20px;
@@ -56,7 +56,7 @@ const Padded = styled.div`
 `;
 
 interface Props {
-  event: PublicEvent;
+  event: EventsPublicEvent_SummaryFragment;
   mode?: 'timepad';
 }
 
@@ -67,12 +67,12 @@ const EventCard: React.FC<Props> = ({ event }) => {
   return (
     <Column stretch gutter={16}>
       <BackgroundLink href={href} target="_top">
-        <Background image={event.image}>
+        <Background image={event.image || ''}>
           <Header>{event.title}</Header>
         </Background>
       </BackgroundLink>
       <TimeWrapper>
-        <HumanizedDateTime date={event.start} />
+        <HumanizedDateTime date={new Date(event.start)} />
       </TimeWrapper>
       <Padded>{event.summary}</Padded>
       <Padded>
