@@ -11,7 +11,7 @@ build-backend:
   script:
     - git submodule init
     - git submodule update
-    - docker build -f backend/Dockerfile --build-arg -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME ./backend
+    - docker build -f backend/Dockerfile -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME ./backend
     - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME
 
 build-frontend:
@@ -19,7 +19,7 @@ build-frontend:
   script:
     - git submodule init
     - git submodule update
-    - docker build -f frontend/Dockerfile --build-arg -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME ./frontend
+    - docker build -f frontend/Dockerfile -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME ./frontend
     - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME
 
 build-chrome:
