@@ -104,19 +104,6 @@ PublicEventPage.getInitialProps = async ({ apolloClient, query }) => {
   return {
     event: result.data.publicEvent,
   };
-
-  // if (user.is_authenticated) {
-  //   try {
-  //     const ticket = await api.call(`events/${event_id}/my_ticket`, 'GET'); // FIXME - can return 404
-  //     result.ticket = ticket;
-  //   } catch (e) {
-  //     if (e instanceof APIError && e.status === 404) {
-  //       // that's ok, user is not registered yet
-  //     } else {
-  //       throw e;
-  //     }
-  //   }
-  // }
 };
 
 export default withApollo(PublicEventPage);

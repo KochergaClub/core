@@ -11,7 +11,7 @@ const SubpagesBlock: React.FC<Props> = ({ subpages }) => (
     {subpages.map(subpage => (
       <AnotherPageSummary
         key={subpage.id}
-        href={new URL(subpage.meta.html_url).pathname}
+        href={subpage.meta.html_url}
         title={subpage.title}
         description={subpage.summary}
       />

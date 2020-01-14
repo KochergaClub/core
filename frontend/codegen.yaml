@@ -3,15 +3,19 @@ schema:
 documents: 'src/**/*.graphql'
 
 generates:
-  src/apollo/gen-types.ts:
+  src/apollo/types.generated.ts:
     plugins:
       - typescript
+
+  src/apollo/introspection-result.generated.ts:
+    plugins:
+      - fragment-matcher
 
   src/:
     preset: near-operation-file
     presetConfig:
       extension: .generated.tsx
-      baseTypesPath: apollo/gen-types.ts
+      baseTypesPath: apollo/types.generated.ts
     plugins:
       - typescript-operations
       - typescript-react-apollo

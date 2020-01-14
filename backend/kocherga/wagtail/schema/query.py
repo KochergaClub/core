@@ -73,6 +73,7 @@ def resolve_WagtailPage_type(page, *_):
 def resolve_WagtailPage_meta(page, info):
     return {
         'slug': page.slug,
+        'html_url': page.url,
     }
 
 
@@ -83,7 +84,9 @@ WagtailBlock = InterfaceType("WagtailBlock")
 def resolve_WagtailBlock_type(obj, *_):
     # Naming type by convention.
     # Example: type='grey' -> GreyWagtailBlock
-    camel_name = [part.capitalize() for part in obj.block.name.split('_')].join('')
+    camel_name = ''.join([
+        part.capitalize() for part in obj.block.name.split('_')
+    ])
     return camel_name + 'Block'
 
 

@@ -1,4 +1,5 @@
 from ariadne import QueryType
+from datetime import datetime
 
 from .. import models
 
@@ -13,7 +14,7 @@ def resolve_events(self, info, search, **pager):
 
 @Query.field('publicEvents')
 def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
-    qs = Event.objects.public_events(
+    qs = models.Event.objects.public_events(
         from_date=datetime.strptime(from_date, '%Y-%m-%d').date() if from_date else None,
     )
 
@@ -24,5 +25,5 @@ def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
 
 @Query.field('publicEvent')
 def resolve_publicEvent(self, info, event_id):
-    event = Event.objects.public_events().get(uuid=event_id)
+    event = models.Event.objects.public_events().get(uuid=event_id)
     return event

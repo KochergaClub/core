@@ -131,11 +131,10 @@ query Get${fragmentName}($path: String!) {
 ${fragmentDoc}
   `;
 
-  console.log(query);
-
   const { data, errors } = await apolloClient.query({
     query,
     variables: { path },
+    fetchPolicy: 'network-only',
   });
 
   if (errors) {

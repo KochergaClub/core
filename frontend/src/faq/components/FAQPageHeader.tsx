@@ -10,7 +10,7 @@ interface Props {
 
 const FAQPageHeader: React.FC<Props> = ({ wagtailPage }) => {
   const root = '/faq';
-  const isRoot = new URL(wagtailPage.meta.html_url).pathname === root;
+  const isRoot = wagtailPage.meta.html_url === root;
 
   const top = <ParentLinkInHeader href={root}>FAQ</ParentLinkInHeader>;
 

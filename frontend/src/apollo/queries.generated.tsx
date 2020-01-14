@@ -1,4 +1,4 @@
-import * as Types from './gen-types';
+import * as Types from './types.generated';
 
 import gql from 'graphql-tag';
 

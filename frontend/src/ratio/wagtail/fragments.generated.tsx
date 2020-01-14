@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import * as Types from '../../apollo/gen-types';
+import * as Types from '../../apollo/types.generated';
 
 import { RatioBriefingBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
 import { RatioExerciseOnelineBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';

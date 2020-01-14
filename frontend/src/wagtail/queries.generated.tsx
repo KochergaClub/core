@@ -1,5 +1,5 @@
 import { BasicLeadBlockFragmentDoc } from './blocks/fragments.generated';
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
 import { MailchimpSubscribeBlockFragment } from './blocks/fragments.generated';
 import { PhotoRibbonBlockFragment } from './blocks/fragments.generated';

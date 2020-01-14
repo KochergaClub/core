@@ -1,4 +1,4 @@
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
 import { EventsPublicEvent_SummaryFragment } from '../events/queries.generated';
 import gql from 'graphql-tag';
