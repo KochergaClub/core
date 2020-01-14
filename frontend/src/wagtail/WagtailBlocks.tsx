@@ -1,7 +1,5 @@
 // Stream of Wagtail blocks rendered in order based on their type.
 
-import { formatDate } from '~/common/utils';
-
 import { FreeFormPageFragment } from './queries.generated';
 
 export type AnyBlockFragment = FreeFormPageFragment['body'][0];
@@ -63,24 +61,3 @@ export default function WagtailBlocks({ blocks }: Props) {
     </div>
   );
 }
-
-// export const loadBlockData = async (
-//   block: AnyBlockFragment,
-//   api: API
-// ): Promise<BlockType> => {
-//   switch (block.type) {
-//     case 'events_list':
-//       const from_date = new Date();
-//       const events = (await api.call(
-//         `public_events?from_date=${formatDate(from_date, 'yyyy-MM-dd')}`,
-//         'GET'
-//       )) as ServerPublicEvent[];
-//
-//       return {
-//         ...block,
-//         data: { events },
-//       };
-//     default:
-//       return block;
-//   }
-// };

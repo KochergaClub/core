@@ -13,22 +13,6 @@ interface CommonEventProps {
   pricing_type: 'anticafe' | 'free';
 }
 
-export interface PublicEvent extends CommonEventProps {
-  event_id: string;
-  image?: string;
-  start: Date;
-  end: Date;
-  project?: number;
-}
-
-export interface ServerPublicEvent extends CommonEventProps {
-  event_id: string;
-  image?: string;
-  start: string; // JSON doesn't support Date objects
-  end: string;
-  project?: number;
-}
-
 export interface Event extends CommonEventProps {
   id: string;
   room: string;
@@ -86,16 +70,6 @@ export interface EventTicket {
 }
 
 export const serverEventToEvent = (event: ServerEvent): Event => {
-  return {
-    ...event,
-    start: new Date(event.start),
-    end: new Date(event.end),
-  };
-};
-
-export const serverPublicEventToEvent = (
-  event: ServerPublicEvent
-): PublicEvent => {
   return {
     ...event,
     start: new Date(event.start),

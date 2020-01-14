@@ -1,6 +1,6 @@
 import { API } from '~/common/api';
 
-import { Event, ServerEvent, serverEventToEvent } from './types';
+import { ServerEvent } from './types';
 
 export interface Range {
   // YYYY-MM-DD format; not Date, because it needs to be serializable.
@@ -17,16 +17,4 @@ export const getEventsInRange = async (api: API, range: Range) => {
 
 export const getEvent = async (api: API, uuid: string) => {
   return (await api.call(`events/${uuid}`, 'GET')) as ServerEvent;
-};
-
-export const searchEvents = async (
-  api: API,
-  { query }: { query: string }
-): Promise<Event[]> => {
-  const { results: serverEvents } = (await api.call(
-    `events-paged?search=${query}`,
-    'GET'
-  )) as { results: ServerEvent[] };
-
-  return serverEvents.map(serverEventToEvent);
 };
