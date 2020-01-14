@@ -1,7 +1,6 @@
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel
-from wagtail.api import APIField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
 
@@ -15,10 +14,6 @@ class FreeFormPage(HeadlessPreviewMixin, Page):
         StreamFieldPanel('body'),
     ]
 
-    api_fields = [
-        APIField('body'),
-    ]
-
     graphql_type = 'FreeFormPage'
 
 
@@ -27,10 +22,6 @@ class FrontPage(HeadlessPreviewMixin, Page):
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('body'),
-    ]
-
-    api_fields = [
-        APIField('body'),
     ]
 
     graphql_type = 'FreeFormPage'

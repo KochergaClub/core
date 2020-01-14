@@ -1,14 +1,23 @@
-from ariadne import ObjectType
+from kocherga.graphql.types import DjangoObjectType
+
+from .. import models
 
 
 def create_BlogPostAuthor():
-    BlogPostAuthor = ObjectType('BlogPostAuthor')
+    BlogPostAuthor = DjangoObjectType('BlogPostAuthor', models.BlogPostAuthor)
 
-    @BlogPostAuthor.field('image')
-    def resolve_image(obj, info, spec):
-        return obj.get_rendition(spec)
+    BlogPostAuthor.image_field('image')
 
     return BlogPostAuthor
 
 
-types = [create_BlogPostAuthor()]
+def create_BlogPostPage():
+    BlogPostPage = DjangoObjectType('BlogPostPage', models.BlogPostPage)
+
+    BlogPostPage.related_field('authors')
+    BlogPostPage.rich_text_field('body')
+
+    return BlogPostPage
+
+
+types = [create_BlogPostAuthor(), create_BlogPostPage()]

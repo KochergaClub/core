@@ -1,5 +1,7 @@
 from typing import cast
 
+from django.db import models
+import wagtail.core.rich_text
 from graphql.type import GraphQLSchema, GraphQLObjectType
 
 import ariadne
@@ -8,6 +10,7 @@ import ariadne
 class DjangoObjectType(ariadne.ObjectType):
     def __init__(self, name: str, model):
         super().__init__(name)
+        assert issubclass(model, models.Model)
         self._model = model
 
     # copy-pasted from ariadne.ObjectType
@@ -22,7 +25,10 @@ class DjangoObjectType(ariadne.ObjectType):
         _meta = self._model._meta
         for name, field in graphql_type.fields.items():
             if name in self._resolvers:
-                continue  # that's ok, set explicitly
+                continue  # That's ok, resolver is defined explicitly.
+
+            if len(graphql_type.interfaces) and graphql_type.interfaces[0].name == 'WagtailPage' and name == 'meta':
+                continue  # Special case: `WagtailPage` interface implements `meta` resolver.
 
             # validate!
             # TODO - compare field types
@@ -50,6 +56,20 @@ class DjangoObjectType(ariadne.ObjectType):
         @self.field(field_name)
         def resolve(obj, info):
             return getattr(obj, field_name)
+
+    def image_field(self, field_name):
+
+        @self.field(field_name)
+        def resolve(obj, info, spec):
+            return getattr(obj, field_name).get_rendition(spec)
+
+    def rich_text_field(self, field_name):
+        # via https://github.com/wagtail/wagtail/issues/2695 - fixing <embed> in RichTextFields
+
+        @self.field(field_name)
+        def resolve(obj, info):
+            value = getattr(obj, field_name)
+            return wagtail.core.rich_text.expand_db_html(value)
 
 
 class PrefixedMixin:

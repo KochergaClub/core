@@ -1,7 +1,4 @@
-from ariadne import ObjectType
-
-from datetime import datetime
-from kocherga.dateutils import TZ
+from kocherga.graphql.types import DjangoObjectType
 
 from .. import models
 
@@ -9,25 +6,17 @@ from kocherga.wagtail.utils import filter_queryset_by_page_permissions
 
 
 def create_ProjectPage():
-    ProjectPage = ObjectType('ProjectPage')
+    ProjectPage = DjangoObjectType('ProjectPage', models.ProjectPage)
 
-    @ProjectPage.field('upcoming_events')
-    def resolve_upcoming_events(obj, info):
-        qs = obj.events.filter(event_type='public', published=True, deleted=False) \
-                       .filter(start__gte = datetime.now(TZ)) \
-                       .order_by('start')
-
-        return qs
-
-    @ProjectPage.field('image')
-    def resolve_image(obj, info, spec):
-        return obj.image.get_rendition(spec)
+    ProjectPage.simple_property_field('upcoming_events')
+    ProjectPage.image_field('image')
+    ProjectPage.rich_text_field('body')
 
     return ProjectPage
 
 
 def create_ProjectIndexPage():
-    ProjectIndexPage = ObjectType('ProjectIndexPage')
+    ProjectIndexPage = DjangoObjectType('ProjectIndexPage', models.ProjectIndexPage)
 
     @ProjectIndexPage.field('projects')
     def resolve_projects(obj, info):

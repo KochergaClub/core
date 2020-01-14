@@ -2,7 +2,6 @@ from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from django.db import models
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
-from wagtail.api import APIField
 
 from ..blocks import section_blocks
 
@@ -29,10 +28,6 @@ class SectionPage(HeadlessPreviewMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('status'),
         StreamFieldPanel('body'),
-    ]
-
-    api_fields = [
-        APIField('body'),
     ]
 
     graphql_type = 'RatioSectionPage'

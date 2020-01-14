@@ -11,11 +11,8 @@ from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.api import APIField
-from wagtail.images.api.fields import ImageRenditionField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
-from kocherga.wagtail.fields import APIRichTextField
 from kocherga.dateutils import TZ
 from kocherga.events.serializers import PublicEventSerializer
 
@@ -56,17 +53,14 @@ class ProjectPage(HeadlessPreviewMixin, Page):
         FieldPanel('body'),
     ]
 
-    # legacy, to be removed
-    api_fields = [
-        APIField('summary'),
-        APIField('activity_summary'),
-        APIRichTextField('body'),
-        APIField('is_active'),
-        APIField('image', serializer=ImageRenditionField('fill-1080x400')),
-        APIField('image_thumbnail', serializer=ImageRenditionField('fill-500x300', source='image')),
-        APIField('upcoming_events', serializer=UpcomingEventsField(source='events')),
-    ]
-
     parent_page_types = ['projects.ProjectIndexPage']
 
     graphql_type = 'ProjectPage'
+
+    @property
+    def upcoming_events(self):
+        qs = self.events.filter(event_type='public', published=True, deleted=False) \
+                        .filter(start__gte = datetime.now(TZ)) \
+                        .order_by('start')
+
+        return qs

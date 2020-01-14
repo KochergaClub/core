@@ -1,7 +1,6 @@
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel
-from wagtail.api import APIField
 
 from ..blocks import notebook_blocks
 
@@ -19,10 +18,6 @@ class NotebookPage(HeadlessPreviewMixin, Page):
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('sections'),
-    ]
-
-    api_fields = [
-        APIField('sections'),
     ]
 
     graphql_type = 'RatioNotebookPage'
