@@ -81,8 +81,6 @@ services:
     build:
       context: ../frontend
       dockerfile: ./Dockerfile
-      args:
-        NPM_TOKEN: ${TOKEN}
     command: node ./dist/index.js
     depends_on:
       - api

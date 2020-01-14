@@ -9,9 +9,7 @@ ENV LC_ALL en_US.UTF-8
 
 RUN (curl -sL https://deb.nodesource.com/setup_10.x | bash -) && apt-get install -y nodejs
 
-ARG NPM_TOKEN
-RUN npm config set registry https://npm.team.kocherga.club/ \
-    && echo "//npm.team.kocherga.club/:_authToken=\"$NPM_TOKEN\"" >>/root/.npmrc
+RUN npm config set registry https://npm.team.kocherga.club/
 
 WORKDIR /code
 

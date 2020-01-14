@@ -1,5 +1,3 @@
-export TOKEN=$(shell cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}')
-
 image:
 	docker-compose -f docker/compose.dev.yml build
 
