@@ -6,6 +6,8 @@ from wagtail.api.v2.utils import page_models_from_string, BadRequestError, filte
 
 from ..utils import filter_queryset_by_page_permissions
 
+from ..models import PagePreview
+
 
 Query = QueryType()
 
@@ -47,17 +49,27 @@ def get_queryset(request, page_type='wagtailcore.Page'):
 
 
 @Query.field('wagtailPage')
-def resolve_wagtailPage(_, info, path):
-    path_components = [component for component in path.split('/') if component]
+def resolve_wagtailPage(_, info, path=None, preview_token=None):
+    if path and preview_token:
+        raise Exception("Only one of `path` and `preview_token` must be set.")
 
-    try:
-        page, _, _ = info.context.site.root_page.specific.route(info.context, path_components)
-    except Http404:
-        return
+    if not path and not preview_token:
+        raise Exception("One of `path` and `preview_token` must be set.")
 
-    queryset = get_queryset(info.context)
-    if queryset.filter(id=page.id).exists():
-        return page.specific
+    if preview_token:
+        page_preview = PagePreview.objects.get(token=preview_token)
+        return page_preview.as_page()
+    else:
+        path_components = [component for component in path.split('/') if component]
+
+        try:
+            page, _, _ = info.context.site.root_page.specific.route(info.context, path_components)
+        except Http404:
+            return
+
+        queryset = get_queryset(info.context)
+        if queryset.filter(id=page.id).exists():
+            return page.specific
 
 
 WagtailPage = InterfaceType("WagtailPage")

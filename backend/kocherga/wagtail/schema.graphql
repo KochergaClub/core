@@ -1,5 +1,5 @@
 extend type Query {
-  wagtailPage(path: String!): WagtailPage
+  wagtailPage(path: String, preview_token: String): WagtailPage
 }
 
 interface WagtailPage {

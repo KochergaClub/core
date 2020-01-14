@@ -1,11 +1,8 @@
 import gql from 'graphql-tag';
 
-import { withApollo } from '~/apollo/client';
-import { NextApolloPage, KochergaApolloClient } from '~/apollo/types';
+import { KochergaApolloClient } from '~/apollo/types';
 
 import { APIError } from '~/common/api';
-
-import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
 // TODO - async load or other trick to reduce the bundle size for wagtail pages
 import * as RatioPages from '~/ratio/wagtail';
@@ -13,14 +10,20 @@ import * as BlogPages from '~/blog/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
 import * as FAQPages from '~/faq/wagtail';
 
-import { NextWagtailPage } from '../types';
+import FreeFormPage from '../../wagtail/FreeFormPage';
+
+import { NextWagtailPage } from '../../types';
 
 import {
   WagtailPageTypeQuery,
   WagtailPageTypeDocument,
-} from '../queries.generated';
+} from './queries.generated';
 
-function typename2component(typename: string): NextWagtailPage<any> | null {
+export type PageLocator = { path: string } | { preview_token: string };
+
+export const getComponentByTypename = (
+  typename: string
+): NextWagtailPage<any> | null => {
   switch (typename) {
     case 'FreeFormPage':
       return FreeFormPage;
@@ -47,32 +50,22 @@ function typename2component(typename: string): NextWagtailPage<any> | null {
     default:
       return null;
   }
-}
-
-interface ProxyProps {
-  typename: string;
-  path: string;
-  page: any;
-}
-
-const ProxyWagtailPage: NextApolloPage<ProxyProps> = ({ typename, page }) => {
-  const Component = typename2component(typename);
-
-  if (!Component) {
-    return <div>oops</div>;
-  }
-
-  return <Component page={page} />;
 };
 
-const path2typename = async (
-  path: string,
-  apolloClient: KochergaApolloClient
-) => {
-  const { data, errors } = await apolloClient.query<WagtailPageTypeQuery>({
-    query: WagtailPageTypeDocument,
-    variables: { path },
-  });
+interface LoadTypenameProps {
+  apolloClient: KochergaApolloClient;
+  locator: PageLocator;
+}
+
+export const loadTypename = async (
+  props: LoadTypenameProps
+): Promise<string> => {
+  const { data, errors } = await props.apolloClient.query<WagtailPageTypeQuery>(
+    {
+      query: WagtailPageTypeDocument,
+      variables: props.locator,
+    }
+  );
 
   if (errors) {
     throw new APIError('GraphQL error', 500);
@@ -91,49 +84,44 @@ const path2typename = async (
   return wagtailPage.__typename;
 };
 
-ProxyWagtailPage.getInitialProps = async context => {
-  const { apolloClient } = context;
+interface LoadPageProps {
+  apolloClient: KochergaApolloClient;
+  component: NextWagtailPage<any>;
+  typename: string;
+  locator: PageLocator;
+}
 
-  if (!context.asPath) {
-    throw new Error('asPath is empty');
-  }
-
-  const path = context.asPath.split('?')[0];
-
-  const typename = await path2typename(path, apolloClient);
-  const component = typename2component(typename);
-
-  if (!component) {
-    throw new APIError('Unknown typename', 500);
-  }
-
-  // we assume that specific wagtail page component defines the fragment with name identical to GraphQL type.
+export const loadPageForComponent = async (
+  props: LoadPageProps
+): Promise<any> => {
+  // We assume that specific wagtail page component defines the fragment with name identical to GraphQL type.
   // For example, if ProjectIndexPage should define `fragment ProjectIndexPage on ProjectIndexPage` in its queries.graphql file.
+  // (FIXME - actualy, I believe we don't need that assumption anymore, though it's still a good convention)
 
-  const fragmentDoc = component.fragment;
+  const fragmentDoc = props.component.fragment;
   const fragmentName = fragmentDoc.definitions[0].name.value;
   const objectName = fragmentDoc.definitions[0].typeCondition.name.value;
 
-  if (objectName !== typename) {
+  if (objectName !== props.typename) {
     throw new APIError(
-      `Invalid fragment - typename is ${objectName}, should be ${typename}`,
+      `Invalid fragment - typename is ${objectName}, should be ${props.typename}`,
       500
     );
   }
 
   // TODO - global cache for typename -> query?
   const query = gql`
-query Get${fragmentName}($path: String!) {
-  wagtailPage(path: $path) {
+query Get${fragmentName}($path: String, $preview_token: String) {
+  wagtailPage(path: $path, preview_token: $preview_token) {
     ...${fragmentName}
   }
 }
 ${fragmentDoc}
   `;
 
-  const { data, errors } = await apolloClient.query({
+  const { data, errors } = await props.apolloClient.query({
     query,
-    variables: { path },
+    variables: props.locator,
     fetchPolicy: 'network-only',
   });
 
@@ -150,7 +138,5 @@ ${fragmentDoc}
     );
   }
 
-  return { typename, path, page };
+  return page;
 };
-
-export default withApollo(ProxyWagtailPage);

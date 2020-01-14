@@ -963,7 +963,8 @@ export type Query = {
 
 
 export type QueryWagtailPageArgs = {
-  path: Scalars['String']
+  path?: Maybe<Scalars['String']>,
+  preview_token?: Maybe<Scalars['String']>
 };
 
 

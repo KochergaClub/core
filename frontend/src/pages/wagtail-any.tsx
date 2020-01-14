@@ -1,1 +1,1 @@
-export { default } from '~/wagtail/pages/ProxyWagtailPage';
+export { default } from '~/wagtail/pages/AnyWagtailPage';

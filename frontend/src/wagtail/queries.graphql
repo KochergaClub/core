@@ -17,9 +17,3 @@ fragment FreeFormPage on FreeFormPage {
     ...HeroFrontBlock
   }
 }
-
-query WagtailPageType($path: String!) {
-  wagtailPage(path: $path) {
-    __typename
-  }
-}

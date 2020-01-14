@@ -5,7 +5,6 @@ from django.conf import settings
 from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
-from kocherga.wagtail.api import api_router
 
 from wagtail.core import urls as wagtail_urls
 
@@ -31,7 +30,6 @@ urlpatterns = [
     path('', include('kocherga.auth.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
-    path('api/wagtail/', api_router.urls),
 
     path('wagtail/login/', RedirectView.as_view(url='/login', query_string=True)),
     path('wagtail/', include('wagtail.admin.urls')),
