@@ -58,7 +58,11 @@ def resolve_wagtailPage(_, info, path=None, preview_token=None):
 
     if preview_token:
         page_preview = PagePreview.objects.get(token=preview_token)
-        return page_preview.as_page()
+        page = page_preview.as_page()
+        if not page.id:
+            # fake primary key to satisfy GraphQL schema
+            page.id = 0
+        return page
     else:
         path_components = [component for component in path.split('/') if component]
 
