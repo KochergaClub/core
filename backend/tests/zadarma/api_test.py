@@ -1,3 +1,16 @@
+from tests.helpers.graphql import run_query
+
+
 def test_index(admin_client):
-    res = admin_client.get('/api/zadarma/pbx_call')
-    assert res.status_code == 200
+    run_query(
+        admin_client,
+        """
+        {
+            zadarmaPbxCalls(first: 10) {
+                nodes {
+                    pbx_call_id
+                }
+            }
+        }
+        """
+    )

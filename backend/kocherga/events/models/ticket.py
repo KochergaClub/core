@@ -16,6 +16,7 @@ from asgiref.sync import async_to_sync
 
 import kocherga.dateutils
 from kocherga.dateutils import TZ
+from kocherga.django.managers import RelayQuerySetMixin
 
 
 # FIXME - copy-pasted from kocherga.events.signals, extract into common module
@@ -24,7 +25,14 @@ def channel_send(channel: str, message):
     async_to_sync(channel_layer.send)(channel, message)
 
 
+class TicketQuerySet(RelayQuerySetMixin, models.QuerySet):
+    pass
+
+
 class TicketManager(models.Manager):
+    def get_queryset(self):
+        return TicketQuerySet(self.model, using=self._db)
+
     def register(self, user, event, subscribed_to_newsletter=False) -> 'Ticket':
         (ticket, _) = self.update_or_create(
             user=user,

@@ -1,3 +1,6 @@
+from tests.helpers.graphql import run_query
+
+
 def test_html(client):
     res = client.get(
         '/api/templater/mailchimp/html?start_date=2017-03-01&end_date=2017-03-08',
@@ -7,7 +10,14 @@ def test_html(client):
 
 
 def test_list(admin_client):
-    res = admin_client.get('/api/templater')
-    assert res.status_code == 200
-    data = res.json()
-    assert type(data) == list
+    res = run_query(
+        admin_client,
+        """
+        {
+            imageTemplatesAll {
+                name
+            }
+        }
+        """
+    )
+    assert type(res['imageTemplatesAll']) == list

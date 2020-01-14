@@ -6,7 +6,7 @@ class TestTeam:
         members = kocherga.staff.tools.members()
         assert type(members) == list
 
-        assert members[0].short_name == 'Элиезер'
+        assert 'Элиезер' in [m.short_name for m in members]
         assert len(members) >= 2
         assert len([m for m in members if m.is_current]) == len(members)
 
@@ -14,7 +14,7 @@ class TestTeam:
         members = kocherga.staff.tools.members(include_former=True)
         assert type(members) == list
 
-        assert members[0].short_name == 'Элиезер'
+        assert 'Элиезер' in [m.short_name for m in members]
         assert len(members) >= 3
         assert len([m for m in members if m.is_current]) != len(members)
 

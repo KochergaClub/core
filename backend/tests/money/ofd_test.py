@@ -9,6 +9,7 @@ import kocherga.money.ofd.api
 import kocherga.money.ofd.importer
 
 
+@pytest.mark.skip(reason="OFD API is down temporarily")
 def test_documents():
     documents = kocherga.money.ofd.api.ofd.documents(datetime.date(2019, 3, 1))
     assert len(documents) > 3

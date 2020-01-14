@@ -1,5 +1,7 @@
 extend type Query {
   events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+  event(event_id: ID!): EventsEvent @staffonly
+
   publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
   publicEvent(event_id: ID!): EventsPublicEvent!
 }
@@ -18,6 +20,14 @@ type EventsEvent {
   event_id: ID!  # uuid field, renamed for client
   title: String!
   start: String!
+
+  # all EventsEvent are staff-only, but this can change in the future
+  tickets: [EventsTicket!]! @staffonly
+}
+
+type EventsTicket {
+  id: ID!
+  status: String!
 }
 
 type EventsPublicEventConnection {
@@ -59,7 +69,7 @@ type EventsTimepadAnnouncement {
 }
 
 extend type My {
-  tickets: [MyEventsTicket!]! @auth(authenticated: true)
+  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection @auth(authenticated: true)
 }
 
 type MyEventsTicket {
@@ -67,6 +77,24 @@ type MyEventsTicket {
   created: String
 }
 
+type MyEventsTicketEdge {
+  node: MyEventsTicket!
+}
+
+type MyEventsTicketConnection {
+  pageInfo: PageInfo!
+  edges: [MyEventsTicketEdge!]!
+  nodes: [MyEventsTicket!]!
+}
+
 extend type Mutation {
-  myTicketDelete(event_id: ID!): Boolean @auth(authenticated: true)
+  myEventsTicketUnregister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
+  myEventsTicketRegister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
+  myEventsTicketRegisterAnon(input: MyEventsTicketRegisterAnonInput!): MyEventsTicket!
+}
+
+input MyEventsTicketRegisterAnonInput {
+  event_id: ID!
+  email: String!
+  subscribed_to_newsletter: Boolean
 }

@@ -5,10 +5,12 @@ from tests.helpers.graphql import run_query, QueryException
 MY_TICKETS_QUERY = """
 {
   my {
-    tickets {
-      event {
-        event_id
-        start
+    tickets(first: 20) {
+      nodes {
+        event {
+          event_id
+          start
+        }
       }
     }
   }

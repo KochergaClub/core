@@ -4,7 +4,7 @@ extend type Query {
     currentRole: Boolean
   ): [WatchmenWatchman!]! @staffonly
   watchmenGradesAll: [WatchmenGrade!]! @staffonly
-  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]! @staffonly
+  watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]! @staffonly
 }
 
 extend type Mutation {

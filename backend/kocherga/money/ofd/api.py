@@ -25,6 +25,7 @@ class OfdYaKkt:
             json=params,
         )
         r.raise_for_status()
+        print(r.json())
         return r.json()
 
     def documents(self, d: date) -> List[OfdDocument]:

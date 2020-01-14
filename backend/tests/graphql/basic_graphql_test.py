@@ -1,7 +1,7 @@
 from tests.helpers.graphql import run_query
 
 
-def test_rooms():
-    data = run_query("{ rooms { name } }")
+def test_rooms(client):
+    data = run_query(client, "{ rooms { name } }")
 
-    assert len(data['rooms']) > 3
+    assert len(data['rooms']) == 4
