@@ -40,7 +40,7 @@ def myEventsTicketRegisterAnon(_, info, input):
 
     event = models.Event.objects.public_events().get(uuid=event_id)
     ticket = models.Ticket.objects.register(
-        user=info.context.user,
+        user=user,
         event=event,
         subscribed_to_newsletter=subscribed_to_newsletter,
     )

@@ -87,7 +87,12 @@ def create_participant_mutations():
         model=models.Participant,
     )
 
-    ParticipantMutation.create_simple_method_field('ActivateVoting', 'tinder_activate', result_format='wrapped_obj', result_key='participant')
+    ParticipantMutation.create_simple_method_field(
+        'ActivateVoting',
+        'tinder_activate',
+        result_format='wrapped_obj',
+        result_key='participant'
+    )
 
     @ParticipantMutation.object_field('SetPresenceStatus')
     def resolve_SetPresenseStatus(_, info, participant, present):

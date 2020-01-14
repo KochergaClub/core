@@ -1,5 +1,3 @@
-from ariadne import QueryType
-
 from .query import Query
 from .mutation import Mutation
 from .types import types
