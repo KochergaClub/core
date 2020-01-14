@@ -339,6 +339,7 @@ export type EventsEventEdge = {
 export type EventsListBlock = WagtailBlock & {
    __typename?: 'EventsListBlock',
   id: Scalars['ID'],
+  events: Array<EventsPublicEvent>,
 };
 
 export type EventsPublicEvent = {

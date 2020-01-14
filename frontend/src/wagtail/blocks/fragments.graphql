@@ -39,6 +39,9 @@ fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
 
 fragment EventsListBlock on EventsListBlock {
   id
+  events {
+    ...EventsPublicEvent_Summary
+  }
 }
 
 fragment BigContactsBlock on BigContactsBlock {

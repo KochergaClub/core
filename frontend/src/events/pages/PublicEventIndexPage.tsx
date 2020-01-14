@@ -4,7 +4,7 @@ import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
 
 import TL03 from '~/blocks/TL03';
-import EventsListBlock from '~/events/components/EventsListBlock';
+import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { Page } from '~/components';
 
 const PublicEventIndexPage: NextPage = () => {
@@ -19,7 +19,7 @@ const PublicEventIndexPage: NextPage = () => {
         просто посиделки, звоните +7(499)350-20-42 или воспользуйтесь{' '}
         <A href="https://booking.kocherga.club">формой брони</A>.
       </TL03>
-      <EventsListBlock />
+      <UpcomingEventsListBlock />
     </Page>
   );
 };

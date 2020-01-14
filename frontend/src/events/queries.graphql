@@ -6,8 +6,8 @@ fragment EventsPublicEvent_Summary on EventsPublicEvent {
   start
 }
 
-query UpcomingPublicEvents($today: String!, $project_id: ID) {
-  publicEvents(from_date: $today, project_id: $project_id, first: 20) {
+query UpcomingPublicEvents($today: String!) {
+  publicEvents(from_date: $today, first: 20) {
     pageInfo {
       hasNextPage
     }

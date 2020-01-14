@@ -61,7 +61,7 @@ type ColumnsButtonsBlockColumn {
 
 type EventsListBlock implements WagtailBlock {
   id: ID!
-  # TODO - events node
+  events: [EventsPublicEvent!]!
 }
 
 type BigContactsBlock implements WagtailBlock {

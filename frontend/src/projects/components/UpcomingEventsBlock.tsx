@@ -14,7 +14,7 @@ const UpcomingEventsBlock: React.FC<{ project: ProjectPageFragment }> = ({
   return (
     <section>
       <TL03 title="Ближайшие события" grey />
-      <EventsListBlock project_id={String(project.id)} />
+      <EventsListBlock events={project.upcoming_events} />
     </section>
   );
 };

@@ -1,6 +1,9 @@
 import * as Types from '../../apollo/types.generated';
 
+import { EventsPublicEvent_SummaryFragment } from '../../events/queries.generated';
 import gql from 'graphql-tag';
+import { EventsPublicEvent_SummaryFragmentDoc } from '../../events/queries.generated';
+
 
 export type GreyBlockFragment = (
   { __typename?: 'GreyBlock' }
@@ -47,6 +50,10 @@ export type ColumnsButtonsBlockFragment = (
 export type EventsListBlockFragment = (
   { __typename?: 'EventsListBlock' }
   & Pick<Types.EventsListBlock, 'id'>
+  & { events: Array<(
+    { __typename?: 'EventsPublicEvent' }
+    & EventsPublicEvent_SummaryFragment
+  )> }
 );
 
 export type BigContactsBlockFragment = (
@@ -145,8 +152,11 @@ export const ColumnsButtonsBlockFragmentDoc = gql`
 export const EventsListBlockFragmentDoc = gql`
     fragment EventsListBlock on EventsListBlock {
   id
+  events {
+    ...EventsPublicEvent_Summary
+  }
 }
-    `;
+    ${EventsPublicEvent_SummaryFragmentDoc}`;
 export const BigContactsBlockFragmentDoc = gql`
     fragment BigContactsBlock on BigContactsBlock {
   id

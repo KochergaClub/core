@@ -10,8 +10,7 @@ export type EventsPublicEvent_SummaryFragment = (
 );
 
 export type UpcomingPublicEventsQueryVariables = {
-  today: Types.Scalars['String'],
-  project_id?: Types.Maybe<Types.Scalars['ID']>
+  today: Types.Scalars['String']
 };
 
 
@@ -39,8 +38,8 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
 }
     `;
 export const UpcomingPublicEventsDocument = gql`
-    query UpcomingPublicEvents($today: String!, $project_id: ID) {
-  publicEvents(from_date: $today, project_id: $project_id, first: 20) {
+    query UpcomingPublicEvents($today: String!) {
+  publicEvents(from_date: $today, first: 20) {
     pageInfo {
       hasNextPage
     }
@@ -64,7 +63,6 @@ export const UpcomingPublicEventsDocument = gql`
  * const { data, loading, error } = useUpcomingPublicEventsQuery({
  *   variables: {
  *      today: // value for 'today'
- *      project_id: // value for 'project_id'
  *   },
  * });
  */
