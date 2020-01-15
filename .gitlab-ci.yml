@@ -55,13 +55,14 @@ test-python:
       --rm api
       bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
 
-deploy-stack:
+deploy_production:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://$DEPLOY_HOST:2376
     DOCKER_TLS_VERIFY: 1
     TAG: $CI_COMMIT_REF_NAME
     HOST_IP: $DEPLOY_HOST
+    COMPOSE_FILE: docker/compose.prod.yml
   before_script:
     # prepare remote docker
     - mkdir -p ~/.docker
@@ -70,17 +71,20 @@ deploy-stack:
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
+    # pull new images first (shortens the time between the upgrade and restart)
+    - docker-compose pull
     # migrate and collect static
-    - docker pull $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME
-    - docker pull $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME
-    - docker pull $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
-    - docker-compose -f docker/compose.prod.yml run --rm api ./scripts/upgrade.sh
+    - docker-compose run --rm api ./scripts/upgrade.sh
     # deploy
-    - docker-compose -f docker/compose.prod.yml up -d
+    - docker-compose up -d
+  environment:
+    name: production
+    url: https://kocherga-club.ru
+  when: manual
   only:
     - master
 
-deploy-stack-beta:
+deploy_beta:
   stage: deploy
   variables:
     DOCKER_HOST: tcp://$DEPLOY_HOST:2376
@@ -90,6 +94,8 @@ deploy-stack-beta:
     API_PORT: 5352
     API_ASYNC_PORT: 5351
     RENDER_SERVER_PORT: 5350
+    COMPOSE_FILE: docker/compose.prod.yml
+    COMPOSE_PROJECT_NAME: beta
   before_script:
     # prepare remote docker
     - mkdir -p ~/.docker
@@ -98,13 +104,14 @@ deploy-stack-beta:
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    # migrate and collect static
-    - docker pull $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME
-    - docker pull $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME
-    - docker pull $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
-    # NOTE: we don't upgrade DB for beta branch (yet).
-    # - docker-compose -f docker/compose.prod.yml run --rm api ./scripts/upgrade.sh
+    # pull new images first (shortens the time between the upgrade and restart)
+    - docker-compose pull
+    # NOTE: we don't migrate the DB for beta environment (yet).
+    # - docker-compose run --rm api ./scripts/upgrade.sh
     # deploy
-    - docker-compose -p beta -f docker/compose.prod.yml up -d api api_async render-server
+    - docker-compose up -d api api_async render-server
+  environment:
+    name: beta
+    url: https://beta.kocherga-club.ru
   only:
-    - beta
+    - master
