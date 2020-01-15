@@ -79,3 +79,32 @@ deploy-stack:
     - docker-compose -f docker/compose.prod.yml up -d
   only:
     - master
+
+deploy-stack-beta:
+  stage: deploy
+  variables:
+    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
+    DOCKER_TLS_VERIFY: 1
+    TAG: $CI_COMMIT_REF_NAME
+    HOST_IP: $DEPLOY_HOST
+    API_PORT: 5352
+    API_ASYNC_PORT: 5351
+    RENDER_SERVER_PORT: 5350
+  script:
+    # prepare docker
+    - mkdir -p ~/.docker
+    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
+    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
+    - echo "$DOCKER_KEY" > ~/.docker/key.pem
+    # one more login, since we changed the docker endpoint
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    # migrate and collect static
+    - docker pull $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME
+    - docker pull $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME
+    - docker pull $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
+    # NOTE: we don't upgrade DB for beta branch (yet).
+    # - docker-compose -f docker/compose.prod.yml run --rm api ./scripts/upgrade.sh
+    # deploy
+    - docker-compose -p beta -f docker/compose.prod.yml up -d api api_async render-server
+  only:
+    - beta
