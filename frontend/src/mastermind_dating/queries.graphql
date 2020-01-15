@@ -1,0 +1,160 @@
+fragment MastermindDatingCohortSummary on MastermindDatingCohort {
+  id
+  event {
+    start
+  }
+}
+
+fragment MastermindDatingParticipantSummary on MastermindDatingParticipant {
+  id
+  name
+}
+
+fragment MastermindDatingParticipant on MastermindDatingParticipant {
+  id
+  name
+  invite_email_sent
+  voted_for
+  photo
+  present
+  desc
+  user {
+    email
+  }
+}
+
+fragment MastermindDatingGroup on MastermindDatingGroup {
+  id
+  telegram_invite_link
+  participants {
+    ...MastermindDatingParticipantSummary
+  }
+}
+
+fragment MastermindDatingCohortDetails on MastermindDatingCohort {
+  id
+  leader_telegram_uid
+  event {
+    event_id
+    start
+    title
+  }
+  participants {
+    ...MastermindDatingParticipant
+  }
+  groups {
+    ...MastermindDatingGroup
+  }
+}
+
+fragment MastermindDatingEvent on EventsEvent {
+  event_id
+  title
+  start
+}
+
+query MastermindDatingCohorts {
+  cohorts: mastermindDatingCohorts {
+    ...MastermindDatingCohortSummary
+  }
+}
+
+query MastermindDatingCohortById($id: ID!) {
+  cohort: mastermindDatingCohortById(id: $id) {
+    ...MastermindDatingCohortDetails
+  }
+}
+
+query MastermindDatingSearchEvents($search: String!) {
+  events(search: $search) {
+    nodes {
+      ...MastermindDatingEvent
+    }
+  }
+}
+
+mutation MastermindDatingCreateCohort {
+  mastermindDatingCreateCohort {
+    cohort {
+      ...MastermindDatingCohortSummary
+    }
+  }
+}
+
+mutation MastermindDatingPopulateCohortFromEvent($cohort_id: ID!) {
+  mastermindDatingPopulateCohortFromEvent(cohort_id: $cohort_id) {
+    cohort {
+      ...MastermindDatingCohortDetails
+    }
+  }
+}
+
+mutation MastermindDatingDeleteCohort($cohort_id: ID!) {
+  mastermindDatingDeleteCohort(cohort_id: $cohort_id) {
+    ok
+  }
+}
+
+mutation MastermindDatingSendInviteEmails($cohort_id: ID!) {
+  mastermindDatingSendInviteEmails(cohort_id: $cohort_id) {
+    cohort {
+      ...MastermindDatingCohortDetails
+    }
+  }
+}
+
+mutation MastermindDatingRunSolver($cohort_id: ID!) {
+  mastermindDatingRunSolver(cohort_id: $cohort_id) {
+    cohort {
+      ...MastermindDatingCohortDetails
+    }
+  }
+}
+
+mutation MastermindDatingSetEventForCohort($cohort_id: ID!, $event_id: String!) {
+  mastermindDatingSetEventForCohort(cohort_id: $cohort_id, event_id: $event_id) {
+    cohort {
+      ...MastermindDatingCohortDetails
+    }
+  }
+}
+
+mutation MastermindDatingUnsetEventForCohort($cohort_id: ID!) {
+  mastermindDatingUnsetEventForCohort(cohort_id: $cohort_id) {
+    cohort {
+      ...MastermindDatingCohortDetails
+    }
+  }
+}
+
+mutation MastermindDatingActivateVoting($participant_id: ID!) {
+  mastermindDatingActivateVoting(participant_id: $participant_id) {
+    participant {
+      ...MastermindDatingParticipant
+    }
+  }
+}
+
+mutation MastermindDatingSetPresenceStatus($participant_id: ID!, $present: Boolean!) {
+  mastermindDatingSetPresenceStatus(participant_id: $participant_id, present: $present) {
+    participant {
+      ...MastermindDatingParticipant
+    }
+  }
+}
+
+mutation MastermindDatingCreateGroup($cohort_id: ID!) {
+  mastermindDatingCreateGroup(cohort_id: $cohort_id) {
+    cohort {
+      ...MastermindDatingCohortDetails
+    }
+  }
+}
+
+mutation MastermindDatingCreateParticipant($cohort_id: ID!, $email: String!) {
+  mastermindDatingCreateParticipant(cohort_id: $cohort_id, email: $email) {
+    participant {
+      ...MastermindDatingParticipant
+    }
+  }
+}

@@ -17,9 +17,10 @@ const ClosedOrdersScreen: React.FC = () => {
       <ApolloQueryResults {...queryResults}>
         {({
           data: {
-            cm2Orders: { nodes: orders },
+            cm2Orders: { edges },
           },
         }) => {
+          const orders = edges.map(edge => edge.node);
           return (
             <Collection
               items={orders}

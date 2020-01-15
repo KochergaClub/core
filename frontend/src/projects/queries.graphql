@@ -1,0 +1,38 @@
+fragment ProjectPage_summary on ProjectPage {
+  id
+  meta {
+    slug
+  }
+  title
+  summary
+  activity_summary
+  is_active
+  image(spec: "fill-500x300") {
+    url
+    width
+    height
+  }
+}
+
+fragment ProjectIndexPage on ProjectIndexPage {
+  id
+  title
+  projects {
+    ...ProjectPage_summary
+  }
+}
+
+fragment ProjectPage on ProjectPage {
+  id
+  title
+  summary
+  body
+  is_active
+  activity_summary
+  image(spec: "fill-1080x400") {
+    url
+  }
+  upcoming_events {
+    ...EventsPublicEvent_Summary
+  }
+}

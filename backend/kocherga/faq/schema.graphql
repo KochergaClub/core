@@ -1,0 +1,17 @@
+type FaqPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  summary: String!
+  prev_page: FaqPage
+  next_page: FaqPage
+  entries: [FaqEntry!]!
+  subpages: [FaqPage!]!
+}
+
+type FaqEntry {
+  id: ID!
+  question: String!
+  answer: String!
+}

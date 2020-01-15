@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
+import time
 import re
 import requests
 
@@ -107,3 +108,39 @@ def now_stats():
         "total": total,
         "customers": customers,
     }
+
+
+stats_cached_ts = None
+stats_cached = None
+CACHE_PERIOD = 5
+
+
+def now_stats_cached():
+    global stats_cached
+    global stats_cached_ts
+
+    now_ts = time.time()
+    if stats_cached_ts and now_ts - stats_cached_ts < CACHE_PERIOD:
+        logger.debug("return now stats from cache")
+        return stats_cached
+
+    stats = now_stats()
+
+    result = {
+        "total": stats["total"],
+        "customers": [
+            {
+                "first_name": c.first_name,
+                "last_name": c.last_name,
+                "card_id": c.card_id,
+            }
+            for c in stats["customers"]
+            if c.privacy_mode == "public"
+        ]
+    }
+
+    stats_cached = result
+    stats_cached_ts = now_ts
+    logger.debug("updated now stats")
+
+    return stats_cached

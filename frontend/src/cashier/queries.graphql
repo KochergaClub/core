@@ -15,14 +15,18 @@ fragment Payment on CashierPayment {
   redeem_dt
 }
 
-query CashierPayments {
-  payments: cashierPayments {
+query CashierPayments($before: String, $after: String, $first: Int, $last: Int) {
+  payments: cashierPayments(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       hasNextPage
-      pageNumber
+      hasPreviousPage
+      startCursor
+      endCursor
     }
-    nodes {
-      ...Payment
+    edges {
+      node {
+        ...Payment
+      }
     }
   }
 }

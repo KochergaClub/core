@@ -2,16 +2,11 @@ import { differenceInCalendarDays } from 'date-fns';
 
 import { RichText } from '@kocherga/frontkit';
 
-import { ProjectPageType } from '~/projects/utils';
-
 import AlertCard from '~/components/AlertCard';
 
-import { PublicEvent } from '~/events/types';
+import { ProjectPage_SummaryForEventFragment } from './queries.generated';
 
-interface Props {
-  event: PublicEvent;
-  project: ProjectPageType;
-}
+import { CommonProps } from './types';
 
 const Wrapper: React.FC = ({ children }) => (
   <AlertCard>
@@ -23,16 +18,20 @@ const Wrapper: React.FC = ({ children }) => (
   </AlertCard>
 );
 
-const ProjectLink: React.FC<{ project: ProjectPageType }> = ({ project }) => (
+const ProjectLink: React.FC<{
+  project: ProjectPage_SummaryForEventFragment;
+}> = ({ project }) => (
   <a href={`/projects/${project.meta.slug}`}>{project.title}</a>
 );
 
-const ProjectInfo: React.FC<Props> = ({ event, project }) => {
-  const daysUntil = differenceInCalendarDays(event.start, new Date());
+const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
+  const daysUntil = differenceInCalendarDays(new Date(event.start), new Date());
 
   if (daysUntil >= 0) {
     return null; // TODO - show project info even for future events
   }
+
+  const { project } = event;
 
   if (!project) {
     return (

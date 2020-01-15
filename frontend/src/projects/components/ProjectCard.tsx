@@ -1,9 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
-import { ProjectPageType } from '../utils';
 import { Label } from '@kocherga/frontkit';
+
+import { ProjectPage_SummaryFragment } from '../queries.generated';
 
 const ProjectA = styled.a`
   text-decoration: none;
@@ -51,12 +50,12 @@ const ActivitySummary = styled(Label)`
   cursor: inherit; // Label overrides cursor, but ActivitySummary is wrapped in Link so we'd prefer to inherit "pointer"
 `;
 
-const ProjectCard = (props: ProjectPageType) => {
-  // TODO - use <Link> for client-side navigation, but wagtail API is not available on the client-side yet
+const ProjectCard = (props: ProjectPage_SummaryFragment) => {
+  // TODO - use <Link> for client-side navigation
   return (
     <ProjectA href={`/projects/${props.meta.slug}`}>
       <Card>
-        <Image src={props.image_thumbnail.url} />
+        <Image src={props.image.url} />
         <Inner>
           <Header>{props.title}</Header>
           {props.activity_summary && props.is_active && (

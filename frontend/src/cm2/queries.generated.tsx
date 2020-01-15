@@ -1,8 +1,11 @@
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
+import { PageInfoFragment } from '../apollo/queries.generated';
 import gql from 'graphql-tag';
+import { PageInfoFragmentDoc } from '../apollo/queries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
+
 
 export type CustomerFragment = (
   { __typename?: 'Cm2Customer' }
@@ -20,7 +23,10 @@ export type OrderWithCustomerFragment = (
 
 export type Cm2OrdersQueryVariables = {
   status?: Types.Maybe<Types.Scalars['String']>,
-  page?: Types.Maybe<Types.Scalars['Int']>
+  after?: Types.Maybe<Types.Scalars['String']>,
+  before?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -30,10 +36,13 @@ export type Cm2OrdersQuery = (
     { __typename?: 'Cm2OrderConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<Types.PageInfo, 'hasNextPage' | 'pageNumber'>
-    ), nodes: Array<(
-      { __typename?: 'Cm2Order' }
-      & OrderWithCustomerFragment
+      & PageInfoFragment
+    ), edges: Array<(
+      { __typename?: 'Cm2OrderEdge' }
+      & { node: (
+        { __typename?: 'Cm2Order' }
+        & OrderWithCustomerFragment
+      ) }
     )> }
   ) }
 );
@@ -76,15 +85,21 @@ export type Cm2SearchCustomersQuery = (
   { __typename?: 'Query' }
   & { cm2Customers: (
     { __typename?: 'Cm2CustomerConnection' }
-    & { nodes: Array<(
-      { __typename?: 'Cm2Customer' }
-      & CustomerFragment
+    & { edges: Array<(
+      { __typename?: 'Cm2CustomerEdge' }
+      & { node: (
+        { __typename?: 'Cm2Customer' }
+        & CustomerFragment
+      ) }
     )> }
   ) }
 );
 
 export type Cm2CustomersQueryVariables = {
-  page?: Types.Maybe<Types.Scalars['Int']>
+  after?: Types.Maybe<Types.Scalars['String']>,
+  before?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -94,10 +109,13 @@ export type Cm2CustomersQuery = (
     { __typename?: 'Cm2CustomerConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<Types.PageInfo, 'hasNextPage' | 'pageNumber'>
-    ), nodes: Array<(
-      { __typename?: 'Cm2Customer' }
-      & CustomerFragment
+      & PageInfoFragment
+    ), edges: Array<(
+      { __typename?: 'Cm2CustomerEdge' }
+      & { node: (
+        { __typename?: 'Cm2Customer' }
+        & CustomerFragment
+      ) }
     )> }
   ) }
 );
@@ -136,9 +154,12 @@ export type Cm2CustomerPageQuery = (
     { __typename?: 'Cm2Customer' }
     & { orders: (
       { __typename?: 'Cm2OrderConnection' }
-      & { nodes: Array<(
-        { __typename?: 'Cm2Order' }
-        & Pick<Types.Cm2Order, 'id' | 'start'>
+      & { edges: Array<(
+        { __typename?: 'Cm2OrderEdge' }
+        & { node: (
+          { __typename?: 'Cm2Order' }
+          & Pick<Types.Cm2Order, 'id' | 'start'>
+        ) }
       )> }
     ) }
     & CustomerFragment
@@ -165,18 +186,20 @@ export const OrderWithCustomerFragmentDoc = gql`
 }
     ${CustomerFragmentDoc}`;
 export const Cm2OrdersDocument = gql`
-    query Cm2Orders($status: String, $page: Int) {
-  cm2Orders(status: $status, page: $page) {
+    query Cm2Orders($status: String, $after: String, $before: String, $first: Int, $last: Int) {
+  cm2Orders(status: $status, after: $after, before: $before, first: $first, last: $last) {
     pageInfo {
-      hasNextPage
-      pageNumber
+      ...PageInfo
     }
-    nodes {
-      ...OrderWithCustomer
+    edges {
+      node {
+        ...OrderWithCustomer
+      }
     }
   }
 }
-    ${OrderWithCustomerFragmentDoc}`;
+    ${PageInfoFragmentDoc}
+${OrderWithCustomerFragmentDoc}`;
 
 /**
  * __useCm2OrdersQuery__
@@ -191,7 +214,10 @@ export const Cm2OrdersDocument = gql`
  * const { data, loading, error } = useCm2OrdersQuery({
  *   variables: {
  *      status: // value for 'status'
- *      page: // value for 'page'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */
@@ -239,7 +265,7 @@ export type Cm2OrderLazyQueryHookResult = ReturnType<typeof useCm2OrderLazyQuery
 export type Cm2OrderQueryResult = ApolloReactCommon.QueryResult<Cm2OrderQuery, Cm2OrderQueryVariables>;
 export const Cm2CreateOrderDocument = gql`
     mutation Cm2CreateOrder($params: Cm2CreateOrderInput!) {
-  cm2CreateOrder(params: $params) {
+  cm2CreateOrder(input: $params) {
     customer {
       id
     }
@@ -274,8 +300,10 @@ export type Cm2CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOption
 export const Cm2SearchCustomersDocument = gql`
     query Cm2SearchCustomers($search: String!) {
   cm2Customers(search: $search, first: 10) {
-    nodes {
-      ...Customer
+    edges {
+      node {
+        ...Customer
+      }
     }
   }
 }
@@ -307,18 +335,20 @@ export type Cm2SearchCustomersQueryHookResult = ReturnType<typeof useCm2SearchCu
 export type Cm2SearchCustomersLazyQueryHookResult = ReturnType<typeof useCm2SearchCustomersLazyQuery>;
 export type Cm2SearchCustomersQueryResult = ApolloReactCommon.QueryResult<Cm2SearchCustomersQuery, Cm2SearchCustomersQueryVariables>;
 export const Cm2CustomersDocument = gql`
-    query Cm2Customers($page: Int) {
-  cm2Customers(page: $page) {
+    query Cm2Customers($after: String, $before: String, $first: Int, $last: Int) {
+  cm2Customers(after: $after, before: $before, first: $first, last: $last) {
     pageInfo {
-      hasNextPage
-      pageNumber
+      ...PageInfo
     }
-    nodes {
-      ...Customer
+    edges {
+      node {
+        ...Customer
+      }
     }
   }
 }
-    ${CustomerFragmentDoc}`;
+    ${PageInfoFragmentDoc}
+${CustomerFragmentDoc}`;
 
 /**
  * __useCm2CustomersQuery__
@@ -332,7 +362,10 @@ export const Cm2CustomersDocument = gql`
  * @example
  * const { data, loading, error } = useCm2CustomersQuery({
  *   variables: {
- *      page: // value for 'page'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */
@@ -347,7 +380,7 @@ export type Cm2CustomersLazyQueryHookResult = ReturnType<typeof useCm2CustomersL
 export type Cm2CustomersQueryResult = ApolloReactCommon.QueryResult<Cm2CustomersQuery, Cm2CustomersQueryVariables>;
 export const Cm2CreateCustomerDocument = gql`
     mutation Cm2CreateCustomer($params: Cm2CreateCustomerInput!) {
-  cm2CreateCustomer(params: $params) {
+  cm2CreateCustomer(input: $params) {
     id
   }
 }
@@ -411,10 +444,12 @@ export const Cm2CustomerPageDocument = gql`
     query Cm2CustomerPage($id: ID!) {
   cm2Customer(id: $id) {
     ...Customer
-    orders {
-      nodes {
-        id
-        start
+    orders(first: 20) {
+      edges {
+        node {
+          id
+          start
+        }
       }
     }
   }

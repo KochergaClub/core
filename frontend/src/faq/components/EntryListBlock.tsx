@@ -4,10 +4,10 @@ import { RichText } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { Entry } from '../types';
+import { FaqEntryFragment } from '../fragments.generated';
 
 interface Props {
-  entries: Entry[];
+  entries: FaqEntryFragment[];
 }
 
 const Header = styled.header`
@@ -20,7 +20,7 @@ const DivWithFixedMargins = styled.div`
   }
 `;
 
-const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => (
+const EntryCard: React.FC<{ entry: FaqEntryFragment }> = ({ entry }) => (
   <DivWithFixedMargins id={`entry${entry.id}`}>
     <Header>{entry.question}</Header>
     <RichText dangerouslySetInnerHTML={{ __html: entry.answer }} />

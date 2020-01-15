@@ -2,7 +2,6 @@ from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from django.db import models
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
-from wagtail.api import APIField
 
 from ..blocks import section_blocks
 
@@ -12,6 +11,8 @@ from kocherga.wagtail.mixins import HeadlessPreviewMixin
 class SectionIndexPage(HeadlessPreviewMixin, Page):
     # parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.SectionPage']
+
+    graphql_type = 'RatioSectionIndexPage'
 
 
 class SectionPage(HeadlessPreviewMixin, Page):
@@ -29,9 +30,7 @@ class SectionPage(HeadlessPreviewMixin, Page):
         StreamFieldPanel('body'),
     ]
 
-    api_fields = [
-        APIField('body'),
-    ]
+    graphql_type = 'RatioSectionPage'
 
     parent_page_types = ['ratio.SectionIndexPage']
     subpage_types = []

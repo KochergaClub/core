@@ -160,6 +160,19 @@ def common_team(db):
     )
 
 
+@pytest.fixture
+def basic_user(db):
+    User = get_user_model()
+    email = 'somebody@example.com'
+    user = User.objects.create_user(email=email)
+    return user
+
+
+@pytest.fixture
+def staff_user(db):
+    return get_user_model().objects.create_user('staff@example.com', is_staff=True)
+
+
 # Override pytest-django's admin_user fixture, since it's not compatible
 # with our User.objects.create_superuser(email, password).
 @pytest.fixture

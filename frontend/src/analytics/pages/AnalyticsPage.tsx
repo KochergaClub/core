@@ -1,20 +1,19 @@
-import React from 'react';
-
 import { A } from '@kocherga/frontkit';
 
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
-import { selectAPI } from '~/core/selectors';
-import Page from '~/components/Page';
-import ActionButton from '~/components/ActionButton';
+import { Page, ActionButton, ApolloQueryResults } from '~/components';
 
-import { fetchBovStats } from '~/analytics/api';
-import { BOVStatType } from '~/analytics/types';
+import {
+  useAnalyticsBovStatsQuery,
+  AnalyticsBovStatFragment,
+} from '../queries.generated';
 
 interface Props {
-  bov_stats: BOVStatType[];
+  bov_stats: AnalyticsBovStatFragment[];
 }
 
-const BOVStatCard = ({ bovStat }: { bovStat: BOVStatType }) => (
+const BOVStatCard = ({ bovStat }: { bovStat: AnalyticsBovStatFragment }) => (
   <div>
     <h3>{bovStat.date}</h3>
     <p>Всего карт: {bovStat.count}</p>
@@ -22,7 +21,9 @@ const BOVStatCard = ({ bovStat }: { bovStat: BOVStatType }) => (
   </div>
 );
 
-const AnalyticsPage: NextPage<Props> = ({ bov_stats }) => {
+const AnalyticsPage: NextPage<Props> = () => {
+  const queryResults = useAnalyticsBovStatsQuery();
+
   return (
     <Page title="Аналитика Кочерги" team>
       <Page.Title>Аналитика Кочерги</Page.Title>
@@ -39,9 +40,15 @@ const AnalyticsPage: NextPage<Props> = ({ bov_stats }) => {
         </ul>
         <section>
           <h2>Большие открытые встречи</h2>
-          {bov_stats.map((bovStat, i) => (
-            <BOVStatCard key={i} bovStat={bovStat} />
-          ))}
+          <ApolloQueryResults {...queryResults} size="block">
+            {({ data: { bovStats } }) => (
+              <div>
+                {bovStats.map((bovStat, i) => (
+                  <BOVStatCard key={i} bovStat={bovStat} />
+                ))}
+              </div>
+            )}
+          </ApolloQueryResults>
         </section>
         <section>
           <h2>Facebook</h2>
@@ -54,10 +61,4 @@ const AnalyticsPage: NextPage<Props> = ({ bov_stats }) => {
   );
 };
 
-AnalyticsPage.getInitialProps = async ({ store: { getState } }) => {
-  const api = selectAPI(getState());
-  const bov_stats = await fetchBovStats(api);
-  return { bov_stats };
-};
-
-export default AnalyticsPage;
+export default withApollo(AnalyticsPage);

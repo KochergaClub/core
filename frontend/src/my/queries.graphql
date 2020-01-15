@@ -1,4 +1,4 @@
-fragment Membership on MyMembership {
+fragment Membership on MyCmCustomer {
   card_id
   orders_count
   subscription_until
@@ -21,7 +21,7 @@ fragment EmailSubscription on MyEmailSubscription {
   }
 }
 
-fragment MyTicket on MyTicket {
+fragment MyTicket on MyEventsTicket {
   event {
     event_id
     start
@@ -30,8 +30,10 @@ fragment MyTicket on MyTicket {
 }
 
 fragment MyPage on My {
-  email
-  is_staff
+  user {
+    email
+    is_staff
+  }
   membership {
     ...Membership
   }
@@ -71,4 +73,20 @@ mutation MyPrivacyModeSet($mode: String!) {
 
 mutation MyTicketDelete($event_id: ID!) {
   myTicketDelete(event_id: $event_id)
+}
+
+mutation Logout {
+  result: authLogout {
+    ok
+  }
+}
+
+mutation SetPassword($old_password: String, $new_password: String!) {
+  result: authSetPassword(input: {
+      old_password: $old_password
+      new_password: $new_password
+  }) {
+    ok
+    error
+  }
 }

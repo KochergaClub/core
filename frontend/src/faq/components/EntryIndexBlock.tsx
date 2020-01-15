@@ -2,13 +2,13 @@ import { A } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { Entry } from '../types';
+import { FaqEntryFragment } from '../fragments.generated';
 
 interface Props {
-  entries: Entry[];
+  entries: FaqEntryFragment[];
 }
 
-const EntryLink: React.FC<{ entry: Entry }> = ({ entry }) => (
+const EntryLink: React.FC<{ entry: FaqEntryFragment }> = ({ entry }) => (
   <div>
     <A href={`#entry${entry.id}`}>{entry.question}</A>
   </div>

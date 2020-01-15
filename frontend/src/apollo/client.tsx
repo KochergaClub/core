@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
 
 import KochergaApolloCache from './cache';
 import cookie from 'cookie';
@@ -16,9 +17,6 @@ let apolloClient: KochergaApolloClient | null = null;
 const createServerLink = (req: NextApolloPageContext['req']) => {
   // this is important for webpack to remove this code on client
   if (typeof window === 'undefined') {
-    const { SchemaLink } = require('apollo-link-schema');
-    const { KochergaAPI } = require('../../server/apolloSchema/api');
-    const { schema } = require('../../server/apolloSchema');
     const { API_HOST } = require('../../server/constants');
 
     // req can be empty when we do the last styled-components-extracting rendering pass in _document.
@@ -29,23 +27,16 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
     const cookies = cookie.parse(cookieHeader || '');
     const csrfToken = cookies.csrftoken as string;
 
-    const authContext = {
-      csrfToken,
-      cookie: cookieHeader,
-      realHost: req ? req.headers.host : undefined,
-    };
+    const fetch = require('node-fetch').default;
 
-    return new SchemaLink({
-      schema,
-      context() {
-        const kochergaAPI = new KochergaAPI(API_HOST);
-        kochergaAPI.initialize({ context: authContext });
-        return {
-          dataSources: {
-            kochergaAPI,
-          },
-          ...authContext,
-        };
+    return new HttpLink({
+      uri: `http://${API_HOST}/api/graphql`,
+      credentials: 'same-origin',
+      fetch,
+      headers: {
+        'X-CSRFToken': csrfToken,
+        Cookie: cookieHeader,
+        'X-Forwarded-Host': req?.headers?.host,
       },
     });
   } else {
@@ -63,7 +54,7 @@ function createClientLink() {
 
   const { HttpLink } = require('apollo-link-http');
   return new HttpLink({
-    uri: '/graphql',
+    uri: '/api/graphql',
     credentials: 'same-origin',
     headers: {
       'X-CSRFToken': csrfToken,

@@ -1,22 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { A, Button } from '@kocherga/frontkit';
 
 import { useAPI, useUser } from '~/common/hooks';
 
-import { PublicEvent, EventTicket } from '~/events/types';
-
 import { trackEvent } from '~/components/analytics';
+
+import { CommonProps } from './types';
 
 import AnonRegistration from './AnonRegistration';
 
-interface Props {
-  event: PublicEvent;
-  ticket?: EventTicket;
-}
-
-export default function Registration(props: Props) {
-  const { event, ticket } = props;
+export default function Registration(props: CommonProps) {
+  const { event } = props;
 
   const [acting, setActing] = useState(false);
 
@@ -54,12 +49,12 @@ export default function Registration(props: Props) {
     return <AnonRegistration {...props} />;
   }
 
-  if (ticket) {
+  if (event.my_ticket) {
     return (
       <div>
         <div>Вы зарегистрированы.</div>
         <div>
-          <A href="/my/">Посмотреть в личном кабинете</A>
+          <A href="/my">Посмотреть в личном кабинете</A>
         </div>
         <Button loading={acting} disabled={acting} onClick={unregister}>
           Отменить регистрацию

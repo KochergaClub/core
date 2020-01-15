@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
-import { useAPI } from '~/common/hooks';
 
-import Page from '~/components/Page';
+import { Page } from '~/components';
 import AuthContainer from '~/auth/components/AuthContainer';
+
+import { useTokenLoginMutation } from '../queries.generated';
 
 interface Props {
   token: string;
@@ -12,25 +14,25 @@ interface Props {
 }
 
 const MagicLinkPage: NextPage<Props> = props => {
-  const api = useAPI();
+  const [tokenLoginMutation] = useTokenLoginMutation();
 
   useEffect(() => {
     async function login() {
-      try {
-        await api.call('auth/login', 'POST', {
-          credentials: {
-            token: props.token,
-          },
-          result: 'cookie',
-        });
-      } catch (e) {
+      const { data } = await tokenLoginMutation({
+        variables: {
+          token: props.token,
+        },
+      });
+
+      if (!data?.result?.user?.is_authenticated) {
         window.location.href = '/login';
       }
+
       // OK! Login didn't throw an exception -> we're in and have a cookie.
       window.location.href = props.next;
     }
     login();
-  }, [api, props.next, props.token]);
+  }, [tokenLoginMutation, props.next, props.token]);
 
   return (
     <Page title="Магическая ссылка" chrome="none" noAnalytics noVkWidget>
@@ -49,4 +51,4 @@ MagicLinkPage.getInitialProps = async ({ query }) => {
   };
 };
 
-export default MagicLinkPage;
+export default withApollo(MagicLinkPage);

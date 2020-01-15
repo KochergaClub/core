@@ -67,6 +67,7 @@ columns_blocks = [
 ]
 
 
+# deprecased, but called in migrations, so can't be removed
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = wagtail.images.models.Image
@@ -82,6 +83,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         return obj.get_rendition('min-400x320').url
 
 
+# deprecased, but called in migrations, so can't be removed
 class APIImageChooserBlock(ImageChooserBlock):
     def get_api_representation(self, value, context=None):
         return ImageSerializer(context=context).to_representation(value)
@@ -106,7 +108,7 @@ various_blocks = [
         icon='site',
     )),
     ('photo_ribbon', blocks.ListBlock(
-        APIImageChooserBlock(),
+        ImageChooserBlock(),
         group='various',
         label='Лента фоток',
     )),

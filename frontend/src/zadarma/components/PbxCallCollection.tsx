@@ -14,7 +14,12 @@ import {
 } from '../queries.generated';
 
 const PbxCallCollection: React.FC = () => {
-  const queryResults = useZadarmaPbxCallsQuery();
+  const queryResults = useZadarmaPbxCallsQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      first: 20,
+    },
+  });
 
   const renderItem = useCallback(
     (pbxCall: CommonZadarmaPbxCallFragment) => (
@@ -24,7 +29,7 @@ const PbxCallCollection: React.FC = () => {
   );
 
   return (
-    <ApolloQueryResults {...queryResults}>
+    <ApolloQueryResults {...queryResults} size="block">
       {({ data: { pbxCalls } }) => (
         <PagedApolloCollection
           connection={pbxCalls}
@@ -32,9 +37,7 @@ const PbxCallCollection: React.FC = () => {
             plural: 'звонки',
             genitive: 'звонок',
           }}
-          fetchPage={async page => {
-            await queryResults.refetch({ page });
-          }}
+          fetchPage={queryResults.refetch}
           view={props => (
             <CustomCardListView {...props} renderItem={renderItem} />
           )}

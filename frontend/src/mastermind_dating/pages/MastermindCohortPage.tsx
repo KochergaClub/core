@@ -1,74 +1,48 @@
-import React, { useReducer } from 'react';
-
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
-import Page from '~/components/Page';
-import { selectAPI } from '~/core/selectors';
+import { Page, ApolloQueryResults } from '~/components';
 
-import { Cohort, Participant, Group } from '~/mastermind_dating/types';
-import {
-  getCohort,
-  getCohortParticipants,
-  getCohortGroups,
-} from '~/mastermind_dating/api';
+import Controls from '../components/Controls';
+import ParticipantSection from '../components/ParticipantSection';
+import GroupSection from '../components/GroupSection';
 
-import Controls from '~/mastermind_dating/pages/cohort/components/Controls';
-import ParticipantSection from '~/mastermind_dating/pages/cohort/components/ParticipantSection';
-import GroupSection from '~/mastermind_dating/pages/cohort/components/GroupSection';
-
-import {
-  reducer,
-  MastermindContext,
-} from '~/mastermind_dating/pages/cohort/reducer';
+import { useMastermindDatingCohortByIdQuery } from '../queries.generated';
 
 interface Props {
-  cohort: Cohort;
-  participants: Participant[];
-  groups: Group[];
+  cohort_id: string;
 }
 
 const MastermindCohortPage: NextPage<Props> = props => {
-  const [store, dispatch] = useReducer(reducer, {
-    cohort: props.cohort,
-    participants: props.participants,
-    groups: props.groups,
+  const queryResults = useMastermindDatingCohortByIdQuery({
+    variables: {
+      id: props.cohort_id,
+    },
   });
 
   return (
-    <MastermindContext.Provider value={dispatch}>
-      <Page title={`Когорта ${store.cohort.id} | Мастермайнд-дейтинг`} team>
-        <Page.Title>Мастермайнд-дейтинг. Когорта {store.cohort.id}</Page.Title>
-        <Page.Main>
-          <Controls cohort={store.cohort} />
-          <ParticipantSection
-            cohort={store.cohort}
-            participants={store.participants}
-          />
-          <GroupSection
-            cohort={store.cohort}
-            participants={store.participants}
-            groups={store.groups}
-          />
-        </Page.Main>
-      </Page>
-    </MastermindContext.Provider>
+    <Page title={`Когорта ${props.cohort_id} | Мастермайнд-дейтинг`} team>
+      <Page.Title>Мастермайнд-дейтинг. Когорта {props.cohort_id}</Page.Title>
+      <Page.Main>
+        <ApolloQueryResults {...queryResults}>
+          {({ data: { cohort } }) => (
+            <div>
+              <Controls cohort={cohort} />
+              <ParticipantSection cohort={cohort} />
+              <GroupSection cohort={cohort} />
+            </div>
+          )}
+        </ApolloQueryResults>
+      </Page.Main>
+    </Page>
   );
 };
 
-MastermindCohortPage.getInitialProps = async ({
-  store: { getState },
-  query,
-}) => {
-  const api = selectAPI(getState());
-
+MastermindCohortPage.getInitialProps = async ({ query }) => {
   const cohort_id = parseInt(query.id as string, 10);
-  const cohort = await getCohort(api, cohort_id);
-  const participants = await getCohortParticipants(api, cohort_id);
-  const groups = await getCohortGroups(api, cohort_id);
+
   return {
-    cohort,
-    participants,
-    groups,
+    cohort_id: String(cohort_id),
   };
 };
 
-export default MastermindCohortPage;
+export default withApollo(MastermindCohortPage);

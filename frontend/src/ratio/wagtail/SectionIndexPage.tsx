@@ -1,21 +1,22 @@
-import React from 'react';
-
-import Page from '~/components/Page';
+import { Page } from '~/components';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { WagtailPageProps } from '~/wagtail/types';
+import {
+  RatioSectionIndexPageFragment,
+  RatioSectionIndexPageFragmentDoc,
+} from './fragments.generated';
 
-export interface PageType extends WagtailPageProps {
-  meta_type: 'ratio.SectionIndexPage';
-}
-
-const SectionIndexPage: NextWagtailPage<PageType> = ({ wagtailPage }) => {
+const SectionIndexPage: NextWagtailPage<RatioSectionIndexPageFragment> = ({
+  page,
+}) => {
   return (
-    <Page title={wagtailPage.title} team>
+    <Page title={page.title} team>
       <h1>TODO - тут будет список секций</h1>
     </Page>
   );
 };
+
+SectionIndexPage.fragment = RatioSectionIndexPageFragmentDoc;
 
 export default SectionIndexPage;

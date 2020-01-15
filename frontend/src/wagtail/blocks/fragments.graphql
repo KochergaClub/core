@@ -1,0 +1,90 @@
+fragment GreyBlock on GreyBlock {
+  grey_value: value {
+    header
+    text
+  }
+}
+
+fragment BasicLeadBlock on BasicLeadBlock {
+  value
+}
+
+fragment BasicParagraphBlock on BasicParagraphBlock {
+  value
+}
+
+fragment ColumnsBasicBlock on ColumnsBasicBlock {
+  basic_columns: value {
+    header
+    text
+  }
+}
+
+fragment ColumnsMembershipsBlock on ColumnsMembershipsBlock {
+  membership_columns: value {
+    title
+    subtitle
+    price
+    description
+  }
+}
+
+fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
+  button_columns: value {
+    title
+    caption
+    link
+  }
+}
+
+fragment EventsListBlock on EventsListBlock {
+  id
+  events {
+    ...EventsPublicEvent_Summary
+  }
+}
+
+fragment BigContactsBlock on BigContactsBlock {
+  id
+  contacts: value {
+    map {
+      lat
+      lng
+    }
+    address
+    phone
+    email
+    text
+  }
+}
+
+fragment PhotoRibbonBlock on PhotoRibbonBlock {
+  id
+  photos: value(spec: "min-400x320") {
+    url
+  }
+}
+
+fragment MailchimpSubscribeBlock on MailchimpSubscribeBlock {
+  id
+  mailchimp: value {
+    news
+    events
+    trainings
+  }
+}
+
+fragment HeroFrontBlock on HeroFrontBlock {
+  id
+  hero: value {
+    title
+    features {
+      title
+      link
+      items {
+        text
+        link
+      }
+    }
+  }
+}

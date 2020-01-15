@@ -1,0 +1,1047 @@
+
+  directive @staffonly on FIELD_DEFINITION
+  directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
+
+  type Query {
+    rooms: [Room]!
+    my: My!
+  }
+
+  # To be extended by specific backend apps.
+  type My {
+    _: Boolean
+  }
+
+  type Room {
+    name: String
+    max_people: Int
+    area: Int
+  }
+
+  type Mutation {
+    _empty: Boolean
+  }
+
+  type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+  }
+
+
+extend type Query {
+  wagtailPage(path: String, preview_token: String): WagtailPage
+}
+
+interface WagtailPage {
+  id: ID!
+  title: String!
+  meta: WagtailPageMeta!
+}
+
+type WagtailPageMeta {
+  slug: String!
+  html_url: String!
+}
+
+type WagtailImage {
+  url: String!
+  width: Int!
+  height: Int!
+}
+
+interface WagtailBlock {
+  id: ID!
+  # Note that there's no `type` field - there's no point in duplicating it since it can be restored from GraphQL's __typename.
+}
+
+type WagtailGeo {
+  lat: String!
+  lng: String!
+}
+
+extend type Query {
+  authGroupsAll: [AuthGroup!]! @auth(permission: "auth.audit")
+  authPermissionsAll: [AuthPermission!]! @auth(permission: "auth.audit")
+}
+
+type AuthCurrentUser {
+  is_authenticated: Boolean!
+  email: String
+  is_staff: Boolean
+  permissions: [String!]!
+}
+
+type AuthGroup {
+  id: ID!
+  name: String!
+  permissions: [AuthPermission!]!
+  users: [AuthUser!]!
+}
+
+type AuthPermission {
+  id: ID!
+  name: String!
+  users: [AuthUser!]!
+}
+
+type AuthUser {
+  id: ID!
+  email: String!
+  staff_member: StaffMember
+}
+
+extend type My {
+  user: AuthCurrentUser!
+}
+
+extend type Mutation {
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+}
+
+extend type Mutation {
+  authLogin(input: AuthLoginInput!): AuthLoginResult!
+}
+
+input AuthLoginInput {
+  credentials: AuthLoginCredentialsInput!
+  # Must be `cookie`; other results, e.g. `access_token` or `jwt`, might be supported later.
+  result: String!
+}
+
+# Either `token` or `email`+`password` must be set.
+# (GraphQL doesn't support union inputs yet; see https://github.com/graphql/graphql-spec/blob/master/rfcs/InputUnion.md for details.)
+input AuthLoginCredentialsInput {
+  email: String
+  password: String
+  token: String
+}
+
+type AuthLoginResult {
+  error: String
+  user: AuthCurrentUser
+  registered: Boolean
+}
+
+extend type Mutation {
+  authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult! @auth(authenticated: true)
+}
+
+input AuthSetPasswordInput {
+  # required if old password exists
+  old_password: String
+  new_password: String!
+}
+
+# TODO - generalize into "SimpleMutationResult"?
+type AuthSetPasswordResult {
+  error: String
+  ok: Boolean
+}
+
+extend type Mutation {
+  authLogout: AuthLogoutResult! @auth(authenticated: true)
+}
+
+type AuthLogoutResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  authSendMagicLink(input: AuthSendMagicLinkInput!): AuthSendMagicLinkResult!
+}
+
+input AuthSendMagicLinkInput {
+  email: String!
+  next: String
+}
+
+type AuthSendMagicLinkResult {
+  ok: Boolean
+}
+
+extend type Query {
+  zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection! @staffonly
+  zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall! @staffonly
+}
+
+type ZadarmaCall {
+  call_id: String!
+  ts: String!
+  call_type: String!
+  disposition: String!
+  clid: String!
+  destination: String!
+  sip: String!
+  is_recorded: Int!
+  watchman: String!
+  record: String!
+}
+
+type ZadarmaData {
+  staff_member: StaffMember
+}
+
+type ZadarmaPbxCall {
+  pbx_call_id: String!
+  ts: String!
+  data: ZadarmaData
+  calls: [ZadarmaCall!]!
+}
+
+type ZadarmaPbxCallEdge {
+  node: ZadarmaPbxCall!
+}
+
+type ZadarmaPbxCallConnection {
+  pageInfo: PageInfo!
+  nodes: [ZadarmaPbxCall!]!
+  edges: [ZadarmaPbxCallEdge!]!
+}
+
+extend type Mutation {
+  zadarmaSetMemberForPbxCall(member_id: ID!, pbx_call_id: ID!): Boolean @auth(permission: "zadarma.admin")
+}
+
+extend type Query {
+  now: NowInfo!
+}
+
+type NowInfo {
+  total: Int!
+  customers: [NowCustomer!]!
+}
+
+type NowCustomer {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+extend type My {
+  membership: MyCmCustomer @auth(authenticated: true)
+}
+
+type MyCmCustomer {
+  card_id: Int!
+  subscription_until: String
+  last_visit: String
+  total_spent: Int!
+  privacy_mode: String!
+  orders_count: Int!
+  orders: [MyCmOrder!]!
+}
+
+type MyCmOrder {
+  order_id: ID!
+  start_dt: String!
+  end_dt: String
+}
+
+extend type Mutation {
+  myPrivacyModeSet(mode: String!): Boolean @auth(authenticated: true)
+}
+
+extend type Query {
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection! @staffonly
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection! @staffonly
+  cm2Customer(id: ID!): Cm2Customer! @staffonly
+  cm2Order(id: ID!): Cm2Order! @staffonly
+}
+
+type Cm2Customer {
+  id: ID!
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
+}
+
+type Cm2CustomerConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2CustomerEdge!]!
+}
+
+type Cm2CustomerEdge {
+  node: Cm2Customer!
+}
+
+type Cm2Order {
+  id: ID!
+  start: String!
+  end: String
+  customer: Cm2Customer
+  value: Int!
+}
+
+type Cm2OrderConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2OrderEdge!]!
+}
+
+type Cm2OrderEdge {
+  node: Cm2Order!
+}
+
+extend type Mutation {
+  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order! @staffonly
+  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer! @staffonly
+  cm2CloseOrder(id: ID!): Boolean @staffonly
+}
+
+input Cm2CreateCustomerInput {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+input Cm2CreateOrderInput {
+  customer: ID
+}
+
+extend type Query {
+  watchmenWatchmenAll(
+    currentStaff: Boolean,
+    currentRole: Boolean
+  ): [WatchmenWatchman!]! @staffonly
+  watchmenGradesAll: [WatchmenGrade!]! @staffonly
+  watchmenShifts(from_date: String, to_date: String): [WatchmenShift!]! @staffonly
+}
+
+extend type Mutation {
+  watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean @auth(permission: "watchmen.manage")
+  watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift! @auth(permission: "watchmen.manage")
+  watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean @auth(permission: "watchmen.manage")
+  watchmenSetWatchmanGrade(params: WatchmenSetWatchmanGradeInput!): Boolean @auth(permission: "watchmen.manage")
+}
+
+input WatchmenCreateWatchmanInput {
+  email: String!
+  short_name: String!
+  full_name: String!
+  password: String!
+  vk: String
+  gender: String!
+  skip_wiki: Boolean
+  skip_cm_customer: Boolean
+  skip_cm_user: Boolean
+}
+
+type WatchmenGrade {
+  id: ID!
+  code: String!
+  multiplier: Float!
+}
+
+input WatchmenSetWatchmanGradeInput {
+  watchman_id: ID!
+  grade_id: ID!
+}
+
+input WatchmenSetWatchmanPriorityInput {
+  watchman_id: ID!
+  priority: Int!
+}
+
+type WatchmenShift {
+  date: String!
+  shift: String!
+  watchman: WatchmenWatchman
+  is_night: Boolean!
+}
+
+input WatchmenUpdateShiftInput {
+  date: String!
+  shift: String!
+  watchman_id: ID
+  is_night: Boolean
+}
+
+type WatchmenWatchman {
+  id: ID!
+  member: StaffMember!
+  grade: WatchmenGrade
+  priority: Int!
+}
+
+extend type Query {
+  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection! @staffonly
+}
+
+type CashierPayment {
+  id: ID!
+  whom: AuthUser!
+  amount: Int!
+  created_dt: String!
+  redeem_dt: String
+  comment: String!
+  is_redeemed: Boolean!
+}
+
+type CashierPaymentEdge {
+  node: CashierPayment!
+}
+
+type CashierPaymentConnection {
+  pageInfo: PageInfo!
+  nodes: [CashierPayment!]!
+  edges: [CashierPaymentEdge!]!
+}
+
+extend type Mutation {
+  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean @auth(permission: "cashier.create")
+  cashierRedeemPayment(id: ID!): Boolean @auth(permission: "cashier.redeem")
+}
+
+input CashierCreatePaymentInput {
+  amount: Int!
+  whom: ID!
+  comment: String!
+}
+
+# KKM-related methods; TODO - move to kocherga.kkm app
+
+extend type Mutation {
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult! @auth(permission: "cashier.kkm_user")
+}
+
+input KkmRegisterCheckInput {
+  email: String!
+  title: String!
+  sum: Int!
+  sign_method_calculation: Int!
+}
+
+type KkmRegisterCheckResult {
+  status: Int!
+  url: String
+  error: String
+}
+
+extend type Query {
+  analyticsBovStats: [AnalyticsBovStat!]! @staffonly
+}
+
+type AnalyticsBovStat {
+  date: String!
+  count: Int!
+  total_income: Int!
+}
+
+extend type Query {
+  events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvent(event_id: ID!): EventsPublicEvent!
+}
+
+type EventsEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsEventEdge!]!
+  nodes: [EventsEvent!]!
+}
+
+type EventsEventEdge {
+  node: EventsEvent!
+}
+
+type EventsEvent {
+  event_id: ID!  # uuid field, renamed for client
+  title: String!
+  start: String!
+}
+
+type EventsPublicEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsPublicEventEdge!]!
+  nodes: [EventsPublicEvent!]!
+}
+
+type EventsPublicEventEdge {
+  node: EventsPublicEvent!
+}
+
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  end: String!
+
+  title: String!
+  summary: String!
+  description: String!
+  image: String
+
+  registration_type: String!
+  pricing_type: String!
+
+  project: ProjectPage
+  announcements: EventsAnnouncements!
+
+  # note that there's no @auth directive - we don't want any errors if user is not authenticated
+  my_ticket: MyEventsTicket
+}
+
+type EventsAnnouncements {
+  timepad: EventsTimepadAnnouncement
+}
+
+type EventsTimepadAnnouncement {
+  link: String!
+}
+
+extend type My {
+  tickets: [MyEventsTicket!]! @auth(authenticated: true)
+}
+
+type MyEventsTicket {
+  event: EventsPublicEvent!
+  created: String
+}
+
+extend type Mutation {
+  myTicketDelete(event_id: ID!): Boolean @auth(authenticated: true)
+}
+
+extend type Query {
+  staffMembersAll: [StaffMember!]! @staffonly
+  staffMember(id: ID!): StaffMember! @staffonly
+}
+
+extend type Mutation {
+  staffGrantGooglePermissionsToMember(id: ID!): Boolean @auth(permission: "staff.manage")
+  staffFireMember(id: ID!): Boolean @auth(permission: "staff.manage")
+  staffUnfireMember(id: ID!): Boolean @auth(permission: "staff.manage")
+}
+
+type StaffMember {
+  id: ID!
+  short_name: String!
+  full_name: String!
+  role: String!
+  is_current: Boolean!
+  vk: String!
+  color: String!
+  user: AuthUser!
+  slack_user: SlackUser
+}
+
+extend type Query {
+  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
+  ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
+  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String! @auth(permission: "ratio.manage")
+}
+
+type RatioActivity {
+  id: ID!
+  time: String!
+  activity_type: String!
+  name: String!
+  location: String!
+  trainer: RatioTrainer
+}
+
+type RatioTicket {
+  id: ID!
+  training: RatioTraining!
+  email: String!
+  first_name: String!
+  last_name: String
+  registration_date: String
+  status: String!
+  ticket_type: String!
+  payment_type: String!
+  payment_amount: Int!
+  fiscalization_status: String!
+  comment: String!
+}
+
+type RatioTrainer {
+  id: ID!
+  short_name: String!
+  long_name: String!
+}
+
+type RatioTraining {
+  id: ID!
+  name: String!
+  slug: String!
+  date: String!
+  salaries_paid: Boolean!
+  tickets: [RatioTicket!]!
+  total_income: Int!
+  tickets_count: Int!
+  long_name: String!
+  schedule: [RatioTrainingDay!]!
+}
+
+type RatioTrainingEdge {
+  node: RatioTraining!
+}
+
+type RatioTrainingConnection {
+  pageInfo: PageInfo!
+  edges: [RatioTrainingEdge!]!
+  nodes: [RatioTraining!]!
+}
+
+type RatioTrainingDay {
+  id: ID!
+  date: String!
+  activities: [RatioActivity!]!
+}
+
+extend type Mutation {
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining! @auth(permission: "ratio.manage")
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket! @auth(permission: "ratio.manage")
+  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTicketFiscalize(ticket_id: ID!): Boolean @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
+  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
+}
+
+input RatioTrainingAddDayInput {
+  training_slug: String!
+  date: String!
+}
+
+input RatioTrainingCopyScheduleFromInput {
+  from_training_slug: String!
+  to_training_slug: String!
+}
+
+input RatioAddTicketInput {
+  training: ID!
+  email: String!
+  first_name: String!
+  last_name: String
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+  comment: String
+  clientMutationId: String
+}
+
+input RatioAddTrainingInput {
+  name: String!
+  slug: String!
+  date: String!
+}
+
+input RatioTrainingSendEmailInput {
+  training_id: ID!
+  title: String!
+  content: String!
+}
+
+type RatioTrainingSendEmailResult {
+  draft_link: String!
+}
+
+type RatioSectionIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
+type RatioSectionPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  body: [WagtailBlock!]!
+}
+
+type RatioNotebookPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  sections: [RatioNotebookSectionBlock!]!
+}
+
+type RatioNotebookSectionBlock implements WagtailBlock {
+  id: ID!
+  value: RatioSectionPage!
+}
+
+type RatioHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioParagraphBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioInsetBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioExerciseBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseBlockValue!
+}
+
+type RatioExerciseBlockValue {
+  header: String!
+  lines_count: Int!
+  enumerate: Boolean
+}
+
+type RatioExerciseOnelineBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseOnelineBlockValue!
+}
+
+type RatioExerciseOnelineBlockValue {
+  text: String!
+}
+
+type RatioBriefingBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioMathBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+extend type Query {
+  mastermindDatingCohorts: [MastermindDatingCohort!]! @staffonly
+  mastermindDatingCohortById(id: ID!): MastermindDatingCohort! @staffonly
+}
+
+type MastermindDatingCohort {
+  id: ID!
+  leader_telegram_uid: String
+
+  event: EventsEvent
+
+  participants: [MastermindDatingParticipant!]!
+  groups: [MastermindDatingGroup!]!
+}
+
+type MastermindDatingParticipant {
+  id: ID!
+  cohort: MastermindDatingCohort!
+  user: AuthUser!
+  name: String
+  desc: String
+  photo: String
+  voted_for: Boolean!
+  present: Boolean!
+  invite_email_sent: Boolean!
+}
+
+type MastermindDatingGroup {
+  id: ID!
+  telegram_invite_link: String!
+  participants: [MastermindDatingParticipant!]!
+}
+
+extend type Mutation {
+  mastermindDatingCreateCohort: MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingSetEventForCohort(cohort_id: ID!, event_id: String!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingUnsetEventForCohort(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingCreateGroup(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingClearAllGroups(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingRunSolver(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+  mastermindDatingBroadcastSolution(cohort_id: ID!): MastermindDatingCohortMutationResult! @staffonly
+
+  mastermindDatingDeleteCohort(cohort_id: ID!): MastermindDatingTrivialMutationResult! @staffonly
+
+  mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): MastermindDatingParticipantMutationResult! @staffonly
+  mastermindDatingActivateVoting(participant_id: ID!): MastermindDatingParticipantMutationResult! @staffonly
+  mastermindDatingSetPresenceStatus(participant_id: ID!, present: Boolean!): MastermindDatingParticipantMutationResult! @staffonly
+}
+
+type MastermindDatingTrivialMutationResult {
+  ok: Boolean
+}
+
+type MastermindDatingCohortMutationResult {
+  cohort: MastermindDatingCohort!
+}
+
+type MastermindDatingParticipantMutationResult {
+  participant: MastermindDatingParticipant!
+}
+
+type ProjectIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  projects: [ProjectPage!]!
+}
+
+type ProjectPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  summary: String!
+  activity_summary: String
+  body: String!
+  is_active: Boolean!
+  upcoming_events: [EventsPublicEvent!]!
+
+  image(spec: String!): WagtailImage!
+}
+
+type FreeFormPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  body: [WagtailBlock!]!
+}
+
+type GreyBlock implements WagtailBlock {
+  id: ID!
+  value: GreyBlockValue!
+}
+
+type GreyBlockValue {
+  header: String!
+  text: String
+}
+
+type BasicLeadBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type BasicParagraphBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type ColumnsBasicBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsBasicBlockColumn!]!
+}
+
+type ColumnsBasicBlockColumn {
+  header: String!
+  text: String
+}
+
+type ColumnsMembershipsBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsMembershipsBlockColumn!]!
+}
+
+type ColumnsMembershipsBlockColumn {
+  title: String!
+  subtitle: String!
+  price: Int!
+  description: String!
+}
+
+type ColumnsButtonsBlock implements WagtailBlock {
+  id: ID!
+  value: [ColumnsButtonsBlockColumn!]!
+}
+
+type ColumnsButtonsBlockColumn {
+  title: String!
+  caption: String!
+  link: String!
+}
+
+type EventsListBlock implements WagtailBlock {
+  id: ID!
+  events: [EventsPublicEvent!]!
+}
+
+type BigContactsBlock implements WagtailBlock {
+  id: ID!
+  value: BigContactsBlockValue!
+}
+
+type BigContactsBlockValue {
+  map: WagtailGeo!
+  address: String!
+  phone: String!
+  email: String!
+  text: String!
+}
+
+type PhotoRibbonBlock implements WagtailBlock {
+  id: ID!
+  value(spec: String!): [WagtailImage!]!
+}
+
+type MailchimpSubscribeBlock implements WagtailBlock {
+  id: ID!
+  value: MailchimpSubscribeBlockValue!
+}
+
+type MailchimpSubscribeBlockValue {
+  news: Boolean!
+  events: Boolean!
+  trainings: Boolean!
+}
+
+type HeroFrontBlock implements WagtailBlock {
+  id: ID!
+  value: HeroFrontBlockValue!
+}
+
+type HeroFrontBlockValue {
+  title: String!
+  features: [HeroFrontBlockFeature!]!
+}
+
+type HeroFrontBlockFeature {
+  title: String!
+  link: String
+  items: [HeroFrontBlockItem!]!
+}
+
+type HeroFrontBlockItem {
+  text: String!
+  link: String
+}
+
+type BlogPostPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  date: String!
+  authors: [BlogPostAuthor!]!
+  body: String!
+  summary: String!
+}
+
+type BlogIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  subtitle: String!
+  posts: [BlogPostPage!]!
+}
+
+type BlogPostAuthor {
+  name: String!
+  description: String!
+  image(spec: String!): WagtailImage!
+}
+
+extend type Query {
+  emailMailchimpCategoriesAll: [EmailMailchimpCategory!]! @staffonly
+  emailSubscribeChannelsAll: [EmailSubscribeChannel!]! @staffonly
+}
+
+type EmailMailchimpCategory {
+  id: ID!
+  title: String!
+  category_id: String!
+  interests: [EmailMailchimpInterest!]!
+}
+
+type EmailSubscribeChannel {
+  id: ID!
+  slug: String!
+  interests: [EmailMailchimpInterest!]!
+}
+
+type EmailMailchimpInterest {
+  id: ID!
+  interest_id: String!
+  name: String!
+  subscriber_count: Int!
+}
+
+extend type Mutation {
+  emailSubscribeChannelDelete(slug: String!): Boolean @staffonly
+  emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean @staffonly
+  emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean @staffonly
+}
+
+input EmailSubscribeChannelCreateInput {
+  slug: String!
+  interest_ids: [ID!]!
+}
+
+extend type My {
+  email_subscription: MyEmailSubscription! @auth(authenticated: true)
+}
+
+type MyEmailSubscription {
+  status: String!
+  interests: [MyEmailSubscriptionInterest!]
+}
+
+type MyEmailSubscriptionInterest {
+  id: ID!
+  name: String!
+  subscribed: Boolean
+}
+
+extend type Mutation {
+  myEmailResubscribe: Boolean @auth(authenticated: true)
+  myEmailUnsubscribe: Boolean @auth(authenticated: true)
+  myEmailSubscribeToInterest(interest_id: ID!): Boolean @auth(authenticated: true)
+  myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean @auth(authenticated: true)
+}
+
+type SlackUser {
+  slack_id: String!
+  image_url: String!
+}
+
+extend type Query {
+  imageTemplatesAll: [ImageTemplate!]! @staffonly
+  imageTemplateBySlug(slug: String!): ImageTemplate! @staffonly
+}
+
+type ImageTemplate {
+  name: ID!
+  schema: ImageTemplateSchema!
+  sizes: ImageTemplateSizes!
+}
+
+type ImageTemplateSchema {
+  fields: [ImageTemplateSchemaField!]!
+}
+
+type ImageTemplateSchemaField {
+  name: String!
+  value_type: String!
+  default: String
+}
+
+type ImageTemplateSizes {
+  width: Int!
+  height: Int!
+}
+
+type FaqPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+
+  summary: String!
+  prev_page: FaqPage
+  next_page: FaqPage
+  entries: [FaqEntry!]!
+  subpages: [FaqPage!]!
+}
+
+type FaqEntry {
+  id: ID!
+  question: String!
+  answer: String!
+}

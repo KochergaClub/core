@@ -189,6 +189,14 @@ class Member(models.Model):
         self.user.save()
         self.save()
 
+    def unfire(self):
+        if self.is_current:
+            raise Exception("User is already on staff")
+        self.is_current = True
+        self.user.is_staff = True
+        self.user.save()
+        self.save()
+
 
 class AltEmail(models.Model):
     email = models.EmailField()

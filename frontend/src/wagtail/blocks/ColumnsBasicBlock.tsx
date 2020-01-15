@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { fonts, RichText, ColumnsBlock } from '@kocherga/frontkit';
 
-import { ColumnsBasicBlockType as Props } from './types';
+import { ColumnsBasicBlockFragment as Props } from './fragments.generated';
 
 const Header = styled.h2`
   font-size: ${fonts.sizes.L};
@@ -13,7 +11,7 @@ const Header = styled.h2`
 
 const Text = styled(RichText)``;
 
-const OneColumn = (column: Props['value'][0]) => (
+const OneColumn = (column: Props['basic_columns'][0]) => (
   <div>
     <Header>{column.header}</Header>
     {column.text && <Text dangerouslySetInnerHTML={{ __html: column.text }} />}
@@ -23,7 +21,7 @@ const OneColumn = (column: Props['value'][0]) => (
 export default function ColumnsBasicBlock(block: Props) {
   return (
     <ColumnsBlock>
-      {block.value.map((column, i) => (
+      {block.basic_columns.map((column, i) => (
         <OneColumn {...column} key={i} />
       ))}
     </ColumnsBlock>

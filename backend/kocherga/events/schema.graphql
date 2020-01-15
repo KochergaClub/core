@@ -1,0 +1,100 @@
+extend type Query {
+  events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+  event(event_id: ID!): EventsEvent @staffonly
+
+  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvent(event_id: ID!): EventsPublicEvent!
+}
+
+type EventsEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsEventEdge!]!
+  nodes: [EventsEvent!]!
+}
+
+type EventsEventEdge {
+  node: EventsEvent!
+}
+
+type EventsEvent {
+  event_id: ID!  # uuid field, renamed for client
+  title: String!
+  start: String!
+
+  # all EventsEvent are staff-only, but this can change in the future
+  tickets: [EventsTicket!]! @staffonly
+}
+
+type EventsTicket {
+  id: ID!
+  status: String!
+}
+
+type EventsPublicEventConnection {
+  pageInfo: PageInfo!
+  edges: [EventsPublicEventEdge!]!
+  nodes: [EventsPublicEvent!]!
+}
+
+type EventsPublicEventEdge {
+  node: EventsPublicEvent!
+}
+
+type EventsPublicEvent {
+  event_id: ID!
+  start: String!
+  end: String!
+
+  title: String!
+  summary: String!
+  description: String!
+  image: String
+
+  registration_type: String!
+  pricing_type: String!
+
+  project: ProjectPage
+  announcements: EventsAnnouncements!
+
+  # note that there's no @auth directive - we don't want any errors if user is not authenticated
+  my_ticket: MyEventsTicket
+}
+
+type EventsAnnouncements {
+  timepad: EventsTimepadAnnouncement
+}
+
+type EventsTimepadAnnouncement {
+  link: String!
+}
+
+extend type My {
+  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection @auth(authenticated: true)
+}
+
+type MyEventsTicket {
+  event: EventsPublicEvent!
+  created: String
+}
+
+type MyEventsTicketEdge {
+  node: MyEventsTicket!
+}
+
+type MyEventsTicketConnection {
+  pageInfo: PageInfo!
+  edges: [MyEventsTicketEdge!]!
+  nodes: [MyEventsTicket!]!
+}
+
+extend type Mutation {
+  myEventsTicketUnregister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
+  myEventsTicketRegister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
+  myEventsTicketRegisterAnon(input: MyEventsTicketRegisterAnonInput!): MyEventsTicket!
+}
+
+input MyEventsTicketRegisterAnonInput {
+  event_id: ID!
+  email: String!
+  subscribed_to_newsletter: Boolean
+}

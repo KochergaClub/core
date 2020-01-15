@@ -1,8 +1,48 @@
 query CurrentUser {
-  currentUser {
-    is_authenticated
-    is_staff
-    permissions
-    email
+  my {
+    user {
+      is_authenticated
+      is_staff
+      permissions
+      email
+    }
+  }
+}
+
+mutation Login($email: String!, $password: String!) {
+  result: authLogin(input: {
+      credentials: {
+        email: $email
+        password: $password
+      }
+      result: "cookie"
+    }) {
+    error
+    user {
+      is_authenticated
+    }
+  }
+}
+
+mutation TokenLogin($token: String!) {
+  result: authLogin(input: {
+      credentials: {
+        token: $token
+      }
+      result: "cookie"
+    }) {
+    error
+    user {
+      is_authenticated
+    }
+  }
+}
+
+mutation SendMagicLink($email: String!, $next: String) {
+  result: authSendMagicLink(input: {
+      email: $email
+      next: $next
+    }) {
+    ok
   }
 }

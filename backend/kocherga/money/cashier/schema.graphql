@@ -1,0 +1,53 @@
+extend type Query {
+  cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection! @staffonly
+}
+
+type CashierPayment {
+  id: ID!
+  whom: AuthUser!
+  amount: Int!
+  created_dt: String!
+  redeem_dt: String
+  comment: String!
+  is_redeemed: Boolean!
+}
+
+type CashierPaymentEdge {
+  node: CashierPayment!
+}
+
+type CashierPaymentConnection {
+  pageInfo: PageInfo!
+  nodes: [CashierPayment!]!
+  edges: [CashierPaymentEdge!]!
+}
+
+extend type Mutation {
+  cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean @auth(permission: "cashier.create")
+  cashierRedeemPayment(id: ID!): Boolean @auth(permission: "cashier.redeem")
+}
+
+input CashierCreatePaymentInput {
+  amount: Int!
+  whom: ID!
+  comment: String!
+}
+
+# KKM-related methods; TODO - move to kocherga.kkm app
+
+extend type Mutation {
+  kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult! @auth(permission: "cashier.kkm_user")
+}
+
+input KkmRegisterCheckInput {
+  email: String!
+  title: String!
+  sum: Int!
+  sign_method_calculation: Int!
+}
+
+type KkmRegisterCheckResult {
+  status: Int!
+  url: String
+  error: String
+}

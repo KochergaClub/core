@@ -37,13 +37,13 @@ fragment Shift on WatchmenShift {
 }
 
 query WatchmenWatchmenList {
-  watchmen: watchmenWatchmenAll {
+  watchmen: watchmenWatchmenAll(currentStaff: true) {
     ...Watchman
   }
 }
 
 query WatchmenWatchmenListForPicker {
-  watchmen: watchmenWatchmenAll(current: true) {
+  watchmen: watchmenWatchmenAll(currentStaff: true, currentRole: true) {
     ...WatchmanForPicker
   }
 }

@@ -23,7 +23,7 @@ import httpProxy from 'http-proxy';
 
 import { API_HOST, API_ASYNC_HOST } from './constants';
 
-import apolloServer from './apolloServer';
+// import apolloServer from './apolloServer';
 import trailingSlashEndpoint from './trailingSlashEndpoint';
 import tildaEndpoint from './tildaEndpoint';
 import nextjsEntrypoint from './nextjsEntrypoint';
@@ -79,7 +79,7 @@ async function main() {
     });
   });
 
-  apolloServer.applyMiddleware({ app, path: '/graphql' });
+  // apolloServer.applyMiddleware({ app, path: '/graphql' });
 
   app.use(trailingSlashEndpoint);
   app.use(tildaEndpoint);

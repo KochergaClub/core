@@ -21,18 +21,10 @@ urlpatterns += [
     # modern - plural
     path('events/<event_id>', views.events.ObjectView.as_view()),
 
-    path('events/<event_id>/tickets', views.tickets.EventTicketView.as_view()),
-    path('events/<event_id>/my_ticket', views.tickets.MyEventTicketView.as_view()),
-    path('events/<event_id>/my_ticket/register', views.tickets.MyEventTicketRegisterView.as_view()),
-    path('events/<event_id>/my_ticket/unregister', views.tickets.MyEventTicketUnregisterView.as_view()),
-    path('events/<event_id>/anon_ticket/register', views.tickets.AnonEventTicketRegisterView.as_view()),
-
     path('events/<event_id>/image/<image_type>', views.events.ImageView.as_view()),
     path('events/<event_id>/image_from_url/<image_type>', views.events.ImageFromUrlView.as_view()),
     path('events/<event_id>/tag/<tag_name>', views.events.TagView.as_view()),
     path('events/<event_id>/feedbacks', views.events.EventFeedbackView.as_view()),
-
-    path('my/tickets', views.tickets.MyTicketView.as_view()),
 
     path('sitemap/events', views.events.SitemapView.as_view()),
 ]

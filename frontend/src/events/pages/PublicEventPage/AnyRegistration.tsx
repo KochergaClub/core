@@ -1,14 +1,9 @@
 import Registration from './Registration';
 import TimepadRegistration from './TimepadRegistration';
 
-import { PublicEvent, EventTicket } from '~/events/types';
+import { CommonProps } from './types';
 
-interface Props {
-  event: PublicEvent;
-  ticket?: EventTicket;
-}
-
-const AnyRegistration: React.FC<Props> = props => {
+const AnyRegistration: React.FC<CommonProps> = props => {
   switch (props.event.registration_type) {
     case 'native':
       return <Registration {...props} />;

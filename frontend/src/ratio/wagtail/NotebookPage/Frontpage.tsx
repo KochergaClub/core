@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import PrintContext from './PrintContext';
 
-import { PageType } from './index';
+import { RatioNotebookPageFragment } from '../fragments.generated';
 
 interface ContainerProps {
   height: number;
@@ -66,7 +66,7 @@ const BrandLine = styled.div`
 `;
 
 interface Props {
-  wagtailPage: PageType;
+  wagtailPage: RatioNotebookPageFragment;
 }
 
 export default function Frontpage(props: Props) {

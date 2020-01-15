@@ -1,15 +1,15 @@
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type MembershipFragment = (
-  { __typename?: 'MyMembership' }
-  & Pick<Types.MyMembership, 'card_id' | 'orders_count' | 'subscription_until' | 'privacy_mode'>
+  { __typename?: 'MyCmCustomer' }
+  & Pick<Types.MyCmCustomer, 'card_id' | 'orders_count' | 'subscription_until' | 'privacy_mode'>
   & { orders: Array<(
-    { __typename?: 'MyOrder' }
-    & Pick<Types.MyOrder, 'start_dt'>
+    { __typename?: 'MyCmOrder' }
+    & Pick<Types.MyCmOrder, 'start_dt'>
   )> }
 );
 
@@ -28,7 +28,7 @@ export type EmailSubscriptionFragment = (
 );
 
 export type MyTicketFragment = (
-  { __typename?: 'MyTicket' }
+  { __typename?: 'MyEventsTicket' }
   & { event: (
     { __typename?: 'EventsPublicEvent' }
     & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
@@ -37,12 +37,14 @@ export type MyTicketFragment = (
 
 export type MyPageFragment = (
   { __typename?: 'My' }
-  & Pick<Types.My, 'email' | 'is_staff'>
-  & { membership: Types.Maybe<(
-    { __typename?: 'MyMembership' }
+  & { user: (
+    { __typename?: 'AuthCurrentUser' }
+    & Pick<Types.AuthCurrentUser, 'email' | 'is_staff'>
+  ), membership: Types.Maybe<(
+    { __typename?: 'MyCmCustomer' }
     & MembershipFragment
   )>, tickets: Array<(
-    { __typename?: 'MyTicket' }
+    { __typename?: 'MyEventsTicket' }
     & MyTicketFragment
   )>, email_subscription: (
     { __typename?: 'MyEmailSubscription' }
@@ -117,8 +119,33 @@ export type MyTicketDeleteMutation = (
   & Pick<Types.Mutation, 'myTicketDelete'>
 );
 
+export type LogoutMutationVariables = {};
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'AuthLogoutResult' }
+    & Pick<Types.AuthLogoutResult, 'ok'>
+  ) }
+);
+
+export type SetPasswordMutationVariables = {
+  old_password?: Types.Maybe<Types.Scalars['String']>,
+  new_password: Types.Scalars['String']
+};
+
+
+export type SetPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'AuthSetPasswordResult' }
+    & Pick<Types.AuthSetPasswordResult, 'ok' | 'error'>
+  ) }
+);
+
 export const MembershipFragmentDoc = gql`
-    fragment Membership on MyMembership {
+    fragment Membership on MyCmCustomer {
   card_id
   orders_count
   subscription_until
@@ -129,7 +156,7 @@ export const MembershipFragmentDoc = gql`
 }
     `;
 export const MyTicketFragmentDoc = gql`
-    fragment MyTicket on MyTicket {
+    fragment MyTicket on MyEventsTicket {
   event {
     event_id
     start
@@ -154,8 +181,10 @@ export const EmailSubscriptionFragmentDoc = gql`
     ${EmailSubscriptionInterestFragmentDoc}`;
 export const MyPageFragmentDoc = gql`
     fragment MyPage on My {
-  email
-  is_staff
+  user {
+    email
+    is_staff
+  }
   membership {
     ...Membership
   }
@@ -379,3 +408,68 @@ export function useMyTicketDeleteMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type MyTicketDeleteMutationHookResult = ReturnType<typeof useMyTicketDeleteMutation>;
 export type MyTicketDeleteMutationResult = ApolloReactCommon.MutationResult<MyTicketDeleteMutation>;
 export type MyTicketDeleteMutationOptions = ApolloReactCommon.BaseMutationOptions<MyTicketDeleteMutation, MyTicketDeleteMutationVariables>;
+export const LogoutDocument = gql`
+    mutation Logout {
+  result: authLogout {
+    ok
+  }
+}
+    `;
+export type LogoutMutationFn = ApolloReactCommon.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const SetPasswordDocument = gql`
+    mutation SetPassword($old_password: String, $new_password: String!) {
+  result: authSetPassword(input: {old_password: $old_password, new_password: $new_password}) {
+    ok
+    error
+  }
+}
+    `;
+export type SetPasswordMutationFn = ApolloReactCommon.MutationFunction<SetPasswordMutation, SetPasswordMutationVariables>;
+
+/**
+ * __useSetPasswordMutation__
+ *
+ * To run a mutation, you first call `useSetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setPasswordMutation, { data, loading, error }] = useSetPasswordMutation({
+ *   variables: {
+ *      old_password: // value for 'old_password'
+ *      new_password: // value for 'new_password'
+ *   },
+ * });
+ */
+export function useSetPasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetPasswordMutation, SetPasswordMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetPasswordMutation, SetPasswordMutationVariables>(SetPasswordDocument, baseOptions);
+      }
+export type SetPasswordMutationHookResult = ReturnType<typeof useSetPasswordMutation>;
+export type SetPasswordMutationResult = ApolloReactCommon.MutationResult<SetPasswordMutation>;
+export type SetPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<SetPasswordMutation, SetPasswordMutationVariables>;

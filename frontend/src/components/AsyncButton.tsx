@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Button } from '@kocherga/frontkit';
 
 interface Props {
-  act: () => Promise<void>;
+  act: () => Promise<any>;
   small?: boolean;
   children?: React.ReactNode;
   disabled?: boolean;

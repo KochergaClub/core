@@ -4,7 +4,6 @@ from rest_framework import fields
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
-from wagtail.api import APIField
 from wagtail.api.v2.serializers import PageSerializer, get_serializer_class
 from modelcluster.fields import ParentalKey
 
@@ -40,18 +39,19 @@ class FAQPage(HeadlessPreviewMixin, Page):
     def next_page(self):
         return self.get_next_siblings().type(self.__class__).live().first()
 
+    @property
+    def subpages(self):
+        return [
+            page.specific
+            for page in self.get_children().type(self.__class__).live()
+        ]
+
     content_panels = Page.content_panels + [
         FieldPanel('summary'),
         CondensedInlinePanel('entries', label="Вопросы и ответы"),
     ]
 
-    api_fields = [
-        APIField('summary'),
-        APIField('prev_page', serializer=NavPageField()),
-        APIField('next_page', serializer=NavPageField()),
-    ]
-    # We could add `entries` to `api_fields` here, but the naive implementation causes circular import issues.
-    # So we'll rely on /api/faq/entry REST call for now.
+    graphql_type = 'FaqPage'
 
 
 class Entry(Orderable, models.Model):

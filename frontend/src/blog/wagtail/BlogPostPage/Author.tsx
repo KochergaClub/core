@@ -1,9 +1,8 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
 
-import { BlogPostAuthorType } from '../types';
+import { BlogPostAuthorFragment } from '../fragments.generated';
 
 const AuthorContainer = styled.div`
   margin: 16px;
@@ -37,10 +36,10 @@ const AuthorDescription = styled.div`
   line-height: 1.35;
 `;
 
-const Author = ({ name, description, image_200px }: BlogPostAuthorType) => {
+const Author = ({ name, description, image }: BlogPostAuthorFragment) => {
   return (
     <AuthorContainer>
-      <AuthorImage src={image_200px.url} />
+      <AuthorImage src={image.url} />
       <AuthorName>{name}</AuthorName>
       <AuthorDescription>{description}</AuthorDescription>
     </AuthorContainer>

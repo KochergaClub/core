@@ -1,15 +1,11 @@
-import React from 'react';
-
-import { API } from '~/common/api';
-import { formatDate } from '~/common/utils';
-import { ServerPublicEvent } from '~/events/types';
-
-import { BlockType } from './blocks/types';
-
 // Stream of Wagtail blocks rendered in order based on their type.
 
+import { FreeFormPageFragment } from './queries.generated';
+
+export type AnyBlockFragment = FreeFormPageFragment['body'][0];
+
 interface Props {
-  blocks: BlockType[];
+  blocks: AnyBlockFragment[];
 }
 
 import BasicLeadBlock from './blocks/BasicLeadBlock';
@@ -19,14 +15,6 @@ import ColumnsBasicBlock from './blocks/ColumnsBasicBlock';
 import ColumnsMembershipsBlock from './blocks/ColumnsMembershipsBlock';
 import ColumnsButtonsBlock from './blocks/ColumnsButtonsBlock';
 
-import RatioBriefingBlock from './blocks/RatioBriefingBlock';
-import RatioHeaderBlock from './blocks/RatioHeaderBlock';
-import RatioParagraphBlock from './blocks/RatioParagraphBlock';
-import RatioInsetBlock from './blocks/RatioInsetBlock';
-import RatioExerciseBlock from './blocks/RatioExerciseBlock';
-import RatioExerciseOnelineBlock from './blocks/RatioExerciseOnelineBlock';
-import RatioMathBlock from './blocks/RatioMathBlock';
-
 import EventsListBlock from './blocks/EventsListBlock';
 import BigContactsBlock from './blocks/BigContactsBlock';
 import HeroFrontBlock from './blocks/HeroFrontBlock';
@@ -35,44 +23,32 @@ import MailchimpSubscribeBlock from './blocks/MailchimpSubscribeBlock';
 
 import DebugBlock from './blocks/DebugBlock';
 
-const AnyBlock = (block: BlockType) => {
-  switch (block.type) {
-    case 'basic_lead':
+const AnyBlock = (block: AnyBlockFragment) => {
+  switch (block.__typename) {
+    case 'BasicLeadBlock':
       return <BasicLeadBlock {...block} />;
-    case 'grey':
+    case 'GreyBlock':
       return <GreyBlock {...block} />;
-    case 'columns_basic':
+    case 'BasicParagraphBlock':
+      throw new Error('BasicParagraphBlock is not implemented');
+    case 'ColumnsBasicBlock':
       return <ColumnsBasicBlock {...block} />;
-    case 'columns_memberships':
+    case 'ColumnsMembershipsBlock':
       return <ColumnsMembershipsBlock {...block} />;
-    case 'columns_buttons':
+    case 'ColumnsButtonsBlock':
       return <ColumnsButtonsBlock {...block} />;
-    case 'ratio_briefing':
-      return <RatioBriefingBlock {...block} />;
-    case 'ratio_header':
-      return <RatioHeaderBlock {...block} />;
-    case 'ratio_paragraph':
-      return <RatioParagraphBlock {...block} />;
-    case 'ratio_inset':
-      return <RatioInsetBlock {...block} />;
-    case 'ratio_exercise':
-      return <RatioExerciseBlock {...block} />;
-    case 'ratio_exercise_oneline':
-      return <RatioExerciseOnelineBlock {...block} />;
-    case 'ratio_math':
-      return <RatioMathBlock {...block} />;
-    case 'events_list':
+    case 'EventsListBlock':
       return <EventsListBlock {...block} />;
-    case 'big_contacts':
+    case 'BigContactsBlock':
       return <BigContactsBlock {...block} />;
-    case 'hero_front':
+    case 'HeroFrontBlock':
       return <HeroFrontBlock {...block} />;
-    case 'photo_ribbon':
+    case 'PhotoRibbonBlock':
       return <PhotoRibbonBlock {...block} />;
-    case 'mailchimp_subscribe':
+    case 'MailchimpSubscribeBlock':
       return <MailchimpSubscribeBlock {...block} />;
     default:
-      return <DebugBlock {...block} />;
+      return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
   }
 };
 
@@ -85,24 +61,3 @@ export default function WagtailBlocks({ blocks }: Props) {
     </div>
   );
 }
-
-export const loadBlockData = async (
-  block: BlockType,
-  api: API
-): Promise<BlockType> => {
-  switch (block.type) {
-    case 'events_list':
-      const from_date = new Date();
-      const events = (await api.call(
-        `public_events?from_date=${formatDate(from_date, 'yyyy-MM-dd')}`,
-        'GET'
-      )) as ServerPublicEvent[];
-
-      return {
-        ...block,
-        data: { events },
-      };
-    default:
-      return block;
-  }
-};

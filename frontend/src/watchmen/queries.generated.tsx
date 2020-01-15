@@ -1,4 +1,4 @@
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -173,7 +173,7 @@ export const ShiftFragmentDoc = gql`
     ${WatchmanForPickerFragmentDoc}`;
 export const WatchmenWatchmenListDocument = gql`
     query WatchmenWatchmenList {
-  watchmen: watchmenWatchmenAll {
+  watchmen: watchmenWatchmenAll(currentStaff: true) {
     ...Watchman
   }
 }
@@ -205,7 +205,7 @@ export type WatchmenWatchmenListLazyQueryHookResult = ReturnType<typeof useWatch
 export type WatchmenWatchmenListQueryResult = ApolloReactCommon.QueryResult<WatchmenWatchmenListQuery, WatchmenWatchmenListQueryVariables>;
 export const WatchmenWatchmenListForPickerDocument = gql`
     query WatchmenWatchmenListForPicker {
-  watchmen: watchmenWatchmenAll(current: true) {
+  watchmen: watchmenWatchmenAll(currentStaff: true, currentRole: true) {
     ...WatchmanForPicker
   }
 }

@@ -1,0 +1,11 @@
+fragment AnalyticsBovStat on AnalyticsBovStat {
+  date
+  count
+  total_income
+}
+
+query AnalyticsBovStats {
+  bovStats: analyticsBovStats {
+    ...AnalyticsBovStat
+  }
+}

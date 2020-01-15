@@ -1,14 +1,17 @@
+import { useCallback } from 'react';
+import { DocumentNode } from 'graphql';
+import { useMutation } from '@apollo/react-hooks';
+
+import { A, Column, Row, Label } from '@kocherga/frontkit';
+
 import { NextPage } from '~/common/types';
 import { withApollo } from '~/apollo/client';
 import { withStaff } from '~/apollo/withStaff';
 
-import { A, Column, Row, Label } from '@kocherga/frontkit';
-
-import { ApolloQueryResults } from '~/components';
-
 import {
+  ApolloQueryResults,
+  AsyncButton,
   Page,
-  ActionButton,
   PaddedBlock,
   ParentLinkInHeader,
 } from '~/components';
@@ -16,8 +19,9 @@ import {
 import PageHeader from '~/blocks/PageHeader';
 
 import {
-  TrainingFragment,
   useRatioTrainingBySlugQuery,
+  RatioTrainingSyncParticipantsToMailchimpDocument,
+  RatioTrainingSyncParticipantsToMailchimpMutationVariables,
 } from '../queries.generated';
 
 import CreateEmailButton from '~/ratio/components/CreateEmailButton';
@@ -27,13 +31,23 @@ interface Props {
   slug: string;
 }
 
-const TrainingActionButton: React.FC<{
-  training: TrainingFragment;
-  action: string;
-}> = ({ training, action, children }) => {
-  const path = `ratio/training/${training.slug}/${action}`;
-  return <ActionButton path={path}>{children}</ActionButton>;
-};
+function MutationButton<V extends {}>({
+  mutation,
+  variables,
+  children,
+}: {
+  mutation: DocumentNode;
+  variables: V;
+  children: React.ReactNode;
+}) {
+  const [mutationCb] = useMutation(mutation);
+  const act = useCallback(async () => {
+    await mutationCb({
+      variables,
+    });
+  }, [mutationCb, variables]);
+  return <AsyncButton act={act}>{children}</AsyncButton>;
+}
 
 const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
   const queryResults = useRatioTrainingBySlugQuery({
@@ -81,27 +95,29 @@ const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
               <PaddedBlock width="max">
                 <h2>Рассылки</h2>
                 <Column>
-                  <TrainingActionButton
-                    training={training}
-                    action="to_mailchimp"
+                  <MutationButton
+                    mutation={RatioTrainingSyncParticipantsToMailchimpDocument}
+                    variables={
+                      {
+                        training_id: training.id,
+                      } as RatioTrainingSyncParticipantsToMailchimpMutationVariables
+                    }
                   >
                     Отправить участников в mailchimp
-                  </TrainingActionButton>
+                  </MutationButton>
                   <CreateEmailButton
                     prototypes={[
                       {
                         title: 'Предрассылка',
-                        url: `ratio/training/${training.slug}/email_prototype_pre`,
+                        type: 'pre',
                       },
                       {
                         title: 'Пострассылка',
-                        url: `ratio/training/${training.slug}/email_prototype_post`,
+                        type: 'post',
                       },
                     ]}
-                    create={`ratio/training/${training.slug}/email`}
-                  >
-                    Написать
-                  </CreateEmailButton>
+                    training_id={training.id}
+                  />
                 </Column>
               </PaddedBlock>
             </Page.Main>

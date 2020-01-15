@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { SectionPageType as Props } from '../types';
+import { RatioSectionPageFragment as Props } from '../fragments.generated';
 
-import WagtailBlocks from '~/wagtail/WagtailBlocks';
+import RatioWagtailBlocks from '../../components/RatioWagtailBlocks';
 
 const Header = styled.h1`
   text-align: center;
@@ -12,7 +12,7 @@ export default function Main(props: Props) {
   return (
     <div>
       <Header>{props.title}</Header>
-      <WagtailBlocks blocks={props.body} />
+      <RatioWagtailBlocks blocks={props.body} />
     </div>
   );
 }

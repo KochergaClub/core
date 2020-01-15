@@ -1,0 +1,38 @@
+fragment BlogPostAuthor on BlogPostAuthor {
+  name
+  description
+  image(spec: "fill-200x200") {
+    url
+  }
+}
+
+fragment BlogPostPage on BlogPostPage {
+  id
+  title
+  summary
+  date
+  body
+  authors {
+    ...BlogPostAuthor
+  }
+}
+
+fragment BlogPostPage_summary on BlogPostPage {
+  id
+  title
+  meta {
+    slug
+  }
+  date
+  summary
+}
+
+fragment BlogIndexPage on BlogIndexPage {
+  id
+  title
+  subtitle
+  posts {
+    ...BlogPostPage_summary
+  }
+
+}

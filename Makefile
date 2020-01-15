@@ -1,5 +1,3 @@
-export TOKEN=$(shell cat ~/.npmrc | fgrep authToken | awk -F'"' '{print $$2}')
-
 image:
 	docker-compose -f docker/compose.dev.yml build
 
@@ -35,6 +33,11 @@ test-js:
 	docker-compose -f docker/compose.dev.yml exec api npx jest
 
 test: test-types test-code test-js lint eslint
+
+runserver:
+	# This target is for testing runserver exceptions only (which are not displayed in docker logs, unfortunately).
+  # Use `make dev` or `make dev-mac` for actually running the app.
+	docker-compose -f docker/compose.dev.yml exec api ./manage.py runserver
 
 ##### Helper commands #####
 dbshell:
@@ -72,3 +75,10 @@ update_requirements:
 	docker-compose -f docker/compose.dev.yml exec api pip-compile
 	docker-compose -f docker/compose.dev.yml exec api pip-sync
 	docker cp docker_api_1:/code/requirements.txt ./backend/requirements.txt
+
+update_schema:
+	docker-compose -f docker/compose.dev.yml exec api ./scripts/export-schema.py schema.graphql
+	docker cp docker_api_1:/code/schema.graphql ./schema.graphql
+
+update_types:
+	cd frontend && gql-gen

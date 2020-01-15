@@ -1,0 +1,100 @@
+extend type Query {
+  authGroupsAll: [AuthGroup!]! @auth(permission: "auth.audit")
+  authPermissionsAll: [AuthPermission!]! @auth(permission: "auth.audit")
+}
+
+type AuthCurrentUser {
+  is_authenticated: Boolean!
+  email: String
+  is_staff: Boolean
+  permissions: [String!]!
+}
+
+type AuthGroup {
+  id: ID!
+  name: String!
+  permissions: [AuthPermission!]!
+  users: [AuthUser!]!
+}
+
+type AuthPermission {
+  id: ID!
+  name: String!
+  users: [AuthUser!]!
+}
+
+type AuthUser {
+  id: ID!
+  email: String!
+  staff_member: StaffMember
+}
+
+extend type My {
+  user: AuthCurrentUser!
+}
+
+extend type Mutation {
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+}
+
+extend type Mutation {
+  authLogin(input: AuthLoginInput!): AuthLoginResult!
+}
+
+input AuthLoginInput {
+  credentials: AuthLoginCredentialsInput!
+  # Must be `cookie`; other results, e.g. `access_token` or `jwt`, might be supported later.
+  result: String!
+}
+
+# Either `token` or `email`+`password` must be set.
+# (GraphQL doesn't support union inputs yet; see https://github.com/graphql/graphql-spec/blob/master/rfcs/InputUnion.md for details.)
+input AuthLoginCredentialsInput {
+  email: String
+  password: String
+  token: String
+}
+
+type AuthLoginResult {
+  error: String
+  user: AuthCurrentUser
+  registered: Boolean
+}
+
+extend type Mutation {
+  authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult! @auth(authenticated: true)
+}
+
+input AuthSetPasswordInput {
+  # required if old password exists
+  old_password: String
+  new_password: String!
+}
+
+# TODO - generalize into "SimpleMutationResult"?
+type AuthSetPasswordResult {
+  error: String
+  ok: Boolean
+}
+
+extend type Mutation {
+  authLogout: AuthLogoutResult! @auth(authenticated: true)
+}
+
+type AuthLogoutResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  authSendMagicLink(input: AuthSendMagicLinkInput!): AuthSendMagicLinkResult!
+}
+
+input AuthSendMagicLinkInput {
+  email: String!
+  next: String
+}
+
+type AuthSendMagicLinkResult {
+  ok: Boolean
+}

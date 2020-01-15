@@ -1,10 +1,8 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
 
-import { HeroFrontBlockType as Props } from '../types';
+import { HeroFrontBlockFragment as Props } from '../fragments.generated';
 
 import LogoWithFeatures from './LogoWithFeatures';
 
@@ -46,9 +44,9 @@ export default function HeroFrontBlock(props: Props) {
   return (
     <Container>
       <InnerContainer>
-        <Header>{props.value.title}</Header>
+        <Header>{props.hero.title}</Header>
         <Line />
-        <LogoWithFeatures features={props.value.features} />
+        <LogoWithFeatures features={props.hero.features} />
       </InnerContainer>
     </Container>
   );

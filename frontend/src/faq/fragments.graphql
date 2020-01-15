@@ -1,0 +1,35 @@
+fragment FaqPage_summary on FaqPage {
+  id
+  summary
+  title
+  meta {
+    html_url
+  }
+}
+
+fragment FaqEntry on FaqEntry {
+  id
+  question
+  answer
+}
+
+fragment FaqPage on FaqPage {
+  id
+  meta {
+    html_url
+  }
+  title
+  summary
+  next_page {
+    ...FaqPage_summary
+  }
+  prev_page {
+    ...FaqPage_summary
+  }
+  subpages {
+    ...FaqPage_summary
+  }
+  entries {
+    ...FaqEntry
+  }
+}

@@ -1,6 +1,11 @@
-import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+  defaultDataIdFromObject,
+} from 'apollo-cache-inmemory';
 
-import { WatchmenShift } from './gen-types';
+import { WatchmenShift } from './types.generated';
+import introspectionResult from './introspection-result.generated';
 
 class KochergaApolloCache extends InMemoryCache {
   constructor() {
@@ -16,6 +21,9 @@ class KochergaApolloCache extends InMemoryCache {
             return defaultDataIdFromObject(object);
         }
       },
+      fragmentMatcher: new IntrospectionFragmentMatcher({
+        introspectionQueryResultData: introspectionResult,
+      }),
     });
   }
 }

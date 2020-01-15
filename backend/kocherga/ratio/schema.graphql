@@ -1,0 +1,185 @@
+extend type Query {
+  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
+  ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
+  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String! @auth(permission: "ratio.manage")
+}
+
+type RatioActivity {
+  id: ID!
+  time: String!
+  activity_type: String!
+  name: String!
+  location: String!
+  trainer: RatioTrainer
+}
+
+type RatioTicket {
+  id: ID!
+  training: RatioTraining!
+  email: String!
+  first_name: String!
+  last_name: String
+  registration_date: String
+  status: String!
+  ticket_type: String!
+  payment_type: String!
+  payment_amount: Int!
+  fiscalization_status: String!
+  comment: String!
+}
+
+type RatioTrainer {
+  id: ID!
+  short_name: String!
+  long_name: String!
+}
+
+type RatioTraining {
+  id: ID!
+  name: String!
+  slug: String!
+  date: String!
+  salaries_paid: Boolean!
+  tickets: [RatioTicket!]!
+  total_income: Int!
+  tickets_count: Int!
+  long_name: String!
+  schedule: [RatioTrainingDay!]!
+}
+
+type RatioTrainingEdge {
+  node: RatioTraining!
+}
+
+type RatioTrainingConnection {
+  pageInfo: PageInfo!
+  edges: [RatioTrainingEdge!]!
+  nodes: [RatioTraining!]!
+}
+
+type RatioTrainingDay {
+  id: ID!
+  date: String!
+  activities: [RatioActivity!]!
+}
+
+extend type Mutation {
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining! @auth(permission: "ratio.manage")
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket! @auth(permission: "ratio.manage")
+  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean @auth(permission: "ratio.manage")
+  ratioTicketFiscalize(ticket_id: ID!): Boolean @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
+  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
+}
+
+input RatioTrainingAddDayInput {
+  training_slug: String!
+  date: String!
+}
+
+input RatioTrainingCopyScheduleFromInput {
+  from_training_slug: String!
+  to_training_slug: String!
+}
+
+input RatioAddTicketInput {
+  training: ID!
+  email: String!
+  first_name: String!
+  last_name: String
+  payment_amount: Int!
+  status: String!
+  fiscalization_status: String!
+  ticket_type: String!
+  payment_type: String!
+  comment: String
+  clientMutationId: String
+}
+
+input RatioAddTrainingInput {
+  name: String!
+  slug: String!
+  date: String!
+}
+
+input RatioTrainingSendEmailInput {
+  training_id: ID!
+  title: String!
+  content: String!
+}
+
+type RatioTrainingSendEmailResult {
+  draft_link: String!
+}
+
+type RatioSectionIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
+type RatioSectionPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  body: [WagtailBlock!]!
+}
+
+type RatioNotebookPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  sections: [RatioNotebookSectionBlock!]!
+}
+
+type RatioNotebookSectionBlock implements WagtailBlock {
+  id: ID!
+  value: RatioSectionPage!
+}
+
+type RatioHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioParagraphBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioInsetBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioExerciseBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseBlockValue!
+}
+
+type RatioExerciseBlockValue {
+  header: String!
+  lines_count: Int!
+  enumerate: Boolean
+}
+
+type RatioExerciseOnelineBlock implements WagtailBlock {
+  id: ID!
+  value: RatioExerciseOnelineBlockValue!
+}
+
+type RatioExerciseOnelineBlockValue {
+  text: String!
+}
+
+type RatioBriefingBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type RatioMathBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}

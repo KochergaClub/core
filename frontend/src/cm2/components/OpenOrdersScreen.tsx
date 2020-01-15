@@ -61,7 +61,7 @@ const OpenOrdersScreen: React.FC = () => {
           if (!customersData) {
             return []; // TODO - proper error handling
           }
-          return customersData.cm2Customers.nodes;
+          return customersData.cm2Customers.edges.map(e => e.node);
         },
         getValue: (c: CustomerFragment) => parseInt(c.id),
       },
@@ -73,9 +73,10 @@ const OpenOrdersScreen: React.FC = () => {
       <ApolloQueryResults {...queryResults}>
         {({
           data: {
-            cm2Orders: { nodes: orders },
+            cm2Orders: { edges },
           },
         }) => {
+          const orders = edges.map(edge => edge.node);
           return (
             <Collection
               items={orders}

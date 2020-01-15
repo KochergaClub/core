@@ -1,11 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
-
-import SocialIcons from '~/components/Page/TildaMenu/SocialIcons';
 
 import { fonts, colors } from '@kocherga/frontkit';
 
-import { BigContactsBlockType as Props } from '../types';
+import SocialIcons from '~/components/Page/TildaMenu/SocialIcons';
+
+import { BigContactsBlockFragment as Props } from '../fragments.generated';
 
 const TwoColumns = styled.div`
   display: flex;
@@ -54,23 +53,25 @@ export default function BigContactsBlock(props: Props) {
   return (
     <TwoColumns>
       <MapIFrame
-        src={`https://www.google.com/maps/embed/v1/view?center=${
-          props.value.map.lat
-        },${props.value.map.lng}&zoom=16&key=${KEY}`}
+        src={`https://www.google.com/maps/embed/v1/view?center=${props.contacts.map.lat},${props.contacts.map.lng}&zoom=16&key=${KEY}`}
         allowFullScreen
       />
       <RightColumn>
         <RightContent>
-          <BigText>{props.value.address}</BigText>
+          <BigText>{props.contacts.address}</BigText>
           <BigText>
             Телефон:{' '}
-            <Link href={`tel:${props.value.phone}`}>{props.value.phone}</Link>
+            <Link href={`tel:${props.contacts.phone}`}>
+              {props.contacts.phone}
+            </Link>
           </BigText>
           <BigText>
             Email:{' '}
-            <Link href={`email:${props.value.email}`}>{props.value.email}</Link>
+            <Link href={`email:${props.contacts.email}`}>
+              {props.contacts.email}
+            </Link>
           </BigText>
-          <Text>{props.value.text}</Text>
+          <Text>{props.contacts.text}</Text>
           <SocialIcons />
         </RightContent>
       </RightColumn>

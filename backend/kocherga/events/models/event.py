@@ -16,6 +16,7 @@ from django.utils import timezone
 
 
 from kocherga.dateutils import TZ, inflected_weekday, inflected_month
+from kocherga.django.managers import RelayQuerySetMixin
 
 from kocherga.images import image_storage
 import kocherga.room
@@ -37,7 +38,14 @@ def ts_now():
     return datetime.now(TZ).timestamp()
 
 
+class EventQuerySet(RelayQuerySetMixin, models.QuerySet):
+    pass
+
+
 class EventManager(models.Manager):
+    def get_queryset(self):
+        return EventQuerySet(self.model, using=self._db)
+
     def notify_update(self):
         def send_update():
             async_to_sync(channels.layers.get_channel_layer().group_send)(
@@ -61,7 +69,7 @@ class EventManager(models.Manager):
             order_args = 'start'
 
         query = (
-            super().get_queryset()
+            self.get_queryset()
             .filter(deleted=False)
             .order_by(order_args)
         )

@@ -11,29 +11,27 @@ import Markdown from 'react-markdown';
 
 import { RichText } from '@kocherga/frontkit';
 
-import { NextPage } from '~/common/types';
+import { withApollo } from '~/apollo/client';
+
+import { NextApolloPage } from '~/apollo/types';
 import { timezone, formatDate } from '~/common/utils';
 import { APIError } from '~/common/api';
-import { selectAPI, selectUser } from '~/core/selectors';
 
-import PaddedBlock from '~/components/PaddedBlock';
-import Page from '~/components/Page';
+import { Page, PaddedBlock } from '~/components';
 import TL03 from '~/blocks/TL03';
 
 import {
-  ServerPublicEvent,
-  serverPublicEventToEvent,
-  EventTicket,
-} from '~/events/types';
-
-import { getWagtailPage } from '~/wagtail/utils';
-import { ProjectPageType } from '~/projects/utils';
+  GetPublicEventQuery,
+  GetPublicEventDocument,
+} from './queries.generated';
 
 import ProjectInfo from './ProjectInfo';
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
 import AnyRegistration from './AnyRegistration';
 import Map from './Map';
+
+import { CommonProps } from './types';
 
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -44,29 +42,21 @@ const RegistrationSection = styled.section`
   margin-bottom: 120px;
 `;
 
-export interface Props {
-  serverEvent: ServerPublicEvent;
-  ticket?: EventTicket;
-  project?: ProjectPageType;
-}
-
-const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
-  const event = serverPublicEventToEvent(serverEvent);
-
-  const zonedStart = utcToZonedTime(event.start, timezone);
+const PublicEventPage: NextApolloPage<CommonProps> = ({ event }) => {
+  const zonedStart = utcToZonedTime(new Date(event.start), timezone);
   const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
 
   const registrationRef = useRef<HTMLElement | null>(null);
 
-  const daysUntil = differenceInCalendarDays(event.start, new Date());
+  const daysUntil = differenceInCalendarDays(new Date(event.start), new Date());
   const inFuture = daysUntil >= 0;
 
   return (
-    <Page title={title} og={{ image: event.image }}>
+    <Page title={title} og={{ image: event.image || undefined }}>
       <Container>
         <EventHeroBlock event={event} registrationRef={registrationRef} />
 
-        {project ? <ProjectInfo event={event} project={project} /> : null}
+        <ProjectInfo event={event} />
         <EventAnnouncements event={event} />
         <PaddedBlock>
           <RichText>
@@ -79,7 +69,7 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
             <RegistrationSection ref={registrationRef}>
               <TL03 title="Регистрация" grey />
               <PaddedBlock>
-                <AnyRegistration event={event} ticket={ticket} />
+                <AnyRegistration event={event} />
               </PaddedBlock>
             </RegistrationSection>
             <section>
@@ -93,41 +83,27 @@ const PublicEventPage: NextPage<Props> = ({ serverEvent, ticket, project }) => {
   );
 };
 
-PublicEventPage.getInitialProps = async ({ store: { getState }, query }) => {
-  const api = selectAPI(getState());
-  const user = selectUser(getState());
-
+PublicEventPage.getInitialProps = async ({ apolloClient, query }) => {
   const event_id = query.id as string;
 
-  const serverEvent = (await api.call(
-    `public_events/${event_id}`,
-    'GET'
-  )) as ServerPublicEvent;
+  const result = await apolloClient.query<GetPublicEventQuery>({
+    query: GetPublicEventDocument,
+    variables: {
+      event_id,
+    },
+  });
 
-  let project: ProjectPageType | undefined;
-  if (serverEvent.project) {
-    project = (await getWagtailPage(
-      api,
-      serverEvent.project
-    )) as ProjectPageType;
+  if (!result.data) {
+    throw new APIError('Expected query data', 500);
   }
 
-  const result: Props = { serverEvent, project };
-
-  if (user.is_authenticated) {
-    try {
-      const ticket = await api.call(`events/${event_id}/my_ticket`, 'GET'); // FIXME - can return 404
-      result.ticket = ticket;
-    } catch (e) {
-      if (e instanceof APIError && e.status === 404) {
-        // that's ok, user is not registered yet
-      } else {
-        throw e;
-      }
-    }
+  if (result.errors) {
+    throw new APIError('Got query errors', 500);
   }
 
-  return result;
+  return {
+    event: result.data.publicEvent,
+  };
 };
 
-export default PublicEventPage;
+export default withApollo(PublicEventPage);

@@ -1,39 +1,24 @@
-import Page from '~/components/Page';
-import PaddedBlock from '~/components/PaddedBlock';
-import { selectAPI } from '~/core/selectors';
+import { Page, PaddedBlock } from '~/components';
 
 import PageHeader from '~/blocks/PageHeader';
 
 import { NextWagtailPage } from '~/wagtail/types';
 
-import { WagtailPageProps } from '~/wagtail/types';
-
-import { BlogPostSummary } from './types';
+import {
+  BlogIndexPageFragment,
+  BlogIndexPageFragmentDoc,
+  BlogPostPage_SummaryFragment,
+} from '../fragments.generated';
 
 import Summary from './Summary';
 
-export interface PageType extends WagtailPageProps {
-  meta_type: 'blog.BlogIndexPage';
-  subtitle: string;
-}
-
-export interface ExtraProps {
-  postSummaries: BlogPostSummary[];
-}
-
-const BlogIndexPage: NextWagtailPage<PageType, ExtraProps> = props => {
+const BlogIndexPage: NextWagtailPage<BlogIndexPageFragment> = ({ page }) => {
   return (
-    <Page
-      title={props.wagtailPage.title}
-      description={props.wagtailPage.subtitle}
-    >
-      <PageHeader
-        title={props.wagtailPage.title}
-        bottom={props.wagtailPage.subtitle}
-      />
+    <Page title={page.title} description={page.subtitle}>
+      <PageHeader title={page.title} bottom={page.subtitle} />
       <Page.Main>
         <PaddedBlock width="small">
-          {props.postSummaries.map((summary, i) => (
+          {page.posts.map((summary, i) => (
             <Summary key={i} {...summary} />
           ))}
         </PaddedBlock>
@@ -42,22 +27,6 @@ const BlogIndexPage: NextWagtailPage<PageType, ExtraProps> = props => {
   );
 };
 
-BlogIndexPage.getInitialProps = async ({
-  store: { getState },
-  wagtailPage,
-}) => {
-  const api = selectAPI(getState());
-
-  const json = await api.callWagtail(
-    `pages/?type=blog.BlogPostPage&fields=date,summary&child_of=${wagtailPage.id}&order=-date`
-  );
-
-  const summaries = json['items'] as BlogPostSummary[];
-
-  const props: ExtraProps = {
-    postSummaries: summaries,
-  };
-  return props;
-};
+BlogIndexPage.fragment = BlogIndexPageFragmentDoc;
 
 export default BlogIndexPage;

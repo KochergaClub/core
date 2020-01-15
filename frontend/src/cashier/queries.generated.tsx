@@ -1,4 +1,4 @@
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -17,7 +17,12 @@ export type PaymentFragment = (
   ) }
 );
 
-export type CashierPaymentsQueryVariables = {};
+export type CashierPaymentsQueryVariables = {
+  before?: Types.Maybe<Types.Scalars['String']>,
+  after?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
+};
 
 
 export type CashierPaymentsQuery = (
@@ -26,10 +31,13 @@ export type CashierPaymentsQuery = (
     { __typename?: 'CashierPaymentConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<Types.PageInfo, 'hasNextPage' | 'pageNumber'>
-    ), nodes: Array<(
-      { __typename?: 'CashierPayment' }
-      & PaymentFragment
+      & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
+    ), edges: Array<(
+      { __typename?: 'CashierPaymentEdge' }
+      & { node: (
+        { __typename?: 'CashierPayment' }
+        & PaymentFragment
+      ) }
     )> }
   ) }
 );
@@ -73,14 +81,18 @@ export const PaymentFragmentDoc = gql`
 }
     `;
 export const CashierPaymentsDocument = gql`
-    query CashierPayments {
-  payments: cashierPayments {
+    query CashierPayments($before: String, $after: String, $first: Int, $last: Int) {
+  payments: cashierPayments(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
       hasNextPage
-      pageNumber
+      hasPreviousPage
+      startCursor
+      endCursor
     }
-    nodes {
-      ...Payment
+    edges {
+      node {
+        ...Payment
+      }
     }
   }
 }
@@ -98,6 +110,10 @@ export const CashierPaymentsDocument = gql`
  * @example
  * const { data, loading, error } = useCashierPaymentsQuery({
  *   variables: {
+ *      before: // value for 'before'
+ *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */

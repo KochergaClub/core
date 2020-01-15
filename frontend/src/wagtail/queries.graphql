@@ -1,0 +1,19 @@
+fragment FreeFormPage on FreeFormPage {
+  id
+  title
+  body {
+    __typename
+    id
+    ...BasicLeadBlock
+    ...BasicParagraphBlock
+    ...GreyBlock
+    ...ColumnsBasicBlock
+    ...ColumnsMembershipsBlock
+    ...ColumnsButtonsBlock
+    ...EventsListBlock
+    ...BigContactsBlock
+    ...PhotoRibbonBlock
+    ...MailchimpSubscribeBlock
+    ...HeroFrontBlock
+  }
+}

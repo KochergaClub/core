@@ -1,0 +1,56 @@
+extend type Query {
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection! @staffonly
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection! @staffonly
+  cm2Customer(id: ID!): Cm2Customer! @staffonly
+  cm2Order(id: ID!): Cm2Order! @staffonly
+}
+
+type Cm2Customer {
+  id: ID!
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
+}
+
+type Cm2CustomerConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2CustomerEdge!]!
+}
+
+type Cm2CustomerEdge {
+  node: Cm2Customer!
+}
+
+type Cm2Order {
+  id: ID!
+  start: String!
+  end: String
+  customer: Cm2Customer
+  value: Int!
+}
+
+type Cm2OrderConnection {
+  pageInfo: PageInfo!
+  edges: [Cm2OrderEdge!]!
+}
+
+type Cm2OrderEdge {
+  node: Cm2Order!
+}
+
+extend type Mutation {
+  cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order! @staffonly
+  cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer! @staffonly
+  cm2CloseOrder(id: ID!): Boolean @staffonly
+}
+
+input Cm2CreateCustomerInput {
+  card_id: Int!
+  first_name: String!
+  last_name: String!
+}
+
+input Cm2CreateOrderInput {
+  customer: ID
+}

@@ -1,0 +1,5 @@
+query WagtailPageType($path: String, $preview_token: String) {
+  wagtailPage(path: $path, preview_token: $preview_token) {
+    __typename
+  }
+}

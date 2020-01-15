@@ -1,8 +1,8 @@
 import { AnotherPageSummary } from '~/components';
 
-import { BlogPostSummary } from './types';
+import { BlogPostPage_SummaryFragment } from '../fragments.generated';
 
-export default function Summary(summary: BlogPostSummary) {
+export default function Summary(summary: BlogPostPage_SummaryFragment) {
   return (
     <AnotherPageSummary
       href={`/blog/${summary.meta.slug}`}

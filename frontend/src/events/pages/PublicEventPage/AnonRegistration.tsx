@@ -16,12 +16,7 @@ import {
 import { trackEvent } from '~/components/analytics';
 import { useAPI } from '~/common/hooks';
 
-import { PublicEvent, EventTicket } from '~/events/types';
-
-interface Props {
-  event: PublicEvent;
-  ticket?: EventTicket;
-}
+import { CommonProps as Props } from './types';
 
 const CheckboxLabel = styled(Label)`
   cursor: pointer;

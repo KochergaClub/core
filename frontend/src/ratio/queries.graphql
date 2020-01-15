@@ -60,26 +60,28 @@ fragment TrainingWithSchedule on RatioTraining {
   }
 }
 
-query RatioTrainings($page: Int) {
-  trainings: ratioTrainings(page: $page) {
+query RatioTrainings($before: String, $after: String, $first: Int, $last: Int) {
+  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
-      pageNumber
-      hasNextPage
+      ...PageInfo
     }
-    nodes {
-      ...Training
+    edges {
+      node {
+        ...Training
+      }
     }
   }
 }
 
-query RatioTrainingsForPicker {
-  trainings: ratioTrainings(page: 1) {
+query RatioTrainingsForPicker($before: String, $after: String, $first: Int, $last: Int) {
+  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
-      pageNumber
-      hasNextPage
+      ...PageInfo
     }
-    nodes {
-      ...TrainingForPicker
+    edges {
+      node {
+        ...TrainingForPicker
+      }
     }
   }
 }
@@ -102,6 +104,10 @@ query RatioTrainers {
   }
 }
 
+query RatioTrainingEmailPrototype($training_id: ID!, $type: String!) {
+  content: ratioTrainingEmailPrototype(training_id: $training_id, type: $type)
+}
+
 mutation RatioAddTraining($params: RatioAddTrainingInput!) {
   ratioAddTraining(params: $params) {
     ...Training
@@ -109,7 +115,7 @@ mutation RatioAddTraining($params: RatioAddTrainingInput!) {
 }
 
 mutation RatioAddTicket($params: RatioAddTicketInput!) {
-  ratioAddTicket(params: $params) {
+  ratioAddTicket(input: $params) {
     ...Ticket
   }
 }
@@ -125,4 +131,14 @@ mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
 
 mutation RatioTrainingCopyScheduleFrom($params: RatioTrainingCopyScheduleFromInput!) {
   ratioTrainingCopyScheduleFrom(params: $params)
+}
+
+mutation RatioTrainingSendEmail($input: RatioTrainingSendEmailInput!) {
+  email: ratioTrainingSendEmail(input: $input) {
+    draft_link
+  }
+}
+
+mutation RatioTrainingSyncParticipantsToMailchimp($training_id: ID!) {
+  ratioTrainingSyncParticipantsToMailchimp(training_id: $training_id)
 }

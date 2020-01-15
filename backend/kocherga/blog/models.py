@@ -6,11 +6,8 @@ from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.api import APIField
-from wagtail.images.api.fields import ImageRenditionField
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
-from kocherga.wagtail.fields import APIRichTextField
 
 
 class BlogIndexPage(HeadlessPreviewMixin, Page):
@@ -22,9 +19,11 @@ class BlogIndexPage(HeadlessPreviewMixin, Page):
         FieldPanel('subtitle'),
     ]
 
-    api_fields = [
-        APIField('subtitle'),
-    ]
+    @property
+    def posts(self):
+        return BlogPostPage.objects.child_of(self).live().order_by('-date')
+
+    graphql_type = 'BlogIndexPage'
 
 
 class BlogPostPage(HeadlessPreviewMixin, Page):
@@ -39,12 +38,7 @@ class BlogPostPage(HeadlessPreviewMixin, Page):
         FieldPanel('body', classname='full'),
     ]
 
-    api_fields = [
-        APIField('date'),
-        APIField('authors'),
-        APIRichTextField('body'),
-        APIField('summary'),
-    ]
+    graphql_type = 'BlogPostPage'
 
     parent_page_types = ['blog.BlogIndexPage']
 
@@ -64,11 +58,4 @@ class BlogPostAuthor(Orderable):
         FieldPanel('name'),
         FieldPanel('description'),
         ImageChooserPanel('image'),
-    ]
-
-    api_fields = [
-        APIField('name'),
-        APIField('description'),
-        APIField('image'),
-        APIField('image_200px', serializer=ImageRenditionField('fill-200x200', source='image')),
     ]

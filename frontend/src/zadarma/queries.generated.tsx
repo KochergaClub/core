@@ -1,4 +1,4 @@
-import * as Types from '../apollo/gen-types';
+import * as Types from '../apollo/types.generated';
 
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -20,7 +20,10 @@ export type CommonZadarmaPbxCallFragment = (
 );
 
 export type ZadarmaPbxCallsQueryVariables = {
-  page?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>,
+  after?: Types.Maybe<Types.Scalars['String']>,
+  first?: Types.Maybe<Types.Scalars['Int']>,
+  last?: Types.Maybe<Types.Scalars['Int']>
 };
 
 
@@ -30,10 +33,13 @@ export type ZadarmaPbxCallsQuery = (
     { __typename?: 'ZadarmaPbxCallConnection' }
     & { pageInfo: (
       { __typename?: 'PageInfo' }
-      & Pick<Types.PageInfo, 'pageNumber' | 'hasNextPage'>
-    ), nodes: Array<(
-      { __typename?: 'ZadarmaPbxCall' }
-      & CommonZadarmaPbxCallFragment
+      & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
+    ), edges: Array<(
+      { __typename?: 'ZadarmaPbxCallEdge' }
+      & { node: (
+        { __typename?: 'ZadarmaPbxCall' }
+        & CommonZadarmaPbxCallFragment
+      ) }
     )> }
   ) }
 );
@@ -86,14 +92,18 @@ export const CommonZadarmaPbxCallFragmentDoc = gql`
 }
     `;
 export const ZadarmaPbxCallsDocument = gql`
-    query ZadarmaPbxCalls($page: Int) {
-  pbxCalls: zadarmaPbxCalls(page: $page, page_size: 20) {
+    query ZadarmaPbxCalls($before: String, $after: String, $first: Int, $last: Int) {
+  pbxCalls: zadarmaPbxCalls(before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
-      pageNumber
       hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
     }
-    nodes {
-      ...CommonZadarmaPbxCall
+    edges {
+      node {
+        ...CommonZadarmaPbxCall
+      }
     }
   }
 }
@@ -111,7 +121,10 @@ export const ZadarmaPbxCallsDocument = gql`
  * @example
  * const { data, loading, error } = useZadarmaPbxCallsQuery({
  *   variables: {
- *      page: // value for 'page'
+ *      before: // value for 'before'
+ *      after: // value for 'after'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
  *   },
  * });
  */

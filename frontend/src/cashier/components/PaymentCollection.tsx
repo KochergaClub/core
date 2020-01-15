@@ -27,7 +27,11 @@ import {
 import PaymentCard from './PaymentCard';
 
 const PaymentCollection: React.FC = () => {
-  const queryResults = useCashierPaymentsQuery();
+  const queryResults = useCashierPaymentsQuery({
+    variables: {
+      first: 20,
+    },
+  });
   const [createPaymentMutation] = useCashierCreatePaymentMutation({
     refetchQueries: [
       {
@@ -58,7 +62,7 @@ const PaymentCollection: React.FC = () => {
           return members;
         },
         display: (member: StaffMemberFullFragment) => member.full_name,
-        getValue: (member: StaffMemberFullFragment) => parseInt(member.user_id),
+        getValue: (member: StaffMemberFullFragment) => parseInt(member.user.id),
       },
     },
   ];
@@ -86,9 +90,7 @@ const PaymentCollection: React.FC = () => {
       {({ data: { payments } }) => (
         <PagedApolloCollection
           connection={payments}
-          fetchPage={async (page: number) => {
-            await queryResults.refetch({ page });
-          }}
+          fetchPage={queryResults.refetch}
           names={{
             plural: 'выплаты',
             genitive: 'выплату',

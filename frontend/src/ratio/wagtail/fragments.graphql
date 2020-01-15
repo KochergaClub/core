@@ -1,0 +1,36 @@
+fragment RatioSectionIndexPage on RatioSectionIndexPage {
+  id
+  title
+}
+
+fragment RatioSectionPage on RatioSectionPage {
+  id
+  meta {
+    slug
+  }
+  title
+  body {
+    __typename
+    id
+    ...RatioHeaderBlock
+    ...RatioParagraphBlock
+    ...RatioInsetBlock
+    ...RatioExerciseBlock
+    ...RatioExerciseOnelineBlock
+    ...RatioBriefingBlock
+    ...RatioMathBlock
+  }
+}
+
+fragment RatioNotebookPage on RatioNotebookPage {
+  id
+  title
+  sections {
+    ...on RatioNotebookSectionBlock {
+      id
+      value {
+        ...RatioSectionPage
+      }
+    }
+  }
+}
