@@ -29,3 +29,4 @@ COPY requirements.txt /code/
 RUN pip-sync
 
 COPY . /code/
+RUN ./manage.py collectstatic --no-input
