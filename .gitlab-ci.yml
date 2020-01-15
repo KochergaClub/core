@@ -62,14 +62,14 @@ deploy-stack:
     DOCKER_TLS_VERIFY: 1
     TAG: $CI_COMMIT_REF_NAME
     HOST_IP: $DEPLOY_HOST
-  script:
-    # prepare docker
+  before_script:
+    # prepare remote docker
     - mkdir -p ~/.docker
     - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
     - echo "$DOCKER_CERT" > ~/.docker/cert.pem
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
-    # one more login, since we changed the docker endpoint
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
     # migrate and collect static
     - docker pull $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME
     - docker pull $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME

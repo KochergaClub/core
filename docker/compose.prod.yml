@@ -39,8 +39,6 @@ services:
     image: registry.gitlab.com/kocherga/core/chrome:${TAG}
     cap_add:
       - SYS_ADMIN
-    ports:
-      - "127.0.0.1:9222:9222"
     volumes:
       # Necessary for image uploads (which are passed by pyppeteer's uploadFile as file paths).
       - /data/kocherga:/data
@@ -49,8 +47,6 @@ services:
 
   redis:
     image: redis:5.0
-    ports:
-      - "127.0.0.1:6379:6379"
 
   api:
     << : *backend
