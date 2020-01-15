@@ -45,7 +45,7 @@ services:
     <<: *backend
     command: ./scripts/importer.py
     ports:
-      - "127.0.0.1:5303:8000" # for prometheus metrics
+      - "127.0.0.1:${IMPORTER_PORT}:8000" # for prometheus metrics
     environment:
       <<: *backend-environment
       NO_DJANGO_PROMETHEUS: 1
@@ -67,7 +67,7 @@ services:
     <<: *backend
     command: ./scripts/ludwig.py
     ports:
-      - "5200:80"
+      - "${LUDWIG_PORT}:80"
     depends_on:
       - db
 
