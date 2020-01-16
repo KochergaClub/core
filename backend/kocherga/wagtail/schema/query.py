@@ -71,9 +71,12 @@ def resolve_wagtailPage(_, info, path=None, preview_token=None):
         except Http404:
             return
 
+        # checking permissions (?)
         queryset = get_queryset(info.context)
-        if queryset.filter(id=page.id).exists():
-            return page.specific
+        if not queryset.filter(id=page.id).exists():
+            return
+
+        return page.specific
 
 
 WagtailPage = InterfaceType("WagtailPage")

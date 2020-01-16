@@ -33,11 +33,13 @@ class FAQPage(HeadlessPreviewMixin, Page):
 
     @property
     def prev_page(self):
-        return self.get_prev_siblings().type(self.__class__).live().first()
+        result = self.get_prev_siblings().type(self.__class__).live().first()
+        return result.specific if result else None
 
     @property
     def next_page(self):
-        return self.get_next_siblings().type(self.__class__).live().first()
+        result = self.get_next_siblings().type(self.__class__).live().first()
+        return result.specific if result else None
 
     @property
     def subpages(self):
