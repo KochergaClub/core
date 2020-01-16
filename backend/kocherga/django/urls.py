@@ -8,13 +8,12 @@ from django.views.generic.base import RedirectView
 
 from wagtail.core import urls as wagtail_urls
 
-from ariadne.contrib.django.views import GraphQLView
-
 import kocherga.django.drf
 from kocherga.graphql.schema import schema
+from kocherga.graphql.views import KochergaGraphQLView
 
 urlpatterns = [
-    path('api/graphql', GraphQLView.as_view(schema=schema), name='graphql'),
+    path('api/graphql', KochergaGraphQLView.as_view(schema=schema), name='graphql'),
 
     path('api/', include('kocherga.api.urls')),
     path('api/tochka/', include('kocherga.money.tochka.urls')),
