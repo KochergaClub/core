@@ -399,7 +399,7 @@ export type MastermindDatingCohortByIdLazyQueryHookResult = ReturnType<typeof us
 export type MastermindDatingCohortByIdQueryResult = ApolloReactCommon.QueryResult<MastermindDatingCohortByIdQuery, MastermindDatingCohortByIdQueryVariables>;
 export const MastermindDatingSearchEventsDocument = gql`
     query MastermindDatingSearchEvents($search: String!) {
-  events(search: $search) {
+  events(search: $search, first: 20) {
     nodes {
       ...MastermindDatingEvent
     }
