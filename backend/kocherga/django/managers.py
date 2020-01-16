@@ -35,7 +35,13 @@ class RelayQuerySetMixin:
             raise Exception(f'Max page size is {self.MAX_PAGE_SIZE}')
 
         if not order:
-            order = 'pk'  # FIXME - get default ordering from model
+            default_ordering = self.model._meta.ordering
+            if len(default_ordering) == 0:
+                order = 'pk'
+            elif len(default_ordering) == 1:
+                order = default_ordering[0]
+            else:
+                raise Exception("Relay pager doesn't support multi-field orderings yet")
 
         unsigned_order = order[1:] if order[0] == '-' else order
 
