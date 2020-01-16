@@ -21,12 +21,12 @@ const NavigationBlock: React.FC<Props> = ({ wagtailPage }) => {
       <HR />
       <Row spaced>
         {prev ? (
-          <A href={new URL(prev.meta.html_url).pathname}>&larr; {prev.title}</A>
+          <A href={prev.meta.html_url}>&larr; {prev.title}</A>
         ) : (
           <span>&nbsp;</span>
         )}
         {next ? (
-          <A href={new URL(next.meta.html_url).pathname}>{next.title} &rarr;</A>
+          <A href={next.meta.html_url}>{next.title} &rarr;</A>
         ) : (
           <span>&nbsp;</span>
         )}
