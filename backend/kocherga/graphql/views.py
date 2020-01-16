@@ -11,6 +11,7 @@ from ariadne.graphql import graphql_sync
 from ariadne.contrib.django.views import GraphQLView
 from ariadne.contrib.tracing.apollotracing import ApolloTracingExtensionSync
 
+
 class KochergaGraphQLView(GraphQLView):
     # Copy-pasted from GraphQLView.
     # TODO: refactor after https://github.com/mirumee/ariadne/pull/284 gets merged.
