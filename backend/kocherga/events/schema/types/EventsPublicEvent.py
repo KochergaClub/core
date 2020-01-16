@@ -1,6 +1,7 @@
 from kocherga.graphql.types import DjangoObjectType
+from django.conf import settings
 
-from ...import models
+from ...import models, markup
 
 EventsPublicEvent = DjangoObjectType('EventsPublicEvent', models.Event)
 
@@ -23,3 +24,16 @@ def resolve_announcements(obj, info):
         'vk': getattr(obj, 'vk_announcement', None),
         'fb': getattr(obj, 'fb_announcement', None),
     }
+
+
+@EventsPublicEvent.field('image')
+def resolve_image(obj, info):
+    if obj.image:
+        return settings.KOCHERGA_API_ROOT + f"/images/{obj.image}"
+    else:
+        return None
+
+
+@EventsPublicEvent.field('description')
+def resolve_description(obj, info):
+    return markup.Markup(obj.description).as_plain()
