@@ -847,7 +847,7 @@ export type My = {
   _?: Maybe<Scalars['Boolean']>,
   user: AuthCurrentUser,
   membership?: Maybe<MyCmCustomer>,
-  tickets?: Maybe<MyEventsTicketConnection>,
+  tickets: MyEventsTicketConnection,
   email_subscription: MyEmailSubscription,
 };
 

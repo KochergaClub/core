@@ -69,7 +69,7 @@ type EventsTimepadAnnouncement {
 }
 
 extend type My {
-  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection @auth(authenticated: true)
+  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection! @auth(authenticated: true)
 }
 
 type MyEventsTicket {

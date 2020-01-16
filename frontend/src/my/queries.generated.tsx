@@ -43,13 +43,13 @@ export type MyPageFragment = (
   ), membership: Types.Maybe<(
     { __typename?: 'MyCmCustomer' }
     & MembershipFragment
-  )>, tickets: Types.Maybe<(
+  )>, tickets: (
     { __typename?: 'MyEventsTicketConnection' }
     & { nodes: Array<(
       { __typename?: 'MyEventsTicket' }
       & MyTicketFragment
     )> }
-  )>, email_subscription: (
+  ), email_subscription: (
     { __typename?: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
   ) }
