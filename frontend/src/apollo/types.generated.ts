@@ -322,6 +322,8 @@ export type EventsEvent = {
   event_id: Scalars['ID'],
   title: Scalars['String'],
   start: Scalars['String'],
+  /** all EventsEvent are staff-only, but this can change in the future */
+  tickets: Array<EventsTicket>,
 };
 
 export type EventsEventConnection = {
@@ -369,6 +371,12 @@ export type EventsPublicEventConnection = {
 export type EventsPublicEventEdge = {
    __typename?: 'EventsPublicEventEdge',
   node: EventsPublicEvent,
+};
+
+export type EventsTicket = {
+   __typename?: 'EventsTicket',
+  id: Scalars['ID'],
+  status: Scalars['String'],
 };
 
 export type EventsTimepadAnnouncement = {
@@ -557,7 +565,9 @@ export type Mutation = {
   cashierCreatePayment?: Maybe<Scalars['Boolean']>,
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>,
   kkmRegisterCheck: KkmRegisterCheckResult,
-  myTicketDelete?: Maybe<Scalars['Boolean']>,
+  myEventsTicketUnregister: MyEventsTicket,
+  myEventsTicketRegister: MyEventsTicket,
+  myEventsTicketRegisterAnon: MyEventsTicket,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -679,8 +689,18 @@ export type MutationKkmRegisterCheckArgs = {
 };
 
 
-export type MutationMyTicketDeleteArgs = {
+export type MutationMyEventsTicketUnregisterArgs = {
   event_id: Scalars['ID']
+};
+
+
+export type MutationMyEventsTicketRegisterArgs = {
+  event_id: Scalars['ID']
+};
+
+
+export type MutationMyEventsTicketRegisterAnonArgs = {
+  input: MyEventsTicketRegisterAnonInput
 };
 
 
@@ -827,8 +847,16 @@ export type My = {
   _?: Maybe<Scalars['Boolean']>,
   user: AuthCurrentUser,
   membership?: Maybe<MyCmCustomer>,
-  tickets: Array<MyEventsTicket>,
+  tickets?: Maybe<MyEventsTicketConnection>,
   email_subscription: MyEmailSubscription,
+};
+
+
+export type MyTicketsArgs = {
+  before?: Maybe<Scalars['String']>,
+  after?: Maybe<Scalars['String']>,
+  first?: Maybe<Scalars['Int']>,
+  last?: Maybe<Scalars['Int']>
 };
 
 export type MyCmCustomer = {
@@ -866,6 +894,24 @@ export type MyEventsTicket = {
    __typename?: 'MyEventsTicket',
   event: EventsPublicEvent,
   created?: Maybe<Scalars['String']>,
+};
+
+export type MyEventsTicketConnection = {
+   __typename?: 'MyEventsTicketConnection',
+  pageInfo: PageInfo,
+  edges: Array<MyEventsTicketEdge>,
+  nodes: Array<MyEventsTicket>,
+};
+
+export type MyEventsTicketEdge = {
+   __typename?: 'MyEventsTicketEdge',
+  node: MyEventsTicket,
+};
+
+export type MyEventsTicketRegisterAnonInput = {
+  event_id: Scalars['ID'],
+  email: Scalars['String'],
+  subscribed_to_newsletter?: Maybe<Scalars['Boolean']>,
 };
 
 export type NowCustomer = {
@@ -946,6 +992,7 @@ export type Query = {
   cashierPayments: CashierPaymentConnection,
   analyticsBovStats: Array<AnalyticsBovStat>,
   events: EventsEventConnection,
+  event?: Maybe<EventsEvent>,
   publicEvents: EventsPublicEventConnection,
   publicEvent: EventsPublicEvent,
   staffMembersAll: Array<StaffMember>,
@@ -1017,8 +1064,8 @@ export type QueryWatchmenWatchmenAllArgs = {
 
 
 export type QueryWatchmenShiftsArgs = {
-  from_date?: Maybe<Scalars['String']>,
-  to_date?: Maybe<Scalars['String']>
+  from_date: Scalars['String'],
+  to_date: Scalars['String']
 };
 
 
@@ -1036,6 +1083,11 @@ export type QueryEventsArgs = {
   after?: Maybe<Scalars['String']>,
   first?: Maybe<Scalars['Int']>,
   last?: Maybe<Scalars['Int']>
+};
+
+
+export type QueryEventArgs = {
+  event_id: Scalars['ID']
 };
 
 

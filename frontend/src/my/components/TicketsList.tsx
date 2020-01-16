@@ -42,7 +42,7 @@ interface Props {
 }
 
 const TicketsList: React.FC<Props> = ({ my }) => {
-  const { tickets } = my;
+  const tickets = my.tickets.nodes;
 
   if (!tickets.length) {
     return (

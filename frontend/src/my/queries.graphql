@@ -37,8 +37,10 @@ fragment MyPage on My {
   membership {
     ...Membership
   }
-  tickets {
-    ...MyTicket
+  tickets(first: 100) {
+    nodes {
+      ...MyTicket
+    }
   }
   email_subscription {
     ...EmailSubscription
@@ -72,7 +74,9 @@ mutation MyPrivacyModeSet($mode: String!) {
 }
 
 mutation MyTicketDelete($event_id: ID!) {
-  myTicketDelete(event_id: $event_id)
+  myEventsTicketUnregister(event_id: $event_id) {
+    created
+  }
 }
 
 mutation Logout {

@@ -43,9 +43,12 @@ export type MyPageFragment = (
   ), membership: Types.Maybe<(
     { __typename?: 'MyCmCustomer' }
     & MembershipFragment
-  )>, tickets: Array<(
-    { __typename?: 'MyEventsTicket' }
-    & MyTicketFragment
+  )>, tickets: Types.Maybe<(
+    { __typename?: 'MyEventsTicketConnection' }
+    & { nodes: Array<(
+      { __typename?: 'MyEventsTicket' }
+      & MyTicketFragment
+    )> }
   )>, email_subscription: (
     { __typename?: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
@@ -116,7 +119,10 @@ export type MyTicketDeleteMutationVariables = {
 
 export type MyTicketDeleteMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'myTicketDelete'>
+  & { myEventsTicketUnregister: (
+    { __typename?: 'MyEventsTicket' }
+    & Pick<Types.MyEventsTicket, 'created'>
+  ) }
 );
 
 export type LogoutMutationVariables = {};
@@ -188,8 +194,10 @@ export const MyPageFragmentDoc = gql`
   membership {
     ...Membership
   }
-  tickets {
-    ...MyTicket
+  tickets(first: 100) {
+    nodes {
+      ...MyTicket
+    }
   }
   email_subscription {
     ...EmailSubscription
@@ -380,7 +388,9 @@ export type MyPrivacyModeSetMutationResult = ApolloReactCommon.MutationResult<My
 export type MyPrivacyModeSetMutationOptions = ApolloReactCommon.BaseMutationOptions<MyPrivacyModeSetMutation, MyPrivacyModeSetMutationVariables>;
 export const MyTicketDeleteDocument = gql`
     mutation MyTicketDelete($event_id: ID!) {
-  myTicketDelete(event_id: $event_id)
+  myEventsTicketUnregister(event_id: $event_id) {
+    created
+  }
 }
     `;
 export type MyTicketDeleteMutationFn = ApolloReactCommon.MutationFunction<MyTicketDeleteMutation, MyTicketDeleteMutationVariables>;
