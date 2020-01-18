@@ -1,4 +1,6 @@
+import { withApollo } from '~/apollo/client';
 import { NextPage } from '~/common/types';
+
 import { Page } from '~/components';
 
 import UpcomingEventsListBlock from '~/events/components/UpcomingEventsListBlock';
@@ -11,4 +13,4 @@ const PublicEventIndexPage: NextPage = () => {
   );
 };
 
-export default PublicEventIndexPage;
+export default withApollo(PublicEventIndexPage);
