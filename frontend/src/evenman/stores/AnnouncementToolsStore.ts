@@ -62,11 +62,26 @@ export class AnnouncementToolsStore {
   get projectSlugs(): IPromiseBasedObservable<string[]> {
     return fromPromise(
       this.api
-        .call(
-          'wagtail/pages/?type=projects.ProjectPage&fields=is_active&limit=100',
-          'GET'
+        .call('api/graphql', 'POST', {
+          query: `
+{
+  wagtailPage(path: "/projects") {
+    ...on ProjectIndexPage {
+      projects {
+        meta {
+          slug
+        }
+      }
+    }
+  }
+}
+`,
+        })
+        .then(json =>
+          json.data.wagtailPage.projects.map(
+            (project: any) => project.meta.slug as string
+          )
         )
-        .then(json => json.items.map((item: any) => item.meta.slug as string))
     );
   }
 
