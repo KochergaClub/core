@@ -62,7 +62,7 @@ export class AnnouncementToolsStore {
   get projectSlugs(): IPromiseBasedObservable<string[]> {
     return fromPromise(
       this.api
-        .call('api/graphql', 'POST', {
+        .call('graphql', 'POST', {
           query: `
 {
   wagtailPage(path: "/projects") {
