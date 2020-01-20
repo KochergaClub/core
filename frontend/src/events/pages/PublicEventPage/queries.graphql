@@ -37,3 +37,9 @@ query GetPublicEvent($event_id: ID!) {
     ...EventsPublicEvent
   }
 }
+
+mutation MyEventsTicketRegisterAnon($input: MyEventsTicketRegisterAnonInput!) {
+  myEventsTicketRegisterAnon(input: $input) {
+    created
+  }
+}
