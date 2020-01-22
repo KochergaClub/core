@@ -1,6 +1,6 @@
 extend type Query {
   ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
-  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "ratio.manage")
   ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String! @auth(permission: "ratio.manage")
 }
