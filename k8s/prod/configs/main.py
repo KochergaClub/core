@@ -17,10 +17,6 @@ DATA_DIR = os.environ.get('DATA_DIR', '/data')
 
 # Security
 
-# TODO - deploy these; but for now we have HTTP-only iacsv.kocherga.club
-# SECURE_HSTS_SECONDS = 86400 # TODO - increase
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
 ALLOWED_HOSTS = [
     '.kocherga.club',
     '.kocherga-club.ru',

@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kocherga-backend
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: kocherga-backend
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kocherga-backend-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: hcloud-volumes
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kocherga-backend-init
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      containers:
+        - name: kocherga-backend-init
+          image: arey/mysql-client
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              mysql -h mysql --password=${ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS kocherga_core; grant all privileges on kocherga_core.* to 'kocherga_core'@'%' identified by '${DB_PASSWORD}'"
+          env:
+            - name: ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: root-password
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kocherga
+                  key: db-password
+      restartPolicy: Never
+  backoffLimit: 1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: kocherga-backend
+  template:
+    metadata:
+      labels:
+        app: kocherga-backend
+    spec:
+      containers:
+      - name: kocherga-backend
+        imagePullPolicy: Always
+        image: registry.gitlab.com/kocherga/core/backend
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: secrets
+          mountPath: "/code/kocherga/django/settings/secrets.py"
+          subPath: "secrets.py"
+          readOnly: true
+        - name: configs
+          mountPath: "/code/kocherga/django/settings/main.py"
+          subPath: "main.py"
+          readOnly: true
+        - name: data
+          mountPath: "/data"
+        env:
+        - name: DJANGO_SETTINGS_MODULE
+          value: kocherga.django.settings.main
+        - name: DB_NAME
+          value: "kocherga_core"
+        - name: DB_USER
+          value: "kocherga_core"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kocherga
+              key: db-password
+      volumes:
+      - name: secrets
+        secret:
+          secretName: kocherga
+      - name: configs
+        configMap:
+          name: kocherga
+      - name: data
+        persistentVolumeClaim:
+          claimName: kocherga-backend-data

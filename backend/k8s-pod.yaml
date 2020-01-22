@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Pod
-metadata:
-  name: kocherga-backend
-spec:
-  containers:
-  - name: django-app
-    image: registry.gitlab.com/kocherga/core/backend

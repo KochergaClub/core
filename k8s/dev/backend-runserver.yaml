@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-backend
+spec:
+  template:
+    spec:
+      containers:
+      - name: kocherga-backend
+        command: ["./manage.py", "runserver", "0.0.0.0:80"]

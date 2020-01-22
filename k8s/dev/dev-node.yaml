@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-backend
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3s-dev-node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-frontend
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3s-dev-node

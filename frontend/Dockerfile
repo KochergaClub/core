@@ -20,3 +20,5 @@ COPY . /code/
 
 RUN NODE_ENV=production npx next build
 RUN NODE_ENV=production npx webpack --config webpack.server.js
+
+CMD ["node", "./dist/index.js"]

@@ -1,0 +1,15 @@
+bases:
+  - ../base
+patches:
+  - backend-runserver.yaml
+  - dev-node.yaml
+  - frontend-with-webpack.yaml
+secretGenerator:
+  - name: kocherga
+    files:
+      - secrets/db-password
+      - secrets/secrets.py
+configMapGenerator:
+  - name: kocherga
+    files:
+      - configs/main.py

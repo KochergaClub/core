@@ -29,3 +29,5 @@ COPY requirements.txt /code/
 RUN pip-sync
 
 COPY . /code/
+
+CMD ["gunicorn", "-c", "python:gunicorn_conf", "kocherga.django.wsgi"]

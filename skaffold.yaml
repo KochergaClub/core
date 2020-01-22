@@ -1,0 +1,25 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+  - image: registry.gitlab.com/kocherga/core/backend
+    context: backend
+    kaniko:
+      cache: {}
+    sync:
+      infer:
+        - kocherga/**
+        - test/**
+  - image: registry.gitlab.com/kocherga/core/frontend
+    context: frontend
+    kaniko:
+      cache: {}
+    sync:
+      infer:
+        - src/**
+  cluster:
+    dockerConfig:
+      path: ./docker.json
+deploy:
+  kustomize:
+    path: k8s/dev
