@@ -13,7 +13,7 @@ type ZadarmaCall {
   sip: String!
   is_recorded: Int!
   watchman: String!
-  record: String!
+  record: String
 }
 
 type ZadarmaData {
