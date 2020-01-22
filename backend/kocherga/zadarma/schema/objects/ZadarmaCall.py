@@ -2,7 +2,7 @@ from kocherga.graphql.types import DjangoObjectType
 
 from ... import models
 
-ZadarmaCall = DjangoObjectType('ZadarmaCall', models.ZadarmaCall)
+ZadarmaCall = DjangoObjectType('ZadarmaCall', models.Call)
 
 
 @ZadarmaCall.field('record')
