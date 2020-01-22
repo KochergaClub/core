@@ -1,5 +1,5 @@
 from .base import *
-from .dev_secrets import *
+from .secrets import *
 
 import logging
 logging.basicConfig(level=logging.INFO)
