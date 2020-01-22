@@ -377,6 +377,7 @@ export type EventsTicket = {
    __typename?: 'EventsTicket',
   id: Scalars['ID'],
   status: Scalars['String'],
+  user: AuthUser,
 };
 
 export type EventsTimepadAnnouncement = {

@@ -63,12 +63,6 @@ export interface Feedback extends CreateFeedbackParams {
   id: number;
 }
 
-export interface EventTicket {
-  id: number;
-  user: string; // email
-  status: string; // 'ok' | 'cancelled'
-}
-
 export const serverEventToEvent = (event: ServerEvent): Event => {
   return {
     ...event,

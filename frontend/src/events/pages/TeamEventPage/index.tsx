@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { A } from '@kocherga/frontkit';
 
+import { withApollo } from '~/apollo/client';
 import { State } from '~/redux/store';
 import { NextPage } from '~/common/types';
 import { Page, PaddedBlock } from '~/components';
@@ -13,7 +14,6 @@ import FeedbackCollection from './FeedbackCollection';
 import TicketsCollection from './TicketsCollection';
 
 import { loadEventFeedbacks } from '~/events/features/eventPageFeedbacks';
-import { loadEventTickets } from '~/events/features/eventPageTickets';
 
 const TeamEventPage: NextPage = () => {
   const event = useSelector((state: State) => selectEvent(state));
@@ -32,7 +32,7 @@ const TeamEventPage: NextPage = () => {
           <FeedbackCollection />
         </PaddedBlock>
         <PaddedBlock width="max">
-          <TicketsCollection />
+          <TicketsCollection event_id={event.id} />
         </PaddedBlock>
       </Page.Main>
     </Page>
@@ -44,9 +44,8 @@ TeamEventPage.getInitialProps = async ({ store: { dispatch }, query }) => {
 
   await dispatch(loadEvent(uuid));
   await dispatch(loadEventFeedbacks());
-  await dispatch(loadEventTickets());
 
   return { event_id: uuid };
 };
 
-export default TeamEventPage;
+export default withApollo(TeamEventPage);

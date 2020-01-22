@@ -1,31 +1,43 @@
-import { useSelector } from 'react-redux';
-
 import { Row } from '@kocherga/frontkit';
 
-import { State } from '~/redux/store';
-
 import Card, { CardList } from '~/components/Card';
-import { Badge } from '~/components';
+import { ApolloQueryResults, Badge } from '~/components';
 
-import { selectEventTickets } from '../../features/eventPageTickets';
+import { useGetEventTicketsQuery } from './queries.generated';
 
-const TicketsCollection: React.FC = () => {
-  const tickets = useSelector((state: State) => selectEventTickets(state));
+interface Props {
+  event_id: string;
+}
+
+const TicketsCollection: React.FC<Props> = ({ event_id }) => {
+  const queryResults = useGetEventTicketsQuery({
+    variables: {
+      event_id,
+    },
+  });
 
   return (
-    <section>
-      <h2>Билеты ({tickets.length})</h2>
-      <CardList>
-        {tickets.map(ticket => (
-          <Card key={ticket.id}>
-            <Row>
-              <div>{ticket.user}</div>
-              <Badge>{ticket.status}</Badge>
-            </Row>
-          </Card>
-        ))}
-      </CardList>
-    </section>
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { event } }) =>
+        event ? (
+          <section>
+            <h2>Билеты ({event.tickets.length})</h2>
+            <CardList>
+              {event.tickets.map(ticket => (
+                <Card key={ticket.id}>
+                  <Row>
+                    <div>{ticket.user.email}</div>
+                    <Badge>{ticket.status}</Badge>
+                  </Row>
+                </Card>
+              ))}
+            </CardList>
+          </section>
+        ) : (
+          <div>Событие не найдено</div>
+        )
+      }
+    </ApolloQueryResults>
   );
 };
 

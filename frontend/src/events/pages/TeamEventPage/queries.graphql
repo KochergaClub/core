@@ -1,0 +1,15 @@
+fragment EventsTicket on EventsTicket {
+  id
+  status
+  user {
+    email
+  }
+}
+
+query GetEventTickets($event_id: ID!) {
+  event(event_id: $event_id) {
+    tickets {
+      ...EventsTicket
+    }
+  }
+}

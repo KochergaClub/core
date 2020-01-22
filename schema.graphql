@@ -460,6 +460,7 @@ type EventsEvent {
 type EventsTicket {
   id: ID!
   status: String!
+  user: AuthUser!
 }
 
 type EventsPublicEventConnection {
