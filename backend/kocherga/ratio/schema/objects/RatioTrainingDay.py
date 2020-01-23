@@ -4,5 +4,5 @@ RatioTrainingDay = ObjectType('RatioTrainingDay')
 
 
 @RatioTrainingDay.field('activities')
-def resolve_tickets(obj, info):
+def resolve_activities(obj, info):
     return obj.schedule.all()
