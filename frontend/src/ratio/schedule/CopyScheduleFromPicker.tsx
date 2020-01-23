@@ -13,7 +13,11 @@ interface Props {
 }
 
 export default function CopyScheduleFromPicker(props: Props) {
-  const queryResults = useRatioTrainingsForPickerQuery();
+  const queryResults = useRatioTrainingsForPickerQuery({
+    variables: {
+      first: 20,
+    },
+  });
 
   return (
     <div>
