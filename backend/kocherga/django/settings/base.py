@@ -165,7 +165,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [("kocherga-redis", 6379)],
         },
     },
 }
@@ -190,10 +190,10 @@ LOGOUT_REDIRECT_URL = '/'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
+        'NAME': 'kocherga',
+        'USER': 'kocherga',
         'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': 'mysql',
+        'HOST': 'kocherga-mysql',
     }
 }
 

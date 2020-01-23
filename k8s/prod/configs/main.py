@@ -1,5 +1,5 @@
 from .base import *
-from .prod_secrets import *
+from .secrets import *
 
 import os
 

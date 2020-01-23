@@ -1,3 +1,5 @@
 resources:
 - backend.yaml
 - frontend.yaml
+- mysql.yaml
+- redis.yaml

@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: kocherga-mysql
 spec:
   ports:
   - port: 3306
   selector:
-    app: mysql
+    app: kocherga-mysql
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: kocherga-mysql-pvc
 spec:
   accessModes:
   - ReadWriteOnce
@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql
+  name: kocherga-mysql
 data:
   my.cnf: |-
     [client]
@@ -40,17 +40,17 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: kocherga-mysql
 spec:
   selector:
     matchLabels: 
-      app: mysql
+      app: kocherga-mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: kocherga-mysql
     spec:
       containers:
         - name: mysql
@@ -62,8 +62,17 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql
-                  key: root-password
+                  name: kocherga
+                  key: root-db-password
+            - name: MYSQL_DATABASE
+              value: kocherga
+            - name: MYSQL_USER
+              value: kocherga
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kocherga
+                  key: db-password
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
@@ -73,9 +82,7 @@ spec:
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:
-            claimName: mysql-pvc
+            claimName: kocherga-mysql-pvc
         - name: config
           configMap:
-            name: mysql
-      nodeSelector:
-        kubernetes.io/hostname: k3s-dev-node
+            name: kocherga-mysql
