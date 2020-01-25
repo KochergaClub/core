@@ -11,7 +11,7 @@ def resolve_events(self, info, search, **pager):
     qs = models.Event.objects.list_events()
     if search:
         qs = qs.filter(title__icontains=search)
-    return qs.relay_page(**pager)
+    return qs.relay_page(order='start', **pager)
 
 
 @Query.field('event')
@@ -29,7 +29,7 @@ def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
     if project_id is not None:
         qs = qs.filter(project_id=project_id)
 
-    return qs.relay_page(**pager)
+    return qs.relay_page(order='start', **pager)
 
 
 @Query.field('publicEvent')
