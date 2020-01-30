@@ -30,7 +30,7 @@ def kkmRegisterCheck(_, info, params):
         kkm.getCheckRequest(
             kkm.OnlineCheck(
                 email=params['email'],
-                title=input['title'],
+                title=params['title'],
                 sum=params['sum'],
                 signMethodCalculation=kkm.SignMethodCalculation(params['sign_method_calculation']),
             )
