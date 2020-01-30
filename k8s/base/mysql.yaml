@@ -36,6 +36,7 @@ data:
     collation-server = utf8mb4_unicode_ci
     init-connect='SET NAMES utf8mb4'
     character-set-server = utf8mb4
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -63,7 +64,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: kocherga
-                  key: root-db-password
+                  key: root_db_password
             - name: MYSQL_DATABASE
               value: kocherga
             - name: MYSQL_USER
@@ -72,12 +73,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: kocherga
-                  key: db-password
+                  key: db_password
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
             - name: config
-              mountPath: "/etc/mysql/conf.d"
+              mountPath: "/etc/mysql/conf.d/my.cnf"
+              subPath: my.cnf
               readOnly: true
       volumes:
         - name: mysql-storage

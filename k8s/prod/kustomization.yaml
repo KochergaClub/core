@@ -2,8 +2,9 @@ bases:
   - ../base
 secretGenerator:
   - name: kocherga
+    envs:
+      - secrets/db-passwords.env
     files:
-      - secrets/db-password
       - secrets/secrets.py
 configMapGenerator:
   - name: kocherga

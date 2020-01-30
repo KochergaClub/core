@@ -60,7 +60,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: kocherga
-              key: db-password
+              key: db_password
       volumes:
       - name: secrets
         secret:

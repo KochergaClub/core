@@ -6,9 +6,9 @@ patches:
   - frontend-with-webpack.yaml
 secretGenerator:
   - name: kocherga
+    envs:
+      - secrets/db-passwords.env
     files:
-      - secrets/root-db-password
-      - secrets/db-password
       - secrets/secrets.py
 configMapGenerator:
   - name: kocherga
