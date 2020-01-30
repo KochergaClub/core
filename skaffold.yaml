@@ -20,6 +20,9 @@ build:
   cluster:
     dockerConfig:
       path: ./docker.json
+  tagPolicy:
+    gitCommit:
+      variant: AbbrevCommitSha
 portForward:
   - resourceType: deployment
     resourceName: kocherga-frontend
