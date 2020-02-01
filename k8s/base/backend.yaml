@@ -61,10 +61,34 @@ spec:
                 secretKeyRef:
                   name: kocherga
                   key: db_password
-        - name: channels-worker # TODO - move additional containers to separate deployments after backend becomes stateless
+        # TODO - move additional containers to separate deployments after backend becomes stateless
+        - name: channels-worker
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
           command: ["./scripts/channels-worker.sh"]
+          volumeMounts:
+          - name: secrets
+            mountPath: "/code/kocherga/django/settings/secrets.py"
+            subPath: "secrets.py"
+            readOnly: true
+          - name: configs
+            mountPath: "/code/kocherga/django/settings/main.py"
+            subPath: "main.py"
+            readOnly: true
+          - name: data
+            mountPath: "/data"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: kocherga.django.settings.main
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kocherga
+                  key: db_password
+        - name: worker
+          imagePullPolicy: Always
+          image: registry.gitlab.com/kocherga/core/backend
+          command: ["./scripts/worker.py"]
           volumeMounts:
           - name: secrets
             mountPath: "/code/kocherga/django/settings/secrets.py"
