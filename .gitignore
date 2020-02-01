@@ -9,3 +9,4 @@
 /frontend/.next
 /frontend/dist
 /frontend/coverage
+/docker.json
