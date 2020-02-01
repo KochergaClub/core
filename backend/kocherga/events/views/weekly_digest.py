@@ -1,9 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import sys
-from datetime import datetime, timedelta
-
 from django.views.decorators.http import require_safe
 from django.http import FileResponse
 
@@ -11,9 +8,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser
 
-from kocherga.error import PublicError
 from kocherga.api.common import ok
-from kocherga.images import image_storage
 
 from kocherga.events import models
 
