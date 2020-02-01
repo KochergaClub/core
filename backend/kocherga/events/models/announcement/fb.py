@@ -8,11 +8,11 @@ import requests
 from django.conf import settings
 from django.utils import timezone
 from django.db import models
+from django.core.files.base import ContentFile
 from annoying.fields import AutoOneToOneField
 
 import kocherga.chrome
 import kocherga.events.markup
-from kocherga.images import image_storage
 import kocherga.fb.api
 
 from ..event import Event
@@ -31,6 +31,10 @@ class Manager(models.Manager):
         return groups
 
 
+def error_screenshot_path(instance, filename):
+    return f'events/announcements/fb/error_screenshot'
+
+
 class FbAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
 
@@ -40,6 +44,8 @@ class FbAnnouncement(models.Model):
 
     added_to_main_page = models.BooleanField(default=False)
     shared_to_main_page = models.BooleanField(default=False)
+
+    error_screenshot = models.ImageField(null=True, blank=True, upload_to='events/announcement/fb/error_screenshot/')
 
     objects = Manager()
 
@@ -52,8 +58,9 @@ class FbAnnouncement(models.Model):
             except Exception:
                 logger.exception(f"Error while creating a FB announcement")
                 image_bytes = await session.screenshot()
-                filename = image_storage.save_screenshot("error", image_bytes)
-                logger.info(f"Screenshot saved to {filename}")
+                self.error_screenshot.save('error', ContentFile(image_bytes))
+                self.save()
+                logger.info(f"Error screenshot saved")
                 raise
 
     def announce(self):
@@ -80,8 +87,9 @@ class FbAnnouncement(models.Model):
             except Exception:
                 logger.exception(f"Error while performing action {action}")
                 image_bytes = await session.screenshot()
-                filename = image_storage.save_screenshot("error", image_bytes)
-                logger.info(f"Screenshot saved to {filename}")
+                self.error_screenshot.save('error', ContentFile(image_bytes))
+                self.save()
+                logger.info(f"Error screenshot saved")
                 raise
 
     def add_to_main_page(self):

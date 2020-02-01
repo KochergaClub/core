@@ -1,15 +1,11 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from django.http import FileResponse
-from django.views.decorators.http import require_safe
-
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework import viewsets, generics
 
-from kocherga.images import image_storage
 from kocherga.events import models
 from kocherga.events import serializers
 
@@ -104,9 +100,3 @@ class FbViewSet(AnnouncementViewSet):
         announcement = self.get_object()
         announcement.share_to_main_page()
         return Response(ok)
-
-
-@require_safe
-def r_last_screenshot(request):
-    filename = image_storage.screenshot_file("error")
-    return FileResponse(open(filename, 'rb'), filename='error.png')

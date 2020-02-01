@@ -59,7 +59,6 @@ router.register(r'event_feedbacks', views.feedback.FeedbackViewSet, basename='ev
 
 urlpatterns += [
     path('announcements/', include(old_announcement_patterns)),
-    path('screenshot/error', views.announcements.r_last_screenshot),
 
     path('weekly-digest/current/vk', views.weekly_digest.r_post_vk),
     path('weekly-digest/current/telegram', views.weekly_digest.r_post_telegram),

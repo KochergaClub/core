@@ -5,19 +5,21 @@ import base64
 from datetime import datetime, timedelta
 
 import markdown
+import asyncio
 
 from django.template.loader import render_to_string
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.files.base import ContentFile
 
 from kocherga.dateutils import TZ
 import kocherga.dateutils
 import kocherga.vk.api
 import kocherga.vk.helpers
 import kocherga.telegram
-import kocherga.images
 import kocherga.mailchimp
+import kocherga.templater.models
 from kocherga.email.tools import get_utmify, mjml2html
 
 from .event import Event
@@ -47,6 +49,8 @@ class WeeklyDigest(models.Model):
     mailchimp_sent = models.BooleanField('Mailchimp-кампания отправлена', default=False)
     telegram_id = models.CharField('ID сообщения в Telegram', max_length=100, blank=True)
     vk_id = models.CharField('ID поста в VK', max_length=100, blank=True)
+
+    image = models.ImageField(null=True, blank=True, upload_to='events/weekly_digest/')
 
     objects = WeeklyDigestManager()
 
@@ -117,8 +121,29 @@ class WeeklyDigest(models.Model):
             'html': html,
         }
 
+    def create_image_if_necessary(self) -> None:
+        if self.image:
+            return
+
+        start_date = self.start
+        params = {
+            "start_date": start_date.strftime("%Y-%m-%d"),
+            "end_date": (start_date + timedelta(days=6)).strftime("%Y-%m-%d"),
+        }
+        template = kocherga.templater.models.Template.by_name('mailchimp')
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        image_bytes = loop.run_until_complete(template.generate_png(params))
+        self.image.save(f"{start_date:%Y-%m-%d}.png", ContentFile(image_bytes))
+        self.save()
+
+    def get_image_bytes(self) -> bytes:
+        self.create_image_if_necessary()
+        with self.image.open('rb') as fh:
+            return fh.read()
+
     def upload_mailchimp_image(self):
-        image_content = kocherga.images.image_storage.create_mailchimp_image(self.start)
+        image_bytes = self.get_image_bytes()
 
         image_folder_id = kocherga.mailchimp.image_folder_by_name(MAILCHIMP_IMAGE_FOLDER_NAME)['id']
 
@@ -129,7 +154,7 @@ class WeeklyDigest(models.Model):
             {
                 'folder_id': image_folder_id,
                 'name': f"weekly-image-{self.start.strftime('%Y-%m-%d')}.png",
-                'file_data': base64.encodebytes(image_content).decode('utf-8'),
+                'file_data': base64.encodebytes(image_bytes).decode('utf-8'),
             }
         )
 
@@ -236,7 +261,7 @@ class WeeklyDigest(models.Model):
 
         group_id = kocherga.vk.helpers.group2id(settings.KOCHERGA_VK["main_page"]["id"])
 
-        image_bytes = kocherga.images.image_storage.create_mailchimp_image(self.start)
+        image_bytes = self.get_image_bytes()
         photo_id = kocherga.vk.helpers.upload_wall_image(group_id, image_bytes)
 
         response = kocherga.vk.api.call(

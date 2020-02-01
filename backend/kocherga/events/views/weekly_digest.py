@@ -43,21 +43,12 @@ def r_post_mailchimp_draft(request):
     return Response(ok)
 
 
-# No auth - images are requested directly
-# TODO - accept a token via CGI params? hmm...
+# No auth - images are requested directly.
+# TODO - deprecate and use url from weekly_digest props instead.
 @require_safe
 def r_schedule_weekly_image(request):
-    dt = datetime.today()
-    if dt.weekday() < 2:
-        dt = dt - timedelta(days=dt.weekday())
-    else:
-        dt = dt + timedelta(days=7 - dt.weekday())
+    digest = models.WeeklyDigest.objects.current_digest()
 
-    try:
-        filename = image_storage.schedule_file(dt)
-    except Exception:
-        error = str(sys.exc_info())
-        raise PublicError(error)
-
-    logger.info(f'Serving weekly image file {filename}')
-    return FileResponse(open(filename, 'rb'))
+    digest.create_image_if_necessary()
+    logger.info(f'Serving weekly image file')
+    return FileResponse(digest.image.open('rb'), content_type='image/png')
