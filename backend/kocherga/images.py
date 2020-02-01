@@ -24,13 +24,14 @@ class ImageStorage:
     def set_directory(self, directory):
         self.directory = directory
 
-        self.assets_dir = str(Path(self.directory) / "assets")
+        if not Path(self.directory).exists():
+            Path(self.directory).mkdir()
+
         self.mailchimp_dir = str(Path(self.directory) / "mailchimp")
         self.screenshot_dir = str(Path(self.directory) / "screenshot")
         self.main_dir = str(Path(self.directory) / "images")
 
         for d in (
-            self.assets_dir,
             self.mailchimp_dir,
             self.screenshot_dir,
         ):
