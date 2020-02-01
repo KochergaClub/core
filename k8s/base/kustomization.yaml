@@ -3,3 +3,4 @@ resources:
 - frontend.yaml
 - mysql.yaml
 - redis.yaml
+- chrome.yaml

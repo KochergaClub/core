@@ -6,5 +6,5 @@ spec:
   template:
     spec:
       containers:
-      - name: kocherga-backend
+      - name: http-server
         command: ["./manage.py", "runserver", "0.0.0.0:80"]

@@ -1,5 +1,7 @@
 bases:
   - ../base
+resources:
+  - backend-migrate.yaml
 patches:
   - backend-runserver.yaml
   - dev-node.yaml

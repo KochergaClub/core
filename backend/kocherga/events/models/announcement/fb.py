@@ -327,10 +327,14 @@ class AnnounceSession:
 
         logger.info("Waiting for image selector")
         await page.waitForSelector("[data-testid=event-create-dialog-image-selector]")
-        el = await page.J("[data-testid=event-create-dialog-image-selector]")
-        image_file = event.image_file("default")
-        logger.info(f"Uploading image {image_file}")
-        await el.uploadFile(image_file)
+
+        raise Exception("Uploading is broken since we moved to k8s: file was passed as local path, but we can't mount "
+                        "data fir both in app and in chrome image")
+        # el = await page.J("[data-testid=event-create-dialog-image-selector]")
+        # image_file = event.image_file("default")
+        # logger.info(f"Uploading image {image_file}")
+        # await el.uploadFile(image_file)
+
         logger.info("Waiting for image to appear")
         await page.waitForFunction(
             'document.querySelector("[data-testid=event_create_dialog]")'

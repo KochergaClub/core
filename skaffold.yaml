@@ -18,6 +18,10 @@ build:
       infer:
         - src/**
         - server/**
+  - image: registry.gitlab.com/kocherga/core/chrome
+    context: chrome
+    kaniko:
+      cache: {}
   cluster:
     dockerConfig:
       path: ./docker.json

@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kocherga-backend-migrate
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      containers:
+        - name: default
+          command: ["./manage.py", "migrate"]
+          imagePullPolicy: Always
+          image: registry.gitlab.com/kocherga/core/backend
+          volumeMounts:
+            - name: secrets
+              mountPath: "/code/kocherga/django/settings/secrets.py"
+              subPath: "secrets.py"
+              readOnly: true
+            - name: configs
+              mountPath: "/code/kocherga/django/settings/main.py"
+              subPath: "main.py"
+              readOnly: true
+            - name: data
+              mountPath: "/data"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: kocherga.django.settings.main
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kocherga
+                  key: db_password
+      volumes:
+        - name: secrets
+          secret:
+            secretName: kocherga
+        - name: configs
+          configMap:
+            name: kocherga
+        - name: data
+          emptyDir: {}  # this might be dangerous if migrations use data, but we'll get rid of data volume soon anyway
+      restartPolicy: Never
+  backoffLimit: 1

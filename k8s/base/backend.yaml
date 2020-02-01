@@ -35,39 +35,62 @@ spec:
         app: kocherga-backend
     spec:
       containers:
-      - name: kocherga-backend
-        imagePullPolicy: Always
-        image: registry.gitlab.com/kocherga/core/backend
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - name: secrets
-          mountPath: "/code/kocherga/django/settings/secrets.py"
-          subPath: "secrets.py"
-          readOnly: true
-        - name: configs
-          mountPath: "/code/kocherga/django/settings/main.py"
-          subPath: "main.py"
-          readOnly: true
-        - name: data
-          mountPath: "/data"
-        env:
-        - name: prometheus_multiproc_dir
-          value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
-        - name: DJANGO_SETTINGS_MODULE
-          value: kocherga.django.settings.main
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: kocherga
-              key: db_password
+        - name: http-server
+          imagePullPolicy: Always
+          image: registry.gitlab.com/kocherga/core/backend
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: secrets
+              mountPath: "/code/kocherga/django/settings/secrets.py"
+              subPath: "secrets.py"
+              readOnly: true
+            - name: configs
+              mountPath: "/code/kocherga/django/settings/main.py"
+              subPath: "main.py"
+              readOnly: true
+            - name: data
+              mountPath: "/data"
+          env:
+            - name: prometheus_multiproc_dir
+              value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+            - name: DJANGO_SETTINGS_MODULE
+              value: kocherga.django.settings.main
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kocherga
+                  key: db_password
+        - name: channels-worker # TODO - move additional containers to separate deployments after backend becomes stateless
+          imagePullPolicy: Always
+          image: registry.gitlab.com/kocherga/core/backend
+          command: ["./scripts/channels-worker.sh"]
+          volumeMounts:
+          - name: secrets
+            mountPath: "/code/kocherga/django/settings/secrets.py"
+            subPath: "secrets.py"
+            readOnly: true
+          - name: configs
+            mountPath: "/code/kocherga/django/settings/main.py"
+            subPath: "main.py"
+            readOnly: true
+          - name: data
+            mountPath: "/data"
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: kocherga.django.settings.main
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kocherga
+                  key: db_password
       volumes:
-      - name: secrets
-        secret:
-          secretName: kocherga
-      - name: configs
-        configMap:
-          name: kocherga
-      - name: data
-        persistentVolumeClaim:
-          claimName: kocherga-backend-data
+        - name: secrets
+          secret:
+            secretName: kocherga
+        - name: configs
+          configMap:
+            name: kocherga
+        - name: data
+          persistentVolumeClaim:
+            claimName: kocherga-backend-data
