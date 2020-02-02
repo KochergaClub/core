@@ -1,15 +1,12 @@
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 
-# import os.path
-
 from django.conf import settings
 
 from .models import Auth
 
 API_ID = settings.KOCHERGA_TELEGRAM['core_api']['api_id']
 API_HASH = settings.KOCHERGA_TELEGRAM['core_api']['api_hash']
-# SESSION = os.path.join(settings.DATA_DIR, 'telegram_core_api.session')
 
 
 async def get_client():
