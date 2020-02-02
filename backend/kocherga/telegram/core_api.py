@@ -1,7 +1,7 @@
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 
-import os.path
+# import os.path
 
 from django.conf import settings
 
