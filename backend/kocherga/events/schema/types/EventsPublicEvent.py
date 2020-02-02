@@ -1,5 +1,4 @@
 from kocherga.graphql.types import DjangoObjectType
-from django.conf import settings
 
 from ...import models, markup
 
