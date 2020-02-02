@@ -25,4 +25,5 @@ class MediaStorage(S3Boto3Storage):
 
     def __init__(self, *args, **kwargs):
         kwargs['location'] = 'media'
+        kwargs['default_acl'] = 'private'
         super().__init__(*args, **kwargs)
