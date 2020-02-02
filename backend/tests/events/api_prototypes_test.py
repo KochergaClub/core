@@ -48,7 +48,7 @@ class TestPrototypes:
         assert type(prototypes) == list
         assert len(prototypes) == 1
 
-    def test_upload_image(self, admin_client, image_storage, common_prototype):
+    def test_upload_image(self, admin_client, common_prototype):
         res = admin_client.post(
             f'/api/event_prototypes/{common_prototype.prototype_id}/image',
             {
@@ -56,6 +56,6 @@ class TestPrototypes:
             },
         )
 
-        assert b'JFIF' in open(EventPrototype.by_id(common_prototype.prototype_id).image_file(), 'rb').read()[:10]
+        assert b'JFIF' in EventPrototype.by_id(common_prototype.prototype_id).image.file.open('rb').read()[:10]
 
         assert res.status_code == 200

@@ -1,7 +1,6 @@
 import pytest
 import freezegun
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from kocherga.staff.models import Member, AltEmail
 
@@ -10,7 +9,6 @@ from pathlib import Path
 from datetime import datetime, timedelta
 
 from kocherga.events.models import Event, EventPrototype
-import kocherga.images
 from kocherga.dateutils import TZ
 
 
@@ -27,15 +25,6 @@ def vk_image_file():
 @pytest.fixture(scope='session')
 def image_file():
     return str(Path(__file__).parent / 'images' / 'default')
-
-
-@pytest.fixture
-def image_storage(tmpdir):
-    d = Path(tmpdir) / 'upload'
-    d.mkdir()
-    settings.DATA_DIR = str(tmpdir)
-    kocherga.images.image_storage = kocherga.images.init_global_image_storage()
-    return kocherga.images.image_storage
 
 
 @pytest.fixture
@@ -62,7 +51,7 @@ def event(image_file, vk_image_file):
         event.vk_announcement.add_image(fh)
 
     with open(image_file, 'rb') as fh:
-        event.add_image('default', fh)
+        event.add_image(fh)
 
     yield event
 

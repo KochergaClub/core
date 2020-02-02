@@ -9,10 +9,11 @@ import urllib
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.files.images import ImageFile
+from wagtail.images.models import Image
 from annoying.fields import AutoOneToOneField
 
 from kocherga.error import PublicError
-from kocherga.images import image_storage
 from kocherga.dateutils import TZ
 import kocherga.dateutils
 
@@ -171,7 +172,14 @@ class VkAnnouncement(models.Model):
     link = models.CharField(max_length=1024, blank=True)
 
     group = models.CharField(max_length=40, blank=True)
-    image = models.CharField(max_length=32, blank=True)
+    image_old = models.CharField(max_length=32, blank=True)
+    image = models.ForeignKey(
+        Image,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
 
     objects = Manager()
 
@@ -197,18 +205,16 @@ class VkAnnouncement(models.Model):
 
         return group2id(self.group)
 
-    def image_file(self):
-        if not self.image:
-            raise PublicError("Can't announce - add an image first")
-        return image_storage.get_filename(self.image)
-
     def post_id(self):
         match = re.match(r'.*_(\d+)', self.link)
         return match.group(1)
 
     def add_image(self, fh):
-        key = image_storage.add_file(fh)
-        self.image = key
+        image = Image(title=f'{self.event.title} - VK')
+        image.file.save(f'vk-announcement-image-{self.id}', ImageFile(fh))
+        image.save()
+
+        self.image = image
         self.save()
 
     def announce(self):
@@ -219,8 +225,9 @@ class VkAnnouncement(models.Model):
         #     "url": link,
         # })
 
-        image_file = self.image_file()
-        photo_id = upload_wall_image(group_id, open(image_file, 'rb').read())
+        if not self.image:
+            raise PublicError("Can't announce - add an image first")
+        photo_id = upload_wall_image(group_id, self.image.file.open('rb').read())
 
         message = self.get_text()
 

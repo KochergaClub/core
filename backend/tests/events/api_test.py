@@ -32,21 +32,20 @@ def test_events_from_date(admin_client, common_events):
     assert '2017' in events[0]['start']
 
 
-def test_upload_image(admin_client, image_storage, event):
+def test_upload_image(admin_client, event):
     res = admin_client.post(
         f'/api/event/{event.uuid}/image/vk',
         {
             'file': open('tests/images/vk', 'rb'),
         },
     )
-
-    event.refresh_from_db()
-    assert b'JFIF' in open(event.image_file('vk'), 'rb').read()[:10]
-
     assert res.status_code == 200
 
+    event.refresh_from_db()
+    assert b'JFIF' in event.vk_announcement.image.file.open('rb').read()[:10]
 
-def test_upload_image_from_url(admin_client, image_storage, event):
+
+def test_upload_image_from_url(admin_client, event):
     res = admin_client.post(
         f'/api/event/{event.uuid}/image_from_url/default',
         {
@@ -54,11 +53,11 @@ def test_upload_image_from_url(admin_client, image_storage, event):
         },
         format='json',
     )
+    assert res.status_code == 200
 
     event.refresh_from_db()
-    assert b'PNG' in open(event.image_file('default'), 'rb').read()[:10]
 
-    assert res.status_code == 200
+    assert b'PNG' in event.image.file.open('rb').read()[:10]
 
 
 def test_create(admin_client):

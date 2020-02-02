@@ -6,9 +6,10 @@ from typing import List
 from datetime import datetime, timedelta
 
 from django.db import models
+from django.core.files.images import ImageFile
+from wagtail.images.models import Image
 
 from kocherga.dateutils import TZ
-from kocherga.images import image_storage
 
 from .event import Event
 
@@ -47,7 +48,15 @@ class EventPrototype(models.Model):
     minute = models.IntegerField()
     length = models.IntegerField()  # in minutes
 
-    image = models.CharField(max_length=32, null=True, blank=True)
+    image_old = models.CharField(max_length=32, null=True, blank=True)
+
+    image = models.ForeignKey(
+        Image,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
 
     active = models.BooleanField(default=True)
 
@@ -157,11 +166,12 @@ class EventPrototype(models.Model):
     def cancel_date(self, d):
         self.set_canceled_dates(self.canceled_dates_list + [d])
 
-    def image_file(self):
-        return image_storage.get_filename(self.image)
-
     def add_image(self, fh):
-        self.image = image_storage.add_file(fh)
+        image = Image(title=self.title)
+        image.file.save(f'prototype-image-{self.pk}', ImageFile(fh))
+        image.save()
+
+        self.image = image
         self.save()
 
     def tag_names(self):

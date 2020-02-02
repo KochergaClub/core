@@ -29,7 +29,7 @@ def resolve_announcements(obj, info):
 @EventsPublicEvent.field('image')
 def resolve_image(obj, info):
     if obj.image:
-        return settings.KOCHERGA_API_ROOT + f"/images/{obj.image}"
+        return obj.image.file.url
     else:
         return None
 

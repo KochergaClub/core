@@ -115,16 +115,23 @@ class ImageView(APIView):
             logger.warning('image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead')
             event.vk_announcement.add_image(f)
         else:
-            event.add_image(image_type, f)
+            event.add_image(f)
 
         return Response(ok)
 
     def get(self, request, event_id, image_type):
+        event = Event.objects.get(uuid=event_id)
+        if image_type == 'vk':
+            image = event.vk_announcement.image
+        else:
+            image = event.image
+
+        if not image:
+            raise Exception("No image")  # FIXME - 404?
+
         return FileResponse(
-            open(
-                Event.objects.get(uuid=event_id).image_file(image_type),
-                'rb'
-            )
+            image.file.open('rb'),
+            content_type='image/png'
         )
 
 
@@ -136,10 +143,17 @@ class ImageFromUrlView(APIView):
 
         url = payload["url"]
         r = requests.get(url)
+        r.raise_for_status()
 
         event = Event.objects.get(uuid=event_id)
         fh = BytesIO(r.content)
-        event.add_image(image_type, fh)
+
+        if image_type == 'default':
+            event.add_image(fh)
+        elif image_type == 'vk':
+            event.vk_announcement.add_image(fh)
+        else:
+            raise Exception(f"Unknown image type {image_type}")
 
         return Response(ok)
 

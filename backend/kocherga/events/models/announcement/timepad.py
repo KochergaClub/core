@@ -179,9 +179,9 @@ class TimepadAnnouncement(models.Model):
             "properties": ["organization_letter_checkbox", "timepad_letter_checkbox"],
             "access_status": DEFAULT_ACCESS_STATUS,
         }
-        image = self.event.get_images().get("default", None)
+        image = self.event.image
         if image:
-            data["poster_image_url"] = image
+            data["poster_image_url"] = image.file.url
 
         logger.debug("creating timepad event %s", data)
         result = api_call('POST', 'events', data)

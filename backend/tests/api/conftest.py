@@ -6,17 +6,6 @@ import jwt
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-import kocherga.images
-
-
-@pytest.fixture
-def upload(tmpdir):
-    upload = tmpdir.mkdir('upload')
-    settings.configure(
-        DATA_DIR = str(tmpdir)
-    )
-    kocherga.images.image_storage.set_directory(upload)
-
 
 def _jwt_token(email):
     return jwt.encode(

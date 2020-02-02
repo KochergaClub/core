@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, date
 from kocherga.dateutils import TZ
 from kocherga.events.models import Event
 from kocherga.events import serializers
-import django.db
 
 
 class TestEventConstructor:
@@ -52,19 +51,16 @@ class TestGetEvent:
 
 
 class TestImages:
-    def test_get_images(self, event):
-        assert event.get_images() is not None
-
     def test_add_image(self, event_for_edits, image_file):
         event = event_for_edits
 
         with open(image_file, 'rb') as fh:
-            event.add_image('default', fh)
+            event.add_image(fh)
 
-        assert event.image_file('default')
+        assert event.image.file.url
 
         event = Event.objects.get(pk=event.pk)  # reloading for another check
-        assert event.image_file('default')
+        assert event.image.file.url
 
 
 def test_delete(event):

@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.conf import settings
 
 from kocherga.dateutils import dts
 
@@ -38,7 +37,7 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return settings.KOCHERGA_API_ROOT + f"/images/{obj.image}"
+            return obj.image.get_rendition('original').url
         else:
             return None
 

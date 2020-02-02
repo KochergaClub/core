@@ -49,7 +49,7 @@ class PublicEventSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return settings.KOCHERGA_API_ROOT + f"/images/{obj.image}"
+            return obj.image.file.url
         else:
             return None
 
@@ -173,9 +173,12 @@ class EventSerializer(serializers.ModelSerializer):
     announcements = AnnouncementsSerializer(required=False)
 
     def get_images(self, obj):
-        result = obj.get_images()
+        result = {}
+        if obj.image:
+            result['default'] = obj.image.file.url
+
         if hasattr(obj, 'vk_announcement') and obj.vk_announcement.image:
-            result['vk'] = settings.KOCHERGA_API_ROOT + f"/images/{obj.vk_announcement.image}"
+            result['vk'] = obj.vk_announcement.image.file.url
         return result
 
     def get_tags(self, obj):

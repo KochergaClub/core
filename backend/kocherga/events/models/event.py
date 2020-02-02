@@ -13,14 +13,13 @@ import channels.layers
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
-
+from django.core.files.images import ImageFile
+from wagtail.images.models import Image
 
 from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 from kocherga.django.managers import RelayQuerySetMixin
 
-from kocherga.images import image_storage
 import kocherga.room
-from kocherga.error import PublicError
 
 import kocherga.events.markup
 
@@ -29,9 +28,6 @@ from kocherga.timepad.models import Event as TimepadEvent
 
 def parse_iso8601(s):
     return dateutil.parser.parse(s).astimezone(TZ)
-
-
-IMAGE_TYPES = ["default", "vk"]
 
 
 def ts_now():
@@ -187,7 +183,14 @@ class Event(models.Model):
         default='anticafe'
     )
 
-    image = models.CharField(max_length=32, null=True, blank=True)
+    image_old = models.CharField(max_length=32, null=True, blank=True)
+    image = models.ForeignKey(
+        Image,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
 
     published = models.BooleanField(default=False)
     timing_description_override = models.CharField(max_length=255, blank=True)
@@ -219,45 +222,12 @@ class Event(models.Model):
         summary = self.description.split("\n\n")[0]
         return kocherga.events.markup.Markup(summary).as_plain()
 
-    def image_file(self, image_type):
-        image_id = None
-        if image_type == 'vk':
-            image_id = self.vk_announcement.image
-        elif image_type == 'default':
-            image_id = self.image
-        else:
-            raise Exception(f"Bad image type {image_type}")
-        if not image_id:
-            return None
+    def add_image(self, fh):
+        image = Image(title=self.title)
+        image.file.save(f'event-image-{self.uuid}', ImageFile(fh))
+        image.save()
 
-        return image_storage.get_filename(image_id)
-
-    def get_images(self):
-        images = {}
-
-        for image_type in ('default',):
-            if image_type == 'default':
-                image_id = self.image
-            else:
-                raise NotImplementedError
-
-            if not image_id:
-                continue
-
-            url = settings.KOCHERGA_API_ROOT + f"/images/{image_id}"
-            images[image_type] = url
-
-        return images
-
-    def add_image(self, image_type, fh):
-        if image_type not in IMAGE_TYPES:
-            raise PublicError("unknown image type {}".format(image_type))
-
-        key = image_storage.add_file(fh)
-        if image_type == 'default':
-            self.image = key
-        else:
-            raise NotImplementedError
+        self.image = image
         self.save()
 
     @property
