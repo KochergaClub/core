@@ -51,6 +51,7 @@ django-prometheus
 wagtail-condensedinlinepanel == 0.5.2
 ariadne
 aiodataloader
+django-storages
 
 # dev-dependencies
 pytest

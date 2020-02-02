@@ -140,3 +140,8 @@ TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
 
 KKM_SERVER = 'https://inside.kocherga.club:5893'
 KKM_SERVER_CERT = '/data/KKMServer.pem'
+
+AWS_STORAGE_BUCKET_NAME = 'kocherga'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = 'eu-central-1'
