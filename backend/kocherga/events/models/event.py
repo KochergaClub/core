@@ -13,8 +13,6 @@ import channels.layers
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
 
 from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 from kocherga.django.managers import RelayQuerySetMixin
@@ -22,6 +20,7 @@ from kocherga.django.managers import RelayQuerySetMixin
 import kocherga.room
 
 import kocherga.events.markup
+from kocherga.events.helpers import create_image_from_fh
 
 from kocherga.timepad.models import Event as TimepadEvent
 
@@ -185,7 +184,7 @@ class Event(models.Model):
 
     image_old = models.CharField(max_length=32, null=True, blank=True)
     image = models.ForeignKey(
-        Image,
+        'wagtailimages.Image',
         null=True,
         blank=True,
         on_delete=models.PROTECT,
@@ -223,11 +222,11 @@ class Event(models.Model):
         return kocherga.events.markup.Markup(summary).as_plain()
 
     def add_image(self, fh):
-        image = Image(title=self.title)
-        image.file.save(f'event-image-{self.uuid}', ImageFile(fh))
-        image.save()
-
-        self.image = image
+        self.image = create_image_from_fh(
+            fh,
+            title=self.title,
+            basename=f'event-image-{self.uuid}',
+        )
         self.save()
 
     @property

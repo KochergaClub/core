@@ -6,12 +6,11 @@ from typing import List
 from datetime import datetime, timedelta
 
 from django.db import models
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
 
 from kocherga.dateutils import TZ
 
 from .event import Event
+from ..helpers import create_image_from_fh
 
 
 class EventPrototype(models.Model):
@@ -51,7 +50,7 @@ class EventPrototype(models.Model):
     image_old = models.CharField(max_length=32, null=True, blank=True)
 
     image = models.ForeignKey(
-        Image,
+        'wagtailimages.Image',
         null=True,
         blank=True,
         on_delete=models.PROTECT,
@@ -167,11 +166,11 @@ class EventPrototype(models.Model):
         self.set_canceled_dates(self.canceled_dates_list + [d])
 
     def add_image(self, fh):
-        image = Image(title=self.title)
-        image.file.save(f'prototype-image-{self.pk}', ImageFile(fh))
-        image.save()
-
-        self.image = image
+        self.image = create_image_from_fh(
+            fh,
+            title=self.title,
+            basename=f'prototype-{self.uuid}',
+        )
         self.save()
 
     def tag_names(self):

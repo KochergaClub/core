@@ -9,8 +9,6 @@ import urllib
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from django.core.files.images import ImageFile
-from wagtail.images.models import Image
 from annoying.fields import AutoOneToOneField
 
 from kocherga.error import PublicError
@@ -23,6 +21,7 @@ from kocherga.vk.helpers import group2id, upload_wall_image
 import kocherga.events.markup
 
 from ..event import Event
+from ...helpers import create_image_from_fh
 
 
 class Manager(models.Manager):
@@ -174,7 +173,7 @@ class VkAnnouncement(models.Model):
     group = models.CharField(max_length=40, blank=True)
     image_old = models.CharField(max_length=32, blank=True)
     image = models.ForeignKey(
-        Image,
+        'wagtailimages.Image',
         null=True,
         blank=True,
         on_delete=models.PROTECT,
@@ -210,11 +209,11 @@ class VkAnnouncement(models.Model):
         return match.group(1)
 
     def add_image(self, fh):
-        image = Image(title=f'{self.event.title} - VK')
-        image.file.save(f'vk-announcement-image-{self.id}', ImageFile(fh))
-        image.save()
-
-        self.image = image
+        self.image = create_image_from_fh(
+            fh,
+            title=f'{self.event.title} - VK',
+            basename=f'vk-announcement-image-{self.id}',
+        )
         self.save()
 
     def announce(self):

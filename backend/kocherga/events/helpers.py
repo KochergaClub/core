@@ -1,8 +1,12 @@
 import datetime
 import re
+import imghdr
 
 from kocherga.error import PublicError
 from kocherga.dateutils import TZ
+
+from django.core.files.images import ImageFile
+from wagtail.images.models import Image
 
 
 def build_start_end_dt(date_str, start_time, end_time):
@@ -32,3 +36,18 @@ def build_start_end_dt(date_str, start_time, end_time):
         raise PublicError("Event should end after it starts.")
 
     return (start_dt, end_dt)
+
+
+def create_image_from_fh(fh, title, basename) -> Image:
+    image = Image(title=title)
+    image_type = imghdr.what(fh)
+    if image_type == 'png':
+        ext = 'png'
+    elif image_type == 'jpeg':
+        ext = 'jpg'
+    else:
+        raise Exception(f"Unknown image type {image_type}")
+
+    image.file.save(basename + '.' + ext, ImageFile(fh))
+    image.save()
+    return image
