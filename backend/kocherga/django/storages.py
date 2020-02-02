@@ -10,6 +10,11 @@ class StaticStorage(S3Boto3Storage):
 
     def __init__(self, *args, **kwargs):
         kwargs['location'] = 'static'
+
+        # static files are always public
+        kwargs['querystring_auth'] = False
+        kwargs['default_acl'] = 'public-read'
+
         super().__init__(*args, **kwargs)
 
 
