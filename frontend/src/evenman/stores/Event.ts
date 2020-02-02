@@ -2,6 +2,8 @@ import { action, computed, observable, runInAction } from 'mobx';
 
 import moment from 'moment';
 
+import { buildQueryString } from '~/common/utils';
+
 import { RootStore } from './RootStore';
 
 import EventShape from './EventShape';
@@ -412,7 +414,14 @@ export class Event extends EventShape {
     const date = m.format('YYYY-MM-DD');
     const time = m.format('HH:mm');
     const image = this.getImage('default');
-    return `/api/templater/vk-image/${mode}?date=${date}&time=${time}&title=${title}&header=${header}&background_image=${image}`;
+    const query = buildQueryString({
+      date,
+      time,
+      title: title || '',
+      header: header || '',
+      background_image: image,
+    });
+    return `/api/templater/vk-image/${mode}?${query}`;
   }
 
   @action

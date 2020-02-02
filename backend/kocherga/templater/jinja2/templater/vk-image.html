@@ -131,6 +131,7 @@
   <body>
     {% set d = date | parse_date('%Y-%m-%d') %}
     {% set months = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'] %}
+    {% set weekdays = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье'] %}
     <main class="VkImage">
       <div class="VkImage-Main">
         <div class="VkImage-Background" style="background-image: url(&quot;{{ background_image }}&quot;)">&nbsp;</div>
@@ -140,7 +141,7 @@
           <div class="VkImage-Line"></div>
           <div class="VkImage-Title">{{ title }}</div>
         </div>
-        <div class="VkImage-Datetime">{{ d.day }} {{ months[d.month] }}<br>{{ d.strftime('%A') }}&nbsp;&nbsp;{{ time }}</div>
+        <div class="VkImage-Datetime">{{ d.day }} {{ months[d.month] }}<br>{{ weekdays[d.weekday()] }}&nbsp;&nbsp;{{ time }}</div>
       </div>
       <footer class="VkImage-Footer">
         <div class="VkImage-Footer-Left">
