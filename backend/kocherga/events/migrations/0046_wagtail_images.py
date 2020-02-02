@@ -24,13 +24,20 @@ def fill_wagtail_images(apps, schema_editor):
                 elif model_name == 'EventPrototype':
                     title = obj.title
                 elif model_name == 'VkAnnouncement':
-                    title = obj.title
+                    title = f'{obj.event.title} - VK'
+
+                if model_name == 'Event':
+                    filename = f'event-image-{obj.uuid}'
+                elif model_name == 'EventPrototype':
+                    filename = f'prototype-image-{obj.pk}'
+                elif model_name == 'VkAnnouncement':
+                    filename = f'vk-announcement-image-{obj.id}'
 
                 fh = open(Path(settings.DATA_DIR) / 'upload' / 'images' / (obj.image + '.jpg'), 'rb')
-                image = image_class.objects.create(
-                    file=ImageFile(fh),
-                    title=title,
-                )
+                image = image_class(title=title)
+                image.file.save(filename, ImageFile(fh))
+                image.save()
+
                 # Django doesn't accept Image object here because it checks FK type, so we have to reload it with correct class.
                 historical_image = historical_image_class.objects.get(pk=image.pk)
                 obj.wagtail_image = historical_image
