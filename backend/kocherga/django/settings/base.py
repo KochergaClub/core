@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'kocherga.slack',
     'kocherga.templater',
     'kocherga.faq',
+    'kocherga.telegram',
 
     'taggit',
     'modelcluster',
