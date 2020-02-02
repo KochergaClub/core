@@ -169,7 +169,7 @@ class EventPrototype(models.Model):
         self.image = create_image_from_fh(
             fh,
             title=self.title,
-            basename=f'prototype-{self.uuid}',
+            basename=f'prototype-{self.pk}',
         )
         self.save()
 
