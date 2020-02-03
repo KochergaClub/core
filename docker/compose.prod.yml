@@ -21,17 +21,14 @@ x-backend: &backend
   environment:
     <<: *environment
   volumes:
-    - /data/kocherga:/data
-    - /data/kocherga-static:/code/collected_static
     - /config/secrets.py:/code/kocherga/django/settings/prod_secrets.py
+    - /config/KKMServer.pem:/KKMServer.pem
 
 
 x-frontend: &frontend
   image: registry.gitlab.com/kocherga/core/frontend:${TAG}
   environment:
     <<: *environment
-  volumes:
-    - /data/kocherga:/data  # used for tilda
 
 
 services:
@@ -39,9 +36,9 @@ services:
     image: registry.gitlab.com/kocherga/core/chrome:${TAG}
     cap_add:
       - SYS_ADMIN
-    volumes:
-      # Necessary for image uploads (which are passed by pyppeteer's uploadFile as file paths).
-      - /data/kocherga:/data
+#    volumes:
+#      # Necessary for image uploads (which are passed by pyppeteer's uploadFile as file paths).
+#      - /data/kocherga:/data
     privileged: true
     restart: always
 

@@ -139,7 +139,7 @@ WAGTAILAPI_BASE_URL = f"{KOCHERGA_API_ROOT}/wagtail"
 TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
 
 KKM_SERVER = 'https://inside.kocherga.club:5893'
-KKM_SERVER_CERT = '/data/KKMServer.pem'
+KKM_SERVER_CERT = '/KKMServer.pem'
 
 DEFAULT_FILE_STORAGE = 'kocherga.django.storages.MediaStorage'
 STATICFILES_STORAGE = 'kocherga.django.storages.StaticStorage'

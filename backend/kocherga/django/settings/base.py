@@ -269,6 +269,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# TODO
+# Unused in production - we use django-storages with S3 instead.
+# Unused in development - we use runserver, so STATIC_ROOT stays unused.
+# Maybe this setting should be deleted altogether.
 STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
 MEDIA_ROOT = '/data/upload'
