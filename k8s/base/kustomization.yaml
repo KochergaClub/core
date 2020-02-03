@@ -1,5 +1,7 @@
 resources:
 - backend.yaml
+- channels-worker.yaml
+- worker.yaml
 - frontend.yaml
 - mysql.yaml
 - redis.yaml
