@@ -27,7 +27,6 @@ import { API_HOST, API_ASYNC_HOST } from './constants';
 import trailingSlashEndpoint from './trailingSlashEndpoint';
 import tildaEndpoint from './tildaEndpoint';
 import nextjsEntrypoint from './nextjsEntrypoint';
-import wagtailEntrypoint from './wagtailEntrypoint';
 
 import next from 'next';
 
@@ -83,7 +82,6 @@ async function main() {
 
   app.use(trailingSlashEndpoint);
   app.use(tildaEndpoint);
-  app.use(wagtailEntrypoint(nextApp));
   app.use(nextjsEntrypoint(nextApp));
 
   // Form handling.
