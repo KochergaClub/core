@@ -1,18 +1,6 @@
-image:
-	docker-compose -f docker/compose.dev.yml build
-
 ##### Dev environment #####
-init-dev:
-	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
-
-dev-mac: image
-	nf start -j ./docker/Procfile.mixed
-
-dev: image
-	docker-compose -f docker/compose.dev.yml up
-
-dev-full: image
-	docker-compose -f docker/compose.dev.yml -f docker/compose.dev-extra.yml up
+dev:
+	skaffold dev --port-forward
 
 ##### Tests #####
 test-types:

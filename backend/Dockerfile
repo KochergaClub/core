@@ -30,4 +30,4 @@ RUN pip-sync
 
 COPY . /code/
 
-CMD ["gunicorn", "-c", "python:gunicorn_conf", "kocherga.django.wsgi"]
+CMD ["gunicorn", "-c", "python:gunicorn_conf", "kocherga.django.asgi"]

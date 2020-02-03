@@ -91,3 +91,5 @@ STATICFILES_STORAGE = 'kocherga.django.storages.StaticStorage'
 AWS_STORAGE_BUCKET_NAME = 'kocherga-dev'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'eu-central-1'
+
+KOCHERGA_IMPORTER_DISABLED = True

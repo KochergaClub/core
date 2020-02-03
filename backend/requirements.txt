@@ -13,7 +13,7 @@ aioredis==1.2.0           # via channels-redis
 appdirs==1.4.3            # via black
 apscheduler==3.6.1
 ariadne==0.9.0
-asgiref==3.2.2            # via channels, channels-redis, daphne
+asgiref==3.2.2            # via channels, channels-redis, daphne, django
 asn1crypto==0.24.0        # via cryptography
 async-timeout==3.0.1      # via aiohttp, aioredis
 atomicwrites==1.3.0       # via pytest
@@ -35,7 +35,7 @@ cffi==1.12.3              # via cryptography
 channels-redis==2.4.0
 channels==2.2.0
 chardet==3.0.4            # via aiohttp, requests
-click==7.0                # via black, flask
+click==7.0                # via black, flask, uvicorn
 codecov==2.0.15
 constantly==15.1.0        # via twisted
 coverage==4.5.4           # via codecov, pytest-cov
@@ -44,18 +44,18 @@ cycler==0.10.0            # via matplotlib
 daphne==2.3.0             # via channels
 decorator==4.4.0          # via ipython, traitlets
 defusedxml==0.6.0         # via nbconvert
-django-annoying==0.10.4
+django-annoying==0.10.6
 django-cors-headers==3.1.0
 django-debug-toolbar==2.0
 django-modelcluster==5.0  # via wagtail
 django-prometheus==1.1.0
 django-rest-framework==0.1.0
-django-reversion-compare==0.8.6
-django-reversion==3.0.4
+django-reversion-compare==0.9.0
+django-reversion==3.0.5
 django-storages==1.8
 django-taggit==1.1.0      # via wagtail
 django-treebeard==4.3     # via wagtail
-django==2.2.5
+django==3.0.3
 djangorestframework==3.10.2  # via django-rest-framework, wagtail
 docutils==0.15.2          # via botocore
 draftjs-exporter==2.1.6   # via wagtail
@@ -73,9 +73,11 @@ google-auth==1.6.3
 graphql-core==3.0.1       # via ariadne
 gspread==3.1.0
 gunicorn==19.9.0
+h11==0.9.0                # via uvicorn
 hiredis==1.0.0            # via aioredis
 html5lib==1.0.1           # via wagtail
 httplib2==0.13.1
+httptools==0.0.13         # via uvicorn
 hyperlink==19.0.0         # via twisted
 idna==2.8                 # via hyperlink, requests, yarl
 importlib-metadata==0.20  # via pluggy, pytest
@@ -96,6 +98,7 @@ jupyter-core==4.5.0       # via jupyter-client, nbconvert, nbformat, notebook, q
 jupyter==1.0.0
 keyring==10.3.2           # via pycookiecheat
 kiwisolver==1.1.0         # via matplotlib
+l18n==2018.5              # via wagtail
 lxml==4.4.1               # via feedgen, python-docx
 markdown==3.1.1
 markupsafe==1.1.1         # via jinja2
@@ -166,7 +169,7 @@ seaborn==0.9.0
 secretstorage==3.1.1      # via keyring
 send2trash==1.5.0         # via notebook
 sentry-sdk[flask]==0.11.2
-six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, faker, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, mwclient, packaging, prompt-toolkit, pyhamcrest, pyrsistent, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, wagtail, websocket-client
+six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, faker, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, l18n, mwclient, packaging, prompt-toolkit, pyhamcrest, pyrsistent, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, websocket-client
 slackclient==1.3.2
 slackeventsapi==2.1.0
 slappy==0.5.1
@@ -189,14 +192,16 @@ tzlocal==2.0.0            # via apscheduler
 unidecode==1.1.1          # via wagtail
 uritemplate==3.0.0        # via google-api-python-client
 urllib3==1.25.3           # via botocore, requests, sentry-sdk
-wagtail-condensedinlinepanel==0.5.2
-wagtail==2.7
+uvicorn==0.11.2
+uvloop==0.14.0            # via uvicorn
+git+https://github.com/berekuk/wagtail-condensedinlinepanel.git@master
+wagtail==2.8
 wagtailgeowidget==5.0.2
 git+https://github.com/berekuk/wagtailmath.git@master
 wcwidth==0.1.7            # via prompt-toolkit, pytest
 webencodings==0.5.1       # via bleach, html5lib
 websocket-client==0.54.0  # via slackclient
-websockets==8.0.2
+websockets==8.0.2         # via uvicorn
 werkzeug==0.15.5          # via flask
 whitenoise==4.1.3
 widgetsnbextension==3.5.1  # via ipywidgets

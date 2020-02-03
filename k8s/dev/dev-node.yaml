@@ -37,3 +37,43 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: k3s-dev-node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-worker
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3s-dev-node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-importer
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3s-dev-node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-channels-worker
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3s-dev-node
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-ludwig
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3s-dev-node

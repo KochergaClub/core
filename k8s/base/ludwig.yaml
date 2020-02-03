@@ -1,16 +1,34 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Service
 metadata:
-  name: kocherga-backend-migrate
+  name: kocherga-ludwig
 spec:
-  ttlSecondsAfterFinished: 3600
+  ports:
+  - port: 80
+  selector:
+    app: kocherga-ludwig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-ludwig
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kocherga-ludwig
   template:
+    metadata:
+      labels:
+        app: kocherga-ludwig
     spec:
       containers:
         - name: default
-          command: ["./manage.py", "migrate"]
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
+          command: ["./scripts/ludwig.py"]
+          ports:
+            - containerPort: 80
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"
@@ -20,8 +38,6 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
-            - name: data
-              mountPath: "/data"
           env:
             - name: DJANGO_SETTINGS_MODULE
               value: kocherga.django.settings.main
@@ -37,9 +53,3 @@ spec:
         - name: configs
           configMap:
             name: kocherga
-        - name: data
-          emptyDir: {}  # this might be dangerous if migrations use data, but we'll get rid of data volume soon anyway
-      restartPolicy: Never
-      nodeSelector:
-        kubernetes.io/hostname: k3s-dev-node
-  backoffLimit: 5

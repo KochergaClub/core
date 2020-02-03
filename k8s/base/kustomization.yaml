@@ -2,6 +2,8 @@ resources:
 - backend.yaml
 - channels-worker.yaml
 - worker.yaml
+- importer.yaml
+- ludwig.yaml
 - frontend.yaml
 - mysql.yaml
 - redis.yaml
