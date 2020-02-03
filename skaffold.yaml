@@ -1,38 +1,39 @@
-apiVersion: skaffold/v1
+apiVersion: skaffold/v2alpha3
 kind: Config
 build:
   artifacts:
   - image: registry.gitlab.com/kocherga/core/backend
     context: backend
-    kaniko:
-      cache: {}
     sync:
       infer:
-        - kocherga/**
-        - test/**
+      - kocherga/**
+      - test/**
+    kaniko:
+      cache: {}
   - image: registry.gitlab.com/kocherga/core/frontend
     context: frontend
-    kaniko:
-      cache: {}
     sync:
       infer:
-        - src/**
-        - server/**
+      - src/**
+      - server/**
+    kaniko:
+      cache: {}
   - image: registry.gitlab.com/kocherga/core/chrome
     context: chrome
     kaniko:
       cache: {}
-  cluster:
-    dockerConfig:
-      path: ./docker.json
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
-portForward:
-  - resourceType: deployment
-    resourceName: kocherga-frontend
-    port: 80
-    localPort: 8000
+  cluster:
+    dockerConfig:
+      path: ./docker.json
 deploy:
   kustomize:
-    path: k8s/dev
+    paths:
+    - k8s/dev
+portForward:
+- resourceType: deployment
+  resourceName: kocherga-frontend
+  port: 80
+  localPort: 8000
