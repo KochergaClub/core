@@ -3,3 +3,9 @@ query WagtailPageType($path: String, $preview_token: String) {
     __typename
   }
 }
+
+query TildaPage($path: String!) {
+  tildaPage(path: $path) {
+    html_url
+  }
+}

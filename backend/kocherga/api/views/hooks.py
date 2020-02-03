@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 
 import kocherga.slack.client
-import kocherga.tilda.tools
+import kocherga.tilda.models
 
 # Routes for external hooks.
 
@@ -85,5 +85,5 @@ def r_vk_callback(request):
 def r_tilda_webhook(request):
     page_id = request.query_params.get('pageid', None)
     if page_id is not None:
-        kocherga.tilda.tools.export_page(page_id)
+        kocherga.tilda.models.TildaPage.objects.export_page(page_id)
     return HttpResponse("ok")

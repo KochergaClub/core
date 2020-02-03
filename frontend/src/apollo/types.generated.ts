@@ -1008,6 +1008,8 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
   imageTemplateBySlug: ImageTemplate,
+  tildaPage?: Maybe<TildaPage>,
+  tildaPages: Array<TildaPage>,
 };
 
 
@@ -1138,6 +1140,11 @@ export type QueryMastermindDatingCohortByIdArgs = {
 
 export type QueryImageTemplateBySlugArgs = {
   slug: Scalars['String']
+};
+
+
+export type QueryTildaPageArgs = {
+  path: Scalars['String']
 };
 
 export type RatioActivity = {
@@ -1356,6 +1363,12 @@ export type StaffMember = {
   slack_user?: Maybe<SlackUser>,
 };
 
+export type TildaPage = {
+   __typename?: 'TildaPage',
+  path: Scalars['String'],
+  html_url: Scalars['String'],
+};
+
 export type WagtailBlock = {
   id: Scalars['ID'],
 };
@@ -1448,7 +1461,7 @@ export type ZadarmaCall = {
   sip: Scalars['String'],
   is_recorded: Scalars['Int'],
   watchman: Scalars['String'],
-  record: Scalars['String'],
+  record?: Maybe<Scalars['String']>,
 };
 
 export type ZadarmaData = {

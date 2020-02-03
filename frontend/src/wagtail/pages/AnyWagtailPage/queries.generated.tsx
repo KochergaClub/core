@@ -15,6 +15,19 @@ export type WagtailPageTypeQuery = (
   & { wagtailPage: Types.Maybe<{ __typename: 'ProjectPage' } | { __typename: 'RatioSectionIndexPage' } | { __typename: 'RatioSectionPage' } | { __typename: 'RatioNotebookPage' } | { __typename: 'ProjectIndexPage' } | { __typename: 'FreeFormPage' } | { __typename: 'BlogPostPage' } | { __typename: 'BlogIndexPage' } | { __typename: 'FaqPage' }> }
 );
 
+export type TildaPageQueryVariables = {
+  path: Types.Scalars['String']
+};
+
+
+export type TildaPageQuery = (
+  { __typename?: 'Query' }
+  & { tildaPage: Types.Maybe<(
+    { __typename?: 'TildaPage' }
+    & Pick<Types.TildaPage, 'html_url'>
+  )> }
+);
+
 
 export const WagtailPageTypeDocument = gql`
     query WagtailPageType($path: String, $preview_token: String) {
@@ -50,3 +63,36 @@ export function useWagtailPageTypeLazyQuery(baseOptions?: ApolloReactHooks.LazyQ
 export type WagtailPageTypeQueryHookResult = ReturnType<typeof useWagtailPageTypeQuery>;
 export type WagtailPageTypeLazyQueryHookResult = ReturnType<typeof useWagtailPageTypeLazyQuery>;
 export type WagtailPageTypeQueryResult = ApolloReactCommon.QueryResult<WagtailPageTypeQuery, WagtailPageTypeQueryVariables>;
+export const TildaPageDocument = gql`
+    query TildaPage($path: String!) {
+  tildaPage(path: $path) {
+    html_url
+  }
+}
+    `;
+
+/**
+ * __useTildaPageQuery__
+ *
+ * To run a query within a React component, call `useTildaPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTildaPageQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTildaPageQuery({
+ *   variables: {
+ *      path: // value for 'path'
+ *   },
+ * });
+ */
+export function useTildaPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TildaPageQuery, TildaPageQueryVariables>) {
+        return ApolloReactHooks.useQuery<TildaPageQuery, TildaPageQueryVariables>(TildaPageDocument, baseOptions);
+      }
+export function useTildaPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TildaPageQuery, TildaPageQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TildaPageQuery, TildaPageQueryVariables>(TildaPageDocument, baseOptions);
+        }
+export type TildaPageQueryHookResult = ReturnType<typeof useTildaPageQuery>;
+export type TildaPageLazyQueryHookResult = ReturnType<typeof useTildaPageLazyQuery>;
+export type TildaPageQueryResult = ApolloReactCommon.QueryResult<TildaPageQuery, TildaPageQueryVariables>;
