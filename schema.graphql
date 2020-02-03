@@ -177,7 +177,7 @@ type ZadarmaCall {
   sip: String!
   is_recorded: Int!
   watchman: String!
-  record: String!
+  record: String
 }
 
 type ZadarmaData {
@@ -557,7 +557,7 @@ type StaffMember {
 
 extend type Query {
   ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
-  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "raito.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "ratio.manage")
   ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String! @auth(permission: "ratio.manage")
 }
@@ -1073,4 +1073,14 @@ type FaqEntry {
   id: ID!
   question: String!
   answer: String!
+}
+
+extend type Query {
+  tildaPage(path: String!): TildaPage
+  tildaPages: [TildaPage!]! @staffonly
+}
+
+type TildaPage {
+  path: String!
+  html_url: String!
 }
