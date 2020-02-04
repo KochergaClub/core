@@ -9,6 +9,8 @@ build:
       - kocherga/**
       - test/**
     kaniko:
+      # TODO - resource limits
+      # TODO - enable kaniko optionally in profile, to allow local builds (which can be faster)
       cache: {}
   - image: registry.gitlab.com/kocherga/core/frontend
     context: frontend
@@ -27,13 +29,28 @@ build:
       variant: AbbrevCommitSha
   cluster:
     dockerConfig:
-      path: ./docker.json
-deploy:
-  kustomize:
-    paths:
-    - k8s/dev
+      path: ./docker.json  # TODO - move to using `secretName` instead and store docker config in k8s cluster
+
 portForward:
 - resourceType: deployment
   resourceName: kocherga-frontend
   port: 80
   localPort: 8000
+
+profiles:
+- name: dev
+  activation:
+    - command: dev
+  deploy:
+    kubeContext: dev
+    kustomize:
+      paths:
+      - k8s/dev
+- name: prod
+  activation:
+    - command: run
+  deploy:
+    kubeContext: prod
+    kustomize:
+      paths:
+      - k8s/prod
