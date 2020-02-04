@@ -1,4 +1,5 @@
 *.swp
+.\#*
 .idea/
 .vscode/
 /.dir-locals.el
