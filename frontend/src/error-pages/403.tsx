@@ -1,4 +1,4 @@
-import React from 'react';
+import { staticUrl } from '~/common/utils';
 
 import ErrorPage from './ErrorPage';
 
@@ -6,7 +6,7 @@ const Error403 = () => (
   <ErrorPage
     title="Нет доступа"
     code={403}
-    image="/static/error-pages/403.jpg"
+    image={staticUrl('error-pages/403.jpg')}
   />
 );
 

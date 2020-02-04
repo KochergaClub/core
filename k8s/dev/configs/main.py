@@ -4,6 +4,8 @@ from .secrets import *
 import logging
 logging.basicConfig(level=logging.INFO)
 
+import os
+
 DATA_DIR = '/data'
 
 DEBUG = True
@@ -85,11 +87,12 @@ TELEGRAM_PROXY = "socks5://tor:9050"
 KKM_SERVER = None
 KKM_SERVER_CERT = None
 
-DEFAULT_FILE_STORAGE = 'kocherga.django.storages.MediaStorage'
-STATICFILES_STORAGE = 'kocherga.django.storages.StaticStorage'
+if os.environ.get('S3_BUCKET'):
+    DEFAULT_FILE_STORAGE = 'kocherga.django.storages.MediaStorage'
+    STATICFILES_STORAGE = 'kocherga.django.storages.StaticStorage'
 
-AWS_STORAGE_BUCKET_NAME = 'kocherga-dev'
-AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_S3_REGION_NAME = 'eu-central-1'
+    AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET']
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_REGION_NAME = 'eu-central-1'
 
 KOCHERGA_IMPORTER_DISABLED = True

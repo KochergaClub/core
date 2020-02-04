@@ -1,5 +1,7 @@
 bases:
   - ../base
+resources:
+  - ingress.yaml
 secretGenerator:
   - name: kocherga
     envs:
@@ -8,5 +10,7 @@ secretGenerator:
       - secrets/secrets.py
 configMapGenerator:
   - name: kocherga
+    literals:
+      - s3_bucket="kocherga"
     files:
       - configs/main.py

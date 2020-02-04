@@ -22,6 +22,9 @@ module.exports = {
     yandexMetrikaId: process.env.YANDEX_METRIKA_ID,
     vkRetargetingId: process.env.VK_RETARGETING_ID,
     sentryDSN: process.env.SENTRY_DSN_FRONTEND,
+    staticPrefix: process.env.STATIC_S3_BUCKET
+      ? `https://${process.env.STATIC_S3_BUCKET}.s3.amazonaws.com/static/`
+      : '/static/',
     vkMessagesWidgetId: 99973027,
     contacts: {
       map: {

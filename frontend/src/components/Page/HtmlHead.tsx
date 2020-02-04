@@ -1,12 +1,13 @@
 import React from 'react';
 
 import Head from 'next/head';
-
 import { useRouter } from 'next/router';
+
+import { staticUrl } from '~/common/utils';
 
 import { OpenGraph } from './types';
 
-const DEFAULT_IMAGE = '/static/og-image.png';
+const DEFAULT_IMAGE = staticUrl('og-image.png');
 
 interface Props {
   og: OpenGraph;
@@ -34,7 +35,7 @@ const HtmlHead: React.FC<Props> = ({ og, title, description }) => {
           <meta name="description" content={description} />
         </React.Fragment>
       ) : null}
-      <link rel="shortcut icon" href="/static/favicon.ico" />
+      <link rel="shortcut icon" href={staticUrl('favicon.ico')} />
     </Head>
   );
 };

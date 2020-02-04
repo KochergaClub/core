@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { Column, Row } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
+import { staticUrl } from '~/common/utils';
 
 import {
   MastermindDatingCohortDetailsFragment as Cohort,
@@ -64,7 +65,7 @@ const ParticipantSection: React.FC<Props> = ({ cohort }) => {
         </Row>
         <Row gutter={4}>
           <Head>
-            <link rel="stylesheet" href="/static/react-toggle/style.css" />
+            <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
           </Head>
           <Toggle
             checked={hideUnregistered}

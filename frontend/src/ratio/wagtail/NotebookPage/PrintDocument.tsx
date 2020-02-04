@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
+import { staticUrl } from '~/common/utils';
+
 import PrintContext from './PrintContext';
 import PageCountEditor from './PageCountEditor';
 
@@ -29,12 +31,12 @@ const Container = styled.table`
 
   @font-face {
     font-family: 'Intro Book';
-    src: url('/static/fonts/intro-pack/Intro-Book.otf');
+    src: url('${staticUrl('fonts/intro-pack/Intro-Book.otf')}');
     font-weight: normal;
   }
   @font-face {
     font-family: 'Intro Book';
-    src: url('/static/fonts/intro-pack/Intro-Bold.otf');
+    src: url('${staticUrl('fonts/intro-pack/Intro-Bold.otf')}');
     font-weight: bold;
   }
   font-family: 'Intro Book';

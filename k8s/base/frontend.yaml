@@ -28,3 +28,9 @@ spec:
           image: registry.gitlab.com/kocherga/core/frontend
           ports:
             - containerPort: 80
+          env:
+            - name: STATIC_S3_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: kocherga
+                  key: s3_bucket

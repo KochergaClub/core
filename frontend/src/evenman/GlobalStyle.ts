@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { staticUrl } from '~/common/utils';
 
 const GlobalStyle = createGlobalStyle`
 main {
@@ -11,7 +12,9 @@ textarea {
 
 @font-face {
   font-family: 'Intro';
-  src: local('Intro'), url('/static/fonts/intro.woff2') format('woff2'), url('/static/fonts/intro.woff') format('woff');
+  src: local('Intro'), url('${staticUrl(
+    'fonts/intro.woff2'
+  )}') format('woff2'), url('${staticUrl('fonts/intro.woff')}') format('woff');
   font-weight: 400;
   font-style: normal;
 }

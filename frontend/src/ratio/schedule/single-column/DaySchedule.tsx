@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import { HR } from '@kocherga/frontkit';
 
+import { staticUrl } from '~/common/utils';
+
 import { TrainingDayFragment } from '../../queries.generated';
 
 import Activity from './Activity';
@@ -65,7 +67,7 @@ const DaySchedule: React.FC<Props> = ({ day_schedule, long_name, index }) => (
 
     <DayFooter>
       <DayFooterBranding>
-        <img src="/static/logo.png" />
+        <img src={staticUrl('logo.png')} />
         <div>Кочерга</div>
       </DayFooterBranding>
       <div>{long_name}</div>

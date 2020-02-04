@@ -1,15 +1,19 @@
-import React from 'react';
-
 import styled from 'styled-components';
+
+import { staticUrl } from '~/common/utils';
 
 import { FeaturesListType } from './types';
 
 import Feature from './Feature';
 
-const Logo = () => <img src="/static/logo.png" width="200" height="200" />;
+const Logo = () => <img src={staticUrl('logo.png')} width="200" height="200" />;
 
 const FeaturesList = ({ features }: { features: FeaturesListType }) => (
-  <div>{features.map((feature, i) => <Feature key={i} {...feature} />)}</div>
+  <div>
+    {features.map((feature, i) => (
+      <Feature key={i} {...feature} />
+    ))}
+  </div>
 );
 
 const Container = styled.div`

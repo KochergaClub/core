@@ -2,6 +2,8 @@ import { useContext } from 'react';
 
 import styled from 'styled-components';
 
+import { staticUrl } from '~/common/utils';
+
 import PrintContext from './PrintContext';
 
 import { RatioNotebookPageFragment } from '../fragments.generated';
@@ -85,7 +87,7 @@ export default function Frontpage(props: Props) {
         {false && <EventTitle>Выездной воркшоп по рациональности</EventTitle>}
 
         <BrandLine>
-          <img src="/static/logo.png" />
+          <img src={staticUrl('logo.png')} />
           <div>Кочерга</div>
         </BrandLine>
       </Training>

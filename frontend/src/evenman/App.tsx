@@ -2,12 +2,15 @@ import { useState } from 'react';
 import Head from 'next/head';
 import { observer } from 'mobx-react-lite';
 
-import Page from '~/components/Page';
+import { ParsedUrlQuery } from 'querystring';
+
+import { Page } from '~/components';
 
 import { selectUser } from '~/core/selectors';
 import { NextPage } from '~/common/types';
 import { useAPI } from '~/common/hooks';
 import { APIError } from '~/common/api';
+import { staticUrl } from '~/common/utils';
 
 import GlobalStyle from './GlobalStyle';
 
@@ -17,7 +20,6 @@ import Main from './Main';
 import { RootStore } from './stores/RootStore';
 
 import { Context } from './common';
-import { ParsedUrlQuery } from 'querystring';
 
 interface Props {
   route: string;
@@ -58,8 +60,11 @@ const App: NextPage<Props> = observer(({ route, query }) => {
     <Page title="Event Manager" team chrome="fullscreen">
       <Context.Provider value={store}>
         <Head>
-          <link rel="stylesheet" href="/static/react-toggle/style.css" />
-          <link rel="stylesheet" href="/static/react-dates/datepicker.css" />
+          <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
+          <link
+            rel="stylesheet"
+            href={staticUrl('static/react-dates/datepicker.css')}
+          />
         </Head>
         <GlobalStyle />
         <ErrorList />

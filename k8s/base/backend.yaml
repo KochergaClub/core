@@ -42,6 +42,11 @@ spec:
               value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
             - name: DJANGO_SETTINGS_MODULE
               value: kocherga.django.settings.main
+            - name: S3_BUCKET # FIXME - should this be set in other backend-related pods?
+              valueFrom:
+                configMapKeyRef:
+                  name: kocherga
+                  key: s3_bucket
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import { Row } from '@kocherga/frontkit';
 
+import { staticUrl } from '~/common/utils';
+
 import { ActivityFragment } from '../../queries.generated';
 
 interface Props {
@@ -19,7 +21,7 @@ const timeWithoutSections = (time: string) => {
 const Container = styled.div<{ outline: boolean }>`
   @font-face {
     font-family: 'Intro Book';
-    src: url('/static/fonts/intro-pack/Intro-book.otf');
+    src: url('${staticUrl('fonts/intro-pack/Intro-book.otf')}');
   }
   font-family: 'Intro Book';
 

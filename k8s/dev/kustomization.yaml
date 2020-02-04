@@ -14,5 +14,7 @@ secretGenerator:
       - secrets/secrets.py
 configMapGenerator:
   - name: kocherga
+    literals:
+      - s3_bucket="kocherga-dev"
     files:
       - configs/main.py

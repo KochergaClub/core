@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Link from 'next/link';
+
+import { staticUrl } from '~/common/utils';
 
 import MenuItems from './MenuItems';
 import MobileHeader from './MobileHeader';
@@ -35,7 +37,7 @@ const Container = styled('div')<{ hideOnMobile: boolean; team: boolean }>`
 `;
 
 const LogoImage = () => (
-  <img src="/static/menu-logo.png" width="190" height="50" />
+  <img src={staticUrl('menu-logo.png')} width="190" height="50" />
 );
 
 const Logo = ({ team }: Props) => {

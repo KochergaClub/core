@@ -8,6 +8,7 @@ import baseStyled, {
 import { withApollo } from '~/apollo/client';
 
 import { NextPage } from '~/common/types';
+import { staticUrl } from '~/common/utils';
 
 import { Page, ApolloQueryResults } from '~/components';
 
@@ -105,7 +106,7 @@ const NowPage: NextPage<Props> = props => {
           <Main>
             <TopHeader>
               <a href="/">
-                <TopHeaderLogo src="/static/logo.png" />
+                <TopHeaderLogo src={staticUrl('logo.png')} />
               </a>
               <TopHeaderLink href="/">Кочерга</TopHeaderLink>
             </TopHeader>

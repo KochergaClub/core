@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { staticUrl } from '~/common/utils';
+
 const CardBox = styled.div`
   width: 300px;
 `;
@@ -64,7 +66,7 @@ export default function CustomerCard({ id }: { id: number }) {
       <Top>Кочерга</Top>
       <Middle>
         <img
-          src="/static/logo-150.png"
+          src={staticUrl('logo-150.png')}
           style={{ height: 60, width: 60, flexShrink: 0 }}
         />
         <MiddleText>Антикафе для всех, кто хочет знать</MiddleText>
