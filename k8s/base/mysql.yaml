@@ -18,7 +18,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: hcloud-volumes
 ---
 apiVersion: v1
 kind: ConfigMap
