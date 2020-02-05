@@ -28,6 +28,15 @@ spec:
           image: registry.gitlab.com/kocherga/core/backend
           ports:
             - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /api/graphql
+              httpHeaders:
+                - name: Host
+                  value: localhost
+              port: 80
+            timeoutSeconds: 3
+            periodSeconds: 10
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"

@@ -28,6 +28,15 @@ spec:
           image: registry.gitlab.com/kocherga/core/frontend
           ports:
             - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /.well-known/ping
+              httpHeaders:
+                - name: Host
+                  value: localhost
+              port: 80
+            timeoutSeconds: 3
+            periodSeconds: 10
           env:
             - name: STATIC_S3_BUCKET
               valueFrom:
