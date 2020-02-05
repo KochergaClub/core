@@ -40,6 +40,4 @@ spec:
         - name: data
           emptyDir: {}  # this might be dangerous if migrations use data, but we'll get rid of data volume soon anyway
       restartPolicy: Never
-      nodeSelector:
-        kubernetes.io/hostname: k3s-dev-node
   backoffLimit: 5

@@ -4,7 +4,6 @@ resources:
   - backend-migrate.yaml
 patches:
   - backend-runserver.yaml
-  - dev-node.yaml
   - frontend-with-webpack.yaml
 secretGenerator:
   - name: kocherga
