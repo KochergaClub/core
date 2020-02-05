@@ -21,10 +21,14 @@ build:
       variant: AbbrevCommitSha
 
 portForward:
-- resourceType: deployment
+- resourceType: service
   resourceName: kocherga-frontend
   port: 80
   localPort: 8000
+- resourceType: service
+  resourceName: kocherga-backend
+  port: 80
+  localPort: 8001
 
 profiles:
 - name: dev
