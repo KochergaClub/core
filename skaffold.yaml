@@ -8,28 +8,17 @@ build:
       infer:
       - kocherga/**
       - test/**
-    kaniko:
-      # TODO - resource limits
-      # TODO - enable kaniko optionally in profile, to allow local builds (which can be faster)
-      cache: {}
   - image: registry.gitlab.com/kocherga/core/frontend
     context: frontend
     sync:
       infer:
       - src/**
       - server/**
-    kaniko:
-      cache: {}
   - image: registry.gitlab.com/kocherga/core/chrome
     context: chrome
-    kaniko:
-      cache: {}
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
-  cluster:
-    dockerConfig:
-      path: ./docker.json  # TODO - move to using `secretName` instead and store docker config in k8s cluster
 
 portForward:
 - resourceType: deployment
