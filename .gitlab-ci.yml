@@ -37,10 +37,11 @@ test-python:
   stage: test
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - docker run --rm "$BACKEND_IMAGE"
-      bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+    - docker run --rm
       -v "ops/ci/ci.py:/data/kocherga/django/settings/main.py"
       -v "ops/ci/ci_secrets.py:/data/kocherga/django/settings/ci_secrets.py"
+      "$BACKEND_IMAGE"
+      bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
   cache:
     <<: *build_cache
 
