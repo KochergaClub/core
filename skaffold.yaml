@@ -6,8 +6,9 @@ build:
     context: backend
     sync:
       infer:
+      - scripts/**
       - kocherga/**
-      - test/**
+      - tests/**
   - image: registry.gitlab.com/kocherga/core/frontend
     context: frontend
     sync:
@@ -16,6 +17,8 @@ build:
       - server/**
   - image: registry.gitlab.com/kocherga/core/chrome
     context: chrome
+  - image: registry.gitlab.com/kocherga/core/mysql-backup
+    context: ops/mysql-backup
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha

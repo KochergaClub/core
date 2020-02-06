@@ -8,3 +8,7 @@ spec:
       containers:
       - name: default
         command: ["./manage.py", "runserver", "0.0.0.0:80"]
+        env:
+          - name: PYTHONUNBUFFERED
+            value: "0"  # fix runserver output on compilation issues
+

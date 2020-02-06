@@ -6,3 +6,4 @@ kocherga/django/settings/*secrets.py
 static/dist
 data
 htmlcov
+node_modules

@@ -3,8 +3,6 @@ version: '3.4'
 x-backend:
   &backend
   image: registry.gitlab.com/kocherga/core/backend:${TAG}
-  volumes:
-    - ../backend/data:/data
   environment:
     DJANGO_SETTINGS_MODULE: 'kocherga.django.settings.ci'
     DB_NAME: 'kocherga'
@@ -24,27 +22,6 @@ x-frontend:
     - SYS_PTRACE
 
 services:
-  db:
-    image: mariadb:10.3
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    volumes:
-      - /data/kocherga-db:/var/lib/mysql
-      - ../mysql.conf.d:/etc/mysql/conf.d
-
-  chrome:
-    image: registry.gitlab.com/kocherga/core/chrome:${TAG}
-    cap_add:
-      - SYS_ADMIN
-    ports:
-      - "127.0.0.1:9222:9222"
-    privileged: true
-
-  redis:
-    image: redis:5.0
-    ports:
-      - "127.0.0.1:6379:6379"
-
   api:
     << : *backend
     command: ./manage.py runserver --noreload 0.0.0.0:80

@@ -2,6 +2,7 @@ bases:
   - ../base
 resources:
   - ingress.yaml
+  - mysql-backup.yaml
 secretGenerator:
   - name: kocherga-backend-secret
     behavior: merge
@@ -10,11 +11,22 @@ secretGenerator:
     files:
       - secrets/secrets.py
       - secrets/KKMServer.pem
+  - name: kocherga-backup-secret
+    envs:
+      - secrets/backup.env
 configMapGenerator:
   - name: kocherga-common-env
     behavior: merge
     literals:
       - STATIC_S3_BUCKET="kocherga"
+  - name: kocherga-frontend-env
+    behavior: merge
+    literals:
+      - GOOGLE_ANALYTICS_ID="UA-67233667-1"
+      - FACEBOOK_PIXEL_ID="898467110259"
+      - YANDEX_METRIKA_ID="45841251"
+      - VK_RETARGETING_ID="VK-RTRG-263809-2VWW0"
+      - SENTRY_DSN_FRONTEND="https://0caabf985a0943fab01ad414573a1f9f@sentry.io/1768687"
   - name: kocherga-backend-config
     behavior: merge
     files:

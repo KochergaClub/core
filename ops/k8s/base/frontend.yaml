@@ -23,7 +23,7 @@ spec:
         app: kocherga-frontend
     spec:
       containers:
-        - name: kocherga-frontend
+        - name: default
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/frontend
           ports:

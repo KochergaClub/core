@@ -2,10 +2,10 @@
 Django settings for kocherga project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/2.1/topics/settings/
+https://docs.djangoproject.com/en/3.0/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/2.1/ref/settings/
+https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
@@ -15,7 +15,7 @@ BASE_DIR = str(Path(__file__).parent.parent.parent.parent)
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -185,7 +185,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -202,7 +202,7 @@ CONN_MAX_AGE = 3600
 # Auth
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -251,7 +251,7 @@ REST_FRAMEWORK = {
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru'
 
@@ -263,7 +263,7 @@ USE_L10N = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -329,3 +329,5 @@ TILDA_PROJECT_ID = 14971
 TELEGRAM_PROXY = ''
 
 KOCHERGA_IMPORTER_DISABLED = False
+
+KKM_SERVER_CERT = '/KKMServer.pem'  # mounted by k8s

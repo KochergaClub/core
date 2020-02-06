@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-        - name: kocherga-frontend
+        - name: default
           command: ["./node_modules/.bin/nodemon", "--watch", "dist", "./dist/index.js"]
           env:
             - name: NODE_ENV

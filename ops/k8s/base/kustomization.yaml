@@ -4,6 +4,7 @@ resources:
 - worker.yaml
 - importer.yaml
 - ludwig.yaml
+- tgbot.yaml
 - frontend.yaml
 - mysql.yaml
 - redis.yaml
