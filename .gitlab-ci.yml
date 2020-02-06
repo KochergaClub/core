@@ -15,7 +15,7 @@ test-lint:
   stage: test
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - docker run --rm $BACKEND_IMAGE flake8 kocherga/ --max-line-length=120
+    - docker run --rm "$BACKEND_IMAGE" flake8 kocherga/ --max-line-length=120
   cache:
     paths:
       - build.json
@@ -23,9 +23,9 @@ test-lint:
 test-js:
   stage: test
   script:
-    - export FRONTEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - docker run --rm $FRONTEND_IMAGE npx tsc
-    - docker run --rm $FRONTEND_IMAGE bash -c "npx jest --no-watchman --coverage"
+    - export FRONTEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/frontend")) | .tag')
+    - docker run --rm "$FRONTEND_IMAGE" npx tsc
+    - docker run --rm "$FRONTEND_IMAGE" bash -c "npx jest --no-watchman --coverage"
   cache:
     paths:
       - build.json
@@ -34,7 +34,7 @@ test-python:
   stage: test
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - docker run --rm $BACKEND_IMAGE bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+    - docker run --rm "$BACKEND_IMAGE" bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
 
 deploy_production:
   stage: deploy
