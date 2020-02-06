@@ -37,7 +37,10 @@ test-python:
   stage: test
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - docker run --rm "$BACKEND_IMAGE" bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+    - docker run --rm "$BACKEND_IMAGE"
+      bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+      -v "ops/ci/ci.py:/data/kocherga/django/settings/main.py"
+      -v "ops/ci/ci_secrets.py:/data/kocherga/django/settings/ci_secrets.py"
   cache:
     <<: *build_cache
 
@@ -58,7 +61,7 @@ deploy_production:
   script:
     # migrate and collect static
     - TODO docker-compose run --rm api ./scripts/upgrade.sh
-    - skaffold deploy --status-check
+    - skaffold deploy -a build.json --status-check
   cache:
     <<: *build_cache
   environment:
@@ -87,12 +90,10 @@ deploy_beta:
     - echo "$DOCKER_KEY" > ~/.docker/key.pem
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    # pull new images first (shortens the time between the upgrade and restart)
-    - docker-compose pull
     # NOTE: we don't migrate the DB for beta environment (yet).
     # - docker-compose run --rm api ./scripts/upgrade.sh
     # deploy
-    - docker-compose up -d api api_async render-server
+    - TODO docker-compose up -d api api_async render-server
   cache:
     <<: *build_cache
   environment:
