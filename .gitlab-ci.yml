@@ -6,7 +6,9 @@ build:
   script:
     - git submodule init
     - git submodule update
-    - skaffold build -q --output='{{json .}}' >build.json
+    - skaffold build --file-output=build.json
+  cache:
+    - build.json
 
 test-lint:
   stage: test
