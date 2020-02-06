@@ -1,6 +1,11 @@
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
+cache: &build_cache
+  paths:
+    - build.json
+  policy: pull
+
 build:
   stage: build
   script:
@@ -8,8 +13,8 @@ build:
     - git submodule update
     - skaffold build --file-output=build.json
   cache:
-    paths:
-      - build.json
+    <<: *build_cache
+    policy: push
 
 test-lint:
   stage: test
@@ -17,8 +22,7 @@ test-lint:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
     - docker run --rm "$BACKEND_IMAGE" flake8 kocherga/ --max-line-length=120
   cache:
-    paths:
-      - build.json
+    <<: *build_cache
 
 test-js:
   stage: test
@@ -27,14 +31,15 @@ test-js:
     - docker run --rm "$FRONTEND_IMAGE" npx tsc
     - docker run --rm "$FRONTEND_IMAGE" bash -c "npx jest --no-watchman --coverage"
   cache:
-    paths:
-      - build.json
+    <<: *build_cache
 
 test-python:
   stage: test
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
     - docker run --rm "$BACKEND_IMAGE" bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+  cache:
+    <<: *build_cache
 
 deploy_production:
   stage: deploy
@@ -54,6 +59,8 @@ deploy_production:
     # migrate and collect static
     - TODO docker-compose run --rm api ./scripts/upgrade.sh
     - skaffold deploy --status-check
+  cache:
+    <<: *build_cache
   environment:
     name: production
     url: https://kocherga-club.ru
@@ -86,6 +93,8 @@ deploy_beta:
     # - docker-compose run --rm api ./scripts/upgrade.sh
     # deploy
     - docker-compose up -d api api_async render-server
+  cache:
+    <<: *build_cache
   environment:
     name: beta
     url: https://beta.kocherga-club.ru
