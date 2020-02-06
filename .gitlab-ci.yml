@@ -44,21 +44,11 @@ test-python:
 
 deploy_production:
   stage: deploy
-  variables:
-    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
-    DOCKER_TLS_VERIFY: 1
-    HOST_IP: $DEPLOY_HOST
-    COMPOSE_FILE: docker/compose.prod.yml
-  before_script:
-    # prepare remote docker
-    - mkdir -p ~/.docker
-    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
-    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
-    - echo "$DOCKER_KEY" > ~/.docker/key.pem
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
     # migrate and collect static
-    - TODO docker-compose run --rm api ./scripts/upgrade.sh
+    - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
+    - kubectl run --rm migrate --image=$BACKEND_IMAGE ./scripts/upgrade.sh
+    # deploy
     - skaffold deploy -a build.json --status-check
   cache:
     <<: *build_cache
@@ -68,34 +58,18 @@ deploy_production:
   when: manual
   only:
     - master
+    - k8s
 
-deploy_beta:
-  stage: deploy
-  variables:
-    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
-    DOCKER_TLS_VERIFY: 1
-    HOST_IP: $DEPLOY_HOST
-    API_PORT: 5352
-    API_ASYNC_PORT: 5351
-    RENDER_SERVER_PORT: 5350
-    COMPOSE_FILE: docker/compose.prod.yml
-    COMPOSE_PROJECT_NAME: beta
-  before_script:
-    # prepare remote docker
-    - mkdir -p ~/.docker
-    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
-    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
-    - echo "$DOCKER_KEY" > ~/.docker/key.pem
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  script:
-    # NOTE: we don't migrate the DB for beta environment (yet).
-    # - docker-compose run --rm api ./scripts/upgrade.sh
-    # deploy
-    - TODO docker-compose up -d api api_async render-server
-  cache:
-    <<: *build_cache
-  environment:
-    name: beta
-    url: https://beta.kocherga-club.ru
-  only:
-    - master
+#deploy_beta:
+#  stage: deploy
+#  script:
+#    # NOTE: we don't migrate the DB for beta environment (yet).
+#    # deploy
+#    - skaffold deploy -a build.json --status-check
+#  cache:
+#    <<: *build_cache
+#  environment:
+#    name: beta
+#    url: https://beta.kocherga-club.ru
+#  only:
+#    - master
