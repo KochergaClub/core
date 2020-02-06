@@ -16,6 +16,9 @@ test-lint:
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
     - docker run --rm $BACKEND_IMAGE flake8 kocherga/ --max-line-length=120
+  cache:
+    paths:
+      - build.json
 
 test-js:
   stage: test
@@ -23,6 +26,9 @@ test-js:
     - export FRONTEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
     - docker run --rm $FRONTEND_IMAGE npx tsc
     - docker run --rm $FRONTEND_IMAGE bash -c "npx jest --no-watchman --coverage"
+  cache:
+    paths:
+      - build.json
 
 test-python:
   stage: test
