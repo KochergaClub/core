@@ -3,6 +3,7 @@ bases:
 resources:
   - ingress.yaml
   - mysql-backup.yaml
+  - migrate.yaml
 secretGenerator:
   - name: kocherga-backend-secret
     behavior: merge

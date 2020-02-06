@@ -45,10 +45,6 @@ test-python:
 deploy_production:
   stage: deploy
   script:
-    # migrate and collect static
-    - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - kubectl run --rm migrate --image=$BACKEND_IMAGE ./scripts/upgrade.sh
-    # deploy
     - skaffold deploy -a build.json --status-check
   cache:
     <<: *build_cache
