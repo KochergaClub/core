@@ -26,18 +26,21 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
+          envFrom:
+            - configMapRef:
+                name: kocherga-common-env
+            - configMapRef:
+                name: kocherga-backend-env
           env:
-            - name: DJANGO_SETTINGS_MODULE
-              value: kocherga.django.settings.main
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: db_password
       volumes:
         - name: secrets
           secret:
-            secretName: kocherga
+            secretName: kocherga-backend-secret
         - name: configs
           configMap:
-            name: kocherga
+            name: kocherga-backend-config

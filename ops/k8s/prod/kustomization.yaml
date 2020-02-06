@@ -1,0 +1,21 @@
+bases:
+  - ../base
+resources:
+  - ingress.yaml
+secretGenerator:
+  - name: kocherga-backend-secret
+    behavior: merge
+    envs:
+      - secrets/db-passwords.env
+    files:
+      - secrets/secrets.py
+      - secrets/KKMServer.pem
+configMapGenerator:
+  - name: kocherga-common-env
+    behavior: merge
+    literals:
+      - STATIC_S3_BUCKET="kocherga"
+  - name: kocherga-backend-config
+    behavior: merge
+    files:
+      - configs/main.py

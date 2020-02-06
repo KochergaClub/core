@@ -1,0 +1,33 @@
+resources:
+- backend.yaml
+- channels-worker.yaml
+- worker.yaml
+- importer.yaml
+- ludwig.yaml
+- frontend.yaml
+- mysql.yaml
+- redis.yaml
+- chrome.yaml
+secretGenerator:
+  - name: kocherga-backend-secret
+    literals:
+      - secrets.py=""
+      - KKMServer.pem=""
+      - root_db_password=""
+      - db_password=""
+configMapGenerator:
+  - name: kocherga-common-env
+    literals:
+      - STATIC_S3_BUCKET=""
+  - name: kocherga-backend-env
+    # not used yet; will be used later when we move from main.py settings to env settings
+  - name: kocherga-frontend-env
+    literals:
+      - GOOGLE_ANALYTICS_ID=""
+      - FACEBOOK_PIXEL_ID=""
+      - YANDEX_METRIKA_ID=""
+      - VK_RETARGETING_ID=""
+      - SENTRY_DSN_FRONTEND=""
+  - name: kocherga-backend-config
+    literals:
+      - main.py=""

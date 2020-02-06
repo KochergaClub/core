@@ -1,16 +1,34 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Service
 metadata:
-  name: kocherga-backend-migrate
+  name: kocherga-ludwig
 spec:
-  ttlSecondsAfterFinished: 3600
+  ports:
+  - port: 80
+  selector:
+    app: kocherga-ludwig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kocherga-ludwig
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kocherga-ludwig
   template:
+    metadata:
+      labels:
+        app: kocherga-ludwig
     spec:
       containers:
         - name: default
-          command: ["./manage.py", "migrate"]
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
+          command: ["./scripts/ludwig.py"]
+          ports:
+            - containerPort: 80
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"
@@ -20,24 +38,21 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
-            - name: data
-              mountPath: "/data"
+          envFrom:
+            - configMapRef:
+                name: kocherga-common-env
+            - configMapRef:
+                name: kocherga-backend-env
           env:
-            - name: DJANGO_SETTINGS_MODULE
-              value: kocherga.django.settings.main
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: db_password
       volumes:
         - name: secrets
           secret:
-            secretName: kocherga
+            secretName: kocherga-backend-secret
         - name: configs
           configMap:
-            name: kocherga
-        - name: data
-          emptyDir: {}  # this might be dangerous if migrations use data, but we'll get rid of data volume soon anyway
-      restartPolicy: Never
-  backoffLimit: 5
+            name: kocherga-backend-config

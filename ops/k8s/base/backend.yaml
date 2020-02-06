@@ -23,7 +23,7 @@ spec:
         app: kocherga-backend
     spec:
       containers:
-        - name: http-server
+        - name: default
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
           ports:
@@ -46,25 +46,23 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
+          envFrom:
+            - configMapRef:
+                name: kocherga-common-env
+            - configMapRef:
+                name: kocherga-backend-env
           env:
-            - name: prometheus_multiproc_dir
-              value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
-            - name: DJANGO_SETTINGS_MODULE
-              value: kocherga.django.settings.main
-            - name: S3_BUCKET # FIXME - should this be set in other backend-related pods?
-              valueFrom:
-                configMapKeyRef:
-                  name: kocherga
-                  key: s3_bucket
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: db_password
+            - name: prometheus_multiproc_dir
+              value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
       volumes:
         - name: secrets
           secret:
-            secretName: kocherga
+            secretName: kocherga-backend-secret
         - name: configs
           configMap:
-            name: kocherga
+            name: kocherga-backend-config

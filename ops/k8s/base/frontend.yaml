@@ -37,9 +37,11 @@ spec:
               port: 80
             timeoutSeconds: 3
             periodSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: kocherga-common-env
+            - configMapRef:
+                name: kocherga-frontend-env
           env:
-            - name: STATIC_S3_BUCKET
-              valueFrom:
-                configMapKeyRef:
-                  name: kocherga
-                  key: s3_bucket
+            - name: NODE_ENV
+              value: production

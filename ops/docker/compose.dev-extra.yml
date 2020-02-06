@@ -23,17 +23,6 @@ x-backend:
   cap_add:
     - SYS_PTRACE
 
-x-frontend:
-  &frontend
-  image: registry.gitlab.com/kocherga/core/frontend:dev
-  volumes:
-    - ../frontend/jsx:/code/jsx
-    - ../backend/data/volume:/data
-  environment:
-    <<: *frontend-environment
-  cap_add:
-    - SYS_PTRACE
-
 services:
   tgbot:
     <<: *backend

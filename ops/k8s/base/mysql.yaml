@@ -62,7 +62,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: root_db_password
             - name: MYSQL_DATABASE
               value: kocherga
@@ -71,7 +71,7 @@ spec:
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: db_password
           volumeMounts:
             - name: mysql-storage

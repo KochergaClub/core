@@ -33,7 +33,7 @@ def fill_wagtail_images(apps, schema_editor):
                 elif model_name == 'VkAnnouncement':
                     filename = f'vk-announcement-image-{obj.id}'
 
-                fh = open(Path(settings.DATA_DIR) / 'upload' / 'images' / (obj.image + '.jpg'), 'rb')
+                fh = open(Path('/data') / 'upload' / 'images' / (obj.image + '.jpg'), 'rb')
                 image = image_class(title=title)
                 image.file.save(filename, ImageFile(fh))
                 image.save()

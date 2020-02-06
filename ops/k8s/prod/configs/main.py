@@ -13,7 +13,6 @@ sentry_sdk.init(
 )
 
 DEBUG = False
-DATA_DIR = os.environ.get('DATA_DIR', '/data')
 
 # Security
 
@@ -137,10 +136,10 @@ TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
 KKM_SERVER = 'https://inside.kocherga.club:5893'
 KKM_SERVER_CERT = '/KKMServer.pem'
 
-if os.environ.get('S3_BUCKET'):
+if os.environ.get('STATIC_S3_BUCKET'):
     DEFAULT_FILE_STORAGE = 'kocherga.django.storages.MediaStorage'
     STATICFILES_STORAGE = 'kocherga.django.storages.StaticStorage'
 
-    AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET']
+    AWS_STORAGE_BUCKET_NAME = os.environ['STATIC_S3_BUCKET']
     AWS_S3_SIGNATURE_VERSION = 's3v4'
     AWS_S3_REGION_NAME = 'eu-central-1'

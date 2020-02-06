@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kocherga-worker
+  name: kocherga-importer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kocherga-worker
+      app: kocherga-importer
   template:
     metadata:
       labels:
-        app: kocherga-worker
+        app: kocherga-importer
     spec:
       containers:
         - name: default
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
-          command: ["./scripts/worker.py"]
+          command: ["./scripts/importer.py"]
+          ports:
+            - containerPort: 8000 # for prometheus metrics
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"
@@ -26,18 +28,23 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
+          envFrom:
+            - configMapRef:
+                name: kocherga-common-env
+            - configMapRef:
+                name: kocherga-backend-env
           env:
-            - name: DJANGO_SETTINGS_MODULE
-              value: kocherga.django.settings.main
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: db_password
+            - name: NO_DJANGO_PROMETHEUS
+              value: "1"
       volumes:
         - name: secrets
           secret:
-            secretName: kocherga
+            secretName: kocherga-backend-secret
         - name: configs
           configMap:
-            name: kocherga
+            name: kocherga-backend-config

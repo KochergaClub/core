@@ -6,14 +6,19 @@ patches:
   - backend-runserver.yaml
   - frontend-with-webpack.yaml
 secretGenerator:
-  - name: kocherga
+  - name: kocherga-backend-secret
+    behavior: merge
     envs:
       - secrets/db-passwords.env
     files:
       - secrets/secrets.py
+#      - secrets/KKMServer.pem
 configMapGenerator:
-  - name: kocherga
+  - name: kocherga-common-env
+    behavior: merge
     literals:
-      - s3_bucket="kocherga-dev"
+      - STATIC_S3_BUCKET="kocherga-dev"
+  - name: kocherga-backend-config
+    behavior: merge
     files:
       - configs/main.py

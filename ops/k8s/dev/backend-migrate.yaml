@@ -1,24 +1,16 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: kocherga-importer
+  name: kocherga-backend-migrate
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: kocherga-importer
+  ttlSecondsAfterFinished: 3600
   template:
-    metadata:
-      labels:
-        app: kocherga-importer
     spec:
       containers:
         - name: default
+          command: ["./manage.py", "migrate"]
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
-          command: ["./scripts/importer.py"]
-          ports:
-            - containerPort: 8000 # for prometheus metrics
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"
@@ -28,20 +20,25 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
+          envFrom:
+            - configMapRef:
+                name: kocherga-common-env
+            - configMapRef:
+                name: kocherga-backend-env
           env:
-            - name: NO_DJANGO_PROMETHEUS
-              value: "1"
-            - name: DJANGO_SETTINGS_MODULE
-              value: kocherga.django.settings.main
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga
+                  name: kocherga-backend-secret
                   key: db_password
+            - name: prometheus_multiproc_dir
+              value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
       volumes:
         - name: secrets
           secret:
-            secretName: kocherga
+            secretName: kocherga-backend-secret
         - name: configs
           configMap:
-            name: kocherga
+            name: kocherga-backend-config
+      restartPolicy: Never
+  backoffLimit: 5

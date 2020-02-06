@@ -6,5 +6,5 @@ spec:
   template:
     spec:
       containers:
-      - name: http-server
+      - name: default
         command: ["./manage.py", "runserver", "0.0.0.0:80"]
