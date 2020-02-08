@@ -16,9 +16,9 @@ build:
       - src/**
       - server/**
   - image: registry.gitlab.com/kocherga/core/chrome
-    context: chrome
+    context: ops/images/chrome
   - image: registry.gitlab.com/kocherga/core/mysql-backup
-    context: ops/mysql-backup
+    context: ops/images/mysql-backup
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
