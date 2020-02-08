@@ -29,3 +29,8 @@ spec:
           ports:
             - containerPort: 6379
               name: redis
+          resources:
+            requests:
+              memory: "4Mi"
+            limits:
+              memory: "1024Mi"

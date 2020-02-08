@@ -38,6 +38,11 @@ spec:
               mountPath: "/code/kocherga/django/settings/main.py"
               subPath: "main.py"
               readOnly: true
+          resources:
+            requests:
+              memory: "32Mi"
+            limits:
+              memory: "512Mi"
           envFrom:
             - configMapRef:
                 name: kocherga-common-env

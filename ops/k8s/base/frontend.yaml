@@ -37,6 +37,11 @@ spec:
               port: 80
             timeoutSeconds: 3
             periodSeconds: 10
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "2048Mi"
           envFrom:
             - configMapRef:
                 name: kocherga-common-env

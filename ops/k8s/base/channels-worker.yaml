@@ -17,6 +17,11 @@ spec:
           imagePullPolicy: Always
           image: registry.gitlab.com/kocherga/core/backend
           command: ["./scripts/channels-worker.sh"]
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "2048Gi"
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"

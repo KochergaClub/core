@@ -19,6 +19,12 @@ spec:
           command: ["./scripts/importer.py"]
           ports:
             - containerPort: 8000 # for prometheus metrics
+          resources:
+            requests:
+              memory: "256Mi"
+            limits:
+              memory: "1024Mi"
+              cpu: "0.5"
           volumeMounts:
             - name: secrets
               mountPath: "/code/kocherga/django/settings/secrets.py"

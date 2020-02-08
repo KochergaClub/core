@@ -28,6 +28,11 @@ spec:
         image: registry.gitlab.com/kocherga/core/chrome
         ports:
           - containerPort: 9222
+        resources:
+          requests:
+            memory: "64Mi"
+          limits:
+            memory: "1024Mi"
         securityContext:
           privileged: true
           capabilities:
