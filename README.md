@@ -31,4 +31,4 @@
 
 Деплой организован с помощью GitLab CI, конфиг в файле `.gitlab-ci.yml`.
 
-Изначальная настройка сервера делается с помощью ansible, см. репозиторий [deploy](https://gitlab.com/kocherga/code/deploy), роль `kocherga-core`.
+Изначальная настройка кластера делается в несколько шагов, подробности в [./docs/infra/README.md](./docs/infra).
