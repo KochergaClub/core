@@ -1,0 +1,28 @@
+repositories:
+  - name: stable
+    url: https://kubernetes-charts.storage.googleapis.com
+  - name: incubator
+    url: https://kubernetes-charts-incubator.storage.googleapis.com
+releases:
+  - name: cert-manager
+    chart: ./charts/cert-manager
+  - name: cert-manager-issuers
+    chart: ./charts/cert-manager-issuers
+  - name: namespaces
+    namespace: default
+    chart: incubator/raw
+    values:
+      - resources:
+        - apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: monitor
+#  - name: metabase
+#    namespace: metabase
+#    chart: stable/metabase
+  - name: prometheus
+    namespace: monitor
+    chart: stable/prometheus-operator
+    values:
+      - prometheus-values.yaml
+      - secrets/prometheus.yaml
