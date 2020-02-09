@@ -1,4 +1,0 @@
-resources:
-- namespace.yaml
-- metabase.yaml
-- mysql.yaml

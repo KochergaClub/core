@@ -12,3 +12,4 @@ grafana:
   persistence:
     enabled: true
     size: 10Gi
+    storageClassName: hcloud-volumes # necessary to avoid "cannot patch" helm error

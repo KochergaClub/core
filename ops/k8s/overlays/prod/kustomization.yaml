@@ -1,15 +1,10 @@
 bases:
   - ../../bases/core
-  - ../../bases/metabase
 resources:
   - ingress.yaml
   - mysql-backup.yaml
   - migrate.yaml
 secretGenerator:
-  - name: metabase-secret
-    namespace: metabase
-    envs:
-      - secrets/metabase-db-passwords.env
   - name: kocherga-backend-secret
     behavior: merge
     envs:

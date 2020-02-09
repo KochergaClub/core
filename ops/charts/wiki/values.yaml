@@ -1,0 +1,17 @@
+database:
+  root_password: ""
+  password: ""
+
+domain: ""
+
+image: "registry.gitlab.com/kocherga/core/mediawiki" # will be replaced by skaffold
+
+settings:
+  secret_key: ""
+  slack_notifications_webhook: ""
+  google_login:
+    app_id: ""
+    secret: ""
+  aws:
+    access_key: ""
+    secret_key: ""

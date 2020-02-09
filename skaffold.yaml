@@ -50,3 +50,13 @@ profiles:
     kustomize:
       paths:
       - ops/k8s/overlays/prod
+    helm:
+      releases:
+        - name: kocherga-wiki
+          chartPath: ops/charts/wiki
+          namespace: kocherga-wiki
+          values:
+            image: registry.gitlab.com/kocherga/core/mediawiki
+          valuesFiles:
+            - ops/values/kocherga-wiki.yaml
+            - ops/secrets/kocherga-wiki.yaml
