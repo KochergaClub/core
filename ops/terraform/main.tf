@@ -43,3 +43,9 @@ module "kocherga-wiki-s3" {
   bucket = "kocherga-wiki"
   user = "kocherga-wiki"
 }
+
+module "dns" {
+  source = "./dns"
+
+  k3s_dev_master_ip = module.k3s-dev.master_ip
+}
