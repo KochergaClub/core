@@ -29,6 +29,8 @@
 * kubectl
 * kustomize (?)
 * skaffold
+* helm
+* helmfile
 
 И доступы:
 * AWS
@@ -56,7 +58,11 @@
 * prometheus и grafana
 * verdaccio
 
-(TODO - реализовать и задокументировать выкладку общих сервисов)
+Для их устновки используем helm и helmfile.
+
+Сначала установить helm, helm-diff и helmfile.
+
+Затем запустить `helmfile apply` в `ops`.
 
 ### Шаг 4. Установка core-софта
 
