@@ -48,4 +48,5 @@ module "dns" {
   source = "./dns"
 
   k3s_dev_master_ip = module.k3s-dev.master_ip
+  k3s_prod_master_ip = module.k3s-prod.master_ip
 }
