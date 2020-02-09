@@ -1,5 +1,5 @@
 bases:
-  - ../base
+  - ../../bases/core
 resources:
   - backend-migrate.yaml
 patches:

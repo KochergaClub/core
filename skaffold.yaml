@@ -41,7 +41,7 @@ profiles:
     kubeContext: dev
     kustomize:
       paths:
-      - ops/k8s/dev
+      - ops/k8s/overlays/dev
 - name: prod
   activation:
     - command: run
@@ -49,4 +49,4 @@ profiles:
     kubeContext: prod
     kustomize:
       paths:
-      - ops/k8s/prod
+      - ops/k8s/overlays/prod
