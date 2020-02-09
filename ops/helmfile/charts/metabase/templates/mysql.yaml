@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: metabase-mysql
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: metabase-mysql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: metabase-mysql-pvc
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metabase-mysql
+  namespace: {{ .Release.Namespace }}
+data:
+  my.cnf: |-
+    [client]
+    default-character-set=utf8mb4
+
+    [mysql]
+    default-character-set=utf8mb4
+
+    [mysqld]
+    collation-server = utf8mb4_unicode_ci
+    init-connect='SET NAMES utf8mb4'
+    character-set-server = utf8mb4
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metabase-mysql
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels: 
+      app: metabase-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: metabase-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: {{ .Values.mysql_image | quote }}
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-db
+                  key: root_password
+            - name: MYSQL_DATABASE
+              value: metabase
+            - name: MYSQL_USER
+              value: metabase
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: metabase-db
+                  key: password
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+            - name: config
+              mountPath: "/etc/mysql/conf.d/my.cnf"
+              subPath: my.cnf
+              readOnly: true
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: metabase-mysql-pvc
+        - name: config
+          configMap:
+            name: metabase-mysql

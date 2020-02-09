@@ -1,0 +1,6 @@
+version: "v0.34.0"
+mysql_image: "mariadb:10.3"
+
+database:
+  root_password: ""
+  password: ""
