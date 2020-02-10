@@ -16,8 +16,8 @@
 Для деплоя:
 - terraform
 - k3s (устанавливаемый пока что через ansible, конфиги в deploy-репозитории)
-- kustomize
-- возможно, скоро понадобится helm
+- helm
+- skaffold
 
 ## Как пересоздать всю инфраструктуру
 
@@ -27,10 +27,8 @@
 * Terraform CLI
 * Ansible
 * kubectl
-* kustomize (?)
 * skaffold
 * helm
-* helmfile
 
 И доступы:
 * AWS
@@ -58,14 +56,20 @@
 * prometheus и grafana
 * verdaccio
 
-Для их устновки используем helm и helmfile.
+Для их устновки используем skaffold и helm.
 
-Сначала установить helm, helm-diff и helmfile.
+Сначала установить helm и skaffold.
 
-Затем запустить `helmfile apply` в `ops`.
+Затем запустить
+- `skaffold run -f ./ops/skaffold/base.yaml`
+- `skaffold run -f ./ops/skaffold/monitor.yaml`
+- `skaffold run -f ./ops/skaffold/metabase.yaml`
+- `skaffold run -f ./ops/skaffold/verdaccio.yaml`
+
+Добавочно: `skaffold run -f ./ops/skaffold/wiki.yaml` (установит kocherga-wiki и berekuk-wiki).
 
 ### Шаг 4. Установка core-софта
 
-Создайте файлы в `ops/k8s/prod/secrets/` в соответствии с требуемыми файлами и настройками, упомянутыми в `secretGenerator` из `ops/k8s/prod/kustomization.yaml`.
+Создайте файлы в `ops/secrets/core/prod/` в соответствии с требуемыми файлами и настройками, упомянутыми в chart'е `ops/charts/core` и skaffold-конфиге `skaffold.yaml`.
 
 Запустите `skaffold run`.
