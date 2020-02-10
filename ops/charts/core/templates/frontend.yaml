@@ -50,6 +50,8 @@ spec:
           envFrom:
 {{ include "core.frontend_env_from" . | indent 12 }}
           env:
+            - name: DJANGO_HOST
+              value: {{ .Release.Name }}-django
             - name: NODE_ENV
               value: {{ if .Values.dev }}development{{ else }}production{{ end }}
 {{- if .Values.dev }}

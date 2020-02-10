@@ -4,7 +4,9 @@ database:
 
 domain: ""
 
-image: "registry.gitlab.com/kocherga/core/mediawiki" # will be replaced by skaffold
+image:
+  wiki: ""
+  mysql_backup: ""
 
 settings:
   secret_key: ""
@@ -16,3 +18,9 @@ settings:
     access_key: ""
     secret_key: ""
     bucket_name: ""
+
+backup:
+  s3_bucket: ""
+  s3_path: ""
+  aws_access_key: ""
+  aws_secret_key: ""

@@ -28,6 +28,7 @@ ingress:
 
 backup:
   s3_bucket: ""
+  s3_path: ""
   aws_access_key: ""
   aws_secret_key: ""
 

@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-mysql-backup
   namespace: {{ .Release.Namespace }}
 spec:
-  schedule: "25 3 * * *"
+  schedule: "10 4 * * *"
   jobTemplate:
     spec:
       template:
@@ -19,9 +19,9 @@ spec:
               - name: DB_HOST
                 value: {{ .Release.Name }}-mysql
               - name: DB_NAME
-                value: kocherga
+                value: wiki
               - name: DB_USER
-                value: kocherga
+                value: wiki
               - name: DB_PASSWORD
                 valueFrom:
                   secretKeyRef:

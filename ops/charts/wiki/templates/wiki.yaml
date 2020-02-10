@@ -27,7 +27,7 @@ spec:
       containers:
         - name: wiki
           imagePullPolicy: Always
-          image: {{ .Values.image }}
+          image: {{ .Values.image.wiki }}
           ports:
             - containerPort: 80
           env:

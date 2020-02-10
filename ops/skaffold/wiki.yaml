@@ -4,6 +4,8 @@ build:
   artifacts:
   - image: registry.gitlab.com/kocherga/core/mediawiki
     context: ops/images/mediawiki
+  - image: registry.gitlab.com/kocherga/core/mysql-backup
+    context: ops/images/mysql-backup
 deploy:
   helm:
     flags:
@@ -13,7 +15,8 @@ deploy:
       - name: kocherga-wiki
         chartPath: ops/charts/wiki
         values:
-          image: registry.gitlab.com/kocherga/core/mediawiki
+          image.wiki: registry.gitlab.com/kocherga/core/mediawiki
+          image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
         valuesFiles:
           - ops/values/kocherga-wiki.yaml
           - ops/secrets/kocherga-wiki.yaml
@@ -21,7 +24,8 @@ deploy:
         chartPath: ops/charts/wiki
         namespace: berekuk
         values:
-          image: registry.gitlab.com/kocherga/core/mediawiki
+          image.wiki: registry.gitlab.com/kocherga/core/mediawiki
+          image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
         valuesFiles:
           - ops/values/berekuk-wiki.yaml
           - ops/secrets/berekuk-wiki.yaml
