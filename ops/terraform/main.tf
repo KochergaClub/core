@@ -24,28 +24,30 @@ module "k3s-prod" {
 }
 
 module "kocherga-s3" {
-  source = "./kocherga-s3"
+  source = "./s3"
 
   user = "kocherga-backend"
   bucket = "kocherga"
+  cors = true
 }
 
 module "kocherga-s3-dev" {
-  source = "./kocherga-s3"
+  source = "./s3"
 
   user = "kocherga-backend-berekuk-dev"
   bucket = "kocherga-berekuk-dev"
+  cors = true
 }
 
 module "kocherga-wiki-s3" {
-  source = "./wiki-s3"
+  source = "./s3"
 
   bucket = "kocherga-wiki"
   user = "kocherga-wiki"
 }
 
 module "berekuk-wiki-s3" {
-  source = "./wiki-s3"
+  source = "./s3"
 
   bucket = "berekuk-wiki"
   user = "berekuk-wiki"
