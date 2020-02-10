@@ -76,6 +76,16 @@ resource "aws_iam_user_policy" "backup-policy" {
       "Resource": [
         "arn:aws:s3:::${var.backup_bucket}/*"
       ]
+    },
+    {
+        "Effect": "Allow",
+        "Action": [
+            "s3:Get*",
+            "s3:List*"
+        ],
+        "Resource": [
+            "arn:aws:s3:::${var.backup_bucket}"
+        ]
     }
   ]
 }
