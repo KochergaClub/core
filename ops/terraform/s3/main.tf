@@ -53,3 +53,27 @@ resource "aws_iam_user_policy" "policy" {
 }
 EOF
 }
+
+resource "aws_iam_user_policy" "backup-policy" {
+  count = var.backup_bucket != "" ? 1 : 0
+
+  name = "${aws_iam_user.user.name}--backups"
+  user    = aws_iam_user.user.name
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.backup_bucket}/*"
+      ]
+    }
+  ]
+}
+EOF
+}

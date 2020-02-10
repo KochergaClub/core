@@ -9,6 +9,16 @@ provider "hcloud" {
   token = var.hcloud_token
 }
 
+module "kocherga-backups" {
+  source = "./s3-backups"
+  bucket = "kocherga-backups"
+}
+
+module "berekuk-backups" {
+  source = "./s3-backups"
+  bucket = "berekuk-backups"
+}
+
 module "k3s-dev" {
   source = "./k3s-cluster"
 
@@ -26,16 +36,17 @@ module "k3s-prod" {
 module "kocherga-s3" {
   source = "./s3"
 
-  user = "kocherga-backend"
   bucket = "kocherga"
+  user = "kocherga-backend"
   cors = true
+  backup_bucket = "kocherga-backups"
 }
 
 module "kocherga-s3-dev" {
   source = "./s3"
 
-  user = "kocherga-backend-berekuk-dev"
   bucket = "kocherga-berekuk-dev"
+  user = "kocherga-backend-berekuk-dev"
   cors = true
 }
 
@@ -44,6 +55,7 @@ module "kocherga-wiki-s3" {
 
   bucket = "kocherga-wiki"
   user = "kocherga-wiki"
+  backup_bucket = "kocherga-backups"
 }
 
 module "berekuk-wiki-s3" {
@@ -51,6 +63,7 @@ module "berekuk-wiki-s3" {
 
   bucket = "berekuk-wiki"
   user = "berekuk-wiki"
+  backup_bucket = "berekuk-backups"
 }
 
 module "dns" {
