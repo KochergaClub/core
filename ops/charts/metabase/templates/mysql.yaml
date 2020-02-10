@@ -66,14 +66,7 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: /var/lib/mysql
-            - name: config
-              mountPath: "/etc/mysql/conf.d/my.cnf"
-              subPath: my.cnf
-              readOnly: true
       volumes:
         - name: storage
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-mysql
-        - name: config
-          configMap:
-            name: {{ .Release.Name }}-mysql
