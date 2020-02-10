@@ -2,6 +2,10 @@ resource "aws_s3_bucket" "bucket" {
   bucket = var.bucket
   acl    = "private"
 
+  versioning {
+    enabled = true
+  }
+
   dynamic "cors_rule" {
     for_each = var.cors ? [1] : []
     content {
