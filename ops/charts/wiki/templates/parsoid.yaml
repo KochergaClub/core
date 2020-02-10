@@ -8,7 +8,7 @@ spec:
   - port: 80
     targetPort: 8000
   selector:
-    app: parsoid
+    app: {{ .Release.Name }}-parsoid
 ---
 apiVersion: apps/v1
 kind: Deployment

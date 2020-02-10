@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-ludwig
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: {{ .Release.Name }}-ludwig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ludwig
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-ludwig
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-ludwig
+    spec:
+      containers:
+        - name: default
+          imagePullPolicy: Always
+          image: {{ .Values.image.backend | quote }}
+          command: ["./scripts/ludwig.py"]
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "32Mi"
+            limits:
+              memory: "512Mi"
+          volumeMounts:
+{{ include "core.backend_mount_configs" . | indent 12 }}
+          envFrom:
+{{ include "core.backend_env_from" . | indent 12 }}
+          env:
+{{ include "core.backend_env_db" . | indent 12 }}
+      volumes:
+{{ include "core.backend_volumes" . | indent 8 }}

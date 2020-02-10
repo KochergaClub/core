@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-common-env
+data:
+  STATIC_S3_BUCKET: {{ .Values.env.common.STATIC_S3_BUCKET | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-frontend-env
+data:
+  GOOGLE_ANALYTICS_ID: {{ .Values.env.frontend.GOOGLE_ANALYTICS_ID | quote }}
+  FACEBOOK_PIXEL_ID: {{ .Values.env.frontend.FACEBOOK_PIXEL_ID | quote }}
+  YANDEX_METRIKA_ID: {{ .Values.env.frontend.YANDEX_METRIKA_ID | quote }}
+  VK_RETARGETING_ID: {{ .Values.env.frontend.VK_RETARGETING_ID | quote }}
+  SENTRY_DSN_FRONTEND: {{ .Values.env.frontend.SENTRY_DSN_FRONTEND | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-env
+data: {} # not used yet; will be used later when we move from main.py settings to env settings
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-config
+data:
+  main.py: {{ required "config.main_py is required" .Values.config.main_py | quote }}

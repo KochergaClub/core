@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-django
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: {{ .Release.Name }}-django
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-django
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: {{ .Release.Name }}-django
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-django
+    spec:
+      containers:
+        - name: default
+          imagePullPolicy: Always
+          image: {{ .Values.image.backend }}
+{{- if .Values.dev }}
+          command: ["./manage.py", "runserver", "0.0.0.0:80"]
+{{- end }}
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /api/graphql
+              httpHeaders:
+                - name: Host
+                  value: localhost
+              port: 80
+            timeoutSeconds: 3
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "512Mi"
+            limits:
+              memory: "2048Mi"
+          volumeMounts:
+{{ include "core.backend_mount_configs" . | indent 12 }}
+          envFrom:
+{{ include "core.backend_env_from" . | indent 12 }}
+          env:
+{{ include "core.backend_env_db" . | indent 12 }}
+            - name: prometheus_multiproc_dir
+              value: /tmp # TODO - create empty tmpfs dir to avoid file name collisions etc.
+{{- if .Values.dev }}
+            - name: PYTHONUNBUFFERED
+              value: "0"  # fix runserver output on compilation issues
+{{- end }}
+      volumes:
+{{ include "core.backend_volumes" . | indent 8 }}

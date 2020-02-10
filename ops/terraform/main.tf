@@ -44,6 +44,13 @@ module "kocherga-wiki-s3" {
   user = "kocherga-wiki"
 }
 
+module "berekuk-wiki-s3" {
+  source = "./wiki-s3"
+
+  bucket = "berekuk-wiki"
+  user = "berekuk-wiki"
+}
+
 module "dns" {
   source = "./dns"
 

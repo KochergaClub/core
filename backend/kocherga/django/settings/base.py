@@ -161,11 +161,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 ASGI_APPLICATION = 'kocherga.django.routing.application'
 
+REDIS_HOST = os.environ['REDIS_HOST']
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("kocherga-redis", 6379)],
+            "hosts": [(REDIS_HOST, 6379)],
         },
     },
 }
@@ -193,7 +195,7 @@ DATABASES = {
         'NAME': 'kocherga',
         'USER': 'kocherga',
         'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': 'kocherga-mysql',
+        'HOST': os.environ['DB_HOST'],
     }
 }
 

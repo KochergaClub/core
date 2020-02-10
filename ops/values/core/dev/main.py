@@ -1,10 +1,10 @@
 from .base import *
 from .secrets import *
 
+import os
+
 import logging
 logging.basicConfig(level=logging.INFO)
-
-import os
 
 DATA_DIR = '/data'
 
@@ -82,7 +82,7 @@ WAGTAILAPI_BASE_URL = "http://localhost:5302/api/wagtail"
 
 TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
 
-TELEGRAM_PROXY = "socks5://tor:9050"
+# TELEGRAM_PROXY = "socks5://tor:9050"
 
 KKM_SERVER = None
 KKM_SERVER_CERT = None

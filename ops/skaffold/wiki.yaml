@@ -17,3 +17,11 @@ deploy:
         valuesFiles:
           - ops/values/kocherga-wiki.yaml
           - ops/secrets/kocherga-wiki.yaml
+      - name: berekuk-wiki
+        chartPath: ops/charts/wiki
+        namespace: berekuk
+        values:
+          image: registry.gitlab.com/kocherga/core/mediawiki
+        valuesFiles:
+          - ops/values/berekuk-wiki.yaml
+          - ops/secrets/berekuk-wiki.yaml

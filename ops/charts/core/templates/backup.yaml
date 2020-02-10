@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: kocherga-mysql-backup
+  name: {{ .Release.Name }}-mysql-backup
 spec:
   schedule: "25 3 * * *"
   jobTemplate:
@@ -10,14 +10,14 @@ spec:
         spec:
           containers:
           - name: default
-            image: registry.gitlab.com/kocherga/core/mysql-backup
+            image: {{ .Values.image.mysql_backup | quote }}
             envFrom:
               - secretRef:
-                  name: kocherga-backup-secret
+                  name: {{ .Release.Name }}-backup
             env:
               - name: DB_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: kocherga-backend-secret
-                    key: db_password
+                    name: {{ .Release.Name }}-mysql
+                    key: password
           restartPolicy: OnFailure

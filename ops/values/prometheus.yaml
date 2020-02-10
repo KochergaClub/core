@@ -8,8 +8,22 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+
 grafana:
   persistence:
     enabled: true
     size: 10Gi
     storageClassName: hcloud-volumes # necessary to avoid "cannot patch" helm error
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      traefik.ingress.kubernetes.io/redirect-entry-point: https
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.k8s.kocherga.club
+#          - grafana.team.kocherga.club
+    hosts:
+      - grafana.k8s.kocherga.club
+#      - grafana.team.kocherga.club

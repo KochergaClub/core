@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-django-migrate
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      containers:
+        - name: default
+          command: ["./scripts/upgrade.sh"]
+          imagePullPolicy: Always
+          image: {{ .Values.image.backend | quote }}
+          volumeMounts:
+{{ include "core.backend_mount_configs" . | indent 12 }}
+          envFrom:
+{{ include "core.backend_env_from" . | indent 12 }}
+          env:
+{{ include "core.backend_env_db" . | indent 12 }}
+      volumes:
+{{ include "core.backend_volumes" . | indent 8 }}
+      restartPolicy: Never
+  backoffLimit: 2

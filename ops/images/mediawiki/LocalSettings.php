@@ -49,7 +49,7 @@ $wgEmailAuthentication = false;
 
 ## Database settings
 $wgDBtype = "mysql";
-$wgDBserver = "mysql";
+$wgDBserver = getenv('DB_HOST');
 $wgDBname = getenv('DB_NAME');
 $wgDBuser = getenv('DB_USER');
 $wgDBpassword = getenv('DB_PASSWORD');
@@ -168,9 +168,11 @@ $wgVisualEditorEnableWikitext = true;
 $wgDefaultUserOptions['visualeditor-newwikitext'] = 1;
 $wgHiddenPrefs[] = 'visualeditor-newwikitext';
 
-wfLoadExtension('GoogleLogin');
-$wgGLAppId = getenv('GOOGLE_LOGIN_APP_ID');
-$wgGLSecret = getenv('GOOGLE_LOGIN_SECRET');
+if ( defined(getenv('GOOGLE_LOGIN_APP_ID')) ) {
+    wfLoadExtension('GoogleLogin');
+    $wgGLAppId = getenv('GOOGLE_LOGIN_APP_ID');
+    $wgGLSecret = getenv('GOOGLE_LOGIN_SECRET');
+}
 
 $wgWhitelistRead = ['Special:GoogleLoginReturn', 'Служебная:GoogleLoginReturn'];
 
@@ -214,8 +216,8 @@ wfLoadExtension( 'VisualEditor' );
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
 
 $wgVirtualRestConfig['modules']['parsoid'] = array(
-  'url' => 'http://parsoid.default',
-  'domain' => 'kocherga',
+    'url' => 'http://' . getenv('PARSOID_HOST'),
+    'domain' => 'wiki',
 );
 $wgVirtualRestConfig['modules']['parsoid']['forwardCookies'] = true;
 
@@ -233,6 +235,6 @@ $wgAWSCredentials = [
 	'token' => false
 ];
 $wgAWSRegion = 'eu-central-1';
-$wgAWSBucketName = 'kocherga-wiki';
+$wgAWSBucketName = getenv('AWS_BUCKET_NAME');
 $wgAWSRepoHashLevels = '2';
 $wgAWSRepoDeletedHashLevels = '3';

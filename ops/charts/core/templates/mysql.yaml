@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kocherga-mysql
+  name: {{ .Release.Name }}-mysql
 spec:
   ports:
   - port: 3306
   selector:
-    app: kocherga-mysql
+    app: {{ .Release.Name }}-mysql
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: kocherga-mysql-pvc
+  name: {{ .Release.Name }}-mysql
 spec:
   accessModes:
   - ReadWriteOnce
@@ -19,41 +19,29 @@ spec:
     requests:
       storage: 10Gi
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kocherga-mysql
-data:
-  my.cnf: |-
-    [client]
-    default-character-set=utf8mb4
-
-    [mysql]
-    default-character-set=utf8mb4
-
-    [mysqld]
-    collation-server = utf8mb4_unicode_ci
-    init-connect='SET NAMES utf8mb4'
-    character-set-server = utf8mb4
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kocherga-mysql
+  name: {{ .Release.Name }}-mysql
 spec:
   selector:
     matchLabels: 
-      app: kocherga-mysql
+      app: {{ .Release.Name }}-mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: kocherga-mysql
+        app: {{ .Release.Name }}-mysql
     spec:
       containers:
         - name: mysql
           image: mariadb:10.3
+          command:
+            - "/docker-entrypoint.sh"
+            - "--character-set-server=utf8mb4"
+            - "--collation-server=utf8mb4_unicode_ci"
+            - "--skip-character-set-client-handshake"
           ports:
             - containerPort: 3306
               name: mysql
@@ -61,8 +49,8 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga-backend-secret
-                  key: root_db_password
+                  name: {{ .Release.Name }}-mysql
+                  key: root_password
             - name: MYSQL_DATABASE
               value: kocherga
             - name: MYSQL_USER
@@ -70,19 +58,12 @@ spec:
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: kocherga-backend-secret
-                  key: db_password
+                  name: {{ .Release.Name }}-mysql
+                  key: password
           volumeMounts:
-            - name: mysql-storage
+            - name: storage
               mountPath: /var/lib/mysql
-            - name: config
-              mountPath: "/etc/mysql/conf.d/my.cnf"
-              subPath: my.cnf
-              readOnly: true
       volumes:
-        - name: mysql-storage
+        - name: storage
           persistentVolumeClaim:
-            claimName: kocherga-mysql-pvc
-        - name: config
-          configMap:
-            name: kocherga-mysql
+            claimName: {{ .Release.Name }}-mysql

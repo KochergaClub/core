@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-worker
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-worker
+    spec:
+      containers:
+        - name: default
+          imagePullPolicy: Always
+          image: {{ .Values.image.backend | quote }}
+          command: ["./scripts/worker.py"]
+          resources:
+            requests:
+              memory: "32Mi"
+            limits:
+              memory: "1024Mi"
+              cpu: "0.5"
+          volumeMounts:
+{{ include "core.backend_mount_configs" . | indent 12 }}
+          envFrom:
+{{ include "core.backend_env_from" . | indent 12 }}
+          env:
+{{ include "core.backend_env_db" . | indent 12 }}
+      volumes:
+{{ include "core.backend_volumes" . | indent 8 }}

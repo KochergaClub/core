@@ -39,24 +39,45 @@ profiles:
     - command: dev
   deploy:
     kubeContext: dev
-    kustomize:
-      paths:
-      - ops/k8s/overlays/dev
+    helm:
+      flags:
+        upgrade:
+          - --install
+      releases:
+        - name: core
+          chartPath: ops/charts/core
+          values:
+            image.backend: registry.gitlab.com/kocherga/core/backend
+            image.frontend: registry.gitlab.com/kocherga/core/frontend
+            image.chrome: registry.gitlab.com/kocherga/core/chrome
+            image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+          valuesFiles:
+            - ops/values/core/dev/main.yaml
+            - ops/secrets/core/dev/main.yaml
+          setFiles:
+            config.main_py: ops/values/core/dev/main.py
+            config.secrets_py: ops/secrets/core/dev/secrets.py
 - name: prod
   activation:
     - command: run
   deploy:
     kubeContext: prod
-    kustomize:
-      paths:
-      - ops/k8s/overlays/prod
     helm:
+      flags:
+        upgrade:
+          - --install
       releases:
-        - name: kocherga-wiki
-          chartPath: ops/charts/wiki
-          namespace: kocherga-wiki
+        - name: core
+          chartPath: ops/charts/core
           values:
-            image: registry.gitlab.com/kocherga/core/mediawiki
+            image.backend: registry.gitlab.com/kocherga/core/backend
+            image.frontend: registry.gitlab.com/kocherga/core/frontend
+            image.chrome: registry.gitlab.com/kocherga/core/chrome
+            image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
           valuesFiles:
-            - ops/values/kocherga-wiki.yaml
-            - ops/secrets/kocherga-wiki.yaml
+            - ops/values/core/prod/main.yaml
+            - ops/secrets/core/prod/main.yaml
+          setFiles:
+            config.main_py: ops/values/core/prod/main.py
+            config.secrets_py: ops/secrets/core/prod/secrets.py
+            config.KKMServer_pem: ops/secrets/core/prod/KKMServer.pem

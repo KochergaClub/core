@@ -21,6 +21,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-wiki
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
     spec:
       containers:
         - name: wiki
@@ -31,6 +33,10 @@ spec:
           env:
             - name: WIKI_DOMAIN
               value: {{ .Values.domain | quote }}
+            - name: PARSOID_HOST
+              value: {{ .Release.Name }}-parsoid
+            - name: DB_HOST
+              value: {{ .Release.Name }}-mysql
             - name: DB_NAME
               value: wiki
             - name: DB_USER
@@ -70,6 +76,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-settings
                   key: aws-secret-key
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-settings
+                  key: aws-bucket-name
         - name: memcached
           image: memcached
 ---
@@ -78,13 +89,13 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging
-#    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
 spec:
-#  tls:
-#  - hosts:
-#    - {{ .Values.domain | quote }}
-#    secretName: {{ .Release.Name }}-wiki-tls
+  tls:
+  - hosts:
+    - {{ .Values.domain | quote }}
+    secretName: {{ .Release.Name }}-wiki-tls
   rules:
   - host: {{ .Values.domain | quote }}
     http:

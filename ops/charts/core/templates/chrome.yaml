@@ -1,31 +1,31 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kocherga-chrome
+  name: {{ .Release.Name }}-chrome
 spec:
   ports:
   - port: 9222
   selector:
-    app: kocherga-chrome
+    app: {{ .Release.Name }}-chrome
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kocherga-chrome
+  name: {{ .Release.Name }}-chrome
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: kocherga-chrome
+      app: {{ .Release.Name }}-chrome
   template:
     metadata:
       labels:
-        app: kocherga-chrome
+        app: {{ .Release.Name }}-chrome
     spec:
       containers:
       - name: default
         imagePullPolicy: Always
-        image: registry.gitlab.com/kocherga/core/chrome
+        image: {{ .Values.image.chrome }}
         ports:
           - containerPort: 9222
         resources:

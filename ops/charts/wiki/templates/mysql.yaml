@@ -7,7 +7,7 @@ spec:
   ports:
   - port: 3306
   selector:
-    app: mysql
+    app: {{ .Release.Name }}-mysql
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
