@@ -19,3 +19,12 @@ deploy:
       - name: cert-manager-issuers
         chartPath: ops/charts/cert-manager-issuers
         wait: true
+
+      - name: traefik
+        namespace: kube-system
+        chartPath: stable/traefik
+        version: 1.86.1
+        valuesFiles:
+          - ops/values/traefik.yaml
+        remote: true
+        wait: true

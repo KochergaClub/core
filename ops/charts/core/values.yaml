@@ -25,6 +25,7 @@ database:
 
 ingress:
   host: "" # set to enable ingress
+  ludwig_host: ""
 
 backup:
   s3_bucket: ""

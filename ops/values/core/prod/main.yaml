@@ -10,5 +10,6 @@ env:
 
 ingress:
   host: "website.k8s.kocherga.club"
+  ludwig_host: "ludwig.k8s.kocherga.club"
 
 monitor: true
