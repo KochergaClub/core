@@ -8,6 +8,9 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
+    serviceMonitorSelectorNilUsesHelmValues: false
 
 grafana:
   persistence:
@@ -27,3 +30,12 @@ grafana:
     hosts:
       - grafana.k8s.kocherga.club
 #      - grafana.team.kocherga.club
+
+# disable components which are not useful in k3s
+# via https://github.com/rancher/k3s/issues/425
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeControllerManager:
+  enabled: false

@@ -1,6 +1,7 @@
 from .base import *
 from .secrets import *
 
+import socket
 import os
 
 import sentry_sdk
@@ -22,7 +23,10 @@ ALLOWED_HOSTS = [
     'localhost',
     'localhost:8000',
     'localhost:5300',
-    'localhost:5302'
+    'localhost:5302',
+    # via https://github.com/korfuri/django-prometheus/issues/81
+    socket.gethostname(),
+    socket.gethostbyname(socket.gethostname()),
 ]
 
 SECURE_CONTENT_TYPE_NOSNIFF = True

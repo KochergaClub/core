@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Release.Name }}-django-migrate
+  namespace: {{ .Release.Namespace }}
 spec:
   ttlSecondsAfterFinished: 3600
   template:

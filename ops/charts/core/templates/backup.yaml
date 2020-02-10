@@ -2,6 +2,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ .Release.Name }}-mysql-backup
+  namespace: {{ .Release.Namespace }}
 spec:
   schedule: "25 3 * * *"
   jobTemplate:

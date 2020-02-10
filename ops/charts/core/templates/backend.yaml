@@ -2,9 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-django
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-django
 spec:
   ports:
-  - port: 80
+  - name: web
+    port: 80
   selector:
     app: {{ .Release.Name }}-django
 ---
@@ -12,6 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-django
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
@@ -59,3 +64,24 @@ spec:
 {{- end }}
       volumes:
 {{ include "core.backend_volumes" . | indent 8 }}
+
+{{- if .Values.monitor }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-django
+  namespace: monitor
+spec:
+  jobLabel: {{ .Release.Name }}-django
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-django
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: web
+    path: /api/prometheus/metrics
+    interval: 30s
+{{- end }}
