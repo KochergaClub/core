@@ -26,15 +26,15 @@ module "k3s-prod" {
 module "kocherga-s3" {
   source = "./kocherga-s3"
 
-  aws_backend_user = "kocherga-backend"
-  aws_bucket_name = "kocherga"
+  user = "kocherga-backend"
+  bucket = "kocherga"
 }
 
 module "kocherga-s3-dev" {
   source = "./kocherga-s3"
 
-  aws_backend_user = "kocherga-backend-berekuk-dev"
-  aws_bucket_name = "kocherga-berekuk-dev"
+  user = "kocherga-backend-berekuk-dev"
+  bucket = "kocherga-berekuk-dev"
 }
 
 module "kocherga-wiki-s3" {

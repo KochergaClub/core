@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.aws_bucket_name
+  bucket = var.bucket
   acl    = "private"
 
   cors_rule {
@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 resource "aws_iam_user" "backend-user" {
-  name = var.aws_backend_user
+  name = var.user
 }
 
 resource "aws_iam_access_key" "backend-user-key" {
@@ -33,7 +33,7 @@ resource "aws_iam_user_policy" "backend-policy" {
         "s3:*"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.aws_bucket_name}/*"
+        "arn:aws:s3:::${var.bucket}/*"
       ]
     },
     {
@@ -43,7 +43,7 @@ resource "aws_iam_user_policy" "backend-policy" {
         "s3:List*"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.aws_bucket_name}"
+        "arn:aws:s3:::${var.bucket}"
       ]
     }
   ]
