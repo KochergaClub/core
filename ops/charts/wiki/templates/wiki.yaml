@@ -31,6 +31,8 @@ spec:
           ports:
             - containerPort: 80
           env:
+            - name: MEMCACHED_HOST
+              value: {{ .Release.Name }}-memcached
             - name: WIKI_DOMAIN
               value: {{ .Values.domain | quote }}
             - name: PARSOID_HOST
@@ -81,8 +83,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-settings
                   key: aws-bucket-name
-        - name: memcached
-          image: memcached
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress

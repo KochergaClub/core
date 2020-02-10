@@ -62,7 +62,7 @@ $wgDBmysql5 = false;
 
 ## Shared memory settings
 $wgMainCacheType = CACHE_MEMCACHED;
-$wgMemCachedServers = [ '127.0.0.1:11211' ]; # FIXME
+$wgMemCachedServers = [ getenv('MEMCACHED_HOST') . ':11211' ];
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
@@ -185,14 +185,16 @@ $wgShowExceptionDetails = true;
 wfLoadExtension('EditAccount');
 $wgGroupPermissions['editaccount']['editaccount'] = true;
 
-wfLoadExtension('SlackNotifications');
-$wgSlackIncomingWebhookUrl = getenv('SLACK_NOTIFICATIONS_WEBHOOK');
-$wgSlackFromName = "Wiki";
-$wgWikiUrl      = "https://" . getenv('WIKI_DOMAIN'). "/";
-$wgWikiUrlEnding = "index.php?title=";
-$wgSlackSendMethod = "file_get_contents";  # this is important! "curl" method is broken and adds junk characters to JSON, which causes VisualEditor errors.
-$wgSlackExcludeNotificationsFrom = ["Участник:", "Участница:"];
-$wgSlackIgnoreMinorEdits = false;
+if (getenv('SLACK_NOTIFICATIONS_WEBHOOK')) {
+    wfLoadExtension('SlackNotifications');
+    $wgSlackIncomingWebhookUrl = getenv('SLACK_NOTIFICATIONS_WEBHOOK');
+    $wgSlackFromName = "Wiki";
+    $wgWikiUrl      = "https://" . getenv('WIKI_DOMAIN'). "/";
+    $wgWikiUrlEnding = "index.php?title=";
+    $wgSlackSendMethod = "file_get_contents";  # this is important! "curl" method is broken and adds junk characters to JSON, which causes VisualEditor errors.
+    $wgSlackExcludeNotificationsFrom = ["Участник:", "Участница:"];
+    $wgSlackIgnoreMinorEdits = false;
+}
 
 wfLoadExtension('MsUpload');
 
