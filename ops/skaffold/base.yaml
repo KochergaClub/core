@@ -26,5 +26,6 @@ deploy:
         version: 1.86.1
         valuesFiles:
           - ops/values/traefik.yaml
+          - ops/secrets/traefik.yaml
         remote: true
         wait: true
