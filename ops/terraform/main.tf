@@ -66,9 +66,23 @@ module "berekuk-wiki-s3" {
   backup_bucket = "berekuk-backups"
 }
 
+resource "hcloud_server" "old_server" {
+  name = "kocherga.club"
+  backups = true
+  server_type = "cx21"
+  image = "ubuntu-18.04"
+  location = "fsn1"
+}
+
+resource "hcloud_floating_ip" "main" {
+  type = "ipv4"
+  server_id = hcloud_server.old_server.id
+}
+
 module "dns" {
   source = "./dns"
 
+  main_floating_ip = hcloud_floating_ip.main.ip_address
   k3s_dev_master_ip = module.k3s-dev.master_ip
   k3s_prod_master_ip = module.k3s-prod.master_ip
 }
