@@ -21,7 +21,7 @@ deploy:
         wait: true
 
       - name: traefik
-        namespace: tt
+        namespace: traefik
         chartPath: ops/charts/traefik
         valuesFiles:
           - ops/secrets/traefik.yaml
