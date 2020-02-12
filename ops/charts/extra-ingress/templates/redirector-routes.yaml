@@ -21,7 +21,7 @@ spec:
     - http
   routes:
   - kind: Rule
-    match: Host(`blog.berekuk.ru`) || Host(`tilda.kocherga-club.ru`) || Host(`kocherga.club`) || Host(`now.kocherga.club`) || Host(`now.kocherga-club.ru`) || Host(`www.kocherga-club.ru`)
+    match: Host(`blog.berekuk.ru`) || Host(`tilda.kocherga-club.ru`) || Host(`kocherga.club`) || Host(`now.kocherga.club`) || Host(`now.kocherga-club.ru`) || Host(`www.kocherga-club.ru`) || Host(`api.kocherga.club`)
     services:
       - kind: Service
         name: {{ .Release.Name }}-redirector
@@ -40,7 +40,7 @@ spec:
     secretName: {{ .Release.Name }}-redirector-cert
   routes:
   - kind: Rule
-    match: Host(`blog.berekuk.ru`)
+    match: Host(`blog.berekuk.ru`) || Host(`tilda.kocherga-club.ru`) || Host(`kocherga.club`) || Host(`now.kocherga.club`) || Host(`now.kocherga-club.ru`) || Host(`www.kocherga-club.ru`) || Host(`api.kocherga.club`)
     services:
       - kind: Service
         name: {{ .Release.Name }}-redirector

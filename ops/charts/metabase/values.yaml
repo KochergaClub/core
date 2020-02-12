@@ -1,8 +1,6 @@
 version: "v0.34.0"
 mysql_image: "mariadb:10.3"
 
-domain: "metabase.dev.kocherga.club"
-
 database:
   root_password: ""
   password: ""

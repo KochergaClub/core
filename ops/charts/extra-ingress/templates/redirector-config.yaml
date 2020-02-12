@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-redirector-conf
+  namespace: {{ .Release.Namespace }}
+data:
+  nginx.conf: {{ .Values.redirector.nginx_conf | quote }}

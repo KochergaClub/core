@@ -33,7 +33,7 @@ configMap: |
   logs:
     - {type: stdout, format: pretty, level: http}
 
-ingress:
-  enabled: true
-  hosts:
-    - verdaccio.k8s.kocherga.club
+#ingress:
+#  enabled: true
+#  hosts:
+#    - verdaccio.k8s.kocherga.club

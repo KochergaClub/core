@@ -1,5 +1,48 @@
+cert_issuer: letsencrypt
+
+domains:
+  - name: website
+    host: website.k8s.kocherga.club
+    service: core-frontend
+
+  - name: ludwig
+    host: ludwig.k8s.kocherga.club
+    service: core-ludwig
+
+  - name: booking
+    host: booking.k8s.kocherga.club
+    service: core-booking
+
+  - name: verdaccio
+    host: verdaccio.k8s.kocherga.club
+    service: verdaccio-verdaccio
+    port: 4873
+
+  - name: grafana
+    host: grafana.k8s.kocherga.club
+    service: monitor-grafana
+    namespace: monitor
+
+  - name: metabase
+    host: metabase.k8s.kocherga.club
+    service: metabase-metabase
+
+  - name: kocherga-wiki
+    host: wiki.k8s.kocherga.club
+    service: kocherga-wiki-wiki
+
+  - name: berekuk-wiki
+    host: wiki.berekuk.ru
+    service: berekuk-wiki-wiki
+    namespace: berekuk
+
 redirector:
   nginx_conf: |
+    server {
+      listen 80 default_server;
+      root /var/www/html;
+    }
+
     server {
       listen 80;
       server_name blog.berekuk.ru;
@@ -31,17 +74,23 @@ redirector:
     server {
       listen 80;
       server_name now.kocherga.club;
-      return 301 https://kocherga-club.ru/now
+      return 301 https://kocherga-club.ru/now;
     }
 
     server {
       listen 80;
       server_name now.kocherga-club.ru;
-      return 301 https://kocherga-club.ru/now
+      return 301 https://kocherga-club.ru/now;
     }
 
     server {
       listen 80;
       server_name www.kocherga-club.ru;
-      return 301 https://kocherga-club.ru$request_uri
+      return 301 https://kocherga-club.ru$request_uri;
+    }
+
+    server {
+      listen 80;
+      server_name api.kocherga.club;
+      return 301 https://kocherga-club.ru/api$request_uri;
     }

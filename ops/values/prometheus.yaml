@@ -17,19 +17,19 @@ grafana:
     enabled: true
     size: 10Gi
     storageClassName: hcloud-volumes # necessary to avoid "cannot patch" helm error
-  ingress:
-    enabled: true
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
-      traefik.ingress.kubernetes.io/redirect-entry-point: https
-    tls:
-      - secretName: grafana-tls
-        hosts:
-          - grafana.k8s.kocherga.club
-#          - grafana.team.kocherga.club
-    hosts:
-      - grafana.k8s.kocherga.club
-#      - grafana.team.kocherga.club
+#  ingress:
+#    enabled: true
+#    annotations:
+#      cert-manager.io/cluster-issuer: letsencrypt
+#      traefik.ingress.kubernetes.io/redirect-entry-point: https
+#    tls:
+#      - secretName: grafana-tls
+#        hosts:
+#          - grafana.k8s.kocherga.club
+##          - grafana.team.kocherga.club
+#    hosts:
+#      - grafana.k8s.kocherga.club
+##      - grafana.team.kocherga.club
 
 # disable components which are not useful in k3s
 # via https://github.com/rancher/k3s/issues/425

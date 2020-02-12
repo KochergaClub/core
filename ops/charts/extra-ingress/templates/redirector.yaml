@@ -22,6 +22,8 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-redirector
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/redirector-config.yaml") . | sha256sum }}
     spec:
       containers:
         - name: default
@@ -37,11 +39,3 @@ spec:
         - name: config
           configMap:
             name: {{ .Release.Name }}-redirector-conf
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ .Release.Name }}-redirector-conf
-  namespace: {{ .Release.Namespace }}
-data:
-  nginx.conf: {{ .Values.redirector.nginx_conf | quote }}
