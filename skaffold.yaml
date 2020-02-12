@@ -15,6 +15,7 @@ build:
       infer:
       - src/**
       - server/**
+      - public/**
   - image: registry.gitlab.com/kocherga/core/booking
     context: booking
   - image: registry.gitlab.com/kocherga/core/chrome
@@ -27,11 +28,11 @@ build:
 
 portForward:
 - resourceType: service
-  resourceName: kocherga-frontend
+  resourceName: core-frontend
   port: 80
   localPort: 8000
 - resourceType: service
-  resourceName: kocherga-backend
+  resourceName: core-backend
   port: 80
   localPort: 8001
 
