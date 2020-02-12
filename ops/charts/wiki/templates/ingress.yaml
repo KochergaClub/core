@@ -25,7 +25,7 @@ spec:
     match: Host(`{{ .Values.domain }}`)
     services:
       - kind: Service
-        name: {{ .Release.Name }}-metabase
+        name: {{ .Release.Name }}-wiki
         port: 80
     middlewares:
       - name: redirect-https
@@ -46,6 +46,6 @@ spec:
     match: Host(`{{ .Values.domain }}`)
     services:
       - kind: Service
-        name: {{ .Release.Name }}-metabase
+        name: {{ .Release.Name }}-wiki
         port: 80
 {{- end }}

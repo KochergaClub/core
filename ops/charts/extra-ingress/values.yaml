@@ -1,0 +1,47 @@
+redirector:
+  nginx_conf: |
+    server {
+      listen 80;
+      server_name blog.berekuk.ru;
+      return 301 https://berekuk.ru/blog$request_uri;
+    }
+
+    upstream tilda {
+      server 185.165.123.206:443;
+    }
+
+    server {
+      listen 80;
+
+      server_name tilda.kocherga-club.ru;
+
+      location / {
+        proxy_pass https://tilda;
+        proxy_ssl_verify off;
+        proxy_set_header Host kocherga-club.ru;
+      }
+    }
+
+    server {
+      listen 80;
+      server_name kocherga.club;
+      return 301 https://kocherga-club.ru$request_uri;
+    }
+
+    server {
+      listen 80;
+      server_name now.kocherga.club;
+      return 301 https://kocherga-club.ru/now
+    }
+
+    server {
+      listen 80;
+      server_name now.kocherga-club.ru;
+      return 301 https://kocherga-club.ru/now
+    }
+
+    server {
+      listen 80;
+      server_name www.kocherga-club.ru;
+      return 301 https://kocherga-club.ru$request_uri
+    }

@@ -21,11 +21,6 @@ deploy:
         wait: true
 
       - name: traefik
-        namespace: kube-system
-        chartPath: stable/traefik
-        version: 1.86.1
-        valuesFiles:
-          - ops/values/traefik.yaml
-          - ops/secrets/traefik.yaml
-        remote: true
+        namespace: tt
+        chartPath: ops/charts/traefik
         wait: true

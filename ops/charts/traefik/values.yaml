@@ -1,0 +1,21 @@
+image:
+  name: traefik
+  tag: 2.1.4
+
+dashboard:
+  host: traefik.k8s.kocherga.club
+  auth: "" # defined in secrets
+
+config:
+  entryPoints:
+    http:
+      address: ":80"
+    https:
+      address: ":443"
+  providers:
+    kubernetesIngress: {}
+    kubernetesCRD: {}
+  log:
+    level: INFO
+  api:
+    dashboard: true
