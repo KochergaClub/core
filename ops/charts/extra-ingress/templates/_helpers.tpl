@@ -15,11 +15,11 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ .domain.name }}-notls
+  name: {{ .domain.name }}
   namespace: {{ .domain.namespace }}
 spec:
   entryPoints:
-    - http
+    - https
   routes:
   - kind: Rule
     match: Host(`{{ .domain.host }}`)
@@ -28,26 +28,6 @@ spec:
         name: {{ .domain.service }}
         namespace: {{ .domain.namespace | default "default" | quote }}
         port: {{ .domain.port | default 80 }}
-    middlewares:
-      - name: redirect-https
-        namespace: default
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: {{ .domain.name }}
-  namespace: {{ .namespace }}
-spec:
-  entryPoints:
-    - https
   tls:
     secretName: {{ .domain.name }}-cert
-  routes:
-  - kind: Rule
-    match: Host(`{{ .domain.host }}`)
-    services:
-      - kind: Service
-        name: {{ .domain.service }}
-        namespace: {{ .domain.namespace | default "default" | quote }}
-        port: {{ .domain.port | default 80 }}
-{{- end -}}
+{{- end }}

@@ -16,6 +16,7 @@ config:
     kubernetesIngress: {}
     kubernetesCRD: {}
   log:
-    level: INFO
+    level: DEBUG
+  accessLog: {}
   api:
     dashboard: true
