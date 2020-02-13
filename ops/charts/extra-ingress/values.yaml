@@ -1,5 +1,7 @@
 cert_issuer: letsencrypt
 
+core_domain: website.k8s.kocherga.club # core domain requires some special rules
+
 domains:
   - name: website
     host: website.k8s.kocherga.club

@@ -4,7 +4,8 @@ image:
 
 dashboard:
   host: traefik.k8s.kocherga.club
-  auth: "" # defined in secrets
+
+common_auth: "" # defined in secrets
 
 config:
   entryPoints:

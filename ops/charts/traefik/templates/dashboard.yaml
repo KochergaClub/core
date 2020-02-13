@@ -27,24 +27,7 @@ spec:
     - name: api@internal
       kind: TraefikService
     middlewares:
-      - name: traefik-dashboard-auth
+      - name: traefik-common-auth
   tls:
     secretName: traefik-dashboard-cert
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: traefik-dashboard-auth
-  namespace: {{ .namespace }}
-spec:
-  basicAuth:
-    secret: traefik-dashboard-auth
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: traefik-dashboard-auth
-  namespace: {{ .namespace }}
-data:
-  users: {{ .Values.dashboard.auth | b64enc | quote }}
 {{- end }}

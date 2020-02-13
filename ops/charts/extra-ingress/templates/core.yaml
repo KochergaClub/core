@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}-core-private-metrics
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - https
+  routes:
+  - kind: Rule
+    match: Host(`{{ .Values.core_domain }}`) && PathPrefix(`/api/prometheus`)
+    services:
+      - kind: Service
+        name: core-frontend
+        namespace: {{ .Release.Namespace }}
+        port: 80
+    middlewares:
+      - name: traefik-common-auth
+        namespace: traefik
+  tls:
+    secretName: website-cert
