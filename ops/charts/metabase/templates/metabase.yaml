@@ -71,4 +71,7 @@ spec:
             timeoutSeconds: 3
             periodSeconds: 5
           resources:
-            {}
+            requests:
+              memory: "512Mi"
+            limits:
+              memory: "2048Mi"
