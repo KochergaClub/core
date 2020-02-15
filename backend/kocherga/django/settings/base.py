@@ -313,7 +313,6 @@ KOCHERGA_ROOMS = [
 
 KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE = '2016-03-14'
 
-KOCHERGA_LUDWIG_PORT = 80
 KOCHERGA_LUDWIG_SENTRY_DSN = None
 
 # OFD configuration is the same as in prod.py, OFD is read-only anyway.
