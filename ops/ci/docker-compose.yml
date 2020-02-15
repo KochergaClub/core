@@ -30,6 +30,6 @@ services:
     environment:
       DB_PASSWORD: "test"
     depends_on:
-      - kocherga-mysql
-      - kocherga-redis
+      - core-mysql
+      - core-redis
       - core-chrome
