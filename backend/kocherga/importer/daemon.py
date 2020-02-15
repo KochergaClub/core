@@ -1,9 +1,15 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
 
 from datetime import datetime, timedelta
+import time
 
 import importlib
+
+from django.conf import settings
 
 from .prometheus import importers_gauge, success_counter, failure_counter
 
@@ -40,6 +46,14 @@ def run_one(name):
 
 
 def run():
+    # Daemon can be disabled in development to avoid importing too much production data.
+    if settings.KOCHERGA_IMPORTER_DISABLED:
+        # Auto-detect settings change?
+        while True:
+            # Logging for clarity about what's going on.
+            logger.info('Importer daemon disabled.')
+            time.sleep(60)
+
     scheduler = BlockingScheduler(executors={
         "default": ThreadPoolExecutor(2)
     })

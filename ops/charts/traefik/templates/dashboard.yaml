@@ -1,0 +1,33 @@
+{{- if .Values.dashboard.host }}
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: traefik-dashboard
+  namespace: {{ .namespace }}
+spec:
+  secretName: traefik-dashboard-cert
+  dnsNames:
+    - {{ .Values.dashboard.host | quote }}
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: {{ .namespace }}
+spec:
+  entryPoints:
+    - https
+  routes:
+  - match: Host(`{{ .Values.dashboard.host }}`)
+    kind: Rule
+    services:
+    - name: api@internal
+      kind: TraefikService
+    middlewares:
+      - name: traefik-common-auth
+  tls:
+    secretName: traefik-dashboard-cert
+{{- end }}

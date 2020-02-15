@@ -1,0 +1,5 @@
+{{- range .Values.domains }}
+{{ $data := dict "domain" . "namespace" $.Release.Namespace "issuer" $.Values.cert_issuer }}
+{{- template "extra-ingress.common-domain" $data }}
+---
+{{- end }}

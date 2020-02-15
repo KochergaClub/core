@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import { A, Column, Row } from '@kocherga/frontkit';
 
+import { staticUrl } from '~/common/utils';
+
 import {
   TrainingWithScheduleFragment,
   TrainingForPickerFragment,
@@ -22,7 +24,7 @@ const Header = styled.header``;
 const HeaderTexts = styled.div`
   @font-face {
     font-family: 'Intro Book';
-    src: url('/static/fonts/intro-pack/Intro-book.otf');
+    src: url('${staticUrl('fonts/intro-pack/Intro-book.otf')}');
   }
   font-family: 'Intro Book';
   letter-spacing: 0.08em;

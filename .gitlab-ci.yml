@@ -1,117 +1,71 @@
-# Workaround for codecov-python - see https://github.com/codecov/codecov-python/issues/96
-# Still unpatched as of 2019-06.
-variables:
-  pass_env: "-e CODECOV_TOKEN -e CI_BUILD_ID=$CI_JOB_ID -e CI_BUILD_REF_NAME=$CI_COMMIT_REF_NAME -e CI_BUILD_ID=$CI_JOB_ID -e CI_REPOSITORY_URL -e CI_BUILD_REF=$CI_COMMIT_SHA -e CI_SERVER_NAME -e CI_PROJECT_DIR=/code"
-
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
-build-backend:
+cache: &build_cache
+  paths:
+    - build.json
+  policy: pull
+
+build:
   stage: build
   script:
     - git submodule init
     - git submodule update
-    - docker build -f backend/Dockerfile -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME ./backend
-    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_NAME
-
-build-frontend:
-  stage: build
-  script:
-    - git submodule init
-    - git submodule update
-    - docker build -f frontend/Dockerfile -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME ./frontend
-    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_NAME
-
-build-chrome:
-  stage: build
-  script:
-    - docker build -f docker/Dockerfile.chrome -t $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE/chrome:$CI_COMMIT_REF_NAME
+    - skaffold build --file-output=build.json
+  cache:
+    <<: *build_cache
+    policy: push
 
 test-lint:
   stage: test
-  variables:
-    TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run --rm api flake8 kocherga/ --max-line-length=120
+    - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
+    - docker run --rm "$BACKEND_IMAGE" flake8 kocherga/ --max-line-length=120
+  cache:
+    <<: *build_cache
 
 test-js:
   stage: test
-  variables:
-    TAG: $CI_COMMIT_REF_NAME
   script:
-    - docker-compose -f docker/compose.ci.yml run --rm render-server npx tsc
-    - docker-compose -f docker/compose.ci.yml run $pass_env
-      --rm render-server
-      bash -c "npx jest --no-watchman --coverage"
+    - export FRONTEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/frontend")) | .tag')
+    - docker run --rm "$FRONTEND_IMAGE" npx tsc
+    - docker run --rm "$FRONTEND_IMAGE" bash -c "npx jest --no-watchman --coverage"
+  cache:
+    <<: *build_cache
 
 test-python:
   stage: test
-  variables:
-    TAG: $CI_COMMIT_REF_NAME
   script:
-    - mkdir -p backend/data/upload/{mailchimp,assets,fonts,images}
-    - docker-compose -f docker/compose.ci.yml run $pass_env
-      --rm api
-      bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+    - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
+    - export CHROME_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/chrome")) | .tag')
+    - docker-compose -f ./ops/ci/docker-compose.yml run --rm kocherga-backend bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+  cache:
+    <<: *build_cache
 
 deploy_production:
   stage: deploy
-  variables:
-    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
-    DOCKER_TLS_VERIFY: 1
-    TAG: $CI_COMMIT_REF_NAME
-    HOST_IP: $DEPLOY_HOST
-    COMPOSE_FILE: docker/compose.prod.yml
-  before_script:
-    # prepare remote docker
-    - mkdir -p ~/.docker
-    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
-    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
-    - echo "$DOCKER_KEY" > ~/.docker/key.pem
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-    # pull new images first (shortens the time between the upgrade and restart)
-    - docker-compose pull
-    # migrate and collect static
-    - docker-compose run --rm api ./scripts/upgrade.sh
-    # deploy
-    - docker-compose up -d
+    - skaffold deploy -a build.json --status-check
+  cache:
+    <<: *build_cache
   environment:
     name: production
     url: https://kocherga-club.ru
   when: manual
   only:
     - master
+    - k8s
 
-deploy_beta:
-  stage: deploy
-  variables:
-    DOCKER_HOST: tcp://$DEPLOY_HOST:2376
-    DOCKER_TLS_VERIFY: 1
-    TAG: $CI_COMMIT_REF_NAME
-    HOST_IP: $DEPLOY_HOST
-    API_PORT: 5352
-    API_ASYNC_PORT: 5351
-    RENDER_SERVER_PORT: 5350
-    COMPOSE_FILE: docker/compose.prod.yml
-    COMPOSE_PROJECT_NAME: beta
-  before_script:
-    # prepare remote docker
-    - mkdir -p ~/.docker
-    - echo "$DOCKER_CACERT" > ~/.docker/ca.pem
-    - echo "$DOCKER_CERT" > ~/.docker/cert.pem
-    - echo "$DOCKER_KEY" > ~/.docker/key.pem
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  script:
-    # pull new images first (shortens the time between the upgrade and restart)
-    - docker-compose pull
-    # NOTE: we don't migrate the DB for beta environment (yet).
-    # - docker-compose run --rm api ./scripts/upgrade.sh
-    # deploy
-    - docker-compose up -d api api_async render-server
-  environment:
-    name: beta
-    url: https://beta.kocherga-club.ru
-  only:
-    - master
+#deploy_beta:
+#  stage: deploy
+#  script:
+#    # NOTE: we don't migrate the DB for beta environment (yet).
+#    # deploy
+#    - skaffold deploy -a build.json --status-check
+#  cache:
+#    <<: *build_cache
+#  environment:
+#    name: beta
+#    url: https://beta.kocherga-club.ru
+#  only:
+#    - master

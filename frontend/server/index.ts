@@ -21,7 +21,7 @@ import http from 'http';
 import express from 'express';
 import httpProxy from 'http-proxy';
 
-import { API_HOST, API_ASYNC_HOST } from './constants';
+import { API_HOST } from './constants';
 
 import trailingSlashEndpoint from './trailingSlashEndpoint';
 import nextjsEntrypoint from './nextjsEntrypoint';
@@ -53,11 +53,13 @@ async function main() {
       port: API_HOST.split(':', 2)[1] || '80',
     },
   });
+
+  // TODO - this duplicate proxy can probably be simplified, re-read https://github.com/http-party/node-http-proxy#proxying-websockets docs
   const wsProxy = httpProxy.createProxyServer({
     ws: true,
     target: {
-      host: API_ASYNC_HOST.split(':', 2)[0],
-      port: API_ASYNC_HOST.split(':', 2)[1] || '80',
+      host: API_HOST.split(':', 2)[0],
+      port: API_HOST.split(':', 2)[1] || '80',
     },
   });
   app.all(/^\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {

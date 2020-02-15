@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-frontend
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: {{ .Release.Name }}-frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-frontend
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: {{ .Release.Name }}-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-frontend
+    spec:
+      containers:
+        - name: default
+          imagePullPolicy: Always
+          image: {{ .Values.image.frontend | quote }}
+{{- if .Values.dev }}
+          command: ["./node_modules/.bin/nodemon", "--watch", "dist", "./dist/index.js"]
+{{- end }}
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /.well-known/ping
+              httpHeaders:
+                - name: Host
+                  value: localhost
+              port: 80
+            timeoutSeconds: 3
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "2048Mi"
+          envFrom:
+{{ include "core.frontend_env_from" . | indent 12 }}
+          env:
+            - name: DJANGO_HOST
+              value: {{ .Release.Name }}-django
+            - name: NODE_ENV
+              value: {{ if .Values.dev }}development{{ else }}production{{ end }}
+{{- if .Values.dev }}
+          volumeMounts:
+            - name: dist
+              mountPath: /code/dist
+              readOnly: true
+{{- end }}
+
+{{- if .Values.dev }}
+        - name: webpack-server
+          image: {{ .Values.image.frontend | quote }}
+          command: ["./node_modules/.bin/webpack", "-w", "--config", "webpack.server.js"]
+          env:
+            - name: NODE_ENV
+              value: development
+          volumeMounts:
+            - name: dist
+              mountPath: /code/dist
+      volumes:
+        - name: dist
+          emptyDir: {}
+{{- end }}

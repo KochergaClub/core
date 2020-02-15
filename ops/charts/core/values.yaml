@@ -1,0 +1,39 @@
+image:
+  backend: ""
+  frontend: ""
+  booking: ""
+  chrome: ""
+  mysql_backup: ""
+
+env:
+  common:
+    STATIC_S3_BUCKET: ""
+  frontend:
+    GOOGLE_ANALYTICS_ID: ""
+    FACEBOOK_PIXEL_ID: ""
+    YANDEX_METRIKA_ID: ""
+    VK_RETARGETING_ID: ""
+    SENTRY_DSN_FRONTEND: ""
+
+config:
+  main_py: ""
+  secrets_py: ""
+  KKMServer_pem: ""
+
+database:
+  root_password: ""
+  password: ""
+
+ingress:
+  host: "" # set to enable ingress
+  ludwig_host: ""
+
+backup:
+  s3_bucket: ""
+  s3_path: ""
+  aws_access_key: ""
+  aws_secret_key: ""
+
+dev: false
+
+monitor: false

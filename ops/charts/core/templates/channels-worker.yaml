@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-channels-worker
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-channels-worker
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-channels-worker
+    spec:
+      containers:
+        - name: default
+          imagePullPolicy: Always
+          image: {{ .Values.image.backend }}
+          command: ["./scripts/channels-worker.sh"]
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "2048Gi"
+          volumeMounts:
+{{ include "core.backend_mount_configs" . | indent 12 }}
+          envFrom:
+{{ include "core.backend_env_from" . | indent 12 }}
+          env:
+{{ include "core.backend_env_db" . | indent 12 }}
+      volumes:
+{{ include "core.backend_volumes" . | indent 8 }}

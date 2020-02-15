@@ -1,0 +1,50 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-redirector-cert
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: {{ .Release.Name }}-redirector-cert
+  dnsNames:
+{{ toYaml .Values.redirector_domains | indent 4 }}
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+{{- range .Values.redirector_domains }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $.Release.Name }}-redirector-{{ . }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  entryPoints:
+    - http
+  routes:
+  - kind: Rule
+    match: Host(`{{ . }}`)
+    services:
+      - kind: Service
+        name: {{ $.Release.Name }}-redirector
+        namespace: {{ $.Release.Namespace }}
+        port: 80
+{{- end }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}-redirector-notls
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - https
+  tls:
+    secretName: {{ .Release.Name }}-redirector-cert
+  routes:
+  - kind: Rule
+    match: Host(`blog.berekuk.ru`) || Host(`tilda.kocherga-club.ru`) || Host(`kocherga.club`) || Host(`now.kocherga.club`) || Host(`now.kocherga-club.ru`) || Host(`www.kocherga-club.ru`) || Host(`api.kocherga.club`)
+    services:
+      - kind: Service
+        name: {{ .Release.Name }}-redirector
+        namespace: {{ .Release.Namespace }}
+        port: 80

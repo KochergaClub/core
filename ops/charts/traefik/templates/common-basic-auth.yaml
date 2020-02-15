@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-common-auth
+  namespace: {{ .namespace }}
+spec:
+  basicAuth:
+    secret: traefik-common-auth
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-common-auth
+  namespace: {{ .namespace }}
+data:
+  users: {{ .Values.common_auth | b64enc | quote }}

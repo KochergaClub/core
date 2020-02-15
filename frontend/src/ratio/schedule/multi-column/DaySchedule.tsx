@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import { colors, Column } from '@kocherga/frontkit';
 
+import { staticUrl } from '~/common/utils';
+
 import { ActivityFragment, TrainingDayFragment } from '../../queries.generated';
 
 import EditDayInAdmin from '../EditDayInAdmin';
@@ -22,7 +24,7 @@ const Container = styled.div`
 const Header = styled.div`
   @font-face {
     font-family: 'Intro Book';
-    src: url('/static/fonts/intro-pack/Intro-book.otf');
+    src: url('${staticUrl('fonts/intro-pack/Intro-book.otf')}');
   }
   font-family: 'Intro Book';
   font-weight: bold;

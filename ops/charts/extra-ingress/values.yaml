@@ -1,0 +1,107 @@
+cert_issuer: letsencrypt
+
+core_domain: kocherga-club.ru # core domain requires some special rules
+
+domains:
+  - name: website
+    host: kocherga-club.ru
+    service: core-frontend
+
+  - name: ludwig
+    host: ludwig.team.kocherga.club
+    service: core-ludwig
+
+  - name: booking
+    host: booking.kocherga.club
+    service: core-booking
+
+  - name: verdaccio
+    host: npm.team.kocherga.club
+    service: verdaccio-verdaccio
+    port: 4873
+
+  - name: grafana
+    host: grafana.team.kocherga.club
+    service: monitor-grafana
+    namespace: monitor
+
+  - name: metabase
+    host: metabase.team.kocherga.club
+    service: metabase-metabase
+
+  - name: kocherga-wiki
+    host: wiki.team.kocherga.club
+    service: kocherga-wiki-wiki
+
+  - name: berekuk-wiki
+    host: wiki.berekuk.ru
+    service: berekuk-wiki-wiki
+    namespace: berekuk
+
+redirector_domains:
+  - blog.berekuk.ru
+  - tilda.kocherga-club.ru
+  - kocherga.club
+  - now.kocherga.club
+  - now.kocherga-club.ru
+  - www.kocherga-club.ru
+  - api.kocherga.club
+
+redirector:
+  nginx_conf: |
+    server {
+      listen 80 default_server;
+      root /var/www/html;
+    }
+
+    server {
+      listen 80;
+      server_name blog.berekuk.ru;
+      return 301 https://berekuk.ru/blog$request_uri;
+    }
+
+    upstream tilda {
+      server 185.165.123.206:443;
+    }
+
+    server {
+      listen 80;
+
+      server_name tilda.kocherga-club.ru;
+
+      location / {
+        proxy_pass https://tilda;
+        proxy_ssl_verify off;
+        proxy_set_header Host kocherga-club.ru;
+      }
+    }
+
+    server {
+      listen 80;
+      server_name kocherga.club;
+      return 301 https://kocherga-club.ru$request_uri;
+    }
+
+    server {
+      listen 80;
+      server_name now.kocherga.club;
+      return 301 https://kocherga-club.ru/now;
+    }
+
+    server {
+      listen 80;
+      server_name now.kocherga-club.ru;
+      return 301 https://kocherga-club.ru/now;
+    }
+
+    server {
+      listen 80;
+      server_name www.kocherga-club.ru;
+      return 301 https://kocherga-club.ru$request_uri;
+    }
+
+    server {
+      listen 80;
+      server_name api.kocherga.club;
+      return 301 https://kocherga-club.ru/api$request_uri;
+    }

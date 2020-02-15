@@ -1,18 +1,6 @@
-image:
-	docker-compose -f docker/compose.dev.yml build
-
 ##### Dev environment #####
-init-dev:
-	docker-compose -f docker/compose.dev.yml run --rm api ./manage.py migrate
-
-dev-mac: image
-	nf start -j ./docker/Procfile.mixed
-
-dev: image
-	docker-compose -f docker/compose.dev.yml up
-
-dev-full: image
-	docker-compose -f docker/compose.dev.yml -f docker/compose.dev-extra.yml up
+dev:
+	skaffold dev --port-forward
 
 ##### Tests #####
 test-types:
@@ -44,10 +32,10 @@ dbshell:
 	docker-compose -f docker/compose.dev.yml exec db mysql kocherga
 
 shell:
-	docker-compose -f docker/compose.dev.yml exec api bash
+	kubectl exec -it $(shell kubectl get po -o name -l app=kocherga-backend) bash
 
 pyshell:
-	docker-compose -f docker/compose.dev.yml exec api ./manage.py shell
+	kubectl exec -it $(shell kubectl get po -o name -l app=kocherga-backend) ./manage.py shell
 
 deploy_prod_secrets:
 	scp backend/kocherga/django/settings/prod_secrets.py kocherga.club:

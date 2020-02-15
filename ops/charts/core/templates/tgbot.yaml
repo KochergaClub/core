@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-tgbot
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-tgbot
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-tgbot
+    spec:
+      containers:
+        - name: default
+          imagePullPolicy: Always
+          image: {{ .Values.image.backend | quote }}
+          command: ["./scripts/tgbot.py"]
+          resources:
+            requests:
+              memory: "64Mi"
+            limits:
+              memory: "2048Mi"
+          volumeMounts:
+{{ include "core.backend_mount_configs" . | indent 12 }}
+          envFrom:
+{{ include "core.backend_env_from" . | indent 12 }}
+          env:
+{{ include "core.backend_env_db" . | indent 12 }}
+      volumes:
+{{ include "core.backend_volumes" . | indent 8 }}

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Page } from '~/components';
 
 import { NextWagtailPage } from '~/wagtail/types';
+import { staticUrl } from '~/common/utils';
 
 import {
   RatioSectionPageFragment,
@@ -14,7 +15,7 @@ import Main from './Main';
 const Container = styled.div`
   @font-face {
     font-family: 'Intro Book';
-    src: url('/static/fonts/intro-pack/Intro-Book.otf');
+    src: url('${staticUrl('fonts/intro-pack/Intro-Book.otf')}');
   }
 
   font-family: 'Intro Book';

@@ -1,0 +1,28 @@
+prometheus:
+  prometheusSpec:      
+    retentionSize: "8GB"
+    retention: 30d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 10Gi
+    serviceMonitorNamespaceSelector: {}
+    serviceMonitorSelector: {}
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+grafana:
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: hcloud-volumes # necessary to avoid "cannot patch" helm error
+
+# disable components which are not useful in k3s
+# via https://github.com/rancher/k3s/issues/425
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeControllerManager:
+  enabled: false

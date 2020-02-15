@@ -1,0 +1,11 @@
+User-Agent: *
+Disallow: /rationality/pay-for-coaching
+Disallow: /test/calendar
+Disallow: /tilda/form*
+Disallow: /tilda/rec*
+Disallow: /tilda/click*
+Disallow: /tilda/scroll*
+Disallow: /tilda/popup*
+Disallow: /events/iframe
+Disallow:
+Host: https://kocherga-club.ru

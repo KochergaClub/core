@@ -1,0 +1,4 @@
+apiVersion: v2
+name: hcloud-csi
+version: 0.2.0
+appVersion: v1.2.2

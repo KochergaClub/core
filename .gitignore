@@ -1,4 +1,5 @@
 *.swp
+.\#*
 .idea/
 .vscode/
 /.dir-locals.el
@@ -9,3 +10,5 @@
 /frontend/.next
 /frontend/dist
 /frontend/coverage
+
+/build.json

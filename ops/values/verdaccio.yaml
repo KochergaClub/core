@@ -1,0 +1,34 @@
+configMap: |
+  storage: /verdaccio/storage/data
+
+  web:
+    title: Kochergaccio
+
+  auth:
+    htpasswd:
+      file: /verdaccio/storage/htpasswd
+      # Maximum amount of users allowed to register, defaults to "+infinity".
+      # You can set this to -1 to disable registration.
+      # NOTE: this is set to 1 so that `berekuk` can register on initial setup and no one else can.
+      # (to avoid generating and passing pre-baked htpasswd, which is harder to implement)
+      max_users: 1
+
+  uplinks:
+    npmjs:
+      url: https://registry.npmjs.org/
+
+  packages:
+    '@kocherga/*':
+      access: $anonymous
+      publish: berekuk
+    '**':
+      access: $anonymous
+      publish: $authenticated
+      proxy: npmjs
+
+  middlewares:
+    audit:
+      enabled: true
+
+  logs:
+    - {type: stdout, format: pretty, level: http}

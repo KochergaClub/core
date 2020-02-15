@@ -1,0 +1,29 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-catchall
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - http
+  routes:
+    - match: HostRegexp(`{any:.+}`)
+      kind: Rule
+      services:
+        # any service in the namespace
+        # the service will be never called
+        - name: traefik-ingress-service
+          port: 80
+      middlewares:
+        - name: https-redirect
+          namespace: {{ .Release.Namespace }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware 
+metadata:
+  name: https-redirect
+  namespace: {{ .Release.Namespace }}
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true

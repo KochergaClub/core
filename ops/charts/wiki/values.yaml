@@ -1,0 +1,26 @@
+database:
+  root_password: ""
+  password: ""
+
+domain: ""
+
+image:
+  wiki: ""
+  mysql_backup: ""
+
+settings:
+  secret_key: ""
+  slack_notifications_webhook: ""
+  google_login:
+    app_id: ""
+    secret: ""
+  aws:
+    access_key: ""
+    secret_key: ""
+    bucket_name: ""
+
+backup:
+  s3_bucket: ""
+  s3_path: ""
+  aws_access_key: ""
+  aws_secret_key: ""

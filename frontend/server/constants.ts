@@ -1,8 +1,3 @@
-// Hosts are bound through docker-compose
+// Hosts are bound through k8s
 
-export const API_HOST = process.env.NO_DOCKER_DEV ? 'localhost:5302' : 'api';
-export const API_ASYNC_HOST = process.env.NO_DOCKER_DEV
-  ? 'localhost:8001'
-  : process.env.NODE_ENV
-  ? 'api'
-  : 'api-async';
+export const API_HOST = process.env.DJANGO_HOST || 'kocherga-django'; // default value is probably incorrect

@@ -1,0 +1,5 @@
+{
+	"require": {
+		"mediawiki/mermaid": "~1.0"
+	}
+}

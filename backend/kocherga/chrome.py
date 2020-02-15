@@ -6,7 +6,7 @@ import contextlib
 import requests
 import pyppeteer
 
-ENDPOINT = 'chrome:9222'
+ENDPOINT = 'kocherga-chrome:9222'
 
 
 def get_websocket():

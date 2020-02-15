@@ -2,10 +2,10 @@
 Django settings for kocherga project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/2.1/topics/settings/
+https://docs.djangoproject.com/en/3.0/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/2.1/ref/settings/
+https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
@@ -15,7 +15,7 @@ BASE_DIR = str(Path(__file__).parent.parent.parent.parent)
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -161,11 +161,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'kocherga.django.wsgi.application'
 ASGI_APPLICATION = 'kocherga.django.routing.application'
 
+REDIS_HOST = os.environ['REDIS_HOST']
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis", 6379)],
+            "hosts": [(REDIS_HOST, 6379)],
         },
     },
 }
@@ -185,15 +187,15 @@ LOGOUT_REDIRECT_URL = '/'
 
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
+        'NAME': 'kocherga',
+        'USER': 'kocherga',
         'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': 'db',
+        'HOST': os.environ['DB_HOST'],
     }
 }
 
@@ -202,7 +204,7 @@ CONN_MAX_AGE = 3600
 # Auth
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -251,7 +253,7 @@ REST_FRAMEWORK = {
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'ru'
 
@@ -263,7 +265,7 @@ USE_L10N = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -327,3 +329,7 @@ GOOGLE_MAPS_V3_APIKEY = 'AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI'
 TILDA_PROJECT_ID = 14971
 
 TELEGRAM_PROXY = ''
+
+KOCHERGA_IMPORTER_DISABLED = False
+
+KKM_SERVER_CERT = '/KKMServer.pem'  # mounted by k8s
