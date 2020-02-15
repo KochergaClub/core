@@ -1,42 +1,51 @@
 cert_issuer: letsencrypt
 
-core_domain: website.k8s.kocherga.club # core domain requires some special rules
+core_domain: kocherga-club.ru # core domain requires some special rules
 
 domains:
   - name: website
-    host: website.k8s.kocherga.club
+    host: kocherga-club.ru
     service: core-frontend
 
   - name: ludwig
-    host: ludwig.k8s.kocherga.club
+    host: ludwig.team.kocherga.club
     service: core-ludwig
 
   - name: booking
-    host: booking.k8s.kocherga.club
+    host: booking.kocherga.club
     service: core-booking
 
   - name: verdaccio
-    host: verdaccio.k8s.kocherga.club
+    host: npm.team.kocherga.club
     service: verdaccio-verdaccio
     port: 4873
 
   - name: grafana
-    host: grafana.k8s.kocherga.club
+    host: grafana.team.kocherga.club
     service: monitor-grafana
     namespace: monitor
 
   - name: metabase
-    host: metabase.k8s.kocherga.club
+    host: metabase.team.kocherga.club
     service: metabase-metabase
 
   - name: kocherga-wiki
-    host: wiki.k8s.kocherga.club
+    host: wiki.team.kocherga.club
     service: kocherga-wiki-wiki
 
   - name: berekuk-wiki
     host: wiki.berekuk.ru
     service: berekuk-wiki-wiki
     namespace: berekuk
+
+redirector_domains:
+  - blog.berekuk.ru
+  - tilda.kocherga-club.ru
+  - kocherga.club
+  - now.kocherga.club
+  - now.kocherga-club.ru
+  - www.kocherga-club.ru
+  - api.kocherga.club
 
 redirector:
   nginx_conf: |

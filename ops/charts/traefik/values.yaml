@@ -3,7 +3,7 @@ image:
   tag: 2.1.4
 
 dashboard:
-  host: traefik.k8s.kocherga.club
+  host: traefik.team.kocherga.club
 
 common_auth: "" # defined in secrets
 

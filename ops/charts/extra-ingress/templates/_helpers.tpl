@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ .domain.name }}
-  namespace: {{ .namespace }}
+  namespace: {{ .domain.namespace }}
 spec:
   secretName: {{ .domain.name }}-cert
   dnsNames:

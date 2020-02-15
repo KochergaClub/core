@@ -9,7 +9,7 @@ env:
     SENTRY_DSN_FRONTEND: "https://0caabf985a0943fab01ad414573a1f9f@sentry.io/1768687"
 
 ingress:
-  host: "website.k8s.kocherga.club"
-  ludwig_host: "ludwig.k8s.kocherga.club"
+  host: "kocherga-club.ru"
+  ludwig_host: "ludwig.team.kocherga.club"
 
 monitor: true
