@@ -28,6 +28,7 @@ services:
       - ./ci.py:/code/kocherga/django/settings/main.py
       - ./ci_secrets.py:/code/kocherga/django/settings/ci_secrets.py
     environment:
+      DB_HOST: "core-mysql"
       DB_PASSWORD: "test"
       REDIS_HOST: "core-redis"
     depends_on:
