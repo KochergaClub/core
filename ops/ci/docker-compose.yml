@@ -29,6 +29,7 @@ services:
       - ./ci_secrets.py:/code/kocherga/django/settings/ci_secrets.py
     environment:
       DB_PASSWORD: "test"
+      REDIS_HOST: "core-redis"
     depends_on:
       - core-mysql
       - core-redis
