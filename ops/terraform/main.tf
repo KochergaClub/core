@@ -23,14 +23,17 @@ module "k3s-dev" {
   source = "./k3s-cluster"
 
   cluster_name = "k3s-dev"
-  cluster_node_count = 0
+  master_type = "cx21"
+  node_count = 0
 }
 
 module "k3s-prod" {
   source = "./k3s-cluster"
 
   cluster_name = "k3s-prod"
-  cluster_node_count = 1
+  master_type = "cx11"
+  node_type = "cx31"
+  node_count = 2
 }
 
 module "kocherga-s3" {
@@ -76,13 +79,13 @@ resource "hcloud_server" "old_server" {
 
 resource "hcloud_floating_ip" "main" {
   type = "ipv4"
-  server_id = hcloud_server.old_server.id
+#  server_id = hcloud_server.old_server.id
+  server_id = module.k3s-prod.ingress_node_id
 }
 
 module "dns" {
   source = "./dns"
 
-  main_floating_ip = hcloud_floating_ip.main.ip_address
-  k3s_dev_master_ip = module.k3s-dev.master_ip
-  k3s_prod_master_ip = module.k3s-prod.master_ip
+  prod_ingress_ip = hcloud_floating_ip.main.ip_address
+  dev_ingress_ip = module.k3s-dev.master_ip
 }

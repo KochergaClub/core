@@ -1,17 +1,20 @@
 variable "cluster_name" {}
 
-variable "cluster_node_count" {
+variable "node_count" {
   default = 0
 }
-variable "cluster_server_type" {
-  default = "cx21"
+variable "master_type" {
+  default = "cx11"
 }
-variable "cluster_location" {
+variable "node_type" {
+  default = "cx31"
+}
+variable "location" {
   default = "fsn1"
 }
-variable "cluster_image" {
+variable "image" {
   default = "ubuntu-18.04"
 }
-variable "cluster_ssh_keys" {
+variable "ssh_keys" {
   default = ["berekuk@mmcleric-osx"]
 }

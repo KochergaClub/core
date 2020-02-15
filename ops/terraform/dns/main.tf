@@ -1,6 +1,5 @@
-variable "main_floating_ip" {}
-variable "k3s_dev_master_ip" {}
-variable "k3s_prod_master_ip" {}
+variable "dev_ingress_ip" {}
+variable "prod_ingress_ip" {}
 
 data "aws_route53_zone" "kocherga_club" {
   name         = "kocherga.club."
@@ -19,16 +18,7 @@ resource "aws_route53_record" "ingress_dev" {
   name    = "*.dev"
   type    = "A"
   ttl     = "300"
-  records = [var.k3s_dev_master_ip]
-}
-
-resource "aws_route53_record" "ingress_prod" {
-  zone_id = data.aws_route53_zone.kocherga_club.zone_id
-  name    = "*.k8s"
-  type    = "A"
-  ttl     = "300"
-  records = [var.k3s_prod_master_ip]
-#  records = [main_floating_ip]
+  records = [var.dev_ingress_ip]
 }
 
 resource "aws_route53_record" "berekuk_wiki" {
@@ -36,6 +26,21 @@ resource "aws_route53_record" "berekuk_wiki" {
   name    = "wiki"
   type    = "A"
   ttl     = "300"
-#  records = [main_floating_ip]
-  records = [var.k3s_prod_master_ip]
+  records = [var.prod_ingress_ip]
+}
+
+resource "aws_route53_record" "kocherga_club" {
+  zone_id = data.aws_route53_zone.kocherga_club.zone_id
+  name    = "kocherga.club"
+  type    = "A"
+  ttl     = "300"
+  records = [var.prod_ingress_ip]
+}
+
+resource "aws_route53_record" "kocherga_club_ru" {
+  zone_id = data.aws_route53_zone.kocherga_club_ru.zone_id
+  name    = "kocherga-club.ru"
+  type    = "A"
+  ttl     = "300"
+  records = [var.prod_ingress_ip]
 }
