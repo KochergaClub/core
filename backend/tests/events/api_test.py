@@ -49,7 +49,7 @@ def test_upload_image_from_url(admin_client, event):
     res = admin_client.post(
         f'/api/event/{event.uuid}/image_from_url/default',
         {
-            'url': 'https://wiki.admin.kocherga.club/resources/assets/kch.png',
+            'url': 'https://wiki.team.kocherga.club/resources/assets/kch.png',
         },
         format='json',
     )

@@ -46,7 +46,7 @@ def add_simple_interactions():
         ),
         (
             r"не (работает|подключается) (VR|ВР|шлем)",
-            "Почитай: https://wiki.admin.kocherga.club/VR",
+            "Почитай: https://wiki.team.kocherga.club/VR",
         ),
     ]
 
