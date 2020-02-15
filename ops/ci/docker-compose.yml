@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  kocherga-mysql:
+  core-mysql:
     image: mariadb:10.3
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -11,10 +11,10 @@ services:
     volumes:
       - ./mysql.conf.d:/etc/mysql/conf.d
 
-  kocherga-redis:
+  core-redis:
     image: redis:5.0
 
-  kocherga-chrome:
+  core-chrome:
     image: ${CHROME_IMAGE}
     cap_add:
       - SYS_ADMIN
@@ -22,7 +22,7 @@ services:
       - "127.0.0.1:9222:9222"
     privileged: true
 
-  kocherga-backend:
+  core-django:
     image: ${BACKEND_IMAGE}
     volumes:
       - ./ci.py:/code/kocherga/django/settings/main.py
@@ -32,4 +32,4 @@ services:
     depends_on:
       - kocherga-mysql
       - kocherga-redis
-      - kocherga-chrome
+      - core-chrome

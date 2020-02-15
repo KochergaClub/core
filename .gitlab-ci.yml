@@ -38,7 +38,7 @@ test-python:
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
     - export CHROME_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/chrome")) | .tag')
-    - docker-compose -f ./ops/ci/docker-compose.yml run --rm kocherga-backend bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
+    - docker-compose -f ./ops/ci/docker-compose.yml run --rm core-django bash -c "pytest -m 'not google and not slack and not mailchimp and not ofd and not vk and not timepad and not slow'"
   cache:
     <<: *build_cache
 
@@ -54,7 +54,6 @@ deploy_production:
   when: manual
   only:
     - master
-    - k8s
 
 #deploy_beta:
 #  stage: deploy
