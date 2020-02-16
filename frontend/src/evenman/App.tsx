@@ -63,7 +63,7 @@ const App: NextPage<Props> = observer(({ route, query }) => {
           <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
           <link
             rel="stylesheet"
-            href={staticUrl('static/react-dates/datepicker.css')}
+            href={staticUrl('react-dates/datepicker.css')}
           />
         </Head>
         <GlobalStyle />
