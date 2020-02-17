@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import { GoogleLoginResponse } from 'react-google-login';
 
-const server = 'https://api.kocherga.club';
+const server = 'https://kocherga-club.ru/api';
 
 configure({ enforceActions: true });
 
