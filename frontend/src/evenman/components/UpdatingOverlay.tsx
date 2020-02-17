@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { staticUrl } from '~/common/utils';
+
 const progressCSS = `
   :before {
 	  content: "";
@@ -23,7 +25,7 @@ const progressCSS = `
     height: 120px;
     z-index: 500;
     /* background */
-    background-image: url(https://api.kocherga.club/logo.png);
+    background-image: url(${staticUrl('logo.png')});
     background-repeat: no-repeat;
     background-position: center top;
     background-size: 120px 120px;
