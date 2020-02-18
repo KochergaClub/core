@@ -64,8 +64,12 @@ async function main() {
   });
   app.all(/^\/(?:api|static|media|wagtail|admin)(?:$|\/)/, (req, res) => {
     proxy.web(req, res, {}, e => {
-      console.log(e);
-      res.status(500).send({ error: 'Backend is down' });
+      console.error(e);
+      try {
+        res.status(500).send({ error: 'Backend is down' });
+      } catch (e) {
+        console.error('Failed to send error: ' + String(e));
+      }
     });
   });
   httpServer.on('upgrade', (req, socket, head) => {
