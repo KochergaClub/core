@@ -25,6 +25,13 @@ domains:
     service: monitor-grafana
     namespace: monitor
 
+  - name: prometheus
+    host: prometheus.team.kocherga.club
+    service: prometheus-operated
+    port: 9090
+    namespace: monitor
+    basic_auth: true
+
   - name: metabase
     host: metabase.team.kocherga.club
     service: metabase-metabase

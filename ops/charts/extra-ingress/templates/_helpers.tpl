@@ -28,6 +28,11 @@ spec:
         name: {{ .domain.service }}
         namespace: {{ .domain.namespace | default "default" | quote }}
         port: {{ .domain.port | default 80 }}
+    middlewares:
+{{- if .domain.basic_auth }}
+      - name: traefik-common-auth
+        namespace: traefik
+{{- end }}
   tls:
     secretName: {{ .domain.name }}-cert
 {{- end }}
