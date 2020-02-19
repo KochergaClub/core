@@ -32,6 +32,13 @@ domains:
     namespace: monitor
     basic_auth: true
 
+  - name: alertmanager
+    host: alertmanager.team.kocherga.club
+    service: alertmanager-operated
+    port: 9093
+    namespace: monitor
+    basic_auth: true
+
   - name: metabase
     host: metabase.team.kocherga.club
     service: metabase-metabase
