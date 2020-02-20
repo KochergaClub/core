@@ -48,8 +48,9 @@ deploy_production:
     - mkdir -p ops/secrets/core/prod
     - |
         set -e
+        set -o pipefail
         for FILE in main.yaml secrets.py KKMServer.pem; do
-          curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/$FILE | jq -r .data.data.content >ops/secrets/core/prod/$FILE
+          curl -f -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/$FILE | jq -r .data.data.content >ops/secrets/core/prod/$FILE
         done
     - skaffold deploy -a build.json --status-check
   cache:
