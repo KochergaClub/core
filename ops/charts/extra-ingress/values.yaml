@@ -28,15 +28,15 @@ domains:
   - name: prometheus
     host: prometheus.team.kocherga.club
     service: prometheus-operated
-    port: 9090
     namespace: monitor
+    port: 9090
     basic_auth: true
 
   - name: alertmanager
     host: alertmanager.team.kocherga.club
     service: alertmanager-operated
-    port: 9093
     namespace: monitor
+    port: 9093
     basic_auth: true
 
   - name: metabase
@@ -51,6 +51,12 @@ domains:
     host: wiki.berekuk.ru
     service: berekuk-wiki-wiki
     namespace: berekuk
+
+  - name: vault
+    host: vault.team.kocherga.club
+    service: vault-vault
+    namespace: vault
+    port: 8200
 
 redirector_domains:
   - blog.berekuk.ru
