@@ -1,0 +1,14 @@
+config: |
+  ui = true
+
+  storage "s3" {}
+
+  listener "tcp" {
+    address = "[::]:8200"
+    tls_disable = 1
+  }
+
+s3:
+  bucket: kocherga-vault
+  access_key: "" # defined in secrets
+  secret_key: "" # defined in secrets
