@@ -45,6 +45,10 @@ test-python:
 deploy_production:
   stage: deploy
   script:
+    - mkdir -p ops/secrets/core/prod
+    - curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/main.yaml | jq -r .data.data.content >ops/secrets/core/prod/main.yaml
+    - curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/secrets.py | jq -r .data.data.content >ops/secrets/core/prod/secrets.py
+    - curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/KKMServer.pem | jq -r .data.data.content >ops/secrets/core/prod/KKMServer.pem
     - skaffold deploy -a build.json --status-check
   cache:
     <<: *build_cache
