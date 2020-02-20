@@ -21,3 +21,15 @@ output "berekuk-wiki-iam-id" {
 output "berekuk-wiki-iam-secret" {
   value = module.berekuk-wiki-s3.iam-secret
 }
+
+output "vault-iam-id" {
+  value = module.vault-s3.iam-id
+}
+
+output "vault-iam-secret" {
+  value = module.vault-s3.iam-secret
+}
+
+output "gitlab-runner-vault-token" {
+  value = vault_token.gitlab-runner.client_token
+}

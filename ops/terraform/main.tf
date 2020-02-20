@@ -69,6 +69,13 @@ module "berekuk-wiki-s3" {
   backup_bucket = "berekuk-backups"
 }
 
+module "vault-s3" {
+  source = "./s3"
+
+  bucket = "kocherga-vault"
+  user = "kocherga-vault"
+}
+
 resource "hcloud_server" "old_server" {
   name = "kocherga.club"
   backups = true
