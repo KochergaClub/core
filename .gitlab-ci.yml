@@ -47,6 +47,7 @@ deploy_production:
   script:
     - mkdir -p ops/secrets/core/prod
     - |
+        set -e
         for FILE in main.yaml secrets.py KKMServer.pem; do
           curl -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/$FILE | jq -r .data.data.content >ops/secrets/core/prod/$FILE
         done
