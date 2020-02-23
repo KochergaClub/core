@@ -19,7 +19,7 @@ const PrototypeLink = observer(({ event }: Props) => {
 
   return (
     <A
-      href={`/event-prototypes/${prototypeId}`}
+      href={`/team/evenman/event-prototypes/${prototypeId}`}
       onClick={e => {
         e.preventDefault();
         event.root.setEventPrototypeView({
