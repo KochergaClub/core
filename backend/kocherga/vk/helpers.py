@@ -41,7 +41,7 @@ def upload_wall_image(group_id, image_bytes):
     # so it doesn't need to be checked with kocherga.vk.check_response
     upload_response = r.json()
 
-    if 'photo' not in upload_response:
+    if not upload_response.get('photo'):
         raise Exception('Invalid upload response: ' + str(upload_response))
 
     try:
