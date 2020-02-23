@@ -12,4 +12,5 @@ EOT
 
 resource "vault_token" "gitlab-runner" {
   policies = ["gitlab-runner"]
+  no_parent = true
 }
