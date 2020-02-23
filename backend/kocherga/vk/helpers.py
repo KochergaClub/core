@@ -41,7 +41,13 @@ def upload_wall_image(group_id, image_bytes):
     # so it doesn't need to be checked with kocherga.vk.check_response
     upload_response = r.json()
 
-    photo = json.loads(upload_response["photo"])
+    if 'photo' not in upload_response:
+        raise Exception('Invalid upload response: ' + str(upload_response))
+
+    try:
+        photo = json.loads(upload_response["photo"])
+    except json.decoder.JSONDecodeError:
+        raise Exception("Photo JSON is invalid: " + upload_response["photo"])
 
     if not len(photo):
         raise Exception("vk didn't like our image file")
