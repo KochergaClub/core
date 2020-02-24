@@ -96,8 +96,6 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
-IGNORE_WEB = False
-
 MIDDLEWARE = [
     'kocherga.django.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -280,6 +278,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 
 MEDIA_ROOT = '/data/upload'
 MEDIA_URL = '/media/'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 10
 
 # ------------- Kocherga settings --------------
 
