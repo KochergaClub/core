@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { Event } from '../stores/Event';
 import { InputModal } from '../InputModal';
-import { EventImageDropzone } from './EventImageDropzone';
+import EventImageDropzone from './EventImageDropzone';
 import { A, Column } from '@kocherga/frontkit';
 
 interface Props {
