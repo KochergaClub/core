@@ -1,5 +1,6 @@
 prometheus:
   prometheusSpec:      
+    externalUrl: prometheus.team.kocherga.club
     retentionSize: "8GB"
     retention: 30d
     storageSpec:
@@ -11,6 +12,43 @@ prometheus:
     serviceMonitorNamespaceSelector: {}
     serviceMonitorSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
+
+alertmanager:
+  alertmanagerSpec:
+    externalUrl: alertmanager.team.kocherga.club
+  config:
+    global:
+      resolve_timeout: 5m
+      slack_api_url: "SECRET" # defined in secrets/prometheus.yaml file
+    route:
+      group_by: ["job"]
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      routes:
+      - match:
+          alertname: Watchdog
+        receiver: 'null'
+      - match:
+        receiver: 'slack'
+        continue: true
+    receivers:
+    - name: 'null'
+    - name: 'slack'
+      slack_configs:
+      - channel: '#infra_alerts'
+        send_resolved: false
+# via: https://gist.github.com/l13t/d432b63641b6972b1f58d7c037eec88f
+        title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] Monitoring Event Notification'
+        text: >-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }} - `{{ .Labels.severity }}`
+            *Description:* {{ .Annotations.description }}
+            *Graph:* <{{ .GeneratorURL }}|:chart_with_upwards_trend:> *Runbook:* <{{ .Annotations.runbook }}|:spiral_note_pad:>
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
 
 grafana:
   persistence:
