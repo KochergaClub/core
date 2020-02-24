@@ -19,10 +19,10 @@ configMap: |
 
   packages:
     '@kocherga/*':
-      access: $anonymous
+      access: $all
       publish: berekuk
     '**':
-      access: $anonymous
+      access: $all
       publish: $authenticated
       proxy: npmjs
 
