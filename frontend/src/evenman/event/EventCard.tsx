@@ -10,7 +10,7 @@ import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
 import Toggle from 'react-toggle';
 
-import { Button, Column, Row } from '@kocherga/frontkit';
+import { A, Button, Column, Row } from '@kocherga/frontkit';
 
 import { Event, EventType } from '../stores/Event';
 
@@ -108,7 +108,7 @@ export default class EventCard extends React.Component<Props, {}> {
         />
         <div>
           {isPublished ? (
-            <a href={`/events/${this.props.event.id}`}>Опубликовано</a>
+            <A href={`/events/${this.props.event.id}`}>Опубликовано</A>
           ) : (
             'Опубликовано'
           )}
