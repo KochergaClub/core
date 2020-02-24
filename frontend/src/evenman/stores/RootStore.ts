@@ -65,7 +65,6 @@ export class RootStore {
 
   @action.bound
   switchView(name: string) {
-    console.log(`switching to ${name}`);
     switch (name) {
       case 'Event':
         this.setEventView({});
