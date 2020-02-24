@@ -59,10 +59,10 @@ kassa_localtunnel:
 	npx lt --port 8000 --subdomain kassa --host https://lt.berekuk.ru
 
 update_requirements:
-	docker cp backend/requirements.in docker_api_1:/code/requirements.in
-	docker-compose -f docker/compose.dev.yml exec api pip-compile
-	docker-compose -f docker/compose.dev.yml exec api pip-sync
-	docker cp docker_api_1:/code/requirements.txt ./backend/requirements.txt
+	kubectl cp --context=dev backend/requirements.in $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/requirements.in
+	kubectl exec --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}') pip-compile
+	kubectl exec --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}') pip-sync
+	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/requirements.txt ./backend/requirements.txt
 
 update_schema:
 	docker-compose -f docker/compose.dev.yml exec api ./scripts/export-schema.py schema.graphql
