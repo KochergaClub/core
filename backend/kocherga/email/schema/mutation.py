@@ -15,7 +15,7 @@ def emailSubscribeChannelDelete(_, info, slug):
 def emailSubscribeChannelCreate(_, info, params):
     slug = params['slug']
     interest_ids = params['interest_ids']
-    interests = models.MailchimpInterest.objects.filter(interest_id__in=interest_ids).all()
+    interests = models.MailchimpInterest.objects.filter(pk__in=interest_ids).all()
     instance = models.SubscribeChannel.objects.create(slug=slug)
     instance.interests.set(interests)
     return True
