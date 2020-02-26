@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 
-import { formatDate } from '~/common/utils';
+import { parseISO } from 'date-fns';
 
 import { Row, Label } from '@kocherga/frontkit';
+
+import { formatDate } from '~/common/utils';
 
 import { usePermissions } from '~/common/hooks';
 
@@ -36,12 +38,12 @@ const PaymentCard = ({ payment }: { payment: PaymentFragment }) => {
       {payment.comment ? <div>{payment.comment}</div> : null}
       <Row vCentered>
         <Label>Создано:</Label>
-        <div>{formatDate(new Date(payment.created_dt), 'd MMMM yyyy')}</div>
+        <div>{formatDate(parseISO(payment.created_dt), 'd MMMM yyyy')}</div>
       </Row>
       {payment.redeem_dt && (
         <Row vCentered>
           <Label>Выплачено:</Label>
-          <div>{formatDate(new Date(payment.redeem_dt), 'd MMMM yyyy')}</div>
+          <div>{formatDate(parseISO(payment.redeem_dt), 'd MMMM yyyy')}</div>
         </Row>
       )}
       {canRedeem && !payment.is_redeemed ? (

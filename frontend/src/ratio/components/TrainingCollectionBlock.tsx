@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { isBefore } from 'date-fns';
+import { isBefore, parseISO } from 'date-fns';
 
 import { usePermissions } from '~/common/hooks';
 
@@ -48,7 +48,7 @@ interface CreateTrainingParams {
 }
 
 const isMuted = (training: TrainingFragment) =>
-  isBefore(new Date(training.date), new Date());
+  isBefore(parseISO(training.date), new Date());
 
 const TrainingCollectionBlock: React.FC = () => {
   const [canCreate] = usePermissions(['ratio.manage']);

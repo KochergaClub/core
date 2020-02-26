@@ -79,7 +79,7 @@ SpaceStaffShiftsPage.getInitialProps = async ({ query }) => {
     if (!match) {
       throw new Error('Invalid from_date query param');
     }
-    from_date = startOfWeek(new Date(match[0]), { weekStartsOn: 1 });
+    from_date = startOfWeek(parseISO(match[0]), { weekStartsOn: 1 });
   } else {
     from_date = startOfWeek(new Date(), { weekStartsOn: 1 });
   }

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { parseISO } from 'date-fns';
 
 import { colors, Column } from '@kocherga/frontkit';
 
@@ -96,7 +97,7 @@ const DaySchedule: React.FC<Props> = props => {
     <Column stretch gutter={24}>
       <Header>
         <HeaderFirstLine>День {props.index}</HeaderFirstLine>
-        <div>{formatDate(new Date(props.day_schedule.date), 'd MMMM')}</div>
+        <div>{formatDate(parseISO(props.day_schedule.date), 'd MMMM')}</div>
         <EditDayInAdmin day_schedule={props.day_schedule} />
       </Header>
       <Container>

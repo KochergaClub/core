@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import styled from 'styled-components';
 
-import { differenceInCalendarDays } from 'date-fns';
+import { parseISO, differenceInCalendarDays } from 'date-fns';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -43,12 +43,12 @@ const RegistrationSection = styled.section`
 `;
 
 const PublicEventPage: NextApolloPage<CommonProps> = ({ event }) => {
-  const zonedStart = utcToZonedTime(new Date(event.start), timezone);
+  const zonedStart = utcToZonedTime(parseISO(event.start), timezone);
   const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
 
   const registrationRef = useRef<HTMLElement | null>(null);
 
-  const daysUntil = differenceInCalendarDays(new Date(event.start), new Date());
+  const daysUntil = differenceInCalendarDays(parseISO(event.start), new Date());
   const inFuture = daysUntil >= 0;
 
   return (

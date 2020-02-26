@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { parseISO } from 'date-fns';
 
 import { CalendarStyle, CalendarDndStyle } from './CalendarStyle';
 import Toolbar from './Toolbar';
@@ -13,6 +14,10 @@ import {
 // FIXME - some some reason `import { Views } from 'react-big-calendar'` imports type, not constant.
 // This is a workaround.
 import { views } from 'react-big-calendar/lib/utils/constants';
+
+import moment from 'moment';
+import 'moment/locale/ru';
+moment.locale('ru');
 
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
@@ -34,10 +39,6 @@ interface WithDragAndDropProps<TEvent> {
   }) => void;
   resizable?: boolean;
 }
-
-import moment from 'moment';
-import 'moment/locale/ru';
-moment.locale('ru');
 
 const localizer = momentLocalizer(moment);
 
@@ -68,7 +69,7 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
         showMultiDayTimes={true}
         popup={true}
         defaultView={views.WEEK}
-        scrollToTime={new Date('2000-01-01 09:00:00')}
+        scrollToTime={parseISO('2000-01-01 09:00:00')}
         {...props}
         components={{
           ...(props.components || {}),

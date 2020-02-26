@@ -3,7 +3,7 @@ import { useApolloClient } from '@apollo/react-hooks';
 import Async from 'react-select/async';
 import { ValueType } from 'react-select';
 
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import { A, Label, Row } from '@kocherga/frontkit';
 
@@ -65,7 +65,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
         callback(
           eventsData.nodes.map(event => {
             const label = `${event.title} ${format(
-              new Date(event.start),
+              parseISO(event.start),
               'yyyy-MM-dd'
             )}`;
             return {

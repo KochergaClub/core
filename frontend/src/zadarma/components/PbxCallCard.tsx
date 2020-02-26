@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { timezone, formatDate } from '~/common/utils';
 
@@ -43,7 +44,7 @@ const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
     title = `${clid} → Кочерга`;
   }
 
-  const zonedDate = utcToZonedTime(new Date(pbx_call.ts), timezone);
+  const zonedDate = utcToZonedTime(parseISO(pbx_call.ts), timezone);
 
   return (
     <div>

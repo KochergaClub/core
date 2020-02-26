@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
-import { addDays } from 'date-fns';
+import { addDays, parseISO } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
@@ -57,8 +57,8 @@ const EventCalendar: NextPage<Props> = props => {
   const api = useAPI();
 
   const [range, setRange] = useState(() => ({
-    start: new Date(props.range.start),
-    end: new Date(props.range.end),
+    start: parseISO(props.range.start),
+    end: parseISO(props.range.end),
   }));
 
   const fetchEvents = useCallback(async () => {

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
+import { parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+
 import { timezone, formatDate } from '~/common/utils';
 
 import DispositionLabel from './DispositionLabel';
@@ -20,7 +22,7 @@ const Container = styled.div`
 type Call = CommonZadarmaPbxCallFragment['calls'][0];
 
 const CallInfo = ({ call }: { call: Call }) => {
-  const zonedDate = utcToZonedTime(new Date(call.ts), timezone);
+  const zonedDate = utcToZonedTime(parseISO(call.ts), timezone);
 
   return (
     <Container>

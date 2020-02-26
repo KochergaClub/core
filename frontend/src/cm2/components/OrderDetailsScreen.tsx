@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { parseISO } from 'date-fns';
+
 import { Column, Label } from '@kocherga/frontkit';
 
 import { ApolloQueryResults, AsyncButton } from '~/components';
@@ -41,12 +43,12 @@ export const OrderDetailsScreen: React.FC<Props> = ({ id }) => {
           <h2>Заказ №{order.id}</h2>
           <div>
             <Label>Открыт</Label>
-            <div>{formatDate(new Date(order.start), 'yyyy-MM-dd HH:mm')}</div>
+            <div>{formatDate(parseISO(order.start), 'yyyy-MM-dd HH:mm')}</div>
           </div>
           {order.end && (
             <div>
               <Label>Закрыт</Label>
-              <div>{formatDate(new Date(order.end), 'yyyy-MM-dd HH:mm')}</div>
+              <div>{formatDate(parseISO(order.end), 'yyyy-MM-dd HH:mm')}</div>
             </div>
           )}
           {order.value && (

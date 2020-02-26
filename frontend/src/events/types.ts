@@ -1,3 +1,5 @@
+import { parseISO } from 'date-fns';
+
 export type AnnouncementKey = 'vk' | 'fb' | 'timepad';
 
 interface CommonEventProps {
@@ -66,7 +68,7 @@ export interface Feedback extends CreateFeedbackParams {
 export const serverEventToEvent = (event: ServerEvent): Event => {
   return {
     ...event,
-    start: new Date(event.start),
-    end: new Date(event.end),
+    start: parseISO(event.start),
+    end: parseISO(event.end),
   };
 };

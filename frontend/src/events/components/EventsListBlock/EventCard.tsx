@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { parseISO } from 'date-fns';
 
 import { colors, Column, Button } from '@kocherga/frontkit';
 
@@ -72,7 +73,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
         </Background>
       </BackgroundLink>
       <TimeWrapper>
-        <HumanizedDateTime date={new Date(event.start)} />
+        <HumanizedDateTime date={parseISO(event.start)} />
       </TimeWrapper>
       <Padded>{event.summary}</Padded>
       <Padded>

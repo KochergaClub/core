@@ -2,7 +2,11 @@ import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
-import { differenceInCalendarDays, differenceInCalendarWeeks } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  differenceInCalendarWeeks,
+  parseISO,
+} from 'date-fns';
 
 import { Button, Label, fonts } from '@kocherga/frontkit';
 import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
@@ -66,7 +70,7 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
   event,
   registrationRef,
 }) => {
-  const daysUntil = differenceInCalendarDays(new Date(event.start), new Date());
+  const daysUntil = differenceInCalendarDays(parseISO(event.start), new Date());
 
   let daysText = '';
 
@@ -89,7 +93,7 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
   } else {
     // more than 6 days
     const weeksUntil = differenceInCalendarWeeks(
-      new Date(event.start),
+      parseISO(event.start),
       new Date(),
       {
         weekStartsOn: 1,
@@ -121,7 +125,7 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
 
   return (
     <BottomRowContainer>
-      <HumanizedDateTime date={new Date(event.start)} />
+      <HumanizedDateTime date={parseISO(event.start)} />
       {daysUntil >= 0 && (
         <Button kind="primary" size="big" onClick={registerCb}>
           Зарегистрироваться

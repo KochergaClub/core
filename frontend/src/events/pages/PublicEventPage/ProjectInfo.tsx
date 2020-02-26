@@ -1,4 +1,4 @@
-import { differenceInCalendarDays } from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 
 import { RichText } from '@kocherga/frontkit';
 
@@ -25,7 +25,7 @@ const ProjectLink: React.FC<{
 );
 
 const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
-  const daysUntil = differenceInCalendarDays(new Date(event.start), new Date());
+  const daysUntil = differenceInCalendarDays(parseISO(event.start), new Date());
 
   if (daysUntil >= 0) {
     return null; // TODO - show project info even for future events
@@ -36,8 +36,6 @@ const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
   if (!project) {
     return (
       <Wrapper>
-        Это событие прошло.
-        <br />
         Посмотрите, что будет в Кочерге <a href="/events">в ближайшие дни.</a>
       </Wrapper>
     );

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { parseISO } from 'date-fns';
 
 import { RichText, colors } from '@kocherga/frontkit';
 
@@ -70,7 +71,7 @@ const BlogPostPage: NextWagtailPage<BlogPostPageFragment> = ({ page }) => {
         sectionLink="/blog"
       >
         <HeaderDate>
-          {formatDate(new Date(page.date), 'd MMMM yyyy')}
+          {formatDate(parseISO(page.date), 'd MMMM yyyy')}
         </HeaderDate>
       </ItemPageHeader>
       <TextWithAuthors text={page.body} authors={page.authors} />

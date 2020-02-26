@@ -1,4 +1,4 @@
-import { differenceInMinutes } from 'date-fns';
+import { differenceInMinutes, parseISO } from 'date-fns';
 
 import { CustomTableView } from '~/components/collections';
 
@@ -38,8 +38,8 @@ const OrdersTableView: React.FC<{
             return <OrderLink order={item} />;
           case 'time':
             const diff = differenceInMinutes(
-              item.end ? new Date(item.end) : new Date(),
-              new Date(item.start)
+              item.end ? parseISO(item.end) : new Date(),
+              parseISO(item.start)
             );
             const hours = Math.floor(diff / 60);
             const minutes = diff % 60;
