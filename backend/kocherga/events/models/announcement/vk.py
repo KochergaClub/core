@@ -136,8 +136,12 @@ class Manager(models.Manager):
             day = day_codes[start_local.weekday()]
             return f"{day} {start_local:%H:%M}"
 
-        group_id = group2id(settings.KOCHERGA_VK["main_page"]["id"])
-        page_id = group2id(settings.KOCHERGA_VK["main_page"]["main_wall_page_id"])
+        main_page_settings = settings.KOCHERGA_VK["main_page"]
+        if 'main_wall_page_id' not in main_page_settings:
+            logger.info('main_wall_page_id is not set, skipping')
+            return
+        group_id = group2id(main_page_settings["id"])
+        page_id = group2id(main_page_settings["main_wall_page_id"])
         wiki_url = f"https://vk.com/page-{group_id}_{page_id}"
 
         kocherga.vk.api.call(
