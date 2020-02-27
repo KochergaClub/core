@@ -36,24 +36,19 @@ const App: NextPage<Props> = observer(({ route, query }) => {
       // FIXME // filter: queryObj(),
       filter: {},
     });
-  } else if (route === '/team/evenman/event-prototypes') {
-    store.setEventPrototypeView({ id: undefined });
   } else if (route === '/team/evenman/schedule') {
     store.setScheduleView();
-  } else if (route === '/team/evenman/event-prototypes/[id]') {
-    store.setEventPrototypeView({ id: parseInt(query.id as string, 10) });
   } else if (route === '/team/evenman/event/[id]') {
     store.setEventView({
       id: query.id as string,
       filter: query,
     });
+  } else if (route === '/team/evenman/event-prototypes') {
+    store.setEventPrototypeView({ id: undefined });
+  } else if (route === '/team/evenman/event-prototypes/[id]') {
+    store.setEventPrototypeView({ id: parseInt(query.id as string, 10) });
   } else {
-    /*
-      }).configure({
-        notfound: () => store.switchView('Event'), // FIXME
-        html5history: true,
-      });
-    */
+    // TODO - show not found page (or get rid of this switch block altogether)
   }
 
   return (
@@ -78,7 +73,7 @@ App.getInitialProps = async ({ store: { getState }, pathname, query }) => {
   const user = selectUser(getState());
 
   if (!user.email) {
-    throw new APIError('You need to be logged in to see /my', 403);
+    throw new APIError('You need to be logged in to see /team/evenman', 403);
   }
 
   return {

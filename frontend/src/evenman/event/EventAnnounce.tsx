@@ -7,8 +7,6 @@ import EditableLink, {
   Props as EditableLinkProps,
 } from '../components/EditableLink';
 
-import FbTokenEditor from './FbTokenEditor';
-
 import { Event, EventAnnounceTarget } from '../stores/Event';
 
 import { Button, Column, Row } from '@kocherga/frontkit';
@@ -65,7 +63,6 @@ const AnnounceLinkFb = observer(({ event }: { event: Event }) => (
         создать
       </Button>
     ) : null}
-    <FbTokenEditor store={event.root.fbStore} />
   </Row>
 ));
 

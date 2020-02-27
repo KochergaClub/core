@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
 
 import EventScreen from './event/EventScreen';
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
@@ -7,8 +6,6 @@ import ScheduleScreen from './schedule/ScheduleScreen';
 
 import { Sidebar } from './Sidebar';
 import { WithSidebar } from './WithSidebar';
-
-// import { FbLoginModal } from './FbLoginModal';
 
 import { useRootStore } from './common';
 
@@ -36,7 +33,6 @@ const Screen = observer(() => {
 const Main = () => (
   <WithSidebar sidebar={<Sidebar />}>
     <Screen />
-    {/* <FbLoginModal /> */}
   </WithSidebar>
 );
 

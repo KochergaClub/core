@@ -15,7 +15,7 @@ export default class EventPrototypeView implements View {
 
   constructor(root: RootStore, props: EventPrototypeViewProps) {
     this.root = root;
-    this.name = "EventPrototype";
+    this.name = 'EventPrototype';
     this.update(props);
   }
 
@@ -44,14 +44,5 @@ export default class EventPrototypeView implements View {
     }
     const result = this.store.getById(this.eventPrototypeId);
     return result;
-  }
-
-  @computed
-  get toPath() {
-    let path = 'event-prototypes';
-    if (this.eventPrototypeId) {
-      path += `/${this.eventPrototypeId}`;
-    }
-    return '/' + path;
   }
 }

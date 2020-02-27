@@ -17,8 +17,4 @@ export default class ScheduleView implements View {
   update() {
     return;
   }
-
-  get toPath() {
-    return '/schedule';
-  }
 }

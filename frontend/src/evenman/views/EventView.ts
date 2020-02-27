@@ -143,25 +143,6 @@ export default class EventView implements View {
     return fromPromise(this.root.eventStore.getEvent(this.eventId));
   }
 
-  @computed
-  get toPath() {
-    let path = '';
-    let queryString = '';
-
-    if (this.eventId) {
-      path = `event/${this.eventId}`;
-    }
-
-    const query = this.filter.asQuery;
-    if (Object.keys(query).length) {
-      queryString = buildQueryString((query as unknown) as {
-        [s: string]: string | boolean;
-      });
-    }
-
-    return '/' + path + (queryString ? '?' + queryString : '');
-  }
-
   @action.bound
   async createNewEvent() {
     const createParams = this.newEvent.serialize();
