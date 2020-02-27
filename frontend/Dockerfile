@@ -1,4 +1,4 @@
-FROM python:3.7.2
+FROM python:3.7.2 as base
 
 RUN apt-get update && apt-get install -y locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -18,7 +18,9 @@ RUN npm ci
 
 COPY . /code/
 
+CMD ["node", "./dist/index.js"]
+
+FROM base as production
+
 RUN NODE_ENV=production npx next build
 RUN NODE_ENV=production npx webpack --config webpack.server.js
-
-CMD ["node", "./dist/index.js"]
