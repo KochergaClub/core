@@ -11,7 +11,6 @@ import { useRootStore } from './common';
 
 import EventView from './views/EventView';
 import EventPrototypeView from './views/EventPrototypeView';
-import ScheduleView from './views/ScheduleView';
 
 const Screen = observer(() => {
   const store = useRootStore();
@@ -24,7 +23,7 @@ const Screen = observer(() => {
         <EventPrototypeScreen view={store!.currentView as EventPrototypeView} />
       );
     case 'Schedule':
-      return <ScheduleScreen view={store!.currentView as ScheduleView} />;
+      return <ScheduleScreen />;
     default:
       return <div>Unknown view {store!.currentView.name}</div>;
   }

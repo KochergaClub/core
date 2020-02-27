@@ -1,116 +1,128 @@
-import { action, computed, observable, runInAction } from 'mobx';
-import { observer } from 'mobx-react';
-import * as React from 'react';
+import { useState, useCallback } from 'react';
+import { observer } from 'mobx-react-lite';
 
 import styled from 'styled-components';
 
-import ScheduleView from '../views/ScheduleView';
+import { A, Button, Column } from '@kocherga/frontkit';
 
 import { ImagePreview } from '../ImageDropzone';
-
-import { A, Button, Column } from '@kocherga/frontkit';
 
 import DigestEmailModal from './DigestEmailModal';
 
 import { AnnouncementCommand } from '../stores/AnnouncementToolsStore';
 
-interface Props {
-  view: ScheduleView;
-}
+import { useRootStore } from '../common';
 
 const Container = styled.main`
   margin-top: 10px;
 `;
 
-@observer
-export default class ScheduleScreen extends React.Component<Props, {}> {
-  @observable showEmailTextModal = false;
-
-  @computed
-  get announcementToolsStore() {
-    return this.props.view.root.announcementToolsStore;
+const EmailDigestButton: React.FC = observer(({ children }) => {
+  const root = useRootStore();
+  if (!root) {
+    throw new Error('Root store is undefined');
   }
+  const announcementToolsStore = root.announcementToolsStore;
 
-  @action.bound
-  toggleEmailTextModal() {
-    this.showEmailTextModal = !this.showEmailTextModal;
-  }
+  const [showModal, setShowModal] = useState(false);
 
-  @action.bound
-  async postEmailDigest(text: string) {
-    await this.announcementToolsStore.postEmailDigest(text);
-    runInAction(() => (this.showEmailTextModal = false));
-  }
+  const toggleModal = useCallback(() => {
+    setShowModal(!showModal);
+  }, [showModal]);
 
-  renderActionButton = (title: string, command: AnnouncementCommand) => {
+  const postEmailDigest = useCallback(
+    async (text: string) => {
+      await announcementToolsStore.postEmailDigest(text);
+      setShowModal(false);
+    },
+    [announcementToolsStore]
+  );
+
+  return (
+    <>
+      <Button
+        onClick={toggleModal}
+        loading={announcementToolsStore.loading['postEmailDigest']}
+        style={{ width: '100%' }}
+      >
+        {children}
+      </Button>
+      <DigestEmailModal
+        toggle={toggleModal}
+        show={showModal}
+        save={postEmailDigest}
+      />
+    </>
+  );
+});
+
+const ActionButton: React.FC<{ command: AnnouncementCommand }> = observer(
+  ({ command, children }) => {
+    const root = useRootStore();
+    if (!root) {
+      throw new Error('Root store is undefined');
+    }
+    const announcementToolsStore = root.announcementToolsStore;
+
     const getAction = (command: AnnouncementCommand) => {
-      if (command === 'postEmailDigest') {
-        return this.toggleEmailTextModal;
-      }
-      return () => this.announcementToolsStore.performCommand(command);
+      return () => announcementToolsStore.performCommand(command);
     };
 
     return (
       <Button
-        key={command}
         onClick={getAction(command)}
-        loading={this.announcementToolsStore.loading[command]}
+        loading={announcementToolsStore.loading[command]}
         style={{ width: '100%' }}
       >
-        {title}
+        {children}
       </Button>
     );
-  };
-
-  renderButtons() {
-    return (
-      <div>
-        <section>
-          <h3>ВК</h3>
-          <Column gutter={8}>
-            <A href="https://vk.com/page-99973027_50473877">ВК-расписание</A>{' '}
-            {/* FIXME - should be customizable */}
-            {this.renderActionButton(
-              'Обновить вики-расписание',
-              'updateVkWikiSchedule'
-            )}
-            {this.renderActionButton(
-              'Создать пост с расписанием',
-              'createVkSchedulePost'
-            )}
-          </Column>
-        </section>
-        <section>
-          <h3>Telegram</h3>
-          {this.renderActionButton(
-            'Запостить расписание',
-            'postTelegramSchedule'
-          )}
-        </section>
-        <section>
-          <h3>Почта</h3>
-          {this.renderActionButton(
-            'Создать черновик рассылки',
-            'postEmailDigest'
-          )}
-        </section>
-      </div>
-    );
   }
+);
 
-  render() {
-    return (
-      <Container>
-        <Column centered>
-          <ImagePreview url={this.props.view.root.weeklyScheduleImage()} />
-          <div>{this.renderButtons()}</div>
+const Buttons: React.FC = () => {
+  return (
+    <div>
+      <section>
+        <h3>ВК</h3>
+        <Column gutter={8}>
+          {/* FIXME - should be customizable */}
+          <A href="https://vk.com/page-99973027_50473877">ВК-расписание</A>{' '}
+          <ActionButton command="updateVkWikiSchedule">
+            Обновить вики-расписание
+          </ActionButton>
+          <ActionButton command="createVkSchedulePost">
+            Создать пост с расписанием
+          </ActionButton>
         </Column>
-        <DigestEmailModal
-          toggle={this.toggleEmailTextModal}
-          show={this.showEmailTextModal}
-          save={this.postEmailDigest}
-        />
-      </Container>
-    );
+      </section>
+      <section>
+        <h3>Telegram</h3>
+        <ActionButton command="postTelegramSchedule">
+          Запостить расписание
+        </ActionButton>
+      </section>
+      <section>
+        <h3>Почта</h3>
+        <EmailDigestButton>Создать черновик рассылки</EmailDigestButton>
+      </section>
+    </div>
+  );
+};
+
+const ScheduleScreen: React.FC = observer(() => {
+  const root = useRootStore();
+  if (!root) {
+    throw new Error('Root store is undefined');
   }
-}
+  return (
+    <Container>
+      <Column centered>
+        <ImagePreview url={root.weeklyScheduleImage()} />
+        <Buttons />
+      </Column>
+    </Container>
+  );
+});
+
+export default ScheduleScreen;
