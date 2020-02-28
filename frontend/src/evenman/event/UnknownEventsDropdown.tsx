@@ -1,19 +1,18 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import styled from 'styled-components';
-
-import EventView from '../views/EventView';
 
 import { A, Button, Column, Row } from '@kocherga/frontkit';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
 import { Event } from '../stores/Event';
+import { EventFilter } from '../stores/EventFilter';
 
 import { NumberBadge } from '../components/ui';
 
 interface Props {
-  view: EventView;
+  filter: EventFilter;
 }
 
 const Container = styled.div`
@@ -53,7 +52,7 @@ const ListItem = observer(({ event }: { event: Event }) => {
   );
 });
 
-const UnknownEventsDropdown = observer(({ view }: Props) => {
+const UnknownEventsDropdown = observer(({ filter }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggle = useCallback(
@@ -68,7 +67,7 @@ const UnknownEventsDropdown = observer(({ view }: Props) => {
     return (
       <ListContainer>
         <Column>
-          {view.filter.unknownEvents.map(event => (
+          {filter.unknownEvents.map(event => (
             <ListItem event={event} key={event.id} />
           ))}
         </Column>
@@ -79,7 +78,7 @@ const UnknownEventsDropdown = observer(({ view }: Props) => {
   return (
     <Container>
       <A href="#" onClick={toggle}>
-        <NumberBadge>{view.filter.unknownEvents.length}</NumberBadge>
+        <NumberBadge>{filter.unknownEvents.length}</NumberBadge>
       </A>
       {expanded && renderList()}
     </Container>

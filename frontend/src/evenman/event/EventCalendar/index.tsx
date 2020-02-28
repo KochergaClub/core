@@ -1,102 +1,35 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { observer, Observer } from 'mobx-react';
-import { observer as liteObserver } from 'mobx-react-lite';
-
-import Router from 'next/router';
-
-import styled from 'styled-components';
 
 import Toggle from 'react-toggle';
+
+import moment from 'moment';
 
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 import { A, Button, Row, Column } from '@kocherga/frontkit';
 
-import EventView from '../views/EventView';
-import { Event } from '../stores/Event';
+import { EventFilter } from '../../stores/EventFilter';
 
-import MonthCalendar from '../common/MonthCalendar';
+import MonthCalendar from '../../common/MonthCalendar';
 
-import EventCalendarItem from './EventCalendarItem';
+import UnknownEventsDropdown from '../UnknownEventsDropdown';
 
-import UnknownEventsDropdown from './UnknownEventsDropdown';
+import CalendarCellHeader from './CalendarCellHeader';
+import CalendarCell from './CalendarCell';
 
 interface Props {
-  view: EventView;
-}
-
-import moment from 'moment';
-
-interface CalendarCellProps {
-  events: Event[];
-  view: EventView;
-}
-
-const CalendarCellContainer = styled.div`
-  height: 3em;
-  overflow: scroll;
-`;
-
-const CalendarCell: React.FC<CalendarCellProps> = liteObserver(
-  ({ events, view }) => {
-    const selectCb = useCallback((id: string) => {
-      Router.push('/team/evenman/event/[id]', `/team/evenman/event/${id}`);
-    }, []);
-
-    return (
-      <CalendarCellContainer>
-        {events.map(event => (
-          <EventCalendarItem
-            key={event.id}
-            event={event}
-            selected={event.id === view.eventId}
-            onSelect={selectCb}
-          />
-        ))}
-      </CalendarCellContainer>
-    );
-  }
-);
-
-class CalendarCellHeader extends React.Component<{
-  date: moment.Moment;
-  view: EventView;
-}> {
-  static NewButton = styled.a`
-    color: black;
-    text-decoration: none;
-    &:hover {
-      color: red;
-    }
-  `;
-
-  openNewEventForm = () => {
-    this.props.view.newEvent.openForm(this.props.date.format('YYYY-MM-DD'));
-  };
-
-  render() {
-    return (
-      <div>
-        <CalendarCellHeader.NewButton
-          className="CalendarCell--OnHover"
-          href="#"
-          onClick={this.openNewEventForm}
-        >
-          +
-        </CalendarCellHeader.NewButton>
-        {this.props.date.format('D MMMM')}
-      </div>
-    );
-  }
+  filter: EventFilter;
+  selected_id?: string;
 }
 
 @observer
-export default class EventCalendar extends React.Component<Props, {}> {
+export default class EventCalendar extends React.Component<Props> {
   renderHideCheckboxes() {
-    const { filter } = this.props.view;
+    const { filter } = this.props;
     return (
       <Row centered>
-        <UnknownEventsDropdown view={this.props.view} />
+        <UnknownEventsDropdown filter={filter} />
         <Toggle
           checked={filter.type === 'all'}
           onChange={(e: React.FormEvent<HTMLInputElement>) =>
@@ -123,7 +56,7 @@ export default class EventCalendar extends React.Component<Props, {}> {
   }
 
   renderToolbar() {
-    const { filter } = this.props.view;
+    const { filter } = this.props;
 
     const prevDate = moment(filter.customDate).subtract(1, 'week');
     const nextDate = moment(filter.customDate).add(1, 'week');
@@ -159,8 +92,8 @@ export default class EventCalendar extends React.Component<Props, {}> {
       <Observer>
         {() => (
           <CalendarCell
-            events={this.props.view.filter.eventsByDate(date)}
-            view={this.props.view}
+            events={this.props.filter.eventsByDate(date)}
+            selected_id={this.props.selected_id}
           />
         )}
       </Observer>
@@ -168,21 +101,21 @@ export default class EventCalendar extends React.Component<Props, {}> {
   };
 
   renderHeader = (date: moment.Moment) => {
-    return <CalendarCellHeader view={this.props.view} date={date} />;
+    return <CalendarCellHeader date={date} />;
   };
 
   render() {
-    const { view } = this.props;
+    const { filter } = this.props;
 
     return (
       <Column stretch>
         {this.renderHideCheckboxes()}
         {this.renderToolbar()}
         <MonthCalendar
-          date={view.filter.customDate || moment()}
+          date={filter.customDate || moment()}
           renderCell={this.renderCell}
           renderHeader={this.renderHeader}
-          weeks={view.filter.weeks}
+          weeks={filter.weeks}
         />
       </Column>
     );

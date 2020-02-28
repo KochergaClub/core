@@ -27,8 +27,6 @@ import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import ScheduleScreen from './schedule/ScheduleScreen';
 import EventScreen from './event/EventScreen';
 
-import EventView from './views/EventView';
-
 interface Props {
   route: string;
   query: ParsedUrlQuery;
@@ -39,28 +37,25 @@ const App: NextPage<Props> = observer(({ route, query }) => {
   const [store] = useState(() => new RootStore(api));
 
   let inner: JSX.Element | undefined;
+  let tab = '';
 
   if (route === '/team/evenman') {
-    store.setEventView({
-      id: undefined,
-      // FIXME // filter: queryObj(),
-      filter: {},
-    });
-    inner = <EventScreen view={store.currentView as EventView} />;
+    inner = <EventScreen />;
+    tab = 'Event';
   } else if (route === '/team/evenman/schedule') {
     inner = <ScheduleScreen />;
+    tab = 'Schedule';
   } else if (route === '/team/evenman/event/[id]') {
-    store.setEventView({
-      id: query.id as string,
-      filter: query,
-    });
-    inner = <EventScreen view={store.currentView as EventView} />;
+    inner = <EventScreen selected_id={query.id as string} />;
+    tab = 'Event';
   } else if (route === '/team/evenman/event-prototypes') {
     inner = <EventPrototypeScreen />;
+    tab = 'EventPrototype';
   } else if (route === '/team/evenman/event-prototypes/[id]') {
     inner = (
       <EventPrototypeScreen selected_id={parseInt(query.id as string, 10)} />
     );
+    tab = 'EventPrototype';
   } else {
     inner = <div>Unknown route {route}</div>;
   }
@@ -77,7 +72,7 @@ const App: NextPage<Props> = observer(({ route, query }) => {
         </Head>
         <GlobalStyle />
         <ErrorList />
-        <WithSidebar sidebar={<Sidebar />}>{inner}</WithSidebar>
+        <WithSidebar sidebar={<Sidebar selected={tab} />}>{inner}</WithSidebar>
       </Context.Provider>
     </Page>
   );

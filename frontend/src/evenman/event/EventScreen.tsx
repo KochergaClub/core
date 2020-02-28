@@ -1,38 +1,43 @@
+import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
+import { fromPromise } from 'mobx-utils';
 
 import styled from 'styled-components';
 
 import { useListeningWebSocket } from '~/common/hooks';
 
-import EventView from '../views/EventView';
+import { useRootStore } from '../common';
+import { EventFilter } from '../stores/EventFilter';
 
 import { EmptyCard } from '../components/Card';
 import EventCard from './EventCard';
 import EventCalendar from './EventCalendar';
 
-import NewEventModal from './NewEventModal';
-
 interface Props {
-  view: EventView;
+  selected_id?: string;
 }
 
 const Container = styled.div`
   margin-top: 10px;
 `;
 
-const EventScreen: React.FC<Props> = observer(({ view }) => {
+const EventScreen: React.FC<Props> = observer(({ selected_id }) => {
+  const root = useRootStore();
+  const filter = useMemo(() => {
+    return new EventFilter(root.eventStore);
+  }, [root]);
+
   useListeningWebSocket('ws/events/', () => {
-    view.root.eventStore.updateRange(
-      view.filter.startDate,
-      view.filter.endDate
-    );
+    root.eventStore.updateRange(filter.startDate, filter.endDate);
   });
 
   const renderEventCard = () => {
-    if (!view.selectedEvent) {
+    if (!selected_id) {
       return <EmptyCard>Выберите событие</EmptyCard>;
     }
-    return view.selectedEvent.case({
+    const event = fromPromise(root.eventStore.getEvent(selected_id));
+
+    return event.case({
       pending: () => <EmptyCard>Загружается...</EmptyCard>,
       rejected: () => <EmptyCard>Ошибка</EmptyCard>,
       fulfilled: value => <EventCard event={value} />,
@@ -41,9 +46,8 @@ const EventScreen: React.FC<Props> = observer(({ view }) => {
 
   return (
     <Container>
-      <EventCalendar view={view} />
+      <EventCalendar selected_id={selected_id} filter={filter} />
       {renderEventCard()}
-      <NewEventModal view={view} />
     </Container>
   );
 });
