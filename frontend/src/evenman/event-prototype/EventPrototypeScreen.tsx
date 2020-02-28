@@ -1,7 +1,6 @@
-import { observer } from 'mobx-react';
-import * as React from 'react';
+import { useMemo } from 'react';
+import { observer } from 'mobx-react-lite';
 
-import EventPrototypeView from '../views/EventPrototypeView';
 import EventPrototypeCard from './EventPrototypeCard';
 
 import Sidebar from './Sidebar';
@@ -9,33 +8,42 @@ import { EmptyCard } from '../components/Card';
 import LoadingOverlay from '../components/LoadingOverlay';
 
 import { WithSidebar } from '../WithSidebar';
+import { useEventPrototypeStore } from '../common';
 
 interface Props {
-  view: EventPrototypeView;
+  selected_id?: number;
 }
 
-@observer
-export default class EventPrototypeScreen extends React.Component<Props, {}> {
-  renderCard() {
-    const { view } = this.props;
+const EventPrototypeScreen: React.FC<Props> = observer(({ selected_id }) => {
+  const store = useEventPrototypeStore();
 
-    const selected = view.selectedEventPrototype;
+  const selected = useMemo(() => {
+    if (!selected_id) {
+      return;
+    }
+    if (store.state === 'empty') {
+      store.loadAll();
+    }
+    return store.getById(selected_id);
+  }, [store, selected_id]);
+
+  const renderCard = () => {
     if (selected) {
       return <EventPrototypeCard prototype={selected} />;
     }
 
     return (
-      <LoadingOverlay progress={view.store.state === 'fetching'}>
+      <LoadingOverlay progress={store.state === 'fetching'}>
         <EmptyCard>Выберите прототип события</EmptyCard>
       </LoadingOverlay>
     );
-  }
+  };
 
-  render() {
-    return (
-      <WithSidebar sidebar={<Sidebar view={this.props.view} />}>
-        {this.renderCard()}
-      </WithSidebar>
-    );
-  }
-}
+  return (
+    <WithSidebar sidebar={<Sidebar selected_id={selected_id} />}>
+      {renderCard()}
+    </WithSidebar>
+  );
+});
+
+export default EventPrototypeScreen;

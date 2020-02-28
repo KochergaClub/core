@@ -15,11 +15,19 @@ import { staticUrl } from '~/common/utils';
 import GlobalStyle from './GlobalStyle';
 
 import ErrorList from './ErrorList';
-import Main from './Main';
+
+import { Sidebar } from './Sidebar';
+import { WithSidebar } from './WithSidebar';
 
 import { RootStore } from './stores/RootStore';
 
 import { Context } from './common';
+
+import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
+import ScheduleScreen from './schedule/ScheduleScreen';
+import EventScreen from './event/EventScreen';
+
+import EventView from './views/EventView';
 
 interface Props {
   route: string;
@@ -30,25 +38,31 @@ const App: NextPage<Props> = observer(({ route, query }) => {
   const api = useAPI();
   const [store] = useState(() => new RootStore(api));
 
+  let inner: JSX.Element | undefined;
+
   if (route === '/team/evenman') {
     store.setEventView({
       id: undefined,
       // FIXME // filter: queryObj(),
       filter: {},
     });
+    inner = <EventScreen view={store.currentView as EventView} />;
   } else if (route === '/team/evenman/schedule') {
-    store.setScheduleView();
+    inner = <ScheduleScreen />;
   } else if (route === '/team/evenman/event/[id]') {
     store.setEventView({
       id: query.id as string,
       filter: query,
     });
+    inner = <EventScreen view={store.currentView as EventView} />;
   } else if (route === '/team/evenman/event-prototypes') {
-    store.setEventPrototypeView({ id: undefined });
+    inner = <EventPrototypeScreen />;
   } else if (route === '/team/evenman/event-prototypes/[id]') {
-    store.setEventPrototypeView({ id: parseInt(query.id as string, 10) });
+    inner = (
+      <EventPrototypeScreen selected_id={parseInt(query.id as string, 10)} />
+    );
   } else {
-    // TODO - show not found page (or get rid of this switch block altogether)
+    inner = <div>Unknown route {route}</div>;
   }
 
   return (
@@ -63,7 +77,7 @@ const App: NextPage<Props> = observer(({ route, query }) => {
         </Head>
         <GlobalStyle />
         <ErrorList />
-        <Main />
+        <WithSidebar sidebar={<Sidebar />}>{inner}</WithSidebar>
       </Context.Provider>
     </Page>
   );

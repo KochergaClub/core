@@ -1,4 +1,4 @@
-import React from 'react';
+import Link from 'next/link';
 import { observer } from 'mobx-react-lite';
 
 import { A } from '@kocherga/frontkit';
@@ -18,17 +18,13 @@ const PrototypeLink = observer(({ event }: Props) => {
   }
 
   return (
-    <A
-      href={`/team/evenman/event-prototypes/${prototypeId}`}
-      onClick={e => {
-        e.preventDefault();
-        event.root.setEventPrototypeView({
-          id: prototypeId,
-        });
-      }}
+    <Link
+      href="/team/evenman/event-prototypes/[id]"
+      as={`/team/evenman/event-prototypes/${prototypeId}`}
+      passHref
     >
-      Прототип
-    </A>
+      <A>Прототип</A>
+    </Link>
   );
 });
 

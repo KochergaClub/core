@@ -1,8 +1,6 @@
 import { action, computed, observable, runInAction } from 'mobx';
 import { fromPromise } from 'mobx-utils';
 
-import { buildQueryString } from '~/common/utils';
-
 import { RootStore } from '../stores/RootStore';
 import { EventFilter } from '../stores/EventFilter';
 
@@ -118,16 +116,6 @@ export default class EventView implements View {
   update(props: EventViewProps) {
     this.eventId = props.id;
     this.setFilterProps(props.filter || {});
-  }
-
-  @action.bound
-  selectEvent(id: string) {
-    this.eventId = id;
-  }
-
-  @action
-  deselectEvent() {
-    this.eventId = undefined;
   }
 
   @action.bound

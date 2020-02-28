@@ -32,7 +32,7 @@ const EventScreen: React.FC<Props> = observer(({ view }) => {
     if (!view.selectedEvent) {
       return <EmptyCard>Выберите событие</EmptyCard>;
     }
-    return view.selectedEvent!.case({
+    return view.selectedEvent.case({
       pending: () => <EmptyCard>Загружается...</EmptyCard>,
       rejected: () => <EmptyCard>Ошибка</EmptyCard>,
       fulfilled: value => <EventCard event={value} />,

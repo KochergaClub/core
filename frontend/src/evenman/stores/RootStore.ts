@@ -13,10 +13,6 @@ import EventPrototypeStore from './EventPrototypeStore';
 
 import View from '../views/View';
 import EventView, { EventViewProps } from '../views/EventView';
-import EventPrototypeView, {
-  EventPrototypeViewProps,
-} from '../views/EventPrototypeView';
-import ScheduleView from '../views/ScheduleView';
 
 export class RootStore {
   api: API;
@@ -44,20 +40,6 @@ export class RootStore {
     } else {
       this.currentView = new EventView(this, props);
     }
-  }
-
-  @action
-  setEventPrototypeView(props: EventPrototypeViewProps) {
-    if (this.currentView && this.currentView.name === 'EventPrototype') {
-      (this.currentView as EventPrototypeView).update(props);
-    } else {
-      this.currentView = new EventPrototypeView(this, props);
-    }
-  }
-
-  @action
-  setScheduleView() {
-    this.currentView = new ScheduleView(this);
   }
 
   weeklyScheduleImage() {
