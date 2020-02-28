@@ -12,10 +12,14 @@ build:
   - image: registry.gitlab.com/kocherga/core/frontend
     context: frontend
     sync:
-      infer:
-      - src/**
-      - server/**
-      - public/**
+      # frontend Dockerfile is multi-stage and skaffold can't figure out infer syncs, so we use manual instead
+      manual:
+        - src: src/**
+          dest: .
+        - src: server/**
+          dest: .
+        - src: public/**
+          dest: .
   - image: registry.gitlab.com/kocherga/core/booking
     context: booking
   - image: registry.gitlab.com/kocherga/core/chrome
