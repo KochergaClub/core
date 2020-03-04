@@ -18,21 +18,19 @@ def token():
 def api_call(method, url, payload={}):
     url = f"{BASE_URL}/{url}.json"
     logger.debug(url)
-    query_params = {
-        'token': token()
+    headers = {
+        'Authorization': 'Bearer ' + token(),
     }
     if method == "GET":
         r = requests.get(
             url,
-            params={
-                **query_params,
-                **payload,
-            },
+            params=payload,
+            headers=headers,
         )
     elif method == "POST":
         r = requests.post(
             url,
-            params=query_params,
+            headers=headers,
             json=payload,
         )
     else:
