@@ -36,6 +36,7 @@ const PaymentCollection: React.FC = () => {
     refetchQueries: [
       {
         query: CashierPaymentsDocument,
+        variables: { first: 20 },
       },
     ],
     awaitRefetchQueries: true,
