@@ -1,5 +1,6 @@
 ##### Dev environment #####
 dev:
+	kubectl delete job core-django-migrate || true
 	skaffold dev --port-forward
 
 ##### Tests #####
