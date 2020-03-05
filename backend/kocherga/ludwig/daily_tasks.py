@@ -28,8 +28,8 @@ def task_attachment(task, status='new'):
             ],
         }
     else:
-        crossed_out_text = f'~*{task.title}*~\n' + '\n'.join([
-            '~' + part + '~'
+        crossed_out_text = f'~*{task.title.strip()}*~\n' + '\n'.join([
+            '~' + part.strip() + '~' if part.strip() != '' else ''
             for part in task.text.replace('\r\n', '\n').split('\n')
         ])
         return {
