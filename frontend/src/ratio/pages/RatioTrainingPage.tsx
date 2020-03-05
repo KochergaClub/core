@@ -81,12 +81,16 @@ const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
                   </Row>
 
                   <A href={`/admin/ratio/training/${training.id}/change/`}>
-                    Править в django-админке
+                    Править в Django-админке
                   </A>
 
                   <A href={`/team/ratio/training/${training.slug}/schedule`}>
                     Расписание
                   </A>
+
+                  {training.telegram_link && (
+                    <A href={training.telegram_link}>Telegram-чат</A>
+                  )}
                 </Column>
               </PaddedBlock>
 

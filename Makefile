@@ -32,10 +32,10 @@ dbshell:
 	docker-compose -f docker/compose.dev.yml exec db mysql kocherga
 
 shell:
-	kubectl exec -it $(shell kubectl get po -o name -l app=kocherga-backend) bash
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) bash
 
 pyshell:
-	kubectl exec -it $(shell kubectl get po -o name -l app=kocherga-backend) ./manage.py shell
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) ./manage.py shell
 
 deploy_prod_secrets:
 	scp backend/kocherga/django/settings/prod_secrets.py kocherga.club:
@@ -65,8 +65,8 @@ update_requirements:
 	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/requirements.txt ./backend/requirements.txt
 
 update_schema:
-	docker-compose -f docker/compose.dev.yml exec api ./scripts/export-schema.py schema.graphql
-	docker cp docker_api_1:/code/schema.graphql ./schema.graphql
+	kubectl exec --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}') ./scripts/export-schema.py schema.graphql
+	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./backend/schema.graphql
 
 update_types:
 	cd frontend && gql-gen

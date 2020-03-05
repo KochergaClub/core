@@ -15,7 +15,7 @@ class Training(models.Model):
     slug = models.SlugField(unique=True)
 
     date = models.DateField('Дата начала')
-    telegram_link = models.URLField('Телеграм-чат', blank=True)
+    telegram_link = models.URLField('Телеграм-чат')
     pre_survey_link = models.URLField('Форма предрассылки', blank=True)
     post_survey_link = models.URLField('Форма пострассылки', blank=True)
     gdrive_link = models.URLField('Материалы', blank=True)

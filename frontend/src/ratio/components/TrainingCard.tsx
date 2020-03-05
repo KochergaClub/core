@@ -28,6 +28,12 @@ const TrainingCard: React.FC<{ training: TrainingFragment }> = ({
         <Label>Суммарный доход:</Label>
         <div>{training.total_income}</div>
       </Row>
+      {training.telegram_link && (
+        <Row vCentered>
+          <Label>Telegram-чат:</Label>
+          <A href={training.telegram_link}>{training.telegram_link}</A>
+        </Row>
+      )}
     </div>
   );
 };

@@ -39,12 +39,19 @@ const trainingShape: FormShape = [
     title: 'Дата начала',
     type: 'date',
   },
+  {
+    name: 'telegram_link',
+    optional: false,
+    title: 'Ссылка на Telegram-чат',
+    type: 'string',
+  },
 ];
 
 interface CreateTrainingParams {
   name: string;
   slug: string;
   date: string;
+  telegram_link: string;
 }
 
 const isMuted = (training: TrainingFragment) =>

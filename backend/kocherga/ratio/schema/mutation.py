@@ -17,6 +17,7 @@ def resolve_ratioAddTraining(_, info, params):
         name=params['name'],
         slug=params['slug'],
         date=date,
+        telegram_link=params['telegram_link'],
     )
 
 

@@ -19,7 +19,7 @@ export type TicketFragment = (
 
 export type TrainingFragment = (
   { __typename?: 'RatioTraining' }
-  & Pick<Types.RatioTraining, 'id' | 'slug' | 'name' | 'date' | 'tickets_count' | 'total_income'>
+  & Pick<Types.RatioTraining, 'id' | 'slug' | 'name' | 'date' | 'telegram_link' | 'tickets_count' | 'total_income'>
   & { tickets: Array<(
     { __typename?: 'RatioTicket' }
     & TicketFragment
@@ -261,6 +261,7 @@ export const TrainingFragmentDoc = gql`
   slug
   name
   date
+  telegram_link
   tickets_count
   total_income
   tickets {

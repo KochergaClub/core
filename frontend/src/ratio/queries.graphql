@@ -21,6 +21,7 @@ fragment Training on RatioTraining {
   slug
   name
   date
+  telegram_link
   tickets_count
   total_income
   tickets {
