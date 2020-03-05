@@ -1175,6 +1175,7 @@ export type RatioAddTrainingInput = {
   name: Scalars['String'],
   slug: Scalars['String'],
   date: Scalars['String'],
+  telegram_link: Scalars['String'],
 };
 
 export type RatioBriefingBlock = WagtailBlock & {
@@ -1289,6 +1290,7 @@ export type RatioTraining = {
   name: Scalars['String'],
   slug: Scalars['String'],
   date: Scalars['String'],
+  telegram_link?: Maybe<Scalars['String']>,
   salaries_paid: Scalars['Boolean'],
   tickets: Array<RatioTicket>,
   total_income: Scalars['Int'],

@@ -597,6 +597,7 @@ type RatioTraining {
   name: String!
   slug: String!
   date: String!
+  telegram_link: String
   salaries_paid: Boolean!
   tickets: [RatioTicket!]!
   total_income: Int!
@@ -659,6 +660,7 @@ input RatioAddTrainingInput {
   name: String!
   slug: String!
   date: String!
+  telegram_link: String!
 }
 
 input RatioTrainingSendEmailInput {
