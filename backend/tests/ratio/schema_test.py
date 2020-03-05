@@ -14,6 +14,7 @@ def test_nonempty_trainings(client, admin_user):
         name: "Прикладное солнцестояние"
         slug: "solstice-training"
         date: "2020-12-21"
+        telegram_link: "http://whatever"
       }) {
         id
       }
