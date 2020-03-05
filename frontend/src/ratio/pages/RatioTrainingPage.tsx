@@ -2,7 +2,9 @@ import { useCallback } from 'react';
 import { DocumentNode } from 'graphql';
 import { useMutation } from '@apollo/react-hooks';
 
-import { A, Column, Row, Label } from '@kocherga/frontkit';
+import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
+
+import { A, Column, Row, Label, colors } from '@kocherga/frontkit';
 
 import { NextPage } from '~/common/types';
 import { withApollo } from '~/apollo/client';
@@ -49,6 +51,23 @@ function MutationButton<V extends {}>({
   return <AsyncButton act={act}>{children}</AsyncButton>;
 }
 
+const LinkWithIcon = ({
+  icon,
+  href,
+  text,
+}: {
+  icon: React.ElementType;
+  href: string;
+  text: string;
+}) => {
+  const Icon = icon;
+  return (
+    <div>
+      <Icon style={{ color: colors.grey[500] }} /> <A href={href}>{text}</A>
+    </div>
+  );
+};
+
 const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
   const queryResults = useRatioTrainingBySlugQuery({
     variables: { slug },
@@ -80,16 +99,24 @@ const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
                     <strong>{training.date}</strong>
                   </Row>
 
-                  <A href={`/admin/ratio/training/${training.id}/change/`}>
-                    Править в Django-админке
-                  </A>
+                  <LinkWithIcon
+                    href={`/admin/ratio/training/${training.id}/change/`}
+                    text="Править в Django-админке"
+                    icon={FaEdit}
+                  />
 
-                  <A href={`/team/ratio/training/${training.slug}/schedule`}>
-                    Расписание
-                  </A>
+                  <LinkWithIcon
+                    href={`/team/ratio/training/${training.slug}/schedule`}
+                    text="Расписание"
+                    icon={FaRegListAlt}
+                  />
 
                   {training.telegram_link && (
-                    <A href={training.telegram_link}>Telegram-чат</A>
+                    <LinkWithIcon
+                      href={training.telegram_link}
+                      text="Telegram-чат"
+                      icon={FaComments}
+                    />
                   )}
                 </Column>
               </PaddedBlock>
