@@ -5,7 +5,7 @@ from kocherga.ludwig.bot import bot
 import kocherga.money.cashier.models
 import kocherga.money.salaries
 from kocherga.money.salaries import SalaryContainer
-import kocherga.staff.tools
+from kocherga.staff.tools import find_member_by_email
 from kocherga.staff.models import Member
 from kocherga.dateutils import inflected_month
 
@@ -27,14 +27,15 @@ def command_current_cash(payload):
     return cash_response()
 
 
-def is_slava(message):
+def can_pay_salaries(message) -> bool:
     user_id = message.body["user"]
     response = message.sc.api_call("users.info", user=user_id)
     if not response["ok"]:
         raise Exception("Couldn't load user info")
 
     email = response["user"]["profile"]["email"]
-    return email == "slava@kocherga-club.ru"
+    member = find_member_by_email(email)
+    return member.user.has_perm('cashier.create')
 
 
 def salaries_message(salaries: SalaryContainer, with_elba_values=False):
@@ -128,8 +129,8 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
 
 @bot.listen_to(r"покажи зарплаты")
 def react_show_salaries(message):
-    if not is_slava(message):
-        message.reply("Только Слава может управлять зарплатами.")
+    if not can_pay_salaries(message):
+        message.reply("У вас нет прав на просмотр и выплату зарплат.")
         return
 
     salaries: SalaryContainer = kocherga.money.salaries.calculate_new_salaries()
@@ -138,8 +139,8 @@ def react_show_salaries(message):
 
 @bot.listen_to(r"отправь зарплаты")
 def react_send_salaries(message):
-    if not is_slava(message):
-        message.reply("Только Слава может управлять зарплатами.")
+    if not can_pay_salaries(message):
+        message.reply("У вас нет прав на просмотр и выплату зарплат.")
         return
 
     salaries: SalaryContainer = kocherga.money.salaries.calculate_new_salaries()
