@@ -11,6 +11,7 @@ import {
 import GlobalStyle from './GlobalStyle';
 
 import ErrorBoundary from './ErrorBoundary';
+import WithToaster from './WithToaster';
 
 import PageTitle from './PageTitle';
 import Main from './Main';
@@ -64,7 +65,11 @@ const Page: PageType = props => {
 
     const menu = showMenu ? <TildaMenu team={props.team || false} /> : null;
     const footer = showFooter ? <TildaFooter /> : null;
-    const body = <ErrorBoundary>{props.children}</ErrorBoundary>;
+    const body = (
+      <ErrorBoundary>
+        <WithToaster>{props.children}</WithToaster>
+      </ErrorBoundary>
+    );
 
     if (chrome === 'fullscreen') {
       return (
