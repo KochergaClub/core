@@ -1,28 +1,13 @@
 from django.db import models
-from rest_framework import fields
 
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable, Page
-from wagtail.api.v2.serializers import PageSerializer, get_serializer_class
 from modelcluster.fields import ParentalKey
 
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 
 from kocherga.wagtail.mixins import HeadlessPreviewMixin
-
-
-class NavPageField(fields.Field):
-    def to_representation(self, value):
-        # adapted from wagtail.api.v2.serializers.PageParentField
-        serializer_class = get_serializer_class(
-            value.__class__,
-            ['id', 'type', 'detail_url', 'html_url', 'title'],
-            meta_fields=['type', 'detail_url', 'html_url'],
-            base=PageSerializer
-        )
-        serializer = serializer_class(context=self.context)
-        return serializer.to_representation(value)
 
 
 class FAQPage(HeadlessPreviewMixin, Page):
