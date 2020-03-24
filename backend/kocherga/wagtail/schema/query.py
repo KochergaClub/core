@@ -84,8 +84,10 @@ WagtailPage = InterfaceType("WagtailPage")
 
 @WagtailPage.type_resolver
 def resolve_WagtailPage_type(page, *_):
-    # Each wagtail page model should provide graphql_type str property.
-    return page.specific_class.graphql_type
+    page_class = page.specific_class
+    if not hasattr(page_class, 'graphql_type'):
+        raise Exception("Page model is missing `graphql_type` property")
+    return page_class.graphql_type
 
 
 @WagtailPage.field("meta")
