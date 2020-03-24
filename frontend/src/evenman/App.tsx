@@ -14,8 +14,6 @@ import { staticUrl } from '~/common/utils';
 
 import GlobalStyle from './GlobalStyle';
 
-import ErrorList from './ErrorList';
-
 import { Sidebar } from './Sidebar';
 import { WithSidebar } from './WithSidebar';
 
@@ -71,7 +69,6 @@ const App: NextPage<Props> = observer(({ route, query }) => {
           />
         </Head>
         <GlobalStyle />
-        <ErrorList />
         <WithSidebar sidebar={<Sidebar selected={tab} />}>{inner}</WithSidebar>
       </Context.Provider>
     </Page>
