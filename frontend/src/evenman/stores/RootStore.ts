@@ -7,7 +7,6 @@ configure({
 import { API } from '~/common/api';
 
 import { AnnouncementToolsStore } from './AnnouncementToolsStore';
-import { ErrorStore } from './ErrorStore';
 import { EventStore } from './EventStore';
 import EventPrototypeStore from './EventPrototypeStore';
 import { FbStore } from './FbStore';
@@ -24,7 +23,6 @@ export class RootStore {
   eventStore: EventStore;
   eventPrototypeStore: EventPrototypeStore;
   fbStore: FbStore;
-  errorStore: ErrorStore;
   announcementToolsStore: AnnouncementToolsStore;
 
   @observable currentView: View;
@@ -34,7 +32,6 @@ export class RootStore {
     this.eventStore = new EventStore(this);
     this.eventPrototypeStore = new EventPrototypeStore(this);
     this.fbStore = new FbStore(this.api);
-    this.errorStore = new ErrorStore();
     this.announcementToolsStore = new AnnouncementToolsStore(this.api);
 
     this.currentView = new EventView(this, {});
@@ -80,10 +77,6 @@ export class RootStore {
 
   weeklyScheduleImage() {
     return `/api/schedule/weekly-image`;
-  }
-
-  addError(text: string) {
-    this.errorStore.addError(text);
   }
 
   @computed

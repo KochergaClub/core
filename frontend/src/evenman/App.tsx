@@ -14,7 +14,6 @@ import { staticUrl } from '~/common/utils';
 
 import GlobalStyle from './GlobalStyle';
 
-import ErrorList from './ErrorList';
 import Main from './Main';
 
 import { RootStore } from './stores/RootStore';
@@ -67,7 +66,6 @@ const App: NextPage<Props> = observer(({ route, query }) => {
           />
         </Head>
         <GlobalStyle />
-        <ErrorList />
         <Main />
       </Context.Provider>
     </Page>
