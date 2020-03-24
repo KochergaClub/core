@@ -7,3 +7,4 @@ export { default as useCommonHotkeys } from './useCommonHotkeys';
 export { default as useAPI } from './useAPI';
 export { default as useUser } from './useUser';
 export { default as useDispatch } from './useDispatch';
+export { default as useNotification } from './useNotification';
