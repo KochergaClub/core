@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 
@@ -26,8 +26,9 @@ class EditableString extends React.Component<Props, {}> {
   UNSAFE_componentWillReceiveProps(nextProps: Props) {
     if (
       this.saving &&
-      (nextProps.value === this.input!.value ||
-        (nextProps.value === undefined && this.input!.value === ''))
+      this.input &&
+      (nextProps.value === this.input.value ||
+        (nextProps.value === undefined && this.input.value === ''))
       // weird case - when we save an empty string, the server responds with 'undefined'
     ) {
       this.saved();
@@ -35,9 +36,9 @@ class EditableString extends React.Component<Props, {}> {
   }
 
   componentDidUpdate() {
-    if (this.editing) {
-      this.input!.focus();
-      this.input!.select();
+    if (this.editing && this.input) {
+      this.input.focus();
+      this.input.select();
     }
   }
 
@@ -51,13 +52,16 @@ class EditableString extends React.Component<Props, {}> {
 
   @action
   save() {
-    const newValue = this.input!.value;
+    if (!this.input) {
+      return;
+    }
+    const newValue = this.input.value;
     if (newValue === this.props.value) {
       // no need for saving
       this.stopEditing();
       return;
     }
-    this.props.save(this.input!.value);
+    this.props.save(this.input.value);
     this.saving = true;
   }
 
