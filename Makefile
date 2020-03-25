@@ -67,7 +67,7 @@ update_requirements:
 
 update_schema:
 	kubectl exec --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}') ./scripts/export-schema.py schema.graphql
-	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./backend/schema.graphql
+	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./schema.graphql
 
 update_types:
 	cd frontend && gql-gen
