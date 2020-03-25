@@ -6,7 +6,7 @@ import { FaTrash } from 'react-icons/fa';
 
 import { Button } from '@kocherga/frontkit';
 
-import { Event } from '../stores/Event';
+import { Event } from '../../stores/Event';
 
 interface Props {
   event: Event;
