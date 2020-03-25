@@ -30,7 +30,7 @@ runserver:
 
 ##### Helper commands #####
 dbshell:
-	docker-compose -f docker/compose.dev.yml exec db mysql kocherga
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-mysql -o name) -- bash -c 'mysql -p$$MYSQL_ROOT_PASSWORD kocherga'
 
 shell:
 	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) bash
