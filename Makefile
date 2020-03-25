@@ -24,8 +24,8 @@ test-js:
 test: test-types test-code test-js lint eslint
 
 runserver:
-	# This target is for testing runserver exceptions only (which are not displayed in docker logs, unfortunately).
-  # Use `make dev` or `make dev-mac` for actually running the app.
+# This target is for testing runserver exceptions only (which are not displayed in docker logs, unfortunately).
+# Use `make dev` or `make dev-mac` for actually running the app.
 	docker-compose -f docker/compose.dev.yml exec api ./manage.py runserver
 
 ##### Helper commands #####
