@@ -13,6 +13,7 @@ export type EventImageType = 'default' | 'vk';
 export type TemplaterMode = 'html' | 'png';
 export type EventType = 'private' | 'public' | 'unknown';
 export type RegistrationType = 'native' | 'timepad';
+export type EventRealm = 'offline' | 'online';
 
 // tslint:disable:variable-name
 
@@ -47,6 +48,7 @@ export interface EventJSON {
   summary?: string;
   type: EventType;
   registration_type: RegistrationType;
+  realm: EventRealm;
   location?: string;
   start: string;
   end: string;
@@ -72,6 +74,7 @@ export class Event extends EventShape {
   @observable id: string;
   @observable type: EventType;
   @observable registration_type: RegistrationType;
+  @observable realm: EventRealm;
 
   @observable start: string;
   @observable end: string;
@@ -100,6 +103,7 @@ export class Event extends EventShape {
     this.id = json.id;
     this.type = json.type;
     this.registration_type = json.registration_type;
+    this.realm = json.realm;
     this.title = json.title;
 
     this.start = json.start;
@@ -380,6 +384,7 @@ export class Event extends EventShape {
       'summary',
       'type',
       'registration_type',
+      'realm',
       'location',
       'start',
       'end',

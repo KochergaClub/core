@@ -317,6 +317,16 @@ export type EventsAnnouncements = {
   timepad?: Maybe<EventsTimepadAnnouncement>,
 };
 
+export type EventSetRealmInput = {
+  event_id: Scalars['ID'],
+  realm: Scalars['String'],
+};
+
+export type EventSetRealmResult = {
+   __typename?: 'EventSetRealmResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventsEvent = {
    __typename?: 'EventsEvent',
   event_id: Scalars['ID'],
@@ -355,6 +365,7 @@ export type EventsPublicEvent = {
   image?: Maybe<Scalars['String']>,
   registration_type: Scalars['String'],
   pricing_type: Scalars['String'],
+  realm: Scalars['String'],
   project?: Maybe<ProjectPage>,
   announcements: EventsAnnouncements,
   /** note that there's no @auth directive - we don't want any errors if user is not authenticated */
@@ -569,6 +580,7 @@ export type Mutation = {
   myEventsTicketUnregister: MyEventsTicket,
   myEventsTicketRegister: MyEventsTicket,
   myEventsTicketRegisterAnon: MyEventsTicket,
+  eventSetRealm: EventSetRealmResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -702,6 +714,11 @@ export type MutationMyEventsTicketRegisterArgs = {
 
 export type MutationMyEventsTicketRegisterAnonArgs = {
   input: MyEventsTicketRegisterAnonInput
+};
+
+
+export type MutationEventSetRealmArgs = {
+  input: EventSetRealmInput
 };
 
 

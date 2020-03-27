@@ -72,10 +72,12 @@ const PublicEventPage: NextApolloPage<CommonProps> = ({ event }) => {
                 <AnyRegistration event={event} />
               </PaddedBlock>
             </RegistrationSection>
-            <section>
-              <TL03 title="Как добраться" grey />
-              <Map />
-            </section>
+            {event.realm === 'offline' ? (
+              <section>
+                <TL03 title="Как добраться" grey />
+                <Map />
+              </section>
+            ) : null}
           </div>
         ) : null}
       </Container>

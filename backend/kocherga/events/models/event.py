@@ -186,7 +186,7 @@ class Event(models.Model):
         max_length=40,
         choices=[
             (x, x)
-            for x in ('offline', 'youtube_broadcast')
+            for x in ('offline', 'online')
         ],
         default='offline',
     )
