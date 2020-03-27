@@ -11,6 +11,8 @@ import EventTypeField from './EventTypeField';
 import PrototypeLink from '../PrototypeLink';
 import EditableMomentSpan from '../EditableMomentSpan';
 
+// import { useEvenmanSetRealmMutation } from '../queries.generated';
+
 const MomentSpan = ({ m }: { m: moment.Moment }) => (
   <span>
     <b>{m.format('ddd').toUpperCase()}</b> {m.format('D MMMM')},{' '}
@@ -26,7 +28,10 @@ interface Props {
 }
 
 const EventHeader: React.FC<Props> = ({ event }) => {
+  // const [setRealmMutation] = useEvenmanSetRealmMutation();
+
   return (
+    // TODO - refactor messy layout with display: grid
     <Column centered>
       <Row spaced>
         <div style={{ flex: 1 }}>
@@ -43,11 +48,6 @@ const EventHeader: React.FC<Props> = ({ event }) => {
           <EventDelete event={event} />
         </div>
       </Row>
-      <EditableString
-        value={event.location}
-        renderValue={ref => <span ref={ref}>{event.location}</span>}
-        save={v => event.setLocation(v)}
-      />
       <Row spaced>
         <div style={{ flex: 1 }}>
           <PrototypeLink event={event} />

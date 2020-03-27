@@ -55,7 +55,7 @@ def myEventsTicketRegisterAnon(_, info, input):
     event = models.Event.objects.get(uuid=event_id)
     assert not event.deleted
 
-    assert realm in ('offline', 'youtube_broadcast')
+    assert realm in ('offline', 'online')
     event.realm = realm
     event.save()
 

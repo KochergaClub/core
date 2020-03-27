@@ -17,6 +17,7 @@ fragment EventsPublicEvent on EventsPublicEvent {
   title
   description
   image
+  realm
   registration_type
   pricing_type
   project {

@@ -4,6 +4,8 @@ import { observer } from 'mobx-react-lite';
 
 import { ParsedUrlQuery } from 'querystring';
 
+import { withApollo } from '~/apollo/client';
+import { withStaff } from '~/apollo/withStaff';
 import { Page } from '~/components';
 
 import { selectUser } from '~/core/selectors';
@@ -88,4 +90,4 @@ App.getInitialProps = async ({ store: { getState }, pathname, query }) => {
   };
 };
 
-export default App;
+export default withApollo(withStaff(App));

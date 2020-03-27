@@ -145,7 +145,9 @@ const EventHeroBlock: React.FC<CommonProps & ExtraProps> = props => {
     <HeroWithImage image={imageUrl}>
       <Container>
         <HeroTopLink href="/events">
-          <HeroLabel>Событие в Кочерге</HeroLabel>
+          <HeroLabel>
+            {event.realm === 'offline' ? 'Событие в Кочерге' : 'Онлайн-событие'}
+          </HeroLabel>
         </HeroTopLink>
         <HeroHeader>{event.title}</HeroHeader>
         <BottomRow {...props} />
