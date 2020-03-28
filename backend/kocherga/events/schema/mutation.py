@@ -45,3 +45,20 @@ def myEventsTicketRegisterAnon(_, info, input):
         subscribed_to_newsletter=subscribed_to_newsletter,
     )
     return ticket
+
+
+@Mutation.field('eventSetRealm')
+def myEventsTicketRegisterAnon(_, info, input):
+    event_id = input['event_id']
+    realm = input['realm']
+
+    event = models.Event.objects.get(uuid=event_id)
+    assert not event.deleted
+
+    assert realm in ('offline', 'online')
+    event.realm = realm
+    event.save()
+
+    return {
+        'ok': True
+    }

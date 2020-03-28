@@ -24,13 +24,13 @@ test-js:
 test: test-types test-code test-js lint eslint
 
 runserver:
-	# This target is for testing runserver exceptions only (which are not displayed in docker logs, unfortunately).
-  # Use `make dev` or `make dev-mac` for actually running the app.
+# This target is for testing runserver exceptions only (which are not displayed in docker logs, unfortunately).
+# Use `make dev` or `make dev-mac` for actually running the app.
 	docker-compose -f docker/compose.dev.yml exec api ./manage.py runserver
 
 ##### Helper commands #####
 dbshell:
-	docker-compose -f docker/compose.dev.yml exec db mysql kocherga
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-mysql -o name) -- bash -c 'mysql -p$$MYSQL_ROOT_PASSWORD kocherga'
 
 shell:
 	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) bash
@@ -67,7 +67,7 @@ update_requirements:
 
 update_schema:
 	kubectl exec --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}') ./scripts/export-schema.py schema.graphql
-	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./backend/schema.graphql
+	kubectl cp --context=dev $(shell kubectl --context=dev get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./schema.graphql
 
 update_types:
 	cd frontend && gql-gen

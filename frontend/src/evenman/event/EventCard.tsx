@@ -6,16 +6,13 @@ import moment from 'moment';
 import 'moment/locale/ru';
 moment.locale('ru');
 
-import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
-
 import Toggle from 'react-toggle';
 
-import { A, Button, Column, Row } from '@kocherga/frontkit';
+import { A, Column, Row } from '@kocherga/frontkit';
 
-import { Event, EventType } from '../stores/Event';
+import { Event } from '../stores/Event';
 
 import { Header, UpdatingOverlay, MutedSpan } from '../components/ui';
-import EditableString from '../components/EditableString';
 import { Card, CardHeader, CardBody } from '../components/Card';
 
 import EventShapeDescription from '../common/EventShapeDescription';
@@ -25,24 +22,13 @@ import EventShapeProjectLink from '../common/EventShapeProjectLink';
 
 import { EventImages } from './EventImages';
 import EventVisitors from './EventVisitors';
-import EventDelete from './EventDelete';
 import EventAnnounce from './EventAnnounce';
-import PrototypeLink from './PrototypeLink';
-import EditableMomentSpan from './EditableMomentSpan';
+import EventHeader from './EventHeader';
+import EventRealm from './EventRealm';
 
 interface Props {
   event: Event;
 }
-
-const MomentSpan = ({ m }: { m: moment.Moment }) => (
-  <span>
-    <b>{m.format('ddd').toUpperCase()}</b> {m.format('D MMMM')},{' '}
-    {m.format('HH:mm')}
-    {' ('}
-    {m.fromNow()}
-    {')'}
-  </span>
-);
 
 @observer
 export default class EventCard extends React.Component<Props, {}> {
@@ -50,50 +36,6 @@ export default class EventCard extends React.Component<Props, {}> {
 
   moment() {
     return this.props.event.startMoment;
-  }
-
-  renderStart() {
-    const m = this.moment();
-    return (
-      <EditableMomentSpan m={m} onChange={m => this.props.event.setStart(m)} />
-    );
-  }
-
-  renderType() {
-    const { event } = this.props;
-    const translatedTypes: { [key in EventType]: string } = {
-      public: 'Публичное',
-      private: 'Приватное',
-      unknown: 'Unknown',
-    };
-
-    if (event.type === 'unknown') {
-      return (
-        <Row gutter={4}>
-          <div>Выберите тип:</div>
-          <Button small onClick={() => event.setType('public')}>
-            <FaGlobeAfrica style={{ color: 'green' }} />
-          </Button>
-          <Button small onClick={() => event.setType('private')}>
-            <FaLock style={{ color: 'red' }} />
-          </Button>
-        </Row>
-      );
-    }
-
-    return (
-      <Row gutter={4}>
-        <Toggle
-          checked={event.type === 'public'}
-          icons={{
-            checked: <FaGlobeAfrica size={11} style={{ color: 'white' }} />,
-            unchecked: <FaLock size={11} style={{ color: 'white' }} />,
-          }}
-          onChange={() => event.invertType()}
-        />
-        <div>{translatedTypes[event.type] || 'Unknown'}</div>
-      </Row>
-    );
   }
 
   renderPublished() {
@@ -117,52 +59,6 @@ export default class EventCard extends React.Component<Props, {}> {
     );
   }
 
-  renderHeader() {
-    const { event } = this.props;
-    return (
-      <Column centered>
-        <Row spaced>
-          <div style={{ flex: 1 }}>{this.renderType()}</div>
-          <div style={{ fontSize: '1.4em' }}>
-            <EditableString
-              value={event.title}
-              renderValue={ref => <strong ref={ref}>{event.title}</strong>}
-              save={value => event.setTitle(value)}
-            />
-          </div>
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            <EventDelete event={event} />
-          </div>
-        </Row>
-        <EditableString
-          value={event.location}
-          renderValue={ref => <span ref={ref}>{event.location}</span>}
-          save={v => event.setLocation(v)}
-        />
-        <Row spaced>
-          <div style={{ flex: 1 }}>
-            <PrototypeLink event={event} />
-          </div>
-          <div>{this.renderStart()}</div>
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignSelf: 'flex-end',
-            }}
-          >
-            <small>
-              <MutedSpan>
-                Создано: <MomentSpan m={moment(event.created)} />
-              </MutedSpan>
-            </small>
-          </div>
-        </Row>
-      </Column>
-    );
-  }
-
   renderVisitors() {
     if (this.moment().isAfter(moment())) {
       return;
@@ -175,11 +71,18 @@ export default class EventCard extends React.Component<Props, {}> {
     return (
       <UpdatingOverlay progress={event.isLoading}>
         <Card>
-          <CardHeader>{this.renderHeader()}</CardHeader>
+          <CardHeader>
+            <EventHeader event={event} />
+          </CardHeader>
 
           <CardBody>
             <Column stretch>
               {this.renderVisitors()}
+
+              <section>
+                <Header>Формат</Header>
+                <EventRealm event={event} />
+              </section>
 
               <section>
                 <Header>Проект</Header>

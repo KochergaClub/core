@@ -106,6 +106,7 @@ class EventSerializer(serializers.ModelSerializer):
             'creator',
             'type',
             'registration_type',
+            'realm',
             'pricing_type',
             'timing_description_override',
 

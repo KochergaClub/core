@@ -182,6 +182,15 @@ class Event(models.Model):
         default='anticafe'
     )
 
+    realm = models.CharField(
+        max_length=40,
+        choices=[
+            (x, x)
+            for x in ('offline', 'online')
+        ],
+        default='offline',
+    )
+
     image_old = models.CharField(max_length=32, null=True, blank=True)
     image = models.ForeignKey(
         'wagtailimages.Image',

@@ -18,7 +18,7 @@ export type ProjectPage_SummaryForEventFragment = (
 
 export type EventsPublicEventFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title' | 'description' | 'image' | 'registration_type' | 'pricing_type'>
+  & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title' | 'description' | 'image' | 'realm' | 'registration_type' | 'pricing_type'>
   & { project: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & ProjectPage_SummaryForEventFragment
@@ -81,6 +81,7 @@ export const EventsPublicEventFragmentDoc = gql`
   title
   description
   image
+  realm
   registration_type
   pricing_type
   project {

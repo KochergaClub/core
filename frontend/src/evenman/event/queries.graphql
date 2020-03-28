@@ -1,0 +1,8 @@
+mutation EvenmanSetRealm($id: ID!, $realm: String!) {
+  result: eventSetRealm(input: {
+    event_id: $id,
+    realm: $realm
+  }) {
+    ok
+  }
+}

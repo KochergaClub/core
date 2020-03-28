@@ -53,6 +53,7 @@ type EventsPublicEvent {
 
   registration_type: String!
   pricing_type: String!
+  realm: String!
 
   project: ProjectPage
   announcements: EventsAnnouncements!
@@ -98,4 +99,17 @@ input MyEventsTicketRegisterAnonInput {
   event_id: ID!
   email: String!
   subscribed_to_newsletter: Boolean
+}
+
+extend type Mutation {
+  eventSetRealm(input: EventSetRealmInput!): EventSetRealmResult! @staffonly
+}
+
+input EventSetRealmInput {
+  event_id: ID!
+  realm: String!
+}
+
+type EventSetRealmResult {
+  ok: Boolean
 }

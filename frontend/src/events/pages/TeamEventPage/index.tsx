@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { A } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
 
 import { withApollo } from '~/apollo/client';
 import { State } from '~/redux/store';
@@ -24,9 +24,12 @@ const TeamEventPage: NextPage = () => {
       <Page.Main>
         <PaddedBlock width="max">
           <EventInfo />
-          <div>
-            <A href={`/team/evenman/event/${event.id}`}>Событие в evenman</A>
-          </div>
+          <Column>
+            <A href={`/team/evenman/event/${event.id}`}>Открыть в evenman</A>
+            {event.type === 'public' && (
+              <A href={`/events/${event.id}`}>Открыть на сайте</A>
+            )}
+          </Column>
         </PaddedBlock>
         <PaddedBlock width="max">
           <FeedbackCollection />
