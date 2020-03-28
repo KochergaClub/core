@@ -48,7 +48,7 @@ def myEventsTicketRegisterAnon(_, info, input):
 
 
 @Mutation.field('eventSetRealm')
-def myEventsTicketRegisterAnon(_, info, input):
+def eventSetRealm(_, info, input):
     event_id = input['event_id']
     realm = input['realm']
 
