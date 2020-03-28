@@ -70,7 +70,8 @@ def send_daily_tasks():
         )
 
 
-@bot.schedule("cron", hour=9, minute=1)
+# disabled due to coronavirus
+# @bot.schedule("cron", hour=9, minute=1)
 def daily_tasks_cron():
     send_daily_tasks()
 

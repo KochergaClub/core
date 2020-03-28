@@ -259,7 +259,8 @@ def react_tag_admin(message):
     return {"text": f"<@{slack_user_id}>, см. выше."}
 
 
-@bot.schedule("cron", hour=12)
+# disabled due to coronavirus
+# @bot.schedule("cron", hour=12)
 def roster_check():
     # We have a reason to panic if either of the following is true:
     # - at least 1 empty shift in the next CRITICAL_DAYS days
@@ -300,7 +301,8 @@ def roster_check():
         )
 
 
-@bot.schedule("cron", hour=9, minute=10)
+# disabled due to coronavirus
+# @bot.schedule("cron", hour=9, minute=10)
 def morning_check():
     CHANNEL = '#space_realtime'
 
