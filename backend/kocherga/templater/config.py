@@ -34,6 +34,7 @@ name2schema['vk-image'] = Schema(
         Field('date', 'date'),
         Field('time'),
         Field('background_image'),
+        Field('realm'),
     ]
 )
 
