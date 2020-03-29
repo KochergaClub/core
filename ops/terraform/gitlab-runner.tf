@@ -1,4 +1,6 @@
-provider "vault" {}
+provider "vault" {
+  address = "https://vault.team.kocherga.club"
+}
 
 resource "vault_policy" "gitlab-runner" {
   name = "gitlab-runner"

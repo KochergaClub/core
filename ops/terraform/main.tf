@@ -76,17 +76,8 @@ module "vault-s3" {
   user = "kocherga-vault"
 }
 
-resource "hcloud_server" "old_server" {
-  name = "kocherga.club"
-  backups = true
-  server_type = "cx21"
-  image = "ubuntu-18.04"
-  location = "fsn1"
-}
-
 resource "hcloud_floating_ip" "main" {
   type = "ipv4"
-#  server_id = hcloud_server.old_server.id
   server_id = module.k3s-prod.ingress_node_id
 }
 
