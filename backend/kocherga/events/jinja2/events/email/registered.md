@@ -3,6 +3,6 @@
 Вы только что зарегистрировались на событие [{{event.title}}]({{event_link}}).
 
 Дата и время: {{humanized_dt}}<br>
-Место проведения: {{address_text}}
+{% if event.realm == 'offline' %}Место проведения: {{address_text}}{% endif -%}
 
 До встречи!
