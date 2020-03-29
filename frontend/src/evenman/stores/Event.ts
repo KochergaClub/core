@@ -425,6 +425,7 @@ export class Event extends EventShape {
       title: title || '',
       header: header || '',
       background_image: image,
+      realm: this.realm,
     });
     return `/api/templater/vk-image/${mode}?${query}`;
   }
