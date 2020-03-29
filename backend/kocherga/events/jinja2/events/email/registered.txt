@@ -4,6 +4,6 @@
 
 Страница события: {{event.link}}
 Дата и время: {{humanized_dt}}
-Место проведения: {{address_text}}
+{% if event.realm == 'offline' %}Место проведения: {{address_text}}{% endif -%}
 
 До встречи!
