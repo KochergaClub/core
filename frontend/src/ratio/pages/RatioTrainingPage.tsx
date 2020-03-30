@@ -78,7 +78,7 @@ const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
       title={
         queryResults.data ? queryResults.data.training.name : 'Загружается...'
       }
-      team
+      menu="team"
     >
       <ApolloQueryResults {...queryResults} size="block">
         {({ data: { training } }) => (

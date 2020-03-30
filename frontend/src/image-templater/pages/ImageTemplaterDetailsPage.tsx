@@ -26,7 +26,7 @@ const ImageTemplaterDetailsPage: NextApolloPage<Props> = ({ slug }) => {
           ? `${queryResults.data.template.name} | Шаблон картинки`
           : 'Загружается...'
       }
-      team
+      menu="team"
     >
       <Page.Main>
         <ApolloQueryResults {...queryResults}>

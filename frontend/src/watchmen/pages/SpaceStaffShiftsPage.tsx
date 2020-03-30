@@ -45,7 +45,7 @@ const SpaceStaffShiftsPage: NextPage<Props> = props => {
   });
 
   return (
-    <Page title="Расписание смен" team>
+    <Page title="Расписание смен" menu="team">
       <Page.Title>Расписание смен</Page.Title>
       <Page.Main>
         <Column gutter={16} stretch>

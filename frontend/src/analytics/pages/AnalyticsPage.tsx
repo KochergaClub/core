@@ -25,7 +25,7 @@ const AnalyticsPage: NextPage<Props> = () => {
   const queryResults = useAnalyticsBovStatsQuery();
 
   return (
-    <Page title="Аналитика Кочерги" team>
+    <Page title="Аналитика Кочерги" menu="team">
       <Page.Title>Аналитика Кочерги</Page.Title>
       <Page.Main>
         <ul>

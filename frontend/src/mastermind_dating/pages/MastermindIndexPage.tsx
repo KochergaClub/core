@@ -6,7 +6,7 @@ import CohortCollection from '../components/CohortCollection';
 
 const MastermindIndexPage: NextPage = () => {
   return (
-    <Page title="Админка мастермайнд-дейтинга" team>
+    <Page title="Админка мастермайнд-дейтинга" menu="team">
       <Page.Title>Мастермайнд-дейтинг</Page.Title>
       <Page.Main>
         <PaddedBlock>

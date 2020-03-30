@@ -24,7 +24,7 @@ const RatioSchedulePage: NextPage<Props> = ({ slug }) => {
           ? `Расписание | ${queryResults.data.training.name}`
           : 'Загружается...'
       }
-      team
+      menu="team"
     >
       <Page.Main>
         <ApolloQueryResults {...queryResults}>

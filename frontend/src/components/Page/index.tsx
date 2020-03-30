@@ -28,7 +28,6 @@ import { OpenGraph, MenuKind } from './types';
 interface Props {
   title: string;
   description?: string;
-  team?: boolean;
   menu?: MenuKind;
   chrome?: 'default' | 'none' | 'fullscreen';
   noVkWidget?: boolean;
@@ -64,7 +63,7 @@ const Page: PageType = props => {
     const showFooter = chrome === 'default';
     const showWhitespace = chrome !== 'fullscreen' && !props.noWhitespace;
 
-    const menuKind = props.team ? 'team' : props.menu || 'public';
+    const menuKind = props.menu || 'public';
 
     const menuEl = showMenu ? <TildaMenu kind={menuKind} /> : null;
     const footerEl = showFooter ? <TildaFooter /> : null;
@@ -111,7 +110,7 @@ const Page: PageType = props => {
       <GlobalStyle />
       <NProgressStyle />
       {renderContent()}
-      {!props.team && !props.noVkWidget && <VkMessagesWidget />}
+      {props.menu !== 'team' && !props.noVkWidget && <VkMessagesWidget />}
     </div>
   );
 };

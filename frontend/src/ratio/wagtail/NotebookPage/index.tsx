@@ -24,7 +24,7 @@ const SectionContainer = styled.section`
 const NotebookPage: NextWagtailPage<RatioNotebookPageFragment> = ({ page }) => {
   const footer = <PrintFooter />;
   return (
-    <Page title={page.title} chrome="none" team>
+    <Page title={page.title} chrome="none" menu="team">
       <PrintDocument footer={footer}>
         <Frontpage wagtailPage={page} />
         <Emptypage />

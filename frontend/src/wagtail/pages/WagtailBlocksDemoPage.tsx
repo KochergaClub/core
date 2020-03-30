@@ -120,7 +120,7 @@ const WagtailBlocksDemoPage: NextPage = () => {
   );
 
   return (
-    <Page title="Примеры Wagtail-блоков" team>
+    <Page title="Примеры Wagtail-блоков" menu="team">
       <Page.Title>Примеры Wagtail-блоков</Page.Title>
       <WagtailBlocks blocks={blocksWithHeaders} />
     </Page>

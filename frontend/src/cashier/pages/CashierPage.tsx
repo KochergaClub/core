@@ -8,7 +8,7 @@ import PaymentCollection from '~/cashier/components/PaymentCollection';
 
 const CashierPage: NextApolloPage = () => {
   return (
-    <Page title="Касса" team>
+    <Page title="Касса" menu="team">
       <Page.Title>Касса</Page.Title>
       <Page.Main>
         <PaymentCollection />

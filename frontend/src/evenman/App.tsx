@@ -58,7 +58,7 @@ const App: NextPage<Props> = observer(({ route, query }) => {
   }
 
   return (
-    <Page title="Event Manager" team chrome="fullscreen">
+    <Page title="Event Manager" menu="team" chrome="fullscreen">
       <Context.Provider value={store}>
         <Head>
           <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
