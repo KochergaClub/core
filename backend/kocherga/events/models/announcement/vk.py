@@ -187,12 +187,15 @@ class VkAnnouncement(models.Model):
     objects = Manager()
 
     def get_tail(self):
-        tail = f"{self.event.timing_description} в @kocherga_club (центре рациональности Кочерга). "
+        if self.event.realm == 'offline':
+            tail = f"{self.event.timing_description} в @kocherga_club (центре рациональности Кочерга). "
+        elif self.event.realm == 'online':
+            tail = f"{self.event.timing_description} в онлайн-формате. "
 
         if self.event.pricing_type == 'anticafe':
             tail += "Оплата участия — по тарифам антикафе: 2,5 руб./минута. "
         elif self.event.pricing_type == 'free':
-            tail += "Вход на встречу бесплатный. "
+            tail += "Участие во встрече бесплатно. "
 
         tail += f"Регистрация: {self.event.public_link()}"
 
