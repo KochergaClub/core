@@ -6,6 +6,6 @@
 
 Название: {{event.title}}<br>
 Дата и время: {{humanized_dt}}<br>
-{% if event.realm == 'offline' %}Место проведения: {{address_text}} (как добраться: https://kocherga-club.ru/#contacts){% endif -%}
+{% if event.realm == 'offline' %}Место проведения: {{address_text}} (как добраться: https://kocherga-club.ru/#contacts){% endif %}
 
 Если Вы передумаете участвовать в событии, или если это письмо попало к вам по ошибке, вы можете отменить регистрацию [по этой ссылке]({{event_link}}).
