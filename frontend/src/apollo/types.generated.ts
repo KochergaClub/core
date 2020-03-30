@@ -911,6 +911,7 @@ export type MyEmailSubscriptionInterest = {
 export type MyEventsTicket = {
    __typename?: 'MyEventsTicket',
   event: EventsPublicEvent,
+  status: Scalars['String'],
   created?: Maybe<Scalars['String']>,
 };
 

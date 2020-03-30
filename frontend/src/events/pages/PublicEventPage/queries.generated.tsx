@@ -16,6 +16,11 @@ export type ProjectPage_SummaryForEventFragment = (
   )> }
 );
 
+export type MyEventsTicketFragment = (
+  { __typename?: 'MyEventsTicket' }
+  & Pick<Types.MyEventsTicket, 'created' | 'status'>
+);
+
 export type EventsPublicEventFragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title' | 'description' | 'image' | 'realm' | 'registration_type' | 'pricing_type'>
@@ -24,7 +29,7 @@ export type EventsPublicEventFragment = (
     & ProjectPage_SummaryForEventFragment
   )>, my_ticket: Types.Maybe<(
     { __typename?: 'MyEventsTicket' }
-    & Pick<Types.MyEventsTicket, 'created'>
+    & MyEventsTicketFragment
   )>, announcements: (
     { __typename?: 'EventsAnnouncements' }
     & { timepad: Types.Maybe<(
@@ -56,7 +61,33 @@ export type MyEventsTicketRegisterAnonMutation = (
   { __typename?: 'Mutation' }
   & { myEventsTicketRegisterAnon: (
     { __typename?: 'MyEventsTicket' }
-    & Pick<Types.MyEventsTicket, 'created'>
+    & MyEventsTicketFragment
+  ) }
+);
+
+export type MyEventsTicketRegisterMutationVariables = {
+  event_id: Types.Scalars['ID']
+};
+
+
+export type MyEventsTicketRegisterMutation = (
+  { __typename?: 'Mutation' }
+  & { myEventsTicketRegister: (
+    { __typename?: 'MyEventsTicket' }
+    & MyEventsTicketFragment
+  ) }
+);
+
+export type MyEventsTicketUnregisterMutationVariables = {
+  event_id: Types.Scalars['ID']
+};
+
+
+export type MyEventsTicketUnregisterMutation = (
+  { __typename?: 'Mutation' }
+  & { myEventsTicketUnregister: (
+    { __typename?: 'MyEventsTicket' }
+    & MyEventsTicketFragment
   ) }
 );
 
@@ -74,6 +105,12 @@ export const ProjectPage_SummaryForEventFragmentDoc = gql`
   }
 }
     `;
+export const MyEventsTicketFragmentDoc = gql`
+    fragment MyEventsTicket on MyEventsTicket {
+  created
+  status
+}
+    `;
 export const EventsPublicEventFragmentDoc = gql`
     fragment EventsPublicEvent on EventsPublicEvent {
   event_id
@@ -88,7 +125,7 @@ export const EventsPublicEventFragmentDoc = gql`
     ...ProjectPage_SummaryForEvent
   }
   my_ticket {
-    created
+    ...MyEventsTicket
   }
   announcements {
     timepad {
@@ -96,7 +133,8 @@ export const EventsPublicEventFragmentDoc = gql`
     }
   }
 }
-    ${ProjectPage_SummaryForEventFragmentDoc}`;
+    ${ProjectPage_SummaryForEventFragmentDoc}
+${MyEventsTicketFragmentDoc}`;
 export const GetPublicEventDocument = gql`
     query GetPublicEvent($event_id: ID!) {
   publicEvent(event_id: $event_id) {
@@ -133,10 +171,10 @@ export type GetPublicEventQueryResult = ApolloReactCommon.QueryResult<GetPublicE
 export const MyEventsTicketRegisterAnonDocument = gql`
     mutation MyEventsTicketRegisterAnon($input: MyEventsTicketRegisterAnonInput!) {
   myEventsTicketRegisterAnon(input: $input) {
-    created
+    ...MyEventsTicket
   }
 }
-    `;
+    ${MyEventsTicketFragmentDoc}`;
 export type MyEventsTicketRegisterAnonMutationFn = ApolloReactCommon.MutationFunction<MyEventsTicketRegisterAnonMutation, MyEventsTicketRegisterAnonMutationVariables>;
 
 /**
@@ -162,3 +200,67 @@ export function useMyEventsTicketRegisterAnonMutation(baseOptions?: ApolloReactH
 export type MyEventsTicketRegisterAnonMutationHookResult = ReturnType<typeof useMyEventsTicketRegisterAnonMutation>;
 export type MyEventsTicketRegisterAnonMutationResult = ApolloReactCommon.MutationResult<MyEventsTicketRegisterAnonMutation>;
 export type MyEventsTicketRegisterAnonMutationOptions = ApolloReactCommon.BaseMutationOptions<MyEventsTicketRegisterAnonMutation, MyEventsTicketRegisterAnonMutationVariables>;
+export const MyEventsTicketRegisterDocument = gql`
+    mutation MyEventsTicketRegister($event_id: ID!) {
+  myEventsTicketRegister(event_id: $event_id) {
+    ...MyEventsTicket
+  }
+}
+    ${MyEventsTicketFragmentDoc}`;
+export type MyEventsTicketRegisterMutationFn = ApolloReactCommon.MutationFunction<MyEventsTicketRegisterMutation, MyEventsTicketRegisterMutationVariables>;
+
+/**
+ * __useMyEventsTicketRegisterMutation__
+ *
+ * To run a mutation, you first call `useMyEventsTicketRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMyEventsTicketRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [myEventsTicketRegisterMutation, { data, loading, error }] = useMyEventsTicketRegisterMutation({
+ *   variables: {
+ *      event_id: // value for 'event_id'
+ *   },
+ * });
+ */
+export function useMyEventsTicketRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MyEventsTicketRegisterMutation, MyEventsTicketRegisterMutationVariables>) {
+        return ApolloReactHooks.useMutation<MyEventsTicketRegisterMutation, MyEventsTicketRegisterMutationVariables>(MyEventsTicketRegisterDocument, baseOptions);
+      }
+export type MyEventsTicketRegisterMutationHookResult = ReturnType<typeof useMyEventsTicketRegisterMutation>;
+export type MyEventsTicketRegisterMutationResult = ApolloReactCommon.MutationResult<MyEventsTicketRegisterMutation>;
+export type MyEventsTicketRegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<MyEventsTicketRegisterMutation, MyEventsTicketRegisterMutationVariables>;
+export const MyEventsTicketUnregisterDocument = gql`
+    mutation MyEventsTicketUnregister($event_id: ID!) {
+  myEventsTicketUnregister(event_id: $event_id) {
+    ...MyEventsTicket
+  }
+}
+    ${MyEventsTicketFragmentDoc}`;
+export type MyEventsTicketUnregisterMutationFn = ApolloReactCommon.MutationFunction<MyEventsTicketUnregisterMutation, MyEventsTicketUnregisterMutationVariables>;
+
+/**
+ * __useMyEventsTicketUnregisterMutation__
+ *
+ * To run a mutation, you first call `useMyEventsTicketUnregisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMyEventsTicketUnregisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [myEventsTicketUnregisterMutation, { data, loading, error }] = useMyEventsTicketUnregisterMutation({
+ *   variables: {
+ *      event_id: // value for 'event_id'
+ *   },
+ * });
+ */
+export function useMyEventsTicketUnregisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<MyEventsTicketUnregisterMutation, MyEventsTicketUnregisterMutationVariables>) {
+        return ApolloReactHooks.useMutation<MyEventsTicketUnregisterMutation, MyEventsTicketUnregisterMutationVariables>(MyEventsTicketUnregisterDocument, baseOptions);
+      }
+export type MyEventsTicketUnregisterMutationHookResult = ReturnType<typeof useMyEventsTicketUnregisterMutation>;
+export type MyEventsTicketUnregisterMutationResult = ApolloReactCommon.MutationResult<MyEventsTicketUnregisterMutation>;
+export type MyEventsTicketUnregisterMutationOptions = ApolloReactCommon.BaseMutationOptions<MyEventsTicketUnregisterMutation, MyEventsTicketUnregisterMutationVariables>;

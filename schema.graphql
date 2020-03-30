@@ -508,6 +508,7 @@ extend type My {
 
 type MyEventsTicket {
   event: EventsPublicEvent!
+  status: String!
   created: String
 }
 

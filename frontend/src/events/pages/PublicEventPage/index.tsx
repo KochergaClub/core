@@ -15,23 +15,17 @@ import { withApollo } from '~/apollo/client';
 
 import { NextApolloPage } from '~/apollo/types';
 import { timezone, formatDate } from '~/common/utils';
-import { APIError } from '~/common/api';
 
-import { Page, PaddedBlock } from '~/components';
+import { Page, PaddedBlock, ApolloQueryResults } from '~/components';
 import TL03 from '~/blocks/TL03';
 
-import {
-  GetPublicEventQuery,
-  GetPublicEventDocument,
-} from './queries.generated';
+import { useGetPublicEventQuery } from './queries.generated';
 
 import ProjectInfo from './ProjectInfo';
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
 import AnyRegistration from './AnyRegistration';
 import Map from './Map';
-
-import { CommonProps } from './types';
 
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -42,70 +36,83 @@ const RegistrationSection = styled.section`
   margin-bottom: 120px;
 `;
 
-const PublicEventPage: NextApolloPage<CommonProps> = ({ event }) => {
-  const zonedStart = utcToZonedTime(parseISO(event.start), timezone);
-  const title = `${event.title} - ${formatDate(zonedStart, 'd MMMM')}`;
+interface Props {
+  event_id: string;
+}
+
+const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
+  const queryResults = useGetPublicEventQuery({
+    variables: {
+      event_id,
+    },
+    fetchPolicy: 'network-only',
+  });
+
+  const event = queryResults.data?.publicEvent;
+
+  const title = event
+    ? `${event.title} - ${formatDate(
+        utcToZonedTime(parseISO(event.start), timezone),
+        'd MMMM'
+      )}`
+    : 'Загружается...';
 
   const registrationRef = useRef<HTMLElement | null>(null);
 
-  const daysUntil = differenceInCalendarDays(parseISO(event.start), new Date());
-  const inFuture = daysUntil >= 0;
-
   return (
-    <Page title={title} og={{ image: event.image || undefined }}>
-      <Container>
-        <EventHeroBlock event={event} registrationRef={registrationRef} />
+    <Page title={title} og={{ image: event?.image || undefined }}>
+      <ApolloQueryResults {...queryResults} size="block">
+        {() => {
+          if (!event) {
+            throw new Error('Internal logic error');
+          }
 
-        <ProjectInfo event={event} />
-        <EventAnnouncements event={event} />
-        <PaddedBlock>
-          <RichText>
-            <Markdown source={event.description} plugins={[breaks]} />
-          </RichText>
-        </PaddedBlock>
-        {inFuture ? (
-          <div>
-            <a id="register" />
-            <RegistrationSection ref={registrationRef}>
-              <TL03 title="Регистрация" grey />
+          const daysUntil = differenceInCalendarDays(
+            parseISO(event.start),
+            new Date()
+          );
+          const inFuture = daysUntil >= 0;
+
+          return (
+            <Container>
+              <EventHeroBlock event={event} registrationRef={registrationRef} />
+
+              <ProjectInfo event={event} />
+              <EventAnnouncements event={event} />
               <PaddedBlock>
-                <AnyRegistration event={event} />
+                <RichText>
+                  <Markdown source={event.description} plugins={[breaks]} />
+                </RichText>
               </PaddedBlock>
-            </RegistrationSection>
-            {event.realm === 'offline' ? (
-              <section>
-                <TL03 title="Как добраться" grey />
-                <Map />
-              </section>
-            ) : null}
-          </div>
-        ) : null}
-      </Container>
+              {inFuture ? (
+                <div>
+                  <a id="register" />
+                  <RegistrationSection ref={registrationRef}>
+                    <TL03 title="Регистрация" grey />
+                    <PaddedBlock>
+                      <AnyRegistration event={event} />
+                    </PaddedBlock>
+                  </RegistrationSection>
+                  {event.realm === 'offline' ? (
+                    <section>
+                      <TL03 title="Как добраться" grey />
+                      <Map />
+                    </section>
+                  ) : null}
+                </div>
+              ) : null}
+            </Container>
+          );
+        }}
+      </ApolloQueryResults>
     </Page>
   );
 };
 
-PublicEventPage.getInitialProps = async ({ apolloClient, query }) => {
+PublicEventPage.getInitialProps = async ({ query }) => {
   const event_id = query.id as string;
 
-  const result = await apolloClient.query<GetPublicEventQuery>({
-    query: GetPublicEventDocument,
-    variables: {
-      event_id,
-    },
-  });
-
-  if (!result.data) {
-    throw new APIError('Expected query data', 500);
-  }
-
-  if (result.errors) {
-    throw new APIError('Got query errors', 500);
-  }
-
-  return {
-    event: result.data.publicEvent,
-  };
+  return { event_id };
 };
 
 export default withApollo(PublicEventPage);

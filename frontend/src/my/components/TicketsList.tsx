@@ -28,7 +28,7 @@ const TicketCard = ({ ticket }: { ticket: MyTicketFragment }) => {
 
   return (
     <div>
-      <A href={`/event/${ticket.event.event_id}/`}>{ticket.event.title}</A>
+      <A href={`/events/${ticket.event.event_id}`}>{ticket.event.title}</A>
       <div>{formatDate(zonedStart, 'd MMMM, HH:mm')}</div>
       <AsyncButton small act={cancel}>
         Отменить

@@ -52,7 +52,7 @@ class TicketManager(models.Manager):
             user=user,
             event=event,
         )
-        ticket.status = 'cancelled'
+        ticket.status = 'inactive'
         ticket.save()
         return ticket
 

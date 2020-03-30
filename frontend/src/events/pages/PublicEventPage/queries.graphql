@@ -11,6 +11,11 @@ fragment ProjectPage_SummaryForEvent on ProjectPage {
   }
 }
 
+fragment MyEventsTicket on MyEventsTicket {
+  created
+  status
+}
+
 fragment EventsPublicEvent on EventsPublicEvent {
   event_id
   start
@@ -24,7 +29,7 @@ fragment EventsPublicEvent on EventsPublicEvent {
     ...ProjectPage_SummaryForEvent
   }
   my_ticket {
-    created
+    ...MyEventsTicket
   }
   announcements {
     timepad {
@@ -41,6 +46,18 @@ query GetPublicEvent($event_id: ID!) {
 
 mutation MyEventsTicketRegisterAnon($input: MyEventsTicketRegisterAnonInput!) {
   myEventsTicketRegisterAnon(input: $input) {
-    created
+    ...MyEventsTicket
+  }
+}
+
+mutation MyEventsTicketRegister($event_id: ID!) {
+  myEventsTicketRegister(event_id: $event_id) {
+    ...MyEventsTicket
+  }
+}
+
+mutation MyEventsTicketUnregister($event_id: ID!) {
+  myEventsTicketUnregister(event_id: $event_id) {
+    ...MyEventsTicket
   }
 }
