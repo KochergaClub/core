@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 
 import Link from 'next/link';
 
@@ -10,14 +10,15 @@ import MobileHeader from './MobileHeader';
 import SocialIcons from './SocialIcons';
 import MenuButton from './MenuButton';
 
-import { teamColor } from './constants';
+import { styled, kind2color } from './constants';
+import { MenuKind } from '../types';
 
-const Container = styled('div')<{ hideOnMobile: boolean; team: boolean }>`
+const Container = styled('div')<{ hideOnMobile: boolean }>`
   width: 100%;
   height: 60px;
   padding: 0 40px;
 
-  background-color: ${props => (props.theme.team ? teamColor : 'black')};
+  background-color: ${props => kind2color[props.theme.kind]};
   color: white;
 
   display: flex;
@@ -40,14 +41,20 @@ const LogoImage = () => (
   <img src={staticUrl('menu-logo.png')} width="190" height="50" />
 );
 
-const Logo = ({ team }: Props) => {
-  if (team) {
+const Logo = ({ kind }: Props) => {
+  if (kind === 'team') {
     return (
       <Link href="/team" passHref>
         <a>
           <LogoImage />
         </a>
       </Link>
+    );
+  } else if (kind === 'my') {
+    return (
+      <a href="/my">
+        <LogoImage />
+      </a>
     );
   }
 
@@ -67,23 +74,23 @@ const Line = styled.div`
 `;
 
 interface Props {
-  team: boolean;
+  kind: MenuKind;
 }
 
-const TildaMenu = ({ team }: Props) => {
+const TildaMenu = ({ kind }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <ThemeProvider theme={{ team }}>
+    <ThemeProvider theme={{ kind }}>
       <div>
         <MobileHeader expanded={expanded} setExpand={setExpanded} />
-        <Container hideOnMobile={!expanded} team={team}>
+        <Container hideOnMobile={!expanded}>
           <Line>
-            <Logo team={team} />
-            <MenuItems team={team} />
+            <Logo kind={kind} />
+            <MenuItems kind={kind} />
           </Line>
           <SocialIcons />
-          {team ? null : <MenuButton href="/my">Войти</MenuButton>}
+          {kind === 'public' ? <MenuButton href="/my">Войти</MenuButton> : null}
         </Container>
       </div>
     </ThemeProvider>

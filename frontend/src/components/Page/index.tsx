@@ -23,12 +23,13 @@ import NProgressStyle from './NProgressStyle';
 
 import VkMessagesWidget from './VkMessagesWidget';
 
-import { OpenGraph } from './types';
+import { OpenGraph, MenuKind } from './types';
 
 interface Props {
   title: string;
   description?: string;
   team?: boolean;
+  menu?: MenuKind;
   chrome?: 'default' | 'none' | 'fullscreen';
   noVkWidget?: boolean;
   noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
@@ -63,9 +64,11 @@ const Page: PageType = props => {
     const showFooter = chrome === 'default';
     const showWhitespace = chrome !== 'fullscreen' && !props.noWhitespace;
 
-    const menu = showMenu ? <TildaMenu team={props.team || false} /> : null;
-    const footer = showFooter ? <TildaFooter /> : null;
-    const body = (
+    const menuKind = props.team ? 'team' : props.menu || 'public';
+
+    const menuEl = showMenu ? <TildaMenu kind={menuKind} /> : null;
+    const footerEl = showFooter ? <TildaFooter /> : null;
+    const bodyEl = (
       <ErrorBoundary>
         <WithToaster>{props.children}</WithToaster>
       </ErrorBoundary>
@@ -74,18 +77,18 @@ const Page: PageType = props => {
     if (chrome === 'fullscreen') {
       return (
         <FullScreenContainer>
-          {menu}
-          <FullScreenContainerInner>{body}</FullScreenContainerInner>
+          {menuEl}
+          <FullScreenContainerInner>{bodyEl}</FullScreenContainerInner>
         </FullScreenContainer>
       );
     }
 
     return (
       <React.Fragment>
-        {menu}
-        {body}
+        {menuEl}
+        {bodyEl}
         {showWhitespace && <Whitespace />}
-        {footer}
+        {footerEl}
       </React.Fragment>
     );
   };
