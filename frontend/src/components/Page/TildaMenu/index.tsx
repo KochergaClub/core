@@ -52,7 +52,7 @@ const Logo = ({ kind }: Props) => {
     );
   } else if (kind === 'my') {
     return (
-      <a href="/my">
+      <a href="/">
         <LogoImage />
       </a>
     );

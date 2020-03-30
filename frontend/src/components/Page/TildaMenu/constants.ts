@@ -1,9 +1,10 @@
+import { colors } from '@kocherga/frontkit';
 import { MenuKind } from '../types';
 
 export const kind2color = {
   team: '#417690',
   public: 'black',
-  my: 'black',
+  my: colors.primary[900],
 };
 
 export interface SingleItem {
@@ -113,8 +114,26 @@ const teamMenuItems: Item[] = [
   },
 ];
 
+const myMenuItems: Item[] = [
+  {
+    title: 'События',
+    link: '/my',
+    mode: 'next',
+  },
+  {
+    title: 'Посещения',
+    link: '/my/visits',
+    mode: 'next',
+  },
+  {
+    title: 'Настройки',
+    link: '/my/settings',
+    mode: 'next',
+  },
+];
+
 export const kind2items: { [k: string]: Item[] } = {
   public: publicMenuItems,
   team: teamMenuItems,
-  my: [],
+  my: myMenuItems,
 };
