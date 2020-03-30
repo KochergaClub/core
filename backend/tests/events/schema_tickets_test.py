@@ -191,7 +191,7 @@ class TestMyUnregister:
             EVENT_WITH_TICKETS_QUERY,
             {'event_id': public_event.uuid}
         )
-        assert res['event']['tickets'][0]['status'] == 'cancelled'
+        assert res['event']['tickets'][0]['status'] == 'inactive'
 
         client.force_login(user1)
 
@@ -210,6 +210,6 @@ class TestMyUnregister:
             EVENT_WITH_TICKETS_QUERY,
             {'event_id': public_event.uuid}
         )
-        assert res['event']['tickets'][0]['status'] == 'cancelled'
+        assert res['event']['tickets'][0]['status'] == 'inactive'
 
 # TODO - test anon registration

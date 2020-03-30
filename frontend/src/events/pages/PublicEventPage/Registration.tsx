@@ -1,78 +1,83 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
-import { A, Button } from '@kocherga/frontkit';
+import { A } from '@kocherga/frontkit';
 
-import { useAPI, useUser } from '~/common/hooks';
+import { useUser } from '~/common/hooks';
 
 import { trackEvent } from '~/components/analytics';
+import { AsyncButton } from '~/components';
 
 import { CommonProps } from './types';
 
 import AnonRegistration from './AnonRegistration';
 
+import {
+  useMyEventsTicketRegisterMutation,
+  useMyEventsTicketUnregisterMutation,
+} from './queries.generated';
+
 export default function Registration(props: CommonProps) {
   const { event } = props;
 
-  const [acting, setActing] = useState(false);
-
-  const api = useAPI();
   const user = useUser();
 
-  const unregister = useCallback(async () => {
-    trackEvent('unregister', {
-      category: 'events',
-      label: event.title,
-    });
+  const [registerMutation] = useMyEventsTicketRegisterMutation({
+    variables: {
+      event_id: event.event_id,
+    },
+    refetchQueries: ['GetPublicEvent'],
+    awaitRefetchQueries: true,
+    onCompleted: () => {
+      trackEvent('register', {
+        category: 'events',
+        label: event.title,
+      });
+    },
+  });
 
-    setActing(true);
-    await api.call(`events/${event.event_id}/my_ticket/unregister`, 'POST');
-    window.location.reload();
-  }, [api, event.title, event.event_id]);
+  const [unregisterMutation] = useMyEventsTicketUnregisterMutation({
+    variables: {
+      event_id: event.event_id,
+    },
+    refetchQueries: ['GetPublicEvent'],
+    awaitRefetchQueries: true,
+    onCompleted: () => {
+      trackEvent('register', {
+        category: 'events',
+        label: event.title,
+      });
+    },
+  });
 
-  const register = useCallback(async () => {
-    trackEvent('register', {
-      category: 'events',
-      label: event.title,
-    });
+  const register = useCallback(() => registerMutation(), [registerMutation]);
 
-    setActing(true);
-    await api.call(`events/${event.event_id}/my_ticket/register`, 'POST');
-    window.location.reload();
-  }, [api, event.title, event.event_id]);
+  const unregister = useCallback(() => unregisterMutation(), [
+    unregisterMutation,
+  ]);
 
   if (!user.is_authenticated) {
     return <AnonRegistration {...props} />;
   }
 
-  if (user.is_authenticated) {
-    // TODO - registration for logged-in users is not ready yet
-    return <AnonRegistration {...props} />;
-  }
-
-  if (event.my_ticket) {
+  if (event.my_ticket && event.my_ticket.status === 'ok') {
     return (
       <div>
         <div>Вы зарегистрированы.</div>
         <div>
           <A href="/my">Посмотреть в личном кабинете</A>
         </div>
-        <Button loading={acting} disabled={acting} onClick={unregister}>
+        <AsyncButton act={unregister} small>
           Отменить регистрацию
-        </Button>
+        </AsyncButton>
       </div>
     );
   }
 
   return (
     <div>
-      <Button
-        kind="primary"
-        loading={acting}
-        disabled={acting}
-        onClick={register}
-      >
+      <AsyncButton kind="primary" act={register}>
         Зарегистрироваться
-      </Button>
+      </AsyncButton>
     </div>
   );
 }
