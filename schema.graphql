@@ -547,6 +547,19 @@ type EventSetRealmResult {
   ok: Boolean
 }
 
+extend type Mutation {
+  eventSetPricingType(input: EventSetPricingTypeInput!): EventSetPricingTypeResult! @staffonly
+}
+
+input EventSetPricingTypeInput {
+  event_id: ID!
+  pricing_type: String!
+}
+
+type EventSetPricingTypeResult {
+  ok: Boolean
+}
+
 extend type Query {
   staffMembersAll: [StaffMember!]! @staffonly
   staffMember(id: ID!): StaffMember! @staffonly

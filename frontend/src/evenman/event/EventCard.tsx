@@ -25,6 +25,7 @@ import EventVisitors from './EventVisitors';
 import EventAnnounce from './EventAnnounce';
 import EventHeader from './EventHeader';
 import EventRealm from './EventRealm';
+import EventPricingType from './EventPricingType';
 
 interface Props {
   event: Event;
@@ -82,6 +83,11 @@ export default class EventCard extends React.Component<Props, {}> {
               <section>
                 <Header>Формат</Header>
                 <EventRealm event={event} />
+              </section>
+
+              <section>
+                <Header>Стоимость</Header>
+                <EventPricingType event={event} />
               </section>
 
               <section>

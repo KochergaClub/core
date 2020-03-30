@@ -6,3 +6,12 @@ mutation EvenmanSetRealm($id: ID!, $realm: String!) {
     ok
   }
 }
+
+mutation EvenmanSetPricingType($id: ID!, $pricing_type: String!) {
+  result: eventSetPricingType(input: {
+      event_id: $id,
+      pricing_type: $pricing_type
+    }) {
+    ok
+  }
+}
