@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import styled from 'styled-components';
 
 import Link from 'next/link';
 
@@ -7,13 +6,15 @@ import { colors } from '@kocherga/frontkit';
 import { usePermissions } from '~/common/hooks';
 
 import {
-  teamColor,
   SingleItem,
   ExpandableItem,
   Item,
-  publicMenuItems,
-  teamMenuItems,
+  kind2color,
+  kind2items,
+  styled,
 } from './constants';
+
+import { MenuKind } from '../types';
 
 const MenuItemsNav = styled.nav`
   margin-left: 30px;
@@ -103,7 +104,7 @@ const MenuItemDropdown = styled.ul`
   padding: 5px 0;
   list-style-type: none;
   border: 1px solid white;
-  background: ${props => (props.theme.team ? teamColor : 'black')};
+  background: ${props => kind2color[props.theme.kind]};
   color: white;
 
   & > li {
@@ -151,11 +152,11 @@ const MenuItemMaybeExpandable: React.FC<{ item: Item }> = ({ item }) =>
   );
 
 interface Props {
-  team: boolean;
+  kind: MenuKind;
 }
 
-const TildaMenuItems: React.FC<Props> = ({ team }) => {
-  const items = team ? teamMenuItems : publicMenuItems;
+const MenuItems: React.FC<Props> = ({ kind }) => {
+  const items = kind2items[kind];
   return (
     <MenuItemsNav>
       <MenuItemsList>
@@ -167,4 +168,4 @@ const TildaMenuItems: React.FC<Props> = ({ team }) => {
   );
 };
 
-export default TildaMenuItems;
+export default MenuItems;

@@ -55,7 +55,7 @@ const MyPage: NextApolloPage<Props> = () => {
   ] as [TabCode, string][];
 
   return (
-    <Page title="Личный кабинет">
+    <Page title="Личный кабинет" menu="my">
       <Page.Title>Личный кабинет</Page.Title>
       <Page.Main>
         <ApolloQueryResults {...queryResults}>

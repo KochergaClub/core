@@ -1,4 +1,10 @@
-export const teamColor = '#417690';
+import { MenuKind } from '../types';
+
+export const kind2color = {
+  team: '#417690',
+  public: 'black',
+  my: 'black',
+};
 
 export interface SingleItem {
   title: string;
@@ -14,7 +20,14 @@ export interface ExpandableItem {
 
 export type Item = SingleItem | ExpandableItem;
 
-export const publicMenuItems: Item[] = [
+export interface ThemeProps {
+  kind: MenuKind;
+}
+
+import baseStyled, { ThemedBaseStyledInterface } from 'styled-components';
+export const styled = baseStyled as ThemedBaseStyledInterface<ThemeProps>; // used for strongly typed `theme.kind`
+
+const publicMenuItems: Item[] = [
   {
     title: 'Пространство',
     items: [
@@ -45,7 +58,7 @@ export const publicMenuItems: Item[] = [
   { link: '/#contacts', title: 'Контакты' },
 ];
 
-export const teamMenuItems: Item[] = [
+const teamMenuItems: Item[] = [
   {
     title: 'Пространство',
     items: [
@@ -99,3 +112,9 @@ export const teamMenuItems: Item[] = [
     ],
   },
 ];
+
+export const kind2items: { [k: string]: Item[] } = {
+  public: publicMenuItems,
+  team: teamMenuItems,
+  my: [],
+};
