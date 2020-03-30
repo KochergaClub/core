@@ -8,7 +8,7 @@ interface Props {
 
 const CmApp: React.FC<Props> = ({ htmlTitle, children }) => {
   return (
-    <Page title={`${htmlTitle} | Cafe Menagerie`} team>
+    <Page title={`${htmlTitle} | Cafe Menagerie`} menu="team">
       <Page.Title>Cafe Menagerie</Page.Title>
       <Page.Main>
         <Navigation />

@@ -20,7 +20,10 @@ const MastermindCohortPage: NextPage<Props> = props => {
   });
 
   return (
-    <Page title={`Когорта ${props.cohort_id} | Мастермайнд-дейтинг`} team>
+    <Page
+      title={`Когорта ${props.cohort_id} | Мастермайнд-дейтинг`}
+      menu="team"
+    >
       <Page.Title>Мастермайнд-дейтинг. Когорта {props.cohort_id}</Page.Title>
       <Page.Main>
         <ApolloQueryResults {...queryResults}>

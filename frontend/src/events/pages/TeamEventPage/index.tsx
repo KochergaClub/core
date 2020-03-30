@@ -19,7 +19,7 @@ const TeamEventPage: NextPage = () => {
   const event = useSelector((state: State) => selectEvent(state));
 
   return (
-    <Page title={event.title} team>
+    <Page title={event.title} menu="team">
       <Page.Title>{event.title}</Page.Title>
       <Page.Main>
         <PaddedBlock width="max">

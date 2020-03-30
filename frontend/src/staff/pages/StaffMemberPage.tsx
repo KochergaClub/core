@@ -22,7 +22,7 @@ const StaffMemberPage: NextPage<Props> = ({ id }) => {
     : '(Ошибка) | Профиль сотрудника';
 
   return (
-    <Page title={title} team>
+    <Page title={title} menu="team">
       <Page.Main>
         <ApolloQueryResults {...queryResults}>
           {({ data: { staffMember } }) => (

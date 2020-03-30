@@ -8,7 +8,7 @@ import PbxCallCollection from '../components/PbxCallCollection';
 
 const ZadarmaIndexPage: NextApolloPage = () => {
   return (
-    <Page title="Архив звонков" team>
+    <Page title="Архив звонков" menu="team">
       <Page.Title>Архив звонков</Page.Title>
       <Page.Main>
         <PbxCallCollection />

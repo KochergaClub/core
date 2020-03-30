@@ -15,7 +15,7 @@ interface Props {}
 
 const SpaceStaffPage: NextPage<Props> = () => {
   return (
-    <Page title="Админы Кочерги" team>
+    <Page title="Админы Кочерги" menu="team">
       <Page.Title>Админы Кочерги</Page.Title>
       <Page.Main>
         <WatchmenList />

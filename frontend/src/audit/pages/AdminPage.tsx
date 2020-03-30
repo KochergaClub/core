@@ -9,7 +9,7 @@ import GroupsList from '~/audit/components/GroupsList';
 
 const AdminPage: NextPage = () => {
   return (
-    <Page title="Внутренняя админка" team>
+    <Page title="Внутренняя админка" menu="team">
       <Page.Title>Админка доступов</Page.Title>
       <Page.Main>
         <SinglePermissionsList />

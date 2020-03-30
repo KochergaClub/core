@@ -8,7 +8,7 @@ import TemplateList from '~/image-templater/components/TemplateList';
 
 const ImageTemplaterIndexPage: NextPage = () => {
   return (
-    <Page title="Шаблоны картинок" team>
+    <Page title="Шаблоны картинок" menu="team">
       <Page.Title>Шаблоны картинок</Page.Title>
       <Page.Main>
         <TemplateList />

@@ -25,7 +25,7 @@ const Container = styled.div`
 
 const SectionPage: NextWagtailPage<RatioSectionPageFragment> = ({ page }) => {
   return (
-    <Page title={page.title} chrome="none" team>
+    <Page title={page.title} chrome="none" menu="team">
       <Container>
         <Main {...page} />
       </Container>

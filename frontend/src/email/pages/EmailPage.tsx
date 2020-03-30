@@ -11,7 +11,7 @@ interface Props {}
 
 const EmailPage: NextPage<Props> = ({}) => {
   return (
-    <Page title="Подписки" team>
+    <Page title="Подписки" menu="team">
       <Page.Main>
         <SubscribeChannelList />
         <MailchimpCategoryList />

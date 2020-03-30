@@ -15,7 +15,7 @@ interface Props {
 const ZadarmaCallPage: NextApolloPage<Props> = ({ pbx_call_id }) => {
   const title = `Архивный звонок ${pbx_call_id}`;
   return (
-    <Page title={title} team>
+    <Page title={title} menu="team">
       <Page.Title>{title}</Page.Title>
       <Page.Main>
         <A href="/team/zadarma">&larr; Ко всем звонкам</A>

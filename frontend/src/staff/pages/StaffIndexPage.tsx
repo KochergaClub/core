@@ -39,7 +39,7 @@ const StaffIndexPage: NextPage = () => {
   const queryResults = useStaffMembersQuery();
 
   return (
-    <Page title="Список сотрудников" team>
+    <Page title="Список сотрудников" menu="team">
       <Page.Main>
         <ApolloQueryResults {...queryResults}>
           {({ data: { staffMembersAll: members } }) => (

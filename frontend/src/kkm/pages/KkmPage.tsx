@@ -9,7 +9,7 @@ import MainForm from '../components/MainForm';
 
 const KkmPage: NextPage = () => {
   return (
-    <Page title="Электронные чеки" team>
+    <Page title="Электронные чеки" menu="team">
       <Page.Title>Электронные чеки</Page.Title>
       <Page.Main>
         <PaddedBlock>
