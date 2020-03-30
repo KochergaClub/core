@@ -317,6 +317,16 @@ export type EventsAnnouncements = {
   timepad?: Maybe<EventsTimepadAnnouncement>,
 };
 
+export type EventSetPricingTypeInput = {
+  event_id: Scalars['ID'],
+  pricing_type: Scalars['String'],
+};
+
+export type EventSetPricingTypeResult = {
+   __typename?: 'EventSetPricingTypeResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventSetRealmInput = {
   event_id: Scalars['ID'],
   realm: Scalars['String'],
@@ -581,6 +591,7 @@ export type Mutation = {
   myEventsTicketRegister: MyEventsTicket,
   myEventsTicketRegisterAnon: MyEventsTicket,
   eventSetRealm: EventSetRealmResult,
+  eventSetPricingType: EventSetPricingTypeResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -719,6 +730,11 @@ export type MutationMyEventsTicketRegisterAnonArgs = {
 
 export type MutationEventSetRealmArgs = {
   input: EventSetRealmInput
+};
+
+
+export type MutationEventSetPricingTypeArgs = {
+  input: EventSetPricingTypeInput
 };
 
 

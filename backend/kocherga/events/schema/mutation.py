@@ -62,3 +62,20 @@ def eventSetRealm(_, info, input):
     return {
         'ok': True
     }
+
+
+@Mutation.field('eventSetPricingType')
+def eventSetPricingType(_, info, input):
+    event_id = input['event_id']
+    pricing_type = input['pricing_type']
+
+    event = models.Event.objects.get(uuid=event_id)
+    assert not event.deleted
+
+    assert pricing_type in ('anticafe', 'free')
+    event.pricing_type = pricing_type
+    event.save()
+
+    return {
+        'ok': True
+    }

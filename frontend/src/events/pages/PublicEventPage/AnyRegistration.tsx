@@ -29,7 +29,13 @@ const Tariffs: React.FC<CommonProps> = ({ event }) => {
   }
 
   if (event.pricing_type === 'free') {
-    return <TariffsContainer>Вход на встречу — бесплатный.</TariffsContainer>;
+    return (
+      <TariffsContainer>
+        {event.realm === 'offline'
+          ? 'Вход на встречу — бесплатный.'
+          : 'Участие во встрече — бесплатно.'}
+      </TariffsContainer>
+    );
   }
 
   throw new Error('Unknown pricing type');
