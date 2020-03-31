@@ -15,3 +15,12 @@ mutation EvenmanSetPricingType($id: ID!, $pricing_type: String!) {
     ok
   }
 }
+
+mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
+  result: eventSetZoomLink(input: {
+      event_id: $id,
+      zoom_link: $link
+    }) {
+    ok
+  }
+}

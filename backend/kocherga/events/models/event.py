@@ -191,6 +191,11 @@ class Event(models.Model):
         default='offline',
     )
 
+    zoom_link = models.URLField(
+        blank=True,
+        max_length=255,
+    )
+
     image_old = models.CharField(max_length=32, null=True, blank=True)
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -290,6 +295,12 @@ class Event(models.Model):
 
     def public_link(self):
         return f'{settings.KOCHERGA_WEBSITE}/events/{self.uuid}'
+
+    def set_zoom_link(self, link):
+        assert not self.deleted
+        assert self.realm == 'online'
+        self.zoom_link = link
+        self.save()
 
 
 class Tag(models.Model):

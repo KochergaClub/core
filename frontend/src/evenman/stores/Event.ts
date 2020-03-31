@@ -51,6 +51,7 @@ export interface EventJSON {
   registration_type: RegistrationType;
   realm: EventRealm;
   pricing_type: EventPricingType;
+  zoom_link: string;
   location?: string;
   start: string;
   end: string;
@@ -78,6 +79,7 @@ export class Event extends EventShape {
   @observable registration_type: RegistrationType;
   @observable realm: EventRealm;
   @observable pricing_type: EventPricingType;
+  @observable zoom_link: string;
 
   @observable start: string;
   @observable end: string;
@@ -108,6 +110,7 @@ export class Event extends EventShape {
     this.registration_type = json.registration_type;
     this.realm = json.realm;
     this.pricing_type = json.pricing_type;
+    this.zoom_link = json.zoom_link;
     this.title = json.title;
 
     this.start = json.start;
@@ -389,6 +392,7 @@ export class Event extends EventShape {
       'type',
       'registration_type',
       'realm',
+      'zoom_link',
       'pricing_type',
       'location',
       'start',

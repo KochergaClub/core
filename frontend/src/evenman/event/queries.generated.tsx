@@ -32,6 +32,20 @@ export type EvenmanSetPricingTypeMutation = (
   ) }
 );
 
+export type EvenmanSetZoomLinkMutationVariables = {
+  id: Types.Scalars['ID'],
+  link: Types.Scalars['String']
+};
+
+
+export type EvenmanSetZoomLinkMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'EventSetZoomLinkResult' }
+    & Pick<Types.EventSetZoomLinkResult, 'ok'>
+  ) }
+);
+
 
 export const EvenmanSetRealmDocument = gql`
     mutation EvenmanSetRealm($id: ID!, $realm: String!) {
@@ -99,3 +113,36 @@ export function useEvenmanSetPricingTypeMutation(baseOptions?: ApolloReactHooks.
 export type EvenmanSetPricingTypeMutationHookResult = ReturnType<typeof useEvenmanSetPricingTypeMutation>;
 export type EvenmanSetPricingTypeMutationResult = ApolloReactCommon.MutationResult<EvenmanSetPricingTypeMutation>;
 export type EvenmanSetPricingTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanSetPricingTypeMutation, EvenmanSetPricingTypeMutationVariables>;
+export const EvenmanSetZoomLinkDocument = gql`
+    mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
+  result: eventSetZoomLink(input: {event_id: $id, zoom_link: $link}) {
+    ok
+  }
+}
+    `;
+export type EvenmanSetZoomLinkMutationFn = ApolloReactCommon.MutationFunction<EvenmanSetZoomLinkMutation, EvenmanSetZoomLinkMutationVariables>;
+
+/**
+ * __useEvenmanSetZoomLinkMutation__
+ *
+ * To run a mutation, you first call `useEvenmanSetZoomLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanSetZoomLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [evenmanSetZoomLinkMutation, { data, loading, error }] = useEvenmanSetZoomLinkMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      link: // value for 'link'
+ *   },
+ * });
+ */
+export function useEvenmanSetZoomLinkMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanSetZoomLinkMutation, EvenmanSetZoomLinkMutationVariables>) {
+        return ApolloReactHooks.useMutation<EvenmanSetZoomLinkMutation, EvenmanSetZoomLinkMutationVariables>(EvenmanSetZoomLinkDocument, baseOptions);
+      }
+export type EvenmanSetZoomLinkMutationHookResult = ReturnType<typeof useEvenmanSetZoomLinkMutation>;
+export type EvenmanSetZoomLinkMutationResult = ApolloReactCommon.MutationResult<EvenmanSetZoomLinkMutation>;
+export type EvenmanSetZoomLinkMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanSetZoomLinkMutation, EvenmanSetZoomLinkMutationVariables>;

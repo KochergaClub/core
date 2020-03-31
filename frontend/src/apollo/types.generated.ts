@@ -337,6 +337,16 @@ export type EventSetRealmResult = {
   ok?: Maybe<Scalars['Boolean']>,
 };
 
+export type EventSetZoomLinkInput = {
+  event_id: Scalars['ID'],
+  zoom_link: Scalars['String'],
+};
+
+export type EventSetZoomLinkResult = {
+   __typename?: 'EventSetZoomLinkResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventsEvent = {
    __typename?: 'EventsEvent',
   event_id: Scalars['ID'],
@@ -592,6 +602,7 @@ export type Mutation = {
   myEventsTicketRegisterAnon: MyEventsTicket,
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
+  eventSetZoomLink: EventSetZoomLinkResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -735,6 +746,11 @@ export type MutationEventSetRealmArgs = {
 
 export type MutationEventSetPricingTypeArgs = {
   input: EventSetPricingTypeInput
+};
+
+
+export type MutationEventSetZoomLinkArgs = {
+  input: EventSetZoomLinkInput
 };
 
 
