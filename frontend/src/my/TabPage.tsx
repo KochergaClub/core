@@ -22,7 +22,6 @@ const AdminSection = () => (
 );
 
 const SectionWrapper = styled.div`
-  max-width: 600px;
   margin-top: 20px;
 `;
 
@@ -51,7 +50,7 @@ export const buildTabPage = (tab: TabCode) => {
         <Page.Main>
           <ApolloQueryResults {...queryResults}>
             {({ data: { my } }) => (
-              <Column centered>
+              <Column centered stretch>
                 <div>
                   <code>{my.user.email}</code> <LogoutButton />
                 </div>

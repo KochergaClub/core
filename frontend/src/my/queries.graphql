@@ -22,6 +22,7 @@ fragment EmailSubscription on MyEmailSubscription {
 }
 
 fragment MyTicket on MyEventsTicket {
+  zoom_link
   event {
     event_id
     start

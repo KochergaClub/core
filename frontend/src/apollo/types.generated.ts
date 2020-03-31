@@ -945,6 +945,7 @@ export type MyEventsTicket = {
   event: EventsPublicEvent,
   status: Scalars['String'],
   created?: Maybe<Scalars['String']>,
+  zoom_link?: Maybe<Scalars['String']>,
 };
 
 export type MyEventsTicketConnection = {

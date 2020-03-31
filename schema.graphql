@@ -510,6 +510,7 @@ type MyEventsTicket {
   event: EventsPublicEvent!
   status: String!
   created: String
+  zoom_link: String
 }
 
 type MyEventsTicketEdge {
