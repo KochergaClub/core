@@ -23,8 +23,14 @@ interface Props {
 
 const AuthForm: React.FC<Props> = props => {
   const notify = useNotification();
-  const [loginMutation] = useLoginMutation();
-  const [sendMagicLinkMutation] = useSendMagicLinkMutation();
+  const [
+    loginMutation,
+    { loading: submittingWithPassword },
+  ] = useLoginMutation();
+  const [
+    sendMagicLinkMutation,
+    { loading: submittingWithoutPassword },
+  ] = useSendMagicLinkMutation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +38,7 @@ const AuthForm: React.FC<Props> = props => {
   // button shouldn't be enabled until we load JS on client
   const [initialLoading, setInitialLoading] = useState(true);
 
-  const [acting, setActing] = useState(false);
+  const [leaving, setLeaving] = useState(false);
 
   // enable inputs and buttons after first load
   useEffect(() => {
@@ -48,15 +54,12 @@ const AuthForm: React.FC<Props> = props => {
   }, [initialLoading]);
 
   const cb = useCallback(async () => {
-    setActing(true);
-
     if (password) {
       const { data } = await loginMutation({
         variables: { email, password },
       });
 
       if (!data) {
-        setActing(false);
         notify({
           type: 'Error',
           text: 'Login failed',
@@ -65,7 +68,6 @@ const AuthForm: React.FC<Props> = props => {
       }
 
       if (data.result.error) {
-        setActing(false);
         notify({
           type: 'Error',
           text: data.result.error,
@@ -74,7 +76,6 @@ const AuthForm: React.FC<Props> = props => {
       }
 
       if (!data?.result.user?.is_authenticated) {
-        setActing(false);
         notify({
           type: 'Error',
           text: 'not authenticated',
@@ -82,6 +83,7 @@ const AuthForm: React.FC<Props> = props => {
         return;
       }
 
+      setLeaving(true);
       window.location.href = props.next;
     } else {
       // passwordless login - send magic link and ask to click it
@@ -90,7 +92,6 @@ const AuthForm: React.FC<Props> = props => {
       });
 
       if (!data || !data.result.ok) {
-        setActing(false);
         notify({
           type: 'Error',
           text: 'Failed for some reason',
@@ -98,6 +99,7 @@ const AuthForm: React.FC<Props> = props => {
         return;
       }
 
+      setLeaving(true);
       window.location.href = '/login/check-your-email';
     }
   }, [
@@ -108,6 +110,8 @@ const AuthForm: React.FC<Props> = props => {
     password,
     props.next,
   ]);
+
+  const acting = submittingWithoutPassword || submittingWithPassword || leaving;
 
   const hotkeys = useCommonHotkeys({
     onEnter: cb,
@@ -124,7 +128,7 @@ const AuthForm: React.FC<Props> = props => {
             required
             id="id_email"
             ref={emailRef}
-            disabled={acting || initialLoading}
+            disabled={acting}
             value={email}
             onChange={e => setEmail(e.currentTarget.value)}
           />
@@ -140,17 +144,12 @@ const AuthForm: React.FC<Props> = props => {
             name="password"
             maxLength={255}
             id="id_password"
-            disabled={acting || initialLoading}
+            disabled={acting}
             value={password}
             onChange={e => setPassword(e.currentTarget.value)}
           />
         </Column>
-        <Button
-          type="submit"
-          disabled={acting || initialLoading}
-          loading={acting}
-          onClick={cb}
-        >
+        <Button type="submit" disabled={acting} loading={acting} onClick={cb}>
           Войти
         </Button>
       </Column>
