@@ -108,6 +108,7 @@ class EventSerializer(serializers.ModelSerializer):
             'registration_type',
             'realm',
             'pricing_type',
+            'zoom_link',
             'timing_description_override',
 
             'announcements',

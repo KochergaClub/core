@@ -127,3 +127,16 @@ input EventSetPricingTypeInput {
 type EventSetPricingTypeResult {
   ok: Boolean
 }
+
+extend type Mutation {
+  eventSetZoomLink(input: EventSetZoomLinkInput!): EventSetZoomLinkResult! @staffonly
+}
+
+input EventSetZoomLinkInput {
+  event_id: ID!
+  zoom_link: String!
+}
+
+type EventSetZoomLinkResult {
+  ok: Boolean
+}

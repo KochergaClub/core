@@ -79,3 +79,16 @@ def eventSetPricingType(_, info, input):
     return {
         'ok': True
     }
+
+
+@Mutation.field('eventSetZoomLink')
+def eventSetZoomLink(_, info, input):
+    event_id = input['event_id']
+    zoom_link = input['zoom_link']
+
+    event = models.Event.objects.get(uuid=event_id)
+    event.set_zoom_link(zoom_link)
+
+    return {
+        'ok': True
+    }
