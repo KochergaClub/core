@@ -198,3 +198,9 @@ class Ticket(models.Model):
             "email": email,
         })
         logger.info(f'Scheduled subscription of {email}')
+
+    @property
+    def zoom_link(self):
+        if self.status != 'ok':
+            return None
+        return self.event.zoom_link
