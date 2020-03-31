@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -34,9 +34,18 @@ const AuthForm: React.FC<Props> = props => {
 
   const [acting, setActing] = useState(false);
 
+  // enable inputs and buttons after first load
   useEffect(() => {
     setInitialLoading(false);
   }, []);
+
+  // autofocus on email input after initialLoading is switched to false
+  const emailRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (!initialLoading) {
+      emailRef.current?.focus();
+    }
+  }, [initialLoading]);
 
   const cb = useCallback(async () => {
     setActing(true);
@@ -114,6 +123,7 @@ const AuthForm: React.FC<Props> = props => {
             maxLength={255}
             required
             id="id_email"
+            ref={emailRef}
             disabled={acting || initialLoading}
             value={email}
             onChange={e => setEmail(e.currentTarget.value)}
