@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
+import { FaHeart } from 'react-icons/fa';
 
-import { A } from '@kocherga/frontkit';
+import { A, Column } from '@kocherga/frontkit';
 
 import { useUser } from '~/common/hooks';
 
@@ -61,15 +62,24 @@ export default function Registration(props: CommonProps) {
 
   if (event.my_ticket && event.my_ticket.status === 'ok') {
     return (
-      <div>
-        <div>Вы зарегистрированы.</div>
+      <Column>
         <div>
-          <A href="/my">Посмотреть в личном кабинете</A>
+          Вы зарегистрированы! <FaHeart style={{ color: 'red' }} />
         </div>
+        {event.my_ticket.zoom_link ? (
+          <div>
+            Ссылка на Zoom-созвон будет доступна в{' '}
+            <A href="/my">личном кабинете</A>.
+          </div>
+        ) : (
+          <div>
+            <A href="/my">Посмотреть в личном кабинете</A>
+          </div>
+        )}
         <AsyncButton act={unregister} small>
           Отменить регистрацию
         </AsyncButton>
-      </div>
+      </Column>
     );
   }
 

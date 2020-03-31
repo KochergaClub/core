@@ -18,7 +18,7 @@ export type ProjectPage_SummaryForEventFragment = (
 
 export type MyEventsTicketFragment = (
   { __typename?: 'MyEventsTicket' }
-  & Pick<Types.MyEventsTicket, 'created' | 'status'>
+  & Pick<Types.MyEventsTicket, 'created' | 'status' | 'zoom_link'>
 );
 
 export type EventsPublicEventFragment = (
@@ -109,6 +109,7 @@ export const MyEventsTicketFragmentDoc = gql`
     fragment MyEventsTicket on MyEventsTicket {
   created
   status
+  zoom_link
 }
     `;
 export const EventsPublicEventFragmentDoc = gql`
