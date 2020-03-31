@@ -29,6 +29,7 @@ export type EmailSubscriptionFragment = (
 
 export type MyTicketFragment = (
   { __typename?: 'MyEventsTicket' }
+  & Pick<Types.MyEventsTicket, 'zoom_link'>
   & { event: (
     { __typename?: 'EventsPublicEvent' }
     & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
@@ -163,6 +164,7 @@ export const MembershipFragmentDoc = gql`
     `;
 export const MyTicketFragmentDoc = gql`
     fragment MyTicket on MyEventsTicket {
+  zoom_link
   event {
     event_id
     start

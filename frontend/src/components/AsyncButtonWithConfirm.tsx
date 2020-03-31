@@ -7,6 +7,8 @@ interface Props {
   small?: boolean;
   children?: React.ReactNode;
   confirmText: string;
+  cancelText?: string;
+  headerText?: string;
 }
 
 const AsyncButtonWithConfirm = ({
@@ -14,6 +16,8 @@ const AsyncButtonWithConfirm = ({
   children,
   small,
   confirmText,
+  cancelText,
+  headerText,
 }: Props) => {
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -45,11 +49,13 @@ const AsyncButtonWithConfirm = ({
       </Button>
       {confirming && (
         <Modal isOpen={confirming}>
-          <Modal.Header toggle={closeConfirm}>Точно?</Modal.Header>
+          <Modal.Header toggle={closeConfirm}>
+            {headerText || 'Точно?'}
+          </Modal.Header>
           <Modal.Body>{confirmText}</Modal.Body>
           <Modal.Footer>
             <ControlsFooter>
-              <Button onClick={closeConfirm}>Отменить</Button>
+              <Button onClick={closeConfirm}>{cancelText || 'Отменить'}</Button>
               <Button
                 onClick={confirm}
                 loading={loading}

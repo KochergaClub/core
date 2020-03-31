@@ -1,10 +1,12 @@
 import { useCallback } from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
+import { FaVideo } from 'react-icons/fa';
 
-import { A, Column } from '@kocherga/frontkit';
+import { A, Label } from '@kocherga/frontkit';
 
-import { AsyncButton } from '~/components';
+import { AsyncButtonWithConfirm } from '~/components';
+import Card, { CardList } from '~/components/Card';
 import { timezone, formatDate } from '~/common/utils';
 
 import {
@@ -27,13 +29,25 @@ const TicketCard = ({ ticket }: { ticket: MyTicketFragment }) => {
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 
   return (
-    <div>
+    <Card>
       <A href={`/events/${ticket.event.event_id}`}>{ticket.event.title}</A>
-      <div>{formatDate(zonedStart, 'd MMMM, HH:mm')}</div>
-      <AsyncButton small act={cancel}>
+      <Label>{formatDate(zonedStart, 'd MMMM, HH:mm')}</Label>
+      {ticket.zoom_link && (
+        <div>
+          <A href={ticket.zoom_link}>
+            <FaVideo /> Присоединиться через Zoom
+          </A>
+        </div>
+      )}
+      <AsyncButtonWithConfirm
+        small
+        act={cancel}
+        confirmText="Точно отменить?"
+        cancelText="Нет"
+      >
         Отменить
-      </AsyncButton>
-    </div>
+      </AsyncButtonWithConfirm>
+    </Card>
   );
 };
 
@@ -53,12 +67,14 @@ const TicketsList: React.FC<Props> = ({ my }) => {
   }
 
   return (
-    <Column>
+    <div>
       <h3>Вы собираетесь на эти события:</h3>
-      {tickets.map(ticket => (
-        <TicketCard key={ticket.event.event_id} ticket={ticket} />
-      ))}
-    </Column>
+      <CardList>
+        {tickets.map(ticket => (
+          <TicketCard key={ticket.event.event_id} ticket={ticket} />
+        ))}
+      </CardList>
+    </div>
   );
 };
 
