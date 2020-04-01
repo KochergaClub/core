@@ -15,7 +15,7 @@ interface Props {
 
 const LoginPage: NextApolloPage<Props> = props => {
   return (
-    <Page title="Логин">
+    <Page title="Войти в Кочергу">
       <Page.Title>Войти или зарегистрироваться</Page.Title>
       <AuthForm next={props.next} />
     </Page>
