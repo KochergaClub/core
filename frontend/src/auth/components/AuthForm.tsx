@@ -69,7 +69,7 @@ const AuthForm: React.FC<Props> = props => {
       if (!data.result.ok) {
         notify({
           type: 'Error',
-          text: 'Что-то пошло не так',
+          text: data.result.error || 'Что-то пошло не так',
         });
         return;
       }

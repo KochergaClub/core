@@ -77,6 +77,7 @@ export type AuthSendMagicLinkInput = {
 export type AuthSendMagicLinkResult = {
    __typename?: 'AuthSendMagicLinkResult',
   ok?: Maybe<Scalars['Boolean']>,
+  error?: Maybe<Scalars['String']>,
 };
 
 export type AuthSetPasswordInput = {

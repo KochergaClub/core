@@ -44,5 +44,6 @@ mutation SendMagicLink($email: String!, $next: String) {
       next: $next
     }) {
     ok
+    error
   }
 }
