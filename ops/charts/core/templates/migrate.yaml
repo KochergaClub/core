@@ -7,6 +7,12 @@ spec:
   ttlSecondsAfterFinished: 3600
   template:
     spec:
+      # initContainers via https://stackoverflow.com/a/50838829
+      # avoid starting the migrations before the mysql DB is online (especially probable in dev)
+      initContainers:
+        - name: wait-for-mysql
+          image: alpine
+          command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 core-mysql 3306 && exit 0 || sleep 3; done; exit 1"]
       containers:
         - name: default
           command: ["./scripts/upgrade.sh"]
