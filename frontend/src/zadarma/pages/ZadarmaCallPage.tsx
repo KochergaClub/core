@@ -1,8 +1,6 @@
 import { A } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
-import { NextApolloPage } from '~/apollo/types';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 

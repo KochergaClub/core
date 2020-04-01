@@ -1,5 +1,4 @@
-import { withApollo } from '~/apollo/client';
-import { NextApolloPage } from '~/apollo/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 
 import { APIError } from '~/common/api';
 

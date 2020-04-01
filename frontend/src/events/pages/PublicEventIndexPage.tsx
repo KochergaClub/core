@@ -1,13 +1,12 @@
 import { A } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { NextPage } from '~/common/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 
 import TL03 from '~/blocks/TL03';
 import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { Page } from '~/components';
 
-const PublicEventIndexPage: NextPage = () => {
+const PublicEventIndexPage: NextApolloPage = () => {
   return (
     <Page title="Расписание мероприятий">
       <TL03 title="Расписание мероприятий" grey>

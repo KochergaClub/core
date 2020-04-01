@@ -11,9 +11,8 @@ import Markdown from 'react-markdown';
 
 import { RichText } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
+import { withApollo, NextApolloPage } from '~/apollo';
 
-import { NextApolloPage } from '~/apollo/types';
 import { timezone, formatDate } from '~/common/utils';
 
 import { Page, PaddedBlock, ApolloQueryResults } from '~/components';

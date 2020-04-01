@@ -2,9 +2,9 @@ import { useSelector } from 'react-redux';
 
 import { A, Column } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
+import { withApollo, NextApolloPage } from '~/apollo';
+
 import { State } from '~/redux/store';
-import { NextPage } from '~/common/types';
 import { Page, PaddedBlock } from '~/components';
 
 import { loadEvent, selectEvent } from '~/events/features/eventPage';
@@ -15,7 +15,7 @@ import TicketsCollection from './TicketsCollection';
 
 import { loadEventFeedbacks } from '~/events/features/eventPageFeedbacks';
 
-const TeamEventPage: NextPage = () => {
+const TeamEventPage: NextApolloPage = () => {
   const event = useSelector((state: State) => selectEvent(state));
 
   return (

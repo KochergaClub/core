@@ -6,9 +6,7 @@ import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
 
 import { A, Column, Row, Label, colors } from '@kocherga/frontkit';
 
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import {
   ApolloQueryResults,
@@ -68,7 +66,7 @@ const LinkWithIcon = ({
   );
 };
 
-const RatioTrainingPage: NextPage<Props> = ({ slug }) => {
+const RatioTrainingPage: NextApolloPage<Props> = ({ slug }) => {
   const queryResults = useRatioTrainingBySlugQuery({
     variables: { slug },
   });

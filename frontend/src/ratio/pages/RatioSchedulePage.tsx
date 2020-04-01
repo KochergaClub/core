@@ -1,6 +1,4 @@
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page, ApolloQueryResults } from '~/components';
 
@@ -12,7 +10,7 @@ interface Props {
   slug: string;
 }
 
-const RatioSchedulePage: NextPage<Props> = ({ slug }) => {
+const RatioSchedulePage: NextApolloPage<Props> = ({ slug }) => {
   const queryResults = useRatioTrainingWithScheduleQuery({
     variables: { slug },
   });

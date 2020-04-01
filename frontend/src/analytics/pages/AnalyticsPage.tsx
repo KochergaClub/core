@@ -1,7 +1,6 @@
 import { A } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { NextPage } from '~/common/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 import { Page, ActionButton, ApolloQueryResults } from '~/components';
 
 import {
@@ -21,7 +20,7 @@ const BOVStatCard = ({ bovStat }: { bovStat: AnalyticsBovStatFragment }) => (
   </div>
 );
 
-const AnalyticsPage: NextPage<Props> = () => {
+const AnalyticsPage: NextApolloPage<Props> = () => {
   const queryResults = useAnalyticsBovStatsQuery();
 
   return (

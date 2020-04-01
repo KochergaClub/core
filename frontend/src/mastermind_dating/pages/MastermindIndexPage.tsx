@@ -1,10 +1,9 @@
-import { withApollo } from '~/apollo/client';
-import { NextPage } from '~/common/types';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 import { PaddedBlock, Page } from '~/components';
 
 import CohortCollection from '../components/CohortCollection';
 
-const MastermindIndexPage: NextPage = () => {
+const MastermindIndexPage: NextApolloPage = () => {
   return (
     <Page title="Админка мастермайнд-дейтинга" menu="team">
       <Page.Title>Мастермайнд-дейтинг</Page.Title>
@@ -17,4 +16,4 @@ const MastermindIndexPage: NextPage = () => {
   );
 };
 
-export default withApollo(MastermindIndexPage);
+export default withApollo(withStaff(MastermindIndexPage));

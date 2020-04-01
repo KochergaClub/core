@@ -1,13 +1,11 @@
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
 import SinglePermissionsList from '~/audit/components/SinglePermissionsList';
 import GroupsList from '~/audit/components/GroupsList';
 
-const AdminPage: NextPage = () => {
+const AdminPage: NextApolloPage = () => {
   return (
     <Page title="Внутренняя админка" menu="team">
       <Page.Title>Админка доступов</Page.Title>
