@@ -15,6 +15,10 @@ def populate_uuids(apps, schema_editor):
         obj.save()
 
 
+def nop(x, y):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -27,5 +31,5 @@ class Migration(migrations.Migration):
             name='uuid',
             field=models.SlugField(default=kocherga.events.models.event.generate_uuid),
         ),
-        migrations.RunPython(populate_uuids, lambda x, y: None),
+        migrations.RunPython(populate_uuids, nop),
     ]
