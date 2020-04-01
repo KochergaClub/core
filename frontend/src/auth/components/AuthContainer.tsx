@@ -4,7 +4,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   margin-top: 100px;
   max-width: 400px;
-  margin-bottom: 25vh;
+  margin-bottom: 100px;
 `;
 
 const Box = styled.div`
