@@ -5,6 +5,7 @@ import markdown
 import urllib.parse
 
 import django.core.exceptions
+from django.core.validators import validate_email
 from django.contrib.auth import models as auth_models, get_user_model, login, logout, authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
@@ -121,6 +122,14 @@ def create_mutations():
             render_to_string('auth/email/login.md', {'magic_link': magic_link})
         )
         plain_email_message = render_to_string('auth/email/login.txt', {'magic_link': magic_link})
+
+        try:
+            validate_email(email)
+        except django.core.exceptions.ValidationError as e:
+            return {
+                'ok': False,
+                'error': '\n'.join(e.messages),
+            }
 
         send_mail(
             subject='Войти на сайт Кочерги',

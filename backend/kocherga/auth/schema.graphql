@@ -97,4 +97,5 @@ input AuthSendMagicLinkInput {
 
 type AuthSendMagicLinkResult {
   ok: Boolean
+  error: String
 }

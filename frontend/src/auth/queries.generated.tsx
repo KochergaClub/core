@@ -63,7 +63,7 @@ export type SendMagicLinkMutation = (
   { __typename?: 'Mutation' }
   & { result: (
     { __typename?: 'AuthSendMagicLinkResult' }
-    & Pick<Types.AuthSendMagicLinkResult, 'ok'>
+    & Pick<Types.AuthSendMagicLinkResult, 'ok' | 'error'>
   ) }
 );
 
@@ -180,6 +180,7 @@ export const SendMagicLinkDocument = gql`
     mutation SendMagicLink($email: String!, $next: String) {
   result: authSendMagicLink(input: {email: $email, next: $next}) {
     ok
+    error
   }
 }
     `;
