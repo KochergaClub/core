@@ -45,6 +45,10 @@ def fill_wagtail_images(apps, schema_editor):
                 obj.save()
 
 
+def nop(x, y):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -70,6 +74,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             fill_wagtail_images,
-            lambda *x: None,
+            nop,
         ),
     ]

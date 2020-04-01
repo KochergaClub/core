@@ -35,6 +35,10 @@ def add_image_extensions(apps, schema_editor):
             image.save()
 
 
+def nop(x, y):
+    pass
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -42,8 +46,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(
-            add_image_extensions,
-            lambda *x: None,
-        ),
+        migrations.RunPython(add_image_extensions, nop),
     ]
