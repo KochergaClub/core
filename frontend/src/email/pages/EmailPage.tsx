@@ -1,15 +1,11 @@
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
-import { NextPage } from '~/common/types';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
 import SubscribeChannelList from '~/email/components/SubscribeChannelList';
 import MailchimpCategoryList from '~/email/components/MailchimpCategoryList';
 
-interface Props {}
-
-const EmailPage: NextPage<Props> = ({}) => {
+const EmailPage: NextApolloPage = () => {
   return (
     <Page title="Подписки" menu="team">
       <Page.Main>

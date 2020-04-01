@@ -4,14 +4,11 @@ import { observer } from 'mobx-react-lite';
 
 import { ParsedUrlQuery } from 'querystring';
 
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
+
 import { Page } from '~/components';
 
-import { selectUser } from '~/core/selectors';
-import { NextPage } from '~/common/types';
 import { useAPI } from '~/common/hooks';
-import { APIError } from '~/common/api';
 import { staticUrl } from '~/common/utils';
 
 import GlobalStyle from './GlobalStyle';
@@ -32,7 +29,7 @@ interface Props {
   query: ParsedUrlQuery;
 }
 
-const App: NextPage<Props> = observer(({ route, query }) => {
+const App: NextApolloPage<Props> = observer(({ route, query }) => {
   const api = useAPI();
   const [store] = useState(() => new RootStore(api));
 
@@ -77,13 +74,7 @@ const App: NextPage<Props> = observer(({ route, query }) => {
   );
 });
 
-App.getInitialProps = async ({ store: { getState }, pathname, query }) => {
-  const user = selectUser(getState());
-
-  if (!user.email) {
-    throw new APIError('You need to be logged in to see /team/evenman', 403);
-  }
-
+App.getInitialProps = async ({ pathname, query }) => {
   return {
     route: pathname,
     query,

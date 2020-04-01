@@ -2,18 +2,14 @@ import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
-import { NextPage } from '~/common/types';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
 import WatchmenList from '../components/WatchmenList';
 import GradesList from '../components/GradesList';
 
-interface Props {}
-
-const SpaceStaffPage: NextPage<Props> = () => {
+const SpaceStaffPage: NextApolloPage = () => {
   return (
     <Page title="Админы Кочерги" menu="team">
       <Page.Title>Админы Кочерги</Page.Title>

@@ -1,6 +1,4 @@
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import CmApp from '../components/CmApp';
 import OrderDetailsScreen from '../components/OrderDetailsScreen';
@@ -9,7 +7,7 @@ interface Props {
   id: string;
 }
 
-const OrderPage: NextPage<Props> = ({ id }) => (
+const OrderPage: NextApolloPage<Props> = ({ id }) => (
   <CmApp htmlTitle="Заказ #{id}">
     <OrderDetailsScreen id={id} />
   </CmApp>

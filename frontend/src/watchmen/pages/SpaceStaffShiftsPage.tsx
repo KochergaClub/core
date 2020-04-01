@@ -1,16 +1,13 @@
 import { useState } from 'react';
-
 import { format, parseISO, addWeeks, startOfWeek } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page, ApolloQueryResults } from '~/components';
 
 import { useListeningWebSocket, usePermissions } from '~/common/hooks';
-import { NextPage } from '~/common/types';
 
 import { useWatchmenShiftsQuery } from '../queries.generated';
 
@@ -25,7 +22,7 @@ interface Props {
   to_date: string;
 }
 
-const SpaceStaffShiftsPage: NextPage<Props> = props => {
+const SpaceStaffShiftsPage: NextApolloPage<Props> = props => {
   const [editable] = usePermissions(['watchmen.manage']);
 
   const [editing, setEditing] = useState(false);

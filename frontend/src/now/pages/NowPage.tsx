@@ -5,9 +5,8 @@ import baseStyled, {
   ThemeProvider,
 } from 'styled-components';
 
-import { withApollo } from '~/apollo/client';
+import { withApollo, NextApolloPage } from '~/apollo';
 
-import { NextPage } from '~/common/types';
 import { staticUrl } from '~/common/utils';
 
 import { Page, ApolloQueryResults } from '~/components';
@@ -87,7 +86,7 @@ const TopHeaderLink = styled.a`
   text-decoration: none;
 `;
 
-const NowPage: NextPage<Props> = props => {
+const NowPage: NextApolloPage<Props> = props => {
   const { theme } = props;
 
   const nowQueryResults = useNowQuery();

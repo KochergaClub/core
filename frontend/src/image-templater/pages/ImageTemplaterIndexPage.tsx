@@ -1,12 +1,10 @@
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
-import { NextPage } from '~/common/types';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
-import TemplateList from '~/image-templater/components/TemplateList';
+import TemplateList from '../components/TemplateList';
 
-const ImageTemplaterIndexPage: NextPage = () => {
+const ImageTemplaterIndexPage: NextApolloPage = () => {
   return (
     <Page title="Шаблоны картинок" menu="team">
       <Page.Title>Шаблоны картинок</Page.Title>

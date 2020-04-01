@@ -1,11 +1,9 @@
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import CmApp from '../components/CmApp';
 import OpenOrdersScreen from '../components/OpenOrdersScreen';
 
-const IndexPage: NextPage = () => (
+const IndexPage: NextApolloPage = () => (
   <CmApp htmlTitle="Открытые заказы">
     <OpenOrdersScreen />
   </CmApp>

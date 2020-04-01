@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { NextApolloPage } from '~/apollo/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 import { redirect } from '~/components/RedirectPage';

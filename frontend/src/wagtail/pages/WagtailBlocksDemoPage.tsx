@@ -1,13 +1,10 @@
-import { withStaff } from '~/apollo/withStaff';
-import { withApollo } from '~/apollo/client';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
-import { NextPage } from '~/common/types';
-
 import WagtailBlocks, { AnyBlockFragment } from '~/wagtail/WagtailBlocks';
 
-const WagtailBlocksDemoPage: NextPage = () => {
+const WagtailBlocksDemoPage: NextApolloPage = () => {
   const blocks: AnyBlockFragment[] = [
     {
       id: '',

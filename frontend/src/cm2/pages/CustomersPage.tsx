@@ -1,11 +1,9 @@
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import CmApp from '../components/CmApp';
 import CustomersScreen from '../components/CustomersScreen';
 
-const CustomersPage: NextPage = () => (
+const CustomersPage: NextApolloPage = () => (
   <CmApp htmlTitle="Клиенты">
     <CustomersScreen />
   </CmApp>

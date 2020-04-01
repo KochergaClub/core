@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
-import { withApollo } from '~/apollo/client';
-import { NextPage } from '~/common/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 import AuthContainer from '~/auth/components/AuthContainer';
@@ -13,7 +12,7 @@ interface Props {
   next: string;
 }
 
-const MagicLinkPage: NextPage<Props> = props => {
+const MagicLinkPage: NextApolloPage<Props> = props => {
   const [tokenLoginMutation] = useTokenLoginMutation();
 
   useEffect(() => {

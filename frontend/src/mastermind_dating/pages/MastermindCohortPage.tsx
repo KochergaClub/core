@@ -1,5 +1,4 @@
-import { withApollo } from '~/apollo/client';
-import { NextPage } from '~/common/types';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 import { Page, ApolloQueryResults } from '~/components';
 
 import Controls from '../components/Controls';
@@ -12,7 +11,7 @@ interface Props {
   cohort_id: string;
 }
 
-const MastermindCohortPage: NextPage<Props> = props => {
+const MastermindCohortPage: NextApolloPage<Props> = props => {
   const queryResults = useMastermindDatingCohortByIdQuery({
     variables: {
       id: props.cohort_id,
@@ -48,4 +47,4 @@ MastermindCohortPage.getInitialProps = async ({ query }) => {
   };
 };
 
-export default withApollo(MastermindCohortPage);
+export default withApollo(withStaff(MastermindCohortPage));

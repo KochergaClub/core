@@ -2,8 +2,7 @@ import styled from 'styled-components';
 
 import { A, Column } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { NextApolloPage } from '~/apollo/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 import { requireAuth } from '~/auth/utils';
 
 import { ApolloQueryResults, Page } from '~/components';

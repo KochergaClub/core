@@ -2,10 +2,8 @@ import Link from 'next/link';
 
 import { A, Column } from '@kocherga/frontkit';
 
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
-import { NextPage } from '~/common/types';
 import { Page, ApolloQueryResults } from '~/components';
 
 import {
@@ -35,7 +33,7 @@ const MemberList = ({
   </Column>
 );
 
-const StaffIndexPage: NextPage = () => {
+const StaffIndexPage: NextApolloPage = () => {
   const queryResults = useStaffMembersQuery();
 
   return (

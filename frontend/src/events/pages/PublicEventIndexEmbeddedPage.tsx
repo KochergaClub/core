@@ -1,11 +1,10 @@
-import { withApollo } from '~/apollo/client';
-import { NextPage } from '~/common/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
 import UpcomingEventsListBlock from '~/events/components/UpcomingEventsListBlock';
 
-const PublicEventIndexPage: NextPage = () => {
+const PublicEventIndexPage: NextApolloPage = () => {
   return (
     <Page title="Расписание мероприятий - iframe" chrome="none" noVkWidget>
       <UpcomingEventsListBlock />

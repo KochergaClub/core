@@ -1,6 +1,4 @@
-import { NextPage } from '~/common/types';
-import { withApollo } from '~/apollo/client';
-import { withStaff } from '~/apollo/withStaff';
+import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page, ApolloQueryResults } from '~/components';
 
@@ -12,7 +10,7 @@ interface Props {
   id: string;
 }
 
-const StaffMemberPage: NextPage<Props> = ({ id }) => {
+const StaffMemberPage: NextApolloPage<Props> = ({ id }) => {
   const queryResults = useStaffMemberQuery({ variables: { id } });
 
   const title = queryResults.loading
