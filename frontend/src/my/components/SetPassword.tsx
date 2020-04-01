@@ -63,6 +63,7 @@ const SetPassword: React.FC = () => {
           <Input
             type="password"
             id="old_password"
+            autoComplete="new-password"
             value={oldPassword}
             onChange={e => setOldPassword(e.currentTarget.value)}
           />
@@ -72,6 +73,7 @@ const SetPassword: React.FC = () => {
           <Input
             type="password"
             id="new_password"
+            autoComplete="new-password"
             value={newPassword}
             onChange={e => setNewPassword(e.currentTarget.value)}
           />
