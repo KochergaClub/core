@@ -84,15 +84,22 @@ def create_mutations():
         if old_password:
             if not user.check_password(old_password):
                 return {
-                    'error': "Invalid `old_password`"
+                    'error': "Неверный старый пароль."
                 }
         else:
             if user.has_usable_password():
                 return {
-                    'error': "`old_password` is not set but user has a password"
+                    'error': "Старый пароль не указан, но у пользователя есть пароль."
                 }
 
-        validate_password(new_password)
+        try:
+            validate_password(new_password)
+        except django.core.exceptions.ValidationError as e:
+            return {
+                'ok': False,
+                'error': '\n'.join(e.messages),
+            }
+
         user.set_password(new_password)
         user.save()
 
