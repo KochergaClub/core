@@ -23,14 +23,6 @@ interface Props {
 
 const AuthForm: React.FC<Props> = props => {
   const notify = useNotification();
-  const [
-    loginMutation,
-    { loading: submittingWithPassword },
-  ] = useLoginMutation();
-  const [
-    sendMagicLinkMutation,
-    { loading: submittingWithoutPassword },
-  ] = useSendMagicLinkMutation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,6 +31,54 @@ const AuthForm: React.FC<Props> = props => {
   const [initialLoading, setInitialLoading] = useState(true);
 
   const [leaving, setLeaving] = useState(false);
+
+  const [loginMutation, { loading: submittingWithPassword }] = useLoginMutation(
+    {
+      variables: { email, password },
+      onCompleted: data => {
+        if (data.result.error) {
+          notify({
+            type: 'Error',
+            text: data.result.error,
+          });
+          return;
+        }
+
+        if (!data.result.user?.is_authenticated) {
+          notify({
+            type: 'Error',
+            text: 'Что-то пошло не так',
+          });
+          return;
+        }
+
+        setLeaving(true);
+        window.location.href = props.next;
+      },
+      onError: () => notify({ type: 'Error', text: 'Что-то пошло не так' }),
+    }
+  );
+
+  // passwordless login - send magic link and ask to click it
+  const [
+    sendMagicLinkMutation,
+    { loading: submittingWithoutPassword },
+  ] = useSendMagicLinkMutation({
+    variables: { email, next: props.next },
+    onCompleted: data => {
+      if (!data.result.ok) {
+        notify({
+          type: 'Error',
+          text: 'Что-то пошло не так',
+        });
+        return;
+      }
+
+      setLeaving(true);
+      window.location.href = '/login/check-your-email';
+    },
+    onError: () => notify({ type: 'Error', text: 'Что-то пошло не так' }),
+  });
 
   // enable inputs and buttons after first load
   useEffect(() => {
@@ -55,61 +95,11 @@ const AuthForm: React.FC<Props> = props => {
 
   const cb = useCallback(async () => {
     if (password) {
-      const { data } = await loginMutation({
-        variables: { email, password },
-      });
-
-      if (!data) {
-        notify({
-          type: 'Error',
-          text: 'Login failed',
-        });
-        return;
-      }
-
-      if (data.result.error) {
-        notify({
-          type: 'Error',
-          text: data.result.error,
-        });
-        return;
-      }
-
-      if (!data?.result.user?.is_authenticated) {
-        notify({
-          type: 'Error',
-          text: 'not authenticated',
-        });
-        return;
-      }
-
-      setLeaving(true);
-      window.location.href = props.next;
+      await loginMutation();
     } else {
-      // passwordless login - send magic link and ask to click it
-      const { data } = await sendMagicLinkMutation({
-        variables: { email, next: props.next },
-      });
-
-      if (!data || !data.result.ok) {
-        notify({
-          type: 'Error',
-          text: 'Failed for some reason',
-        });
-        return;
-      }
-
-      setLeaving(true);
-      window.location.href = '/login/check-your-email';
+      await sendMagicLinkMutation();
     }
-  }, [
-    loginMutation,
-    sendMagicLinkMutation,
-    notify,
-    email,
-    password,
-    props.next,
-  ]);
+  }, [password, loginMutation, sendMagicLinkMutation]);
 
   const acting = submittingWithoutPassword || submittingWithPassword || leaving;
 
