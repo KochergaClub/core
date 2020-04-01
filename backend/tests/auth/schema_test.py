@@ -220,7 +220,7 @@ class TestSetPassword:
             },
         )
         assert not res['authSetPassword']['ok']
-        assert res['authSetPassword']['error'] == '`old_password` is not set but user has a password'
+        assert res['authSetPassword']['error'] == 'Старый пароль не указан, но у пользователя есть пароль.'
 
     def test_success(self, client):
         user = get_user_model().objects.create_user(self.EMAIL)
