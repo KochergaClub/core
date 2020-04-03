@@ -313,6 +313,15 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventGenerateZoomLinkInput = {
+  event_id: Scalars['ID'],
+};
+
+export type EventGenerateZoomLinkResult = {
+   __typename?: 'EventGenerateZoomLinkResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventsAnnouncements = {
    __typename?: 'EventsAnnouncements',
   timepad?: Maybe<EventsTimepadAnnouncement>,
@@ -604,6 +613,7 @@ export type Mutation = {
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
   eventSetZoomLink: EventSetZoomLinkResult,
+  eventGenerateZoomLink: EventGenerateZoomLinkResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -752,6 +762,11 @@ export type MutationEventSetPricingTypeArgs = {
 
 export type MutationEventSetZoomLinkArgs = {
   input: EventSetZoomLinkInput
+};
+
+
+export type MutationEventGenerateZoomLinkArgs = {
+  input: EventGenerateZoomLinkInput
 };
 
 

@@ -92,3 +92,15 @@ def eventSetZoomLink(_, info, input):
     return {
         'ok': True
     }
+
+
+@Mutation.field('eventGenerateZoomLink')
+def eventGenerateZoomLink(_, info, input):
+    event_id = input['event_id']
+
+    event = models.Event.objects.get(uuid=event_id)
+    event.generate_zoom_link()
+
+    return {
+        'ok': True
+    }

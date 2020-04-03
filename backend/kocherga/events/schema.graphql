@@ -141,3 +141,15 @@ input EventSetZoomLinkInput {
 type EventSetZoomLinkResult {
   ok: Boolean
 }
+
+extend type Mutation {
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventGenerateZoomLinkResult! @staffonly
+}
+
+input EventGenerateZoomLinkInput {
+  event_id: ID!
+}
+
+type EventGenerateZoomLinkResult {
+  ok: Boolean
+}
