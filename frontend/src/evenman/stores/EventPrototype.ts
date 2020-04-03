@@ -43,6 +43,7 @@ class PrototypeInstances {
     this.prototype_id = prototype_id;
   }
 
+  @action
   async load() {
     this.state = 'loading';
 
@@ -186,12 +187,6 @@ export default class EventPrototype extends EventShape {
   @action
   async setActive(active: boolean) {
     await this._patch({ active });
-  }
-
-  @computed
-  get upcomingCount() {
-    const upTo = moment().add(7, 'day');
-    return this.suggested.filter(m => m.isSameOrBefore(upTo)).length;
   }
 
   @action

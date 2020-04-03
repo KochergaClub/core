@@ -313,6 +313,23 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventPrototypeUpdateInput = {
+  id: Scalars['ID'],
+  title?: Maybe<Scalars['String']>,
+  location?: Maybe<Scalars['String']>,
+  active?: Maybe<Scalars['Boolean']>,
+  weekday?: Maybe<Scalars['Int']>,
+  hour?: Maybe<Scalars['Int']>,
+  minute?: Maybe<Scalars['Int']>,
+  length?: Maybe<Scalars['Int']>,
+  project_slug?: Maybe<Scalars['String']>,
+};
+
+export type EventPrototypeUpdateResult = {
+   __typename?: 'EventPrototypeUpdateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventsAnnouncements = {
    __typename?: 'EventsAnnouncements',
   timepad?: Maybe<EventsTimepadAnnouncement>,
@@ -373,6 +390,26 @@ export type EventsListBlock = WagtailBlock & {
    __typename?: 'EventsListBlock',
   id: Scalars['ID'],
   events: Array<EventsPublicEvent>,
+};
+
+export type EventsPrototype = {
+   __typename?: 'EventsPrototype',
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  location: Scalars['String'],
+  active: Scalars['Boolean'],
+  weekday: Scalars['Int'],
+  hour: Scalars['Int'],
+  minute: Scalars['Int'],
+  length: Scalars['Int'],
+  suggested_dates: Array<Scalars['String']>,
+  project?: Maybe<ProjectPage>,
+};
+
+
+export type EventsPrototypeSuggested_DatesArgs = {
+  until_ts?: Maybe<Scalars['Int']>,
+  limit: Scalars['Int']
 };
 
 export type EventsPublicEvent = {
@@ -604,6 +641,7 @@ export type Mutation = {
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
   eventSetZoomLink: EventSetZoomLinkResult,
+  eventPrototypeUpdate: EventPrototypeUpdateResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -752,6 +790,11 @@ export type MutationEventSetPricingTypeArgs = {
 
 export type MutationEventSetZoomLinkArgs = {
   input: EventSetZoomLinkInput
+};
+
+
+export type MutationEventPrototypeUpdateArgs = {
+  input: EventPrototypeUpdateInput
 };
 
 
@@ -1046,6 +1089,8 @@ export type Query = {
   analyticsBovStats: Array<AnalyticsBovStat>,
   events: EventsEventConnection,
   event?: Maybe<EventsEvent>,
+  eventsPrototype: EventsPrototype,
+  eventsPrototypes: Array<EventsPrototype>,
   publicEvents: EventsPublicEventConnection,
   publicEvent: EventsPublicEvent,
   staffMembersAll: Array<StaffMember>,
@@ -1056,6 +1101,7 @@ export type Query = {
   ratioTrainingEmailPrototype: Scalars['String'],
   mastermindDatingCohorts: Array<MastermindDatingCohort>,
   mastermindDatingCohortById: MastermindDatingCohort,
+  projects: Array<ProjectPage>,
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
@@ -1143,6 +1189,11 @@ export type QueryEventsArgs = {
 
 export type QueryEventArgs = {
   event_id: Scalars['ID']
+};
+
+
+export type QueryEventsPrototypeArgs = {
+  id: Scalars['ID']
 };
 
 

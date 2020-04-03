@@ -178,10 +178,10 @@ export default class EventPrototypeAdd extends React.Component<Props, {}> {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Button onClick={this.openModal}>Создать прототип</Button>
         {this.renderModal()}
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -300,6 +300,7 @@ class Event(models.Model):
         assert not self.deleted
         assert self.realm == 'online'
         self.zoom_link = link
+        self.full_clean()
         self.save()
 
 

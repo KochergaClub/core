@@ -1,0 +1,73 @@
+fragment EventsPrototype on EventsPrototype {
+  id
+  title
+  location
+  active
+  weekday
+  hour
+  minute
+  length
+  project {
+    meta {
+      slug
+    }
+  }
+}
+
+fragment EventsPrototype_Summary on EventsPrototype {
+  id
+  title
+  active
+  weekday
+  hour
+  minute
+  suggested_dates(until_ts: $suggested_until_ts, limit: 10)
+}
+
+query EvenmanPrototypes($suggested_until_ts: Int!) {
+  prototypes: eventsPrototypes {
+    ...EventsPrototype_Summary
+  }
+}
+
+query EvenmanPrototype($id: ID!) {
+  prototype: eventsPrototype(id: $id) {
+    ...EventsPrototype
+  }
+}
+
+mutation EvenmanPrototypeSetTitle($id: ID!, $title: String!) {
+  result: eventPrototypeUpdate(input: {
+      id: $id,
+      title: $title
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeSetLocation($id: ID!, $location: String!) {
+  result: eventPrototypeUpdate(input: {
+      id: $id,
+      location: $location
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeSetActive($id: ID!, $active: Boolean!) {
+  result: eventPrototypeUpdate(input: {
+      id: $id,
+      active: $active
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeSetProject($id: ID!, $project_slug: String!) {
+  result: eventPrototypeUpdate(input: {
+      id: $id,
+      project_slug: $project_slug
+    }) {
+    ok
+  }
+}

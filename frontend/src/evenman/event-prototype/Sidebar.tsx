@@ -29,7 +29,7 @@ const Sidebar: React.FC<Props> = ({ selected_id }) => {
   return (
     <Container>
       <LoadingOverlay progress={store.state === 'fetching'}>
-        <EventPrototypeList selectedId={selected_id} />
+        <EventPrototypeList selectedId={String(selected_id)} />
       </LoadingOverlay>
       <div style={{ textAlign: 'center' }}>
         <EventPrototypeAdd store={store} />

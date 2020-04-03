@@ -1,44 +1,43 @@
-import { observer } from 'mobx-react-lite';
-import React from 'react';
+import { getUnixTime, addWeeks } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
-import { useRootStore } from '../common';
+import { ApolloQueryResults } from '~/components';
 
+import { useEvenmanPrototypesQuery } from './queries.generated';
 import PrototypeNavList from './PrototypeNavList';
 
 interface Props {
-  selectedId?: number;
+  selectedId?: string;
 }
 
-const EventPrototypeList = observer((props: Props) => {
-  const store = useRootStore()!.eventPrototypeStore;
+const EventPrototypeList = (props: Props) => {
+  const queryResults = useEvenmanPrototypesQuery({
+    variables: {
+      suggested_until_ts: getUnixTime(addWeeks(new Date(), 1)),
+    },
+  });
 
-  switch (store.state) {
-    case 'empty':
-      store.loadAll();
-    case 'fetching':
-      return <div>loading...</div>;
-    case 'full':
-      return (
+  return (
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { prototypes } }) => (
         <div>
           <Column gutter={10} stretch>
             <PrototypeNavList
               title="Активные"
-              items={store.list.filter(p => p.active)}
+              items={prototypes.filter(p => p.active)}
               selectedId={props.selectedId}
             />
             <PrototypeNavList
               title="Неактивные"
-              items={store.list.filter(p => !p.active)}
+              items={prototypes.filter(p => !p.active)}
               selectedId={props.selectedId}
             />
           </Column>
         </div>
-      );
-    default:
-      return <span>{'wat? ' + store.state}</span>;
-  }
-});
+      )}
+    </ApolloQueryResults>
+  );
+};
 
 export default EventPrototypeList;

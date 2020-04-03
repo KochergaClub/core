@@ -20,6 +20,16 @@ def resolve_event(self, info, event_id):
     return event
 
 
+@Query.field('eventsPrototype')
+def resolve_eventsPrototype(self, info, id):
+    return models.EventPrototype.objects.get(pk=id)
+
+
+@Query.field('eventsPrototypes')
+def resolve_eventsPrototypes(self, info):
+    return models.EventPrototype.objects.order_by('weekday').all()
+
+
 @Query.field('publicEvents')
 def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
     qs = models.Event.objects.public_events(

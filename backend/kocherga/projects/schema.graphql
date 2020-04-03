@@ -19,3 +19,7 @@ type ProjectPage implements WagtailPage {
 
   image(spec: String!): WagtailImage!
 }
+
+extend type Query {
+  projects: [ProjectPage!]!
+}

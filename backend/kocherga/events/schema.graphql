@@ -1,9 +1,6 @@
 extend type Query {
   events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
   event(event_id: ID!): EventsEvent @staffonly
-
-  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
-  publicEvent(event_id: ID!): EventsPublicEvent!
 }
 
 type EventsEventConnection {
@@ -29,6 +26,29 @@ type EventsTicket {
   id: ID!
   status: String!
   user: AuthUser!
+}
+
+extend type Query {
+  eventsPrototype(id: ID!): EventsPrototype! @staffonly
+  eventsPrototypes: [EventsPrototype!]! @staffonly
+}
+
+type EventsPrototype {
+  id: ID!
+  title: String!
+  location: String!
+  active: Boolean!
+  weekday: Int!
+  hour: Int!
+  minute: Int!
+  length: Int!
+  suggested_dates(until_ts: Int, limit: Int!): [String!]!
+  project: ProjectPage
+}
+
+extend type Query {
+  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvent(event_id: ID!): EventsPublicEvent!
 }
 
 type EventsPublicEventConnection {
@@ -139,5 +159,25 @@ input EventSetZoomLinkInput {
 }
 
 type EventSetZoomLinkResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventPrototypeUpdate(input: EventPrototypeUpdateInput!): EventPrototypeUpdateResult! @staffonly
+}
+
+input EventPrototypeUpdateInput {
+  id: ID!
+  title: String
+  location: String
+  active: Boolean
+  weekday: Int
+  hour: Int
+  minute: Int
+  length: Int
+  project_slug: String
+}
+
+type EventPrototypeUpdateResult {
   ok: Boolean
 }

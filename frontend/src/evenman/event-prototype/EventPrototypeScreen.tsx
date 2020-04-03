@@ -17,19 +17,9 @@ interface Props {
 const EventPrototypeScreen: React.FC<Props> = observer(({ selected_id }) => {
   const store = useEventPrototypeStore();
 
-  const selected = useMemo(() => {
-    if (!selected_id) {
-      return;
-    }
-    if (store.state === 'empty') {
-      store.loadAll();
-    }
-    return store.getById(selected_id);
-  }, [store, selected_id]);
-
   const renderCard = () => {
-    if (selected) {
-      return <EventPrototypeCard prototype={selected} />;
+    if (selected_id) {
+      return <EventPrototypeCard prototype_id={String(selected_id)} />;
     }
 
     return (

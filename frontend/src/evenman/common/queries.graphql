@@ -1,0 +1,7 @@
+query EvenmanProjectsList {
+  projects {
+    meta {
+      slug
+    }
+  }
+}

@@ -1,6 +1,7 @@
 from ariadne import MutationType
 from django.contrib.auth import get_user_model
 
+import kocherga.projects.models
 from .. import models
 
 Mutation = MutationType()
@@ -72,8 +73,8 @@ def eventSetPricingType(_, info, input):
     event = models.Event.objects.get(uuid=event_id)
     assert not event.deleted
 
-    assert pricing_type in ('anticafe', 'free')
     event.pricing_type = pricing_type
+    event.full_clean()
     event.save()
 
     return {
@@ -88,6 +89,25 @@ def eventSetZoomLink(_, info, input):
 
     event = models.Event.objects.get(uuid=event_id)
     event.set_zoom_link(zoom_link)
+
+    return {
+        'ok': True
+    }
+
+
+@Mutation.field('eventPrototypeUpdate')
+def eventPrototypeUpdate(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+
+    for field in ('title', 'location', 'active', 'weekday', 'hour', 'minute'):
+        if field in input:
+            setattr(prototype, field, input[field])
+
+    if 'project_slug' in input:
+        prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(slug=input['project_slug'])
+
+    prototype.full_clean()
+    prototype.save()
 
     return {
         'ok': True

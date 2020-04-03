@@ -92,7 +92,10 @@ export default class EventCard extends React.Component<Props, {}> {
 
               <section>
                 <Header>Проект</Header>
-                <EventShapeProjectLink event={event} />
+                <EventShapeProjectLink
+                  selected={event.project_slug}
+                  select={project => event.setProjectSlug(project)}
+                />
               </section>
 
               <section>

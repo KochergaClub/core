@@ -6,11 +6,11 @@ import { NavList, NavListItem } from '../components/NavList';
 import { NumberBadge, MutedSpan } from '../components/ui';
 import { Row } from '@kocherga/frontkit';
 
-import EventPrototype from '../stores/EventPrototype';
+import { EventsPrototype_SummaryFragment } from './queries.generated';
 
 interface Props {
-  items: EventPrototype[];
-  selectedId?: number;
+  items: EventsPrototype_SummaryFragment[];
+  selectedId?: string;
   title: string;
 }
 
@@ -18,22 +18,24 @@ const weekdayLetterCodes = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'В�
 const padToTwoDigits = (value: number) =>
   value < 10 ? `0${value}` : `${value}`;
 
-const TimeInfo = observer(({ prototype }: { prototype: EventPrototype }) => (
-  <span>
-    <b>{weekdayLetterCodes[prototype.weekday]}</b>{' '}
-    <MutedSpan>
-      {padToTwoDigits(prototype.hour)}:{padToTwoDigits(prototype.minute)}
-    </MutedSpan>
-  </span>
-));
+const TimeInfo = observer(
+  ({ prototype }: { prototype: EventsPrototype_SummaryFragment }) => (
+    <span>
+      <b>{weekdayLetterCodes[prototype.weekday]}</b>{' '}
+      <MutedSpan>
+        {padToTwoDigits(prototype.hour)}:{padToTwoDigits(prototype.minute)}
+      </MutedSpan>
+    </span>
+  )
+);
 
 const PrototypeItem = observer(
-  ({ prototype }: { prototype: EventPrototype }) => (
+  ({ prototype }: { prototype: EventsPrototype_SummaryFragment }) => (
     <div>
       <Row spaced>
         {prototype.title}
-        {Boolean(prototype.upcomingCount) && (
-          <NumberBadge>{prototype.upcomingCount}</NumberBadge>
+        {Boolean(prototype.suggested_dates.length) && (
+          <NumberBadge>{prototype.suggested_dates.length}</NumberBadge>
         )}
       </Row>
       <TimeInfo prototype={prototype} />

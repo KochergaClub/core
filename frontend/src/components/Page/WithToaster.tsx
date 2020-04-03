@@ -102,10 +102,10 @@ const WithToaster: React.FC = ({ children }) => {
 
   return (
     <ToasterContext.Provider value={dispatch}>
-      <div>
+      <>
         {children}
         <ToastList toasts={state} />
-      </div>
+      </>
     </ToasterContext.Provider>
   );
 };
