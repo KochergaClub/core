@@ -29,12 +29,12 @@ def job_wrapper(func):
 def main():
     scheduler = BlockingScheduler(timezone=django.utils.timezone.get_current_timezone())
 
-#    scheduler.add_job(
-#        func=job_wrapper(VkAnnouncement.objects.update_widget),
-#        trigger='interval',
-#        name='update_vk_widget',
-#        minutes=1,
-#    )
+    scheduler.add_job(
+        func=job_wrapper(VkAnnouncement.objects.update_widget),
+        trigger='interval',
+        name='update_vk_widget',
+        minutes=1,
+    )
 
     scheduler.add_job(
         func=job_wrapper(kocherga.vk.tools.update_cover),
