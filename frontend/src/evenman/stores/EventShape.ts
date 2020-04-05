@@ -10,9 +10,9 @@ export default abstract class EventShape {
   @observable title = '';
 
   @observable location?: string;
-  @observable summary?: string;
-  @observable description?: string;
-  @observable timing_description_override?: string;
+  @observable summary = '';
+  @observable description = '';
+  @observable timing_description_override = '';
   @observable project_slug?: string;
 
   @observable tags: string[] = [];

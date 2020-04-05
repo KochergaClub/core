@@ -2,25 +2,23 @@ import Toggle from 'react-toggle';
 
 import { Row } from '@kocherga/frontkit';
 
-import {
-  EventsPrototypeFragment,
-  useEvenmanPrototypeSetActiveMutation,
-} from '../queries.generated';
+import { useUpdateMutation } from './hooks';
+import { EventsPrototypeFragment } from '../queries.generated';
 
 interface Props {
   prototype: EventsPrototypeFragment;
 }
 
 const ActiveStatus: React.FC<Props> = ({ prototype }) => {
-  const [setActive] = useEvenmanPrototypeSetActiveMutation();
+  const update = useUpdateMutation(prototype.id);
 
   return (
     <Row gutter={4}>
       <Toggle
         checked={prototype.active}
         onChange={e =>
-          setActive({
-            variables: { id: prototype.id, active: e.target.checked },
+          update({
+            active: e.target.checked,
           })
         }
       />

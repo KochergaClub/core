@@ -18,6 +18,8 @@ type EventsEvent {
   title: String!
   start: String!
 
+  visitors: String @staffonly
+
   # all EventsEvent are staff-only, but this can change in the future
   tickets: [EventsTicket!]! @staffonly
 }
@@ -36,7 +38,10 @@ extend type Query {
 type EventsPrototype {
   id: ID!
   title: String!
+  summary: String!
+  description: String!
   location: String!
+  timing_description_override: String!
   active: Boolean!
   weekday: Int!
   hour: Int!
@@ -44,6 +49,8 @@ type EventsPrototype {
   length: Int!
   suggested_dates(until_ts: Int, limit: Int!): [String!]!
   project: ProjectPage
+  instances(limit: Int): [EventsEvent!]! @staffonly
+  tags: [String!]!
 }
 
 extend type Query {
@@ -169,6 +176,9 @@ extend type Mutation {
 input EventPrototypeUpdateInput {
   id: ID!
   title: String
+  summary: String
+  description: String
+  timing_description_override: String
   location: String
   active: Boolean
   weekday: Int
@@ -180,4 +190,59 @@ input EventPrototypeUpdateInput {
 
 type EventPrototypeUpdateResult {
   ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeCancelDate(input: EventPrototypeCancelDateInput!): EventPrototypeCancelDateResult! @staffonly
+}
+
+input EventPrototypeCancelDateInput {
+  id: ID!
+  date: String!
+}
+
+type EventPrototypeCancelDateResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventPrototypeNewEvent(input: EventPrototypeNewEventInput!): EventPrototypeNewEventResult! @staffonly
+}
+
+input EventPrototypeNewEventInput {
+  id: ID!
+  ts: Int!
+}
+
+type EventPrototypeNewEventResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventPrototypeAddTag(input: EventPrototypeAddTagInput!): EventPrototypeAddTagResult! @staffonly
+}
+
+input EventPrototypeAddTagInput {
+  id: ID!
+  tag: String!
+}
+
+type EventPrototypeAddTagResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeDeleteTag(input: EventPrototypeDeleteTagInput!): EventPrototypeDeleteTagResult! @staffonly
+}
+
+input EventPrototypeDeleteTagInput {
+  id: ID!
+  tag: String!
+}
+
+type EventPrototypeDeleteTagResult {
+  ok: Boolean
+  prototype: EventsPrototype!
 }

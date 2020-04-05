@@ -1,5 +1,3 @@
-import { observer } from 'mobx-react-lite';
-
 import { Column, Row, Label } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
@@ -17,10 +15,12 @@ import EditableString from '../../components/EditableString';
 
 import {
   useEvenmanPrototypeQuery,
-  useEvenmanPrototypeSetTitleMutation,
-  useEvenmanPrototypeSetLocationMutation,
   useEvenmanPrototypeSetProjectMutation,
+  useEvenmanPrototypeAddTagMutation,
+  useEvenmanPrototypeDeleteTagMutation,
 } from '../queries.generated';
+
+import { useUpdateMutation, getCacheUpdater } from './hooks';
 
 import ExistingEvents from './ExistingEvents';
 import ActiveStatus from './ActiveStatus';
@@ -32,16 +32,24 @@ interface Props {
   prototype_id: string;
 }
 
-const EventPrototypeCard: React.FC<Props> = observer(({ prototype_id }) => {
+const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
   const queryResults = useEvenmanPrototypeQuery({
     variables: {
       id: prototype_id,
     },
   });
 
-  const [setTitle] = useEvenmanPrototypeSetTitleMutation();
-  const [setLocation] = useEvenmanPrototypeSetLocationMutation();
-  const [setProjectMutation] = useEvenmanPrototypeSetProjectMutation();
+  const [setProject] = useEvenmanPrototypeSetProjectMutation({
+    refetchQueries: ['EvenmanPrototype'],
+  });
+  const update = useUpdateMutation(prototype_id);
+
+  const [addTag] = useEvenmanPrototypeAddTagMutation({
+    update: getCacheUpdater(prototype_id),
+  });
+  const [deleteTag] = useEvenmanPrototypeDeleteTagMutation({
+    update: getCacheUpdater(prototype_id),
+  });
 
   return (
     <ApolloQueryResults {...queryResults}>
@@ -52,18 +60,14 @@ const EventPrototypeCard: React.FC<Props> = observer(({ prototype_id }) => {
               <EditableString
                 value={prototype.title}
                 renderValue={() => <b>{prototype.title}</b>}
-                save={v =>
-                  setTitle({ variables: { id: prototype_id, title: v } })
-                }
+                save={v => update({ title: v })}
               />
               <ActiveStatus prototype={prototype} />
             </Row>
             <EditableString
               value={prototype.location}
               renderValue={() => prototype.location}
-              save={v =>
-                setLocation({ variables: { id: prototype_id, location: v } })
-              }
+              save={v => update({ location: v })}
             />
           </CardHeader>
           <CardBody>
@@ -73,7 +77,7 @@ const EventPrototypeCard: React.FC<Props> = observer(({ prototype_id }) => {
                 <EventShapeProjectLink
                   selected={prototype.project?.meta.slug}
                   select={async slug => {
-                    await setProjectMutation({
+                    await setProject({
                       variables: {
                         id: prototype_id,
                         project_slug: slug,
@@ -82,33 +86,58 @@ const EventPrototypeCard: React.FC<Props> = observer(({ prototype_id }) => {
                   }}
                 />
               </section>
-
-              {/*
               <section>
                 <Header>Расписание</Header>
                 <Schedule prototype={prototype} />
               </section>
 
               <SuggestedEvents prototype={prototype} />
-
               <section>
                 <Header>Существующие мероприятия</Header>
                 <ExistingEvents prototype={prototype} />
               </section>
 
               <section>
-                <EventShapeDescription event={prototype} />
+                <EventShapeDescription
+                  summary={prototype.summary}
+                  description={prototype.description}
+                  setSummary={value => update({ summary: value })}
+                  setDescription={value =>
+                    update({
+                      description: value,
+                    })
+                  }
+                />
               </section>
 
               <section>
                 <Header>Описание расписания</Header>
-                <EventShapeTimingDescription event={prototype} />
+                <EventShapeTimingDescription
+                  value={prototype.timing_description_override}
+                  setValue={value =>
+                    update({
+                      timing_description_override: value,
+                    })
+                  }
+                />
               </section>
 
               <section>
                 <Header>Теги</Header>
-                <EventShapeTags event={prototype} />
+                <EventShapeTags
+                  tags={prototype.tags}
+                  addTag={tag =>
+                    addTag({ variables: { id: prototype_id, tag } })
+                  }
+                  deleteTag={tag =>
+                    deleteTag({ variables: { id: prototype_id, tag } })
+                  }
+                />
               </section>
+
+              {/*
+
+
 
               <section>
                 <Header>Картинки</Header>
@@ -144,6 +173,6 @@ const EventPrototypeCard: React.FC<Props> = observer(({ prototype_id }) => {
       )}
     </ApolloQueryResults>
   );
-});
+};
 
 export default EventPrototypeCard;

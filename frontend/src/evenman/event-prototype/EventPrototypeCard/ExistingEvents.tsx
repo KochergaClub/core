@@ -1,15 +1,13 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-
 import styled from 'styled-components';
 
-import moment from 'moment';
+import { parseISO, isBefore } from 'date-fns';
 
 import { A } from '@kocherga/frontkit';
 
+import { formatDate } from '~/common/utils';
 import { MutedSpan } from '../../components/ui';
 
-import EventPrototype from '../../stores/EventPrototype';
+import { EventsPrototypeFragment } from '../queries.generated';
 
 const EventsTable = styled.table`
   width: 100%;
@@ -32,20 +30,15 @@ const EventsTableRow = styled('tr')<{ past: boolean }>`
 `;
 
 interface Props {
-  prototype: EventPrototype;
+  prototype: EventsPrototypeFragment;
 }
 
-const ExistingEvents: React.FC<Props> = observer(({ prototype }) => {
+const ExistingEvents: React.FC<Props> = ({ prototype }) => {
   const instances = prototype.instances;
-
-  if (instances.state === 'not_loaded') {
-    instances.load();
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
-      {instances.items.length ? (
+      {instances.length ? (
         <EventsTable>
           <tbody>
             <tr>
@@ -53,14 +46,14 @@ const ExistingEvents: React.FC<Props> = observer(({ prototype }) => {
               <th>Название</th>
               <th>Посетителей</th>
             </tr>
-            {instances.items.map(e => (
+            {instances.map(e => (
               <EventsTableRow
-                key={e.id}
-                past={e.startMoment.isBefore(moment())}
+                key={e.event_id}
+                past={isBefore(parseISO(e.start), new Date())}
               >
-                <td>{e.startMoment.format('D MMMM')} </td>
+                <td>{formatDate(parseISO(e.start), 'd MMMM')} </td>
                 <td>
-                  <A href={`/team/evenman/event/${e.id}`}>{e.title}</A>
+                  <A href={`/team/evenman/event/${e.event_id}`}>{e.title}</A>
                 </td>
                 <td>{e.visitors}</td>
               </EventsTableRow>
@@ -72,6 +65,6 @@ const ExistingEvents: React.FC<Props> = observer(({ prototype }) => {
       )}
     </div>
   );
-});
+};
 
 export default ExistingEvents;

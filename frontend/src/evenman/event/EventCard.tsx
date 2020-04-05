@@ -99,17 +99,29 @@ export default class EventCard extends React.Component<Props, {}> {
               </section>
 
               <section>
-                <EventShapeDescription event={event} />
+                <EventShapeDescription
+                  summary={event.summary}
+                  description={event.description}
+                  setSummary={v => event.setSummary(v)}
+                  setDescription={v => event.setDescription(v)}
+                />
               </section>
 
               <section>
                 <Header>Описание расписания</Header>
-                <EventShapeTimingDescription event={event} />
+                <EventShapeTimingDescription
+                  value={event.timing_description_override}
+                  setValue={value => event.setTimingDescriptionOverride(value)}
+                />
               </section>
 
               <section>
                 <Header>Теги</Header>
-                <EventShapeTags event={event} />
+                <EventShapeTags
+                  tags={event.tags}
+                  addTag={value => event.addTag(value)}
+                  deleteTag={value => event.deleteTag(value)}
+                />
               </section>
 
               {event.isPublic && (

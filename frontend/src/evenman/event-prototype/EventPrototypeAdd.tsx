@@ -1,8 +1,8 @@
-import { observer } from 'mobx-react';
-import { action, observable } from 'mobx';
-import * as React from 'react';
+import { useState, useCallback, useMemo } from 'react';
 
 import { Button, Column, Modal, Input } from '@kocherga/frontkit';
+import { AsyncButton } from '~/components';
+import { useCommonHotkeys } from '~/common/hooks';
 import { ReactSelect } from '../components/ui';
 
 import EventPrototypeStore from '../stores/EventPrototypeStore';
@@ -11,93 +11,90 @@ interface Props {
   store: EventPrototypeStore;
 }
 
-@observer
-export default class EventPrototypeAdd extends React.Component<Props, {}> {
-  @observable isOpen = false;
+const EventPrototypeAdd: React.FC<Props> = ({ store }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [location, setLocation] = useState('');
+  const [weekday, setWeekday] = useState<number | undefined>(undefined);
+  const [hour, setHour] = useState<number | undefined>(undefined);
+  const [minute, setMinute] = useState<number | undefined>(undefined);
+  const [length, setLength] = useState<number | undefined>(undefined);
 
-  @observable title = '';
-  @observable location = '';
-  @observable weekday?: number;
-  @observable hour?: number;
-  @observable minute?: number;
-  @observable length?: number;
+  const openModal = useCallback(() => setIsOpen(true), []);
 
-  @action.bound
-  openModal() {
-    this.isOpen = true;
-  }
+  const closeModal = useCallback(() => setIsOpen(false), []);
 
-  @action.bound
-  closeModal() {
-    this.isOpen = false;
-  }
+  const canCreate = useMemo(
+    () =>
+      title &&
+      location &&
+      weekday !== undefined &&
+      hour !== undefined &&
+      minute !== undefined &&
+      length !== undefined,
+    [title, location, weekday, hour, minute, length]
+  );
 
-  @action.bound
-  toggleModal() {
-    this.isOpen = !this.isOpen;
-  }
-
-  canCreate() {
-    return (
-      this.title &&
-      this.location &&
-      this.weekday !== undefined &&
-      this.hour !== undefined &&
-      this.minute !== undefined &&
-      this.length !== undefined
-    );
-  }
-
-  @action.bound
-  async create() {
-    if (!this.canCreate()) {
+  const create = useCallback(async () => {
+    if (!canCreate) {
       return;
     }
-    await this.props.store.create({
-      title: this.title!,
-      location: this.location!,
-      weekday: this.weekday!,
-      hour: this.hour!,
-      minute: this.minute!,
-      length: this.length!,
+    await store.create({
+      title,
+      location,
+      weekday: weekday!,
+      hour: hour!,
+      minute: minute!,
+      length: length!,
       active: true,
       timepad_prepaid_tickets: false,
     });
+    closeModal();
+  }, [
+    store,
+    closeModal,
+    canCreate,
+    title,
+    location,
+    weekday,
+    hour,
+    minute,
+    length,
+  ]);
 
-    this.closeModal();
-  }
+  const updateTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.currentTarget.value);
+  }, []);
 
-  @action.bound
-  updateTitle(e: React.ChangeEvent<HTMLInputElement>) {
-    this.title = e.currentTarget.value;
-  }
+  const updateLocation = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setLocation(e.currentTarget.value);
+    },
+    []
+  );
 
-  @action.bound
-  updateLocation(e: React.ChangeEvent<HTMLInputElement>) {
-    this.location = e.currentTarget.value;
-  }
+  const updateWeekday = useCallback((selectOption: any) => {
+    setWeekday(parseInt(selectOption.value as string, 10));
+  }, []);
 
-  @action.bound
-  updateWeekday(selectOption: any) {
-    this.weekday = parseInt(selectOption.value as string, 10);
-  }
+  const updateHour = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setHour(parseInt(e.currentTarget.value, 10));
+  }, []);
 
-  @action.bound
-  updateHour(e: React.ChangeEvent<HTMLInputElement>) {
-    this.hour = parseInt(e.currentTarget.value, 10);
-  }
+  const updateMinute = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setMinute(parseInt(e.currentTarget.value, 10));
+  }, []);
 
-  @action.bound
-  updateMinute(e: React.ChangeEvent<HTMLInputElement>) {
-    this.minute = parseInt(e.currentTarget.value, 10);
-  }
+  const updateLength = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setLength(parseInt(e.currentTarget.value, 10));
+  }, []);
 
-  @action.bound
-  updateLength(e: React.ChangeEvent<HTMLInputElement>) {
-    this.length = parseInt(e.currentTarget.value, 10);
-  }
+  const hotkeys = useCommonHotkeys({
+    onEscape: closeModal,
+    onEnter: create,
+  });
 
-  renderModal() {
+  const renderModal = () => {
     const weekdays = [
       'Понедельник',
       'Вторник',
@@ -108,26 +105,26 @@ export default class EventPrototypeAdd extends React.Component<Props, {}> {
       'Воскресенье',
     ];
 
-    if (!this.isOpen) {
+    if (!isOpen) {
       return null;
     }
 
     return (
       <Modal>
-        <Modal.Header toggle={this.toggleModal}>Создать прототип</Modal.Header>
-        <Modal.Body>
+        <Modal.Header toggle={closeModal}>Создать прототип</Modal.Header>
+        <Modal.Body {...hotkeys}>
           <Column stretch>
             <Input
               type="text"
               placeholder="Название"
-              value={this.title}
-              onChange={this.updateTitle}
+              value={title}
+              onChange={updateTitle}
             />
             <Input
               type="text"
               placeholder="Комната"
-              value={this.location}
-              onChange={this.updateLocation}
+              value={location}
+              onChange={updateLocation}
             />
             <ReactSelect
               placeholder="День недели"
@@ -136,52 +133,47 @@ export default class EventPrototypeAdd extends React.Component<Props, {}> {
                 label: weekdays[n],
               }))}
               value={
-                this.weekday === undefined
+                weekday === undefined
                   ? null
-                  : { value: this.weekday, label: weekdays[this.weekday] }
+                  : { value: weekday, label: weekdays[weekday] }
               }
-              onChange={(option: any) => this.updateWeekday(option)}
+              onChange={updateWeekday}
             />
             <Input
               type="number"
               placeholder="Час"
-              value={this.hour}
-              onChange={this.updateHour}
+              value={hour}
+              onChange={updateHour}
             />
             <Input
               type="number"
               placeholder="Минута"
-              value={this.minute}
-              onChange={this.updateMinute}
+              value={minute}
+              onChange={updateMinute}
             />
             <Input
               type="number"
               placeholder="Продолжительность (в минутах)"
-              value={this.length}
-              onChange={this.updateLength}
+              value={length}
+              onChange={updateLength}
             />
           </Column>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            onClick={this.create}
-            loading={this.props.store.creating}
-            disabled={!this.canCreate()}
-            primary
-          >
+          <AsyncButton act={create} disabled={!canCreate} kind="primary">
             Создать
-          </Button>
+          </AsyncButton>
         </Modal.Footer>
       </Modal>
     );
-  }
+  };
 
-  render() {
-    return (
-      <>
-        <Button onClick={this.openModal}>Создать прототип</Button>
-        {this.renderModal()}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Button onClick={openModal}>Создать прототип</Button>
+      {renderModal()}
+    </>
+  );
+};
+
+export default EventPrototypeAdd;

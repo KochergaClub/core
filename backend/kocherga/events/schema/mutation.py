@@ -1,6 +1,11 @@
+import logging
+logger = logging.getLogger(__name__)
+
+from datetime import datetime
 from ariadne import MutationType
 from django.contrib.auth import get_user_model
 
+from kocherga.dateutils import TZ
 import kocherga.projects.models
 from .. import models
 
@@ -98,17 +103,82 @@ def eventSetZoomLink(_, info, input):
 @Mutation.field('eventPrototypeUpdate')
 def eventPrototypeUpdate(_, info, input):
     prototype = models.EventPrototype.objects.get(pk=input['id'])
+    logger.debug(input)
 
-    for field in ('title', 'location', 'active', 'weekday', 'hour', 'minute'):
+    for field in (
+            'title',
+            'summary',
+            'description',
+            'location',
+            'timing_description_override',
+            'active',
+            'weekday',
+            'hour',
+            'minute'
+    ):
         if field in input:
             setattr(prototype, field, input[field])
 
     if 'project_slug' in input:
-        prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(slug=input['project_slug'])
+        if not input['project_slug']:
+            prototype.project = None
+        else:
+            prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(slug=input['project_slug'])
 
     prototype.full_clean()
     prototype.save()
 
     return {
+        'ok': True,
+        'prototype': prototype,
+    }
+
+
+@Mutation.field('eventPrototypeCancelDate')
+def eventPrototypeCancelDate(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+    date_str = input['date']
+    prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
+    prototype.save()
+
+    return {
         'ok': True
+    }
+
+
+@Mutation.field('eventPrototypeNewEvent')
+def eventPrototypeNewEvent(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+
+    ts = input['ts']
+
+    dt = datetime.fromtimestamp(ts, TZ)
+    event = prototype.new_event(dt)
+
+    return {
+        'ok': True
+    }
+
+
+@Mutation.field('eventPrototypeAddTag')
+def eventPrototypeAddTag(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+
+    prototype.add_tag(input['tag'])
+
+    return {
+        'ok': True,
+        'prototype': prototype,
+    }
+
+
+@Mutation.field('eventPrototypeDeleteTag')
+def eventPrototypeDeleteTag(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+
+    prototype.delete_tag(input['tag'])
+
+    return {
+        'ok': True,
+        'prototype': prototype,
     }

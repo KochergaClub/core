@@ -1,43 +1,80 @@
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
+import { parseISO, getUnixTime } from 'date-fns';
 
-import { Button, Row } from '@kocherga/frontkit';
+import { Row } from '@kocherga/frontkit';
+
+import { formatDate } from '~/common/utils';
+import { AsyncButton } from '~/components';
 
 import { Header, MutedSpan } from '../../components/ui';
 
-import EventPrototype from '../../stores/EventPrototype';
+import {
+  useEvenmanPrototypeCancelDateMutation,
+  useEvenmanPrototypeNewEventMutation,
+  EventsPrototypeFragment,
+} from '../queries.generated';
 
 interface Props {
-  prototype: EventPrototype;
+  prototype: EventsPrototypeFragment;
 }
 
-const SuggestedEvents: React.FC<Props> = observer(({ prototype }) => {
+const SuggestedEvents: React.FC<Props> = ({ prototype }) => {
+  const [cancelDate] = useEvenmanPrototypeCancelDateMutation({
+    refetchQueries: ['EvenmanPrototype'],
+  });
+  const [newEvent] = useEvenmanPrototypeNewEventMutation({
+    refetchQueries: ['EvenmanPrototype'],
+  });
+
   if (!prototype.active) {
     return null;
   }
-  const m = prototype.suggested[0];
+
+  const d = parseISO(prototype.suggested_dates[0]);
   return (
     <section>
       <Header>Будущие мероприятия</Header>
       <table>
         <tbody>
-          <tr key={m.format('D MMMM')}>
+          <tr>
             <td>
-              {m.format('D MMMM')}{' '}
+              {formatDate(d, 'd MMMM')}{' '}
+              {/*
               <MutedSpan>
                 {' ('}
                 {m.fromNow()}
                 {') '}
               </MutedSpan>
+      */}
             </td>
             <td>
               <Row>
-                <Button small primary onClick={() => prototype.newEvent(m)}>
+                <AsyncButton
+                  small
+                  kind="primary"
+                  act={() =>
+                    newEvent({
+                      variables: {
+                        id: prototype.id,
+                        ts: getUnixTime(d),
+                      },
+                    })
+                  }
+                >
                   Создать
-                </Button>
-                <Button small onClick={() => prototype.cancelDate(m)}>
+                </AsyncButton>
+                <AsyncButton
+                  small
+                  act={() =>
+                    cancelDate({
+                      variables: {
+                        id: prototype.id,
+                        date: formatDate(d, 'yyyy-MM-dd'),
+                      },
+                    })
+                  }
+                >
                   Отменить
-                </Button>
+                </AsyncButton>
               </Row>
             </td>
           </tr>
@@ -45,6 +82,6 @@ const SuggestedEvents: React.FC<Props> = observer(({ prototype }) => {
       </table>
     </section>
   );
-});
+};
 
 export default SuggestedEvents;

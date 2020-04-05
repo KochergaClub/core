@@ -1,16 +1,27 @@
 fragment EventsPrototype on EventsPrototype {
   id
   title
+  summary
+  description
   location
+  timing_description_override
   active
   weekday
   hour
   minute
   length
+  tags
   project {
     meta {
       slug
     }
+  }
+  suggested_dates(limit: 5)
+  instances {
+    event_id
+    start
+    title
+    visitors
   }
 }
 
@@ -36,38 +47,79 @@ query EvenmanPrototype($id: ID!) {
   }
 }
 
-mutation EvenmanPrototypeSetTitle($id: ID!, $title: String!) {
+mutation EvenmanPrototypeUpdate(
+  $id: ID!,
+  $active: Boolean,
+  $title: String,
+  $summary: String,
+  $description: String,
+  $location: String,
+  $timing_description_override: String
+) {
   result: eventPrototypeUpdate(input: {
       id: $id,
-      title: $title
+      active: $active,
+      title: $title,
+      summary: $summary,
+      description: $description,
+      location: $location,
+      timing_description_override: $timing_description_override
     }) {
     ok
+    prototype {
+      ...EventsPrototype
+    }
   }
 }
 
-mutation EvenmanPrototypeSetLocation($id: ID!, $location: String!) {
-  result: eventPrototypeUpdate(input: {
-      id: $id,
-      location: $location
-    }) {
-    ok
-  }
-}
-
-mutation EvenmanPrototypeSetActive($id: ID!, $active: Boolean!) {
-  result: eventPrototypeUpdate(input: {
-      id: $id,
-      active: $active
-    }) {
-    ok
-  }
-}
-
+# deprecated, use EvenmanPrototypeUpdate
 mutation EvenmanPrototypeSetProject($id: ID!, $project_slug: String!) {
   result: eventPrototypeUpdate(input: {
       id: $id,
       project_slug: $project_slug
     }) {
     ok
+  }
+}
+
+mutation EvenmanPrototypeCancelDate($id: ID!, $date: String!) {
+  result: eventPrototypeCancelDate(input: {
+      id: $id,
+      date: $date
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeNewEvent($id: ID!, $ts: Int!) {
+  result: eventPrototypeNewEvent(input: {
+      id: $id
+      ts: $ts
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeAddTag($id: ID!, $tag: String!) {
+  result: eventPrototypeAddTag(input: {
+      id: $id
+      tag: $tag
+    }) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
+  }
+}
+
+mutation EvenmanPrototypeDeleteTag($id: ID!, $tag: String!) {
+  result: eventPrototypeDeleteTag(input: {
+      id: $id
+      tag: $tag
+    }) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
   }
 }

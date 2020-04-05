@@ -70,6 +70,7 @@ profiles:
           setFiles:
             config.main_py: ops/values/core/dev/main.py
             config.secrets_py: ops/secrets/core/dev/secrets.py
+    statusCheckDeadlineSeconds: 600
 - name: prod
   activation:
     - command: run

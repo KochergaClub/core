@@ -313,9 +313,54 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventPrototypeAddTagInput = {
+  id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
+export type EventPrototypeAddTagResult = {
+   __typename?: 'EventPrototypeAddTagResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventPrototypeCancelDateInput = {
+  id: Scalars['ID'],
+  date: Scalars['String'],
+};
+
+export type EventPrototypeCancelDateResult = {
+   __typename?: 'EventPrototypeCancelDateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventPrototypeDeleteTagInput = {
+  id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
+export type EventPrototypeDeleteTagResult = {
+   __typename?: 'EventPrototypeDeleteTagResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventPrototypeNewEventInput = {
+  id: Scalars['ID'],
+  ts: Scalars['Int'],
+};
+
+export type EventPrototypeNewEventResult = {
+   __typename?: 'EventPrototypeNewEventResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventPrototypeUpdateInput = {
   id: Scalars['ID'],
   title?: Maybe<Scalars['String']>,
+  summary?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  timing_description_override?: Maybe<Scalars['String']>,
   location?: Maybe<Scalars['String']>,
   active?: Maybe<Scalars['Boolean']>,
   weekday?: Maybe<Scalars['Int']>,
@@ -328,6 +373,7 @@ export type EventPrototypeUpdateInput = {
 export type EventPrototypeUpdateResult = {
    __typename?: 'EventPrototypeUpdateResult',
   ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
 };
 
 export type EventsAnnouncements = {
@@ -370,6 +416,7 @@ export type EventsEvent = {
   event_id: Scalars['ID'],
   title: Scalars['String'],
   start: Scalars['String'],
+  visitors?: Maybe<Scalars['String']>,
   /** all EventsEvent are staff-only, but this can change in the future */
   tickets: Array<EventsTicket>,
 };
@@ -396,7 +443,10 @@ export type EventsPrototype = {
    __typename?: 'EventsPrototype',
   id: Scalars['ID'],
   title: Scalars['String'],
+  summary: Scalars['String'],
+  description: Scalars['String'],
   location: Scalars['String'],
+  timing_description_override: Scalars['String'],
   active: Scalars['Boolean'],
   weekday: Scalars['Int'],
   hour: Scalars['Int'],
@@ -404,12 +454,19 @@ export type EventsPrototype = {
   length: Scalars['Int'],
   suggested_dates: Array<Scalars['String']>,
   project?: Maybe<ProjectPage>,
+  instances: Array<EventsEvent>,
+  tags: Array<Scalars['String']>,
 };
 
 
 export type EventsPrototypeSuggested_DatesArgs = {
   until_ts?: Maybe<Scalars['Int']>,
   limit: Scalars['Int']
+};
+
+
+export type EventsPrototypeInstancesArgs = {
+  limit?: Maybe<Scalars['Int']>
 };
 
 export type EventsPublicEvent = {
@@ -642,6 +699,10 @@ export type Mutation = {
   eventSetPricingType: EventSetPricingTypeResult,
   eventSetZoomLink: EventSetZoomLinkResult,
   eventPrototypeUpdate: EventPrototypeUpdateResult,
+  eventPrototypeCancelDate: EventPrototypeCancelDateResult,
+  eventPrototypeNewEvent: EventPrototypeNewEventResult,
+  eventPrototypeAddTag: EventPrototypeAddTagResult,
+  eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -795,6 +856,26 @@ export type MutationEventSetZoomLinkArgs = {
 
 export type MutationEventPrototypeUpdateArgs = {
   input: EventPrototypeUpdateInput
+};
+
+
+export type MutationEventPrototypeCancelDateArgs = {
+  input: EventPrototypeCancelDateInput
+};
+
+
+export type MutationEventPrototypeNewEventArgs = {
+  input: EventPrototypeNewEventInput
+};
+
+
+export type MutationEventPrototypeAddTagArgs = {
+  input: EventPrototypeAddTagInput
+};
+
+
+export type MutationEventPrototypeDeleteTagArgs = {
+  input: EventPrototypeDeleteTagInput
 };
 
 
