@@ -2,6 +2,8 @@
   directive @staffonly on FIELD_DEFINITION
   directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
 
+  scalar Upload
+
   type Query {
     rooms: [Room]!
     my: My!
@@ -480,10 +482,11 @@ type EventsPrototype {
   hour: Int!
   minute: Int!
   length: Int!
-  suggested_dates(until_ts: Int, limit: Int!): [String!]!
   project: ProjectPage
-  instances(limit: Int): [EventsEvent!]! @staffonly
   tags: [String!]!
+  image(spec: String!): WagtailImage
+  suggested_dates(until_ts: Int, limit: Int!): [String!]!
+  instances(limit: Int): [EventsEvent!]! @staffonly
 }
 
 extend type Query {
@@ -676,6 +679,20 @@ input EventPrototypeDeleteTagInput {
 }
 
 type EventPrototypeDeleteTagResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeUploadImage(input: EventPrototypeUploadImageInput!): EventPrototypeUploadImageResult! @staffonly
+}
+
+input EventPrototypeUploadImageInput {
+  id: ID!
+  image_file: Upload!
+}
+
+type EventPrototypeUploadImageResult {
   ok: Boolean
   prototype: EventsPrototype!
 }

@@ -6,6 +6,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  Upload: any,
 };
 
 
@@ -376,6 +377,17 @@ export type EventPrototypeUpdateResult = {
   prototype: EventsPrototype,
 };
 
+export type EventPrototypeUploadImageInput = {
+  id: Scalars['ID'],
+  image_file: Scalars['Upload'],
+};
+
+export type EventPrototypeUploadImageResult = {
+   __typename?: 'EventPrototypeUploadImageResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
 export type EventsAnnouncements = {
    __typename?: 'EventsAnnouncements',
   timepad?: Maybe<EventsTimepadAnnouncement>,
@@ -452,10 +464,16 @@ export type EventsPrototype = {
   hour: Scalars['Int'],
   minute: Scalars['Int'],
   length: Scalars['Int'],
-  suggested_dates: Array<Scalars['String']>,
   project?: Maybe<ProjectPage>,
-  instances: Array<EventsEvent>,
   tags: Array<Scalars['String']>,
+  image?: Maybe<WagtailImage>,
+  suggested_dates: Array<Scalars['String']>,
+  instances: Array<EventsEvent>,
+};
+
+
+export type EventsPrototypeImageArgs = {
+  spec: Scalars['String']
 };
 
 
@@ -703,6 +721,7 @@ export type Mutation = {
   eventPrototypeNewEvent: EventPrototypeNewEventResult,
   eventPrototypeAddTag: EventPrototypeAddTagResult,
   eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
+  eventPrototypeUploadImage: EventPrototypeUploadImageResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -876,6 +895,11 @@ export type MutationEventPrototypeAddTagArgs = {
 
 export type MutationEventPrototypeDeleteTagArgs = {
   input: EventPrototypeDeleteTagInput
+};
+
+
+export type MutationEventPrototypeUploadImageArgs = {
+  input: EventPrototypeUploadImageInput
 };
 
 
@@ -1554,6 +1578,7 @@ export type TildaPage = {
   path: Scalars['String'],
   html_url: Scalars['String'],
 };
+
 
 export type WagtailBlock = {
   id: Scalars['ID'],

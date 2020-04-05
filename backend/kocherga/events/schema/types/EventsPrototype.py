@@ -7,8 +7,8 @@ from ...import models
 
 EventsPrototype = DjangoObjectType('EventsPrototype', models.EventPrototype)
 
-
 EventsPrototype.set_alias('id', 'prototype_id')
+EventsPrototype.image_field('image')
 
 
 @EventsPrototype.field('suggested_dates')

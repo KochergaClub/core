@@ -182,3 +182,14 @@ def eventPrototypeDeleteTag(_, info, input):
         'ok': True,
         'prototype': prototype,
     }
+
+
+@Mutation.field('eventPrototypeUploadImage')
+def eventPrototypeUploadImage(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+    logger.info(input)
+
+    return {
+        'ok': True,
+        'prototype': prototype,
+    }

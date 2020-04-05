@@ -7,7 +7,7 @@ from importlib import import_module
 import django.apps
 from django.utils.module_loading import module_has_submodule
 
-from ariadne import make_executable_schema, QueryType, gql
+from ariadne import make_executable_schema, upload_scalar, QueryType, gql
 from ariadne.load_schema import read_graphql_file
 
 import kocherga.room
@@ -18,6 +18,8 @@ from . import directives
 core_type_defs = gql("""
   directive @staffonly on FIELD_DEFINITION
   directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
+
+  scalar Upload
 
   type Query {
     rooms: [Room]!
@@ -93,6 +95,7 @@ def load_all_types():
 
 schema = make_executable_schema(
     load_all_typedefs(),
+    upload_scalar,
     *load_all_types(),
     directives={
         "staffonly": directives.StaffOnlyDirective,

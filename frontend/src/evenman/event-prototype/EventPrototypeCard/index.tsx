@@ -135,14 +135,14 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 />
               </section>
 
-              {/*
-
-
-
               <section>
                 <Header>Картинки</Header>
                 <Image prototype={prototype} />
               </section>
+
+              {/*
+
+
 
               <section>
                 <Header>Timepad</Header>
