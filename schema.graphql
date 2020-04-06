@@ -697,6 +697,18 @@ type EventPrototypeUploadImageResult {
   prototype: EventsPrototype!
 }
 
+extend type Mutation {
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventGenerateZoomLinkResult! @staffonly
+}
+
+input EventGenerateZoomLinkInput {
+  event_id: ID!
+}
+
+type EventGenerateZoomLinkResult {
+  ok: Boolean
+}
+
 extend type Query {
   staffMembersAll: [StaffMember!]! @staffonly
   staffMember(id: ID!): StaffMember! @staffonly

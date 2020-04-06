@@ -160,6 +160,18 @@ def eventPrototypeNewEvent(_, info, input):
     }
 
 
+@Mutation.field('eventGenerateZoomLink')
+def eventGenerateZoomLink(_, info, input):
+    event_id = input['event_id']
+
+    event = models.Event.objects.get(uuid=event_id)
+    event.generate_zoom_link()
+
+    return {
+        'ok': True
+    }
+
+
 @Mutation.field('eventPrototypeAddTag')
 def eventPrototypeAddTag(_, info, input):
     prototype = models.EventPrototype.objects.get(pk=input['id'])

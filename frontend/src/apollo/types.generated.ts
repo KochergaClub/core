@@ -314,6 +314,15 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventGenerateZoomLinkInput = {
+  event_id: Scalars['ID'],
+};
+
+export type EventGenerateZoomLinkResult = {
+   __typename?: 'EventGenerateZoomLinkResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type EventPrototypeAddTagInput = {
   id: Scalars['ID'],
   tag: Scalars['String'],
@@ -722,6 +731,7 @@ export type Mutation = {
   eventPrototypeAddTag: EventPrototypeAddTagResult,
   eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
   eventPrototypeUploadImage: EventPrototypeUploadImageResult,
+  eventGenerateZoomLink: EventGenerateZoomLinkResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -900,6 +910,11 @@ export type MutationEventPrototypeDeleteTagArgs = {
 
 export type MutationEventPrototypeUploadImageArgs = {
   input: EventPrototypeUploadImageInput
+};
+
+
+export type MutationEventGenerateZoomLinkArgs = {
+  input: EventGenerateZoomLinkInput
 };
 
 

@@ -18,6 +18,7 @@ from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 from kocherga.django.managers import RelayQuerySetMixin
 
 import kocherga.room
+import kocherga.zoom
 
 import kocherga.events.markup
 from kocherga.events.helpers import create_image_from_fh
@@ -302,6 +303,16 @@ class Event(models.Model):
         self.zoom_link = link
         self.full_clean()
         self.save()
+
+    def generate_zoom_link(self):
+        assert not self.deleted
+        assert self.realm == 'online'
+        zoom_link = kocherga.zoom.schedule_meeting(
+            topic = self.title + ' | Кочерга',
+            start_dt = self.start,
+            duration = int((self.end - self.start).total_seconds() / 60),
+        )
+        self.set_zoom_link(zoom_link)
 
 
 class Tag(models.Model):

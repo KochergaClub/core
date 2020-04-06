@@ -261,3 +261,15 @@ type EventPrototypeUploadImageResult {
   ok: Boolean
   prototype: EventsPrototype!
 }
+
+extend type Mutation {
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventGenerateZoomLinkResult! @staffonly
+}
+
+input EventGenerateZoomLinkInput {
+  event_id: ID!
+}
+
+type EventGenerateZoomLinkResult {
+  ok: Boolean
+}

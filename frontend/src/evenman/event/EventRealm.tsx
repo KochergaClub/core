@@ -3,6 +3,8 @@ import { observer } from 'mobx-react-lite';
 
 import { colors, Row, Column } from '@kocherga/frontkit';
 
+import { AsyncButton } from '~/components';
+
 import { Event } from '../stores/Event';
 import EditableString from '../components/EditableString';
 import EditableLink from '../components/EditableLink';
@@ -10,6 +12,7 @@ import EditableLink from '../components/EditableLink';
 import {
   useEvenmanSetRealmMutation,
   useEvenmanSetZoomLinkMutation,
+  useEvenmanGenerateZoomLinkMutation,
 } from './queries.generated';
 
 interface Props {
@@ -17,10 +20,14 @@ interface Props {
 }
 
 const RealmDetails: React.FC<Props> = observer(({ event }) => {
-  const [
-    setZoomLinkMutation,
-    { loading: mutating },
-  ] = useEvenmanSetZoomLinkMutation({
+  const [setZoomLinkMutation] = useEvenmanSetZoomLinkMutation({
+    onCompleted: async () => {
+      await event.reload();
+    },
+  });
+
+  const [generateZoomLinkMutation] = useEvenmanGenerateZoomLinkMutation({
+    variables: { id: event.id },
     onCompleted: async () => {
       await event.reload();
     },
@@ -40,13 +47,18 @@ const RealmDetails: React.FC<Props> = observer(({ event }) => {
       );
     case 'online':
       return (
-        <EditableLink
-          value={event.zoom_link}
-          title="Zoom"
-          save={v =>
-            setZoomLinkMutation({ variables: { id: event.id, link: v } })
-          }
-        />
+        <Row>
+          <EditableLink
+            value={event.zoom_link}
+            title="Zoom"
+            save={v =>
+              setZoomLinkMutation({ variables: { id: event.id, link: v } })
+            }
+          />
+          <AsyncButton act={generateZoomLinkMutation} small>
+            Сгенерировать
+          </AsyncButton>
+        </Row>
       );
     default:
       return null;

@@ -68,3 +68,6 @@ MASTERMIND_BOT_CONFIG = {
     "token": "",
     "bot_link": "",
 }
+
+ZOOM_ANNOUNCER_USER_ID = ""
+ZOOM_JWT_TOKEN = ""

@@ -24,3 +24,11 @@ mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
     ok
   }
 }
+
+mutation EvenmanGenerateZoomLink($id: ID!) {
+  result: eventGenerateZoomLink(input: {
+      event_id: $id
+    }) {
+    ok
+  }
+}
