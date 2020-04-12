@@ -13,7 +13,8 @@ import { Button, Column, Row } from '@kocherga/frontkit';
 import { Header } from '../components/ui';
 
 import EventShapeTimepadCategories from '../common/EventShapeTimepadCategories';
-import EventShapeSocialGroups from '../common/EventShapeSocialGroups';
+import VkGroupPicker from '../common/VkGroupPicker';
+import FbGroupPicker from '../common/FbGroupPicker';
 
 const EditableOrElement = (
   props: { el: React.ReactNode } & EditableLinkProps
@@ -125,7 +126,10 @@ export default class EventAnnounce extends React.Component<Props> {
         </HeadedSection>
 
         <HeadedSection title="Facebook">
-          <EventShapeSocialGroups event={event} type="fb" />
+          <FbGroupPicker
+            value={event.getFbGroup || ''}
+            setValue={event.setFbGroup}
+          />
           {event.readyForAnnounceToFbMainPage && (
             <Button
               onClick={() => event.announceToFbMainPage()}
@@ -153,7 +157,10 @@ export default class EventAnnounce extends React.Component<Props> {
         </HeadedSection>
 
         <HeadedSection title="VK">
-          <EventShapeSocialGroups event={event} type="vk" />
+          <VkGroupPicker
+            value={event.getVkGroup || ''}
+            setValue={event.setVkGroup}
+          />
           <EditableOrElement
             title="ВКонтакте"
             value={event.getAnnounceLink('vk')}

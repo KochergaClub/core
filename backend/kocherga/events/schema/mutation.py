@@ -126,6 +126,12 @@ def eventPrototypeUpdate(_, info, input):
         else:
             prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(slug=input['project_slug'])
 
+    if 'vk_group_name' in input:
+        if not input['vk_group_name']:
+            prototype.vk_group = None
+        else:
+            prototype.vk_group = input['vk_group_name']
+
     prototype.full_clean()
     prototype.save()
 

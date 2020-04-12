@@ -389,6 +389,7 @@ export type EventPrototypeUpdateInput = {
   minute?: Maybe<Scalars['Int']>,
   length?: Maybe<Scalars['Int']>,
   project_slug?: Maybe<Scalars['String']>,
+  vk_group_name?: Maybe<Scalars['String']>,
 };
 
 export type EventPrototypeUpdateResult = {
@@ -478,6 +479,7 @@ export type EventsPrototype = {
   image?: Maybe<WagtailImage>,
   suggested_dates: Array<Scalars['String']>,
   instances: Array<EventsEvent>,
+  vk_group?: Maybe<VkGroup>,
 };
 
 
@@ -1211,6 +1213,7 @@ export type Query = {
   event?: Maybe<EventsEvent>,
   eventsPrototype: EventsPrototype,
   eventsPrototypes: Array<EventsPrototype>,
+  vkGroups: Array<VkGroup>,
   publicEvents: EventsPublicEventConnection,
   publicEvent: EventsPublicEvent,
   staffMembersAll: Array<StaffMember>,
@@ -1594,6 +1597,11 @@ export type TildaPage = {
   html_url: Scalars['String'],
 };
 
+
+export type VkGroup = {
+   __typename?: 'VkGroup',
+  name: Scalars['String'],
+};
 
 export type WagtailBlock = {
   id: Scalars['ID'],

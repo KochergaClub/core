@@ -218,12 +218,12 @@ export default class EventPrototype extends EventShape {
   }
 
   @action
-  async setVkGroup(value: string | null) {
+  async setVkGroup(value?: string) {
     this._patch({ vk_group: value });
   }
 
   @action
-  async setFbGroup(value: string | null) {
+  async setFbGroup(value?: string) {
     this._patch({ fb_group: value });
   }
 

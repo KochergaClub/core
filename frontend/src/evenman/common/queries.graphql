@@ -5,3 +5,9 @@ query EvenmanProjectsList {
     }
   }
 }
+
+query EvenmanVkGroups {
+  vkGroups {
+    name
+  }
+}

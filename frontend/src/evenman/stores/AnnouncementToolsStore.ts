@@ -58,33 +58,6 @@ export class AnnouncementToolsStore {
     );
   }
 
-  @computed
-  get projectSlugs(): IPromiseBasedObservable<string[]> {
-    return fromPromise(
-      this.api
-        .call('graphql', 'POST', {
-          query: `
-{
-  wagtailPage(path: "/projects") {
-    ...on ProjectIndexPage {
-      projects {
-        meta {
-          slug
-        }
-      }
-    }
-  }
-}
-`,
-        })
-        .then(json =>
-          json.data.wagtailPage.projects.map(
-            (project: any) => project.meta.slug as string
-          )
-        )
-    );
-  }
-
   @action
   async performCommand(command: AnnouncementCommand) {
     this.startCommand(command);

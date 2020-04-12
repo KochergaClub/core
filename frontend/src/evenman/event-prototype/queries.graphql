@@ -11,6 +11,9 @@ fragment EventsPrototype on EventsPrototype {
   minute
   length
   tags
+  vk_group {
+    name
+  }
   image(spec: "width-240") {
     url
   }
@@ -57,7 +60,8 @@ mutation EvenmanPrototypeUpdate(
   $summary: String,
   $description: String,
   $location: String,
-  $timing_description_override: String
+  $timing_description_override: String,
+  $vk_group_name: String
 ) {
   result: eventPrototypeUpdate(input: {
       id: $id,
@@ -66,7 +70,8 @@ mutation EvenmanPrototypeUpdate(
       summary: $summary,
       description: $description,
       location: $location,
-      timing_description_override: $timing_description_override
+      timing_description_override: $timing_description_override,
+      vk_group_name: $vk_group_name
     }) {
     ok
     prototype {

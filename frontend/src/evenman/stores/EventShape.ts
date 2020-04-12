@@ -34,8 +34,8 @@ export default abstract class EventShape {
   abstract get getTimepadPrepaidTickets(): boolean;
   abstract get getTimepadCategoryCode(): string | undefined;
 
-  abstract setFbGroup(value: string | null): void;
-  abstract setVkGroup(value: string | null): void;
+  abstract setFbGroup(value?: string): void;
+  abstract setVkGroup(value?: string): void;
   abstract setTimepadPrepaidTickets(prepaid: boolean): void;
   abstract setTimepadCategoryCode(code: string): void;
 

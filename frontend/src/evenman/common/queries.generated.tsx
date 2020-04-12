@@ -18,6 +18,17 @@ export type EvenmanProjectsListQuery = (
   )> }
 );
 
+export type EvenmanVkGroupsQueryVariables = {};
+
+
+export type EvenmanVkGroupsQuery = (
+  { __typename?: 'Query' }
+  & { vkGroups: Array<(
+    { __typename?: 'VkGroup' }
+    & Pick<Types.VkGroup, 'name'>
+  )> }
+);
+
 
 export const EvenmanProjectsListDocument = gql`
     query EvenmanProjectsList {
@@ -53,3 +64,35 @@ export function useEvenmanProjectsListLazyQuery(baseOptions?: ApolloReactHooks.L
 export type EvenmanProjectsListQueryHookResult = ReturnType<typeof useEvenmanProjectsListQuery>;
 export type EvenmanProjectsListLazyQueryHookResult = ReturnType<typeof useEvenmanProjectsListLazyQuery>;
 export type EvenmanProjectsListQueryResult = ApolloReactCommon.QueryResult<EvenmanProjectsListQuery, EvenmanProjectsListQueryVariables>;
+export const EvenmanVkGroupsDocument = gql`
+    query EvenmanVkGroups {
+  vkGroups {
+    name
+  }
+}
+    `;
+
+/**
+ * __useEvenmanVkGroupsQuery__
+ *
+ * To run a query within a React component, call `useEvenmanVkGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanVkGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEvenmanVkGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEvenmanVkGroupsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EvenmanVkGroupsQuery, EvenmanVkGroupsQueryVariables>) {
+        return ApolloReactHooks.useQuery<EvenmanVkGroupsQuery, EvenmanVkGroupsQueryVariables>(EvenmanVkGroupsDocument, baseOptions);
+      }
+export function useEvenmanVkGroupsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EvenmanVkGroupsQuery, EvenmanVkGroupsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<EvenmanVkGroupsQuery, EvenmanVkGroupsQueryVariables>(EvenmanVkGroupsDocument, baseOptions);
+        }
+export type EvenmanVkGroupsQueryHookResult = ReturnType<typeof useEvenmanVkGroupsQuery>;
+export type EvenmanVkGroupsLazyQueryHookResult = ReturnType<typeof useEvenmanVkGroupsLazyQuery>;
+export type EvenmanVkGroupsQueryResult = ApolloReactCommon.QueryResult<EvenmanVkGroupsQuery, EvenmanVkGroupsQueryVariables>;

@@ -8,7 +8,7 @@ import EventShapeDescription from '../../common/EventShapeDescription';
 import EventShapeTimingDescription from '../../common/EventShapeTimingDescription';
 import EventShapeTimepadCategories from '../../common/EventShapeTimepadCategories';
 import EventShapeTags from '../../common/EventShapeTags';
-import EventShapeSocialGroups from '../../common/EventShapeSocialGroups';
+import VkGroupPicker from '../../common/VkGroupPicker';
 import EventShapeProjectLink from '../../common/EventShapeProjectLink';
 
 import EditableString from '../../components/EditableString';
@@ -156,15 +156,18 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <EventShapeSocialGroups event={prototype} type="fb" />
               </section>
 
+                */}
               <section>
                 <Header>VK</Header>
                 <Label>
                   Страница для анонсов (выберите kocherga_club, чтобы
                   опубликовать на главную страницу).
                 </Label>
-                <EventShapeSocialGroups event={prototype} type="vk" />
+                <VkGroupPicker
+                  value={prototype.vk_group?.name || ''}
+                  setValue={v => update({ vk_group_name: v })}
+                />
               </section>
-                */}
             </Column>
           </CardBody>
         </Card>

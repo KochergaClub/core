@@ -26,3 +26,12 @@ def resolve_instances(obj, info, limit=None):
 @EventsPrototype.field('tags')
 def resolve_tags(obj, info):
     return obj.tag_names()
+
+
+@EventsPrototype.field('vk_group')
+def resolve_vk_group(obj, info):
+    if not obj.vk_group:
+        return None
+    return {
+        'name': obj.vk_group,  # might become foreign key some day
+    }

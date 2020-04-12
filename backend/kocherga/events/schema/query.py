@@ -46,3 +46,14 @@ def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
 def resolve_publicEvent(self, info, event_id):
     event = models.Event.objects.public_events().get(uuid=event_id)
     return event
+
+
+@Query.field('vkGroups')
+def resolve_vkGroups(self, info):
+    all_groups = models.VkAnnouncement.objects.all_groups()
+    return [
+        {
+            'name': name,
+        }
+        for name in all_groups
+    ]

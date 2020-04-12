@@ -52,6 +52,15 @@ type EventsPrototype {
   image(spec: String!): WagtailImage
   suggested_dates(until_ts: Int, limit: Int!): [String!]!
   instances(limit: Int): [EventsEvent!]! @staffonly
+  vk_group: VkGroup
+}
+
+extend type Query {
+  vkGroups: [VkGroup!]! @staffonly
+}
+
+type VkGroup {
+  name: String!
 }
 
 extend type Query {
@@ -187,6 +196,7 @@ input EventPrototypeUpdateInput {
   minute: Int
   length: Int
   project_slug: String
+  vk_group_name: String
 }
 
 type EventPrototypeUpdateResult {
