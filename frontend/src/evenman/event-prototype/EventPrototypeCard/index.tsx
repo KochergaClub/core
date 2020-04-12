@@ -142,8 +142,6 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
 
               {/*
 
-
-
               <section>
                 <Header>Timepad</Header>
                 <EventShapeTimepadCategories event={prototype} />

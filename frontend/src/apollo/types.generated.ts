@@ -365,6 +365,17 @@ export type EventPrototypeNewEventResult = {
   ok?: Maybe<Scalars['Boolean']>,
 };
 
+export type EventPrototypeSetImageInput = {
+  id: Scalars['ID'],
+  image_id: Scalars['ID'],
+};
+
+export type EventPrototypeSetImageResult = {
+   __typename?: 'EventPrototypeSetImageResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
 export type EventPrototypeUpdateInput = {
   id: Scalars['ID'],
   title?: Maybe<Scalars['String']>,
@@ -382,17 +393,6 @@ export type EventPrototypeUpdateInput = {
 
 export type EventPrototypeUpdateResult = {
    __typename?: 'EventPrototypeUpdateResult',
-  ok?: Maybe<Scalars['Boolean']>,
-  prototype: EventsPrototype,
-};
-
-export type EventPrototypeUploadImageInput = {
-  id: Scalars['ID'],
-  image_file: Scalars['Upload'],
-};
-
-export type EventPrototypeUploadImageResult = {
-   __typename?: 'EventPrototypeUploadImageResult',
   ok?: Maybe<Scalars['Boolean']>,
   prototype: EventsPrototype,
 };
@@ -730,7 +730,7 @@ export type Mutation = {
   eventPrototypeNewEvent: EventPrototypeNewEventResult,
   eventPrototypeAddTag: EventPrototypeAddTagResult,
   eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
-  eventPrototypeUploadImage: EventPrototypeUploadImageResult,
+  eventPrototypeSetImage: EventPrototypeSetImageResult,
   eventGenerateZoomLink: EventGenerateZoomLinkResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
@@ -908,8 +908,8 @@ export type MutationEventPrototypeDeleteTagArgs = {
 };
 
 
-export type MutationEventPrototypeUploadImageArgs = {
-  input: EventPrototypeUploadImageInput
+export type MutationEventPrototypeSetImageArgs = {
+  input: EventPrototypeSetImageInput
 };
 
 

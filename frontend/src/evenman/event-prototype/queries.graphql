@@ -11,7 +11,7 @@ fragment EventsPrototype on EventsPrototype {
   minute
   length
   tags
-  image(spec: "fill-200x200") {
+  image(spec: "width-240") {
     url
   }
   project {
@@ -127,10 +127,10 @@ mutation EvenmanPrototypeDeleteTag($id: ID!, $tag: String!) {
   }
 }
 
-mutation EvenmanPrototypeUploadImage($id: ID!, $image_file: Upload!) {
-  result: eventPrototypeUploadImage(input: {
+mutation EvenmanPrototypeSetImage($id: ID!, $image_id: ID!) {
+  result: eventPrototypeSetImage(input: {
       id: $id
-      image_file: $image_file
+      image_id: $image_id
     }) {
     ok
     prototype {

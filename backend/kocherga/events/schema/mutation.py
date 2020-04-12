@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 from datetime import datetime
 from ariadne import MutationType
 from django.contrib.auth import get_user_model
+import wagtail.images.models
 
 from kocherga.dateutils import TZ
 import kocherga.projects.models
@@ -196,10 +197,17 @@ def eventPrototypeDeleteTag(_, info, input):
     }
 
 
-@Mutation.field('eventPrototypeUploadImage')
-def eventPrototypeUploadImage(_, info, input):
+@Mutation.field('eventPrototypeSetImage')
+def eventPrototypeSetImage(_, info, input):
     prototype = models.EventPrototype.objects.get(pk=input['id'])
     logger.info(input)
+
+    image = wagtail.images.models.Image.objects.get(pk=input['image_id'])
+    # TODO - implement image view permission and check for it
+
+    prototype.image = image
+    prototype.full_clean()
+    prototype.save()
 
     return {
         'ok': True,

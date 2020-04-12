@@ -154,17 +154,17 @@ export type EvenmanPrototypeDeleteTagMutation = (
   ) }
 );
 
-export type EvenmanPrototypeUploadImageMutationVariables = {
+export type EvenmanPrototypeSetImageMutationVariables = {
   id: Types.Scalars['ID'],
-  image_file: Types.Scalars['Upload']
+  image_id: Types.Scalars['ID']
 };
 
 
-export type EvenmanPrototypeUploadImageMutation = (
+export type EvenmanPrototypeSetImageMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeUploadImageResult' }
-    & Pick<Types.EventPrototypeUploadImageResult, 'ok'>
+    { __typename?: 'EventPrototypeSetImageResult' }
+    & Pick<Types.EventPrototypeSetImageResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
       & EventsPrototypeFragment
@@ -186,7 +186,7 @@ export const EventsPrototypeFragmentDoc = gql`
   minute
   length
   tags
-  image(spec: "fill-200x200") {
+  image(spec: "width-240") {
     url
   }
   project {
@@ -492,9 +492,9 @@ export function useEvenmanPrototypeDeleteTagMutation(baseOptions?: ApolloReactHo
 export type EvenmanPrototypeDeleteTagMutationHookResult = ReturnType<typeof useEvenmanPrototypeDeleteTagMutation>;
 export type EvenmanPrototypeDeleteTagMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeDeleteTagMutation>;
 export type EvenmanPrototypeDeleteTagMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeDeleteTagMutation, EvenmanPrototypeDeleteTagMutationVariables>;
-export const EvenmanPrototypeUploadImageDocument = gql`
-    mutation EvenmanPrototypeUploadImage($id: ID!, $image_file: Upload!) {
-  result: eventPrototypeUploadImage(input: {id: $id, image_file: $image_file}) {
+export const EvenmanPrototypeSetImageDocument = gql`
+    mutation EvenmanPrototypeSetImage($id: ID!, $image_id: ID!) {
+  result: eventPrototypeSetImage(input: {id: $id, image_id: $image_id}) {
     ok
     prototype {
       ...EventsPrototype
@@ -502,29 +502,29 @@ export const EvenmanPrototypeUploadImageDocument = gql`
   }
 }
     ${EventsPrototypeFragmentDoc}`;
-export type EvenmanPrototypeUploadImageMutationFn = ApolloReactCommon.MutationFunction<EvenmanPrototypeUploadImageMutation, EvenmanPrototypeUploadImageMutationVariables>;
+export type EvenmanPrototypeSetImageMutationFn = ApolloReactCommon.MutationFunction<EvenmanPrototypeSetImageMutation, EvenmanPrototypeSetImageMutationVariables>;
 
 /**
- * __useEvenmanPrototypeUploadImageMutation__
+ * __useEvenmanPrototypeSetImageMutation__
  *
- * To run a mutation, you first call `useEvenmanPrototypeUploadImageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanPrototypeUploadImageMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useEvenmanPrototypeSetImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanPrototypeSetImageMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [evenmanPrototypeUploadImageMutation, { data, loading, error }] = useEvenmanPrototypeUploadImageMutation({
+ * const [evenmanPrototypeSetImageMutation, { data, loading, error }] = useEvenmanPrototypeSetImageMutation({
  *   variables: {
  *      id: // value for 'id'
- *      image_file: // value for 'image_file'
+ *      image_id: // value for 'image_id'
  *   },
  * });
  */
-export function useEvenmanPrototypeUploadImageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanPrototypeUploadImageMutation, EvenmanPrototypeUploadImageMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanPrototypeUploadImageMutation, EvenmanPrototypeUploadImageMutationVariables>(EvenmanPrototypeUploadImageDocument, baseOptions);
+export function useEvenmanPrototypeSetImageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanPrototypeSetImageMutation, EvenmanPrototypeSetImageMutationVariables>) {
+        return ApolloReactHooks.useMutation<EvenmanPrototypeSetImageMutation, EvenmanPrototypeSetImageMutationVariables>(EvenmanPrototypeSetImageDocument, baseOptions);
       }
-export type EvenmanPrototypeUploadImageMutationHookResult = ReturnType<typeof useEvenmanPrototypeUploadImageMutation>;
-export type EvenmanPrototypeUploadImageMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeUploadImageMutation>;
-export type EvenmanPrototypeUploadImageMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeUploadImageMutation, EvenmanPrototypeUploadImageMutationVariables>;
+export type EvenmanPrototypeSetImageMutationHookResult = ReturnType<typeof useEvenmanPrototypeSetImageMutation>;
+export type EvenmanPrototypeSetImageMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeSetImageMutation>;
+export type EvenmanPrototypeSetImageMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeSetImageMutation, EvenmanPrototypeSetImageMutationVariables>;
