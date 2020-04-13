@@ -41,6 +41,12 @@ pyshell:
 tail:
 	kubectl logs --context=dev -f -l app=core-django
 
+superuser:
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) -- ./manage.py createsuperuser --email=me@berekuk.ru
+
+proxy:
+	kubectl port-forward --context=dev svc/core-frontend 8000:80
+
 deploy_prod_secrets:
 	scp backend/kocherga/django/settings/prod_secrets.py kocherga.club:
 	ssh kocherga.club 'sudo mv prod_secrets.py /config/secrets.py && sudo chown root:root /config/secrets.py && sudo chmod 600 /config/secrets.py'
