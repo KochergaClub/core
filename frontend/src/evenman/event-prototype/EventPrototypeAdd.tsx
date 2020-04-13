@@ -8,7 +8,10 @@ import { ReactSelect } from '../components/ui';
 import { useEvenmanPrototypeCreateMutation } from './queries.generated';
 
 const EventPrototypeAdd: React.FC = () => {
-  const [createMutation] = useEvenmanPrototypeCreateMutation();
+  const [createMutation] = useEvenmanPrototypeCreateMutation({
+    refetchQueries: ['EvenmanPrototypes'],
+    awaitRefetchQueries: true,
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');

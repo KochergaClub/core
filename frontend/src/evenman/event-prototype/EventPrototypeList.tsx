@@ -1,4 +1,4 @@
-import { getUnixTime, addWeeks } from 'date-fns';
+import { getUnixTime, startOfToday, addWeeks } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
@@ -16,7 +16,7 @@ interface Props {
 const EventPrototypeList = (props: Props) => {
   const queryResults = useEvenmanPrototypesQuery({
     variables: {
-      suggested_until_ts: getUnixTime(addWeeks(new Date(), 1)),
+      suggested_until_ts: getUnixTime(addWeeks(startOfToday(), 1)),
     },
   });
 
