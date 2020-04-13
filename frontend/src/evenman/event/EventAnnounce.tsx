@@ -1,5 +1,4 @@
-import React from 'react';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 
 import Toggle from 'react-toggle';
 
@@ -78,100 +77,95 @@ interface Props {
   event: Event;
 }
 
-@observer
-export default class EventAnnounce extends React.Component<Props> {
-  render() {
-    const { event } = this.props;
+const EventAnnounce: React.FC<Props> = ({ event }) => {
+  if (!event.isPublic) return null;
 
-    if (!event.isPublic) return null;
+  const genSave = (target: EventAnnounceTarget) => {
+    return (value: string) => event.setAnnounceLink(target, value);
+  };
 
-    const genSave = (target: EventAnnounceTarget) => {
-      return (value: string) => event.setAnnounceLink(target, value);
-    };
+  return (
+    <Column stretch>
+      <HeadedSection title="Timepad">
+        <TimepadCategoryPicker
+          code={event.getTimepadCategoryCode}
+          setCode={code => event.setTimepadCategoryCode(code || '')}
+        />
+        <Row gutter={4}>
+          <Toggle
+            checked={event.announcements.timepad.prepaid_tickets}
+            onChange={() =>
+              event.setTimepadPrepaidTickets(
+                !event.announcements.timepad.prepaid_tickets
+              )
+            }
+          />
+          <div>Разрешить предоплату билетов</div>
+        </Row>
 
-    return (
-      <Column stretch>
-        <HeadedSection title="Timepad">
-          <TimepadCategoryPicker
-            code={event.getTimepadCategoryCode}
-            setCode={code => event.setTimepadCategoryCode(code || '')}
+        <Row gutter={4}>
+          <div>Нативная регистрация</div>
+          <Toggle
+            checked={event.registration_type === 'timepad'}
+            onChange={e =>
+              event.setRegistrationType(e.target.checked ? 'timepad' : 'native')
+            }
           />
-          <Row gutter={4}>
-            <Toggle
-              checked={event.announcements.timepad.prepaid_tickets}
-              onChange={() =>
-                event.setTimepadPrepaidTickets(
-                  !event.announcements.timepad.prepaid_tickets
-                )
-              }
-            />
-            <div>Разрешить предоплату билетов</div>
-          </Row>
+          <div>Регистрация через Timepad</div>
+        </Row>
+        <EditableOrElement
+          title="Timepad"
+          value={event.getAnnounceLink('timepad')}
+          save={genSave('timepad')}
+          el={<AnnounceLinkTimepad event={event} />}
+        />
+      </HeadedSection>
 
-          <Row gutter={4}>
-            <div>Нативная регистрация</div>
-            <Toggle
-              checked={event.registration_type === 'timepad'}
-              onChange={e =>
-                event.setRegistrationType(
-                  e.target.checked ? 'timepad' : 'native'
-                )
-              }
-            />
-            <div>Регистрация через Timepad</div>
-          </Row>
-          <EditableOrElement
-            title="Timepad"
-            value={event.getAnnounceLink('timepad')}
-            save={genSave('timepad')}
-            el={<AnnounceLinkTimepad event={event} />}
-          />
-        </HeadedSection>
+      <HeadedSection title="Facebook">
+        <FbGroupPicker
+          value={event.getFbGroup || ''}
+          setValue={event.setFbGroup}
+        />
+        {event.readyForAnnounceToFbMainPage && (
+          <Button
+            onClick={() => event.announceToFbMainPage()}
+            small
+            loading={event.isLoading}
+          >
+            добавить на главную страницу FB
+          </Button>
+        )}
+        {event.readyForSharingToFbMainPage && (
+          <Button
+            onClick={() => event.shareToFbMainPage()}
+            small
+            loading={event.isLoading}
+          >
+            пошарить на главную страницу FB
+          </Button>
+        )}
+        <EditableOrElement
+          title="Facebook"
+          value={event.getAnnounceLink('fb')}
+          save={genSave('fb')}
+          el={<AnnounceLinkFb event={event} />}
+        />
+      </HeadedSection>
 
-        <HeadedSection title="Facebook">
-          <FbGroupPicker
-            value={event.getFbGroup || ''}
-            setValue={event.setFbGroup}
-          />
-          {event.readyForAnnounceToFbMainPage && (
-            <Button
-              onClick={() => event.announceToFbMainPage()}
-              small
-              loading={event.isLoading}
-            >
-              добавить на главную страницу FB
-            </Button>
-          )}
-          {event.readyForSharingToFbMainPage && (
-            <Button
-              onClick={() => event.shareToFbMainPage()}
-              small
-              loading={event.isLoading}
-            >
-              пошарить на главную страницу FB
-            </Button>
-          )}
-          <EditableOrElement
-            title="Facebook"
-            value={event.getAnnounceLink('fb')}
-            save={genSave('fb')}
-            el={<AnnounceLinkFb event={event} />}
-          />
-        </HeadedSection>
+      <HeadedSection title="VK">
+        <VkGroupPicker
+          value={event.getVkGroup || ''}
+          setValue={event.setVkGroup}
+        />
+        <EditableOrElement
+          title="ВКонтакте"
+          value={event.getAnnounceLink('vk')}
+          save={genSave('vk')}
+          el={<AnnounceLinkVk event={event} />}
+        />
+      </HeadedSection>
+    </Column>
+  );
+};
 
-        <HeadedSection title="VK">
-          <VkGroupPicker
-            value={event.getVkGroup || ''}
-            setValue={event.setVkGroup}
-          />
-          <EditableOrElement
-            title="ВКонтакте"
-            value={event.getAnnounceLink('vk')}
-            save={genSave('vk')}
-            el={<AnnounceLinkVk event={event} />}
-          />
-        </HeadedSection>
-      </Column>
-    );
-  }
-}
+export default EventAnnounce;

@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { observer } from 'mobx-react-lite';
 
 import styled from 'styled-components';
 
@@ -7,7 +6,7 @@ import Router from 'next/router';
 
 import EventCalendarItem from '../EventCalendarItem';
 
-import { Event } from '../../stores/Event';
+import { EventsEvent_SummaryFragment } from '../queries.generated';
 
 const CalendarCellContainer = styled.div`
   height: 3em;
@@ -15,11 +14,11 @@ const CalendarCellContainer = styled.div`
 `;
 
 interface Props {
-  events: Event[];
+  events: EventsEvent_SummaryFragment[];
   selected_id?: string;
 }
 
-const CalendarCell: React.FC<Props> = observer(({ events, selected_id }) => {
+const CalendarCell: React.FC<Props> = ({ events, selected_id }) => {
   const selectCb = useCallback((id: string) => {
     Router.push('/team/evenman/event/[id]', `/team/evenman/event/${id}`);
   }, []);
@@ -28,14 +27,14 @@ const CalendarCell: React.FC<Props> = observer(({ events, selected_id }) => {
     <CalendarCellContainer>
       {events.map(event => (
         <EventCalendarItem
-          key={event.id}
+          key={event.event_id}
           event={event}
-          selected={event.id === selected_id}
+          selected={event.event_id === selected_id}
           onSelect={selectCb}
         />
       ))}
     </CalendarCellContainer>
   );
-});
+};
 
 export default CalendarCell;

@@ -414,9 +414,36 @@ export type EventPrototypeUpdateResult = {
   prototype: EventsPrototype,
 };
 
+export type EventsAnnouncementFb = {
+   __typename?: 'EventsAnnouncementFb',
+  link: Scalars['String'],
+};
+
 export type EventsAnnouncements = {
    __typename?: 'EventsAnnouncements',
-  timepad?: Maybe<EventsTimepadAnnouncement>,
+  timepad: EventsAnnouncementTimepad,
+  vk: EventsAnnouncementVk,
+  fb: EventsAnnouncementFb,
+};
+
+export type EventsAnnouncementTimepad = {
+   __typename?: 'EventsAnnouncementTimepad',
+  link: Scalars['String'],
+};
+
+export type EventsAnnouncementVk = {
+   __typename?: 'EventsAnnouncementVk',
+  link: Scalars['String'],
+};
+
+export type EventSetEventTypeInput = {
+  event_id: Scalars['ID'],
+  event_type: Scalars['String'],
+};
+
+export type EventSetEventTypeResult = {
+   __typename?: 'EventSetEventTypeResult',
+  ok?: Maybe<Scalars['Boolean']>,
 };
 
 export type EventSetPricingTypeInput = {
@@ -454,6 +481,9 @@ export type EventsEvent = {
   event_id: Scalars['ID'],
   title: Scalars['String'],
   start: Scalars['String'],
+  event_type: Scalars['String'],
+  published: Scalars['Boolean'],
+  announcements: EventsAnnouncements,
   visitors?: Maybe<Scalars['String']>,
   /** all EventsEvent are staff-only, but this can change in the future */
   tickets: Array<EventsTicket>,
@@ -469,6 +499,10 @@ export type EventsEventConnection = {
 export type EventsEventEdge = {
    __typename?: 'EventsEventEdge',
   node: EventsEvent,
+};
+
+export type EventsFilterInput = {
+  event_type?: Maybe<Scalars['String']>,
 };
 
 export type EventsListBlock = WagtailBlock & {
@@ -550,11 +584,6 @@ export type EventsTicket = {
   id: Scalars['ID'],
   status: Scalars['String'],
   user: AuthUser,
-};
-
-export type EventsTimepadAnnouncement = {
-   __typename?: 'EventsTimepadAnnouncement',
-  link: Scalars['String'],
 };
 
 export type FaqEntry = {
@@ -741,6 +770,7 @@ export type Mutation = {
   myEventsTicketUnregister: MyEventsTicket,
   myEventsTicketRegister: MyEventsTicket,
   myEventsTicketRegisterAnon: MyEventsTicket,
+  eventSetEventType: EventSetEventTypeResult,
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
   eventSetZoomLink: EventSetZoomLinkResult,
@@ -885,6 +915,11 @@ export type MutationMyEventsTicketRegisterArgs = {
 
 export type MutationMyEventsTicketRegisterAnonArgs = {
   input: MyEventsTicketRegisterAnonInput
+};
+
+
+export type MutationEventSetEventTypeArgs = {
+  input: EventSetEventTypeInput
 };
 
 
@@ -1327,6 +1362,7 @@ export type QueryCashierPaymentsArgs = {
 
 export type QueryEventsArgs = {
   search?: Maybe<Scalars['String']>,
+  filter?: Maybe<EventsFilterInput>,
   before?: Maybe<Scalars['String']>,
   after?: Maybe<Scalars['String']>,
   first?: Maybe<Scalars['Int']>,

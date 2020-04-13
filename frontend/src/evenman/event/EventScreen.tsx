@@ -1,13 +1,4 @@
-import { useMemo } from 'react';
-import { observer } from 'mobx-react-lite';
-import { fromPromise } from 'mobx-utils';
-
 import styled from 'styled-components';
-
-import { useListeningWebSocket } from '~/common/hooks';
-
-import { useRootStore } from '../common';
-import { EventFilter } from '../stores/EventFilter';
 
 import { EmptyCard } from '../components/Card';
 import EventCard from './EventCard';
@@ -21,41 +12,17 @@ const Container = styled.div`
   margin-top: 10px;
 `;
 
-const EventScreen: React.FC<Props> = observer(({ selected_id }) => {
-  const root = useRootStore();
-  const filter = useMemo(() => {
-    return new EventFilter(root.eventStore);
-  }, [root]);
-
-  useListeningWebSocket('ws/events/', () => {
-    root.eventStore.updateRange(filter.startDate, filter.endDate);
-  });
-
-  const event = useMemo(() => {
-    if (!selected_id) {
-      return undefined;
-    }
-    return fromPromise(root.eventStore.getEvent(selected_id));
-  }, [root, selected_id]);
-
-  const renderEventCard = () => {
-    if (!event) {
-      return <EmptyCard>Выберите событие</EmptyCard>;
-    }
-
-    return event.case({
-      pending: () => <EmptyCard>Загружается...</EmptyCard>,
-      rejected: () => <EmptyCard>Ошибка</EmptyCard>,
-      fulfilled: value => <EventCard event={value} />,
-    });
-  };
-
+const EventScreen: React.FC<Props> = ({ selected_id }) => {
   return (
     <Container>
-      <EventCalendar selected_id={selected_id} filter={filter} />
-      {renderEventCard()}
+      <EventCalendar selected_id={selected_id} />
+      {selected_id ? (
+        <EventCard id={selected_id} />
+      ) : (
+        <EmptyCard>Выберите событие</EmptyCard>
+      )}
     </Container>
   );
-});
+};
 
 export default EventScreen;

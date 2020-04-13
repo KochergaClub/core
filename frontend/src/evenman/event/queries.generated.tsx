@@ -4,6 +4,87 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
+export type EventsEvent_SummaryFragment = (
+  { __typename?: 'EventsEvent' }
+  & Pick<Types.EventsEvent, 'event_id' | 'title' | 'start' | 'published' | 'event_type'>
+  & { announcements: (
+    { __typename?: 'EventsAnnouncements' }
+    & { timepad: (
+      { __typename?: 'EventsAnnouncementTimepad' }
+      & Pick<Types.EventsAnnouncementTimepad, 'link'>
+    ), vk: (
+      { __typename?: 'EventsAnnouncementVk' }
+      & Pick<Types.EventsAnnouncementVk, 'link'>
+    ), fb: (
+      { __typename?: 'EventsAnnouncementFb' }
+      & Pick<Types.EventsAnnouncementFb, 'link'>
+    ) }
+  ) }
+);
+
+export type EvenmanEventsQueryVariables = {
+  start: Types.Scalars['String'],
+  end: Types.Scalars['String']
+};
+
+
+export type EvenmanEventsQuery = (
+  { __typename?: 'Query' }
+  & { events: (
+    { __typename?: 'EventsEventConnection' }
+    & { nodes: Array<(
+      { __typename?: 'EventsEvent' }
+      & EventsEvent_SummaryFragment
+    )> }
+  ) }
+);
+
+export type EvenmanUnknownEventFragment = (
+  { __typename?: 'EventsEvent' }
+  & Pick<Types.EventsEvent, 'event_id' | 'title'>
+);
+
+export type EvenmanUnknownEventsQueryVariables = {};
+
+
+export type EvenmanUnknownEventsQuery = (
+  { __typename?: 'Query' }
+  & { events: (
+    { __typename?: 'EventsEventConnection' }
+    & { nodes: Array<(
+      { __typename?: 'EventsEvent' }
+      & EvenmanUnknownEventFragment
+    )> }
+  ) }
+);
+
+export type EvenmanEventQueryVariables = {
+  id: Types.Scalars['ID']
+};
+
+
+export type EvenmanEventQuery = (
+  { __typename?: 'Query' }
+  & { event: Types.Maybe<(
+    { __typename?: 'EventsEvent' }
+    & EventsEvent_SummaryFragment
+  )> }
+);
+
+export type EvenmanSetEventTypeMutationVariables = {
+  id: Types.Scalars['ID'],
+  event_type: Types.Scalars['String']
+};
+
+
+export type EvenmanSetEventTypeMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'EventSetEventTypeResult' }
+    & Pick<Types.EventSetEventTypeResult, 'ok'>
+  ) }
+);
+
 export type EvenmanSetRealmMutationVariables = {
   id: Types.Scalars['ID'],
   realm: Types.Scalars['String']
@@ -59,7 +140,168 @@ export type EvenmanGenerateZoomLinkMutation = (
   ) }
 );
 
+export const EventsEvent_SummaryFragmentDoc = gql`
+    fragment EventsEvent_Summary on EventsEvent {
+  event_id
+  title
+  start
+  published
+  event_type
+  announcements {
+    timepad {
+      link
+    }
+    vk {
+      link
+    }
+    fb {
+      link
+    }
+  }
+}
+    `;
+export const EvenmanUnknownEventFragmentDoc = gql`
+    fragment EvenmanUnknownEvent on EventsEvent {
+  event_id
+  title
+}
+    `;
+export const EvenmanEventsDocument = gql`
+    query EvenmanEvents($start: String!, $end: String!) {
+  events(after: $start, before: $end, first: 100) {
+    nodes {
+      ...EventsEvent_Summary
+    }
+  }
+}
+    ${EventsEvent_SummaryFragmentDoc}`;
 
+/**
+ * __useEvenmanEventsQuery__
+ *
+ * To run a query within a React component, call `useEvenmanEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEvenmanEventsQuery({
+ *   variables: {
+ *      start: // value for 'start'
+ *      end: // value for 'end'
+ *   },
+ * });
+ */
+export function useEvenmanEventsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EvenmanEventsQuery, EvenmanEventsQueryVariables>) {
+        return ApolloReactHooks.useQuery<EvenmanEventsQuery, EvenmanEventsQueryVariables>(EvenmanEventsDocument, baseOptions);
+      }
+export function useEvenmanEventsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EvenmanEventsQuery, EvenmanEventsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<EvenmanEventsQuery, EvenmanEventsQueryVariables>(EvenmanEventsDocument, baseOptions);
+        }
+export type EvenmanEventsQueryHookResult = ReturnType<typeof useEvenmanEventsQuery>;
+export type EvenmanEventsLazyQueryHookResult = ReturnType<typeof useEvenmanEventsLazyQuery>;
+export type EvenmanEventsQueryResult = ApolloReactCommon.QueryResult<EvenmanEventsQuery, EvenmanEventsQueryVariables>;
+export const EvenmanUnknownEventsDocument = gql`
+    query EvenmanUnknownEvents {
+  events(filter: {event_type: "unknown"}, first: 20) {
+    nodes {
+      ...EvenmanUnknownEvent
+    }
+  }
+}
+    ${EvenmanUnknownEventFragmentDoc}`;
+
+/**
+ * __useEvenmanUnknownEventsQuery__
+ *
+ * To run a query within a React component, call `useEvenmanUnknownEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanUnknownEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEvenmanUnknownEventsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEvenmanUnknownEventsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EvenmanUnknownEventsQuery, EvenmanUnknownEventsQueryVariables>) {
+        return ApolloReactHooks.useQuery<EvenmanUnknownEventsQuery, EvenmanUnknownEventsQueryVariables>(EvenmanUnknownEventsDocument, baseOptions);
+      }
+export function useEvenmanUnknownEventsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EvenmanUnknownEventsQuery, EvenmanUnknownEventsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<EvenmanUnknownEventsQuery, EvenmanUnknownEventsQueryVariables>(EvenmanUnknownEventsDocument, baseOptions);
+        }
+export type EvenmanUnknownEventsQueryHookResult = ReturnType<typeof useEvenmanUnknownEventsQuery>;
+export type EvenmanUnknownEventsLazyQueryHookResult = ReturnType<typeof useEvenmanUnknownEventsLazyQuery>;
+export type EvenmanUnknownEventsQueryResult = ApolloReactCommon.QueryResult<EvenmanUnknownEventsQuery, EvenmanUnknownEventsQueryVariables>;
+export const EvenmanEventDocument = gql`
+    query EvenmanEvent($id: ID!) {
+  event(event_id: $id) {
+    ...EventsEvent_Summary
+  }
+}
+    ${EventsEvent_SummaryFragmentDoc}`;
+
+/**
+ * __useEvenmanEventQuery__
+ *
+ * To run a query within a React component, call `useEvenmanEventQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanEventQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEvenmanEventQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEvenmanEventQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EvenmanEventQuery, EvenmanEventQueryVariables>) {
+        return ApolloReactHooks.useQuery<EvenmanEventQuery, EvenmanEventQueryVariables>(EvenmanEventDocument, baseOptions);
+      }
+export function useEvenmanEventLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EvenmanEventQuery, EvenmanEventQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<EvenmanEventQuery, EvenmanEventQueryVariables>(EvenmanEventDocument, baseOptions);
+        }
+export type EvenmanEventQueryHookResult = ReturnType<typeof useEvenmanEventQuery>;
+export type EvenmanEventLazyQueryHookResult = ReturnType<typeof useEvenmanEventLazyQuery>;
+export type EvenmanEventQueryResult = ApolloReactCommon.QueryResult<EvenmanEventQuery, EvenmanEventQueryVariables>;
+export const EvenmanSetEventTypeDocument = gql`
+    mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
+  result: eventSetEventType(input: {event_id: $id, event_type: $event_type}) {
+    ok
+  }
+}
+    `;
+export type EvenmanSetEventTypeMutationFn = ApolloReactCommon.MutationFunction<EvenmanSetEventTypeMutation, EvenmanSetEventTypeMutationVariables>;
+
+/**
+ * __useEvenmanSetEventTypeMutation__
+ *
+ * To run a mutation, you first call `useEvenmanSetEventTypeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanSetEventTypeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [evenmanSetEventTypeMutation, { data, loading, error }] = useEvenmanSetEventTypeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      event_type: // value for 'event_type'
+ *   },
+ * });
+ */
+export function useEvenmanSetEventTypeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanSetEventTypeMutation, EvenmanSetEventTypeMutationVariables>) {
+        return ApolloReactHooks.useMutation<EvenmanSetEventTypeMutation, EvenmanSetEventTypeMutationVariables>(EvenmanSetEventTypeDocument, baseOptions);
+      }
+export type EvenmanSetEventTypeMutationHookResult = ReturnType<typeof useEvenmanSetEventTypeMutation>;
+export type EvenmanSetEventTypeMutationResult = ApolloReactCommon.MutationResult<EvenmanSetEventTypeMutation>;
+export type EvenmanSetEventTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanSetEventTypeMutation, EvenmanSetEventTypeMutationVariables>;
 export const EvenmanSetRealmDocument = gql`
     mutation EvenmanSetRealm($id: ID!, $realm: String!) {
   result: eventSetRealm(input: {event_id: $id, realm: $realm}) {

@@ -1,19 +1,17 @@
 import { useCallback, useState } from 'react';
-import { observer } from 'mobx-react-lite';
 
 import styled from 'styled-components';
 
 import { A, Button, Column, Row } from '@kocherga/frontkit';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
-import { Event } from '../stores/Event';
-import { EventFilter } from '../stores/EventFilter';
-
 import { NumberBadge } from '../components/ui';
 
-interface Props {
-  filter: EventFilter;
-}
+import {
+  EvenmanUnknownEventFragment,
+  useEvenmanUnknownEventsQuery,
+  useEvenmanSetEventTypeMutation,
+} from './queries.generated';
 
 const Container = styled.div`
   position: relative;
@@ -34,9 +32,27 @@ const ControlButton = styled(Button)`
   width: 40px;
 `;
 
-const ListItem = observer(({ event }: { event: Event }) => {
-  const setPublic = useCallback(() => event.setType('public'), [event]);
-  const setPrivate = useCallback(() => event.setType('private'), [event]);
+const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
+  const [setEventType] = useEvenmanSetEventTypeMutation();
+
+  const setPublic = useCallback(() => {
+    setEventType({
+      variables: {
+        id: event.event_id,
+        event_type: 'public',
+      },
+    });
+  }, [event.event_id, setEventType]);
+
+  const setPrivate = useCallback(() => {
+    setEventType({
+      variables: {
+        id: event.event_id,
+        event_type: 'private',
+      },
+    });
+  }, [event.event_id, setEventType]);
+
   return (
     <Row stretch spaced>
       <small>{event.title}</small>
@@ -50,9 +66,11 @@ const ListItem = observer(({ event }: { event: Event }) => {
       </Row>
     </Row>
   );
-});
+};
 
-const UnknownEventsDropdown = observer(({ filter }: Props) => {
+const UnknownEventsDropdown: React.FC = () => {
+  const queryResults = useEvenmanUnknownEventsQuery();
+
   const [expanded, setExpanded] = useState(false);
 
   const toggle = useCallback(
@@ -63,12 +81,18 @@ const UnknownEventsDropdown = observer(({ filter }: Props) => {
     [expanded]
   );
 
+  if (!queryResults.data) {
+    return null;
+  }
+
+  const events = queryResults.data.events.nodes;
+
   const renderList = () => {
     return (
       <ListContainer>
         <Column>
-          {filter.unknownEvents.map(event => (
-            <ListItem event={event} key={event.id} />
+          {events.map(event => (
+            <ListItem event={event} key={event.event_id} />
           ))}
         </Column>
       </ListContainer>
@@ -78,11 +102,11 @@ const UnknownEventsDropdown = observer(({ filter }: Props) => {
   return (
     <Container>
       <A href="#" onClick={toggle}>
-        <NumberBadge>{filter.unknownEvents.length}</NumberBadge>
+        <NumberBadge>{events.length}</NumberBadge>
       </A>
       {expanded && renderList()}
     </Container>
   );
-});
+};
 
 export default UnknownEventsDropdown;

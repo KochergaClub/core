@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
+
+import { formatDate } from '~/common/utils';
 
 import NewEventModal from '../NewEventModal';
 
 interface Props {
-  date: moment.Moment;
+  date: Date;
 }
 
 const NewButton = styled.a`
@@ -39,11 +40,11 @@ const CalendarCellHeader: React.FC<Props> = ({ date }) => {
       </NewButton>
       {isNewEventModalOpen && (
         <NewEventModal
-          date={date.format('YYYY-MM-DD')}
+          date={formatDate(date, 'yyyy-MM-dd')}
           close={closeNewEventModal}
         />
       )}
-      {date.format('D MMMM')}
+      {formatDate(date, 'd MMMM')}
     </div>
   );
 };

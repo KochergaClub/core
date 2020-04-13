@@ -7,11 +7,15 @@ import kocherga.events.models.announcement.timepad
 Query = QueryType()
 
 
+# test
 @Query.field('events')
-def resolve_events(self, info, search, **pager):
+def resolve_events(self, info, search=None, filter=None, **pager):
     qs = models.Event.objects.list_events()
     if search:
         qs = qs.filter(title__icontains=search)
+    if filter:
+        if 'event_type' in filter:
+            qs = qs.filter(event_type=filter['event_type'])
     return qs.relay_page(order='start', **pager)
 
 

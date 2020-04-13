@@ -73,6 +73,8 @@ const Week: React.FC<Props> = ({
 }) => {
   const [resizeListener, sizes] = useResizeAware();
 
+  console.log('render week ' + firstDay.toDate());
+
   React.useEffect(() => {
     setHeight(firstDay, sizes.height);
   }, [firstDay, sizes.height, setHeight]);

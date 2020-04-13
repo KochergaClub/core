@@ -1,11 +1,10 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
 import styled from 'styled-components';
 
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
-import { Event } from '../stores/Event';
+import { EventsEvent_SummaryFragment } from './queries.generated';
 
 interface ProgressProps {
   private: boolean;
@@ -15,7 +14,7 @@ interface ProgressProps {
 }
 
 interface Props {
-  event: Event;
+  event: EventsEvent_SummaryFragment;
   selected: boolean;
   onSelect: (id: string) => void;
 }
@@ -77,21 +76,19 @@ const TitleContainer = styled.div`
   z-index: 1;
 `;
 
-@observer
 export default class EventCalendarItem extends React.Component<Props> {
   progressParams() {
     const { event } = this.props;
 
     let max = 0;
     let value = 0;
-    if (event.type !== 'public') {
+    if (event.event_type !== 'public') {
       return {
         max: 1,
         value: 0,
       };
     }
 
-    // TODO - move this code to Event class
     max = 4;
     if (event.published) value += 1;
     if (event.announcements.timepad.link) value += 1;
@@ -107,7 +104,7 @@ export default class EventCalendarItem extends React.Component<Props> {
       <Progress
         max={max}
         value={value}
-        private={this.props.event.type !== 'public'}
+        private={this.props.event.event_type !== 'public'}
         selected={this.props.selected}
       />
     );
@@ -115,7 +112,7 @@ export default class EventCalendarItem extends React.Component<Props> {
 
   onSelect = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    this.props.onSelect(this.props.event.id);
+    this.props.onSelect(this.props.event.event_id);
   };
 
   render() {
@@ -124,7 +121,7 @@ export default class EventCalendarItem extends React.Component<Props> {
       <Container onClick={this.onSelect}>
         {this.renderProgress()}
         <Icon>
-          {event.type === 'public' ? (
+          {event.event_type === 'public' ? (
             <FaGlobeAfrica
               style={{ color: 'green', verticalAlign: 'inherit' }}
             />

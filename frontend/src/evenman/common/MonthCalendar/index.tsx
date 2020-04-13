@@ -23,24 +23,21 @@ const MonthCalendar = observer((props: Props) => {
     heights: {},
   });
 
-  React.useEffect(
-    () => {
-      const firstDay = moment(props.date).startOf('week');
+  React.useEffect(() => {
+    const firstDay = moment(props.date).startOf('week');
 
-      const result = [];
-      const day = firstDay;
-      do {
-        result.push(moment(day));
-        day.add(1, 'week');
-      } while (result.length < props.weeks);
+    const result = [];
+    const day = firstDay;
+    do {
+      result.push(moment(day));
+      day.add(1, 'week');
+    } while (result.length < props.weeks);
 
-      dispatch({
-        type: 'SET_WEEKS',
-        payload: result,
-      });
-    },
-    [props.date, props.weeks]
-  );
+    dispatch({
+      type: 'SET_WEEKS',
+      payload: result,
+    });
+  }, [props.date, props.weeks]);
 
   const transitions = useTransition(
     weeksState.weeks,
@@ -79,6 +76,8 @@ const MonthCalendar = observer((props: Props) => {
       },
     });
   }, []);
+
+  console.log('render MonthCalendar');
 
   return (
     <div style={{ minHeight: 250, overflow: 'hidden' }}>

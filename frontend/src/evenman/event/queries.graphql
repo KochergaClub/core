@@ -1,3 +1,58 @@
+fragment EventsEvent_Summary on EventsEvent {
+  event_id
+  title
+  start
+  published
+  event_type
+  announcements {
+    timepad {
+      link
+    }
+    vk {
+      link
+    }
+    fb {
+      link
+    }
+  }
+}
+
+query EvenmanEvents($start: String!, $end: String!) {
+  events(after: $start, before: $end, first: 100) {
+    nodes {
+      ...EventsEvent_Summary
+    }
+  }
+}
+
+fragment EvenmanUnknownEvent on EventsEvent {
+  event_id
+  title
+}
+
+query EvenmanUnknownEvents {
+  events(filter: { event_type: "unknown" }, first: 20) {
+    nodes {
+      ...EvenmanUnknownEvent
+    }
+  }
+}
+
+query EvenmanEvent($id: ID!) {
+  event(event_id: $id) {
+    ...EventsEvent_Summary
+  }
+}
+
+mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
+  result: eventSetEventType(input: {
+      event_id: $id,
+      event_type: $event_type
+    }) {
+    ok
+  }
+}
+
 mutation EvenmanSetRealm($id: ID!, $realm: String!) {
   result: eventSetRealm(input: {
     event_id: $id,

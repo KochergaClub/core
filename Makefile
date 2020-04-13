@@ -38,6 +38,9 @@ shell:
 pyshell:
 	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) ./manage.py shell
 
+tail:
+	kubectl logs --context=dev -f -l app=core-django
+
 deploy_prod_secrets:
 	scp backend/kocherga/django/settings/prod_secrets.py kocherga.club:
 	ssh kocherga.club 'sudo mv prod_secrets.py /config/secrets.py && sudo chown root:root /config/secrets.py && sudo chmod 600 /config/secrets.py'

@@ -1,6 +1,10 @@
 extend type Query {
-  events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+  events(search: String, filter: EventsFilterInput, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
   event(event_id: ID!): EventsEvent @staffonly
+}
+
+input EventsFilterInput {
+  event_type: String
 }
 
 type EventsEventConnection {
@@ -18,10 +22,33 @@ type EventsEvent {
   title: String!
   start: String!
 
+  event_type: String!
+  published: Boolean!
+
+  announcements: EventsAnnouncements!
+
   visitors: String @staffonly
 
   # all EventsEvent are staff-only, but this can change in the future
   tickets: [EventsTicket!]! @staffonly
+}
+
+type EventsAnnouncements {
+  timepad: EventsAnnouncementTimepad!
+  vk: EventsAnnouncementVk!
+  fb: EventsAnnouncementFb!
+}
+
+type EventsAnnouncementTimepad {
+  link: String!
+}
+
+type EventsAnnouncementVk {
+  link: String!
+}
+
+type EventsAnnouncementFb {
+  link: String!
 }
 
 type EventsTicket {
@@ -110,14 +137,6 @@ type EventsPublicEvent {
   my_ticket: MyEventsTicket
 }
 
-type EventsAnnouncements {
-  timepad: EventsTimepadAnnouncement
-}
-
-type EventsTimepadAnnouncement {
-  link: String!
-}
-
 extend type My {
   tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection! @auth(authenticated: true)
 }
@@ -149,6 +168,19 @@ input MyEventsTicketRegisterAnonInput {
   event_id: ID!
   email: String!
   subscribed_to_newsletter: Boolean
+}
+
+extend type Mutation {
+  eventSetEventType(input: EventSetEventTypeInput!): EventSetEventTypeResult! @staffonly
+}
+
+input EventSetEventTypeInput {
+  event_id: ID!
+  event_type: String!
+}
+
+type EventSetEventTypeResult {
+  ok: Boolean
 }
 
 extend type Mutation {

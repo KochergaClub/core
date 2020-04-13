@@ -54,6 +54,23 @@ def myEventsTicketRegisterAnon(_, info, input):
     return ticket
 
 
+@Mutation.field('eventSetEventType')
+def eventSetEventType(_, info, input):
+    event_id = input['event_id']
+    event_type = input['event_type']
+
+    event = models.Event.objects.get(uuid=event_id)
+    assert not event.deleted
+
+    event.event_type = event_type
+    event.full_clean()
+    event.save()
+
+    return {
+        'ok': True
+    }
+
+
 @Mutation.field('eventSetRealm')
 def eventSetRealm(_, info, input):
     event_id = input['event_id']
@@ -62,8 +79,8 @@ def eventSetRealm(_, info, input):
     event = models.Event.objects.get(uuid=event_id)
     assert not event.deleted
 
-    assert realm in ('offline', 'online')
     event.realm = realm
+    event.full_clean()
     event.save()
 
     return {
