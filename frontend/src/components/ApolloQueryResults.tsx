@@ -4,6 +4,7 @@ import Spinner, { Size } from './Spinner';
 
 interface Props<D> {
   loading: boolean;
+  renderLoading?: () => React.ReactElement | null;
   error?: ApolloError;
   data?: NonNullable<D>;
   size?: Size;
@@ -18,6 +19,7 @@ interface Props<D> {
 
 function ApolloQueryResults<D>({
   loading,
+  renderLoading,
   error,
   data,
   size,
@@ -31,7 +33,7 @@ function ApolloQueryResults<D>({
 
   if (!data) {
     if (loading) {
-      return <Spinner size={size || 'div'} />;
+      return renderLoading ? renderLoading() : <Spinner size={size || 'div'} />;
     }
 
     throw new Error('No data and not loading');

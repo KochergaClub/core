@@ -191,6 +191,24 @@ type EventSetZoomLinkResult {
 }
 
 extend type Mutation {
+  eventPrototypeCreate(input: EventPrototypeCreateInput!): EventPrototypeCreateResult! @staffonly
+}
+
+input EventPrototypeCreateInput {
+  title: String!
+  location: String
+  weekday: Int!
+  hour: Int!
+  minute: Int!
+  length: Int!
+}
+
+type EventPrototypeCreateResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
   eventPrototypeUpdate(input: EventPrototypeUpdateInput!): EventPrototypeUpdateResult! @staffonly
 }
 

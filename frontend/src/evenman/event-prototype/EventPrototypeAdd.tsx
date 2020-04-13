@@ -5,13 +5,11 @@ import { AsyncButton } from '~/components';
 import { useCommonHotkeys } from '~/common/hooks';
 import { ReactSelect } from '../components/ui';
 
-import EventPrototypeStore from '../stores/EventPrototypeStore';
+import { useEvenmanPrototypeCreateMutation } from './queries.generated';
 
-interface Props {
-  store: EventPrototypeStore;
-}
+const EventPrototypeAdd: React.FC = () => {
+  const [createMutation] = useEvenmanPrototypeCreateMutation();
 
-const EventPrototypeAdd: React.FC<Props> = ({ store }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
@@ -39,19 +37,19 @@ const EventPrototypeAdd: React.FC<Props> = ({ store }) => {
     if (!canCreate) {
       return;
     }
-    await store.create({
-      title,
-      location,
-      weekday: weekday!,
-      hour: hour!,
-      minute: minute!,
-      length: length!,
-      active: true,
-      timepad_prepaid_tickets: false,
+    await createMutation({
+      variables: {
+        title,
+        location,
+        weekday: weekday!,
+        hour: hour!,
+        minute: minute!,
+        length: length!,
+      },
     });
     closeModal();
   }, [
-    store,
+    createMutation,
     closeModal,
     canCreate,
     title,

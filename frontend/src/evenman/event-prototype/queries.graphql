@@ -57,6 +57,30 @@ query EvenmanPrototype($id: ID!) {
   }
 }
 
+mutation EvenmanPrototypeCreate(
+  $title: String!,
+  $location: String,
+  $weekday: Int!,
+  $hour: Int!,
+  $minute: Int!,
+  $length: Int!,
+) {
+  result: eventPrototypeCreate(input: {
+      title: $title,
+      location: $location,
+      weekday: $weekday,
+      hour: $hour,
+      minute: $minute,
+      length: $length,
+    }) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
+  }
+}
+
+
 mutation EvenmanPrototypeUpdate(
   $id: ID!,
   $active: Boolean,

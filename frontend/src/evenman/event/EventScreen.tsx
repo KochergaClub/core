@@ -31,11 +31,17 @@ const EventScreen: React.FC<Props> = observer(({ selected_id }) => {
     root.eventStore.updateRange(filter.startDate, filter.endDate);
   });
 
-  const renderEventCard = () => {
+  const event = useMemo(() => {
     if (!selected_id) {
+      return undefined;
+    }
+    return fromPromise(root.eventStore.getEvent(selected_id));
+  }, [root, selected_id]);
+
+  const renderEventCard = () => {
+    if (!event) {
       return <EmptyCard>Выберите событие</EmptyCard>;
     }
-    const event = fromPromise(root.eventStore.getEvent(selected_id));
 
     return event.case({
       pending: () => <EmptyCard>Загружается...</EmptyCard>,

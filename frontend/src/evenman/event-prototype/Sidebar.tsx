@@ -2,9 +2,6 @@ import styled from 'styled-components';
 
 import { Column } from '@kocherga/frontkit';
 
-import LoadingOverlay from '../components/LoadingOverlay';
-import { useEventPrototypeStore } from '../common';
-
 import EventPrototypeList from './EventPrototypeList';
 import EventPrototypeAdd from './EventPrototypeAdd';
 
@@ -24,15 +21,11 @@ const Container = styled(Column).attrs({
 `;
 
 const Sidebar: React.FC<Props> = ({ selected_id }) => {
-  const store = useEventPrototypeStore();
-
   return (
     <Container>
-      <LoadingOverlay progress={store.state === 'fetching'}>
-        <EventPrototypeList selectedId={String(selected_id)} />
-      </LoadingOverlay>
+      <EventPrototypeList selectedId={String(selected_id)} />
       <div style={{ textAlign: 'center' }}>
-        <EventPrototypeAdd store={store} />
+        <EventPrototypeAdd />
       </div>
     </Container>
   );

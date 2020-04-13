@@ -59,6 +59,28 @@ export type EvenmanPrototypeQuery = (
   ) }
 );
 
+export type EvenmanPrototypeCreateMutationVariables = {
+  title: Types.Scalars['String'],
+  location?: Types.Maybe<Types.Scalars['String']>,
+  weekday: Types.Scalars['Int'],
+  hour: Types.Scalars['Int'],
+  minute: Types.Scalars['Int'],
+  length: Types.Scalars['Int']
+};
+
+
+export type EvenmanPrototypeCreateMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'EventPrototypeCreateResult' }
+    & Pick<Types.EventPrototypeCreateResult, 'ok'>
+    & { prototype: (
+      { __typename?: 'EventsPrototype' }
+      & EventsPrototypeFragment
+    ) }
+  ) }
+);
+
 export type EvenmanPrototypeUpdateMutationVariables = {
   id: Types.Scalars['ID'],
   active?: Types.Maybe<Types.Scalars['Boolean']>,
@@ -282,6 +304,46 @@ export function useEvenmanPrototypeLazyQuery(baseOptions?: ApolloReactHooks.Lazy
 export type EvenmanPrototypeQueryHookResult = ReturnType<typeof useEvenmanPrototypeQuery>;
 export type EvenmanPrototypeLazyQueryHookResult = ReturnType<typeof useEvenmanPrototypeLazyQuery>;
 export type EvenmanPrototypeQueryResult = ApolloReactCommon.QueryResult<EvenmanPrototypeQuery, EvenmanPrototypeQueryVariables>;
+export const EvenmanPrototypeCreateDocument = gql`
+    mutation EvenmanPrototypeCreate($title: String!, $location: String, $weekday: Int!, $hour: Int!, $minute: Int!, $length: Int!) {
+  result: eventPrototypeCreate(input: {title: $title, location: $location, weekday: $weekday, hour: $hour, minute: $minute, length: $length}) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
+  }
+}
+    ${EventsPrototypeFragmentDoc}`;
+export type EvenmanPrototypeCreateMutationFn = ApolloReactCommon.MutationFunction<EvenmanPrototypeCreateMutation, EvenmanPrototypeCreateMutationVariables>;
+
+/**
+ * __useEvenmanPrototypeCreateMutation__
+ *
+ * To run a mutation, you first call `useEvenmanPrototypeCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanPrototypeCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [evenmanPrototypeCreateMutation, { data, loading, error }] = useEvenmanPrototypeCreateMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      location: // value for 'location'
+ *      weekday: // value for 'weekday'
+ *      hour: // value for 'hour'
+ *      minute: // value for 'minute'
+ *      length: // value for 'length'
+ *   },
+ * });
+ */
+export function useEvenmanPrototypeCreateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanPrototypeCreateMutation, EvenmanPrototypeCreateMutationVariables>) {
+        return ApolloReactHooks.useMutation<EvenmanPrototypeCreateMutation, EvenmanPrototypeCreateMutationVariables>(EvenmanPrototypeCreateDocument, baseOptions);
+      }
+export type EvenmanPrototypeCreateMutationHookResult = ReturnType<typeof useEvenmanPrototypeCreateMutation>;
+export type EvenmanPrototypeCreateMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeCreateMutation>;
+export type EvenmanPrototypeCreateMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeCreateMutation, EvenmanPrototypeCreateMutationVariables>;
 export const EvenmanPrototypeUpdateDocument = gql`
     mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String, $timepad_category_code: String, $project_slug: String) {
   result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name, timepad_category_code: $timepad_category_code, project_slug: $project_slug}) {

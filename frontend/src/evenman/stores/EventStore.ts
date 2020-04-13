@@ -23,7 +23,9 @@ export class EventStore {
 
   async getEvent(id: string) {
     let event = this.findEvent(id);
-    if (event) return event;
+    if (event) {
+      return event;
+    }
 
     event = Event.fromJSON({ id }, this.root);
     await event.reload();

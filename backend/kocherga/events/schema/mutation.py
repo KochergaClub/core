@@ -101,6 +101,23 @@ def eventSetZoomLink(_, info, input):
     }
 
 
+@Mutation.field('eventPrototypeCreate')
+def eventPrototypeCreate(_, info, input):
+    prototype = models.EventPrototype.objects.create(
+        title=input['title'],
+        location=input.get('location', ''),
+        weekday=input['weekday'],
+        hour=input['hour'],
+        minute=input['minute'],
+        length=input['length'],
+    )
+
+    return {
+        'ok': True,
+        'prototype': prototype,
+    }
+
+
 @Mutation.field('eventPrototypeUpdate')
 def eventPrototypeUpdate(_, info, input):
     prototype = models.EventPrototype.objects.get(pk=input['id'])

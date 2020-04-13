@@ -10,8 +10,3 @@ export const useRootStore = () => {
   }
   return root;
 };
-
-export const useEventPrototypeStore = () => {
-  const root = useRootStore();
-  return root.eventPrototypeStore;
-};

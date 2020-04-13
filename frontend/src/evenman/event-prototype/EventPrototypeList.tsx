@@ -4,6 +4,8 @@ import { Column } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
+import LoadingOverlay from '../components/LoadingOverlay';
+
 import { useEvenmanPrototypesQuery } from './queries.generated';
 import PrototypeNavList from './PrototypeNavList';
 
@@ -19,7 +21,10 @@ const EventPrototypeList = (props: Props) => {
   });
 
   return (
-    <ApolloQueryResults {...queryResults}>
+    <ApolloQueryResults
+      {...queryResults}
+      renderLoading={() => <LoadingOverlay progress={true} />}
+    >
       {({ data: { prototypes } }) => (
         <div>
           <Column gutter={10} stretch>

@@ -344,6 +344,21 @@ export type EventPrototypeCancelDateResult = {
   ok?: Maybe<Scalars['Boolean']>,
 };
 
+export type EventPrototypeCreateInput = {
+  title: Scalars['String'],
+  location?: Maybe<Scalars['String']>,
+  weekday: Scalars['Int'],
+  hour: Scalars['Int'],
+  minute: Scalars['Int'],
+  length: Scalars['Int'],
+};
+
+export type EventPrototypeCreateResult = {
+   __typename?: 'EventPrototypeCreateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
 export type EventPrototypeDeleteTagInput = {
   id: Scalars['ID'],
   tag: Scalars['String'],
@@ -729,6 +744,7 @@ export type Mutation = {
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
   eventSetZoomLink: EventSetZoomLinkResult,
+  eventPrototypeCreate: EventPrototypeCreateResult,
   eventPrototypeUpdate: EventPrototypeUpdateResult,
   eventPrototypeCancelDate: EventPrototypeCancelDateResult,
   eventPrototypeNewEvent: EventPrototypeNewEventResult,
@@ -884,6 +900,11 @@ export type MutationEventSetPricingTypeArgs = {
 
 export type MutationEventSetZoomLinkArgs = {
   input: EventSetZoomLinkInput
+};
+
+
+export type MutationEventPrototypeCreateArgs = {
+  input: EventPrototypeCreateInput
 };
 
 
