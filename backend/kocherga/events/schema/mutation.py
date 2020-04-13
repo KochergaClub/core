@@ -115,7 +115,8 @@ def eventPrototypeUpdate(_, info, input):
             'active',
             'weekday',
             'hour',
-            'minute'
+            'minute',
+            'timepad_category_code',
     ):
         if field in input:
             setattr(prototype, field, input[field])

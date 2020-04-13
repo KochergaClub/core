@@ -11,3 +11,11 @@ query EvenmanVkGroups {
     name
   }
 }
+
+query EvenmanTimepadCategories {
+  timepadCategories {
+    id
+    code
+    name
+  }
+}

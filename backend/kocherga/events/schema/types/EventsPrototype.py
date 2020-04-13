@@ -35,3 +35,8 @@ def resolve_vk_group(obj, info):
     return {
         'name': obj.vk_group,  # might become foreign key some day
     }
+
+
+@EventsPrototype.field('timepad_category')
+def resolve_timepad_category(obj, info):
+    return obj.timepad_category

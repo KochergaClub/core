@@ -1,4 +1,4 @@
-import { ReactSelectCreatable } from '../components/ui';
+import LabeledLoadingPicker from './LabeledLoadingPicker';
 
 interface Props {
   value: string;
@@ -10,19 +10,8 @@ interface Props {
 }
 
 const LoadingPicker: React.FC<Props> = props => {
-  if (props.loading) {
-    return <ReactSelectCreatable placeholder={props.placeholder} isDisabled />;
-  }
-  if (props.error || !props.values) {
-    return <ReactSelectCreatable placeholder="Ошибка загрузки" isDisabled />;
-  }
-
-  if (props.value && props.values.indexOf(props.value) === -1) {
-    props.values.push(props.value);
-  }
-
-  const value2option = (g: string | null | undefined) => {
-    if (g === null || g === undefined || g === '') {
+  const value2option = (g: string | undefined) => {
+    if (g === undefined || g === '') {
       return {
         value: '',
         label: 'Ø',
@@ -36,13 +25,11 @@ const LoadingPicker: React.FC<Props> = props => {
   };
 
   return (
-    <ReactSelectCreatable
-      placeholder={props.placeholder}
-      options={props.values.map(g => value2option(g))}
+    <LabeledLoadingPicker
+      {...props}
       value={value2option(props.value)}
-      onChange={(option: any) => {
-        props.setValue(option ? (option.value as string) : undefined);
-      }}
+      values={props.values?.map(value2option)}
+      setValue={v => props.setValue(v?.value)}
     />
   );
 };

@@ -10,6 +10,9 @@ export type EventsPrototypeFragment = (
   & { vk_group: Types.Maybe<(
     { __typename?: 'VkGroup' }
     & Pick<Types.VkGroup, 'name'>
+  )>, timepad_category: Types.Maybe<(
+    { __typename?: 'TimepadCategory' }
+    & Pick<Types.TimepadCategory, 'code' | 'name'>
   )>, image: Types.Maybe<(
     { __typename?: 'WagtailImage' }
     & Pick<Types.WagtailImage, 'url'>
@@ -64,7 +67,8 @@ export type EvenmanPrototypeUpdateMutationVariables = {
   description?: Types.Maybe<Types.Scalars['String']>,
   location?: Types.Maybe<Types.Scalars['String']>,
   timing_description_override?: Types.Maybe<Types.Scalars['String']>,
-  vk_group_name?: Types.Maybe<Types.Scalars['String']>
+  vk_group_name?: Types.Maybe<Types.Scalars['String']>,
+  timepad_category_code?: Types.Maybe<Types.Scalars['String']>
 };
 
 
@@ -193,6 +197,10 @@ export const EventsPrototypeFragmentDoc = gql`
   vk_group {
     name
   }
+  timepad_category {
+    code
+    name
+  }
   image(spec: "width-240") {
     url
   }
@@ -288,8 +296,8 @@ export type EvenmanPrototypeQueryHookResult = ReturnType<typeof useEvenmanProtot
 export type EvenmanPrototypeLazyQueryHookResult = ReturnType<typeof useEvenmanPrototypeLazyQuery>;
 export type EvenmanPrototypeQueryResult = ApolloReactCommon.QueryResult<EvenmanPrototypeQuery, EvenmanPrototypeQueryVariables>;
 export const EvenmanPrototypeUpdateDocument = gql`
-    mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String) {
-  result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name}) {
+    mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String, $timepad_category_code: String) {
+  result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name, timepad_category_code: $timepad_category_code}) {
     ok
     prototype {
       ...EventsPrototype
@@ -320,6 +328,7 @@ export type EvenmanPrototypeUpdateMutationFn = ApolloReactCommon.MutationFunctio
  *      location: // value for 'location'
  *      timing_description_override: // value for 'timing_description_override'
  *      vk_group_name: // value for 'vk_group_name'
+ *      timepad_category_code: // value for 'timepad_category_code'
  *   },
  * });
  */

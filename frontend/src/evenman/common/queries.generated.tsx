@@ -29,6 +29,17 @@ export type EvenmanVkGroupsQuery = (
   )> }
 );
 
+export type EvenmanTimepadCategoriesQueryVariables = {};
+
+
+export type EvenmanTimepadCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { timepadCategories: Array<(
+    { __typename?: 'TimepadCategory' }
+    & Pick<Types.TimepadCategory, 'id' | 'code' | 'name'>
+  )> }
+);
+
 
 export const EvenmanProjectsListDocument = gql`
     query EvenmanProjectsList {
@@ -96,3 +107,37 @@ export function useEvenmanVkGroupsLazyQuery(baseOptions?: ApolloReactHooks.LazyQ
 export type EvenmanVkGroupsQueryHookResult = ReturnType<typeof useEvenmanVkGroupsQuery>;
 export type EvenmanVkGroupsLazyQueryHookResult = ReturnType<typeof useEvenmanVkGroupsLazyQuery>;
 export type EvenmanVkGroupsQueryResult = ApolloReactCommon.QueryResult<EvenmanVkGroupsQuery, EvenmanVkGroupsQueryVariables>;
+export const EvenmanTimepadCategoriesDocument = gql`
+    query EvenmanTimepadCategories {
+  timepadCategories {
+    id
+    code
+    name
+  }
+}
+    `;
+
+/**
+ * __useEvenmanTimepadCategoriesQuery__
+ *
+ * To run a query within a React component, call `useEvenmanTimepadCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEvenmanTimepadCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEvenmanTimepadCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEvenmanTimepadCategoriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EvenmanTimepadCategoriesQuery, EvenmanTimepadCategoriesQueryVariables>) {
+        return ApolloReactHooks.useQuery<EvenmanTimepadCategoriesQuery, EvenmanTimepadCategoriesQueryVariables>(EvenmanTimepadCategoriesDocument, baseOptions);
+      }
+export function useEvenmanTimepadCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EvenmanTimepadCategoriesQuery, EvenmanTimepadCategoriesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<EvenmanTimepadCategoriesQuery, EvenmanTimepadCategoriesQueryVariables>(EvenmanTimepadCategoriesDocument, baseOptions);
+        }
+export type EvenmanTimepadCategoriesQueryHookResult = ReturnType<typeof useEvenmanTimepadCategoriesQuery>;
+export type EvenmanTimepadCategoriesLazyQueryHookResult = ReturnType<typeof useEvenmanTimepadCategoriesLazyQuery>;
+export type EvenmanTimepadCategoriesQueryResult = ApolloReactCommon.QueryResult<EvenmanTimepadCategoriesQuery, EvenmanTimepadCategoriesQueryVariables>;

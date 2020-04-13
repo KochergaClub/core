@@ -6,7 +6,7 @@ import { Header } from '../../components/ui';
 
 import EventShapeDescription from '../../common/EventShapeDescription';
 import EventShapeTimingDescription from '../../common/EventShapeTimingDescription';
-import EventShapeTimepadCategories from '../../common/EventShapeTimepadCategories';
+import TimepadCategoryPicker from '../../common/TimepadCategoryPicker';
 import EventShapeTags from '../../common/EventShapeTags';
 import VkGroupPicker from '../../common/VkGroupPicker';
 import EventShapeProjectLink from '../../common/EventShapeProjectLink';
@@ -140,12 +140,15 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <Image prototype={prototype} />
               </section>
 
-              {/*
-
               <section>
                 <Header>Timepad</Header>
-                <EventShapeTimepadCategories event={prototype} />
+                <TimepadCategoryPicker
+                  code={prototype.timepad_category?.code}
+                  setCode={code => update({ timepad_category_code: code })}
+                />
               </section>
+
+              {/*
 
               <section>
                 <Header>Facebook</Header>

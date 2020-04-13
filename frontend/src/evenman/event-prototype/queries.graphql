@@ -14,6 +14,10 @@ fragment EventsPrototype on EventsPrototype {
   vk_group {
     name
   }
+  timepad_category {
+    code
+    name
+  }
   image(spec: "width-240") {
     url
   }
@@ -61,7 +65,8 @@ mutation EvenmanPrototypeUpdate(
   $description: String,
   $location: String,
   $timing_description_override: String,
-  $vk_group_name: String
+  $vk_group_name: String,
+  $timepad_category_code: String
 ) {
   result: eventPrototypeUpdate(input: {
       id: $id,
@@ -71,7 +76,8 @@ mutation EvenmanPrototypeUpdate(
       description: $description,
       location: $location,
       timing_description_override: $timing_description_override,
-      vk_group_name: $vk_group_name
+      vk_group_name: $vk_group_name,
+      timepad_category_code: $timepad_category_code
     }) {
     ok
     prototype {

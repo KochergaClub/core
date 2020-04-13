@@ -488,6 +488,7 @@ type EventsPrototype {
   suggested_dates(until_ts: Int, limit: Int!): [String!]!
   instances(limit: Int): [EventsEvent!]! @staffonly
   vk_group: VkGroup
+  timepad_category: TimepadCategory
 }
 
 extend type Query {
@@ -495,6 +496,16 @@ extend type Query {
 }
 
 type VkGroup {
+  name: String!
+}
+
+extend type Query {
+  timepadCategories: [TimepadCategory!]! @staffonly
+}
+
+type TimepadCategory {
+  id: ID!
+  code: String!
   name: String!
 }
 
@@ -632,6 +643,7 @@ input EventPrototypeUpdateInput {
   length: Int
   project_slug: String
   vk_group_name: String
+  timepad_category_code: String
 }
 
 type EventPrototypeUpdateResult {

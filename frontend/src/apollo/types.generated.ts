@@ -390,6 +390,7 @@ export type EventPrototypeUpdateInput = {
   length?: Maybe<Scalars['Int']>,
   project_slug?: Maybe<Scalars['String']>,
   vk_group_name?: Maybe<Scalars['String']>,
+  timepad_category_code?: Maybe<Scalars['String']>,
 };
 
 export type EventPrototypeUpdateResult = {
@@ -480,6 +481,7 @@ export type EventsPrototype = {
   suggested_dates: Array<Scalars['String']>,
   instances: Array<EventsEvent>,
   vk_group?: Maybe<VkGroup>,
+  timepad_category?: Maybe<TimepadCategory>,
 };
 
 
@@ -1214,6 +1216,7 @@ export type Query = {
   eventsPrototype: EventsPrototype,
   eventsPrototypes: Array<EventsPrototype>,
   vkGroups: Array<VkGroup>,
+  timepadCategories: Array<TimepadCategory>,
   publicEvents: EventsPublicEventConnection,
   publicEvent: EventsPublicEvent,
   staffMembersAll: Array<StaffMember>,
@@ -1595,6 +1598,13 @@ export type TildaPage = {
    __typename?: 'TildaPage',
   path: Scalars['String'],
   html_url: Scalars['String'],
+};
+
+export type TimepadCategory = {
+   __typename?: 'TimepadCategory',
+  id: Scalars['ID'],
+  code: Scalars['String'],
+  name: Scalars['String'],
 };
 
 

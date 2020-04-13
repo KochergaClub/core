@@ -2,6 +2,7 @@ from ariadne import QueryType
 from datetime import datetime
 
 from .. import models
+import kocherga.events.models.announcement.timepad
 
 Query = QueryType()
 
@@ -57,3 +58,9 @@ def resolve_vkGroups(self, info):
         }
         for name in all_groups
     ]
+
+
+@Query.field('timepadCategories')
+def resolve_timepadCategories(self, info):
+    categories = kocherga.events.models.announcement.timepad.timepad_categories()
+    return categories
