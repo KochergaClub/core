@@ -12,9 +12,9 @@ import { Event, EventAnnounceTarget } from '../stores/Event';
 import { Button, Column, Row } from '@kocherga/frontkit';
 import { Header } from '../components/ui';
 
-import EventShapeTimepadCategories from '../common/EventShapeTimepadCategories';
 import VkGroupPicker from '../common/VkGroupPicker';
 import FbGroupPicker from '../common/FbGroupPicker';
+import TimepadCategoryPicker from '../common/TimepadCategoryPicker';
 
 const EditableOrElement = (
   props: { el: React.ReactNode } & EditableLinkProps
@@ -92,7 +92,10 @@ export default class EventAnnounce extends React.Component<Props> {
     return (
       <Column stretch>
         <HeadedSection title="Timepad">
-          <EventShapeTimepadCategories event={event} />
+          <TimepadCategoryPicker
+            code={event.getTimepadCategoryCode}
+            setCode={code => event.setTimepadCategoryCode(code || '')}
+          />
           <Row gutter={4}>
             <Toggle
               checked={event.announcements.timepad.prepaid_tickets}
