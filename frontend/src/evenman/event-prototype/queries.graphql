@@ -66,7 +66,8 @@ mutation EvenmanPrototypeUpdate(
   $location: String,
   $timing_description_override: String,
   $vk_group_name: String,
-  $timepad_category_code: String
+  $timepad_category_code: String,
+  $project_slug: String
 ) {
   result: eventPrototypeUpdate(input: {
       id: $id,
@@ -77,22 +78,13 @@ mutation EvenmanPrototypeUpdate(
       location: $location,
       timing_description_override: $timing_description_override,
       vk_group_name: $vk_group_name,
-      timepad_category_code: $timepad_category_code
+      timepad_category_code: $timepad_category_code,
+      project_slug: $project_slug
     }) {
     ok
     prototype {
       ...EventsPrototype
     }
-  }
-}
-
-# deprecated, use EvenmanPrototypeUpdate
-mutation EvenmanPrototypeSetProject($id: ID!, $project_slug: String!) {
-  result: eventPrototypeUpdate(input: {
-      id: $id,
-      project_slug: $project_slug
-    }) {
-    ok
   }
 }
 

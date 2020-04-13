@@ -68,7 +68,8 @@ export type EvenmanPrototypeUpdateMutationVariables = {
   location?: Types.Maybe<Types.Scalars['String']>,
   timing_description_override?: Types.Maybe<Types.Scalars['String']>,
   vk_group_name?: Types.Maybe<Types.Scalars['String']>,
-  timepad_category_code?: Types.Maybe<Types.Scalars['String']>
+  timepad_category_code?: Types.Maybe<Types.Scalars['String']>,
+  project_slug?: Types.Maybe<Types.Scalars['String']>
 };
 
 
@@ -81,20 +82,6 @@ export type EvenmanPrototypeUpdateMutation = (
       { __typename?: 'EventsPrototype' }
       & EventsPrototypeFragment
     ) }
-  ) }
-);
-
-export type EvenmanPrototypeSetProjectMutationVariables = {
-  id: Types.Scalars['ID'],
-  project_slug: Types.Scalars['String']
-};
-
-
-export type EvenmanPrototypeSetProjectMutation = (
-  { __typename?: 'Mutation' }
-  & { result: (
-    { __typename?: 'EventPrototypeUpdateResult' }
-    & Pick<Types.EventPrototypeUpdateResult, 'ok'>
   ) }
 );
 
@@ -296,8 +283,8 @@ export type EvenmanPrototypeQueryHookResult = ReturnType<typeof useEvenmanProtot
 export type EvenmanPrototypeLazyQueryHookResult = ReturnType<typeof useEvenmanPrototypeLazyQuery>;
 export type EvenmanPrototypeQueryResult = ApolloReactCommon.QueryResult<EvenmanPrototypeQuery, EvenmanPrototypeQueryVariables>;
 export const EvenmanPrototypeUpdateDocument = gql`
-    mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String, $timepad_category_code: String) {
-  result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name, timepad_category_code: $timepad_category_code}) {
+    mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String, $timepad_category_code: String, $project_slug: String) {
+  result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name, timepad_category_code: $timepad_category_code, project_slug: $project_slug}) {
     ok
     prototype {
       ...EventsPrototype
@@ -329,6 +316,7 @@ export type EvenmanPrototypeUpdateMutationFn = ApolloReactCommon.MutationFunctio
  *      timing_description_override: // value for 'timing_description_override'
  *      vk_group_name: // value for 'vk_group_name'
  *      timepad_category_code: // value for 'timepad_category_code'
+ *      project_slug: // value for 'project_slug'
  *   },
  * });
  */
@@ -338,39 +326,6 @@ export function useEvenmanPrototypeUpdateMutation(baseOptions?: ApolloReactHooks
 export type EvenmanPrototypeUpdateMutationHookResult = ReturnType<typeof useEvenmanPrototypeUpdateMutation>;
 export type EvenmanPrototypeUpdateMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeUpdateMutation>;
 export type EvenmanPrototypeUpdateMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeUpdateMutation, EvenmanPrototypeUpdateMutationVariables>;
-export const EvenmanPrototypeSetProjectDocument = gql`
-    mutation EvenmanPrototypeSetProject($id: ID!, $project_slug: String!) {
-  result: eventPrototypeUpdate(input: {id: $id, project_slug: $project_slug}) {
-    ok
-  }
-}
-    `;
-export type EvenmanPrototypeSetProjectMutationFn = ApolloReactCommon.MutationFunction<EvenmanPrototypeSetProjectMutation, EvenmanPrototypeSetProjectMutationVariables>;
-
-/**
- * __useEvenmanPrototypeSetProjectMutation__
- *
- * To run a mutation, you first call `useEvenmanPrototypeSetProjectMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanPrototypeSetProjectMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evenmanPrototypeSetProjectMutation, { data, loading, error }] = useEvenmanPrototypeSetProjectMutation({
- *   variables: {
- *      id: // value for 'id'
- *      project_slug: // value for 'project_slug'
- *   },
- * });
- */
-export function useEvenmanPrototypeSetProjectMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanPrototypeSetProjectMutation, EvenmanPrototypeSetProjectMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanPrototypeSetProjectMutation, EvenmanPrototypeSetProjectMutationVariables>(EvenmanPrototypeSetProjectDocument, baseOptions);
-      }
-export type EvenmanPrototypeSetProjectMutationHookResult = ReturnType<typeof useEvenmanPrototypeSetProjectMutation>;
-export type EvenmanPrototypeSetProjectMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeSetProjectMutation>;
-export type EvenmanPrototypeSetProjectMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeSetProjectMutation, EvenmanPrototypeSetProjectMutationVariables>;
 export const EvenmanPrototypeCancelDateDocument = gql`
     mutation EvenmanPrototypeCancelDate($id: ID!, $date: String!) {
   result: eventPrototypeCancelDate(input: {id: $id, date: $date}) {

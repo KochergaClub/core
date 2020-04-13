@@ -15,7 +15,6 @@ import EditableString from '../../components/EditableString';
 
 import {
   useEvenmanPrototypeQuery,
-  useEvenmanPrototypeSetProjectMutation,
   useEvenmanPrototypeAddTagMutation,
   useEvenmanPrototypeDeleteTagMutation,
 } from '../queries.generated';
@@ -39,9 +38,6 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
     },
   });
 
-  const [setProject] = useEvenmanPrototypeSetProjectMutation({
-    refetchQueries: ['EvenmanPrototype'],
-  });
   const update = useUpdateMutation(prototype_id);
 
   const [addTag] = useEvenmanPrototypeAddTagMutation({
@@ -77,11 +73,8 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <EventShapeProjectLink
                   selected={prototype.project?.meta.slug}
                   select={async slug => {
-                    await setProject({
-                      variables: {
-                        id: prototype_id,
-                        project_slug: slug,
-                      },
+                    await update({
+                      project_slug: slug,
                     });
                   }}
                 />
