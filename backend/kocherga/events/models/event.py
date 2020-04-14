@@ -314,6 +314,13 @@ class Event(models.Model):
         )
         self.set_zoom_link(zoom_link)
 
+    def clean(self):
+        if self.published:
+            if self.event_type != 'public':
+                raise Exception("Only public events can be published")
+            if self.realm == 'online' and not self.zoom_link:
+                raise Exception("zoom_link must be set when publishing online events")
+
 
 class Tag(models.Model):
     class Meta:

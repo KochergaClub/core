@@ -3,7 +3,7 @@ from datetime import datetime
 from kocherga.dateutils import TZ
 from kocherga.graphql.types import DjangoObjectType
 
-from ...import models
+from ... import models
 
 EventsPrototype = DjangoObjectType('EventsPrototype', models.EventPrototype)
 

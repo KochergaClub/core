@@ -10,7 +10,7 @@ import { useEvenmanProjectsListQuery } from './queries.generated';
 
 interface Props {
   selected?: string;
-  select: (slug: string) => Promise<void>;
+  select: (slug: string) => Promise<any>;
 }
 
 const EventShapeProjectLink = ({ selected, select }: Props) => {

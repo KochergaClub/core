@@ -3,27 +3,31 @@ import Toggle from 'react-toggle';
 
 import { Button, Row } from '@kocherga/frontkit';
 
-import { Event, EventType } from '../../stores/Event';
+import { EventType } from '../types';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
+import { useUpdateMutation } from '../hooks';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
 const EventTypeField: React.FC<Props> = ({ event }) => {
+  const update = useUpdateMutation(event.id);
+
   const translatedTypes: { [key in EventType]: string } = {
     public: 'Публичное',
     private: 'Приватное',
     unknown: 'Unknown',
   };
 
-  if (event.type === 'unknown') {
+  if (event.event_type === 'unknown') {
     return (
       <Row gutter={4}>
         <div>Выберите тип:</div>
-        <Button small onClick={() => event.setType('public')}>
+        <Button small onClick={() => update({ event_type: 'public' })}>
           <FaGlobeAfrica style={{ color: 'green' }} />
         </Button>
-        <Button small onClick={() => event.setType('private')}>
+        <Button small onClick={() => update({ event_type: 'private' })}>
           <FaLock style={{ color: 'red' }} />
         </Button>
       </Row>
@@ -33,14 +37,18 @@ const EventTypeField: React.FC<Props> = ({ event }) => {
   return (
     <Row gutter={4}>
       <Toggle
-        checked={event.type === 'public'}
+        checked={event.event_type === 'public'}
         icons={{
           checked: <FaGlobeAfrica size={11} style={{ color: 'white' }} />,
           unchecked: <FaLock size={11} style={{ color: 'white' }} />,
         }}
-        onChange={() => event.invertType()}
+        onChange={() =>
+          update({
+            event_type: event.event_type === 'public' ? 'private' : 'public',
+          })
+        }
       />
-      <div>{translatedTypes[event.type] || 'Unknown'}</div>
+      <div>{translatedTypes[event.event_type as EventType] || 'Unknown'}</div>
     </Row>
   );
 };

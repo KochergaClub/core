@@ -8,10 +8,11 @@ import { RootStore } from './RootStore';
 
 import EventShape from './EventShape';
 
+import { EventType } from '../event/types';
+
 export type EventAnnounceTarget = 'vk' | 'fb' | 'timepad';
 export type EventImageType = 'default' | 'vk';
 export type TemplaterMode = 'html' | 'png';
-export type EventType = 'private' | 'public' | 'unknown';
 export type RegistrationType = 'native' | 'timepad';
 export type EventRealm = 'offline' | 'online';
 export type EventPricingType = 'anticafe' | 'free';
@@ -246,23 +247,6 @@ export class Event extends EventShape {
         },
       },
     });
-  }
-
-  @computed
-  get readyForAnnounceToTimepad() {
-    return (
-      this.description && this.summary && this.title && this.getImage('default')
-    );
-  }
-
-  @computed
-  get readyForAnnounceToVk() {
-    return (
-      this.description &&
-      this.title &&
-      this.getImage('vk') &&
-      this.announcements.vk.group
-    );
   }
 
   @computed

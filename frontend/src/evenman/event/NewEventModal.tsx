@@ -3,7 +3,9 @@ import { useState, useCallback } from 'react';
 import { Modal, Column, ControlsFooter, Input } from '@kocherga/frontkit';
 import { AsyncButton } from '~/components';
 
-import { useRootStore } from '../common';
+import { useEvenmanEventCreateMutation } from './queries.generated';
+import { setHours, setMinutes, addHours } from 'date-fns';
+import { useCommonHotkeys } from '~/common/hooks';
 
 interface Props {
   close: () => void;
@@ -11,60 +13,52 @@ interface Props {
 }
 
 const NewEventModal: React.FC<Props> = props => {
+  const [createMutation] = useEvenmanEventCreateMutation();
+
   const [title, setTitle] = useState('');
   const [time, setTime] = useState('');
-
-  const root = useRootStore();
 
   const isValid =
     title &&
     Boolean(time.match(/^\d\d:(00|30)$/)) &&
     Boolean(props.date.match(/^\d\d\d\d-\d\d-\d\d$/));
 
-  const getEndTime = useCallback(() => {
-    const match = time.match(/^(\d\d):(\d\d)$/);
-    if (!match) {
-      return;
-    }
-    const hour = match[1];
-    const minute = match[2];
-    return String(parseInt(hour, 10) + 2).padStart(2, '0') + ':' + minute;
-  }, [time]);
-
-  const serialize = useCallback(() => {
-    if (!isValid) {
-      return;
-    }
-    const endTime = getEndTime();
-    if (!endTime) {
-      return; // shouldn't happen, but this makes typescript happy
-    }
-    return {
-      title,
-      date: props.date,
-      startTime: time,
-      endTime,
-    };
-  }, [getEndTime, isValid, props, title, time]);
-
   const create = useCallback(async () => {
     if (!isValid) {
       return;
     }
-    const createParams = serialize();
-    if (!createParams) {
-      return; // throw exception?
+
+    const match = time.match(/^(\d\d):(\d\d)$/);
+    if (!match) {
+      return;
     }
-    await root.eventStore.createEvent(createParams);
+    const hour = parseInt(match[1], 10);
+    const minute = parseInt(match[2], 10);
+
+    const start = setHours(setMinutes(new Date(props.date), minute), hour);
+    const end = addHours(start, 2);
+
+    await createMutation({
+      variables: {
+        title,
+        start: start.toISOString(),
+        end: end.toISOString(),
+      },
+    });
     props.close();
-  }, [root, props, isValid, serialize]);
+  }, [createMutation, title, props, isValid, time]);
+
+  const hotkeys = useCommonHotkeys({
+    onEscape: props.close,
+    onEnter: create,
+  });
 
   return (
     <Modal>
       <Modal.Header toggle={props.close}>
         Новое событие на {props.date}
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body {...hotkeys}>
         <Column stretch>
           <label>Название события</label>
           <Input

@@ -1,5 +1,5 @@
 fragment EventsEvent_Summary on EventsEvent {
-  event_id
+  id
   title
   start
   published
@@ -26,7 +26,7 @@ query EvenmanEvents($start: String!, $end: String!) {
 }
 
 fragment EvenmanUnknownEvent on EventsEvent {
-  event_id
+  id
   title
 }
 
@@ -38,9 +38,69 @@ query EvenmanUnknownEvents {
   }
 }
 
+fragment EvenmanEvent_Details on EventsEvent {
+  id
+  created
+  start
+
+  title
+  summary
+  description
+  timing_description_override
+
+  location
+  zoom_link
+
+  event_type
+  pricing_type
+  registration_type
+  realm
+
+  visitors
+  tags
+
+  image(spec: "width-240") {
+    url
+  }
+
+  imageForVkBackground: image(spec: "width-1100") {
+    url
+  }
+
+  prototype {
+    id
+  }
+
+  project {
+    meta {
+      slug
+    }
+  }
+
+  published
+  announcements {
+    timepad {
+      link
+      category_code
+      prepaid_tickets
+    }
+    vk {
+      link
+      group
+      image(spec: "width-240") {
+        url
+      }
+    }
+    fb {
+      link
+      group
+    }
+  }
+}
+
 query EvenmanEvent($id: ID!) {
   event(event_id: $id) {
-    ...EventsEvent_Summary
+    ...EvenmanEvent_Details
   }
 }
 
@@ -73,7 +133,7 @@ mutation EvenmanSetPricingType($id: ID!, $pricing_type: String!) {
 
 mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
   result: eventSetZoomLink(input: {
-      event_id: $id,
+      event_id: $id
       zoom_link: $link
     }) {
     ok
@@ -83,6 +143,125 @@ mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
 mutation EvenmanGenerateZoomLink($id: ID!) {
   result: eventGenerateZoomLink(input: {
       event_id: $id
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanUpdate(
+  $id: ID!
+  $published: Boolean
+  $visitors: String
+  $event_type: String
+  $registration_type: String
+  $title: String
+  $description: String
+  $summary: String
+  $location: String
+  $prototype_id: ID
+  $project_slug: String
+  $timing_description_override: String
+  $image_id: ID
+) {
+  result: eventUpdate(input: {
+      event_id: $id
+      published: $published
+      visitors: $visitors
+      event_type: $event_type
+      registration_type: $registration_type
+      title: $title
+      description: $description
+      summary: $summary
+      location: $location
+      prototype_id: $prototype_id
+      project_slug: $project_slug
+      timing_description_override: $timing_description_override
+      image_id: $image_id
+    }) {
+    ok
+    event {
+      ...EvenmanEvent_Details
+    }
+  }
+}
+
+mutation EvenmanEventDelete($id: ID!) {
+  result: eventDelete(input: {
+      event_id: $id
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanEventAddTag($id: ID!, $tag: String!) {
+  result: eventAddTag(input: {
+      event_id: $id
+      tag: $tag
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanEventDeleteTag($id: ID!, $tag: String!) {
+  result: eventDeleteTag(input: {
+      event_id: $id
+      tag: $tag
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
+  result: eventSetImageFromUrl(input: {
+      event_id: $id
+      url: $url
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanVkAnnouncementSetImage($event_id: ID!, $image_id: ID!) {
+  result: eventVkAnnouncementSetImage(input: {
+      event_id: $event_id
+      image_id: $image_id
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanAnnounce($event_id: ID!, $target: EventAnnounceTarget!) {
+  result: eventAnnounce(input: {
+      event_id: $event_id
+      target: $target
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanSetAnnounceUrl($event_id: ID!, $target: EventAnnounceTarget!, $url: String!) {
+  result: eventSetAnnounceUrl(input: {
+      event_id: $event_id
+      target: $target
+      url: $url
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanEventMove($event_id: ID!, $start: String!) {
+  result: eventMove(input: {
+      event_id: $event_id
+      start: $start
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanEventCreate($title: String!, $start: String!, $end: String!) {
+  result: eventCreate(input: {
+      title: $title
+      start: $start
+      end: $end
     }) {
     ok
   }

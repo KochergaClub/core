@@ -1,60 +1,54 @@
-import { observer } from 'mobx-react';
-import { action, observable } from 'mobx';
-import * as React from 'react';
+import { useState, useCallback } from 'react';
 
-import { Event } from '../stores/Event';
-import { VkImageModal } from './VkImageModal';
-import EventImageDropzone from './EventImageDropzone';
+import VkImageModal from './VkImageModal';
 import { A, Column } from '@kocherga/frontkit';
+import ImageEditor from '../common/ImageEditor';
+import {
+  EvenmanEvent_DetailsFragment,
+  useEvenmanVkAnnouncementSetImageMutation,
+} from './queries.generated';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-@observer
-class EventImageWidgetVk extends React.Component<Props, {}> {
-  @observable modalIsOpen = false;
+const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  @action.bound
-  toggleModal() {
-    this.modalIsOpen = !this.modalIsOpen;
-  }
+  const toggleModal = useCallback(() => {
+    setModalIsOpen(!modalIsOpen);
+  }, [modalIsOpen]);
 
-  constructor(props: Props) {
-    super(props);
-    this.saveLink = this.saveLink.bind(this);
-  }
+  const [setImage] = useEvenmanVkAnnouncementSetImageMutation();
 
-  @action.bound
-  async saveLink(link: string) {
-    this.modalIsOpen = false;
-    await this.props.event.setImageFromUrl(link);
-  }
+  const onSave = useCallback(
+    image_id => setImage({ variables: { event_id: event.id, image_id } }),
+    [event.id, setImage]
+  );
 
-  render() {
-    return (
-      <Column centered gutter={0}>
-        <header>Картинка для ВК:</header>
-        <small>
-          <A
-            href="#"
-            onClick={e => {
-              e.preventDefault();
-              this.toggleModal();
-            }}
-          >
-            создать
-          </A>
-          <VkImageModal
-            isOpen={this.modalIsOpen}
-            event={this.props.event}
-            toggle={this.toggleModal}
-          />
-        </small>
-        <EventImageDropzone imageType="vk" event={this.props.event} />
-      </Column>
-    );
-  }
-}
+  return (
+    <Column centered gutter={0}>
+      <header>Картинка для ВК:</header>
+      <small>
+        <A
+          href="#"
+          onClick={e => {
+            e.preventDefault();
+            toggleModal();
+          }}
+        >
+          создать
+        </A>
+        {modalIsOpen && (
+          <VkImageModal event={event} close={toggleModal} onSave={onSave} />
+        )}
+      </small>
+      <ImageEditor
+        onChange={onSave}
+        image={event.announcements.vk.image || undefined}
+      />
+    </Column>
+  );
+};
 
 export default EventImageWidgetVk;

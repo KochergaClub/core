@@ -112,7 +112,7 @@ export default class EventCalendarItem extends React.Component<Props> {
 
   onSelect = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    this.props.onSelect(this.props.event.event_id);
+    this.props.onSelect(this.props.event.id);
   };
 
   render() {

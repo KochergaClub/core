@@ -1,15 +1,16 @@
-import { observer } from 'mobx-react';
-
 import styled from 'styled-components';
 
 import { FaTrash } from 'react-icons/fa';
 
 import { Button } from '@kocherga/frontkit';
 
-import { Event } from '../../stores/Event';
+import {
+  EvenmanEvent_DetailsFragment,
+  useEvenmanEventDeleteMutation,
+} from '../queries.generated';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
 const CenteredLine = styled.div`
@@ -23,18 +24,19 @@ const CenteredLine = styled.div`
   }
 `;
 
-const EventDelete = observer(({ event }: Props) => {
-  if (event.deleted) {
-    return <b>Событие удалено</b>;
-  }
+const EventDelete: React.FC<Props> = ({ event }) => {
+  const [deleteMutation] = useEvenmanEventDeleteMutation({
+    variables: { id: event.id },
+  });
+
   return (
-    <Button onClick={() => event.delete()} small>
+    <Button onClick={() => deleteMutation()} small>
       <CenteredLine>
         <FaTrash />
         <span>Удалить</span>
       </CenteredLine>
     </Button>
   );
-});
+};
 
 export default EventDelete;

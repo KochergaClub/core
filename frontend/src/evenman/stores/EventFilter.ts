@@ -5,7 +5,8 @@ import { createTransformer } from 'mobx-utils';
 
 import moment from 'moment';
 
-import { Event, EventType } from './Event';
+import { Event } from './Event';
+import { EventType } from '../event/types';
 import { EventStore } from './EventStore';
 
 interface Query {

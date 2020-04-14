@@ -27,9 +27,9 @@ const CalendarCell: React.FC<Props> = ({ events, selected_id }) => {
     <CalendarCellContainer>
       {events.map(event => (
         <EventCalendarItem
-          key={event.event_id}
+          key={event.id}
           event={event}
-          selected={event.event_id === selected_id}
+          selected={event.id === selected_id}
           onSelect={selectCb}
         />
       ))}

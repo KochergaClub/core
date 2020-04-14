@@ -38,20 +38,20 @@ const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
   const setPublic = useCallback(() => {
     setEventType({
       variables: {
-        id: event.event_id,
+        id: event.id,
         event_type: 'public',
       },
     });
-  }, [event.event_id, setEventType]);
+  }, [event.id, setEventType]);
 
   const setPrivate = useCallback(() => {
     setEventType({
       variables: {
-        id: event.event_id,
+        id: event.id,
         event_type: 'private',
       },
     });
-  }, [event.event_id, setEventType]);
+  }, [event.id, setEventType]);
 
   return (
     <Row stretch spaced>
@@ -92,7 +92,7 @@ const UnknownEventsDropdown: React.FC = () => {
       <ListContainer>
         <Column>
           {events.map(event => (
-            <ListItem event={event} key={event.event_id} />
+            <ListItem event={event} key={event.id} />
           ))}
         </Column>
       </ListContainer>

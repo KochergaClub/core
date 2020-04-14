@@ -11,6 +11,7 @@ export type EvenmanProjectsListQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'ProjectPage' }
+    & Pick<Types.ProjectPage, 'id'>
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'slug'>
@@ -44,6 +45,7 @@ export type EvenmanTimepadCategoriesQuery = (
 export const EvenmanProjectsListDocument = gql`
     query EvenmanProjectsList {
   projects {
+    id
     meta {
       slug
     }

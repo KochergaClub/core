@@ -2,16 +2,17 @@ import { ApolloQueryResults } from '~/components';
 
 import { ReactSelectCreatable } from '../../components/ui';
 
-import { Event } from '../../stores/Event';
-
 import { useEvenmanPrototypesForPickerQuery } from './queries.generated';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
+import { useUpdateMutation } from '../hooks';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
 const Picker = ({ event }: Props) => {
   const queryResults = useEvenmanPrototypesForPickerQuery();
+  const update = useUpdateMutation(event.id);
 
   return (
     <ApolloQueryResults {...queryResults}>
@@ -28,10 +29,10 @@ const Picker = ({ event }: Props) => {
             placeholder="Выбрать прототип"
             options={prototypes.map(value2option)}
             value={
-              value2option(prototypes[0]) // FIXME - selected -> value2option
+              prototypes.length ? value2option(prototypes[0]) : null // FIXME - selected -> value2option
             }
             onChange={(option: any) => {
-              event.setPrototypeId(option.value);
+              update({ prototype_id: option.value });
             }}
           />
         );

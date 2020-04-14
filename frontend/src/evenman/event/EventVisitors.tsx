@@ -1,40 +1,37 @@
-import * as React from 'react';
-import { observer } from 'mobx-react';
-
-import EditableString from '../components/EditableString';
-
-import { Event } from '../stores/Event';
+import { useCallback } from 'react';
 
 import { Row } from '@kocherga/frontkit';
 
+import EditableString from '../components/EditableString';
+
 import { MutedSpan } from '../components/ui';
+import { EvenmanEvent_DetailsFragment } from './queries.generated';
+import { useUpdateMutation } from './hooks';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-@observer
-export default class EventVisitors extends React.Component<Props, {}> {
-  renderValue = () => {
-    const { visitors } = this.props.event;
-    if (!visitors) {
+const EventVisitors: React.FC<Props> = ({ event }) => {
+  const update = useUpdateMutation(event.id);
+
+  const renderValue = useCallback(() => {
+    if (!event.visitors) {
       return <MutedSpan>ввести</MutedSpan>;
     }
-    return <strong>{visitors}</strong>;
-  };
+    return <strong>{event.visitors}</strong>;
+  }, [event.visitors]);
 
-  render() {
-    const { visitors } = this.props.event;
+  return (
+    <Row gutter={4}>
+      <div>Число участников:</div>
+      <EditableString
+        value={event.visitors || undefined}
+        save={value => update({ visitors: value })}
+        renderValue={renderValue}
+      />
+    </Row>
+  );
+};
 
-    return (
-      <Row gutter={4}>
-        <div>Число участников:</div>
-        <EditableString
-          value={visitors}
-          save={value => this.props.event.setVisitors(value)}
-          renderValue={this.renderValue}
-        />
-      </Row>
-    );
-  }
-}
+export default EventVisitors;

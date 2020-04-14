@@ -1,33 +1,40 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 import moment from 'moment';
+import {
+  formatDistanceToNow,
+  setHours,
+  setMinutes,
+  getHours,
+  getMinutes,
+} from 'date-fns';
 
 import { A } from '@kocherga/frontkit';
 
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 
-const EditableMomentSpan = ({
-  m,
-  onChange,
-}: {
-  m: moment.Moment;
-  onChange: (m: moment.Moment) => void;
-}) => {
+import { formatDate } from '~/common/utils';
+
+interface Props {
+  date: Date;
+  onChange: (d: Date) => void;
+}
+
+const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
   const [focused, setFocused] = useState(false);
 
   const onDateChange = useCallback(
-    (newDate: moment.Moment | null) => {
-      if (!newDate) {
+    (newMoment: moment.Moment | null) => {
+      if (!newMoment) {
         return;
       }
-      const newMoment = newDate.set({
-        hour: m.hour(),
-        minute: m.minute(),
-      });
-      onChange(newMoment);
+      const newDate = newMoment.toDate();
+      setHours(newDate, getHours(date));
+      setMinutes(newDate, getMinutes(date));
+      onChange(newDate);
     },
-    [m, onChange]
+    [date, onChange]
   );
 
   const onFocusChange = useCallback(
@@ -48,22 +55,23 @@ const EditableMomentSpan = ({
       {focused ? (
         <SingleDatePicker
           id="event-date-picker"
-          date={m}
+          date={moment(date)}
           focused={focused}
           onDateChange={onDateChange}
           onFocusChange={onFocusChange}
         />
       ) : (
         <A href="#" onClick={onExpand}>
-          <b>{m.format('ddd').toUpperCase()}</b> {m.format('D MMMM')}
+          <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
+          {formatDate(date, 'd MMMM')}
         </A>
       )}
-      , {m.format('HH:mm')}
+      , {formatDate(date, 'HH:mm')}
       {' ('}
-      {m.fromNow()}
+      {formatDistanceToNow(date)}
       {')'}
     </span>
   );
 };
 
-export default EditableMomentSpan;
+export default EditableDateSpan;

@@ -1,5 +1,6 @@
 query EvenmanProjectsList {
   projects {
+    id
     meta {
       slug
     }

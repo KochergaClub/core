@@ -1,28 +1,21 @@
-import { useState } from 'react';
-import { observer } from 'mobx-react-lite';
-
 import { colors, Row, Column } from '@kocherga/frontkit';
 
-import { Event } from '../stores/Event';
-
-import { useEvenmanSetPricingTypeMutation } from './queries.generated';
+import {
+  useEvenmanSetPricingTypeMutation,
+  EvenmanEvent_DetailsFragment,
+} from './queries.generated';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-const EventRealm: React.FC<Props> = observer(({ event }) => {
-  const [reloading, setReloading] = useState(false);
-
+const EventRealm: React.FC<Props> = ({ event }) => {
   const [
     setPricingTypeMutation,
     { loading: mutating },
   ] = useEvenmanSetPricingTypeMutation({
-    onCompleted: async () => {
-      setReloading(true);
-      await event.reload();
-      setReloading(false);
-    },
+    refetchQueries: ['EvenmanEvent'],
+    awaitRefetchQueries: true,
   });
 
   return (
@@ -46,7 +39,7 @@ const EventRealm: React.FC<Props> = observer(({ event }) => {
           />
           <label
             htmlFor={'pricing_type--' + item.value}
-            style={mutating || reloading ? { color: colors.grey[500] } : {}}
+            style={mutating ? { color: colors.grey[500] } : {}}
           >
             {item.title}
           </label>
@@ -54,6 +47,8 @@ const EventRealm: React.FC<Props> = observer(({ event }) => {
       ))}
     </Column>
   );
-});
+};
 
 export default EventRealm;
+
+//test

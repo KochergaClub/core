@@ -77,8 +77,6 @@ const MonthCalendar = observer((props: Props) => {
     });
   }, []);
 
-  console.log('render MonthCalendar');
-
   return (
     <div style={{ minHeight: 250, overflow: 'hidden' }}>
       <MonthHeader />

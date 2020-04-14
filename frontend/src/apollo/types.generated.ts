@@ -113,6 +113,11 @@ export type BasicParagraphBlock = WagtailBlock & {
   value: Scalars['String'],
 };
 
+export type BasicResult = {
+   __typename?: 'BasicResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
 export type BigContactsBlock = WagtailBlock & {
    __typename?: 'BigContactsBlock',
   id: Scalars['ID'],
@@ -314,13 +319,54 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventAddTagInput = {
+  event_id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
+export type EventAnnounceInput = {
+  event_id: Scalars['ID'],
+  target: EventAnnounceTarget,
+};
+
+export enum EventAnnounceTarget {
+  Vk = 'VK',
+  Fb = 'FB',
+  Timepad = 'TIMEPAD'
+}
+
+export type EventCreateInput = {
+  title: Scalars['String'],
+  start: Scalars['String'],
+  end: Scalars['String'],
+};
+
+export type EventCreateResult = {
+   __typename?: 'EventCreateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventDeleteInput = {
+  event_id: Scalars['ID'],
+};
+
+export type EventDeleteResult = {
+   __typename?: 'EventDeleteResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventDeleteTagInput = {
+  event_id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
 export type EventGenerateZoomLinkInput = {
   event_id: Scalars['ID'],
 };
 
-export type EventGenerateZoomLinkResult = {
-   __typename?: 'EventGenerateZoomLinkResult',
-  ok?: Maybe<Scalars['Boolean']>,
+export type EventMoveInput = {
+  event_id: Scalars['ID'],
+  start: Scalars['String'],
 };
 
 export type EventPrototypeAddTagInput = {
@@ -417,6 +463,7 @@ export type EventPrototypeUpdateResult = {
 export type EventsAnnouncementFb = {
    __typename?: 'EventsAnnouncementFb',
   link: Scalars['String'],
+  group: Scalars['String'],
 };
 
 export type EventsAnnouncements = {
@@ -429,11 +476,26 @@ export type EventsAnnouncements = {
 export type EventsAnnouncementTimepad = {
    __typename?: 'EventsAnnouncementTimepad',
   link: Scalars['String'],
+  category_code: Scalars['String'],
+  prepaid_tickets: Scalars['Boolean'],
 };
 
 export type EventsAnnouncementVk = {
    __typename?: 'EventsAnnouncementVk',
   link: Scalars['String'],
+  group: Scalars['String'],
+  image?: Maybe<WagtailImage>,
+};
+
+
+export type EventsAnnouncementVkImageArgs = {
+  spec: Scalars['String']
+};
+
+export type EventSetAnnounceUrlInput = {
+  event_id: Scalars['ID'],
+  target: EventAnnounceTarget,
+  url: Scalars['String'],
 };
 
 export type EventSetEventTypeInput = {
@@ -444,6 +506,11 @@ export type EventSetEventTypeInput = {
 export type EventSetEventTypeResult = {
    __typename?: 'EventSetEventTypeResult',
   ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventSetImageFromUrlInput = {
+  event_id: Scalars['ID'],
+  url: Scalars['String'],
 };
 
 export type EventSetPricingTypeInput = {
@@ -478,15 +545,35 @@ export type EventSetZoomLinkResult = {
 
 export type EventsEvent = {
    __typename?: 'EventsEvent',
+  id: Scalars['ID'],
   event_id: Scalars['ID'],
   title: Scalars['String'],
+  description: Scalars['String'],
+  summary: Scalars['String'],
+  timing_description_override: Scalars['String'],
+  location: Scalars['String'],
+  zoom_link: Scalars['String'],
   start: Scalars['String'],
-  event_type: Scalars['String'],
+  created: Scalars['String'],
+  updated: Scalars['String'],
   published: Scalars['Boolean'],
-  announcements: EventsAnnouncements,
+  event_type: Scalars['String'],
+  pricing_type: Scalars['String'],
+  registration_type: Scalars['String'],
+  realm: Scalars['String'],
   visitors?: Maybe<Scalars['String']>,
+  tags: Array<Scalars['String']>,
+  image?: Maybe<WagtailImage>,
+  prototype?: Maybe<EventsPrototype>,
+  project?: Maybe<ProjectPage>,
+  announcements: EventsAnnouncements,
   /** all EventsEvent are staff-only, but this can change in the future */
   tickets: Array<EventsTicket>,
+};
+
+
+export type EventsEventImageArgs = {
+  spec: Scalars['String']
 };
 
 export type EventsEventConnection = {
@@ -584,6 +671,45 @@ export type EventsTicket = {
   id: Scalars['ID'],
   status: Scalars['String'],
   user: AuthUser,
+};
+
+export type EventTimepadAnnouncementUpdateInput = {
+  event_id: Scalars['ID'],
+  prepaid_tickets?: Maybe<Scalars['Boolean']>,
+  category_code?: Maybe<Scalars['String']>,
+};
+
+export type EventUpdateInput = {
+  event_id: Scalars['ID'],
+  published?: Maybe<Scalars['Boolean']>,
+  visitors?: Maybe<Scalars['String']>,
+  event_type?: Maybe<Scalars['String']>,
+  registration_type?: Maybe<Scalars['String']>,
+  title?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  summary?: Maybe<Scalars['String']>,
+  location?: Maybe<Scalars['String']>,
+  zoom_link?: Maybe<Scalars['String']>,
+  prototype_id?: Maybe<Scalars['ID']>,
+  project_slug?: Maybe<Scalars['String']>,
+  timing_description_override?: Maybe<Scalars['String']>,
+  image_id?: Maybe<Scalars['ID']>,
+};
+
+export type EventUpdateResult = {
+   __typename?: 'EventUpdateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  event: EventsEvent,
+};
+
+export type EventVkAnnouncementSetImageInput = {
+  event_id: Scalars['ID'],
+  image_id: Scalars['ID'],
+};
+
+export type EventVkAnnouncementUpdateInput = {
+  event_id: Scalars['ID'],
+  group?: Maybe<Scalars['String']>,
 };
 
 export type FaqEntry = {
@@ -770,6 +896,9 @@ export type Mutation = {
   myEventsTicketUnregister: MyEventsTicket,
   myEventsTicketRegister: MyEventsTicket,
   myEventsTicketRegisterAnon: MyEventsTicket,
+  eventUpdate: EventUpdateResult,
+  eventCreate: EventCreateResult,
+  eventDelete: EventDeleteResult,
   eventSetEventType: EventSetEventTypeResult,
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
@@ -781,7 +910,16 @@ export type Mutation = {
   eventPrototypeAddTag: EventPrototypeAddTagResult,
   eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
   eventPrototypeSetImage: EventPrototypeSetImageResult,
-  eventGenerateZoomLink: EventGenerateZoomLinkResult,
+  eventGenerateZoomLink: BasicResult,
+  eventAddTag: BasicResult,
+  eventDeleteTag: BasicResult,
+  eventSetImageFromUrl: BasicResult,
+  eventVkAnnouncementSetImage: BasicResult,
+  eventAnnounce: BasicResult,
+  eventSetAnnounceUrl: BasicResult,
+  eventTimepadAnnouncementUpdate: BasicResult,
+  eventVkAnnouncementUpdate: BasicResult,
+  eventMove: BasicResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -918,6 +1056,21 @@ export type MutationMyEventsTicketRegisterAnonArgs = {
 };
 
 
+export type MutationEventUpdateArgs = {
+  input: EventUpdateInput
+};
+
+
+export type MutationEventCreateArgs = {
+  input: EventCreateInput
+};
+
+
+export type MutationEventDeleteArgs = {
+  input: EventDeleteInput
+};
+
+
 export type MutationEventSetEventTypeArgs = {
   input: EventSetEventTypeInput
 };
@@ -975,6 +1128,51 @@ export type MutationEventPrototypeSetImageArgs = {
 
 export type MutationEventGenerateZoomLinkArgs = {
   input: EventGenerateZoomLinkInput
+};
+
+
+export type MutationEventAddTagArgs = {
+  input: EventAddTagInput
+};
+
+
+export type MutationEventDeleteTagArgs = {
+  input: EventDeleteTagInput
+};
+
+
+export type MutationEventSetImageFromUrlArgs = {
+  input: EventSetImageFromUrlInput
+};
+
+
+export type MutationEventVkAnnouncementSetImageArgs = {
+  input: EventVkAnnouncementSetImageInput
+};
+
+
+export type MutationEventAnnounceArgs = {
+  input: EventAnnounceInput
+};
+
+
+export type MutationEventSetAnnounceUrlArgs = {
+  input: EventSetAnnounceUrlInput
+};
+
+
+export type MutationEventTimepadAnnouncementUpdateArgs = {
+  input: EventTimepadAnnouncementUpdateInput
+};
+
+
+export type MutationEventVkAnnouncementUpdateArgs = {
+  input: EventVkAnnouncementUpdateInput
+};
+
+
+export type MutationEventMoveArgs = {
+  input: EventMoveInput
 };
 
 

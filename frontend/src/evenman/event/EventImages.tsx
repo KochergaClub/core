@@ -1,27 +1,22 @@
-import { observer } from 'mobx-react';
-import * as React from 'react';
-
-import { Event } from '../stores/Event';
-
 import EventImageWidgetDefault from './EventImageWidgetDefault';
 import EventImageWidgetVk from './EventImageWidgetVk';
 
 import { Row } from '@kocherga/frontkit';
+import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-@observer
-export class EventImages extends React.Component<Props, {}> {
-  render() {
-    if (!this.props.event.isPublic) return null;
+const EventImages: React.FC<Props> = ({ event }) => {
+  if (event.event_type !== 'public') return null;
 
-    return (
-      <Row centered gutter={12}>
-        <EventImageWidgetDefault event={this.props.event} />
-        <EventImageWidgetVk event={this.props.event} />
-      </Row>
-    );
-  }
-}
+  return (
+    <Row centered gutter={12}>
+      <EventImageWidgetDefault event={event} />
+      <EventImageWidgetVk event={event} />
+    </Row>
+  );
+};
+
+export default EventImages;

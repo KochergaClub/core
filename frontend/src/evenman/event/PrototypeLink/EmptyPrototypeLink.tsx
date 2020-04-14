@@ -1,24 +1,25 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-
-import { Event } from '../../stores/Event';
+import { useState } from 'react';
 
 import Picker from './Picker';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-const EmptyPrototypeLink = observer((props: Props) => {
-  const [picking, setPicking] = React.useState(false);
+const EmptyPrototypeLink: React.FC<Props> = ({ event }) => {
+  const [picking, setPicking] = useState(false);
   if (picking) {
-    return <Picker event={props.event} />
+    return <Picker event={event} />;
   }
   return (
-    <a style={{textDecoration: 'none', borderBottom: '1px dotted black'}} onClick={() => setPicking(true)}>
+    <a
+      style={{ textDecoration: 'none', borderBottom: '1px dotted black' }}
+      onClick={() => setPicking(true)}
+    >
       Выбрать прототип
     </a>
   );
-});
+};
 
 export default EmptyPrototypeLink;

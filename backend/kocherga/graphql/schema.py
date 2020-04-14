@@ -41,6 +41,10 @@ core_type_defs = gql("""
     _empty: Boolean
   }
 
+  type BasicResult {
+    ok: Boolean
+  }
+
   type PageInfo {
     hasNextPage: Boolean!
     hasPreviousPage: Boolean!

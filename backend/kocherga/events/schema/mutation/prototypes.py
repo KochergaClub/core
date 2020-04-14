@@ -1,121 +1,16 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from datetime import datetime
 from ariadne import MutationType
-from django.contrib.auth import get_user_model
+
+from datetime import datetime
 import wagtail.images.models
 
 from kocherga.dateutils import TZ
 import kocherga.projects.models
-from .. import models
+from ... import models
 
 Mutation = MutationType()
-
-
-@Mutation.field('myEventsTicketUnregister')
-def myEventsTicketUnregister(_, info, event_id):
-    event = models.Event.objects.public_events().get(uuid=event_id)
-    ticket = models.Ticket.objects.unregister(
-        user=info.context.user,
-        event=event,
-    )
-    return ticket
-
-
-@Mutation.field('myEventsTicketRegister')
-def myEventsTicketRegister(_, info, event_id):
-    event = models.Event.objects.public_events().get(uuid=event_id)
-    ticket = models.Ticket.objects.register(
-        user=info.context.user,
-        event=event,
-    )
-    return ticket
-
-
-@Mutation.field('myEventsTicketRegisterAnon')
-def myEventsTicketRegisterAnon(_, info, input):
-    event_id = input['event_id']
-    email = input['email']
-    subscribed_to_newsletter = input.get('subscribed_to_newsletter', False)
-
-    KchUser = get_user_model()
-    try:
-        user = KchUser.objects.get(email=email)
-    except KchUser.DoesNotExist:
-        user = KchUser.objects.create_user(email)
-
-    event = models.Event.objects.public_events().get(uuid=event_id)
-    ticket = models.Ticket.objects.register(
-        user=user,
-        event=event,
-        subscribed_to_newsletter=subscribed_to_newsletter,
-    )
-    return ticket
-
-
-@Mutation.field('eventSetEventType')
-def eventSetEventType(_, info, input):
-    event_id = input['event_id']
-    event_type = input['event_type']
-
-    event = models.Event.objects.get(uuid=event_id)
-    assert not event.deleted
-
-    event.event_type = event_type
-    event.full_clean()
-    event.save()
-
-    return {
-        'ok': True
-    }
-
-
-@Mutation.field('eventSetRealm')
-def eventSetRealm(_, info, input):
-    event_id = input['event_id']
-    realm = input['realm']
-
-    event = models.Event.objects.get(uuid=event_id)
-    assert not event.deleted
-
-    event.realm = realm
-    event.full_clean()
-    event.save()
-
-    return {
-        'ok': True
-    }
-
-
-@Mutation.field('eventSetPricingType')
-def eventSetPricingType(_, info, input):
-    event_id = input['event_id']
-    pricing_type = input['pricing_type']
-
-    event = models.Event.objects.get(uuid=event_id)
-    assert not event.deleted
-
-    event.pricing_type = pricing_type
-    event.full_clean()
-    event.save()
-
-    return {
-        'ok': True
-    }
-
-
-@Mutation.field('eventSetZoomLink')
-def eventSetZoomLink(_, info, input):
-    event_id = input['event_id']
-    zoom_link = input['zoom_link']
-
-    event = models.Event.objects.get(uuid=event_id)
-    event.set_zoom_link(zoom_link)
-
-    return {
-        'ok': True
-    }
 
 
 @Mutation.field('eventPrototypeCreate')
@@ -159,7 +54,9 @@ def eventPrototypeUpdate(_, info, input):
         if not input['project_slug']:
             prototype.project = None
         else:
-            prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(slug=input['project_slug'])
+            prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(
+                slug=input['project_slug']
+            )
 
     if 'vk_group_name' in input:
         if not input['vk_group_name']:
@@ -195,19 +92,7 @@ def eventPrototypeNewEvent(_, info, input):
     ts = input['ts']
 
     dt = datetime.fromtimestamp(ts, TZ)
-    event = prototype.new_event(dt)
-
-    return {
-        'ok': True
-    }
-
-
-@Mutation.field('eventGenerateZoomLink')
-def eventGenerateZoomLink(_, info, input):
-    event_id = input['event_id']
-
-    event = models.Event.objects.get(uuid=event_id)
-    event.generate_zoom_link()
+    prototype.new_event(dt)
 
     return {
         'ok': True
@@ -241,7 +126,7 @@ def eventPrototypeDeleteTag(_, info, input):
 @Mutation.field('eventPrototypeSetImage')
 def eventPrototypeSetImage(_, info, input):
     prototype = models.EventPrototype.objects.get(pk=input['id'])
-    logger.info(input)
+    logger.debug(input)
 
     image = wagtail.images.models.Image.objects.get(pk=input['image_id'])
     # TODO - implement image view permission and check for it
@@ -254,3 +139,4 @@ def eventPrototypeSetImage(_, info, input):
         'ok': True,
         'prototype': prototype,
     }
+

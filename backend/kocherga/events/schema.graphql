@@ -18,16 +18,37 @@ type EventsEventEdge {
 }
 
 type EventsEvent {
-  event_id: ID!  # uuid field, renamed for client
-  title: String!
-  start: String!
+  id: ID!   # uuid field, renamed for client
+  event_id: ID!  # deprecated
 
-  event_type: String!
+  title: String!
+  description: String!
+  summary: String!
+  timing_description_override: String!
+
+  location: String!
+  zoom_link: String!
+
+  start: String!
+  created: String!
+  updated: String!
   published: Boolean!
 
-  announcements: EventsAnnouncements!
+  event_type: String!
+  pricing_type: String!
+  registration_type: String!
+  realm: String!
 
   visitors: String @staffonly
+
+  tags: [String!]! @staffonly
+
+  image(spec: String!): WagtailImage
+
+  prototype: EventsPrototype
+  project: ProjectPage
+
+  announcements: EventsAnnouncements!
 
   # all EventsEvent are staff-only, but this can change in the future
   tickets: [EventsTicket!]! @staffonly
@@ -41,14 +62,19 @@ type EventsAnnouncements {
 
 type EventsAnnouncementTimepad {
   link: String!
+  category_code: String!
+  prepaid_tickets: Boolean!
 }
 
 type EventsAnnouncementVk {
   link: String!
+  group: String!
+  image(spec: String!): WagtailImage @staffonly
 }
 
 type EventsAnnouncementFb {
   link: String!
+  group: String!
 }
 
 type EventsTicket {
@@ -168,6 +194,58 @@ input MyEventsTicketRegisterAnonInput {
   event_id: ID!
   email: String!
   subscribed_to_newsletter: Boolean
+}
+
+extend type Mutation {
+  eventUpdate(input: EventUpdateInput!): EventUpdateResult! @staffonly
+}
+
+input EventUpdateInput {
+  event_id: ID!
+  published: Boolean
+  visitors: String
+  event_type: String
+  registration_type: String
+  title: String
+  description: String
+  summary: String
+  location: String
+  zoom_link: String
+  prototype_id: ID
+  project_slug: String
+  timing_description_override: String
+  image_id: ID
+}
+
+type EventUpdateResult {
+  ok: Boolean
+  event: EventsEvent!
+}
+
+extend type Mutation {
+  eventCreate(input: EventCreateInput!): EventCreateResult! @staffonly
+}
+
+input EventCreateInput {
+  title: String!
+  start: String!
+  end: String!
+}
+
+type EventCreateResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventDelete(input: EventDeleteInput!): EventDeleteResult! @staffonly
+}
+
+input EventDeleteInput {
+  event_id: ID!
+}
+
+type EventDeleteResult {
+  ok: Boolean
 }
 
 extend type Mutation {
@@ -335,13 +413,98 @@ type EventPrototypeSetImageResult {
 }
 
 extend type Mutation {
-  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventGenerateZoomLinkResult! @staffonly
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): BasicResult! @staffonly
 }
 
 input EventGenerateZoomLinkInput {
   event_id: ID!
 }
 
-type EventGenerateZoomLinkResult {
-  ok: Boolean
+extend type Mutation {
+  eventAddTag(input: EventAddTagInput!): BasicResult! @staffonly
+}
+
+input EventAddTagInput {
+  event_id: ID!
+  tag: String!
+}
+
+extend type Mutation {
+  eventDeleteTag(input: EventDeleteTagInput!): BasicResult! @staffonly
+}
+
+input EventDeleteTagInput {
+  event_id: ID!
+  tag: String!
+}
+
+extend type Mutation {
+  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): BasicResult! @staffonly
+}
+
+input EventSetImageFromUrlInput {
+  event_id: ID!
+  url: String!
+}
+
+extend type Mutation {
+  eventVkAnnouncementSetImage(input: EventVkAnnouncementSetImageInput!): BasicResult! @staffonly
+}
+
+input EventVkAnnouncementSetImageInput {
+  event_id: ID!
+  image_id: ID!
+}
+
+enum EventAnnounceTarget {
+  VK
+  FB
+  TIMEPAD
+}
+
+extend type Mutation {
+  eventAnnounce(input: EventAnnounceInput!): BasicResult! @staffonly
+}
+
+input EventAnnounceInput {
+  event_id: ID!
+  target: EventAnnounceTarget!
+}
+
+extend type Mutation {
+  eventSetAnnounceUrl(input: EventSetAnnounceUrlInput!): BasicResult! @staffonly
+}
+
+input EventSetAnnounceUrlInput {
+  event_id: ID!
+  target: EventAnnounceTarget!
+  url: String!
+}
+
+extend type Mutation {
+  eventTimepadAnnouncementUpdate(input: EventTimepadAnnouncementUpdateInput!): BasicResult! @staffonly
+}
+
+input EventTimepadAnnouncementUpdateInput {
+  event_id: ID!
+  prepaid_tickets: Boolean
+  category_code: String
+}
+
+extend type Mutation {
+  eventVkAnnouncementUpdate(input: EventVkAnnouncementUpdateInput!): BasicResult! @staffonly
+}
+
+input EventVkAnnouncementUpdateInput {
+  event_id: ID!
+  group: String
+}
+
+extend type Mutation {
+  eventMove(input: EventMoveInput!): BasicResult! @staffonly
+}
+
+input EventMoveInput {
+  event_id: ID!
+  start: String!
 }

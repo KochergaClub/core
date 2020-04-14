@@ -30,6 +30,9 @@ export const getCacheUpdater = <
     }
     cache.writeQuery({
       query: EvenmanPrototypeDocument,
+      variables: {
+        id: prototype_id,
+      },
       data: {
         prototype: {
           ...cached.prototype,

@@ -1,34 +1,40 @@
-import moment from 'moment';
+import { formatDistanceToNow } from 'date-fns';
 
 import { Column, Row } from '@kocherga/frontkit';
 
+import { formatDate } from '~/common/utils';
+
 import EditableString from '../../components/EditableString';
-import { Event } from '../../stores/Event';
 import { MutedSpan } from '../../components/ui';
 
 import EventDelete from './EventDelete';
 import EventTypeField from './EventTypeField';
 import PrototypeLink from '../PrototypeLink';
-import EditableMomentSpan from '../EditableMomentSpan';
+import EditableDateSpan from '../EditableDateSpan';
 
-// import { useEvenmanSetRealmMutation } from '../queries.generated';
+import {
+  EvenmanEvent_DetailsFragment,
+  useEvenmanEventMoveMutation,
+} from '../queries.generated';
+import { useUpdateMutation } from '../hooks';
 
-const MomentSpan = ({ m }: { m: moment.Moment }) => (
+const DateSpan: React.FC<{ date: Date }> = ({ date }) => (
   <span>
-    <b>{m.format('ddd').toUpperCase()}</b> {m.format('D MMMM')},{' '}
-    {m.format('HH:mm')}
+    <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
+    {formatDate(date, 'd MMMM')}, {formatDate(date, 'HH:mm')}
     {' ('}
-    {m.fromNow()}
+    {formatDistanceToNow(date)}
     {')'}
   </span>
 );
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
 const EventHeader: React.FC<Props> = ({ event }) => {
-  // const [setRealmMutation] = useEvenmanSetRealmMutation();
+  const update = useUpdateMutation(event.id);
+  const [moveMutation] = useEvenmanEventMoveMutation();
 
   return (
     // TODO - refactor messy layout with display: grid
@@ -41,7 +47,7 @@ const EventHeader: React.FC<Props> = ({ event }) => {
           <EditableString
             value={event.title}
             renderValue={ref => <strong ref={ref}>{event.title}</strong>}
-            save={value => event.setTitle(value)}
+            save={value => update({ title: value })}
           />
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
@@ -54,9 +60,16 @@ const EventHeader: React.FC<Props> = ({ event }) => {
         </div>
 
         <div>
-          <EditableMomentSpan
-            m={event.startMoment}
-            onChange={m => event.setStart(m)}
+          <EditableDateSpan
+            date={new Date(event.start)}
+            onChange={date =>
+              moveMutation({
+                variables: {
+                  event_id: event.id,
+                  start: date.toISOString(),
+                },
+              })
+            }
           />
         </div>
         <div
@@ -69,7 +82,7 @@ const EventHeader: React.FC<Props> = ({ event }) => {
         >
           <small>
             <MutedSpan>
-              Создано: <MomentSpan m={moment(event.created)} />
+              Создано: <DateSpan date={new Date(event.created)} />
             </MutedSpan>
           </small>
         </div>
