@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import Toggle from 'react-toggle';
 
@@ -20,14 +21,22 @@ const EventTypeField: React.FC<Props> = ({ event }) => {
     unknown: 'Unknown',
   };
 
+  const setPublic = useCallback(() => {
+    update({ event_type: 'public' });
+  }, [update]);
+
+  const setPrivate = useCallback(() => {
+    update({ event_type: 'private' });
+  }, [update]);
+
   if (event.event_type === 'unknown') {
     return (
       <Row gutter={4}>
         <div>Выберите тип:</div>
-        <Button small onClick={() => update({ event_type: 'public' })}>
+        <Button size="small" onClick={setPublic}>
           <FaGlobeAfrica style={{ color: 'green' }} />
         </Button>
-        <Button small onClick={() => update({ event_type: 'private' })}>
+        <Button size="small" onClick={setPrivate}>
           <FaLock style={{ color: 'red' }} />
         </Button>
       </Row>

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import styled from 'styled-components';
 
 import FlipMove from 'react-flip-move';
@@ -42,22 +41,16 @@ interface ItemProps {
 }
 
 const NavListItemLi = styled('li')<ItemProps>`
-  background-color: ${(props: any) =>
+  background-color: ${props =>
     props.selected ? '#ffffb3' : props.blur ? '#f0f0f0' : ''};
   cursor: pointer;
 
   &:hover {
-    background-color: ${(props: any) =>
+    background-color: ${props =>
       props.selected ? '#ffffb3' : props.blur ? '#e8e8e8' : '#e8e8e8'};
   }
 `;
 
-export class NavListItem extends React.Component<ItemProps> {
-  render() {
-    return (
-      <NavListItemLi {...this.props} onClick={() => this.props.select()} />
-    );
-  }
-}
-
-export const NavListAuxItem = (props: any) => <li {...props} />;
+export const NavListItem: React.FC<ItemProps> = props => {
+  return <NavListItemLi {...props} onClick={() => props.select()} />;
+};

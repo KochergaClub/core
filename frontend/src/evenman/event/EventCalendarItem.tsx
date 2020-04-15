@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
@@ -11,12 +9,6 @@ interface ProgressProps {
   selected: boolean;
   max: number;
   value: number;
-}
-
-interface Props {
-  event: EventsEvent_SummaryFragment;
-  selected: boolean;
-  onSelect: (id: string) => void;
 }
 
 const Container = styled.div`
@@ -76,10 +68,16 @@ const TitleContainer = styled.div`
   z-index: 1;
 `;
 
-export default class EventCalendarItem extends React.Component<Props> {
-  progressParams() {
-    const { event } = this.props;
+interface Props {
+  event: EventsEvent_SummaryFragment;
+  selected: boolean;
+  onSelect: (id: string) => void;
+}
 
+const EventCalendarItem: React.FC<Props> = props => {
+  const { event } = props;
+
+  const progressParams = () => {
     let max = 0;
     let value = 0;
     if (event.event_type !== 'public') {
@@ -96,43 +94,40 @@ export default class EventCalendarItem extends React.Component<Props> {
     if (event.announcements.vk.link) value += 1;
 
     return { max, value };
-  }
+  };
 
-  renderProgress() {
-    const { max, value } = this.progressParams();
+  const renderProgress = () => {
+    const { max, value } = progressParams();
     return (
       <Progress
         max={max}
         value={value}
-        private={this.props.event.event_type !== 'public'}
-        selected={this.props.selected}
+        private={props.event.event_type !== 'public'}
+        selected={props.selected}
       />
     );
-  }
-
-  onSelect = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    this.props.onSelect(this.props.event.id);
   };
 
-  render() {
-    const { event } = this.props;
-    return (
-      <Container onClick={this.onSelect}>
-        {this.renderProgress()}
-        <Icon>
-          {event.event_type === 'public' ? (
-            <FaGlobeAfrica
-              style={{ color: 'green', verticalAlign: 'inherit' }}
-            />
-          ) : (
-            <FaLock style={{ color: 'black', verticalAlign: 'inherit' }} />
-          )}
-        </Icon>
-        <TitleContainer>
-          <div>{event.title}</div>
-        </TitleContainer>
-      </Container>
-    );
-  }
-}
+  const onSelect = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    props.onSelect(props.event.id);
+  };
+
+  return (
+    <Container onClick={onSelect}>
+      {renderProgress()}
+      <Icon>
+        {event.event_type === 'public' ? (
+          <FaGlobeAfrica style={{ color: 'green', verticalAlign: 'inherit' }} />
+        ) : (
+          <FaLock style={{ color: 'black', verticalAlign: 'inherit' }} />
+        )}
+      </Icon>
+      <TitleContainer>
+        <div>{event.title}</div>
+      </TitleContainer>
+    </Container>
+  );
+};
+
+export default EventCalendarItem;

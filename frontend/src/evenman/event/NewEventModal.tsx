@@ -2,10 +2,19 @@ import { useState, useCallback } from 'react';
 import { setHours, setMinutes, addHours } from 'date-fns';
 import Router from 'next/router';
 
-import { Modal, Column, ControlsFooter, Input } from '@kocherga/frontkit';
+import {
+  Modal,
+  Column,
+  ControlsFooter,
+  Input,
+  Button,
+} from '@kocherga/frontkit';
 
-import { AsyncButton } from '~/components';
-import { useCommonHotkeys, useNotification } from '~/common/hooks';
+import {
+  useCommonHotkeys,
+  useNotification,
+  useFocusOnFirstModalRender,
+} from '~/common/hooks';
 
 import { useEvenmanEventCreateMutation } from './queries.generated';
 import { eventRoute } from '../routes';
@@ -17,10 +26,12 @@ interface Props {
 
 const NewEventModal: React.FC<Props> = props => {
   const notify = useNotification();
-  const [createMutation] = useEvenmanEventCreateMutation({
-    refetchQueries: ['EvenmanEvents'],
-    awaitRefetchQueries: true,
-  });
+  const [createMutation, { loading: creating }] = useEvenmanEventCreateMutation(
+    {
+      refetchQueries: ['EvenmanEvents'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const [title, setTitle] = useState('');
   const [time, setTime] = useState('');
@@ -67,6 +78,8 @@ const NewEventModal: React.FC<Props> = props => {
     onEnter: create,
   });
 
+  const focus = useFocusOnFirstModalRender();
+
   return (
     <Modal>
       <Modal.Header toggle={props.close}>
@@ -79,6 +92,7 @@ const NewEventModal: React.FC<Props> = props => {
             type="text"
             value={title}
             onChange={e => setTitle(e.currentTarget.value)}
+            ref={focus}
           />
           <label>Время (xx:00 или xx:30)</label>
           <Input
@@ -91,9 +105,14 @@ const NewEventModal: React.FC<Props> = props => {
       </Modal.Body>
       <Modal.Footer>
         <ControlsFooter>
-          <AsyncButton act={create} kind="primary" disabled={!isValid}>
+          <Button
+            onClick={create}
+            kind="primary"
+            loading={creating}
+            disabled={!isValid || creating}
+          >
             Создать
-          </AsyncButton>
+          </Button>
         </ControlsFooter>
       </Modal.Footer>
     </Modal>
