@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
+import React from 'react';
 
 import { animated, useTransition } from 'react-spring';
 
@@ -17,7 +16,7 @@ interface Props {
   weeks: number;
 }
 
-const MonthCalendar = observer((props: Props) => {
+const MonthCalendar = (props: Props) => {
   const [weeksState, dispatch] = React.useReducer(reducer, {
     weeks: [],
     heights: {},
@@ -101,6 +100,6 @@ const MonthCalendar = observer((props: Props) => {
       ))}
     </div>
   );
-});
+};
 
 export default MonthCalendar;
