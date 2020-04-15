@@ -6,7 +6,7 @@ interface Props {
   setValue: (v?: string) => void;
 }
 
-const FbGroupPicker: React.FC<Props> = props => {
+const FbGroupPicker: React.FC<Props> = () => {
   return <div>TODO</div>; // implement similar to VkGroupPicker
 };
 

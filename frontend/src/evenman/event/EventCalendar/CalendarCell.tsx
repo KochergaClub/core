@@ -8,6 +8,8 @@ import EventCalendarItem from '../EventCalendarItem';
 
 import { EventsEvent_SummaryFragment } from '../queries.generated';
 
+import { eventRoute } from '../../routes';
+
 const CalendarCellContainer = styled.div`
   height: 3em;
   overflow: scroll;
@@ -20,7 +22,8 @@ interface Props {
 
 const CalendarCell: React.FC<Props> = ({ events, selected_id }) => {
   const selectCb = useCallback((id: string) => {
-    Router.push('/team/evenman/event/[id]', `/team/evenman/event/${id}`);
+    const route = eventRoute(id);
+    Router.push(route.href, route.as);
   }, []);
 
   return (

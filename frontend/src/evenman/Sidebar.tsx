@@ -1,5 +1,3 @@
-import { observer } from 'mobx-react-lite';
-
 import Link from 'next/link';
 import Router from 'next/router';
 
@@ -29,7 +27,7 @@ const tabs = [
   },
 ];
 
-const MainNav = observer(({ selected }: { selected: string }) => {
+const MainNav = ({ selected }: { selected: string }) => {
   return (
     <ColumnNav>
       {tabs.map(({ path, title, viewName }) => (
@@ -43,9 +41,9 @@ const MainNav = observer(({ selected }: { selected: string }) => {
       ))}
     </ColumnNav>
   );
-});
+};
 
-export const Sidebar = observer(({ selected }: { selected: string }) => {
+const Sidebar = ({ selected }: { selected: string }) => {
   return (
     <Column stretch spaced>
       <Column stretch>
@@ -58,4 +56,6 @@ export const Sidebar = observer(({ selected }: { selected: string }) => {
       </Column>
     </Column>
   );
-});
+};
+
+export default Sidebar;

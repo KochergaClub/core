@@ -28,7 +28,7 @@ fragment EventsPrototype on EventsPrototype {
   }
   suggested_dates(limit: 5)
   instances {
-    event_id
+    id
     start
     title
     visitors
@@ -137,7 +137,8 @@ mutation EvenmanPrototypeAddTag($id: ID!, $tag: String!) {
     }) {
     ok
     prototype {
-      ...EventsPrototype
+      id
+      tags
     }
   }
 }
@@ -149,7 +150,8 @@ mutation EvenmanPrototypeDeleteTag($id: ID!, $tag: String!) {
     }) {
     ok
     prototype {
-      ...EventsPrototype
+      id
+      tags
     }
   }
 }

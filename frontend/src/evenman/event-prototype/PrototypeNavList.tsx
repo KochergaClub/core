@@ -6,6 +6,7 @@ import { NavList, NavListItem } from '../components/NavList';
 import { NumberBadge, MutedSpan } from '../components/ui';
 
 import { EventsPrototype_SummaryFragment } from './queries.generated';
+import { prototypeRoute } from '../routes';
 
 interface Props {
   items: EventsPrototype_SummaryFragment[];
@@ -49,12 +50,10 @@ const PrototypeNavList: React.FC<Props> = ({ items, title, selectedId }) => {
         <NavListItem
           key={item.id}
           selected={item.id === selectedId}
-          select={() =>
-            Router.push(
-              '/team/evenman/event-prototypes/[id]',
-              `/team/evenman/event-prototypes/${item.id}`
-            )
-          }
+          select={() => {
+            const route = prototypeRoute(item.id);
+            Router.push(route.href, route.as);
+          }}
         >
           <PrototypeItem prototype={item} />
         </NavListItem>

@@ -4,13 +4,7 @@ import { Row } from '@kocherga/frontkit';
 
 import UnknownEventsDropdown from '../UnknownEventsDropdown';
 
-import {
-  Action,
-  setEventType,
-  setHideAnnounced,
-  setHideUnpublished,
-  State,
-} from './filters';
+import { Action, setEventType, setHideAnnounced, State } from './filters';
 
 interface Props {
   filters: State;
@@ -35,13 +29,6 @@ const FiltersBar: React.FC<Props> = ({ filters, dispatch }) => {
         }
       />
       <span>Анонсированные</span>
-      <Toggle
-        checked={!filters.hideUnpublished}
-        onChange={(e: React.FormEvent<HTMLInputElement>) =>
-          dispatch(setHideUnpublished(!e.currentTarget.checked))
-        }
-      />
-      <span>Неготовые</span>
     </Row>
   );
 };

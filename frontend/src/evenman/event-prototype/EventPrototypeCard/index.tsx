@@ -19,7 +19,7 @@ import {
   useEvenmanPrototypeDeleteTagMutation,
 } from '../queries.generated';
 
-import { useUpdateMutation, getCacheUpdater } from './hooks';
+import { useUpdateMutation } from './hooks';
 
 import ExistingEvents from './ExistingEvents';
 import ActiveStatus from './ActiveStatus';
@@ -40,12 +40,8 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
 
   const update = useUpdateMutation(prototype_id);
 
-  const [addTag] = useEvenmanPrototypeAddTagMutation({
-    update: getCacheUpdater(prototype_id),
-  });
-  const [deleteTag] = useEvenmanPrototypeDeleteTagMutation({
-    update: getCacheUpdater(prototype_id),
-  });
+  const [addTag] = useEvenmanPrototypeAddTagMutation();
+  const [deleteTag] = useEvenmanPrototypeDeleteTagMutation();
 
   return (
     <ApolloQueryResults {...queryResults}>

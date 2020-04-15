@@ -6,10 +6,10 @@ import EditableString from '../components/EditableString';
 import EditableLink from '../components/EditableLink';
 
 import {
-  useEvenmanSetRealmMutation,
   useEvenmanSetZoomLinkMutation,
   useEvenmanGenerateZoomLinkMutation,
   EvenmanEvent_DetailsFragment,
+  useEvenmanUpdateMutation,
 } from './queries.generated';
 import { useUpdateMutation } from './hooks';
 
@@ -66,10 +66,7 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
 };
 
 const EventRealm: React.FC<Props> = ({ event }) => {
-  const [setRealmMutation, { loading: mutating }] = useEvenmanSetRealmMutation({
-    refetchQueries: ['EvenmanEvent'],
-    awaitRefetchQueries: true,
-  });
+  const [updateMutation, { loading }] = useEvenmanUpdateMutation();
 
   return (
     <Row gutter={20}>
@@ -86,14 +83,14 @@ const EventRealm: React.FC<Props> = ({ event }) => {
               value={item.value}
               checked={event.realm === item.value}
               onChange={() =>
-                setRealmMutation({
+                updateMutation({
                   variables: { id: event.id, realm: item.value },
                 })
               }
             />
             <label
               htmlFor={'realm--' + item.value}
-              style={mutating ? { color: colors.grey[500] } : {}}
+              style={loading ? { color: colors.grey[500] } : {}}
             >
               {item.title}
             </label>

@@ -1,11 +1,14 @@
 import { useState, useCallback } from 'react';
+import { setHours, setMinutes, addHours } from 'date-fns';
+import Router from 'next/router';
 
 import { Modal, Column, ControlsFooter, Input } from '@kocherga/frontkit';
+
 import { AsyncButton } from '~/components';
+import { useCommonHotkeys, useNotification } from '~/common/hooks';
 
 import { useEvenmanEventCreateMutation } from './queries.generated';
-import { setHours, setMinutes, addHours } from 'date-fns';
-import { useCommonHotkeys } from '~/common/hooks';
+import { eventRoute } from '../routes';
 
 interface Props {
   close: () => void;
@@ -13,7 +16,11 @@ interface Props {
 }
 
 const NewEventModal: React.FC<Props> = props => {
-  const [createMutation] = useEvenmanEventCreateMutation();
+  const notify = useNotification();
+  const [createMutation] = useEvenmanEventCreateMutation({
+    refetchQueries: ['EvenmanEvents'],
+    awaitRefetchQueries: true,
+  });
 
   const [title, setTitle] = useState('');
   const [time, setTime] = useState('');
@@ -38,15 +45,22 @@ const NewEventModal: React.FC<Props> = props => {
     const start = setHours(setMinutes(new Date(props.date), minute), hour);
     const end = addHours(start, 2);
 
-    await createMutation({
+    const result = await createMutation({
       variables: {
         title,
         start: start.toISOString(),
         end: end.toISOString(),
       },
     });
+    if (!result.data) {
+      notify({ text: 'Failed to create event', type: 'Error' });
+      return;
+    }
     props.close();
-  }, [createMutation, title, props, isValid, time]);
+
+    const route = eventRoute(result.data.result.event.id);
+    Router.push(route.href, route.as);
+  }, [notify, createMutation, title, props, isValid, time]);
 
   const hotkeys = useCommonHotkeys({
     onEscape: props.close,

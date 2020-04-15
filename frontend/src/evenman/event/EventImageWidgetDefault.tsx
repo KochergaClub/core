@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-
-import { InputModal } from '../InputModal';
 import { A, Column } from '@kocherga/frontkit';
+
+import InputModal from '../InputModal';
 
 import {
   EvenmanEvent_DetailsFragment,
@@ -26,13 +26,13 @@ const EventImageWidgetDefault: React.FC<Props> = ({ event }) => {
 
   const saveLink = useCallback(
     async (url: string) => {
-      setModalIsOpen(false);
       await setImageFromUrl({
         variables: {
           id: event.id,
           url,
         },
       });
+      setModalIsOpen(false);
     },
     [event.id, setImageFromUrl]
   );
@@ -50,13 +50,14 @@ const EventImageWidgetDefault: React.FC<Props> = ({ event }) => {
         >
           добавить по ссылке
         </A>
-        <InputModal
-          title="Ссылка на картинку"
-          description="Вставьте сюда прямую ссылку на картинку:"
-          isOpen={modalIsOpen}
-          toggle={toggleModal}
-          save={saveLink}
-        />
+        {modalIsOpen && (
+          <InputModal
+            title="Ссылка на картинку"
+            description="Вставьте сюда прямую ссылку на картинку:"
+            toggle={toggleModal}
+            save={saveLink}
+          />
+        )}
       </small>
       <ImageEditor
         onChange={image_id => update({ image_id })}

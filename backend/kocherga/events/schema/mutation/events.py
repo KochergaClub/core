@@ -22,7 +22,7 @@ def eventCreate(_, info, input):
     start = dateutil.parser.isoparse(start)
     end = dateutil.parser.isoparse(end)
 
-    models.Event.objects.create(
+    event = models.Event.objects.create(
         title=title,
         start=start,
         end=end,
@@ -31,6 +31,7 @@ def eventCreate(_, info, input):
 
     return {
         'ok': True,
+        'event': event,
     }
 
 
@@ -44,11 +45,13 @@ def eventUpdate(_, info, input):
     for field in (
             'published',
             'visitors',
-            'event_type',
-            'registration_type',
             'title',
             'description',
             'summary',
+            'event_type',
+            'registration_type',
+            'pricing_type',
+            'realm',
             'timing_description_override',
             'location',
             'zoom_link',
@@ -180,17 +183,19 @@ def eventAddTag(_, info, input):
 
     return {
         'ok': True,
+        'event': event,
     }
 
 
 @Mutation.field('eventDeleteTag')
 def eventDeleteTag(_, info, input):
-    event = models.Event.objects.get(uiud=input['event_id'])
+    event = models.Event.objects.get(uuid=input['event_id'])
 
     event.delete_tag(input['tag'])
 
     return {
         'ok': True,
+        'event': event,
     }
 
 
@@ -280,9 +285,11 @@ def eventSetAnnounceUrl(_, info, input):
 @Mutation.field('eventMove')
 def eventMove(_, info, input):
     event = models.Event.objects.get(uuid=input['event_id'])
+    start = dateutil.parser.isoparse(input['start'])
 
-    raise Exception("Not implemented")
+    event.move(start)
 
     return {
         'ok': True,
+        'event': event,
     }

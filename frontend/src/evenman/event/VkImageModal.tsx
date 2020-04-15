@@ -1,12 +1,28 @@
 import { useState, useCallback, useMemo } from 'react';
+import styled from 'styled-components';
 import { format } from 'date-fns';
 
-import { Button, Column, Modal, Input } from '@kocherga/frontkit';
+import {
+  Button,
+  Column,
+  Modal,
+  Input,
+  ControlsFooter,
+  Label,
+} from '@kocherga/frontkit';
 
 import { state2link } from '~/image-templater/utils';
 
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
-import { useAPI } from '~/common/hooks';
+import {
+  useAPI,
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '~/common/hooks';
+
+const WideInput = styled(Input)`
+  width: 100%;
+`;
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
@@ -16,6 +32,8 @@ interface Props {
 
 const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
   const api = useAPI();
+
+  const [saving, setSaving] = useState(false);
 
   const [title, setTitle] = useState(event.title);
   const [header, setHeader] = useState('');
@@ -45,6 +63,7 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
   );
 
   const save = useCallback(async () => {
+    setSaving(true);
     const response = await fetch(buildLink('png'));
     if (!response.ok) {
       throw new Error("can't fetch image");
@@ -72,6 +91,9 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
     setHeader(e.currentTarget.value);
   }, []);
 
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({ onEnter: save, onEscape: close });
+
   const iframeUrl = state2link({
     name: 'vk-image',
     type: 'html',
@@ -81,10 +103,27 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
   return (
     <Modal>
       <Modal.Header toggle={close}>Картинка для ВК</Modal.Header>
-      <Modal.Body>
+      <Modal.Body {...hotkeys}>
         <Column stretch>
-          <Input type="text" value={header} onChange={updateHeader} />
-          <Input type="text" value={title} onChange={updateTitle} />
+          <div>
+            <Label>Заголовок</Label>
+            <WideInput
+              type="text"
+              value={header}
+              onChange={updateHeader}
+              disabled={saving}
+            />
+          </div>
+          <div>
+            <Label>Название</Label>
+            <WideInput
+              type="text"
+              value={title}
+              onChange={updateTitle}
+              ref={focus}
+              disabled={saving}
+            />
+          </div>
           <iframe
             src={iframeUrl}
             style={{ width: 550, height: 350, border: 0 }}
@@ -92,9 +131,16 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
         </Column>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={save} primary>
-          Сохранить
-        </Button>
+        <ControlsFooter>
+          <Button
+            onClick={save}
+            kind="primary"
+            loading={saving}
+            disabled={saving}
+          >
+            Сохранить
+          </Button>
+        </ControlsFooter>
       </Modal.Footer>
     </Modal>
   );

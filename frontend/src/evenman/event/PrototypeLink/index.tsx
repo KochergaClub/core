@@ -5,6 +5,8 @@ import { A } from '@kocherga/frontkit';
 import EmptyPrototypeLink from './EmptyPrototypeLink';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 
+import { prototypeRoute } from '../../routes';
+
 interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
@@ -14,12 +16,9 @@ const PrototypeLink = ({ event }: Props) => {
     return <EmptyPrototypeLink event={event} />;
   }
 
+  const route = prototypeRoute(event.prototype.id);
   return (
-    <Link
-      href="/team/evenman/event-prototypes/[id]"
-      as={`/team/evenman/event-prototypes/${event.prototype.id}`}
-      passHref
-    >
+    <Link href={route.href} as={route.as} passHref>
       <A>Прототип</A>
     </Link>
   );

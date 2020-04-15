@@ -1,8 +1,8 @@
 import { colors, Row, Column } from '@kocherga/frontkit';
 
 import {
-  useEvenmanSetPricingTypeMutation,
   EvenmanEvent_DetailsFragment,
+  useEvenmanUpdateMutation,
 } from './queries.generated';
 
 interface Props {
@@ -10,13 +10,7 @@ interface Props {
 }
 
 const EventRealm: React.FC<Props> = ({ event }) => {
-  const [
-    setPricingTypeMutation,
-    { loading: mutating },
-  ] = useEvenmanSetPricingTypeMutation({
-    refetchQueries: ['EvenmanEvent'],
-    awaitRefetchQueries: true,
-  });
+  const [updateMutation, { loading: mutating }] = useEvenmanUpdateMutation();
 
   return (
     <Column>
@@ -32,7 +26,7 @@ const EventRealm: React.FC<Props> = ({ event }) => {
             value={item.value}
             checked={event.pricing_type === item.value}
             onChange={() =>
-              setPricingTypeMutation({
+              updateMutation({
                 variables: { id: event.id, pricing_type: item.value },
               })
             }

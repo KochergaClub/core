@@ -1,20 +1,22 @@
-import * as React from 'react';
-import { action, observable } from 'mobx';
-import { observer } from 'mobx-react';
-
-import { Button, Modal } from '@kocherga/frontkit';
-
+import { useState, useCallback } from 'react';
 import styled from 'styled-components';
+
+import { Input, Modal, Button, ControlsFooter } from '@kocherga/frontkit';
+
+import {
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+  useNotification,
+} from '~/common/hooks';
 
 interface Props {
   title: string;
   description: string;
   toggle: () => void;
-  save: (text: string) => void;
-  isOpen: boolean;
+  save: (text: string) => Promise<void>;
 }
 
-const Input = styled.input`
+const WideInput = styled(Input)`
   width: 100%;
 `;
 
@@ -22,54 +24,60 @@ const Centered = styled.div`
   text-align: center;
 `;
 
-@observer
-export class InputModal extends React.Component<Props, {}> {
-  @observable value = '';
-  private input: HTMLInputElement | null = null;
+const InputModal: React.FC<Props> = ({ title, description, toggle, save }) => {
+  const [value, setValue] = useState('');
+  const [acting, setActing] = useState(false);
+  const updateValue = (e: React.FormEvent<HTMLInputElement>) => {
+    setValue(e.currentTarget.value);
+  };
 
-  @action.bound
-  updateValue(e: React.FormEvent<HTMLInputElement>) {
-    this.value = e.currentTarget.value;
-  }
+  const notify = useNotification();
 
-  save() {
-    if (!this.value) {
+  const submit = useCallback(async () => {
+    if (!value) {
       return; // nothing to save
     }
-    this.props.save(this.value);
-  }
-
-  render() {
-    if (!this.props.isOpen) {
-      return null;
+    setActing(true);
+    try {
+      await save(value);
+    } catch (e) {
+      notify({ text: String(e), type: 'Error' });
     }
-    return (
-      <Modal onOpened={() => this.input && this.input.focus()}>
-        <Modal.Header toggle={this.props.toggle}>
-          {this.props.title}
-        </Modal.Header>
-        <Modal.Body>
-          <Centered>
-            {this.props.description}
-            <br />
-            <Input
-              type="text"
-              value={this.value}
-              onChange={this.updateValue}
-              ref={ref => (this.input = ref)}
-            />
-          </Centered>
-        </Modal.Body>
-        <Modal.Footer>
+    setActing(false);
+  }, [save, value, notify]);
+
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({ onEnter: submit, onEscape: toggle });
+
+  return (
+    <Modal>
+      <Modal.Header toggle={toggle}>{title}</Modal.Header>
+      <Modal.Body {...hotkeys}>
+        <Centered>
+          {description}
+          <br />
+          <WideInput
+            type="text"
+            value={value}
+            onChange={updateValue}
+            ref={focus}
+          />
+        </Centered>
+      </Modal.Body>
+      <Modal.Footer>
+        <ControlsFooter>
           <Button
-            disabled={!this.value.startsWith('http')}
-            onClick={() => this.save()}
-            primary
+            disabled={acting || !value.startsWith('http')}
+            loading={acting}
+            onClick={submit}
+            kind="primary"
           >
             Сохранить
           </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-}
+        </ControlsFooter>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default InputModal;

@@ -30,6 +30,7 @@ type EventsEvent {
   zoom_link: String!
 
   start: String!
+  end: String!
   created: String!
   updated: String!
   published: Boolean!
@@ -204,16 +205,18 @@ input EventUpdateInput {
   event_id: ID!
   published: Boolean
   visitors: String
-  event_type: String
-  registration_type: String
   title: String
   description: String
   summary: String
+  event_type: String
+  registration_type: String
+  pricing_type: String
+  realm: String
+  timing_description_override: String
   location: String
   zoom_link: String
   prototype_id: ID
   project_slug: String
-  timing_description_override: String
   image_id: ID
 }
 
@@ -234,6 +237,7 @@ input EventCreateInput {
 
 type EventCreateResult {
   ok: Boolean
+  event: EventsEvent!
 }
 
 extend type Mutation {
@@ -421,7 +425,7 @@ input EventGenerateZoomLinkInput {
 }
 
 extend type Mutation {
-  eventAddTag(input: EventAddTagInput!): BasicResult! @staffonly
+  eventAddTag(input: EventAddTagInput!): EventUpdateResult! @staffonly
 }
 
 input EventAddTagInput {
@@ -430,7 +434,7 @@ input EventAddTagInput {
 }
 
 extend type Mutation {
-  eventDeleteTag(input: EventDeleteTagInput!): BasicResult! @staffonly
+  eventDeleteTag(input: EventDeleteTagInput!): EventUpdateResult! @staffonly
 }
 
 input EventDeleteTagInput {
@@ -501,7 +505,7 @@ input EventVkAnnouncementUpdateInput {
 }
 
 extend type Mutation {
-  eventMove(input: EventMoveInput!): BasicResult! @staffonly
+  eventMove(input: EventMoveInput!): EventUpdateResult! @staffonly
 }
 
 input EventMoveInput {

@@ -314,6 +314,12 @@ class Event(models.Model):
         )
         self.set_zoom_link(zoom_link)
 
+    def move(self, start: datetime):
+        self.end = self.end + (start - self.start)
+        self.start = start
+        self.full_clean()
+        self.save()
+
     def clean(self):
         if self.published:
             if self.event_type != 'public':

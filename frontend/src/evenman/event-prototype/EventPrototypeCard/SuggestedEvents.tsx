@@ -5,7 +5,7 @@ import { Row } from '@kocherga/frontkit';
 import { formatDate } from '~/common/utils';
 import { AsyncButton } from '~/components';
 
-import { Header, MutedSpan } from '../../components/ui';
+import { Header } from '../../components/ui';
 
 import {
   useEvenmanPrototypeCancelDateMutation,

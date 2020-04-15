@@ -10,7 +10,7 @@ import { staticUrl } from '~/common/utils';
 
 import GlobalStyle from './GlobalStyle';
 
-import { Sidebar } from './Sidebar';
+import Sidebar from './Sidebar';
 import { WithSidebar } from './WithSidebar';
 
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';

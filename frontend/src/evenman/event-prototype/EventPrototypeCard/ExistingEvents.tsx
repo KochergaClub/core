@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 
 import { parseISO, isBefore } from 'date-fns';
 
@@ -8,6 +9,7 @@ import { formatDate } from '~/common/utils';
 import { MutedSpan } from '../../components/ui';
 
 import { EventsPrototypeFragment } from '../queries.generated';
+import { eventRoute } from '../../routes';
 
 const EventsTable = styled.table`
   width: 100%;
@@ -48,12 +50,14 @@ const ExistingEvents: React.FC<Props> = ({ prototype }) => {
             </tr>
             {instances.map(e => (
               <EventsTableRow
-                key={e.event_id}
+                key={e.id}
                 past={isBefore(parseISO(e.start), new Date())}
               >
                 <td>{formatDate(parseISO(e.start), 'd MMMM')} </td>
                 <td>
-                  <A href={`/team/evenman/event/${e.event_id}`}>{e.title}</A>
+                  <Link {...eventRoute(e.id)} passHref>
+                    <A>{e.title}</A>
+                  </Link>
                 </td>
                 <td>{e.visitors}</td>
               </EventsTableRow>

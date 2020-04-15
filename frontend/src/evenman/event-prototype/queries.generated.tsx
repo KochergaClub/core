@@ -24,7 +24,7 @@ export type EventsPrototypeFragment = (
     ) }
   )>, instances: Array<(
     { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'event_id' | 'start' | 'title' | 'visitors'>
+    & Pick<Types.EventsEvent, 'id' | 'start' | 'title' | 'visitors'>
   )> }
 );
 
@@ -148,7 +148,7 @@ export type EvenmanPrototypeAddTagMutation = (
     & Pick<Types.EventPrototypeAddTagResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
-      & EventsPrototypeFragment
+      & Pick<Types.EventsPrototype, 'id' | 'tags'>
     ) }
   ) }
 );
@@ -166,7 +166,7 @@ export type EvenmanPrototypeDeleteTagMutation = (
     & Pick<Types.EventPrototypeDeleteTagResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
-      & EventsPrototypeFragment
+      & Pick<Types.EventsPrototype, 'id' | 'tags'>
     ) }
   ) }
 );
@@ -220,7 +220,7 @@ export const EventsPrototypeFragmentDoc = gql`
   }
   suggested_dates(limit: 5)
   instances {
-    event_id
+    id
     start
     title
     visitors
@@ -459,11 +459,12 @@ export const EvenmanPrototypeAddTagDocument = gql`
   result: eventPrototypeAddTag(input: {id: $id, tag: $tag}) {
     ok
     prototype {
-      ...EventsPrototype
+      id
+      tags
     }
   }
 }
-    ${EventsPrototypeFragmentDoc}`;
+    `;
 export type EvenmanPrototypeAddTagMutationFn = ApolloReactCommon.MutationFunction<EvenmanPrototypeAddTagMutation, EvenmanPrototypeAddTagMutationVariables>;
 
 /**
@@ -495,11 +496,12 @@ export const EvenmanPrototypeDeleteTagDocument = gql`
   result: eventPrototypeDeleteTag(input: {id: $id, tag: $tag}) {
     ok
     prototype {
-      ...EventsPrototype
+      id
+      tags
     }
   }
 }
-    ${EventsPrototypeFragmentDoc}`;
+    `;
 export type EvenmanPrototypeDeleteTagMutationFn = ApolloReactCommon.MutationFunction<EvenmanPrototypeDeleteTagMutation, EvenmanPrototypeDeleteTagMutationVariables>;
 
 /**

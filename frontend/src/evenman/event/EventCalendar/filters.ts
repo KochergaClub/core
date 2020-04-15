@@ -1,6 +1,5 @@
 const SET_EVENT_TYPE = 'SET_EVENT_TYPE';
 const SET_HIDE_ANNOUNCED = 'SET_HIDE_ANNOUNCED';
-const SET_HIDE_UNPUBLISHED = 'SET_HIDE_UNPUBLISHED';
 
 interface SetEventTypeAction {
   type: typeof SET_EVENT_TYPE;
@@ -12,20 +11,11 @@ interface SetHideAnnouncedAction {
   payload: boolean;
 }
 
-interface SetHideUnpublishedAction {
-  type: typeof SET_HIDE_UNPUBLISHED;
-  payload: boolean;
-}
-
-export type Action =
-  | SetEventTypeAction
-  | SetHideAnnouncedAction
-  | SetHideUnpublishedAction;
+export type Action = SetEventTypeAction | SetHideAnnouncedAction;
 
 export interface State {
   eventType: string | undefined;
   hideAnnounced: boolean;
-  hideUnpublished: boolean;
 }
 
 export const setEventType = (
@@ -40,13 +30,6 @@ export const setHideAnnounced = (payload: boolean): SetHideAnnouncedAction => ({
   payload,
 });
 
-export const setHideUnpublished = (
-  payload: boolean
-): SetHideUnpublishedAction => ({
-  type: SET_HIDE_UNPUBLISHED,
-  payload,
-});
-
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case SET_EVENT_TYPE:
@@ -58,11 +41,6 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         hideAnnounced: action.payload,
-      };
-    case SET_HIDE_UNPUBLISHED:
-      return {
-        ...state,
-        hideUnpublished: action.payload,
       };
     default:
       return state;

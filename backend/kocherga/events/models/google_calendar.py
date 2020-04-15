@@ -15,11 +15,6 @@ from .event import Event
 
 
 def event_to_google_dict(event):
-    location = event.location
-
-    if location.lower() in kocherga.room.all_rooms:
-        location = kocherga.room.to_long_location(location)
-
     description = kocherga.events.markup.Markup(event.description or '').as_plain()
     if event.event_type == 'public':
         description = event.public_link() + "\n\n" + description
@@ -27,11 +22,18 @@ def event_to_google_dict(event):
     result = {
         "summary": event.title,
         "description": description,
-        "location": location,
         "start": {"dateTime": dts(event.start)},
         "end": {"dateTime": dts(event.end)},
         "status": "confirmed",
     }
+    if event.realm == 'offline':
+        location = event.location
+
+        if location.lower() in kocherga.room.all_rooms:
+            location = kocherga.room.to_long_location(location)
+
+        result['location'] = location
+
     if event.invite_creator:
         # TODO - this could lead to multiple invites if we create several full calendars.
         # Need to figure out how to avoid such problem.

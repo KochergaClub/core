@@ -1,7 +1,7 @@
-import { useState, useCallback, useReducer } from 'react';
+import { useState, useCallback, useReducer, useMemo } from 'react';
 
 import moment from 'moment';
-import { addWeeks, startOfDay, isEqual, format } from 'date-fns';
+import { startOfWeek, addWeeks, startOfDay, isEqual, format } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
@@ -27,18 +27,16 @@ const WEEKS = 3;
 
 const EventCalendar: React.FC<Props> = ({ selected_id }) => {
   // FIXME - pass from above
-  const [start, setStart] = useState(() => new Date());
-  const [end, setEnd] = useState(() => addWeeks(new Date(), WEEKS));
+  const [start, setStart] = useState(() => startOfWeek(new Date()));
+  const end = useMemo(() => addWeeks(start, WEEKS), [start]);
 
   const [filters, dispatch] = useReducer(reducer, {
     eventType: undefined,
     hideAnnounced: false,
-    hideUnpublished: false,
   });
 
   const setDate = useCallback((newDate: Date) => {
     setStart(newDate);
-    setEnd(addWeeks(newDate, WEEKS));
   }, []);
 
   const queryResults = useEvenmanEventsQuery({
@@ -53,15 +51,34 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     queryResults.refetch();
   });
 
+  const rawEvents = queryResults.data?.events?.nodes;
+
+  const filteredEvents = useMemo(
+    () =>
+      rawEvents
+        ? rawEvents.filter(
+            event =>
+              (filters.eventType === undefined ||
+                filters.eventType === event.event_type) &&
+              (!filters.hideAnnounced ||
+                (event.published &&
+                  event.announcements.fb.link &&
+                  event.announcements.vk.link &&
+                  event.announcements.timepad.link))
+          )
+        : [],
+    [rawEvents, filters]
+  );
+
   const renderCell = useCallback(
     (date: moment.Moment) => {
-      const events =
-        queryResults.data?.events?.nodes.filter(event =>
+      const dayEvents =
+        filteredEvents.filter(event =>
           isEqual(startOfDay(new Date(event.start)), startOfDay(date.toDate()))
         ) || [];
-      return <CalendarCell events={events} selected_id={selected_id} />;
+      return <CalendarCell events={dayEvents} selected_id={selected_id} />;
     },
-    [selected_id, queryResults.data]
+    [selected_id, filteredEvents]
   );
 
   const renderHeader = useCallback((date: moment.Moment) => {

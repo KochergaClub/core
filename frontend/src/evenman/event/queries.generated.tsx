@@ -60,7 +60,7 @@ export type EvenmanUnknownEventsQuery = (
 
 export type EvenmanEvent_DetailsFragment = (
   { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
+  & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
   & { image: Types.Maybe<(
     { __typename?: 'WagtailImage' }
     & Pick<Types.WagtailImage, 'url'>
@@ -181,11 +181,13 @@ export type EvenmanUpdateMutationVariables = {
   id: Types.Scalars['ID'],
   published?: Types.Maybe<Types.Scalars['Boolean']>,
   visitors?: Types.Maybe<Types.Scalars['String']>,
-  event_type?: Types.Maybe<Types.Scalars['String']>,
-  registration_type?: Types.Maybe<Types.Scalars['String']>,
   title?: Types.Maybe<Types.Scalars['String']>,
   description?: Types.Maybe<Types.Scalars['String']>,
   summary?: Types.Maybe<Types.Scalars['String']>,
+  event_type?: Types.Maybe<Types.Scalars['String']>,
+  registration_type?: Types.Maybe<Types.Scalars['String']>,
+  pricing_type?: Types.Maybe<Types.Scalars['String']>,
+  realm?: Types.Maybe<Types.Scalars['String']>,
   location?: Types.Maybe<Types.Scalars['String']>,
   prototype_id?: Types.Maybe<Types.Scalars['ID']>,
   project_slug?: Types.Maybe<Types.Scalars['String']>,
@@ -228,8 +230,12 @@ export type EvenmanEventAddTagMutationVariables = {
 export type EvenmanEventAddTagMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & Pick<Types.EventsEvent, 'id' | 'tags'>
+    ) }
   ) }
 );
 
@@ -242,8 +248,12 @@ export type EvenmanEventDeleteTagMutationVariables = {
 export type EvenmanEventDeleteTagMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & Pick<Types.EventsEvent, 'id' | 'tags'>
+    ) }
   ) }
 );
 
@@ -313,8 +323,12 @@ export type EvenmanEventMoveMutationVariables = {
 export type EvenmanEventMoveMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & Pick<Types.EventsEvent, 'id' | 'start' | 'end'>
+    ) }
   ) }
 );
 
@@ -330,6 +344,10 @@ export type EvenmanEventCreateMutation = (
   & { result: (
     { __typename?: 'EventCreateResult' }
     & Pick<Types.EventCreateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -364,6 +382,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
   id
   created
   start
+  end
   title
   summary
   description
@@ -679,8 +698,8 @@ export type EvenmanGenerateZoomLinkMutationHookResult = ReturnType<typeof useEve
 export type EvenmanGenerateZoomLinkMutationResult = ApolloReactCommon.MutationResult<EvenmanGenerateZoomLinkMutation>;
 export type EvenmanGenerateZoomLinkMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanGenerateZoomLinkMutation, EvenmanGenerateZoomLinkMutationVariables>;
 export const EvenmanUpdateDocument = gql`
-    mutation EvenmanUpdate($id: ID!, $published: Boolean, $visitors: String, $event_type: String, $registration_type: String, $title: String, $description: String, $summary: String, $location: String, $prototype_id: ID, $project_slug: String, $timing_description_override: String, $image_id: ID) {
-  result: eventUpdate(input: {event_id: $id, published: $published, visitors: $visitors, event_type: $event_type, registration_type: $registration_type, title: $title, description: $description, summary: $summary, location: $location, prototype_id: $prototype_id, project_slug: $project_slug, timing_description_override: $timing_description_override, image_id: $image_id}) {
+    mutation EvenmanUpdate($id: ID!, $published: Boolean, $visitors: String, $title: String, $description: String, $summary: String, $event_type: String, $registration_type: String, $pricing_type: String, $realm: String, $location: String, $prototype_id: ID, $project_slug: String, $timing_description_override: String, $image_id: ID) {
+  result: eventUpdate(input: {event_id: $id, published: $published, visitors: $visitors, title: $title, description: $description, summary: $summary, event_type: $event_type, registration_type: $registration_type, pricing_type: $pricing_type, realm: $realm, location: $location, prototype_id: $prototype_id, project_slug: $project_slug, timing_description_override: $timing_description_override, image_id: $image_id}) {
     ok
     event {
       ...EvenmanEvent_Details
@@ -706,11 +725,13 @@ export type EvenmanUpdateMutationFn = ApolloReactCommon.MutationFunction<Evenman
  *      id: // value for 'id'
  *      published: // value for 'published'
  *      visitors: // value for 'visitors'
- *      event_type: // value for 'event_type'
- *      registration_type: // value for 'registration_type'
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      summary: // value for 'summary'
+ *      event_type: // value for 'event_type'
+ *      registration_type: // value for 'registration_type'
+ *      pricing_type: // value for 'pricing_type'
+ *      realm: // value for 'realm'
  *      location: // value for 'location'
  *      prototype_id: // value for 'prototype_id'
  *      project_slug: // value for 'project_slug'
@@ -761,6 +782,10 @@ export const EvenmanEventAddTagDocument = gql`
     mutation EvenmanEventAddTag($id: ID!, $tag: String!) {
   result: eventAddTag(input: {event_id: $id, tag: $tag}) {
     ok
+    event {
+      id
+      tags
+    }
   }
 }
     `;
@@ -794,6 +819,10 @@ export const EvenmanEventDeleteTagDocument = gql`
     mutation EvenmanEventDeleteTag($id: ID!, $tag: String!) {
   result: eventDeleteTag(input: {event_id: $id, tag: $tag}) {
     ok
+    event {
+      id
+      tags
+    }
   }
 }
     `;
@@ -960,6 +989,11 @@ export const EvenmanEventMoveDocument = gql`
     mutation EvenmanEventMove($event_id: ID!, $start: String!) {
   result: eventMove(input: {event_id: $event_id, start: $start}) {
     ok
+    event {
+      id
+      start
+      end
+    }
   }
 }
     `;
@@ -993,9 +1027,12 @@ export const EvenmanEventCreateDocument = gql`
     mutation EvenmanEventCreate($title: String!, $start: String!, $end: String!) {
   result: eventCreate(input: {title: $title, start: $start, end: $end}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanEventCreateMutationFn = ApolloReactCommon.MutationFunction<EvenmanEventCreateMutation, EvenmanEventCreateMutationVariables>;
 
 /**
