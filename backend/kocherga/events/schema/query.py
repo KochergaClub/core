@@ -68,3 +68,11 @@ def resolve_vkGroups(self, info):
 def resolve_timepadCategories(self, info):
     categories = kocherga.events.models.announcement.timepad.timepad_categories()
     return categories
+
+
+@Query.field('eventsWeeklyDigestCurrent')
+def resolve_eventsWeeklyDigestCurrent(self, info):
+    digest = models.WeeklyDigest.objects.current_digest()
+    digest.create_image_if_necessary()
+
+    return digest

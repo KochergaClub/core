@@ -1,7 +1,10 @@
 import logging
 logger = logging.getLogger(__name__)
 
+from typing import Optional
+
 import base64
+from io import BytesIO
 from datetime import datetime, timedelta
 
 import markdown
@@ -11,7 +14,6 @@ from django.template.loader import render_to_string
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from django.core.files.base import ContentFile
 
 from kocherga.dateutils import TZ
 import kocherga.dateutils
@@ -22,6 +24,7 @@ import kocherga.mailchimp
 import kocherga.templater.models
 from kocherga.email.tools import get_utmify, mjml2html
 
+from ..helpers import create_image_from_fh
 from .event import Event
 
 MAILCHIMP_IMAGE_FOLDER_NAME = 'Расписание на неделю'
@@ -50,7 +53,13 @@ class WeeklyDigest(models.Model):
     telegram_id = models.CharField('ID сообщения в Telegram', max_length=100, blank=True)
     vk_id = models.CharField('ID поста в VK', max_length=100, blank=True)
 
-    image = models.ImageField(null=True, blank=True, upload_to='events/weekly_digest/')
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name='+'
+    )
 
     objects = WeeklyDigestManager()
 
@@ -134,12 +143,16 @@ class WeeklyDigest(models.Model):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         image_bytes = loop.run_until_complete(template.generate_png(params))
-        self.image.save(f"{start_date:%Y-%m-%d}.png", ContentFile(image_bytes))
+        self.image = create_image_from_fh(
+            BytesIO(image_bytes),
+            title=f'WeeklyDigest cover - {start_date:%Y-%m-%d}',
+            basename=f'weekly-digest-{start_date:%Y-%m-%d}.png',
+        )
         self.save()
 
     def get_image_bytes(self) -> bytes:
         self.create_image_if_necessary()
-        with self.image.open('rb') as fh:
+        with self.image.file.open('rb') as fh:
             return fh.read()
 
     def upload_mailchimp_image(self):
@@ -200,6 +213,18 @@ class WeeklyDigest(models.Model):
         self.mailchimp_id = campaign_id
         self.save()
 
+    def mailchimp_campaign_link(self) -> Optional[str]:
+        if not self.mailchimp_id:
+            return None
+
+        response = kocherga.mailchimp.api_call(
+            'GET',
+            f'campaigns/{self.mailchimp_id}',
+            {'fields': 'web_id'}
+        )
+
+        return kocherga.mailchimp.campaign_web_link(response['web_id'])
+
     def _telegram_message(self):
         message = f"#{TELEGRAM_HASHTAG}\nНа этой неделе в Кочерге:"
         message += "\n\n"
@@ -228,6 +253,12 @@ class WeeklyDigest(models.Model):
         posted_messages = kocherga.telegram.post_to_channel(text)
         self.telegram_id = posted_messages[0]['result']['message_id']
         self.save()
+
+    def telegram_link(self) -> Optional[str]:
+        if not self.telegram_id:
+            return None
+
+        return kocherga.telegram.channel_message_link_by_id(self.telegram_id)
 
     def post_vk(self, prefix_text):
         if self.vk_id:
@@ -277,3 +308,10 @@ class WeeklyDigest(models.Model):
 
         self.vk_id = response['post_id']
         self.save()
+
+    def vk_link(self) -> Optional[str]:
+        if not self.vk_id:
+            return None
+
+        group_id = kocherga.vk.helpers.group2id(settings.KOCHERGA_VK["main_page"]["id"])
+        return f'https://vk.com/wall-{group_id}_{self.vk_id}'

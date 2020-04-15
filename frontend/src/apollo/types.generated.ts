@@ -675,6 +675,46 @@ export type EventsTicket = {
   user: AuthUser,
 };
 
+export type EventsWeeklyDigest = {
+   __typename?: 'EventsWeeklyDigest',
+  id: Scalars['ID'],
+  start?: Maybe<Scalars['String']>,
+  image?: Maybe<WagtailImage>,
+  mailchimp: EventsWeeklyDigestMailchimp,
+  telegram: EventsWeeklyDigestTelegram,
+  vk: EventsWeeklyDigestVk,
+};
+
+
+export type EventsWeeklyDigestImageArgs = {
+  spec: Scalars['String']
+};
+
+export type EventsWeeklyDigestMailchimp = {
+   __typename?: 'EventsWeeklyDigestMailchimp',
+  link?: Maybe<Scalars['String']>,
+};
+
+export type EventsWeeklyDigestPostMailchimpInput = {
+  text?: Maybe<Scalars['String']>,
+};
+
+export type EventsWeeklyDigestTelegram = {
+   __typename?: 'EventsWeeklyDigestTelegram',
+  link?: Maybe<Scalars['String']>,
+};
+
+export type EventsWeeklyDigestUpdateResult = {
+   __typename?: 'EventsWeeklyDigestUpdateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  digest: EventsWeeklyDigest,
+};
+
+export type EventsWeeklyDigestVk = {
+   __typename?: 'EventsWeeklyDigestVk',
+  link?: Maybe<Scalars['String']>,
+};
+
 export type EventTimepadAnnouncementUpdateInput = {
   event_id: Scalars['ID'],
   prepaid_tickets?: Maybe<Scalars['Boolean']>,
@@ -924,6 +964,10 @@ export type Mutation = {
   eventTimepadAnnouncementUpdate: BasicResult,
   eventVkAnnouncementUpdate: BasicResult,
   eventMove: EventUpdateResult,
+  eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult,
+  eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult,
+  eventsWeeklyDigestPostMailchimp: EventsWeeklyDigestUpdateResult,
+  vkWikiScheduleUpdate?: Maybe<BasicResult>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -1177,6 +1221,11 @@ export type MutationEventVkAnnouncementUpdateArgs = {
 
 export type MutationEventMoveArgs = {
   input: EventMoveInput
+};
+
+
+export type MutationEventsWeeklyDigestPostMailchimpArgs = {
+  input?: Maybe<EventsWeeklyDigestPostMailchimpInput>
 };
 
 
@@ -1477,6 +1526,7 @@ export type Query = {
   timepadCategories: Array<TimepadCategory>,
   publicEvents: EventsPublicEventConnection,
   publicEvent: EventsPublicEvent,
+  eventsWeeklyDigestCurrent: EventsWeeklyDigest,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
   ratioTrainings: RatioTrainingConnection,

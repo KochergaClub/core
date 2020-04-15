@@ -77,3 +77,25 @@ def post_to_channel(message):
         result.append(r.json())
 
     return result
+
+
+def channel_message_link_by_id(message_id: str):
+    if not message_id:
+        raise Exception("message_id must be non-empty")
+
+    token = get_token()
+
+    # TODO - technically we could just remove the first '@' character and avoid the HTTP request,
+    # but this feels more proper at the moment for some reason.
+    # (I'll probably regret this later.)
+    r = requests.get(
+        f"https://api.telegram.org/bot{token}/getChat",
+        params={
+            'chat_id': get_channel_id(),
+        }
+    )
+    r.raise_for_status()
+
+    print(r.json())
+    channel_username = r.json()['result']['username']
+    return f'https://t.me/{channel_username}/{message_id}'

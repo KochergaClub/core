@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import * as React from 'react';
 
 import { A } from '@kocherga/frontkit';
@@ -9,7 +10,7 @@ import EditableString from './EditableString';
 export interface Props {
   value: string | undefined;
   title: string;
-  save: (value: string) => void;
+  save: (value: string) => Promise<any>;
 }
 
 class EditableLink extends React.Component<Props, {}> {
@@ -21,12 +22,15 @@ class EditableLink extends React.Component<Props, {}> {
     return <BinaryIndicator status={this.hasValue()} />;
   };
 
-  renderValue = (ref?: (instance: HTMLElement | null) => void) => {
+  renderValue = (ref?: RefObject<HTMLElement>) => {
     if (!this.hasValue()) {
       return this.props.title;
     }
     return (
-      <A ref={ref} href={this.props.value || ''}>
+      <A
+        ref={ref as RefObject<HTMLAnchorElement>}
+        href={this.props.value || ''}
+      >
         {this.props.title}
       </A>
     );

@@ -953,6 +953,56 @@ input EventMoveInput {
 }
 
 extend type Query {
+  eventsWeeklyDigestCurrent: EventsWeeklyDigest! @staffonly
+}
+
+type EventsWeeklyDigest {
+  id: ID!
+  start: String
+  image(spec: String!): WagtailImage
+  mailchimp: EventsWeeklyDigestMailchimp!
+  telegram: EventsWeeklyDigestTelegram!
+  vk: EventsWeeklyDigestVk!
+}
+
+type EventsWeeklyDigestMailchimp {
+  link: String
+}
+
+type EventsWeeklyDigestTelegram {
+  link: String
+}
+
+type EventsWeeklyDigestVk {
+  link: String
+}
+
+type EventsWeeklyDigestUpdateResult {
+  ok: Boolean
+  digest: EventsWeeklyDigest!
+}
+
+extend type Mutation {
+  eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult! @staffonly
+}
+
+extend type Mutation {
+  eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult! @staffonly
+}
+
+extend type Mutation {
+  eventsWeeklyDigestPostMailchimp(input: EventsWeeklyDigestPostMailchimpInput): EventsWeeklyDigestUpdateResult! @staffonly
+}
+
+input EventsWeeklyDigestPostMailchimpInput {
+  text: String
+}
+
+extend type Mutation {
+  vkWikiScheduleUpdate: BasicResult @staffonly
+}
+
+extend type Query {
   staffMembersAll: [StaffMember!]! @staffonly
   staffMember(id: ID!): StaffMember! @staffonly
 }

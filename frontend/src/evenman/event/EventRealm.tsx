@@ -1,4 +1,4 @@
-import { colors, Row, Column } from '@kocherga/frontkit';
+import { colors, Row, Column, Label } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
 
@@ -34,8 +34,8 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
   switch (event.realm) {
     case 'offline':
       return (
-        <Row>
-          <div>Комната:</div>
+        <Row vCentered>
+          <Label>Комната:</Label>
           <EditableString
             value={event.location}
             renderValue={ref => <span ref={ref}>{event.location}</span>}
