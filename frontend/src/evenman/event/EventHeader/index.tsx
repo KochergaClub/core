@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import { Column, Row } from '@kocherga/frontkit';
 
@@ -23,7 +24,7 @@ const DateSpan: React.FC<{ date: Date }> = ({ date }) => (
     <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
     {formatDate(date, 'd MMMM')}, {formatDate(date, 'HH:mm')}
     {' ('}
-    {formatDistanceToNow(date)}
+    {formatDistanceToNow(date, { locale: ru })}
     {')'}
   </span>
 );

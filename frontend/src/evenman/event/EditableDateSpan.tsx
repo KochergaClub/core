@@ -8,6 +8,7 @@ import {
   getHours,
   getMinutes,
 } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import { A } from '@kocherga/frontkit';
 
@@ -68,7 +69,7 @@ const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
       )}
       , {formatDate(date, 'HH:mm')}
       {' ('}
-      {formatDistanceToNow(date)}
+      {formatDistanceToNow(date, { locale: ru })}
       {')'}
     </span>
   );
