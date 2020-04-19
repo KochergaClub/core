@@ -63,6 +63,8 @@ spec:
 {{- if .Values.dev }}
             - name: PYTHONUNBUFFERED
               value: "0"  # fix runserver output on compilation issues
+            - name: DJANGO_WATCHMAN_TIMEOUT
+              value: "60"
 {{- end }}
       volumes:
 {{ include "core.backend_volumes" . | indent 8 }}
