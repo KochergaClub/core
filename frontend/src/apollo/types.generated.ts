@@ -351,11 +351,6 @@ export type EventDeleteInput = {
   event_id: Scalars['ID'],
 };
 
-export type EventDeleteResult = {
-   __typename?: 'EventDeleteResult',
-  ok?: Maybe<Scalars['Boolean']>,
-};
-
 export type EventDeleteTagInput = {
   event_id: Scalars['ID'],
   tag: Scalars['String'],
@@ -510,11 +505,6 @@ export type EventSetEventTypeInput = {
   event_type: Scalars['String'],
 };
 
-export type EventSetEventTypeResult = {
-   __typename?: 'EventSetEventTypeResult',
-  ok?: Maybe<Scalars['Boolean']>,
-};
-
 export type EventSetImageFromUrlInput = {
   event_id: Scalars['ID'],
   url: Scalars['String'],
@@ -525,29 +515,14 @@ export type EventSetPricingTypeInput = {
   pricing_type: Scalars['String'],
 };
 
-export type EventSetPricingTypeResult = {
-   __typename?: 'EventSetPricingTypeResult',
-  ok?: Maybe<Scalars['Boolean']>,
-};
-
 export type EventSetRealmInput = {
   event_id: Scalars['ID'],
   realm: Scalars['String'],
 };
 
-export type EventSetRealmResult = {
-   __typename?: 'EventSetRealmResult',
-  ok?: Maybe<Scalars['Boolean']>,
-};
-
 export type EventSetZoomLinkInput = {
   event_id: Scalars['ID'],
   zoom_link: Scalars['String'],
-};
-
-export type EventSetZoomLinkResult = {
-   __typename?: 'EventSetZoomLinkResult',
-  ok?: Maybe<Scalars['Boolean']>,
 };
 
 export type EventsEvent = {
@@ -948,11 +923,11 @@ export type Mutation = {
   myEventsTicketRegisterAnon: MyEventsTicket,
   eventUpdate: EventUpdateResult,
   eventCreate: EventCreateResult,
-  eventDelete: EventDeleteResult,
-  eventSetEventType: EventSetEventTypeResult,
-  eventSetRealm: EventSetRealmResult,
-  eventSetPricingType: EventSetPricingTypeResult,
-  eventSetZoomLink: EventSetZoomLinkResult,
+  eventDelete: BasicResult,
+  eventSetEventType: EventUpdateResult,
+  eventSetRealm: EventUpdateResult,
+  eventSetPricingType: EventUpdateResult,
+  eventSetZoomLink: EventUpdateResult,
   eventPrototypeCreate: EventPrototypeCreateResult,
   eventPrototypeUpdate: EventPrototypeUpdateResult,
   eventPrototypeCancelDate: EventPrototypeCancelDateResult,
@@ -960,15 +935,15 @@ export type Mutation = {
   eventPrototypeAddTag: EventPrototypeAddTagResult,
   eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
   eventPrototypeSetImage: EventPrototypeSetImageResult,
-  eventGenerateZoomLink: BasicResult,
+  eventGenerateZoomLink: EventUpdateResult,
   eventAddTag: EventUpdateResult,
   eventDeleteTag: EventUpdateResult,
-  eventSetImageFromUrl: BasicResult,
-  eventVkAnnouncementSetImage: BasicResult,
-  eventAnnounce: BasicResult,
-  eventSetAnnounceUrl: BasicResult,
-  eventTimepadAnnouncementUpdate: BasicResult,
-  eventVkAnnouncementUpdate: BasicResult,
+  eventSetImageFromUrl: EventUpdateResult,
+  eventVkAnnouncementSetImage: EventUpdateResult,
+  eventAnnounce: EventUpdateResult,
+  eventSetAnnounceUrl: EventUpdateResult,
+  eventTimepadAnnouncementUpdate: EventUpdateResult,
+  eventVkAnnouncementUpdate: EventUpdateResult,
   eventMove: EventUpdateResult,
   eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult,
   eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult,

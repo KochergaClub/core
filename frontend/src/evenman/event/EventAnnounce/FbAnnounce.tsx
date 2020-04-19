@@ -1,6 +1,8 @@
 import { AsyncButton } from '~/components';
 import { EventAnnounceTarget } from '~/apollo/types.generated';
 
+import { A } from '@kocherga/frontkit';
+
 import FbGroupPicker from '../../common/FbGroupPicker';
 
 import {
@@ -64,12 +66,19 @@ const FbAnnounce: React.FC<Props> = ({ event }) => {
             </AsyncButton>
           )
         */}
+      {/*
       <EditableOrElement
         title="Facebook"
         value={event.announcements.fb.link}
         save={setAnnounceUrl}
         el={<AnnounceLinkFb event={event} />}
       />
+      */}
+      {event.announcements.fb.link ? (
+        <A href={event.announcements.fb.link}>Анонс</A>
+      ) : (
+        <div>Facebook-анонсы отключены.</div>
+      )}
     </div>
   );
 };

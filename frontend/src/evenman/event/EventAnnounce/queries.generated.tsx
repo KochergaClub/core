@@ -1,8 +1,11 @@
 import * as Types from '../../../apollo/types.generated';
 
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 import gql from 'graphql-tag';
+import { EvenmanEvent_DetailsFragmentDoc } from '../queries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
+
 
 export type EvenmanTimepadAnnouncementUpdateMutationVariables = {
   event_id: Types.Scalars['ID'],
@@ -14,8 +17,12 @@ export type EvenmanTimepadAnnouncementUpdateMutationVariables = {
 export type EvenmanTimepadAnnouncementUpdateMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -28,8 +35,12 @@ export type EvenmanVkAnnouncementUpdateMutationVariables = {
 export type EvenmanVkAnnouncementUpdateMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -38,9 +49,12 @@ export const EvenmanTimepadAnnouncementUpdateDocument = gql`
     mutation EvenmanTimepadAnnouncementUpdate($event_id: ID!, $category_code: String, $prepaid_tickets: Boolean) {
   result: eventTimepadAnnouncementUpdate(input: {event_id: $event_id, category_code: $category_code, prepaid_tickets: $prepaid_tickets}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanTimepadAnnouncementUpdateMutationFn = ApolloReactCommon.MutationFunction<EvenmanTimepadAnnouncementUpdateMutation, EvenmanTimepadAnnouncementUpdateMutationVariables>;
 
 /**
@@ -72,9 +86,12 @@ export const EvenmanVkAnnouncementUpdateDocument = gql`
     mutation EvenmanVkAnnouncementUpdate($event_id: ID!, $group: String) {
   result: eventVkAnnouncementUpdate(input: {event_id: $event_id, group: $group}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanVkAnnouncementUpdateMutationFn = ApolloReactCommon.MutationFunction<EvenmanVkAnnouncementUpdateMutation, EvenmanVkAnnouncementUpdateMutationVariables>;
 
 /**

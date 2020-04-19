@@ -117,36 +117,12 @@ export type EvenmanSetEventTypeMutationVariables = {
 export type EvenmanSetEventTypeMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventSetEventTypeResult' }
-    & Pick<Types.EventSetEventTypeResult, 'ok'>
-  ) }
-);
-
-export type EvenmanSetRealmMutationVariables = {
-  id: Types.Scalars['ID'],
-  realm: Types.Scalars['String']
-};
-
-
-export type EvenmanSetRealmMutation = (
-  { __typename?: 'Mutation' }
-  & { result: (
-    { __typename?: 'EventSetRealmResult' }
-    & Pick<Types.EventSetRealmResult, 'ok'>
-  ) }
-);
-
-export type EvenmanSetPricingTypeMutationVariables = {
-  id: Types.Scalars['ID'],
-  pricing_type: Types.Scalars['String']
-};
-
-
-export type EvenmanSetPricingTypeMutation = (
-  { __typename?: 'Mutation' }
-  & { result: (
-    { __typename?: 'EventSetPricingTypeResult' }
-    & Pick<Types.EventSetPricingTypeResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & Pick<Types.EventsEvent, 'id' | 'event_type'>
+    ) }
   ) }
 );
 
@@ -159,8 +135,12 @@ export type EvenmanSetZoomLinkMutationVariables = {
 export type EvenmanSetZoomLinkMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventSetZoomLinkResult' }
-    & Pick<Types.EventSetZoomLinkResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & Pick<Types.EventsEvent, 'id' | 'zoom_link'>
+    ) }
   ) }
 );
 
@@ -172,8 +152,12 @@ export type EvenmanGenerateZoomLinkMutationVariables = {
 export type EvenmanGenerateZoomLinkMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & Pick<Types.EventsEvent, 'id' | 'zoom_link'>
+    ) }
   ) }
 );
 
@@ -216,8 +200,8 @@ export type EvenmanEventDeleteMutationVariables = {
 export type EvenmanEventDeleteMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventDeleteResult' }
-    & Pick<Types.EventDeleteResult, 'ok'>
+    { __typename?: 'BasicResult' }
+    & Pick<Types.BasicResult, 'ok'>
   ) }
 );
 
@@ -266,8 +250,12 @@ export type EvenmanEventSetImageFromUrlMutationVariables = {
 export type EvenmanEventSetImageFromUrlMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -280,8 +268,12 @@ export type EvenmanVkAnnouncementSetImageMutationVariables = {
 export type EvenmanVkAnnouncementSetImageMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -294,8 +286,12 @@ export type EvenmanAnnounceMutationVariables = {
 export type EvenmanAnnounceMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -309,8 +305,12 @@ export type EvenmanSetAnnounceUrlMutationVariables = {
 export type EvenmanSetAnnounceUrlMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
-    & Pick<Types.BasicResult, 'ok'>
+    { __typename?: 'EventUpdateResult' }
+    & Pick<Types.EventUpdateResult, 'ok'>
+    & { event: (
+      { __typename?: 'EventsEvent' }
+      & EvenmanEvent_DetailsFragment
+    ) }
   ) }
 );
 
@@ -548,6 +548,10 @@ export const EvenmanSetEventTypeDocument = gql`
     mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
   result: eventSetEventType(input: {event_id: $id, event_type: $event_type}) {
     ok
+    event {
+      id
+      event_type
+    }
   }
 }
     `;
@@ -577,76 +581,14 @@ export function useEvenmanSetEventTypeMutation(baseOptions?: ApolloReactHooks.Mu
 export type EvenmanSetEventTypeMutationHookResult = ReturnType<typeof useEvenmanSetEventTypeMutation>;
 export type EvenmanSetEventTypeMutationResult = ApolloReactCommon.MutationResult<EvenmanSetEventTypeMutation>;
 export type EvenmanSetEventTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanSetEventTypeMutation, EvenmanSetEventTypeMutationVariables>;
-export const EvenmanSetRealmDocument = gql`
-    mutation EvenmanSetRealm($id: ID!, $realm: String!) {
-  result: eventSetRealm(input: {event_id: $id, realm: $realm}) {
-    ok
-  }
-}
-    `;
-export type EvenmanSetRealmMutationFn = ApolloReactCommon.MutationFunction<EvenmanSetRealmMutation, EvenmanSetRealmMutationVariables>;
-
-/**
- * __useEvenmanSetRealmMutation__
- *
- * To run a mutation, you first call `useEvenmanSetRealmMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanSetRealmMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evenmanSetRealmMutation, { data, loading, error }] = useEvenmanSetRealmMutation({
- *   variables: {
- *      id: // value for 'id'
- *      realm: // value for 'realm'
- *   },
- * });
- */
-export function useEvenmanSetRealmMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanSetRealmMutation, EvenmanSetRealmMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanSetRealmMutation, EvenmanSetRealmMutationVariables>(EvenmanSetRealmDocument, baseOptions);
-      }
-export type EvenmanSetRealmMutationHookResult = ReturnType<typeof useEvenmanSetRealmMutation>;
-export type EvenmanSetRealmMutationResult = ApolloReactCommon.MutationResult<EvenmanSetRealmMutation>;
-export type EvenmanSetRealmMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanSetRealmMutation, EvenmanSetRealmMutationVariables>;
-export const EvenmanSetPricingTypeDocument = gql`
-    mutation EvenmanSetPricingType($id: ID!, $pricing_type: String!) {
-  result: eventSetPricingType(input: {event_id: $id, pricing_type: $pricing_type}) {
-    ok
-  }
-}
-    `;
-export type EvenmanSetPricingTypeMutationFn = ApolloReactCommon.MutationFunction<EvenmanSetPricingTypeMutation, EvenmanSetPricingTypeMutationVariables>;
-
-/**
- * __useEvenmanSetPricingTypeMutation__
- *
- * To run a mutation, you first call `useEvenmanSetPricingTypeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanSetPricingTypeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evenmanSetPricingTypeMutation, { data, loading, error }] = useEvenmanSetPricingTypeMutation({
- *   variables: {
- *      id: // value for 'id'
- *      pricing_type: // value for 'pricing_type'
- *   },
- * });
- */
-export function useEvenmanSetPricingTypeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanSetPricingTypeMutation, EvenmanSetPricingTypeMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanSetPricingTypeMutation, EvenmanSetPricingTypeMutationVariables>(EvenmanSetPricingTypeDocument, baseOptions);
-      }
-export type EvenmanSetPricingTypeMutationHookResult = ReturnType<typeof useEvenmanSetPricingTypeMutation>;
-export type EvenmanSetPricingTypeMutationResult = ApolloReactCommon.MutationResult<EvenmanSetPricingTypeMutation>;
-export type EvenmanSetPricingTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanSetPricingTypeMutation, EvenmanSetPricingTypeMutationVariables>;
 export const EvenmanSetZoomLinkDocument = gql`
     mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
   result: eventSetZoomLink(input: {event_id: $id, zoom_link: $link}) {
     ok
+    event {
+      id
+      zoom_link
+    }
   }
 }
     `;
@@ -680,6 +622,10 @@ export const EvenmanGenerateZoomLinkDocument = gql`
     mutation EvenmanGenerateZoomLink($id: ID!) {
   result: eventGenerateZoomLink(input: {event_id: $id}) {
     ok
+    event {
+      id
+      zoom_link
+    }
   }
 }
     `;
@@ -867,9 +813,12 @@ export const EvenmanEventSetImageFromUrlDocument = gql`
     mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
   result: eventSetImageFromUrl(input: {event_id: $id, url: $url}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanEventSetImageFromUrlMutationFn = ApolloReactCommon.MutationFunction<EvenmanEventSetImageFromUrlMutation, EvenmanEventSetImageFromUrlMutationVariables>;
 
 /**
@@ -900,9 +849,12 @@ export const EvenmanVkAnnouncementSetImageDocument = gql`
     mutation EvenmanVkAnnouncementSetImage($event_id: ID!, $image_id: ID!) {
   result: eventVkAnnouncementSetImage(input: {event_id: $event_id, image_id: $image_id}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanVkAnnouncementSetImageMutationFn = ApolloReactCommon.MutationFunction<EvenmanVkAnnouncementSetImageMutation, EvenmanVkAnnouncementSetImageMutationVariables>;
 
 /**
@@ -933,9 +885,12 @@ export const EvenmanAnnounceDocument = gql`
     mutation EvenmanAnnounce($event_id: ID!, $target: EventAnnounceTarget!) {
   result: eventAnnounce(input: {event_id: $event_id, target: $target}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanAnnounceMutationFn = ApolloReactCommon.MutationFunction<EvenmanAnnounceMutation, EvenmanAnnounceMutationVariables>;
 
 /**
@@ -966,9 +921,12 @@ export const EvenmanSetAnnounceUrlDocument = gql`
     mutation EvenmanSetAnnounceUrl($event_id: ID!, $target: EventAnnounceTarget!, $url: String!) {
   result: eventSetAnnounceUrl(input: {event_id: $event_id, target: $target, url: $url}) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
-    `;
+    ${EvenmanEvent_DetailsFragmentDoc}`;
 export type EvenmanSetAnnounceUrlMutationFn = ApolloReactCommon.MutationFunction<EvenmanSetAnnounceUrlMutation, EvenmanSetAnnounceUrlMutationVariables>;
 
 /**

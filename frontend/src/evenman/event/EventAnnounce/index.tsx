@@ -23,16 +23,16 @@ const EventAnnounce: React.FC<Props> = ({ event }) => {
 
   return (
     <Column stretch>
-      <HeadedSection title="Timepad">
-        <TimepadAnnounce event={event} />
+      <HeadedSection title="VK">
+        <VkAnnounce event={event} />
       </HeadedSection>
 
       <HeadedSection title="Facebook">
         <FbAnnounce event={event} />
       </HeadedSection>
 
-      <HeadedSection title="VK">
-        <VkAnnounce event={event} />
+      <HeadedSection title="Timepad">
+        <TimepadAnnounce event={event} />
       </HeadedSection>
     </Column>
   );

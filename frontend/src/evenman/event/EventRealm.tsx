@@ -20,15 +20,10 @@ interface Props {
 const RealmDetails: React.FC<Props> = ({ event }) => {
   const update = useUpdateMutation(event.id);
 
-  const [setZoomLinkMutation] = useEvenmanSetZoomLinkMutation({
-    refetchQueries: ['EvenmanEvent'],
-    awaitRefetchQueries: true,
-  });
+  const [setZoomLinkMutation] = useEvenmanSetZoomLinkMutation();
 
   const [generateZoomLinkMutation] = useEvenmanGenerateZoomLinkMutation({
     variables: { id: event.id },
-    refetchQueries: ['EvenmanEvent'],
-    awaitRefetchQueries: true,
   });
 
   switch (event.realm) {

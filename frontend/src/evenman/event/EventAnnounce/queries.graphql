@@ -5,6 +5,9 @@ mutation EvenmanTimepadAnnouncementUpdate($event_id: ID!, $category_code: String
       prepaid_tickets: $prepaid_tickets
     }) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
 
@@ -14,5 +17,8 @@ mutation EvenmanVkAnnouncementUpdate($event_id: ID!, $group: String) {
       group: $group
     }) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }

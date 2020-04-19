@@ -111,24 +111,10 @@ mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
       event_type: $event_type
     }) {
     ok
-  }
-}
-
-mutation EvenmanSetRealm($id: ID!, $realm: String!) {
-  result: eventSetRealm(input: {
-    event_id: $id,
-    realm: $realm
-  }) {
-    ok
-  }
-}
-
-mutation EvenmanSetPricingType($id: ID!, $pricing_type: String!) {
-  result: eventSetPricingType(input: {
-      event_id: $id,
-      pricing_type: $pricing_type
-    }) {
-    ok
+    event {
+      id
+      event_type
+    }
   }
 }
 
@@ -138,6 +124,10 @@ mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
       zoom_link: $link
     }) {
     ok
+    event {
+      id
+      zoom_link
+    }
   }
 }
 
@@ -146,6 +136,10 @@ mutation EvenmanGenerateZoomLink($id: ID!) {
       event_id: $id
     }) {
     ok
+    event {
+      id
+      zoom_link
+    }
   }
 }
 
@@ -230,6 +224,9 @@ mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
       url: $url
     }) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
 
@@ -239,6 +236,9 @@ mutation EvenmanVkAnnouncementSetImage($event_id: ID!, $image_id: ID!) {
       image_id: $image_id
     }) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
 
@@ -248,6 +248,9 @@ mutation EvenmanAnnounce($event_id: ID!, $target: EventAnnounceTarget!) {
       target: $target
     }) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
 
@@ -258,6 +261,9 @@ mutation EvenmanSetAnnounceUrl($event_id: ID!, $target: EventAnnounceTarget!, $u
       url: $url
     }) {
     ok
+    event {
+      ...EvenmanEvent_Details
+    }
   }
 }
 

@@ -241,19 +241,15 @@ type EventCreateResult {
 }
 
 extend type Mutation {
-  eventDelete(input: EventDeleteInput!): EventDeleteResult! @staffonly
+  eventDelete(input: EventDeleteInput!): BasicResult! @staffonly
 }
 
 input EventDeleteInput {
   event_id: ID!
 }
 
-type EventDeleteResult {
-  ok: Boolean
-}
-
 extend type Mutation {
-  eventSetEventType(input: EventSetEventTypeInput!): EventSetEventTypeResult! @staffonly
+  eventSetEventType(input: EventSetEventTypeInput!): EventUpdateResult! @staffonly
 }
 
 input EventSetEventTypeInput {
@@ -261,12 +257,8 @@ input EventSetEventTypeInput {
   event_type: String!
 }
 
-type EventSetEventTypeResult {
-  ok: Boolean
-}
-
 extend type Mutation {
-  eventSetRealm(input: EventSetRealmInput!): EventSetRealmResult! @staffonly
+  eventSetRealm(input: EventSetRealmInput!): EventUpdateResult! @staffonly
 }
 
 input EventSetRealmInput {
@@ -274,12 +266,8 @@ input EventSetRealmInput {
   realm: String!
 }
 
-type EventSetRealmResult {
-  ok: Boolean
-}
-
 extend type Mutation {
-  eventSetPricingType(input: EventSetPricingTypeInput!): EventSetPricingTypeResult! @staffonly
+  eventSetPricingType(input: EventSetPricingTypeInput!): EventUpdateResult! @staffonly
 }
 
 input EventSetPricingTypeInput {
@@ -287,21 +275,13 @@ input EventSetPricingTypeInput {
   pricing_type: String!
 }
 
-type EventSetPricingTypeResult {
-  ok: Boolean
-}
-
 extend type Mutation {
-  eventSetZoomLink(input: EventSetZoomLinkInput!): EventSetZoomLinkResult! @staffonly
+  eventSetZoomLink(input: EventSetZoomLinkInput!): EventUpdateResult! @staffonly
 }
 
 input EventSetZoomLinkInput {
   event_id: ID!
   zoom_link: String!
-}
-
-type EventSetZoomLinkResult {
-  ok: Boolean
 }
 
 extend type Mutation {
@@ -417,7 +397,7 @@ type EventPrototypeSetImageResult {
 }
 
 extend type Mutation {
-  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): BasicResult! @staffonly
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventUpdateResult! @staffonly
 }
 
 input EventGenerateZoomLinkInput {
@@ -443,7 +423,7 @@ input EventDeleteTagInput {
 }
 
 extend type Mutation {
-  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): BasicResult! @staffonly
+  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): EventUpdateResult! @staffonly
 }
 
 input EventSetImageFromUrlInput {
@@ -452,7 +432,7 @@ input EventSetImageFromUrlInput {
 }
 
 extend type Mutation {
-  eventVkAnnouncementSetImage(input: EventVkAnnouncementSetImageInput!): BasicResult! @staffonly
+  eventVkAnnouncementSetImage(input: EventVkAnnouncementSetImageInput!): EventUpdateResult! @staffonly
 }
 
 input EventVkAnnouncementSetImageInput {
@@ -467,7 +447,7 @@ enum EventAnnounceTarget {
 }
 
 extend type Mutation {
-  eventAnnounce(input: EventAnnounceInput!): BasicResult! @staffonly
+  eventAnnounce(input: EventAnnounceInput!): EventUpdateResult! @staffonly
 }
 
 input EventAnnounceInput {
@@ -476,7 +456,7 @@ input EventAnnounceInput {
 }
 
 extend type Mutation {
-  eventSetAnnounceUrl(input: EventSetAnnounceUrlInput!): BasicResult! @staffonly
+  eventSetAnnounceUrl(input: EventSetAnnounceUrlInput!): EventUpdateResult! @staffonly
 }
 
 input EventSetAnnounceUrlInput {
@@ -486,7 +466,7 @@ input EventSetAnnounceUrlInput {
 }
 
 extend type Mutation {
-  eventTimepadAnnouncementUpdate(input: EventTimepadAnnouncementUpdateInput!): BasicResult! @staffonly
+  eventTimepadAnnouncementUpdate(input: EventTimepadAnnouncementUpdateInput!): EventUpdateResult! @staffonly
 }
 
 input EventTimepadAnnouncementUpdateInput {
@@ -496,7 +476,7 @@ input EventTimepadAnnouncementUpdateInput {
 }
 
 extend type Mutation {
-  eventVkAnnouncementUpdate(input: EventVkAnnouncementUpdateInput!): BasicResult! @staffonly
+  eventVkAnnouncementUpdate(input: EventVkAnnouncementUpdateInput!): EventUpdateResult! @staffonly
 }
 
 input EventVkAnnouncementUpdateInput {

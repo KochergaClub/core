@@ -26,7 +26,8 @@ def eventTimepadAnnouncementUpdate(_, info, input):
     announcement.save()
 
     return {
-        'ok': True
+        'ok': True,
+        'event': event,
     }
 
 
@@ -49,7 +50,8 @@ def eventVkAnnouncementUpdate(_, info, input):
     announcement.save()
 
     return {
-        'ok': True
+        'ok': True,
+        'event': event,
     }
 
 
@@ -70,6 +72,7 @@ def eventVkAnnouncementSetImage(_, info, input):
 
     return {
         'ok': True,
+        'event': event,
     }
 
 
@@ -92,6 +95,7 @@ def eventAnnounce(_, info, input):
 
     return {
         'ok': True,
+        'event': event,
     }
 
 
@@ -120,4 +124,5 @@ def eventSetAnnounceUrl(_, info, input):
 
     return {
         'ok': True,
+        'event': event,
     }
