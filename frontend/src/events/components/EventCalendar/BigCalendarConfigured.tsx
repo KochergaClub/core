@@ -8,16 +8,15 @@ import {
   Calendar,
   CalendarProps,
   stringOrDate,
-  momentLocalizer,
+  dateFnsLocalizer,
 } from 'react-big-calendar';
 
 // FIXME - some some reason `import { Views } from 'react-big-calendar'` imports type, not constant.
 // This is a workaround.
 import { views } from 'react-big-calendar/lib/utils/constants';
 
-import moment from 'moment';
-import 'moment/locale/ru';
-moment.locale('ru');
+import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
@@ -40,7 +39,15 @@ interface WithDragAndDropProps<TEvent> {
   resizable?: boolean;
 }
 
-const localizer = momentLocalizer(moment);
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales: {
+    ru,
+  },
+});
 
 const Container = styled.div`
   height: 100%;
@@ -66,6 +73,7 @@ const BigCalendarConfigured = <TEvent extends object, TResource extends object>(
         selectable
         resizable
         localizer={localizer}
+        culture="ru"
         showMultiDayTimes={true}
         popup={true}
         defaultView={views.WEEK}

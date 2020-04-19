@@ -62,6 +62,7 @@ const EventCalendar: NextPage<Props> = props => {
   }));
 
   const fetchEvents = useCallback(async () => {
+    console.log(range);
     const json = await getEventsInRange(api, {
       start: format(range.start, 'yyyy-MM-dd'),
       end: format(range.end, 'yyyy-MM-dd'),
@@ -84,6 +85,8 @@ const EventCalendar: NextPage<Props> = props => {
         }
       | Date[]
   ) => {
+    console.log('onRangeChange');
+    console.log(range);
     let start: Date;
     let end: Date;
 
