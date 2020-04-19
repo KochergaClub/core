@@ -1,9 +1,11 @@
 import React from 'react';
 
+import { formatDate } from '~/common/utils';
+
 import { animated, useTransition } from 'react-spring';
 
-import moment from 'moment';
-import 'moment/locale/ru';
+import { startOfWeek, addWeeks } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import MonthHeader from './MonthHeader';
 import Week from './Week';
@@ -11,9 +13,9 @@ import Week from './Week';
 import { reducer } from './reducer';
 
 interface Props {
-  date: moment.Moment;
-  renderCell: (date: moment.Moment) => React.ReactNode;
-  renderHeader?: (date: moment.Moment) => React.ReactNode;
+  date: Date;
+  renderCell: (date: Date) => React.ReactNode;
+  renderHeader?: (date: Date) => React.ReactNode;
   weeks: number;
 }
 
@@ -24,13 +26,13 @@ const MonthCalendar = (props: Props) => {
   });
 
   React.useEffect(() => {
-    const firstDay = moment(props.date).startOf('week');
+    const firstDay = startOfWeek(props.date, { locale: ru });
 
     const result = [];
-    const day = firstDay;
+    let day = firstDay;
     do {
-      result.push(moment(day));
-      day.add(1, 'week');
+      result.push(day);
+      day = addWeeks(day, 1);
     } while (result.length < props.weeks);
 
     dispatch({
@@ -41,7 +43,7 @@ const MonthCalendar = (props: Props) => {
 
   const transitions = useTransition(
     weeksState.weeks,
-    week => week.format('YYYY-MM-DD'),
+    week => formatDate(week, 'yyyy-MM-dd'),
     {
       from: {
         opacity: 0,
@@ -50,13 +52,13 @@ const MonthCalendar = (props: Props) => {
       update: item => {
         return {
           opacity: 1,
-          height: weeksState.heights[item.format('YYYY-MM-DD')] || 0,
+          height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
         };
       },
       enter: item => {
         return {
           opacity: 1,
-          height: weeksState.heights[item.format('YYYY-MM-DD')] || 0,
+          height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
         };
       },
       leave: {
@@ -67,7 +69,7 @@ const MonthCalendar = (props: Props) => {
     }
   );
 
-  const setHeight = React.useCallback((date: moment.Moment, height: number) => {
+  const setHeight = React.useCallback((date: Date, height: number) => {
     dispatch({
       type: 'SET_SIZE',
       payload: {

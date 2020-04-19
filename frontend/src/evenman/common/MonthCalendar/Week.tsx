@@ -1,22 +1,23 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
-import moment from 'moment';
+import { addDays, isEqual, startOfDay } from 'date-fns';
 
 import useResizeAware from 'react-resize-aware';
 
 import { colors } from '@kocherga/frontkit';
+import { formatDate } from '~/common/utils';
 
 const borderColor = colors.grey[200];
 
-const weekMoments = (firstDay: moment.Moment) => [
+const weekDates = (firstDay: Date) => [
   firstDay,
-  moment(firstDay).add(1, 'day'),
-  moment(firstDay).add(2, 'day'),
-  moment(firstDay).add(3, 'day'),
-  moment(firstDay).add(4, 'day'),
-  moment(firstDay).add(5, 'day'),
-  moment(firstDay).add(6, 'day'),
+  addDays(firstDay, 1),
+  addDays(firstDay, 2),
+  addDays(firstDay, 3),
+  addDays(firstDay, 4),
+  addDays(firstDay, 5),
+  addDays(firstDay, 6),
 ];
 
 const Container = styled.div`
@@ -59,10 +60,10 @@ const Cell = styled.div<{ today: boolean }>`
 `;
 
 interface Props {
-  firstDay: moment.Moment;
-  renderCell: (date: moment.Moment) => React.ReactNode;
-  renderHeader?: (date: moment.Moment) => React.ReactNode;
-  setHeight: (date: moment.Moment, height: number) => void;
+  firstDay: Date;
+  renderCell: (date: Date) => React.ReactNode;
+  renderHeader?: (date: Date) => React.ReactNode;
+  setHeight: (date: Date, height: number) => void;
 }
 
 const Week: React.FC<Props> = ({
@@ -73,21 +74,20 @@ const Week: React.FC<Props> = ({
 }) => {
   const [resizeListener, sizes] = useResizeAware();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setHeight(firstDay, sizes.height);
   }, [firstDay, sizes.height, setHeight]);
 
   return (
     <Container>
       {resizeListener}
-      {weekMoments(firstDay).map((day, i) => {
-        const today = moment(day)
-          .startOf('day')
-          .isSame(moment().startOf('day'));
+      {weekDates(firstDay).map((day, i) => {
+        const today = isEqual(day, startOfDay(new Date()));
+
         return (
           <Cell key={i} today={today}>
             <header>
-              {renderHeader ? renderHeader(day) : day.format('D MMMM')}
+              {renderHeader ? renderHeader(day) : formatDate(day, 'd MMMM')}
             </header>
             <div>{renderCell(day)}</div>
           </Cell>

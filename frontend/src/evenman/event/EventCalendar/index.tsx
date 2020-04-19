@@ -1,7 +1,7 @@
 import { useState, useCallback, useReducer, useMemo } from 'react';
 
-import moment from 'moment';
 import { startOfWeek, addWeeks, startOfDay, isEqual, format } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import { Column } from '@kocherga/frontkit';
 
@@ -29,7 +29,9 @@ const WEEKS = 3;
 
 const EventCalendar: React.FC<Props> = ({ selected_id }) => {
   // FIXME - pass from above
-  const [start, setStart] = useState(() => startOfWeek(new Date()));
+  const [start, setStart] = useState(() =>
+    startOfWeek(new Date(), { locale: ru })
+  );
   const end = useMemo(() => addWeeks(start, WEEKS), [start]);
 
   const [filters, dispatch] = useReducer(reducer, {
@@ -86,18 +88,18 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
   );
 
   const renderCell = useCallback(
-    (date: moment.Moment) => {
+    (date: Date) => {
       const dayEvents =
         filteredEvents.filter(event =>
-          isEqual(startOfDay(new Date(event.start)), startOfDay(date.toDate()))
+          isEqual(startOfDay(new Date(event.start)), startOfDay(date))
         ) || [];
       return <CalendarCell events={dayEvents} selected_id={selected_id} />;
     },
     [selected_id, filteredEvents]
   );
 
-  const renderHeader = useCallback((date: moment.Moment) => {
-    return <CalendarCellHeader date={date.toDate()} />;
+  const renderHeader = useCallback((date: Date) => {
+    return <CalendarCellHeader date={date} />;
   }, []);
 
   return (
@@ -105,7 +107,7 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
       <FiltersBar filters={filters} dispatch={dispatch} />
       <Toolbar date={start} setDate={setDate} />
       <MonthCalendar
-        date={moment(start)}
+        date={start}
         renderCell={renderCell}
         renderHeader={renderHeader}
         weeks={WEEKS}

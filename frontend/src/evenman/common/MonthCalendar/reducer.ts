@@ -1,21 +1,21 @@
-import moment from 'moment';
+import { formatDate } from '~/common/utils';
 
 type WeeksState = {
-  weeks: moment.Moment[];
+  weeks: Date[];
   heights: { [k: string]: number };
 };
 
 interface SetSizeAction {
   type: 'SET_SIZE';
   payload: {
-    date: moment.Moment;
+    date: Date;
     height: number;
   };
 }
 
 interface SetWeeksAction {
   type: 'SET_WEEKS';
-  payload: moment.Moment[];
+  payload: Date[];
 }
 
 export type Action = SetSizeAction | SetWeeksAction;
@@ -23,7 +23,7 @@ export type Action = SetSizeAction | SetWeeksAction;
 export const reducer = (state: WeeksState, action: Action): WeeksState => {
   switch (action.type) {
     case 'SET_SIZE':
-      const key = action.payload.date.format('YYYY-MM-DD');
+      const key = formatDate(action.payload.date, 'yyyy-MM-dd');
       return {
         weeks: state.weeks,
         heights: {
