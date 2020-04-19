@@ -51,7 +51,10 @@ const App: NextApolloPage<Props> = ({ route, query }) => {
     <Page title="Event Manager" menu="team" chrome="fullscreen">
       <Head>
         <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
-        <link rel="stylesheet" href={staticUrl('react-dates/datepicker.css')} />
+        <link
+          rel="stylesheet"
+          href={staticUrl('react-datepicker/react-datepicker.min.css')}
+        />
       </Head>
       <GlobalStyle />
       <WithSidebar sidebar={<Sidebar selected={tab} />}>{inner}</WithSidebar>

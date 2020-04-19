@@ -1,19 +1,18 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 
-import moment from 'moment';
 import {
   formatDistanceToNow,
   setHours,
   setMinutes,
   getHours,
   getMinutes,
+  parse,
 } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-import { A } from '@kocherga/frontkit';
+import { A, Row } from '@kocherga/frontkit';
 
-import { SingleDatePicker } from 'react-dates';
-import 'react-dates/initialize';
+import DatePicker from 'react-datepicker';
 
 import { formatDate } from '~/common/utils';
 
@@ -22,15 +21,31 @@ interface Props {
   onChange: (d: Date) => void;
 }
 
-const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
-  const [focused, setFocused] = useState(false);
+const SERIALIZE_FORMAT = 'yyyy-MM-dd HH:mm';
 
+const CustomInput = ({
+  value,
+  onClick,
+}: {
+  value?: string;
+  onClick?: () => void;
+}) => {
+  if (!value || !onClick) {
+    return null;
+  }
+
+  const date = parse(value, SERIALIZE_FORMAT, new Date());
+  return (
+    <A href="#" onClick={onClick}>
+      <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
+      {formatDate(date, 'd MMMM')}
+    </A>
+  );
+};
+
+const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
   const onDateChange = useCallback(
-    (newMoment: moment.Moment | null) => {
-      if (!newMoment) {
-        return;
-      }
-      const newDate = newMoment.toDate();
+    (newDate: Date) => {
       setHours(newDate, getHours(date));
       setMinutes(newDate, getMinutes(date));
       onChange(newDate);
@@ -38,40 +53,22 @@ const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
     [date, onChange]
   );
 
-  const onFocusChange = useCallback(
-    ({ focused }: { focused: boolean | null }) => setFocused(Boolean(focused)),
-    []
-  );
-
-  const onExpand = useCallback(
-    (e: React.SyntheticEvent) => {
-      e.preventDefault();
-      setFocused(true);
-    },
-    [setFocused]
-  );
-
   return (
-    <span>
-      {focused ? (
-        <SingleDatePicker
-          id="event-date-picker"
-          date={moment(date)}
-          focused={focused}
-          onDateChange={onDateChange}
-          onFocusChange={onFocusChange}
-        />
-      ) : (
-        <A href="#" onClick={onExpand}>
-          <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
-          {formatDate(date, 'd MMMM')}
-        </A>
-      )}
-      , {formatDate(date, 'HH:mm')}
-      {' ('}
-      {formatDistanceToNow(date, { locale: ru })}
-      {')'}
-    </span>
+    <Row gutter={0}>
+      <DatePicker
+        selected={date}
+        onChange={onDateChange}
+        customInput={<CustomInput />}
+        dateFormat={SERIALIZE_FORMAT}
+        locale={ru}
+      />
+      <div>
+        , {formatDate(date, 'HH:mm')}
+        {' ('}
+        {formatDistanceToNow(date, { locale: ru })}
+        {')'}
+      </div>
+    </Row>
   );
 };
 
