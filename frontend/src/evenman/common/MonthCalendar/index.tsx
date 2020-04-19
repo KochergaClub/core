@@ -3,6 +3,7 @@ import React from 'react';
 import { animated, useTransition } from 'react-spring';
 
 import moment from 'moment';
+import 'moment/locale/ru';
 
 import MonthHeader from './MonthHeader';
 import Week from './Week';
