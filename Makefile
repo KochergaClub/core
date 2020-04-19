@@ -38,6 +38,9 @@ shell:
 pyshell:
 	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) ./manage.py shell
 
+tail:
+	kubectl logs --context=dev -f -l app=core-django
+
 superuser:
 	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) -- ./manage.py createsuperuser --email=me@berekuk.ru
 

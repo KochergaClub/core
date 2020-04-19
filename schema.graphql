@@ -2,6 +2,8 @@
   directive @staffonly on FIELD_DEFINITION
   directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
 
+  scalar Upload
+
   type Query {
     rooms: [Room]!
     my: My!
@@ -20,6 +22,14 @@
 
   type Mutation {
     _empty: Boolean
+  }
+
+  type Subscription {
+    _empty: Boolean
+  }
+
+  type BasicResult {
+    ok: Boolean
   }
 
   type PageInfo {
@@ -432,11 +442,12 @@ type AnalyticsBovStat {
 }
 
 extend type Query {
-  events(search: String, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+  events(search: String, filter: EventsFilterInput, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
   event(event_id: ID!): EventsEvent @staffonly
+}
 
-  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
-  publicEvent(event_id: ID!): EventsPublicEvent!
+input EventsFilterInput {
+  event_type: String
 }
 
 type EventsEventConnection {
@@ -450,18 +461,119 @@ type EventsEventEdge {
 }
 
 type EventsEvent {
-  event_id: ID!  # uuid field, renamed for client
+  id: ID!   # uuid field, renamed for client
+  event_id: ID!  # deprecated
+
   title: String!
+  description: String!
+  summary: String!
+  timing_description_override: String!
+
+  location: String!
+  zoom_link: String!
+
   start: String!
+  end: String!
+  created: String!
+  updated: String!
+  published: Boolean!
+
+  event_type: String!
+  pricing_type: String!
+  registration_type: String!
+  realm: String!
+
+  visitors: String @staffonly
+
+  tags: [String!]! @staffonly
+
+  image(spec: String!): WagtailImage
+
+  prototype: EventsPrototype
+  project: ProjectPage
+
+  announcements: EventsAnnouncements!
 
   # all EventsEvent are staff-only, but this can change in the future
   tickets: [EventsTicket!]! @staffonly
+}
+
+type EventsAnnouncements {
+  timepad: EventsAnnouncementTimepad!
+  vk: EventsAnnouncementVk!
+  fb: EventsAnnouncementFb!
+}
+
+type EventsAnnouncementTimepad {
+  link: String!
+  category_code: String!
+  prepaid_tickets: Boolean!
+}
+
+type EventsAnnouncementVk {
+  link: String!
+  group: String!
+  image(spec: String!): WagtailImage @staffonly
+}
+
+type EventsAnnouncementFb {
+  link: String!
+  group: String!
 }
 
 type EventsTicket {
   id: ID!
   status: String!
   user: AuthUser!
+}
+
+extend type Query {
+  eventsPrototype(id: ID!): EventsPrototype! @staffonly
+  eventsPrototypes: [EventsPrototype!]! @staffonly
+}
+
+type EventsPrototype {
+  id: ID!
+  title: String!
+  summary: String!
+  description: String!
+  location: String!
+  timing_description_override: String!
+  active: Boolean!
+  weekday: Int!
+  hour: Int!
+  minute: Int!
+  length: Int!
+  project: ProjectPage
+  tags: [String!]!
+  image(spec: String!): WagtailImage
+  suggested_dates(until_ts: Int, limit: Int!): [String!]!
+  instances(limit: Int): [EventsEvent!]! @staffonly
+  vk_group: VkGroup
+  timepad_category: TimepadCategory
+}
+
+extend type Query {
+  vkGroups: [VkGroup!]! @staffonly
+}
+
+type VkGroup {
+  name: String!
+}
+
+extend type Query {
+  timepadCategories: [TimepadCategory!]! @staffonly
+}
+
+type TimepadCategory {
+  id: ID!
+  code: String!
+  name: String!
+}
+
+extend type Query {
+  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvent(event_id: ID!): EventsPublicEvent!
 }
 
 type EventsPublicEventConnection {
@@ -495,14 +607,6 @@ type EventsPublicEvent {
   my_ticket: MyEventsTicket
 }
 
-type EventsAnnouncements {
-  timepad: EventsTimepadAnnouncement
-}
-
-type EventsTimepadAnnouncement {
-  link: String!
-}
-
 extend type My {
   tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection! @auth(authenticated: true)
 }
@@ -534,6 +638,74 @@ input MyEventsTicketRegisterAnonInput {
   event_id: ID!
   email: String!
   subscribed_to_newsletter: Boolean
+}
+
+extend type Mutation {
+  eventUpdate(input: EventUpdateInput!): EventUpdateResult! @staffonly
+}
+
+input EventUpdateInput {
+  event_id: ID!
+  published: Boolean
+  visitors: String
+  title: String
+  description: String
+  summary: String
+  event_type: String
+  registration_type: String
+  pricing_type: String
+  realm: String
+  timing_description_override: String
+  location: String
+  zoom_link: String
+  prototype_id: ID
+  project_slug: String
+  image_id: ID
+}
+
+type EventUpdateResult {
+  ok: Boolean
+  event: EventsEvent!
+}
+
+extend type Mutation {
+  eventCreate(input: EventCreateInput!): EventCreateResult! @staffonly
+}
+
+input EventCreateInput {
+  title: String!
+  start: String!
+  end: String!
+}
+
+type EventCreateResult {
+  ok: Boolean
+  event: EventsEvent!
+}
+
+extend type Mutation {
+  eventDelete(input: EventDeleteInput!): EventDeleteResult! @staffonly
+}
+
+input EventDeleteInput {
+  event_id: ID!
+}
+
+type EventDeleteResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventSetEventType(input: EventSetEventTypeInput!): EventSetEventTypeResult! @staffonly
+}
+
+input EventSetEventTypeInput {
+  event_id: ID!
+  event_type: String!
+}
+
+type EventSetEventTypeResult {
+  ok: Boolean
 }
 
 extend type Mutation {
@@ -576,15 +748,271 @@ type EventSetZoomLinkResult {
 }
 
 extend type Mutation {
-  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventGenerateZoomLinkResult! @staffonly
+  eventPrototypeCreate(input: EventPrototypeCreateInput!): EventPrototypeCreateResult! @staffonly
+}
+
+input EventPrototypeCreateInput {
+  title: String!
+  location: String
+  weekday: Int!
+  hour: Int!
+  minute: Int!
+  length: Int!
+}
+
+type EventPrototypeCreateResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeUpdate(input: EventPrototypeUpdateInput!): EventPrototypeUpdateResult! @staffonly
+}
+
+input EventPrototypeUpdateInput {
+  id: ID!
+  title: String
+  summary: String
+  description: String
+  timing_description_override: String
+  location: String
+  active: Boolean
+  weekday: Int
+  hour: Int
+  minute: Int
+  length: Int
+  project_slug: String
+  vk_group_name: String
+  timepad_category_code: String
+}
+
+type EventPrototypeUpdateResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeCancelDate(input: EventPrototypeCancelDateInput!): EventPrototypeCancelDateResult! @staffonly
+}
+
+input EventPrototypeCancelDateInput {
+  id: ID!
+  date: String!
+}
+
+type EventPrototypeCancelDateResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventPrototypeNewEvent(input: EventPrototypeNewEventInput!): EventPrototypeNewEventResult! @staffonly
+}
+
+input EventPrototypeNewEventInput {
+  id: ID!
+  ts: Int!
+}
+
+type EventPrototypeNewEventResult {
+  ok: Boolean
+}
+
+extend type Mutation {
+  eventPrototypeAddTag(input: EventPrototypeAddTagInput!): EventPrototypeAddTagResult! @staffonly
+}
+
+input EventPrototypeAddTagInput {
+  id: ID!
+  tag: String!
+}
+
+type EventPrototypeAddTagResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeDeleteTag(input: EventPrototypeDeleteTagInput!): EventPrototypeDeleteTagResult! @staffonly
+}
+
+input EventPrototypeDeleteTagInput {
+  id: ID!
+  tag: String!
+}
+
+type EventPrototypeDeleteTagResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventPrototypeSetImage(input: EventPrototypeSetImageInput!): EventPrototypeSetImageResult! @staffonly
+}
+
+input EventPrototypeSetImageInput {
+  id: ID!
+  image_id: ID!
+}
+
+type EventPrototypeSetImageResult {
+  ok: Boolean
+  prototype: EventsPrototype!
+}
+
+extend type Mutation {
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): BasicResult! @staffonly
 }
 
 input EventGenerateZoomLinkInput {
   event_id: ID!
 }
 
-type EventGenerateZoomLinkResult {
+extend type Mutation {
+  eventAddTag(input: EventAddTagInput!): EventUpdateResult! @staffonly
+}
+
+input EventAddTagInput {
+  event_id: ID!
+  tag: String!
+}
+
+extend type Mutation {
+  eventDeleteTag(input: EventDeleteTagInput!): EventUpdateResult! @staffonly
+}
+
+input EventDeleteTagInput {
+  event_id: ID!
+  tag: String!
+}
+
+extend type Mutation {
+  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): BasicResult! @staffonly
+}
+
+input EventSetImageFromUrlInput {
+  event_id: ID!
+  url: String!
+}
+
+extend type Mutation {
+  eventVkAnnouncementSetImage(input: EventVkAnnouncementSetImageInput!): BasicResult! @staffonly
+}
+
+input EventVkAnnouncementSetImageInput {
+  event_id: ID!
+  image_id: ID!
+}
+
+enum EventAnnounceTarget {
+  VK
+  FB
+  TIMEPAD
+}
+
+extend type Mutation {
+  eventAnnounce(input: EventAnnounceInput!): BasicResult! @staffonly
+}
+
+input EventAnnounceInput {
+  event_id: ID!
+  target: EventAnnounceTarget!
+}
+
+extend type Mutation {
+  eventSetAnnounceUrl(input: EventSetAnnounceUrlInput!): BasicResult! @staffonly
+}
+
+input EventSetAnnounceUrlInput {
+  event_id: ID!
+  target: EventAnnounceTarget!
+  url: String!
+}
+
+extend type Mutation {
+  eventTimepadAnnouncementUpdate(input: EventTimepadAnnouncementUpdateInput!): BasicResult! @staffonly
+}
+
+input EventTimepadAnnouncementUpdateInput {
+  event_id: ID!
+  prepaid_tickets: Boolean
+  category_code: String
+}
+
+extend type Mutation {
+  eventVkAnnouncementUpdate(input: EventVkAnnouncementUpdateInput!): BasicResult! @staffonly
+}
+
+input EventVkAnnouncementUpdateInput {
+  event_id: ID!
+  group: String
+}
+
+extend type Mutation {
+  eventMove(input: EventMoveInput!): EventUpdateResult! @staffonly
+}
+
+input EventMoveInput {
+  event_id: ID!
+  start: String!
+}
+
+extend type Query {
+  eventsWeeklyDigestCurrent: EventsWeeklyDigest! @staffonly
+}
+
+type EventsWeeklyDigest {
+  id: ID!
+  start: String
+  image(spec: String!): WagtailImage
+  mailchimp: EventsWeeklyDigestMailchimp!
+  telegram: EventsWeeklyDigestTelegram!
+  vk: EventsWeeklyDigestVk!
+}
+
+type EventsWeeklyDigestMailchimp {
+  link: String
+}
+
+type EventsWeeklyDigestTelegram {
+  link: String
+}
+
+type EventsWeeklyDigestVk {
+  link: String
+}
+
+type EventsWeeklyDigestUpdateResult {
   ok: Boolean
+  digest: EventsWeeklyDigest!
+}
+
+extend type Mutation {
+  eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult! @staffonly
+}
+
+extend type Mutation {
+  eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult! @staffonly
+}
+
+extend type Mutation {
+  eventsWeeklyDigestPostMailchimp(input: EventsWeeklyDigestPostMailchimpInput): EventsWeeklyDigestUpdateResult! @staffonly
+}
+
+input EventsWeeklyDigestPostMailchimpInput {
+  text: String
+}
+
+extend type Mutation {
+  vkWikiScheduleUpdate: BasicResult @staffonly
+}
+
+extend type Subscription {
+  events: EventNotification!
+}
+
+type EventNotification {
+  type: String!
+  id: ID!
 }
 
 extend type Query {
@@ -881,6 +1309,10 @@ type ProjectPage implements WagtailPage {
   upcoming_events: [EventsPublicEvent!]!
 
   image(spec: String!): WagtailImage!
+}
+
+extend type Query {
+  projects: [ProjectPage!]!
 }
 
 type FreeFormPage implements WagtailPage {

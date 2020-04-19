@@ -1,12 +1,9 @@
-import { observer } from 'mobx-react-lite';
-
 import Link from 'next/link';
 import Router from 'next/router';
 
 import styled from 'styled-components';
 
 import { Column, ColumnNav } from '@kocherga/frontkit';
-import { useRootStore } from './common';
 
 const LogoLink = styled.a`
   color: black;
@@ -30,14 +27,13 @@ const tabs = [
   },
 ];
 
-const MainNav = observer(() => {
-  const store = useRootStore();
+const MainNav = ({ selected }: { selected: string }) => {
   return (
     <ColumnNav>
       {tabs.map(({ path, title, viewName }) => (
         <ColumnNav.Item
           key={path}
-          selected={viewName === store!.currentView.name}
+          selected={viewName === selected}
           select={() => Router.push(`/team/evenman${path}`)}
         >
           {title}
@@ -45,9 +41,9 @@ const MainNav = observer(() => {
       ))}
     </ColumnNav>
   );
-});
+};
 
-export const Sidebar = observer(() => {
+const Sidebar = ({ selected }: { selected: string }) => {
   return (
     <Column stretch spaced>
       <Column stretch>
@@ -56,8 +52,10 @@ export const Sidebar = observer(() => {
             <LogoLink>Event Manager</LogoLink>
           </Link>
         </header>
-        <MainNav />
+        <MainNav selected={selected} />
       </Column>
     </Column>
   );
-});
+};
+
+export default Sidebar;

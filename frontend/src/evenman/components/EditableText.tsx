@@ -1,8 +1,4 @@
-import React from 'react';
-
-import { action, observable } from 'mobx';
-import { observer } from 'mobx-react';
-
+import { useCallback, useRef, useReducer } from 'react';
 import breaks from 'remark-breaks';
 import Markdown from 'react-markdown';
 import autosize from 'autosize';
@@ -12,6 +8,7 @@ import { FaEdit } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { Button, ControlsFooter } from '@kocherga/frontkit';
+import { AsyncButton } from '~/components';
 import { Header, IconLink, UserText } from './ui';
 
 const Textarea = styled.textarea`
@@ -22,115 +19,141 @@ const Textarea = styled.textarea`
 interface Props {
   title: string;
   text: string;
-  save: (text: string) => void;
+  save: (text: string) => Promise<void>;
   empty: React.ReactNode;
 }
 
-@observer
-export default class EditableText extends React.Component<Props, {}> {
-  @observable editing = false;
+interface State {
+  editing: boolean;
+  saving: boolean;
+}
 
-  @observable textarea?: HTMLTextAreaElement;
+type Action = 'START_EDITING' | 'CANCEL_EDITING' | 'START_SAVING' | 'SAVED';
 
-  @action.bound
-  startEditing() {
-    this.editing = true;
+const reducer = (_: State, action: Action): State => {
+  switch (action) {
+    case 'START_EDITING':
+      return {
+        editing: true,
+        saving: false,
+      };
+    case 'START_SAVING':
+      return {
+        editing: true,
+        saving: true,
+      };
+    case 'CANCEL_EDITING':
+      return {
+        editing: false,
+        saving: false,
+      };
+    case 'SAVED':
+      return {
+        editing: false,
+        saving: false,
+      };
   }
+};
 
-  @action.bound
-  cancelEditing() {
-    this.editing = false;
-  }
+const EditableText: React.FC<Props> = ({ title, text, save, empty }) => {
+  const [{ editing, saving }, dispatch] = useReducer(reducer, {
+    editing: false,
+    saving: false,
+  });
 
-  @action.bound
-  commitEditing() {
-    this.editing = false;
-    this.props.save(this.textarea!.value);
-  }
+  const textarea = useRef<HTMLTextAreaElement>();
+  const setTextarea = useCallback((node: HTMLTextAreaElement) => {
+    if (node) {
+      node.focus();
+      autosize(node);
+    }
+    textarea.current = node;
+  }, []);
 
-  editText(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.keyCode === 27) {
-      this.cancelEditing();
+  const startEditing = useCallback(() => dispatch('START_EDITING'), []);
+
+  const cancelEditing = useCallback(() => dispatch('CANCEL_EDITING'), []);
+
+  const commitEditing = useCallback(async () => {
+    if (!textarea.current) {
       return;
     }
-    if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
-      this.commitEditing();
-      return;
-    }
-  }
+    dispatch('START_SAVING');
+    await save(textarea.current.value);
+    dispatch('SAVED');
+  }, [save]);
 
-  @action.bound
-  setTextarea(el?: HTMLTextAreaElement) {
-    if (el && this.textarea !== el) {
-      autosize(el);
-    }
-    this.textarea = el;
-  }
-
-  componentDidUpdate() {
-    if (this.textarea) {
-      if (document.activeElement !== this.textarea) {
-        this.textarea.focus();
+  const editText = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.keyCode === 27) {
+        cancelEditing();
+        return;
       }
-    }
-  }
+      if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+        commitEditing();
+        return;
+      }
+    },
+    [cancelEditing, commitEditing]
+  );
 
-  renderEditing() {
+  const renderEditing = () => {
     return (
       <div>
         <Textarea
-          ref={el => this.setTextarea(el || undefined)}
-          onKeyDown={e => this.editText(e)}
-          defaultValue={this.props.text}
+          ref={setTextarea}
+          onKeyDown={editText}
+          defaultValue={text}
+          disabled={saving}
         />
         <ControlsFooter>
-          <Button small onClick={this.cancelEditing}>
+          <Button small onClick={cancelEditing}>
             Отменить
           </Button>
-          <Button small primary onClick={this.commitEditing}>
+          <AsyncButton small kind="primary" act={commitEditing}>
             Сохранить
-          </Button>
+          </AsyncButton>
         </ControlsFooter>
       </div>
     );
-  }
+  };
 
-  renderPreview() {
-    if (this.props.text) {
+  const renderPreview = () => {
+    if (text) {
       return (
         <UserText>
-          <Markdown source={this.props.text} plugins={[breaks]} />
+          <Markdown source={text} plugins={[breaks]} />
         </UserText>
       );
     } else {
       return (
-        <React.Fragment>
-          {this.props.empty}
-          <Button small onClick={this.startEditing}>
+        <>
+          {empty}
+          <Button small onClick={startEditing}>
             добавить описание
           </Button>
-        </React.Fragment>
+        </>
       );
     }
-  }
+  };
 
-  render() {
-    return (
-      <section>
-        <Header>
-          {this.props.title}{' '}
-          <IconLink
-            href="#"
-            onClick={(e: React.SyntheticEvent<EventTarget>) => {
-              e.preventDefault();
-              this.startEditing();
-            }}
-          >
-            <FaEdit />
-          </IconLink>
-        </Header>
-        {this.editing ? this.renderEditing() : this.renderPreview()}
-      </section>
-    );
-  }
-}
+  return (
+    <section>
+      <Header>
+        {title}{' '}
+        <IconLink
+          href="#"
+          onClick={(e: React.SyntheticEvent<EventTarget>) => {
+            e.preventDefault();
+            startEditing();
+          }}
+        >
+          <FaEdit />
+        </IconLink>
+      </Header>
+      {editing ? renderEditing() : renderPreview()}
+    </section>
+  );
+};
+
+export default EditableText;

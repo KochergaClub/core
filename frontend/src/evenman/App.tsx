@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import Head from 'next/head';
-import { observer } from 'mobx-react-lite';
 
 import { ParsedUrlQuery } from 'querystring';
 
@@ -8,68 +6,58 @@ import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
-import { useAPI } from '~/common/hooks';
 import { staticUrl } from '~/common/utils';
 
 import GlobalStyle from './GlobalStyle';
 
-import Main from './Main';
+import Sidebar from './Sidebar';
+import { WithSidebar } from './WithSidebar';
 
-import { RootStore } from './stores/RootStore';
-
-import { Context } from './common';
+import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
+import ScheduleScreen from './schedule/ScheduleScreen';
+import EventScreen from './event/EventScreen';
 
 interface Props {
   route: string;
   query: ParsedUrlQuery;
 }
 
-const App: NextApolloPage<Props> = observer(({ route, query }) => {
-  const api = useAPI();
-  const [store] = useState(() => new RootStore(api));
+const App: NextApolloPage<Props> = ({ route, query }) => {
+  let inner: JSX.Element | undefined;
+  let tab = '';
 
   if (route === '/team/evenman') {
-    store.setEventView({
-      id: undefined,
-      // FIXME // filter: queryObj(),
-      filter: {},
-    });
-  } else if (route === '/team/evenman/event-prototypes') {
-    store.setEventPrototypeView({ id: undefined });
+    inner = <EventScreen />;
+    tab = 'Event';
   } else if (route === '/team/evenman/schedule') {
-    store.setScheduleView();
-  } else if (route === '/team/evenman/event-prototypes/[id]') {
-    store.setEventPrototypeView({ id: parseInt(query.id as string, 10) });
+    inner = <ScheduleScreen />;
+    tab = 'Schedule';
   } else if (route === '/team/evenman/event/[id]') {
-    store.setEventView({
-      id: query.id as string,
-      filter: query,
-    });
+    inner = <EventScreen selected_id={query.id as string} />;
+    tab = 'Event';
+  } else if (route === '/team/evenman/event-prototypes') {
+    inner = <EventPrototypeScreen />;
+    tab = 'EventPrototype';
+  } else if (route === '/team/evenman/event-prototypes/[id]') {
+    inner = (
+      <EventPrototypeScreen selected_id={parseInt(query.id as string, 10)} />
+    );
+    tab = 'EventPrototype';
   } else {
-    /*
-      }).configure({
-        notfound: () => store.switchView('Event'), // FIXME
-        html5history: true,
-      });
-    */
+    inner = <div>Unknown route {route}</div>;
   }
 
   return (
     <Page title="Event Manager" menu="team" chrome="fullscreen">
-      <Context.Provider value={store}>
-        <Head>
-          <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
-          <link
-            rel="stylesheet"
-            href={staticUrl('react-dates/datepicker.css')}
-          />
-        </Head>
-        <GlobalStyle />
-        <Main />
-      </Context.Provider>
+      <Head>
+        <link rel="stylesheet" href={staticUrl('react-toggle/style.css')} />
+        <link rel="stylesheet" href={staticUrl('react-dates/datepicker.css')} />
+      </Head>
+      <GlobalStyle />
+      <WithSidebar sidebar={<Sidebar selected={tab} />}>{inner}</WithSidebar>
     </Page>
   );
-});
+};
 
 App.getInitialProps = async ({ pathname, query }) => {
   return {

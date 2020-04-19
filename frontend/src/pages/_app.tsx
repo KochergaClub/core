@@ -106,16 +106,17 @@ class MyApp extends App<MyProps> {
   render() {
     const { Component, pageProps, store, errorCode } = this.props;
 
+    // React.StrictMode was enabled here globally, but turned out that it caused duplicate
+    // GraphQL subscriptions and queries, which is too annoying to keep around.
+    // Issue: https://github.com/apollographql/apollo-client/issues/6037
     return (
-      <React.StrictMode>
-        <Provider store={store}>
-          {errorCode ? (
-            <Error statusCode={errorCode} />
-          ) : (
-            <Component {...pageProps} />
-          )}
-        </Provider>
-      </React.StrictMode>
+      <Provider store={store}>
+        {errorCode ? (
+          <Error statusCode={errorCode} />
+        ) : (
+          <Component {...pageProps} />
+        )}
+      </Provider>
     );
   }
 }

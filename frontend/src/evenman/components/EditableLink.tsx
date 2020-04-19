@@ -1,47 +1,42 @@
-import * as React from 'react';
+import { RefObject } from 'react';
 
 import { A } from '@kocherga/frontkit';
 
 import BinaryIndicator from './BinaryIndicator';
-
 import EditableString from './EditableString';
 
 export interface Props {
   value: string | undefined;
   title: string;
-  save: (value: string) => void;
+  save: (value: string) => Promise<any>;
 }
 
-class EditableLink extends React.Component<Props, {}> {
-  hasValue() {
-    return Boolean(this.props.value);
-  }
+const EditableLink: React.FC<Props> = ({ value, title, save }) => {
+  const hasValue = Boolean(value);
 
-  renderBinaryIndicator = () => {
-    return <BinaryIndicator status={this.hasValue()} />;
+  const renderBinaryIndicator = () => {
+    return <BinaryIndicator status={hasValue} />;
   };
 
-  renderValue = (ref?: (instance: HTMLElement | null) => void) => {
-    if (!this.hasValue()) {
-      return this.props.title;
+  const renderValue = (ref?: RefObject<HTMLElement>) => {
+    if (!hasValue) {
+      return title;
     }
     return (
-      <A ref={ref} href={this.props.value || ''}>
-        {this.props.title}
+      <A ref={ref as RefObject<HTMLAnchorElement>} href={value || ''}>
+        {title}
       </A>
     );
   };
 
-  render() {
-    return (
-      <EditableString
-        value={this.props.value}
-        renderPrefix={this.renderBinaryIndicator}
-        renderValue={this.renderValue}
-        save={this.props.save}
-      />
-    );
-  }
-}
+  return (
+    <EditableString
+      value={value}
+      renderPrefix={renderBinaryIndicator}
+      renderValue={renderValue}
+      save={save}
+    />
+  );
+};
 
 export default EditableLink;

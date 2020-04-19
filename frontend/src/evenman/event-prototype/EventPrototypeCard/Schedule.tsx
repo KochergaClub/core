@@ -1,13 +1,10 @@
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
-
-import EventPrototype from '../../stores/EventPrototype';
+import { EventsPrototypeFragment } from '../queries.generated';
 
 interface Props {
-  prototype: EventPrototype;
+  prototype: EventsPrototypeFragment;
 }
 
-const Schedule: React.FC<Props> = observer(({ prototype }) => {
+const Schedule: React.FC<Props> = ({ prototype }) => {
   const daysOfWeek = [
     'понедельник',
     'вторник',
@@ -28,6 +25,6 @@ const Schedule: React.FC<Props> = observer(({ prototype }) => {
       минут.
     </div>
   );
-});
+};
 
 export default Schedule;

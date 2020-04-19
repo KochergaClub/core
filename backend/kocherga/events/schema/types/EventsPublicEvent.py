@@ -1,6 +1,6 @@
 from kocherga.graphql.types import DjangoObjectType
 
-from ...import models, markup
+from ... import models, markup
 
 EventsPublicEvent = DjangoObjectType('EventsPublicEvent', models.Event)
 

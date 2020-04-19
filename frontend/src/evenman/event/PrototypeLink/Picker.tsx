@@ -1,49 +1,44 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-
-import { FaSpinner } from 'react-icons/fa';
+import { ApolloQueryResults } from '~/components';
 
 import { ReactSelectCreatable } from '../../components/ui';
 
-import { Event } from '../../stores/Event';
-import EventPrototype from '../../stores/EventPrototype';
+import { useEvenmanPrototypesForPickerQuery } from './queries.generated';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
+import { useUpdateMutation } from '../hooks';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-const Picker = observer(({ event }: Props) => {
-  // FIXME - can be not loaded!
-  const { eventPrototypeStore } = event.root;
-
-  if (eventPrototypeStore.state === 'empty') {
-    eventPrototypeStore.loadAll();
-  }
-  const prototypes = eventPrototypeStore.list;
-
-  if (!prototypes.length) {
-    return <FaSpinner />;
-  }
-
-  const value2option = (g: EventPrototype) => {
-    return {
-      value: g.id,
-      label: g.title,
-    };
-  };
+const Picker = ({ event }: Props) => {
+  const queryResults = useEvenmanPrototypesForPickerQuery();
+  const update = useUpdateMutation(event.id);
 
   return (
-    <ReactSelectCreatable
-      placeholder="Выбрать прототип"
-      options={prototypes.map(value2option)}
-      value={
-        value2option(prototypes[0]) // FIXME - selected -> value2option
-      }
-      onChange={(option: any) => {
-        event.setPrototypeId(option.value);
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { prototypes } }) => {
+        const value2option = (g: { id: string; title: string }) => {
+          return {
+            value: g.id,
+            label: g.title,
+          };
+        };
+
+        return (
+          <ReactSelectCreatable
+            placeholder="Выбрать прототип"
+            options={prototypes.map(value2option)}
+            value={
+              prototypes.length ? value2option(prototypes[0]) : null // FIXME - selected -> value2option
+            }
+            onChange={(option: any) => {
+              update({ prototype_id: option.value });
+            }}
+          />
+        );
       }}
-    />
+    </ApolloQueryResults>
   );
-});
+};
 
 export default Picker;

@@ -11,6 +11,7 @@ from kocherga.dateutils import TZ
 
 from .event import Event
 from ..helpers import create_image_from_fh
+from .announcement.timepad import timepad_category_by_code
 
 
 class EventPrototype(models.Model):
@@ -67,6 +68,12 @@ class EventPrototype(models.Model):
     @classmethod
     def by_id(cls, prototype_id):
         return EventPrototype.objects.get(pk=prototype_id)
+
+    @property
+    def timepad_category(self):
+        if not self.timepad_category_code:
+            return None
+        return timepad_category_by_code(self.timepad_category_code)
 
     # This is a legacy method, we should replace it with all_events() from Event's FK.
     # But that method for now doesn't allow limiting, doesn't filter out deleted events and doesn't apply `order_by`.

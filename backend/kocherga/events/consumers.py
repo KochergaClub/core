@@ -16,6 +16,10 @@ from .models import Event, GoogleCalendar
 
 class UpdatesWebsocketConsumer(WebsocketConsumer):
     def connect(self):
+        if not self.scope["user"].is_staff:
+            self.close()
+            return
+
         async_to_sync(self.channel_layer.group_add)(
             'events_group',
             self.channel_name

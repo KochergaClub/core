@@ -1,92 +1,149 @@
-import { action, autorun, observable } from 'mobx';
-import { observer } from 'mobx-react';
+import { useState, useCallback, useMemo } from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
 
-import * as React from 'react';
+import {
+  Button,
+  Column,
+  Modal,
+  Input,
+  ControlsFooter,
+  Label,
+} from '@kocherga/frontkit';
 
-import { Button, Column, Modal, Input } from '@kocherga/frontkit';
+import { state2link } from '~/image-templater/utils';
 
-import { Event } from '../stores/Event';
+import { EvenmanEvent_DetailsFragment } from './queries.generated';
+import {
+  useAPI,
+  useFocusOnFirstModalRender,
+  useCommonHotkeys,
+} from '~/common/hooks';
+
+const WideInput = styled(Input)`
+  width: 100%;
+`;
 
 interface Props {
-  event: Event;
-  toggle: () => void;
-  isOpen: boolean;
+  event: EvenmanEvent_DetailsFragment;
+  close: () => void;
+  onSave: (image_id: string) => Promise<any>;
 }
 
-@observer
-export class VkImageModal extends React.Component<Props, {}> {
-  @observable title?: string;
-  @observable header?: string;
+const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
+  const api = useAPI();
 
-  private titleInput: HTMLInputElement | null = null;
-  private headerInput: HTMLInputElement | null = null;
+  const [saving, setSaving] = useState(false);
 
-  constructor(props: Props) {
-    super(props);
-    const fillVars = autorun(() => {
-      this.header = '';
-      this.title = this.props.event.title;
-    });
+  const [title, setTitle] = useState(event.title);
+  const [header, setHeader] = useState('');
 
-    fillVars();
-  }
+  const config = useMemo(() => {
+    const date = format(new Date(event.start), 'yyyy-MM-dd');
+    const time = format(new Date(event.start), 'HH:mm');
 
-  @action.bound
-  updateHeader() {
-    this.header = this.headerInput!.value;
-  }
+    return {
+      date,
+      time,
+      title,
+      header,
+      background_image: event.imageForVkBackground?.url || '',
+      realm: event.realm,
+    };
+  }, [event.start, title, header, event.imageForVkBackground, event.realm]);
 
-  @action.bound
-  updateTitle() {
-    this.title = this.titleInput!.value;
-  }
+  const buildLink = useCallback(
+    (type: 'html' | 'png') =>
+      state2link({
+        name: 'vk-image',
+        type,
+        state: config,
+      }),
+    [config]
+  );
 
-  async save() {
-    await this.props.event.vkImageGenerate(this.header || '', this.title || '');
-    this.props.toggle();
-  }
-
-  renderImage() {
-    return (
-      <Column stretch>
-        <Input
-          type="text"
-          value={this.header}
-          onChange={this.updateHeader}
-          ref={ref => (this.headerInput = ref)}
-        />
-        <Input
-          type="text"
-          value={this.title}
-          onChange={this.updateTitle}
-          ref={ref => (this.titleInput = ref)}
-        />
-        <iframe
-          src={this.props.event.vkImageTemplater(
-            this.header,
-            this.title,
-            'html'
-          )}
-          style={{ width: 550, height: 350, border: 0 }}
-        />
-      </Column>
-    );
-  }
-
-  render() {
-    if (!this.props.isOpen) {
-      return null;
+  const save = useCallback(async () => {
+    setSaving(true);
+    const response = await fetch(buildLink('png'));
+    if (!response.ok) {
+      throw new Error("can't fetch image");
     }
-    return (
-      <Modal>
-        <Modal.Header toggle={this.props.toggle}>Картинка для ВК</Modal.Header>
-        <Modal.Body>{this.renderImage()}</Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => this.save()} primary>
+    const blob = await response.blob();
+
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('title', 'VK_IMAGE'); // TODO - generate title
+
+    const result = await api.call('wagtail/upload_image', 'POST', formData, {
+      stringifyPayload: false,
+    });
+    const image_id = result.id;
+    await onSave(image_id);
+
+    close();
+  }, [api, buildLink, onSave, close]);
+
+  const updateTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.currentTarget.value);
+  }, []);
+
+  const updateHeader = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setHeader(e.currentTarget.value);
+  }, []);
+
+  const focus = useFocusOnFirstModalRender();
+  const hotkeys = useCommonHotkeys({ onEnter: save, onEscape: close });
+
+  const iframeUrl = state2link({
+    name: 'vk-image',
+    type: 'html',
+    state: config,
+  });
+
+  return (
+    <Modal>
+      <Modal.Header toggle={close}>Картинка для ВК</Modal.Header>
+      <Modal.Body {...hotkeys}>
+        <Column stretch>
+          <div>
+            <Label>Заголовок</Label>
+            <WideInput
+              type="text"
+              value={header}
+              onChange={updateHeader}
+              disabled={saving}
+            />
+          </div>
+          <div>
+            <Label>Название</Label>
+            <WideInput
+              type="text"
+              value={title}
+              onChange={updateTitle}
+              ref={focus}
+              disabled={saving}
+            />
+          </div>
+          <iframe
+            src={iframeUrl}
+            style={{ width: 550, height: 350, border: 0 }}
+          />
+        </Column>
+      </Modal.Body>
+      <Modal.Footer>
+        <ControlsFooter>
+          <Button
+            onClick={save}
+            kind="primary"
+            loading={saving}
+            disabled={saving}
+          >
             Сохранить
           </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-}
+        </ControlsFooter>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default VkImageModal;

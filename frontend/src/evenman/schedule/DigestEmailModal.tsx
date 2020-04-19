@@ -1,51 +1,44 @@
-import { action, observable } from 'mobx';
-import { observer } from 'mobx-react';
-import * as React from 'react';
-
 import autosize from 'autosize';
 
-import { Button, Modal } from '@kocherga/frontkit';
+import { Modal } from '@kocherga/frontkit';
+import { AsyncButton } from '~/components';
+import { useRef, useCallback } from 'react';
 
 interface Props {
-  show: boolean;
-  toggle: () => void;
-  save: (text: string) => void;
+  close: () => void;
+  save: (text: string) => Promise<any>;
 }
 
-@observer
-export default class DigestEmailModal extends React.Component<Props> {
-  @observable text = '';
-  @observable textarea?: HTMLTextAreaElement;
-
-  @action.bound
-  setTextarea(el?: HTMLTextAreaElement) {
-    if (el && this.textarea !== el) {
-      autosize(el);
+const DigestEmailModal: React.FC<Props> = ({ close, save }) => {
+  const textarea = useRef<HTMLTextAreaElement>();
+  const setTextarea = useCallback((node: HTMLTextAreaElement) => {
+    if (node) {
+      node.focus();
+      autosize(node);
     }
-    this.textarea = el;
-  }
+    textarea.current = node;
+  }, []);
 
-  render() {
-    if (!this.props.show) {
-      return null;
+  const submit = useCallback(async () => {
+    if (!textarea.current) {
+      return;
     }
-    return (
-      <Modal>
-        <Modal.Header toggle={this.props.toggle}>
-          Текст еженедельной рассылки
-        </Modal.Header>
-        <Modal.Body>
-          <textarea
-            ref={el => this.setTextarea(el || undefined)}
-            defaultValue={this.text}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => this.props.save(this.textarea!.value)} primary>
-            Создать черновик
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-}
+    await save(textarea.current.value || '');
+  }, [save]);
+
+  return (
+    <Modal>
+      <Modal.Header toggle={close}>Текст еженедельной рассылки</Modal.Header>
+      <Modal.Body>
+        <textarea ref={setTextarea} defaultValue={''} />
+      </Modal.Body>
+      <Modal.Footer>
+        <AsyncButton act={submit} kind="primary">
+          Создать черновик
+        </AsyncButton>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default DigestEmailModal;

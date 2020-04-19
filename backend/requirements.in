@@ -39,7 +39,7 @@ aiohttp_socks >= 0.2.2
 whitenoise >= 4.1
 channels >= 2.4
 daphne >= 2.4.1
-channels_redis >= 2.4
+channels_redis >= 2.4.2
 django-reversion >= 3.0.5
 redis >= 3.2
 django-reversion-compare >= 0.9.0
@@ -54,7 +54,7 @@ django-prometheus
 git+https://github.com/berekuk/wagtail-condensedinlinepanel.git@master # compatible with django 3
 # wagtail-condensedinlinepanel == 0.5.2
 
-ariadne
+ariadne == 0.11.0
 aiodataloader
 django-storages
 

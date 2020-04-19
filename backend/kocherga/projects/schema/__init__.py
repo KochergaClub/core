@@ -1,3 +1,3 @@
-from . import objects
+from . import objects, query
 
-types = [*objects.types]
+types = [*objects.types, query.Query]

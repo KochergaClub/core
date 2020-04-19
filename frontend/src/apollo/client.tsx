@@ -1,7 +1,11 @@
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
+
+import { split } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
 
 import KochergaApolloCache from './cache';
 import cookie from 'cookie';
@@ -29,7 +33,7 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
 
     const fetch = require('node-fetch').default;
 
-    return new HttpLink({
+    const httpLink = new HttpLink({
       uri: `http://${API_HOST}/api/graphql`,
       credentials: 'same-origin',
       fetch,
@@ -39,6 +43,22 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
         'X-Forwarded-Host': req?.headers?.host,
       },
     });
+
+    // https://www.apollographql.com/docs/react/data/subscriptions/#client-setup
+    const link = split(
+      // split based on operation type
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      () => null, // subscriptions are not needed on server but still get invoked for some reason and cause server-side errors on backend
+      httpLink
+    );
+
+    return link;
   } else {
     throw new Error("Shouldn't be called on client side");
   }
@@ -52,14 +72,40 @@ function createClientLink() {
   const cookies = cookie.parse(document.cookie || '');
   const csrfToken = cookies.csrftoken as string;
 
-  const { HttpLink } = require('apollo-link-http');
-  return new HttpLink({
+  const httpLink = new HttpLink({
     uri: '/api/graphql',
     credentials: 'same-origin',
     headers: {
       'X-CSRFToken': csrfToken,
     },
   });
+
+  const WS_ENDPOINT =
+    (window.location.protocol === 'http:' ? 'ws://' : 'wss://') +
+    window.location.host +
+    '/ws/graphql';
+
+  const wsLink = new WebSocketLink({
+    uri: WS_ENDPOINT,
+    options: {
+      reconnect: true,
+    },
+  });
+
+  // https://www.apollographql.com/docs/react/data/subscriptions/#client-setup
+  const link = split(
+    // split based on operation type
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      );
+    },
+    wsLink,
+    httpLink
+  );
+  return link;
 }
 
 /**

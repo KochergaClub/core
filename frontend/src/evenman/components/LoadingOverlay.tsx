@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import styled from 'styled-components';
 
 interface Props {
@@ -27,7 +25,7 @@ const LoadingOverlay = (props: Props) => {
   if (props.error) {
     return <Error>Ошибка: {props.error}</Error>;
   }
-  return <React.Fragment>{props.children}</React.Fragment>;
+  return <>{props.children}</>;
 };
 
 export default LoadingOverlay;

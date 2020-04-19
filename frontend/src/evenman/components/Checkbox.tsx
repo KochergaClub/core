@@ -1,4 +1,3 @@
-import * as React from 'react';
 import styled from 'styled-components';
 
 interface CheckboxProps {
@@ -13,23 +12,21 @@ const CheckboxLabel = styled.label`
   font-size: 0.8rem;
 
   &:hover {
-  color: #666;
+    color: #666;
   }
 `;
 
 const CheckboxInput = styled.input.attrs({
   type: 'checkbox',
-})`
-`;
+})``;
 
-export default class Checkbox extends React.Component<CheckboxProps> {
-  render() {
-    return (
-      <CheckboxLabel>
-        <CheckboxInput checked={this.props.checked} onChange={this.props.onChange} />
-        {' '}
-        {this.props.children}
-      </CheckboxLabel>
-    );
-  }
-}
+const Checkbox: React.FC<CheckboxProps> = props => {
+  return (
+    <CheckboxLabel>
+      <CheckboxInput checked={props.checked} onChange={props.onChange} />{' '}
+      {props.children}
+    </CheckboxLabel>
+  );
+};
+
+export default Checkbox;

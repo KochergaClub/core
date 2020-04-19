@@ -1,53 +1,56 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
+import Select from 'react-select';
 
 import { Label } from '@kocherga/frontkit';
 
-import EventShape from '../stores/EventShape';
+import { ApolloQueryResults } from '~/components';
 
-import Select from 'react-select';
 import { ActionTypes } from 'react-select/src/types';
 
+import { useEvenmanProjectsListQuery } from './queries.generated';
+
 interface Props {
-  event: EventShape;
+  selected?: string;
+  select: (slug: string) => Promise<any>;
 }
 
-const EventShapeProjectLink = observer(({ event }: Props) => {
-  const toolsStore = event.root.announcementToolsStore;
-  const projectsPromise = toolsStore.projectSlugs;
+const EventShapeProjectLink = ({ selected, select }: Props) => {
+  const projectsResult = useEvenmanProjectsListQuery();
 
-  return projectsPromise.case({
-    pending: () => <Label>Проекты загружаются...</Label>,
-    rejected: () => <Label>Не удалось загрузить проекты</Label>,
-    fulfilled: projects => {
-      const options = projects.map(p => ({ value: p, label: p }));
+  return (
+    <ApolloQueryResults {...projectsResult}>
+      {({ data: { projects } }) => {
+        const options = projects.map(p => ({
+          value: p.meta.slug,
+          label: p.meta.slug,
+        }));
 
-      const currentProject = options.find(p => p.value === event.project_slug);
+        const currentProject = options.find(p => p.value === selected);
 
-      const pickProject = async (
-        v: any,
-        { action }: { action: ActionTypes }
-      ) => {
-        if (action === 'clear') {
-          event.setProjectSlug('');
-        } else {
-          event.setProjectSlug(v.value);
-        }
-      };
+        const pickProject = async (
+          v: any,
+          { action }: { action: ActionTypes }
+        ) => {
+          if (action === 'clear') {
+            await select('');
+          } else {
+            await select(v.value);
+          }
+        };
 
-      return (
-        <div>
-          <Label>Проект:</Label>
-          <Select
-            value={currentProject || null}
-            options={options}
-            isClearable={true}
-            onChange={pickProject}
-          />
-        </div>
-      );
-    },
-  });
-});
+        return (
+          <div>
+            <Label>Проект:</Label>
+            <Select
+              value={currentProject || null}
+              options={options}
+              isClearable={true}
+              onChange={pickProject}
+            />
+          </div>
+        );
+      }}
+    </ApolloQueryResults>
+  );
+};
 
 export default EventShapeProjectLink;

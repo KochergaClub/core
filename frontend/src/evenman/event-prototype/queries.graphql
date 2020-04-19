@@ -1,0 +1,169 @@
+fragment EventsPrototype on EventsPrototype {
+  id
+  title
+  summary
+  description
+  location
+  timing_description_override
+  active
+  weekday
+  hour
+  minute
+  length
+  tags
+  vk_group {
+    name
+  }
+  timepad_category {
+    code
+    name
+  }
+  image(spec: "width-240") {
+    url
+  }
+  project {
+    meta {
+      slug
+    }
+  }
+  suggested_dates(limit: 5)
+  instances {
+    id
+    start
+    title
+    visitors
+  }
+}
+
+fragment EventsPrototype_Summary on EventsPrototype {
+  id
+  title
+  active
+  weekday
+  hour
+  minute
+  suggested_dates(until_ts: $suggested_until_ts, limit: 10)
+}
+
+query EvenmanPrototypes($suggested_until_ts: Int!) {
+  prototypes: eventsPrototypes {
+    ...EventsPrototype_Summary
+  }
+}
+
+query EvenmanPrototype($id: ID!) {
+  prototype: eventsPrototype(id: $id) {
+    ...EventsPrototype
+  }
+}
+
+mutation EvenmanPrototypeCreate(
+  $title: String!,
+  $location: String,
+  $weekday: Int!,
+  $hour: Int!,
+  $minute: Int!,
+  $length: Int!,
+) {
+  result: eventPrototypeCreate(input: {
+      title: $title,
+      location: $location,
+      weekday: $weekday,
+      hour: $hour,
+      minute: $minute,
+      length: $length,
+    }) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
+  }
+}
+
+
+mutation EvenmanPrototypeUpdate(
+  $id: ID!,
+  $active: Boolean,
+  $title: String,
+  $summary: String,
+  $description: String,
+  $location: String,
+  $timing_description_override: String,
+  $vk_group_name: String,
+  $timepad_category_code: String,
+  $project_slug: String
+) {
+  result: eventPrototypeUpdate(input: {
+      id: $id,
+      active: $active,
+      title: $title,
+      summary: $summary,
+      description: $description,
+      location: $location,
+      timing_description_override: $timing_description_override,
+      vk_group_name: $vk_group_name,
+      timepad_category_code: $timepad_category_code,
+      project_slug: $project_slug
+    }) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
+  }
+}
+
+mutation EvenmanPrototypeCancelDate($id: ID!, $date: String!) {
+  result: eventPrototypeCancelDate(input: {
+      id: $id,
+      date: $date
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeNewEvent($id: ID!, $ts: Int!) {
+  result: eventPrototypeNewEvent(input: {
+      id: $id
+      ts: $ts
+    }) {
+    ok
+  }
+}
+
+mutation EvenmanPrototypeAddTag($id: ID!, $tag: String!) {
+  result: eventPrototypeAddTag(input: {
+      id: $id
+      tag: $tag
+    }) {
+    ok
+    prototype {
+      id
+      tags
+    }
+  }
+}
+
+mutation EvenmanPrototypeDeleteTag($id: ID!, $tag: String!) {
+  result: eventPrototypeDeleteTag(input: {
+      id: $id
+      tag: $tag
+    }) {
+    ok
+    prototype {
+      id
+      tags
+    }
+  }
+}
+
+mutation EvenmanPrototypeSetImage($id: ID!, $image_id: ID!) {
+  result: eventPrototypeSetImage(input: {
+      id: $id
+      image_id: $image_id
+    }) {
+    ok
+    prototype {
+      ...EventsPrototype
+    }
+  }
+}

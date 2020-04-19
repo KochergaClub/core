@@ -1,25 +1,33 @@
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
-
 import { Row } from '@kocherga/frontkit';
 
-import ImageDropzone from '../../ImageDropzone';
+import ImageEditor from '../../common/ImageEditor';
 
-import EventPrototype from '../../stores/EventPrototype';
+import {
+  EventsPrototypeFragment,
+  useEvenmanPrototypeSetImageMutation,
+} from '../queries.generated';
+
 interface Props {
-  prototype: EventPrototype;
+  prototype: EventsPrototypeFragment;
 }
 
-const Image: React.FC<Props> = observer(({ prototype }) => {
-  const onDrop = (acceptedFiles: File[]) => {
-    prototype.uploadImage(acceptedFiles[0]);
+const Image: React.FC<Props> = ({ prototype }) => {
+  const [setImage] = useEvenmanPrototypeSetImageMutation();
+
+  const onChange = async (image_id: string) => {
+    await setImage({
+      variables: {
+        id: prototype.id,
+        image_id,
+      },
+    });
   };
 
   return (
     <Row centered>
-      <ImageDropzone onDrop={onDrop} url={prototype.image} />
+      <ImageEditor onChange={onChange} image={prototype.image || undefined} />
     </Row>
   );
-});
+};
 
 export default Image;

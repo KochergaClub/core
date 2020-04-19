@@ -6,6 +6,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  Upload: any,
 };
 
 
@@ -110,6 +111,11 @@ export type BasicParagraphBlock = WagtailBlock & {
    __typename?: 'BasicParagraphBlock',
   id: Scalars['ID'],
   value: Scalars['String'],
+};
+
+export type BasicResult = {
+   __typename?: 'BasicResult',
+  ok?: Maybe<Scalars['Boolean']>,
 };
 
 export type BigContactsBlock = WagtailBlock & {
@@ -313,18 +319,205 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>,
 };
 
+export type EventAddTagInput = {
+  event_id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
+export type EventAnnounceInput = {
+  event_id: Scalars['ID'],
+  target: EventAnnounceTarget,
+};
+
+export enum EventAnnounceTarget {
+  Vk = 'VK',
+  Fb = 'FB',
+  Timepad = 'TIMEPAD'
+}
+
+export type EventCreateInput = {
+  title: Scalars['String'],
+  start: Scalars['String'],
+  end: Scalars['String'],
+};
+
+export type EventCreateResult = {
+   __typename?: 'EventCreateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  event: EventsEvent,
+};
+
+export type EventDeleteInput = {
+  event_id: Scalars['ID'],
+};
+
+export type EventDeleteResult = {
+   __typename?: 'EventDeleteResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventDeleteTagInput = {
+  event_id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
 export type EventGenerateZoomLinkInput = {
   event_id: Scalars['ID'],
 };
 
-export type EventGenerateZoomLinkResult = {
-   __typename?: 'EventGenerateZoomLinkResult',
+export type EventMoveInput = {
+  event_id: Scalars['ID'],
+  start: Scalars['String'],
+};
+
+export type EventNotification = {
+   __typename?: 'EventNotification',
+  type: Scalars['String'],
+  id: Scalars['ID'],
+};
+
+export type EventPrototypeAddTagInput = {
+  id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
+export type EventPrototypeAddTagResult = {
+   __typename?: 'EventPrototypeAddTagResult',
   ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventPrototypeCancelDateInput = {
+  id: Scalars['ID'],
+  date: Scalars['String'],
+};
+
+export type EventPrototypeCancelDateResult = {
+   __typename?: 'EventPrototypeCancelDateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventPrototypeCreateInput = {
+  title: Scalars['String'],
+  location?: Maybe<Scalars['String']>,
+  weekday: Scalars['Int'],
+  hour: Scalars['Int'],
+  minute: Scalars['Int'],
+  length: Scalars['Int'],
+};
+
+export type EventPrototypeCreateResult = {
+   __typename?: 'EventPrototypeCreateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventPrototypeDeleteTagInput = {
+  id: Scalars['ID'],
+  tag: Scalars['String'],
+};
+
+export type EventPrototypeDeleteTagResult = {
+   __typename?: 'EventPrototypeDeleteTagResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventPrototypeNewEventInput = {
+  id: Scalars['ID'],
+  ts: Scalars['Int'],
+};
+
+export type EventPrototypeNewEventResult = {
+   __typename?: 'EventPrototypeNewEventResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventPrototypeSetImageInput = {
+  id: Scalars['ID'],
+  image_id: Scalars['ID'],
+};
+
+export type EventPrototypeSetImageResult = {
+   __typename?: 'EventPrototypeSetImageResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventPrototypeUpdateInput = {
+  id: Scalars['ID'],
+  title?: Maybe<Scalars['String']>,
+  summary?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  timing_description_override?: Maybe<Scalars['String']>,
+  location?: Maybe<Scalars['String']>,
+  active?: Maybe<Scalars['Boolean']>,
+  weekday?: Maybe<Scalars['Int']>,
+  hour?: Maybe<Scalars['Int']>,
+  minute?: Maybe<Scalars['Int']>,
+  length?: Maybe<Scalars['Int']>,
+  project_slug?: Maybe<Scalars['String']>,
+  vk_group_name?: Maybe<Scalars['String']>,
+  timepad_category_code?: Maybe<Scalars['String']>,
+};
+
+export type EventPrototypeUpdateResult = {
+   __typename?: 'EventPrototypeUpdateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  prototype: EventsPrototype,
+};
+
+export type EventsAnnouncementFb = {
+   __typename?: 'EventsAnnouncementFb',
+  link: Scalars['String'],
+  group: Scalars['String'],
 };
 
 export type EventsAnnouncements = {
    __typename?: 'EventsAnnouncements',
-  timepad?: Maybe<EventsTimepadAnnouncement>,
+  timepad: EventsAnnouncementTimepad,
+  vk: EventsAnnouncementVk,
+  fb: EventsAnnouncementFb,
+};
+
+export type EventsAnnouncementTimepad = {
+   __typename?: 'EventsAnnouncementTimepad',
+  link: Scalars['String'],
+  category_code: Scalars['String'],
+  prepaid_tickets: Scalars['Boolean'],
+};
+
+export type EventsAnnouncementVk = {
+   __typename?: 'EventsAnnouncementVk',
+  link: Scalars['String'],
+  group: Scalars['String'],
+  image?: Maybe<WagtailImage>,
+};
+
+
+export type EventsAnnouncementVkImageArgs = {
+  spec: Scalars['String']
+};
+
+export type EventSetAnnounceUrlInput = {
+  event_id: Scalars['ID'],
+  target: EventAnnounceTarget,
+  url: Scalars['String'],
+};
+
+export type EventSetEventTypeInput = {
+  event_id: Scalars['ID'],
+  event_type: Scalars['String'],
+};
+
+export type EventSetEventTypeResult = {
+   __typename?: 'EventSetEventTypeResult',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type EventSetImageFromUrlInput = {
+  event_id: Scalars['ID'],
+  url: Scalars['String'],
 };
 
 export type EventSetPricingTypeInput = {
@@ -359,11 +552,36 @@ export type EventSetZoomLinkResult = {
 
 export type EventsEvent = {
    __typename?: 'EventsEvent',
+  id: Scalars['ID'],
   event_id: Scalars['ID'],
   title: Scalars['String'],
+  description: Scalars['String'],
+  summary: Scalars['String'],
+  timing_description_override: Scalars['String'],
+  location: Scalars['String'],
+  zoom_link: Scalars['String'],
   start: Scalars['String'],
+  end: Scalars['String'],
+  created: Scalars['String'],
+  updated: Scalars['String'],
+  published: Scalars['Boolean'],
+  event_type: Scalars['String'],
+  pricing_type: Scalars['String'],
+  registration_type: Scalars['String'],
+  realm: Scalars['String'],
+  visitors?: Maybe<Scalars['String']>,
+  tags: Array<Scalars['String']>,
+  image?: Maybe<WagtailImage>,
+  prototype?: Maybe<EventsPrototype>,
+  project?: Maybe<ProjectPage>,
+  announcements: EventsAnnouncements,
   /** all EventsEvent are staff-only, but this can change in the future */
   tickets: Array<EventsTicket>,
+};
+
+
+export type EventsEventImageArgs = {
+  spec: Scalars['String']
 };
 
 export type EventsEventConnection = {
@@ -378,10 +596,52 @@ export type EventsEventEdge = {
   node: EventsEvent,
 };
 
+export type EventsFilterInput = {
+  event_type?: Maybe<Scalars['String']>,
+};
+
 export type EventsListBlock = WagtailBlock & {
    __typename?: 'EventsListBlock',
   id: Scalars['ID'],
   events: Array<EventsPublicEvent>,
+};
+
+export type EventsPrototype = {
+   __typename?: 'EventsPrototype',
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  summary: Scalars['String'],
+  description: Scalars['String'],
+  location: Scalars['String'],
+  timing_description_override: Scalars['String'],
+  active: Scalars['Boolean'],
+  weekday: Scalars['Int'],
+  hour: Scalars['Int'],
+  minute: Scalars['Int'],
+  length: Scalars['Int'],
+  project?: Maybe<ProjectPage>,
+  tags: Array<Scalars['String']>,
+  image?: Maybe<WagtailImage>,
+  suggested_dates: Array<Scalars['String']>,
+  instances: Array<EventsEvent>,
+  vk_group?: Maybe<VkGroup>,
+  timepad_category?: Maybe<TimepadCategory>,
+};
+
+
+export type EventsPrototypeImageArgs = {
+  spec: Scalars['String']
+};
+
+
+export type EventsPrototypeSuggested_DatesArgs = {
+  until_ts?: Maybe<Scalars['Int']>,
+  limit: Scalars['Int']
+};
+
+
+export type EventsPrototypeInstancesArgs = {
+  limit?: Maybe<Scalars['Int']>
 };
 
 export type EventsPublicEvent = {
@@ -421,9 +681,85 @@ export type EventsTicket = {
   user: AuthUser,
 };
 
-export type EventsTimepadAnnouncement = {
-   __typename?: 'EventsTimepadAnnouncement',
-  link: Scalars['String'],
+export type EventsWeeklyDigest = {
+   __typename?: 'EventsWeeklyDigest',
+  id: Scalars['ID'],
+  start?: Maybe<Scalars['String']>,
+  image?: Maybe<WagtailImage>,
+  mailchimp: EventsWeeklyDigestMailchimp,
+  telegram: EventsWeeklyDigestTelegram,
+  vk: EventsWeeklyDigestVk,
+};
+
+
+export type EventsWeeklyDigestImageArgs = {
+  spec: Scalars['String']
+};
+
+export type EventsWeeklyDigestMailchimp = {
+   __typename?: 'EventsWeeklyDigestMailchimp',
+  link?: Maybe<Scalars['String']>,
+};
+
+export type EventsWeeklyDigestPostMailchimpInput = {
+  text?: Maybe<Scalars['String']>,
+};
+
+export type EventsWeeklyDigestTelegram = {
+   __typename?: 'EventsWeeklyDigestTelegram',
+  link?: Maybe<Scalars['String']>,
+};
+
+export type EventsWeeklyDigestUpdateResult = {
+   __typename?: 'EventsWeeklyDigestUpdateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  digest: EventsWeeklyDigest,
+};
+
+export type EventsWeeklyDigestVk = {
+   __typename?: 'EventsWeeklyDigestVk',
+  link?: Maybe<Scalars['String']>,
+};
+
+export type EventTimepadAnnouncementUpdateInput = {
+  event_id: Scalars['ID'],
+  prepaid_tickets?: Maybe<Scalars['Boolean']>,
+  category_code?: Maybe<Scalars['String']>,
+};
+
+export type EventUpdateInput = {
+  event_id: Scalars['ID'],
+  published?: Maybe<Scalars['Boolean']>,
+  visitors?: Maybe<Scalars['String']>,
+  title?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  summary?: Maybe<Scalars['String']>,
+  event_type?: Maybe<Scalars['String']>,
+  registration_type?: Maybe<Scalars['String']>,
+  pricing_type?: Maybe<Scalars['String']>,
+  realm?: Maybe<Scalars['String']>,
+  timing_description_override?: Maybe<Scalars['String']>,
+  location?: Maybe<Scalars['String']>,
+  zoom_link?: Maybe<Scalars['String']>,
+  prototype_id?: Maybe<Scalars['ID']>,
+  project_slug?: Maybe<Scalars['String']>,
+  image_id?: Maybe<Scalars['ID']>,
+};
+
+export type EventUpdateResult = {
+   __typename?: 'EventUpdateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  event: EventsEvent,
+};
+
+export type EventVkAnnouncementSetImageInput = {
+  event_id: Scalars['ID'],
+  image_id: Scalars['ID'],
+};
+
+export type EventVkAnnouncementUpdateInput = {
+  event_id: Scalars['ID'],
+  group?: Maybe<Scalars['String']>,
 };
 
 export type FaqEntry = {
@@ -610,10 +946,34 @@ export type Mutation = {
   myEventsTicketUnregister: MyEventsTicket,
   myEventsTicketRegister: MyEventsTicket,
   myEventsTicketRegisterAnon: MyEventsTicket,
+  eventUpdate: EventUpdateResult,
+  eventCreate: EventCreateResult,
+  eventDelete: EventDeleteResult,
+  eventSetEventType: EventSetEventTypeResult,
   eventSetRealm: EventSetRealmResult,
   eventSetPricingType: EventSetPricingTypeResult,
   eventSetZoomLink: EventSetZoomLinkResult,
-  eventGenerateZoomLink: EventGenerateZoomLinkResult,
+  eventPrototypeCreate: EventPrototypeCreateResult,
+  eventPrototypeUpdate: EventPrototypeUpdateResult,
+  eventPrototypeCancelDate: EventPrototypeCancelDateResult,
+  eventPrototypeNewEvent: EventPrototypeNewEventResult,
+  eventPrototypeAddTag: EventPrototypeAddTagResult,
+  eventPrototypeDeleteTag: EventPrototypeDeleteTagResult,
+  eventPrototypeSetImage: EventPrototypeSetImageResult,
+  eventGenerateZoomLink: BasicResult,
+  eventAddTag: EventUpdateResult,
+  eventDeleteTag: EventUpdateResult,
+  eventSetImageFromUrl: BasicResult,
+  eventVkAnnouncementSetImage: BasicResult,
+  eventAnnounce: BasicResult,
+  eventSetAnnounceUrl: BasicResult,
+  eventTimepadAnnouncementUpdate: BasicResult,
+  eventVkAnnouncementUpdate: BasicResult,
+  eventMove: EventUpdateResult,
+  eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult,
+  eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult,
+  eventsWeeklyDigestPostMailchimp: EventsWeeklyDigestUpdateResult,
+  vkWikiScheduleUpdate?: Maybe<BasicResult>,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -750,6 +1110,26 @@ export type MutationMyEventsTicketRegisterAnonArgs = {
 };
 
 
+export type MutationEventUpdateArgs = {
+  input: EventUpdateInput
+};
+
+
+export type MutationEventCreateArgs = {
+  input: EventCreateInput
+};
+
+
+export type MutationEventDeleteArgs = {
+  input: EventDeleteInput
+};
+
+
+export type MutationEventSetEventTypeArgs = {
+  input: EventSetEventTypeInput
+};
+
+
 export type MutationEventSetRealmArgs = {
   input: EventSetRealmInput
 };
@@ -765,8 +1145,93 @@ export type MutationEventSetZoomLinkArgs = {
 };
 
 
+export type MutationEventPrototypeCreateArgs = {
+  input: EventPrototypeCreateInput
+};
+
+
+export type MutationEventPrototypeUpdateArgs = {
+  input: EventPrototypeUpdateInput
+};
+
+
+export type MutationEventPrototypeCancelDateArgs = {
+  input: EventPrototypeCancelDateInput
+};
+
+
+export type MutationEventPrototypeNewEventArgs = {
+  input: EventPrototypeNewEventInput
+};
+
+
+export type MutationEventPrototypeAddTagArgs = {
+  input: EventPrototypeAddTagInput
+};
+
+
+export type MutationEventPrototypeDeleteTagArgs = {
+  input: EventPrototypeDeleteTagInput
+};
+
+
+export type MutationEventPrototypeSetImageArgs = {
+  input: EventPrototypeSetImageInput
+};
+
+
 export type MutationEventGenerateZoomLinkArgs = {
   input: EventGenerateZoomLinkInput
+};
+
+
+export type MutationEventAddTagArgs = {
+  input: EventAddTagInput
+};
+
+
+export type MutationEventDeleteTagArgs = {
+  input: EventDeleteTagInput
+};
+
+
+export type MutationEventSetImageFromUrlArgs = {
+  input: EventSetImageFromUrlInput
+};
+
+
+export type MutationEventVkAnnouncementSetImageArgs = {
+  input: EventVkAnnouncementSetImageInput
+};
+
+
+export type MutationEventAnnounceArgs = {
+  input: EventAnnounceInput
+};
+
+
+export type MutationEventSetAnnounceUrlArgs = {
+  input: EventSetAnnounceUrlInput
+};
+
+
+export type MutationEventTimepadAnnouncementUpdateArgs = {
+  input: EventTimepadAnnouncementUpdateInput
+};
+
+
+export type MutationEventVkAnnouncementUpdateArgs = {
+  input: EventVkAnnouncementUpdateInput
+};
+
+
+export type MutationEventMoveArgs = {
+  input: EventMoveInput
+};
+
+
+export type MutationEventsWeeklyDigestPostMailchimpArgs = {
+  input?: Maybe<EventsWeeklyDigestPostMailchimpInput>
 };
 
 
@@ -1061,8 +1526,13 @@ export type Query = {
   analyticsBovStats: Array<AnalyticsBovStat>,
   events: EventsEventConnection,
   event?: Maybe<EventsEvent>,
+  eventsPrototype: EventsPrototype,
+  eventsPrototypes: Array<EventsPrototype>,
+  vkGroups: Array<VkGroup>,
+  timepadCategories: Array<TimepadCategory>,
   publicEvents: EventsPublicEventConnection,
   publicEvent: EventsPublicEvent,
+  eventsWeeklyDigestCurrent: EventsWeeklyDigest,
   staffMembersAll: Array<StaffMember>,
   staffMember: StaffMember,
   ratioTrainings: RatioTrainingConnection,
@@ -1071,6 +1541,7 @@ export type Query = {
   ratioTrainingEmailPrototype: Scalars['String'],
   mastermindDatingCohorts: Array<MastermindDatingCohort>,
   mastermindDatingCohortById: MastermindDatingCohort,
+  projects: Array<ProjectPage>,
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>,
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>,
   imageTemplatesAll: Array<ImageTemplate>,
@@ -1149,6 +1620,7 @@ export type QueryCashierPaymentsArgs = {
 
 export type QueryEventsArgs = {
   search?: Maybe<Scalars['String']>,
+  filter?: Maybe<EventsFilterInput>,
   before?: Maybe<Scalars['String']>,
   after?: Maybe<Scalars['String']>,
   first?: Maybe<Scalars['Int']>,
@@ -1158,6 +1630,11 @@ export type QueryEventsArgs = {
 
 export type QueryEventArgs = {
   event_id: Scalars['ID']
+};
+
+
+export type QueryEventsPrototypeArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -1432,10 +1909,29 @@ export type StaffMember = {
   slack_user?: Maybe<SlackUser>,
 };
 
+export type Subscription = {
+   __typename?: 'Subscription',
+  _empty?: Maybe<Scalars['Boolean']>,
+  events: EventNotification,
+};
+
 export type TildaPage = {
    __typename?: 'TildaPage',
   path: Scalars['String'],
   html_url: Scalars['String'],
+};
+
+export type TimepadCategory = {
+   __typename?: 'TimepadCategory',
+  id: Scalars['ID'],
+  code: Scalars['String'],
+  name: Scalars['String'],
+};
+
+
+export type VkGroup = {
+   __typename?: 'VkGroup',
+  name: Scalars['String'],
 };
 
 export type WagtailBlock = {

@@ -1,0 +1,22 @@
+query EvenmanProjectsList {
+  projects {
+    id
+    meta {
+      slug
+    }
+  }
+}
+
+query EvenmanVkGroups {
+  vkGroups {
+    name
+  }
+}
+
+query EvenmanTimepadCategories {
+  timepadCategories {
+    id
+    code
+    name
+  }
+}

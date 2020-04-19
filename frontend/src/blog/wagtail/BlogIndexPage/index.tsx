@@ -7,7 +7,6 @@ import { NextWagtailPage } from '~/wagtail/types';
 import {
   BlogIndexPageFragment,
   BlogIndexPageFragmentDoc,
-  BlogPostPage_SummaryFragment,
 } from '../fragments.generated';
 
 import Summary from './Summary';

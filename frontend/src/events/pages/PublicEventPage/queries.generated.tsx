@@ -32,10 +32,10 @@ export type EventsPublicEventFragment = (
     & MyEventsTicketFragment
   )>, announcements: (
     { __typename?: 'EventsAnnouncements' }
-    & { timepad: Types.Maybe<(
-      { __typename?: 'EventsTimepadAnnouncement' }
-      & Pick<Types.EventsTimepadAnnouncement, 'link'>
-    )> }
+    & { timepad: (
+      { __typename?: 'EventsAnnouncementTimepad' }
+      & Pick<Types.EventsAnnouncementTimepad, 'link'>
+    ) }
   ) }
 );
 

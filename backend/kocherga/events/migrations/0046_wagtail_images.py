@@ -3,7 +3,6 @@ from pathlib import Path
 
 from django.db import migrations, models
 import django.db.models.deletion
-from django.conf import settings
 from django.core.files.images import ImageFile
 from wagtail.images.models import Image
 

@@ -1,0 +1,6 @@
+query EvenmanPrototypesForPicker {
+  prototypes: eventsPrototypes {
+    id
+    title
+  }
+}

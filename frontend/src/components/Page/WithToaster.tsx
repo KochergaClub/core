@@ -55,6 +55,7 @@ const ToastContainer = styled.div`
   position: fixed;
   left: 20px;
   bottom: 20px;
+  z-index: 1500;
 
   > * + * {
     margin-top: 8px;
@@ -102,10 +103,10 @@ const WithToaster: React.FC = ({ children }) => {
 
   return (
     <ToasterContext.Provider value={dispatch}>
-      <div>
+      <>
         {children}
         <ToastList toasts={state} />
-      </div>
+      </>
     </ToasterContext.Provider>
   );
 };

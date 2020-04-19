@@ -36,6 +36,7 @@ spec:
 {{- end }}
           ports:
             - containerPort: 80
+{{- if not .Values.dev }}
           readinessProbe:
             httpGet:
               path: /api/graphql
@@ -45,6 +46,7 @@ spec:
               port: 80
             timeoutSeconds: 3
             periodSeconds: 10
+{{- end }}
           resources:
             requests:
               memory: "512Mi"
@@ -61,6 +63,8 @@ spec:
 {{- if .Values.dev }}
             - name: PYTHONUNBUFFERED
               value: "0"  # fix runserver output on compilation issues
+            - name: DJANGO_WATCHMAN_TIMEOUT
+              value: "60"
 {{- end }}
       volumes:
 {{ include "core.backend_volumes" . | indent 8 }}

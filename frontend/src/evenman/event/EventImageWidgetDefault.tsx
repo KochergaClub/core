@@ -1,62 +1,70 @@
-import { observer } from 'mobx-react';
-import { action, observable } from 'mobx';
-import * as React from 'react';
-
-import { Event } from '../stores/Event';
-import { InputModal } from '../InputModal';
-import EventImageDropzone from './EventImageDropzone';
+import { useState, useCallback } from 'react';
 import { A, Column } from '@kocherga/frontkit';
 
+import InputModal from '../InputModal';
+
+import {
+  EvenmanEvent_DetailsFragment,
+  useEvenmanEventSetImageFromUrlMutation,
+} from './queries.generated';
+import { useUpdateMutation } from './hooks';
+import ImageEditor from '../common/ImageEditor';
+
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-@observer
-class EventImageWidgetDefault extends React.Component<Props, {}> {
-  @observable modalIsOpen = false;
+const EventImageWidgetDefault: React.FC<Props> = ({ event }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  @action.bound
-  toggleModal() {
-    this.modalIsOpen = !this.modalIsOpen;
-  }
+  const [setImageFromUrl] = useEvenmanEventSetImageFromUrlMutation();
+  const update = useUpdateMutation(event.id);
 
-  constructor(props: Props) {
-    super(props);
-    this.saveLink = this.saveLink.bind(this);
-  }
+  const toggleModal = useCallback(() => {
+    setModalIsOpen(!modalIsOpen);
+  }, [modalIsOpen]);
 
-  @action.bound
-  async saveLink(link: string) {
-    this.modalIsOpen = false;
-    await this.props.event.setImageFromUrl(link);
-  }
+  const saveLink = useCallback(
+    async (url: string) => {
+      await setImageFromUrl({
+        variables: {
+          id: event.id,
+          url,
+        },
+      });
+      setModalIsOpen(false);
+    },
+    [event.id, setImageFromUrl]
+  );
 
-  render() {
-    return (
-      <Column centered gutter={0}>
-        <header>Основная картинка:</header>
-        <small>
-          <A
-            href="#"
-            onClick={e => {
-              e.preventDefault();
-              this.toggleModal();
-            }}
-          >
-            добавить по ссылке
-          </A>
+  return (
+    <Column centered gutter={0}>
+      <header>Основная картинка:</header>
+      <small>
+        <A
+          href="#"
+          onClick={e => {
+            e.preventDefault();
+            toggleModal();
+          }}
+        >
+          добавить по ссылке
+        </A>
+        {modalIsOpen && (
           <InputModal
             title="Ссылка на картинку"
             description="Вставьте сюда прямую ссылку на картинку:"
-            isOpen={this.modalIsOpen}
-            toggle={this.toggleModal}
-            save={this.saveLink}
+            toggle={toggleModal}
+            save={saveLink}
           />
-        </small>
-        <EventImageDropzone imageType="default" event={this.props.event} />
-      </Column>
-    );
-  }
-}
+        )}
+      </small>
+      <ImageEditor
+        onChange={image_id => update({ image_id })}
+        image={event.image || undefined}
+      />
+    </Column>
+  );
+};
 
 export default EventImageWidgetDefault;

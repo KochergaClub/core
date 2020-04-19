@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { Button } from '@kocherga/frontkit';
+import { useNotification } from '~/common/hooks';
 
 interface Props {
   act: () => Promise<any>;
@@ -11,22 +12,23 @@ interface Props {
 }
 
 const AsyncButton = ({ act, children, small, kind, disabled }: Props) => {
-  const [loading, setLoading] = useState(false);
+  const notify = useNotification();
+  const [acting, setActing] = useState(false);
 
   const cb = useCallback(async () => {
-    setLoading(true);
+    setActing(true);
     try {
       await act();
     } catch (e) {
-      window.alert(e);
+      notify({ text: String(e), type: 'Error' });
     }
-    setLoading(false);
-  }, [act]);
+    setActing(false);
+  }, [act, notify]);
 
   return (
     <Button
-      loading={loading}
-      disabled={disabled || loading}
+      loading={acting}
+      disabled={disabled || acting}
       onClick={cb}
       small={small}
       kind={kind}

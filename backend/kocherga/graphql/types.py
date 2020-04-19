@@ -34,6 +34,7 @@ class DjangoObjectType(ariadne.ObjectType):
             # TODO - compare field types
             # TODO - special handling for FK fields
             # TODO - support methods and properties
+            # TODO - wrap FK resolvers in sync_to_async
             _meta.get_field(name)
 
     def related_field(self, field_name):
@@ -61,7 +62,10 @@ class DjangoObjectType(ariadne.ObjectType):
 
         @self.field(field_name)
         def resolve(obj, info, spec):
-            return getattr(obj, field_name).get_rendition(spec)
+            image = getattr(obj, field_name)
+            if not image:
+                return None
+            return image.get_rendition(spec)
 
     def rich_text_field(self, field_name):
         # via https://github.com/wagtail/wagtail/issues/2695 - fixing <embed> in RichTextFields

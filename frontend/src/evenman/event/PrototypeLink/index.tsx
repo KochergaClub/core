@@ -1,35 +1,27 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
 
 import { A } from '@kocherga/frontkit';
 
-import { Event } from '../../stores/Event';
-
 import EmptyPrototypeLink from './EmptyPrototypeLink';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
+
+import { prototypeRoute } from '../../routes';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
-const PrototypeLink = observer(({ event }: Props) => {
-  const prototypeId = event.prototype_id;
-  if (!prototypeId) {
+const PrototypeLink = ({ event }: Props) => {
+  if (!event.prototype) {
     return <EmptyPrototypeLink event={event} />;
   }
 
+  const route = prototypeRoute(event.prototype.id);
   return (
-    <A
-      href={`/team/evenman/event-prototypes/${prototypeId}`}
-      onClick={e => {
-        e.preventDefault();
-        event.root.setEventPrototypeView({
-          id: prototypeId,
-        });
-      }}
-    >
-      Прототип
-    </A>
+    <Link href={route.href} as={route.as} passHref>
+      <A>Прототип</A>
+    </Link>
   );
-});
+};
 
 export default PrototypeLink;

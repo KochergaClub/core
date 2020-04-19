@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
+import React from 'react';
 
 import { animated, useTransition } from 'react-spring';
 
@@ -17,30 +16,27 @@ interface Props {
   weeks: number;
 }
 
-const MonthCalendar = observer((props: Props) => {
+const MonthCalendar = (props: Props) => {
   const [weeksState, dispatch] = React.useReducer(reducer, {
     weeks: [],
     heights: {},
   });
 
-  React.useEffect(
-    () => {
-      const firstDay = moment(props.date).startOf('week');
+  React.useEffect(() => {
+    const firstDay = moment(props.date).startOf('week');
 
-      const result = [];
-      const day = firstDay;
-      do {
-        result.push(moment(day));
-        day.add(1, 'week');
-      } while (result.length < props.weeks);
+    const result = [];
+    const day = firstDay;
+    do {
+      result.push(moment(day));
+      day.add(1, 'week');
+    } while (result.length < props.weeks);
 
-      dispatch({
-        type: 'SET_WEEKS',
-        payload: result,
-      });
-    },
-    [props.date, props.weeks]
-  );
+    dispatch({
+      type: 'SET_WEEKS',
+      payload: result,
+    });
+  }, [props.date, props.weeks]);
 
   const transitions = useTransition(
     weeksState.weeks,
@@ -104,6 +100,6 @@ const MonthCalendar = observer((props: Props) => {
       ))}
     </div>
   );
-});
+};
 
 export default MonthCalendar;

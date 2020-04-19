@@ -1,15 +1,19 @@
-import { observer } from 'mobx-react';
-
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
+import Router from 'next/router';
 
 import { FaTrash } from 'react-icons/fa';
 
-import { Button } from '@kocherga/frontkit';
+import { AsyncButton } from '~/components';
 
-import { Event } from '../../stores/Event';
+import {
+  EvenmanEvent_DetailsFragment,
+  useEvenmanEventDeleteMutation,
+} from '../queries.generated';
+import { rootRoute } from '../../routes';
 
 interface Props {
-  event: Event;
+  event: EvenmanEvent_DetailsFragment;
 }
 
 const CenteredLine = styled.div`
@@ -23,18 +27,31 @@ const CenteredLine = styled.div`
   }
 `;
 
-const EventDelete = observer(({ event }: Props) => {
-  if (event.deleted) {
-    return <b>Событие удалено</b>;
+const EventDelete: React.FC<Props> = ({ event }) => {
+  const [deleted, setDeleted] = useState(false);
+  const [deleteMutation] = useEvenmanEventDeleteMutation({
+    variables: { id: event.id },
+  });
+
+  const act = useCallback(async () => {
+    await deleteMutation();
+    const route = rootRoute();
+    setDeleted(true);
+    Router.push(route.href, route.as);
+  }, [deleteMutation]);
+
+  if (deleted) {
+    return null;
   }
+
   return (
-    <Button onClick={() => event.delete()} small>
+    <AsyncButton act={act} small>
       <CenteredLine>
         <FaTrash />
         <span>Удалить</span>
       </CenteredLine>
-    </Button>
+    </AsyncButton>
   );
-});
+};
 
 export default EventDelete;

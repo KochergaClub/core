@@ -260,8 +260,28 @@ class Event(models.Model):
     # overrides django method, but that's probably ok
     def delete(self):
         self.deleted = True
+        async_to_sync(channels.layers.get_channel_layer().group_send)(
+            'event_updates', {
+                'type': 'event.deleted',
+                'uuid': self.uuid,
+            }
+        )
         self.save()
-        Event.objects.notify_update()
+
+    def save(self, *args, **kwargs):
+        adding = not bool(self.pk)
+        super().save(*args, **kwargs)
+
+        if not self.deleted:
+            logger.info('sending event_updates notification')
+            layer = channels.layers.get_channel_layer()
+
+            async_to_sync(layer.group_send)(
+                'event_updates', {
+                    'type': 'event.created' if adding else 'event.updated',
+                    'uuid': self.uuid,
+                }
+            )
 
     def tag_names(self):
         return [
@@ -313,6 +333,19 @@ class Event(models.Model):
             duration = int((self.end - self.start).total_seconds() / 60),
         )
         self.set_zoom_link(zoom_link)
+
+    def move(self, start: datetime):
+        self.end = self.end + (start - self.start)
+        self.start = start
+        self.full_clean()
+        self.save()
+
+    def clean(self):
+        if self.published:
+            if self.event_type != 'public':
+                raise Exception("Only public events can be published")
+            if self.realm == 'online' and not self.zoom_link:
+                raise Exception("zoom_link must be set when publishing online events")
 
 
 class Tag(models.Model):
