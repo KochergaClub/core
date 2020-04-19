@@ -287,3 +287,10 @@ mutation EvenmanEventCreate($title: String!, $start: String!, $end: String!) {
     }
   }
 }
+
+subscription onEvents {
+  events {
+    type
+    id
+  }
+}

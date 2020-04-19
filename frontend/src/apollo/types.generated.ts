@@ -370,6 +370,12 @@ export type EventMoveInput = {
   start: Scalars['String'],
 };
 
+export type EventNotification = {
+   __typename?: 'EventNotification',
+  type: Scalars['String'],
+  id: Scalars['ID'],
+};
+
 export type EventPrototypeAddTagInput = {
   id: Scalars['ID'],
   tag: Scalars['String'],
@@ -1901,6 +1907,12 @@ export type StaffMember = {
   color: Scalars['String'],
   user: AuthUser,
   slack_user?: Maybe<SlackUser>,
+};
+
+export type Subscription = {
+   __typename?: 'Subscription',
+  _empty?: Maybe<Scalars['Boolean']>,
+  events: EventNotification,
 };
 
 export type TildaPage = {

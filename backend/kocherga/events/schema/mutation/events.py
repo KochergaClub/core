@@ -28,6 +28,7 @@ def eventCreate(_, info, input):
         end=end,
         creator=info.context.user.email,
     )
+    models.Event.objects.notify_update()  # send notification message to websocket
 
     return {
         'ok': True,
@@ -79,6 +80,7 @@ def eventUpdate(_, info, input):
 
     event.full_clean()
     event.save()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -93,6 +95,7 @@ def eventDelete(_, info, input):
     event = models.Event.objects.get(uuid=event_id)
     assert not event.deleted
     event.delete()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True
@@ -110,6 +113,7 @@ def eventSetEventType(_, info, input):
     event.event_type = event_type
     event.full_clean()
     event.save()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True
@@ -127,6 +131,7 @@ def eventSetRealm(_, info, input):
     event.realm = realm
     event.full_clean()
     event.save()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True
@@ -144,6 +149,7 @@ def eventSetPricingType(_, info, input):
     event.pricing_type = pricing_type
     event.full_clean()
     event.save()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True
@@ -157,6 +163,7 @@ def eventSetZoomLink(_, info, input):
 
     event = models.Event.objects.get(uuid=event_id)
     event.set_zoom_link(zoom_link)
+    models.Event.objects.notify_update()
 
     return {
         'ok': True
@@ -169,6 +176,7 @@ def eventGenerateZoomLink(_, info, input):
 
     event = models.Event.objects.get(uuid=event_id)
     event.generate_zoom_link()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True
@@ -180,6 +188,7 @@ def eventAddTag(_, info, input):
     event = models.Event.objects.get(uuid=input['event_id'])
 
     event.add_tag(input['tag'])
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -192,6 +201,7 @@ def eventDeleteTag(_, info, input):
     event = models.Event.objects.get(uuid=input['event_id'])
 
     event.delete_tag(input['tag'])
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -210,6 +220,7 @@ def eventSetImageFromUrl(_, info, input):
 
     fh = BytesIO(r.content)
     event.add_image(fh)
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -229,6 +240,7 @@ def eventVkAnnouncementSetImage(_, info, input):
 
     vk_announcement.full_clean()
     vk_announcement.save()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -249,6 +261,8 @@ def eventAnnounce(_, info, input):
         event.fb_announcement.announce()
     elif target == 'TIMEPAD':
         event.timepad_announcement.announce()
+
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -276,6 +290,7 @@ def eventSetAnnounceUrl(_, info, input):
     announcement.link = url
     announcement.full_clean()
     announcement.save()
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,
@@ -288,6 +303,7 @@ def eventMove(_, info, input):
     start = dateutil.parser.isoparse(input['start'])
 
     event.move(start)
+    models.Event.objects.notify_update()
 
     return {
         'ok': True,

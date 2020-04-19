@@ -562,3 +562,12 @@ input EventsWeeklyDigestPostMailchimpInput {
 extend type Mutation {
   vkWikiScheduleUpdate: BasicResult @staffonly
 }
+
+extend type Subscription {
+  events: EventNotification! @staffonly
+}
+
+type EventNotification {
+  type: String!
+  id: ID!
+}

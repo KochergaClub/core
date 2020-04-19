@@ -65,6 +65,7 @@
     "apollo-datasource-rest": "^0.6.10",
     "apollo-link-http": "^1.5.16",
     "apollo-link-schema": "^1.2.4",
+    "apollo-link-ws": "^1.0.20",
     "apollo-server-express": "^2.9.14",
     "autosize": "^4.0.2",
     "cookie": "^0.4.0",

@@ -24,6 +24,10 @@
     _empty: Boolean
   }
 
+  type Subscription {
+    _empty: Boolean
+  }
+
   type BasicResult {
     ok: Boolean
   }
@@ -1000,6 +1004,15 @@ input EventsWeeklyDigestPostMailchimpInput {
 
 extend type Mutation {
   vkWikiScheduleUpdate: BasicResult @staffonly
+}
+
+extend type Subscription {
+  events: EventNotification!
+}
+
+type EventNotification {
+  type: String!
+  id: ID!
 }
 
 extend type Query {

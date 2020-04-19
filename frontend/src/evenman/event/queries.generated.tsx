@@ -351,6 +351,17 @@ export type EvenmanEventCreateMutation = (
   ) }
 );
 
+export type OnEventsSubscriptionVariables = {};
+
+
+export type OnEventsSubscription = (
+  { __typename?: 'Subscription' }
+  & { events: (
+    { __typename?: 'EventNotification' }
+    & Pick<Types.EventNotification, 'type' | 'id'>
+  ) }
+);
+
 export const EventsEvent_SummaryFragmentDoc = gql`
     fragment EventsEvent_Summary on EventsEvent {
   id
@@ -1060,3 +1071,32 @@ export function useEvenmanEventCreateMutation(baseOptions?: ApolloReactHooks.Mut
 export type EvenmanEventCreateMutationHookResult = ReturnType<typeof useEvenmanEventCreateMutation>;
 export type EvenmanEventCreateMutationResult = ApolloReactCommon.MutationResult<EvenmanEventCreateMutation>;
 export type EvenmanEventCreateMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanEventCreateMutation, EvenmanEventCreateMutationVariables>;
+export const OnEventsDocument = gql`
+    subscription onEvents {
+  events {
+    type
+    id
+  }
+}
+    `;
+
+/**
+ * __useOnEventsSubscription__
+ *
+ * To run a query within a React component, call `useOnEventsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnEventsSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnEventsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnEventsSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<OnEventsSubscription, OnEventsSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<OnEventsSubscription, OnEventsSubscriptionVariables>(OnEventsDocument, baseOptions);
+      }
+export type OnEventsSubscriptionHookResult = ReturnType<typeof useOnEventsSubscription>;
+export type OnEventsSubscriptionResult = ApolloReactCommon.SubscriptionResult<OnEventsSubscription>;

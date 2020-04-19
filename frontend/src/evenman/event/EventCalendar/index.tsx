@@ -5,8 +5,6 @@ import { startOfWeek, addWeeks, startOfDay, isEqual, format } from 'date-fns';
 
 import { Column } from '@kocherga/frontkit';
 
-import { useListeningWebSocket } from '~/common/hooks';
-
 import MonthCalendar from '../../common/MonthCalendar';
 
 import CalendarCellHeader from './CalendarCellHeader';
@@ -15,7 +13,11 @@ import CalendarCell from './CalendarCell';
 import FiltersBar from './FiltersBar';
 import Toolbar from './Toolbar';
 
-import { useEvenmanEventsQuery } from '../queries.generated';
+import {
+  useEvenmanEventsQuery,
+  useOnEventsSubscription,
+  EvenmanEventDocument,
+} from '../queries.generated';
 
 import { reducer } from './filters';
 
@@ -46,9 +48,22 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     },
   });
 
-  // TODO - use graphql subscription instead
-  useListeningWebSocket('ws/events/', () => {
-    queryResults.refetch();
+  useOnEventsSubscription({
+    async onSubscriptionData({ client, subscriptionData }) {
+      if (!subscriptionData.data) {
+        return;
+      }
+      await client.query({
+        query: EvenmanEventDocument,
+        variables: {
+          id: subscriptionData.data.events.id,
+        },
+        fetchPolicy: 'network-only',
+      });
+      if (subscriptionData.data.events.type === 'deleted') {
+        await queryResults.refetch();
+      }
+    },
   });
 
   const rawEvents = queryResults.data?.events?.nodes;

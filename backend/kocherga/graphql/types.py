@@ -34,6 +34,7 @@ class DjangoObjectType(ariadne.ObjectType):
             # TODO - compare field types
             # TODO - special handling for FK fields
             # TODO - support methods and properties
+            # TODO - wrap FK resolvers in sync_to_async
             _meta.get_field(name)
 
     def related_field(self, field_name):

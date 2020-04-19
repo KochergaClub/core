@@ -4,78 +4,78 @@
 #
 #    pip-compile
 #
-aioconsole==0.1.15
-aiodataloader==0.1.2
-aiogram==2.3
-aiohttp-socks==0.2.2
+aioconsole==0.1.15        # via -r requirements.in
+aiodataloader==0.1.2      # via -r requirements.in
+aiogram==2.3              # via -r requirements.in
+aiohttp-socks==0.2.2      # via -r requirements.in
 aiohttp==3.5.4            # via aiogram, aiohttp-socks
 aioredis==1.2.0           # via channels-redis
-appdirs==1.4.3            # via black
-apscheduler==3.6.1
-ariadne==0.9.0
+appdirs==1.4.3            # via black, pyppeteer
+apscheduler==3.6.1        # via -r requirements.in, slappy
+ariadne==0.11.0           # via -r requirements.in
 asgiref==3.2.2            # via channels, channels-redis, daphne, django
 async-timeout==3.0.1      # via aiohttp, aioredis
 atomicwrites==1.3.0       # via pytest
-attrs==19.1.0
+attrs==19.1.0             # via -r requirements.in, aiohttp, automat, black, jsonschema, packaging, pytest, service-identity, twisted
 autobahn==19.9.2          # via daphne
 automat==0.7.0            # via twisted
 babel==2.7.0              # via aiogram
 backcall==0.1.0           # via ipython
 beautifulsoup4==4.6.0     # via wagtail
-black==18.6b4
+black==18.6b4             # via -r requirements.in
 bleach==3.1.0             # via nbconvert
 blinker==1.4              # via sentry-sdk
-boto3==1.9.220
+boto3==1.9.220            # via -r requirements.in
 botocore==1.12.220        # via boto3, s3transfer
 cachetools==3.1.1         # via google-auth
-captcha-solver==0.1.5
+captcha-solver==0.1.5     # via -r requirements.in
 certifi==2019.6.16        # via aiogram, requests, sentry-sdk
 cffi==1.12.3              # via cryptography
-channels-redis==2.4.0
-channels==2.4.0
+channels-redis==2.4.2     # via -r requirements.in
+channels==2.4.0           # via -r requirements.in, channels-redis
 chardet==3.0.4            # via aiohttp, requests
 click==7.0                # via black, flask, uvicorn
-codecov==2.0.15
+codecov==2.0.15           # via -r requirements.in
 constantly==15.1.0        # via twisted
 coverage==4.5.4           # via codecov, pytest-cov
 cryptography==2.8         # via autobahn, pyopenssl, secretstorage, service-identity
 cycler==0.10.0            # via matplotlib
-daphne==2.4.1
+daphne==2.4.1             # via -r requirements.in, channels
 decorator==4.4.0          # via ipython, traitlets
 defusedxml==0.6.0         # via nbconvert
-django-annoying==0.10.6
-django-cors-headers==3.1.0
-django-debug-toolbar==2.0
+django-annoying==0.10.6   # via -r requirements.in
+django-cors-headers==3.1.0  # via -r requirements.in
+django-debug-toolbar==2.0  # via -r requirements.in
 django-modelcluster==5.0  # via wagtail
-django-prometheus==1.1.0
-django-rest-framework==0.1.0
-django-reversion-compare==0.9.0
-django-reversion==3.0.5
-django-storages==1.8
+django-prometheus==1.1.0  # via -r requirements.in
+django-rest-framework==0.1.0  # via -r requirements.in
+django-reversion-compare==0.9.0  # via -r requirements.in
+django-reversion==3.0.5   # via -r requirements.in, django-reversion-compare
+django-storages==1.8      # via -r requirements.in
 django-taggit==1.1.0      # via wagtail
 django-treebeard==4.3     # via wagtail
-django==3.0.3
+django==3.0.3             # via -r requirements.in, channels, django-annoying, django-cors-headers, django-debug-toolbar, django-reversion, django-reversion-compare, django-storages, django-taggit, django-treebeard, wagtail, wagtailgeowidget, wagtailmath
 djangorestframework==3.10.2  # via django-rest-framework, wagtail
 docutils==0.15.2          # via botocore
 draftjs-exporter==2.1.6   # via wagtail
 entrypoints==0.3          # via flake8, nbconvert
-factory-boy==2.12.0
+factory-boy==2.12.0       # via -r requirements.in
 faker==2.0.3              # via factory-boy
-feedgen==0.7.0
-fire==0.2.1
-flake8==3.7.8
+feedgen==0.7.0            # via -r requirements.in
+fire==0.2.1               # via -r requirements.in
+flake8==3.7.8             # via -r requirements.in
 flask==1.1.1              # via sentry-sdk, slackeventsapi, slappy
-freezegun==0.3.12
-google-api-python-client==1.7.11
-google-auth-httplib2==0.0.3
-google-auth==1.6.3
+freezegun==0.3.12         # via -r requirements.in
+google-api-python-client==1.7.11  # via -r requirements.in
+google-auth-httplib2==0.0.3  # via -r requirements.in, google-api-python-client
+google-auth==1.6.3        # via -r requirements.in, google-api-python-client, google-auth-httplib2
 graphql-core==3.0.1       # via ariadne
-gspread==3.1.0
-gunicorn==19.9.0
+gspread==3.1.0            # via -r requirements.in
+gunicorn==19.9.0          # via -r requirements.in
 h11==0.9.0                # via uvicorn
 hiredis==1.0.0            # via aioredis
 html5lib==1.0.1           # via wagtail
-httplib2==0.13.1
+httplib2==0.13.1          # via -r requirements.in, google-api-python-client, google-auth-httplib2
 httptools==0.0.13         # via uvicorn
 hyperlink==19.0.0         # via twisted
 idna==2.8                 # via hyperlink, requests, twisted, yarl
@@ -94,30 +94,30 @@ jsonschema==3.0.2         # via nbformat
 jupyter-client==5.3.1     # via ipykernel, jupyter-console, notebook, qtconsole
 jupyter-console==6.0.0    # via jupyter
 jupyter-core==4.5.0       # via jupyter-client, nbconvert, nbformat, notebook, qtconsole
-jupyter==1.0.0
+jupyter==1.0.0            # via -r requirements.in
 keyring==10.3.2           # via pycookiecheat
 kiwisolver==1.1.0         # via matplotlib
 l18n==2018.5              # via wagtail
 lxml==4.4.1               # via feedgen, python-docx
-markdown==3.1.1
+markdown==3.1.1           # via -r requirements.in
 markupsafe==1.1.1         # via jinja2
-matplotlib==3.1.1
+matplotlib==3.1.1         # via -r requirements.in, seaborn
 mccabe==0.6.1             # via flake8
 mistune==0.8.4            # via nbconvert
 more-itertools==7.2.0     # via pytest, zipp
 msgpack==0.6.1            # via channels-redis
 multidict==4.5.2          # via aiohttp, yarl
-mwclient==0.10.0
+mwclient==0.10.0          # via -r requirements.in
 mypy-extensions==0.4.1    # via mypy
-mypy==0.720
-mysqlclient==1.4.2
+mypy==0.720               # via -r requirements.in
+mysqlclient==1.4.2        # via -r requirements.in
 nbconvert==5.6.0          # via jupyter, notebook
 nbformat==4.4.0           # via ipywidgets, nbconvert, notebook
 notebook==6.0.1           # via jupyter, widgetsnbextension
 numpy==1.17.1             # via matplotlib, pandas, scipy, seaborn
 oauthlib==3.1.0           # via requests-oauthlib
 packaging==19.1           # via pytest
-pandas==0.25.1
+pandas==0.25.1            # via -r requirements.in, seaborn
 pandocfilters==1.4.2      # via nbconvert
 parso==0.5.1              # via jedi
 pexpect==4.7.0            # via ipython
@@ -132,58 +132,58 @@ pyaes==1.6.1              # via telethon
 pyasn1-modules==0.2.6     # via google-auth, service-identity
 pyasn1==0.4.7             # via pyasn1-modules, rsa, service-identity
 pycodestyle==2.5.0        # via flake8
-pycookiecheat==0.4.3
+pycookiecheat==0.4.3      # via -r requirements.in
 pycparser==2.19           # via cffi
 pycrypto==2.6.1           # via pycookiecheat
-pyee==5.0.0
+pyee==5.0.0               # via -r requirements.in, pyppeteer, slackeventsapi
 pyflakes==2.1.1           # via flake8
 pygments==2.4.2           # via ipython, jupyter-console, nbconvert, qtconsole
 pyhamcrest==1.9.0         # via twisted
-pyinotify==0.9.6
-pyjwt==1.7.1
+pyinotify==0.9.6          # via -r requirements.in
+pyjwt==1.7.1              # via -r requirements.in
 pyopenssl==19.1.0         # via twisted
 pyparsing==2.4.2          # via matplotlib, packaging
-git+https://github.com/berekuk/pyppeteer.git@dev
+git+https://github.com/berekuk/pyppeteer.git@dev  # via -r requirements.in
 pyrsistent==0.15.4        # via jsonschema
-pysocks==1.7.0
-pytest-asyncio==0.10.0
-pytest-cov==2.7.1
-pytest-django==3.5.1
-pytest-env==0.6.2
-pytest==5.1.2
-python-dateutil==2.8.0
-python-docx==0.8.10
-python-gitlab==1.11.0
-pytz==2019.2
-pywatchman==1.4.1
+pysocks==1.7.0            # via -r requirements.in
+pytest-asyncio==0.10.0    # via -r requirements.in
+pytest-cov==2.7.1         # via -r requirements.in
+pytest-django==3.5.1      # via -r requirements.in
+pytest-env==0.6.2         # via -r requirements.in
+pytest==5.1.2             # via -r requirements.in, pytest-asyncio, pytest-cov, pytest-django, pytest-env
+python-dateutil==2.8.0    # via -r requirements.in, botocore, faker, feedgen, freezegun, jupyter-client, matplotlib, pandas
+python-docx==0.8.10       # via -r requirements.in
+python-gitlab==1.11.0     # via -r requirements.in
+pytz==2019.2              # via -r requirements.in, apscheduler, babel, django, django-modelcluster, l18n, pandas, tzlocal
+pywatchman==1.4.1         # via -r requirements.in
 pyzmq==18.1.0             # via jupyter-client, notebook
 qtconsole==4.5.5          # via jupyter
-redis==3.3.8
+redis==3.3.8              # via -r requirements.in
 requests-oauthlib==1.2.0  # via mwclient
-requests-toolbelt==0.9.1
-requests==2.22.0
+requests-toolbelt==0.9.1  # via -r requirements.in
+requests==2.22.0          # via -r requirements.in, codecov, gspread, python-gitlab, requests-oauthlib, requests-toolbelt, slackclient, slackeventsapi, wagtail
 rsa==4.0                  # via google-auth, telethon
 s3transfer==0.2.1         # via boto3
 scipy==1.3.1              # via seaborn
-seaborn==0.9.0
+seaborn==0.9.0            # via -r requirements.in
 secretstorage==3.1.1      # via keyring
 send2trash==1.5.0         # via notebook
-sentry-sdk[flask]==0.11.2
+sentry-sdk[flask]==0.11.2  # via -r requirements.in
 service-identity==18.1.0  # via twisted
-six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, django-annoying, faker, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, l18n, mwclient, packaging, prompt-toolkit, pyhamcrest, pyopenssl, pyrsistent, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, websocket-client
-slackclient==1.3.2
-slackeventsapi==2.1.0
-slappy==0.5.1
+six==1.12.0               # via apscheduler, autobahn, automat, bleach, captcha-solver, cryptography, cycler, django-annoying, faker, fire, freezegun, google-api-python-client, google-auth, html5lib, jsonschema, l18n, mwclient, packaging, prompt-toolkit, pyhamcrest, pyopenssl, python-dateutil, python-gitlab, slackclient, slackeventsapi, traitlets, txaio, websocket-client
+slackclient==1.3.2        # via -r requirements.in, slappy
+slackeventsapi==2.1.0     # via -r requirements.in, slappy
+slappy==0.5.1             # via -r requirements.in
 sqlparse==0.3.0           # via django, django-debug-toolbar
 starlette==0.13.0         # via ariadne
-telethon==1.9.0
-termcolor==1.1.0
+telethon==1.9.0           # via -r requirements.in
+termcolor==1.1.0          # via -r requirements.in, fire
 terminado==0.8.2          # via notebook
 testpath==0.4.2           # via nbconvert
 text-unidecode==1.3       # via faker
 toml==0.10.0              # via black
 tornado==6.0.3            # via ipykernel, jupyter-client, notebook, terminado
-tqdm==4.35.0
+tqdm==4.35.0              # via -r requirements.in, pyppeteer
 traitlets==4.3.2          # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
 twisted[tls]==19.7.0      # via daphne
 txaio==18.8.1             # via autobahn
@@ -192,19 +192,19 @@ typing-extensions==3.7.4  # via ariadne, mypy
 tzlocal==2.0.0            # via apscheduler
 unidecode==1.1.1          # via wagtail
 uritemplate==3.0.0        # via google-api-python-client
-urllib3==1.25.3           # via botocore, requests, sentry-sdk
-uvicorn==0.11.2
+urllib3==1.25.3           # via botocore, pyppeteer, requests, sentry-sdk
+uvicorn==0.11.2           # via -r requirements.in
 uvloop==0.14.0            # via uvicorn
-git+https://github.com/berekuk/wagtail-condensedinlinepanel.git@master
-wagtail==2.8
-wagtailgeowidget==5.0.2
-git+https://github.com/berekuk/wagtailmath.git@master
+git+https://github.com/berekuk/wagtail-condensedinlinepanel.git@master  # via -r requirements.in
+wagtail==2.8              # via -r requirements.in, wagtailmath
+wagtailgeowidget==5.0.2   # via -r requirements.in
+git+https://github.com/berekuk/wagtailmath.git@master  # via -r requirements.in
 wcwidth==0.1.7            # via prompt-toolkit, pytest
 webencodings==0.5.1       # via bleach, html5lib
 websocket-client==0.54.0  # via slackclient
-websockets==8.0.2         # via uvicorn
+websockets==8.0.2         # via pyppeteer, uvicorn
 werkzeug==0.15.5          # via flask
-whitenoise==4.1.3
+whitenoise==4.1.3         # via -r requirements.in
 widgetsnbextension==3.5.1  # via ipywidgets
 willow==1.3               # via wagtail
 yarl==1.3.0               # via aiohttp
