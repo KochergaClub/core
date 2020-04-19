@@ -139,4 +139,3 @@ def eventPrototypeSetImage(_, info, input):
         'ok': True,
         'prototype': prototype,
     }
-

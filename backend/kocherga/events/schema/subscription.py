@@ -1,15 +1,11 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import asyncio
-
 from ariadne import SubscriptionType
 import channels.layers
-from channels.db import database_sync_to_async
-
-from .. import models
 
 Subscription = SubscriptionType()
+
 
 @Subscription.source("events")
 async def generate_events(obj, info):
@@ -25,13 +21,6 @@ async def generate_events(obj, info):
         yield msg
 
 
-@database_sync_to_async
-def get_event(id):
-    event = models.Event.objects.get(uuid=id)
-    logger.info(event.tag_names())
-    return event
-
-
 @Subscription.field("events")
 async def resolve_events(msg, info):
     logger.debug(info.context)
@@ -41,7 +30,9 @@ async def resolve_events(msg, info):
         logger.error('weird, msg is empty')
         return  # this will cause an exception anyway since `events` result is non-nullable
 
+    # It'd be better to yield event, but it's problematic because all other resolver are sync
+    # and Django ORM can't be called in async context.
     return {
         'type': msg['type'],
         'id': msg['uuid'],
-    } # it'd be better to yield event, but it's problematic because all other resolver are sync and Django ORM can't be called in async context
+    }

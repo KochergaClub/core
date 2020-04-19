@@ -9,13 +9,13 @@ test-types:
 	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml exec api mypy --strict-optional --check-untyped-defs kocherga # FIXME
 
 test-code:
-	docker-compose -f docker/compose.dev.yml exec api pytest
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) pytest
 
 lint:
-	docker-compose -f docker/compose.dev.yml exec api flake8 kocherga/ --max-line-length=120
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-django -o name) -- flake8 kocherga/ --max-line-length=120
 
 eslint:
-	docker-compose -f docker/compose.dev.yml exec api npx eslint src --ext ts,tsx
+	kubectl exec --context=dev -it $(shell kubectl --context=dev get po -l app=core-frontend -o name) -- npx eslint src --ext ts,tsx
 
 test-js:
 	docker-compose -f docker/compose.dev.yml exec api npx tsc

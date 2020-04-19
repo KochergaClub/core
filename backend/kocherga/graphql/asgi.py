@@ -6,6 +6,7 @@ from channels.auth import get_user
 
 from .schema import schema
 
+
 # via https://github.com/mirumee/ariadne/issues/210#issuecomment-508424149
 class ASGIGraphQL(ariadne.asgi.GraphQL):
     def __call__(self, scope) -> None:
