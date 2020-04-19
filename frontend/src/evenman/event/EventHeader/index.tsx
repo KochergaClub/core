@@ -24,7 +24,7 @@ const DateSpan: React.FC<{ date: Date }> = ({ date }) => (
     <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
     {formatDate(date, 'd MMMM')}, {formatDate(date, 'HH:mm')}
     {' ('}
-    {formatDistanceToNow(date, { locale: ru })}
+    {formatDistanceToNow(date, { locale: ru, addSuffix: true })}
     {')'}
   </span>
 );

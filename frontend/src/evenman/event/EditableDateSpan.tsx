@@ -65,7 +65,7 @@ const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
       <div>
         , {formatDate(date, 'HH:mm')}
         {' ('}
-        {formatDistanceToNow(date, { locale: ru })}
+        {formatDistanceToNow(date, { locale: ru, addSuffix: true })}
         {')'}
       </div>
     </Row>
