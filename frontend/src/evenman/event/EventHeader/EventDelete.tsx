@@ -4,7 +4,7 @@ import Router from 'next/router';
 
 import { FaTrash } from 'react-icons/fa';
 
-import { AsyncButton } from '~/components';
+import { AsyncButtonWithConfirm } from '~/components';
 
 import {
   EvenmanEvent_DetailsFragment,
@@ -45,12 +45,17 @@ const EventDelete: React.FC<Props> = ({ event }) => {
   }
 
   return (
-    <AsyncButton act={act} small>
+    <AsyncButtonWithConfirm
+      act={act}
+      small
+      headerText="Удалить событие"
+      confirmText="Вы уверены?"
+    >
       <CenteredLine>
         <FaTrash />
         <span>Удалить</span>
       </CenteredLine>
-    </AsyncButton>
+    </AsyncButtonWithConfirm>
   );
 };
 
