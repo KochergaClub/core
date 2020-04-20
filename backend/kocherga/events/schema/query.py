@@ -21,7 +21,10 @@ def resolve_events(self, info, search=None, filter=None, **pager):
 
 @Query.field('event')
 def resolve_event(self, info, event_id):
-    event = models.Event.objects.list_events().get(uuid=event_id)
+    try:
+        event = models.Event.objects.list_events().get(uuid=event_id)
+    except models.Event.DoesNotExist:
+        return None
     return event
 
 
