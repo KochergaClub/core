@@ -50,9 +50,11 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
               })
             }
           />
-          <AsyncButton act={generateZoomLinkMutation} small>
-            Сгенерировать
-          </AsyncButton>
+          {event.zoom_link || (
+            <AsyncButton act={generateZoomLinkMutation} small>
+              Сгенерировать
+            </AsyncButton>
+          )}
         </Row>
       );
     default:
