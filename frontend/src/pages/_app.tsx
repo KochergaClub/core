@@ -97,6 +97,7 @@ class MyApp extends App<MyProps> {
 
     if (ctx.req) {
       // This is critical so that we don't leak wagtail token to the html!
+      // (TODO - revisit, I think we don't use wagtail token anymore.)
       store.dispatch(cleanupAPIForClient());
     }
 

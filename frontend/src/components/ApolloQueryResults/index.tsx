@@ -1,6 +1,8 @@
 import { ApolloError } from 'apollo-client';
 
-import Spinner, { Size } from './Spinner';
+import Spinner, { Size } from '../Spinner';
+
+import ErrorCard from './ErrorCard';
 
 interface Props<D> {
   loading: boolean;
@@ -26,9 +28,7 @@ function ApolloQueryResults<D>({
   children,
 }: Props<D>) {
   if (error) {
-    return (
-      <pre style={{ overflow: 'auto' }}>{JSON.stringify(error, null, 2)}</pre>
-    ); // TODO - better design
+    return <ErrorCard error={error} />;
   }
 
   if (!data) {
