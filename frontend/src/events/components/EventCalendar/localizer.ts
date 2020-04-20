@@ -27,9 +27,6 @@ const patchedFormats = {
   dayRangeHeaderFormat: weekRangeFormat,
 };
 
-console.log(formats);
-console.log(patchedFormats);
-
 export const localizer = new DateLocalizer({
   formats: patchedFormats,
   firstOfWeek() {
