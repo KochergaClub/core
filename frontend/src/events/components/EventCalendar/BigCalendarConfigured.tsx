@@ -4,19 +4,13 @@ import { parseISO } from 'date-fns';
 import { CalendarStyle, CalendarDndStyle } from './CalendarStyle';
 import Toolbar from './Toolbar';
 
-import {
-  Calendar,
-  CalendarProps,
-  stringOrDate,
-  dateFnsLocalizer,
-} from 'react-big-calendar';
+import { Calendar, CalendarProps, stringOrDate } from 'react-big-calendar';
+
+import { localizer } from './localizer';
 
 // FIXME - some some reason `import { Views } from 'react-big-calendar'` imports type, not constant.
 // This is a workaround.
 import { views } from 'react-big-calendar/lib/utils/constants';
-
-import { format, parse, startOfWeek, getDay } from 'date-fns';
-import { ru } from 'date-fns/locale';
 
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 
@@ -38,16 +32,6 @@ interface WithDragAndDropProps<TEvent> {
   }) => void;
   resizable?: boolean;
 }
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales: {
-    ru,
-  },
-});
 
 const Container = styled.div`
   height: 100%;
