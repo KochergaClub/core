@@ -1,11 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { addDays, isEqual, startOfWeek, startOfDay } from 'date-fns';
 
 import DayHeader from './DayHeader';
 
-const weekMoments = (firstDay: Date) =>
+const weekDays = (firstDay: Date) =>
   [0, 1, 2, 3, 4, 5, 6].map(i => addDays(firstDay, i));
 
 interface Props {
@@ -50,7 +49,7 @@ const Week: React.FC<Props> = ({ firstDay, renderDay }) => {
 
   return (
     <Container>
-      {weekMoments(firstDay).map((day, i) => {
+      {weekDays(firstDay).map((day, i) => {
         const today = isEqual(startOfDay(new Date()), startOfDay(day));
 
         return (
