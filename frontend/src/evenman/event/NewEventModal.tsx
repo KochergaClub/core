@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
-import { setHours, setMinutes, addHours } from 'date-fns';
+import { setHours, setMinutes, getHours, getMinutes, addHours } from 'date-fns';
 import Router from 'next/router';
+
+import DatePicker from 'react-datepicker';
 
 import {
   Modal,
@@ -8,6 +10,7 @@ import {
   ControlsFooter,
   Input,
   Button,
+  Label,
 } from '@kocherga/frontkit';
 
 import {
@@ -34,26 +37,23 @@ const NewEventModal: React.FC<Props> = props => {
   );
 
   const [title, setTitle] = useState('');
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState(new Date());
 
-  const isValid =
-    title &&
-    Boolean(time.match(/^\d\d:(00|30)$/)) &&
-    Boolean(props.date.match(/^\d\d\d\d-\d\d-\d\d$/));
+  const isValid = title && time;
+
+  const changeTime = useCallback((newTime: Date) => {
+    setTime(newTime);
+  }, []);
 
   const create = useCallback(async () => {
     if (!isValid) {
       return;
     }
 
-    const match = time.match(/^(\d\d):(\d\d)$/);
-    if (!match) {
-      return;
-    }
-    const hour = parseInt(match[1], 10);
-    const minute = parseInt(match[2], 10);
-
-    const start = setHours(setMinutes(new Date(props.date), minute), hour);
+    const start = setHours(
+      setMinutes(new Date(props.date), getMinutes(time)),
+      getHours(time)
+    );
     const end = addHours(start, 2);
 
     const result = await createMutation({
@@ -87,19 +87,25 @@ const NewEventModal: React.FC<Props> = props => {
       </Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
-          <label>Название события</label>
+          <Label>Название события:</Label>
           <Input
             type="text"
             value={title}
             onChange={e => setTitle(e.currentTarget.value)}
             ref={focus}
           />
-          <label>Время (xx:00 или xx:30)</label>
-          <Input
-            type="time"
-            placeholder="ЧЧ:ММ"
-            value={time}
-            onChange={e => setTime(e.currentTarget.value)}
+          <DatePicker
+            selected={time}
+            onChange={changeTime}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            minTime={setHours(setMinutes(new Date(), 0), 9)}
+            maxTime={setHours(setMinutes(new Date(), 30), 23)}
+            timeCaption="Время"
+            dateFormat="HH:mm"
+            timeFormat="HH:mm"
+            inline
           />
         </Column>
       </Modal.Body>

@@ -38,7 +38,7 @@ const CustomInput = ({
   return (
     <A href="#" onClick={onClick}>
       <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
-      {formatDate(date, 'd MMMM')}
+      {formatDate(date, 'd MMMM, HH:mm')}
     </A>
   );
 };
@@ -54,20 +54,20 @@ const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
   );
 
   return (
-    <Row gutter={0}>
+    <Row>
       <DatePicker
         selected={date}
         onChange={onDateChange}
+        showTimeSelect
+        timeIntervals={15}
+        minTime={setHours(setMinutes(new Date(), 0), 9)}
+        maxTime={setHours(setMinutes(new Date(), 45), 23)}
+        timeCaption="Время"
         customInput={<CustomInput />}
         dateFormat={SERIALIZE_FORMAT}
         locale={ru}
       />
-      <div>
-        , {formatDate(date, 'HH:mm')}
-        {' ('}
-        {formatDistanceToNow(date, { locale: ru, addSuffix: true })}
-        {')'}
-      </div>
+      <div>({formatDistanceToNow(date, { locale: ru, addSuffix: true })})</div>
     </Row>
   );
 };
