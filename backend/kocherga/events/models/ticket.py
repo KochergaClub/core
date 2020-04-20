@@ -10,6 +10,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+import reversion
 
 import channels.layers
 from asgiref.sync import async_to_sync
@@ -73,6 +74,7 @@ class TicketManager(models.Manager):
             ticket.send_day_before_reminder()
 
 
+@reversion.register()
 class Ticket(models.Model):
     event = models.ForeignKey(
         'Event',

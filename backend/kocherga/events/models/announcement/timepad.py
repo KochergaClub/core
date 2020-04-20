@@ -7,6 +7,7 @@ from collections import namedtuple
 from django.conf import settings
 from django.db import models
 from annoying.fields import AutoOneToOneField
+import reversion
 
 from kocherga.dateutils import dts
 import kocherga.events.markup
@@ -81,6 +82,7 @@ def timepad_category_by_code(code):
     return next(c for c in timepad_categories() if c.code == code)
 
 
+@reversion.register()
 class TimepadAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='timepad_announcement')
 

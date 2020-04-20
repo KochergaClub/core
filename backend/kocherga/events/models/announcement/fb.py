@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.db import models
 from django.core.files.base import ContentFile
 from annoying.fields import AutoOneToOneField
+import reversion
 
 import kocherga.chrome
 import kocherga.events.markup
@@ -35,6 +36,7 @@ def error_screenshot_path(instance, filename):
     return f'events/announcements/fb/error_screenshot'
 
 
+@reversion.register()
 class FbAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
 

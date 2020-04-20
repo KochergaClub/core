@@ -1,8 +1,10 @@
 from django.db import models
+import reversion
 
 from kocherga.events.google import api as google_api
 
 
+@reversion.register()
 class GoogleEvent(models.Model):
     event = models.ForeignKey(
         'Event',

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core import validators
+import reversion
 
 
 class ScoreField(models.IntegerField):
@@ -13,6 +14,7 @@ class ScoreField(models.IntegerField):
         super().__init__(*args, **kwargs)
 
 
+@reversion.register()
 class Feedback(models.Model):
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='feedbacks')
 

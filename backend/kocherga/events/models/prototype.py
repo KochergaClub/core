@@ -6,6 +6,7 @@ from typing import List
 from datetime import datetime, timedelta
 
 from django.db import models
+import reversion
 
 from kocherga.dateutils import TZ
 
@@ -14,6 +15,7 @@ from ..helpers import create_image_from_fh
 from .announcement.timepad import timepad_category_by_code
 
 
+@reversion.register()
 class EventPrototype(models.Model):
     class Meta:
         db_table = 'event_prototypes'

@@ -11,6 +11,8 @@ from django.conf import settings
 from django.utils import timezone
 from annoying.fields import AutoOneToOneField
 
+import reversion
+
 from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 import kocherga.dateutils
@@ -169,6 +171,7 @@ class Manager(models.Manager):
         )
 
 
+@reversion.register()
 class VkAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='vk_announcement')
 
