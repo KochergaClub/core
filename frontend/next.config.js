@@ -1,5 +1,4 @@
 const rawConfig = require('./next.raw-config');
-
 const withGraphql = require('next-plugin-graphql');
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

@@ -5,7 +5,7 @@ import { FaSpinner } from 'react-icons/fa';
 
 import { Row } from '@kocherga/frontkit';
 
-export type Size = 'block' | 'div';
+export type Size = 'block' | 'div' | 'span';
 
 const AnimatedSpinner = styled(FaSpinner)`
   animation: icon-spin 2s infinite linear;
@@ -42,8 +42,10 @@ const Spinner: React.FC<{ size: Size }> = ({ size }) => {
         <Row centered>{appear && <AnimatedSpinner />}</Row>
       </BlockContainer>
     );
-  } else {
+  } else if (size === 'div') {
     return <Row centered>{appear && <AnimatedSpinner />}</Row>;
+  } else {
+    return <>{appear && <AnimatedSpinner />}</>;
   }
 };
 

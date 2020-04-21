@@ -15,7 +15,7 @@ export type EventsPrototypeFragment = (
     & Pick<Types.TimepadCategory, 'code' | 'name'>
   )>, image: Types.Maybe<(
     { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url'>
+    & Pick<Types.WagtailImage, 'id' | 'url'>
   )>, project: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & { meta: (
@@ -211,6 +211,7 @@ export const EventsPrototypeFragmentDoc = gql`
     name
   }
   image(spec: "width-240") {
+    id
     url
   }
   project {

@@ -1,10 +1,13 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button, Modal, ControlsFooter, Row, Column } from '@kocherga/frontkit';
 import Toggle from 'react-toggle';
 
-import { AsyncButton } from '~/components';
+import { AsyncButton, Spinner } from '~/components';
 import PrototypePicker from './PrototypePicker';
-import { EvenmanEvent_DetailsFragment } from '../queries.generated';
+import {
+  EvenmanEvent_DetailsFragment,
+  EvenmanUpdateMutationVariables,
+} from '../queries.generated';
 import { useEvenmanPrototypeLazyQuery } from '../../event-prototype/queries.generated';
 import { useUpdateMutation } from '../hooks';
 
@@ -32,66 +35,102 @@ interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
 
+type AllUpdateArgs = Omit<EvenmanUpdateMutationVariables, 'id'>;
+
+type UpdatableArgs = Pick<
+  AllUpdateArgs,
+  | 'title'
+  | 'summary'
+  | 'description'
+  | 'location'
+  | 'project_slug'
+  | 'timing_description_override'
+  | 'image_id'
+>;
+
+const FIELDS: { key: keyof UpdatableArgs; title: string }[] = [
+  { key: 'title', title: 'Название' },
+  { key: 'summary', title: 'Короткое описание' },
+  { key: 'description', title: 'Описание' },
+  { key: 'location', title: 'Комната' },
+  { key: 'project_slug', title: 'Проект' },
+  { key: 'timing_description_override', title: 'Описание расписания' },
+  { key: 'image_id', title: 'Картинка' },
+];
+
 const LinkToPrototypeModal: React.FC<Props> = ({ event, close }) => {
   const [selectedId, setSelectedId] = useState(event.prototype?.id);
   const update = useUpdateMutation(event.id);
 
   const [loadPrototype, { loading, data }] = useEvenmanPrototypeLazyQuery();
 
-  const [fillTitle, setFillTitle] = useState(true);
-  const [fillSummary, setFillSummary] = useState(true);
-  const [fillDescription, setFillDescription] = useState(true);
+  const [selectedFields, setSelectedFields] = useState(
+    () => new Set<keyof UpdatableArgs>(FIELDS.map(f => f.key))
+  );
 
   const save = useCallback(async () => {
     if (!data) {
       return;
     }
+
+    const updateArgs: UpdatableArgs = {};
+
+    selectedFields.forEach(f => {
+      if (f === 'project_slug') {
+        updateArgs[f] = data.prototype.project?.meta.slug;
+      } else if (f === 'image_id') {
+        updateArgs[f] = data.prototype.image?.id;
+      } else {
+        updateArgs[f] = data.prototype[f];
+      }
+    });
+
     await update({
       prototype_id: data.prototype.id,
-      ...(fillTitle ? { title: data.prototype.title } : {}),
-      ...(fillSummary ? { summary: data.prototype.summary } : {}),
-      ...(fillDescription ? { description: data.prototype.description } : {}),
+      ...updateArgs,
     });
     close();
-  }, [update, close, data, fillTitle, fillSummary, fillDescription]);
+  }, [update, close, data, selectedFields]);
 
-  const select = useCallback(
-    async (id: string) => {
-      setSelectedId(id);
-      loadPrototype({
-        variables: {
-          id,
-        },
-      });
-    },
-    [loadPrototype]
-  );
+  useEffect(() => {
+    if (!selectedId) {
+      return;
+    }
+    loadPrototype({
+      variables: {
+        id: selectedId,
+      },
+    });
+  }, [loadPrototype, selectedId]);
 
   const saveDisabled = !selectedId || !data || loading;
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Заполнить из прототипа</Modal.Header>
+      <Modal.Header toggle={close}>
+        Заполнить из прототипа {loading && <Spinner size="span" />}
+      </Modal.Header>
       <Modal.Body>
         <Column stretch>
-          <PrototypePicker selectedId={selectedId} select={select} />
+          <PrototypePicker selectedId={selectedId} select={setSelectedId} />
           {selectedId && (
             <>
-              <WrappedToggle
-                checked={fillTitle}
-                setChecked={setFillTitle}
-                title="Название"
-              />
-              <WrappedToggle
-                checked={fillSummary}
-                setChecked={setFillSummary}
-                title="Короткое описание"
-              />
-              <WrappedToggle
-                checked={fillDescription}
-                setChecked={setFillDescription}
-                title="Описание"
-              />
+              {FIELDS.map(f => (
+                <WrappedToggle
+                  key={f.key}
+                  checked={selectedFields.has(f.key)}
+                  setChecked={(value: boolean) => {
+                    const newSelectedFields = new Set(selectedFields);
+                    if (value) {
+                      newSelectedFields.add(f.key);
+                    } else {
+                      newSelectedFields.delete(f.key);
+                    }
+                    setSelectedFields(newSelectedFields);
+                  }}
+                  title={f.title}
+                />
+              ))}
             </>
           )}
         </Column>

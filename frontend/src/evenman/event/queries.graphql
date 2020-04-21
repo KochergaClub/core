@@ -61,6 +61,7 @@ fragment EvenmanEvent_Details on EventsEvent {
   tags
 
   image(spec: "width-240") {
+    id
     url
   }
 

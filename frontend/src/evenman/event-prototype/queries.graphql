@@ -19,6 +19,7 @@ fragment EventsPrototype on EventsPrototype {
     name
   }
   image(spec: "width-240") {
+    id
     url
   }
   project {

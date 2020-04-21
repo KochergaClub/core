@@ -63,7 +63,7 @@ export type EvenmanEvent_DetailsFragment = (
   & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
   & { image: Types.Maybe<(
     { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url'>
+    & Pick<Types.WagtailImage, 'id' | 'url'>
   )>, imageForVkBackground: Types.Maybe<(
     { __typename?: 'WagtailImage' }
     & Pick<Types.WagtailImage, 'url'>
@@ -407,6 +407,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
   visitors
   tags
   image(spec: "width-240") {
+    id
     url
   }
   imageForVkBackground: image(spec: "width-1100") {

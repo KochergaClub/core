@@ -1921,6 +1921,7 @@ export type WagtailGeo = {
 
 export type WagtailImage = {
    __typename?: 'WagtailImage',
+  id: Scalars['ID'],
   url: Scalars['String'],
   width: Scalars['Int'],
   height: Scalars['Int'],
