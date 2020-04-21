@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Router from 'next/router';
 
 import { FaTrash } from 'react-icons/fa';
+import { Modal, ControlsFooter, Button } from '@kocherga/frontkit';
 
-import { AsyncButtonWithConfirm } from '~/components';
-
+import { AsyncButton } from '~/components';
 import {
   EvenmanEvent_DetailsFragment,
   useEvenmanEventDeleteMutation,
@@ -14,6 +14,7 @@ import { rootRoute } from '../../routes';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
+  close: () => void;
 }
 
 const CenteredLine = styled.div`
@@ -27,7 +28,7 @@ const CenteredLine = styled.div`
   }
 `;
 
-const EventDelete: React.FC<Props> = ({ event }) => {
+const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const [deleted, setDeleted] = useState(false);
   const [deleteMutation] = useEvenmanEventDeleteMutation({
     variables: { id: event.id },
@@ -45,18 +46,22 @@ const EventDelete: React.FC<Props> = ({ event }) => {
   }
 
   return (
-    <AsyncButtonWithConfirm
-      act={act}
-      small
-      headerText="Удалить событие"
-      confirmText="Вы уверены?"
-    >
-      <CenteredLine>
-        <FaTrash />
-        <span>Удалить</span>
-      </CenteredLine>
-    </AsyncButtonWithConfirm>
+    <Modal>
+      <Modal.Header toggle={close}>Удалить событие</Modal.Header>
+      <Modal.Body>Вы уверены?</Modal.Body>
+      <Modal.Footer>
+        <ControlsFooter>
+          <Button onClick={close}>Отменить</Button>
+          <AsyncButton act={act} kind="primary">
+            <CenteredLine>
+              <FaTrash />
+              <span>Удалить</span>
+            </CenteredLine>
+          </AsyncButton>
+        </ControlsFooter>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
-export default EventDelete;
+export default EventDeleteModal;

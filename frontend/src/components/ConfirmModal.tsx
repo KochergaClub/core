@@ -19,7 +19,7 @@ const ConfirmModal: React.FC<Props> = ({ yes, no, act, close, children }) => {
   }, [act, close]);
 
   return (
-    <Modal isOpen={true}>
+    <Modal>
       <Modal.Header toggle={close}>Подтвердите</Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>

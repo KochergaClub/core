@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useContext } from 'react';
+import Link from 'next/link';
 
 import styled from 'styled-components';
 
 import { FaCaretDown } from 'react-icons/fa';
 
-import { colors, fonts } from '@kocherga/frontkit';
+import { colors, fonts, A } from '@kocherga/frontkit';
 
 import { useExpandable } from '~/common/hooks';
 
@@ -38,7 +39,11 @@ const Dropdown = styled.div`
   background-color: white;
 `;
 
-const DropdownMenu: React.FC = ({ children }) => {
+interface Props {
+  title?: string;
+}
+
+const DropdownMenu: React.FC<Props> = ({ title, children }) => {
   // we need to wrap ModalCreator function in an object because useState behaves funky otherwise
   const [modalWrapper, setModalWrapper] = useState<
     { modal: ModalCreator } | undefined
@@ -59,10 +64,10 @@ const DropdownMenu: React.FC = ({ children }) => {
       {modalWrapper ? modalWrapper.modal({ close: closeModal }) : null}
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
         <Container ref={ref}>
-          <FaCaretDown
-            color={colors.grey[expanded ? 900 : 500]}
-            onClick={flipExpand}
-          />
+          <A href="#" onClick={flipExpand}>
+            {title || null}
+            <FaCaretDown color={colors.grey[expanded ? 900 : 500]} />
+          </A>
           {expanded && <Dropdown>{children}</Dropdown>}
         </Container>
       </DropdownMenuContext.Provider>
@@ -129,6 +134,24 @@ export const LinkAction: React.FC<LinkActionProps> = ({ children, href }) => {
     <LinkActionA href={href}>
       <ActionContainer>{children}</ActionContainer>
     </LinkActionA>
+  );
+};
+
+interface NextLinkActionProps {
+  href: string;
+  as: string;
+}
+export const NextLinkAction: React.FC<NextLinkActionProps> = ({
+  children,
+  href,
+  as,
+}) => {
+  return (
+    <Link href={href} as={as} passHref>
+      <LinkActionA>
+        <ActionContainer>{children}</ActionContainer>
+      </LinkActionA>
+    </Link>
   );
 };
 
