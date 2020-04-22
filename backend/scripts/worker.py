@@ -37,6 +37,13 @@ def main():
     )
 
     scheduler.add_job(
+        func=job_wrapper(VkAnnouncement.objects.update_wiki_schedule),
+        trigger='interval',
+        name='update_vk_wiki_schedule',
+        minutes=1,
+    )
+
+    scheduler.add_job(
         func=job_wrapper(kocherga.vk.tools.update_cover),
         trigger='interval',
         name='update_vk_cover',
