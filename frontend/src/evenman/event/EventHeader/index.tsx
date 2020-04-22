@@ -5,26 +5,19 @@ import { Column, Row } from '@kocherga/frontkit';
 
 import { formatDate } from '~/common/utils';
 
-import DropdownMenu, {
-  NextLinkAction,
-  ModalAction,
-} from '~/components/DropdownMenu';
-
 import EditableString from '../../components/EditableString';
 import { MutedSpan } from '../../components/ui';
 
-import EventDeleteModal from './EventDeleteModal';
 import EventTypeField from './EventTypeField';
 import EditableDateSpan from '../EditableDateSpan';
 
-import LinkToPrototypeModal from './LinkToPrototypeModal';
+import EventDropdownMenu from '../EventDropdownMenu';
 
 import {
   EvenmanEvent_DetailsFragment,
   useEvenmanEventMoveMutation,
 } from '../queries.generated';
 import { useUpdateMutation } from '../hooks';
-import { prototypeRoute } from '~/evenman/routes';
 
 const DateSpan: React.FC<{ date: Date }> = ({ date }) => (
   <span>
@@ -59,21 +52,7 @@ const EventHeader: React.FC<Props> = ({ event }) => {
           />
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-          <DropdownMenu title="Действия">
-            {event.prototype && (
-              <NextLinkAction {...prototypeRoute(event.prototype.id)}>
-                Открыть прототип
-              </NextLinkAction>
-            )}
-            <ModalAction title="Заполнить из прототипа">
-              {({ close }) => (
-                <LinkToPrototypeModal close={close} event={event} />
-              )}
-            </ModalAction>
-            <ModalAction title="Удалить">
-              {({ close }) => <EventDeleteModal close={close} event={event} />}
-            </ModalAction>
-          </DropdownMenu>
+          <EventDropdownMenu event={event} />
         </div>
       </Row>
       <Row spaced>

@@ -7,9 +7,9 @@ import PrototypePicker from './PrototypePicker';
 import {
   EvenmanEvent_DetailsFragment,
   EvenmanUpdateMutationVariables,
-} from '../queries.generated';
-import { useEvenmanPrototypeLazyQuery } from '../../event-prototype/queries.generated';
-import { useUpdateMutation } from '../hooks';
+} from './queries.generated';
+import { useEvenmanPrototypeLazyQuery } from '../event-prototype/queries.generated';
+import { useUpdateMutation } from './hooks';
 
 const WrappedToggle: React.FC<{
   title: string;

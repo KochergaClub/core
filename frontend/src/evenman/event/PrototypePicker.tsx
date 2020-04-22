@@ -1,6 +1,6 @@
 import { ApolloQueryResults } from '~/components';
 
-import { ReactSelect } from '../../components/ui';
+import { ReactSelect } from '../components/ui';
 
 import { useEvenmanPrototypesForPickerQuery } from './queries.generated';
 

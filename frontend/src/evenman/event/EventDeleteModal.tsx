@@ -9,8 +9,8 @@ import { AsyncButton } from '~/components';
 import {
   EvenmanEvent_DetailsFragment,
   useEvenmanEventDeleteMutation,
-} from '../queries.generated';
-import { rootRoute } from '../../routes';
+} from './queries.generated';
+import { rootRoute } from '../routes';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
