@@ -76,35 +76,25 @@ class Manager(models.Manager):
         )
 
     def update_wiki_schedule(self):
-        logger.info("Selecting all vk groups")
-
-        announcements = self.upcoming().all()
-        logger.info(f"Schedule includes {len(announcements)} events")
+        events = Event.objects.public_events(
+            from_date=datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
+        )
+        logger.info(f"Schedule includes {len(events)} events")
 
         result = "=== Лента всех мероприятий: [https://vk.com/kocherga_daily] ===\n\n-----\n<br>\n"
 
         prev_date = None
-        for announcement in announcements:
-            event = announcement.event
+        for event in events:
             start_local = timezone.localtime(event.start)
             if start_local.date() != prev_date:
-                weekdays = [
-                    "Понедельник",
-                    "Вторник",
-                    "Среда",
-                    "Четверг",
-                    "Пятница",
-                    "Суббота",
-                    "Воскресенье",
-                ]
-                weekday = weekdays[start_local.weekday()]
+                weekday = kocherga.dateutils.WEEKDAY_NAMES[start_local.weekday()].capitalize()
                 month = kocherga.dateutils.inflected_month(start_local)
                 result += f"==={weekday}, {start_local.day} {month}===\n"
                 prev_date = event.start.date()
 
             result += (
-                f"<blockquote>'''{start_local:%H:%M}''' [{announcement.link}|{event.title}]\n"
-            )
+                f"<blockquote>'''{start_local:%H:%M}''' [{event.public_link()}|{event.title}]"
+            ) + (f" [{event.vk_announcement.link}|(VK)]" if event.vk_announcement.link else '') + "\n"
             result += f"{event.generate_summary()}</blockquote>\n"
 
         logger.debug(f"New schedule: {result}")
