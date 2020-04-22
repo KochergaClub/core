@@ -121,7 +121,7 @@
     "reselect": "^4.0.0",
     "set-cookie-parser": "^2.3.5",
     "source-map-support": "^0.5.13",
-    "styled-components": "^4.4.1",
+    "styled-components": "^5.1.0",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.2",
