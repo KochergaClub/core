@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import FlipMove from 'react-flip-move';
@@ -51,6 +52,11 @@ const NavListItemLi = styled('li')<ItemProps>`
   }
 `;
 
-export const NavListItem: React.FC<ItemProps> = props => {
-  return <NavListItemLi {...props} onClick={() => props.select()} />;
-};
+// FlipMove fails on SFC, so we have to use React.Component here.
+export class NavListItem extends React.Component<ItemProps> {
+  render() {
+    return (
+      <NavListItemLi {...this.props} onClick={() => this.props.select()} />
+    );
+  }
+}
