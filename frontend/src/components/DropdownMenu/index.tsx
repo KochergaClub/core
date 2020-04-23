@@ -92,7 +92,7 @@ const DropdownMenu: React.FC<Props> = ({ title, children }) => {
   );
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+    //    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
   });
 
   return (
