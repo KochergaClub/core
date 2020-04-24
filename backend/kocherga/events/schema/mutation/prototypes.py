@@ -25,6 +25,7 @@ def input_to_update_dict(input):
             'weekday',
             'hour',
             'minute',
+            'length',
             'timepad_category_code',
     ):
         if field in input:
