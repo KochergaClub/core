@@ -146,7 +146,7 @@ export type BlogPostAuthor = {
    __typename?: 'BlogPostAuthor',
   name: Scalars['String'],
   description: Scalars['String'],
-  image: WagtailImage,
+  image: WagtailImageRendition,
 };
 
 
@@ -394,11 +394,17 @@ export type EventPrototypeCancelDateResult = {
 
 export type EventPrototypeCreateInput = {
   title: Scalars['String'],
+  summary?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+  timing_description_override?: Maybe<Scalars['String']>,
   location?: Maybe<Scalars['String']>,
   weekday: Scalars['Int'],
   hour: Scalars['Int'],
   minute: Scalars['Int'],
   length: Scalars['Int'],
+  project_slug?: Maybe<Scalars['String']>,
+  vk_group_name?: Maybe<Scalars['String']>,
+  timepad_category_code?: Maybe<Scalars['String']>,
 };
 
 export type EventPrototypeCreateResult = {
@@ -486,7 +492,7 @@ export type EventsAnnouncementVk = {
    __typename?: 'EventsAnnouncementVk',
   link: Scalars['String'],
   group: Scalars['String'],
-  image?: Maybe<WagtailImage>,
+  image?: Maybe<WagtailImageRendition>,
 };
 
 
@@ -546,7 +552,7 @@ export type EventsEvent = {
   realm: Scalars['String'],
   visitors?: Maybe<Scalars['String']>,
   tags: Array<Scalars['String']>,
-  image?: Maybe<WagtailImage>,
+  image?: Maybe<WagtailImageRendition>,
   prototype?: Maybe<EventsPrototype>,
   project?: Maybe<ProjectPage>,
   announcements: EventsAnnouncements,
@@ -596,7 +602,7 @@ export type EventsPrototype = {
   length: Scalars['Int'],
   project?: Maybe<ProjectPage>,
   tags: Array<Scalars['String']>,
-  image?: Maybe<WagtailImage>,
+  image?: Maybe<WagtailImageRendition>,
   suggested_dates: Array<Scalars['String']>,
   instances: Array<EventsEvent>,
   vk_group?: Maybe<VkGroup>,
@@ -660,7 +666,7 @@ export type EventsWeeklyDigest = {
    __typename?: 'EventsWeeklyDigest',
   id: Scalars['ID'],
   start?: Maybe<Scalars['String']>,
-  image?: Maybe<WagtailImage>,
+  image: WagtailImageRendition,
   mailchimp: EventsWeeklyDigestMailchimp,
   telegram: EventsWeeklyDigestTelegram,
   vk: EventsWeeklyDigestVk,
@@ -1446,7 +1452,7 @@ export type PageInfo = {
 export type PhotoRibbonBlock = WagtailBlock & {
    __typename?: 'PhotoRibbonBlock',
   id: Scalars['ID'],
-  value: Array<WagtailImage>,
+  value: Array<WagtailImageRendition>,
 };
 
 
@@ -1472,7 +1478,7 @@ export type ProjectPage = WagtailPage & {
   body: Scalars['String'],
   is_active: Scalars['Boolean'],
   upcoming_events: Array<EventsPublicEvent>,
-  image: WagtailImage,
+  image: WagtailImageRendition,
 };
 
 
@@ -1925,6 +1931,15 @@ export type WagtailImage = {
   url: Scalars['String'],
   width: Scalars['Int'],
   height: Scalars['Int'],
+};
+
+export type WagtailImageRendition = {
+   __typename?: 'WagtailImageRendition',
+  id: Scalars['ID'],
+  url: Scalars['String'],
+  width: Scalars['Int'],
+  height: Scalars['Int'],
+  original_image: WagtailImage,
 };
 
 export type WagtailPage = {

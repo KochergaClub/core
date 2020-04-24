@@ -17,7 +17,7 @@ type ProjectPage implements WagtailPage {
   is_active: Boolean!
   upcoming_events: [EventsPublicEvent!]!
 
-  image(spec: String!): WagtailImage!
+  image(spec: String!): WagtailImageRendition!
 }
 
 extend type Query {

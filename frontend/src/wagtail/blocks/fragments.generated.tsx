@@ -73,8 +73,8 @@ export type PhotoRibbonBlockFragment = (
   { __typename?: 'PhotoRibbonBlock' }
   & Pick<Types.PhotoRibbonBlock, 'id'>
   & { photos: Array<(
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url'>
   )> }
 );
 

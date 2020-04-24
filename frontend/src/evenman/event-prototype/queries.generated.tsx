@@ -14,8 +14,12 @@ export type EventsPrototypeFragment = (
     { __typename?: 'TimepadCategory' }
     & Pick<Types.TimepadCategory, 'code' | 'name'>
   )>, image: Types.Maybe<(
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'id' | 'url'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+    & { original_image: (
+      { __typename?: 'WagtailImage' }
+      & Pick<Types.WagtailImage, 'id'>
+    ) }
   )>, project: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & { meta: (
@@ -213,6 +217,9 @@ export const EventsPrototypeFragmentDoc = gql`
   image(spec: "width-240") {
     id
     url
+    original_image {
+      id
+    }
   }
   project {
     meta {

@@ -62,6 +62,14 @@ type WagtailImage {
   height: Int!
 }
 
+type WagtailImageRendition {
+  id: ID!
+  url: String!
+  width: Int!
+  height: Int!
+  original_image: WagtailImage! # TODO - require permissions?
+}
+
 interface WagtailBlock {
   id: ID!
   # Note that there's no `type` field - there's no point in duplicating it since it can be restored from GraphQL's __typename.
@@ -488,7 +496,7 @@ type EventsEvent {
 
   tags: [String!]! @staffonly
 
-  image(spec: String!): WagtailImage
+  image(spec: String!): WagtailImageRendition
 
   prototype: EventsPrototype
   project: ProjectPage
@@ -514,7 +522,7 @@ type EventsAnnouncementTimepad {
 type EventsAnnouncementVk {
   link: String!
   group: String!
-  image(spec: String!): WagtailImage @staffonly
+  image(spec: String!): WagtailImageRendition @staffonly
 }
 
 type EventsAnnouncementFb {
@@ -547,7 +555,7 @@ type EventsPrototype {
   length: Int!
   project: ProjectPage
   tags: [String!]!
-  image(spec: String!): WagtailImage
+  image(spec: String!): WagtailImageRendition
   suggested_dates(until_ts: Int, limit: Int!): [String!]!
   instances(limit: Int): [EventsEvent!]! @staffonly
   vk_group: VkGroup
@@ -734,11 +742,17 @@ extend type Mutation {
 
 input EventPrototypeCreateInput {
   title: String!
+  summary: String
+  description: String
+  timing_description_override: String
   location: String
   weekday: Int!
   hour: Int!
   minute: Int!
   length: Int!
+  project_slug: String
+  vk_group_name: String
+  timepad_category_code: String
 }
 
 type EventPrototypeCreateResult {
@@ -944,7 +958,7 @@ extend type Query {
 type EventsWeeklyDigest {
   id: ID!
   start: String
-  image(spec: String!): WagtailImage
+  image(spec: String!): WagtailImageRendition!
   mailchimp: EventsWeeklyDigestMailchimp!
   telegram: EventsWeeklyDigestTelegram!
   vk: EventsWeeklyDigestVk!
@@ -1289,7 +1303,7 @@ type ProjectPage implements WagtailPage {
   is_active: Boolean!
   upcoming_events: [EventsPublicEvent!]!
 
-  image(spec: String!): WagtailImage!
+  image(spec: String!): WagtailImageRendition!
 }
 
 extend type Query {
@@ -1377,7 +1391,7 @@ type BigContactsBlockValue {
 
 type PhotoRibbonBlock implements WagtailBlock {
   id: ID!
-  value(spec: String!): [WagtailImage!]!
+  value(spec: String!): [WagtailImageRendition!]!
 }
 
 type MailchimpSubscribeBlock implements WagtailBlock {
@@ -1435,7 +1449,7 @@ type BlogIndexPage implements WagtailPage {
 type BlogPostAuthor {
   name: String!
   description: String!
-  image(spec: String!): WagtailImage!
+  image(spec: String!): WagtailImageRendition!
 }
 
 extend type Query {

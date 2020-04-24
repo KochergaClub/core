@@ -62,11 +62,11 @@ export type EvenmanEvent_DetailsFragment = (
   { __typename?: 'EventsEvent' }
   & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
   & { image: Types.Maybe<(
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'id' | 'url'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )>, imageForVkBackground: Types.Maybe<(
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url'>
   )>, prototype: Types.Maybe<(
     { __typename?: 'EventsPrototype' }
     & Pick<Types.EventsPrototype, 'id'>
@@ -85,8 +85,8 @@ export type EvenmanEvent_DetailsFragment = (
       { __typename?: 'EventsAnnouncementVk' }
       & Pick<Types.EventsAnnouncementVk, 'link' | 'group'>
       & { image: Types.Maybe<(
-        { __typename?: 'WagtailImage' }
-        & Pick<Types.WagtailImage, 'url'>
+        { __typename?: 'WagtailImageRendition' }
+        & Pick<Types.WagtailImageRendition, 'url'>
       )> }
     ), fb: (
       { __typename?: 'EventsAnnouncementFb' }

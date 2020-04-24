@@ -1,4 +1,4 @@
-from ariadne import QueryType, InterfaceType
+from ariadne import QueryType, InterfaceType, ObjectType
 
 from django.http import Http404
 from wagtail.core.models import Page
@@ -111,4 +111,9 @@ def resolve_WagtailBlock_type(obj, *_):
     return camel_name + 'Block'
 
 
-types = [Query, WagtailPage, WagtailBlock]
+WagtailImageRendition = ObjectType("WagtailImageRendition")
+
+WagtailImageRendition.set_alias('original_image', 'image')
+
+
+types = [Query, WagtailPage, WagtailBlock, WagtailImageRendition]

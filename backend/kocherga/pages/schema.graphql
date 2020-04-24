@@ -79,7 +79,7 @@ type BigContactsBlockValue {
 
 type PhotoRibbonBlock implements WagtailBlock {
   id: ID!
-  value(spec: String!): [WagtailImage!]!
+  value(spec: String!): [WagtailImageRendition!]!
 }
 
 type MailchimpSubscribeBlock implements WagtailBlock {

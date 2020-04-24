@@ -6,8 +6,8 @@ export type BlogPostAuthorFragment = (
   { __typename?: 'BlogPostAuthor' }
   & Pick<Types.BlogPostAuthor, 'name' | 'description'>
   & { image: (
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url'>
   ) }
 );
 

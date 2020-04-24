@@ -79,7 +79,7 @@ const LinkToPrototypeModal: React.FC<Props> = ({ event, close }) => {
       if (f === 'project_slug') {
         updateArgs[f] = data.prototype.project?.meta.slug;
       } else if (f === 'image_id') {
-        updateArgs[f] = data.prototype.image?.id;
+        updateArgs[f] = data.prototype.image?.original_image.id;
       } else {
         updateArgs[f] = data.prototype[f];
       }

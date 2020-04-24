@@ -44,7 +44,7 @@ type EventsEvent {
 
   tags: [String!]! @staffonly
 
-  image(spec: String!): WagtailImage
+  image(spec: String!): WagtailImageRendition
 
   prototype: EventsPrototype
   project: ProjectPage
@@ -70,7 +70,7 @@ type EventsAnnouncementTimepad {
 type EventsAnnouncementVk {
   link: String!
   group: String!
-  image(spec: String!): WagtailImage @staffonly
+  image(spec: String!): WagtailImageRendition @staffonly
 }
 
 type EventsAnnouncementFb {
@@ -103,7 +103,7 @@ type EventsPrototype {
   length: Int!
   project: ProjectPage
   tags: [String!]!
-  image(spec: String!): WagtailImage
+  image(spec: String!): WagtailImageRendition
   suggested_dates(until_ts: Int, limit: Int!): [String!]!
   instances(limit: Int): [EventsEvent!]! @staffonly
   vk_group: VkGroup
@@ -506,7 +506,7 @@ extend type Query {
 type EventsWeeklyDigest {
   id: ID!
   start: String
-  image(spec: String!): WagtailImage
+  image(spec: String!): WagtailImageRendition!
   mailchimp: EventsWeeklyDigestMailchimp!
   telegram: EventsWeeklyDigestTelegram!
   vk: EventsWeeklyDigestVk!

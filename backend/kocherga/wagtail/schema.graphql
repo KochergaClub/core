@@ -20,6 +20,14 @@ type WagtailImage {
   height: Int!
 }
 
+type WagtailImageRendition {
+  id: ID!
+  url: String!
+  width: Int!
+  height: Int!
+  original_image: WagtailImage! # TODO - require permissions?
+}
+
 interface WagtailBlock {
   id: ID!
   # Note that there's no `type` field - there's no point in duplicating it since it can be restored from GraphQL's __typename.

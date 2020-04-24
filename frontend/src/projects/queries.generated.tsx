@@ -12,8 +12,8 @@ export type ProjectPage_SummaryFragment = (
     { __typename?: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), image: (
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url' | 'width' | 'height'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url' | 'width' | 'height'>
   ) }
 );
 
@@ -30,8 +30,8 @@ export type ProjectPageFragment = (
   { __typename?: 'ProjectPage' }
   & Pick<Types.ProjectPage, 'id' | 'title' | 'summary' | 'body' | 'is_active' | 'activity_summary'>
   & { image: (
-    { __typename?: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'url'>
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url'>
   ), upcoming_events: Array<(
     { __typename?: 'EventsPublicEvent' }
     & EventsPublicEvent_SummaryFragment
