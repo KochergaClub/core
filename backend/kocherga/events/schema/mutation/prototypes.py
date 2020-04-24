@@ -13,28 +13,8 @@ from ... import models
 Mutation = MutationType()
 
 
-@Mutation.field('eventPrototypeCreate')
-def eventPrototypeCreate(_, info, input):
-    prototype = models.EventPrototype.objects.create(
-        title=input['title'],
-        location=input.get('location', ''),
-        weekday=input['weekday'],
-        hour=input['hour'],
-        minute=input['minute'],
-        length=input['length'],
-    )
-
-    return {
-        'ok': True,
-        'prototype': prototype,
-    }
-
-
-@Mutation.field('eventPrototypeUpdate')
-def eventPrototypeUpdate(_, info, input):
-    prototype = models.EventPrototype.objects.get(pk=input['id'])
-    logger.debug(input)
-
+def input_to_update_dict(input):
+    result = {}
     for field in (
             'title',
             'summary',
@@ -48,21 +28,46 @@ def eventPrototypeUpdate(_, info, input):
             'timepad_category_code',
     ):
         if field in input:
-            setattr(prototype, field, input[field])
+            result[field] = input[field]
 
     if 'project_slug' in input:
         if not input['project_slug']:
-            prototype.project = None
+            result['project'] = None
         else:
-            prototype.project = kocherga.projects.models.ProjectPage.objects.live().public().get(
+            result['project'] = kocherga.projects.models.ProjectPage.objects.live().public().get(
                 slug=input['project_slug']
             )
 
     if 'vk_group_name' in input:
         if not input['vk_group_name']:
-            prototype.vk_group = None
+            result['vk_group'] = None
         else:
-            prototype.vk_group = input['vk_group_name']
+            result['vk_group'] = input['vk_group_name']
+
+    return result
+
+
+@Mutation.field('eventPrototypeCreate')
+def eventPrototypeCreate(_, info, input):
+    prototype = models.EventPrototype(
+        **input_to_update_dict(input)
+    )
+    prototype.full_clean()
+    prototype.save()
+
+    return {
+        'ok': True,
+        'prototype': prototype,
+    }
+
+
+@Mutation.field('eventPrototypeUpdate')
+def eventPrototypeUpdate(_, info, input):
+    prototype = models.EventPrototype.objects.get(pk=input['id'])
+    logger.debug(input)
+
+    for field, value in input_to_update_dict(input).items():
+        setattr(prototype, field, value)
 
     prototype.full_clean()
     prototype.save()

@@ -290,11 +290,17 @@ extend type Mutation {
 
 input EventPrototypeCreateInput {
   title: String!
+  summary: String
+  description: String
+  timing_description_override: String
   location: String
   weekday: Int!
   hour: Int!
   minute: Int!
   length: Int!
+  project_slug: String
+  vk_group_name: String
+  timepad_category_code: String
 }
 
 type EventPrototypeCreateResult {
