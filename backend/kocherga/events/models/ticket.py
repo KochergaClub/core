@@ -115,7 +115,7 @@ class Ticket(models.Model):
         start_local = timezone.localtime(self.event.start)
         weekday = kocherga.dateutils.weekday(start_local)
         month = kocherga.dateutils.inflected_month(start_local)
-        humanized_dt = f"{weekday}, {start_local.day} {month}\n"
+        humanized_dt = f"{weekday}, {start_local.day} {month}, {start_local:%H:%M}\n"
 
         return {
             'event': self.event,
