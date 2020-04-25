@@ -90,7 +90,7 @@ class MailchimpMember:
     def subscribe_to_interest(self, interest_id):
         self.set_interests(
             list(
-                set(self.get_interest_ids()) & set([interest_id])
+                set(self.get_interest_ids()) | set([interest_id])
             )
         )
 
