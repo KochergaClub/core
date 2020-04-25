@@ -604,6 +604,7 @@ type EventsPublicEvent {
   summary: String!
   description: String!
   image: String
+  image_rendition(spec: String!): WagtailImageRendition
 
   registration_type: String!
   pricing_type: String!

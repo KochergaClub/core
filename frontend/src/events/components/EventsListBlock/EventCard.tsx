@@ -12,7 +12,10 @@ const padding = css`
   padding-right: 20px;
 `;
 
-const Background = styled.div<{ image?: string }>`
+const Background = styled.div<{
+  image?: EventsPublicEvent_SummaryFragment['image'];
+  image_2x?: EventsPublicEvent_SummaryFragment['image_2x'];
+}>`
   display: flex;
   flex-direction: column;
   justify-content: end;
@@ -24,7 +27,12 @@ const Background = styled.div<{ image?: string }>`
   height: 200px;
 
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${props => props.image});
+    url(${props => props.image?.url || ''});
+
+  @media (min-resolution: 192dpi) {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      url(${props => props.image_2x?.url || ''});
+  }
 
   &:hover {
     header {
@@ -68,7 +76,7 @@ const EventCard: React.FC<Props> = ({ event }) => {
   return (
     <Column stretch gutter={16}>
       <BackgroundLink href={href} target="_top">
-        <Background image={event.image || ''}>
+        <Background image={event.image} image_2x={event.image_2x}>
           <Header>{event.title}</Header>
         </Background>
       </BackgroundLink>

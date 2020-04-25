@@ -27,10 +27,16 @@ def resolve_announcements(obj, info):
 
 @EventsPublicEvent.field('image')
 def resolve_image(obj, info):
-    if obj.image:
-        return obj.image.file.url
-    else:
+    if not obj.image:
         return None
+    return obj.image.file.url
+
+
+@EventsPublicEvent.field('image_rendition')
+def resolve(obj, info, spec):
+    if not obj.image:
+        return None
+    return obj.image.get_rendition(spec)
 
 
 @EventsPublicEvent.field('description')

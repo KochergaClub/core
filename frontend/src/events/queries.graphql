@@ -2,7 +2,14 @@ fragment EventsPublicEvent_Summary on EventsPublicEvent {
   event_id
   title
   summary
-  image
+  image: image_rendition(spec: "fill-760x200") {
+    id
+    url
+  }
+  image_2x: image_rendition(spec: "fill-1520x400") {
+    id
+    url
+  }
   start
 }
 

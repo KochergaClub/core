@@ -6,7 +6,14 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type EventsPublicEvent_SummaryFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'summary' | 'image' | 'start'>
+  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'summary' | 'start'>
+  & { image: Types.Maybe<(
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+  )>, image_2x: Types.Maybe<(
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+  )> }
 );
 
 export type UpcomingPublicEventsQueryVariables = {
@@ -33,7 +40,14 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
   event_id
   title
   summary
-  image
+  image: image_rendition(spec: "fill-760x200") {
+    id
+    url
+  }
+  image_2x: image_rendition(spec: "fill-1520x400") {
+    id
+    url
+  }
   start
 }
     `;

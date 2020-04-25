@@ -634,6 +634,7 @@ export type EventsPublicEvent = {
   summary: Scalars['String'],
   description: Scalars['String'],
   image?: Maybe<Scalars['String']>,
+  image_rendition?: Maybe<WagtailImageRendition>,
   registration_type: Scalars['String'],
   pricing_type: Scalars['String'],
   realm: Scalars['String'],
@@ -641,6 +642,11 @@ export type EventsPublicEvent = {
   announcements: EventsAnnouncements,
   /** note that there's no @auth directive - we don't want any errors if user is not authenticated */
   my_ticket?: Maybe<MyEventsTicket>,
+};
+
+
+export type EventsPublicEventImage_RenditionArgs = {
+  spec: Scalars['String']
 };
 
 export type EventsPublicEventConnection = {
