@@ -85,7 +85,7 @@ class MailchimpMember:
         logger.info('Updated to status: ' + self.status)
 
     def get_interest_ids(self):
-        return [interest.id for interest in self.interests]
+        return [interest.id for interest in self.interests if interest.subscribed]
 
     def subscribe_to_interest(self, interest_id):
         self.set_interests(
