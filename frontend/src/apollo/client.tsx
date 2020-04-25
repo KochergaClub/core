@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
@@ -151,6 +152,9 @@ const initApolloClient = (
   // Reuse client on the client-side
   if (!apolloClient) {
     apolloClient = createApolloClient(initialState);
+
+    // avoiding refetch on client side, see https://github.com/apollographql/apollo-client/issues/4814
+    apolloClient.disableNetworkFetches = true;
   }
 
   return apolloClient;
@@ -171,6 +175,12 @@ export function withApollo(
     ...pageProps
   }) => {
     const client = apolloClient || initApolloClient(apolloState);
+
+    // reenable fetching on client-side, see https://github.com/apollographql/apollo-client/issues/4814
+    useEffect(() => {
+      client.disableNetworkFetches = false;
+    }, [client]);
+
     return (
       <ApolloProvider client={client}>
         <PageComponent {...pageProps} />
