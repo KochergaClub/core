@@ -117,8 +117,6 @@ class Manager(models.Manager):
             "pages.save", {"group_id": group_id, "page_id": page_id, "text": content}
         )
 
-        self.update_widget()
-
     def update_widget(self):
         announcements = self.upcoming()[:3].all()
 
