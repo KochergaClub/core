@@ -86,3 +86,6 @@ update_schema:
 
 update_types:
 	cd frontend && gql-gen
+
+restart_backend:
+	$(K) rollout restart deploy/core-django
