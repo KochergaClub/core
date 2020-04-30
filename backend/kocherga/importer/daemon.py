@@ -61,7 +61,7 @@ def run():
             "default": ThreadPoolExecutor(2)
         },
         jobstores={
-            "default": RedisJobStore(get_redis_connect_args())
+            "default": RedisJobStore(**get_redis_connect_args())
         }
     )
 
