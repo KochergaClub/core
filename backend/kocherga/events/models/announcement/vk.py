@@ -131,12 +131,13 @@ class Manager(models.Manager):
                 "rows": [
                     {
                         "title": event.title,
-                        "title_url": event.public_link(),
+                        "title_url": event.vk_announcement.link,
                         "button": "Подробнее",
-                        "button_url": event.public_link(),
+                        "button_url": event.vk_announcement.link,
                         "time": event2time(event),
                     }
                     for event in events
+                    if event.vk_announcement.link
                 ],
                 "title_url": wiki_url,
                 "more": "Все мероприятия",
