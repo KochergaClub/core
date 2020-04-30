@@ -838,6 +838,11 @@ export type ImageTemplateSizes = {
   height: Scalars['Int'],
 };
 
+export type Importer = {
+   __typename?: 'Importer',
+  name: Scalars['ID'],
+};
+
 export type KkmRegisterCheckInput = {
   email: Scalars['String'],
   title: Scalars['String'],
@@ -1501,6 +1506,7 @@ export type Query = {
   authPermissionsAll: Array<AuthPermission>,
   zadarmaPbxCalls: ZadarmaPbxCallConnection,
   zadarmaPbxCall: ZadarmaPbxCall,
+  importers: Array<Importer>,
   now: NowInfo,
   cm2Customers: Cm2CustomerConnection,
   cm2Orders: Cm2OrderConnection,

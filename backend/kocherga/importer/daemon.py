@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
+from apscheduler.jobstores.redis import RedisJobStore
 
 from datetime import datetime, timedelta
 import time
@@ -10,6 +11,7 @@ import time
 import importlib
 
 from django.conf import settings
+from kocherga.redis import get_redis_connect_args
 
 from .prometheus import importers_gauge, success_counter, failure_counter
 
@@ -54,9 +56,14 @@ def run():
             logger.info('Importer daemon disabled.')
             time.sleep(60)
 
-    scheduler = BlockingScheduler(executors={
-        "default": ThreadPoolExecutor(2)
-    })
+    scheduler = BlockingScheduler(
+        executors={
+            "default": ThreadPoolExecutor(2)
+        },
+        jobstores={
+            "default": RedisJobStore(get_redis_connect_args())
+        }
+    )
 
     importers = all_importers()
     importers_gauge.set(len(all_importers()))
@@ -66,10 +73,13 @@ def run():
         failure_counter.labels(importer=importer.name).inc(0)
 
         scheduler.add_job(
-            func=importer.__class__.import_new,
-            trigger="interval",
-            args=[importer],
+            id=importer.name,
             name=importer.name,
+            replace_existing=True,
+            coalesce=True,
+            func=importer.__class__.import_new,
+            args=[importer],
+            trigger="interval",
             **importer.interval(),
             jitter=300,
             start_date=datetime.now() + timedelta(seconds=i * 5),

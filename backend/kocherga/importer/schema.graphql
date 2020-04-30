@@ -1,0 +1,7 @@
+extend type Query {
+  importers: [Importer!]! @staffonly
+}
+
+type Importer {
+  name: ID!
+}

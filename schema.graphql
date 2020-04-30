@@ -226,6 +226,14 @@ extend type Mutation {
 }
 
 extend type Query {
+  importers: [Importer!]! @staffonly
+}
+
+type Importer {
+  name: ID!
+}
+
+extend type Query {
   now: NowInfo!
 }
 
