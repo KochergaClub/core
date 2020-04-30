@@ -62,23 +62,13 @@ class Manager(models.Manager):
         logger.info(f"Got {len(groups)} groups")
         return groups
 
-    def upcoming(self):
-        from_dt = datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
-        return (
-            self
-            .exclude(event__deleted=True)
-            .filter(
-                event__start__gt=from_dt,
-                event__start__lt=(datetime.now(TZ) + timedelta(weeks=4)),
-            )
-            .exclude(link='')
-            .order_by('event__start')
+    def upcoming_events(self):
+        return Event.objects.public_events(
+            from_date=datetime.now(TZ) - timedelta(hours=2)
         )
 
     def update_wiki_schedule(self):
-        events = Event.objects.public_events(
-            from_date=datetime.now(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
-        )
+        events = self.upcoming_events()
         logger.info(f"Schedule includes {len(events)} events")
 
         result = "=== Лента всех мероприятий: [https://vk.com/kocherga_daily] ===\n\n-----\n<br>\n"
@@ -118,7 +108,7 @@ class Manager(models.Manager):
         )
 
     def update_widget(self):
-        announcements = self.upcoming()[:3].all()
+        events = self.upcoming_events()[:3].all()
 
         def event2time(event):
             day_codes = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
@@ -142,13 +132,13 @@ class Manager(models.Manager):
                     "title": "Расписание",
                     "rows": [
                         {
-                            "title": announcement.event.title,
-                            "title_url": announcement.link,
+                            "title": event.title,
+                            "title_url": event.public_link(),
                             "button": "Подробнее",
-                            "button_url": announcement.link,
-                            "time": event2time(announcement.event),
+                            "button_url": event.public_link(),
+                            "time": event2time(event),
                         }
-                        for announcement in announcements
+                        for event in events
                     ],
                     "title_url": wiki_url,
                     "more": "Все мероприятия",
