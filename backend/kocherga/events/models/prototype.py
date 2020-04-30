@@ -50,8 +50,6 @@ class EventPrototype(models.Model):
     minute = models.IntegerField()
     length = models.IntegerField()  # in minutes
 
-    image_old = models.CharField(max_length=32, null=True, blank=True)
-
     image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,

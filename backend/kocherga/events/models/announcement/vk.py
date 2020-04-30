@@ -165,9 +165,8 @@ class VkAnnouncement(models.Model):
     event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='vk_announcement')
 
     link = models.CharField(max_length=1024, blank=True)
-
     group = models.CharField(max_length=40, blank=True)
-    image_old = models.CharField(max_length=32, blank=True)
+
     image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,

@@ -112,8 +112,8 @@ class Event(models.Model):
 
     uuid = models.SlugField(default=generate_uuid, unique=True)
 
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    start = models.DateTimeField(db_index=True)
+    end = models.DateTimeField(db_index=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -197,7 +197,6 @@ class Event(models.Model):
         max_length=255,
     )
 
-    image_old = models.CharField(max_length=32, null=True, blank=True)
     image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
