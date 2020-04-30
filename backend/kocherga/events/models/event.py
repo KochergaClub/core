@@ -89,7 +89,7 @@ class EventManager(models.Manager):
             # public events can contain raw description initially, so we rely on `published` flag
             .filter(event_type = 'public', published = True)
             # earlier events are not cleaned up yet
-            .filter(start__gte = datetime(2018, 6, 1))
+            .filter(start__gte = datetime(2018, 6, 1, tzinfo=TZ))
         )
 
         if tag:
