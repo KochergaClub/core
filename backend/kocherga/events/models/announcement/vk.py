@@ -124,21 +124,28 @@ class Manager(models.Manager):
         page_id = group2id(main_page_settings["main_wall_page_id"])
         wiki_url = f"https://vk.com/page-{group_id}_{page_id}"
 
+        widget_rows = []
+        for event in events:
+            button = "Подробнее"
+            if event.vk_announcement.link:
+                link = event.vk_announcement.link
+                button = "Подробнее"
+            else:
+                link = wiki_url
+                button = "В расписании"
+            widget_rows.append({
+                "title": event.title,
+                "title_url": link,
+                "button": button,
+                "button_url": link,
+                "time": event2time(event),
+            })
+
         return {
             "type": "compact_list",
             "code": "return " + json.dumps({
                 "title": "Расписание",
-                "rows": [
-                    {
-                        "title": event.title,
-                        "title_url": event.vk_announcement.link,
-                        "button": "Подробнее",
-                        "button_url": event.vk_announcement.link,
-                        "time": event2time(event),
-                    }
-                    for event in events
-                    if event.vk_announcement.link
-                ],
+                "rows": widget_rows,
                 "title_url": wiki_url,
                 "more": "Все мероприятия",
                 "more_url": wiki_url
