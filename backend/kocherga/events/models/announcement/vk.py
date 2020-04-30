@@ -107,7 +107,7 @@ class Manager(models.Manager):
             "pages.save", {"group_id": group_id, "page_id": page_id, "text": content}
         )
 
-    def update_widget(self):
+    def get_widget_config(self):
         events = self.upcoming_events()[:3].all()
 
         def event2time(event):
@@ -124,27 +124,30 @@ class Manager(models.Manager):
         page_id = group2id(main_page_settings["main_wall_page_id"])
         wiki_url = f"https://vk.com/page-{group_id}_{page_id}"
 
+        return {
+            "type": "compact_list",
+            "code": "return " + json.dumps({
+                "title": "Расписание",
+                "rows": [
+                    {
+                        "title": event.title,
+                        "title_url": event.public_link(),
+                        "button": "Подробнее",
+                        "button_url": event.public_link(),
+                        "time": event2time(event),
+                    }
+                    for event in events
+                ],
+                "title_url": wiki_url,
+                "more": "Все мероприятия",
+                "more_url": wiki_url
+            }, ensure_ascii=False) + ";"
+        }
+
+    def update_widget(self):
         kocherga.vk.api.call(
             "appWidgets.update",
-            {
-                "type": "compact_list",
-                "code": "return " + json.dumps({
-                    "title": "Расписание",
-                    "rows": [
-                        {
-                            "title": event.title,
-                            "title_url": event.public_link(),
-                            "button": "Подробнее",
-                            "button_url": event.public_link(),
-                            "time": event2time(event),
-                        }
-                        for event in events
-                    ],
-                    "title_url": wiki_url,
-                    "more": "Все мероприятия",
-                    "more_url": wiki_url
-                }, ensure_ascii=False) + ";"
-            },
+            self.get_widget_config(),
             group_token=True
         )
 
