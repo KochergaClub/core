@@ -63,8 +63,8 @@ class Manager(models.Manager):
         return groups
 
     def upcoming_events(self):
-        return Event.objects.public_events(
-            from_date=datetime.now(TZ) - timedelta(hours=2)
+        return Event.objects.public_events().filter(
+            start__gte=datetime.now(TZ) - timedelta(hours=2)
         )
 
     def update_wiki_schedule(self):
