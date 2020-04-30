@@ -108,7 +108,7 @@ class Manager(models.Manager):
         )
 
     def get_widget_config(self):
-        events = self.upcoming_events()[:3].all()
+        events = self.upcoming_events()[:6].all()
 
         def event2time(event):
             day_codes = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
