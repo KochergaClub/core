@@ -18,7 +18,7 @@ from .prometheus import importers_gauge, success_counter, failure_counter
 IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
     # "gitlab.models",
-    "cm",
+    # "cm",
     "money.cashier",
     "money.ofd",
     "money.tochka",
