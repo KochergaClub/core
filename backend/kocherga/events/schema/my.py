@@ -16,6 +16,6 @@ def resolve_tickets(obj, info, **pager):
         # only future tickets are supported for now
         event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
         status='ok'
-    )
+    ).order_by('event__start')
 
-    return qs.relay_page(**pager, order='event__start')
+    return qs.relay_page(**pager)
