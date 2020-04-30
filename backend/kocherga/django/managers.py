@@ -44,7 +44,6 @@ class RelayQuerySetMixin:
                 raise Exception("Relay pager doesn't support multi-field orderings yet")
 
         unsigned_order = order[1:] if order[0] == '-' else order
-        order_parts = unsigned_order.split('__')
 
         qs = self
         qs = qs.order_by(order)
@@ -111,6 +110,10 @@ class RelayQuerySetMixin:
             # FIXME - see the note above
             has_next_page = True
 
+        order_parts = unsigned_order.split('__')
+
+        # Traverse node fields, possibly several levels deep, to get the field value which we use as startCursor and
+        # endCursor.
         def get_node_ordering_field(node):
             result = node
             for part in order_parts:
