@@ -1,5 +1,6 @@
+import { useCallback } from 'react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import { startOfDay, subWeeks, addWeeks } from 'date-fns';
+import { subWeeks, addWeeks, endOfWeek } from 'date-fns';
 
 import { A, Button, Row } from '@kocherga/frontkit';
 
@@ -11,26 +12,36 @@ interface Props {
 }
 
 const Toolbar: React.FC<Props> = ({ date, setDate }) => {
-  const prevDate = subWeeks(date, 1);
-  const nextDate = addWeeks(date, 1);
+  const toPrevWeek = useCallback(() => {
+    setDate(subWeeks(date, 1));
+  }, [date, setDate]);
+
+  const toNextWeek = useCallback(() => {
+    setDate(addWeeks(date, 1));
+  }, [date, setDate]);
+
+  const toNow = useCallback(
+    (e: React.SyntheticEvent) => {
+      e.preventDefault();
+      setDate(new Date());
+    },
+    [setDate]
+  );
 
   return (
     <div style={{ margin: '6px 0' }}>
       <Row centered>
-        <Button small onClick={() => setDate(prevDate)}>
+        <Button size="small" onClick={toPrevWeek}>
           <FaArrowUp /> Назад
         </Button>
         <A
           href="#"
-          onClick={e => {
-            e.preventDefault();
-            setDate(startOfDay(new Date()));
-          }}
+          onClick={toNow}
           style={{ minWidth: 120, textAlign: 'center' }}
         >
-          {formatDate(date, 'MMMM yyyy')}
+          {formatDate(endOfWeek(date), 'LLLL yyyy')}
         </A>
-        <Button small onClick={() => setDate(nextDate)}>
+        <Button size="small" onClick={toNextWeek}>
           <FaArrowDown /> Вперёд
         </Button>
       </Row>
