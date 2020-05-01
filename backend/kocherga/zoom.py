@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from random import randint
 import datetime
 
@@ -43,7 +46,7 @@ def schedule_meeting(topic, start_dt, duration):
     )
 
     if r.status_code >= 400:
-        # print(r.body)
+        logger.warn(r.content)
         r.raise_for_status()
 
     join_url = r.json()['join_url']
