@@ -89,6 +89,12 @@ def delete_manager(user: User) -> None:
 
 
 def now_stats():
+    # cafe-manager is no more, returning the dummy result
+    return {
+        "total": 0,
+        "customers": [],
+    }
+
     try:
         r = requests.get(DOMAIN, cookies=get_cookies(), timeout=10)
     except ConnectionError as e:
@@ -98,7 +104,8 @@ def now_stats():
 
     match = re.search(r"Посетителей сейчас в зале: <b>(\d+)</b>", r.text)
     if not match:
-        raise Exception("Failed to parse cafe-manager data " + r.text)
+        logger.warn(r.text)
+        raise Exception("Failed to parse cafe-manager data")
     total = int(match.group(1))
 
     customer_ids = [int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)]
