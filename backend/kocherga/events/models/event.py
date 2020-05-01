@@ -180,7 +180,7 @@ class Event(models.Model):
             (x, x)
             for x in ('anticafe', 'free')
         ],
-        default='anticafe'
+        default='free'
     )
 
     realm = models.CharField(
@@ -189,7 +189,7 @@ class Event(models.Model):
             (x, x)
             for x in ('offline', 'online')
         ],
-        default='offline',
+        default='online',
     )
 
     zoom_link = models.URLField(
