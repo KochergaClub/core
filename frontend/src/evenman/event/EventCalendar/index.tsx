@@ -40,7 +40,7 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
   });
 
   const setDate = useCallback((newDate: Date) => {
-    setStart(newDate);
+    setStart(startOfWeek(newDate, { locale: ru }));
   }, []);
 
   const queryResults = useEvenmanEventsQuery({
