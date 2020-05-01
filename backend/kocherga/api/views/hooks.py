@@ -85,5 +85,6 @@ def r_vk_callback(request):
 def r_tilda_webhook(request):
     page_id = request.query_params.get('pageid', None)
     if page_id is not None:
+        # TODO - register notification and export in background job, as recommended in http://help-ru.tilda.ws/api
         kocherga.tilda.models.TildaPage.objects.export_page(page_id)
     return HttpResponse("ok")
