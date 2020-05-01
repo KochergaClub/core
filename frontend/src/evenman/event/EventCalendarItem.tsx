@@ -87,11 +87,11 @@ const EventCalendarItem: React.FC<Props> = props => {
       };
     }
 
-    max = 4;
+    max = 2;
     if (event.published) value += 1;
-    if (event.announcements.timepad.link) value += 1;
-    if (event.announcements.fb.link) value += 1;
     if (event.announcements.vk.link) value += 1;
+    // if (event.announcements.fb.link) value += 1;
+    // if (event.announcements.timepad.link) value += 1;
 
     return { max, value };
   };

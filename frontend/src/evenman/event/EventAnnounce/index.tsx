@@ -27,9 +27,11 @@ const EventAnnounce: React.FC<Props> = ({ event }) => {
         <VkAnnounce event={event} />
       </HeadedSection>
 
-      <HeadedSection title="Facebook">
-        <FbAnnounce event={event} />
-      </HeadedSection>
+      {event.announcements.fb.link ? (
+        <HeadedSection title="Facebook">
+          <FbAnnounce event={event} />
+        </HeadedSection>
+      ) : null}
 
       <HeadedSection title="Timepad">
         <TimepadAnnounce event={event} />
