@@ -227,21 +227,20 @@ class WeeklyDigest(models.Model):
 
     def _telegram_message(self):
         message = f"#{TELEGRAM_HASHTAG}\nНа этой неделе в Кочерге:"
-        message += "\n\n"
+        message += "\n"
 
         prev_date = None
         events = self.events()
         for event in events:
             start_local = timezone.localtime(event.start)
             if start_local.date() != prev_date:
-                weekday = kocherga.dateutils.weekday(start_local).upper()
+                weekday = kocherga.dateutils.weekday(start_local).capitalize()
                 month = kocherga.dateutils.inflected_month(start_local)
-                message += f"{weekday}, {start_local.day} {month}\n"
+                message += f"\n<b>{weekday}, {start_local.day} {month}</b>\n"
                 prev_date = start_local.date()
 
             title = f'<a href="{event.public_link()}">{event.title}</a>'
             message += f"{start_local:%H:%M} {title}\n"
-            message += f"{event.generate_summary()}\n\n"
 
         return message
 
