@@ -51,9 +51,11 @@
 {% for group in events_by_date %}
     <mj-section>
       <mj-column width="100%">
+        <mj-text>
+          <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
+        </mj-text>
         {% for event in group['events'] %}
           <mj-text>
-            <h2 style="font-weight: normal; margin-top: 5px">{{ date2day(group['date']) | e }}</h2>
             <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0">
                 {{ localtime(event.start).strftime("%H:%M") | e }}. {{ event.title | e }}
             </h3>
