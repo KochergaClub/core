@@ -270,8 +270,8 @@ class WeeklyDigest(models.Model):
 
         prev_date = None
         for event in events:
-            if not event.vk_announcement.link:
-                continue  # TODO - throw error?
+            # if not event.vk_announcement.link:
+            #     continue  # TODO - throw error?
 
             start_local = timezone.localtime(event.start)
             if start_local.date() != prev_date:
