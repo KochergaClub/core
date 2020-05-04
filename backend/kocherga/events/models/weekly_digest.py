@@ -266,10 +266,7 @@ class WeeklyDigest(models.Model):
         message = f"#{VK_HASHTAG}\n"
         message += prefix_text
 
-        message += "\n\n"
-
         events = self.events()
-        logger.info(f"Schedule includes {len(events)} events")
 
         prev_date = None
         for event in events:
@@ -280,14 +277,14 @@ class WeeklyDigest(models.Model):
             if start_local.date() != prev_date:
                 weekday = kocherga.dateutils.weekday(start_local).upper()
                 month = kocherga.dateutils.inflected_month(start_local)
-                message += f"{weekday}, {start_local.day} {month}\n"
+                message += f"\n{weekday}, {start_local.day} {month}\n"
                 prev_date = start_local.date()
 
             title = event.title
-            if event.vk_announcement.group:
-                title = f"@{event.vk_announcement.group} ({title})"
-            message += f"{start_local:%H:%M} {title}\n"
-            message += f"{event.generate_summary()}\n\n"
+            # if event.vk_announcement.group:
+            #     title = f"@{event.vk_announcement.group} ({title})"
+            message += f"{start_local:%H:%M} {title} - {event.public_link()}\n"
+            # message += f"{event.generate_summary()}\n\n"
 
         group_id = kocherga.vk.helpers.group2id(settings.KOCHERGA_VK["main_page"]["id"])
 
