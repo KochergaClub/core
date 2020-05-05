@@ -6,7 +6,8 @@ from . import models
 class ProjectPageAdmin(ModelAdmin):
     model = models.ProjectPage
 
-    list_display = ('__str__', 'is_active')
+    list_display = ('__str__', 'is_active', 'slug')
+    list_filter = ('is_active',)
 
 
 modeladmin_register(ProjectPageAdmin)

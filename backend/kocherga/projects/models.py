@@ -34,11 +34,11 @@ class ProjectIndexPage(HeadlessPreviewMixin, Page):
 
 
 class ProjectPage(HeadlessPreviewMixin, Page):
-    summary = models.TextField()
-    activity_summary = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField()
+    summary = models.TextField('Короткое описание')
+    activity_summary = models.TextField('Периодичность', blank=True, null=True)
+    is_active = models.BooleanField('Активный')
 
-    body = RichTextField(blank=True)
+    body = RichTextField('Описание', blank=True)
     image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.PROTECT,
@@ -56,6 +56,10 @@ class ProjectPage(HeadlessPreviewMixin, Page):
     parent_page_types = ['projects.ProjectIndexPage']
 
     graphql_type = 'ProjectPage'
+
+    class Meta:
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
 
     @property
     def upcoming_events(self):
