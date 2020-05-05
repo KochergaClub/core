@@ -1,4 +1,4 @@
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.options import ModelAdmin
 
 from . import models
 
@@ -10,4 +10,4 @@ class ProjectPageAdmin(ModelAdmin):
     list_filter = ('is_active',)
 
 
-modeladmin_register(ProjectPageAdmin)
+# not registered - registered in events group from kocherga.events.wagtail_hooks

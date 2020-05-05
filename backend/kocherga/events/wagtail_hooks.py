@@ -1,6 +1,7 @@
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 
 from . import models
+import kocherga.projects.wagtail_hooks
 
 
 class GoogleCalendarAdmin(ModelAdmin):
@@ -11,4 +12,10 @@ class GoogleCalendarAdmin(ModelAdmin):
     list_display = ('public_only', 'calendar_id')
 
 
-modeladmin_register(GoogleCalendarAdmin)
+class EventsGroup(ModelAdminGroup):
+    menu_icon = 'group'
+    menu_label = 'Сообщество'
+    items = (GoogleCalendarAdmin, kocherga.projects.wagtail_hooks.ProjectPageAdmin,)
+
+
+modeladmin_register(EventsGroup)
