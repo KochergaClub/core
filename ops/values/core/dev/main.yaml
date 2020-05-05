@@ -1,6 +1,6 @@
 env:
   common:
-    STATIC_S3_BUCKET: "kocherga-dev"
+    STATIC_S3_BUCKET: "kocherga-dev2"
 
 ingress:
   host: "website.dev.kocherga.club"

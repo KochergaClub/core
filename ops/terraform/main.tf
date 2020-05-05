@@ -48,8 +48,8 @@ module "kocherga-s3" {
 module "kocherga-s3-dev" {
   source = "./s3"
 
-  bucket = "kocherga-berekuk-dev"
-  user = "kocherga-backend-berekuk-dev"
+  bucket = "kocherga-dev2"
+  user = "kocherga-backend-dev"
   cors = true
 }
 

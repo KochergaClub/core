@@ -6,6 +6,14 @@ output "kocherga-backend-iam-secret" {
   value = module.kocherga-s3.iam-secret
 }
 
+output "kocherga-backend-dev-iam-id" {
+  value = module.kocherga-s3-dev.iam-id
+}
+
+output "kocherga-backend-dev-iam-secret" {
+  value = module.kocherga-s3-dev.iam-secret
+}
+
 output "kocherga-wiki-iam-id" {
   value = module.kocherga-wiki-s3.iam-id
 }
