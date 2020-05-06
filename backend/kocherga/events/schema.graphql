@@ -28,6 +28,7 @@ type EventsEvent {
 
   location: String!
   zoom_link: String!
+  zoom_meeting: ZoomMeeting
 
   start: String!
   end: String!
