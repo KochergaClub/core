@@ -7,6 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('zoom', '0001_initial'),
         ('events', '0054_dt_indices_and_cleanups'),
     ]
 
