@@ -3,6 +3,7 @@ logger = logging.getLogger(__name__)
 
 import base64
 import uuid
+import re
 
 import dateutil.parser
 from datetime import datetime, time
@@ -18,7 +19,7 @@ from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 from kocherga.django.managers import RelayQuerySetMixin
 
 import kocherga.room
-import kocherga.zoom.tools
+import kocherga.zoom.models
 
 import kocherga.events.markup
 from kocherga.events.helpers import create_image_from_fh
@@ -196,6 +197,13 @@ class Event(models.Model):
         blank=True,
         max_length=255,
     )
+    zoom_meeting = models.OneToOneField(
+        kocherga.zoom.models.Meeting,
+        related_name='events',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     image = models.ForeignKey(
         'wagtailimages.Image',
@@ -326,12 +334,27 @@ class Event(models.Model):
     def generate_zoom_link(self):
         assert not self.deleted
         assert self.realm == 'online'
-        zoom_link = kocherga.zoom.tools.schedule_meeting(
+        zoom_meeting = kocherga.zoom.models.Meeting.objects.schedule(
             topic = self.title + ' | Кочерга',
             start_dt = self.start,
             duration = int((self.end - self.start).total_seconds() / 60),
         )
-        self.set_zoom_link(zoom_link)
+        self.zoom_meeting = zoom_meeting
+        self.set_zoom_link(zoom_meeting.join_url)
+
+    def detect_zoom_meeting_from_zoom_link(self):
+        """
+        Temporary method for migrating from event.zoom_link to event.zoom_meeting.
+        """
+        if not self.zoom_link:
+            return  # nothing to do
+
+        match = re.match(r'https://\w+.zoom.us/j/(\d+)', self.zoom_link)
+        if not match:
+            raise Exception(f"Strange zoom_link: {self.zoom_link}")
+
+        self.zoom_meeting = kocherga.zoom.models.Meeting.objects.get(zoom_id=match.group(1))
+        self.save()
 
     def move(self, start: datetime):
         self.end = self.end + (start - self.start)

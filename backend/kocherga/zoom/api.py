@@ -21,19 +21,26 @@ def get_jwt_token():
 
 
 def api_call(method, url, data={}):
-    if method == "POST":
+    headers = {
+        'Authorization': 'Bearer ' + get_jwt_token(),
+    }
+    if method == 'POST':
         r = requests.post(
             f'https://api.zoom.us/v2/{url}',
             json=data,
-            headers={
-                'Authorization': 'Bearer ' + get_jwt_token(),
-            }
+            headers=headers,
         )
-
-        if r.status_code >= 400:
-            logger.warn(r.content)
-            r.raise_for_status()
-
-        return r.json()
+    elif method == 'GET':
+        r = requests.get(
+            f'https://api.zoom.us/v2/{url}',
+            params=data,
+            headers=headers,
+        )
     else:
         raise Exception(f"Unknown method {method}")
+
+    if r.status_code >= 400:
+        logger.warn(r.content)
+        r.raise_for_status()
+
+    return r.json()

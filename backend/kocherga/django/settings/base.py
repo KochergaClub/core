@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'kocherga.faq',
     'kocherga.telegram',
     'kocherga.tilda',
+    'kocherga.zoom',
 
     'taggit',
     'modelcluster',
