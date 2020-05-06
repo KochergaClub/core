@@ -12,7 +12,7 @@ test-types:
 	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml exec api mypy --strict-optional --check-untyped-defs kocherga # FIXME
 
 test-code:
-	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) pytest
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- pytest
 
 lint:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- flake8 kocherga/ --max-line-length=120
@@ -36,10 +36,10 @@ dbshell:
 	$(K) exec -it $(shell $(K) get po -l app=core-mysql -o name) -- bash -c 'mysql -p$$MYSQL_ROOT_PASSWORD kocherga'
 
 shell:
-	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) bash
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- bash
 
 pyshell:
-	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) ./manage.py shell
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py shell
 
 tail:
 	$(K) logs -f -l app=core-django
@@ -76,12 +76,12 @@ kassa_localtunnel:
 
 update_requirements:
 	$(K) cp backend/requirements.in $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/requirements.in
-	$(K) exec $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}') pip-compile
-	$(K) exec $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}') pip-sync
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- pip-compile
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- pip-sync
 	$(K) cp $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/requirements.txt ./backend/requirements.txt
 
 update_schema:
-	$(K) exec $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}') ./scripts/export-schema.py schema.graphql
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./scripts/export-schema.py schema.graphql
 	$(K) cp $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./schema.graphql
 
 update_types:

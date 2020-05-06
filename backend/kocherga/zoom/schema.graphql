@@ -1,0 +1,8 @@
+type ZoomMeeting {
+  id: ID!
+  zoom_id: String!
+  zoom_uuid: String
+
+  join_url: String!
+  participants_count: Int
+}
