@@ -353,7 +353,10 @@ class Event(models.Model):
         if not match:
             raise Exception(f"Strange zoom_link: {self.zoom_link}")
 
-        self.zoom_meeting = kocherga.zoom.models.Meeting.objects.filter(zoom_id=match.group(1)).order_by('-duration').first()
+        self.zoom_meeting = kocherga.zoom.models.Meeting.objects.filter(
+            zoom_id=match.group(1)
+        ).order_by('-duration').first()
+
         self.save()
 
     def move(self, start: datetime):
