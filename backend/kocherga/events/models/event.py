@@ -349,7 +349,7 @@ class Event(models.Model):
         if not self.zoom_link:
             return  # nothing to do
 
-        match = re.match(r'https://\w+.zoom.us/j/(\d+)', self.zoom_link)
+        match = re.match(r'https://(?:\w+.)?zoom.us/j/(\d+)', self.zoom_link)
         if not match:
             raise Exception(f"Strange zoom_link: {self.zoom_link}")
 
