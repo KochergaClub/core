@@ -541,6 +541,7 @@ export type EventsEvent = {
   timing_description_override: Scalars['String'],
   location: Scalars['String'],
   zoom_link: Scalars['String'],
+  zoom_meeting?: Maybe<ZoomMeeting>,
   start: Scalars['String'],
   end: Scalars['String'],
   created: Scalars['String'],
@@ -2055,4 +2056,13 @@ export type ZadarmaPbxCallConnection = {
 export type ZadarmaPbxCallEdge = {
    __typename?: 'ZadarmaPbxCallEdge',
   node: ZadarmaPbxCall,
+};
+
+export type ZoomMeeting = {
+   __typename?: 'ZoomMeeting',
+  id: Scalars['ID'],
+  zoom_id: Scalars['String'],
+  zoom_uuid?: Maybe<Scalars['String']>,
+  join_url: Scalars['String'],
+  participants_count?: Maybe<Scalars['Int']>,
 };

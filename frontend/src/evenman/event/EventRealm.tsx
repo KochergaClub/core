@@ -55,6 +55,12 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
               Сгенерировать
             </AsyncButton>
           )}
+          {event.zoom_meeting && (
+            <div>
+              Участники по статистике Zoom'а:{' '}
+              {event.zoom_meeting.participants_count}
+            </div>
+          )}
         </Row>
       );
     default:

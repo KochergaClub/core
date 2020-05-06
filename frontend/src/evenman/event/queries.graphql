@@ -51,6 +51,9 @@ fragment EvenmanEvent_Details on EventsEvent {
 
   location
   zoom_link
+  zoom_meeting {
+    participants_count
+  }
 
   event_type
   pricing_type
