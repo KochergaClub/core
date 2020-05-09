@@ -15,7 +15,7 @@ test-code:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- pytest
 
 lint:
-	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- flake8 kocherga/ --max-line-length=120
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- flake8 kocherga/
 
 eslint:
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx eslint src --ext ts,tsx

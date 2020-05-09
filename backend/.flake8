@@ -1,3 +1,4 @@
 [flake8]
 ignore = E401,E402,W503,E251
 exclude = migrations,kocherga/django/settings
+max-line-length = 120
