@@ -237,7 +237,7 @@ def r_list_public_atom(request):
         # fe.id(f'{settings.KOCHERGA_API_ROOT}/public_event/{event.uuid}')
         fg.add_item(
             title=event.title,
-            link=event.vk_announcement.link,
+            link=event.public_link(),
             description=event.summary,
             pubdate=event.start,
         )
