@@ -21,6 +21,7 @@ const ZoomAnalytics: React.FC<Props> = ({ event }) => {
   }, []);
 
   const closeModal = useCallback(() => {
+    console.log('closeModal');
     setShowModal(false);
   }, []);
 
@@ -34,12 +35,14 @@ const ZoomAnalytics: React.FC<Props> = ({ event }) => {
 
   if (canViewDetails) {
     result = (
-      <A href="#" onClick={viewDetails}>
-        {result}
+      <>
+        <A href="#" onClick={viewDetails}>
+          {result}
+        </A>
         {showModal && (
           <ParticipantsModal close={closeModal} event_id={event.id} />
         )}
-      </A>
+      </>
     );
   }
 

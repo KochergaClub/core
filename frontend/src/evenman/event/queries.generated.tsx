@@ -63,7 +63,7 @@ export type EvenmanEvent_DetailsFragment = (
   & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
   & { zoom_meeting: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
-    & Pick<Types.ZoomMeeting, 'participants_count'>
+    & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
   )>, image: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
@@ -415,6 +415,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
   location
   zoom_link
   zoom_meeting {
+    id
     participants_count
   }
   event_type

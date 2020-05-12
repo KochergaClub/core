@@ -9,6 +9,7 @@ export type EvenmanEvent_ForZoomAnalyticsFragment = (
   & Pick<Types.EventsEvent, 'id'>
   & { zoom_meeting: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
+    & Pick<Types.ZoomMeeting, 'id'>
     & { participants: Array<(
       { __typename?: 'ZoomParticipant' }
       & Pick<Types.ZoomParticipant, 'id' | 'name' | 'join_time' | 'leave_time'>
@@ -33,6 +34,7 @@ export const EvenmanEvent_ForZoomAnalyticsFragmentDoc = gql`
     fragment EvenmanEvent_ForZoomAnalytics on EventsEvent {
   id
   zoom_meeting {
+    id
     participants {
       id
       name
