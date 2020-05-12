@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -109,4 +109,4 @@ const UnknownEventsDropdown: React.FC = () => {
   );
 };
 
-export default UnknownEventsDropdown;
+export default React.memo(UnknownEventsDropdown);

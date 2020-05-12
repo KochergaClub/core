@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { subWeeks, addWeeks, endOfWeek } from 'date-fns';
 
@@ -49,4 +49,4 @@ const Toolbar: React.FC<Props> = ({ date, setDate }) => {
   );
 };
 
-export default Toolbar;
+export default React.memo(Toolbar);

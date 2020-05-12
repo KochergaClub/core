@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
 
@@ -58,4 +59,4 @@ const Sidebar = ({ selected }: { selected: string }) => {
   );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);

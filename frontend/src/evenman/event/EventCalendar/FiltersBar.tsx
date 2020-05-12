@@ -1,3 +1,4 @@
+import React from 'react';
 import Toggle from 'react-toggle';
 
 import { Row } from '@kocherga/frontkit';
@@ -33,4 +34,4 @@ const FiltersBar: React.FC<Props> = ({ filters, dispatch }) => {
   );
 };
 
-export default FiltersBar;
+export default React.memo(FiltersBar);

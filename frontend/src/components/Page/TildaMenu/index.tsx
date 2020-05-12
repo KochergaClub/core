@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 import Link from 'next/link';
@@ -97,4 +97,4 @@ const TildaMenu = ({ kind }: Props) => {
   );
 };
 
-export default TildaMenu;
+export default React.memo(TildaMenu);
