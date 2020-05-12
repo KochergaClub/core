@@ -26,6 +26,7 @@ IMPORTER_MODULES = [
     "timepad",
     "slack",
     "email",
+    "zoom",
 ]
 
 

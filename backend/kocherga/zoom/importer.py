@@ -39,7 +39,7 @@ def get_meetings(from_d: date, to_d: date):
             }
         )
         if created:
-            pass
+            meeting.update_participants()
             # TODO - can fail with 404 for old meetings
             # meeting.update_from_zoom()
         yield meeting

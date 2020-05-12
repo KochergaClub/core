@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from random import randint
 import dateutil.parser
 
@@ -49,8 +52,60 @@ class Meeting(models.Model):
 
     objects = MeetingManager()
 
+    class Meta:
+        permissions = (
+            ('view_participants', 'Может просматривать участников созвонов'),
+        )
+
     def update_from_zoom(self):
         # TODO - populate other fields
         result = api_call('GET', f'meetings/{self.zoom_id}')
         self.join_url = result['join_url']
         self.save()
+
+    def update_participants(self):
+        # quoted_uuid = urllib.parse.quote(urllib.parse.quote(self.zoom_uuid))
+        result = api_call(
+            'GET',
+            f'report/meetings/{self.zoom_id}/participants',
+            {
+                'page_size': 300
+            }
+        )
+
+        if result['page_count'] != 1:
+            raise Exception("Can't fetch multi-page report")
+
+        for item in result['participants']:
+            Participant.objects.get_or_create(
+                meeting=self,
+                zoom_user_id=item['user_id'],
+                defaults={
+                    'zoom_id': item['id'],
+                    'name': item['name'],
+                    'user_email': item['user_email'],
+                    'join_time': dateutil.parser.isoparse(item['join_time']),
+                    'leave_time': dateutil.parser.isoparse(item['leave_time']),
+                    'duration': item['duration'],
+                }
+            )
+
+
+class Participant(models.Model):
+    meeting = models.ForeignKey(
+        Meeting,
+        on_delete=models.CASCADE,
+        related_name='participants'
+    )
+
+    # Empirically, id ("Participant UUID" in Zoom API docs) stays the same for the same meeting,
+    # while user_id ("Participant ID") changes.
+    zoom_id = models.CharField(max_length=40)
+    zoom_user_id = models.CharField(max_length=40)
+
+    name = models.CharField(max_length=256)
+    user_email = models.CharField(max_length=256)
+
+    join_time = models.DateTimeField()
+    leave_time = models.DateTimeField()
+    duration = models.IntegerField()

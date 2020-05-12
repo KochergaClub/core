@@ -13,6 +13,8 @@ import {
 } from './queries.generated';
 import { useUpdateMutation } from './hooks';
 
+import ZoomAnalytics from './ZoomAnalytics';
+
 interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
@@ -55,12 +57,7 @@ const RealmDetails: React.FC<Props> = ({ event }) => {
               Сгенерировать
             </AsyncButton>
           )}
-          {event.zoom_meeting && (
-            <div>
-              Участники по статистике Zoom'а:{' '}
-              {event.zoom_meeting.participants_count}
-            </div>
-          )}
+          <ZoomAnalytics event={event} />
         </Row>
       );
     default:

@@ -1586,4 +1586,14 @@ type ZoomMeeting {
 
   join_url: String!
   participants_count: Int
+
+  participants: [ZoomParticipant!]! @auth(permission: "zoom.view_participants")
+}
+
+type ZoomParticipant {
+  id: ID!
+
+  name: String!
+  join_time: String!
+  leave_time: String!
 }

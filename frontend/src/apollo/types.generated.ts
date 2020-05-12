@@ -2065,4 +2065,13 @@ export type ZoomMeeting = {
   zoom_uuid?: Maybe<Scalars['String']>,
   join_url: Scalars['String'],
   participants_count?: Maybe<Scalars['Int']>,
+  participants: Array<ZoomParticipant>,
+};
+
+export type ZoomParticipant = {
+   __typename?: 'ZoomParticipant',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  join_time: Scalars['String'],
+  leave_time: Scalars['String'],
 };

@@ -1,0 +1,17 @@
+fragment EvenmanEvent_ForZoomAnalytics on EventsEvent {
+  id
+  zoom_meeting {
+    participants {
+      id
+      name
+      join_time
+      leave_time
+    }
+  }
+}
+
+query EvenmanEventForZoomAnalytics($id: ID!) {
+  event(event_id: $id) {
+    ...EvenmanEvent_ForZoomAnalytics
+  }
+}
