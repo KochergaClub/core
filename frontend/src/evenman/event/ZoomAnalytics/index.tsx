@@ -34,7 +34,7 @@ const ZoomAnalytics: React.FC<Props> = ({ event }) => {
 
   if (canViewDetails) {
     result = (
-      <A onClick={viewDetails}>
+      <A href="#" onClick={viewDetails}>
         {result}
         {showModal && (
           <ParticipantsModal close={closeModal} event_id={event.id} />

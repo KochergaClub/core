@@ -1,6 +1,7 @@
 fragment EvenmanEvent_ForZoomAnalytics on EventsEvent {
   id
   zoom_meeting {
+    id
     participants {
       id
       name

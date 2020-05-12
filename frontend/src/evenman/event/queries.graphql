@@ -52,6 +52,7 @@ fragment EvenmanEvent_Details on EventsEvent {
   location
   zoom_link
   zoom_meeting {
+    id
     participants_count
   }
 
