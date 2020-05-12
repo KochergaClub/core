@@ -12,7 +12,7 @@ interface Props {
 }
 
 const ZoomAnalytics: React.FC<Props> = ({ event }) => {
-  const [canViewDetails] = usePermissions(['zoom.view_participant_details']);
+  const [canViewDetails] = usePermissions(['zoom.view_participants']);
   const [showModal, setShowModal] = useState(false);
 
   const viewDetails = useCallback((e: React.SyntheticEvent) => {
