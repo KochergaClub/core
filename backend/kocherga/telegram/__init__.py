@@ -98,4 +98,4 @@ def channel_message_link_by_id(message_id: str):
 
     print(r.json())
     channel_username = r.json()['result']['username']
-    return f'https://t.me/{channel_username}/{message_id}'
+    return f'https://teleg.run/{channel_username}/{message_id}'

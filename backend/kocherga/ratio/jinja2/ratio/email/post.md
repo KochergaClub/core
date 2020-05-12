@@ -34,7 +34,7 @@
 # Общение
 В [telegram-чате прошедшего воркшопа]({{ training.telegram_link }}) можно продолжать задавать вопросы по материалам или договориться друг с другом о совместной тренировке в формате mastermind-группы.
 
-А вот отдельный [чат выпускников](https://t.me/joinchat/BWnaog64-pnlNS3PK778OA), не пропустите.
+А вот отдельный [чат выпускников](https://teleg.run/joinchat/BWnaog64-pnlNS3PK778OA), не пропустите.
 
 Ещё у LessWrong-сообщества есть большой [slack-чат](https://lesswrong.ru/slack). Там много людей, которые интересуются рациональностью, некоторые из них были на воркшопах. А ещё там часто появляется Слава (*@berekuk*).
 
@@ -51,9 +51,9 @@
 
 Напишите нам в Телеграм или куда угодно ещё:
 
-* Слава: [vk](https://vk.com/berekuk), [facebook](https://www.facebook.com/berekuk), [telegram](https://t.me/berekuk), [slava@kocherga-club.ru](mailto:slava@kocherga-club.ru)
-* Саша: [vk](https://vk.com/mr_ali), [facebook](https://www.facebook.com/alexander.ali.7549), [telegram](https://t.me/LordAli)
-* Нароттам: [vk](https://vk.com/dra9ohole), [telegram](https://t.me/dragohole)
+* Слава: [vk](https://vk.com/berekuk), [facebook](https://www.facebook.com/berekuk), [telegram](https://teleg.run/berekuk), [slava@kocherga-club.ru](mailto:slava@kocherga-club.ru)
+* Саша: [vk](https://vk.com/mr_ali), [facebook](https://www.facebook.com/alexander.ali.7549), [telegram](https://teleg.run/LordAli)
+* Нароттам: [vk](https://vk.com/dra9ohole), [telegram](https://teleg.run/dragohole)
 
 Успехов в применении методов рациональности!
 
