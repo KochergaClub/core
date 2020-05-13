@@ -1582,10 +1582,19 @@ type TildaPage {
 type ZoomMeeting {
   id: ID!
   zoom_id: String!
-  zoom_uuid: String
 
   join_url: String!
   participants_count: Int
+
+  instances: [ZoomMeetingInstance!]!
+}
+
+type ZoomMeetingInstance {
+  id: ID!
+  zoom_uuid: String!
+
+  start_time: String!
+  end_time: String!
 
   participants: [ZoomParticipant!]! @auth(permission: "zoom.view_participants")
 }

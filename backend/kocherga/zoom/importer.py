@@ -10,10 +10,10 @@ import kocherga.importer.base
 from kocherga.dateutils import TZ, date_chunks
 
 from .api import api_call
-from .models import Meeting
+from .models import Meeting, MeetingInstance
 
 
-def get_meetings(from_d: date, to_d: date):
+def import_meetings(from_d: date, to_d: date):
     result = api_call(
         'GET',
         f'report/users/{settings.ZOOM_ANNOUNCER_USER_ID}/meetings',
@@ -27,22 +27,26 @@ def get_meetings(from_d: date, to_d: date):
     if result['next_page_token']:
         raise Exception("Zoom wants paging, which is not implemented")
 
-    for meeting_data in result['meetings']:
-        (meeting, created) = Meeting.objects.update_or_create(
-            zoom_uuid=meeting_data['uuid'],
+    for instance_data in result['meetings']:
+        # Note: instance_data is not a meeting, but a meeting instance.
+        # It means that its `start_time` and `end_time` fields are not aligned with the schedule, and also that there
+        # might be multiple instances per meeting, even if we don't use recurring meetings, because participants might
+        # all join, leave, and join again (which counts as a new instance by Zoom).
+        zoom_id = str(instance_data['id'])
+        meeting = Meeting.objects.get_with_import(zoom_id=zoom_id)
+
+        (meeting_instance, created) = MeetingInstance.objects.update_or_create(
+            zoom_uuid=str(instance_data['uuid']),
             defaults={
-                'zoom_id': str(meeting_data['id']),
-                'start_time': dateutil.parser.isoparse(meeting_data['start_time']),
-                'end_time': dateutil.parser.isoparse(meeting_data['end_time']),
-                'duration': meeting_data['duration'],
-                'participants_count': meeting_data['participants_count'],
+                'meeting': meeting,
+                'start_time': dateutil.parser.isoparse(instance_data['start_time']),
+                'end_time': dateutil.parser.isoparse(instance_data['end_time']),
             }
         )
-        if created:
-            meeting.update_participants()
+        if created or not meeting_instance.participants.all():
+            meeting_instance.update_participants()
             # TODO - can fail with 404 for old meetings
             # meeting.update_from_zoom()
-        yield meeting
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
@@ -56,8 +60,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             chunk_from_d = (chunk_from_dt - timedelta(days=2)).date()
             chunk_to_d = chunk_to_dt.date()
             logger.info(f"Importing from {chunk_from_d} to {chunk_to_d}")
-            for meeting in get_meetings(chunk_from_d, chunk_to_d):
-                pass  # already saved
+            import_meetings(chunk_from_d, chunk_to_d)
 
         return to_dt - timedelta(
             days=1

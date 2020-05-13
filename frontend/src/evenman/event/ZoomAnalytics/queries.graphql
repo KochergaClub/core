@@ -2,11 +2,16 @@ fragment EvenmanEvent_ForZoomAnalytics on EventsEvent {
   id
   zoom_meeting {
     id
-    participants {
+    instances {
       id
-      name
-      join_time
-      leave_time
+      start_time
+      end_time
+      participants {
+        id
+        name
+        join_time
+        leave_time
+      }
     }
   }
 }

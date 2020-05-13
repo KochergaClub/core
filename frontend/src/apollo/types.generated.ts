@@ -2062,9 +2062,17 @@ export type ZoomMeeting = {
    __typename?: 'ZoomMeeting',
   id: Scalars['ID'],
   zoom_id: Scalars['String'],
-  zoom_uuid?: Maybe<Scalars['String']>,
   join_url: Scalars['String'],
   participants_count?: Maybe<Scalars['Int']>,
+  instances: Array<ZoomMeetingInstance>,
+};
+
+export type ZoomMeetingInstance = {
+   __typename?: 'ZoomMeetingInstance',
+  id: Scalars['ID'],
+  zoom_uuid: Scalars['String'],
+  start_time: Scalars['String'],
+  end_time: Scalars['String'],
   participants: Array<ZoomParticipant>,
 };
 

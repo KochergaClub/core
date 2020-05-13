@@ -2,6 +2,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from random import randint
+import urllib.parse
+import requests
 import dateutil.parser
 
 from django.db import models
@@ -13,6 +15,24 @@ ANNOUNCER_USER_ID = settings.ZOOM_ANNOUNCER_USER_ID
 
 
 class MeetingManager(models.Manager):
+    def get_with_import(self, zoom_id):
+        try:
+            result = api_call('GET', f'meetings/{zoom_id}')
+        except requests.HTTPError as e:
+            if e.response.status_code != 404:
+                raise
+            result = api_call('GET', f'report/meetings/{zoom_id}')
+
+        (meeting, _) = self.update_or_create(
+            zoom_id=zoom_id,
+            defaults={
+                'start_time': dateutil.parser.isoparse(result['start_time']),
+                'duration': result['duration'],
+                'join_url': result.get('join_url', ''),
+            }
+        )
+        return meeting
+
     def schedule(self, topic, start_dt, duration):
         result = api_call('POST', f'users/{ANNOUNCER_USER_ID}/meetings', {
             "topic": topic,
@@ -32,6 +52,7 @@ class MeetingManager(models.Manager):
         return self.create(
             zoom_id=result['id'],
             start_time=dateutil.parser.isoparse(result['start_time']),
+            duration=duration,
             join_url=result['join_url'],
         )
 
@@ -39,13 +60,9 @@ class MeetingManager(models.Manager):
 class Meeting(models.Model):
     # id and uuid are different: https://devforum.zoom.us/t/meeting-id-versus-uuid-confusion/5764/2
     # It's kinda messy, so let's avoid recurring meetings in the future if possible.
-    zoom_id = models.CharField(max_length=20)
-    zoom_uuid = models.CharField(max_length=100, blank=True)
+    zoom_id = models.CharField(max_length=20, unique=True)
 
     start_time = models.DateTimeField()
-    end_time = models.DateTimeField(null=True, blank=True)
-
-    participants_count = models.IntegerField(null=True)
     duration = models.IntegerField(null=True)
 
     join_url = models.CharField(max_length=255, blank=True)
@@ -63,11 +80,37 @@ class Meeting(models.Model):
         self.join_url = result['join_url']
         self.save()
 
+    def update_instances(self):
+        raise Exception("TODO")
+
+    @property
+    def participants_count(self):
+        return sum(
+            instance.participants.count()
+            for instance in self.instances.all()
+        )
+
+
+class MeetingInstance(models.Model):
+    zoom_uuid = models.CharField(max_length=100)
+    meeting = models.ForeignKey(
+        Meeting,
+        on_delete=models.CASCADE,
+        related_name='instances',
+    )
+
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
     def update_participants(self):
-        # quoted_uuid = urllib.parse.quote(urllib.parse.quote(self.zoom_uuid))
+        uuid = self.zoom_uuid
+        if '//' in uuid or uuid[0] == '/':
+            uuid = urllib.parse.quote_plus(urllib.parse.quote_plus(uuid))
+
+        logger.info(f'fetching participants for {uuid}')
         result = api_call(
             'GET',
-            f'report/meetings/{self.zoom_id}/participants',
+            f'report/meetings/{uuid}/participants',
             {
                 'page_size': 300
             }
@@ -78,7 +121,7 @@ class Meeting(models.Model):
 
         for item in result['participants']:
             Participant.objects.get_or_create(
-                meeting=self,
+                meeting_instance=self,
                 zoom_user_id=item['user_id'],
                 defaults={
                     'zoom_id': item['id'],
@@ -92,8 +135,8 @@ class Meeting(models.Model):
 
 
 class Participant(models.Model):
-    meeting = models.ForeignKey(
-        Meeting,
+    meeting_instance = models.ForeignKey(
+        MeetingInstance,
         on_delete=models.CASCADE,
         related_name='participants'
     )

@@ -2,6 +2,7 @@ import { Modal } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import { useEvenmanEventForZoomAnalyticsQuery } from './queries.generated';
+import { formatDate } from '~/common/utils';
 
 interface Props {
   close: () => void;
@@ -26,8 +27,21 @@ const ParticipantsModal: React.FC<Props> = ({ close, event_id }) => {
             }
             return (
               <div>
-                {event.zoom_meeting.participants.map(p => (
-                  <div key={p.id}>{p.name}</div>
+                {event.zoom_meeting.instances.map(instance => (
+                  <section>
+                    <strong>
+                      {formatDate(new Date(instance.start_time), 'HH:mm')}—
+                      {formatDate(new Date(instance.end_time), 'HH:mm')}
+                    </strong>
+                    <div>
+                      {instance.participants.map(p => (
+                        <div key={p.id}>
+                          {formatDate(new Date(p.join_time), 'HH:mm')}—
+                          {formatDate(new Date(p.leave_time), 'HH:mm')} {p.name}
+                        </div>
+                      ))}
+                    </div>
+                  </section>
                 ))}
               </div>
             );

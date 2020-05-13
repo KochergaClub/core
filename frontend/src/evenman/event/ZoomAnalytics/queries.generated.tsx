@@ -10,9 +10,13 @@ export type EvenmanEvent_ForZoomAnalyticsFragment = (
   & { zoom_meeting: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id'>
-    & { participants: Array<(
-      { __typename?: 'ZoomParticipant' }
-      & Pick<Types.ZoomParticipant, 'id' | 'name' | 'join_time' | 'leave_time'>
+    & { instances: Array<(
+      { __typename?: 'ZoomMeetingInstance' }
+      & Pick<Types.ZoomMeetingInstance, 'id' | 'start_time' | 'end_time'>
+      & { participants: Array<(
+        { __typename?: 'ZoomParticipant' }
+        & Pick<Types.ZoomParticipant, 'id' | 'name' | 'join_time' | 'leave_time'>
+      )> }
     )> }
   )> }
 );
@@ -35,11 +39,16 @@ export const EvenmanEvent_ForZoomAnalyticsFragmentDoc = gql`
   id
   zoom_meeting {
     id
-    participants {
+    instances {
       id
-      name
-      join_time
-      leave_time
+      start_time
+      end_time
+      participants {
+        id
+        name
+        join_time
+        leave_time
+      }
     }
   }
 }
