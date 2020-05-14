@@ -233,6 +233,10 @@ type Importer {
   name: ID!
 }
 
+extend type Mutation {
+  fbMarketingAudienceUploadRatioTickets: BasicResult! @auth(permission: "fb.marketing")
+}
+
 extend type Query {
   now: NowInfo!
 }

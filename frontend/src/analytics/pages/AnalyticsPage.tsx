@@ -1,10 +1,11 @@
 import { A } from '@kocherga/frontkit';
 
 import { withApollo, NextApolloPage } from '~/apollo';
-import { Page, ActionButton, ApolloQueryResults } from '~/components';
+import { Page, ApolloQueryResults, AsyncButton } from '~/components';
 
 import {
   useAnalyticsBovStatsQuery,
+  useAnalyticsUpdateFbRatioAudienceMutation,
   AnalyticsBovStatFragment,
 } from '../queries.generated';
 
@@ -22,6 +23,8 @@ const BOVStatCard = ({ bovStat }: { bovStat: AnalyticsBovStatFragment }) => (
 
 const AnalyticsPage: NextApolloPage<Props> = () => {
   const queryResults = useAnalyticsBovStatsQuery();
+
+  const [updateFbRatioTickets] = useAnalyticsUpdateFbRatioAudienceMutation();
 
   return (
     <Page title="Аналитика Кочерги" menu="team">
@@ -51,9 +54,9 @@ const AnalyticsPage: NextApolloPage<Props> = () => {
         </section>
         <section>
           <h2>Facebook</h2>
-          <ActionButton path="fb/marketing/audience/upload_ratio_tickets">
+          <AsyncButton act={updateFbRatioTickets}>
             Обновить аудиторию ratio_tickets
-          </ActionButton>
+          </AsyncButton>
         </section>
       </Page.Main>
     </Page>

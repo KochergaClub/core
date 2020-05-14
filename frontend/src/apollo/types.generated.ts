@@ -925,6 +925,7 @@ export type Mutation = {
   authLogout: AuthLogoutResult,
   authSendMagicLink: AuthSendMagicLinkResult,
   zadarmaSetMemberForPbxCall?: Maybe<Scalars['Boolean']>,
+  fbMarketingAudienceUploadRatioTickets: BasicResult,
   myPrivacyModeSet?: Maybe<Scalars['Boolean']>,
   cm2CreateOrder: Cm2Order,
   cm2CreateCustomer: Cm2Customer,

@@ -9,3 +9,9 @@ query AnalyticsBovStats {
     ...AnalyticsBovStat
   }
 }
+
+mutation AnalyticsUpdateFbRatioAudience {
+  result: fbMarketingAudienceUploadRatioTickets {
+    ok
+  }
+}

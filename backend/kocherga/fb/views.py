@@ -16,11 +16,3 @@ class MarketingAudienceView(APIView):
     def get(self, request):
         audiences = marketing.get_audiences()
         return Response(audiences)
-
-
-class MarketingAudienceUploadRatioTicketsView(APIView):
-    permission_classes = (IsMarketingUser,)
-
-    def post(self, request, **args):
-        marketing.upload_ratio_tickets_audience()
-        return Response('ok')
