@@ -3,15 +3,12 @@ import styled from 'styled-components';
 import { format } from 'date-fns-tz';
 import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 
+import { withApollo } from '~/apollo';
 import { NextPage } from '~/common/types';
-import { selectAPI } from '~/core/selectors';
 
 import { Page } from '~/components';
 
 import EventCalendar from '~/events/components/EventCalendar';
-
-import { getEventsInRange } from '~/events/api';
-import { replaceEvents } from '~/events/features/events';
 
 const OuterContainer = styled.div`
   display: flex;
@@ -42,11 +39,7 @@ const TeamCalendarPage: NextPage<Props> = ({ range }) => {
   );
 };
 
-TeamCalendarPage.getInitialProps = async ({
-  store: { getState, dispatch },
-}) => {
-  const api = selectAPI(getState());
-
+TeamCalendarPage.getInitialProps = async () => {
   const range = {
     start: format(
       subDays(startOfWeek(new Date(), { weekStartsOn: 1 }), 1),
@@ -58,12 +51,9 @@ TeamCalendarPage.getInitialProps = async ({
     ),
   };
 
-  const events = await getEventsInRange(api, range);
-  dispatch(replaceEvents(events));
-
   return {
     range,
   };
 };
 
-export default TeamCalendarPage;
+export default withApollo(TeamCalendarPage);

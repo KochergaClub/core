@@ -1,5 +1,3 @@
-import { connect } from 'react-redux';
-
 import styled from 'styled-components';
 
 import { utcToZonedTime } from 'date-fns-tz';
@@ -9,14 +7,12 @@ import Markdown from 'react-markdown';
 
 import { A, RichText, Row, Label } from '@kocherga/frontkit';
 
-import { State } from '~/redux/store';
 import { timezone, formatDate } from '~/common/utils';
 
-import { selectEvent } from '../features/eventPage';
-import { Event } from '../types';
+import { TeamCalendarEventFragment } from '../queries.generated';
 
 interface Props {
-  event: Event;
+  event: TeamCalendarEventFragment;
 }
 
 const EventDescription = styled.div`
@@ -79,8 +75,4 @@ export const EventInfo: React.FC<Props> = ({ event }) => {
   );
 };
 
-const mapStateToProps = (state: State) => ({
-  event: selectEvent(state),
-});
-
-export default connect(mapStateToProps)(EventInfo);
+export default EventInfo;

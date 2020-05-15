@@ -1,5 +1,4 @@
-import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useState, useContext } from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
@@ -8,10 +7,9 @@ import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 import { useCommonHotkeys, useDispatch } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
-import { createEvent } from '~/events/features/events';
-import { closeUI, selectRangeForNewEvent } from '~/events/features/calendarUI';
-
 import EventFields from './EventFields';
+import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
+import { useTeamCalendarCreateEventMutation } from '../queries.generated';
 
 const NewEventModal: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -19,8 +17,18 @@ const NewEventModal: React.FC = () => {
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
 
-  const dispatch = useDispatch();
-  const { start, end } = useSelector(selectRangeForNewEvent);
+  const [createMutation] = useTeamCalendarCreateEventMutation({
+    // TODO - update cache instead
+    refetchQueries: ['EventsInRange'],
+    awaitRefetchQueries: true,
+  });
+
+  const { dispatch, state } = useContext(CalendarUIContext);
+
+  if (state.mode !== 'new') {
+    throw new Error('Expected new mode');
+  }
+  const { start, end } = state.context;
 
   const saveDisabled = saving || !title.length;
 
@@ -31,15 +39,15 @@ const NewEventModal: React.FC = () => {
 
     setSaving(true);
 
-    await dispatch(
-      createEvent({
-        start,
-        end,
+    await createMutation({
+      variables: {
+        start: start.toISOString(),
+        end: end.toISOString(),
         title,
         description,
-        location: room,
-      })
-    );
+        room,
+      },
+    });
     dispatch(closeUI());
   }, [dispatch, title, description, room, start, end, saveDisabled]);
 

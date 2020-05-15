@@ -336,9 +336,11 @@ export enum EventAnnounceTarget {
 }
 
 export type EventCreateInput = {
-  title: Scalars['String'],
   start: Scalars['String'],
   end: Scalars['String'],
+  title: Scalars['String'],
+  description?: Maybe<Scalars['String']>,
+  location?: Maybe<Scalars['String']>,
 };
 
 export type EventCreateResult = {
@@ -540,6 +542,7 @@ export type EventsEvent = {
   summary: Scalars['String'],
   timing_description_override: Scalars['String'],
   location: Scalars['String'],
+  room: Scalars['String'],
   zoom_link: Scalars['String'],
   zoom_meeting?: Maybe<ZoomMeeting>,
   start: Scalars['String'],
@@ -547,6 +550,7 @@ export type EventsEvent = {
   created: Scalars['String'],
   updated: Scalars['String'],
   published: Scalars['Boolean'],
+  creator?: Maybe<Scalars['String']>,
   event_type: Scalars['String'],
   pricing_type: Scalars['String'],
   registration_type: Scalars['String'],
@@ -717,6 +721,8 @@ export type EventTimepadAnnouncementUpdateInput = {
 
 export type EventUpdateInput = {
   event_id: Scalars['ID'],
+  start?: Maybe<Scalars['String']>,
+  end?: Maybe<Scalars['String']>,
   published?: Maybe<Scalars['Boolean']>,
   visitors?: Maybe<Scalars['String']>,
   title?: Maybe<Scalars['String']>,

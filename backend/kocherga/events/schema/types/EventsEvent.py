@@ -24,3 +24,8 @@ def resolve_timepad_category(obj, info):
 @EventsEvent.field('tags')
 def resolve_tags(obj, info):
     return obj.tag_names()
+
+
+@EventsEvent.field('room')
+def resolve_room(obj, info):
+    return obj.get_room()

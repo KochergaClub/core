@@ -22,12 +22,19 @@ def eventCreate(_, info, input):
     start = dateutil.parser.isoparse(start)
     end = dateutil.parser.isoparse(end)
 
-    event = models.Event.objects.create(
-        title=title,
-        start=start,
-        end=end,
-        creator=info.context.user.email,
-    )
+    params = {
+        'title': title,
+        'start': start,
+        'end': end,
+        'creator': info.context.user.email,
+    }
+
+    # optional fields
+    for field in ('description', 'location'):
+        if field in input:
+            params[field] = input[field]
+
+    event = models.Event.objects.create(**params)
     models.Event.objects.notify_update()  # send notification message to websocket
 
     return {
@@ -59,6 +66,12 @@ def eventUpdate(_, info, input):
     ):
         if field in input:
             setattr(event, field, input[field])
+
+    if 'start' in input:
+        event.start = dateutil.parser.isoparse(input['start'])
+
+    if 'end' in input:
+        event.end = dateutil.parser.isoparse(input['end'])
 
     if 'prototype_id' in input:
         if not input['prototype_id']:

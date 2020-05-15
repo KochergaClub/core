@@ -1,5 +1,12 @@
 extend type Query {
-  events(search: String, filter: EventsFilterInput, before: String, after: String, first: Int, last: Int): EventsEventConnection! @staffonly
+  events(
+    search: String
+    filter: EventsFilterInput
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): EventsEventConnection! @staffonly
   event(event_id: ID!): EventsEvent @staffonly
 }
 
@@ -18,15 +25,15 @@ type EventsEventEdge {
 }
 
 type EventsEvent {
-  id: ID!   # uuid field, renamed for client
-  event_id: ID!  # deprecated
-
+  id: ID! # uuid field, renamed for client
+  event_id: ID! # deprecated
   title: String!
   description: String!
   summary: String!
   timing_description_override: String!
 
   location: String!
+  room: String! # normalized location
   zoom_link: String!
   zoom_meeting: ZoomMeeting
 
@@ -35,6 +42,7 @@ type EventsEvent {
   created: String!
   updated: String!
   published: Boolean!
+  creator: String
 
   event_type: String!
   pricing_type: String!
@@ -130,7 +138,14 @@ type TimepadCategory {
 }
 
 extend type Query {
-  publicEvents(from_date: String, project_id: ID, before: String, after: String, first: Int, last: Int): EventsPublicEventConnection!
+  publicEvents(
+    from_date: String
+    project_id: ID
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): EventsPublicEventConnection!
   publicEvent(event_id: ID!): EventsPublicEvent!
 }
 
@@ -167,7 +182,12 @@ type EventsPublicEvent {
 }
 
 extend type My {
-  tickets(before: String, after: String, first: Int, last: Int): MyEventsTicketConnection! @auth(authenticated: true)
+  tickets(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): MyEventsTicketConnection! @auth(authenticated: true)
 }
 
 type MyEventsTicket {
@@ -188,9 +208,13 @@ type MyEventsTicketConnection {
 }
 
 extend type Mutation {
-  myEventsTicketUnregister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
-  myEventsTicketRegister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
-  myEventsTicketRegisterAnon(input: MyEventsTicketRegisterAnonInput!): MyEventsTicket!
+  myEventsTicketUnregister(event_id: ID!): MyEventsTicket!
+    @auth(authenticated: true)
+  myEventsTicketRegister(event_id: ID!): MyEventsTicket!
+    @auth(authenticated: true)
+  myEventsTicketRegisterAnon(
+    input: MyEventsTicketRegisterAnonInput!
+  ): MyEventsTicket!
 }
 
 input MyEventsTicketRegisterAnonInput {
@@ -205,6 +229,8 @@ extend type Mutation {
 
 input EventUpdateInput {
   event_id: ID!
+  start: String
+  end: String
   published: Boolean
   visitors: String
   title: String
@@ -232,9 +258,11 @@ extend type Mutation {
 }
 
 input EventCreateInput {
-  title: String!
   start: String!
   end: String!
+  title: String!
+  description: String
+  location: String
 }
 
 type EventCreateResult {
@@ -251,7 +279,8 @@ input EventDeleteInput {
 }
 
 extend type Mutation {
-  eventSetEventType(input: EventSetEventTypeInput!): EventUpdateResult! @staffonly
+  eventSetEventType(input: EventSetEventTypeInput!): EventUpdateResult!
+    @staffonly
 }
 
 input EventSetEventTypeInput {
@@ -269,7 +298,8 @@ input EventSetRealmInput {
 }
 
 extend type Mutation {
-  eventSetPricingType(input: EventSetPricingTypeInput!): EventUpdateResult! @staffonly
+  eventSetPricingType(input: EventSetPricingTypeInput!): EventUpdateResult!
+    @staffonly
 }
 
 input EventSetPricingTypeInput {
@@ -287,7 +317,9 @@ input EventSetZoomLinkInput {
 }
 
 extend type Mutation {
-  eventPrototypeCreate(input: EventPrototypeCreateInput!): EventPrototypeCreateResult! @staffonly
+  eventPrototypeCreate(
+    input: EventPrototypeCreateInput!
+  ): EventPrototypeCreateResult! @staffonly
 }
 
 input EventPrototypeCreateInput {
@@ -311,7 +343,9 @@ type EventPrototypeCreateResult {
 }
 
 extend type Mutation {
-  eventPrototypeUpdate(input: EventPrototypeUpdateInput!): EventPrototypeUpdateResult! @staffonly
+  eventPrototypeUpdate(
+    input: EventPrototypeUpdateInput!
+  ): EventPrototypeUpdateResult! @staffonly
 }
 
 input EventPrototypeUpdateInput {
@@ -337,7 +371,9 @@ type EventPrototypeUpdateResult {
 }
 
 extend type Mutation {
-  eventPrototypeCancelDate(input: EventPrototypeCancelDateInput!): EventPrototypeCancelDateResult! @staffonly
+  eventPrototypeCancelDate(
+    input: EventPrototypeCancelDateInput!
+  ): EventPrototypeCancelDateResult! @staffonly
 }
 
 input EventPrototypeCancelDateInput {
@@ -350,7 +386,9 @@ type EventPrototypeCancelDateResult {
 }
 
 extend type Mutation {
-  eventPrototypeNewEvent(input: EventPrototypeNewEventInput!): EventPrototypeNewEventResult! @staffonly
+  eventPrototypeNewEvent(
+    input: EventPrototypeNewEventInput!
+  ): EventPrototypeNewEventResult! @staffonly
 }
 
 input EventPrototypeNewEventInput {
@@ -363,7 +401,9 @@ type EventPrototypeNewEventResult {
 }
 
 extend type Mutation {
-  eventPrototypeAddTag(input: EventPrototypeAddTagInput!): EventPrototypeAddTagResult! @staffonly
+  eventPrototypeAddTag(
+    input: EventPrototypeAddTagInput!
+  ): EventPrototypeAddTagResult! @staffonly
 }
 
 input EventPrototypeAddTagInput {
@@ -377,7 +417,9 @@ type EventPrototypeAddTagResult {
 }
 
 extend type Mutation {
-  eventPrototypeDeleteTag(input: EventPrototypeDeleteTagInput!): EventPrototypeDeleteTagResult! @staffonly
+  eventPrototypeDeleteTag(
+    input: EventPrototypeDeleteTagInput!
+  ): EventPrototypeDeleteTagResult! @staffonly
 }
 
 input EventPrototypeDeleteTagInput {
@@ -391,7 +433,9 @@ type EventPrototypeDeleteTagResult {
 }
 
 extend type Mutation {
-  eventPrototypeSetImage(input: EventPrototypeSetImageInput!): EventPrototypeSetImageResult! @staffonly
+  eventPrototypeSetImage(
+    input: EventPrototypeSetImageInput!
+  ): EventPrototypeSetImageResult! @staffonly
 }
 
 input EventPrototypeSetImageInput {
@@ -405,7 +449,8 @@ type EventPrototypeSetImageResult {
 }
 
 extend type Mutation {
-  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventUpdateResult! @staffonly
+  eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventUpdateResult!
+    @staffonly
 }
 
 input EventGenerateZoomLinkInput {
@@ -431,7 +476,8 @@ input EventDeleteTagInput {
 }
 
 extend type Mutation {
-  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): EventUpdateResult! @staffonly
+  eventSetImageFromUrl(input: EventSetImageFromUrlInput!): EventUpdateResult!
+    @staffonly
 }
 
 input EventSetImageFromUrlInput {
@@ -440,7 +486,9 @@ input EventSetImageFromUrlInput {
 }
 
 extend type Mutation {
-  eventVkAnnouncementSetImage(input: EventVkAnnouncementSetImageInput!): EventUpdateResult! @staffonly
+  eventVkAnnouncementSetImage(
+    input: EventVkAnnouncementSetImageInput!
+  ): EventUpdateResult! @staffonly
 }
 
 input EventVkAnnouncementSetImageInput {
@@ -464,7 +512,8 @@ input EventAnnounceInput {
 }
 
 extend type Mutation {
-  eventSetAnnounceUrl(input: EventSetAnnounceUrlInput!): EventUpdateResult! @staffonly
+  eventSetAnnounceUrl(input: EventSetAnnounceUrlInput!): EventUpdateResult!
+    @staffonly
 }
 
 input EventSetAnnounceUrlInput {
@@ -474,7 +523,9 @@ input EventSetAnnounceUrlInput {
 }
 
 extend type Mutation {
-  eventTimepadAnnouncementUpdate(input: EventTimepadAnnouncementUpdateInput!): EventUpdateResult! @staffonly
+  eventTimepadAnnouncementUpdate(
+    input: EventTimepadAnnouncementUpdateInput!
+  ): EventUpdateResult! @staffonly
 }
 
 input EventTimepadAnnouncementUpdateInput {
@@ -484,7 +535,9 @@ input EventTimepadAnnouncementUpdateInput {
 }
 
 extend type Mutation {
-  eventVkAnnouncementUpdate(input: EventVkAnnouncementUpdateInput!): EventUpdateResult! @staffonly
+  eventVkAnnouncementUpdate(
+    input: EventVkAnnouncementUpdateInput!
+  ): EventUpdateResult! @staffonly
 }
 
 input EventVkAnnouncementUpdateInput {
@@ -540,7 +593,9 @@ extend type Mutation {
 }
 
 extend type Mutation {
-  eventsWeeklyDigestPostMailchimp(input: EventsWeeklyDigestPostMailchimpInput): EventsWeeklyDigestUpdateResult! @staffonly
+  eventsWeeklyDigestPostMailchimp(
+    input: EventsWeeklyDigestPostMailchimpInput
+  ): EventsWeeklyDigestUpdateResult! @staffonly
 }
 
 input EventsWeeklyDigestPostMailchimpInput {

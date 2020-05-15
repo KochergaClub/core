@@ -1,25 +1,44 @@
-import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useState, useContext } from 'react';
 
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { Button, Modal, Row } from '@kocherga/frontkit';
 
-import { useCommonHotkeys, useDispatch } from '~/common/hooks';
+import { useCommonHotkeys } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
-import { deleteEvent, patchEvent } from '../features/events';
-import { closeUI, selectActiveEvent } from '../features/calendarUI';
+import { closeUI, CalendarUIContext } from '../reducers/calendarUI';
 
 import EventFields from './EventFields';
+import {
+  useTeamCalendarEventQuery,
+  TeamCalendarEventFragment,
+  useTeamCalendarUpdateEventMutation,
+  useTeamCalendarDeleteEventMutation,
+} from '../queries.generated';
+import { ApolloQueryResults } from '~/components';
 
-const EditEventModal: React.FC = () => {
-  const dispatch = useDispatch();
-  const event = useSelector(selectActiveEvent);
+interface LoadedProps {
+  event: TeamCalendarEventFragment;
+}
 
-  const [title, setTitle] = useState(event?.title || '');
-  const [description, setDescription] = useState(event?.description || '');
-  const [room, setRoom] = useState(event?.room || '');
+const EditEventModalLoaded: React.FC<LoadedProps> = ({ event }) => {
+  const { dispatch } = useContext(CalendarUIContext);
+
+  const [updateMutation] = useTeamCalendarUpdateEventMutation({
+    // TODO - update cache instead
+    refetchQueries: ['EventsInRange'],
+    awaitRefetchQueries: true,
+  });
+  const [deleteMutation] = useTeamCalendarDeleteEventMutation({
+    // TODO - update cache instead
+    refetchQueries: ['EventsInRange'],
+    awaitRefetchQueries: true,
+  });
+
+  const [title, setTitle] = useState(event.title);
+  const [description, setDescription] = useState(event.description);
+  const [room, setRoom] = useState(event.room);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -34,13 +53,14 @@ const EditEventModal: React.FC = () => {
     }
     setSaving(true);
 
-    await dispatch(
-      patchEvent(event.id, {
+    await updateMutation({
+      variables: {
+        id: event.id,
         title,
         description,
         location: room,
-      })
-    );
+      },
+    });
     dispatch(closeUI());
   }, [dispatch, event, saveDisabled, title, description, room]);
 
@@ -49,7 +69,7 @@ const EditEventModal: React.FC = () => {
       return;
     }
     setDeleting(true);
-    await dispatch(deleteEvent(event.id));
+    await deleteMutation({ variables: { id: event.id } });
     dispatch(closeUI());
   }, [dispatch, event]);
 
@@ -110,6 +130,30 @@ const EditEventModal: React.FC = () => {
           </Button>
         </Row>
       </Modal.Footer>
+    </Modal>
+  );
+};
+
+interface Props {
+  event_id: string;
+}
+
+const EditEventModal: React.FC<Props> = ({ event_id }) => {
+  const queryResults = useTeamCalendarEventQuery({
+    variables: { id: event_id },
+  });
+
+  return (
+    <Modal>
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { event } }) =>
+          event ? (
+            <EditEventModalLoaded event={event} />
+          ) : (
+            <div>Событие не найдено</div> // TODO - better formatting (though this error shouldn't happen very often)
+          )
+        }
+      </ApolloQueryResults>
     </Modal>
   );
 };

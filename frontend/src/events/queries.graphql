@@ -23,3 +23,98 @@ query UpcomingPublicEvents($today: String!) {
     }
   }
 }
+
+fragment TeamCalendarEvent on EventsEvent {
+  id
+  start
+  end
+  title
+  summary
+  description
+  event_type
+  room
+  creator
+  announcements {
+    vk {
+      link
+    }
+    fb {
+      link
+    }
+    timepad {
+      link
+    }
+  }
+}
+
+query EventsInRange($start: String!, $end: String!) {
+  events(after: $start, before: $end, first: 100) {
+    nodes {
+      ...TeamCalendarEvent
+    }
+  }
+}
+
+query TeamCalendarEvent($id: ID!) {
+  event(event_id: $id) {
+    ...TeamCalendarEvent
+  }
+}
+
+mutation ResizeEvent($id: ID!, $start: String!, $end: String!) {
+  result: eventUpdate(input: { event_id: $id, start: $start, end: $end }) {
+    event {
+      ...TeamCalendarEvent
+    }
+  }
+}
+
+mutation TeamCalendarCreateEvent(
+  $start: String!
+  $end: String!
+  $title: String!
+  $description: String!
+  $room: String!
+) {
+  result: eventCreate(
+    input: {
+      title: $title
+      start: $start
+      end: $end
+      description: $description
+      location: $room
+    }
+  ) {
+    ok
+    event {
+      ...TeamCalendarEvent
+    }
+  }
+}
+
+mutation TeamCalendarUpdateEvent(
+  $id: ID!
+  $title: String
+  $description: String
+  $location: String
+) {
+  result: eventUpdate(
+    input: {
+      event_id: $id
+      title: $title
+      description: $description
+      location: $location
+    }
+  ) {
+    ok
+    event {
+      ...TeamCalendarEvent
+    }
+  }
+}
+
+mutation TeamCalendarDeleteEvent($id: ID!) {
+  result: eventDelete(input: { event_id: $id }) {
+    ok
+  }
+}

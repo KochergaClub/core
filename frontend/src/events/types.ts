@@ -1,53 +1,55 @@
 import { parseISO } from 'date-fns';
 
-export type AnnouncementKey = 'vk' | 'fb' | 'timepad';
+import { TeamCalendarEventFragment } from './queries.generated';
 
-interface CommonEventProps {
-  title: string;
-  summary?: string;
-  description: string;
-  announcements: {
-    [key in AnnouncementKey]: {
-      link: string;
-    };
-  };
-  registration_type: 'native' | 'timepad';
-  pricing_type: 'anticafe' | 'free';
-}
-
-export interface Event extends CommonEventProps {
-  id: string;
-  room: string;
-  creator?: string;
-  start: Date;
-  end: Date;
-  type: 'public' | 'private' | 'unknown';
-}
-
-export type ServerEventPatch = Omit<Partial<ServerEvent>, 'id' | 'room'> & {
-  location?: string;
-};
-
-export interface ServerEvent extends CommonEventProps {
-  id: string;
-  room: string;
-  creator?: string;
-  start: string;
-  end: string;
-  type: 'public' | 'private' | 'unknown';
-}
-
-export interface NewEvent {
-  title: string;
-  description?: string;
-  location: string;
-  start: Date;
-  end: Date;
-  type?: 'public' | 'private' | 'unknown';
-}
+// export type AnnouncementKey = 'vk' | 'fb' | 'timepad';
+// 
+// interface CommonEventProps {
+//   title: string;
+//   summary?: string;
+//   description: string;
+//   announcements: {
+//     [key in AnnouncementKey]: {
+//       link: string;
+//     };
+//   };
+//   registration_type: 'native' | 'timepad';
+//   pricing_type: 'anticafe' | 'free';
+// }
+// 
+// export interface Event extends CommonEventProps {
+//   id: string;
+//   room: string;
+//   creator?: string;
+//   start: Date;
+//   end: Date;
+//   type: 'public' | 'private' | 'unknown';
+// }
+// 
+// export type ServerEventPatch = Omit<Partial<ServerEvent>, 'id' | 'room'> & {
+//   location?: string;
+// };
+// 
+// export interface ServerEvent extends CommonEventProps {
+//   id: string;
+//   room: string;
+//   creator?: string;
+//   start: string;
+//   end: string;
+//   type: 'public' | 'private' | 'unknown';
+// }
+// 
+// export interface NewEvent {
+//   title: string;
+//   description?: string;
+//   location: string;
+//   start: Date;
+//   end: Date;
+//   type?: 'public' | 'private' | 'unknown';
+// }
 
 export interface LocalEventWithMetadata {
-  event: Event;
+  event: TeamCalendarEventFragment;
   saving: boolean;
 }
 
@@ -65,10 +67,10 @@ export interface Feedback extends CreateFeedbackParams {
   id: number;
 }
 
-export const serverEventToEvent = (event: ServerEvent): Event => {
-  return {
-    ...event,
-    start: parseISO(event.start),
-    end: parseISO(event.end),
-  };
-};
+// export const serverEventToEvent = (event: ServerEvent): Event => {
+//   return {
+//     ...event,
+//     start: parseISO(event.start),
+//     end: parseISO(event.end),
+//   };
+// };

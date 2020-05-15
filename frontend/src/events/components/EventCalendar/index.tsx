@@ -1,27 +1,29 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useState } from 'react';
 
 import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addDays, parseISO } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
-import { useListeningWebSocket, useAPI, useDispatch } from '~/common/hooks';
+import { useListeningWebSocket, useDispatch } from '~/common/hooks';
+
+import UILayer from '../UILayer';
 
 import BigCalendarConfigured from './BigCalendarConfigured';
-import UILayer from '~/events/components/UILayer';
 import CalendarEvent from './CalendarEvent';
 
-import { LocalEventWithMetadata } from '~/events/types';
-
-import { getEventsInRange } from '~/events/api';
-
 import {
-  replaceEvents,
-  selectEventsWithMetadata,
-  patchEvent,
-} from '~/events/features/events';
-import { startNewUI, startViewUI } from '~/events/features/calendarUI';
+  useEventsInRangeQuery,
+  useResizeEventMutation,
+} from '../../queries.generated';
+
+import { LocalEventWithMetadata } from '../../types';
+import {
+  useCalendarUIReducer,
+  startNewUI,
+  startViewUI,
+  CalendarUIContext,
+} from '../../reducers/calendarUI';
 
 const startAccessor = (eventWithMetadata: LocalEventWithMetadata) =>
   utcToZonedTime(eventWithMetadata.event.start, timezone);
@@ -32,12 +34,14 @@ const endAccessor = (eventWithMetadata: LocalEventWithMetadata) =>
 const eventPropGetter = (eventWithMetadata: LocalEventWithMetadata) => {
   const classNames: string[] = [];
   const event = eventWithMetadata.event;
-  if (event.type === 'public') {
+  if (event.event_type === 'public') {
     classNames.push('rbc-kocherga-event-public');
   }
+
   if (eventWithMetadata.saving) {
     classNames.push('rbc-kocherga-event-saving');
   }
+
   if (event.description) {
     classNames.push('rbc-kocherga-event-has-description');
   }
@@ -52,29 +56,24 @@ interface Props {
 }
 
 const EventCalendar: NextPage<Props> = props => {
-  const dispatch = useDispatch();
+  const [resizeMutation] = useResizeEventMutation();
 
-  const api = useAPI();
+  const [uiState, uiDispatch] = useCalendarUIReducer();
 
   const [range, setRange] = useState(() => ({
     start: parseISO(props.range.start),
     end: parseISO(props.range.end),
   }));
 
-  const fetchEvents = useCallback(async () => {
-    const json = await getEventsInRange(api, {
+  const queryResults = useEventsInRangeQuery({
+    variables: {
       start: format(range.start, 'yyyy-MM-dd'),
       end: format(range.end, 'yyyy-MM-dd'),
-    });
+    },
+  });
 
-    dispatch(replaceEvents(json));
-  }, [api, dispatch, range]);
-
-  useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
-
-  useListeningWebSocket('ws/events/', fetchEvents);
+  // FIXME - replace with graphql subscription
+  // useListeningWebSocket('ws/events/', () => queryResults.refetch());
 
   const onRangeChange = (
     range:
@@ -121,16 +120,16 @@ const EventCalendar: NextPage<Props> = props => {
         end: zonedTimeToUtc(zonedEnd, timezone),
       };
 
-      dispatch(startNewUI({ start, end }));
+      uiDispatch(startNewUI({ start, end }));
     },
-    [dispatch]
+    [uiDispatch]
   );
 
   const startViewEvent = useCallback(
     (eventWithMetadata: LocalEventWithMetadata) => {
-      dispatch(startViewUI(eventWithMetadata.event.id));
+      uiDispatch(startViewUI(eventWithMetadata.event.id));
     },
-    [dispatch]
+    [uiDispatch]
   );
 
   const resizeEvent = useCallback(
@@ -149,24 +148,41 @@ const EventCalendar: NextPage<Props> = props => {
         end: zonedTimeToUtc(zonedEnd, timezone),
       };
 
-      await dispatch(
-        patchEvent(eventWithMetadata.event.id, {
+      await resizeMutation({
+        variables: {
+          id: eventWithMetadata.event.id,
           start: start.toISOString(),
           end: end.toISOString(),
-        })
-      );
+        },
+        optimisticResponse: {
+          __typename: 'Mutation' as const,
+          result: {
+            event: {
+              __typename: 'EventsEvent' as const,
+              ...eventWithMetadata.event,
+              start: start.toISOString(),
+              end: end.toISOString(),
+            },
+          },
+        },
+      });
     },
-    [dispatch]
+    [resizeMutation]
   );
 
   const getNow = useCallback(() => utcToZonedTime(new Date(), timezone), []);
 
-  const events = useSelector(selectEventsWithMetadata);
+  const eventsWithMetadata = (queryResults.data?.events.nodes || []).map(
+    event => ({
+      event,
+      saving: false, // FIXME
+    })
+  );
 
   return (
     <>
       <BigCalendarConfigured
-        events={events}
+        events={eventsWithMetadata}
         getNow={getNow}
         startAccessor={startAccessor}
         endAccessor={endAccessor}
@@ -180,7 +196,11 @@ const EventCalendar: NextPage<Props> = props => {
           event: CalendarEvent,
         }}
       />
-      <UILayer />
+      <CalendarUIContext.Provider
+        value={{ dispatch: uiDispatch, state: uiState }}
+      >
+        <UILayer />
+      </CalendarUIContext.Provider>
     </>
   );
 };
