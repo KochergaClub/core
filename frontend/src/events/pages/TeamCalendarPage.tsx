@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { format } from 'date-fns-tz';
 import { addDays, subDays, startOfWeek, endOfWeek } from 'date-fns';
 
-import { withApollo } from '~/apollo';
+import { withApollo, withStaff } from '~/apollo';
 import { NextPage } from '~/common/types';
 
 import { Page } from '~/components';
@@ -56,4 +56,4 @@ TeamCalendarPage.getInitialProps = async () => {
   };
 };
 
-export default withApollo(TeamCalendarPage);
+export default withApollo(withStaff(TeamCalendarPage));

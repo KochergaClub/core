@@ -4,7 +4,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
-import { useCommonHotkeys, useDispatch } from '~/common/hooks';
+import { useCommonHotkeys } from '~/common/hooks';
 import { timezone, formatDate } from '~/common/utils';
 
 import EventFields from './EventFields';

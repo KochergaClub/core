@@ -1,34 +1,32 @@
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useDispatch } from '~/common/hooks';
 
 import { Collection, ShapedTableView } from '~/components/collections';
-
-import { AsyncButtonWithConfirm } from '~/components';
-
 import { FormShape } from '~/components/forms/types';
 
-import {
-  selectEventFeedbacks,
-  deleteEventFeedback,
-  addEventFeedback,
-} from '~/events/features/eventPageFeedbacks';
-
-import { Feedback, CreateFeedbackParams } from '~/events/types';
-
 import shapes from '~/shapes';
+
+import { AsyncButtonWithConfirm } from '~/components';
+import {
+  TeamEventDetailsFragment,
+  TeamEventFeedbackFragment,
+  useEventFeedbackDeleteMutation,
+  useEventFeedbackCreateMutation,
+} from '~/events/queries.generated';
 
 const feedbackShape: FormShape = shapes.events.feedback.filter(
   f => f.name !== 'event_id' && f.name !== 'id'
 );
 
-const DeleteFeedback: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
-  const dispatch = useDispatch();
-
+const DeleteFeedback: React.FC<{ feedback: TeamEventFeedbackFragment }> = ({
+  feedback,
+}) => {
+  const [deleteMutation] = useEventFeedbackDeleteMutation({
+    refetchQueries: ['TeamEventDetails'],
+    awaitRefetchQueries: true,
+  });
   const deleteCb = useCallback(async () => {
-    await dispatch(deleteEventFeedback(feedback.id));
-  }, [dispatch, feedback.id]);
+    await deleteMutation({ variables: { id: feedback.id } });
+  }, [deleteMutation, feedback.id]);
 
   return (
     <AsyncButtonWithConfirm confirmText="Точно удалить?" act={deleteCb}>
@@ -37,19 +35,30 @@ const DeleteFeedback: React.FC<{ feedback: Feedback }> = ({ feedback }) => {
   );
 };
 
-const FeedbackCollection: React.FC = () => {
-  // FIXME - we store current event's feedbacks globally instead of separating them by event
-  const feedbacks = useSelector(selectEventFeedbacks);
-  const dispatch = useDispatch();
+interface Props {
+  event: TeamEventDetailsFragment;
+}
+
+const FeedbackCollection: React.FC<Props> = ({ event }) => {
+  const feedbacks = event.feedbacks;
+  const [createMutation] = useEventFeedbackCreateMutation({
+    refetchQueries: ['TeamEventDetails'],
+    awaitRefetchQueries: true,
+  });
 
   const add = useCallback(
-    async (values: CreateFeedbackParams) => {
-      await dispatch(addEventFeedback(values));
+    async (values: any) => {
+      await createMutation({
+        variables: {
+          ...values,
+          event_id: event.id,
+        },
+      });
     },
-    [dispatch]
+    [createMutation]
   );
 
-  const renderExtraColumn = (feedback: Feedback) => (
+  const renderExtraColumn = (feedback: TeamEventFeedbackFragment) => (
     <DeleteFeedback feedback={feedback} />
   );
 

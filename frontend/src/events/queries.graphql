@@ -118,3 +118,77 @@ mutation TeamCalendarDeleteEvent($id: ID!) {
     ok
   }
 }
+
+fragment TeamEventFeedback on EventsFeedback {
+  id
+  overall_score
+  recommend_score
+  content_score
+  conductor_score
+  source_friend
+  source_vk
+  source_fb
+  source_timepad
+  source_email
+  source_website
+  custom_source
+  comment
+}
+
+fragment TeamEventDetails on EventsEvent {
+  ...TeamCalendarEvent
+  feedbacks {
+    ...TeamEventFeedback
+  }
+}
+
+query TeamEventDetails($id: ID!) {
+  event(event_id: $id) {
+    ...TeamEventDetails
+  }
+}
+
+mutation EventFeedbackCreate(
+  $event_id: ID!
+  $overall_score: Int
+  $recommend_score: Int
+  $content_score: Int
+  $conductor_score: Int
+  $source_friend: Boolean!
+  $source_vk: Boolean!
+  $source_fb: Boolean!
+  $source_timepad: Boolean!
+  $source_email: Boolean!
+  $source_website: Boolean!
+  $custom_source: String!
+  $comment: String!
+) {
+  result: eventsFeedbackCreate(
+    input: {
+      event_id: $event_id
+      overall_score: $overall_score
+      recommend_score: $recommend_score
+      content_score: $content_score
+      conductor_score: $conductor_score
+      source_friend: $source_friend
+      source_vk: $source_vk
+      source_fb: $source_fb
+      source_timepad: $source_timepad
+      source_email: $source_email
+      source_website: $source_website
+      custom_source: $custom_source
+      comment: $comment
+    }
+  ) {
+    ok
+    feedback {
+      ...TeamEventFeedback
+    }
+  }
+}
+
+mutation EventFeedbackDelete($id: ID!) {
+  result: eventsFeedbackDelete(input: { id: $id }) {
+    ok
+  }
+}

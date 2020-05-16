@@ -1,54 +1,70 @@
-import { useSelector } from 'react-redux';
-
 import { A, Column } from '@kocherga/frontkit';
 
-import { withApollo, NextApolloPage } from '~/apollo';
+import { withApollo, NextApolloPage, withStaff } from '~/apollo';
 
 import { State } from '~/redux/store';
-import { Page, PaddedBlock } from '~/components';
-
-import { loadEvent, selectEvent } from '~/events/features/eventPage';
+import { Page, PaddedBlock, ApolloQueryResults } from '~/components';
 
 import EventInfo from '~/events/components/EventInfo';
 import FeedbackCollection from './FeedbackCollection';
 import TicketsCollection from './TicketsCollection';
+import { useTeamEventDetailsQuery } from '~/events/queries.generated';
 
-import { loadEventFeedbacks } from '~/events/features/eventPageFeedbacks';
+interface Props {
+  event_id: string;
+}
 
-const TeamEventPage: NextApolloPage = () => {
-  const event = useSelector((state: State) => selectEvent(state));
+const TeamEventPage: NextApolloPage<Props> = ({ event_id }) => {
+  const queryResults = useTeamEventDetailsQuery({
+    variables: { id: event_id },
+  });
 
   return (
-    <Page title={event.title} menu="team">
-      <Page.Title>{event.title}</Page.Title>
-      <Page.Main>
-        <PaddedBlock width="max">
-          <EventInfo />
-          <Column>
-            <A href={`/team/evenman/event/${event.id}`}>Открыть в evenman</A>
-            {event.type === 'public' && (
-              <A href={`/events/${event.id}`}>Открыть на сайте</A>
-            )}
-          </Column>
-        </PaddedBlock>
-        <PaddedBlock width="max">
-          <FeedbackCollection />
-        </PaddedBlock>
-        <PaddedBlock width="max">
-          <TicketsCollection event_id={event.id} />
-        </PaddedBlock>
-      </Page.Main>
+    <Page
+      title={
+        queryResults.data
+          ? queryResults.data.event?.title || 'Событие не найдено'
+          : 'Загружается...'
+      }
+      menu="team"
+    >
+      <ApolloQueryResults {...queryResults}>
+        {({ data: { event } }) => {
+          if (!event) {
+            return <Page.Title>СОБЫТИЕ НЕ НАЙДЕНО</Page.Title>;
+          }
+          return (
+            <>
+              <Page.Title>{event.title}</Page.Title>
+              <Page.Main>
+                <PaddedBlock width="max">
+                  <EventInfo event={event} />
+                  <Column>
+                    <A href={`/team/evenman/event/${event.id}`}>
+                      Открыть в evenman
+                    </A>
+                    {event.event_type === 'public' && (
+                      <A href={`/events/${event.id}`}>Открыть на сайте</A>
+                    )}
+                  </Column>
+                </PaddedBlock>
+                <PaddedBlock width="max">
+                  <FeedbackCollection event={event} />
+                </PaddedBlock>
+                <PaddedBlock width="max">
+                  <TicketsCollection event_id={event.id} />
+                </PaddedBlock>
+              </Page.Main>
+            </>
+          );
+        }}
+      </ApolloQueryResults>
     </Page>
   );
 };
 
 TeamEventPage.getInitialProps = async ({ store: { dispatch }, query }) => {
-  const uuid = query.uuid as string;
-
-  await dispatch(loadEvent(uuid));
-  await dispatch(loadEventFeedbacks());
-
-  return { event_id: uuid };
+  return { event_id: query.uuid as string };
 };
 
-export default withApollo(TeamEventPage);
+export default withApollo(withStaff(TeamEventPage));

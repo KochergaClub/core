@@ -22,6 +22,7 @@ export type GetEventTicketsQuery = (
   { __typename?: 'Query' }
   & { event: Types.Maybe<(
     { __typename?: 'EventsEvent' }
+    & Pick<Types.EventsEvent, 'id'>
     & { tickets: Array<(
       { __typename?: 'EventsTicket' }
       & EventsTicketFragment
@@ -41,6 +42,7 @@ export const EventsTicketFragmentDoc = gql`
 export const GetEventTicketsDocument = gql`
     query GetEventTickets($event_id: ID!) {
   event(event_id: $event_id) {
+    id
     tickets {
       ...EventsTicket
     }

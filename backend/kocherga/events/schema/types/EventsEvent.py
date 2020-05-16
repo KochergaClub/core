@@ -8,6 +8,7 @@ EventsEvent.set_alias('event_id', 'uuid')  # deprecated
 EventsEvent.set_alias('id', 'uuid')
 
 EventsEvent.related_field('tickets')
+EventsEvent.related_field('feedbacks')
 
 EventsEvent.image_field('image')
 

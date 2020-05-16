@@ -527,6 +527,7 @@ type EventsEvent {
 
   # all EventsEvent are staff-only, but this can change in the future
   tickets: [EventsTicket!]! @staffonly
+  feedbacks: [EventsFeedback!]! @staffonly
 }
 
 type EventsAnnouncements {
@@ -550,6 +551,24 @@ type EventsAnnouncementVk {
 type EventsAnnouncementFb {
   link: String!
   group: String!
+}
+
+type EventsFeedback {
+  id: ID!
+  overall_score: Int
+  recommend_score: Int
+  content_score: Int
+  conductor_score: Int
+
+  source_friend: Boolean!
+  source_vk: Boolean!
+  source_fb: Boolean!
+  source_timepad: Boolean!
+  source_email: Boolean!
+  source_website: Boolean!
+
+  custom_source: String
+  comment: String
 }
 
 type EventsTicket {
@@ -1069,6 +1088,45 @@ input EventsWeeklyDigestPostMailchimpInput {
 
 extend type Mutation {
   vkWikiScheduleUpdate: BasicResult @staffonly
+}
+
+extend type Mutation {
+  eventsFeedbackCreate(
+    input: EventsFeedbackCreateInput
+  ): EventsFeedbackCreateResult! @staffonly
+}
+
+input EventsFeedbackCreateInput {
+  event_id: ID!
+
+  overall_score: Int
+  recommend_score: Int
+  content_score: Int
+  conductor_score: Int
+
+  source_friend: Boolean!
+  source_vk: Boolean!
+  source_fb: Boolean!
+  source_timepad: Boolean!
+  source_email: Boolean!
+  source_website: Boolean!
+
+  custom_source: String
+  comment: String
+}
+
+type EventsFeedbackCreateResult {
+  ok: Boolean
+  feedback: EventsFeedback!
+}
+
+extend type Mutation {
+  eventsFeedbackDelete(input: EventsFeedbackDeleteInput): BasicResult!
+    @staffonly
+}
+
+input EventsFeedbackDeleteInput {
+  id: ID!
 }
 
 extend type Subscription {

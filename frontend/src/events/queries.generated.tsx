@@ -155,6 +155,75 @@ export type TeamCalendarDeleteEventMutation = (
   ) }
 );
 
+export type TeamEventFeedbackFragment = (
+  { __typename?: 'EventsFeedback' }
+  & Pick<Types.EventsFeedback, 'id' | 'overall_score' | 'recommend_score' | 'content_score' | 'conductor_score' | 'source_friend' | 'source_vk' | 'source_fb' | 'source_timepad' | 'source_email' | 'source_website' | 'custom_source' | 'comment'>
+);
+
+export type TeamEventDetailsFragment = (
+  { __typename?: 'EventsEvent' }
+  & { feedbacks: Array<(
+    { __typename?: 'EventsFeedback' }
+    & TeamEventFeedbackFragment
+  )> }
+  & TeamCalendarEventFragment
+);
+
+export type TeamEventDetailsQueryVariables = {
+  id: Types.Scalars['ID']
+};
+
+
+export type TeamEventDetailsQuery = (
+  { __typename?: 'Query' }
+  & { event: Types.Maybe<(
+    { __typename?: 'EventsEvent' }
+    & TeamEventDetailsFragment
+  )> }
+);
+
+export type EventFeedbackCreateMutationVariables = {
+  event_id: Types.Scalars['ID'],
+  overall_score?: Types.Maybe<Types.Scalars['Int']>,
+  recommend_score?: Types.Maybe<Types.Scalars['Int']>,
+  content_score?: Types.Maybe<Types.Scalars['Int']>,
+  conductor_score?: Types.Maybe<Types.Scalars['Int']>,
+  source_friend: Types.Scalars['Boolean'],
+  source_vk: Types.Scalars['Boolean'],
+  source_fb: Types.Scalars['Boolean'],
+  source_timepad: Types.Scalars['Boolean'],
+  source_email: Types.Scalars['Boolean'],
+  source_website: Types.Scalars['Boolean'],
+  custom_source: Types.Scalars['String'],
+  comment: Types.Scalars['String']
+};
+
+
+export type EventFeedbackCreateMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'EventsFeedbackCreateResult' }
+    & Pick<Types.EventsFeedbackCreateResult, 'ok'>
+    & { feedback: (
+      { __typename?: 'EventsFeedback' }
+      & TeamEventFeedbackFragment
+    ) }
+  ) }
+);
+
+export type EventFeedbackDeleteMutationVariables = {
+  id: Types.Scalars['ID']
+};
+
+
+export type EventFeedbackDeleteMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'BasicResult' }
+    & Pick<Types.BasicResult, 'ok'>
+  ) }
+);
+
 export const EventsPublicEvent_SummaryFragmentDoc = gql`
     fragment EventsPublicEvent_Summary on EventsPublicEvent {
   event_id
@@ -195,6 +264,32 @@ export const TeamCalendarEventFragmentDoc = gql`
   }
 }
     `;
+export const TeamEventFeedbackFragmentDoc = gql`
+    fragment TeamEventFeedback on EventsFeedback {
+  id
+  overall_score
+  recommend_score
+  content_score
+  conductor_score
+  source_friend
+  source_vk
+  source_fb
+  source_timepad
+  source_email
+  source_website
+  custom_source
+  comment
+}
+    `;
+export const TeamEventDetailsFragmentDoc = gql`
+    fragment TeamEventDetails on EventsEvent {
+  ...TeamCalendarEvent
+  feedbacks {
+    ...TeamEventFeedback
+  }
+}
+    ${TeamCalendarEventFragmentDoc}
+${TeamEventFeedbackFragmentDoc}`;
 export const UpcomingPublicEventsDocument = gql`
     query UpcomingPublicEvents($today: String!) {
   publicEvents(from_date: $today, first: 20) {
@@ -447,3 +542,115 @@ export function useTeamCalendarDeleteEventMutation(baseOptions?: ApolloReactHook
 export type TeamCalendarDeleteEventMutationHookResult = ReturnType<typeof useTeamCalendarDeleteEventMutation>;
 export type TeamCalendarDeleteEventMutationResult = ApolloReactCommon.MutationResult<TeamCalendarDeleteEventMutation>;
 export type TeamCalendarDeleteEventMutationOptions = ApolloReactCommon.BaseMutationOptions<TeamCalendarDeleteEventMutation, TeamCalendarDeleteEventMutationVariables>;
+export const TeamEventDetailsDocument = gql`
+    query TeamEventDetails($id: ID!) {
+  event(event_id: $id) {
+    ...TeamEventDetails
+  }
+}
+    ${TeamEventDetailsFragmentDoc}`;
+
+/**
+ * __useTeamEventDetailsQuery__
+ *
+ * To run a query within a React component, call `useTeamEventDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamEventDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamEventDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTeamEventDetailsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TeamEventDetailsQuery, TeamEventDetailsQueryVariables>) {
+        return ApolloReactHooks.useQuery<TeamEventDetailsQuery, TeamEventDetailsQueryVariables>(TeamEventDetailsDocument, baseOptions);
+      }
+export function useTeamEventDetailsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TeamEventDetailsQuery, TeamEventDetailsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TeamEventDetailsQuery, TeamEventDetailsQueryVariables>(TeamEventDetailsDocument, baseOptions);
+        }
+export type TeamEventDetailsQueryHookResult = ReturnType<typeof useTeamEventDetailsQuery>;
+export type TeamEventDetailsLazyQueryHookResult = ReturnType<typeof useTeamEventDetailsLazyQuery>;
+export type TeamEventDetailsQueryResult = ApolloReactCommon.QueryResult<TeamEventDetailsQuery, TeamEventDetailsQueryVariables>;
+export const EventFeedbackCreateDocument = gql`
+    mutation EventFeedbackCreate($event_id: ID!, $overall_score: Int, $recommend_score: Int, $content_score: Int, $conductor_score: Int, $source_friend: Boolean!, $source_vk: Boolean!, $source_fb: Boolean!, $source_timepad: Boolean!, $source_email: Boolean!, $source_website: Boolean!, $custom_source: String!, $comment: String!) {
+  result: eventsFeedbackCreate(input: {event_id: $event_id, overall_score: $overall_score, recommend_score: $recommend_score, content_score: $content_score, conductor_score: $conductor_score, source_friend: $source_friend, source_vk: $source_vk, source_fb: $source_fb, source_timepad: $source_timepad, source_email: $source_email, source_website: $source_website, custom_source: $custom_source, comment: $comment}) {
+    ok
+    feedback {
+      ...TeamEventFeedback
+    }
+  }
+}
+    ${TeamEventFeedbackFragmentDoc}`;
+export type EventFeedbackCreateMutationFn = ApolloReactCommon.MutationFunction<EventFeedbackCreateMutation, EventFeedbackCreateMutationVariables>;
+
+/**
+ * __useEventFeedbackCreateMutation__
+ *
+ * To run a mutation, you first call `useEventFeedbackCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEventFeedbackCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [eventFeedbackCreateMutation, { data, loading, error }] = useEventFeedbackCreateMutation({
+ *   variables: {
+ *      event_id: // value for 'event_id'
+ *      overall_score: // value for 'overall_score'
+ *      recommend_score: // value for 'recommend_score'
+ *      content_score: // value for 'content_score'
+ *      conductor_score: // value for 'conductor_score'
+ *      source_friend: // value for 'source_friend'
+ *      source_vk: // value for 'source_vk'
+ *      source_fb: // value for 'source_fb'
+ *      source_timepad: // value for 'source_timepad'
+ *      source_email: // value for 'source_email'
+ *      source_website: // value for 'source_website'
+ *      custom_source: // value for 'custom_source'
+ *      comment: // value for 'comment'
+ *   },
+ * });
+ */
+export function useEventFeedbackCreateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EventFeedbackCreateMutation, EventFeedbackCreateMutationVariables>) {
+        return ApolloReactHooks.useMutation<EventFeedbackCreateMutation, EventFeedbackCreateMutationVariables>(EventFeedbackCreateDocument, baseOptions);
+      }
+export type EventFeedbackCreateMutationHookResult = ReturnType<typeof useEventFeedbackCreateMutation>;
+export type EventFeedbackCreateMutationResult = ApolloReactCommon.MutationResult<EventFeedbackCreateMutation>;
+export type EventFeedbackCreateMutationOptions = ApolloReactCommon.BaseMutationOptions<EventFeedbackCreateMutation, EventFeedbackCreateMutationVariables>;
+export const EventFeedbackDeleteDocument = gql`
+    mutation EventFeedbackDelete($id: ID!) {
+  result: eventsFeedbackDelete(input: {id: $id}) {
+    ok
+  }
+}
+    `;
+export type EventFeedbackDeleteMutationFn = ApolloReactCommon.MutationFunction<EventFeedbackDeleteMutation, EventFeedbackDeleteMutationVariables>;
+
+/**
+ * __useEventFeedbackDeleteMutation__
+ *
+ * To run a mutation, you first call `useEventFeedbackDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEventFeedbackDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [eventFeedbackDeleteMutation, { data, loading, error }] = useEventFeedbackDeleteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEventFeedbackDeleteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EventFeedbackDeleteMutation, EventFeedbackDeleteMutationVariables>) {
+        return ApolloReactHooks.useMutation<EventFeedbackDeleteMutation, EventFeedbackDeleteMutationVariables>(EventFeedbackDeleteDocument, baseOptions);
+      }
+export type EventFeedbackDeleteMutationHookResult = ReturnType<typeof useEventFeedbackDeleteMutation>;
+export type EventFeedbackDeleteMutationResult = ApolloReactCommon.MutationResult<EventFeedbackDeleteMutation>;
+export type EventFeedbackDeleteMutationOptions = ApolloReactCommon.BaseMutationOptions<EventFeedbackDeleteMutation, EventFeedbackDeleteMutationVariables>;

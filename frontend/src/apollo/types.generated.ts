@@ -563,6 +563,7 @@ export type EventsEvent = {
   announcements: EventsAnnouncements,
   /** all EventsEvent are staff-only, but this can change in the future */
   tickets: Array<EventsTicket>,
+  feedbacks: Array<EventsFeedback>,
 };
 
 
@@ -580,6 +581,49 @@ export type EventsEventConnection = {
 export type EventsEventEdge = {
    __typename?: 'EventsEventEdge',
   node: EventsEvent,
+};
+
+export type EventsFeedback = {
+   __typename?: 'EventsFeedback',
+  id: Scalars['ID'],
+  overall_score?: Maybe<Scalars['Int']>,
+  recommend_score?: Maybe<Scalars['Int']>,
+  content_score?: Maybe<Scalars['Int']>,
+  conductor_score?: Maybe<Scalars['Int']>,
+  source_friend: Scalars['Boolean'],
+  source_vk: Scalars['Boolean'],
+  source_fb: Scalars['Boolean'],
+  source_timepad: Scalars['Boolean'],
+  source_email: Scalars['Boolean'],
+  source_website: Scalars['Boolean'],
+  custom_source?: Maybe<Scalars['String']>,
+  comment?: Maybe<Scalars['String']>,
+};
+
+export type EventsFeedbackCreateInput = {
+  event_id: Scalars['ID'],
+  overall_score?: Maybe<Scalars['Int']>,
+  recommend_score?: Maybe<Scalars['Int']>,
+  content_score?: Maybe<Scalars['Int']>,
+  conductor_score?: Maybe<Scalars['Int']>,
+  source_friend: Scalars['Boolean'],
+  source_vk: Scalars['Boolean'],
+  source_fb: Scalars['Boolean'],
+  source_timepad: Scalars['Boolean'],
+  source_email: Scalars['Boolean'],
+  source_website: Scalars['Boolean'],
+  custom_source?: Maybe<Scalars['String']>,
+  comment?: Maybe<Scalars['String']>,
+};
+
+export type EventsFeedbackCreateResult = {
+   __typename?: 'EventsFeedbackCreateResult',
+  ok?: Maybe<Scalars['Boolean']>,
+  feedback: EventsFeedback,
+};
+
+export type EventsFeedbackDeleteInput = {
+  id: Scalars['ID'],
 };
 
 export type EventsFilterInput = {
@@ -974,6 +1018,8 @@ export type Mutation = {
   eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult,
   eventsWeeklyDigestPostMailchimp: EventsWeeklyDigestUpdateResult,
   vkWikiScheduleUpdate?: Maybe<BasicResult>,
+  eventsFeedbackCreate: EventsFeedbackCreateResult,
+  eventsFeedbackDelete: BasicResult,
   staffGrantGooglePermissionsToMember?: Maybe<Scalars['Boolean']>,
   staffFireMember?: Maybe<Scalars['Boolean']>,
   staffUnfireMember?: Maybe<Scalars['Boolean']>,
@@ -1232,6 +1278,16 @@ export type MutationEventMoveArgs = {
 
 export type MutationEventsWeeklyDigestPostMailchimpArgs = {
   input?: Maybe<EventsWeeklyDigestPostMailchimpInput>
+};
+
+
+export type MutationEventsFeedbackCreateArgs = {
+  input?: Maybe<EventsFeedbackCreateInput>
+};
+
+
+export type MutationEventsFeedbackDeleteArgs = {
+  input?: Maybe<EventsFeedbackDeleteInput>
 };
 
 

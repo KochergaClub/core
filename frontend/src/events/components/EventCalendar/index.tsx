@@ -5,7 +5,7 @@ import { addDays, parseISO } from 'date-fns';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
-import { useListeningWebSocket, useDispatch } from '~/common/hooks';
+import { useListeningWebSocket } from '~/common/hooks';
 
 import UILayer from '../UILayer';
 
