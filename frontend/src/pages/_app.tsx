@@ -1,4 +1,3 @@
-import React from 'react';
 import { Provider } from 'react-redux';
 import cookie from 'cookie';
 
@@ -9,7 +8,7 @@ import getConfig from 'next/config';
 
 import NProgress from 'nprogress';
 
-import * as Sentry from '@sentry/node';
+import Sentry from '@sentry/node';
 
 import { configureStore, Store } from '~/redux/store';
 import { configureAPI, loadUser, cleanupAPIForClient } from '~/core/actions';

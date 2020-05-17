@@ -14,8 +14,3 @@ export const selectAPI = createSelector(
 );
 
 export const selectUser = (state: State) => state.core.user;
-
-export const selectIsStaff = createSelector(
-  selectUser,
-  user => user.is_staff || false
-);
