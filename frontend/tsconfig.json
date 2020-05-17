@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
@@ -20,15 +16,80 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "src/*"
-      ],
-      "next-redux-wrapper": [
-        "@types/next-redux-wrapper.d.ts"
-      ]
+      "~/*": ["src/*"],
+      "next-redux-wrapper": ["@types/next-redux-wrapper.d.ts"]
     },
     "skipLibCheck": false,
-    "strict": true
+    "strict": true,
+    "types": [
+      // this is an unfortunate consequence of https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311 clusterfuck
+      "accepts",
+      "autosize",
+      "babel__core",
+      "babel__generator",
+      "babel__template",
+      "babel__traverse",
+      "body-parser",
+      "color-name",
+      "connect",
+      "cookie",
+      "cookies",
+      "cors",
+      "debounce",
+      "eslint-visitor-keys",
+      "events",
+      "express",
+      "express-serve-static-core",
+      "fs-capacitor",
+      "glob",
+      "graphql-upload",
+      "hoist-non-react-statics",
+      "http-assert",
+      "http-proxy",
+      "is-glob",
+      "istanbul-lib-coverage",
+      "istanbul-lib-report",
+      "istanbul-reports",
+      "jest",
+      "jest-diff",
+      "jquery",
+      "json-schema",
+      "keygrip",
+      "koa",
+      "koa-compose",
+      "lodash",
+      "long",
+      "mime",
+      "minimatch",
+      "mkdirp",
+      "node",
+      "node-fetch",
+      "nprogress",
+      "parse-json",
+      "prop-types",
+      "q",
+      "range-parser",
+      "react",
+      "react-big-calendar",
+      "react-datepicker",
+      "react-dom",
+      "react-helmet",
+      "react-redux",
+      "react-select",
+      "react-toggle",
+      "react-transition-group",
+      "serve-static",
+      "set-cookie-parser",
+      "sizzle",
+      "stack-utils",
+      "styled-components",
+      "unist",
+      "valid-url",
+      "ws",
+      "yargs",
+      "yargs-parser",
+      "zen-observable"
+    ]
   },
   "exclude": [
     "node_modules",
@@ -38,10 +99,5 @@
     "dist",
     "src/server"
   ],
-  "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "server/**/*.ts"
-  ]
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "server/**/*.ts"]
 }
