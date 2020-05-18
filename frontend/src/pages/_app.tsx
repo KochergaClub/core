@@ -8,7 +8,7 @@ import getConfig from 'next/config';
 
 import NProgress from 'nprogress';
 
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 
 import { configureStore, Store } from '~/redux/store';
 import { configureAPI, loadUser, cleanupAPIForClient } from '~/core/actions';
