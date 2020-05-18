@@ -111,7 +111,7 @@ const Page: PageType = props => {
       <GlobalStyle />
       <NProgressStyle />
       {renderContent()}
-      {vkWidget && <VkMessagesWidget />}
+      {props.vkWidget && <VkMessagesWidget />}
     </div>
   );
 };
