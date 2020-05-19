@@ -5,24 +5,24 @@ import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type WagtailPageTypeQueryVariables = {
-  path?: Types.Maybe<Types.Scalars['String']>,
-  preview_token?: Types.Maybe<Types.Scalars['String']>
+  path?: Types.Maybe<Types.Scalars['String']>;
+  preview_token?: Types.Maybe<Types.Scalars['String']>;
 };
 
 
 export type WagtailPageTypeQuery = (
   { __typename?: 'Query' }
-  & { wagtailPage: Types.Maybe<{ __typename: 'ProjectPage' } | { __typename: 'RatioSectionIndexPage' } | { __typename: 'RatioSectionPage' } | { __typename: 'RatioNotebookPage' } | { __typename: 'ProjectIndexPage' } | { __typename: 'FreeFormPage' } | { __typename: 'BlogPostPage' } | { __typename: 'BlogIndexPage' } | { __typename: 'FaqPage' }> }
+  & { wagtailPage?: Types.Maybe<{ __typename: 'ProjectPage' } | { __typename: 'RatioSectionIndexPage' } | { __typename: 'RatioSectionPage' } | { __typename: 'RatioNotebookPage' } | { __typename: 'ProjectIndexPage' } | { __typename: 'FreeFormPage' } | { __typename: 'BlogPostPage' } | { __typename: 'BlogIndexPage' } | { __typename: 'FaqPage' }> }
 );
 
 export type TildaPageQueryVariables = {
-  path: Types.Scalars['String']
+  path: Types.Scalars['String'];
 };
 
 
 export type TildaPageQuery = (
   { __typename?: 'Query' }
-  & { tildaPage: Types.Maybe<(
+  & { tildaPage?: Types.Maybe<(
     { __typename?: 'TildaPage' }
     & Pick<Types.TildaPage, 'html_url'>
   )> }
@@ -41,7 +41,7 @@ export const WagtailPageTypeDocument = gql`
  * __useWagtailPageTypeQuery__
  *
  * To run a query within a React component, call `useWagtailPageTypeQuery` and pass it any options that fit your needs.
- * When your component renders, `useWagtailPageTypeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useWagtailPageTypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -75,7 +75,7 @@ export const TildaPageDocument = gql`
  * __useTildaPageQuery__
  *
  * To run a query within a React component, call `useTildaPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useTildaPageQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTildaPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

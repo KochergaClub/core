@@ -4,7 +4,6 @@ import { EventsPublicEvent_SummaryFragment } from '../../events/queries.generate
 import gql from 'graphql-tag';
 import { EventsPublicEvent_SummaryFragmentDoc } from '../../events/queries.generated';
 
-
 export type GreyBlockFragment = (
   { __typename?: 'GreyBlock' }
   & { grey_value: (

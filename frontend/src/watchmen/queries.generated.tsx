@@ -7,7 +7,7 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type WatchmanFragment = (
   { __typename?: 'WatchmenWatchman' }
   & Pick<Types.WatchmenWatchman, 'id' | 'priority'>
-  & { grade: Types.Maybe<(
+  & { grade?: Types.Maybe<(
     { __typename?: 'WatchmenGrade' }
     & Pick<Types.WatchmenGrade, 'id' | 'code'>
   )>, member: (
@@ -33,7 +33,7 @@ export type GradeFragment = (
 export type ShiftFragment = (
   { __typename?: 'WatchmenShift' }
   & Pick<Types.WatchmenShift, 'date' | 'shift' | 'is_night'>
-  & { watchman: Types.Maybe<(
+  & { watchman?: Types.Maybe<(
     { __typename?: 'WatchmenWatchman' }
     & WatchmanForPickerFragment
   )> }
@@ -73,8 +73,8 @@ export type WatchmenGradesListQuery = (
 );
 
 export type WatchmenShiftsQueryVariables = {
-  from_date: Types.Scalars['String'],
-  to_date: Types.Scalars['String']
+  from_date: Types.Scalars['String'];
+  to_date: Types.Scalars['String'];
 };
 
 
@@ -87,7 +87,7 @@ export type WatchmenShiftsQuery = (
 );
 
 export type WatchmenSetWatchmanPriorityMutationVariables = {
-  params: Types.WatchmenSetWatchmanPriorityInput
+  params: Types.WatchmenSetWatchmanPriorityInput;
 };
 
 
@@ -97,7 +97,7 @@ export type WatchmenSetWatchmanPriorityMutation = (
 );
 
 export type WatchmenSetWatchmanGradeMutationVariables = {
-  params: Types.WatchmenSetWatchmanGradeInput
+  params: Types.WatchmenSetWatchmanGradeInput;
 };
 
 
@@ -107,7 +107,7 @@ export type WatchmenSetWatchmanGradeMutation = (
 );
 
 export type WatchmenCreateWatchmanMutationVariables = {
-  params: Types.WatchmenCreateWatchmanInput
+  params: Types.WatchmenCreateWatchmanInput;
 };
 
 
@@ -117,7 +117,7 @@ export type WatchmenCreateWatchmanMutation = (
 );
 
 export type WatchmenUpdateShiftMutationVariables = {
-  params: Types.WatchmenUpdateShiftInput
+  params: Types.WatchmenUpdateShiftInput;
 };
 
 
@@ -183,7 +183,7 @@ export const WatchmenWatchmenListDocument = gql`
  * __useWatchmenWatchmenListQuery__
  *
  * To run a query within a React component, call `useWatchmenWatchmenListQuery` and pass it any options that fit your needs.
- * When your component renders, `useWatchmenWatchmenListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useWatchmenWatchmenListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -215,7 +215,7 @@ export const WatchmenWatchmenListForPickerDocument = gql`
  * __useWatchmenWatchmenListForPickerQuery__
  *
  * To run a query within a React component, call `useWatchmenWatchmenListForPickerQuery` and pass it any options that fit your needs.
- * When your component renders, `useWatchmenWatchmenListForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useWatchmenWatchmenListForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -247,7 +247,7 @@ export const WatchmenGradesListDocument = gql`
  * __useWatchmenGradesListQuery__
  *
  * To run a query within a React component, call `useWatchmenGradesListQuery` and pass it any options that fit your needs.
- * When your component renders, `useWatchmenGradesListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useWatchmenGradesListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -279,7 +279,7 @@ export const WatchmenShiftsDocument = gql`
  * __useWatchmenShiftsQuery__
  *
  * To run a query within a React component, call `useWatchmenShiftsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWatchmenShiftsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useWatchmenShiftsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

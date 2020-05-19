@@ -19,8 +19,8 @@ export type CurrentUserQuery = (
 );
 
 export type LoginMutationVariables = {
-  email: Types.Scalars['String'],
-  password: Types.Scalars['String']
+  email: Types.Scalars['String'];
+  password: Types.Scalars['String'];
 };
 
 
@@ -29,7 +29,7 @@ export type LoginMutation = (
   & { result: (
     { __typename?: 'AuthLoginResult' }
     & Pick<Types.AuthLoginResult, 'error'>
-    & { user: Types.Maybe<(
+    & { user?: Types.Maybe<(
       { __typename?: 'AuthCurrentUser' }
       & Pick<Types.AuthCurrentUser, 'is_authenticated'>
     )> }
@@ -37,7 +37,7 @@ export type LoginMutation = (
 );
 
 export type TokenLoginMutationVariables = {
-  token: Types.Scalars['String']
+  token: Types.Scalars['String'];
 };
 
 
@@ -46,7 +46,7 @@ export type TokenLoginMutation = (
   & { result: (
     { __typename?: 'AuthLoginResult' }
     & Pick<Types.AuthLoginResult, 'error'>
-    & { user: Types.Maybe<(
+    & { user?: Types.Maybe<(
       { __typename?: 'AuthCurrentUser' }
       & Pick<Types.AuthCurrentUser, 'is_authenticated'>
     )> }
@@ -54,8 +54,8 @@ export type TokenLoginMutation = (
 );
 
 export type SendMagicLinkMutationVariables = {
-  email: Types.Scalars['String'],
-  next?: Types.Maybe<Types.Scalars['String']>
+  email: Types.Scalars['String'];
+  next?: Types.Maybe<Types.Scalars['String']>;
 };
 
 
@@ -85,7 +85,7 @@ export const CurrentUserDocument = gql`
  * __useCurrentUserQuery__
  *
  * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

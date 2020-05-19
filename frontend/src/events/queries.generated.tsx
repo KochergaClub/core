@@ -7,17 +7,17 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type EventsPublicEvent_SummaryFragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'summary' | 'start'>
-  & { image: Types.Maybe<(
+  & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
-  )>, image_2x: Types.Maybe<(
+  )>, image_2x?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )> }
 );
 
 export type UpcomingPublicEventsQueryVariables = {
-  today: Types.Scalars['String']
+  today: Types.Scalars['String'];
 };
 
 
@@ -54,8 +54,8 @@ export type TeamCalendarEventFragment = (
 );
 
 export type EventsInRangeQueryVariables = {
-  start: Types.Scalars['String'],
-  end: Types.Scalars['String']
+  start: Types.Scalars['String'];
+  end: Types.Scalars['String'];
 };
 
 
@@ -71,22 +71,22 @@ export type EventsInRangeQuery = (
 );
 
 export type TeamCalendarEventQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
 export type TeamCalendarEventQuery = (
   { __typename?: 'Query' }
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & TeamCalendarEventFragment
   )> }
 );
 
 export type ResizeEventMutationVariables = {
-  id: Types.Scalars['ID'],
-  start: Types.Scalars['String'],
-  end: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  start: Types.Scalars['String'];
+  end: Types.Scalars['String'];
 };
 
 
@@ -102,11 +102,11 @@ export type ResizeEventMutation = (
 );
 
 export type TeamCalendarCreateEventMutationVariables = {
-  start: Types.Scalars['String'],
-  end: Types.Scalars['String'],
-  title: Types.Scalars['String'],
-  description: Types.Scalars['String'],
-  room: Types.Scalars['String']
+  start: Types.Scalars['String'];
+  end: Types.Scalars['String'];
+  title: Types.Scalars['String'];
+  description: Types.Scalars['String'];
+  room: Types.Scalars['String'];
 };
 
 
@@ -123,10 +123,10 @@ export type TeamCalendarCreateEventMutation = (
 );
 
 export type TeamCalendarUpdateEventMutationVariables = {
-  id: Types.Scalars['ID'],
-  title?: Types.Maybe<Types.Scalars['String']>,
-  description?: Types.Maybe<Types.Scalars['String']>,
-  location?: Types.Maybe<Types.Scalars['String']>
+  id: Types.Scalars['ID'];
+  title?: Types.Maybe<Types.Scalars['String']>;
+  description?: Types.Maybe<Types.Scalars['String']>;
+  location?: Types.Maybe<Types.Scalars['String']>;
 };
 
 
@@ -143,7 +143,7 @@ export type TeamCalendarUpdateEventMutation = (
 );
 
 export type TeamCalendarDeleteEventMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -170,32 +170,32 @@ export type TeamEventDetailsFragment = (
 );
 
 export type TeamEventDetailsQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
 export type TeamEventDetailsQuery = (
   { __typename?: 'Query' }
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & TeamEventDetailsFragment
   )> }
 );
 
 export type EventFeedbackCreateMutationVariables = {
-  event_id: Types.Scalars['ID'],
-  overall_score?: Types.Maybe<Types.Scalars['Int']>,
-  recommend_score?: Types.Maybe<Types.Scalars['Int']>,
-  content_score?: Types.Maybe<Types.Scalars['Int']>,
-  conductor_score?: Types.Maybe<Types.Scalars['Int']>,
-  source_friend: Types.Scalars['Boolean'],
-  source_vk: Types.Scalars['Boolean'],
-  source_fb: Types.Scalars['Boolean'],
-  source_timepad: Types.Scalars['Boolean'],
-  source_email: Types.Scalars['Boolean'],
-  source_website: Types.Scalars['Boolean'],
-  custom_source: Types.Scalars['String'],
-  comment: Types.Scalars['String']
+  event_id: Types.Scalars['ID'];
+  overall_score?: Types.Maybe<Types.Scalars['Int']>;
+  recommend_score?: Types.Maybe<Types.Scalars['Int']>;
+  content_score?: Types.Maybe<Types.Scalars['Int']>;
+  conductor_score?: Types.Maybe<Types.Scalars['Int']>;
+  source_friend: Types.Scalars['Boolean'];
+  source_vk: Types.Scalars['Boolean'];
+  source_fb: Types.Scalars['Boolean'];
+  source_timepad: Types.Scalars['Boolean'];
+  source_email: Types.Scalars['Boolean'];
+  source_website: Types.Scalars['Boolean'];
+  custom_source: Types.Scalars['String'];
+  comment: Types.Scalars['String'];
 };
 
 
@@ -212,7 +212,7 @@ export type EventFeedbackCreateMutation = (
 );
 
 export type EventFeedbackDeleteMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -307,7 +307,7 @@ export const UpcomingPublicEventsDocument = gql`
  * __useUpcomingPublicEventsQuery__
  *
  * To run a query within a React component, call `useUpcomingPublicEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUpcomingPublicEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useUpcomingPublicEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -342,7 +342,7 @@ export const EventsInRangeDocument = gql`
  * __useEventsInRangeQuery__
  *
  * To run a query within a React component, call `useEventsInRangeQuery` and pass it any options that fit your needs.
- * When your component renders, `useEventsInRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEventsInRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -376,7 +376,7 @@ export const TeamCalendarEventDocument = gql`
  * __useTeamCalendarEventQuery__
  *
  * To run a query within a React component, call `useTeamCalendarEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useTeamCalendarEventQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTeamCalendarEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -554,7 +554,7 @@ export const TeamEventDetailsDocument = gql`
  * __useTeamEventDetailsQuery__
  *
  * To run a query within a React component, call `useTeamEventDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTeamEventDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTeamEventDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

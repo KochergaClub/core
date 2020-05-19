@@ -1,39 +1,8 @@
-import gql from 'graphql-tag';
 import * as Types from '../apollo/types.generated';
 
-import { MailchimpSubscribeBlockFragment } from './blocks/fragments.generated';
-import { PhotoRibbonBlockFragment } from './blocks/fragments.generated';
-import { BigContactsBlockFragment } from './blocks/fragments.generated';
-import { EventsListBlockFragment } from './blocks/fragments.generated';
-import { ColumnsButtonsBlockFragment } from './blocks/fragments.generated';
-import { ColumnsMembershipsBlockFragment } from './blocks/fragments.generated';
-import { ColumnsBasicBlockFragment } from './blocks/fragments.generated';
-import { GreyBlockFragment } from './blocks/fragments.generated';
-import { BasicParagraphBlockFragment } from './blocks/fragments.generated';
-import { BasicLeadBlockFragment } from './blocks/fragments.generated';
-import { HeroFrontBlockFragment } from './blocks/fragments.generated';
-import { BasicLeadBlockFragmentDoc } from './blocks/fragments.generated';
-import { BasicParagraphBlockFragmentDoc } from './blocks/fragments.generated';
-import { GreyBlockFragmentDoc } from './blocks/fragments.generated';
-import { ColumnsBasicBlockFragmentDoc } from './blocks/fragments.generated';
-import { ColumnsMembershipsBlockFragmentDoc } from './blocks/fragments.generated';
-import { ColumnsButtonsBlockFragmentDoc } from './blocks/fragments.generated';
-import { EventsListBlockFragmentDoc } from './blocks/fragments.generated';
-import { BigContactsBlockFragmentDoc } from './blocks/fragments.generated';
-import { PhotoRibbonBlockFragmentDoc } from './blocks/fragments.generated';
-import { MailchimpSubscribeBlockFragmentDoc } from './blocks/fragments.generated';
-import { HeroFrontBlockFragmentDoc } from './blocks/fragments.generated';
-
-
-
-
-
-
-
-
-
-
-
+import { BasicLeadBlockFragment, BasicParagraphBlockFragment, GreyBlockFragment, ColumnsBasicBlockFragment, ColumnsMembershipsBlockFragment, ColumnsButtonsBlockFragment, EventsListBlockFragment, BigContactsBlockFragment, PhotoRibbonBlockFragment, MailchimpSubscribeBlockFragment, HeroFrontBlockFragment } from './blocks/fragments.generated';
+import gql from 'graphql-tag';
+import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsMembershipsBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc } from './blocks/fragments.generated';
 
 export type FreeFormPageFragment = (
   { __typename?: 'FreeFormPage' }

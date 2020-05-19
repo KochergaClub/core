@@ -64,7 +64,7 @@ export type EvenmanDigestToTelegramMutation = (
 );
 
 export type EvenmanDigestToMailchimpMutationVariables = {
-  text: Types.Scalars['String']
+  text: Types.Scalars['String'];
 };
 
 
@@ -85,7 +85,7 @@ export type EvenmanVkWikiScheduleUpdateMutationVariables = {};
 
 export type EvenmanVkWikiScheduleUpdateMutation = (
   { __typename?: 'Mutation' }
-  & { result: Types.Maybe<(
+  & { result?: Types.Maybe<(
     { __typename?: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   )> }
@@ -121,7 +121,7 @@ export const EvenmanWeeklyDigestDocument = gql`
  * __useEvenmanWeeklyDigestQuery__
  *
  * To run a query within a React component, call `useEvenmanWeeklyDigestQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanWeeklyDigestQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanWeeklyDigestQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

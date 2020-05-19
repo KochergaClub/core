@@ -5,7 +5,7 @@ import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type KkmRegisterCheckMutationVariables = {
-  params: Types.KkmRegisterCheckInput
+  params: Types.KkmRegisterCheckInput;
 };
 
 

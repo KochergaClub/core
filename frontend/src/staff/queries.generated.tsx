@@ -7,7 +7,7 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type StaffMemberFullFragment = (
   { __typename?: 'StaffMember' }
   & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'role' | 'color' | 'is_current' | 'vk'>
-  & { slack_user: Types.Maybe<(
+  & { slack_user?: Types.Maybe<(
     { __typename?: 'SlackUser' }
     & Pick<Types.SlackUser, 'slack_id' | 'image_url'>
   )>, user: (
@@ -48,7 +48,7 @@ export type StaffMembersForPickerQuery = (
 );
 
 export type StaffMemberQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -61,7 +61,7 @@ export type StaffMemberQuery = (
 );
 
 export type StaffGrantGooglePermissionsToMemberMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -71,7 +71,7 @@ export type StaffGrantGooglePermissionsToMemberMutation = (
 );
 
 export type StaffFireMemberMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -81,7 +81,7 @@ export type StaffFireMemberMutation = (
 );
 
 export type StaffUnfireMemberMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -132,7 +132,7 @@ export const StaffMembersDocument = gql`
  * __useStaffMembersQuery__
  *
  * To run a query within a React component, call `useStaffMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useStaffMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useStaffMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -164,7 +164,7 @@ export const StaffMembersForPickerDocument = gql`
  * __useStaffMembersForPickerQuery__
  *
  * To run a query within a React component, call `useStaffMembersForPickerQuery` and pass it any options that fit your needs.
- * When your component renders, `useStaffMembersForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useStaffMembersForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -196,7 +196,7 @@ export const StaffMemberDocument = gql`
  * __useStaffMemberQuery__
  *
  * To run a query within a React component, call `useStaffMemberQuery` and pass it any options that fit your needs.
- * When your component renders, `useStaffMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useStaffMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

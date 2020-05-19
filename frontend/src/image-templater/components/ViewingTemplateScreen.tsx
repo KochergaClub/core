@@ -119,7 +119,7 @@ const ViewingTemplateScreen: React.FC<Props> = ({ template }) => {
       <Column>
         <Formik
           initialValues={template2initialValues(template, router.query)}
-          onSubmit={() => null}
+          onSubmit={() => undefined}
           validate={validate}
         >
           {({ values, isValid }) => {

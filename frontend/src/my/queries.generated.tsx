@@ -21,7 +21,7 @@ export type EmailSubscriptionInterestFragment = (
 export type EmailSubscriptionFragment = (
   { __typename?: 'MyEmailSubscription' }
   & Pick<Types.MyEmailSubscription, 'status'>
-  & { interests: Types.Maybe<Array<(
+  & { interests?: Types.Maybe<Array<(
     { __typename?: 'MyEmailSubscriptionInterest' }
     & EmailSubscriptionInterestFragment
   )>> }
@@ -41,7 +41,7 @@ export type MyPageFragment = (
   & { user: (
     { __typename?: 'AuthCurrentUser' }
     & Pick<Types.AuthCurrentUser, 'email' | 'is_staff'>
-  ), membership: Types.Maybe<(
+  ), membership?: Types.Maybe<(
     { __typename?: 'MyCmCustomer' }
     & MembershipFragment
   )>, tickets: (
@@ -84,7 +84,7 @@ export type MyEmailUnsubscribeMutation = (
 );
 
 export type MyEmailSubscribeToInterestMutationVariables = {
-  interest_id: Types.Scalars['ID']
+  interest_id: Types.Scalars['ID'];
 };
 
 
@@ -94,7 +94,7 @@ export type MyEmailSubscribeToInterestMutation = (
 );
 
 export type MyEmailUnsubscribeFromInterestMutationVariables = {
-  interest_id: Types.Scalars['ID']
+  interest_id: Types.Scalars['ID'];
 };
 
 
@@ -104,7 +104,7 @@ export type MyEmailUnsubscribeFromInterestMutation = (
 );
 
 export type MyPrivacyModeSetMutationVariables = {
-  mode: Types.Scalars['String']
+  mode: Types.Scalars['String'];
 };
 
 
@@ -114,7 +114,7 @@ export type MyPrivacyModeSetMutation = (
 );
 
 export type MyTicketDeleteMutationVariables = {
-  event_id: Types.Scalars['ID']
+  event_id: Types.Scalars['ID'];
 };
 
 
@@ -138,8 +138,8 @@ export type LogoutMutation = (
 );
 
 export type SetPasswordMutationVariables = {
-  old_password?: Types.Maybe<Types.Scalars['String']>,
-  new_password: Types.Scalars['String']
+  old_password?: Types.Maybe<Types.Scalars['String']>;
+  new_password: Types.Scalars['String'];
 };
 
 
@@ -220,7 +220,7 @@ export const MyPageDocument = gql`
  * __useMyPageQuery__
  *
  * To run a query within a React component, call `useMyPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyPageQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useMyPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

@@ -7,7 +7,7 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type MaybeStaffUserFragment = (
   { __typename?: 'AuthUser' }
   & Pick<Types.AuthUser, 'id' | 'email'>
-  & { staff_member: Types.Maybe<(
+  & { staff_member?: Types.Maybe<(
     { __typename?: 'StaffMember' }
     & Pick<Types.StaffMember, 'id' | 'full_name'>
   )> }
@@ -32,8 +32,8 @@ export type AuthGroupsQuery = (
 );
 
 export type AuthAddUserToGroupMutationVariables = {
-  user_id: Types.Scalars['ID'],
-  group_id: Types.Scalars['ID']
+  user_id: Types.Scalars['ID'];
+  group_id: Types.Scalars['ID'];
 };
 
 
@@ -43,8 +43,8 @@ export type AuthAddUserToGroupMutation = (
 );
 
 export type AuthRemoveUserFromGroupMutationVariables = {
-  user_id: Types.Scalars['ID'],
-  group_id: Types.Scalars['ID']
+  user_id: Types.Scalars['ID'];
+  group_id: Types.Scalars['ID'];
 };
 
 
@@ -98,7 +98,7 @@ export const AuthGroupsDocument = gql`
  * __useAuthGroupsQuery__
  *
  * To run a query within a React component, call `useAuthGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useAuthGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useAuthGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -196,7 +196,7 @@ export const AuthPermissionsDocument = gql`
  * __useAuthPermissionsQuery__
  *
  * To run a query within a React component, call `useAuthPermissionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useAuthPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useAuthPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

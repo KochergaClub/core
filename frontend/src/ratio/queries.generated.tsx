@@ -6,7 +6,6 @@ import { PageInfoFragmentDoc } from '../apollo/queries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
-
 export type TrainingForPickerFragment = (
   { __typename?: 'RatioTraining' }
   & Pick<Types.RatioTraining, 'id' | 'slug' | 'name'>
@@ -34,7 +33,7 @@ export type TrainerFragment = (
 export type ActivityFragment = (
   { __typename?: 'RatioActivity' }
   & Pick<Types.RatioActivity, 'id' | 'time' | 'activity_type' | 'name' | 'location'>
-  & { trainer: Types.Maybe<(
+  & { trainer?: Types.Maybe<(
     { __typename?: 'RatioTrainer' }
     & TrainerFragment
   )> }
@@ -59,10 +58,10 @@ export type TrainingWithScheduleFragment = (
 );
 
 export type RatioTrainingsQueryVariables = {
-  before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>,
-  first?: Types.Maybe<Types.Scalars['Int']>,
-  last?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.Maybe<Types.Scalars['String']>;
+  first?: Types.Maybe<Types.Scalars['Int']>;
+  last?: Types.Maybe<Types.Scalars['Int']>;
 };
 
 
@@ -84,10 +83,10 @@ export type RatioTrainingsQuery = (
 );
 
 export type RatioTrainingsForPickerQueryVariables = {
-  before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>,
-  first?: Types.Maybe<Types.Scalars['Int']>,
-  last?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.Maybe<Types.Scalars['String']>;
+  first?: Types.Maybe<Types.Scalars['Int']>;
+  last?: Types.Maybe<Types.Scalars['Int']>;
 };
 
 
@@ -109,7 +108,7 @@ export type RatioTrainingsForPickerQuery = (
 );
 
 export type RatioTrainingBySlugQueryVariables = {
-  slug: Types.Scalars['String']
+  slug: Types.Scalars['String'];
 };
 
 
@@ -122,7 +121,7 @@ export type RatioTrainingBySlugQuery = (
 );
 
 export type RatioTrainingWithScheduleQueryVariables = {
-  slug: Types.Scalars['String']
+  slug: Types.Scalars['String'];
 };
 
 
@@ -146,8 +145,8 @@ export type RatioTrainersQuery = (
 );
 
 export type RatioTrainingEmailPrototypeQueryVariables = {
-  training_id: Types.Scalars['ID'],
-  type: Types.Scalars['String']
+  training_id: Types.Scalars['ID'];
+  type: Types.Scalars['String'];
 };
 
 
@@ -157,7 +156,7 @@ export type RatioTrainingEmailPrototypeQuery = (
 );
 
 export type RatioAddTrainingMutationVariables = {
-  params: Types.RatioAddTrainingInput
+  params: Types.RatioAddTrainingInput;
 };
 
 
@@ -170,7 +169,7 @@ export type RatioAddTrainingMutation = (
 );
 
 export type RatioAddTicketMutationVariables = {
-  params: Types.RatioAddTicketInput
+  params: Types.RatioAddTicketInput;
 };
 
 
@@ -183,7 +182,7 @@ export type RatioAddTicketMutation = (
 );
 
 export type RatioTicketFiscalizeMutationVariables = {
-  ticket_id: Types.Scalars['ID']
+  ticket_id: Types.Scalars['ID'];
 };
 
 
@@ -193,7 +192,7 @@ export type RatioTicketFiscalizeMutation = (
 );
 
 export type RatioTrainingAddDayMutationVariables = {
-  params: Types.RatioTrainingAddDayInput
+  params: Types.RatioTrainingAddDayInput;
 };
 
 
@@ -203,7 +202,7 @@ export type RatioTrainingAddDayMutation = (
 );
 
 export type RatioTrainingCopyScheduleFromMutationVariables = {
-  params: Types.RatioTrainingCopyScheduleFromInput
+  params: Types.RatioTrainingCopyScheduleFromInput;
 };
 
 
@@ -213,7 +212,7 @@ export type RatioTrainingCopyScheduleFromMutation = (
 );
 
 export type RatioTrainingSendEmailMutationVariables = {
-  input: Types.RatioTrainingSendEmailInput
+  input: Types.RatioTrainingSendEmailInput;
 };
 
 
@@ -226,7 +225,7 @@ export type RatioTrainingSendEmailMutation = (
 );
 
 export type RatioTrainingSyncParticipantsToMailchimpMutationVariables = {
-  training_id: Types.Scalars['ID']
+  training_id: Types.Scalars['ID'];
 };
 
 
@@ -326,7 +325,7 @@ ${TrainingFragmentDoc}`;
  * __useRatioTrainingsQuery__
  *
  * To run a query within a React component, call `useRatioTrainingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useRatioTrainingsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useRatioTrainingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -370,7 +369,7 @@ ${TrainingForPickerFragmentDoc}`;
  * __useRatioTrainingsForPickerQuery__
  *
  * To run a query within a React component, call `useRatioTrainingsForPickerQuery` and pass it any options that fit your needs.
- * When your component renders, `useRatioTrainingsForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useRatioTrainingsForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -406,7 +405,7 @@ export const RatioTrainingBySlugDocument = gql`
  * __useRatioTrainingBySlugQuery__
  *
  * To run a query within a React component, call `useRatioTrainingBySlugQuery` and pass it any options that fit your needs.
- * When your component renders, `useRatioTrainingBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useRatioTrainingBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -439,7 +438,7 @@ export const RatioTrainingWithScheduleDocument = gql`
  * __useRatioTrainingWithScheduleQuery__
  *
  * To run a query within a React component, call `useRatioTrainingWithScheduleQuery` and pass it any options that fit your needs.
- * When your component renders, `useRatioTrainingWithScheduleQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useRatioTrainingWithScheduleQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -472,7 +471,7 @@ export const RatioTrainersDocument = gql`
  * __useRatioTrainersQuery__
  *
  * To run a query within a React component, call `useRatioTrainersQuery` and pass it any options that fit your needs.
- * When your component renders, `useRatioTrainersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useRatioTrainersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -502,7 +501,7 @@ export const RatioTrainingEmailPrototypeDocument = gql`
  * __useRatioTrainingEmailPrototypeQuery__
  *
  * To run a query within a React component, call `useRatioTrainingEmailPrototypeQuery` and pass it any options that fit your needs.
- * When your component renders, `useRatioTrainingEmailPrototypeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useRatioTrainingEmailPrototypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

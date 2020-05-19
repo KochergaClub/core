@@ -23,8 +23,8 @@ export type EventsEvent_SummaryFragment = (
 );
 
 export type EvenmanEventsQueryVariables = {
-  start: Types.Scalars['String'],
-  end: Types.Scalars['String']
+  start: Types.Scalars['String'];
+  end: Types.Scalars['String'];
 };
 
 
@@ -61,19 +61,19 @@ export type EvenmanUnknownEventsQuery = (
 export type EvenmanEvent_DetailsFragment = (
   { __typename?: 'EventsEvent' }
   & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
-  & { zoom_meeting: Types.Maybe<(
+  & { zoom_meeting?: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
-  )>, image: Types.Maybe<(
+  )>, image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
-  )>, imageForVkBackground: Types.Maybe<(
+  )>, imageForVkBackground?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
-  )>, prototype: Types.Maybe<(
+  )>, prototype?: Types.Maybe<(
     { __typename?: 'EventsPrototype' }
     & Pick<Types.EventsPrototype, 'id'>
-  )>, project: Types.Maybe<(
+  )>, project?: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
@@ -87,7 +87,7 @@ export type EvenmanEvent_DetailsFragment = (
     ), vk: (
       { __typename?: 'EventsAnnouncementVk' }
       & Pick<Types.EventsAnnouncementVk, 'link' | 'group'>
-      & { image: Types.Maybe<(
+      & { image?: Types.Maybe<(
         { __typename?: 'WagtailImageRendition' }
         & Pick<Types.WagtailImageRendition, 'url'>
       )> }
@@ -99,21 +99,21 @@ export type EvenmanEvent_DetailsFragment = (
 );
 
 export type EvenmanEventQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
 export type EvenmanEventQuery = (
   { __typename?: 'Query' }
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & EvenmanEvent_DetailsFragment
   )> }
 );
 
 export type EvenmanSetEventTypeMutationVariables = {
-  id: Types.Scalars['ID'],
-  event_type: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  event_type: Types.Scalars['String'];
 };
 
 
@@ -130,8 +130,8 @@ export type EvenmanSetEventTypeMutation = (
 );
 
 export type EvenmanSetZoomLinkMutationVariables = {
-  id: Types.Scalars['ID'],
-  link: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  link: Types.Scalars['String'];
 };
 
 
@@ -148,7 +148,7 @@ export type EvenmanSetZoomLinkMutation = (
 );
 
 export type EvenmanGenerateZoomLinkMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -165,21 +165,21 @@ export type EvenmanGenerateZoomLinkMutation = (
 );
 
 export type EvenmanUpdateMutationVariables = {
-  id: Types.Scalars['ID'],
-  published?: Types.Maybe<Types.Scalars['Boolean']>,
-  visitors?: Types.Maybe<Types.Scalars['String']>,
-  title?: Types.Maybe<Types.Scalars['String']>,
-  description?: Types.Maybe<Types.Scalars['String']>,
-  summary?: Types.Maybe<Types.Scalars['String']>,
-  event_type?: Types.Maybe<Types.Scalars['String']>,
-  registration_type?: Types.Maybe<Types.Scalars['String']>,
-  pricing_type?: Types.Maybe<Types.Scalars['String']>,
-  realm?: Types.Maybe<Types.Scalars['String']>,
-  location?: Types.Maybe<Types.Scalars['String']>,
-  prototype_id?: Types.Maybe<Types.Scalars['ID']>,
-  project_slug?: Types.Maybe<Types.Scalars['String']>,
-  timing_description_override?: Types.Maybe<Types.Scalars['String']>,
-  image_id?: Types.Maybe<Types.Scalars['ID']>
+  id: Types.Scalars['ID'];
+  published?: Types.Maybe<Types.Scalars['Boolean']>;
+  visitors?: Types.Maybe<Types.Scalars['String']>;
+  title?: Types.Maybe<Types.Scalars['String']>;
+  description?: Types.Maybe<Types.Scalars['String']>;
+  summary?: Types.Maybe<Types.Scalars['String']>;
+  event_type?: Types.Maybe<Types.Scalars['String']>;
+  registration_type?: Types.Maybe<Types.Scalars['String']>;
+  pricing_type?: Types.Maybe<Types.Scalars['String']>;
+  realm?: Types.Maybe<Types.Scalars['String']>;
+  location?: Types.Maybe<Types.Scalars['String']>;
+  prototype_id?: Types.Maybe<Types.Scalars['ID']>;
+  project_slug?: Types.Maybe<Types.Scalars['String']>;
+  timing_description_override?: Types.Maybe<Types.Scalars['String']>;
+  image_id?: Types.Maybe<Types.Scalars['ID']>;
 };
 
 
@@ -196,7 +196,7 @@ export type EvenmanUpdateMutation = (
 );
 
 export type EvenmanEventDeleteMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -209,8 +209,8 @@ export type EvenmanEventDeleteMutation = (
 );
 
 export type EvenmanEventAddTagMutationVariables = {
-  id: Types.Scalars['ID'],
-  tag: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  tag: Types.Scalars['String'];
 };
 
 
@@ -227,8 +227,8 @@ export type EvenmanEventAddTagMutation = (
 );
 
 export type EvenmanEventDeleteTagMutationVariables = {
-  id: Types.Scalars['ID'],
-  tag: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  tag: Types.Scalars['String'];
 };
 
 
@@ -245,8 +245,8 @@ export type EvenmanEventDeleteTagMutation = (
 );
 
 export type EvenmanEventSetImageFromUrlMutationVariables = {
-  id: Types.Scalars['ID'],
-  url: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  url: Types.Scalars['String'];
 };
 
 
@@ -263,8 +263,8 @@ export type EvenmanEventSetImageFromUrlMutation = (
 );
 
 export type EvenmanVkAnnouncementSetImageMutationVariables = {
-  event_id: Types.Scalars['ID'],
-  image_id: Types.Scalars['ID']
+  event_id: Types.Scalars['ID'];
+  image_id: Types.Scalars['ID'];
 };
 
 
@@ -281,8 +281,8 @@ export type EvenmanVkAnnouncementSetImageMutation = (
 );
 
 export type EvenmanAnnounceMutationVariables = {
-  event_id: Types.Scalars['ID'],
-  target: Types.EventAnnounceTarget
+  event_id: Types.Scalars['ID'];
+  target: Types.EventAnnounceTarget;
 };
 
 
@@ -299,9 +299,9 @@ export type EvenmanAnnounceMutation = (
 );
 
 export type EvenmanSetAnnounceUrlMutationVariables = {
-  event_id: Types.Scalars['ID'],
-  target: Types.EventAnnounceTarget,
-  url: Types.Scalars['String']
+  event_id: Types.Scalars['ID'];
+  target: Types.EventAnnounceTarget;
+  url: Types.Scalars['String'];
 };
 
 
@@ -318,8 +318,8 @@ export type EvenmanSetAnnounceUrlMutation = (
 );
 
 export type EvenmanEventMoveMutationVariables = {
-  event_id: Types.Scalars['ID'],
-  start: Types.Scalars['String']
+  event_id: Types.Scalars['ID'];
+  start: Types.Scalars['String'];
 };
 
 
@@ -336,9 +336,9 @@ export type EvenmanEventMoveMutation = (
 );
 
 export type EvenmanEventCreateMutationVariables = {
-  title: Types.Scalars['String'],
-  start: Types.Scalars['String'],
-  end: Types.Scalars['String']
+  title: Types.Scalars['String'];
+  start: Types.Scalars['String'];
+  end: Types.Scalars['String'];
 };
 
 
@@ -474,7 +474,7 @@ export const EvenmanEventsDocument = gql`
  * __useEvenmanEventsQuery__
  *
  * To run a query within a React component, call `useEvenmanEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -510,7 +510,7 @@ export const EvenmanUnknownEventsDocument = gql`
  * __useEvenmanUnknownEventsQuery__
  *
  * To run a query within a React component, call `useEvenmanUnknownEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanUnknownEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanUnknownEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -542,7 +542,7 @@ export const EvenmanEventDocument = gql`
  * __useEvenmanEventQuery__
  *
  * To run a query within a React component, call `useEvenmanEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanEventQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1061,7 +1061,7 @@ export const OnEventsDocument = gql`
  * __useOnEventsSubscription__
  *
  * To run a query within a React component, call `useOnEventsSubscription` and pass it any options that fit your needs.
- * When your component renders, `useOnEventsSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useOnEventsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1090,7 +1090,7 @@ export const EvenmanPrototypesForPickerDocument = gql`
  * __useEvenmanPrototypesForPickerQuery__
  *
  * To run a query within a React component, call `useEvenmanPrototypesForPickerQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanPrototypesForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanPrototypesForPickerQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

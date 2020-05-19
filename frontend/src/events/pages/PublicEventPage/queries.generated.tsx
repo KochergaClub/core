@@ -24,10 +24,10 @@ export type MyEventsTicketFragment = (
 export type EventsPublicEventFragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title' | 'description' | 'image' | 'realm' | 'registration_type' | 'pricing_type'>
-  & { project: Types.Maybe<(
+  & { project?: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & ProjectPage_SummaryForEventFragment
-  )>, my_ticket: Types.Maybe<(
+  )>, my_ticket?: Types.Maybe<(
     { __typename?: 'MyEventsTicket' }
     & MyEventsTicketFragment
   )>, announcements: (
@@ -40,7 +40,7 @@ export type EventsPublicEventFragment = (
 );
 
 export type GetPublicEventQueryVariables = {
-  event_id: Types.Scalars['ID']
+  event_id: Types.Scalars['ID'];
 };
 
 
@@ -53,7 +53,7 @@ export type GetPublicEventQuery = (
 );
 
 export type MyEventsTicketRegisterAnonMutationVariables = {
-  input: Types.MyEventsTicketRegisterAnonInput
+  input: Types.MyEventsTicketRegisterAnonInput;
 };
 
 
@@ -66,7 +66,7 @@ export type MyEventsTicketRegisterAnonMutation = (
 );
 
 export type MyEventsTicketRegisterMutationVariables = {
-  event_id: Types.Scalars['ID']
+  event_id: Types.Scalars['ID'];
 };
 
 
@@ -79,7 +79,7 @@ export type MyEventsTicketRegisterMutation = (
 );
 
 export type MyEventsTicketUnregisterMutationVariables = {
-  event_id: Types.Scalars['ID']
+  event_id: Types.Scalars['ID'];
 };
 
 
@@ -148,7 +148,7 @@ export const GetPublicEventDocument = gql`
  * __useGetPublicEventQuery__
  *
  * To run a query within a React component, call `useGetPublicEventQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPublicEventQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetPublicEventQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

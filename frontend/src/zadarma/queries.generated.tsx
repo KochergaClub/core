@@ -10,9 +10,9 @@ export type CommonZadarmaPbxCallFragment = (
   & { calls: Array<(
     { __typename?: 'ZadarmaCall' }
     & Pick<Types.ZadarmaCall, 'call_id' | 'ts' | 'call_type' | 'destination' | 'disposition' | 'clid' | 'sip' | 'record' | 'watchman'>
-  )>, data: Types.Maybe<(
+  )>, data?: Types.Maybe<(
     { __typename?: 'ZadarmaData' }
-    & { staff_member: Types.Maybe<(
+    & { staff_member?: Types.Maybe<(
       { __typename?: 'StaffMember' }
       & Pick<Types.StaffMember, 'color' | 'short_name'>
     )> }
@@ -20,10 +20,10 @@ export type CommonZadarmaPbxCallFragment = (
 );
 
 export type ZadarmaPbxCallsQueryVariables = {
-  before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>,
-  first?: Types.Maybe<Types.Scalars['Int']>,
-  last?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.Maybe<Types.Scalars['String']>;
+  first?: Types.Maybe<Types.Scalars['Int']>;
+  last?: Types.Maybe<Types.Scalars['Int']>;
 };
 
 
@@ -45,7 +45,7 @@ export type ZadarmaPbxCallsQuery = (
 );
 
 export type ZadarmaPbxCallQueryVariables = {
-  pbx_call_id: Types.Scalars['ID']
+  pbx_call_id: Types.Scalars['ID'];
 };
 
 
@@ -58,8 +58,8 @@ export type ZadarmaPbxCallQuery = (
 );
 
 export type ZadarmaSetMemberForPbxCallMutationVariables = {
-  member_id: Types.Scalars['ID'],
-  pbx_call_id: Types.Scalars['ID']
+  member_id: Types.Scalars['ID'];
+  pbx_call_id: Types.Scalars['ID'];
 };
 
 
@@ -113,7 +113,7 @@ export const ZadarmaPbxCallsDocument = gql`
  * __useZadarmaPbxCallsQuery__
  *
  * To run a query within a React component, call `useZadarmaPbxCallsQuery` and pass it any options that fit your needs.
- * When your component renders, `useZadarmaPbxCallsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useZadarmaPbxCallsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -149,7 +149,7 @@ export const ZadarmaPbxCallDocument = gql`
  * __useZadarmaPbxCallQuery__
  *
  * To run a query within a React component, call `useZadarmaPbxCallQuery` and pass it any options that fit your needs.
- * When your component renders, `useZadarmaPbxCallQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useZadarmaPbxCallQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

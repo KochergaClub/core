@@ -7,7 +7,7 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type MastermindDatingCohortSummaryFragment = (
   { __typename?: 'MastermindDatingCohort' }
   & Pick<Types.MastermindDatingCohort, 'id'>
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & Pick<Types.EventsEvent, 'start'>
   )> }
@@ -39,7 +39,7 @@ export type MastermindDatingGroupFragment = (
 export type MastermindDatingCohortDetailsFragment = (
   { __typename?: 'MastermindDatingCohort' }
   & Pick<Types.MastermindDatingCohort, 'id' | 'leader_telegram_uid'>
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & Pick<Types.EventsEvent, 'event_id' | 'start' | 'title'>
   )>, participants: Array<(
@@ -68,7 +68,7 @@ export type MastermindDatingCohortsQuery = (
 );
 
 export type MastermindDatingCohortByIdQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -81,7 +81,7 @@ export type MastermindDatingCohortByIdQuery = (
 );
 
 export type MastermindDatingSearchEventsQueryVariables = {
-  search: Types.Scalars['String']
+  search: Types.Scalars['String'];
 };
 
 
@@ -111,7 +111,7 @@ export type MastermindDatingCreateCohortMutation = (
 );
 
 export type MastermindDatingPopulateCohortFromEventMutationVariables = {
-  cohort_id: Types.Scalars['ID']
+  cohort_id: Types.Scalars['ID'];
 };
 
 
@@ -127,7 +127,7 @@ export type MastermindDatingPopulateCohortFromEventMutation = (
 );
 
 export type MastermindDatingDeleteCohortMutationVariables = {
-  cohort_id: Types.Scalars['ID']
+  cohort_id: Types.Scalars['ID'];
 };
 
 
@@ -140,7 +140,7 @@ export type MastermindDatingDeleteCohortMutation = (
 );
 
 export type MastermindDatingSendInviteEmailsMutationVariables = {
-  cohort_id: Types.Scalars['ID']
+  cohort_id: Types.Scalars['ID'];
 };
 
 
@@ -156,7 +156,7 @@ export type MastermindDatingSendInviteEmailsMutation = (
 );
 
 export type MastermindDatingRunSolverMutationVariables = {
-  cohort_id: Types.Scalars['ID']
+  cohort_id: Types.Scalars['ID'];
 };
 
 
@@ -172,8 +172,8 @@ export type MastermindDatingRunSolverMutation = (
 );
 
 export type MastermindDatingSetEventForCohortMutationVariables = {
-  cohort_id: Types.Scalars['ID'],
-  event_id: Types.Scalars['String']
+  cohort_id: Types.Scalars['ID'];
+  event_id: Types.Scalars['String'];
 };
 
 
@@ -189,7 +189,7 @@ export type MastermindDatingSetEventForCohortMutation = (
 );
 
 export type MastermindDatingUnsetEventForCohortMutationVariables = {
-  cohort_id: Types.Scalars['ID']
+  cohort_id: Types.Scalars['ID'];
 };
 
 
@@ -205,7 +205,7 @@ export type MastermindDatingUnsetEventForCohortMutation = (
 );
 
 export type MastermindDatingActivateVotingMutationVariables = {
-  participant_id: Types.Scalars['ID']
+  participant_id: Types.Scalars['ID'];
 };
 
 
@@ -221,8 +221,8 @@ export type MastermindDatingActivateVotingMutation = (
 );
 
 export type MastermindDatingSetPresenceStatusMutationVariables = {
-  participant_id: Types.Scalars['ID'],
-  present: Types.Scalars['Boolean']
+  participant_id: Types.Scalars['ID'];
+  present: Types.Scalars['Boolean'];
 };
 
 
@@ -238,7 +238,7 @@ export type MastermindDatingSetPresenceStatusMutation = (
 );
 
 export type MastermindDatingCreateGroupMutationVariables = {
-  cohort_id: Types.Scalars['ID']
+  cohort_id: Types.Scalars['ID'];
 };
 
 
@@ -254,8 +254,8 @@ export type MastermindDatingCreateGroupMutation = (
 );
 
 export type MastermindDatingCreateParticipantMutationVariables = {
-  cohort_id: Types.Scalars['ID'],
-  email: Types.Scalars['String']
+  cohort_id: Types.Scalars['ID'];
+  email: Types.Scalars['String'];
 };
 
 
@@ -344,7 +344,7 @@ export const MastermindDatingCohortsDocument = gql`
  * __useMastermindDatingCohortsQuery__
  *
  * To run a query within a React component, call `useMastermindDatingCohortsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMastermindDatingCohortsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useMastermindDatingCohortsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -376,7 +376,7 @@ export const MastermindDatingCohortByIdDocument = gql`
  * __useMastermindDatingCohortByIdQuery__
  *
  * To run a query within a React component, call `useMastermindDatingCohortByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useMastermindDatingCohortByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useMastermindDatingCohortByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -411,7 +411,7 @@ export const MastermindDatingSearchEventsDocument = gql`
  * __useMastermindDatingSearchEventsQuery__
  *
  * To run a query within a React component, call `useMastermindDatingSearchEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useMastermindDatingSearchEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useMastermindDatingSearchEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

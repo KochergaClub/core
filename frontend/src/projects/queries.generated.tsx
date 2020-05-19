@@ -4,7 +4,6 @@ import { EventsPublicEvent_SummaryFragment } from '../events/queries.generated';
 import gql from 'graphql-tag';
 import { EventsPublicEvent_SummaryFragmentDoc } from '../events/queries.generated';
 
-
 export type ProjectPage_SummaryFragment = (
   { __typename?: 'ProjectPage' }
   & Pick<Types.ProjectPage, 'id' | 'title' | 'summary' | 'activity_summary' | 'is_active'>

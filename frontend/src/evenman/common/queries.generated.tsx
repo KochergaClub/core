@@ -57,7 +57,7 @@ export const EvenmanProjectsListDocument = gql`
  * __useEvenmanProjectsListQuery__
  *
  * To run a query within a React component, call `useEvenmanProjectsListQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanProjectsListQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanProjectsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -89,7 +89,7 @@ export const EvenmanVkGroupsDocument = gql`
  * __useEvenmanVkGroupsQuery__
  *
  * To run a query within a React component, call `useEvenmanVkGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanVkGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanVkGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -123,7 +123,7 @@ export const EvenmanTimepadCategoriesDocument = gql`
  * __useEvenmanTimepadCategoriesQuery__
  *
  * To run a query within a React component, call `useEvenmanTimepadCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanTimepadCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanTimepadCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

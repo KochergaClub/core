@@ -14,13 +14,13 @@ export type EventsTicketFragment = (
 );
 
 export type GetEventTicketsQueryVariables = {
-  event_id: Types.Scalars['ID']
+  event_id: Types.Scalars['ID'];
 };
 
 
 export type GetEventTicketsQuery = (
   { __typename?: 'Query' }
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & Pick<Types.EventsEvent, 'id'>
     & { tickets: Array<(
@@ -54,7 +54,7 @@ export const GetEventTicketsDocument = gql`
  * __useGetEventTicketsQuery__
  *
  * To run a query within a React component, call `useGetEventTicketsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useGetEventTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

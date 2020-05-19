@@ -31,7 +31,7 @@ export type ImageTemplatesQuery = (
 );
 
 export type ImageTemplateBySlugQueryVariables = {
-  slug: Types.Scalars['String']
+  slug: Types.Scalars['String'];
 };
 
 
@@ -71,7 +71,7 @@ export const ImageTemplatesDocument = gql`
  * __useImageTemplatesQuery__
  *
  * To run a query within a React component, call `useImageTemplatesQuery` and pass it any options that fit your needs.
- * When your component renders, `useImageTemplatesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useImageTemplatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -103,7 +103,7 @@ export const ImageTemplateBySlugDocument = gql`
  * __useImageTemplateBySlugQuery__
  *
  * To run a query within a React component, call `useImageTemplateBySlugQuery` and pass it any options that fit your needs.
- * When your component renders, `useImageTemplateBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useImageTemplateBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

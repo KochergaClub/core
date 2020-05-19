@@ -22,10 +22,10 @@ export type FaqPageFragment = (
   & { meta: (
     { __typename?: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'html_url'>
-  ), next_page: Types.Maybe<(
+  ), next_page?: Types.Maybe<(
     { __typename?: 'FaqPage' }
     & FaqPage_SummaryFragment
-  )>, prev_page: Types.Maybe<(
+  )>, prev_page?: Types.Maybe<(
     { __typename?: 'FaqPage' }
     & FaqPage_SummaryFragment
   )>, subpages: Array<(

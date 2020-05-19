@@ -1,27 +1,8 @@
-import gql from 'graphql-tag';
 import * as Types from '../../apollo/types.generated';
 
-import { RatioBriefingBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioExerciseOnelineBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioExerciseBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioInsetBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioParagraphBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioHeaderBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioMathBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioHeaderBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioParagraphBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioInsetBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioExerciseBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioExerciseOnelineBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioBriefingBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-import { RatioMathBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-
-
-
-
-
-
-
+import { RatioHeaderBlockFragment, RatioParagraphBlockFragment, RatioInsetBlockFragment, RatioExerciseBlockFragment, RatioExerciseOnelineBlockFragment, RatioBriefingBlockFragment, RatioMathBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
+import gql from 'graphql-tag';
+import { RatioHeaderBlockFragmentDoc, RatioParagraphBlockFragmentDoc, RatioInsetBlockFragmentDoc, RatioExerciseBlockFragmentDoc, RatioExerciseOnelineBlockFragmentDoc, RatioBriefingBlockFragmentDoc, RatioMathBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
 
 export type RatioSectionIndexPageFragment = (
   { __typename?: 'RatioSectionIndexPage' }

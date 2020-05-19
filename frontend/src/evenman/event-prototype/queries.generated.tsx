@@ -7,20 +7,20 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type EventsPrototypeFragment = (
   { __typename?: 'EventsPrototype' }
   & Pick<Types.EventsPrototype, 'id' | 'title' | 'summary' | 'description' | 'location' | 'timing_description_override' | 'active' | 'weekday' | 'hour' | 'minute' | 'length' | 'tags' | 'suggested_dates'>
-  & { vk_group: Types.Maybe<(
+  & { vk_group?: Types.Maybe<(
     { __typename?: 'VkGroup' }
     & Pick<Types.VkGroup, 'name'>
-  )>, timepad_category: Types.Maybe<(
+  )>, timepad_category?: Types.Maybe<(
     { __typename?: 'TimepadCategory' }
     & Pick<Types.TimepadCategory, 'code' | 'name'>
-  )>, image: Types.Maybe<(
+  )>, image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
     & { original_image: (
       { __typename?: 'WagtailImage' }
       & Pick<Types.WagtailImage, 'id'>
     ) }
-  )>, project: Types.Maybe<(
+  )>, project?: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
@@ -38,7 +38,7 @@ export type EventsPrototype_SummaryFragment = (
 );
 
 export type EvenmanPrototypesQueryVariables = {
-  suggested_until_ts: Types.Scalars['Int']
+  suggested_until_ts: Types.Scalars['Int'];
 };
 
 
@@ -51,7 +51,7 @@ export type EvenmanPrototypesQuery = (
 );
 
 export type EvenmanPrototypeQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -64,12 +64,12 @@ export type EvenmanPrototypeQuery = (
 );
 
 export type EvenmanPrototypeCreateMutationVariables = {
-  title: Types.Scalars['String'],
-  location?: Types.Maybe<Types.Scalars['String']>,
-  weekday: Types.Scalars['Int'],
-  hour: Types.Scalars['Int'],
-  minute: Types.Scalars['Int'],
-  length: Types.Scalars['Int']
+  title: Types.Scalars['String'];
+  location?: Types.Maybe<Types.Scalars['String']>;
+  weekday: Types.Scalars['Int'];
+  hour: Types.Scalars['Int'];
+  minute: Types.Scalars['Int'];
+  length: Types.Scalars['Int'];
 };
 
 
@@ -86,16 +86,16 @@ export type EvenmanPrototypeCreateMutation = (
 );
 
 export type EvenmanPrototypeUpdateMutationVariables = {
-  id: Types.Scalars['ID'],
-  active?: Types.Maybe<Types.Scalars['Boolean']>,
-  title?: Types.Maybe<Types.Scalars['String']>,
-  summary?: Types.Maybe<Types.Scalars['String']>,
-  description?: Types.Maybe<Types.Scalars['String']>,
-  location?: Types.Maybe<Types.Scalars['String']>,
-  timing_description_override?: Types.Maybe<Types.Scalars['String']>,
-  vk_group_name?: Types.Maybe<Types.Scalars['String']>,
-  timepad_category_code?: Types.Maybe<Types.Scalars['String']>,
-  project_slug?: Types.Maybe<Types.Scalars['String']>
+  id: Types.Scalars['ID'];
+  active?: Types.Maybe<Types.Scalars['Boolean']>;
+  title?: Types.Maybe<Types.Scalars['String']>;
+  summary?: Types.Maybe<Types.Scalars['String']>;
+  description?: Types.Maybe<Types.Scalars['String']>;
+  location?: Types.Maybe<Types.Scalars['String']>;
+  timing_description_override?: Types.Maybe<Types.Scalars['String']>;
+  vk_group_name?: Types.Maybe<Types.Scalars['String']>;
+  timepad_category_code?: Types.Maybe<Types.Scalars['String']>;
+  project_slug?: Types.Maybe<Types.Scalars['String']>;
 };
 
 
@@ -112,8 +112,8 @@ export type EvenmanPrototypeUpdateMutation = (
 );
 
 export type EvenmanPrototypeCancelDateMutationVariables = {
-  id: Types.Scalars['ID'],
-  date: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  date: Types.Scalars['String'];
 };
 
 
@@ -126,8 +126,8 @@ export type EvenmanPrototypeCancelDateMutation = (
 );
 
 export type EvenmanPrototypeNewEventMutationVariables = {
-  id: Types.Scalars['ID'],
-  ts: Types.Scalars['Int']
+  id: Types.Scalars['ID'];
+  ts: Types.Scalars['Int'];
 };
 
 
@@ -140,8 +140,8 @@ export type EvenmanPrototypeNewEventMutation = (
 );
 
 export type EvenmanPrototypeAddTagMutationVariables = {
-  id: Types.Scalars['ID'],
-  tag: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  tag: Types.Scalars['String'];
 };
 
 
@@ -158,8 +158,8 @@ export type EvenmanPrototypeAddTagMutation = (
 );
 
 export type EvenmanPrototypeDeleteTagMutationVariables = {
-  id: Types.Scalars['ID'],
-  tag: Types.Scalars['String']
+  id: Types.Scalars['ID'];
+  tag: Types.Scalars['String'];
 };
 
 
@@ -176,8 +176,8 @@ export type EvenmanPrototypeDeleteTagMutation = (
 );
 
 export type EvenmanPrototypeSetImageMutationVariables = {
-  id: Types.Scalars['ID'],
-  image_id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
+  image_id: Types.Scalars['ID'];
 };
 
 
@@ -258,7 +258,7 @@ export const EvenmanPrototypesDocument = gql`
  * __useEvenmanPrototypesQuery__
  *
  * To run a query within a React component, call `useEvenmanPrototypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanPrototypesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanPrototypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -291,7 +291,7 @@ export const EvenmanPrototypeDocument = gql`
  * __useEvenmanPrototypeQuery__
  *
  * To run a query within a React component, call `useEvenmanPrototypeQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanPrototypeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanPrototypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

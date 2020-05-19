@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { FragmentDefinitionNode } from 'graphql';
 
 import { KochergaApolloClient } from '~/apollo/types';
 
@@ -99,8 +100,10 @@ export const loadPageForComponent = async (
   // (FIXME - actualy, I believe we don't need that assumption anymore, though it's still a good convention)
 
   const fragmentDoc = props.component.fragment;
-  const fragmentName = fragmentDoc.definitions[0].name.value;
-  const objectName = fragmentDoc.definitions[0].typeCondition.name.value;
+  const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
+    .name.value;
+  const objectName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
+    .typeCondition.name.value;
 
   if (objectName !== props.typename) {
     throw new APIError(

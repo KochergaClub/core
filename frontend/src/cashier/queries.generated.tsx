@@ -10,7 +10,7 @@ export type PaymentFragment = (
   & { whom: (
     { __typename?: 'AuthUser' }
     & Pick<Types.AuthUser, 'id' | 'email'>
-    & { staff_member: Types.Maybe<(
+    & { staff_member?: Types.Maybe<(
       { __typename?: 'StaffMember' }
       & Pick<Types.StaffMember, 'id' | 'full_name'>
     )> }
@@ -18,10 +18,10 @@ export type PaymentFragment = (
 );
 
 export type CashierPaymentsQueryVariables = {
-  before?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>,
-  first?: Types.Maybe<Types.Scalars['Int']>,
-  last?: Types.Maybe<Types.Scalars['Int']>
+  before?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.Maybe<Types.Scalars['String']>;
+  first?: Types.Maybe<Types.Scalars['Int']>;
+  last?: Types.Maybe<Types.Scalars['Int']>;
 };
 
 
@@ -43,7 +43,7 @@ export type CashierPaymentsQuery = (
 );
 
 export type CashierCreatePaymentMutationVariables = {
-  params: Types.CashierCreatePaymentInput
+  params: Types.CashierCreatePaymentInput;
 };
 
 
@@ -53,7 +53,7 @@ export type CashierCreatePaymentMutation = (
 );
 
 export type CashierRedeemPaymentMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -102,7 +102,7 @@ export const CashierPaymentsDocument = gql`
  * __useCashierPaymentsQuery__
  *
  * To run a query within a React component, call `useCashierPaymentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCashierPaymentsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCashierPaymentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

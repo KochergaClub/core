@@ -6,7 +6,6 @@ import { PageInfoFragmentDoc } from '../apollo/queries.generated';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
-
 export type CustomerFragment = (
   { __typename?: 'Cm2Customer' }
   & Pick<Types.Cm2Customer, 'id' | 'first_name' | 'last_name' | 'card_id'>
@@ -15,18 +14,18 @@ export type CustomerFragment = (
 export type OrderWithCustomerFragment = (
   { __typename?: 'Cm2Order' }
   & Pick<Types.Cm2Order, 'id' | 'start' | 'end' | 'value'>
-  & { customer: Types.Maybe<(
+  & { customer?: Types.Maybe<(
     { __typename?: 'Cm2Customer' }
     & CustomerFragment
   )> }
 );
 
 export type Cm2OrdersQueryVariables = {
-  status?: Types.Maybe<Types.Scalars['String']>,
-  after?: Types.Maybe<Types.Scalars['String']>,
-  before?: Types.Maybe<Types.Scalars['String']>,
-  first?: Types.Maybe<Types.Scalars['Int']>,
-  last?: Types.Maybe<Types.Scalars['Int']>
+  status?: Types.Maybe<Types.Scalars['String']>;
+  after?: Types.Maybe<Types.Scalars['String']>;
+  before?: Types.Maybe<Types.Scalars['String']>;
+  first?: Types.Maybe<Types.Scalars['Int']>;
+  last?: Types.Maybe<Types.Scalars['Int']>;
 };
 
 
@@ -48,7 +47,7 @@ export type Cm2OrdersQuery = (
 );
 
 export type Cm2OrderQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -61,7 +60,7 @@ export type Cm2OrderQuery = (
 );
 
 export type Cm2CreateOrderMutationVariables = {
-  params: Types.Cm2CreateOrderInput
+  params: Types.Cm2CreateOrderInput;
 };
 
 
@@ -69,7 +68,7 @@ export type Cm2CreateOrderMutation = (
   { __typename?: 'Mutation' }
   & { cm2CreateOrder: (
     { __typename?: 'Cm2Order' }
-    & { customer: Types.Maybe<(
+    & { customer?: Types.Maybe<(
       { __typename?: 'Cm2Customer' }
       & Pick<Types.Cm2Customer, 'id'>
     )> }
@@ -77,7 +76,7 @@ export type Cm2CreateOrderMutation = (
 );
 
 export type Cm2SearchCustomersQueryVariables = {
-  search: Types.Scalars['String']
+  search: Types.Scalars['String'];
 };
 
 
@@ -96,10 +95,10 @@ export type Cm2SearchCustomersQuery = (
 );
 
 export type Cm2CustomersQueryVariables = {
-  after?: Types.Maybe<Types.Scalars['String']>,
-  before?: Types.Maybe<Types.Scalars['String']>,
-  first?: Types.Maybe<Types.Scalars['Int']>,
-  last?: Types.Maybe<Types.Scalars['Int']>
+  after?: Types.Maybe<Types.Scalars['String']>;
+  before?: Types.Maybe<Types.Scalars['String']>;
+  first?: Types.Maybe<Types.Scalars['Int']>;
+  last?: Types.Maybe<Types.Scalars['Int']>;
 };
 
 
@@ -121,7 +120,7 @@ export type Cm2CustomersQuery = (
 );
 
 export type Cm2CreateCustomerMutationVariables = {
-  params: Types.Cm2CreateCustomerInput
+  params: Types.Cm2CreateCustomerInput;
 };
 
 
@@ -134,7 +133,7 @@ export type Cm2CreateCustomerMutation = (
 );
 
 export type Cm2CloseOrderMutationVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -144,7 +143,7 @@ export type Cm2CloseOrderMutation = (
 );
 
 export type Cm2CustomerPageQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
@@ -205,7 +204,7 @@ ${OrderWithCustomerFragmentDoc}`;
  * __useCm2OrdersQuery__
  *
  * To run a query within a React component, call `useCm2OrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useCm2OrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCm2OrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -242,7 +241,7 @@ export const Cm2OrderDocument = gql`
  * __useCm2OrderQuery__
  *
  * To run a query within a React component, call `useCm2OrderQuery` and pass it any options that fit your needs.
- * When your component renders, `useCm2OrderQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCm2OrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -313,7 +312,7 @@ export const Cm2SearchCustomersDocument = gql`
  * __useCm2SearchCustomersQuery__
  *
  * To run a query within a React component, call `useCm2SearchCustomersQuery` and pass it any options that fit your needs.
- * When your component renders, `useCm2SearchCustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCm2SearchCustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -354,7 +353,7 @@ ${CustomerFragmentDoc}`;
  * __useCm2CustomersQuery__
  *
  * To run a query within a React component, call `useCm2CustomersQuery` and pass it any options that fit your needs.
- * When your component renders, `useCm2CustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCm2CustomersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -460,7 +459,7 @@ export const Cm2CustomerPageDocument = gql`
  * __useCm2CustomerPageQuery__
  *
  * To run a query within a React component, call `useCm2CustomerPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useCm2CustomerPageQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCm2CustomerPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

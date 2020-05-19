@@ -7,7 +7,7 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type EvenmanEvent_ForZoomAnalyticsFragment = (
   { __typename?: 'EventsEvent' }
   & Pick<Types.EventsEvent, 'id'>
-  & { zoom_meeting: Types.Maybe<(
+  & { zoom_meeting?: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id'>
     & { instances: Array<(
@@ -22,13 +22,13 @@ export type EvenmanEvent_ForZoomAnalyticsFragment = (
 );
 
 export type EvenmanEventForZoomAnalyticsQueryVariables = {
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID'];
 };
 
 
 export type EvenmanEventForZoomAnalyticsQuery = (
   { __typename?: 'Query' }
-  & { event: Types.Maybe<(
+  & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
     & EvenmanEvent_ForZoomAnalyticsFragment
   )> }
@@ -65,7 +65,7 @@ export const EvenmanEventForZoomAnalyticsDocument = gql`
  * __useEvenmanEventForZoomAnalyticsQuery__
  *
  * To run a query within a React component, call `useEvenmanEventForZoomAnalyticsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanEventForZoomAnalyticsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEvenmanEventForZoomAnalyticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

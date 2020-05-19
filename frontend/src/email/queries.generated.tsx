@@ -50,7 +50,7 @@ export type EmailMailchimpCategoriesQuery = (
 );
 
 export type EmailSubscribeChannelDeleteMutationVariables = {
-  slug: Types.Scalars['String']
+  slug: Types.Scalars['String'];
 };
 
 
@@ -60,8 +60,8 @@ export type EmailSubscribeChannelDeleteMutation = (
 );
 
 export type EmailSubscribeChannelAddEmailMutationVariables = {
-  slug: Types.Scalars['String'],
-  email: Types.Scalars['String']
+  slug: Types.Scalars['String'];
+  email: Types.Scalars['String'];
 };
 
 
@@ -71,7 +71,7 @@ export type EmailSubscribeChannelAddEmailMutation = (
 );
 
 export type EmailSubscribeChannelCreateMutationVariables = {
-  params: Types.EmailSubscribeChannelCreateInput
+  params: Types.EmailSubscribeChannelCreateInput;
 };
 
 
@@ -116,7 +116,7 @@ export const EmailSubscribeChannelsDocument = gql`
  * __useEmailSubscribeChannelsQuery__
  *
  * To run a query within a React component, call `useEmailSubscribeChannelsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEmailSubscribeChannelsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEmailSubscribeChannelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -148,7 +148,7 @@ export const EmailMailchimpCategoriesDocument = gql`
  * __useEmailMailchimpCategoriesQuery__
  *
  * To run a query within a React component, call `useEmailMailchimpCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useEmailMailchimpCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useEmailMailchimpCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
