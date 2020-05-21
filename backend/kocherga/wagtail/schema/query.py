@@ -1,7 +1,7 @@
 from ariadne import QueryType, InterfaceType, ObjectType
 
 from django.http import Http404
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Site
 from wagtail.api.v2.utils import page_models_from_string, BadRequestError, filter_page_type
 
 from ..utils import filter_queryset_by_page_permissions
@@ -39,8 +39,9 @@ def get_queryset(request, page_type='wagtailcore.Page'):
     queryset = queryset.live()
 
     # Filter by site
-    if request.site:
-        queryset = queryset.descendant_of(request.site.root_page, inclusive=True)
+    site = Site.find_for_request(request)
+    if site:
+        queryset = queryset.descendant_of(site.root_page, inclusive=True)
     else:
         # No sites configured
         queryset = queryset.none()
@@ -67,7 +68,8 @@ def resolve_wagtailPage(_, info, path=None, preview_token=None):
         path_components = [component for component in path.split('/') if component]
 
         try:
-            page, _, _ = info.context.site.root_page.specific.route(info.context, path_components)
+            site = Site.find_for_request(info.context)
+            page, _, _ = site.root_page.specific.route(info.context, path_components)
         except Http404:
             return
 
