@@ -1,0 +1,14 @@
+<mjml>
+  <mj-body background-color="white">
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="14px">Добрый день!</mj-text>
+        <mj-text font-size="14px">
+          Вы только что зарегистрировались на событие <a href="{{ event_link }}">{{event.title}}</a>.</mj-text>
+        <mj-text font-size="14px">Событие начнётся в {{humanized_dt}} по московскому времени.</mj-text>
+        <mj-button background-color="#4d8ccb" href="{{ event.zoom_link }}">Присоединиться к Zoom-созвону</mj-button>
+        <mj-text font-size="14px">До встречи!</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

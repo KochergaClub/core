@@ -3,7 +3,7 @@
 Вы только что зарегистрировались на событие «{{event.title}}».
 
 Страница события: {{event.link}}
-Дата и время: {{humanized_dt}}
+Событие начнётся в {{humanized_dt}} по московскому времени.
 {% if event.realm == 'offline' -%}
 Место проведения: {{address_text}}
 {%- elif event.realm == 'online' and event.zoom_link -%}

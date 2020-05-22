@@ -16,6 +16,7 @@ import channels.layers
 from asgiref.sync import async_to_sync
 
 import kocherga.dateutils
+from kocherga.email.tools import mjml2html
 from kocherga.dateutils import TZ
 from kocherga.django.managers import RelayQuerySetMixin
 
@@ -113,7 +114,7 @@ class Ticket(models.Model):
 
     def _common_email_vars(self):
         start_local = timezone.localtime(self.event.start)
-        weekday = kocherga.dateutils.weekday(start_local)
+        weekday = kocherga.dateutils.inflected_weekday(start_local)
         month = kocherga.dateutils.inflected_month(start_local)
         humanized_dt = f"{weekday}, {start_local.day} {month}, {start_local:%H:%M}\n"
 
@@ -131,7 +132,7 @@ class Ticket(models.Model):
         template_vars = self._common_email_vars()
 
         text_body = render_to_string('events/email/registered.txt', template_vars)
-        html_body = markdown.markdown(render_to_string('events/email/registered.md', template_vars))
+        html_body = mjml2html(render_to_string('events/email/registered.mjml', template_vars))
 
         send_mail(
             subject=f'Регистрация на событие: {self.event.title}',
@@ -177,7 +178,7 @@ class Ticket(models.Model):
         template_vars = self._common_email_vars()
 
         text_body = render_to_string('events/email/day_before_reminder.txt', template_vars)
-        html_body = markdown.markdown(render_to_string('events/email/day_before_reminder.md', template_vars))
+        html_body = mjml2html(render_to_string('events/email/day_before_reminder.mjml', template_vars))
 
         logger.info(f'Sending reminder to {self.user.email} about {self.event.id} ({self.event.title})')
         send_mail(
