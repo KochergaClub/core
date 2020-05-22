@@ -1,7 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
 
-import markdown
 import urllib.parse
 
 import django.core.exceptions
@@ -12,6 +11,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from kocherga.graphql.types import PrefixedMutationType
+from kocherga.email.tools import mjml2html
 
 from ..view_utils import get_magic_token
 
@@ -125,8 +125,8 @@ def create_mutations():
         })
         magic_link = info.context.build_absolute_uri('/login/magic-link' + '?' + params_str)
 
-        html_email_message = markdown.markdown(
-            render_to_string('auth/email/login.md', {'magic_link': magic_link})
+        html_email_message = mjml2html(
+            render_to_string('auth/email/login.mjml', {'magic_link': magic_link})
         )
         plain_email_message = render_to_string('auth/email/login.txt', {'magic_link': magic_link})
 
