@@ -89,3 +89,18 @@ update_types:
 
 restart_backend:
 	$(K) rollout restart deploy/core-django
+
+dry_migrations:
+	@test $(APP) || (echo "APP is not set"; exit 1)
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./manage.py makemigrations --dry-run $(APP)
+
+migrations:
+	@test $(NAME) || (echo "NAME is not set"; exit 1)
+	@test $(APP) || (echo "APP is not set"; exit 1)
+	RESULT=$$($(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./manage.py makemigrations -n $(NAME) $(APP)) && \
+	(for filename in $$(echo "$$RESULT" | fgrep '/'); do \
+	$(K) cp $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/$$filename ./backend/$$filename; \
+	done)
+
+migrate:
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./manage.py migrate
