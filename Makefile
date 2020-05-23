@@ -104,3 +104,6 @@ migrations:
 
 migrate:
 	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./manage.py migrate
+
+wagtail_init:
+	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./scripts/wagtail-init.py
