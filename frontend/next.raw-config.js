@@ -1,6 +1,11 @@
 const webpack = require('webpack');
 
-module.exports = {
+const withTM = require('next-transpile-modules')([
+  '@fullcalendar/common',
+  '@fullcalendar/core',
+]);
+
+module.exports = withTM({
   webpack: (config, options) => {
     config.resolve.alias['~'] = __dirname + '/src';
 
@@ -43,4 +48,4 @@ module.exports = {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,
   },
-};
+});

@@ -24,6 +24,20 @@ query UpcomingPublicEvents($today: String!) {
   }
 }
 
+fragment EventsPublicEvent_ForCalendar on EventsPublicEvent {
+  event_id
+  title
+  start
+}
+
+query PublicEventsForCalendar($from: String!, $to: String!) {
+  publicEvents(after: $from, before: $to, first: 100) {
+    nodes {
+      ...EventsPublicEvent_ForCalendar
+    }
+  }
+}
+
 fragment TeamCalendarEvent on EventsEvent {
   id
   start

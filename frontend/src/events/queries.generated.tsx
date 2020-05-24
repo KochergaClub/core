@@ -35,6 +35,28 @@ export type UpcomingPublicEventsQuery = (
   ) }
 );
 
+export type EventsPublicEvent_ForCalendarFragment = (
+  { __typename?: 'EventsPublicEvent' }
+  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'start'>
+);
+
+export type PublicEventsForCalendarQueryVariables = {
+  from: Types.Scalars['String'];
+  to: Types.Scalars['String'];
+};
+
+
+export type PublicEventsForCalendarQuery = (
+  { __typename?: 'Query' }
+  & { publicEvents: (
+    { __typename?: 'EventsPublicEventConnection' }
+    & { nodes: Array<(
+      { __typename?: 'EventsPublicEvent' }
+      & EventsPublicEvent_ForCalendarFragment
+    )> }
+  ) }
+);
+
 export type TeamCalendarEventFragment = (
   { __typename?: 'EventsEvent' }
   & Pick<Types.EventsEvent, 'id' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'event_type' | 'room' | 'creator'>
@@ -240,6 +262,13 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
   start
 }
     `;
+export const EventsPublicEvent_ForCalendarFragmentDoc = gql`
+    fragment EventsPublicEvent_ForCalendar on EventsPublicEvent {
+  event_id
+  title
+  start
+}
+    `;
 export const TeamCalendarEventFragmentDoc = gql`
     fragment TeamCalendarEvent on EventsEvent {
   id
@@ -328,6 +357,42 @@ export function useUpcomingPublicEventsLazyQuery(baseOptions?: ApolloReactHooks.
 export type UpcomingPublicEventsQueryHookResult = ReturnType<typeof useUpcomingPublicEventsQuery>;
 export type UpcomingPublicEventsLazyQueryHookResult = ReturnType<typeof useUpcomingPublicEventsLazyQuery>;
 export type UpcomingPublicEventsQueryResult = ApolloReactCommon.QueryResult<UpcomingPublicEventsQuery, UpcomingPublicEventsQueryVariables>;
+export const PublicEventsForCalendarDocument = gql`
+    query PublicEventsForCalendar($from: String!, $to: String!) {
+  publicEvents(after: $from, before: $to, first: 100) {
+    nodes {
+      ...EventsPublicEvent_ForCalendar
+    }
+  }
+}
+    ${EventsPublicEvent_ForCalendarFragmentDoc}`;
+
+/**
+ * __usePublicEventsForCalendarQuery__
+ *
+ * To run a query within a React component, call `usePublicEventsForCalendarQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePublicEventsForCalendarQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePublicEventsForCalendarQuery({
+ *   variables: {
+ *      from: // value for 'from'
+ *      to: // value for 'to'
+ *   },
+ * });
+ */
+export function usePublicEventsForCalendarQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PublicEventsForCalendarQuery, PublicEventsForCalendarQueryVariables>) {
+        return ApolloReactHooks.useQuery<PublicEventsForCalendarQuery, PublicEventsForCalendarQueryVariables>(PublicEventsForCalendarDocument, baseOptions);
+      }
+export function usePublicEventsForCalendarLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PublicEventsForCalendarQuery, PublicEventsForCalendarQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<PublicEventsForCalendarQuery, PublicEventsForCalendarQueryVariables>(PublicEventsForCalendarDocument, baseOptions);
+        }
+export type PublicEventsForCalendarQueryHookResult = ReturnType<typeof usePublicEventsForCalendarQuery>;
+export type PublicEventsForCalendarLazyQueryHookResult = ReturnType<typeof usePublicEventsForCalendarLazyQuery>;
+export type PublicEventsForCalendarQueryResult = ApolloReactCommon.QueryResult<PublicEventsForCalendarQuery, PublicEventsForCalendarQueryVariables>;
 export const EventsInRangeDocument = gql`
     query EventsInRange($start: String!, $end: String!) {
   events(after: $start, before: $end, first: 100) {

@@ -1,12 +1,17 @@
 CLUSTER ?= dev
 K = kubectl --context=$(CLUSTER)
 
+SUPERUSER_EMAIL ?= me@berekuk.ru
+
 ##### Dev environment #####
 dev:
 	kubectl --context=dev delete job core-django-migrate || true
 	skaffold dev
 
-dev_common: superuser wagtail_init restart_backend proxy
+wait_for_migrate:
+	$(K) logs -f $(shell $(K) get po -o name | fgrep core-django-migrate)
+
+dev_init: wait_for_migrate superuser wagtail_init restart_backend proxy
 	echo OK
 
 ##### Tests #####
@@ -24,8 +29,8 @@ eslint:
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx eslint src --ext ts,tsx
 
 test-js:
-	docker-compose -f docker/compose.dev.yml exec api npx tsc
-	docker-compose -f docker/compose.dev.yml exec api npx jest
+	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx tsc
+	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx jest
 
 test: test-types test-code test-js lint eslint
 
@@ -48,7 +53,7 @@ tail:
 	$(K) logs -f -l app=core-django
 
 superuser:
-	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py createsuperuser --email=me@berekuk.ru
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py createsuperuser --email=$(SUPERUSER_EMAIL)
 
 proxy:
 	$(K) port-forward svc/core-frontend 8000:80

@@ -19,7 +19,8 @@
       "~/*": ["src/*"],
       "next-redux-wrapper": ["@types/next-redux-wrapper.d.ts"]
     },
-    "skipLibCheck": false,
+    // this would be nice to have, but fullcalendar types are buggy, see https://github.com/fullcalendar/fullcalendar/issues/5446
+    "skipLibCheck": true,
     "strict": true,
     "types": [
       // this is an unfortunate consequence of https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311 clusterfuck

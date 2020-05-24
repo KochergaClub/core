@@ -1,3 +1,10 @@
+import dynamic from 'next/dynamic';
+
+const PublicEventsCalendar = dynamic(
+  () => import('../components/PublicEventsCalendar'),
+  { ssr: false }
+);
+
 import { A } from '@kocherga/frontkit';
 
 import { withApollo, NextApolloPage } from '~/apollo';
@@ -5,6 +12,8 @@ import { withApollo, NextApolloPage } from '~/apollo';
 import TL03 from '~/blocks/TL03';
 import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { Page } from '~/components';
+import Head from 'next/head';
+import { staticUrl } from '~/common/utils';
 
 const PublicEventIndexPage: NextApolloPage = () => {
   return (
@@ -22,6 +31,16 @@ const PublicEventIndexPage: NextApolloPage = () => {
           </>
         )}
       </TL03>
+
+      <Head>
+        <link rel="stylesheet" href={staticUrl('fullcalendar/core-main.css')} />
+        <link
+          rel="stylesheet"
+          href={staticUrl('fullcalendar/daygrid-main.css')}
+        />
+      </Head>
+      <PublicEventsCalendar />
+
       <UpcomingEventsListBlock />
     </Page>
   );
