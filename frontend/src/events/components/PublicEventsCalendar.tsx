@@ -8,6 +8,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { EventApi } from '@fullcalendar/core';
 
+import { isPast } from 'date-fns';
+
+import { colors } from '@kocherga/frontkit';
+
 import { PaddedBlock } from '~/components';
 import { formatDate } from '~/common/utils';
 import {
@@ -39,7 +43,14 @@ const PublicEventsCalendar = () => {
           to: formatDate(end, 'yyyy-MM-dd'),
         },
       });
-      return queryResults.data.publicEvents.nodes;
+      return queryResults.data.publicEvents.nodes.map(event => {
+        const past = isPast(new Date(event.start));
+        return {
+          ...event,
+          backgroundColor: past ? colors.primary[300] : colors.primary[500],
+          borderColor: past ? colors.primary[300] : colors.primary[500],
+        };
+      });
     },
     [apolloClient]
   );
@@ -53,7 +64,7 @@ const PublicEventsCalendar = () => {
     <PaddedBlock width="max">
       <Container>
         <FullCalendar
-          aspectRatio={1.8}
+          aspectRatio={2}
           defaultView="dayGridMonth"
           plugins={[dayGridPlugin]}
           fixedWeekCount={false}
