@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 import { useApolloClient } from '@apollo/react-hooks';
+import styled from 'styled-components';
+import Router from 'next/router';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import ruLocale from '@fullcalendar/core/locales/ru';
+import { EventApi } from '@fullcalendar/core';
 
 import { PaddedBlock } from '~/components';
 import { formatDate } from '~/common/utils';
@@ -12,11 +15,12 @@ import {
   PublicEventsForCalendarQuery,
   PublicEventsForCalendarQueryVariables,
 } from '../queries.generated';
-import styled from 'styled-components';
+import { publicEventRoute } from '../routes';
 
 const Container = styled.div`
   .fc-event {
     font-size: 12px;
+    cursor: pointer;
   }
 `;
 
@@ -25,7 +29,6 @@ const PublicEventsCalendar = () => {
 
   const events = useCallback(
     async ({ start, end }: { start: Date; end: Date }) => {
-      console.log({ start, end });
       const queryResults = await apolloClient.query<
         PublicEventsForCalendarQuery,
         PublicEventsForCalendarQueryVariables
@@ -41,6 +44,12 @@ const PublicEventsCalendar = () => {
     [apolloClient]
   );
 
+  const navigate = useCallback(async ({ event }: { event: EventApi }) => {
+    const route = publicEventRoute(event.extendedProps.event_id);
+    await Router.push(route.href, route.as);
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <PaddedBlock>
       <Container>
@@ -55,6 +64,7 @@ const PublicEventsCalendar = () => {
             minute: '2-digit',
             omitZeroMinute: false,
           }}
+          eventClick={navigate}
         />
       </Container>
     </PaddedBlock>
