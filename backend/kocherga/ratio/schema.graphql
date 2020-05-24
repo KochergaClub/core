@@ -1,8 +1,15 @@
 extend type Query {
-  ratioTrainings(before: String, after: String, first: Int, last: Int): RatioTrainingConnection! @auth(permission: "ratio.manage")
-  ratioTrainingBySlug(slug: String!): RatioTraining! @auth(permission: "ratio.manage")
+  ratioTrainings(
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): RatioTrainingConnection! @auth(permission: "ratio.manage")
+  ratioTrainingBySlug(slug: String!): RatioTraining!
+    @auth(permission: "ratio.manage")
   ratioTrainersAll: [RatioTrainer!]! @auth(permission: "ratio.manage")
-  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String! @auth(permission: "ratio.manage")
+  ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
+    @auth(permission: "ratio.manage")
 }
 
 type RatioActivity {
@@ -66,13 +73,22 @@ type RatioTrainingDay {
 }
 
 extend type Mutation {
-  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining! @auth(permission: "ratio.manage")
-  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket! @auth(permission: "ratio.manage")
-  ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean @auth(permission: "ratio.manage")
-  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean @auth(permission: "ratio.manage")
-  ratioTicketFiscalize(ticket_id: ID!): Boolean @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
-  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean @auth(permission: "ratio.manage")
-  ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
+  ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+    @auth(permission: "ratio.manage")
+  ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+    @auth(permission: "ratio.manage")
+  ratioTrainingCopyScheduleFrom(
+    params: RatioTrainingCopyScheduleFromInput!
+  ): Boolean @auth(permission: "ratio.manage")
+  ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean
+    @auth(permission: "ratio.manage")
+  ratioTicketFiscalize(ticket_id: ID!): Boolean
+    @auth(permissions: ["ratio.manage", "cashier.kkm_user"])
+  ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean
+    @auth(permission: "ratio.manage")
+  ratioTrainingSendEmail(
+    input: RatioTrainingSendEmailInput!
+  ): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
 }
 
 input RatioTrainingAddDayInput {
@@ -184,4 +200,18 @@ type RatioBriefingBlock implements WagtailBlock {
 type RatioMathBlock implements WagtailBlock {
   id: ID!
   value: String!
+}
+
+type RatioPresentationIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  presentations: [RatioPresentationPage!]!
+}
+
+type RatioPresentationPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+  source: String!
 }

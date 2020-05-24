@@ -26,11 +26,29 @@ fragment RatioNotebookPage on RatioNotebookPage {
   id
   title
   sections {
-    ...on RatioNotebookSectionBlock {
+    ... on RatioNotebookSectionBlock {
       id
       value {
         ...RatioSectionPage
       }
     }
   }
+}
+
+fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
+  id
+  title
+  presentations {
+    id
+    title
+    meta {
+      html_url
+    }
+  }
+}
+
+fragment RatioPresentationPage on RatioPresentationPage {
+  id
+  title
+  source
 }

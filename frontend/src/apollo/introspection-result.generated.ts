@@ -30,6 +30,12 @@
             "name": "RatioNotebookPage"
           },
           {
+            "name": "RatioPresentationIndexPage"
+          },
+          {
+            "name": "RatioPresentationPage"
+          },
+          {
             "name": "ProjectIndexPage"
           },
           {

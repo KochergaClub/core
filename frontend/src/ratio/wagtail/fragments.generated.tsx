@@ -95,6 +95,24 @@ export type RatioNotebookPageFragment = (
   )> }
 );
 
+export type RatioPresentationIndexPageFragment = (
+  { __typename?: 'RatioPresentationIndexPage' }
+  & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
+  & { presentations: Array<(
+    { __typename?: 'RatioPresentationPage' }
+    & Pick<Types.RatioPresentationPage, 'id' | 'title'>
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  )> }
+);
+
+export type RatioPresentationPageFragment = (
+  { __typename?: 'RatioPresentationPage' }
+  & Pick<Types.RatioPresentationPage, 'id' | 'title' | 'source'>
+);
+
 export const RatioSectionIndexPageFragmentDoc = gql`
     fragment RatioSectionIndexPage on RatioSectionIndexPage {
   id
@@ -141,3 +159,23 @@ export const RatioNotebookPageFragmentDoc = gql`
   }
 }
     ${RatioSectionPageFragmentDoc}`;
+export const RatioPresentationIndexPageFragmentDoc = gql`
+    fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
+  id
+  title
+  presentations {
+    id
+    title
+    meta {
+      html_url
+    }
+  }
+}
+    `;
+export const RatioPresentationPageFragmentDoc = gql`
+    fragment RatioPresentationPage on RatioPresentationPage {
+  id
+  title
+  source
+}
+    `;

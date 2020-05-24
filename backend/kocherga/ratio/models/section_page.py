@@ -14,6 +14,10 @@ class SectionIndexPage(HeadlessPreviewMixin, Page):
 
     graphql_type = 'RatioSectionIndexPage'
 
+    class Meta:
+        verbose_name = 'Список рацио-секций'
+        verbose_name_plural = 'Списки рацио-секций'
+
 
 class SectionPage(HeadlessPreviewMixin, Page):
     body = StreamField(section_blocks)
@@ -36,5 +40,5 @@ class SectionPage(HeadlessPreviewMixin, Page):
     subpage_types = []
 
     class Meta:
-        verbose_name = 'Секция'
-        verbose_name_plural = 'Секции'
+        verbose_name = 'Рацио-секция'
+        verbose_name_plural = 'Рацио-секции'

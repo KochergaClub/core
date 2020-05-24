@@ -16,7 +16,7 @@ from kocherga.pages.models import FrontPage, FolderPage
 from kocherga.faq.models import FAQPage
 from kocherga.projects.models import ProjectIndexPage
 from kocherga.blog.models import BlogIndexPage
-from kocherga.ratio.models import NotebookIndexPage, SectionIndexPage
+from kocherga.ratio.models import NotebookIndexPage, SectionIndexPage, PresentationIndexPage
 
 
 def main():
@@ -87,6 +87,12 @@ def main():
         instance=SectionIndexPage(
             slug="sections",
             title="Рацио-секции",
+        )
+    )
+    team_ratio_page.add_child(
+        instance=PresentationIndexPage(
+            slug="slides",
+            title="Рацио-слайды",
         )
     )
 

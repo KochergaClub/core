@@ -4,7 +4,10 @@ K = kubectl --context=$(CLUSTER)
 ##### Dev environment #####
 dev:
 	kubectl --context=dev delete job core-django-migrate || true
-	skaffold dev --port-forward
+	skaffold dev
+
+dev_common: superuser wagtail_init restart_backend proxy
+	echo OK
 
 ##### Tests #####
 test-types:

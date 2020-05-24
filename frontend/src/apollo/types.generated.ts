@@ -1837,6 +1837,22 @@ export type RatioParagraphBlock = WagtailBlock & {
   value: Scalars['String'];
 };
 
+export type RatioPresentationIndexPage = WagtailPage & {
+   __typename?: 'RatioPresentationIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  presentations: Array<RatioPresentationPage>;
+};
+
+export type RatioPresentationPage = WagtailPage & {
+   __typename?: 'RatioPresentationPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  source: Scalars['String'];
+};
+
 export type RatioSectionIndexPage = WagtailPage & {
    __typename?: 'RatioSectionIndexPage';
   id: Scalars['ID'];
