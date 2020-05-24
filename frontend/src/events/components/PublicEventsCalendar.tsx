@@ -44,16 +44,16 @@ const PublicEventsCalendar = () => {
     [apolloClient]
   );
 
-  const navigate = useCallback(async ({ event }: { event: EventApi }) => {
+  const navigate = useCallback(({ event }: { event: EventApi }) => {
     const route = publicEventRoute(event.extendedProps.event_id);
-    await Router.push(route.href, route.as);
-    window.scrollTo(0, 0);
+    Router.push(route.href, route.as).then(() => window.scrollTo(0, 0));
   }, []);
 
   return (
-    <PaddedBlock>
+    <PaddedBlock width="max">
       <Container>
         <FullCalendar
+          aspectRatio={1.8}
           defaultView="dayGridMonth"
           plugins={[dayGridPlugin]}
           fixedWeekCount={false}
