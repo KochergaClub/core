@@ -1817,6 +1817,13 @@ export type RatioMathBlock = WagtailBlock & {
   value: Scalars['String'];
 };
 
+export type RatioNotebookIndexPage = WagtailPage & {
+   __typename?: 'RatioNotebookIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+};
+
 export type RatioNotebookPage = WagtailPage & {
    __typename?: 'RatioNotebookPage';
   id: Scalars['ID'];

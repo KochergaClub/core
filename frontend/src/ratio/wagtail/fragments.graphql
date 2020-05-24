@@ -22,6 +22,11 @@ fragment RatioSectionPage on RatioSectionPage {
   }
 }
 
+fragment RatioNotebookIndexPage on RatioNotebookIndexPage {
+  id
+  title
+}
+
 fragment RatioNotebookPage on RatioNotebookPage {
   id
   title

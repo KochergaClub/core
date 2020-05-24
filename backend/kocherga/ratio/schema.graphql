@@ -145,6 +145,12 @@ type RatioSectionPage implements WagtailPage {
   body: [WagtailBlock!]!
 }
 
+type RatioNotebookIndexPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
 type RatioNotebookPage implements WagtailPage {
   id: ID!
   meta: WagtailPageMeta!

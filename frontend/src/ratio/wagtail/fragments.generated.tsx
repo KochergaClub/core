@@ -82,6 +82,11 @@ export type RatioSectionPageFragment = (
   )> }
 );
 
+export type RatioNotebookIndexPageFragment = (
+  { __typename?: 'RatioNotebookIndexPage' }
+  & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
+);
+
 export type RatioNotebookPageFragment = (
   { __typename?: 'RatioNotebookPage' }
   & Pick<Types.RatioNotebookPage, 'id' | 'title'>
@@ -115,6 +120,12 @@ export type RatioPresentationPageFragment = (
 
 export const RatioSectionIndexPageFragmentDoc = gql`
     fragment RatioSectionIndexPage on RatioSectionIndexPage {
+  id
+  title
+}
+    `;
+export const RatioNotebookIndexPageFragmentDoc = gql`
+    fragment RatioNotebookIndexPage on RatioNotebookIndexPage {
   id
   title
 }

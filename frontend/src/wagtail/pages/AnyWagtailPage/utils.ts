@@ -33,6 +33,8 @@ export const getComponentByTypename = (
       return RatioPages.SectionIndexPage;
     case 'RatioSectionPage':
       return RatioPages.SectionPage;
+    case 'RatioNotebookIndexPage':
+      return RatioPages.NotebookIndexPage;
     case 'RatioNotebookPage':
       return RatioPages.NotebookPage;
     case 'RatioPresentationIndexPage':

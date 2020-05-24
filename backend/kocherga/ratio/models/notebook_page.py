@@ -11,9 +11,10 @@ class NotebookIndexPage(HeadlessPreviewMixin, Page):
     parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.NotebookPage']
 
+    graphql_type = 'RatioNotebookIndexPage'
+
 
 class NotebookPage(HeadlessPreviewMixin, Page):
-    # training = ...
     sections = StreamField(notebook_blocks)
 
     content_panels = Page.content_panels + [

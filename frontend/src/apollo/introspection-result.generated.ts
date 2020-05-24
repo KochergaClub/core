@@ -27,6 +27,9 @@
             "name": "RatioSectionPage"
           },
           {
+            "name": "RatioNotebookIndexPage"
+          },
+          {
             "name": "RatioNotebookPage"
           },
           {

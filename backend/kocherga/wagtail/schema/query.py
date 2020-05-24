@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from ariadne import QueryType, InterfaceType, ObjectType
 
 from django.http import Http404
@@ -87,6 +90,7 @@ WagtailPage = InterfaceType("WagtailPage")
 @WagtailPage.type_resolver
 def resolve_WagtailPage_type(page, *_):
     page_class = page.specific_class
+    logger.info(page_class)
     if not hasattr(page_class, 'graphql_type'):
         raise Exception("Page model is missing `graphql_type` property")
     return page_class.graphql_type

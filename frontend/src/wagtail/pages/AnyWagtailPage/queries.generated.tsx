@@ -12,7 +12,7 @@ export type WagtailPageTypeQueryVariables = {
 
 export type WagtailPageTypeQuery = (
   { __typename?: 'Query' }
-  & { wagtailPage?: Types.Maybe<{ __typename: 'ProjectPage' } | { __typename: 'RatioSectionIndexPage' } | { __typename: 'RatioSectionPage' } | { __typename: 'RatioNotebookPage' } | { __typename: 'RatioPresentationIndexPage' } | { __typename: 'RatioPresentationPage' } | { __typename: 'ProjectIndexPage' } | { __typename: 'FreeFormPage' } | { __typename: 'BlogPostPage' } | { __typename: 'BlogIndexPage' } | { __typename: 'FaqPage' }> }
+  & { wagtailPage?: Types.Maybe<{ __typename: 'ProjectPage' } | { __typename: 'RatioSectionIndexPage' } | { __typename: 'RatioSectionPage' } | { __typename: 'RatioNotebookIndexPage' } | { __typename: 'RatioNotebookPage' } | { __typename: 'RatioPresentationIndexPage' } | { __typename: 'RatioPresentationPage' } | { __typename: 'ProjectIndexPage' } | { __typename: 'FreeFormPage' } | { __typename: 'BlogPostPage' } | { __typename: 'BlogIndexPage' } | { __typename: 'FaqPage' }> }
 );
 
 export type TildaPageQueryVariables = {
