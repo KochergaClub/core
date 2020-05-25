@@ -64,7 +64,7 @@ const PublicEventsCalendar = () => {
     <PaddedBlock width="max">
       <Container>
         <FullCalendar
-          aspectRatio={3}
+          height="auto"
           defaultView="dayGridTwoWeeks"
           views={{
             dayGridTwoWeeks: {
