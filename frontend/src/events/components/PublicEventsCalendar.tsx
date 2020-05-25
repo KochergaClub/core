@@ -64,8 +64,14 @@ const PublicEventsCalendar = () => {
     <PaddedBlock width="max">
       <Container>
         <FullCalendar
-          aspectRatio={2}
-          defaultView="dayGridMonth"
+          aspectRatio={3}
+          defaultView="dayGridTwoWeeks"
+          views={{
+            dayGridTwoWeeks: {
+              type: 'dayGrid',
+              duration: { weeks: 2 },
+            },
+          }}
           plugins={[dayGridPlugin]}
           fixedWeekCount={false}
           locale={ruLocale}
