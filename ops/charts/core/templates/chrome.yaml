@@ -26,7 +26,6 @@ spec:
     spec:
       containers:
       - name: default
-        imagePullPolicy: Always
         image: {{ .Values.image.chrome }}
         ports:
           - containerPort: 9222

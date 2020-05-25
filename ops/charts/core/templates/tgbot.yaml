@@ -15,7 +15,6 @@ spec:
     spec:
       containers:
         - name: default
-          imagePullPolicy: Always
           image: {{ .Values.image.backend | quote }}
           command: ["./scripts/tgbot.py"]
           resources:

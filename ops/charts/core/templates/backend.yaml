@@ -29,7 +29,6 @@ spec:
     spec:
       containers:
         - name: default
-          imagePullPolicy: Always
           image: {{ .Values.image.backend }}
 {{- if .Values.dev }}
           command: ["./manage.py", "runserver", "0.0.0.0:80"]

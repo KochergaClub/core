@@ -26,7 +26,6 @@ spec:
     spec:
       containers:
         - name: default
-          imagePullPolicy: Always
           image: {{ .Values.image.frontend | quote }}
 {{- if .Values.dev }}
           command: ["./node_modules/.bin/nodemon", "--watch", "dist", "./dist/index.js"]

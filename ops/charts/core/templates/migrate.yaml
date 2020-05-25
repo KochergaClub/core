@@ -16,7 +16,6 @@ spec:
       containers:
         - name: default
           command: ["./scripts/upgrade.sh"]
-          imagePullPolicy: Always
           image: {{ .Values.image.backend | quote }}
           volumeMounts:
 {{ include "core.backend_mount_configs" . | indent 12 }}
