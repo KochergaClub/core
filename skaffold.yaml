@@ -29,8 +29,6 @@ build:
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
-  local:
-    push: false
 
 portForward:
   - resourceType: service
@@ -51,6 +49,9 @@ profiles:
         path: /build/artifacts/1/docker
         value:
           target: base # avoid slow `next build`
+    build:
+      local:
+        push: false
     deploy:
       kubeContext: dev
       helm:
