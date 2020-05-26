@@ -6,6 +6,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from rest_framework.exceptions import APIException
 
+import markdown
+from html2text import html2text
+
 import kocherga.wiki
 import kocherga.cm.tools
 import kocherga.cm.models
@@ -137,15 +140,16 @@ def add_watchman(
     kocherga.watchmen.models.Watchman.objects.create(member=member)
 
     logger.info("Success! Time to send notifications")
-    message = render_to_string('staff/email/new_watchman.md', {
+    html_message = markdown.markdown(render_to_string('staff/email/new_watchman.md', {
         'full_name': full_name,
         'password': password,
         'cm_login': cm_user.login if cm_user else 'UNDEFINED',
-    })
+    }))
     send_mail(
         subject='Доступы в Кочергу',
         from_email='Кочерга <info@kocherga-club.ru>',
-        message=message,
+        html_message=html_message,
+        message=html2text(html_message),
         recipient_list=[email],
     )
 
