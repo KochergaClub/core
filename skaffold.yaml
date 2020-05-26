@@ -2,98 +2,100 @@ apiVersion: skaffold/v2alpha3
 kind: Config
 build:
   artifacts:
-  - image: registry.gitlab.com/kocherga/core/backend
-    context: backend
-    sync:
-      infer:
-      - scripts/**
-      - kocherga/**
-      - tests/**
-  - image: registry.gitlab.com/kocherga/core/frontend
-    context: frontend
-    sync:
-      # frontend Dockerfile is multi-stage and skaffold can't figure out infer syncs, so we use manual instead
-      manual:
-        - src: src/**
-          dest: .
-        - src: server/**
-          dest: .
-        - src: public/**
-          dest: .
-  - image: registry.gitlab.com/kocherga/core/booking
-    context: booking
-  - image: registry.gitlab.com/kocherga/core/chrome
-    context: ops/images/chrome
-  - image: registry.gitlab.com/kocherga/core/mysql-backup
-    context: ops/images/mysql-backup
+    - image: registry.gitlab.com/kocherga/core/backend
+      context: backend
+      sync:
+        infer:
+          - scripts/**
+          - kocherga/**
+          - tests/**
+    - image: registry.gitlab.com/kocherga/core/frontend
+      context: frontend
+      sync:
+        # frontend Dockerfile is multi-stage and skaffold can't figure out infer syncs, so we use manual instead
+        manual:
+          - src: src/**
+            dest: .
+          - src: server/**
+            dest: .
+          - src: public/**
+            dest: .
+    - image: registry.gitlab.com/kocherga/core/booking
+      context: booking
+    - image: registry.gitlab.com/kocherga/core/chrome
+      context: ops/images/chrome
+    - image: registry.gitlab.com/kocherga/core/mysql-backup
+      context: ops/images/mysql-backup
   tagPolicy:
     gitCommit:
       variant: AbbrevCommitSha
+  local:
+    push: false
 
 portForward:
-- resourceType: service
-  resourceName: core-frontend
-  port: 80
-  localPort: 8000
-- resourceType: service
-  resourceName: core-backend
-  port: 80
-  localPort: 8001
+  - resourceType: service
+    resourceName: core-frontend
+    port: 80
+    localPort: 8000
+  - resourceType: service
+    resourceName: core-backend
+    port: 80
+    localPort: 8001
 
 profiles:
-- name: dev
-  activation:
-    - command: dev
-  patches:
-    - op: add
-      path: /build/artifacts/1/docker
-      value:
-        target: base # avoid slow `next build`
-  deploy:
-    kubeContext: dev
-    helm:
-      flags:
-        upgrade:
-          - --install
-      releases:
-        - name: core
-          chartPath: ops/charts/core
-          values:
-            image.backend: registry.gitlab.com/kocherga/core/backend
-            image.frontend: registry.gitlab.com/kocherga/core/frontend
-            image.booking: registry.gitlab.com/kocherga/core/booking
-            image.chrome: registry.gitlab.com/kocherga/core/chrome
-            image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
-          valuesFiles:
-            - ops/values/core/dev/main.yaml
-            - ops/secrets/core/dev/main.yaml
-          setFiles:
-            config.main_py: ops/values/core/dev/main.py
-            config.secrets_py: ops/secrets/core/dev/secrets.py
-    statusCheckDeadlineSeconds: 600
-- name: prod
-  activation:
-    - command: run
-    - command: deploy
-  deploy:
-    kubeContext: prod
-    helm:
-      flags:
-        upgrade:
-          - --install
-      releases:
-        - name: core
-          chartPath: ops/charts/core
-          values:
-            image.backend: registry.gitlab.com/kocherga/core/backend
-            image.frontend: registry.gitlab.com/kocherga/core/frontend
-            image.booking: registry.gitlab.com/kocherga/core/booking
-            image.chrome: registry.gitlab.com/kocherga/core/chrome
-            image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
-          valuesFiles:
-            - ops/values/core/prod/main.yaml
-            - ops/secrets/core/prod/main.yaml
-          setFiles:
-            config.main_py: ops/values/core/prod/main.py
-            config.secrets_py: ops/secrets/core/prod/secrets.py
-            config.KKMServer_pem: ops/secrets/core/prod/KKMServer.pem
+  - name: dev
+    activation:
+      - command: dev
+    patches:
+      - op: add
+        path: /build/artifacts/1/docker
+        value:
+          target: base # avoid slow `next build`
+    deploy:
+      kubeContext: dev
+      helm:
+        flags:
+          upgrade:
+            - --install
+        releases:
+          - name: core
+            chartPath: ops/charts/core
+            values:
+              image.backend: registry.gitlab.com/kocherga/core/backend
+              image.frontend: registry.gitlab.com/kocherga/core/frontend
+              image.booking: registry.gitlab.com/kocherga/core/booking
+              image.chrome: registry.gitlab.com/kocherga/core/chrome
+              image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+            valuesFiles:
+              - ops/values/core/dev/main.yaml
+              - ops/secrets/core/dev/main.yaml
+            setFiles:
+              config.main_py: ops/values/core/dev/main.py
+              config.secrets_py: ops/secrets/core/dev/secrets.py
+      statusCheckDeadlineSeconds: 600
+  - name: prod
+    activation:
+      - command: run
+      - command: deploy
+    deploy:
+      kubeContext: prod
+      helm:
+        flags:
+          upgrade:
+            - --install
+        releases:
+          - name: core
+            chartPath: ops/charts/core
+            values:
+              image.backend: registry.gitlab.com/kocherga/core/backend
+              image.frontend: registry.gitlab.com/kocherga/core/frontend
+              image.booking: registry.gitlab.com/kocherga/core/booking
+              image.chrome: registry.gitlab.com/kocherga/core/chrome
+              image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+            valuesFiles:
+              - ops/values/core/prod/main.yaml
+              - ops/secrets/core/prod/main.yaml
+            setFiles:
+              config.main_py: ops/values/core/prod/main.py
+              config.secrets_py: ops/secrets/core/prod/secrets.py
+              config.KKMServer_pem: ops/secrets/core/prod/KKMServer.pem
