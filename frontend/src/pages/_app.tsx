@@ -20,6 +20,8 @@ import { trackPageview } from '~/components/analytics';
 
 import Error from './_error';
 
+import '~/css/react-datepicker.css';
+
 Sentry.init({
   dsn: getConfig().publicRuntimeConfig.sentryDSN,
 });

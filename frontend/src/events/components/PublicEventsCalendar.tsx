@@ -72,6 +72,7 @@ const PublicEventsCalendar = () => {
               duration: { weeks: 2 },
             },
           }}
+          titleFormat={{ year: 'numeric', month: 'long', day: 'numeric' }}
           plugins={[dayGridPlugin]}
           fixedWeekCount={false}
           locale={ruLocale}

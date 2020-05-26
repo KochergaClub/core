@@ -1,6 +1,9 @@
 import Select from 'react-select';
 
 import { ErrorMessage } from 'formik';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
+import DatePicker from 'react-datepicker';
 
 import { Label, Input } from '@kocherga/frontkit';
 
@@ -20,6 +23,26 @@ const FieldInputForType: React.FC<{ field: FormField; type: string }> = ({
 }) => (
   <LabeledField for={field}>
     {({ field }) => <Input {...field} type={type} />}
+  </LabeledField>
+);
+
+const FieldInputForDate: React.FC<{ field: FormField }> = ({ field }) => (
+  <LabeledField for={field}>
+    {({ field, form }) => (
+      <DatePicker
+        selected={field.value ? new Date(field.value) : new Date()}
+        onChange={date => {
+          form.setFieldValue(
+            field.name,
+            date ? format(date, 'yyyy-MM-dd') : undefined
+          );
+        }}
+        customInput={<Input {...field} />}
+        dateFormat="yyyy-MM-dd"
+        locale={ru}
+        inline
+      />
+    )}
   </LabeledField>
 );
 
@@ -100,7 +123,7 @@ const FieldWidget: React.FC<Props> = ({ field }) => {
     case 'email':
       return <FieldInputForType field={field} type="email" />;
     case 'date':
-      return <FieldInputForType field={field} type="date" />;
+      return <FieldInputForDate field={field} />;
     case 'password':
       return <FieldInputForType field={field} type="password" />;
     case 'number':
