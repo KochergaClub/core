@@ -5,6 +5,8 @@ from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.template.loader import render_to_string
 
+import markdown
+from html2text import html2text
 import hashlib
 
 from .training import Training
@@ -97,13 +99,14 @@ def first_email(sender, instance, created, **kwargs):
         return
 
     # TODO - notify consumer for async
-    message = render_to_string('ratio/email/new_ticket.md', {
+    html_message = markdown.markdown(render_to_string('ratio/email/new_ticket.md', {
         "ticket": instance,
         "training": instance.training,
-    })
+    }))
     send_mail(
         subject='Регистрация на событие',
         from_email='Кочерга <workshop@kocherga-club.ru>',
-        message=message,
+        html_message=html_message,
+        message=html2text(html_message),
         recipient_list=[instance.email],
     )
