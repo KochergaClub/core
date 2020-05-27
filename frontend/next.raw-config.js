@@ -18,9 +18,6 @@ module.exports = withTM({
 
     return config;
   },
-  experimental: {
-    granularChunks: true,
-  },
   publicRuntimeConfig: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
     facebookPixelId: process.env.FACEBOOK_PIXEL_ID,
