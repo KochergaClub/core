@@ -16,7 +16,7 @@ import { APIProps, APIError } from '~/common/api';
 import { API_HOST } from '../../server/constants';
 
 import { selectUser } from '~/core/selectors';
-import { trackPageview } from '~/components/analytics';
+import { trackPageview, trackEvent } from '~/components/analytics';
 
 import Error from './_error';
 
@@ -121,6 +121,26 @@ class MyApp extends App<MyProps> {
       </Provider>
     );
   }
+}
+
+interface WebVitals {
+  id: string;
+  name: string;
+  value: number;
+  label: string;
+}
+
+export function reportWebVitals(metric: WebVitals) {
+  // These metrics can be sent to any analytics service
+  trackEvent(metric.name, {
+    category:
+      metric.label === 'web-vital' ? 'Web Vitals' : 'Next.js custom metric',
+    label: metric.id,
+    value: Math.round(
+      metric.name === 'CLS' ? metric.value * 1000 : metric.value
+    ),
+    non_interaction: true,
+  });
 }
 
 export default withRedux(configureStore)(MyApp);

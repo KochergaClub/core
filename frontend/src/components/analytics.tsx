@@ -132,13 +132,15 @@ interface GTagEventParams {
   category?: string;
   label?: string;
   value?: number;
+  non_interaction?: boolean;
 }
 
 export const trackEvent = (action: string, params?: GTagEventParams) => {
-  const { category, label, value } = params || {
+  const { category, label, value, non_interaction } = params || {
     category: undefined,
     label: undefined,
     value: undefined,
+    non_interaction: false,
   };
 
   if (GA_TRACKING_ID) {
@@ -146,6 +148,7 @@ export const trackEvent = (action: string, params?: GTagEventParams) => {
       event_category: category,
       event_label: label,
       value,
+      non_interaction,
     });
   }
 };
