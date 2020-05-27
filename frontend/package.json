@@ -28,6 +28,7 @@
     "@babel/preset-env": "^7.4.5",
     "@fullcalendar/core": "^4.4.0",
     "@fullcalendar/daygrid": "^4.4.0",
+    "@fullcalendar/list": "^4.4.0",
     "@fullcalendar/react": "^4.4.0",
     "@graphql-codegen/cli": "^1.13.5",
     "@graphql-codegen/fragment-matcher": "^1.13.5",

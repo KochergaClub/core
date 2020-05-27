@@ -1,10 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { useApolloClient } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import Router from 'next/router';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import listPlugin from '@fullcalendar/list';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { EventApi } from '@fullcalendar/core';
 
@@ -60,12 +61,39 @@ const PublicEventsCalendar = () => {
     Router.push(route.href, route.as).then(() => window.scrollTo(0, 0));
   }, []);
 
+  const [calendarView, setCalendarView] = useState('dayGridTwoWeeks');
+  const calendarRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window !== 'object') {
+      return;
+    }
+
+    const updateWidth = () => {
+      const width = window.innerWidth;
+      setCalendarView(width < 800 ? 'listWeek' : 'dayGridTwoWeeks');
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  useEffect(() => {
+    if (!calendarRef.current) {
+      return;
+    }
+    // just setting defaultView prop is not enough, at least on fullcalendar v4
+    (calendarRef.current as any).getApi().changeView(calendarView);
+  }, [calendarView]);
+
   return (
     <PaddedBlock width="max">
       <Container>
         <FullCalendar
+          ref={calendarRef}
           height="auto"
-          defaultView="dayGridTwoWeeks"
+          defaultView={calendarView}
           views={{
             dayGridTwoWeeks: {
               type: 'dayGrid',
@@ -73,7 +101,7 @@ const PublicEventsCalendar = () => {
             },
           }}
           titleFormat={{ year: 'numeric', month: 'long', day: 'numeric' }}
-          plugins={[dayGridPlugin]}
+          plugins={[dayGridPlugin, listPlugin]}
           fixedWeekCount={false}
           locale={ruLocale}
           events={events}
