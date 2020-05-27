@@ -32,12 +32,9 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
     const cookies = cookie.parse(cookieHeader || '');
     const csrfToken = cookies.csrftoken as string;
 
-    const fetch = require('node-fetch').default;
-
     const httpLink = new HttpLink({
       uri: `http://${API_HOST}/api/graphql`,
       credentials: 'same-origin',
-      fetch,
       headers: {
         'X-CSRFToken': csrfToken,
         Cookie: cookieHeader,

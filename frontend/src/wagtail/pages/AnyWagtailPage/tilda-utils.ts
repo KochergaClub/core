@@ -2,10 +2,6 @@ import { KochergaApolloClient } from '~/apollo/types';
 
 import { APIError } from '~/common/api';
 
-import { IS_SERVER } from '~/common/utils';
-
-const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
-
 import { TildaPageQuery, TildaPageDocument } from './queries.generated';
 
 interface LoadTildaPageProps {

@@ -95,7 +95,6 @@
     "next-plugin-graphql": "0.0.2",
     "next-redux-wrapper": "^4.0.1",
     "next-transpile-modules": "^3.3.0",
-    "node-fetch": "^2.4.1",
     "nodemon": "^2.0.2",
     "npm": "^6.14.5",
     "npm-why": "^1.1.6",

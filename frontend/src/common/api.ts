@@ -1,7 +1,5 @@
 import { IS_SERVER } from './utils';
 
-const fetch = IS_SERVER ? require('node-fetch').default : window.fetch;
-
 declare global {
   interface Window {
     WebSocket: {
