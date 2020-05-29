@@ -34,7 +34,6 @@ const publicMenuItems: Item[] = [
     items: [
       { link: '/events', title: 'Расписание мероприятий', mode: 'next' },
       { link: '/projects', title: 'Проекты', mode: 'wagtail' },
-      { link: '/blog', title: 'Блог', mode: 'wagtail' },
     ],
   },
   {
