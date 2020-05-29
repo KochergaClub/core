@@ -30,25 +30,18 @@ export const styled = baseStyled as ThemedBaseStyledInterface<ThemeProps>; // us
 
 const publicMenuItems: Item[] = [
   {
-    title: 'Пространство',
-    items: [
-      { link: '/space', title: 'Пространство' },
-      { link: '/pricing', title: 'Цены' },
-      { link: '/faq', title: 'F.A.Q.' },
-    ],
-  },
-  {
     title: 'Сообщество',
     items: [
-      { link: '/projects', title: 'Проекты' },
-      { link: '/events', title: 'Расписание мероприятий' },
-      { link: '/blog', title: 'Блог' }, // TODO - mode: 'wagtail', but can't enable it until old blog is disabled
+      { link: '/events', title: 'Расписание мероприятий', mode: 'next' },
+      { link: '/projects', title: 'Проекты', mode: 'wagtail' },
+      { link: '/blog', title: 'Блог', mode: 'wagtail' },
     ],
   },
   {
     title: 'Обучение',
     items: [
       { link: '/rationality', title: 'Рациональность' },
+      { link: '/rationality/online', title: 'Онлайн' },
       { link: '/rationality/dojo', title: 'Додзё' },
       { link: '/rationality/3week', title: 'Трёхнедельный курс' },
       { link: '/workshop/country', title: 'Выездной воркшоп' },
@@ -56,7 +49,17 @@ const publicMenuItems: Item[] = [
       { link: '/rationality/corporate', title: 'Для бизнеса' },
     ],
   },
-  { link: '/#contacts', title: 'Контакты' },
+  {
+    title: 'Материалы',
+    items: [{ link: '/blog', title: 'Блог', mode: 'wagtail' }],
+  },
+  {
+    title: 'Мета',
+    items: [
+      { link: '/faq', title: 'F.A.Q.', mode: 'wagtail' },
+      { link: '/#contacts', title: 'Контакты' },
+    ],
+  },
 ];
 
 const teamMenuItems: Item[] = [

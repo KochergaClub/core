@@ -1,9 +1,6 @@
-import React from 'react';
-
-const VkIcon = () => (
+const VkIcon: React.FC = () => (
   <svg
     version="1.1"
-    id="Layer_1"
     x="0px"
     y="0px"
     width="30px"

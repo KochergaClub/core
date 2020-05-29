@@ -12,7 +12,43 @@ export type WagtailPageTypeQueryVariables = {
 
 export type WagtailPageTypeQuery = (
   { __typename?: 'Query' }
-  & { wagtailPage?: Types.Maybe<{ __typename: 'ProjectPage' } | { __typename: 'RatioSectionIndexPage' } | { __typename: 'RatioSectionPage' } | { __typename: 'RatioNotebookIndexPage' } | { __typename: 'RatioNotebookPage' } | { __typename: 'RatioPresentationIndexPage' } | { __typename: 'RatioPresentationPage' } | { __typename: 'ProjectIndexPage' } | { __typename: 'FreeFormPage' } | { __typename: 'BlogPostPage' } | { __typename: 'BlogIndexPage' } | { __typename: 'FaqPage' }> }
+  & { wagtailPage?: Types.Maybe<(
+    { __typename: 'RatioSectionIndexPage' }
+    & Pick<Types.RatioSectionIndexPage, 'id'>
+  ) | (
+    { __typename: 'RatioSectionPage' }
+    & Pick<Types.RatioSectionPage, 'id'>
+  ) | (
+    { __typename: 'RatioNotebookIndexPage' }
+    & Pick<Types.RatioNotebookIndexPage, 'id'>
+  ) | (
+    { __typename: 'RatioNotebookPage' }
+    & Pick<Types.RatioNotebookPage, 'id'>
+  ) | (
+    { __typename: 'RatioPresentationIndexPage' }
+    & Pick<Types.RatioPresentationIndexPage, 'id'>
+  ) | (
+    { __typename: 'RatioPresentationPage' }
+    & Pick<Types.RatioPresentationPage, 'id'>
+  ) | (
+    { __typename: 'ProjectIndexPage' }
+    & Pick<Types.ProjectIndexPage, 'id'>
+  ) | (
+    { __typename: 'ProjectPage' }
+    & Pick<Types.ProjectPage, 'id'>
+  ) | (
+    { __typename: 'FreeFormPage' }
+    & Pick<Types.FreeFormPage, 'id'>
+  ) | (
+    { __typename: 'BlogPostPage' }
+    & Pick<Types.BlogPostPage, 'id'>
+  ) | (
+    { __typename: 'BlogIndexPage' }
+    & Pick<Types.BlogIndexPage, 'id'>
+  ) | (
+    { __typename: 'FaqPage' }
+    & Pick<Types.FaqPage, 'id'>
+  )> }
 );
 
 export type TildaPageQueryVariables = {
@@ -33,6 +69,7 @@ export const WagtailPageTypeDocument = gql`
     query WagtailPageType($path: String, $preview_token: String) {
   wagtailPage(path: $path, preview_token: $preview_token) {
     __typename
+    id
   }
 }
     `;

@@ -56,7 +56,7 @@ const TildaFooter = () => {
           </Column>
         </Part>
       </Parts>
-      <Copyright>© 2015–2019 Центр рациональности Кочерга</Copyright>
+      <Copyright>© 2015–2020 Центр рациональности Кочерга</Copyright>
     </Footer>
   );
 };

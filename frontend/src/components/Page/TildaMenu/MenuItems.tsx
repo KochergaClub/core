@@ -68,7 +68,7 @@ const ItemLink: React.FC<{ item: SingleItem }> = ({ item }) => {
   }
   if (item.mode === 'wagtail') {
     return (
-      <Link href="/wagtail-any" as={item.link}>
+      <Link href="[...slug]" as={item.link}>
         <a>{item.title}</a>
       </Link>
     );

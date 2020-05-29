@@ -11,952 +11,220 @@ export type Scalars = {
 
 
 
-export type AnalyticsBovStat = {
-   __typename?: 'AnalyticsBovStat';
-  date: Scalars['String'];
-  count: Scalars['Int'];
-  total_income: Scalars['Int'];
-};
 
-export type AuthCurrentUser = {
-   __typename?: 'AuthCurrentUser';
-  is_authenticated: Scalars['Boolean'];
-  email?: Maybe<Scalars['String']>;
-  is_staff?: Maybe<Scalars['Boolean']>;
-  permissions: Array<Scalars['String']>;
-};
-
-export type AuthGroup = {
-   __typename?: 'AuthGroup';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  permissions: Array<AuthPermission>;
-  users: Array<AuthUser>;
-};
-
-export type AuthLoginCredentialsInput = {
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type AuthLoginInput = {
-  credentials: AuthLoginCredentialsInput;
-  result: Scalars['String'];
-};
-
-export type AuthLoginResult = {
-   __typename?: 'AuthLoginResult';
-  error?: Maybe<Scalars['String']>;
-  user?: Maybe<AuthCurrentUser>;
-  registered?: Maybe<Scalars['Boolean']>;
-};
-
-export type AuthLogoutResult = {
-   __typename?: 'AuthLogoutResult';
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
-export type AuthPermission = {
-   __typename?: 'AuthPermission';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  users: Array<AuthUser>;
-};
-
-export type AuthSendMagicLinkInput = {
-  email: Scalars['String'];
-  next?: Maybe<Scalars['String']>;
-};
-
-export type AuthSendMagicLinkResult = {
-   __typename?: 'AuthSendMagicLinkResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  error?: Maybe<Scalars['String']>;
-};
-
-export type AuthSetPasswordInput = {
-  old_password?: Maybe<Scalars['String']>;
-  new_password: Scalars['String'];
-};
-
-export type AuthSetPasswordResult = {
-   __typename?: 'AuthSetPasswordResult';
-  error?: Maybe<Scalars['String']>;
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
-export type AuthUser = {
-   __typename?: 'AuthUser';
-  id: Scalars['ID'];
-  email: Scalars['String'];
-  staff_member?: Maybe<StaffMember>;
-};
-
-export type BasicLeadBlock = WagtailBlock & {
-   __typename?: 'BasicLeadBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type BasicParagraphBlock = WagtailBlock & {
-   __typename?: 'BasicParagraphBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type BasicResult = {
-   __typename?: 'BasicResult';
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
-export type BigContactsBlock = WagtailBlock & {
-   __typename?: 'BigContactsBlock';
-  id: Scalars['ID'];
-  value: BigContactsBlockValue;
-};
-
-export type BigContactsBlockValue = {
-   __typename?: 'BigContactsBlockValue';
-  map: WagtailGeo;
-  address: Scalars['String'];
-  phone: Scalars['String'];
-  email: Scalars['String'];
-  text: Scalars['String'];
-};
-
-export type BlogIndexPage = WagtailPage & {
-   __typename?: 'BlogIndexPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  subtitle: Scalars['String'];
-  posts: Array<BlogPostPage>;
-};
-
-export type BlogPostAuthor = {
-   __typename?: 'BlogPostAuthor';
-  name: Scalars['String'];
-  description: Scalars['String'];
-  image: WagtailImageRendition;
+export type Query = {
+  __typename?: 'Query';
+  analyticsBovStats: Array<AnalyticsBovStat>;
+  authGroupsAll: Array<AuthGroup>;
+  authPermissionsAll: Array<AuthPermission>;
+  cashierPayments: CashierPaymentConnection;
+  cm2Customer: Cm2Customer;
+  cm2Customers: Cm2CustomerConnection;
+  cm2Order: Cm2Order;
+  cm2Orders: Cm2OrderConnection;
+  emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>;
+  emailSubscribeChannelsAll: Array<EmailSubscribeChannel>;
+  event?: Maybe<EventsEvent>;
+  events: EventsEventConnection;
+  eventsPrototype: EventsPrototype;
+  eventsPrototypes: Array<EventsPrototype>;
+  eventsWeeklyDigestCurrent: EventsWeeklyDigest;
+  imageTemplateBySlug: ImageTemplate;
+  imageTemplatesAll: Array<ImageTemplate>;
+  importers: Array<Importer>;
+  mastermindDatingCohortById: MastermindDatingCohort;
+  mastermindDatingCohorts: Array<MastermindDatingCohort>;
+  my: My;
+  now: NowInfo;
+  projects: Array<ProjectPage>;
+  publicEvent: EventsPublicEvent;
+  publicEvents: EventsPublicEventConnection;
+  ratioTrainersAll: Array<RatioTrainer>;
+  ratioTrainingBySlug: RatioTraining;
+  ratioTrainingEmailPrototype: Scalars['String'];
+  ratioTrainings: RatioTrainingConnection;
+  rooms: Array<Maybe<Room>>;
+  staffMember: StaffMember;
+  staffMembersAll: Array<StaffMember>;
+  tildaPage?: Maybe<TildaPage>;
+  tildaPages: Array<TildaPage>;
+  timepadCategories: Array<TimepadCategory>;
+  vkGroups: Array<VkGroup>;
+  wagtailPage?: Maybe<WagtailPage>;
+  watchmenGradesAll: Array<WatchmenGrade>;
+  watchmenShifts: Array<WatchmenShift>;
+  watchmenWatchmenAll: Array<WatchmenWatchman>;
+  zadarmaPbxCall: ZadarmaPbxCall;
+  zadarmaPbxCalls: ZadarmaPbxCallConnection;
 };
 
 
-export type BlogPostAuthorImageArgs = {
-  spec: Scalars['String'];
-};
-
-export type BlogPostPage = WagtailPage & {
-   __typename?: 'BlogPostPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  date: Scalars['String'];
-  authors: Array<BlogPostAuthor>;
-  body: Scalars['String'];
-  summary: Scalars['String'];
-};
-
-export type CashierCreatePaymentInput = {
-  amount: Scalars['Int'];
-  whom: Scalars['ID'];
-  comment: Scalars['String'];
-};
-
-export type CashierPayment = {
-   __typename?: 'CashierPayment';
-  id: Scalars['ID'];
-  whom: AuthUser;
-  amount: Scalars['Int'];
-  created_dt: Scalars['String'];
-  redeem_dt?: Maybe<Scalars['String']>;
-  comment: Scalars['String'];
-  is_redeemed: Scalars['Boolean'];
-};
-
-export type CashierPaymentConnection = {
-   __typename?: 'CashierPaymentConnection';
-  pageInfo: PageInfo;
-  nodes: Array<CashierPayment>;
-  edges: Array<CashierPaymentEdge>;
-};
-
-export type CashierPaymentEdge = {
-   __typename?: 'CashierPaymentEdge';
-  node: CashierPayment;
-};
-
-export type Cm2CreateCustomerInput = {
-  card_id: Scalars['Int'];
-  first_name: Scalars['String'];
-  last_name: Scalars['String'];
-};
-
-export type Cm2CreateOrderInput = {
-  customer?: Maybe<Scalars['ID']>;
-};
-
-export type Cm2Customer = {
-   __typename?: 'Cm2Customer';
-  id: Scalars['ID'];
-  card_id: Scalars['Int'];
-  first_name: Scalars['String'];
-  last_name: Scalars['String'];
-  orders: Cm2OrderConnection;
-};
-
-
-export type Cm2CustomerOrdersArgs = {
+export type QueryCashierPaymentsArgs = {
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
 };
 
-export type Cm2CustomerConnection = {
-   __typename?: 'Cm2CustomerConnection';
-  pageInfo: PageInfo;
-  edges: Array<Cm2CustomerEdge>;
-};
 
-export type Cm2CustomerEdge = {
-   __typename?: 'Cm2CustomerEdge';
-  node: Cm2Customer;
-};
-
-export type Cm2Order = {
-   __typename?: 'Cm2Order';
+export type QueryCm2CustomerArgs = {
   id: Scalars['ID'];
-  start: Scalars['String'];
-  end?: Maybe<Scalars['String']>;
-  customer?: Maybe<Cm2Customer>;
-  value: Scalars['Int'];
 };
 
-export type Cm2OrderConnection = {
-   __typename?: 'Cm2OrderConnection';
-  pageInfo: PageInfo;
-  edges: Array<Cm2OrderEdge>;
+
+export type QueryCm2CustomersArgs = {
+  search?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
-export type Cm2OrderEdge = {
-   __typename?: 'Cm2OrderEdge';
-  node: Cm2Order;
-};
 
-export type ColumnsBasicBlock = WagtailBlock & {
-   __typename?: 'ColumnsBasicBlock';
+export type QueryCm2OrderArgs = {
   id: Scalars['ID'];
-  value: Array<ColumnsBasicBlockColumn>;
 };
 
-export type ColumnsBasicBlockColumn = {
-   __typename?: 'ColumnsBasicBlockColumn';
-  header: Scalars['String'];
-  text?: Maybe<Scalars['String']>;
+
+export type QueryCm2OrdersArgs = {
+  status?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
-export type ColumnsButtonsBlock = WagtailBlock & {
-   __typename?: 'ColumnsButtonsBlock';
+
+export type QueryEventArgs = {
+  event_id: Scalars['ID'];
+};
+
+
+export type QueryEventsArgs = {
+  search?: Maybe<Scalars['String']>;
+  filter?: Maybe<EventsFilterInput>;
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryEventsPrototypeArgs = {
   id: Scalars['ID'];
-  value: Array<ColumnsButtonsBlockColumn>;
 };
 
-export type ColumnsButtonsBlockColumn = {
-   __typename?: 'ColumnsButtonsBlockColumn';
-  title: Scalars['String'];
-  caption: Scalars['String'];
-  link: Scalars['String'];
-};
 
-export type ColumnsMembershipsBlock = WagtailBlock & {
-   __typename?: 'ColumnsMembershipsBlock';
-  id: Scalars['ID'];
-  value: Array<ColumnsMembershipsBlockColumn>;
-};
-
-export type ColumnsMembershipsBlockColumn = {
-   __typename?: 'ColumnsMembershipsBlockColumn';
-  title: Scalars['String'];
-  subtitle: Scalars['String'];
-  price: Scalars['Int'];
-  description: Scalars['String'];
-};
-
-export type EmailMailchimpCategory = {
-   __typename?: 'EmailMailchimpCategory';
-  id: Scalars['ID'];
-  title: Scalars['String'];
-  category_id: Scalars['String'];
-  interests: Array<EmailMailchimpInterest>;
-};
-
-export type EmailMailchimpInterest = {
-   __typename?: 'EmailMailchimpInterest';
-  id: Scalars['ID'];
-  interest_id: Scalars['String'];
-  name: Scalars['String'];
-  subscriber_count: Scalars['Int'];
-};
-
-export type EmailSubscribeChannel = {
-   __typename?: 'EmailSubscribeChannel';
-  id: Scalars['ID'];
+export type QueryImageTemplateBySlugArgs = {
   slug: Scalars['String'];
-  interests: Array<EmailMailchimpInterest>;
 };
 
-export type EmailSubscribeChannelCreateInput = {
+
+export type QueryMastermindDatingCohortByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryPublicEventArgs = {
+  event_id: Scalars['ID'];
+};
+
+
+export type QueryPublicEventsArgs = {
+  from_date?: Maybe<Scalars['String']>;
+  project_id?: Maybe<Scalars['ID']>;
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryRatioTrainingBySlugArgs = {
   slug: Scalars['String'];
-  interest_ids: Array<Scalars['ID']>;
 };
 
-export type EventAddTagInput = {
-  event_id: Scalars['ID'];
-  tag: Scalars['String'];
-};
 
-export type EventAnnounceInput = {
-  event_id: Scalars['ID'];
-  target: EventAnnounceTarget;
-};
-
-export enum EventAnnounceTarget {
-  Vk = 'VK',
-  Fb = 'FB',
-  Timepad = 'TIMEPAD'
-}
-
-export type EventCreateInput = {
-  start: Scalars['String'];
-  end: Scalars['String'];
-  title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  location?: Maybe<Scalars['String']>;
-};
-
-export type EventCreateResult = {
-   __typename?: 'EventCreateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  event: EventsEvent;
-};
-
-export type EventDeleteInput = {
-  event_id: Scalars['ID'];
-};
-
-export type EventDeleteTagInput = {
-  event_id: Scalars['ID'];
-  tag: Scalars['String'];
-};
-
-export type EventGenerateZoomLinkInput = {
-  event_id: Scalars['ID'];
-};
-
-export type EventMoveInput = {
-  event_id: Scalars['ID'];
-  start: Scalars['String'];
-};
-
-export type EventNotification = {
-   __typename?: 'EventNotification';
+export type QueryRatioTrainingEmailPrototypeArgs = {
+  training_id: Scalars['ID'];
   type: Scalars['String'];
+};
+
+
+export type QueryRatioTrainingsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryStaffMemberArgs = {
   id: Scalars['ID'];
 };
 
-export type EventPrototypeAddTagInput = {
-  id: Scalars['ID'];
-  tag: Scalars['String'];
-};
-
-export type EventPrototypeAddTagResult = {
-   __typename?: 'EventPrototypeAddTagResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  prototype: EventsPrototype;
-};
-
-export type EventPrototypeCancelDateInput = {
-  id: Scalars['ID'];
-  date: Scalars['String'];
-};
-
-export type EventPrototypeCancelDateResult = {
-   __typename?: 'EventPrototypeCancelDateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
-export type EventPrototypeCreateInput = {
-  title: Scalars['String'];
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  timing_description_override?: Maybe<Scalars['String']>;
-  location?: Maybe<Scalars['String']>;
-  weekday: Scalars['Int'];
-  hour: Scalars['Int'];
-  minute: Scalars['Int'];
-  length: Scalars['Int'];
-  project_slug?: Maybe<Scalars['String']>;
-  vk_group_name?: Maybe<Scalars['String']>;
-  timepad_category_code?: Maybe<Scalars['String']>;
-};
-
-export type EventPrototypeCreateResult = {
-   __typename?: 'EventPrototypeCreateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  prototype: EventsPrototype;
-};
-
-export type EventPrototypeDeleteTagInput = {
-  id: Scalars['ID'];
-  tag: Scalars['String'];
-};
-
-export type EventPrototypeDeleteTagResult = {
-   __typename?: 'EventPrototypeDeleteTagResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  prototype: EventsPrototype;
-};
-
-export type EventPrototypeNewEventInput = {
-  id: Scalars['ID'];
-  ts: Scalars['Int'];
-};
-
-export type EventPrototypeNewEventResult = {
-   __typename?: 'EventPrototypeNewEventResult';
-  ok?: Maybe<Scalars['Boolean']>;
-};
-
-export type EventPrototypeSetImageInput = {
-  id: Scalars['ID'];
-  image_id: Scalars['ID'];
-};
-
-export type EventPrototypeSetImageResult = {
-   __typename?: 'EventPrototypeSetImageResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  prototype: EventsPrototype;
-};
-
-export type EventPrototypeUpdateInput = {
-  id: Scalars['ID'];
-  title?: Maybe<Scalars['String']>;
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  timing_description_override?: Maybe<Scalars['String']>;
-  location?: Maybe<Scalars['String']>;
-  active?: Maybe<Scalars['Boolean']>;
-  weekday?: Maybe<Scalars['Int']>;
-  hour?: Maybe<Scalars['Int']>;
-  minute?: Maybe<Scalars['Int']>;
-  length?: Maybe<Scalars['Int']>;
-  project_slug?: Maybe<Scalars['String']>;
-  vk_group_name?: Maybe<Scalars['String']>;
-  timepad_category_code?: Maybe<Scalars['String']>;
-};
-
-export type EventPrototypeUpdateResult = {
-   __typename?: 'EventPrototypeUpdateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  prototype: EventsPrototype;
-};
-
-export type EventsAnnouncementFb = {
-   __typename?: 'EventsAnnouncementFb';
-  link: Scalars['String'];
-  group: Scalars['String'];
-};
-
-export type EventsAnnouncements = {
-   __typename?: 'EventsAnnouncements';
-  timepad: EventsAnnouncementTimepad;
-  vk: EventsAnnouncementVk;
-  fb: EventsAnnouncementFb;
-};
-
-export type EventsAnnouncementTimepad = {
-   __typename?: 'EventsAnnouncementTimepad';
-  link: Scalars['String'];
-  category_code: Scalars['String'];
-  prepaid_tickets: Scalars['Boolean'];
-};
-
-export type EventsAnnouncementVk = {
-   __typename?: 'EventsAnnouncementVk';
-  link: Scalars['String'];
-  group: Scalars['String'];
-  image?: Maybe<WagtailImageRendition>;
-};
-
-
-export type EventsAnnouncementVkImageArgs = {
-  spec: Scalars['String'];
-};
-
-export type EventSetAnnounceUrlInput = {
-  event_id: Scalars['ID'];
-  target: EventAnnounceTarget;
-  url: Scalars['String'];
-};
-
-export type EventSetEventTypeInput = {
-  event_id: Scalars['ID'];
-  event_type: Scalars['String'];
-};
-
-export type EventSetImageFromUrlInput = {
-  event_id: Scalars['ID'];
-  url: Scalars['String'];
-};
-
-export type EventSetPricingTypeInput = {
-  event_id: Scalars['ID'];
-  pricing_type: Scalars['String'];
-};
-
-export type EventSetRealmInput = {
-  event_id: Scalars['ID'];
-  realm: Scalars['String'];
-};
-
-export type EventSetZoomLinkInput = {
-  event_id: Scalars['ID'];
-  zoom_link: Scalars['String'];
-};
-
-export type EventsEvent = {
-   __typename?: 'EventsEvent';
-  id: Scalars['ID'];
-  event_id: Scalars['ID'];
-  title: Scalars['String'];
-  description: Scalars['String'];
-  summary: Scalars['String'];
-  timing_description_override: Scalars['String'];
-  location: Scalars['String'];
-  room: Scalars['String'];
-  zoom_link: Scalars['String'];
-  zoom_meeting?: Maybe<ZoomMeeting>;
-  start: Scalars['String'];
-  end: Scalars['String'];
-  created: Scalars['String'];
-  updated: Scalars['String'];
-  published: Scalars['Boolean'];
-  creator?: Maybe<Scalars['String']>;
-  event_type: Scalars['String'];
-  pricing_type: Scalars['String'];
-  registration_type: Scalars['String'];
-  realm: Scalars['String'];
-  visitors?: Maybe<Scalars['String']>;
-  tags: Array<Scalars['String']>;
-  image?: Maybe<WagtailImageRendition>;
-  prototype?: Maybe<EventsPrototype>;
-  project?: Maybe<ProjectPage>;
-  announcements: EventsAnnouncements;
-  tickets: Array<EventsTicket>;
-  feedbacks: Array<EventsFeedback>;
-};
-
-
-export type EventsEventImageArgs = {
-  spec: Scalars['String'];
-};
-
-export type EventsEventConnection = {
-   __typename?: 'EventsEventConnection';
-  pageInfo: PageInfo;
-  edges: Array<EventsEventEdge>;
-  nodes: Array<EventsEvent>;
-};
-
-export type EventsEventEdge = {
-   __typename?: 'EventsEventEdge';
-  node: EventsEvent;
-};
-
-export type EventsFeedback = {
-   __typename?: 'EventsFeedback';
-  id: Scalars['ID'];
-  overall_score?: Maybe<Scalars['Int']>;
-  recommend_score?: Maybe<Scalars['Int']>;
-  content_score?: Maybe<Scalars['Int']>;
-  conductor_score?: Maybe<Scalars['Int']>;
-  source_friend: Scalars['Boolean'];
-  source_vk: Scalars['Boolean'];
-  source_fb: Scalars['Boolean'];
-  source_timepad: Scalars['Boolean'];
-  source_email: Scalars['Boolean'];
-  source_website: Scalars['Boolean'];
-  custom_source?: Maybe<Scalars['String']>;
-  comment?: Maybe<Scalars['String']>;
-};
-
-export type EventsFeedbackCreateInput = {
-  event_id: Scalars['ID'];
-  overall_score?: Maybe<Scalars['Int']>;
-  recommend_score?: Maybe<Scalars['Int']>;
-  content_score?: Maybe<Scalars['Int']>;
-  conductor_score?: Maybe<Scalars['Int']>;
-  source_friend: Scalars['Boolean'];
-  source_vk: Scalars['Boolean'];
-  source_fb: Scalars['Boolean'];
-  source_timepad: Scalars['Boolean'];
-  source_email: Scalars['Boolean'];
-  source_website: Scalars['Boolean'];
-  custom_source?: Maybe<Scalars['String']>;
-  comment?: Maybe<Scalars['String']>;
-};
-
-export type EventsFeedbackCreateResult = {
-   __typename?: 'EventsFeedbackCreateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  feedback: EventsFeedback;
-};
-
-export type EventsFeedbackDeleteInput = {
-  id: Scalars['ID'];
-};
-
-export type EventsFilterInput = {
-  event_type?: Maybe<Scalars['String']>;
-};
 
-export type EventsListBlock = WagtailBlock & {
-   __typename?: 'EventsListBlock';
-  id: Scalars['ID'];
-  events: Array<EventsPublicEvent>;
+export type QueryTildaPageArgs = {
+  path: Scalars['String'];
 };
 
-export type EventsPrototype = {
-   __typename?: 'EventsPrototype';
-  id: Scalars['ID'];
-  title: Scalars['String'];
-  summary: Scalars['String'];
-  description: Scalars['String'];
-  location: Scalars['String'];
-  timing_description_override: Scalars['String'];
-  active: Scalars['Boolean'];
-  weekday: Scalars['Int'];
-  hour: Scalars['Int'];
-  minute: Scalars['Int'];
-  length: Scalars['Int'];
-  project?: Maybe<ProjectPage>;
-  tags: Array<Scalars['String']>;
-  image?: Maybe<WagtailImageRendition>;
-  suggested_dates: Array<Scalars['String']>;
-  instances: Array<EventsEvent>;
-  vk_group?: Maybe<VkGroup>;
-  timepad_category?: Maybe<TimepadCategory>;
-};
-
-
-export type EventsPrototypeImageArgs = {
-  spec: Scalars['String'];
-};
-
-
-export type EventsPrototypeSuggested_DatesArgs = {
-  until_ts?: Maybe<Scalars['Int']>;
-  limit: Scalars['Int'];
-};
-
-
-export type EventsPrototypeInstancesArgs = {
-  limit?: Maybe<Scalars['Int']>;
-};
-
-export type EventsPublicEvent = {
-   __typename?: 'EventsPublicEvent';
-  event_id: Scalars['ID'];
-  start: Scalars['String'];
-  end: Scalars['String'];
-  title: Scalars['String'];
-  summary: Scalars['String'];
-  description: Scalars['String'];
-  image?: Maybe<Scalars['String']>;
-  image_rendition?: Maybe<WagtailImageRendition>;
-  registration_type: Scalars['String'];
-  pricing_type: Scalars['String'];
-  realm: Scalars['String'];
-  project?: Maybe<ProjectPage>;
-  announcements: EventsAnnouncements;
-  my_ticket?: Maybe<MyEventsTicket>;
-};
-
-
-export type EventsPublicEventImage_RenditionArgs = {
-  spec: Scalars['String'];
-};
-
-export type EventsPublicEventConnection = {
-   __typename?: 'EventsPublicEventConnection';
-  pageInfo: PageInfo;
-  edges: Array<EventsPublicEventEdge>;
-  nodes: Array<EventsPublicEvent>;
-};
-
-export type EventsPublicEventEdge = {
-   __typename?: 'EventsPublicEventEdge';
-  node: EventsPublicEvent;
-};
-
-export type EventsTicket = {
-   __typename?: 'EventsTicket';
-  id: Scalars['ID'];
-  status: Scalars['String'];
-  user: AuthUser;
-};
-
-export type EventsWeeklyDigest = {
-   __typename?: 'EventsWeeklyDigest';
-  id: Scalars['ID'];
-  start?: Maybe<Scalars['String']>;
-  image: WagtailImageRendition;
-  mailchimp: EventsWeeklyDigestMailchimp;
-  telegram: EventsWeeklyDigestTelegram;
-  vk: EventsWeeklyDigestVk;
-};
-
-
-export type EventsWeeklyDigestImageArgs = {
-  spec: Scalars['String'];
-};
-
-export type EventsWeeklyDigestMailchimp = {
-   __typename?: 'EventsWeeklyDigestMailchimp';
-  link?: Maybe<Scalars['String']>;
-};
-
-export type EventsWeeklyDigestPostMailchimpInput = {
-  text?: Maybe<Scalars['String']>;
-};
-
-export type EventsWeeklyDigestTelegram = {
-   __typename?: 'EventsWeeklyDigestTelegram';
-  link?: Maybe<Scalars['String']>;
-};
-
-export type EventsWeeklyDigestUpdateResult = {
-   __typename?: 'EventsWeeklyDigestUpdateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  digest: EventsWeeklyDigest;
-};
 
-export type EventsWeeklyDigestVk = {
-   __typename?: 'EventsWeeklyDigestVk';
-  link?: Maybe<Scalars['String']>;
+export type QueryWagtailPageArgs = {
+  path?: Maybe<Scalars['String']>;
+  preview_token?: Maybe<Scalars['String']>;
 };
 
-export type EventTimepadAnnouncementUpdateInput = {
-  event_id: Scalars['ID'];
-  prepaid_tickets?: Maybe<Scalars['Boolean']>;
-  category_code?: Maybe<Scalars['String']>;
-};
-
-export type EventUpdateInput = {
-  event_id: Scalars['ID'];
-  start?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['String']>;
-  published?: Maybe<Scalars['Boolean']>;
-  visitors?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  summary?: Maybe<Scalars['String']>;
-  event_type?: Maybe<Scalars['String']>;
-  registration_type?: Maybe<Scalars['String']>;
-  pricing_type?: Maybe<Scalars['String']>;
-  realm?: Maybe<Scalars['String']>;
-  timing_description_override?: Maybe<Scalars['String']>;
-  location?: Maybe<Scalars['String']>;
-  zoom_link?: Maybe<Scalars['String']>;
-  prototype_id?: Maybe<Scalars['ID']>;
-  project_slug?: Maybe<Scalars['String']>;
-  image_id?: Maybe<Scalars['ID']>;
-};
-
-export type EventUpdateResult = {
-   __typename?: 'EventUpdateResult';
-  ok?: Maybe<Scalars['Boolean']>;
-  event: EventsEvent;
-};
-
-export type EventVkAnnouncementSetImageInput = {
-  event_id: Scalars['ID'];
-  image_id: Scalars['ID'];
-};
-
-export type EventVkAnnouncementUpdateInput = {
-  event_id: Scalars['ID'];
-  group?: Maybe<Scalars['String']>;
-};
-
-export type FaqEntry = {
-   __typename?: 'FaqEntry';
-  id: Scalars['ID'];
-  question: Scalars['String'];
-  answer: Scalars['String'];
-};
-
-export type FaqPage = WagtailPage & {
-   __typename?: 'FaqPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  summary: Scalars['String'];
-  prev_page?: Maybe<FaqPage>;
-  next_page?: Maybe<FaqPage>;
-  entries: Array<FaqEntry>;
-  subpages: Array<FaqPage>;
-};
-
-export type FreeFormPage = WagtailPage & {
-   __typename?: 'FreeFormPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  body: Array<WagtailBlock>;
-};
-
-export type GreyBlock = WagtailBlock & {
-   __typename?: 'GreyBlock';
-  id: Scalars['ID'];
-  value: GreyBlockValue;
-};
 
-export type GreyBlockValue = {
-   __typename?: 'GreyBlockValue';
-  header: Scalars['String'];
-  text?: Maybe<Scalars['String']>;
+export type QueryWatchmenShiftsArgs = {
+  from_date: Scalars['String'];
+  to_date: Scalars['String'];
 };
 
-export type HeroFrontBlock = WagtailBlock & {
-   __typename?: 'HeroFrontBlock';
-  id: Scalars['ID'];
-  value: HeroFrontBlockValue;
-};
-
-export type HeroFrontBlockFeature = {
-   __typename?: 'HeroFrontBlockFeature';
-  title: Scalars['String'];
-  link?: Maybe<Scalars['String']>;
-  items: Array<HeroFrontBlockItem>;
-};
-
-export type HeroFrontBlockItem = {
-   __typename?: 'HeroFrontBlockItem';
-  text: Scalars['String'];
-  link?: Maybe<Scalars['String']>;
-};
-
-export type HeroFrontBlockValue = {
-   __typename?: 'HeroFrontBlockValue';
-  title: Scalars['String'];
-  features: Array<HeroFrontBlockFeature>;
-};
-
-export type ImageTemplate = {
-   __typename?: 'ImageTemplate';
-  name: Scalars['ID'];
-  schema: ImageTemplateSchema;
-  sizes: ImageTemplateSizes;
-};
 
-export type ImageTemplateSchema = {
-   __typename?: 'ImageTemplateSchema';
-  fields: Array<ImageTemplateSchemaField>;
+export type QueryWatchmenWatchmenAllArgs = {
+  currentStaff?: Maybe<Scalars['Boolean']>;
+  currentRole?: Maybe<Scalars['Boolean']>;
 };
 
-export type ImageTemplateSchemaField = {
-   __typename?: 'ImageTemplateSchemaField';
-  name: Scalars['String'];
-  value_type: Scalars['String'];
-  default?: Maybe<Scalars['String']>;
-};
-
-export type ImageTemplateSizes = {
-   __typename?: 'ImageTemplateSizes';
-  width: Scalars['Int'];
-  height: Scalars['Int'];
-};
-
-export type Importer = {
-   __typename?: 'Importer';
-  name: Scalars['ID'];
-};
-
-export type KkmRegisterCheckInput = {
-  email: Scalars['String'];
-  title: Scalars['String'];
-  sum: Scalars['Int'];
-  sign_method_calculation: Scalars['Int'];
-};
 
-export type KkmRegisterCheckResult = {
-   __typename?: 'KkmRegisterCheckResult';
-  status: Scalars['Int'];
-  url?: Maybe<Scalars['String']>;
-  error?: Maybe<Scalars['String']>;
+export type QueryZadarmaPbxCallArgs = {
+  pbx_call_id: Scalars['ID'];
 };
 
-export type MailchimpSubscribeBlock = WagtailBlock & {
-   __typename?: 'MailchimpSubscribeBlock';
-  id: Scalars['ID'];
-  value: MailchimpSubscribeBlockValue;
-};
 
-export type MailchimpSubscribeBlockValue = {
-   __typename?: 'MailchimpSubscribeBlockValue';
-  news: Scalars['Boolean'];
-  events: Scalars['Boolean'];
-  trainings: Scalars['Boolean'];
+export type QueryZadarmaPbxCallsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
-export type MastermindDatingCohort = {
-   __typename?: 'MastermindDatingCohort';
-  id: Scalars['ID'];
-  leader_telegram_uid?: Maybe<Scalars['String']>;
-  event?: Maybe<EventsEvent>;
-  participants: Array<MastermindDatingParticipant>;
-  groups: Array<MastermindDatingGroup>;
+export type My = {
+  __typename?: 'My';
+  _?: Maybe<Scalars['Boolean']>;
+  email_subscription: MyEmailSubscription;
+  membership?: Maybe<MyCmCustomer>;
+  tickets: MyEventsTicketConnection;
+  user: AuthCurrentUser;
 };
 
-export type MastermindDatingCohortMutationResult = {
-   __typename?: 'MastermindDatingCohortMutationResult';
-  cohort: MastermindDatingCohort;
-};
 
-export type MastermindDatingGroup = {
-   __typename?: 'MastermindDatingGroup';
-  id: Scalars['ID'];
-  telegram_invite_link: Scalars['String'];
-  participants: Array<MastermindDatingParticipant>;
+export type MyTicketsArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
-export type MastermindDatingParticipant = {
-   __typename?: 'MastermindDatingParticipant';
-  id: Scalars['ID'];
-  cohort: MastermindDatingCohort;
-  user: AuthUser;
+export type Room = {
+  __typename?: 'Room';
   name?: Maybe<Scalars['String']>;
-  desc?: Maybe<Scalars['String']>;
-  photo?: Maybe<Scalars['String']>;
-  voted_for: Scalars['Boolean'];
-  present: Scalars['Boolean'];
-  invite_email_sent: Scalars['Boolean'];
-};
-
-export type MastermindDatingParticipantMutationResult = {
-   __typename?: 'MastermindDatingParticipantMutationResult';
-  participant: MastermindDatingParticipant;
-};
-
-export type MastermindDatingTrivialMutationResult = {
-   __typename?: 'MastermindDatingTrivialMutationResult';
-  ok?: Maybe<Scalars['Boolean']>;
+  max_people?: Maybe<Scalars['Int']>;
+  area?: Maybe<Scalars['Int']>;
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   _empty?: Maybe<Scalars['Boolean']>;
   authAddUserToGroup?: Maybe<Scalars['Boolean']>;
   authLogin: AuthLoginResult;
@@ -1419,25 +687,198 @@ export type MutationZadarmaSetMemberForPbxCallArgs = {
   pbx_call_id: Scalars['ID'];
 };
 
-export type My = {
-   __typename?: 'My';
-  _?: Maybe<Scalars['Boolean']>;
-  email_subscription: MyEmailSubscription;
-  membership?: Maybe<MyCmCustomer>;
-  tickets: MyEventsTicketConnection;
-  user: AuthCurrentUser;
+export type Subscription = {
+  __typename?: 'Subscription';
+  _empty?: Maybe<Scalars['Boolean']>;
+  events: EventNotification;
 };
 
+export type BasicResult = {
+  __typename?: 'BasicResult';
+  ok?: Maybe<Scalars['Boolean']>;
+};
 
-export type MyTicketsArgs = {
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+  endCursor?: Maybe<Scalars['String']>;
+};
+
+export type WagtailPage = {
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  meta: WagtailPageMeta;
+};
+
+export type WagtailPageMeta = {
+  __typename?: 'WagtailPageMeta';
+  slug: Scalars['String'];
+  html_url: Scalars['String'];
+};
+
+export type WagtailImage = {
+  __typename?: 'WagtailImage';
+  id: Scalars['ID'];
+  url: Scalars['String'];
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+};
+
+export type WagtailImageRendition = {
+  __typename?: 'WagtailImageRendition';
+  id: Scalars['ID'];
+  url: Scalars['String'];
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+  original_image: WagtailImage;
+};
+
+export type WagtailBlock = {
+  id: Scalars['ID'];
+};
+
+export type WagtailGeo = {
+  __typename?: 'WagtailGeo';
+  lat: Scalars['String'];
+  lng: Scalars['String'];
+};
+
+export type AuthCurrentUser = {
+  __typename?: 'AuthCurrentUser';
+  is_authenticated: Scalars['Boolean'];
+  email?: Maybe<Scalars['String']>;
+  is_staff?: Maybe<Scalars['Boolean']>;
+  permissions: Array<Scalars['String']>;
+};
+
+export type AuthGroup = {
+  __typename?: 'AuthGroup';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  permissions: Array<AuthPermission>;
+  users: Array<AuthUser>;
+};
+
+export type AuthPermission = {
+  __typename?: 'AuthPermission';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  users: Array<AuthUser>;
+};
+
+export type AuthUser = {
+  __typename?: 'AuthUser';
+  id: Scalars['ID'];
+  email: Scalars['String'];
+  staff_member?: Maybe<StaffMember>;
+};
+
+export type AuthLoginInput = {
+  credentials: AuthLoginCredentialsInput;
+  result: Scalars['String'];
+};
+
+export type AuthLoginCredentialsInput = {
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+};
+
+export type AuthLoginResult = {
+  __typename?: 'AuthLoginResult';
+  error?: Maybe<Scalars['String']>;
+  user?: Maybe<AuthCurrentUser>;
+  registered?: Maybe<Scalars['Boolean']>;
+};
+
+export type AuthSetPasswordInput = {
+  old_password?: Maybe<Scalars['String']>;
+  new_password: Scalars['String'];
+};
+
+export type AuthSetPasswordResult = {
+  __typename?: 'AuthSetPasswordResult';
+  error?: Maybe<Scalars['String']>;
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type AuthLogoutResult = {
+  __typename?: 'AuthLogoutResult';
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type AuthSendMagicLinkInput = {
+  email: Scalars['String'];
+  next?: Maybe<Scalars['String']>;
+};
+
+export type AuthSendMagicLinkResult = {
+  __typename?: 'AuthSendMagicLinkResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  error?: Maybe<Scalars['String']>;
+};
+
+export type ZadarmaCall = {
+  __typename?: 'ZadarmaCall';
+  call_id: Scalars['String'];
+  ts: Scalars['String'];
+  call_type: Scalars['String'];
+  disposition: Scalars['String'];
+  clid: Scalars['String'];
+  destination: Scalars['String'];
+  sip: Scalars['String'];
+  is_recorded: Scalars['Int'];
+  watchman: Scalars['String'];
+  record?: Maybe<Scalars['String']>;
+};
+
+export type ZadarmaData = {
+  __typename?: 'ZadarmaData';
+  staff_member?: Maybe<StaffMember>;
+};
+
+export type ZadarmaPbxCall = {
+  __typename?: 'ZadarmaPbxCall';
+  pbx_call_id: Scalars['String'];
+  ts: Scalars['String'];
+  data?: Maybe<ZadarmaData>;
+  calls: Array<ZadarmaCall>;
+};
+
+export type ZadarmaPbxCallEdge = {
+  __typename?: 'ZadarmaPbxCallEdge';
+  node: ZadarmaPbxCall;
+};
+
+export type ZadarmaPbxCallConnection = {
+  __typename?: 'ZadarmaPbxCallConnection';
+  pageInfo: PageInfo;
+  nodes: Array<ZadarmaPbxCall>;
+  edges: Array<ZadarmaPbxCallEdge>;
+};
+
+export type Importer = {
+  __typename?: 'Importer';
+  name: Scalars['ID'];
+};
+
+export type NowInfo = {
+  __typename?: 'NowInfo';
+  total: Scalars['Int'];
+  customers: Array<NowCustomer>;
+};
+
+export type NowCustomer = {
+  __typename?: 'NowCustomer';
+  card_id: Scalars['Int'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
 };
 
 export type MyCmCustomer = {
-   __typename?: 'MyCmCustomer';
+  __typename?: 'MyCmCustomer';
   card_id: Scalars['Int'];
   subscription_until?: Maybe<Scalars['String']>;
   last_visit?: Maybe<Scalars['String']>;
@@ -1448,43 +889,384 @@ export type MyCmCustomer = {
 };
 
 export type MyCmOrder = {
-   __typename?: 'MyCmOrder';
+  __typename?: 'MyCmOrder';
   order_id: Scalars['ID'];
   start_dt: Scalars['String'];
   end_dt?: Maybe<Scalars['String']>;
 };
 
-export type MyEmailSubscription = {
-   __typename?: 'MyEmailSubscription';
-  status: Scalars['String'];
-  interests?: Maybe<Array<MyEmailSubscriptionInterest>>;
+export type Cm2Customer = {
+  __typename?: 'Cm2Customer';
+  id: Scalars['ID'];
+  card_id: Scalars['Int'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  orders: Cm2OrderConnection;
 };
 
-export type MyEmailSubscriptionInterest = {
-   __typename?: 'MyEmailSubscriptionInterest';
+
+export type Cm2CustomerOrdersArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+export type Cm2CustomerConnection = {
+  __typename?: 'Cm2CustomerConnection';
+  pageInfo: PageInfo;
+  edges: Array<Cm2CustomerEdge>;
+};
+
+export type Cm2CustomerEdge = {
+  __typename?: 'Cm2CustomerEdge';
+  node: Cm2Customer;
+};
+
+export type Cm2Order = {
+  __typename?: 'Cm2Order';
   id: Scalars['ID'];
+  start: Scalars['String'];
+  end?: Maybe<Scalars['String']>;
+  customer?: Maybe<Cm2Customer>;
+  value: Scalars['Int'];
+};
+
+export type Cm2OrderConnection = {
+  __typename?: 'Cm2OrderConnection';
+  pageInfo: PageInfo;
+  edges: Array<Cm2OrderEdge>;
+};
+
+export type Cm2OrderEdge = {
+  __typename?: 'Cm2OrderEdge';
+  node: Cm2Order;
+};
+
+export type Cm2CreateCustomerInput = {
+  card_id: Scalars['Int'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+};
+
+export type Cm2CreateOrderInput = {
+  customer?: Maybe<Scalars['ID']>;
+};
+
+export type WatchmenCreateWatchmanInput = {
+  email: Scalars['String'];
+  short_name: Scalars['String'];
+  full_name: Scalars['String'];
+  password: Scalars['String'];
+  vk?: Maybe<Scalars['String']>;
+  gender: Scalars['String'];
+  skip_wiki?: Maybe<Scalars['Boolean']>;
+  skip_cm_customer?: Maybe<Scalars['Boolean']>;
+  skip_cm_user?: Maybe<Scalars['Boolean']>;
+};
+
+export type WatchmenGrade = {
+  __typename?: 'WatchmenGrade';
+  id: Scalars['ID'];
+  code: Scalars['String'];
+  multiplier: Scalars['Float'];
+};
+
+export type WatchmenSetWatchmanGradeInput = {
+  watchman_id: Scalars['ID'];
+  grade_id: Scalars['ID'];
+};
+
+export type WatchmenSetWatchmanPriorityInput = {
+  watchman_id: Scalars['ID'];
+  priority: Scalars['Int'];
+};
+
+export type WatchmenShift = {
+  __typename?: 'WatchmenShift';
+  date: Scalars['String'];
+  shift: Scalars['String'];
+  watchman?: Maybe<WatchmenWatchman>;
+  is_night: Scalars['Boolean'];
+};
+
+export type WatchmenUpdateShiftInput = {
+  date: Scalars['String'];
+  shift: Scalars['String'];
+  watchman_id?: Maybe<Scalars['ID']>;
+  is_night?: Maybe<Scalars['Boolean']>;
+};
+
+export type WatchmenWatchman = {
+  __typename?: 'WatchmenWatchman';
+  id: Scalars['ID'];
+  member: StaffMember;
+  grade?: Maybe<WatchmenGrade>;
+  priority: Scalars['Int'];
+};
+
+export type CashierPayment = {
+  __typename?: 'CashierPayment';
+  id: Scalars['ID'];
+  whom: AuthUser;
+  amount: Scalars['Int'];
+  created_dt: Scalars['String'];
+  redeem_dt?: Maybe<Scalars['String']>;
+  comment: Scalars['String'];
+  is_redeemed: Scalars['Boolean'];
+};
+
+export type CashierPaymentEdge = {
+  __typename?: 'CashierPaymentEdge';
+  node: CashierPayment;
+};
+
+export type CashierPaymentConnection = {
+  __typename?: 'CashierPaymentConnection';
+  pageInfo: PageInfo;
+  nodes: Array<CashierPayment>;
+  edges: Array<CashierPaymentEdge>;
+};
+
+export type CashierCreatePaymentInput = {
+  amount: Scalars['Int'];
+  whom: Scalars['ID'];
+  comment: Scalars['String'];
+};
+
+export type KkmRegisterCheckInput = {
+  email: Scalars['String'];
+  title: Scalars['String'];
+  sum: Scalars['Int'];
+  sign_method_calculation: Scalars['Int'];
+};
+
+export type KkmRegisterCheckResult = {
+  __typename?: 'KkmRegisterCheckResult';
+  status: Scalars['Int'];
+  url?: Maybe<Scalars['String']>;
+  error?: Maybe<Scalars['String']>;
+};
+
+export type AnalyticsBovStat = {
+  __typename?: 'AnalyticsBovStat';
+  date: Scalars['String'];
+  count: Scalars['Int'];
+  total_income: Scalars['Int'];
+};
+
+export type EventsFilterInput = {
+  event_type?: Maybe<Scalars['String']>;
+};
+
+export type EventsEventConnection = {
+  __typename?: 'EventsEventConnection';
+  pageInfo: PageInfo;
+  edges: Array<EventsEventEdge>;
+  nodes: Array<EventsEvent>;
+};
+
+export type EventsEventEdge = {
+  __typename?: 'EventsEventEdge';
+  node: EventsEvent;
+};
+
+export type EventsEvent = {
+  __typename?: 'EventsEvent';
+  id: Scalars['ID'];
+  event_id: Scalars['ID'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  summary: Scalars['String'];
+  timing_description_override: Scalars['String'];
+  location: Scalars['String'];
+  room: Scalars['String'];
+  zoom_link: Scalars['String'];
+  zoom_meeting?: Maybe<ZoomMeeting>;
+  start: Scalars['String'];
+  end: Scalars['String'];
+  created: Scalars['String'];
+  updated: Scalars['String'];
+  published: Scalars['Boolean'];
+  creator?: Maybe<Scalars['String']>;
+  event_type: Scalars['String'];
+  pricing_type: Scalars['String'];
+  registration_type: Scalars['String'];
+  realm: Scalars['String'];
+  visitors?: Maybe<Scalars['String']>;
+  tags: Array<Scalars['String']>;
+  image?: Maybe<WagtailImageRendition>;
+  prototype?: Maybe<EventsPrototype>;
+  project?: Maybe<ProjectPage>;
+  announcements: EventsAnnouncements;
+  tickets: Array<EventsTicket>;
+  feedbacks: Array<EventsFeedback>;
+};
+
+
+export type EventsEventImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type EventsAnnouncements = {
+  __typename?: 'EventsAnnouncements';
+  timepad: EventsAnnouncementTimepad;
+  vk: EventsAnnouncementVk;
+  fb: EventsAnnouncementFb;
+};
+
+export type EventsAnnouncementTimepad = {
+  __typename?: 'EventsAnnouncementTimepad';
+  link: Scalars['String'];
+  category_code: Scalars['String'];
+  prepaid_tickets: Scalars['Boolean'];
+};
+
+export type EventsAnnouncementVk = {
+  __typename?: 'EventsAnnouncementVk';
+  link: Scalars['String'];
+  group: Scalars['String'];
+  image?: Maybe<WagtailImageRendition>;
+};
+
+
+export type EventsAnnouncementVkImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type EventsAnnouncementFb = {
+  __typename?: 'EventsAnnouncementFb';
+  link: Scalars['String'];
+  group: Scalars['String'];
+};
+
+export type EventsFeedback = {
+  __typename?: 'EventsFeedback';
+  id: Scalars['ID'];
+  overall_score?: Maybe<Scalars['Int']>;
+  recommend_score?: Maybe<Scalars['Int']>;
+  content_score?: Maybe<Scalars['Int']>;
+  conductor_score?: Maybe<Scalars['Int']>;
+  source_friend: Scalars['Boolean'];
+  source_vk: Scalars['Boolean'];
+  source_fb: Scalars['Boolean'];
+  source_timepad: Scalars['Boolean'];
+  source_email: Scalars['Boolean'];
+  source_website: Scalars['Boolean'];
+  custom_source?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
+};
+
+export type EventsTicket = {
+  __typename?: 'EventsTicket';
+  id: Scalars['ID'];
+  status: Scalars['String'];
+  user: AuthUser;
+};
+
+export type EventsPrototype = {
+  __typename?: 'EventsPrototype';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  summary: Scalars['String'];
+  description: Scalars['String'];
+  location: Scalars['String'];
+  timing_description_override: Scalars['String'];
+  active: Scalars['Boolean'];
+  weekday: Scalars['Int'];
+  hour: Scalars['Int'];
+  minute: Scalars['Int'];
+  length: Scalars['Int'];
+  project?: Maybe<ProjectPage>;
+  tags: Array<Scalars['String']>;
+  image?: Maybe<WagtailImageRendition>;
+  suggested_dates: Array<Scalars['String']>;
+  instances: Array<EventsEvent>;
+  vk_group?: Maybe<VkGroup>;
+  timepad_category?: Maybe<TimepadCategory>;
+};
+
+
+export type EventsPrototypeImageArgs = {
+  spec: Scalars['String'];
+};
+
+
+export type EventsPrototypeSuggested_DatesArgs = {
+  until_ts?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type EventsPrototypeInstancesArgs = {
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type VkGroup = {
+  __typename?: 'VkGroup';
   name: Scalars['String'];
-  subscribed?: Maybe<Scalars['Boolean']>;
+};
+
+export type TimepadCategory = {
+  __typename?: 'TimepadCategory';
+  id: Scalars['ID'];
+  code: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type EventsPublicEventConnection = {
+  __typename?: 'EventsPublicEventConnection';
+  pageInfo: PageInfo;
+  edges: Array<EventsPublicEventEdge>;
+  nodes: Array<EventsPublicEvent>;
+};
+
+export type EventsPublicEventEdge = {
+  __typename?: 'EventsPublicEventEdge';
+  node: EventsPublicEvent;
+};
+
+export type EventsPublicEvent = {
+  __typename?: 'EventsPublicEvent';
+  event_id: Scalars['ID'];
+  start: Scalars['String'];
+  end: Scalars['String'];
+  title: Scalars['String'];
+  summary: Scalars['String'];
+  description: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
+  image_rendition?: Maybe<WagtailImageRendition>;
+  registration_type: Scalars['String'];
+  pricing_type: Scalars['String'];
+  realm: Scalars['String'];
+  project?: Maybe<ProjectPage>;
+  announcements: EventsAnnouncements;
+  my_ticket?: Maybe<MyEventsTicket>;
+};
+
+
+export type EventsPublicEventImage_RenditionArgs = {
+  spec: Scalars['String'];
 };
 
 export type MyEventsTicket = {
-   __typename?: 'MyEventsTicket';
+  __typename?: 'MyEventsTicket';
   event: EventsPublicEvent;
   status: Scalars['String'];
   created?: Maybe<Scalars['String']>;
   zoom_link?: Maybe<Scalars['String']>;
 };
 
+export type MyEventsTicketEdge = {
+  __typename?: 'MyEventsTicketEdge';
+  node: MyEventsTicket;
+};
+
 export type MyEventsTicketConnection = {
-   __typename?: 'MyEventsTicketConnection';
+  __typename?: 'MyEventsTicketConnection';
   pageInfo: PageInfo;
   edges: Array<MyEventsTicketEdge>;
   nodes: Array<MyEventsTicket>;
-};
-
-export type MyEventsTicketEdge = {
-   __typename?: 'MyEventsTicketEdge';
-  node: MyEventsTicket;
 };
 
 export type MyEventsTicketRegisterAnonInput = {
@@ -1493,259 +1275,385 @@ export type MyEventsTicketRegisterAnonInput = {
   subscribed_to_newsletter?: Maybe<Scalars['Boolean']>;
 };
 
-export type NowCustomer = {
-   __typename?: 'NowCustomer';
-  card_id: Scalars['Int'];
-  first_name: Scalars['String'];
-  last_name: Scalars['String'];
+export type EventUpdateInput = {
+  event_id: Scalars['ID'];
+  start?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['String']>;
+  published?: Maybe<Scalars['Boolean']>;
+  visitors?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  event_type?: Maybe<Scalars['String']>;
+  registration_type?: Maybe<Scalars['String']>;
+  pricing_type?: Maybe<Scalars['String']>;
+  realm?: Maybe<Scalars['String']>;
+  timing_description_override?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  zoom_link?: Maybe<Scalars['String']>;
+  prototype_id?: Maybe<Scalars['ID']>;
+  project_slug?: Maybe<Scalars['String']>;
+  image_id?: Maybe<Scalars['ID']>;
 };
 
-export type NowInfo = {
-   __typename?: 'NowInfo';
-  total: Scalars['Int'];
-  customers: Array<NowCustomer>;
+export type EventUpdateResult = {
+  __typename?: 'EventUpdateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  event: EventsEvent;
 };
 
-export type PageInfo = {
-   __typename?: 'PageInfo';
-  hasNextPage: Scalars['Boolean'];
-  hasPreviousPage: Scalars['Boolean'];
-  startCursor?: Maybe<Scalars['String']>;
-  endCursor?: Maybe<Scalars['String']>;
-};
-
-export type PhotoRibbonBlock = WagtailBlock & {
-   __typename?: 'PhotoRibbonBlock';
-  id: Scalars['ID'];
-  value: Array<WagtailImageRendition>;
-};
-
-
-export type PhotoRibbonBlockValueArgs = {
-  spec: Scalars['String'];
-};
-
-export type ProjectIndexPage = WagtailPage & {
-   __typename?: 'ProjectIndexPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
+export type EventCreateInput = {
+  start: Scalars['String'];
+  end: Scalars['String'];
   title: Scalars['String'];
-  projects: Array<ProjectPage>;
+  description?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
 };
 
-export type ProjectPage = WagtailPage & {
-   __typename?: 'ProjectPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
+export type EventCreateResult = {
+  __typename?: 'EventCreateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  event: EventsEvent;
+};
+
+export type EventDeleteInput = {
+  event_id: Scalars['ID'];
+};
+
+export type EventSetEventTypeInput = {
+  event_id: Scalars['ID'];
+  event_type: Scalars['String'];
+};
+
+export type EventSetRealmInput = {
+  event_id: Scalars['ID'];
+  realm: Scalars['String'];
+};
+
+export type EventSetPricingTypeInput = {
+  event_id: Scalars['ID'];
+  pricing_type: Scalars['String'];
+};
+
+export type EventSetZoomLinkInput = {
+  event_id: Scalars['ID'];
+  zoom_link: Scalars['String'];
+};
+
+export type EventPrototypeCreateInput = {
   title: Scalars['String'];
-  summary: Scalars['String'];
-  activity_summary?: Maybe<Scalars['String']>;
-  body: Scalars['String'];
-  is_active: Scalars['Boolean'];
-  upcoming_events: Array<EventsPublicEvent>;
+  summary?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  timing_description_override?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  weekday: Scalars['Int'];
+  hour: Scalars['Int'];
+  minute: Scalars['Int'];
+  length: Scalars['Int'];
+  project_slug?: Maybe<Scalars['String']>;
+  vk_group_name?: Maybe<Scalars['String']>;
+  timepad_category_code?: Maybe<Scalars['String']>;
+};
+
+export type EventPrototypeCreateResult = {
+  __typename?: 'EventPrototypeCreateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  prototype: EventsPrototype;
+};
+
+export type EventPrototypeUpdateInput = {
+  id: Scalars['ID'];
+  title?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  timing_description_override?: Maybe<Scalars['String']>;
+  location?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  weekday?: Maybe<Scalars['Int']>;
+  hour?: Maybe<Scalars['Int']>;
+  minute?: Maybe<Scalars['Int']>;
+  length?: Maybe<Scalars['Int']>;
+  project_slug?: Maybe<Scalars['String']>;
+  vk_group_name?: Maybe<Scalars['String']>;
+  timepad_category_code?: Maybe<Scalars['String']>;
+};
+
+export type EventPrototypeUpdateResult = {
+  __typename?: 'EventPrototypeUpdateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  prototype: EventsPrototype;
+};
+
+export type EventPrototypeCancelDateInput = {
+  id: Scalars['ID'];
+  date: Scalars['String'];
+};
+
+export type EventPrototypeCancelDateResult = {
+  __typename?: 'EventPrototypeCancelDateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type EventPrototypeNewEventInput = {
+  id: Scalars['ID'];
+  ts: Scalars['Int'];
+};
+
+export type EventPrototypeNewEventResult = {
+  __typename?: 'EventPrototypeNewEventResult';
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type EventPrototypeAddTagInput = {
+  id: Scalars['ID'];
+  tag: Scalars['String'];
+};
+
+export type EventPrototypeAddTagResult = {
+  __typename?: 'EventPrototypeAddTagResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  prototype: EventsPrototype;
+};
+
+export type EventPrototypeDeleteTagInput = {
+  id: Scalars['ID'];
+  tag: Scalars['String'];
+};
+
+export type EventPrototypeDeleteTagResult = {
+  __typename?: 'EventPrototypeDeleteTagResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  prototype: EventsPrototype;
+};
+
+export type EventPrototypeSetImageInput = {
+  id: Scalars['ID'];
+  image_id: Scalars['ID'];
+};
+
+export type EventPrototypeSetImageResult = {
+  __typename?: 'EventPrototypeSetImageResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  prototype: EventsPrototype;
+};
+
+export type EventGenerateZoomLinkInput = {
+  event_id: Scalars['ID'];
+};
+
+export type EventAddTagInput = {
+  event_id: Scalars['ID'];
+  tag: Scalars['String'];
+};
+
+export type EventDeleteTagInput = {
+  event_id: Scalars['ID'];
+  tag: Scalars['String'];
+};
+
+export type EventSetImageFromUrlInput = {
+  event_id: Scalars['ID'];
+  url: Scalars['String'];
+};
+
+export type EventVkAnnouncementSetImageInput = {
+  event_id: Scalars['ID'];
+  image_id: Scalars['ID'];
+};
+
+export enum EventAnnounceTarget {
+  Vk = 'VK',
+  Fb = 'FB',
+  Timepad = 'TIMEPAD'
+}
+
+export type EventAnnounceInput = {
+  event_id: Scalars['ID'];
+  target: EventAnnounceTarget;
+};
+
+export type EventSetAnnounceUrlInput = {
+  event_id: Scalars['ID'];
+  target: EventAnnounceTarget;
+  url: Scalars['String'];
+};
+
+export type EventTimepadAnnouncementUpdateInput = {
+  event_id: Scalars['ID'];
+  prepaid_tickets?: Maybe<Scalars['Boolean']>;
+  category_code?: Maybe<Scalars['String']>;
+};
+
+export type EventVkAnnouncementUpdateInput = {
+  event_id: Scalars['ID'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type EventMoveInput = {
+  event_id: Scalars['ID'];
+  start: Scalars['String'];
+};
+
+export type EventsWeeklyDigest = {
+  __typename?: 'EventsWeeklyDigest';
+  id: Scalars['ID'];
+  start?: Maybe<Scalars['String']>;
   image: WagtailImageRendition;
+  mailchimp: EventsWeeklyDigestMailchimp;
+  telegram: EventsWeeklyDigestTelegram;
+  vk: EventsWeeklyDigestVk;
 };
 
 
-export type ProjectPageImageArgs = {
+export type EventsWeeklyDigestImageArgs = {
   spec: Scalars['String'];
 };
 
-export type Query = {
-   __typename?: 'Query';
-  analyticsBovStats: Array<AnalyticsBovStat>;
-  authGroupsAll: Array<AuthGroup>;
-  authPermissionsAll: Array<AuthPermission>;
-  cashierPayments: CashierPaymentConnection;
-  cm2Customer: Cm2Customer;
-  cm2Customers: Cm2CustomerConnection;
-  cm2Order: Cm2Order;
-  cm2Orders: Cm2OrderConnection;
-  emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>;
-  emailSubscribeChannelsAll: Array<EmailSubscribeChannel>;
-  event?: Maybe<EventsEvent>;
-  events: EventsEventConnection;
-  eventsPrototype: EventsPrototype;
-  eventsPrototypes: Array<EventsPrototype>;
-  eventsWeeklyDigestCurrent: EventsWeeklyDigest;
-  imageTemplateBySlug: ImageTemplate;
-  imageTemplatesAll: Array<ImageTemplate>;
-  importers: Array<Importer>;
-  mastermindDatingCohortById: MastermindDatingCohort;
-  mastermindDatingCohorts: Array<MastermindDatingCohort>;
-  my: My;
-  now: NowInfo;
-  projects: Array<ProjectPage>;
-  publicEvent: EventsPublicEvent;
-  publicEvents: EventsPublicEventConnection;
-  ratioTrainersAll: Array<RatioTrainer>;
-  ratioTrainingBySlug: RatioTraining;
-  ratioTrainingEmailPrototype: Scalars['String'];
-  ratioTrainings: RatioTrainingConnection;
-  rooms: Array<Maybe<Room>>;
-  staffMember: StaffMember;
-  staffMembersAll: Array<StaffMember>;
-  tildaPage?: Maybe<TildaPage>;
-  tildaPages: Array<TildaPage>;
-  timepadCategories: Array<TimepadCategory>;
-  vkGroups: Array<VkGroup>;
-  wagtailPage?: Maybe<WagtailPage>;
-  watchmenGradesAll: Array<WatchmenGrade>;
-  watchmenShifts: Array<WatchmenShift>;
-  watchmenWatchmenAll: Array<WatchmenWatchman>;
-  zadarmaPbxCall: ZadarmaPbxCall;
-  zadarmaPbxCalls: ZadarmaPbxCallConnection;
+export type EventsWeeklyDigestMailchimp = {
+  __typename?: 'EventsWeeklyDigestMailchimp';
+  link?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryCashierPaymentsArgs = {
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+export type EventsWeeklyDigestTelegram = {
+  __typename?: 'EventsWeeklyDigestTelegram';
+  link?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryCm2CustomerArgs = {
-  id: Scalars['ID'];
+export type EventsWeeklyDigestVk = {
+  __typename?: 'EventsWeeklyDigestVk';
+  link?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryCm2CustomersArgs = {
-  search?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+export type EventsWeeklyDigestUpdateResult = {
+  __typename?: 'EventsWeeklyDigestUpdateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  digest: EventsWeeklyDigest;
 };
 
-
-export type QueryCm2OrderArgs = {
-  id: Scalars['ID'];
+export type EventsWeeklyDigestPostMailchimpInput = {
+  text?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryCm2OrdersArgs = {
-  status?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryEventArgs = {
+export type EventsFeedbackCreateInput = {
   event_id: Scalars['ID'];
+  overall_score?: Maybe<Scalars['Int']>;
+  recommend_score?: Maybe<Scalars['Int']>;
+  content_score?: Maybe<Scalars['Int']>;
+  conductor_score?: Maybe<Scalars['Int']>;
+  source_friend: Scalars['Boolean'];
+  source_vk: Scalars['Boolean'];
+  source_fb: Scalars['Boolean'];
+  source_timepad: Scalars['Boolean'];
+  source_email: Scalars['Boolean'];
+  source_website: Scalars['Boolean'];
+  custom_source?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
 };
 
-
-export type QueryEventsArgs = {
-  search?: Maybe<Scalars['String']>;
-  filter?: Maybe<EventsFilterInput>;
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+export type EventsFeedbackCreateResult = {
+  __typename?: 'EventsFeedbackCreateResult';
+  ok?: Maybe<Scalars['Boolean']>;
+  feedback: EventsFeedback;
 };
 
-
-export type QueryEventsPrototypeArgs = {
+export type EventsFeedbackDeleteInput = {
   id: Scalars['ID'];
 };
 
-
-export type QueryImageTemplateBySlugArgs = {
-  slug: Scalars['String'];
-};
-
-
-export type QueryMastermindDatingCohortByIdArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryPublicEventArgs = {
-  event_id: Scalars['ID'];
-};
-
-
-export type QueryPublicEventsArgs = {
-  from_date?: Maybe<Scalars['String']>;
-  project_id?: Maybe<Scalars['ID']>;
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryRatioTrainingBySlugArgs = {
-  slug: Scalars['String'];
-};
-
-
-export type QueryRatioTrainingEmailPrototypeArgs = {
-  training_id: Scalars['ID'];
+export type EventNotification = {
+  __typename?: 'EventNotification';
   type: Scalars['String'];
-};
-
-
-export type QueryRatioTrainingsArgs = {
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryStaffMemberArgs = {
   id: Scalars['ID'];
 };
 
-
-export type QueryTildaPageArgs = {
-  path: Scalars['String'];
-};
-
-
-export type QueryWagtailPageArgs = {
-  path?: Maybe<Scalars['String']>;
-  preview_token?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryWatchmenShiftsArgs = {
-  from_date: Scalars['String'];
-  to_date: Scalars['String'];
-};
-
-
-export type QueryWatchmenWatchmenAllArgs = {
-  currentStaff?: Maybe<Scalars['Boolean']>;
-  currentRole?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type QueryZadarmaPbxCallArgs = {
-  pbx_call_id: Scalars['ID'];
-};
-
-
-export type QueryZadarmaPbxCallsArgs = {
-  before?: Maybe<Scalars['String']>;
-  after?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+export type StaffMember = {
+  __typename?: 'StaffMember';
+  id: Scalars['ID'];
+  short_name: Scalars['String'];
+  full_name: Scalars['String'];
+  role: Scalars['String'];
+  is_current: Scalars['Boolean'];
+  vk: Scalars['String'];
+  color: Scalars['String'];
+  user: AuthUser;
+  slack_user?: Maybe<SlackUser>;
 };
 
 export type RatioActivity = {
-   __typename?: 'RatioActivity';
+  __typename?: 'RatioActivity';
   id: Scalars['ID'];
   time: Scalars['String'];
   activity_type: Scalars['String'];
   name: Scalars['String'];
   location: Scalars['String'];
   trainer?: Maybe<RatioTrainer>;
+};
+
+export type RatioTicket = {
+  __typename?: 'RatioTicket';
+  id: Scalars['ID'];
+  training: RatioTraining;
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name?: Maybe<Scalars['String']>;
+  registration_date?: Maybe<Scalars['String']>;
+  status: Scalars['String'];
+  ticket_type: Scalars['String'];
+  payment_type: Scalars['String'];
+  payment_amount: Scalars['Int'];
+  fiscalization_status: Scalars['String'];
+  comment: Scalars['String'];
+};
+
+export type RatioTrainer = {
+  __typename?: 'RatioTrainer';
+  id: Scalars['ID'];
+  short_name: Scalars['String'];
+  long_name: Scalars['String'];
+};
+
+export type RatioTraining = {
+  __typename?: 'RatioTraining';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  date: Scalars['String'];
+  telegram_link?: Maybe<Scalars['String']>;
+  salaries_paid: Scalars['Boolean'];
+  tickets: Array<RatioTicket>;
+  total_income: Scalars['Int'];
+  tickets_count: Scalars['Int'];
+  long_name: Scalars['String'];
+  schedule: Array<RatioTrainingDay>;
+};
+
+export type RatioTrainingEdge = {
+  __typename?: 'RatioTrainingEdge';
+  node: RatioTraining;
+};
+
+export type RatioTrainingConnection = {
+  __typename?: 'RatioTrainingConnection';
+  pageInfo: PageInfo;
+  edges: Array<RatioTrainingEdge>;
+  nodes: Array<RatioTraining>;
+};
+
+export type RatioTrainingDay = {
+  __typename?: 'RatioTrainingDay';
+  id: Scalars['ID'];
+  date: Scalars['String'];
+  activities: Array<RatioActivity>;
+};
+
+export type RatioTrainingAddDayInput = {
+  training_slug: Scalars['String'];
+  date: Scalars['String'];
+};
+
+export type RatioTrainingCopyScheduleFromInput = {
+  from_training_slug: Scalars['String'];
+  to_training_slug: Scalars['String'];
 };
 
 export type RatioAddTicketInput = {
@@ -1769,179 +1677,6 @@ export type RatioAddTrainingInput = {
   telegram_link: Scalars['String'];
 };
 
-export type RatioBriefingBlock = WagtailBlock & {
-   __typename?: 'RatioBriefingBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type RatioExerciseBlock = WagtailBlock & {
-   __typename?: 'RatioExerciseBlock';
-  id: Scalars['ID'];
-  value: RatioExerciseBlockValue;
-};
-
-export type RatioExerciseBlockValue = {
-   __typename?: 'RatioExerciseBlockValue';
-  header: Scalars['String'];
-  lines_count: Scalars['Int'];
-  enumerate?: Maybe<Scalars['Boolean']>;
-};
-
-export type RatioExerciseOnelineBlock = WagtailBlock & {
-   __typename?: 'RatioExerciseOnelineBlock';
-  id: Scalars['ID'];
-  value: RatioExerciseOnelineBlockValue;
-};
-
-export type RatioExerciseOnelineBlockValue = {
-   __typename?: 'RatioExerciseOnelineBlockValue';
-  text: Scalars['String'];
-};
-
-export type RatioHeaderBlock = WagtailBlock & {
-   __typename?: 'RatioHeaderBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type RatioInsetBlock = WagtailBlock & {
-   __typename?: 'RatioInsetBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type RatioMathBlock = WagtailBlock & {
-   __typename?: 'RatioMathBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type RatioNotebookIndexPage = WagtailPage & {
-   __typename?: 'RatioNotebookIndexPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-};
-
-export type RatioNotebookPage = WagtailPage & {
-   __typename?: 'RatioNotebookPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  sections: Array<RatioNotebookSectionBlock>;
-};
-
-export type RatioNotebookSectionBlock = WagtailBlock & {
-   __typename?: 'RatioNotebookSectionBlock';
-  id: Scalars['ID'];
-  value: RatioSectionPage;
-};
-
-export type RatioParagraphBlock = WagtailBlock & {
-   __typename?: 'RatioParagraphBlock';
-  id: Scalars['ID'];
-  value: Scalars['String'];
-};
-
-export type RatioPresentationIndexPage = WagtailPage & {
-   __typename?: 'RatioPresentationIndexPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  presentations: Array<RatioPresentationPage>;
-};
-
-export type RatioPresentationPage = WagtailPage & {
-   __typename?: 'RatioPresentationPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  source: Scalars['String'];
-};
-
-export type RatioSectionIndexPage = WagtailPage & {
-   __typename?: 'RatioSectionIndexPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-};
-
-export type RatioSectionPage = WagtailPage & {
-   __typename?: 'RatioSectionPage';
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  title: Scalars['String'];
-  body: Array<WagtailBlock>;
-};
-
-export type RatioTicket = {
-   __typename?: 'RatioTicket';
-  id: Scalars['ID'];
-  training: RatioTraining;
-  email: Scalars['String'];
-  first_name: Scalars['String'];
-  last_name?: Maybe<Scalars['String']>;
-  registration_date?: Maybe<Scalars['String']>;
-  status: Scalars['String'];
-  ticket_type: Scalars['String'];
-  payment_type: Scalars['String'];
-  payment_amount: Scalars['Int'];
-  fiscalization_status: Scalars['String'];
-  comment: Scalars['String'];
-};
-
-export type RatioTrainer = {
-   __typename?: 'RatioTrainer';
-  id: Scalars['ID'];
-  short_name: Scalars['String'];
-  long_name: Scalars['String'];
-};
-
-export type RatioTraining = {
-   __typename?: 'RatioTraining';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  date: Scalars['String'];
-  telegram_link?: Maybe<Scalars['String']>;
-  salaries_paid: Scalars['Boolean'];
-  tickets: Array<RatioTicket>;
-  total_income: Scalars['Int'];
-  tickets_count: Scalars['Int'];
-  long_name: Scalars['String'];
-  schedule: Array<RatioTrainingDay>;
-};
-
-export type RatioTrainingAddDayInput = {
-  training_slug: Scalars['String'];
-  date: Scalars['String'];
-};
-
-export type RatioTrainingConnection = {
-   __typename?: 'RatioTrainingConnection';
-  pageInfo: PageInfo;
-  edges: Array<RatioTrainingEdge>;
-  nodes: Array<RatioTraining>;
-};
-
-export type RatioTrainingCopyScheduleFromInput = {
-  from_training_slug: Scalars['String'];
-  to_training_slug: Scalars['String'];
-};
-
-export type RatioTrainingDay = {
-   __typename?: 'RatioTrainingDay';
-  id: Scalars['ID'];
-  date: Scalars['String'];
-  activities: Array<RatioActivity>;
-};
-
-export type RatioTrainingEdge = {
-   __typename?: 'RatioTrainingEdge';
-  node: RatioTraining;
-};
-
 export type RatioTrainingSendEmailInput = {
   training_id: Scalars['ID'];
   title: Scalars['String'];
@@ -1949,193 +1684,458 @@ export type RatioTrainingSendEmailInput = {
 };
 
 export type RatioTrainingSendEmailResult = {
-   __typename?: 'RatioTrainingSendEmailResult';
+  __typename?: 'RatioTrainingSendEmailResult';
   draft_link: Scalars['String'];
 };
 
-export type Room = {
-   __typename?: 'Room';
+export type RatioSectionIndexPage = WagtailPage & {
+  __typename?: 'RatioSectionIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+};
+
+export type RatioSectionPage = WagtailPage & {
+  __typename?: 'RatioSectionPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  body: Array<WagtailBlock>;
+};
+
+export type RatioNotebookIndexPage = WagtailPage & {
+  __typename?: 'RatioNotebookIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+};
+
+export type RatioNotebookPage = WagtailPage & {
+  __typename?: 'RatioNotebookPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  sections: Array<RatioNotebookSectionBlock>;
+};
+
+export type RatioNotebookSectionBlock = WagtailBlock & {
+  __typename?: 'RatioNotebookSectionBlock';
+  id: Scalars['ID'];
+  value: RatioSectionPage;
+};
+
+export type RatioHeaderBlock = WagtailBlock & {
+  __typename?: 'RatioHeaderBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type RatioParagraphBlock = WagtailBlock & {
+  __typename?: 'RatioParagraphBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type RatioInsetBlock = WagtailBlock & {
+  __typename?: 'RatioInsetBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type RatioExerciseBlock = WagtailBlock & {
+  __typename?: 'RatioExerciseBlock';
+  id: Scalars['ID'];
+  value: RatioExerciseBlockValue;
+};
+
+export type RatioExerciseBlockValue = {
+  __typename?: 'RatioExerciseBlockValue';
+  header: Scalars['String'];
+  lines_count: Scalars['Int'];
+  enumerate?: Maybe<Scalars['Boolean']>;
+};
+
+export type RatioExerciseOnelineBlock = WagtailBlock & {
+  __typename?: 'RatioExerciseOnelineBlock';
+  id: Scalars['ID'];
+  value: RatioExerciseOnelineBlockValue;
+};
+
+export type RatioExerciseOnelineBlockValue = {
+  __typename?: 'RatioExerciseOnelineBlockValue';
+  text: Scalars['String'];
+};
+
+export type RatioBriefingBlock = WagtailBlock & {
+  __typename?: 'RatioBriefingBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type RatioMathBlock = WagtailBlock & {
+  __typename?: 'RatioMathBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type RatioPresentationIndexPage = WagtailPage & {
+  __typename?: 'RatioPresentationIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  presentations: Array<RatioPresentationPage>;
+};
+
+export type RatioPresentationPage = WagtailPage & {
+  __typename?: 'RatioPresentationPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  source: Scalars['String'];
+};
+
+export type MastermindDatingCohort = {
+  __typename?: 'MastermindDatingCohort';
+  id: Scalars['ID'];
+  leader_telegram_uid?: Maybe<Scalars['String']>;
+  event?: Maybe<EventsEvent>;
+  participants: Array<MastermindDatingParticipant>;
+  groups: Array<MastermindDatingGroup>;
+};
+
+export type MastermindDatingParticipant = {
+  __typename?: 'MastermindDatingParticipant';
+  id: Scalars['ID'];
+  cohort: MastermindDatingCohort;
+  user: AuthUser;
   name?: Maybe<Scalars['String']>;
-  max_people?: Maybe<Scalars['Int']>;
-  area?: Maybe<Scalars['Int']>;
+  desc?: Maybe<Scalars['String']>;
+  photo?: Maybe<Scalars['String']>;
+  voted_for: Scalars['Boolean'];
+  present: Scalars['Boolean'];
+  invite_email_sent: Scalars['Boolean'];
+};
+
+export type MastermindDatingGroup = {
+  __typename?: 'MastermindDatingGroup';
+  id: Scalars['ID'];
+  telegram_invite_link: Scalars['String'];
+  participants: Array<MastermindDatingParticipant>;
+};
+
+export type MastermindDatingTrivialMutationResult = {
+  __typename?: 'MastermindDatingTrivialMutationResult';
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type MastermindDatingCohortMutationResult = {
+  __typename?: 'MastermindDatingCohortMutationResult';
+  cohort: MastermindDatingCohort;
+};
+
+export type MastermindDatingParticipantMutationResult = {
+  __typename?: 'MastermindDatingParticipantMutationResult';
+  participant: MastermindDatingParticipant;
+};
+
+export type ProjectIndexPage = WagtailPage & {
+  __typename?: 'ProjectIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  projects: Array<ProjectPage>;
+};
+
+export type ProjectPage = WagtailPage & {
+  __typename?: 'ProjectPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  summary: Scalars['String'];
+  activity_summary?: Maybe<Scalars['String']>;
+  body: Scalars['String'];
+  is_active: Scalars['Boolean'];
+  upcoming_events: Array<EventsPublicEvent>;
+  image: WagtailImageRendition;
+};
+
+
+export type ProjectPageImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type FreeFormPage = WagtailPage & {
+  __typename?: 'FreeFormPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  body: Array<WagtailBlock>;
+};
+
+export type GreyBlock = WagtailBlock & {
+  __typename?: 'GreyBlock';
+  id: Scalars['ID'];
+  value: GreyBlockValue;
+};
+
+export type GreyBlockValue = {
+  __typename?: 'GreyBlockValue';
+  header: Scalars['String'];
+  text?: Maybe<Scalars['String']>;
+};
+
+export type BasicLeadBlock = WagtailBlock & {
+  __typename?: 'BasicLeadBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type BasicParagraphBlock = WagtailBlock & {
+  __typename?: 'BasicParagraphBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type ColumnsBasicBlock = WagtailBlock & {
+  __typename?: 'ColumnsBasicBlock';
+  id: Scalars['ID'];
+  value: Array<ColumnsBasicBlockColumn>;
+};
+
+export type ColumnsBasicBlockColumn = {
+  __typename?: 'ColumnsBasicBlockColumn';
+  header: Scalars['String'];
+  text?: Maybe<Scalars['String']>;
+};
+
+export type ColumnsMembershipsBlock = WagtailBlock & {
+  __typename?: 'ColumnsMembershipsBlock';
+  id: Scalars['ID'];
+  value: Array<ColumnsMembershipsBlockColumn>;
+};
+
+export type ColumnsMembershipsBlockColumn = {
+  __typename?: 'ColumnsMembershipsBlockColumn';
+  title: Scalars['String'];
+  subtitle: Scalars['String'];
+  price: Scalars['Int'];
+  description: Scalars['String'];
+};
+
+export type ColumnsButtonsBlock = WagtailBlock & {
+  __typename?: 'ColumnsButtonsBlock';
+  id: Scalars['ID'];
+  value: Array<ColumnsButtonsBlockColumn>;
+};
+
+export type ColumnsButtonsBlockColumn = {
+  __typename?: 'ColumnsButtonsBlockColumn';
+  title: Scalars['String'];
+  caption: Scalars['String'];
+  link: Scalars['String'];
+};
+
+export type EventsListBlock = WagtailBlock & {
+  __typename?: 'EventsListBlock';
+  id: Scalars['ID'];
+  events: Array<EventsPublicEvent>;
+};
+
+export type BigContactsBlock = WagtailBlock & {
+  __typename?: 'BigContactsBlock';
+  id: Scalars['ID'];
+  value: BigContactsBlockValue;
+};
+
+export type BigContactsBlockValue = {
+  __typename?: 'BigContactsBlockValue';
+  map: WagtailGeo;
+  address: Scalars['String'];
+  phone: Scalars['String'];
+  email: Scalars['String'];
+  text: Scalars['String'];
+};
+
+export type PhotoRibbonBlock = WagtailBlock & {
+  __typename?: 'PhotoRibbonBlock';
+  id: Scalars['ID'];
+  value: Array<WagtailImageRendition>;
+};
+
+
+export type PhotoRibbonBlockValueArgs = {
+  spec: Scalars['String'];
+};
+
+export type MailchimpSubscribeBlock = WagtailBlock & {
+  __typename?: 'MailchimpSubscribeBlock';
+  id: Scalars['ID'];
+  value: MailchimpSubscribeBlockValue;
+};
+
+export type MailchimpSubscribeBlockValue = {
+  __typename?: 'MailchimpSubscribeBlockValue';
+  news: Scalars['Boolean'];
+  events: Scalars['Boolean'];
+  trainings: Scalars['Boolean'];
+};
+
+export type HeroFrontBlock = WagtailBlock & {
+  __typename?: 'HeroFrontBlock';
+  id: Scalars['ID'];
+  value: HeroFrontBlockValue;
+};
+
+export type HeroFrontBlockValue = {
+  __typename?: 'HeroFrontBlockValue';
+  title: Scalars['String'];
+  features: Array<HeroFrontBlockFeature>;
+};
+
+export type HeroFrontBlockFeature = {
+  __typename?: 'HeroFrontBlockFeature';
+  title: Scalars['String'];
+  link?: Maybe<Scalars['String']>;
+  items: Array<HeroFrontBlockItem>;
+};
+
+export type HeroFrontBlockItem = {
+  __typename?: 'HeroFrontBlockItem';
+  text: Scalars['String'];
+  link?: Maybe<Scalars['String']>;
+};
+
+export type BlogPostPage = WagtailPage & {
+  __typename?: 'BlogPostPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  date: Scalars['String'];
+  authors: Array<BlogPostAuthor>;
+  body: Scalars['String'];
+  summary: Scalars['String'];
+};
+
+export type BlogIndexPage = WagtailPage & {
+  __typename?: 'BlogIndexPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  subtitle: Scalars['String'];
+  posts: Array<BlogPostPage>;
+};
+
+export type BlogPostAuthor = {
+  __typename?: 'BlogPostAuthor';
+  name: Scalars['String'];
+  description: Scalars['String'];
+  image: WagtailImageRendition;
+};
+
+
+export type BlogPostAuthorImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type EmailMailchimpCategory = {
+  __typename?: 'EmailMailchimpCategory';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  category_id: Scalars['String'];
+  interests: Array<EmailMailchimpInterest>;
+};
+
+export type EmailSubscribeChannel = {
+  __typename?: 'EmailSubscribeChannel';
+  id: Scalars['ID'];
+  slug: Scalars['String'];
+  interests: Array<EmailMailchimpInterest>;
+};
+
+export type EmailMailchimpInterest = {
+  __typename?: 'EmailMailchimpInterest';
+  id: Scalars['ID'];
+  interest_id: Scalars['String'];
+  name: Scalars['String'];
+  subscriber_count: Scalars['Int'];
+};
+
+export type EmailSubscribeChannelCreateInput = {
+  slug: Scalars['String'];
+  interest_ids: Array<Scalars['ID']>;
+};
+
+export type MyEmailSubscription = {
+  __typename?: 'MyEmailSubscription';
+  status: Scalars['String'];
+  interests?: Maybe<Array<MyEmailSubscriptionInterest>>;
+};
+
+export type MyEmailSubscriptionInterest = {
+  __typename?: 'MyEmailSubscriptionInterest';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  subscribed?: Maybe<Scalars['Boolean']>;
 };
 
 export type SlackUser = {
-   __typename?: 'SlackUser';
+  __typename?: 'SlackUser';
   slack_id: Scalars['String'];
   image_url: Scalars['String'];
 };
 
-export type StaffMember = {
-   __typename?: 'StaffMember';
-  id: Scalars['ID'];
-  short_name: Scalars['String'];
-  full_name: Scalars['String'];
-  role: Scalars['String'];
-  is_current: Scalars['Boolean'];
-  vk: Scalars['String'];
-  color: Scalars['String'];
-  user: AuthUser;
-  slack_user?: Maybe<SlackUser>;
+export type ImageTemplate = {
+  __typename?: 'ImageTemplate';
+  name: Scalars['ID'];
+  schema: ImageTemplateSchema;
+  sizes: ImageTemplateSizes;
 };
 
-export type Subscription = {
-   __typename?: 'Subscription';
-  _empty?: Maybe<Scalars['Boolean']>;
-  events: EventNotification;
+export type ImageTemplateSchema = {
+  __typename?: 'ImageTemplateSchema';
+  fields: Array<ImageTemplateSchemaField>;
+};
+
+export type ImageTemplateSchemaField = {
+  __typename?: 'ImageTemplateSchemaField';
+  name: Scalars['String'];
+  value_type: Scalars['String'];
+  default?: Maybe<Scalars['String']>;
+};
+
+export type ImageTemplateSizes = {
+  __typename?: 'ImageTemplateSizes';
+  width: Scalars['Int'];
+  height: Scalars['Int'];
+};
+
+export type FaqPage = WagtailPage & {
+  __typename?: 'FaqPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+  summary: Scalars['String'];
+  prev_page?: Maybe<FaqPage>;
+  next_page?: Maybe<FaqPage>;
+  entries: Array<FaqEntry>;
+  subpages: Array<FaqPage>;
+};
+
+export type FaqEntry = {
+  __typename?: 'FaqEntry';
+  id: Scalars['ID'];
+  question: Scalars['String'];
+  answer: Scalars['String'];
 };
 
 export type TildaPage = {
-   __typename?: 'TildaPage';
+  __typename?: 'TildaPage';
   path: Scalars['String'];
   html_url: Scalars['String'];
 };
 
-export type TimepadCategory = {
-   __typename?: 'TimepadCategory';
-  id: Scalars['ID'];
-  code: Scalars['String'];
-  name: Scalars['String'];
-};
-
-
-export type VkGroup = {
-   __typename?: 'VkGroup';
-  name: Scalars['String'];
-};
-
-export type WagtailBlock = {
-  id: Scalars['ID'];
-};
-
-export type WagtailGeo = {
-   __typename?: 'WagtailGeo';
-  lat: Scalars['String'];
-  lng: Scalars['String'];
-};
-
-export type WagtailImage = {
-   __typename?: 'WagtailImage';
-  id: Scalars['ID'];
-  url: Scalars['String'];
-  width: Scalars['Int'];
-  height: Scalars['Int'];
-};
-
-export type WagtailImageRendition = {
-   __typename?: 'WagtailImageRendition';
-  id: Scalars['ID'];
-  url: Scalars['String'];
-  width: Scalars['Int'];
-  height: Scalars['Int'];
-  original_image: WagtailImage;
-};
-
-export type WagtailPage = {
-  id: Scalars['ID'];
-  title: Scalars['String'];
-  meta: WagtailPageMeta;
-};
-
-export type WagtailPageMeta = {
-   __typename?: 'WagtailPageMeta';
-  slug: Scalars['String'];
-  html_url: Scalars['String'];
-};
-
-export type WatchmenCreateWatchmanInput = {
-  email: Scalars['String'];
-  short_name: Scalars['String'];
-  full_name: Scalars['String'];
-  password: Scalars['String'];
-  vk?: Maybe<Scalars['String']>;
-  gender: Scalars['String'];
-  skip_wiki?: Maybe<Scalars['Boolean']>;
-  skip_cm_customer?: Maybe<Scalars['Boolean']>;
-  skip_cm_user?: Maybe<Scalars['Boolean']>;
-};
-
-export type WatchmenGrade = {
-   __typename?: 'WatchmenGrade';
-  id: Scalars['ID'];
-  code: Scalars['String'];
-  multiplier: Scalars['Float'];
-};
-
-export type WatchmenSetWatchmanGradeInput = {
-  watchman_id: Scalars['ID'];
-  grade_id: Scalars['ID'];
-};
-
-export type WatchmenSetWatchmanPriorityInput = {
-  watchman_id: Scalars['ID'];
-  priority: Scalars['Int'];
-};
-
-export type WatchmenShift = {
-   __typename?: 'WatchmenShift';
-  date: Scalars['String'];
-  shift: Scalars['String'];
-  watchman?: Maybe<WatchmenWatchman>;
-  is_night: Scalars['Boolean'];
-};
-
-export type WatchmenUpdateShiftInput = {
-  date: Scalars['String'];
-  shift: Scalars['String'];
-  watchman_id?: Maybe<Scalars['ID']>;
-  is_night?: Maybe<Scalars['Boolean']>;
-};
-
-export type WatchmenWatchman = {
-   __typename?: 'WatchmenWatchman';
-  id: Scalars['ID'];
-  member: StaffMember;
-  grade?: Maybe<WatchmenGrade>;
-  priority: Scalars['Int'];
-};
-
-export type ZadarmaCall = {
-   __typename?: 'ZadarmaCall';
-  call_id: Scalars['String'];
-  ts: Scalars['String'];
-  call_type: Scalars['String'];
-  disposition: Scalars['String'];
-  clid: Scalars['String'];
-  destination: Scalars['String'];
-  sip: Scalars['String'];
-  is_recorded: Scalars['Int'];
-  watchman: Scalars['String'];
-  record?: Maybe<Scalars['String']>;
-};
-
-export type ZadarmaData = {
-   __typename?: 'ZadarmaData';
-  staff_member?: Maybe<StaffMember>;
-};
-
-export type ZadarmaPbxCall = {
-   __typename?: 'ZadarmaPbxCall';
-  pbx_call_id: Scalars['String'];
-  ts: Scalars['String'];
-  data?: Maybe<ZadarmaData>;
-  calls: Array<ZadarmaCall>;
-};
-
-export type ZadarmaPbxCallConnection = {
-   __typename?: 'ZadarmaPbxCallConnection';
-  pageInfo: PageInfo;
-  nodes: Array<ZadarmaPbxCall>;
-  edges: Array<ZadarmaPbxCallEdge>;
-};
-
-export type ZadarmaPbxCallEdge = {
-   __typename?: 'ZadarmaPbxCallEdge';
-  node: ZadarmaPbxCall;
-};
-
 export type ZoomMeeting = {
-   __typename?: 'ZoomMeeting';
+  __typename?: 'ZoomMeeting';
   id: Scalars['ID'];
   zoom_id: Scalars['String'];
   join_url: Scalars['String'];
@@ -2144,7 +2144,7 @@ export type ZoomMeeting = {
 };
 
 export type ZoomMeetingInstance = {
-   __typename?: 'ZoomMeetingInstance';
+  __typename?: 'ZoomMeetingInstance';
   id: Scalars['ID'];
   zoom_uuid: Scalars['String'];
   start_time: Scalars['String'];
@@ -2153,7 +2153,7 @@ export type ZoomMeetingInstance = {
 };
 
 export type ZoomParticipant = {
-   __typename?: 'ZoomParticipant';
+  __typename?: 'ZoomParticipant';
   id: Scalars['ID'];
   name: Scalars['String'];
   join_time: Scalars['String'];

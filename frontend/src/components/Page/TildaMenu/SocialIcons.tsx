@@ -1,18 +1,21 @@
-import React from 'react';
-
+import styled from 'styled-components';
 import { Row } from '@kocherga/frontkit';
 
 import VkIcon from './VkIcon';
-import FbIcon from './FbIcon';
+import TelegramIcon from './TelegramIcon';
+
+const NarrowA = styled.a`
+  line-height: 0;
+`;
 
 const SocialIcons = () => (
   <Row gutter={10}>
-    <a href="https://www.facebook.com/kocherga.club/">
-      <FbIcon />
-    </a>
-    <a href="http://vk.com/kocherga_club">
+    <NarrowA href="https://vk.com/kocherga_club">
       <VkIcon />
-    </a>
+    </NarrowA>
+    <NarrowA href="https://teleg.run/kocherga_club">
+      <TelegramIcon />
+    </NarrowA>
   </Row>
 );
 
