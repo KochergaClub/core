@@ -1,9 +1,7 @@
-import { useSelector } from 'react-redux';
-
-import { selectUser } from '~/core/selectors';
+import useUser from './useUser';
 
 const usePermissions = (permissions: string[]) => {
-  const user = useSelector(selectUser);
+  const user = useUser();
 
   const result: boolean[] = [];
   for (const permission of permissions) {

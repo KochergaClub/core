@@ -16,6 +16,10 @@ import {
   NextApolloPage,
   NextApolloPageContext,
 } from './types';
+import {
+  CurrentUserQuery,
+  CurrentUserDocument,
+} from '~/auth/queries.generated';
 
 let apolloClient: KochergaApolloClient | null = null;
 
@@ -207,6 +211,16 @@ export function withApollo(
         undefined,
         ctx.req
       ));
+
+      const currentUserQueryResult = await apolloClient.query<CurrentUserQuery>(
+        {
+          query: CurrentUserDocument,
+        }
+      );
+
+      if (!currentUserQueryResult.data) {
+        throw new Error('CurrentUser query failed');
+      }
 
       // Run wrapped getInitialProps methods
       let pageProps = {};

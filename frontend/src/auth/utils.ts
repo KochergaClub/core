@@ -3,6 +3,7 @@ import { KochergaApolloClient } from '~/apollo/types';
 import { CurrentUserQuery, CurrentUserDocument } from './queries.generated';
 
 import { APIError } from '~/common/api';
+import { NeedLoginError } from './errors';
 
 interface Params {
   is_authenticated?: boolean;
@@ -25,8 +26,8 @@ export const requireAuth = async (
 
   const currentUser = result.data.my.user;
 
-  if (params.is_authenticated && !currentUser.is_authenticated) {
-    throw new APIError('Need to be logged in', 403);
+  if (!currentUser.is_authenticated) {
+    throw new NeedLoginError();
   }
 
   if (params.is_staff && !currentUser.is_staff) {

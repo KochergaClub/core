@@ -1,3 +1,4 @@
+import { withApollo } from '~/apollo';
 import { NextPage } from '~/common/types';
 import { Page } from '~/components';
 import AuthContainer from '~/auth/components/AuthContainer';
@@ -10,4 +11,4 @@ const CheckYourEmailPage: NextPage = () => (
   </Page>
 );
 
-export default CheckYourEmailPage;
+export default withApollo(CheckYourEmailPage);
