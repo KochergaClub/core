@@ -1139,6 +1139,15 @@ type EventNotification {
 }
 
 extend type Query {
+  eventsPublicGoogleCalendar: EventsGoogleCalendar
+}
+
+type EventsGoogleCalendar {
+  id: ID!
+  url: String!
+}
+
+extend type Query {
   staffMembersAll: [StaffMember!]! @staffonly
   staffMember(id: ID!): StaffMember! @staffonly
 }

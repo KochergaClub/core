@@ -43,7 +43,12 @@ def event_to_google_dict(event):
 
 
 class GoogleCalendarManager(models.Manager):
-    pass
+    def get_public_calendar(self):
+        try:
+            return self.get(public_only=True)
+        except GoogleCalendar.DoesNotExist:
+            return None
+
     # TODO - create calendar through api automatically or at least check access
 
 
@@ -122,6 +127,10 @@ class GoogleCalendar(models.Model):
                 event=event,
                 google_id=result['id'],
             )
+
+    @property
+    def url(self):
+        return f"https://calendar.google.com/calendar/r?cid={self.calendar_id}"
 
     panels = [
         FieldPanel('calendar_id'),

@@ -2,7 +2,6 @@ import { A, Column } from '@kocherga/frontkit';
 
 import { withApollo, NextApolloPage, withStaff } from '~/apollo';
 
-import { State } from '~/redux/store';
 import { Page, PaddedBlock, ApolloQueryResults } from '~/components';
 
 import EventInfo from '~/events/components/EventInfo';
@@ -63,7 +62,7 @@ const TeamEventPage: NextApolloPage<Props> = ({ event_id }) => {
   );
 };
 
-TeamEventPage.getInitialProps = async ({ store: { dispatch }, query }) => {
+TeamEventPage.getInitialProps = async ({ query }) => {
   return { event_id: query.uuid as string };
 };
 

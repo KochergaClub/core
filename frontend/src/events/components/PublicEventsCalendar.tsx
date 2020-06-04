@@ -11,14 +11,15 @@ import { EventApi } from '@fullcalendar/core';
 
 import { isPast } from 'date-fns';
 
-import { colors } from '@kocherga/frontkit';
+import { colors, A } from '@kocherga/frontkit';
 
-import { PaddedBlock } from '~/components';
+import { PaddedBlock, AlertCard, ApolloQueryResults } from '~/components';
 import { formatDate } from '~/common/utils';
 import {
   PublicEventsForCalendarDocument,
   PublicEventsForCalendarQuery,
   PublicEventsForCalendarQueryVariables,
+  useEventsPublicGoogleCalendarQuery,
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
 
@@ -30,6 +31,8 @@ const Container = styled.div`
 `;
 
 const PublicEventsCalendar = () => {
+  const googleCalendarQueryResults = useEventsPublicGoogleCalendarQuery();
+
   const apolloClient = useApolloClient();
 
   const events = useCallback(
@@ -113,6 +116,20 @@ const PublicEventsCalendar = () => {
           eventClick={navigate}
         />
       </Container>
+      <ApolloQueryResults {...googleCalendarQueryResults}>
+        {({ data: { eventsPublicGoogleCalendar: gCalendar } }) => {
+          if (!gCalendar) {
+            return null;
+          }
+          return (
+            <AlertCard>
+              Хотите видеть события Кочерги в своём календаре? Тогда подпишитесь
+              на наш
+              <A href={gCalendar.url}>Google-календарь</A>.
+            </AlertCard>
+          );
+        }}
+      </ApolloQueryResults>
     </PaddedBlock>
   );
 };
