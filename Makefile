@@ -88,12 +88,14 @@ update_requirements:
 	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- pip-sync
 	$(K) cp $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/requirements.txt ./backend/requirements.txt
 
-update_schema:
+graphql_schema:
 	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./scripts/export-schema.py schema.graphql
 	$(K) cp $(shell $(K) get po -l app=core-django -o name | awk -F "/" '{print $$2}'):/code/schema.graphql ./schema.graphql
 
-update_types:
+graphql_types:
 	cd frontend && gql-gen
+
+graphql: graphql_schema graphql_types
 
 restart_backend:
 	$(K) rollout restart deploy/core-django
