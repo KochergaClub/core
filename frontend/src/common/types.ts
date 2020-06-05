@@ -1,6 +1,5 @@
-import { NextPageContext as OriginalNextPageContext } from 'next/dist/next-server/lib/utils';
-
-import { Store } from '~/redux/store';
+// In the past these types included extra redux props.
+export type { NextPage, NextPageContext } from 'next';
 
 export interface User {
   is_authenticated: boolean;
@@ -8,15 +7,3 @@ export interface User {
   is_staff?: boolean;
   email?: string;
 }
-
-export type NextPageContext = OriginalNextPageContext & {
-  store: Store;
-};
-
-// copy-pasted from next-js types to patch getInitialProps context type
-export type NextPage<P = {}, IP = P> = {
-  (props: P): JSX.Element | null;
-  defaultProps?: Partial<P>;
-  displayName?: string;
-  getInitialProps?(ctx: NextPageContext): Promise<IP>;
-};

@@ -28,44 +28,6 @@ interface MyProps {
 }
 
 class MyApp extends App<MyProps> {
-  //  static async getInitialProps({ Component, ctx, router }: AppContext) {
-  //    let pageProps = {};
-  //    if (Component.getInitialProps) {
-  //      try {
-  //        pageProps = await Component.getInitialProps(ctx);
-  //      } catch (err) {
-  //        Sentry.captureException(err);
-  //        if (err instanceof NeedLoginError) {
-  //          // During getInitialProps we checked permissions (through requireAuth) and it decided that
-  //          // the user needs to be logged in.
-  //          // If we're on the server, we should redirect to /login.
-  //          // If we're on the client side, we should push /login to router.
-  //          const loginUrl =
-  //            '/login' +
-  //            (ctx.asPath ? `?next=${encodeURIComponent(ctx.asPath)}` : '');
-  //          if (ctx.res) {
-  //            ctx.res.writeHead(302, { Location: loginUrl });
-  //            ctx.res.end();
-  //          } else {
-  //            router.push(loginUrl);
-  //          }
-  //          return { pageProps: {} };
-  //        } else if (
-  //          err instanceof APIError &&
-  //          (err.status === 404 || err.status === 403 || err.status === 400)
-  //        ) {
-  //          if (ctx.res) {
-  //            ctx.res.statusCode = err.status;
-  //          }
-  //          return { pageProps: {}, errorCode: err.status };
-  //        } else {
-  //          throw err;
-  //        }
-  //      }
-  //    }
-  //
-  //    return { pageProps };
-  //  }
   //render() {
   //  const { Component, pageProps, errorCode } = this.props;
   //  // React.StrictMode was enabled here globally, but turned out that it caused duplicate

@@ -18,9 +18,6 @@
         "name": "WagtailPage",
         "possibleTypes": [
           {
-            "name": "ProjectPage"
-          },
-          {
             "name": "RatioSectionIndexPage"
           },
           {
@@ -40,6 +37,9 @@
           },
           {
             "name": "ProjectIndexPage"
+          },
+          {
+            "name": "ProjectPage"
           },
           {
             "name": "FreeFormPage"
