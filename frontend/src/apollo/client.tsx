@@ -43,7 +43,7 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
       headers: {
         'X-CSRFToken': csrfToken,
         Cookie: cookieHeader,
-        'X-Forwarded-Host': req?.headers?.host,
+        'X-Forwarded-Host': req?.headers?.host || 'localhost',
       },
     });
 
@@ -141,7 +141,7 @@ const createApolloClient = (
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  */
-const initApolloClient = (
+export const initApolloClient = (
   initialState = undefined,
   req: NextApolloPageContext['req'] = undefined
 ) => {

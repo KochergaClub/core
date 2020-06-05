@@ -31,9 +31,10 @@ const DELAY = 500;
 const Spinner: React.FC<{ size: Size }> = ({ size }) => {
   const [appear, setAppear] = useState(false);
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setAppear(true);
     }, DELAY);
+    return () => clearTimeout(timer);
   }, []);
 
   if (size === 'block') {
