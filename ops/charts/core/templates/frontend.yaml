@@ -29,6 +29,9 @@ spec:
         - name: next-build
           image: {{ .Values.image.frontend | quote }}
           command: ["./node_modules/.bin/next", "build"]
+          volumeMounts:
+            - name: build
+              mountPath: /code/.next
 {{- end }}
       containers:
         - name: default
@@ -64,6 +67,10 @@ spec:
             - name: dist
               mountPath: /code/dist
               readOnly: true
+{{- else }}
+          volumeMounts:
+            - name: build
+              mountPath: /code/.next
 {{- end }}
 
 {{- if .Values.dev }}
@@ -76,7 +83,13 @@ spec:
           volumeMounts:
             - name: dist
               mountPath: /code/dist
+{{- end }}
+{{- if .Values.dev }}
       volumes:
         - name: dist
+          emptyDir: {}
+{{- else }}
+      volumes:
+        - name: build
           emptyDir: {}
 {{- end }}
