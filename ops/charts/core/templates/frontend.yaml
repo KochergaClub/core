@@ -24,6 +24,12 @@ spec:
       labels:
         app: {{ .Release.Name }}-frontend
     spec:
+{{- if not .Values.dev }}
+      initContainers:
+        - name: next-build
+          image: {{ .Values.image.frontend | quote }}
+          command: ["next", "build"]
+{{- end }}
       containers:
         - name: default
           image: {{ .Values.image.frontend | quote }}
