@@ -96,7 +96,7 @@ const PublicEventsCalendar = () => {
         <FullCalendar
           ref={calendarRef}
           height="auto"
-          defaultView={calendarView}
+          initialView={calendarView}
           views={{
             dayGridTwoWeeks: {
               type: 'dayGrid',
