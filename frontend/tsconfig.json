@@ -16,8 +16,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-      "next-redux-wrapper": ["@types/next-redux-wrapper.d.ts"]
+      "~/*": ["src/*"]
     },
     // this would be nice to have, but fullcalendar types are buggy, see https://github.com/fullcalendar/fullcalendar/issues/5446
     "skipLibCheck": true,
@@ -57,7 +56,6 @@
       "react-big-calendar",
       "react-datepicker",
       "react-dom",
-      "react-redux",
       "react-select",
       "react-toggle",
       "react-transition-group",
