@@ -1,3 +1,4 @@
+import cookie from 'cookie';
 import { IS_SERVER } from './utils';
 
 declare global {
@@ -19,7 +20,6 @@ export class APIError extends Error {
 }
 
 export interface APIProps {
-  csrfToken: string;
   base?: string;
   cookie?: string;
   realHost?: string;
@@ -31,22 +31,27 @@ export interface APICallOptions {
 }
 
 export class API {
-  csrfToken: string;
   base: string;
   cookie: string;
   realHost: string;
 
   constructor(props: APIProps) {
-    this.csrfToken = props.csrfToken || '';
     this.base = props.base || '';
     this.cookie = props.cookie || '';
     this.realHost = props.realHost || '';
   }
 
   getHeaders = (): { [header: string]: string } => {
+    if (typeof window === 'undefined') {
+      throw new Error('Should be called on client side');
+    }
+
+    const cookies = cookie.parse(document.cookie || '');
+    const csrfToken = cookies.csrftoken as string;
+
     const headers: { [header: string]: string } = {
       'Content-Type': 'application/json',
-      'X-CSRFToken': this.csrfToken,
+      'X-CSRFToken': csrfToken,
     };
     if (this.cookie) {
       headers['Cookie'] = this.cookie;

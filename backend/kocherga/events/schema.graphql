@@ -672,3 +672,12 @@ type EventNotification {
   type: String!
   id: ID!
 }
+
+extend type Query {
+  eventsPublicGoogleCalendar: EventsGoogleCalendar
+}
+
+type EventsGoogleCalendar {
+  id: ID!
+  url: String!
+}

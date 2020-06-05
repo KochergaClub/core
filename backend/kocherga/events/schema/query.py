@@ -79,3 +79,8 @@ def resolve_eventsWeeklyDigestCurrent(self, info):
     digest.create_image_if_necessary()
 
     return digest
+
+
+@Query.field('eventsPublicGoogleCalendar')
+def resolve_publicGoogleCalendar(self, info):
+    return models.GoogleCalendar.objects.get_public_calendar()

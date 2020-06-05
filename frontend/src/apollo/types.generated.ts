@@ -28,6 +28,7 @@ export type Query = {
   events: EventsEventConnection;
   eventsPrototype: EventsPrototype;
   eventsPrototypes: Array<EventsPrototype>;
+  eventsPublicGoogleCalendar?: Maybe<EventsGoogleCalendar>;
   eventsWeeklyDigestCurrent: EventsWeeklyDigest;
   imageTemplateBySlug: ImageTemplate;
   imageTemplatesAll: Array<ImageTemplate>;
@@ -1564,6 +1565,12 @@ export type EventNotification = {
   __typename?: 'EventNotification';
   type: Scalars['String'];
   id: Scalars['ID'];
+};
+
+export type EventsGoogleCalendar = {
+  __typename?: 'EventsGoogleCalendar';
+  id: Scalars['ID'];
+  url: Scalars['String'];
 };
 
 export type StaffMember = {

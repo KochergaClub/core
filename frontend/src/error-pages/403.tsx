@@ -1,6 +1,7 @@
 import { staticUrl } from '~/common/utils';
 
 import ErrorPage from './ErrorPage';
+import { withApollo } from '~/apollo';
 
 const Error403 = () => (
   <ErrorPage
@@ -10,4 +11,4 @@ const Error403 = () => (
   />
 );
 
-export default Error403;
+export default withApollo(Error403);

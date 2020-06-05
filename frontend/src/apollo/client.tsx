@@ -16,6 +16,10 @@ import {
   NextApolloPage,
   NextApolloPageContext,
 } from './types';
+import {
+  CurrentUserQuery,
+  CurrentUserDocument,
+} from '~/auth/queries.generated';
 
 let apolloClient: KochergaApolloClient | null = null;
 
@@ -27,6 +31,7 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
     // req can be empty when we do the last styled-components-extracting rendering pass in _document.
     // Note that we can't pass always `apolloClient` to WithApollo props, since it can't be serialized.
     // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
+    // (TODO - recheck if it's true; I suspect React strict mode might actually be to blame here, and it's fixed now.)
     const cookieHeader = req ? req.headers.cookie : undefined;
 
     const cookies = cookie.parse(cookieHeader || '');
@@ -159,7 +164,7 @@ const initApolloClient = (
 
 /**
  * Creates and provides the apolloContext
- * to a next.js PageTree. Use it by wrapping
+ * to a Next.js PageTree. Use it by wrapping
  * your PageComponent via HOC pattern.
  */
 export function withApollo(
@@ -207,6 +212,16 @@ export function withApollo(
         undefined,
         ctx.req
       ));
+
+      const currentUserQueryResult = await apolloClient.query<CurrentUserQuery>(
+        {
+          query: CurrentUserDocument,
+        }
+      );
+
+      if (!currentUserQueryResult.data) {
+        throw new Error('CurrentUser query failed');
+      }
 
       // Run wrapped getInitialProps methods
       let pageProps = {};

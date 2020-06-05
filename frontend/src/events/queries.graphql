@@ -38,6 +38,12 @@ query PublicEventsForCalendar($from: String!, $to: String!) {
   }
 }
 
+query EventsPublicGoogleCalendar {
+  eventsPublicGoogleCalendar {
+    url
+  }
+}
+
 fragment TeamCalendarEvent on EventsEvent {
   id
   start
