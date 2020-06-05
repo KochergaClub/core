@@ -28,7 +28,7 @@ spec:
       initContainers:
         - name: next-build
           image: {{ .Values.image.frontend | quote }}
-          command: ["next", "build"]
+          command: ["./node_modules/.bin/next", "build"]
 {{- end }}
       containers:
         - name: default
