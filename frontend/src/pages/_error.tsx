@@ -53,7 +53,7 @@ ErrorPage.getInitialProps = async ({ asPath, res, err }) => {
     if (res) {
       res.statusCode = err.status;
     }
-    return { pageProps: {}, errorCode: err.status };
+    return { pageProps: {}, statusCode: err.status };
   }
   return { statusCode: 500 };
 };
