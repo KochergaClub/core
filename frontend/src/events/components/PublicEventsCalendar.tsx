@@ -124,8 +124,7 @@ const PublicEventsCalendar = () => {
           return (
             <AlertCard>
               Хотите видеть события Кочерги в своём календаре? Тогда подпишитесь
-              на наш
-              <A href={gCalendar.url}>Google-календарь</A>.
+              на наш <A href={gCalendar.url}>Google-календарь</A>.
             </AlertCard>
           );
         }}
