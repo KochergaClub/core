@@ -32,6 +32,13 @@ spec:
           volumeMounts:
             - name: build
               mountPath: /code/.next
+          envFrom:
+{{ include "core.frontend_env_from" . | indent 12 }}
+          env:
+            - name: DJANGO_HOST
+              value: {{ .Release.Name }}-django
+            - name: NODE_ENV
+              value: production
 {{- end }}
       containers:
         - name: default
