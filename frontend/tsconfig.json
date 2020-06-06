@@ -18,57 +18,10 @@
     "paths": {
       "~/*": ["src/*"]
     },
-    // this would be nice to have, but fullcalendar types are buggy, see https://github.com/fullcalendar/fullcalendar/issues/5446
+    // This would be nice to have, but fullcalendar types are buggy, see https://github.com/fullcalendar/fullcalendar/issues/5446
+    // Also, this fixes styled-components https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311 clusterfuck.
     "skipLibCheck": true,
-    "strict": true,
-    "types": [
-      // this is an unfortunate consequence of https://github.com/DefinitelyTyped/DefinitelyTyped/issues/33311 clusterfuck
-      "autosize",
-      "babel__core",
-      "babel__generator",
-      "babel__template",
-      "babel__traverse",
-      "body-parser",
-      "color-name",
-      "connect",
-      "cookie",
-      "eslint-visitor-keys",
-      "express",
-      "express-serve-static-core",
-      "hoist-non-react-statics",
-      "http-proxy",
-      "istanbul-lib-coverage",
-      "istanbul-lib-report",
-      "istanbul-reports",
-      "jest",
-      "jest-diff",
-      "jquery",
-      "json-schema",
-      "lodash",
-      "mime",
-      "node",
-      "nprogress",
-      "parse-json",
-      "prop-types",
-      "q",
-      "range-parser",
-      "react",
-      "react-big-calendar",
-      "react-datepicker",
-      "react-dom",
-      "react-select",
-      "react-toggle",
-      "react-transition-group",
-      "serve-static",
-      "set-cookie-parser",
-      "sizzle",
-      "stack-utils",
-      "styled-components",
-      "unist",
-      "yargs",
-      "yargs-parser",
-      "zen-observable"
-    ]
+    "strict": true
   },
   "exclude": [
     "node_modules",
