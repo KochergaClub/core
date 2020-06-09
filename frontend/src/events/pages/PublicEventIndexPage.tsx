@@ -12,8 +12,7 @@ import { withApollo, NextApolloPage } from '~/apollo';
 import TL03 from '~/blocks/TL03';
 import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { Page } from '~/components';
-import Head from 'next/head';
-import { staticUrl, formatDate } from '~/common/utils';
+import { formatDate } from '~/common/utils';
 import { GetStaticProps } from 'next';
 import { initApolloClient } from '~/apollo/client';
 import {
@@ -39,15 +38,7 @@ const PublicEventIndexPage: NextApolloPage = () => {
         )}
       </TL03>
 
-      <Head>
-        <link rel="stylesheet" href={staticUrl('fullcalendar/core-main.css')} />
-        <link
-          rel="stylesheet"
-          href={staticUrl('fullcalendar/daygrid-main.css')}
-        />
-      </Head>
       <PublicEventsCalendar />
-
       <UpcomingEventsListBlock />
     </Page>
   );

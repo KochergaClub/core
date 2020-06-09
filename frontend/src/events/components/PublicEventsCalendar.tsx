@@ -7,7 +7,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
 import ruLocale from '@fullcalendar/core/locales/ru';
-import { EventApi } from '@fullcalendar/core';
+import { EventClickArg } from '@fullcalendar/core';
 
 import { isPast } from 'date-fns';
 
@@ -27,6 +27,25 @@ const Container = styled.div`
   .fc-event {
     font-size: 12px;
     cursor: pointer;
+    background-color: ${colors.primary[500]};
+    padding: 0 1px;
+    color: white;
+  }
+  .fc-event-time {
+    font-weight: bold;
+  }
+  .fc-event-title {
+    font-weight: normal;
+  }
+  .fc-kocherga-past {
+    background-color: ${colors.primary[300]};
+  }
+
+  .fc-daygrid-event-dot {
+    display: none;
+  }
+  .fc-list-event-dot {
+    display: none;
   }
 `;
 
@@ -51,15 +70,14 @@ const PublicEventsCalendar = () => {
         const past = isPast(new Date(event.start));
         return {
           ...event,
-          backgroundColor: past ? colors.primary[300] : colors.primary[500],
-          borderColor: past ? colors.primary[300] : colors.primary[500],
+          classNames: past ? ['fc-kocherga-past'] : [],
         };
       });
     },
     [apolloClient]
   );
 
-  const navigate = useCallback(({ event }: { event: EventApi }) => {
+  const navigate = useCallback(({ event }: EventClickArg) => {
     const route = publicEventRoute(event.extendedProps.event_id);
     Router.push(route.href, route.as).then(() => window.scrollTo(0, 0));
   }, []);
@@ -86,7 +104,6 @@ const PublicEventsCalendar = () => {
     if (!calendarRef.current) {
       return;
     }
-    // just setting defaultView prop is not enough, at least on fullcalendar v4
     (calendarRef.current as any).getApi().changeView(calendarView);
   }, [calendarView]);
 
@@ -96,7 +113,7 @@ const PublicEventsCalendar = () => {
         <FullCalendar
           ref={calendarRef}
           height="auto"
-          defaultView={calendarView}
+          initialView={calendarView}
           views={{
             dayGridTwoWeeks: {
               type: 'dayGrid',

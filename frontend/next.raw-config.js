@@ -1,11 +1,4 @@
-const webpack = require('webpack');
-
-const withTM = require('next-transpile-modules')([
-  '@fullcalendar/common',
-  '@fullcalendar/core',
-]);
-
-module.exports = withTM({
+module.exports = {
   webpack: (config, options) => {
     config.resolve.alias['~'] = __dirname + '/src';
 
@@ -14,7 +7,24 @@ module.exports = withTM({
       config.resolve.alias['@sentry/node'] = '@sentry/browser';
     }
 
-    config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+    // based on code from next-transpile-modules
+    const nextCssLoaders = config.module.rules.find(
+      rule => typeof rule.oneOf === 'object'
+    );
+
+    nextCssLoaders.oneOf.forEach(loader => {
+      if (
+        loader.sideEffects &&
+        loader.issuer &&
+        loader.issuer.include &&
+        loader.issuer.include.endsWith('_app.tsx')
+      ) {
+        delete loader.issuer;
+      }
+    });
+
+    // not needed since we don't use moment.js anymore
+    // config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
     return config;
   },
@@ -45,4 +55,4 @@ module.exports = withTM({
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,
   },
-});
+};
