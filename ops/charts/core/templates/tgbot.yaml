@@ -1,3 +1,4 @@
+{{- if not .Values.dev }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,3 +31,4 @@ spec:
 {{ include "core.backend_env_db" . | indent 12 }}
       volumes:
 {{ include "core.backend_volumes" . | indent 8 }}
+{{- end }}
