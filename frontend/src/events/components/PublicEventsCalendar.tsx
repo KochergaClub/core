@@ -24,28 +24,30 @@ import {
 import { publicEventRoute } from '../routes';
 
 const Container = styled.div`
-  .fc-event {
-    font-size: 12px;
-    cursor: pointer;
-    background-color: ${colors.primary[500]};
-    padding: 0 1px;
-    color: white;
-  }
-  .fc-event-time {
-    font-weight: bold;
-  }
-  .fc-event-title {
-    font-weight: normal;
-  }
-  .fc-kocherga-past {
-    background-color: ${colors.primary[300]};
-  }
+  &&& {
+    .fc-event {
+      font-size: 12px;
+      cursor: pointer;
+      background-color: ${colors.primary[500]};
+      padding: 0 1px;
+      color: white;
+    }
+    .fc-event-time {
+      font-weight: bold;
+    }
+    .fc-event-title {
+      font-weight: normal;
+    }
+    .fc-kocherga-past {
+      background-color: ${colors.primary[300]};
+    }
 
-  .fc-daygrid-event-dot {
-    display: none;
-  }
-  .fc-list-event-dot {
-    display: none;
+    .fc-daygrid-event-dot {
+      display: none;
+    }
+    .fc-list-event-dot {
+      display: none;
+    }
   }
 `;
 
