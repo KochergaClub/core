@@ -24,8 +24,16 @@ class MediaStorage(S3Boto3Storage):
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs['location'] = 'media'
+        kwargs.setdefault('location', 'media')
 
         # media files are private, since we often use predictable names and will have some private images in the future
-        kwargs['default_acl'] = 'private'
+        kwargs.setdefault('default_acl', 'private')
         super().__init__(*args, **kwargs)
+
+    def make_object_private(self, name):
+        name = self._normalize_name(self._clean_name(name))
+        self.bucket.Object(name).Acl().put(ACL='private')
+
+    def make_object_public(self, name):
+        name = self._normalize_name(self._clean_name(name))
+        self.bucket.Object(name).Acl().put(ACL='public-read')
