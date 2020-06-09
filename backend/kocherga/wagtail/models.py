@@ -4,6 +4,8 @@ import json
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+import wagtail.images.models
+
 
 class PagePreview(models.Model):
     token = models.CharField(max_length=255, unique=True)
@@ -26,3 +28,16 @@ class PagePreview(models.Model):
     def garbage_collect(cls):
         yesterday = datetime.datetime.now() - datetime.timedelta(hours=24)
         cls.objects.filter(created_at__lt=yesterday).delete()
+
+
+class CustomImage(wagtail.images.models.AbstractImage):
+    admin_form_fields = wagtail.images.models.Image.admin_form_fields
+
+
+class CustomRendition(wagtail.images.models.AbstractRendition):
+    image = models.ForeignKey(CustomImage, related_name='renditions', on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (
+            ('image', 'filter_spec', 'focal_point_key'),
+        )
