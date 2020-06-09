@@ -6,7 +6,8 @@ SUPERUSER_EMAIL ?= me@berekuk.ru
 ##### Dev environment #####
 dev:
 	kubectl --context=dev delete job core-django-migrate || true
-	skaffold dev
+	# see: https://github.com/GoogleContainerTools/skaffold/issues/3798, "Consider defaulting 'force' to false with Helm v3"
+	skaffold dev --force=false
 
 wait_for_migrate:
 	$(K) logs -f $(shell $(K) get po -o name | fgrep core-django-migrate)
