@@ -168,7 +168,7 @@ class VkAnnouncement(models.Model):
     group = models.CharField(max_length=40, blank=True)
 
     image = models.ForeignKey(
-        'wagtailimages.Image',
+        'kocherga_wagtail.CustomImage',
         null=True,
         blank=True,
         on_delete=models.PROTECT,

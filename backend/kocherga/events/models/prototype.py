@@ -51,7 +51,7 @@ class EventPrototype(models.Model):
     length = models.IntegerField()  # in minutes
 
     image = models.ForeignKey(
-        'wagtailimages.Image',
+        'kocherga_wagtail.CustomImage',
         null=True,
         blank=True,
         on_delete=models.PROTECT,

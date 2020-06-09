@@ -54,7 +54,7 @@ class WeeklyDigest(models.Model):
     vk_id = models.CharField('ID поста в VK', max_length=100, blank=True)
 
     image = models.ForeignKey(
-        'wagtailimages.Image',
+        'kocherga_wagtail.CustomImage',
         null=True,
         blank=True,
         on_delete=models.PROTECT,

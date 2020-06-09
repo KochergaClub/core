@@ -40,7 +40,7 @@ class ProjectPage(HeadlessPreviewMixin, Page):
 
     body = RichTextField('Описание', blank=True)
     image = models.ForeignKey(
-        'wagtailimages.Image',
+        'kocherga_wagtail.CustomImage',
         on_delete=models.PROTECT,
         related_name='+'
     )

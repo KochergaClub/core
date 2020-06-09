@@ -206,7 +206,7 @@ class Event(models.Model):
     )
 
     image = models.ForeignKey(
-        'wagtailimages.Image',
+        'kocherga_wagtail.CustomImage',
         null=True,
         blank=True,
         on_delete=models.PROTECT,
