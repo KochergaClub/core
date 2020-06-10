@@ -29,7 +29,7 @@ def resolve_announcements(obj, info):
 def resolve_image(obj, info):
     if not obj.image:
         return None
-    return obj.image.file.url
+    return obj.image.url
 
 
 @EventsPublicEvent.field('image_rendition')

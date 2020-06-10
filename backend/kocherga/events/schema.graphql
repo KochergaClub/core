@@ -186,7 +186,7 @@ type EventsPublicEvent {
   title: String!
   summary: String!
   description: String!
-  image: String
+  image: String # deprecated, links to original image
   image_rendition(spec: String!): WagtailImageRendition
 
   registration_type: String!
