@@ -67,14 +67,9 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       apolloState: apolloClient.cache.extract(),
-      unstable_revalidate: 1,
     },
+    unstable_revalidate: 1,
   };
 };
-
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: [],
-  fallback: false,
-});
 
 export default withApollo(PublicEventIndexPage, { ssr: false });
