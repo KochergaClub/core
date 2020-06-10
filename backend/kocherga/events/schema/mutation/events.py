@@ -89,6 +89,8 @@ def eventUpdate(_, info, input):
         if not input['image_id']:
             event.image = None
         else:
+            # TODO - check image access permissions
+            # TODO - make image public if necessary
             event.image = kocherga.wagtail.models.CustomImage.objects.get(pk=input['image_id'])
 
     event.full_clean()

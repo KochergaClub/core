@@ -46,6 +46,13 @@ class CustomImage(wagtail.images.models.AbstractImage):
         self.private = value
         self.save()
 
+    @property
+    def url(self):
+        result = self.file.url
+        if not self.private:
+            result = self.file.storage._strip_signing_parameters(result)
+        return result
+
 
 class CustomRendition(wagtail.images.models.AbstractRendition):
     image = models.ForeignKey(CustomImage, related_name='renditions', on_delete=models.CASCADE)
@@ -57,7 +64,7 @@ class CustomRendition(wagtail.images.models.AbstractRendition):
 
     @property
     def url(self):
-        result = super().url
+        result = self.file.url
         if not self.image.private:
             result = self.image.file.storage._strip_signing_parameters(result)
         return result
