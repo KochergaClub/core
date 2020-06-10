@@ -72,5 +72,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-// export default withApollo(PublicEventIndexPage, { ssr: false });
-export default withApollo(PublicEventIndexPage);
+export default withApollo(PublicEventIndexPage, { ssr: false });
