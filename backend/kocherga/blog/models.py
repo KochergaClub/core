@@ -50,7 +50,7 @@ class BlogPostAuthor(Orderable):
     description = models.TextField('Описание', blank=True)
     image = models.ForeignKey(
         'kocherga_wagtail.CustomImage',
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='+',
     )
 
