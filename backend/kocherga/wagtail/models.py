@@ -34,17 +34,16 @@ class PagePreview(models.Model):
 
 
 class CustomImage(wagtail.images.models.AbstractImage):
-    private = models.BooleanField(default=True)
+    private = models.BooleanField(default=False)
 
     admin_form_fields = wagtail.images.models.Image.admin_form_fields + ('private',)
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         # TODO - compare current and previous `private` value
-        # initial file is InMemoryUploadedFile, so we make sure that file is on S3 already before updating ACL
+        # note that we update ACL after saving, because before saving file is InMemoryUploadedFile and not on S3 yet
         if getattr(self.file.file, 'obj', None):
             self._update_acl()
-
-        super().save(*args, **kwargs)
 
     def _update_acl(self):
         acl = 'private' if self.private else 'public-read'
