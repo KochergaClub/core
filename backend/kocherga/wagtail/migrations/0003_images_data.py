@@ -62,6 +62,7 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('wagtailimages', '0001_initial'),
         ('kocherga_wagtail', '0002_custom_images'),
     ]
 
