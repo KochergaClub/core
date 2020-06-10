@@ -1,6 +1,4 @@
-import React from 'react';
-
-import getConfig from 'next/config';
+import { useEffect } from 'react';
 
 declare global {
   interface Window {
@@ -9,9 +7,9 @@ declare global {
 }
 
 const VkMessagesWidget: React.FC = () => {
-  const widgetId = getConfig().publicRuntimeConfig.vkMessagesWidgetId;
+  const widgetId = process.env.NEXT_PUBLIC_VK_MESSAGES_WIDGET_ID;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!widgetId) {
       return;
     }
@@ -31,10 +29,10 @@ const VkMessagesWidget: React.FC = () => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <script src="https://vk.com/js/api/openapi.js?158" />
       <div id="vk_community_messages" />
-    </React.Fragment>
+    </>
   );
 };
 

@@ -13,7 +13,7 @@ import TL03 from '~/blocks/TL03';
 import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { Page } from '~/components';
 import { formatDate } from '~/common/utils';
-import { GetStaticProps } from 'next';
+import { GetStaticProps, GetStaticPaths } from 'next';
 import { initApolloClient } from '~/apollo/client';
 import {
   CurrentUserQuery,
@@ -71,5 +71,10 @@ export const getStaticProps: GetStaticProps = async () => {
     },
   };
 };
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: false,
+});
 
 export default withApollo(PublicEventIndexPage, { ssr: false });

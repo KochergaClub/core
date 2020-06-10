@@ -1,12 +1,7 @@
-import React from 'react';
-
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-
-export const GA_TRACKING_ID = publicRuntimeConfig.googleAnalyticsId;
-export const FB_PIXEL_ID = publicRuntimeConfig.facebookPixelId;
-export const YANDEX_METRIKA_ID = publicRuntimeConfig.yandexMetrikaId;
-export const VK_RETARGETING_ID = publicRuntimeConfig.vkRetargetingId;
+const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID;
+const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
+const YANDEX_METRIKA_ID = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+const VK_RETARGETING_ID = process.env.NEXT_PUBLIC_VK_RETARGETING_ID;
 
 declare global {
   interface Window {
@@ -88,7 +83,7 @@ export const VkRetargetingScript = () => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <script
         dangerouslySetInnerHTML={{
           __html: `!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?162",t.onload=function(){VK.Retargeting.Init("${VK_RETARGETING_ID}"),VK.Retargeting.Hit()},document.head.appendChild(t)}();`,
@@ -101,7 +96,7 @@ export const VkRetargetingScript = () => {
           alt=""
         />
       </noscript>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -14,6 +14,8 @@ env:
     YANDEX_METRIKA_ID: ""
     VK_RETARGETING_ID: ""
     SENTRY_DSN_FRONTEND: ""
+    VK_MESSAGES_WIDGET_ID: ""
+    GOOGLE_MAPS_KEY: ""
 
 config:
   main_py: ""

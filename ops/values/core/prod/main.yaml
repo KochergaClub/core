@@ -7,6 +7,8 @@ env:
     YANDEX_METRIKA_ID: "45841251"
     VK_RETARGETING_ID: "VK-RTRG-263809-2VWW0"
     SENTRY_DSN_FRONTEND: "https://0caabf985a0943fab01ad414573a1f9f@sentry.io/1768687"
+    VK_MESSAGES_WIDGET_ID: "99973027"
+    GOOGLE_MAPS_KEY: "AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI"
 
 ingress:
   host: "kocherga-club.ru"

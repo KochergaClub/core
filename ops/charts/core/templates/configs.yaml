@@ -12,11 +12,14 @@ metadata:
   name: {{ .Release.Name }}-frontend-env
   namespace: {{ .Release.Namespace }}
 data:
-  GOOGLE_ANALYTICS_ID: {{ .Values.env.frontend.GOOGLE_ANALYTICS_ID | quote }}
-  FACEBOOK_PIXEL_ID: {{ .Values.env.frontend.FACEBOOK_PIXEL_ID | quote }}
-  YANDEX_METRIKA_ID: {{ .Values.env.frontend.YANDEX_METRIKA_ID | quote }}
-  VK_RETARGETING_ID: {{ .Values.env.frontend.VK_RETARGETING_ID | quote }}
-  SENTRY_DSN_FRONTEND: {{ .Values.env.frontend.SENTRY_DSN_FRONTEND | quote }}
+  NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: {{ .Values.env.frontend.GOOGLE_ANALYTICS_ID | quote }}
+  NEXT_PUBLIC_FACEBOOK_PIXEL_ID: {{ .Values.env.frontend.FACEBOOK_PIXEL_ID | quote }}
+  NEXT_PUBLIC_YANDEX_METRIKA_ID: {{ .Values.env.frontend.YANDEX_METRIKA_ID | quote }}
+  NEXT_PUBLIC_VK_RETARGETING_ID: {{ .Values.env.frontend.VK_RETARGETING_ID | quote }}
+  NEXT_PUBLIC_SENTRY_DSN_FRONTEND: {{ .Values.env.frontend.SENTRY_DSN_FRONTEND | quote }}
+  NEXT_PUBLIC_VK_MESSAGES_WIDGET_ID: {{ .Values.env.frontend.VK_MESSAGES_WIDGET_ID | quote }}
+  NEXT_PUBLIC_GOOGLE_MAPS_KEY: {{ .Values.env.frontend.GOOGLE_MAPS_KEY | quote }}
+  NEXT_PUBLIC_STATIC_S3_BUCKET: {{ .Values.env.common.STATIC_S3_BUCKET | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap

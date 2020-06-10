@@ -1,6 +1,5 @@
 import App from 'next/app';
 import Router from 'next/router';
-import getConfig from 'next/config';
 
 import NProgress from 'nprogress';
 
@@ -11,7 +10,7 @@ import { trackPageview, trackEvent } from '~/components/analytics';
 import '~/css/react-datepicker.css';
 
 Sentry.init({
-  dsn: getConfig().publicRuntimeConfig.sentryDSN,
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN_FRONTEND,
 });
 
 Router.events.on('routeChangeStart', () => {
