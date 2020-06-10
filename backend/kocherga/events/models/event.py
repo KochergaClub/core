@@ -371,6 +371,9 @@ class Event(models.Model):
                 raise Exception("Only public events can be published")
             if self.realm == 'online' and not self.zoom_link:
                 raise Exception("zoom_link must be set when publishing online events")
+#
+#        if self.event_type == 'public' and self.image and self.image.private:
+#            raise Exception("Public event images must be public too")
 
 
 class Tag(models.Model):

@@ -1,3 +1,6 @@
+import logging
+logger = logging.getLogger(__name__)
+
 import datetime
 import json
 
@@ -31,20 +34,25 @@ class PagePreview(models.Model):
 
 
 class CustomImage(wagtail.images.models.AbstractImage):
-    admin_form_fields = wagtail.images.models.Image.admin_form_fields
-
     private = models.BooleanField(default=True)
 
-    def set_private(self, value: bool):
-        assert type(value) == bool
-        acl = 'private' if value else 'public-read'
+    admin_form_fields = wagtail.images.models.Image.admin_form_fields + ('private',)
+
+    def save(self, *args, **kwargs):
+        # TODO - compare current and previous `private` value
+        # initial file is InMemoryUploadedFile, so we make sure that file is on S3 already before updating ACL
+        if getattr(self.file.file, 'obj', None):
+            self._update_acl()
+
+        super().save(*args, **kwargs)
+
+    def _update_acl(self):
+        acl = 'private' if self.private else 'public-read'
+        logger.info(f'Updating {self.file.name} ACL to {acl}')
 
         self.file.file.obj.Acl().put(ACL=acl)
         for rendition in self.renditions.all():
             rendition.file.file.obj.Acl().put(ACL=acl)
-
-        self.private = value
-        self.save()
 
     @property
     def url(self):
@@ -68,3 +76,15 @@ class CustomRendition(wagtail.images.models.AbstractRendition):
         if not self.image.private:
             result = self.image.file.storage._strip_signing_parameters(result)
         return result
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # TODO - compare current and previous `private` value
+        # note that we update ACL after saving, because before saving file is InMemoryUploadedFile and not on S3 yet
+        self._update_acl()
+
+    def _update_acl(self):
+        acl = 'private' if self.image.private else 'public-read'
+        logger.info(f'Updating {self.file.name} ACL to {acl}')
+
+        self.file.file.obj.Acl().put(ACL=acl)
