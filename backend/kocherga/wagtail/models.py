@@ -33,6 +33,19 @@ class PagePreview(models.Model):
 class CustomImage(wagtail.images.models.AbstractImage):
     admin_form_fields = wagtail.images.models.Image.admin_form_fields
 
+    private = models.BooleanField(default=True)
+
+    def set_private(self, value: bool):
+        assert type(value) == bool
+        acl = 'private' if value else 'public-read'
+
+        self.file.file.obj.Acl().put(ACL=acl)
+        for rendition in self.renditions.all():
+            rendition.file.file.obj.Acl().put(ACL=acl)
+
+        self.private = value
+        self.save()
+
 
 class CustomRendition(wagtail.images.models.AbstractRendition):
     image = models.ForeignKey(CustomImage, related_name='renditions', on_delete=models.CASCADE)
@@ -41,3 +54,10 @@ class CustomRendition(wagtail.images.models.AbstractRendition):
         unique_together = (
             ('image', 'filter_spec', 'focal_point_key'),
         )
+
+    @property
+    def url(self):
+        result = super().url
+        if not self.image.private:
+            result = self.image.file.storage._strip_signing_parameters(result)
+        return result

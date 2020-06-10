@@ -6,7 +6,7 @@ from kocherga.error import PublicError
 from kocherga.dateutils import TZ
 
 from django.core.files.images import ImageFile
-from wagtail.images.models import Image
+from kocherga.wagtail.models import CustomImage
 
 
 def build_start_end_dt(date_str, start_time, end_time):
@@ -38,8 +38,8 @@ def build_start_end_dt(date_str, start_time, end_time):
     return (start_dt, end_dt)
 
 
-def create_image_from_fh(fh, title, basename) -> Image:
-    image = Image(title=title)
+def create_image_from_fh(fh, title, basename) -> CustomImage:
+    image = CustomImage(title=title)
     image_type = imghdr.what(fh)
     if image_type == 'png':
         ext = 'png'

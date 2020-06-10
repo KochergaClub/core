@@ -1,5 +1,5 @@
 from ariadne import MutationType
-import wagtail.images.models
+import kocherga.wagtail.models
 
 from ... import models
 
@@ -64,7 +64,7 @@ def eventVkAnnouncementSetImage(_, info, input):
     if not image_id:
         vk_announcement.image = None
     else:
-        vk_announcement.image = wagtail.images.models.Image.objects.get(pk=image_id)
+        vk_announcement.image = kocherga.wagtail.models.CustomImage.objects.get(pk=image_id)
 
     vk_announcement.full_clean()
     vk_announcement.save()

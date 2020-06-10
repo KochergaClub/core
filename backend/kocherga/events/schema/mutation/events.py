@@ -4,7 +4,7 @@ import dateutil.parser
 import requests
 
 from ariadne import MutationType
-import wagtail.images.models
+import kocherga.wagtail.models
 
 import kocherga.projects.models
 
@@ -89,7 +89,7 @@ def eventUpdate(_, info, input):
         if not input['image_id']:
             event.image = None
         else:
-            event.image = wagtail.images.models.Image.objects.get(pk=input['image_id'])
+            event.image = kocherga.wagtail.models.CustomImage.objects.get(pk=input['image_id'])
 
     event.full_clean()
     event.save()

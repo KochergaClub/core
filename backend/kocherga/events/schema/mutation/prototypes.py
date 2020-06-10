@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 from ariadne import MutationType
 
 from datetime import datetime
-import wagtail.images.models
+import kocherga.wagtail.models
 
 from kocherga.dateutils import TZ
 import kocherga.projects.models
@@ -134,7 +134,7 @@ def eventPrototypeSetImage(_, info, input):
     prototype = models.EventPrototype.objects.get(pk=input['id'])
     logger.debug(input)
 
-    image = wagtail.images.models.Image.objects.get(pk=input['image_id'])
+    image = kocherga.wagtail.models.CustomImage.objects.get(pk=input['image_id'])
     # TODO - implement image view permission and check for it
 
     prototype.image = image
