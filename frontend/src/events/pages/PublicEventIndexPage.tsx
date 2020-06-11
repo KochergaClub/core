@@ -13,12 +13,8 @@ import TL03 from '~/blocks/TL03';
 import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { Page } from '~/components';
 import { formatDate } from '~/common/utils';
-import { GetStaticProps, GetStaticPaths } from 'next';
-import { initApolloClient } from '~/apollo/client';
-import {
-  CurrentUserQuery,
-  CurrentUserDocument,
-} from '~/auth/queries.generated';
+import { GetStaticProps } from 'next';
+import { apolloClientForStaticProps } from '~/apollo/client';
 import { UpcomingPublicEventsDocument } from '../queries.generated';
 
 const PublicEventIndexPage: NextApolloPage = () => {
@@ -45,16 +41,7 @@ const PublicEventIndexPage: NextApolloPage = () => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const apolloClient = initApolloClient();
-
-  // FIXME - copy-paste from apollo/client
-  const currentUserQueryResult = await apolloClient.query<CurrentUserQuery>({
-    query: CurrentUserDocument,
-  });
-
-  if (!currentUserQueryResult.data) {
-    throw new Error('CurrentUser query failed');
-  }
+  const apolloClient = await apolloClientForStaticProps();
 
   // TODO - pass date to page props to avoid inconsistencies?
   await apolloClient.query({

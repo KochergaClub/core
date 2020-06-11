@@ -1,4 +1,6 @@
+import { GetStaticProps, GetStaticPaths } from 'next';
 import { withApollo, NextApolloPage } from '~/apollo';
+import { apolloClientForStaticProps } from '~/apollo/client';
 
 import { APIError } from '~/common/api';
 
@@ -10,6 +12,7 @@ import {
 } from './utils';
 
 import { loadTildaPage } from './tilda-utils';
+import { Spinner } from '~/components';
 
 interface Props {
   typename: string;
@@ -20,47 +23,55 @@ const AnyWagtailPage: NextApolloPage<Props> = ({ typename, page }) => {
   const Component = getComponentByTypename(typename);
 
   if (!Component) {
-    return <div>oops</div>;
+    return <Spinner size="block" />;
   }
 
   return <Component page={page} />;
 };
 
-AnyWagtailPage.getInitialProps = async context => {
-  const { apolloClient, res } = context;
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
 
-  if (!context.asPath) {
-    throw new Error('asPath is empty');
+export const getStaticProps: GetStaticProps = async context => {
+  const apolloClient = await apolloClientForStaticProps();
+
+  if (!context.params) {
+    throw new Error('params are empty');
   }
 
-  const path = decodeURI(context.asPath.split('?')[0]);
+  const path = (context.params.slug as string[]).join('/');
 
-  const tildaPage = await loadTildaPage({
-    apolloClient,
-    path,
-  });
+  // FIXME!
+  // const tildaPage = await loadTildaPage({
+  //   apolloClient,
+  //   path,
+  // });
+  // if (tildaPage) {
+  //   if (!res) {
+  //     throw new Error("Can't render Tilda pages on client-side navigation");
+  //     // FIXME - just reload the page from server
+  //   }
+  //   res.writeHead(200, {
+  //     'Content-Type': 'text/html',
+  //   });
+  //   res.write(tildaPage);
+  //   res.end();
+  //   return { typename: '', page: '' };
+  // }
 
-  if (tildaPage) {
-    if (!res) {
-      throw new Error("Can't render Tilda pages on client-side navigation");
-      // FIXME - just reload the page from server
-    }
-    res.writeHead(200, {
-      'Content-Type': 'text/html',
-    });
-    res.write(tildaPage);
-    res.end();
-    return { typename: '', page: '' };
-  }
-
-  let locator: PageLocator = { path };
-  if (path === '/preview') {
-    const preview_token = context.query.token as string;
-    if (!preview_token) {
-      throw new APIError('No token', 500);
-    }
-    locator = { preview_token };
-  }
+  const locator: PageLocator = { path };
+  // FIXME - move to pages/preview.tsx
+  // if (path === '/preview') {
+  //   const preview_token = context.query.token as string;
+  //   if (!preview_token) {
+  //     throw new APIError('No token', 500);
+  //   }
+  //   locator = { preview_token };
+  // }
 
   const typename = await loadTypename({
     apolloClient,
@@ -79,7 +90,13 @@ AnyWagtailPage.getInitialProps = async context => {
     locator,
   });
 
-  return { typename, page };
+  return {
+    props: {
+      typename,
+      page,
+    },
+    unstable_revalidate: 1,
+  };
 };
 
-export default withApollo(AnyWagtailPage);
+export default withApollo(AnyWagtailPage, { ssr: false });
