@@ -48,6 +48,8 @@ const AnyWagtailPage: NextApolloPage<Props> = props => {
         return <div>oops</div>; // FIXME - better error
       }
       return <Component page={props.page} />;
+    default:
+      return <div>Unknown page kind: {props.kind}</div>;
   }
 };
 
@@ -61,11 +63,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<Props> = async context => {
   const apolloClient = await apolloClientForStaticProps();
 
-  if (!context.params) {
-    throw new Error('params are empty');
-  }
-
-  const path = (context.params.slug as string[]).join('/');
+  const path = context.params
+    ? (context.params.slug as string[]).join('/')
+    : '';
 
   const tildaPage = await loadTildaPage({
     apolloClient,
@@ -77,6 +77,7 @@ export const getStaticProps: GetStaticProps<Props> = async context => {
       props: {
         kind: 'tilda',
         data: tildaPage,
+        apolloState: apolloClient.cache.extract(),
       },
       unstable_revalidate: 1,
     };
@@ -114,6 +115,7 @@ export const getStaticProps: GetStaticProps<Props> = async context => {
       kind: 'wagtail',
       typename,
       page,
+      apolloState: apolloClient.cache.extract(),
     },
     unstable_revalidate: 1,
   };
