@@ -11,7 +11,7 @@ interface LoadTildaPageProps {
 
 export const loadTildaPage = async (
   props: LoadTildaPageProps
-): Promise<string | undefined> => {
+): Promise<TildaPageQuery['tildaPage']> => {
   let path = props.path;
   if (path.startsWith('/')) {
     path = path.substr(1);
@@ -35,10 +35,5 @@ export const loadTildaPage = async (
     return;
   }
 
-  const htmlUrl = data.tildaPage.html_url;
-
-  const response = await fetch(htmlUrl);
-  const body = await response.text();
-
-  return body;
+  return data.tildaPage;
 };

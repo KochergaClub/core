@@ -651,7 +651,7 @@ type EventsPublicEvent {
   title: String!
   summary: String!
   description: String!
-  image: String
+  image: String # deprecated, links to original image
   image_rendition(spec: String!): WagtailImageRendition
 
   registration_type: String!
@@ -1740,6 +1740,16 @@ extend type Query {
 type TildaPage {
   path: String!
   html_url: String!
+  body: String!
+  title: String!
+  assets: [TildaAsset!]!
+  css: [TildaAsset!]!
+  js: [TildaAsset!]!
+}
+
+type TildaAsset {
+  url: String!
+  kind: String!
 }
 
 type ZoomMeeting {

@@ -2139,6 +2139,17 @@ export type TildaPage = {
   __typename?: 'TildaPage';
   path: Scalars['String'];
   html_url: Scalars['String'];
+  body: Scalars['String'];
+  title: Scalars['String'];
+  assets: Array<TildaAsset>;
+  css: Array<TildaAsset>;
+  js: Array<TildaAsset>;
+};
+
+export type TildaAsset = {
+  __typename?: 'TildaAsset';
+  url: Scalars['String'];
+  kind: Scalars['String'];
 };
 
 export type ZoomMeeting = {

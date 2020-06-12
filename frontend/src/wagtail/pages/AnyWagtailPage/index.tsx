@@ -13,20 +13,42 @@ import {
 
 import { loadTildaPage } from './tilda-utils';
 import { Spinner } from '~/components';
+import { useRouter } from 'next/router';
+import { TildaPageQuery } from './queries.generated';
+import TildaPage from './TildaPage';
 
-interface Props {
+interface WagtailProps {
+  kind: 'wagtail';
   typename: string;
   page: any;
 }
 
-const AnyWagtailPage: NextApolloPage<Props> = ({ typename, page }) => {
-  const Component = getComponentByTypename(typename);
+interface TildaProps {
+  kind: 'tilda';
+  data: TildaPageQuery['tildaPage'];
+}
 
-  if (!Component) {
+type Props = WagtailProps | TildaProps;
+
+const AnyWagtailPage: NextApolloPage<Props> = props => {
+  const router = useRouter();
+  if (router.isFallback) {
     return <Spinner size="block" />;
   }
 
-  return <Component page={page} />;
+  switch (props.kind) {
+    case 'tilda':
+      if (!props.data) {
+        throw new Error('oops');
+      }
+      return <TildaPage {...props.data} />;
+    case 'wagtail':
+      const Component = getComponentByTypename(props.typename);
+      if (!Component) {
+        return <div>oops</div>; // FIXME - better error
+      }
+      return <Component page={props.page} />;
+  }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -36,7 +58,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async context => {
+export const getStaticProps: GetStaticProps<Props> = async context => {
   const apolloClient = await apolloClientForStaticProps();
 
   if (!context.params) {
@@ -45,23 +67,20 @@ export const getStaticProps: GetStaticProps = async context => {
 
   const path = (context.params.slug as string[]).join('/');
 
-  // FIXME!
-  // const tildaPage = await loadTildaPage({
-  //   apolloClient,
-  //   path,
-  // });
-  // if (tildaPage) {
-  //   if (!res) {
-  //     throw new Error("Can't render Tilda pages on client-side navigation");
-  //     // FIXME - just reload the page from server
-  //   }
-  //   res.writeHead(200, {
-  //     'Content-Type': 'text/html',
-  //   });
-  //   res.write(tildaPage);
-  //   res.end();
-  //   return { typename: '', page: '' };
-  // }
+  const tildaPage = await loadTildaPage({
+    apolloClient,
+    path,
+  });
+
+  if (tildaPage) {
+    return {
+      props: {
+        kind: 'tilda',
+        data: tildaPage,
+      },
+      unstable_revalidate: 1,
+    };
+  }
 
   const locator: PageLocator = { path };
   // FIXME - move to pages/preview.tsx
@@ -92,6 +111,7 @@ export const getStaticProps: GetStaticProps = async context => {
 
   return {
     props: {
+      kind: 'wagtail',
       typename,
       page,
     },

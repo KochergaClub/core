@@ -60,7 +60,14 @@ export type TildaPageQuery = (
   { __typename?: 'Query' }
   & { tildaPage?: Types.Maybe<(
     { __typename?: 'TildaPage' }
-    & Pick<Types.TildaPage, 'html_url'>
+    & Pick<Types.TildaPage, 'body' | 'title'>
+    & { css: Array<(
+      { __typename?: 'TildaAsset' }
+      & Pick<Types.TildaAsset, 'url'>
+    )>, js: Array<(
+      { __typename?: 'TildaAsset' }
+      & Pick<Types.TildaAsset, 'url'>
+    )> }
   )> }
 );
 
@@ -103,7 +110,14 @@ export type WagtailPageTypeQueryResult = ApolloReactCommon.QueryResult<WagtailPa
 export const TildaPageDocument = gql`
     query TildaPage($path: String!) {
   tildaPage(path: $path) {
-    html_url
+    body
+    title
+    css {
+      url
+    }
+    js {
+      url
+    }
   }
 }
     `;
