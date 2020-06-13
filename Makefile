@@ -53,6 +53,9 @@ pyshell:
 tail:
 	$(K) logs -f -l app=core-django
 
+tail_front:
+	$(K) logs -f -l app=core-frontend -c default
+
 superuser:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py createsuperuser --email=$(SUPERUSER_EMAIL)
 

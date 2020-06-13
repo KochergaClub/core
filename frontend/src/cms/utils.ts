@@ -11,13 +11,15 @@ import * as BlogPages from '~/blog/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
 import * as FAQPages from '~/faq/wagtail';
 
-import FreeFormPage from '../../wagtail/FreeFormPage';
+import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
-import { NextWagtailPage } from '../../types';
+import { NextWagtailPage } from '~/wagtail/types';
 
 import {
   WagtailPageTypeQuery,
   WagtailPageTypeDocument,
+  WagtailPagesDocument,
+  WagtailPagesQuery,
 } from './queries.generated';
 
 export type PageLocator = { path: string } | { preview_token: string };
@@ -148,4 +150,21 @@ ${fragmentDoc}
   }
 
   return page;
+};
+
+export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
+  const { data, errors } = await apolloClient.query<WagtailPagesQuery>({
+    query: WagtailPagesDocument,
+  });
+
+  if (errors) {
+    throw new APIError('GraphQL error', 500);
+  }
+
+  return data.wagtailPages.map(p => p.meta.html_url.replace(/^\//, ''));
+};
+
+export const normalizeSsrUrl = (url: string) => {
+  // TODO - this is sloppy, this code assumes both that page could have `?ssr=1` param and /ssr prefix, because rewrite in nextjsEntrypoint is not perfect.
+  return url.replace(/^\/ssr\/?/, '').replace(/\?.*/, '');
 };

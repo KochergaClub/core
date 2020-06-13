@@ -113,3 +113,9 @@ type HeroFrontBlockItem {
   text: String!
   link: String
 }
+
+type FolderPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}

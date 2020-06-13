@@ -52,6 +52,7 @@ export type Query = {
   timepadCategories: Array<TimepadCategory>;
   vkGroups: Array<VkGroup>;
   wagtailPage?: Maybe<WagtailPage>;
+  wagtailPages: Array<WagtailPage>;
   watchmenGradesAll: Array<WatchmenGrade>;
   watchmenShifts: Array<WatchmenShift>;
   watchmenWatchmenAll: Array<WatchmenWatchman>;
@@ -2012,6 +2013,13 @@ export type HeroFrontBlockItem = {
   link?: Maybe<Scalars['String']>;
 };
 
+export type FolderPage = WagtailPage & {
+  __typename?: 'FolderPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
+};
+
 export type BlogPostPage = WagtailPage & {
   __typename?: 'BlogPostPage';
   id: Scalars['ID'];
@@ -2139,6 +2147,18 @@ export type TildaPage = {
   __typename?: 'TildaPage';
   path: Scalars['String'];
   html_url: Scalars['String'];
+  body: Scalars['String'];
+  title: Scalars['String'];
+  show_header_and_footer: Scalars['Boolean'];
+  assets: Array<TildaAsset>;
+  css: Array<TildaAsset>;
+  js: Array<TildaAsset>;
+};
+
+export type TildaAsset = {
+  __typename?: 'TildaAsset';
+  url: Scalars['String'];
+  kind: Scalars['String'];
 };
 
 export type ZoomMeeting = {

@@ -8,5 +8,13 @@ export default (nextApp: Server) => async (
   res: express.Response
 ) => {
   const parsedUrl = parse(req.url, true);
+
+  if (parsedUrl.query.ssr === '1') {
+    return nextApp.getRequestHandler()(
+      req,
+      res,
+      parse('/ssr' + parsedUrl.pathname, true)
+    );
+  }
   return nextApp.getRequestHandler()(req, res, parsedUrl);
 };

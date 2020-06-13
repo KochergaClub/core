@@ -29,4 +29,4 @@ class FrontPage(HeadlessPreviewMixin, Page):
 
 # fake model for wagtail folders
 class FolderPage(Page):
-    pass
+    graphql_type = 'FolderPage'

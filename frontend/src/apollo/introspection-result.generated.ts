@@ -45,6 +45,9 @@
             "name": "FreeFormPage"
           },
           {
+            "name": "FolderPage"
+          },
+          {
             "name": "BlogPostPage"
           },
           {

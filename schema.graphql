@@ -42,6 +42,7 @@
 
 extend type Query {
   wagtailPage(path: String, preview_token: String): WagtailPage
+  wagtailPages: [WagtailPage!]!
 }
 
 interface WagtailPage {
@@ -651,7 +652,7 @@ type EventsPublicEvent {
   title: String!
   summary: String!
   description: String!
-  image: String
+  image: String # deprecated, links to original image
   image_rendition(spec: String!): WagtailImageRendition
 
   registration_type: String!
@@ -1599,6 +1600,12 @@ type HeroFrontBlockItem {
   link: String
 }
 
+type FolderPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
 type BlogPostPage implements WagtailPage {
   id: ID!
   meta: WagtailPageMeta!
@@ -1734,12 +1741,23 @@ type FaqEntry {
 
 extend type Query {
   tildaPage(path: String!): TildaPage
-  tildaPages: [TildaPage!]! @staffonly
+  tildaPages: [TildaPage!]! # @staffonly
 }
 
 type TildaPage {
   path: String!
   html_url: String!
+  body: String!
+  title: String!
+  show_header_and_footer: Boolean!
+  assets: [TildaAsset!]!
+  css: [TildaAsset!]!
+  js: [TildaAsset!]!
+}
+
+type TildaAsset {
+  url: String!
+  kind: String!
 }
 
 type ZoomMeeting {

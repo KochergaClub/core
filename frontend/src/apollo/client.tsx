@@ -28,7 +28,10 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
   if (typeof window === 'undefined') {
     const { API_HOST } = require('../../server/constants');
 
-    // req can be empty when we do the last styled-components-extracting rendering pass in _document.
+    // req can be empty:
+    // - when we do the last styled-components-extracting rendering pass in _document.
+    // - when we init apollo client from getStaticProps which doesn't have access to req.
+    //
     // Note that we can't pass always `apolloClient` to WithApollo props, since it can't be serialized.
     // This is ugly - it means that we do 3 rendering passes on all apollo pages, and that we create server-side ApolloClient twice.
     // (TODO - recheck if it's true; I suspect React strict mode might actually be to blame here, and it's fixed now.)
@@ -141,7 +144,7 @@ const createApolloClient = (
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  */
-export const initApolloClient = (
+const initApolloClient = (
   initialState = undefined,
   req: NextApolloPageContext['req'] = undefined
 ) => {
@@ -157,6 +160,21 @@ export const initApolloClient = (
 
     // avoiding refetch on client side, see https://github.com/apollographql/apollo-client/issues/4814
     apolloClient.disableNetworkFetches = true;
+  }
+
+  return apolloClient;
+};
+
+export const apolloClientForStaticProps = async () => {
+  const apolloClient = initApolloClient();
+
+  // the result is always non-authenticated user, but a lot of components still rely of this data being in apollo cache
+  const currentUserQueryResult = await apolloClient.query<CurrentUserQuery>({
+    query: CurrentUserDocument,
+  });
+
+  if (!currentUserQueryResult.data) {
+    throw new Error('CurrentUser query failed');
   }
 
   return apolloClient;

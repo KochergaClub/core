@@ -1,1 +1,1 @@
-export { default } from '~/wagtail/pages/AnyWagtailPage';
+export { default, getStaticProps } from '~/cms/pages/AnyCmsPage';

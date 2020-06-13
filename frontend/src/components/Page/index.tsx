@@ -35,6 +35,7 @@ interface Props {
   noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
   noWhitespace?: boolean; // useful e.g. for /now page where we don't want a white whitespace, especially in black tv mode
   og?: OpenGraph;
+  canonicalUrl?: string;
 }
 
 type PageType = React.FC<Props> & {
@@ -99,6 +100,7 @@ const Page: PageType = props => {
         title={props.title}
         description={props.description}
         og={props.og || {}}
+        canonicalUrl={props.canonicalUrl}
       />
       {props.noAnalytics || (
         <React.Fragment>
