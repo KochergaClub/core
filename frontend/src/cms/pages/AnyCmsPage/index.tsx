@@ -1,6 +1,8 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
+import { useRouter } from 'next/router';
 import { withApollo, NextApolloPage } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
+import { KochergaApolloClient } from '~/apollo/types';
 
 import { APIError } from '~/common/api';
 
@@ -9,13 +11,12 @@ import {
   loadTypename,
   getComponentByTypename,
   loadPageForComponent,
-} from './utils';
+} from '../../utils';
+import { loadTildaPage } from '../../tilda-utils';
 
-import { loadTildaPage } from './tilda-utils';
-import { Spinner } from '~/components';
-import { useRouter } from 'next/router';
-import { TildaPageQuery } from './queries.generated';
-import TildaPage from './TildaPage';
+import { TildaPageQuery } from '../../queries.generated';
+import TildaPage from '../../components/TildaPage';
+import FallbackPage from '../../components/FallbackPage';
 
 interface WagtailProps {
   kind: 'wagtail';
@@ -28,12 +29,12 @@ interface TildaProps {
   data: TildaPageQuery['tildaPage'];
 }
 
-type Props = WagtailProps | TildaProps;
+export type Props = WagtailProps | TildaProps;
 
-const AnyWagtailPage: NextApolloPage<Props> = props => {
+export const AnyCmsPage: NextApolloPage<Props> = props => {
   const router = useRouter();
   if (router.isFallback) {
-    return <Spinner size="block" />;
+    return <FallbackPage />;
   }
 
   switch (props.kind) {
@@ -48,8 +49,6 @@ const AnyWagtailPage: NextApolloPage<Props> = props => {
         return <div>oops</div>; // FIXME - better error
       }
       return <Component page={props.page} />;
-    default:
-      return <div>Unknown page kind: {props.kind}</div>;
   }
 };
 
@@ -60,13 +59,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<Props> = async context => {
-  const apolloClient = await apolloClientForStaticProps();
-
-  const path = context.params
-    ? (context.params.slug as string[]).join('/')
-    : '';
-
+export const getCmsProps = async (
+  apolloClient: KochergaApolloClient,
+  path: string
+): Promise<Props> => {
   const tildaPage = await loadTildaPage({
     apolloClient,
     path,
@@ -74,24 +70,12 @@ export const getStaticProps: GetStaticProps<Props> = async context => {
 
   if (tildaPage) {
     return {
-      props: {
-        kind: 'tilda',
-        data: tildaPage,
-        apolloState: apolloClient.cache.extract(),
-      },
-      unstable_revalidate: 1,
+      kind: 'tilda',
+      data: tildaPage,
     };
   }
 
   const locator: PageLocator = { path };
-  // FIXME - move to pages/preview.tsx
-  // if (path === '/preview') {
-  //   const preview_token = context.query.token as string;
-  //   if (!preview_token) {
-  //     throw new APIError('No token', 500);
-  //   }
-  //   locator = { preview_token };
-  // }
 
   const typename = await loadTypename({
     apolloClient,
@@ -111,14 +95,37 @@ export const getStaticProps: GetStaticProps<Props> = async context => {
   });
 
   return {
+    kind: 'wagtail',
+    typename,
+    page,
+  };
+};
+
+export const getStaticProps: GetStaticProps<Props> = async context => {
+  const apolloClient = await apolloClientForStaticProps();
+
+  const path = context.params
+    ? (context.params.slug as string[]).join('/')
+    : '';
+
+  const props = await getCmsProps(apolloClient, path);
+
+  return {
     props: {
-      kind: 'wagtail',
-      typename,
-      page,
+      ...props,
       apolloState: apolloClient.cache.extract(),
     },
     unstable_revalidate: 1,
   };
+
+  // FIXME - move to pages/preview.tsx
+  // if (path === '/preview') {
+  //   const preview_token = context.query.token as string;
+  //   if (!preview_token) {
+  //     throw new APIError('No token', 500);
+  //   }
+  //   locator = { preview_token };
+  // }
 };
 
-export default withApollo(AnyWagtailPage, { ssr: false });
+export default withApollo(AnyCmsPage, { ssr: false });

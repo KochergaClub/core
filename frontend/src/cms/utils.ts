@@ -11,9 +11,9 @@ import * as BlogPages from '~/blog/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
 import * as FAQPages from '~/faq/wagtail';
 
-import FreeFormPage from '../../wagtail/FreeFormPage';
+import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
-import { NextWagtailPage } from '../../types';
+import { NextWagtailPage } from '~/wagtail/types';
 
 import {
   WagtailPageTypeQuery,
@@ -148,4 +148,9 @@ ${fragmentDoc}
   }
 
   return page;
+};
+
+export const normalizeSsrUrl = (url: string) => {
+  // TODO - this is sloppy, this code assumes both that page could have `?ssr=1` param and /ssr prefix, because rewrite in nextjsEntrypoint is not perfect.
+  return url.replace(/^\/ssr\/?/, '').replace(/\?.*/, '');
 };

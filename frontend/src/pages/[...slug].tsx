@@ -2,4 +2,4 @@ export {
   default,
   getStaticProps,
   getStaticPaths,
-} from '~/wagtail/pages/AnyWagtailPage';
+} from '~/cms/pages/AnyCmsPage';

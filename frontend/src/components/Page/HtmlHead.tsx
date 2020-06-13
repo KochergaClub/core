@@ -13,11 +13,17 @@ interface Props {
   og: OpenGraph;
   title: string;
   description?: string;
+  canonicalUrl?: string;
 }
 
-const HtmlHead: React.FC<Props> = ({ og, title, description }) => {
+const HtmlHead: React.FC<Props> = ({
+  og,
+  title,
+  description,
+  canonicalUrl,
+}) => {
   const router = useRouter();
-  const ogUrl = router.asPath;
+  const ogUrl = canonicalUrl || router.asPath;
 
   return (
     <Head>
@@ -29,6 +35,7 @@ const HtmlHead: React.FC<Props> = ({ og, title, description }) => {
       />
       <meta name="og:url" content={ogUrl} />
       <meta name="og:type" content="website" />
+      {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
       {description ? (
         <React.Fragment>
           <meta property="og:description" content={description} />
