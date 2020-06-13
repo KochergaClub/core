@@ -42,6 +42,7 @@
 
 extend type Query {
   wagtailPage(path: String, preview_token: String): WagtailPage
+  wagtailPages: [WagtailPage!]!
 }
 
 interface WagtailPage {
@@ -1599,6 +1600,12 @@ type HeroFrontBlockItem {
   link: String
 }
 
+type FolderPage implements WagtailPage {
+  id: ID!
+  meta: WagtailPageMeta!
+  title: String!
+}
+
 type BlogPostPage implements WagtailPage {
   id: ID!
   meta: WagtailPageMeta!
@@ -1734,7 +1741,7 @@ type FaqEntry {
 
 extend type Query {
   tildaPage(path: String!): TildaPage
-  tildaPages: [TildaPage!]! @staffonly
+  tildaPages: [TildaPage!]! # @staffonly
 }
 
 type TildaPage {

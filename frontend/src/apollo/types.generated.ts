@@ -52,6 +52,7 @@ export type Query = {
   timepadCategories: Array<TimepadCategory>;
   vkGroups: Array<VkGroup>;
   wagtailPage?: Maybe<WagtailPage>;
+  wagtailPages: Array<WagtailPage>;
   watchmenGradesAll: Array<WatchmenGrade>;
   watchmenShifts: Array<WatchmenShift>;
   watchmenWatchmenAll: Array<WatchmenWatchman>;
@@ -2010,6 +2011,13 @@ export type HeroFrontBlockItem = {
   __typename?: 'HeroFrontBlockItem';
   text: Scalars['String'];
   link?: Maybe<Scalars['String']>;
+};
+
+export type FolderPage = WagtailPage & {
+  __typename?: 'FolderPage';
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  title: Scalars['String'];
 };
 
 export type BlogPostPage = WagtailPage & {

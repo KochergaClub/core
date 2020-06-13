@@ -2,12 +2,29 @@ import { KochergaApolloClient } from '~/apollo/types';
 
 import { APIError } from '~/common/api';
 
-import { TildaPageQuery, TildaPageDocument } from './queries.generated';
+import {
+  TildaPageQuery,
+  TildaPageDocument,
+  TildaPagesQuery,
+  TildaPagesDocument,
+} from './queries.generated';
 
 interface LoadTildaPageProps {
   apolloClient: KochergaApolloClient;
   path: string;
 }
+
+export const tildaPageUrls = async (apolloClient: KochergaApolloClient) => {
+  const { data, errors } = await apolloClient.query<TildaPagesQuery>({
+    query: TildaPagesDocument,
+  });
+
+  if (errors) {
+    throw new APIError('GraphQL error', 500);
+  }
+
+  return data.tildaPages.map(p => p.path);
+};
 
 export const loadTildaPage = async (
   props: LoadTildaPageProps

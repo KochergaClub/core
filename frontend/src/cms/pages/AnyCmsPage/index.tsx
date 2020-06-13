@@ -11,8 +11,9 @@ import {
   loadTypename,
   getComponentByTypename,
   loadPageForComponent,
+  wagtailPageUrls,
 } from '../../utils';
-import { loadTildaPage } from '../../tilda-utils';
+import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
 
 import { TildaPageQuery } from '../../queries.generated';
 import TildaPage from '../../components/TildaPage';
@@ -53,8 +54,22 @@ export const AnyCmsPage: NextApolloPage<Props> = props => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const apolloClient = await apolloClientForStaticProps();
+
+  const tildaUrls = await tildaPageUrls(apolloClient);
+  const wagtailUrls = await wagtailPageUrls(apolloClient);
+
+  const urls = [...tildaUrls, ...wagtailUrls];
+
+  const paths = urls.map(url => ({
+    params: {
+      slug: url.split('/'),
+    },
+  }));
+
+  console.log(JSON.stringify(paths));
   return {
-    paths: [],
+    paths,
     fallback: true,
   };
 };

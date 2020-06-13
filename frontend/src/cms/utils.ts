@@ -18,6 +18,8 @@ import { NextWagtailPage } from '~/wagtail/types';
 import {
   WagtailPageTypeQuery,
   WagtailPageTypeDocument,
+  WagtailPagesDocument,
+  WagtailPagesQuery,
 } from './queries.generated';
 
 export type PageLocator = { path: string } | { preview_token: string };
@@ -148,6 +150,18 @@ ${fragmentDoc}
   }
 
   return page;
+};
+
+export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
+  const { data, errors } = await apolloClient.query<WagtailPagesQuery>({
+    query: WagtailPagesDocument,
+  });
+
+  if (errors) {
+    throw new APIError('GraphQL error', 500);
+  }
+
+  return data.wagtailPages.map(p => p.meta.html_url.replace(/^\//, ''));
 };
 
 export const normalizeSsrUrl = (url: string) => {

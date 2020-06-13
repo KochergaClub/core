@@ -84,6 +84,14 @@ def resolve_wagtailPage(_, info, path=None, preview_token=None):
         return page.specific
 
 
+@Query.field('wagtailPages')
+def resolve_wagtailPages(_, info):
+    # page.specific is slow! but we call wagtailPages only on getStaticPaths once per build, so that should be ok?..
+    return [
+        page.specific for page in get_queryset(info.context)
+    ]
+
+
 WagtailPage = InterfaceType("WagtailPage")
 
 

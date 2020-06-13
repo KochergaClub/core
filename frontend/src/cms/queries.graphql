@@ -17,3 +17,17 @@ query TildaPage($path: String!) {
     }
   }
 }
+
+query TildaPages {
+  tildaPages {
+    path
+  }
+}
+
+query WagtailPages {
+  wagtailPages {
+    meta {
+      html_url
+    }
+  }
+}

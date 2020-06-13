@@ -40,6 +40,9 @@ export type WagtailPageTypeQuery = (
     { __typename: 'FreeFormPage' }
     & Pick<Types.FreeFormPage, 'id'>
   ) | (
+    { __typename: 'FolderPage' }
+    & Pick<Types.FolderPage, 'id'>
+  ) | (
     { __typename: 'BlogPostPage' }
     & Pick<Types.BlogPostPage, 'id'>
   ) | (
@@ -68,6 +71,103 @@ export type TildaPageQuery = (
       { __typename?: 'TildaAsset' }
       & Pick<Types.TildaAsset, 'url'>
     )> }
+  )> }
+);
+
+export type TildaPagesQueryVariables = {};
+
+
+export type TildaPagesQuery = (
+  { __typename?: 'Query' }
+  & { tildaPages: Array<(
+    { __typename?: 'TildaPage' }
+    & Pick<Types.TildaPage, 'path'>
+  )> }
+);
+
+export type WagtailPagesQueryVariables = {};
+
+
+export type WagtailPagesQuery = (
+  { __typename?: 'Query' }
+  & { wagtailPages: Array<(
+    { __typename?: 'RatioSectionIndexPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'RatioSectionPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'RatioNotebookIndexPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'RatioNotebookPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'RatioPresentationIndexPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'RatioPresentationPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'ProjectIndexPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'ProjectPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'FreeFormPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'FolderPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'BlogPostPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'BlogIndexPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'FaqPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
   )> }
 );
 
@@ -147,3 +247,69 @@ export function useTildaPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
 export type TildaPageQueryHookResult = ReturnType<typeof useTildaPageQuery>;
 export type TildaPageLazyQueryHookResult = ReturnType<typeof useTildaPageLazyQuery>;
 export type TildaPageQueryResult = ApolloReactCommon.QueryResult<TildaPageQuery, TildaPageQueryVariables>;
+export const TildaPagesDocument = gql`
+    query TildaPages {
+  tildaPages {
+    path
+  }
+}
+    `;
+
+/**
+ * __useTildaPagesQuery__
+ *
+ * To run a query within a React component, call `useTildaPagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTildaPagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTildaPagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTildaPagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TildaPagesQuery, TildaPagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<TildaPagesQuery, TildaPagesQueryVariables>(TildaPagesDocument, baseOptions);
+      }
+export function useTildaPagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TildaPagesQuery, TildaPagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TildaPagesQuery, TildaPagesQueryVariables>(TildaPagesDocument, baseOptions);
+        }
+export type TildaPagesQueryHookResult = ReturnType<typeof useTildaPagesQuery>;
+export type TildaPagesLazyQueryHookResult = ReturnType<typeof useTildaPagesLazyQuery>;
+export type TildaPagesQueryResult = ApolloReactCommon.QueryResult<TildaPagesQuery, TildaPagesQueryVariables>;
+export const WagtailPagesDocument = gql`
+    query WagtailPages {
+  wagtailPages {
+    meta {
+      html_url
+    }
+  }
+}
+    `;
+
+/**
+ * __useWagtailPagesQuery__
+ *
+ * To run a query within a React component, call `useWagtailPagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWagtailPagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWagtailPagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useWagtailPagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WagtailPagesQuery, WagtailPagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<WagtailPagesQuery, WagtailPagesQueryVariables>(WagtailPagesDocument, baseOptions);
+      }
+export function useWagtailPagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WagtailPagesQuery, WagtailPagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WagtailPagesQuery, WagtailPagesQueryVariables>(WagtailPagesDocument, baseOptions);
+        }
+export type WagtailPagesQueryHookResult = ReturnType<typeof useWagtailPagesQuery>;
+export type WagtailPagesLazyQueryHookResult = ReturnType<typeof useWagtailPagesLazyQuery>;
+export type WagtailPagesQueryResult = ApolloReactCommon.QueryResult<WagtailPagesQuery, WagtailPagesQueryVariables>;
