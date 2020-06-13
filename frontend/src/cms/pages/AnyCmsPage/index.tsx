@@ -62,7 +62,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const urls = [...tildaUrls, ...wagtailUrls];
 
   const paths = urls
-    .filter(u => u !== '')) // filter out front page - will be rendered from pages/index.tsx
+    .filter(u => u !== '') // filter out front page - will be rendered from pages/index.tsx
     .filter(u => !u.startsWith('team/')) // filter out team/ pages - can't be prerendered anyway
     .map(url => ({
       params: {
