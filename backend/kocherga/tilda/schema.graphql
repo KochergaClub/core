@@ -8,6 +8,7 @@ type TildaPage {
   html_url: String!
   body: String!
   title: String!
+  show_header_and_footer: Boolean!
   assets: [TildaAsset!]!
   css: [TildaAsset!]!
   js: [TildaAsset!]!

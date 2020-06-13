@@ -41,7 +41,11 @@ const TildaPage: React.FC<Props> = props => {
           <script src={asset.url} key={asset.url} />
         ))}
       </Head>
-      <Page title={props.title} canonicalUrl={canonicalUrl}>
+      <Page
+        title={props.title}
+        canonicalUrl={canonicalUrl}
+        chrome={props.show_header_and_footer ? 'default' : 'none'}
+      >
         <Container dangerouslySetInnerHTML={{ __html: patchedBody }} />
       </Page>
     </>

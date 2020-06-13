@@ -2,7 +2,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.db import models
+from django.conf import settings
 from django.core.files.base import ContentFile
+from wagtail.admin import edit_handlers
 
 from . import api
 
@@ -42,6 +44,7 @@ class TildaPageManager(models.Manager):
                 'content': ContentFile(html.encode('utf-8'), filename),
                 'body': page_body['html'],
                 'title': title,
+                'page_id': page_id,
             }
         )
 
@@ -73,11 +76,25 @@ class Asset(models.Model):
 
 
 class TildaPage(models.Model):
-    path = models.CharField(max_length=255, unique=True)
-    content = models.FileField(upload_to='tilda/')
-    body = models.TextField(default='')
-    title = models.CharField(max_length=1024, default='')
+    show_header_and_footer = models.BooleanField(default=True)
+
+    path = models.CharField(max_length=255, unique=True, editable=False)
+    content = models.FileField(upload_to='tilda/', editable=False)
+    body = models.TextField(default='', editable=False)
+    title = models.CharField(max_length=1024, default='', editable=False)
+    page_id = models.IntegerField(editable=False, default=0)
 
     assets = models.ManyToManyField(Asset)
 
     objects = TildaPageManager()
+
+    def __str__(self):
+        return self.path
+
+    def get_tilda_edit_link(self):
+        return f'https://tilda.cc/page/?pageid={self.page_id}&projectid={settings.TILDA_PROJECT_ID}'
+
+    panels = [
+        edit_handlers.FieldPanel('show_header_and_footer'),
+        # TODO - show tilda edit link in custom panel
+    ]

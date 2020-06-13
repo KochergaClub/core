@@ -63,7 +63,7 @@ export type TildaPageQuery = (
   { __typename?: 'Query' }
   & { tildaPage?: Types.Maybe<(
     { __typename?: 'TildaPage' }
-    & Pick<Types.TildaPage, 'body' | 'title'>
+    & Pick<Types.TildaPage, 'body' | 'title' | 'show_header_and_footer'>
     & { css: Array<(
       { __typename?: 'TildaAsset' }
       & Pick<Types.TildaAsset, 'url'>
@@ -212,6 +212,7 @@ export const TildaPageDocument = gql`
   tildaPage(path: $path) {
     body
     title
+    show_header_and_footer
     css {
       url
     }

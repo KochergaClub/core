@@ -9,6 +9,7 @@ query TildaPage($path: String!) {
   tildaPage(path: $path) {
     body
     title
+    show_header_and_footer
     css {
       url
     }
