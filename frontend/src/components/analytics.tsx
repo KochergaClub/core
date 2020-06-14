@@ -66,9 +66,8 @@ export const YandexMetrikaScript = () => {
     case 'watch':
       return (
         <>
-          <script>
-            dangerouslySetInnerHTML=
-            {{
+          <script
+            dangerouslySetInnerHTML={{
               __html: `(function (d, w, c) {
   (w[c] = w[c] || []).push(function() {
     try {
@@ -93,7 +92,7 @@ export const YandexMetrikaScript = () => {
   } else { f(); }
 })(document, window, "yandex_metrika_callbacks");`,
             }}
-          </script>
+          />
           <noscript>
             <div>
               <img
