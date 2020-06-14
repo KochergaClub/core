@@ -12,11 +12,7 @@ import { normalizeSsrUrl } from '../utils';
 type Props = TildaPageQuery['tildaPage'];
 
 const Container = styled.div`
-  & > *,
-  & > ::after,
-  & > ::before {
-    box-sizing: content-box;
-  }
+  box-sizing: content-box;
 `;
 
 const TildaPage: React.FC<Props> = props => {
