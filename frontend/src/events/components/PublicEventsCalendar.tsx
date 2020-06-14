@@ -22,6 +22,7 @@ import {
   useEventsPublicGoogleCalendarQuery,
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
+import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
 
 const Container = styled.div`
   &&& {
@@ -48,6 +49,16 @@ const Container = styled.div`
     .fc-list-event-dot {
       display: none;
     }
+
+    .fc-toolbar-title {
+      font-size: 1.2em;
+    }
+
+    ${deviceMediaQueries.mobile(`
+    .fc-toolbar {
+      flex-direction: column;
+    }
+    `)}
   }
 `;
 
