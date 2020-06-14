@@ -59,6 +59,8 @@ export const YandexMetrikaScript = () => {
     return null;
   }
 
+  const webvisor = false;
+
   return (
     <script
       dangerouslySetInnerHTML={{
@@ -70,7 +72,7 @@ export const YandexMetrikaScript = () => {
         clickmap:true,
         trackLinks:true,
         accurateTrackBounce:true,
-        webvisor:true
+        webvisor:${webvisor}
       });`,
       }}
     />
