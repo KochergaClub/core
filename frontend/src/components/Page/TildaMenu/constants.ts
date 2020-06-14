@@ -42,7 +42,7 @@ const publicMenuItems: Item[] = [
       { link: '/rationality', title: 'Рациональность' },
       { link: '/rationality/online', title: 'Онлайн' },
       { link: '/rationality/dojo', title: 'Додзё' },
-      { link: '/rationality/3week', title: 'Трёхнедельный курс' },
+      { link: '/3week', title: 'Трёхнедельный курс' },
       { link: '/workshop/country', title: 'Выездной воркшоп' },
       { link: '/rationality/integration', title: '"Интеграция"' },
       { link: '/rationality/corporate', title: 'Для бизнеса' },
