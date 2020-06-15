@@ -1,5 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 const Button = styled.button`
   border-radius: 20px;
@@ -13,10 +13,12 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const MenuButton: React.FC<{ href: string }> = ({ href, children }) => (
-  <a href={href} style={{ textDecoration: 'none' }}>
-    <Button>{children}</Button>
-  </a>
+const LoginButton: React.FC = () => (
+  <Link href="/my" passHref>
+    <a style={{ textDecoration: 'none' }}>
+      <Button>Войти</Button>
+    </a>
+  </Link>
 );
 
-export default MenuButton;
+export default LoginButton;

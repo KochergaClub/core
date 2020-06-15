@@ -12,6 +12,7 @@ import MenuButton from './MenuButton';
 
 import { styled, kind2color } from './constants';
 import { MenuKind } from '../types';
+import UserButtons from './UserButtons';
 
 const Container = styled('div')<{ hideOnMobile: boolean }>`
   width: 100%;
@@ -89,8 +90,8 @@ const TildaMenu = ({ kind }: Props) => {
             <Logo kind={kind} />
             <MenuItems kind={kind} />
           </Line>
-          <SocialIcons />
-          {kind === 'public' ? <MenuButton href="/my">Войти</MenuButton> : null}
+          {null && <SocialIcons />}
+          <UserButtons kind={kind} />
         </Container>
       </div>
     </ThemeProvider>
