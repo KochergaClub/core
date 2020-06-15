@@ -92,6 +92,11 @@ const PublicEventsCalendar = () => {
 
   const navigate = useCallback(({ event }: EventClickArg) => {
     const route = publicEventRoute(event.extendedProps.event_id);
+    if (window.location !== window.parent.location) {
+      // we're in iframe
+      window.open(route.as, '_parent');
+      return;
+    }
     Router.push(route.href, route.as).then(() => window.scrollTo(0, 0));
   }, []);
 
