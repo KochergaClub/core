@@ -39,8 +39,15 @@ const Container = styled.div`
     .fc-event-title {
       font-weight: normal;
     }
+
+    .fc-kocherga-ratio {
+      background-color: ${colors.accent[500]};
+    }
     .fc-kocherga-past {
       background-color: ${colors.primary[300]};
+    }
+    .fc-kocherga-past.fc-kocherga-ratio {
+      background-color: ${colors.accent[300]};
     }
 
     .fc-daygrid-event-dot {
@@ -81,9 +88,17 @@ const PublicEventsCalendar = () => {
       });
       return queryResults.data.publicEvents.nodes.map(event => {
         const past = isPast(new Date(event.start));
+        const classNames = [];
+        if (past) {
+          classNames.push('fc-kocherga-past');
+        }
+        if (event.public_tags.includes('ratio')) {
+          classNames.push('fc-kocherga-ratio');
+        }
+
         return {
           ...event,
-          classNames: past ? ['fc-kocherga-past'] : [],
+          classNames,
         };
       });
     },

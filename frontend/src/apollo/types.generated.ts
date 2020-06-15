@@ -1242,6 +1242,7 @@ export type EventsPublicEvent = {
   pricing_type: Scalars['String'];
   realm: Scalars['String'];
   project?: Maybe<ProjectPage>;
+  public_tags: Array<Scalars['String']>;
   announcements: EventsAnnouncements;
   my_ticket?: Maybe<MyEventsTicket>;
 };

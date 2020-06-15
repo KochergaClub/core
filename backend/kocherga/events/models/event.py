@@ -296,6 +296,10 @@ class Event(models.Model):
             for tag in self.tags.all()
         ]
 
+    def public_tag_names(self):
+        # only `ratio` tag is public for now
+        return [tag_name for tag_name in self.tag_names() if tag_name in ('ratio',)]
+
     def add_tag(self, tag_name):
         if tag_name in self.tag_names():
             raise Exception(f"Tag {tag_name} already exists on this event")

@@ -660,6 +660,8 @@ type EventsPublicEvent {
   realm: String!
 
   project: ProjectPage
+  public_tags: [String!]!
+
   announcements: EventsAnnouncements!
 
   # note that there's no @auth directive - we don't want any errors if user is not authenticated

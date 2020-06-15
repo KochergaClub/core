@@ -33,7 +33,7 @@ def resolve_image(obj, info):
 
 
 @EventsPublicEvent.field('image_rendition')
-def resolve(obj, info, spec):
+def resolve_image_rendition(obj, info, spec):
     if not obj.image:
         return None
     return obj.image.get_rendition(spec)
@@ -42,3 +42,8 @@ def resolve(obj, info, spec):
 @EventsPublicEvent.field('description')
 def resolve_description(obj, info):
     return markup.Markup(obj.description).as_plain()
+
+
+@EventsPublicEvent.field('public_tags')
+def resolve_public_tags(obj, info):
+    return obj.public_tag_names()

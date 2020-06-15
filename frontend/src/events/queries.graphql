@@ -28,6 +28,7 @@ fragment EventsPublicEvent_ForCalendar on EventsPublicEvent {
   event_id
   title
   start
+  public_tags
 }
 
 query PublicEventsForCalendar($from: String!, $to: String!) {

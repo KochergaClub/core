@@ -37,7 +37,7 @@ export type UpcomingPublicEventsQuery = (
 
 export type EventsPublicEvent_ForCalendarFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'start'>
+  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'start' | 'public_tags'>
 );
 
 export type PublicEventsForCalendarQueryVariables = {
@@ -278,6 +278,7 @@ export const EventsPublicEvent_ForCalendarFragmentDoc = gql`
   event_id
   title
   start
+  public_tags
 }
     `;
 export const TeamCalendarEventFragmentDoc = gql`
