@@ -1,1 +1,4 @@
-export { default } from '~/events/pages/PublicEventIndexEmbeddedPage';
+export {
+  default,
+  getStaticProps,
+} from '~/events/pages/PublicEventIndexEmbeddedPage';
