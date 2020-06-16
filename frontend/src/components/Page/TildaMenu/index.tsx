@@ -8,7 +8,6 @@ import { staticUrl } from '~/common/utils';
 import MenuItems from './MenuItems';
 import MobileHeader from './MobileHeader';
 import SocialIcons from './SocialIcons';
-import MenuButton from './MenuButton';
 
 import { styled, kind2color } from './constants';
 import { MenuKind } from '../types';
