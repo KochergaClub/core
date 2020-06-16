@@ -14,12 +14,6 @@ import LogoutButton from './components/LogoutButton';
 
 import { useMyPageQuery, MyPageFragment } from './queries.generated';
 
-const AdminSection = () => (
-  <div style={{ marginBottom: 10 }}>
-    <A href="/team/">Перейти в интранет</A>
-  </div>
-);
-
 const SectionWrapper = styled.div`
   margin-top: 20px;
 `;
@@ -44,7 +38,7 @@ export const buildTabPage = (tab: TabCode) => {
     };
 
     return (
-      <Page title="Личный кабинет" menu="my">
+      <Page title="Личный кабинет">
         <Page.Title>Личный кабинет</Page.Title>
         <Page.Main>
           <ApolloQueryResults {...queryResults}>
@@ -53,7 +47,6 @@ export const buildTabPage = (tab: TabCode) => {
                 <div>
                   <code>{my.user.email}</code> <LogoutButton />
                 </div>
-                {my.user.is_staff && <AdminSection />}
                 <SectionWrapper>{getSection(my)}</SectionWrapper>
               </Column>
             )}

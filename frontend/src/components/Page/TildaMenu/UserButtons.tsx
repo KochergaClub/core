@@ -1,12 +1,15 @@
-import { FaGlobe, FaGrin, FaHammer } from 'react-icons/fa';
+import { useEffect } from 'react';
+
+import { FaUserCircle, FaUser, FaUserTie } from 'react-icons/fa';
+import { GoGear } from 'react-icons/go';
 import { IconType } from 'react-icons/lib';
 
+import { useCurrentUserLazyQuery } from '~/auth/queries.generated';
+import { ApolloQueryResults, DropdownMenu } from '~/components';
+import { NextLinkAction } from '~/components/DropdownMenu';
 import { MenuKind } from '../types';
-import { Row } from '@kocherga/frontkit';
-import Link from 'next/link';
-import { useCurrentUserQuery } from '~/auth/queries.generated';
-import { ApolloQueryResults } from '~/components';
 import LoginButton from './LoginButton';
+import { colors, Row } from '@kocherga/frontkit';
 
 interface ButtonProps {
   kind: MenuKind;
@@ -15,31 +18,21 @@ interface ButtonProps {
   icon: IconType;
 }
 
-const UserButton: React.FC<ButtonProps> = ({
-  kind,
-  currentKind,
-  href,
-  icon: IconComponent,
-}) => {
-  const color = kind === currentKind ? 'white' : '#333333';
-
-  return (
-    <Link href={href} passHref>
-      <a>
-        <IconComponent size={24} color={color} />
-      </a>
-    </Link>
-  );
-};
-
 interface Props {
   kind: MenuKind;
 }
 
 const UserButtons: React.FC<Props> = ({ kind }) => {
-  const queryResults = useCurrentUserQuery({ ssr: true });
+  const [getUser, queryResults] = useCurrentUserLazyQuery({
+    fetchPolicy: 'network-only',
+  });
 
-  if (typeof window === 'undefined') {
+  // we can't use `ssr: false` query since we use `disableNetworkFetches` in our apollo code
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
+  if (!queryResults.called) {
     return null; // no buttons on server
   }
 
@@ -51,23 +44,31 @@ const UserButtons: React.FC<Props> = ({ kind }) => {
         },
       }) =>
         user.is_authenticated ? (
-          <Row gutter={10}>
+          <DropdownMenu
+            render={() => <FaUserCircle size="24" color="white" />}
+            placement="bottom-end"
+          >
+            <NextLinkAction href="/my" as="/my">
+              <Row vCentered>
+                <FaUser color={colors.grey[500]} />
+                <span>Личный кабинет</span>
+              </Row>
+            </NextLinkAction>
             {user.is_staff ? (
-              <UserButton
-                kind="team"
-                currentKind={kind}
-                href="/team"
-                icon={FaHammer}
-              />
+              <NextLinkAction href="/team" as="/team">
+                <Row vCentered>
+                  <FaUserTie color={colors.grey[500]} />
+                  <span>Интранет</span>
+                </Row>
+              </NextLinkAction>
             ) : null}
-            <UserButton
-              kind="public"
-              currentKind={kind}
-              href="/"
-              icon={FaGlobe}
-            />
-            <UserButton kind="my" currentKind={kind} href="/my" icon={FaGrin} />
-          </Row>
+            <NextLinkAction href="/my/settings" as="/my/settings">
+              <Row vCentered>
+                <GoGear color={colors.grey[500]} />
+                <span>Настройки</span>
+              </Row>
+            </NextLinkAction>
+          </DropdownMenu>
         ) : (
           <LoginButton />
         )

@@ -6,6 +6,7 @@ import { FaCaretDown } from 'react-icons/fa';
 import { colors, A } from '@kocherga/frontkit';
 
 import { usePopper } from 'react-popper';
+import { Placement } from '@popperjs/core';
 import { useExpandable } from '~/common/hooks';
 
 import { ModalCreator, DropdownMenuContext } from './contexts';
@@ -25,6 +26,8 @@ const Dropdown = styled.div`
   border-radius: 4px;
 
   z-index: 10;
+  position: relative;
+  overflow: hidden; // necessary to avoid broken corners when items are hovered
   background-color: white;
   cursor: pointer;
 `;
@@ -64,9 +67,16 @@ const Arrow = styled.div`
 
 interface Props {
   title?: string;
+  render?: ({ expanded }: { expanded: boolean }) => React.ReactElement;
+  placement?: Placement;
 }
 
-const DropdownMenu: React.FC<Props> = ({ title, children }) => {
+const DropdownMenu: React.FC<Props> = ({
+  placement,
+  title,
+  children,
+  render,
+}) => {
   // Note that modalWrapper belongs here and not in <ModalAction> because it should be open even if dropdown is collapsed.
   // We need to wrap ModalCreator function in an object because useState behaves funky otherwise.
   const [modalWrapper, setModalWrapper] = useState<
@@ -90,9 +100,8 @@ const DropdownMenu: React.FC<Props> = ({ title, children }) => {
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(
     null
   );
-  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    //    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+    placement: placement || 'bottom',
   });
 
   return (
@@ -101,20 +110,23 @@ const DropdownMenu: React.FC<Props> = ({ title, children }) => {
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
         <Container ref={ref}>
           <A href="#" onClick={flipExpand} ref={setReferenceElement}>
-            {title || null}
-            <FaCaretDown color={colors.grey[expanded ? 900 : 500]} />
+            {render ? (
+              render({ expanded })
+            ) : (
+              <>
+                {title || null}
+                <FaCaretDown color={colors.grey[expanded ? 900 : 500]} />
+              </>
+            )}
           </A>
           {expanded && (
-            <div
+            <Dropdown
               ref={setPopperElement}
               style={styles.popper}
               {...attributes.popper}
             >
-              <Dropdown>{children}</Dropdown>
-              {null && (
-                <Arrow ref={setArrowElement} style={styles.arrow} />
-              ) /* TODO - fix visual issues */}
-            </div>
+              {children}
+            </Dropdown>
           )}
         </Container>
       </DropdownMenuContext.Provider>

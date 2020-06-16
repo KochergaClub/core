@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { A, HR } from '@kocherga/frontkit';
 
 import TicketsList from '../components/TicketsList';
@@ -6,7 +7,9 @@ import { MyPageFragment } from '../queries.generated';
 
 const OtherEvents = () => (
   <div>
-    <A href="/events">Посмотреть ближайшие события</A>
+    <Link href="/events" passHref>
+      <A>Посмотреть ближайшие события</A>
+    </Link>
   </div>
 );
 
