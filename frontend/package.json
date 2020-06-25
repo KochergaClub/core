@@ -19,7 +19,7 @@
     "@graphql-codegen/typescript-operations": "^1.15.0",
     "@graphql-codegen/typescript-react-apollo": "^1.15.0",
     "@graphql-codegen/typescript-resolvers": "^1.15.0",
-    "@kocherga/frontkit": "^1.7.1",
+    "@kocherga/frontkit": "^1.7.2",
     "@next/bundle-analyzer": "^9.4.2",
     "@popperjs/core": "^2.3.1",
     "@sentry/browser": "^5.6.3",

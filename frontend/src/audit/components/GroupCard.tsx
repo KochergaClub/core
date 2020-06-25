@@ -58,7 +58,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
             </ModalAction>
           </DropdownMenu>
         </Row>
-        <Row>
+        <Row wrap={true}>
           {group.permissions.map(permission => (
             <Badge key={permission.id}>{permission.name}</Badge>
           ))}
