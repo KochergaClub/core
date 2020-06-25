@@ -79,6 +79,7 @@ KOCHERGA_WEBSITE = 'https://yudkowsky.cult'
 GDRIVE_WATCHMEN_FOLDER = '14QJy4SLl-TY-DwyPWktNcCIple75Ppe_'
 
 WAGTAILAPI_BASE_URL = "http://localhost:5302/api/wagtail"
+BASE_URL = KOCHERGA_WEBSITE
 
 TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
 

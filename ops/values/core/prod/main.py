@@ -1,3 +1,4 @@
+import logging.config
 from .base import *
 from .secrets import *
 
@@ -35,7 +36,6 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Logging
-import logging.config
 LOGGING_CONFIG = None
 logging.config.dictConfig({
     'version': 1,
@@ -134,6 +134,9 @@ GOOGLE_ANALYTICS_ID = 'UA-67233667-7'
 GDRIVE_WATCHMEN_FOLDER = '0B3eXnAACJCqlOUlEWUU2bkRlMkE'
 
 WAGTAILAPI_BASE_URL = f"{KOCHERGA_API_ROOT}/wagtail"
+
+# this is wagtail setting for email templates, see https://github.com/wagtail/wagtail/pull/3769 for details
+BASE_URL = KOCHERGA_WEBSITE
 
 TILDA_PUBLIC_KEY = 'egq8lznrfxn6ok7bjvte'
 
