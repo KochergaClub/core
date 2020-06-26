@@ -7,7 +7,7 @@ import { Row } from '@kocherga/frontkit';
 
 export type Size = 'block' | 'div' | 'span';
 
-const AnimatedSpinner = styled(FaSpinner)`
+export const AnimatedSpinner = styled(FaSpinner)`
   animation: icon-spin 2s infinite linear;
 
   @keyframes icon-spin {

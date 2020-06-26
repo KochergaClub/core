@@ -69,17 +69,12 @@ const Page: PageType = props => {
 
     const menuEl = showMenu ? <TildaMenu kind={menuKind} /> : null;
     const footerEl = showFooter ? <TildaFooter /> : null;
-    const bodyEl = (
-      <ErrorBoundary>
-        <WithToaster>{props.children}</WithToaster>
-      </ErrorBoundary>
-    );
 
     if (chrome === 'fullscreen') {
       return (
         <FullScreenContainer>
           {menuEl}
-          <FullScreenContainerInner>{bodyEl}</FullScreenContainerInner>
+          <FullScreenContainerInner>{props.children}</FullScreenContainerInner>
         </FullScreenContainer>
       );
     }
@@ -87,7 +82,7 @@ const Page: PageType = props => {
     return (
       <React.Fragment>
         {menuEl}
-        {bodyEl}
+        {props.children}
         {showWhitespace && <Whitespace />}
         {footerEl}
       </React.Fragment>
@@ -112,7 +107,9 @@ const Page: PageType = props => {
       )}
       <GlobalStyle />
       <NProgressStyle />
-      {renderContent()}
+      <ErrorBoundary>
+        <WithToaster>{renderContent()}</WithToaster>
+      </ErrorBoundary>
       {props.vkWidget && <VkMessagesWidget />}
     </div>
   );

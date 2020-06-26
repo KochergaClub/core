@@ -1,22 +1,56 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { FaUserCircle, FaUser, FaUserTie } from 'react-icons/fa';
-import { GoGear } from 'react-icons/go';
-import { IconType } from 'react-icons/lib';
+import { GoGear, GoSignOut } from 'react-icons/go';
 
 import { useCurrentUserLazyQuery } from '~/auth/queries.generated';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
-import { NextLinkAction } from '~/components/DropdownMenu';
+import { AnimatedSpinner } from '~/components/Spinner';
+import { NextLinkAction, Action } from '~/components/DropdownMenu';
 import { MenuKind } from '../types';
 import LoginButton from './LoginButton';
-import { colors, Row } from '@kocherga/frontkit';
+import { colors, fonts, Row } from '@kocherga/frontkit';
+import { useLogoutMutation } from '~/my/queries.generated';
+import { useNotification } from '~/common/hooks';
+import Link from 'next/link';
 
-interface ButtonProps {
-  kind: MenuKind;
-  currentKind: MenuKind;
-  href: string;
-  icon: IconType;
-}
+const Email = styled.div`
+  padding: 4px 12px;
+  text-align: center;
+  font-size: ${fonts.sizes.XS};
+`;
+
+const LogoutAction: React.FC = () => {
+  const [acting, setActing] = useState(false);
+
+  const [logoutMutation] = useLogoutMutation();
+  const notify = useNotification();
+
+  const act = useCallback(async () => {
+    setActing(true);
+    const { data } = await logoutMutation();
+    if (!data?.result?.ok) {
+      notify({ text: 'Не получилось выйти', type: 'Error' });
+      setActing(false);
+      return;
+    }
+    window.location.href = '/';
+  }, [logoutMutation, notify]);
+
+  return (
+    <Action act={act}>
+      <Row vCentered>
+        {acting ? (
+          <AnimatedSpinner color={colors.grey[500]} />
+        ) : (
+          <GoSignOut color={colors.grey[500]} />
+        )}
+        <span>Выйти</span>
+      </Row>
+    </Action>
+  );
+};
 
 interface Props {
   kind: MenuKind;
@@ -48,6 +82,9 @@ const UserButtons: React.FC<Props> = ({ kind }) => {
             render={() => <FaUserCircle size="24" color="white" />}
             placement="bottom-end"
           >
+            <Link href="/my" as="/my">
+              <Email>{user.email}</Email>
+            </Link>
             <NextLinkAction href="/my" as="/my">
               <Row vCentered>
                 <FaUser color={colors.grey[500]} />
@@ -68,6 +105,7 @@ const UserButtons: React.FC<Props> = ({ kind }) => {
                 <span>Настройки</span>
               </Row>
             </NextLinkAction>
+            <LogoutAction />
           </DropdownMenu>
         ) : (
           <LoginButton />

@@ -18,6 +18,7 @@ import { MenuKind } from '../types';
 
 const MenuItemsNav = styled.nav`
   margin-left: 30px;
+  color: white;
   @media screen and (max-width: 980px) {
     margin-left: 0;
   }

@@ -19,7 +19,6 @@ const Container = styled('div')<{ hideOnMobile: boolean }>`
   padding: 0 40px;
 
   background-color: ${props => kind2color[props.theme.kind]};
-  color: white;
 
   display: flex;
   justify-content: space-between;
