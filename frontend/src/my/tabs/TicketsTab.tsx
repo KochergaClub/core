@@ -1,16 +1,16 @@
 import Link from 'next/link';
-import { A, HR } from '@kocherga/frontkit';
+import { A, HR, Row } from '@kocherga/frontkit';
 
 import TicketsList from '../components/TicketsList';
 
 import { MyPageFragment } from '../queries.generated';
 
 const OtherEvents = () => (
-  <div>
+  <Row centered>
     <Link href="/events" passHref>
       <A>Посмотреть ближайшие события</A>
     </Link>
-  </div>
+  </Row>
 );
 
 interface Props {

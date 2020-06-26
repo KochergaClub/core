@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import { utcToZonedTime } from 'date-fns-tz';
 import { FaVideo } from 'react-icons/fa';
 
-import { A, Label } from '@kocherga/frontkit';
+import { A, Label, Row, Button, Column, colors } from '@kocherga/frontkit';
 
-import { AsyncButtonWithConfirm } from '~/components';
+import { DropdownMenu } from '~/components';
 import Card, { CardList } from '~/components/Card';
 import { timezone, formatDate } from '~/common/utils';
 
@@ -14,6 +14,7 @@ import {
   MyTicketFragment,
   useMyTicketDeleteMutation,
 } from '../queries.generated';
+import { Action } from '~/components/DropdownMenu';
 
 const TicketCard = ({ ticket }: { ticket: MyTicketFragment }) => {
   const [deleteMutation] = useMyTicketDeleteMutation();
@@ -28,25 +29,38 @@ const TicketCard = ({ ticket }: { ticket: MyTicketFragment }) => {
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 
+  const joinZoom = useCallback(() => {
+    if (!ticket.zoom_link) {
+      return;
+    }
+    window.open(ticket.zoom_link, '_blank');
+  }, [ticket.zoom_link]);
+
   return (
     <Card>
-      <A href={`/events/${ticket.event.event_id}`}>{ticket.event.title}</A>
-      <Label>{formatDate(zonedStart, 'd MMMM, HH:mm')}</Label>
-      {ticket.zoom_link && (
+      <Column stretch>
         <div>
-          <A href={ticket.zoom_link}>
-            <FaVideo /> Присоединиться через Zoom
-          </A>
+          <Row spaced>
+            <A href={`/events/${ticket.event.event_id}`}>
+              {ticket.event.title}
+            </A>
+            <DropdownMenu placement="bottom-end">
+              <Action act={cancel}>Отменить регистрацию</Action>
+            </DropdownMenu>
+          </Row>
+          <Label>{formatDate(zonedStart, 'd MMMM, HH:mm')}</Label>
         </div>
-      )}
-      <AsyncButtonWithConfirm
-        small
-        act={cancel}
-        confirmText="Точно отменить?"
-        cancelText="Нет"
-      >
-        Отменить
-      </AsyncButtonWithConfirm>
+        {ticket.zoom_link && (
+          <div>
+            <Button onClick={joinZoom}>
+              <Row vCentered>
+                <FaVideo color={colors.grey[500]} />{' '}
+                <span>Присоединиться через Zoom</span>
+              </Row>
+            </Button>
+          </div>
+        )}
+      </Column>
     </Card>
   );
 };
@@ -68,7 +82,9 @@ const TicketsList: React.FC<Props> = ({ my }) => {
 
   return (
     <div>
-      <h3>Вы собираетесь на эти события:</h3>
+      <Row centered>
+        <h3>Вы собираетесь на эти события:</h3>
+      </Row>
       <CardList>
         {tickets.map(ticket => (
           <TicketCard key={ticket.event.event_id} ticket={ticket} />
