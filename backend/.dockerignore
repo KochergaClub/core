@@ -7,3 +7,4 @@ static/dist
 data
 htmlcov
 node_modules
+venv
