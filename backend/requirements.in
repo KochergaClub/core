@@ -68,6 +68,5 @@ matplotlib
 seaborn
 python-docx
 flake8 >= 3.7
-pyinotify >= 0.9.6
 codecov
 factory_boy
