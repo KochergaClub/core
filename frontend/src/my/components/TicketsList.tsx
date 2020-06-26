@@ -17,7 +17,10 @@ import {
 import { Action } from '~/components/DropdownMenu';
 
 const TicketCard = ({ ticket }: { ticket: MyTicketFragment }) => {
-  const [deleteMutation] = useMyTicketDeleteMutation();
+  const [deleteMutation] = useMyTicketDeleteMutation({
+    refetchQueries: ['MyPage'],
+    awaitRefetchQueries: true,
+  });
 
   const cancel = useCallback(async () => {
     await deleteMutation({
@@ -74,9 +77,9 @@ const TicketsList: React.FC<Props> = ({ my }) => {
 
   if (!tickets.length) {
     return (
-      <div>
+      <Row centered>
         <em>Вы не зарегистрированы ни на одно событие.</em>
-      </div>
+      </Row>
     );
   }
 
