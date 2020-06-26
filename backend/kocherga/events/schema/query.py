@@ -61,7 +61,7 @@ def resolve_publicEvent(self, info, event_id):
 @Query.field('vkGroups')
 def resolve_vkGroups(self, info):
     all_groups = models.VkAnnouncement.objects.all_groups()
-    return [{'name': name,} for name in all_groups]
+    return [{'name': name} for name in all_groups]
 
 
 @Query.field('timepadCategories')

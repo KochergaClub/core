@@ -162,7 +162,7 @@ class Participant(models.Model):
 
         message = render_to_string(
             'mastermind_dating/email/bot_link.txt',
-            {'bot_link': bot_link, 'bot_token': bot_token, 'start_time': start_time,},
+            {'bot_link': bot_link, 'bot_token': bot_token, 'start_time': start_time},
         )
 
         html = markdown.markdown(

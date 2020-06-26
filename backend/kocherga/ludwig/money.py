@@ -48,7 +48,7 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
     else:
         header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}*"
 
-    blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": header,}})
+    blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": header}})
     blocks.append({"type": "divider"})
 
     total_cash_payments = 0

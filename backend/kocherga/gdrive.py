@@ -70,5 +70,5 @@ def gdoc_to_pdf(file_id):
 
 def share_to_public(folder_id):
     gdrive().permissions().create(
-        fileId=folder_id, body={'role': 'reader', 'type': 'everyone',}
+        fileId=folder_id, body={'role': 'reader', 'type': 'everyone'}
     ).execute()

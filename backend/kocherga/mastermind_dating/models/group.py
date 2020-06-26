@@ -24,7 +24,7 @@ class GroupManager(models.Manager):
 
         updates = await client(
             telethon.functions.messages.CreateChatRequest(
-                users=['KochergaMastermindBot', cohort.leader_telegram_uid,],
+                users=['KochergaMastermindBot', cohort.leader_telegram_uid],
                 title='Мастермайнд-группа',
             )
         )

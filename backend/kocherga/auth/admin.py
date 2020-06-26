@@ -22,7 +22,7 @@ class UserAdmin(BaseUserAdmin):
         ),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
-    add_fieldsets = ((None, {'classes': ('wide',), 'fields': ('email',),}),)
+    add_fieldsets = ((None, {'classes': ('wide',), 'fields': ('email',)}),)
     form = UserChangeForm
     add_form = UserCreationForm
     list_display = ('email', 'is_staff')

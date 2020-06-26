@@ -31,7 +31,7 @@ def resolve_watchmenUpdateShift(_, info, params):
     shift.save()
 
     async_to_sync(channels.layers.get_channel_layer().group_send)(
-        'watchmen_schedule_group', {'type': 'notify.update',}
+        'watchmen_schedule_group', {'type': 'notify.update'}
     )
     return shift
 

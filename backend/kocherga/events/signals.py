@@ -28,7 +28,7 @@ def cb_flush_new_revisions(sender, revision, versions, **kwargs):
                 logger.info('Notifying about new event revisions')
                 channel_send(
                     "events-slack-notify",
-                    {"type": "notify_by_version", "version_id": version.pk,},
+                    {"type": "notify_by_version", "version_id": version.pk},
                 )
                 break
 
@@ -38,9 +38,7 @@ def cb_flush_new_revisions(sender, revision, versions, **kwargs):
 
 
 def channel_send_google_export(event_pk):
-    channel_send(
-        "events-google-export", {"type": "export_event", "event_pk": event_pk,}
-    )
+    channel_send("events-google-export", {"type": "export_event", "event_pk": event_pk})
 
 
 @receiver(post_save, sender=models.Event)

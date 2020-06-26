@@ -39,4 +39,4 @@ class ImageView(APIView):
         image.file.save(basename + '.' + ext, ImageFile(fh))
         image.save()
 
-        return Response({'ok': True, 'id': image.pk,})
+        return Response({'ok': True, 'id': image.pk})

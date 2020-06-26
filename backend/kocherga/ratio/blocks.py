@@ -34,7 +34,7 @@ section_blocks = [
     (
         'ratio_exercise_oneline',
         blocks.StructBlock(
-            [('text', blocks.CharBlock(label='Задание')),],
+            [('text', blocks.CharBlock(label='Задание'))],
             icon='horizontalrule',
             label='Задание с одним полем',
             group='Упражнение',

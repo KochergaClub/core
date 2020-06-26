@@ -15,10 +15,10 @@ def parse_date(value, fmt):
 def environment(**options):
     env = Environment(**options)
     env.filters.update(
-        {'localtime': template_localtime,}
+        {'localtime': template_localtime}
     )
     env.globals.update(
-        {'localtime': template_localtime, 'static': static, 'url': reverse,}
+        {'localtime': template_localtime, 'static': static, 'url': reverse}
     )
     env.filters['parse_date'] = parse_date
     return env

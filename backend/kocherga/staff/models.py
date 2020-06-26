@@ -53,13 +53,13 @@ class Member(models.Model):
         'Форма зарплаты',
         max_length=10,
         blank=True,
-        choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал'),],
+        choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал')],
     )
 
     vk = models.URLField('Профиль VK', max_length=255, blank=True)
 
     gender = models.CharField(
-        'Пол', max_length=10, null=True, choices=[('MALE', 'М'), ('FEMALE', 'Ж'),],
+        'Пол', max_length=10, null=True, choices=[('MALE', 'М'), ('FEMALE', 'Ж')],
     )
 
     color = models.CharField(max_length=7)
@@ -171,7 +171,7 @@ class Member(models.Model):
         gdrive = kocherga.google.service('drive')
         gdrive.permissions().create(
             fileId=settings.GDRIVE_WATCHMEN_FOLDER,
-            body={'role': 'writer', 'type': 'user', 'emailAddress': email,},
+            body={'role': 'writer', 'type': 'user', 'emailAddress': email},
         ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
 

@@ -114,7 +114,7 @@ def accept_task_outcome(payload, task_id):
         if attachments[-1]['text'] != CONGRATS_TEXT:
             # success, let's reinforce the good deed with a picture
             attachments.append(
-                {'text': CONGRATS_TEXT, 'image_url': get_reward_picture(),}
+                {'text': CONGRATS_TEXT, 'image_url': get_reward_picture()}
             )
 
     return original_message

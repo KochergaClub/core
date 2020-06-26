@@ -126,7 +126,7 @@ def first_email(sender, instance, created, **kwargs):
     html_message = markdown.markdown(
         render_to_string(
             'ratio/email/new_ticket.md',
-            {"ticket": instance, "training": instance.training,},
+            {"ticket": instance, "training": instance.training},
         )
     )
     send_mail(

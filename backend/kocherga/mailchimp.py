@@ -105,7 +105,7 @@ def wait_for_batch(batch_id):
             {
                 'fields': 'status,total_operations,finished_operations,errored_operations,response_body_url',
             },
-            headers={'Authorization': 'apikey ' + MAILCHIMP_API_KEY,},
+            headers={'Authorization': 'apikey ' + MAILCHIMP_API_KEY},
         )
 
         body = json.loads(r.text)
@@ -123,7 +123,7 @@ def create_campaign_folder(name):
         # folder already exists
         return
 
-    api_call('POST', '/campaign-folders', {'name': name,})
+    api_call('POST', '/campaign-folders', {'name': name})
 
 
 # Used in setup only
@@ -134,7 +134,7 @@ def create_file_folder(name):
         # folder already exists
         return
 
-    api_call('POST', '/file-manager/folders', {'name': name,})
+    api_call('POST', '/file-manager/folders', {'name': name})
 
 
 def segment_by_name(name, list_id=MAIN_LIST_ID):

@@ -48,7 +48,7 @@ def import_all():
                         'email_type': 'html',
                         'email_address': email,
                         'merge_fields': merge_fields,
-                        'interests': {news_interest: True,},
+                        'interests': {news_interest: True},
                         'status_if_new': 'subscribed',
                     }
                 ),
@@ -60,7 +60,7 @@ def import_all():
                 'method': 'POST',
                 'path': f'lists/{LIST_ID}/members/{subscriber_hash}/tags',
                 'body': json.dumps(
-                    {'tags': [{'name': 'Краудфандинг ГПиМРМ', 'status': 'active',}]}
+                    {'tags': [{'name': 'Краудфандинг ГПиМРМ', 'status': 'active'}]}
                 ),
             }
         )

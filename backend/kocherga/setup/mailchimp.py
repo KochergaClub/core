@@ -14,7 +14,7 @@ def create_mailchimp_file_folder(name):
         # already exists
         return
 
-    kocherga.mailchimp.api_call('POST', '/campaign-folders', {'name': name,})
+    kocherga.mailchimp.api_call('POST', '/campaign-folders', {'name': name})
 
 
 def create_mailchimp_interest_group(name, cat_type):
@@ -25,7 +25,7 @@ def create_mailchimp_interest_group(name, cat_type):
         kocherga.mailchimp.api_call(
             'POST',
             f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/interest-categories',
-            {'title': name, 'type': cat_type,},
+            {'title': name, 'type': cat_type},
         )
 
 
@@ -39,7 +39,7 @@ def create_mailchimp_interest(category_name, name):
         kocherga.mailchimp.api_call(
             'POST',
             f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/interest-categories/{category_id}/interests',
-            {'name': name,},
+            {'name': name},
         )
 
 

@@ -34,7 +34,7 @@ class AuthManager(models.Manager):
         logger.debug(f'Obtained long-term token {long_term_access_token}')
 
         (result, _) = self.update_or_create(
-            id=1, defaults={'access_token': long_term_access_token,}
+            id=1, defaults={'access_token': long_term_access_token}
         )
         return result
 

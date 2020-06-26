@@ -35,7 +35,7 @@ def check(url):
         raise Exception("Weird url: {}".format(url))
     timepad_id = int(match.group(1))
 
-    result = api_call('GET', 'events', {'organization_ids': ORGANIZATION_ID,})
+    result = api_call('GET', 'events', {'organization_ids': ORGANIZATION_ID})
     events = result["values"]
 
     return timepad_id in [event["id"] for event in events]

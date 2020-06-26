@@ -45,6 +45,6 @@ def upload_ratio_tickets_audience():
 
     api.post(
         f'{AUDIENCE_ID}/users',
-        data={'payload': {'schema': schema, 'data': data,}},
+        data={'payload': {'schema': schema, 'data': data}},
         token=MARKETING_TOKEN,
     )

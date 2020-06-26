@@ -96,7 +96,7 @@ def channel_message_link_by_id(message_id: str):
     # (I'll probably regret this later.)
     r = requests.get(
         f"https://api.telegram.org/bot{token}/getChat",
-        params={'chat_id': get_channel_id(),},
+        params={'chat_id': get_channel_id()},
     )
     r.raise_for_status()
 

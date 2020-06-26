@@ -79,7 +79,7 @@ def daily_watchmen(d):
     date_str = f"<{settings.KOCHERGA_WEBSITE}/team/space/staff/shifts|{date_str}>"
     intro_text = f":female-astronaut: {preposition} {weekday_str} {date_str}:\n"
 
-    blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": intro_text,}})
+    blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": intro_text}})
 
     for shift_type in sorted(day_schedule.keys()):
         shift = day_schedule[shift_type]

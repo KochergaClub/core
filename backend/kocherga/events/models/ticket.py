@@ -190,7 +190,7 @@ class Ticket(models.Model):
         email = self.user.email
 
         channel_send(
-            "mailchimp-subscribe", {"type": "subscribe_to_main_list", "email": email,}
+            "mailchimp-subscribe", {"type": "subscribe_to_main_list", "email": email}
         )
         logger.info(f'Scheduled subscription of {email}')
 

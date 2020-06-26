@@ -19,7 +19,7 @@ def update_cover():
 
     api_root = settings.KOCHERGA_API_ROOT
     r = requests.get(
-        f"{api_root}/templater/vk-cover/png", params={"now_total": now_total,},
+        f"{api_root}/templater/vk-cover/png", params={"now_total": now_total},
     )
     r.raise_for_status()
     image_bytes = r.content

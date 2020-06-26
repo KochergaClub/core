@@ -21,7 +21,7 @@ def training_recipients(training):
                     'condition_type': 'Interests',
                     'op': 'interestcontains',
                     'field': f'interests-{training_category_id()}',
-                    'value': [training.mailchimp_interest_id,],
+                    'value': [training.mailchimp_interest_id],
                 }
             ],
         },
@@ -72,7 +72,7 @@ def create_any_draft(
 
     logger.info('Filling campaign content')
     kocherga.mailchimp.api_call(
-        'PUT', f'campaigns/{campaign_id}/content', {'html': html,}
+        'PUT', f'campaigns/{campaign_id}/content', {'html': html}
     )
 
     return {
@@ -81,8 +81,8 @@ def create_any_draft(
 
 
 def get_pre_content(training):
-    return render_to_string('ratio/email/pre.md', {'training': training,})
+    return render_to_string('ratio/email/pre.md', {'training': training})
 
 
 def get_post_content(training):
-    return render_to_string('ratio/email/post.md', {'training': training,})
+    return render_to_string('ratio/email/post.md', {'training': training})

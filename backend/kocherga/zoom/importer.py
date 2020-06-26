@@ -18,7 +18,7 @@ def import_meetings(from_d: date, to_d: date):
     result = api_call(
         'GET',
         f'report/users/{settings.ZOOM_ANNOUNCER_USER_ID}/meetings',
-        {'from': str(from_d), 'to': str(to_d), 'page_size': 300,},
+        {'from': str(from_d), 'to': str(to_d), 'page_size': 300},
     )
 
     if result['next_page_token']:

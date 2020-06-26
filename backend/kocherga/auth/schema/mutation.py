@@ -123,7 +123,7 @@ def create_mutations():
 
         magic_token = get_magic_token(email)
         params_str = urllib.parse.urlencode(
-            {'token': magic_token, 'next': input.get('next', '/'),}
+            {'token': magic_token, 'next': input.get('next', '/')}
         )
         magic_link = info.context.build_absolute_uri(
             '/login/magic-link' + '?' + params_str

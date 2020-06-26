@@ -168,7 +168,7 @@ def build_extra_files(folder_id):
 
     kocherga.gdrive.gdrive().files().copy(
         fileId=post_form_id,
-        body={"name": form_filename, "parents": [sources_folder_id],},
+        body={"name": form_filename, "parents": [sources_folder_id]},
     ).execute()
 
 

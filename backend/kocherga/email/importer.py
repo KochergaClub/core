@@ -9,7 +9,7 @@ def import_category(category_data):
     print(category_data)
     (category, _) = MailchimpCategory.objects.update_or_create(
         category_id=category_data['id'],
-        defaults={'title': category_data['title'], 'type': category_data['type'],},
+        defaults={'title': category_data['title'], 'type': category_data['type']},
     )
 
     interests = get_interests(category.category_id)

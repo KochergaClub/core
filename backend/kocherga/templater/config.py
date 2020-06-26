@@ -34,7 +34,7 @@ name2schema['vk-image'] = Schema(
 )
 
 name2schema['mailchimp'] = Schema(
-    [Field('start_date', 'date'), Field('end_date', 'date'),]
+    [Field('start_date', 'date'), Field('end_date', 'date')]
 )
 
 name2schema['workshop-badge'] = Schema([Field('date_text')])

@@ -23,7 +23,9 @@ def get_last_code():
     (guid, text, ts) = conn.execute(
         "SELECT guid, text, date / 1000000000 FROM message WHERE text LIKE 'Код: %' ORDER BY date DESC LIMIT 1"
     ).fetchone()
-    ts_base = 978307200  # 2001-01-01 - see https://apple.stackexchange.com/questions/114168/dates-format-in-messages-chat-db
+
+    # 2001-01-01 - see https://apple.stackexchange.com/questions/114168/dates-format-in-messages-chat-db
+    ts_base = 978307200
     ts += ts_base
 
     if guid == last_sms_guid:

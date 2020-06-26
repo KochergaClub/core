@@ -92,7 +92,7 @@ class WeeklyDigest(models.Model):
             date2events[d].append(event)
 
         events_by_date = [
-            {"date": d, "events": date2events[d],} for d in sorted(date2events.keys())
+            {"date": d, "events": date2events[d]} for d in sorted(date2events.keys())
         ]
 
         start_month = kocherga.dateutils.inflected_month(self.start)
@@ -219,7 +219,7 @@ class WeeklyDigest(models.Model):
 
         logger.info('Filling campaign content')
         kocherga.mailchimp.api_call(
-            'PUT', f'campaigns/{campaign_id}/content', {'html': content['html'],}
+            'PUT', f'campaigns/{campaign_id}/content', {'html': content['html']}
         )
         self.mailchimp_id = campaign_id
         self.save()
