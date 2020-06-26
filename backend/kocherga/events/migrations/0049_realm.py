@@ -13,6 +13,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='realm',
-            field=models.CharField(choices=[('offline', 'offline'), ('youtube_broadcast', 'youtube_broadcast')], default='offline', max_length=40),
+            field=models.CharField(
+                choices=[
+                    ('offline', 'offline'),
+                    ('youtube_broadcast', 'youtube_broadcast'),
+                ],
+                default='offline',
+                max_length=40,
+            ),
         ),
     ]

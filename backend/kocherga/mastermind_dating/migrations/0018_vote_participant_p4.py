@@ -10,14 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='vote',
-            old_name='who_p',
-            new_name='who',
-        ),
-        migrations.RenameField(
-            model_name='vote',
-            old_name='whom_p',
-            new_name='whom',
-        ),
+        migrations.RenameField(model_name='vote', old_name='who_p', new_name='who',),
+        migrations.RenameField(model_name='vote', old_name='whom_p', new_name='whom',),
     ]

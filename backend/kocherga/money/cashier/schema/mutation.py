@@ -10,9 +10,7 @@ Mutation = MutationType()
 def cashierCreatePayment(_, info, params):
     user = get_user_model().objects.get(pk=params['whom'])
     models.Payment.objects.create(
-        whom=user,
-        amount=params['amount'],
-        comment=params['comment'],
+        whom=user, amount=params['amount'], comment=params['comment'],
     )
     return True
 
@@ -32,7 +30,9 @@ def kkmRegisterCheck(_, info, params):
                 email=params['email'],
                 title=params['title'],
                 sum=params['sum'],
-                signMethodCalculation=kkm.SignMethodCalculation(params['sign_method_calculation']),
+                signMethodCalculation=kkm.SignMethodCalculation(
+                    params['sign_method_calculation']
+                ),
             )
         )
     )

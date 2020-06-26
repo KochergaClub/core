@@ -10,12 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='event',
-            name='google_id',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='google_link',
-        ),
+        migrations.RemoveField(model_name='event', name='google_id',),
+        migrations.RemoveField(model_name='event', name='google_link',),
     ]

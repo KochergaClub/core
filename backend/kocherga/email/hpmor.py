@@ -10,8 +10,12 @@ URL = 'https://audd.io/hpmor/api/?action=get_subscribed'
 def import_all():
     LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
 
-    interests = kocherga.mailchimp.api_call('GET', f"lists/{LIST_ID}/interest-categories/861f3cb880/interests")
-    news_interest = next(i for i in interests['interests'] if i['name'] == 'Материалы и новости')['id']
+    interests = kocherga.mailchimp.api_call(
+        'GET', f"lists/{LIST_ID}/interest-categories/861f3cb880/interests"
+    )
+    news_interest = next(
+        i for i in interests['interests'] if i['name'] == 'Материалы и новости'
+    )['id']
 
     r = requests.get(URL)
     r.raise_for_status()
@@ -35,36 +39,33 @@ def import_all():
         }
 
         subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
-        operations.append({
-            'method': 'PUT',
-            'path': f'lists/{LIST_ID}/members/{subscriber_hash}',
-            'body': json.dumps({
-                'email_type': 'html',
-                'email_address': email,
-                'merge_fields': merge_fields,
-                'interests': {
-                    news_interest: True,
-                },
-                'status_if_new': 'subscribed',
-            }),
-        })
-
-        operations.append({
-            'method': 'POST',
-            'path': f'lists/{LIST_ID}/members/{subscriber_hash}/tags',
-            'body': json.dumps({
-                'tags': [
+        operations.append(
+            {
+                'method': 'PUT',
+                'path': f'lists/{LIST_ID}/members/{subscriber_hash}',
+                'body': json.dumps(
                     {
-                        'name': 'Краудфандинг ГПиМРМ',
-                        'status': 'active',
+                        'email_type': 'html',
+                        'email_address': email,
+                        'merge_fields': merge_fields,
+                        'interests': {news_interest: True,},
+                        'status_if_new': 'subscribed',
                     }
-                ]
-            }),
-        })
+                ),
+            }
+        )
 
-    result = kocherga.mailchimp.api_call('POST', 'batches', {
-        'operations': operations
-    })
+        operations.append(
+            {
+                'method': 'POST',
+                'path': f'lists/{LIST_ID}/members/{subscriber_hash}/tags',
+                'body': json.dumps(
+                    {'tags': [{'name': 'Краудфандинг ГПиМРМ', 'status': 'active',}]}
+                ),
+            }
+        )
+
+    result = kocherga.mailchimp.api_call('POST', 'batches', {'operations': operations})
 
     batch_id = result['id']
 

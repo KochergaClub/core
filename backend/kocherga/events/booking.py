@@ -22,7 +22,6 @@ MAX_BOOKING_DELAY = datetime.timedelta(days=60)
 
 
 class Booking:
-
     def __init__(self, start_dt, end_dt, room, people, event_uuid=None):
         self.start_dt = start_dt
         self.end_dt = end_dt
@@ -37,9 +36,7 @@ class Booking:
         people = None
         if match:
             people = match.group(1)
-        return Booking(
-            event.start, event.end, event.get_room(), people, event.uuid
-        )
+        return Booking(event.start, event.end, event.get_room(), people, event.uuid)
 
     def public_object(self):
         return {
@@ -74,9 +71,7 @@ def check_availability(start_dt, end_dt, room):
     date = start_dt.date()
 
     bookings = day_bookings(date)
-    logger.debug(
-        str([vars(b) for b in bookings])
-    )
+    logger.debug(str([vars(b) for b in bookings]))
     for booking in bookings:
         if booking.room not in (room, kocherga.room.unknown):
             continue  # irrelevant
@@ -93,7 +88,11 @@ def check_availability(start_dt, end_dt, room):
 
 
 def bookings_by_email(email):
-    events = Event.objects.list_events().filter(title__startswith="Бронь ").filter(title__endswith=" " + email)
+    events = (
+        Event.objects.list_events()
+        .filter(title__startswith="Бронь ")
+        .filter(title__endswith=" " + email)
+    )
 
     bookings = [
         Booking.from_event(event)
@@ -140,7 +139,9 @@ def add_booking(date, room, people, start_time, end_time, email):
     if len(email) == 0:
         raise PublicError("Email is required.")
 
-    (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(date, start_time, end_time)
+    (start_dt, end_dt) = kocherga.events.helpers.build_start_end_dt(
+        date, start_time, end_time
+    )
 
     if datetime.datetime.now(TZ) + MAX_BOOKING_DELAY < start_dt:
         raise PublicError("This booking is too far off, we can't allow it.")

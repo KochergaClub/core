@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -34,7 +35,9 @@ class Event(models.Model):
         return f'[{self.id}] {self.name}'
 
     def get_kocherga_event(self):
-        announcement = kocherga.events.models.TimepadAnnouncement.objects.find_by_timepad_id(self.id)
+        announcement = kocherga.events.models.TimepadAnnouncement.objects.find_by_timepad_id(
+            self.id
+        )
         return announcement.event
 
     def link(self):
@@ -74,7 +77,7 @@ class Order(models.Model):
                 'from_timepad': True,
                 'subscribed_to_newsletter': self.subscribed_to_newsletter,
                 'status': self.status,
-            }
+            },
         )
         if created:
             # created field can't be overriden through `defaults` for some reason

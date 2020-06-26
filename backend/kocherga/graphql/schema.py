@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from pathlib import Path
@@ -15,7 +16,8 @@ import kocherga.room
 from . import directives
 
 
-core_type_defs = gql("""
+core_type_defs = gql(
+    """
   directive @staffonly on FIELD_DEFINITION
   directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
 
@@ -56,7 +58,8 @@ core_type_defs = gql("""
     endCursor: String
   }
 
-""")
+"""
+)
 
 
 def load_all_typedefs():
@@ -77,10 +80,7 @@ Query = QueryType()
 # FIXME - move rooms query code somewhere else
 @Query.field("rooms")
 def resolve_rooms(_, info):
-    return [
-        kocherga.room.details(room)
-        for room in kocherga.room.all_rooms
-    ]
+    return [kocherga.room.details(room) for room in kocherga.room.all_rooms]
 
 
 @Query.field('my')
@@ -108,5 +108,5 @@ schema = make_executable_schema(
     directives={
         "staffonly": directives.StaffOnlyDirective,
         "auth": directives.AuthDirective,
-    }
+    },
 )

@@ -16,8 +16,8 @@ def eventTimepadAnnouncementUpdate(_, info, input):
     announcement = event.timepad_announcement
 
     for field in (
-            'prepaid_tickets',
-            'category_code',
+        'prepaid_tickets',
+        'category_code',
     ):
         if field in input:
             setattr(announcement, field, input[field])
@@ -40,9 +40,7 @@ def eventVkAnnouncementUpdate(_, info, input):
 
     announcement = event.vk_announcement
 
-    for field in (
-            'group',
-    ):
+    for field in ('group',):
         if field in input:
             setattr(announcement, field, input[field])
 
@@ -64,7 +62,9 @@ def eventVkAnnouncementSetImage(_, info, input):
     if not image_id:
         vk_announcement.image = None
     else:
-        vk_announcement.image = kocherga.wagtail.models.CustomImage.objects.get(pk=image_id)
+        vk_announcement.image = kocherga.wagtail.models.CustomImage.objects.get(
+            pk=image_id
+        )
 
     vk_announcement.full_clean()
     vk_announcement.save()

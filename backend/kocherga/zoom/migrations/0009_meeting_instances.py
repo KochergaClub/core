@@ -11,18 +11,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='meeting',
-            name='end_time',
-        ),
-        migrations.RemoveField(
-            model_name='meeting',
-            name='zoom_uuid',
-        ),
-        migrations.RemoveField(
-            model_name='participant',
-            name='meeting',
-        ),
+        migrations.RemoveField(model_name='meeting', name='end_time',),
+        migrations.RemoveField(model_name='meeting', name='zoom_uuid',),
+        migrations.RemoveField(model_name='participant', name='meeting',),
         migrations.AlterField(
             model_name='meeting',
             name='zoom_id',
@@ -31,17 +22,38 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MeetingInstance',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('zoom_uuid', models.CharField(max_length=100)),
                 ('start_time', models.DateTimeField()),
                 ('end_time', models.DateTimeField()),
-                ('meeting', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='instances', to='zoom.Meeting')),
+                (
+                    'meeting',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='instances',
+                        to='zoom.Meeting',
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
             model_name='participant',
             name='meeting_instance',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, related_name='participants', to='zoom.MeetingInstance', null=True),
+            field=models.ForeignKey(
+                default=None,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='participants',
+                to='zoom.MeetingInstance',
+                null=True,
+            ),
             preserve_default=False,
         ),
     ]

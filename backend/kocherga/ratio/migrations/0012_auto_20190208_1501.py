@@ -16,13 +16,33 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Trainer',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='ratio_trainer', to=settings.AUTH_USER_MODEL)),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'user',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='ratio_trainer',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
             model_name='activity',
             name='trainer',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='+', to='ratio.Trainer', verbose_name='Ведущий'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='ratio.Trainer',
+                verbose_name='Ведущий',
+            ),
         ),
     ]

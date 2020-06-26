@@ -42,22 +42,57 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Participant',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('telegram_uid', models.CharField(blank=True, max_length=100)),
                 ('name', models.CharField(blank=True, max_length=255)),
                 ('desc', models.TextField(blank=True)),
-                ('photo', models.ImageField(blank=True, null=True, upload_to=kocherga.mastermind_dating.models.participant.photo_path)),
+                (
+                    'photo',
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to=kocherga.mastermind_dating.models.participant.photo_path,
+                    ),
+                ),
                 ('state', models.TextField(blank=True)),
                 ('chat_id', models.IntegerField(blank=True, null=True)),
                 ('voted_for', models.BooleanField(default=False)),
                 ('present', models.BooleanField(default=False)),
                 ('invite_email_sent', models.BooleanField(default=False)),
-                ('cohort', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='participants', to='mastermind_dating.Cohort')),
-                ('group', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='participants', to='mastermind_dating.Group')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    'cohort',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='participants',
+                        to='mastermind_dating.Cohort',
+                    ),
+                ),
+                (
+                    'group',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='participants',
+                        to='mastermind_dating.Group',
+                    ),
+                ),
+                (
+                    'user',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
-        migrations.RunPython(
-            fill_participants
-        )
+        migrations.RunPython(fill_participants),
     ]

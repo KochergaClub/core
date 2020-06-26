@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='trainer',
             name='long_name',
-            field=models.CharField(default='', max_length=255, verbose_name='Длинное имя'),
+            field=models.CharField(
+                default='', max_length=255, verbose_name='Длинное имя'
+            ),
             preserve_default=False,
         ),
     ]

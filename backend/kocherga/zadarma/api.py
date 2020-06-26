@@ -28,15 +28,13 @@ def api_call(method, url, params):
             + params_str
             + hashlib.md5(params_str.encode('utf-8')).hexdigest()
         ).encode('utf-8'),
-        hashlib.sha1
+        hashlib.sha1,
     ).hexdigest()
     signature = base64.b64encode(hmac_value.encode('utf-8')).decode('utf-8')
 
     r = requests.get(
         f'https://api.zadarma.com/v1/{url}/?{params_str}',
-        headers={
-            'Authorization': f'{key}:{signature}'
-        }
+        headers={'Authorization': f'{key}:{signature}'},
     )
     r.raise_for_status()
     return r.json()

@@ -1,11 +1,16 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from ariadne import QueryType, InterfaceType, ObjectType
 
 from django.http import Http404
 from wagtail.core.models import Page, Site
-from wagtail.api.v2.utils import page_models_from_string, BadRequestError, filter_page_type
+from wagtail.api.v2.utils import (
+    page_models_from_string,
+    BadRequestError,
+    filter_page_type,
+)
 
 from ..utils import filter_queryset_by_page_permissions
 
@@ -87,9 +92,7 @@ def resolve_wagtailPage(_, info, path=None, preview_token=None):
 @Query.field('wagtailPages')
 def resolve_wagtailPages(_, info):
     # page.specific is slow! but we call wagtailPages only on getStaticPaths once per build, so that should be ok?..
-    return [
-        page.specific for page in get_queryset(info.context)
-    ]
+    return [page.specific for page in get_queryset(info.context)]
 
 
 WagtailPage = InterfaceType("WagtailPage")
@@ -119,9 +122,7 @@ WagtailBlock = InterfaceType("WagtailBlock")
 def resolve_WagtailBlock_type(obj, *_):
     # Naming type by convention.
     # Example: type='grey' -> GreyWagtailBlock
-    camel_name = ''.join([
-        part.capitalize() for part in obj.block.name.split('_')
-    ])
+    camel_name = ''.join([part.capitalize() for part in obj.block.name.split('_')])
     return camel_name + 'Block'
 
 

@@ -12,7 +12,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='notebookpage',
-            options={'verbose_name': 'Рабочая тетрадь', 'verbose_name_plural': 'Рабочие тетради'},
+            options={
+                'verbose_name': 'Рабочая тетрадь',
+                'verbose_name_plural': 'Рабочие тетради',
+            },
         ),
         migrations.AlterModelOptions(
             name='sectionpage',

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from ariadne import MutationType
@@ -30,6 +31,4 @@ def eventsFeedbackDelete(_, info, input):
 
     models.Feedback.objects.get(pk=id).delete()
 
-    return {
-        'ok': True
-    }
+    return {'ok': True}

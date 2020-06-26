@@ -9,14 +9,16 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('google_id', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    'google_id',
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
                 ('google_link', models.CharField(max_length=1024)),
                 ('start_ts', models.IntegerField()),
                 ('end_ts', models.IntegerField()),
@@ -44,11 +46,12 @@ class Migration(migrations.Migration):
                 ('posted_vk', models.CharField(blank=True, max_length=1024)),
                 ('timepad_category_code', models.CharField(blank=True, max_length=40)),
                 ('timepad_prepaid_tickets', models.BooleanField(default=False)),
-                ('timing_description_override', models.CharField(blank=True, max_length=255)),
+                (
+                    'timing_description_override',
+                    models.CharField(blank=True, max_length=255),
+                ),
             ],
-            options={
-                'db_table': 'events',
-            },
+            options={'db_table': 'events',},
         ),
         migrations.CreateModel(
             name='EventPrototype',
@@ -60,7 +63,10 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(blank=True)),
                 ('timepad_category_code', models.CharField(blank=True, max_length=40)),
                 ('timepad_prepaid_tickets', models.BooleanField(default=False)),
-                ('timing_description_override', models.CharField(blank=True, max_length=255)),
+                (
+                    'timing_description_override',
+                    models.CharField(blank=True, max_length=255),
+                ),
                 ('vk_group', models.CharField(blank=True, max_length=40)),
                 ('fb_group', models.CharField(blank=True, max_length=40)),
                 ('weekday', models.IntegerField()),
@@ -71,38 +77,41 @@ class Migration(migrations.Migration):
                 ('active', models.BooleanField(default=True)),
                 ('canceled_dates', models.TextField()),
             ],
-            options={
-                'db_table': 'event_prototypes',
-            },
+            options={'db_table': 'event_prototypes',},
         ),
         migrations.CreateModel(
             name='EventPrototypeTag',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=40)),
-                ('prototype', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='events.EventPrototype')),
+                (
+                    'prototype',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='events.EventPrototype',
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'event_prototype_tags',
-            },
+            options={'db_table': 'event_prototype_tags',},
         ),
         migrations.CreateModel(
             name='Tag',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=40)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='events.Event')),
+                (
+                    'event',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to='events.Event'
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'event_tags',
-            },
+            options={'db_table': 'event_tags',},
         ),
         migrations.AlterUniqueTogether(
-            name='tag',
-            unique_together={('event', 'name')},
+            name='tag', unique_together={('event', 'name')},
         ),
         migrations.AlterUniqueTogether(
-            name='eventprototypetag',
-            unique_together={('prototype', 'name')},
+            name='eventprototypetag', unique_together={('prototype', 'name')},
         ),
     ]

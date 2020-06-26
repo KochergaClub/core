@@ -41,7 +41,9 @@ def resolve_eventsPrototypes(self, info):
 @Query.field('publicEvents')
 def resolve_publicEvents(self, info, from_date=None, project_id=None, **pager):
     qs = models.Event.objects.public_events(
-        from_date=datetime.strptime(from_date, '%Y-%m-%d').date() if from_date else None,
+        from_date=datetime.strptime(from_date, '%Y-%m-%d').date()
+        if from_date
+        else None,
     )
 
     if project_id is not None:
@@ -59,12 +61,7 @@ def resolve_publicEvent(self, info, event_id):
 @Query.field('vkGroups')
 def resolve_vkGroups(self, info):
     all_groups = models.VkAnnouncement.objects.all_groups()
-    return [
-        {
-            'name': name,
-        }
-        for name in all_groups
-    ]
+    return [{'name': name,} for name in all_groups]
 
 
 @Query.field('timepadCategories')

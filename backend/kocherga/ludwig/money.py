@@ -48,13 +48,7 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
     else:
         header += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}*"
 
-    blocks.append({
-        "type": "section",
-        "text": {
-            "type": "mrkdwn",
-            "text": header,
-        }
-    })
+    blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": header,}})
     blocks.append({"type": "divider"})
 
     total_cash_payments = 0
@@ -93,33 +87,35 @@ def salaries_message(salaries: SalaryContainer, with_elba_values=False):
                 {
                     "type": "mrkdwn",
                     "text": f"Смены: {salary.shifts} руб."
-                            f" 2% бонус: {salary.commissions} руб."
-                            f" Грейд: {member.watchman.grade.code}",
+                    f" 2% бонус: {salary.commissions} руб."
+                    f" Грейд: {member.watchman.grade.code}",
                 }
-            ]
+            ],
         }
 
         blocks.append(member_block)
         blocks.append(comment_block)
         blocks.append({"type": "divider"})
 
-    blocks.append({
-        "type": "context",
-        "elements": [
-            {
-                "type": "mrkdwn",
-                "text": f"Всего наличных в кассе: {kocherga.money.cashier.models.current_cash()} руб.",
-            },
-            {
-                "type": "mrkdwn",
-                "text": f"Всего к выдаче наличными: {total_cash_payments} руб.",
-            },
-            {
-                "type": "mrkdwn",
-                "text": f"Не забудьте отметить выданные деньги в {settings.KOCHERGA_WEBSITE}/team/cashier.",
-            },
-        ]
-    })
+    blocks.append(
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"Всего наличных в кассе: {kocherga.money.cashier.models.current_cash()} руб.",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": f"Всего к выдаче наличными: {total_cash_payments} руб.",
+                },
+                {
+                    "type": "mrkdwn",
+                    "text": f"Не забудьте отметить выданные деньги в {settings.KOCHERGA_WEBSITE}/team/cashier.",
+                },
+            ],
+        }
+    )
 
     return {
         "text": header,
@@ -145,7 +141,4 @@ def react_send_salaries(message):
 
     salaries: SalaryContainer = kocherga.money.salaries.calculate_new_salaries()
     kocherga.money.salaries.salaries_to_payments(salaries)
-    bot.send_message(
-        channel=SALARIES_CHANNEL,
-        **salaries_message(salaries)
-    )
+    bot.send_message(channel=SALARIES_CHANNEL, **salaries_message(salaries))

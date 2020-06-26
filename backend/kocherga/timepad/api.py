@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -22,17 +23,9 @@ def api_call(method, url, payload={}):
         'Authorization': 'Bearer ' + token(),
     }
     if method == "GET":
-        r = requests.get(
-            url,
-            params=payload,
-            headers=headers,
-        )
+        r = requests.get(url, params=payload, headers=headers,)
     elif method == "POST":
-        r = requests.post(
-            url,
-            headers=headers,
-            json=payload,
-        )
+        r = requests.post(url, headers=headers, json=payload,)
     else:
         raise Exception(f"Unknown method {method}")
 

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -20,7 +21,9 @@ class Training(models.Model):
     post_survey_link = models.URLField('Форма пострассылки', blank=True)
     gdrive_link = models.URLField('Материалы', blank=True)
 
-    mailchimp_interest_id = models.CharField('ID Mailchimp-группы', max_length=20, blank=True)
+    mailchimp_interest_id = models.CharField(
+        'ID Mailchimp-группы', max_length=20, blank=True
+    )
 
     post_survey_collected = models.BooleanField(default=False)
     salaries_paid = models.BooleanField(default=False)
@@ -31,30 +34,30 @@ class Training(models.Model):
         verbose_name = 'Тренинг'
         verbose_name_plural = 'Тренинги'
         ordering = ['-date']
-        permissions = (
-            ('manage', 'Может управлять тренингами'),
-        )
+        permissions = (('manage', 'Может управлять тренингами'),)
 
     def __str__(self):
         return self.name
 
     def tickets_count(self) -> int:
         return sum(1 for ticket in self.tickets.all() if ticket.status == 'normal')
+
     tickets_count.short_description = 'Число билетов'
 
     def total_income(self) -> int:
         return sum(ticket.payment_amount for ticket in self.tickets.all())
+
     total_income.short_description = 'Суммарный доход'
 
     def add_day(self, date):
         if date < self.date:
-            raise Exception("Can't add day for date which is earlier than training's start date")
+            raise Exception(
+                "Can't add day for date which is earlier than training's start date"
+            )
 
         from .training_day import TrainingDay
-        day = TrainingDay.objects.create(
-            training=self,
-            date=date,
-        )
+
+        day = TrainingDay.objects.create(training=self, date=date,)
         return day
 
     def copy_schedule_from(self, src_training):
@@ -69,8 +72,7 @@ class Training(models.Model):
         for src_day in src_training.days.all():
             logger.info(f'Copying day {src_day}')
             day = TrainingDay.objects.create(
-                training=self,
-                date=src_day.date - src_training.date + self.date,
+                training=self, date=src_day.date - src_training.date + self.date,
             )
             for activity in src_day.schedule.all():
                 activity.pk = None
@@ -109,7 +111,9 @@ class Training(models.Model):
             trainer_total += 1
 
         if total == 0:
-            raise Exception(f"Training {self} doesn't have any sections, can't calculate salary")
+            raise Exception(
+                f"Training {self} doesn't have any sections, can't calculate salary"
+            )
 
         activity_share = trainer_total / total
         income_share = 0.5

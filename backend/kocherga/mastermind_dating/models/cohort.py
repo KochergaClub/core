@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -18,9 +19,13 @@ from .. import rpc
 
 
 class Cohort(models.Model):
-    event = models.OneToOneField(KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+    event = models.OneToOneField(
+        KchEvent, on_delete=models.CASCADE, related_name='+', blank=True, null=True
+    )
 
-    leader_telegram_uid = models.CharField(max_length=100, blank=True)  # will be added to the newly created groups
+    leader_telegram_uid = models.CharField(
+        max_length=100, blank=True
+    )  # will be added to the newly created groups
 
     def populate_from_event(self):
         if not self.event:
@@ -28,8 +33,7 @@ class Cohort(models.Model):
 
         for kocherga_user in self.event.registered_users():
             (participant, _) = Participant.objects.get_or_create(
-                user=kocherga_user,
-                cohort=self,
+                user=kocherga_user, cohort=self,
             )
         # TODO - remove stale participants (people can cancel their registrations)
 
@@ -74,9 +78,7 @@ class Cohort(models.Model):
                     f"and skipped some ({len(yall) - 1 - len(uvotes)}) participants in voting."
                 )
             else:
-                logger.info(
-                    f"Participant {u.telegram_uid}({u.user.email}) [OK]"
-                )
+                logger.info(f"Participant {u.telegram_uid}({u.user.email}) [OK]")
             votes += uvotes
             participants.append(u)
 
@@ -118,8 +120,10 @@ class Cohort(models.Model):
 
     def run_solver(self):
         if self.has_populated_groups():
-            raise Exception("Can't run solver when groups are already populated. "
-                            "If you want to re-run solver, call clear_all_groups() first.")
+            raise Exception(
+                "Can't run solver when groups are already populated. "
+                "If you want to re-run solver, call clear_all_groups() first."
+            )
 
         data = self.get_solver_data()
         with open("data.dzn", mode="w") as f:
@@ -128,13 +132,16 @@ class Cohort(models.Model):
         (participants, votes) = self.get_participants_and_votes()  # duplicate effort
 
         logger.info("Starting solver.")
-        subprocess.run([
-            "minizinc/minizinc",
-            "mm-bot-model/model.mzn",
-            "data.dzn",
-            "--time-limit",
-            "30000",
-        ], stdout=open("solution.json", mode='w'))
+        subprocess.run(
+            [
+                "minizinc/minizinc",
+                "mm-bot-model/model.mzn",
+                "data.dzn",
+                "--time-limit",
+                "30000",
+            ],
+            stdout=open("solution.json", mode='w'),
+        )
 
         solution = json.load(open("solution.json", mode="r"))
         logger.info(f"Got solution: {solution}")
@@ -148,7 +155,10 @@ class Cohort(models.Model):
             passoc[participants[i]] = ptg[i]
 
         group_names = set(solution["people_to_groups"])
-        groups = {group: [u for u in participants if passoc[u] == group] for group in group_names}
+        groups = {
+            group: [u for u in participants if passoc[u] == group]
+            for group in group_names
+        }
 
         for group_id in groups.keys():
             group: List[Participant] = groups[group_id]

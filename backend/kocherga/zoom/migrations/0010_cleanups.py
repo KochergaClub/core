@@ -11,13 +11,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='meeting',
-            name='participants_count',
-        ),
+        migrations.RemoveField(model_name='meeting', name='participants_count',),
         migrations.AlterField(
             model_name='participant',
             name='meeting_instance',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='participants', to='zoom.MeetingInstance'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='participants',
+                to='zoom.MeetingInstance',
+            ),
         ),
     ]

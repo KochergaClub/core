@@ -92,8 +92,7 @@ class Order(models.Model):
         params["imported_ts"] = datetime.now(TZ).timestamp()
 
         (obj, created) = Order.objects.update_or_create(
-            order_id=params['order_id'],
-            defaults=params,
+            order_id=params['order_id'], defaults=params,
         )
         return obj
 

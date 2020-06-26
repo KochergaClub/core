@@ -26,9 +26,7 @@ class FinTransaction(models.Model):
 class FinTransactionLine(models.Model):
     class Meta:
         db_table = 'fin_transaction_lines'
-        unique_together = (
-            ('transaction', 'account'),
-        )
+        unique_together = (('transaction', 'account'),)
 
     transaction = models.ForeignKey(FinTransaction, on_delete=models.CASCADE)
     account = models.ForeignKey(FinAccount, on_delete=models.CASCADE)

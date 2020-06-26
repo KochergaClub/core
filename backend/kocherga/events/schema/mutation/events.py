@@ -51,18 +51,18 @@ def eventUpdate(_, info, input):
     assert not event.deleted
 
     for field in (
-            'published',
-            'visitors',
-            'title',
-            'description',
-            'summary',
-            'event_type',
-            'registration_type',
-            'pricing_type',
-            'realm',
-            'timing_description_override',
-            'location',
-            'zoom_link',
+        'published',
+        'visitors',
+        'title',
+        'description',
+        'summary',
+        'event_type',
+        'registration_type',
+        'pricing_type',
+        'realm',
+        'timing_description_override',
+        'location',
+        'zoom_link',
     ):
         if field in input:
             setattr(event, field, input[field])
@@ -77,13 +77,19 @@ def eventUpdate(_, info, input):
         if not input['prototype_id']:
             event.prototype = None
         else:
-            event.prototype = models.EventPrototype.objects.get(pk=input['prototype_id'])
+            event.prototype = models.EventPrototype.objects.get(
+                pk=input['prototype_id']
+            )
 
     if 'project_slug' in input:
         if not input['project_slug']:
             event.project = None
         else:
-            event.project = kocherga.projects.models.ProjectPage.objects.live().public().get(slug=input['project_slug'])
+            event.project = (
+                kocherga.projects.models.ProjectPage.objects.live()
+                .public()
+                .get(slug=input['project_slug'])
+            )
 
     if 'image_id' in input:
         if not input['image_id']:
@@ -91,7 +97,9 @@ def eventUpdate(_, info, input):
         else:
             # TODO - check image access permissions
             # TODO - make image public if necessary
-            event.image = kocherga.wagtail.models.CustomImage.objects.get(pk=input['image_id'])
+            event.image = kocherga.wagtail.models.CustomImage.objects.get(
+                pk=input['image_id']
+            )
 
     event.full_clean()
     event.save()
@@ -112,9 +120,7 @@ def eventDelete(_, info, input):
     event.delete()
     models.Event.objects.notify_update()
 
-    return {
-        'ok': True
-    }
+    return {'ok': True}
 
 
 @Mutation.field('eventSetEventType')

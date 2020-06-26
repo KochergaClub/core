@@ -19,7 +19,10 @@ class Section:
     def remark_tree(self):
         cwd = Path(__file__).parent.parent.parent
         os.chdir(cwd)
-        out = subprocess.check_output(['node', 'scripts/parse-handbook-markdown.js'], stdin=open(self.source_filename))
+        out = subprocess.check_output(
+            ['node', 'scripts/parse-handbook-markdown.js'],
+            stdin=open(self.source_filename),
+        )
         tree = json.loads(out)
 
         return tree
@@ -32,19 +35,27 @@ class Section:
             paragraph.style = 'Неупорядоченный список'
 
             if len(node['children']) != 1:
-                raise Exception("Expected 1 child, got: " + json.dumps(node, ensure_ascii=False))
+                raise Exception(
+                    "Expected 1 child, got: " + json.dumps(node, ensure_ascii=False)
+                )
             if node['children'][0]['type'] != 'paragraph':
-                raise Exception("Expected paragraph child, got: " + json.dumps(node, ensure_ascii=False))
+                raise Exception(
+                    "Expected paragraph child, got: "
+                    + json.dumps(node, ensure_ascii=False)
+                )
 
             self._populate_docx_paragraph(paragraph, node['children'][0])
 
     def _populate_docx_paragraph(self, paragraph, tree):
-
         def expect_one_text_child(node):
             if len(node['children']) != 1:
-                raise Exception("Expected 1 child, got: " + json.dumps(node, ensure_ascii=False))
+                raise Exception(
+                    "Expected 1 child, got: " + json.dumps(node, ensure_ascii=False)
+                )
             if node['children'][0]['type'] != 'text':
-                raise Exception("Expected text child, got: " + json.dumps(node, ensure_ascii=False))
+                raise Exception(
+                    "Expected text child, got: " + json.dumps(node, ensure_ascii=False)
+                )
 
         for node in tree['children']:
             # print(node)

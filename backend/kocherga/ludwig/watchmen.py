@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -78,13 +79,7 @@ def daily_watchmen(d):
     date_str = f"<{settings.KOCHERGA_WEBSITE}/team/space/staff/shifts|{date_str}>"
     intro_text = f":female-astronaut: {preposition} {weekday_str} {date_str}:\n"
 
-    blocks.append({
-        "type": "section",
-        "text": {
-            "type": "mrkdwn",
-            "text": intro_text,
-        }
-    })
+    blocks.append({"type": "section", "text": {"type": "mrkdwn", "text": intro_text,}})
 
     for shift_type in sorted(day_schedule.keys()):
         shift = day_schedule[shift_type]
@@ -92,13 +87,15 @@ def daily_watchmen(d):
             continue
 
         if not shift.watchman:
-            blocks.append({
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"{shift_type.when().capitalize()}: *нет админа*!\n",
+            blocks.append(
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"{shift_type.when().capitalize()}: *нет админа*!\n",
+                    },
                 }
-            })
+            )
             continue
 
         (shift_start, shift_end) = shift_type.dt_tuple_by_date(d)
@@ -110,26 +107,28 @@ def daily_watchmen(d):
         else:
             rel = "админит"
 
-        blocks.append({
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.member.short_name}*.\n",
-            }
-        })
-
-    blocks.append({
-        "type": "divider"
-    })
-    blocks.append({
-        "type": "context",
-        "elements": [
+        blocks.append(
             {
-                "type": "mrkdwn",
-                "text": "Посмотреть админов на сегодня: `/watchmen`\n",
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"{shift_type.when().capitalize()} {rel} *{shift.watchman.member.short_name}*.\n",
+                },
             }
-        ]
-    })
+        )
+
+    blocks.append({"type": "divider"})
+    blocks.append(
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": "Посмотреть админов на сегодня: `/watchmen`\n",
+                }
+            ],
+        }
+    )
 
     return {
         "text": intro_text,
@@ -284,7 +283,11 @@ def roster_check():
             if not shift.watchman and not shift.is_night:
                 empty_for_day += 1
 
-        if empty_for_day and d <= today + timedelta(days=CRITICAL_DAYS) and not critical_sent:
+        if (
+            empty_for_day
+            and d <= today + timedelta(days=CRITICAL_DAYS)
+            and not critical_sent
+        ):
             bot.send_message(
                 text=f":exclamation: Есть пустые смены в ближайшие {CRITICAL_DAYS} дня.",
                 channel=CHANNEL,

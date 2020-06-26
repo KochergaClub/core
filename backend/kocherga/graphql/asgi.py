@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import ariadne.asgi
@@ -12,6 +13,7 @@ class ASGIGraphQL(ariadne.asgi.GraphQL):
     def __call__(self, scope) -> None:
         async def handle(receive, send):
             await super(ASGIGraphQL, self).__call__(scope, receive, send)
+
         return handle
 
 
@@ -23,11 +25,7 @@ class ASGIContext:
 
 
 async def get_context_value(websocket):
-    return ASGIContext(
-        user=await get_user(websocket.scope)
-    )
+    return ASGIContext(user=await get_user(websocket.scope))
 
-asgi_graphql_app = ASGIGraphQL(
-    schema,
-    context_value=get_context_value,
-)
+
+asgi_graphql_app = ASGIGraphQL(schema, context_value=get_context_value,)

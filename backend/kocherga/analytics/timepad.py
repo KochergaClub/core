@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import json
@@ -21,9 +22,14 @@ def export_events_dataset():
             continue
 
         event = kocherga.timepad.api.api_call('GET', f'events/{timepad_event_id}')
-        print(json.dumps({
-            'created_at': event['created_at'],
-            'starts_at': event['starts_at'],
-            'tickets_total': event['registration_data']['tickets_total'],
-            'name': event['name'],
-        }, ensure_ascii=False))
+        print(
+            json.dumps(
+                {
+                    'created_at': event['created_at'],
+                    'starts_at': event['starts_at'],
+                    'tickets_total': event['registration_data']['tickets_total'],
+                    'name': event['name'],
+                },
+                ensure_ascii=False,
+            )
+        )

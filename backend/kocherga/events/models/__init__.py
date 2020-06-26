@@ -8,11 +8,16 @@ from .google_event import GoogleEvent
 from .feedback import Feedback
 
 __all__ = [
-    'Event', 'Tag',
-    'EventPrototype', 'EventPrototypeTag',
+    'Event',
+    'Tag',
+    'EventPrototype',
+    'EventPrototypeTag',
     'WeeklyDigest',
     'Ticket',
-    'VkAnnouncement', 'FbAnnouncement', 'TimepadAnnouncement',
-    'GoogleCalendar', 'GoogleEvent',
+    'VkAnnouncement',
+    'FbAnnouncement',
+    'TimepadAnnouncement',
+    'GoogleCalendar',
+    'GoogleEvent',
     'Feedback',
 ]

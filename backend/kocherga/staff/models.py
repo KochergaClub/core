@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -18,10 +19,14 @@ class MemberManager(models.Manager):
             [
                 list(self.filter(is_current=True, role='FOUNDER')),
                 list(self.filter(is_current=True, role='MANAGER')),
-                list(self.filter(is_current=True).exclude(role__in=['FOUNDER', 'MANAGER'])),
+                list(
+                    self.filter(is_current=True).exclude(
+                        role__in=['FOUNDER', 'MANAGER']
+                    )
+                ),
                 list(self.filter(is_current=False)),
             ],
-            []
+            [],
         )
 
 
@@ -40,7 +45,7 @@ class Member(models.Model):
             ('TRAINER', 'Тренер'),
             ('CONSULTANT', 'Внешний консультант'),
             ('VOLUNTEER', 'Волонтёр'),
-        ]
+        ],
     )
 
     is_current = models.BooleanField('Текущий сотрудник')
@@ -48,22 +53,13 @@ class Member(models.Model):
         'Форма зарплаты',
         max_length=10,
         blank=True,
-        choices=[
-            ('CASH', 'нал'),
-            ('ELECTRONIC', 'безнал'),
-        ]
+        choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал'),],
     )
 
     vk = models.URLField('Профиль VK', max_length=255, blank=True)
 
     gender = models.CharField(
-        'Пол',
-        max_length=10,
-        null=True,
-        choices=[
-            ('MALE', 'М'),
-            ('FEMALE', 'Ж'),
-        ],
+        'Пол', max_length=10, null=True, choices=[('MALE', 'М'), ('FEMALE', 'Ж'),],
     )
 
     color = models.CharField(max_length=7)
@@ -71,7 +67,8 @@ class Member(models.Model):
     cm_login = models.CharField('Логин в КМ', max_length=255, blank=True)
     cm_customer = models.ForeignKey(
         kocherga.cm.models.Customer,
-        null=True, blank=True,
+        null=True,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name='staff_member',
         verbose_name='Клиент в КМ',
@@ -87,40 +84,43 @@ class Member(models.Model):
     objects = MemberManager()
 
     panels = [
-        edit_handlers.MultiFieldPanel([
-            edit_handlers.FieldPanel('user'),
-            edit_handlers.FieldPanel('full_name'),
-            edit_handlers.FieldPanel('short_name'),
-            edit_handlers.FieldPanel(
-                'gender',
-                widget=widgets.RadioSelect(),
-            ),
-            edit_handlers.FieldPanel('vk'),
-            edit_handlers.FieldPanel(
-                'color',
-                widget=widgets.TextInput(attrs={'type': 'color', 'style': 'box-sizing: content-box'}),
-            ),
-        ], heading='Личные данные'),
-        edit_handlers.MultiFieldPanel([
-            edit_handlers.FieldPanel('role'),
-            edit_handlers.FieldPanel('is_current'),
-            edit_handlers.FieldPanel(
-                'payment_type',
-                widget=widgets.RadioSelect(),
-            ),
-        ], heading='Работа'),
-        edit_handlers.MultiFieldPanel([
-            edit_handlers.FieldPanel('cm_login'),
-            edit_handlers.FieldPanel('cm_customer'),
-        ], heading='Кафе-менеджер'),
+        edit_handlers.MultiFieldPanel(
+            [
+                edit_handlers.FieldPanel('user'),
+                edit_handlers.FieldPanel('full_name'),
+                edit_handlers.FieldPanel('short_name'),
+                edit_handlers.FieldPanel('gender', widget=widgets.RadioSelect(),),
+                edit_handlers.FieldPanel('vk'),
+                edit_handlers.FieldPanel(
+                    'color',
+                    widget=widgets.TextInput(
+                        attrs={'type': 'color', 'style': 'box-sizing: content-box'}
+                    ),
+                ),
+            ],
+            heading='Личные данные',
+        ),
+        edit_handlers.MultiFieldPanel(
+            [
+                edit_handlers.FieldPanel('role'),
+                edit_handlers.FieldPanel('is_current'),
+                edit_handlers.FieldPanel('payment_type', widget=widgets.RadioSelect(),),
+            ],
+            heading='Работа',
+        ),
+        edit_handlers.MultiFieldPanel(
+            [
+                edit_handlers.FieldPanel('cm_login'),
+                edit_handlers.FieldPanel('cm_customer'),
+            ],
+            heading='Кафе-менеджер',
+        ),
     ]
 
     class Meta:
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
-        permissions = (
-            ('manage', 'Может управлять стаффом и доступами'),
-        )
+        permissions = (('manage', 'Может управлять стаффом и доступами'),)
 
     def __str__(self):
         return self.full_name
@@ -128,9 +128,7 @@ class Member(models.Model):
     @property
     def slack_user(self):
         primary_email = self.user.email.lower()
-        alt_emails = [
-            a.email.lower() for a in self.alt_emails.all()
-        ]
+        alt_emails = [a.email.lower() for a in self.alt_emails.all()]
 
         slack_user = None
         for email in [primary_email] + alt_emails:
@@ -173,11 +171,7 @@ class Member(models.Model):
         gdrive = kocherga.google.service('drive')
         gdrive.permissions().create(
             fileId=settings.GDRIVE_WATCHMEN_FOLDER,
-            body={
-                'role': 'writer',
-                'type': 'user',
-                'emailAddress': email,
-            }
+            body={'role': 'writer', 'type': 'user', 'emailAddress': email,},
         ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
 
@@ -200,4 +194,6 @@ class Member(models.Model):
 
 class AltEmail(models.Model):
     email = models.EmailField()
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='alt_emails')
+    member = models.ForeignKey(
+        Member, on_delete=models.CASCADE, related_name='alt_emails'
+    )

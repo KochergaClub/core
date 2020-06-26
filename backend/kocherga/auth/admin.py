@@ -8,15 +8,21 @@ from .forms import UserChangeForm, UserCreationForm
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email',)}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (
+            'Permissions',
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                )
+            },
+        ),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email',),
-        }),
-    )
+    add_fieldsets = ((None, {'classes': ('wide',), 'fields': ('email',),}),)
     form = UserChangeForm
     add_form = UserCreationForm
     list_display = ('email', 'is_staff')

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -63,72 +64,58 @@ def list_events():
     intro_text = f"Сегодня *{len(events)}* {word_form}"
 
     blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": intro_text + ':',
-            },
-        },
-        {
-            "type": "divider",
-        },
+        {"type": "section", "text": {"type": "mrkdwn", "text": intro_text + ':',},},
+        {"type": "divider",},
     ]
 
     for event in events:
-        blocks.append({
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": '<' + internal_event_link(event) + '|' + event.title + '>',
-            },
-        })
-
-        instructions = event_instructions(event)
-        if instructions:
-            blocks.append({
+        blocks.append(
+            {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": instructions,
+                    "text": '<' + internal_event_link(event) + '|' + event.title + '>',
                 },
-            })
+            }
+        )
+
+        instructions = event_instructions(event)
+        if instructions:
+            blocks.append(
+                {"type": "section", "text": {"type": "mrkdwn", "text": instructions,},}
+            )
 
         start_time = timezone.localtime(event.start).strftime("%H:%M")
         end_time = timezone.localtime(event.end).strftime("%H:%M")
 
-        blocks.append({
-            "type": "context",
-            "elements": [
-                {
-                    "type": "mrkdwn",
-                    "text": f"*Время:* с {start_time} до {end_time}",
-                },
-                {
-                    "type": "mrkdwn",
-                    "text": "*Тип:* " + event_emoji(event),
-                },
-                {
-                    "type": "mrkdwn",
-                    "text": "*Комната:* " + event.location,
-                },
-            ],
-        })
-        if event.description:
-            blocks.append({
+        blocks.append(
+            {
                 "type": "context",
                 "elements": [
                     {
-                        # TODO - convert description markdown to slack markdown
-                        "type": "plain_text",
-                        "text": event.description,
+                        "type": "mrkdwn",
+                        "text": f"*Время:* с {start_time} до {end_time}",
                     },
+                    {"type": "mrkdwn", "text": "*Тип:* " + event_emoji(event),},
+                    {"type": "mrkdwn", "text": "*Комната:* " + event.location,},
                 ],
-            })
+            }
+        )
+        if event.description:
+            blocks.append(
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            # TODO - convert description markdown to slack markdown
+                            "type": "plain_text",
+                            "text": event.description,
+                        },
+                    ],
+                }
+            )
 
-        blocks.append({
-            "type": "divider"
-        })
+        blocks.append({"type": "divider"})
 
     return {
         "text": intro_text,
@@ -205,7 +192,8 @@ def list_event_visitors():
         attachments.append(visitors_attachment(event))
 
     return {
-        "text": "Статистика по мероприятиям за сегодня:" + ("" if attachments else " нет данных."),
+        "text": "Статистика по мероприятиям за сегодня:"
+        + ("" if attachments else " нет данных."),
         "attachments": attachments,
     }
 
@@ -265,7 +253,9 @@ def event_visitors_question(event):
 @bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
     logger.debug("ask_for_event_visitors")
-    events = Event.objects.filter(deleted=False, start__gt=datetime.now(TZ) - timedelta(days=1)).all()
+    events = Event.objects.filter(
+        deleted=False, start__gt=datetime.now(TZ) - timedelta(days=1)
+    ).all()
     logger.debug(f"Total events: {len(events)}")
 
     events = [
@@ -274,7 +264,8 @@ def ask_for_event_visitors():
         if not (
             e.visitors  # already entered
             or e.asked_for_visitors  # already asked
-            or datetime.now(tz=TZ) < e.start + timedelta(minutes=30)  # event haven't started yet, let's wait
+            or datetime.now(tz=TZ)
+            < e.start + timedelta(minutes=30)  # event haven't started yet, let's wait
         )
     ]
     logger.info(f"Events we should ask about: {len(events)}")
@@ -305,14 +296,7 @@ def submit_event_visitors_dialog(payload, event_uuid, original_message_path):
     value = payload["submission"]["visitors"]
 
     if not value.isdigit():
-        return {
-            "errors": [
-                {
-                    "name": "visitors",
-                    "error": "Нужно ввести число"
-                },
-            ]
-        }
+        return {"errors": [{"name": "visitors", "error": "Нужно ввести число"},]}
 
     event = Event.objects.get(uuid=event_uuid)
     event.visitors = value
@@ -323,11 +307,7 @@ def submit_event_visitors_dialog(payload, event_uuid, original_message_path):
     attachment = question['attachments'][0]
     attachment['text'] = f"<@{payload['user']['id']}>: {attachment['text']}"
 
-    response = bot.sc.api_call(
-        'chat.update',
-        ts=original_message_id,
-        **question,
-    )
+    response = bot.sc.api_call('chat.update', ts=original_message_id, **question,)
     if not response["ok"]:
         logger.warning(response)
         raise Exception("Couldn't update question message")

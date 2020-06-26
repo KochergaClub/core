@@ -8,24 +8,25 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Timeclub24Visitors',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('ts', models.DateTimeField(default=kocherga.analytics.timeclub24.models.dt_now)),
+                (
+                    'ts',
+                    models.DateTimeField(
+                        default=kocherga.analytics.timeclub24.models.dt_now
+                    ),
+                ),
                 ('venue', models.CharField(max_length=100)),
                 ('visitors', models.IntegerField()),
             ],
-            options={
-                'db_table': 'timeclub24_visitors',
-            },
+            options={'db_table': 'timeclub24_visitors',},
         ),
         migrations.AlterUniqueTogether(
-            name='timeclub24visitors',
-            unique_together={('ts', 'venue')},
+            name='timeclub24visitors', unique_together={('ts', 'venue')},
         ),
     ]

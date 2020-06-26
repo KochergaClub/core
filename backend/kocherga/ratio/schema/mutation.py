@@ -25,10 +25,7 @@ def resolve_ratioAddTraining(_, info, params):
 def resolve_ratioAddTicket(_, info, input):
     training_id = input.pop('training')
     training = models.Training.objects.get(pk=training_id)
-    ticket = models.Ticket.objects.create(
-        **input,
-        training=training,
-    )
+    ticket = models.Ticket.objects.create(**input, training=training,)
     return ticket
 
 

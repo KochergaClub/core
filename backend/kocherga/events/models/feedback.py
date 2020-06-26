@@ -16,10 +16,14 @@ class ScoreField(models.IntegerField):
 
 @reversion.register()
 class Feedback(models.Model):
-    event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='feedbacks')
+    event = models.ForeignKey(
+        'Event', on_delete=models.CASCADE, related_name='feedbacks'
+    )
 
     overall_score = ScoreField('Насколько вам понравилось мероприятие в целом?')
-    recommend_score = ScoreField('Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?')
+    recommend_score = ScoreField(
+        'Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?'
+    )
     content_score = ScoreField('Насколько вам было интересно содержание?')
     conductor_score = ScoreField('Насколько вы довольны работой ведущих?')
 
@@ -31,12 +35,7 @@ class Feedback(models.Model):
     source_website = models.BooleanField('Откуда / Сайт Кочерги')
 
     custom_source = models.CharField(
-        'Откуда вы узнали про мероприятие? (свой вариант)',
-        max_length=1024,
-        blank=True,
+        'Откуда вы узнали про мероприятие? (свой вариант)', max_length=1024, blank=True,
     )
 
-    comment = models.TextField(
-        'Что можно улучшить?',
-        blank=True,
-    )
+    comment = models.TextField('Что можно улучшить?', blank=True,)

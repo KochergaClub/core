@@ -14,11 +14,24 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='payment',
-            options={'permissions': (('create', 'Может выписывать новые чеки'), ('redeem', 'Может обналичивать существующие чеки'), ('kkm_user', 'Может использовать кассовый аппарат')), 'verbose_name': 'Выплата', 'verbose_name_plural': 'Выплаты'},
+            options={
+                'permissions': (
+                    ('create', 'Может выписывать новые чеки'),
+                    ('redeem', 'Может обналичивать существующие чеки'),
+                    ('kkm_user', 'Может использовать кассовый аппарат'),
+                ),
+                'verbose_name': 'Выплата',
+                'verbose_name_plural': 'Выплаты',
+            },
         ),
         migrations.AlterField(
             model_name='payment',
             name='whom',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments', to=settings.AUTH_USER_MODEL, verbose_name='Кому'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='payments',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Кому',
+            ),
         ),
     ]

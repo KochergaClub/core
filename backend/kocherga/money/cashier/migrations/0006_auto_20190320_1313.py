@@ -15,8 +15,6 @@ class Migration(migrations.Migration):
             options={'verbose_name': 'Выплата', 'verbose_name_plural': 'Выплаты'},
         ),
         migrations.RenameField(
-            model_name='cheque',
-            old_name='paid_dt',
-            new_name='redeem_dt',
+            model_name='cheque', old_name='paid_dt', new_name='redeem_dt',
         ),
     ]

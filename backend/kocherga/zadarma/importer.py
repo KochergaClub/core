@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -14,9 +15,9 @@ from .models import Call, PbxCall
 
 def process_call_item(item) -> Call:
     if item['is_recorded'] == 'true':
-        record = api.api_call('GET', 'pbx/record/request', {
-            'call_id': item['call_id'],
-        })
+        record = api.api_call(
+            'GET', 'pbx/record/request', {'call_id': item['call_id'],}
+        )
         assert record['status'] == 'success'
         item['record_link'] = record['link']
 
@@ -24,8 +25,10 @@ def process_call_item(item) -> Call:
         pk=item['pbx_call_id'],
         defaults={
             # copy-pasted from Call.from_api_data
-            'ts': datetime.strptime(item['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
-        }
+            'ts': datetime.strptime(item['callstart'], "%Y-%m-%d %H:%M:%S").replace(
+                tzinfo=TZ
+            ),
+        },
     )
     call = Call.from_api_data(pbx_call, item)
     return call
@@ -34,11 +37,15 @@ def process_call_item(item) -> Call:
 def fetch_calls(from_dt: datetime, to_dt: datetime) -> (int, Optional[Call]):
     dt_format = '%Y-%m-%d %H:%M:%S'
 
-    response = api.api_call('GET', 'statistics/pbx', {
-        'start': from_dt.strftime(dt_format),
-        'end': to_dt.strftime(dt_format),
-        'version': 2,
-    })
+    response = api.api_call(
+        'GET',
+        'statistics/pbx',
+        {
+            'start': from_dt.strftime(dt_format),
+            'end': to_dt.strftime(dt_format),
+            'version': 2,
+        },
+    )
 
     count = 0
     last_call = None
@@ -69,7 +76,6 @@ def fetch_all_calls(from_dt: datetime, to_dt: datetime) -> Optional[Call]:
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
-
     def get_initial_dt(self):
         return datetime(2019, 11, 1, tzinfo=TZ)
 

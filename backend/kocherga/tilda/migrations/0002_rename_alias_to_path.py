@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='tildapage',
-            old_name='alias',
-            new_name='path',
+            model_name='tildapage', old_name='alias', new_name='path',
         ),
     ]

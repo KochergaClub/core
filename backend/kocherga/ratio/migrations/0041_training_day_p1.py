@@ -15,9 +15,7 @@ def fill_training_day(apps, schema_editor):
         date = first_date + timedelta(days=activity.day - 1)
 
         (day, _) = TrainingDay.objects.get_or_create(
-            training=activity.training,
-            date=date,
-            index=activity.day,
+            training=activity.training, date=date, index=activity.day,
         )
         activity.day_fk = day
         activity.save()
@@ -33,10 +31,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TrainingDay',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('index', models.PositiveSmallIntegerField(verbose_name='Порядковый номер')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'index',
+                    models.PositiveSmallIntegerField(verbose_name='Порядковый номер'),
+                ),
                 ('date', models.DateField(verbose_name='Дата')),
-                ('training', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='dates', to='ratio.Training', verbose_name='Тренинг')),
+                (
+                    'training',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='dates',
+                        to='ratio.Training',
+                        verbose_name='Тренинг',
+                    ),
+                ),
             ],
             options={
                 'verbose_name': 'День тренинга',
@@ -47,9 +64,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='day_fk',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='schedule', to='ratio.TrainingDay'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='schedule',
+                to='ratio.TrainingDay',
+            ),
         ),
-        migrations.RunPython(
-            fill_training_day
-        )
+        migrations.RunPython(fill_training_day),
     ]

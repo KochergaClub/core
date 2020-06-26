@@ -7,14 +7,16 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Call',
             fields=[
-                ('call_id', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    'call_id',
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
                 ('pbx_call_id', models.CharField(max_length=100)),
                 ('ts', models.DateTimeField()),
                 ('call_type', models.CharField(max_length=15)),
@@ -28,7 +30,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'zadarma_calls',
-#                'managed': False,
+                #                'managed': False,
             },
         ),
     ]

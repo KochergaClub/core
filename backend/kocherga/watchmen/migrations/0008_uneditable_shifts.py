@@ -11,13 +11,22 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='shift',
-            name='date',
-            field=models.DateField(editable=False),
+            model_name='shift', name='date', field=models.DateField(editable=False),
         ),
         migrations.AlterField(
             model_name='shift',
             name='shift',
-            field=models.CharField(choices=[('MORNING_V1', 'MORNING_V1'), ('EVENING_V1', 'EVENING_V1'), ('MORNING', 'MORNING'), ('MIDDAY', 'MIDDAY'), ('EVENING', 'EVENING'), ('NIGHT', 'NIGHT')], editable=False, max_length=20),
+            field=models.CharField(
+                choices=[
+                    ('MORNING_V1', 'MORNING_V1'),
+                    ('EVENING_V1', 'EVENING_V1'),
+                    ('MORNING', 'MORNING'),
+                    ('MIDDAY', 'MIDDAY'),
+                    ('EVENING', 'EVENING'),
+                    ('NIGHT', 'NIGHT'),
+                ],
+                editable=False,
+                max_length=20,
+            ),
         ),
     ]

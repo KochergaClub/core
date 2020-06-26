@@ -11,14 +11,10 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='ends_at',
-            field=models.DateTimeField(null=True),
+            model_name='event', name='ends_at', field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='event',
-            name='starts_at',
-            field=models.DateTimeField(null=True),
+            model_name='event', name='starts_at', field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
             model_name='order',

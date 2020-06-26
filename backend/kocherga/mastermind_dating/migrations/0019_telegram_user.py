@@ -16,18 +16,35 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TelegramUser',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('telegram_uid', models.CharField(max_length=100, unique=True)),
                 ('chat_id', models.IntegerField(unique=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='mastermind_dating_telegram_user', to=settings.AUTH_USER_MODEL)),
+                (
+                    'user',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='mastermind_dating_telegram_user',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
             model_name='participant',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='mastermind_dating_participants', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='mastermind_dating_participants',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
-        migrations.DeleteModel(
-            name='User',
-        ),
+        migrations.DeleteModel(name='User',),
     ]

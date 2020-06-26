@@ -11,6 +11,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='realm',
-            field=models.CharField(choices=[('offline', 'offline'), ('online', 'online')], default='offline', max_length=40),
+            field=models.CharField(
+                choices=[('offline', 'offline'), ('online', 'online')],
+                default='offline',
+                max_length=40,
+            ),
         ),
     ]

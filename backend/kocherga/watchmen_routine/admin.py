@@ -44,9 +44,7 @@ class WeekdayFilter(admin.SimpleListFilter):
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'text', 'days_string')
     list_filter = (WeekdayFilter,)
-    inlines = [
-        ScheduleInline
-    ]
+    inlines = [ScheduleInline]
 
 
 @admin.register(RewardImage)

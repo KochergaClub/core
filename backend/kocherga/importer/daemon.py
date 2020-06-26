@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -58,12 +59,8 @@ def run():
             time.sleep(60)
 
     scheduler = BlockingScheduler(
-        executors={
-            "default": ThreadPoolExecutor(2)
-        },
-        jobstores={
-            "default": RedisJobStore(**get_redis_connect_args())
-        }
+        executors={"default": ThreadPoolExecutor(2)},
+        jobstores={"default": RedisJobStore(**get_redis_connect_args())},
     )
 
     importers = all_importers()

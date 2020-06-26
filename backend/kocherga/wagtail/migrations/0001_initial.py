@@ -16,11 +16,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PagePreview',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('token', models.CharField(max_length=255, unique=True)),
                 ('content_json', models.TextField()),
                 ('created_at', models.DateField(auto_now_add=True)),
-                ('content_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType')),
+                (
+                    'content_type',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='contenttypes.ContentType',
+                    ),
+                ),
             ],
         ),
     ]

@@ -13,15 +13,28 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='shift',
-            old_name='watchman',
-            new_name='watchman_old',
+            model_name='shift', old_name='watchman', new_name='watchman_old',
         ),
         migrations.CreateModel(
             name='Watchman',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='watchman', to='staff.Member')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'member',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='watchman',
+                        to='staff.Member',
+                    ),
+                ),
             ],
         ),
     ]

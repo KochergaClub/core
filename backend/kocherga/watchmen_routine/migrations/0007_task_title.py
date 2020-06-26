@@ -20,12 +20,18 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='schedule',
             name='period',
-            field=models.IntegerField(default=1, help_text='Повторять каждые N недель', verbose_name='Частота'),
+            field=models.IntegerField(
+                default=1, help_text='Повторять каждые N недель', verbose_name='Частота'
+            ),
         ),
         migrations.AlterField(
             model_name='schedule',
             name='task',
-            field=modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='schedules', to='watchmen_routine.Task'),
+            field=modelcluster.fields.ParentalKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='schedules',
+                to='watchmen_routine.Task',
+            ),
         ),
         migrations.AlterField(
             model_name='task',

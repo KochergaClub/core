@@ -12,6 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='auth',
-            options={'permissions': (('marketing', 'Может контролировать ФБ-маркетинг'),)},
+            options={
+                'permissions': (('marketing', 'Может контролировать ФБ-маркетинг'),)
+            },
         ),
     ]

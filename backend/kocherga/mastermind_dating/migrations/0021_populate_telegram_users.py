@@ -13,7 +13,7 @@ def fill_telegram_users(apps, schema_editor):
         TelegramUser.objects.create(
             user=participant.user,
             telegram_uid=participant.telegram_uid,
-            chat_id=participant.chat_id
+            chat_id=participant.chat_id,
         )
 
 
@@ -23,6 +23,4 @@ class Migration(migrations.Migration):
         ('mastermind_dating', '0020_unique_participants'),
     ]
 
-    operations = [
-        migrations.RunPython(fill_telegram_users, lambda *args: None)
-    ]
+    operations = [migrations.RunPython(fill_telegram_users, lambda *args: None)]

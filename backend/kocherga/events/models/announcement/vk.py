@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -38,14 +39,15 @@ class Manager(models.Manager):
         operations = []
         for event in events:
             announcement = event.vk_announcement
-            object_id = urllib.parse.parse_qs(urllib.parse.urlparse(announcement.link).query)['w']
-            operations.append({
-                'method': 'wall.repost',
-                'params': {
-                    'group_id': DAILY_GROUP_ID,
-                    'object': object_id,
+            object_id = urllib.parse.parse_qs(
+                urllib.parse.urlparse(announcement.link).query
+            )['w']
+            operations.append(
+                {
+                    'method': 'wall.repost',
+                    'params': {'group_id': DAILY_GROUP_ID, 'object': object_id,},
                 }
-            })
+            )
 
         if len(operations) == 0:
             logger.info('Nothing to repost')
@@ -77,14 +79,24 @@ class Manager(models.Manager):
         for event in events:
             start_local = timezone.localtime(event.start)
             if start_local.date() != prev_date:
-                weekday = kocherga.dateutils.WEEKDAY_NAMES[start_local.weekday()].capitalize()
+                weekday = kocherga.dateutils.WEEKDAY_NAMES[
+                    start_local.weekday()
+                ].capitalize()
                 month = kocherga.dateutils.inflected_month(start_local)
                 result += f"==={weekday}, {start_local.day} {month}===\n"
                 prev_date = event.start.date()
 
             result += (
-                f"<blockquote>'''{start_local:%H:%M}''' [{event.public_link()}|{event.title}]"
-            ) + (f" [{event.vk_announcement.link}|(VK)]" if event.vk_announcement.link else '') + "\n"
+                (
+                    f"<blockquote>'''{start_local:%H:%M}''' [{event.public_link()}|{event.title}]"
+                )
+                + (
+                    f" [{event.vk_announcement.link}|(VK)]"
+                    if event.vk_announcement.link
+                    else ''
+                )
+                + "\n"
+            )
             result += f"{event.generate_summary()}</blockquote>\n"
 
         logger.debug(f"New schedule: {result}")
@@ -95,9 +107,7 @@ class Manager(models.Manager):
             "pages.get", {"owner_id": -group_id, "page_id": page_id, "need_source": 1}
         )
 
-        position = r["source"].index(
-            """</blockquote>\n\n-----\n\n[https://"""
-        )
+        position = r["source"].index("""</blockquote>\n\n-----\n\n[https://""")
         position += len("</blockquote>\n")
 
         content = result + r["source"][position:]
@@ -133,36 +143,43 @@ class Manager(models.Manager):
             else:
                 link = wiki_url
                 button = "В расписании"
-            widget_rows.append({
-                "title": event.title,
-                "title_url": link,
-                "button": button,
-                "button_url": link,
-                "time": event2time(event),
-            })
+            widget_rows.append(
+                {
+                    "title": event.title,
+                    "title_url": link,
+                    "button": button,
+                    "button_url": link,
+                    "time": event2time(event),
+                }
+            )
 
         return {
             "type": "compact_list",
-            "code": "return " + json.dumps({
-                "title": "Расписание",
-                "rows": widget_rows,
-                "title_url": wiki_url,
-                "more": "Все мероприятия",
-                "more_url": wiki_url
-            }, ensure_ascii=False) + ";"
+            "code": "return "
+            + json.dumps(
+                {
+                    "title": "Расписание",
+                    "rows": widget_rows,
+                    "title_url": wiki_url,
+                    "more": "Все мероприятия",
+                    "more_url": wiki_url,
+                },
+                ensure_ascii=False,
+            )
+            + ";",
         }
 
     def update_widget(self):
         kocherga.vk.api.call(
-            "appWidgets.update",
-            self.get_widget_config(),
-            group_token=True
+            "appWidgets.update", self.get_widget_config(), group_token=True
         )
 
 
 @reversion.register()
 class VkAnnouncement(models.Model):
-    event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='vk_announcement')
+    event = AutoOneToOneField(
+        Event, on_delete=models.CASCADE, related_name='vk_announcement'
+    )
 
     link = models.CharField(max_length=1024, blank=True)
     group = models.CharField(max_length=40, blank=True)
@@ -172,7 +189,7 @@ class VkAnnouncement(models.Model):
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='+',
     )
 
     objects = Manager()
@@ -193,7 +210,9 @@ class VkAnnouncement(models.Model):
         return tail
 
     def get_text(self):
-        description = kocherga.events.markup.Markup(self.event.description or '').as_vk()
+        description = kocherga.events.markup.Markup(
+            self.event.description or ''
+        ).as_vk()
         return description + "\n\n***\n" + self.get_tail()
 
     def group_id(self):

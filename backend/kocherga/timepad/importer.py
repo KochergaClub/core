@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -19,7 +20,6 @@ KchUser = get_user_model()
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
-
     def get_events_data(self, from_dt: datetime):
         LIMIT = 100
         skip = 0
@@ -27,16 +27,22 @@ class Importer(kocherga.importer.base.IncrementalImporter):
         while True:
             starts_at_min = from_dt.strftime('%Y-%m-%d')
             logger.info(f'Importing chunk from {starts_at_min} with skip={skip}')
-            api_response = api_call('GET', 'events', {
-                'limit': LIMIT,
-                'skip': skip,
-                'sort': 'starts_at',
-                'organization_ids': ORGANIZATION_ID,
-                'access_statuses': settings.KOCHERGA_TIMEPAD['default_access_status'],
-                # ends_at is not returned by default; name and starts_at are always returned
-                'fields': 'name,starts_at,ends_at',
-                'starts_at_min': starts_at_min,
-            })
+            api_response = api_call(
+                'GET',
+                'events',
+                {
+                    'limit': LIMIT,
+                    'skip': skip,
+                    'sort': 'starts_at',
+                    'organization_ids': ORGANIZATION_ID,
+                    'access_statuses': settings.KOCHERGA_TIMEPAD[
+                        'default_access_status'
+                    ],
+                    # ends_at is not returned by default; name and starts_at are always returned
+                    'fields': 'name,starts_at,ends_at',
+                    'starts_at_min': starts_at_min,
+                },
+            )
             chunk_items = api_response['values']
             items += chunk_items
             total = api_response['total']
@@ -75,7 +81,9 @@ class Importer(kocherga.importer.base.IncrementalImporter):
 
             if subscribed_to_newsletter:
                 if (datetime.now(tz=TZ) - created_at).total_seconds() > 86400 * 14:
-                    logger.info(f"{email} wants to subscribe to the newsletter but order is too old")
+                    logger.info(
+                        f"{email} wants to subscribe to the newsletter but order is too old"
+                    )
                 else:
                     logger.info(f"{email} agreed to newsletter")
                     mailchimp_user = kocherga.email.lists.User(
@@ -96,7 +104,7 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                     'status': status,
                     'created_at': created_at,
                     'subscribed_to_newsletter': subscribed_to_newsletter,
-                }
+                },
             )
             order.create_native_ticket()
 
@@ -116,8 +124,10 @@ class Importer(kocherga.importer.base.IncrementalImporter):
                 defaults={
                     'name': event_data['name'],
                     'starts_at': dateutil.parser.parse(event_data['starts_at']),
-                    'ends_at': dateutil.parser.parse(event_data['ends_at']) if 'ends_at' in event_data else None,
-                }
+                    'ends_at': dateutil.parser.parse(event_data['ends_at'])
+                    if 'ends_at' in event_data
+                    else None,
+                },
             )
             for mailchimp_user in self.import_orders(event):
                 mailchimp_users.append(mailchimp_user)

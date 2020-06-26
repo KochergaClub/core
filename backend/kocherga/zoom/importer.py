@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, date, timedelta
@@ -17,11 +18,7 @@ def import_meetings(from_d: date, to_d: date):
     result = api_call(
         'GET',
         f'report/users/{settings.ZOOM_ANNOUNCER_USER_ID}/meetings',
-        {
-            'from': str(from_d),
-            'to': str(to_d),
-            'page_size': 300,
-        }
+        {'from': str(from_d), 'to': str(to_d), 'page_size': 300,},
     )
 
     if result['next_page_token']:
@@ -41,7 +38,7 @@ def import_meetings(from_d: date, to_d: date):
                 'meeting': meeting,
                 'start_time': dateutil.parser.isoparse(instance_data['start_time']),
                 'end_time': dateutil.parser.isoparse(instance_data['end_time']),
-            }
+            },
         )
         if created or not meeting_instance.participants.all():
             meeting_instance.update_participants()
@@ -62,6 +59,4 @@ class Importer(kocherga.importer.base.IncrementalImporter):
             logger.info(f"Importing from {chunk_from_d} to {chunk_to_d}")
             import_meetings(chunk_from_d, chunk_to_d)
 
-        return to_dt - timedelta(
-            days=1
-        )
+        return to_dt - timedelta(days=1)

@@ -17,34 +17,57 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='fbannouncement',
             name='event',
-            field=annoying.fields.AutoOneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='fb_announcement', to='events.Event'),
+            field=annoying.fields.AutoOneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='fb_announcement',
+                to='events.Event',
+            ),
         ),
         migrations.AddField(
             model_name='tag',
             name='event',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tags', to='events.Event'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='tags',
+                to='events.Event',
+            ),
         ),
         migrations.AddField(
             model_name='ticket',
             name='event',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='tickets', to='events.Event'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='tickets',
+                to='events.Event',
+            ),
         ),
         migrations.AddField(
             model_name='timepadannouncement',
             name='event',
-            field=annoying.fields.AutoOneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='timepad_announcement', to='events.Event'),
+            field=annoying.fields.AutoOneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='timepad_announcement',
+                to='events.Event',
+            ),
         ),
         migrations.AddField(
             model_name='vkannouncement',
             name='event',
-            field=annoying.fields.AutoOneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='vk_announcement', to='events.Event'),
+            field=annoying.fields.AutoOneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='vk_announcement',
+                to='events.Event',
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='tag',
-            unique_together={('event', 'name')},
+            name='tag', unique_together={('event', 'name')},
         ),
         migrations.AlterUniqueTogether(
-            name='ticket',
-            unique_together={('event', 'user')},
+            name='ticket', unique_together={('event', 'user')},
         ),
     ]

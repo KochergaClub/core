@@ -11,26 +11,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='activity',
-            name='training_slug',
-        ),
+        migrations.RemoveField(model_name='activity', name='training_slug',),
         migrations.AlterField(
             model_name='activity',
             name='training',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='schedule', to='ratio.Training', verbose_name='Тренинг'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='schedule',
+                to='ratio.Training',
+                verbose_name='Тренинг',
+            ),
         ),
         migrations.AlterField(
             model_name='ticket',
             name='training',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='tickets', to='ratio.Training', verbose_name='Тренинг'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='tickets',
+                to='ratio.Training',
+                verbose_name='Тренинг',
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='ticket',
-            unique_together={('training', 'email')},
+            name='ticket', unique_together={('training', 'email')},
         ),
-        migrations.RemoveField(
-            model_name='ticket',
-            name='training_slug',
-        ),
+        migrations.RemoveField(model_name='ticket', name='training_slug',),
     ]

@@ -35,7 +35,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='customer',
             name='gender',
-            field=models.CharField(blank=True, choices=[('unknown', 'unknown'), ('male', 'male'), ('female', 'female')], max_length=20, verbose_name='Пол'),
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ('unknown', 'unknown'),
+                    ('male', 'male'),
+                    ('female', 'female'),
+                ],
+                max_length=20,
+                verbose_name='Пол',
+            ),
         ),
         migrations.AlterField(
             model_name='customer',

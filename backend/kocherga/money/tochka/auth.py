@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -32,8 +33,8 @@ def init_tokens():
 
     response_json = r.json()
     Auth.objects.create(
-        access_token = response_json['access_token'],
-        refresh_token = response_json['refresh_token'],
+        access_token=response_json['access_token'],
+        refresh_token=response_json['refresh_token'],
     )
 
 

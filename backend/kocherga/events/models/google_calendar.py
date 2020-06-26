@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -104,8 +105,7 @@ class GoogleCalendar(models.Model):
                 # Removing is not enough - we could accidentally export an event we want to hide completely.
                 # (I haven't checked but `cancelled` events are probably still visible in some way.)
                 google_api().events().delete(
-                    calendarId=self.calendar_id,
-                    eventId=google_event.google_id,
+                    calendarId=self.calendar_id, eventId=google_event.google_id,
                 ).execute()
                 google_event.delete()
 
@@ -116,16 +116,19 @@ class GoogleCalendar(models.Model):
 
             logger.info(f'Inserting event {event.pk}')
 
-            result = google_api().events().insert(
-                calendarId=self.calendar_id,
-                sendNotifications=True,
-                body=google_dict
-            ).execute()
+            result = (
+                google_api()
+                .events()
+                .insert(
+                    calendarId=self.calendar_id,
+                    sendNotifications=True,
+                    body=google_dict,
+                )
+                .execute()
+            )
 
             GoogleEvent.objects.create(
-                google_calendar=self,
-                event=event,
-                google_id=result['id'],
+                google_calendar=self, event=event, google_id=result['id'],
             )
 
     @property

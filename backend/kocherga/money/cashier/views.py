@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from rest_framework import viewsets
@@ -27,7 +28,9 @@ class KkmViewSet(viewsets.ViewSet):
                         email=request.data['email'],
                         title=request.data['title'],
                         sum=int(request.data['sum']),
-                        signMethodCalculation=kkm.SignMethodCalculation(request.data['sign_method_calculation']),
+                        signMethodCalculation=kkm.SignMethodCalculation(
+                            request.data['sign_method_calculation']
+                        ),
                     )
                 )
             )

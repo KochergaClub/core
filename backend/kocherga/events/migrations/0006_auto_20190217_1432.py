@@ -10,13 +10,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='event',
-            name='prototype_id',
-        ),
+        migrations.RemoveField(model_name='event', name='prototype_id',),
         migrations.RenameField(
-            model_name='event',
-            old_name='prototype_link',
-            new_name='prototype',
+            model_name='event', old_name='prototype_link', new_name='prototype',
         ),
     ]

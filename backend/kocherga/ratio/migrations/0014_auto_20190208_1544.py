@@ -14,6 +14,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='activity',
             name='trainer',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='ratio.Trainer', verbose_name='Ведущий'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='ratio.Trainer',
+                verbose_name='Ведущий',
+            ),
         ),
     ]

@@ -8,14 +8,14 @@ Query = QueryType()
 
 
 @Query.field('watchmenWatchmenAll')
-def resolve_watchmenWatchmenAll(_, info, current=False, currentStaff=False, currentRole=False):
+def resolve_watchmenWatchmenAll(
+    _, info, current=False, currentStaff=False, currentRole=False
+):
     queryset = models.Watchman.objects.all()
 
     # TODO - move to model's manager
     if currentStaff:
-        queryset = queryset.filter(
-            member__is_current=True
-        )
+        queryset = queryset.filter(member__is_current=True)
     if currentRole:
         queryset = queryset.filter(priority__lt=3)
 

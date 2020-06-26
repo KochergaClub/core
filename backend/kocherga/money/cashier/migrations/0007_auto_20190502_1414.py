@@ -12,6 +12,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='cheque',
-            options={'permissions': (('create', 'Может выписывать новые чеки'),), 'verbose_name': 'Выплата', 'verbose_name_plural': 'Выплаты'},
+            options={
+                'permissions': (('create', 'Может выписывать новые чеки'),),
+                'verbose_name': 'Выплата',
+                'verbose_name_plural': 'Выплаты',
+            },
         ),
     ]

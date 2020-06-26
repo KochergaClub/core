@@ -5,6 +5,7 @@ def require_permission(permission_name):
             if not info.context.user.has_perm(permission_name):
                 raise Exception("Forbidden")
             return func(*args, **kwargs)
+
         return wrapper
 
     return decorator
@@ -16,4 +17,5 @@ def require_staff(func):
         if not info.context.user.is_staff:
             raise Exception("Forbidden")
         return func(*args, **kwargs)
+
     return wrapper

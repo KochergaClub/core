@@ -10,12 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='vote',
-            name='who',
-        ),
-        migrations.RemoveField(
-            model_name='vote',
-            name='whom',
-        ),
+        migrations.RemoveField(model_name='vote', name='who',),
+        migrations.RemoveField(model_name='vote', name='whom',),
     ]

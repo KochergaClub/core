@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from dataclasses import dataclass
@@ -56,11 +57,7 @@ class RelayQuerySetMixin:
             else:
                 key = f'{unsigned_order}__lt'
 
-            qs = qs.filter(
-                **{
-                    key: before
-                }
-            )
+            qs = qs.filter(**{key: before})
 
         if after:
             if order[0] == '-':
@@ -68,11 +65,7 @@ class RelayQuerySetMixin:
             else:
                 key = f'{unsigned_order}__gt'
 
-            qs = qs.filter(
-                **{
-                    key: after
-                }
-            )
+            qs = qs.filter(**{key: after})
 
         nodes = None
         has_more_forward = False
@@ -80,13 +73,13 @@ class RelayQuerySetMixin:
             raise Exception('Only one of "first" and "last" should be set')
         elif first:
             limit = first
-            nodes = list(qs[:limit + 1])
+            nodes = list(qs[: limit + 1])
             if len(nodes) > limit:
                 nodes = nodes[:limit]
                 has_more_forward = True
         elif last:
             limit = last
-            nodes = list(reversed(qs.reverse()[:limit + 1]))
+            nodes = list(reversed(qs.reverse()[: limit + 1]))
             if len(nodes) > limit:
                 nodes = nodes[-limit:]
                 has_more_forward = True
@@ -128,12 +121,7 @@ class RelayQuerySetMixin:
         )
 
         return RelayConnection(
-            pageInfo=page_info,
-            nodes=nodes,
-            edges=[
-                {'node': node}
-                for node in nodes
-            ]
+            pageInfo=page_info, nodes=nodes, edges=[{'node': node} for node in nodes]
         )
 
 

@@ -15,6 +15,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='order',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='timepad_orders', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='timepad_orders',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

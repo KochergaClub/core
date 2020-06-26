@@ -23,13 +23,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PbxCall',
             fields=[
-                ('pbx_call_id', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    'pbx_call_id',
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
             ],
         ),
         migrations.AddField(
             model_name='call',
             name='pbx_call_fk',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='zadarma.PbxCall'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='zadarma.PbxCall',
+            ),
         ),
         migrations.RunPython(fill_pbx_fk, lambda x, y: None),
     ]

@@ -30,7 +30,9 @@ class AuthDirective(SchemaDirectiveVisitor):
             check_is_authenticated = True
 
         if not len(permission_names) and not check_is_authenticated:
-            raise Exception('@auth requires one of "permission", "permissions" or "authenticated" fields to be set')
+            raise Exception(
+                '@auth requires one of "permission", "permissions" or "authenticated" fields to be set'
+            )
 
         original_resolver = field.resolve or graphql.default_field_resolver
 

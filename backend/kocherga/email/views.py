@@ -16,8 +16,7 @@ class EmptyEmailException(exceptions.APIException):
 # still needed for Tilda hook
 # TODO - move to kocherga.api.hooks
 class SubscribeChannelViewSet(
-        viewsets.ModelViewSet,
-        BulkRetrieveMixin,
+    viewsets.ModelViewSet, BulkRetrieveMixin,
 ):
     queryset = models.SubscribeChannel.objects.all()
     permission_classes = (permissions.IsAdminUser,)
@@ -32,7 +31,11 @@ class SubscribeChannelViewSet(
         if request.data.get('test', '') == 'test':
             return Response('test response')
 
-        email = request.data.get('EMAIL') or request.data.get('email') or request.data.get('Email')
+        email = (
+            request.data.get('EMAIL')
+            or request.data.get('email')
+            or request.data.get('Email')
+        )
         if not email:
             raise EmptyEmailException()
 

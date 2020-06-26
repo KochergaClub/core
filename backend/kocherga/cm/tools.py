@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import time
@@ -73,7 +74,9 @@ def add_manager(login: str, name: str, password: str, email: str) -> User:
         raise Exception(f"User with login {login} already exists")
 
     if "Пользователь успешно добавлен!" not in r.text:
-        raise Exception("Expected a message about success in response, got something else")
+        raise Exception(
+            "Expected a message about success in response, got something else"
+        )
 
     all_users = load_users()
     user = next(u for u in all_users if u.login == login)
@@ -108,7 +111,9 @@ def now_stats():
         raise Exception("Failed to parse cafe-manager data")
     total = int(match.group(1))
 
-    customer_ids = [int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)]
+    customer_ids = [
+        int(value) for value in re.findall(r"<a\s+href='/customer/(\d+)/?'", r.text)
+    ]
     customers = Customer.objects.filter(customer_id__in=customer_ids).all()
 
     return {
@@ -143,7 +148,7 @@ def now_stats_cached():
             }
             for c in stats["customers"]
             if c.privacy_mode == "public"
-        ]
+        ],
     }
 
     stats_cached = result

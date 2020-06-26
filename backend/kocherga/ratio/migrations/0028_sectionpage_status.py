@@ -13,6 +13,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sectionpage',
             name='status',
-            field=models.CharField(choices=[('test', 'Тест'), ('placeholder', 'Заглушка'), ('in_progress', 'В разработке'), ('editing', 'Редактура'), ('ready', 'Готово')], default='placeholder', max_length=40, verbose_name='Статус'),
+            field=models.CharField(
+                choices=[
+                    ('test', 'Тест'),
+                    ('placeholder', 'Заглушка'),
+                    ('in_progress', 'В разработке'),
+                    ('editing', 'Редактура'),
+                    ('ready', 'Готово'),
+                ],
+                default='placeholder',
+                max_length=40,
+                verbose_name='Статус',
+            ),
         ),
     ]

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -15,7 +16,6 @@ from .prometheus import success_counter, failure_counter
 
 
 class ImportSession:
-
     def __init__(self, name, mode):
         self.name = name
         self.mode = mode
@@ -71,7 +71,6 @@ class BaseImporter(ABC):
 
 
 class FullImporter(BaseImporter):
-
     @abstractmethod
     def do_full_import(self) -> None:
         ...
@@ -89,7 +88,6 @@ class FullImporter(BaseImporter):
 
 
 class IncrementalImporter(BaseImporter):
-
     @abstractmethod
     def get_initial_dt(self) -> datetime:
         ...

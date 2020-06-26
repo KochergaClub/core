@@ -12,6 +12,9 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='user',
-            options={'verbose_name': 'Пользователь', 'verbose_name_plural': 'Пользователи'},
+            options={
+                'verbose_name': 'Пользователь',
+                'verbose_name_plural': 'Пользователи',
+            },
         ),
     ]

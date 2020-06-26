@@ -15,9 +15,33 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PbxCallData',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('pbx_call', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='data', to='zadarma.PbxCall')),
-                ('staff_member', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='staff.Member')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'pbx_call',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='data',
+                        to='zadarma.PbxCall',
+                    ),
+                ),
+                (
+                    'staff_member',
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='+',
+                        to='staff.Member',
+                    ),
+                ),
             ],
         ),
     ]

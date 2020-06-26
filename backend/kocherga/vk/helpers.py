@@ -5,6 +5,7 @@ such as kocherga.events.vk and kocherga.vk.tools.
 """
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import re
@@ -32,9 +33,7 @@ def upload_wall_image(group_id, image_bytes):
     )
     upload_url = upload_server["upload_url"]
 
-    r = requests.post(upload_url, files={
-        "file": ("image.png", image_bytes)
-    })
+    r = requests.post(upload_url, files={"file": ("image.png", image_bytes)})
     r.raise_for_status()
 
     # note that image upload doesn't wrap the result in {'response': ...},
@@ -72,19 +71,18 @@ def upload_wall_image(group_id, image_bytes):
 
 def upload_cover_image(group_id, image_bytes):
     upload_server = kocherga.vk.api.call(
-        "photos.getOwnerCoverPhotoUploadServer", {
+        "photos.getOwnerCoverPhotoUploadServer",
+        {
             "group_id": group_id,
             "crop_x": 0,
             "crop_y": 0,
             "crop_x2": 1590,
             "crop_y2": 400,
-        }
+        },
     )
     upload_url = upload_server["upload_url"]
 
-    r = requests.post(upload_url, files={
-        "file": ("image.png", image_bytes)
-    })
+    r = requests.post(upload_url, files={"file": ("image.png", image_bytes)})
     r.raise_for_status()
 
     # note that image upload doesn't wrap the result in {'response': ...},
@@ -101,8 +99,5 @@ def upload_cover_image(group_id, image_bytes):
 
     kocherga.vk.api.call(
         "photos.saveOwnerCoverPhoto",
-        {
-            "photo": upload_response["photo"],
-            "hash": upload_response["hash"],
-        },
+        {"photo": upload_response["photo"], "hash": upload_response["hash"],},
     )

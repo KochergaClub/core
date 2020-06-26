@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='member',
-            name='cm_card_id',
-        ),
+        migrations.RemoveField(model_name='member', name='cm_card_id',),
     ]

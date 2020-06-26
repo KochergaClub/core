@@ -48,9 +48,7 @@ class CookiePick(models.Model):
 class CookieCombinationItem(models.Model):
     class Meta:
         db_table = 'cookie_combination_items'
-        unique_together = (
-            ('combination', 'position_id'),
-        )
+        unique_together = (('combination', 'position_id'),)
 
     id = models.AutoField(primary_key=True)
 
@@ -72,7 +70,9 @@ class CookieCombination(models.Model):
     total_users = models.IntegerField()
 
 
-def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, combination_size=3):
+def calculate_best_combinations(
+    limit=50, learning_steps=500, threshold=0.6, combination_size=3
+):
     cookie_picks = CookiePick.objects.all()
 
     # https://wchargin.github.io/posts/a-cute-autoincrementing-id-table-in-one-line-of-python/
@@ -109,36 +109,38 @@ def calculate_best_combinations(limit=50, learning_steps=500, threshold=0.6, com
                 update_weight(w, v, lr=0.02)
                 w[m] = 0.0
                 w[m + 1] = 1.0
-        marks[i] = w[:len(cookies)]
+        marks[i] = w[: len(cookies)]
 
     # mean_user_ratings = sorted([(k, marks[:, v].mean()) for k, v in cookies.items()], key=lambda x: -x[1])
 
     ctuple2rating = {}
 
     for ctuple in tqdm(
-            itertools.combinations(
-                cookies.keys(), combination_size
-            ),
-            total=(
-                math.factorial(len(cookies))
-                / (math.factorial(len(cookies) - combination_size) * math.factorial(combination_size))
+        itertools.combinations(cookies.keys(), combination_size),
+        total=(
+            math.factorial(len(cookies))
+            / (
+                math.factorial(len(cookies) - combination_size)
+                * math.factorial(combination_size)
             )
+        ),
     ):
         happy_users = sum(
-            1 for user_marks in marks
-            if any(
-                user_marks[cookies[x]] > threshold for x in ctuple
-            )
+            1
+            for user_marks in marks
+            if any(user_marks[cookies[x]] > threshold for x in ctuple)
         )
         ctuple2rating[ctuple] = happy_users
 
     for combination in CookieCombination.objects.all():
         combination.delete()
 
-    for ctuple in itertools.islice(sorted(ctuple2rating.keys(), key=lambda a: ctuple2rating[a], reverse=True), limit):
+    for ctuple in itertools.islice(
+        sorted(ctuple2rating.keys(), key=lambda a: ctuple2rating[a], reverse=True),
+        limit,
+    ):
         combination = CookieCombination(
-            happy_users=ctuple2rating[ctuple],
-            total_users=len(marks),
+            happy_users=ctuple2rating[ctuple], total_users=len(marks),
         )
         combination.items = [
             CookieCombinationItem(cookie_id=cookie_id, position_id=i)
@@ -154,7 +156,9 @@ def generate_wiki_rating(limit=10):
     for combination in CookieCombination.objects.order_by('-happy_users'):
         partial = f'| {combination.happy_users}\n'
         for item in combination.items:
-            partial += f'| <img src="{item.image_link}" style="width: 200px; height: auto">\n'
+            partial += (
+                f'| <img src="{item.image_link}" style="width: 200px; height: auto">\n'
+            )
 
         partials.append(partial)
 
@@ -181,11 +185,13 @@ def fetch_cookies_info():
 
         match = re.search(
             r'<div\s+class="slider-images"\s+id="slider_images">\s+<a\s+rel=\'images\'\s+href="(.*?)"',
-            r.text
+            r.text,
         )
         image = match.group(1)
 
-        match = re.search(r'<div\s+class="current"\s+id="price">(\d+.\d+) руб</div>', r.text)
+        match = re.search(
+            r'<div\s+class="current"\s+id="price">(\d+.\d+) руб</div>', r.text
+        )
         price = float(match.group(1))
 
         match = re.match(r'(.*?)\s*(\d.*)$', title)

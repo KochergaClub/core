@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.template.loader import render_to_string
@@ -21,7 +22,9 @@ _V = typing.TypeVar("_V")
 def get_participant() -> typing.Optional[models.Participant]:
     try:
         # FIXME - multiple participants can have the identical chat_id
-        telegram_user = models.TelegramUser.objects.get(chat_id=at.Chat.get_current().id)
+        telegram_user = models.TelegramUser.objects.get(
+            chat_id=at.Chat.get_current().id
+        )
     except models.TelegramUser.DoesNotExist:
         return None
 
@@ -65,7 +68,11 @@ def generate_voting_buttons(who: models.Participant, whom: models.Participant):
         button = emoji
         if existing_vote == vote_type:
             button = "[" + button + "]"
-        markup = markup.insert(InlineKeyboardButton(button, callback_data=f"vote{vote_type}-{whom.get_telegram_uid()}"))
+        markup = markup.insert(
+            InlineKeyboardButton(
+                button, callback_data=f"vote{vote_type}-{whom.get_telegram_uid()}"
+            )
+        )
     logger.info('Voting markup: ' + str(markup))
     return markup
 
@@ -88,13 +95,17 @@ def register_handlers(dsp: Dispatcher):
         bot: Bot = Bot.get_current()
 
         token = msg.get_args()
-        logger.info('Looking up user by token ' + (token[:10] + '...' if token else 'NONE'))
+        logger.info(
+            'Looking up user by token ' + (token[:10] + '...' if token else 'NONE')
+        )
         user = models.Participant.objects.get_by_token(token)
 
         if user is None:
             logger.info('Looked up user by token but none found')
-            await bot.send_message(chat_id=msg.chat.id,
-                                   text="Найдите письмо от Кочерги и активируйте бота по инструкциям из него.")
+            await bot.send_message(
+                chat_id=msg.chat.id,
+                text="Найдите письмо от Кочерги и активируйте бота по инструкциям из него.",
+            )
             return
         logger.info('Found user by token')
 
@@ -102,15 +113,13 @@ def register_handlers(dsp: Dispatcher):
             await bot.send_message(
                 chat_id=msg.chat.id,
                 text="Перед регистрацией вам нужно зайти в настройки Telegram "
-                     "и выбрать себе username (имя пользователя)."
+                "и выбрать себе username (имя пользователя).",
             )
             return
 
         # TODO - create_or_update
         models.TelegramUser.objects.create(
-            user=user.user,
-            telegram_uid=msg.from_user.username,
-            chat_id=msg.chat.id,
+            user=user.user, telegram_uid=msg.from_user.username, chat_id=msg.chat.id,
         )
         logger.info('Saved user telegram info')
 
@@ -135,9 +144,11 @@ def register_handlers(dsp: Dispatcher):
 
     entering_desc = model_is(lambda a: not a.desc) & ~reg_complete
 
-    entering_photo = model_is(lambda a: not a.photo) \
-        & state_is(RegistrationState, lambda a: not a.skipped_photo) \
+    entering_photo = (
+        model_is(lambda a: not a.photo)
+        & state_is(RegistrationState, lambda a: not a.skipped_photo)
         & ~reg_complete
+    )
 
     async def start_registration():
         user = get_participant()
@@ -151,7 +162,7 @@ def register_handlers(dsp: Dispatcher):
             user.get_chat_id(),
             text="Привет! Это бот мастермайнд-дейтинга в Кочерге: мероприятия, "
             "на котором вы можете найти партнеров в мастермайнд-группу.",
-            disable_notification=True
+            disable_notification=True,
         )
         await bot.send_message(
             user.get_chat_id(),
@@ -173,7 +184,9 @@ def register_handlers(dsp: Dispatcher):
             text="Пожалуйста, введите своё имя, или выберите одно из тех, что ниже.",
             reply_markup=InlineKeyboardMarkup()
             .insert(InlineKeyboardButton(suggestion_name, callback_data="use_name"))
-            .insert(InlineKeyboardButton(suggestion_nick, callback_data="use_nickname"))
+            .insert(
+                InlineKeyboardButton(suggestion_nick, callback_data="use_nickname")
+            ),
         )
 
         with user.edit_state(RegistrationState) as s:
@@ -216,7 +229,7 @@ def register_handlers(dsp: Dispatcher):
     async def start_registration_enter_desc():
         await get_bot().send_message(
             chat_id=get_participant().get_chat_id(),
-            text="Опишите себя в одном или двух предложениях."
+            text="Опишите себя в одном или двух предложениях.",
         )
 
     @dsp.message_handler(logged_in, entering_desc)
@@ -259,7 +272,9 @@ def register_handlers(dsp: Dispatcher):
         # await start_time_tables()  # TODO - timetables are not implemented.
         await registration_complete()
 
-    @dsp.callback_query_handler(logged_in, entering_photo, lambda a: a.data in ["skip_photo"])
+    @dsp.callback_query_handler(
+        logged_in, entering_photo, lambda a: a.data in ["skip_photo"]
+    )
     async def registration_skip_photo(_):
         with get_participant().edit_state(RegistrationState) as s:
             s.skipped_photo = True
@@ -284,12 +299,20 @@ def register_handlers(dsp: Dispatcher):
             for time in times:
                 cell_id = f"{dayid}.{timeid}"
                 marker = "✅" if cell_id in selected_cells else ""
-                markup.insert(InlineKeyboardButton(f"{marker}{time}", callback_data=f"time-{cell_id}"))
+                markup.insert(
+                    InlineKeyboardButton(
+                        f"{marker}{time}", callback_data=f"time-{cell_id}"
+                    )
+                )
                 timeid += 1
             markup.row()
             dayid += 1
         if save_button:
-            markup.add(InlineKeyboardButton(text="Сохранить расписание", callback_data="time-confirm"))
+            markup.add(
+                InlineKeyboardButton(
+                    text="Сохранить расписание", callback_data="time-confirm"
+                )
+            )
         return markup
 
     async def start_time_tables():
@@ -298,12 +321,12 @@ def register_handlers(dsp: Dispatcher):
         await bot.send_message(
             chat_id.id,
             text="Обычно мастермайнд-встречи проходят в зафиксированный день раз в неделю "
-                 "(или раз в две) и длятся около полутора часов.\n"
-                 "Пожалуйста, выберите дни и временные интервалы, в которые вы сможете "
-                 "приходить на мастермайнд-встречи в ближайшие несколько месяцев.\n"
-                 "Пожалуйста, постарайтесь выбрать как можно больше, "
-                 "даже если они подходят только частично.",
-            reply_markup=generate_timetable([])
+            "(или раз в две) и длятся около полутора часов.\n"
+            "Пожалуйста, выберите дни и временные интервалы, в которые вы сможете "
+            "приходить на мастермайнд-встречи в ближайшие несколько месяцев.\n"
+            "Пожалуйста, постарайтесь выбрать как можно больше, "
+            "даже если они подходят только частично.",
+            reply_markup=generate_timetable([]),
         )
 
     @dsp.callback_query_handler(Text(startswith="time"))
@@ -317,7 +340,7 @@ def register_handlers(dsp: Dispatcher):
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
                     message_id=action.message.message_id,
-                    reply_markup=generate_timetable(s.selected_time, save_button=False)
+                    reply_markup=generate_timetable(s.selected_time, save_button=False),
                 )
             await registration_complete()
         else:
@@ -331,7 +354,9 @@ def register_handlers(dsp: Dispatcher):
                 await get_bot().edit_message_reply_markup(
                     chat_id=action.message.chat.id,
                     message_id=action.message.message_id,
-                    reply_markup=generate_timetable(s.selected_time, save_button=(not s.confirmed))
+                    reply_markup=generate_timetable(
+                        s.selected_time, save_button=(not s.confirmed)
+                    ),
                 )
 
     # ==--== Registration/Complete
@@ -339,34 +364,51 @@ def register_handlers(dsp: Dispatcher):
     info_messages = {
         "root": {
             "text": "*Важная информация — пожалуйста, обязательно прочтите её заранее:*\n",
-            "reply_markup":
-                InlineKeyboardMarkup(row_width=2)
-                    .add(InlineKeyboardButton("Расписание", callback_data="info-timetables"))
-                    .add(InlineKeyboardButton("Вопросы для знакомства", callback_data="info-questions"))
-                    .add(InlineKeyboardButton("Почему всё так сложно?", callback_data="info-why-so-serious"))
-                    .add(InlineKeyboardButton("Больше контекста о мастермайнд-группах",
-                                              url="https://kocherga-club.ru/blog/mastermind")),
-            "parse_mode": "Markdown"
+            "reply_markup": InlineKeyboardMarkup(row_width=2)
+            .add(InlineKeyboardButton("Расписание", callback_data="info-timetables"))
+            .add(
+                InlineKeyboardButton(
+                    "Вопросы для знакомства", callback_data="info-questions"
+                )
+            )
+            .add(
+                InlineKeyboardButton(
+                    "Почему всё так сложно?", callback_data="info-why-so-serious"
+                )
+            )
+            .add(
+                InlineKeyboardButton(
+                    "Больше контекста о мастермайнд-группах",
+                    url="https://kocherga-club.ru/blog/mastermind",
+                )
+            ),
+            "parse_mode": "Markdown",
         },
         "timetables": {
             "text": render_to_string('mastermind_dating/bot/info-timetables.md'),
             "parse_mode": "Markdown",
             "reply_markup": InlineKeyboardMarkup().add(
-                InlineKeyboardButton("« Обратно в информацию", callback_data="info-root")
+                InlineKeyboardButton(
+                    "« Обратно в информацию", callback_data="info-root"
+                )
             ),
         },
         "questions": {
             "text": render_to_string('mastermind_dating/bot/info-questions.md'),
             "parse_mode": "Markdown",
             "reply_markup": InlineKeyboardMarkup().add(
-                InlineKeyboardButton("« Обратно в информацию", callback_data="info-root")
+                InlineKeyboardButton(
+                    "« Обратно в информацию", callback_data="info-root"
+                )
             ),
         },
         "why-so-serious": {
             "text": render_to_string('mastermind_dating/bot/info-why-so-serious.md'),
             "parse_mode": "Markdown",
             "reply_markup": InlineKeyboardMarkup().add(
-                InlineKeyboardButton("« Обратно в информацию", callback_data="info-root")
+                InlineKeyboardButton(
+                    "« Обратно в информацию", callback_data="info-root"
+                )
             ),
         },
     }
@@ -376,21 +418,21 @@ def register_handlers(dsp: Dispatcher):
             s.complete = True
         await get_bot().send_message(
             chat_id=get_participant().get_chat_id(),
-            text=("*Спасибо!*\n"
-                  "\n"
-                  "Это все! Ждем вас в Кочерге в субботу. Мероприятие начнется в 14:00, но "
-                  "мы очень рекомендуем вам прийти на 10-15 минут раньше.\n"
-                  "Приготовьтесь: мероприятие будет интересным, интенсивным и возможно "
-                  "немного сложным; но мы надеемся, что ценность, которую вы получите "
-                  "от вашей будущей мастермайнд-группы, многократно окупит труд, "
-                  "который вы вложите.\n"
-                  "До встречи!"
-                  ).strip(),
-            parse_mode="Markdown"
+            text=(
+                "*Спасибо!*\n"
+                "\n"
+                "Это все! Ждем вас в Кочерге в субботу. Мероприятие начнется в 14:00, но "
+                "мы очень рекомендуем вам прийти на 10-15 минут раньше.\n"
+                "Приготовьтесь: мероприятие будет интересным, интенсивным и возможно "
+                "немного сложным; но мы надеемся, что ценность, которую вы получите "
+                "от вашей будущей мастермайнд-группы, многократно окупит труд, "
+                "который вы вложите.\n"
+                "До встречи!"
+            ).strip(),
+            parse_mode="Markdown",
         )
         await get_bot().send_message(
-            chat_id=get_participant().get_chat_id(),
-            **info_messages["root"]
+            chat_id=get_participant().get_chat_id(), **info_messages["root"]
         )
 
     @dsp.callback_query_handler(Text(startswith="info-"))
@@ -417,10 +459,7 @@ def register_handlers(dsp: Dispatcher):
         whom = models.TelegramUser.objects.get(telegram_uid=whom).get_participant()
         who = get_participant()
         vote_obj, _ = models.Vote.objects.update_or_create(
-            who=who, whom=whom,
-            defaults={
-                'how': how,
-            }
+            who=who, whom=whom, defaults={'how': how,}
         )
 
         logger.info('editing markup')
@@ -428,7 +467,7 @@ def register_handlers(dsp: Dispatcher):
             await get_bot().edit_message_reply_markup(
                 chat_id=msg.message.chat.id,
                 message_id=msg.message.message_id,
-                reply_markup=generate_voting_buttons(who, whom)
+                reply_markup=generate_voting_buttons(who, whom),
             )
         except aiogram.utils.exceptions.MessageNotModified:
             # that's ok
@@ -448,22 +487,26 @@ def register_handlers(dsp: Dispatcher):
             response += '\nВы НЕ ЗАРЕГИСТРИРОВАНЫ ни в каком мастермайнд-дейтинге.'
 
         await get_bot().send_message(
-            chat_id=chat_id,
-            text=response,
+            chat_id=chat_id, text=response,
         )
 
 
-async def send_rate_request(who: models.Participant, whom: models.Participant, bot: Bot):
-    await bot.send_message(who.get_chat_id(), f"**Голосование за** {whom.name}", parse_mode="Markdown")
+async def send_rate_request(
+    who: models.Participant, whom: models.Participant, bot: Bot
+):
+    await bot.send_message(
+        who.get_chat_id(), f"**Голосование за** {whom.name}", parse_mode="Markdown"
+    )
     if whom.photo:
         whom.photo.open()
         photo = at.InputFile(BytesIO(whom.photo.read()))
         await bot.send_photo(who.get_chat_id(), photo, disable_notification=True)
 
     await bot.send_message(
-        who.get_chat_id(), whom.desc or '(Нет описания)',
+        who.get_chat_id(),
+        whom.desc or '(Нет описания)',
         reply_markup=generate_voting_buttons(who, whom),
-        disable_notification=True
+        disable_notification=True,
     )
 
 

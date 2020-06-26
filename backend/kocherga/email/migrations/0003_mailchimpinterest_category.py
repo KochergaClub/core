@@ -14,7 +14,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='mailchimpinterest',
             name='category',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, related_name='interests', to='email.MailchimpCategory'),
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='interests',
+                to='email.MailchimpCategory',
+            ),
             preserve_default=False,
         ),
     ]

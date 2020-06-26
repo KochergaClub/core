@@ -18,12 +18,16 @@ def resolve_analyticsBovStats(_, info):
 
     BOV_stats = []
     for date_str in cohort_dates:
-        customers = Customer.objects.from_date(datetime.strptime(date_str, '%Y-%m-%d').date())
+        customers = Customer.objects.from_date(
+            datetime.strptime(date_str, '%Y-%m-%d').date()
+        )
         total_income = sum(c.total_spent for c in customers)
-        BOV_stats.append({
-            'date': date_str,
-            'count': customers.count(),
-            'total_income': total_income,
-        })
+        BOV_stats.append(
+            {
+                'date': date_str,
+                'count': customers.count(),
+                'total_income': total_income,
+            }
+        )
 
     return BOV_stats

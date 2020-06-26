@@ -32,7 +32,9 @@ def fill_wagtail_images(apps, schema_editor):
                 elif model_name == 'VkAnnouncement':
                     filename = f'vk-announcement-image-{obj.id}'
 
-                fh = open(Path('/data') / 'upload' / 'images' / (obj.image + '.jpg'), 'rb')
+                fh = open(
+                    Path('/data') / 'upload' / 'images' / (obj.image + '.jpg'), 'rb'
+                )
                 image = image_class(title=title)
                 image.file.save(filename, ImageFile(fh))
                 image.save()
@@ -59,20 +61,35 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='wagtail_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='wagtailimages.Image'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='wagtailimages.Image',
+            ),
         ),
         migrations.AddField(
             model_name='eventprototype',
             name='wagtail_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='wagtailimages.Image'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='wagtailimages.Image',
+            ),
         ),
         migrations.AddField(
             model_name='vkannouncement',
             name='wagtail_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='wagtailimages.Image'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='wagtailimages.Image',
+            ),
         ),
-        migrations.RunPython(
-            fill_wagtail_images,
-            nop,
-        ),
+        migrations.RunPython(fill_wagtail_images, nop,),
     ]

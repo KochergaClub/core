@@ -17,25 +17,83 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Member',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('short_name', models.CharField(max_length=20)),
                 ('full_name', models.CharField(max_length=80)),
-                ('role', models.CharField(choices=[('FOUNDER', 'Основатель'), ('MANAGER', 'Менеджер'), ('VIDEOMANAGER', 'Видеоменеджер'), ('WATCHMAN', 'Админ'), ('TRAINER', 'Тренер'), ('CONSULTANT', 'Внешний консультант'), ('VOLUNTEER', 'Волонтёр')], max_length=20)),
+                (
+                    'role',
+                    models.CharField(
+                        choices=[
+                            ('FOUNDER', 'Основатель'),
+                            ('MANAGER', 'Менеджер'),
+                            ('VIDEOMANAGER', 'Видеоменеджер'),
+                            ('WATCHMAN', 'Админ'),
+                            ('TRAINER', 'Тренер'),
+                            ('CONSULTANT', 'Внешний консультант'),
+                            ('VOLUNTEER', 'Волонтёр'),
+                        ],
+                        max_length=20,
+                    ),
+                ),
                 ('is_current', models.BooleanField()),
-                ('payment_type', models.CharField(blank=True, choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал')], max_length=10)),
+                (
+                    'payment_type',
+                    models.CharField(
+                        blank=True,
+                        choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал')],
+                        max_length=10,
+                    ),
+                ),
                 ('vk', models.CharField(blank=True, max_length=255)),
-                ('gender', models.CharField(choices=[('MALE', 'М'), ('FEMALE', 'Ж')], max_length=10, null=True)),
+                (
+                    'gender',
+                    models.CharField(
+                        choices=[('MALE', 'М'), ('FEMALE', 'Ж')],
+                        max_length=10,
+                        null=True,
+                    ),
+                ),
                 ('cm_login', models.CharField(blank=True, max_length=255)),
                 ('cm_card_id', models.IntegerField(null=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='staff_member', to=settings.AUTH_USER_MODEL)),
+                (
+                    'user',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='staff_member',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='MemberAltEmail',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('email', models.EmailField(max_length=254)),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='alt_emails', to='staff.Member')),
+                (
+                    'member',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='alt_emails',
+                        to='staff.Member',
+                    ),
+                ),
             ],
         ),
     ]

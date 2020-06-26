@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from rest_framework import serializers
@@ -23,7 +24,9 @@ class AnnouncementsSerializer(serializers.ModelSerializer):
 
     vk = announcement_serializers.VkAnnouncementSerializer(source='vk_announcement')
     fb = announcement_serializers.FbAnnouncementSerializer(source='fb_announcement')
-    timepad = announcement_serializers.TimepadAnnouncementSerializer(source='timepad_announcement')
+    timepad = announcement_serializers.TimepadAnnouncementSerializer(
+        source='timepad_announcement'
+    )
 
 
 class PublicEventSerializer(serializers.ModelSerializer):
@@ -110,9 +113,7 @@ class EventSerializer(serializers.ModelSerializer):
             'pricing_type',
             'zoom_link',
             'timing_description_override',
-
             'announcements',
-
             # optional
             'prototype_id',
             'published',
@@ -120,7 +121,6 @@ class EventSerializer(serializers.ModelSerializer):
             'visitors',
             'deleted',
             'project_slug',
-
             # announcement-related
             'timepad_category_code',
             'timepad_prepaid_tickets',
@@ -129,23 +129,35 @@ class EventSerializer(serializers.ModelSerializer):
             'posted_vk',
             'posted_fb',
             'posted_timepad',
-
             # method-based
             'images',
             'tags',
         )
         read_only_fields = tuple(
             # Listing editable fields instead of read-only fields for clearer code.
-            f for f in fields if f not in (
-                'title', 'location', 'description', 'summary',
-                'start', 'end', 'creator',
+            f
+            for f in fields
+            if f
+            not in (
+                'title',
+                'location',
+                'description',
+                'summary',
+                'start',
+                'end',
+                'creator',
                 'visitors',
                 'published',
                 'timing_description_override',
-                'vk_group', 'fb_group',
-                'posted_timepad', 'posted_fb', 'posted_vk',
-                'timepad_prepaid_tickets', 'timepad_category_code',
-                'type', 'registration_type',
+                'vk_group',
+                'fb_group',
+                'posted_timepad',
+                'posted_fb',
+                'posted_vk',
+                'timepad_prepaid_tickets',
+                'timepad_category_code',
+                'type',
+                'registration_type',
                 'ready_to_post',  # deprecated
                 'prototype_id',
                 'project_slug',
@@ -166,7 +178,9 @@ class EventSerializer(serializers.ModelSerializer):
 
     # It'd be better if this was SlugRelatedField.
     # But it causes circular import issues which I wasn't able to figure out yet.
-    project_slug = serializers.CharField(source='project.slug', required=False, allow_blank=True)
+    project_slug = serializers.CharField(
+        source='project.slug', required=False, allow_blank=True
+    )
 
     # deprecated
     ready_to_post = serializers.BooleanField(source='published', required=False)
@@ -216,42 +230,66 @@ class EventSerializer(serializers.ModelSerializer):
             if project_slug == '':
                 event.project = None
             else:
-                event.project = kocherga.projects.models.ProjectPage.objects.get(slug=project_slug)
+                event.project = kocherga.projects.models.ProjectPage.objects.get(
+                    slug=project_slug
+                )
 
             event.save()
 
         if vk_announcement_data:
-            event.vk_announcement.group = vk_announcement_data.get('group', event.vk_announcement.group)
-            event.vk_announcement.link = vk_announcement_data.get('link', event.vk_announcement.link)
+            event.vk_announcement.group = vk_announcement_data.get(
+                'group', event.vk_announcement.group
+            )
+            event.vk_announcement.link = vk_announcement_data.get(
+                'link', event.vk_announcement.link
+            )
             event.vk_announcement.save()
 
         if fb_announcement_data:
-            event.fb_announcement.group = fb_announcement_data.get('group', event.fb_announcement.group)
-            event.fb_announcement.link = fb_announcement_data.get('link', event.fb_announcement.link)
+            event.fb_announcement.group = fb_announcement_data.get(
+                'group', event.fb_announcement.group
+            )
+            event.fb_announcement.link = fb_announcement_data.get(
+                'link', event.fb_announcement.link
+            )
             event.fb_announcement.save()
 
         if timepad_announcement_data:
             event.timepad_announcement.category_code = timepad_announcement_data.get(
-                'category_code',
-                event.timepad_announcement.category_code
+                'category_code', event.timepad_announcement.category_code
             )
             event.timepad_announcement.prepaid_tickets = timepad_announcement_data.get(
-                'prepaid_tickets',
-                event.timepad_announcement.prepaid_tickets
+                'prepaid_tickets', event.timepad_announcement.prepaid_tickets
             )
-            event.timepad_announcement.link = timepad_announcement_data.get('link', event.timepad_announcement.link)
+            event.timepad_announcement.link = timepad_announcement_data.get(
+                'link', event.timepad_announcement.link
+            )
             event.timepad_announcement.save()
 
         models.Event.objects.notify_update()  # send notification message to websocket
         return event
 
     # Deprecated fields which should be serialized through nested serializers instead.
-    timepad_category_code = serializers.CharField(source='timepad_announcement.category_code', required=False)
-    timepad_prepaid_tickets = serializers.BooleanField(source='timepad_announcement.prepaid_tickets', required=False)
-    posted_timepad = serializers.CharField(source='timepad_announcement.link', required=False, allow_blank=True)
+    timepad_category_code = serializers.CharField(
+        source='timepad_announcement.category_code', required=False
+    )
+    timepad_prepaid_tickets = serializers.BooleanField(
+        source='timepad_announcement.prepaid_tickets', required=False
+    )
+    posted_timepad = serializers.CharField(
+        source='timepad_announcement.link', required=False, allow_blank=True
+    )
 
-    fb_group = serializers.CharField(source='fb_announcement.group', required=False, allow_blank=True)
-    posted_fb = serializers.CharField(source='fb_announcement.link', required=False, allow_blank=True)
+    fb_group = serializers.CharField(
+        source='fb_announcement.group', required=False, allow_blank=True
+    )
+    posted_fb = serializers.CharField(
+        source='fb_announcement.link', required=False, allow_blank=True
+    )
 
-    vk_group = serializers.CharField(source='vk_announcement.group', required=False, allow_blank=True)
-    posted_vk = serializers.CharField(source='vk_announcement.link', required=False, allow_blank=True)
+    vk_group = serializers.CharField(
+        source='vk_announcement.group', required=False, allow_blank=True
+    )
+    posted_vk = serializers.CharField(
+        source='vk_announcement.link', required=False, allow_blank=True
+    )

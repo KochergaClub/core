@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 
+
 def fill_privacy_mode_from_cm(apps, schema_editor):
     Customer = apps.get_model('cm', 'Customer')
     for customer in Customer.objects.all():
@@ -20,7 +21,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='customer',
             name='privacy_mode',
-            field=models.CharField(choices=[('private', 'private'), ('public', 'public')], default='private', max_length=40, verbose_name='Приватность'),
+            field=models.CharField(
+                choices=[('private', 'private'), ('public', 'public')],
+                default='private',
+                max_length=40,
+                verbose_name='Приватность',
+            ),
         ),
         migrations.RunPython(fill_privacy_mode_from_cm),
     ]

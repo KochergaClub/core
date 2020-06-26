@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='weeklydigest',
             name='vk_id',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='ID поста в VK'),
+            field=models.CharField(
+                blank=True, max_length=100, null=True, verbose_name='ID поста в VK'
+            ),
         ),
     ]

@@ -14,6 +14,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='order',
             name='customer',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='orders', to='cm2.Customer'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='orders',
+                to='cm2.Customer',
+            ),
         ),
     ]

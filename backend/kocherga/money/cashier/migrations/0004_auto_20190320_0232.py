@@ -15,6 +15,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cheque',
             name='whom',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cheques', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='cheques',
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

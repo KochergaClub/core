@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -34,7 +35,9 @@ class CallType(enum.Enum):
 
 class Call(models.Model):
     call_id = models.CharField(primary_key=True, max_length=100)
-    pbx_call = models.ForeignKey(PbxCall, on_delete=models.CASCADE, related_name='calls')
+    pbx_call = models.ForeignKey(
+        PbxCall, on_delete=models.CASCADE, related_name='calls'
+    )
 
     ts = models.DateTimeField()
     call_type = models.CharField(max_length=15)
@@ -75,13 +78,15 @@ class Call(models.Model):
         (call, _) = Call.objects.update_or_create(
             call_id=call_id,
             defaults={
-                'ts': datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S").replace(tzinfo=TZ),
+                'ts': datetime.strptime(data['callstart'], "%Y-%m-%d %H:%M:%S").replace(
+                    tzinfo=TZ
+                ),
                 'call_type': CallType.from_api_data(data).name,
                 'is_recorded': (data['is_recorded'] == 'true'),
                 'destination': str(data['destination']),
                 'pbx_call': pbx_call,
                 **args,
-            }
+            },
         )
 
         if 'record_link' in data and not call.record:

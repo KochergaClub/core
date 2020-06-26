@@ -21,7 +21,8 @@ class CheckType(enum.Enum):
 class OfdDocument(models.Model):
     class Meta:
         db_table = "ofd_documents"
-#        managed = False
+
+    #        managed = False
 
     id = models.IntegerField(primary_key=True)
     timestamp = models.IntegerField()
@@ -29,12 +30,9 @@ class OfdDocument(models.Model):
     electronic = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     check_type = models.CharField(
-        max_length=40,
-        choices=[
-            (t.name, t.name) for t in CheckType
-        ],
+        max_length=40, choices=[(t.name, t.name) for t in CheckType],
     )
-    shift_id = models.IntegerField()   # TODO - foreign key
+    shift_id = models.IntegerField()  # TODO - foreign key
     request_id = models.IntegerField()  # cheque number in current shift
     operator = models.CharField(max_length=255)
     operator_inn = models.BigIntegerField(null=True)
@@ -73,11 +71,13 @@ class OfdDocument(models.Model):
 
 
 def cash_income_by_date(start_d, end_d):
-    docs = OfdDocument.objects.filter(
-        midday_ts__gte=datetime.combine(start_d, datetime.min.time()).timestamp()
-    ).filter(
-        midday_ts__lte=datetime.combine(end_d, datetime.max.time()).timestamp()
-    ).all()
+    docs = (
+        OfdDocument.objects.filter(
+            midday_ts__gte=datetime.combine(start_d, datetime.min.time()).timestamp()
+        )
+        .filter(midday_ts__lte=datetime.combine(end_d, datetime.max.time()).timestamp())
+        .all()
+    )
 
     date2income = defaultdict(decimal.Decimal)
     for doc in docs:
@@ -87,7 +87,4 @@ def cash_income_by_date(start_d, end_d):
         elif doc.check_type == 'refund_income':
             date2income[d] -= doc.cash
 
-    return [
-        {'date': d, 'income': date2income[d]}
-        for d in sorted(date2income.keys())
-    ]
+    return [{'date': d, 'income': date2income[d]} for d in sorted(date2income.keys())]

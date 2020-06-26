@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='training',
             name='mailchimp_interest_id',
-            field=models.CharField(blank=True, max_length=20, verbose_name='ID Mailchimp-группы'),
+            field=models.CharField(
+                blank=True, max_length=20, verbose_name='ID Mailchimp-группы'
+            ),
         ),
     ]

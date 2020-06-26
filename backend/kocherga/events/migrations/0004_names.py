@@ -16,10 +16,12 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='eventprototype',
-            options={'verbose_name': 'Прототип события', 'verbose_name_plural': 'Прототипы событий'},
+            options={
+                'verbose_name': 'Прототип события',
+                'verbose_name_plural': 'Прототипы событий',
+            },
         ),
         migrations.AlterModelOptions(
-            name='tag',
-            options={'verbose_name': 'Тег', 'verbose_name_plural': 'Теги'},
+            name='tag', options={'verbose_name': 'Тег', 'verbose_name_plural': 'Теги'},
         ),
     ]

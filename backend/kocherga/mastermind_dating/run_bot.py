@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import aiogram
@@ -21,11 +22,18 @@ def get_server(evloop, bot):
     def run_async(method: Callable[[], Awaitable]):
         def run(*args, **kwargs):
             evloop.create_task(method(*args, **kwargs))
+
         return run
 
     manager = BaseManager(address=('', 44444), authkey=b"django_sec_key")
-    manager.register("tinder_activate", run_async(lambda participant_id: tinder_activate(participant_id, bot)))
-    manager.register("broadcast_solution", run_async(lambda cohort_id: broadcast_solution(cohort_id, bot)))
+    manager.register(
+        "tinder_activate",
+        run_async(lambda participant_id: tinder_activate(participant_id, bot)),
+    )
+    manager.register(
+        "broadcast_solution",
+        run_async(lambda cohort_id: broadcast_solution(cohort_id, bot)),
+    )
     server = manager.get_server()
 
     return server
@@ -50,10 +58,7 @@ def init():
     if settings.TELEGRAM_PROXY:
         bot_extra_settings['proxy'] = settings.TELEGRAM_PROXY
 
-    bot = aiogram.Bot(
-        settings.MASTERMIND_BOT_CONFIG["token"],
-        **bot_extra_settings,
-    )
+    bot = aiogram.Bot(settings.MASTERMIND_BOT_CONFIG["token"], **bot_extra_settings,)
 
     dsp = Dispatcher(bot)
     register_handlers(dsp)

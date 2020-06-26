@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -70,7 +71,9 @@ class Template:
             )
             logger.info('Setting page html')
             html = html.replace('#', '%23')
-            await page.goto(f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000})
+            await page.goto(
+                f"data:text/html,{html}", {"waitUntil": "load", "timeout": 10000}
+            )
 
             logger.info('Making screenshot')
             image_bytes = await page.screenshot()

@@ -3,6 +3,7 @@ from django.db import models
 from datetime import datetime
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -54,11 +55,11 @@ class Record(models.Model):
         }
 
         for f in (
-                'counterparty_name',
-                'counterparty_inn',
-                'counterparty_bank_bic',
-                'counterparty_bank_account_number',
-                'counterparty_bank_name',
+            'counterparty_name',
+            'counterparty_inn',
+            'counterparty_bank_bic',
+            'counterparty_bank_account_number',
+            'counterparty_bank_name',
         ):
             fields[f] = record.get(f, '')
 

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import re
@@ -38,7 +39,9 @@ def error_screenshot_path(instance, filename):
 
 @reversion.register()
 class FbAnnouncement(models.Model):
-    event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='fb_announcement')
+    event = AutoOneToOneField(
+        Event, on_delete=models.CASCADE, related_name='fb_announcement'
+    )
 
     link = models.CharField(max_length=1024, blank=True)
 
@@ -47,7 +50,9 @@ class FbAnnouncement(models.Model):
     added_to_main_page = models.BooleanField(default=False)
     shared_to_main_page = models.BooleanField(default=False)
 
-    error_screenshot = models.ImageField(null=True, blank=True, upload_to='events/announcement/fb/error_screenshot/')
+    error_screenshot = models.ImageField(
+        null=True, blank=True, upload_to='events/announcement/fb/error_screenshot/'
+    )
 
     objects = Manager()
 
@@ -147,10 +152,9 @@ class AnnounceSession:
     async def create(cls, browser):
         self = cls()
         self.page = await browser.newPage()
-        await self.page.setViewport({
-            'width': 1280,
-            'height': 800,
-        })
+        await self.page.setViewport(
+            {'width': 1280, 'height': 800,}
+        )
         return self
 
     async def clean_field(self, max_length=20, both_directions=False):
@@ -168,7 +172,9 @@ class AnnounceSession:
 
     async def fill_dates(self, event):
         date_inputs = await self.page.JJ('input[placeholder="дд.мм.гггг"]')
-        assert len(date_inputs) == 2  # There might be other date inputs on the page and we don't want to mess it up.
+        assert (
+            len(date_inputs) == 2
+        )  # There might be other date inputs on the page and we don't want to mess it up.
 
         # We assume that start input always precedes the end; this seems reasonable enough.
         await self.page.evaluate('(el) => el.focus()', date_inputs[0])
@@ -294,10 +300,9 @@ class AnnounceSession:
         await page.focus("input[name=pass]")
         await page.keyboard.type(PASSWORD)
 
-        await asyncio.wait([
-            page.keyboard.press("Enter"),
-            page.waitForNavigation(),
-        ])
+        await asyncio.wait(
+            [page.keyboard.press("Enter"), page.waitForNavigation(),]
+        )
         # TODO - waitForSelector
         logger.info("Signed in")
 
@@ -307,7 +312,9 @@ class AnnounceSession:
         else:
             return settings.KOCHERGA_FB["main_page"]["announce_page"]
 
-    async def run(self, group: str, event: Event, auto_confirm=True, select_self_location=True) -> str:
+    async def run(
+        self, group: str, event: Event, auto_confirm=True, select_self_location=True
+    ) -> str:
         page = self.page
         await self.sign_in()
 
@@ -330,8 +337,10 @@ class AnnounceSession:
         logger.info("Waiting for image selector")
         await page.waitForSelector("[data-testid=event-create-dialog-image-selector]")
 
-        raise Exception("Uploading is broken since we moved to k8s: file was passed as local path, but we can't mount "
-                        "data fir both in app and in chrome image")
+        raise Exception(
+            "Uploading is broken since we moved to k8s: file was passed as local path, but we can't mount "
+            "data fir both in app and in chrome image"
+        )
         # el = await page.J("[data-testid=event-create-dialog-image-selector]")
         # image_file = event.image_file("default")
         # logger.info(f"Uploading image {image_file}")
@@ -374,7 +383,9 @@ class AnnounceSession:
         await page.click("[data-testid=event-create-dialog-confirm-button]")
 
         logger.info(f"Clicked confirm button, waiting for title to appear")
-        await page.waitForSelector("h1#seo_h1_tag[data-testid=event-permalink-event-name]")
+        await page.waitForSelector(
+            "h1#seo_h1_tag[data-testid=event-permalink-event-name]"
+        )
 
         logger.info(f"Confirmed")
 
@@ -382,7 +393,9 @@ class AnnounceSession:
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
-        match = re.match(r'https://(?:www|business)\.facebook\.com/events/(\d+)/?(?:$|\?)', page_url)
+        match = re.match(
+            r'https://(?:www|business)\.facebook\.com/events/(\d+)/?(?:$|\?)', page_url
+        )
         if not match:
             raise Exception(f"Expected '/events/' in page url, got: {page_url}")
 
@@ -403,14 +416,18 @@ class AnnounceSession:
         await page.waitForSelector(link)
         await page.click(link)
 
-        dialog_el = await page.waitForXPath('//h3[text()="Добавить на Страницу"]/ancestor::*[@role="dialog"]')
+        dialog_el = await page.waitForXPath(
+            '//h3[text()="Добавить на Страницу"]/ancestor::*[@role="dialog"]'
+        )
 
         input_el = await dialog_el.J('input[name="target_page_id"]')
         parent_el = (await input_el.xpath('..'))[0]
         dropdown_el = await parent_el.J(':scope > a')
         await dropdown_el.click()
 
-        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', dropdown_el)
+        controls_id = await page.evaluate(
+            '(el) => el.getAttribute("aria-controls")', dropdown_el
+        )
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
@@ -426,15 +443,20 @@ class AnnounceSession:
         button_el = await dialog_el.J('.uiOverlayFooter button.layerConfirm')
 
         await asyncio.gather(
-            button_el.click(),
-            page.waitForNavigation(),
+            button_el.click(), page.waitForNavigation(),
         )
 
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
-        if not page_url.startswith('https://www.facebook.com/' + settings.KOCHERGA_FB["main_page"]["slug"] + '/events'):
-            raise Exception(f"Expected to navigate to main page, got {page_url} instead")
+        if not page_url.startswith(
+            'https://www.facebook.com/'
+            + settings.KOCHERGA_FB["main_page"]["slug"]
+            + '/events'
+        ):
+            raise Exception(
+                f"Expected to navigate to main page, got {page_url} instead"
+            )
 
     async def share_to_main_page(self, event_url):
         page = self.page
@@ -443,11 +465,15 @@ class AnnounceSession:
         logger.info("Going to page: " + event_url)
         await page.goto(event_url)
 
-        share_menu_el = await page.J('#admin_button_bar .uiPopover [aria-label="Поделиться"]')
+        share_menu_el = await page.J(
+            '#admin_button_bar .uiPopover [aria-label="Поделиться"]'
+        )
         await share_menu_el.hover()
 
         # TODO - extract this pattern into method (el -> controls_el)
-        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', share_menu_el)
+        controls_id = await page.evaluate(
+            '(el) => el.getAttribute("aria-controls")', share_menu_el
+        )
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
@@ -455,8 +481,7 @@ class AnnounceSession:
         await (await controls_el.J('a[target="share_in_newsfeed_option"]')).click()
 
         # Wait for dialog to load.
-        audience_menu_selector = \
-            'div[data-testid="react_share_dialog_audience_selector"] > div.uiPopover > a[role="button"]'
+        audience_menu_selector = 'div[data-testid="react_share_dialog_audience_selector"] > div.uiPopover > a[role="button"]'
         await page.waitForSelector(audience_menu_selector)
         dialog_el = await page.J('[data-testid="react_share_dialog_content"]')
 
@@ -469,20 +494,28 @@ class AnnounceSession:
         # First, make sure that aria-controls attribute is set;
         # for this element it's not set initially for some reason.
         await page.waitForSelector(audience_menu_selector + '[aria-controls]')
-        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', audience_menu_el)
+        controls_id = await page.evaluate(
+            '(el) => el.getAttribute("aria-controls")', audience_menu_el
+        )
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
         # Pick "share to page" option.
-        item_el = await controls_el.J('[role="menuitemcheckbox"] [data-testid="share_to_page"]')
+        item_el = await controls_el.J(
+            '[role="menuitemcheckbox"] [data-testid="share_to_page"]'
+        )
         await item_el.click()
 
         # Now let's expand page menu.
-        page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
+        page_menu_el = await dialog_el.J(
+            'div[inputid="audience_page"] > div.uiPopover > a[role="button"]'
+        )
         await page_menu_el.click()
 
         # Find dropdown...
-        controls_id = await page.evaluate('(el) => el.getAttribute("aria-controls")', page_menu_el)
+        controls_id = await page.evaluate(
+            '(el) => el.getAttribute("aria-controls")', page_menu_el
+        )
         controls = '#' + controls_id
         controls_el = await page.J(controls)
 
@@ -497,7 +530,9 @@ class AnnounceSession:
         await kocherga_page_el.click()
 
         # Recreate the page menu button element, just to be sure.
-        page_menu_el = await dialog_el.J('div[inputid="audience_page"] > div.uiPopover > a[role="button"]')
+        page_menu_el = await dialog_el.J(
+            'div[inputid="audience_page"] > div.uiPopover > a[role="button"]'
+        )
         # Check that page menu button now refers to the correct page.
         text_list = await page_menu_el.xpath(
             './/*[contains(text(), "' + PAGE_TITLE + '")]'
@@ -508,17 +543,18 @@ class AnnounceSession:
         # Finally, share the event.
         button_el = await dialog_el.J('[data-testid="react_share_dialog_post_button"]')
 
-        await asyncio.wait([
-            button_el.click(),
-            page.waitForNavigation(),
-        ])
+        await asyncio.wait(
+            [button_el.click(), page.waitForNavigation(),]
+        )
 
         # Checking that we navigated to the events page after sharing.
         page_url = await page.evaluate('() => window.location.href')
         logger.info(f"URL: {page_url}")
 
         if not page_url.startswith(event_url):
-            raise Exception(f"Expected to navigate back to event page, got {page_url} instead")
+            raise Exception(
+                f"Expected to navigate back to event page, got {page_url} instead"
+            )
 
     async def extra_action(self, event_url, action):
         if action == 'add_to_main_page':

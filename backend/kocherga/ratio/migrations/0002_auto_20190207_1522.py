@@ -37,7 +37,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='participant',
             name='payment_type',
-            field=models.CharField(choices=[('website', 'Сайт'), ('timepad', 'Timepad'), ('staff', 'Стафф'), ('stipend', 'Стипендия')], max_length=40, verbose_name='Вид оплаты'),
+            field=models.CharField(
+                choices=[
+                    ('website', 'Сайт'),
+                    ('timepad', 'Timepad'),
+                    ('staff', 'Стафф'),
+                    ('stipend', 'Стипендия'),
+                ],
+                max_length=40,
+                verbose_name='Вид оплаты',
+            ),
         ),
         migrations.AlterField(
             model_name='participant',
@@ -47,6 +56,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='participant',
             name='status',
-            field=models.CharField(choices=[('normal', 'Участник')], max_length=40, verbose_name='Статус'),
+            field=models.CharField(
+                choices=[('normal', 'Участник')], max_length=40, verbose_name='Статус'
+            ),
         ),
     ]

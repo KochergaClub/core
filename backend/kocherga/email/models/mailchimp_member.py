@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from dataclasses import dataclass
@@ -13,13 +14,7 @@ def get_sub_interests():
     sub_interests = kocherga.mailchimp.get_interests(
         kocherga.mailchimp.interest_category_by_name('Подписки')['id']
     )
-    return [
-        {
-            'id': i['id'],
-            'name': i['name']
-        }
-        for i in sub_interests
-    ]
+    return [{'id': i['id'], 'name': i['name']} for i in sub_interests]
 
 
 class BadMailchimpStatus(APIException):
@@ -69,7 +64,12 @@ class MailchimpMember:
 
     def set_status(self, new_status, check_old_status=None):
         if check_old_status:
-            logger.info('Current status: ' + self.status + ', needed status: ' + check_old_status)
+            logger.info(
+                'Current status: '
+                + self.status
+                + ', needed status: '
+                + check_old_status
+            )
             if check_old_status != self.status:
                 raise BadMailchimpStatus()
 
@@ -77,9 +77,7 @@ class MailchimpMember:
         kocherga.mailchimp.api_call(
             'PATCH',
             f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/members/{subscriber_hash}',
-            {
-                'status': new_status
-            }
+            {'status': new_status},
         )
         self.status = new_status
         logger.info('Updated to status: ' + self.status)
@@ -88,38 +86,25 @@ class MailchimpMember:
         return [interest.id for interest in self.interests if interest.subscribed]
 
     def subscribe_to_interest(self, interest_id):
-        self.set_interests(
-            list(
-                set(self.get_interest_ids()) | set([interest_id])
-            )
-        )
+        self.set_interests(list(set(self.get_interest_ids()) | set([interest_id])))
 
     def unsubscribe_from_interest(self, interest_id):
-        self.set_interests(
-            list(
-                set(self.get_interest_ids()) - set([interest_id])
-            )
-        )
+        self.set_interests(list(set(self.get_interest_ids()) - set([interest_id])))
 
     def set_interests(self, interest_ids):
         if self.status != 'subscribed':
             raise BadMailchimpStatus()
 
         subscriber_hash = kocherga.mailchimp.subscriber_hash(self.email)
-        new_interests = {
-            i.id: (i.id in interest_ids)
-            for i in self.interests
-        }
+        new_interests = {i.id: (i.id in interest_ids) for i in self.interests}
         logger.info('Updating interests: ' + str(new_interests))
 
         kocherga.mailchimp.api_call(
             'PATCH',
             f'lists/{kocherga.mailchimp.MAIN_LIST_ID}/members/{subscriber_hash}',
-            {
-                'interests': new_interests
-            }
+            {'interests': new_interests},
         )
 
         # update local object after remote call
         for interest in self.interests:
-            interest.subscribed = (interest.id in interest_ids)
+            interest.subscribed = interest.id in interest_ids

@@ -26,13 +26,12 @@ class Migration(migrations.Migration):
             model_name='shift',
             name='watchman',
             field=models.ForeignKey(
-                blank=True, null=True,
+                blank=True,
+                null=True,
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='+',
                 to='watchmen.Watchman',
             ),
         ),
-        migrations.RunPython(
-            fill_new_watchman
-        )
+        migrations.RunPython(fill_new_watchman),
     ]

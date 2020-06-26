@@ -7,20 +7,24 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Order',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('start', models.DateTimeField(auto_now_add=True, db_index=True)),
                 ('end', models.DateTimeField(blank=True, db_index=True, null=True)),
             ],
-            options={
-                'verbose_name': 'Заказ',
-                'verbose_name_plural': 'Заказы',
-            },
+            options={'verbose_name': 'Заказ', 'verbose_name_plural': 'Заказы',},
         ),
     ]

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -8,6 +9,7 @@ import requests
 import dateutil.parser
 
 import kocherga.gitlab.models
+
 ROOT = 'https://api.tracker.yandex.net/v2'
 
 ORG_ID = settings.KOCHERGA_YANDEX_ORG_ID
@@ -33,18 +35,12 @@ def api_call(method, url, data={}):
     if method == "GET":
         r = requests.get(
             f"{ROOT}/{url}",
-            headers={
-                'Authorization': f'OAuth {token()}',
-                'X-Org-ID': str(ORG_ID),
-            },
+            headers={'Authorization': f'OAuth {token()}', 'X-Org-ID': str(ORG_ID),},
         )
     elif method == "POST":
         r = requests.post(
             f"{ROOT}/{url}",
-            headers={
-                'Authorization': f'OAuth {token()}',
-                'X-Org-ID': str(ORG_ID),
-            },
+            headers={'Authorization': f'OAuth {token()}', 'X-Org-ID': str(ORG_ID),},
             json=data,
         )
 
@@ -105,12 +101,17 @@ def import_gl_issue(gl_issue, target_queue):
             'updatedAt': updated_dt.strftime(DATE_FORMAT),
             'updatedBy': gl2tracker_users.get(gl_issue.author['username'], 'info'),
             'description': f'{gl_wiki_link(gl_issue.web_url)}\n\n{gl_issue.description}',
-            'tags': [s.replace(' ', '_').replace(',', '_') for s in gl_issue.attributes.get('labels', [])],
+            'tags': [
+                s.replace(' ', '_').replace(',', '_')
+                for s in gl_issue.attributes.get('labels', [])
+            ],
             'unique': f'{IMPORT_UNIQUE_KEY}-{gl_issue.id}',
             'status': 1,  # can be overriden later
         }
         if gl_issue.attributes['assignee']:
-            request_body['assignee'] = gl2tracker_users.get(gl_issue.attributes['assignee']['username'], 'info')
+            request_body['assignee'] = gl2tracker_users.get(
+                gl_issue.attributes['assignee']['username'], 'info'
+            )
 
         notes = gl_issue.notes.list(all=True, as_list=True)
         if gl_issue.state == 'closed':
@@ -119,16 +120,19 @@ def import_gl_issue(gl_issue, target_queue):
             close_notes = [n for n in notes if n.body == 'closed' and n.system]
             if len(close_notes) == 0:
                 # moved?
-                moved_notes = [n for n in notes if n.body.startswith('moved to ') and n.system]
+                moved_notes = [
+                    n for n in notes if n.body.startswith('moved to ') and n.system
+                ]
                 close_note = moved_notes[0]
             else:
                 close_note = close_notes[0]
 
             request_body['resolvedAt'] = min(
-                dateutil.parser.parse(close_note.attributes["created_at"]),
-                updated_dt
+                dateutil.parser.parse(close_note.attributes["created_at"]), updated_dt
             ).strftime(DATE_FORMAT)
-            request_body['resolvedBy'] = gl2tracker_users.get(close_note.author['username'], 'info')
+            request_body['resolvedBy'] = gl2tracker_users.get(
+                close_note.author['username'], 'info'
+            )
 
         result = api_call('POST', 'issues/_import', request_body)
 
@@ -141,5 +145,7 @@ def import_gl_issue(gl_issue, target_queue):
 
 def import_from_gitlab(gitlab_project_name, tracker_queue_name):
     gitlab_project = kocherga.gitlab.models.get_gl().projects.get(gitlab_project_name)
-    for gl_issue in gitlab_project.issues.list(all=True, as_list=False, order_by='created_at', sort='asc'):
+    for gl_issue in gitlab_project.issues.list(
+        all=True, as_list=False, order_by='created_at', sort='asc'
+    ):
         import_gl_issue(gl_issue, tracker_queue_name)

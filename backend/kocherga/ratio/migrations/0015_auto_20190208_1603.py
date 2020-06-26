@@ -11,13 +11,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='activity',
-            options={'ordering': ('day', 'time')},
+            name='activity', options={'ordering': ('day', 'time')},
         ),
         migrations.AddField(
             model_name='trainer',
             name='short_name',
-            field=models.CharField(default='кто-то', max_length=40, verbose_name='Короткое имя'),
+            field=models.CharField(
+                default='кто-то', max_length=40, verbose_name='Короткое имя'
+            ),
             preserve_default=False,
         ),
     ]

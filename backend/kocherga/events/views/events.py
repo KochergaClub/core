@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from io import BytesIO
@@ -42,16 +43,19 @@ class RootView(generics.ListCreateAPIView):
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        qs = Event.objects.list_events(
-            date=arg2date("date"),
-            from_date=arg2date("from_date"),
-            to_date=arg2date("to_date"),
-        ).prefetch_related('tags') \
-         .prefetch_related('project') \
-         .prefetch_related('prototype') \
-         .select_related('vk_announcement') \
-         .select_related('fb_announcement') \
-         .select_related('timepad_announcement')
+        qs = (
+            Event.objects.list_events(
+                date=arg2date("date"),
+                from_date=arg2date("from_date"),
+                to_date=arg2date("to_date"),
+            )
+            .prefetch_related('tags')
+            .prefetch_related('project')
+            .prefetch_related('prototype')
+            .select_related('vk_announcement')
+            .select_related('fb_announcement')
+            .select_related('timepad_announcement')
+        )
         return qs
 
     # TODO - replace with CreateAPIView after we standardize on `start` / `end` params on client
@@ -91,7 +95,9 @@ class PagedRootView(RootView):
 class ObjectView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAdminUser,)
     serializer_class = serializers.EventSerializer
-    queryset = Event.objects.all()  # not list_events() - allows retrieving deleted objects
+    queryset = (
+        Event.objects.all()
+    )  # not list_events() - allows retrieving deleted objects
     lookup_url_kwarg = 'event_id'
     lookup_field = 'uuid'
 
@@ -112,7 +118,9 @@ class ImageView(APIView):
 
         if image_type == 'vk':
             # TODO - is /announcements/vk/... even implemented?
-            logger.warning('image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead')
+            logger.warning(
+                'image_type=vk is deprecated, use POST /announcements/vk/{id}/image instead'
+            )
             event.vk_announcement.add_image(f)
         else:
             event.add_image(f)
@@ -129,10 +137,7 @@ class ImageView(APIView):
         if not image:
             raise Exception("No image")  # FIXME - 404?
 
-        return FileResponse(
-            image.file.open('rb'),
-            content_type='image/png'
-        )
+        return FileResponse(image.file.open('rb'), content_type='image/png')
 
 
 class ImageFromUrlView(APIView):
@@ -186,15 +191,18 @@ class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
                 d = datetime.strptime(d, "%Y-%m-%d").date()
             return d
 
-        events = Event.objects.public_events(
-            date=arg2date('date'),
-            from_date=arg2date('from_date'),
-            to_date=arg2date('to_date'),
-            tag=self.request.query_params.get('tag'),
-        ).prefetch_related('tags') \
-         .prefetch_related('vk_announcement') \
-         .prefetch_related('fb_announcement') \
-         .prefetch_related('timepad_announcement')
+        events = (
+            Event.objects.public_events(
+                date=arg2date('date'),
+                from_date=arg2date('from_date'),
+                to_date=arg2date('to_date'),
+                tag=self.request.query_params.get('tag'),
+            )
+            .prefetch_related('tags')
+            .prefetch_related('vk_announcement')
+            .prefetch_related('fb_announcement')
+            .prefetch_related('timepad_announcement')
+        )
 
         # TODO - pager or limit queryset (but I can't do this right now because DetailView would break)
         return events
@@ -203,28 +211,30 @@ class PublicEventsViewSet(viewsets.ReadOnlyModelViewSet):
 @api_view()
 @permission_classes((AllowAny,))
 def r_list_public_today(request):
-    events = Event.objects.public_events(
-        date=datetime.today().date(),
-        tag=request.query_params.get('tag'),
-    ).prefetch_related('tags') \
-        .prefetch_related('vk_announcement') \
-        .prefetch_related('fb_announcement') \
+    events = (
+        Event.objects.public_events(
+            date=datetime.today().date(), tag=request.query_params.get('tag'),
+        )
+        .prefetch_related('tags')
+        .prefetch_related('vk_announcement')
+        .prefetch_related('fb_announcement')
         .prefetch_related('timepad_announcement')
+    )
 
-    return Response([
-        serializers.PublicEventSerializer(event).data
-        for event in events[:1000]
-    ])
+    return Response(
+        [serializers.PublicEventSerializer(event).data for event in events[:1000]]
+    )
 
 
 @require_safe
 def r_list_public_atom(request):
-    events = Event.objects.public_events(
-        from_date=datetime.now().date(),
-        tag=request.GET.get('tag'),
-    ) \
-        .prefetch_related('tags') \
+    events = (
+        Event.objects.public_events(
+            from_date=datetime.now().date(), tag=request.GET.get('tag'),
+        )
+        .prefetch_related('tags')
         .prefetch_related('vk_announcement')
+    )
 
     fg = feedgenerator.Atom1Feed(
         title='Публичные мероприятия Кочерги',
@@ -251,15 +261,18 @@ class EventFeedbackView(APIView):
     def get(self, request, event_id):
         event = Event.objects.list_events().get(uuid=event_id)
         feedbacks = event.feedbacks.all()
-        return Response(
-            serializers.FeedbackSerializer(feedbacks, many=True).data
-        )
+        return Response(serializers.FeedbackSerializer(feedbacks, many=True).data)
 
 
 class SitemapView(View):
     def get(self, request):
         events = Event.objects.public_events()
-        return HttpResponse(''.join([
-            f'{settings.KOCHERGA_WEBSITE}/events/{event.uuid}\n'
-            for event in events
-        ]), content_type='text/plain')
+        return HttpResponse(
+            ''.join(
+                [
+                    f'{settings.KOCHERGA_WEBSITE}/events/{event.uuid}\n'
+                    for event in events
+                ]
+            ),
+            content_type='text/plain',
+        )

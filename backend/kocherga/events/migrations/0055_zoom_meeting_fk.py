@@ -15,16 +15,30 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='zoom_meeting',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='events', to='zoom.Meeting'),
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='events',
+                to='zoom.Meeting',
+            ),
         ),
         migrations.AlterField(
             model_name='event',
             name='pricing_type',
-            field=models.CharField(choices=[('anticafe', 'anticafe'), ('free', 'free')], default='free', max_length=20),
+            field=models.CharField(
+                choices=[('anticafe', 'anticafe'), ('free', 'free')],
+                default='free',
+                max_length=20,
+            ),
         ),
         migrations.AlterField(
             model_name='event',
             name='realm',
-            field=models.CharField(choices=[('offline', 'offline'), ('online', 'online')], default='online', max_length=40),
+            field=models.CharField(
+                choices=[('offline', 'offline'), ('online', 'online')],
+                default='online',
+                max_length=40,
+            ),
         ),
     ]

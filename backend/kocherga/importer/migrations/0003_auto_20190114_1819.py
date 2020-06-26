@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelTable(
-            name='logentry',
-            table='importers_log',
-        ),
+        migrations.AlterModelTable(name='logentry', table='importers_log',),
     ]

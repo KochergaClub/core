@@ -16,8 +16,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameModel(
-            old_name='HomePage',
-            new_name='FreeFormPage',
-        ),
+        migrations.RenameModel(old_name='HomePage', new_name='FreeFormPage',),
     ]

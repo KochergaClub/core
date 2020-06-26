@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -22,9 +23,7 @@ def get_last_code():
     (guid, text, ts) = conn.execute(
         "SELECT guid, text, date / 1000000000 FROM message WHERE text LIKE 'Код: %' ORDER BY date DESC LIMIT 1"
     ).fetchone()
-    ts_base = (
-        978307200
-    )  # 2001-01-01 - see https://apple.stackexchange.com/questions/114168/dates-format-in-messages-chat-db
+    ts_base = 978307200  # 2001-01-01 - see https://apple.stackexchange.com/questions/114168/dates-format-in-messages-chat-db
     ts += ts_base
 
     if guid == last_sms_guid:
@@ -192,7 +191,9 @@ async def add_cash_income(data, last_pko_id=None):
         await page.click("#Filter_FormOfMoneyFilter_Caption")
         await page.click(f'#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
 
-        await page.waitForXPath('//span[@id="Footer_SelectedPeriod" and text()="Наличные"]')
+        await page.waitForXPath(
+            '//span[@id="Footer_SelectedPeriod" and text()="Наличные"]'
+        )
 
         pko_id = last_pko_id or await get_last_pko_id(page)
         logger.info(f'Last pko_id: {pko_id}')
@@ -225,7 +226,9 @@ async def add_cash_income(data, last_pko_id=None):
                 f'ОФД: выручка за {d.strftime("%d.%m.%Y")}',
             )
 
-            docnum_el = await page.J("#ComponentsHost_PaymentEditLightbox_DocumentNumber")
+            docnum_el = await page.J(
+                "#ComponentsHost_PaymentEditLightbox_DocumentNumber"
+            )
             await docnum_el.focus()
             for i in range(10):
                 await docnum_el.press("Backspace")

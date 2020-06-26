@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import enum
@@ -52,19 +53,11 @@ class Customer(models.Model):
     first_name = models.CharField('Имя', max_length=100)
     last_name = models.CharField('Фамилия', max_length=100)
     gender = models.CharField(
-        'Пол',
-        max_length=20,
-        choices=[
-            (t.name, t.name) for t in Gender
-        ],
-        blank=True,
+        'Пол', max_length=20, choices=[(t.name, t.name) for t in Gender], blank=True,
     )
     email = models.CharField(max_length=255, db_index=True)
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True,
     )
     time_discount = models.IntegerField()
     is_active = models.BooleanField()  # "Активный" / "В архиве"
@@ -100,10 +93,12 @@ class Customer(models.Model):
     total_spent = models.IntegerField()
 
     # local fields - not from CM
-    privacy_mode = models.CharField('Приватность', max_length=40, default='private', choices=(
-        ('private', 'private'),
-        ('public', 'public'),
-    ))
+    privacy_mode = models.CharField(
+        'Приватность',
+        max_length=40,
+        default='private',
+        choices=(('private', 'private'), ('public', 'public'),),
+    )
 
     def __str__(self):
         return f'{self.card_id} {self.first_name or ""} {self.last_name or ""}'
@@ -158,7 +153,9 @@ class Customer(models.Model):
                 elif value == '':
                     pass
                 else:
-                    raise Exception(f"Unparsable gender value {value} (name: {csv_row['Имя']})")
+                    raise Exception(
+                        f"Unparsable gender value {value} (name: {csv_row['Имя']})"
+                    )
             elif isinstance(field, models.fields.CharField):
                 pass
             elif isinstance(field, models.fields.TextField):
@@ -175,12 +172,16 @@ class Customer(models.Model):
                 if value == '':
                     value = None
                 else:
-                    value = datetime.strptime(value, "%d.%m.%Y %H:%M").replace(tzinfo=TZ)
+                    value = datetime.strptime(value, "%d.%m.%Y %H:%M").replace(
+                        tzinfo=TZ
+                    )
             elif isinstance(field, models.fields.DateField):
                 if value == '':
                     value = None
                 else:
-                    value = datetime.strptime(value, "%d.%m.%Y").replace(tzinfo=TZ).date()
+                    value = (
+                        datetime.strptime(value, "%d.%m.%Y").replace(tzinfo=TZ).date()
+                    )
             elif isinstance(field, models.fields.BooleanField):
                 if value in ("Да", "true", "Активный"):
                     value = True
@@ -189,11 +190,11 @@ class Customer(models.Model):
                 else:
                     if csv_row['Имя'] == r'апр':
                         continue  # invalid customer from demo.cafe-manager.ru which has invalid gender
-                    raise Exception(f"Unparsable boolean value {value} (name: {csv_row['Имя']})")
+                    raise Exception(
+                        f"Unparsable boolean value {value} (name: {csv_row['Имя']})"
+                    )
             else:
-                raise Exception(
-                    f"Don't know how to to parse value to {field}"
-                )
+                raise Exception(f"Don't know how to to parse value to {field}")
 
             params[field.name] = value
 
@@ -207,11 +208,12 @@ class Customer(models.Model):
 
         try:
             (obj, created) = Customer.objects.update_or_create(
-                customer_id=params['customer_id'],
-                defaults=params,
+                customer_id=params['customer_id'], defaults=params,
             )
         except Exception as e:
-            logger.error(f"Failed to create or update customer {params['customer_id']}, probably an email collision")
+            logger.error(
+                f"Failed to create or update customer {params['customer_id']}, probably an email collision"
+            )
             raise e
 
         return obj
@@ -237,10 +239,15 @@ class Customer(models.Model):
         return load_customer_from_html(self.customer_id)
 
     def extend_subscription(self, period):
-        html_customer = load_customer_from_html(self.customer_id)  # we can't rely on DB cache here
+        html_customer = load_customer_from_html(
+            self.customer_id
+        )  # we can't rely on DB cache here
 
         subs_until = (
-            max(html_customer.get("subscription", datetime.now().date()), datetime.now().date())
+            max(
+                html_customer.get("subscription", datetime.now().date()),
+                datetime.now().date(),
+            )
             + period
         )
 

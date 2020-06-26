@@ -1,5 +1,8 @@
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, ModelAdminGroup, modeladmin_register)
+    ModelAdmin,
+    ModelAdminGroup,
+    modeladmin_register,
+)
 
 from django.utils.html import format_html
 from django.templatetags.static import static
@@ -22,7 +25,9 @@ def editor_css():
 
 @hooks.register('insert_global_admin_css')
 def global_admin_css():
-    return format_html('<link rel="stylesheet" href="{}">', static('kch-wagtail/global.css'))
+    return format_html(
+        '<link rel="stylesheet" href="{}">', static('kch-wagtail/global.css')
+    )
 
 
 class TrainingAdmin(ModelAdmin):
@@ -49,7 +54,11 @@ class NotebookAdmin(ModelAdmin):
 class RatioGroup(ModelAdminGroup):
     menu_icon = 'group'
     menu_label = 'Рацио'
-    items = (TrainingAdmin, SectionAdmin, NotebookAdmin,)
+    items = (
+        TrainingAdmin,
+        SectionAdmin,
+        NotebookAdmin,
+    )
 
 
 modeladmin_register(RatioGroup)

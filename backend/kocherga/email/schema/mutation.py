@@ -34,19 +34,13 @@ def member_from_info(info):
 
 @Mutation.field('myEmailResubscribe')
 def myEmailResubscribe(_, info):
-    member_from_info(info).set_status(
-        'pending',
-        check_old_status='unsubscribed'
-    )
+    member_from_info(info).set_status('pending', check_old_status='unsubscribed')
     return True
 
 
 @Mutation.field('myEmailUnsubscribe')
 def myEmailUnsubscribe(_, info):
-    member_from_info(info).set_status(
-        'unsubscribed',
-        check_old_status='subscribed'
-    )
+    member_from_info(info).set_status('unsubscribed', check_old_status='subscribed')
     return True
 
 

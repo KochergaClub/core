@@ -19,6 +19,4 @@ class Migration(migrations.Migration):
         ('mastermind_dating', '0015_vote_participant_p1'),
     ]
 
-    operations = [
-        migrations.RunPython(fill_participant_votes, lambda *args: None)
-    ]
+    operations = [migrations.RunPython(fill_participant_votes, lambda *args: None)]

@@ -17,7 +17,7 @@ def get_all_interests():
     LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
     return kocherga.mailchimp.api_call(
         'GET',
-        f"lists/{LIST_ID}/interest-categories/{get_interest_category_id()}/interests"
+        f"lists/{LIST_ID}/interest-categories/{get_interest_category_id()}/interests",
     )['interests']
 
 
@@ -43,34 +43,33 @@ def populate_main_list(users: List[User]):
         add_operation = {
             'method': 'POST',
             'path': f'lists/{LIST_ID}/members',
-            'body': json.dumps({
-                'email_type': 'html',
-                'email_address': user.email,
-                'status': 'subscribed',
-                'merge_fields': merge_fields,
-                'interests': {
-                    k['id']: True
-                    for k in get_all_interests()
-                },
-            }),
+            'body': json.dumps(
+                {
+                    'email_type': 'html',
+                    'email_address': user.email,
+                    'status': 'subscribed',
+                    'merge_fields': merge_fields,
+                    'interests': {k['id']: True for k in get_all_interests()},
+                }
+            ),
         }
         update_operation = {
             'method': 'PATCH',
             'path': f'lists/{LIST_ID}/members/{subscriber_hash}',
-            'body': json.dumps({
-                'email_type': 'html',
-                'email_address': user.email,
-                'merge_fields': merge_fields,
-                # Note that we update merge fields (i.e. cafe-manager's CARD_ID), but not interests,
-                # because users can update those on their own.
-            }),
+            'body': json.dumps(
+                {
+                    'email_type': 'html',
+                    'email_address': user.email,
+                    'merge_fields': merge_fields,
+                    # Note that we update merge fields (i.e. cafe-manager's CARD_ID), but not interests,
+                    # because users can update those on their own.
+                }
+            ),
         }
         operations.append(add_operation)
         operations.append(update_operation)
 
-    result = kocherga.mailchimp.api_call('POST', 'batches', {
-        'operations': operations
-    })
+    result = kocherga.mailchimp.api_call('POST', 'batches', {'operations': operations})
 
     batch_id = result['id']
 

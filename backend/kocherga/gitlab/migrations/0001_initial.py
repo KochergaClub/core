@@ -7,8 +7,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
@@ -19,9 +18,7 @@ class Migration(migrations.Migration):
                 ('created_ts', models.IntegerField()),
                 ('updated_ts', models.IntegerField()),
             ],
-            options={
-                'db_table': 'gitlab_issues',
-            },
+            options={'db_table': 'gitlab_issues',},
         ),
         migrations.CreateModel(
             name='IssueNote',
@@ -31,8 +28,6 @@ class Migration(migrations.Migration):
                 ('created_ts', models.IntegerField()),
                 ('updated_ts', models.IntegerField()),
             ],
-            options={
-                'db_table': 'gitlab_issue_notes',
-            },
+            options={'db_table': 'gitlab_issue_notes',},
         ),
     ]

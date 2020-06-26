@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -38,7 +39,9 @@ def load_df_from_google():
         }
     )
     if '' in df.columns:
-        df = df.drop(columns='')  # extra comments in empty columns can break the importer
+        df = df.drop(
+            columns=''
+        )  # extra comments in empty columns can break the importer
 
     return df
 
@@ -48,7 +51,11 @@ class Importer(kocherga.importer.base.FullImporter):
         logger.info('Loading cashier data from google')
         df = load_df_from_google()
 
-        int_fields = [f.name for f in CashierItem._meta.get_fields() if type(f) == models.fields.IntegerField]
+        int_fields = [
+            f.name
+            for f in CashierItem._meta.get_fields()
+            if type(f) == models.fields.IntegerField
+        ]
 
         logger.info('Saving cashier items to DB')
         for i, row in enumerate(df.to_dict('records')):

@@ -25,9 +25,9 @@ class Customer(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
-        null=True,  # FIXME
+        null=True,
         blank=True,
-        related_name='cm2_customer',
+        related_name='cm2_customer',  # FIXME
     )
 
     objects = CustomerQuerySet.as_manager()

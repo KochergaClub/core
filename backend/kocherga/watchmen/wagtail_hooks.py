@@ -1,5 +1,8 @@
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, ModelAdminGroup, modeladmin_register)
+    ModelAdmin,
+    ModelAdminGroup,
+    modeladmin_register,
+)
 
 from . import models
 from kocherga.watchmen_routine.wagtail_hooks import TaskAdmin, RewardImageAdmin
@@ -15,7 +18,11 @@ class GradeAdmin(ModelAdmin):
 class WatchmanGroup(ModelAdminGroup):
     menu_icon = 'group'
     menu_label = 'Админы'
-    items = (TaskAdmin, RewardImageAdmin, GradeAdmin, )
+    items = (
+        TaskAdmin,
+        RewardImageAdmin,
+        GradeAdmin,
+    )
 
 
 modeladmin_register(WatchmanGroup)

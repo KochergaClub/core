@@ -1,11 +1,18 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import urllib.parse
 
 import django.core.exceptions
 from django.core.validators import validate_email
-from django.contrib.auth import models as auth_models, get_user_model, login, logout, authenticate
+from django.contrib.auth import (
+    models as auth_models,
+    get_user_model,
+    login,
+    logout,
+    authenticate,
+)
 from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -37,7 +44,9 @@ def create_mutations():
     def resolve_Login(_, info, input):
         credentials = input['credentials']
 
-        if 'token' not in credentials and not ('email' in credentials and 'password' in credentials):
+        if 'token' not in credentials and not (
+            'email' in credentials and 'password' in credentials
+        ):
             return {
                 'error': 'One of `token` and `email`+`password` must be set',
             }
@@ -83,9 +92,7 @@ def create_mutations():
 
         if old_password:
             if not user.check_password(old_password):
-                return {
-                    'error': "Неверный старый пароль."
-                }
+                return {'error': "Неверный старый пароль."}
         else:
             if user.has_usable_password():
                 return {
@@ -103,32 +110,31 @@ def create_mutations():
         user.set_password(new_password)
         user.save()
 
-        return {
-            'ok': True
-        }
+        return {'ok': True}
 
     @Mutation.field("Logout")
     def resolve_Logout(_, info):
         logout(info.context)
-        return {
-            'ok': True
-        }
+        return {'ok': True}
 
     @Mutation.field("SendMagicLink")
     def resolve_SendMagicLink(_, info, input):
         email = input['email']
 
         magic_token = get_magic_token(email)
-        params_str = urllib.parse.urlencode({
-            'token': magic_token,
-            'next': input.get('next', '/'),
-        })
-        magic_link = info.context.build_absolute_uri('/login/magic-link' + '?' + params_str)
+        params_str = urllib.parse.urlencode(
+            {'token': magic_token, 'next': input.get('next', '/'),}
+        )
+        magic_link = info.context.build_absolute_uri(
+            '/login/magic-link' + '?' + params_str
+        )
 
         html_email_message = mjml2html(
             render_to_string('auth/email/login.mjml', {'magic_link': magic_link})
         )
-        plain_email_message = render_to_string('auth/email/login.txt', {'magic_link': magic_link})
+        plain_email_message = render_to_string(
+            'auth/email/login.txt', {'magic_link': magic_link}
+        )
 
         try:
             validate_email(email)
@@ -146,9 +152,7 @@ def create_mutations():
             recipient_list=[email],
         )
 
-        return {
-            'ok': True
-        }
+        return {'ok': True}
 
     return Mutation
 

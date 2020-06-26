@@ -17,8 +17,6 @@ class Migration(migrations.Migration):
                 ('access_token', models.CharField(max_length=100)),
                 ('refresh_token', models.CharField(max_length=100)),
             ],
-            options={
-                'db_table': 'tochka_auth',
-            },
+            options={'db_table': 'tochka_auth',},
         ),
     ]

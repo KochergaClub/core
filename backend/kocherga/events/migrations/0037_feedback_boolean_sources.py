@@ -12,14 +12,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='feedback',
-            name='source',
-        ),
+        migrations.RemoveField(model_name='feedback', name='source',),
         migrations.AddField(
             model_name='feedback',
             name='source_email',
-            field=models.BooleanField(default=False, verbose_name='Откуда / Почтовая рассылка'),
+            field=models.BooleanField(
+                default=False, verbose_name='Откуда / Почтовая рассылка'
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
@@ -49,7 +48,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='feedback',
             name='source_website',
-            field=models.BooleanField(default=False, verbose_name='Откуда / Сайт Кочерги'),
+            field=models.BooleanField(
+                default=False, verbose_name='Откуда / Сайт Кочерги'
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
@@ -60,26 +61,62 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='feedback',
             name='conductor_score',
-            field=kocherga.events.models.feedback.ScoreField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(10)], verbose_name='Насколько вы довольны работой ведущих?'),
+            field=kocherga.events.models.feedback.ScoreField(
+                blank=True,
+                null=True,
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(10),
+                ],
+                verbose_name='Насколько вы довольны работой ведущих?',
+            ),
         ),
         migrations.AlterField(
             model_name='feedback',
             name='content_score',
-            field=kocherga.events.models.feedback.ScoreField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(10)], verbose_name='Насколько вам было интересно содержание?'),
+            field=kocherga.events.models.feedback.ScoreField(
+                blank=True,
+                null=True,
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(10),
+                ],
+                verbose_name='Насколько вам было интересно содержание?',
+            ),
         ),
         migrations.AlterField(
             model_name='feedback',
             name='custom_source',
-            field=models.CharField(blank=True, max_length=1024, verbose_name='Откуда вы узнали про мероприятие? (свой вариант)'),
+            field=models.CharField(
+                blank=True,
+                max_length=1024,
+                verbose_name='Откуда вы узнали про мероприятие? (свой вариант)',
+            ),
         ),
         migrations.AlterField(
             model_name='feedback',
             name='overall_score',
-            field=kocherga.events.models.feedback.ScoreField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(10)], verbose_name='Насколько вам понравилось мероприятие в целом?'),
+            field=kocherga.events.models.feedback.ScoreField(
+                blank=True,
+                null=True,
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(10),
+                ],
+                verbose_name='Насколько вам понравилось мероприятие в целом?',
+            ),
         ),
         migrations.AlterField(
             model_name='feedback',
             name='recommend_score',
-            field=kocherga.events.models.feedback.ScoreField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(10)], verbose_name='Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?'),
+            field=kocherga.events.models.feedback.ScoreField(
+                blank=True,
+                null=True,
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(10),
+                ],
+                verbose_name='Насколько вероятно, что вы порекомендуете такое мероприятие знакомым?',
+            ),
         ),
     ]

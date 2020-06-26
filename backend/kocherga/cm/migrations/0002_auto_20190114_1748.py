@@ -18,7 +18,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='customer',
             name='gender',
-            field=models.CharField(blank=True, choices=[('unknown', 'unknown'), ('male', 'male'), ('female', 'female')], max_length=20),
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ('unknown', 'unknown'),
+                    ('male', 'male'),
+                    ('female', 'female'),
+                ],
+                max_length=20,
+            ),
         ),
         migrations.AlterField(
             model_name='subscriptionorder',

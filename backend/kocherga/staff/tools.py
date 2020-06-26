@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.contrib.auth import get_user_model
@@ -40,15 +41,15 @@ def find_member_by_email(email):
 
 
 def add_watchman(
-        short_name,
-        full_name,
-        email,
-        password,
-        vk,
-        gender,
-        skip_wiki=False,
-        skip_cm_customer=False,
-        skip_cm_user=False
+    short_name,
+    full_name,
+    email,
+    password,
+    vk,
+    gender,
+    skip_wiki=False,
+    skip_cm_customer=False,
+    skip_cm_user=False,
 ):
     if not email.endswith('@gmail.com'):
         raise APIException("Only @gmail.com emails are supported")
@@ -91,11 +92,9 @@ def add_watchman(
         logger.info(f'Creating wiki account')
         wiki = kocherga.wiki.get_wiki()
         wiki.api(action='query', meta='tokens', type='createaccount')
-        wiki_token = wiki.api(
-            action='query',
-            meta='tokens',
-            type='createaccount'
-        )['query']['tokens']['createaccounttoken']
+        wiki_token = wiki.api(action='query', meta='tokens', type='createaccount')[
+            'query'
+        ]['tokens']['createaccounttoken']
 
         wiki.post(
             action='createaccount',
@@ -117,19 +116,21 @@ def add_watchman(
         last_name=full_name.split(' ')[-1],
     )
     if not sc_response["ok"]:
-        if sc_response.get("error") in ("already_in_team_invited_user", "already_in_team"):
+        if sc_response.get("error") in (
+            "already_in_team_invited_user",
+            "already_in_team",
+        ):
             logger.info("Couldn't invite to Slack, already in team or invited")
         else:
-            raise APIException("Couldn't invite to Slack: " + sc_response.get('error', 'unknown error'))
+            raise APIException(
+                "Couldn't invite to Slack: " + sc_response.get('error', 'unknown error')
+            )
 
     cm_user = None
     if not skip_cm_user:
         logger.info(f'Adding to Cafe Manager')
         cm_user = kocherga.cm.tools.add_manager(
-            login=email.split('@')[0],
-            name=full_name,
-            password=password,
-            email=email,
+            login=email.split('@')[0], name=full_name, password=password, email=email,
         )
         member.cm_login = cm_user.login
     member.save()
@@ -140,11 +141,16 @@ def add_watchman(
     kocherga.watchmen.models.Watchman.objects.create(member=member)
 
     logger.info("Success! Time to send notifications")
-    html_message = markdown.markdown(render_to_string('staff/email/new_watchman.md', {
-        'full_name': full_name,
-        'password': password,
-        'cm_login': cm_user.login if cm_user else 'UNDEFINED',
-    }))
+    html_message = markdown.markdown(
+        render_to_string(
+            'staff/email/new_watchman.md',
+            {
+                'full_name': full_name,
+                'password': password,
+                'cm_login': cm_user.login if cm_user else 'UNDEFINED',
+            },
+        )
+    )
     send_mail(
         subject='Доступы в Кочергу',
         from_email='Кочерга <info@kocherga-club.ru>',

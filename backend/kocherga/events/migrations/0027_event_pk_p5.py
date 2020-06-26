@@ -5,7 +5,13 @@ from django.db import migrations
 def fill_event_fk(apps, schema_editor):
     Event = apps.get_model('events', 'Event')
 
-    for model_name in ('Ticket', 'Tag', 'VkAnnouncement', 'FbAnnouncement', 'TimepadAnnouncement'):
+    for model_name in (
+        'Ticket',
+        'Tag',
+        'VkAnnouncement',
+        'FbAnnouncement',
+        'TimepadAnnouncement',
+    ):
         model_class = apps.get_model('events', model_name)
         for obj in model_class.objects.all():
             event = Event.objects.get(google_id=obj.event_google_id)
@@ -21,7 +27,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(
-            fill_event_fk
-        ),
+        migrations.RunPython(fill_event_fk),
     ]

@@ -26,10 +26,9 @@ class PbxCall(models.Model):
 
 
 class PbxCallData(models.Model):
-    pbx_call = models.OneToOneField(PbxCall, on_delete=models.PROTECT, related_name='data')
+    pbx_call = models.OneToOneField(
+        PbxCall, on_delete=models.PROTECT, related_name='data'
+    )
     staff_member = models.ForeignKey(
-        Member,
-        null=True, blank=True,
-        on_delete=models.PROTECT,
-        related_name='+'
+        Member, null=True, blank=True, on_delete=models.PROTECT, related_name='+'
     )

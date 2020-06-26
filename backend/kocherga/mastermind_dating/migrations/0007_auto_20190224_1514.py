@@ -12,18 +12,24 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='present',
-            field=models.BooleanField(default=False),
+            model_name='user', name='present', field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
             model_name='vote',
             name='who',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='mastermind_dating.User'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='+',
+                to='mastermind_dating.User',
+            ),
         ),
         migrations.AlterField(
             model_name='vote',
             name='whom',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='mastermind_dating.User'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='+',
+                to='mastermind_dating.User',
+            ),
         ),
     ]

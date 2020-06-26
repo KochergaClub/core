@@ -9,13 +9,9 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='weeklydigest',
-            old_name='image',
-            new_name='image_old',
+            model_name='weeklydigest', old_name='image', new_name='image_old',
         ),
         migrations.RenameField(
-            model_name='weeklydigest',
-            old_name='wagtail_image',
-            new_name='image',
+            model_name='weeklydigest', old_name='wagtail_image', new_name='image',
         ),
     ]

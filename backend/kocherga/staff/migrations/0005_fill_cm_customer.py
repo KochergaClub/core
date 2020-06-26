@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 def fill_cm_customers(apps, schema_editor):
     Member = apps.get_model('staff', 'Member')
     Customer = apps.get_model('cm', 'Customer')

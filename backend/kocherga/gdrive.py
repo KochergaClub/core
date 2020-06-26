@@ -8,7 +8,9 @@ def gdrive():
 
 
 def parent_id(file_id):
-    parents = gdrive().files().get(fileId=file_id, fields='parents').execute()['parents']
+    parents = (
+        gdrive().files().get(fileId=file_id, fields='parents').execute()['parents']
+    )
     return parents[0]
 
 
@@ -50,10 +52,7 @@ def upload_file(local_filename, google_filename, folder_id):
         mimetype = 'application/pdf'
     media = MediaFileUpload(local_filename, mimetype=mimetype)
 
-    (gdrive()
-        .files()
-        .create(body=file_metadata, media_body=media)
-        .execute())
+    (gdrive().files().create(body=file_metadata, media_body=media).execute())
 
 
 def gdoc_to_pdf(file_id):
@@ -71,9 +70,5 @@ def gdoc_to_pdf(file_id):
 
 def share_to_public(folder_id):
     gdrive().permissions().create(
-        fileId=folder_id,
-        body={
-            'role': 'reader',
-            'type': 'everyone',
-        }
+        fileId=folder_id, body={'role': 'reader', 'type': 'everyone',}
     ).execute()

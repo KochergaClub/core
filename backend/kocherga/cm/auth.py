@@ -20,10 +20,7 @@ def update_cookies():
     cookies = get_new_cookies(auth["login"], auth["password"])
 
     models.Auth.objects.get_or_create(
-        id=1,
-        defaults={
-            'cookies': json.dumps(cookies.get_dict())
-        }
+        id=1, defaults={'cookies': json.dumps(cookies.get_dict())}
     )
 
 

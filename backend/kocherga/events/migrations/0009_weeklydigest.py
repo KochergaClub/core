@@ -13,12 +13,44 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='WeeklyDigest',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('start', models.DateField(verbose_name='Дата начала недели')),
-                ('mailchimp_id', models.CharField(blank=True, max_length=100, null=True, verbose_name='ID кампании в Mailchimp')),
-                ('mailchimp_sent', models.BooleanField(default=False, verbose_name='Mailchimp-кампания отправлена')),
-                ('telegram_id', models.CharField(blank=True, max_length=100, null=True, verbose_name='ID сообщения в Telegram')),
-                ('vk_id', models.CharField(max_length=100, verbose_name='ID поста в VK')),
+                (
+                    'mailchimp_id',
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name='ID кампании в Mailchimp',
+                    ),
+                ),
+                (
+                    'mailchimp_sent',
+                    models.BooleanField(
+                        default=False, verbose_name='Mailchimp-кампания отправлена'
+                    ),
+                ),
+                (
+                    'telegram_id',
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name='ID сообщения в Telegram',
+                    ),
+                ),
+                (
+                    'vk_id',
+                    models.CharField(max_length=100, verbose_name='ID поста в VK'),
+                ),
             ],
         ),
     ]

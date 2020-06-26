@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import hashlib
@@ -29,11 +30,13 @@ def create_new_mailchimp_training_group(category_id, training):
 
 def import_ticket_to_mailchimp(ticket, group_id):
     md5 = hashlib.md5(ticket.email.lower().encode()).hexdigest()
-    logger.info({
-        "FNAME": ticket.first_name,
-        "LNAME": ticket.last_name,
-        "USER_ID": ticket.uid(),
-    })
+    logger.info(
+        {
+            "FNAME": ticket.first_name,
+            "LNAME": ticket.last_name,
+            "USER_ID": ticket.uid(),
+        }
+    )
     response = kocherga.mailchimp.api_call(
         "PUT",
         f"lists/{LIST_ID}/members/{md5}",
@@ -53,7 +56,9 @@ def import_ticket_to_mailchimp(ticket, group_id):
 
 
 def training_category_id():
-    category = kocherga.mailchimp.interest_category_by_name(MAILCHIMP_TRAINING_CATEGORY_NAME)
+    category = kocherga.mailchimp.interest_category_by_name(
+        MAILCHIMP_TRAINING_CATEGORY_NAME
+    )
     return category['id']
 
 

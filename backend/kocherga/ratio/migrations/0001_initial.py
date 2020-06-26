@@ -8,32 +8,60 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Participant',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('email', models.EmailField(max_length=254)),
                 ('first_name', models.CharField(max_length=255)),
                 ('last_name', models.CharField(max_length=255)),
                 ('registration_date', models.DateField()),
-                ('status', models.CharField(choices=[('normal', 'Участник')], max_length=40)),
-                ('payment_type', models.CharField(choices=[('website', 'Сайт'), ('timepad', 'Timepad'), ('staff', 'Стафф'), ('stipend', 'Стипендия')], max_length=40)),
+                (
+                    'status',
+                    models.CharField(choices=[('normal', 'Участник')], max_length=40),
+                ),
+                (
+                    'payment_type',
+                    models.CharField(
+                        choices=[
+                            ('website', 'Сайт'),
+                            ('timepad', 'Timepad'),
+                            ('staff', 'Стафф'),
+                            ('stipend', 'Стипендия'),
+                        ],
+                        max_length=40,
+                    ),
+                ),
                 ('comment', models.TextField()),
             ],
         ),
         migrations.CreateModel(
             name='Training',
             fields=[
-                ('name', models.CharField(max_length=255, primary_key=True, serialize=False)),
+                (
+                    'name',
+                    models.CharField(max_length=255, primary_key=True, serialize=False),
+                ),
             ],
         ),
         migrations.AddField(
             model_name='participant',
             name='training',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='participants', to='ratio.Training'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='participants',
+                to='ratio.Training',
+            ),
         ),
     ]

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from random import randint
@@ -29,25 +30,29 @@ class MeetingManager(models.Manager):
                 'start_time': dateutil.parser.isoparse(result['start_time']),
                 'duration': result['duration'],
                 'join_url': result.get('join_url', ''),
-            }
+            },
         )
         return meeting
 
     def schedule(self, topic, start_dt, duration):
-        result = api_call('POST', f'users/{ANNOUNCER_USER_ID}/meetings', {
-            "topic": topic,
-            "type": 2,
-            "start_time": start_dt.strftime('%Y-%m-%dT%H:%M:00Z'),
-            # "timezone": "Europe/Moscow",
-            "duration": duration,
-            "password": randint(1, 999999),
-            "settings": {
-                "host_video": True,
-                "participant_video": True,
-                "join_before_host": True,
-                "waiting_room": False,
-            }
-        })
+        result = api_call(
+            'POST',
+            f'users/{ANNOUNCER_USER_ID}/meetings',
+            {
+                "topic": topic,
+                "type": 2,
+                "start_time": start_dt.strftime('%Y-%m-%dT%H:%M:00Z'),
+                # "timezone": "Europe/Moscow",
+                "duration": duration,
+                "password": randint(1, 999999),
+                "settings": {
+                    "host_video": True,
+                    "participant_video": True,
+                    "join_before_host": True,
+                    "waiting_room": False,
+                },
+            },
+        )
 
         return self.create(
             zoom_id=result['id'],
@@ -85,18 +90,13 @@ class Meeting(models.Model):
 
     @property
     def participants_count(self):
-        return sum(
-            instance.participants.count()
-            for instance in self.instances.all()
-        )
+        return sum(instance.participants.count() for instance in self.instances.all())
 
 
 class MeetingInstance(models.Model):
     zoom_uuid = models.CharField(max_length=100)
     meeting = models.ForeignKey(
-        Meeting,
-        on_delete=models.CASCADE,
-        related_name='instances',
+        Meeting, on_delete=models.CASCADE, related_name='instances',
     )
 
     start_time = models.DateTimeField()
@@ -109,11 +109,7 @@ class MeetingInstance(models.Model):
 
         logger.info(f'fetching participants for {uuid}')
         result = api_call(
-            'GET',
-            f'report/meetings/{uuid}/participants',
-            {
-                'page_size': 300
-            }
+            'GET', f'report/meetings/{uuid}/participants', {'page_size': 300}
         )
 
         if result['page_count'] != 1:
@@ -130,15 +126,13 @@ class MeetingInstance(models.Model):
                     'join_time': dateutil.parser.isoparse(item['join_time']),
                     'leave_time': dateutil.parser.isoparse(item['leave_time']),
                     'duration': item['duration'],
-                }
+                },
             )
 
 
 class Participant(models.Model):
     meeting_instance = models.ForeignKey(
-        MeetingInstance,
-        on_delete=models.CASCADE,
-        related_name='participants'
+        MeetingInstance, on_delete=models.CASCADE, related_name='participants'
     )
 
     # Empirically, id ("Participant UUID" in Zoom API docs) stays the same for the same meeting,

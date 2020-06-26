@@ -15,6 +15,44 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='homepage',
             name='body',
-            field=wagtail.core.fields.StreamField([('basic_header', wagtail.core.blocks.CharBlock(group='basic')), ('basic_paragraph', wagtail.core.blocks.RichTextBlock(group='basic')), ('grey', wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock()), ('text', wagtail.core.blocks.RichTextBlock(required=False))], group='style')), ('columns_basic', wagtail.core.blocks.ListBlock(wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock()), ('text', wagtail.core.blocks.RichTextBlock(required=False))]), group='columns'))]),
+            field=wagtail.core.fields.StreamField(
+                [
+                    ('basic_header', wagtail.core.blocks.CharBlock(group='basic')),
+                    (
+                        'basic_paragraph',
+                        wagtail.core.blocks.RichTextBlock(group='basic'),
+                    ),
+                    (
+                        'grey',
+                        wagtail.core.blocks.StructBlock(
+                            [
+                                ('header', wagtail.core.blocks.CharBlock()),
+                                (
+                                    'text',
+                                    wagtail.core.blocks.RichTextBlock(required=False),
+                                ),
+                            ],
+                            group='style',
+                        ),
+                    ),
+                    (
+                        'columns_basic',
+                        wagtail.core.blocks.ListBlock(
+                            wagtail.core.blocks.StructBlock(
+                                [
+                                    ('header', wagtail.core.blocks.CharBlock()),
+                                    (
+                                        'text',
+                                        wagtail.core.blocks.RichTextBlock(
+                                            required=False
+                                        ),
+                                    ),
+                                ]
+                            ),
+                            group='columns',
+                        ),
+                    ),
+                ]
+            ),
         ),
     ]

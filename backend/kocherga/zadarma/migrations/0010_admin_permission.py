@@ -12,10 +12,22 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='call',
-            options={'ordering': ['-ts'], 'permissions': (('listen', 'Может слушать звонки'), ('admin', 'Может администрировать звонки')), 'verbose_name': 'Звонок', 'verbose_name_plural': 'Звонки'},
+            options={
+                'ordering': ['-ts'],
+                'permissions': (
+                    ('listen', 'Может слушать звонки'),
+                    ('admin', 'Может администрировать звонки'),
+                ),
+                'verbose_name': 'Звонок',
+                'verbose_name_plural': 'Звонки',
+            },
         ),
         migrations.AlterModelOptions(
             name='pbxcall',
-            options={'ordering': ['-ts'], 'verbose_name': 'АТС-звонок', 'verbose_name_plural': 'АТС-звонки'},
+            options={
+                'ordering': ['-ts'],
+                'verbose_name': 'АТС-звонок',
+                'verbose_name_plural': 'АТС-звонки',
+            },
         ),
     ]

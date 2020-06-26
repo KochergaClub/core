@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='task',
-            name='name',
-            field=models.TextField(max_length=1024),
+            model_name='task', name='name', field=models.TextField(max_length=1024),
         ),
     ]

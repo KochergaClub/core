@@ -12,6 +12,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='member',
-            options={'permissions': (('manage', 'Может управлять стаффом и доступами'),), 'verbose_name': 'Сотрудник', 'verbose_name_plural': 'Сотрудники'},
+            options={
+                'permissions': (('manage', 'Может управлять стаффом и доступами'),),
+                'verbose_name': 'Сотрудник',
+                'verbose_name_plural': 'Сотрудники',
+            },
         ),
     ]

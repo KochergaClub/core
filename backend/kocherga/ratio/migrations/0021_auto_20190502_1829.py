@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticket',
             name='registration_date',
-            field=models.DateField(blank=True, null=True, verbose_name='Дата регистрации'),
+            field=models.DateField(
+                blank=True, null=True, verbose_name='Дата регистрации'
+            ),
         ),
     ]

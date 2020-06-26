@@ -20,10 +20,7 @@ def get(endpoint: str, fields=None, token=None) -> dict:
     if fields:
         params['fields'] = ','.join(fields)
 
-    r = requests.get(
-        f"{SERVER}/{API_VERSION}/{endpoint}",
-        params=params,
-    )
+    r = requests.get(f"{SERVER}/{API_VERSION}/{endpoint}", params=params,)
     r.raise_for_status()
     return r.json()
 
@@ -32,11 +29,7 @@ def post(endpoint: str, data={}, token=None) -> dict:
     params = {}
     params['access_token'] = token or Auth.objects.get().access_token
 
-    r = requests.post(
-        f"{SERVER}/{API_VERSION}/{endpoint}",
-        params=params,
-        json=data,
-    )
+    r = requests.post(f"{SERVER}/{API_VERSION}/{endpoint}", params=params, json=data,)
     r.raise_for_status()
     return r.json()
 

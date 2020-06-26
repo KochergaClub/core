@@ -14,17 +14,43 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Activity',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('day', models.PositiveSmallIntegerField(verbose_name='День')),
                 ('time', models.TimeField(verbose_name='Время')),
                 ('name', models.CharField(max_length=255, verbose_name='Название')),
-                ('trainer', models.CharField(blank=True, max_length=255, verbose_name='Ведущий')),
-                ('training', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='schedule', to='ratio.Training', verbose_name='Тренинг')),
+                (
+                    'trainer',
+                    models.CharField(
+                        blank=True, max_length=255, verbose_name='Ведущий'
+                    ),
+                ),
+                (
+                    'training',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='schedule',
+                        to='ratio.Training',
+                        verbose_name='Тренинг',
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
             model_name='ticket',
             name='status',
-            field=models.CharField(choices=[('normal', 'Участник'), ('canceled', 'Отказ')], default='normal', max_length=40, verbose_name='Статус'),
+            field=models.CharField(
+                choices=[('normal', 'Участник'), ('canceled', 'Отказ')],
+                default='normal',
+                max_length=40,
+                verbose_name='Статус',
+            ),
         ),
     ]

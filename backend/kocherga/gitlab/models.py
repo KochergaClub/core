@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import dateutil.parser
@@ -70,7 +71,6 @@ def main_project():
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
-
     def get_initial_dt(self):
         return datetime(2017, 10, 1, tzinfo=TZ)
 

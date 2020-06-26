@@ -3,5 +3,7 @@ from .fb import FbAnnouncement
 from .timepad import TimepadAnnouncement
 
 __all__ = [
-    'VkAnnouncement', 'FbAnnouncement', 'TimepadAnnouncement',
+    'VkAnnouncement',
+    'FbAnnouncement',
+    'TimepadAnnouncement',
 ]

@@ -12,6 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='scheduleitem',
-            options={'permissions': (('manage', 'Может управлять админским расписанием'),)},
+            options={
+                'permissions': (('manage', 'Может управлять админским расписанием'),)
+            },
         ),
     ]

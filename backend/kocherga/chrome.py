@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import contextlib
@@ -16,7 +17,7 @@ def get_websocket():
         f"http://{ENDPOINT}/json/version",
         headers={
             'Host': '',  # see https://github.com/cyrus-and/chrome-remote-interface/issues/340#issuecomment-384598817
-        }
+        },
     )
     r.raise_for_status()
 

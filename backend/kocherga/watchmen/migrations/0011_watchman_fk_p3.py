@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='shift',
-            name='watchman_old',
-        ),
+        migrations.RemoveField(model_name='shift', name='watchman_old',),
     ]

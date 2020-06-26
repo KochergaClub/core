@@ -1,9 +1,14 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.utils import timezone
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
 
 
 class UserManager(BaseUserManager):
@@ -46,6 +51,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        permissions = (
-            ('audit', 'Может проверять права доступа'),
-        )
+        permissions = (('audit', 'Может проверять права доступа'),)

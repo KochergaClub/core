@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticket',
             name='last_name',
-            field=models.CharField(blank=True, max_length=255, null=True, verbose_name='Фамилия'),
+            field=models.CharField(
+                blank=True, max_length=255, null=True, verbose_name='Фамилия'
+            ),
         ),
     ]

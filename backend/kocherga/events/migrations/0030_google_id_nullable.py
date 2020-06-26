@@ -24,6 +24,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='uuid',
-            field=models.SlugField(default=kocherga.events.models.event.generate_uuid, unique=True),
+            field=models.SlugField(
+                default=kocherga.events.models.event.generate_uuid, unique=True
+            ),
         ),
     ]

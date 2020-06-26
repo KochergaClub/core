@@ -13,24 +13,24 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='cheque',
-            name='cashed_date',
-        ),
-        migrations.RemoveField(
-            model_name='cheque',
-            name='dt',
-        ),
+        migrations.RemoveField(model_name='cheque', name='cashed_date',),
+        migrations.RemoveField(model_name='cheque', name='dt',),
         migrations.AddField(
             model_name='cheque',
             name='created_dt',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now, verbose_name='Дата создания'),
+            field=models.DateTimeField(
+                auto_now_add=True,
+                default=django.utils.timezone.now,
+                verbose_name='Дата создания',
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='cheque',
             name='paid_dt',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Дата получения'),
+            field=models.DateTimeField(
+                blank=True, null=True, verbose_name='Дата получения'
+            ),
         ),
         migrations.AlterField(
             model_name='cheque',
@@ -45,6 +45,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cheque',
             name='whom',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cheques', to=settings.AUTH_USER_MODEL, verbose_name='Кому'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='cheques',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Кому',
+            ),
         ),
     ]

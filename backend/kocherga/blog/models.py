@@ -49,9 +49,7 @@ class BlogPostAuthor(Orderable):
     name = models.CharField('Имя', max_length=80)
     description = models.TextField('Описание', blank=True)
     image = models.ForeignKey(
-        'kocherga_wagtail.CustomImage',
-        on_delete=models.PROTECT,
-        related_name='+',
+        'kocherga_wagtail.CustomImage', on_delete=models.PROTECT, related_name='+',
     )
 
     panels = [

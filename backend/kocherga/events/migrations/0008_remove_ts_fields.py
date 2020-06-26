@@ -10,26 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='event',
-            name='asked_for_visitors_ts',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='created_ts',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='end_ts',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='start_ts',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='updated_ts',
-        ),
+        migrations.RemoveField(model_name='event', name='asked_for_visitors_ts',),
+        migrations.RemoveField(model_name='event', name='created_ts',),
+        migrations.RemoveField(model_name='event', name='end_ts',),
+        migrations.RemoveField(model_name='event', name='start_ts',),
+        migrations.RemoveField(model_name='event', name='updated_ts',),
         migrations.AlterField(
             model_name='event',
             name='creator',

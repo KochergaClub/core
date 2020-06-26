@@ -12,11 +12,17 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='activity',
-            options={'ordering': ('training_day__training__date', 'training_day__date', 'time'), 'verbose_name': 'Активность', 'verbose_name_plural': 'Активности'},
+            options={
+                'ordering': (
+                    'training_day__training__date',
+                    'training_day__date',
+                    'time',
+                ),
+                'verbose_name': 'Активность',
+                'verbose_name_plural': 'Активности',
+            },
         ),
         migrations.RenameField(
-            model_name='activity',
-            old_name='day_fk',
-            new_name='training_day',
+            model_name='activity', old_name='day_fk', new_name='training_day',
         ),
     ]

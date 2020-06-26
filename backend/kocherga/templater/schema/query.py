@@ -8,10 +8,7 @@ Query = QueryType()
 @Query.field('imageTemplatesAll')
 def resolve_image_templates_all(_, info):
     names = models.list_templates()
-    return [
-        models.Template.by_name(name)
-        for name in names
-    ]
+    return [models.Template.by_name(name) for name in names]
 
 
 @Query.field('imageTemplateBySlug')

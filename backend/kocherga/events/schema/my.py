@@ -14,8 +14,10 @@ def resolve_tickets(obj, info, **pager):
     qs = models.Ticket.objects.filter(
         user=info.context.user,
         # only future tickets are supported for now
-        event__start__gte=datetime.combine(datetime.today().date(), time.min, tzinfo=TZ),
-        status='ok'
+        event__start__gte=datetime.combine(
+            datetime.today().date(), time.min, tzinfo=TZ
+        ),
+        status='ok',
     )
 
     return qs.relay_page(**pager, order='event__start')

@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='cohort',
-            name='event_google_id',
-        ),
+        migrations.RemoveField(model_name='cohort', name='event_google_id',),
     ]

@@ -11,14 +11,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='training',
-            name='name',
-            field=models.CharField(max_length=255),
+            model_name='training', name='name', field=models.CharField(max_length=255),
         ),
         migrations.AddField(
             model_name='training',
             name='id',
-            field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+            field=models.AutoField(
+                auto_created=True, primary_key=True, serialize=False, verbose_name='ID'
+            ),
             preserve_default=False,
         ),
     ]

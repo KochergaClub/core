@@ -19,8 +19,7 @@ def resolve_watchmenCreateWatchman(_, info, params):
 def resolve_watchmenUpdateShift(_, info, params):
     # TODO - move to model
     (shift, _) = models.Shift.objects.get_or_create(
-        date=params['date'],
-        shift=params['shift'],
+        date=params['date'], shift=params['shift'],
     )
     shift.is_night = params.get('is_night', False)
     if 'watchman_id' in params:
@@ -32,9 +31,7 @@ def resolve_watchmenUpdateShift(_, info, params):
     shift.save()
 
     async_to_sync(channels.layers.get_channel_layer().group_send)(
-        'watchmen_schedule_group', {
-            'type': 'notify.update',
-        }
+        'watchmen_schedule_group', {'type': 'notify.update',}
     )
     return shift
 

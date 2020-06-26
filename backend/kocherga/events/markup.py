@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -88,7 +89,6 @@ def parse_to_parts(description: str) -> List[Part]:
 
 
 class Markup:
-
     def __init__(self, text):
         self.text = text
 

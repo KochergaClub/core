@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -8,7 +9,11 @@ KchUser = get_user_model()
 
 
 class TelegramUser(models.Model):
-    user = models.OneToOneField(KchUser, on_delete=models.CASCADE, related_name='mastermind_dating_telegram_user')
+    user = models.OneToOneField(
+        KchUser,
+        on_delete=models.CASCADE,
+        related_name='mastermind_dating_telegram_user',
+    )
 
     telegram_uid = models.CharField(max_length=100, unique=True)
     chat_id = models.IntegerField(unique=True)

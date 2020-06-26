@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -8,7 +9,9 @@ import json
 import requests
 import hashlib
 
-MAILCHIMP_API = f"https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.api.mailchimp.com/3.0"
+MAILCHIMP_API = (
+    f"https://{settings.KOCHERGA_MAILCHIMP_DATACENTER}.api.mailchimp.com/3.0"
+)
 MAILCHIMP_API_KEY = settings.KOCHERGA_MAILCHIMP_API_KEY
 MAIN_LIST_ID = settings.KOCHERGA_MAILCHIMP_MAIN_LIST_ID
 
@@ -63,7 +66,9 @@ def api_call(method, url, data={}):
         raise Exception(f"Unknown method {method}")
 
     if r.status_code >= 400:
-        raise MailchimpException(f"Error: {r.status_code} {r.reason}\n\n{r.text}", r.status_code)
+        raise MailchimpException(
+            f"Error: {r.status_code} {r.reason}\n\n{r.text}", r.status_code
+        )
     r.raise_for_status()
 
     return r.json()
@@ -88,11 +93,7 @@ def api_call_get_paginated(url, key):
 
 def folder_id_by_name(name):
     folders = api_call_get_paginated('campaign-folders', 'folders')
-    return next(
-        f['id']
-        for f in folders
-        if f['name'] == name
-    )
+    return next(f['id'] for f in folders if f['name'] == name)
 
 
 def wait_for_batch(batch_id):
@@ -104,9 +105,7 @@ def wait_for_batch(batch_id):
             {
                 'fields': 'status,total_operations,finished_operations,errored_operations,response_body_url',
             },
-            headers={
-                'Authorization': 'apikey ' + MAILCHIMP_API_KEY,
-            },
+            headers={'Authorization': 'apikey ' + MAILCHIMP_API_KEY,},
         )
 
         body = json.loads(r.text)
@@ -124,13 +123,7 @@ def create_campaign_folder(name):
         # folder already exists
         return
 
-    api_call(
-        'POST',
-        '/campaign-folders',
-        {
-            'name': name,
-        }
-    )
+    api_call('POST', '/campaign-folders', {'name': name,})
 
 
 # Used in setup only
@@ -141,13 +134,7 @@ def create_file_folder(name):
         # folder already exists
         return
 
-    api_call(
-        'POST',
-        '/file-manager/folders',
-        {
-            'name': name,
-        }
-    )
+    api_call('POST', '/file-manager/folders', {'name': name,})
 
 
 def segment_by_name(name, list_id=MAIN_LIST_ID):
@@ -160,7 +147,9 @@ def segment_by_name(name, list_id=MAIN_LIST_ID):
 
 
 def interest_category_by_name(name, list_id=MAIN_LIST_ID):
-    items = api_call_get_paginated(f'/lists/{list_id}/interest-categories', 'categories')
+    items = api_call_get_paginated(
+        f'/lists/{list_id}/interest-categories', 'categories'
+    )
 
     try:
         return next(i for i in items if i['title'] == name)
@@ -170,16 +159,14 @@ def interest_category_by_name(name, list_id=MAIN_LIST_ID):
 
 def get_interests(category_id, list_id=MAIN_LIST_ID):
     items = api_call_get_paginated(
-        f'/lists/{list_id}/interest-categories/{category_id}/interests',
-        'interests'
+        f'/lists/{list_id}/interest-categories/{category_id}/interests', 'interests'
     )
     return items
 
 
 def interest_by_name(category_id, name, list_id=MAIN_LIST_ID):
     items = api_call_get_paginated(
-        f'/lists/{list_id}/interest-categories/{category_id}/interests',
-        'interests'
+        f'/lists/{list_id}/interest-categories/{category_id}/interests', 'interests'
     )
 
     try:
@@ -204,7 +191,4 @@ def subscriber_hash(email: str) -> str:
 
 def get_member_by_email(email: str):
     email_hash = subscriber_hash(email)
-    return api_call(
-        'GET',
-        f'lists/{MAIN_LIST_ID}/members/{email_hash}'
-    )
+    return api_call('GET', f'lists/{MAIN_LIST_ID}/members/{email_hash}')

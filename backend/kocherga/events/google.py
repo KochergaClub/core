@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import datetime
@@ -38,7 +39,7 @@ def events_with_condition(calendar_id, **kwargs) -> List[Dict[str, Any]]:
         events.extend(
             events_with_condition(
                 calendar_id,
-                **{**kwargs, **{"pageToken": eventsResult["nextPageToken"]}}
+                **{**kwargs, **{"pageToken": eventsResult["nextPageToken"]}},
             )
         )
 

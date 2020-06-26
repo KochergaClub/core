@@ -24,7 +24,10 @@ def split_message_into_chunks_by_separator(message, separator):
 
     chunks = []
     for paragraph in paragraphs:
-        if chunks and len(chunks[-1]) + len(separator) + len(paragraph) <= MAX_MESSAGE_SIZE:
+        if (
+            chunks
+            and len(chunks[-1]) + len(separator) + len(paragraph) <= MAX_MESSAGE_SIZE
+        ):
             chunks[-1] += separator + paragraph
         else:
             chunks.append(paragraph)
@@ -46,7 +49,10 @@ def split_message_into_chunks(message):
         return chunks
 
     # ok, we'll just have to break the message in a fixed position
-    return [message[i:i + MAX_MESSAGE_SIZE] for i in range(0, len(message), MAX_MESSAGE_SIZE)]
+    return [
+        message[i : i + MAX_MESSAGE_SIZE]
+        for i in range(0, len(message), MAX_MESSAGE_SIZE)
+    ]
 
 
 def post_to_channel(message):
@@ -90,9 +96,7 @@ def channel_message_link_by_id(message_id: str):
     # (I'll probably regret this later.)
     r = requests.get(
         f"https://api.telegram.org/bot{token}/getChat",
-        params={
-            'chat_id': get_channel_id(),
-        }
+        params={'chat_id': get_channel_id(),},
     )
     r.raise_for_status()
 

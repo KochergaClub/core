@@ -17,7 +17,6 @@ class Migration(migrations.Migration):
             options={'permissions': (('view_tickets', 'Может смотреть билеты'),)},
         ),
         migrations.AlterUniqueTogether(
-            name='ticket',
-            unique_together={('event', 'user')},
+            name='ticket', unique_together={('event', 'user')},
         ),
     ]

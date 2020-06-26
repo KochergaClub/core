@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import base64
@@ -46,10 +47,9 @@ class EventManager(models.Manager):
     def notify_update(self):
         def send_update():
             async_to_sync(channels.layers.get_channel_layer().group_send)(
-                'events_group', {
-                    'type': 'notify.update',
-                }
+                'events_group', {'type': 'notify.update',}
             )
+
         transaction.on_commit(send_update)
 
     def list_events(
@@ -57,7 +57,7 @@ class EventManager(models.Manager):
         date: datetime.date = None,
         from_date: datetime.date = None,
         to_date: datetime.date = None,
-        order_by = None,
+        order_by=None,
     ):
         order_args = None
         if order_by == "updated":
@@ -65,20 +65,20 @@ class EventManager(models.Manager):
         else:
             order_args = 'start'
 
-        query = (
-            self.get_queryset()
-            .filter(deleted=False)
-            .order_by(order_args)
-        )
+        query = self.get_queryset().filter(deleted=False).order_by(order_args)
 
         if date:
             from_date = to_date = date
 
         if from_date:
-            query = query.filter(start__gte = datetime.combine(from_date, time.min, tzinfo=TZ))
+            query = query.filter(
+                start__gte=datetime.combine(from_date, time.min, tzinfo=TZ)
+            )
 
         if to_date:
-            query = query.filter(start__lte = datetime.combine(to_date, time.max, tzinfo=TZ))
+            query = query.filter(
+                start__lte=datetime.combine(to_date, time.max, tzinfo=TZ)
+            )
 
         return query
 
@@ -88,13 +88,13 @@ class EventManager(models.Manager):
         query = (
             query
             # public events can contain raw description initially, so we rely on `published` flag
-            .filter(event_type = 'public', published = True)
+            .filter(event_type='public', published=True)
             # earlier events are not cleaned up yet
-            .filter(start__gte = datetime(2018, 6, 1, tzinfo=TZ))
+            .filter(start__gte=datetime(2018, 6, 1, tzinfo=TZ))
         )
 
         if tag:
-            query = query.filter(tags__name = tag)
+            query = query.filter(tags__name=tag)
 
         return query
 
@@ -139,64 +139,45 @@ class Event(models.Model):
         'EventPrototype',
         on_delete=models.PROTECT,
         related_name='all_events',
-        null=True, blank=True,
+        null=True,
+        blank=True,
     )
 
     project = models.ForeignKey(
         'projects.ProjectPage',
         on_delete=models.SET_NULL,
         related_name='events',
-        null=True, blank=True,
+        null=True,
+        blank=True,
     )
 
     visitors = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True
+        max_length=100, blank=True, null=True
     )  # not Integer, because it can take values such as 'no_record' or 'cancelled'
 
     asked_for_visitors = models.DateTimeField(null=True, blank=True)
 
     event_type = models.CharField(
         max_length=40,
-        choices=[
-            (x, x)
-            for x in ('public', 'private', 'unknown')
-        ],
-        default="unknown"
+        choices=[(x, x) for x in ('public', 'private', 'unknown')],
+        default="unknown",
     )
 
     registration_type = models.CharField(
-        max_length=20,
-        choices=[
-            (x, x)
-            for x in ('native', 'timepad')
-        ],
-        default='native'
+        max_length=20, choices=[(x, x) for x in ('native', 'timepad')], default='native'
     )
 
     pricing_type = models.CharField(
-        max_length=20,
-        choices=[
-            (x, x)
-            for x in ('anticafe', 'free')
-        ],
-        default='free'
+        max_length=20, choices=[(x, x) for x in ('anticafe', 'free')], default='free'
     )
 
     realm = models.CharField(
         max_length=40,
-        choices=[
-            (x, x)
-            for x in ('offline', 'online')
-        ],
+        choices=[(x, x) for x in ('offline', 'online')],
         default='online',
     )
 
-    zoom_link = models.URLField(
-        blank=True,
-        max_length=255,
-    )
+    zoom_link = models.URLField(blank=True, max_length=255,)
     zoom_meeting = models.OneToOneField(
         kocherga.zoom.models.Meeting,
         related_name='events',
@@ -210,7 +191,7 @@ class Event(models.Model):
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='+',
     )
 
     published = models.BooleanField(default=False)
@@ -231,9 +212,7 @@ class Event(models.Model):
         # TODO - move to kocherga.room.look_for_room_in_string(...)?
         for room in kocherga.room.all_rooms:
             if room in self.title.lower():
-                return (
-                    room
-                )  # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
+                return room  # TODO - check that the title is not something like "Кто-то лекционная или ГЭБ"
 
         return kocherga.room.unknown
 
@@ -245,9 +224,7 @@ class Event(models.Model):
 
     def add_image(self, fh):
         self.image = create_image_from_fh(
-            fh,
-            title=self.title,
-            basename=f'event-image-{self.uuid}',
+            fh, title=self.title, basename=f'event-image-{self.uuid}',
         )
         self.save()
 
@@ -268,10 +245,7 @@ class Event(models.Model):
     def delete(self):
         self.deleted = True
         async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'event_updates', {
-                'type': 'event.deleted',
-                'uuid': self.uuid,
-            }
+            'event_updates', {'type': 'event.deleted', 'uuid': self.uuid,}
         )
         self.save()
 
@@ -284,17 +258,15 @@ class Event(models.Model):
             layer = channels.layers.get_channel_layer()
 
             async_to_sync(layer.group_send)(
-                'event_updates', {
+                'event_updates',
+                {
                     'type': 'event.created' if adding else 'event.updated',
                     'uuid': self.uuid,
-                }
+                },
             )
 
     def tag_names(self):
-        return [
-            tag.name
-            for tag in self.tags.all()
-        ]
+        return [tag.name for tag in self.tags.all()]
 
     def public_tag_names(self):
         # only `ratio` tag is public for now
@@ -339,9 +311,9 @@ class Event(models.Model):
         assert not self.deleted
         assert self.realm == 'online'
         zoom_meeting = kocherga.zoom.models.Meeting.objects.schedule(
-            topic = self.title + ' | Кочерга',
-            start_dt = self.start,
-            duration = int((self.end - self.start).total_seconds() / 60),
+            topic=self.title + ' | Кочерга',
+            start_dt=self.start,
+            duration=int((self.end - self.start).total_seconds() / 60),
         )
         self.zoom_meeting = zoom_meeting
         self.set_zoom_link(zoom_meeting.join_url)
@@ -357,9 +329,11 @@ class Event(models.Model):
         if not match:
             raise Exception(f"Strange zoom_link: {self.zoom_link}")
 
-        self.zoom_meeting = kocherga.zoom.models.Meeting.objects.filter(
-            zoom_id=match.group(1)
-        ).order_by('-duration').first()
+        self.zoom_meeting = (
+            kocherga.zoom.models.Meeting.objects.filter(zoom_id=match.group(1))
+            .order_by('-duration')
+            .first()
+        )
 
         self.save()
 
@@ -375,6 +349,8 @@ class Event(models.Model):
                 raise Exception("Only public events can be published")
             if self.realm == 'online' and not self.zoom_link:
                 raise Exception("zoom_link must be set when publishing online events")
+
+
 #
 #        if self.event_type == 'public' and self.image and self.image.private:
 #            raise Exception("Public event images must be public too")
@@ -383,9 +359,7 @@ class Event(models.Model):
 class Tag(models.Model):
     class Meta:
         db_table = "event_tags"
-        unique_together = (
-            ('event', 'name'),
-        )
+        unique_together = (('event', 'name'),)
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 

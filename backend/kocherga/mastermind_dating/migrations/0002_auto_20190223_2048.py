@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='photo',
-            field=models.ImageField(blank=True, null=True, upload_to='whatever-deprecated'),
+            field=models.ImageField(
+                blank=True, null=True, upload_to='whatever-deprecated'
+            ),
         ),
     ]

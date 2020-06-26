@@ -9,10 +9,19 @@ from .. import models
 FIELDS = (
     'prototype_id',
     'project_slug',
-    'title', 'location', 'summary', 'description',
-    'timepad_category_code', 'timepad_prepaid_tickets', 'timing_description_override',
-    'vk_group', 'fb_group',
-    'weekday', 'hour', 'minute', 'length',
+    'title',
+    'location',
+    'summary',
+    'description',
+    'timepad_category_code',
+    'timepad_prepaid_tickets',
+    'timing_description_override',
+    'vk_group',
+    'fb_group',
+    'weekday',
+    'hour',
+    'minute',
+    'length',
     'image',
     'active',
     'canceled_dates',
@@ -26,7 +35,9 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
         fields = FIELDS
         read_only_fields = ('image', 'canceled_dates')
 
-    project_slug = serializers.CharField(source='project.slug', required=False, allow_blank=True)
+    project_slug = serializers.CharField(
+        source='project.slug', required=False, allow_blank=True
+    )
 
     tags = serializers.SerializerMethodField()
 
@@ -50,7 +61,9 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
             if project_slug == '':
                 prototype.project = None
             else:
-                prototype.project = kocherga.projects.models.ProjectPage.objects.get(slug=project_slug)
+                prototype.project = kocherga.projects.models.ProjectPage.objects.get(
+                    slug=project_slug
+                )
             prototype.save()
 
         return prototype
@@ -62,9 +75,7 @@ class EventPrototypeSerializer(serializers.ModelSerializer):
 class DetailedEventPrototypeSerializer(EventPrototypeSerializer):
     class Meta:
         model = models.EventPrototype
-        fields = FIELDS + (
-            'suggested',
-        )
+        fields = FIELDS + ('suggested',)
         read_only_fields = ('image', 'canceled_dates')
 
     suggested = serializers.SerializerMethodField()

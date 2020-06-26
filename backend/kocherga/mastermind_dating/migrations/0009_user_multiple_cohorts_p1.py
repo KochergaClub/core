@@ -23,5 +23,5 @@ class Migration(migrations.Migration):
             name='cohorts',
             field=models.ManyToManyField(to='mastermind_dating.Cohort'),
         ),
-        migrations.RunPython(fill_cohorts)
+        migrations.RunPython(fill_cohorts),
     ]

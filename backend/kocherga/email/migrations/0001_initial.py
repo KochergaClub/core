@@ -7,23 +7,49 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='MailchimpCategory',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('category_id', models.CharField(max_length=20, unique=True)),
                 ('title', models.CharField(max_length=1024)),
-                ('type', models.CharField(choices=[('checkboxes', 'checkboxes'), ('dropdown', 'dropdown'), ('radio', 'radio'), ('hidden', 'hidden')], max_length=40)),
+                (
+                    'type',
+                    models.CharField(
+                        choices=[
+                            ('checkboxes', 'checkboxes'),
+                            ('dropdown', 'dropdown'),
+                            ('radio', 'radio'),
+                            ('hidden', 'hidden'),
+                        ],
+                        max_length=40,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='MailchimpInterest',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('interest_id', models.CharField(max_length=20, unique=True)),
                 ('name', models.CharField(max_length=1024)),
                 ('subscriber_count', models.IntegerField()),

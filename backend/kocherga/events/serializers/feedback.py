@@ -30,9 +30,6 @@ class FeedbackSerializer(serializers.ModelSerializer):
         event_data = validated_data.pop('event')
         event = models.Event.objects.list_events().get(uuid=event_data['uuid'])
 
-        feedback = models.Feedback.objects.create(
-            event=event,
-            **validated_data,
-        )
+        feedback = models.Feedback.objects.create(event=event, **validated_data,)
 
         return feedback

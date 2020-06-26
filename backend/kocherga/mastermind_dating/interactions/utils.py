@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import asyncio
@@ -41,6 +42,7 @@ class Interaction:
     """
     :type parent Interaction
     """
+
     state_class = db.State
     parent = None
     awaits = []
@@ -90,7 +92,9 @@ class Interaction:
                 while dsp:
                     dsp = await dsp.on_update(update)
             except Exception:
-                logger.exception(f"Exception raised while processing an update {update}")
+                logger.exception(
+                    f"Exception raised while processing an update {update}"
+                )
 
         # noinspection PyAsyncCall
         asyncio.create_task(mow())

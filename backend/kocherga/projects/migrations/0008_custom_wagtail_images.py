@@ -25,12 +25,18 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectpage',
             name='body',
-            field=wagtail.core.fields.RichTextField(blank=True, verbose_name='Описание'),
+            field=wagtail.core.fields.RichTextField(
+                blank=True, verbose_name='Описание'
+            ),
         ),
         migrations.AlterField(
             model_name='projectpage',
             name='image',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='+', to='kocherga_wagtail.CustomImage'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='kocherga_wagtail.CustomImage',
+            ),
         ),
         migrations.AlterField(
             model_name='projectpage',

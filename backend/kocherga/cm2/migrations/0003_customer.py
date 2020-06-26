@@ -16,11 +16,31 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Customer',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('card_id', models.BigIntegerField(db_index=True, verbose_name='Номер карты')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'card_id',
+                    models.BigIntegerField(db_index=True, verbose_name='Номер карты'),
+                ),
                 ('first_name', models.CharField(max_length=100, verbose_name='Имя')),
                 ('last_name', models.CharField(max_length=100, verbose_name='Фамилия')),
-                ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='cm2_customer', to=settings.AUTH_USER_MODEL)),
+                (
+                    'user',
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='cm2_customer',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

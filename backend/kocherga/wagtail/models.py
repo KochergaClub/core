@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import datetime
@@ -62,12 +63,12 @@ class CustomImage(wagtail.images.models.AbstractImage):
 
 
 class CustomRendition(wagtail.images.models.AbstractRendition):
-    image = models.ForeignKey(CustomImage, related_name='renditions', on_delete=models.CASCADE)
+    image = models.ForeignKey(
+        CustomImage, related_name='renditions', on_delete=models.CASCADE
+    )
 
     class Meta:
-        unique_together = (
-            ('image', 'filter_spec', 'focal_point_key'),
-        )
+        unique_together = (('image', 'filter_spec', 'focal_point_key'),)
 
     @property
     def url(self):

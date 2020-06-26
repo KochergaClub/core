@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -24,7 +25,6 @@ signer = TimestampSigner()
 
 
 class State(dict):
-
     def __init__(self):
         super().__init__()
 
@@ -67,7 +67,10 @@ class Participant(models.Model):
     """
     Note that Participant is not a user! It's a user PLUS cohort.
     """
-    user = models.ForeignKey(KchUser, on_delete=models.CASCADE, related_name='mastermind_dating_participants')
+
+    user = models.ForeignKey(
+        KchUser, on_delete=models.CASCADE, related_name='mastermind_dating_participants'
+    )
     name = models.CharField(max_length=255, blank=True)
     desc = models.TextField(blank=True)
     photo = models.ImageField(null=True, blank=True, upload_to=photo_path)
@@ -80,16 +83,22 @@ class Participant(models.Model):
     telegram_uid = models.CharField(max_length=100, blank=True)
     chat_id = models.IntegerField(null=True, blank=True)
 
-    cohort = models.ForeignKey('Cohort', on_delete=models.CASCADE, related_name='participants')
+    cohort = models.ForeignKey(
+        'Cohort', on_delete=models.CASCADE, related_name='participants'
+    )
 
-    group = models.ForeignKey('Group', on_delete=models.PROTECT, related_name='participants', blank=True, null=True)
+    group = models.ForeignKey(
+        'Group',
+        on_delete=models.PROTECT,
+        related_name='participants',
+        blank=True,
+        null=True,
+    )
 
     objects = ParticipantManager()
 
     class Meta:
-        unique_together = (
-            ('user', 'cohort'),
-        )
+        unique_together = (('user', 'cohort'),)
 
     def get_telegram_uid(self):
         return self.user.mastermind_dating_telegram_user.telegram_uid
@@ -107,7 +116,6 @@ class Participant(models.Model):
         participant = self
 
         class EditState:
-
             def __enter__(self):
                 self.state = participant.get_state(type)
                 return self.state
@@ -146,19 +154,27 @@ class Participant(models.Model):
 
         bot_link = self.telegram_link()
         bot_token = str(self.generate_token(), 'utf-8')
-        start_time = timezone.localtime(self.cohort.event.start).strftime('%H:%M') if self.cohort.event else None
+        start_time = (
+            timezone.localtime(self.cohort.event.start).strftime('%H:%M')
+            if self.cohort.event
+            else None
+        )
 
-        message = render_to_string('mastermind_dating/email/bot_link.txt', {
-            'bot_link': bot_link,
-            'bot_token': bot_token,
-            'start_time': start_time,
-        })
+        message = render_to_string(
+            'mastermind_dating/email/bot_link.txt',
+            {'bot_link': bot_link, 'bot_token': bot_token, 'start_time': start_time,},
+        )
 
-        html = markdown.markdown(render_to_string('mastermind_dating/email/bot_link.md', {
-            'bot_link': bot_link,
-            'bot_token': bot_token,
-            'start_time': start_time,
-        }))
+        html = markdown.markdown(
+            render_to_string(
+                'mastermind_dating/email/bot_link.md',
+                {
+                    'bot_link': bot_link,
+                    'bot_token': bot_token,
+                    'start_time': start_time,
+                },
+            )
+        )
         send_mail(
             subject='Регистрация на мастермайнд-дейтинг',
             from_email='Кочерга <info@kocherga-club.ru>',

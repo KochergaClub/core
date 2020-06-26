@@ -15,16 +15,28 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='fbannouncement',
             name='event',
-            field=annoying.fields.AutoOneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='fb_announcement', to='events.Event'),
+            field=annoying.fields.AutoOneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='fb_announcement',
+                to='events.Event',
+            ),
         ),
         migrations.AlterField(
             model_name='timepadannouncement',
             name='event',
-            field=annoying.fields.AutoOneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='timepad_announcement', to='events.Event'),
+            field=annoying.fields.AutoOneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='timepad_announcement',
+                to='events.Event',
+            ),
         ),
         migrations.AlterField(
             model_name='vkannouncement',
             name='event',
-            field=annoying.fields.AutoOneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='vk_announcement', to='events.Event'),
+            field=annoying.fields.AutoOneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='vk_announcement',
+                to='events.Event',
+            ),
         ),
     ]

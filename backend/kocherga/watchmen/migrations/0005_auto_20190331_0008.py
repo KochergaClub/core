@@ -10,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameModel(
-            old_name='ScheduleItem',
-            new_name='Shift',
-        ),
+        migrations.RenameModel(old_name='ScheduleItem', new_name='Shift',),
     ]

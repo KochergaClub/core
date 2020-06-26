@@ -5,7 +5,9 @@ from .training import Training
 
 class TrainingDay(models.Model):
     date = models.DateField('Дата')
-    training = models.ForeignKey(Training, verbose_name='Тренинг', on_delete=models.CASCADE, related_name='days')
+    training = models.ForeignKey(
+        Training, verbose_name='Тренинг', on_delete=models.CASCADE, related_name='days'
+    )
 
     class Meta:
         ordering = ('date',)

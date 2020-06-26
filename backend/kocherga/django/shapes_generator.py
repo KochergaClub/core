@@ -42,7 +42,9 @@ def convert_field(field):
         result['min'] = 0
         result['max'] = 10
     elif field_cls == fields.related.ForeignKey:
-        result['type'] = 'fk'  # FIXME - not all foreign keys are numbers (but they probably should be)
+        result[
+            'type'
+        ] = 'fk'  # FIXME - not all foreign keys are numbers (but they probably should be)
     elif issubclass(field_cls, fields.IntegerField):
         result['type'] = 'number'
     elif field_cls == fields.AutoField:
@@ -67,7 +69,9 @@ def build_shape(serializer_class):
             continue  # skip for now, probably SerializerMethodField or something
         if '.' in field.source:
             if type(field) != rest_framework.serializers.SlugField:
-                raise Exception(f"Can't process field {field_name} for {serializer_class}")
+                raise Exception(
+                    f"Can't process field {field_name} for {serializer_class}"
+                )
             frontend_field = {
                 'name': field_name,
                 'type': 'string',
@@ -101,7 +105,10 @@ def build_shape(serializer_class):
                 elif return_type == bool:
                     frontend_field['type'] = 'boolean'
                 else:
-                    raise Exception("Got method field but can't interpret type. Return type: " + str(return_type))
+                    raise Exception(
+                        "Got method field but can't interpret type. Return type: "
+                        + str(return_type)
+                    )
 
             if not frontend_field:
                 continue  # skip for now
@@ -125,7 +132,9 @@ def generate_shapes_to_fh(fh):
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)
-    print("const shapes: { [k: string]: { [k: string]: FormShape } } = ", end='', file=fh)
+    print(
+        "const shapes: { [k: string]: { [k: string]: FormShape } } = ", end='', file=fh
+    )
 
     shapes = {}
 
@@ -142,9 +151,7 @@ def generate_shapes_to_fh(fh):
         shapes[app_label][model_name] = shape
 
     print(
-        json.dumps(shapes, indent=2, ensure_ascii=False),
-        end='',
-        file=fh,
+        json.dumps(shapes, indent=2, ensure_ascii=False), end='', file=fh,
     )
     print(';', file=fh)
     print('export default shapes;', file=fh)

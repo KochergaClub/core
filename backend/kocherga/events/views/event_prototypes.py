@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from rest_framework.views import APIView
@@ -12,17 +13,21 @@ from datetime import datetime
 from kocherga.dateutils import TZ
 
 from kocherga.events.models import EventPrototype
-from kocherga.events.serializers import EventSerializer, EventPrototypeSerializer, DetailedEventPrototypeSerializer
+from kocherga.events.serializers import (
+    EventSerializer,
+    EventPrototypeSerializer,
+    DetailedEventPrototypeSerializer,
+)
 
 from kocherga.api.common import ok
 
 
 class RootViewSet(
-        mixins.CreateModelMixin,
-        mixins.RetrieveModelMixin,
-        mixins.UpdateModelMixin,
-        mixins.ListModelMixin,
-        viewsets.GenericViewSet,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
 ):
     permission_classes = (IsAdminUser,)
     queryset = EventPrototype.objects.order_by('weekday').all()

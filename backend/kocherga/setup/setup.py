@@ -15,6 +15,7 @@
 # This module should provide the way to set up all of those (but does so only partially for now).
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 from .vk import setup_vk

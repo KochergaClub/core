@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from collections import defaultdict
@@ -24,12 +25,7 @@ class Manager(models.Manager):
         while d <= to_date:
             for shift_type in ShiftType.modern_shifts():
                 if shift_type.name not in (item.shift for item in date2items[d]):
-                    date2items[d].append(
-                        Shift(
-                            date=d,
-                            shift=shift_type.name,
-                        )
-                    )
+                    date2items[d].append(Shift(date=d, shift=shift_type.name,))
             d += timedelta(days=1)
 
         return sum(date2items.values(), [])
@@ -41,16 +37,11 @@ class Shift(models.Model):
     # TODO - rename to shift_type or shift_type_name
     shift = models.CharField(
         max_length=20,
-        choices=[
-            (shift_type.name, shift_type.name) for shift_type in ShiftType
-        ],
+        choices=[(shift_type.name, shift_type.name) for shift_type in ShiftType],
         editable=False,
     )
     watchman = models.ForeignKey(
-        Watchman,
-        null=True, blank=True,
-        on_delete=models.CASCADE,
-        related_name='+'
+        Watchman, null=True, blank=True, on_delete=models.CASCADE, related_name='+'
     )
     is_night = models.BooleanField(default=False)
 
@@ -71,9 +62,5 @@ class Shift(models.Model):
 
     class Meta:
         db_table = "watchmen_schedule"
-        unique_together = (
-            ('date', 'shift'),
-        )
-        permissions = (
-            ('manage', 'Может управлять админским расписанием'),
-        )
+        unique_together = (('date', 'shift'),)
+        permissions = (('manage', 'Может управлять админским расписанием'),)

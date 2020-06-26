@@ -19,12 +19,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='HomePage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('body', wagtail.core.fields.StreamField([('header', wagtail.core.blocks.CharBlock()), ('paragraph', wagtail.core.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())])),
+                (
+                    'page_ptr',
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to='wagtailcore.Page',
+                    ),
+                ),
+                (
+                    'body',
+                    wagtail.core.fields.StreamField(
+                        [
+                            ('header', wagtail.core.blocks.CharBlock()),
+                            ('paragraph', wagtail.core.blocks.RichTextBlock()),
+                            ('image', wagtail.images.blocks.ImageChooserBlock()),
+                        ]
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
             bases=('wagtailcore.page',),
         ),
     ]

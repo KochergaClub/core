@@ -15,6 +15,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='eventprototype',
             name='project',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='projects.ProjectPage'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='+',
+                to='projects.ProjectPage',
+            ),
         ),
     ]

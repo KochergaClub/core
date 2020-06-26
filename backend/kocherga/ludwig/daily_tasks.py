@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from kocherga.ludwig.bot import bot
@@ -28,10 +29,12 @@ def task_attachment(task, status='new'):
             ],
         }
     else:
-        crossed_out_text = f'~*{task.title.strip()}*~\n' + '\n'.join([
-            '~' + part.strip() + '~' if part.strip() != '' else ''
-            for part in task.text.replace('\r\n', '\n').split('\n')
-        ])
+        crossed_out_text = f'~*{task.title.strip()}*~\n' + '\n'.join(
+            [
+                '~' + part.strip() + '~' if part.strip() != '' else ''
+                for part in task.text.replace('\r\n', '\n').split('\n')
+            ]
+        )
         return {
             "title": None,
             "text": crossed_out_text,
@@ -54,18 +57,14 @@ def send_daily_tasks():
     if not tasks:
         return
 
-    channels = set(
-        task.channel for task in tasks
-    )
+    channels = set(task.channel for task in tasks)
 
     for channel in channels:
         bot.send_message(
             text="Таски на сегодня:",
             channel="#" + channel,
             attachments=[
-                task_attachment(task)
-                for task in tasks
-                if task.channel == channel
+                task_attachment(task) for task in tasks if task.channel == channel
             ],
         )
 
@@ -96,17 +95,15 @@ def accept_task_outcome(payload, task_id):
 
     attachments = original_message['attachments']
 
-    a = next(a for a in attachments if a['callback_id'] == f'daily_tasks/action/{task_id}')
+    a = next(
+        a for a in attachments if a['callback_id'] == f'daily_tasks/action/{task_id}'
+    )
     task = get_task_by_id(task_id)
 
     if value == 'done':
-        a.update(
-            task_attachment(task, 'completed')
-        )
+        a.update(task_attachment(task, 'completed'))
     elif value == 'cancel':
-        a.update(
-            task_attachment(task, 'new')
-        )
+        a.update(task_attachment(task, 'new'))
 
     else:
         raise Exception(f"Unknown value {value}")
@@ -116,9 +113,8 @@ def accept_task_outcome(payload, task_id):
     if all_done:
         if attachments[-1]['text'] != CONGRATS_TEXT:
             # success, let's reinforce the good deed with a picture
-            attachments.append({
-                'text': CONGRATS_TEXT,
-                'image_url': get_reward_picture(),
-            })
+            attachments.append(
+                {'text': CONGRATS_TEXT, 'image_url': get_reward_picture(),}
+            )
 
     return original_message

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -27,15 +28,12 @@ def create_bot():
         timezone=pytz.timezone(
             "Europe/Moscow"
         ),  # can't use kocherga.dateutils.TZ - it's based on dateutil.tz now
-        alt_names=['людвиг']
+        alt_names=['людвиг'],
     )
 
     sentry_dsn = settings.KOCHERGA_LUDWIG_SENTRY_DSN
     if sentry_dsn:
-        sentry_sdk.init(
-            dsn=sentry_dsn,
-            integrations=[FlaskIntegration()]
-        )
+        sentry_sdk.init(dsn=sentry_dsn, integrations=[FlaskIntegration()])
 
     return bot
 

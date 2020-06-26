@@ -8,8 +8,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
@@ -44,9 +43,7 @@ class Migration(migrations.Migration):
                 ('last_visit', models.DateField(null=True)),
                 ('total_spent', models.IntegerField()),
             ],
-            options={
-                'db_table': 'cm_customers',
-            },
+            options={'db_table': 'cm_customers',},
         ),
         migrations.CreateModel(
             name='Order',
@@ -72,28 +69,45 @@ class Migration(migrations.Migration):
                 ('comment', models.CharField(max_length=1024)),
                 ('history', models.TextField()),
             ],
-            options={
-                'db_table': 'cm_orders',
-            },
+            options={'db_table': 'cm_orders',},
         ),
         migrations.CreateModel(
             name='OrderLogEntry',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('operation_id', models.IntegerField()),
                 ('operation', models.CharField(max_length=1024)),
                 ('ts', models.IntegerField(db_index=True)),
                 ('login', models.CharField(max_length=80)),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cm.Order')),
+                (
+                    'order',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to='cm.Order'
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'cm_order_log',
-            },
+            options={'db_table': 'cm_order_log',},
         ),
         migrations.CreateModel(
             name='SubscriptionOrder',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('card_id', models.BigIntegerField()),
                 ('ts', models.IntegerField()),
                 ('order_value', models.IntegerField()),
@@ -101,16 +115,12 @@ class Migration(migrations.Migration):
                 ('client_name', models.CharField(max_length=255)),
                 ('manager', models.CharField(max_length=255)),
             ],
-            options={
-                'db_table': 'cm_subscription_orders',
-            },
+            options={'db_table': 'cm_subscription_orders',},
         ),
         migrations.AlterUniqueTogether(
-            name='subscriptionorder',
-            unique_together={('card_id', 'ts')},
+            name='subscriptionorder', unique_together={('card_id', 'ts')},
         ),
         migrations.AlterUniqueTogether(
-            name='orderlogentry',
-            unique_together={('order', 'operation_id')},
+            name='orderlogentry', unique_together={('order', 'operation_id')},
         ),
     ]

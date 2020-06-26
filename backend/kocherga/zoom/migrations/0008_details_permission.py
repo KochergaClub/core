@@ -12,6 +12,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='meeting',
-            options={'permissions': (('view_participants', 'Может просматривать участников созвонов'),)},
+            options={
+                'permissions': (
+                    ('view_participants', 'Может просматривать участников созвонов'),
+                )
+            },
         ),
     ]

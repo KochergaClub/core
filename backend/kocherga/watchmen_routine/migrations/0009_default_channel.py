@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='task',
             name='channel',
-            field=models.CharField(default='space_bot', max_length=40, verbose_name='Канал'),
+            field=models.CharField(
+                default='space_bot', max_length=40, verbose_name='Канал'
+            ),
         ),
     ]

@@ -10,32 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='fbannouncement',
-            name='event',
-        ),
-        migrations.RemoveField(
-            model_name='timepadannouncement',
-            name='event',
-        ),
-        migrations.RemoveField(
-            model_name='vkannouncement',
-            name='event',
-        ),
-        migrations.AlterUniqueTogether(
-            name='ticket',
-            unique_together=set(),
-        ),
-        migrations.RemoveField(
-            model_name='ticket',
-            name='event',
-        ),
-        migrations.AlterUniqueTogether(
-            name='tag',
-            unique_together=set(),
-        ),
-        migrations.RemoveField(
-            model_name='tag',
-            name='event',
-        ),
+        migrations.RemoveField(model_name='fbannouncement', name='event',),
+        migrations.RemoveField(model_name='timepadannouncement', name='event',),
+        migrations.RemoveField(model_name='vkannouncement', name='event',),
+        migrations.AlterUniqueTogether(name='ticket', unique_together=set(),),
+        migrations.RemoveField(model_name='ticket', name='event',),
+        migrations.AlterUniqueTogether(name='tag', unique_together=set(),),
+        migrations.RemoveField(model_name='tag', name='event',),
     ]

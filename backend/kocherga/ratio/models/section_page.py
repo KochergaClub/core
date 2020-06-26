@@ -21,13 +21,18 @@ class SectionIndexPage(HeadlessPreviewMixin, Page):
 
 class SectionPage(HeadlessPreviewMixin, Page):
     body = StreamField(section_blocks)
-    status = models.CharField('Статус', max_length=40, default='placeholder', choices=(
-        ('test', 'Тест'),
-        ('placeholder', 'Заглушка'),
-        ('in_progress', 'В разработке'),
-        ('editing', 'Редактура'),
-        ('ready', 'Готово'),
-    ))
+    status = models.CharField(
+        'Статус',
+        max_length=40,
+        default='placeholder',
+        choices=(
+            ('test', 'Тест'),
+            ('placeholder', 'Заглушка'),
+            ('in_progress', 'В разработке'),
+            ('editing', 'Редактура'),
+            ('ready', 'Готово'),
+        ),
+    )
 
     content_panels = Page.content_panels + [
         FieldPanel('status'),

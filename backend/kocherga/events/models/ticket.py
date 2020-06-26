@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -48,10 +49,7 @@ class TicketManager(models.Manager):
         return ticket
 
     def unregister(self, user, event) -> 'Ticket':
-        ticket = self.get(
-            user=user,
-            event=event,
-        )
+        ticket = self.get(user=user, event=event,)
         ticket.status = 'inactive'
         ticket.save()
         return ticket
@@ -76,9 +74,7 @@ class TicketManager(models.Manager):
 @reversion.register()
 class Ticket(models.Model):
     event = models.ForeignKey(
-        'Event',
-        on_delete=models.PROTECT,
-        related_name='tickets',
+        'Event', on_delete=models.PROTECT, related_name='tickets',
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
@@ -87,12 +83,7 @@ class Ticket(models.Model):
     updated = models.DateTimeField(auto_now=True, null=True)
 
     status = models.CharField(
-        max_length=20,
-        choices=(
-            ('ok', 'ОК'),
-            ('inactive', 'Отказ'),
-        ),
-        default='ok',
+        max_length=20, choices=(('ok', 'ОК'), ('inactive', 'Отказ'),), default='ok',
     )
 
     subscribed_to_newsletter = models.BooleanField(default=False)
@@ -103,12 +94,8 @@ class Ticket(models.Model):
     objects = TicketManager()
 
     class Meta:
-        unique_together = (
-            ('event', 'user'),
-        )
-        permissions = (
-            ('view_tickets', 'Может смотреть все билеты'),
-        )
+        unique_together = (('event', 'user'),)
+        permissions = (('view_tickets', 'Может смотреть все билеты'),)
 
     def _common_email_vars(self):
         start_local = timezone.localtime(self.event.start)
@@ -130,7 +117,9 @@ class Ticket(models.Model):
         template_vars = self._common_email_vars()
 
         text_body = render_to_string('events/email/registered.txt', template_vars)
-        html_body = mjml2html(render_to_string('events/email/registered.mjml', template_vars))
+        html_body = mjml2html(
+            render_to_string('events/email/registered.mjml', template_vars)
+        )
 
         send_mail(
             subject=f'Регистрация на событие: {self.event.title}',
@@ -175,10 +164,16 @@ class Ticket(models.Model):
 
         template_vars = self._common_email_vars()
 
-        text_body = render_to_string('events/email/day_before_reminder.txt', template_vars)
-        html_body = mjml2html(render_to_string('events/email/day_before_reminder.mjml', template_vars))
+        text_body = render_to_string(
+            'events/email/day_before_reminder.txt', template_vars
+        )
+        html_body = mjml2html(
+            render_to_string('events/email/day_before_reminder.mjml', template_vars)
+        )
 
-        logger.info(f'Sending reminder to {self.user.email} about {self.event.id} ({self.event.title})')
+        logger.info(
+            f'Sending reminder to {self.user.email} about {self.event.id} ({self.event.title})'
+        )
         send_mail(
             subject=f'Напоминание о событии: {self.event.title}',
             from_email='Кочерга <info@kocherga-club.ru>',
@@ -194,10 +189,9 @@ class Ticket(models.Model):
 
         email = self.user.email
 
-        channel_send("mailchimp-subscribe", {
-            "type": "subscribe_to_main_list",
-            "email": email,
-        })
+        channel_send(
+            "mailchimp-subscribe", {"type": "subscribe_to_main_list", "email": email,}
+        )
         logger.info(f'Scheduled subscription of {email}')
 
     @property

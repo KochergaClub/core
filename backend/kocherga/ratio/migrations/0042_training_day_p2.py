@@ -13,16 +13,14 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='activity',
-            options={'ordering': ('day_fk__date',), 'verbose_name': 'Активность', 'verbose_name_plural': 'Активности'},
+            options={
+                'ordering': ('day_fk__date',),
+                'verbose_name': 'Активность',
+                'verbose_name_plural': 'Активности',
+            },
         ),
-        migrations.RemoveField(
-            model_name='activity',
-            name='day',
-        ),
-        migrations.RemoveField(
-            model_name='activity',
-            name='training',
-        ),
+        migrations.RemoveField(model_name='activity', name='day',),
+        migrations.RemoveField(model_name='activity', name='training',),
         migrations.AlterField(
             model_name='training',
             name='date',
@@ -31,14 +29,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='trainingday',
             name='training',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='days', to='ratio.Training', verbose_name='Тренинг'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='days',
+                to='ratio.Training',
+                verbose_name='Тренинг',
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='trainingday',
-            unique_together={('date', 'training')},
+            name='trainingday', unique_together={('date', 'training')},
         ),
-        migrations.RemoveField(
-            model_name='trainingday',
-            name='index',
-        ),
+        migrations.RemoveField(model_name='trainingday', name='index',),
     ]

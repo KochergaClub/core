@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import re
@@ -24,9 +25,7 @@ DEFAULT_ACCESS_STATUS = TIMEPAD_CONFIG["default_access_status"]
 class TimepadAnnouncementManager(models.Manager):
     def find_by_timepad_id(self, id: int):
         link = f'https://{ORGANIZATION}.timepad.ru/event/{id}'
-        announcement = self.get(
-            link__in=[link, link + '/']
-        )
+        announcement = self.get(link__in=[link, link + '/'])
         return announcement
 
 
@@ -36,9 +35,7 @@ def check(url):
         raise Exception("Weird url: {}".format(url))
     timepad_id = int(match.group(1))
 
-    result = api_call('GET', 'events', {
-        'organization_ids': ORGANIZATION_ID,
-    })
+    result = api_call('GET', 'events', {'organization_ids': ORGANIZATION_ID,})
     events = result["values"]
 
     return timepad_id in [event["id"] for event in events]
@@ -84,7 +81,9 @@ def timepad_category_by_code(code):
 
 @reversion.register()
 class TimepadAnnouncement(models.Model):
-    event = AutoOneToOneField(Event, on_delete=models.CASCADE, related_name='timepad_announcement')
+    event = AutoOneToOneField(
+        Event, on_delete=models.CASCADE, related_name='timepad_announcement'
+    )
 
     link = models.CharField(max_length=1024, blank=True)
 
@@ -107,9 +106,7 @@ class TimepadAnnouncement(models.Model):
         return kocherga.events.markup.Markup(text).as_html()
 
     def announce(self):
-        timepad_category = timepad_category_by_code(
-            self.category_code or "other_event"
-        )
+        timepad_category = timepad_category_by_code(self.category_code or "other_event")
 
         if self.prepaid_tickets:
             ticket_types = [
@@ -176,7 +173,12 @@ class TimepadAnnouncement(models.Model):
                     "type": "text",
                     "is_mandatory": True,
                 },
-                {"field_id": "name", "name": "Имя", "type": "text", "is_mandatory": True},
+                {
+                    "field_id": "name",
+                    "name": "Имя",
+                    "type": "text",
+                    "is_mandatory": True,
+                },
             ],
             "properties": ["organization_letter_checkbox", "timepad_letter_checkbox"],
             "access_status": DEFAULT_ACCESS_STATUS,

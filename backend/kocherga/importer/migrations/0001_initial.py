@@ -7,14 +7,21 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='LogEntry',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('name', models.CharField(db_index=True, max_length=100)),
                 ('start_ts', models.IntegerField(null=True)),
                 ('end_ts', models.DateTimeField(null=True)),
@@ -22,20 +29,23 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'importers_log_entry',
-#                'managed': False,
+                #                'managed': False,
             },
         ),
         migrations.CreateModel(
             name='State',
             fields=[
-                ('name', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    'name',
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
                 ('until_ts', models.IntegerField(null=True)),
                 ('last_ts', models.IntegerField(null=True)),
                 ('last_exception', models.CharField(max_length=1024, null=True)),
             ],
             options={
                 'db_table': 'importers_state',
-#                'managed': False,
+                #                'managed': False,
             },
         ),
     ]

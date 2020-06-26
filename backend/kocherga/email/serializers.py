@@ -8,7 +8,5 @@ class SubscribeChannelSerializer(serializers.ModelSerializer):
         fields = ('id', 'slug', 'interest_ids')
 
     interest_ids = serializers.PrimaryKeyRelatedField(
-        source='interests',
-        many=True,
-        queryset=models.MailchimpInterest.objects.all(),
+        source='interests', many=True, queryset=models.MailchimpInterest.objects.all(),
     )

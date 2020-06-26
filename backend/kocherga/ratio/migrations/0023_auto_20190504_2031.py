@@ -15,6 +15,25 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='sectionpage',
             name='body',
-            field=wagtail.core.fields.StreamField([('ratio_briefing', wagtail.core.blocks.RichTextBlock()), ('ratio_header', wagtail.core.blocks.CharBlock(classname='full title')), ('ratio_paragraph', wagtail.core.blocks.RichTextBlock()), ('ratio_inset', wagtail.core.blocks.RichTextBlock()), ('ratio_exercise', wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock()), ('lines_count', wagtail.core.blocks.IntegerBlock())]))]),
+            field=wagtail.core.fields.StreamField(
+                [
+                    ('ratio_briefing', wagtail.core.blocks.RichTextBlock()),
+                    (
+                        'ratio_header',
+                        wagtail.core.blocks.CharBlock(classname='full title'),
+                    ),
+                    ('ratio_paragraph', wagtail.core.blocks.RichTextBlock()),
+                    ('ratio_inset', wagtail.core.blocks.RichTextBlock()),
+                    (
+                        'ratio_exercise',
+                        wagtail.core.blocks.StructBlock(
+                            [
+                                ('header', wagtail.core.blocks.CharBlock()),
+                                ('lines_count', wagtail.core.blocks.IntegerBlock()),
+                            ]
+                        ),
+                    ),
+                ]
+            ),
         ),
     ]

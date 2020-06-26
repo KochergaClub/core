@@ -18,30 +18,87 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Cohort',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('event', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='events.Event')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'event',
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='+',
+                        to='events.Event',
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='User',
             fields=[
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('telegram_uid', models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    'user',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    'telegram_uid',
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
                 ('name', models.CharField(blank=True, max_length=255, null=True)),
                 ('desc', models.TextField(blank=True, null=True)),
                 ('photo', models.BinaryField(blank=True, null=True)),
                 ('state', models.TextField(blank=True, null=True)),
                 ('chat_id', models.IntegerField(blank=True, null=True)),
-                ('cohort', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='users', to='mastermind_dating.Cohort')),
+                (
+                    'cohort',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='users',
+                        to='mastermind_dating.Cohort',
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='Vote',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('how', models.IntegerField()),
-                ('who', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='who', to='mastermind_dating.User')),
-                ('whom', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='whom', to='mastermind_dating.User')),
+                (
+                    'who',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='who',
+                        to='mastermind_dating.User',
+                    ),
+                ),
+                (
+                    'whom',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='whom',
+                        to='mastermind_dating.User',
+                    ),
+                ),
             ],
         ),
     ]

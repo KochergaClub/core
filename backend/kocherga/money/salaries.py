@@ -61,8 +61,12 @@ def shift_salaries(start_date, end_date):
 
 def period_orders(start_date, end_date):
     orders = Order.objects.filter(
-        start_ts__gte=datetime.combine(start_date, datetime.min.time(), tzinfo=TZ).timestamp(),
-        end_ts__lte=datetime.combine(end_date, datetime.max.time(), tzinfo=TZ).timestamp(),
+        start_ts__gte=datetime.combine(
+            start_date, datetime.min.time(), tzinfo=TZ
+        ).timestamp(),
+        end_ts__lte=datetime.combine(
+            end_date, datetime.max.time(), tzinfo=TZ
+        ).timestamp(),
     ).all()
     return orders
 
@@ -72,9 +76,13 @@ def commission_bonuses(start_date, end_date):
 
     last_cm_import_dt = kocherga.importer.daemon.get_importer('cm').last_dt
     if not last_cm_import_dt:
-        raise Exception("cm importer never ever executed, can't calculate bonuses correctly")
+        raise Exception(
+            "cm importer never ever executed, can't calculate bonuses correctly"
+        )
     if (datetime.now(TZ) - last_cm_import_dt).seconds > 86400:
-        raise Exception("cm importer is behind schedule, can't calculate bonuses correctly")
+        raise Exception(
+            "cm importer is behind schedule, can't calculate bonuses correctly"
+        )
 
     commissions = defaultdict(float)
     for order in orders:
@@ -144,7 +152,9 @@ class SalaryContainer:
         for member_id in sorted(self.salaries.keys()):
             member = Member.objects.get(pk=member_id)
             salary = self.salaries[member_id]
-            print(f'{member.short_name:<14} {salary.shifts:<12}{salary.commissions:<8}{salary.total:<8}')
+            print(
+                f'{member.short_name:<14} {salary.shifts:<12}{salary.commissions:<8}{salary.total:<8}'
+            )
 
 
 def calculate_salaries(start_date, end_date):
@@ -204,7 +214,9 @@ def calculate_new_salaries(override_period=None):
             return True
         if payment_type == 'CASH':
             return False
-        raise Exception(f"Unknown payment type {payment_type} for email {member.user.email}")
+        raise Exception(
+            f"Unknown payment type {payment_type} for email {member.user.email}"
+        )
 
     if end_date.day == 5:
         # need to add salaries for the previous period for those who get salaries on card once per month on 5th
@@ -228,7 +240,9 @@ def salaries_to_payments(salaries: SalaryContainer):
     end_date = salaries.end_date
     comment_prefix = "Зарплата за "
     if start_date.month == end_date.month:
-        comment_prefix += f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
+        comment_prefix += (
+            f"{start_date.day}–{end_date.day} {inflected_month(start_date)}"
+        )
     else:
         comment_prefix += f"{start_date.day} {inflected_month(start_date)}–{end_date.day} {inflected_month(end_date)}"
 
@@ -239,12 +253,12 @@ def salaries_to_payments(salaries: SalaryContainer):
         if member.payment_type != 'CASH':
             continue
 
-        comment = f"{comment_prefix}. Смены: {salary.shifts}, бонус: {salary.commissions}"
+        comment = (
+            f"{comment_prefix}. Смены: {salary.shifts}, бонус: {salary.commissions}"
+        )
         if member.watchman and member.watchman.grade:
             comment += f". Грейд: {member.watchman.grade.code}"
 
         Payment.objects.create(
-            whom=member.user,
-            amount=salary.total,
-            comment=comment,
+            whom=member.user, amount=salary.total, comment=comment,
         )

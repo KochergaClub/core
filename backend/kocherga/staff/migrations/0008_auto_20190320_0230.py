@@ -14,6 +14,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='cm_customer',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='staff_member', to='cm.Customer'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='staff_member',
+                to='cm.Customer',
+            ),
         ),
     ]

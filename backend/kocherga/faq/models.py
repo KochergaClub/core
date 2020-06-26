@@ -29,8 +29,7 @@ class FAQPage(HeadlessPreviewMixin, Page):
     @property
     def subpages(self):
         return [
-            page.specific
-            for page in self.get_children().type(self.__class__).live()
+            page.specific for page in self.get_children().type(self.__class__).live()
         ]
 
     content_panels = Page.content_panels + [

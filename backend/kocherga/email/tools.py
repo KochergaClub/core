@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import subprocess
@@ -26,10 +27,7 @@ def mjml2html(mjml):
     root_dir = Path(__file__).parent.parent.parent
     mjml_bin = str(root_dir / 'node_modules' / '.bin' / 'mjml')
     with subprocess.Popen(
-            [mjml_bin, '/dev/stdin'],
-            stdin=fp,
-            stdout=subprocess.PIPE,
-            encoding='utf-8',
+        [mjml_bin, '/dev/stdin'], stdin=fp, stdout=subprocess.PIPE, encoding='utf-8',
     ) as proc:
         html = proc.stdout.read()
 

@@ -8,22 +8,50 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Schedule',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('weekday', models.IntegerField(choices=[(0, 'Понедельник'), (1, 'Вторник'), (2, 'Среда'), (3, 'Четверг'), (4, 'Пятница'), (5, 'Суббота'), (6, 'Воскресенье')])),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'weekday',
+                    models.IntegerField(
+                        choices=[
+                            (0, 'Понедельник'),
+                            (1, 'Вторник'),
+                            (2, 'Среда'),
+                            (3, 'Четверг'),
+                            (4, 'Пятница'),
+                            (5, 'Суббота'),
+                            (6, 'Воскресенье'),
+                        ]
+                    ),
+                ),
                 ('period', models.IntegerField(default=1)),
             ],
         ),
         migrations.CreateModel(
             name='Task',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('name', models.CharField(max_length=1024)),
                 ('channel', models.CharField(default='watchmen', max_length=40)),
             ],
@@ -31,6 +59,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='schedule',
             name='routine',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='schedules', to='watchmen_routine.Task'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='schedules',
+                to='watchmen_routine.Task',
+            ),
         ),
     ]

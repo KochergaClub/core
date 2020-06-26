@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='feedback',
-            name='comment',
-            field=models.TextField(blank=True),
+            model_name='feedback', name='comment', field=models.TextField(blank=True),
         ),
     ]

@@ -12,7 +12,10 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='rewardimage',
-            options={'verbose_name': 'Добрый мем', 'verbose_name_plural': 'Добрые мемы'},
+            options={
+                'verbose_name': 'Добрый мем',
+                'verbose_name_plural': 'Добрые мемы',
+            },
         ),
         migrations.AlterModelOptions(
             name='schedule',
@@ -35,17 +38,34 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='schedule',
             name='period',
-            field=models.IntegerField(default=1, help_text='Повторять каждые N недель', verbose_name='Периодичность'),
+            field=models.IntegerField(
+                default=1,
+                help_text='Повторять каждые N недель',
+                verbose_name='Периодичность',
+            ),
         ),
         migrations.AlterField(
             model_name='schedule',
             name='weekday',
-            field=models.IntegerField(choices=[(0, 'Понедельник'), (1, 'Вторник'), (2, 'Среда'), (3, 'Четверг'), (4, 'Пятница'), (5, 'Суббота'), (6, 'Воскресенье')], verbose_name='День недели'),
+            field=models.IntegerField(
+                choices=[
+                    (0, 'Понедельник'),
+                    (1, 'Вторник'),
+                    (2, 'Среда'),
+                    (3, 'Четверг'),
+                    (4, 'Пятница'),
+                    (5, 'Суббота'),
+                    (6, 'Воскресенье'),
+                ],
+                verbose_name='День недели',
+            ),
         ),
         migrations.AlterField(
             model_name='task',
             name='channel',
-            field=models.CharField(default='watchmen', max_length=40, verbose_name='Канал'),
+            field=models.CharField(
+                default='watchmen', max_length=40, verbose_name='Канал'
+            ),
         ),
         migrations.AlterField(
             model_name='task',

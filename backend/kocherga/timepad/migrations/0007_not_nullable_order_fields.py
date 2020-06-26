@@ -11,9 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='order',
-            name='created_at',
-            field=models.DateTimeField(),
+            model_name='order', name='created_at', field=models.DateTimeField(),
         ),
         migrations.AlterField(
             model_name='order',

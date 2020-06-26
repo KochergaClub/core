@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'channels',
     'reversion',
     'reversion_compare',
-
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
@@ -53,9 +52,7 @@ INSTALLED_APPS = [
     'wagtailmath',
     'wagtailgeowidget',
     'condensedinlinepanel',
-
     'ariadne.contrib.django',
-
     'kocherga.wagtail',
     'kocherga.auth',
     'kocherga.zadarma',
@@ -89,10 +86,8 @@ INSTALLED_APPS = [
     'kocherga.telegram',
     'kocherga.tilda',
     'kocherga.zoom',
-
     'taggit',
     'modelcluster',
-
     'wagtail.api.v2',
     'rest_framework',
 ]
@@ -108,7 +103,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'kocherga.django.middleware.JsonExceptionMiddleware',
     'reversion.middleware.RevisionMiddleware',
-
     # 'wagtail.core.middleware.SiteMiddleware',
     # 'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -129,9 +123,7 @@ ROOT_URLCONF = 'kocherga.django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'jinja_templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'jinja_templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'kocherga.django.jinja2.environment',
@@ -141,9 +133,7 @@ TEMPLATES = [
     # needed for admin
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,9 +154,7 @@ REDIS_HOST = os.environ['REDIS_HOST']
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [(REDIS_HOST, 6379)],
-        },
+        "CONFIG": {"hosts": [(REDIS_HOST, 6379)],},
     },
 }
 
@@ -195,9 +183,7 @@ DATABASES = {
         'USER': 'kocherga',
         'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': os.environ['DB_HOST'],
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        }
+        'OPTIONS': {'charset': 'utf8mb4',},
     }
 }
 
@@ -212,15 +198,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 AUTH_USER_MODEL = 'kocherga_auth.User'
@@ -245,12 +225,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'kocherga.api.auth.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAdminUser',
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
     'EXCEPTION_HANDLER': 'kocherga.django.drf.exception_handler',
 }
 
@@ -293,26 +269,10 @@ KOCHERGA_TARIFF = "2,5 руб./минута"
 
 # TODO - move to DB (implement kocherga.rooms.models)
 KOCHERGA_ROOMS = [
-    {
-        "name": "лекционная",
-        "max_people": 40,
-        "area": 50
-    },
-    {
-        "name": "гэб",
-        "max_people": 20,
-        "area": 30
-    },
-    {
-        "name": "летняя",
-        "max_people": 5,
-        "area": 9
-    },
-    {
-        "name": "китайская",
-        "max_people": 12,
-        "area": 17
-    },
+    {"name": "лекционная", "max_people": 40, "area": 50},
+    {"name": "гэб", "max_people": 20, "area": 30},
+    {"name": "летняя", "max_people": 5, "area": 9},
+    {"name": "китайская", "max_people": 12, "area": 17},
 ]
 
 KOCHERGA_WATCHMEN_MODERN_SHIFTS_FIRST_DATE = '2016-03-14'

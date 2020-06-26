@@ -15,7 +15,9 @@ def fill_dt_fields(apps, schema_editor):
         event.start = datetime.fromtimestamp(event.start_ts, TZ)
         event.end = datetime.fromtimestamp(event.end_ts, TZ)
         if event.asked_for_visitors_ts:
-            event.asked_for_visitors = datetime.fromtimestamp(event.asked_for_visitors_ts, TZ)
+            event.asked_for_visitors = datetime.fromtimestamp(
+                event.asked_for_visitors_ts, TZ
+            )
 
         event.save()
 
@@ -33,7 +35,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='created',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
@@ -84,9 +88,7 @@ class Migration(migrations.Migration):
         migrations.RunPython(fill_dt_fields),
         # unrelated to datetime migration - blank fields for fields which should be blank
         migrations.AlterField(
-            model_name='event',
-            name='description',
-            field=models.TextField(blank=True),
+            model_name='event', name='description', field=models.TextField(blank=True),
         ),
         migrations.AlterField(
             model_name='event',
@@ -94,9 +96,7 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, max_length=32, null=True),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='summary',
-            field=models.TextField(blank=True),
+            model_name='event', name='summary', field=models.TextField(blank=True),
         ),
         migrations.AlterField(
             model_name='event',

@@ -1,6 +1,6 @@
 from kocherga.graphql.types import DjangoObjectType
 
-from ...import models
+from ... import models
 
 RatioTraining = DjangoObjectType('RatioTraining', models.Training)
 

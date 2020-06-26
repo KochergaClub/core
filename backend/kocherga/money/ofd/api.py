@@ -14,7 +14,6 @@ DT_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 class OfdYaKkt:
-
     def __init__(self, fiscal_drive_number: int) -> None:
         self.fdnum = fiscal_drive_number
 

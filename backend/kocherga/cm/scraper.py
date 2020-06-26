@@ -35,7 +35,9 @@ def load_customer_from_html(customer_id):
         if ">Заметка:</label>" in fragment:
             continue
         match = re.search(
-            r"<label.*?>(.*?)</label>\s*<span.*?>(.*?)</span>", fragment, flags=re.DOTALL
+            r"<label.*?>(.*?)</label>\s*<span.*?>(.*?)</span>",
+            fragment,
+            flags=re.DOTALL,
         )
         if not match:
             raise Exception("Unexpected form-group: " + fragment)

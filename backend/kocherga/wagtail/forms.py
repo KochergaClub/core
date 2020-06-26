@@ -17,6 +17,7 @@ class URLOrAbsolutePathValidator(validators.URLValidator):
 
 class URLOrAbsolutePathField(forms.URLField):
     """This field is used in ./blocks.py. The code is copy-pasted from wagtail.wagtailadmin.forms."""
+
     widget = TextInput
     default_validators = [URLOrAbsolutePathValidator()]
 

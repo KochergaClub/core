@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
@@ -11,7 +12,6 @@ from .api import get_statements
 
 
 class Importer(kocherga.importer.base.IncrementalImporter):
-
     def get_initial_dt(self):
         return datetime(2015, 8, 1, tzinfo=TZ)
 

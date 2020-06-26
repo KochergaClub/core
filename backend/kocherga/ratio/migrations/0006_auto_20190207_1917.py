@@ -12,10 +12,13 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='training',
-            options={'ordering': ['-date'], 'verbose_name': 'Тренинг', 'verbose_name_plural': 'Тренинги'},
+            options={
+                'ordering': ['-date'],
+                'verbose_name': 'Тренинг',
+                'verbose_name_plural': 'Тренинги',
+            },
         ),
         migrations.AlterUniqueTogether(
-            name='ticket',
-            unique_together={('training', 'email')},
+            name='ticket', unique_together={('training', 'email')},
         ),
     ]

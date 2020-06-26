@@ -13,7 +13,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Auth',
             fields=[
-                ('id', models.IntegerField(default=1, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.IntegerField(default=1, primary_key=True, serialize=False),
+                ),
                 ('cookies', models.CharField(max_length=4096)),
             ],
         ),

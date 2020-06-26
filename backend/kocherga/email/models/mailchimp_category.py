@@ -11,5 +11,5 @@ class MailchimpCategory(models.Model):
             ('dropdown', 'dropdown'),
             ('radio', 'radio'),
             ('hidden', 'hidden'),
-        ]
+        ],
     )

@@ -2,19 +2,21 @@
 
 In production, we use prod_secrets.py which is not commited to this repo for obvious reasons."""
 
-SECRET_KEY = None # put any long random string here
+SECRET_KEY = None  # put any long random string here
 
 # AWS credentials
 AWS_ACCESS_KEY_ID = None
 AWS_SECRET_ACCESS_KEY = None
 
-KOCHERGA_JWT_SECRET_KEY = None # another long random string
+KOCHERGA_JWT_SECRET_KEY = None  # another long random string
 
 # ses-smtp-user credentials from AWS
 EMAIL_HOST_USER = None
 EMAIL_HOST_PASSWORD = None
 
-KOCHERGA_MAILCHIMP_UID_SALT = None # whatever - used to anonymize email users in ratio experiments
+KOCHERGA_MAILCHIMP_UID_SALT = (
+    None  # whatever - used to anonymize email users in ratio experiments
+)
 
 CAFE_MANAGER_SERVER = 'https://demo.cafe-manager.ru'
 CAFE_MANAGER_CREDENTIALS = {
@@ -27,14 +29,11 @@ KOCHERGA_FB_ANNOUNCER_PASSWORD = None  # real FB password, not a token
 KOCHERGA_FB_MARKETING = {
     "access_token": "",  # Marketing API token (with ads_management permission)
     "account_id": "",  # Primary ads account id
-    "audiences": {
-        "ratio_tickets": "",  # custom audience id which can be uploaded
-    },
+    "audiences": {"ratio_tickets": "",},  # custom audience id which can be uploaded
 }
 
 KOCHERGA_GOOGLE_CREDENTIALS = {
     "type": "service_account",
-
     "project_id": None,
     "private_key_id": None,
     "private_key": "-----BEGIN PRIVATE KEY-----\n...",
@@ -69,8 +68,6 @@ KOCHERGA_VK_CALLBACK_SECRET = None
 
 KOCHERGA_WIKI_PASSWORD = None
 
-MASTERMIND_BOT_CONFIG = {
-    "token": "tg-token-here"
-}
+MASTERMIND_BOT_CONFIG = {"token": "tg-token-here"}
 
 KKM_USER_PASSWORD = 'fake_broken_password'

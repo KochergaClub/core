@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -13,9 +14,7 @@ class AuthManager(models.Manager):
     def get(self):
         result = self.first()
         if not result:
-            raise Exception(
-                "FB token is not initialized."
-            )
+            raise Exception("FB token is not initialized.")
         return result
 
     def set(self, access_token):
@@ -35,10 +34,7 @@ class AuthManager(models.Manager):
         logger.debug(f'Obtained long-term token {long_term_access_token}')
 
         (result, _) = self.update_or_create(
-            id=1,
-            defaults={
-                'access_token': long_term_access_token,
-            }
+            id=1, defaults={'access_token': long_term_access_token,}
         )
         return result
 
@@ -50,9 +46,9 @@ class Auth(models.Model):
     objects = AuthManager()
 
     def validate(self):
-        requests.get(f"{SERVER}/{API_VERSION}/kocherga.club?fields=picture").raise_for_status()
+        requests.get(
+            f"{SERVER}/{API_VERSION}/kocherga.club?fields=picture"
+        ).raise_for_status()
 
     class Meta:
-        permissions = (
-            ('marketing', 'Может контролировать ФБ-маркетинг'),
-        )
+        permissions = (('marketing', 'Может контролировать ФБ-маркетинг'),)

@@ -13,6 +13,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='scheduleitem',
             name='shift',
-            field=models.CharField(choices=[('MORNING_V1', 'MORNING_V1'), ('EVENING_V1', 'EVENING_V1'), ('MORNING', 'MORNING'), ('MIDDAY', 'MIDDAY'), ('EVENING', 'EVENING'), ('NIGHT', 'NIGHT')], max_length=20),
+            field=models.CharField(
+                choices=[
+                    ('MORNING_V1', 'MORNING_V1'),
+                    ('EVENING_V1', 'EVENING_V1'),
+                    ('MORNING', 'MORNING'),
+                    ('MIDDAY', 'MIDDAY'),
+                    ('EVENING', 'EVENING'),
+                    ('NIGHT', 'NIGHT'),
+                ],
+                max_length=20,
+            ),
         ),
     ]

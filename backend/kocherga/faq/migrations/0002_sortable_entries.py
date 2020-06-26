@@ -11,8 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='entry',
-            options={'ordering': ['sort_order']},
+            name='entry', options={'ordering': ['sort_order']},
         ),
         migrations.AddField(
             model_name='entry',

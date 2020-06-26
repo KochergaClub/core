@@ -13,19 +13,31 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='weeklydigest',
             name='mailchimp_id',
-            field=models.CharField(blank=True, default='', max_length=100, verbose_name='ID кампании в Mailchimp'),
+            field=models.CharField(
+                blank=True,
+                default='',
+                max_length=100,
+                verbose_name='ID кампании в Mailchimp',
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name='weeklydigest',
             name='telegram_id',
-            field=models.CharField(blank=True, default='', max_length=100, verbose_name='ID сообщения в Telegram'),
+            field=models.CharField(
+                blank=True,
+                default='',
+                max_length=100,
+                verbose_name='ID сообщения в Telegram',
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name='weeklydigest',
             name='vk_id',
-            field=models.CharField(blank=True, default='', max_length=100, verbose_name='ID поста в VK'),
+            field=models.CharField(
+                blank=True, default='', max_length=100, verbose_name='ID поста в VK'
+            ),
             preserve_default=False,
         ),
     ]

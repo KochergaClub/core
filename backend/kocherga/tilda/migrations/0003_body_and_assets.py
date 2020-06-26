@@ -13,15 +13,27 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Asset',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('url', models.URLField(max_length=255)),
-                ('kind', models.CharField(choices=[('css', 'css'), ('js', 'js'), ('image', 'image')], max_length=10)),
+                (
+                    'kind',
+                    models.CharField(
+                        choices=[('css', 'css'), ('js', 'js'), ('image', 'image')],
+                        max_length=10,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='tildapage',
-            name='body',
-            field=models.TextField(default=''),
+            model_name='tildapage', name='body', field=models.TextField(default=''),
         ),
         migrations.AddField(
             model_name='tildapage',

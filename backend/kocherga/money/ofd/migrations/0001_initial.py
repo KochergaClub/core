@@ -7,8 +7,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
@@ -19,7 +18,18 @@ class Migration(migrations.Migration):
                 ('cash', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('electronic', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('total', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('check_type', models.CharField(choices=[('income', 'income'), ('refund_income', 'refund_income'), ('expense', 'expense'), ('refund_expense', 'refund_expense')], max_length=40)),
+                (
+                    'check_type',
+                    models.CharField(
+                        choices=[
+                            ('income', 'income'),
+                            ('refund_income', 'refund_income'),
+                            ('expense', 'expense'),
+                            ('refund_expense', 'refund_expense'),
+                        ],
+                        max_length=40,
+                    ),
+                ),
                 ('shift_id', models.IntegerField()),
                 ('request_id', models.IntegerField()),
                 ('operator', models.CharField(max_length=255)),
@@ -27,8 +37,6 @@ class Migration(migrations.Migration):
                 ('fiscal_sign', models.BigIntegerField()),
                 ('midday_ts', models.IntegerField()),
             ],
-            options={
-                'db_table': 'ofd_documents',
-            },
+            options={'db_table': 'ofd_documents',},
         ),
     ]

@@ -20,6 +20,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='projectpage',
             name='image',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='+', to='wagtailimages.Image'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='wagtailimages.Image',
+            ),
         ),
     ]

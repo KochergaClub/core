@@ -17,22 +17,60 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SectionIndexPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
+                (
+                    'page_ptr',
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to='wagtailcore.Page',
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
             bases=('wagtailcore.page',),
         ),
         migrations.CreateModel(
             name='SectionPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.Page')),
-                ('body', wagtail.core.fields.StreamField([('ratio_briefing', wagtail.core.blocks.CharBlock()), ('ratio_header', wagtail.core.blocks.CharBlock()), ('ratio_paragraph', wagtail.core.blocks.RichTextBlock()), ('ratio_inset', wagtail.core.blocks.RichTextBlock()), ('ratio_exercise', wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock()), ('lines_count', wagtail.core.blocks.IntegerBlock())]))])),
+                (
+                    'page_ptr',
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to='wagtailcore.Page',
+                    ),
+                ),
+                (
+                    'body',
+                    wagtail.core.fields.StreamField(
+                        [
+                            ('ratio_briefing', wagtail.core.blocks.CharBlock()),
+                            ('ratio_header', wagtail.core.blocks.CharBlock()),
+                            ('ratio_paragraph', wagtail.core.blocks.RichTextBlock()),
+                            ('ratio_inset', wagtail.core.blocks.RichTextBlock()),
+                            (
+                                'ratio_exercise',
+                                wagtail.core.blocks.StructBlock(
+                                    [
+                                        ('header', wagtail.core.blocks.CharBlock()),
+                                        (
+                                            'lines_count',
+                                            wagtail.core.blocks.IntegerBlock(),
+                                        ),
+                                    ]
+                                ),
+                            ),
+                        ]
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
+            options={'abstract': False,},
             bases=('wagtailcore.page',),
         ),
     ]

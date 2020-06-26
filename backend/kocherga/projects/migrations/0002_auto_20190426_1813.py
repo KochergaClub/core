@@ -15,7 +15,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='projectpage',
             name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='+', to='wagtailimages.Image'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='wagtailimages.Image',
+            ),
         ),
         migrations.AddField(
             model_name='projectpage',

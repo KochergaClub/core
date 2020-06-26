@@ -10,20 +10,14 @@ Mutation = MutationType()
 @Mutation.field('myEventsTicketUnregister')
 def myEventsTicketUnregister(_, info, event_id):
     event = models.Event.objects.public_events().get(uuid=event_id)
-    ticket = models.Ticket.objects.unregister(
-        user=info.context.user,
-        event=event,
-    )
+    ticket = models.Ticket.objects.unregister(user=info.context.user, event=event,)
     return ticket
 
 
 @Mutation.field('myEventsTicketRegister')
 def myEventsTicketRegister(_, info, event_id):
     event = models.Event.objects.public_events().get(uuid=event_id)
-    ticket = models.Ticket.objects.register(
-        user=info.context.user,
-        event=event,
-    )
+    ticket = models.Ticket.objects.register(user=info.context.user, event=event,)
     return ticket
 
 
@@ -41,8 +35,6 @@ def myEventsTicketRegisterAnon(_, info, input):
 
     event = models.Event.objects.public_events().get(uuid=event_id)
     ticket = models.Ticket.objects.register(
-        user=user,
-        event=event,
-        subscribed_to_newsletter=subscribed_to_newsletter,
+        user=user, event=event, subscribed_to_newsletter=subscribed_to_newsletter,
     )
     return ticket

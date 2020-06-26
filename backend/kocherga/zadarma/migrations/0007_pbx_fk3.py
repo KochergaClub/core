@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='call',
-            old_name='pbx_call_fk',
-            new_name='pbx_call',
+            model_name='call', old_name='pbx_call_fk', new_name='pbx_call',
         ),
     ]

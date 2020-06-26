@@ -2,7 +2,9 @@ from kocherga.wagtail.utils import filter_queryset_by_page_permissions
 from kocherga.graphql.types import DjangoObjectType
 from ... import models
 
-RatioPresentationIndexPage = DjangoObjectType('RatioPresentationIndexPage', models.PresentationIndexPage)
+RatioPresentationIndexPage = DjangoObjectType(
+    'RatioPresentationIndexPage', models.PresentationIndexPage
+)
 
 
 @RatioPresentationIndexPage.field('presentations')

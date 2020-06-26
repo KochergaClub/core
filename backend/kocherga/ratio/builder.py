@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from pathlib import Path
@@ -42,7 +43,9 @@ def workshops_root_id():
 def humanized_event_date(event_name):
     match = re.match(r'(\d+)-(\d+) воркшоп$', event_name)
     (year, month) = match.groups()
-    month_names = 'январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь'.split(' ')
+    month_names = 'январь февраль март апрель май июнь июль август сентябрь октябрь ноябрь декабрь'.split(
+        ' '
+    )
     month_name = month_names[int(month) - 1]
     return f'{month_name} {year}'
 
@@ -50,7 +53,7 @@ def humanized_event_date(event_name):
 # TODO - fetch from google drive via API or make more customizable
 @contextlib.contextmanager
 def serve_slides(
-    path=os.environ["HOME"] + "/Google Drive/Rationality/Workshops/Секции"
+    path=os.environ["HOME"] + "/Google Drive/Rationality/Workshops/Секции",
 ):
     server = subprocess.Popen(["python3", "-m", "http.server"], cwd=path)
     try:
@@ -81,7 +84,9 @@ async def build_slides(folder_id, sections=SECTIONS):
             for section in sections:
                 name = f'{section["id"]} - {section["name"]}.pdf'
 
-                if kocherga.gdrive.find_in_folder(slides_folder_id, name, missing_ok=True):
+                if kocherga.gdrive.find_in_folder(
+                    slides_folder_id, name, missing_ok=True
+                ):
                     # file already exists
                     continue
 
@@ -104,7 +109,9 @@ def build_handbooks(event_name, sections=SECTIONS):
     for day in '1', '2':
         document = docx.Document(DOCX_TEMPLATE)
 
-        document.add_heading('Прикладная рациональность: рабочая тетрадь').style = 'Заголовок тетради'
+        document.add_heading(
+            'Прикладная рациональность: рабочая тетрадь'
+        ).style = 'Заголовок тетради'
         # TODO - add "День 1" / "День 2" subheader
 
         document.add_heading(
@@ -141,24 +148,27 @@ def build_extra_files(folder_id):
     # kocherga.gdrive.upload_file(filename, "Расписание.pdf", folder_id)
 
     # additional materials
-    materials_gdoc_id = kocherga.gdrive.find_in_folder(sources_folder_id, "Дополнительные материалы")
+    materials_gdoc_id = kocherga.gdrive.find_in_folder(
+        sources_folder_id, "Дополнительные материалы"
+    )
     filename = kocherga.gdrive.gdoc_to_pdf(materials_gdoc_id)
     kocherga.gdrive.upload_file(filename, "Материалы.pdf", folder_id)
 
     # feedback form
     form_filename = 'Впечатления от воркшопа'  # TODO - name according to the event
-    if kocherga.gdrive.find_in_folder(sources_folder_id, form_filename, missing_ok=True):
+    if kocherga.gdrive.find_in_folder(
+        sources_folder_id, form_filename, missing_ok=True
+    ):
         # already exists
         return
     templates_folder_id = kocherga.gdrive.find_in_folder(workshops_root_id(), 'Шаблоны')
-    post_form_id = kocherga.gdrive.find_in_folder(templates_folder_id, 'Впечатления от воркшопа')
+    post_form_id = kocherga.gdrive.find_in_folder(
+        templates_folder_id, 'Впечатления от воркшопа'
+    )
 
     kocherga.gdrive.gdrive().files().copy(
         fileId=post_form_id,
-        body={
-            "name": form_filename,
-            "parents": [sources_folder_id],
-        }
+        body={"name": form_filename, "parents": [sources_folder_id],},
     ).execute()
 
 

@@ -12,14 +12,21 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='notebookpage',
-            name='sections',
-        ),
+        migrations.RemoveField(model_name='notebookpage', name='sections',),
         migrations.AddField(
             model_name='notebookpage',
             name='sections',
-            field=wagtail.core.fields.StreamField([('ratio_notebook_section', wagtail.core.blocks.PageChooserBlock(page_type=['ratio.SectionPage']))], default={}),
+            field=wagtail.core.fields.StreamField(
+                [
+                    (
+                        'ratio_notebook_section',
+                        wagtail.core.blocks.PageChooserBlock(
+                            page_type=['ratio.SectionPage']
+                        ),
+                    )
+                ],
+                default={},
+            ),
             preserve_default=False,
         ),
     ]

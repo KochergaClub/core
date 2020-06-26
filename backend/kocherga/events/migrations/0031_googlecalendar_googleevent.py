@@ -14,17 +14,47 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='GoogleCalendar',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('calendar_id', models.CharField(db_index=True, max_length=100)),
             ],
         ),
         migrations.CreateModel(
             name='GoogleEvent',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('google_id', models.CharField(max_length=100, unique=True)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='google_events', to='events.Event')),
-                ('google_calendar', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='google_events', to='events.GoogleCalendar')),
+                (
+                    'event',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name='google_events',
+                        to='events.Event',
+                    ),
+                ),
+                (
+                    'google_calendar',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='google_events',
+                        to='events.GoogleCalendar',
+                    ),
+                ),
             ],
         ),
     ]

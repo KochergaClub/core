@@ -10,16 +10,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='activity',
-            name='training',
-        ),
+        migrations.RemoveField(model_name='activity', name='training',),
         migrations.AlterUniqueTogether(
-            name='ticket',
-            unique_together={('training_slug', 'email')},
+            name='ticket', unique_together={('training_slug', 'email')},
         ),
-        migrations.RemoveField(
-            model_name='ticket',
-            name='training',
-        ),
+        migrations.RemoveField(model_name='ticket', name='training',),
     ]

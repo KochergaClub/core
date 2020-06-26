@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import requests
@@ -18,10 +19,7 @@ def update_cover():
 
     api_root = settings.KOCHERGA_API_ROOT
     r = requests.get(
-        f"{api_root}/templater/vk-cover/png",
-        params={
-            "now_total": now_total,
-        },
+        f"{api_root}/templater/vk-cover/png", params={"now_total": now_total,},
     )
     r.raise_for_status()
     image_bytes = r.content
@@ -55,8 +53,7 @@ def find_top_friends(user_id: int, limit: int = 50):
 
         result[friend_id]['followers'] = r['count']
 
-    for id in list(reversed(sorted(
-            result.keys(),
-            key=lambda id: result[id]['followers']
-    )))[:limit]:
+    for id in list(
+        reversed(sorted(result.keys(), key=lambda id: result[id]['followers']))
+    )[:limit]:
         logger.info(f"https://vk.com/id{id}\t{result[id]['followers']}")

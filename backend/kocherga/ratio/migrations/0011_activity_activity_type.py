@@ -13,7 +13,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='activity_type',
-            field=models.CharField(choices=[('section', 'Cекция'), ('break', 'Перерыв'), ('bonus', 'Бонус')], default='section', max_length=40, verbose_name='Тип'),
+            field=models.CharField(
+                choices=[
+                    ('section', 'Cекция'),
+                    ('break', 'Перерыв'),
+                    ('bonus', 'Бонус'),
+                ],
+                default='section',
+                max_length=40,
+                verbose_name='Тип',
+            ),
             preserve_default=False,
         ),
     ]

@@ -9,23 +9,23 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Cookie',
             fields=[
-                ('id', models.CharField(max_length=32, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.CharField(max_length=32, primary_key=True, serialize=False),
+                ),
                 ('title', models.CharField(max_length=255)),
                 ('price', models.FloatField()),
                 ('weight', models.FloatField()),
                 ('prodway_page', models.CharField(max_length=255)),
                 ('prodway_image', models.CharField(max_length=255)),
             ],
-            options={
-                'db_table': 'cookies',
-            },
+            options={'db_table': 'cookies',},
         ),
         migrations.CreateModel(
             name='CookieCombination',
@@ -34,9 +34,7 @@ class Migration(migrations.Migration):
                 ('happy_users', models.IntegerField()),
                 ('total_users', models.IntegerField()),
             ],
-            options={
-                'db_table': 'cookie_combinations',
-            },
+            options={'db_table': 'cookie_combinations',},
         ),
         migrations.CreateModel(
             name='CookieCombinationItem',
@@ -44,11 +42,15 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('position_id', models.IntegerField()),
                 ('cookie_id', models.CharField(max_length=32)),
-                ('combination', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='supplies.CookieCombination')),
+                (
+                    'combination',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to='supplies.CookieCombination',
+                    ),
+                ),
             ],
-            options={
-                'db_table': 'cookie_combination_items',
-            },
+            options={'db_table': 'cookie_combination_items',},
         ),
         migrations.CreateModel(
             name='CookiePick',
@@ -61,9 +63,7 @@ class Migration(migrations.Migration):
                 ('user', models.CharField(max_length=255)),
                 ('time', models.IntegerField()),
             ],
-            options={
-                'db_table': 'cookie_picks',
-            },
+            options={'db_table': 'cookie_picks',},
         ),
         migrations.AlterUniqueTogether(
             name='cookiecombinationitem',

@@ -7,8 +7,7 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
@@ -26,12 +25,9 @@ class Migration(migrations.Migration):
                 ('discrepancy', models.IntegerField(null=True)),
                 ('spendings', models.IntegerField(null=True)),
             ],
-            options={
-                'db_table': 'cashier',
-            },
+            options={'db_table': 'cashier',},
         ),
         migrations.AlterUniqueTogether(
-            name='cashieritem',
-            unique_together={('date', 'shift')},
+            name='cashieritem', unique_together={('date', 'shift')},
         ),
     ]

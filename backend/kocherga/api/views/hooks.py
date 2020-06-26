@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -44,37 +45,34 @@ def r_vk_callback(request):
     if payload["type"] == "message_new":
         notify(
             'Новое сообщение вк-сообществу',
-            f'https://vk.com/gim{group_id}?sel={obj["from_id"]}'
+            f'https://vk.com/gim{group_id}?sel={obj["from_id"]}',
         )
     elif payload["type"] == "wall_reply_new":
         notify(
             'Новый комментарий',
-            f'https://vk.com/wall-{group_id}_{obj["post_id"]}?reply={obj["id"]}'
+            f'https://vk.com/wall-{group_id}_{obj["post_id"]}?reply={obj["id"]}',
         )
     elif payload["type"] == "wall_post_new":
-        notify(
-            'Новый пост',
-            f'https://vk.com/wall-{group_id}_{obj["id"]}'
-        )
+        notify('Новый пост', f'https://vk.com/wall-{group_id}_{obj["id"]}')
     elif payload["type"] == "board_post_new":
         notify(
             'Новый комментарий в обсуждении',
-            f'https://vk.com/topic-{group_id}_{obj["topic_id"]}?post={obj["id"]}'
+            f'https://vk.com/topic-{group_id}_{obj["topic_id"]}?post={obj["id"]}',
         )
     elif payload["type"] == "photo_comment_new":
         notify(
             'Новый комментарий к фотографии',
-            f'https://vk.com/photo-{group_id}_{obj["photo_id"]}'
+            f'https://vk.com/photo-{group_id}_{obj["photo_id"]}',
         )
     elif payload["type"] == "video_comment_new":
         notify(
             'Новый комментарий к видеозаписи',
-            f'https://vk.com/video-{group_id}_{obj["video_id"]}'
+            f'https://vk.com/video-{group_id}_{obj["video_id"]}',
         )
     elif payload["type"] == "market_comment_new":
         notify(
             'Новый комментарий к товару',
-            f'https://vk.com/club{group_id}?w=product-{group_id}_{obj["item_id"]}'
+            f'https://vk.com/club{group_id}?w=product-{group_id}_{obj["item_id"]}',
         )
 
     return HttpResponse("ok")

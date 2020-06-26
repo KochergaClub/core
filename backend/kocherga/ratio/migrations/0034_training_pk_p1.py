@@ -30,7 +30,5 @@ class Migration(migrations.Migration):
             name='training_slug',
             field=models.CharField(default='', max_length=255),
         ),
-        migrations.RunPython(
-            fill_slugs
-        ),
+        migrations.RunPython(fill_slugs),
     ]

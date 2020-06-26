@@ -25,14 +25,16 @@ def fill_announcements(apps, schema_editor):
         # fb
         if event.fb_group or event.posted_fb:
             fb_announcement = FbAnnouncement.objects.create(
-                event=event,
-                link=event.posted_fb,
-                group=event.fb_group,
+                event=event, link=event.posted_fb, group=event.fb_group,
             )
             fb_announcement.save()
 
         # timepad
-        if event.posted_timepad or event.timepad_category_code or event.timepad_prepaid_tickets:
+        if (
+            event.posted_timepad
+            or event.timepad_category_code
+            or event.timepad_prepaid_tickets
+        ):
             timepad_announcement = TimepadAnnouncement.objects.create(
                 event=event,
                 link=event.posted_timepad,
@@ -52,31 +54,76 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='VkAnnouncement',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('link', models.CharField(blank=True, max_length=1024)),
                 ('group', models.CharField(blank=True, max_length=40)),
                 ('image', models.CharField(blank=True, max_length=32)),
-                ('event', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='vk_announcement', to='events.Event')),
+                (
+                    'event',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='vk_announcement',
+                        to='events.Event',
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='TimepadAnnouncement',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('link', models.CharField(blank=True, max_length=1024)),
                 ('category_code', models.CharField(blank=True, max_length=40)),
                 ('prepaid_tickets', models.BooleanField(default=False)),
-                ('event', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='timepad_announcement', to='events.Event')),
+                (
+                    'event',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='timepad_announcement',
+                        to='events.Event',
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
             name='FbAnnouncement',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('link', models.CharField(blank=True, max_length=1024)),
                 ('group', models.CharField(blank=True, max_length=40)),
-                ('event', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='fb_announcement', to='events.Event')),
+                (
+                    'event',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='fb_announcement',
+                        to='events.Event',
+                    ),
+                ),
             ],
         ),
-        migrations.RunPython(fill_announcements)
+        migrations.RunPython(fill_announcements),
     ]

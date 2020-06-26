@@ -18,9 +18,7 @@ def dt_now():
 class Timeclub24Visitors(models.Model):
     class Meta:
         db_table = 'timeclub24_visitors'
-        unique_together = (
-            ("ts", "venue"),
-        )
+        unique_together = (("ts", "venue"),)
 
     id = models.AutoField(primary_key=True)
     ts = models.DateTimeField(default=dt_now)
@@ -33,7 +31,9 @@ class Importer(kocherga.importer.base.FullImporter):
         raise Exception("TODO - support async importers or run temporary loop")
 
         client_promise = kocherga.telegram.core_api.get_client()
-        client = None or client_promise  # TODO - `await client_promise`, but importers are not async yet
+        client = (
+            None or client_promise
+        )  # TODO - `await client_promise`, but importers are not async yet
 
         client.send_message(TIMECLUB_BOT, 'Загруженность клубов')
         time.sleep(3)
@@ -47,8 +47,4 @@ class Importer(kocherga.importer.base.FullImporter):
                 raise Exception(f"Can't parse message: {message}")
             (venue, visitors) = match.groups()
 
-            Timeclub24Visitors(
-                ts=ts,
-                venue=venue,
-                visitors=int(visitors),
-            ).save()
+            Timeclub24Visitors(ts=ts, venue=venue, visitors=int(visitors),).save()

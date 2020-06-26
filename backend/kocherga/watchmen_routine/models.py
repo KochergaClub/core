@@ -19,7 +19,9 @@ class TaskManager(models.Manager):
 
 
 class Task(ClusterableModel):
-    title = models.CharField('Название', max_length=80, blank=True)  # TODO - make required
+    title = models.CharField(
+        'Название', max_length=80, blank=True
+    )  # TODO - make required
     text = models.TextField('Текст', max_length=1024, blank=True)
     channel = models.CharField('Канал', default='space_bot', max_length=40)
 
@@ -40,26 +42,28 @@ class Task(ClusterableModel):
         return self.title or self.text
 
     def days_string(self):
-        return ','.join(
-            str(s)
-            for s in self.schedules.all()
-        )
+        return ','.join(str(s) for s in self.schedules.all())
+
     days_string.short_description = 'Расписание'
 
 
 class Schedule(models.Model):
-    weekday = models.IntegerField('День недели',
-                                  choices=(
-                                      (0, 'Понедельник'),
-                                      (1, 'Вторник'),
-                                      (2, 'Среда'),
-                                      (3, 'Четверг'),
-                                      (4, 'Пятница'),
-                                      (5, 'Суббота'),
-                                      (6, 'Воскресенье'),
-                                  ))
+    weekday = models.IntegerField(
+        'День недели',
+        choices=(
+            (0, 'Понедельник'),
+            (1, 'Вторник'),
+            (2, 'Среда'),
+            (3, 'Четверг'),
+            (4, 'Пятница'),
+            (5, 'Суббота'),
+            (6, 'Воскресенье'),
+        ),
+    )
 
-    period = models.IntegerField('Частота', default=1, help_text='Повторять каждые N недель')
+    period = models.IntegerField(
+        'Частота', default=1, help_text='Повторять каждые N недель'
+    )
 
     task = ParentalKey(Task, on_delete=models.CASCADE, related_name='schedules')
 
@@ -79,7 +83,7 @@ class Schedule(models.Model):
     def check_date(self, d):
         if d.isocalendar()[1] % self.period:
             return False
-        return (d.weekday() == self.weekday)
+        return d.weekday() == self.weekday
 
     def __str__(self):
         result = self.weekday_short

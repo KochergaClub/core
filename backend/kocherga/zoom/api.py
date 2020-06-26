@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import datetime
@@ -25,17 +26,9 @@ def api_call(method, url, data={}):
         'Authorization': 'Bearer ' + get_jwt_token(),
     }
     if method == 'POST':
-        r = requests.post(
-            f'https://api.zoom.us/v2/{url}',
-            json=data,
-            headers=headers,
-        )
+        r = requests.post(f'https://api.zoom.us/v2/{url}', json=data, headers=headers,)
     elif method == 'GET':
-        r = requests.get(
-            f'https://api.zoom.us/v2/{url}',
-            params=data,
-            headers=headers,
-        )
+        r = requests.get(f'https://api.zoom.us/v2/{url}', params=data, headers=headers,)
     else:
         raise Exception(f"Unknown method {method}")
 

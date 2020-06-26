@@ -21,8 +21,6 @@ class Migration(migrations.Migration):
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='customer',
-            name='comment',
-            field=models.TextField(blank=True),
+            model_name='customer', name='comment', field=models.TextField(blank=True),
         ),
     ]

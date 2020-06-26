@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -19,9 +20,11 @@ from kocherga.events.serializers import PublicEventSerializer
 
 class UpcomingEventsField(Field):
     def to_representation(self, value):
-        qs = value.filter(event_type='public', published=True, deleted=False) \
-                  .filter(start__gte = datetime.now(TZ)) \
-                  .order_by('start')
+        qs = (
+            value.filter(event_type='public', published=True, deleted=False)
+            .filter(start__gte=datetime.now(TZ))
+            .order_by('start')
+        )
 
         return PublicEventSerializer(qs, many=True).data
 
@@ -40,9 +43,7 @@ class ProjectPage(HeadlessPreviewMixin, Page):
 
     body = RichTextField('Описание', blank=True)
     image = models.ForeignKey(
-        'kocherga_wagtail.CustomImage',
-        on_delete=models.PROTECT,
-        related_name='+'
+        'kocherga_wagtail.CustomImage', on_delete=models.PROTECT, related_name='+'
     )
 
     content_panels = Page.content_panels + [
@@ -63,8 +64,10 @@ class ProjectPage(HeadlessPreviewMixin, Page):
 
     @property
     def upcoming_events(self):
-        qs = self.events.filter(event_type='public', published=True, deleted=False) \
-                        .filter(start__gte = datetime.now(TZ)) \
-                        .order_by('start')
+        qs = (
+            self.events.filter(event_type='public', published=True, deleted=False)
+            .filter(start__gte=datetime.now(TZ))
+            .order_by('start')
+        )
 
         return qs

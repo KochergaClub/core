@@ -7,14 +7,16 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Auth',
             fields=[
-                ('id', models.IntegerField(default=1, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.IntegerField(default=1, primary_key=True, serialize=False),
+                ),
                 ('access_token', models.CharField(max_length=1024)),
             ],
         ),

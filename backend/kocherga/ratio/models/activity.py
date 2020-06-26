@@ -10,28 +10,35 @@ from .trainer import Trainer
 # - bonuses
 # TODO - add 'type' field or figure out some other way to make activities polymorphic.
 class Activity(models.Model):
-    training_day = models.ForeignKey(TrainingDay, on_delete=models.CASCADE, related_name='schedule', null=True)
+    training_day = models.ForeignKey(
+        TrainingDay, on_delete=models.CASCADE, related_name='schedule', null=True
+    )
 
     time = models.TimeField('Время')
 
-    activity_type = models.CharField('Тип', max_length=40, choices=(
-        ('section', 'Секция'),
-        ('break', 'Перерыв'),
-        ('bonus', 'Бонус'),
-    ))
+    activity_type = models.CharField(
+        'Тип',
+        max_length=40,
+        choices=(('section', 'Секция'), ('break', 'Перерыв'), ('bonus', 'Бонус'),),
+    )
     name = models.CharField('Название', max_length=255)
     location = models.CharField('Локация', max_length=255, blank=True)
 
     trainer = models.ForeignKey(
         Trainer,
         verbose_name='Ведущий',
-        blank=True, null=True,
+        blank=True,
+        null=True,
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='+',
     )
 
     class Meta:
-        ordering = ('training_day__training__date', 'training_day__date', 'time',)
+        ordering = (
+            'training_day__training__date',
+            'training_day__date',
+            'time',
+        )
         verbose_name = 'Активность'
         verbose_name_plural = 'Активности'
 

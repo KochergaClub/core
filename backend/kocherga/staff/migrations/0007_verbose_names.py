@@ -14,12 +14,19 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='cm_customer',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='staff_member', to='cm.Customer'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='staff_member',
+                to='cm.Customer',
+            ),
         ),
         migrations.AlterField(
             model_name='member',
             name='cm_login',
-            field=models.CharField(blank=True, max_length=255, verbose_name='Логин в CM'),
+            field=models.CharField(
+                blank=True, max_length=255, verbose_name='Логин в CM'
+            ),
         ),
         migrations.AlterField(
             model_name='member',
@@ -29,7 +36,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='gender',
-            field=models.CharField(choices=[('MALE', 'М'), ('FEMALE', 'Ж')], max_length=10, null=True, verbose_name='Пол'),
+            field=models.CharField(
+                choices=[('MALE', 'М'), ('FEMALE', 'Ж')],
+                max_length=10,
+                null=True,
+                verbose_name='Пол',
+            ),
         ),
         migrations.AlterField(
             model_name='member',
@@ -39,16 +51,32 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='role',
-            field=models.CharField(choices=[('FOUNDER', 'Основатель'), ('MANAGER', 'Менеджер'), ('VIDEOMANAGER', 'Видеоменеджер'), ('WATCHMAN', 'Админ'), ('TRAINER', 'Тренер'), ('CONSULTANT', 'Внешний консультант'), ('VOLUNTEER', 'Волонтёр')], max_length=20, verbose_name='Должность'),
+            field=models.CharField(
+                choices=[
+                    ('FOUNDER', 'Основатель'),
+                    ('MANAGER', 'Менеджер'),
+                    ('VIDEOMANAGER', 'Видеоменеджер'),
+                    ('WATCHMAN', 'Админ'),
+                    ('TRAINER', 'Тренер'),
+                    ('CONSULTANT', 'Внешний консультант'),
+                    ('VOLUNTEER', 'Волонтёр'),
+                ],
+                max_length=20,
+                verbose_name='Должность',
+            ),
         ),
         migrations.AlterField(
             model_name='member',
             name='short_name',
-            field=models.CharField(blank=True, max_length=20, verbose_name='Короткое имя'),
+            field=models.CharField(
+                blank=True, max_length=20, verbose_name='Короткое имя'
+            ),
         ),
         migrations.AlterField(
             model_name='member',
             name='vk',
-            field=models.URLField(blank=True, max_length=255, verbose_name='Профиль VK'),
+            field=models.URLField(
+                blank=True, max_length=255, verbose_name='Профиль VK'
+            ),
         ),
     ]

@@ -16,9 +16,7 @@ def resolve_cm2CreateOrder(_, info, input):
 
 @Mutation.field('cm2CreateCustomer')
 def resolve_cm2CreateCustomer(_, info, input):
-    return models.Customer.objects.create(
-        **input
-    )
+    return models.Customer.objects.create(**input)
 
 
 @Mutation.field('cm2CloseOrder')

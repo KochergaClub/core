@@ -15,6 +15,71 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='sectionpage',
             name='body',
-            field=wagtail.core.fields.StreamField([('ratio_header', wagtail.core.blocks.CharBlock(classname='full title', group='Текст', icon='title', label='Заголовок')), ('ratio_paragraph', wagtail.core.blocks.RichTextBlock(group='Текст', label='Текст')), ('ratio_inset', wagtail.core.blocks.RichTextBlock(group='Текст', icon='placeholder', label='Врезка')), ('ratio_exercise', wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock(label='Задание')), ('lines_count', wagtail.core.blocks.IntegerBlock(label='Число строк')), ('enumerate', wagtail.core.blocks.BooleanBlock(default=True, label='Нумеровать строки', required=False))], group='Упражнение', icon='list-ol', label='Задание со строками')), ('ratio_exercise_oneline', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.CharBlock(label='Задание'))], group='Упражнение', icon='horizontalrule', label='Задание с одним полем')), ('ratio_briefing', wagtail.core.blocks.RichTextBlock(icon='home', label='Вводная часть'))]),
+            field=wagtail.core.fields.StreamField(
+                [
+                    (
+                        'ratio_header',
+                        wagtail.core.blocks.CharBlock(
+                            classname='full title',
+                            group='Текст',
+                            icon='title',
+                            label='Заголовок',
+                        ),
+                    ),
+                    (
+                        'ratio_paragraph',
+                        wagtail.core.blocks.RichTextBlock(group='Текст', label='Текст'),
+                    ),
+                    (
+                        'ratio_inset',
+                        wagtail.core.blocks.RichTextBlock(
+                            group='Текст', icon='placeholder', label='Врезка'
+                        ),
+                    ),
+                    (
+                        'ratio_exercise',
+                        wagtail.core.blocks.StructBlock(
+                            [
+                                (
+                                    'header',
+                                    wagtail.core.blocks.CharBlock(label='Задание'),
+                                ),
+                                (
+                                    'lines_count',
+                                    wagtail.core.blocks.IntegerBlock(
+                                        label='Число строк'
+                                    ),
+                                ),
+                                (
+                                    'enumerate',
+                                    wagtail.core.blocks.BooleanBlock(
+                                        default=True,
+                                        label='Нумеровать строки',
+                                        required=False,
+                                    ),
+                                ),
+                            ],
+                            group='Упражнение',
+                            icon='list-ol',
+                            label='Задание со строками',
+                        ),
+                    ),
+                    (
+                        'ratio_exercise_oneline',
+                        wagtail.core.blocks.StructBlock(
+                            [('text', wagtail.core.blocks.CharBlock(label='Задание'))],
+                            group='Упражнение',
+                            icon='horizontalrule',
+                            label='Задание с одним полем',
+                        ),
+                    ),
+                    (
+                        'ratio_briefing',
+                        wagtail.core.blocks.RichTextBlock(
+                            icon='home', label='Вводная часть'
+                        ),
+                    ),
+                ]
+            ),
         ),
     ]

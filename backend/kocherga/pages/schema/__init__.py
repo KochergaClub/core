@@ -9,10 +9,7 @@ def create_PhotoRibbonBlock():
 
     @PhotoRibbonBlock.field('value')
     def resolve_value(obj, info, spec):
-        return [
-            image.get_rendition(spec)
-            for image in obj.value
-        ]
+        return [image.get_rendition(spec) for image in obj.value]
 
     return PhotoRibbonBlock
 

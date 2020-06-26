@@ -9,7 +9,11 @@ class EventTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Ticket
-        fields = ('id', 'user', 'status',)
+        fields = (
+            'id',
+            'user',
+            'status',
+        )
 
 
 class MyTicketSerializer(serializers.ModelSerializer):

@@ -15,25 +15,45 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
-                                    related_name='+', to='kocherga_wagtail.CustomImage'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='kocherga_wagtail.CustomImage',
+            ),
         ),
         migrations.AlterField(
             model_name='eventprototype',
             name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
-                                    related_name='+', to='kocherga_wagtail.CustomImage'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='kocherga_wagtail.CustomImage',
+            ),
         ),
         migrations.AlterField(
             model_name='vkannouncement',
             name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
-                                    related_name='+', to='kocherga_wagtail.CustomImage'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='kocherga_wagtail.CustomImage',
+            ),
         ),
         migrations.AlterField(
             model_name='weeklydigest',
             name='image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
-                                    related_name='+', to='kocherga_wagtail.CustomImage'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='+',
+                to='kocherga_wagtail.CustomImage',
+            ),
         ),
     ]

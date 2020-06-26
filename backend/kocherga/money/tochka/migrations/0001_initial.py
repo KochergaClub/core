@@ -7,21 +7,21 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
             name='Record',
             fields=[
-                ('id', models.CharField(max_length=100, primary_key=True, serialize=False)),
+                (
+                    'id',
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
                 ('ts', models.IntegerField()),
                 ('purpose', models.TextField()),
                 ('document_type', models.IntegerField()),
                 ('total', models.DecimalField(decimal_places=2, max_digits=10)),
             ],
-            options={
-                'db_table': 'tochka_records',
-            },
+            options={'db_table': 'tochka_records',},
         ),
     ]

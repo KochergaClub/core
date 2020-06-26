@@ -14,26 +14,22 @@ def create_mutations():
     @Mutation.field('CreateCohort')
     def resolve_CreateCohort(_, info):
         cohort = models.Cohort.objects.create()
-        return {
-            'cohort': cohort
-        }
+        return {'cohort': cohort}
 
     return Mutation
 
 
 def create_cohort_mutations():
     CohortMutation = DjangoObjectMutationType(
-        id_argument='cohort_id',
-        prefix=PREFIX,
-        model=models.Cohort,
+        id_argument='cohort_id', prefix=PREFIX, model=models.Cohort,
     )
 
     for (field, method) in [
-            ('PopulateCohortFromEvent', 'populate_from_event'),
-            ('SendInviteEmails', 'send_invite_emails'),
-            ('ClearAllGroups', 'clear_all_groups'),
-            ('RunSolver', 'run_solver'),
-            ('BroadcastSolution', 'broadcast_solution'),
+        ('PopulateCohortFromEvent', 'populate_from_event'),
+        ('SendInviteEmails', 'send_invite_emails'),
+        ('ClearAllGroups', 'clear_all_groups'),
+        ('RunSolver', 'run_solver'),
+        ('BroadcastSolution', 'broadcast_solution'),
     ]:
         CohortMutation.create_simple_method_field(
             field_name=field,
@@ -42,7 +38,9 @@ def create_cohort_mutations():
             result_key='cohort',
         )
 
-    CohortMutation.create_simple_method_field('DeleteCohort', 'delete', result_format='ok')
+    CohortMutation.create_simple_method_field(
+        'DeleteCohort', 'delete', result_format='ok'
+    )
 
     @CohortMutation.object_field('CreateGroup')
     def resolve_cohort_CreateGroup(_, info, cohort):
@@ -71,8 +69,7 @@ def create_cohort_mutations():
             kocherga_user = KchUser.objects.create_user(email)
 
         (participant, _) = models.Participant.objects.get_or_create(
-            user=kocherga_user,
-            cohort=cohort,
+            user=kocherga_user, cohort=cohort,
         )
 
         return {'participant': participant}
@@ -82,16 +79,14 @@ def create_cohort_mutations():
 
 def create_participant_mutations():
     ParticipantMutation = DjangoObjectMutationType(
-        id_argument='participant_id',
-        prefix=PREFIX,
-        model=models.Participant,
+        id_argument='participant_id', prefix=PREFIX, model=models.Participant,
     )
 
     ParticipantMutation.create_simple_method_field(
         'ActivateVoting',
         'tinder_activate',
         result_format='wrapped_obj',
-        result_key='participant'
+        result_key='participant',
     )
 
     @ParticipantMutation.object_field('SetPresenceStatus')

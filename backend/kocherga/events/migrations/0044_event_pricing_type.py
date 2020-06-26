@@ -13,6 +13,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='pricing_type',
-            field=models.CharField(choices=[('anticafe', 'anticafe'), ('free', 'free')], default='anticafe', max_length=20),
+            field=models.CharField(
+                choices=[('anticafe', 'anticafe'), ('free', 'free')],
+                default='anticafe',
+                max_length=20,
+            ),
         ),
     ]

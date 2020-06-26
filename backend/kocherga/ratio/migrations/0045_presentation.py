@@ -12,10 +12,16 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='sectionindexpage',
-            options={'verbose_name': 'Список рацио-секций', 'verbose_name_plural': 'Списки рацио-секций'},
+            options={
+                'verbose_name': 'Список рацио-секций',
+                'verbose_name_plural': 'Списки рацио-секций',
+            },
         ),
         migrations.AlterModelOptions(
             name='sectionpage',
-            options={'verbose_name': 'Рацио-секция', 'verbose_name_plural': 'Рацио-секции'},
+            options={
+                'verbose_name': 'Рацио-секция',
+                'verbose_name_plural': 'Рацио-секции',
+            },
         ),
     ]

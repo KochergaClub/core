@@ -14,11 +14,18 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='call',
-            options={'ordering': ['-ts'], 'permissions': (('listen', 'Может слушать  звонки'),), 'verbose_name': 'Звонок', 'verbose_name_plural': 'Звонки'},
+            options={
+                'ordering': ['-ts'],
+                'permissions': (('listen', 'Может слушать  звонки'),),
+                'verbose_name': 'Звонок',
+                'verbose_name_plural': 'Звонки',
+            },
         ),
         migrations.AlterField(
             model_name='call',
             name='record',
-            field=models.FileField(blank=True, upload_to=kocherga.zadarma.models.call.call_path),
+            field=models.FileField(
+                blank=True, upload_to=kocherga.zadarma.models.call.call_path
+            ),
         ),
     ]

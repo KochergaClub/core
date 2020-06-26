@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import sys
@@ -31,9 +32,19 @@ def react_like_supply(message):
         return
     if random.random() > 0.8:
         return
-    message.react(random.choice([
-        'heart', 'heartbeat', 'heart_eyes', 'blue_heart', 'heart_decoration', 'kissing_heart', 'heart_eyes_cat'
-    ]))
+    message.react(
+        random.choice(
+            [
+                'heart',
+                'heartbeat',
+                'heart_eyes',
+                'blue_heart',
+                'heart_decoration',
+                'kissing_heart',
+                'heart_eyes_cat',
+            ]
+        )
+    )
 
 
 def add_simple_interactions():
@@ -56,7 +67,6 @@ def add_simple_interactions():
     ]
 
     def gen_cb(response):
-
         def f(msg, *args):
             return response
 
@@ -79,6 +89,8 @@ add_simple_interactions()
 # disabled due to coronavirus
 # @bot.schedule("cron", hour=9)
 def morning_events_notification():
-    bot.send_message(**kocherga.ludwig.watchmen.today_watchmen(), channel="#space_realtime")
+    bot.send_message(
+        **kocherga.ludwig.watchmen.today_watchmen(), channel="#space_realtime"
+    )
     bot.send_message(**kocherga.ludwig.watchmen.today_watchmen(), channel="#space_bot")
     bot.send_message(**kocherga.ludwig.events.list_events(), channel="#space_bot")

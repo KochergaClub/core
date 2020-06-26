@@ -12,7 +12,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='activity',
-            options={'ordering': ('day', 'time'), 'verbose_name': 'Активность', 'verbose_name_plural': 'Активности'},
+            options={
+                'ordering': ('day', 'time'),
+                'verbose_name': 'Активность',
+                'verbose_name_plural': 'Активности',
+            },
         ),
         migrations.AddField(
             model_name='trainer',
@@ -20,8 +24,6 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='ticket',
-            name='comment',
-            field=models.TextField(blank=True),
+            model_name='ticket', name='comment', field=models.TextField(blank=True),
         ),
     ]

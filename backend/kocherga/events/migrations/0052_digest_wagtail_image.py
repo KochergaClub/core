@@ -40,10 +40,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='weeklydigest',
             name='wagtail_image',
-            field=models.ForeignKey(blank=True, null=True, on_delete=models.deletion.PROTECT, related_name='+', to='wagtailimages.Image'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=models.deletion.PROTECT,
+                related_name='+',
+                to='wagtailimages.Image',
+            ),
         ),
-        migrations.RunPython(
-            fill_wagtail_images,
-            nop,
-        ),
+        migrations.RunPython(fill_wagtail_images, nop,),
     ]

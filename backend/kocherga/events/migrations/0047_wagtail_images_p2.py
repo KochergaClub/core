@@ -11,33 +11,21 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='event',
-            old_name='image',
-            new_name='image_old',
+            model_name='event', old_name='image', new_name='image_old',
         ),
         migrations.RenameField(
-            model_name='eventprototype',
-            old_name='image',
-            new_name='image_old',
+            model_name='eventprototype', old_name='image', new_name='image_old',
         ),
         migrations.RenameField(
-            model_name='vkannouncement',
-            old_name='image',
-            new_name='image_old',
+            model_name='vkannouncement', old_name='image', new_name='image_old',
         ),
         migrations.RenameField(
-            model_name='event',
-            old_name='wagtail_image',
-            new_name='image',
+            model_name='event', old_name='wagtail_image', new_name='image',
         ),
         migrations.RenameField(
-            model_name='eventprototype',
-            old_name='wagtail_image',
-            new_name='image',
+            model_name='eventprototype', old_name='wagtail_image', new_name='image',
         ),
         migrations.RenameField(
-            model_name='vkannouncement',
-            old_name='wagtail_image',
-            new_name='image',
+            model_name='vkannouncement', old_name='wagtail_image', new_name='image',
         ),
     ]

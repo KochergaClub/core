@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from ariadne import MutationType
@@ -16,17 +17,17 @@ Mutation = MutationType()
 def input_to_update_dict(input):
     result = {}
     for field in (
-            'title',
-            'summary',
-            'description',
-            'location',
-            'timing_description_override',
-            'active',
-            'weekday',
-            'hour',
-            'minute',
-            'length',
-            'timepad_category_code',
+        'title',
+        'summary',
+        'description',
+        'location',
+        'timing_description_override',
+        'active',
+        'weekday',
+        'hour',
+        'minute',
+        'length',
+        'timepad_category_code',
     ):
         if field in input:
             result[field] = input[field]
@@ -35,8 +36,10 @@ def input_to_update_dict(input):
         if not input['project_slug']:
             result['project'] = None
         else:
-            result['project'] = kocherga.projects.models.ProjectPage.objects.live().public().get(
-                slug=input['project_slug']
+            result['project'] = (
+                kocherga.projects.models.ProjectPage.objects.live()
+                .public()
+                .get(slug=input['project_slug'])
             )
 
     if 'vk_group_name' in input:
@@ -50,9 +53,7 @@ def input_to_update_dict(input):
 
 @Mutation.field('eventPrototypeCreate')
 def eventPrototypeCreate(_, info, input):
-    prototype = models.EventPrototype(
-        **input_to_update_dict(input)
-    )
+    prototype = models.EventPrototype(**input_to_update_dict(input))
     prototype.full_clean()
     prototype.save()
 
@@ -86,9 +87,7 @@ def eventPrototypeCancelDate(_, info, input):
     prototype.cancel_date(datetime.strptime(date_str, '%Y-%m-%d').date())
     prototype.save()
 
-    return {
-        'ok': True
-    }
+    return {'ok': True}
 
 
 @Mutation.field('eventPrototypeNewEvent')
@@ -100,9 +99,7 @@ def eventPrototypeNewEvent(_, info, input):
     dt = datetime.fromtimestamp(ts, TZ)
     prototype.new_event(dt)
 
-    return {
-        'ok': True
-    }
+    return {'ok': True}
 
 
 @Mutation.field('eventPrototypeAddTag')

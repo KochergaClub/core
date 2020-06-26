@@ -19,4 +19,5 @@ class RewardImageAdmin(ModelAdmin):
     menu_icon = 'success'
     list_display = ('__str__', 'is_active')
 
+
 # These admins are wired to the group in kocherga.watchmen app, not here.

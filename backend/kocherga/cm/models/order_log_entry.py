@@ -5,9 +5,7 @@ from .order import Order
 
 class OrderLogEntry(models.Model):
     class Meta:
-        unique_together = (
-            ('order', 'operation_id'),
-        )
+        unique_together = (('order', 'operation_id'),)
         db_table = 'cm_order_log'
 
     operation_id = models.IntegerField()
@@ -15,4 +13,6 @@ class OrderLogEntry(models.Model):
     ts = models.IntegerField(db_index=True)
     login = models.CharField(max_length=80)
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='log_entries')
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name='log_entries'
+    )

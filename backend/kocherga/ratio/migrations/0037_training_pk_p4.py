@@ -26,14 +26,24 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='activity',
             name='training',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='schedule', to='ratio.Training', verbose_name='Тренинг'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='schedule',
+                to='ratio.Training',
+                verbose_name='Тренинг',
+            ),
         ),
         migrations.AddField(
             model_name='ticket',
             name='training',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, related_name='tickets', to='ratio.Training', verbose_name='Тренинг'),
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='tickets',
+                to='ratio.Training',
+                verbose_name='Тренинг',
+            ),
         ),
-        migrations.RunPython(
-            fill_fk
-        )
+        migrations.RunPython(fill_fk),
     ]

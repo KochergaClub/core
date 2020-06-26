@@ -13,13 +13,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RewardImage',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('image', models.URLField(max_length=255)),
             ],
         ),
         migrations.RenameField(
-            model_name='schedule',
-            old_name='routine',
-            new_name='task',
+            model_name='schedule', old_name='routine', new_name='task',
         ),
     ]

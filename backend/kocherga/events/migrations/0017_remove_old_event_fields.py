@@ -10,36 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='event',
-            name='fb_group',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='posted_fb',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='posted_timepad',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='posted_vk',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='timepad_category_code',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='timepad_prepaid_tickets',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='vk_group',
-        ),
-        migrations.RemoveField(
-            model_name='event',
-            name='vk_image',
-        ),
+        migrations.RemoveField(model_name='event', name='fb_group',),
+        migrations.RemoveField(model_name='event', name='posted_fb',),
+        migrations.RemoveField(model_name='event', name='posted_timepad',),
+        migrations.RemoveField(model_name='event', name='posted_vk',),
+        migrations.RemoveField(model_name='event', name='timepad_category_code',),
+        migrations.RemoveField(model_name='event', name='timepad_prepaid_tickets',),
+        migrations.RemoveField(model_name='event', name='vk_group',),
+        migrations.RemoveField(model_name='event', name='vk_image',),
     ]

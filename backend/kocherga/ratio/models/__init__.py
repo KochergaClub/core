@@ -9,9 +9,15 @@ from .presentation import PresentationIndexPage, PresentationPage
 
 
 __all__ = [
-    'Training', 'TrainingDay',
-    'Trainer', 'Ticket', 'Activity',
-    'SectionIndexPage', 'SectionPage',
-    'NotebookIndexPage', 'NotebookPage',
-    'PresentationIndexPage', 'PresentationPage',
+    'Training',
+    'TrainingDay',
+    'Trainer',
+    'Ticket',
+    'Activity',
+    'SectionIndexPage',
+    'SectionPage',
+    'NotebookIndexPage',
+    'NotebookPage',
+    'PresentationIndexPage',
+    'PresentationPage',
 ]

@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -25,7 +26,7 @@ class UserManager(models.Manager):
                     'deleted': m.get('deleted'),
                     'image_url': m['profile']['image_512'],
                     'real_name': m.get('real_name', ''),
-                }
+                },
             )
 
 

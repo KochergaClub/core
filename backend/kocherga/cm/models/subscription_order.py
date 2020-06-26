@@ -5,9 +5,7 @@ from .util import date_and_time_to_ts
 
 class SubscriptionOrder(models.Model):
     class Meta:
-        unique_together = (
-            ('card_id', 'ts'),
-        )
+        unique_together = (('card_id', 'ts'),)
         db_table = 'cm_subscription_orders'
         verbose_name = 'Абонемент'
         verbose_name_plural = 'Абонементы'
@@ -50,7 +48,6 @@ class SubscriptionOrder(models.Model):
         )
 
         (obj, created) = SubscriptionOrder.objects.update_or_create(
-            card_id=params['card_id'], ts=params['ts'],
-            defaults=params,
+            card_id=params['card_id'], ts=params['ts'], defaults=params,
         )
         return obj

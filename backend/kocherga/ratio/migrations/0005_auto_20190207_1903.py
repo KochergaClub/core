@@ -44,6 +44,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticket',
             name='training',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='tickets', to='ratio.Training', verbose_name='Тренинг'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name='tickets',
+                to='ratio.Training',
+                verbose_name='Тренинг',
+            ),
         ),
     ]

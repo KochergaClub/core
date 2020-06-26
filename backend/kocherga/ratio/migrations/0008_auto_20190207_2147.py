@@ -12,6 +12,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='training',
-            options={'ordering': ['-date'], 'permissions': (('manage', 'Может управлять тренингами'),), 'verbose_name': 'Тренинг', 'verbose_name_plural': 'Тренинги'},
+            options={
+                'ordering': ['-date'],
+                'permissions': (('manage', 'Может управлять тренингами'),),
+                'verbose_name': 'Тренинг',
+                'verbose_name_plural': 'Тренинги',
+            },
         ),
     ]

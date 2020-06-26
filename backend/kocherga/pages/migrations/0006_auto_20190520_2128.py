@@ -15,6 +15,92 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='freeformpage',
             name='body',
-            field=wagtail.core.fields.StreamField([('basic_lead', wagtail.core.blocks.RichTextBlock(group='basic', label='Крупный текст')), ('basic_paragraph', wagtail.core.blocks.RichTextBlock(group='basic', label='Обычный текст')), ('grey', wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock()), ('text', wagtail.core.blocks.RichTextBlock(required=False))], group='basic', label='Заголовок секции')), ('columns_basic', wagtail.core.blocks.ListBlock(wagtail.core.blocks.StructBlock([('header', wagtail.core.blocks.CharBlock()), ('text', wagtail.core.blocks.RichTextBlock(required=False))]), group='columns', label='Колонки')), ('columns_memberships', wagtail.core.blocks.ListBlock(wagtail.core.blocks.StructBlock([('title', wagtail.core.blocks.CharBlock(label='Название')), ('subtitle', wagtail.core.blocks.CharBlock(label='Подзаголовок')), ('price', wagtail.core.blocks.IntegerBlock(label='Стоимость')), ('description', wagtail.core.blocks.RichTextBlock(label='Описание'))]), group='columns', label='Абонементы')), ('events_list', wagtail.core.blocks.StructBlock([], group='events', label='Список событий'))]),
+            field=wagtail.core.fields.StreamField(
+                [
+                    (
+                        'basic_lead',
+                        wagtail.core.blocks.RichTextBlock(
+                            group='basic', label='Крупный текст'
+                        ),
+                    ),
+                    (
+                        'basic_paragraph',
+                        wagtail.core.blocks.RichTextBlock(
+                            group='basic', label='Обычный текст'
+                        ),
+                    ),
+                    (
+                        'grey',
+                        wagtail.core.blocks.StructBlock(
+                            [
+                                ('header', wagtail.core.blocks.CharBlock()),
+                                (
+                                    'text',
+                                    wagtail.core.blocks.RichTextBlock(required=False),
+                                ),
+                            ],
+                            group='basic',
+                            label='Заголовок секции',
+                        ),
+                    ),
+                    (
+                        'columns_basic',
+                        wagtail.core.blocks.ListBlock(
+                            wagtail.core.blocks.StructBlock(
+                                [
+                                    ('header', wagtail.core.blocks.CharBlock()),
+                                    (
+                                        'text',
+                                        wagtail.core.blocks.RichTextBlock(
+                                            required=False
+                                        ),
+                                    ),
+                                ]
+                            ),
+                            group='columns',
+                            label='Колонки',
+                        ),
+                    ),
+                    (
+                        'columns_memberships',
+                        wagtail.core.blocks.ListBlock(
+                            wagtail.core.blocks.StructBlock(
+                                [
+                                    (
+                                        'title',
+                                        wagtail.core.blocks.CharBlock(label='Название'),
+                                    ),
+                                    (
+                                        'subtitle',
+                                        wagtail.core.blocks.CharBlock(
+                                            label='Подзаголовок'
+                                        ),
+                                    ),
+                                    (
+                                        'price',
+                                        wagtail.core.blocks.IntegerBlock(
+                                            label='Стоимость'
+                                        ),
+                                    ),
+                                    (
+                                        'description',
+                                        wagtail.core.blocks.RichTextBlock(
+                                            label='Описание'
+                                        ),
+                                    ),
+                                ]
+                            ),
+                            group='columns',
+                            label='Абонементы',
+                        ),
+                    ),
+                    (
+                        'events_list',
+                        wagtail.core.blocks.StructBlock(
+                            [], group='events', label='Список событий'
+                        ),
+                    ),
+                ]
+            ),
         ),
     ]

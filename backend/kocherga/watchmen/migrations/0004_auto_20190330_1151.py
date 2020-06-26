@@ -11,8 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='scheduleitem',
-            old_name='watchman',
-            new_name='watchman_name',
+            model_name='scheduleitem', old_name='watchman', new_name='watchman_name',
         ),
     ]

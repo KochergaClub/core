@@ -11,10 +11,7 @@ def resolve_zadarmaPbxCalls(_, info, **pager):
     if not info.context.user.has_perm('zadarma.admin'):
         qs = qs.filter(data__staff_member__user__pk=info.context.user.pk)
 
-    return qs.relay_page(
-        order='-ts',
-        **pager
-    )
+    return qs.relay_page(order='-ts', **pager)
 
 
 @Query.field('zadarmaPbxCall')

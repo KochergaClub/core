@@ -10,13 +10,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='cohort',
-        ),
+        migrations.RemoveField(model_name='user', name='cohort',),
         migrations.AlterField(
             model_name='user',
             name='cohorts',
-            field=models.ManyToManyField(related_name='users', to='mastermind_dating.Cohort'),
+            field=models.ManyToManyField(
+                related_name='users', to='mastermind_dating.Cohort'
+            ),
         ),
     ]

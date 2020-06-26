@@ -29,5 +29,5 @@ class Migration(migrations.Migration):
             name='invite_email_sent',
             field=models.BooleanField(default=False),
         ),
-        migrations.RunPython(populate_invite_email_sent, lambda x, y: None)
+        migrations.RunPython(populate_invite_email_sent, lambda x, y: None),
     ]

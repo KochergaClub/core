@@ -4,7 +4,13 @@ from django.db import migrations, models
 
 
 def fill_google_ids(apps, schema_editor):
-    for model_name in ('Ticket', 'Tag', 'VkAnnouncement', 'FbAnnouncement', 'TimepadAnnouncement'):
+    for model_name in (
+        'Ticket',
+        'Tag',
+        'VkAnnouncement',
+        'FbAnnouncement',
+        'TimepadAnnouncement',
+    ):
         model_class = apps.get_model('events', model_name)
         for obj in model_class.objects.all():
             obj.event_google_id = obj.event_id

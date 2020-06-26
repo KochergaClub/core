@@ -34,20 +34,17 @@ def upload_ratio_tickets_audience():
     schema = ['EMAIL', 'FN', 'LN', 'LOOKALIKE_VALUE']
     data = []
     for email, email_tickets in email2tickets.items():
-        data.append([
-            email,
-            email_tickets[0].first_name,
-            email_tickets[0].last_name,
-            sum(t.payment_amount for t in email_tickets),
-        ])
+        data.append(
+            [
+                email,
+                email_tickets[0].first_name,
+                email_tickets[0].last_name,
+                sum(t.payment_amount for t in email_tickets),
+            ]
+        )
 
     api.post(
         f'{AUDIENCE_ID}/users',
-        data={
-            'payload': {
-                'schema': schema,
-                'data': data,
-            }
-        },
+        data={'payload': {'schema': schema, 'data': data,}},
         token=MARKETING_TOKEN,
     )

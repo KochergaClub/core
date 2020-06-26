@@ -7,7 +7,9 @@ MastermindDatingCohort.related_field('participants')
 MastermindDatingCohort.related_field('groups')
 
 
-MastermindDatingParticipant = DjangoObjectType('MastermindDatingParticipant', models.Participant)
+MastermindDatingParticipant = DjangoObjectType(
+    'MastermindDatingParticipant', models.Participant
+)
 
 
 @MastermindDatingParticipant.field('photo')

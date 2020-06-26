@@ -34,7 +34,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='call',
             name='pbx_call',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='calls', to='zadarma.PbxCall'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='calls',
+                to='zadarma.PbxCall',
+            ),
         ),
         migrations.RunPython(fill_pbx_ts),
     ]

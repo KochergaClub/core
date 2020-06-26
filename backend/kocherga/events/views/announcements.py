@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from rest_framework.response import Response
@@ -20,8 +21,7 @@ class AnnouncementViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_object(self):
         event = generics.get_object_or_404(
-            models.Event.objects.all(),
-            uuid=self.kwargs[self.lookup_field]
+            models.Event.objects.all(), uuid=self.kwargs[self.lookup_field]
         )
         announcement = getattr(event, self.event_field)
         return announcement
@@ -43,11 +43,9 @@ class TimepadViewSet(AnnouncementViewSet):
     @action(detail=False)
     def categories(self, request):
         categories = kocherga.events.models.announcement.timepad.timepad_categories()
-        return Response([
-            {
-                "id": c.id, "name": c.name, "code": c.code
-            } for c in categories
-        ])
+        return Response(
+            [{"id": c.id, "name": c.name, "code": c.code} for c in categories]
+        )
 
 
 class VkViewSet(AnnouncementViewSet):

@@ -15,21 +15,40 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='member',
             name='cm_customer',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='staff_member', to='cm.Customer', verbose_name='Клиент в КМ'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='staff_member',
+                to='cm.Customer',
+                verbose_name='Клиент в КМ',
+            ),
         ),
         migrations.AlterField(
             model_name='member',
             name='cm_login',
-            field=models.CharField(blank=True, max_length=255, verbose_name='Логин в КМ'),
+            field=models.CharField(
+                blank=True, max_length=255, verbose_name='Логин в КМ'
+            ),
         ),
         migrations.AlterField(
             model_name='member',
             name='payment_type',
-            field=models.CharField(blank=True, choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал')], max_length=10, verbose_name='Форма зарплаты'),
+            field=models.CharField(
+                blank=True,
+                choices=[('CASH', 'нал'), ('ELECTRONIC', 'безнал')],
+                max_length=10,
+                verbose_name='Форма зарплаты',
+            ),
         ),
         migrations.AlterField(
             model_name='member',
             name='user',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='staff_member', to=settings.AUTH_USER_MODEL, verbose_name='Учетная запись на сайте'),
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='staff_member',
+                to=settings.AUTH_USER_MODEL,
+                verbose_name='Учетная запись на сайте',
+            ),
         ),
     ]

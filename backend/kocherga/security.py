@@ -1,6 +1,7 @@
 """Audit staff access permissions."""
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 from termcolor import colored
@@ -48,7 +49,9 @@ def audit_wiki():
 
     for user in staff:
         if user.full_name not in wiki_team_by_name:
-            report_shortage("Staff member is not a wiki user: {}".format(user.full_name))
+            report_shortage(
+                "Staff member is not a wiki user: {}".format(user.full_name)
+            )
 
 
 def audit_slack():
@@ -68,14 +71,18 @@ def audit_slack():
         if not email:
             continue
         if not kocherga.staff.tools.find_member_by_email(user.email):
-            report_excess(f"Slack user is not a staff member: {user.email}, {user.real_name}")
+            report_excess(
+                f"Slack user is not a staff member: {user.email}, {user.real_name}"
+            )
 
     return ok
 
 
 def audit_calendar():
     logger.info("Audit calendar permissions")
-    private_google_calendars = kocherga.events.models.GoogleCalendar.objects.filter(public_only=False)
+    private_google_calendars = kocherga.events.models.GoogleCalendar.objects.filter(
+        public_only=False
+    )
     api = kocherga.events.google.api()
 
     for google_calendar in private_google_calendars:

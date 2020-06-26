@@ -18,11 +18,35 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticket',
             name='payment_type',
-            field=models.CharField(choices=[('none', '-'), ('timepad', 'Timepad'), ('website', 'Сайт'), ('crowdfunding', 'Краудфандинг'), ('cash', 'Нал'), ('invoice', 'Счёт'), ('transfer', 'Перевод')], default='website', max_length=40, verbose_name='Вид оплаты'),
+            field=models.CharField(
+                choices=[
+                    ('none', '-'),
+                    ('timepad', 'Timepad'),
+                    ('website', 'Сайт'),
+                    ('crowdfunding', 'Краудфандинг'),
+                    ('cash', 'Нал'),
+                    ('invoice', 'Счёт'),
+                    ('transfer', 'Перевод'),
+                ],
+                default='website',
+                max_length=40,
+                verbose_name='Вид оплаты',
+            ),
         ),
         migrations.AlterField(
             model_name='ticket',
             name='ticket_type',
-            field=models.CharField(choices=[('normal', 'Обычный'), ('stipend', 'Стипендия'), ('staff', 'Стафф'), ('replacement', 'Замена (заменяет другого участника)'), ('carry-over', 'Перенос (с прошлого мероприятия)')], default='normal', max_length=40, verbose_name='Тип билета'),
+            field=models.CharField(
+                choices=[
+                    ('normal', 'Обычный'),
+                    ('stipend', 'Стипендия'),
+                    ('staff', 'Стафф'),
+                    ('replacement', 'Замена (заменяет другого участника)'),
+                    ('carry-over', 'Перенос (с прошлого мероприятия)'),
+                ],
+                default='normal',
+                max_length=40,
+                verbose_name='Тип билета',
+            ),
         ),
     ]

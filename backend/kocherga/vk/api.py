@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -10,9 +11,7 @@ import urllib.parse
 
 from captcha_solver import CaptchaSolver
 
-captcha_solver = CaptchaSolver(
-    "rucaptcha", api_key=settings.KOCHERGA_RUCAPTCHA_KEY
-)
+captcha_solver = CaptchaSolver("rucaptcha", api_key=settings.KOCHERGA_RUCAPTCHA_KEY)
 
 API_VERSION = "5.80"
 
@@ -42,14 +41,16 @@ def new_token_url():
     redirect_uri = "https://oauth.vk.com/blank.html"
     scope = "groups,wall,photos,offline"
     client_id = settings.KOCHERGA_VK['client_id']
-    return f"https://oauth.vk.com/authorize?" + urllib.parse.urlencode({
-        "client_id": client_id,
-        "display": "page",
-        "redirect_uri": redirect_uri,
-        "scope": scope,
-        "response_type": "token",
-        "v": API_VERSION,
-    })
+    return f"https://oauth.vk.com/authorize?" + urllib.parse.urlencode(
+        {
+            "client_id": client_id,
+            "display": "page",
+            "redirect_uri": redirect_uri,
+            "scope": scope,
+            "response_type": "token",
+            "v": API_VERSION,
+        }
+    )
 
 
 def _call(method, params, group_token=False):
@@ -103,9 +104,7 @@ def call(method, params, group_token=False):
 
 
 def bulk_call(operations, group_token=False):
-    lines = [
-        'var result = [];\n'
-    ]
+    lines = ['var result = [];\n']
     for operation in operations:
         method = operation['method']
         params = operation['params']
@@ -114,11 +113,5 @@ def bulk_call(operations, group_token=False):
 
     lines.append('return result;')
 
-    r = _call(
-        'execute',
-        {
-            'code': ''.join(lines)
-        },
-        group_token=group_token
-    )
+    r = _call('execute', {'code': ''.join(lines)}, group_token=group_token)
     return r['response']

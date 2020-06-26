@@ -15,12 +15,27 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Cheque',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('amount', models.IntegerField()),
                 ('dt', models.DateTimeField(auto_now_add=True)),
                 ('cashed_date', models.DateTimeField(blank=True, null=True)),
                 ('comment', models.TextField(blank=True)),
-                ('whom', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cheques', to='staff.Member')),
+                (
+                    'whom',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='cheques',
+                        to='staff.Member',
+                    ),
+                ),
             ],
         ),
     ]

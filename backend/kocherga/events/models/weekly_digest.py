@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from typing import Optional
@@ -48,9 +49,13 @@ class WeeklyDigestManager(models.Manager):
 
 class WeeklyDigest(models.Model):
     start = models.DateField('Дата начала недели')
-    mailchimp_id = models.CharField('ID кампании в Mailchimp', max_length=100, blank=True)
+    mailchimp_id = models.CharField(
+        'ID кампании в Mailchimp', max_length=100, blank=True
+    )
     mailchimp_sent = models.BooleanField('Mailchimp-кампания отправлена', default=False)
-    telegram_id = models.CharField('ID сообщения в Telegram', max_length=100, blank=True)
+    telegram_id = models.CharField(
+        'ID сообщения в Telegram', max_length=100, blank=True
+    )
     vk_id = models.CharField('ID поста в VK', max_length=100, blank=True)
 
     image = models.ForeignKey(
@@ -58,7 +63,7 @@ class WeeklyDigest(models.Model):
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name='+'
+        related_name='+',
     )
 
     objects = WeeklyDigestManager()
@@ -71,12 +76,7 @@ class WeeklyDigest(models.Model):
         return self.start + timedelta(days=6)
 
     def events(self):
-        query = (
-            Event.objects.public_events(
-                from_date=self.start,
-                to_date=self.end,
-            )
-        )
+        query = Event.objects.public_events(from_date=self.start, to_date=self.end,)
         result = list(query.all())
         logger.info(f"Schedule includes {len(result)} events")
         return result
@@ -92,11 +92,7 @@ class WeeklyDigest(models.Model):
             date2events[d].append(event)
 
         events_by_date = [
-            {
-                "date": d,
-                "events": date2events[d],
-            }
-            for d in sorted(date2events.keys())
+            {"date": d, "events": date2events[d],} for d in sorted(date2events.keys())
         ]
 
         start_month = kocherga.dateutils.inflected_month(self.start)
@@ -114,14 +110,19 @@ class WeeklyDigest(models.Model):
             month = kocherga.dateutils.inflected_month(dt)
             return f"{weekday}, {dt.day} {month}"
 
-        mjml = render_to_string('events/email/weekly_digest.mjml', {
-            'text': markdown.markdown(text, extensions=['markdown.extensions.nl2br']),
-            'image_url': image_url,
-            'title_dates': title_dates,
-            'events_by_date': events_by_date,
-            'date2day': date2day,
-            'utmify': get_utmify('weekly-digest', 'kocherga-newsletter'),
-        })
+        mjml = render_to_string(
+            'events/email/weekly_digest.mjml',
+            {
+                'text': markdown.markdown(
+                    text, extensions=['markdown.extensions.nl2br']
+                ),
+                'image_url': image_url,
+                'title_dates': title_dates,
+                'events_by_date': events_by_date,
+                'date2day': date2day,
+                'utmify': get_utmify('weekly-digest', 'kocherga-newsletter'),
+            },
+        )
 
         html = mjml2html(mjml)
 
@@ -158,7 +159,9 @@ class WeeklyDigest(models.Model):
     def upload_mailchimp_image(self):
         image_bytes = self.get_image_bytes()
 
-        image_folder_id = kocherga.mailchimp.image_folder_by_name(MAILCHIMP_IMAGE_FOLDER_NAME)['id']
+        image_folder_id = kocherga.mailchimp.image_folder_by_name(
+            MAILCHIMP_IMAGE_FOLDER_NAME
+        )['id']
 
         logger.info('Uploading weekly digest image to mailchimp')
         result = kocherga.mailchimp.api_call(
@@ -168,7 +171,7 @@ class WeeklyDigest(models.Model):
                 'folder_id': image_folder_id,
                 'name': f"weekly-image-{self.start.strftime('%Y-%m-%d')}.png",
                 'file_data': base64.encodebytes(image_bytes).decode('utf-8'),
-            }
+            },
         )
 
         return result['full_size_url']
@@ -183,33 +186,41 @@ class WeeklyDigest(models.Model):
         content = self.get_mailchimp_content(text, image_url)
 
         logger.info('Creating campaign draft')
-        campaign = kocherga.mailchimp.api_call('POST', 'campaigns', {
-            'type': 'regular',
-            'recipients': {
-                'list_id': kocherga.mailchimp.MAIN_LIST_ID,
-                'segment_opts': {
-                    'saved_segment_id': kocherga.mailchimp.segment_by_name('Подписаны на расписание')['id'],
+        campaign = kocherga.mailchimp.api_call(
+            'POST',
+            'campaigns',
+            {
+                'type': 'regular',
+                'recipients': {
+                    'list_id': kocherga.mailchimp.MAIN_LIST_ID,
+                    'segment_opts': {
+                        'saved_segment_id': kocherga.mailchimp.segment_by_name(
+                            'Подписаны на расписание'
+                        )['id'],
+                    },
+                },
+                'settings': {
+                    'subject_line': content['title'],
+                    'title': content['title'],
+                    'from_name': 'Кочерга',
+                    'reply_to': 'info@kocherga-club.ru',
+                    'to_name': '*|FNAME|* *|LNAME|*',
+                    'folder_id': kocherga.mailchimp.folder_id_by_name(
+                        MAILCHIMP_CAMPAIGN_FOLDER_NAME
+                    ),
+                },
+                'tracking': {
+                    'google_analytics': f'weekly-digest-{self.start:%Y-%m-%d}',
                 },
             },
-            'settings': {
-                'subject_line': content['title'],
-                'title': content['title'],
-                'from_name': 'Кочерга',
-                'reply_to': 'info@kocherga-club.ru',
-                'to_name': '*|FNAME|* *|LNAME|*',
-                'folder_id': kocherga.mailchimp.folder_id_by_name(MAILCHIMP_CAMPAIGN_FOLDER_NAME),
-            },
-            'tracking': {
-                'google_analytics': f'weekly-digest-{self.start:%Y-%m-%d}',
-            }
-        })
+        )
 
         campaign_id = campaign['id']
 
         logger.info('Filling campaign content')
-        kocherga.mailchimp.api_call('PUT', f'campaigns/{campaign_id}/content', {
-            'html': content['html'],
-        })
+        kocherga.mailchimp.api_call(
+            'PUT', f'campaigns/{campaign_id}/content', {'html': content['html'],}
+        )
         self.mailchimp_id = campaign_id
         self.save()
 
@@ -218,9 +229,7 @@ class WeeklyDigest(models.Model):
             return None
 
         response = kocherga.mailchimp.api_call(
-            'GET',
-            f'campaigns/{self.mailchimp_id}',
-            {'fields': 'web_id'}
+            'GET', f'campaigns/{self.mailchimp_id}', {'fields': 'web_id'}
         )
 
         return kocherga.mailchimp.campaign_web_link(response['web_id'])

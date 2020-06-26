@@ -7,7 +7,7 @@ import django.db.models.deletion
 def fill_event_fk(apps, schema_editor):
     Event = apps.get_model('events', 'Event')
 
-    for model_name in ('Cohort', ):
+    for model_name in ('Cohort',):
         model_class = apps.get_model('mastermind_dating', model_name)
         for obj in model_class.objects.all():
             if not obj.event_google_id:
@@ -28,9 +28,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='cohort',
             name='event',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='events.Event'),
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='+',
+                to='events.Event',
+            ),
         ),
-        migrations.RunPython(
-            fill_event_fk
-        ),
+        migrations.RunPython(fill_event_fk),
     ]

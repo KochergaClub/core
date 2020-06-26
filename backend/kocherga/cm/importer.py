@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import csv
@@ -75,10 +76,22 @@ def load_users() -> List[User]:
     users = []
 
     # needed for OrderLogEntries
-    for i, name in enumerate([
-            "Мальбург", "Андрей Ершов", "Макс", "Лев", "Женя", "Лена",
-            "Маша", "Ринат", "Роман", "Филипп Б.", "Стася", "Юрий",
-    ]):
+    for i, name in enumerate(
+        [
+            "Мальбург",
+            "Андрей Ершов",
+            "Макс",
+            "Лев",
+            "Женя",
+            "Лена",
+            "Маша",
+            "Ринат",
+            "Роман",
+            "Филипп Б.",
+            "Стася",
+            "Юрий",
+        ]
+    ):
         deleted_user = User(id=-i, name=name, login=name, level="deleted")
         users.append(deleted_user)
 
@@ -120,9 +133,7 @@ def load_order_log(order_id):
     html = r.content.decode("utf-8")
 
     match = re.search(
-        r"История изменения заказа1?:\s*<div.*?>(.*?)</div>",
-        html,
-        re.DOTALL,
+        r"История изменения заказа1?:\s*<div.*?>(.*?)</div>", html, re.DOTALL,
     )
     if not match:
         if re.search(r'Заказ с номером №\d+ не найден', html):
@@ -169,7 +180,6 @@ def load_order_log(order_id):
 
 
 class Importer(kocherga.importer.base.FullImporter):
-
     def __init__(self, log_portion_size=100):
         self.log_portion_size = log_portion_size
 
@@ -193,29 +203,29 @@ class Importer(kocherga.importer.base.FullImporter):
         logger.info("Importing order logs")
 
         for (q, note) in (
-                (Q(log_imported_ts__lt=datetime.now().timestamp() - 86400), 'stale'),
-                (Q(log_imported_ts__isnull=True), 'never imported'),
+            (Q(log_imported_ts__lt=datetime.now().timestamp() - 86400), 'stale'),
+            (Q(log_imported_ts__isnull=True), 'never imported'),
         ):
             logger.info(f"Importing {note} order logs")
-            query = (
-                Order.objects.filter(q).order_by('-order_id')
-            )
-            for order in query[:self.log_portion_size]:
+            query = Order.objects.filter(q).order_by('-order_id')
+            for order in query[: self.log_portion_size]:
                 self.import_order_log(order)
 
         logger.info("Loading customers")
         customers = load_customers()
 
         logger.info("Uploading customers to Mailchimp")
-        kocherga.email.lists.populate_main_list([
-            kocherga.email.lists.User(
-                email=c.email,
-                first_name=c.first_name,
-                last_name=c.last_name,
-                card_id=c.card_id,
-            )
-            for c in customers
-            if c.email
-        ])
+        kocherga.email.lists.populate_main_list(
+            [
+                kocherga.email.lists.User(
+                    email=c.email,
+                    first_name=c.first_name,
+                    last_name=c.last_name,
+                    card_id=c.card_id,
+                )
+                for c in customers
+                if c.email
+            ]
+        )
 
         logger.info(f"Imported {len(customers)} customers")

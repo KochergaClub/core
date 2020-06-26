@@ -57,6 +57,7 @@ class Payment(models.Model):
 
     def is_redeemed(self) -> bool:
         return self.redeem_dt is not None
+
     is_redeemed.boolean = True
 
     def redeem(self):
@@ -67,7 +68,5 @@ class Payment(models.Model):
 
 
 def current_cash():
-    item = (
-        CashierItem.objects.exclude(current_cash=None).order_by('-id')[0]
-    )
+    item = CashierItem.objects.exclude(current_cash=None).order_by('-id')[0]
     return item.current_cash

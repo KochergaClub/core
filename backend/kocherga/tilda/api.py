@@ -20,7 +20,7 @@ def api_call(method: str, params={}):
             'publickey': settings.TILDA_PUBLIC_KEY,
             'secretkey': settings.TILDA_SECRET_KEY,
             **params,
-        }
+        },
     )
     r.raise_for_status()
     response = r.json()

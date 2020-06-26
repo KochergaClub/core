@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 from django.db import models
@@ -45,7 +46,7 @@ class TildaPageManager(models.Manager):
                 'body': page_body['html'],
                 'title': title,
                 'page_id': page_id,
-            }
+            },
         )
 
         # now let's build the list of assets
@@ -54,10 +55,7 @@ class TildaPageManager(models.Manager):
         for kind in ('image', 'js', 'css'):
             key = 'images' if kind == 'image' else kind
             for item in page_full_export[key]:
-                asset, _ = Asset.objects.update_or_create(
-                    url=item['from'],
-                    kind=kind,
-                )
+                asset, _ = Asset.objects.update_or_create(url=item['from'], kind=kind,)
                 assets.append(asset)
 
         page.assets.set(assets)
@@ -67,11 +65,7 @@ class TildaPageManager(models.Manager):
 class Asset(models.Model):
     url = models.URLField(max_length=255)
     kind = models.CharField(
-        max_length=10,
-        choices=[
-            (x, x)
-            for x in ('css', 'js', 'image')
-        ]
+        max_length=10, choices=[(x, x) for x in ('css', 'js', 'image')]
     )
 
 

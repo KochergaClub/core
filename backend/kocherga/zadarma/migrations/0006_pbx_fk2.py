@@ -11,13 +11,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='call',
-            name='pbx_call_id',
-        ),
+        migrations.RemoveField(model_name='call', name='pbx_call_id',),
         migrations.AlterField(
             model_name='call',
             name='pbx_call_fk',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='zadarma.PbxCall'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='zadarma.PbxCall'
+            ),
         ),
     ]

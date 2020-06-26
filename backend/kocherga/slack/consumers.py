@@ -1,4 +1,5 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import channels.consumer
@@ -18,7 +19,4 @@ class NotifyConsumer(channels.consumer.SyncConsumer):
             logger.info('Message has attachments')
             args['attachments'] = message['attachments']
 
-        client().api_call(
-            "chat.postMessage",
-            **args
-        )
+        client().api_call("chat.postMessage", **args)
