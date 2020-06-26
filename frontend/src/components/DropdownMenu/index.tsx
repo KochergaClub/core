@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { CSSTransition } from 'react-transition-group';
 
 import styled from 'styled-components';
 import { FaCaretDown } from 'react-icons/fa';
@@ -20,6 +21,9 @@ const Container = styled.div`
   white-space: nowrap;
 `;
 
+const animationTimeout = 250;
+const animationClass = 'transition';
+
 const Dropdown = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   user-select: none;
@@ -30,38 +34,23 @@ const Dropdown = styled.div`
   overflow: hidden; // necessary to avoid broken corners when items are hovered
   background-color: white;
   cursor: pointer;
-`;
 
-const Arrow = styled.div`
-  &,
-  &::before {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    z-index: -1;
+  &.${animationClass}-enter {
+    opacity: 0;
   }
 
-  &::before {
-    content: '';
-    transform: rotate(45deg);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    background-color: white;
+  &.${animationClass}-enter-active {
+    opacity: 1;
+    transition: opacity ${animationTimeout}ms ease-in-out;
   }
 
-  [data-popper-placement^='top'] > & {
-    bottom: -4px;
+  &.${animationClass}-exit {
+    opacity: 1;
   }
 
-  [data-popper-placement^='bottom'] > & {
-    top: -4px;
-  }
-
-  [data-popper-placement^='left'] > & {
-    right: -4px;
-  }
-
-  [data-popper-placement^='right'] > & {
-    left: -4px;
+  &.${animationClass}-exit-active {
+    opacity: 0;
+    transition: opacity ${animationTimeout}ms ease-in-out;
   }
 `;
 
@@ -119,7 +108,14 @@ const DropdownMenu: React.FC<Props> = ({
               </>
             )}
           </A>
-          {expanded && (
+          <CSSTransition
+            appear={true}
+            mountOnEnter={true}
+            unmountOnExit={true}
+            in={expanded}
+            timeout={animationTimeout}
+            classNames={animationClass}
+          >
             <Dropdown
               ref={setPopperElement}
               style={styles.popper}
@@ -127,7 +123,7 @@ const DropdownMenu: React.FC<Props> = ({
             >
               {children}
             </Dropdown>
-          )}
+          </CSSTransition>
         </Container>
       </DropdownMenuContext.Provider>
     </>
