@@ -1,4 +1,4 @@
-import urllib
+import urllib.parse
 import hmac
 import hashlib
 import base64

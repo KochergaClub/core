@@ -1,4 +1,5 @@
 import requests
+import requests.cookies
 import json
 
 from django.conf import settings

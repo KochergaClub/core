@@ -6,8 +6,8 @@ class Auth(models.Model):
     cookies = models.CharField(max_length=4096)
 
     @classmethod
-    def get(self):
-        result = self.objects.first()
+    def get(cls):
+        result = cls.objects.first()
         if not result:
             raise Exception(
                 "CM auth is not initialized, please call kocherga.cm.auth.update_cookies() manually."

@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 import sys, pathlib, os.path
-sys.path.append(
-    os.path.abspath(
-        str(pathlib.Path(__file__).parent.parent)
-    )
-)
+
+sys.path.append(os.path.abspath(str(pathlib.Path(__file__).parent.parent)))
 
 import django
+
 django.setup()
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from kocherga.events.models import VkAnnouncement
+import kocherga.events.models
 import kocherga.vk.tools
 
 from django.db import transaction

@@ -3,6 +3,7 @@ import pytest
 import kocherga.cm.auth
 import kocherga.cm.tools
 import kocherga.cm.models
+import kocherga.cm.importer
 
 
 def user_exists(login):
@@ -14,8 +15,10 @@ def test_add_manager(cm_auth):
     login = 'test1'
     assert not user_exists(login)
 
-    user = kocherga.cm.tools.add_manager(login, 'Тест Тестов', 'test_password', 'test@example.com')
-    assert type(user) == kocherga.cm.models.User
+    user = kocherga.cm.tools.add_manager(
+        login, 'Тест Тестов', 'test_password', 'test@example.com'
+    )
+    assert isinstance(user, kocherga.cm.models.User)
     assert user_exists(login)
 
     kocherga.cm.tools.delete_manager(user)

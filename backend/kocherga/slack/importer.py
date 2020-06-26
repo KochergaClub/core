@@ -1,4 +1,4 @@
-import kocherga.importer
+import kocherga.importer.base
 
 from .models import User
 

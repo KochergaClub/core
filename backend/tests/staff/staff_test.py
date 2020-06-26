@@ -4,7 +4,7 @@ import kocherga.staff.tools
 class TestTeam:
     def test_members(self, common_team):
         members = kocherga.staff.tools.members()
-        assert type(members) == list
+        assert isinstance(members, list)
 
         assert 'Элиезер' in [m.short_name for m in members]
         assert len(members) >= 2
@@ -12,7 +12,7 @@ class TestTeam:
 
     def test_members_former(self, common_team):
         members = kocherga.staff.tools.members(include_former=True)
-        assert type(members) == list
+        assert isinstance(members, list)
 
         assert 'Элиезер' in [m.short_name for m in members]
         assert len(members) >= 3

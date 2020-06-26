@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Tuple
 
 import kocherga.importer.base
 from kocherga.dateutils import TZ
@@ -16,7 +16,7 @@ from .models import Call, PbxCall
 def process_call_item(item) -> Call:
     if item['is_recorded'] == 'true':
         record = api.api_call(
-            'GET', 'pbx/record/request', {'call_id': item['call_id'],}
+            'GET', 'pbx/record/request', {'call_id': item['call_id']}
         )
         assert record['status'] == 'success'
         item['record_link'] = record['link']
@@ -34,7 +34,7 @@ def process_call_item(item) -> Call:
     return call
 
 
-def fetch_calls(from_dt: datetime, to_dt: datetime) -> (int, Optional[Call]):
+def fetch_calls(from_dt: datetime, to_dt: datetime) -> Tuple[int, Optional[Call]]:
     dt_format = '%Y-%m-%d %H:%M:%S'
 
     response = api.api_call(

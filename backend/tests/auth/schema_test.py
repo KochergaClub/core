@@ -10,7 +10,9 @@ from kocherga.auth.view_utils import get_magic_token
 
 class TestAnyLogin:
     def test_no_credentials(self, client):
-        data = run_query(client, """
+        data = run_query(
+            client,
+            """
         mutation Login {
           authLogin(input: {
             credentials: {}
@@ -19,7 +21,8 @@ class TestAnyLogin:
             error
           }
         }
-        """)
+        """,
+        )
         assert data['authLogin']['error'].startswith("One of `token`")
 
 
@@ -42,32 +45,35 @@ class TestTokenLogin:
     """
 
     def test_bad_token(self, client):
-        data = run_query(client, self.LOGIN_MUTATION, {
-            'token': 'bad'
-        })
+        data = run_query(client, self.LOGIN_MUTATION, {'token': 'bad'})
         assert data['authLogin']['error'] == "Invalid token"
 
     def test_result_param(self, client):
         token = get_magic_token('test@example.com')
-        data = run_query(client, """
+        data = run_query(
+            client,
+            """
         mutation Login {
           authLogin(input: {
             credentials: {
-              token: """ + '"' + token + '"' + """
+              token: """
+            + '"'
+            + token
+            + '"'
+            + """
             }
             result: "unknown"
           }) {
             error
           }
         }
-        """)
+        """,
+        )
         assert data['authLogin']['error'] == "Only `cookie` result is supported"
 
     def test_good(self, client):
         token = get_magic_token('test@example.com')
-        data = run_query(client, self.LOGIN_MUTATION, {
-            'token': token
-        })
+        data = run_query(client, self.LOGIN_MUTATION, {'token': token})
 
         assert data['authLogin']['error'] is None
         assert data['authLogin']['registered'] is True
@@ -80,15 +86,15 @@ class TestTokenLogin:
         assert res.json()['is_authenticated'] is True
 
     def test_registered_value(self, client):
-        for i in range(2):
-            data = run_query(
+        def _login():
+            return run_query(
                 client,
                 self.LOGIN_MUTATION,
-                {
-                    'token': get_magic_token('test@example.com'),
-                }
+                {'token': get_magic_token('test@example.com')},
             )
 
+        data = _login()
+        data = _login()
         assert data['authLogin']['registered'] is False
 
 
@@ -127,7 +133,7 @@ class TestPasswordLogin:
                         error
                     }
                 }
-            """
+            """,
         )
         assert res['authLogin']['error'].startswith("One of `token`")
 
@@ -135,10 +141,7 @@ class TestPasswordLogin:
         res = run_query(
             client,
             self.LOGIN_MUTATION,
-            {
-                'email': self.EMAIL,
-                'password': 'password_for_nonexistent_user'
-            },
+            {'email': self.EMAIL, 'password': 'password_for_nonexistent_user'},
         )
         assert res['authLogin']['error'] == "Некорректные учетные данные."
         assert not res['authLogin']['user']
@@ -149,10 +152,7 @@ class TestPasswordLogin:
         res = run_query(
             client,
             self.LOGIN_MUTATION,
-            {
-                'email': self.EMAIL,
-                'password': 'bad_password'
-            },
+            {'email': self.EMAIL, 'password': 'bad_password'},
         )
         assert res['authLogin']['error']
         assert not res['authLogin']['user']
@@ -165,10 +165,7 @@ class TestPasswordLogin:
         res = run_query(
             client,
             self.LOGIN_MUTATION,
-            {
-                'email': self.EMAIL,
-                'password': self.PASSWORD,
-            },
+            {'email': self.EMAIL, 'password': self.PASSWORD},
         )
         assert res['authLogin']['registered'] is False
         assert client.cookies['sessionid']
@@ -196,11 +193,7 @@ class TestSetPassword:
         client.force_login(user)
 
         res = run_query(
-            client,
-            self.SET_PASSWORD_MUTATION,
-            {
-                'new_password': self.NEW_PASSWORD,
-            },
+            client, self.SET_PASSWORD_MUTATION, {'new_password': self.NEW_PASSWORD},
         )
         assert not res['authSetPassword']['error']
         assert res['authSetPassword']['ok']
@@ -213,14 +206,13 @@ class TestSetPassword:
         client.force_login(user)
 
         res = run_query(
-            client,
-            self.SET_PASSWORD_MUTATION,
-            {
-                'new_password': self.NEW_PASSWORD,
-            },
+            client, self.SET_PASSWORD_MUTATION, {'new_password': self.NEW_PASSWORD},
         )
         assert not res['authSetPassword']['ok']
-        assert res['authSetPassword']['error'] == 'Старый пароль не указан, но у пользователя есть пароль.'
+        assert (
+            res['authSetPassword']['error']
+            == 'Старый пароль не указан, но у пользователя есть пароль.'
+        )
 
     def test_success(self, client):
         user = get_user_model().objects.create_user(self.EMAIL)
@@ -231,10 +223,7 @@ class TestSetPassword:
         res = run_query(
             client,
             self.SET_PASSWORD_MUTATION,
-            {
-                'old_password': self.PASSWORD,
-                'new_password': self.NEW_PASSWORD,
-            },
+            {'old_password': self.PASSWORD, 'new_password': self.NEW_PASSWORD},
         )
         assert not res['authSetPassword']['error']
         assert res['authSetPassword']['ok']
@@ -256,7 +245,7 @@ class TestLogout:
                     ok
                 }
             }
-            """
+            """,
         )
 
         assert res['authLogout']['ok']
@@ -279,7 +268,7 @@ class TestGetMagicToken:
                     ok
                 }
             }
-            """
+            """,
         )
         assert res['authSendMagicLink']['ok']
         assert len(mail.outbox) == 1

@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 from django.db import models
 
 import subprocess
-from typing import List
+from typing import List, Any
 import json
 import random
 
@@ -43,7 +43,7 @@ class Cohort(models.Model):
                 participant.send_invite_email()
 
     def broadcast_solution(self):
-        manager = rpc.get_client()
+        manager: Any = rpc.get_client()
         manager.broadcast_solution(self.id)
 
     def has_populated_groups(self) -> bool:

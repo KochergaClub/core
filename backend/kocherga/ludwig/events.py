@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from typing import Dict, Any
 from datetime import datetime, timedelta
 
 from django.conf import settings
@@ -64,8 +65,8 @@ def list_events():
     intro_text = f"Сегодня *{len(events)}* {word_form}"
 
     blocks = [
-        {"type": "section", "text": {"type": "mrkdwn", "text": intro_text + ':',},},
-        {"type": "divider",},
+        {"type": "section", "text": {"type": "mrkdwn", "text": intro_text + ':'}},
+        {"type": "divider"},
     ]
 
     for event in events:
@@ -82,7 +83,7 @@ def list_events():
         instructions = event_instructions(event)
         if instructions:
             blocks.append(
-                {"type": "section", "text": {"type": "mrkdwn", "text": instructions,},}
+                {"type": "section", "text": {"type": "mrkdwn", "text": instructions}}
             )
 
         start_time = timezone.localtime(event.start).strftime("%H:%M")
@@ -96,8 +97,8 @@ def list_events():
                         "type": "mrkdwn",
                         "text": f"*Время:* с {start_time} до {end_time}",
                     },
-                    {"type": "mrkdwn", "text": "*Тип:* " + event_emoji(event),},
-                    {"type": "mrkdwn", "text": "*Комната:* " + event.location,},
+                    {"type": "mrkdwn", "text": "*Тип:* " + event_emoji(event)},
+                    {"type": "mrkdwn", "text": "*Комната:* " + event.location},
                 ],
             }
         )
@@ -209,7 +210,8 @@ def command_event_visitors(payload):
 
 
 def event_visitors_question(event):
-    result = {
+    # TODO - TypedDict type (after we upgrade to Python 3.8)
+    result: Dict[str, Any] = {
         "text": "Сколько человек пришло на событие?",
         "channel": "#space_bot",
     }
@@ -296,7 +298,7 @@ def submit_event_visitors_dialog(payload, event_uuid, original_message_path):
     value = payload["submission"]["visitors"]
 
     if not value.isdigit():
-        return {"errors": [{"name": "visitors", "error": "Нужно ввести число"},]}
+        return {"errors": [{"name": "visitors", "error": "Нужно ввести число"}]}
 
     event = Event.objects.get(uuid=event_uuid)
     event.visitors = value

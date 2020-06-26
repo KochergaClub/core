@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.core.signing import TimestampSigner
 
 from .models import PagePreview
+from wagtail.core.models import Page
 
 
 class HeadlessPreviewMixin:
@@ -12,7 +13,7 @@ class HeadlessPreviewMixin:
     def get_preview_url(self, token):
         return f'/preview?token={token}'
 
-    def create_page_preview(self):
+    def create_page_preview(self: Page):
         return PagePreview.objects.create(
             token=self.get_preview_signer().sign(''),  # just a unique token
             content_type=self.content_type,

@@ -122,7 +122,7 @@ def now_stats():
     }
 
 
-stats_cached_ts = None
+stats_cached_ts = 0
 stats_cached = None
 CACHE_PERIOD = 5
 
@@ -132,7 +132,7 @@ def now_stats_cached():
     global stats_cached_ts
 
     now_ts = time.time()
-    if stats_cached_ts and now_ts - stats_cached_ts < CACHE_PERIOD:
+    if now_ts - stats_cached_ts < CACHE_PERIOD:
         logger.debug("return now stats from cache")
         return stats_cached
 

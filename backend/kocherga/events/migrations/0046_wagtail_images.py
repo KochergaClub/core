@@ -31,6 +31,8 @@ def fill_wagtail_images(apps, schema_editor):
                     filename = f'prototype-image-{obj.pk}'
                 elif model_name == 'VkAnnouncement':
                     filename = f'vk-announcement-image-{obj.id}'
+                else:
+                    raise Exception("Internal error")
 
                 fh = open(
                     Path('/data') / 'upload' / 'images' / (obj.image + '.jpg'), 'rb'
@@ -39,7 +41,8 @@ def fill_wagtail_images(apps, schema_editor):
                 image.file.save(filename, ImageFile(fh))
                 image.save()
 
-                # Django doesn't accept Image object here because it checks FK type, so we have to reload it with correct class.
+                # Django doesn't accept Image object here because it checks FK type,
+                # so we have to reload it with correct class.
                 historical_image = historical_image_class.objects.get(pk=image.pk)
                 obj.wagtail_image = historical_image
 

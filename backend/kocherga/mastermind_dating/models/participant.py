@@ -106,7 +106,7 @@ class Participant(models.Model):
     def get_chat_id(self):
         return self.user.mastermind_dating_telegram_user.chat_id
 
-    def generate_token(self) -> str:
+    def generate_token(self) -> bytes:
         return base64url_encode(bytes(signer.sign(self.id), "utf-8"))
 
     def is_bound(self):
@@ -187,7 +187,7 @@ class Participant(models.Model):
         self.save()
 
     def tinder_activate(self):
-        manager = rpc.get_client()
+        manager: typing.Any = rpc.get_client()
         manager.tinder_activate(self.id)
 
     def timetable(self):

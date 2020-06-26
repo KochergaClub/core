@@ -1,6 +1,7 @@
 # via https://gist.github.com/twidi/9d55486c36b6a51bdcb05ce3a763e79f
 
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db.models import Manager
 
 from rest_framework.exceptions import ValidationError as DRFValidationError, NotFound
 from rest_framework.views import exception_handler as drf_exception_handler
@@ -26,7 +27,7 @@ def view404(request):
 
 class BulkRetrieveMixin:
     @action(detail=False)
-    def bulk(self, request):
+    def bulk(self: Manager, request):
         ids_str = request.query_params.get('ids')
         if not ids_str:
             raise Exception("Expected ids query param")

@@ -48,5 +48,5 @@ def test_schema(t):
 
 def test_list():
     tt = list_templates()
-    assert type(tt) == list
+    assert isinstance(tt, list)
     assert len(tt) >= 3

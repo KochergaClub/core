@@ -27,7 +27,14 @@ class RelayQuerySetMixin:
     DEFAULT_PAGE_SIZE = 100
     MAX_PAGE_SIZE = 100
 
-    def relay_page(self, order=None, before=None, after=None, first=None, last=None):
+    def relay_page(
+        self: models.QuerySet,
+        order=None,
+        before=None,
+        after=None,
+        first=None,
+        last=None,
+    ):
         if not first and not last:
             # This is required by https://facebook.github.io/relay/graphql/connections.htm
             raise Exception("One of `first` or `last` must be set")

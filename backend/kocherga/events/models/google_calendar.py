@@ -11,6 +11,7 @@ from kocherga.dateutils import dts, TZ
 import kocherga.room
 
 from kocherga.events.google import api as google_api
+import kocherga.events.markup
 from .google_event import GoogleEvent
 from .event import Event
 

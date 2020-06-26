@@ -10,13 +10,14 @@ logger = logging.getLogger(__name__)
 
 import re
 import json
+import json.decoder
 import requests
 
 import kocherga.vk.api
 
 
-def group2id(group_name):
-    if type(group_name) == int:
+def group2id(group_name) -> int:
+    if isinstance(group_name, int):
         return group_name
 
     match = re.match(r'^(?:public|club|event)(\d+)', group_name)
@@ -24,7 +25,10 @@ def group2id(group_name):
         return int(match.group(1))
 
     r = kocherga.vk.api.call("groups.getById", {"group_id": group_name})
-    return r[0]["id"]
+    result: int = r[0]["id"]
+    if not isinstance(result, int):
+        raise Exception(f"Invalid id {result}, expected int")
+    return result
 
 
 def upload_wall_image(group_id, image_bytes):
@@ -99,5 +103,5 @@ def upload_cover_image(group_id, image_bytes):
 
     kocherga.vk.api.call(
         "photos.saveOwnerCoverPhoto",
-        {"photo": upload_response["photo"], "hash": upload_response["hash"],},
+        {"photo": upload_response["photo"], "hash": upload_response["hash"]},
     )

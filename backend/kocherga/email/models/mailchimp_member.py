@@ -3,6 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from dataclasses import dataclass
+from typing import List
 
 import kocherga.mailchimp
 
@@ -31,10 +32,12 @@ class MemberInterest:
 
 
 class MailchimpMember:
+    interests: List[MemberInterest]
+
     def __init__(self, email, status, interests=None):
         self.email = email
         self.status = status
-        self.interests = interests
+        self.interests = interests or []
 
     @classmethod
     def get_from_mailchimp(cls, email):

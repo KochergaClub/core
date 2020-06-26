@@ -8,6 +8,7 @@ from apscheduler.jobstores.redis import RedisJobStore
 
 from datetime import datetime, timedelta
 import time
+from typing import Any
 
 import importlib
 
@@ -15,6 +16,7 @@ from django.conf import settings
 from kocherga.redis import get_redis_connect_args
 
 from .prometheus import importers_gauge, success_counter, failure_counter
+from .base import BaseImporter
 
 IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
@@ -31,8 +33,8 @@ IMPORTER_MODULES = [
 ]
 
 
-def get_importer(module_name):
-    module = importlib.import_module(f"kocherga.{module_name}.importer")
+def get_importer(module_name) -> BaseImporter:
+    module: Any = importlib.import_module(f"kocherga.{module_name}.importer")
     return module.Importer()
 
 

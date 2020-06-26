@@ -7,7 +7,7 @@ import uuid
 import re
 
 import dateutil.parser
-from datetime import datetime, time
+import datetime
 
 from asgiref.sync import async_to_sync
 import channels.layers
@@ -33,7 +33,7 @@ def parse_iso8601(s):
 
 
 def ts_now():
-    return datetime.now(TZ).timestamp()
+    return datetime.datetime.now(TZ).timestamp()
 
 
 class EventQuerySet(RelayQuerySetMixin, models.QuerySet):
@@ -47,7 +47,7 @@ class EventManager(models.Manager):
     def notify_update(self):
         def send_update():
             async_to_sync(channels.layers.get_channel_layer().group_send)(
-                'events_group', {'type': 'notify.update',}
+                'events_group', {'type': 'notify.update'}
             )
 
         transaction.on_commit(send_update)
@@ -72,12 +72,12 @@ class EventManager(models.Manager):
 
         if from_date:
             query = query.filter(
-                start__gte=datetime.combine(from_date, time.min, tzinfo=TZ)
+                start__gte=datetime.datetime.combine(from_date, datetime.time.min, tzinfo=TZ)
             )
 
         if to_date:
             query = query.filter(
-                start__lte=datetime.combine(to_date, time.max, tzinfo=TZ)
+                start__lte=datetime.datetime.combine(to_date, datetime.time.max, tzinfo=TZ)
             )
 
         return query
@@ -90,7 +90,7 @@ class EventManager(models.Manager):
             # public events can contain raw description initially, so we rely on `published` flag
             .filter(event_type='public', published=True)
             # earlier events are not cleaned up yet
-            .filter(start__gte=datetime(2018, 6, 1, tzinfo=TZ))
+            .filter(start__gte=datetime.datetime(2018, 6, 1, tzinfo=TZ))
         )
 
         if tag:
@@ -245,7 +245,7 @@ class Event(models.Model):
     def delete(self):
         self.deleted = True
         async_to_sync(channels.layers.get_channel_layer().group_send)(
-            'event_updates', {'type': 'event.deleted', 'uuid': self.uuid,}
+            'event_updates', {'type': 'event.deleted', 'uuid': self.uuid}
         )
         self.save()
 
@@ -337,7 +337,7 @@ class Event(models.Model):
 
         self.save()
 
-    def move(self, start: datetime):
+    def move(self, start: datetime.datetime):
         self.end = self.end + (start - self.start)
         self.start = start
         self.full_clean()

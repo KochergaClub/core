@@ -8,13 +8,13 @@ import kocherga.cm.importer
 
 def test_now_stats(cm_auth):
     c = kocherga.cm.tools.now_stats()
-    assert type(c["total"]) == int
+    assert isinstance(c["total"], int)
 
 
 @pytest.mark.slow
 def test_load_customers(cm_auth):
     customers = kocherga.cm.importer.load_customers()
-    assert type(customers) == list
+    assert isinstance(customers, list)
     assert len(customers) > 10
     assert customers[0].card_id == 1
 
@@ -22,9 +22,9 @@ def test_load_customers(cm_auth):
 @pytest.mark.slow
 def test_load_orders(cm_auth):
     orders = kocherga.cm.importer.load_orders()
-    assert type(orders) == list
+    assert isinstance(orders, list)
     assert len(orders) > 10
-    assert type(orders[0]) == kocherga.cm.models.Order
+    assert isinstance(orders[0], kocherga.cm.models.Order)
 
 
 @pytest.mark.slow

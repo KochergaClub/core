@@ -86,7 +86,7 @@ class PrefixedMixin:
         self._kch_prefix = prefix
         super().__init__()
 
-    def field(self, name: str):
+    def field(self: ariadne.ObjectType, name: str):
         def wrapper(f):
             self.set_field(self._kch_prefix + name, f)
             return f

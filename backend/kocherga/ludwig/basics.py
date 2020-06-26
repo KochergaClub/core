@@ -7,6 +7,7 @@ import random
 
 from kocherga.ludwig.bot import bot
 import kocherga.ludwig.events
+import kocherga.ludwig.watchmen
 
 from slappy import Listener
 

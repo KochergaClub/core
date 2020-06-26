@@ -7,7 +7,7 @@ from django.conf import settings
 import time
 import requests
 from datetime import date
-from typing import Any, Iterable
+from typing import Any, Iterable, Tuple
 
 from .auth import get_access_token, update_tokens
 from .models import Record
@@ -50,7 +50,7 @@ def call(http_method, url, data={}):
     return r.json()
 
 
-def get_account_info() -> str:
+def get_account_info() -> Tuple[str, str]:
     accounts = call('GET', 'account/list')
 
     accounts = [a for a in accounts if a['code'][5:8] == '810']  # RUB

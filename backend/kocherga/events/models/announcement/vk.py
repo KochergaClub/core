@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 from datetime import datetime, timedelta
 import json
 import re
-import urllib
+import urllib.parse
 
 from django.db import models
 from django.conf import settings
@@ -45,7 +45,7 @@ class Manager(models.Manager):
             operations.append(
                 {
                     'method': 'wall.repost',
-                    'params': {'group_id': DAILY_GROUP_ID, 'object': object_id,},
+                    'params': {'group_id': DAILY_GROUP_ID, 'object': object_id},
                 }
             )
 
@@ -199,6 +199,8 @@ class VkAnnouncement(models.Model):
             tail = f"{self.event.timing_description} в @kocherga_club (центре рациональности Кочерга). "
         elif self.event.realm == 'online':
             tail = f"{self.event.timing_description} в онлайн-формате. "
+        else:
+            raise Exception(f"Unknown realm {self.event.realm}")
 
         if self.event.pricing_type == 'anticafe':
             tail += "Оплата участия — по тарифам антикафе: 2,5 руб./минута. "

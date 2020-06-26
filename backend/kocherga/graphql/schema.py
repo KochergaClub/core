@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 from pathlib import Path
 from importlib import import_module
+from typing import Any
 
 import django.apps
 from django.utils.module_loading import module_has_submodule
@@ -96,7 +97,7 @@ def load_all_types():
         if not module_has_submodule(app.module, SCHEMA_MODULE_NAME):
             continue
         logger.debug(f"Found schema for app {app.name}")
-        schema_module = import_module(f'{app.name}.{SCHEMA_MODULE_NAME}')
+        schema_module: Any = import_module(f'{app.name}.{SCHEMA_MODULE_NAME}')
         type_defs_list.extend(schema_module.types)
     return type_defs_list
 

@@ -56,7 +56,7 @@ def load_orders():
                 pass  # skip for now
             else:
                 order = Order.from_csv_row(row)
-            orders.append(order)
+            orders.append(order)  # type: ignore # FIXME
     return orders
 
 

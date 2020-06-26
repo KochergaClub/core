@@ -19,7 +19,7 @@ from .solver import broadcast_solution
 
 # Not in .rpc because of cyclic imports :(
 def get_server(evloop, bot):
-    def run_async(method: Callable[[], Awaitable]):
+    def run_async(method: Callable[[int], Awaitable]):
         def run(*args, **kwargs):
             evloop.create_task(method(*args, **kwargs))
 

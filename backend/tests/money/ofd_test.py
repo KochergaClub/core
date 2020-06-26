@@ -1,4 +1,5 @@
 import pytest
+
 pytestmark = pytest.mark.ofd
 
 import datetime
@@ -7,13 +8,14 @@ from freezegun import freeze_time
 
 import kocherga.money.ofd.api
 import kocherga.money.ofd.importer
+import kocherga.money.ofd.models
 
 
 @pytest.mark.skip(reason="OFD API is down temporarily")
 def test_documents():
     documents = kocherga.money.ofd.api.ofd.documents(datetime.date(2019, 3, 1))
     assert len(documents) > 3
-    assert type(documents[0]) == kocherga.money.ofd.models.OfdDocument
+    assert isinstance(documents[0], kocherga.money.ofd.models.OfdDocument)
 
 
 @pytest.mark.slow

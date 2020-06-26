@@ -10,7 +10,7 @@ from .schema import schema
 
 # via https://github.com/mirumee/ariadne/issues/210#issuecomment-508424149
 class ASGIGraphQL(ariadne.asgi.GraphQL):
-    def __call__(self, scope) -> None:
+    def __call__(self, scope):
         async def handle(receive, send):
             await super(ASGIGraphQL, self).__call__(scope, receive, send)
 

@@ -35,14 +35,16 @@ def api_call(method, url, data={}):
     if method == "GET":
         r = requests.get(
             f"{ROOT}/{url}",
-            headers={'Authorization': f'OAuth {token()}', 'X-Org-ID': str(ORG_ID),},
+            headers={'Authorization': f'OAuth {token()}', 'X-Org-ID': str(ORG_ID)},
         )
     elif method == "POST":
         r = requests.post(
             f"{ROOT}/{url}",
-            headers={'Authorization': f'OAuth {token()}', 'X-Org-ID': str(ORG_ID),},
+            headers={'Authorization': f'OAuth {token()}', 'X-Org-ID': str(ORG_ID)},
             json=data,
         )
+    else:
+        raise Exception(f"Unknown method {method}")
 
     if r.status_code == 409:
         raise ConflictException()

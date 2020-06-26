@@ -1,9 +1,3 @@
-from pathlib import Path
-import importlib
+from . import auth, bookings, fb, hooks, supplies
 
-for p in Path(__file__).parent.glob('*.py'):
-    filename = p.name
-    if filename == '__init__.py':
-        continue
-    module = filename.split('.')[0]
-    importlib.import_module('.' + module, __name__)
+__all__ = ['auth', 'bookings', 'fb', 'hooks', 'supplies']

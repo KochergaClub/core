@@ -31,7 +31,7 @@ class Booking:
         self.event_uuid = event_uuid
 
     @classmethod
-    def from_event(self, event):
+    def from_event(cls, event):
         match = re.match(r"Бронь \w+, (\d+) человек", event.title)
         people = None
         if match:

@@ -8,8 +8,6 @@ from kocherga.events.models.feedback import ScoreField
 
 import kocherga.events.serializers
 import kocherga.ratio.serializers
-import kocherga.cm2.serializers
-import kocherga.money.cashier.serializers
 
 
 def convert_field(field):
@@ -124,11 +122,7 @@ def generate_shapes_to_fh(fh):
     serializers = [
         kocherga.events.serializers.FeedbackSerializer,
         kocherga.events.serializers.PublicEventSerializer,
-        kocherga.ratio.serializers.TicketSerializer,
         kocherga.ratio.serializers.TrainingSerializer,
-        kocherga.cm2.serializers.OrderSerializer,
-        kocherga.cm2.serializers.CustomerSerializer,
-        # kocherga.money.cashier.serializers.PaymentSerializer,  # FIXME - leads to double `whom` fk
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)

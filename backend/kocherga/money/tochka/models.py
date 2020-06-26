@@ -17,8 +17,8 @@ class Auth(models.Model):
     dt = models.DateTimeField(auto_now=True)
 
     @classmethod
-    def get(self):
-        result = self.objects.first()
+    def get(cls):
+        result = cls.objects.first()
         if not result:
             raise Exception(
                 "Tochka auth is not initialized, please call kocherga.money.tochka.auth.init_tokens() manually."

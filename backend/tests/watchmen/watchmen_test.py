@@ -21,13 +21,18 @@ class TestSchedule:
     def test_shifts_by_date(self):
         by_date = schedule.shifts_by_date(datetime.date(2019, 3, 30))
 
-        assert type(by_date) == dict
-        assert by_date[kocherga.watchmen.models.ShiftType.MORNING].watchman.member.short_name == 'Элиезер'
+        assert isinstance(by_date, dict)
+        assert (
+            by_date[
+                kocherga.watchmen.models.ShiftType.MORNING
+            ].watchman.member.short_name
+            == 'Элиезер'
+        )
 
     def test_shifts_by_empty_date(self):
         by_date = schedule.shifts_by_date(datetime.date(2018, 1, 1))
 
-        assert type(by_date) == dict
+        assert isinstance(by_date, dict)
         assert len(by_date) == 4
 
     def test_shift_by_dt(self):

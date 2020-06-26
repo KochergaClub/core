@@ -25,7 +25,7 @@ class ShiftType(IntEnum):
             ShiftType.EVENING: "вечером",
             ShiftType.NIGHT: "ночью (в конце дня)",
         }
-        return when_values[self.value]
+        return when_values[self]
 
     def start_time(self):
         if self.value == ShiftType.MORNING:
@@ -36,6 +36,7 @@ class ShiftType(IntEnum):
             return time(19)
         if self.value == ShiftType.NIGHT:
             return time(0)
+        raise Exception("Not implemented")
 
     def end_time(self):
         if self.value == ShiftType.MORNING:
@@ -46,6 +47,7 @@ class ShiftType(IntEnum):
             return time(23, 59, 59, 999999)
         if self.value == ShiftType.NIGHT:
             return time(8, 59, 59, 999999)
+        raise Exception("Not implemented")
 
     def dt_tuple_by_date(self, d):
         assert isinstance(d, date)

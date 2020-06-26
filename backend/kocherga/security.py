@@ -10,6 +10,7 @@ import kocherga.staff.tools
 import kocherga.wiki
 import kocherga.events.models
 import kocherga.events.google
+import kocherga.slack.models
 
 
 def report_excess(message):

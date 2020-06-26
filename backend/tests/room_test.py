@@ -6,7 +6,7 @@ from kocherga.error import PublicError
 
 class TestAllRooms:
     def test_type(self):
-        assert type(kocherga.room.all_rooms) == list
+        assert isinstance(kocherga.room.all_rooms, list)
 
     def test_geb(self):
         assert 'гэб' in kocherga.room.all_rooms

@@ -35,7 +35,7 @@ def get_participant() -> typing.Optional[models.Participant]:
 def state_is(t: typing.Type[_V], a: typing.Callable[[_V], bool]) -> BoundFilter:
     class LF(BoundFilter):
         async def check(self, *args):
-            user: models.Participant = get_participant()
+            user = get_participant()
             if not user:
                 return False
             return a(user.get_state(t))
@@ -46,7 +46,7 @@ def state_is(t: typing.Type[_V], a: typing.Callable[[_V], bool]) -> BoundFilter:
 def model_is(a: typing.Callable[[models.Participant], bool]) -> Filter:
     class LF(BoundFilter):
         async def check(self, *args):
-            user: models.Participant = get_participant()
+            user = get_participant()
             if not user:
                 return False
             return bool(a(user))
@@ -458,8 +458,10 @@ def register_handlers(dsp: Dispatcher):
         how = ['Y', 'O', 'N'].index(how)
         whom = models.TelegramUser.objects.get(telegram_uid=whom).get_participant()
         who = get_participant()
+        if not who:
+            raise Exception("Not participating")
         vote_obj, _ = models.Vote.objects.update_or_create(
-            who=who, whom=whom, defaults={'how': how,}
+            who=who, whom=whom, defaults={'how': how}
         )
 
         logger.info('editing markup')

@@ -8,10 +8,9 @@ from kocherga.events import serializers
 class TestEventConstructor:
     def test_minimal(self):
         event = Event(
-            start = datetime.now(TZ),
-            end = datetime.now(TZ) + timedelta(hours=1),
+            start=datetime.now(TZ), end=datetime.now(TZ) + timedelta(hours=1),
         )
-        assert type(event) == Event
+        assert isinstance(event, Event)
 
 
 def test_get_room(event):
@@ -21,9 +20,7 @@ def test_get_room(event):
 def test_default_event_type():
     dt = datetime.now(TZ)
     event = Event.objects.create(
-        start=dt,
-        end=dt + timedelta(hours=1),
-        title='test event',
+        start=dt, end=dt + timedelta(hours=1), title='test event',
     )
     assert event.event_type == "unknown"
 

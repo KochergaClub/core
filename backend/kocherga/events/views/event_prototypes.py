@@ -90,7 +90,7 @@ class TagView(APIView):
 
         return Response(ok)
 
-    def delete(prototype_id, tag_name):
+    def delete(self, prototype_id, tag_name):
         prototype = EventPrototype.by_id(prototype_id)
         prototype.delete_tag(tag_name)
 

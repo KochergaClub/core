@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 import re
 import asyncio
 import requests
+from typing import Any
 
 from django.conf import settings
 from django.utils import timezone
@@ -148,13 +149,13 @@ def get_image_id(fb_id: str):
 
 
 class AnnounceSession:
+    page = None  # type: Any
+
     @classmethod
     async def create(cls, browser):
         self = cls()
         self.page = await browser.newPage()
-        await self.page.setViewport(
-            {'width': 1280, 'height': 800,}
-        )
+        await self.page.setViewport({'width': 1280, 'height': 800})
         return self
 
     async def clean_field(self, max_length=20, both_directions=False):
@@ -300,9 +301,7 @@ class AnnounceSession:
         await page.focus("input[name=pass]")
         await page.keyboard.type(PASSWORD)
 
-        await asyncio.wait(
-            [page.keyboard.press("Enter"), page.waitForNavigation(),]
-        )
+        await asyncio.wait([page.keyboard.press("Enter"), page.waitForNavigation()])
         # TODO - waitForSelector
         logger.info("Signed in")
 
@@ -481,7 +480,10 @@ class AnnounceSession:
         await (await controls_el.J('a[target="share_in_newsfeed_option"]')).click()
 
         # Wait for dialog to load.
-        audience_menu_selector = 'div[data-testid="react_share_dialog_audience_selector"] > div.uiPopover > a[role="button"]'
+        audience_menu_selector = (
+            'div[data-testid="react_share_dialog_audience_selector"]'
+            ' > div.uiPopover > a[role="button"]'
+        )
         await page.waitForSelector(audience_menu_selector)
         dialog_el = await page.J('[data-testid="react_share_dialog_content"]')
 
@@ -543,9 +545,7 @@ class AnnounceSession:
         # Finally, share the event.
         button_el = await dialog_el.J('[data-testid="react_share_dialog_post_button"]')
 
-        await asyncio.wait(
-            [button_el.click(), page.waitForNavigation(),]
-        )
+        await asyncio.wait([button_el.click(), page.waitForNavigation()])
 
         # Checking that we navigated to the events page after sharing.
         page_url = await page.evaluate('() => window.location.href')

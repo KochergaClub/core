@@ -4,29 +4,31 @@ logger = logging.getLogger(__name__)
 
 from django.conf import settings
 
+from typing import Optional
 import re
 import markdown
-import attr
+from dataclasses import dataclass
 
 from typing import List
 
 from kocherga.error import PublicError
 
 
+@dataclass
 class Part:
     pass
 
 
-@attr.s
+@dataclass
 class Text(Part):
-    text = attr.ib()
+    text: str
 
 
-@attr.s
+@dataclass
 class Entity(Part):
-    name = attr.ib()
-    fb_id = attr.ib(default=None)
-    vk_id = attr.ib(default=None)
+    name: str
+    fb_id: Optional[int] = None
+    vk_id: Optional[int] = None
 
 
 class SelfMention(Part):
