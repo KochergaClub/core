@@ -1,0 +1,46 @@
+{{- if .Values.dev }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-openvidu
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-openvidu
+spec:
+  type: NodePort
+  ports:
+  - name: https
+    port: 30003
+    nodePort: 30003
+  selector:
+    app: {{ .Release.Name }}-openvidu
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-openvidu
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: {{ .Release.Name }}-openvidu
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-openvidu
+    spec:
+      containers:
+        - name: default
+          image: openvidu/openvidu-server-kms:2.14.0
+          ports:
+            - containerPort: 30003
+          env:
+            # FIXME
+            - name: OPENVIDU_SECRET
+              value: MY_SECRET
+            - name: DOMAIN_OR_PUBLIC_IP
+              value: 192.168.1.69
+            - name: HTTPS_PORT
+              value: "30003"
+{{- end }}

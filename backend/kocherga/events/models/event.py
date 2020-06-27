@@ -8,6 +8,7 @@ import re
 
 import dateutil.parser
 import datetime
+import requests
 
 from asgiref.sync import async_to_sync
 import channels.layers
@@ -72,12 +73,16 @@ class EventManager(models.Manager):
 
         if from_date:
             query = query.filter(
-                start__gte=datetime.datetime.combine(from_date, datetime.time.min, tzinfo=TZ)
+                start__gte=datetime.datetime.combine(
+                    from_date, datetime.time.min, tzinfo=TZ
+                )
             )
 
         if to_date:
             query = query.filter(
-                start__lte=datetime.datetime.combine(to_date, datetime.time.max, tzinfo=TZ)
+                start__lte=datetime.datetime.combine(
+                    to_date, datetime.time.max, tzinfo=TZ
+                )
             )
 
         return query
@@ -350,10 +355,42 @@ class Event(models.Model):
             if self.realm == 'online' and not self.zoom_link:
                 raise Exception("zoom_link must be set when publishing online events")
 
+        # if self.event_type == 'public' and self.image and self.image.private:
+            # raise Exception("public event images must be public too")
 
-#
-#        if self.event_type == 'public' and self.image and self.image.private:
-#            raise Exception("Public event images must be public too")
+    def get_openvidu_session_id(self):
+        # TODO - check that event is on openvidu platform
+        return f"event_{self.uuid}"
+
+    def generate_openvidu_token(self, user):
+        session_id = self.get_openvidu_session_id()
+        logger.info(f"Generating token for session_id {session_id}")
+
+        def openvidu_post(url: str, payload):
+            return requests.post(
+                f"{settings.OPENVIDU_SERVER}/{url}",
+                json=payload,
+                auth=('OPENVIDUAPP', settings.OPENVIDU_SECRET),
+                verify=not settings.DEBUG,  # we don't have a proper certificate in dev
+            )
+
+        r = openvidu_post('api/sessions', {"customSessionId": session_id})
+        if r.status_code == 409:
+            pass  # that's ok
+        else:
+            if r.status_code >= 400:
+                logger.error(r.text)
+            r.raise_for_status()
+
+        # TODO:
+        # - check event start time
+        # - check that user has a ticket
+        # - start session?
+        r = openvidu_post("api/tokens", {"session": session_id})
+        if r.status_code in (401, 404):
+            logger.error(r.text)
+        r.raise_for_status()
+        return r.json()['token']
 
 
 class Tag(models.Model):

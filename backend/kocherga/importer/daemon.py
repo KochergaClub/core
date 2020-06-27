@@ -16,7 +16,6 @@ from django.conf import settings
 from kocherga.redis import get_redis_connect_args
 
 from .prometheus import importers_gauge, success_counter, failure_counter
-from .base import BaseImporter
 
 IMPORTER_MODULES = [
     # "analytics.timeclub24.models",
@@ -33,7 +32,7 @@ IMPORTER_MODULES = [
 ]
 
 
-def get_importer(module_name) -> BaseImporter:
+def get_importer(module_name):
     module: Any = importlib.import_module(f"kocherga.{module_name}.importer")
     return module.Importer()
 

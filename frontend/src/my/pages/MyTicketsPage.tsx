@@ -4,8 +4,7 @@ import { useMyTicketsPageQuery } from '../queries.generated';
 import TicketsTab from '../tabs/TicketsTab';
 import { requireAuth } from '~/auth/utils';
 
-// FIXME - inconsistent naming, MyEvents vs MyTickets
-const MyEventsPage: NextApolloPage = () => {
+const MyTicketsPage: NextApolloPage = () => {
   const queryResults = useMyTicketsPageQuery();
   const title = 'Личный кабинет';
 
@@ -25,10 +24,10 @@ const MyEventsPage: NextApolloPage = () => {
   );
 };
 
-MyEventsPage.getInitialProps = async ({ apolloClient }) => {
+MyTicketsPage.getInitialProps = async ({ apolloClient }) => {
   await requireAuth(apolloClient, { is_authenticated: true });
 
   return {};
 };
 
-export default withApollo(MyEventsPage);
+export default withApollo(MyTicketsPage);

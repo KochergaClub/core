@@ -1,0 +1,5 @@
+mutation GenerateOpenViduToken($event_id: ID!) {
+  result: eventGenerateOpenViduToken(input: { event_id: $event_id }) {
+    token
+  }
+}

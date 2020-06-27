@@ -1150,6 +1150,20 @@ type EventsGoogleCalendar {
   url: String!
 }
 
+extend type Mutation {
+  eventGenerateOpenViduToken(
+    input: EventGenerateOpenViduTokenInput
+  ): EventGenerateOpenViduTokenResult @auth(authenticated: true)
+}
+
+input EventGenerateOpenViduTokenInput {
+  event_id: ID!
+}
+
+type EventGenerateOpenViduTokenResult {
+  token: String!
+}
+
 extend type Query {
   staffMembersAll: [StaffMember!]! @staffonly
   staffMember(id: ID!): StaffMember! @staffonly

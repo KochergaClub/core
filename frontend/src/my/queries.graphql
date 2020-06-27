@@ -110,3 +110,13 @@ mutation SetPassword($old_password: String, $new_password: String!) {
     error
   }
 }
+query MyEventPage($event_id: ID!) {
+  publicEvent(event_id: $event_id) {
+    event_id
+    start
+    title
+    my_ticket {
+      status
+    }
+  }
+}

@@ -247,6 +247,7 @@ export type Mutation = {
   eventCreate: EventCreateResult;
   eventDelete: BasicResult;
   eventDeleteTag: EventUpdateResult;
+  eventGenerateOpenViduToken?: Maybe<EventGenerateOpenViduTokenResult>;
   eventGenerateZoomLink: EventUpdateResult;
   eventMove: EventUpdateResult;
   eventPrototypeAddTag: EventPrototypeAddTagResult;
@@ -403,6 +404,11 @@ export type MutationEventDeleteArgs = {
 
 export type MutationEventDeleteTagArgs = {
   input: EventDeleteTagInput;
+};
+
+
+export type MutationEventGenerateOpenViduTokenArgs = {
+  input?: Maybe<EventGenerateOpenViduTokenInput>;
 };
 
 
@@ -1573,6 +1579,15 @@ export type EventsGoogleCalendar = {
   __typename?: 'EventsGoogleCalendar';
   id: Scalars['ID'];
   url: Scalars['String'];
+};
+
+export type EventGenerateOpenViduTokenInput = {
+  event_id: Scalars['ID'];
+};
+
+export type EventGenerateOpenViduTokenResult = {
+  __typename?: 'EventGenerateOpenViduTokenResult';
+  token: Scalars['String'];
 };
 
 export type StaffMember = {

@@ -1,1 +1,1 @@
-export { default } from '~/my/pages/MyEventsPage';
+export { default } from '~/my/pages/MyTicketsPage';
