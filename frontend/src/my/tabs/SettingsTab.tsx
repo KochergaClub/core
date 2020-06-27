@@ -2,10 +2,10 @@ import SetPassword from '../components/SetPassword';
 import PrivacySettings from '../components/PrivacySettings';
 import EmailSettings from '../components/EmailSettings';
 
-import { MyPageFragment } from '../queries.generated';
+import { MySettingsPageFragment } from '../queries.generated';
 
 interface Props {
-  my: MyPageFragment;
+  my: MySettingsPageFragment;
 }
 
 const SettingsTab: React.FC<Props> = ({ my }) => {

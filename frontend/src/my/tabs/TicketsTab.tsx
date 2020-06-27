@@ -3,7 +3,7 @@ import { A, HR, Row } from '@kocherga/frontkit';
 
 import TicketsList from '../components/TicketsList';
 
-import { MyPageFragment } from '../queries.generated';
+import { MyTicketsPageFragment } from '../queries.generated';
 
 const OtherEvents = () => (
   <Row centered>
@@ -14,7 +14,7 @@ const OtherEvents = () => (
 );
 
 interface Props {
-  my: MyPageFragment;
+  my: MyTicketsPageFragment;
 }
 
 const TicketsTab: React.FC<Props> = ({ my }) => {

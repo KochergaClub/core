@@ -21,11 +21,11 @@ interface InterestProps {
 
 const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
   const [subscribeMutation] = useMyEmailSubscribeToInterestMutation({
-    refetchQueries: ['MyPage'],
+    refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
   const [unsubscribeMutation] = useMyEmailUnsubscribeFromInterestMutation({
-    refetchQueries: ['MyPage'],
+    refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
 
@@ -75,11 +75,11 @@ interface Props {
 
 const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
   const [resubscribeCb] = useMyEmailResubscribeMutation({
-    refetchQueries: ['MyPage'],
+    refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
   const [unsubscribeCb] = useMyEmailUnsubscribeMutation({
-    refetchQueries: ['MyPage'],
+    refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
 

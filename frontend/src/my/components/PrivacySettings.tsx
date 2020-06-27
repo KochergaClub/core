@@ -12,7 +12,7 @@ import TVIcon from './TVIcon';
 import HeadedFragment from './HeadedFragment';
 
 import {
-  MembershipFragment,
+  MySettingsPageFragment,
   useMyPrivacyModeSetMutation,
 } from '../queries.generated';
 
@@ -44,12 +44,12 @@ const oppositePrivacyMode = (mode: string) =>
   mode == 'private' ? 'public' : 'private';
 
 interface Props {
-  membership: MembershipFragment;
+  membership: NonNullable<MySettingsPageFragment['membership']>;
 }
 
 const PrivacySettings: React.FC<Props> = ({ membership }) => {
   const [setPrivacyModeMutation] = useMyPrivacyModeSetMutation({
-    refetchQueries: ['MyPage'],
+    refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
 

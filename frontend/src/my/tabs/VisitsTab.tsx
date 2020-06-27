@@ -9,7 +9,7 @@ import HeadedFragment from '../components/HeadedFragment';
 
 import NonCustomerVisitsTab from './NonCustomerVisitsTab';
 
-import { MyPageFragment } from '../queries.generated';
+import { MyVisitsPageFragment } from '../queries.generated';
 
 const inflect = (n: number) => {
   if ((n % 100 < 10 || n % 100 > 20) && [2, 3, 4].includes(n % 10)) {
@@ -19,7 +19,7 @@ const inflect = (n: number) => {
 };
 
 interface Props {
-  my: MyPageFragment;
+  my: MyVisitsPageFragment;
 }
 
 const VisitsTab = ({ my }: Props) => {

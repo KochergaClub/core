@@ -6,7 +6,7 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type MembershipFragment = (
   { __typename?: 'MyCmCustomer' }
-  & Pick<Types.MyCmCustomer, 'card_id' | 'orders_count' | 'subscription_until' | 'privacy_mode'>
+  & Pick<Types.MyCmCustomer, 'card_id' | 'orders_count' | 'subscription_until'>
   & { orders: Array<(
     { __typename?: 'MyCmOrder' }
     & Pick<Types.MyCmOrder, 'start_dt'>
@@ -36,34 +36,66 @@ export type MyTicketFragment = (
   ) }
 );
 
-export type MyPageFragment = (
+export type MyVisitsPageFragment = (
   { __typename?: 'My' }
-  & { user: (
-    { __typename?: 'AuthCurrentUser' }
-    & Pick<Types.AuthCurrentUser, 'email' | 'is_staff'>
-  ), membership?: Types.Maybe<(
+  & { membership?: Types.Maybe<(
     { __typename?: 'MyCmCustomer' }
     & MembershipFragment
-  )>, tickets: (
+  )> }
+);
+
+export type MyTicketsPageFragment = (
+  { __typename?: 'My' }
+  & { tickets: (
     { __typename?: 'MyEventsTicketConnection' }
     & { nodes: Array<(
       { __typename?: 'MyEventsTicket' }
       & MyTicketFragment
     )> }
-  ), email_subscription: (
-    { __typename?: 'MyEmailSubscription' }
-    & EmailSubscriptionFragment
   ) }
 );
 
-export type MyPageQueryVariables = {};
+export type MySettingsPageFragment = (
+  { __typename?: 'My' }
+  & { email_subscription: (
+    { __typename?: 'MyEmailSubscription' }
+    & EmailSubscriptionFragment
+  ), membership?: Types.Maybe<(
+    { __typename?: 'MyCmCustomer' }
+    & Pick<Types.MyCmCustomer, 'privacy_mode'>
+  )> }
+);
+
+export type MyVisitsPageQueryVariables = {};
 
 
-export type MyPageQuery = (
+export type MyVisitsPageQuery = (
   { __typename?: 'Query' }
   & { my: (
     { __typename?: 'My' }
-    & MyPageFragment
+    & MyVisitsPageFragment
+  ) }
+);
+
+export type MyTicketsPageQueryVariables = {};
+
+
+export type MyTicketsPageQuery = (
+  { __typename?: 'Query' }
+  & { my: (
+    { __typename?: 'My' }
+    & MyTicketsPageFragment
+  ) }
+);
+
+export type MySettingsPageQueryVariables = {};
+
+
+export type MySettingsPageQuery = (
+  { __typename?: 'Query' }
+  & { my: (
+    { __typename?: 'My' }
+    & MySettingsPageFragment
   ) }
 );
 
@@ -156,12 +188,18 @@ export const MembershipFragmentDoc = gql`
   card_id
   orders_count
   subscription_until
-  privacy_mode
   orders {
     start_dt
   }
 }
     `;
+export const MyVisitsPageFragmentDoc = gql`
+    fragment MyVisitsPage on My {
+  membership {
+    ...Membership
+  }
+}
+    ${MembershipFragmentDoc}`;
 export const MyTicketFragmentDoc = gql`
     fragment MyTicket on MyEventsTicket {
   zoom_link
@@ -172,6 +210,15 @@ export const MyTicketFragmentDoc = gql`
   }
 }
     `;
+export const MyTicketsPageFragmentDoc = gql`
+    fragment MyTicketsPage on My {
+  tickets(first: 100) {
+    nodes {
+      ...MyTicket
+    }
+  }
+}
+    ${MyTicketFragmentDoc}`;
 export const EmailSubscriptionInterestFragmentDoc = gql`
     fragment EmailSubscriptionInterest on MyEmailSubscriptionInterest {
   id
@@ -187,59 +234,112 @@ export const EmailSubscriptionFragmentDoc = gql`
   }
 }
     ${EmailSubscriptionInterestFragmentDoc}`;
-export const MyPageFragmentDoc = gql`
-    fragment MyPage on My {
-  user {
-    email
-    is_staff
-  }
-  membership {
-    ...Membership
-  }
-  tickets(first: 100) {
-    nodes {
-      ...MyTicket
-    }
-  }
+export const MySettingsPageFragmentDoc = gql`
+    fragment MySettingsPage on My {
   email_subscription {
     ...EmailSubscription
   }
-}
-    ${MembershipFragmentDoc}
-${MyTicketFragmentDoc}
-${EmailSubscriptionFragmentDoc}`;
-export const MyPageDocument = gql`
-    query MyPage {
-  my {
-    ...MyPage
+  membership {
+    privacy_mode
   }
 }
-    ${MyPageFragmentDoc}`;
+    ${EmailSubscriptionFragmentDoc}`;
+export const MyVisitsPageDocument = gql`
+    query MyVisitsPage {
+  my {
+    ...MyVisitsPage
+  }
+}
+    ${MyVisitsPageFragmentDoc}`;
 
 /**
- * __useMyPageQuery__
+ * __useMyVisitsPageQuery__
  *
- * To run a query within a React component, call `useMyPageQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMyVisitsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyVisitsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyPageQuery({
+ * const { data, loading, error } = useMyVisitsPageQuery({
  *   variables: {
  *   },
  * });
  */
-export function useMyPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyPageQuery, MyPageQueryVariables>) {
-        return ApolloReactHooks.useQuery<MyPageQuery, MyPageQueryVariables>(MyPageDocument, baseOptions);
+export function useMyVisitsPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyVisitsPageQuery, MyVisitsPageQueryVariables>) {
+        return ApolloReactHooks.useQuery<MyVisitsPageQuery, MyVisitsPageQueryVariables>(MyVisitsPageDocument, baseOptions);
       }
-export function useMyPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyPageQuery, MyPageQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<MyPageQuery, MyPageQueryVariables>(MyPageDocument, baseOptions);
+export function useMyVisitsPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyVisitsPageQuery, MyVisitsPageQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MyVisitsPageQuery, MyVisitsPageQueryVariables>(MyVisitsPageDocument, baseOptions);
         }
-export type MyPageQueryHookResult = ReturnType<typeof useMyPageQuery>;
-export type MyPageLazyQueryHookResult = ReturnType<typeof useMyPageLazyQuery>;
-export type MyPageQueryResult = ApolloReactCommon.QueryResult<MyPageQuery, MyPageQueryVariables>;
+export type MyVisitsPageQueryHookResult = ReturnType<typeof useMyVisitsPageQuery>;
+export type MyVisitsPageLazyQueryHookResult = ReturnType<typeof useMyVisitsPageLazyQuery>;
+export type MyVisitsPageQueryResult = ApolloReactCommon.QueryResult<MyVisitsPageQuery, MyVisitsPageQueryVariables>;
+export const MyTicketsPageDocument = gql`
+    query MyTicketsPage {
+  my {
+    ...MyTicketsPage
+  }
+}
+    ${MyTicketsPageFragmentDoc}`;
+
+/**
+ * __useMyTicketsPageQuery__
+ *
+ * To run a query within a React component, call `useMyTicketsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTicketsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyTicketsPageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyTicketsPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyTicketsPageQuery, MyTicketsPageQueryVariables>) {
+        return ApolloReactHooks.useQuery<MyTicketsPageQuery, MyTicketsPageQueryVariables>(MyTicketsPageDocument, baseOptions);
+      }
+export function useMyTicketsPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyTicketsPageQuery, MyTicketsPageQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MyTicketsPageQuery, MyTicketsPageQueryVariables>(MyTicketsPageDocument, baseOptions);
+        }
+export type MyTicketsPageQueryHookResult = ReturnType<typeof useMyTicketsPageQuery>;
+export type MyTicketsPageLazyQueryHookResult = ReturnType<typeof useMyTicketsPageLazyQuery>;
+export type MyTicketsPageQueryResult = ApolloReactCommon.QueryResult<MyTicketsPageQuery, MyTicketsPageQueryVariables>;
+export const MySettingsPageDocument = gql`
+    query MySettingsPage {
+  my {
+    ...MySettingsPage
+  }
+}
+    ${MySettingsPageFragmentDoc}`;
+
+/**
+ * __useMySettingsPageQuery__
+ *
+ * To run a query within a React component, call `useMySettingsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMySettingsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMySettingsPageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMySettingsPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MySettingsPageQuery, MySettingsPageQueryVariables>) {
+        return ApolloReactHooks.useQuery<MySettingsPageQuery, MySettingsPageQueryVariables>(MySettingsPageDocument, baseOptions);
+      }
+export function useMySettingsPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MySettingsPageQuery, MySettingsPageQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MySettingsPageQuery, MySettingsPageQueryVariables>(MySettingsPageDocument, baseOptions);
+        }
+export type MySettingsPageQueryHookResult = ReturnType<typeof useMySettingsPageQuery>;
+export type MySettingsPageLazyQueryHookResult = ReturnType<typeof useMySettingsPageLazyQuery>;
+export type MySettingsPageQueryResult = ApolloReactCommon.QueryResult<MySettingsPageQuery, MySettingsPageQueryVariables>;
 export const MyEmailResubscribeDocument = gql`
     mutation MyEmailResubscribe {
   myEmailResubscribe

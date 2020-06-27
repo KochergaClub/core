@@ -24,7 +24,7 @@ import { Action } from '~/components/DropdownMenu';
 import { timezone, formatDate } from '~/common/utils';
 
 import {
-  MyPageFragment,
+  MyTicketsPageFragment,
   MyTicketFragment,
   useMyTicketDeleteMutation,
 } from '../queries.generated';
@@ -49,6 +49,7 @@ const DropdownButtonContainer = styled.div`
   border: 1px solid ${colors.grey[200]};
   border-radius: 4px;
   padding: 4px;
+  line-height: 0;
 
   &:hover {
     border-color: ${colors.grey[300]};
@@ -71,7 +72,7 @@ const TicketCard = ({
   later?: boolean;
 }) => {
   const [deleteMutation] = useMyTicketDeleteMutation({
-    refetchQueries: ['MyPage'],
+    refetchQueries: ['MyTicketsPage'],
     awaitRefetchQueries: true,
   });
 
@@ -137,10 +138,10 @@ const TicketCard = ({
 };
 
 interface Props {
-  my: MyPageFragment;
+  my: MyTicketsPageFragment;
 }
 
-type TicketType = MyPageFragment['tickets']['nodes'][0];
+type TicketType = MyTicketsPageFragment['tickets']['nodes'][0];
 
 const TicketsSublist: React.FC<{
   tickets: TicketType[];

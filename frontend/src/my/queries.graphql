@@ -2,7 +2,6 @@ fragment Membership on MyCmCustomer {
   card_id
   orders_count
   subscription_until
-  privacy_mode
   orders {
     start_dt
   }
@@ -30,27 +29,44 @@ fragment MyTicket on MyEventsTicket {
   }
 }
 
-fragment MyPage on My {
-  user {
-    email
-    is_staff
-  }
+fragment MyVisitsPage on My {
   membership {
     ...Membership
   }
+}
+
+fragment MyTicketsPage on My {
   tickets(first: 100) {
     nodes {
       ...MyTicket
     }
   }
+}
+
+fragment MySettingsPage on My {
   email_subscription {
     ...EmailSubscription
   }
+  membership {
+    privacy_mode
+  }
 }
 
-query MyPage {
+query MyVisitsPage {
   my {
-    ...MyPage
+    ...MyVisitsPage
+  }
+}
+
+query MyTicketsPage {
+  my {
+    ...MyTicketsPage
+  }
+}
+
+query MySettingsPage {
+  my {
+    ...MySettingsPage
   }
 }
 
@@ -87,10 +103,9 @@ mutation Logout {
 }
 
 mutation SetPassword($old_password: String, $new_password: String!) {
-  result: authSetPassword(input: {
-      old_password: $old_password
-      new_password: $new_password
-  }) {
+  result: authSetPassword(
+    input: { old_password: $old_password, new_password: $new_password }
+  ) {
     ok
     error
   }
