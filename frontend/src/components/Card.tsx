@@ -4,7 +4,8 @@ import { Column, colors } from '@kocherga/frontkit';
 
 const Card = styled.div`
   border: 1px solid ${colors.grey[200]};
-  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 12px 20px;
 `;
 
 export const CardHeader: React.FC = ({ children }) => (
@@ -14,7 +15,7 @@ export const CardHeader: React.FC = ({ children }) => (
 );
 
 export const CardList: React.FC = ({ children }) => (
-  <Column stretch gutter={10}>
+  <Column stretch gutter={20}>
     {children}
   </Column>
 );

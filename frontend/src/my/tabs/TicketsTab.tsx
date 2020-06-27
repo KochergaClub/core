@@ -8,7 +8,7 @@ import { MyPageFragment } from '../queries.generated';
 const OtherEvents = () => (
   <Row centered>
     <Link href="/events" passHref>
-      <A>Посмотреть ближайшие события</A>
+      <A>Посмотреть календарь всех событий</A>
     </Link>
   </Row>
 );

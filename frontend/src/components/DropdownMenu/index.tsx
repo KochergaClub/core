@@ -93,12 +93,20 @@ const DropdownMenu: React.FC<Props> = ({
     placement: placement || 'bottom',
   });
 
+  const flipExpandWithPrevent = useCallback(
+    (e: React.SyntheticEvent) => {
+      e.preventDefault();
+      flipExpand();
+    },
+    [flipExpand]
+  );
+
   return (
     <>
       {modalWrapper ? modalWrapper.modal({ close: closeModal }) : null}
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
         <Container ref={ref}>
-          <A href="#" onClick={flipExpand} ref={setReferenceElement}>
+          <A href="#" onClick={flipExpandWithPrevent} ref={setReferenceElement}>
             {render ? (
               render({ expanded })
             ) : (

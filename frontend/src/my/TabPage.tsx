@@ -44,9 +44,6 @@ export const buildTabPage = (tab: TabCode) => {
           <ApolloQueryResults {...queryResults}>
             {({ data: { my } }) => (
               <Column centered stretch>
-                <div>
-                  <code>{my.user.email}</code> <LogoutButton />
-                </div>
                 <SectionWrapper>{getSection(my)}</SectionWrapper>
               </Column>
             )}
