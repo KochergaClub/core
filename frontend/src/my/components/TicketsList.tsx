@@ -1,6 +1,10 @@
 import { useCallback, useMemo } from 'react';
+import styled from 'styled-components';
+import Link from 'next/link';
 
+import { formatDistanceToNow, differenceInHours } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { ru } from 'date-fns/locale';
 import { FiVideo } from 'react-icons/fi';
 import { FaEllipsisH } from 'react-icons/fa';
 
@@ -16,6 +20,7 @@ import {
 
 import { DropdownMenu } from '~/components';
 import Card, { CardList } from '~/components/Card';
+import { Action } from '~/components/DropdownMenu';
 import { timezone, formatDate } from '~/common/utils';
 
 import {
@@ -23,10 +28,6 @@ import {
   MyTicketFragment,
   useMyTicketDeleteMutation,
 } from '../queries.generated';
-import { Action } from '~/components/DropdownMenu';
-import styled from 'styled-components';
-import { formatDistanceToNow, differenceInHours } from 'date-fns';
-import { ru } from 'date-fns/locale';
 
 const EventLink = styled(A)`
   color: black;
@@ -101,9 +102,13 @@ const TicketCard = ({
       <Column stretch gutter={16}>
         <Column stretch gutter={16}>
           <Row spaced gutter={8}>
-            <EventLink href={`/events/${ticket.event.event_id}`}>
-              {ticket.event.title}
-            </EventLink>
+            <Link
+              href="/events/[id]"
+              as={`/events/${ticket.event.event_id}`}
+              passHref
+            >
+              <EventLink>{ticket.event.title}</EventLink>
+            </Link>
           </Row>
           <Column centered gutter={0}>
             <Label>{formatDate(zonedStart, 'cccc, d MMMM, HH:mm')} MSK</Label>
