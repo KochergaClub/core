@@ -6,6 +6,7 @@
 
 /backend/node_modules
 
+# not necessary for git but helps with `ag`
 /frontend/node_modules
 /frontend/.next
 /frontend/dist
