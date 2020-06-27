@@ -47,7 +47,7 @@ const GroupCard: React.FC<Props> = ({ group }) => {
       <Column>
         <Row stretch>
           <strong>{group.name}</strong>
-          <DropdownMenu>
+          <DropdownMenu placement="bottom-start">
             <LinkAction href={`/wagtail/groups/${group.id}/`}>
               Редактировать в Wagtail
             </LinkAction>

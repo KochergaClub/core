@@ -2,9 +2,9 @@ import { useState, useCallback } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import styled from 'styled-components';
-import { FaCaretDown } from 'react-icons/fa';
+import { FaEllipsisH } from 'react-icons/fa';
 
-import { colors, A } from '@kocherga/frontkit';
+import { fonts, colors } from '@kocherga/frontkit';
 
 import { usePopper } from 'react-popper';
 import { Placement } from '@popperjs/core';
@@ -54,6 +54,46 @@ const Dropdown = styled.div`
   }
 `;
 
+const UnstyledLink = styled.a`
+  text-decoration: none;
+  color: black;
+`;
+
+const DropdownButtonContainer = styled.div`
+  border: 1px solid ${colors.grey[200]};
+  border-radius: 4px;
+  padding: 4px;
+  line-height: 0;
+  background-color: white;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > div {
+    ${fonts.label};
+    font-weight: 500;
+    color: ${colors.grey[700]};
+  }
+
+  > * + * {
+    margin-left: 8px;
+  }
+
+  &:hover {
+    border-color: ${colors.grey[300]};
+  }
+`;
+
+const DropdownButton: React.FC<{ title: string | null }> = ({ title }) => {
+  return (
+    <DropdownButtonContainer>
+      {title ? <div>{title}</div> : null}
+      <FaEllipsisH color={colors.grey[600]} />
+    </DropdownButtonContainer>
+  );
+};
+
 interface Props {
   title?: string;
   render?: ({ expanded }: { expanded: boolean }) => React.ReactElement;
@@ -90,7 +130,7 @@ const DropdownMenu: React.FC<Props> = ({
     null
   );
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement || 'bottom',
+    placement: placement || 'bottom-end',
   });
 
   const flipExpandWithPrevent = useCallback(
@@ -106,16 +146,17 @@ const DropdownMenu: React.FC<Props> = ({
       {modalWrapper ? modalWrapper.modal({ close: closeModal }) : null}
       <DropdownMenuContext.Provider value={{ close: unexpand, setModal }}>
         <Container ref={ref}>
-          <A href="#" onClick={flipExpandWithPrevent} ref={setReferenceElement}>
+          <UnstyledLink
+            href="#"
+            onClick={flipExpandWithPrevent}
+            ref={setReferenceElement}
+          >
             {render ? (
               render({ expanded })
             ) : (
-              <>
-                {title || null}
-                <FaCaretDown color={colors.grey[expanded ? 900 : 500]} />
-              </>
+              <DropdownButton title={title || null} />
             )}
-          </A>
+          </UnstyledLink>
           <CSSTransition
             appear={true}
             mountOnEnter={true}

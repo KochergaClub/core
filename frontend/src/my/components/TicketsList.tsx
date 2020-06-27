@@ -45,25 +45,6 @@ const DropdownContainer = styled.div`
   margin-left: 10px;
 `;
 
-const DropdownButtonContainer = styled.div`
-  border: 1px solid ${colors.grey[200]};
-  border-radius: 4px;
-  padding: 4px;
-  line-height: 0;
-
-  &:hover {
-    border-color: ${colors.grey[300]};
-  }
-`;
-
-const DropdownButton: React.FC = () => {
-  return (
-    <DropdownButtonContainer>
-      <FaEllipsisH color={colors.grey[600]} />
-    </DropdownButtonContainer>
-  );
-};
-
 const TicketCard = ({
   ticket,
   later,
@@ -96,7 +77,7 @@ const TicketCard = ({
   return (
     <Card>
       <DropdownContainer>
-        <DropdownMenu placement="bottom-end" render={() => <DropdownButton />}>
+        <DropdownMenu>
           <Action act={cancel}>Отменить регистрацию</Action>
         </DropdownMenu>
       </DropdownContainer>
