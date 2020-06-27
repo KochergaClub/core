@@ -94,7 +94,7 @@ const TicketCard = ({
   return (
     <Card>
       <DropdownContainer>
-        <DropdownMenu placement="bottom-end" render={DropdownButton}>
+        <DropdownMenu placement="bottom-end" render={() => <DropdownButton />}>
           <Action act={cancel}>Отменить регистрацию</Action>
         </DropdownMenu>
       </DropdownContainer>
