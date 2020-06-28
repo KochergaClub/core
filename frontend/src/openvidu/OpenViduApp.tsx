@@ -1,28 +1,14 @@
-import { useCallback } from 'react';
 import { Row } from '@kocherga/frontkit';
 import { AsyncButton } from '~/components';
 
 import { useOpenViduSession } from './hooks';
-import { useGenerateOpenViduTokenMutation } from './queries.generated';
 import OvVideo from './OvVideo';
 
 interface Props {
-  event_id: string;
+  getToken: () => Promise<string>;
 }
 
-const OpenViduApp: React.FC<Props> = ({ event_id }) => {
-  const [mutation] = useGenerateOpenViduTokenMutation();
-
-  const getToken = useCallback(async () => {
-    const { data } = await mutation({
-      variables: { event_id },
-    });
-    if (!data || !data.result) {
-      throw Error('Failed to obtain token');
-    }
-    return data.result.token;
-  }, [mutation, event_id]);
-
+const OpenViduApp: React.FC<Props> = ({ getToken }) => {
   const { session, subscribers, publisher, joinSession } = useOpenViduSession(
     getToken
   );

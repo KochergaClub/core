@@ -4,49 +4,46 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
-export type GenerateOpenViduTokenMutationVariables = {
-  event_id: Types.Scalars['ID'];
-};
+export type OpenviduGenerateRoomTokenMutationVariables = {};
 
 
-export type GenerateOpenViduTokenMutation = (
+export type OpenviduGenerateRoomTokenMutation = (
   { __typename?: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'EventGenerateOpenViduTokenResult' }
-    & Pick<Types.EventGenerateOpenViduTokenResult, 'token'>
+    { __typename?: 'OpenviduGenerateRoomTokenResult' }
+    & Pick<Types.OpenviduGenerateRoomTokenResult, 'token'>
   )> }
 );
 
 
-export const GenerateOpenViduTokenDocument = gql`
-    mutation GenerateOpenViduToken($event_id: ID!) {
-  result: eventGenerateOpenViduToken(input: {event_id: $event_id}) {
+export const OpenviduGenerateRoomTokenDocument = gql`
+    mutation OpenviduGenerateRoomToken {
+  result: openviduGenerateRoomToken {
     token
   }
 }
     `;
-export type GenerateOpenViduTokenMutationFn = ApolloReactCommon.MutationFunction<GenerateOpenViduTokenMutation, GenerateOpenViduTokenMutationVariables>;
+export type OpenviduGenerateRoomTokenMutationFn = ApolloReactCommon.MutationFunction<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>;
 
 /**
- * __useGenerateOpenViduTokenMutation__
+ * __useOpenviduGenerateRoomTokenMutation__
  *
- * To run a mutation, you first call `useGenerateOpenViduTokenMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useGenerateOpenViduTokenMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useOpenviduGenerateRoomTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useOpenviduGenerateRoomTokenMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [generateOpenViduTokenMutation, { data, loading, error }] = useGenerateOpenViduTokenMutation({
+ * const [openviduGenerateRoomTokenMutation, { data, loading, error }] = useOpenviduGenerateRoomTokenMutation({
  *   variables: {
- *      event_id: // value for 'event_id'
  *   },
  * });
  */
-export function useGenerateOpenViduTokenMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<GenerateOpenViduTokenMutation, GenerateOpenViduTokenMutationVariables>) {
-        return ApolloReactHooks.useMutation<GenerateOpenViduTokenMutation, GenerateOpenViduTokenMutationVariables>(GenerateOpenViduTokenDocument, baseOptions);
+export function useOpenviduGenerateRoomTokenMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>) {
+        return ApolloReactHooks.useMutation<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>(OpenviduGenerateRoomTokenDocument, baseOptions);
       }
-export type GenerateOpenViduTokenMutationHookResult = ReturnType<typeof useGenerateOpenViduTokenMutation>;
-export type GenerateOpenViduTokenMutationResult = ApolloReactCommon.MutationResult<GenerateOpenViduTokenMutation>;
-export type GenerateOpenViduTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<GenerateOpenViduTokenMutation, GenerateOpenViduTokenMutationVariables>;
+export type OpenviduGenerateRoomTokenMutationHookResult = ReturnType<typeof useOpenviduGenerateRoomTokenMutation>;
+export type OpenviduGenerateRoomTokenMutationResult = ApolloReactCommon.MutationResult<OpenviduGenerateRoomTokenMutation>;
+export type OpenviduGenerateRoomTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>;

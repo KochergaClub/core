@@ -1,13 +1,11 @@
-import dynamic from 'next/dynamic';
 import { A } from '@kocherga/frontkit';
+
 import { NextApolloPage, withApollo } from '~/apollo';
 import { Page, ApolloQueryResults, PaddedBlock } from '~/components';
-import { useMyEventPageQuery } from '../queries.generated';
 import { requireAuth } from '~/auth/utils';
 
-const OpenViduApp = dynamic(() => import('~/openvidu/OpenViduApp'), {
-  ssr: false,
-});
+import { useMyEventPageQuery } from '../queries.generated';
+import EventCall from '../components/EventCall';
 
 interface Props {
   event_id: string;
@@ -31,7 +29,7 @@ const MyEventPage: NextApolloPage<Props> = ({ event_id }) => {
             <Page.Main>
               <PaddedBlock>
                 {publicEvent.my_ticket?.status === 'ok' ? (
-                  <OpenViduApp event_id={event_id} />
+                  <EventCall event_id={event_id} />
                 ) : (
                   <div>
                     Вы не регистрировались на это мероприятие.{' '}

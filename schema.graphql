@@ -1803,3 +1803,12 @@ type ZoomParticipant {
   join_time: String!
   leave_time: String!
 }
+
+extend type Mutation {
+  openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult
+    @auth(authenticated: true)
+}
+
+type OpenviduGenerateRoomTokenResult {
+  token: String!
+}

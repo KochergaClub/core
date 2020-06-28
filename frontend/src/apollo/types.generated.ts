@@ -295,6 +295,7 @@ export type Mutation = {
   myEventsTicketRegisterAnon: MyEventsTicket;
   myEventsTicketUnregister: MyEventsTicket;
   myPrivacyModeSet?: Maybe<Scalars['Boolean']>;
+  openviduGenerateRoomToken?: Maybe<OpenviduGenerateRoomTokenResult>;
   ratioAddTicket: RatioTicket;
   ratioAddTraining: RatioTraining;
   ratioTicketFiscalize?: Maybe<Scalars['Boolean']>;
@@ -2201,4 +2202,9 @@ export type ZoomParticipant = {
   name: Scalars['String'];
   join_time: Scalars['String'];
   leave_time: Scalars['String'];
+};
+
+export type OpenviduGenerateRoomTokenResult = {
+  __typename?: 'OpenviduGenerateRoomTokenResult';
+  token: Scalars['String'];
 };
