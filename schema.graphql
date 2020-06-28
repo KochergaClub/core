@@ -1150,6 +1150,20 @@ type EventsGoogleCalendar {
   url: String!
 }
 
+extend type Mutation {
+  eventGenerateOpenViduToken(
+    input: EventGenerateOpenViduTokenInput
+  ): EventGenerateOpenViduTokenResult @auth(authenticated: true)
+}
+
+input EventGenerateOpenViduTokenInput {
+  event_id: ID!
+}
+
+type EventGenerateOpenViduTokenResult {
+  token: String!
+}
+
 extend type Query {
   staffMembersAll: [StaffMember!]! @staffonly
   staffMember(id: ID!): StaffMember! @staffonly
@@ -1788,4 +1802,13 @@ type ZoomParticipant {
   name: String!
   join_time: String!
   leave_time: String!
+}
+
+extend type Mutation {
+  openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult
+    @auth(authenticated: true)
+}
+
+type OpenviduGenerateRoomTokenResult {
+  token: String!
 }

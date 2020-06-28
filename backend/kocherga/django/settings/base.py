@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'kocherga.telegram',
     'kocherga.tilda',
     'kocherga.zoom',
+    'kocherga.openvidu',
     'taggit',
     'modelcluster',
     'wagtail.api.v2',
@@ -296,3 +297,4 @@ TELEGRAM_PROXY = ''
 KOCHERGA_IMPORTER_DISABLED = False
 
 KKM_SERVER_CERT = '/KKMServer.pem'  # mounted by k8s
+

@@ -683,3 +683,17 @@ type EventsGoogleCalendar {
   id: ID!
   url: String!
 }
+
+extend type Mutation {
+  eventGenerateOpenViduToken(
+    input: EventGenerateOpenViduTokenInput
+  ): EventGenerateOpenViduTokenResult @auth(authenticated: true)
+}
+
+input EventGenerateOpenViduTokenInput {
+  event_id: ID!
+}
+
+type EventGenerateOpenViduTokenResult {
+  token: String!
+}

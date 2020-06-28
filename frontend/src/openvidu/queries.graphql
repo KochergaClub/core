@@ -1,0 +1,5 @@
+mutation OpenviduGenerateRoomToken {
+  result: openviduGenerateRoomToken {
+    token
+  }
+}

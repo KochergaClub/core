@@ -247,6 +247,7 @@ export type Mutation = {
   eventCreate: EventCreateResult;
   eventDelete: BasicResult;
   eventDeleteTag: EventUpdateResult;
+  eventGenerateOpenViduToken?: Maybe<EventGenerateOpenViduTokenResult>;
   eventGenerateZoomLink: EventUpdateResult;
   eventMove: EventUpdateResult;
   eventPrototypeAddTag: EventPrototypeAddTagResult;
@@ -294,6 +295,7 @@ export type Mutation = {
   myEventsTicketRegisterAnon: MyEventsTicket;
   myEventsTicketUnregister: MyEventsTicket;
   myPrivacyModeSet?: Maybe<Scalars['Boolean']>;
+  openviduGenerateRoomToken?: Maybe<OpenviduGenerateRoomTokenResult>;
   ratioAddTicket: RatioTicket;
   ratioAddTraining: RatioTraining;
   ratioTicketFiscalize?: Maybe<Scalars['Boolean']>;
@@ -403,6 +405,11 @@ export type MutationEventDeleteArgs = {
 
 export type MutationEventDeleteTagArgs = {
   input: EventDeleteTagInput;
+};
+
+
+export type MutationEventGenerateOpenViduTokenArgs = {
+  input?: Maybe<EventGenerateOpenViduTokenInput>;
 };
 
 
@@ -1575,6 +1582,15 @@ export type EventsGoogleCalendar = {
   url: Scalars['String'];
 };
 
+export type EventGenerateOpenViduTokenInput = {
+  event_id: Scalars['ID'];
+};
+
+export type EventGenerateOpenViduTokenResult = {
+  __typename?: 'EventGenerateOpenViduTokenResult';
+  token: Scalars['String'];
+};
+
 export type StaffMember = {
   __typename?: 'StaffMember';
   id: Scalars['ID'];
@@ -2186,4 +2202,9 @@ export type ZoomParticipant = {
   name: Scalars['String'];
   join_time: Scalars['String'];
   leave_time: Scalars['String'];
+};
+
+export type OpenviduGenerateRoomTokenResult = {
+  __typename?: 'OpenviduGenerateRoomTokenResult';
+  token: Scalars['String'];
 };

@@ -266,3 +266,15 @@ def eventMove(_, info, input):
         'ok': True,
         'event': event,
     }
+
+
+@Mutation.field('eventGenerateOpenViduToken')
+def eventGenerateOpenViduToken(_, info, input):
+    event = models.Event.objects.get(uuid=input['event_id'])
+
+    # TODO - start openvidu session
+    token = event.generate_openvidu_token(info.context.user)
+
+    return {
+        'token': token,
+    }

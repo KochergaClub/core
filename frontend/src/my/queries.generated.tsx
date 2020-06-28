@@ -183,6 +183,36 @@ export type SetPasswordMutation = (
   ) }
 );
 
+export type MyEventPageQueryVariables = {
+  event_id: Types.Scalars['ID'];
+};
+
+
+export type MyEventPageQuery = (
+  { __typename?: 'Query' }
+  & { publicEvent: (
+    { __typename?: 'EventsPublicEvent' }
+    & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
+    & { my_ticket?: Types.Maybe<(
+      { __typename?: 'MyEventsTicket' }
+      & Pick<Types.MyEventsTicket, 'status'>
+    )> }
+  ) }
+);
+
+export type EventGenerateOpenViduTokenMutationVariables = {
+  event_id: Types.Scalars['ID'];
+};
+
+
+export type EventGenerateOpenViduTokenMutation = (
+  { __typename?: 'Mutation' }
+  & { result?: Types.Maybe<(
+    { __typename?: 'EventGenerateOpenViduTokenResult' }
+    & Pick<Types.EventGenerateOpenViduTokenResult, 'token'>
+  )> }
+);
+
 export const MembershipFragmentDoc = gql`
     fragment Membership on MyCmCustomer {
   card_id
@@ -585,3 +615,73 @@ export function useSetPasswordMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type SetPasswordMutationHookResult = ReturnType<typeof useSetPasswordMutation>;
 export type SetPasswordMutationResult = ApolloReactCommon.MutationResult<SetPasswordMutation>;
 export type SetPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<SetPasswordMutation, SetPasswordMutationVariables>;
+export const MyEventPageDocument = gql`
+    query MyEventPage($event_id: ID!) {
+  publicEvent(event_id: $event_id) {
+    event_id
+    start
+    title
+    my_ticket {
+      status
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyEventPageQuery__
+ *
+ * To run a query within a React component, call `useMyEventPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyEventPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyEventPageQuery({
+ *   variables: {
+ *      event_id: // value for 'event_id'
+ *   },
+ * });
+ */
+export function useMyEventPageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyEventPageQuery, MyEventPageQueryVariables>) {
+        return ApolloReactHooks.useQuery<MyEventPageQuery, MyEventPageQueryVariables>(MyEventPageDocument, baseOptions);
+      }
+export function useMyEventPageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyEventPageQuery, MyEventPageQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MyEventPageQuery, MyEventPageQueryVariables>(MyEventPageDocument, baseOptions);
+        }
+export type MyEventPageQueryHookResult = ReturnType<typeof useMyEventPageQuery>;
+export type MyEventPageLazyQueryHookResult = ReturnType<typeof useMyEventPageLazyQuery>;
+export type MyEventPageQueryResult = ApolloReactCommon.QueryResult<MyEventPageQuery, MyEventPageQueryVariables>;
+export const EventGenerateOpenViduTokenDocument = gql`
+    mutation EventGenerateOpenViduToken($event_id: ID!) {
+  result: eventGenerateOpenViduToken(input: {event_id: $event_id}) {
+    token
+  }
+}
+    `;
+export type EventGenerateOpenViduTokenMutationFn = ApolloReactCommon.MutationFunction<EventGenerateOpenViduTokenMutation, EventGenerateOpenViduTokenMutationVariables>;
+
+/**
+ * __useEventGenerateOpenViduTokenMutation__
+ *
+ * To run a mutation, you first call `useEventGenerateOpenViduTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEventGenerateOpenViduTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [eventGenerateOpenViduTokenMutation, { data, loading, error }] = useEventGenerateOpenViduTokenMutation({
+ *   variables: {
+ *      event_id: // value for 'event_id'
+ *   },
+ * });
+ */
+export function useEventGenerateOpenViduTokenMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EventGenerateOpenViduTokenMutation, EventGenerateOpenViduTokenMutationVariables>) {
+        return ApolloReactHooks.useMutation<EventGenerateOpenViduTokenMutation, EventGenerateOpenViduTokenMutationVariables>(EventGenerateOpenViduTokenDocument, baseOptions);
+      }
+export type EventGenerateOpenViduTokenMutationHookResult = ReturnType<typeof useEventGenerateOpenViduTokenMutation>;
+export type EventGenerateOpenViduTokenMutationResult = ApolloReactCommon.MutationResult<EventGenerateOpenViduTokenMutation>;
+export type EventGenerateOpenViduTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<EventGenerateOpenViduTokenMutation, EventGenerateOpenViduTokenMutationVariables>;

@@ -150,3 +150,5 @@ if os.environ.get('STATIC_S3_BUCKET'):
     AWS_STORAGE_BUCKET_NAME = os.environ['STATIC_S3_BUCKET']
     AWS_S3_SIGNATURE_VERSION = 's3v4'
     AWS_S3_REGION_NAME = 'eu-central-1'
+
+OPENVIDU_SERVER = "https://openvidu.kocherga.club"

@@ -21,6 +21,7 @@ from kocherga.django.managers import RelayQuerySetMixin
 
 import kocherga.room
 import kocherga.zoom.models
+import kocherga.openvidu.api
 
 import kocherga.events.markup
 from kocherga.events.helpers import create_image_from_fh
@@ -72,12 +73,16 @@ class EventManager(models.Manager):
 
         if from_date:
             query = query.filter(
-                start__gte=datetime.datetime.combine(from_date, datetime.time.min, tzinfo=TZ)
+                start__gte=datetime.datetime.combine(
+                    from_date, datetime.time.min, tzinfo=TZ
+                )
             )
 
         if to_date:
             query = query.filter(
-                start__lte=datetime.datetime.combine(to_date, datetime.time.max, tzinfo=TZ)
+                start__lte=datetime.datetime.combine(
+                    to_date, datetime.time.max, tzinfo=TZ
+                )
             )
 
         return query
@@ -350,10 +355,16 @@ class Event(models.Model):
             if self.realm == 'online' and not self.zoom_link:
                 raise Exception("zoom_link must be set when publishing online events")
 
+        # if self.event_type == 'public' and self.image and self.image.private:
+            # raise Exception("public event images must be public too")
 
-#
-#        if self.event_type == 'public' and self.image and self.image.private:
-#            raise Exception("Public event images must be public too")
+    def get_openvidu_session_id(self):
+        # TODO - check that event is on openvidu platform
+        return f"event_{self.uuid}"
+
+    def generate_openvidu_token(self, user):
+        session_id = self.get_openvidu_session_id()
+        return kocherga.openvidu.api.generate_token(session_id)
 
 
 class Tag(models.Model):

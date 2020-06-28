@@ -1,0 +1,8 @@
+extend type Mutation {
+  openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult
+    @auth(authenticated: true)
+}
+
+type OpenviduGenerateRoomTokenResult {
+  token: String!
+}
