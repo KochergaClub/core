@@ -13,7 +13,7 @@ DEBUG = True
 
 INSTALLED_APPS += ["debug_toolbar"]
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
-ALLOWED_HOSTS = ["localhost", "kassa.lt.berekuk.ru"]
+ALLOWED_HOSTS = ["localhost", "kassa.lt.berekuk.ru", "192.168.1.68"]
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Kocherga settings

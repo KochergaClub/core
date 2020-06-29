@@ -1,9 +1,14 @@
 import React from 'react';
-import { Subscriber } from 'openvidu-browser';
+import styled from 'styled-components';
+import { StreamManager } from 'openvidu-browser';
 
 interface Props {
-  streamManager: Subscriber;
+  streamManager: StreamManager;
 }
+
+const Video = styled.video`
+  width: 100%;
+`;
 
 export default class OvVideo extends React.Component<Props> {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -26,6 +31,6 @@ export default class OvVideo extends React.Component<Props> {
   }
 
   render() {
-    return <video autoPlay={true} ref={this.videoRef} />;
+    return <Video autoPlay={true} ref={this.videoRef} />;
   }
 }

@@ -30,10 +30,8 @@ const MyEventPage: NextApolloPage<Props> = ({ event_id }) => {
   return (
     <Page title={title}>
       <Page.Title>{title}</Page.Title>
-      <Page.Main>
-        <PaddedBlock>
-          <OpenViduApp getToken={getToken} />
-        </PaddedBlock>
+      <Page.Main wide>
+        <OpenViduApp getToken={getToken} />
       </Page.Main>
     </Page>
   );
