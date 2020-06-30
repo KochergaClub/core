@@ -169,6 +169,9 @@ WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'nosuchtemplate.html'
 WAGTAIL_APPEND_SLASH = False
 WAGTAILAPI_LIMIT_MAX = None
 WAGTAILIMAGES_IMAGE_MODEL = 'kocherga_wagtail.CustomImage'
+WAGTAIL_USER_EDIT_FORM = 'kocherga.wagtail.forms.CustomUserEditForm'
+WAGTAIL_USER_CREATION_FORM = 'kocherga.wagtail.forms.CustomUserCreationForm'
+WAGTAILUSERS_PASSWORD_REQUIRED = False
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

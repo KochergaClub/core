@@ -233,6 +233,7 @@ export type Mutation = {
   authLogout: AuthLogoutResult;
   authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>;
   authSendMagicLink: AuthSendMagicLinkResult;
+  authSetMyNames: AuthSetMyNamesResult;
   authSetPassword: AuthSetPasswordResult;
   cashierCreatePayment?: Maybe<Scalars['Boolean']>;
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>;
@@ -334,6 +335,11 @@ export type MutationAuthRemoveUserFromGroupArgs = {
 
 export type MutationAuthSendMagicLinkArgs = {
   input: AuthSendMagicLinkInput;
+};
+
+
+export type MutationAuthSetMyNamesArgs = {
+  input: AuthSetMyNamesInput;
 };
 
 
@@ -758,6 +764,8 @@ export type AuthCurrentUser = {
   __typename?: 'AuthCurrentUser';
   is_authenticated: Scalars['Boolean'];
   email?: Maybe<Scalars['String']>;
+  first_name?: Maybe<Scalars['String']>;
+  last_name?: Maybe<Scalars['String']>;
   is_staff?: Maybe<Scalars['Boolean']>;
   permissions: Array<Scalars['String']>;
 };
@@ -809,6 +817,17 @@ export type AuthSetPasswordInput = {
 
 export type AuthSetPasswordResult = {
   __typename?: 'AuthSetPasswordResult';
+  error?: Maybe<Scalars['String']>;
+  ok?: Maybe<Scalars['Boolean']>;
+};
+
+export type AuthSetMyNamesInput = {
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+};
+
+export type AuthSetMyNamesResult = {
+  __typename?: 'AuthSetMyNamesResult';
   error?: Maybe<Scalars['String']>;
   ok?: Maybe<Scalars['Boolean']>;
 };

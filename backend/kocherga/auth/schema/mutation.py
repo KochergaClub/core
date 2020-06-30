@@ -154,6 +154,19 @@ def create_mutations():
 
         return {'ok': True}
 
+    @Mutation.field("SetMyNames")
+    def resolve_SetMyNames(_, info, input):
+        first_name = input['first_name']
+        last_name = input['last_name']
+
+        user = info.context.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.full_clean()
+        user.save()
+
+        return {'ok': True}
+
     return Mutation
 
 

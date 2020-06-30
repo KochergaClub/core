@@ -57,7 +57,10 @@ export type MyTicketsPageFragment = (
 
 export type MySettingsPageFragment = (
   { __typename?: 'My' }
-  & { email_subscription: (
+  & { user: (
+    { __typename?: 'AuthCurrentUser' }
+    & Pick<Types.AuthCurrentUser, 'first_name' | 'last_name'>
+  ), email_subscription: (
     { __typename?: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
   ), membership?: Types.Maybe<(
@@ -213,6 +216,20 @@ export type EventGenerateOpenViduTokenMutation = (
   )> }
 );
 
+export type SetMyNamesMutationVariables = {
+  first_name: Types.Scalars['String'];
+  last_name: Types.Scalars['String'];
+};
+
+
+export type SetMyNamesMutation = (
+  { __typename?: 'Mutation' }
+  & { result: (
+    { __typename?: 'AuthSetMyNamesResult' }
+    & Pick<Types.AuthSetMyNamesResult, 'ok' | 'error'>
+  ) }
+);
+
 export const MembershipFragmentDoc = gql`
     fragment Membership on MyCmCustomer {
   card_id
@@ -266,6 +283,10 @@ export const EmailSubscriptionFragmentDoc = gql`
     ${EmailSubscriptionInterestFragmentDoc}`;
 export const MySettingsPageFragmentDoc = gql`
     fragment MySettingsPage on My {
+  user {
+    first_name
+    last_name
+  }
   email_subscription {
     ...EmailSubscription
   }
@@ -685,3 +706,37 @@ export function useEventGenerateOpenViduTokenMutation(baseOptions?: ApolloReactH
 export type EventGenerateOpenViduTokenMutationHookResult = ReturnType<typeof useEventGenerateOpenViduTokenMutation>;
 export type EventGenerateOpenViduTokenMutationResult = ApolloReactCommon.MutationResult<EventGenerateOpenViduTokenMutation>;
 export type EventGenerateOpenViduTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<EventGenerateOpenViduTokenMutation, EventGenerateOpenViduTokenMutationVariables>;
+export const SetMyNamesDocument = gql`
+    mutation SetMyNames($first_name: String!, $last_name: String!) {
+  result: authSetMyNames(input: {first_name: $first_name, last_name: $last_name}) {
+    ok
+    error
+  }
+}
+    `;
+export type SetMyNamesMutationFn = ApolloReactCommon.MutationFunction<SetMyNamesMutation, SetMyNamesMutationVariables>;
+
+/**
+ * __useSetMyNamesMutation__
+ *
+ * To run a mutation, you first call `useSetMyNamesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetMyNamesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setMyNamesMutation, { data, loading, error }] = useSetMyNamesMutation({
+ *   variables: {
+ *      first_name: // value for 'first_name'
+ *      last_name: // value for 'last_name'
+ *   },
+ * });
+ */
+export function useSetMyNamesMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetMyNamesMutation, SetMyNamesMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetMyNamesMutation, SetMyNamesMutationVariables>(SetMyNamesDocument, baseOptions);
+      }
+export type SetMyNamesMutationHookResult = ReturnType<typeof useSetMyNamesMutation>;
+export type SetMyNamesMutationResult = ApolloReactCommon.MutationResult<SetMyNamesMutation>;
+export type SetMyNamesMutationOptions = ApolloReactCommon.BaseMutationOptions<SetMyNamesMutation, SetMyNamesMutationVariables>;

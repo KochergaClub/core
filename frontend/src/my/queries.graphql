@@ -44,6 +44,10 @@ fragment MyTicketsPage on My {
 }
 
 fragment MySettingsPage on My {
+  user {
+    first_name
+    last_name
+  }
   email_subscription {
     ...EmailSubscription
   }
@@ -110,6 +114,7 @@ mutation SetPassword($old_password: String, $new_password: String!) {
     error
   }
 }
+
 query MyEventPage($event_id: ID!) {
   publicEvent(event_id: $event_id) {
     event_id
@@ -124,5 +129,13 @@ query MyEventPage($event_id: ID!) {
 mutation EventGenerateOpenViduToken($event_id: ID!) {
   result: eventGenerateOpenViduToken(input: { event_id: $event_id }) {
     token
+  }
+}
+mutation SetMyNames($first_name: String!, $last_name: String!) {
+  result: authSetMyNames(
+    input: { first_name: $first_name, last_name: $last_name }
+  ) {
+    ok
+    error
   }
 }

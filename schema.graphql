@@ -89,6 +89,8 @@ extend type Query {
 type AuthCurrentUser {
   is_authenticated: Boolean!
   email: String
+  first_name: String
+  last_name: String
   is_staff: Boolean
   permissions: [String!]!
 }
@@ -117,8 +119,10 @@ extend type My {
 }
 
 extend type Mutation {
-  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
-  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean
+    @auth(permission: "auth.audit")
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean
+    @auth(permission: "auth.audit")
 }
 
 extend type Mutation {
@@ -146,7 +150,8 @@ type AuthLoginResult {
 }
 
 extend type Mutation {
-  authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult! @auth(authenticated: true)
+  authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult!
+    @auth(authenticated: true)
 }
 
 input AuthSetPasswordInput {
@@ -157,6 +162,21 @@ input AuthSetPasswordInput {
 
 # TODO - generalize into "SimpleMutationResult"?
 type AuthSetPasswordResult {
+  error: String
+  ok: Boolean
+}
+
+extend type Mutation {
+  authSetMyNames(input: AuthSetMyNamesInput!): AuthSetMyNamesResult!
+    @auth(authenticated: true)
+}
+
+input AuthSetMyNamesInput {
+  first_name: String!
+  last_name: String!
+}
+
+type AuthSetMyNamesResult {
   error: String
   ok: Boolean
 }

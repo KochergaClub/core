@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 from django.utils import timezone
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -44,6 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     date_joined = models.DateTimeField(default=timezone.now)
 
+    first_name = models.CharField(_('first name'), max_length=150, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150, blank=True)
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
@@ -52,3 +55,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
         permissions = (('audit', 'Может проверять права доступа'),)
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"

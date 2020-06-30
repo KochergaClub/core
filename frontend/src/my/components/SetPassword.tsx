@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Button, Column, Label, Input, colors } from '@kocherga/frontkit';
 import { useCommonHotkeys } from '~/common/hooks';
+import { HintCard } from '~/components';
 
 import { useSetPasswordMutation } from '../queries.generated';
 
@@ -58,6 +59,10 @@ const SetPassword: React.FC = () => {
   return (
     <HeadedFragment title="Сменить или установить пароль">
       <Column centered {...hotkeys}>
+        <HintCard>
+          Если у вас не был настроен пароль, то оставьте поле "Старый пароль"
+          пустым.
+        </HintCard>
         <Column centered>
           <Label>Старый пароль (если есть):</Label>
           <Input
