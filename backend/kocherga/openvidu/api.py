@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from typing import Optional
 import requests
 
 from django.conf import settings
@@ -16,7 +17,7 @@ def api_post(url: str, payload):
     )
 
 
-def generate_token(session_id: str):
+def generate_token(session_id: str, data: Optional[str] = None):
     logger.info(f"Generating token for session_id {session_id}")
 
     # TODO: option for deciding whether to start a session
@@ -28,7 +29,7 @@ def generate_token(session_id: str):
             logger.error(r.text)
         r.raise_for_status()
 
-    r = api_post("api/tokens", {"session": session_id})
+    r = api_post("api/tokens", {"session": session_id, "data": data})
     if r.status_code in (401, 404):
         logger.error(r.text)
     r.raise_for_status()

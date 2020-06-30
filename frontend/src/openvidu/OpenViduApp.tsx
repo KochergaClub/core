@@ -116,7 +116,10 @@ const OpenViduApp: React.FC<Props> = ({ getToken }) => {
           }}
           publisher={publisher}
           session={session}
-          leaveSession={leaveSession}
+          leaveSession={() => {
+            setFakeStreams(0);
+            leaveSession();
+          }}
         />
       </Column>
       <Grid>

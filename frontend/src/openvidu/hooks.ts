@@ -14,19 +14,6 @@ export const useOpenViduSession = (getToken: () => Promise<string>) => {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [publisher, setPublisher] = useState<Publisher | undefined>(undefined);
 
-  const onBeforeUnload = useCallback(() => {
-    if (session) {
-      session.disconnect();
-    }
-  }, [session]);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', onBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', onBeforeUnload);
-    };
-  }, [onBeforeUnload]);
-
   const leaveSession = useCallback(() => {
     if (!session) {
       return;
@@ -35,8 +22,15 @@ export const useOpenViduSession = (getToken: () => Promise<string>) => {
     setSession(undefined);
     setSubscribers([]);
     setPublisher(undefined);
-    console.log('left');
   }, [session]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', leaveSession);
+    return () => {
+      window.removeEventListener('beforeunload', leaveSession);
+      leaveSession();
+    };
+  }, [leaveSession]);
 
   const joinSession = useCallback(async () => {
     if (session) {
@@ -67,6 +61,8 @@ export const useOpenViduSession = (getToken: () => Promise<string>) => {
 
     const token = await getToken();
 
+    // Please never add metadata (clientData) here, since we use serverData (which is more secure)
+    // and OpenVidu uses strange encoding when you use both.
     await newSession.connect(token);
 
     // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video

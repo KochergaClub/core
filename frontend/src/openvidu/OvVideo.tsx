@@ -1,6 +1,7 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { StreamManager } from 'openvidu-browser';
+import { fonts } from '@kocherga/frontkit';
 
 interface Props {
   streamManager: StreamManager;
@@ -8,29 +9,42 @@ interface Props {
 
 const Video = styled.video`
   width: 100%;
+  background-color: black;
 `;
 
-export default class OvVideo extends React.Component<Props> {
-  videoRef: React.RefObject<HTMLVideoElement>;
+const Container = styled.div`
+  position: relative;
+`;
 
-  constructor(props: Props) {
-    super(props);
-    this.videoRef = React.createRef();
-  }
+const Name = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background: white;
+  padding: 0 4px;
+  font-size: ${fonts.sizes.S};
+`;
 
-  componentDidUpdate(props: Props) {
-    if (props && this.videoRef.current) {
-      this.props.streamManager.addVideoElement(this.videoRef.current);
+const OvVideo: React.FC<Props> = ({ streamManager }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    if (!videoRef.current) {
+      return;
     }
-  }
+    const data = JSON.parse(streamManager.stream.connection.data);
+    streamManager.addVideoElement(videoRef.current);
+    setName(data.name);
+  }, [streamManager]);
 
-  componentDidMount() {
-    if (this.props && this.videoRef.current) {
-      this.props.streamManager.addVideoElement(this.videoRef.current);
-    }
-  }
+  return (
+    <Container>
+      <Name>{name}</Name>
+      <Video autoPlay={true} ref={videoRef} />
+    </Container>
+  );
+};
 
-  render() {
-    return <Video autoPlay={true} ref={this.videoRef} />;
-  }
-}
+export default OvVideo;
