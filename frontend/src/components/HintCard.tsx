@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors, fonts } from '@kocherga/frontkit';
 
 const HintCard = styled.div`
   border: 1px solid ${colors.grey[300]};
   background-color: ${colors.grey[100]};
+  font-size: ${fonts.sizes.S};
   max-width: 660px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px 16px;
 `;
 
 export default HintCard;
