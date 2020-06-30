@@ -5,6 +5,7 @@ import Router from 'next/router';
 import { NeedLoginError } from '~/auth/errors';
 import { NextPage } from '~/common/types';
 
+import Error302 from '~/error-pages/302';
 import Error403 from '~/error-pages/403';
 import Error404 from '~/error-pages/404';
 import Error500 from '~/error-pages/500';
@@ -16,6 +17,8 @@ interface Props {
 
 const ErrorPage: NextPage<Props> = ({ statusCode }) => {
   switch (statusCode) {
+    case 302:
+      return <Error302 />;
     case 403:
       return <Error403 />;
     case 404:
@@ -30,7 +33,6 @@ ErrorPage.getInitialProps = async ({ asPath, res, err }) => {
     return { statusCode: 404 };
   }
 
-  console.log(err);
   Sentry.captureException(err);
   if (err instanceof NeedLoginError) {
     // During getInitialProps we checked permissions (through requireAuth) and it decided that
@@ -45,7 +47,7 @@ ErrorPage.getInitialProps = async ({ asPath, res, err }) => {
     } else {
       Router.push(loginUrl);
     }
-    return { pageProps: {} };
+    return { statusCode: 302 };
   } else if (
     err instanceof APIError &&
     (err.status === 404 || err.status === 403 || err.status === 400)
@@ -53,7 +55,7 @@ ErrorPage.getInitialProps = async ({ asPath, res, err }) => {
     if (res) {
       res.statusCode = err.status;
     }
-    return { pageProps: {}, statusCode: err.status };
+    return { statusCode: err.status };
   }
   return { statusCode: 500 };
 };
