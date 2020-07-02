@@ -42,7 +42,7 @@ const OvVideo: React.FC<Props> = ({ streamManager }) => {
   return (
     <Container>
       <Name>{name}</Name>
-      <Video autoPlay={true} ref={videoRef} />
+      <Video autoPlay={true} ref={videoRef} muted={!streamManager.remote} />
     </Container>
   );
 };
