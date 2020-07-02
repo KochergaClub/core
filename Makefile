@@ -10,7 +10,8 @@ dev:
 	skaffold dev --force=false
 
 wait_for_migrate:
-	$(K) logs -f $(shell $(K) get po -o name | fgrep core-django-migrate)
+	@echo Waiting for migrate
+	$(K) wait --for=condition=complete job/core-django-migrate --timeout=1h
 
 dev_init: wait_for_migrate superuser wagtail_init restart_backend proxy
 	echo OK
