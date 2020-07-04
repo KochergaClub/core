@@ -19,7 +19,7 @@ python-gitlab
 slackeventsapi
 pytz
 boto3
-mysqlclient
+mysqlclient >= 2
 requests-toolbelt
 slappy == 0.5.1
 feedgen
@@ -45,7 +45,7 @@ git+https://github.com/berekuk/wagtailmath.git@master
 django-annoying >= 0.10.6
 pywatchman
 wagtailgeowidget >= 5.0
-pyee == 5.0.0 # avoids warnings from pyppeteer; required by slackeventsapi (6.0.0 works too but prints annoying warnings)
+pyee
 django-prometheus
 wagtail-condensedinlinepanel >= 0.5.3
 html2text

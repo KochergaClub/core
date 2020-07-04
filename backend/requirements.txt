@@ -110,7 +110,7 @@ multidict==4.7.5          # via aiohttp, yarl
 mwclient==0.10.0          # via -r requirements.in
 mypy-extensions==0.4.3    # via mypy
 mypy==0.770               # via -r requirements.in
-mysqlclient==1.4.2        # via -r requirements.in
+mysqlclient==2.0.1        # via -r requirements.in
 nbconvert==5.6.1          # via jupyter, notebook
 nbformat==5.0.6           # via ipywidgets, nbconvert, notebook
 notebook==6.0.3           # via jupyter, widgetsnbextension
