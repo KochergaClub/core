@@ -70,6 +70,11 @@ class Manager(models.Manager):
         )
 
     def update_wiki_schedule(self):
+        main_page_settings = settings.KOCHERGA_VK["main_page"]
+        if 'main_wall_page_id' not in main_page_settings:
+            logger.info("main_wall_page_id is not set, can't update wiki schedule")
+            return
+
         events = self.upcoming_events()
         logger.info(f"Schedule includes {len(events)} events")
 
@@ -118,6 +123,11 @@ class Manager(models.Manager):
         )
 
     def get_widget_config(self):
+        main_page_settings = settings.KOCHERGA_VK["main_page"]
+        if 'main_wall_page_id' not in main_page_settings:
+            logger.info("main_wall_page_id is not set, can't update widget config")
+            return
+
         events = self.upcoming_events()[:6].all()
 
         def event2time(event):
@@ -126,10 +136,6 @@ class Manager(models.Manager):
             day = day_codes[start_local.weekday()]
             return f"{day} {start_local:%H:%M}"
 
-        main_page_settings = settings.KOCHERGA_VK["main_page"]
-        if 'main_wall_page_id' not in main_page_settings:
-            logger.info('main_wall_page_id is not set, skipping')
-            return
         group_id = group2id(main_page_settings["id"])
         page_id = group2id(main_page_settings["main_wall_page_id"])
         wiki_url = f"https://vk.com/page-{group_id}_{page_id}"
@@ -170,6 +176,11 @@ class Manager(models.Manager):
         }
 
     def update_widget(self):
+        widget_config = self.get_widget_config()
+        # for dev
+        if not widget_config:
+            return
+
         kocherga.vk.api.call(
             "appWidgets.update", self.get_widget_config(), group_token=True
         )
