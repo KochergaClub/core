@@ -19,7 +19,7 @@ python-gitlab
 slackeventsapi
 pytz
 boto3
-mysqlclient == 1.4.2
+mysqlclient
 requests-toolbelt
 slappy == 0.5.1
 feedgen
