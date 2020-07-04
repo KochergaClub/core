@@ -13,12 +13,12 @@ RUN apt-get install -y inotify-tools && \
     git clone https://github.com/facebook/watchman.git /tmp/watchman-src && \
     cd /tmp/watchman-src && \
     git checkout v4.9.0 && \
-    ./autogen.sh && ./configure && make && make install && rm -rf /tmp/watchman-src
+    ./autogen.sh && ./configure --enable-lenient && make && make install && rm -rf /tmp/watchman-src
 
 WORKDIR /code
 
 # necessary for mjml
-RUN (curl -sL https://deb.nodesource.com/setup_10.x | bash -) && apt-get install -y nodejs
+RUN (curl -sL https://deb.nodesource.com/setup_14.x | bash -) && apt-get install -y nodejs
 COPY package.json package-lock.json /code/
 RUN npm ci
 
