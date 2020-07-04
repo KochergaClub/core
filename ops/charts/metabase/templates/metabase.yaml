@@ -54,6 +54,8 @@ spec:
             value: normal
           - name: MB_PASSWORD_LENGTH
             value: "6"
+          - name: MAX_SESSION_AGE
+            value: "129600" # 3 months; https://www.metabase.com/docs/latest/operations-guide/changing-session-expiration.html
           ports:
             - containerPort: 3000
           livenessProbe:
