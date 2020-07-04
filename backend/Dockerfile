@@ -1,4 +1,4 @@
-FROM python:3.7.2
+FROM python:3.8.3
 
 RUN apt-get update && apt-get install -y locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
