@@ -11,5 +11,6 @@
 /frontend/.next
 /frontend/dist
 /frontend/coverage
+/backend/venv
 
 /build.json
