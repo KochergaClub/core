@@ -1,5 +1,12 @@
 import { useState, useCallback } from 'react';
-import { setHours, setMinutes, getHours, getMinutes, addHours } from 'date-fns';
+import {
+  setHours,
+  setMinutes,
+  getHours,
+  getMinutes,
+  addHours,
+  parseISO,
+} from 'date-fns';
 import Router from 'next/router';
 
 import DatePicker from 'react-datepicker';
@@ -51,7 +58,7 @@ const NewEventModal: React.FC<Props> = props => {
     }
 
     const start = setHours(
-      setMinutes(new Date(props.date), getMinutes(time)),
+      setMinutes(parseISO(props.date), getMinutes(time)),
       getHours(time)
     );
     const end = addHours(start, 2);

@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import { Column, Row } from '@kocherga/frontkit';
@@ -60,7 +60,7 @@ const EventHeader: React.FC<Props> = ({ event }) => {
 
         <div>
           <EditableDateSpan
-            date={new Date(event.start)}
+            date={parseISO(event.start)}
             onChange={date =>
               moveMutation({
                 variables: {
@@ -81,7 +81,7 @@ const EventHeader: React.FC<Props> = ({ event }) => {
         >
           <small>
             <MutedSpan>
-              Создано: <DateSpan date={new Date(event.created)} />
+              Создано: <DateSpan date={parseISO(event.created)} />
             </MutedSpan>
           </small>
         </div>

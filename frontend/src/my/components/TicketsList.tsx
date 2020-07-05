@@ -2,11 +2,10 @@ import { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 
-import { formatDistanceToNow, differenceInHours } from 'date-fns';
+import { formatDistanceToNow, differenceInHours, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ru } from 'date-fns/locale';
 import { FiVideo } from 'react-icons/fi';
-import { FaEllipsisH } from 'react-icons/fa';
 
 import {
   A,
@@ -96,7 +95,7 @@ const TicketCard = ({
             <Label>{formatDate(zonedStart, 'cccc, d MMMM, HH:mm')} MSK</Label>
             <DistanceLabel>
               (
-              {formatDistanceToNow(new Date(ticket.event.start), {
+              {formatDistanceToNow(parseISO(ticket.event.start), {
                 locale: ru,
                 addSuffix: true,
               })}
@@ -157,7 +156,7 @@ const TicketsList: React.FC<Props> = ({ my }) => {
   const LATER_THRESHOLD = 12;
 
   const condition = (ticket: TicketType) =>
-    differenceInHours(new Date(ticket.event.start), new Date()) <
+    differenceInHours(parseISO(ticket.event.start), new Date()) <
     LATER_THRESHOLD;
 
   const soonTickets = useMemo(() => tickets.filter(condition), [tickets]);

@@ -1,6 +1,13 @@
 import { useState, useCallback, useReducer, useMemo } from 'react';
 
-import { startOfWeek, addWeeks, startOfDay, isEqual, format } from 'date-fns';
+import {
+  startOfWeek,
+  addWeeks,
+  startOfDay,
+  isEqual,
+  format,
+  parseISO,
+} from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 import { Column } from '@kocherga/frontkit';
@@ -91,8 +98,9 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     (date: Date) => {
       const dayEvents =
         filteredEvents.filter(event =>
-          isEqual(startOfDay(new Date(event.start)), startOfDay(date))
+          isEqual(startOfDay(parseISO(event.start)), startOfDay(date))
         ) || [];
+
       return <CalendarCell events={dayEvents} selected_id={selected_id} />;
     },
     [selected_id, filteredEvents]

@@ -1,3 +1,5 @@
+import { parseISO } from 'date-fns';
+
 import { Modal } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
@@ -28,16 +30,16 @@ const ParticipantsModal: React.FC<Props> = ({ close, event_id }) => {
             return (
               <div>
                 {event.zoom_meeting.instances.map(instance => (
-                  <section>
+                  <section key={instance.id}>
                     <strong>
-                      {formatDate(new Date(instance.start_time), 'HH:mm')}—
-                      {formatDate(new Date(instance.end_time), 'HH:mm')}
+                      {formatDate(parseISO(instance.start_time), 'HH:mm')}—
+                      {formatDate(parseISO(instance.end_time), 'HH:mm')}
                     </strong>
                     <div>
                       {instance.participants.map(p => (
                         <div key={p.id}>
-                          {formatDate(new Date(p.join_time), 'HH:mm')}—
-                          {formatDate(new Date(p.leave_time), 'HH:mm')} {p.name}
+                          {formatDate(parseISO(p.join_time), 'HH:mm')}—
+                          {formatDate(parseISO(p.leave_time), 'HH:mm')} {p.name}
                         </div>
                       ))}
                     </div>

@@ -87,7 +87,7 @@ const PublicEventsCalendar = () => {
         },
       });
       return queryResults.data.publicEvents.nodes.map(event => {
-        const past = isPast(new Date(event.start));
+        const past = isPast(parseISO(event.start));
         const classNames = [];
         if (past) {
           classNames.push('fc-kocherga-past');

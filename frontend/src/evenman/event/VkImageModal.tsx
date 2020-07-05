@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 import {
   Button,
@@ -39,8 +39,8 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
   const [header, setHeader] = useState('');
 
   const config = useMemo(() => {
-    const date = format(new Date(event.start), 'yyyy-MM-dd');
-    const time = format(new Date(event.start), 'HH:mm');
+    const date = format(parseISO(event.start), 'yyyy-MM-dd');
+    const time = format(parseISO(event.start), 'HH:mm');
 
     return {
       date,

@@ -23,21 +23,22 @@ interface Props {
 
 const SERIALIZE_FORMAT = 'yyyy-MM-dd HH:mm';
 
-const CustomInput = forwardRef(
-  ({ value, onClick }: { value?: string; onClick?: () => void }) => {
-    if (!value || !onClick) {
-      return null;
-    }
-
-    const date = parse(value, SERIALIZE_FORMAT, new Date());
-    return (
-      <A href="#" onClick={onClick}>
-        <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
-        {formatDate(date, 'd MMMM, HH:mm')}
-      </A>
-    );
+const CustomInput: React.FC<{
+  value?: string;
+  onClick?: () => void;
+}> = ({ value, onClick }) => {
+  if (!value || !onClick) {
+    return null;
   }
-);
+
+  const date = parse(value, SERIALIZE_FORMAT, new Date());
+  return (
+    <A href="#" onClick={onClick}>
+      <b>{formatDate(date, 'EEEEEE').toUpperCase()}</b>{' '}
+      {formatDate(date, 'd MMMM, HH:mm')}
+    </A>
+  );
+};
 
 const EditableDateSpan: React.FC<Props> = ({ date, onChange }) => {
   const onDateChange = useCallback(
