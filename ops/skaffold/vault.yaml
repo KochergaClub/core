@@ -1,13 +1,13 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta5
 kind: Config
 deploy:
   helm:
+    releases:
+    - name: vault
+      chartPath: ops/charts/vault
+      valuesFiles:
+      - ops/secrets/vault.yaml
+      namespace: vault
     flags:
       upgrade:
-        - --install
-    releases:
-      - name: vault
-        namespace: vault
-        chartPath: ops/charts/vault
-        valuesFiles:
-          - ops/secrets/vault.yaml
+      - --install

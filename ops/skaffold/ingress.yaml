@@ -1,10 +1,10 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta5
 kind: Config
 deploy:
   helm:
+    releases:
+    - name: extra-ingress
+      chartPath: ops/charts/extra-ingress
     flags:
       upgrade:
-        - --install
-    releases:
-      - name: extra-ingress
-        chartPath: ops/charts/extra-ingress
+      - --install

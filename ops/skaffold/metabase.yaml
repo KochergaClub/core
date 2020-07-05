@@ -1,12 +1,12 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta5
 kind: Config
 deploy:
   helm:
+    releases:
+    - name: metabase
+      chartPath: ops/charts/metabase
+      valuesFiles:
+      - ops/secrets/metabase.yaml
     flags:
       upgrade:
-        - --install
-    releases:
-      - name: metabase
-        chartPath: ops/charts/metabase
-        valuesFiles:
-          - ops/secrets/metabase.yaml
+      - --install

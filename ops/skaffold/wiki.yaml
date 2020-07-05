@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta5
 kind: Config
 build:
   artifacts:
@@ -8,24 +8,24 @@ build:
     context: ops/images/mysql-backup
 deploy:
   helm:
+    releases:
+    - name: kocherga-wiki
+      chartPath: ops/charts/wiki
+      valuesFiles:
+      - ops/values/kocherga-wiki.yaml
+      - ops/secrets/kocherga-wiki.yaml
+      artifactOverrides:
+        image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+        image.wiki: registry.gitlab.com/kocherga/core/mediawiki
+    - name: berekuk-wiki
+      chartPath: ops/charts/wiki
+      valuesFiles:
+      - ops/values/berekuk-wiki.yaml
+      - ops/secrets/berekuk-wiki.yaml
+      artifactOverrides:
+        image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
+        image.wiki: registry.gitlab.com/kocherga/core/mediawiki
+      namespace: berekuk
     flags:
       upgrade:
-        - --install
-    releases:
-      - name: kocherga-wiki
-        chartPath: ops/charts/wiki
-        values:
-          image.wiki: registry.gitlab.com/kocherga/core/mediawiki
-          image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
-        valuesFiles:
-          - ops/values/kocherga-wiki.yaml
-          - ops/secrets/kocherga-wiki.yaml
-      - name: berekuk-wiki
-        chartPath: ops/charts/wiki
-        namespace: berekuk
-        values:
-          image.wiki: registry.gitlab.com/kocherga/core/mediawiki
-          image.mysql_backup: registry.gitlab.com/kocherga/core/mysql-backup
-        valuesFiles:
-          - ops/values/berekuk-wiki.yaml
-          - ops/secrets/berekuk-wiki.yaml
+      - --install

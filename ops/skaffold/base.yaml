@@ -1,28 +1,25 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta5
 kind: Config
 deploy:
   helm:
+    releases:
+    - name: hcloud-csi
+      chartPath: ops/charts/hcloud-csi
+      valuesFiles:
+      - ops/secrets/hcloud-csi.yaml
+      wait: true
+    - name: cert-manager
+      chartPath: ops/charts/cert-manager
+      wait: true
+    - name: cert-manager-issuers
+      chartPath: ops/charts/cert-manager-issuers
+      wait: true
+    - name: traefik
+      chartPath: ops/charts/traefik
+      valuesFiles:
+      - ops/secrets/traefik.yaml
+      namespace: traefik
+      wait: true
     flags:
       upgrade:
-        - --install
-    releases:
-      - name: hcloud-csi
-        chartPath: ops/charts/hcloud-csi
-        valuesFiles:
-          - ops/secrets/hcloud-csi.yaml
-        wait: true
-
-      - name: cert-manager
-        chartPath: ops/charts/cert-manager
-        wait: true
-
-      - name: cert-manager-issuers
-        chartPath: ops/charts/cert-manager-issuers
-        wait: true
-
-      - name: traefik
-        namespace: traefik
-        chartPath: ops/charts/traefik
-        valuesFiles:
-          - ops/secrets/traefik.yaml
-        wait: true
+      - --install

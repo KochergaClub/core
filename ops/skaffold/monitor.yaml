@@ -1,16 +1,16 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta5
 kind: Config
 deploy:
   helm:
+    releases:
+    - name: monitor
+      chartPath: stable/prometheus-operator
+      valuesFiles:
+      - ops/values/prometheus.yaml
+      - ops/secrets/prometheus.yaml
+      namespace: monitor
+      wait: true
+      remote: true
     flags:
       upgrade:
-        - --install
-    releases:
-      - name: monitor
-        namespace: monitor
-        chartPath: stable/prometheus-operator
-        valuesFiles:
-          - ops/values/prometheus.yaml
-          - ops/secrets/prometheus.yaml
-        remote: true
-        wait: true
+      - --install
