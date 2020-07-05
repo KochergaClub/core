@@ -43,6 +43,8 @@ const EventShapeProjectLink = ({ selected, select }: Props) => {
             <Select
               value={currentProject || null}
               options={options}
+              noOptionsMessage={() => 'Нет проектов'}
+              placeholder="Выбрать..."
               isClearable={true}
               onChange={pickProject}
             />
