@@ -9,7 +9,7 @@ import listPlugin from '@fullcalendar/list';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import { EventClickArg } from '@fullcalendar/core';
 
-import { isPast } from 'date-fns';
+import { isPast, parseISO } from 'date-fns';
 
 import { colors, A } from '@kocherga/frontkit';
 
