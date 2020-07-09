@@ -1,4 +1,0 @@
-type SlackUser {
-  slack_id: String!
-  image_url: String!
-}

@@ -124,7 +124,7 @@ ROOT_URLCONF = 'kocherga.django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'jinja_templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'jinja_templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'kocherga.django.jinja2.environment',
@@ -134,7 +134,7 @@ TEMPLATES = [
     # needed for admin
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -173,9 +173,6 @@ WAGTAIL_USER_EDIT_FORM = 'kocherga.wagtail.forms.CustomUserEditForm'
 WAGTAIL_USER_CREATION_FORM = 'kocherga.wagtail.forms.CustomUserCreationForm'
 WAGTAILUSERS_PASSWORD_REQUIRED = False
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -187,7 +184,7 @@ DATABASES = {
         'USER': 'kocherga',
         'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': os.environ['DB_HOST'],
-        'OPTIONS': {'charset': 'utf8mb4',},
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -200,11 +197,11 @@ CONN_MAX_AGE = 3600
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
     },
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 AUTH_USER_MODEL = 'kocherga_auth.User'
@@ -300,4 +297,3 @@ TELEGRAM_PROXY = ''
 KOCHERGA_IMPORTER_DISABLED = False
 
 KKM_SERVER_CERT = '/KKMServer.pem'  # mounted by k8s
-

@@ -1,3 +1,1 @@
-from . import types
-
-types = [*types.types]
+from .types import exported_types

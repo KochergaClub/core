@@ -1,7 +1,4 @@
-from .my import My
-from .mutation import mutations
-from .query import Query
-from .subscription import Subscription
-from .types import types
-
-types = [My, Query, Subscription, *mutations, *types]
+from .my_queries import my_queries
+from .mutations import mutations
+from .queries import queries
+from .subscriptions import subscriptions

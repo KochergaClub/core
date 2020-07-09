@@ -2,95 +2,23 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from pathlib import Path
 from importlib import import_module
 from typing import Any
 
 import django.apps
 from django.utils.module_loading import module_has_submodule
 
-from ariadne import make_executable_schema, upload_scalar, QueryType, gql
-from ariadne.load_schema import read_graphql_file
-
-import kocherga.room
-
-from . import directives
+import graphql
+from . import g, helpers
 
 
-core_type_defs = gql(
-    """
-  directive @staffonly on FIELD_DEFINITION
-  directive @auth(permission: String, permissions: [String!], authenticated: Boolean) on FIELD_DEFINITION
-
-  scalar Upload
-
-  type Query {
-    rooms: [Room]!
-    my: My!
-  }
-
-  # To be extended by specific backend apps.
-  type My {
-    _: Boolean
-  }
-
-  type Room {
-    name: String
-    max_people: Int
-    area: Int
-  }
-
-  type Mutation {
-    _empty: Boolean
-  }
-
-  type Subscription {
-    _empty: Boolean
-  }
-
-  type BasicResult {
-    ok: Boolean
-  }
-
-  type PageInfo {
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-    startCursor: String
-    endCursor: String
-  }
-
-"""
-)
+_schema_modules = []
 
 
-def load_all_typedefs():
-    type_defs_list = [core_type_defs]
-    for app in django.apps.apps.get_app_configs():
-        schema_path = Path(app.path) / 'schema.graphql'
-        if not schema_path.is_file():
-            continue
-        logger.debug(f"Found {schema_path}")
-        app_type_defs = read_graphql_file(schema_path)
-        type_defs_list.append(app_type_defs)
-    return '\n'.join(type_defs_list)
+def get_schema_modules():
+    if len(_schema_modules):
+        return _schema_modules
 
-
-Query = QueryType()
-
-
-# FIXME - move rooms query code somewhere else
-@Query.field("rooms")
-def resolve_rooms(_, info):
-    return [kocherga.room.details(room) for room in kocherga.room.all_rooms]
-
-
-@Query.field('my')
-def resolve_my(_, info):
-    return 'my'
-
-
-def load_all_types():
-    type_defs_list = [Query]
     # based on django.apps.config.import_models
     for app in django.apps.apps.get_app_configs():
         SCHEMA_MODULE_NAME = 'schema'
@@ -98,16 +26,67 @@ def load_all_types():
             continue
         logger.debug(f"Found schema for app {app.name}")
         schema_module: Any = import_module(f'{app.name}.{SCHEMA_MODULE_NAME}')
-        type_defs_list.extend(schema_module.types)
-    return type_defs_list
+        _schema_modules.append(schema_module)
+    return _schema_modules
 
 
-schema = make_executable_schema(
-    load_all_typedefs(),
-    upload_scalar,
-    *load_all_types(),
-    directives={
-        "staffonly": directives.StaffOnlyDirective,
-        "auth": directives.AuthDirective,
-    },
+def object_from_modules(attr):
+    result = helpers.merge_field_dicts(
+        [
+            getattr(schema_module, attr)
+            for schema_module in get_schema_modules()
+            if hasattr(schema_module, attr)
+        ]
+    )
+
+    if not result:
+        result = {'_blank': g.Field(g.Boolean)}
+    return result
+
+
+def load_queries():
+    my_queries = object_from_modules('my_queries')
+    queries = object_from_modules('queries')
+
+    if 'my' in queries:
+        raise Exception("Some schema module defined `my` query, that's forbidden")
+
+    queries['my'] = g.Field(
+        g.NN(g.ObjectType('My', my_queries)), resolve=lambda obj, info: 'my'
+    )
+
+    return g.ObjectType(name='Query', fields=queries)
+
+
+def load_mutations():
+    mutations = object_from_modules('mutations')
+
+    return g.ObjectType(name='Mutation', fields=mutations)
+
+
+# For extra types only which are unreachable from query and mutation types,
+# e.g. for WagtailPage interface implementations.
+def load_types():
+    types = []
+    for schema_module in get_schema_modules():
+        if not hasattr(schema_module, 'exported_types'):
+            continue
+        if not isinstance(schema_module.exported_types, list):
+            raise Exception(f"Expected list for {schema_module}.exported_types")
+        types.extend(schema_module.exported_types)
+
+    return types
+
+
+def load_subscriptions():
+    subscriptions = object_from_modules('subscriptions')
+
+    return g.ObjectType(name='Subscription', fields=subscriptions)
+
+
+schema = graphql.GraphQLSchema(
+    query=load_queries(),
+    mutation=load_mutations(),
+    subscription=load_subscriptions(),
+    types=load_types(),
 )

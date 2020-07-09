@@ -2,7 +2,7 @@
 
 In production, we use prod_secrets.py which is not commited to this repo for obvious reasons."""
 
-SECRET_KEY = None  # put any long random string here
+SECRET_KEY = 'whatever'  # put any long random string here
 
 # AWS credentials
 AWS_ACCESS_KEY_ID = None
@@ -71,3 +71,6 @@ KOCHERGA_WIKI_PASSWORD = None
 MASTERMIND_BOT_CONFIG = {"token": "tg-token-here"}
 
 KKM_USER_PASSWORD = 'fake_broken_password'
+
+ZOOM_ANNOUNCER_USER_ID = ""
+ZOOM_JWT_TOKEN = ""

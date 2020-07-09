@@ -1,4 +1,0 @@
-extend type Mutation {
-  fbMarketingAudienceUploadRatioTickets: BasicResult!
-    @auth(permission: "fb.marketing")
-}
