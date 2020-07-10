@@ -5,10 +5,17 @@ build:
     - image: registry.gitlab.com/kocherga/core/backend
       context: backend
       sync:
-        infer:
-          - scripts/**
-          - kocherga/**
-          - tests/**
+        manual:
+          - src: scripts/**
+            dest: .
+          - src: kocherga/**
+            dest: .
+          - src: tests/**
+            dest: .
+        # infer:
+        #   - scripts/**
+        #   - kocherga/**
+        #   - tests/**
     - image: registry.gitlab.com/kocherga/core/frontend
       context: frontend
       sync:
