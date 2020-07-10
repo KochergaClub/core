@@ -134,8 +134,8 @@ export type MastermindDatingDeleteCohortMutationVariables = {
 export type MastermindDatingDeleteCohortMutation = (
   { __typename?: 'Mutation' }
   & { mastermindDatingDeleteCohort: (
-    { __typename?: 'MastermindDatingTrivialMutationResult' }
-    & Pick<Types.MastermindDatingTrivialMutationResult, 'ok'>
+    { __typename?: 'BasicResult' }
+    & Pick<Types.BasicResult, 'ok'>
   ) }
 );
 
@@ -173,7 +173,7 @@ export type MastermindDatingRunSolverMutation = (
 
 export type MastermindDatingSetEventForCohortMutationVariables = {
   cohort_id: Types.Scalars['ID'];
-  event_id: Types.Scalars['String'];
+  event_id: Types.Scalars['ID'];
 };
 
 
@@ -600,7 +600,7 @@ export type MastermindDatingRunSolverMutationHookResult = ReturnType<typeof useM
 export type MastermindDatingRunSolverMutationResult = ApolloReactCommon.MutationResult<MastermindDatingRunSolverMutation>;
 export type MastermindDatingRunSolverMutationOptions = ApolloReactCommon.BaseMutationOptions<MastermindDatingRunSolverMutation, MastermindDatingRunSolverMutationVariables>;
 export const MastermindDatingSetEventForCohortDocument = gql`
-    mutation MastermindDatingSetEventForCohort($cohort_id: ID!, $event_id: String!) {
+    mutation MastermindDatingSetEventForCohort($cohort_id: ID!, $event_id: ID!) {
   mastermindDatingSetEventForCohort(cohort_id: $cohort_id, event_id: $event_id) {
     cohort {
       ...MastermindDatingCohortDetails

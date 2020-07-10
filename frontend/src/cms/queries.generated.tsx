@@ -13,11 +13,26 @@ export type WagtailPageTypeQueryVariables = {
 export type WagtailPageTypeQuery = (
   { __typename?: 'Query' }
   & { wagtailPage?: Types.Maybe<(
-    { __typename: 'RatioSectionIndexPage' }
-    & Pick<Types.RatioSectionIndexPage, 'id'>
+    { __typename: 'BlogIndexPage' }
+    & Pick<Types.BlogIndexPage, 'id'>
   ) | (
-    { __typename: 'RatioSectionPage' }
-    & Pick<Types.RatioSectionPage, 'id'>
+    { __typename: 'BlogPostPage' }
+    & Pick<Types.BlogPostPage, 'id'>
+  ) | (
+    { __typename: 'FaqPage' }
+    & Pick<Types.FaqPage, 'id'>
+  ) | (
+    { __typename: 'FolderPage' }
+    & Pick<Types.FolderPage, 'id'>
+  ) | (
+    { __typename: 'FreeFormPage' }
+    & Pick<Types.FreeFormPage, 'id'>
+  ) | (
+    { __typename: 'ProjectIndexPage' }
+    & Pick<Types.ProjectIndexPage, 'id'>
+  ) | (
+    { __typename: 'ProjectPage' }
+    & Pick<Types.ProjectPage, 'id'>
   ) | (
     { __typename: 'RatioNotebookIndexPage' }
     & Pick<Types.RatioNotebookIndexPage, 'id'>
@@ -31,26 +46,11 @@ export type WagtailPageTypeQuery = (
     { __typename: 'RatioPresentationPage' }
     & Pick<Types.RatioPresentationPage, 'id'>
   ) | (
-    { __typename: 'ProjectIndexPage' }
-    & Pick<Types.ProjectIndexPage, 'id'>
+    { __typename: 'RatioSectionIndexPage' }
+    & Pick<Types.RatioSectionIndexPage, 'id'>
   ) | (
-    { __typename: 'ProjectPage' }
-    & Pick<Types.ProjectPage, 'id'>
-  ) | (
-    { __typename: 'FreeFormPage' }
-    & Pick<Types.FreeFormPage, 'id'>
-  ) | (
-    { __typename: 'FolderPage' }
-    & Pick<Types.FolderPage, 'id'>
-  ) | (
-    { __typename: 'BlogPostPage' }
-    & Pick<Types.BlogPostPage, 'id'>
-  ) | (
-    { __typename: 'BlogIndexPage' }
-    & Pick<Types.BlogIndexPage, 'id'>
-  ) | (
-    { __typename: 'FaqPage' }
-    & Pick<Types.FaqPage, 'id'>
+    { __typename: 'RatioSectionPage' }
+    & Pick<Types.RatioSectionPage, 'id'>
   )> }
 );
 
@@ -91,13 +91,43 @@ export type WagtailPagesQueryVariables = {};
 export type WagtailPagesQuery = (
   { __typename?: 'Query' }
   & { wagtailPages: Array<(
-    { __typename?: 'RatioSectionIndexPage' }
+    { __typename?: 'BlogIndexPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioSectionPage' }
+    { __typename?: 'BlogPostPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'FaqPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'FolderPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'FreeFormPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'ProjectIndexPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
+    { __typename?: 'ProjectPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
@@ -127,43 +157,13 @@ export type WagtailPagesQuery = (
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'ProjectIndexPage' }
+    { __typename?: 'RatioSectionIndexPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'ProjectPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'FreeFormPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'FolderPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'BlogPostPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'BlogIndexPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'FaqPage' }
+    { __typename?: 'RatioSectionPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>

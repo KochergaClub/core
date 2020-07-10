@@ -15,13 +15,91 @@
     "types": [
       {
         "kind": "INTERFACE",
+        "name": "WagtailBlock",
+        "possibleTypes": [
+          {
+            "name": "BasicLeadBlock"
+          },
+          {
+            "name": "BasicParagraphBlock"
+          },
+          {
+            "name": "BigContactsBlock"
+          },
+          {
+            "name": "ColumnsBasicBlock"
+          },
+          {
+            "name": "ColumnsButtonsBlock"
+          },
+          {
+            "name": "ColumnsMembershipsBlock"
+          },
+          {
+            "name": "EventsListBlock"
+          },
+          {
+            "name": "GreyBlock"
+          },
+          {
+            "name": "HeroFrontBlock"
+          },
+          {
+            "name": "MailchimpSubscribeBlock"
+          },
+          {
+            "name": "PhotoRibbonBlock"
+          },
+          {
+            "name": "RatioBriefingBlock"
+          },
+          {
+            "name": "RatioExerciseBlock"
+          },
+          {
+            "name": "RatioExerciseOnelineBlock"
+          },
+          {
+            "name": "RatioHeaderBlock"
+          },
+          {
+            "name": "RatioInsetBlock"
+          },
+          {
+            "name": "RatioMathBlock"
+          },
+          {
+            "name": "RatioNotebookSectionBlock"
+          },
+          {
+            "name": "RatioParagraphBlock"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
         "name": "WagtailPage",
         "possibleTypes": [
           {
-            "name": "RatioSectionIndexPage"
+            "name": "BlogIndexPage"
           },
           {
-            "name": "RatioSectionPage"
+            "name": "BlogPostPage"
+          },
+          {
+            "name": "FaqPage"
+          },
+          {
+            "name": "FolderPage"
+          },
+          {
+            "name": "FreeFormPage"
+          },
+          {
+            "name": "ProjectIndexPage"
+          },
+          {
+            "name": "ProjectPage"
           },
           {
             "name": "RatioNotebookIndexPage"
@@ -36,88 +114,10 @@
             "name": "RatioPresentationPage"
           },
           {
-            "name": "ProjectIndexPage"
+            "name": "RatioSectionIndexPage"
           },
           {
-            "name": "ProjectPage"
-          },
-          {
-            "name": "FreeFormPage"
-          },
-          {
-            "name": "FolderPage"
-          },
-          {
-            "name": "BlogPostPage"
-          },
-          {
-            "name": "BlogIndexPage"
-          },
-          {
-            "name": "FaqPage"
-          }
-        ]
-      },
-      {
-        "kind": "INTERFACE",
-        "name": "WagtailBlock",
-        "possibleTypes": [
-          {
-            "name": "RatioNotebookSectionBlock"
-          },
-          {
-            "name": "RatioHeaderBlock"
-          },
-          {
-            "name": "RatioParagraphBlock"
-          },
-          {
-            "name": "RatioInsetBlock"
-          },
-          {
-            "name": "RatioExerciseBlock"
-          },
-          {
-            "name": "RatioExerciseOnelineBlock"
-          },
-          {
-            "name": "RatioBriefingBlock"
-          },
-          {
-            "name": "RatioMathBlock"
-          },
-          {
-            "name": "GreyBlock"
-          },
-          {
-            "name": "BasicLeadBlock"
-          },
-          {
-            "name": "BasicParagraphBlock"
-          },
-          {
-            "name": "ColumnsBasicBlock"
-          },
-          {
-            "name": "ColumnsMembershipsBlock"
-          },
-          {
-            "name": "ColumnsButtonsBlock"
-          },
-          {
-            "name": "EventsListBlock"
-          },
-          {
-            "name": "BigContactsBlock"
-          },
-          {
-            "name": "PhotoRibbonBlock"
-          },
-          {
-            "name": "MailchimpSubscribeBlock"
-          },
-          {
-            "name": "HeroFrontBlock"
+            "name": "RatioSectionPage"
           }
         ]
       }

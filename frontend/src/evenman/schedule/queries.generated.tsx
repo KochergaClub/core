@@ -7,10 +7,10 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type EvenmanWeeklyDigestFragment = (
   { __typename?: 'EventsWeeklyDigest' }
   & Pick<Types.EventsWeeklyDigest, 'id' | 'start'>
-  & { image: (
+  & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
-  ), mailchimp: (
+  )>, mailchimp: (
     { __typename?: 'EventsWeeklyDigestMailchimp' }
     & Pick<Types.EventsWeeklyDigestMailchimp, 'link'>
   ), telegram: (
@@ -41,10 +41,10 @@ export type EvenmanDigestToVkMutation = (
   & { result: (
     { __typename?: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
-    & { digest: (
+    & { digest?: Types.Maybe<(
       { __typename?: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
-    ) }
+    )> }
   ) }
 );
 
@@ -56,10 +56,10 @@ export type EvenmanDigestToTelegramMutation = (
   & { result: (
     { __typename?: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
-    & { digest: (
+    & { digest?: Types.Maybe<(
       { __typename?: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
-    ) }
+    )> }
   ) }
 );
 
@@ -73,10 +73,10 @@ export type EvenmanDigestToMailchimpMutation = (
   & { result: (
     { __typename?: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
-    & { digest: (
+    & { digest?: Types.Maybe<(
       { __typename?: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
-    ) }
+    )> }
   ) }
 );
 

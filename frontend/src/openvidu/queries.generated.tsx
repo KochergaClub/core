@@ -9,10 +9,10 @@ export type OpenviduGenerateRoomTokenMutationVariables = {};
 
 export type OpenviduGenerateRoomTokenMutation = (
   { __typename?: 'Mutation' }
-  & { result?: Types.Maybe<(
+  & { result: (
     { __typename?: 'OpenviduGenerateRoomTokenResult' }
     & Pick<Types.OpenviduGenerateRoomTokenResult, 'token'>
-  )> }
+  ) }
 );
 
 

@@ -210,10 +210,10 @@ export type EventGenerateOpenViduTokenMutationVariables = {
 
 export type EventGenerateOpenViduTokenMutation = (
   { __typename?: 'Mutation' }
-  & { result?: Types.Maybe<(
+  & { result: (
     { __typename?: 'EventGenerateOpenViduTokenResult' }
     & Pick<Types.EventGenerateOpenViduTokenResult, 'token'>
-  )> }
+  ) }
 );
 
 export type SetMyNamesMutationVariables = {

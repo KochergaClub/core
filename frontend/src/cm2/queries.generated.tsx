@@ -151,7 +151,7 @@ export type Cm2CustomerPageQuery = (
   { __typename?: 'Query' }
   & { cm2Customer: (
     { __typename?: 'Cm2Customer' }
-    & { orders: (
+    & { orders?: Types.Maybe<(
       { __typename?: 'Cm2OrderConnection' }
       & { edges: Array<(
         { __typename?: 'Cm2OrderEdge' }
@@ -160,7 +160,7 @@ export type Cm2CustomerPageQuery = (
           & Pick<Types.Cm2Order, 'id' | 'start'>
         ) }
       )> }
-    ) }
+    )> }
     & CustomerFragment
   ) }
 );
