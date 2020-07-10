@@ -1,5 +1,10 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from typing import List, Dict, Union, Tuple
 from types import FunctionType
+import graphql
 
 import wagtail.core.rich_text
 import wagtail.core.fields
@@ -15,7 +20,7 @@ from .schema import types
 
 
 def basic_fields():
-    return g.fields({'id': g.NN(g.ID), 'meta': g.NN(types.WagtailPageMeta)})
+    return types.WagtailPage.fields
 
 
 def richtext_field(model, field_name):
@@ -107,7 +112,8 @@ def block_to_gfield(
     if isinstance(block_type, wagtail.core.blocks.RichTextBlock):
 
         def resolve_richtext_value(obj, info):
-            return wagtail.core.rich_text.expand_db_html(obj.value)
+            value = graphql.default_field_resolver(obj, info)
+            return wagtail.core.rich_text.expand_db_html(value.source)
 
         return g.Field(g.NN(g.String), resolve=resolve_richtext_value)
 
@@ -115,20 +121,17 @@ def block_to_gfield(
         child_field = block_to_gfield(
             name, block_type.child_block, types_for_page_chooser
         )
-        resolve = None
-        child_type = None
-
-        # Child field can be a real field (GraphQLField, e.g. for StructBlock or RichTextBlock),
-        # or it can be python type or graphql type.
-        # So there are a few different cases here, please be careful.
         if isinstance(child_field, g.Field):
             child_type = child_field.type
             if child_field.resolve:
-                resolve = lambda obj, info: [child_field.resolve(v, info) for v in obj]
+                # handling this case is more complicated than I expected and we don't need it for now
+                raise Exception(
+                    "Wrapping fields with custom resolvers in ListBLock is not implemented yet"
+                )
         else:
             child_type = g.as_type(child_field)
 
-        return g.Field(g.NN(g.List(child_type)), resolve=resolve)
+        return g.NN(g.List(child_type))
 
     if isinstance(block_type, wagtail.core.blocks.StructBlock):
         return g.NN(
@@ -161,15 +164,10 @@ def WagtailBlockType(
     (name, block_type) = t
     object_name = ''.join([part.capitalize() for part in name.split('_')]) + 'Block'
 
+    value_field = block_to_gfield(object_name, block_type, types_for_page_chooser)
+
     return g.ObjectType(
         object_name,
         interfaces=[types.WagtailBlock],
-        fields=g.fields(
-            {
-                'id': 'ID!',
-                'value': block_to_gfield(
-                    object_name, block_type, types_for_page_chooser
-                ),
-            }
-        ),
+        fields=g.fields({'id': 'ID!', 'value': value_field}),
     )

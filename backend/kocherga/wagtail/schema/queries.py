@@ -3,6 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from typing import Optional
+import urllib.parse
 
 from django.http import Http404
 from wagtail.core.models import Page, Site
@@ -68,7 +69,7 @@ def wagtailPage(helper):
         if path and preview_token:
             raise Exception("Only one of `path` and `preview_token` must be set.")
 
-        if not path and not preview_token:
+        if path is None and not preview_token:
             raise Exception("One of `path` and `preview_token` must be set.")
 
         if preview_token:
@@ -79,7 +80,11 @@ def wagtailPage(helper):
                 page.id = 0
             return page
         else:
-            path_components = [component for component in path.split('/') if component]
+            path_components = [
+                component
+                for component in urllib.parse.unquote(path).split('/')
+                if component
+            ]
 
             try:
                 site = Site.find_for_request(info.context)

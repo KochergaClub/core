@@ -8,7 +8,6 @@ from .types import CashierPaymentConnection
 c = helpers.Collection()
 
 
-# cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection! @staffonly
 @c.class_field
 class cashierPayments(helpers.BaseField):
     @staffonly
