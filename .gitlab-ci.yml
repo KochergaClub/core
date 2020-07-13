@@ -47,11 +47,11 @@ deploy_production:
   script:
     - mkdir -p ops/secrets/core/prod
     - |
-        set -e
-        set -o pipefail
-        for FILE in main.yaml secrets.py KKMServer.pem; do
-          curl -f -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/$FILE | jq -r .data.data.content >ops/secrets/core/prod/$FILE
-        done
+      set -e
+      set -o pipefail
+      for FILE in main.yaml secrets.py KKMServer.pem; do
+        curl -f -X GET -H "X-Vault-Token: $VAULT_TOKEN" https://vault.team.kocherga.club/v1/kv/data/chart-secrets/core/prod/$FILE | jq -r .data.data.content >ops/secrets/core/prod/$FILE
+      done
     - kubectl delete job core-django-migrate || true # temporary hack until skaffold issues are fixed
     - skaffold deploy -a build.json --status-check
   cache:
@@ -60,9 +60,9 @@ deploy_production:
     name: production
     url: https://kocherga-club.ru
   when: manual
+  allow_failure: false
   only:
     - master
-
 #deploy_beta:
 #  stage: deploy
 #  script:
