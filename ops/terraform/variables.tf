@@ -1,4 +1,5 @@
 variable "hcloud_token" {}
+variable "gitlab_token" {}
 
 variable "aws_region" {
   default = "eu-central-1"
