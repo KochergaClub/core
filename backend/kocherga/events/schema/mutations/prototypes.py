@@ -59,7 +59,7 @@ def input_to_update_dict(input):
 UpdateResult = g.NN(
     g.ObjectType(
         'EventPrototypeUpdateResult',
-        g.fields({'ok': bool, 'prototype': g.NN(EventsPrototype),}),
+        g.fields({'ok': bool, 'prototype': g.NN(EventsPrototype)}),
     )
 )
 
@@ -153,7 +153,7 @@ class eventPrototypeCancelDate(helpers.BaseFieldWithInput):
         'id': 'ID!',
         'date': str,
     }
-    result = BasicResult
+    result = g.NN(BasicResult)
 
 
 @c.class_field
@@ -173,7 +173,7 @@ class eventPrototypeNewEvent(helpers.BaseFieldWithInput):
         'id': 'ID!',
         'ts': int,
     }
-    result = BasicResult
+    result = g.NN(BasicResult)
 
 
 @c.class_field

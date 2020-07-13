@@ -41,10 +41,10 @@ export type EvenmanDigestToVkMutation = (
   & { result: (
     { __typename?: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
-    & { digest?: Types.Maybe<(
+    & { digest: (
       { __typename?: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
-    )> }
+    ) }
   ) }
 );
 
@@ -56,10 +56,10 @@ export type EvenmanDigestToTelegramMutation = (
   & { result: (
     { __typename?: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
-    & { digest?: Types.Maybe<(
+    & { digest: (
       { __typename?: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
-    )> }
+    ) }
   ) }
 );
 
@@ -73,10 +73,10 @@ export type EvenmanDigestToMailchimpMutation = (
   & { result: (
     { __typename?: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
-    & { digest?: Types.Maybe<(
+    & { digest: (
       { __typename?: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
-    )> }
+    ) }
   ) }
 );
 

@@ -32,6 +32,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       basic_columns: [
         {
           header: 'Колонка 1',
+          text: '',
         },
         {
           header: 'Колонка 2',

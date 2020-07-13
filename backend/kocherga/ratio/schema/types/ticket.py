@@ -28,4 +28,3 @@ RatioTicket = DjangoObjectType(
     ],
     extra_fields=extra_fields,  # delay import
 )
-

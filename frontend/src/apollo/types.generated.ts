@@ -217,7 +217,7 @@ export type Cm2Customer = {
   card_id: Scalars['Int'];
   first_name: Scalars['String'];
   last_name: Scalars['String'];
-  orders?: Maybe<Cm2OrderConnection>;
+  orders: Cm2OrderConnection;
 };
 
 
@@ -781,7 +781,7 @@ export type EventsWeeklyDigestTelegram = {
 export type EventsWeeklyDigestUpdateResult = {
   __typename?: 'EventsWeeklyDigestUpdateResult';
   ok?: Maybe<Scalars['Boolean']>;
-  digest?: Maybe<EventsWeeklyDigest>;
+  digest: EventsWeeklyDigest;
 };
 
 export type EventsWeeklyDigestVk = {
@@ -996,8 +996,8 @@ export type Mutation = {
   eventGenerateOpenViduToken: EventGenerateOpenViduTokenResult;
   eventPrototypeCreate: EventPrototypeUpdateResult;
   eventPrototypeUpdate: EventPrototypeUpdateResult;
-  eventPrototypeCancelDate?: Maybe<BasicResult>;
-  eventPrototypeNewEvent?: Maybe<BasicResult>;
+  eventPrototypeCancelDate: BasicResult;
+  eventPrototypeNewEvent: BasicResult;
   eventPrototypeAddTag: EventPrototypeUpdateResult;
   eventPrototypeDeleteTag: EventPrototypeUpdateResult;
   eventPrototypeSetImage: EventPrototypeUpdateResult;

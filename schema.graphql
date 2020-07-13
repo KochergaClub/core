@@ -180,7 +180,7 @@ type Cm2Customer {
   card_id: Int!
   first_name: String!
   last_name: String!
-  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection
+  orders(before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
 }
 
 type Cm2CustomerConnection {
@@ -661,7 +661,7 @@ type EventsWeeklyDigestTelegram {
 
 type EventsWeeklyDigestUpdateResult {
   ok: Boolean
-  digest: EventsWeeklyDigest
+  digest: EventsWeeklyDigest!
 }
 
 type EventsWeeklyDigestVk {
@@ -851,8 +851,8 @@ type Mutation {
   eventGenerateOpenViduToken(input: EventGenerateOpenViduTokenInput!): EventGenerateOpenViduTokenResult!
   eventPrototypeCreate(input: EventPrototypeCreateInput!): EventPrototypeUpdateResult!
   eventPrototypeUpdate(input: EventPrototypeUpdateInput!): EventPrototypeUpdateResult!
-  eventPrototypeCancelDate(input: EventPrototypeCancelDateInput!): BasicResult
-  eventPrototypeNewEvent(input: EventPrototypeNewEventInput!): BasicResult
+  eventPrototypeCancelDate(input: EventPrototypeCancelDateInput!): BasicResult!
+  eventPrototypeNewEvent(input: EventPrototypeNewEventInput!): BasicResult!
   eventPrototypeAddTag(input: EventPrototypeAddTagInput!): EventPrototypeUpdateResult!
   eventPrototypeDeleteTag(input: EventPrototypeDeleteTagInput!): EventPrototypeUpdateResult!
   eventPrototypeSetImage(input: EventPrototypeSetImageInput!): EventPrototypeUpdateResult!

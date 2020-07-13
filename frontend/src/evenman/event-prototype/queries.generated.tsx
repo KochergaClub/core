@@ -119,10 +119,10 @@ export type EvenmanPrototypeCancelDateMutationVariables = {
 
 export type EvenmanPrototypeCancelDateMutation = (
   { __typename?: 'Mutation' }
-  & { result?: Types.Maybe<(
+  & { result: (
     { __typename?: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
-  )> }
+  ) }
 );
 
 export type EvenmanPrototypeNewEventMutationVariables = {
@@ -133,10 +133,10 @@ export type EvenmanPrototypeNewEventMutationVariables = {
 
 export type EvenmanPrototypeNewEventMutation = (
   { __typename?: 'Mutation' }
-  & { result?: Types.Maybe<(
+  & { result: (
     { __typename?: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
-  )> }
+  ) }
 );
 
 export type EvenmanPrototypeAddTagMutationVariables = {

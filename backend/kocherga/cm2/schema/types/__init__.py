@@ -31,7 +31,7 @@ Cm2Customer = g.ObjectType(
             'first_name': str,
             'last_name': str,
             'orders': helpers.ConnectionField(
-                Cm2OrderConnection, resolve=resolve_Cm2Customer_orders
+                g.NN(Cm2OrderConnection), resolve=resolve_Cm2Customer_orders
             ),
         }
     ),

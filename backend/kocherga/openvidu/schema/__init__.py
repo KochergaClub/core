@@ -1,6 +1,6 @@
 import json
 
-from kocherga.graphql import g, helpers
+from kocherga.graphql import helpers
 from kocherga.graphql.permissions import authenticated
 
 from ..api import generate_token

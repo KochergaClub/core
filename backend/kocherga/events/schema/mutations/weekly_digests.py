@@ -18,7 +18,7 @@ c = helpers.Collection()
 UpdateResult = g.NN(
     g.ObjectType(
         'EventsWeeklyDigestUpdateResult',
-        g.fields({'ok': Optional[bool], 'digest': EventsWeeklyDigest}),
+        g.fields({'ok': Optional[bool], 'digest': g.NN(EventsWeeklyDigest)}),
     )
 )
 

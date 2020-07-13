@@ -9,7 +9,7 @@ from kocherga.graphql.permissions import staffonly, check_permissions
 
 
 EventNotification = g.ObjectType(
-    'EventNotification', g.fields({'type': str, 'id': 'ID!',})
+    'EventNotification', g.fields({'type': str, 'id': 'ID!'})
 )
 
 c = helpers.Collection()

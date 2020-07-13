@@ -1,5 +1,5 @@
-from kocherga.graphql.permissions import user_perm
-from kocherga.graphql import g, helpers, permissions
+from kocherga.graphql.permissions import user_perm, check_permissions
+from kocherga.graphql import g, helpers
 
 from .. import models
 
@@ -9,7 +9,7 @@ c = helpers.Collection()
 
 @c.field
 def staffGrantGooglePermissionsToMember(helper):
-    @permissions.check_permissions([permissions.user_perm('staff.manage')])
+    @check_permissions([user_perm('staff.manage')])
     def resolve(obj, info, id):
         member = models.Member.objects.get(pk=id)
         member.grant_google_permissions()
@@ -20,7 +20,7 @@ def staffGrantGooglePermissionsToMember(helper):
 
 @c.field
 def staffFireMember(helper):
-    @permissions.check_permissions([permissions.user_perm('staff.manage')])
+    @check_permissions([user_perm('staff.manage')])
     def resolve(obj, info, id):
         member = models.Member.objects.get(pk=id)
         member.fire()
@@ -31,7 +31,7 @@ def staffFireMember(helper):
 
 @c.field
 def staffUnfireMember(helper):
-    @permissions.check_permissions([permissions.user_perm('staff.manage')])
+    @check_permissions([user_perm('staff.manage')])
     def resolve(obj, info, id):
         member = models.Member.objects.get(pk=id)
         member.unfire()
