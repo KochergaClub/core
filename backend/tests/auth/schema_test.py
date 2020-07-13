@@ -81,9 +81,8 @@ class TestTokenLogin:
         assert client.cookies['sessionid']
         assert client.cookies['csrftoken']
 
-        res = client.get('/api/me')
-        assert res.status_code == 200
-        assert res.json()['is_authenticated'] is True
+        data = run_query(client, """{ me { user { is_authenticated } } }""")
+        assert data['me']['user']['is_authenticated'] is True
 
     def test_registered_value(self, client):
         def _login():
