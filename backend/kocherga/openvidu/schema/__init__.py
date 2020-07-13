@@ -1,7 +1,7 @@
 import json
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import authenticated
 
 from ..api import generate_token
 
@@ -10,7 +10,6 @@ c = helpers.Collection()
 
 @c.class_field
 class openviduGenerateRoomToken(helpers.BaseField):
-    @auth(authenticated=True)
     def resolve(self, _, info):
         name = info.context.user.get_full_name()
         if not name:
@@ -21,6 +20,7 @@ class openviduGenerateRoomToken(helpers.BaseField):
             'token': token,
         }
 
+    permissions = [authenticated]
     result = {
         'token': str,
     }

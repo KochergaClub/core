@@ -1,5 +1,5 @@
 from kocherga.graphql import g, django_utils
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from ... import models
@@ -36,7 +36,7 @@ EventsAnnouncementVk = g.ObjectType(
     {
         **django_utils.model_fields(models.VkAnnouncement, ['link', 'group']),
         'image': wagtail_utils.image_rendition_field(
-            models.VkAnnouncement, 'image', decorator=staffonly
+            models.VkAnnouncement, 'image', permissions=[staffonly]
         ),
     },
 )

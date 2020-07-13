@@ -1,7 +1,8 @@
 from typing import Optional
 import datetime
 
-from kocherga.graphql import g, helpers, decorators
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import user_perm
 
 from .. import models
 from ..users import training2mailchimp
@@ -15,7 +16,6 @@ c = helpers.Collection()
 # ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining! @auth(permission: "ratio.manage")
 @c.class_field
 class ratioAddTraining(helpers.BaseFieldWithInput):
-    @decorators.auth(permission='ratio.manage')
     def resolve(self, _, info, params):
         date_str = params['date']
         date = datetime.datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -26,6 +26,7 @@ class ratioAddTraining(helpers.BaseFieldWithInput):
             telegram_link=params['telegram_link'],
         )
 
+    permissions = [user_perm('ratio.manage')]
     input = {
         'name': str,
         'slug': str,
@@ -40,13 +41,13 @@ class ratioAddTraining(helpers.BaseFieldWithInput):
 # ratioAddTicket(input: RatioAddTicketInput!): RatioTicket! @auth(permission: "ratio.manage")
 @c.class_field
 class ratioAddTicket(helpers.BaseFieldWithInput):
-    @decorators.auth(permission='ratio.manage')
     def resolve(self, _, info, input):
         training_id = input.pop('training')
         training = models.Training.objects.get(pk=training_id)
         ticket = models.Ticket.objects.create(**input, training=training,)
         return ticket
 
+    permissions = [user_perm('ratio.manage')]
     input = {
         'training': 'ID!',
         'email': str,
@@ -65,13 +66,13 @@ class ratioAddTicket(helpers.BaseFieldWithInput):
 
 @c.class_field
 class ratioTrainingCopyScheduleFrom(helpers.BaseFieldWithInput):
-    @decorators.auth(permission='ratio.manage')
     def resolve(self, _, info, params):
         from_training = models.Training.objects.get(slug=params['from_training_slug'])
         to_training = models.Training.objects.get(slug=params['to_training_slug'])
         to_training.copy_schedule_from(from_training)
         return True
 
+    permissions = [user_perm('ratio.manage')]
     input = {
         'from_training_slug': str,
         'to_training_slug': str,
@@ -83,7 +84,6 @@ class ratioTrainingCopyScheduleFrom(helpers.BaseFieldWithInput):
 
 @c.class_field
 class ratioTrainingAddDay(helpers.BaseFieldWithInput):
-    @decorators.auth(permission='ratio.manage')
     def resolve(self, _, info, params):
         training = models.Training.objects.get(slug=params['training_slug'])
         date_str = params['date']
@@ -91,6 +91,7 @@ class ratioTrainingAddDay(helpers.BaseFieldWithInput):
         training.add_day(date)
         return True
 
+    permissions = [user_perm('ratio.manage')]
     input = {
         'training_slug': str,
         'date': str,
@@ -102,24 +103,24 @@ class ratioTrainingAddDay(helpers.BaseFieldWithInput):
 
 @c.class_field
 class ratioTicketFiscalize(helpers.BaseField):
-    @decorators.auth(permissions=["ratio.manage", "cashier.kkm_user"])
     def resolve(self, _, info, ticket_id):
         ticket = models.Ticket.objects.get(pk=ticket_id)
         ticket.fiscalize()
         return True
 
+    permissions = [user_perm('ratio.manage'), user_perm('cashier.kkm_user')]
     args = {'ticket_id': 'ID!'}
     result = bool
 
 
 @c.class_field
 class ratioTrainingSyncParticipantsToMailchimp(helpers.BaseField):
-    @decorators.auth(permission='ratio.manage')
     def resolve(self, _, info, training_id):
         training = models.Training.objects.get(pk=training_id)
         training2mailchimp(training)
         return True
 
+    permissions = [user_perm('ratio.manage')]
     args = {'training_id': 'ID!'}
     result = bool
 
@@ -129,7 +130,6 @@ class ratioTrainingSyncParticipantsToMailchimp(helpers.BaseField):
 #   ): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
 @c.class_field
 class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
-    @decorators.auth(permission='ratio.manage')
     def resolve(self, _, info, input):
         training = models.Training.objects.get(pk=input['training_id'])
         title = input['title']
@@ -139,6 +139,7 @@ class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
             'draft_link': result['draft_link'],
         }
 
+    permissions = [user_perm('ratio.manage')]
     input = {
         'training_id': 'ID!',
         'title': str,

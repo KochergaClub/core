@@ -3,7 +3,7 @@ from datetime import datetime
 
 from kocherga.dateutils import TZ
 from kocherga.graphql import g, django_utils
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly, check_permissions
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from kocherga.projects.schema.types import ProjectPage
@@ -63,7 +63,7 @@ def suggested_dates_field():
 
 # instances(limit: Int): [EventsEvent!]! @staffonly
 def instances_field():
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(obj, info, limit=None):
         return obj.instances(limit=limit)
 

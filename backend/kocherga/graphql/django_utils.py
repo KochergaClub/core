@@ -1,5 +1,6 @@
 from kocherga.graphql import g
-from typing import List, Dict, Union, Tuple
+from kocherga.graphql.permissions import check_permissions
+from typing import List, Dict, Union, Tuple, Any
 import types
 
 from django.db import models
@@ -45,17 +46,21 @@ def model_fields(model: models.Model, field_names: List[str]):
 
 
 def related_field(
-    model: models.Model, field_name: str, item_type: g.ObjectType, decorator=lambda x: x
+    model: models.Model,
+    field_name: str,
+    item_type: g.ObjectType,
+    permissions: List[Any] = [],
 ):
     db_field = model._meta.get_field(field_name)
     assert isinstance(db_field, models.base.ForeignObjectRel) or isinstance(
         db_field, models.fields.related.ManyToManyField
     )
 
+    @check_permissions(permissions)
     def resolve(obj, info):
         return list(getattr(obj, field_name).all())
 
-    return g.Field(g.NNList(item_type), resolve=decorator(resolve))
+    return g.Field(g.NNList(item_type), resolve=resolve)
 
 
 def DjangoObjectType(

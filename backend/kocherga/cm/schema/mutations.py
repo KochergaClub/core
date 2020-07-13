@@ -1,13 +1,11 @@
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql import g
-from kocherga.graphql.decorators import auth
+from kocherga.graphql import g, helpers, permissions
 
-c = Collection()
+c = helpers.Collection()
 
 
 @c.field
 def myPrivacyModeSet(helper):
-    @auth(authenticated=True)
+    @permissions.check_permissions([permissions.authenticated])
     def resolve(_, info, mode: str):
         if not hasattr(info.context.user, 'customer'):
             raise Exception("User doesn't have a customer profile")

@@ -1,7 +1,7 @@
 from datetime import datetime, time
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import authenticated
 from kocherga.dateutils import TZ
 
 from .. import models
@@ -10,16 +10,13 @@ from . import types
 c = helpers.Collection()
 
 
-# tickets(
-#   before: String
-#   after: String
-#   first: Int
-#   last: Int
-# ): MyEventsTicketConnection! @auth(authenticated: true)
-@c.field
-def tickets(_):
-    @auth(authenticated=True)
-    def resolve(obj, info, **pager):
+@c.class_field
+class tickets(helpers.BaseField):
+    permissions = [authenticated]
+    args = helpers.connection_args()
+    result = g.NN(types.MyEventsTicketConnection)
+
+    def resolve(self, _, info, **pager):
         # TODO - move to models' manager
         qs = models.Ticket.objects.filter(
             user=info.context.user,
@@ -31,10 +28,6 @@ def tickets(_):
         )
 
         return qs.relay_page(**pager, order='event__start')
-
-    return helpers.ConnectionField(
-        g.NN(types.MyEventsTicketConnection), resolve=resolve
-    )
 
 
 my_queries = c.as_dict()

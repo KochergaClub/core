@@ -1,6 +1,6 @@
 from typing import Optional
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import user_perm
 
 import channels.layers
 from asgiref.sync import async_to_sync
@@ -14,11 +14,11 @@ c = helpers.Collection()
 
 @c.class_field
 class watchmenCreateWatchman(helpers.BaseFieldWithInput):
-    @auth(permission='watchmen.manage')
     def resolve(self, _, info, params):
         kocherga.staff.tools.add_watchman(**params)
         return True
 
+    permissions = [user_perm('watchmen.manage')]
     input = {
         'email': str,
         'short_name': str,
@@ -37,7 +37,6 @@ class watchmenCreateWatchman(helpers.BaseFieldWithInput):
 
 @c.class_field
 class watchmenUpdateShift(helpers.BaseFieldWithInput):
-    @auth(permission='watchmen.manage')
     def resolve(self, _, info, params):
         # TODO - move to model
         (shift, _) = models.Shift.objects.get_or_create(
@@ -57,6 +56,7 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
         )
         return shift
 
+    permissions = [user_perm('watchmen.manage')]
     input = {
         'date': str,
         'shift': str,
@@ -70,7 +70,6 @@ class watchmenUpdateShift(helpers.BaseFieldWithInput):
 
 @c.class_field
 class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
-    @auth(permission='watchmen.manage')
     def resolve(self, _, info, params):
         watchman = models.Watchman.objects.get(pk=params['watchman_id'])
         watchman.priority = params['priority']
@@ -78,6 +77,7 @@ class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
         watchman.save()
         return True
 
+    permissions = [user_perm('watchmen.manage')]
     input = {
         'watchman_id': 'ID!',
         'priority': int,
@@ -89,7 +89,6 @@ class watchmenSetWatchmanPriority(helpers.BaseFieldWithInput):
 
 @c.class_field
 class watchmenSetWatchmanGrade(helpers.BaseFieldWithInput):
-    @auth(permission='watchmen.manage')
     def resolve(self, _, info, params):
         watchman = models.Watchman.objects.get(pk=params['watchman_id'])
         watchman.grade = models.Grade.objects.get(pk=params['grade_id'])
@@ -97,6 +96,7 @@ class watchmenSetWatchmanGrade(helpers.BaseFieldWithInput):
         watchman.save()
         return True
 
+    permissions = [user_perm('watchmen.manage')]
     input = {
         'watchman_id': 'ID!',
         'grade_id': 'ID!',

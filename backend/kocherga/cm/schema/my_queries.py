@@ -1,11 +1,9 @@
 from typing import Optional
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql import g, django_utils
-from kocherga.graphql.decorators import auth
+from kocherga.graphql import g, django_utils, helpers, permissions
 
 from .. import models
 
-c = Collection()
+c = helpers.Collection()
 
 MyCmOrder = g.ObjectType(
     'MyCmOrder', g.fields({'order_id': 'ID!', 'start_dt': str, 'end_dt': Optional[str]})
@@ -46,7 +44,7 @@ MyCmCustomer = g.ObjectType(
 
 @c.field
 def membership(helper):
-    @auth(authenticated=True)
+    @permissions.check_permissions([permissions.authenticated])
     def resolve(_, info):
         user = info.context.user
         if not hasattr(user, 'customer'):

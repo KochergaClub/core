@@ -1,17 +1,16 @@
-from kocherga.graphql import g
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql.decorators import auth
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import check_permissions, user_perm
 from . import types
 
 from django.contrib.auth import models as auth_models
 
 
-c = Collection()
+c = helpers.Collection()
 
 
 @c.field
 def authGroupsAll(helper):
-    @auth(permission="auth.audit")
+    @check_permissions([user_perm("auth.audit")])
     def resolve(_, info):
         return auth_models.Group.objects.all()
 
@@ -22,7 +21,7 @@ def authGroupsAll(helper):
 
 @c.field
 def authPermissionsAll(helper):
-    @auth(permission="auth.audit")
+    @check_permissions([user_perm("auth.audit")])
     def resolve(_, info):
         return auth_models.Permission.objects.all()
 

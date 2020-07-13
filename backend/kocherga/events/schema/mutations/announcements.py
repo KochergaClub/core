@@ -1,7 +1,7 @@
 from typing import Optional
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly
 
 import kocherga.wagtail.models
 
@@ -19,7 +19,6 @@ EventAnnounceTarget = g.EnumType(
 
 @c.class_field
 class eventTimepadAnnouncementUpdate(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         event_id = input['event_id']
 
@@ -43,6 +42,7 @@ class eventTimepadAnnouncementUpdate(helpers.BaseFieldWithInput):
             'event': event,
         }
 
+    permissions = [staffonly]
     input = {
         'event_id': 'ID!',
         'prepaid_tickets': Optional[bool],
@@ -53,7 +53,6 @@ class eventTimepadAnnouncementUpdate(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventVkAnnouncementUpdate(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         event_id = input['event_id']
 
@@ -74,6 +73,7 @@ class eventVkAnnouncementUpdate(helpers.BaseFieldWithInput):
             'event': event,
         }
 
+    permissions = [staffonly]
     input = {
         'event_id': 'ID!',
         'group': Optional[str],
@@ -83,7 +83,6 @@ class eventVkAnnouncementUpdate(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventVkAnnouncementSetImage(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         event = models.Event.objects.get(uuid=input['event_id'])
         vk_announcement = event.vk_announcement
@@ -105,6 +104,7 @@ class eventVkAnnouncementSetImage(helpers.BaseFieldWithInput):
             'event': event,
         }
 
+    permissions = [staffonly]
     input = {
         'event_id': 'ID!',
         'image_id': 'ID!',
@@ -114,7 +114,6 @@ class eventVkAnnouncementSetImage(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventAnnounce(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         event = models.Event.objects.get(uuid=input['event_id'])
 
@@ -136,6 +135,7 @@ class eventAnnounce(helpers.BaseFieldWithInput):
             'event': event,
         }
 
+    permissions = [staffonly]
     input = {
         'event_id': 'ID!',
         'target': g.NN(EventAnnounceTarget),
@@ -145,7 +145,6 @@ class eventAnnounce(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventSetAnnounceUrl(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         event = models.Event.objects.get(uuid=input['event_id'])
 
@@ -173,6 +172,7 @@ class eventSetAnnounceUrl(helpers.BaseFieldWithInput):
             'event': event,
         }
 
+    permissions = [staffonly]
     input = {
         'event_id': 'ID!',
         'target': g.NN(EventAnnounceTarget),

@@ -4,9 +4,8 @@ logger = logging.getLogger(__name__)
 
 from typing import Optional
 
-from kocherga.graphql import g
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql.decorators import auth
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import user_perm, authenticated
 
 import urllib.parse
 
@@ -30,46 +29,74 @@ from ..view_utils import get_magic_token
 from . import types
 
 
-c = Collection()
+c = helpers.Collection()
 
 
-@c.field
-def authAddUserToGroup(helper):
-    @auth(permission='auth.audit')
-    def resolve(_, info, group_id, user_id):
+@c.class_field
+class authAddUserToGroup(helpers.BaseField):
+    permissions = [user_perm('auth.audit')]
+    args = {'group_id': 'ID!', 'user_id': 'ID!'}
+    result = bool
+
+    def resolve(self, _, info, group_id, user_id):
         group = auth_models.Group.objects.get(pk=group_id)
         user = get_user_model().objects.get(pk=user_id)
         group.user_set.add(user)
         return True
 
-    # authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
-    return g.Field(
-        g.Boolean,
-        args=g.arguments({'group_id': 'ID!', 'user_id': 'ID!'}),
-        resolve=resolve,
-    )
 
+@c.class_field
+class authRemoveUserFromGroup(helpers.BaseField):
+    permissions = [user_perm('auth.audit')]
+    args = {'group_id': 'ID!', 'user_id': 'ID!'}
+    result = bool
 
-@c.field
-def authRemoveUserFromGroup(helper):
-    @auth(permission='auth.audit')
-    def resolve(_, info, group_id, user_id):
+    def resolve(self, _, info, group_id, user_id):
         group = auth_models.Group.objects.get(pk=group_id)
         user = get_user_model().objects.get(pk=user_id)
         group.user_set.remove(user)
         return True
 
-    # authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean @auth(permission: "auth.audit")
-    return g.Field(
-        g.Boolean,
-        args=g.arguments({'group_id': 'ID!', 'user_id': 'ID!'}),
-        resolve=resolve,
+
+@c.class_field
+class authLogin(helpers.BaseFieldWithInput):
+    permissions = []
+
+    # # Either `token` or `email`+`password` must be set.
+    # # (GraphQL doesn't support union inputs yet;
+    # see https://github.com/graphql/graphql-spec/blob/master/rfcs/InputUnion.md for details.)
+    # input AuthLoginCredentialsInput {
+    #   email: String
+    #   password: String
+    #   token: String
+    # }
+    credentials_input = g.InputObjectType(
+        'AuthLoginCredentialsInput',
+        g.input_fields(
+            {'email': Optional[str], 'password': Optional[str], 'token': Optional[str]}
+        ),
     )
 
+    input = {
+        'credentials': g.NN(credentials_input),
+        # Must be `cookie`; other results, e.g. `access_token` or `jwt`, might be supported later.
+        'result': str,
+    }
 
-@c.field
-def authLogin(helper):
-    def resolve(_, info, input):
+    result = g.NN(
+        g.ObjectType(
+            'AuthLoginResult',
+            g.fields(
+                {
+                    'error': Optional[str],
+                    'user': types.AuthCurrentUser,
+                    'registered': Optional[bool],
+                }
+            ),
+        )
+    )
+
+    def resolve(self, _, info, input):
         credentials = input['credentials']
 
         if 'token' not in credentials and not (
@@ -111,62 +138,23 @@ def authLogin(helper):
             'registered': getattr(request, 'registered', False),
         }
 
-    # input AuthLoginInput {
-    #   credentials: AuthLoginCredentialsInput!
-    #   result: String!
-    # }
-    Input = g.InputObjectType(
-        'AuthLoginInput',
-        lambda: g.input_fields(
-            {
-                'credentials': g.NN(CredentialsInput),
-                # Must be `cookie`; other results, e.g. `access_token` or `jwt`, might be supported later.
-                'result': str,
-            }
-        ),
+
+@c.class_field
+class authSetPassword(helpers.BaseFieldWithInput):
+    permissions = [authenticated]
+    input = {
+        # required if old password exists
+        'old_password': Optional[str],
+        'new_password': str,
+    }
+
+    # TODO - generalize into "SimpleMutationResult"?
+    result = g.ObjectType(
+        'AuthSetPasswordResult',
+        g.fields({'error': Optional[str], 'ok': Optional[bool]}),
     )
 
-    # # Either `token` or `email`+`password` must be set.
-    # # (GraphQL doesn't support union inputs yet;
-    # see https://github.com/graphql/graphql-spec/blob/master/rfcs/InputUnion.md for details.)
-    # input AuthLoginCredentialsInput {
-    #   email: String
-    #   password: String
-    #   token: String
-    # }
-    CredentialsInput = g.InputObjectType(
-        'AuthLoginCredentialsInput',
-        g.input_fields(
-            {'email': Optional[str], 'password': Optional[str], 'token': Optional[str]}
-        ),
-    )
-
-    # type AuthLoginResult {
-    #   error: String
-    #   user: AuthCurrentUser
-    #   registered: Boolean
-    # }
-    Result = g.NN(
-        g.ObjectType(
-            'AuthLoginResult',
-            g.fields(
-                {
-                    'error': Optional[str],
-                    'user': types.AuthCurrentUser,
-                    'registered': Optional[bool],
-                }
-            ),
-        )
-    )
-
-    # authLogin(input: AuthLoginInput!): AuthLoginResult!
-    return g.Field(Result, args={'input': g.NN(Input)}, resolve=resolve)
-
-
-@c.field
-def authSetPassword(helper):
-    @auth(authenticated=True)
-    def resolve(_, info, input):
+    def resolve(self, _, info, input):
         old_password = input.get('old_password')
         new_password = input['new_password']
 
@@ -194,46 +182,24 @@ def authSetPassword(helper):
 
         return {'ok': True}
 
-    # input AuthSetPasswordInput {
-    #   old_password: String
-    #   new_password: String!
-    # }
-    Input = g.InputObjectType(
-        'AuthSetPasswordInput',
-        g.input_fields(
-            {
-                # required if old password exists
-                'old_password': Optional[str],
-                'new_password': str,
-            }
-        ),
-    )
 
-    # TODO - generalize into "SimpleMutationResult"?
-    Result = g.ObjectType(
-        'AuthSetPasswordResult',
-        g.fields({'error': Optional[str], 'ok': Optional[bool]}),
-    )
+@c.class_field
+class authLogout(helpers.BaseField):
+    permissions = [authenticated]
+    result = g.ObjectType('AuthLogoutResult', g.fields({'ok': Optional[bool]}))
 
-    # authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult! @auth(authenticated: true)
-    return g.Field(g.NN(Result), args={'input': g.NN(Input)}, resolve=resolve,)
-
-
-@c.field
-def authLogout(helper):
-    @auth(authenticated=True)
-    def resolve(_, info):
+    def resolve(self, _, info):
         logout(info.context)
         return {'ok': True}
 
-    Result = g.ObjectType('AuthLogoutResult', g.fields({'ok': Optional[bool]}))
 
-    return g.Field(g.NN(Result), resolve=resolve)
+@c.class_field
+class authSendMagicLink(helpers.BaseFieldWithInput):
+    permissions = []
+    input = {'email': str, 'next': Optional[str]}
+    result = {'ok': Optional[bool], 'error': Optional[str]}
 
-
-@c.field
-def authSendMagicLink(helper):
-    def resolve(_, info, input):
+    def resolve(self, _, info, input):
         email = input['email']
 
         magic_token = get_magic_token(email)
@@ -269,30 +235,16 @@ def authSendMagicLink(helper):
 
         return {'ok': True}
 
-    # input AuthSendMagicLinkInput {
-    #   email: String!
-    #   next: String
-    # }
-    Input = g.InputObjectType(
-        'AuthSendMagicLinkInput', g.input_fields({'email': str, 'next': Optional[str]}),
+
+@c.class_field
+class authSetMyNames(helpers.BaseFieldWithInput):
+    permissions = [authenticated]
+    input = {'first_name': str, 'last_name': str}
+    result = g.ObjectType(
+        'AuthSetMyNamesResult', g.fields({'error': Optional[str], 'ok': Optional[bool]})
     )
 
-    # type AuthSendMagicLinkResult {
-    #   ok: Boolean
-    #   error: String
-    # }
-    Result = g.ObjectType(
-        'AuthSendMagicLinkResult',
-        g.fields({'ok': Optional[bool], 'error': Optional[str]}),
-    )
-
-    return g.Field(g.NN(Result), args={'input': g.NN(Input)}, resolve=resolve,)
-
-
-@c.field
-def authSetMyNames(helper):
-    @auth(authenticated=True)
-    def resolve(_, info, input):
+    def resolve(self, _, info, input):
         first_name = input['first_name']
         last_name = input['last_name']
 
@@ -303,25 +255,6 @@ def authSetMyNames(helper):
         user.save()
 
         return {'ok': True}
-
-    # input AuthSetMyNamesInput {
-    #   first_name: String!
-    #   last_name: String!
-    # }
-    Input = g.InputObjectType(
-        'AuthSetMyNamesInput', g.input_fields({'first_name': str, 'last_name': str})
-    )
-
-    # type AuthSetMyNamesResult {
-    #   error: String
-    #   ok: Boolean
-    # }
-    Result = g.ObjectType(
-        'AuthSetMyNamesResult', g.fields({'error': Optional[str], 'ok': Optional[bool]})
-    )
-
-    # authSetMyNames(input: AuthSetMyNamesInput!): AuthSetMyNamesResult! @auth(authenticated: true)
-    return g.Field(g.NN(Result), args={'input': g.NN(Input)}, resolve=resolve)
 
 
 mutations = c.as_dict()

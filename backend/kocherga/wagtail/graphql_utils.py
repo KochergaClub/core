@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import List, Dict, Union, Tuple
+from typing import List, Dict, Union, Tuple, Any
 from types import FunctionType
 import graphql
 
@@ -16,6 +16,7 @@ import wagtailgeowidget.blocks
 
 import kocherga.wagtail.blocks
 from kocherga.graphql import g, django_utils
+from kocherga.graphql.permissions import check_permissions
 from .schema import types
 
 
@@ -40,7 +41,8 @@ def richtext_field(model, field_name):
     return g.Field(type_, resolve=resolve)
 
 
-def image_rendition_field(model, field_name, decorator=lambda x: x):
+def image_rendition_field(model, field_name, permissions: List[Any] = []):
+    @check_permissions(permissions)
     def resolve(obj, info, spec):
         image = getattr(obj, field_name)
         if not image:
@@ -54,7 +56,7 @@ def image_rendition_field(model, field_name, decorator=lambda x: x):
     if not field.null:
         Result = g.NN(Result)
 
-    return g.Field(Result, args=g.arguments({'spec': str}), resolve=decorator(resolve))
+    return g.Field(Result, args=g.arguments({'spec': str}), resolve=resolve)
 
 
 def WagtailPageType(

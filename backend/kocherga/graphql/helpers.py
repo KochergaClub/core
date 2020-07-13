@@ -3,11 +3,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 import graphql
-from typing import Callable, Optional, List, Dict
+from typing import Callable, Any, Optional, List, Dict
 
 from abc import abstractmethod, ABC
 
-from . import g, basic_types
+from . import g, basic_types, permissions
 
 
 def capitalize_first_only(s):
@@ -129,7 +129,16 @@ class BaseField(ABC):
         args = getattr(self, 'args', {})
         args = g.arguments(args)
 
-        return g.Field(result, args=args, resolve=self.resolve)
+        return g.Field(
+            result,
+            args=args,
+            resolve=permissions.check_permissions(self.permissions)(self.resolve),
+        )
+
+    @property
+    @abstractmethod
+    def permissions(self) -> List[Callable[[Any, Any], bool]]:
+        ...
 
     @property
     @abstractmethod

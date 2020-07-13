@@ -1,6 +1,6 @@
 from typing import Optional
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import authenticated
 
 from django.contrib.auth import get_user_model
 
@@ -14,27 +14,27 @@ c = helpers.Collection()
 # myEventsTicketUnregister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
 @c.class_field
 class myEventsTicketUnregister(helpers.BaseField):
-    @auth(authenticated=True)
+    permissions = [authenticated]
+    args = {'event_id': 'ID!'}
+    result = g.NN(MyEventsTicket)
+
     def resolve(self, _, info, event_id):
         event = models.Event.objects.public_events().get(uuid=event_id)
         ticket = models.Ticket.objects.unregister(user=info.context.user, event=event)
         return ticket
 
-    args = {'event_id': 'ID!'}
-    result = g.NN(MyEventsTicket)
-
 
 # myEventsTicketRegister(event_id: ID!): MyEventsTicket! @auth(authenticated: true)
 @c.class_field
 class myEventsTicketRegister(helpers.BaseField):
-    @auth(authenticated=True)
+    permissions = [authenticated]
+    args = {'event_id': 'ID!'}
+    result = g.NN(MyEventsTicket)
+
     def resolve(self, _, info, event_id):
         event = models.Event.objects.public_events().get(uuid=event_id)
         ticket = models.Ticket.objects.register(user=info.context.user, event=event)
         return ticket
-
-    args = {'event_id': 'ID!'}
-    result = g.NN(MyEventsTicket)
 
 
 # myEventsTicketRegisterAnon(
@@ -59,6 +59,7 @@ class myEventsTicketRegisterAnon(helpers.BaseFieldWithInput):
         )
         return ticket
 
+    permissions = []
     input = {
         'event_id': 'ID!',
         'email': str,

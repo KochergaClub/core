@@ -3,7 +3,7 @@ from typing import Optional
 from django.contrib.auth import get_user_model
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import user_perm
 
 from .. import models, kkm
 
@@ -11,10 +11,8 @@ from .. import models, kkm
 c = helpers.Collection()
 
 
-# cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean @auth(permission: "cashier.create")
 @c.class_field
 class cashierCreatePayment(helpers.BaseFieldWithInput):
-    @auth(permission="cashier.create")
     def resolve(self, _, info, params):
         user = get_user_model().objects.get(pk=params['whom'])
         models.Payment.objects.create(
@@ -22,6 +20,7 @@ class cashierCreatePayment(helpers.BaseFieldWithInput):
         )
         return True
 
+    permissions = [user_perm('cashier.create')]
     input = {'amount': int, 'whom': 'ID!', 'comment': str}
     input_argument_name = 'params'  # TODO
 
@@ -30,12 +29,12 @@ class cashierCreatePayment(helpers.BaseFieldWithInput):
 
 @c.class_field
 class cashierRedeemPayment(helpers.BaseField):
-    @auth(permission="cashier.redeem")
     def resolve(self, _, info, id):
         payment = models.Payment.objects.get(pk=id)
         payment.redeem()
         return True
 
+    permissions = [user_perm('cashier.redeem')]
     args = g.arguments({'id': 'ID!'})
     result = g.Boolean
 
@@ -45,7 +44,6 @@ class cashierRedeemPayment(helpers.BaseField):
 
 @c.class_field
 class kkmRegisterCheck(helpers.BaseFieldWithInput):
-    @auth(permission="cashier.kkm_user")
     def resolve(self, _, info, params):
         return kkm.execute(
             kkm.getCheckRequest(
@@ -60,6 +58,7 @@ class kkmRegisterCheck(helpers.BaseFieldWithInput):
             )
         )
 
+    permissions = [user_perm('cashier.kkm_user')]
     input = {
         'email': str,
         'title': str,

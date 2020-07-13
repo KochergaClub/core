@@ -1,5 +1,6 @@
 from typing import Optional
 from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import authenticated
 
 from .. import models
 
@@ -17,23 +18,24 @@ MyEmailSubscription = g.ObjectType(
 )
 
 
-# email_subscription: MyEmailSubscription! @auth(authenticated: true)
-@c.field
-def email_subscription(_):
-    def resolve(_, info):
+@c.class_field
+class email_subscription(helpers.BaseField):
+    def resolve(self, _, info):
         subscription = models.MailchimpMember.get_from_mailchimp(
             info.context.user.email
         )
 
-        # This is not technically necessary, but somehow it feels safer/saner to at least partially validate subscription
-        # structure here instead of relying on GraphQL schema.
-        # (I might change my mind about best practices later, but this is early days.)
+        # This is not technically necessary, but somehow it feels safer/saner to at least partially validate
+        # subscription structure here instead of relying on GraphQL schema.
+        # (I might change my mind about best practices later, but this code was written in early days of graphql
+        # adoption.)
         return {
             'status': subscription.status,
             'interests': subscription.interests,
         }
 
-    return g.Field(g.NN(MyEmailSubscription), resolve=resolve)
+    permissions = [authenticated]
+    result = g.NN(MyEmailSubscription)
 
 
 my_queries = c.as_dict()

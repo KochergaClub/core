@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql import g
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import staffonly
+
 from kocherga.cm.models import Customer
 
-c = Collection()
+c = helpers.Collection()
 
 # TODO - move to types
 AnalyticsBovStat = g.ObjectType(
@@ -13,11 +13,9 @@ AnalyticsBovStat = g.ObjectType(
 )
 
 
-# analyticsBovStats: [AnalyticsBovStat!]! @staffonly
-@c.field
-def analyticsBovStats(helper):
-    @staffonly
-    def resolve(_, info):
+@c.class_field
+class analyticsBovStats(helpers.BaseField):
+    def resolve(self, _, info):
         cohort_dates = [
             '2019-01-07',
             '2019-02-07',
@@ -42,7 +40,8 @@ def analyticsBovStats(helper):
 
         return BOV_stats
 
-    return g.Field(g.NNList(AnalyticsBovStat), resolve=resolve)
+    permissions = [staffonly]
+    result = g.NNList(AnalyticsBovStat)
 
 
 queries = c.as_dict()

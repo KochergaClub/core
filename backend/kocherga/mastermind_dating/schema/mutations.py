@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 
-from kocherga.graphql import g
-from kocherga.graphql.decorators import staffonly
-from kocherga.graphql.helpers import Collection
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import staffonly, check_permissions
 from kocherga.graphql.basic_types import BasicResult
 
 from kocherga.events.models import Event
@@ -10,7 +9,7 @@ from kocherga.events.models import Event
 from .. import models
 from . import types
 
-c = Collection()
+c = helpers.Collection()
 
 CohortMutationResult = g.ObjectType(
     'MastermindDatingCohortMutationResult',
@@ -25,7 +24,7 @@ ParticipantMutationResult = g.ObjectType(
 
 @c.field
 def mastermindDatingCreateCohort(helper):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info):
         cohort = models.Cohort.objects.create()
         return {'cohort': cohort}
@@ -41,7 +40,7 @@ for (field_name, method) in [
     ('BroadcastSolution', 'broadcast_solution'),
 ]:
 
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
         obj = models.Cohort.objects.get(pk=cohort_id)
         getattr(obj, method)()
@@ -57,7 +56,7 @@ for (field_name, method) in [
 
 @c.field
 def mastermindDatingDeleteCohort(helper):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
         obj = models.Cohort.objects.get(pk=cohort_id)
         obj.delete()
@@ -70,7 +69,7 @@ def mastermindDatingDeleteCohort(helper):
 
 @c.field
 def mastermindDatingCreateGroup(helper):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
         cohort = models.Cohort.objects.get(cohort_id)
         models.Group.objects.create_for_cohort(cohort)
@@ -85,7 +84,7 @@ def mastermindDatingCreateGroup(helper):
 
 @c.field
 def mastermindDatingSetEventForCohort(_):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, cohort_id, event_id):
         cohort = models.Cohort.objects.get(cohort_id)
         event = Event.objects.get(uuid=event_id)
@@ -102,7 +101,7 @@ def mastermindDatingSetEventForCohort(_):
 
 @c.field
 def mastermindDatingUnsetEventForCohort(_):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, cohort_id):
         cohort = models.Cohort.objects.get(cohort_id)
         cohort.event = None
@@ -118,7 +117,7 @@ def mastermindDatingUnsetEventForCohort(_):
 
 @c.field
 def mastermindDatingCreateParticipant(_):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, cohort, email):
         KchUser = get_user_model()
         try:
@@ -141,7 +140,7 @@ def mastermindDatingCreateParticipant(_):
 
 @c.field
 def mastermindDatingActivateVoting(_):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, participant_id):
         obj = models.Participant.objects.get(pk=participant_id)
         obj.tinder_activate()
@@ -156,7 +155,7 @@ def mastermindDatingActivateVoting(_):
 
 @c.field
 def mastermindDatingSetPresenceStatus(_):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info, participant_id, present):
         obj = models.Participant.objects.get(pk=participant_id)
         obj.present = present

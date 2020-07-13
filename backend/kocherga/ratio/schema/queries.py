@@ -1,5 +1,5 @@
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import user_perm
 
 from .. import models
 from .. import email
@@ -11,38 +11,35 @@ c = helpers.Collection()
 
 @c.class_field
 class ratioTrainings(helpers.BaseField):
-    @auth(permission='ratio.manage')
     def resolve(self, _, info, **pager):
         return models.Training.objects.relay_page(**pager)
 
+    permissions = [user_perm('ratio.manage')]
     args = helpers.connection_args()
     result = g.NN(types.RatioTrainingConnection)
 
 
 @c.class_field
 class ratioTrainingBySlug(helpers.BaseField):
-    @auth(permission='ratio.manage')
     def resolve(self, _, info, slug):
         return models.Training.objects.get(slug=slug)
 
+    permissions = [user_perm('ratio.manage')]
     args = {'slug': str}
     result = g.NN(types.RatioTraining)
 
 
 @c.class_field
 class ratioTrainersAll(helpers.BaseField):
-    @auth(permission='ratio.manage')
     def resolve(self, _, info):
         return models.Trainer.objects.all()
 
+    permissions = [user_perm('ratio.manage')]
     result = g.NNList(types.RatioTrainer)
 
 
-#   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
-#     @auth(permission: "ratio.manage")
 @c.class_field
 class ratioTrainingEmailPrototype(helpers.BaseField):
-    @auth(permission='ratio.manage')
     def resolve(self, _, info, training_id, type):
         training = models.Training.objects.get(pk=training_id)
         if type == 'pre':
@@ -52,6 +49,7 @@ class ratioTrainingEmailPrototype(helpers.BaseField):
         else:
             raise Exception(f"Unknown email type `type`")
 
+    permissions = [user_perm('ratio.manage')]
     args = {'training_id': 'ID!', 'type': str}
 
     result = str

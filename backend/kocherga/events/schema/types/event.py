@@ -1,5 +1,5 @@
 from kocherga.graphql import g, helpers, django_utils
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly, check_permissions
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from kocherga.projects.schema.types import ProjectPage
@@ -11,7 +11,7 @@ from ... import models, markup
 
 def build_EventsEvent():
     # All EventsEvent uses are staff-only for now, but this can change in the future.
-    # Don't forget to decorate all private fields with @staffonly or @auth when that happens!
+    # Don't forget to add permissions checks to all private fields when that happens!
 
     def build_fields():
         from .prototype import EventsPrototype
@@ -57,13 +57,13 @@ def build_EventsEvent():
                     models.Event,
                     'tickets',
                     item_type=EventsTicket,
-                    decorator=staffonly,
+                    permissions=[staffonly],
                 ),
                 'feedbacks': django_utils.related_field(
                     models.Event,
                     'feedbacks',
                     item_type=EventsFeedback,
-                    decorator=staffonly,
+                    permissions=[staffonly],
                 ),
                 'prototype': g.Field(EventsPrototype),
                 'project': g.Field(ProjectPage),
@@ -87,7 +87,7 @@ def build_EventsEvent():
 
     # tags: [String!]! @staffonly
     def tags_field():
-        @staffonly
+        @check_permissions([staffonly])
         def resolve(obj, info):
             return obj.tag_names()
 

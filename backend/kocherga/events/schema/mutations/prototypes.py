@@ -8,7 +8,7 @@ from datetime import datetime
 import kocherga.wagtail.models
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly
 from kocherga.graphql.basic_types import BasicResult
 
 from kocherga.dateutils import TZ
@@ -68,7 +68,6 @@ UpdateResult = g.NN(
 # ): EventPrototypeCreateResult! @staffonly
 @c.class_field
 class eventPrototypeCreate(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         prototype = models.EventPrototype(**input_to_update_dict(input))
         prototype.full_clean()
@@ -78,6 +77,7 @@ class eventPrototypeCreate(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
+    permissions = [staffonly]
     input = {
         'title': str,
         'summary': Optional[str],
@@ -101,7 +101,6 @@ class eventPrototypeCreate(helpers.BaseFieldWithInput):
 # ): EventPrototypeUpdateResult! @staffonly
 @c.class_field
 class eventPrototypeUpdate(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         prototype = models.EventPrototype.objects.get(pk=input['id'])
         logger.debug(input)
@@ -117,6 +116,7 @@ class eventPrototypeUpdate(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
+    permissions = [staffonly]
     # TODO - fix copy-paste, slightly different from eventPrototypeCreate input
     input = {
         'id': 'ID!',
@@ -140,7 +140,6 @@ class eventPrototypeUpdate(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventPrototypeCancelDate(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         prototype = models.EventPrototype.objects.get(pk=input['id'])
         date_str = input['date']
@@ -149,6 +148,7 @@ class eventPrototypeCancelDate(helpers.BaseFieldWithInput):
 
         return {'ok': True}
 
+    permissions = [staffonly]
     input = {
         'id': 'ID!',
         'date': str,
@@ -158,7 +158,6 @@ class eventPrototypeCancelDate(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventPrototypeNewEvent(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         prototype = models.EventPrototype.objects.get(pk=input['id'])
 
@@ -169,6 +168,7 @@ class eventPrototypeNewEvent(helpers.BaseFieldWithInput):
 
         return {'ok': True}
 
+    permissions = [staffonly]
     input = {
         'id': 'ID!',
         'ts': int,
@@ -178,7 +178,6 @@ class eventPrototypeNewEvent(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventPrototypeAddTag(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         prototype = models.EventPrototype.objects.get(pk=input['id'])
 
@@ -189,6 +188,7 @@ class eventPrototypeAddTag(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
+    permissions = [staffonly]
     input = {
         'id': 'ID!',
         'tag': str,
@@ -198,7 +198,6 @@ class eventPrototypeAddTag(helpers.BaseFieldWithInput):
 
 @c.class_field
 class eventPrototypeDeleteTag(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         prototype = models.EventPrototype.objects.get(pk=input['id'])
 
@@ -209,6 +208,7 @@ class eventPrototypeDeleteTag(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
+    permissions = [staffonly]
     input = {
         'id': 'ID!',
         'tag': str,
@@ -234,6 +234,7 @@ class eventPrototypeSetImage(helpers.BaseFieldWithInput):
             'prototype': prototype,
         }
 
+    permissions = [staffonly]
     input = {
         'id': 'ID!',
         'image_id': 'ID!',

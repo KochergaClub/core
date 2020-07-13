@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly
 
 from .. import models
 from . import types
@@ -21,7 +21,6 @@ c = helpers.Collection()
 # ): EventsEventConnection! @staffonly
 @c.class_field
 class events(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info, search=None, filter=None, **pager):
         qs = models.Event.objects.list_events()
         if search:
@@ -31,6 +30,7 @@ class events(helpers.BaseField):
                 qs = qs.filter(event_type=filter['event_type'])
         return qs.relay_page(order='start', **pager)
 
+    permissions = [staffonly]
     # input EventsFilterInput {
     #   event_type: String
     # }
@@ -46,7 +46,6 @@ class events(helpers.BaseField):
 # event(event_id: ID!): EventsEvent @staffonly
 @c.class_field
 class event(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info, event_id):
         try:
             event = models.Event.objects.list_events().get(uuid=event_id)
@@ -54,6 +53,7 @@ class event(helpers.BaseField):
             return None
         return event
 
+    permissions = [staffonly]
     args = {'event_id': 'ID!'}
     result = types.EventsEvent
 
@@ -61,10 +61,10 @@ class event(helpers.BaseField):
 # eventsPrototype(id: ID!): EventsPrototype! @staffonly
 @c.class_field
 class eventsPrototype(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info, id):
         return models.EventPrototype.objects.get(pk=id)
 
+    permissions = [staffonly]
     args = {'id': 'ID!'}
 
     result = g.NN(types.EventsPrototype)
@@ -73,10 +73,10 @@ class eventsPrototype(helpers.BaseField):
 # eventsPrototypes: [EventsPrototype!]! @staffonly
 @c.class_field
 class eventsPrototypes(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info):
         return models.EventPrototype.objects.order_by('weekday').all()
 
+    permissions = [staffonly]
     result = g.NNList(types.EventsPrototype)
 
 
@@ -102,6 +102,7 @@ class publicEvents(helpers.BaseField):
 
         return qs.relay_page(order='start', **pager)
 
+    permissions = []
     args = {**helpers.connection_args(), 'from_date': Optional[str], 'project_id': 'ID'}
 
     result = g.NN(types.EventsPublicEventConnection)
@@ -114,43 +115,43 @@ class publicEvent(helpers.BaseField):
         event = models.Event.objects.public_events().get(uuid=event_id)
         return event
 
+    permissions = []
     args = {'event_id': 'ID!'}
-
     result = g.NN(types.EventsPublicEvent)
 
 
 # vkGroups: [VkGroup!]! @staffonly
 @c.class_field
 class vkGroups(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info):
         all_groups = models.VkAnnouncement.objects.all_groups()
         return [{'name': name} for name in all_groups]
 
+    permissions = [staffonly]
     result = g.NNList(types.VkGroup)
 
 
 # timepadCategories: [TimepadCategory!]! @staffonly
 @c.class_field
 class timepadCategories(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info):
         categories = kocherga.events.models.announcement.timepad.timepad_categories()
         return categories
 
+    permissions = [staffonly]
     result = g.NNList(types.TimepadCategory)
 
 
 # eventsWeeklyDigestCurrent: EventsWeeklyDigest! @staffonly
 @c.class_field
 class eventsWeeklyDigestCurrent(helpers.BaseField):
-    @staffonly
     def resolve(self, obj, info):
         digest = models.WeeklyDigest.objects.current_digest()
         digest.create_image_if_necessary()
 
         return digest
 
+    permissions = [staffonly]
     result = g.NN(types.EventsWeeklyDigest)
 
 
@@ -160,6 +161,7 @@ class eventsPublicGoogleCalendar(helpers.BaseField):
     def resolve(self, obj, info):
         return models.GoogleCalendar.objects.get_public_calendar()
 
+    permissions = []
     result = types.EventsGoogleCalendar
 
 

@@ -1,58 +1,34 @@
 from typing import Optional
 
-from kocherga.graphql import g, django_utils
+from kocherga.graphql import django_utils
 
 from .. import models
-from kocherga.graphql.decorators import auth
+from kocherga.graphql.permissions import user_perm
 
-ZoomMeeting = g.ObjectType(
+ZoomMeeting = django_utils.DjangoObjectType(
     'ZoomMeeting',
-    lambda: g.fields(
-        {
-            **django_utils.model_fields(models.Meeting, ['id', 'zoom_id', 'join_url']),
-            'participants_count': Optional[int],
-            'instances': django_utils.related_field(
-                models.Meeting, 'instances', ZoomMeetingInstance
-            ),
-        }
-    ),
+    model=models.Meeting,
+    db_fields=['id', 'zoom_id', 'join_url'],
+    related_fields=lambda: {'instances': ZoomMeetingInstance},
+    extra_fields={'participants_count': Optional[int]},
 )
 
-# type ZoomMeetingInstance {
-#   id: ID!
-#   zoom_uuid: String!
-
-#   start_time: String!
-#   end_time: String!
-
-#   participants: [ZoomParticipant!]! @auth(permission: "zoom.view_participants")
-# }
-
-
-ZoomMeetingInstance = g.ObjectType(
+ZoomMeetingInstance = django_utils.DjangoObjectType(
     'ZoomMeetingInstance',
-    lambda: g.fields(
-        {
-            **django_utils.model_fields(
-                models.MeetingInstance, ['id', 'zoom_uuid', 'start_time', 'end_time']
-            ),
-            'participants': django_utils.related_field(
-                models.MeetingInstance,
-                'participants',
-                item_type=ZoomParticipant,
-                decorator=auth(permission='zoom.view_participants'),
-            ),
-        }
-    ),
+    model=models.MeetingInstance,
+    db_fields=['id', 'zoom_uuid', 'start_time', 'end_time'],
+    extra_fields=lambda: {
+        'participants': django_utils.related_field(
+            models.MeetingInstance,
+            'participants',
+            item_type=ZoomParticipant,
+            permissions=[user_perm('zoom.view_participants')],
+        ),
+    },
 )
 
-ZoomParticipant = g.ObjectType(
+ZoomParticipant = django_utils.DjangoObjectType(
     'ZoomParticipant',
-    lambda: g.fields(
-        {
-            **django_utils.model_fields(
-                models.Participant, ['id', 'name', 'join_time', 'leave_time']
-            )
-        }
-    ),
+    model=models.Participant,
+    db_fields=['id', 'name', 'join_time', 'leave_time'],
 )

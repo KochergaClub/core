@@ -2,7 +2,7 @@ from typing import Optional
 from datetime import datetime
 
 from kocherga.graphql import g, helpers
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly
 
 from .. import models
 from . import types
@@ -12,7 +12,6 @@ c = helpers.Collection()
 
 @c.class_field
 class watchmenWatchmenAll(helpers.BaseField):
-    @staffonly
     def resolve(self, _, info, currentStaff=False, currentRole=False):
         queryset = models.Watchman.objects.all()
 
@@ -24,6 +23,7 @@ class watchmenWatchmenAll(helpers.BaseField):
 
         return list(queryset)
 
+    permissions = [staffonly]
     args = {
         'currentStaff': Optional[bool],
         'currentRole': Optional[bool],
@@ -33,16 +33,15 @@ class watchmenWatchmenAll(helpers.BaseField):
 
 @c.class_field
 class watchmenGradesAll(helpers.BaseField):
-    @staffonly
     def resolve(self, _, info):
         return models.Grade.objects.all()
 
+    permissions = [staffonly]
     result = g.NNList(types.WatchmenGrade)
 
 
 @c.class_field
 class watchmenShifts(helpers.BaseField):
-    @staffonly
     def resolve(self, _, info, from_date, to_date):
         from_date = datetime.strptime(from_date, '%Y-%m-%d').date()
         to_date = datetime.strptime(to_date, '%Y-%m-%d').date()
@@ -52,6 +51,7 @@ class watchmenShifts(helpers.BaseField):
 
         return models.Shift.objects.items_range(from_date, to_date)
 
+    permissions = [staffonly]
     args = {
         'from_date': str,
         'to_date': str,

@@ -26,6 +26,7 @@ class mailchimp_field(helpers.BaseField):
             'link': obj.mailchimp_campaign_link(),
         }
 
+    permissions = []
     result = g.NN(
         g.ObjectType('EventsWeeklyDigestMailchimp', g.fields({'link': Optional[str]}))
     )
@@ -37,6 +38,7 @@ class telegram_field(helpers.BaseField):
             'link': obj.telegram_link(),
         }
 
+    permissions = []
     result = g.NN(
         g.ObjectType('EventsWeeklyDigestTelegram', g.fields({'link': Optional[str]}))
     )
@@ -48,6 +50,7 @@ class vk_field(helpers.BaseField):
             'link': obj.vk_link(),
         }
 
+    permissions = []
     result = g.NN(
         g.ObjectType('EventsWeeklyDigestVk', g.fields({'link': Optional[str]}))
     )

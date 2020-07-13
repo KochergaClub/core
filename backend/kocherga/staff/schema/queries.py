@@ -1,31 +1,29 @@
-from kocherga.graphql import g
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql import g, permissions, helpers
+
 from .. import models
 from . import types
 
 
-c = Collection()
+c = helpers.Collection()
 
 
-@c.field
-def staffMembersAll(helper):
-    # staffMembersAll: [StaffMember!]! @staffonly
-    @staffonly
-    def resolve(_, info):
+@c.class_field
+class staffMembersAll(helpers.BaseField):
+    permissions = [permissions.staffonly]
+    result = g.NNList(types.StaffMember)
+
+    def resolve(self, _, info):
         return models.Member.objects.all()
 
-    return g.Field(g.NNList(types.StaffMember), resolve=resolve)
 
+@c.class_field
+class staffMember(helpers.BaseField):
+    permissions = [permissions.staffonly]
+    args = {'id': 'ID!'}
+    result = g.NN(types.StaffMember)
 
-@c.field
-def staffMember(helper):
-    # staffMember(id: ID!): StaffMember! @staffonly
-    @staffonly
-    def resolve(_, info, id):
+    def resolve(self, _, info):
         return models.Member.objects.get(pk=id)
-
-    return g.Field(g.NN(types.StaffMember), args={'id': g.NN(g.ID)}, resolve=resolve)
 
 
 queries = c.as_dict()

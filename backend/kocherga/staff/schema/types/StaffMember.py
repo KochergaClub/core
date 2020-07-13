@@ -1,31 +1,19 @@
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly, check_permissions
 from kocherga.graphql import g
 
 from kocherga.auth.schema import types as auth_types
 from kocherga.slack.schema import types as slack_types
 
 
-@staffonly
+@check_permissions([staffonly])
 def resolve_user(obj, info):
     return obj.user
 
 
-@staffonly
+@check_permissions([staffonly])
 def resolve_slack_user(obj, info):
     return obj.slack_user
 
-
-# type StaffMember {
-#   id: ID!
-#   short_name: String!
-#   full_name: String!
-#   role: String!
-#   is_current: Boolean!
-#   vk: String!
-#   color: String!
-#   user: AuthUser!
-#   slack_user: SlackUser
-# }
 
 StaffMember = g.ObjectType(
     'StaffMember',

@@ -6,7 +6,7 @@ from typing import Optional
 
 from kocherga.graphql import g, helpers
 from kocherga.graphql.basic_types import BasicResult
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql.permissions import staffonly
 
 from ... import models
 
@@ -26,7 +26,6 @@ UpdateResult = g.NN(
 # eventsWeeklyDigestPostVk: EventsWeeklyDigestUpdateResult! @staffonly
 @c.class_field
 class eventsWeeklyDigestPostVk(helpers.BaseField):
-    @staffonly
     def resolve(self, _, info):
         digest = models.WeeklyDigest.objects.current_digest()
         digest.post_vk('')
@@ -35,13 +34,13 @@ class eventsWeeklyDigestPostVk(helpers.BaseField):
             'digest': digest,
         }
 
+    permissions = [staffonly]
     result = UpdateResult
 
 
 # eventsWeeklyDigestPostTelegram: EventsWeeklyDigestUpdateResult! @staffonly
 @c.class_field
 class eventsWeeklyDigestPostTelegram(helpers.BaseField):
-    @staffonly
     def resolve(self, _, info):
         digest = models.WeeklyDigest.objects.current_digest()
         digest.post_telegram()
@@ -50,12 +49,12 @@ class eventsWeeklyDigestPostTelegram(helpers.BaseField):
             'digest': digest,
         }
 
+    permissions = [staffonly]
     result = UpdateResult
 
 
 @c.class_field
 class eventsWeeklyDigestPostMailchimp(helpers.BaseFieldWithInput):
-    @staffonly
     def resolve(self, _, info, input):
         text = input.get('text', '')
         digest = models.WeeklyDigest.objects.current_digest()
@@ -65,6 +64,7 @@ class eventsWeeklyDigestPostMailchimp(helpers.BaseFieldWithInput):
             'digest': digest,
         }
 
+    permissions = [staffonly]
     input = {
         'text': Optional[str],
     }
@@ -74,13 +74,13 @@ class eventsWeeklyDigestPostMailchimp(helpers.BaseFieldWithInput):
 
 @c.class_field
 class vkWikiScheduleUpdate(helpers.BaseField):
-    @staffonly
     def resolve(self, _, info, input):
         models.VkAnnouncement.objects.update_wiki_schedule()
         return {
             'ok': True,
         }
 
+    permissions = [staffonly]
     result = BasicResult
 
 

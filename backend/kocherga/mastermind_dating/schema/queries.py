@@ -1,29 +1,27 @@
-from kocherga.graphql.helpers import Collection
-from kocherga.graphql import g
-from kocherga.graphql.decorators import staffonly
+from kocherga.graphql import g, helpers
+from kocherga.graphql.permissions import staffonly, check_permissions
 
 from .. import models
 from . import types
 
-c = Collection()
+c = helpers.Collection()
 
 
 @c.field
 def mastermindDatingCohorts(helper):
-    @staffonly
+    @check_permissions([staffonly])
     def resolve(_, info):
         return models.Cohort.objects.all()
 
-    # mastermindDatingCohorts: [MastermindDatingCohort!]! @staffonly
     return g.Field(g.NNList(types.MastermindDatingCohort), resolve=resolve)
 
 
 @c.field
 def mastermindDatingCohortById(helper):
+    @check_permissions([staffonly])
     def resolve(_, info, id):
         return models.Cohort.objects.get(pk=id)
 
-    # mastermindDatingCohortById(id: ID!): MastermindDatingCohort! @staffonly
     return g.Field(
         g.NN(types.MastermindDatingCohort),
         args=g.arguments({'id': 'ID!'}),
