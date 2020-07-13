@@ -81,7 +81,7 @@ class TestTokenLogin:
         assert client.cookies['sessionid']
         assert client.cookies['csrftoken']
 
-        data = run_query(client, """{ me { user { is_authenticated } } }""")
+        data = run_query(client, """{ my { user { is_authenticated } } }""")
         assert data['me']['user']['is_authenticated'] is True
 
     def test_registered_value(self, client):

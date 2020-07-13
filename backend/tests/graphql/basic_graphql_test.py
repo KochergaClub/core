@@ -1,8 +1,6 @@
 from tests.helpers.graphql import run_query
 
 
-pass
-## NOTE: rooms query is no more
-# def test_rooms(client):
-#     data = run_query(client, "{ rooms { name } }")
-#     assert len(data['rooms']) == 4
+def test_auth(client):
+    data = run_query(client, "{ my { user { is_authenticated } } }")
+    assert data['my']['user']['is_authenticated'] is False
