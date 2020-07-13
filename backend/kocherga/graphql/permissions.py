@@ -41,10 +41,12 @@ def check_permissions(permissions):
         @wraps(resolve)
         def wrapper(obj, info, **kwargs):
             for permission in permissions:
-                if not permission(info.context, obj):
+                if not permission(obj, info):
                     # TODO - return None on false result?
                     # permission checkers can throw exceptions when permission is denied
                     raise Exception("Permission denied")
             return resolve(obj, info, **kwargs)
+
+        return wrapper
 
     return decorator
