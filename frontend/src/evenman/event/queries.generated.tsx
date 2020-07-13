@@ -270,14 +270,14 @@ export type EvenmanVkAnnouncementSetImageMutationVariables = {
 
 export type EvenmanVkAnnouncementSetImageMutation = (
   { __typename?: 'Mutation' }
-  & { result: (
+  & { result?: Types.Maybe<(
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
       & EvenmanEvent_DetailsFragment
     ) }
-  ) }
+  )> }
 );
 
 export type EvenmanAnnounceMutationVariables = {
@@ -288,14 +288,14 @@ export type EvenmanAnnounceMutationVariables = {
 
 export type EvenmanAnnounceMutation = (
   { __typename?: 'Mutation' }
-  & { result: (
+  & { result?: Types.Maybe<(
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
       & EvenmanEvent_DetailsFragment
     ) }
-  ) }
+  )> }
 );
 
 export type EvenmanSetAnnounceUrlMutationVariables = {
@@ -307,14 +307,14 @@ export type EvenmanSetAnnounceUrlMutationVariables = {
 
 export type EvenmanSetAnnounceUrlMutation = (
   { __typename?: 'Mutation' }
-  & { result: (
+  & { result?: Types.Maybe<(
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
       & EvenmanEvent_DetailsFragment
     ) }
-  ) }
+  )> }
 );
 
 export type EvenmanEventMoveMutationVariables = {

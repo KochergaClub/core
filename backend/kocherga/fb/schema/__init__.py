@@ -1,14 +1,18 @@
-from ariadne import MutationType
+from kocherga.graphql import g, helpers, permissions
+from kocherga.graphql.basic_types import BasicResult
 
 from .. import marketing
 
-Mutation = MutationType()
+c = helpers.Collection()
 
 
-@Mutation.field('fbMarketingAudienceUploadRatioTickets')
-def fbMarketingAudienceUploadRatioTickets(_, info):
-    marketing.upload_ratio_tickets_audience()
-    return {'ok': True}
+@c.class_field
+class fbMarketingAudienceUploadRatioTickets(helpers.BaseField):
+    permissions = [permissions.user_perm('fb.marketing')]
+    result = g.NN(BasicResult)
+
+    def resolve(self, _, info, input):
+        marketing.upload_ratio_tickets_audience()
 
 
-types = [Mutation]
+mutations = c.as_dict()

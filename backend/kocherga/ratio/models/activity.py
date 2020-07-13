@@ -8,7 +8,6 @@ from .trainer import Trainer
 # - sections (classes)
 # - breaks
 # - bonuses
-# TODO - add 'type' field or figure out some other way to make activities polymorphic.
 class Activity(models.Model):
     training_day = models.ForeignKey(
         TrainingDay, on_delete=models.CASCADE, related_name='schedule', null=True

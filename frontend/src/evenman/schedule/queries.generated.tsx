@@ -7,10 +7,10 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type EvenmanWeeklyDigestFragment = (
   { __typename?: 'EventsWeeklyDigest' }
   & Pick<Types.EventsWeeklyDigest, 'id' | 'start'>
-  & { image: (
+  & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
-  ), mailchimp: (
+  )>, mailchimp: (
     { __typename?: 'EventsWeeklyDigestMailchimp' }
     & Pick<Types.EventsWeeklyDigestMailchimp, 'link'>
   ), telegram: (

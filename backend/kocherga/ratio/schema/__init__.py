@@ -1,5 +1,5 @@
-from .query import Query
-from .mutation import Mutation
-from .objects import types
+from .queries import queries
+from .mutations import mutations
+from .types import exported_types
 
-types = [Query, Mutation, *types]
+__all__ = ['queries', 'mutations', 'exported_types']

@@ -105,6 +105,9 @@ graphql: graphql_schema graphql_types
 restart_backend:
 	$(K) rollout restart deploy/core-django
 
+restart_frontend:
+	$(K) rollout restart deploy/core-frontend
+
 dry_migrations:
 	@test $(APP) || (echo "APP is not set"; exit 1)
 	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./manage.py makemigrations --dry-run $(APP)

@@ -111,8 +111,11 @@ mutation MastermindDatingRunSolver($cohort_id: ID!) {
   }
 }
 
-mutation MastermindDatingSetEventForCohort($cohort_id: ID!, $event_id: String!) {
-  mastermindDatingSetEventForCohort(cohort_id: $cohort_id, event_id: $event_id) {
+mutation MastermindDatingSetEventForCohort($cohort_id: ID!, $event_id: ID!) {
+  mastermindDatingSetEventForCohort(
+    cohort_id: $cohort_id
+    event_id: $event_id
+  ) {
     cohort {
       ...MastermindDatingCohortDetails
     }
@@ -135,8 +138,14 @@ mutation MastermindDatingActivateVoting($participant_id: ID!) {
   }
 }
 
-mutation MastermindDatingSetPresenceStatus($participant_id: ID!, $present: Boolean!) {
-  mastermindDatingSetPresenceStatus(participant_id: $participant_id, present: $present) {
+mutation MastermindDatingSetPresenceStatus(
+  $participant_id: ID!
+  $present: Boolean!
+) {
+  mastermindDatingSetPresenceStatus(
+    participant_id: $participant_id
+    present: $present
+  ) {
     participant {
       ...MastermindDatingParticipant
     }

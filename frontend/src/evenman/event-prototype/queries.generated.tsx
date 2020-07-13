@@ -76,8 +76,8 @@ export type EvenmanPrototypeCreateMutationVariables = {
 export type EvenmanPrototypeCreateMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeCreateResult' }
-    & Pick<Types.EventPrototypeCreateResult, 'ok'>
+    { __typename?: 'EventPrototypeUpdateResult' }
+    & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
       & EventsPrototypeFragment
@@ -120,8 +120,8 @@ export type EvenmanPrototypeCancelDateMutationVariables = {
 export type EvenmanPrototypeCancelDateMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeCancelDateResult' }
-    & Pick<Types.EventPrototypeCancelDateResult, 'ok'>
+    { __typename?: 'BasicResult' }
+    & Pick<Types.BasicResult, 'ok'>
   ) }
 );
 
@@ -134,8 +134,8 @@ export type EvenmanPrototypeNewEventMutationVariables = {
 export type EvenmanPrototypeNewEventMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeNewEventResult' }
-    & Pick<Types.EventPrototypeNewEventResult, 'ok'>
+    { __typename?: 'BasicResult' }
+    & Pick<Types.BasicResult, 'ok'>
   ) }
 );
 
@@ -148,8 +148,8 @@ export type EvenmanPrototypeAddTagMutationVariables = {
 export type EvenmanPrototypeAddTagMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeAddTagResult' }
-    & Pick<Types.EventPrototypeAddTagResult, 'ok'>
+    { __typename?: 'EventPrototypeUpdateResult' }
+    & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
       & Pick<Types.EventsPrototype, 'id' | 'tags'>
@@ -166,8 +166,8 @@ export type EvenmanPrototypeDeleteTagMutationVariables = {
 export type EvenmanPrototypeDeleteTagMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeDeleteTagResult' }
-    & Pick<Types.EventPrototypeDeleteTagResult, 'ok'>
+    { __typename?: 'EventPrototypeUpdateResult' }
+    & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
       & Pick<Types.EventsPrototype, 'id' | 'tags'>
@@ -184,8 +184,8 @@ export type EvenmanPrototypeSetImageMutationVariables = {
 export type EvenmanPrototypeSetImageMutation = (
   { __typename?: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeSetImageResult' }
-    & Pick<Types.EventPrototypeSetImageResult, 'ok'>
+    { __typename?: 'EventPrototypeUpdateResult' }
+    & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
       { __typename?: 'EventsPrototype' }
       & EventsPrototypeFragment

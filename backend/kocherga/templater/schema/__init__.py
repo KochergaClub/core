@@ -1,4 +1,3 @@
-from .query import Query
-from . import objects
+from .queries import queries
 
-types = [Query, *objects.types]
+__all__ = ['queries']

@@ -25,24 +25,24 @@ export type BasicParagraphBlockFragment = (
 export type ColumnsBasicBlockFragment = (
   { __typename?: 'ColumnsBasicBlock' }
   & { basic_columns: Array<(
-    { __typename?: 'ColumnsBasicBlockColumn' }
-    & Pick<Types.ColumnsBasicBlockColumn, 'header' | 'text'>
+    { __typename?: 'ColumnsBasicBlockValue' }
+    & Pick<Types.ColumnsBasicBlockValue, 'header' | 'text'>
   )> }
 );
 
 export type ColumnsMembershipsBlockFragment = (
   { __typename?: 'ColumnsMembershipsBlock' }
   & { membership_columns: Array<(
-    { __typename?: 'ColumnsMembershipsBlockColumn' }
-    & Pick<Types.ColumnsMembershipsBlockColumn, 'title' | 'subtitle' | 'price' | 'description'>
+    { __typename?: 'ColumnsMembershipsBlockValue' }
+    & Pick<Types.ColumnsMembershipsBlockValue, 'title' | 'subtitle' | 'price' | 'description'>
   )> }
 );
 
 export type ColumnsButtonsBlockFragment = (
   { __typename?: 'ColumnsButtonsBlock' }
   & { button_columns: Array<(
-    { __typename?: 'ColumnsButtonsBlockColumn' }
-    & Pick<Types.ColumnsButtonsBlockColumn, 'title' | 'caption' | 'link'>
+    { __typename?: 'ColumnsButtonsBlockValue' }
+    & Pick<Types.ColumnsButtonsBlockValue, 'title' | 'caption' | 'link'>
   )> }
 );
 
@@ -93,11 +93,11 @@ export type HeroFrontBlockFragment = (
     { __typename?: 'HeroFrontBlockValue' }
     & Pick<Types.HeroFrontBlockValue, 'title'>
     & { features: Array<(
-      { __typename?: 'HeroFrontBlockFeature' }
-      & Pick<Types.HeroFrontBlockFeature, 'title' | 'link'>
+      { __typename?: 'HeroFrontBlock_featuresValue' }
+      & Pick<Types.HeroFrontBlock_FeaturesValue, 'title' | 'link'>
       & { items: Array<(
-        { __typename?: 'HeroFrontBlockItem' }
-        & Pick<Types.HeroFrontBlockItem, 'text' | 'link'>
+        { __typename?: 'HeroFrontBlock_features_itemsValue' }
+        & Pick<Types.HeroFrontBlock_Features_ItemsValue, 'text' | 'link'>
       )> }
     )> }
   ) }

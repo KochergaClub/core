@@ -1,5 +1,3 @@
-from .query import Query
-from .mutation import Mutation
-from .types import types
+from .queries import queries
 
-types = [Query, Mutation, *types]
+__all__ = ['queries']

@@ -16,20 +16,42 @@ export type RatioSectionPageFragment = (
     { __typename?: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), body: Array<(
-    { __typename: 'RatioNotebookSectionBlock' }
-    & Pick<Types.RatioNotebookSectionBlock, 'id'>
+    { __typename: 'BasicLeadBlock' }
+    & Pick<Types.BasicLeadBlock, 'id'>
   ) | (
-    { __typename: 'RatioHeaderBlock' }
-    & Pick<Types.RatioHeaderBlock, 'id'>
-    & RatioHeaderBlockFragment
+    { __typename: 'BasicParagraphBlock' }
+    & Pick<Types.BasicParagraphBlock, 'id'>
   ) | (
-    { __typename: 'RatioParagraphBlock' }
-    & Pick<Types.RatioParagraphBlock, 'id'>
-    & RatioParagraphBlockFragment
+    { __typename: 'BigContactsBlock' }
+    & Pick<Types.BigContactsBlock, 'id'>
   ) | (
-    { __typename: 'RatioInsetBlock' }
-    & Pick<Types.RatioInsetBlock, 'id'>
-    & RatioInsetBlockFragment
+    { __typename: 'ColumnsBasicBlock' }
+    & Pick<Types.ColumnsBasicBlock, 'id'>
+  ) | (
+    { __typename: 'ColumnsButtonsBlock' }
+    & Pick<Types.ColumnsButtonsBlock, 'id'>
+  ) | (
+    { __typename: 'ColumnsMembershipsBlock' }
+    & Pick<Types.ColumnsMembershipsBlock, 'id'>
+  ) | (
+    { __typename: 'EventsListBlock' }
+    & Pick<Types.EventsListBlock, 'id'>
+  ) | (
+    { __typename: 'GreyBlock' }
+    & Pick<Types.GreyBlock, 'id'>
+  ) | (
+    { __typename: 'HeroFrontBlock' }
+    & Pick<Types.HeroFrontBlock, 'id'>
+  ) | (
+    { __typename: 'MailchimpSubscribeBlock' }
+    & Pick<Types.MailchimpSubscribeBlock, 'id'>
+  ) | (
+    { __typename: 'PhotoRibbonBlock' }
+    & Pick<Types.PhotoRibbonBlock, 'id'>
+  ) | (
+    { __typename: 'RatioBriefingBlock' }
+    & Pick<Types.RatioBriefingBlock, 'id'>
+    & RatioBriefingBlockFragment
   ) | (
     { __typename: 'RatioExerciseBlock' }
     & Pick<Types.RatioExerciseBlock, 'id'>
@@ -39,46 +61,24 @@ export type RatioSectionPageFragment = (
     & Pick<Types.RatioExerciseOnelineBlock, 'id'>
     & RatioExerciseOnelineBlockFragment
   ) | (
-    { __typename: 'RatioBriefingBlock' }
-    & Pick<Types.RatioBriefingBlock, 'id'>
-    & RatioBriefingBlockFragment
+    { __typename: 'RatioHeaderBlock' }
+    & Pick<Types.RatioHeaderBlock, 'id'>
+    & RatioHeaderBlockFragment
+  ) | (
+    { __typename: 'RatioInsetBlock' }
+    & Pick<Types.RatioInsetBlock, 'id'>
+    & RatioInsetBlockFragment
   ) | (
     { __typename: 'RatioMathBlock' }
     & Pick<Types.RatioMathBlock, 'id'>
     & RatioMathBlockFragment
   ) | (
-    { __typename: 'GreyBlock' }
-    & Pick<Types.GreyBlock, 'id'>
+    { __typename: 'RatioNotebookSectionBlock' }
+    & Pick<Types.RatioNotebookSectionBlock, 'id'>
   ) | (
-    { __typename: 'BasicLeadBlock' }
-    & Pick<Types.BasicLeadBlock, 'id'>
-  ) | (
-    { __typename: 'BasicParagraphBlock' }
-    & Pick<Types.BasicParagraphBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsBasicBlock' }
-    & Pick<Types.ColumnsBasicBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsMembershipsBlock' }
-    & Pick<Types.ColumnsMembershipsBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsButtonsBlock' }
-    & Pick<Types.ColumnsButtonsBlock, 'id'>
-  ) | (
-    { __typename: 'EventsListBlock' }
-    & Pick<Types.EventsListBlock, 'id'>
-  ) | (
-    { __typename: 'BigContactsBlock' }
-    & Pick<Types.BigContactsBlock, 'id'>
-  ) | (
-    { __typename: 'PhotoRibbonBlock' }
-    & Pick<Types.PhotoRibbonBlock, 'id'>
-  ) | (
-    { __typename: 'MailchimpSubscribeBlock' }
-    & Pick<Types.MailchimpSubscribeBlock, 'id'>
-  ) | (
-    { __typename: 'HeroFrontBlock' }
-    & Pick<Types.HeroFrontBlock, 'id'>
+    { __typename: 'RatioParagraphBlock' }
+    & Pick<Types.RatioParagraphBlock, 'id'>
+    & RatioParagraphBlockFragment
   )> }
 );
 

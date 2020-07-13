@@ -1,8 +1,18 @@
-from ariadne import ObjectType
+from kocherga.graphql import g
+from kocherga.graphql.helpers import Collection
+from . import types
 
-My = ObjectType('My')
+
+c = Collection()
 
 
-@My.field('user')
-def resolve_my_user(_, info):
-    return info.context.user
+# user: AuthCurrentUser!
+@c.field
+def user(helper):
+    def resolve(_, info):
+        return info.context.user
+
+    return g.Field(g.NN(types.AuthCurrentUser), resolve=resolve)
+
+
+my_queries = c.as_dict()

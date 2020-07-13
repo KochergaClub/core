@@ -1,12 +1,34 @@
-from kocherga.graphql.types import DjangoObjectType
+from typing import Optional
+
+from kocherga.graphql import django_utils
 
 from .. import models
+from kocherga.graphql.permissions import user_perm
 
-ZoomMeeting = DjangoObjectType('ZoomMeeting', models.Meeting)
-ZoomMeeting.related_field('instances')
-ZoomMeeting.simple_property_field('participants_count')
+ZoomMeeting = django_utils.DjangoObjectType(
+    'ZoomMeeting',
+    model=models.Meeting,
+    db_fields=['id', 'zoom_id', 'join_url'],
+    related_fields=lambda: {'instances': ZoomMeetingInstance},
+    extra_fields={'participants_count': Optional[int]},
+)
 
-ZoomMeetingInstance = DjangoObjectType('ZoomMeetingInstance', models.MeetingInstance)
-ZoomMeetingInstance.related_field('participants')
+ZoomMeetingInstance = django_utils.DjangoObjectType(
+    'ZoomMeetingInstance',
+    model=models.MeetingInstance,
+    db_fields=['id', 'zoom_uuid', 'start_time', 'end_time'],
+    extra_fields=lambda: {
+        'participants': django_utils.related_field(
+            models.MeetingInstance,
+            'participants',
+            item_type=ZoomParticipant,
+            permissions=[user_perm('zoom.view_participants')],
+        ),
+    },
+)
 
-types = [ZoomMeeting, ZoomMeetingInstance]
+ZoomParticipant = django_utils.DjangoObjectType(
+    'ZoomParticipant',
+    model=models.Participant,
+    db_fields=['id', 'name', 'join_time', 'leave_time'],
+)

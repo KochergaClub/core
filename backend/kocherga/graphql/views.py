@@ -16,10 +16,7 @@ class KochergaGraphQLView(GraphQLView):
     # Copy-pasted from GraphQLView.
     # TODO: refactor after https://github.com/mirumee/ariadne/pull/284 gets merged.
     def execute_query(self, request: HttpRequest, data: dict) -> GraphQLResult:
-        if callable(self.context_value):
-            context_value = self.context_value(request)  # pylint: disable=not-callable
-        else:
-            context_value = self.context_value or request
+        context_value = request
 
         return graphql_sync(
             cast(GraphQLSchema, self.schema),
