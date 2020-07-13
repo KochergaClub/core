@@ -149,9 +149,11 @@ class authSetPassword(helpers.BaseFieldWithInput):
     }
 
     # TODO - generalize into "SimpleMutationResult"?
-    result = g.ObjectType(
-        'AuthSetPasswordResult',
-        g.fields({'error': Optional[str], 'ok': Optional[bool]}),
+    result = g.NN(
+        g.ObjectType(
+            'AuthSetPasswordResult',
+            g.fields({'error': Optional[str], 'ok': Optional[bool]}),
+        )
     )
 
     def resolve(self, _, info, input):
@@ -186,7 +188,7 @@ class authSetPassword(helpers.BaseFieldWithInput):
 @c.class_field
 class authLogout(helpers.BaseField):
     permissions = [authenticated]
-    result = g.ObjectType('AuthLogoutResult', g.fields({'ok': Optional[bool]}))
+    result = g.NN(g.ObjectType('AuthLogoutResult', g.fields({'ok': Optional[bool]})))
 
     def resolve(self, _, info):
         logout(info.context)
@@ -240,8 +242,11 @@ class authSendMagicLink(helpers.BaseFieldWithInput):
 class authSetMyNames(helpers.BaseFieldWithInput):
     permissions = [authenticated]
     input = {'first_name': str, 'last_name': str}
-    result = g.ObjectType(
-        'AuthSetMyNamesResult', g.fields({'error': Optional[str], 'ok': Optional[bool]})
+    result = g.NN(
+        g.ObjectType(
+            'AuthSetMyNamesResult',
+            g.fields({'error': Optional[str], 'ok': Optional[bool]}),
+        )
     )
 
     def resolve(self, _, info, input):

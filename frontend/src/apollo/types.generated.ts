@@ -958,8 +958,8 @@ export type MastermindDatingParticipantMutationResult = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  authAddUserToGroup?: Maybe<Scalars['Boolean']>;
-  authRemoveUserFromGroup?: Maybe<Scalars['Boolean']>;
+  authAddUserToGroup: Scalars['Boolean'];
+  authRemoveUserFromGroup: Scalars['Boolean'];
   authLogin: AuthLoginResult;
   authSetPassword: AuthSetPasswordResult;
   authLogout: AuthLogoutResult;
@@ -970,7 +970,7 @@ export type Mutation = {
   myPrivacyModeSet?: Maybe<Scalars['Boolean']>;
   cm2CreateOrder: Cm2Order;
   cm2CreateCustomer: Cm2Customer;
-  cm2CloseOrder?: Maybe<Scalars['Boolean']>;
+  cm2CloseOrder: Scalars['Boolean'];
   watchmenCreateWatchman: Scalars['Boolean'];
   watchmenUpdateShift: WatchmenShift;
   watchmenSetWatchmanPriority: Scalars['Boolean'];
@@ -1040,8 +1040,8 @@ export type Mutation = {
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>;
   myEmailResubscribe?: Maybe<Scalars['Boolean']>;
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>;
-  myEmailSubscribeToInterest?: Maybe<Scalars['Boolean']>;
-  myEmailUnsubscribeFromInterest?: Maybe<Scalars['Boolean']>;
+  myEmailSubscribeToInterest: Scalars['Boolean'];
+  myEmailUnsubscribeFromInterest: Scalars['Boolean'];
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
 };
 
@@ -1636,20 +1636,20 @@ export type QueryZadarmaPbxCallArgs = {
 
 
 export type QueryCm2CustomersArgs = {
+  search?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
-  search?: Maybe<Scalars['String']>;
 };
 
 
 export type QueryCm2OrdersArgs = {
+  status?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
-  status?: Maybe<Scalars['String']>;
 };
 
 
@@ -2159,8 +2159,8 @@ export type ZoomMeeting = {
   id: Scalars['ID'];
   zoom_id: Scalars['String'];
   join_url: Scalars['String'];
-  participants_count?: Maybe<Scalars['Int']>;
   instances: Array<ZoomMeetingInstance>;
+  participants_count?: Maybe<Scalars['Int']>;
 };
 
 export type ZoomMeetingInstance = {

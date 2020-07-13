@@ -813,8 +813,8 @@ type MastermindDatingParticipantMutationResult {
 }
 
 type Mutation {
-  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean
-  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean
+  authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean!
+  authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean!
   authLogin(input: AuthLoginInput!): AuthLoginResult!
   authSetPassword(input: AuthSetPasswordInput!): AuthSetPasswordResult!
   authLogout: AuthLogoutResult!
@@ -825,7 +825,7 @@ type Mutation {
   myPrivacyModeSet(mode: String!): Boolean
   cm2CreateOrder(input: Cm2CreateOrderInput!): Cm2Order!
   cm2CreateCustomer(input: Cm2CreateCustomerInput!): Cm2Customer!
-  cm2CloseOrder(id: ID!): Boolean
+  cm2CloseOrder(id: ID!): Boolean!
   watchmenCreateWatchman(params: WatchmenCreateWatchmanInput!): Boolean!
   watchmenUpdateShift(params: WatchmenUpdateShiftInput!): WatchmenShift!
   watchmenSetWatchmanPriority(params: WatchmenSetWatchmanPriorityInput!): Boolean!
@@ -895,8 +895,8 @@ type Mutation {
   emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean
   myEmailResubscribe: Boolean
   myEmailUnsubscribe: Boolean
-  myEmailSubscribeToInterest(interest_id: ID!): Boolean
-  myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean
+  myEmailSubscribeToInterest(interest_id: ID!): Boolean!
+  myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean!
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
 }
 
@@ -1012,8 +1012,8 @@ type Query {
   zadarmaPbxCall(pbx_call_id: ID!): ZadarmaPbxCall!
   importers: [Importer!]!
   now: NowInfo!
-  cm2Customers(before: String, after: String, first: Int, last: Int, search: String): Cm2CustomerConnection!
-  cm2Orders(before: String, after: String, first: Int, last: Int, status: String): Cm2OrderConnection!
+  cm2Customers(search: String, before: String, after: String, first: Int, last: Int): Cm2CustomerConnection!
+  cm2Orders(status: String, before: String, after: String, first: Int, last: Int): Cm2OrderConnection!
   cm2Customer(id: ID!): Cm2Customer!
   cm2Order(id: ID!): Cm2Order!
   watchmenWatchmenAll(currentStaff: Boolean, currentRole: Boolean): [WatchmenWatchman!]!
@@ -1408,8 +1408,8 @@ type ZoomMeeting {
   id: ID!
   zoom_id: String!
   join_url: String!
-  participants_count: Int
   instances: [ZoomMeetingInstance!]!
+  participants_count: Int
 }
 
 type ZoomMeetingInstance {
