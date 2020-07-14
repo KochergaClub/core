@@ -1268,7 +1268,7 @@ type TildaAsset {
 }
 
 input TildaImportInput {
-  page_id: ID!
+  page_id: Int!
 }
 
 type TildaPage {

@@ -22,7 +22,7 @@ class tildaImport(helpers.BaseFieldWithInput):
         return {'ok': True}
 
     permissions = [permissions.staffonly]
-    input = {'page_id': 'ID!'}
+    input = {'page_id': int}
     result = basic_types.BasicResult
 
 

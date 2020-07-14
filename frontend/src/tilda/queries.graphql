@@ -13,7 +13,7 @@ mutation TildaImportAll {
   }
 }
 
-mutation TildaImport($page_id: ID!) {
+mutation TildaImport($page_id: Int!) {
   tildaImport(input: { page_id: $page_id }) {
     ok
   }

@@ -2008,7 +2008,7 @@ export type TildaAsset = {
 };
 
 export type TildaImportInput = {
-  page_id: Scalars['ID'];
+  page_id: Scalars['Int'];
 };
 
 export type TildaPage = {

@@ -27,7 +27,7 @@ export type TildaImportAllMutation = (
 );
 
 export type TildaImportMutationVariables = {
-  page_id: Types.Scalars['ID'];
+  page_id: Types.Scalars['Int'];
 };
 
 
@@ -107,7 +107,7 @@ export type TildaImportAllMutationHookResult = ReturnType<typeof useTildaImportA
 export type TildaImportAllMutationResult = ApolloReactCommon.MutationResult<TildaImportAllMutation>;
 export type TildaImportAllMutationOptions = ApolloReactCommon.BaseMutationOptions<TildaImportAllMutation, TildaImportAllMutationVariables>;
 export const TildaImportDocument = gql`
-    mutation TildaImport($page_id: ID!) {
+    mutation TildaImport($page_id: Int!) {
   tildaImport(input: {page_id: $page_id}) {
     ok
   }
