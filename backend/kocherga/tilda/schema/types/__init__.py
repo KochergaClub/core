@@ -5,20 +5,15 @@ from ... import models
 TildaPage = django_utils.DjangoObjectType(
     'TildaPage',
     models.TildaPage,
-    db_fields=['path', 'body', 'title', 'show_header_and_footer'],
+    db_fields=['page_id', 'path', 'body', 'title', 'show_header_and_footer'],
     extra_fields=lambda: g.fields(
         {
-            'html_url': g.Field(g.NN(g.String), resolve=resolve_html_url),
             'assets': g.Field(g.NNList(TildaAsset), resolve=resolve_assets),
             'css': g.Field(g.NNList(TildaAsset), resolve=resolve_css),
             'js': g.Field(g.NNList(TildaAsset), resolve=resolve_js),
         },
     ),
 )
-
-
-def resolve_html_url(obj, info):
-    return obj.content.url
 
 
 def resolve_assets(obj, info):

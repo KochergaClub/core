@@ -1,0 +1,19 @@
+query TildaPagesForAdmin {
+  tildaPages {
+    page_id
+    title
+    path
+  }
+}
+
+mutation TildaImportAll {
+  tildaImportAll {
+    ok
+  }
+}
+
+mutation TildaImport($page_id: ID!) {
+  tildaImport(input: { page_id: $page_id }) {
+    ok
+  }
+}

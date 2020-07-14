@@ -1,6 +1,6 @@
 import { A } from '@kocherga/frontkit';
 
-import { withApollo, NextApolloPage } from '~/apollo';
+import { withApollo, NextApolloPage, withStaff } from '~/apollo';
 import { Page, ApolloQueryResults, AsyncButton } from '~/components';
 
 import {
@@ -63,4 +63,4 @@ const AnalyticsPage: NextApolloPage<Props> = () => {
   );
 };
 
-export default withApollo(AnalyticsPage);
+export default withApollo(withStaff(AnalyticsPage));

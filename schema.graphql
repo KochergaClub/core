@@ -897,6 +897,8 @@ type Mutation {
   myEmailUnsubscribe: Boolean
   myEmailSubscribeToInterest(interest_id: ID!): Boolean!
   myEmailUnsubscribeFromInterest(interest_id: ID!): Boolean!
+  tildaImportAll: BasicResult
+  tildaImport(input: TildaImportInput!): BasicResult
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult!
 }
 
@@ -1265,12 +1267,16 @@ type TildaAsset {
   kind: String!
 }
 
+input TildaImportInput {
+  page_id: ID!
+}
+
 type TildaPage {
+  page_id: Int!
   path: String!
   body: String!
   title: String!
   show_header_and_footer: Boolean!
-  html_url: String!
   assets: [TildaAsset!]!
   css: [TildaAsset!]!
   js: [TildaAsset!]!

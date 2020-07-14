@@ -1042,6 +1042,8 @@ export type Mutation = {
   myEmailUnsubscribe?: Maybe<Scalars['Boolean']>;
   myEmailSubscribeToInterest: Scalars['Boolean'];
   myEmailUnsubscribeFromInterest: Scalars['Boolean'];
+  tildaImportAll?: Maybe<BasicResult>;
+  tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
 };
 
@@ -1430,6 +1432,11 @@ export type MutationMyEmailSubscribeToInterestArgs = {
 
 export type MutationMyEmailUnsubscribeFromInterestArgs = {
   interest_id: Scalars['ID'];
+};
+
+
+export type MutationTildaImportArgs = {
+  input: TildaImportInput;
 };
 
 export type My = {
@@ -2000,13 +2007,17 @@ export type TildaAsset = {
   kind: Scalars['String'];
 };
 
+export type TildaImportInput = {
+  page_id: Scalars['ID'];
+};
+
 export type TildaPage = {
   __typename?: 'TildaPage';
+  page_id: Scalars['Int'];
   path: Scalars['String'];
   body: Scalars['String'];
   title: Scalars['String'];
   show_header_and_footer: Scalars['Boolean'];
-  html_url: Scalars['String'];
   assets: Array<TildaAsset>;
   css: Array<TildaAsset>;
   js: Array<TildaAsset>;

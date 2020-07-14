@@ -1,0 +1,8 @@
+projects:
+  app:
+    schemaPath: "./schema.graphql"
+    include:
+      - "./frontend/src/**/*.graphql"
+    extensions:
+      endpoints:
+        dev: http://localhost:8000/api/graphql
