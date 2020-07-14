@@ -24,7 +24,7 @@ const TildaAdminPage: NextApolloPage = () => {
   });
 
   return (
-    <Page title="Управление Tilda-страницами">
+    <Page title="Управление Tilda-страницами" menu="team">
       <Page.Title>Управление Tilda-страницами</Page.Title>
       <Page.Main>
         <Column stretch gutter={24}>
