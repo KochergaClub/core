@@ -62,6 +62,7 @@ const TildaAdminPage: NextApolloPage = () => {
                         Обновить
                       </AsyncButton>
                     </Row>
+                    <div>{page.description}</div>
                   </Card>
                 ))}
               </CardList>

@@ -26,6 +26,7 @@ class TildaPageManager(models.Manager):
 
         alias = page_body['alias']
         title = page_body['title']
+        description = page_body['descr']
 
         if alias == 'blog' or alias.startswith('blog/'):
             logger.info('/blog got moved to Wagtail')
@@ -37,7 +38,12 @@ class TildaPageManager(models.Manager):
 
         page, _ = self.update_or_create(
             path=alias,
-            defaults={'body': page_body['html'], 'title': title, 'page_id': page_id},
+            defaults={
+                'body': page_body['html'],
+                'title': title,
+                'description': description,
+                'page_id': page_id,
+            },
         )
 
         # now let's build the list of assets
@@ -66,6 +72,7 @@ class TildaPage(models.Model):
     path = models.CharField(max_length=255, unique=True, editable=False)
     body = models.TextField(default='', editable=False)
     title = models.CharField(max_length=1024, default='', editable=False)
+    description = models.CharField(max_length=1024, default='', editable=False)
     page_id = models.IntegerField(editable=False, default=0)
 
     assets = models.ManyToManyField(Asset)

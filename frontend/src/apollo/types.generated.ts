@@ -2017,6 +2017,7 @@ export type TildaPage = {
   path: Scalars['String'];
   body: Scalars['String'];
   title: Scalars['String'];
+  description: Scalars['String'];
   show_header_and_footer: Scalars['Boolean'];
   assets: Array<TildaAsset>;
   css: Array<TildaAsset>;

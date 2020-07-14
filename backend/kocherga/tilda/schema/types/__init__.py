@@ -5,7 +5,14 @@ from ... import models
 TildaPage = django_utils.DjangoObjectType(
     'TildaPage',
     models.TildaPage,
-    db_fields=['page_id', 'path', 'body', 'title', 'show_header_and_footer'],
+    db_fields=[
+        'page_id',
+        'path',
+        'body',
+        'title',
+        'description',
+        'show_header_and_footer',
+    ],
     extra_fields=lambda: g.fields(
         {
             'assets': g.Field(g.NNList(TildaAsset), resolve=resolve_assets),

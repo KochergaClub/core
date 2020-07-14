@@ -39,6 +39,7 @@ const TildaPage: React.FC<Props> = props => {
       </Head>
       <Page
         title={props.title}
+        description={props.description}
         canonicalUrl={canonicalUrl}
         chrome={props.show_header_and_footer ? 'default' : 'none'}
       >

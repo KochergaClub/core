@@ -1276,6 +1276,7 @@ type TildaPage {
   path: String!
   body: String!
   title: String!
+  description: String!
   show_header_and_footer: Boolean!
   assets: [TildaAsset!]!
   css: [TildaAsset!]!

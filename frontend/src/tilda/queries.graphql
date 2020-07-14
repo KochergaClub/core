@@ -2,6 +2,7 @@ query TildaPagesForAdmin {
   tildaPages {
     page_id
     title
+    description
     path
   }
 }

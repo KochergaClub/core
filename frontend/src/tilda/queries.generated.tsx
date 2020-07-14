@@ -11,7 +11,7 @@ export type TildaPagesForAdminQuery = (
   { __typename?: 'Query' }
   & { tildaPages: Array<(
     { __typename?: 'TildaPage' }
-    & Pick<Types.TildaPage, 'page_id' | 'title' | 'path'>
+    & Pick<Types.TildaPage, 'page_id' | 'title' | 'description' | 'path'>
   )> }
 );
 
@@ -45,6 +45,7 @@ export const TildaPagesForAdminDocument = gql`
   tildaPages {
     page_id
     title
+    description
     path
   }
 }
