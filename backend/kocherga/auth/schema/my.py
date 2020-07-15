@@ -5,13 +5,13 @@ from . import types
 c = helpers.Collection()
 
 
-# user: AuthCurrentUser!
-@c.field
-def user(helper):
-    def resolve(_, info):
-        return info.context.user
+@c.class_field
+class user(helpers.BaseField):
+    permissions = []
+    result = g.NN(types.AuthCurrentUser)
 
-    return g.Field(g.NN(types.AuthCurrentUser), resolve=resolve)
+    def resolve(self, _, info):
+        return info.context.user
 
 
 my_queries = c.as_dict()
