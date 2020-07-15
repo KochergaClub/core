@@ -52,7 +52,7 @@ WagtailImageRendition = g.ObjectType(
             'original_image': g.Field(
                 g.NN(WagtailImage),
                 # TODO - require permissions?
-                resolve=lambda r: r.image,
+                resolve=lambda r, info: r.image,
             ),
         }
     ),
