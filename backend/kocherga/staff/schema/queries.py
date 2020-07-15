@@ -22,7 +22,7 @@ class staffMember(helpers.BaseField):
     args = {'id': 'ID!'}
     result = g.NN(types.StaffMember)
 
-    def resolve(self, _, info):
+    def resolve(self, _, info, id):
         return models.Member.objects.get(pk=id)
 
 
