@@ -33,9 +33,11 @@ const EventAnnounce: React.FC<Props> = ({ event }) => {
         </HeadedSection>
       ) : null}
 
-      <HeadedSection title="Timepad">
-        <TimepadAnnounce event={event} />
-      </HeadedSection>
+      {event.announcements.timepad.link ? (
+        <HeadedSection title="Timepad">
+          <TimepadAnnounce event={event} />
+        </HeadedSection>
+      ) : null}
     </Column>
   );
 };
