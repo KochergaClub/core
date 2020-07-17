@@ -54,7 +54,8 @@ const Spinner: React.FC<{ size: Size }> = ({ size }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const SpinnerComponent = size === 'block' ? FishSpinner : BasicSpinner;
+  const SpinnerComponent: React.ComponentType =
+    size === 'block' ? FishSpinner : BasicSpinner;
 
   if (size === 'block') {
     return (
