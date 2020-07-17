@@ -6,7 +6,7 @@ import { GoGear, GoSignOut } from 'react-icons/go';
 
 import { useCurrentUserLazyQuery } from '~/auth/queries.generated';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
-import { AnimatedSpinner } from '~/components/Spinner';
+import { BasicSpinner } from '~/components/Spinner';
 import { NextLinkAction, Action } from '~/components/DropdownMenu';
 import { MenuKind } from '../types';
 import LoginButton from './LoginButton';
@@ -42,7 +42,7 @@ const LogoutAction: React.FC = () => {
     <Action act={act}>
       <Row vCentered>
         {acting ? (
-          <AnimatedSpinner color={colors.grey[500]} />
+          <BasicSpinner color={colors.grey[500]} />
         ) : (
           <GoSignOut color={colors.grey[500]} />
         )}

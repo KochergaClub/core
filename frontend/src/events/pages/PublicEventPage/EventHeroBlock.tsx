@@ -128,7 +128,7 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
       <HumanizedDateTime date={parseISO(event.start)} />
       {daysUntil >= 0 && (
         <Button kind="primary" size="big" onClick={registerCb}>
-          Зарегистрироваться
+          К регистрации
         </Button>
       )}
       <div>{daysText}</div>
