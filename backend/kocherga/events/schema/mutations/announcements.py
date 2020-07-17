@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from typing import Optional
 
 from kocherga.graphql import g, helpers
@@ -13,7 +17,7 @@ c = helpers.Collection()
 
 
 EventAnnounceTarget = g.EnumType(
-    'EventAnnounceTarget', {'VK': 1, 'FB': 2, 'TIMEPAD': 3}
+    'EventAnnounceTarget', {'VK': 'VK', 'FB': 'FB', 'TIMEPAD': 'TIMEPAD'}
 )
 
 
