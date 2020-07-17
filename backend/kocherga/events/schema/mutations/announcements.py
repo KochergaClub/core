@@ -131,6 +131,8 @@ class eventAnnounce(helpers.BaseFieldWithInput):
             event.fb_announcement.announce()
         elif target == 'TIMEPAD':
             event.timepad_announcement.announce()
+        else:
+            raise Exception(f"Unknown target {target}")
 
         models.Event.objects.notify_update()
 
@@ -165,6 +167,8 @@ class eventSetAnnounceUrl(helpers.BaseFieldWithInput):
             announcement = event.fb_announcement
         elif target == 'TIMEPAD':
             announcement = event.timepad_announcement
+        else:
+            raise Exception(f"Unknown target {target}")
 
         announcement.link = url
         announcement.full_clean()
