@@ -14,13 +14,7 @@ from pathlib import Path
 BASE_DIR = str(Path(__file__).parent.parent.parent.parent)
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# We call Django API from the render server and want the API to interpret its own host correctly.
+# We call Django API from the frontend and want the API to interpret its own host correctly.
 # For example, this matters when we use request.build_absolute_uri().
 USE_X_FORWARDED_HOST = True
 
@@ -104,8 +98,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'kocherga.django.middleware.JsonExceptionMiddleware',
     'reversion.middleware.RevisionMiddleware',
-    # 'wagtail.core.middleware.SiteMiddleware',
-    # 'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
 # NO_DJANGO_PROMETHEUS is used to disable prometheus for importer.py and worker.py.
@@ -155,7 +147,7 @@ REDIS_HOST = os.environ['REDIS_HOST']
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [(REDIS_HOST, 6379)],},
+        "CONFIG": {"hosts": [(REDIS_HOST, 6379)]},
     },
 }
 
@@ -194,6 +186,8 @@ CONN_MAX_AGE = 3600
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+
+SESSION_COOKIE_AGE = 86400 * 365
 
 AUTH_PASSWORD_VALIDATORS = [
     {
