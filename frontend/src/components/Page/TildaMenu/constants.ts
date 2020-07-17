@@ -56,6 +56,7 @@ const publicMenuItems: Item[] = [
     title: 'Мета',
     items: [
       { link: '/faq', title: 'F.A.Q.', mode: 'wagtail' },
+      { link: '/patreon', title: 'Patreon' },
       { link: '/#contacts', title: 'Контакты' },
     ],
   },

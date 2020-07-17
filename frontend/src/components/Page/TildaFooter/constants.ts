@@ -1,27 +1,29 @@
 export const footerParts = [
   {
-    title: 'Пространство',
+    title: 'Сообщество',
     items: [
-      { link: '/space', title: 'Пространство' },
-      { link: '/pricing', title: 'Цены' },
-      { link: '/now', title: 'Сколько человек сейчас' },
-      { link: 'https://booking.kocherga.club', title: 'Форма брони' },
+      { link: '/projects', title: 'Проекты' },
       { link: '/events', title: 'Мероприятия' },
     ],
   },
   {
-    title: 'Рациональность',
+    title: 'Обучение',
     items: [
-      { link: '/workshop/country', title: 'Воркшопы' },
-      { link: '/rationality/formats', title: 'Форматы' },
+      { link: '/rationality/online', title: 'Онлайн-курс' },
+      { link: '/rationality/corporate', title: 'Для бизнеса' },
       { link: 'https://lesswrong.ru', title: 'Lesswrong.ru' },
     ],
   },
   {
-    title: 'О нас',
+    title: 'Материалы',
+    items: [{ link: '/blog', title: 'Блог' }],
+  },
+  {
+    title: 'Мета',
     items: [
+      { link: '/faq', title: 'F.A.Q.' },
       { link: '/#contacts', title: 'Контакты' },
-      { link: '/patreon/', title: 'Patreon' },
+      { link: '/patreon', title: 'Patreon' },
     ],
   },
 ];
