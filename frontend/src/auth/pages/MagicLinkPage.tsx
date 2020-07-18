@@ -6,20 +6,21 @@ import { Page } from '~/components';
 import AuthContainer from '~/auth/components/AuthContainer';
 
 import { useTokenLoginMutation } from '../queries.generated';
+import CenteredLayout from '../components/CenteredLayout';
 
 interface Props {
   token: string;
   next: string;
 }
 
-const MagicLinkPage: NextApolloPage<Props> = props => {
+const MagicLinkPage: NextApolloPage<Props> = ({ token, next }) => {
   const [tokenLoginMutation] = useTokenLoginMutation();
 
   useEffect(() => {
     async function login() {
       const { data } = await tokenLoginMutation({
         variables: {
-          token: props.token,
+          token,
         },
       });
 
@@ -28,14 +29,16 @@ const MagicLinkPage: NextApolloPage<Props> = props => {
       }
 
       // OK! Login didn't throw an exception -> we're in and have a cookie.
-      window.location.href = props.next;
+      window.location.href = next;
     }
     login();
-  }, [tokenLoginMutation, props.next, props.token]);
+  }, [tokenLoginMutation, next, token]);
 
   return (
     <Page title="Магическая ссылка" chrome="none" noAnalytics noVkWidget>
-      <AuthContainer>Проверяем доступ...</AuthContainer>
+      <CenteredLayout>
+        <AuthContainer>Проверяем доступ...</AuthContainer>
+      </CenteredLayout>
     </Page>
   );
 };

@@ -1,16 +1,11 @@
-import { useApolloClient } from '@apollo/react-hooks';
-import {
-  CurrentUserDocument,
-  CurrentUserQuery,
-} from '~/auth/queries.generated';
+import { useCurrentUserQuery } from '~/auth/queries.generated';
 
 export default () => {
-  const apolloClient = useApolloClient();
-  const result = apolloClient.cache.readQuery<CurrentUserQuery>({
-    query: CurrentUserDocument,
+  const result = useCurrentUserQuery({
+    fetchPolicy: 'cache-only',
   });
-  if (!result) {
+  if (!result.data) {
     throw new Error('Expected CurrentUser data in cache');
   }
-  return result.my.user;
+  return result.data.my.user;
 };

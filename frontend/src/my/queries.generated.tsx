@@ -29,7 +29,7 @@ export type EmailSubscriptionFragment = (
 
 export type MyTicketFragment = (
   { __typename?: 'MyEventsTicket' }
-  & Pick<Types.MyEventsTicket, 'zoom_link'>
+  & Pick<Types.MyEventsTicket, 'id' | 'status' | 'zoom_link'>
   & { event: (
     { __typename?: 'EventsPublicEvent' }
     & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
@@ -155,9 +155,9 @@ export type MyTicketDeleteMutationVariables = {
 
 export type MyTicketDeleteMutation = (
   { __typename?: 'Mutation' }
-  & { myEventsTicketUnregister: (
+  & { result: (
     { __typename?: 'MyEventsTicket' }
-    & Pick<Types.MyEventsTicket, 'created'>
+    & Pick<Types.MyEventsTicket, 'id' | 'created' | 'status'>
   ) }
 );
 
@@ -249,6 +249,8 @@ export const MyVisitsPageFragmentDoc = gql`
     ${MembershipFragmentDoc}`;
 export const MyTicketFragmentDoc = gql`
     fragment MyTicket on MyEventsTicket {
+  id
+  status
   zoom_link
   event {
     event_id
@@ -541,8 +543,10 @@ export type MyPrivacyModeSetMutationResult = ApolloReactCommon.MutationResult<My
 export type MyPrivacyModeSetMutationOptions = ApolloReactCommon.BaseMutationOptions<MyPrivacyModeSetMutation, MyPrivacyModeSetMutationVariables>;
 export const MyTicketDeleteDocument = gql`
     mutation MyTicketDelete($event_id: ID!) {
-  myEventsTicketUnregister(event_id: $event_id) {
+  result: myEventsTicketUnregister(event_id: $event_id) {
+    id
     created
+    status
   }
 }
     `;

@@ -5,10 +5,11 @@ import styled from 'styled-components';
 import { FaCheck, FaHeart } from 'react-icons/fa';
 import { A, Button, Input, Column, Label, Row } from '@kocherga/frontkit';
 
+import { HintCard } from '~/components';
 import { trackEvent } from '~/components/analytics';
-import { useMyEventsTicketRegisterAnonMutation } from './queries.generated';
+import { useMyEventsTicketRegisterAnonMutation } from '../queries.generated';
 
-import { CommonProps as Props } from './types';
+import { CommonProps as Props } from '../types';
 
 const CheckboxLabel = styled(Label)`
   cursor: pointer;
@@ -16,8 +17,7 @@ const CheckboxLabel = styled(Label)`
 
 const Success: React.FC<{
   email: string;
-  restart: (e: React.SyntheticEvent) => void;
-}> = ({ email, restart }) => {
+}> = ({ email }) => {
   return (
     <Column gutter={16}>
       <Row vCentered gutter={16}>
@@ -30,10 +30,39 @@ const Success: React.FC<{
           <div>Мы отправили вам письмо с подтверждением на ящик {email}.</div>
         </Column>
       </Row>
-      <A href="#" onClick={restart} style={{ textDecorationStyle: 'dashed' }}>
-        <small>Ещё одна регистрация</small>
-      </A>
     </Column>
+  );
+};
+
+const CommunityNote: React.FC = () => {
+  return null;
+
+  // TODO:
+  // return (
+  //   <HintCard>
+  //     Это событие сообщества Кочерги — сообщества рационалистов. (узнать больше)
+  //   </HintCard>
+  // );
+};
+
+const RegistrationNote: React.FC = () => {
+  return (
+    <HintCard>
+      <p>Вот что случится после регистрации:</p>
+      <p>
+        <ol>
+          <li>Мы пришлём вам письмо с подтверждением.</li>
+          <li>
+            Мы создадим для вас личный кабинет, в котором вы сможете видеть
+            список всех ваших событий.
+          </li>
+          <li>
+            Мы подпишем вас на рассылку с нашими анонсами и мероприятиями, если
+            вы поставите галочку «хочу получать анонсы».
+          </li>
+        </ol>
+      </p>
+    </HintCard>
   );
 };
 
@@ -43,7 +72,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
   const [email, setEmail] = useState('');
   const [complete, setComplete] = useState(false);
 
-  const [subscribedToNewsletter, setSubscribedToNewsletter] = useState(true);
+  const [subscribedToNewsletter, setSubscribedToNewsletter] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const [registerMutation] = useMyEventsTicketRegisterAnonMutation();
@@ -74,27 +103,8 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
     subscribedToNewsletter,
   ]);
 
-  const restart = useCallback(
-    async (e: React.SyntheticEvent) => {
-      e.preventDefault();
-
-      trackEvent('register_restart', {
-        category: 'events',
-        label: event.title,
-      });
-
-      // TODO - reducer
-      setActing(false);
-      setEmail('');
-      setComplete(false);
-      setSubscribedToNewsletter(true);
-      setAgreedToTerms(false);
-    },
-    [event.title]
-  );
-
   if (complete) {
-    return <Success email={email} restart={restart} />;
+    return <Success email={email} />;
   }
 
   const canSubmit =
@@ -105,17 +115,19 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
 
   return (
     <Column stretch gutter={16}>
+      <CommunityNote />
       <Column stretch gutter={0}>
         <Label>E-mail</Label>
         <Input
           type="email"
           name="email"
           scale="big"
+          style={{ width: '100%' }} // somehow this fixes mobile layout, I'm not sure why
           value={email}
           onChange={e => setEmail(e.currentTarget.value)}
         />
       </Column>
-      <div>
+      <Column>
         <Row vCentered gutter={8}>
           <Input
             type="checkbox"
@@ -141,7 +153,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
             <A href="/terms">подробности</A>)
           </CheckboxLabel>
         </Row>
-      </div>
+      </Column>
       <div>
         <Button
           kind="primary"
@@ -153,6 +165,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
           Зарегистрироваться
         </Button>
       </div>
+      <RegistrationNote />
     </Column>
   );
 };

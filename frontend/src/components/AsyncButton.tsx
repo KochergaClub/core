@@ -5,13 +5,14 @@ import { useNotification } from '~/common/hooks';
 
 interface Props {
   act: () => Promise<any>;
-  small?: boolean;
-  children?: React.ReactNode;
-  disabled?: boolean;
+  small?: boolean; // deprecated
+  size?: 'small' | 'normal' | 'big';
   kind?: 'primary' | 'danger' | 'default';
+  disabled?: boolean;
+  children?: React.ReactNode;
 }
 
-const AsyncButton = ({ act, children, small, kind, disabled }: Props) => {
+const AsyncButton = ({ act, children, small, size, kind, disabled }: Props) => {
   const notify = useNotification();
   const [acting, setActing] = useState(false);
 
@@ -31,6 +32,7 @@ const AsyncButton = ({ act, children, small, kind, disabled }: Props) => {
       disabled={disabled || acting}
       onClick={cb}
       small={small}
+      size={size}
       kind={kind}
     >
       {children}

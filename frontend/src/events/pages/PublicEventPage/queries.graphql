@@ -12,6 +12,7 @@ fragment ProjectPage_SummaryForEvent on ProjectPage {
 }
 
 fragment MyEventsTicket on MyEventsTicket {
+  id
   created
   status
   zoom_link

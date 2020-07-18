@@ -1,121 +1,14 @@
-import { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
-import Link from 'next/link';
+import { useMemo } from 'react';
 
-import { formatDistanceToNow, differenceInHours, parseISO } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
-import { ru } from 'date-fns/locale';
-import { FiVideo } from 'react-icons/fi';
+import { differenceInHours, parseISO } from 'date-fns';
 
-import {
-  A,
-  Label,
-  Row,
-  Button,
-  Column,
-  fonts,
-  colors,
-} from '@kocherga/frontkit';
+import { Row } from '@kocherga/frontkit';
 
-import { DropdownMenu } from '~/components';
-import Card, { CardList } from '~/components/Card';
-import { Action } from '~/components/DropdownMenu';
-import { timezone, formatDate } from '~/common/utils';
+import { CardList } from '~/components/Card';
 
-import {
-  MyTicketsPageFragment,
-  MyTicketFragment,
-  useMyTicketDeleteMutation,
-} from '../queries.generated';
+import { MyTicketsPageFragment } from '../queries.generated';
 
-const EventLink = styled(A)`
-  color: black;
-  font-size: ${fonts.sizes.L};
-  line-height: 1.2;
-`;
-
-const DistanceLabel = styled.div`
-  color: ${colors.grey[700]};
-  font-size: ${fonts.sizes.S};
-`;
-
-const DropdownContainer = styled.div`
-  float: right;
-  margin-left: 10px;
-`;
-
-const TicketCard = ({
-  ticket,
-  later,
-}: {
-  ticket: MyTicketFragment;
-  later?: boolean;
-}) => {
-  const [deleteMutation] = useMyTicketDeleteMutation({
-    refetchQueries: ['MyTicketsPage'],
-    awaitRefetchQueries: true,
-  });
-
-  const cancel = useCallback(async () => {
-    await deleteMutation({
-      variables: {
-        event_id: ticket.event.event_id,
-      },
-    });
-  }, [deleteMutation, ticket.event.event_id]);
-
-  const zonedStart = utcToZonedTime(ticket.event.start, timezone);
-
-  const joinZoom = useCallback(() => {
-    if (!ticket.zoom_link) {
-      return;
-    }
-    window.open(ticket.zoom_link, '_blank');
-  }, [ticket.zoom_link]);
-
-  return (
-    <Card>
-      <DropdownContainer>
-        <DropdownMenu>
-          <Action act={cancel}>Отменить регистрацию</Action>
-        </DropdownMenu>
-      </DropdownContainer>
-      <Column stretch gutter={16}>
-        <Column stretch gutter={16}>
-          <Row spaced gutter={8}>
-            <Link
-              href="/events/[id]"
-              as={`/events/${ticket.event.event_id}`}
-              passHref
-            >
-              <EventLink>{ticket.event.title}</EventLink>
-            </Link>
-          </Row>
-          <Column centered gutter={0}>
-            <Label>{formatDate(zonedStart, 'cccc, d MMMM, HH:mm')} MSK</Label>
-            <DistanceLabel>
-              (
-              {formatDistanceToNow(parseISO(ticket.event.start), {
-                locale: ru,
-                addSuffix: true,
-              })}
-              )
-            </DistanceLabel>
-          </Column>
-        </Column>
-        {!later && ticket.zoom_link && (
-          <Row centered>
-            <Button onClick={joinZoom} kind="primary">
-              <Row vCentered gutter={8}>
-                <FiVideo /> <span>Зайти</span>
-              </Row>
-            </Button>
-          </Row>
-        )}
-      </Column>
-    </Card>
-  );
-};
+import TicketCard from './TicketCard';
 
 interface Props {
   my: MyTicketsPageFragment;
@@ -151,7 +44,8 @@ const TicketsSublist: React.FC<{
 };
 
 const TicketsList: React.FC<Props> = ({ my }) => {
-  const tickets = my.tickets.nodes;
+  // cancelled tickets stay in the list so we have to filter tickets by status here
+  const tickets = my.tickets.nodes.filter(t => t.status === 'ok');
 
   const LATER_THRESHOLD = 12;
 

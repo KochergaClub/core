@@ -15,6 +15,7 @@ MyEventsTicket = g.ObjectType(
     'MyEventsTicket',
     g.fields(
         {
+            'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.event.uuid),
             'event': g.NN(EventsPublicEvent),
             'status': str,
             'created': Optional[str],

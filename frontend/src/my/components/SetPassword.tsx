@@ -58,35 +58,37 @@ const SetPassword: React.FC = () => {
 
   return (
     <HeadedFragment title="Сменить или установить пароль">
-      <Column centered {...hotkeys}>
+      <Column centered gutter={16}>
         <HintCard>
-          Если у вас не был настроен пароль, то оставьте поле "Старый пароль"
+          Если у вас не был настроен пароль, то оставьте поле «Старый пароль»
           пустым.
         </HintCard>
-        <Column centered>
-          <Label>Старый пароль (если есть):</Label>
-          <Input
-            type="password"
-            id="old_password"
-            autoComplete="new-password"
-            value={oldPassword}
-            onChange={e => setOldPassword(e.currentTarget.value)}
-          />
+        <Column centered {...hotkeys}>
+          <Column centered>
+            <Label>Старый пароль (если есть):</Label>
+            <Input
+              type="password"
+              id="old_password"
+              autoComplete="new-password"
+              value={oldPassword}
+              onChange={e => setOldPassword(e.currentTarget.value)}
+            />
+          </Column>
+          <Column centered>
+            <Label>Новый пароль:</Label>
+            <Input
+              type="password"
+              id="new_password"
+              autoComplete="new-password"
+              value={newPassword}
+              onChange={e => setNewPassword(e.currentTarget.value)}
+            />
+          </Column>
+          <Button loading={acting} disabled={acting} onClick={act}>
+            Сменить пароль
+          </Button>
+          {error ? <ErrorMessage>{error}</ErrorMessage> : null}
         </Column>
-        <Column centered>
-          <Label>Новый пароль:</Label>
-          <Input
-            type="password"
-            id="new_password"
-            autoComplete="new-password"
-            value={newPassword}
-            onChange={e => setNewPassword(e.currentTarget.value)}
-          />
-        </Column>
-        <Button loading={acting} disabled={acting} onClick={act}>
-          Сменить пароль
-        </Button>
-        {error ? <ErrorMessage>{error}</ErrorMessage> : null}
       </Column>
     </HeadedFragment>
   );

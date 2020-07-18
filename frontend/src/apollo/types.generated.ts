@@ -715,6 +715,7 @@ export type EventsPublicEvent = {
   registration_type: Scalars['String'];
   pricing_type: Scalars['String'];
   realm: Scalars['String'];
+  id: Scalars['ID'];
   event_id: Scalars['ID'];
   description: Scalars['String'];
   image?: Maybe<Scalars['String']>;
@@ -1488,6 +1489,7 @@ export type MyEmailSubscriptionInterest = {
 
 export type MyEventsTicket = {
   __typename?: 'MyEventsTicket';
+  id: Scalars['ID'];
   event: EventsPublicEvent;
   status: Scalars['String'];
   created?: Maybe<Scalars['String']>;

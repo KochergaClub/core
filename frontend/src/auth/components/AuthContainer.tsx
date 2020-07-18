@@ -1,13 +1,7 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  margin: 0 auto;
-  margin-top: 100px;
   max-width: 400px;
-  margin-bottom: 100px;
-`;
-
-const Box = styled.div`
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -15,8 +9,6 @@ const Box = styled.div`
 `;
 
 const AuthContainer: React.FC = ({ children, ...props }) => (
-  <Wrapper {...props}>
-    <Box>{children}</Box>
-  </Wrapper>
+  <Wrapper {...props}>{children}</Wrapper>
 );
 export default AuthContainer;

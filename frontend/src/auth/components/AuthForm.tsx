@@ -18,6 +18,8 @@ const SmallNote = styled.small`
 `;
 
 interface Props {
+  onLogin: () => void;
+  onMagicLinkSent: () => void;
   next: string;
 }
 
@@ -53,7 +55,7 @@ const AuthForm: React.FC<Props> = props => {
         }
 
         setLeaving(true);
-        window.location.href = props.next;
+        props.onLogin();
       },
       onError: () => notify({ type: 'Error', text: 'Что-то пошло не так' }),
     }
@@ -75,7 +77,7 @@ const AuthForm: React.FC<Props> = props => {
       }
 
       setLeaving(true);
-      window.location.href = '/login/check-your-email';
+      props.onMagicLinkSent();
     },
     onError: () => notify({ type: 'Error', text: 'Что-то пошло не так' }),
   });
@@ -93,7 +95,7 @@ const AuthForm: React.FC<Props> = props => {
     }
   }, [initialLoading]);
 
-  const cb = useCallback(async () => {
+  const submit = useCallback(async () => {
     if (password) {
       await loginMutation();
     } else {
@@ -104,7 +106,7 @@ const AuthForm: React.FC<Props> = props => {
   const acting = submittingWithoutPassword || submittingWithPassword || leaving;
 
   const hotkeys = useCommonHotkeys({
-    onEnter: cb,
+    onEnter: submit,
   });
   return (
     <AuthContainer {...hotkeys}>
@@ -139,7 +141,12 @@ const AuthForm: React.FC<Props> = props => {
             onChange={e => setPassword(e.currentTarget.value)}
           />
         </Column>
-        <Button type="submit" disabled={acting} loading={acting} onClick={cb}>
+        <Button
+          type="submit"
+          disabled={acting}
+          loading={acting}
+          onClick={submit}
+        >
           Войти
         </Button>
       </Column>

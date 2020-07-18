@@ -161,10 +161,14 @@ def build_EventsPublicEvent():
                         'realm',
                     ],
                 ),
-                'event_id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
+                'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
+                'event_id': g.Field(
+                    g.NN(g.ID), resolve=lambda obj, info: obj.uuid
+                ),  # deprecated, use `id` instead
                 'description': g.Field(g.NN(g.String), resolve=resolve_description),
-                # deprecated, links to original image
-                'image': g.Field(g.String, resolve=resolve_image),
+                'image': g.Field(
+                    g.String, resolve=resolve_image
+                ),  # deprecated, links to original image
                 'image_rendition': wagtail_utils.image_rendition_field(
                     models.Event, 'image'
                 ),

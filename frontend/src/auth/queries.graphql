@@ -1,48 +1,45 @@
+fragment AuthCurrentUser on AuthCurrentUser {
+  is_authenticated
+  is_staff
+  permissions
+  email
+}
+
 query CurrentUser {
   my {
     user {
-      is_authenticated
-      is_staff
-      permissions
-      email
+      ...AuthCurrentUser
     }
   }
 }
 
 mutation Login($email: String!, $password: String!) {
-  result: authLogin(input: {
-      credentials: {
-        email: $email
-        password: $password
-      }
+  result: authLogin(
+    input: {
+      credentials: { email: $email, password: $password }
       result: "cookie"
-    }) {
+    }
+  ) {
     error
     user {
-      is_authenticated
+      ...AuthCurrentUser
     }
   }
 }
 
 mutation TokenLogin($token: String!) {
-  result: authLogin(input: {
-      credentials: {
-        token: $token
-      }
-      result: "cookie"
-    }) {
+  result: authLogin(
+    input: { credentials: { token: $token }, result: "cookie" }
+  ) {
     error
     user {
-      is_authenticated
+      ...AuthCurrentUser
     }
   }
 }
 
 mutation SendMagicLink($email: String!, $next: String) {
-  result: authSendMagicLink(input: {
-      email: $email
-      next: $next
-    }) {
+  result: authSendMagicLink(input: { email: $email, next: $next }) {
     ok
     error
   }

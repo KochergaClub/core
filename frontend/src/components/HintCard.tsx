@@ -7,7 +7,6 @@ const HintCard = styled.div`
   background-color: ${colors.grey[100]};
   font-size: ${fonts.sizes.S};
   max-width: 660px;
-  margin: 0 auto;
   padding: 10px 16px;
 `;
 

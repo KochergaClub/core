@@ -4,6 +4,11 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 
+export type AuthCurrentUserFragment = (
+  { __typename?: 'AuthCurrentUser' }
+  & Pick<Types.AuthCurrentUser, 'is_authenticated' | 'is_staff' | 'permissions' | 'email'>
+);
+
 export type CurrentUserQueryVariables = {};
 
 
@@ -13,7 +18,7 @@ export type CurrentUserQuery = (
     { __typename?: 'My' }
     & { user: (
       { __typename?: 'AuthCurrentUser' }
-      & Pick<Types.AuthCurrentUser, 'is_authenticated' | 'is_staff' | 'permissions' | 'email'>
+      & AuthCurrentUserFragment
     ) }
   ) }
 );
@@ -31,7 +36,7 @@ export type LoginMutation = (
     & Pick<Types.AuthLoginResult, 'error'>
     & { user?: Types.Maybe<(
       { __typename?: 'AuthCurrentUser' }
-      & Pick<Types.AuthCurrentUser, 'is_authenticated'>
+      & AuthCurrentUserFragment
     )> }
   ) }
 );
@@ -48,7 +53,7 @@ export type TokenLoginMutation = (
     & Pick<Types.AuthLoginResult, 'error'>
     & { user?: Types.Maybe<(
       { __typename?: 'AuthCurrentUser' }
-      & Pick<Types.AuthCurrentUser, 'is_authenticated'>
+      & AuthCurrentUserFragment
     )> }
   ) }
 );
@@ -67,19 +72,23 @@ export type SendMagicLinkMutation = (
   ) }
 );
 
-
+export const AuthCurrentUserFragmentDoc = gql`
+    fragment AuthCurrentUser on AuthCurrentUser {
+  is_authenticated
+  is_staff
+  permissions
+  email
+}
+    `;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   my {
     user {
-      is_authenticated
-      is_staff
-      permissions
-      email
+      ...AuthCurrentUser
     }
   }
 }
-    `;
+    ${AuthCurrentUserFragmentDoc}`;
 
 /**
  * __useCurrentUserQuery__
@@ -110,11 +119,11 @@ export const LoginDocument = gql`
   result: authLogin(input: {credentials: {email: $email, password: $password}, result: "cookie"}) {
     error
     user {
-      is_authenticated
+      ...AuthCurrentUser
     }
   }
 }
-    `;
+    ${AuthCurrentUserFragmentDoc}`;
 export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -146,11 +155,11 @@ export const TokenLoginDocument = gql`
   result: authLogin(input: {credentials: {token: $token}, result: "cookie"}) {
     error
     user {
-      is_authenticated
+      ...AuthCurrentUser
     }
   }
 }
-    `;
+    ${AuthCurrentUserFragmentDoc}`;
 export type TokenLoginMutationFn = ApolloReactCommon.MutationFunction<TokenLoginMutation, TokenLoginMutationVariables>;
 
 /**

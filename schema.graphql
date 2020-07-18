@@ -612,6 +612,7 @@ type EventsPublicEvent {
   registration_type: String!
   pricing_type: String!
   realm: String!
+  id: ID!
   event_id: ID!
   description: String!
   image: String
@@ -937,6 +938,7 @@ type MyEmailSubscriptionInterest {
 }
 
 type MyEventsTicket {
+  id: ID!
   event: EventsPublicEvent!
   status: String!
   created: String

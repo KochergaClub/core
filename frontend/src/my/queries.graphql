@@ -21,6 +21,8 @@ fragment EmailSubscription on MyEmailSubscription {
 }
 
 fragment MyTicket on MyEventsTicket {
+  id
+  status
   zoom_link
   event {
     event_id
@@ -95,8 +97,10 @@ mutation MyPrivacyModeSet($mode: String!) {
 }
 
 mutation MyTicketDelete($event_id: ID!) {
-  myEventsTicketUnregister(event_id: $event_id) {
+  result: myEventsTicketUnregister(event_id: $event_id) {
+    id
     created
+    status
   }
 }
 

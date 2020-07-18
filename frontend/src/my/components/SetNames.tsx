@@ -65,41 +65,43 @@ const SetNames: React.FC<Props> = ({ user }) => {
 
   return (
     <HeadedFragment title="Настроить имя">
-      <Column centered {...hotkeys}>
+      <Column centered gutter={16}>
         <HintCard>
           По умолчанию мы не покажем ваши имя и фамилию никому, пока вы не
           зайдёте в какое-то онлайн-мероприятие или не поучаствуете в прочих
           социальных активностях на платформе Кочерги.
         </HintCard>
-        <Column centered>
-          <Label>Имя:</Label>
-          <Input
-            id="first_name"
-            value={firstName}
-            onChange={e => {
-              setFirstName(e.currentTarget.value);
-              setSaved(false);
-            }}
-          />
+        <Column centered {...hotkeys}>
+          <Column centered>
+            <Label>Имя:</Label>
+            <Input
+              id="first_name"
+              value={firstName}
+              onChange={e => {
+                setFirstName(e.currentTarget.value);
+                setSaved(false);
+              }}
+            />
+          </Column>
+          <Column centered>
+            <Label>Фамилия:</Label>
+            <Input
+              id="last_name"
+              value={lastName}
+              onChange={e => {
+                setLastName(e.currentTarget.value);
+                setSaved(false);
+              }}
+            />
+          </Column>
+          <Button loading={acting} disabled={acting || saved} onClick={act}>
+            <Row vCentered>
+              {saved ? <FaCheck /> : null}
+              <span>{saved ? 'Сохранено' : 'Сохранить'}</span>
+            </Row>
+          </Button>
+          {error ? <ErrorMessage>{error}</ErrorMessage> : null}
         </Column>
-        <Column centered>
-          <Label>Фамилия:</Label>
-          <Input
-            id="last_name"
-            value={lastName}
-            onChange={e => {
-              setLastName(e.currentTarget.value);
-              setSaved(false);
-            }}
-          />
-        </Column>
-        <Button loading={acting} disabled={acting || saved} onClick={act}>
-          <Row vCentered>
-            {saved ? <FaCheck /> : null}
-            <span>{saved ? 'Сохранено' : 'Сохранить'}</span>
-          </Row>
-        </Button>
-        {error ? <ErrorMessage>{error}</ErrorMessage> : null}
       </Column>
     </HeadedFragment>
   );

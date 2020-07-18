@@ -1,41 +1,29 @@
-import styled from 'styled-components';
+import { A, Column } from '@kocherga/frontkit';
 
-import { A, Column, colors } from '@kocherga/frontkit';
-
+import { HintCard } from '~/components';
 import Registration from './Registration';
 import TimepadRegistration from './TimepadRegistration';
 
 import { CommonProps } from './types';
 
-const TariffsContainer = styled.div`
-  border: 1px solid ${colors.grey[300]};
-  background-color: ${colors.grey[100]};
-  padding: 20px;
-  margin-bottom: 32px;
-`;
-
 const Tariffs: React.FC<CommonProps> = ({ event }) => {
   if (event.pricing_type === 'anticafe') {
     return (
-      <TariffsContainer>
-        Участие по{' '}
-        <A href="/pricing" target="_blank">
-          обычным тарифам пространства Кочерги
-        </A>{' '}
-        — 2,5 руб./минута, для владельцев абонементов — без доплаты. Оплата по
-        факту участия.
-      </TariffsContainer>
+      <Column centered>
+        <HintCard>
+          Участие по{' '}
+          <A href="/pricing" target="_blank">
+            обычным тарифам пространства Кочерги
+          </A>{' '}
+          — 2,5 руб./минута, для владельцев абонементов — без доплаты. Оплата по
+          факту участия.
+        </HintCard>
+      </Column>
     );
   }
 
   if (event.pricing_type === 'free') {
-    return (
-      <TariffsContainer>
-        {event.realm === 'offline'
-          ? 'Вход на встречу — бесплатный.'
-          : 'Участие во встрече — бесплатно.'}
-      </TariffsContainer>
-    );
+    return null;
   }
 
   throw new Error('Unknown pricing type');
@@ -54,7 +42,7 @@ const AnyRegistrationInsides: React.FC<CommonProps> = props => {
 };
 
 const AnyRegistration: React.FC<CommonProps> = ({ event }) => (
-  <Column stretch>
+  <Column stretch gutter={40}>
     <Tariffs event={event} />
     <AnyRegistrationInsides event={event} />
   </Column>
