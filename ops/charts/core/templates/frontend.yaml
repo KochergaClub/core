@@ -70,6 +70,10 @@ spec:
             - name: NODE_ENV
               value: {{ if .Values.dev }}development{{ else }}production{{ end }}
 {{- if .Values.dev }}
+            - name: NODE_OPTIONS
+              value: "--max_old_space_size=4096"
+{{- end }}
+{{- if .Values.dev }}
           volumeMounts:
             - name: dist
               mountPath: /code/dist

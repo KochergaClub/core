@@ -5,6 +5,7 @@ logger = logging.getLogger(__name__)
 from django.db import models
 from django.conf import settings
 from wagtail.admin import edit_handlers
+from wagtail.images import edit_handlers as images_edit_handlers
 
 from . import api
 
@@ -67,8 +68,7 @@ class Asset(models.Model):
 
 
 class TildaPage(models.Model):
-    show_header_and_footer = models.BooleanField(default=True)
-
+    # imported fields - not editable
     path = models.CharField(max_length=255, unique=True, editable=False)
     body = models.TextField(default='', editable=False)
     title = models.CharField(max_length=1024, default='', editable=False)
@@ -76,6 +76,16 @@ class TildaPage(models.Model):
     page_id = models.IntegerField(editable=False, default=0)
 
     assets = models.ManyToManyField(Asset)
+
+    # these fields are can be configured through Kocherga website
+    show_header_and_footer = models.BooleanField(default=True)
+    og_image = models.ForeignKey(
+        'kocherga_wagtail.CustomImage',
+        on_delete=models.PROTECT,
+        related_name='+',
+        null=True,
+        blank=True,
+    )
 
     objects = TildaPageManager()
 
@@ -87,5 +97,6 @@ class TildaPage(models.Model):
 
     panels = [
         edit_handlers.FieldPanel('show_header_and_footer'),
+        images_edit_handlers.ImageChooserPanel('og_image'),
         # TODO - show tilda edit link in custom panel
     ]

@@ -64,7 +64,10 @@ export type TildaPageQuery = (
   & { tildaPage?: Types.Maybe<(
     { __typename?: 'TildaPage' }
     & Pick<Types.TildaPage, 'body' | 'title' | 'description' | 'show_header_and_footer'>
-    & { css: Array<(
+    & { og_image?: Types.Maybe<(
+      { __typename?: 'WagtailImageRendition' }
+      & Pick<Types.WagtailImageRendition, 'url'>
+    )>, css: Array<(
       { __typename?: 'TildaAsset' }
       & Pick<Types.TildaAsset, 'url'>
     )>, js: Array<(
@@ -214,6 +217,9 @@ export const TildaPageDocument = gql`
     title
     description
     show_header_and_footer
+    og_image(spec: "fill-1200x630") {
+      url
+    }
     css {
       url
     }

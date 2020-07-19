@@ -1280,6 +1280,7 @@ type TildaPage {
   title: String!
   description: String!
   show_header_and_footer: Boolean!
+  og_image(spec: String!): WagtailImageRendition
   assets: [TildaAsset!]!
   css: [TildaAsset!]!
   js: [TildaAsset!]!

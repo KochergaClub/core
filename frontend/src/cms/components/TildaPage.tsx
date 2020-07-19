@@ -42,6 +42,7 @@ const TildaPage: React.FC<Props> = props => {
         description={props.description}
         canonicalUrl={canonicalUrl}
         chrome={props.show_header_and_footer ? 'default' : 'none'}
+        og={{ image: props.og_image?.url }}
       >
         <Container dangerouslySetInnerHTML={{ __html: patchedBody }} />
       </Page>

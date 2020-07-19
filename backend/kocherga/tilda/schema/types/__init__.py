@@ -1,4 +1,5 @@
 from kocherga.graphql import g, django_utils
+from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from ... import models
 
@@ -15,6 +16,9 @@ TildaPage = django_utils.DjangoObjectType(
     ],
     extra_fields=lambda: g.fields(
         {
+            'og_image': wagtail_utils.image_rendition_field(
+                models.TildaPage, 'og_image'
+            ),
             'assets': g.Field(g.NNList(TildaAsset), resolve=resolve_assets),
             'css': g.Field(g.NNList(TildaAsset), resolve=resolve_css),
             'js': g.Field(g.NNList(TildaAsset), resolve=resolve_js),

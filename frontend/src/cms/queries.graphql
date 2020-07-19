@@ -11,6 +11,9 @@ query TildaPage($path: String!) {
     title
     description
     show_header_and_footer
+    og_image(spec: "fill-1200x630") {
+      url
+    }
     css {
       url
     }

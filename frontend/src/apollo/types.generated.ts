@@ -2021,9 +2021,15 @@ export type TildaPage = {
   title: Scalars['String'];
   description: Scalars['String'];
   show_header_and_footer: Scalars['Boolean'];
+  og_image?: Maybe<WagtailImageRendition>;
   assets: Array<TildaAsset>;
   css: Array<TildaAsset>;
   js: Array<TildaAsset>;
+};
+
+
+export type TildaPageOg_ImageArgs = {
+  spec: Scalars['String'];
 };
 
 export type TimepadCategory = {
