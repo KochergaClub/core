@@ -13,23 +13,6 @@ import kocherga.cm.models
 import kocherga.google
 
 
-class MemberManager(models.Manager):
-    def full_list(self):
-        return sum(
-            [
-                list(self.filter(is_current=True, role='FOUNDER')),
-                list(self.filter(is_current=True, role='MANAGER')),
-                list(
-                    self.filter(is_current=True).exclude(
-                        role__in=['FOUNDER', 'MANAGER']
-                    )
-                ),
-                list(self.filter(is_current=False)),
-            ],
-            [],
-        )
-
-
 class Member(models.Model):
     short_name = models.CharField('Короткое имя', max_length=20, blank=True)
     full_name = models.CharField('Полное имя', max_length=80)
@@ -80,8 +63,6 @@ class Member(models.Model):
         related_name='staff_member',
         verbose_name='Учетная запись на сайте',
     )
-
-    objects = MemberManager()
 
     panels = [
         edit_handlers.MultiFieldPanel(
@@ -150,10 +131,6 @@ class Member(models.Model):
         slack_user = self.slack_user
         return slack_user.image_url if slack_user else None
 
-    def update_user_permissions(self):
-        self.user.is_staff = self.is_current
-        self.user.save()
-
     def grant_google_permissions(self):
         if self.role != 'WATCHMAN':
             raise Exception("Only WATCHMAN google permissions are supported")
@@ -175,20 +152,22 @@ class Member(models.Model):
         ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
 
+    def update_user_permissions(self):
+        self.user.is_staff = self.is_current
+        self.user.save()
+
     def fire(self):
         if not self.is_current:
             raise Exception("Already fired")
         self.is_current = False
-        self.user.is_staff = False
-        self.user.save()
+        self.update_user_permissions()
         self.save()
 
     def unfire(self):
         if self.is_current:
             raise Exception("User is already on staff")
         self.is_current = True
-        self.user.is_staff = True
-        self.user.save()
+        self.update_user_permissions()
         self.save()
 
 
