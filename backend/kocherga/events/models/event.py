@@ -130,8 +130,7 @@ class Event(models.Model):
 
     title = models.CharField(max_length=255)
 
-    # Not a google_event.summary!
-    # This is for the short schedule/timepad/email summaries.
+    # This is used for the short schedule/timepad/email summaries.
     summary = models.TextField(blank=True)
 
     description = models.TextField(blank=True)
@@ -356,7 +355,7 @@ class Event(models.Model):
                 raise Exception("zoom_link must be set when publishing online events")
 
         # if self.event_type == 'public' and self.image and self.image.private:
-            # raise Exception("public event images must be public too")
+        # raise Exception("public event images must be public too")
 
     def get_openvidu_session_id(self):
         # TODO - check that event is on openvidu platform
