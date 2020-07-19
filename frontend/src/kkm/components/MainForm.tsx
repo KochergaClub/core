@@ -20,8 +20,8 @@ const WideInput = styled(Input)`
 `;
 
 interface Outcome {
-  result: object;
-  error: object;
+  result: unknown;
+  error: unknown;
 }
 
 const MainForm: React.FC = () => {

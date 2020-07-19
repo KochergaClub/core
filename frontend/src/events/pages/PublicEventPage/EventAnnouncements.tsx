@@ -1,17 +1,17 @@
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
-import { A } from '@kocherga/frontkit';
+// import { A } from '@kocherga/frontkit';
 
 import { CommonProps } from './types';
 
-const AnnouncementsContainer = styled.div`
-  text-align: center;
-  > *:not(:last-child):after {
-    content: ' \00b7 ';
-  }
-`;
+// const AnnouncementsContainer = styled.div`
+//   text-align: center;
+//   > *:not(:last-child):after {
+//     content: ' \00b7 ';
+//   }
+// `;
 
-export default function EventAnnouncements({ event }: CommonProps) {
+export default function EventAnnouncements({}: CommonProps) {
   // temporarily disabled
   return null;
 

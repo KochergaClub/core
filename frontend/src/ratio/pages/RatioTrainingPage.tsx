@@ -31,7 +31,7 @@ interface Props {
   slug: string;
 }
 
-function MutationButton<V extends {}>({
+function MutationButton<V extends Record<string, unknown>>({
   mutation,
   variables,
   children,

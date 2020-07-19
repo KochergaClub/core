@@ -16,7 +16,7 @@ const PresentationIndexPage: NextWagtailPage<RatioPresentationIndexPageFragment>
       <Page.Title>{page.title}</Page.Title>
       <PaddedBlock>
         {page.presentations.map(presentation => (
-          <div>
+          <div key={presentation.id}>
             <A href={presentation.meta.html_url}>{presentation.title}</A>
           </div>
         ))}

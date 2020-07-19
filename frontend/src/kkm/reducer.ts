@@ -8,8 +8,8 @@ export interface State {
     method: SignMethodCalculation;
   };
   outcome?: {
-    result: object;
-    error: object;
+    result: unknown;
+    error: unknown;
   };
   modalOpen: boolean;
 }

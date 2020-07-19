@@ -55,7 +55,7 @@ const FeedbackCollection: React.FC<Props> = ({ event }) => {
         },
       });
     },
-    [createMutation]
+    [createMutation, event.id]
   );
 
   const renderExtraColumn = (feedback: TeamEventFeedbackFragment) => (

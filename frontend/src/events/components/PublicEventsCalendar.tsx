@@ -116,7 +116,7 @@ const PublicEventsCalendar = () => {
   }, []);
 
   const [calendarView, setCalendarView] = useState('dayGridTwoWeeks');
-  const calendarRef = useRef(null);
+  const calendarRef = useRef<FullCalendar | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'object') {
@@ -137,7 +137,7 @@ const PublicEventsCalendar = () => {
     if (!calendarRef.current) {
       return;
     }
-    (calendarRef.current as any).getApi().changeView(calendarView);
+    calendarRef.current.getApi().changeView(calendarView);
   }, [calendarView]);
 
   return (

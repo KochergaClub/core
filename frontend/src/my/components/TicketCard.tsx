@@ -26,8 +26,6 @@ import { timezone, formatDate } from '~/common/utils';
 
 import {
   MyTicketFragment,
-  MyTicketsPageDocument,
-  MyTicketsPageFragment,
   useMyTicketDeleteMutation,
 } from '../queries.generated';
 

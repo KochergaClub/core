@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import styled from 'styled-components';
 import { FaHeart, FaUser } from 'react-icons/fa';
 import Link from 'next/link';
 

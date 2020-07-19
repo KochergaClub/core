@@ -14,10 +14,7 @@ import {
   closeUI,
   viewToEditUI,
 } from '../reducers/calendarUI';
-import {
-  TeamCalendarEventFragment,
-  useTeamCalendarEventQuery,
-} from '../queries.generated';
+import { useTeamCalendarEventQuery } from '../queries.generated';
 
 interface Props {
   event_id: string;

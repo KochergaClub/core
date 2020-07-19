@@ -8,7 +8,7 @@ interface Props {
   from_date: Date;
 }
 
-const PagerLink: React.FC<{ query: { [key: string]: any } }> = ({
+const PagerLink: React.FC<{ query: { [key: string]: string } }> = ({
   query,
   children,
 }) => (

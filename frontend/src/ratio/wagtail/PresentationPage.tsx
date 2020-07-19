@@ -26,7 +26,7 @@ const Remark: React.FC<{ source: string }> = ({ source }) => {
       source: source.replace(/\r\n/g, '\n'),
       container: ref.current,
     });
-  }, [source, ref.current]);
+  }, [source]);
 
   return (
     <RemarkContainer ref={ref}>

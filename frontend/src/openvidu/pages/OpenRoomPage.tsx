@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { NextApolloPage, withApollo } from '~/apollo';
-import { Page, PaddedBlock } from '~/components';
+import { Page } from '~/components';
 import { requireAuth } from '~/auth/utils';
 
 import { useOpenviduGenerateRoomTokenMutation } from '../queries.generated';
