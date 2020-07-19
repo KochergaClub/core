@@ -161,6 +161,6 @@ def add_watchman(
 
     kocherga.slack.client.client().api_call(
         "chat.postMessage",
-        text=f'Новый админ: {short_name} / {full_name} / {email}',
-        channel='#space_management',
+        text=f'Новый сотрудник: {short_name} / {full_name} / {email}',
+        channel='#team',
     )
