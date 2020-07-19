@@ -99,7 +99,7 @@ const NowPage: NextApolloPage<Props> = props => {
   }, [nowQueryResults]);
 
   return (
-    <Page title="Сейчас в Кочерге" chrome="none" noVkWidget noWhitespace>
+    <Page title="Сейчас в Кочерге" chrome="none" noWhitespace>
       <ThemeProvider theme={THEMES[theme]}>
         <Container>
           <Main>

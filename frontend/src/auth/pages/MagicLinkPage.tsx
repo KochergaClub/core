@@ -35,7 +35,7 @@ const MagicLinkPage: NextApolloPage<Props> = ({ token, next }) => {
   }, [tokenLoginMutation, next, token]);
 
   return (
-    <Page title="Магическая ссылка" chrome="none" noAnalytics noVkWidget>
+    <Page title="Магическая ссылка" chrome="none" noAnalytics>
       <CenteredLayout>
         <AuthContainer>Проверяем доступ...</AuthContainer>
       </CenteredLayout>

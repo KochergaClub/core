@@ -30,7 +30,6 @@ interface Props {
   description?: string;
   menu?: MenuKind;
   chrome?: 'default' | 'none' | 'fullscreen';
-  noVkWidget?: boolean; // deprecated/unused; use vkWidget instead
   vkWidget?: boolean;
   noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
   noWhitespace?: boolean; // useful e.g. for /now page where we don't want a white whitespace, especially in black tv mode

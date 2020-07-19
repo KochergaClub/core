@@ -12,7 +12,7 @@ const PublicEventsCalendar = dynamic(
 
 const PublicEventIndexPage: NextApolloPage = () => {
   return (
-    <Page title="Расписание мероприятий - iframe" chrome="none" noVkWidget>
+    <Page title="Расписание мероприятий - iframe" chrome="none">
       <PublicEventsCalendar />
       <UpcomingEventsListBlock />
     </Page>
