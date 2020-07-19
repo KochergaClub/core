@@ -1,12 +1,12 @@
 from kocherga.graphql import g
 from kocherga.graphql.permissions import check_permissions
-from typing import List, Dict, Union, Tuple, Any
+from typing import List, Dict, Union, Tuple, Any, Type
 import types
 
 from django.db import models
 
 
-def model_field(model: models.Model, field_name: str):
+def model_field(model: Type[models.Model], field_name: str):
     db_field = model._meta.get_field(field_name)
 
     if (
@@ -37,7 +37,7 @@ def model_field(model: models.Model, field_name: str):
     return g.Field(type_)
 
 
-def model_fields(model: models.Model, field_names: List[str]):
+def model_fields(model: Type[models.Model], field_names: List[str]):
     result = {}
     for field_name in field_names:
         result[field_name] = model_field(model, field_name)
@@ -46,7 +46,7 @@ def model_fields(model: models.Model, field_names: List[str]):
 
 
 def related_field(
-    model: models.Model,
+    model: Type[models.Model],
     field_name: str,
     item_type: g.ObjectType,
     permissions: List[Any] = [],
@@ -65,7 +65,7 @@ def related_field(
 
 def DjangoObjectType(
     name: str,
-    model: models.Model,
+    model: Type[models.Model],
     db_fields: List[str],
     related_fields: Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]] = {},
     extra_fields={},
