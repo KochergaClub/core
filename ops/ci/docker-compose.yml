@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   core-mysql:
@@ -31,6 +31,7 @@ services:
       DB_HOST: "core-mysql"
       DB_PASSWORD: "test"
       REDIS_HOST: "core-redis"
+      KOCHERGA_WEBSITE: "http://localhost:8000"
     depends_on:
       - core-mysql
       - core-redis
