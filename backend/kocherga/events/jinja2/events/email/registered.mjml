@@ -5,9 +5,23 @@
         <mj-text font-size="14px">Добрый день!</mj-text>
         <mj-text font-size="14px">
           Вы только что зарегистрировались на событие <a href="{{ event_link }}">{{event.title}}</a>.</mj-text>
-        <mj-text font-size="14px">Событие начнётся в {{humanized_dt}} по московскому времени.</mj-text>
-        <mj-button background-color="#4d8ccb" href="{{ event.zoom_link }}">Присоединиться к Zoom-созвону</mj-button>
-        <mj-text font-size="14px">До встречи!</mj-text>
+        <mj-text font-size="14px">Событие запланировано на {{humanized_dt}} по московскому времени.</mj-text>
+        {% set seconds_remaining = (event.start - now).total_seconds() %}
+        <mj-text font-size="14px">
+          {% if event.zoom_link %}
+          Ссылка на созвон
+          {% else %}
+          Информация о регистрации
+          {% endif %}
+          будет доступна из личного кабинета на сайте:
+        </mj-text>
+        <mj-button background-color="#4d8ccb" href="{{lk_link}}">Открыть личный кабинет</mj-button>
+        {% if event.zoom_link %}
+        {% if seconds_remaining < 0 %} <mj-text font-size="14px">Событие уже началось, вот <a href="{{event.zoom_link}}">прямая ссылка на Zoom-созвон</a>.</mj-text>
+          {% elif seconds_remaining < 3600 %} <mj-text font-size="14px">Событие скоро начнётся, вот <a href="{{event.zoom_link}}">прямая ссылка на Zoom-созвон</a>.</mj-text>
+            {% endif %}
+            {% endif %}
+            <mj-text font-size="14px">До встречи!</mj-text>
       </mj-column>
     </mj-section>
   </mj-body>

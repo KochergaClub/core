@@ -33,7 +33,9 @@ class myEventsTicketRegister(helpers.BaseField):
 
     def resolve(self, _, info, event_id):
         event = models.Event.objects.public_events().get(uuid=event_id)
-        ticket = models.Ticket.objects.register(user=info.context.user, event=event)
+        ticket = models.Ticket.objects.register(
+            user=info.context.user, event=event, signed_in=True
+        )
         return ticket
 
 
@@ -55,7 +57,10 @@ class myEventsTicketRegisterAnon(helpers.BaseFieldWithInput):
 
         event = models.Event.objects.public_events().get(uuid=event_id)
         ticket = models.Ticket.objects.register(
-            user=user, event=event, subscribed_to_newsletter=subscribed_to_newsletter,
+            user=user,
+            event=event,
+            subscribed_to_newsletter=subscribed_to_newsletter,
+            signed_in=False,
         )
         return ticket
 

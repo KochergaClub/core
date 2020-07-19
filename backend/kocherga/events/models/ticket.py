@@ -3,6 +3,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 from datetime import datetime
+from typing import Optional
+import urllib.parse
 
 from django.db import models
 from django.conf import settings
@@ -19,6 +21,8 @@ from kocherga.email.tools import mjml2html
 from kocherga.dateutils import TZ
 from kocherga.django.managers import RelayQuerySetMixin
 
+import kocherga.auth.view_utils
+
 
 # FIXME - copy-pasted from kocherga.events.signals, extract into common module
 def channel_send(channel: str, message):
@@ -34,7 +38,13 @@ class TicketManager(models.Manager):
     def get_queryset(self):
         return TicketQuerySet(self.model, using=self._db)
 
-    def register(self, user, event, subscribed_to_newsletter=False) -> 'Ticket':
+    def register(
+        self,
+        user,
+        event,
+        subscribed_to_newsletter=False,
+        signed_in: Optional[bool] = None,
+    ) -> 'Ticket':
         (ticket, _) = self.update_or_create(
             user=user,
             event=event,
@@ -44,7 +54,9 @@ class TicketManager(models.Manager):
             },
         )
 
-        ticket.send_confirmation_email()
+        ticket.send_confirmation_email(
+            signed_in=signed_in
+        )  # `signed_in` might be useful in email templates
         ticket.subscribe_to_newsletter_if_necessary()  # TODO - do asynchronously for faster response
         return ticket
 
@@ -97,24 +109,34 @@ class Ticket(models.Model):
         unique_together = (('event', 'user'),)
         permissions = (('view_tickets', 'Может смотреть все билеты'),)
 
-    def _common_email_vars(self):
+    def _common_email_vars(self, signed_in: Optional[bool] = None):
         start_local = timezone.localtime(self.event.start)
         weekday = kocherga.dateutils.inflected_weekday(start_local)
         month = kocherga.dateutils.inflected_month(start_local)
         humanized_dt = f"{weekday}, {start_local.day} {month}, {start_local:%H:%M}\n"
 
+        if signed_in:
+            lk_link = f'{settings.KOCHERGA_WEBSITE}/my'
+        else:
+            magic_token = kocherga.auth.view_utils.get_magic_token(self.user.email)
+            params_str = urllib.parse.urlencode({'token': magic_token, 'next': '/my'})
+            lk_link = f'{settings.KOCHERGA_WEBSITE}/login/magic-link' + '?' + params_str
+
         return {
             'event': self.event,
+            'now': datetime.now(tz=TZ),
             'humanized_dt': humanized_dt,
             'event_link': f'{settings.KOCHERGA_WEBSITE}/events/{self.event.uuid}',
+            'lk_link': lk_link,
+            'signed_in': signed_in,
             'address_text': 'Москва, ул. Большая Дорогомиловская, д.5к2',  # TODO - move to config
         }
 
-    def send_confirmation_email(self) -> None:
+    def send_confirmation_email(self, signed_in: Optional[bool] = None) -> None:
         if self.from_timepad:
             return
 
-        template_vars = self._common_email_vars()
+        template_vars = self._common_email_vars(signed_in=signed_in)
 
         text_body = render_to_string('events/email/registered.txt', template_vars)
         html_body = mjml2html(

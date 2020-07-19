@@ -182,7 +182,7 @@ class Event(models.Model):
         default='online',
     )
 
-    zoom_link = models.URLField(blank=True, max_length=255,)
+    zoom_link = models.URLField(blank=True, max_length=255)
     zoom_meeting = models.OneToOneField(
         kocherga.zoom.models.Meeting,
         related_name='events',
