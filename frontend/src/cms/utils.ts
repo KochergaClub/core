@@ -164,7 +164,7 @@ export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
   return data.wagtailPages.map(p => p.meta.html_url.replace(/^\//, ''));
 };
 
-export const normalizeSsrUrl = (url: string) => {
+export const normalizeSsrPath = (path: string) => {
   // TODO - this is sloppy, this code assumes both that page could have `?ssr=1` param and /ssr prefix, because rewrite in nextjsEntrypoint is not perfect.
-  return url.replace(/^\/ssr\/?/, '').replace(/\?.*/, '');
+  return path.replace(/^\/ssr\/?/, '').replace(/\?.*/, '');
 };

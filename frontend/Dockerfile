@@ -22,3 +22,4 @@ FROM base as production
 
 # RUN NODE_ENV=production npx next build
 RUN NODE_ENV=production npx webpack --config webpack.server.js
+

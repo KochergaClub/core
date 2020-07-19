@@ -258,7 +258,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 10
 
 # ------------- Kocherga settings --------------
 
-KOCHERGA_WEBSITE = 'https://kocherga-club.ru'
+KOCHERGA_WEBSITE = os.environ['KOCHERGA_WEBSITE']
 
 KOCHERGA_TARIFF = "2,5 руб./минута"
 

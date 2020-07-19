@@ -1,6 +1,7 @@
 env:
   common:
     STATIC_S3_BUCKET: "kocherga-dev2"
+    KOCHERGA_WEBSITE: "http://localhost:8000"
   frontend:
     GOOGLE_MAPS_KEY: "AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI"
 

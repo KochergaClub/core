@@ -8,6 +8,7 @@ image:
 env:
   common:
     STATIC_S3_BUCKET: ""
+    KOCHERGA_WEBSITE: ""
   frontend:
     GOOGLE_ANALYTICS_ID: ""
     FACEBOOK_PIXEL_ID: ""

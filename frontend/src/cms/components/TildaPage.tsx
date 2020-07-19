@@ -7,7 +7,7 @@ import Head from 'next/head';
 import { Page } from '~/components';
 
 import { TildaPageQuery } from '../queries.generated';
-import { normalizeSsrUrl } from '../utils';
+import { normalizeSsrPath } from '../utils';
 
 type Props = TildaPageQuery['tildaPage'];
 
@@ -25,7 +25,8 @@ const TildaPage: React.FC<Props> = props => {
     );
   }, [props.body]);
 
-  const canonicalUrl = normalizeSsrUrl(router.asPath);
+  const canonicalUrl =
+    process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE + normalizeSsrPath(router.asPath);
 
   return (
     <>

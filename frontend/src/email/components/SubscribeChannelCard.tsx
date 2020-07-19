@@ -61,7 +61,8 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
       <Row vCentered>
         <Label>Webhook:</Label>
         <code>
-          https://kocherga-club.ru/api/email/subscribe_channel/
+          {process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE}
+          /api/email/subscribe_channel/
           {subscribeChannel.slug}/subscribe
         </code>
       </Row>

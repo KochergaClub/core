@@ -3,6 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.template.loader import render_to_string
+from django.conf import settings
 
 import asyncio
 import typing
@@ -379,7 +380,7 @@ def register_handlers(dsp: Dispatcher):
             .add(
                 InlineKeyboardButton(
                     "Больше контекста о мастермайнд-группах",
-                    url="https://kocherga-club.ru/blog/mastermind",
+                    url=f"{settings.KOCHERGA_WEBSITE}/blog/mastermind",
                 )
             ),
             "parse_mode": "Markdown",
