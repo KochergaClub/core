@@ -1,9 +1,10 @@
 from kocherga.graphql import g
 from kocherga.graphql.permissions import check_permissions
-from typing import List, Dict, Union, Tuple, Any, Type
+from typing import List, Dict, Union, Tuple, Any, Type, Callable
 import types
 
 from django.db import models
+from django.db.models.fields.reverse_related import ForeignObjectRel
 
 
 def model_field(model: Type[models.Model], field_name: str):
@@ -52,7 +53,7 @@ def related_field(
     permissions: List[Any] = [],
 ):
     db_field = model._meta.get_field(field_name)
-    assert isinstance(db_field, models.base.ForeignObjectRel) or isinstance(
+    assert isinstance(db_field, ForeignObjectRel) or isinstance(
         db_field, models.fields.related.ManyToManyField
     )
 
@@ -67,7 +68,10 @@ def DjangoObjectType(
     name: str,
     model: Type[models.Model],
     db_fields: List[str],
-    related_fields: Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]] = {},
+    related_fields: Union[
+        Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]],
+        Callable[[], Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]]],
+    ] = {},
     extra_fields={},
 ):
     def build_related():
