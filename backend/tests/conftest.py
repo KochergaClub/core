@@ -84,7 +84,7 @@ def event_for_edits():
         start=dt,
         end=dt + timedelta(hours=1),
         title="title doesn't matter",
-        description="description doesn't matter"
+        description="description doesn't matter",
     )
     event.save()
 
@@ -98,9 +98,7 @@ def common_events(db):
     for i in range(5):
         dt = datetime.now(TZ) + timedelta(days=i)
         Event.objects.create(
-            start=dt,
-            end=dt + timedelta(hours=1),
-            title='test event',
+            start=dt, end=dt + timedelta(hours=1), title='test event',
         )
 
 
@@ -123,29 +121,29 @@ def common_prototype(db):
 @pytest.fixture
 def common_team(db):
     Member.objects.create(
-        user=get_user_model().objects.create_user('yudkowsky@example.com', is_staff=True),
+        user=get_user_model().objects.create_user(
+            'yudkowsky@example.com', is_staff=True
+        ),
         short_name='Элиезер',
-        is_current=True,
     )
 
     Member.objects.create(
         user=get_user_model().objects.create_user('ssc@example.com', is_staff=True),
         short_name='Скотт',
-        is_current=True,
     )
 
     m = Member.objects.create(
-        user=get_user_model().objects.create_user('test@kocherga-club.ru', is_staff=True),
+        user=get_user_model().objects.create_user(
+            'test@kocherga-club.ru', is_staff=True
+        ),
         short_name='Слава',
         role='WATCHMAN',
-        is_current=True,
     )
     AltEmail.objects.create(member=m, email='mmcleric@gmail.com')
 
     Member.objects.create(
         user=get_user_model().objects.create_user('not.about.email@example.com'),
         short_name='Робин',
-        is_current=False,
     )
 
 
@@ -180,6 +178,7 @@ def admin_user(db):
 @pytest.fixture()
 def client():
     from rest_framework.test import APIClient
+
     return APIClient()
 
 
@@ -191,11 +190,7 @@ def admin_client(client, admin_user):
 
 @pytest.fixture()
 def frozen_time():
-    with freezegun.freeze_time(datetime(
-            year=2019,
-            month=11,
-            day=1,
-            hour=9,
-            tzinfo=TZ
-    )) as f:
+    with freezegun.freeze_time(
+        datetime(year=2019, month=11, day=1, hour=9, tzinfo=TZ)
+    ) as f:
         yield f

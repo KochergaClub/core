@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Optional, TypeVar, Generic
+from typing import List, Optional
 from abc import abstractmethod, ABC
 
 

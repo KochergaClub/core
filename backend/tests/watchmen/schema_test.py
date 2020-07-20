@@ -88,7 +88,6 @@ def test_update_normal(client, manager_user):
     member = Member.objects.create(
         user=manager_user,
         short_name='abc',
-        is_current=True,
     )
     watchman = Watchman.objects.create(member=member)
 
@@ -108,7 +107,6 @@ def test_update_invalid(client, manager_user):
     member = Member.objects.create(
         user=manager_user,
         short_name='abc',
-        is_current=True,
     )
     watchman = Watchman.objects.create(member=member)
 

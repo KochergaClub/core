@@ -20,7 +20,7 @@ test-lint:
   stage: test
   script:
     - export BACKEND_IMAGE=$(cat build.json | jq -r '.builds[] | select(.imageName | endswith("/backend")) | .tag')
-    - docker run --rm "$BACKEND_IMAGE" flake8 kocherga/ --max-line-length=120
+    - docker run --rm "$BACKEND_IMAGE" flake8 kocherga/
   cache:
     <<: *build_cache
 

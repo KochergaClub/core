@@ -17,16 +17,3 @@ class externalServices(helpers.BaseField):
 
 
 queries = c.as_dict()
-
-
-### query ###
-
-# member {
-#     externalAccounts {
-#         service {
-#             slug
-#         }
-#         ...WikiAccount
-#         ...GoogleDriveAccount
-#     }
-# }

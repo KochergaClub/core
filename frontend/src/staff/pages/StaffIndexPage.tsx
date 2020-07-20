@@ -7,7 +7,7 @@ import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 import { Page, ApolloQueryResults } from '~/components';
 
 import {
-  StaffMemberFullFragment,
+  StaffMemberForListFragment,
   useStaffMembersQuery,
 } from '../queries.generated';
 
@@ -16,7 +16,7 @@ const MemberList = ({
   members,
 }: {
   title: string;
-  members: StaffMemberFullFragment[];
+  members: StaffMemberForListFragment[];
 }) => (
   <Column centered>
     <h2>{title}</h2>
