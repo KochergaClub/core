@@ -129,7 +129,10 @@ class GoogleCalendar(models.Model):
             )
 
             GoogleEvent.objects.create(
-                google_calendar=self, event=event, google_id=result['id'],
+                google_calendar=self,
+                event=event,
+                google_id=result['id'],
+                html_link=result['htmlLink'],
             )
 
     @property

@@ -1,8 +1,10 @@
-from kocherga.graphql import g, django_utils
+from kocherga.graphql import django_utils
 
 from ... import models
 
-EventsGoogleCalendar = g.ObjectType(
+EventsGoogleCalendar = django_utils.DjangoObjectType(
     'EventsGoogleCalendar',
-    g.fields({**django_utils.model_fields(models.GoogleCalendar, ['id']), 'url': str}),
+    model=models.GoogleCalendar,
+    db_fields=['id'],
+    extra_fields={'url': str},
 )

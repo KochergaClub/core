@@ -1,3 +1,4 @@
+from __future__ import annotations
 import logging
 
 logger = logging.getLogger(__name__)
@@ -5,6 +6,7 @@ logger = logging.getLogger(__name__)
 import base64
 import uuid
 import re
+from typing import Optional, Any
 
 import dateutil.parser
 import datetime
@@ -364,6 +366,17 @@ class Event(models.Model):
     def generate_openvidu_token(self, user):
         session_id = self.get_openvidu_session_id()
         return kocherga.openvidu.api.generate_token(session_id)
+
+    def public_google_event(
+        self,
+    ) -> Optional[
+        Any  # can't specify GoogleEvent since it can't be imported due to circular dependency
+    ]:
+        from . import GoogleCalendar
+
+        return self.google_events.filter(
+            google_calendar=GoogleCalendar.objects.get_public_calendar()
+        ).first()
 
 
 class Tag(models.Model):
