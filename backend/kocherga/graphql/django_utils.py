@@ -1,7 +1,10 @@
-from kocherga.graphql import g
-from kocherga.graphql.permissions import check_permissions
 from typing import List, Dict, Union, Tuple, Any, Type, Callable
 import types
+import inspect
+
+import graphql
+from kocherga.graphql import g
+from kocherga.graphql.permissions import check_permissions
 
 from django.db import models
 from django.db.models.fields.reverse_related import ForeignObjectRel
@@ -72,6 +75,7 @@ def DjangoObjectType(
         Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]],
         Callable[[], Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]]],
     ] = {},
+    method_fields: List[str] = [],
     extra_fields={},
 ):
     def build_related():
@@ -101,9 +105,30 @@ def DjangoObjectType(
         else:
             return extra_fields
 
+    def build_method_fields():
+        result: Dict[str, graphql.GraphQLField] = {}
+        for method_name in method_fields:
+            # only methods with annotated return type are supported
+            signature = inspect.signature(getattr(model, method_name))
+
+            # only methods without arguments are supported
+            assert list(signature.parameters.keys()) == ['self']
+
+            field = g.Field(
+                g.as_type(signature.return_annotation),
+                resolve=lambda obj, info: getattr(obj, method_name)(),
+            )
+            result[method_name] = field
+        return result
+
     return g.ObjectType(
         name,
         fields=lambda: g.fields(
-            {**model_fields(model, db_fields), **build_related(), **build_extra()}
+            {
+                **model_fields(model, db_fields),
+                **build_related(),
+                **build_method_fields(),
+                **build_extra(),
+            }
         ),
     )

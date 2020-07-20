@@ -15,7 +15,8 @@ RatioTraining = django_utils.DjangoObjectType(
     model=models.Training,
     db_fields=['id', 'name', 'slug', 'date', 'telegram_link', 'salaries_paid'],
     related_fields=related_fields,
-    extra_fields={'tickets_count': int, 'total_income': int, 'long_name': str},
+    method_fields=['tickets_count', 'total_income'],
+    extra_fields={'long_name': str},
 )
 
 RatioTrainingConnection = helpers.ConnectionType(RatioTraining)
