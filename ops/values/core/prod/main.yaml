@@ -1,6 +1,7 @@
 env:
   common:
     STATIC_S3_BUCKET: "kocherga"
+    KOCHERGA_WEBSITE: "https://kocherga-club.ru"
   frontend:
     GOOGLE_ANALYTICS_ID: "UA-67233667-1"
     FACEBOOK_PIXEL_ID: "898467110259"
