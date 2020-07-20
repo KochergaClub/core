@@ -146,13 +146,13 @@ def build_EventsPublicEvent():
         return g.Field(g.NN(EventsAnnouncements), resolve=resolve)
 
     from .google_event import EventsGoogleEvent
+
     class public_google_event_field(helpers.BaseField):
         def resolve(self, obj, info):
             return obj.public_google_event()
 
         permissions = []
         result = EventsGoogleEvent
-
 
     EventsPublicEvent = g.ObjectType(
         'EventsPublicEvent',
