@@ -86,6 +86,7 @@ type AuthUser {
   id: ID!
   email: String!
   staff_member: StaffMember
+  external_accounts: [ExternalServiceAccount!]!
 }
 
 type BasicLeadBlock implements WagtailBlock {
@@ -669,6 +670,15 @@ type EventsWeeklyDigestVk {
   link: String
 }
 
+interface ExternalService {
+  slug: String!
+  accounts: [ExternalServiceAccount!]!
+}
+
+interface ExternalServiceAccount {
+  service: ExternalService!
+}
+
 type FaqEntry {
   id: ID!
   question: String!
@@ -1050,6 +1060,7 @@ type Query {
   imageTemplateBySlug(slug: String!): ImageTemplate!
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
+  externalServices: [ExternalService!]!
   my: My!
 }
 
@@ -1243,6 +1254,16 @@ type RatioTrainingSendEmailResult {
   draft_link: String!
 }
 
+type SlackAccount implements ExternalServiceAccount {
+  service: SlackExternalService!
+  email: String!
+}
+
+type SlackExternalService implements ExternalService {
+  slug: String!
+  accounts: [SlackAccount!]!
+}
+
 type SlackUser {
   slack_id: String!
   image_url: String!
@@ -1378,6 +1399,16 @@ type WatchmenWatchman {
   priority: Int!
   member: StaffMember!
   grade: WatchmenGrade
+}
+
+type WikiAccount implements ExternalServiceAccount {
+  service: WikiExternalService!
+  name: String!
+}
+
+type WikiExternalService implements ExternalService {
+  slug: String!
+  accounts: [WikiAccount!]!
 }
 
 type ZadarmaCall {

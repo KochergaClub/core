@@ -15,6 +15,30 @@
     "types": [
       {
         "kind": "INTERFACE",
+        "name": "ExternalService",
+        "possibleTypes": [
+          {
+            "name": "SlackExternalService"
+          },
+          {
+            "name": "WikiExternalService"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "ExternalServiceAccount",
+        "possibleTypes": [
+          {
+            "name": "SlackAccount"
+          },
+          {
+            "name": "WikiAccount"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
         "name": "WagtailBlock",
         "possibleTypes": [
           {

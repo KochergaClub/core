@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'kocherga.tilda',
     'kocherga.zoom',
     'kocherga.openvidu',
+    'kocherga.external_services',
     'taggit',
     'modelcluster',
     'wagtail.api.v2',

@@ -16,9 +16,36 @@ export type StaffMemberFullFragment = (
   ) }
 );
 
+export type StaffMemberExternalAccountsFragment = (
+  { __typename?: 'StaffMember' }
+  & Pick<Types.StaffMember, 'id'>
+  & { user: (
+    { __typename?: 'AuthUser' }
+    & Pick<Types.AuthUser, 'id'>
+    & { external_accounts: Array<(
+      { __typename?: 'SlackAccount' }
+      & { service: (
+        { __typename?: 'SlackExternalService' }
+        & Pick<Types.SlackExternalService, 'slug'>
+      ) }
+    ) | (
+      { __typename?: 'WikiAccount' }
+      & { service: (
+        { __typename?: 'WikiExternalService' }
+        & Pick<Types.WikiExternalService, 'slug'>
+      ) }
+    )> }
+  ) }
+);
+
+export type StaffMemberForListFragment = (
+  { __typename?: 'StaffMember' }
+  & Pick<Types.StaffMember, 'id' | 'full_name' | 'is_current' | 'role'>
+);
+
 export type StaffMemberForPickerFragment = (
   { __typename?: 'StaffMember' }
-  & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'color'>
+  & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'is_current' | 'color'>
   & { user: (
     { __typename?: 'AuthUser' }
     & Pick<Types.AuthUser, 'id'>
@@ -32,7 +59,7 @@ export type StaffMembersQuery = (
   { __typename?: 'Query' }
   & { staffMembersAll: Array<(
     { __typename?: 'StaffMember' }
-    & StaffMemberFullFragment
+    & StaffMemberForListFragment
   )> }
 );
 
@@ -57,6 +84,19 @@ export type StaffMemberQuery = (
   & { staffMember: (
     { __typename?: 'StaffMember' }
     & StaffMemberFullFragment
+  ) }
+);
+
+export type StaffMemberExternalAccountsQueryVariables = {
+  id: Types.Scalars['ID'];
+};
+
+
+export type StaffMemberExternalAccountsQuery = (
+  { __typename?: 'Query' }
+  & { staffMember: (
+    { __typename?: 'StaffMember' }
+    & StaffMemberExternalAccountsFragment
   ) }
 );
 
@@ -109,6 +149,27 @@ export const StaffMemberFullFragmentDoc = gql`
   }
 }
     `;
+export const StaffMemberExternalAccountsFragmentDoc = gql`
+    fragment StaffMemberExternalAccounts on StaffMember {
+  id
+  user {
+    id
+    external_accounts {
+      service {
+        slug
+      }
+    }
+  }
+}
+    `;
+export const StaffMemberForListFragmentDoc = gql`
+    fragment StaffMemberForList on StaffMember {
+  id
+  full_name
+  is_current
+  role
+}
+    `;
 export const StaffMemberForPickerFragmentDoc = gql`
     fragment StaffMemberForPicker on StaffMember {
   id
@@ -117,16 +178,17 @@ export const StaffMemberForPickerFragmentDoc = gql`
   }
   full_name
   short_name
+  is_current
   color
 }
     `;
 export const StaffMembersDocument = gql`
     query StaffMembers {
   staffMembersAll {
-    ...StaffMemberFull
+    ...StaffMemberForList
   }
 }
-    ${StaffMemberFullFragmentDoc}`;
+    ${StaffMemberForListFragmentDoc}`;
 
 /**
  * __useStaffMembersQuery__
@@ -217,6 +279,39 @@ export function useStaffMemberLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type StaffMemberQueryHookResult = ReturnType<typeof useStaffMemberQuery>;
 export type StaffMemberLazyQueryHookResult = ReturnType<typeof useStaffMemberLazyQuery>;
 export type StaffMemberQueryResult = ApolloReactCommon.QueryResult<StaffMemberQuery, StaffMemberQueryVariables>;
+export const StaffMemberExternalAccountsDocument = gql`
+    query StaffMemberExternalAccounts($id: ID!) {
+  staffMember(id: $id) {
+    ...StaffMemberExternalAccounts
+  }
+}
+    ${StaffMemberExternalAccountsFragmentDoc}`;
+
+/**
+ * __useStaffMemberExternalAccountsQuery__
+ *
+ * To run a query within a React component, call `useStaffMemberExternalAccountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStaffMemberExternalAccountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStaffMemberExternalAccountsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useStaffMemberExternalAccountsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<StaffMemberExternalAccountsQuery, StaffMemberExternalAccountsQueryVariables>) {
+        return ApolloReactHooks.useQuery<StaffMemberExternalAccountsQuery, StaffMemberExternalAccountsQueryVariables>(StaffMemberExternalAccountsDocument, baseOptions);
+      }
+export function useStaffMemberExternalAccountsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<StaffMemberExternalAccountsQuery, StaffMemberExternalAccountsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<StaffMemberExternalAccountsQuery, StaffMemberExternalAccountsQueryVariables>(StaffMemberExternalAccountsDocument, baseOptions);
+        }
+export type StaffMemberExternalAccountsQueryHookResult = ReturnType<typeof useStaffMemberExternalAccountsQuery>;
+export type StaffMemberExternalAccountsLazyQueryHookResult = ReturnType<typeof useStaffMemberExternalAccountsLazyQuery>;
+export type StaffMemberExternalAccountsQueryResult = ApolloReactCommon.QueryResult<StaffMemberExternalAccountsQuery, StaffMemberExternalAccountsQueryVariables>;
 export const StaffGrantGooglePermissionsToMemberDocument = gql`
     mutation StaffGrantGooglePermissionsToMember($id: ID!) {
   staffGrantGooglePermissionsToMember(id: $id)

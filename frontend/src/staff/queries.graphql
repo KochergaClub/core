@@ -16,6 +16,25 @@ fragment StaffMemberFull on StaffMember {
   }
 }
 
+fragment StaffMemberExternalAccounts on StaffMember {
+  id
+  user {
+    id
+    external_accounts {
+      service {
+        slug
+      }
+    }
+  }
+}
+
+fragment StaffMemberForList on StaffMember {
+  id
+  full_name
+  is_current
+  role
+}
+
 fragment StaffMemberForPicker on StaffMember {
   id
   user {
@@ -23,12 +42,13 @@ fragment StaffMemberForPicker on StaffMember {
   }
   full_name
   short_name
+  is_current
   color
 }
 
 query StaffMembers {
   staffMembersAll {
-    ...StaffMemberFull
+    ...StaffMemberForList
   }
 }
 
@@ -41,6 +61,12 @@ query StaffMembersForPicker {
 query StaffMember($id: ID!) {
   staffMember(id: $id) {
     ...StaffMemberFull
+  }
+}
+
+query StaffMemberExternalAccounts($id: ID!) {
+  staffMember(id: $id) {
+    ...StaffMemberExternalAccounts
   }
 }
 

@@ -5,7 +5,11 @@ import styled from 'styled-components';
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
-import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
+import {
+  AsyncButton,
+  AsyncButtonWithConfirm,
+  ApolloQueryResults,
+} from '~/components';
 
 import {
   StaffMemberFullFragment,
@@ -13,6 +17,7 @@ import {
   useStaffGrantGooglePermissionsToMemberMutation,
   useStaffFireMemberMutation,
   useStaffUnfireMemberMutation,
+  useStaffMemberExternalAccountsQuery,
 } from '../queries.generated';
 
 const Ex = styled.div`
@@ -30,6 +35,33 @@ const Image = styled.img`
 interface Props {
   member: StaffMemberFullFragment;
 }
+
+const ExternalServices: React.FC<{ member_id: string }> = ({ member_id }) => {
+  const queryResults = useStaffMemberExternalAccountsQuery({
+    variables: {
+      id: member_id,
+    },
+  });
+  return (
+    <ApolloQueryResults {...queryResults}>
+      {({ data: { staffMember } }) => (
+        <Column>
+          <h2>Внешние доступы</h2>
+          <small>
+            Раздел в разработке, пока поддерживается только slack и wiki. Этот
+            раздел виден только пользователям с правами{' '}
+            <code>external_services.view_access</code>.
+          </small>
+          <ul>
+            {staffMember.user.external_accounts.map((account, id) => (
+              <li key={id}>{account.service.slug}</li>
+            ))}
+          </ul>
+        </Column>
+      )}
+    </ApolloQueryResults>
+  );
+};
 
 const ManagerControls: React.FC<Props> = ({ member }) => {
   const refetchConfig = {
@@ -89,6 +121,9 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
 
 const MemberProfile: React.FC<Props> = ({ member }) => {
   const [current_user_is_manager] = usePermissions(['staff.manage']);
+  const [current_user_can_view_external_services] = usePermissions([
+    'external_services.view_access',
+  ]);
 
   return (
     <Column centered gutter={20} style={{ marginBottom: 100 }}>
@@ -113,6 +148,9 @@ const MemberProfile: React.FC<Props> = ({ member }) => {
         <Column centered>
           <ManagerControls member={member} />
         </Column>
+      )}
+      {current_user_can_view_external_services && (
+        <ExternalServices member_id={member.id} />
       )}
     </Column>
   );

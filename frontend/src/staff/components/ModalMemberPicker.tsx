@@ -3,7 +3,7 @@ import { Modal, Column } from '@kocherga/frontkit';
 import { AsyncButton, ApolloQueryResults } from '~/components';
 
 import {
-  useStaffMembersQuery,
+  useStaffMembersForPickerQuery,
   StaffMemberForPickerFragment,
 } from '../queries.generated';
 
@@ -13,14 +13,14 @@ interface Props {
 }
 
 const ModalMemberPicker: React.FC<Props> = ({ close, pick }) => {
-  const queryResults = useStaffMembersQuery();
+  const queryResults = useStaffMembersForPickerQuery();
 
   return (
     <Modal isOpen={true}>
       <Modal.Header toggle={close}>Выбрать сотрудника</Modal.Header>
       <Modal.Body>
         <ApolloQueryResults {...queryResults}>
-          {({ data: { staffMembersAll: members } }) => (
+          {({ data: { members } }) => (
             <Column stretch>
               {members
                 .filter(m => m.is_current)

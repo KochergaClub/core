@@ -106,6 +106,7 @@ export type AuthUser = {
   id: Scalars['ID'];
   email: Scalars['String'];
   staff_member?: Maybe<StaffMember>;
+  external_accounts: Array<ExternalServiceAccount>;
 };
 
 export type BasicLeadBlock = WagtailBlock & {
@@ -788,6 +789,15 @@ export type EventsWeeklyDigestUpdateResult = {
 export type EventsWeeklyDigestVk = {
   __typename?: 'EventsWeeklyDigestVk';
   link?: Maybe<Scalars['String']>;
+};
+
+export type ExternalService = {
+  slug: Scalars['String'];
+  accounts: Array<ExternalServiceAccount>;
+};
+
+export type ExternalServiceAccount = {
+  service: ExternalService;
 };
 
 export type FaqEntry = {
@@ -1621,6 +1631,7 @@ export type Query = {
   imageTemplateBySlug: ImageTemplate;
   tildaPage?: Maybe<TildaPage>;
   tildaPages: Array<TildaPage>;
+  externalServices: Array<ExternalService>;
   my: My;
 };
 
@@ -1979,6 +1990,18 @@ export type RatioTrainingSendEmailResult = {
   draft_link: Scalars['String'];
 };
 
+export type SlackAccount = ExternalServiceAccount & {
+  __typename?: 'SlackAccount';
+  service: SlackExternalService;
+  email: Scalars['String'];
+};
+
+export type SlackExternalService = ExternalService & {
+  __typename?: 'SlackExternalService';
+  slug: Scalars['String'];
+  accounts: Array<SlackAccount>;
+};
+
 export type SlackUser = {
   __typename?: 'SlackUser';
   slack_id: Scalars['String'];
@@ -2133,6 +2156,18 @@ export type WatchmenWatchman = {
   priority: Scalars['Int'];
   member: StaffMember;
   grade?: Maybe<WatchmenGrade>;
+};
+
+export type WikiAccount = ExternalServiceAccount & {
+  __typename?: 'WikiAccount';
+  service: WikiExternalService;
+  name: Scalars['String'];
+};
+
+export type WikiExternalService = ExternalService & {
+  __typename?: 'WikiExternalService';
+  slug: Scalars['String'];
+  accounts: Array<WikiAccount>;
 };
 
 export type ZadarmaCall = {
