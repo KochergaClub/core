@@ -48,6 +48,9 @@ dbshell:
 shell:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- bash
 
+shell_front:
+	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- bash
+
 pyshell:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py shell
 
