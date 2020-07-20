@@ -25,6 +25,7 @@ import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
 import AnyRegistration from './AnyRegistration';
 import Map from './Map';
+import EventToCalendar from './EventToCalendar';
 
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -83,6 +84,7 @@ const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
                   <Markdown source={event.description} plugins={[breaks]} />
                 </RichText>
               </PaddedBlock>
+              <EventToCalendar event={event} />
               {inFuture ? (
                 <div>
                   <a id="register" />

@@ -663,6 +663,13 @@ export type EventsGoogleCalendar = {
   url: Scalars['String'];
 };
 
+export type EventsGoogleEvent = {
+  __typename?: 'EventsGoogleEvent';
+  google_id: Scalars['String'];
+  html_link: Scalars['String'];
+  id: Scalars['ID'];
+};
+
 export type EventsListBlock = WagtailBlock & {
   __typename?: 'EventsListBlock';
   id: Scalars['ID'];
@@ -725,6 +732,7 @@ export type EventsPublicEvent = {
   public_tags: Array<Scalars['String']>;
   my_ticket?: Maybe<MyEventsTicket>;
   announcements: EventsAnnouncements;
+  public_google_event?: Maybe<EventsGoogleEvent>;
 };
 
 

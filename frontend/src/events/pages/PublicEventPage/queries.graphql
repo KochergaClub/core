@@ -21,6 +21,7 @@ fragment MyEventsTicket on MyEventsTicket {
 fragment EventsPublicEvent on EventsPublicEvent {
   event_id
   start
+  end
   title
   description
   image
@@ -38,6 +39,9 @@ fragment EventsPublicEvent on EventsPublicEvent {
       link
     }
   }
+  # public_google_event {
+  #   html_link
+  # }
 }
 
 query GetPublicEvent($event_id: ID!) {
