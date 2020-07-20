@@ -5,9 +5,9 @@ from . import models
 
 class MemberAdmin(ModelAdmin):
     model = models.Member
-    list_display = ('__str__', 'short_name', 'role', 'is_current')
-    list_filter = ('is_current',)
-    ordering = ('-is_current', 'role')
+    list_display = ('__str__', 'short_name', 'role', 'user__is_staff')
+    list_filter = ('user__is_staff',)
+    ordering = ('-user__is_staff', 'role')
 
 
 modeladmin_register(MemberAdmin)

@@ -31,7 +31,6 @@ class Member(models.Model):
         ],
     )
 
-    is_current = models.BooleanField('Текущий сотрудник')
     payment_type = models.CharField(
         'Форма зарплаты',
         max_length=10,
@@ -84,7 +83,6 @@ class Member(models.Model):
         edit_handlers.MultiFieldPanel(
             [
                 edit_handlers.FieldPanel('role'),
-                edit_handlers.FieldPanel('is_current'),
                 edit_handlers.FieldPanel('payment_type', widget=widgets.RadioSelect(),),
             ],
             heading='Работа',
@@ -105,6 +103,10 @@ class Member(models.Model):
 
     def __str__(self):
         return self.full_name
+
+    @property
+    def is_current(self) -> bool:
+        return self.user.is_staff
 
     @property
     def slack_user(self):
@@ -152,23 +154,17 @@ class Member(models.Model):
         ).execute()
         logger.info(f"Granted gdrive permissions to {email}")
 
-    def update_user_permissions(self):
-        self.user.is_staff = self.is_current
-        self.user.save()
-
     def fire(self):
         if not self.is_current:
             raise Exception("Already fired")
-        self.is_current = False
-        self.update_user_permissions()
-        self.save()
+        self.user.is_staff = False
+        self.user.save()
 
     def unfire(self):
         if self.is_current:
             raise Exception("User is already on staff")
-        self.is_current = True
-        self.update_user_permissions()
-        self.save()
+        self.user.is_staff = True
+        self.user.save()
 
 
 class AltEmail(models.Model):

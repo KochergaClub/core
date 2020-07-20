@@ -80,7 +80,6 @@ def add_watchman(
         short_name=short_name,
         full_name=full_name,
         role='WATCHMAN',
-        is_current=True,
         payment_type='CASH',
         user=user,
         cm_customer=cm_customer,
