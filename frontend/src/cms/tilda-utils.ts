@@ -19,7 +19,7 @@ export const tildaPageUrls = async (apolloClient: KochergaApolloClient) => {
     query: TildaPagesDocument,
   });
 
-  if (errors) {
+  if (errors || !data) {
     throw new APIError('GraphQL error', 500);
   }
 

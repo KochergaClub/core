@@ -10,6 +10,8 @@ generates:
   src/apollo/introspection-result.generated.ts:
     plugins:
       - fragment-matcher
+    config:
+      apolloClientVersion: 3
 
   src/:
     preset: near-operation-file
@@ -23,3 +25,4 @@ generates:
       withComponent: false
       withHOC: false
       withHooks: true
+      reactApolloVersion: 3

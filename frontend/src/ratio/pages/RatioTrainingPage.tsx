@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { DocumentNode } from 'graphql';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
 

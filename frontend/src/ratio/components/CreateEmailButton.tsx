@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 
 import { Button, Row, Column, Input, Modal } from '@kocherga/frontkit';
 
@@ -43,16 +43,17 @@ const PrototypePicker: React.FC<PrototypePickerProps> = ({
   const apolloClient = useApolloClient();
 
   const loadPrototype = useCallback(async () => {
-    const {
-      data: { content },
-    } = await apolloClient.query<
+    const { data } = await apolloClient.query<
       RatioTrainingEmailPrototypeQuery,
       RatioTrainingEmailPrototypeQueryVariables
     >({
       query: RatioTrainingEmailPrototypeDocument,
       variables: { training_id, type: prototype.type },
     });
-    pick(content);
+    if (!data) {
+      throw new Error('No data');
+    }
+    pick(data.content);
   }, [apolloClient, prototype.type, training_id, pick]);
 
   return <AsyncButton act={loadPrototype}>{prototype.title}</AsyncButton>;
