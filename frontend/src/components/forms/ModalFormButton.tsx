@@ -81,7 +81,15 @@ function ModalForm<Values>({
           }
         }
       }
-      const postResult = (await post(postValues as Values)) || { close: true };
+      let postResult: PostResult | undefined;
+      try {
+        postResult = (await post(postValues as Values)) || { close: true };
+      } catch (e) {
+        postResult = {
+          close: false,
+          error: String(e),
+        };
+      }
       actions.setSubmitting(false);
       if (postResult.close) {
         close();

@@ -11,21 +11,30 @@ export type TrainingForPickerFragment = (
   & Pick<Types.RatioTraining, 'id' | 'slug' | 'name'>
 );
 
-export type TicketFragment = (
-  { __typename?: 'RatioTicket' }
-  & Pick<Types.RatioTicket, 'id' | 'email' | 'first_name' | 'last_name' | 'payment_amount' | 'status' | 'fiscalization_status' | 'ticket_type' | 'payment_type'>
+export type RatioPaymentFragment = (
+  { __typename?: 'RatioPayment' }
+  & Pick<Types.RatioPayment, 'id' | 'amount' | 'payment_type' | 'status' | 'fiscalization_status'>
 );
 
-export type TrainingFragment = (
+export type RatioTicketFragment = (
+  { __typename?: 'RatioTicket' }
+  & Pick<Types.RatioTicket, 'id' | 'email' | 'first_name' | 'last_name' | 'payment_amount' | 'status' | 'ticket_type'>
+  & { payments: Array<(
+    { __typename?: 'RatioPayment' }
+    & RatioPaymentFragment
+  )> }
+);
+
+export type RatioTrainingFragment = (
   { __typename?: 'RatioTraining' }
   & Pick<Types.RatioTraining, 'id' | 'slug' | 'name' | 'date' | 'telegram_link' | 'tickets_count' | 'total_income'>
   & { tickets: Array<(
     { __typename?: 'RatioTicket' }
-    & TicketFragment
+    & RatioTicketFragment
   )> }
 );
 
-export type TrainerFragment = (
+export type RatioTrainerFragment = (
   { __typename?: 'RatioTrainer' }
   & Pick<Types.RatioTrainer, 'id' | 'short_name' | 'long_name'>
 );
@@ -35,7 +44,7 @@ export type ActivityFragment = (
   & Pick<Types.RatioActivity, 'id' | 'time' | 'activity_type' | 'name' | 'location'>
   & { trainer?: Types.Maybe<(
     { __typename?: 'RatioTrainer' }
-    & TrainerFragment
+    & RatioTrainerFragment
   )> }
 );
 
@@ -54,7 +63,7 @@ export type TrainingWithScheduleFragment = (
     { __typename?: 'RatioTrainingDay' }
     & TrainingDayFragment
   )> }
-  & TrainingFragment
+  & RatioTrainingFragment
 );
 
 export type RatioTrainingsQueryVariables = {
@@ -76,7 +85,7 @@ export type RatioTrainingsQuery = (
       { __typename?: 'RatioTrainingEdge' }
       & { node: (
         { __typename?: 'RatioTraining' }
-        & TrainingFragment
+        & RatioTrainingFragment
       ) }
     )> }
   ) }
@@ -116,7 +125,7 @@ export type RatioTrainingBySlugQuery = (
   { __typename?: 'Query' }
   & { training: (
     { __typename?: 'RatioTraining' }
-    & TrainingFragment
+    & RatioTrainingFragment
   ) }
 );
 
@@ -140,7 +149,7 @@ export type RatioTrainersQuery = (
   { __typename?: 'Query' }
   & { trainers: Array<(
     { __typename?: 'RatioTrainer' }
-    & TrainerFragment
+    & RatioTrainerFragment
   )> }
 );
 
@@ -164,7 +173,7 @@ export type RatioAddTrainingMutation = (
   { __typename?: 'Mutation' }
   & { ratioAddTraining: (
     { __typename?: 'RatioTraining' }
-    & TrainingFragment
+    & RatioTrainingFragment
   ) }
 );
 
@@ -177,18 +186,79 @@ export type RatioAddTicketMutation = (
   { __typename?: 'Mutation' }
   & { ratioAddTicket: (
     { __typename?: 'RatioTicket' }
-    & TicketFragment
+    & RatioTicketFragment
   ) }
 );
 
-export type RatioTicketFiscalizeMutationVariables = {
-  ticket_id: Types.Scalars['ID'];
+export type RatioPaymentAddMutationVariables = {
+  params: Types.RatioPaymentAddInput;
 };
 
 
-export type RatioTicketFiscalizeMutation = (
+export type RatioPaymentAddMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Types.Mutation, 'ratioTicketFiscalize'>
+  & { ratioPaymentAdd: (
+    { __typename?: 'RatioPaymentAddResult' }
+    & { payment: (
+      { __typename?: 'RatioPayment' }
+      & RatioPaymentFragment
+    ) }
+  ) }
+);
+
+export type RatioPaymentDeleteMutationVariables = {
+  payment_id: Types.Scalars['ID'];
+};
+
+
+export type RatioPaymentDeleteMutation = (
+  { __typename?: 'Mutation' }
+  & { ratioPaymentDelete: (
+    { __typename?: 'BasicResult' }
+    & Pick<Types.BasicResult, 'ok'>
+  ) }
+);
+
+export type RatioPaymentSetStatusMutationVariables = {
+  input: Types.RatioPaymentSetStatusInput;
+};
+
+
+export type RatioPaymentSetStatusMutation = (
+  { __typename?: 'Mutation' }
+  & { ratioPaymentSetStatus: (
+    { __typename?: 'RatioPaymentSetStatusResult' }
+    & { payment: (
+      { __typename?: 'RatioPayment' }
+      & RatioPaymentFragment
+    ) }
+  ) }
+);
+
+export type RatioPaymentFiscalizeMutationVariables = {
+  payment_id: Types.Scalars['ID'];
+};
+
+
+export type RatioPaymentFiscalizeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Types.Mutation, 'ratioPaymentFiscalize'>
+);
+
+export type RatioPaymentFiscalizedManuallyMutationVariables = {
+  payment_id: Types.Scalars['ID'];
+};
+
+
+export type RatioPaymentFiscalizedManuallyMutation = (
+  { __typename?: 'Mutation' }
+  & { ratioPaymentFiscalizedManually: (
+    { __typename?: 'RatioPaymentFiscalizedManuallyResult' }
+    & { payment: (
+      { __typename?: 'RatioPayment' }
+      & RatioPaymentFragment
+    ) }
+  ) }
 );
 
 export type RatioTrainingAddDayMutationVariables = {
@@ -241,21 +311,31 @@ export const TrainingForPickerFragmentDoc = gql`
   name
 }
     `;
-export const TicketFragmentDoc = gql`
-    fragment Ticket on RatioTicket {
+export const RatioPaymentFragmentDoc = gql`
+    fragment RatioPayment on RatioPayment {
+  id
+  amount
+  payment_type
+  status
+  fiscalization_status
+}
+    `;
+export const RatioTicketFragmentDoc = gql`
+    fragment RatioTicket on RatioTicket {
   id
   email
   first_name
   last_name
   payment_amount
   status
-  fiscalization_status
   ticket_type
-  payment_type
+  payments {
+    ...RatioPayment
+  }
 }
-    `;
-export const TrainingFragmentDoc = gql`
-    fragment Training on RatioTraining {
+    ${RatioPaymentFragmentDoc}`;
+export const RatioTrainingFragmentDoc = gql`
+    fragment RatioTraining on RatioTraining {
   id
   slug
   name
@@ -264,12 +344,12 @@ export const TrainingFragmentDoc = gql`
   tickets_count
   total_income
   tickets {
-    ...Ticket
+    ...RatioTicket
   }
 }
-    ${TicketFragmentDoc}`;
-export const TrainerFragmentDoc = gql`
-    fragment Trainer on RatioTrainer {
+    ${RatioTicketFragmentDoc}`;
+export const RatioTrainerFragmentDoc = gql`
+    fragment RatioTrainer on RatioTrainer {
   id
   short_name
   long_name
@@ -283,10 +363,10 @@ export const ActivityFragmentDoc = gql`
   name
   location
   trainer {
-    ...Trainer
+    ...RatioTrainer
   }
 }
-    ${TrainerFragmentDoc}`;
+    ${RatioTrainerFragmentDoc}`;
 export const TrainingDayFragmentDoc = gql`
     fragment TrainingDay on RatioTrainingDay {
   id
@@ -298,12 +378,12 @@ export const TrainingDayFragmentDoc = gql`
     ${ActivityFragmentDoc}`;
 export const TrainingWithScheduleFragmentDoc = gql`
     fragment TrainingWithSchedule on RatioTraining {
-  ...Training
+  ...RatioTraining
   schedule {
     ...TrainingDay
   }
 }
-    ${TrainingFragmentDoc}
+    ${RatioTrainingFragmentDoc}
 ${TrainingDayFragmentDoc}`;
 export const RatioTrainingsDocument = gql`
     query RatioTrainings($before: String, $after: String, $first: Int, $last: Int) {
@@ -313,13 +393,13 @@ export const RatioTrainingsDocument = gql`
     }
     edges {
       node {
-        ...Training
+        ...RatioTraining
       }
     }
   }
 }
     ${PageInfoFragmentDoc}
-${TrainingFragmentDoc}`;
+${RatioTrainingFragmentDoc}`;
 
 /**
  * __useRatioTrainingsQuery__
@@ -396,10 +476,10 @@ export type RatioTrainingsForPickerQueryResult = ApolloReactCommon.QueryResult<R
 export const RatioTrainingBySlugDocument = gql`
     query RatioTrainingBySlug($slug: String!) {
   training: ratioTrainingBySlug(slug: $slug) {
-    ...Training
+    ...RatioTraining
   }
 }
-    ${TrainingFragmentDoc}`;
+    ${RatioTrainingFragmentDoc}`;
 
 /**
  * __useRatioTrainingBySlugQuery__
@@ -462,10 +542,10 @@ export type RatioTrainingWithScheduleQueryResult = ApolloReactCommon.QueryResult
 export const RatioTrainersDocument = gql`
     query RatioTrainers {
   trainers: ratioTrainersAll {
-    ...Trainer
+    ...RatioTrainer
   }
 }
-    ${TrainerFragmentDoc}`;
+    ${RatioTrainerFragmentDoc}`;
 
 /**
  * __useRatioTrainersQuery__
@@ -526,10 +606,10 @@ export type RatioTrainingEmailPrototypeQueryResult = ApolloReactCommon.QueryResu
 export const RatioAddTrainingDocument = gql`
     mutation RatioAddTraining($params: RatioAddTrainingInput!) {
   ratioAddTraining(params: $params) {
-    ...Training
+    ...RatioTraining
   }
 }
-    ${TrainingFragmentDoc}`;
+    ${RatioTrainingFragmentDoc}`;
 export type RatioAddTrainingMutationFn = ApolloReactCommon.MutationFunction<RatioAddTrainingMutation, RatioAddTrainingMutationVariables>;
 
 /**
@@ -558,10 +638,10 @@ export type RatioAddTrainingMutationOptions = ApolloReactCommon.BaseMutationOpti
 export const RatioAddTicketDocument = gql`
     mutation RatioAddTicket($params: RatioAddTicketInput!) {
   ratioAddTicket(input: $params) {
-    ...Ticket
+    ...RatioTicket
   }
 }
-    ${TicketFragmentDoc}`;
+    ${RatioTicketFragmentDoc}`;
 export type RatioAddTicketMutationFn = ApolloReactCommon.MutationFunction<RatioAddTicketMutation, RatioAddTicketMutationVariables>;
 
 /**
@@ -587,36 +667,170 @@ export function useRatioAddTicketMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type RatioAddTicketMutationHookResult = ReturnType<typeof useRatioAddTicketMutation>;
 export type RatioAddTicketMutationResult = ApolloReactCommon.MutationResult<RatioAddTicketMutation>;
 export type RatioAddTicketMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioAddTicketMutation, RatioAddTicketMutationVariables>;
-export const RatioTicketFiscalizeDocument = gql`
-    mutation RatioTicketFiscalize($ticket_id: ID!) {
-  ratioTicketFiscalize(ticket_id: $ticket_id)
+export const RatioPaymentAddDocument = gql`
+    mutation RatioPaymentAdd($params: RatioPaymentAddInput!) {
+  ratioPaymentAdd(input: $params) {
+    payment {
+      ...RatioPayment
+    }
+  }
 }
-    `;
-export type RatioTicketFiscalizeMutationFn = ApolloReactCommon.MutationFunction<RatioTicketFiscalizeMutation, RatioTicketFiscalizeMutationVariables>;
+    ${RatioPaymentFragmentDoc}`;
+export type RatioPaymentAddMutationFn = ApolloReactCommon.MutationFunction<RatioPaymentAddMutation, RatioPaymentAddMutationVariables>;
 
 /**
- * __useRatioTicketFiscalizeMutation__
+ * __useRatioPaymentAddMutation__
  *
- * To run a mutation, you first call `useRatioTicketFiscalizeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRatioTicketFiscalizeMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useRatioPaymentAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioPaymentAddMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [ratioTicketFiscalizeMutation, { data, loading, error }] = useRatioTicketFiscalizeMutation({
+ * const [ratioPaymentAddMutation, { data, loading, error }] = useRatioPaymentAddMutation({
  *   variables: {
- *      ticket_id: // value for 'ticket_id'
+ *      params: // value for 'params'
  *   },
  * });
  */
-export function useRatioTicketFiscalizeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioTicketFiscalizeMutation, RatioTicketFiscalizeMutationVariables>) {
-        return ApolloReactHooks.useMutation<RatioTicketFiscalizeMutation, RatioTicketFiscalizeMutationVariables>(RatioTicketFiscalizeDocument, baseOptions);
+export function useRatioPaymentAddMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioPaymentAddMutation, RatioPaymentAddMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioPaymentAddMutation, RatioPaymentAddMutationVariables>(RatioPaymentAddDocument, baseOptions);
       }
-export type RatioTicketFiscalizeMutationHookResult = ReturnType<typeof useRatioTicketFiscalizeMutation>;
-export type RatioTicketFiscalizeMutationResult = ApolloReactCommon.MutationResult<RatioTicketFiscalizeMutation>;
-export type RatioTicketFiscalizeMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioTicketFiscalizeMutation, RatioTicketFiscalizeMutationVariables>;
+export type RatioPaymentAddMutationHookResult = ReturnType<typeof useRatioPaymentAddMutation>;
+export type RatioPaymentAddMutationResult = ApolloReactCommon.MutationResult<RatioPaymentAddMutation>;
+export type RatioPaymentAddMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioPaymentAddMutation, RatioPaymentAddMutationVariables>;
+export const RatioPaymentDeleteDocument = gql`
+    mutation RatioPaymentDelete($payment_id: ID!) {
+  ratioPaymentDelete(payment_id: $payment_id) {
+    ok
+  }
+}
+    `;
+export type RatioPaymentDeleteMutationFn = ApolloReactCommon.MutationFunction<RatioPaymentDeleteMutation, RatioPaymentDeleteMutationVariables>;
+
+/**
+ * __useRatioPaymentDeleteMutation__
+ *
+ * To run a mutation, you first call `useRatioPaymentDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioPaymentDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ratioPaymentDeleteMutation, { data, loading, error }] = useRatioPaymentDeleteMutation({
+ *   variables: {
+ *      payment_id: // value for 'payment_id'
+ *   },
+ * });
+ */
+export function useRatioPaymentDeleteMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioPaymentDeleteMutation, RatioPaymentDeleteMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioPaymentDeleteMutation, RatioPaymentDeleteMutationVariables>(RatioPaymentDeleteDocument, baseOptions);
+      }
+export type RatioPaymentDeleteMutationHookResult = ReturnType<typeof useRatioPaymentDeleteMutation>;
+export type RatioPaymentDeleteMutationResult = ApolloReactCommon.MutationResult<RatioPaymentDeleteMutation>;
+export type RatioPaymentDeleteMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioPaymentDeleteMutation, RatioPaymentDeleteMutationVariables>;
+export const RatioPaymentSetStatusDocument = gql`
+    mutation RatioPaymentSetStatus($input: RatioPaymentSetStatusInput!) {
+  ratioPaymentSetStatus(input: $input) {
+    payment {
+      ...RatioPayment
+    }
+  }
+}
+    ${RatioPaymentFragmentDoc}`;
+export type RatioPaymentSetStatusMutationFn = ApolloReactCommon.MutationFunction<RatioPaymentSetStatusMutation, RatioPaymentSetStatusMutationVariables>;
+
+/**
+ * __useRatioPaymentSetStatusMutation__
+ *
+ * To run a mutation, you first call `useRatioPaymentSetStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioPaymentSetStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ratioPaymentSetStatusMutation, { data, loading, error }] = useRatioPaymentSetStatusMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRatioPaymentSetStatusMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioPaymentSetStatusMutation, RatioPaymentSetStatusMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioPaymentSetStatusMutation, RatioPaymentSetStatusMutationVariables>(RatioPaymentSetStatusDocument, baseOptions);
+      }
+export type RatioPaymentSetStatusMutationHookResult = ReturnType<typeof useRatioPaymentSetStatusMutation>;
+export type RatioPaymentSetStatusMutationResult = ApolloReactCommon.MutationResult<RatioPaymentSetStatusMutation>;
+export type RatioPaymentSetStatusMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioPaymentSetStatusMutation, RatioPaymentSetStatusMutationVariables>;
+export const RatioPaymentFiscalizeDocument = gql`
+    mutation RatioPaymentFiscalize($payment_id: ID!) {
+  ratioPaymentFiscalize(payment_id: $payment_id)
+}
+    `;
+export type RatioPaymentFiscalizeMutationFn = ApolloReactCommon.MutationFunction<RatioPaymentFiscalizeMutation, RatioPaymentFiscalizeMutationVariables>;
+
+/**
+ * __useRatioPaymentFiscalizeMutation__
+ *
+ * To run a mutation, you first call `useRatioPaymentFiscalizeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioPaymentFiscalizeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ratioPaymentFiscalizeMutation, { data, loading, error }] = useRatioPaymentFiscalizeMutation({
+ *   variables: {
+ *      payment_id: // value for 'payment_id'
+ *   },
+ * });
+ */
+export function useRatioPaymentFiscalizeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioPaymentFiscalizeMutation, RatioPaymentFiscalizeMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioPaymentFiscalizeMutation, RatioPaymentFiscalizeMutationVariables>(RatioPaymentFiscalizeDocument, baseOptions);
+      }
+export type RatioPaymentFiscalizeMutationHookResult = ReturnType<typeof useRatioPaymentFiscalizeMutation>;
+export type RatioPaymentFiscalizeMutationResult = ApolloReactCommon.MutationResult<RatioPaymentFiscalizeMutation>;
+export type RatioPaymentFiscalizeMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioPaymentFiscalizeMutation, RatioPaymentFiscalizeMutationVariables>;
+export const RatioPaymentFiscalizedManuallyDocument = gql`
+    mutation RatioPaymentFiscalizedManually($payment_id: ID!) {
+  ratioPaymentFiscalizedManually(payment_id: $payment_id) {
+    payment {
+      ...RatioPayment
+    }
+  }
+}
+    ${RatioPaymentFragmentDoc}`;
+export type RatioPaymentFiscalizedManuallyMutationFn = ApolloReactCommon.MutationFunction<RatioPaymentFiscalizedManuallyMutation, RatioPaymentFiscalizedManuallyMutationVariables>;
+
+/**
+ * __useRatioPaymentFiscalizedManuallyMutation__
+ *
+ * To run a mutation, you first call `useRatioPaymentFiscalizedManuallyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRatioPaymentFiscalizedManuallyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ratioPaymentFiscalizedManuallyMutation, { data, loading, error }] = useRatioPaymentFiscalizedManuallyMutation({
+ *   variables: {
+ *      payment_id: // value for 'payment_id'
+ *   },
+ * });
+ */
+export function useRatioPaymentFiscalizedManuallyMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RatioPaymentFiscalizedManuallyMutation, RatioPaymentFiscalizedManuallyMutationVariables>) {
+        return ApolloReactHooks.useMutation<RatioPaymentFiscalizedManuallyMutation, RatioPaymentFiscalizedManuallyMutationVariables>(RatioPaymentFiscalizedManuallyDocument, baseOptions);
+      }
+export type RatioPaymentFiscalizedManuallyMutationHookResult = ReturnType<typeof useRatioPaymentFiscalizedManuallyMutation>;
+export type RatioPaymentFiscalizedManuallyMutationResult = ApolloReactCommon.MutationResult<RatioPaymentFiscalizedManuallyMutation>;
+export type RatioPaymentFiscalizedManuallyMutationOptions = ApolloReactCommon.BaseMutationOptions<RatioPaymentFiscalizedManuallyMutation, RatioPaymentFiscalizedManuallyMutationVariables>;
 export const RatioTrainingAddDayDocument = gql`
     mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
   ratioTrainingAddDay(params: $params)

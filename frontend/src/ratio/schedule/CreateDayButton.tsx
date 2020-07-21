@@ -2,12 +2,12 @@ import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
 import {
-  TrainingFragment,
+  RatioTrainingFragment,
   useRatioTrainingAddDayMutation,
 } from '../queries.generated';
 
 interface Props {
-  training: TrainingFragment;
+  training: RatioTrainingFragment;
 }
 
 const CreateDayButton: React.FC<Props> = ({ training }) => {

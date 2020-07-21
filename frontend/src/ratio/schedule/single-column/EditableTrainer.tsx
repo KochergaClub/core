@@ -5,12 +5,12 @@ import { useExpandable } from '~/common/hooks';
 
 import {
   useRatioTrainersQuery,
-  TrainerFragment,
+  RatioTrainerFragment,
 } from '../../queries.generated';
 
 interface Props {
   trainer_name?: string;
-  picked: (name: TrainerFragment) => Promise<void>;
+  picked: (name: RatioTrainerFragment) => Promise<void>;
   unpicked: () => Promise<void>;
 }
 
@@ -63,7 +63,7 @@ export default function EditableTrainer({
             item2text={maybeTrainer =>
               maybeTrainer ? maybeTrainer.long_name : 'Очистить'
             }
-            picked={async (t?: TrainerFragment) => {
+            picked={async (t?: RatioTrainerFragment) => {
               if (t) {
                 await picked(t);
               } else {

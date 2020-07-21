@@ -10,6 +10,12 @@ def extra_fields():
     return {'training': g.NN(RatioTraining)}
 
 
+def related_fields():
+    from .payment import RatioPayment
+
+    return {'payments': RatioPayment}
+
+
 RatioTicket = DjangoObjectType(
     'RatioTicket',
     model=models.Ticket,
@@ -26,5 +32,6 @@ RatioTicket = DjangoObjectType(
         'fiscalization_status',
         'comment',
     ],
+    related_fields=related_fields,
     extra_fields=extra_fields,  # delay import
 )

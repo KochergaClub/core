@@ -24,7 +24,7 @@ import {
   RatioTrainingSyncParticipantsToMailchimpMutationVariables,
 } from '../queries.generated';
 
-import CreateEmailButton from '~/ratio/components/CreateEmailButton';
+// import CreateEmailButton from '~/ratio/components/CreateEmailButton';
 import TrainingTicketsBlock from '~/ratio/components/TrainingTicketsBlock';
 
 interface Props {
@@ -134,7 +134,7 @@ const RatioTrainingPage: NextApolloPage<Props> = ({ slug }) => {
                   >
                     Отправить участников в mailchimp
                   </MutationButton>
-                  <CreateEmailButton
+                  {/* <CreateEmailButton
                     prototypes={[
                       {
                         title: 'Предрассылка',
@@ -146,7 +146,7 @@ const RatioTrainingPage: NextApolloPage<Props> = ({ slug }) => {
                       },
                     ]}
                     training_id={training.id}
-                  />
+                  /> */}
                 </Column>
               </PaddedBlock>
             </Page.Main>

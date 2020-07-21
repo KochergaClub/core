@@ -890,9 +890,13 @@ type Mutation {
   staffUnfireMember(id: ID!): Boolean
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
+  ratioPaymentAdd(input: RatioPaymentAddInput!): RatioPaymentAddResult!
+  ratioPaymentDelete(payment_id: ID!): BasicResult!
+  ratioPaymentFiscalize(payment_id: ID!): Boolean!
+  ratioPaymentFiscalizedManually(payment_id: ID!): RatioPaymentFiscalizedManuallyResult!
+  ratioPaymentSetStatus(input: RatioPaymentSetStatusInput!): RatioPaymentSetStatusResult!
   ratioTrainingCopyScheduleFrom(params: RatioTrainingCopyScheduleFromInput!): Boolean!
   ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean!
-  ratioTicketFiscalize(ticket_id: ID!): Boolean!
   ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean!
   ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
@@ -1086,10 +1090,10 @@ input RatioAddTicketInput {
   first_name: String!
   last_name: String
   payment_amount: Int!
-  status: String!
-  fiscalization_status: String!
-  ticket_type: String!
-  payment_type: String!
+  status: String
+  ticket_type: String
+  fiscalization_status: String
+  payment_type: String
   comment: String
 }
 
@@ -1163,6 +1167,43 @@ type RatioParagraphBlock implements WagtailBlock {
   value: String!
 }
 
+type RatioPayment {
+  id: ID!
+  amount: Int!
+  payment_type: String!
+  status: String!
+  fiscalization_status: String!
+  comment: String!
+  custom_kkm_title: String!
+  ticket: RatioTicket!
+}
+
+input RatioPaymentAddInput {
+  ticket_id: ID!
+  amount: Int!
+  status: String
+  fiscalization_status: String!
+  payment_type: String!
+  comment: String
+}
+
+type RatioPaymentAddResult {
+  payment: RatioPayment!
+}
+
+type RatioPaymentFiscalizedManuallyResult {
+  payment: RatioPayment!
+}
+
+input RatioPaymentSetStatusInput {
+  payment_id: ID!
+  status: String!
+}
+
+type RatioPaymentSetStatusResult {
+  payment: RatioPayment!
+}
+
 type RatioPresentationIndexPage implements WagtailPage {
   title: String!
   id: ID!
@@ -1202,6 +1243,7 @@ type RatioTicket {
   payment_amount: Int!
   fiscalization_status: String!
   comment: String!
+  payments: [RatioPayment!]!
   training: RatioTraining!
 }
 

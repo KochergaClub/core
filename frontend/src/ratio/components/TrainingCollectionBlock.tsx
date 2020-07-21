@@ -15,7 +15,7 @@ import { FormShape } from '~/components/forms/types';
 import {
   useRatioTrainingsQuery,
   useRatioAddTrainingMutation,
-  TrainingFragment,
+  RatioTrainingFragment,
 } from '../queries.generated';
 
 import TrainingCard from './TrainingCard';
@@ -54,7 +54,7 @@ interface CreateTrainingParams {
   telegram_link: string;
 }
 
-const isMuted = (training: TrainingFragment) =>
+const isMuted = (training: RatioTrainingFragment) =>
   isBefore(parseISO(training.date), new Date());
 
 const TrainingCollectionBlock: React.FC = () => {
@@ -71,7 +71,7 @@ const TrainingCollectionBlock: React.FC = () => {
   });
 
   const renderItem = useCallback(
-    (training: TrainingFragment) => <TrainingCard training={training} />,
+    (training: RatioTrainingFragment) => <TrainingCard training={training} />,
     []
   );
 

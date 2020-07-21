@@ -36,10 +36,7 @@ export type EventsPublicEventFragment = (
       { __typename?: 'EventsAnnouncementTimepad' }
       & Pick<Types.EventsAnnouncementTimepad, 'link'>
     ) }
-  ), public_google_event?: Types.Maybe<(
-    { __typename?: 'EventsGoogleEvent' }
-    & Pick<Types.EventsGoogleEvent, 'html_link'>
-  )> }
+  ) }
 );
 
 export type GetPublicEventQueryVariables = {
@@ -137,9 +134,6 @@ export const EventsPublicEventFragmentDoc = gql`
     timepad {
       link
     }
-  }
-  public_google_event {
-    html_link
   }
 }
     ${ProjectPage_SummaryForEventFragmentDoc}

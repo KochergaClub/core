@@ -95,6 +95,7 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
                   label: option[1],
                 }))}
                 menuPlacement="auto"
+                menuPortalTarget={document.body}
                 styles={{
                   menuPortal: provided => ({ ...provided, zIndex: 1100 }),
                   container: provided => ({ ...provided, width: '100%' }),

@@ -11,8 +11,6 @@ import hashlib
 
 from .training import Training
 
-from kocherga.money.cashier import kkm
-
 
 class Ticket(models.Model):
     training = models.ForeignKey(
@@ -52,9 +50,11 @@ class Ticket(models.Model):
         ),
     )
 
+    # deprecated, moved to Payment
     payment_type = models.CharField(
         'Вид оплаты',
         max_length=40,
+        blank=True,
         default='website',
         choices=(
             ('none', '-'),
@@ -66,11 +66,17 @@ class Ticket(models.Model):
             ('transfer', 'Перевод'),
         ),
     )
+
     payment_amount = models.IntegerField('Размер оплаты')
+
+    # deprecated, should be calculated based on payment_amount - sum(payments.amount)
     paid = models.BooleanField('Оплачено', default=False)
+
+    # deprecated, moved to Payment
     fiscalization_status = models.CharField(
         'Статус фискального чека',
         max_length=40,
+        blank=True,
         choices=(
             ('todo', 'todo'),
             ('not_needed', 'not_needed'),
@@ -96,25 +102,7 @@ class Ticket(models.Model):
         return hashlib.sha1(SALT + self.email.lower().encode()).hexdigest()[:10]
 
     def fiscalize(self):
-        if self.fiscalization_status != 'todo':
-            raise Exception("fiscalization_status must be `todo`")
-
-        self.fiscalization_status = 'in_progress'
-        self.save()
-
-        kkm.execute(
-            kkm.getCheckRequest(
-                kkm.OnlineCheck(
-                    title=f"Участие в мероприятии: {self.training.name}",
-                    signMethodCalculation=kkm.SignMethodCalculation.PrePayment100,
-                    email=self.email,
-                    sum=self.payment_amount,
-                )
-            )
-        )
-
-        self.fiscalization_status = 'fiscalized'
-        self.save()
+        raise Exception("Use Payment.fiscalize() instead")
 
 
 @receiver(post_save, sender=Ticket)

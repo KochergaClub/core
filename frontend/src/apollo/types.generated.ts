@@ -1036,9 +1036,13 @@ export type Mutation = {
   staffUnfireMember?: Maybe<Scalars['Boolean']>;
   ratioAddTraining: RatioTraining;
   ratioAddTicket: RatioTicket;
+  ratioPaymentAdd: RatioPaymentAddResult;
+  ratioPaymentDelete: BasicResult;
+  ratioPaymentFiscalize: Scalars['Boolean'];
+  ratioPaymentFiscalizedManually: RatioPaymentFiscalizedManuallyResult;
+  ratioPaymentSetStatus: RatioPaymentSetStatusResult;
   ratioTrainingCopyScheduleFrom: Scalars['Boolean'];
   ratioTrainingAddDay: Scalars['Boolean'];
-  ratioTicketFiscalize: Scalars['Boolean'];
   ratioTrainingSyncParticipantsToMailchimp: Scalars['Boolean'];
   ratioTrainingSendEmail: RatioTrainingSendEmailResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
@@ -1340,6 +1344,31 @@ export type MutationRatioAddTicketArgs = {
 };
 
 
+export type MutationRatioPaymentAddArgs = {
+  input: RatioPaymentAddInput;
+};
+
+
+export type MutationRatioPaymentDeleteArgs = {
+  payment_id: Scalars['ID'];
+};
+
+
+export type MutationRatioPaymentFiscalizeArgs = {
+  payment_id: Scalars['ID'];
+};
+
+
+export type MutationRatioPaymentFiscalizedManuallyArgs = {
+  payment_id: Scalars['ID'];
+};
+
+
+export type MutationRatioPaymentSetStatusArgs = {
+  input: RatioPaymentSetStatusInput;
+};
+
+
 export type MutationRatioTrainingCopyScheduleFromArgs = {
   params: RatioTrainingCopyScheduleFromInput;
 };
@@ -1347,11 +1376,6 @@ export type MutationRatioTrainingCopyScheduleFromArgs = {
 
 export type MutationRatioTrainingAddDayArgs = {
   params: RatioTrainingAddDayInput;
-};
-
-
-export type MutationRatioTicketFiscalizeArgs = {
-  ticket_id: Scalars['ID'];
 };
 
 
@@ -1800,10 +1824,10 @@ export type RatioAddTicketInput = {
   first_name: Scalars['String'];
   last_name?: Maybe<Scalars['String']>;
   payment_amount: Scalars['Int'];
-  status: Scalars['String'];
-  fiscalization_status: Scalars['String'];
-  ticket_type: Scalars['String'];
-  payment_type: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
+  ticket_type?: Maybe<Scalars['String']>;
+  fiscalization_status?: Maybe<Scalars['String']>;
+  payment_type?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
 };
 
@@ -1889,6 +1913,47 @@ export type RatioParagraphBlock = WagtailBlock & {
   value: Scalars['String'];
 };
 
+export type RatioPayment = {
+  __typename?: 'RatioPayment';
+  id: Scalars['ID'];
+  amount: Scalars['Int'];
+  payment_type: Scalars['String'];
+  status: Scalars['String'];
+  fiscalization_status: Scalars['String'];
+  comment: Scalars['String'];
+  custom_kkm_title: Scalars['String'];
+  ticket: RatioTicket;
+};
+
+export type RatioPaymentAddInput = {
+  ticket_id: Scalars['ID'];
+  amount: Scalars['Int'];
+  status?: Maybe<Scalars['String']>;
+  fiscalization_status: Scalars['String'];
+  payment_type: Scalars['String'];
+  comment?: Maybe<Scalars['String']>;
+};
+
+export type RatioPaymentAddResult = {
+  __typename?: 'RatioPaymentAddResult';
+  payment: RatioPayment;
+};
+
+export type RatioPaymentFiscalizedManuallyResult = {
+  __typename?: 'RatioPaymentFiscalizedManuallyResult';
+  payment: RatioPayment;
+};
+
+export type RatioPaymentSetStatusInput = {
+  payment_id: Scalars['ID'];
+  status: Scalars['String'];
+};
+
+export type RatioPaymentSetStatusResult = {
+  __typename?: 'RatioPaymentSetStatusResult';
+  payment: RatioPayment;
+};
+
 export type RatioPresentationIndexPage = WagtailPage & {
   __typename?: 'RatioPresentationIndexPage';
   title: Scalars['String'];
@@ -1933,6 +1998,7 @@ export type RatioTicket = {
   payment_amount: Scalars['Int'];
   fiscalization_status: Scalars['String'];
   comment: Scalars['String'];
+  payments: Array<RatioPayment>;
   training: RatioTraining;
 };
 

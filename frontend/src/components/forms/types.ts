@@ -31,12 +31,12 @@ export interface BooleanFormField extends AnyFormField {
 
 export interface ForeignKeyFormField extends AnyFormField {
   readonly type: 'fk';
-  readonly value?: number;
+  readonly value?: number | string;
   readonly widget?: {
     type: 'async';
     display: (item: any) => string;
     load: (inputValue: string) => Promise<any[]>;
-    getValue: (item: any) => number;
+    getValue: (item: any) => number | string;
   };
 }
 //export interface ListField extends AnyFormField {

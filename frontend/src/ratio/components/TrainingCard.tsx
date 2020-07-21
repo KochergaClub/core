@@ -2,9 +2,9 @@ import Link from 'next/link';
 
 import { A, Row, Label } from '@kocherga/frontkit';
 
-import { TrainingFragment } from '../queries.generated';
+import { RatioTrainingFragment } from '../queries.generated';
 
-const TrainingCard: React.FC<{ training: TrainingFragment }> = ({
+const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
   training,
 }) => {
   return (

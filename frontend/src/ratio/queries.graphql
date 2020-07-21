@@ -4,19 +4,28 @@ fragment TrainingForPicker on RatioTraining {
   name
 }
 
-fragment Ticket on RatioTicket {
+fragment RatioPayment on RatioPayment {
+  id
+  amount
+  payment_type
+  status
+  fiscalization_status
+}
+
+fragment RatioTicket on RatioTicket {
   id
   email
   first_name
   last_name
   payment_amount
   status
-  fiscalization_status
   ticket_type
-  payment_type
+  payments {
+    ...RatioPayment
+  }
 }
 
-fragment Training on RatioTraining {
+fragment RatioTraining on RatioTraining {
   id
   slug
   name
@@ -25,11 +34,11 @@ fragment Training on RatioTraining {
   tickets_count
   total_income
   tickets {
-    ...Ticket
+    ...RatioTicket
   }
 }
 
-fragment Trainer on RatioTrainer {
+fragment RatioTrainer on RatioTrainer {
   id
   short_name
   long_name
@@ -42,7 +51,7 @@ fragment Activity on RatioActivity {
   name
   location
   trainer {
-    ...Trainer
+    ...RatioTrainer
   }
 }
 
@@ -55,27 +64,42 @@ fragment TrainingDay on RatioTrainingDay {
 }
 
 fragment TrainingWithSchedule on RatioTraining {
-  ...Training
+  ...RatioTraining
   schedule {
     ...TrainingDay
   }
 }
 
 query RatioTrainings($before: String, $after: String, $first: Int, $last: Int) {
-  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
+  trainings: ratioTrainings(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+  ) {
     pageInfo {
       ...PageInfo
     }
     edges {
       node {
-        ...Training
+        ...RatioTraining
       }
     }
   }
 }
 
-query RatioTrainingsForPicker($before: String, $after: String, $first: Int, $last: Int) {
-  trainings: ratioTrainings(before: $before, after: $after, first: $first, last: $last) {
+query RatioTrainingsForPicker(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+) {
+  trainings: ratioTrainings(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+  ) {
     pageInfo {
       ...PageInfo
     }
@@ -89,7 +113,7 @@ query RatioTrainingsForPicker($before: String, $after: String, $first: Int, $las
 
 query RatioTrainingBySlug($slug: String!) {
   training: ratioTrainingBySlug(slug: $slug) {
-    ...Training
+    ...RatioTraining
   }
 }
 
@@ -101,7 +125,7 @@ query RatioTrainingWithSchedule($slug: String!) {
 
 query RatioTrainers {
   trainers: ratioTrainersAll {
-    ...Trainer
+    ...RatioTrainer
   }
 }
 
@@ -111,26 +135,57 @@ query RatioTrainingEmailPrototype($training_id: ID!, $type: String!) {
 
 mutation RatioAddTraining($params: RatioAddTrainingInput!) {
   ratioAddTraining(params: $params) {
-    ...Training
+    ...RatioTraining
   }
 }
 
 mutation RatioAddTicket($params: RatioAddTicketInput!) {
   ratioAddTicket(input: $params) {
-    ...Ticket
+    ...RatioTicket
   }
 }
 
-mutation RatioTicketFiscalize($ticket_id: ID!) {
-  ratioTicketFiscalize(ticket_id: $ticket_id)
+mutation RatioPaymentAdd($params: RatioPaymentAddInput!) {
+  ratioPaymentAdd(input: $params) {
+    payment {
+      ...RatioPayment
+    }
+  }
 }
 
+mutation RatioPaymentDelete($payment_id: ID!) {
+  ratioPaymentDelete(payment_id: $payment_id) {
+    ok
+  }
+}
+
+mutation RatioPaymentSetStatus($input: RatioPaymentSetStatusInput!) {
+  ratioPaymentSetStatus(input: $input) {
+    payment {
+      ...RatioPayment
+    }
+  }
+}
+
+mutation RatioPaymentFiscalize($payment_id: ID!) {
+  ratioPaymentFiscalize(payment_id: $payment_id)
+}
+
+mutation RatioPaymentFiscalizedManually($payment_id: ID!) {
+  ratioPaymentFiscalizedManually(payment_id: $payment_id) {
+    payment {
+      ...RatioPayment
+    }
+  }
+}
 
 mutation RatioTrainingAddDay($params: RatioTrainingAddDayInput!) {
   ratioTrainingAddDay(params: $params)
 }
 
-mutation RatioTrainingCopyScheduleFrom($params: RatioTrainingCopyScheduleFromInput!) {
+mutation RatioTrainingCopyScheduleFrom(
+  $params: RatioTrainingCopyScheduleFromInput!
+) {
   ratioTrainingCopyScheduleFrom(params: $params)
 }
 
