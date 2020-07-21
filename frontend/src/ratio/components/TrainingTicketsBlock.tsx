@@ -30,20 +30,9 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     { name: 'last_name', title: 'Фамилия', type: 'string' },
     { name: 'payment_amount', title: 'Стоимость билета', type: 'number' },
   ];
-  // exclude: ['id'],
-  // transform: {
-  //   training: f =>
-  //     ({
-  //       ...f,
-  //       value: training_id,
-  //       readonly: true,
-  //     } as FormField),
-  //   status: f => ({ ...f, value: 'normal' } as FormField),
-  //   ticket_type: f => ({ ...f, value: 'normal' } as FormField),
-  // },
 
   const cb = useCallback(
-    async (values: unknown) => {
+    async (values: any) => {
       const { data } = await addTicketMutation({
         variables: {
           params: {
@@ -57,15 +46,11 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
         },
       });
 
-      await addPaymentMutation({
-        variables: {
-          params: {
-            ticket_id: data?.ratioAddTicket.id,
-          },
-        },
-      });
+      if (!data) {
+        throw new Error('add ticket failed');
+      }
     },
-    [addTicketMutation, addPaymentMutation]
+    [addTicketMutation, addPaymentMutation, training_id]
   );
 
   return (

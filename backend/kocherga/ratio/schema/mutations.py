@@ -107,7 +107,6 @@ class ratioPaymentDelete(helpers.BaseField):
     result = g.NN(basic_types.BasicResult)
 
 
-
 @c.class_field
 class ratioPaymentFiscalize(helpers.BaseField):
     def resolve(self, _, info, payment_id):

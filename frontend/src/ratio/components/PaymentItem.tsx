@@ -29,7 +29,7 @@ const FiscalizeAction: React.FC<Props> = ({ payment }) => {
     awaitRefetchQueries: true,
   });
 
-  const click = useCallback(async () => {
+  const act = useCallback(async () => {
     await fiscalizeMutation({
       variables: {
         payment_id: payment.id,
@@ -47,7 +47,7 @@ const FiscalizeAction: React.FC<Props> = ({ payment }) => {
     return null;
   }
 
-  return <Action act={click}>Напечатать чек</Action>;
+  return <Action act={act}>Напечатать чек</Action>;
 };
 
 const DeleteAction: React.FC<Props> = ({ payment }) => {
@@ -59,15 +59,11 @@ const DeleteAction: React.FC<Props> = ({ payment }) => {
     awaitRefetchQueries: true,
   });
 
-  return (
-    <Action
-      act={async () => {
-        await mutation();
-      }}
-    >
-      Удалить
-    </Action>
-  );
+  const act = useCallback(async () => {
+    await mutation();
+  }, [mutation]);
+
+  return <Action act={act}>Удалить</Action>;
 };
 
 const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
@@ -76,6 +72,10 @@ const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
       payment_id: payment.id,
     },
   });
+
+  const act = useCallback(async () => {
+    await mutation();
+  }, [mutation]);
 
   if (payment.status !== 'paid') {
     return null;
@@ -86,7 +86,7 @@ const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
   ) {
     return null;
   }
-  return <Action act={mutation}>Чек пробит вручную</Action>;
+  return <Action act={act}>Чек пробит вручную</Action>;
 };
 
 const PaymentStatus: React.FC<Props> = ({ payment }) => {
