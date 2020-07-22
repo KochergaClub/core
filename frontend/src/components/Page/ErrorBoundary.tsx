@@ -1,6 +1,6 @@
-import React from 'react';
+import { A, Column } from '@kocherga/frontkit';
 
-import { A } from '@kocherga/frontkit';
+import { PaddedBlock } from '~/components';
 
 import * as Sentry from '@sentry/node';
 
@@ -25,15 +25,15 @@ class ErrorBoundary extends React.Component<Props, State> {
     if (this.state.hasError) {
       // You can render any custom fallback UI
       return (
-        <>
+        <PaddedBlock>
           <h1>Что-то пошло не так.</h1>
-          <h2>
-            В коде страницы баг. Зарепортите его в{' '}
-            <A href="https://gitlab.com/kocherga/forum">GitLab</A>, пожалуйста.
-            А потом обновите страницу и больше не делайте то, что привело к
-            ошибке.
-          </h2>
-        </>
+          <h2>В коде страницы баг.</h2>
+          <p>
+            Мы будем благодарны, если вы зарепортите проблему в наш{' '}
+            <A href="https://gitlab.com/kocherga/core/issues">GitLab</A> или{' '}
+            <A href="https://t.me/kocherga_code">Телеграм-чат</A>.
+          </p>
+        </PaddedBlock>
       );
     }
 
