@@ -15,6 +15,15 @@ class KochergaApolloCache extends InMemoryCache {
         EventsPublicEvent: {
           keyFields: ['event_id'], // TODO - migrate to `id` field which is now returned by backend
         },
+        Query: {
+          fields: {
+            my: {
+              merge(existing, incoming) {
+                return { ...existing, ...incoming };
+              },
+            },
+          },
+        },
       },
       possibleTypes: introspectionResult.possibleTypes,
     });
