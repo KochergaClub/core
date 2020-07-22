@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from 'apollo-client';
 
 import { colors, A } from '@kocherga/frontkit';
 

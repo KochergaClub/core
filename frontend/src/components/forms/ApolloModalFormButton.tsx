@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { GraphQLError } from 'graphql';
-import { FetchResult } from '@apollo/client';
+import { ExecutionResult } from '@apollo/react-common';
 
 import { FormShape } from './types';
 import ModalFormButton from './ModalFormButton';
@@ -14,7 +14,7 @@ interface Props<FormResult extends {}> {
   small?: boolean;
   mutation: (options: {
     variables: { params: FormResult };
-  }) => Promise<FetchResult<any>>;
+  }) => Promise<ExecutionResult<any>>;
 }
 
 export default function ApolloModalFormButton<FormResult>({

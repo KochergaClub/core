@@ -17,7 +17,7 @@ class watchmenWatchmenAll(helpers.BaseField):
 
         # TODO - move to model's manager
         if currentStaff:
-            queryset = queryset.filter(member__user__is_staff=True)
+            queryset = queryset.filter(member__user__is_current=True)
         if currentRole:
             queryset = queryset.filter(priority__lt=3)
 

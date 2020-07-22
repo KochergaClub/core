@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/react-hooks';
 import Async from 'react-select/async';
 import { ValueType } from 'react-select';
 
@@ -49,19 +49,21 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   const loadEvents = useCallback(
     async (inputValue: string, callback: (options: OptionType[]) => void) => {
       try {
-        const { data } = await apolloClient.query<
+        const {
+          data: { events: eventsData },
+        } = await apolloClient.query<
           MastermindDatingSearchEventsQuery,
           MastermindDatingSearchEventsQueryVariables
         >({
           query: MastermindDatingSearchEventsDocument,
           variables: { search: inputValue },
         });
-        if (!data?.events) {
+        if (!eventsData) {
           return []; // TODO - proper error handling
         }
 
         callback(
-          data.events.nodes.map(event => {
+          eventsData.nodes.map(event => {
             const label = `${event.title} ${format(
               parseISO(event.start),
               'yyyy-MM-dd'

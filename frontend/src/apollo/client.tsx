@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloClient } from 'apollo-client';
 
-import { ApolloClient, ApolloProvider, HttpLink, split } from '@apollo/client';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { split } from 'apollo-link';
+import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
 
 import KochergaApolloCache from './cache';
 import cookie from 'cookie';
@@ -256,9 +259,7 @@ export function withApollo(
         if (ssr) {
           try {
             // Run all GraphQL queries
-            const { getDataFromTree } = await import(
-              '@apollo/client/react/ssr'
-            );
+            const { getDataFromTree } = await import('@apollo/react-ssr');
             await getDataFromTree(
               <AppTree
                 pageProps={{

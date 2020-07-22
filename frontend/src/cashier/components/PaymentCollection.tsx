@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import { usePermissions } from '~/common/hooks';
 
@@ -55,14 +55,12 @@ const PaymentCollection: React.FC = () => {
       widget: {
         type: 'async',
         load: async () => {
-          const { data } = await apolloClient.query<StaffMembersQuery>({
+          const {
+            data: { staffMembersAll: members },
+          } = await apolloClient.query<StaffMembersQuery>({
             query: StaffMembersDocument,
           });
-
-          if (!data) {
-            throw new Error('query failed');
-          }
-          return data.staffMembersAll;
+          return members;
         },
         display: (member: StaffMemberFullFragment) => member.full_name,
         getValue: (member: StaffMemberFullFragment) => parseInt(member.user.id),

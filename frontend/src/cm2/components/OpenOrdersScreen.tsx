@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/react-hooks';
 
 import { Collection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';

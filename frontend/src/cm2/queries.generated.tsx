@@ -3,8 +3,8 @@ import * as Types from '../apollo/types.generated';
 import { PageInfoFragment } from '../apollo/queries.generated';
 import gql from 'graphql-tag';
 import { PageInfoFragmentDoc } from '../apollo/queries.generated';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
+import * as ApolloReactCommon from '@apollo/react-common';
+import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export type CustomerFragment = (
   { __typename?: 'Cm2Customer' }
