@@ -1,4 +1,5 @@
-import { A, Column } from '@kocherga/frontkit';
+import React from 'react';
+import { A } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
