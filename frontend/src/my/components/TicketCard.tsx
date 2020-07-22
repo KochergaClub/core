@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
@@ -7,7 +7,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ru } from 'date-fns/locale';
 import { FiVideo } from 'react-icons/fi';
-import { FaTicketAlt } from 'react-icons/fa';
+import { FaTicketAlt, FaRegCopy } from 'react-icons/fa';
 
 import {
   A,
@@ -44,6 +44,38 @@ const DropdownContainer = styled.div`
   float: right;
   margin-left: 10px;
 `;
+
+const ClipboardIcon = styled(FaRegCopy)`
+  color: ${colors.grey[500]};
+  cursor: pointer;
+  &:hover {
+    color: black;
+  }
+`;
+
+// TODO - extract to ~/components
+const CopyToClipboardIcon: React.FC<{ text: string }> = ({ text }) => {
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const copy = useCallback(() => {
+    if (!textRef.current) {
+      return; // shouldn't happen
+    }
+    textRef.current.select();
+    document.execCommand('copy');
+  }, []);
+
+  return (
+    <>
+      <textarea
+        style={{ position: 'absolute', left: -10000, top: -10000 }}
+        ref={textRef}
+      >
+        {text}
+      </textarea>
+      <ClipboardIcon onClick={copy} />
+    </>
+  );
+};
 
 interface Props {
   ticket: MyTicketFragment;
@@ -103,12 +135,13 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
             </Column>
           </Column>
           {!later && ticket.zoom_link && (
-            <Row centered>
+            <Row centered vCentered gutter={8}>
               <Button onClick={joinZoom} kind="primary">
                 <Row vCentered gutter={8}>
                   <FiVideo /> <span>Зайти</span>
                 </Row>
               </Button>
+              <CopyToClipboardIcon text={ticket.zoom_link} />
             </Row>
           )}
         </Column>
