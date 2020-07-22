@@ -18,8 +18,8 @@ class KochergaApolloCache extends InMemoryCache {
         Query: {
           fields: {
             my: {
-              merge(existing, incoming) {
-                return { ...existing, ...incoming };
+              merge(existing, incoming, { mergeObjects }) {
+                return mergeObjects(existing, incoming);
               },
             },
           },
