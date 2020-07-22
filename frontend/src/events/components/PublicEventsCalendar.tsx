@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
-import { useApolloClient } from '@apollo/react-hooks';
+import { useApolloClient } from '@apollo/client';
 import styled from 'styled-components';
 import Router from 'next/router';
 
@@ -86,6 +86,10 @@ const PublicEventsCalendar = () => {
           to: formatDate(end, 'yyyy-MM-dd'),
         },
       });
+
+      if (!queryResults.data) {
+        throw new Error('Empty data');
+      }
       return queryResults.data.publicEvents.nodes.map(event => {
         const past = isPast(parseISO(event.start));
         const classNames = [];

@@ -3,8 +3,8 @@ import * as Types from '../../../apollo/types.generated';
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 import gql from 'graphql-tag';
 import { EvenmanEvent_DetailsFragmentDoc } from '../queries.generated';
-import * as ApolloReactCommon from '@apollo/react-common';
-import * as ApolloReactHooks from '@apollo/react-hooks';
+import * as ApolloReactCommon from '@apollo/client';
+import * as ApolloReactHooks from '@apollo/client';
 
 export type EvenmanTimepadAnnouncementUpdateMutationVariables = {
   event_id: Types.Scalars['ID'];

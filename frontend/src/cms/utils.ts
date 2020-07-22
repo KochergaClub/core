@@ -157,7 +157,7 @@ export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
     query: WagtailPagesDocument,
   });
 
-  if (errors) {
+  if (errors || !data) {
     throw new APIError('GraphQL error', 500);
   }
 
