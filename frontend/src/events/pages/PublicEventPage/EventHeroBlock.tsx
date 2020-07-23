@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 
 import { Button, Label, fonts } from '@kocherga/frontkit';
-import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
+import { deviceMediaQueries } from '@kocherga/frontkit/dist/sizes';
 
 import { trackEvent } from '~/components/analytics';
 

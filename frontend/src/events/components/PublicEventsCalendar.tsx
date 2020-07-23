@@ -22,7 +22,7 @@ import {
   useEventsPublicGoogleCalendarQuery,
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
-import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
+import { deviceMediaQueries } from '@kocherga/frontkit/dist/sizes';
 
 const Container = styled.div`
   &&& {

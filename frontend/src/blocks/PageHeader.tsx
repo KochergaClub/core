@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { colors, fonts } from '@kocherga/frontkit';
-import { deviceMediaQueries } from '@kocherga/frontkit/dist/src/sizes';
+import { deviceMediaQueries } from '@kocherga/frontkit/dist/sizes';
 
 const Container = styled.div`
   background-color: ${colors.grey[100]};
