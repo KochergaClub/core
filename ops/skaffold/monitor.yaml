@@ -3,14 +3,16 @@ kind: Config
 deploy:
   helm:
     releases:
-    - name: monitor
-      chartPath: stable/prometheus-operator
-      valuesFiles:
-      - ops/values/prometheus.yaml
-      - ops/secrets/prometheus.yaml
-      namespace: monitor
-      wait: true
-      remote: true
+      - name: monitor
+        # https://github.com/helm/charts/tree/master/stable/prometheus-operator
+        chartPath: stable/prometheus-operator
+        valuesFiles:
+          - ops/values/prometheus.yaml
+          - ops/secrets/prometheus.yaml
+        namespace: monitor
+        wait: true
+        remote: true
+        upgradeOnChange: true
     flags:
       upgrade:
-      - --install
+        - --install
