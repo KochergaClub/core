@@ -53,5 +53,5 @@ spec:
     - {{ .Release.Namespace }}
   endpoints:
   - port: web
-    jnterval: 30s
+    interval: 30s
 {{- end }}
