@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { deviceMediaQueries } from '@kocherga/frontkit/dist/sizes';
+import { deviceMediaQueries } from '@kocherga/frontkit/esm/sizes';
 import { Label, fonts } from '@kocherga/frontkit';
 
 import { ProjectPageFragment } from '../queries.generated';
