@@ -12,7 +12,7 @@ export type ProjectPage_SummaryForEventFragment = (
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), upcoming_events: Array<(
     { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'event_id' | 'title'>
+    & Pick<Types.EventsPublicEvent, 'id' | 'title'>
   )> }
 );
 
@@ -23,7 +23,7 @@ export type MyEventsTicketFragment = (
 
 export type EventsPublicEventFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'end' | 'title' | 'description' | 'image' | 'realm' | 'registration_type' | 'pricing_type'>
+  & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'image' | 'realm' | 'registration_type' | 'pricing_type'>
   & { project?: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & ProjectPage_SummaryForEventFragment
@@ -100,7 +100,7 @@ export const ProjectPage_SummaryForEventFragmentDoc = gql`
   title
   is_active
   upcoming_events {
-    event_id
+    id
     title
   }
 }
@@ -115,7 +115,7 @@ export const MyEventsTicketFragmentDoc = gql`
     `;
 export const EventsPublicEventFragmentDoc = gql`
     fragment EventsPublicEvent on EventsPublicEvent {
-  event_id
+  id
   start
   end
   title

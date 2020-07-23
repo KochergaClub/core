@@ -88,20 +88,14 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
       variables: {
         input: {
           email,
-          event_id: event.event_id,
+          event_id: event.id,
           subscribed_to_newsletter: subscribedToNewsletter,
         },
       },
     });
     setComplete(true);
     setActing(false);
-  }, [
-    registerMutation,
-    event.title,
-    event.event_id,
-    email,
-    subscribedToNewsletter,
-  ]);
+  }, [registerMutation, event.title, event.id, email, subscribedToNewsletter]);
 
   if (complete) {
     return <Success email={email} />;

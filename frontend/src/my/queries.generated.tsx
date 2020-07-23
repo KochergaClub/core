@@ -32,7 +32,7 @@ export type MyTicketFragment = (
   & Pick<Types.MyEventsTicket, 'id' | 'status' | 'zoom_link'>
   & { event: (
     { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
+    & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'title'>
   ) }
 );
 
@@ -59,7 +59,7 @@ export type MySettingsPageFragment = (
   { __typename?: 'My' }
   & { user: (
     { __typename?: 'AuthCurrentUser' }
-    & Pick<Types.AuthCurrentUser, 'first_name' | 'last_name'>
+    & Pick<Types.AuthCurrentUser, 'email' | 'first_name' | 'last_name'>
   ), email_subscription: (
     { __typename?: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
@@ -195,7 +195,7 @@ export type MyEventPageQuery = (
   { __typename?: 'Query' }
   & { publicEvent: (
     { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'event_id' | 'start' | 'title'>
+    & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'title'>
     & { my_ticket?: Types.Maybe<(
       { __typename?: 'MyEventsTicket' }
       & Pick<Types.MyEventsTicket, 'status'>
@@ -253,7 +253,7 @@ export const MyTicketFragmentDoc = gql`
   status
   zoom_link
   event {
-    event_id
+    id
     start
     title
   }
@@ -286,6 +286,7 @@ export const EmailSubscriptionFragmentDoc = gql`
 export const MySettingsPageFragmentDoc = gql`
     fragment MySettingsPage on My {
   user {
+    email
     first_name
     last_name
   }
@@ -643,7 +644,7 @@ export type SetPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<S
 export const MyEventPageDocument = gql`
     query MyEventPage($event_id: ID!) {
   publicEvent(event_id: $event_id) {
-    event_id
+    id
     start
     title
     my_ticket {

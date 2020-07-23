@@ -6,7 +6,7 @@ import * as ApolloReactHooks from '@apollo/client';
 
 export type AuthCurrentUserFragment = (
   { __typename?: 'AuthCurrentUser' }
-  & Pick<Types.AuthCurrentUser, 'is_authenticated' | 'is_staff' | 'permissions' | 'email'>
+  & Pick<Types.AuthCurrentUser, 'id' | 'is_authenticated' | 'is_staff' | 'permissions' | 'email'>
 );
 
 export type CurrentUserQueryVariables = {};
@@ -74,6 +74,7 @@ export type SendMagicLinkMutation = (
 
 export const AuthCurrentUserFragmentDoc = gql`
     fragment AuthCurrentUser on AuthCurrentUser {
+  id
   is_authenticated
   is_staff
   permissions

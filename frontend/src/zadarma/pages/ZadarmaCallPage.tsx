@@ -19,7 +19,7 @@ const ZadarmaCallPage: NextApolloPage<Props> = ({ pbx_call_id }) => {
         <A href="/team/zadarma">&larr; Ко всем звонкам</A>
         <br />
         <br />
-        <PbxCallDetails pbx_call_id={pbx_call_id} />
+        <PbxCallDetails id={pbx_call_id} />
       </Page.Main>
     </Page>
   );

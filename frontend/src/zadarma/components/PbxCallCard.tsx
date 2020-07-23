@@ -52,12 +52,10 @@ const PbxCallCard: React.FC<Props> = ({ pbx_call }) => {
         <div>
           <header>
             <DateDiv>{formatDate(zonedDate, 'd MMMM')}</DateDiv>
-            <A href={`/team/zadarma/pbx_call/${pbx_call.pbx_call_id}`}>
-              {title}
-            </A>
+            <A href={`/team/zadarma/pbx_call/${pbx_call.id}`}>{title}</A>
           </header>
           {pbx_call.calls.map(call => (
-            <CallInfo key={call.call_id} call={call} />
+            <CallInfo key={call.id} call={call} />
           ))}
         </div>
         <PbxCallData pbx_call={pbx_call} />

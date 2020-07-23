@@ -10,6 +10,7 @@ Describes the current user.
 If user is not signed in, `is_authenticated` field will be false and all other fields will be empty.
 """
 type AuthCurrentUser {
+  id: ID!
   is_authenticated: Boolean!
   email: String
   first_name: String
@@ -1433,6 +1434,7 @@ type WatchmenShift {
   date: String!
   shift: String!
   is_night: Boolean!
+  id: ID!
   watchman: WatchmenWatchman
 }
 
@@ -1471,6 +1473,7 @@ type ZadarmaCall {
   is_recorded: Int!
   watchman: String!
   record: String
+  id: ID!
 }
 
 type ZadarmaData {
@@ -1482,6 +1485,7 @@ type ZadarmaPbxCall {
   ts: String!
   calls: [ZadarmaCall!]!
   data: ZadarmaData
+  id: ID!
 }
 
 type ZadarmaPbxCallConnection {

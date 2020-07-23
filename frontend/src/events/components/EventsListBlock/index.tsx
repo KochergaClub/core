@@ -22,7 +22,7 @@ export default function EventsListBlock({ events }: Props) {
       {events.length ? (
         <List>
           {events.map(event => (
-            <EventCard key={event.event_id} event={event} />
+            <EventCard key={event.id} event={event} />
           ))}
         </List>
       ) : (

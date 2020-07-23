@@ -1,5 +1,5 @@
 fragment EventsPublicEvent_Summary on EventsPublicEvent {
-  event_id
+  id
   title
   summary
   image: image_rendition(spec: "fill-760x200") {
@@ -25,7 +25,7 @@ query UpcomingPublicEvents($today: String!) {
 }
 
 fragment EventsPublicEvent_ForCalendar on EventsPublicEvent {
-  event_id
+  id
   title
   start
   public_tags

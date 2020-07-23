@@ -69,9 +69,8 @@ const CopyToClipboardIcon: React.FC<{ text: string }> = ({ text }) => {
       <textarea
         style={{ position: 'absolute', left: -10000, top: -10000 }}
         ref={textRef}
-      >
-        {text}
-      </textarea>
+        value={text}
+      />
       <ClipboardIcon onClick={copy} />
     </>
   );
@@ -88,10 +87,10 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
   const cancel = useCallback(async () => {
     await deleteMutation({
       variables: {
-        event_id: ticket.event.event_id,
+        event_id: ticket.event.id,
       },
     });
-  }, [deleteMutation, ticket.event.event_id]);
+  }, [deleteMutation, ticket.event.id]);
 
   const zonedStart = utcToZonedTime(ticket.event.start, timezone);
 
@@ -116,7 +115,7 @@ const TicketCard: React.FC<Props> = ({ ticket, later }) => {
             <Row spaced gutter={8}>
               <Link
                 href="/events/[id]"
-                as={`/events/${ticket.event.event_id}`}
+                as={`/events/${ticket.event.id}`}
                 passHref
               >
                 <EventLink>{ticket.event.title}</EventLink>

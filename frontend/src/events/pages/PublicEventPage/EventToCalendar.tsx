@@ -10,7 +10,7 @@ const EventToCalendar: React.FC<CommonProps> = ({ event }) => {
   // https://stackoverflow.com/questions/10488831/link-to-add-to-google-calendar/21653600#21653600
   const buildLink = () => {
     const details = `Подробности: ${process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE}${
-      publicEventRoute(event.event_id).as
+      publicEventRoute(event.id).as
     }`;
 
     const googleDateFormat = "yyyyMMdd'T'HHmmss'Z'";

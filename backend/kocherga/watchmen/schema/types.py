@@ -10,7 +10,10 @@ WatchmenShift = django_utils.DjangoObjectType(
     'WatchmenShift',
     model=models.Shift,
     db_fields=['date', 'shift', 'is_night'],
-    extra_fields=lambda: {'watchman': WatchmenWatchman},
+    extra_fields=lambda: {
+        'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: f"{obj.date}:{obj.shift}"),
+        'watchman': WatchmenWatchman,
+    },
 )
 
 WatchmenWatchman = django_utils.DjangoObjectType(

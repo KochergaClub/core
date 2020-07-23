@@ -6,7 +6,7 @@ import * as ApolloReactHooks from '@apollo/client';
 
 export type EventsPublicEvent_SummaryFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'summary' | 'start'>
+  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'summary' | 'start'>
   & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
@@ -37,7 +37,7 @@ export type UpcomingPublicEventsQuery = (
 
 export type EventsPublicEvent_ForCalendarFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'event_id' | 'title' | 'start' | 'public_tags'>
+  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'start' | 'public_tags'>
 );
 
 export type PublicEventsForCalendarQueryVariables = {
@@ -259,7 +259,7 @@ export type EventFeedbackDeleteMutation = (
 
 export const EventsPublicEvent_SummaryFragmentDoc = gql`
     fragment EventsPublicEvent_Summary on EventsPublicEvent {
-  event_id
+  id
   title
   summary
   image: image_rendition(spec: "fill-760x200") {
@@ -275,7 +275,7 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
     `;
 export const EventsPublicEvent_ForCalendarFragmentDoc = gql`
     fragment EventsPublicEvent_ForCalendar on EventsPublicEvent {
-  event_id
+  id
   title
   start
   public_tags

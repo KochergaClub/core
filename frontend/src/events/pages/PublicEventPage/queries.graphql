@@ -6,7 +6,7 @@ fragment ProjectPage_SummaryForEvent on ProjectPage {
   title
   is_active
   upcoming_events {
-    event_id
+    id
     title
   }
 }
@@ -19,7 +19,7 @@ fragment MyEventsTicket on MyEventsTicket {
 }
 
 fragment EventsPublicEvent on EventsPublicEvent {
-  event_id
+  id
   start
   end
   title

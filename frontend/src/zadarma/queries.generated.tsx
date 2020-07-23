@@ -6,15 +6,15 @@ import * as ApolloReactHooks from '@apollo/client';
 
 export type CommonZadarmaPbxCallFragment = (
   { __typename?: 'ZadarmaPbxCall' }
-  & Pick<Types.ZadarmaPbxCall, 'pbx_call_id' | 'ts'>
+  & Pick<Types.ZadarmaPbxCall, 'id' | 'ts'>
   & { calls: Array<(
     { __typename?: 'ZadarmaCall' }
-    & Pick<Types.ZadarmaCall, 'call_id' | 'ts' | 'call_type' | 'destination' | 'disposition' | 'clid' | 'sip' | 'record' | 'watchman'>
+    & Pick<Types.ZadarmaCall, 'id' | 'ts' | 'call_type' | 'destination' | 'disposition' | 'clid' | 'sip' | 'record' | 'watchman'>
   )>, data?: Types.Maybe<(
     { __typename?: 'ZadarmaData' }
     & { staff_member?: Types.Maybe<(
       { __typename?: 'StaffMember' }
-      & Pick<Types.StaffMember, 'color' | 'short_name'>
+      & Pick<Types.StaffMember, 'id' | 'color' | 'short_name'>
     )> }
   )> }
 );
@@ -70,10 +70,10 @@ export type ZadarmaSetMemberForPbxCallMutation = (
 
 export const CommonZadarmaPbxCallFragmentDoc = gql`
     fragment CommonZadarmaPbxCall on ZadarmaPbxCall {
-  pbx_call_id
+  id
   ts
   calls {
-    call_id
+    id
     ts
     call_type
     destination
@@ -85,6 +85,7 @@ export const CommonZadarmaPbxCallFragmentDoc = gql`
   }
   data {
     staff_member {
+      id
       color
       short_name
     }

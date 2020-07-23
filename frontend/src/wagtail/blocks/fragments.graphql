@@ -1,4 +1,5 @@
 fragment GreyBlock on GreyBlock {
+  id
   grey_value: value {
     header
     text
@@ -6,14 +7,17 @@ fragment GreyBlock on GreyBlock {
 }
 
 fragment BasicLeadBlock on BasicLeadBlock {
+  id
   value
 }
 
 fragment BasicParagraphBlock on BasicParagraphBlock {
+  id
   value
 }
 
 fragment ColumnsBasicBlock on ColumnsBasicBlock {
+  id
   basic_columns: value {
     header
     text
@@ -21,6 +25,7 @@ fragment ColumnsBasicBlock on ColumnsBasicBlock {
 }
 
 fragment ColumnsMembershipsBlock on ColumnsMembershipsBlock {
+  id
   membership_columns: value {
     title
     subtitle
@@ -30,6 +35,7 @@ fragment ColumnsMembershipsBlock on ColumnsMembershipsBlock {
 }
 
 fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
+  id
   button_columns: value {
     title
     caption
@@ -61,6 +67,7 @@ fragment BigContactsBlock on BigContactsBlock {
 fragment PhotoRibbonBlock on PhotoRibbonBlock {
   id
   photos: value(spec: "min-400x320") {
+    id
     url
   }
 }

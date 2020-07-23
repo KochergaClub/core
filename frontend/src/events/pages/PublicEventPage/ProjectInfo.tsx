@@ -56,7 +56,7 @@ const ProjectInfo: React.FC<CommonProps> = ({ event }) => {
     return (
       <Wrapper>
         Ближайшее событие проекта <ProjectLink project={project} />:{' '}
-        <a href={`/events/${upcomingEvent.event_id}`}>{upcomingEvent.title}</a>.
+        <a href={`/events/${upcomingEvent.id}`}>{upcomingEvent.title}</a>.
       </Wrapper>
     );
   }

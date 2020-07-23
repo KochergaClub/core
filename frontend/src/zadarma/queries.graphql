@@ -1,8 +1,8 @@
 fragment CommonZadarmaPbxCall on ZadarmaPbxCall {
-  pbx_call_id
+  id
   ts
   calls {
-    call_id
+    id
     ts
     call_type
     destination
@@ -14,14 +14,25 @@ fragment CommonZadarmaPbxCall on ZadarmaPbxCall {
   }
   data {
     staff_member {
+      id
       color
       short_name
     }
   }
 }
 
-query ZadarmaPbxCalls($before: String, $after: String, $first: Int, $last: Int) {
-  pbxCalls: zadarmaPbxCalls(before: $before, after: $after, first: $first, last: $last) {
+query ZadarmaPbxCalls(
+  $before: String
+  $after: String
+  $first: Int
+  $last: Int
+) {
+  pbxCalls: zadarmaPbxCalls(
+    before: $before
+    after: $after
+    first: $first
+    last: $last
+  ) {
     pageInfo {
       hasNextPage
       hasPreviousPage

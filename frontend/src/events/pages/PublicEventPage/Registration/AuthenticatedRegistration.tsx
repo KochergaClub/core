@@ -39,7 +39,7 @@ const Registered: React.FC<CommonProps> = ({ event }) => {
 const Unregistered: React.FC<CommonProps> = ({ event }) => {
   const [registerMutation] = useMyEventsTicketRegisterMutation({
     variables: {
-      event_id: event.event_id,
+      event_id: event.id,
     },
     refetchQueries: ['GetPublicEvent'],
     awaitRefetchQueries: true,

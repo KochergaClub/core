@@ -6,15 +6,7 @@ class KochergaApolloCache extends InMemoryCache {
   constructor() {
     super({
       typePolicies: {
-        WatchmenShift: {
-          keyFields: ['date', 'shift'],
-        },
-        AuthCurrentUser: {
-          keyFields: ['email'],
-        },
-        EventsPublicEvent: {
-          keyFields: ['event_id'], // TODO - migrate to `id` field which is now returned by backend
-        },
+        // please don't use keyFields, they are too fragile can cause a page crash
         Query: {
           fields: {
             my: {

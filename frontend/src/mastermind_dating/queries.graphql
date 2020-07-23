@@ -1,6 +1,7 @@
 fragment MastermindDatingCohortSummary on MastermindDatingCohort {
   id
   event {
+    id
     start
   }
 }
@@ -19,6 +20,7 @@ fragment MastermindDatingParticipant on MastermindDatingParticipant {
   present
   desc
   user {
+    id
     email
   }
 }
@@ -35,7 +37,7 @@ fragment MastermindDatingCohortDetails on MastermindDatingCohort {
   id
   leader_telegram_uid
   event {
-    event_id
+    id
     start
     title
   }
@@ -48,7 +50,7 @@ fragment MastermindDatingCohortDetails on MastermindDatingCohort {
 }
 
 fragment MastermindDatingEvent on EventsEvent {
-  event_id
+  id
   title
   start
 }

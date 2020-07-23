@@ -1,4 +1,5 @@
 fragment AuthCurrentUser on AuthCurrentUser {
+  id
   is_authenticated
   is_staff
   permissions

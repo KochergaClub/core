@@ -32,11 +32,7 @@ const TicketsSublist: React.FC<{
       </Row>
       <CardList>
         {tickets.map(ticket => (
-          <TicketCard
-            key={ticket.event.event_id}
-            ticket={ticket}
-            later={later}
-          />
+          <TicketCard key={ticket.event.id} ticket={ticket} later={later} />
         ))}
       </CardList>
     </section>

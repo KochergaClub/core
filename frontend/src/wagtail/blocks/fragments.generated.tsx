@@ -6,6 +6,7 @@ import { EventsPublicEvent_SummaryFragmentDoc } from '../../events/queries.gener
 
 export type GreyBlockFragment = (
   { __typename?: 'GreyBlock' }
+  & Pick<Types.GreyBlock, 'id'>
   & { grey_value: (
     { __typename?: 'GreyBlockValue' }
     & Pick<Types.GreyBlockValue, 'header' | 'text'>
@@ -14,16 +15,17 @@ export type GreyBlockFragment = (
 
 export type BasicLeadBlockFragment = (
   { __typename?: 'BasicLeadBlock' }
-  & Pick<Types.BasicLeadBlock, 'value'>
+  & Pick<Types.BasicLeadBlock, 'id' | 'value'>
 );
 
 export type BasicParagraphBlockFragment = (
   { __typename?: 'BasicParagraphBlock' }
-  & Pick<Types.BasicParagraphBlock, 'value'>
+  & Pick<Types.BasicParagraphBlock, 'id' | 'value'>
 );
 
 export type ColumnsBasicBlockFragment = (
   { __typename?: 'ColumnsBasicBlock' }
+  & Pick<Types.ColumnsBasicBlock, 'id'>
   & { basic_columns: Array<(
     { __typename?: 'ColumnsBasicBlockValue' }
     & Pick<Types.ColumnsBasicBlockValue, 'header' | 'text'>
@@ -32,6 +34,7 @@ export type ColumnsBasicBlockFragment = (
 
 export type ColumnsMembershipsBlockFragment = (
   { __typename?: 'ColumnsMembershipsBlock' }
+  & Pick<Types.ColumnsMembershipsBlock, 'id'>
   & { membership_columns: Array<(
     { __typename?: 'ColumnsMembershipsBlockValue' }
     & Pick<Types.ColumnsMembershipsBlockValue, 'title' | 'subtitle' | 'price' | 'description'>
@@ -40,6 +43,7 @@ export type ColumnsMembershipsBlockFragment = (
 
 export type ColumnsButtonsBlockFragment = (
   { __typename?: 'ColumnsButtonsBlock' }
+  & Pick<Types.ColumnsButtonsBlock, 'id'>
   & { button_columns: Array<(
     { __typename?: 'ColumnsButtonsBlockValue' }
     & Pick<Types.ColumnsButtonsBlockValue, 'title' | 'caption' | 'link'>
@@ -73,7 +77,7 @@ export type PhotoRibbonBlockFragment = (
   & Pick<Types.PhotoRibbonBlock, 'id'>
   & { photos: Array<(
     { __typename?: 'WagtailImageRendition' }
-    & Pick<Types.WagtailImageRendition, 'url'>
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )> }
 );
 
@@ -105,6 +109,7 @@ export type HeroFrontBlockFragment = (
 
 export const GreyBlockFragmentDoc = gql`
     fragment GreyBlock on GreyBlock {
+  id
   grey_value: value {
     header
     text
@@ -113,16 +118,19 @@ export const GreyBlockFragmentDoc = gql`
     `;
 export const BasicLeadBlockFragmentDoc = gql`
     fragment BasicLeadBlock on BasicLeadBlock {
+  id
   value
 }
     `;
 export const BasicParagraphBlockFragmentDoc = gql`
     fragment BasicParagraphBlock on BasicParagraphBlock {
+  id
   value
 }
     `;
 export const ColumnsBasicBlockFragmentDoc = gql`
     fragment ColumnsBasicBlock on ColumnsBasicBlock {
+  id
   basic_columns: value {
     header
     text
@@ -131,6 +139,7 @@ export const ColumnsBasicBlockFragmentDoc = gql`
     `;
 export const ColumnsMembershipsBlockFragmentDoc = gql`
     fragment ColumnsMembershipsBlock on ColumnsMembershipsBlock {
+  id
   membership_columns: value {
     title
     subtitle
@@ -141,6 +150,7 @@ export const ColumnsMembershipsBlockFragmentDoc = gql`
     `;
 export const ColumnsButtonsBlockFragmentDoc = gql`
     fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
+  id
   button_columns: value {
     title
     caption
@@ -175,6 +185,7 @@ export const PhotoRibbonBlockFragmentDoc = gql`
     fragment PhotoRibbonBlock on PhotoRibbonBlock {
   id
   photos: value(spec: "min-400x320") {
+    id
     url
   }
 }

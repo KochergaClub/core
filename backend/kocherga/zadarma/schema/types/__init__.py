@@ -19,7 +19,10 @@ ZadarmaCall = django_utils.DjangoObjectType(
         'is_recorded',
         'watchman',
     ],
-    extra_fields=lambda: {'record': record_field()},
+    extra_fields=lambda: {
+        'record': record_field(),
+        'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.call_id),
+    },
 )
 
 
@@ -39,7 +42,10 @@ ZadarmaPbxCall = django_utils.DjangoObjectType(
     model=models.PbxCall,
     db_fields=['pbx_call_id', 'ts'],
     related_fields={'calls': ZadarmaCall},
-    extra_fields={'data': ZadarmaData},
+    extra_fields={
+        'data': ZadarmaData,
+        'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.pbx_call_id),
+    },
 )
 
 ZadarmaPbxCallConnection = helpers.ConnectionType(ZadarmaPbxCall)

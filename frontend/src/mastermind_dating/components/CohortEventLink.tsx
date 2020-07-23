@@ -100,7 +100,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
     setEvent({
       variables: {
         cohort_id: cohort.id,
-        event_id: confirming.event_id,
+        event_id: confirming.id,
       },
     });
   }, [cohort.id, setEvent, confirming]);
@@ -110,7 +110,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
       <Row>
         <div>
           Связанное событие:{' '}
-          <A href={`/team/events/view/${cohort.event.event_id}`}>
+          <A href={`/team/events/view/${cohort.event.id}`}>
             {cohort.event.title}
           </A>
         </div>

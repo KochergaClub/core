@@ -1,7 +1,8 @@
+from typing import Optional
+
 from kocherga.graphql import g
 
 # type AuthCurrentUser {
-#   is_authenticated: Boolean!
 #   email: String
 #   first_name: String
 #   last_name: String
@@ -14,16 +15,26 @@ def resolve_permissions(obj, info):
     return info.context.user.get_all_permissions()
 
 
+def id_field():
+    def resolve(obj, info):
+        return getattr(obj, 'email', None) or 'anonymous'
+
+    return g.Field(g.NN(g.ID), resolve=resolve)
+
+
 AuthCurrentUser = g.ObjectType(
     'AuthCurrentUser',
-    fields={
-        'is_authenticated': g.Field(g.NN(g.Boolean)),
-        'email': g.Field(g.String),
-        'first_name': g.Field(g.String),
-        'last_name': g.Field(g.String),
-        'is_staff': g.Field(g.Boolean),
-        'permissions': g.Field(g.NNList(g.String), resolve=resolve_permissions),
-    },
+    fields=g.fields(
+        {
+            'id': id_field(),
+            'is_authenticated': bool,
+            'email': Optional[str],
+            'first_name': Optional[str],
+            'last_name': Optional[str],
+            'is_staff': Optional[bool],
+            'permissions': g.Field(g.NNList(g.String), resolve=resolve_permissions),
+        }
+    ),
     description="""Describes the current user.
 
 If user is not signed in, `is_authenticated` field will be false and all other fields will be empty.""",

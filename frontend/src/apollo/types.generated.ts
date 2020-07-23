@@ -22,6 +22,7 @@ export type AnalyticsBovStat = {
  */
 export type AuthCurrentUser = {
   __typename?: 'AuthCurrentUser';
+  id: Scalars['ID'];
   is_authenticated: Scalars['Boolean'];
   email?: Maybe<Scalars['String']>;
   first_name?: Maybe<Scalars['String']>;
@@ -2214,6 +2215,7 @@ export type WatchmenShift = {
   date: Scalars['String'];
   shift: Scalars['String'];
   is_night: Scalars['Boolean'];
+  id: Scalars['ID'];
   watchman?: Maybe<WatchmenWatchman>;
 };
 
@@ -2256,6 +2258,7 @@ export type ZadarmaCall = {
   is_recorded: Scalars['Int'];
   watchman: Scalars['String'];
   record?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
 };
 
 export type ZadarmaData = {
@@ -2269,6 +2272,7 @@ export type ZadarmaPbxCall = {
   ts: Scalars['String'];
   calls: Array<ZadarmaCall>;
   data?: Maybe<ZadarmaData>;
+  id: Scalars['ID'];
 };
 
 export type ZadarmaPbxCallConnection = {

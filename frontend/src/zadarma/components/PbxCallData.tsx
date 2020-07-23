@@ -60,12 +60,12 @@ const StaffMember: React.FC<Props> = ({ pbx_call }) => {
       await setStaffMemberMutation({
         variables: {
           member_id: String(watchman.member.id),
-          pbx_call_id: pbx_call.pbx_call_id,
+          pbx_call_id: pbx_call.id,
         },
       });
       unexpand();
     },
-    [unexpand, pbx_call.pbx_call_id, setStaffMemberMutation]
+    [unexpand, pbx_call.id, setStaffMemberMutation]
   );
 
   const nameEl = <StaffMemberName pbx_call={pbx_call} />;

@@ -7,11 +7,13 @@ import Card from '~/components/Card';
 import PbxCallCard from './PbxCallCard';
 
 interface Props {
-  pbx_call_id: string;
+  id: string;
 }
 
-const PbxCallDetails: React.FC<Props> = ({ pbx_call_id }) => {
-  const queryResults = useZadarmaPbxCallQuery({ variables: { pbx_call_id } });
+const PbxCallDetails: React.FC<Props> = ({ id }) => {
+  const queryResults = useZadarmaPbxCallQuery({
+    variables: { pbx_call_id: id },
+  });
 
   return (
     <ApolloQueryResults {...queryResults}>

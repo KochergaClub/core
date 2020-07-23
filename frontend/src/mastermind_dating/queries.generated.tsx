@@ -9,7 +9,7 @@ export type MastermindDatingCohortSummaryFragment = (
   & Pick<Types.MastermindDatingCohort, 'id'>
   & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'start'>
+    & Pick<Types.EventsEvent, 'id' | 'start'>
   )> }
 );
 
@@ -23,7 +23,7 @@ export type MastermindDatingParticipantFragment = (
   & Pick<Types.MastermindDatingParticipant, 'id' | 'name' | 'invite_email_sent' | 'voted_for' | 'photo' | 'present' | 'desc'>
   & { user: (
     { __typename?: 'AuthUser' }
-    & Pick<Types.AuthUser, 'email'>
+    & Pick<Types.AuthUser, 'id' | 'email'>
   ) }
 );
 
@@ -41,7 +41,7 @@ export type MastermindDatingCohortDetailsFragment = (
   & Pick<Types.MastermindDatingCohort, 'id' | 'leader_telegram_uid'>
   & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'event_id' | 'start' | 'title'>
+    & Pick<Types.EventsEvent, 'id' | 'start' | 'title'>
   )>, participants: Array<(
     { __typename?: 'MastermindDatingParticipant' }
     & MastermindDatingParticipantFragment
@@ -53,7 +53,7 @@ export type MastermindDatingCohortDetailsFragment = (
 
 export type MastermindDatingEventFragment = (
   { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'event_id' | 'title' | 'start'>
+  & Pick<Types.EventsEvent, 'id' | 'title' | 'start'>
 );
 
 export type MastermindDatingCohortsQueryVariables = {};
@@ -274,6 +274,7 @@ export const MastermindDatingCohortSummaryFragmentDoc = gql`
     fragment MastermindDatingCohortSummary on MastermindDatingCohort {
   id
   event {
+    id
     start
   }
 }
@@ -288,6 +289,7 @@ export const MastermindDatingParticipantFragmentDoc = gql`
   present
   desc
   user {
+    id
     email
   }
 }
@@ -312,7 +314,7 @@ export const MastermindDatingCohortDetailsFragmentDoc = gql`
   id
   leader_telegram_uid
   event {
-    event_id
+    id
     start
     title
   }
@@ -327,7 +329,7 @@ export const MastermindDatingCohortDetailsFragmentDoc = gql`
 ${MastermindDatingGroupFragmentDoc}`;
 export const MastermindDatingEventFragmentDoc = gql`
     fragment MastermindDatingEvent on EventsEvent {
-  event_id
+  id
   title
   start
 }
