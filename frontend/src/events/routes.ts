@@ -1,7 +1,4 @@
-interface Route {
-  href: string;
-  as: string;
-}
+import { Route } from '~/common/types';
 
 export const publicEventRoute = (id: string): Route => ({
   href: `/events/[id]`,

@@ -8,6 +8,7 @@ import { CurrentUserQuery, CurrentUserDocument } from '../queries.generated';
 
 import AuthForm from '../components/AuthForm';
 import CenteredLayout from '../components/CenteredLayout';
+import { checkYourEmailRoute } from '../routes';
 
 interface Props {
   next: string;
@@ -21,7 +22,7 @@ const LoginPage: NextApolloPage<Props> = props => {
         <AuthForm
           onLogin={() => (window.location.href = props.next)}
           onMagicLinkSent={() =>
-            (window.location.href = '/login/check-your-email')
+            (window.location.href = checkYourEmailRoute().as)
           }
           next={props.next}
         />

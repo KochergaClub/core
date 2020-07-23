@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { A, Button, Row, Column } from '@kocherga/frontkit';
 
 import AuthForm from '~/auth/components/AuthForm';
+import { checkYourEmailRoute } from '~/auth/routes';
 
 import { CommonProps } from '../types';
 
@@ -37,7 +38,7 @@ const AnonChoice: React.FC<CommonProps> = props => {
             // no action needed because <Registration /> uses useUser() hook and will automatically render AuthenticationRegistration instead
             onLogin={() => null}
             onMagicLinkSent={() => {
-              window.location.href = '/auth/check-your-email';
+              window.location.href = checkYourEmailRoute().as;
             }}
           />
           <BackLink reset={reset} />

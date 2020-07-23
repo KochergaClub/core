@@ -7,3 +7,8 @@ export interface User {
   is_staff?: boolean;
   email?: string;
 }
+
+export interface Route {
+  href: string;
+  as: string;
+}
