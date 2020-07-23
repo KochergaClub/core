@@ -1,5 +1,6 @@
 CLUSTER ?= dev
 K = kubectl --context=$(CLUSTER)
+KDEV = kubectl --context=dev  # for cases where we never want to affect prod by mistake
 
 SUPERUSER_EMAIL ?= me@berekuk.ru
 
@@ -50,6 +51,9 @@ shell:
 
 shell_front:
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- bash
+
+shell_db:
+	$(K) exec -it $(shell $(K) get po -l app=core-mysql -o name) -- bash
 
 pyshell:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- ./manage.py shell
@@ -128,3 +132,9 @@ migrate:
 
 wagtail_init:
 	$(K) exec $(shell $(K) get po -l app=core-django -o name) -- ./scripts/wagtail-init.py
+
+dump_db:
+	$(KDEV) exec $(shell $(KDEV) get po -l app=core-mysql -o name) -- sh -c 'mysqldump -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE | gzip -c' >dump.gz
+
+restore_db:
+	cat dump.gz | zcat | $(KDEV) exec -i $(shell $(KDEV) get po -l app=core-mysql -o name) -- sh -c 'mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE'
