@@ -28,8 +28,8 @@ spec:
             - name: https
               containerPort: 443
               hostPort: 443
-#            - name: admin
-#              containerPort: 8080
+            - name: admin
+              containerPort: 8080
           volumeMounts:
             - name: config
               mountPath: /etc/traefik/traefik.yaml
@@ -45,6 +45,8 @@ apiVersion: v1
 metadata:
   name: traefik-ingress-service
   namespace: {{ .Release.Namespace }}
+  labels:
+    app: traefik
 spec:
   selector:
     app: traefik-ingress-lb
@@ -53,6 +55,24 @@ spec:
       name: http
     - port: 443
       name: https
-#    - protocol: TCP
-#      port: 8080
-#      name: admin
+    - port: 8080
+      name: admin
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: traefik
+  namespace: monitor
+spec:
+  jobLabel: traefik
+  selector:
+    matchLabels:
+      app: traefik
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  endpoints:
+  - port: admin
+    path: /metrics
+    interval: 30s
