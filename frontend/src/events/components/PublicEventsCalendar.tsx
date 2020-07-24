@@ -90,7 +90,7 @@ const PublicEventsCalendar = () => {
       if (!queryResults.data) {
         throw new Error('Empty data');
       }
-      return queryResults.data.publicEvents.nodes.map(event => {
+      const result = queryResults.data.publicEvents.nodes.map(event => {
         const past = isPast(parseISO(event.start));
         const classNames = [];
         if (past) {
@@ -102,15 +102,17 @@ const PublicEventsCalendar = () => {
 
         return {
           ...event,
+          event_id: event.id, // id attr is special in FullCalendar and can't be used from externalProps
           classNames,
         };
       });
+      return result;
     },
     [apolloClient]
   );
 
   const navigate = useCallback(({ event }: EventClickArg) => {
-    const route = publicEventRoute(event.extendedProps.id);
+    const route = publicEventRoute(event.extendedProps.event_id); // don't try to use .id here!
     if (window.location !== window.parent.location) {
       // we're in iframe
       window.open(route.as, '_parent');

@@ -11,6 +11,7 @@ fragment EventsPublicEvent_Summary on EventsPublicEvent {
     url
   }
   start
+  end
 }
 
 query UpcomingPublicEvents($today: String!) {
