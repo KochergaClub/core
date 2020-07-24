@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+deploy:
+  helm:
+    releases:
+      - name: elasticsearch
+        chartPath: elastic/elasticsearch
+        valuesFiles:
+          - ops/values/elasticsearch.yaml
+        wait: true
+        remote: true
+      - name: kibana
+        chartPath: elastic/kibana
+        version: 7.8.0
+        wait: true
+        remote: true
+    flags:
+      upgrade:
+        - --install

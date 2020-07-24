@@ -39,6 +39,12 @@ domains:
     port: 9093
     basic_auth: true
 
+  - name: kibana
+    host: kibana.team.kocherga.club
+    service: kibana-kibana
+    port: 5601
+    basic_auth: true
+
   - name: metabase
     host: metabase.team.kocherga.club
     service: metabase-metabase

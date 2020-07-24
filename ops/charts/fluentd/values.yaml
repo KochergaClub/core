@@ -1,0 +1,4 @@
+image_tag: "v1.11.1-debian-elasticsearch7-1.3"
+
+elasticsearch:
+  host: elasticsearch-master.default
