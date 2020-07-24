@@ -13,6 +13,13 @@ deploy:
         wait: true
         remote: true
         upgradeOnChange: true
+      - name: loki
+        # https://grafana.github.io/loki/charts/
+        chartPath: loki/loki-stack
+        namespace: monitor
+        wait: true
+        remote: true
+        upgradeOnChange: true
     flags:
       upgrade:
         - --install
