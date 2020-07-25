@@ -111,6 +111,16 @@ GOOGLE_ANALYTICS_ID = "UA-67233667-7"
 GDRIVE_WATCHMEN_FOLDER = "0B3eXnAACJCqlOUlEWUU2bkRlMkE"
 
 WAGTAILAPI_BASE_URL = f"{KOCHERGA_API_ROOT}/wagtail"
+WAGTAILSEARCH_BACKENDS = {
+    "default": {
+        "BACKEND": "wagtail.search.backends.elasticsearch7",
+        "URLS": ["http://elasticsearch-master:9200"],
+        "INDEX": "wagtail",
+        "TIMEOUT": 5,
+        "OPTIONS": {},
+        "INDEX_SETTINGS": {},
+    }
+}
 
 # this is wagtail setting for email templates, see https://github.com/wagtail/wagtail/pull/3769 for details
 BASE_URL = KOCHERGA_WEBSITE

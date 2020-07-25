@@ -6,7 +6,7 @@ import * as ApolloReactHooks from '@apollo/client';
 
 export type EventsPublicEvent_SummaryFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'summary' | 'start'>
+  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'summary' | 'start' | 'end'>
   & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
@@ -271,6 +271,7 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
     url
   }
   start
+  end
 }
     `;
 export const EventsPublicEvent_ForCalendarFragmentDoc = gql`

@@ -13,8 +13,7 @@ from wagtail.api.v2.utils import (
     filter_page_type,
 )
 
-from kocherga.graphql import g
-from kocherga.graphql.helpers import Collection
+from kocherga.graphql import g, helpers
 
 from ..utils import filter_queryset_by_page_permissions
 
@@ -23,7 +22,7 @@ from ..models import PagePreview
 from . import types
 
 
-c = Collection()
+c = helpers.Collection()
 
 
 # Copy-pasted from https://github.com/wagtail/wagtail/blob/master/wagtail/api/v2/endpoints.py
@@ -117,6 +116,19 @@ def wagtailPages(helper):
 
     # wagtailPages: [WagtailPage!]!
     return g.Field(g.NNList(types.WagtailPage), resolve=resolve)
+
+
+@c.class_field
+class wagtailSearch(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        query = input['query']
+        return [page.specific for page in get_queryset(info.context).search(query)]
+
+    permissions = []
+    input = {
+        'query': str,
+    }
+    result = g.NNList(types.WagtailPage)
 
 
 queries = c.as_dict()

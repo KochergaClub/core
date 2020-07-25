@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { CSSTransition } from 'react-transition-group';
 
 import styled from 'styled-components';
 import { FaEllipsisH } from 'react-icons/fa';
@@ -17,41 +16,10 @@ export { default as LinkAction } from './LinkAction';
 export { default as NextLinkAction } from './NextLinkAction';
 export { default as ModalAction } from './ModalAction';
 
+import { FloatingList } from '~/components';
+
 const Container = styled.div`
   white-space: nowrap;
-`;
-
-const animationTimeout = 250;
-const animationClass = 'transition';
-
-const Dropdown = styled.div`
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  user-select: none;
-  border-radius: 4px;
-
-  z-index: 10;
-  position: relative;
-  overflow: hidden; // necessary to avoid broken corners when items are hovered
-  background-color: white;
-  cursor: pointer;
-
-  &.${animationClass}-enter {
-    opacity: 0;
-  }
-
-  &.${animationClass}-enter-active {
-    opacity: 1;
-    transition: opacity ${animationTimeout}ms ease-in-out;
-  }
-
-  &.${animationClass}-exit {
-    opacity: 1;
-  }
-
-  &.${animationClass}-exit-active {
-    opacity: 0;
-    transition: opacity ${animationTimeout}ms ease-in-out;
-  }
 `;
 
 const UnstyledLink = styled.a`
@@ -157,22 +125,14 @@ const DropdownMenu: React.FC<Props> = ({
               <DropdownButton title={title || null} />
             )}
           </UnstyledLink>
-          <CSSTransition
-            appear={true}
-            mountOnEnter={true}
-            unmountOnExit={true}
-            in={expanded}
-            timeout={animationTimeout}
-            classNames={animationClass}
+          <FloatingList
+            expanded={expanded}
+            ref={setPopperElement}
+            style={styles.popper}
+            attributes={attributes.popper}
           >
-            <Dropdown
-              ref={setPopperElement}
-              style={styles.popper}
-              {...attributes.popper}
-            >
-              {children}
-            </Dropdown>
-          </CSSTransition>
+            {children}
+          </FloatingList>
         </Container>
       </DropdownMenuContext.Provider>
     </>

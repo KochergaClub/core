@@ -1,0 +1,9 @@
+query WagtailSearch($input: WagtailSearchInput!) {
+  wagtailSearch(input: $input) {
+    id
+    title
+    meta {
+      html_url
+    }
+  }
+}

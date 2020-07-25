@@ -1624,6 +1624,7 @@ export type Query = {
   __typename?: 'Query';
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
+  wagtailSearch: Array<WagtailPage>;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
   zadarmaPbxCalls: ZadarmaPbxCallConnection;
@@ -1672,6 +1673,11 @@ export type Query = {
 export type QueryWagtailPageArgs = {
   path?: Maybe<Scalars['String']>;
   preview_token?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryWagtailSearchArgs = {
+  input: WagtailSearchInput;
 };
 
 
@@ -2179,6 +2185,10 @@ export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
   html_url: Scalars['String'];
+};
+
+export type WagtailSearchInput = {
+  query: Scalars['String'];
 };
 
 export type WatchmenCreateWatchmanInput = {

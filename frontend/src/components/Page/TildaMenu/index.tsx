@@ -7,11 +7,11 @@ import { staticUrl } from '~/common/utils';
 
 import MenuItems from './MenuItems';
 import MobileHeader from './MobileHeader';
-import SocialIcons from './SocialIcons';
 
 import { styled, kind2color } from './constants';
 import { MenuKind } from '../types';
 import UserButtons from './UserButtons';
+import Search from '../Search';
 
 const Container = styled('div')<{ hideOnMobile: boolean }>`
   width: 100%;
@@ -51,9 +51,11 @@ const Logo = ({ kind }: Props) => {
     );
   } else if (kind === 'my') {
     return (
-      <a href="/">
-        <LogoImage />
-      </a>
+      <Link href="/" as="/" passHref>
+        <a>
+          <LogoImage />
+        </a>
+      </Link>
     );
   }
 
@@ -69,6 +71,7 @@ const Line = styled.div`
   align-items: center;
   @media screen and (max-width: 980px) {
     flex-direction: column;
+    margin-bottom: 20px;
   }
 `;
 
@@ -87,8 +90,8 @@ const TildaMenu = ({ kind }: Props) => {
           <Line>
             <Logo kind={kind} />
             <MenuItems kind={kind} />
+            <Search />
           </Line>
-          {null && <SocialIcons />}
           <UserButtons kind={kind} />
         </Container>
       </div>

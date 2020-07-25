@@ -12,3 +12,4 @@ export { default as DropdownMenu } from './DropdownMenu';
 export { default as ApolloQueryResults } from './ApolloQueryResults';
 export { default as Spinner } from './Spinner';
 export { default as HintCard } from './HintCard';
+export { default as FloatingList } from './FloatingList';
