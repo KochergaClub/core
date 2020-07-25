@@ -27,7 +27,7 @@ boto3==1.12.46            # via -r requirements.in
 botocore==1.15.46         # via boto3, s3transfer
 cachetools==4.1.0         # via google-auth
 captcha-solver==0.1.5     # via -r requirements.in
-certifi==2020.4.5.1       # via aiogram, requests, sentry-sdk
+certifi==2020.4.5.1       # via aiogram, elasticsearch, requests, sentry-sdk
 cffi==1.14.0              # via cryptography
 channels-redis==2.4.2     # via -r requirements.in
 channels==2.4.0           # via -r requirements.in, channels-redis
@@ -57,6 +57,7 @@ django==3.0.5             # via -r requirements.in, channels, django-annoying, d
 djangorestframework==3.11.0  # via django-rest-framework, wagtail
 docutils==0.15.2          # via botocore
 draftjs-exporter==2.1.7   # via wagtail
+elasticsearch==7.8.0      # via -r requirements.in
 entrypoints==0.3          # via flake8, nbconvert
 factory-boy==2.12.0       # via -r requirements.in
 faker==4.0.3              # via factory-boy
@@ -191,7 +192,7 @@ typing-extensions==3.7.4.2  # via ariadne, mypy
 tzlocal==2.0.0            # via apscheduler
 unidecode==1.1.1          # via wagtail
 uritemplate==3.0.1        # via google-api-python-client
-urllib3==1.25.9           # via botocore, pyppeteer, requests, sentry-sdk
+urllib3==1.25.9           # via botocore, elasticsearch, pyppeteer, requests, sentry-sdk
 uvicorn==0.11.3           # via -r requirements.in
 uvloop==0.14.0            # via uvicorn
 wagtail-condensedinlinepanel==0.5.3  # via -r requirements.in

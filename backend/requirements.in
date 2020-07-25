@@ -52,6 +52,7 @@ html2text
 ariadne == 0.11.0
 aiodataloader
 django-storages
+elasticsearch >= 7.0.0
 
 # dev-dependencies
 pytest
