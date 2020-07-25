@@ -16,12 +16,6 @@ deploy:
         chartPath: ops/charts/fluentd
         namespace: monitor
         wait: true
-      - name: loki
-        # https://grafana.github.io/loki/charts/
-        chartPath: loki/loki-stack
-        namespace: monitor
-        wait: true
-        remote: true
     flags:
       upgrade:
         - --install
