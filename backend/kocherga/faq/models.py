@@ -2,15 +2,15 @@ from django.db import models
 
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
-from wagtail.core.models import Orderable, Page
+from wagtail.core.models import Orderable
 from modelcluster.fields import ParentalKey
 
 from condensedinlinepanel.edit_handlers import CondensedInlinePanel
 
-from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.models import KochergaPage
 
 
-class FAQPage(HeadlessPreviewMixin, Page):
+class FAQPage(KochergaPage):
     summary = models.TextField('Короткое описание', blank=True)
 
     parent_page_types = ['pages.FrontPage', 'faq.FAQPage']
@@ -32,7 +32,7 @@ class FAQPage(HeadlessPreviewMixin, Page):
             page.specific for page in self.get_children().type(self.__class__).live()
         ]
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         FieldPanel('summary'),
         CondensedInlinePanel('entries', label="Вопросы и ответы"),
     ]

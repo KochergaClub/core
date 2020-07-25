@@ -9,6 +9,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 import wagtail.images.models
+import wagtail.core.models
+from .mixins import HeadlessPreviewMixin
+from kocherga.django.managers import RelayQuerySetMixin
 
 
 class PagePreview(models.Model):
@@ -88,3 +91,22 @@ class CustomRendition(wagtail.images.models.AbstractRendition):
         logger.info(f'Updating {self.file.name} ACL to {acl}')
 
         self.file.file.obj.Acl().put(ACL=acl)
+
+
+class KochergaPageQuerySet(wagtail.core.models.PageQuerySet, RelayQuerySetMixin):
+    pass
+
+
+KochergaPageManager = wagtail.core.models.PageManager.from_queryset(
+    KochergaPageQuerySet
+)
+
+
+class KochergaPage(wagtail.core.models.Page, HeadlessPreviewMixin):
+    objects = KochergaPageManager()
+
+    class Meta:
+        # Not `abstract = True` because we want to use KochergaPage.objects.
+        # Not non-abstract, non-proxy page because we don't want to create another DB table
+        # (and also migration would be non-trivial).
+        proxy = True

@@ -8,12 +8,11 @@ from django.db import models
 
 from rest_framework.serializers import Field
 
-from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
-from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.models import KochergaPage
 from kocherga.dateutils import TZ
 from kocherga.events.serializers import PublicEventSerializer
 
@@ -29,14 +28,14 @@ class UpcomingEventsField(Field):
         return PublicEventSerializer(qs, many=True).data
 
 
-class ProjectIndexPage(HeadlessPreviewMixin, Page):
+class ProjectIndexPage(KochergaPage):
     subpage_types = ['projects.ProjectPage']
     parent_page_types = ['pages.FrontPage']
 
     graphql_type = 'ProjectIndexPage'
 
 
-class ProjectPage(HeadlessPreviewMixin, Page):
+class ProjectPage(KochergaPage):
     summary = models.TextField('Короткое описание')
     activity_summary = models.TextField('Периодичность', blank=True, null=True)
     is_active = models.BooleanField('Активный')
@@ -46,7 +45,7 @@ class ProjectPage(HeadlessPreviewMixin, Page):
         'kocherga_wagtail.CustomImage', on_delete=models.PROTECT, related_name='+'
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         FieldPanel('is_active'),
         FieldPanel('summary'),
         FieldPanel('activity_summary'),

@@ -15,6 +15,7 @@ import wagtailmath.blocks
 import wagtailgeowidget.blocks
 
 import kocherga.wagtail.blocks
+import kocherga.wagtail.models
 from kocherga.graphql import g, django_utils
 from kocherga.graphql.permissions import check_permissions
 from .schema import types
@@ -60,7 +61,7 @@ def image_rendition_field(model, field_name, permissions: List[Any] = []):
 
 
 def WagtailPageType(
-    model: wagtail.core.models.Page,
+    model: kocherga.wagtail.models.KochergaPage,
     db_fields: List[str],
     related_fields: Dict[str, Union[Tuple[str, g.ObjectType], g.ObjectType]] = {},
     extra_fields={},

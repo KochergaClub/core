@@ -1,26 +1,25 @@
-from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel
 
-from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.models import KochergaPage
 
 from .blocks import all_blocks, hero_block
 
 
-class FreeFormPage(HeadlessPreviewMixin, Page):
+class FreeFormPage(KochergaPage):
     body = StreamField(all_blocks)
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         StreamFieldPanel('body'),
     ]
 
     graphql_type = 'FreeFormPage'
 
 
-class FrontPage(HeadlessPreviewMixin, Page):
+class FrontPage(KochergaPage):
     body = StreamField(all_blocks + [hero_block])
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         StreamFieldPanel('body'),
     ]
 
@@ -28,5 +27,5 @@ class FrontPage(HeadlessPreviewMixin, Page):
 
 
 # fake model for wagtail folders
-class FolderPage(Page):
+class FolderPage(KochergaPage):
     graphql_type = 'FolderPage'

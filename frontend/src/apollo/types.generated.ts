@@ -1624,7 +1624,7 @@ export type Query = {
   __typename?: 'Query';
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
-  wagtailSearch: Array<WagtailPage>;
+  wagtailSearch: WagtailSearchResult;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
   zadarmaPbxCalls: ZadarmaPbxCallConnection;
@@ -2189,6 +2189,13 @@ export type WagtailPageMeta = {
 
 export type WagtailSearchInput = {
   query: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type WagtailSearchResult = {
+  __typename?: 'WagtailSearchResult';
+  results: Array<WagtailPage>;
+  more: Scalars['Boolean'];
 };
 
 export type WatchmenCreateWatchmanInput = {

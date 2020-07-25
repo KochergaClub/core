@@ -1032,7 +1032,7 @@ type ProjectPage implements WagtailPage {
 type Query {
   wagtailPage(path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
-  wagtailSearch(input: WagtailSearchInput!): [WagtailPage!]!
+  wagtailSearch(input: WagtailSearchInput!): WagtailSearchResult!
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
   zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
@@ -1405,6 +1405,12 @@ type WagtailPageMeta {
 
 input WagtailSearchInput {
   query: String!
+  limit: Int
+}
+
+type WagtailSearchResult {
+  results: [WagtailPage!]!
+  more: Boolean!
 }
 
 input WatchmenCreateWatchmanInput {

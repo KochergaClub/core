@@ -1,14 +1,13 @@
-from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from django.db import models
 from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel
 
 from ..blocks import section_blocks
 
-from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.models import KochergaPage
 
 
-class SectionIndexPage(HeadlessPreviewMixin, Page):
+class SectionIndexPage(KochergaPage):
     # parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.SectionPage']
 
@@ -19,7 +18,7 @@ class SectionIndexPage(HeadlessPreviewMixin, Page):
         verbose_name_plural = 'Списки рацио-секций'
 
 
-class SectionPage(HeadlessPreviewMixin, Page):
+class SectionPage(KochergaPage):
     body = StreamField(section_blocks)
     status = models.CharField(
         'Статус',
@@ -34,7 +33,7 @@ class SectionPage(HeadlessPreviewMixin, Page):
         ),
     )
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         FieldPanel('status'),
         StreamFieldPanel('body'),
     ]

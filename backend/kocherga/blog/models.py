@@ -2,20 +2,20 @@ from django.db import models
 
 from modelcluster.fields import ParentalKey
 
-from wagtail.core.models import Page, Orderable
+from wagtail.core.models import Orderable
 from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
-from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.models import KochergaPage
 
 
-class BlogIndexPage(HeadlessPreviewMixin, Page):
+class BlogIndexPage(KochergaPage):
     subpage_types = ['blog.BlogPostPage']
 
     subtitle = models.TextField('Подзаголовок')
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         FieldPanel('subtitle'),
     ]
 
@@ -26,12 +26,12 @@ class BlogIndexPage(HeadlessPreviewMixin, Page):
     graphql_type = 'BlogIndexPage'
 
 
-class BlogPostPage(HeadlessPreviewMixin, Page):
+class BlogPostPage(KochergaPage):
     body = RichTextField('Текст')
     summary = models.TextField('Короткое описание', blank=True)
     date = models.DateField('Дата поста')
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         FieldPanel('date'),
         InlinePanel('authors', label='Авторы'),
         FieldPanel('summary'),

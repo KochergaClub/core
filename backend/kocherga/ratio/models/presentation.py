@@ -1,12 +1,11 @@
 from django.db import models
 
-from wagtail.core.models import Page
 from wagtail.admin.edit_handlers import FieldPanel
 
-from kocherga.wagtail.mixins import HeadlessPreviewMixin
+from kocherga.wagtail.models import KochergaPage
 
 
-class PresentationIndexPage(HeadlessPreviewMixin, Page):
+class PresentationIndexPage(KochergaPage):
     # parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.PresentationPage']
 
@@ -17,10 +16,10 @@ class PresentationIndexPage(HeadlessPreviewMixin, Page):
         verbose_name_plural = 'Списки рацио-презентаций'
 
 
-class PresentationPage(HeadlessPreviewMixin, Page):
+class PresentationPage(KochergaPage):
     source = models.TextField()
 
-    content_panels = Page.content_panels + [
+    content_panels = KochergaPage.content_panels + [
         FieldPanel('source'),
     ]
 

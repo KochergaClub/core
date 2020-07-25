@@ -7,17 +7,13 @@ import urllib.parse
 
 from django.http import Http404
 from wagtail.core.models import Page, Site
-from wagtail.api.v2.utils import (
-    page_models_from_string,
-    BadRequestError,
-    filter_page_type,
-)
+from wagtail.api.v2.utils import filter_page_type
 
 from kocherga.graphql import g, helpers
 
 from ..utils import filter_queryset_by_page_permissions
 
-from ..models import PagePreview
+from ..models import PagePreview, KochergaPage
 
 from . import types
 
@@ -25,25 +21,10 @@ from . import types
 c = helpers.Collection()
 
 
-# Copy-pasted from https://github.com/wagtail/wagtail/blob/master/wagtail/api/v2/endpoints.py
+# Simplified from https://github.com/wagtail/wagtail/blob/master/wagtail/api/v2/endpoints.py
 # to allow non-public pages in API.
-def get_queryset(request, page_type='wagtailcore.Page'):
-    # Allow pages to be filtered to a specific type
-    try:
-        models = page_models_from_string(page_type)
-    except (LookupError, ValueError):
-        raise BadRequestError("type doesn't exist")
-
-    if not models:
-        models = [Page]
-
-    if len(models) == 1:
-        queryset = models[0].objects.all()
-    else:
-        queryset = Page.objects.all()
-
-        # Filter pages by specified models
-        queryset = filter_page_type(queryset, models)
+def get_queryset(request):
+    queryset = KochergaPage.objects.all()
 
     # Get live pages that are not in a private section
     queryset = filter_queryset_by_page_permissions(request, queryset)
@@ -118,17 +99,39 @@ def wagtailPages(helper):
     return g.Field(g.NNList(types.WagtailPage), resolve=resolve)
 
 
+# Search is not paged, since combining relay_page with search is non-trivial.
 @c.class_field
 class wagtailSearch(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         query = input['query']
-        return [page.specific for page in get_queryset(info.context).search(query)]
+        qs = get_queryset(info.context).search(query)
+
+        limit = input.pop('limit', None)
+        if limit:
+            # ask for one more to determine if there are more results
+            qs = qs[: limit + 1]
+
+        pages = list(qs)
+
+        more = False
+        if limit:
+            more = len(pages) > limit
+            pages = pages[:limit]
+
+        return {
+            'results': [page.specific for page in pages],
+            'more': more,
+        }
 
     permissions = []
     input = {
         'query': str,
+        'limit': Optional[int],
     }
-    result = g.NNList(types.WagtailPage)
+    result = {
+        'results': g.NNList(types.WagtailPage),
+        'more': bool,
+    }
 
 
 queries = c.as_dict()

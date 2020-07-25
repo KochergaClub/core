@@ -31,9 +31,6 @@ class events(helpers.BaseField):
         return qs.relay_page(order='start', **pager)
 
     permissions = [staffonly]
-    # input EventsFilterInput {
-    #   event_type: String
-    # }
     FilterInput = g.InputObjectType(
         'EventsFilterInput', g.input_fields({'event_type': Optional[str]})
     )
