@@ -114,7 +114,7 @@ WAGTAILAPI_BASE_URL = f"{KOCHERGA_API_ROOT}/wagtail"
 WAGTAILSEARCH_BACKENDS = {
     "default": {
         "BACKEND": "wagtail.search.backends.elasticsearch7",
-        "URLS": ["http://elasticsearch-master:9200"],
+        "URLS": ["http://elasticsearch-master-headless:9200"],
         "INDEX": "wagtail",
         "TIMEOUT": 5,
         "OPTIONS": {},

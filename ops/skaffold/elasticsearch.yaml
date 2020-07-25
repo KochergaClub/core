@@ -9,6 +9,7 @@ deploy:
           - ops/values/elasticsearch.yaml
         wait: true
         remote: true
+        upgradeOnChange: true
       - name: kibana
         chartPath: elastic/kibana
         version: 7.8.0
