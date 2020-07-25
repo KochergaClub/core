@@ -37,7 +37,7 @@ const PageResultInternals: React.FC<{
           <div>{page.title}</div>
         </div>
       );
-    case 'FAQPage':
+    case 'FaqPage':
       return (
         <div>
           <Label>FAQ</Label>

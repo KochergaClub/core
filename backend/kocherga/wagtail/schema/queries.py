@@ -6,8 +6,7 @@ from typing import Optional
 import urllib.parse
 
 from django.http import Http404
-from wagtail.core.models import Page, Site
-from wagtail.api.v2.utils import filter_page_type
+from wagtail.core.models import Site
 
 from kocherga.graphql import g, helpers
 
