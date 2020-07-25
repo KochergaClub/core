@@ -1,5 +1,8 @@
 replicas: 1
 
+# necessary for single-node deployment
+clusterHealthCheckParams: "wait_for_status=yellow&timeout=1s"
+
 resources:
   requests:
     cpu: "100m"
