@@ -42,10 +42,10 @@ interface Props {
   ref: React.Dispatch<React.SetStateAction<HTMLDivElement | null>>;
 }
 
-const FloatingList: React.ForwardRefRenderFunction<HTMLDivElement, Props> = (
-  { children, expanded, style, attributes },
-  ref
-) => (
+const FloatingList: React.ForwardRefRenderFunction<
+  HTMLDivElement,
+  React.PropsWithChildren<Props>
+> = ({ children, expanded, style, attributes }, ref) => (
   <CSSTransition
     appear={true}
     mountOnEnter={true}
