@@ -30,7 +30,7 @@ const Input = styled.input`
 
   background-color: transparent;
   border: 1px solid transparent;
-  width: 100px;
+  width: 80px;
   transition: width 0.15s;
 
   &::placeholder {

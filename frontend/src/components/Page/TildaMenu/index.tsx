@@ -13,7 +13,7 @@ import { MenuKind } from '../types';
 import UserButtons from './UserButtons';
 import Search from '../Search';
 
-const Container = styled('div')<{ hideOnMobile: boolean }>`
+const Container = styled.div<{ hideOnMobile: boolean }>`
   width: 100%;
   height: 60px;
   padding: 0 40px;
@@ -49,20 +49,14 @@ const Logo = ({ kind }: Props) => {
         </a>
       </Link>
     );
-  } else if (kind === 'my') {
-    return (
-      <Link href="/" as="/" passHref>
-        <a>
-          <LogoImage />
-        </a>
-      </Link>
-    );
   }
 
   return (
-    <a href="/">
-      <LogoImage />
-    </a>
+    <Link href="/" as="/" passHref>
+      <a>
+        <LogoImage />
+      </a>
+    </Link>
   );
 };
 
@@ -72,6 +66,13 @@ const Line = styled.div`
   @media screen and (max-width: 980px) {
     flex-direction: column;
     margin-bottom: 20px;
+  }
+`;
+
+const MaybePaddedSearch = styled.div`
+  margin-left: 16px;
+  @media screen and (max-width: 980px) {
+    margin-left: 0;
   }
 `;
 
@@ -90,7 +91,9 @@ const TildaMenu = ({ kind }: Props) => {
           <Line>
             <Logo kind={kind} />
             <MenuItems kind={kind} />
-            <Search />
+            <MaybePaddedSearch>
+              <Search />
+            </MaybePaddedSearch>
           </Line>
           <UserButtons kind={kind} />
         </Container>
