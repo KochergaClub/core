@@ -34,14 +34,29 @@ const Search: React.FC = () => {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const blur = useCallback(() => setQuery(''), []);
+  const [active, setActive] = useState(false);
 
-  useOnClickOutside(containerRef, blur);
+  const start = () => {
+    setActive(true);
+  };
+
+  const stop = () => {
+    setActive(false);
+    setQuery('');
+  };
+
+  useOnClickOutside(containerRef, stop);
 
   return (
     <div ref={containerRef}>
       <div ref={setReferenceElement}>
-        <SearchInput query={query} setQuery={setQuery} />
+        <SearchInput
+          query={query}
+          setQuery={setQuery}
+          active={active}
+          start={start}
+          stop={stop}
+        />
       </div>
       <FloatingList
         expanded={Boolean(queryResults.data)}

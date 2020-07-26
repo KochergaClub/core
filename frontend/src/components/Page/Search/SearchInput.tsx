@@ -1,17 +1,41 @@
-import styled from 'styled-components';
+import { useRef, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 
 import { colors } from '@kocherga/frontkit';
 
+const Container = styled.div`
+  position: relative;
+`;
+
+const placeholderStyles = css`
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-size: 13px;
+`;
+
+const Placeholder = styled.div`
+  padding: 4px 8px;
+  padding-left: 28px;
+  color: white;
+  cursor: pointer;
+
+  ${placeholderStyles}
+`;
+
 const Input = styled.input`
   border-radius: 4px;
   padding: 4px 8px;
-  padding-left: 24px;
+  padding-left: 28px;
 
   background-color: transparent;
   border: 1px solid transparent;
   width: 100px;
   transition: width 0.15s;
+
+  &::placeholder {
+    ${placeholderStyles}
+  }
 
   &:focus {
     outline: none;
@@ -21,29 +45,52 @@ const Input = styled.input`
   }
 `;
 
+const SearchIcon = styled(FaSearch)<{ active: boolean }>`
+  position: absolute;
+  left: 6px;
+  top: 6px;
+
+  color: ${props => (props.active ? colors.grey[500] : 'white')};
+  cursor: pointer;
+`;
+
 interface Props {
+  active: boolean;
+  start: () => void;
+  stop: () => void;
   query: string;
   setQuery: (query: string) => void;
 }
 
-const SearchInput: React.FC<Props> = ({ query, setQuery }) => {
+const SearchInput: React.FC<Props> = ({ active, start, query, setQuery }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (active) {
+      inputRef.current?.focus();
+    }
+  }, [active]);
+
+  if (!active) {
+    return (
+      <Container onClick={start}>
+        <SearchIcon active={active} />
+        <Placeholder>Поиск</Placeholder>
+      </Container>
+    );
+  }
+
   return (
-    <div style={{ position: 'relative' }}>
-      <FaSearch
-        style={{
-          position: 'absolute',
-          left: 6,
-          top: 6,
-          color: 'white',
-        }}
-      />
+    <Container>
+      <SearchIcon active={active} />
       <Input
         type="text"
         value={query}
         placeholder="Поиск"
         onChange={e => setQuery(e.currentTarget.value)}
+        ref={inputRef}
       />
-    </div>
+    </Container>
   );
 };
 
