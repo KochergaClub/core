@@ -21,6 +21,7 @@ Float = graphql.GraphQLFloat
 ObjectType = graphql.GraphQLObjectType
 InputObjectType = graphql.GraphQLInputObjectType
 InterfaceType = graphql.GraphQLInterfaceType
+UnionType = graphql.GraphQLUnionType
 EnumType = graphql.GraphQLEnumType
 Argument = graphql.GraphQLArgument
 

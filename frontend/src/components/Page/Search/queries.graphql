@@ -1,11 +1,26 @@
-query WagtailSearch($input: WagtailSearchInput!) {
-  wagtailSearch(input: $input) {
+fragment PageSearchItem on PageSearchItem {
+  page {
+    id
+    title
+    meta {
+      html_url
+    }
+  }
+}
+
+fragment EventSearchItem on EventSearchItem {
+  event {
+    id
+    title
+    start
+  }
+}
+
+query Search($input: SearchInput!) {
+  search(input: $input) {
     results {
-      id
-      title
-      meta {
-        html_url
-      }
+      ...PageSearchItem
+      ...EventSearchItem
     }
     more
   }

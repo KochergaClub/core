@@ -393,6 +393,10 @@ type EventPrototypeUpdateResult {
   prototype: EventsPrototype!
 }
 
+type EventSearchItem {
+  event: EventsPublicEvent!
+}
+
 input EventSetAnnounceUrlInput {
   event_id: ID!
   target: EventAnnounceTarget!
@@ -1005,6 +1009,10 @@ type PageInfo {
   endCursor: String
 }
 
+type PageSearchItem {
+  page: WagtailPage!
+}
+
 type PhotoRibbonBlock implements WagtailBlock {
   id: ID!
   value(spec: String!): [WagtailImageRendition!]!
@@ -1033,6 +1041,7 @@ type Query {
   wagtailPage(path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
   wagtailSearch(input: WagtailSearchInput!): WagtailSearchResult!
+  search(input: SearchInput!): SearchResult!
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
   zadarmaPbxCalls(before: String, after: String, first: Int, last: Int): ZadarmaPbxCallConnection!
@@ -1303,6 +1312,18 @@ input RatioTrainingSendEmailInput {
 
 type RatioTrainingSendEmailResult {
   draft_link: String!
+}
+
+input SearchInput {
+  query: String!
+  limit: Int
+}
+
+union SearchItem = PageSearchItem | EventSearchItem
+
+type SearchResult {
+  results: [SearchItem!]!
+  more: Boolean!
 }
 
 type SlackAccount implements ExternalServiceAccount {

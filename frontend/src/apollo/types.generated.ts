@@ -456,6 +456,11 @@ export type EventPrototypeUpdateResult = {
   prototype: EventsPrototype;
 };
 
+export type EventSearchItem = {
+  __typename?: 'EventSearchItem';
+  event: EventsPublicEvent;
+};
+
 export type EventSetAnnounceUrlInput = {
   event_id: Scalars['ID'];
   target: EventAnnounceTarget;
@@ -1583,6 +1588,11 @@ export type PageInfo = {
   endCursor?: Maybe<Scalars['String']>;
 };
 
+export type PageSearchItem = {
+  __typename?: 'PageSearchItem';
+  page: WagtailPage;
+};
+
 export type PhotoRibbonBlock = WagtailBlock & {
   __typename?: 'PhotoRibbonBlock';
   id: Scalars['ID'];
@@ -1625,6 +1635,7 @@ export type Query = {
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
   wagtailSearch: WagtailSearchResult;
+  search: SearchResult;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
   zadarmaPbxCalls: ZadarmaPbxCallConnection;
@@ -1678,6 +1689,11 @@ export type QueryWagtailPageArgs = {
 
 export type QueryWagtailSearchArgs = {
   input: WagtailSearchInput;
+};
+
+
+export type QuerySearchArgs = {
+  input: SearchInput;
 };
 
 
@@ -2069,6 +2085,19 @@ export type RatioTrainingSendEmailInput = {
 export type RatioTrainingSendEmailResult = {
   __typename?: 'RatioTrainingSendEmailResult';
   draft_link: Scalars['String'];
+};
+
+export type SearchInput = {
+  query: Scalars['String'];
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type SearchItem = PageSearchItem | EventSearchItem;
+
+export type SearchResult = {
+  __typename?: 'SearchResult';
+  results: Array<SearchItem>;
+  more: Scalars['Boolean'];
 };
 
 export type SlackAccount = ExternalServiceAccount & {

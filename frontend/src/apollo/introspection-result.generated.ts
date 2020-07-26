@@ -14,6 +14,10 @@
       "SlackAccount",
       "WikiAccount"
     ],
+    "SearchItem": [
+      "PageSearchItem",
+      "EventSearchItem"
+    ],
     "WagtailBlock": [
       "BasicLeadBlock",
       "BasicParagraphBlock",

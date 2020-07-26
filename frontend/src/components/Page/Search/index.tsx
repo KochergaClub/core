@@ -6,18 +6,19 @@ import SearchResults from './SearchResults';
 import SearchInput from './SearchInput';
 import useOnClickOutside from 'use-onclickoutside';
 
-import { useWagtailSearchQuery } from './queries.generated';
+import { useSearchQuery } from './queries.generated';
 import { FloatingList } from '~/components';
 
 const Search: React.FC = () => {
   const [query, setQuery] = useState('');
 
-  const queryResults = useWagtailSearchQuery({
+  const queryResults = useSearchQuery({
     variables: {
       input: {
         query,
       },
     },
+    fetchPolicy: 'no-cache',
   });
 
   const [

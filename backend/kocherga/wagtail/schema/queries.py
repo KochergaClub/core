@@ -4,11 +4,16 @@ logger = logging.getLogger(__name__)
 
 from typing import Optional
 import urllib.parse
+from datetime import datetime, timedelta
 
 from django.http import Http404
 from wagtail.core.models import Site
+from wagtail.search.backends import get_search_backend
 
 from kocherga.graphql import g, helpers
+from kocherga.dateutils import TZ
+import kocherga.events.models
+import kocherga.events.schema.types
 
 from ..utils import filter_queryset_by_page_permissions
 
@@ -98,7 +103,37 @@ def wagtailPages(helper):
     return g.Field(g.NNList(types.WagtailPage), resolve=resolve)
 
 
-# Search is not paged, since combining relay_page with search is non-trivial.
+PageSearchItem = g.ObjectType(
+    'PageSearchItem', g.fields({'page': g.NN(types.WagtailPage)})
+)
+
+EventSearchItem = g.ObjectType(
+    'EventSearchItem',
+    g.fields({'event': g.NN(kocherga.events.schema.types.EventsPublicEvent)}),
+)
+
+
+# {'page': KochergaPage}
+# or {'event': KochergaEvent}
+def resolve_SearchItem_type(value, *_):
+    if 'page' in value:
+        return PageSearchItem
+    elif 'event' in value:
+        return EventSearchItem
+    else:
+        raise Exception(f"Unknown value {value}")
+
+
+# not SearchResult because it's already taken as generated return type of search() query field
+SearchItem = g.UnionType(
+    'SearchItem',
+    types=[PageSearchItem, EventSearchItem],
+    resolve_type=resolve_SearchItem_type,
+)
+
+
+# mostly deprecated in favor of `search`
+# TODO - rename to pageSearch?
 @c.class_field
 class wagtailSearch(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -129,6 +164,61 @@ class wagtailSearch(helpers.BaseFieldWithInput):
     }
     result = {
         'results': g.NNList(types.WagtailPage),
+        'more': bool,
+    }
+
+
+# Search is not paged, since combining relay_page with search is non-trivial.
+@c.class_field
+class search(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        query = input['query']
+        if not query:
+            # don't want to find anything by an empty query
+            return {
+                'results': [],
+                'more': False,
+            }
+
+        results = []
+
+        events = get_search_backend().search(
+            query,
+            kocherga.events.models.Event.objects.public_events(
+                from_date=datetime.now(tz=TZ) - timedelta(days=2)
+            ),
+        )[:2]
+
+        results.extend([{'event': event} for event in events])
+
+        qs = get_queryset(info.context).search(query)
+
+        limit = input.pop('limit', None)
+        if limit:
+            # ask for one more to determine if there are more results
+            qs = qs[: limit + 1]
+
+        pages = list(qs)
+
+        more = False
+        if limit:
+            more = len(pages) > limit
+            pages = pages[:limit]
+
+        results.extend([{'page': page.specific} for page in pages])
+
+        return {
+            'results': results,
+            'more': more,
+        }
+
+    permissions = []
+    input = {
+        'query': str,
+        'limit': Optional[int],
+    }
+    result = {
+        'results': g.NNList(SearchItem),
         'more': bool,
     }
 

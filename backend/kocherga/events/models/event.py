@@ -17,6 +17,7 @@ import channels.layers
 from django.db import models, transaction
 from django.conf import settings
 from django.utils import timezone
+import wagtail.search.index
 
 from kocherga.dateutils import TZ, inflected_weekday, inflected_month
 from kocherga.django.managers import RelayQuerySetMixin
@@ -110,14 +111,7 @@ def generate_uuid():
     return base64.b32encode(uuid.uuid4().bytes)[:26].lower().decode('ascii')
 
 
-class Event(models.Model):
-    class Meta:
-        db_table = "events"
-        verbose_name = 'Событие'
-        verbose_name_plural = 'События'
-
-    objects = EventManager()
-
+class Event(wagtail.search.index.Indexed, models.Model):
     uuid = models.SlugField(default=generate_uuid, unique=True)
 
     start = models.DateTimeField(db_index=True)
@@ -202,6 +196,21 @@ class Event(models.Model):
 
     published = models.BooleanField(default=False)
     timing_description_override = models.CharField(max_length=255, blank=True)
+
+    search_fields = [
+        wagtail.search.index.SearchField('title', partial_match=True, boost=10),
+        wagtail.search.index.FilterField('deleted'),
+        wagtail.search.index.FilterField('published'),
+        wagtail.search.index.FilterField('start'),
+        wagtail.search.index.FilterField('event_type'),
+    ]
+
+    objects = EventManager()
+
+    class Meta:
+        db_table = "events"
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'
 
     def __str__(self):
         return f'{timezone.localtime(self.start)} - {self.title}'

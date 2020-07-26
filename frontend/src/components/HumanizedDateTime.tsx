@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { utcToZonedTime } from 'date-fns-tz';
 
 import { timezone, formatDate, capitalize } from '~/common/utils';

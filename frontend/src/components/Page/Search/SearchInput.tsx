@@ -8,8 +8,8 @@ const Input = styled.input`
   padding: 4px 8px;
   padding-left: 24px;
 
-  background-color: ${colors.grey[300]};
-  border: 1px solid ${colors.grey[300]};
+  background-color: transparent;
+  border: 1px solid transparent;
   width: 100px;
   transition: width 0.15s;
 
@@ -34,7 +34,7 @@ const SearchInput: React.FC<Props> = ({ query, setQuery }) => {
           position: 'absolute',
           left: 6,
           top: 6,
-          color: colors.grey[500],
+          color: 'white',
         }}
       />
       <Input
