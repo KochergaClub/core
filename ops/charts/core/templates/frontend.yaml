@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-frontend
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   ports:
   - port: 80
@@ -14,6 +16,8 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-frontend
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
@@ -23,6 +27,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-frontend
+        release: {{ .Release.Name }}
     spec:
 {{- if not .Values.dev }}
       initContainers:

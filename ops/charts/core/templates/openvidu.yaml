@@ -6,6 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Release.Name }}-openvidu
+    release: {{ .Release.Name }}
 spec:
   type: NodePort
   ports:
@@ -20,6 +21,8 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-openvidu
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
@@ -29,6 +32,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-openvidu
+        release: {{ .Release.Name }}
     spec:
       containers:
         - name: default

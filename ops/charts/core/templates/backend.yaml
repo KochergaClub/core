@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Release.Name }}-django
+    release: {{ .Release.Name }}
 spec:
   ports:
   - name: web
@@ -17,6 +18,8 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-django
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
@@ -26,6 +29,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-django
+        release: {{ .Release.Name }}
     spec:
       containers:
         - name: default
@@ -75,6 +79,8 @@ kind: ServiceMonitor
 metadata:
   name: {{ .Release.Name }}-django
   namespace: monitor
+  labels:
+    release: {{ .Release.Name }}
 spec:
   jobLabel: {{ .Release.Name }}-django
   selector:

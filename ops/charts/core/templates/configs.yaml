@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-common-env
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 data:
   STATIC_S3_BUCKET: {{ .Values.env.common.STATIC_S3_BUCKET | quote }}
   KOCHERGA_WEBSITE: {{ .Values.env.common.KOCHERGA_WEBSITE | quote }}
@@ -12,6 +14,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-frontend-env
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 data:
   NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: {{ .Values.env.frontend.GOOGLE_ANALYTICS_ID | quote }}
   NEXT_PUBLIC_FACEBOOK_PIXEL_ID: {{ .Values.env.frontend.FACEBOOK_PIXEL_ID | quote }}
@@ -28,6 +32,8 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-backend-env
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 data: {} # not used yet; will be used later when we move from main.py settings to env settings
 ---
 apiVersion: v1
@@ -35,5 +41,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-backend-config
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 data:
   main.py: {{ required "config.main_py is required" .Values.config.main_py | quote }}

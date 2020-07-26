@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-mysql
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   ports:
   - port: 3306
@@ -14,6 +16,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-mysql
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -26,6 +30,8 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-mysql
   namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
 spec:
   selector:
     matchLabels: 
@@ -36,6 +42,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-mysql
+        release: {{ .Release.Name }}
     spec:
       containers:
         - name: mysql
