@@ -23,8 +23,11 @@ export type MyEventsTicketFragment = (
 
 export type EventsPublicEventFragment = (
   { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'image' | 'realm' | 'registration_type' | 'pricing_type'>
-  & { project?: Types.Maybe<(
+  & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
+  & { image_rendition?: Types.Maybe<(
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url'>
+  )>, project?: Types.Maybe<(
     { __typename?: 'ProjectPage' }
     & ProjectPage_SummaryForEventFragment
   )>, my_ticket?: Types.Maybe<(
@@ -120,7 +123,9 @@ export const EventsPublicEventFragmentDoc = gql`
   end
   title
   description
-  image
+  image_rendition(spec: "original") {
+    url
+  }
   realm
   registration_type
   pricing_type

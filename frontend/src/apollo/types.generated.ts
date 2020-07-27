@@ -732,6 +732,7 @@ export type EventsPublicEvent = {
   id: Scalars['ID'];
   event_id: Scalars['ID'];
   description: Scalars['String'];
+  /** @deprecated Links to original image, use image_rendition instead */
   image?: Maybe<Scalars['String']>;
   image_rendition?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;

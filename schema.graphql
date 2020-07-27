@@ -627,7 +627,7 @@ type EventsPublicEvent {
   id: ID!
   event_id: ID!
   description: String!
-  image: String
+  image: String @deprecated(reason: "Links to original image, use image_rendition instead")
   image_rendition(spec: String!): WagtailImageRendition
   project: ProjectPage
   public_tags: [String!]!

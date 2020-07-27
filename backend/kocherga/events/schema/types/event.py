@@ -65,8 +65,8 @@ def build_EventsEvent():
                     item_type=EventsFeedback,
                     permissions=[staffonly],
                 ),
-                'prototype': g.Field(EventsPrototype),
-                'project': g.Field(ProjectPage),
+                'prototype': EventsPrototype,
+                'project': ProjectPage,
             }
         )
 
@@ -176,8 +176,10 @@ def build_EventsPublicEvent():
                 ),  # deprecated, use `id` instead
                 'description': g.Field(g.NN(g.String), resolve=resolve_description),
                 'image': g.Field(
-                    g.String, resolve=resolve_image
-                ),  # deprecated, links to original image
+                    g.String,
+                    resolve=resolve_image,
+                    deprecation_reason='Links to original image, use image_rendition instead',
+                ),
                 'image_rendition': wagtail_utils.image_rendition_field(
                     models.Event, 'image'
                 ),
