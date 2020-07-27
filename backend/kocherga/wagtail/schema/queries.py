@@ -12,8 +12,6 @@ from wagtail.search.backends import get_search_backend
 
 from kocherga.graphql import g, helpers
 from kocherga.dateutils import TZ
-import kocherga.events.models
-import kocherga.events.schema.types
 
 from ..utils import filter_queryset_by_page_permissions
 
@@ -107,9 +105,16 @@ PageSearchItem = g.ObjectType(
     'PageSearchItem', g.fields({'page': g.NN(types.WagtailPage)})
 )
 
+
+# defer imports
+def EventSearchItem_fields():
+    import kocherga.events.schema.types
+
+    return g.fields({'event': g.NN(kocherga.events.schema.types.EventsPublicEvent)})
+
+
 EventSearchItem = g.ObjectType(
-    'EventSearchItem',
-    g.fields({'event': g.NN(kocherga.events.schema.types.EventsPublicEvent)}),
+    'EventSearchItem', lambda: g.fields(EventSearchItem_fields()),
 )
 
 
@@ -181,6 +186,8 @@ class search(helpers.BaseFieldWithInput):
             }
 
         results = []
+
+        import kocherga.events.models
 
         events = get_search_backend().search(
             query,

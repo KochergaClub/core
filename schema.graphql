@@ -518,10 +518,10 @@ type EventsEvent {
   room: String!
   tags: [String!]!
   zoom_meeting: ZoomMeeting
-  tickets: [EventsTicket!]!
-  feedbacks: [EventsFeedback!]!
   prototype: EventsPrototype
   project: ProjectPage
+  tickets: [EventsTicket!]!
+  feedbacks: [EventsFeedback!]!
 }
 
 type EventsEventConnection {
@@ -627,13 +627,15 @@ type EventsPublicEvent {
   id: ID!
   event_id: ID!
   description: String!
-  image: String @deprecated(reason: "Links to original image, use image_rendition instead")
+  image(spec: String!): WagtailImageRendition
   image_rendition(spec: String!): WagtailImageRendition
   project: ProjectPage
   public_tags: [String!]!
   my_ticket: MyEventsTicket
   announcements: EventsAnnouncements!
   public_google_event: EventsGoogleEvent
+  tickets: [EventsTicket!]!
+  feedbacks: [EventsFeedback!]!
 }
 
 type EventsPublicEventConnection {

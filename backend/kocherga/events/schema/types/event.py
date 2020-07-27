@@ -202,7 +202,7 @@ def build_EventsPublicEvent():
             }
         )
 
-    EventsPublicEvent = g.ObjectType('EventsPublicEvent', fields=build_fields,)
+    EventsPublicEvent = g.ObjectType('EventsPublicEvent', fields=build_fields)
 
     return EventsPublicEvent
 
