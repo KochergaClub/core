@@ -11,14 +11,6 @@ import kocherga.events.models.announcement.timepad
 c = helpers.Collection()
 
 
-# events(
-#   search: String
-#   filter: EventsFilterInput
-#   before: String
-#   after: String
-#   first: Int
-#   last: Int
-# ): EventsEventConnection! @staffonly
 @c.class_field
 class events(helpers.BaseField):
     def resolve(self, obj, info, search=None, filter=None, **pager):
@@ -35,12 +27,15 @@ class events(helpers.BaseField):
         'EventsFilterInput', g.input_fields({'event_type': Optional[str]})
     )
 
-    args = {**helpers.connection_args(), 'search': Optional[str], 'filter': FilterInput}
+    args = {
+        **helpers.connection_args(),
+        'search': Optional[str],
+        'filter': FilterInput,
+    }
 
     result = g.NN(types.EventsEventConnection)
 
 
-# event(event_id: ID!): EventsEvent @staffonly
 @c.class_field
 class event(helpers.BaseField):
     def resolve(self, obj, info, event_id):
@@ -55,7 +50,6 @@ class event(helpers.BaseField):
     result = types.EventsEvent
 
 
-# eventsPrototype(id: ID!): EventsPrototype! @staffonly
 @c.class_field
 class eventsPrototype(helpers.BaseField):
     def resolve(self, obj, info, id):
@@ -67,7 +61,6 @@ class eventsPrototype(helpers.BaseField):
     result = g.NN(types.EventsPrototype)
 
 
-# eventsPrototypes: [EventsPrototype!]! @staffonly
 @c.class_field
 class eventsPrototypes(helpers.BaseField):
     def resolve(self, obj, info):
@@ -77,14 +70,6 @@ class eventsPrototypes(helpers.BaseField):
     result = g.NNList(types.EventsPrototype)
 
 
-# publicEvents(
-#   from_date: String
-#   project_id: ID
-#   before: String
-#   after: String
-#   first: Int
-#   last: Int
-# ): EventsPublicEventConnection!
 @c.class_field
 class publicEvents(helpers.BaseField):
     def resolve(self, obj, info, from_date=None, project_id=None, **pager):
@@ -100,12 +85,15 @@ class publicEvents(helpers.BaseField):
         return qs.relay_page(order='start', **pager)
 
     permissions = []
-    args = {**helpers.connection_args(), 'from_date': Optional[str], 'project_id': 'ID'}
+    args = {
+        **helpers.connection_args(),
+        'from_date': Optional[str],
+        'project_id': 'ID',
+    }
 
     result = g.NN(types.EventsPublicEventConnection)
 
 
-# publicEvent(event_id: ID!): EventsPublicEvent!
 @c.class_field
 class publicEvent(helpers.BaseField):
     def resolve(self, obj, info, event_id):
@@ -117,7 +105,6 @@ class publicEvent(helpers.BaseField):
     result = g.NN(types.EventsPublicEvent)
 
 
-# vkGroups: [VkGroup!]! @staffonly
 @c.class_field
 class vkGroups(helpers.BaseField):
     def resolve(self, obj, info):
@@ -128,7 +115,6 @@ class vkGroups(helpers.BaseField):
     result = g.NNList(types.VkGroup)
 
 
-# timepadCategories: [TimepadCategory!]! @staffonly
 @c.class_field
 class timepadCategories(helpers.BaseField):
     def resolve(self, obj, info):
@@ -139,7 +125,6 @@ class timepadCategories(helpers.BaseField):
     result = g.NNList(types.TimepadCategory)
 
 
-# eventsWeeklyDigestCurrent: EventsWeeklyDigest! @staffonly
 @c.class_field
 class eventsWeeklyDigestCurrent(helpers.BaseField):
     def resolve(self, obj, info):
@@ -152,7 +137,6 @@ class eventsWeeklyDigestCurrent(helpers.BaseField):
     result = g.NN(types.EventsWeeklyDigest)
 
 
-# eventsPublicGoogleCalendar: EventsGoogleCalendar
 @c.class_field
 class eventsPublicGoogleCalendar(helpers.BaseField):
     def resolve(self, obj, info):
