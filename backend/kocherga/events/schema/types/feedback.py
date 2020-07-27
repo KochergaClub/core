@@ -1,21 +1,24 @@
-import graphql
+from kocherga.graphql import g
 
-src = """type EventsFeedback {
-  id: ID!
-  overall_score: Int
-  recommend_score: Int
-  content_score: Int
-  conductor_score: Int
+from typing import Optional
 
-  source_friend: Boolean!
-  source_vk: Boolean!
-  source_fb: Boolean!
-  source_timepad: Boolean!
-  source_email: Boolean!
-  source_website: Boolean!
-
-  custom_source: String
-  comment: String
-}"""
-
-EventsFeedback = graphql.build_ast_schema(graphql.parse(src)).get_type('EventsFeedback')
+EventsFeedback = g.ObjectType(
+    'EventsFeedback',
+    fields=g.fields(
+        {
+            'id': 'ID!',
+            'overall_score': Optional[int],
+            'recommend_score': Optional[int],
+            'content_score': Optional[int],
+            'conductor_score': Optional[int],
+            'source_friend': bool,
+            'source_vk': bool,
+            'source_fb': bool,
+            'source_timepad': bool,
+            'source_email': bool,
+            'source_website': bool,
+            'custom_source': Optional[str],
+            'comment': Optional[str],
+        }
+    ),
+)

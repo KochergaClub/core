@@ -53,6 +53,8 @@ def build_EventsEvent():
                 'room': room_field(),  # normalized location
                 'tags': tags_field(),
                 'zoom_meeting': g.Field(zoom_types.ZoomMeeting),
+                'prototype': EventsPrototype,
+                'project': ProjectPage,
                 'tickets': django_utils.related_field(
                     models.Event,
                     'tickets',
@@ -65,8 +67,6 @@ def build_EventsEvent():
                     item_type=EventsFeedback,
                     permissions=[staffonly],
                 ),
-                'prototype': EventsPrototype,
-                'project': ProjectPage,
             }
         )
 
@@ -154,9 +154,11 @@ def build_EventsPublicEvent():
         permissions = []
         result = EventsGoogleEvent
 
-    EventsPublicEvent = g.ObjectType(
-        'EventsPublicEvent',
-        fields=lambda: g.fields(
+    def build_fields():
+        from .feedback import EventsFeedback
+        from .ticket import EventsTicket
+
+        return g.fields(
             {
                 **django_utils.model_fields(
                     models.Event,
@@ -175,9 +177,7 @@ def build_EventsPublicEvent():
                     g.NN(g.ID), resolve=lambda obj, info: obj.uuid
                 ),  # deprecated, use `id` instead
                 'description': g.Field(g.NN(g.String), resolve=resolve_description),
-                'image': wagtail_utils.image_rendition_field(
-                    models.Event, 'image'
-                ),
+                'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
                 # will be removed soon
                 'image_rendition': wagtail_utils.image_rendition_field(
                     models.Event, 'image'
@@ -187,9 +187,22 @@ def build_EventsPublicEvent():
                 'my_ticket': my_ticket_field(),
                 'announcements': announcements_field(),
                 'public_google_event': public_google_event_field().as_field(),
+                'tickets': django_utils.related_field(
+                    models.Event,
+                    'tickets',
+                    item_type=EventsTicket,
+                    permissions=[staffonly],
+                ),
+                'feedbacks': django_utils.related_field(
+                    models.Event,
+                    'feedbacks',
+                    item_type=EventsFeedback,
+                    permissions=[staffonly],
+                ),
             }
-        ),
-    )
+        )
+
+    EventsPublicEvent = g.ObjectType('EventsPublicEvent', fields=build_fields,)
 
     return EventsPublicEvent
 
