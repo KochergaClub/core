@@ -139,7 +139,7 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
 const EventHeroBlock: React.FC<CommonProps & ExtraProps> = props => {
   const { event } = props;
 
-  const imageUrl = event.image_rendition?.url || ''; // TODO - default image url?
+  const imageUrl = event.image?.url || ''; // TODO - default image url?
 
   return (
     <HeroWithImage image={imageUrl}>

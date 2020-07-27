@@ -60,10 +60,7 @@ const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
   const registrationRef = useRef<HTMLElement | null>(null);
 
   return (
-    <Page
-      title={title}
-      og={{ image: event?.image_rendition?.url || undefined }}
-    >
+    <Page title={title} og={{ image: event?.image?.url || undefined }}>
       <ApolloQueryResults {...queryResults} size="block">
         {() => {
           if (!event) {

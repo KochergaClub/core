@@ -24,7 +24,7 @@ fragment EventsPublicEvent on EventsPublicEvent {
   end
   title
   description
-  image_rendition(spec: "original") {
+  image(spec: "original") {
     url
   }
   realm

@@ -593,10 +593,10 @@ export type EventsEvent = {
   room: Scalars['String'];
   tags: Array<Scalars['String']>;
   zoom_meeting?: Maybe<ZoomMeeting>;
-  tickets: Array<EventsTicket>;
-  feedbacks: Array<EventsFeedback>;
   prototype?: Maybe<EventsPrototype>;
   project?: Maybe<ProjectPage>;
+  tickets: Array<EventsTicket>;
+  feedbacks: Array<EventsFeedback>;
 };
 
 
@@ -732,14 +732,20 @@ export type EventsPublicEvent = {
   id: Scalars['ID'];
   event_id: Scalars['ID'];
   description: Scalars['String'];
-  /** @deprecated Links to original image, use image_rendition instead */
-  image?: Maybe<Scalars['String']>;
+  image?: Maybe<WagtailImageRendition>;
   image_rendition?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   public_tags: Array<Scalars['String']>;
   my_ticket?: Maybe<MyEventsTicket>;
   announcements: EventsAnnouncements;
   public_google_event?: Maybe<EventsGoogleEvent>;
+  tickets: Array<EventsTicket>;
+  feedbacks: Array<EventsFeedback>;
+};
+
+
+export type EventsPublicEventImageArgs = {
+  spec: Scalars['String'];
 };
 
 

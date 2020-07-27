@@ -24,7 +24,7 @@ export type MyEventsTicketFragment = (
 export type EventsPublicEventFragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
-  & { image_rendition?: Types.Maybe<(
+  & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
   )>, project?: Types.Maybe<(
@@ -123,7 +123,7 @@ export const EventsPublicEventFragmentDoc = gql`
   end
   title
   description
-  image_rendition(spec: "original") {
+  image(spec: "original") {
     url
   }
   realm
