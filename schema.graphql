@@ -624,16 +624,27 @@ type EventsPublicEvent {
   registration_type: String!
   pricing_type: String!
   realm: String!
+  published: Boolean!
+  event_type: String!
   id: ID!
   event_id: ID!
   description: String!
   image(spec: String!): WagtailImageRendition
-  image_rendition(spec: String!): WagtailImageRendition
   project: ProjectPage
   public_tags: [String!]!
   my_ticket: MyEventsTicket
   announcements: EventsAnnouncements!
   public_google_event: EventsGoogleEvent
+  zoom_meeting: ZoomMeeting
+  prototype: EventsPrototype
+  visitors: String
+  creator: String
+  created: String!
+  updated: String!
+  location: String!
+  room: String!
+  zoom_link: String!
+  timing_description_override: String!
   tickets: [EventsTicket!]!
   feedbacks: [EventsFeedback!]!
 }

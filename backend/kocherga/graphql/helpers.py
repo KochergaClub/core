@@ -7,7 +7,8 @@ from typing import Callable, Any, Optional, List, Dict
 
 from abc import abstractmethod, ABC
 
-from . import g, basic_types, permissions
+from . import g, basic_types
+from .permissions import check_permissions
 
 
 def capitalize_first_only(s):
@@ -110,6 +111,17 @@ def ConnectionType(node_type):
     return connection_type
 
 
+PermissionType = Callable[[Any, Any], bool]
+
+
+def field_with_permissions(
+    type_: graphql.GraphQLOutputType, permissions: List[PermissionType]
+):
+    return g.Field(
+        type_, resolve=check_permissions(permissions)(graphql.default_field_resolver)
+    )
+
+
 class BaseField(ABC):
     def as_field(self):
         result = self.result
@@ -132,12 +144,12 @@ class BaseField(ABC):
         return g.Field(
             result,
             args=args,
-            resolve=permissions.check_permissions(self.permissions)(self.resolve),
+            resolve=check_permissions(self.permissions)(self.resolve),
         )
 
     @property
     @abstractmethod
-    def permissions(self) -> List[Callable[[Any, Any], bool]]:
+    def permissions(self) -> List[PermissionType]:
         ...
 
     @property

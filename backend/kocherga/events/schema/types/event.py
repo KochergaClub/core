@@ -52,8 +52,12 @@ def build_EventsEvent():
                 'announcements': announcements_field(),
                 'room': room_field(),  # normalized location
                 'tags': tags_field(),
-                'zoom_meeting': g.Field(zoom_types.ZoomMeeting),
-                'prototype': EventsPrototype,
+                'zoom_meeting': helpers.field_with_permissions(
+                    zoom_types.ZoomMeeting, [staffonly]
+                ),
+                'prototype': helpers.field_with_permissions(
+                    EventsPrototype, [staffonly]
+                ),
                 'project': ProjectPage,
                 'tickets': django_utils.related_field(
                     models.Event,
@@ -157,6 +161,7 @@ def build_EventsPublicEvent():
     def build_fields():
         from .feedback import EventsFeedback
         from .ticket import EventsTicket
+        from .prototype import EventsPrototype
 
         return g.fields(
             {
@@ -170,6 +175,8 @@ def build_EventsPublicEvent():
                         'registration_type',
                         'pricing_type',
                         'realm',
+                        'published',
+                        'event_type',
                     ],
                 ),
                 'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
@@ -183,6 +190,24 @@ def build_EventsPublicEvent():
                 'my_ticket': my_ticket_field(),
                 'announcements': announcements_field(),
                 'public_google_event': public_google_event_field().as_field(),
+                'zoom_meeting': helpers.field_with_permissions(
+                    zoom_types.ZoomMeeting, [staffonly]
+                ),
+                'prototype': helpers.field_with_permissions(
+                    EventsPrototype, [staffonly]
+                ),
+                'visitors': helpers.field_with_permissions(g.String, [staffonly]),
+                'creator': helpers.field_with_permissions(g.String, [staffonly]),
+                'created': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+                'updated': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+                'location': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+                'room': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+                'zoom_link': helpers.field_with_permissions(
+                    g.NN(g.String), [staffonly]
+                ),
+                'timing_description_override': helpers.field_with_permissions(
+                    g.NN(g.String), [staffonly]
+                ),
                 'tickets': django_utils.related_field(
                     models.Event,
                     'tickets',

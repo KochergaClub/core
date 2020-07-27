@@ -729,27 +729,33 @@ export type EventsPublicEvent = {
   registration_type: Scalars['String'];
   pricing_type: Scalars['String'];
   realm: Scalars['String'];
+  published: Scalars['Boolean'];
+  event_type: Scalars['String'];
   id: Scalars['ID'];
   event_id: Scalars['ID'];
   description: Scalars['String'];
   image?: Maybe<WagtailImageRendition>;
-  image_rendition?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   public_tags: Array<Scalars['String']>;
   my_ticket?: Maybe<MyEventsTicket>;
   announcements: EventsAnnouncements;
   public_google_event?: Maybe<EventsGoogleEvent>;
+  zoom_meeting?: Maybe<ZoomMeeting>;
+  prototype?: Maybe<EventsPrototype>;
+  visitors?: Maybe<Scalars['String']>;
+  creator?: Maybe<Scalars['String']>;
+  created: Scalars['String'];
+  updated: Scalars['String'];
+  location: Scalars['String'];
+  room: Scalars['String'];
+  zoom_link: Scalars['String'];
+  timing_description_override: Scalars['String'];
   tickets: Array<EventsTicket>;
   feedbacks: Array<EventsFeedback>;
 };
 
 
 export type EventsPublicEventImageArgs = {
-  spec: Scalars['String'];
-};
-
-
-export type EventsPublicEventImage_RenditionArgs = {
   spec: Scalars['String'];
 };
 
