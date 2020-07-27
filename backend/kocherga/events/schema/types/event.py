@@ -175,11 +175,10 @@ def build_EventsPublicEvent():
                     g.NN(g.ID), resolve=lambda obj, info: obj.uuid
                 ),  # deprecated, use `id` instead
                 'description': g.Field(g.NN(g.String), resolve=resolve_description),
-                'image': g.Field(
-                    g.String,
-                    resolve=resolve_image,
-                    deprecation_reason='Links to original image, use image_rendition instead',
+                'image': wagtail_utils.image_rendition_field(
+                    models.Event, 'image'
                 ),
+                # will be removed soon
                 'image_rendition': wagtail_utils.image_rendition_field(
                     models.Event, 'image'
                 ),
