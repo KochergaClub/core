@@ -178,10 +178,6 @@ def build_EventsPublicEvent():
                 ),  # deprecated, use `id` instead
                 'description': g.Field(g.NN(g.String), resolve=resolve_description),
                 'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
-                # will be removed soon
-                'image_rendition': wagtail_utils.image_rendition_field(
-                    models.Event, 'image'
-                ),
                 'project': ProjectPage,
                 'public_tags': g.Field(g.NNList(g.String), resolve=resolve_public_tags),
                 'my_ticket': my_ticket_field(),
