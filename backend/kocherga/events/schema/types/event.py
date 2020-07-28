@@ -105,9 +105,11 @@ def build_event_fields():
             'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
             'project': ProjectPage,
             'public_tags': g.Field(g.NNList(g.String), resolve=resolve_public_tags),
-            'tags': tags_field(),
-            'my_ticket': my_ticket_field(),
             'announcements': announcements_field(),
+            # signed-in fields
+            'my_ticket': my_ticket_field(),
+            # private fields
+            'tags': tags_field(),
             'public_google_event': public_google_event_field().as_field(),
             'zoom_meeting': helpers.field_with_permissions(
                 zoom_types.ZoomMeeting, [staffonly]

@@ -287,9 +287,9 @@ type Event {
   image(spec: String!): WagtailImageRendition
   project: ProjectPage
   public_tags: [String!]!
-  tags: [String!]!
-  my_ticket: MyEventsTicket
   announcements: EventsAnnouncements!
+  my_ticket: MyEventsTicket
+  tags: [String!]!
   public_google_event: EventsGoogleEvent
   zoom_meeting: ZoomMeeting
   prototype: EventsPrototype

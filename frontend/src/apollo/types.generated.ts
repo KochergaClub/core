@@ -347,9 +347,9 @@ export type Event = {
   image?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   public_tags: Array<Scalars['String']>;
-  tags: Array<Scalars['String']>;
-  my_ticket?: Maybe<MyEventsTicket>;
   announcements: EventsAnnouncements;
+  my_ticket?: Maybe<MyEventsTicket>;
+  tags: Array<Scalars['String']>;
   public_google_event?: Maybe<EventsGoogleEvent>;
   zoom_meeting?: Maybe<ZoomMeeting>;
   prototype?: Maybe<EventsPrototype>;
