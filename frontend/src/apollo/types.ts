@@ -1,4 +1,5 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
+import { NormalizedCacheObject } from '@apollo/client/cache';
 
 import { NextPageContext } from '~/common/types';
 
