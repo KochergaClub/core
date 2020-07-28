@@ -2,7 +2,6 @@ slackclient < 2.0
 markdown
 captcha-solver
 python-dateutil
-httplib2
 google-api-python-client
 google-auth
 google-auth-httplib2
@@ -11,21 +10,19 @@ requests
 pyjwt
 mwclient
 termcolor
-pandas
+pandas  # used in money.cashier.importer
 git+https://github.com/berekuk/pyppeteer.git@dev
 apscheduler
 fire
 python-gitlab
-slackeventsapi
 pytz
 boto3
 mysqlclient >= 2
-requests-toolbelt
+requests-toolbelt  # used in cafe-manager multipart POSTs
 slappy == 0.5.1
 feedgen
 telethon
-pysocks
-django == 3.0.5
+django == 3.0.*
 django-cors-headers
 django-rest-framework
 sentry-sdk[flask]
@@ -40,19 +37,19 @@ channels_redis >= 2.4.2
 django-reversion >= 3.0.5
 redis >= 3.2
 django-reversion-compare >= 0.9.0
-wagtail == 2.9.0
+wagtail == 2.9.*
 git+https://github.com/berekuk/wagtailmath.git@master
 django-annoying >= 0.10.6
 pywatchman
 wagtailgeowidget >= 5.0
-pyee
 django-prometheus
 wagtail-condensedinlinepanel >= 0.5.3
 html2text
 ariadne == 0.11.0
-aiodataloader
+# aiodataloader  # not used for now, but we might need it in the future
 django-storages
 elasticsearch >= 7.0.0
+python-docx
 
 # dev-dependencies
 pytest
@@ -62,12 +59,7 @@ pytest-django
 pytest-cov
 freezegun
 mypy
-black == 18.6b4
-jupyter
-aioconsole
-matplotlib
-seaborn
-python-docx
+black
 flake8 >= 3.7
 codecov
 factory_boy
