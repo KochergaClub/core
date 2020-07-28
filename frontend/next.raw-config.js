@@ -7,6 +7,9 @@ module.exports = {
       config.resolve.alias['@sentry/node'] = '@sentry/browser';
     }
 
+    // NOTE: uncomment for webpack 5
+    // config.resolve.alias['path'] = false;
+
     // based on code from next-transpile-modules
     const nextCssLoaders = config.module.rules.find(
       rule => typeof rule.oneOf === 'object'
@@ -15,16 +18,18 @@ module.exports = {
     nextCssLoaders.oneOf.forEach(loader => {
       if (
         loader.sideEffects &&
+        // NOTE: uncomment for webpack 5
+        // loader.test &&
+        // loader.test == '/(?<!\\.module)\\.css$/' &&
         loader.issuer &&
         loader.issuer.include &&
         loader.issuer.include.endsWith('_app.tsx')
+        // NOTE: uncomment for webpack 5
+        // loader.issuer.and
       ) {
         delete loader.issuer;
       }
     });
-
-    // Not needed since we don't use moment.js anymore:
-    // config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
 
     return config;
   },

@@ -63,7 +63,7 @@
     "localtunnel": "^2.0.0",
     "lodash": "^4.17.15",
     "mjml": "^4.0.5",
-    "next": "^9.4.2",
+    "next": "^9.5.0",
     "next-plugin-graphql": "0.0.2",
     "next-transpile-modules": "^3.3.0",
     "nodemon": "^2.0.2",
@@ -100,6 +100,7 @@
     "tslib": "^1.13.0",
     "typescript": "^3.8.3",
     "use-onclickoutside": "^0.3.1",
+    "webpack": "^4.44.0",
     "webpack-cli": "^3.3.10",
     "webpack-node-externals": "^1.7.2",
     "yargs": "^15.3.1"

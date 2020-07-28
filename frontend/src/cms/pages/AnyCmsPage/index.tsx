@@ -132,7 +132,7 @@ export const getStaticProps: GetStaticProps<Props> = async context => {
       ...props,
       apolloState: apolloClient.cache.extract(),
     },
-    unstable_revalidate: 1,
+    revalidate: 1,
   };
 
   // FIXME - move to pages/preview.tsx
