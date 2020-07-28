@@ -271,6 +271,40 @@ input EmailSubscribeChannelCreateInput {
   interest_ids: [ID!]!
 }
 
+interface Event {
+  start: String!
+  end: String!
+  title: String!
+  summary: String!
+  registration_type: String!
+  pricing_type: String!
+  realm: String!
+  published: Boolean!
+  event_type: String!
+  id: ID!
+  event_id: ID!
+  description(format: EventsMarkupFormat): String!
+  image(spec: String!): WagtailImageRendition
+  project: ProjectPage
+  public_tags: [String!]!
+  tags: [String!]!
+  my_ticket: MyEventsTicket
+  announcements: EventsAnnouncements!
+  public_google_event: EventsGoogleEvent
+  zoom_meeting: ZoomMeeting
+  prototype: EventsPrototype
+  visitors: String
+  creator: String
+  created: String!
+  updated: String!
+  location: String!
+  room: String!
+  zoom_link: String!
+  timing_description_override: String!
+  tickets: [EventsTicket!]!
+  feedbacks: [EventsFeedback!]!
+}
+
 input EventAddTagInput {
   event_id: ID!
   tag: String!
@@ -493,33 +527,36 @@ type EventsAnnouncements {
   fb: EventsAnnouncementFb!
 }
 
-type EventsEvent {
-  title: String!
-  description: String!
-  summary: String!
-  timing_description_override: String!
-  location: String!
-  zoom_link: String!
+type EventsEvent implements Event {
   start: String!
   end: String!
-  created: String!
-  updated: String!
-  published: Boolean!
-  creator: String
-  event_type: String!
-  pricing_type: String!
+  title: String!
+  summary: String!
   registration_type: String!
+  pricing_type: String!
   realm: String!
-  visitors: String
-  event_id: ID!
+  published: Boolean!
+  event_type: String!
   id: ID!
+  event_id: ID!
+  description(format: EventsMarkupFormat): String!
   image(spec: String!): WagtailImageRendition
-  announcements: EventsAnnouncements!
-  room: String!
+  project: ProjectPage
+  public_tags: [String!]!
   tags: [String!]!
+  my_ticket: MyEventsTicket
+  announcements: EventsAnnouncements!
+  public_google_event: EventsGoogleEvent
   zoom_meeting: ZoomMeeting
   prototype: EventsPrototype
-  project: ProjectPage
+  visitors: String
+  creator: String
+  created: String!
+  updated: String!
+  location: String!
+  room: String!
+  zoom_link: String!
+  timing_description_override: String!
   tickets: [EventsTicket!]!
   feedbacks: [EventsFeedback!]!
 }
@@ -595,6 +632,11 @@ type EventsListBlock implements WagtailBlock {
   events: [EventsPublicEvent!]!
 }
 
+enum EventsMarkupFormat {
+  SOURCE
+  PLAIN
+}
+
 type EventsPrototype {
   id: ID!
   title: String!
@@ -616,7 +658,7 @@ type EventsPrototype {
   timepad_category: TimepadCategory
 }
 
-type EventsPublicEvent {
+type EventsPublicEvent implements Event {
   start: String!
   end: String!
   title: String!
@@ -628,10 +670,11 @@ type EventsPublicEvent {
   event_type: String!
   id: ID!
   event_id: ID!
-  description: String!
+  description(format: EventsMarkupFormat): String!
   image(spec: String!): WagtailImageRendition
   project: ProjectPage
   public_tags: [String!]!
+  tags: [String!]!
   my_ticket: MyEventsTicket
   announcements: EventsAnnouncements!
   public_google_event: EventsGoogleEvent

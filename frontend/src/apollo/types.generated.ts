@@ -330,6 +330,50 @@ export type EmailSubscribeChannelCreateInput = {
   interest_ids: Array<Scalars['ID']>;
 };
 
+export type Event = {
+  start: Scalars['String'];
+  end: Scalars['String'];
+  title: Scalars['String'];
+  summary: Scalars['String'];
+  registration_type: Scalars['String'];
+  pricing_type: Scalars['String'];
+  realm: Scalars['String'];
+  published: Scalars['Boolean'];
+  event_type: Scalars['String'];
+  id: Scalars['ID'];
+  event_id: Scalars['ID'];
+  description: Scalars['String'];
+  image?: Maybe<WagtailImageRendition>;
+  project?: Maybe<ProjectPage>;
+  public_tags: Array<Scalars['String']>;
+  tags: Array<Scalars['String']>;
+  my_ticket?: Maybe<MyEventsTicket>;
+  announcements: EventsAnnouncements;
+  public_google_event?: Maybe<EventsGoogleEvent>;
+  zoom_meeting?: Maybe<ZoomMeeting>;
+  prototype?: Maybe<EventsPrototype>;
+  visitors?: Maybe<Scalars['String']>;
+  creator?: Maybe<Scalars['String']>;
+  created: Scalars['String'];
+  updated: Scalars['String'];
+  location: Scalars['String'];
+  room: Scalars['String'];
+  zoom_link: Scalars['String'];
+  timing_description_override: Scalars['String'];
+  tickets: Array<EventsTicket>;
+  feedbacks: Array<EventsFeedback>;
+};
+
+
+export type EventDescriptionArgs = {
+  format?: Maybe<EventsMarkupFormat>;
+};
+
+
+export type EventImageArgs = {
+  spec: Scalars['String'];
+};
+
 export type EventAddTagInput = {
   event_id: Scalars['ID'];
   tag: Scalars['String'];
@@ -567,36 +611,44 @@ export type EventsAnnouncements = {
   fb: EventsAnnouncementFb;
 };
 
-export type EventsEvent = {
+export type EventsEvent = Event & {
   __typename?: 'EventsEvent';
-  title: Scalars['String'];
-  description: Scalars['String'];
-  summary: Scalars['String'];
-  timing_description_override: Scalars['String'];
-  location: Scalars['String'];
-  zoom_link: Scalars['String'];
   start: Scalars['String'];
   end: Scalars['String'];
-  created: Scalars['String'];
-  updated: Scalars['String'];
-  published: Scalars['Boolean'];
-  creator?: Maybe<Scalars['String']>;
-  event_type: Scalars['String'];
-  pricing_type: Scalars['String'];
+  title: Scalars['String'];
+  summary: Scalars['String'];
   registration_type: Scalars['String'];
+  pricing_type: Scalars['String'];
   realm: Scalars['String'];
-  visitors?: Maybe<Scalars['String']>;
-  event_id: Scalars['ID'];
+  published: Scalars['Boolean'];
+  event_type: Scalars['String'];
   id: Scalars['ID'];
+  event_id: Scalars['ID'];
+  description: Scalars['String'];
   image?: Maybe<WagtailImageRendition>;
-  announcements: EventsAnnouncements;
-  room: Scalars['String'];
+  project?: Maybe<ProjectPage>;
+  public_tags: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
+  my_ticket?: Maybe<MyEventsTicket>;
+  announcements: EventsAnnouncements;
+  public_google_event?: Maybe<EventsGoogleEvent>;
   zoom_meeting?: Maybe<ZoomMeeting>;
   prototype?: Maybe<EventsPrototype>;
-  project?: Maybe<ProjectPage>;
+  visitors?: Maybe<Scalars['String']>;
+  creator?: Maybe<Scalars['String']>;
+  created: Scalars['String'];
+  updated: Scalars['String'];
+  location: Scalars['String'];
+  room: Scalars['String'];
+  zoom_link: Scalars['String'];
+  timing_description_override: Scalars['String'];
   tickets: Array<EventsTicket>;
   feedbacks: Array<EventsFeedback>;
+};
+
+
+export type EventsEventDescriptionArgs = {
+  format?: Maybe<EventsMarkupFormat>;
 };
 
 
@@ -682,6 +734,11 @@ export type EventsListBlock = WagtailBlock & {
   events: Array<EventsPublicEvent>;
 };
 
+export enum EventsMarkupFormat {
+  Source = 'SOURCE',
+  Plain = 'PLAIN'
+}
+
 export type EventsPrototype = {
   __typename?: 'EventsPrototype';
   id: Scalars['ID'];
@@ -720,7 +777,7 @@ export type EventsPrototypeInstancesArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
-export type EventsPublicEvent = {
+export type EventsPublicEvent = Event & {
   __typename?: 'EventsPublicEvent';
   start: Scalars['String'];
   end: Scalars['String'];
@@ -737,6 +794,7 @@ export type EventsPublicEvent = {
   image?: Maybe<WagtailImageRendition>;
   project?: Maybe<ProjectPage>;
   public_tags: Array<Scalars['String']>;
+  tags: Array<Scalars['String']>;
   my_ticket?: Maybe<MyEventsTicket>;
   announcements: EventsAnnouncements;
   public_google_event?: Maybe<EventsGoogleEvent>;
@@ -752,6 +810,11 @@ export type EventsPublicEvent = {
   timing_description_override: Scalars['String'];
   tickets: Array<EventsTicket>;
   feedbacks: Array<EventsFeedback>;
+};
+
+
+export type EventsPublicEventDescriptionArgs = {
+  format?: Maybe<EventsMarkupFormat>;
 };
 
 

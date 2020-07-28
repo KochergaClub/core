@@ -1,95 +1,96 @@
-from kocherga.graphql import g, helpers, django_utils
-from kocherga.graphql.permissions import staffonly, check_permissions
-from kocherga.wagtail import graphql_utils as wagtail_utils
+from typing import Optional
 
+import graphql
+
+from kocherga.graphql import django_utils, g, helpers
+from kocherga.graphql.permissions import check_permissions, staffonly
 from kocherga.projects.schema.types import ProjectPage
-
+from kocherga.wagtail import graphql_utils as wagtail_utils
 from kocherga.zoom.schema import types as zoom_types
 
-from ... import models, markup
+from ... import markup, models
+
+EventsMarkupFormat = g.EnumType(
+    'EventsMarkupFormat', {'SOURCE': 'SOURCE', 'PLAIN': 'PLAIN'}
+)
 
 
-def build_EventsEvent():
-    # All EventsEvent uses are staff-only for now, but this can change in the future.
-    # Don't forget to add permissions checks to all private fields when that happens!
-
+# temporary interface for smoother EventsPublicEvent -> Event migration, will be deleted soon
+def build_EventInterface() -> graphql.GraphQLInterfaceType:
     def build_fields():
+        from .my_ticket import MyEventsTicket
+        from .announcements import EventsAnnouncements
+        from .google_event import EventsGoogleEvent
         from .prototype import EventsPrototype
         from .feedback import EventsFeedback
         from .ticket import EventsTicket
+        from kocherga.wagtail.schema.types import WagtailImageRendition
 
         return g.fields(
             {
-                **django_utils.model_fields(
-                    models.Event,
-                    [
-                        'title',
-                        'description',
-                        'summary',
-                        'timing_description_override',
-                        'location',
-                        'zoom_link',
-                        'start',
-                        'end',
-                        'created',
-                        'updated',
-                        'published',
-                        'creator',
-                        'event_type',
-                        'pricing_type',
-                        'registration_type',
-                        'realm',
-                        'visitors',
-                    ],
+                'start': str,
+                'end': str,
+                'title': str,
+                'summary': str,
+                'registration_type': str,
+                'pricing_type': str,
+                'realm': str,
+                'published': bool,
+                'event_type': str,
+                'id': 'ID!',
+                'event_id': 'ID!',
+                'description': g.Field(
+                    g.NN(g.String), args=g.arguments({'format': EventsMarkupFormat})
                 ),
-                'event_id': g.Field(
-                    g.NN(g.ID), resolve=lambda obj, info: obj.uuid
-                ),  # deprecated
-                'id': g.Field(
-                    g.NN(g.ID), resolve=lambda obj, info: obj.uuid
-                ),  # uuid field, renamed for client
-                'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
-                'announcements': announcements_field(),
-                'room': room_field(),  # normalized location
-                'tags': tags_field(),
-                'zoom_meeting': helpers.field_with_permissions(
-                    zoom_types.ZoomMeeting, [staffonly]
-                ),
-                'prototype': helpers.field_with_permissions(
-                    EventsPrototype, [staffonly]
+                'image': g.Field(
+                    WagtailImageRendition, args=g.arguments({'spec': str})
                 ),
                 'project': ProjectPage,
-                'tickets': django_utils.related_field(
-                    models.Event,
-                    'tickets',
-                    item_type=EventsTicket,
-                    permissions=[staffonly],
-                ),
-                'feedbacks': django_utils.related_field(
-                    models.Event,
-                    'feedbacks',
-                    item_type=EventsFeedback,
-                    permissions=[staffonly],
-                ),
+                'public_tags': g.NNList(g.String),
+                'tags': g.NNList(g.String),
+                'my_ticket': MyEventsTicket,
+                'announcements': g.Field(g.NN(EventsAnnouncements)),
+                'public_google_event': EventsGoogleEvent,
+                'zoom_meeting': zoom_types.ZoomMeeting,
+                'prototype': EventsPrototype,
+                'visitors': Optional[str],
+                'creator': Optional[str],
+                'created': str,
+                'updated': str,
+                'location': str,
+                'room': str,
+                'zoom_link': str,
+                'zoom_link': str,
+                'timing_description_override': str,
+                'tickets': g.NNList(EventsTicket),
+                'feedbacks': g.NNList(EventsFeedback),
             }
         )
 
-    EventsEvent = g.ObjectType('EventsEvent', build_fields)
+    result = g.InterfaceType('Event', fields=build_fields)
+    return result
 
-    # announcements: EventsAnnouncements!
-    def announcements_field():
-        from .announcements import EventsAnnouncements
 
-        def resolve(obj, info):
-            return {
-                'timepad': obj.timepad_announcement,
-                'vk': obj.vk_announcement,
-                'fb': obj.fb_announcement,
-            }
+EventInterface = build_EventInterface()
 
-        return g.Field(g.NN(EventsAnnouncements), resolve=resolve)
 
-    # tags: [String!]! @staffonly
+def build_event_fields():
+    def description_field():
+        def resolve(obj, info, format=None):
+            # PLAIN is default for now, for backward-compatibility
+            if format == 'PLAIN' or format is None:
+                return markup.Markup(obj.description).as_plain()
+            elif format == 'SOURCE' or format is None:
+                return obj.description
+            else:
+                raise Exception(f"Unknown markup format {format}")
+
+        args = g.arguments({'format': EventsMarkupFormat})
+        return g.Field(g.NN(g.String), args=args, resolve=resolve)
+
+    def resolve_public_tags(obj, info):
+        return obj.public_tag_names()
+
     def tags_field():
         @check_permissions([staffonly])
         def resolve(obj, info):
@@ -98,30 +99,11 @@ def build_EventsEvent():
         return g.Field(g.NNList(g.String), resolve=resolve)
 
     def room_field():
+        @check_permissions([staffonly])
         def resolve(obj, info):
             return obj.get_room()
 
         return g.Field(g.NN(g.String), resolve=resolve)
-
-    return EventsEvent
-
-
-EventsEvent = build_EventsEvent()
-
-EventsEventConnection = helpers.ConnectionType(EventsEvent)
-
-
-def build_EventsPublicEvent():
-    def resolve_description(obj, info):
-        return markup.Markup(obj.description).as_plain()
-
-    def resolve_image(obj, info):
-        if not obj.image:
-            return None
-        return obj.image.url
-
-    def resolve_public_tags(obj, info):
-        return obj.public_tag_names()
 
     def my_ticket_field():
         # note that there's no @auth decorator - we don't want any errors if user is not authenticated
@@ -158,76 +140,76 @@ def build_EventsPublicEvent():
         permissions = []
         result = EventsGoogleEvent
 
-    def build_fields():
-        from .feedback import EventsFeedback
-        from .ticket import EventsTicket
-        from .prototype import EventsPrototype
+    from .feedback import EventsFeedback
+    from .ticket import EventsTicket
+    from .prototype import EventsPrototype
 
-        return g.fields(
-            {
-                **django_utils.model_fields(
-                    models.Event,
-                    [
-                        'start',
-                        'end',
-                        'title',
-                        'summary',
-                        'registration_type',
-                        'pricing_type',
-                        'realm',
-                        'published',
-                        'event_type',
-                    ],
-                ),
-                'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
-                'event_id': g.Field(
-                    g.NN(g.ID), resolve=lambda obj, info: obj.uuid
-                ),  # deprecated, use `id` instead
-                'description': g.Field(g.NN(g.String), resolve=resolve_description),
-                'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
-                'project': ProjectPage,
-                'public_tags': g.Field(g.NNList(g.String), resolve=resolve_public_tags),
-                'my_ticket': my_ticket_field(),
-                'announcements': announcements_field(),
-                'public_google_event': public_google_event_field().as_field(),
-                'zoom_meeting': helpers.field_with_permissions(
-                    zoom_types.ZoomMeeting, [staffonly]
-                ),
-                'prototype': helpers.field_with_permissions(
-                    EventsPrototype, [staffonly]
-                ),
-                'visitors': helpers.field_with_permissions(g.String, [staffonly]),
-                'creator': helpers.field_with_permissions(g.String, [staffonly]),
-                'created': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
-                'updated': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
-                'location': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
-                'room': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
-                'zoom_link': helpers.field_with_permissions(
-                    g.NN(g.String), [staffonly]
-                ),
-                'timing_description_override': helpers.field_with_permissions(
-                    g.NN(g.String), [staffonly]
-                ),
-                'tickets': django_utils.related_field(
-                    models.Event,
-                    'tickets',
-                    item_type=EventsTicket,
-                    permissions=[staffonly],
-                ),
-                'feedbacks': django_utils.related_field(
-                    models.Event,
-                    'feedbacks',
-                    item_type=EventsFeedback,
-                    permissions=[staffonly],
-                ),
-            }
-        )
-
-    EventsPublicEvent = g.ObjectType('EventsPublicEvent', fields=build_fields)
-
-    return EventsPublicEvent
+    return g.fields(
+        {
+            **django_utils.model_fields(
+                models.Event,
+                [
+                    'start',
+                    'end',
+                    'title',
+                    'summary',
+                    'registration_type',
+                    'pricing_type',
+                    'realm',
+                    'published',
+                    'event_type',
+                ],
+            ),
+            'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
+            'event_id': g.Field(
+                g.NN(g.ID), resolve=lambda obj, info: obj.uuid
+            ),  # deprecated, use `id` instead
+            'description': description_field(),
+            'image': wagtail_utils.image_rendition_field(models.Event, 'image'),
+            'project': ProjectPage,
+            'public_tags': g.Field(g.NNList(g.String), resolve=resolve_public_tags),
+            'tags': tags_field(),
+            'my_ticket': my_ticket_field(),
+            'announcements': announcements_field(),
+            'public_google_event': public_google_event_field().as_field(),
+            'zoom_meeting': helpers.field_with_permissions(
+                zoom_types.ZoomMeeting, [staffonly]
+            ),
+            'prototype': helpers.field_with_permissions(
+                EventsPrototype, [staffonly]
+            ),
+            'visitors': helpers.field_with_permissions(g.String, [staffonly]),
+            'creator': helpers.field_with_permissions(g.String, [staffonly]),
+            'created': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+            'updated': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+            'location': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
+            'room': room_field(),
+            'zoom_link': helpers.field_with_permissions(
+                g.NN(g.String), [staffonly]
+            ),
+            'timing_description_override': helpers.field_with_permissions(
+                g.NN(g.String), [staffonly]
+            ),
+            'tickets': django_utils.related_field(
+                models.Event,
+                'tickets',
+                item_type=EventsTicket,
+                permissions=[staffonly],
+            ),
+            'feedbacks': django_utils.related_field(
+                models.Event,
+                'feedbacks',
+                item_type=EventsFeedback,
+                permissions=[staffonly],
+            ),
+        }
+    )
 
 
-EventsPublicEvent = build_EventsPublicEvent()
+EventsEvent = g.ObjectType('EventsEvent', fields=build_event_fields, interfaces=[EventInterface])
+
+EventsEventConnection = helpers.ConnectionType(EventsEvent)
+
+EventsPublicEvent = g.ObjectType('EventsPublicEvent', fields=build_event_fields, interfaces=[EventInterface])
 
 EventsPublicEventConnection = helpers.ConnectionType(EventsPublicEvent)
