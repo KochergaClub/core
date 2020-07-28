@@ -21,7 +21,28 @@ export type MyEventsTicketFragment = (
   & Pick<Types.MyEventsTicket, 'id' | 'created' | 'status' | 'zoom_link'>
 );
 
-export type EventsPublicEventFragment = (
+export type EventsPublicEvent_EventsEvent_Fragment = (
+  { __typename?: 'EventsEvent' }
+  & Pick<Types.EventsEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
+  & { image?: Types.Maybe<(
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'url'>
+  )>, project?: Types.Maybe<(
+    { __typename?: 'ProjectPage' }
+    & ProjectPage_SummaryForEventFragment
+  )>, my_ticket?: Types.Maybe<(
+    { __typename?: 'MyEventsTicket' }
+    & MyEventsTicketFragment
+  )>, announcements: (
+    { __typename?: 'EventsAnnouncements' }
+    & { timepad: (
+      { __typename?: 'EventsAnnouncementTimepad' }
+      & Pick<Types.EventsAnnouncementTimepad, 'link'>
+    ) }
+  ) }
+);
+
+export type EventsPublicEvent_EventsPublicEvent_Fragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
   & { image?: Types.Maybe<(
@@ -42,6 +63,8 @@ export type EventsPublicEventFragment = (
   ) }
 );
 
+export type EventsPublicEventFragment = EventsPublicEvent_EventsEvent_Fragment | EventsPublicEvent_EventsPublicEvent_Fragment;
+
 export type GetPublicEventQueryVariables = {
   event_id: Types.Scalars['ID'];
 };
@@ -51,7 +74,7 @@ export type GetPublicEventQuery = (
   { __typename?: 'Query' }
   & { publicEvent: (
     { __typename?: 'EventsPublicEvent' }
-    & EventsPublicEventFragment
+    & EventsPublicEvent_EventsPublicEvent_Fragment
   ) }
 );
 
@@ -117,7 +140,7 @@ export const MyEventsTicketFragmentDoc = gql`
 }
     `;
 export const EventsPublicEventFragmentDoc = gql`
-    fragment EventsPublicEvent on EventsPublicEvent {
+    fragment EventsPublicEvent on Event {
   id
   start
   end

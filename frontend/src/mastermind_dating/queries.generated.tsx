@@ -51,10 +51,17 @@ export type MastermindDatingCohortDetailsFragment = (
   )> }
 );
 
-export type MastermindDatingEventFragment = (
+export type MastermindDatingEvent_EventsEvent_Fragment = (
   { __typename?: 'EventsEvent' }
   & Pick<Types.EventsEvent, 'id' | 'title' | 'start'>
 );
+
+export type MastermindDatingEvent_EventsPublicEvent_Fragment = (
+  { __typename?: 'EventsPublicEvent' }
+  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'start'>
+);
+
+export type MastermindDatingEventFragment = MastermindDatingEvent_EventsEvent_Fragment | MastermindDatingEvent_EventsPublicEvent_Fragment;
 
 export type MastermindDatingCohortsQueryVariables = {};
 
@@ -91,7 +98,7 @@ export type MastermindDatingSearchEventsQuery = (
     { __typename?: 'EventsEventConnection' }
     & { nodes: Array<(
       { __typename?: 'EventsEvent' }
-      & MastermindDatingEventFragment
+      & MastermindDatingEvent_EventsEvent_Fragment
     )> }
   ) }
 );
@@ -328,7 +335,7 @@ export const MastermindDatingCohortDetailsFragmentDoc = gql`
     ${MastermindDatingParticipantFragmentDoc}
 ${MastermindDatingGroupFragmentDoc}`;
 export const MastermindDatingEventFragmentDoc = gql`
-    fragment MastermindDatingEvent on EventsEvent {
+    fragment MastermindDatingEvent on Event {
   id
   title
   start

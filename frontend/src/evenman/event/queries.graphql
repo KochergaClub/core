@@ -1,4 +1,4 @@
-fragment EventsEvent_Summary on EventsEvent {
+fragment EventsEvent_Summary on Event {
   id
   title
   start
@@ -25,7 +25,7 @@ query EvenmanEvents($start: String!, $end: String!) {
   }
 }
 
-fragment EvenmanUnknownEvent on EventsEvent {
+fragment EvenmanUnknownEvent on Event {
   id
   title
 }
@@ -38,7 +38,7 @@ query EvenmanUnknownEvents {
   }
 }
 
-fragment EvenmanEvent_Details on EventsEvent {
+fragment EvenmanEvent_Details on Event {
   id
   created
   start
@@ -111,10 +111,7 @@ query EvenmanEvent($id: ID!) {
 }
 
 mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
-  result: eventSetEventType(input: {
-      event_id: $id,
-      event_type: $event_type
-    }) {
+  result: eventSetEventType(input: { event_id: $id, event_type: $event_type }) {
     ok
     event {
       id
@@ -124,10 +121,7 @@ mutation EvenmanSetEventType($id: ID!, $event_type: String!) {
 }
 
 mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
-  result: eventSetZoomLink(input: {
-      event_id: $id
-      zoom_link: $link
-    }) {
+  result: eventSetZoomLink(input: { event_id: $id, zoom_link: $link }) {
     ok
     event {
       id
@@ -137,9 +131,7 @@ mutation EvenmanSetZoomLink($id: ID!, $link: String!) {
 }
 
 mutation EvenmanGenerateZoomLink($id: ID!) {
-  result: eventGenerateZoomLink(input: {
-      event_id: $id
-    }) {
+  result: eventGenerateZoomLink(input: { event_id: $id }) {
     ok
     event {
       id
@@ -165,7 +157,8 @@ mutation EvenmanUpdate(
   $timing_description_override: String
   $image_id: ID
 ) {
-  result: eventUpdate(input: {
+  result: eventUpdate(
+    input: {
       event_id: $id
       published: $published
       visitors: $visitors
@@ -181,7 +174,8 @@ mutation EvenmanUpdate(
       project_slug: $project_slug
       timing_description_override: $timing_description_override
       image_id: $image_id
-    }) {
+    }
+  ) {
     ok
     event {
       ...EvenmanEvent_Details
@@ -190,18 +184,13 @@ mutation EvenmanUpdate(
 }
 
 mutation EvenmanEventDelete($id: ID!) {
-  result: eventDelete(input: {
-      event_id: $id
-    }) {
+  result: eventDelete(input: { event_id: $id }) {
     ok
   }
 }
 
 mutation EvenmanEventAddTag($id: ID!, $tag: String!) {
-  result: eventAddTag(input: {
-      event_id: $id
-      tag: $tag
-    }) {
+  result: eventAddTag(input: { event_id: $id, tag: $tag }) {
     ok
     event {
       id
@@ -211,10 +200,7 @@ mutation EvenmanEventAddTag($id: ID!, $tag: String!) {
 }
 
 mutation EvenmanEventDeleteTag($id: ID!, $tag: String!) {
-  result: eventDeleteTag(input: {
-      event_id: $id
-      tag: $tag
-    }) {
+  result: eventDeleteTag(input: { event_id: $id, tag: $tag }) {
     ok
     event {
       id
@@ -224,10 +210,7 @@ mutation EvenmanEventDeleteTag($id: ID!, $tag: String!) {
 }
 
 mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
-  result: eventSetImageFromUrl(input: {
-      event_id: $id
-      url: $url
-    }) {
+  result: eventSetImageFromUrl(input: { event_id: $id, url: $url }) {
     ok
     event {
       ...EvenmanEvent_Details
@@ -236,10 +219,9 @@ mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
 }
 
 mutation EvenmanVkAnnouncementSetImage($event_id: ID!, $image_id: ID!) {
-  result: eventVkAnnouncementSetImage(input: {
-      event_id: $event_id
-      image_id: $image_id
-    }) {
+  result: eventVkAnnouncementSetImage(
+    input: { event_id: $event_id, image_id: $image_id }
+  ) {
     ok
     event {
       ...EvenmanEvent_Details
@@ -248,10 +230,7 @@ mutation EvenmanVkAnnouncementSetImage($event_id: ID!, $image_id: ID!) {
 }
 
 mutation EvenmanAnnounce($event_id: ID!, $target: EventAnnounceTarget!) {
-  result: eventAnnounce(input: {
-      event_id: $event_id
-      target: $target
-    }) {
+  result: eventAnnounce(input: { event_id: $event_id, target: $target }) {
     ok
     event {
       ...EvenmanEvent_Details
@@ -259,12 +238,14 @@ mutation EvenmanAnnounce($event_id: ID!, $target: EventAnnounceTarget!) {
   }
 }
 
-mutation EvenmanSetAnnounceUrl($event_id: ID!, $target: EventAnnounceTarget!, $url: String!) {
-  result: eventSetAnnounceUrl(input: {
-      event_id: $event_id
-      target: $target
-      url: $url
-    }) {
+mutation EvenmanSetAnnounceUrl(
+  $event_id: ID!
+  $target: EventAnnounceTarget!
+  $url: String!
+) {
+  result: eventSetAnnounceUrl(
+    input: { event_id: $event_id, target: $target, url: $url }
+  ) {
     ok
     event {
       ...EvenmanEvent_Details
@@ -273,10 +254,7 @@ mutation EvenmanSetAnnounceUrl($event_id: ID!, $target: EventAnnounceTarget!, $u
 }
 
 mutation EvenmanEventMove($event_id: ID!, $start: String!) {
-  result: eventMove(input: {
-      event_id: $event_id
-      start: $start
-    }) {
+  result: eventMove(input: { event_id: $event_id, start: $start }) {
     ok
     event {
       id
@@ -287,11 +265,7 @@ mutation EvenmanEventMove($event_id: ID!, $start: String!) {
 }
 
 mutation EvenmanEventCreate($title: String!, $start: String!, $end: String!) {
-  result: eventCreate(input: {
-      title: $title
-      start: $start
-      end: $end
-    }) {
+  result: eventCreate(input: { title: $title, start: $start, end: $end }) {
     ok
     event {
       ...EvenmanEvent_Details

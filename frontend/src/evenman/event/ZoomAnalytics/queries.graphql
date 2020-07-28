@@ -1,4 +1,4 @@
-fragment EvenmanEvent_ForZoomAnalytics on EventsEvent {
+fragment EvenmanEvent_ForZoomAnalytics on Event {
   id
   zoom_meeting {
     id

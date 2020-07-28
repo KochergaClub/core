@@ -4,7 +4,19 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type EventsPublicEvent_SummaryFragment = (
+export type EventsPublicEvent_Summary_EventsEvent_Fragment = (
+  { __typename?: 'EventsEvent' }
+  & Pick<Types.EventsEvent, 'id' | 'title' | 'summary' | 'start' | 'end'>
+  & { image?: Types.Maybe<(
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+  )>, image_2x?: Types.Maybe<(
+    { __typename?: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+  )> }
+);
+
+export type EventsPublicEvent_Summary_EventsPublicEvent_Fragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'summary' | 'start' | 'end'>
   & { image?: Types.Maybe<(
@@ -15,6 +27,8 @@ export type EventsPublicEvent_SummaryFragment = (
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )> }
 );
+
+export type EventsPublicEvent_SummaryFragment = EventsPublicEvent_Summary_EventsEvent_Fragment | EventsPublicEvent_Summary_EventsPublicEvent_Fragment;
 
 export type UpcomingPublicEventsQueryVariables = {
   today: Types.Scalars['String'];
@@ -30,15 +44,22 @@ export type UpcomingPublicEventsQuery = (
       & Pick<Types.PageInfo, 'hasNextPage'>
     ), nodes: Array<(
       { __typename?: 'EventsPublicEvent' }
-      & EventsPublicEvent_SummaryFragment
+      & EventsPublicEvent_Summary_EventsPublicEvent_Fragment
     )> }
   ) }
 );
 
-export type EventsPublicEvent_ForCalendarFragment = (
+export type EventsPublicEvent_ForCalendar_EventsEvent_Fragment = (
+  { __typename?: 'EventsEvent' }
+  & Pick<Types.EventsEvent, 'id' | 'title' | 'start' | 'public_tags'>
+);
+
+export type EventsPublicEvent_ForCalendar_EventsPublicEvent_Fragment = (
   { __typename?: 'EventsPublicEvent' }
   & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'start' | 'public_tags'>
 );
+
+export type EventsPublicEvent_ForCalendarFragment = EventsPublicEvent_ForCalendar_EventsEvent_Fragment | EventsPublicEvent_ForCalendar_EventsPublicEvent_Fragment;
 
 export type PublicEventsForCalendarQueryVariables = {
   from: Types.Scalars['String'];
@@ -52,7 +73,7 @@ export type PublicEventsForCalendarQuery = (
     { __typename?: 'EventsPublicEventConnection' }
     & { nodes: Array<(
       { __typename?: 'EventsPublicEvent' }
-      & EventsPublicEvent_ForCalendarFragment
+      & EventsPublicEvent_ForCalendar_EventsPublicEvent_Fragment
     )> }
   ) }
 );
@@ -68,7 +89,7 @@ export type EventsPublicGoogleCalendarQuery = (
   )> }
 );
 
-export type TeamCalendarEventFragment = (
+export type TeamCalendarEvent_EventsEvent_Fragment = (
   { __typename?: 'EventsEvent' }
   & Pick<Types.EventsEvent, 'id' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'event_type' | 'room' | 'creator'>
   & { announcements: (
@@ -86,6 +107,26 @@ export type TeamCalendarEventFragment = (
   ) }
 );
 
+export type TeamCalendarEvent_EventsPublicEvent_Fragment = (
+  { __typename?: 'EventsPublicEvent' }
+  & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'event_type' | 'room' | 'creator'>
+  & { announcements: (
+    { __typename?: 'EventsAnnouncements' }
+    & { vk: (
+      { __typename?: 'EventsAnnouncementVk' }
+      & Pick<Types.EventsAnnouncementVk, 'link'>
+    ), fb: (
+      { __typename?: 'EventsAnnouncementFb' }
+      & Pick<Types.EventsAnnouncementFb, 'link'>
+    ), timepad: (
+      { __typename?: 'EventsAnnouncementTimepad' }
+      & Pick<Types.EventsAnnouncementTimepad, 'link'>
+    ) }
+  ) }
+);
+
+export type TeamCalendarEventFragment = TeamCalendarEvent_EventsEvent_Fragment | TeamCalendarEvent_EventsPublicEvent_Fragment;
+
 export type EventsInRangeQueryVariables = {
   start: Types.Scalars['String'];
   end: Types.Scalars['String'];
@@ -98,7 +139,7 @@ export type EventsInRangeQuery = (
     { __typename?: 'EventsEventConnection' }
     & { nodes: Array<(
       { __typename?: 'EventsEvent' }
-      & TeamCalendarEventFragment
+      & TeamCalendarEvent_EventsEvent_Fragment
     )> }
   ) }
 );
@@ -112,7 +153,7 @@ export type TeamCalendarEventQuery = (
   { __typename?: 'Query' }
   & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
-    & TeamCalendarEventFragment
+    & TeamCalendarEvent_EventsEvent_Fragment
   )> }
 );
 
@@ -129,7 +170,7 @@ export type ResizeEventMutation = (
     { __typename?: 'EventUpdateResult' }
     & { event: (
       { __typename?: 'EventsEvent' }
-      & TeamCalendarEventFragment
+      & TeamCalendarEvent_EventsEvent_Fragment
     ) }
   ) }
 );
@@ -150,7 +191,7 @@ export type TeamCalendarCreateEventMutation = (
     & Pick<Types.EventCreateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
-      & TeamCalendarEventFragment
+      & TeamCalendarEvent_EventsEvent_Fragment
     ) }
   ) }
 );
@@ -170,7 +211,7 @@ export type TeamCalendarUpdateEventMutation = (
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
-      & TeamCalendarEventFragment
+      & TeamCalendarEvent_EventsEvent_Fragment
     ) }
   ) }
 );
@@ -193,14 +234,25 @@ export type TeamEventFeedbackFragment = (
   & Pick<Types.EventsFeedback, 'id' | 'overall_score' | 'recommend_score' | 'content_score' | 'conductor_score' | 'source_friend' | 'source_vk' | 'source_fb' | 'source_timepad' | 'source_email' | 'source_website' | 'custom_source' | 'comment'>
 );
 
-export type TeamEventDetailsFragment = (
+export type TeamEventDetails_EventsEvent_Fragment = (
   { __typename?: 'EventsEvent' }
   & { feedbacks: Array<(
     { __typename?: 'EventsFeedback' }
     & TeamEventFeedbackFragment
   )> }
-  & TeamCalendarEventFragment
+  & TeamCalendarEvent_EventsEvent_Fragment
 );
+
+export type TeamEventDetails_EventsPublicEvent_Fragment = (
+  { __typename?: 'EventsPublicEvent' }
+  & { feedbacks: Array<(
+    { __typename?: 'EventsFeedback' }
+    & TeamEventFeedbackFragment
+  )> }
+  & TeamCalendarEvent_EventsPublicEvent_Fragment
+);
+
+export type TeamEventDetailsFragment = TeamEventDetails_EventsEvent_Fragment | TeamEventDetails_EventsPublicEvent_Fragment;
 
 export type TeamEventDetailsQueryVariables = {
   id: Types.Scalars['ID'];
@@ -211,7 +263,7 @@ export type TeamEventDetailsQuery = (
   { __typename?: 'Query' }
   & { event?: Types.Maybe<(
     { __typename?: 'EventsEvent' }
-    & TeamEventDetailsFragment
+    & TeamEventDetails_EventsEvent_Fragment
   )> }
 );
 
@@ -258,7 +310,7 @@ export type EventFeedbackDeleteMutation = (
 );
 
 export const EventsPublicEvent_SummaryFragmentDoc = gql`
-    fragment EventsPublicEvent_Summary on EventsPublicEvent {
+    fragment EventsPublicEvent_Summary on Event {
   id
   title
   summary
@@ -275,7 +327,7 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
 }
     `;
 export const EventsPublicEvent_ForCalendarFragmentDoc = gql`
-    fragment EventsPublicEvent_ForCalendar on EventsPublicEvent {
+    fragment EventsPublicEvent_ForCalendar on Event {
   id
   title
   start
@@ -283,7 +335,7 @@ export const EventsPublicEvent_ForCalendarFragmentDoc = gql`
 }
     `;
 export const TeamCalendarEventFragmentDoc = gql`
-    fragment TeamCalendarEvent on EventsEvent {
+    fragment TeamCalendarEvent on Event {
   id
   start
   end
@@ -324,7 +376,7 @@ export const TeamEventFeedbackFragmentDoc = gql`
 }
     `;
 export const TeamEventDetailsFragmentDoc = gql`
-    fragment TeamEventDetails on EventsEvent {
+    fragment TeamEventDetails on Event {
   ...TeamCalendarEvent
   feedbacks {
     ...TeamEventFeedback

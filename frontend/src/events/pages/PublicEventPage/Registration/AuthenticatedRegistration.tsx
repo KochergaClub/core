@@ -24,7 +24,7 @@ const Registered: React.FC<CommonProps> = ({ event }) => {
           id: event.my_ticket.id,
           status: event.my_ticket.status,
           zoom_link: event.my_ticket.zoom_link,
-          event: event,
+          event: event as any, // FIXME - short-term hack!
         }}
       />
       <Column centered>

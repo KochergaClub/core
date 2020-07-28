@@ -49,7 +49,7 @@ fragment MastermindDatingCohortDetails on MastermindDatingCohort {
   }
 }
 
-fragment MastermindDatingEvent on EventsEvent {
+fragment MastermindDatingEvent on Event {
   id
   title
   start

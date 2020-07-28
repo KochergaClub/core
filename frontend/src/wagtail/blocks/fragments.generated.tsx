@@ -1,6 +1,6 @@
 import * as Types from '../../apollo/types.generated';
 
-import { EventsPublicEvent_SummaryFragment } from '../../events/queries.generated';
+import { EventsPublicEvent_Summary_EventsEvent_Fragment, EventsPublicEvent_Summary_EventsPublicEvent_Fragment } from '../../events/queries.generated';
 import gql from 'graphql-tag';
 import { EventsPublicEvent_SummaryFragmentDoc } from '../../events/queries.generated';
 
@@ -55,7 +55,7 @@ export type EventsListBlockFragment = (
   & Pick<Types.EventsListBlock, 'id'>
   & { events: Array<(
     { __typename?: 'EventsPublicEvent' }
-    & EventsPublicEvent_SummaryFragment
+    & EventsPublicEvent_Summary_EventsPublicEvent_Fragment
   )> }
 );
 

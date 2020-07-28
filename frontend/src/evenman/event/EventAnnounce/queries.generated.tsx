@@ -1,6 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import { EvenmanEvent_DetailsFragment } from '../queries.generated';
+import { EvenmanEvent_Details_EventsEvent_Fragment, EvenmanEvent_Details_EventsPublicEvent_Fragment } from '../queries.generated';
 import gql from 'graphql-tag';
 import { EvenmanEvent_DetailsFragmentDoc } from '../queries.generated';
 import * as ApolloReactCommon from '@apollo/client';
@@ -20,7 +20,7 @@ export type EvenmanTimepadAnnouncementUpdateMutation = (
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
-      & EvenmanEvent_DetailsFragment
+      & EvenmanEvent_Details_EventsEvent_Fragment
     ) }
   )> }
 );
@@ -38,7 +38,7 @@ export type EvenmanVkAnnouncementUpdateMutation = (
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
       { __typename?: 'EventsEvent' }
-      & EvenmanEvent_DetailsFragment
+      & EvenmanEvent_Details_EventsEvent_Fragment
     ) }
   )> }
 );

@@ -158,7 +158,7 @@ const EventCalendar: NextPage<Props> = props => {
           __typename: 'Mutation' as const,
           result: {
             event: {
-              __typename: 'EventsEvent' as const,
+              __typename: 'EventsEvent' as any, // FIXME - short-term hack!
               ...eventWithMetadata.event,
               start: start.toISOString(),
               end: end.toISOString(),
