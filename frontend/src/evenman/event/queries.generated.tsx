@@ -4,9 +4,9 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type EventsEvent_Summary_EventsEvent_Fragment = (
-  { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id' | 'title' | 'start' | 'published' | 'event_type'>
+export type EventsEvent_SummaryFragment = (
+  { __typename?: 'Event' }
+  & Pick<Types.Event, 'id' | 'title' | 'start' | 'published' | 'event_type'>
   & { announcements: (
     { __typename?: 'EventsAnnouncements' }
     & { timepad: (
@@ -21,26 +21,6 @@ export type EventsEvent_Summary_EventsEvent_Fragment = (
     ) }
   ) }
 );
-
-export type EventsEvent_Summary_EventsPublicEvent_Fragment = (
-  { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'start' | 'published' | 'event_type'>
-  & { announcements: (
-    { __typename?: 'EventsAnnouncements' }
-    & { timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
-      & Pick<Types.EventsAnnouncementTimepad, 'link'>
-    ), vk: (
-      { __typename?: 'EventsAnnouncementVk' }
-      & Pick<Types.EventsAnnouncementVk, 'link'>
-    ), fb: (
-      { __typename?: 'EventsAnnouncementFb' }
-      & Pick<Types.EventsAnnouncementFb, 'link'>
-    ) }
-  ) }
-);
-
-export type EventsEvent_SummaryFragment = EventsEvent_Summary_EventsEvent_Fragment | EventsEvent_Summary_EventsPublicEvent_Fragment;
 
 export type EvenmanEventsQueryVariables = {
   start: Types.Scalars['String'];
@@ -51,25 +31,18 @@ export type EvenmanEventsQueryVariables = {
 export type EvenmanEventsQuery = (
   { __typename?: 'Query' }
   & { events: (
-    { __typename?: 'EventsEventConnection' }
+    { __typename?: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'EventsEvent' }
-      & EventsEvent_Summary_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EventsEvent_SummaryFragment
     )> }
   ) }
 );
 
-export type EvenmanUnknownEvent_EventsEvent_Fragment = (
-  { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id' | 'title'>
+export type EvenmanUnknownEventFragment = (
+  { __typename?: 'Event' }
+  & Pick<Types.Event, 'id' | 'title'>
 );
-
-export type EvenmanUnknownEvent_EventsPublicEvent_Fragment = (
-  { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'title'>
-);
-
-export type EvenmanUnknownEventFragment = EvenmanUnknownEvent_EventsEvent_Fragment | EvenmanUnknownEvent_EventsPublicEvent_Fragment;
 
 export type EvenmanUnknownEventsQueryVariables = {};
 
@@ -77,17 +50,17 @@ export type EvenmanUnknownEventsQueryVariables = {};
 export type EvenmanUnknownEventsQuery = (
   { __typename?: 'Query' }
   & { events: (
-    { __typename?: 'EventsEventConnection' }
+    { __typename?: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'EventsEvent' }
-      & EvenmanUnknownEvent_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanUnknownEventFragment
     )> }
   ) }
 );
 
-export type EvenmanEvent_Details_EventsEvent_Fragment = (
-  { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
+export type EvenmanEvent_DetailsFragment = (
+  { __typename?: 'Event' }
+  & Pick<Types.Event, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
   & { zoom_meeting?: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
@@ -124,48 +97,6 @@ export type EvenmanEvent_Details_EventsEvent_Fragment = (
     ) }
   ) }
 );
-
-export type EvenmanEvent_Details_EventsPublicEvent_Fragment = (
-  { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
-  & { zoom_meeting?: Types.Maybe<(
-    { __typename?: 'ZoomMeeting' }
-    & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
-  )>, image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
-    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
-  )>, imageForVkBackground?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
-    & Pick<Types.WagtailImageRendition, 'url'>
-  )>, prototype?: Types.Maybe<(
-    { __typename?: 'EventsPrototype' }
-    & Pick<Types.EventsPrototype, 'id'>
-  )>, project?: Types.Maybe<(
-    { __typename?: 'ProjectPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'slug'>
-    ) }
-  )>, announcements: (
-    { __typename?: 'EventsAnnouncements' }
-    & { timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
-      & Pick<Types.EventsAnnouncementTimepad, 'link' | 'category_code' | 'prepaid_tickets'>
-    ), vk: (
-      { __typename?: 'EventsAnnouncementVk' }
-      & Pick<Types.EventsAnnouncementVk, 'link' | 'group'>
-      & { image?: Types.Maybe<(
-        { __typename?: 'WagtailImageRendition' }
-        & Pick<Types.WagtailImageRendition, 'url'>
-      )> }
-    ), fb: (
-      { __typename?: 'EventsAnnouncementFb' }
-      & Pick<Types.EventsAnnouncementFb, 'link' | 'group'>
-    ) }
-  ) }
-);
-
-export type EvenmanEvent_DetailsFragment = EvenmanEvent_Details_EventsEvent_Fragment | EvenmanEvent_Details_EventsPublicEvent_Fragment;
 
 export type EvenmanEventQueryVariables = {
   id: Types.Scalars['ID'];
@@ -175,8 +106,8 @@ export type EvenmanEventQueryVariables = {
 export type EvenmanEventQuery = (
   { __typename?: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'EventsEvent' }
-    & EvenmanEvent_Details_EventsEvent_Fragment
+    { __typename?: 'Event' }
+    & EvenmanEvent_DetailsFragment
   )> }
 );
 
@@ -192,8 +123,8 @@ export type EvenmanSetEventTypeMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & Pick<Types.EventsEvent, 'id' | 'event_type'>
+      { __typename?: 'Event' }
+      & Pick<Types.Event, 'id' | 'event_type'>
     ) }
   ) }
 );
@@ -210,8 +141,8 @@ export type EvenmanSetZoomLinkMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & Pick<Types.EventsEvent, 'id' | 'zoom_link'>
+      { __typename?: 'Event' }
+      & Pick<Types.Event, 'id' | 'zoom_link'>
     ) }
   ) }
 );
@@ -227,8 +158,8 @@ export type EvenmanGenerateZoomLinkMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & Pick<Types.EventsEvent, 'id' | 'zoom_link'>
+      { __typename?: 'Event' }
+      & Pick<Types.Event, 'id' | 'zoom_link'>
     ) }
   ) }
 );
@@ -258,8 +189,8 @@ export type EvenmanUpdateMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & EvenmanEvent_Details_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanEvent_DetailsFragment
     ) }
   ) }
 );
@@ -289,8 +220,8 @@ export type EvenmanEventAddTagMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & Pick<Types.EventsEvent, 'id' | 'tags'>
+      { __typename?: 'Event' }
+      & Pick<Types.Event, 'id' | 'tags'>
     ) }
   ) }
 );
@@ -307,8 +238,8 @@ export type EvenmanEventDeleteTagMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & Pick<Types.EventsEvent, 'id' | 'tags'>
+      { __typename?: 'Event' }
+      & Pick<Types.Event, 'id' | 'tags'>
     ) }
   ) }
 );
@@ -325,8 +256,8 @@ export type EvenmanEventSetImageFromUrlMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & EvenmanEvent_Details_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanEvent_DetailsFragment
     ) }
   ) }
 );
@@ -343,8 +274,8 @@ export type EvenmanVkAnnouncementSetImageMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & EvenmanEvent_Details_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanEvent_DetailsFragment
     ) }
   )> }
 );
@@ -361,8 +292,8 @@ export type EvenmanAnnounceMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & EvenmanEvent_Details_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanEvent_DetailsFragment
     ) }
   )> }
 );
@@ -380,8 +311,8 @@ export type EvenmanSetAnnounceUrlMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & EvenmanEvent_Details_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanEvent_DetailsFragment
     ) }
   )> }
 );
@@ -398,8 +329,8 @@ export type EvenmanEventMoveMutation = (
     { __typename?: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & Pick<Types.EventsEvent, 'id' | 'start' | 'end'>
+      { __typename?: 'Event' }
+      & Pick<Types.Event, 'id' | 'start' | 'end'>
     ) }
   ) }
 );
@@ -417,8 +348,8 @@ export type EvenmanEventCreateMutation = (
     { __typename?: 'EventCreateResult' }
     & Pick<Types.EventCreateResult, 'ok'>
     & { event: (
-      { __typename?: 'EventsEvent' }
-      & EvenmanEvent_Details_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & EvenmanEvent_DetailsFragment
     ) }
   ) }
 );

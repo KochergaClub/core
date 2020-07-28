@@ -19,7 +19,7 @@ ProjectPage = g.ObjectType(
         ),
         'body': wagtail_utils.richtext_field(models.ProjectPage, 'body'),
         'image': wagtail_utils.image_rendition_field(models.ProjectPage, 'image'),
-        'upcoming_events': g.Field(g.NNList(event_types.EventsPublicEvent)),
+        'upcoming_events': g.Field(g.NNList(event_types.Event)),
     },
 )
 

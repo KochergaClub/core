@@ -4,9 +4,9 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type EvenmanEvent_ForZoomAnalytics_EventsEvent_Fragment = (
-  { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id'>
+export type EvenmanEvent_ForZoomAnalyticsFragment = (
+  { __typename?: 'Event' }
+  & Pick<Types.Event, 'id'>
   & { zoom_meeting?: Types.Maybe<(
     { __typename?: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id'>
@@ -20,25 +20,6 @@ export type EvenmanEvent_ForZoomAnalytics_EventsEvent_Fragment = (
     )> }
   )> }
 );
-
-export type EvenmanEvent_ForZoomAnalytics_EventsPublicEvent_Fragment = (
-  { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id'>
-  & { zoom_meeting?: Types.Maybe<(
-    { __typename?: 'ZoomMeeting' }
-    & Pick<Types.ZoomMeeting, 'id'>
-    & { instances: Array<(
-      { __typename?: 'ZoomMeetingInstance' }
-      & Pick<Types.ZoomMeetingInstance, 'id' | 'start_time' | 'end_time'>
-      & { participants: Array<(
-        { __typename?: 'ZoomParticipant' }
-        & Pick<Types.ZoomParticipant, 'id' | 'name' | 'join_time' | 'leave_time'>
-      )> }
-    )> }
-  )> }
-);
-
-export type EvenmanEvent_ForZoomAnalyticsFragment = EvenmanEvent_ForZoomAnalytics_EventsEvent_Fragment | EvenmanEvent_ForZoomAnalytics_EventsPublicEvent_Fragment;
 
 export type EvenmanEventForZoomAnalyticsQueryVariables = {
   id: Types.Scalars['ID'];
@@ -48,8 +29,8 @@ export type EvenmanEventForZoomAnalyticsQueryVariables = {
 export type EvenmanEventForZoomAnalyticsQuery = (
   { __typename?: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'EventsEvent' }
-    & EvenmanEvent_ForZoomAnalytics_EventsEvent_Fragment
+    { __typename?: 'Event' }
+    & EvenmanEvent_ForZoomAnalyticsFragment
   )> }
 );
 

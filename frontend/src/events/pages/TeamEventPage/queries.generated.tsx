@@ -21,8 +21,8 @@ export type GetEventTicketsQueryVariables = {
 export type GetEventTicketsQuery = (
   { __typename?: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'id'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id'>
     & { tickets: Array<(
       { __typename?: 'EventsTicket' }
       & EventsTicketFragment

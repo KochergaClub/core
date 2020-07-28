@@ -271,7 +271,7 @@ input EmailSubscribeChannelCreateInput {
   interest_ids: [ID!]!
 }
 
-interface Event {
+type Event {
   start: String!
   end: String!
   title: String!
@@ -321,6 +321,12 @@ enum EventAnnounceTarget {
   TIMEPAD
 }
 
+type EventConnection {
+  pageInfo: PageInfo!
+  nodes: [Event!]!
+  edges: [EventEdge!]!
+}
+
 input EventCreateInput {
   start: String!
   end: String!
@@ -331,7 +337,7 @@ input EventCreateInput {
 
 type EventCreateResult {
   ok: Boolean
-  event: EventsEvent!
+  event: Event!
 }
 
 input EventDeleteInput {
@@ -341,6 +347,10 @@ input EventDeleteInput {
 input EventDeleteTagInput {
   event_id: ID!
   tag: String!
+}
+
+type EventEdge {
+  node: Event!
 }
 
 input EventGenerateOpenViduTokenInput {
@@ -428,7 +438,7 @@ type EventPrototypeUpdateResult {
 }
 
 type EventSearchItem {
-  event: EventsPublicEvent!
+  event: Event!
 }
 
 input EventSetAnnounceUrlInput {
@@ -491,7 +501,7 @@ input EventUpdateInput {
 
 type EventUpdateResult {
   ok: Boolean
-  event: EventsEvent!
+  event: Event!
 }
 
 input EventVkAnnouncementSetImageInput {
@@ -525,50 +535,6 @@ type EventsAnnouncements {
   timepad: EventsAnnouncementTimepad!
   vk: EventsAnnouncementVk!
   fb: EventsAnnouncementFb!
-}
-
-type EventsEvent implements Event {
-  start: String!
-  end: String!
-  title: String!
-  summary: String!
-  registration_type: String!
-  pricing_type: String!
-  realm: String!
-  published: Boolean!
-  event_type: String!
-  id: ID!
-  event_id: ID!
-  description(format: EventsMarkupFormat): String!
-  image(spec: String!): WagtailImageRendition
-  project: ProjectPage
-  public_tags: [String!]!
-  tags: [String!]!
-  my_ticket: MyEventsTicket
-  announcements: EventsAnnouncements!
-  public_google_event: EventsGoogleEvent
-  zoom_meeting: ZoomMeeting
-  prototype: EventsPrototype
-  visitors: String
-  creator: String
-  created: String!
-  updated: String!
-  location: String!
-  room: String!
-  zoom_link: String!
-  timing_description_override: String!
-  tickets: [EventsTicket!]!
-  feedbacks: [EventsFeedback!]!
-}
-
-type EventsEventConnection {
-  pageInfo: PageInfo!
-  nodes: [EventsEvent!]!
-  edges: [EventsEventEdge!]!
-}
-
-type EventsEventEdge {
-  node: EventsEvent!
 }
 
 type EventsFeedback {
@@ -629,7 +595,7 @@ type EventsGoogleEvent {
 
 type EventsListBlock implements WagtailBlock {
   id: ID!
-  events: [EventsPublicEvent!]!
+  events: [Event!]!
 }
 
 enum EventsMarkupFormat {
@@ -653,53 +619,9 @@ type EventsPrototype {
   tags: [String!]!
   image(spec: String!): WagtailImageRendition
   suggested_dates(until_ts: Int, limit: Int!): [String!]!
-  instances(limit: Int): [EventsEvent!]!
+  instances(limit: Int): [Event!]!
   vk_group: VkGroup
   timepad_category: TimepadCategory
-}
-
-type EventsPublicEvent implements Event {
-  start: String!
-  end: String!
-  title: String!
-  summary: String!
-  registration_type: String!
-  pricing_type: String!
-  realm: String!
-  published: Boolean!
-  event_type: String!
-  id: ID!
-  event_id: ID!
-  description(format: EventsMarkupFormat): String!
-  image(spec: String!): WagtailImageRendition
-  project: ProjectPage
-  public_tags: [String!]!
-  tags: [String!]!
-  my_ticket: MyEventsTicket
-  announcements: EventsAnnouncements!
-  public_google_event: EventsGoogleEvent
-  zoom_meeting: ZoomMeeting
-  prototype: EventsPrototype
-  visitors: String
-  creator: String
-  created: String!
-  updated: String!
-  location: String!
-  room: String!
-  zoom_link: String!
-  timing_description_override: String!
-  tickets: [EventsTicket!]!
-  feedbacks: [EventsFeedback!]!
-}
-
-type EventsPublicEventConnection {
-  pageInfo: PageInfo!
-  nodes: [EventsPublicEvent!]!
-  edges: [EventsPublicEventEdge!]!
-}
-
-type EventsPublicEventEdge {
-  node: EventsPublicEvent!
 }
 
 type EventsTicket {
@@ -860,7 +782,7 @@ type MailchimpSubscribeBlockValue {
 type MastermindDatingCohort {
   id: ID!
   leader_telegram_uid: String!
-  event: EventsEvent
+  event: Event
   participants: [MastermindDatingParticipant!]!
   groups: [MastermindDatingGroup!]!
 }
@@ -1021,7 +943,7 @@ type MyEmailSubscriptionInterest {
 
 type MyEventsTicket {
   id: ID!
-  event: EventsPublicEvent!
+  event: Event!
   status: String!
   created: String
   zoom_link: String
@@ -1090,7 +1012,7 @@ type ProjectPage implements WagtailPage {
   is_active: Boolean!
   body: String!
   image(spec: String!): WagtailImageRendition!
-  upcoming_events: [EventsPublicEvent!]!
+  upcoming_events: [Event!]!
 }
 
 type Query {
@@ -1113,12 +1035,12 @@ type Query {
   watchmenShifts(from_date: String!, to_date: String!): [WatchmenShift!]!
   cashierPayments(before: String, after: String, first: Int, last: Int): CashierPaymentConnection!
   analyticsBovStats: [AnalyticsBovStat!]!
-  events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventsEventConnection!
-  event(event_id: ID!): EventsEvent
+  events(before: String, after: String, first: Int, last: Int, search: String, filter: EventsFilterInput): EventConnection!
+  event(event_id: ID!): Event
   eventsPrototype(id: ID!): EventsPrototype!
   eventsPrototypes: [EventsPrototype!]!
-  publicEvents(before: String, after: String, first: Int, last: Int, from_date: String, project_id: ID): EventsPublicEventConnection!
-  publicEvent(event_id: ID!): EventsPublicEvent!
+  publicEvents(before: String, after: String, first: Int, last: Int, from_date: String, project_id: ID): EventConnection!
+  publicEvent(event_id: ID!): Event!
   vkGroups: [VkGroup!]!
   timepadCategories: [TimepadCategory!]!
   eventsWeeklyDigestCurrent: EventsWeeklyDigest!

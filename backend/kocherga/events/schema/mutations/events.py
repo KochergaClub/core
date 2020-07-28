@@ -13,17 +13,17 @@ import kocherga.wagtail.models
 import kocherga.projects.models
 
 from ... import models
-from ..types import EventsEvent
+from ..types import Event
 
 c = helpers.Collection()
 
 
 # type EventUpdateResult {
 #   ok: Boolean
-#   event: EventsEvent!
+#   event: Event!
 # }
 EventUpdateResult = g.ObjectType(
-    'EventUpdateResult', g.fields({'ok': Optional[bool], 'event': g.NN(EventsEvent)})
+    'EventUpdateResult', g.fields({'ok': Optional[bool], 'event': g.NN(Event)})
 )
 
 
@@ -66,7 +66,7 @@ class eventCreate(helpers.BaseFieldWithInput):
         'location': Optional[str],
     }
 
-    result = {'ok': Optional[bool], 'event': g.NN(EventsEvent)}
+    result = {'ok': Optional[bool], 'event': g.NN(Event)}
 
 
 # eventUpdate(input: EventUpdateInput!): EventUpdateResult! @staffonly

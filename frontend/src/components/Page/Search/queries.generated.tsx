@@ -103,8 +103,8 @@ export type PageSearchItemFragment = (
 export type EventSearchItemFragment = (
   { __typename?: 'EventSearchItem' }
   & { event: (
-    { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'start'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'title' | 'start'>
   ) }
 );
 

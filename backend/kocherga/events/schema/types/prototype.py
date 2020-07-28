@@ -10,7 +10,7 @@ from kocherga.projects.schema.types import ProjectPage
 
 from ... import models
 
-from .event import EventsEvent
+from .event import Event
 from .announcements import VkGroup, TimepadCategory
 
 EventsPrototype = g.ObjectType(
@@ -61,16 +61,14 @@ def suggested_dates_field():
     )
 
 
-# instances(limit: Int): [EventsEvent!]! @staffonly
+# instances(limit: Int): [Event!]! @staffonly
 def instances_field():
     @check_permissions([staffonly])
     def resolve(obj, info, limit=None):
         return obj.instances(limit=limit)
 
     return g.Field(
-        g.NNList(EventsEvent),
-        args=g.arguments({'limit': Optional[int]}),
-        resolve=resolve,
+        g.NNList(Event), args=g.arguments({'limit': Optional[int]}), resolve=resolve,
     )
 
 

@@ -8,8 +8,8 @@ export type MastermindDatingCohortSummaryFragment = (
   { __typename?: 'MastermindDatingCohort' }
   & Pick<Types.MastermindDatingCohort, 'id'>
   & { event?: Types.Maybe<(
-    { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'id' | 'start'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'start'>
   )> }
 );
 
@@ -40,8 +40,8 @@ export type MastermindDatingCohortDetailsFragment = (
   { __typename?: 'MastermindDatingCohort' }
   & Pick<Types.MastermindDatingCohort, 'id' | 'leader_telegram_uid'>
   & { event?: Types.Maybe<(
-    { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'id' | 'start' | 'title'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'start' | 'title'>
   )>, participants: Array<(
     { __typename?: 'MastermindDatingParticipant' }
     & MastermindDatingParticipantFragment
@@ -51,17 +51,10 @@ export type MastermindDatingCohortDetailsFragment = (
   )> }
 );
 
-export type MastermindDatingEvent_EventsEvent_Fragment = (
-  { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id' | 'title' | 'start'>
+export type MastermindDatingEventFragment = (
+  { __typename?: 'Event' }
+  & Pick<Types.Event, 'id' | 'title' | 'start'>
 );
-
-export type MastermindDatingEvent_EventsPublicEvent_Fragment = (
-  { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'title' | 'start'>
-);
-
-export type MastermindDatingEventFragment = MastermindDatingEvent_EventsEvent_Fragment | MastermindDatingEvent_EventsPublicEvent_Fragment;
 
 export type MastermindDatingCohortsQueryVariables = {};
 
@@ -95,10 +88,10 @@ export type MastermindDatingSearchEventsQueryVariables = {
 export type MastermindDatingSearchEventsQuery = (
   { __typename?: 'Query' }
   & { events: (
-    { __typename?: 'EventsEventConnection' }
+    { __typename?: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'EventsEvent' }
-      & MastermindDatingEvent_EventsEvent_Fragment
+      { __typename?: 'Event' }
+      & MastermindDatingEventFragment
     )> }
   ) }
 );

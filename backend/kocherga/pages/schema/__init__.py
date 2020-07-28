@@ -45,7 +45,7 @@ def create_PhotoRibbonBlock():
 
 # type EventsListBlock implements WagtailBlock {
 #   id: ID!
-#   events: [EventsPublicEvent!]!
+#   events: [Event!]!
 # }
 def create_EventsListBlock():
     def resolve_value(obj, info):
@@ -60,9 +60,7 @@ def create_EventsListBlock():
         fields=g.fields(
             {
                 'id': 'ID!',
-                'events': g.Field(
-                    g.NNList(event_types.EventsPublicEvent), resolve=resolve_value
-                ),
+                'events': g.Field(g.NNList(event_types.Event), resolve=resolve_value),
             }
         ),
     )

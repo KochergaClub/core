@@ -11,8 +11,8 @@ export type ProjectPage_SummaryForEventFragment = (
     { __typename?: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), upcoming_events: Array<(
-    { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'id' | 'title'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'title'>
   )> }
 );
 
@@ -21,9 +21,9 @@ export type MyEventsTicketFragment = (
   & Pick<Types.MyEventsTicket, 'id' | 'created' | 'status' | 'zoom_link'>
 );
 
-export type EventsPublicEvent_EventsEvent_Fragment = (
-  { __typename?: 'EventsEvent' }
-  & Pick<Types.EventsEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
+export type EventsPublicEventFragment = (
+  { __typename?: 'Event' }
+  & Pick<Types.Event, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
   & { image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
@@ -41,29 +41,6 @@ export type EventsPublicEvent_EventsEvent_Fragment = (
     ) }
   ) }
 );
-
-export type EventsPublicEvent_EventsPublicEvent_Fragment = (
-  { __typename?: 'EventsPublicEvent' }
-  & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
-  & { image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
-    & Pick<Types.WagtailImageRendition, 'url'>
-  )>, project?: Types.Maybe<(
-    { __typename?: 'ProjectPage' }
-    & ProjectPage_SummaryForEventFragment
-  )>, my_ticket?: Types.Maybe<(
-    { __typename?: 'MyEventsTicket' }
-    & MyEventsTicketFragment
-  )>, announcements: (
-    { __typename?: 'EventsAnnouncements' }
-    & { timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
-      & Pick<Types.EventsAnnouncementTimepad, 'link'>
-    ) }
-  ) }
-);
-
-export type EventsPublicEventFragment = EventsPublicEvent_EventsEvent_Fragment | EventsPublicEvent_EventsPublicEvent_Fragment;
 
 export type GetPublicEventQueryVariables = {
   event_id: Types.Scalars['ID'];
@@ -73,8 +50,8 @@ export type GetPublicEventQueryVariables = {
 export type GetPublicEventQuery = (
   { __typename?: 'Query' }
   & { publicEvent: (
-    { __typename?: 'EventsPublicEvent' }
-    & EventsPublicEvent_EventsPublicEvent_Fragment
+    { __typename?: 'Event' }
+    & EventsPublicEventFragment
   ) }
 );
 

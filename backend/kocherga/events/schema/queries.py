@@ -33,7 +33,7 @@ class events(helpers.BaseField):
         'filter': FilterInput,
     }
 
-    result = g.NN(types.EventsEventConnection)
+    result = g.NN(types.EventConnection)
 
 
 @c.class_field
@@ -47,7 +47,7 @@ class event(helpers.BaseField):
 
     permissions = [staffonly]
     args = {'event_id': 'ID!'}
-    result = types.EventsEvent
+    result = types.Event
 
 
 @c.class_field
@@ -91,7 +91,7 @@ class publicEvents(helpers.BaseField):
         'project_id': 'ID',
     }
 
-    result = g.NN(types.EventsPublicEventConnection)
+    result = g.NN(types.EventConnection)
 
 
 @c.class_field
@@ -102,7 +102,7 @@ class publicEvent(helpers.BaseField):
 
     permissions = []
     args = {'event_id': 'ID!'}
-    result = g.NN(types.EventsPublicEvent)
+    result = g.NN(types.Event)
 
 
 @c.class_field

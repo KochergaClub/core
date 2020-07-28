@@ -27,8 +27,8 @@ export type EventsPrototypeFragment = (
       & Pick<Types.WagtailPageMeta, 'slug'>
     ) }
   )>, instances: Array<(
-    { __typename?: 'EventsEvent' }
-    & Pick<Types.EventsEvent, 'id' | 'start' | 'title' | 'visitors'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'start' | 'title' | 'visitors'>
   )> }
 );
 

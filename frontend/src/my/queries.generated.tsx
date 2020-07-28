@@ -31,8 +31,8 @@ export type MyTicketFragment = (
   { __typename?: 'MyEventsTicket' }
   & Pick<Types.MyEventsTicket, 'id' | 'status' | 'zoom_link'>
   & { event: (
-    { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'title'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'start' | 'title'>
   ) }
 );
 
@@ -194,8 +194,8 @@ export type MyEventPageQueryVariables = {
 export type MyEventPageQuery = (
   { __typename?: 'Query' }
   & { publicEvent: (
-    { __typename?: 'EventsPublicEvent' }
-    & Pick<Types.EventsPublicEvent, 'id' | 'start' | 'title'>
+    { __typename?: 'Event' }
+    & Pick<Types.Event, 'id' | 'start' | 'title'>
     & { my_ticket?: Types.Maybe<(
       { __typename?: 'MyEventsTicket' }
       & Pick<Types.MyEventsTicket, 'status'>

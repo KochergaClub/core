@@ -15,65 +15,6 @@ EventsMarkupFormat = g.EnumType(
 )
 
 
-# temporary interface for smoother EventsPublicEvent -> Event migration, will be deleted soon
-def build_EventInterface() -> graphql.GraphQLInterfaceType:
-    def build_fields():
-        from .my_ticket import MyEventsTicket
-        from .announcements import EventsAnnouncements
-        from .google_event import EventsGoogleEvent
-        from .prototype import EventsPrototype
-        from .feedback import EventsFeedback
-        from .ticket import EventsTicket
-        from kocherga.wagtail.schema.types import WagtailImageRendition
-
-        return g.fields(
-            {
-                'start': str,
-                'end': str,
-                'title': str,
-                'summary': str,
-                'registration_type': str,
-                'pricing_type': str,
-                'realm': str,
-                'published': bool,
-                'event_type': str,
-                'id': 'ID!',
-                'event_id': 'ID!',
-                'description': g.Field(
-                    g.NN(g.String), args=g.arguments({'format': EventsMarkupFormat})
-                ),
-                'image': g.Field(
-                    WagtailImageRendition, args=g.arguments({'spec': str})
-                ),
-                'project': ProjectPage,
-                'public_tags': g.NNList(g.String),
-                'tags': g.NNList(g.String),
-                'my_ticket': MyEventsTicket,
-                'announcements': g.Field(g.NN(EventsAnnouncements)),
-                'public_google_event': EventsGoogleEvent,
-                'zoom_meeting': zoom_types.ZoomMeeting,
-                'prototype': EventsPrototype,
-                'visitors': Optional[str],
-                'creator': Optional[str],
-                'created': str,
-                'updated': str,
-                'location': str,
-                'room': str,
-                'zoom_link': str,
-                'zoom_link': str,
-                'timing_description_override': str,
-                'tickets': g.NNList(EventsTicket),
-                'feedbacks': g.NNList(EventsFeedback),
-            }
-        )
-
-    result = g.InterfaceType('Event', fields=build_fields)
-    return result
-
-
-EventInterface = build_EventInterface()
-
-
 def build_event_fields():
     def description_field():
         def resolve(obj, info, format=None):
@@ -175,18 +116,14 @@ def build_event_fields():
             'zoom_meeting': helpers.field_with_permissions(
                 zoom_types.ZoomMeeting, [staffonly]
             ),
-            'prototype': helpers.field_with_permissions(
-                EventsPrototype, [staffonly]
-            ),
+            'prototype': helpers.field_with_permissions(EventsPrototype, [staffonly]),
             'visitors': helpers.field_with_permissions(g.String, [staffonly]),
             'creator': helpers.field_with_permissions(g.String, [staffonly]),
             'created': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
             'updated': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
             'location': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
             'room': room_field(),
-            'zoom_link': helpers.field_with_permissions(
-                g.NN(g.String), [staffonly]
-            ),
+            'zoom_link': helpers.field_with_permissions(g.NN(g.String), [staffonly]),
             'timing_description_override': helpers.field_with_permissions(
                 g.NN(g.String), [staffonly]
             ),
@@ -206,10 +143,6 @@ def build_event_fields():
     )
 
 
-EventsEvent = g.ObjectType('EventsEvent', fields=build_event_fields, interfaces=[EventInterface])
+Event = g.ObjectType('Event', fields=build_event_fields)
 
-EventsEventConnection = helpers.ConnectionType(EventsEvent)
-
-EventsPublicEvent = g.ObjectType('EventsPublicEvent', fields=build_event_fields, interfaces=[EventInterface])
-
-EventsPublicEventConnection = helpers.ConnectionType(EventsPublicEvent)
+EventConnection = helpers.ConnectionType(Event)

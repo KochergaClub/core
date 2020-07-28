@@ -6,10 +6,6 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
-    "Event": [
-      "EventsEvent",
-      "EventsPublicEvent"
-    ],
     "ExternalService": [
       "SlackExternalService",
       "WikiExternalService"

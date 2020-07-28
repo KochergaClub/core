@@ -1,9 +1,4 @@
-from .event import (
-    EventsEvent,
-    EventsPublicEvent,
-    EventsEventConnection,
-    EventsPublicEventConnection,
-)
+from .event import Event, EventConnection
 from .ticket import EventsTicket
 from .prototype import EventsPrototype
 from .weekly_digest import EventsWeeklyDigest
@@ -14,10 +9,8 @@ from .my_ticket import MyEventsTicket, MyEventsTicketConnection
 from .announcements import VkGroup, TimepadCategory
 
 __all__ = [
-    'EventsEvent',
-    'EventsEventConnection',
-    'EventsPublicEvent',
-    'EventsPublicEventConnection',
+    'Event',
+    'EventConnection',
     'EventsTicket',
     'EventsPrototype',
     'EventsWeeklyDigest',

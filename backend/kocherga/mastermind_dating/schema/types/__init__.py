@@ -13,7 +13,7 @@ MastermindDatingCohort = g.ObjectType(
     'MastermindDatingCohort',
     fields=lambda: {
         **django_utils.model_fields(models.Cohort, ['id', 'leader_telegram_uid']),
-        'event': g.Field(event_types.EventsEvent),
+        'event': g.Field(event_types.Event),
         'participants': django_utils.related_field(
             models.Cohort, 'participants', item_type=MastermindDatingParticipant
         ),

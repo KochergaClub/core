@@ -110,7 +110,7 @@ PageSearchItem = g.ObjectType(
 def EventSearchItem_fields():
     import kocherga.events.schema.types
 
-    return g.fields({'event': g.NN(kocherga.events.schema.types.EventsPublicEvent)})
+    return g.fields({'event': g.NN(kocherga.events.schema.types.Event)})
 
 
 EventSearchItem = g.ObjectType(
