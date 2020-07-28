@@ -21,7 +21,7 @@ export type MyEventsTicketFragment = (
   & Pick<Types.MyEventsTicket, 'id' | 'created' | 'status' | 'zoom_link'>
 );
 
-export type EventsPublicEventFragment = (
+export type Event_DetailsFragment = (
   { __typename?: 'Event' }
   & Pick<Types.Event, 'id' | 'start' | 'end' | 'title' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
   & { image?: Types.Maybe<(
@@ -51,7 +51,7 @@ export type GetPublicEventQuery = (
   { __typename?: 'Query' }
   & { publicEvent: (
     { __typename?: 'Event' }
-    & EventsPublicEventFragment
+    & Event_DetailsFragment
   ) }
 );
 
@@ -116,8 +116,8 @@ export const MyEventsTicketFragmentDoc = gql`
   zoom_link
 }
     `;
-export const EventsPublicEventFragmentDoc = gql`
-    fragment EventsPublicEvent on Event {
+export const Event_DetailsFragmentDoc = gql`
+    fragment Event_Details on Event {
   id
   start
   end
@@ -146,10 +146,10 @@ ${MyEventsTicketFragmentDoc}`;
 export const GetPublicEventDocument = gql`
     query GetPublicEvent($event_id: ID!) {
   publicEvent(event_id: $event_id) {
-    ...EventsPublicEvent
+    ...Event_Details
   }
 }
-    ${EventsPublicEventFragmentDoc}`;
+    ${Event_DetailsFragmentDoc}`;
 
 /**
  * __useGetPublicEventQuery__

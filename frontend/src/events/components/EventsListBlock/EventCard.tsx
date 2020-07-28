@@ -5,7 +5,7 @@ import { colors, Column, Button } from '@kocherga/frontkit';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 
-import { EventsPublicEvent_SummaryFragment } from '../../queries.generated';
+import { Event_SummaryFragment } from '../../queries.generated';
 
 const padding = css`
   padding-left: 20px;
@@ -13,8 +13,8 @@ const padding = css`
 `;
 
 const Background = styled.div<{
-  image?: EventsPublicEvent_SummaryFragment['image'];
-  image_2x?: EventsPublicEvent_SummaryFragment['image_2x'];
+  image?: Event_SummaryFragment['image'];
+  image_2x?: Event_SummaryFragment['image_2x'];
 }>`
   display: flex;
   flex-direction: column;
@@ -65,7 +65,7 @@ const Padded = styled.div`
 `;
 
 interface Props {
-  event: EventsPublicEvent_SummaryFragment;
+  event: Event_SummaryFragment;
   mode?: 'timepad';
 }
 

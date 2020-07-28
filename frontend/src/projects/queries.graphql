@@ -33,6 +33,6 @@ fragment ProjectPage on ProjectPage {
     url
   }
   upcoming_events {
-    ...EventsPublicEvent_Summary
+    ...Event_Summary
   }
 }

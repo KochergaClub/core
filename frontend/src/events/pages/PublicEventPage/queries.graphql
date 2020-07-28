@@ -18,7 +18,7 @@ fragment MyEventsTicket on MyEventsTicket {
   zoom_link
 }
 
-fragment EventsPublicEvent on Event {
+fragment Event_Details on Event {
   id
   start
   end
@@ -41,14 +41,11 @@ fragment EventsPublicEvent on Event {
       link
     }
   }
-  # public_google_event {
-  #   html_link
-  # }
 }
 
 query GetPublicEvent($event_id: ID!) {
   publicEvent(event_id: $event_id) {
-    ...EventsPublicEvent
+    ...Event_Details
   }
 }
 

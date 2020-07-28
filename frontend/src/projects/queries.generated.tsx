@@ -1,8 +1,8 @@
 import * as Types from '../apollo/types.generated';
 
-import { EventsPublicEvent_SummaryFragment } from '../events/queries.generated';
+import { Event_SummaryFragment } from '../events/queries.generated';
 import gql from 'graphql-tag';
-import { EventsPublicEvent_SummaryFragmentDoc } from '../events/queries.generated';
+import { Event_SummaryFragmentDoc } from '../events/queries.generated';
 
 export type ProjectPage_SummaryFragment = (
   { __typename?: 'ProjectPage' }
@@ -33,7 +33,7 @@ export type ProjectPageFragment = (
     & Pick<Types.WagtailImageRendition, 'url'>
   ), upcoming_events: Array<(
     { __typename?: 'Event' }
-    & EventsPublicEvent_SummaryFragment
+    & Event_SummaryFragment
   )> }
 );
 
@@ -75,7 +75,7 @@ export const ProjectPageFragmentDoc = gql`
     url
   }
   upcoming_events {
-    ...EventsPublicEvent_Summary
+    ...Event_Summary
   }
 }
-    ${EventsPublicEvent_SummaryFragmentDoc}`;
+    ${Event_SummaryFragmentDoc}`;

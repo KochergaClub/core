@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type EventsPublicEvent_SummaryFragment = (
+export type Event_SummaryFragment = (
   { __typename?: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'summary' | 'start' | 'end'>
   & { image?: Types.Maybe<(
@@ -30,12 +30,12 @@ export type UpcomingPublicEventsQuery = (
       & Pick<Types.PageInfo, 'hasNextPage'>
     ), nodes: Array<(
       { __typename?: 'Event' }
-      & EventsPublicEvent_SummaryFragment
+      & Event_SummaryFragment
     )> }
   ) }
 );
 
-export type EventsPublicEvent_ForCalendarFragment = (
+export type Event_ForCalendarFragment = (
   { __typename?: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'start' | 'public_tags'>
 );
@@ -52,7 +52,7 @@ export type PublicEventsForCalendarQuery = (
     { __typename?: 'EventConnection' }
     & { nodes: Array<(
       { __typename?: 'Event' }
-      & EventsPublicEvent_ForCalendarFragment
+      & Event_ForCalendarFragment
     )> }
   ) }
 );
@@ -257,8 +257,8 @@ export type EventFeedbackDeleteMutation = (
   ) }
 );
 
-export const EventsPublicEvent_SummaryFragmentDoc = gql`
-    fragment EventsPublicEvent_Summary on Event {
+export const Event_SummaryFragmentDoc = gql`
+    fragment Event_Summary on Event {
   id
   title
   summary
@@ -274,8 +274,8 @@ export const EventsPublicEvent_SummaryFragmentDoc = gql`
   end
 }
     `;
-export const EventsPublicEvent_ForCalendarFragmentDoc = gql`
-    fragment EventsPublicEvent_ForCalendar on Event {
+export const Event_ForCalendarFragmentDoc = gql`
+    fragment Event_ForCalendar on Event {
   id
   title
   start
@@ -339,11 +339,11 @@ export const UpcomingPublicEventsDocument = gql`
       hasNextPage
     }
     nodes {
-      ...EventsPublicEvent_Summary
+      ...Event_Summary
     }
   }
 }
-    ${EventsPublicEvent_SummaryFragmentDoc}`;
+    ${Event_SummaryFragmentDoc}`;
 
 /**
  * __useUpcomingPublicEventsQuery__
@@ -374,11 +374,11 @@ export const PublicEventsForCalendarDocument = gql`
     query PublicEventsForCalendar($from: String!, $to: String!) {
   publicEvents(after: $from, before: $to, first: 100) {
     nodes {
-      ...EventsPublicEvent_ForCalendar
+      ...Event_ForCalendar
     }
   }
 }
-    ${EventsPublicEvent_ForCalendarFragmentDoc}`;
+    ${Event_ForCalendarFragmentDoc}`;
 
 /**
  * __usePublicEventsForCalendarQuery__

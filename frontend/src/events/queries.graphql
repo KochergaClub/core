@@ -1,4 +1,4 @@
-fragment EventsPublicEvent_Summary on Event {
+fragment Event_Summary on Event {
   id
   title
   summary
@@ -20,12 +20,12 @@ query UpcomingPublicEvents($today: String!) {
       hasNextPage
     }
     nodes {
-      ...EventsPublicEvent_Summary
+      ...Event_Summary
     }
   }
 }
 
-fragment EventsPublicEvent_ForCalendar on Event {
+fragment Event_ForCalendar on Event {
   id
   title
   start
@@ -35,7 +35,7 @@ fragment EventsPublicEvent_ForCalendar on Event {
 query PublicEventsForCalendar($from: String!, $to: String!) {
   publicEvents(after: $from, before: $to, first: 100) {
     nodes {
-      ...EventsPublicEvent_ForCalendar
+      ...Event_ForCalendar
     }
   }
 }

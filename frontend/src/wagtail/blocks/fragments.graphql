@@ -46,7 +46,7 @@ fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
 fragment EventsListBlock on EventsListBlock {
   id
   events {
-    ...EventsPublicEvent_Summary
+    ...Event_Summary
   }
 }
 

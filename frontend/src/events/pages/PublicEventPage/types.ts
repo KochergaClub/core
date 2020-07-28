@@ -1,5 +1,5 @@
-import { EventsPublicEventFragment } from './queries.generated';
+import { Event_DetailsFragment } from './queries.generated';
 
 export interface CommonProps {
-  event: EventsPublicEventFragment;
+  event: Event_DetailsFragment;
 }

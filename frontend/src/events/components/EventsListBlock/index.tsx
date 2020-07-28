@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { PaddedBlock } from '~/components';
 
-import { EventsPublicEvent_SummaryFragment } from '../../queries.generated';
+import { Event_SummaryFragment } from '../../queries.generated';
 
 import EventCard from './EventCard';
 
@@ -13,7 +13,7 @@ const List = styled.div`
 `;
 
 interface Props {
-  events: EventsPublicEvent_SummaryFragment[];
+  events: Event_SummaryFragment[];
 }
 
 export default function EventsListBlock({ events }: Props) {
