@@ -1,7 +1,3 @@
-from typing import Optional
-
-import graphql
-
 from kocherga.graphql import django_utils, g, helpers
 from kocherga.graphql.permissions import check_permissions, staffonly
 from kocherga.projects.schema.types import ProjectPage
