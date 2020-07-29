@@ -29,10 +29,7 @@ class eventsWeeklyDigestPostVk(helpers.BaseField):
     def resolve(self, _, info):
         digest = models.WeeklyDigest.objects.current_digest()
         digest.post_vk('')
-        return {
-            'ok': True,
-            'digest': digest,
-        }
+        return {'ok': True, 'digest': digest}
 
     permissions = [staffonly]
     result = UpdateResult
@@ -44,10 +41,7 @@ class eventsWeeklyDigestPostTelegram(helpers.BaseField):
     def resolve(self, _, info):
         digest = models.WeeklyDigest.objects.current_digest()
         digest.post_telegram()
-        return {
-            'ok': True,
-            'digest': digest,
-        }
+        return {'ok': True, 'digest': digest}
 
     permissions = [staffonly]
     result = UpdateResult
@@ -59,26 +53,19 @@ class eventsWeeklyDigestPostMailchimp(helpers.BaseFieldWithInput):
         text = input.get('text', '')
         digest = models.WeeklyDigest.objects.current_digest()
         digest.post_mailchimp_draft(text)
-        return {
-            'ok': True,
-            'digest': digest,
-        }
+        return {'ok': True, 'digest': digest}
 
     permissions = [staffonly]
-    input = {
-        'text': Optional[str],
-    }
+    input = {'text': Optional[str]}
 
     result = UpdateResult
 
 
 @c.class_field
 class vkWikiScheduleUpdate(helpers.BaseField):
-    def resolve(self, _, info, input):
+    def resolve(self, _, info):
         models.VkAnnouncement.objects.update_wiki_schedule()
-        return {
-            'ok': True,
-        }
+        return {'ok': True}
 
     permissions = [staffonly]
     result = BasicResult
