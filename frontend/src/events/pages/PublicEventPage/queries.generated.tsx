@@ -42,22 +42,22 @@ export type Event_DetailsFragment = (
   ) }
 );
 
-export type GetPublicEventQueryVariables = {
+export type GetPublicEventQueryVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type GetPublicEventQuery = (
   { __typename?: 'Query' }
-  & { publicEvent: (
+  & { publicEvent?: Types.Maybe<(
     { __typename?: 'Event' }
     & Event_DetailsFragment
-  ) }
+  )> }
 );
 
-export type MyEventsTicketRegisterAnonMutationVariables = {
+export type MyEventsTicketRegisterAnonMutationVariables = Types.Exact<{
   input: Types.MyEventsTicketRegisterAnonInput;
-};
+}>;
 
 
 export type MyEventsTicketRegisterAnonMutation = (
@@ -68,9 +68,9 @@ export type MyEventsTicketRegisterAnonMutation = (
   ) }
 );
 
-export type MyEventsTicketRegisterMutationVariables = {
+export type MyEventsTicketRegisterMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MyEventsTicketRegisterMutation = (
@@ -81,9 +81,9 @@ export type MyEventsTicketRegisterMutation = (
   ) }
 );
 
-export type MyEventsTicketUnregisterMutationVariables = {
+export type MyEventsTicketUnregisterMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MyEventsTicketUnregisterMutation = (

@@ -22,7 +22,7 @@ export type EvenmanWeeklyDigestFragment = (
   ) }
 );
 
-export type EvenmanWeeklyDigestQueryVariables = {};
+export type EvenmanWeeklyDigestQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanWeeklyDigestQuery = (
@@ -33,7 +33,7 @@ export type EvenmanWeeklyDigestQuery = (
   ) }
 );
 
-export type EvenmanDigestToVkMutationVariables = {};
+export type EvenmanDigestToVkMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanDigestToVkMutation = (
@@ -48,7 +48,7 @@ export type EvenmanDigestToVkMutation = (
   ) }
 );
 
-export type EvenmanDigestToTelegramMutationVariables = {};
+export type EvenmanDigestToTelegramMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanDigestToTelegramMutation = (
@@ -63,9 +63,9 @@ export type EvenmanDigestToTelegramMutation = (
   ) }
 );
 
-export type EvenmanDigestToMailchimpMutationVariables = {
+export type EvenmanDigestToMailchimpMutationVariables = Types.Exact<{
   text: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanDigestToMailchimpMutation = (
@@ -80,7 +80,7 @@ export type EvenmanDigestToMailchimpMutation = (
   ) }
 );
 
-export type EvenmanVkWikiScheduleUpdateMutationVariables = {};
+export type EvenmanVkWikiScheduleUpdateMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanVkWikiScheduleUpdateMutation = (

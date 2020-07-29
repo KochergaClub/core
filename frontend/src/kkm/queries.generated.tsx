@@ -4,9 +4,9 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type KkmRegisterCheckMutationVariables = {
+export type KkmRegisterCheckMutationVariables = Types.Exact<{
   params: Types.KkmRegisterCheckInput;
-};
+}>;
 
 
 export type KkmRegisterCheckMutation = (

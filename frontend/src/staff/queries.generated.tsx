@@ -52,7 +52,7 @@ export type StaffMemberForPickerFragment = (
   ) }
 );
 
-export type StaffMembersQueryVariables = {};
+export type StaffMembersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type StaffMembersQuery = (
@@ -63,7 +63,7 @@ export type StaffMembersQuery = (
   )> }
 );
 
-export type StaffMembersForPickerQueryVariables = {};
+export type StaffMembersForPickerQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type StaffMembersForPickerQuery = (
@@ -74,9 +74,9 @@ export type StaffMembersForPickerQuery = (
   )> }
 );
 
-export type StaffMemberQueryVariables = {
+export type StaffMemberQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type StaffMemberQuery = (
@@ -87,9 +87,9 @@ export type StaffMemberQuery = (
   ) }
 );
 
-export type StaffMemberExternalAccountsQueryVariables = {
+export type StaffMemberExternalAccountsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type StaffMemberExternalAccountsQuery = (
@@ -100,9 +100,9 @@ export type StaffMemberExternalAccountsQuery = (
   ) }
 );
 
-export type StaffGrantGooglePermissionsToMemberMutationVariables = {
+export type StaffGrantGooglePermissionsToMemberMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type StaffGrantGooglePermissionsToMemberMutation = (
@@ -110,9 +110,9 @@ export type StaffGrantGooglePermissionsToMemberMutation = (
   & Pick<Types.Mutation, 'staffGrantGooglePermissionsToMember'>
 );
 
-export type StaffFireMemberMutationVariables = {
+export type StaffFireMemberMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type StaffFireMemberMutation = (
@@ -120,9 +120,9 @@ export type StaffFireMemberMutation = (
   & Pick<Types.Mutation, 'staffFireMember'>
 );
 
-export type StaffUnfireMemberMutationVariables = {
+export type StaffUnfireMemberMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type StaffUnfireMemberMutation = (

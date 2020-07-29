@@ -69,7 +69,7 @@ export type MySettingsPageFragment = (
   )> }
 );
 
-export type MyVisitsPageQueryVariables = {};
+export type MyVisitsPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MyVisitsPageQuery = (
@@ -80,7 +80,7 @@ export type MyVisitsPageQuery = (
   ) }
 );
 
-export type MyTicketsPageQueryVariables = {};
+export type MyTicketsPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MyTicketsPageQuery = (
@@ -91,7 +91,7 @@ export type MyTicketsPageQuery = (
   ) }
 );
 
-export type MySettingsPageQueryVariables = {};
+export type MySettingsPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MySettingsPageQuery = (
@@ -102,7 +102,7 @@ export type MySettingsPageQuery = (
   ) }
 );
 
-export type MyEmailResubscribeMutationVariables = {};
+export type MyEmailResubscribeMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MyEmailResubscribeMutation = (
@@ -110,7 +110,7 @@ export type MyEmailResubscribeMutation = (
   & Pick<Types.Mutation, 'myEmailResubscribe'>
 );
 
-export type MyEmailUnsubscribeMutationVariables = {};
+export type MyEmailUnsubscribeMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MyEmailUnsubscribeMutation = (
@@ -118,9 +118,9 @@ export type MyEmailUnsubscribeMutation = (
   & Pick<Types.Mutation, 'myEmailUnsubscribe'>
 );
 
-export type MyEmailSubscribeToInterestMutationVariables = {
+export type MyEmailSubscribeToInterestMutationVariables = Types.Exact<{
   interest_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MyEmailSubscribeToInterestMutation = (
@@ -128,9 +128,9 @@ export type MyEmailSubscribeToInterestMutation = (
   & Pick<Types.Mutation, 'myEmailSubscribeToInterest'>
 );
 
-export type MyEmailUnsubscribeFromInterestMutationVariables = {
+export type MyEmailUnsubscribeFromInterestMutationVariables = Types.Exact<{
   interest_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MyEmailUnsubscribeFromInterestMutation = (
@@ -138,9 +138,9 @@ export type MyEmailUnsubscribeFromInterestMutation = (
   & Pick<Types.Mutation, 'myEmailUnsubscribeFromInterest'>
 );
 
-export type MyPrivacyModeSetMutationVariables = {
+export type MyPrivacyModeSetMutationVariables = Types.Exact<{
   mode: Types.Scalars['String'];
-};
+}>;
 
 
 export type MyPrivacyModeSetMutation = (
@@ -148,9 +148,9 @@ export type MyPrivacyModeSetMutation = (
   & Pick<Types.Mutation, 'myPrivacyModeSet'>
 );
 
-export type MyTicketDeleteMutationVariables = {
+export type MyTicketDeleteMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MyTicketDeleteMutation = (
@@ -161,7 +161,7 @@ export type MyTicketDeleteMutation = (
   ) }
 );
 
-export type LogoutMutationVariables = {};
+export type LogoutMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = (
@@ -172,10 +172,10 @@ export type LogoutMutation = (
   ) }
 );
 
-export type SetPasswordMutationVariables = {
+export type SetPasswordMutationVariables = Types.Exact<{
   old_password?: Types.Maybe<Types.Scalars['String']>;
   new_password: Types.Scalars['String'];
-};
+}>;
 
 
 export type SetPasswordMutation = (
@@ -186,26 +186,26 @@ export type SetPasswordMutation = (
   ) }
 );
 
-export type MyEventPageQueryVariables = {
+export type MyEventPageQueryVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MyEventPageQuery = (
   { __typename?: 'Query' }
-  & { publicEvent: (
+  & { publicEvent?: Types.Maybe<(
     { __typename?: 'Event' }
     & Pick<Types.Event, 'id' | 'start' | 'title'>
     & { my_ticket?: Types.Maybe<(
       { __typename?: 'MyEventsTicket' }
       & Pick<Types.MyEventsTicket, 'status'>
     )> }
-  ) }
+  )> }
 );
 
-export type EventGenerateOpenViduTokenMutationVariables = {
+export type EventGenerateOpenViduTokenMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EventGenerateOpenViduTokenMutation = (
@@ -216,10 +216,10 @@ export type EventGenerateOpenViduTokenMutation = (
   ) }
 );
 
-export type SetMyNamesMutationVariables = {
+export type SetMyNamesMutationVariables = Types.Exact<{
   first_name: Types.Scalars['String'];
   last_name: Types.Scalars['String'];
-};
+}>;
 
 
 export type SetMyNamesMutation = (

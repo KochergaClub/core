@@ -1040,7 +1040,7 @@ type Query {
   eventsPrototype(id: ID!): EventsPrototype!
   eventsPrototypes: [EventsPrototype!]!
   publicEvents(before: String, after: String, first: Int, last: Int, from_date: String, project_id: ID): EventConnection!
-  publicEvent(event_id: ID!): Event!
+  publicEvent(event_id: ID!): Event
   vkGroups: [VkGroup!]!
   timepadCategories: [TimepadCategory!]!
   eventsWeeklyDigestCurrent: EventsWeeklyDigest!

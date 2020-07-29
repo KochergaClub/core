@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type TildaPagesForAdminQueryVariables = {};
+export type TildaPagesForAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type TildaPagesForAdminQuery = (
@@ -15,7 +15,7 @@ export type TildaPagesForAdminQuery = (
   )> }
 );
 
-export type TildaImportAllMutationVariables = {};
+export type TildaImportAllMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type TildaImportAllMutation = (
@@ -26,9 +26,9 @@ export type TildaImportAllMutation = (
   )> }
 );
 
-export type TildaImportMutationVariables = {
+export type TildaImportMutationVariables = Types.Exact<{
   page_id: Types.Scalars['Int'];
-};
+}>;
 
 
 export type TildaImportMutation = (

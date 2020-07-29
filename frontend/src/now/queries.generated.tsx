@@ -13,7 +13,7 @@ export type NowFragment = (
   )> }
 );
 
-export type NowQueryVariables = {};
+export type NowQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type NowQuery = (

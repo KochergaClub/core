@@ -1,34 +1,30 @@
-import React from 'react';
 import * as Sentry from '@sentry/node';
 import Router from 'next/router';
 
 import { NeedLoginError } from '~/auth/errors';
 import { NextPage } from '~/common/types';
 
+import ErrorPage from '~/error-pages/ErrorPage';
 import Error302 from '~/error-pages/302';
-import Error403 from '~/error-pages/403';
-import Error404 from '~/error-pages/404';
-import Error500 from '~/error-pages/500';
 import { APIError } from '~/common/api';
 
 interface Props {
   statusCode?: number;
 }
 
-const ErrorPage: NextPage<Props> = ({ statusCode }) => {
+const NextErrorPage: NextPage<Props> = ({ statusCode }) => {
   switch (statusCode) {
     case 302:
       return <Error302 />;
     case 403:
-      return <Error403 />;
     case 404:
-      return <Error404 />;
+      return <ErrorPage code={statusCode} />;
     default:
-      return <Error500 />;
+      return <ErrorPage code={500} />;
   }
 };
 
-ErrorPage.getInitialProps = async ({ asPath, res, err }) => {
+NextErrorPage.getInitialProps = async ({ asPath, res, err }) => {
   if (res?.statusCode === 404) {
     return { statusCode: 404 };
   }
@@ -60,4 +56,4 @@ ErrorPage.getInitialProps = async ({ asPath, res, err }) => {
   return { statusCode: 500 };
 };
 
-export default ErrorPage;
+export default NextErrorPage;

@@ -19,7 +19,7 @@ export type TemplateFragment = (
   ) }
 );
 
-export type ImageTemplatesQueryVariables = {};
+export type ImageTemplatesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type ImageTemplatesQuery = (
@@ -30,9 +30,9 @@ export type ImageTemplatesQuery = (
   )> }
 );
 
-export type ImageTemplateBySlugQueryVariables = {
+export type ImageTemplateBySlugQueryVariables = Types.Exact<{
   slug: Types.Scalars['String'];
-};
+}>;
 
 
 export type ImageTemplateBySlugQuery = (

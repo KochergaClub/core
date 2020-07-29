@@ -1,25 +1,16 @@
-import React from 'react';
-
 import Page from '../components/Page';
+import ErrorBlock from './ErrorBlock';
 
-import { Column } from '@kocherga/frontkit';
+import { Code, code2title } from './codes';
 
 interface Props {
-  code: number;
-  title: string;
-  image: string;
+  code: Code;
 }
 
-const ErrorPage = ({ code, title, image }: Props) => (
-  <Page title={title} chrome="none">
+const ErrorPage: React.FC<Props> = ({ code }) => (
+  <Page title={code2title[code]} chrome="none">
     <Page.Main>
-      <Column centered style={{ marginTop: 20, marginBottom: 50 }} gutter={40}>
-        <h1 style={{ fontSize: 40 }}>{code}</h1>
-        <a href="/">
-          <img src={image} style={{ width: 'auto', height: 300 }} />
-        </a>
-        <h1>{title}</h1>
-      </Column>
+      <ErrorBlock code={code} />
     </Page.Main>
   </Page>
 );

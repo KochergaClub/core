@@ -6,11 +6,11 @@ import { EvenmanEvent_DetailsFragmentDoc } from '../queries.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type EvenmanTimepadAnnouncementUpdateMutationVariables = {
+export type EvenmanTimepadAnnouncementUpdateMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   category_code?: Types.Maybe<Types.Scalars['String']>;
   prepaid_tickets?: Types.Maybe<Types.Scalars['Boolean']>;
-};
+}>;
 
 
 export type EvenmanTimepadAnnouncementUpdateMutation = (
@@ -25,10 +25,10 @@ export type EvenmanTimepadAnnouncementUpdateMutation = (
   )> }
 );
 
-export type EvenmanVkAnnouncementUpdateMutationVariables = {
+export type EvenmanVkAnnouncementUpdateMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   group?: Types.Maybe<Types.Scalars['String']>;
-};
+}>;
 
 
 export type EvenmanVkAnnouncementUpdateMutation = (

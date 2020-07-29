@@ -17,6 +17,7 @@ import { timezone, formatDate } from '~/common/utils';
 
 import { Page, PaddedBlock, ApolloQueryResults } from '~/components';
 import TL03 from '~/blocks/TL03';
+import ErrorBlock from '~/error-pages/ErrorBlock';
 
 import { useGetPublicEventQuery } from './queries.generated';
 
@@ -48,23 +49,25 @@ const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
     fetchPolicy: 'network-only',
   });
 
+  const registrationRef = useRef<HTMLElement | null>(null);
+
   const event = queryResults.data?.publicEvent;
 
-  const title = event
+  const title = queryResults.loading
+    ? 'Загружается'
+    : event
     ? `${event.title} - ${formatDate(
         utcToZonedTime(parseISO(event.start), timezone),
         'd MMMM'
       )}`
-    : 'Загружается...';
-
-  const registrationRef = useRef<HTMLElement | null>(null);
+    : 'Событие не найдено';
 
   return (
     <Page title={title} og={{ image: event?.image?.url || undefined }}>
       <ApolloQueryResults {...queryResults} size="block">
         {() => {
           if (!event) {
-            throw new Error('Internal logic error');
+            return <ErrorBlock code={404} title="Событие не найдено" />;
           }
 
           const daysUntil = differenceInCalendarDays(

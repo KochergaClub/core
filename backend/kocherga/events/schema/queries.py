@@ -27,11 +27,7 @@ class events(helpers.BaseField):
         'EventsFilterInput', g.input_fields({'event_type': Optional[str]})
     )
 
-    args = {
-        **helpers.connection_args(),
-        'search': Optional[str],
-        'filter': FilterInput,
-    }
+    args = {**helpers.connection_args(), 'search': Optional[str], 'filter': FilterInput}
 
     result = g.NN(types.EventConnection)
 
@@ -76,7 +72,7 @@ class publicEvents(helpers.BaseField):
         qs = models.Event.objects.public_events(
             from_date=datetime.strptime(from_date, '%Y-%m-%d').date()
             if from_date
-            else None,
+            else None
         )
 
         if project_id is not None:
@@ -85,11 +81,7 @@ class publicEvents(helpers.BaseField):
         return qs.relay_page(order='start', **pager)
 
     permissions = []
-    args = {
-        **helpers.connection_args(),
-        'from_date': Optional[str],
-        'project_id': 'ID',
-    }
+    args = {**helpers.connection_args(), 'from_date': Optional[str], 'project_id': 'ID'}
 
     result = g.NN(types.EventConnection)
 
@@ -97,12 +89,15 @@ class publicEvents(helpers.BaseField):
 @c.class_field
 class publicEvent(helpers.BaseField):
     def resolve(self, obj, info, event_id):
-        event = models.Event.objects.public_events().get(uuid=event_id)
+        try:
+            event = models.Event.objects.public_events().get(uuid=event_id)
+        except models.Event.DoesNotExist:
+            return None
         return event
 
     permissions = []
     args = {'event_id': 'ID!'}
-    result = g.NN(types.Event)
+    result = types.Event
 
 
 @c.class_field

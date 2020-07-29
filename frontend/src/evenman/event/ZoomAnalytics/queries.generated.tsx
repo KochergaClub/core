@@ -21,9 +21,9 @@ export type EvenmanEvent_ForZoomAnalyticsFragment = (
   )> }
 );
 
-export type EvenmanEventForZoomAnalyticsQueryVariables = {
+export type EvenmanEventForZoomAnalyticsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanEventForZoomAnalyticsQuery = (

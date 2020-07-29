@@ -13,9 +13,9 @@ export type EventsTicketFragment = (
   ) }
 );
 
-export type GetEventTicketsQueryVariables = {
+export type GetEventTicketsQueryVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type GetEventTicketsQuery = (

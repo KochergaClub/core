@@ -22,10 +22,10 @@ export type EventsEvent_SummaryFragment = (
   ) }
 );
 
-export type EvenmanEventsQueryVariables = {
+export type EvenmanEventsQueryVariables = Types.Exact<{
   start: Types.Scalars['String'];
   end: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanEventsQuery = (
@@ -44,7 +44,7 @@ export type EvenmanUnknownEventFragment = (
   & Pick<Types.Event, 'id' | 'title'>
 );
 
-export type EvenmanUnknownEventsQueryVariables = {};
+export type EvenmanUnknownEventsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanUnknownEventsQuery = (
@@ -98,9 +98,9 @@ export type EvenmanEvent_DetailsFragment = (
   ) }
 );
 
-export type EvenmanEventQueryVariables = {
+export type EvenmanEventQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanEventQuery = (
@@ -111,10 +111,10 @@ export type EvenmanEventQuery = (
   )> }
 );
 
-export type EvenmanSetEventTypeMutationVariables = {
+export type EvenmanSetEventTypeMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   event_type: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanSetEventTypeMutation = (
@@ -129,10 +129,10 @@ export type EvenmanSetEventTypeMutation = (
   ) }
 );
 
-export type EvenmanSetZoomLinkMutationVariables = {
+export type EvenmanSetZoomLinkMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   link: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanSetZoomLinkMutation = (
@@ -147,9 +147,9 @@ export type EvenmanSetZoomLinkMutation = (
   ) }
 );
 
-export type EvenmanGenerateZoomLinkMutationVariables = {
+export type EvenmanGenerateZoomLinkMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanGenerateZoomLinkMutation = (
@@ -164,7 +164,7 @@ export type EvenmanGenerateZoomLinkMutation = (
   ) }
 );
 
-export type EvenmanUpdateMutationVariables = {
+export type EvenmanUpdateMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   published?: Types.Maybe<Types.Scalars['Boolean']>;
   visitors?: Types.Maybe<Types.Scalars['String']>;
@@ -180,7 +180,7 @@ export type EvenmanUpdateMutationVariables = {
   project_slug?: Types.Maybe<Types.Scalars['String']>;
   timing_description_override?: Types.Maybe<Types.Scalars['String']>;
   image_id?: Types.Maybe<Types.Scalars['ID']>;
-};
+}>;
 
 
 export type EvenmanUpdateMutation = (
@@ -195,9 +195,9 @@ export type EvenmanUpdateMutation = (
   ) }
 );
 
-export type EvenmanEventDeleteMutationVariables = {
+export type EvenmanEventDeleteMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanEventDeleteMutation = (
@@ -208,10 +208,10 @@ export type EvenmanEventDeleteMutation = (
   ) }
 );
 
-export type EvenmanEventAddTagMutationVariables = {
+export type EvenmanEventAddTagMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   tag: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanEventAddTagMutation = (
@@ -226,10 +226,10 @@ export type EvenmanEventAddTagMutation = (
   ) }
 );
 
-export type EvenmanEventDeleteTagMutationVariables = {
+export type EvenmanEventDeleteTagMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   tag: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanEventDeleteTagMutation = (
@@ -244,10 +244,10 @@ export type EvenmanEventDeleteTagMutation = (
   ) }
 );
 
-export type EvenmanEventSetImageFromUrlMutationVariables = {
+export type EvenmanEventSetImageFromUrlMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   url: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanEventSetImageFromUrlMutation = (
@@ -262,10 +262,10 @@ export type EvenmanEventSetImageFromUrlMutation = (
   ) }
 );
 
-export type EvenmanVkAnnouncementSetImageMutationVariables = {
+export type EvenmanVkAnnouncementSetImageMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   image_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanVkAnnouncementSetImageMutation = (
@@ -280,10 +280,10 @@ export type EvenmanVkAnnouncementSetImageMutation = (
   )> }
 );
 
-export type EvenmanAnnounceMutationVariables = {
+export type EvenmanAnnounceMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   target: Types.EventAnnounceTarget;
-};
+}>;
 
 
 export type EvenmanAnnounceMutation = (
@@ -298,11 +298,11 @@ export type EvenmanAnnounceMutation = (
   )> }
 );
 
-export type EvenmanSetAnnounceUrlMutationVariables = {
+export type EvenmanSetAnnounceUrlMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   target: Types.EventAnnounceTarget;
   url: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanSetAnnounceUrlMutation = (
@@ -317,10 +317,10 @@ export type EvenmanSetAnnounceUrlMutation = (
   )> }
 );
 
-export type EvenmanEventMoveMutationVariables = {
+export type EvenmanEventMoveMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   start: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanEventMoveMutation = (
@@ -335,11 +335,11 @@ export type EvenmanEventMoveMutation = (
   ) }
 );
 
-export type EvenmanEventCreateMutationVariables = {
+export type EvenmanEventCreateMutationVariables = Types.Exact<{
   title: Types.Scalars['String'];
   start: Types.Scalars['String'];
   end: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanEventCreateMutation = (
@@ -354,7 +354,7 @@ export type EvenmanEventCreateMutation = (
   ) }
 );
 
-export type OnEventsSubscriptionVariables = {};
+export type OnEventsSubscriptionVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type OnEventsSubscription = (
@@ -365,7 +365,7 @@ export type OnEventsSubscription = (
   ) }
 );
 
-export type EvenmanPrototypesForPickerQueryVariables = {};
+export type EvenmanPrototypesForPickerQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanPrototypesForPickerQuery = (

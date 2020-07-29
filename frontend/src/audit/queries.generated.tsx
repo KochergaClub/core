@@ -13,7 +13,7 @@ export type MaybeStaffUserFragment = (
   )> }
 );
 
-export type AuthGroupsQueryVariables = {};
+export type AuthGroupsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type AuthGroupsQuery = (
@@ -31,10 +31,10 @@ export type AuthGroupsQuery = (
   )> }
 );
 
-export type AuthAddUserToGroupMutationVariables = {
+export type AuthAddUserToGroupMutationVariables = Types.Exact<{
   user_id: Types.Scalars['ID'];
   group_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type AuthAddUserToGroupMutation = (
@@ -42,10 +42,10 @@ export type AuthAddUserToGroupMutation = (
   & Pick<Types.Mutation, 'authAddUserToGroup'>
 );
 
-export type AuthRemoveUserFromGroupMutationVariables = {
+export type AuthRemoveUserFromGroupMutationVariables = Types.Exact<{
   user_id: Types.Scalars['ID'];
   group_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type AuthRemoveUserFromGroupMutation = (
@@ -53,7 +53,7 @@ export type AuthRemoveUserFromGroupMutation = (
   & Pick<Types.Mutation, 'authRemoveUserFromGroup'>
 );
 
-export type AuthPermissionsQueryVariables = {};
+export type AuthPermissionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type AuthPermissionsQuery = (

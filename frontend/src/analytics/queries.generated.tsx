@@ -9,7 +9,7 @@ export type AnalyticsBovStatFragment = (
   & Pick<Types.AnalyticsBovStat, 'date' | 'count' | 'total_income'>
 );
 
-export type AnalyticsBovStatsQueryVariables = {};
+export type AnalyticsBovStatsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type AnalyticsBovStatsQuery = (
@@ -20,7 +20,7 @@ export type AnalyticsBovStatsQuery = (
   )> }
 );
 
-export type AnalyticsUpdateFbRatioAudienceMutationVariables = {};
+export type AnalyticsUpdateFbRatioAudienceMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type AnalyticsUpdateFbRatioAudienceMutation = (

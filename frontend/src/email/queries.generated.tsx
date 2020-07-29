@@ -27,7 +27,7 @@ export type MailchimpCategoryFragment = (
   )> }
 );
 
-export type EmailSubscribeChannelsQueryVariables = {};
+export type EmailSubscribeChannelsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EmailSubscribeChannelsQuery = (
@@ -38,7 +38,7 @@ export type EmailSubscribeChannelsQuery = (
   )> }
 );
 
-export type EmailMailchimpCategoriesQueryVariables = {};
+export type EmailMailchimpCategoriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EmailMailchimpCategoriesQuery = (
@@ -49,9 +49,9 @@ export type EmailMailchimpCategoriesQuery = (
   )> }
 );
 
-export type EmailSubscribeChannelDeleteMutationVariables = {
+export type EmailSubscribeChannelDeleteMutationVariables = Types.Exact<{
   slug: Types.Scalars['String'];
-};
+}>;
 
 
 export type EmailSubscribeChannelDeleteMutation = (
@@ -59,10 +59,10 @@ export type EmailSubscribeChannelDeleteMutation = (
   & Pick<Types.Mutation, 'emailSubscribeChannelDelete'>
 );
 
-export type EmailSubscribeChannelAddEmailMutationVariables = {
+export type EmailSubscribeChannelAddEmailMutationVariables = Types.Exact<{
   slug: Types.Scalars['String'];
   email: Types.Scalars['String'];
-};
+}>;
 
 
 export type EmailSubscribeChannelAddEmailMutation = (
@@ -70,9 +70,9 @@ export type EmailSubscribeChannelAddEmailMutation = (
   & Pick<Types.Mutation, 'emailSubscribeChannelAddEmail'>
 );
 
-export type EmailSubscribeChannelCreateMutationVariables = {
+export type EmailSubscribeChannelCreateMutationVariables = Types.Exact<{
   params: Types.EmailSubscribeChannelCreateInput;
-};
+}>;
 
 
 export type EmailSubscribeChannelCreateMutation = (

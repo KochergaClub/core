@@ -16,9 +16,9 @@ export type Event_SummaryFragment = (
   )> }
 );
 
-export type UpcomingPublicEventsQueryVariables = {
+export type UpcomingPublicEventsQueryVariables = Types.Exact<{
   today: Types.Scalars['String'];
-};
+}>;
 
 
 export type UpcomingPublicEventsQuery = (
@@ -40,10 +40,10 @@ export type Event_ForCalendarFragment = (
   & Pick<Types.Event, 'id' | 'title' | 'start' | 'public_tags'>
 );
 
-export type PublicEventsForCalendarQueryVariables = {
+export type PublicEventsForCalendarQueryVariables = Types.Exact<{
   from: Types.Scalars['String'];
   to: Types.Scalars['String'];
-};
+}>;
 
 
 export type PublicEventsForCalendarQuery = (
@@ -57,7 +57,7 @@ export type PublicEventsForCalendarQuery = (
   ) }
 );
 
-export type EventsPublicGoogleCalendarQueryVariables = {};
+export type EventsPublicGoogleCalendarQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EventsPublicGoogleCalendarQuery = (
@@ -86,10 +86,10 @@ export type TeamCalendarEventFragment = (
   ) }
 );
 
-export type EventsInRangeQueryVariables = {
+export type EventsInRangeQueryVariables = Types.Exact<{
   start: Types.Scalars['String'];
   end: Types.Scalars['String'];
-};
+}>;
 
 
 export type EventsInRangeQuery = (
@@ -103,9 +103,9 @@ export type EventsInRangeQuery = (
   ) }
 );
 
-export type TeamCalendarEventQueryVariables = {
+export type TeamCalendarEventQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type TeamCalendarEventQuery = (
@@ -116,11 +116,11 @@ export type TeamCalendarEventQuery = (
   )> }
 );
 
-export type ResizeEventMutationVariables = {
+export type ResizeEventMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   start: Types.Scalars['String'];
   end: Types.Scalars['String'];
-};
+}>;
 
 
 export type ResizeEventMutation = (
@@ -134,13 +134,13 @@ export type ResizeEventMutation = (
   ) }
 );
 
-export type TeamCalendarCreateEventMutationVariables = {
+export type TeamCalendarCreateEventMutationVariables = Types.Exact<{
   start: Types.Scalars['String'];
   end: Types.Scalars['String'];
   title: Types.Scalars['String'];
   description: Types.Scalars['String'];
   room: Types.Scalars['String'];
-};
+}>;
 
 
 export type TeamCalendarCreateEventMutation = (
@@ -155,12 +155,12 @@ export type TeamCalendarCreateEventMutation = (
   ) }
 );
 
-export type TeamCalendarUpdateEventMutationVariables = {
+export type TeamCalendarUpdateEventMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   title?: Types.Maybe<Types.Scalars['String']>;
   description?: Types.Maybe<Types.Scalars['String']>;
   location?: Types.Maybe<Types.Scalars['String']>;
-};
+}>;
 
 
 export type TeamCalendarUpdateEventMutation = (
@@ -175,9 +175,9 @@ export type TeamCalendarUpdateEventMutation = (
   ) }
 );
 
-export type TeamCalendarDeleteEventMutationVariables = {
+export type TeamCalendarDeleteEventMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type TeamCalendarDeleteEventMutation = (
@@ -202,9 +202,9 @@ export type TeamEventDetailsFragment = (
   & TeamCalendarEventFragment
 );
 
-export type TeamEventDetailsQueryVariables = {
+export type TeamEventDetailsQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type TeamEventDetailsQuery = (
@@ -215,7 +215,7 @@ export type TeamEventDetailsQuery = (
   )> }
 );
 
-export type EventFeedbackCreateMutationVariables = {
+export type EventFeedbackCreateMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   overall_score?: Types.Maybe<Types.Scalars['Int']>;
   recommend_score?: Types.Maybe<Types.Scalars['Int']>;
@@ -229,7 +229,7 @@ export type EventFeedbackCreateMutationVariables = {
   source_website: Types.Scalars['Boolean'];
   custom_source: Types.Scalars['String'];
   comment: Types.Scalars['String'];
-};
+}>;
 
 
 export type EventFeedbackCreateMutation = (
@@ -244,9 +244,9 @@ export type EventFeedbackCreateMutation = (
   ) }
 );
 
-export type EventFeedbackDeleteMutationVariables = {
+export type EventFeedbackDeleteMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EventFeedbackDeleteMutation = (

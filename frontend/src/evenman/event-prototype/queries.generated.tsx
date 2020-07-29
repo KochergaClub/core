@@ -37,9 +37,9 @@ export type EventsPrototype_SummaryFragment = (
   & Pick<Types.EventsPrototype, 'id' | 'title' | 'active' | 'weekday' | 'hour' | 'minute' | 'suggested_dates'>
 );
 
-export type EvenmanPrototypesQueryVariables = {
+export type EvenmanPrototypesQueryVariables = Types.Exact<{
   suggested_until_ts: Types.Scalars['Int'];
-};
+}>;
 
 
 export type EvenmanPrototypesQuery = (
@@ -50,9 +50,9 @@ export type EvenmanPrototypesQuery = (
   )> }
 );
 
-export type EvenmanPrototypeQueryVariables = {
+export type EvenmanPrototypeQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanPrototypeQuery = (
@@ -63,14 +63,14 @@ export type EvenmanPrototypeQuery = (
   ) }
 );
 
-export type EvenmanPrototypeCreateMutationVariables = {
+export type EvenmanPrototypeCreateMutationVariables = Types.Exact<{
   title: Types.Scalars['String'];
   location?: Types.Maybe<Types.Scalars['String']>;
   weekday: Types.Scalars['Int'];
   hour: Types.Scalars['Int'];
   minute: Types.Scalars['Int'];
   length: Types.Scalars['Int'];
-};
+}>;
 
 
 export type EvenmanPrototypeCreateMutation = (
@@ -85,7 +85,7 @@ export type EvenmanPrototypeCreateMutation = (
   ) }
 );
 
-export type EvenmanPrototypeUpdateMutationVariables = {
+export type EvenmanPrototypeUpdateMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   active?: Types.Maybe<Types.Scalars['Boolean']>;
   title?: Types.Maybe<Types.Scalars['String']>;
@@ -96,7 +96,7 @@ export type EvenmanPrototypeUpdateMutationVariables = {
   vk_group_name?: Types.Maybe<Types.Scalars['String']>;
   timepad_category_code?: Types.Maybe<Types.Scalars['String']>;
   project_slug?: Types.Maybe<Types.Scalars['String']>;
-};
+}>;
 
 
 export type EvenmanPrototypeUpdateMutation = (
@@ -111,10 +111,10 @@ export type EvenmanPrototypeUpdateMutation = (
   ) }
 );
 
-export type EvenmanPrototypeCancelDateMutationVariables = {
+export type EvenmanPrototypeCancelDateMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   date: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanPrototypeCancelDateMutation = (
@@ -125,10 +125,10 @@ export type EvenmanPrototypeCancelDateMutation = (
   ) }
 );
 
-export type EvenmanPrototypeNewEventMutationVariables = {
+export type EvenmanPrototypeNewEventMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   ts: Types.Scalars['Int'];
-};
+}>;
 
 
 export type EvenmanPrototypeNewEventMutation = (
@@ -139,10 +139,10 @@ export type EvenmanPrototypeNewEventMutation = (
   ) }
 );
 
-export type EvenmanPrototypeAddTagMutationVariables = {
+export type EvenmanPrototypeAddTagMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   tag: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanPrototypeAddTagMutation = (
@@ -157,10 +157,10 @@ export type EvenmanPrototypeAddTagMutation = (
   ) }
 );
 
-export type EvenmanPrototypeDeleteTagMutationVariables = {
+export type EvenmanPrototypeDeleteTagMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   tag: Types.Scalars['String'];
-};
+}>;
 
 
 export type EvenmanPrototypeDeleteTagMutation = (
@@ -175,10 +175,10 @@ export type EvenmanPrototypeDeleteTagMutation = (
   ) }
 );
 
-export type EvenmanPrototypeSetImageMutationVariables = {
+export type EvenmanPrototypeSetImageMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
   image_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type EvenmanPrototypeSetImageMutation = (

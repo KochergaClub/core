@@ -56,7 +56,7 @@ export type MastermindDatingEventFragment = (
   & Pick<Types.Event, 'id' | 'title' | 'start'>
 );
 
-export type MastermindDatingCohortsQueryVariables = {};
+export type MastermindDatingCohortsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MastermindDatingCohortsQuery = (
@@ -67,9 +67,9 @@ export type MastermindDatingCohortsQuery = (
   )> }
 );
 
-export type MastermindDatingCohortByIdQueryVariables = {
+export type MastermindDatingCohortByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingCohortByIdQuery = (
@@ -80,9 +80,9 @@ export type MastermindDatingCohortByIdQuery = (
   ) }
 );
 
-export type MastermindDatingSearchEventsQueryVariables = {
+export type MastermindDatingSearchEventsQueryVariables = Types.Exact<{
   search: Types.Scalars['String'];
-};
+}>;
 
 
 export type MastermindDatingSearchEventsQuery = (
@@ -96,7 +96,7 @@ export type MastermindDatingSearchEventsQuery = (
   ) }
 );
 
-export type MastermindDatingCreateCohortMutationVariables = {};
+export type MastermindDatingCreateCohortMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MastermindDatingCreateCohortMutation = (
@@ -110,9 +110,9 @@ export type MastermindDatingCreateCohortMutation = (
   ) }
 );
 
-export type MastermindDatingPopulateCohortFromEventMutationVariables = {
+export type MastermindDatingPopulateCohortFromEventMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingPopulateCohortFromEventMutation = (
@@ -126,9 +126,9 @@ export type MastermindDatingPopulateCohortFromEventMutation = (
   ) }
 );
 
-export type MastermindDatingDeleteCohortMutationVariables = {
+export type MastermindDatingDeleteCohortMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingDeleteCohortMutation = (
@@ -139,9 +139,9 @@ export type MastermindDatingDeleteCohortMutation = (
   ) }
 );
 
-export type MastermindDatingSendInviteEmailsMutationVariables = {
+export type MastermindDatingSendInviteEmailsMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingSendInviteEmailsMutation = (
@@ -155,9 +155,9 @@ export type MastermindDatingSendInviteEmailsMutation = (
   ) }
 );
 
-export type MastermindDatingRunSolverMutationVariables = {
+export type MastermindDatingRunSolverMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingRunSolverMutation = (
@@ -171,10 +171,10 @@ export type MastermindDatingRunSolverMutation = (
   ) }
 );
 
-export type MastermindDatingSetEventForCohortMutationVariables = {
+export type MastermindDatingSetEventForCohortMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
   event_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingSetEventForCohortMutation = (
@@ -188,9 +188,9 @@ export type MastermindDatingSetEventForCohortMutation = (
   ) }
 );
 
-export type MastermindDatingUnsetEventForCohortMutationVariables = {
+export type MastermindDatingUnsetEventForCohortMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingUnsetEventForCohortMutation = (
@@ -204,9 +204,9 @@ export type MastermindDatingUnsetEventForCohortMutation = (
   ) }
 );
 
-export type MastermindDatingActivateVotingMutationVariables = {
+export type MastermindDatingActivateVotingMutationVariables = Types.Exact<{
   participant_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingActivateVotingMutation = (
@@ -220,10 +220,10 @@ export type MastermindDatingActivateVotingMutation = (
   ) }
 );
 
-export type MastermindDatingSetPresenceStatusMutationVariables = {
+export type MastermindDatingSetPresenceStatusMutationVariables = Types.Exact<{
   participant_id: Types.Scalars['ID'];
   present: Types.Scalars['Boolean'];
-};
+}>;
 
 
 export type MastermindDatingSetPresenceStatusMutation = (
@@ -237,9 +237,9 @@ export type MastermindDatingSetPresenceStatusMutation = (
   ) }
 );
 
-export type MastermindDatingCreateGroupMutationVariables = {
+export type MastermindDatingCreateGroupMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type MastermindDatingCreateGroupMutation = (
@@ -253,10 +253,10 @@ export type MastermindDatingCreateGroupMutation = (
   ) }
 );
 
-export type MastermindDatingCreateParticipantMutationVariables = {
+export type MastermindDatingCreateParticipantMutationVariables = Types.Exact<{
   cohort_id: Types.Scalars['ID'];
   email: Types.Scalars['String'];
-};
+}>;
 
 
 export type MastermindDatingCreateParticipantMutation = (

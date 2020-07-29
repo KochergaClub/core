@@ -20,13 +20,13 @@ export type OrderWithCustomerFragment = (
   )> }
 );
 
-export type Cm2OrdersQueryVariables = {
+export type Cm2OrdersQueryVariables = Types.Exact<{
   status?: Types.Maybe<Types.Scalars['String']>;
   after?: Types.Maybe<Types.Scalars['String']>;
   before?: Types.Maybe<Types.Scalars['String']>;
   first?: Types.Maybe<Types.Scalars['Int']>;
   last?: Types.Maybe<Types.Scalars['Int']>;
-};
+}>;
 
 
 export type Cm2OrdersQuery = (
@@ -46,9 +46,9 @@ export type Cm2OrdersQuery = (
   ) }
 );
 
-export type Cm2OrderQueryVariables = {
+export type Cm2OrderQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type Cm2OrderQuery = (
@@ -59,9 +59,9 @@ export type Cm2OrderQuery = (
   ) }
 );
 
-export type Cm2CreateOrderMutationVariables = {
+export type Cm2CreateOrderMutationVariables = Types.Exact<{
   params: Types.Cm2CreateOrderInput;
-};
+}>;
 
 
 export type Cm2CreateOrderMutation = (
@@ -75,9 +75,9 @@ export type Cm2CreateOrderMutation = (
   ) }
 );
 
-export type Cm2SearchCustomersQueryVariables = {
+export type Cm2SearchCustomersQueryVariables = Types.Exact<{
   search: Types.Scalars['String'];
-};
+}>;
 
 
 export type Cm2SearchCustomersQuery = (
@@ -94,12 +94,12 @@ export type Cm2SearchCustomersQuery = (
   ) }
 );
 
-export type Cm2CustomersQueryVariables = {
+export type Cm2CustomersQueryVariables = Types.Exact<{
   after?: Types.Maybe<Types.Scalars['String']>;
   before?: Types.Maybe<Types.Scalars['String']>;
   first?: Types.Maybe<Types.Scalars['Int']>;
   last?: Types.Maybe<Types.Scalars['Int']>;
-};
+}>;
 
 
 export type Cm2CustomersQuery = (
@@ -119,9 +119,9 @@ export type Cm2CustomersQuery = (
   ) }
 );
 
-export type Cm2CreateCustomerMutationVariables = {
+export type Cm2CreateCustomerMutationVariables = Types.Exact<{
   params: Types.Cm2CreateCustomerInput;
-};
+}>;
 
 
 export type Cm2CreateCustomerMutation = (
@@ -132,9 +132,9 @@ export type Cm2CreateCustomerMutation = (
   ) }
 );
 
-export type Cm2CloseOrderMutationVariables = {
+export type Cm2CloseOrderMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type Cm2CloseOrderMutation = (
@@ -142,9 +142,9 @@ export type Cm2CloseOrderMutation = (
   & Pick<Types.Mutation, 'cm2CloseOrder'>
 );
 
-export type Cm2CustomerPageQueryVariables = {
+export type Cm2CustomerPageQueryVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type Cm2CustomerPageQuery = (

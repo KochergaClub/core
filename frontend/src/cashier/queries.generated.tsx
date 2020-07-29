@@ -17,12 +17,12 @@ export type PaymentFragment = (
   ) }
 );
 
-export type CashierPaymentsQueryVariables = {
+export type CashierPaymentsQueryVariables = Types.Exact<{
   before?: Types.Maybe<Types.Scalars['String']>;
   after?: Types.Maybe<Types.Scalars['String']>;
   first?: Types.Maybe<Types.Scalars['Int']>;
   last?: Types.Maybe<Types.Scalars['Int']>;
-};
+}>;
 
 
 export type CashierPaymentsQuery = (
@@ -42,9 +42,9 @@ export type CashierPaymentsQuery = (
   ) }
 );
 
-export type CashierCreatePaymentMutationVariables = {
+export type CashierCreatePaymentMutationVariables = Types.Exact<{
   params: Types.CashierCreatePaymentInput;
-};
+}>;
 
 
 export type CashierCreatePaymentMutation = (
@@ -52,9 +52,9 @@ export type CashierCreatePaymentMutation = (
   & Pick<Types.Mutation, 'cashierCreatePayment'>
 );
 
-export type CashierRedeemPaymentMutationVariables = {
+export type CashierRedeemPaymentMutationVariables = Types.Exact<{
   id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type CashierRedeemPaymentMutation = (

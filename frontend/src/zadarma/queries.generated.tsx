@@ -19,12 +19,12 @@ export type CommonZadarmaPbxCallFragment = (
   )> }
 );
 
-export type ZadarmaPbxCallsQueryVariables = {
+export type ZadarmaPbxCallsQueryVariables = Types.Exact<{
   before?: Types.Maybe<Types.Scalars['String']>;
   after?: Types.Maybe<Types.Scalars['String']>;
   first?: Types.Maybe<Types.Scalars['Int']>;
   last?: Types.Maybe<Types.Scalars['Int']>;
-};
+}>;
 
 
 export type ZadarmaPbxCallsQuery = (
@@ -44,9 +44,9 @@ export type ZadarmaPbxCallsQuery = (
   ) }
 );
 
-export type ZadarmaPbxCallQueryVariables = {
+export type ZadarmaPbxCallQueryVariables = Types.Exact<{
   pbx_call_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type ZadarmaPbxCallQuery = (
@@ -57,10 +57,10 @@ export type ZadarmaPbxCallQuery = (
   ) }
 );
 
-export type ZadarmaSetMemberForPbxCallMutationVariables = {
+export type ZadarmaSetMemberForPbxCallMutationVariables = Types.Exact<{
   member_id: Types.Scalars['ID'];
   pbx_call_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type ZadarmaSetMemberForPbxCallMutation = (

@@ -66,12 +66,12 @@ export type TrainingWithScheduleFragment = (
   & RatioTrainingFragment
 );
 
-export type RatioTrainingsQueryVariables = {
+export type RatioTrainingsQueryVariables = Types.Exact<{
   before?: Types.Maybe<Types.Scalars['String']>;
   after?: Types.Maybe<Types.Scalars['String']>;
   first?: Types.Maybe<Types.Scalars['Int']>;
   last?: Types.Maybe<Types.Scalars['Int']>;
-};
+}>;
 
 
 export type RatioTrainingsQuery = (
@@ -91,12 +91,12 @@ export type RatioTrainingsQuery = (
   ) }
 );
 
-export type RatioTrainingsForPickerQueryVariables = {
+export type RatioTrainingsForPickerQueryVariables = Types.Exact<{
   before?: Types.Maybe<Types.Scalars['String']>;
   after?: Types.Maybe<Types.Scalars['String']>;
   first?: Types.Maybe<Types.Scalars['Int']>;
   last?: Types.Maybe<Types.Scalars['Int']>;
-};
+}>;
 
 
 export type RatioTrainingsForPickerQuery = (
@@ -116,9 +116,9 @@ export type RatioTrainingsForPickerQuery = (
   ) }
 );
 
-export type RatioTrainingBySlugQueryVariables = {
+export type RatioTrainingBySlugQueryVariables = Types.Exact<{
   slug: Types.Scalars['String'];
-};
+}>;
 
 
 export type RatioTrainingBySlugQuery = (
@@ -129,9 +129,9 @@ export type RatioTrainingBySlugQuery = (
   ) }
 );
 
-export type RatioTrainingWithScheduleQueryVariables = {
+export type RatioTrainingWithScheduleQueryVariables = Types.Exact<{
   slug: Types.Scalars['String'];
-};
+}>;
 
 
 export type RatioTrainingWithScheduleQuery = (
@@ -142,7 +142,7 @@ export type RatioTrainingWithScheduleQuery = (
   ) }
 );
 
-export type RatioTrainersQueryVariables = {};
+export type RatioTrainersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type RatioTrainersQuery = (
@@ -153,10 +153,10 @@ export type RatioTrainersQuery = (
   )> }
 );
 
-export type RatioTrainingEmailPrototypeQueryVariables = {
+export type RatioTrainingEmailPrototypeQueryVariables = Types.Exact<{
   training_id: Types.Scalars['ID'];
   type: Types.Scalars['String'];
-};
+}>;
 
 
 export type RatioTrainingEmailPrototypeQuery = (
@@ -164,9 +164,9 @@ export type RatioTrainingEmailPrototypeQuery = (
   & { content: Types.Query['ratioTrainingEmailPrototype'] }
 );
 
-export type RatioAddTrainingMutationVariables = {
+export type RatioAddTrainingMutationVariables = Types.Exact<{
   params: Types.RatioAddTrainingInput;
-};
+}>;
 
 
 export type RatioAddTrainingMutation = (
@@ -177,9 +177,9 @@ export type RatioAddTrainingMutation = (
   ) }
 );
 
-export type RatioAddTicketMutationVariables = {
+export type RatioAddTicketMutationVariables = Types.Exact<{
   params: Types.RatioAddTicketInput;
-};
+}>;
 
 
 export type RatioAddTicketMutation = (
@@ -190,9 +190,9 @@ export type RatioAddTicketMutation = (
   ) }
 );
 
-export type RatioPaymentAddMutationVariables = {
+export type RatioPaymentAddMutationVariables = Types.Exact<{
   params: Types.RatioPaymentAddInput;
-};
+}>;
 
 
 export type RatioPaymentAddMutation = (
@@ -206,9 +206,9 @@ export type RatioPaymentAddMutation = (
   ) }
 );
 
-export type RatioPaymentDeleteMutationVariables = {
+export type RatioPaymentDeleteMutationVariables = Types.Exact<{
   payment_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type RatioPaymentDeleteMutation = (
@@ -219,9 +219,9 @@ export type RatioPaymentDeleteMutation = (
   ) }
 );
 
-export type RatioPaymentSetStatusMutationVariables = {
+export type RatioPaymentSetStatusMutationVariables = Types.Exact<{
   input: Types.RatioPaymentSetStatusInput;
-};
+}>;
 
 
 export type RatioPaymentSetStatusMutation = (
@@ -235,9 +235,9 @@ export type RatioPaymentSetStatusMutation = (
   ) }
 );
 
-export type RatioPaymentFiscalizeMutationVariables = {
+export type RatioPaymentFiscalizeMutationVariables = Types.Exact<{
   payment_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type RatioPaymentFiscalizeMutation = (
@@ -245,9 +245,9 @@ export type RatioPaymentFiscalizeMutation = (
   & Pick<Types.Mutation, 'ratioPaymentFiscalize'>
 );
 
-export type RatioPaymentFiscalizedManuallyMutationVariables = {
+export type RatioPaymentFiscalizedManuallyMutationVariables = Types.Exact<{
   payment_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type RatioPaymentFiscalizedManuallyMutation = (
@@ -261,9 +261,9 @@ export type RatioPaymentFiscalizedManuallyMutation = (
   ) }
 );
 
-export type RatioTrainingAddDayMutationVariables = {
+export type RatioTrainingAddDayMutationVariables = Types.Exact<{
   params: Types.RatioTrainingAddDayInput;
-};
+}>;
 
 
 export type RatioTrainingAddDayMutation = (
@@ -271,9 +271,9 @@ export type RatioTrainingAddDayMutation = (
   & Pick<Types.Mutation, 'ratioTrainingAddDay'>
 );
 
-export type RatioTrainingCopyScheduleFromMutationVariables = {
+export type RatioTrainingCopyScheduleFromMutationVariables = Types.Exact<{
   params: Types.RatioTrainingCopyScheduleFromInput;
-};
+}>;
 
 
 export type RatioTrainingCopyScheduleFromMutation = (
@@ -281,9 +281,9 @@ export type RatioTrainingCopyScheduleFromMutation = (
   & Pick<Types.Mutation, 'ratioTrainingCopyScheduleFrom'>
 );
 
-export type RatioTrainingSendEmailMutationVariables = {
+export type RatioTrainingSendEmailMutationVariables = Types.Exact<{
   input: Types.RatioTrainingSendEmailInput;
-};
+}>;
 
 
 export type RatioTrainingSendEmailMutation = (
@@ -294,9 +294,9 @@ export type RatioTrainingSendEmailMutation = (
   ) }
 );
 
-export type RatioTrainingSyncParticipantsToMailchimpMutationVariables = {
+export type RatioTrainingSyncParticipantsToMailchimpMutationVariables = Types.Exact<{
   training_id: Types.Scalars['ID'];
-};
+}>;
 
 
 export type RatioTrainingSyncParticipantsToMailchimpMutation = (

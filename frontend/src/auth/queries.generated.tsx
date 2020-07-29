@@ -9,7 +9,7 @@ export type AuthCurrentUserFragment = (
   & Pick<Types.AuthCurrentUser, 'id' | 'is_authenticated' | 'is_staff' | 'permissions' | 'email'>
 );
 
-export type CurrentUserQueryVariables = {};
+export type CurrentUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserQuery = (
@@ -23,10 +23,10 @@ export type CurrentUserQuery = (
   ) }
 );
 
-export type LoginMutationVariables = {
+export type LoginMutationVariables = Types.Exact<{
   email: Types.Scalars['String'];
   password: Types.Scalars['String'];
-};
+}>;
 
 
 export type LoginMutation = (
@@ -41,9 +41,9 @@ export type LoginMutation = (
   ) }
 );
 
-export type TokenLoginMutationVariables = {
+export type TokenLoginMutationVariables = Types.Exact<{
   token: Types.Scalars['String'];
-};
+}>;
 
 
 export type TokenLoginMutation = (
@@ -58,10 +58,10 @@ export type TokenLoginMutation = (
   ) }
 );
 
-export type SendMagicLinkMutationVariables = {
+export type SendMagicLinkMutationVariables = Types.Exact<{
   email: Types.Scalars['String'];
   next?: Types.Maybe<Types.Scalars['String']>;
-};
+}>;
 
 
 export type SendMagicLinkMutation = (

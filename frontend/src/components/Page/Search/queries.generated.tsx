@@ -108,9 +108,9 @@ export type EventSearchItemFragment = (
   ) }
 );
 
-export type SearchQueryVariables = {
+export type SearchQueryVariables = Types.Exact<{
   input: Types.SearchInput;
-};
+}>;
 
 
 export type SearchQuery = (

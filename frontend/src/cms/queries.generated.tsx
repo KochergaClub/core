@@ -4,10 +4,10 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type WagtailPageTypeQueryVariables = {
+export type WagtailPageTypeQueryVariables = Types.Exact<{
   path?: Types.Maybe<Types.Scalars['String']>;
   preview_token?: Types.Maybe<Types.Scalars['String']>;
-};
+}>;
 
 
 export type WagtailPageTypeQuery = (
@@ -54,9 +54,9 @@ export type WagtailPageTypeQuery = (
   )> }
 );
 
-export type TildaPageQueryVariables = {
+export type TildaPageQueryVariables = Types.Exact<{
   path: Types.Scalars['String'];
-};
+}>;
 
 
 export type TildaPageQuery = (
@@ -77,7 +77,7 @@ export type TildaPageQuery = (
   )> }
 );
 
-export type TildaPagesQueryVariables = {};
+export type TildaPagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type TildaPagesQuery = (
@@ -88,7 +88,7 @@ export type TildaPagesQuery = (
   )> }
 );
 
-export type WagtailPagesQueryVariables = {};
+export type WagtailPagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type WagtailPagesQuery = (

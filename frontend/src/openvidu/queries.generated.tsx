@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type OpenviduGenerateRoomTokenMutationVariables = {};
+export type OpenviduGenerateRoomTokenMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type OpenviduGenerateRoomTokenMutation = (

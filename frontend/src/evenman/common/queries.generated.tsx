@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type EvenmanProjectsListQueryVariables = {};
+export type EvenmanProjectsListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanProjectsListQuery = (
@@ -19,7 +19,7 @@ export type EvenmanProjectsListQuery = (
   )> }
 );
 
-export type EvenmanVkGroupsQueryVariables = {};
+export type EvenmanVkGroupsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanVkGroupsQuery = (
@@ -30,7 +30,7 @@ export type EvenmanVkGroupsQuery = (
   )> }
 );
 
-export type EvenmanTimepadCategoriesQueryVariables = {};
+export type EvenmanTimepadCategoriesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type EvenmanTimepadCategoriesQuery = (

@@ -39,7 +39,7 @@ export type ShiftFragment = (
   )> }
 );
 
-export type WatchmenWatchmenListQueryVariables = {};
+export type WatchmenWatchmenListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type WatchmenWatchmenListQuery = (
@@ -50,7 +50,7 @@ export type WatchmenWatchmenListQuery = (
   )> }
 );
 
-export type WatchmenWatchmenListForPickerQueryVariables = {};
+export type WatchmenWatchmenListForPickerQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type WatchmenWatchmenListForPickerQuery = (
@@ -61,7 +61,7 @@ export type WatchmenWatchmenListForPickerQuery = (
   )> }
 );
 
-export type WatchmenGradesListQueryVariables = {};
+export type WatchmenGradesListQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type WatchmenGradesListQuery = (
@@ -72,10 +72,10 @@ export type WatchmenGradesListQuery = (
   )> }
 );
 
-export type WatchmenShiftsQueryVariables = {
+export type WatchmenShiftsQueryVariables = Types.Exact<{
   from_date: Types.Scalars['String'];
   to_date: Types.Scalars['String'];
-};
+}>;
 
 
 export type WatchmenShiftsQuery = (
@@ -86,9 +86,9 @@ export type WatchmenShiftsQuery = (
   )> }
 );
 
-export type WatchmenSetWatchmanPriorityMutationVariables = {
+export type WatchmenSetWatchmanPriorityMutationVariables = Types.Exact<{
   params: Types.WatchmenSetWatchmanPriorityInput;
-};
+}>;
 
 
 export type WatchmenSetWatchmanPriorityMutation = (
@@ -96,9 +96,9 @@ export type WatchmenSetWatchmanPriorityMutation = (
   & Pick<Types.Mutation, 'watchmenSetWatchmanPriority'>
 );
 
-export type WatchmenSetWatchmanGradeMutationVariables = {
+export type WatchmenSetWatchmanGradeMutationVariables = Types.Exact<{
   params: Types.WatchmenSetWatchmanGradeInput;
-};
+}>;
 
 
 export type WatchmenSetWatchmanGradeMutation = (
@@ -106,9 +106,9 @@ export type WatchmenSetWatchmanGradeMutation = (
   & Pick<Types.Mutation, 'watchmenSetWatchmanGrade'>
 );
 
-export type WatchmenCreateWatchmanMutationVariables = {
+export type WatchmenCreateWatchmanMutationVariables = Types.Exact<{
   params: Types.WatchmenCreateWatchmanInput;
-};
+}>;
 
 
 export type WatchmenCreateWatchmanMutation = (
@@ -116,9 +116,9 @@ export type WatchmenCreateWatchmanMutation = (
   & Pick<Types.Mutation, 'watchmenCreateWatchman'>
 );
 
-export type WatchmenUpdateShiftMutationVariables = {
+export type WatchmenUpdateShiftMutationVariables = Types.Exact<{
   params: Types.WatchmenUpdateShiftInput;
-};
+}>;
 
 
 export type WatchmenUpdateShiftMutation = (

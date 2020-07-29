@@ -9,23 +9,17 @@ const OpenViduApp = dynamic(() => import('~/openvidu/OpenViduApp'), {
   ssr: false,
 });
 
-interface Props {
-  event_id: string;
-}
-
-const MyEventPage: NextApolloPage<Props> = ({ event_id }) => {
+const MyEventPage: NextApolloPage = () => {
   const title = 'Открытая комната (альфа-версия)';
   const [generateTokenMutation] = useOpenviduGenerateRoomTokenMutation();
 
   const getToken = useCallback(async () => {
-    const { data } = await generateTokenMutation({
-      variables: { event_id },
-    });
+    const { data } = await generateTokenMutation();
     if (!data || !data.result) {
       throw Error('Failed to obtain token');
     }
     return data.result.token;
-  }, [generateTokenMutation, event_id]);
+  }, [generateTokenMutation]);
 
   return (
     <Page title={title}>
@@ -39,10 +33,7 @@ const MyEventPage: NextApolloPage<Props> = ({ event_id }) => {
 
 MyEventPage.getInitialProps = async ({ query, apolloClient }) => {
   await requireAuth(apolloClient, { is_authenticated: true });
-
-  const event_id = query.id as string;
-
-  return { event_id };
+  return {};
 };
 
 export default withApollo(MyEventPage);
