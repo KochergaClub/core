@@ -32,7 +32,7 @@ interface TildaProps {
 
 export type Props = WagtailProps | TildaProps;
 
-export const AnyCmsPage: NextApolloPage<Props> = props => {
+export const AnyCmsPage: NextApolloPage<Props> = (props) => {
   const router = useRouter();
   if (router.isFallback) {
     return <FallbackPage />;
@@ -62,9 +62,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const urls = [...tildaUrls, ...wagtailUrls];
 
   const paths = urls
-    .filter(u => u !== '') // filter out front page - will be rendered from pages/index.tsx
-    .filter(u => !u.match(/^team($|\/)/)) // filter out team/ pages - can't be prerendered anyway
-    .map(url => ({
+    .filter((u) => u !== '') // filter out front page - will be rendered from pages/index.tsx
+    .filter((u) => !u.match(/^team($|\/)/)) // filter out team/ pages - can't be prerendered anyway
+    .map((url) => ({
       params: {
         slug: url.split('/'),
       },
@@ -118,7 +118,7 @@ export const getCmsProps = async (
   };
 };
 
-export const getStaticProps: GetStaticProps<Props> = async context => {
+export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const apolloClient = await apolloClientForStaticProps();
 
   const path = context.params
@@ -145,4 +145,5 @@ export const getStaticProps: GetStaticProps<Props> = async context => {
   // }
 };
 
-export default withApollo(AnyCmsPage, { ssr: false });
+// FIXME - there's a weird typescript error which I don't know how to fix
+export default withApollo(AnyCmsPage as any, { ssr: false });

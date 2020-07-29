@@ -2,9 +2,9 @@ import { Props, AnyCmsPage, getCmsProps } from './AnyCmsPage';
 import { NextApolloPage, withApollo } from '~/apollo';
 import { normalizeSsrPath } from '../utils';
 
-const SsrCmsPage: NextApolloPage<Props> = props => AnyCmsPage(props);
+const SsrCmsPage: NextApolloPage<Props> = (props) => <AnyCmsPage {...props} />;
 
-SsrCmsPage.getInitialProps = async ctx => {
+SsrCmsPage.getInitialProps = async (ctx) => {
   if (!ctx.asPath) {
     throw new Error('asPath is empty');
   }
@@ -18,4 +18,5 @@ SsrCmsPage.getInitialProps = async ctx => {
   };
 };
 
-export default withApollo(SsrCmsPage);
+// FIXME - there's a weird typescript error which I don't know how to fix
+export default withApollo(SsrCmsPage as any);

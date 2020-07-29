@@ -1,6 +1,7 @@
 import { ApolloClient } from '@apollo/client';
 import { NormalizedCacheObject } from '@apollo/client/cache';
 
+import { NextComponentType } from 'next';
 import { NextPageContext } from '~/common/types';
 
 export type KochergaApolloClient = ApolloClient<NormalizedCacheObject>;
@@ -10,9 +11,8 @@ export type NextApolloPageContext = NextPageContext & {
   apolloClient: KochergaApolloClient;
 };
 
-export type NextApolloPage<P = {}, IP = P> = {
-  (props: P): JSX.Element | null;
-  defaultProps?: Partial<P>;
-  displayName?: string;
-  getInitialProps?(ctx: NextApolloPageContext): Promise<IP>;
-};
+export type NextApolloPage<P extends {} = {}, IP = P> = NextComponentType<
+  NextApolloPageContext,
+  IP,
+  P
+>;

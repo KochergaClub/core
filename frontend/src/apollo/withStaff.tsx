@@ -2,12 +2,14 @@ import { requireAuth } from '~/auth/utils';
 
 import { NextApolloPage } from './types';
 
-export function withStaff<T extends {}>(PageComponent: NextApolloPage<T, any>) {
-  const WithStaff: NextApolloPage<T, any> = pageProps => (
+export function withStaff<P extends {}, IP = P>(
+  PageComponent: NextApolloPage<P, IP>
+) {
+  const WithStaff: NextApolloPage<P, IP> = (pageProps) => (
     <PageComponent {...pageProps} />
   );
 
-  WithStaff.getInitialProps = async ctx => {
+  WithStaff.getInitialProps = async (ctx) => {
     const { apolloClient } = ctx;
 
     await requireAuth(apolloClient, { is_staff: true });
@@ -16,7 +18,7 @@ export function withStaff<T extends {}>(PageComponent: NextApolloPage<T, any>) {
     if (PageComponent.getInitialProps) {
       return await PageComponent.getInitialProps(ctx);
     }
-    return {};
+    return {} as any; // sorry!
   };
 
   return WithStaff;

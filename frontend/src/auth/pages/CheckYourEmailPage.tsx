@@ -1,10 +1,9 @@
-import { withApollo } from '~/apollo';
-import { NextPage } from '~/common/types';
+import { withApollo, NextApolloPage } from '~/apollo';
 import { Page } from '~/components';
 import AuthContainer from '~/auth/components/AuthContainer';
 import CenteredLayout from '~/auth/components/CenteredLayout';
 
-const CheckYourEmailPage: NextPage = () => (
+const CheckYourEmailPage: NextApolloPage = () => (
   <Page title="Логин">
     <CenteredLayout>
       <AuthContainer>

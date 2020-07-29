@@ -12,20 +12,15 @@ module.exports = {
 
     // based on code from next-transpile-modules
     const nextCssLoaders = config.module.rules.find(
-      rule => typeof rule.oneOf === 'object'
+      (rule) => typeof rule.oneOf === 'object'
     );
 
-    nextCssLoaders.oneOf.forEach(loader => {
+    nextCssLoaders.oneOf.forEach((loader) => {
       if (
-        loader.sideEffects &&
-        // NOTE: uncomment for webpack 5
-        // loader.test &&
-        // loader.test == '/(?<!\\.module)\\.css$/' &&
+        loader.test &&
+        loader.test == '/(?<!\\.module)\\.css$/' &&
         loader.issuer &&
-        loader.issuer.include &&
-        loader.issuer.include.endsWith('_app.tsx')
-        // NOTE: uncomment for webpack 5
-        // loader.issuer.and
+        loader.issuer.and
       ) {
         delete loader.issuer;
       }

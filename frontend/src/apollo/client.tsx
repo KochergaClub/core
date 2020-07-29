@@ -8,6 +8,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import KochergaApolloCache from './cache';
 import cookie from 'cookie';
 
+import { IS_SERVER } from '~/common/utils';
 import {
   KochergaApolloClient,
   NextApolloPage,
@@ -18,11 +19,15 @@ import {
   CurrentUserDocument,
 } from '~/auth/queries.generated';
 
+type CacheState = KochergaApolloClient extends ApolloClient<infer T>
+  ? T
+  : never;
+
 let apolloClient: KochergaApolloClient | null = null;
 
 const createServerLink = (req: NextApolloPageContext['req']) => {
   // this is important for webpack to remove this code on client
-  if (typeof window === 'undefined') {
+  if (IS_SERVER) {
     const { API_HOST } = require('../../server/constants');
 
     // req can be empty:
@@ -68,7 +73,7 @@ const createServerLink = (req: NextApolloPageContext['req']) => {
 };
 
 function createClientLink() {
-  if (typeof window === 'undefined') {
+  if (IS_SERVER) {
     throw new Error('Should be called on client side');
   }
 
@@ -115,15 +120,14 @@ function createClientLink() {
  * Creates and configures the ApolloClient
  */
 const createApolloClient = (
-  initialState = {},
+  initialState: CacheState = {},
   req: NextApolloPageContext['req'] = undefined
 ) => {
-  const ssrMode = typeof window === 'undefined';
   const cache = new KochergaApolloCache().restore(initialState);
 
   return new ApolloClient({
-    ssrMode,
-    link: ssrMode ? createServerLink(req) : createClientLink(),
+    ssrMode: IS_SERVER,
+    link: IS_SERVER ? createServerLink(req) : createClientLink(),
     cache,
     assumeImmutableResults: true, // see https://blog.apollographql.com/whats-new-in-apollo-client-2-6-b3acf28ecad1
     defaultOptions: {
@@ -142,12 +146,12 @@ const createApolloClient = (
  * Creates or reuses apollo client in the browser.
  */
 const initApolloClient = (
-  initialState = undefined,
+  initialState: CacheState | undefined = undefined,
   req: NextApolloPageContext['req'] = undefined
 ) => {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
-  if (typeof window === 'undefined') {
+  if (IS_SERVER) {
     return createApolloClient(initialState, req);
   }
 
@@ -177,17 +181,37 @@ export const apolloClientForStaticProps = async () => {
   return apolloClient;
 };
 
-/**
- * Creates and provides the apolloContext
- * to a Next.js PageTree. Use it by wrapping
- * your PageComponent via HOC pattern.
- */
-export function withApollo(
-  PageComponent: NextApolloPage<any>,
+// Creates and provides the apolloContext to a Next.js PageTree.
+// Use it by wrapping your PageComponent via HOC pattern.
+
+// typing cases:
+// 1) ssr, getInitialProps, P >= {}
+// 2) ssr, no getInitialProps, P = {}
+// 3) no ssr, P >= {}
+type T1 = <P extends { [k: string]: unknown }>(
+  PageComponent: NextApolloPage<P>,
+  params: { ssr: boolean }
+) => NextApolloPage<P>;
+
+type T2 = <P extends { [k: string]: unknown }>(
+  PageComponent: NextApolloPage<P>,
+  params: { ssr: false }
+) => NextApolloPage<P>;
+
+export const withApollo = <P extends {}, IP = P>(
+  PageComponent: NextApolloPage<P, IP>,
   { ssr = true } = {}
-) {
-  const WithApollo: NextApolloPage<any> = ({
-    apolloClient,
+) => {
+  type ApolloP = {
+    apolloState?: KochergaApolloClient extends ApolloClient<infer T>
+      ? T
+      : never;
+  };
+  type ExtendedP = P & ApolloP;
+
+  type ExtendedIP = IP & ApolloP;
+
+  const WithApollo: NextApolloPage<ExtendedP, ExtendedIP> = ({
     apolloState,
     ...pageProps
   }) => {
@@ -200,7 +224,11 @@ export function withApollo(
 
     return (
       <ApolloProvider client={client}>
-        <PageComponent {...pageProps} />
+        <PageComponent
+          {
+            ...(pageProps as P) /* casting because typescript is not smart enough to guess that this is ok*/
+          }
+        />
       </ApolloProvider>
     );
   };
@@ -218,7 +246,7 @@ export function withApollo(
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+    WithApollo.getInitialProps = async (ctx) => {
       const { AppTree } = ctx;
 
       // Initialize ApolloClient, add it to the ctx object so
@@ -238,18 +266,26 @@ export function withApollo(
         throw new Error('CurrentUser query failed');
       }
 
-      // Run wrapped getInitialProps methods
-      let pageProps = {};
-      if (PageComponent.getInitialProps) {
-        pageProps = await PageComponent.getInitialProps(ctx);
-      }
+      // Run wrapped getInitialProps methods.
+      // NOTE: So, about this `any`... Sorry.
+      // Some pages can use Props which are obtained via getStaticProps, and getStaticProps is unfortunately
+      // a separate function and not an attribute on NextPage. It *might* be fixable with smart withApollo type unions,
+      // something like: EITHER { ssr: false } OR { ssr: true } and non-empty P.
+      // But I'm too lazy to try to implement it now, since we'll also need inferences to check if `getInitialProps` is
+      // present, and that sounds like too much work for non-significant benefit.
+      const pageProps: IP | any = PageComponent.getInitialProps
+        ? await PageComponent.getInitialProps(ctx)
+        : {};
 
       // Only on the server:
-      if (typeof window === 'undefined') {
+      if (IS_SERVER) {
         // When redirecting, the response is finished.
-        // No point in continuing to render
+        // No point in continuing to render.
         if (ctx.res && ctx.res.finished) {
-          return pageProps;
+          return {
+            ...pageProps,
+            apolloState: {}, // to satisfy typescript
+          };
         }
 
         // Only if ssr is enabled
@@ -284,11 +320,11 @@ export function withApollo(
       const apolloState = apolloClient.cache.extract();
 
       return {
-        ...pageProps,
         apolloState,
+        ...pageProps,
       };
     };
   }
 
   return WithApollo;
-}
+};
