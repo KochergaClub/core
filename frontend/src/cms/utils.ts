@@ -161,10 +161,40 @@ export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
     throw new APIError('GraphQL error', 500);
   }
 
-  return data.wagtailPages.map(p => p.meta.html_url.replace(/^\//, ''));
+  return data.wagtailPages.map((p) => p.meta.html_url.replace(/^\//, ''));
 };
 
 export const normalizeSsrPath = (path: string) => {
   // TODO - this is sloppy, this code assumes both that page could have `?ssr=1` param and /ssr prefix, because rewrite in nextjsEntrypoint is not perfect.
   return path.replace(/^\/ssr\/?/, '').replace(/\?.*/, '');
+};
+
+export const loadWagtailPage = async ({
+  locator,
+  apolloClient,
+}: {
+  locator: PageLocator;
+  apolloClient: KochergaApolloClient;
+}) => {
+  const typename = await loadTypename({
+    apolloClient,
+    locator,
+  });
+  const component = getComponentByTypename(typename);
+
+  if (!component) {
+    throw new APIError('Unknown typename', 500);
+  }
+
+  const page = await loadPageForComponent({
+    component,
+    typename,
+    apolloClient,
+    locator,
+  });
+
+  return {
+    typename,
+    page,
+  };
 };

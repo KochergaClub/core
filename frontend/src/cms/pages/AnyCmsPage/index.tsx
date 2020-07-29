@@ -4,14 +4,10 @@ import { withApollo, NextApolloPage } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
 import { KochergaApolloClient } from '~/apollo/types';
 
-import { APIError } from '~/common/api';
-
 import {
-  PageLocator,
-  loadTypename,
   getComponentByTypename,
-  loadPageForComponent,
   wagtailPageUrls,
+  loadWagtailPage,
 } from '../../utils';
 import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
 
@@ -92,23 +88,9 @@ export const getCmsProps = async (
     };
   }
 
-  const locator: PageLocator = { path };
-
-  const typename = await loadTypename({
+  const { page, typename } = await loadWagtailPage({
+    locator: { path },
     apolloClient,
-    locator,
-  });
-  const component = getComponentByTypename(typename);
-
-  if (!component) {
-    throw new APIError('Unknown typename', 500);
-  }
-
-  const page = await loadPageForComponent({
-    component,
-    typename,
-    apolloClient,
-    locator,
   });
 
   return {
@@ -134,15 +116,6 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     },
     revalidate: 1,
   };
-
-  // FIXME - move to pages/preview.tsx
-  // if (path === '/preview') {
-  //   const preview_token = context.query.token as string;
-  //   if (!preview_token) {
-  //     throw new APIError('No token', 500);
-  //   }
-  //   locator = { preview_token };
-  // }
 };
 
 // FIXME - there's a weird typescript error which I don't know how to fix
