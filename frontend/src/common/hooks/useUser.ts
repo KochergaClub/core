@@ -1,6 +1,6 @@
 import { useCurrentUserQuery } from '~/auth/queries.generated';
 
-export default () => {
+const useUser = () => {
   const result = useCurrentUserQuery({
     fetchPolicy: 'cache-only',
   });
@@ -9,3 +9,5 @@ export default () => {
   }
   return result.data.my.user;
 };
+
+export default useUser;
