@@ -45,9 +45,9 @@ def get_queryset(request):
     return queryset
 
 
-@c.field
-def wagtailPage(helper):
-    def resolve(_, info, path=None, preview_token=None):
+@c.class_field
+class wagtailPage(helpers.BaseField):
+    def resolve(self, _, info, path=None, preview_token=None):
         if path and preview_token:
             raise Exception("Only one of `path` and `preview_token` must be set.")
 
@@ -83,18 +83,19 @@ def wagtailPage(helper):
 
             return page.specific
 
-    # wagtailPage(path: String, preview_token: String): WagtailPage
-    return g.Field(
-        types.WagtailPage,
-        args=g.arguments({'path': Optional[str], 'preview_token': Optional[str]}),
-        resolve=resolve,
-    )
+    permissions = []
+    args = {
+        'path': Optional[str],
+        'preview_token': Optional[str],
+    }
+    result = types.WagtailPage
 
 
 @c.field
 def wagtailPages(helper):
     def resolve(_, info):
-        # page.specific is slow! but we call wagtailPages only on getStaticPaths once per build, so that should be ok?..
+        # page.specific is slow!
+        # But we call wagtailPages only on getStaticPaths once per build, so that should be ok.
         return [page.specific for page in get_queryset(info.context)]
 
     # wagtailPages: [WagtailPage!]!
@@ -114,7 +115,7 @@ def EventSearchItem_fields():
 
 
 EventSearchItem = g.ObjectType(
-    'EventSearchItem', lambda: g.fields(EventSearchItem_fields()),
+    'EventSearchItem', lambda: g.fields(EventSearchItem_fields())
 )
 
 

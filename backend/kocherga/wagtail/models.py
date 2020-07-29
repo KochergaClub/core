@@ -102,7 +102,7 @@ KochergaPageManager = wagtail.core.models.PageManager.from_queryset(
 )
 
 
-class KochergaPage(wagtail.core.models.Page, HeadlessPreviewMixin):
+class KochergaPage(HeadlessPreviewMixin, wagtail.core.models.Page):
     objects = KochergaPageManager()
 
     class Meta:
