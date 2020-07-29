@@ -12,6 +12,7 @@ deploy:
         namespace: monitor
         wait: true
         remote: true
+        upgradeOnChange: true
       - name: fluentd
         chartPath: ops/charts/fluentd
         namespace: monitor

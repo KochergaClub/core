@@ -51,6 +51,8 @@ alertmanager:
               {{ end }}
 
 grafana:
+  image:
+    tag: 7.1.1
   persistence:
     enabled: true
     size: 10Gi
