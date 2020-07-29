@@ -59,7 +59,8 @@ pytest-django
 pytest-cov
 freezegun
 mypy
-black
+black == 19.10b0
 flake8 >= 3.7
 codecov
 factory_boy
+ipython  # for better ./manage.py shell experience
