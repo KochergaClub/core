@@ -1,23 +1,16 @@
-import { useEffect } from 'react';
+import cookie from 'cookie';
 import Head from 'next/head';
+import { useEffect } from 'react';
 
 import { ApolloClient, ApolloProvider, HttpLink, split } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
-import KochergaApolloCache from './cache';
-import cookie from 'cookie';
-
+import { CurrentUserDocument, CurrentUserQuery } from '~/auth/queries.generated';
 import { IS_SERVER } from '~/common/utils';
-import {
-  KochergaApolloClient,
-  NextApolloPage,
-  NextApolloPageContext,
-} from './types';
-import {
-  CurrentUserQuery,
-  CurrentUserDocument,
-} from '~/auth/queries.generated';
+
+import KochergaApolloCache from './cache';
+import { KochergaApolloClient, NextApolloPage, NextApolloPageContext } from './types';
 
 type CacheState = KochergaApolloClient extends ApolloClient<infer T>
   ? T
@@ -188,21 +181,13 @@ export const apolloClientForStaticProps = async () => {
 // 1) ssr, getInitialProps, P >= {}
 // 2) ssr, no getInitialProps, P = {}
 // 3) no ssr, P >= {}
-type T1 = <P extends { [k: string]: unknown }>(
-  PageComponent: NextApolloPage<P>,
-  params: { ssr: boolean }
-) => NextApolloPage<P>;
-
-type T2 = <P extends { [k: string]: unknown }>(
-  PageComponent: NextApolloPage<P>,
-  params: { ssr: false }
-) => NextApolloPage<P>;
 
 export const withApollo = <P extends {}, IP = P>(
   PageComponent: NextApolloPage<P, IP>,
   { ssr = true } = {}
 ) => {
   type ApolloP = {
+    apolloClient: KochergaApolloClient;
     apolloState?: KochergaApolloClient extends ApolloClient<infer T>
       ? T
       : never;
@@ -213,6 +198,7 @@ export const withApollo = <P extends {}, IP = P>(
 
   const WithApollo: NextApolloPage<ExtendedP, ExtendedIP> = ({
     apolloState,
+    apolloClient, // don't delete this! it'll break SSR
     ...pageProps
   }) => {
     const client = apolloClient || initApolloClient(apolloState);
