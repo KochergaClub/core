@@ -1,32 +1,25 @@
-import { useRef } from 'react';
-
-import styled from 'styled-components';
-
-import { parseISO, differenceInCalendarDays } from 'date-fns';
-
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-
-import breaks from 'remark-breaks';
+import { useRef } from 'react';
 import Markdown from 'react-markdown';
+import breaks from 'remark-breaks';
+import styled from 'styled-components';
 
 import { RichText } from '@kocherga/frontkit';
 
-import { withApollo, NextApolloPage } from '~/apollo';
-
-import { timezone, formatDate } from '~/common/utils';
-
-import { Page, PaddedBlock, ApolloQueryResults } from '~/components';
+import { NextApolloPage, withApollo } from '~/apollo';
 import TL03 from '~/blocks/TL03';
+import { formatDate, timezone } from '~/common/utils';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import ErrorBlock from '~/error-pages/ErrorBlock';
 
-import { useGetPublicEventQuery } from './queries.generated';
-
-import ProjectInfo from './ProjectInfo';
+import AnyRegistration from './AnyRegistration';
 import EventAnnouncements from './EventAnnouncements';
 import EventHeroBlock from './EventHeroBlock';
-import AnyRegistration from './AnyRegistration';
-import Map from './Map';
 import EventToCalendar from './EventToCalendar';
+import Map from './Map';
+import ProjectInfo from './ProjectInfo';
+import { useGetPublicEventQuery } from './queries.generated';
 
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -46,7 +39,6 @@ const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
     variables: {
       event_id,
     },
-    fetchPolicy: 'network-only',
   });
 
   const registrationRef = useRef<HTMLElement | null>(null);
