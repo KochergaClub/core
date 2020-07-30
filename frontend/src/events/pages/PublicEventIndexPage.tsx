@@ -1,21 +1,21 @@
+import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
-
-const PublicEventsCalendar = dynamic(
-  () => import('../components/PublicEventsCalendar'),
-  { ssr: false }
-);
 
 import { A } from '@kocherga/frontkit';
 
-import { withApollo, NextApolloPage } from '~/apollo';
-
-import TL03 from '~/blocks/TL03';
-import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
-import { Page } from '~/components';
-import { formatDate } from '~/common/utils';
-import { GetStaticProps } from 'next';
+import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
+import TL03 from '~/blocks/TL03';
+import { formatDate } from '~/common/utils';
+import { Page, Spinner } from '~/components';
+
+import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { UpcomingPublicEventsDocument } from '../queries.generated';
+
+const PublicEventsCalendar = dynamic(
+  () => import('../components/PublicEventsCalendar'),
+  { ssr: false, loading: () => <Spinner size="div" /> }
+);
 
 const PublicEventIndexPage: NextApolloPage = () => {
   return (

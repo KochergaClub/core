@@ -3,6 +3,7 @@ import Router from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import '@fullcalendar/react'; // side effects!
 import { useApolloClient } from '@apollo/client';
 import { EventClickArg } from '@fullcalendar/core';
 import ruLocale from '@fullcalendar/core/locales/ru';
@@ -15,8 +16,10 @@ import { formatDate } from '~/common/utils';
 import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';
 
 import {
-    PublicEventsForCalendarDocument, PublicEventsForCalendarQuery,
-    PublicEventsForCalendarQueryVariables, useEventsPublicGoogleCalendarQuery
+  PublicEventsForCalendarDocument,
+  PublicEventsForCalendarQuery,
+  PublicEventsForCalendarQueryVariables,
+  useEventsPublicGoogleCalendarQuery,
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
 
