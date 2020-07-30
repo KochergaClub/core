@@ -8,8 +8,7 @@ import {
   parseISO,
 } from 'date-fns';
 
-import { Button, Label, fonts } from '@kocherga/frontkit';
-import { deviceMediaQueries } from '@kocherga/frontkit/esm/sizes';
+import { Button, Label, fonts, deviceMediaQueries } from '@kocherga/frontkit';
 
 import { trackEvent } from '~/components/analytics';
 
@@ -136,7 +135,7 @@ const BottomRow: React.FC<CommonProps & ExtraProps> = ({
   );
 };
 
-const EventHeroBlock: React.FC<CommonProps & ExtraProps> = props => {
+const EventHeroBlock: React.FC<CommonProps & ExtraProps> = (props) => {
   const { event } = props;
 
   const imageUrl = event.image?.url || ''; // TODO - default image url?

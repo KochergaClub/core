@@ -1,21 +1,15 @@
 import { useState } from 'react';
-
 import styled from 'styled-components';
 
-import { deviceMediaQueries } from '@kocherga/frontkit/esm/sizes';
-import { Button, Row } from '@kocherga/frontkit';
+import { Button, deviceMediaQueries, Row } from '@kocherga/frontkit';
 
 import TL02 from '~/blocks/TL02';
 import { Page } from '~/components';
-
 import { NextWagtailPage } from '~/wagtail/types';
 
 import ProjectCard from '../components/ProjectCard';
-
 import {
-  ProjectIndexPageFragment,
-  ProjectIndexPageFragmentDoc,
-  ProjectPage_SummaryFragment,
+    ProjectIndexPageFragment, ProjectIndexPageFragmentDoc, ProjectPage_SummaryFragment
 } from '../queries.generated';
 
 const Grid = styled.div`
@@ -48,7 +42,7 @@ interface ProjectsGridProps {
 
 const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => (
   <Grid>
-    {projects.map(project => (
+    {projects.map((project) => (
       <ProjectCard key={project.id} {...project} />
     ))}
   </Grid>
@@ -88,11 +82,11 @@ const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
         многое другое.
       </TL02>
       <ProjectsGrid
-        projects={page.projects.filter(project => project.is_active)}
+        projects={page.projects.filter((project) => project.is_active)}
       />
       <TL02 title="Неактивные проекты" />
       <InactiveProjects
-        projects={page.projects.filter(project => !project.is_active)}
+        projects={page.projects.filter((project) => !project.is_active)}
       />
     </Page>
   );

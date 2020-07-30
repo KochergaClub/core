@@ -1,13 +1,12 @@
 import styled from 'styled-components';
-import { deviceMediaQueries } from '@kocherga/frontkit/esm/sizes';
-import { Label, fonts } from '@kocherga/frontkit';
+import { Label, fonts, deviceMediaQueries } from '@kocherga/frontkit';
 
 import { ProjectPageFragment } from '../queries.generated';
 
 const Container = styled.div<{ image: string }>`
   min-height: 400px;
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${props => props.image});
+    url(${(props) => props.image});
   background-size: cover;
   background-position: center;
 

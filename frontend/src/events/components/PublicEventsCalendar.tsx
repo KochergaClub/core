@@ -1,28 +1,24 @@
-import { useCallback, useState, useEffect, useRef } from 'react';
-import { useApolloClient } from '@apollo/client';
-import styled from 'styled-components';
+import { isPast, parseISO } from 'date-fns';
 import Router from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
-import FullCalendar from '@fullcalendar/react';
+import { useApolloClient } from '@apollo/client';
+import { EventClickArg } from '@fullcalendar/core';
+import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
-import ruLocale from '@fullcalendar/core/locales/ru';
-import { EventClickArg } from '@fullcalendar/core';
+import FullCalendar from '@fullcalendar/react';
+import { A, colors, deviceMediaQueries } from '@kocherga/frontkit';
 
-import { isPast, parseISO } from 'date-fns';
-
-import { colors, A } from '@kocherga/frontkit';
-
-import { PaddedBlock, AlertCard, ApolloQueryResults } from '~/components';
 import { formatDate } from '~/common/utils';
+import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';
+
 import {
-  PublicEventsForCalendarDocument,
-  PublicEventsForCalendarQuery,
-  PublicEventsForCalendarQueryVariables,
-  useEventsPublicGoogleCalendarQuery,
+    PublicEventsForCalendarDocument, PublicEventsForCalendarQuery,
+    PublicEventsForCalendarQueryVariables, useEventsPublicGoogleCalendarQuery
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
-import { deviceMediaQueries } from '@kocherga/frontkit/esm/sizes';
 
 const Container = styled.div`
   &&& {
@@ -90,7 +86,7 @@ const PublicEventsCalendar = () => {
       if (!queryResults.data) {
         throw new Error('Empty data');
       }
-      const result = queryResults.data.publicEvents.nodes.map(event => {
+      const result = queryResults.data.publicEvents.nodes.map((event) => {
         const past = isPast(parseISO(event.start));
         const classNames = [];
         if (past) {
