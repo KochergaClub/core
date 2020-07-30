@@ -2,10 +2,11 @@ import { useCallback, useContext, useState } from 'react';
 import { GoGear } from 'react-icons/go';
 import styled from 'styled-components';
 
-import { colors, Modal } from '@kocherga/frontkit';
+import { colors, Modal, ControlsFooter, Button, Row } from '@kocherga/frontkit';
 
 import { AnyBlockFragment } from './WagtailBlocks';
 import { WagtailPreviewContext } from '~/cms/contexts';
+import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 
 const PreviewContainer = styled.div`
   position: relative;
@@ -42,9 +43,31 @@ interface Props {
   block: AnyBlockFragment;
 }
 
-const Dump: React.FC<Props> = ({ block }) => {
+type DumpProps = Props & {
+  close: () => void;
+};
+
+const Dump: React.FC<DumpProps> = ({ block, close }) => {
   const { __typename, id, ...rest } = block;
-  return <pre>{JSON.stringify(rest, null, 2)}</pre>;
+
+  const hotkeys = useCommonHotkeys({ onEscape: close });
+  const focus = useFocusOnFirstModalRender();
+
+  return (
+    <Modal>
+      <Modal.Header toggle={close}>
+        {__typename} <small>{id}</small>
+      </Modal.Header>
+      <Modal.Body {...hotkeys} ref={focus}>
+        <pre>{JSON.stringify(rest, null, 2)}</pre>
+      </Modal.Body>
+      <Modal.Footer>
+        <ControlsFooter>
+          <Button onClick={close}>Закрыть</Button>
+        </ControlsFooter>
+      </Modal.Footer>
+    </Modal>
+  );
 };
 
 const Controls: React.FC<Props> = ({ block }) => {
@@ -60,17 +83,13 @@ const Controls: React.FC<Props> = ({ block }) => {
 
   return (
     <ControlsContainer className="preview-block-controls">
-      <GoGear onClick={dump} />
-      {dumping && (
-        <Modal>
-          <Modal.Header toggle={undump}>
-            {block.__typename} <small>{block.id}</small>
-          </Modal.Header>
-          <Modal.Body>
-            <Dump block={block} />
-          </Modal.Body>
-        </Modal>
-      )}
+      <Button size="small" onClick={dump}>
+        <Row vCentered>
+          <GoGear />
+          <span>Параметры</span>
+        </Row>
+      </Button>
+      {dumping && <Dump block={block} close={undump} />}
     </ControlsContainer>
   );
 };
@@ -83,6 +102,7 @@ const WagtailBlockContainer: React.FC<Props> = ({ block, children }) => {
     return <>{children}</>;
   }
 
+  // TODO - extract preview-specific stuff into dynamically loaded component, to reduce JS bundle size?
   return (
     <PreviewContainer>
       <Controls block={block}>controls</Controls>
