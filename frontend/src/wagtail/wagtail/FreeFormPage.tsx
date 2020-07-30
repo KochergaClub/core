@@ -7,7 +7,7 @@ import {
   FreeFormPageFragmentDoc,
 } from '../queries.generated';
 
-import WagtailBlocks from '../WagtailBlocks';
+import WagtailBlocks from '../components/WagtailBlocks';
 
 const FreeFormPage: NextWagtailPage<FreeFormPageFragment> = ({ page }) => {
   return (

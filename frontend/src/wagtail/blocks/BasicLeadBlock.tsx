@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { RichText, fonts } from '@kocherga/frontkit';
+import { fonts, RichText } from '@kocherga/frontkit';
 
 import { BasicLeadBlockFragment as Props } from './fragments.generated';
 

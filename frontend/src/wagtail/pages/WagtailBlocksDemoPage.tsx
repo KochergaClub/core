@@ -2,7 +2,9 @@ import { withApollo, withStaff, NextApolloPage } from '~/apollo';
 
 import { Page } from '~/components';
 
-import WagtailBlocks, { AnyBlockFragment } from '~/wagtail/WagtailBlocks';
+import WagtailBlocks, {
+  AnyBlockFragment,
+} from '~/wagtail/components/WagtailBlocks';
 
 const WagtailBlocksDemoPage: NextApolloPage = () => {
   const blocks: AnyBlockFragment[] = [
@@ -100,7 +102,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
   ];
 
   const headedPairs = blocks.map(
-    block =>
+    (block) =>
       [
         {
           id: '',

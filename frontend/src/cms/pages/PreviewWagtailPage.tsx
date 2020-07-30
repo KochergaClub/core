@@ -1,6 +1,8 @@
-import { withApollo, NextApolloPage } from '~/apollo';
+import { NextApolloPage, withApollo } from '~/apollo';
 import { APIError } from '~/common/api';
-import { loadWagtailPage, getComponentByTypename } from '../utils';
+
+import { WagtailPreviewContext } from '../contexts';
+import { getComponentByTypename, loadWagtailPage } from '../utils';
 
 interface Props {
   typename: string;
@@ -12,7 +14,11 @@ const PreviewWagtailPage: NextApolloPage<Props> = (props) => {
   if (!Component) {
     return <div>oops</div>; // FIXME - better error
   }
-  return <Component page={props.page} />;
+  return (
+    <WagtailPreviewContext.Provider value={{ preview: true }}>
+      <Component page={props.page} />
+    </WagtailPreviewContext.Provider>
+  );
 };
 
 PreviewWagtailPage.getInitialProps = async ({ query, apolloClient }) => {

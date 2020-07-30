@@ -1,27 +1,26 @@
 // Stream of Wagtail blocks rendered in order based on their type.
 
-import { FreeFormPageFragment } from './queries.generated';
+import WagtailBlockContainer from './WagtailBlockContainer';
+
+import { FreeFormPageFragment } from '../queries.generated';
+
+import BasicLeadBlock from '../blocks/BasicLeadBlock';
+import BigContactsBlock from '../blocks/BigContactsBlock';
+import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
+import ColumnsButtonsBlock from '../blocks/ColumnsButtonsBlock';
+import ColumnsMembershipsBlock from '../blocks/ColumnsMembershipsBlock';
+import DebugBlock from '../blocks/DebugBlock';
+import EventsListBlock from '../blocks/EventsListBlock';
+import GreyBlock from '../blocks/GreyBlock';
+import HeroFrontBlock from '../blocks/HeroFrontBlock';
+import MailchimpSubscribeBlock from '../blocks/MailchimpSubscribeBlock';
+import PhotoRibbonBlock from '../blocks/PhotoRibbonBlock';
 
 export type AnyBlockFragment = FreeFormPageFragment['body'][0];
 
 interface Props {
   blocks: AnyBlockFragment[];
 }
-
-import BasicLeadBlock from './blocks/BasicLeadBlock';
-import GreyBlock from './blocks/GreyBlock';
-
-import ColumnsBasicBlock from './blocks/ColumnsBasicBlock';
-import ColumnsMembershipsBlock from './blocks/ColumnsMembershipsBlock';
-import ColumnsButtonsBlock from './blocks/ColumnsButtonsBlock';
-
-import EventsListBlock from './blocks/EventsListBlock';
-import BigContactsBlock from './blocks/BigContactsBlock';
-import HeroFrontBlock from './blocks/HeroFrontBlock';
-import PhotoRibbonBlock from './blocks/PhotoRibbonBlock';
-import MailchimpSubscribeBlock from './blocks/MailchimpSubscribeBlock';
-
-import DebugBlock from './blocks/DebugBlock';
 
 const AnyBlock = (block: AnyBlockFragment) => {
   switch (block.__typename) {
@@ -55,8 +54,10 @@ const AnyBlock = (block: AnyBlockFragment) => {
 export default function WagtailBlocks({ blocks }: Props) {
   return (
     <div>
-      {blocks.map(block => (
-        <AnyBlock key={block.id} {...block} />
+      {blocks.map((block) => (
+        <WagtailBlockContainer key={block.id} block={block}>
+          <AnyBlock {...block} />
+        </WagtailBlockContainer>
       ))}
     </div>
   );

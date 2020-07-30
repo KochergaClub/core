@@ -103,9 +103,8 @@ interface LoadPageProps {
 export const loadPageForComponent = async (
   props: LoadPageProps
 ): Promise<any> => {
-  // We assume that specific wagtail page component defines the fragment with name identical to GraphQL type.
-  // For example, if ProjectIndexPage should define `fragment ProjectIndexPage on ProjectIndexPage` in its queries.graphql file.
-  // (FIXME - actualy, I believe we don't need that assumption anymore, though it's still a good convention)
+  // Specific wagtail pages should define `.fragment` property with FragmentDoc.
+  // The fragment should be something like `fragment MyPage on MyPage`, usually in a queries.graphql file.
 
   const fragmentDoc = props.component.fragment;
   const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
