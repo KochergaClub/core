@@ -23,6 +23,7 @@ fragment Event_Details on Event {
   start
   end
   title
+  summary
   description
   image(spec: "original") {
     url

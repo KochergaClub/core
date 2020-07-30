@@ -63,7 +63,11 @@ const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
     : 'Событие не найдено';
 
   return (
-    <Page title={title} og={{ image: event?.image?.url || undefined }}>
+    <Page
+      title={title}
+      og={{ image: event?.image?.url || undefined }}
+      description={event?.summary}
+    >
       <ApolloQueryResults {...queryResults} size="block">
         {() => {
           if (!event) {
