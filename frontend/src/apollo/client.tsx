@@ -187,7 +187,7 @@ export const withApollo = <P extends {}, IP = P>(
   { ssr = true } = {}
 ) => {
   type ApolloP = {
-    apolloClient: KochergaApolloClient;
+    apolloClient?: KochergaApolloClient;
     apolloState?: KochergaApolloClient extends ApolloClient<infer T>
       ? T
       : never;
