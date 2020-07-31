@@ -117,7 +117,7 @@ ROOT_URLCONF = 'kocherga.django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'jinja_templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'kocherga.django.jinja2.environment',
