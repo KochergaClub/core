@@ -34,7 +34,7 @@ interface Props {
   event_id: string;
 }
 
-const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
+export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
   const queryResults = useGetPublicEventQuery({
     variables: {
       event_id,

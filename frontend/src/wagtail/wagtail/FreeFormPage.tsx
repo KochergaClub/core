@@ -1,13 +1,8 @@
 import { Page } from '~/components';
 
-import { NextWagtailPage } from '../types';
-
-import {
-  FreeFormPageFragment,
-  FreeFormPageFragmentDoc,
-} from '../queries.generated';
-
 import WagtailBlocks from '../components/WagtailBlocks';
+import { FreeFormPageFragment, FreeFormPageFragmentDoc } from '../queries.generated';
+import { NextWagtailPage } from '../types';
 
 const FreeFormPage: NextWagtailPage<FreeFormPageFragment> = ({ page }) => {
   return (

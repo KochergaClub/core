@@ -3,8 +3,10 @@ import { InMemoryCache } from '@apollo/client';
 import introspectionResult from './introspection-result.generated';
 
 class KochergaApolloCache extends InMemoryCache {
-  constructor() {
+  constructor(config: { addTypename?: boolean } = { addTypename: true }) {
+    const { addTypename } = config;
     super({
+      addTypename,
       typePolicies: {
         // please don't use keyFields, they are too fragile can cause a page crash
         Query: {

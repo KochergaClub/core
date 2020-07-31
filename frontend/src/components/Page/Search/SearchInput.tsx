@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import { useEffect, useRef } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import styled, { css } from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
 
@@ -45,12 +45,12 @@ const Input = styled.input`
   }
 `;
 
-const SearchIcon = styled(FaSearch)<{ active: boolean }>`
+const SearchIcon = styled(FaSearch)<{ active?: boolean }>`
   position: absolute;
   left: 6px;
   top: 6px;
 
-  color: ${props => (props.active ? colors.grey[500] : 'white')};
+  color: ${(props) => (props.active ? colors.grey[500] : 'white')};
   cursor: pointer;
 `;
 
@@ -74,7 +74,7 @@ const SearchInput: React.FC<Props> = ({ active, start, query, setQuery }) => {
   if (!active) {
     return (
       <Container onClick={start}>
-        <SearchIcon active={active} />
+        <SearchIcon active={active || undefined} />
         <Placeholder>Поиск</Placeholder>
       </Container>
     );
@@ -82,12 +82,12 @@ const SearchInput: React.FC<Props> = ({ active, start, query, setQuery }) => {
 
   return (
     <Container>
-      <SearchIcon active={active} />
+      <SearchIcon active={active || undefined} />
       <Input
         type="text"
         value={query}
         placeholder="Поиск"
-        onChange={e => setQuery(e.currentTarget.value)}
+        onChange={(e) => setQuery(e.currentTarget.value)}
         ref={inputRef}
       />
     </Container>

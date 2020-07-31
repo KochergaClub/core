@@ -1,18 +1,19 @@
-import { useState, useRef, useCallback } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
-
-import SearchResults from './SearchResults';
-import SearchInput from './SearchInput';
 import useOnClickOutside from 'use-onclickoutside';
 
-import { useSearchQuery } from './queries.generated';
 import { FloatingList } from '~/components';
+
+import { useSearchLazyQuery } from './queries.generated';
+import SearchInput from './SearchInput';
+import SearchResults from './SearchResults';
+
+const isRunnableQuery = (query: string) => query !== '';
 
 const Search: React.FC = () => {
   const [query, setQuery] = useState('');
 
-  const queryResults = useSearchQuery({
+  const [runSearchQuery, queryResults] = useSearchLazyQuery({
     variables: {
       input: {
         query,
@@ -20,6 +21,18 @@ const Search: React.FC = () => {
     },
     fetchPolicy: 'no-cache',
   });
+
+  useEffect(() => {
+    if (isRunnableQuery(query)) {
+      runSearchQuery({
+        variables: {
+          input: {
+            query,
+          },
+        },
+      });
+    }
+  }, [runSearchQuery, query]);
 
   const [
     referenceElement,
@@ -47,6 +60,8 @@ const Search: React.FC = () => {
 
   useOnClickOutside(containerRef, stop);
 
+  const searchData = isRunnableQuery(query) ? queryResults.data : undefined;
+
   return (
     <div ref={containerRef}>
       <div ref={setReferenceElement}>
@@ -59,12 +74,12 @@ const Search: React.FC = () => {
         />
       </div>
       <FloatingList
-        expanded={Boolean(queryResults.data)}
+        expanded={Boolean(searchData)}
         ref={setPopperElement}
         style={styles.popper}
         attributes={attributes.popper}
       >
-        <SearchResults results={queryResults.data} />
+        <SearchResults results={searchData} />
       </FloatingList>
     </div>
   );

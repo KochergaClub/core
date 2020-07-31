@@ -1,9 +1,9 @@
 import React from 'react';
+
 import { A } from '@kocherga/frontkit';
+import * as Sentry from '@sentry/node';
 
 import { PaddedBlock } from '~/components';
-
-import * as Sentry from '@sentry/node';
 
 interface Props {}
 interface State {
@@ -24,6 +24,9 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      if (typeof jest !== undefined) {
+        throw new Error('Jest is not tolerant to errors');
+      }
       // You can render any custom fallback UI
       return (
         <PaddedBlock>

@@ -2,28 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {
-  GoogleAnalyticsScript,
-  FacebookPixelScript,
-  YandexMetrikaScript,
-  VkRetargetingScript,
+    FacebookPixelScript, GoogleAnalyticsScript, VkRetargetingScript, YandexMetrikaScript
 } from '~/components/analytics';
 
-import GlobalStyle from './GlobalStyle';
-
 import ErrorBoundary from './ErrorBoundary';
-import WithToaster from './WithToaster';
-
-import PageTitle from './PageTitle';
-import Main from './Main';
+import GlobalStyle from './GlobalStyle';
 import HtmlHead from './HtmlHead';
-
-import TildaMenu from './TildaMenu';
-import TildaFooter from './TildaFooter';
+import Main from './Main';
 import NProgressStyle from './NProgressStyle';
-
+import PageTitle from './PageTitle';
+import TildaFooter from './TildaFooter';
+import TildaMenu from './TildaMenu';
+import { MenuKind, OpenGraph } from './types';
 import VkMessagesWidget from './VkMessagesWidget';
-
-import { OpenGraph, MenuKind } from './types';
+import WithToaster from './WithToaster';
 
 interface Props {
   title: string;
@@ -57,7 +49,7 @@ const Whitespace = styled.div`
   height: 80px;
 `;
 
-const Page: PageType = props => {
+const Page: PageType = (props) => {
   const renderContent = () => {
     const chrome = props.chrome || 'default';
     const showMenu = chrome !== 'none';
