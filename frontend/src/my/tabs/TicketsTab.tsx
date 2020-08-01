@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import { A, HR, Row } from '@kocherga/frontkit';
+
+import { A, Column, HR, Row } from '@kocherga/frontkit';
+
+import { HintCard } from '~/components';
 
 import TicketsList from '../components/TicketsList';
-
 import { MyTicketsPageFragment } from '../queries.generated';
 
 const OtherEvents = () => (
@@ -23,6 +25,15 @@ const TicketsTab: React.FC<Props> = ({ my }) => {
       <TicketsList my={my} />
       <HR />
       <OtherEvents />
+      <HR />
+      <Column centered>
+        <HintCard>
+          Кочерга развивается благодаря поддержке участниками сообщества.
+          Подпишитесь на наш{' '}
+          <A href="https://www.patreon.com/kocherga">Patreon</A>, чтобы мы могли
+          и дальше организовывать встречи.
+        </HintCard>
+      </Column>
     </article>
   );
 };

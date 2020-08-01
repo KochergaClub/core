@@ -5,6 +5,7 @@
       <mj-text font-size="14px" />
       <mj-button background-color="#4d8ccb" />
       <mj-body background-color="white" />
+      <mj-divider border-color="#666666" border-width="2px" />
     </mj-attributes>
   </mj-head>
   <mj-body>

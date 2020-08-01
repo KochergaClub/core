@@ -1,5 +1,6 @@
 {% extends "email/simple-layout.mjml" %}
 {% block title %}Регистрация на событие Кочерги{% endblock %}
+{% block body %}
 <mj-section>
   <mj-column>
     <mj-text>Добрый день!</mj-text>
@@ -18,9 +19,12 @@
     <mj-button href="{{lk_link}}">Открыть личный кабинет</mj-button>
     {% if event.zoom_link %}
     {% if seconds_remaining < 0 %} <mj-text>Событие уже началось, вот <a href="{{event.zoom_link}}">прямая ссылка на Zoom-созвон</a>.</mj-text>
-      {% elif seconds_remaining < 3600 %} <mj-text>Событие скоро начнётся, вот <a href="{{event.zoom_link}}">прямая ссылка на Zoom-созвон</a>.</mj-text>
-        {% endif %}
-        {% endif %}
-        <mj-text>До встречи!</mj-text>
+    {% elif seconds_remaining < 3600 %} <mj-text>Событие скоро начнётся, вот <a href="{{event.zoom_link}}">прямая ссылка на Zoom-созвон</a>.</mj-text>
+    {% endif %}
+    {% endif %}
+    <mj-text>До встречи!</mj-text>
+    <mj-divider />
+    <mj-text font-size="12px">Кочерга развивается благодаря поддержке участниками сообщества. Подпишитесь на наш <a href="https://www.patreon.com/kocherga">Patreon</a>, чтобы мы могли и дальше организовывать встречи.</mj-text>
   </mj-column>
 </mj-section>
+{% endblock %}
