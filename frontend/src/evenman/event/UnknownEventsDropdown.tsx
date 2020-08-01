@@ -1,16 +1,13 @@
-import React, { useCallback, useState } from 'react';
-
+import React, { useCallback, useRef, useState } from 'react';
+import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
+import useOnClickOutside from 'use-onclickoutside';
 
 import { A, Button, Column, Row } from '@kocherga/frontkit';
-import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 
 import { NumberBadge } from '../components/ui';
-
 import {
-  EvenmanUnknownEventFragment,
-  useEvenmanUnknownEventsQuery,
-  useEvenmanSetEventTypeMutation,
+    EvenmanUnknownEventFragment, useEvenmanSetEventTypeMutation, useEvenmanUnknownEventsQuery
 } from './queries.generated';
 
 const Container = styled.div`
@@ -74,12 +71,21 @@ const UnknownEventsDropdown: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
 
   const toggle = useCallback(
-    (e: React.SyntheticEvent<EventTarget>) => {
+    (e: React.SyntheticEvent) => {
       e.preventDefault();
       setExpanded(!expanded);
     },
     [expanded]
   );
+
+  const unexpand = useCallback((e: MouseEvent | TouchEvent) => {
+    e.preventDefault();
+    setExpanded(false);
+  }, []);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(ref, unexpand);
 
   if (!queryResults.data) {
     return null;
@@ -89,9 +95,9 @@ const UnknownEventsDropdown: React.FC = () => {
 
   const renderList = () => {
     return (
-      <ListContainer>
+      <ListContainer ref={ref}>
         <Column>
-          {events.map(event => (
+          {events.map((event) => (
             <ListItem event={event} key={event.id} />
           ))}
         </Column>
