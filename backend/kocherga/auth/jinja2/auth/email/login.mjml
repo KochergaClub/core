@@ -1,13 +1,13 @@
-<mjml>
-  <mj-body background-color="white">
-    <mj-section>
-      <mj-column>
-        <mj-text font-size="14px" align="center">
-          Чтобы подтвердить свой адрес почты, нажмите на кнопку:
-        </mj-text>
-        <mj-button background-color="#4d8ccb" href="{{ magic_link }}">Войти на сайт Кочерги</mj-button>
-        <mj-text font-size="12px">Если вы не вводили свой email в форму логина на сайте Кочерги, просто проигнорируйте это письмо.</mj-text>
-      </mj-column>
-    </mj-section>
-  </mj-body>
-</mjml>
+{% extends "email/simple-layout.mjml" %}
+{% block title %}Вход в Кочергу{% endblock %}
+{% block body %}
+<mj-section>
+  <mj-column>
+    <mj-text align="center">
+      Чтобы подтвердить свой адрес почты, нажмите на кнопку:
+    </mj-text>
+    <mj-button href="{{ magic_link }}">Войти на сайт Кочерги</mj-button>
+    <mj-text font-size="12px">Если вы не вводили свой email в форму логина на сайте Кочерги, просто проигнорируйте это письмо.</mj-text>
+  </mj-column>
+</mj-section>
+{% endblock %}

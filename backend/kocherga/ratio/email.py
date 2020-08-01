@@ -60,7 +60,7 @@ def create_any_draft(
     main_html = markdown.markdown(main_md)
 
     mjml = render_to_string(
-        'email/layout.mjml',
+        'ratio/email/campaign.mjml',
         {
             'title': title,
             'text': main_html,
