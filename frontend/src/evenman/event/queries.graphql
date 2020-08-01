@@ -102,6 +102,10 @@ fragment EvenmanEvent_Details on Event {
       group
     }
   }
+
+  tickets {
+    id
+  }
 }
 
 query EvenmanEvent($id: ID!) {

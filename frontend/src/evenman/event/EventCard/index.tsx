@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+
 import { ApolloQueryResults } from '~/components';
 
 import { useEvenmanEventQuery } from '../queries.generated';
-
 import LoadedEventCard from './LoadedEventCard';
 
 interface Props {
@@ -23,7 +23,7 @@ const EventCard: React.FC<Props> = ({ id }) => {
   });
 
   return (
-    <ApolloQueryResults {...queryResults}>
+    <ApolloQueryResults {...queryResults} size="block">
       {({ data: { event } }) => {
         if (!event) {
           return <NotFound>Событие не найдено</NotFound>;

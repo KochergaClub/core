@@ -7,17 +7,11 @@ import { formatDate } from '~/common/utils';
 
 import EditableString from '../../components/EditableString';
 import { MutedSpan } from '../../components/ui';
-
-import EventTypeField from './EventTypeField';
 import EditableDateSpan from '../EditableDateSpan';
-
 import EventDropdownMenu from '../EventDropdownMenu';
-
-import {
-  EvenmanEvent_DetailsFragment,
-  useEvenmanEventMoveMutation,
-} from '../queries.generated';
 import { useUpdateMutation } from '../hooks';
+import { EvenmanEvent_DetailsFragment, useEvenmanEventMoveMutation } from '../queries.generated';
+import EventTypeField from './EventTypeField';
 
 const DateSpan: React.FC<{ date: Date }> = ({ date }) => (
   <span>
@@ -47,8 +41,8 @@ const EventHeader: React.FC<Props> = ({ event }) => {
         <div style={{ fontSize: '1.4em' }}>
           <EditableString
             value={event.title}
-            renderValue={ref => <strong ref={ref}>{event.title}</strong>}
-            save={value => update({ title: value })}
+            renderValue={(ref) => <strong ref={ref}>{event.title}</strong>}
+            save={(value) => update({ title: value })}
           />
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
@@ -56,12 +50,16 @@ const EventHeader: React.FC<Props> = ({ event }) => {
         </div>
       </Row>
       <Row spaced>
-        <div style={{ flex: 1 }}>&nbsp;</div>
+        <div style={{ flex: 1 }}>
+          {event.tickets.length ? (
+            <div>Регистраций: {event.tickets.length}</div>
+          ) : null}
+        </div>
 
         <div>
           <EditableDateSpan
             date={parseISO(event.start)}
-            onChange={date =>
+            onChange={(date) =>
               moveMutation({
                 variables: {
                   event_id: event.id,

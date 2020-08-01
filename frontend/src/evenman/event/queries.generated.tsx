@@ -95,7 +95,10 @@ export type EvenmanEvent_DetailsFragment = (
       { __typename?: 'EventsAnnouncementFb' }
       & Pick<Types.EventsAnnouncementFb, 'link' | 'group'>
     ) }
-  ) }
+  ), tickets: Array<(
+    { __typename?: 'EventsTicket' }
+    & Pick<Types.EventsTicket, 'id'>
+  )> }
 );
 
 export type EvenmanEventQueryVariables = Types.Exact<{
@@ -457,6 +460,9 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
       link
       group
     }
+  }
+  tickets {
+    id
   }
 }
     `;
