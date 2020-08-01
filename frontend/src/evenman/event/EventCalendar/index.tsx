@@ -1,32 +1,18 @@
-import { useState, useCallback, useReducer, useMemo } from 'react';
-
-import {
-  startOfWeek,
-  addWeeks,
-  startOfDay,
-  isEqual,
-  format,
-  parseISO,
-} from 'date-fns';
+import { addWeeks, format, isEqual, parseISO, startOfDay, startOfWeek } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 
 import { Column } from '@kocherga/frontkit';
 
 import MonthCalendar from '../../common/MonthCalendar';
-
-import CalendarCellHeader from './CalendarCellHeader';
+import {
+    EvenmanEventDocument, useEvenmanEventsQuery, useOnEventsSubscription
+} from '../queries.generated';
 import CalendarCell from './CalendarCell';
-
+import CalendarCellHeader from './CalendarCellHeader';
+import { reducer } from './filters';
 import FiltersBar from './FiltersBar';
 import Toolbar from './Toolbar';
-
-import {
-  useEvenmanEventsQuery,
-  useOnEventsSubscription,
-  EvenmanEventDocument,
-} from '../queries.generated';
-
-import { reducer } from './filters';
 
 interface Props {
   selected_id?: string;
@@ -81,7 +67,7 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     () =>
       rawEvents
         ? rawEvents.filter(
-            event =>
+            (event) =>
               (filters.eventType === undefined ||
                 filters.eventType === event.event_type) &&
               (!filters.hideAnnounced ||
@@ -97,7 +83,7 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
   const renderCell = useCallback(
     (date: Date) => {
       const dayEvents =
-        filteredEvents.filter(event =>
+        filteredEvents.filter((event) =>
           isEqual(startOfDay(parseISO(event.start)), startOfDay(date))
         ) || [];
 
