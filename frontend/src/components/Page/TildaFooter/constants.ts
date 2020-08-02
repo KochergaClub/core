@@ -23,7 +23,7 @@ export const footerParts = [
     items: [
       { link: '/faq', title: 'F.A.Q.' },
       { link: '/#contacts', title: 'Контакты' },
-      { link: '/patreon', title: 'Patreon' },
+      { link: '/patreon', title: 'Помочь' },
     ],
   },
 ];

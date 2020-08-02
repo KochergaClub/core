@@ -1,4 +1,7 @@
+import baseStyled, { ThemedBaseStyledInterface } from 'styled-components';
+
 import { colors } from '@kocherga/frontkit';
+
 import { MenuKind } from '../types';
 
 export const kind2color = {
@@ -25,7 +28,6 @@ export interface ThemeProps {
   kind: MenuKind;
 }
 
-import baseStyled, { ThemedBaseStyledInterface } from 'styled-components';
 export const styled = baseStyled as ThemedBaseStyledInterface<ThemeProps>; // used for strongly typed `theme.kind`
 
 const publicMenuItems: Item[] = [
@@ -56,7 +58,7 @@ const publicMenuItems: Item[] = [
     title: 'Мета',
     items: [
       { link: '/faq', title: 'F.A.Q.', mode: 'wagtail' },
-      { link: '/patreon', title: 'Patreon' },
+      { link: '/patreon', title: 'Помочь' },
       { link: '/#contacts', title: 'Контакты' },
     ],
   },
