@@ -413,7 +413,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
   end
   title
   summary
-  description
+  description(format: SOURCE)
   timing_description_override
   location
   zoom_link
