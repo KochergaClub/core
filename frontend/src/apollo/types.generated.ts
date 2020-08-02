@@ -1967,6 +1967,7 @@ export type RatioPresentationPage = WagtailPage & {
   source: Scalars['String'];
   id: Scalars['ID'];
   meta: WagtailPageMeta;
+  slides: Array<WagtailBlock>;
 };
 
 export type RatioSectionIndexPage = WagtailPage & {
@@ -2092,6 +2093,12 @@ export type SlackUser = {
   __typename?: 'SlackUser';
   slack_id: Scalars['String'];
   image_url: Scalars['String'];
+};
+
+export type SlidesTitleBlock = WagtailBlock & {
+  __typename?: 'SlidesTitleBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
 };
 
 export type StaffMember = {

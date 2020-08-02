@@ -1,13 +1,11 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { Page } from '~/components';
-
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {
-  RatioPresentationPageFragment,
-  RatioPresentationPageFragmentDoc,
+    RatioPresentationPageFragment, RatioPresentationPageFragmentDoc
 } from './fragments.generated';
 
 const RemarkContainer = styled.div`
@@ -35,12 +33,26 @@ const Remark: React.FC<{ source: string }> = ({ source }) => {
   );
 };
 
+const slide2remark = (slide: RatioPresentationPageFragment['slides'][0]) => {
+  switch (slide.__typename) {
+    case 'SlidesTitleBlock':
+      return '# ' + slide.title;
+    default:
+      return 'TODO';
+  }
+};
+
+const slides2remark = (slides: RatioPresentationPageFragment['slides']) => {
+  return slides.map(slide2remark).join('\n---\n');
+};
+
 const PresentationPage: NextWagtailPage<RatioPresentationPageFragment> = ({
   page,
 }) => {
+  const source = slides2remark(page.slides);
   return (
     <Page title={page.title} menu="team" chrome="none">
-      <Remark source={page.source} />
+      <Remark source={source} />
     </Page>
   );
 };

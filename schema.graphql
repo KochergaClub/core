@@ -1205,6 +1205,7 @@ type RatioPresentationPage implements WagtailPage {
   source: String!
   id: ID!
   meta: WagtailPageMeta!
+  slides: [WagtailBlock!]!
 }
 
 type RatioSectionIndexPage implements WagtailPage {
@@ -1317,6 +1318,11 @@ type SlackExternalService implements ExternalService {
 type SlackUser {
   slack_id: String!
   image_url: String!
+}
+
+type SlidesTitleBlock implements WagtailBlock {
+  id: ID!
+  value: String!
 }
 
 type StaffMember {

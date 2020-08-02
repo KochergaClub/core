@@ -52,8 +52,18 @@ fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
   }
 }
 
+fragment SlidesTitleBlock on SlidesTitleBlock {
+  id
+  title: value
+}
+
 fragment RatioPresentationPage on RatioPresentationPage {
   id
   title
   source
+  slides {
+    __typename
+    id
+    ...SlidesTitleBlock
+  }
 }

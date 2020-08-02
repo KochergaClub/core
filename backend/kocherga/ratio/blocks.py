@@ -47,3 +47,7 @@ section_blocks = [
 notebook_blocks = [
     ('ratio_notebook_section', blocks.PageChooserBlock(page_type='ratio.SectionPage')),
 ]
+
+slides_blocks = [
+    ('slides_title', blocks.CharBlock(label='Заголовок')),
+]

@@ -79,6 +79,9 @@ export type RatioSectionPageFragment = (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
     & RatioParagraphBlockFragment
+  ) | (
+    { __typename: 'SlidesTitleBlock' }
+    & Pick<Types.SlidesTitleBlock, 'id'>
   )> }
 );
 
@@ -113,9 +116,77 @@ export type RatioPresentationIndexPageFragment = (
   )> }
 );
 
+export type SlidesTitleBlockFragment = (
+  { __typename?: 'SlidesTitleBlock' }
+  & Pick<Types.SlidesTitleBlock, 'id'>
+  & { title: Types.SlidesTitleBlock['value'] }
+);
+
 export type RatioPresentationPageFragment = (
   { __typename?: 'RatioPresentationPage' }
   & Pick<Types.RatioPresentationPage, 'id' | 'title' | 'source'>
+  & { slides: Array<(
+    { __typename: 'BasicLeadBlock' }
+    & Pick<Types.BasicLeadBlock, 'id'>
+  ) | (
+    { __typename: 'BasicParagraphBlock' }
+    & Pick<Types.BasicParagraphBlock, 'id'>
+  ) | (
+    { __typename: 'BigContactsBlock' }
+    & Pick<Types.BigContactsBlock, 'id'>
+  ) | (
+    { __typename: 'ColumnsBasicBlock' }
+    & Pick<Types.ColumnsBasicBlock, 'id'>
+  ) | (
+    { __typename: 'ColumnsButtonsBlock' }
+    & Pick<Types.ColumnsButtonsBlock, 'id'>
+  ) | (
+    { __typename: 'ColumnsMembershipsBlock' }
+    & Pick<Types.ColumnsMembershipsBlock, 'id'>
+  ) | (
+    { __typename: 'EventsListBlock' }
+    & Pick<Types.EventsListBlock, 'id'>
+  ) | (
+    { __typename: 'GreyBlock' }
+    & Pick<Types.GreyBlock, 'id'>
+  ) | (
+    { __typename: 'HeroFrontBlock' }
+    & Pick<Types.HeroFrontBlock, 'id'>
+  ) | (
+    { __typename: 'MailchimpSubscribeBlock' }
+    & Pick<Types.MailchimpSubscribeBlock, 'id'>
+  ) | (
+    { __typename: 'PhotoRibbonBlock' }
+    & Pick<Types.PhotoRibbonBlock, 'id'>
+  ) | (
+    { __typename: 'RatioBriefingBlock' }
+    & Pick<Types.RatioBriefingBlock, 'id'>
+  ) | (
+    { __typename: 'RatioExerciseBlock' }
+    & Pick<Types.RatioExerciseBlock, 'id'>
+  ) | (
+    { __typename: 'RatioExerciseOnelineBlock' }
+    & Pick<Types.RatioExerciseOnelineBlock, 'id'>
+  ) | (
+    { __typename: 'RatioHeaderBlock' }
+    & Pick<Types.RatioHeaderBlock, 'id'>
+  ) | (
+    { __typename: 'RatioInsetBlock' }
+    & Pick<Types.RatioInsetBlock, 'id'>
+  ) | (
+    { __typename: 'RatioMathBlock' }
+    & Pick<Types.RatioMathBlock, 'id'>
+  ) | (
+    { __typename: 'RatioNotebookSectionBlock' }
+    & Pick<Types.RatioNotebookSectionBlock, 'id'>
+  ) | (
+    { __typename: 'RatioParagraphBlock' }
+    & Pick<Types.RatioParagraphBlock, 'id'>
+  ) | (
+    { __typename: 'SlidesTitleBlock' }
+    & Pick<Types.SlidesTitleBlock, 'id'>
+    & SlidesTitleBlockFragment
+  )> }
 );
 
 export const RatioSectionIndexPageFragmentDoc = gql`
@@ -183,10 +254,21 @@ export const RatioPresentationIndexPageFragmentDoc = gql`
   }
 }
     `;
+export const SlidesTitleBlockFragmentDoc = gql`
+    fragment SlidesTitleBlock on SlidesTitleBlock {
+  id
+  title: value
+}
+    `;
 export const RatioPresentationPageFragmentDoc = gql`
     fragment RatioPresentationPage on RatioPresentationPage {
   id
   title
   source
+  slides {
+    __typename
+    id
+    ...SlidesTitleBlock
+  }
 }
-    `;
+    ${SlidesTitleBlockFragmentDoc}`;

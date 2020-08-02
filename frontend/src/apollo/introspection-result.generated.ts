@@ -37,7 +37,8 @@
       "RatioInsetBlock",
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
-      "RatioParagraphBlock"
+      "RatioParagraphBlock",
+      "SlidesTitleBlock"
     ],
     "WagtailPage": [
       "BlogIndexPage",

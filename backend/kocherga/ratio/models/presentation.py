@@ -1,6 +1,8 @@
 from django.db import models
 
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.core.fields import StreamField
+from ..blocks import slides_blocks
 
 from kocherga.wagtail.models import KochergaPage
 
@@ -18,9 +20,11 @@ class PresentationIndexPage(KochergaPage):
 
 class PresentationPage(KochergaPage):
     source = models.TextField()
+    slides = StreamField(slides_blocks, blank=True)
 
     content_panels = KochergaPage.content_panels + [
         FieldPanel('source'),
+        StreamFieldPanel('slides'),
     ]
 
     graphql_type = 'RatioPresentationPage'
