@@ -1,39 +1,33 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback } from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
-import useOnClickOutside from 'use-onclickoutside';
 
-import { A, Button, Column, Row } from '@kocherga/frontkit';
+import { Button, Column, Row } from '@kocherga/frontkit';
 
-import { NumberBadge } from '../components/ui';
+import { AsyncButton, DropdownMenu } from '~/components';
+
 import {
     EvenmanUnknownEventFragment, useEvenmanSetEventTypeMutation, useEvenmanUnknownEventsQuery
 } from './queries.generated';
 
-const Container = styled.div`
-  position: relative;
-`;
-
 const ListContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  border: 1px solid #aaa;
-  box-shadow: 4px 4px 4px #999;
   background: white;
   padding: 4px 8px;
   min-width: 300px;
-  z-index: 5;
 `;
 
-const ControlButton = styled(Button)`
+const ControlButton = styled(AsyncButton)`
   width: 40px;
 `;
 
 const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
-  const [setEventType] = useEvenmanSetEventTypeMutation();
+  const [setEventType] = useEvenmanSetEventTypeMutation({
+    refetchQueries: ['EvenmanUnknownEvents'],
+    awaitRefetchQueries: true,
+  });
 
-  const setPublic = useCallback(() => {
-    setEventType({
+  const setPublic = useCallback(async () => {
+    await setEventType({
       variables: {
         id: event.id,
         event_type: 'public',
@@ -41,8 +35,8 @@ const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
     });
   }, [event.id, setEventType]);
 
-  const setPrivate = useCallback(() => {
-    setEventType({
+  const setPrivate = useCallback(async () => {
+    await setEventType({
       variables: {
         id: event.id,
         event_type: 'private',
@@ -54,10 +48,10 @@ const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
     <Row stretch spaced>
       <small>{event.title}</small>
       <Row>
-        <ControlButton onClick={setPublic}>
+        <ControlButton act={setPublic}>
           <FaGlobeAfrica style={{ color: 'green' }} />
         </ControlButton>
-        <ControlButton onClick={setPrivate}>
+        <ControlButton act={setPrivate}>
           <FaLock style={{ color: 'red' }} />
         </ControlButton>
       </Row>
@@ -68,25 +62,6 @@ const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
 const UnknownEventsDropdown: React.FC = () => {
   const queryResults = useEvenmanUnknownEventsQuery();
 
-  const [expanded, setExpanded] = useState(false);
-
-  const toggle = useCallback(
-    (e: React.SyntheticEvent) => {
-      e.preventDefault();
-      setExpanded(!expanded);
-    },
-    [expanded]
-  );
-
-  const unexpand = useCallback((e: MouseEvent | TouchEvent) => {
-    e.preventDefault();
-    setExpanded(false);
-  }, []);
-
-  const ref = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(ref, unexpand);
-
   if (!queryResults.data) {
     return null;
   }
@@ -95,23 +70,35 @@ const UnknownEventsDropdown: React.FC = () => {
 
   const renderList = () => {
     return (
-      <ListContainer ref={ref}>
-        <Column>
-          {events.map((event) => (
-            <ListItem event={event} key={event.id} />
-          ))}
-        </Column>
+      <ListContainer>
+        {events.length ? (
+          <Column>
+            {events.map((event) => (
+              <ListItem event={event} key={event.id} />
+            ))}
+          </Column>
+        ) : (
+          <div>Нет событий для разметки</div>
+        )}
       </ListContainer>
     );
   };
 
+  if (!events.length) {
+    return null;
+  }
+
   return (
-    <Container>
-      <A href="#" onClick={toggle}>
-        <NumberBadge>{events.length}</NumberBadge>
-      </A>
-      {expanded && renderList()}
-    </Container>
+    <DropdownMenu
+      placement="bottom-start"
+      render={() => (
+        <Button size="small" kind="danger">
+          Неразмеченные события: {events.length}
+        </Button>
+      )}
+    >
+      {renderList()}
+    </DropdownMenu>
   );
 };
 
