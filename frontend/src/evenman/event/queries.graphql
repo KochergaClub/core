@@ -46,7 +46,7 @@ fragment EvenmanEvent_Details on Event {
 
   title
   summary
-  description
+  description(format: SOURCE)
   timing_description_override
 
   location
