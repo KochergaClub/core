@@ -1,15 +1,11 @@
-import { Row, Column, Label } from '@kocherga/frontkit';
+import { Column, Label, Row } from '@kocherga/frontkit';
 
 import { Badge } from '~/components';
 import Card from '~/components/Card';
-
-import {
-  useRatioPaymentAddMutation,
-  RatioTicketFragment,
-} from '../queries.generated';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
+import { RatioTicketFragment, useRatioPaymentAddMutation } from '../queries.generated';
 import PaymentItem from './PaymentItem';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
@@ -67,14 +63,16 @@ interface Props {
 const RemainingPayments: React.FC<Props> = ({ ticket }) => {
   const remaining =
     ticket.payment_amount -
-    ticket.payments.map(p => p.amount).reduce((x, y) => x + y, 0);
+    ticket.payments.map((p) => p.amount).reduce((x, y) => x + y, 0);
 
   if (remaining === 0) {
     return null; // all payments created
   } else if (remaining > 0) {
     return <Badge>Не хватает платежей на сумму: {remaining} руб.</Badge>;
   } else {
-    return <Badge>Сумма платежей превышает стоимость билета!</Badge>;
+    return (
+      <Badge type="accent">Сумма платежей превышает стоимость билета!</Badge>
+    );
   }
 };
 
@@ -97,7 +95,7 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             <Label>Платежи</Label>
             <CreatePaymentButton ticket_id={ticket.id} />
           </Row>
-          {ticket.payments.map(payment => (
+          {ticket.payments.map((payment) => (
             <PaymentItem payment={payment} key={payment.id} />
           ))}
           <RemainingPayments ticket={ticket} />

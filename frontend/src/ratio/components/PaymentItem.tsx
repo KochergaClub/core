@@ -1,26 +1,22 @@
 import { useCallback } from 'react';
-
-import { FaCheck, FaTimes, FaCashRegister } from 'react-icons/fa';
+import { FaCashRegister, FaCheck, FaTimes } from 'react-icons/fa';
 
 import { colors, Row } from '@kocherga/frontkit';
 
-import { Badge } from '~/components';
 import { usePermissions } from '~/common/hooks';
+import { Badge } from '~/components';
+import DropdownMenu, { Action } from '~/components/DropdownMenu';
 
 import {
-  useRatioPaymentFiscalizeMutation,
-  RatioPaymentFragment,
-  useRatioPaymentSetStatusMutation,
-  useRatioPaymentFiscalizedManuallyMutation,
-  useRatioPaymentDeleteMutation,
+    RatioPaymentFragment, useRatioPaymentDeleteMutation, useRatioPaymentFiscalizedManuallyMutation,
+    useRatioPaymentFiscalizeMutation, useRatioPaymentSetStatusMutation
 } from '../queries.generated';
-import DropdownMenu, { Action } from '~/components/DropdownMenu';
 
 interface Props {
   payment: RatioPaymentFragment;
 }
 
-const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
+const CanceledBadge = () => <Badge type="accent">ОТКАЗ</Badge>;
 
 const FiscalizeAction: React.FC<Props> = ({ payment }) => {
   const [isKkmUser] = usePermissions(['cashier.kkm_user']);
@@ -108,15 +104,15 @@ const FiscalizationStatus: React.FC<Props> = ({ payment }) => {
   }
   switch (payment.fiscalization_status) {
     case 'todo':
-      return <Badge>Нужно пробить чек</Badge>;
+      return <Badge type="accent">Нужно пробить чек</Badge>;
     case 'in_progress':
-      return <Badge>Пробивка чека сломалась</Badge>;
+      return <Badge type="accent">Пробивка чека сломалась</Badge>;
     case 'not_needed':
       return null;
     case 'fiscalized':
       return <FaCashRegister />;
     default:
-      return <Badge>НЕИЗВЕСТНЫЙ СТАТУС ФИСКАЛИЗАЦИИ</Badge>;
+      return <Badge type="accent">НЕИЗВЕСТНЫЙ СТАТУС ФИСКАЛИЗАЦИИ</Badge>;
   }
 };
 
