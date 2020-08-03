@@ -1,25 +1,16 @@
 import { useCallback } from 'react';
+
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
-import { FormShape } from '~/components/forms/types';
 import ModalFormButton from '~/components/forms/ModalFormButton';
+import { FormShape } from '~/components/forms/types';
 
+import { RatioTrainingFragment, useRatioAddTicketMutation } from '../queries.generated';
 import TicketList from './TicketList';
-
-import {
-  RatioTrainingFragment,
-  useRatioAddTicketMutation,
-  useRatioPaymentAddMutation,
-} from '../queries.generated';
 
 const CreateTicketButton = ({ training_id }: { training_id: string }) => {
   const [addTicketMutation] = useRatioAddTicketMutation({
-    refetchQueries: ['RatioTrainingBySlug'],
-    awaitRefetchQueries: true,
-  });
-
-  const [addPaymentMutation] = useRatioPaymentAddMutation({
     refetchQueries: ['RatioTrainingBySlug'],
     awaitRefetchQueries: true,
   });
@@ -50,7 +41,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
         throw new Error('add ticket failed');
       }
     },
-    [addTicketMutation, addPaymentMutation, training_id]
+    [addTicketMutation, training_id]
   );
 
   return (
@@ -73,10 +64,7 @@ const TrainingTicketsBlock: React.FC<Props> = ({ training }) => {
     <PaddedBlock width="max">
       <h2>
         <Row>
-          <div>Участники:</div>
-          <A href={`/admin/ratio/ticket/?training__id__exact=${training.id}`}>
-            {training.tickets.length}
-          </A>
+          <div>Участники: {training.tickets.length}</div>
           <CreateTicketButton training_id={training.id} />
         </Row>
       </h2>
