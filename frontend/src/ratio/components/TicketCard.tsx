@@ -1,4 +1,4 @@
-import { Column, Label, Row } from '@kocherga/frontkit';
+import { A, Column, Label, Row } from '@kocherga/frontkit';
 
 import { Badge } from '~/components';
 import Card from '~/components/Card';
@@ -85,9 +85,12 @@ const TicketCard: React.FC<Props> = ({ ticket }) => {
             <strong>
               {ticket.first_name} {ticket.last_name}
             </strong>
-            <div>{ticket.email}</div>
+            <div>
+              <A href={`mailto:${ticket.email}`}>{ticket.email}</A>
+            </div>
           </Row>
           <div>{ticket.payment_amount} руб.</div>
+          <div>{ticket.registration_date}</div>
           {ticket.status === 'canceled' && <CanceledBadge />}
         </Column>
         <Column>

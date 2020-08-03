@@ -18,7 +18,7 @@ export type RatioPaymentFragment = (
 
 export type RatioTicketFragment = (
   { __typename?: 'RatioTicket' }
-  & Pick<Types.RatioTicket, 'id' | 'email' | 'first_name' | 'last_name' | 'payment_amount' | 'status' | 'ticket_type'>
+  & Pick<Types.RatioTicket, 'id' | 'email' | 'first_name' | 'last_name' | 'payment_amount' | 'status' | 'ticket_type' | 'registration_date'>
   & { payments: Array<(
     { __typename?: 'RatioPayment' }
     & RatioPaymentFragment
@@ -329,6 +329,7 @@ export const RatioTicketFragmentDoc = gql`
   payment_amount
   status
   ticket_type
+  registration_date
   payments {
     ...RatioPayment
   }

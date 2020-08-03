@@ -90,7 +90,8 @@ class Ticket(models.Model):
     class Meta:
         verbose_name = 'Участник'
         verbose_name_plural = 'Участники'
-        unique_together = (('training', 'email'),)
+        unique_together = [['training', 'email']]
+        ordering = ['registration_date']
 
     def __str__(self):
         return f'{self.training} - {self.email}'
