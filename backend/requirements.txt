@@ -74,7 +74,7 @@ h11==0.9.0                # via uvicorn
 hiredis==1.0.1            # via aioredis
 html2text==2020.1.16      # via -r requirements.in
 html5lib==1.0.1           # via wagtail
-httplib2==0.17.3          # via google-api-python-client, google-auth-httplib2
+httplib2==0.18.0          # via google-api-python-client, google-auth-httplib2
 httptools==0.1.1          # via uvicorn
 hyperlink==19.0.0         # via twisted
 idna==2.9                 # via hyperlink, requests, twisted, yarl
