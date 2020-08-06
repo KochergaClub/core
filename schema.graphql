@@ -1320,6 +1320,11 @@ type SlackUser {
   image_url: String!
 }
 
+type SlidesTextBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
 type SlidesTitleBlock implements WagtailBlock {
   id: ID!
   value: String!

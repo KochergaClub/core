@@ -11,6 +11,11 @@ import {
 const RemarkContainer = styled.div`
   width: 100%;
   height: 100vh;
+
+  .slides-title h1 {
+    text-align: center;
+    margin-top: 25vh;
+  }
 `;
 
 const Remark: React.FC<{ source: string }> = ({ source }) => {
@@ -36,9 +41,15 @@ const Remark: React.FC<{ source: string }> = ({ source }) => {
 const slide2remark = (slide: RatioPresentationPageFragment['slides'][0]) => {
   switch (slide.__typename) {
     case 'SlidesTitleBlock':
-      return '# ' + slide.title;
+      return `
+class: slides-title
+
+# ${slide.title}
+`;
+    case 'SlidesTextBlock':
+      return slide.value;
     default:
-      return 'TODO';
+      return 'TODO - слайд не поддерживается';
   }
 };
 

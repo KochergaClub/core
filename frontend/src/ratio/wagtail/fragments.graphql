@@ -57,6 +57,11 @@ fragment SlidesTitleBlock on SlidesTitleBlock {
   title: value
 }
 
+fragment SlidesTextBlock on SlidesTextBlock {
+  id
+  value
+}
+
 fragment RatioPresentationPage on RatioPresentationPage {
   id
   title
@@ -65,5 +70,6 @@ fragment RatioPresentationPage on RatioPresentationPage {
     __typename
     id
     ...SlidesTitleBlock
+    ...SlidesTextBlock
   }
 }

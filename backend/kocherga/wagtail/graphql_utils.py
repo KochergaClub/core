@@ -97,6 +97,7 @@ def block_to_gfield(
         isinstance(block_type, c)
         for c in (
             wagtail.core.blocks.CharBlock,
+            wagtail.core.blocks.TextBlock,
             kocherga.wagtail.blocks.URLOrAbsolutePathBlock,
             wagtailmath.blocks.MathBlock,
         )

@@ -50,4 +50,5 @@ notebook_blocks = [
 
 slides_blocks = [
     ('slides_title', blocks.CharBlock(label='Заголовок')),
+    ('slides_text', blocks.TextBlock(label='Текст')),
 ]
