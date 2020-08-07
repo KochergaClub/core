@@ -80,6 +80,9 @@ export type RatioSectionPageFragment = (
     & Pick<Types.RatioParagraphBlock, 'id'>
     & RatioParagraphBlockFragment
   ) | (
+    { __typename: 'SlidesMermaidBlock' }
+    & Pick<Types.SlidesMermaidBlock, 'id'>
+  ) | (
     { __typename: 'SlidesTextBlock' }
     & Pick<Types.SlidesTextBlock, 'id'>
   ) | (
@@ -128,6 +131,11 @@ export type SlidesTitleBlockFragment = (
 export type SlidesTextBlockFragment = (
   { __typename?: 'SlidesTextBlock' }
   & Pick<Types.SlidesTextBlock, 'id' | 'value'>
+);
+
+export type SlidesMermaidBlockFragment = (
+  { __typename?: 'SlidesMermaidBlock' }
+  & Pick<Types.SlidesMermaidBlock, 'id' | 'value'>
 );
 
 export type RatioPresentationPageFragment = (
@@ -190,6 +198,10 @@ export type RatioPresentationPageFragment = (
   ) | (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
+  ) | (
+    { __typename: 'SlidesMermaidBlock' }
+    & Pick<Types.SlidesMermaidBlock, 'id'>
+    & SlidesMermaidBlockFragment
   ) | (
     { __typename: 'SlidesTextBlock' }
     & Pick<Types.SlidesTextBlock, 'id'>
@@ -278,6 +290,12 @@ export const SlidesTextBlockFragmentDoc = gql`
   value
 }
     `;
+export const SlidesMermaidBlockFragmentDoc = gql`
+    fragment SlidesMermaidBlock on SlidesMermaidBlock {
+  id
+  value
+}
+    `;
 export const RatioPresentationPageFragmentDoc = gql`
     fragment RatioPresentationPage on RatioPresentationPage {
   id
@@ -288,7 +306,9 @@ export const RatioPresentationPageFragmentDoc = gql`
     id
     ...SlidesTitleBlock
     ...SlidesTextBlock
+    ...SlidesMermaidBlock
   }
 }
     ${SlidesTitleBlockFragmentDoc}
-${SlidesTextBlockFragmentDoc}`;
+${SlidesTextBlockFragmentDoc}
+${SlidesMermaidBlockFragmentDoc}`;

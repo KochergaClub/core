@@ -1,6 +1,8 @@
+import Head from 'next/head';
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+import { staticUrl } from '~/common/utils';
 import { Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
@@ -15,6 +17,10 @@ const RemarkContainer = styled.div`
   .slides-title h1 {
     text-align: center;
     margin-top: 25vh;
+  }
+
+  .slides-text {
+    font-size: 24px;
   }
 `;
 
@@ -47,9 +53,29 @@ class: slides-title
 # ${slide.title}
 `;
     case 'SlidesTextBlock':
-      return slide.value;
+      return `
+class: slides-text, middle, center
+
+${slide.value}
+`;
+    case 'SlidesMermaidBlock':
+      const escapeMap: { [key: string]: string } = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;',
+      };
+      const escapeHTML = (str: string) =>
+        str.replace(/[&<>'"]/g, (tag: string) => escapeMap[tag]);
+
+      return `
+<div class="mermaid">
+${escapeHTML(slide.value)}
+</div>
+`;
     default:
-      return 'TODO - слайд не поддерживается';
+      return '# Ошибка - неизвестный тип слайда';
   }
 };
 
@@ -61,8 +87,19 @@ const PresentationPage: NextWagtailPage<RatioPresentationPageFragment> = ({
   page,
 }) => {
   const source = slides2remark(page.slides);
+
+  console.log(source);
+
+  useEffect(() => {
+    (window as any).mermaid.initialize({ startOnLoad: false });
+  }, []);
+
   return (
     <Page title={page.title} menu="team" chrome="none">
+      <Head>
+        <script src={staticUrl('mermaid/mermaid.min.js')} />
+        <link rel="stylesheet" href={staticUrl('mermaid/mermaid.css')} />
+      </Head>
       <Remark source={source} />
     </Page>
   );

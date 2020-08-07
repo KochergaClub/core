@@ -2095,6 +2095,12 @@ export type SlackUser = {
   image_url: Scalars['String'];
 };
 
+export type SlidesMermaidBlock = WagtailBlock & {
+  __typename?: 'SlidesMermaidBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
 export type SlidesTextBlock = WagtailBlock & {
   __typename?: 'SlidesTextBlock';
   id: Scalars['ID'];

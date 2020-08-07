@@ -62,6 +62,11 @@ fragment SlidesTextBlock on SlidesTextBlock {
   value
 }
 
+fragment SlidesMermaidBlock on SlidesMermaidBlock {
+  id
+  value
+}
+
 fragment RatioPresentationPage on RatioPresentationPage {
   id
   title
@@ -71,5 +76,6 @@ fragment RatioPresentationPage on RatioPresentationPage {
     id
     ...SlidesTitleBlock
     ...SlidesTextBlock
+    ...SlidesMermaidBlock
   }
 }

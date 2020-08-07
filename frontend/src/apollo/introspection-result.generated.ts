@@ -38,6 +38,7 @@
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
       "RatioParagraphBlock",
+      "SlidesMermaidBlock",
       "SlidesTextBlock",
       "SlidesTitleBlock"
     ],

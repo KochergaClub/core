@@ -76,6 +76,9 @@ export type FreeFormPageFragment = (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
   ) | (
+    { __typename: 'SlidesMermaidBlock' }
+    & Pick<Types.SlidesMermaidBlock, 'id'>
+  ) | (
     { __typename: 'SlidesTextBlock' }
     & Pick<Types.SlidesTextBlock, 'id'>
   ) | (
