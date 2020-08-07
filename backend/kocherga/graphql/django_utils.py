@@ -114,9 +114,14 @@ def DjangoObjectType(
             # only methods without arguments are supported
             assert list(signature.parameters.keys()) == ['self']
 
+            # note the method_name=method_name trick, it's important!
+            # See also:
+            # https://stackoverflow.com/questions/8946868/is-there-a-pythonic-way-to-close-over-a-loop-variable
             field = g.Field(
                 g.as_type(signature.return_annotation),
-                resolve=lambda obj, info: getattr(obj, method_name)(),
+                resolve=lambda obj, info, method_name=method_name: getattr(
+                    obj, method_name
+                )(),
             )
             result[method_name] = field
         return result
