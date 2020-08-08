@@ -98,6 +98,7 @@ def block_to_gfield(
         for c in (
             wagtail.core.blocks.CharBlock,
             wagtail.core.blocks.TextBlock,
+            wagtail.core.blocks.RawHTMLBlock,
             kocherga.wagtail.blocks.URLOrAbsolutePathBlock,
             wagtailmath.blocks.MathBlock,
         )

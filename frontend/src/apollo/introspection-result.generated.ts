@@ -38,8 +38,8 @@
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
       "RatioParagraphBlock",
-      "SlidesMermaidBlock",
-      "SlidesTextBlock",
+      "SlidesRawHtmlBlock",
+      "SlidesRichTextBlock",
       "SlidesTitleBlock"
     ],
     "WagtailPage": [

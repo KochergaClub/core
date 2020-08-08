@@ -50,6 +50,10 @@ notebook_blocks = [
 
 slides_blocks = [
     ('slides_title', blocks.CharBlock(label='Заголовок')),
-    ('slides_text', blocks.TextBlock(label='Текст')),
-    ('slides_mermaid', blocks.TextBlock(label='Mermaid-разметка')),
+    ('slides_rich_text', blocks.RichTextBlock(label='Текст с разметкой')),
+    (
+        'slides_raw_html',
+        blocks.RawHTMLBlock(label='Произвольный HTML'),
+    ),  # TODO - warning! this field shouldn't be available to anyone but trusted staff
 ]
+

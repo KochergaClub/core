@@ -1320,12 +1320,12 @@ type SlackUser {
   image_url: String!
 }
 
-type SlidesMermaidBlock implements WagtailBlock {
+type SlidesRawHtmlBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
 
-type SlidesTextBlock implements WagtailBlock {
+type SlidesRichTextBlock implements WagtailBlock {
   id: ID!
   value: String!
 }

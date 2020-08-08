@@ -57,12 +57,12 @@ fragment SlidesTitleBlock on SlidesTitleBlock {
   title: value
 }
 
-fragment SlidesTextBlock on SlidesTextBlock {
+fragment SlidesRichTextBlock on SlidesRichTextBlock {
   id
   value
 }
 
-fragment SlidesMermaidBlock on SlidesMermaidBlock {
+fragment SlidesRawHtmlBlock on SlidesRawHtmlBlock {
   id
   value
 }
@@ -75,7 +75,7 @@ fragment RatioPresentationPage on RatioPresentationPage {
     __typename
     id
     ...SlidesTitleBlock
-    ...SlidesTextBlock
-    ...SlidesMermaidBlock
+    ...SlidesRichTextBlock
+    ...SlidesRawHtmlBlock
   }
 }
