@@ -1580,6 +1580,14 @@ export type PhotoRibbonBlockValueArgs = {
   spec: Scalars['String'];
 };
 
+export type PresentationPage = WagtailPage & {
+  __typename?: 'PresentationPage';
+  title: Scalars['String'];
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  slides: Array<WagtailBlock>;
+};
+
 export type ProjectIndexPage = WagtailPage & {
   __typename?: 'ProjectIndexPage';
   id: Scalars['ID'];
@@ -1958,16 +1966,7 @@ export type RatioPresentationIndexPage = WagtailPage & {
   title: Scalars['String'];
   id: Scalars['ID'];
   meta: WagtailPageMeta;
-  presentations: Array<RatioPresentationPage>;
-};
-
-export type RatioPresentationPage = WagtailPage & {
-  __typename?: 'RatioPresentationPage';
-  title: Scalars['String'];
-  source: Scalars['String'];
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
-  slides: Array<WagtailBlock>;
+  presentations: Array<PresentationPage>;
 };
 
 export type RatioSectionIndexPage = WagtailPage & {
@@ -2095,20 +2094,20 @@ export type SlackUser = {
   image_url: Scalars['String'];
 };
 
-export type SlidesRawHtmlBlock = WagtailBlock & {
-  __typename?: 'SlidesRawHtmlBlock';
+export type SlideRawHtmlBlock = WagtailBlock & {
+  __typename?: 'SlideRawHtmlBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };
 
-export type SlidesRichTextBlock = WagtailBlock & {
-  __typename?: 'SlidesRichTextBlock';
+export type SlideRichTextBlock = WagtailBlock & {
+  __typename?: 'SlideRichTextBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };
 
-export type SlidesTitleBlock = WagtailBlock & {
-  __typename?: 'SlidesTitleBlock';
+export type SlideTitleBlock = WagtailBlock & {
+  __typename?: 'SlideTitleBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };

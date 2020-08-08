@@ -47,13 +47,3 @@ section_blocks = [
 notebook_blocks = [
     ('ratio_notebook_section', blocks.PageChooserBlock(page_type='ratio.SectionPage')),
 ]
-
-slides_blocks = [
-    ('slides_title', blocks.CharBlock(label='Заголовок')),
-    ('slides_rich_text', blocks.RichTextBlock(label='Текст с разметкой')),
-    (
-        'slides_raw_html',
-        blocks.RawHTMLBlock(label='Произвольный HTML'),
-    ),  # TODO - warning! this field shouldn't be available to anyone but trusted staff
-]
-

@@ -28,6 +28,9 @@ export type WagtailPageTypeQuery = (
     { __typename: 'FreeFormPage' }
     & Pick<Types.FreeFormPage, 'id'>
   ) | (
+    { __typename: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id'>
+  ) | (
     { __typename: 'ProjectIndexPage' }
     & Pick<Types.ProjectIndexPage, 'id'>
   ) | (
@@ -42,9 +45,6 @@ export type WagtailPageTypeQuery = (
   ) | (
     { __typename: 'RatioPresentationIndexPage' }
     & Pick<Types.RatioPresentationIndexPage, 'id'>
-  ) | (
-    { __typename: 'RatioPresentationPage' }
-    & Pick<Types.RatioPresentationPage, 'id'>
   ) | (
     { __typename: 'RatioSectionIndexPage' }
     & Pick<Types.RatioSectionIndexPage, 'id'>
@@ -124,6 +124,12 @@ export type WagtailPagesQuery = (
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
+    { __typename?: 'PresentationPage' }
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
     { __typename?: 'ProjectIndexPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
@@ -149,12 +155,6 @@ export type WagtailPagesQuery = (
     ) }
   ) | (
     { __typename?: 'RatioPresentationIndexPage' }
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'RatioPresentationPage' }
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>

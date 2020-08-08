@@ -42,6 +42,13 @@ export type PageSearchItemFragment = (
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
+    { __typename?: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id' | 'title'>
+    & { meta: (
+      { __typename?: 'WagtailPageMeta' }
+      & Pick<Types.WagtailPageMeta, 'html_url'>
+    ) }
+  ) | (
     { __typename?: 'ProjectIndexPage' }
     & Pick<Types.ProjectIndexPage, 'id' | 'title'>
     & { meta: (
@@ -72,13 +79,6 @@ export type PageSearchItemFragment = (
   ) | (
     { __typename?: 'RatioPresentationIndexPage' }
     & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
-    & { meta: (
-      { __typename?: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
-    ) }
-  ) | (
-    { __typename?: 'RatioPresentationPage' }
-    & Pick<Types.RatioPresentationPage, 'id' | 'title'>
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>

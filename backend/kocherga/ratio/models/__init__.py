@@ -6,7 +6,7 @@ from .payment import Payment
 from .activity import Activity
 from .section_page import SectionIndexPage, SectionPage
 from .notebook_page import NotebookIndexPage, NotebookPage
-from .presentation import PresentationIndexPage, PresentationPage
+from .presentation import PresentationIndexPage
 
 
 __all__ = [
@@ -21,5 +21,4 @@ __all__ = [
     'NotebookIndexPage',
     'NotebookPage',
     'PresentationIndexPage',
-    'PresentationPage',
 ]

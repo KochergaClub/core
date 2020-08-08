@@ -1,20 +1,18 @@
 import 'reveal.js/dist/reveal.css';
-import 'reveal.js/dist/theme/moon.css';
+import 'reveal.js/dist/theme/white.css';
 
 import dynamic from 'next/dynamic';
 
 import { Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
-import {
-    RatioPresentationPageFragment, RatioPresentationPageFragmentDoc
-} from './fragments.generated';
+import { PresentationPageFragment, PresentationPageFragmentDoc } from './fragments.generated';
 
 const RevealView = dynamic(() => import('../components/RevealView'), {
   ssr: false,
 });
 
-const PresentationPage: NextWagtailPage<RatioPresentationPageFragment> = ({
+const PresentationPage: NextWagtailPage<PresentationPageFragment> = ({
   page,
 }) => {
   return (
@@ -24,6 +22,6 @@ const PresentationPage: NextWagtailPage<RatioPresentationPageFragment> = ({
   );
 };
 
-PresentationPage.fragment = RatioPresentationPageFragmentDoc;
+PresentationPage.fragment = PresentationPageFragmentDoc;
 
 export default PresentationPage;

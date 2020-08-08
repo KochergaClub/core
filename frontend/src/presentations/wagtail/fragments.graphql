@@ -1,0 +1,26 @@
+fragment SlideTitleBlock on SlideTitleBlock {
+  id
+  title: value
+}
+
+fragment SlideRichTextBlock on SlideRichTextBlock {
+  id
+  value
+}
+
+fragment SlideRawHtmlBlock on SlideRawHtmlBlock {
+  id
+  value
+}
+
+fragment PresentationPage on PresentationPage {
+  id
+  title
+  slides {
+    __typename
+    id
+    ...SlideTitleBlock
+    ...SlideRichTextBlock
+    ...SlideRawHtmlBlock
+  }
+}

@@ -1,56 +1,59 @@
-import * as Types from '../apollo/types.generated';
+import * as Types from '../../apollo/types.generated';
 
-import { BasicLeadBlockFragment, BasicParagraphBlockFragment, GreyBlockFragment, ColumnsBasicBlockFragment, ColumnsMembershipsBlockFragment, ColumnsButtonsBlockFragment, EventsListBlockFragment, BigContactsBlockFragment, PhotoRibbonBlockFragment, MailchimpSubscribeBlockFragment, HeroFrontBlockFragment } from './blocks/fragments.generated';
 import gql from 'graphql-tag';
-import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsMembershipsBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc } from './blocks/fragments.generated';
 
-export type FreeFormPageFragment = (
-  { __typename?: 'FreeFormPage' }
-  & Pick<Types.FreeFormPage, 'id' | 'title'>
-  & { body: Array<(
+export type SlideTitleBlockFragment = (
+  { __typename?: 'SlideTitleBlock' }
+  & Pick<Types.SlideTitleBlock, 'id'>
+  & { title: Types.SlideTitleBlock['value'] }
+);
+
+export type SlideRichTextBlockFragment = (
+  { __typename?: 'SlideRichTextBlock' }
+  & Pick<Types.SlideRichTextBlock, 'id' | 'value'>
+);
+
+export type SlideRawHtmlBlockFragment = (
+  { __typename?: 'SlideRawHtmlBlock' }
+  & Pick<Types.SlideRawHtmlBlock, 'id' | 'value'>
+);
+
+export type PresentationPageFragment = (
+  { __typename?: 'PresentationPage' }
+  & Pick<Types.PresentationPage, 'id' | 'title'>
+  & { slides: Array<(
     { __typename: 'BasicLeadBlock' }
     & Pick<Types.BasicLeadBlock, 'id'>
-    & BasicLeadBlockFragment
   ) | (
     { __typename: 'BasicParagraphBlock' }
     & Pick<Types.BasicParagraphBlock, 'id'>
-    & BasicParagraphBlockFragment
   ) | (
     { __typename: 'BigContactsBlock' }
     & Pick<Types.BigContactsBlock, 'id'>
-    & BigContactsBlockFragment
   ) | (
     { __typename: 'ColumnsBasicBlock' }
     & Pick<Types.ColumnsBasicBlock, 'id'>
-    & ColumnsBasicBlockFragment
   ) | (
     { __typename: 'ColumnsButtonsBlock' }
     & Pick<Types.ColumnsButtonsBlock, 'id'>
-    & ColumnsButtonsBlockFragment
   ) | (
     { __typename: 'ColumnsMembershipsBlock' }
     & Pick<Types.ColumnsMembershipsBlock, 'id'>
-    & ColumnsMembershipsBlockFragment
   ) | (
     { __typename: 'EventsListBlock' }
     & Pick<Types.EventsListBlock, 'id'>
-    & EventsListBlockFragment
   ) | (
     { __typename: 'GreyBlock' }
     & Pick<Types.GreyBlock, 'id'>
-    & GreyBlockFragment
   ) | (
     { __typename: 'HeroFrontBlock' }
     & Pick<Types.HeroFrontBlock, 'id'>
-    & HeroFrontBlockFragment
   ) | (
     { __typename: 'MailchimpSubscribeBlock' }
     & Pick<Types.MailchimpSubscribeBlock, 'id'>
-    & MailchimpSubscribeBlockFragment
   ) | (
     { __typename: 'PhotoRibbonBlock' }
     & Pick<Types.PhotoRibbonBlock, 'id'>
-    & PhotoRibbonBlockFragment
   ) | (
     { __typename: 'RatioBriefingBlock' }
     & Pick<Types.RatioBriefingBlock, 'id'>
@@ -78,43 +81,48 @@ export type FreeFormPageFragment = (
   ) | (
     { __typename: 'SlideRawHtmlBlock' }
     & Pick<Types.SlideRawHtmlBlock, 'id'>
+    & SlideRawHtmlBlockFragment
   ) | (
     { __typename: 'SlideRichTextBlock' }
     & Pick<Types.SlideRichTextBlock, 'id'>
+    & SlideRichTextBlockFragment
   ) | (
     { __typename: 'SlideTitleBlock' }
     & Pick<Types.SlideTitleBlock, 'id'>
+    & SlideTitleBlockFragment
   )> }
 );
 
-export const FreeFormPageFragmentDoc = gql`
-    fragment FreeFormPage on FreeFormPage {
+export const SlideTitleBlockFragmentDoc = gql`
+    fragment SlideTitleBlock on SlideTitleBlock {
+  id
+  title: value
+}
+    `;
+export const SlideRichTextBlockFragmentDoc = gql`
+    fragment SlideRichTextBlock on SlideRichTextBlock {
+  id
+  value
+}
+    `;
+export const SlideRawHtmlBlockFragmentDoc = gql`
+    fragment SlideRawHtmlBlock on SlideRawHtmlBlock {
+  id
+  value
+}
+    `;
+export const PresentationPageFragmentDoc = gql`
+    fragment PresentationPage on PresentationPage {
   id
   title
-  body {
+  slides {
     __typename
     id
-    ...BasicLeadBlock
-    ...BasicParagraphBlock
-    ...GreyBlock
-    ...ColumnsBasicBlock
-    ...ColumnsMembershipsBlock
-    ...ColumnsButtonsBlock
-    ...EventsListBlock
-    ...BigContactsBlock
-    ...PhotoRibbonBlock
-    ...MailchimpSubscribeBlock
-    ...HeroFrontBlock
+    ...SlideTitleBlock
+    ...SlideRichTextBlock
+    ...SlideRawHtmlBlock
   }
 }
-    ${BasicLeadBlockFragmentDoc}
-${BasicParagraphBlockFragmentDoc}
-${GreyBlockFragmentDoc}
-${ColumnsBasicBlockFragmentDoc}
-${ColumnsMembershipsBlockFragmentDoc}
-${ColumnsButtonsBlockFragmentDoc}
-${EventsListBlockFragmentDoc}
-${BigContactsBlockFragmentDoc}
-${PhotoRibbonBlockFragmentDoc}
-${MailchimpSubscribeBlockFragmentDoc}
-${HeroFrontBlockFragmentDoc}`;
+    ${SlideTitleBlockFragmentDoc}
+${SlideRichTextBlockFragmentDoc}
+${SlideRawHtmlBlockFragmentDoc}`;

@@ -996,6 +996,13 @@ type PhotoRibbonBlock implements WagtailBlock {
   value(spec: String!): [WagtailImageRendition!]!
 }
 
+type PresentationPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+  slides: [WagtailBlock!]!
+}
+
 type ProjectIndexPage implements WagtailPage {
   id: ID!
   title: String!
@@ -1197,15 +1204,7 @@ type RatioPresentationIndexPage implements WagtailPage {
   title: String!
   id: ID!
   meta: WagtailPageMeta!
-  presentations: [RatioPresentationPage!]!
-}
-
-type RatioPresentationPage implements WagtailPage {
-  title: String!
-  source: String!
-  id: ID!
-  meta: WagtailPageMeta!
-  slides: [WagtailBlock!]!
+  presentations: [PresentationPage!]!
 }
 
 type RatioSectionIndexPage implements WagtailPage {
@@ -1320,17 +1319,17 @@ type SlackUser {
   image_url: String!
 }
 
-type SlidesRawHtmlBlock implements WagtailBlock {
+type SlideRawHtmlBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
 
-type SlidesRichTextBlock implements WagtailBlock {
+type SlideRichTextBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
 
-type SlidesTitleBlock implements WagtailBlock {
+type SlideTitleBlock implements WagtailBlock {
   id: ID!
   value: String!
 }

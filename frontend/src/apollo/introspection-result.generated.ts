@@ -38,9 +38,9 @@
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
       "RatioParagraphBlock",
-      "SlidesRawHtmlBlock",
-      "SlidesRichTextBlock",
-      "SlidesTitleBlock"
+      "SlideRawHtmlBlock",
+      "SlideRichTextBlock",
+      "SlideTitleBlock"
     ],
     "WagtailPage": [
       "BlogIndexPage",
@@ -48,12 +48,12 @@
       "FaqPage",
       "FolderPage",
       "FreeFormPage",
+      "PresentationPage",
       "ProjectIndexPage",
       "ProjectPage",
       "RatioNotebookIndexPage",
       "RatioNotebookPage",
       "RatioPresentationIndexPage",
-      "RatioPresentationPage",
       "RatioSectionIndexPage",
       "RatioSectionPage"
     ]

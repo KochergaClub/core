@@ -1,24 +1,23 @@
 import { useCallback } from 'react';
 import Reveal from 'reveal.js';
-// import RevealMarkdown from 'reveal.js/plugin/markdown/markdown.js';
 import RevealNotes from 'reveal.js/plugin/notes/notes.js';
 
-import { RatioPresentationPageFragment } from '../wagtail/fragments.generated';
+import { PresentationPageFragment } from '../wagtail/fragments.generated';
 
 const Slide: React.FC<{
-  slide: RatioPresentationPageFragment['slides'][0];
+  slide: PresentationPageFragment['slides'][0];
 }> = ({ slide }) => {
   console.log(slide.__typename);
   switch (slide.__typename) {
-    case 'SlidesTitleBlock':
+    case 'SlideTitleBlock':
       return (
         <section>
           <h2>{slide.title}</h2>
         </section>
       );
-    case 'SlidesRichTextBlock':
+    case 'SlideRichTextBlock':
       return <section dangerouslySetInnerHTML={{ __html: slide.value }} />;
-    case 'SlidesRawHtmlBlock':
+    case 'SlideRawHtmlBlock':
       return <section dangerouslySetInnerHTML={{ __html: slide.value }} />;
     default:
       return <section>ОШИБКА: неизвестный тип слайда</section>;
@@ -26,7 +25,7 @@ const Slide: React.FC<{
 };
 
 const RevealView: React.FC<{
-  slides: RatioPresentationPageFragment['slides'];
+  slides: PresentationPageFragment['slides'];
 }> = ({ slides }) => {
   const setRef = useCallback((node: HTMLDivElement) => {
     const deck = new Reveal(node, {

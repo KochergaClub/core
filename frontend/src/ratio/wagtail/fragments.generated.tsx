@@ -80,14 +80,14 @@ export type RatioSectionPageFragment = (
     & Pick<Types.RatioParagraphBlock, 'id'>
     & RatioParagraphBlockFragment
   ) | (
-    { __typename: 'SlidesRawHtmlBlock' }
-    & Pick<Types.SlidesRawHtmlBlock, 'id'>
+    { __typename: 'SlideRawHtmlBlock' }
+    & Pick<Types.SlideRawHtmlBlock, 'id'>
   ) | (
-    { __typename: 'SlidesRichTextBlock' }
-    & Pick<Types.SlidesRichTextBlock, 'id'>
+    { __typename: 'SlideRichTextBlock' }
+    & Pick<Types.SlideRichTextBlock, 'id'>
   ) | (
-    { __typename: 'SlidesTitleBlock' }
-    & Pick<Types.SlidesTitleBlock, 'id'>
+    { __typename: 'SlideTitleBlock' }
+    & Pick<Types.SlideTitleBlock, 'id'>
   )> }
 );
 
@@ -113,103 +113,12 @@ export type RatioPresentationIndexPageFragment = (
   { __typename?: 'RatioPresentationIndexPage' }
   & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
   & { presentations: Array<(
-    { __typename?: 'RatioPresentationPage' }
-    & Pick<Types.RatioPresentationPage, 'id' | 'title'>
+    { __typename?: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id' | 'title'>
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
-  )> }
-);
-
-export type SlidesTitleBlockFragment = (
-  { __typename?: 'SlidesTitleBlock' }
-  & Pick<Types.SlidesTitleBlock, 'id'>
-  & { title: Types.SlidesTitleBlock['value'] }
-);
-
-export type SlidesRichTextBlockFragment = (
-  { __typename?: 'SlidesRichTextBlock' }
-  & Pick<Types.SlidesRichTextBlock, 'id' | 'value'>
-);
-
-export type SlidesRawHtmlBlockFragment = (
-  { __typename?: 'SlidesRawHtmlBlock' }
-  & Pick<Types.SlidesRawHtmlBlock, 'id' | 'value'>
-);
-
-export type RatioPresentationPageFragment = (
-  { __typename?: 'RatioPresentationPage' }
-  & Pick<Types.RatioPresentationPage, 'id' | 'title' | 'source'>
-  & { slides: Array<(
-    { __typename: 'BasicLeadBlock' }
-    & Pick<Types.BasicLeadBlock, 'id'>
-  ) | (
-    { __typename: 'BasicParagraphBlock' }
-    & Pick<Types.BasicParagraphBlock, 'id'>
-  ) | (
-    { __typename: 'BigContactsBlock' }
-    & Pick<Types.BigContactsBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsBasicBlock' }
-    & Pick<Types.ColumnsBasicBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsButtonsBlock' }
-    & Pick<Types.ColumnsButtonsBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsMembershipsBlock' }
-    & Pick<Types.ColumnsMembershipsBlock, 'id'>
-  ) | (
-    { __typename: 'EventsListBlock' }
-    & Pick<Types.EventsListBlock, 'id'>
-  ) | (
-    { __typename: 'GreyBlock' }
-    & Pick<Types.GreyBlock, 'id'>
-  ) | (
-    { __typename: 'HeroFrontBlock' }
-    & Pick<Types.HeroFrontBlock, 'id'>
-  ) | (
-    { __typename: 'MailchimpSubscribeBlock' }
-    & Pick<Types.MailchimpSubscribeBlock, 'id'>
-  ) | (
-    { __typename: 'PhotoRibbonBlock' }
-    & Pick<Types.PhotoRibbonBlock, 'id'>
-  ) | (
-    { __typename: 'RatioBriefingBlock' }
-    & Pick<Types.RatioBriefingBlock, 'id'>
-  ) | (
-    { __typename: 'RatioExerciseBlock' }
-    & Pick<Types.RatioExerciseBlock, 'id'>
-  ) | (
-    { __typename: 'RatioExerciseOnelineBlock' }
-    & Pick<Types.RatioExerciseOnelineBlock, 'id'>
-  ) | (
-    { __typename: 'RatioHeaderBlock' }
-    & Pick<Types.RatioHeaderBlock, 'id'>
-  ) | (
-    { __typename: 'RatioInsetBlock' }
-    & Pick<Types.RatioInsetBlock, 'id'>
-  ) | (
-    { __typename: 'RatioMathBlock' }
-    & Pick<Types.RatioMathBlock, 'id'>
-  ) | (
-    { __typename: 'RatioNotebookSectionBlock' }
-    & Pick<Types.RatioNotebookSectionBlock, 'id'>
-  ) | (
-    { __typename: 'RatioParagraphBlock' }
-    & Pick<Types.RatioParagraphBlock, 'id'>
-  ) | (
-    { __typename: 'SlidesRawHtmlBlock' }
-    & Pick<Types.SlidesRawHtmlBlock, 'id'>
-    & SlidesRawHtmlBlockFragment
-  ) | (
-    { __typename: 'SlidesRichTextBlock' }
-    & Pick<Types.SlidesRichTextBlock, 'id'>
-    & SlidesRichTextBlockFragment
-  ) | (
-    { __typename: 'SlidesTitleBlock' }
-    & Pick<Types.SlidesTitleBlock, 'id'>
-    & SlidesTitleBlockFragment
   )> }
 );
 
@@ -278,37 +187,3 @@ export const RatioPresentationIndexPageFragmentDoc = gql`
   }
 }
     `;
-export const SlidesTitleBlockFragmentDoc = gql`
-    fragment SlidesTitleBlock on SlidesTitleBlock {
-  id
-  title: value
-}
-    `;
-export const SlidesRichTextBlockFragmentDoc = gql`
-    fragment SlidesRichTextBlock on SlidesRichTextBlock {
-  id
-  value
-}
-    `;
-export const SlidesRawHtmlBlockFragmentDoc = gql`
-    fragment SlidesRawHtmlBlock on SlidesRawHtmlBlock {
-  id
-  value
-}
-    `;
-export const RatioPresentationPageFragmentDoc = gql`
-    fragment RatioPresentationPage on RatioPresentationPage {
-  id
-  title
-  source
-  slides {
-    __typename
-    id
-    ...SlidesTitleBlock
-    ...SlidesRichTextBlock
-    ...SlidesRawHtmlBlock
-  }
-}
-    ${SlidesTitleBlockFragmentDoc}
-${SlidesRichTextBlockFragmentDoc}
-${SlidesRawHtmlBlockFragmentDoc}`;
