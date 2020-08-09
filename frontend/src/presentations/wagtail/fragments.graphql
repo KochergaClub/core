@@ -13,6 +13,24 @@ fragment SlideRawHtmlBlock on SlideRawHtmlBlock {
   value
 }
 
+fragment SlideFragmentRichText on SlideFragmentsBlock_RichTextBlock {
+  id
+  value
+}
+
+fragment SlideFragmentRawHtml on SlideFragmentsBlock_RawHtmlBlock {
+  id
+  value
+}
+
+fragment SlideFragmentsBlock on SlideFragmentsBlock {
+  id
+  fragments: value {
+    ...SlideFragmentRichText
+    ...SlideFragmentRawHtml
+  }
+}
+
 fragment PresentationPage on PresentationPage {
   id
   title
@@ -22,5 +40,6 @@ fragment PresentationPage on PresentationPage {
     ...SlideTitleBlock
     ...SlideRichTextBlock
     ...SlideRawHtmlBlock
+    ...SlideFragmentsBlock
   }
 }

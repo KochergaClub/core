@@ -18,6 +18,28 @@ export type SlideRawHtmlBlockFragment = (
   & Pick<Types.SlideRawHtmlBlock, 'id' | 'value'>
 );
 
+export type SlideFragmentRichTextFragment = (
+  { __typename?: 'SlideFragmentsBlock_RichTextBlock' }
+  & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id' | 'value'>
+);
+
+export type SlideFragmentRawHtmlFragment = (
+  { __typename?: 'SlideFragmentsBlock_RawHtmlBlock' }
+  & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id' | 'value'>
+);
+
+export type SlideFragmentsBlockFragment = (
+  { __typename?: 'SlideFragmentsBlock' }
+  & Pick<Types.SlideFragmentsBlock, 'id'>
+  & { fragments: Array<(
+    { __typename?: 'SlideFragmentsBlock_RichTextBlock' }
+    & SlideFragmentRichTextFragment
+  ) | (
+    { __typename?: 'SlideFragmentsBlock_RawHtmlBlock' }
+    & SlideFragmentRawHtmlFragment
+  )> }
+);
+
 export type PresentationPageFragment = (
   { __typename?: 'PresentationPage' }
   & Pick<Types.PresentationPage, 'id' | 'title'>
@@ -79,6 +101,16 @@ export type PresentationPageFragment = (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
   ) | (
+    { __typename: 'SlideFragmentsBlock' }
+    & Pick<Types.SlideFragmentsBlock, 'id'>
+    & SlideFragmentsBlockFragment
+  ) | (
+    { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
+    & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id'>
+  ) | (
+    { __typename: 'SlideFragmentsBlock_RichTextBlock' }
+    & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id'>
+  ) | (
     { __typename: 'SlideRawHtmlBlock' }
     & Pick<Types.SlideRawHtmlBlock, 'id'>
     & SlideRawHtmlBlockFragment
@@ -111,6 +143,28 @@ export const SlideRawHtmlBlockFragmentDoc = gql`
   value
 }
     `;
+export const SlideFragmentRichTextFragmentDoc = gql`
+    fragment SlideFragmentRichText on SlideFragmentsBlock_RichTextBlock {
+  id
+  value
+}
+    `;
+export const SlideFragmentRawHtmlFragmentDoc = gql`
+    fragment SlideFragmentRawHtml on SlideFragmentsBlock_RawHtmlBlock {
+  id
+  value
+}
+    `;
+export const SlideFragmentsBlockFragmentDoc = gql`
+    fragment SlideFragmentsBlock on SlideFragmentsBlock {
+  id
+  fragments: value {
+    ...SlideFragmentRichText
+    ...SlideFragmentRawHtml
+  }
+}
+    ${SlideFragmentRichTextFragmentDoc}
+${SlideFragmentRawHtmlFragmentDoc}`;
 export const PresentationPageFragmentDoc = gql`
     fragment PresentationPage on PresentationPage {
   id
@@ -121,8 +175,10 @@ export const PresentationPageFragmentDoc = gql`
     ...SlideTitleBlock
     ...SlideRichTextBlock
     ...SlideRawHtmlBlock
+    ...SlideFragmentsBlock
   }
 }
     ${SlideTitleBlockFragmentDoc}
 ${SlideRichTextBlockFragmentDoc}
-${SlideRawHtmlBlockFragmentDoc}`;
+${SlideRawHtmlBlockFragmentDoc}
+${SlideFragmentsBlockFragmentDoc}`;

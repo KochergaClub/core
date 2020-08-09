@@ -2094,6 +2094,26 @@ export type SlackUser = {
   image_url: Scalars['String'];
 };
 
+export type SlideFragmentsBlock = WagtailBlock & {
+  __typename?: 'SlideFragmentsBlock';
+  id: Scalars['ID'];
+  value: Array<SlideFragmentsBlockValues>;
+};
+
+export type SlideFragmentsBlockValues = SlideFragmentsBlock_RichTextBlock | SlideFragmentsBlock_RawHtmlBlock;
+
+export type SlideFragmentsBlock_RawHtmlBlock = WagtailBlock & {
+  __typename?: 'SlideFragmentsBlock_RawHtmlBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type SlideFragmentsBlock_RichTextBlock = WagtailBlock & {
+  __typename?: 'SlideFragmentsBlock_RichTextBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
 export type SlideRawHtmlBlock = WagtailBlock & {
   __typename?: 'SlideRawHtmlBlock';
   id: Scalars['ID'];

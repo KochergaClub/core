@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from typing import List, Dict, Union, Tuple, Any
+from typing import List, Dict, Union, Tuple, Any, Callable
 from types import FunctionType
 import graphql
 
@@ -88,9 +88,16 @@ def WagtailPageType(
     return result
 
 
+def wagtail_to_graphql_block_name(name: str):
+    return ''.join([part.capitalize() for part in name.split('_')]) + 'Block'
+
+
 def block_to_gfield(
     name: str,
     block_type: wagtail.core.blocks.Block,
+    registrator: Callable[
+        [g.ObjectType], None
+    ],  # registers extra block types, usually from StreamBlock
     types_for_page_chooser: Dict[str, g.ObjectType] = {},
 ):
     if any(
@@ -124,7 +131,7 @@ def block_to_gfield(
 
     if isinstance(block_type, wagtail.core.blocks.ListBlock):
         child_field = block_to_gfield(
-            name, block_type.child_block, types_for_page_chooser
+            name, block_type.child_block, registrator, types_for_page_chooser
         )
         if isinstance(child_field, g.Field):
             child_type = child_field.type
@@ -144,9 +151,36 @@ def block_to_gfield(
                 name + 'Value',
                 fields=g.fields(
                     {
-                        k: block_to_gfield(name + '_' + k, v, types_for_page_chooser)
+                        k: block_to_gfield(
+                            name + '_' + k, v, registrator, types_for_page_chooser
+                        )
                         for k, v in block_type.child_blocks.items()
                     }
+                ),
+            )
+        )
+
+    if isinstance(block_type, wagtail.core.blocks.StreamBlock):
+        nested_name_to_full_graphql_name = (
+            lambda n: name + '_' + wagtail_to_graphql_block_name(k)
+        )
+        nested_types = []
+        for k, v in block_type.child_blocks.items():
+            all_nested_types = block_to_types(
+                (nested_name_to_full_graphql_name(k), v),
+                types_for_page_chooser,
+                rewrite_name=False,
+            )
+            nested_types.append(all_nested_types[0])
+            # for nested_type in nested_types:
+            #     registrator(nested_type)
+
+        return g.NNList(
+            g.UnionType(
+                name + 'Values',
+                types=nested_types,
+                resolve_type=lambda obj, *_: nested_name_to_full_graphql_name(
+                    obj.block.name
                 ),
             )
         )
@@ -162,17 +196,36 @@ def block_to_gfield(
     raise Exception(f"Don't know how to handle block type {block_type}")
 
 
-def WagtailBlockType(
+def block_to_types(
     t: Tuple[str, wagtail.core.blocks.Block],
     types_for_page_chooser: Dict[str, g.ObjectType] = {},
+    rewrite_name=True,
 ):
+    """Converts wagtail block tuple to the list of graphql types.
+
+    Tuple should look like `('foo_block', blocks.CharBlock())`.
+    This function returns a list of types because complex wagtail blocks can include StreamBlocks which can
+    define new graphql types implementing WagtailBlock interface.
+    """
+
     (name, block_type) = t
-    object_name = ''.join([part.capitalize() for part in name.split('_')]) + 'Block'
 
-    value_field = block_to_gfield(object_name, block_type, types_for_page_chooser)
+    # false `rewrite_name` is useful in recursion from block_to_gfield
+    if rewrite_name:
+        name = wagtail_to_graphql_block_name(name)
 
-    return g.ObjectType(
-        object_name,
-        interfaces=[types.WagtailBlock],
-        fields=g.fields({'id': 'ID!', 'value': value_field}),
-    )
+    extra_types = []
+
+    def registrator(t: g.ObjectType):
+        extra_types.append(t)
+
+    value_field = block_to_gfield(name, block_type, registrator, types_for_page_chooser)
+
+    return [
+        g.ObjectType(
+            name,
+            interfaces=[types.WagtailBlock],
+            fields=g.fields({'id': 'ID!', 'value': value_field}),
+        ),
+        *extra_types,
+    ]

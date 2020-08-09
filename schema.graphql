@@ -1319,6 +1319,23 @@ type SlackUser {
   image_url: String!
 }
 
+type SlideFragmentsBlock implements WagtailBlock {
+  id: ID!
+  value: [SlideFragmentsBlockValues!]!
+}
+
+union SlideFragmentsBlockValues = SlideFragmentsBlock_RichTextBlock | SlideFragmentsBlock_RawHtmlBlock
+
+type SlideFragmentsBlock_RawHtmlBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideFragmentsBlock_RichTextBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
 type SlideRawHtmlBlock implements WagtailBlock {
   id: ID!
   value: String!

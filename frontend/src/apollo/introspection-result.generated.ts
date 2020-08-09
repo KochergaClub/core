@@ -18,6 +18,10 @@
       "PageSearchItem",
       "EventSearchItem"
     ],
+    "SlideFragmentsBlockValues": [
+      "SlideFragmentsBlock_RichTextBlock",
+      "SlideFragmentsBlock_RawHtmlBlock"
+    ],
     "WagtailBlock": [
       "BasicLeadBlock",
       "BasicParagraphBlock",
@@ -38,6 +42,9 @@
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
       "RatioParagraphBlock",
+      "SlideFragmentsBlock",
+      "SlideFragmentsBlock_RawHtmlBlock",
+      "SlideFragmentsBlock_RichTextBlock",
       "SlideRawHtmlBlock",
       "SlideRichTextBlock",
       "SlideTitleBlock"
