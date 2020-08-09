@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'kocherga.zoom',
     'kocherga.openvidu',
     'kocherga.external_services',
+    'kocherga.presentations',
     'taggit',
     'modelcluster',
     'wagtail.api.v2',

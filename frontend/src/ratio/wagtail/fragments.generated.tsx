@@ -79,6 +79,24 @@ export type RatioSectionPageFragment = (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
     & RatioParagraphBlockFragment
+  ) | (
+    { __typename: 'SlideFragmentsBlock' }
+    & Pick<Types.SlideFragmentsBlock, 'id'>
+  ) | (
+    { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
+    & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id'>
+  ) | (
+    { __typename: 'SlideFragmentsBlock_RichTextBlock' }
+    & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id'>
+  ) | (
+    { __typename: 'SlideRawHtmlBlock' }
+    & Pick<Types.SlideRawHtmlBlock, 'id'>
+  ) | (
+    { __typename: 'SlideRichTextBlock' }
+    & Pick<Types.SlideRichTextBlock, 'id'>
+  ) | (
+    { __typename: 'SlideTitleBlock' }
+    & Pick<Types.SlideTitleBlock, 'id'>
   )> }
 );
 
@@ -104,18 +122,13 @@ export type RatioPresentationIndexPageFragment = (
   { __typename?: 'RatioPresentationIndexPage' }
   & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
   & { presentations: Array<(
-    { __typename?: 'RatioPresentationPage' }
-    & Pick<Types.RatioPresentationPage, 'id' | 'title'>
+    { __typename?: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id' | 'title'>
     & { meta: (
       { __typename?: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   )> }
-);
-
-export type RatioPresentationPageFragment = (
-  { __typename?: 'RatioPresentationPage' }
-  & Pick<Types.RatioPresentationPage, 'id' | 'title' | 'source'>
 );
 
 export const RatioSectionIndexPageFragmentDoc = gql`
@@ -181,12 +194,5 @@ export const RatioPresentationIndexPageFragmentDoc = gql`
       html_url
     }
   }
-}
-    `;
-export const RatioPresentationPageFragmentDoc = gql`
-    fragment RatioPresentationPage on RatioPresentationPage {
-  id
-  title
-  source
 }
     `;

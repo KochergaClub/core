@@ -4,6 +4,7 @@ from kocherga.graphql import g
 
 from ... import models
 
+
 RatioPresentationIndexPage = wagtail_utils.WagtailPageType(
     model=models.PresentationIndexPage,
     db_fields=['title'],
@@ -12,15 +13,18 @@ RatioPresentationIndexPage = wagtail_utils.WagtailPageType(
 
 
 def presentations_field():
+    import kocherga.presentations.models
+    from kocherga.presentations.schema.types import PresentationPage
+
     def resolve(obj, info):
-        qs = models.PresentationPage.objects.all().live()
+        qs = kocherga.presentations.models.PresentationPage.objects.all().live()
         qs = filter_queryset_by_page_permissions(info.context, qs)
         # TODO - filter by site for parity with `wagtailPage` GraphQL query
         return list(qs)
 
-    return g.Field(g.NNList(RatioPresentationPage), resolve=resolve)
+    return g.Field(g.NNList(PresentationPage), resolve=resolve)
 
 
-RatioPresentationPage = wagtail_utils.WagtailPageType(
-    model=models.PresentationPage, db_fields=['title', 'source'],
-)
+exported_types = [
+    RatioPresentationIndexPage,
+]

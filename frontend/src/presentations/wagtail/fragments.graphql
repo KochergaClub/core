@@ -1,0 +1,45 @@
+fragment SlideTitleBlock on SlideTitleBlock {
+  id
+  title: value
+}
+
+fragment SlideRichTextBlock on SlideRichTextBlock {
+  id
+  value
+}
+
+fragment SlideRawHtmlBlock on SlideRawHtmlBlock {
+  id
+  value
+}
+
+fragment SlideFragmentRichText on SlideFragmentsBlock_RichTextBlock {
+  id
+  value
+}
+
+fragment SlideFragmentRawHtml on SlideFragmentsBlock_RawHtmlBlock {
+  id
+  value
+}
+
+fragment SlideFragmentsBlock on SlideFragmentsBlock {
+  id
+  fragments: value {
+    ...SlideFragmentRichText
+    ...SlideFragmentRawHtml
+  }
+}
+
+fragment PresentationPage on PresentationPage {
+  id
+  title
+  slides {
+    __typename
+    id
+    ...SlideTitleBlock
+    ...SlideRichTextBlock
+    ...SlideRawHtmlBlock
+    ...SlideFragmentsBlock
+  }
+}

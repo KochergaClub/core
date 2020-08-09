@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from kocherga.graphql import g
-from kocherga.wagtail.graphql_utils import WagtailPageType, WagtailBlockType
+from kocherga.wagtail.graphql_utils import WagtailPageType, block_to_types
 from kocherga.wagtail.schema.types import WagtailBlock, WagtailImageRendition
 from kocherga.events.schema import types as event_types
 
@@ -67,10 +67,12 @@ def create_EventsListBlock():
 
 
 block_types = [
-    WagtailBlockType(b)
-    for b in [*blocks.all_blocks, blocks.hero_block]
-    if b[0] not in ('events_list', 'photo_ribbon')
+    t
+    for block in [*blocks.all_blocks, blocks.hero_block]
+    if block[0] not in ('events_list', 'photo_ribbon')
+    for t in block_to_types(block)
 ]
+
 page_types = [FreeFormPage, FolderPage]
 static_block_types = [create_EventsListBlock(), create_PhotoRibbonBlock()]
 

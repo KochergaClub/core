@@ -996,6 +996,13 @@ type PhotoRibbonBlock implements WagtailBlock {
   value(spec: String!): [WagtailImageRendition!]!
 }
 
+type PresentationPage implements WagtailPage {
+  title: String!
+  id: ID!
+  meta: WagtailPageMeta!
+  slides: [WagtailBlock!]!
+}
+
 type ProjectIndexPage implements WagtailPage {
   id: ID!
   title: String!
@@ -1197,14 +1204,7 @@ type RatioPresentationIndexPage implements WagtailPage {
   title: String!
   id: ID!
   meta: WagtailPageMeta!
-  presentations: [RatioPresentationPage!]!
-}
-
-type RatioPresentationPage implements WagtailPage {
-  title: String!
-  source: String!
-  id: ID!
-  meta: WagtailPageMeta!
+  presentations: [PresentationPage!]!
 }
 
 type RatioSectionIndexPage implements WagtailPage {
@@ -1317,6 +1317,38 @@ type SlackExternalService implements ExternalService {
 type SlackUser {
   slack_id: String!
   image_url: String!
+}
+
+type SlideFragmentsBlock implements WagtailBlock {
+  id: ID!
+  value: [SlideFragmentsBlockValues!]!
+}
+
+union SlideFragmentsBlockValues = SlideFragmentsBlock_RichTextBlock | SlideFragmentsBlock_RawHtmlBlock
+
+type SlideFragmentsBlock_RawHtmlBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideFragmentsBlock_RichTextBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideRawHtmlBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideRichTextBlock implements WagtailBlock {
+  id: ID!
+  value: String!
+}
+
+type SlideTitleBlock implements WagtailBlock {
+  id: ID!
+  value: String!
 }
 
 type StaffMember {

@@ -1580,6 +1580,14 @@ export type PhotoRibbonBlockValueArgs = {
   spec: Scalars['String'];
 };
 
+export type PresentationPage = WagtailPage & {
+  __typename?: 'PresentationPage';
+  title: Scalars['String'];
+  id: Scalars['ID'];
+  meta: WagtailPageMeta;
+  slides: Array<WagtailBlock>;
+};
+
 export type ProjectIndexPage = WagtailPage & {
   __typename?: 'ProjectIndexPage';
   id: Scalars['ID'];
@@ -1958,15 +1966,7 @@ export type RatioPresentationIndexPage = WagtailPage & {
   title: Scalars['String'];
   id: Scalars['ID'];
   meta: WagtailPageMeta;
-  presentations: Array<RatioPresentationPage>;
-};
-
-export type RatioPresentationPage = WagtailPage & {
-  __typename?: 'RatioPresentationPage';
-  title: Scalars['String'];
-  source: Scalars['String'];
-  id: Scalars['ID'];
-  meta: WagtailPageMeta;
+  presentations: Array<PresentationPage>;
 };
 
 export type RatioSectionIndexPage = WagtailPage & {
@@ -2092,6 +2092,44 @@ export type SlackUser = {
   __typename?: 'SlackUser';
   slack_id: Scalars['String'];
   image_url: Scalars['String'];
+};
+
+export type SlideFragmentsBlock = WagtailBlock & {
+  __typename?: 'SlideFragmentsBlock';
+  id: Scalars['ID'];
+  value: Array<SlideFragmentsBlockValues>;
+};
+
+export type SlideFragmentsBlockValues = SlideFragmentsBlock_RichTextBlock | SlideFragmentsBlock_RawHtmlBlock;
+
+export type SlideFragmentsBlock_RawHtmlBlock = WagtailBlock & {
+  __typename?: 'SlideFragmentsBlock_RawHtmlBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type SlideFragmentsBlock_RichTextBlock = WagtailBlock & {
+  __typename?: 'SlideFragmentsBlock_RichTextBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type SlideRawHtmlBlock = WagtailBlock & {
+  __typename?: 'SlideRawHtmlBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type SlideRichTextBlock = WagtailBlock & {
+  __typename?: 'SlideRichTextBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
+};
+
+export type SlideTitleBlock = WagtailBlock & {
+  __typename?: 'SlideTitleBlock';
+  id: Scalars['ID'];
+  value: Scalars['String'];
 };
 
 export type StaffMember = {

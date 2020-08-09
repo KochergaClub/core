@@ -51,9 +51,3 @@ fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
     }
   }
 }
-
-fragment RatioPresentationPage on RatioPresentationPage {
-  id
-  title
-  source
-}

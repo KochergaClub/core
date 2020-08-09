@@ -1,25 +1,19 @@
-import gql from 'graphql-tag';
 import { FragmentDefinitionNode } from 'graphql';
+import gql from 'graphql-tag';
 
 import { KochergaApolloClient } from '~/apollo/types';
-
+import * as BlogPages from '~/blog/wagtail';
 import { APIError } from '~/common/api';
-
+import * as FAQPages from '~/faq/wagtail';
+import * as PresentationPages from '~/presentations/wagtail';
+import * as ProjectsPages from '~/projects/wagtail';
 // TODO - async load or other trick to reduce the bundle size for wagtail pages
 import * as RatioPages from '~/ratio/wagtail';
-import * as BlogPages from '~/blog/wagtail';
-import * as ProjectsPages from '~/projects/wagtail';
-import * as FAQPages from '~/faq/wagtail';
-
+import { NextWagtailPage } from '~/wagtail/types';
 import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
-import { NextWagtailPage } from '~/wagtail/types';
-
 import {
-  WagtailPageTypeQuery,
-  WagtailPageTypeDocument,
-  WagtailPagesDocument,
-  WagtailPagesQuery,
+    WagtailPagesDocument, WagtailPagesQuery, WagtailPageTypeDocument, WagtailPageTypeQuery
 } from './queries.generated';
 
 export type PageLocator = { path: string } | { preview_token: string };
@@ -41,8 +35,9 @@ export const getComponentByTypename = (
       return RatioPages.NotebookPage;
     case 'RatioPresentationIndexPage':
       return RatioPages.PresentationIndexPage;
-    case 'RatioPresentationPage':
-      return RatioPages.PresentationPage;
+
+    case 'PresentationPage':
+      return PresentationPages.PresentationPage;
 
     case 'BlogPostPage':
       return BlogPages.BlogPostPage;

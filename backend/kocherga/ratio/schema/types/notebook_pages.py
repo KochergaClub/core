@@ -1,5 +1,5 @@
 from kocherga.graphql import g
-from kocherga.wagtail.graphql_utils import WagtailPageType, WagtailBlockType
+from kocherga.wagtail.graphql_utils import WagtailPageType, block_to_types
 from kocherga.wagtail.schema.types import WagtailBlock
 
 from ... import models, blocks
@@ -26,24 +26,23 @@ RatioNotebookPage = WagtailPageType(
     extra_fields=lambda: g.fields({'sections': g.NNList(RatioNotebookSectionBlock)}),
 )
 
-# type RatioNotebookSectionBlock implements WagtailBlock {
-#   id: ID!
-#   value: RatioSectionPage!
-# }
-assert len(blocks.notebook_blocks) == 1
-assert blocks.notebook_blocks[0][0] == 'ratio_notebook_section'
-RatioNotebookSectionBlock = WagtailBlockType(
-    blocks.notebook_blocks[0],
-    types_for_page_chooser={'RatioSectionPage': RatioSectionPage},
-)
+block_types = [
+    t
+    for block in [*blocks.notebook_blocks, *blocks.section_blocks]
+    for t in block_to_types(
+        block, types_for_page_chooser={'RatioSectionPage': RatioSectionPage}
+    )
+]
 
-section_block_types = [WagtailBlockType(block) for block in blocks.section_blocks]
+# used in RatioNotebookPage above
+RatioNotebookSectionBlock = next(
+    block for block in block_types if block.name == 'RatioNotebookSectionBlock'
+)
 
 exported_types = [
     RatioSectionPage,
     RatioSectionIndexPage,
     RatioNotebookPage,
     RatioNotebookIndexPage,
-    RatioNotebookSectionBlock,
-    *section_block_types,
+    *block_types,
 ]

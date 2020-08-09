@@ -18,6 +18,10 @@
       "PageSearchItem",
       "EventSearchItem"
     ],
+    "SlideFragmentsBlockValues": [
+      "SlideFragmentsBlock_RichTextBlock",
+      "SlideFragmentsBlock_RawHtmlBlock"
+    ],
     "WagtailBlock": [
       "BasicLeadBlock",
       "BasicParagraphBlock",
@@ -37,7 +41,13 @@
       "RatioInsetBlock",
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
-      "RatioParagraphBlock"
+      "RatioParagraphBlock",
+      "SlideFragmentsBlock",
+      "SlideFragmentsBlock_RawHtmlBlock",
+      "SlideFragmentsBlock_RichTextBlock",
+      "SlideRawHtmlBlock",
+      "SlideRichTextBlock",
+      "SlideTitleBlock"
     ],
     "WagtailPage": [
       "BlogIndexPage",
@@ -45,12 +55,12 @@
       "FaqPage",
       "FolderPage",
       "FreeFormPage",
+      "PresentationPage",
       "ProjectIndexPage",
       "ProjectPage",
       "RatioNotebookIndexPage",
       "RatioNotebookPage",
       "RatioPresentationIndexPage",
-      "RatioPresentationPage",
       "RatioSectionIndexPage",
       "RatioSectionPage"
     ]
