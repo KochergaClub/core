@@ -12,11 +12,7 @@ PresentationPage = wagtail_utils.WagtailPageType(
     extra_fields={'slides': g.NNList(WagtailBlock)},
 )
 
-slide_block_types = [
-    t
-    for block in blocks.slide_blocks 
-    for t in block_to_types(block)
-]
+slide_block_types = [t for block in blocks.slide_blocks for t in block_to_types(block)]
 
 exported_types = [
     PresentationPage,
