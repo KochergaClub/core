@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import Reveal from 'reveal.js';
-import RevealNotes from 'reveal.js/plugin/notes/notes.js';
 
+// import RevealNotes from 'reveal.js/plugin/notes/notes.js';
 import {
     PresentationPageFragment, SlideFragmentsBlockFragment
 } from '../wagtail/fragments.generated';
@@ -59,7 +59,7 @@ const RevealView: React.FC<{
     const deck = new Reveal(node, {
       embedded: true,
       //   plugins: [RevealMarkdown],
-      plugins: [RevealNotes],
+      // plugins: [RevealNotes],
     });
     deck.initialize();
     console.log('intiialized');
