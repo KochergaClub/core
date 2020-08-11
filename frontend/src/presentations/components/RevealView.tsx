@@ -1,10 +1,19 @@
 import { useCallback } from 'react';
 import Reveal from 'reveal.js';
+import styled from 'styled-components';
 
 // import RevealNotes from 'reveal.js/plugin/notes/notes.js';
 import {
     PresentationPageFragment, SlideFragmentsBlockFragment
 } from '../wagtail/fragments.generated';
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  .bad {
+    color: red;
+  }
+`;
 
 const SlideFragment: React.FC<{
   fragment: SlideFragmentsBlockFragment['fragments'][0];
@@ -32,7 +41,12 @@ const Slide: React.FC<{
       );
     case 'SlideRichTextBlock':
     case 'SlideRawHtmlBlock':
-      return <section dangerouslySetInnerHTML={{ __html: slide.value }} />;
+      return (
+        <section
+          data-auto-animate
+          dangerouslySetInnerHTML={{ __html: slide.value }}
+        />
+      );
     case 'SlideFragmentsBlock':
       return (
         <section>
@@ -66,7 +80,7 @@ const RevealView: React.FC<{
   }, []);
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <Container>
       <div ref={setRef} className="reveal">
         <div className="slides">
           {slides.map((slide) => (
@@ -74,7 +88,7 @@ const RevealView: React.FC<{
           ))}
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 
