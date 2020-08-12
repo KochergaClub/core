@@ -45,10 +45,10 @@
 
 Устаревший REST API на основе Django REST Framework. Код в `kocherga.api.*` и раскидан по отдельным Django-приложениям.
 
-GraphLQL API реализован с помощью [Ariadne](https://ariadnegraphql.org/), но в будущем будет реализовано поверх низкоуровневого graphql-core.
+GraphLQL API реализован с самописных обёрток поверх [GraphQL-core](https://graphql-core-3.readthedocs.io/en/latest/). Код обёрток — в `kocherga.graphql.*`.
 
 ## Типизация
 
-Понемногу начинаем пользоваться [аннотациями типов](https://www.python.org/dev/peps/pep-0484/) и [mypy](http://mypy-lang.org/).
+Используем type hints, но не проверяем систематически.
 
-Чтобы проверить типы на корректность, вызовите `make test-types`. Пока что эта проверка падает с большим количеством ошибок.
+Если вы используете VS Code, то рекомендуется настроить [pyright](https://github.com/microsoft/pyright) или [pylance](https://github.com/microsoft/pylance-release).
