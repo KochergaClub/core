@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 import { Column } from '@kocherga/frontkit';
 
-import EventPrototypeList from './EventPrototypeList';
 import EventPrototypeAdd from './EventPrototypeAdd';
+import EventPrototypeList from './EventPrototypeList';
 
 interface Props {
   selected_id?: number;
@@ -14,7 +14,7 @@ const Container = styled(Column).attrs({
   gutter: 8,
 })`
   width: 320px;
-  overflow: scroll;
+  overflow: auto;
   padding-bottom: 10px;
   justify-content: space-between;
   height: 100%;

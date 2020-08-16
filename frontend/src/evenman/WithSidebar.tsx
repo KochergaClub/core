@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
+
 const grey = colors.grey;
 
 const Container = styled.div`

@@ -42,7 +42,7 @@ const FullScreenContainer = styled.div`
 
 const FullScreenContainerInner = styled.div`
   flex: 1;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 const Whitespace = styled.div`

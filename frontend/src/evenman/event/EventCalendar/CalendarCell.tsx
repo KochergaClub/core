@@ -1,18 +1,14 @@
+import Router from 'next/router';
 import { useCallback } from 'react';
-
 import styled from 'styled-components';
 
-import Router from 'next/router';
-
-import EventCalendarItem from '../EventCalendarItem';
-
-import { EventsEvent_SummaryFragment } from '../queries.generated';
-
 import { eventRoute } from '../../routes';
+import EventCalendarItem from '../EventCalendarItem';
+import { EventsEvent_SummaryFragment } from '../queries.generated';
 
 const CalendarCellContainer = styled.div`
   height: 3em;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 interface Props {
@@ -28,7 +24,7 @@ const CalendarCell: React.FC<Props> = ({ events, selected_id }) => {
 
   return (
     <CalendarCellContainer>
-      {events.map(event => (
+      {events.map((event) => (
         <EventCalendarItem
           key={event.id}
           event={event}
