@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import Reveal from 'reveal.js';
 import styled from 'styled-components';
 
+import RevealChart from '../plugins/chart';
 // import RevealNotes from 'reveal.js/plugin/notes/notes.js';
 import {
     PresentationPageFragment, SlideFragmentsBlockFragment
@@ -72,8 +73,11 @@ const RevealView: React.FC<{
   const setRef = useCallback((node: HTMLDivElement) => {
     const deck = new Reveal(node, {
       embedded: true,
-      //   plugins: [RevealMarkdown],
-      // plugins: [RevealNotes],
+      plugins: [
+        RevealChart,
+        // RevealMarkdown,
+        // RevealNotes,
+      ],
     });
     deck.initialize();
     console.log('intiialized');

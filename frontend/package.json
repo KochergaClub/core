@@ -43,6 +43,7 @@
     "@typescript-eslint/parser": "^3.7.1",
     "apollo-link-ws": "^1.0.20",
     "autosize": "^4.0.2",
+    "chart.js": "^2.9.3",
     "cookie": "^0.4.0",
     "date-fns": "^2.15.0",
     "date-fns-tz": "^1.0.10",
