@@ -1,8 +1,5 @@
-from rest_framework import serializers
-
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
-import kocherga.wagtail.models
 
 from wagtailgeowidget.blocks import GeoBlock
 
@@ -75,28 +72,6 @@ columns_blocks = [
         ),
     ),
 ]
-
-
-# deprecated, but called in migrations, so can't be removed
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = kocherga.wagtail.models.CustomImage
-        fields = ['file160', 'file320', 'file']
-
-    file160 = serializers.SerializerMethodField()
-    file320 = serializers.SerializerMethodField()
-
-    def get_file160(self, obj):
-        return obj.get_rendition('min-200x160').url
-
-    def get_file320(self, obj):
-        return obj.get_rendition('min-400x320').url
-
-
-# deprecated, but called in migrations, so can't be removed
-class APIImageChooserBlock(ImageChooserBlock):
-    def get_api_representation(self, value, context=None):
-        return ImageSerializer(context=context).to_representation(value)
 
 
 various_blocks = [
