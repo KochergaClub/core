@@ -1,9 +1,5 @@
 // Stream of Wagtail blocks rendered in order based on their type.
 
-import WagtailBlockContainer from './WagtailBlockContainer';
-
-import { FreeFormPageFragment } from '../queries.generated';
-
 import BasicLeadBlock from '../blocks/BasicLeadBlock';
 import BigContactsBlock from '../blocks/BigContactsBlock';
 import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
@@ -15,6 +11,8 @@ import GreyBlock from '../blocks/GreyBlock';
 import HeroFrontBlock from '../blocks/HeroFrontBlock';
 import MailchimpSubscribeBlock from '../blocks/MailchimpSubscribeBlock';
 import PhotoRibbonBlock from '../blocks/PhotoRibbonBlock';
+import { FreeFormPageFragment } from '../queries.generated';
+import WagtailBlockContainer from './WagtailBlockContainer';
 
 export type AnyBlockFragment = FreeFormPageFragment['body'][0];
 

@@ -845,19 +845,12 @@ export type HeroFrontBlock = WagtailBlock & {
 export type HeroFrontBlockValue = {
   __typename?: 'HeroFrontBlockValue';
   title: Scalars['String'];
-  features: Array<HeroFrontBlock_FeaturesValue>;
+  buttons: Array<HeroFrontBlock_ButtonsValue>;
 };
 
-export type HeroFrontBlock_FeaturesValue = {
-  __typename?: 'HeroFrontBlock_featuresValue';
+export type HeroFrontBlock_ButtonsValue = {
+  __typename?: 'HeroFrontBlock_buttonsValue';
   title: Scalars['String'];
-  link: Scalars['String'];
-  items: Array<HeroFrontBlock_Features_ItemsValue>;
-};
-
-export type HeroFrontBlock_Features_ItemsValue = {
-  __typename?: 'HeroFrontBlock_features_itemsValue';
-  text: Scalars['String'];
   link: Scalars['String'];
 };
 

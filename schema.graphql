@@ -716,17 +716,11 @@ type HeroFrontBlock implements WagtailBlock {
 
 type HeroFrontBlockValue {
   title: String!
-  features: [HeroFrontBlock_featuresValue!]!
+  buttons: [HeroFrontBlock_buttonsValue!]!
 }
 
-type HeroFrontBlock_featuresValue {
+type HeroFrontBlock_buttonsValue {
   title: String!
-  link: String!
-  items: [HeroFrontBlock_features_itemsValue!]!
-}
-
-type HeroFrontBlock_features_itemsValue {
-  text: String!
   link: String!
 }
 

@@ -85,13 +85,9 @@ fragment HeroFrontBlock on HeroFrontBlock {
   id
   hero: value {
     title
-    features {
+    buttons {
       title
       link
-      items {
-        text
-        link
-      }
     }
   }
 }

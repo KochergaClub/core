@@ -96,13 +96,9 @@ export type HeroFrontBlockFragment = (
   & { hero: (
     { __typename?: 'HeroFrontBlockValue' }
     & Pick<Types.HeroFrontBlockValue, 'title'>
-    & { features: Array<(
-      { __typename?: 'HeroFrontBlock_featuresValue' }
-      & Pick<Types.HeroFrontBlock_FeaturesValue, 'title' | 'link'>
-      & { items: Array<(
-        { __typename?: 'HeroFrontBlock_features_itemsValue' }
-        & Pick<Types.HeroFrontBlock_Features_ItemsValue, 'text' | 'link'>
-      )> }
+    & { buttons: Array<(
+      { __typename?: 'HeroFrontBlock_buttonsValue' }
+      & Pick<Types.HeroFrontBlock_ButtonsValue, 'title' | 'link'>
     )> }
   ) }
 );
@@ -205,13 +201,9 @@ export const HeroFrontBlockFragmentDoc = gql`
   id
   hero: value {
     title
-    features {
+    buttons {
       title
       link
-      items {
-        text
-        link
-      }
     }
   }
 }

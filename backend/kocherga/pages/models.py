@@ -3,7 +3,7 @@ from wagtail.admin.edit_handlers import StreamFieldPanel
 
 from kocherga.wagtail.models import KochergaPage
 
-from .blocks import all_blocks, hero_block
+from .blocks import all_blocks, hero_blocks
 
 
 class FreeFormPage(KochergaPage):
@@ -17,7 +17,7 @@ class FreeFormPage(KochergaPage):
 
 
 class FrontPage(KochergaPage):
-    body = StreamField(all_blocks + [hero_block])
+    body = StreamField(all_blocks + hero_blocks)
 
     content_panels = KochergaPage.content_panels + [
         StreamFieldPanel('body'),

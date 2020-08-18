@@ -20,11 +20,11 @@ basic_blocks = [
     ),
     (
         'basic_lead',
-        blocks.RichTextBlock(group='basic', label='Крупный текст', icon='bold',),
+        blocks.RichTextBlock(group='basic', label='Крупный текст', icon='bold'),
     ),
     (
         'basic_paragraph',
-        blocks.RichTextBlock(group='basic', label='Обычный текст', icon='doc-full',),
+        blocks.RichTextBlock(group='basic', label='Обычный текст', icon='doc-full'),
     ),
 ]
 
@@ -96,7 +96,7 @@ various_blocks = [
     ),
     (
         'photo_ribbon',
-        blocks.ListBlock(ImageChooserBlock(), group='various', label='Лента фоток',),
+        blocks.ListBlock(ImageChooserBlock(), group='various', label='Лента фоток'),
     ),
     (
         'mailchimp_subscribe',
@@ -126,44 +126,32 @@ various_blocks = [
 all_blocks = basic_blocks + columns_blocks + various_blocks
 
 
-hero_block = (
-    'hero_front',
-    blocks.StructBlock(
-        [
-            ('title', blocks.CharBlock(label='Заголовок')),
-            (
-                'features',
-                blocks.ListBlock(
-                    blocks.StructBlock(
-                        [
-                            ('title', blocks.CharBlock(label='Подзаголовок')),
-                            (
-                                'link',
-                                URLOrAbsolutePathBlock(label='Ссылка', required=False),
-                            ),
-                            (
-                                'items',
-                                blocks.ListBlock(
-                                    blocks.StructBlock(
-                                        [
-                                            ('text', blocks.CharBlock(label='Элемент')),
-                                            (
-                                                'link',
-                                                URLOrAbsolutePathBlock(
-                                                    label='Ссылка', required=False
-                                                ),
-                                            ),
-                                        ]
-                                    )
+hero_blocks = [
+    (
+        'hero_front',
+        blocks.StructBlock(
+            [
+                ('title', blocks.CharBlock(label='Заголовок')),
+                (
+                    'buttons',
+                    blocks.ListBlock(
+                        blocks.StructBlock(
+                            [
+                                ('title', blocks.CharBlock(label='Подзаголовок')),
+                                (
+                                    'link',
+                                    URLOrAbsolutePathBlock(
+                                        label='Ссылка', required=False
+                                    ),
                                 ),
-                            ),
-                        ]
+                            ]
+                        ),
+                        label='Кнопки',
                     ),
-                    label='Фичи',
                 ),
-            ),
-        ],
-        icon='home',
-        group='various',
-    ),
-)
+            ],
+            icon='home',
+            group='various',
+        ),
+    )
+]

@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { colors } from '@kocherga/frontkit';
 
 import { HeroFrontBlockFragment as Props } from '../fragments.generated';
-
-import LogoWithFeatures from './LogoWithFeatures';
+import HeroButtons from './HeroButtons';
 
 const Container = styled.div`
   background-color: ${colors.grey[100]};
@@ -14,11 +13,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const InnerContainer = styled.div`
-  margin: 0 auto;
-  max-width: 940px;
 `;
 
 const Header = styled.div`
@@ -34,20 +28,11 @@ const Header = styled.div`
   color: ${colors.primary[900]};
 `;
 
-const Line = styled.div`
-  margin: 48px 0;
-  border-bottom: 2px solid ${colors.primary[900]};
-  width: 100%;
-`;
-
 export default function HeroFrontBlock(props: Props) {
   return (
     <Container>
-      <InnerContainer>
-        <Header>{props.hero.title}</Header>
-        <Line />
-        <LogoWithFeatures features={props.hero.features} />
-      </InnerContainer>
+      <Header>{props.hero.title}</Header>
+      <HeroButtons buttons={props.hero.buttons} />
     </Container>
   );
 }
