@@ -1,6 +1,7 @@
 // Stream of Wagtail blocks rendered in order based on their type.
 
 import BasicLeadBlock from '../blocks/BasicLeadBlock';
+import BasicParagraphBlock from '../blocks/BasicParagraphBlock';
 import BigContactsBlock from '../blocks/BigContactsBlock';
 import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
 import ColumnsButtonsBlock from '../blocks/ColumnsButtonsBlock';
@@ -27,7 +28,7 @@ const AnyBlock = (block: AnyBlockFragment) => {
     case 'GreyBlock':
       return <GreyBlock {...block} />;
     case 'BasicParagraphBlock':
-      throw new Error('BasicParagraphBlock is not implemented');
+      return <BasicParagraphBlock {...block} />;
     case 'ColumnsBasicBlock':
       return <ColumnsBasicBlock {...block} />;
     case 'ColumnsMembershipsBlock':

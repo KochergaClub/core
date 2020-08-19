@@ -1,23 +1,20 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { WagtailPreviewContext } from '~/cms/contexts';
 import { Page } from '~/components';
-
-import WagtailBlocks, {
-  AnyBlockFragment,
-} from '~/wagtail/components/WagtailBlocks';
+import WagtailBlocks, { AnyBlockFragment } from '~/wagtail/components/WagtailBlocks';
 
 const WagtailBlocksDemoPage: NextApolloPage = () => {
   const blocks: AnyBlockFragment[] = [
     {
       id: '',
       __typename: 'BasicLeadBlock',
-      value: 'Базовый заголовок',
+      value: 'Базовый заголовок (BasicLeadBlock)',
     },
     {
       id: '',
       __typename: 'BasicParagraphBlock',
       value:
-        'Обычный текст. Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
+        'Обычный текст (BasicParagraphBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
     },
     {
       id: '',
@@ -101,28 +98,30 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
     },
   ];
 
-  const headedPairs = blocks.map(
-    (block) =>
-      [
-        {
-          id: '',
-          __typename: 'BasicLeadBlock',
-          value: block.__typename + ':',
-        },
-        block,
-      ] as AnyBlockFragment[]
-  );
+  // const headedPairs = blocks.map(
+  //   (block) =>
+  //     [
+  //       {
+  //         id: '',
+  //         __typename: 'BasicLeadBlock',
+  //         value: block.__typename + ':',
+  //       },
+  //       block,
+  //     ] as AnyBlockFragment[]
+  // );
 
-  // can't use [].flat yet - not supported by node
-  const blocksWithHeaders = ([] as AnyBlockFragment[]).concat.apply(
-    [],
-    headedPairs
-  );
+  // // can't use [].flat yet - not supported by node
+  // const blocksWithHeaders = ([] as AnyBlockFragment[]).concat.apply(
+  //   [],
+  //   headedPairs
+  // );
 
   return (
     <Page title="Примеры Wagtail-блоков" menu="team">
       <Page.Title>Примеры Wagtail-блоков</Page.Title>
-      <WagtailBlocks blocks={blocksWithHeaders} />
+      <WagtailPreviewContext.Provider value={{ preview: true }}>
+        <WagtailBlocks blocks={blocks} />
+      </WagtailPreviewContext.Provider>
     </Page>
   );
 };

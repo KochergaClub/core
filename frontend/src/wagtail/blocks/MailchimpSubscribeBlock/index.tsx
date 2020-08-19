@@ -1,4 +1,6 @@
-import { A, Button, Input, Row, Column } from '@kocherga/frontkit';
+import { A, Button, Column, Input, Row } from '@kocherga/frontkit';
+
+import { PaddedBlock } from '~/components';
 
 import { MailchimpSubscribeBlockFragment as Props } from '../fragments.generated';
 
@@ -32,41 +34,43 @@ const InterestCheckbox = ({
 
 export default function MailchimpSubscribeBlock(props: Props) {
   return (
-    <form
-      action="https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&amp;id=d73cd4de36"
-      method="post"
-      target="_blank"
-    >
-      <div style={{ display: 'none' }}>
-        <InterestCheckbox interest="news" value={props.mailchimp.news} />
-        <InterestCheckbox interest="events" value={props.mailchimp.events} />
-        <InterestCheckbox
-          interest="trainings"
-          value={props.mailchimp.trainings}
-        />
-      </div>
-
-      <div style={{ position: 'absolute', left: -5000 }} aria-hidden="true">
-        <input
-          type="text"
-          name="b_275ee3f3bd1fdc7e05496a122_d73cd4de36"
-          tabIndex={-1}
-          value=""
-          readOnly
-        />
-      </div>
-
-      <Column centered>
-        <Row>
-          <Input type="text" name="EMAIL" placeholder="Ваш E-mail" />
-          <Button type="submit">Подписаться</Button>
-        </Row>
-
-        <div>
-          Заполняя форму, я даю согласие на{' '}
-          <A href="/terms">обработку персональных данных</A>.
+    <PaddedBlock>
+      <form
+        action="https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&amp;id=d73cd4de36"
+        method="post"
+        target="_blank"
+      >
+        <div style={{ display: 'none' }}>
+          <InterestCheckbox interest="news" value={props.mailchimp.news} />
+          <InterestCheckbox interest="events" value={props.mailchimp.events} />
+          <InterestCheckbox
+            interest="trainings"
+            value={props.mailchimp.trainings}
+          />
         </div>
-      </Column>
-    </form>
+
+        <div style={{ position: 'absolute', left: -5000 }} aria-hidden="true">
+          <input
+            type="text"
+            name="b_275ee3f3bd1fdc7e05496a122_d73cd4de36"
+            tabIndex={-1}
+            value=""
+            readOnly
+          />
+        </div>
+
+        <Column centered>
+          <Row>
+            <Input type="text" name="EMAIL" placeholder="Ваш E-mail" />
+            <Button type="submit">Подписаться</Button>
+          </Row>
+
+          <div>
+            Заполняя форму, я даю согласие на{' '}
+            <A href="/terms">обработку персональных данных</A>.
+          </div>
+        </Column>
+      </form>
+    </PaddedBlock>
   );
 }
