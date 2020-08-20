@@ -68,7 +68,7 @@ def create_EventsListBlock():
 
 block_types = [
     t
-    for block in [*blocks.all_blocks, *blocks.hero_blocks]
+    for block in [*blocks.all_blocks, *blocks.front_blocks]
     if block[0] not in ('events_list', 'photo_ribbon')
     for t in block_to_types(block)
 ]

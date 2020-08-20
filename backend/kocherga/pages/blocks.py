@@ -124,7 +124,7 @@ various_blocks = [
 all_blocks = basic_blocks + columns_blocks + various_blocks
 
 
-hero_blocks = [
+front_blocks = [
     (
         'hero_front',
         blocks.StructBlock(
