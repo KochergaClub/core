@@ -7,6 +7,7 @@ interface Props {
 const WIDTHS = {
   small: '640px',
   normal: '800px',
+  wide: '1200px',
   max: '100%',
 };
 

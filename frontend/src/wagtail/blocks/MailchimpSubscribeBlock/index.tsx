@@ -59,16 +59,23 @@ export default function MailchimpSubscribeBlock(props: Props) {
           />
         </div>
 
-        <Column centered>
-          <Row>
-            <Input type="text" name="EMAIL" placeholder="Ваш E-mail" />
-            <Button type="submit">Подписаться</Button>
+        <Column centered gutter={16}>
+          <Row stretch gutter={16}>
+            <Input
+              type="text"
+              name="EMAIL"
+              placeholder="Ваш E-mail"
+              scale="big"
+            />
+            <Button type="submit" kind="primary">
+              Подписаться
+            </Button>
           </Row>
 
-          <div>
+          <small>
             Заполняя форму, я даю согласие на{' '}
             <A href="/terms">обработку персональных данных</A>.
-          </div>
+          </small>
         </Column>
       </form>
     </PaddedBlock>

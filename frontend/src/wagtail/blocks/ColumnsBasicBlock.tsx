@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-import { fonts, RichText, ColumnsBlock } from '@kocherga/frontkit';
+import { ColumnsBlock, fonts, RichText } from '@kocherga/frontkit';
+
+import { PaddedBlock } from '~/components';
 
 import { ColumnsBasicBlockFragment as Props } from './fragments.generated';
 
@@ -20,10 +22,12 @@ const OneColumn = (column: Props['basic_columns'][0]) => (
 
 export default function ColumnsBasicBlock(block: Props) {
   return (
-    <ColumnsBlock>
-      {block.basic_columns.map((column, i) => (
-        <OneColumn {...column} key={i} />
-      ))}
-    </ColumnsBlock>
+    <PaddedBlock width="wide">
+      <ColumnsBlock>
+        {block.basic_columns.map((column, i) => (
+          <OneColumn {...column} key={i} />
+        ))}
+      </ColumnsBlock>
+    </PaddedBlock>
   );
 }
