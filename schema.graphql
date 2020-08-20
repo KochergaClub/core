@@ -104,6 +104,16 @@ type BasicResult {
   ok: Boolean
 }
 
+type BasicTextBlock implements WagtailBlock {
+  id: ID!
+  value: BasicTextBlockValue!
+}
+
+type BasicTextBlockValue {
+  text: String!
+  centered: Boolean!
+}
+
 type BigContactsBlock implements WagtailBlock {
   id: ID!
   value: BigContactsBlockValue!
@@ -232,18 +242,6 @@ type ColumnsButtonsBlockValue {
   title: String!
   caption: String!
   link: String!
-}
-
-type ColumnsMembershipsBlock implements WagtailBlock {
-  id: ID!
-  value: [ColumnsMembershipsBlockValue!]!
-}
-
-type ColumnsMembershipsBlockValue {
-  title: String!
-  subtitle: String!
-  price: Int!
-  description: String!
 }
 
 type EmailMailchimpCategory {

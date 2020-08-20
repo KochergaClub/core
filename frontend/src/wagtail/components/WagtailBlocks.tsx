@@ -2,10 +2,10 @@
 
 import BasicLeadBlock from '../blocks/BasicLeadBlock';
 import BasicParagraphBlock from '../blocks/BasicParagraphBlock';
+import BasicTextBlock from '../blocks/BasicTextBlock';
 import BigContactsBlock from '../blocks/BigContactsBlock';
 import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
 import ColumnsButtonsBlock from '../blocks/ColumnsButtonsBlock';
-import ColumnsMembershipsBlock from '../blocks/ColumnsMembershipsBlock';
 import DebugBlock from '../blocks/DebugBlock';
 import EventsListBlock from '../blocks/EventsListBlock';
 import GreyBlock from '../blocks/GreyBlock';
@@ -29,10 +29,10 @@ const AnyBlock = (block: AnyBlockFragment) => {
       return <GreyBlock {...block} />;
     case 'BasicParagraphBlock':
       return <BasicParagraphBlock {...block} />;
+    case 'BasicTextBlock':
+      return <BasicTextBlock {...block} />;
     case 'ColumnsBasicBlock':
       return <ColumnsBasicBlock {...block} />;
-    case 'ColumnsMembershipsBlock':
-      return <ColumnsMembershipsBlock {...block} />;
     case 'ColumnsButtonsBlock':
       return <ColumnsButtonsBlock {...block} />;
     case 'EventsListBlock':

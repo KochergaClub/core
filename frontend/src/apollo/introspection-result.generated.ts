@@ -25,10 +25,10 @@
     "WagtailBlock": [
       "BasicLeadBlock",
       "BasicParagraphBlock",
+      "BasicTextBlock",
       "BigContactsBlock",
       "ColumnsBasicBlock",
       "ColumnsButtonsBlock",
-      "ColumnsMembershipsBlock",
       "EventsListBlock",
       "GreyBlock",
       "HeroFrontBlock",

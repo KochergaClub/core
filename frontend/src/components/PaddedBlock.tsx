@@ -11,9 +11,9 @@ const WIDTHS = {
 };
 
 const PaddedBlock = styled.div<Props>`
-  margin: 40px auto;
-  padding: 0 20px;
-  max-width: ${props => WIDTHS[props.width || 'normal']};
+  padding: 40px 20px;
+  margin: 0 auto;
+  max-width: ${(props) => WIDTHS[props.width || 'normal']};
 `;
 
 export default PaddedBlock;

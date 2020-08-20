@@ -2,11 +2,12 @@ import { useCallback, useContext, useState } from 'react';
 import { GoGear } from 'react-icons/go';
 import styled from 'styled-components';
 
-import { colors, Modal, ControlsFooter, Button, Row } from '@kocherga/frontkit';
+import { Button, colors, ControlsFooter, Modal, Row } from '@kocherga/frontkit';
 
-import { AnyBlockFragment } from './WagtailBlocks';
 import { WagtailPreviewContext } from '~/cms/contexts';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+
+import { AnyBlockFragment } from './WagtailBlocks';
 
 const PreviewContainer = styled.div`
   position: relative;
@@ -17,6 +18,7 @@ const PreviewContainer = styled.div`
   }
 
   &:hover {
+    z-index: 10; /* outline on top of neighbor blocks */
     outline: 1px dashed ${colors.grey[500]};
     > .preview-block-controls {
       display: block;

@@ -23,21 +23,21 @@ export type BasicParagraphBlockFragment = (
   & Pick<Types.BasicParagraphBlock, 'id' | 'value'>
 );
 
+export type BasicTextBlockFragment = (
+  { __typename?: 'BasicTextBlock' }
+  & Pick<Types.BasicTextBlock, 'id'>
+  & { basic_text: (
+    { __typename?: 'BasicTextBlockValue' }
+    & Pick<Types.BasicTextBlockValue, 'text' | 'centered'>
+  ) }
+);
+
 export type ColumnsBasicBlockFragment = (
   { __typename?: 'ColumnsBasicBlock' }
   & Pick<Types.ColumnsBasicBlock, 'id'>
   & { basic_columns: Array<(
     { __typename?: 'ColumnsBasicBlockValue' }
     & Pick<Types.ColumnsBasicBlockValue, 'header' | 'text'>
-  )> }
-);
-
-export type ColumnsMembershipsBlockFragment = (
-  { __typename?: 'ColumnsMembershipsBlock' }
-  & Pick<Types.ColumnsMembershipsBlock, 'id'>
-  & { membership_columns: Array<(
-    { __typename?: 'ColumnsMembershipsBlockValue' }
-    & Pick<Types.ColumnsMembershipsBlockValue, 'title' | 'subtitle' | 'price' | 'description'>
   )> }
 );
 
@@ -124,23 +124,21 @@ export const BasicParagraphBlockFragmentDoc = gql`
   value
 }
     `;
+export const BasicTextBlockFragmentDoc = gql`
+    fragment BasicTextBlock on BasicTextBlock {
+  id
+  basic_text: value {
+    text
+    centered
+  }
+}
+    `;
 export const ColumnsBasicBlockFragmentDoc = gql`
     fragment ColumnsBasicBlock on ColumnsBasicBlock {
   id
   basic_columns: value {
     header
     text
-  }
-}
-    `;
-export const ColumnsMembershipsBlockFragmentDoc = gql`
-    fragment ColumnsMembershipsBlock on ColumnsMembershipsBlock {
-  id
-  membership_columns: value {
-    title
-    subtitle
-    price
-    description
   }
 }
     `;

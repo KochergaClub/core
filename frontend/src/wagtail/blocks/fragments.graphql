@@ -16,21 +16,19 @@ fragment BasicParagraphBlock on BasicParagraphBlock {
   value
 }
 
+fragment BasicTextBlock on BasicTextBlock {
+  id
+  basic_text: value {
+    text
+    centered
+  }
+}
+
 fragment ColumnsBasicBlock on ColumnsBasicBlock {
   id
   basic_columns: value {
     header
     text
-  }
-}
-
-fragment ColumnsMembershipsBlock on ColumnsMembershipsBlock {
-  id
-  membership_columns: value {
-    title
-    subtitle
-    price
-    description
   }
 }
 

@@ -128,6 +128,18 @@ export type BasicResult = {
   ok?: Maybe<Scalars['Boolean']>;
 };
 
+export type BasicTextBlock = WagtailBlock & {
+  __typename?: 'BasicTextBlock';
+  id: Scalars['ID'];
+  value: BasicTextBlockValue;
+};
+
+export type BasicTextBlockValue = {
+  __typename?: 'BasicTextBlockValue';
+  text: Scalars['String'];
+  centered: Scalars['Boolean'];
+};
+
 export type BigContactsBlock = WagtailBlock & {
   __typename?: 'BigContactsBlock';
   id: Scalars['ID'];
@@ -287,20 +299,6 @@ export type ColumnsButtonsBlockValue = {
   title: Scalars['String'];
   caption: Scalars['String'];
   link: Scalars['String'];
-};
-
-export type ColumnsMembershipsBlock = WagtailBlock & {
-  __typename?: 'ColumnsMembershipsBlock';
-  id: Scalars['ID'];
-  value: Array<ColumnsMembershipsBlockValue>;
-};
-
-export type ColumnsMembershipsBlockValue = {
-  __typename?: 'ColumnsMembershipsBlockValue';
-  title: Scalars['String'];
-  subtitle: Scalars['String'];
-  price: Scalars['Int'];
-  description: Scalars['String'];
 };
 
 export type EmailMailchimpCategory = {

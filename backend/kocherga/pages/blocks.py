@@ -1,4 +1,5 @@
 from wagtail.core import blocks
+from wagtail.core.blocks.field_block import BooleanBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 from wagtailgeowidget.blocks import GeoBlock
@@ -19,12 +20,24 @@ basic_blocks = [
         ),
     ),
     (
-        'basic_lead',
+        'basic_lead',  # deprecated
         blocks.RichTextBlock(group='basic', label='Крупный текст', icon='bold'),
     ),
     (
-        'basic_paragraph',
+        'basic_paragraph',  # deprecated
         blocks.RichTextBlock(group='basic', label='Обычный текст', icon='doc-full'),
+    ),
+    (
+        'basic_text',
+        blocks.StructBlock(
+            [
+                ('text', blocks.RichTextBlock()),
+                ('centered', blocks.BooleanBlock(required=False)),
+            ],
+            group='basic',
+            label='Обычный текст v2',
+            icon='doc-full',
+        ),
     ),
 ]
 
@@ -40,21 +53,6 @@ columns_blocks = [
             ),
             group='columns',
             label='Колонки',
-        ),
-    ),
-    (
-        'columns_memberships',
-        blocks.ListBlock(
-            blocks.StructBlock(
-                [
-                    ('title', blocks.CharBlock(label='Название')),
-                    ('subtitle', blocks.CharBlock(label='Подзаголовок')),
-                    ('price', blocks.IntegerBlock(label='Стоимость')),
-                    ('description', blocks.RichTextBlock(label='Описание')),
-                ],
-            ),
-            group='columns',
-            label='Абонементы',
         ),
     ),
     (

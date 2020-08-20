@@ -1,8 +1,8 @@
 import * as Types from '../apollo/types.generated';
 
-import { BasicLeadBlockFragment, BasicParagraphBlockFragment, GreyBlockFragment, ColumnsBasicBlockFragment, ColumnsMembershipsBlockFragment, ColumnsButtonsBlockFragment, EventsListBlockFragment, BigContactsBlockFragment, PhotoRibbonBlockFragment, MailchimpSubscribeBlockFragment, HeroFrontBlockFragment } from './blocks/fragments.generated';
+import { BasicLeadBlockFragment, BasicParagraphBlockFragment, BasicTextBlockFragment, GreyBlockFragment, ColumnsBasicBlockFragment, ColumnsButtonsBlockFragment, EventsListBlockFragment, BigContactsBlockFragment, PhotoRibbonBlockFragment, MailchimpSubscribeBlockFragment, HeroFrontBlockFragment } from './blocks/fragments.generated';
 import gql from 'graphql-tag';
-import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsMembershipsBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc } from './blocks/fragments.generated';
+import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, BasicTextBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc } from './blocks/fragments.generated';
 
 export type FreeFormPageFragment = (
   { __typename?: 'FreeFormPage' }
@@ -16,6 +16,10 @@ export type FreeFormPageFragment = (
     & Pick<Types.BasicParagraphBlock, 'id'>
     & BasicParagraphBlockFragment
   ) | (
+    { __typename: 'BasicTextBlock' }
+    & Pick<Types.BasicTextBlock, 'id'>
+    & BasicTextBlockFragment
+  ) | (
     { __typename: 'BigContactsBlock' }
     & Pick<Types.BigContactsBlock, 'id'>
     & BigContactsBlockFragment
@@ -27,10 +31,6 @@ export type FreeFormPageFragment = (
     { __typename: 'ColumnsButtonsBlock' }
     & Pick<Types.ColumnsButtonsBlock, 'id'>
     & ColumnsButtonsBlockFragment
-  ) | (
-    { __typename: 'ColumnsMembershipsBlock' }
-    & Pick<Types.ColumnsMembershipsBlock, 'id'>
-    & ColumnsMembershipsBlockFragment
   ) | (
     { __typename: 'EventsListBlock' }
     & Pick<Types.EventsListBlock, 'id'>
@@ -105,9 +105,9 @@ export const FreeFormPageFragmentDoc = gql`
     id
     ...BasicLeadBlock
     ...BasicParagraphBlock
+    ...BasicTextBlock
     ...GreyBlock
     ...ColumnsBasicBlock
-    ...ColumnsMembershipsBlock
     ...ColumnsButtonsBlock
     ...EventsListBlock
     ...BigContactsBlock
@@ -118,9 +118,9 @@ export const FreeFormPageFragmentDoc = gql`
 }
     ${BasicLeadBlockFragmentDoc}
 ${BasicParagraphBlockFragmentDoc}
+${BasicTextBlockFragmentDoc}
 ${GreyBlockFragmentDoc}
 ${ColumnsBasicBlockFragmentDoc}
-${ColumnsMembershipsBlockFragmentDoc}
 ${ColumnsButtonsBlockFragmentDoc}
 ${EventsListBlockFragmentDoc}
 ${BigContactsBlockFragmentDoc}

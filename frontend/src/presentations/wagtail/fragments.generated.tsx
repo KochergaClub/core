@@ -50,6 +50,9 @@ export type PresentationPageFragment = (
     { __typename: 'BasicParagraphBlock' }
     & Pick<Types.BasicParagraphBlock, 'id'>
   ) | (
+    { __typename: 'BasicTextBlock' }
+    & Pick<Types.BasicTextBlock, 'id'>
+  ) | (
     { __typename: 'BigContactsBlock' }
     & Pick<Types.BigContactsBlock, 'id'>
   ) | (
@@ -58,9 +61,6 @@ export type PresentationPageFragment = (
   ) | (
     { __typename: 'ColumnsButtonsBlock' }
     & Pick<Types.ColumnsButtonsBlock, 'id'>
-  ) | (
-    { __typename: 'ColumnsMembershipsBlock' }
-    & Pick<Types.ColumnsMembershipsBlock, 'id'>
   ) | (
     { __typename: 'EventsListBlock' }
     & Pick<Types.EventsListBlock, 'id'>
