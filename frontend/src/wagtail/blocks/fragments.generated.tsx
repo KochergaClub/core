@@ -46,7 +46,11 @@ export type ColumnsButtonsBlockFragment = (
   & Pick<Types.ColumnsButtonsBlock, 'id'>
   & { button_columns: Array<(
     { __typename?: 'ColumnsButtonsBlockValue' }
-    & Pick<Types.ColumnsButtonsBlockValue, 'title' | 'caption' | 'link'>
+    & Pick<Types.ColumnsButtonsBlockValue, 'title' | 'text' | 'caption' | 'link'>
+    & { image: (
+      { __typename?: 'WagtailImageRendition' }
+      & Pick<Types.WagtailImageRendition, 'url'>
+    ) }
   )> }
 );
 
@@ -147,6 +151,10 @@ export const ColumnsButtonsBlockFragmentDoc = gql`
   id
   button_columns: value {
     title
+    text
+    image(spec: "original") {
+      url
+    }
     caption
     link
   }

@@ -297,8 +297,15 @@ export type ColumnsButtonsBlock = WagtailBlock & {
 export type ColumnsButtonsBlockValue = {
   __typename?: 'ColumnsButtonsBlockValue';
   title: Scalars['String'];
+  text: Scalars['String'];
+  image: WagtailImageRendition;
   caption: Scalars['String'];
   link: Scalars['String'];
+};
+
+
+export type ColumnsButtonsBlockValueImageArgs = {
+  spec: Scalars['String'];
 };
 
 export type EmailMailchimpCategory = {

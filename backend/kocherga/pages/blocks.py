@@ -60,7 +60,9 @@ columns_blocks = [
         blocks.ListBlock(
             blocks.StructBlock(
                 [
-                    ('title', blocks.CharBlock(label='Текст')),
+                    ('title', blocks.CharBlock(label='Заголовок')),
+                    ('text', blocks.CharBlock(label='Текст')),
+                    ('image', ImageChooserBlock()),
                     ('caption', blocks.CharBlock(label='Текст на кнопке')),
                     ('link', URLOrAbsolutePathBlock(label='Ссылка')),
                 ]

@@ -240,6 +240,8 @@ type ColumnsButtonsBlock implements WagtailBlock {
 
 type ColumnsButtonsBlockValue {
   title: String!
+  text: String!
+  image(spec: String!): WagtailImageRendition!
   caption: String!
   link: String!
 }

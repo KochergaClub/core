@@ -36,6 +36,10 @@ fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
   id
   button_columns: value {
     title
+    text
+    image(spec: "original") {
+      url
+    }
     caption
     link
   }

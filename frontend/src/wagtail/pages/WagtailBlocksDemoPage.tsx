@@ -12,9 +12,20 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
     },
     {
       id: '',
-      __typename: 'BasicParagraphBlock',
-      value:
-        'Обычный текст (BasicParagraphBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
+      __typename: 'BasicTextBlock',
+      basic_text: {
+        text:
+          'Обычный текст (BasicTextBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. По умолчанию выравнивается по левому краю.',
+      },
+    },
+    {
+      id: '',
+      __typename: 'BasicTextBlock',
+      basic_text: {
+        text:
+          'Обычный текст (BasicTextBlock) с центрированием. Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. При проставленной настройке "centered" выравнивается по центру.',
+        centered: true,
+      },
     },
     {
       id: '',
@@ -41,33 +52,17 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
     },
     {
       id: '',
-      __typename: 'ColumnsMembershipsBlock',
-      membership_columns: [
-        {
-          title: 'Колонка 1',
-          subtitle: 'Подзаголовок 1',
-          price: 500,
-          description: 'Описание 1',
-        },
-        {
-          title: 'Колонка 2',
-          subtitle: 'Подзаголовок 2',
-          price: 1500,
-          description: 'Описание 2',
-        },
-      ],
-    },
-    {
-      id: '',
       __typename: 'ColumnsButtonsBlock',
       button_columns: [
         {
           title: 'Колонка 1',
+          text: 'Описание колонки 1',
           caption: 'Заголовок 1',
           link: 'https://example.com',
         },
         {
           title: 'Колонка 2',
+          text: 'Описание колонки 2',
           caption: 'Заголовок 2',
           link: 'https://example.com',
         },
@@ -97,24 +92,6 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       },
     },
   ];
-
-  // const headedPairs = blocks.map(
-  //   (block) =>
-  //     [
-  //       {
-  //         id: '',
-  //         __typename: 'BasicLeadBlock',
-  //         value: block.__typename + ':',
-  //       },
-  //       block,
-  //     ] as AnyBlockFragment[]
-  // );
-
-  // // can't use [].flat yet - not supported by node
-  // const blocksWithHeaders = ([] as AnyBlockFragment[]).concat.apply(
-  //   [],
-  //   headedPairs
-  // );
 
   return (
     <Page title="Примеры Wagtail-блоков" menu="team">
