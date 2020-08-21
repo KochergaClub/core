@@ -107,6 +107,32 @@ export type HeroFrontBlockFragment = (
   ) }
 );
 
+export type HrBlockFragment = (
+  { __typename?: 'HrBlock' }
+  & Pick<Types.HrBlock, 'id'>
+);
+
+export type FrontPartnersBlockFragment = (
+  { __typename?: 'FrontPartnersBlock' }
+  & Pick<Types.FrontPartnersBlock, 'id'>
+  & { partners: Array<(
+    { __typename?: 'FrontPartnersBlockValue' }
+    & Pick<Types.FrontPartnersBlockValue, 'link'>
+    & { image: (
+      { __typename?: 'WagtailImageRendition' }
+      & Pick<Types.WagtailImageRendition, 'url'>
+    ), image_x2: (
+      { __typename?: 'WagtailImageRendition' }
+      & Pick<Types.WagtailImageRendition, 'url'>
+    ) }
+  )> }
+);
+
+export type FrontSocialLinksBlockFragment = (
+  { __typename?: 'FrontSocialLinksBlock' }
+  & Pick<Types.FrontSocialLinksBlock, 'id'>
+);
+
 export const GreyBlockFragmentDoc = gql`
     fragment GreyBlock on GreyBlock {
   id
@@ -212,5 +238,29 @@ export const HeroFrontBlockFragmentDoc = gql`
       link
     }
   }
+}
+    `;
+export const HrBlockFragmentDoc = gql`
+    fragment HrBlock on HrBlock {
+  id
+}
+    `;
+export const FrontPartnersBlockFragmentDoc = gql`
+    fragment FrontPartnersBlock on FrontPartnersBlock {
+  id
+  partners: value {
+    link
+    image(spec: "width-160") {
+      url
+    }
+    image_x2: image(spec: "width-320") {
+      url
+    }
+  }
+}
+    `;
+export const FrontSocialLinksBlockFragmentDoc = gql`
+    fragment FrontSocialLinksBlock on FrontSocialLinksBlock {
+  id
 }
     `;

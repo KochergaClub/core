@@ -699,6 +699,20 @@ type FreeFormPage implements WagtailPage {
   body: [WagtailBlock!]!
 }
 
+type FrontPartnersBlock implements WagtailBlock {
+  id: ID!
+  value: [FrontPartnersBlockValue!]!
+}
+
+type FrontPartnersBlockValue {
+  link: String!
+  image(spec: String!): WagtailImageRendition!
+}
+
+type FrontSocialLinksBlock implements WagtailBlock {
+  id: ID!
+}
+
 type GreyBlock implements WagtailBlock {
   id: ID!
   value: GreyBlockValue!
@@ -722,6 +736,10 @@ type HeroFrontBlockValue {
 type HeroFrontBlock_buttonsValue {
   title: String!
   link: String!
+}
+
+type HrBlock implements WagtailBlock {
+  id: ID!
 }
 
 type ImageTemplate {

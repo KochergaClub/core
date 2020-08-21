@@ -15,5 +15,8 @@ fragment FreeFormPage on FreeFormPage {
     ...PhotoRibbonBlock
     ...MailchimpSubscribeBlock
     ...HeroFrontBlock
+    ...HrBlock
+    ...FrontPartnersBlock
+    ...FrontSocialLinksBlock
   }
 }

@@ -8,7 +8,7 @@ from kocherga.wagtail.blocks import URLOrAbsolutePathBlock
 
 basic_blocks = [
     (
-        'grey',
+        'grey',  # TODO - rename to `basic_header` or `basic_section_header`
         blocks.StructBlock(
             [
                 ('header', blocks.CharBlock()),
@@ -37,6 +37,12 @@ basic_blocks = [
             group='basic',
             label='Обычный текст v2',
             icon='doc-full',
+        ),
+    ),
+    (
+        'hr',
+        blocks.StaticBlock(
+            group='basic', label='Горизонтальная линия', icon='horizontalrule'
         ),
     ),
 ]
@@ -77,7 +83,7 @@ columns_blocks = [
 various_blocks = [
     (
         'events_list',
-        blocks.StaticBlock(group='various', label='Список событий', icon='list-ul',),
+        blocks.StaticBlock(group='various', label='Список событий', icon='list-ul'),
     ),
     (
         'big_contacts',
@@ -153,5 +159,22 @@ front_blocks = [
             icon='home',
             group='various',
         ),
+    ),
+    (
+        'front_partners',
+        blocks.ListBlock(
+            blocks.StructBlock(
+                [
+                    ('link', URLOrAbsolutePathBlock(label='Ссылка', required=False)),
+                    ('image', ImageChooserBlock()),
+                ]
+            ),
+            group='various',
+            label='Партнёры',
+        ),
+    ),
+    (
+        'front_social_links',
+        blocks.StaticBlock(group='various', label='Ссылки на соцсети')
     )
 ]

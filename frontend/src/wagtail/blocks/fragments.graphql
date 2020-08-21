@@ -93,3 +93,24 @@ fragment HeroFrontBlock on HeroFrontBlock {
     }
   }
 }
+
+fragment HrBlock on HrBlock {
+  id
+}
+
+fragment FrontPartnersBlock on FrontPartnersBlock {
+  id
+  partners: value {
+    link
+    image(spec: "width-160") {
+      url
+    }
+    image_x2: image(spec: "width-320") {
+      url
+    }
+  }
+}
+
+fragment FrontSocialLinksBlock on FrontSocialLinksBlock {
+  id
+}

@@ -8,8 +8,11 @@ import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
 import ColumnsButtonsBlock from '../blocks/ColumnsButtonsBlock';
 import DebugBlock from '../blocks/DebugBlock';
 import EventsListBlock from '../blocks/EventsListBlock';
+import FrontPartnersBlock from '../blocks/FrontPartnersBlock';
+import FrontSocialLinksBlock from '../blocks/FrontSocialLinksBlock';
 import GreyBlock from '../blocks/GreyBlock';
 import HeroFrontBlock from '../blocks/HeroFrontBlock';
+import HrBlock from '../blocks/HrBlock';
 import MailchimpSubscribeBlock from '../blocks/MailchimpSubscribeBlock';
 import PhotoRibbonBlock from '../blocks/PhotoRibbonBlock';
 import { FreeFormPageFragment } from '../queries.generated';
@@ -45,6 +48,12 @@ const AnyBlock = (block: AnyBlockFragment) => {
       return <PhotoRibbonBlock {...block} />;
     case 'MailchimpSubscribeBlock':
       return <MailchimpSubscribeBlock {...block} />;
+    case 'HrBlock':
+      return <HrBlock {...block} />;
+    case 'FrontPartnersBlock':
+      return <FrontPartnersBlock {...block} />;
+    case 'FrontSocialLinksBlock':
+      return <FrontSocialLinksBlock {...block} />;
     default:
       return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
   }

@@ -19,10 +19,6 @@ FreeFormPage = WagtailPageType(
 FolderPage = WagtailPageType(model=models.FolderPage, db_fields=['title'],)
 
 
-# type PhotoRibbonBlock implements WagtailBlock {
-#   id: ID!
-#   value(spec: String!): [WagtailImageRendition!]!
-# }
 def create_PhotoRibbonBlock():
     def resolve_value(obj, info, spec):
         return [image.get_rendition(spec) for image in obj.value]
@@ -43,10 +39,6 @@ def create_PhotoRibbonBlock():
     )
 
 
-# type EventsListBlock implements WagtailBlock {
-#   id: ID!
-#   events: [Event!]!
-# }
 def create_EventsListBlock():
     def resolve_value(obj, info):
         qs = kocherga.events.models.Event.objects.public_events(
@@ -66,14 +58,23 @@ def create_EventsListBlock():
     )
 
 
+def create_static_block(name: str):
+    return g.ObjectType(name, interfaces=[WagtailBlock], fields=g.fields({'id': 'ID!'}))
+
+
 block_types = [
     t
     for block in [*blocks.all_blocks, *blocks.front_blocks]
-    if block[0] not in ('events_list', 'photo_ribbon')
+    if block[0] not in ('events_list', 'photo_ribbon', 'hr', 'front_social_links')
     for t in block_to_types(block)
 ]
 
 page_types = [FreeFormPage, FolderPage]
-static_block_types = [create_EventsListBlock(), create_PhotoRibbonBlock()]
+static_block_types = [
+    create_EventsListBlock(),
+    create_PhotoRibbonBlock(),
+    create_static_block(name='HrBlock'),
+    create_static_block(name='FrontSocialLinksBlock'),
+]
 
 exported_types = page_types + block_types + static_block_types

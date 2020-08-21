@@ -65,11 +65,20 @@ export type PresentationPageFragment = (
     { __typename: 'EventsListBlock' }
     & Pick<Types.EventsListBlock, 'id'>
   ) | (
+    { __typename: 'FrontPartnersBlock' }
+    & Pick<Types.FrontPartnersBlock, 'id'>
+  ) | (
+    { __typename: 'FrontSocialLinksBlock' }
+    & Pick<Types.FrontSocialLinksBlock, 'id'>
+  ) | (
     { __typename: 'GreyBlock' }
     & Pick<Types.GreyBlock, 'id'>
   ) | (
     { __typename: 'HeroFrontBlock' }
     & Pick<Types.HeroFrontBlock, 'id'>
+  ) | (
+    { __typename: 'HrBlock' }
+    & Pick<Types.HrBlock, 'id'>
   ) | (
     { __typename: 'MailchimpSubscribeBlock' }
     & Pick<Types.MailchimpSubscribeBlock, 'id'>

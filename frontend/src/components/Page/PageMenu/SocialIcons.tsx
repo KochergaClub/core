@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+
 import { Row } from '@kocherga/frontkit';
 
-import VkIcon from './VkIcon';
-import TelegramIcon from './TelegramIcon';
+import TelegramIcon from '../../icons/TelegramIcon';
+import VkIcon from '../../icons/VkIcon';
 
 const NarrowA = styled.a`
   line-height: 0;

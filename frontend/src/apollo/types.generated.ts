@@ -829,6 +829,28 @@ export type FreeFormPage = WagtailPage & {
   body: Array<WagtailBlock>;
 };
 
+export type FrontPartnersBlock = WagtailBlock & {
+  __typename?: 'FrontPartnersBlock';
+  id: Scalars['ID'];
+  value: Array<FrontPartnersBlockValue>;
+};
+
+export type FrontPartnersBlockValue = {
+  __typename?: 'FrontPartnersBlockValue';
+  link: Scalars['String'];
+  image: WagtailImageRendition;
+};
+
+
+export type FrontPartnersBlockValueImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type FrontSocialLinksBlock = WagtailBlock & {
+  __typename?: 'FrontSocialLinksBlock';
+  id: Scalars['ID'];
+};
+
 export type GreyBlock = WagtailBlock & {
   __typename?: 'GreyBlock';
   id: Scalars['ID'];
@@ -857,6 +879,11 @@ export type HeroFrontBlock_ButtonsValue = {
   __typename?: 'HeroFrontBlock_buttonsValue';
   title: Scalars['String'];
   link: Scalars['String'];
+};
+
+export type HrBlock = WagtailBlock & {
+  __typename?: 'HrBlock';
+  id: Scalars['ID'];
 };
 
 export type ImageTemplate = {
