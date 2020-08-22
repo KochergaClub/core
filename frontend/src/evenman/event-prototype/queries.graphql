@@ -62,21 +62,23 @@ query EvenmanPrototype($id: ID!) {
 }
 
 mutation EvenmanPrototypeCreate(
-  $title: String!,
-  $location: String,
-  $weekday: Int!,
-  $hour: Int!,
-  $minute: Int!,
-  $length: Int!,
+  $title: String!
+  $location: String
+  $weekday: Int!
+  $hour: Int!
+  $minute: Int!
+  $length: Int!
 ) {
-  result: eventPrototypeCreate(input: {
-      title: $title,
-      location: $location,
-      weekday: $weekday,
-      hour: $hour,
-      minute: $minute,
-      length: $length,
-    }) {
+  result: eventPrototypeCreate(
+    input: {
+      title: $title
+      location: $location
+      weekday: $weekday
+      hour: $hour
+      minute: $minute
+      length: $length
+    }
+  ) {
     ok
     prototype {
       ...EventsPrototype
@@ -84,31 +86,40 @@ mutation EvenmanPrototypeCreate(
   }
 }
 
-
 mutation EvenmanPrototypeUpdate(
-  $id: ID!,
-  $active: Boolean,
-  $title: String,
-  $summary: String,
-  $description: String,
-  $location: String,
-  $timing_description_override: String,
-  $vk_group_name: String,
-  $timepad_category_code: String,
+  $id: ID!
+  $active: Boolean
+  $title: String
+  $summary: String
+  $description: String
+  $location: String
+  $timing_description_override: String
+  $vk_group_name: String
+  $timepad_category_code: String
   $project_slug: String
+  $length: Int
+  $weekday: Int
+  $hour: Int
+  $minute: Int
 ) {
-  result: eventPrototypeUpdate(input: {
-      id: $id,
-      active: $active,
-      title: $title,
-      summary: $summary,
-      description: $description,
-      location: $location,
-      timing_description_override: $timing_description_override,
-      vk_group_name: $vk_group_name,
-      timepad_category_code: $timepad_category_code,
+  result: eventPrototypeUpdate(
+    input: {
+      id: $id
+      active: $active
+      title: $title
+      summary: $summary
+      description: $description
+      location: $location
+      timing_description_override: $timing_description_override
+      vk_group_name: $vk_group_name
+      timepad_category_code: $timepad_category_code
       project_slug: $project_slug
-    }) {
+      length: $length
+      weekday: $weekday
+      hour: $hour
+      minute: $minute
+    }
+  ) {
     ok
     prototype {
       ...EventsPrototype
@@ -117,28 +128,19 @@ mutation EvenmanPrototypeUpdate(
 }
 
 mutation EvenmanPrototypeCancelDate($id: ID!, $date: String!) {
-  result: eventPrototypeCancelDate(input: {
-      id: $id,
-      date: $date
-    }) {
+  result: eventPrototypeCancelDate(input: { id: $id, date: $date }) {
     ok
   }
 }
 
 mutation EvenmanPrototypeNewEvent($id: ID!, $ts: Int!) {
-  result: eventPrototypeNewEvent(input: {
-      id: $id
-      ts: $ts
-    }) {
+  result: eventPrototypeNewEvent(input: { id: $id, ts: $ts }) {
     ok
   }
 }
 
 mutation EvenmanPrototypeAddTag($id: ID!, $tag: String!) {
-  result: eventPrototypeAddTag(input: {
-      id: $id
-      tag: $tag
-    }) {
+  result: eventPrototypeAddTag(input: { id: $id, tag: $tag }) {
     ok
     prototype {
       id
@@ -148,10 +150,7 @@ mutation EvenmanPrototypeAddTag($id: ID!, $tag: String!) {
 }
 
 mutation EvenmanPrototypeDeleteTag($id: ID!, $tag: String!) {
-  result: eventPrototypeDeleteTag(input: {
-      id: $id
-      tag: $tag
-    }) {
+  result: eventPrototypeDeleteTag(input: { id: $id, tag: $tag }) {
     ok
     prototype {
       id
@@ -161,10 +160,7 @@ mutation EvenmanPrototypeDeleteTag($id: ID!, $tag: String!) {
 }
 
 mutation EvenmanPrototypeSetImage($id: ID!, $image_id: ID!) {
-  result: eventPrototypeSetImage(input: {
-      id: $id
-      image_id: $image_id
-    }) {
+  result: eventPrototypeSetImage(input: { id: $id, image_id: $image_id }) {
     ok
     prototype {
       ...EventsPrototype

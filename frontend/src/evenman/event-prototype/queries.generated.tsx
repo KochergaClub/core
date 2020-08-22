@@ -96,6 +96,10 @@ export type EvenmanPrototypeUpdateMutationVariables = Types.Exact<{
   vk_group_name?: Types.Maybe<Types.Scalars['String']>;
   timepad_category_code?: Types.Maybe<Types.Scalars['String']>;
   project_slug?: Types.Maybe<Types.Scalars['String']>;
+  length?: Types.Maybe<Types.Scalars['Int']>;
+  weekday?: Types.Maybe<Types.Scalars['Int']>;
+  hour?: Types.Maybe<Types.Scalars['Int']>;
+  minute?: Types.Maybe<Types.Scalars['Int']>;
 }>;
 
 
@@ -353,8 +357,8 @@ export type EvenmanPrototypeCreateMutationHookResult = ReturnType<typeof useEven
 export type EvenmanPrototypeCreateMutationResult = ApolloReactCommon.MutationResult<EvenmanPrototypeCreateMutation>;
 export type EvenmanPrototypeCreateMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanPrototypeCreateMutation, EvenmanPrototypeCreateMutationVariables>;
 export const EvenmanPrototypeUpdateDocument = gql`
-    mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String, $timepad_category_code: String, $project_slug: String) {
-  result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name, timepad_category_code: $timepad_category_code, project_slug: $project_slug}) {
+    mutation EvenmanPrototypeUpdate($id: ID!, $active: Boolean, $title: String, $summary: String, $description: String, $location: String, $timing_description_override: String, $vk_group_name: String, $timepad_category_code: String, $project_slug: String, $length: Int, $weekday: Int, $hour: Int, $minute: Int) {
+  result: eventPrototypeUpdate(input: {id: $id, active: $active, title: $title, summary: $summary, description: $description, location: $location, timing_description_override: $timing_description_override, vk_group_name: $vk_group_name, timepad_category_code: $timepad_category_code, project_slug: $project_slug, length: $length, weekday: $weekday, hour: $hour, minute: $minute}) {
     ok
     prototype {
       ...EventsPrototype
@@ -387,6 +391,10 @@ export type EvenmanPrototypeUpdateMutationFn = ApolloReactCommon.MutationFunctio
  *      vk_group_name: // value for 'vk_group_name'
  *      timepad_category_code: // value for 'timepad_category_code'
  *      project_slug: // value for 'project_slug'
+ *      length: // value for 'length'
+ *      weekday: // value for 'weekday'
+ *      hour: // value for 'hour'
+ *      minute: // value for 'minute'
  *   },
  * });
  */

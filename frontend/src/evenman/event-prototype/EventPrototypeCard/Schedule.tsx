@@ -1,4 +1,7 @@
+import { Row } from '@kocherga/frontkit';
+
 import { EventsPrototypeFragment } from '../queries.generated';
+import EditScheduleButton from './EditScheduleButton';
 
 interface Props {
   prototype: EventsPrototypeFragment;
@@ -19,11 +22,17 @@ const Schedule: React.FC<Props> = ({ prototype }) => {
     value < 10 ? `0${value}` : `${value}`;
 
   return (
-    <div>
-      В {daysOfWeek[prototype.weekday]} в {padToTwoDigits(prototype.hour)}:
-      {padToTwoDigits(prototype.minute)}, продложительность {prototype.length}{' '}
-      минут.
-    </div>
+    <Row>
+      <span>
+        В{prototype.weekday === 1 ? 'о' : ''}{' '}
+        <strong>{daysOfWeek[prototype.weekday]}</strong> в{' '}
+        <strong>
+          {padToTwoDigits(prototype.hour)}:{padToTwoDigits(prototype.minute)}
+        </strong>
+        , продложительность <strong>{prototype.length}</strong> минут.
+      </span>
+      <EditScheduleButton prototype={prototype} />
+    </Row>
   );
 };
 

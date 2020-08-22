@@ -1,18 +1,9 @@
-import { forwardRef, useCallback } from 'react';
-
-import {
-  formatDistanceToNow,
-  setHours,
-  setMinutes,
-  getHours,
-  getMinutes,
-  parse,
-} from 'date-fns';
+import { formatDistanceToNow, getHours, getMinutes, parse, setHours, setMinutes } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useCallback } from 'react';
+import DatePicker from 'react-datepicker';
 
 import { A, Row } from '@kocherga/frontkit';
-
-import DatePicker from 'react-datepicker';
 
 import { formatDate } from '~/common/utils';
 

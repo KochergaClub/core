@@ -1,14 +1,14 @@
-import { useState, useCallback, useMemo } from 'react';
-import DatePicker from 'react-datepicker';
-import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
+import { getHours, getMinutes } from 'date-fns';
+import { useCallback, useMemo, useState } from 'react';
 
-import { Column, Label, Modal, Input } from '@kocherga/frontkit';
+import { Column, Input, Label, Modal } from '@kocherga/frontkit';
 
-import { AsyncButton } from '~/components';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
-import { ReactSelect } from '../components/ui';
+import { AsyncButton } from '~/components';
 
 import { useEvenmanPrototypeCreateMutation } from './queries.generated';
+import TimePicker from './TimePicker';
+import WeekdayPicker from './WeekdayPicker';
 
 interface Props {
   close: () => void;
@@ -56,14 +56,6 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
     setTitle(e.currentTarget.value);
   }, []);
 
-  const updateWeekday = useCallback((selectOption: any) => {
-    setWeekday(parseInt(selectOption.value as string, 10));
-  }, []);
-
-  const updateTime = useCallback((newTime: Date) => {
-    setTime(newTime);
-  }, []);
-
   const updateLength = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setLength(parseInt(e.currentTarget.value, 10));
   }, []);
@@ -74,16 +66,6 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
   });
 
   const focus = useFocusOnFirstModalRender();
-
-  const weekdays = [
-    'Понедельник',
-    'Вторник',
-    'Среда',
-    'Четверг',
-    'Пятница',
-    'Суббота',
-    'Воскресенье',
-  ];
 
   return (
     <Modal>
@@ -99,36 +81,8 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
             ref={focus}
           />
           <Label>День недели:</Label>
-          <ReactSelect
-            placeholder="Выбрать..."
-            menuPortalTarget={document.body}
-            styles={{
-              menuPortal: (base: any) => ({ ...base, zIndex: 1500 }),
-            }}
-            options={[0, 1, 2, 3, 4, 5, 6].map(n => ({
-              value: n,
-              label: weekdays[n],
-            }))}
-            value={
-              weekday === undefined
-                ? null
-                : { value: weekday, label: weekdays[weekday] }
-            }
-            onChange={updateWeekday}
-          />
-          <DatePicker
-            selected={time}
-            onChange={updateTime}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            minTime={setHours(setMinutes(new Date(), 0), 9)}
-            maxTime={setHours(setMinutes(new Date(), 30), 23)}
-            timeCaption="Время"
-            dateFormat="HH:mm"
-            timeFormat="HH:mm"
-            inline
-          />
+          <WeekdayPicker value={weekday} setValue={setWeekday} />
+          <TimePicker time={time} setTime={setTime} />
           <Label>Продолжительность в минутах:</Label>
           <Input type="number" value={length} onChange={updateLength} />
         </Column>
