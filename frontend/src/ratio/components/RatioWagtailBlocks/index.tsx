@@ -1,20 +1,19 @@
+import DebugBlock from '~/wagtail/components/DebugBlock';
+
 import { RatioSectionPageFragment } from '../../wagtail/fragments.generated';
+import RatioBriefingBlock from './RatioBriefingBlock';
+import RatioExerciseBlock from './RatioExerciseBlock';
+import RatioExerciseOnelineBlock from './RatioExerciseOnelineBlock';
+import RatioHeaderBlock from './RatioHeaderBlock';
+import RatioInsetBlock from './RatioInsetBlock';
+import RatioMathBlock from './RatioMathBlock';
+import RatioParagraphBlock from './RatioParagraphBlock';
 
 type AnyRatioBlockFragment = RatioSectionPageFragment['body'][0];
 
 interface Props {
   blocks: AnyRatioBlockFragment[];
 }
-
-import RatioBriefingBlock from './RatioBriefingBlock';
-import RatioHeaderBlock from './RatioHeaderBlock';
-import RatioParagraphBlock from './RatioParagraphBlock';
-import RatioInsetBlock from './RatioInsetBlock';
-import RatioExerciseBlock from './RatioExerciseBlock';
-import RatioExerciseOnelineBlock from './RatioExerciseOnelineBlock';
-import RatioMathBlock from './RatioMathBlock';
-
-import DebugBlock from '~/wagtail/blocks/DebugBlock';
 
 const AnyBlock = (block: AnyRatioBlockFragment) => {
   switch (block.__typename) {
@@ -40,7 +39,7 @@ const AnyBlock = (block: AnyRatioBlockFragment) => {
 export default function WagtailBlocks({ blocks }: Props) {
   return (
     <div>
-      {blocks.map(block => (
+      {blocks.map((block) => (
         <AnyBlock key={block.id} {...block} />
       ))}
     </div>
