@@ -1,5 +1,7 @@
 import logging
 
+from kocherga.wagtail.utils import get_page_queryset_for_request
+
 logger = logging.getLogger(__name__)
 
 from typing import Optional
@@ -13,36 +15,12 @@ from wagtail.search.backends import get_search_backend
 from kocherga.graphql import g, helpers
 from kocherga.dateutils import TZ
 
-from ..utils import filter_queryset_by_page_permissions
-
-from ..models import PagePreview, KochergaPage
+from ..models import PagePreview
 
 from . import types
 
 
 c = helpers.Collection()
-
-
-# Simplified from https://github.com/wagtail/wagtail/blob/master/wagtail/api/v2/endpoints.py
-# to allow non-public pages in API.
-def get_queryset(request):
-    queryset = KochergaPage.objects.all()
-
-    # Get live pages that are not in a private section
-    queryset = filter_queryset_by_page_permissions(request, queryset)
-
-    # Get live pages only
-    queryset = queryset.live()
-
-    # Filter by site
-    site = Site.find_for_request(request)
-    if site:
-        queryset = queryset.descendant_of(site.root_page, inclusive=True)
-    else:
-        # No sites configured
-        queryset = queryset.none()
-
-    return queryset
 
 
 @c.class_field
@@ -76,8 +54,8 @@ class wagtailPage(helpers.BaseField):
             except Http404:
                 return
 
-            # checking permissions (?)
-            queryset = get_queryset(info.context)
+            # checking permissions
+            queryset = get_page_queryset_for_request(info.context)
             if not queryset.filter(id=page.id).exists():
                 return
 
@@ -96,7 +74,7 @@ def wagtailPages(helper):
     def resolve(_, info):
         # page.specific is slow!
         # But we call wagtailPages only on getStaticPaths once per build, so that should be ok.
-        return [page.specific for page in get_queryset(info.context)]
+        return [page.specific for page in get_page_queryset_for_request(info.context)]
 
     # wagtailPages: [WagtailPage!]!
     return g.Field(g.NNList(types.WagtailPage), resolve=resolve)
@@ -144,7 +122,7 @@ SearchItem = g.UnionType(
 class wagtailSearch(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         query = input['query']
-        qs = get_queryset(info.context).search(query)
+        qs = get_page_queryset_for_request(info.context).search(query)
 
         limit = input.pop('limit', None)
         if limit:
@@ -199,7 +177,7 @@ class search(helpers.BaseFieldWithInput):
 
         results.extend([{'event': event} for event in events])
 
-        qs = get_queryset(info.context).search(query)
+        qs = get_page_queryset_for_request(info.context).search(query)
 
         limit = input.pop('limit', None)
         if limit:

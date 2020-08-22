@@ -5,7 +5,7 @@ import FbIcon from '~/components/icons/FbIcon';
 import VkIcon from '~/components/icons/VkIcon';
 import YoutubeIcon from '~/components/icons/YoutubeIcon';
 
-import { FrontSocialLinksFragment as Props } from './fragments.generated';
+import { FrontSocialLinksBlockFragment as Props } from './fragments.generated';
 
 export default function FrontSocialLinksBlock(block: Props) {
   // FIXME - move links to config

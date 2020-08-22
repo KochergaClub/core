@@ -1,20 +1,22 @@
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
-import { FaUser, FaUserCircle, FaUserTie } from 'react-icons/fa';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { FaEdit, FaUser, FaUserCircle, FaUserTie } from 'react-icons/fa';
 import { GoGear, GoSignOut } from 'react-icons/go';
 import styled from 'styled-components';
 
 import { colors, fonts, Row } from '@kocherga/frontkit';
 
 import { useCurrentUserLazyQuery } from '~/auth/queries.generated';
+import { WagtailPageContext } from '~/cms/contexts';
 import { useNotification } from '~/common/hooks';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { BasicSpinner } from '~/components/Spinner';
 import { useLogoutMutation } from '~/my/queries.generated';
 
-import { MenuKind } from '../types';
+import { MenuKind } from '../../types';
 import LoginButton from './LoginButton';
+import { useWagtailEditablePageLazyQuery } from './queries.generated';
 
 const Email = styled.div`
   padding: 4px 12px;
@@ -53,6 +55,52 @@ const LogoutAction: React.FC = () => {
   );
 };
 
+const EditWagtailPageAction: React.FC = () => {
+  const {
+    state: { editing },
+    dispatch,
+  } = useContext(WagtailPageContext);
+
+  const [query, queryResults] = useWagtailEditablePageLazyQuery({
+    variables: { path: window.location.pathname },
+  });
+
+  useEffect(() => {
+    if (!dispatch) {
+      return; // avoid query if on non-wagtail pages
+    }
+    query();
+  }, [dispatch, query]);
+
+  const act = useCallback(async () => {
+    if (!dispatch) {
+      return; // shouldn't happen
+    }
+    dispatch({ type: 'EDIT' });
+  }, [dispatch]);
+
+  if (editing) {
+    return null; // already editing
+  }
+
+  if (!queryResults.data) {
+    return null;
+  }
+
+  if (!queryResults.data?.wagtailPage?.meta.permissions.can_edit) {
+    return null;
+  }
+
+  return (
+    <Action act={act}>
+      <Row vCentered>
+        <FaEdit color={colors.grey[500]} />
+        <span>Редактировать</span>
+      </Row>
+    </Action>
+  );
+};
+
 interface Props {
   kind: MenuKind;
 }
@@ -63,6 +111,7 @@ const UserButtons: React.FC<Props> = (
   }
 ) => {
   const [getUser, queryResults] = useCurrentUserLazyQuery({
+    // we can't provide user data from server since we often use static pages, e.g. for wagtail
     fetchPolicy: 'network-only',
   });
 
@@ -108,6 +157,7 @@ const UserButtons: React.FC<Props> = (
               </Row>
             </NextLinkAction>
             <LogoutAction />
+            <EditWagtailPageAction />
           </DropdownMenu>
         ) : (
           <LoginButton />

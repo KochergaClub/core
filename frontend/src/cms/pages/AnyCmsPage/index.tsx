@@ -1,19 +1,16 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { withApollo, NextApolloPage } from '~/apollo';
+
+import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
 import { KochergaApolloClient } from '~/apollo/types';
 
-import {
-  getComponentByTypename,
-  wagtailPageUrls,
-  loadWagtailPage,
-} from '../../utils';
-import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
-
-import { TildaPageQuery } from '../../queries.generated';
-import TildaPage from '../../components/TildaPage';
 import FallbackPage from '../../components/FallbackPage';
+import TildaPage from '../../components/TildaPage';
+import { useWagtailPageReducer, WagtailPageContext } from '../../contexts';
+import { TildaPageQuery } from '../../queries.generated';
+import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
+import { getComponentByTypename, loadWagtailPage, wagtailPageUrls } from '../../utils';
 
 interface WagtailProps {
   kind: 'wagtail';
@@ -28,6 +25,23 @@ interface TildaProps {
 
 export type Props = WagtailProps | TildaProps;
 
+export const WagtailCmsPage: React.FC<WagtailProps> = ({ typename, page }) => {
+  const [state, dispatch] = useWagtailPageReducer({
+    page_id: page.id,
+  });
+
+  const Component = getComponentByTypename(typename);
+  if (!Component) {
+    return <div>oops</div>; // FIXME - better error
+  }
+
+  return (
+    <WagtailPageContext.Provider value={{ state, dispatch }}>
+      <Component page={page} />
+    </WagtailPageContext.Provider>
+  );
+};
+
 export const AnyCmsPage: NextApolloPage<Props> = (props) => {
   const router = useRouter();
   if (router.isFallback) {
@@ -41,11 +55,7 @@ export const AnyCmsPage: NextApolloPage<Props> = (props) => {
       }
       return <TildaPage {...props.data} />;
     case 'wagtail':
-      const Component = getComponentByTypename(props.typename);
-      if (!Component) {
-        return <div>oops</div>; // FIXME - better error
-      }
-      return <Component page={props.page} />;
+      return <WagtailCmsPage {...props} />;
   }
 };
 

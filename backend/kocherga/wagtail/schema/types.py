@@ -1,12 +1,6 @@
 from kocherga.graphql import g
 
 
-# WagtailPageMeta
-WagtailPageMeta = g.ObjectType(
-    'WagtailPageMeta', g.fields({'slug': str, 'html_url': str})
-)
-
-
 # WagtailPage
 def resolve_WagtailPage_type(page, *_):
     page_class = page.specific_class
@@ -15,10 +9,28 @@ def resolve_WagtailPage_type(page, *_):
     return page_class.graphql_type
 
 
+# WagtailPageMeta
+WagtailPageMeta = g.ObjectType(
+    'WagtailPageMeta',
+    g.fields(
+        {
+            'slug': str,
+            'html_url': str,
+            'permissions': g.NN(g.ObjectType(
+                'WagtailPagePermissions', g.fields({'can_edit': bool})
+            )),
+        }
+    ),
+)
+
+
 def resolve_WagtailPage_meta(page, info):
     return {
         'slug': page.slug,
         'html_url': page.url,
+        'permissions': {
+            'can_edit': page.permissions_for_user(info.context.user).can_edit(),
+        },
     }
 
 

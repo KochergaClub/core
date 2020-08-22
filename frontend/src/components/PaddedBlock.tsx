@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface Props {
-  width?: 'small' | 'normal' | 'max';
+  width?: 'small' | 'normal' | 'wide' | 'max';
 }
 
 const WIDTHS = {

@@ -1066,6 +1066,7 @@ export type Mutation = {
   mastermindDatingCreateParticipant: MastermindDatingParticipantMutationResult;
   mastermindDatingActivateVoting: MastermindDatingParticipantMutationResult;
   mastermindDatingSetPresenceStatus: MastermindDatingParticipantMutationResult;
+  wagtailEditPageBodyBlocks: WagtailEditPageBodyBlocksResult;
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>;
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>;
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>;
@@ -1462,6 +1463,11 @@ export type MutationMastermindDatingActivateVotingArgs = {
 export type MutationMastermindDatingSetPresenceStatusArgs = {
   participant_id: Scalars['ID'];
   present: Scalars['Boolean'];
+};
+
+
+export type MutationWagtailEditPageBodyBlocksArgs = {
+  input: WagtailEditPageBodyBlocksInput;
 };
 
 
@@ -2226,6 +2232,17 @@ export type WagtailBlock = {
   id: Scalars['ID'];
 };
 
+export type WagtailEditPageBodyBlocksInput = {
+  page_id: Scalars['ID'];
+  publish: Scalars['Boolean'];
+  blocksJson: Scalars['String'];
+};
+
+export type WagtailEditPageBodyBlocksResult = {
+  __typename?: 'WagtailEditPageBodyBlocksResult';
+  page?: Maybe<WagtailPage>;
+};
+
 export type WagtailGeo = {
   __typename?: 'WagtailGeo';
   lat: Scalars['String'];
@@ -2259,6 +2276,12 @@ export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
   html_url: Scalars['String'];
+  permissions: WagtailPagePermissions;
+};
+
+export type WagtailPagePermissions = {
+  __typename?: 'WagtailPagePermissions';
+  can_edit: Scalars['Boolean'];
 };
 
 export type WagtailSearchInput = {

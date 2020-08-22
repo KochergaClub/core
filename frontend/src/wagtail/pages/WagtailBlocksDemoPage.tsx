@@ -1,7 +1,8 @@
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import { WagtailPreviewContext } from '~/cms/contexts';
+import { WagtailPageContext } from '~/cms/contexts';
 import { Page } from '~/components';
-import WagtailBlocks, { AnyBlockFragment } from '~/wagtail/components/WagtailBlocks';
+import WagtailBlocks from '~/wagtail/components/WagtailBlocks';
+import { AnyBlockFragment } from '~/wagtail/types';
 
 const WagtailBlocksDemoPage: NextApolloPage = () => {
   const blocks: AnyBlockFragment[] = [
@@ -16,6 +17,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       basic_text: {
         text:
           'Обычный текст (BasicTextBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. По умолчанию выравнивается по левому краю.',
+        centered: false,
       },
     },
     {
@@ -59,12 +61,18 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
           text: 'Описание колонки 1',
           caption: 'Заголовок 1',
           link: 'https://example.com',
+          image: {
+            url: 'https://example.com',
+          },
         },
         {
           title: 'Колонка 2',
           text: 'Описание колонки 2',
           caption: 'Заголовок 2',
           link: 'https://example.com',
+          image: {
+            url: 'https://example.com',
+          },
         },
       ],
     },
@@ -96,9 +104,9 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
   return (
     <Page title="Примеры Wagtail-блоков" menu="team">
       <Page.Title>Примеры Wagtail-блоков</Page.Title>
-      <WagtailPreviewContext.Provider value={{ preview: true }}>
+      <WagtailPageContext.Provider value={{ state: { preview: true } }}>
         <WagtailBlocks blocks={blocks} />
-      </WagtailPreviewContext.Provider>
+      </WagtailPageContext.Provider>
     </Page>
   );
 };

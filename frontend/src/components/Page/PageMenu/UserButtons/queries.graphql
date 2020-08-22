@@ -1,0 +1,10 @@
+query WagtailEditablePage($path: String!) {
+  wagtailPage(path: $path) {
+    id
+    meta {
+      permissions {
+        can_edit
+      }
+    }
+  }
+}

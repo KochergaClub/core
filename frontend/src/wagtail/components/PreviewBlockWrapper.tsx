@@ -1,13 +1,12 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { GoGear } from 'react-icons/go';
 import styled from 'styled-components';
 
 import { Button, colors, ControlsFooter, Modal, Row } from '@kocherga/frontkit';
 
-import { WagtailPreviewContext } from '~/cms/contexts';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 
-import { AnyBlockFragment } from './WagtailBlocks';
+import { AnyBlockFragment } from '../types';
 
 const PreviewContainer = styled.div`
   position: relative;
@@ -96,14 +95,7 @@ const Controls: React.FC<Props> = ({ block }) => {
   );
 };
 
-const WagtailBlockContainer: React.FC<Props> = ({ block, children }) => {
-  const { preview } = useContext(WagtailPreviewContext);
-
-  if (!preview) {
-    // TODO - wrap in <div> for parity with preview mode?
-    return <>{children}</>;
-  }
-
+const PreviewBlockWrapper: React.FC<Props> = ({ block, children }) => {
   // TODO - extract preview-specific stuff into dynamically loaded component, to reduce JS bundle size?
   return (
     <PreviewContainer>
@@ -113,4 +105,4 @@ const WagtailBlockContainer: React.FC<Props> = ({ block, children }) => {
   );
 };
 
-export default WagtailBlockContainer;
+export default PreviewBlockWrapper;

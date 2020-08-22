@@ -908,6 +908,7 @@ type Mutation {
   mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): MastermindDatingParticipantMutationResult!
   mastermindDatingActivateVoting(participant_id: ID!): MastermindDatingParticipantMutationResult!
   mastermindDatingSetPresenceStatus(participant_id: ID!, present: Boolean!): MastermindDatingParticipantMutationResult!
+  wagtailEditPageBodyBlocks(input: WagtailEditPageBodyBlocksInput!): WagtailEditPageBodyBlocksResult!
   emailSubscribeChannelDelete(slug: String!): Boolean
   emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean
   emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean
@@ -1416,6 +1417,16 @@ interface WagtailBlock {
   id: ID!
 }
 
+input WagtailEditPageBodyBlocksInput {
+  page_id: ID!
+  publish: Boolean!
+  blocksJson: String!
+}
+
+type WagtailEditPageBodyBlocksResult {
+  page: WagtailPage
+}
+
 type WagtailGeo {
   lat: String!
   lng: String!
@@ -1445,6 +1456,11 @@ interface WagtailPage {
 type WagtailPageMeta {
   slug: String!
   html_url: String!
+  permissions: WagtailPagePermissions!
+}
+
+type WagtailPagePermissions {
+  can_edit: Boolean!
 }
 
 input WagtailSearchInput {
