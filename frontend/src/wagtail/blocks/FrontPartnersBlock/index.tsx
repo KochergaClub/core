@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
+import { gql } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { FrontPartnersBlockFragment as Props } from './fragments.generated';
+import { BlockComponent } from '../../types';
+import { FrontPartnersBlockFragment as Props } from './index.generated';
 
 const Image = styled.img`
   filter: grayscale(100%);
@@ -25,7 +27,7 @@ const Partner: React.FC<{ partner: Props['partners'][0] }> = ({ partner }) => {
   );
 };
 
-export default function BasicParagraphBlock(block: Props) {
+const FrontPartnersBlock: BlockComponent<Props> = (block) => {
   return (
     <PaddedBlock>
       <Row wrap={true} gutter={32} centered vCentered>
@@ -35,4 +37,21 @@ export default function BasicParagraphBlock(block: Props) {
       </Row>
     </PaddedBlock>
   );
-}
+};
+
+FrontPartnersBlock.fragment = gql`
+  fragment FrontPartnersBlock on FrontPartnersBlock {
+    id
+    partners: value {
+      link
+      image(spec: "width-160") {
+        url
+      }
+      image_x2: image(spec: "width-320") {
+        url
+      }
+    }
+  }
+`;
+
+export default FrontPartnersBlock;

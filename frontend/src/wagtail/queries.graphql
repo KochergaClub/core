@@ -5,7 +5,6 @@ fragment FreeFormPage on FreeFormPage {
     __typename
     id
     ...BasicLeadBlock
-    ...BasicParagraphBlock
     ...BasicTextBlock
     ...GreyBlock
     ...ColumnsBasicBlock

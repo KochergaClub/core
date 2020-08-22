@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
+import { gql } from '@apollo/client';
 import { colors } from '@kocherga/frontkit';
 
 import { staticUrl } from '~/common/utils';
 
-import { HeroFrontBlockFragment as Props } from '../fragments.generated';
+import { BlockComponent } from '../../types';
 import HeroButtons from './HeroButtons';
+import { HeroFrontBlockFragment as Props } from './index.generated';
 
 const Container = styled.div`
   padding-left: 40px;
@@ -28,11 +30,26 @@ const Header = styled.h1`
   max-width: 600px;
 `;
 
-export default function HeroFrontBlock(props: Props) {
+const HeroFrontBlock: BlockComponent<Props> = (props) => {
   return (
     <Container>
       <Header>{props.hero.title}</Header>
       <HeroButtons buttons={props.hero.buttons} />
     </Container>
   );
-}
+};
+
+HeroFrontBlock.fragment = gql`
+  fragment HeroFrontBlock on HeroFrontBlock {
+    id
+    hero: value {
+      title
+      buttons {
+        title
+        link
+      }
+    }
+  }
+`;
+
+export default HeroFrontBlock;

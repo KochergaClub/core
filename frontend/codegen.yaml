@@ -1,6 +1,8 @@
 schema:
   - ../schema.graphql
-documents: "src/**/*.graphql"
+documents:
+  - "src/**/*.graphql"
+  - "src/wagtail/blocks/*/index.tsx"
 
 generates:
   src/apollo/types.generated.ts:

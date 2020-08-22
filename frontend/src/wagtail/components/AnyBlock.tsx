@@ -1,5 +1,4 @@
 import BasicLeadBlock from '../blocks/BasicLeadBlock';
-import BasicParagraphBlock from '../blocks/BasicParagraphBlock';
 import BasicTextBlock from '../blocks/BasicTextBlock';
 import BigContactsBlock from '../blocks/BigContactsBlock';
 import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
@@ -18,7 +17,6 @@ import { AnyBlockFragment } from '../types';
 const BLOCKS = {
   BasicLeadBlock,
   GreyBlock,
-  BasicParagraphBlock,
   BasicTextBlock,
   ColumnsBasicBlock,
   ColumnsButtonsBlock,

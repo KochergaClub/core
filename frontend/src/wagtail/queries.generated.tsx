@@ -1,8 +1,32 @@
+import gql from 'graphql-tag';
 import * as Types from '../apollo/types.generated';
 
-import { BasicLeadBlockFragment, BasicParagraphBlockFragment, BasicTextBlockFragment, GreyBlockFragment, ColumnsBasicBlockFragment, ColumnsButtonsBlockFragment, EventsListBlockFragment, BigContactsBlockFragment, PhotoRibbonBlockFragment, MailchimpSubscribeBlockFragment, HeroFrontBlockFragment, HrBlockFragment, FrontPartnersBlockFragment, FrontSocialLinksBlockFragment } from './blocks/fragments.generated';
-import gql from 'graphql-tag';
-import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, BasicTextBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc, HrBlockFragmentDoc, FrontPartnersBlockFragmentDoc, FrontSocialLinksBlockFragmentDoc } from './blocks/fragments.generated';
+import { BasicTextBlockFragment } from './blocks/BasicTextBlock/index.generated';
+import { GreyBlockFragment } from './blocks/GreyBlock/index.generated';
+import { ColumnsBasicBlockFragment } from './blocks/ColumnsBasicBlock/index.generated';
+import { ColumnsButtonsBlockFragment } from './blocks/ColumnsButtonsBlock/index.generated';
+import { EventsListBlockFragment } from './blocks/EventsListBlock/index.generated';
+import { BigContactsBlockFragment } from './blocks/BigContactsBlock/index.generated';
+import { PhotoRibbonBlockFragment } from './blocks/PhotoRibbonBlock/index.generated';
+import { MailchimpSubscribeBlockFragment } from './blocks/MailchimpSubscribeBlock/index.generated';
+import { HeroFrontBlockFragment } from './blocks/HeroFrontBlock/index.generated';
+import { HrBlockFragment } from './blocks/HrBlock/index.generated';
+import { FrontPartnersBlockFragment } from './blocks/FrontPartnersBlock/index.generated';
+import { FrontSocialLinksBlockFragment } from './blocks/FrontSocialLinksBlock/index.generated';
+import { BasicLeadBlockFragment } from './blocks/BasicLeadBlock/index.generated';
+import { BasicLeadBlockFragmentDoc } from './blocks/BasicLeadBlock/index.generated';
+import { BasicTextBlockFragmentDoc } from './blocks/BasicTextBlock/index.generated';
+import { GreyBlockFragmentDoc } from './blocks/GreyBlock/index.generated';
+import { ColumnsBasicBlockFragmentDoc } from './blocks/ColumnsBasicBlock/index.generated';
+import { ColumnsButtonsBlockFragmentDoc } from './blocks/ColumnsButtonsBlock/index.generated';
+import { EventsListBlockFragmentDoc } from './blocks/EventsListBlock/index.generated';
+import { BigContactsBlockFragmentDoc } from './blocks/BigContactsBlock/index.generated';
+import { PhotoRibbonBlockFragmentDoc } from './blocks/PhotoRibbonBlock/index.generated';
+import { MailchimpSubscribeBlockFragmentDoc } from './blocks/MailchimpSubscribeBlock/index.generated';
+import { HeroFrontBlockFragmentDoc } from './blocks/HeroFrontBlock/index.generated';
+import { HrBlockFragmentDoc } from './blocks/HrBlock/index.generated';
+import { FrontPartnersBlockFragmentDoc } from './blocks/FrontPartnersBlock/index.generated';
+import { FrontSocialLinksBlockFragmentDoc } from './blocks/FrontSocialLinksBlock/index.generated';
 
 export type FreeFormPageFragment = (
   { __typename: 'FreeFormPage' }
@@ -14,7 +38,6 @@ export type FreeFormPageFragment = (
   ) | (
     { __typename: 'BasicParagraphBlock' }
     & Pick<Types.BasicParagraphBlock, 'id'>
-    & BasicParagraphBlockFragment
   ) | (
     { __typename: 'BasicTextBlock' }
     & Pick<Types.BasicTextBlock, 'id'>
@@ -116,7 +139,6 @@ export const FreeFormPageFragmentDoc = gql`
     __typename
     id
     ...BasicLeadBlock
-    ...BasicParagraphBlock
     ...BasicTextBlock
     ...GreyBlock
     ...ColumnsBasicBlock
@@ -132,7 +154,6 @@ export const FreeFormPageFragmentDoc = gql`
   }
 }
     ${BasicLeadBlockFragmentDoc}
-${BasicParagraphBlockFragmentDoc}
 ${BasicTextBlockFragmentDoc}
 ${GreyBlockFragmentDoc}
 ${ColumnsBasicBlockFragmentDoc}

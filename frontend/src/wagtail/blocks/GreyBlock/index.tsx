@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
+import { gql } from '@apollo/client';
 import { colors, fonts, RichText } from '@kocherga/frontkit';
 
-import { GreyBlockFragment as Props } from './fragments.generated';
+import { BlockComponent } from '../../types';
+import { GreyBlockFragment as Props } from './index.generated';
 
 const Container = styled(RichText)`
   background-color: ${colors.grey[100]};
@@ -23,7 +25,7 @@ const Text = styled(RichText)`
   margin: 0 auto;
 `;
 
-export default function GreyBlock(block: Props) {
+const GreyBlock: BlockComponent<Props> = (block) => {
   return (
     <Container>
       <Header>{block.grey_value.header}</Header>
@@ -32,4 +34,16 @@ export default function GreyBlock(block: Props) {
       )}
     </Container>
   );
-}
+};
+
+GreyBlock.fragment = gql`
+  fragment GreyBlock on GreyBlock {
+    id
+    grey_value: value {
+      header
+      text
+    }
+  }
+`;
+
+export default GreyBlock;

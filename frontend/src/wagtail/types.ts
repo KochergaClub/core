@@ -13,3 +13,12 @@ export interface NextWagtailPage<P extends AnyWagtailPage> {
 }
 
 export type AnyBlockFragment = FreeFormPageFragment['body'][0];
+
+interface BaseWagtailBlock {
+  id: string;
+}
+
+export interface BlockComponent<P extends BaseWagtailBlock> {
+  (props: P): JSX.Element | null;
+  fragment: DocumentNode;
+}

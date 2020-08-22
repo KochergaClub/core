@@ -1,3 +1,4 @@
+import { gql } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
@@ -5,9 +6,10 @@ import FbIcon from '~/components/icons/FbIcon';
 import VkIcon from '~/components/icons/VkIcon';
 import YoutubeIcon from '~/components/icons/YoutubeIcon';
 
-import { FrontSocialLinksBlockFragment as Props } from './fragments.generated';
+import { BlockComponent } from '../../types';
+import { FrontSocialLinksBlockFragment as Props } from './index.generated';
 
-export default function FrontSocialLinksBlock(block: Props) {
+const FrontSocialLinksBlock: BlockComponent<Props> = (block) => {
   // FIXME - move links to config
   return (
     <PaddedBlock>
@@ -24,4 +26,12 @@ export default function FrontSocialLinksBlock(block: Props) {
       </Row>
     </PaddedBlock>
   );
-}
+};
+
+FrontSocialLinksBlock.fragment = gql`
+  fragment FrontSocialLinksBlock on FrontSocialLinksBlock {
+    id
+  }
+`;
+
+export default FrontSocialLinksBlock;

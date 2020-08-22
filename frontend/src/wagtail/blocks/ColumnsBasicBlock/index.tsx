@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
+import { gql } from '@apollo/client';
 import { ColumnsBlock, fonts, RichText } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { ColumnsBasicBlockFragment as Props } from './fragments.generated';
+import { BlockComponent } from '../../types';
+import { ColumnsBasicBlockFragment as Props } from './index.generated';
 
 const Header = styled.h2`
   font-size: ${fonts.sizes.L};
@@ -20,7 +22,7 @@ const OneColumn = (column: Props['basic_columns'][0]) => (
   </div>
 );
 
-export default function ColumnsBasicBlock(block: Props) {
+const ColumnsBasicBlock: BlockComponent<Props> = (block) => {
   return (
     <PaddedBlock width="wide">
       <ColumnsBlock>
@@ -30,4 +32,16 @@ export default function ColumnsBasicBlock(block: Props) {
       </ColumnsBlock>
     </PaddedBlock>
   );
-}
+};
+
+ColumnsBasicBlock.fragment = gql`
+  fragment ColumnsBasicBlock on ColumnsBasicBlock {
+    id
+    basic_columns: value {
+      header
+      text
+    }
+  }
+`;
+
+export default ColumnsBasicBlock;

@@ -1,7 +1,21 @@
-import { EventsListBlockFragment as Props } from '../fragments.generated';
+import { gql } from '@apollo/client';
 
 import NonWagtailEventsListBlock from '~/events/components/EventsListBlock';
+import { BlockComponent } from '~/wagtail/types';
 
-export default function EventsListBlock(props: Props) {
+import { EventsListBlockFragment as Props } from './index.generated';
+
+const EventsListBlock: BlockComponent<Props> = (props) => {
   return <NonWagtailEventsListBlock events={props.events} />;
-}
+};
+
+EventsListBlock.fragment = gql`
+  fragment EventsListBlock on EventsListBlock {
+    id
+    events {
+      ...Event_Summary
+    }
+  }
+`;
+
+export default EventsListBlock;

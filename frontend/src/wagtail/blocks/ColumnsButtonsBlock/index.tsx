@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
+import { gql } from '@apollo/client';
 import { Button, Column, ColumnsBlock, fonts } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { ColumnsButtonsBlockFragment as Props } from './fragments.generated';
+import { BlockComponent } from '../../types';
+import { ColumnsButtonsBlockFragment as Props } from './index.generated';
 
 const Header = styled.div`
   font-size: ${fonts.sizes.L};
@@ -35,7 +37,7 @@ const OneColumn = (column: Props['button_columns'][0]) => (
   </div>
 );
 
-export default function ColumnsBasicBlock(block: Props) {
+const ColumnsButtonsBlock: BlockComponent<Props> = (block) => {
   return (
     <PaddedBlock>
       <ColumnsBlock>
@@ -45,4 +47,21 @@ export default function ColumnsBasicBlock(block: Props) {
       </ColumnsBlock>
     </PaddedBlock>
   );
-}
+};
+
+ColumnsButtonsBlock.fragment = gql`
+  fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
+    id
+    button_columns: value {
+      title
+      text
+      image(spec: "original") {
+        url
+      }
+      caption
+      link
+    }
+  }
+`;
+
+export default ColumnsButtonsBlock;
