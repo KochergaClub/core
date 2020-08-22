@@ -5,15 +5,15 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type CommonZadarmaPbxCallFragment = (
-  { __typename?: 'ZadarmaPbxCall' }
+  { __typename: 'ZadarmaPbxCall' }
   & Pick<Types.ZadarmaPbxCall, 'id' | 'ts'>
   & { calls: Array<(
-    { __typename?: 'ZadarmaCall' }
+    { __typename: 'ZadarmaCall' }
     & Pick<Types.ZadarmaCall, 'id' | 'ts' | 'call_type' | 'destination' | 'disposition' | 'clid' | 'sip' | 'record' | 'watchman'>
   )>, data?: Types.Maybe<(
-    { __typename?: 'ZadarmaData' }
+    { __typename: 'ZadarmaData' }
     & { staff_member?: Types.Maybe<(
-      { __typename?: 'StaffMember' }
+      { __typename: 'StaffMember' }
       & Pick<Types.StaffMember, 'id' | 'color' | 'short_name'>
     )> }
   )> }
@@ -28,16 +28,16 @@ export type ZadarmaPbxCallsQueryVariables = Types.Exact<{
 
 
 export type ZadarmaPbxCallsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { pbxCalls: (
-    { __typename?: 'ZadarmaPbxCallConnection' }
+    { __typename: 'ZadarmaPbxCallConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
     ), edges: Array<(
-      { __typename?: 'ZadarmaPbxCallEdge' }
+      { __typename: 'ZadarmaPbxCallEdge' }
       & { node: (
-        { __typename?: 'ZadarmaPbxCall' }
+        { __typename: 'ZadarmaPbxCall' }
         & CommonZadarmaPbxCallFragment
       ) }
     )> }
@@ -50,9 +50,9 @@ export type ZadarmaPbxCallQueryVariables = Types.Exact<{
 
 
 export type ZadarmaPbxCallQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { pbxCall: (
-    { __typename?: 'ZadarmaPbxCall' }
+    { __typename: 'ZadarmaPbxCall' }
     & CommonZadarmaPbxCallFragment
   ) }
 );
@@ -64,7 +64,7 @@ export type ZadarmaSetMemberForPbxCallMutationVariables = Types.Exact<{
 
 
 export type ZadarmaSetMemberForPbxCallMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'zadarmaSetMemberForPbxCall'>
 );
 

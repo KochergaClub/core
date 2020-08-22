@@ -1,6 +1,6 @@
 schema:
   - ../schema.graphql
-documents: 'src/**/*.graphql'
+documents: "src/**/*.graphql"
 
 generates:
   src/apollo/types.generated.ts:
@@ -22,6 +22,12 @@ generates:
       - typescript-operations
       - typescript-react-apollo
     config:
+      # Apollo always asks for __typename.
+      # Technically this is violated in Jest tests when we use MockedProvider, but so far this hasn't caused
+      # any problems.
+      # This option is necessary, for example, for proper casting of AnyBlockFragment to KnownBlockFragment
+      # in wagtail/components/AnyBlock.
+      nonOptionalTypename: true
       withComponent: false
       withHOC: false
       withHooks: true

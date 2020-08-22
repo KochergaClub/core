@@ -15,39 +15,51 @@ import MailchimpSubscribeBlock from '../blocks/MailchimpSubscribeBlock';
 import PhotoRibbonBlock from '../blocks/PhotoRibbonBlock';
 import { AnyBlockFragment } from '../types';
 
+const BLOCKS = {
+  BasicLeadBlock,
+  GreyBlock,
+  BasicParagraphBlock,
+  BasicTextBlock,
+  ColumnsBasicBlock,
+  ColumnsButtonsBlock,
+  EventsListBlock,
+  BigContactsBlock,
+  HeroFrontBlock,
+  PhotoRibbonBlock,
+  MailchimpSubscribeBlock,
+  HrBlock,
+  FrontPartnersBlock,
+  FrontSocialLinksBlock,
+};
+
+type ComponentsMap = typeof BLOCKS;
+
+type KnownTypename = keyof ComponentsMap;
+
+type TypenameToFragment<T extends KnownTypename> = Parameters<
+  ComponentsMap[T]
+>[0];
+
+type KnownBlockFragment = Parameters<ComponentsMap[keyof ComponentsMap]>[0];
+
+const isKnownFragment = (
+  block: AnyBlockFragment
+): block is KnownBlockFragment => {
+  return BLOCKS.hasOwnProperty(block.__typename);
+};
+
+const renderKnownBlock = <T extends KnownTypename>(
+  block: TypenameToFragment<T>
+): JSX.Element => {
+  const BlockComponent = BLOCKS[block.__typename];
+  return <BlockComponent {...(block as any)} />; // Almost there... sorry. I'll figure this out later.
+};
+
 const AnyBlock = (block: AnyBlockFragment) => {
-  switch (block.__typename) {
-    case 'BasicLeadBlock':
-      return <BasicLeadBlock {...block} />;
-    case 'GreyBlock':
-      return <GreyBlock {...block} />;
-    case 'BasicParagraphBlock':
-      return <BasicParagraphBlock {...block} />;
-    case 'BasicTextBlock':
-      return <BasicTextBlock {...block} />;
-    case 'ColumnsBasicBlock':
-      return <ColumnsBasicBlock {...block} />;
-    case 'ColumnsButtonsBlock':
-      return <ColumnsButtonsBlock {...block} />;
-    case 'EventsListBlock':
-      return <EventsListBlock {...block} />;
-    case 'BigContactsBlock':
-      return <BigContactsBlock {...block} />;
-    case 'HeroFrontBlock':
-      return <HeroFrontBlock {...block} />;
-    case 'PhotoRibbonBlock':
-      return <PhotoRibbonBlock {...block} />;
-    case 'MailchimpSubscribeBlock':
-      return <MailchimpSubscribeBlock {...block} />;
-    case 'HrBlock':
-      return <HrBlock {...block} />;
-    case 'FrontPartnersBlock':
-      return <FrontPartnersBlock {...block} />;
-    case 'FrontSocialLinksBlock':
-      return <FrontSocialLinksBlock {...block} />;
-    default:
-      return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
+  if (isKnownFragment(block)) {
+    return renderKnownBlock(block);
   }
+  return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
 };
 
 export default AnyBlock;

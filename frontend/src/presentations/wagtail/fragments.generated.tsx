@@ -3,45 +3,45 @@ import * as Types from '../../apollo/types.generated';
 import gql from 'graphql-tag';
 
 export type SlideTitleBlockFragment = (
-  { __typename?: 'SlideTitleBlock' }
+  { __typename: 'SlideTitleBlock' }
   & Pick<Types.SlideTitleBlock, 'id'>
   & { title: Types.SlideTitleBlock['value'] }
 );
 
 export type SlideRichTextBlockFragment = (
-  { __typename?: 'SlideRichTextBlock' }
+  { __typename: 'SlideRichTextBlock' }
   & Pick<Types.SlideRichTextBlock, 'id' | 'value'>
 );
 
 export type SlideRawHtmlBlockFragment = (
-  { __typename?: 'SlideRawHtmlBlock' }
+  { __typename: 'SlideRawHtmlBlock' }
   & Pick<Types.SlideRawHtmlBlock, 'id' | 'value'>
 );
 
 export type SlideFragmentRichTextFragment = (
-  { __typename?: 'SlideFragmentsBlock_RichTextBlock' }
+  { __typename: 'SlideFragmentsBlock_RichTextBlock' }
   & Pick<Types.SlideFragmentsBlock_RichTextBlock, 'id' | 'value'>
 );
 
 export type SlideFragmentRawHtmlFragment = (
-  { __typename?: 'SlideFragmentsBlock_RawHtmlBlock' }
+  { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
   & Pick<Types.SlideFragmentsBlock_RawHtmlBlock, 'id' | 'value'>
 );
 
 export type SlideFragmentsBlockFragment = (
-  { __typename?: 'SlideFragmentsBlock' }
+  { __typename: 'SlideFragmentsBlock' }
   & Pick<Types.SlideFragmentsBlock, 'id'>
   & { fragments: Array<(
-    { __typename?: 'SlideFragmentsBlock_RichTextBlock' }
+    { __typename: 'SlideFragmentsBlock_RichTextBlock' }
     & SlideFragmentRichTextFragment
   ) | (
-    { __typename?: 'SlideFragmentsBlock_RawHtmlBlock' }
+    { __typename: 'SlideFragmentsBlock_RawHtmlBlock' }
     & SlideFragmentRawHtmlFragment
   )> }
 );
 
 export type PresentationPageFragment = (
-  { __typename?: 'PresentationPage' }
+  { __typename: 'PresentationPage' }
   & Pick<Types.PresentationPage, 'id' | 'title'>
   & { slides: Array<(
     { __typename: 'BasicLeadBlock' }

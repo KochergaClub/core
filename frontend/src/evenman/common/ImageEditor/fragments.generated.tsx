@@ -3,10 +3,10 @@ import * as Types from '../../../apollo/types.generated';
 import gql from 'graphql-tag';
 
 export type WagtailImageRendition_ForEditorFragment = (
-  { __typename?: 'WagtailImageRendition' }
+  { __typename: 'WagtailImageRendition' }
   & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   & { original_image: (
-    { __typename?: 'WagtailImage' }
+    { __typename: 'WagtailImage' }
     & Pick<Types.WagtailImage, 'id' | 'url'>
   ) }
 );

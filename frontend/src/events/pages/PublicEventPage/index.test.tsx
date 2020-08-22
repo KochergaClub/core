@@ -21,7 +21,9 @@ it('renders without crashing', async () => {
     project: null,
     my_ticket: null,
     announcements: {
+      __typename: 'EventsAnnouncements',
       timepad: {
+        __typename: 'EventsAnnouncementTimepad',
         link: '',
       },
     },

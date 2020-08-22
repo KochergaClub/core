@@ -3,7 +3,7 @@ import * as Types from './types.generated';
 import gql from 'graphql-tag';
 
 export type PageInfoFragment = (
-  { __typename?: 'PageInfo' }
+  { __typename: 'PageInfo' }
   & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
 );
 

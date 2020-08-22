@@ -5,10 +5,10 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type EventsTicketFragment = (
-  { __typename?: 'EventsTicket' }
+  { __typename: 'EventsTicket' }
   & Pick<Types.EventsTicket, 'id' | 'status'>
   & { user: (
-    { __typename?: 'AuthUser' }
+    { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'email'>
   ) }
 );
@@ -19,12 +19,12 @@ export type GetEventTicketsQueryVariables = Types.Exact<{
 
 
 export type GetEventTicketsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id'>
     & { tickets: Array<(
-      { __typename?: 'EventsTicket' }
+      { __typename: 'EventsTicket' }
       & EventsTicketFragment
     )> }
   )> }

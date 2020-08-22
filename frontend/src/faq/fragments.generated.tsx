@@ -3,36 +3,36 @@ import * as Types from '../apollo/types.generated';
 import gql from 'graphql-tag';
 
 export type FaqPage_SummaryFragment = (
-  { __typename?: 'FaqPage' }
+  { __typename: 'FaqPage' }
   & Pick<Types.FaqPage, 'id' | 'summary' | 'title'>
   & { meta: (
-    { __typename?: 'WagtailPageMeta' }
+    { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'html_url'>
   ) }
 );
 
 export type FaqEntryFragment = (
-  { __typename?: 'FaqEntry' }
+  { __typename: 'FaqEntry' }
   & Pick<Types.FaqEntry, 'id' | 'question' | 'answer'>
 );
 
 export type FaqPageFragment = (
-  { __typename?: 'FaqPage' }
+  { __typename: 'FaqPage' }
   & Pick<Types.FaqPage, 'id' | 'title' | 'summary'>
   & { meta: (
-    { __typename?: 'WagtailPageMeta' }
+    { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'html_url'>
   ), next_page?: Types.Maybe<(
-    { __typename?: 'FaqPage' }
+    { __typename: 'FaqPage' }
     & FaqPage_SummaryFragment
   )>, prev_page?: Types.Maybe<(
-    { __typename?: 'FaqPage' }
+    { __typename: 'FaqPage' }
     & FaqPage_SummaryFragment
   )>, subpages: Array<(
-    { __typename?: 'FaqPage' }
+    { __typename: 'FaqPage' }
     & FaqPage_SummaryFragment
   )>, entries: Array<(
-    { __typename?: 'FaqEntry' }
+    { __typename: 'FaqEntry' }
     & FaqEntryFragment
   )> }
 );

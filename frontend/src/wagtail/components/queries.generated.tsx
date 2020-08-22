@@ -10,47 +10,47 @@ export type WagtailSavePageMutationVariables = Types.Exact<{
 
 
 export type WagtailSavePageMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { wagtailEditPageBodyBlocks: (
-    { __typename?: 'WagtailEditPageBodyBlocksResult' }
+    { __typename: 'WagtailEditPageBodyBlocksResult' }
     & { page?: Types.Maybe<(
-      { __typename?: 'BlogIndexPage' }
+      { __typename: 'BlogIndexPage' }
       & Pick<Types.BlogIndexPage, 'id'>
     ) | (
-      { __typename?: 'BlogPostPage' }
+      { __typename: 'BlogPostPage' }
       & Pick<Types.BlogPostPage, 'id'>
     ) | (
-      { __typename?: 'FaqPage' }
+      { __typename: 'FaqPage' }
       & Pick<Types.FaqPage, 'id'>
     ) | (
-      { __typename?: 'FolderPage' }
+      { __typename: 'FolderPage' }
       & Pick<Types.FolderPage, 'id'>
     ) | (
-      { __typename?: 'FreeFormPage' }
+      { __typename: 'FreeFormPage' }
       & Pick<Types.FreeFormPage, 'id'>
     ) | (
-      { __typename?: 'PresentationPage' }
+      { __typename: 'PresentationPage' }
       & Pick<Types.PresentationPage, 'id'>
     ) | (
-      { __typename?: 'ProjectIndexPage' }
+      { __typename: 'ProjectIndexPage' }
       & Pick<Types.ProjectIndexPage, 'id'>
     ) | (
-      { __typename?: 'ProjectPage' }
+      { __typename: 'ProjectPage' }
       & Pick<Types.ProjectPage, 'id'>
     ) | (
-      { __typename?: 'RatioNotebookIndexPage' }
+      { __typename: 'RatioNotebookIndexPage' }
       & Pick<Types.RatioNotebookIndexPage, 'id'>
     ) | (
-      { __typename?: 'RatioNotebookPage' }
+      { __typename: 'RatioNotebookPage' }
       & Pick<Types.RatioNotebookPage, 'id'>
     ) | (
-      { __typename?: 'RatioPresentationIndexPage' }
+      { __typename: 'RatioPresentationIndexPage' }
       & Pick<Types.RatioPresentationIndexPage, 'id'>
     ) | (
-      { __typename?: 'RatioSectionIndexPage' }
+      { __typename: 'RatioSectionIndexPage' }
       & Pick<Types.RatioSectionIndexPage, 'id'>
     ) | (
-      { __typename?: 'RatioSectionPage' }
+      { __typename: 'RatioSectionPage' }
       & Pick<Types.RatioSectionPage, 'id'>
     )> }
   ) }

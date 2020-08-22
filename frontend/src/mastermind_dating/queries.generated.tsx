@@ -5,54 +5,54 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type MastermindDatingCohortSummaryFragment = (
-  { __typename?: 'MastermindDatingCohort' }
+  { __typename: 'MastermindDatingCohort' }
   & Pick<Types.MastermindDatingCohort, 'id'>
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'start'>
   )> }
 );
 
 export type MastermindDatingParticipantSummaryFragment = (
-  { __typename?: 'MastermindDatingParticipant' }
+  { __typename: 'MastermindDatingParticipant' }
   & Pick<Types.MastermindDatingParticipant, 'id' | 'name'>
 );
 
 export type MastermindDatingParticipantFragment = (
-  { __typename?: 'MastermindDatingParticipant' }
+  { __typename: 'MastermindDatingParticipant' }
   & Pick<Types.MastermindDatingParticipant, 'id' | 'name' | 'invite_email_sent' | 'voted_for' | 'photo' | 'present' | 'desc'>
   & { user: (
-    { __typename?: 'AuthUser' }
+    { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'id' | 'email'>
   ) }
 );
 
 export type MastermindDatingGroupFragment = (
-  { __typename?: 'MastermindDatingGroup' }
+  { __typename: 'MastermindDatingGroup' }
   & Pick<Types.MastermindDatingGroup, 'id' | 'telegram_invite_link'>
   & { participants: Array<(
-    { __typename?: 'MastermindDatingParticipant' }
+    { __typename: 'MastermindDatingParticipant' }
     & MastermindDatingParticipantSummaryFragment
   )> }
 );
 
 export type MastermindDatingCohortDetailsFragment = (
-  { __typename?: 'MastermindDatingCohort' }
+  { __typename: 'MastermindDatingCohort' }
   & Pick<Types.MastermindDatingCohort, 'id' | 'leader_telegram_uid'>
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'start' | 'title'>
   )>, participants: Array<(
-    { __typename?: 'MastermindDatingParticipant' }
+    { __typename: 'MastermindDatingParticipant' }
     & MastermindDatingParticipantFragment
   )>, groups: Array<(
-    { __typename?: 'MastermindDatingGroup' }
+    { __typename: 'MastermindDatingGroup' }
     & MastermindDatingGroupFragment
   )> }
 );
 
 export type MastermindDatingEventFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'start'>
 );
 
@@ -60,9 +60,9 @@ export type MastermindDatingCohortsQueryVariables = Types.Exact<{ [key: string]:
 
 
 export type MastermindDatingCohortsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cohorts: Array<(
-    { __typename?: 'MastermindDatingCohort' }
+    { __typename: 'MastermindDatingCohort' }
     & MastermindDatingCohortSummaryFragment
   )> }
 );
@@ -73,9 +73,9 @@ export type MastermindDatingCohortByIdQueryVariables = Types.Exact<{
 
 
 export type MastermindDatingCohortByIdQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cohort: (
-    { __typename?: 'MastermindDatingCohort' }
+    { __typename: 'MastermindDatingCohort' }
     & MastermindDatingCohortDetailsFragment
   ) }
 );
@@ -86,11 +86,11 @@ export type MastermindDatingSearchEventsQueryVariables = Types.Exact<{
 
 
 export type MastermindDatingSearchEventsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { events: (
-    { __typename?: 'EventConnection' }
+    { __typename: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & MastermindDatingEventFragment
     )> }
   ) }
@@ -100,11 +100,11 @@ export type MastermindDatingCreateCohortMutationVariables = Types.Exact<{ [key: 
 
 
 export type MastermindDatingCreateCohortMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingCreateCohort: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortSummaryFragment
     ) }
   ) }
@@ -116,11 +116,11 @@ export type MastermindDatingPopulateCohortFromEventMutationVariables = Types.Exa
 
 
 export type MastermindDatingPopulateCohortFromEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingPopulateCohortFromEvent: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortDetailsFragment
     ) }
   ) }
@@ -132,9 +132,9 @@ export type MastermindDatingDeleteCohortMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingDeleteCohortMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingDeleteCohort: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );
@@ -145,11 +145,11 @@ export type MastermindDatingSendInviteEmailsMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingSendInviteEmailsMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingSendInviteEmails: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortDetailsFragment
     ) }
   ) }
@@ -161,11 +161,11 @@ export type MastermindDatingRunSolverMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingRunSolverMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingRunSolver: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortDetailsFragment
     ) }
   ) }
@@ -178,11 +178,11 @@ export type MastermindDatingSetEventForCohortMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingSetEventForCohortMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingSetEventForCohort: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortDetailsFragment
     ) }
   ) }
@@ -194,11 +194,11 @@ export type MastermindDatingUnsetEventForCohortMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingUnsetEventForCohortMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingUnsetEventForCohort: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortDetailsFragment
     ) }
   ) }
@@ -210,11 +210,11 @@ export type MastermindDatingActivateVotingMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingActivateVotingMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingActivateVoting: (
-    { __typename?: 'MastermindDatingParticipantMutationResult' }
+    { __typename: 'MastermindDatingParticipantMutationResult' }
     & { participant: (
-      { __typename?: 'MastermindDatingParticipant' }
+      { __typename: 'MastermindDatingParticipant' }
       & MastermindDatingParticipantFragment
     ) }
   ) }
@@ -227,11 +227,11 @@ export type MastermindDatingSetPresenceStatusMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingSetPresenceStatusMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingSetPresenceStatus: (
-    { __typename?: 'MastermindDatingParticipantMutationResult' }
+    { __typename: 'MastermindDatingParticipantMutationResult' }
     & { participant: (
-      { __typename?: 'MastermindDatingParticipant' }
+      { __typename: 'MastermindDatingParticipant' }
       & MastermindDatingParticipantFragment
     ) }
   ) }
@@ -243,11 +243,11 @@ export type MastermindDatingCreateGroupMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingCreateGroupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingCreateGroup: (
-    { __typename?: 'MastermindDatingCohortMutationResult' }
+    { __typename: 'MastermindDatingCohortMutationResult' }
     & { cohort: (
-      { __typename?: 'MastermindDatingCohort' }
+      { __typename: 'MastermindDatingCohort' }
       & MastermindDatingCohortDetailsFragment
     ) }
   ) }
@@ -260,11 +260,11 @@ export type MastermindDatingCreateParticipantMutationVariables = Types.Exact<{
 
 
 export type MastermindDatingCreateParticipantMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { mastermindDatingCreateParticipant: (
-    { __typename?: 'MastermindDatingParticipantMutationResult' }
+    { __typename: 'MastermindDatingParticipantMutationResult' }
     & { participant: (
-      { __typename?: 'MastermindDatingParticipant' }
+      { __typename: 'MastermindDatingParticipant' }
       & MastermindDatingParticipantFragment
     ) }
   ) }

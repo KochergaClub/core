@@ -5,131 +5,131 @@ import gql from 'graphql-tag';
 import { Event_SummaryFragmentDoc } from '../../events/queries.generated';
 
 export type GreyBlockFragment = (
-  { __typename?: 'GreyBlock' }
+  { __typename: 'GreyBlock' }
   & Pick<Types.GreyBlock, 'id'>
   & { grey_value: (
-    { __typename?: 'GreyBlockValue' }
+    { __typename: 'GreyBlockValue' }
     & Pick<Types.GreyBlockValue, 'header' | 'text'>
   ) }
 );
 
 export type BasicLeadBlockFragment = (
-  { __typename?: 'BasicLeadBlock' }
+  { __typename: 'BasicLeadBlock' }
   & Pick<Types.BasicLeadBlock, 'id' | 'value'>
 );
 
 export type BasicParagraphBlockFragment = (
-  { __typename?: 'BasicParagraphBlock' }
+  { __typename: 'BasicParagraphBlock' }
   & Pick<Types.BasicParagraphBlock, 'id' | 'value'>
 );
 
 export type BasicTextBlockFragment = (
-  { __typename?: 'BasicTextBlock' }
+  { __typename: 'BasicTextBlock' }
   & Pick<Types.BasicTextBlock, 'id'>
   & { basic_text: (
-    { __typename?: 'BasicTextBlockValue' }
+    { __typename: 'BasicTextBlockValue' }
     & Pick<Types.BasicTextBlockValue, 'text' | 'centered'>
   ) }
 );
 
 export type ColumnsBasicBlockFragment = (
-  { __typename?: 'ColumnsBasicBlock' }
+  { __typename: 'ColumnsBasicBlock' }
   & Pick<Types.ColumnsBasicBlock, 'id'>
   & { basic_columns: Array<(
-    { __typename?: 'ColumnsBasicBlockValue' }
+    { __typename: 'ColumnsBasicBlockValue' }
     & Pick<Types.ColumnsBasicBlockValue, 'header' | 'text'>
   )> }
 );
 
 export type ColumnsButtonsBlockFragment = (
-  { __typename?: 'ColumnsButtonsBlock' }
+  { __typename: 'ColumnsButtonsBlock' }
   & Pick<Types.ColumnsButtonsBlock, 'id'>
   & { button_columns: Array<(
-    { __typename?: 'ColumnsButtonsBlockValue' }
+    { __typename: 'ColumnsButtonsBlockValue' }
     & Pick<Types.ColumnsButtonsBlockValue, 'title' | 'text' | 'caption' | 'link'>
     & { image: (
-      { __typename?: 'WagtailImageRendition' }
+      { __typename: 'WagtailImageRendition' }
       & Pick<Types.WagtailImageRendition, 'url'>
     ) }
   )> }
 );
 
 export type EventsListBlockFragment = (
-  { __typename?: 'EventsListBlock' }
+  { __typename: 'EventsListBlock' }
   & Pick<Types.EventsListBlock, 'id'>
   & { events: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Event_SummaryFragment
   )> }
 );
 
 export type BigContactsBlockFragment = (
-  { __typename?: 'BigContactsBlock' }
+  { __typename: 'BigContactsBlock' }
   & Pick<Types.BigContactsBlock, 'id'>
   & { contacts: (
-    { __typename?: 'BigContactsBlockValue' }
+    { __typename: 'BigContactsBlockValue' }
     & Pick<Types.BigContactsBlockValue, 'address' | 'phone' | 'email' | 'text'>
     & { map: (
-      { __typename?: 'WagtailGeo' }
+      { __typename: 'WagtailGeo' }
       & Pick<Types.WagtailGeo, 'lat' | 'lng'>
     ) }
   ) }
 );
 
 export type PhotoRibbonBlockFragment = (
-  { __typename?: 'PhotoRibbonBlock' }
+  { __typename: 'PhotoRibbonBlock' }
   & Pick<Types.PhotoRibbonBlock, 'id'>
   & { photos: Array<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )> }
 );
 
 export type MailchimpSubscribeBlockFragment = (
-  { __typename?: 'MailchimpSubscribeBlock' }
+  { __typename: 'MailchimpSubscribeBlock' }
   & Pick<Types.MailchimpSubscribeBlock, 'id'>
   & { mailchimp: (
-    { __typename?: 'MailchimpSubscribeBlockValue' }
+    { __typename: 'MailchimpSubscribeBlockValue' }
     & Pick<Types.MailchimpSubscribeBlockValue, 'news' | 'events' | 'trainings'>
   ) }
 );
 
 export type HeroFrontBlockFragment = (
-  { __typename?: 'HeroFrontBlock' }
+  { __typename: 'HeroFrontBlock' }
   & Pick<Types.HeroFrontBlock, 'id'>
   & { hero: (
-    { __typename?: 'HeroFrontBlockValue' }
+    { __typename: 'HeroFrontBlockValue' }
     & Pick<Types.HeroFrontBlockValue, 'title'>
     & { buttons: Array<(
-      { __typename?: 'HeroFrontBlock_buttonsValue' }
+      { __typename: 'HeroFrontBlock_buttonsValue' }
       & Pick<Types.HeroFrontBlock_ButtonsValue, 'title' | 'link'>
     )> }
   ) }
 );
 
 export type HrBlockFragment = (
-  { __typename?: 'HrBlock' }
+  { __typename: 'HrBlock' }
   & Pick<Types.HrBlock, 'id'>
 );
 
 export type FrontPartnersBlockFragment = (
-  { __typename?: 'FrontPartnersBlock' }
+  { __typename: 'FrontPartnersBlock' }
   & Pick<Types.FrontPartnersBlock, 'id'>
   & { partners: Array<(
-    { __typename?: 'FrontPartnersBlockValue' }
+    { __typename: 'FrontPartnersBlockValue' }
     & Pick<Types.FrontPartnersBlockValue, 'link'>
     & { image: (
-      { __typename?: 'WagtailImageRendition' }
+      { __typename: 'WagtailImageRendition' }
       & Pick<Types.WagtailImageRendition, 'url'>
     ), image_x2: (
-      { __typename?: 'WagtailImageRendition' }
+      { __typename: 'WagtailImageRendition' }
       & Pick<Types.WagtailImageRendition, 'url'>
     ) }
   )> }
 );
 
 export type FrontSocialLinksBlockFragment = (
-  { __typename?: 'FrontSocialLinksBlock' }
+  { __typename: 'FrontSocialLinksBlock' }
   & Pick<Types.FrontSocialLinksBlock, 'id'>
 );
 

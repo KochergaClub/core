@@ -5,38 +5,38 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type ProjectPage_SummaryForEventFragment = (
-  { __typename?: 'ProjectPage' }
+  { __typename: 'ProjectPage' }
   & Pick<Types.ProjectPage, 'id' | 'title' | 'is_active'>
   & { meta: (
-    { __typename?: 'WagtailPageMeta' }
+    { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), upcoming_events: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title'>
   )> }
 );
 
 export type MyEventsTicketFragment = (
-  { __typename?: 'MyEventsTicket' }
+  { __typename: 'MyEventsTicket' }
   & Pick<Types.MyEventsTicket, 'id' | 'created' | 'status' | 'zoom_link'>
 );
 
 export type Event_DetailsFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'realm' | 'registration_type' | 'pricing_type'>
   & { image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
   )>, project?: Types.Maybe<(
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & ProjectPage_SummaryForEventFragment
   )>, my_ticket?: Types.Maybe<(
-    { __typename?: 'MyEventsTicket' }
+    { __typename: 'MyEventsTicket' }
     & MyEventsTicketFragment
   )>, announcements: (
-    { __typename?: 'EventsAnnouncements' }
+    { __typename: 'EventsAnnouncements' }
     & { timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
+      { __typename: 'EventsAnnouncementTimepad' }
       & Pick<Types.EventsAnnouncementTimepad, 'link'>
     ) }
   ) }
@@ -48,9 +48,9 @@ export type GetPublicEventQueryVariables = Types.Exact<{
 
 
 export type GetPublicEventQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { publicEvent?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Event_DetailsFragment
   )> }
 );
@@ -61,9 +61,9 @@ export type MyEventsTicketRegisterAnonMutationVariables = Types.Exact<{
 
 
 export type MyEventsTicketRegisterAnonMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { myEventsTicketRegisterAnon: (
-    { __typename?: 'MyEventsTicket' }
+    { __typename: 'MyEventsTicket' }
     & MyEventsTicketFragment
   ) }
 );
@@ -74,9 +74,9 @@ export type MyEventsTicketRegisterMutationVariables = Types.Exact<{
 
 
 export type MyEventsTicketRegisterMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { myEventsTicketRegister: (
-    { __typename?: 'MyEventsTicket' }
+    { __typename: 'MyEventsTicket' }
     & MyEventsTicketFragment
   ) }
 );
@@ -87,9 +87,9 @@ export type MyEventsTicketUnregisterMutationVariables = Types.Exact<{
 
 
 export type MyEventsTicketUnregisterMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { myEventsTicketUnregister: (
-    { __typename?: 'MyEventsTicket' }
+    { __typename: 'MyEventsTicket' }
     & MyEventsTicketFragment
   ) }
 );

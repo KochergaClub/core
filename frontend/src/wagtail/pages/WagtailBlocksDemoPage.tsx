@@ -15,6 +15,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'BasicTextBlock',
       basic_text: {
+        __typename: 'BasicTextBlockValue',
         text:
           'Обычный текст (BasicTextBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. По умолчанию выравнивается по левому краю.',
         centered: false,
@@ -24,6 +25,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'BasicTextBlock',
       basic_text: {
+        __typename: 'BasicTextBlockValue',
         text:
           'Обычный текст (BasicTextBlock) с центрированием. Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. При проставленной настройке "centered" выравнивается по центру.',
         centered: true,
@@ -33,6 +35,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'GreyBlock',
       grey_value: {
+        __typename: 'GreyBlockValue',
         header: 'Серый блок',
         text:
           'Текст поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
@@ -43,10 +46,12 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       __typename: 'ColumnsBasicBlock',
       basic_columns: [
         {
+          __typename: 'ColumnsBasicBlockValue',
           header: 'Колонка 1',
           text: '',
         },
         {
+          __typename: 'ColumnsBasicBlockValue',
           header: 'Колонка 2',
           text: 'Опциональный текст',
         },
@@ -57,20 +62,24 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       __typename: 'ColumnsButtonsBlock',
       button_columns: [
         {
+          __typename: 'ColumnsButtonsBlockValue',
           title: 'Колонка 1',
           text: 'Описание колонки 1',
           caption: 'Заголовок 1',
           link: 'https://example.com',
           image: {
+            __typename: 'WagtailImageRendition',
             url: 'https://example.com',
           },
         },
         {
+          __typename: 'ColumnsButtonsBlockValue',
           title: 'Колонка 2',
           text: 'Описание колонки 2',
           caption: 'Заголовок 2',
           link: 'https://example.com',
           image: {
+            __typename: 'WagtailImageRendition',
             url: 'https://example.com',
           },
         },
@@ -80,7 +89,9 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'BigContactsBlock',
       contacts: {
+        __typename: 'BigContactsBlockValue',
         map: {
+          __typename: 'WagtailGeo',
           lat: '100',
           lng: '100',
         },
@@ -94,6 +105,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'MailchimpSubscribeBlock',
       mailchimp: {
+        __typename: 'MailchimpSubscribeBlockValue',
         news: true,
         events: true,
         trainings: true,

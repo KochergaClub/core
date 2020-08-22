@@ -7,67 +7,67 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type MembershipFragment = (
-  { __typename?: 'MyCmCustomer' }
+  { __typename: 'MyCmCustomer' }
   & Pick<Types.MyCmCustomer, 'card_id' | 'orders_count' | 'subscription_until'>
   & { orders: Array<(
-    { __typename?: 'MyCmOrder' }
+    { __typename: 'MyCmOrder' }
     & Pick<Types.MyCmOrder, 'start_dt'>
   )> }
 );
 
 export type EmailSubscriptionInterestFragment = (
-  { __typename?: 'MyEmailSubscriptionInterest' }
+  { __typename: 'MyEmailSubscriptionInterest' }
   & Pick<Types.MyEmailSubscriptionInterest, 'id' | 'name' | 'subscribed'>
 );
 
 export type EmailSubscriptionFragment = (
-  { __typename?: 'MyEmailSubscription' }
+  { __typename: 'MyEmailSubscription' }
   & Pick<Types.MyEmailSubscription, 'status'>
   & { interests?: Types.Maybe<Array<(
-    { __typename?: 'MyEmailSubscriptionInterest' }
+    { __typename: 'MyEmailSubscriptionInterest' }
     & EmailSubscriptionInterestFragment
   )>> }
 );
 
 export type MyTicketFragment = (
-  { __typename?: 'MyEventsTicket' }
+  { __typename: 'MyEventsTicket' }
   & Pick<Types.MyEventsTicket, 'id' | 'status' | 'zoom_link'>
   & { event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'start' | 'title'>
   ) }
 );
 
 export type MyVisitsPageFragment = (
-  { __typename?: 'My' }
+  { __typename: 'My' }
   & { membership?: Types.Maybe<(
-    { __typename?: 'MyCmCustomer' }
+    { __typename: 'MyCmCustomer' }
     & MembershipFragment
   )> }
 );
 
 export type MyTicketsPageFragment = (
-  { __typename?: 'My' }
+  { __typename: 'My' }
   & { tickets: (
-    { __typename?: 'MyEventsTicketConnection' }
+    { __typename: 'MyEventsTicketConnection' }
     & { nodes: Array<(
-      { __typename?: 'MyEventsTicket' }
+      { __typename: 'MyEventsTicket' }
       & MyTicketFragment
     )> }
   ) }
 );
 
 export type MySettingsPageFragment = (
-  { __typename?: 'My' }
+  { __typename: 'My' }
   & { user: (
-    { __typename?: 'AuthCurrentUser' }
+    { __typename: 'AuthCurrentUser' }
     & Pick<Types.AuthCurrentUser, 'first_name' | 'last_name'>
     & AuthCurrentUserFragment
   ), email_subscription: (
-    { __typename?: 'MyEmailSubscription' }
+    { __typename: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
   ), membership?: Types.Maybe<(
-    { __typename?: 'MyCmCustomer' }
+    { __typename: 'MyCmCustomer' }
     & Pick<Types.MyCmCustomer, 'privacy_mode'>
   )> }
 );
@@ -76,9 +76,9 @@ export type MyVisitsPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type MyVisitsPageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { my: (
-    { __typename?: 'My' }
+    { __typename: 'My' }
     & MyVisitsPageFragment
   ) }
 );
@@ -87,9 +87,9 @@ export type MyTicketsPageQueryVariables = Types.Exact<{ [key: string]: never; }>
 
 
 export type MyTicketsPageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { my: (
-    { __typename?: 'My' }
+    { __typename: 'My' }
     & MyTicketsPageFragment
   ) }
 );
@@ -98,9 +98,9 @@ export type MySettingsPageQueryVariables = Types.Exact<{ [key: string]: never; }
 
 
 export type MySettingsPageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { my: (
-    { __typename?: 'My' }
+    { __typename: 'My' }
     & MySettingsPageFragment
   ) }
 );
@@ -109,7 +109,7 @@ export type MyEmailResubscribeMutationVariables = Types.Exact<{ [key: string]: n
 
 
 export type MyEmailResubscribeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'myEmailResubscribe'>
 );
 
@@ -117,7 +117,7 @@ export type MyEmailUnsubscribeMutationVariables = Types.Exact<{ [key: string]: n
 
 
 export type MyEmailUnsubscribeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'myEmailUnsubscribe'>
 );
 
@@ -127,7 +127,7 @@ export type MyEmailSubscribeToInterestMutationVariables = Types.Exact<{
 
 
 export type MyEmailSubscribeToInterestMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'myEmailSubscribeToInterest'>
 );
 
@@ -137,7 +137,7 @@ export type MyEmailUnsubscribeFromInterestMutationVariables = Types.Exact<{
 
 
 export type MyEmailUnsubscribeFromInterestMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'myEmailUnsubscribeFromInterest'>
 );
 
@@ -147,7 +147,7 @@ export type MyPrivacyModeSetMutationVariables = Types.Exact<{
 
 
 export type MyPrivacyModeSetMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'myPrivacyModeSet'>
 );
 
@@ -157,9 +157,9 @@ export type MyTicketDeleteMutationVariables = Types.Exact<{
 
 
 export type MyTicketDeleteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'MyEventsTicket' }
+    { __typename: 'MyEventsTicket' }
     & Pick<Types.MyEventsTicket, 'id' | 'created' | 'status'>
   ) }
 );
@@ -168,9 +168,9 @@ export type LogoutMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'AuthLogoutResult' }
+    { __typename: 'AuthLogoutResult' }
     & Pick<Types.AuthLogoutResult, 'ok'>
   ) }
 );
@@ -182,9 +182,9 @@ export type SetPasswordMutationVariables = Types.Exact<{
 
 
 export type SetPasswordMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'AuthSetPasswordResult' }
+    { __typename: 'AuthSetPasswordResult' }
     & Pick<Types.AuthSetPasswordResult, 'ok' | 'error'>
   ) }
 );
@@ -195,12 +195,12 @@ export type MyEventPageQueryVariables = Types.Exact<{
 
 
 export type MyEventPageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { publicEvent?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'start' | 'title'>
     & { my_ticket?: Types.Maybe<(
-      { __typename?: 'MyEventsTicket' }
+      { __typename: 'MyEventsTicket' }
       & Pick<Types.MyEventsTicket, 'status'>
     )> }
   )> }
@@ -212,9 +212,9 @@ export type EventGenerateOpenViduTokenMutationVariables = Types.Exact<{
 
 
 export type EventGenerateOpenViduTokenMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventGenerateOpenViduTokenResult' }
+    { __typename: 'EventGenerateOpenViduTokenResult' }
     & Pick<Types.EventGenerateOpenViduTokenResult, 'token'>
   ) }
 );
@@ -226,9 +226,9 @@ export type SetMyNamesMutationVariables = Types.Exact<{
 
 
 export type SetMyNamesMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'AuthSetMyNamesResult' }
+    { __typename: 'AuthSetMyNamesResult' }
     & Pick<Types.AuthSetMyNamesResult, 'ok' | 'error'>
   ) }
 );

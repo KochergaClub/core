@@ -7,31 +7,31 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type EventsPrototypeFragment = (
-  { __typename?: 'EventsPrototype' }
+  { __typename: 'EventsPrototype' }
   & Pick<Types.EventsPrototype, 'id' | 'title' | 'summary' | 'description' | 'location' | 'timing_description_override' | 'active' | 'weekday' | 'hour' | 'minute' | 'length' | 'tags' | 'suggested_dates'>
   & { vk_group?: Types.Maybe<(
-    { __typename?: 'VkGroup' }
+    { __typename: 'VkGroup' }
     & Pick<Types.VkGroup, 'name'>
   )>, timepad_category?: Types.Maybe<(
-    { __typename?: 'TimepadCategory' }
+    { __typename: 'TimepadCategory' }
     & Pick<Types.TimepadCategory, 'code' | 'name'>
   )>, image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & WagtailImageRendition_ForEditorFragment
   )>, project?: Types.Maybe<(
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'slug'>
     ) }
   )>, instances: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'start' | 'title' | 'visitors'>
   )> }
 );
 
 export type EventsPrototype_SummaryFragment = (
-  { __typename?: 'EventsPrototype' }
+  { __typename: 'EventsPrototype' }
   & Pick<Types.EventsPrototype, 'id' | 'title' | 'active' | 'weekday' | 'hour' | 'minute' | 'suggested_dates'>
 );
 
@@ -41,9 +41,9 @@ export type EvenmanPrototypesQueryVariables = Types.Exact<{
 
 
 export type EvenmanPrototypesQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { prototypes: Array<(
-    { __typename?: 'EventsPrototype' }
+    { __typename: 'EventsPrototype' }
     & EventsPrototype_SummaryFragment
   )> }
 );
@@ -54,9 +54,9 @@ export type EvenmanPrototypeQueryVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { prototype: (
-    { __typename?: 'EventsPrototype' }
+    { __typename: 'EventsPrototype' }
     & EventsPrototypeFragment
   ) }
 );
@@ -72,12 +72,12 @@ export type EvenmanPrototypeCreateMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeCreateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeUpdateResult' }
+    { __typename: 'EventPrototypeUpdateResult' }
     & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
-      { __typename?: 'EventsPrototype' }
+      { __typename: 'EventsPrototype' }
       & EventsPrototypeFragment
     ) }
   ) }
@@ -102,12 +102,12 @@ export type EvenmanPrototypeUpdateMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeUpdateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeUpdateResult' }
+    { __typename: 'EventPrototypeUpdateResult' }
     & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
-      { __typename?: 'EventsPrototype' }
+      { __typename: 'EventsPrototype' }
       & EventsPrototypeFragment
     ) }
   ) }
@@ -120,9 +120,9 @@ export type EvenmanPrototypeCancelDateMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeCancelDateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );
@@ -134,9 +134,9 @@ export type EvenmanPrototypeNewEventMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeNewEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );
@@ -148,12 +148,12 @@ export type EvenmanPrototypeAddTagMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeAddTagMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeUpdateResult' }
+    { __typename: 'EventPrototypeUpdateResult' }
     & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
-      { __typename?: 'EventsPrototype' }
+      { __typename: 'EventsPrototype' }
       & Pick<Types.EventsPrototype, 'id' | 'tags'>
     ) }
   ) }
@@ -166,12 +166,12 @@ export type EvenmanPrototypeDeleteTagMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeDeleteTagMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeUpdateResult' }
+    { __typename: 'EventPrototypeUpdateResult' }
     & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
-      { __typename?: 'EventsPrototype' }
+      { __typename: 'EventsPrototype' }
       & Pick<Types.EventsPrototype, 'id' | 'tags'>
     ) }
   ) }
@@ -184,12 +184,12 @@ export type EvenmanPrototypeSetImageMutationVariables = Types.Exact<{
 
 
 export type EvenmanPrototypeSetImageMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventPrototypeUpdateResult' }
+    { __typename: 'EventPrototypeUpdateResult' }
     & Pick<Types.EventPrototypeUpdateResult, 'ok'>
     & { prototype: (
-      { __typename?: 'EventsPrototype' }
+      { __typename: 'EventsPrototype' }
       & EventsPrototypeFragment
     ) }
   ) }

@@ -14,12 +14,12 @@ export type EvenmanTimepadAnnouncementUpdateMutationVariables = Types.Exact<{
 
 
 export type EvenmanTimepadAnnouncementUpdateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   )> }
@@ -32,12 +32,12 @@ export type EvenmanVkAnnouncementUpdateMutationVariables = Types.Exact<{
 
 
 export type EvenmanVkAnnouncementUpdateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   )> }

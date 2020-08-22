@@ -5,16 +5,16 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type TemplateFragment = (
-  { __typename?: 'ImageTemplate' }
+  { __typename: 'ImageTemplate' }
   & Pick<Types.ImageTemplate, 'name'>
   & { schema: (
-    { __typename?: 'ImageTemplateSchema' }
+    { __typename: 'ImageTemplateSchema' }
     & { fields: Array<(
-      { __typename?: 'ImageTemplateSchemaField' }
+      { __typename: 'ImageTemplateSchemaField' }
       & Pick<Types.ImageTemplateSchemaField, 'name' | 'value_type' | 'default'>
     )> }
   ), sizes: (
-    { __typename?: 'ImageTemplateSizes' }
+    { __typename: 'ImageTemplateSizes' }
     & Pick<Types.ImageTemplateSizes, 'width' | 'height'>
   ) }
 );
@@ -23,9 +23,9 @@ export type ImageTemplatesQueryVariables = Types.Exact<{ [key: string]: never; }
 
 
 export type ImageTemplatesQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { templates: Array<(
-    { __typename?: 'ImageTemplate' }
+    { __typename: 'ImageTemplate' }
     & TemplateFragment
   )> }
 );
@@ -36,9 +36,9 @@ export type ImageTemplateBySlugQueryVariables = Types.Exact<{
 
 
 export type ImageTemplateBySlugQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { template: (
-    { __typename?: 'ImageTemplate' }
+    { __typename: 'ImageTemplate' }
     & TemplateFragment
   ) }
 );

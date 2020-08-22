@@ -7,18 +7,18 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type EventsEvent_SummaryFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'start' | 'published' | 'event_type'>
   & { announcements: (
-    { __typename?: 'EventsAnnouncements' }
+    { __typename: 'EventsAnnouncements' }
     & { timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
+      { __typename: 'EventsAnnouncementTimepad' }
       & Pick<Types.EventsAnnouncementTimepad, 'link'>
     ), vk: (
-      { __typename?: 'EventsAnnouncementVk' }
+      { __typename: 'EventsAnnouncementVk' }
       & Pick<Types.EventsAnnouncementVk, 'link'>
     ), fb: (
-      { __typename?: 'EventsAnnouncementFb' }
+      { __typename: 'EventsAnnouncementFb' }
       & Pick<Types.EventsAnnouncementFb, 'link'>
     ) }
   ) }
@@ -31,18 +31,18 @@ export type EvenmanEventsQueryVariables = Types.Exact<{
 
 
 export type EvenmanEventsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { events: (
-    { __typename?: 'EventConnection' }
+    { __typename: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EventsEvent_SummaryFragment
     )> }
   ) }
 );
 
 export type EvenmanUnknownEventFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title'>
 );
 
@@ -50,55 +50,55 @@ export type EvenmanUnknownEventsQueryVariables = Types.Exact<{ [key: string]: ne
 
 
 export type EvenmanUnknownEventsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { events: (
-    { __typename?: 'EventConnection' }
+    { __typename: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanUnknownEventFragment
     )> }
   ) }
 );
 
 export type EvenmanEvent_DetailsFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'created' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'timing_description_override' | 'location' | 'zoom_link' | 'event_type' | 'pricing_type' | 'registration_type' | 'realm' | 'visitors' | 'tags' | 'published'>
   & { zoom_meeting?: Types.Maybe<(
-    { __typename?: 'ZoomMeeting' }
+    { __typename: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
   )>, image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & WagtailImageRendition_ForEditorFragment
   )>, imageForVkBackground?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )>, prototype?: Types.Maybe<(
-    { __typename?: 'EventsPrototype' }
+    { __typename: 'EventsPrototype' }
     & Pick<Types.EventsPrototype, 'id'>
   )>, project?: Types.Maybe<(
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'slug'>
     ) }
   )>, announcements: (
-    { __typename?: 'EventsAnnouncements' }
+    { __typename: 'EventsAnnouncements' }
     & { timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
+      { __typename: 'EventsAnnouncementTimepad' }
       & Pick<Types.EventsAnnouncementTimepad, 'link' | 'category_code' | 'prepaid_tickets'>
     ), vk: (
-      { __typename?: 'EventsAnnouncementVk' }
+      { __typename: 'EventsAnnouncementVk' }
       & Pick<Types.EventsAnnouncementVk, 'link' | 'group'>
       & { image?: Types.Maybe<(
-        { __typename?: 'WagtailImageRendition' }
+        { __typename: 'WagtailImageRendition' }
         & WagtailImageRendition_ForEditorFragment
       )> }
     ), fb: (
-      { __typename?: 'EventsAnnouncementFb' }
+      { __typename: 'EventsAnnouncementFb' }
       & Pick<Types.EventsAnnouncementFb, 'link' | 'group'>
     ) }
   ), tickets: Array<(
-    { __typename?: 'EventsTicket' }
+    { __typename: 'EventsTicket' }
     & Pick<Types.EventsTicket, 'id'>
   )> }
 );
@@ -109,9 +109,9 @@ export type EvenmanEventQueryVariables = Types.Exact<{
 
 
 export type EvenmanEventQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & EvenmanEvent_DetailsFragment
   )> }
 );
@@ -123,12 +123,12 @@ export type EvenmanSetEventTypeMutationVariables = Types.Exact<{
 
 
 export type EvenmanSetEventTypeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'event_type'>
     ) }
   ) }
@@ -141,12 +141,12 @@ export type EvenmanSetZoomLinkMutationVariables = Types.Exact<{
 
 
 export type EvenmanSetZoomLinkMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'zoom_link'>
     ) }
   ) }
@@ -158,12 +158,12 @@ export type EvenmanGenerateZoomLinkMutationVariables = Types.Exact<{
 
 
 export type EvenmanGenerateZoomLinkMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'zoom_link'>
     ) }
   ) }
@@ -189,12 +189,12 @@ export type EvenmanUpdateMutationVariables = Types.Exact<{
 
 
 export type EvenmanUpdateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   ) }
@@ -206,9 +206,9 @@ export type EvenmanEventDeleteMutationVariables = Types.Exact<{
 
 
 export type EvenmanEventDeleteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );
@@ -220,12 +220,12 @@ export type EvenmanEventAddTagMutationVariables = Types.Exact<{
 
 
 export type EvenmanEventAddTagMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'tags'>
     ) }
   ) }
@@ -238,12 +238,12 @@ export type EvenmanEventDeleteTagMutationVariables = Types.Exact<{
 
 
 export type EvenmanEventDeleteTagMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'tags'>
     ) }
   ) }
@@ -256,12 +256,12 @@ export type EvenmanVkAnnouncementSetImageMutationVariables = Types.Exact<{
 
 
 export type EvenmanVkAnnouncementSetImageMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   )> }
@@ -274,12 +274,12 @@ export type EvenmanAnnounceMutationVariables = Types.Exact<{
 
 
 export type EvenmanAnnounceMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   )> }
@@ -293,12 +293,12 @@ export type EvenmanSetAnnounceUrlMutationVariables = Types.Exact<{
 
 
 export type EvenmanSetAnnounceUrlMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   )> }
@@ -311,12 +311,12 @@ export type EvenmanEventMoveMutationVariables = Types.Exact<{
 
 
 export type EvenmanEventMoveMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Pick<Types.Event, 'id' | 'start' | 'end'>
     ) }
   ) }
@@ -330,12 +330,12 @@ export type EvenmanEventCreateMutationVariables = Types.Exact<{
 
 
 export type EvenmanEventCreateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventCreateResult' }
+    { __typename: 'EventCreateResult' }
     & Pick<Types.EventCreateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & EvenmanEvent_DetailsFragment
     ) }
   ) }
@@ -345,9 +345,9 @@ export type OnEventsSubscriptionVariables = Types.Exact<{ [key: string]: never; 
 
 
 export type OnEventsSubscription = (
-  { __typename?: 'Subscription' }
+  { __typename: 'Subscription' }
   & { events: (
-    { __typename?: 'EventNotification' }
+    { __typename: 'EventNotification' }
     & Pick<Types.EventNotification, 'type' | 'id'>
   ) }
 );
@@ -356,9 +356,9 @@ export type EvenmanPrototypesForPickerQueryVariables = Types.Exact<{ [key: strin
 
 
 export type EvenmanPrototypesForPickerQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { prototypes: Array<(
-    { __typename?: 'EventsPrototype' }
+    { __typename: 'EventsPrototype' }
     & Pick<Types.EventsPrototype, 'id' | 'title'>
   )> }
 );

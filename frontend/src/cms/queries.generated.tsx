@@ -11,7 +11,7 @@ export type WagtailPageTypeQueryVariables = Types.Exact<{
 
 
 export type WagtailPageTypeQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { wagtailPage?: Types.Maybe<(
     { __typename: 'BlogIndexPage' }
     & Pick<Types.BlogIndexPage, 'id'>
@@ -60,18 +60,18 @@ export type TildaPageQueryVariables = Types.Exact<{
 
 
 export type TildaPageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { tildaPage?: Types.Maybe<(
-    { __typename?: 'TildaPage' }
+    { __typename: 'TildaPage' }
     & Pick<Types.TildaPage, 'body' | 'title' | 'description' | 'show_header_and_footer'>
     & { og_image?: Types.Maybe<(
-      { __typename?: 'WagtailImageRendition' }
+      { __typename: 'WagtailImageRendition' }
       & Pick<Types.WagtailImageRendition, 'url'>
     )>, css: Array<(
-      { __typename?: 'TildaAsset' }
+      { __typename: 'TildaAsset' }
       & Pick<Types.TildaAsset, 'url'>
     )>, js: Array<(
-      { __typename?: 'TildaAsset' }
+      { __typename: 'TildaAsset' }
       & Pick<Types.TildaAsset, 'url'>
     )> }
   )> }
@@ -81,9 +81,9 @@ export type TildaPagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type TildaPagesQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { tildaPages: Array<(
-    { __typename?: 'TildaPage' }
+    { __typename: 'TildaPage' }
     & Pick<Types.TildaPage, 'path'>
   )> }
 );
@@ -92,83 +92,83 @@ export type WagtailPagesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type WagtailPagesQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { wagtailPages: Array<(
-    { __typename?: 'BlogIndexPage' }
+    { __typename: 'BlogIndexPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'BlogPostPage' }
+    { __typename: 'BlogPostPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'FaqPage' }
+    { __typename: 'FaqPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'FolderPage' }
+    { __typename: 'FolderPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'FreeFormPage' }
+    { __typename: 'FreeFormPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'PresentationPage' }
+    { __typename: 'PresentationPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'ProjectIndexPage' }
+    { __typename: 'ProjectIndexPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioNotebookIndexPage' }
+    { __typename: 'RatioNotebookIndexPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioNotebookPage' }
+    { __typename: 'RatioNotebookPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioPresentationIndexPage' }
+    { __typename: 'RatioPresentationIndexPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioSectionIndexPage' }
+    { __typename: 'RatioSectionIndexPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioSectionPage' }
+    { __typename: 'RatioSectionPage' }
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   )> }

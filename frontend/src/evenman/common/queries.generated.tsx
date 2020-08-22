@@ -8,12 +8,12 @@ export type EvenmanProjectsListQueryVariables = Types.Exact<{ [key: string]: nev
 
 
 export type EvenmanProjectsListQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { projects: Array<(
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & Pick<Types.ProjectPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'slug'>
     ) }
   )> }
@@ -23,9 +23,9 @@ export type EvenmanVkGroupsQueryVariables = Types.Exact<{ [key: string]: never; 
 
 
 export type EvenmanVkGroupsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { vkGroups: Array<(
-    { __typename?: 'VkGroup' }
+    { __typename: 'VkGroup' }
     & Pick<Types.VkGroup, 'name'>
   )> }
 );
@@ -34,9 +34,9 @@ export type EvenmanTimepadCategoriesQueryVariables = Types.Exact<{ [key: string]
 
 
 export type EvenmanTimepadCategoriesQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { timepadCategories: Array<(
-    { __typename?: 'TimepadCategory' }
+    { __typename: 'TimepadCategory' }
     & Pick<Types.TimepadCategory, 'id' | 'code' | 'name'>
   )> }
 );

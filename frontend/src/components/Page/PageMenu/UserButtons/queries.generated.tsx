@@ -10,134 +10,134 @@ export type WagtailEditablePageQueryVariables = Types.Exact<{
 
 
 export type WagtailEditablePageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { wagtailPage?: Types.Maybe<(
-    { __typename?: 'BlogIndexPage' }
+    { __typename: 'BlogIndexPage' }
     & Pick<Types.BlogIndexPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'BlogPostPage' }
+    { __typename: 'BlogPostPage' }
     & Pick<Types.BlogPostPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'FaqPage' }
+    { __typename: 'FaqPage' }
     & Pick<Types.FaqPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'FolderPage' }
+    { __typename: 'FolderPage' }
     & Pick<Types.FolderPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'FreeFormPage' }
+    { __typename: 'FreeFormPage' }
     & Pick<Types.FreeFormPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'PresentationPage' }
+    { __typename: 'PresentationPage' }
     & Pick<Types.PresentationPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'ProjectIndexPage' }
+    { __typename: 'ProjectIndexPage' }
     & Pick<Types.ProjectIndexPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & Pick<Types.ProjectPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'RatioNotebookIndexPage' }
+    { __typename: 'RatioNotebookIndexPage' }
     & Pick<Types.RatioNotebookIndexPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'RatioNotebookPage' }
+    { __typename: 'RatioNotebookPage' }
     & Pick<Types.RatioNotebookPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'RatioPresentationIndexPage' }
+    { __typename: 'RatioPresentationIndexPage' }
     & Pick<Types.RatioPresentationIndexPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'RatioSectionIndexPage' }
+    { __typename: 'RatioSectionIndexPage' }
     & Pick<Types.RatioSectionIndexPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }
   ) | (
-    { __typename?: 'RatioSectionPage' }
+    { __typename: 'RatioSectionPage' }
     & Pick<Types.RatioSectionPage, 'id'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & { permissions: (
-        { __typename?: 'WagtailPagePermissions' }
+        { __typename: 'WagtailPagePermissions' }
         & Pick<Types.WagtailPagePermissions, 'can_edit'>
       ) }
     ) }

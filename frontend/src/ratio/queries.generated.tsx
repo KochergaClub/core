@@ -7,60 +7,60 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type TrainingForPickerFragment = (
-  { __typename?: 'RatioTraining' }
+  { __typename: 'RatioTraining' }
   & Pick<Types.RatioTraining, 'id' | 'slug' | 'name'>
 );
 
 export type RatioPaymentFragment = (
-  { __typename?: 'RatioPayment' }
+  { __typename: 'RatioPayment' }
   & Pick<Types.RatioPayment, 'id' | 'amount' | 'payment_type' | 'status' | 'fiscalization_status'>
 );
 
 export type RatioTicketFragment = (
-  { __typename?: 'RatioTicket' }
+  { __typename: 'RatioTicket' }
   & Pick<Types.RatioTicket, 'id' | 'email' | 'first_name' | 'last_name' | 'payment_amount' | 'status' | 'ticket_type' | 'registration_date'>
   & { payments: Array<(
-    { __typename?: 'RatioPayment' }
+    { __typename: 'RatioPayment' }
     & RatioPaymentFragment
   )> }
 );
 
 export type RatioTrainingFragment = (
-  { __typename?: 'RatioTraining' }
+  { __typename: 'RatioTraining' }
   & Pick<Types.RatioTraining, 'id' | 'slug' | 'name' | 'date' | 'telegram_link' | 'tickets_count' | 'total_income'>
   & { tickets: Array<(
-    { __typename?: 'RatioTicket' }
+    { __typename: 'RatioTicket' }
     & RatioTicketFragment
   )> }
 );
 
 export type RatioTrainerFragment = (
-  { __typename?: 'RatioTrainer' }
+  { __typename: 'RatioTrainer' }
   & Pick<Types.RatioTrainer, 'id' | 'short_name' | 'long_name'>
 );
 
 export type ActivityFragment = (
-  { __typename?: 'RatioActivity' }
+  { __typename: 'RatioActivity' }
   & Pick<Types.RatioActivity, 'id' | 'time' | 'activity_type' | 'name' | 'location'>
   & { trainer?: Types.Maybe<(
-    { __typename?: 'RatioTrainer' }
+    { __typename: 'RatioTrainer' }
     & RatioTrainerFragment
   )> }
 );
 
 export type TrainingDayFragment = (
-  { __typename?: 'RatioTrainingDay' }
+  { __typename: 'RatioTrainingDay' }
   & Pick<Types.RatioTrainingDay, 'id' | 'date'>
   & { activities: Array<(
-    { __typename?: 'RatioActivity' }
+    { __typename: 'RatioActivity' }
     & ActivityFragment
   )> }
 );
 
 export type TrainingWithScheduleFragment = (
-  { __typename?: 'RatioTraining' }
+  { __typename: 'RatioTraining' }
   & { schedule: Array<(
-    { __typename?: 'RatioTrainingDay' }
+    { __typename: 'RatioTrainingDay' }
     & TrainingDayFragment
   )> }
   & RatioTrainingFragment
@@ -75,16 +75,16 @@ export type RatioTrainingsQueryVariables = Types.Exact<{
 
 
 export type RatioTrainingsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { trainings: (
-    { __typename?: 'RatioTrainingConnection' }
+    { __typename: 'RatioTrainingConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & PageInfoFragment
     ), edges: Array<(
-      { __typename?: 'RatioTrainingEdge' }
+      { __typename: 'RatioTrainingEdge' }
       & { node: (
-        { __typename?: 'RatioTraining' }
+        { __typename: 'RatioTraining' }
         & RatioTrainingFragment
       ) }
     )> }
@@ -100,16 +100,16 @@ export type RatioTrainingsForPickerQueryVariables = Types.Exact<{
 
 
 export type RatioTrainingsForPickerQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { trainings: (
-    { __typename?: 'RatioTrainingConnection' }
+    { __typename: 'RatioTrainingConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & PageInfoFragment
     ), edges: Array<(
-      { __typename?: 'RatioTrainingEdge' }
+      { __typename: 'RatioTrainingEdge' }
       & { node: (
-        { __typename?: 'RatioTraining' }
+        { __typename: 'RatioTraining' }
         & TrainingForPickerFragment
       ) }
     )> }
@@ -122,9 +122,9 @@ export type RatioTrainingBySlugQueryVariables = Types.Exact<{
 
 
 export type RatioTrainingBySlugQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { training: (
-    { __typename?: 'RatioTraining' }
+    { __typename: 'RatioTraining' }
     & RatioTrainingFragment
   ) }
 );
@@ -135,9 +135,9 @@ export type RatioTrainingWithScheduleQueryVariables = Types.Exact<{
 
 
 export type RatioTrainingWithScheduleQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { training: (
-    { __typename?: 'RatioTraining' }
+    { __typename: 'RatioTraining' }
     & TrainingWithScheduleFragment
   ) }
 );
@@ -146,9 +146,9 @@ export type RatioTrainersQueryVariables = Types.Exact<{ [key: string]: never; }>
 
 
 export type RatioTrainersQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { trainers: Array<(
-    { __typename?: 'RatioTrainer' }
+    { __typename: 'RatioTrainer' }
     & RatioTrainerFragment
   )> }
 );
@@ -160,7 +160,7 @@ export type RatioTrainingEmailPrototypeQueryVariables = Types.Exact<{
 
 
 export type RatioTrainingEmailPrototypeQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { content: Types.Query['ratioTrainingEmailPrototype'] }
 );
 
@@ -170,9 +170,9 @@ export type RatioAddTrainingMutationVariables = Types.Exact<{
 
 
 export type RatioAddTrainingMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { ratioAddTraining: (
-    { __typename?: 'RatioTraining' }
+    { __typename: 'RatioTraining' }
     & RatioTrainingFragment
   ) }
 );
@@ -183,9 +183,9 @@ export type RatioAddTicketMutationVariables = Types.Exact<{
 
 
 export type RatioAddTicketMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { ratioAddTicket: (
-    { __typename?: 'RatioTicket' }
+    { __typename: 'RatioTicket' }
     & RatioTicketFragment
   ) }
 );
@@ -196,11 +196,11 @@ export type RatioPaymentAddMutationVariables = Types.Exact<{
 
 
 export type RatioPaymentAddMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { ratioPaymentAdd: (
-    { __typename?: 'RatioPaymentAddResult' }
+    { __typename: 'RatioPaymentAddResult' }
     & { payment: (
-      { __typename?: 'RatioPayment' }
+      { __typename: 'RatioPayment' }
       & RatioPaymentFragment
     ) }
   ) }
@@ -212,9 +212,9 @@ export type RatioPaymentDeleteMutationVariables = Types.Exact<{
 
 
 export type RatioPaymentDeleteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { ratioPaymentDelete: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );
@@ -225,11 +225,11 @@ export type RatioPaymentSetStatusMutationVariables = Types.Exact<{
 
 
 export type RatioPaymentSetStatusMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { ratioPaymentSetStatus: (
-    { __typename?: 'RatioPaymentSetStatusResult' }
+    { __typename: 'RatioPaymentSetStatusResult' }
     & { payment: (
-      { __typename?: 'RatioPayment' }
+      { __typename: 'RatioPayment' }
       & RatioPaymentFragment
     ) }
   ) }
@@ -241,7 +241,7 @@ export type RatioPaymentFiscalizeMutationVariables = Types.Exact<{
 
 
 export type RatioPaymentFiscalizeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'ratioPaymentFiscalize'>
 );
 
@@ -251,11 +251,11 @@ export type RatioPaymentFiscalizedManuallyMutationVariables = Types.Exact<{
 
 
 export type RatioPaymentFiscalizedManuallyMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { ratioPaymentFiscalizedManually: (
-    { __typename?: 'RatioPaymentFiscalizedManuallyResult' }
+    { __typename: 'RatioPaymentFiscalizedManuallyResult' }
     & { payment: (
-      { __typename?: 'RatioPayment' }
+      { __typename: 'RatioPayment' }
       & RatioPaymentFragment
     ) }
   ) }
@@ -267,7 +267,7 @@ export type RatioTrainingAddDayMutationVariables = Types.Exact<{
 
 
 export type RatioTrainingAddDayMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'ratioTrainingAddDay'>
 );
 
@@ -277,7 +277,7 @@ export type RatioTrainingCopyScheduleFromMutationVariables = Types.Exact<{
 
 
 export type RatioTrainingCopyScheduleFromMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'ratioTrainingCopyScheduleFrom'>
 );
 
@@ -287,9 +287,9 @@ export type RatioTrainingSendEmailMutationVariables = Types.Exact<{
 
 
 export type RatioTrainingSendEmailMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { email: (
-    { __typename?: 'RatioTrainingSendEmailResult' }
+    { __typename: 'RatioTrainingSendEmailResult' }
     & Pick<Types.RatioTrainingSendEmailResult, 'draft_link'>
   ) }
 );
@@ -300,7 +300,7 @@ export type RatioTrainingSyncParticipantsToMailchimpMutationVariables = Types.Ex
 
 
 export type RatioTrainingSyncParticipantsToMailchimpMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'ratioTrainingSyncParticipantsToMailchimp'>
 );
 

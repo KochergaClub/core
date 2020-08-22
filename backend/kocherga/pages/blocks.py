@@ -1,5 +1,4 @@
 from wagtail.core import blocks
-from wagtail.core.blocks.field_block import BooleanBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 from wagtailgeowidget.blocks import GeoBlock

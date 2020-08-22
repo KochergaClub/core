@@ -8,9 +8,9 @@ export type TildaPagesForAdminQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type TildaPagesForAdminQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { tildaPages: Array<(
-    { __typename?: 'TildaPage' }
+    { __typename: 'TildaPage' }
     & Pick<Types.TildaPage, 'page_id' | 'title' | 'description' | 'path'>
   )> }
 );
@@ -19,9 +19,9 @@ export type TildaImportAllMutationVariables = Types.Exact<{ [key: string]: never
 
 
 export type TildaImportAllMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { tildaImportAll?: Types.Maybe<(
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   )> }
 );
@@ -32,9 +32,9 @@ export type TildaImportMutationVariables = Types.Exact<{
 
 
 export type TildaImportMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { tildaImport?: Types.Maybe<(
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   )> }
 );

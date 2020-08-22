@@ -5,7 +5,7 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type AnalyticsBovStatFragment = (
-  { __typename?: 'AnalyticsBovStat' }
+  { __typename: 'AnalyticsBovStat' }
   & Pick<Types.AnalyticsBovStat, 'date' | 'count' | 'total_income'>
 );
 
@@ -13,9 +13,9 @@ export type AnalyticsBovStatsQueryVariables = Types.Exact<{ [key: string]: never
 
 
 export type AnalyticsBovStatsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { bovStats: Array<(
-    { __typename?: 'AnalyticsBovStat' }
+    { __typename: 'AnalyticsBovStat' }
     & AnalyticsBovStatFragment
   )> }
 );
@@ -24,9 +24,9 @@ export type AnalyticsUpdateFbRatioAudienceMutationVariables = Types.Exact<{ [key
 
 
 export type AnalyticsUpdateFbRatioAudienceMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );

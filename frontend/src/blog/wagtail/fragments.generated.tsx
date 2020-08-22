@@ -3,37 +3,37 @@ import * as Types from '../../apollo/types.generated';
 import gql from 'graphql-tag';
 
 export type BlogPostAuthorFragment = (
-  { __typename?: 'BlogPostAuthor' }
+  { __typename: 'BlogPostAuthor' }
   & Pick<Types.BlogPostAuthor, 'name' | 'description'>
   & { image: (
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
   ) }
 );
 
 export type BlogPostPageFragment = (
-  { __typename?: 'BlogPostPage' }
+  { __typename: 'BlogPostPage' }
   & Pick<Types.BlogPostPage, 'id' | 'title' | 'summary' | 'date' | 'body'>
   & { authors: Array<(
-    { __typename?: 'BlogPostAuthor' }
+    { __typename: 'BlogPostAuthor' }
     & BlogPostAuthorFragment
   )> }
 );
 
 export type BlogPostPage_SummaryFragment = (
-  { __typename?: 'BlogPostPage' }
+  { __typename: 'BlogPostPage' }
   & Pick<Types.BlogPostPage, 'id' | 'title' | 'date' | 'summary'>
   & { meta: (
-    { __typename?: 'WagtailPageMeta' }
+    { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ) }
 );
 
 export type BlogIndexPageFragment = (
-  { __typename?: 'BlogIndexPage' }
+  { __typename: 'BlogIndexPage' }
   & Pick<Types.BlogIndexPage, 'id' | 'title' | 'subtitle'>
   & { posts: Array<(
-    { __typename?: 'BlogPostPage' }
+    { __typename: 'BlogPostPage' }
     & BlogPostPage_SummaryFragment
   )> }
 );

@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, BasicTextBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc, HrBlockFragmentDoc, FrontPartnersBlockFragmentDoc, FrontSocialLinksBlockFragmentDoc } from './blocks/fragments.generated';
 
 export type FreeFormPageFragment = (
-  { __typename?: 'FreeFormPage' }
+  { __typename: 'FreeFormPage' }
   & Pick<Types.FreeFormPage, 'id' | 'title'>
   & { body: Array<(
     { __typename: 'BasicLeadBlock' }

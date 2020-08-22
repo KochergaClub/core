@@ -10,11 +10,11 @@ export type WagtailUploadImageFromUrlMutationVariables = Types.Exact<{
 
 
 export type WagtailUploadImageFromUrlMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'WagtailUploadImageFromUrlResult' }
+    { __typename: 'WagtailUploadImageFromUrlResult' }
     & { image: (
-      { __typename?: 'WagtailImage' }
+      { __typename: 'WagtailImage' }
       & Pick<Types.WagtailImage, 'id'>
     ) }
   ) }

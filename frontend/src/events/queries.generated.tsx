@@ -5,13 +5,13 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type Event_SummaryFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'summary' | 'start' | 'end'>
   & { image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )>, image_2x?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )> }
 );
@@ -22,21 +22,21 @@ export type UpcomingPublicEventsQueryVariables = Types.Exact<{
 
 
 export type UpcomingPublicEventsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { publicEvents: (
-    { __typename?: 'EventConnection' }
+    { __typename: 'EventConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & Pick<Types.PageInfo, 'hasNextPage'>
     ), nodes: Array<(
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Event_SummaryFragment
     )> }
   ) }
 );
 
 export type Event_ForCalendarFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'title' | 'start' | 'public_tags'>
 );
 
@@ -47,11 +47,11 @@ export type PublicEventsForCalendarQueryVariables = Types.Exact<{
 
 
 export type PublicEventsForCalendarQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { publicEvents: (
-    { __typename?: 'EventConnection' }
+    { __typename: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & Event_ForCalendarFragment
     )> }
   ) }
@@ -61,26 +61,26 @@ export type EventsPublicGoogleCalendarQueryVariables = Types.Exact<{ [key: strin
 
 
 export type EventsPublicGoogleCalendarQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { eventsPublicGoogleCalendar?: Types.Maybe<(
-    { __typename?: 'EventsGoogleCalendar' }
+    { __typename: 'EventsGoogleCalendar' }
     & Pick<Types.EventsGoogleCalendar, 'url'>
   )> }
 );
 
 export type TeamCalendarEventFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id' | 'start' | 'end' | 'title' | 'summary' | 'description' | 'event_type' | 'room' | 'creator'>
   & { announcements: (
-    { __typename?: 'EventsAnnouncements' }
+    { __typename: 'EventsAnnouncements' }
     & { vk: (
-      { __typename?: 'EventsAnnouncementVk' }
+      { __typename: 'EventsAnnouncementVk' }
       & Pick<Types.EventsAnnouncementVk, 'link'>
     ), fb: (
-      { __typename?: 'EventsAnnouncementFb' }
+      { __typename: 'EventsAnnouncementFb' }
       & Pick<Types.EventsAnnouncementFb, 'link'>
     ), timepad: (
-      { __typename?: 'EventsAnnouncementTimepad' }
+      { __typename: 'EventsAnnouncementTimepad' }
       & Pick<Types.EventsAnnouncementTimepad, 'link'>
     ) }
   ) }
@@ -93,11 +93,11 @@ export type EventsInRangeQueryVariables = Types.Exact<{
 
 
 export type EventsInRangeQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { events: (
-    { __typename?: 'EventConnection' }
+    { __typename: 'EventConnection' }
     & { nodes: Array<(
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & TeamCalendarEventFragment
     )> }
   ) }
@@ -109,9 +109,9 @@ export type TeamCalendarEventQueryVariables = Types.Exact<{
 
 
 export type TeamCalendarEventQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & TeamCalendarEventFragment
   )> }
 );
@@ -124,11 +124,11 @@ export type ResizeEventMutationVariables = Types.Exact<{
 
 
 export type ResizeEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & TeamCalendarEventFragment
     ) }
   ) }
@@ -144,12 +144,12 @@ export type TeamCalendarCreateEventMutationVariables = Types.Exact<{
 
 
 export type TeamCalendarCreateEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventCreateResult' }
+    { __typename: 'EventCreateResult' }
     & Pick<Types.EventCreateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & TeamCalendarEventFragment
     ) }
   ) }
@@ -164,12 +164,12 @@ export type TeamCalendarUpdateEventMutationVariables = Types.Exact<{
 
 
 export type TeamCalendarUpdateEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventUpdateResult' }
+    { __typename: 'EventUpdateResult' }
     & Pick<Types.EventUpdateResult, 'ok'>
     & { event: (
-      { __typename?: 'Event' }
+      { __typename: 'Event' }
       & TeamCalendarEventFragment
     ) }
   ) }
@@ -181,22 +181,22 @@ export type TeamCalendarDeleteEventMutationVariables = Types.Exact<{
 
 
 export type TeamCalendarDeleteEventMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );
 
 export type TeamEventFeedbackFragment = (
-  { __typename?: 'EventsFeedback' }
+  { __typename: 'EventsFeedback' }
   & Pick<Types.EventsFeedback, 'id' | 'overall_score' | 'recommend_score' | 'content_score' | 'conductor_score' | 'source_friend' | 'source_vk' | 'source_fb' | 'source_timepad' | 'source_email' | 'source_website' | 'custom_source' | 'comment'>
 );
 
 export type TeamEventDetailsFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & { feedbacks: Array<(
-    { __typename?: 'EventsFeedback' }
+    { __typename: 'EventsFeedback' }
     & TeamEventFeedbackFragment
   )> }
   & TeamCalendarEventFragment
@@ -208,9 +208,9 @@ export type TeamEventDetailsQueryVariables = Types.Exact<{
 
 
 export type TeamEventDetailsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & TeamEventDetailsFragment
   )> }
 );
@@ -233,12 +233,12 @@ export type EventFeedbackCreateMutationVariables = Types.Exact<{
 
 
 export type EventFeedbackCreateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventsFeedbackCreateResult' }
+    { __typename: 'EventsFeedbackCreateResult' }
     & Pick<Types.EventsFeedbackCreateResult, 'ok'>
     & { feedback: (
-      { __typename?: 'EventsFeedback' }
+      { __typename: 'EventsFeedback' }
       & TeamEventFeedbackFragment
     ) }
   ) }
@@ -250,9 +250,9 @@ export type EventFeedbackDeleteMutationVariables = Types.Exact<{
 
 
 export type EventFeedbackDeleteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   ) }
 );

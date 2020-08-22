@@ -5,36 +5,36 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type WatchmanFragment = (
-  { __typename?: 'WatchmenWatchman' }
+  { __typename: 'WatchmenWatchman' }
   & Pick<Types.WatchmenWatchman, 'id' | 'priority'>
   & { grade?: Types.Maybe<(
-    { __typename?: 'WatchmenGrade' }
+    { __typename: 'WatchmenGrade' }
     & Pick<Types.WatchmenGrade, 'id' | 'code'>
   )>, member: (
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & Pick<Types.StaffMember, 'id' | 'short_name'>
   ) }
 );
 
 export type WatchmanForPickerFragment = (
-  { __typename?: 'WatchmenWatchman' }
+  { __typename: 'WatchmenWatchman' }
   & Pick<Types.WatchmenWatchman, 'id' | 'priority'>
   & { member: (
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & Pick<Types.StaffMember, 'id' | 'short_name' | 'color'>
   ) }
 );
 
 export type GradeFragment = (
-  { __typename?: 'WatchmenGrade' }
+  { __typename: 'WatchmenGrade' }
   & Pick<Types.WatchmenGrade, 'id' | 'code' | 'multiplier'>
 );
 
 export type ShiftFragment = (
-  { __typename?: 'WatchmenShift' }
+  { __typename: 'WatchmenShift' }
   & Pick<Types.WatchmenShift, 'date' | 'shift' | 'is_night'>
   & { watchman?: Types.Maybe<(
-    { __typename?: 'WatchmenWatchman' }
+    { __typename: 'WatchmenWatchman' }
     & WatchmanForPickerFragment
   )> }
 );
@@ -43,9 +43,9 @@ export type WatchmenWatchmenListQueryVariables = Types.Exact<{ [key: string]: ne
 
 
 export type WatchmenWatchmenListQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { watchmen: Array<(
-    { __typename?: 'WatchmenWatchman' }
+    { __typename: 'WatchmenWatchman' }
     & WatchmanFragment
   )> }
 );
@@ -54,9 +54,9 @@ export type WatchmenWatchmenListForPickerQueryVariables = Types.Exact<{ [key: st
 
 
 export type WatchmenWatchmenListForPickerQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { watchmen: Array<(
-    { __typename?: 'WatchmenWatchman' }
+    { __typename: 'WatchmenWatchman' }
     & WatchmanForPickerFragment
   )> }
 );
@@ -65,9 +65,9 @@ export type WatchmenGradesListQueryVariables = Types.Exact<{ [key: string]: neve
 
 
 export type WatchmenGradesListQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { grades: Array<(
-    { __typename?: 'WatchmenGrade' }
+    { __typename: 'WatchmenGrade' }
     & GradeFragment
   )> }
 );
@@ -79,9 +79,9 @@ export type WatchmenShiftsQueryVariables = Types.Exact<{
 
 
 export type WatchmenShiftsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { shifts: Array<(
-    { __typename?: 'WatchmenShift' }
+    { __typename: 'WatchmenShift' }
     & ShiftFragment
   )> }
 );
@@ -92,7 +92,7 @@ export type WatchmenSetWatchmanPriorityMutationVariables = Types.Exact<{
 
 
 export type WatchmenSetWatchmanPriorityMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'watchmenSetWatchmanPriority'>
 );
 
@@ -102,7 +102,7 @@ export type WatchmenSetWatchmanGradeMutationVariables = Types.Exact<{
 
 
 export type WatchmenSetWatchmanGradeMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'watchmenSetWatchmanGrade'>
 );
 
@@ -112,7 +112,7 @@ export type WatchmenCreateWatchmanMutationVariables = Types.Exact<{
 
 
 export type WatchmenCreateWatchmanMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'watchmenCreateWatchman'>
 );
 
@@ -122,9 +122,9 @@ export type WatchmenUpdateShiftMutationVariables = Types.Exact<{
 
 
 export type WatchmenUpdateShiftMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { shift: (
-    { __typename?: 'WatchmenShift' }
+    { __typename: 'WatchmenShift' }
     & ShiftFragment
   ) }
 );
