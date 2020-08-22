@@ -1,3 +1,4 @@
+import { AnyBlockFragment } from '../types';
 import BasicLeadBlock from './BasicLeadBlock';
 import BasicTextBlock from './BasicTextBlock';
 import BigContactsBlock from './BigContactsBlock';
@@ -26,4 +27,14 @@ export const allBlockComponents = {
   HrBlock,
   FrontPartnersBlock,
   FrontSocialLinksBlock,
+};
+
+type ComponentsMap = typeof allBlockComponents;
+
+type KnownBlockFragment = Parameters<ComponentsMap[keyof ComponentsMap]>[0];
+
+export const isKnownBlock = (
+  block: AnyBlockFragment
+): block is KnownBlockFragment => {
+  return allBlockComponents.hasOwnProperty(block.__typename);
 };

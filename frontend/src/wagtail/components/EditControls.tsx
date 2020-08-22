@@ -1,9 +1,11 @@
+import { FieldNode, FragmentDefinitionNode } from 'graphql';
 import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { AsyncButton } from '~/components';
 
+import { allBlockComponents, isKnownBlock } from '../blocks';
 import { AnyBlockFragment } from '../types';
 import { useWagtailSavePageMutation } from './queries.generated';
 
@@ -20,12 +22,38 @@ interface Props {
   blocks: AnyBlockFragment[];
 }
 
-const serializeOneBlock = (block: AnyBlockFragment) => {
-  throw new Error('Not implemented');
+const serializeBlockValue = (block: AnyBlockFragment) => {
+  const typename = block.__typename;
+  if (!isKnownBlock(block)) {
+    throw new Error(`Unknown block ${typename}`);
+  }
+
+  const blockComponent = allBlockComponents[block.__typename];
+  const fieldSelections = (blockComponent.fragment
+    .definitions[0] as FragmentDefinitionNode).selectionSet.selections.filter(
+    (s) => s.kind === 'Field'
+  ) as FieldNode[];
+
+  const valueSelection = fieldSelections.find(
+    (selection) => selection.name.value === 'value'
+  );
+  if (!valueSelection) {
+    // That's probably ok, some blocks don't have values (but we should check the block's shape just to be
+    // safe).
+    return null;
+  }
+
+  const valueKey = valueSelection.alias?.value || 'value';
+
+  // TODO - traverse value and rewrite images etc., check that all types are comprehensible
+  return (block as any)[valueKey];
 };
 
 const serializeBlocks = (blocks: AnyBlockFragment[]) => {
-  return blocks.map(serializeOneBlock);
+  return blocks.map((block) => {
+    const value = serializeBlockValue(block);
+    return [block.__typename, value]; // FIXME - rewrite __typename to backend type
+  });
 };
 
 const EditControls: React.FC<Props> = ({ blocks }) => {
@@ -39,15 +67,19 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     if (!page_id) {
       return; // shouldn't happen
     }
-    await saveMutation({
-      variables: {
-        input: {
-          page_id,
-          blocksJson: JSON.stringify(serializeBlocks(blocks)),
-          publish: false,
-        },
-      },
-    });
+
+    const blocksJson = JSON.stringify(serializeBlocks(blocks), null, 2);
+    window.alert(blocksJson);
+    // not ready yet
+    // await saveMutation({
+    //   variables: {
+    //     input: {
+    //       page_id,
+    //       blocksJson,
+    //       publish: false,
+    //     },
+    //   },
+    // });
   }, [saveMutation, page_id]);
 
   if (!page_id) {

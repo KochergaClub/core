@@ -1,22 +1,14 @@
-import { allBlockComponents } from '../blocks';
+import { allBlockComponents, isKnownBlock } from '../blocks';
 import { AnyBlockFragment } from '../types';
 import DebugBlock from './DebugBlock';
 
+// TODO - move type helpers to blocks/index.tsx?
 type ComponentsMap = typeof allBlockComponents;
-
 type KnownTypename = keyof ComponentsMap;
 
 type TypenameToFragment<T extends KnownTypename> = Parameters<
   ComponentsMap[T]
 >[0];
-
-type KnownBlockFragment = Parameters<ComponentsMap[keyof ComponentsMap]>[0];
-
-const isKnownFragment = (
-  block: AnyBlockFragment
-): block is KnownBlockFragment => {
-  return allBlockComponents.hasOwnProperty(block.__typename);
-};
 
 const renderKnownBlock = <T extends KnownTypename>(
   block: TypenameToFragment<T>
@@ -26,7 +18,7 @@ const renderKnownBlock = <T extends KnownTypename>(
 };
 
 const AnyBlock = (block: AnyBlockFragment) => {
-  if (isKnownFragment(block)) {
+  if (isKnownBlock(block)) {
     return renderKnownBlock(block);
   }
   return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
