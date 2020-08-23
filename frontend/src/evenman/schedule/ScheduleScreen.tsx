@@ -21,7 +21,12 @@ const ScheduleScreen: React.FC = () => {
         <ApolloQueryResults {...queryResults} size="block">
           {({ data: { digest } }) => (
             <>
-              {digest.image && <ImagePreview url={digest.image.url} />}
+              {digest.image && (
+                <ImagePreview
+                  url={digest.image.url}
+                  link={digest.image.original_image.url}
+                />
+              )}
               <Buttons digest={digest} />
             </>
           )}

@@ -21,7 +21,14 @@ const Image: React.FC<Props> = ({ prototype }) => {
 
   return (
     <Row centered>
-      <ImageEditor onChange={onChange} image={prototype.image || undefined} />
+      <ImageEditor
+        onChange={onChange}
+        image={prototype.image || undefined}
+        defaults={{
+          title: prototype.title,
+          basename: `prototype-image-${prototype.id}`,
+        }}
+      />
     </Row>
   );
 };

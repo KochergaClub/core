@@ -46,6 +46,10 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
       <ImageEditor
         onChange={onSave}
         image={event.announcements.vk.image || undefined}
+        defaults={{
+          title: `[VK] ${event.title}`,
+          basename: `event-vk-image-${event.id}`,
+        }}
       />
     </Column>
   );
