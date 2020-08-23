@@ -65,11 +65,11 @@ fragment EvenmanEvent_Details on Event {
   tags
 
   image(spec: "width-240") {
-    id
-    url
+    ...WagtailImageRendition_ForEditor
   }
 
   imageForVkBackground: image(spec: "width-1100") {
+    id
     url
   }
 
@@ -94,7 +94,7 @@ fragment EvenmanEvent_Details on Event {
       link
       group
       image(spec: "width-240") {
-        url
+        ...WagtailImageRendition_ForEditor
       }
     }
     fb {
@@ -209,15 +209,6 @@ mutation EvenmanEventDeleteTag($id: ID!, $tag: String!) {
     event {
       id
       tags
-    }
-  }
-}
-
-mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
-  result: eventSetImageFromUrl(input: { event_id: $id, url: $url }) {
-    ok
-    event {
-      ...EvenmanEvent_Details
     }
   }
 }

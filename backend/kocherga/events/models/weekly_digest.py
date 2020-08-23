@@ -25,7 +25,7 @@ import kocherga.mailchimp
 import kocherga.templater.models
 from kocherga.email.tools import get_utmify, mjml2html
 
-from ..helpers import create_image_from_fh
+from kocherga.wagtail.utils import create_image_from_fh
 from .event import Event
 
 MAILCHIMP_IMAGE_FOLDER_NAME = 'Расписание на неделю'

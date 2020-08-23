@@ -1,6 +1,8 @@
 import * as Types from '../../apollo/types.generated';
 
+import { WagtailImageRendition_ForEditorFragment } from '../common/ImageEditor/fragments.generated';
 import gql from 'graphql-tag';
+import { WagtailImageRendition_ForEditorFragmentDoc } from '../common/ImageEditor/fragments.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
@@ -66,10 +68,10 @@ export type EvenmanEvent_DetailsFragment = (
     & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
   )>, image?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
-    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+    & WagtailImageRendition_ForEditorFragment
   )>, imageForVkBackground?: Types.Maybe<(
     { __typename?: 'WagtailImageRendition' }
-    & Pick<Types.WagtailImageRendition, 'url'>
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   )>, prototype?: Types.Maybe<(
     { __typename?: 'EventsPrototype' }
     & Pick<Types.EventsPrototype, 'id'>
@@ -89,7 +91,7 @@ export type EvenmanEvent_DetailsFragment = (
       & Pick<Types.EventsAnnouncementVk, 'link' | 'group'>
       & { image?: Types.Maybe<(
         { __typename?: 'WagtailImageRendition' }
-        & Pick<Types.WagtailImageRendition, 'url'>
+        & WagtailImageRendition_ForEditorFragment
       )> }
     ), fb: (
       { __typename?: 'EventsAnnouncementFb' }
@@ -243,24 +245,6 @@ export type EvenmanEventDeleteTagMutation = (
     & { event: (
       { __typename?: 'Event' }
       & Pick<Types.Event, 'id' | 'tags'>
-    ) }
-  ) }
-);
-
-export type EvenmanEventSetImageFromUrlMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID'];
-  url: Types.Scalars['String'];
-}>;
-
-
-export type EvenmanEventSetImageFromUrlMutation = (
-  { __typename?: 'Mutation' }
-  & { result: (
-    { __typename?: 'EventUpdateResult' }
-    & Pick<Types.EventUpdateResult, 'ok'>
-    & { event: (
-      { __typename?: 'Event' }
-      & EvenmanEvent_DetailsFragment
     ) }
   ) }
 );
@@ -428,10 +412,10 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
   visitors
   tags
   image(spec: "width-240") {
-    id
-    url
+    ...WagtailImageRendition_ForEditor
   }
   imageForVkBackground: image(spec: "width-1100") {
+    id
     url
   }
   prototype {
@@ -453,7 +437,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
       link
       group
       image(spec: "width-240") {
-        url
+        ...WagtailImageRendition_ForEditor
       }
     }
     fb {
@@ -465,7 +449,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
     id
   }
 }
-    `;
+    ${WagtailImageRendition_ForEditorFragmentDoc}`;
 export const EvenmanEventsDocument = gql`
     query EvenmanEvents($start: String!, $end: String!) {
   events(after: $start, before: $end, first: 100) {
@@ -834,42 +818,6 @@ export function useEvenmanEventDeleteTagMutation(baseOptions?: ApolloReactHooks.
 export type EvenmanEventDeleteTagMutationHookResult = ReturnType<typeof useEvenmanEventDeleteTagMutation>;
 export type EvenmanEventDeleteTagMutationResult = ApolloReactCommon.MutationResult<EvenmanEventDeleteTagMutation>;
 export type EvenmanEventDeleteTagMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanEventDeleteTagMutation, EvenmanEventDeleteTagMutationVariables>;
-export const EvenmanEventSetImageFromUrlDocument = gql`
-    mutation EvenmanEventSetImageFromUrl($id: ID!, $url: String!) {
-  result: eventSetImageFromUrl(input: {event_id: $id, url: $url}) {
-    ok
-    event {
-      ...EvenmanEvent_Details
-    }
-  }
-}
-    ${EvenmanEvent_DetailsFragmentDoc}`;
-export type EvenmanEventSetImageFromUrlMutationFn = ApolloReactCommon.MutationFunction<EvenmanEventSetImageFromUrlMutation, EvenmanEventSetImageFromUrlMutationVariables>;
-
-/**
- * __useEvenmanEventSetImageFromUrlMutation__
- *
- * To run a mutation, you first call `useEvenmanEventSetImageFromUrlMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanEventSetImageFromUrlMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evenmanEventSetImageFromUrlMutation, { data, loading, error }] = useEvenmanEventSetImageFromUrlMutation({
- *   variables: {
- *      id: // value for 'id'
- *      url: // value for 'url'
- *   },
- * });
- */
-export function useEvenmanEventSetImageFromUrlMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanEventSetImageFromUrlMutation, EvenmanEventSetImageFromUrlMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanEventSetImageFromUrlMutation, EvenmanEventSetImageFromUrlMutationVariables>(EvenmanEventSetImageFromUrlDocument, baseOptions);
-      }
-export type EvenmanEventSetImageFromUrlMutationHookResult = ReturnType<typeof useEvenmanEventSetImageFromUrlMutation>;
-export type EvenmanEventSetImageFromUrlMutationResult = ApolloReactCommon.MutationResult<EvenmanEventSetImageFromUrlMutation>;
-export type EvenmanEventSetImageFromUrlMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanEventSetImageFromUrlMutation, EvenmanEventSetImageFromUrlMutationVariables>;
 export const EvenmanVkAnnouncementSetImageDocument = gql`
     mutation EvenmanVkAnnouncementSetImage($event_id: ID!, $image_id: ID!) {
   result: eventVkAnnouncementSetImage(input: {event_id: $event_id, image_id: $image_id}) {

@@ -140,6 +140,7 @@ class ImageView(APIView):
         return FileResponse(image.file.open('rb'), content_type='image/png')
 
 
+# deprecated, upload and linking to wagtail image is handled by frontend
 class ImageFromUrlView(APIView):
     permission_classes = (IsAdminUser,)
 

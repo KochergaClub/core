@@ -1,12 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
-import VkImageModal from './VkImageModal';
 import { A, Column } from '@kocherga/frontkit';
+
 import ImageEditor from '../common/ImageEditor';
 import {
-  EvenmanEvent_DetailsFragment,
-  useEvenmanVkAnnouncementSetImageMutation,
+    EvenmanEvent_DetailsFragment, useEvenmanVkAnnouncementSetImageMutation
 } from './queries.generated';
+import VkImageModal from './VkImageModal';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
@@ -22,7 +22,7 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
   const [setImage] = useEvenmanVkAnnouncementSetImageMutation();
 
   const onSave = useCallback(
-    image_id => setImage({ variables: { event_id: event.id, image_id } }),
+    (image_id) => setImage({ variables: { event_id: event.id, image_id } }),
     [event.id, setImage]
   );
 
@@ -32,7 +32,7 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
       <small>
         <A
           href="#"
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault();
             toggleModal();
           }}

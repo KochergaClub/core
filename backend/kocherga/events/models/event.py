@@ -27,7 +27,7 @@ import kocherga.zoom.models
 import kocherga.openvidu.api
 
 import kocherga.events.markup
-from kocherga.events.helpers import create_image_from_fh
+from kocherga.wagtail.utils import create_image_from_fh
 
 from kocherga.timepad.models import Event as TimepadEvent
 
@@ -237,6 +237,7 @@ class Event(wagtail.search.index.Indexed, models.Model):
         summary = self.description.split("\n\n")[0]
         return kocherga.events.markup.Markup(summary).as_plain()
 
+    # deprecated, upload and linking to wagtail image is handled by frontend
     def add_image(self, fh):
         self.image = create_image_from_fh(
             fh, title=self.title, basename=f'event-image-{self.uuid}',

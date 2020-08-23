@@ -12,7 +12,7 @@ import reversion
 from kocherga.dateutils import TZ
 
 from .event import Event
-from ..helpers import create_image_from_fh
+from kocherga.wagtail.utils import create_image_from_fh
 from .announcement.timepad import timepad_category_by_code
 
 

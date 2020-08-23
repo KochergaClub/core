@@ -1,7 +1,7 @@
+import { Row } from '@kocherga/frontkit';
+
 import EventImageWidgetDefault from './EventImageWidgetDefault';
 import EventImageWidgetVk from './EventImageWidgetVk';
-
-import { Row } from '@kocherga/frontkit';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
 interface Props {

@@ -1,0 +1,7 @@
+mutation WagtailUploadImageFromUrl($input: WagtailUploadImageFromUrlInput!) {
+  result: wagtailUploadImageFromUrl(input: $input) {
+    image {
+      id
+    }
+  }
+}

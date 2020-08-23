@@ -4,9 +4,8 @@ import { Column } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
-import { ImagePreview } from '../ImageDropzone';
+import ImagePreview from '../common/ImagePreview';
 import Buttons from './Buttons';
-
 import { useEvenmanWeeklyDigestQuery } from './queries.generated';
 
 const Container = styled.main`

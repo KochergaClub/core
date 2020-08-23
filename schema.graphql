@@ -808,6 +808,7 @@ type MastermindDatingParticipantMutationResult {
 }
 
 type Mutation {
+  wagtailUploadImageFromUrl(input: WagtailUploadImageFromUrlInput!): WagtailUploadImageFromUrlResult!
   authAddUserToGroup(group_id: ID!, user_id: ID!): Boolean!
   authRemoveUserFromGroup(group_id: ID!, user_id: ID!): Boolean!
   authLogin(input: AuthLoginInput!): AuthLoginResult!
@@ -1436,6 +1437,16 @@ input WagtailSearchInput {
 type WagtailSearchResult {
   results: [WagtailPage!]!
   more: Boolean!
+}
+
+input WagtailUploadImageFromUrlInput {
+  url: String!
+  title: String!
+  basename: String!
+}
+
+type WagtailUploadImageFromUrlResult {
+  image: WagtailImage!
 }
 
 input WatchmenCreateWatchmanInput {

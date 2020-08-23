@@ -952,6 +952,7 @@ export type MastermindDatingParticipantMutationResult = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  wagtailUploadImageFromUrl: WagtailUploadImageFromUrlResult;
   authAddUserToGroup: Scalars['Boolean'];
   authRemoveUserFromGroup: Scalars['Boolean'];
   authLogin: AuthLoginResult;
@@ -1043,6 +1044,11 @@ export type Mutation = {
   tildaImportAll?: Maybe<BasicResult>;
   tildaImport?: Maybe<BasicResult>;
   openviduGenerateRoomToken: OpenviduGenerateRoomTokenResult;
+};
+
+
+export type MutationWagtailUploadImageFromUrlArgs = {
+  input: WagtailUploadImageFromUrlInput;
 };
 
 
@@ -2232,6 +2238,17 @@ export type WagtailSearchResult = {
   __typename?: 'WagtailSearchResult';
   results: Array<WagtailPage>;
   more: Scalars['Boolean'];
+};
+
+export type WagtailUploadImageFromUrlInput = {
+  url: Scalars['String'];
+  title: Scalars['String'];
+  basename: Scalars['String'];
+};
+
+export type WagtailUploadImageFromUrlResult = {
+  __typename?: 'WagtailUploadImageFromUrlResult';
+  image: WagtailImage;
 };
 
 export type WatchmenCreateWatchmanInput = {

@@ -18,10 +18,6 @@ from ..types import Event
 c = helpers.Collection()
 
 
-# type EventUpdateResult {
-#   ok: Boolean
-#   event: Event!
-# }
 EventUpdateResult = g.ObjectType(
     'EventUpdateResult', g.fields({'ok': Optional[bool], 'event': g.NN(Event)})
 )
@@ -69,7 +65,6 @@ class eventCreate(helpers.BaseFieldWithInput):
     result = {'ok': Optional[bool], 'event': g.NN(Event)}
 
 
-# eventUpdate(input: EventUpdateInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventUpdate(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -169,7 +164,6 @@ class eventUpdate(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventDelete(input: EventDeleteInput!): BasicResult! @staffonly
 @c.class_field
 class eventDelete(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -187,7 +181,6 @@ class eventDelete(helpers.BaseFieldWithInput):
     result = g.NN(BasicResult)
 
 
-# eventSetEventType(input: EventSetEventTypeInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventSetEventType(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -212,7 +205,6 @@ class eventSetEventType(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventSetRealm(input: EventSetRealmInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventSetRealm(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -237,7 +229,6 @@ class eventSetRealm(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventSetPricingType(input: EventSetPricingTypeInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventSetPricingType(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -262,7 +253,6 @@ class eventSetPricingType(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventSetZoomLink(input: EventSetZoomLinkInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventSetZoomLink(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -283,7 +273,6 @@ class eventSetZoomLink(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventGenerateZoomLink(input: EventGenerateZoomLinkInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventGenerateZoomLink(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -303,7 +292,6 @@ class eventGenerateZoomLink(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventAddTag(input: EventAddTagInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventAddTag(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -322,7 +310,6 @@ class eventAddTag(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventDeleteTag(input: EventDeleteTagInput!): EventUpdateResult! @staffonly
 @c.class_field
 class eventDeleteTag(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -341,7 +328,7 @@ class eventDeleteTag(helpers.BaseFieldWithInput):
     result = g.NN(EventUpdateResult)
 
 
-# eventSetImageFromUrl(input: EventSetImageFromUrlInput!): EventUpdateResult! @staffonly
+# deprecated! use wagtailUploadImageFromUrl + eventUpdate instead
 @c.class_field
 class eventSetImageFromUrl(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):

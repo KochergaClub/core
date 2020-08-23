@@ -24,7 +24,7 @@ from kocherga.vk.helpers import group2id, upload_wall_image
 import kocherga.events.markup
 
 from ..event import Event
-from ...helpers import create_image_from_fh
+from kocherga.wagtail.utils import create_image_from_fh
 
 
 class Manager(models.Manager):

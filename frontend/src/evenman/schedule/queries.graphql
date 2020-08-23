@@ -2,7 +2,7 @@ fragment EvenmanWeeklyDigest on EventsWeeklyDigest {
   id
   start
   image(spec: "width-240") {
-    url
+    ...WagtailImageRendition_ForEditor
   }
   mailchimp {
     link
@@ -40,9 +40,7 @@ mutation EvenmanDigestToTelegram {
 }
 
 mutation EvenmanDigestToMailchimp($text: String!) {
-  result: eventsWeeklyDigestPostMailchimp(input: {
-      text: $text
-    }) {
+  result: eventsWeeklyDigestPostMailchimp(input: { text: $text }) {
     ok
     digest {
       ...EvenmanWeeklyDigest
