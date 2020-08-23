@@ -1,29 +1,32 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 
 import { useAPI } from '~/common/hooks';
 
-import ImagePreview from '../ImagePreview';
+// import ImagePreview from '../ImagePreview';
+import ImageBox from '../images/ImageBox';
+import ViewOverlay from '../images/ViewOverlay';
 import Controls from './Controls';
 import { WagtailImageRendition_ForEditorFragment as ImageFragment } from './fragments.generated';
 import { Defaults } from './types';
 
 const Placeholder = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 240px;
+  min-height: 50px;
+  background-color: #f8f8f8;
   font-size: 0.7rem;
 `;
 
 const Container = styled.div<{ active: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 240px;
-  min-height: 50px;
+  position: relative; /* important for inner z-index elements, e.g. dropdowns */
   border-width: 2px;
   border-color: #666;
   border-style: dashed;
   border-radius: 5px;
-  background-color: #f8f8f8;
-  position: relative;
 
   ${(props) =>
     props.active
@@ -33,24 +36,51 @@ const Container = styled.div<{ active: boolean }>`
       background-color: #eee;
     `
       : ''}
-
-  > .controls-container {
-    opacity: 0;
-    transition: opacity 200ms;
-  }
-
-  &:hover {
-    > .controls-container {
-      opacity: 1;
-      transition: opacity 200ms;
-    }
-  }
 `;
 
 const ControlsContainer = styled.div`
   position: absolute;
   bottom: 5px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 1; /* transform creates a new stacking context, so this is necessary for inner Dropdown */
 `;
+
+// via https://gist.github.com/gragland/a32d08580b7e0604ff02cb069826ca2f
+const useHover = (): [(node: HTMLDivElement) => void, boolean] => {
+  const [value, setValue] = useState(false);
+
+  // Wrap in useCallback so we can use in dependencies below
+  const handleMouseEnter = useCallback(() => setValue(true), []);
+  const handleMouseLeave = useCallback(() => setValue(false), []);
+
+  // Keep track of the last node passed to callbackRef
+  // so we can remove its event listeners.
+  const ref = useRef<HTMLDivElement>();
+
+  // Use a callback ref instead of useEffect so that event listeners
+  // get changed in the case that the returned ref gets added to
+  // a different element later. With useEffect, changes to ref.current
+  // wouldn't cause a rerender and thus the effect would run again.
+  const callbackRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (ref.current) {
+        ref.current.removeEventListener('mouseenter', handleMouseEnter);
+        ref.current.removeEventListener('mouseleave', handleMouseLeave);
+      }
+
+      ref.current = node;
+
+      if (ref.current) {
+        ref.current.addEventListener('mouseenter', handleMouseEnter);
+        ref.current.addEventListener('mouseleave', handleMouseLeave);
+      }
+    },
+    [handleMouseEnter, handleMouseLeave]
+  );
+
+  return [callbackRef, value];
+};
 
 interface Props {
   image?: ImageFragment;
@@ -78,21 +108,32 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults }) => {
     noClick: true,
   });
 
+  const [hoverRef, isHovered] = useHover();
+
+  const [controlsExpanded, setControlsExpanded] = useState(false);
+
+  const showControls = isHovered || controlsExpanded;
+
   return (
-    <Container {...getRootProps()} active={isDragActive}>
-      <input {...getInputProps()} />
-      {image ? (
-        <ImagePreview url={image.url || ''} link={image.original_image?.url} />
-      ) : (
-        <Placeholder>Сюда можно бросить файл</Placeholder>
-      )}
-      <ControlsContainer className="controls-container">
-        <Controls
-          openFilePicker={open}
-          setImageId={onChange}
-          defaults={defaults || {}}
-        />
-      </ControlsContainer>
+    <Container {...getRootProps()} active={isDragActive} ref={hoverRef}>
+      <ImageBox
+        src={image?.url}
+        empty={() => <Placeholder>Сюда можно бросить файл</Placeholder>}
+        displayOverlay={showControls}
+      >
+        {image && (
+          <ViewOverlay link={`/wagtail/images/${image.original_image.id}/`} />
+        )}
+        <input {...getInputProps()} />
+        <ControlsContainer className="controls-container">
+          <Controls
+            openFilePicker={open}
+            setImageId={onChange}
+            defaults={defaults || {}}
+            onExpandChange={setControlsExpanded}
+          />
+        </ControlsContainer>
+      </ImageBox>
     </Container>
   );
 };

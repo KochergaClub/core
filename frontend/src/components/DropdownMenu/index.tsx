@@ -1,22 +1,20 @@
-import { useState, useCallback } from 'react';
-
-import styled from 'styled-components';
+import { useCallback, useEffect, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
-
-import { fonts, colors } from '@kocherga/frontkit';
-
 import { usePopper } from 'react-popper';
-import { Placement } from '@popperjs/core';
-import { useExpandable } from '~/common/hooks';
+import styled from 'styled-components';
 
-import { ModalCreator, DropdownMenuContext } from './contexts';
+import { colors, fonts } from '@kocherga/frontkit';
+import { Placement } from '@popperjs/core';
+
+import { useExpandable } from '~/common/hooks';
+import { FloatingList } from '~/components';
+
+import { DropdownMenuContext, ModalCreator } from './contexts';
 
 export { default as Action } from './Action';
 export { default as LinkAction } from './LinkAction';
 export { default as NextLinkAction } from './NextLinkAction';
 export { default as ModalAction } from './ModalAction';
-
-import { FloatingList } from '~/components';
 
 const Container = styled.div`
   white-space: nowrap;
@@ -66,6 +64,7 @@ interface Props {
   title?: string;
   render?: ({ expanded }: { expanded: boolean }) => React.ReactElement;
   placement?: Placement;
+  onExpandChange?: (expanded: boolean) => void; // some outside components can be interested when Dropdown becomes expanded or unexpanded
 }
 
 const DropdownMenu: React.FC<Props> = ({
@@ -73,6 +72,7 @@ const DropdownMenu: React.FC<Props> = ({
   title,
   children,
   render,
+  onExpandChange,
 }) => {
   // Note that modalWrapper belongs here and not in <ModalAction> because it should be open even if dropdown is collapsed.
   // We need to wrap ModalCreator function in an object because useState behaves funky otherwise.
@@ -89,6 +89,12 @@ const DropdownMenu: React.FC<Props> = ({
   }, []);
 
   const { ref, flipExpand, unexpand, expanded } = useExpandable();
+
+  useEffect(() => {
+    if (onExpandChange) {
+      onExpandChange(expanded);
+    }
+  }, [expanded, onExpandChange]);
 
   const [
     referenceElement,

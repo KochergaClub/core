@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { A, Column } from '@kocherga/frontkit';
+import { Button, Column, Row } from '@kocherga/frontkit';
 
 import ImageEditor from '../common/ImageEditor';
 import {
@@ -28,21 +28,24 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
 
   return (
     <Column centered gutter={0}>
-      <header>Картинка для ВК:</header>
-      <small>
-        <A
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            toggleModal();
-          }}
-        >
-          создать
-        </A>
-        {modalIsOpen && (
-          <VkImageModal event={event} close={toggleModal} onSave={onSave} />
-        )}
-      </small>
+      <header>
+        <Row>
+          <span>Картинка для ВК:</span>
+          <Button
+            size="small"
+            kind="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              toggleModal();
+            }}
+          >
+            создать
+          </Button>
+        </Row>
+      </header>
+      {modalIsOpen && (
+        <VkImageModal event={event} close={toggleModal} onSave={onSave} />
+      )}
       <ImageEditor
         onChange={onSave}
         image={event.announcements.vk.image || undefined}
