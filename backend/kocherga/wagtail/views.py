@@ -1,13 +1,12 @@
-import imghdr
-
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from django.core.files.images import ImageFile
 from kocherga.wagtail.models import CustomImage
 
 from kocherga.error import PublicError
+
+from .utils import create_image_from_fh
 
 
 class ImageView(APIView):
@@ -24,19 +23,9 @@ class ImageView(APIView):
 
         title = request.data['title']
 
-        image = CustomImage(title=title)
-        image_type = imghdr.what(fh)
-        if image_type == 'png':
-            ext = 'png'
-        elif image_type == 'jpeg':
-            ext = 'jpg'
-        else:
-            raise Exception(f"Unknown image type {image_type}")
-
         last_image = CustomImage.objects.last()
         basename = str(last_image.pk + 1 if last_image else 1)
 
-        image.file.save(basename + '.' + ext, ImageFile(fh))
-        image.save()
+        image = create_image_from_fh(fh, title, basename)
 
         return Response({'ok': True, 'id': image.pk})
