@@ -1,24 +1,13 @@
-import { useState, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
 import { format, parseISO } from 'date-fns';
+import { useCallback, useMemo, useState } from 'react';
+import styled from 'styled-components';
 
-import {
-  Button,
-  Column,
-  Modal,
-  Input,
-  ControlsFooter,
-  Label,
-} from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
 
+import { useAPI, useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { state2link } from '~/image-templater/utils';
 
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
-import {
-  useAPI,
-  useFocusOnFirstModalRender,
-  useCommonHotkeys,
-} from '~/common/hooks';
 
 const WideInput = styled(Input)`
   width: 100%;
@@ -27,9 +16,10 @@ const WideInput = styled(Input)`
 interface Props {
   event: EvenmanEvent_DetailsFragment;
   close: () => void;
-  onSave: (image_id: string) => Promise<any>;
+  onSave: (image_id: string) => Promise<unknown>;
 }
 
+//test
 const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
   const api = useAPI();
 
@@ -70,9 +60,11 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
     }
     const blob = await response.blob();
 
+    const imageTitle = `[VK] ${config.date} ${event.title}`;
+
     const formData = new FormData();
     formData.append('file', blob);
-    formData.append('title', 'VK_IMAGE'); // TODO - generate title
+    formData.append('title', imageTitle);
 
     const result = await api.call('wagtail/upload_image', 'POST', formData, {
       stringifyPayload: false,
@@ -81,7 +73,7 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
     await onSave(image_id);
 
     close();
-  }, [api, buildLink, onSave, close]);
+  }, [api, buildLink, onSave, close, event.title, config.date]);
 
   const updateTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);

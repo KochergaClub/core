@@ -94,7 +94,8 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults }) => {
   const onDrop = async (acceptedFiles: File[]) => {
     const formData = new FormData();
     formData.append('file', acceptedFiles[0]);
-    formData.append('title', 'UNTITLED'); // TODO - ask for title
+    formData.append('title', defaults?.title || 'UNTITLED'); // TODO - ask for title
+    // TODO - pass basename
 
     const result = await api.call('wagtail/upload_image', 'POST', formData, {
       stringifyPayload: false,

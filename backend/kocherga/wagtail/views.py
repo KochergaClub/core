@@ -23,6 +23,7 @@ class ImageView(APIView):
 
         title = request.data['title']
 
+        # TODO - take basename from request
         last_image = CustomImage.objects.last()
         basename = str(last_image.pk + 1 if last_image else 1)
 
