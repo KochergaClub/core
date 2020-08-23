@@ -35,12 +35,14 @@ const Container = styled.div<{ active: boolean }>`
       : ''}
 
   > .controls-container {
-    display: none;
+    opacity: 0;
+    transition: opacity 200ms;
   }
 
   &:hover {
     > .controls-container {
-      display: block;
+      opacity: 1;
+      transition: opacity 200ms;
     }
   }
 `;

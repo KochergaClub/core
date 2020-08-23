@@ -3,6 +3,19 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   position: relative;
+
+  > .external-link {
+    display: none;
+  }
+  &:hover {
+    > .preview-img {
+      filter: brightness(50%);
+      transition: filter 0.3s;
+    }
+    > .external-link {
+      display: block;
+    }
+  }
 `;
 
 const ExternalLink = styled.a`
@@ -26,9 +39,9 @@ interface Props {
 
 export const ImagePreview: React.FC<Props> = ({ url, link }) => (
   <Container>
-    <PreviewImg src={url} alt="Превью картинки" />
+    <PreviewImg src={url} alt="Превью картинки" className="preview-img" />
 
-    <ExternalLink href={link || url}>
+    <ExternalLink href={link || url} className="external-link">
       <FaExternalLinkAlt />
     </ExternalLink>
   </Container>

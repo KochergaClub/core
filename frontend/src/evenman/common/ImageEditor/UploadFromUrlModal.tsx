@@ -22,7 +22,7 @@ const WideInput = styled(Input)`
 `;
 
 // TODO - formik
-const InputModal: React.FC<Props> = ({ toggle, save, defaults }) => {
+const UploadFromUrlModal: React.FC<Props> = ({ toggle, save, defaults }) => {
   const [acting, setActing] = useState(false);
 
   const [url, setUrl] = useState('');
@@ -97,4 +97,4 @@ const InputModal: React.FC<Props> = ({ toggle, save, defaults }) => {
   );
 };
 
-export default InputModal;
+export default UploadFromUrlModal;
