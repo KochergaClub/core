@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 import json
 
 from kocherga.graphql import helpers
@@ -26,8 +30,10 @@ class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
             [isinstance(page, m) for m in (models.FreeFormPage, models.FrontPage)]
         )
 
-        # FIXME - validate
-        page.body = json.loads(input['blocksJson'])
+        # FIXME - validate? wagtail mostly validates blocks data but sometimes fails to do it properly
+        stream_block = page._meta.get_field('body').stream_block
+        serialized_value = json.loads(input['blocksJson'])
+        page.body = stream_block.clean(stream_block.to_python(serialized_value))
 
         # TODO - pass user
         # TODO - consider `publish` flag

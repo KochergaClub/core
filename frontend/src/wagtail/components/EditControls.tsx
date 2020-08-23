@@ -22,6 +22,31 @@ interface Props {
   blocks: AnyBlockFragment[];
 }
 
+// TODO - compare value with block's shape
+const valueToBackendValue = (value: any) => {
+  if (typeof value === 'object') {
+    if (value instanceof Array) {
+      return value.map(valueToBackendValue);
+    }
+
+    if (value.__typename === 'WagtailImageRendition') {
+      // TODO
+      // throw new Error("Don't know how to convert images yet");
+      return null;
+    }
+
+    return Object.fromEntries(
+      Object.keys(value)
+        .filter((key) => key !== '__typename')
+        .map((key) => {
+          return [key, valueToBackendValue(value[key])];
+        })
+    );
+  } else {
+    return value;
+  }
+};
+
 const serializeBlockValue = (block: AnyBlockFragment) => {
   const typename = block.__typename;
   if (!isKnownBlock(block)) {
@@ -45,14 +70,28 @@ const serializeBlockValue = (block: AnyBlockFragment) => {
 
   const valueKey = valueSelection.alias?.value || 'value';
 
-  // TODO - traverse value and rewrite images etc., check that all types are comprehensible
-  return (block as any)[valueKey];
+  const value = (block as any)[valueKey];
+  return valueToBackendValue(value);
+};
+
+const typenameToBackendBlockName = (typename: string) => {
+  const parts = Array.from(typename.matchAll(/([A-Z][a-z]*)/g)).map(
+    (match) => match[0]
+  );
+  if (parts[parts.length - 1] !== 'Block') {
+    throw new Error(`Invalid typename ${typename}, should end with ...Block`);
+  }
+
+  return parts
+    .slice(0, -1)
+    .map((p) => p.toLowerCase())
+    .join('_');
 };
 
 const serializeBlocks = (blocks: AnyBlockFragment[]) => {
   return blocks.map((block) => {
     const value = serializeBlockValue(block);
-    return [block.__typename, value]; // FIXME - rewrite __typename to backend type
+    return { type: typenameToBackendBlockName(block.__typename), value };
   });
 };
 
@@ -70,16 +109,15 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
 
     const blocksJson = JSON.stringify(serializeBlocks(blocks), null, 2);
     window.alert(blocksJson);
-    // not ready yet
-    // await saveMutation({
-    //   variables: {
-    //     input: {
-    //       page_id,
-    //       blocksJson,
-    //       publish: false,
-    //     },
-    //   },
-    // });
+    await saveMutation({
+      variables: {
+        input: {
+          page_id,
+          blocksJson,
+          publish: false,
+        },
+      },
+    });
   }, [saveMutation, page_id]);
 
   if (!page_id) {

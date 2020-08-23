@@ -1,8 +1,8 @@
 import logging
 
-from kocherga.wagtail.utils import get_page_queryset_for_request
-
 logger = logging.getLogger(__name__)
+
+from kocherga.wagtail.utils import get_page_queryset_for_request
 
 from typing import Optional
 import urllib.parse
