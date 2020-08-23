@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { A, Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { ModalAction } from '~/components/DropdownMenu';
@@ -39,16 +39,19 @@ const ChooseImageModal: React.FC<ModalProps> = ({ close, save }) => {
       <Modal.Header toggle={close}>Выбор существующей картинки</Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
-          <div>
-            <Label>ID картинки в Wagtail:</Label>
-            <Input
-              type="number"
-              value={value}
-              onChange={updateValue}
-              ref={focus}
-              scale="big"
-            />
-          </div>
+          <small>
+            Возможность искать картинки появится позже. Пока что можно пойти в{' '}
+            <A href="/wagtail/images/">Wagtail</A> и найти ID картинки там
+            (взять из URL-а).
+          </small>
+          <Label>ID картинки в Wagtail:</Label>
+          <Input
+            type="number"
+            value={value}
+            onChange={updateValue}
+            ref={focus}
+            scale="big"
+          />
         </Column>
       </Modal.Body>
       <Modal.Footer>
