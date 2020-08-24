@@ -252,7 +252,7 @@ def event_visitors_question(event):
     return result
 
 
-@bot.schedule("interval", minutes=5)
+# @bot.schedule("interval", minutes=5)
 def ask_for_event_visitors():
     logger.debug("ask_for_event_visitors")
     events = Event.objects.filter(
