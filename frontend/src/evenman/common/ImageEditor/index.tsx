@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 
 import { useAPI } from '~/common/hooks';
 
-// import ImagePreview from '../ImagePreview';
 import ImageBox from '../images/ImageBox';
 import ViewOverlay from '../images/ViewOverlay';
 import Controls from './Controls';

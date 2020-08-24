@@ -1,17 +1,15 @@
 import { useCallback } from 'react';
 
-import { Row, Label } from '@kocherga/frontkit';
+import { Label, Row } from '@kocherga/frontkit';
 
-import Card, { CardHeader } from '~/components/Card';
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
-
+import Card, { CardHeader } from '~/components/Card';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
 import {
-  useEmailSubscribeChannelDeleteMutation,
-  useEmailSubscribeChannelAddEmailMutation,
-  SubscribeChannelFragment,
+    SubscribeChannelFragment, useEmailSubscribeChannelAddEmailMutation,
+    useEmailSubscribeChannelDeleteMutation
 } from '../queries.generated';
 
 interface ManualSubscribeFormResults {
@@ -67,7 +65,7 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
         </code>
       </Row>
       <ul>
-        {subscribeChannel.interests.map(interest => (
+        {subscribeChannel.interests.map((interest) => (
           <li key={interest.id}>{interest.name}</li>
         ))}
       </ul>

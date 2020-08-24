@@ -38,15 +38,18 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
     if (!canCreate) {
       return;
     }
-    const hour = getHours(time!);
-    const minute = getMinutes(time!);
+    if (time === undefined || weekday === undefined) {
+      return; // shouldn't happen, but this satisfies typescript
+    }
+    const hour = getHours(time);
+    const minute = getMinutes(time);
     await createMutation({
       variables: {
         title,
-        weekday: weekday!,
+        weekday,
         hour,
         minute,
-        length: length!,
+        length,
       },
     });
     close();

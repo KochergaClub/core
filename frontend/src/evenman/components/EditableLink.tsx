@@ -8,7 +8,7 @@ import EditableString from './EditableString';
 export interface Props {
   value: string | undefined;
   title: string;
-  save: (value: string) => Promise<any>;
+  save: (value: string) => Promise<unknown>;
 }
 
 const EditableLink: React.FC<Props> = ({ value, title, save }) => {

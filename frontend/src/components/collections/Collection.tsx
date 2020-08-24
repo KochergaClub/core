@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { Row, Column } from '@kocherga/frontkit';
+import { Column, Row } from '@kocherga/frontkit';
 
 import { capitalize } from '~/common/utils';
 import { FormShape } from '~/components/forms/types';
 
 import CreateItemButton from './CreateItemButton';
 import DumpJSONView from './DumpJSONView';
-
 import { AnyViewProps, EntityNames } from './types';
 
 interface Props<I, A extends {}> {

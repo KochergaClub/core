@@ -1,11 +1,12 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { Device, OpenVidu, PublisherProperties } from 'openvidu-browser';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Select, { ValueType } from 'react-select';
 import styled from 'styled-components';
-import Select from 'react-select';
-import { OpenVidu, Device, PublisherProperties } from 'openvidu-browser';
 
-import { Row, Column, Label } from '@kocherga/frontkit';
+import { Column, Label, Row } from '@kocherga/frontkit';
 
-import { AsyncButton, Spinner, PaddedBlock } from '~/components';
+import { AsyncButton, PaddedBlock, Spinner } from '~/components';
+
 import MuteAudioButton from './MuteAudioButton';
 import MuteVideoButton from './MuteVideoButton';
 
@@ -35,20 +36,25 @@ const DevicePicker: React.FC<DevicePickerProps> = ({
   devices,
 }) => {
   const [loading, setLoading] = useState(false);
-  const options = devices
-    .filter(d => d.kind === kind)
-    .map(d => ({
+
+  type MyOption = { value: string; label: string };
+  const options: MyOption[] = devices
+    .filter((d) => d.kind === kind)
+    .map((d) => ({
       value: d.deviceId,
       label: d.label,
     }));
-  const currentOption = options.find(o => o.value && o.value === current);
+  const currentOption = options.find((o) => o.value && o.value === current);
   return (
     <Select
       options={options}
       value={currentOption}
-      onChange={async (selected: any) => {
+      onChange={async (selected: ValueType<MyOption>) => {
+        if (!selected || Array.isArray(selected)) {
+          throw new Error('react-select is weird'); // shouldn't happen
+        }
         setLoading(true);
-        await pick(selected.value);
+        await pick((selected as MyOption).value);
         setLoading(false);
       }}
       isLoading={loading}
@@ -147,7 +153,7 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
           previewRef.current.srcObject = um;
         }
       }
-      setPublisherProperties(pp => ({
+      setPublisherProperties((pp) => ({
         ...pp,
         videoSource: id,
       }));
@@ -172,7 +178,7 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
           previewRef.current.srcObject = um;
         }
       }
-      setPublisherProperties(pp => ({
+      setPublisherProperties((pp) => ({
         ...pp,
         audioSource: id,
       }));
@@ -181,14 +187,14 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
   );
 
   const muteVideo = useCallback(() => {
-    setPublisherProperties(pp => {
+    setPublisherProperties((pp) => {
       const publishVideo = !pp.publishVideo;
       return { ...pp, publishVideo };
     });
   }, []);
 
   const muteAudio = useCallback(() => {
-    setPublisherProperties(pp => {
+    setPublisherProperties((pp) => {
       const publishAudio = !pp.publishAudio;
       return { ...pp, publishAudio };
     });
@@ -210,7 +216,7 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
                   <DevicePicker
                     kind="videoinput"
                     current={publisherProperties.videoSource}
-                    pick={async v => await setVideoDevice(v)}
+                    pick={async (v) => await setVideoDevice(v)}
                     devices={devices}
                   />
                   <MuteVideoButton
@@ -223,7 +229,7 @@ const JoinSettings: React.FC<Props> = ({ ov, joinSession }) => {
                   <DevicePicker
                     kind="audioinput"
                     current={publisherProperties.audioSource}
-                    pick={async v => await setAudioDevice(v)}
+                    pick={async (v) => await setAudioDevice(v)}
                     devices={devices}
                   />
                   <MuteAudioButton

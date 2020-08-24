@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
 
 import { Button } from '@kocherga/frontkit';
+
 import { useNotification } from '~/common/hooks';
 
 interface Props {
-  act: () => Promise<any>;
+  act: () => Promise<unknown>;
   small?: boolean; // deprecated
   size?: 'small' | 'normal' | 'big';
   kind?: 'primary' | 'danger' | 'default';

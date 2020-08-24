@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef } from 'react';
-
-import Select from 'react-select';
 import autosize from 'autosize';
-
-import { useFocusOnFirstModalRender } from '../../common/hooks';
+import { useCallback, useEffect, useRef } from 'react';
+import Select from 'react-select';
 
 import { Column, Input, Label } from '@kocherga/frontkit';
+
+import { useFocusOnFirstModalRender } from '../../common/hooks';
 
 const roomOptions = [
   { value: '', label: '(не выбрана)' },
@@ -16,7 +15,9 @@ const roomOptions = [
 ];
 
 const findRoom = (room: string) => {
-  return roomOptions.find(el => el.value.toLowerCase() === room.toLowerCase());
+  return roomOptions.find(
+    (el) => el.value.toLowerCase() === room.toLowerCase()
+  );
 };
 
 const Textarea = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
@@ -72,26 +73,25 @@ const EventFields = (props: Props) => {
         <Label>Комната</Label>
         <Select
           value={findRoom(props.room)}
-          onChange={(selected: any) => {
-            // FIXME - fix type
+          onChange={(selected) => {
             if (selected && !Array.isArray(selected)) {
-              props.setRoom(selected.value);
+              props.setRoom((selected as typeof roomOptions[0]).value);
             } // TODO - else?
           }}
           options={roomOptions}
           isDisabled={props.disabled}
           menuPortalTarget={document.body}
           styles={{
-            menuPortal: provided => ({ ...provided, zIndex: 1100 }),
+            menuPortal: (provided) => ({ ...provided, zIndex: 1100 }),
           }}
         />
       </Column>
       <Column stretch gutter={0}>
         <Label>Описание</Label>
         <Textarea
-          onChange={e => props.setDescription(e.currentTarget.value)}
+          onChange={(e) => props.setDescription(e.currentTarget.value)}
           defaultValue={props.description}
-          onKeyDown={e => e.keyCode == 13 && e.stopPropagation()}
+          onKeyDown={(e) => e.keyCode == 13 && e.stopPropagation()}
           disabled={props.disabled}
         />
       </Column>

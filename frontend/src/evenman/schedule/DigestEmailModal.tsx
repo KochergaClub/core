@@ -1,12 +1,13 @@
 import autosize from 'autosize';
+import { useCallback, useRef } from 'react';
 
 import { Modal } from '@kocherga/frontkit';
+
 import { AsyncButton } from '~/components';
-import { useRef, useCallback } from 'react';
 
 interface Props {
   close: () => void;
-  save: (text: string) => Promise<any>;
+  save: (text: string) => Promise<unknown>;
 }
 
 const DigestEmailModal: React.FC<Props> = ({ close, save }) => {

@@ -41,7 +41,7 @@ const EditScheduleModal: React.FC<ModalProps> = ({ prototype, close }) => {
       minute,
     });
     close();
-  }, [weekday, length, time, close]);
+  }, [weekday, length, time, close, updateMutation]);
 
   const hotkeys = useCommonHotkeys({
     onEscape: close,

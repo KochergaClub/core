@@ -2,8 +2,8 @@ import { ReactSelectCreatable } from '../components/ui';
 
 interface Props {
   tags: string[];
-  addTag: (value: string) => Promise<any>;
-  deleteTag: (value: string) => Promise<any>;
+  addTag: (value: string) => Promise<unknown>;
+  deleteTag: (value: string) => Promise<unknown>;
 }
 
 interface OptionType {
@@ -30,7 +30,7 @@ const EventShapeTags: React.FC<Props> = ({ tags, addTag, deleteTag }) => {
         isMulti
         onChange={(options: any) => {
           const selectedTags = ((options || []) as OptionType[]).map(
-            option => option.value
+            (option) => option.value
           );
 
           for (const selectedTag of selectedTags) {

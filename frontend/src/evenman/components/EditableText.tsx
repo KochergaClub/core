@@ -1,14 +1,14 @@
-import { useCallback, useRef, useReducer } from 'react';
-import breaks from 'remark-breaks';
-import Markdown from 'react-markdown';
 import autosize from 'autosize';
-
+import { useCallback, useReducer, useRef } from 'react';
 import { FaEdit } from 'react-icons/fa';
-
+import Markdown from 'react-markdown';
+import breaks from 'remark-breaks';
 import styled from 'styled-components';
 
 import { Button, ControlsFooter } from '@kocherga/frontkit';
+
 import { AsyncButton } from '~/components';
+
 import { Header, IconLink, UserText } from './ui';
 
 const Textarea = styled.textarea`
@@ -19,7 +19,7 @@ const Textarea = styled.textarea`
 interface Props {
   title: string;
   text: string;
-  save: (text: string) => Promise<void>;
+  save: (text: string) => Promise<unknown>;
   empty: React.ReactNode;
 }
 

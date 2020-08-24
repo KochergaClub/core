@@ -1,20 +1,18 @@
-import { withApollo, NextApolloPage } from '~/apollo';
-
-import { Page, HintCard } from '~/components';
-import { redirect } from '~/components/RedirectPage';
+import { NextApolloPage, withApollo } from '~/apollo';
 import { APIError } from '~/common/api';
-
-import { CurrentUserQuery, CurrentUserDocument } from '../queries.generated';
+import { HintCard, Page } from '~/components';
+import { redirect } from '~/components/RedirectPage';
 
 import AuthForm from '../components/AuthForm';
 import CenteredLayout from '../components/CenteredLayout';
+import { CurrentUserDocument, CurrentUserQuery } from '../queries.generated';
 import { checkYourEmailRoute } from '../routes';
 
 interface Props {
   next: string;
 }
 
-const LoginPage: NextApolloPage<Props> = props => {
+const LoginPage: NextApolloPage<Props> = (props) => {
   return (
     <Page title="Войти в Кочергу">
       <Page.Title>Войти или зарегистрироваться</Page.Title>

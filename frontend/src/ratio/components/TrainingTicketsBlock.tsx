@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { A, Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 import ModalFormButton from '~/components/forms/ModalFormButton';

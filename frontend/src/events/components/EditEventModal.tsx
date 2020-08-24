@@ -1,22 +1,18 @@
-import { useCallback, useState, useContext } from 'react';
-
 import { utcToZonedTime } from 'date-fns-tz';
+import { useCallback, useContext, useState } from 'react';
 
 import { Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
-import { timezone, formatDate } from '~/common/utils';
-
-import { closeUI, CalendarUIContext } from '../reducers/calendarUI';
-
-import EventFields from './EventFields';
-import {
-  useTeamCalendarEventQuery,
-  TeamCalendarEventFragment,
-  useTeamCalendarUpdateEventMutation,
-  useTeamCalendarDeleteEventMutation,
-} from '../queries.generated';
+import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults } from '~/components';
+
+import {
+    TeamCalendarEventFragment, useTeamCalendarDeleteEventMutation, useTeamCalendarEventQuery,
+    useTeamCalendarUpdateEventMutation
+} from '../queries.generated';
+import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
+import EventFields from './EventFields';
 
 interface LoadedProps {
   event: TeamCalendarEventFragment;
@@ -62,7 +58,7 @@ const EditEventModalLoaded: React.FC<LoadedProps> = ({ event }) => {
       },
     });
     dispatch(closeUI());
-  }, [dispatch, event, saveDisabled, title, description, room]);
+  }, [dispatch, event, saveDisabled, title, description, room, updateMutation]);
 
   const deleteCb = useCallback(async () => {
     if (!event) {
@@ -71,7 +67,7 @@ const EditEventModalLoaded: React.FC<LoadedProps> = ({ event }) => {
     setDeleting(true);
     await deleteMutation({ variables: { id: event.id } });
     dispatch(closeUI());
-  }, [dispatch, event]);
+  }, [dispatch, event, deleteMutation]);
 
   const closeCb = useCallback(() => {
     dispatch(closeUI());

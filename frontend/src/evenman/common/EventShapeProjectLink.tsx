@@ -1,16 +1,15 @@
 import Select from 'react-select';
+import { ActionTypes } from 'react-select/src/types';
 
 import { Label } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
-import { ActionTypes } from 'react-select/src/types';
-
 import { useEvenmanProjectsListQuery } from './queries.generated';
 
 interface Props {
   selected?: string;
-  select: (slug: string) => Promise<any>;
+  select: (slug: string) => Promise<unknown>;
 }
 
 const EventShapeProjectLink = ({ selected, select }: Props) => {
@@ -19,12 +18,12 @@ const EventShapeProjectLink = ({ selected, select }: Props) => {
   return (
     <ApolloQueryResults {...projectsResult}>
       {({ data: { projects } }) => {
-        const options = projects.map(p => ({
+        const options = projects.map((p) => ({
           value: p.meta.slug,
           label: p.meta.slug,
         }));
 
-        const currentProject = options.find(p => p.value === selected);
+        const currentProject = options.find((p) => p.value === selected);
 
         const pickProject = async (
           v: any,

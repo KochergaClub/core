@@ -1,10 +1,9 @@
-import { MutedSpan, UserSpan } from '../components/ui';
-
 import EditableString from '../components/EditableString';
+import { MutedSpan, UserSpan } from '../components/ui';
 
 interface Props {
   value: string;
-  setValue: (value: string) => Promise<any>;
+  setValue: (value: string) => Promise<unknown>;
 }
 
 const EventShapeTimingDescription: React.FC<Props> = ({ value, setValue }) => {

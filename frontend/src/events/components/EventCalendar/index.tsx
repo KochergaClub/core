@@ -1,29 +1,19 @@
-import { useCallback, useState } from 'react';
-
-import { utcToZonedTime, zonedTimeToUtc, format } from 'date-fns-tz';
 import { addDays, parseISO } from 'date-fns';
+import { format, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { useCallback, useState } from 'react';
 
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
-import { useListeningWebSocket } from '~/common/hooks';
 
+import { useEventsInRangeQuery, useResizeEventMutation } from '../../queries.generated';
+import {
+    CalendarUIContext, startNewUI, startViewUI, useCalendarUIReducer
+} from '../../reducers/calendarUI';
+import { LocalEventWithMetadata } from '../../types';
+// import { useListeningWebSocket } from '~/common/hooks';
 import UILayer from '../UILayer';
-
 import BigCalendarConfigured from './BigCalendarConfigured';
 import CalendarEvent from './CalendarEvent';
-
-import {
-  useEventsInRangeQuery,
-  useResizeEventMutation,
-} from '../../queries.generated';
-
-import { LocalEventWithMetadata } from '../../types';
-import {
-  useCalendarUIReducer,
-  startNewUI,
-  startViewUI,
-  CalendarUIContext,
-} from '../../reducers/calendarUI';
 
 const startAccessor = (eventWithMetadata: LocalEventWithMetadata) =>
   utcToZonedTime(eventWithMetadata.event.start, timezone);
@@ -55,7 +45,7 @@ interface Props {
   range: { start: string; end: string };
 }
 
-const EventCalendar: NextPage<Props> = props => {
+const EventCalendar: NextPage<Props> = (props) => {
   const [resizeMutation] = useResizeEventMutation();
 
   const [uiState, uiDispatch] = useCalendarUIReducer();
@@ -173,7 +163,7 @@ const EventCalendar: NextPage<Props> = props => {
   const getNow = useCallback(() => utcToZonedTime(new Date(), timezone), []);
 
   const eventsWithMetadata = (queryResults.data?.events.nodes || []).map(
-    event => ({
+    (event) => ({
       event,
       saving: false, // FIXME
     })

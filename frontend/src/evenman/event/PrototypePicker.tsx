@@ -1,7 +1,6 @@
 import { ApolloQueryResults } from '~/components';
 
 import { ReactSelect } from '../components/ui';
-
 import { useEvenmanPrototypesForPickerQuery } from './queries.generated';
 
 interface Props {
@@ -24,13 +23,18 @@ const Picker: React.FC<Props> = ({ selectedId, select }) => {
       {({ data: { prototypes } }) => {
         const options = prototypes.map(value2option);
         const findOptionById = (id: string) =>
-          options.find(option => option.value === id);
+          options.find((option) => option.value === id);
 
         return (
           <ReactSelect
             placeholder="Выбрать прототип"
             menuPortalTarget={document.body}
-            styles={{ menuPortal: (base: any) => ({ ...base, zIndex: 1500 }) }}
+            styles={{
+              menuPortal: (base: Record<string, string>) => ({
+                ...base,
+                zIndex: 1500,
+              }),
+            }}
             options={options}
             value={selectedId ? findOptionById(selectedId) : null}
             onChange={(option: any) => {

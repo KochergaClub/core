@@ -12,9 +12,11 @@ import { Page, Spinner } from '~/components';
 import UpcomingEventsListBlock from '../components/UpcomingEventsListBlock';
 import { UpcomingPublicEventsDocument } from '../queries.generated';
 
+const loadingCalendar = () => <Spinner size="div" />;
+
 const PublicEventsCalendar = dynamic(
   () => import('../components/PublicEventsCalendar'),
-  { ssr: false, loading: () => <Spinner size="div" /> }
+  { ssr: false, loading: loadingCalendar }
 );
 
 const PublicEventIndexPage: NextApolloPage = () => {

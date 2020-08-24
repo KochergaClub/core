@@ -1,23 +1,21 @@
+import { Form, Formik, FormikHelpers } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
 
-import { Formik, Form, FormikHelpers } from 'formik';
+import { Button, Column, ControlsFooter, Modal } from '@kocherga/frontkit';
 
-import { Column, Button, Modal, ControlsFooter } from '@kocherga/frontkit';
-
-import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
+import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 
 import ButtonWithModal from '../ButtonWithModal';
-
-import { FormShape } from './types';
 import FieldWidget from './FieldWidget';
 import ErrorLabel from './FieldWidget/ErrorLabel'; // TODO - move ErrorLabel to one level up?
+import { FormShape } from './types';
 
 interface PostResult {
   close: boolean;
   error?: string;
 }
 
-interface Props<Values extends {}> {
+interface Props<Values> {
   fields: FormShape; // FormShape should match Values!
   buttonName: string;
   modalButtonName: string;
@@ -102,7 +100,7 @@ function ModalForm<Values>({
   );
 
   const validate = useCallback(
-    values => {
+    (values) => {
       const errors: { [k: string]: string } = {};
       for (const field of fields) {
         const value = values[field.name];
@@ -143,7 +141,7 @@ function ModalForm<Values>({
           <Form>
             <Modal.Body ref={focus} {...hotkeys}>
               <Column stretch>
-                {fields.map(field => (
+                {fields.map((field) => (
                   <FieldWidget key={field.name} field={field} />
                 ))}
               </Column>

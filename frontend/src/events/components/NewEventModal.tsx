@@ -1,15 +1,14 @@
-import { useCallback, useState, useContext } from 'react';
-
 import { utcToZonedTime } from 'date-fns-tz';
+import { useCallback, useContext, useState } from 'react';
 
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
-import { timezone, formatDate } from '~/common/utils';
+import { formatDate, timezone } from '~/common/utils';
 
-import EventFields from './EventFields';
-import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
 import { useTeamCalendarCreateEventMutation } from '../queries.generated';
+import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
+import EventFields from './EventFields';
 
 const NewEventModal: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -49,7 +48,16 @@ const NewEventModal: React.FC = () => {
       },
     });
     dispatch(closeUI());
-  }, [dispatch, title, description, room, start, end, saveDisabled]);
+  }, [
+    dispatch,
+    title,
+    description,
+    room,
+    start,
+    end,
+    saveDisabled,
+    createMutation,
+  ]);
 
   const closeCb = useCallback(() => {
     dispatch(closeUI());

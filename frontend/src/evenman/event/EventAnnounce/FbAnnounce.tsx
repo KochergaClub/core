@@ -1,50 +1,44 @@
-import { AsyncButton } from '~/components';
-import { EventAnnounceTarget } from '~/apollo/types.generated';
-
 import { A } from '@kocherga/frontkit';
 
+// import { EventAnnounceTarget } from '~/apollo/types.generated';
+// import { AsyncButton } from '~/components';
 import FbGroupPicker from '../../common/FbGroupPicker';
+import { EvenmanEvent_DetailsFragment } from '../queries.generated';
 
-import {
-  EvenmanEvent_DetailsFragment,
-  useEvenmanAnnounceMutation,
-} from '../queries.generated';
+// import EditableOrElement from './EditableOrElement';
+// import { useSetAnnounceUrl } from './hooks';
 
-import EditableOrElement from './EditableOrElement';
+// const AnnounceLinkFb: React.FC<Props> = ({ event }) => {
+//   const [announce] = useEvenmanAnnounceMutation({
+//     variables: {
+//       event_id: event.id,
+//       target: EventAnnounceTarget.Fb,
+//     },
+//   });
 
-import { useSetAnnounceUrl } from './hooks';
+//   if (
+//     !event.published ||
+//     !event.description ||
+//     !event.summary ||
+//     !event.title ||
+//     !event.image
+//   ) {
+//     return null;
+//   }
 
-const AnnounceLinkFb: React.FC<Props> = ({ event }) => {
-  const [announce] = useEvenmanAnnounceMutation({
-    variables: {
-      event_id: event.id,
-      target: EventAnnounceTarget.Fb,
-    },
-  });
-
-  if (
-    !event.published ||
-    !event.description ||
-    !event.summary ||
-    !event.title ||
-    !event.image
-  ) {
-    return null;
-  }
-
-  return (
-    <AsyncButton act={announce} small>
-      создать
-    </AsyncButton>
-  );
-};
+//   return (
+//     <AsyncButton act={announce} small>
+//       создать
+//     </AsyncButton>
+//   );
+// };
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
 
 const FbAnnounce: React.FC<Props> = ({ event }) => {
-  const setAnnounceUrl = useSetAnnounceUrl(event.id, EventAnnounceTarget.Fb);
+  // const setAnnounceUrl = useSetAnnounceUrl(event.id, EventAnnounceTarget.Fb);
 
   return (
     <div>

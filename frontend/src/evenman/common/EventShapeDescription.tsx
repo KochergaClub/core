@@ -1,12 +1,11 @@
-import { UserText, MutedSpan } from '../components/ui';
-
 import EditableText from '../components/EditableText';
+import { MutedSpan, UserText } from '../components/ui';
 
 interface Props {
   summary: string;
   description: string;
-  setSummary: (value: string) => Promise<any>;
-  setDescription: (value: string) => Promise<any>;
+  setSummary: (value: string) => Promise<unknown>;
+  setDescription: (value: string) => Promise<unknown>;
 }
 
 const EventShapeDescription: React.FC<Props> = ({

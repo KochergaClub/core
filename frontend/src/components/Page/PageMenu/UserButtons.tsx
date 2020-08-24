@@ -1,19 +1,20 @@
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { FaUser, FaUserCircle, FaUserTie } from 'react-icons/fa';
+import { GoGear, GoSignOut } from 'react-icons/go';
 import styled from 'styled-components';
 
-import { FaUserCircle, FaUser, FaUserTie } from 'react-icons/fa';
-import { GoGear, GoSignOut } from 'react-icons/go';
+import { colors, fonts, Row } from '@kocherga/frontkit';
 
 import { useCurrentUserLazyQuery } from '~/auth/queries.generated';
+import { useNotification } from '~/common/hooks';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
+import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { BasicSpinner } from '~/components/Spinner';
-import { NextLinkAction, Action } from '~/components/DropdownMenu';
+import { useLogoutMutation } from '~/my/queries.generated';
+
 import { MenuKind } from '../types';
 import LoginButton from './LoginButton';
-import { colors, fonts, Row } from '@kocherga/frontkit';
-import { useLogoutMutation } from '~/my/queries.generated';
-import { useNotification } from '~/common/hooks';
-import Link from 'next/link';
 
 const Email = styled.div`
   padding: 4px 12px;
@@ -56,7 +57,11 @@ interface Props {
   kind: MenuKind;
 }
 
-const UserButtons: React.FC<Props> = ({ kind }) => {
+const UserButtons: React.FC<Props> = (
+  {
+    /* kind */
+  }
+) => {
   const [getUser, queryResults] = useCurrentUserLazyQuery({
     fetchPolicy: 'network-only',
   });
