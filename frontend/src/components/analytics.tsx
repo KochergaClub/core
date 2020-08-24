@@ -160,7 +160,7 @@ export const trackPageview = (url: string) => {
       });
     }
 
-    if (YANDEX_METRIKA_ID) {
+    if (YANDEX_METRIKA_ID && window.ym) {
       window.ym(YANDEX_METRIKA_ID, 'init', {
         clickmap: true,
         trackLinks: true,
