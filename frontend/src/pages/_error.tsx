@@ -1,12 +1,12 @@
-import * as Sentry from '@sentry/node';
 import Router from 'next/router';
 
-import { NeedLoginError } from '~/auth/errors';
-import { NextPage } from '~/common/types';
+import * as Sentry from '@sentry/node';
 
-import ErrorPage from '~/error-pages/ErrorPage';
-import Error302 from '~/error-pages/302';
+import { NeedLoginError } from '~/auth/errors';
 import { APIError } from '~/common/api';
+import { NextPage } from '~/common/types';
+import Error302 from '~/error-pages/302';
+import ErrorPage from '~/error-pages/ErrorPage';
 
 interface Props {
   statusCode?: number;
@@ -29,7 +29,6 @@ NextErrorPage.getInitialProps = async ({ asPath, res, err }) => {
     return { statusCode: 404 };
   }
 
-  Sentry.captureException(err);
   if (err instanceof NeedLoginError) {
     // During getInitialProps we checked permissions (through requireAuth) and it decided that
     // the user needs to be logged in.
@@ -53,6 +52,8 @@ NextErrorPage.getInitialProps = async ({ asPath, res, err }) => {
     }
     return { statusCode: err.status };
   }
+
+  Sentry.captureException(err);
   return { statusCode: 500 };
 };
 
