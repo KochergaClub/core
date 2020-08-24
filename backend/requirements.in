@@ -25,7 +25,7 @@ telethon
 django == 3.0.*
 django-cors-headers
 django-rest-framework
-sentry-sdk[flask]
+sentry-sdk[flask] >= 0.16.5
 django-debug-toolbar
 tqdm
 gunicorn >= 19.9
