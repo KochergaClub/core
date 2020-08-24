@@ -1,5 +1,3 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 import { colors } from '@kocherga/frontkit';
@@ -23,7 +21,7 @@ const Container = styled.div`
 
 const MonthHeader = () => (
   <Container>
-    {['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'].map(weekday => (
+    {['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'].map((weekday) => (
       <div key={weekday}>{weekday}</div>
     ))}
   </Container>

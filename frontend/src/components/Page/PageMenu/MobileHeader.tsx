@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Burger } from '@kocherga/frontkit';
 
-import { styled, kind2color } from './constants';
+import { kind2color, styled } from './constants';
 
 interface Props {
   expanded: boolean;
@@ -20,7 +20,7 @@ const MobileHeaderComponent = styled.div`
     height: 72px;
     padding: 0 20px;
 
-    background: ${props => kind2color[props.theme.kind]};
+    background: ${(props) => kind2color[props.theme.kind]};
     color: white;
     font-size: 24px;
     font-weight: 300;

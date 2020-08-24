@@ -1,7 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
-
 import { addDays, getYear } from 'date-fns';
+import styled from 'styled-components';
 
 import { formatDate } from '~/common/utils';
 

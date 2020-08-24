@@ -1,11 +1,11 @@
-import React from 'react';
+import { createContext, useReducer } from 'react';
 
 interface CalendarUIContextShape {
   dispatch: (action: Action) => void;
   state: UIState;
 }
 
-export const CalendarUIContext = React.createContext<CalendarUIContextShape>({
+export const CalendarUIContext = createContext<CalendarUIContextShape>({
   dispatch: () => null,
   state: { mode: 'passive' },
 });
@@ -137,5 +137,5 @@ const reducer = (state: UIState, action: Action): UIState => {
 };
 
 export const useCalendarUIReducer = () => {
-  return React.useReducer(reducer, { mode: 'passive' });
+  return useReducer(reducer, { mode: 'passive' });
 };

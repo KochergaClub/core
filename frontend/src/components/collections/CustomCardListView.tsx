@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Card, { CardList } from '~/components/Card';
 import MutedCard from '~/components/MutedCard';
 

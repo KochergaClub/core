@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FbIcon = () => (
   <svg
     style={{ fill: '#ffffff' }}

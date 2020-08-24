@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -37,10 +35,10 @@ const HtmlHead: React.FC<Props> = ({
       <meta name="og:type" content="website" />
       {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
       {description ? (
-        <React.Fragment>
+        <>
           <meta property="og:description" content={description} />
           <meta name="description" content={description} />
-        </React.Fragment>
+        </>
       ) : null}
       <link rel="shortcut icon" href={staticUrl('favicon.ico')} />
     </Head>

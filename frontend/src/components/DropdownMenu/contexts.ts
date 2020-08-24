@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 
 export type ModalCreator = ({
   close,
@@ -11,9 +11,7 @@ interface DropdownMenuContextShape {
   setModal: (modal: ModalCreator) => void;
 }
 
-export const DropdownMenuContext = React.createContext<
-  DropdownMenuContextShape
->({
+export const DropdownMenuContext = createContext<DropdownMenuContextShape>({
   close: () => undefined,
   setModal: () => null,
 });

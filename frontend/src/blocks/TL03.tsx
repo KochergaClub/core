@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Container, TLHeader, TLDescription } from './helpers/index';
+import { Container, TLDescription, TLHeader } from './helpers/index';
 
 interface Props {
   title: string;

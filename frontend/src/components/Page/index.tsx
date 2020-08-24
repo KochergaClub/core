@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import {
@@ -71,12 +70,12 @@ const Page: PageType = (props) => {
     }
 
     return (
-      <React.Fragment>
+      <>
         {menuEl}
         {props.children}
         {showWhitespace && <Whitespace />}
         {footerEl}
-      </React.Fragment>
+      </>
     );
   };
 
@@ -89,12 +88,12 @@ const Page: PageType = (props) => {
         canonicalUrl={props.canonicalUrl}
       />
       {props.noAnalytics || (
-        <React.Fragment>
+        <>
           <GoogleAnalyticsScript />
           <FacebookPixelScript />
           <YandexMetrikaScript />
           <VkRetargetingScript />
-        </React.Fragment>
+        </>
       )}
       <GlobalStyle />
       <NProgressStyle />

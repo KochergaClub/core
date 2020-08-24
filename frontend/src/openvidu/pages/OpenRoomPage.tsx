@@ -1,10 +1,12 @@
-import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { useCallback } from 'react';
+
 import { NextApolloPage, withApollo } from '~/apollo';
-import { Page } from '~/components';
 import { requireAuth } from '~/auth/utils';
+import { Page } from '~/components';
 
 import { useOpenviduGenerateRoomTokenMutation } from '../queries.generated';
+
 const OpenViduApp = dynamic(() => import('~/openvidu/OpenViduApp'), {
   ssr: false,
 });
@@ -31,7 +33,7 @@ const MyEventPage: NextApolloPage = () => {
   );
 };
 
-MyEventPage.getInitialProps = async ({ query, apolloClient }) => {
+MyEventPage.getInitialProps = async ({ apolloClient }) => {
   await requireAuth(apolloClient, { is_authenticated: true });
   return {};
 };

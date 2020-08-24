@@ -1,9 +1,9 @@
-import React from 'react';
+import { createContext } from 'react';
 
 interface EditingContextShape {
   editing: boolean;
 }
 
-export const EditingContext = React.createContext<EditingContextShape>({
+export const EditingContext = createContext<EditingContextShape>({
   editing: false,
 });

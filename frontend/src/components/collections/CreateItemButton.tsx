@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 

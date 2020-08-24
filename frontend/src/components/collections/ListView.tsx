@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Column } from '@kocherga/frontkit';
 
 import { AnyViewProps } from './types';

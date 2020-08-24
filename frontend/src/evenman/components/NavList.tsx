@@ -1,7 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
-
 import FlipMove from 'react-flip-move';
+import styled from 'styled-components';
 
 const NavListUl = (styled(FlipMove)`
   border-bottom: 1px solid #d8d8d8;
@@ -42,12 +41,12 @@ interface ItemProps {
 }
 
 const NavListItemLi = styled('li')<ItemProps>`
-  background-color: ${props =>
+  background-color: ${(props) =>
     props.selected ? '#ffffb3' : props.blur ? '#f0f0f0' : ''};
   cursor: pointer;
 
   &:hover {
-    background-color: ${props =>
+    background-color: ${(props) =>
       props.selected ? '#ffffb3' : props.blur ? '#e8e8e8' : '#e8e8e8'};
   }
 `;

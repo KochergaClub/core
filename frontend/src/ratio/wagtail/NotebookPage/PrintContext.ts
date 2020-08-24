@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext } from 'react';
 
 interface PrintContextShape {
   page: {
@@ -8,7 +8,7 @@ interface PrintContextShape {
   };
 }
 
-const PrintContext = React.createContext<PrintContextShape>({
+const PrintContext = createContext<PrintContextShape>({
   page: {
     height: 297,
     bottomMargin: 25.4,

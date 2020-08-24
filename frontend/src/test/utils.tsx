@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { render } from '@testing-library/react';
 

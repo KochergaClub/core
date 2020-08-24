@@ -1,11 +1,9 @@
-import React from 'react';
-
 import { FaCheck } from 'react-icons/fa';
 
 import { FormField, FormShape } from '~/components/forms/types';
-import { AnyViewProps } from './types';
 
 import { Table, TableHeaderCell } from './tables';
+import { AnyViewProps } from './types';
 
 interface Props<I> extends AnyViewProps<I> {
   shape: FormShape;
@@ -52,7 +50,7 @@ function TableViewRow<I>({
 }: RowProps<I>) {
   return (
     <tr>
-      {shape.map(field => (
+      {shape.map((field) => (
         <TableViewCell key={field.name} field={field} item={item} />
       ))}
       {(extraColumns || []).map((_, i) => (
@@ -75,7 +73,7 @@ function ShapedTableView<I>(props: Props<I>) {
     <Table>
       <thead>
         <tr>
-          {props.shape.map(field => (
+          {props.shape.map((field) => (
             <TableHeaderCell key={field.name}>{field.title}</TableHeaderCell>
           ))}
           {(props.extraColumns || []).map((extraColumn, i) => (

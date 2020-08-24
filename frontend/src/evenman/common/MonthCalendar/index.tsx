@@ -1,16 +1,13 @@
-import React from 'react';
+import { addWeeks, startOfWeek } from 'date-fns';
+import { ru } from 'date-fns/locale';
+import { useCallback, useEffect, useReducer } from 'react';
+import { animated, useTransition } from 'react-spring';
 
 import { formatDate } from '~/common/utils';
 
-import { animated, useTransition } from 'react-spring';
-
-import { startOfWeek, addWeeks } from 'date-fns';
-import { ru } from 'date-fns/locale';
-
 import MonthHeader from './MonthHeader';
-import Week from './Week';
-
 import { reducer } from './reducer';
+import Week from './Week';
 
 interface Props {
   date: Date;
@@ -20,12 +17,12 @@ interface Props {
 }
 
 const MonthCalendar = (props: Props) => {
-  const [weeksState, dispatch] = React.useReducer(reducer, {
+  const [weeksState, dispatch] = useReducer(reducer, {
     weeks: [],
     heights: {},
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const firstDay = startOfWeek(props.date, { locale: ru });
 
     const result = [];
@@ -43,19 +40,19 @@ const MonthCalendar = (props: Props) => {
 
   const transitions = useTransition(
     weeksState.weeks,
-    week => formatDate(week, 'yyyy-MM-dd'),
+    (week) => formatDate(week, 'yyyy-MM-dd'),
     {
       from: {
         opacity: 0,
         height: 0,
       },
-      update: item => {
+      update: (item) => {
         return {
           opacity: 1,
           height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
         };
       },
-      enter: item => {
+      enter: (item) => {
         return {
           opacity: 1,
           height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
@@ -69,7 +66,7 @@ const MonthCalendar = (props: Props) => {
     }
   );
 
-  const setHeight = React.useCallback((date: Date, height: number) => {
+  const setHeight = useCallback((date: Date, height: number) => {
     dispatch({
       type: 'SET_SIZE',
       payload: {
@@ -89,7 +86,7 @@ const MonthCalendar = (props: Props) => {
           style={{
             opacity: style.opacity,
             height: style.height
-              ? style.height.interpolate(height => `${height}px`)
+              ? style.height.interpolate((height) => `${height}px`)
               : 0,
           }}
         >
