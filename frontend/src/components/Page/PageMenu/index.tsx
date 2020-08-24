@@ -1,31 +1,29 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import Link from 'next/link';
-
 import { staticUrl } from '~/common/utils';
 
+import Search from '../Search';
+import { MenuKind } from '../types';
+import { kind2color, styled } from './constants';
 import MenuItems from './MenuItems';
 import MobileHeader from './MobileHeader';
-
-import { styled, kind2color } from './constants';
-import { MenuKind } from '../types';
 import UserButtons from './UserButtons';
-import Search from '../Search';
 
 const Container = styled.div<{ hideOnMobile: boolean }>`
   width: 100%;
   height: 60px;
   padding: 0 40px;
 
-  background-color: ${props => kind2color[props.theme.kind]};
+  background-color: ${(props) => kind2color[props.theme.kind]};
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   @media screen and (max-width: 980px) {
-    display: ${props => (props.hideOnMobile ? 'none' : 'flex')};
+    display: ${(props) => (props.hideOnMobile ? 'none' : 'flex')};
     flex-direction: column;
     height: auto;
     padding: 20px 0;
@@ -80,7 +78,7 @@ interface Props {
   kind: MenuKind;
 }
 
-const TildaMenu = ({ kind }: Props) => {
+const PageMenu = ({ kind }: Props) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -102,4 +100,4 @@ const TildaMenu = ({ kind }: Props) => {
   );
 };
 
-export default React.memo(TildaMenu);
+export default React.memo(PageMenu);

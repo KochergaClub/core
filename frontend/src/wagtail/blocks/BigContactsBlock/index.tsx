@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { fonts, colors } from '@kocherga/frontkit';
+import { colors, fonts } from '@kocherga/frontkit';
 
-import SocialIcons from '~/components/Page/TildaMenu/SocialIcons';
+import SocialIcons from '~/components/Page/PageMenu/SocialIcons';
 
 import { BigContactsBlockFragment as Props } from '../fragments.generated';
 

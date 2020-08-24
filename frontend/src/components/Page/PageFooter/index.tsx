@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 import { Column } from '@kocherga/frontkit';
 
-import FooterGroup from './FooterGroup';
-import PartLinks from './PartLinks';
-import Mailchimp from './Mailchimp';
-import SocialIcons from '../TildaMenu/SocialIcons';
+import SocialIcons from '../PageMenu/SocialIcons';
 import { footerParts } from './constants';
+import FooterGroup from './FooterGroup';
+import Mailchimp from './Mailchimp';
+import PartLinks from './PartLinks';
 
 const Footer = styled.footer`
   background-color: #111111;
@@ -58,7 +58,7 @@ const WrappedGroup: React.FC<{ title: string }> = ({ title, children }) => (
   </GroupContainer>
 );
 
-const TildaFooter = () => {
+const PageFooter: React.FC = () => {
   return (
     <Footer>
       <Layout>
@@ -79,4 +79,4 @@ const TildaFooter = () => {
   );
 };
 
-export default TildaFooter;
+export default PageFooter;

@@ -10,9 +10,9 @@ import GlobalStyle from './GlobalStyle';
 import HtmlHead from './HtmlHead';
 import Main from './Main';
 import NProgressStyle from './NProgressStyle';
+import PageFooter from './PageFooter';
+import PageMenu from './PageMenu';
 import PageTitle from './PageTitle';
-import TildaFooter from './TildaFooter';
-import TildaMenu from './TildaMenu';
 import { MenuKind, OpenGraph } from './types';
 import VkMessagesWidget from './VkMessagesWidget';
 import WithToaster from './WithToaster';
@@ -58,8 +58,8 @@ const Page: PageType = (props) => {
 
     const menuKind = props.menu || 'public';
 
-    const menuEl = showMenu ? <TildaMenu kind={menuKind} /> : null;
-    const footerEl = showFooter ? <TildaFooter /> : null;
+    const menuEl = showMenu ? <PageMenu kind={menuKind} /> : null;
+    const footerEl = showFooter ? <PageFooter /> : null;
 
     if (chrome === 'fullscreen') {
       return (
