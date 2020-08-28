@@ -1,6 +1,8 @@
 import * as Types from '../apollo/types.generated';
 
+import { AuthCurrentUserFragment } from '../auth/queries.generated';
 import gql from 'graphql-tag';
+import { AuthCurrentUserFragmentDoc } from '../auth/queries.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
@@ -59,7 +61,8 @@ export type MySettingsPageFragment = (
   { __typename?: 'My' }
   & { user: (
     { __typename?: 'AuthCurrentUser' }
-    & Pick<Types.AuthCurrentUser, 'email' | 'first_name' | 'last_name'>
+    & Pick<Types.AuthCurrentUser, 'first_name' | 'last_name'>
+    & AuthCurrentUserFragment
   ), email_subscription: (
     { __typename?: 'MyEmailSubscription' }
     & EmailSubscriptionFragment
@@ -286,7 +289,7 @@ export const EmailSubscriptionFragmentDoc = gql`
 export const MySettingsPageFragmentDoc = gql`
     fragment MySettingsPage on My {
   user {
-    email
+    ...AuthCurrentUser
     first_name
     last_name
   }
@@ -297,7 +300,8 @@ export const MySettingsPageFragmentDoc = gql`
     privacy_mode
   }
 }
-    ${EmailSubscriptionFragmentDoc}`;
+    ${AuthCurrentUserFragmentDoc}
+${EmailSubscriptionFragmentDoc}`;
 export const MyVisitsPageDocument = gql`
     query MyVisitsPage {
   my {
