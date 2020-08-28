@@ -1417,6 +1417,11 @@ interface WagtailBlock {
   id: ID!
 }
 
+type WagtailBlockValidationError {
+  block_id: Int!
+  error_message: String!
+}
+
 input WagtailEditPageBodyBlocksInput {
   page_id: ID!
   publish: Boolean!
@@ -1425,6 +1430,7 @@ input WagtailEditPageBodyBlocksInput {
 
 type WagtailEditPageBodyBlocksResult {
   page: WagtailPage
+  validation_error: WagtailStreamFieldValidationError
 }
 
 type WagtailGeo {
@@ -1471,6 +1477,10 @@ input WagtailSearchInput {
 type WagtailSearchResult {
   results: [WagtailPage!]!
   more: Boolean!
+}
+
+type WagtailStreamFieldValidationError {
+  block_errors: [WagtailBlockValidationError!]!
 }
 
 input WagtailUploadImageFromUrlInput {

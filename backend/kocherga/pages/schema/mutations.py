@@ -4,13 +4,34 @@ logger = logging.getLogger(__name__)
 
 import json
 
-from kocherga.graphql import helpers
+from kocherga.graphql import g, helpers
 import kocherga.wagtail.schema.types
 import kocherga.wagtail.utils
 
 from .. import models
 
 c = helpers.Collection()
+
+
+WagtailBlockValidationError = g.ObjectType(
+    'WagtailBlockValidationError', g.fields({'block_id': int, 'error_message': str})
+)
+
+
+WagtailStreamFieldValidationError = g.ObjectType(
+    'WagtailStreamFieldValidationError',
+    g.fields(
+        {
+            'block_errors': g.Field(
+                g.NNList(WagtailBlockValidationError),
+                resolve=lambda obj, info: [
+                    {'block_id': k, 'error_message': str(v)}
+                    for k, v in obj['params'].items()
+                ],
+            )
+        }
+    ),
+)
 
 
 @c.class_field
@@ -30,10 +51,16 @@ class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
             [isinstance(page, m) for m in (models.FreeFormPage, models.FrontPage)]
         )
 
-        # FIXME - validate? wagtail mostly validates blocks data but sometimes fails to do it properly
+        # FIXME - wagtail mostly validates blocks data but sometimes fails to do it properly, e.g. for static blocks
+        from wagtail.core.blocks.stream_block import StreamBlockValidationError
+
         stream_block = page._meta.get_field('body').stream_block
         serialized_value = json.loads(input['blocksJson'])
-        page.body = stream_block.clean(stream_block.to_python(serialized_value))
+        try:
+            page.body = stream_block.clean(stream_block.to_python(serialized_value))
+        except StreamBlockValidationError as e:
+            logger.info('caught an exception!')
+            return {'validation_error': {'params': e.params}}
 
         # TODO - pass user
         # TODO - consider `publish` flag
@@ -53,6 +80,7 @@ class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
     }
     result = {
         'page': kocherga.wagtail.schema.types.WagtailPage,
+        'validation_error': WagtailStreamFieldValidationError,
     }
 
 

@@ -1,7 +1,13 @@
 mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
-  wagtailEditPageBodyBlocks(input: $input) {
+  result: wagtailEditPageBodyBlocks(input: $input) {
     page {
       id
+    }
+    validation_error {
+      block_errors {
+        block_id
+        error_message
+      }
     }
   }
 }

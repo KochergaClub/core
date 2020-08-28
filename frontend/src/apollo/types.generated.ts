@@ -2232,6 +2232,12 @@ export type WagtailBlock = {
   id: Scalars['ID'];
 };
 
+export type WagtailBlockValidationError = {
+  __typename?: 'WagtailBlockValidationError';
+  block_id: Scalars['Int'];
+  error_message: Scalars['String'];
+};
+
 export type WagtailEditPageBodyBlocksInput = {
   page_id: Scalars['ID'];
   publish: Scalars['Boolean'];
@@ -2241,6 +2247,7 @@ export type WagtailEditPageBodyBlocksInput = {
 export type WagtailEditPageBodyBlocksResult = {
   __typename?: 'WagtailEditPageBodyBlocksResult';
   page?: Maybe<WagtailPage>;
+  validation_error?: Maybe<WagtailStreamFieldValidationError>;
 };
 
 export type WagtailGeo = {
@@ -2293,6 +2300,11 @@ export type WagtailSearchResult = {
   __typename?: 'WagtailSearchResult';
   results: Array<WagtailPage>;
   more: Scalars['Boolean'];
+};
+
+export type WagtailStreamFieldValidationError = {
+  __typename?: 'WagtailStreamFieldValidationError';
+  block_errors: Array<WagtailBlockValidationError>;
 };
 
 export type WagtailUploadImageFromUrlInput = {

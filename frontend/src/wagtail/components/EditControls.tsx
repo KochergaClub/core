@@ -3,6 +3,7 @@ import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import { WagtailPageContext } from '~/cms/contexts';
+import { useNotification } from '~/common/hooks';
 import { AsyncButton } from '~/components';
 
 import { allBlockComponents, isKnownBlock } from '../blocks';
@@ -23,7 +24,7 @@ interface Props {
 }
 
 // TODO - compare value with block's shape
-const valueToBackendValue = (value: any) => {
+const valueToBackendValue = (value: any): any => {
   if (typeof value === 'object') {
     if (value instanceof Array) {
       return value.map(valueToBackendValue);
@@ -100,6 +101,8 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     state: { page_id },
   } = useContext(WagtailPageContext);
 
+  const notify = useNotification();
+
   const [saveMutation] = useWagtailSavePageMutation();
 
   const save = useCallback(async () => {
@@ -108,8 +111,8 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     }
 
     const blocksJson = JSON.stringify(serializeBlocks(blocks), null, 2);
-    window.alert(blocksJson);
-    await saveMutation({
+    // window.alert(blocksJson);
+    const mutationResults = await saveMutation({
       variables: {
         input: {
           page_id,
@@ -118,7 +121,15 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
         },
       },
     });
-  }, [saveMutation, page_id]);
+    if (mutationResults.data?.result.validation_error) {
+      notify({
+        text:
+          'Failed to save: ' +
+          JSON.stringify(mutationResults.data.result.validation_error),
+        type: 'Error',
+      });
+    }
+  }, [saveMutation, blocks, page_id, notify]);
 
   if (!page_id) {
     throw new Error('No page_id in WagtailPageContext');

@@ -11,7 +11,7 @@ export type WagtailSavePageMutationVariables = Types.Exact<{
 
 export type WagtailSavePageMutation = (
   { __typename: 'Mutation' }
-  & { wagtailEditPageBodyBlocks: (
+  & { result: (
     { __typename: 'WagtailEditPageBodyBlocksResult' }
     & { page?: Types.Maybe<(
       { __typename: 'BlogIndexPage' }
@@ -52,6 +52,12 @@ export type WagtailSavePageMutation = (
     ) | (
       { __typename: 'RatioSectionPage' }
       & Pick<Types.RatioSectionPage, 'id'>
+    )>, validation_error?: Types.Maybe<(
+      { __typename: 'WagtailStreamFieldValidationError' }
+      & { block_errors: Array<(
+        { __typename: 'WagtailBlockValidationError' }
+        & Pick<Types.WagtailBlockValidationError, 'block_id' | 'error_message'>
+      )> }
     )> }
   ) }
 );
@@ -59,9 +65,15 @@ export type WagtailSavePageMutation = (
 
 export const WagtailSavePageDocument = gql`
     mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
-  wagtailEditPageBodyBlocks(input: $input) {
+  result: wagtailEditPageBodyBlocks(input: $input) {
     page {
       id
+    }
+    validation_error {
+      block_errors {
+        block_id
+        error_message
+      }
     }
   }
 }
