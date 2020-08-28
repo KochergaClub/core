@@ -45,10 +45,18 @@ FrontPartnersBlock.fragment = gql`
     partners: value {
       link
       image(spec: "width-160") {
+        id
         url
+        original_image {
+          id
+        }
       }
       image_x2: image(spec: "width-320") {
+        id
         url
+        original_image {
+          id
+        }
       }
     }
   }

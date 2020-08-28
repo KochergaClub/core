@@ -11,6 +11,10 @@ export type ColumnsButtonsBlockFragment = (
     & { image: (
       { __typename: 'WagtailImageRendition' }
       & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+      & { original_image: (
+        { __typename: 'WagtailImage' }
+        & Pick<Types.WagtailImage, 'id'>
+      ) }
     ) }
   )> }
 );
@@ -24,6 +28,9 @@ export const ColumnsButtonsBlockFragmentDoc = gql`
     image(spec: "original") {
       id
       url
+      original_image {
+        id
+      }
     }
     caption
     link

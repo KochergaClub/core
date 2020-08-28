@@ -58,6 +58,9 @@ ColumnsButtonsBlock.fragment = gql`
       image(spec: "original") {
         id
         url
+        original_image {
+          id
+        }
       }
       caption
       link

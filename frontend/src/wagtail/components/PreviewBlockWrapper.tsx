@@ -7,30 +7,10 @@ import { Button, colors, ControlsFooter, Modal, Row } from '@kocherga/frontkit';
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 
 import { AnyBlockFragment } from '../types';
+import ControlledBlockContainer from './ControlledBlockContainer';
 
-const PreviewContainer = styled.div`
-  position: relative;
-  box-sizing: border-box;
-
-  > .preview-block-controls {
-    display: none;
-  }
-
-  &:hover {
-    z-index: 10; /* outline on top of neighbor blocks */
-    outline: 1px dashed ${colors.grey[500]};
-    > .preview-block-controls {
-      display: block;
-    }
-  }
-`;
-
+// is this necessary?
 const ControlsContainer = styled.div`
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  cursor: pointer;
-
   > * {
     color: ${colors.grey[500]};
 
@@ -98,10 +78,9 @@ const Controls: React.FC<Props> = ({ block }) => {
 const PreviewBlockWrapper: React.FC<Props> = ({ block, children }) => {
   // TODO - extract preview-specific stuff into dynamically loaded component, to reduce JS bundle size?
   return (
-    <PreviewContainer>
-      <Controls block={block}>controls</Controls>
+    <ControlledBlockContainer controls={Controls} block={block}>
       {children}
-    </PreviewContainer>
+    </ControlledBlockContainer>
   );
 };
 

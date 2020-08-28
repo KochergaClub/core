@@ -12,26 +12,57 @@ from .. import models
 
 c = helpers.Collection()
 
+# interface BlockError {
+#   message: String!
+# }
+
+# type ListErrorWrapper {
+#   block_id: Int!
+#   error: BlockError!
+# }
+
+# type ListBlockError implements BlockError {
+#   block_errors: [BlockError!]!
+# }
+
+# type StructErrorWrapper {
+#   field: String!
+#   error: BlockError!
+# }
+
+# type StructBlockError implements BlockError {
+#   block_errors: [StructErrorWrapper!]!
+# }
 
 WagtailBlockValidationError = g.ObjectType(
     'WagtailBlockValidationError', g.fields({'block_id': int, 'error_message': str})
 )
 
 
-WagtailStreamFieldValidationError = g.ObjectType(
-    'WagtailStreamFieldValidationError',
-    g.fields(
-        {
-            'block_errors': g.Field(
-                g.NNList(WagtailBlockValidationError),
-                resolve=lambda obj, info: [
-                    {'block_id': k, 'error_message': str(v)}
-                    for k, v in obj['params'].items()
-                ],
-            )
-        }
-    ),
-)
+def build_WagtailStreamFieldValidationError():
+    from django.forms.utils import ErrorList
+
+    def resolve_block_errors(obj, info):
+        result = []
+        for k, v in obj['params'].items():
+            assert isinstance(v, ErrorList)
+            error = v.data[0]
+            result.append({'block_id': k, 'error_message': repr(vars(error))})
+        return result
+
+    return g.ObjectType(
+        'WagtailStreamFieldValidationError',
+        g.fields(
+            {
+                'block_errors': g.Field(
+                    g.NNList(WagtailBlockValidationError), resolve=resolve_block_errors
+                )
+            }
+        ),
+    )
+
+
+WagtailStreamFieldValidationError = build_WagtailStreamFieldValidationError()
 
 
 @c.class_field

@@ -1,13 +1,21 @@
+fragment WagtailBlockValidationError on WagtailBlockValidationError {
+  block_id
+  error_message
+}
+
+fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
+  block_errors {
+    ...WagtailBlockValidationError
+  }
+}
+
 mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
   result: wagtailEditPageBodyBlocks(input: $input) {
     page {
       id
     }
     validation_error {
-      block_errors {
-        block_id
-        error_message
-      }
+      ...WagtailStreamFieldValidationError
     }
   }
 }

@@ -8,15 +8,17 @@ import { AsyncButton } from '~/components';
 
 import { allBlockComponents, isKnownBlock } from '../blocks';
 import { AnyBlockFragment } from '../types';
+import { EditBlocksContext } from './EditWagtailBlocks';
 import { useWagtailSavePageMutation } from './queries.generated';
 
 const Container = styled.div`
   position: fixed;
-  bottom: 10px;
-  left: 10px;
-  border: 1px solid red;
+  bottom: 0;
+  width: 100%;
+  border-top: 2px solid red;
   background-color: white;
   padding: 20px;
+  z-index: 50;
 `;
 
 interface Props {
@@ -32,8 +34,13 @@ const valueToBackendValue = (value: any): any => {
 
     if (value.__typename === 'WagtailImageRendition') {
       // TODO
-      // throw new Error("Don't know how to convert images yet");
-      return null;
+      const originalImageId = value?.original_image?.id;
+      if (!originalImageId) {
+        throw new Error(
+          "No original image ID, can't save image. " + JSON.stringify(value)
+        );
+      }
+      return originalImageId;
     }
 
     return Object.fromEntries(
@@ -101,6 +108,8 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     state: { page_id },
   } = useContext(WagtailPageContext);
 
+  const { dispatch: editDispatch } = useContext(EditBlocksContext);
+
   const notify = useNotification();
 
   const [saveMutation] = useWagtailSavePageMutation();
@@ -122,14 +131,26 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
       },
     });
     if (mutationResults.data?.result.validation_error) {
+      const { validation_error } = mutationResults.data?.result;
+      editDispatch({
+        type: 'SET_VALIDATION_ERROR',
+        payload: validation_error,
+      });
       notify({
         text:
-          'Failed to save: ' +
-          JSON.stringify(mutationResults.data.result.validation_error),
+          'Failed to save. Errors in blocks ' +
+          validation_error.block_errors.map((e) => e.block_id + 1).join(', '),
         type: 'Error',
       });
     }
-  }, [saveMutation, blocks, page_id, notify]);
+
+    // if (mutationResults.data?.result.page.body) {
+    //   editDispatch({
+    //     type: 'REPLACE_BLOCKS',
+    //     payload: mutationResults.data?.page.body,
+    //   });
+    // }
+  }, [saveMutation, blocks, page_id, notify, editDispatch]);
 
   if (!page_id) {
     throw new Error('No page_id in WagtailPageContext');

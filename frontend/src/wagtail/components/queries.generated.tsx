@@ -4,6 +4,19 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
+export type WagtailBlockValidationErrorFragment = (
+  { __typename: 'WagtailBlockValidationError' }
+  & Pick<Types.WagtailBlockValidationError, 'block_id' | 'error_message'>
+);
+
+export type WagtailStreamFieldValidationErrorFragment = (
+  { __typename: 'WagtailStreamFieldValidationError' }
+  & { block_errors: Array<(
+    { __typename: 'WagtailBlockValidationError' }
+    & WagtailBlockValidationErrorFragment
+  )> }
+);
+
 export type WagtailSavePageMutationVariables = Types.Exact<{
   input: Types.WagtailEditPageBodyBlocksInput;
 }>;
@@ -54,15 +67,24 @@ export type WagtailSavePageMutation = (
       & Pick<Types.RatioSectionPage, 'id'>
     )>, validation_error?: Types.Maybe<(
       { __typename: 'WagtailStreamFieldValidationError' }
-      & { block_errors: Array<(
-        { __typename: 'WagtailBlockValidationError' }
-        & Pick<Types.WagtailBlockValidationError, 'block_id' | 'error_message'>
-      )> }
+      & WagtailStreamFieldValidationErrorFragment
     )> }
   ) }
 );
 
-
+export const WagtailBlockValidationErrorFragmentDoc = gql`
+    fragment WagtailBlockValidationError on WagtailBlockValidationError {
+  block_id
+  error_message
+}
+    `;
+export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
+    fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
+  block_errors {
+    ...WagtailBlockValidationError
+  }
+}
+    ${WagtailBlockValidationErrorFragmentDoc}`;
 export const WagtailSavePageDocument = gql`
     mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
   result: wagtailEditPageBodyBlocks(input: $input) {
@@ -70,14 +92,11 @@ export const WagtailSavePageDocument = gql`
       id
     }
     validation_error {
-      block_errors {
-        block_id
-        error_message
-      }
+      ...WagtailStreamFieldValidationError
     }
   }
 }
-    `;
+    ${WagtailStreamFieldValidationErrorFragmentDoc}`;
 export type WagtailSavePageMutationFn = ApolloReactCommon.MutationFunction<WagtailSavePageMutation, WagtailSavePageMutationVariables>;
 
 /**
