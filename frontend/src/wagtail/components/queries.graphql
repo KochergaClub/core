@@ -21,50 +21,59 @@ mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
   }
 }
 
+fragment StructureL1 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      label
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        label
+      }
+    }
+  }
+}
+
+fragment StructureL2 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL1
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL1
+      }
+    }
+  }
+}
+
+fragment StructureL3 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL2
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL2
+      }
+    }
+  }
+}
+
 query WagtailBlockStructure($name: String!) {
   result: wagtailBlockStructure(input: { name: $name }) {
-    label
-    ... on WagtailListBlockStructure {
-      child_block {
-        label
-        ... on WagtailStructBlockStructure {
-          child_blocks {
-            name
-            definition {
-              label
-            }
-          }
-        }
-      }
-    }
-    ... on WagtailStructBlockStructure {
-      child_blocks {
-        name
-        definition {
-          label
-          ... on WagtailListBlockStructure {
-            child_block {
-              label
-              ... on WagtailStructBlockStructure {
-                child_blocks {
-                  name
-                  definition {
-                    label
-                  }
-                }
-              }
-            }
-          }
-          ... on WagtailStructBlockStructure {
-            child_blocks {
-              name
-              definition {
-                label
-              }
-            }
-          }
-        }
-      }
-    }
+    ...StructureL3
   }
 }

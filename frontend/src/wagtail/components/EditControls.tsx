@@ -12,7 +12,8 @@ import { allBlockComponents, isKnownBlock } from '../blocks';
 import { AnyBlockFragment } from '../types';
 import { EditBlocksContext } from './EditWagtailBlocks';
 import {
-    useWagtailSavePageMutation, WagtailBlockStructureDocument, WagtailBlockStructureQuery
+    StructureL1Fragment, StructureL2Fragment, StructureL3Fragment, useWagtailSavePageMutation,
+    WagtailBlockStructureDocument, WagtailBlockStructureQuery
 } from './queries.generated';
 
 const Container = styled.div`
@@ -32,7 +33,10 @@ interface Props {
 type StructureFragment = WagtailBlockStructureQuery['result'];
 
 // TODO - compare value with block's shape
-const valueToBackendValue = (structure: StructureFragment, value: any): any => {
+const valueToBackendValue = (
+  structure: StructureL1Fragment | StructureL2Fragment | StructureL3Fragment,
+  value: any
+): any => {
   // window.alert(
   //   JSON.stringify(structure, null, 2) + '\n\n' + JSON.stringify(value, null, 2)
   // );

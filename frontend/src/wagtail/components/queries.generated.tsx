@@ -73,14 +73,25 @@ export type WagtailSavePageMutation = (
   ) }
 );
 
-export type WagtailBlockStructureQueryVariables = Types.Exact<{
-  name: Types.Scalars['String'];
-}>;
+export type StructureL1_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+);
 
+export type StructureL1_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & Pick<Types.WagtailCharBlockStructure, 'label'>
+);
 
-export type WagtailBlockStructureQuery = (
-  { __typename: 'Query' }
-  & { result: (
+export type StructureL1_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & Pick<Types.WagtailImageBlockStructure, 'label'>
+);
+
+export type StructureL1_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & Pick<Types.WagtailListBlockStructure, 'label'>
+  & { child_block: (
     { __typename: 'WagtailBooleanBlockStructure' }
     & Pick<Types.WagtailBooleanBlockStructure, 'label'>
   ) | (
@@ -92,7 +103,38 @@ export type WagtailBlockStructureQuery = (
   ) | (
     { __typename: 'WagtailListBlockStructure' }
     & Pick<Types.WagtailListBlockStructure, 'label'>
-    & { child_block: (
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & Pick<Types.WagtailStaticBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailStructBlockStructure' }
+    & Pick<Types.WagtailStructBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & Pick<Types.WagtailUrlBlockStructure, 'label'>
+  ) }
+);
+
+export type StructureL1_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+);
+
+export type StructureL1_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+);
+
+export type StructureL1_WagtailStructBlockStructure_Fragment = (
+  { __typename: 'WagtailStructBlockStructure' }
+  & Pick<Types.WagtailStructBlockStructure, 'label'>
+  & { child_blocks: Array<(
+    { __typename: 'WagtailStructBlockChildStructure' }
+    & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+    & { definition: (
       { __typename: 'WagtailBooleanBlockStructure' }
       & Pick<Types.WagtailBooleanBlockStructure, 'label'>
     ) | (
@@ -113,163 +155,243 @@ export type WagtailBlockStructureQuery = (
     ) | (
       { __typename: 'WagtailStructBlockStructure' }
       & Pick<Types.WagtailStructBlockStructure, 'label'>
-      & { child_blocks: Array<(
-        { __typename: 'WagtailStructBlockChildStructure' }
-        & Pick<Types.WagtailStructBlockChildStructure, 'name'>
-        & { definition: (
-          { __typename: 'WagtailBooleanBlockStructure' }
-          & Pick<Types.WagtailBooleanBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailCharBlockStructure' }
-          & Pick<Types.WagtailCharBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailImageBlockStructure' }
-          & Pick<Types.WagtailImageBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailListBlockStructure' }
-          & Pick<Types.WagtailListBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailRichTextBlockStructure' }
-          & Pick<Types.WagtailRichTextBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailStaticBlockStructure' }
-          & Pick<Types.WagtailStaticBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailStructBlockStructure' }
-          & Pick<Types.WagtailStructBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailURLBlockStructure' }
-          & Pick<Types.WagtailUrlBlockStructure, 'label'>
-        ) }
-      )> }
     ) | (
       { __typename: 'WagtailURLBlockStructure' }
       & Pick<Types.WagtailUrlBlockStructure, 'label'>
     ) }
+  )> }
+);
+
+export type StructureL1_WagtailUrlBlockStructure_Fragment = (
+  { __typename: 'WagtailURLBlockStructure' }
+  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+);
+
+export type StructureL1Fragment = StructureL1_WagtailBooleanBlockStructure_Fragment | StructureL1_WagtailCharBlockStructure_Fragment | StructureL1_WagtailImageBlockStructure_Fragment | StructureL1_WagtailListBlockStructure_Fragment | StructureL1_WagtailRichTextBlockStructure_Fragment | StructureL1_WagtailStaticBlockStructure_Fragment | StructureL1_WagtailStructBlockStructure_Fragment | StructureL1_WagtailUrlBlockStructure_Fragment;
+
+export type StructureL2_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+);
+
+export type StructureL2_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & Pick<Types.WagtailCharBlockStructure, 'label'>
+);
+
+export type StructureL2_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & Pick<Types.WagtailImageBlockStructure, 'label'>
+);
+
+export type StructureL2_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & Pick<Types.WagtailListBlockStructure, 'label'>
+  & { child_block: (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureL1_WagtailBooleanBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureL1_WagtailCharBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureL1_WagtailImageBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & StructureL1_WagtailListBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailRichTextBlockStructure' }
-    & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+    & StructureL1_WagtailRichTextBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailStaticBlockStructure' }
-    & Pick<Types.WagtailStaticBlockStructure, 'label'>
+    & StructureL1_WagtailStaticBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailStructBlockStructure' }
-    & Pick<Types.WagtailStructBlockStructure, 'label'>
-    & { child_blocks: Array<(
-      { __typename: 'WagtailStructBlockChildStructure' }
-      & Pick<Types.WagtailStructBlockChildStructure, 'name'>
-      & { definition: (
-        { __typename: 'WagtailBooleanBlockStructure' }
-        & Pick<Types.WagtailBooleanBlockStructure, 'label'>
-      ) | (
-        { __typename: 'WagtailCharBlockStructure' }
-        & Pick<Types.WagtailCharBlockStructure, 'label'>
-      ) | (
-        { __typename: 'WagtailImageBlockStructure' }
-        & Pick<Types.WagtailImageBlockStructure, 'label'>
-      ) | (
-        { __typename: 'WagtailListBlockStructure' }
-        & Pick<Types.WagtailListBlockStructure, 'label'>
-        & { child_block: (
-          { __typename: 'WagtailBooleanBlockStructure' }
-          & Pick<Types.WagtailBooleanBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailCharBlockStructure' }
-          & Pick<Types.WagtailCharBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailImageBlockStructure' }
-          & Pick<Types.WagtailImageBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailListBlockStructure' }
-          & Pick<Types.WagtailListBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailRichTextBlockStructure' }
-          & Pick<Types.WagtailRichTextBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailStaticBlockStructure' }
-          & Pick<Types.WagtailStaticBlockStructure, 'label'>
-        ) | (
-          { __typename: 'WagtailStructBlockStructure' }
-          & Pick<Types.WagtailStructBlockStructure, 'label'>
-          & { child_blocks: Array<(
-            { __typename: 'WagtailStructBlockChildStructure' }
-            & Pick<Types.WagtailStructBlockChildStructure, 'name'>
-            & { definition: (
-              { __typename: 'WagtailBooleanBlockStructure' }
-              & Pick<Types.WagtailBooleanBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailCharBlockStructure' }
-              & Pick<Types.WagtailCharBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailImageBlockStructure' }
-              & Pick<Types.WagtailImageBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailListBlockStructure' }
-              & Pick<Types.WagtailListBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailRichTextBlockStructure' }
-              & Pick<Types.WagtailRichTextBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailStaticBlockStructure' }
-              & Pick<Types.WagtailStaticBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailStructBlockStructure' }
-              & Pick<Types.WagtailStructBlockStructure, 'label'>
-            ) | (
-              { __typename: 'WagtailURLBlockStructure' }
-              & Pick<Types.WagtailUrlBlockStructure, 'label'>
-            ) }
-          )> }
-        ) | (
-          { __typename: 'WagtailURLBlockStructure' }
-          & Pick<Types.WagtailUrlBlockStructure, 'label'>
-        ) }
-      ) | (
-        { __typename: 'WagtailRichTextBlockStructure' }
-        & Pick<Types.WagtailRichTextBlockStructure, 'label'>
-      ) | (
-        { __typename: 'WagtailStaticBlockStructure' }
-        & Pick<Types.WagtailStaticBlockStructure, 'label'>
-      ) | (
-        { __typename: 'WagtailStructBlockStructure' }
-        & Pick<Types.WagtailStructBlockStructure, 'label'>
-        & { child_blocks: Array<(
-          { __typename: 'WagtailStructBlockChildStructure' }
-          & Pick<Types.WagtailStructBlockChildStructure, 'name'>
-          & { definition: (
-            { __typename: 'WagtailBooleanBlockStructure' }
-            & Pick<Types.WagtailBooleanBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailCharBlockStructure' }
-            & Pick<Types.WagtailCharBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailImageBlockStructure' }
-            & Pick<Types.WagtailImageBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailListBlockStructure' }
-            & Pick<Types.WagtailListBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailRichTextBlockStructure' }
-            & Pick<Types.WagtailRichTextBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailStaticBlockStructure' }
-            & Pick<Types.WagtailStaticBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailStructBlockStructure' }
-            & Pick<Types.WagtailStructBlockStructure, 'label'>
-          ) | (
-            { __typename: 'WagtailURLBlockStructure' }
-            & Pick<Types.WagtailUrlBlockStructure, 'label'>
-          ) }
-        )> }
-      ) | (
-        { __typename: 'WagtailURLBlockStructure' }
-        & Pick<Types.WagtailUrlBlockStructure, 'label'>
-      ) }
-    )> }
+    & StructureL1_WagtailStructBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailURLBlockStructure' }
-    & Pick<Types.WagtailUrlBlockStructure, 'label'>
+    & StructureL1_WagtailUrlBlockStructure_Fragment
+  ) }
+);
+
+export type StructureL2_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+);
+
+export type StructureL2_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+);
+
+export type StructureL2_WagtailStructBlockStructure_Fragment = (
+  { __typename: 'WagtailStructBlockStructure' }
+  & Pick<Types.WagtailStructBlockStructure, 'label'>
+  & { child_blocks: Array<(
+    { __typename: 'WagtailStructBlockChildStructure' }
+    & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+    & { definition: (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & StructureL1_WagtailBooleanBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & StructureL1_WagtailCharBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailImageBlockStructure' }
+      & StructureL1_WagtailImageBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailListBlockStructure' }
+      & StructureL1_WagtailListBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailRichTextBlockStructure' }
+      & StructureL1_WagtailRichTextBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailStaticBlockStructure' }
+      & StructureL1_WagtailStaticBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailStructBlockStructure' }
+      & StructureL1_WagtailStructBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailURLBlockStructure' }
+      & StructureL1_WagtailUrlBlockStructure_Fragment
+    ) }
+  )> }
+);
+
+export type StructureL2_WagtailUrlBlockStructure_Fragment = (
+  { __typename: 'WagtailURLBlockStructure' }
+  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+);
+
+export type StructureL2Fragment = StructureL2_WagtailBooleanBlockStructure_Fragment | StructureL2_WagtailCharBlockStructure_Fragment | StructureL2_WagtailImageBlockStructure_Fragment | StructureL2_WagtailListBlockStructure_Fragment | StructureL2_WagtailRichTextBlockStructure_Fragment | StructureL2_WagtailStaticBlockStructure_Fragment | StructureL2_WagtailStructBlockStructure_Fragment | StructureL2_WagtailUrlBlockStructure_Fragment;
+
+export type StructureL3_WagtailBooleanBlockStructure_Fragment = (
+  { __typename: 'WagtailBooleanBlockStructure' }
+  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+);
+
+export type StructureL3_WagtailCharBlockStructure_Fragment = (
+  { __typename: 'WagtailCharBlockStructure' }
+  & Pick<Types.WagtailCharBlockStructure, 'label'>
+);
+
+export type StructureL3_WagtailImageBlockStructure_Fragment = (
+  { __typename: 'WagtailImageBlockStructure' }
+  & Pick<Types.WagtailImageBlockStructure, 'label'>
+);
+
+export type StructureL3_WagtailListBlockStructure_Fragment = (
+  { __typename: 'WagtailListBlockStructure' }
+  & Pick<Types.WagtailListBlockStructure, 'label'>
+  & { child_block: (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureL2_WagtailBooleanBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureL2_WagtailCharBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureL2_WagtailImageBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & StructureL2_WagtailListBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & StructureL2_WagtailRichTextBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & StructureL2_WagtailStaticBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStructBlockStructure' }
+    & StructureL2_WagtailStructBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & StructureL2_WagtailUrlBlockStructure_Fragment
+  ) }
+);
+
+export type StructureL3_WagtailRichTextBlockStructure_Fragment = (
+  { __typename: 'WagtailRichTextBlockStructure' }
+  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+);
+
+export type StructureL3_WagtailStaticBlockStructure_Fragment = (
+  { __typename: 'WagtailStaticBlockStructure' }
+  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+);
+
+export type StructureL3_WagtailStructBlockStructure_Fragment = (
+  { __typename: 'WagtailStructBlockStructure' }
+  & Pick<Types.WagtailStructBlockStructure, 'label'>
+  & { child_blocks: Array<(
+    { __typename: 'WagtailStructBlockChildStructure' }
+    & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+    & { definition: (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & StructureL2_WagtailBooleanBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & StructureL2_WagtailCharBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailImageBlockStructure' }
+      & StructureL2_WagtailImageBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailListBlockStructure' }
+      & StructureL2_WagtailListBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailRichTextBlockStructure' }
+      & StructureL2_WagtailRichTextBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailStaticBlockStructure' }
+      & StructureL2_WagtailStaticBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailStructBlockStructure' }
+      & StructureL2_WagtailStructBlockStructure_Fragment
+    ) | (
+      { __typename: 'WagtailURLBlockStructure' }
+      & StructureL2_WagtailUrlBlockStructure_Fragment
+    ) }
+  )> }
+);
+
+export type StructureL3_WagtailUrlBlockStructure_Fragment = (
+  { __typename: 'WagtailURLBlockStructure' }
+  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+);
+
+export type StructureL3Fragment = StructureL3_WagtailBooleanBlockStructure_Fragment | StructureL3_WagtailCharBlockStructure_Fragment | StructureL3_WagtailImageBlockStructure_Fragment | StructureL3_WagtailListBlockStructure_Fragment | StructureL3_WagtailRichTextBlockStructure_Fragment | StructureL3_WagtailStaticBlockStructure_Fragment | StructureL3_WagtailStructBlockStructure_Fragment | StructureL3_WagtailUrlBlockStructure_Fragment;
+
+export type WagtailBlockStructureQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+
+export type WagtailBlockStructureQuery = (
+  { __typename: 'Query' }
+  & { result: (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & StructureL3_WagtailBooleanBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & StructureL3_WagtailCharBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & StructureL3_WagtailImageBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & StructureL3_WagtailListBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & StructureL3_WagtailRichTextBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & StructureL3_WagtailStaticBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailStructBlockStructure' }
+    & StructureL3_WagtailStructBlockStructure_Fragment
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & StructureL3_WagtailUrlBlockStructure_Fragment
   ) }
 );
 
@@ -287,6 +409,60 @@ export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
   }
 }
     ${WagtailBlockValidationErrorFragmentDoc}`;
+export const StructureL1FragmentDoc = gql`
+    fragment StructureL1 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      label
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        label
+      }
+    }
+  }
+}
+    `;
+export const StructureL2FragmentDoc = gql`
+    fragment StructureL2 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL1
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL1
+      }
+    }
+  }
+}
+    ${StructureL1FragmentDoc}`;
+export const StructureL3FragmentDoc = gql`
+    fragment StructureL3 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL2
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL2
+      }
+    }
+  }
+}
+    ${StructureL2FragmentDoc}`;
 export const WagtailSavePageDocument = gql`
     mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
   result: wagtailEditPageBodyBlocks(input: $input) {
@@ -327,52 +503,10 @@ export type WagtailSavePageMutationOptions = ApolloReactCommon.BaseMutationOptio
 export const WagtailBlockStructureDocument = gql`
     query WagtailBlockStructure($name: String!) {
   result: wagtailBlockStructure(input: {name: $name}) {
-    label
-    ... on WagtailListBlockStructure {
-      child_block {
-        label
-        ... on WagtailStructBlockStructure {
-          child_blocks {
-            name
-            definition {
-              label
-            }
-          }
-        }
-      }
-    }
-    ... on WagtailStructBlockStructure {
-      child_blocks {
-        name
-        definition {
-          label
-          ... on WagtailListBlockStructure {
-            child_block {
-              label
-              ... on WagtailStructBlockStructure {
-                child_blocks {
-                  name
-                  definition {
-                    label
-                  }
-                }
-              }
-            }
-          }
-          ... on WagtailStructBlockStructure {
-            child_blocks {
-              name
-              definition {
-                label
-              }
-            }
-          }
-        }
-      }
-    }
+    ...StructureL3
   }
 }
-    `;
+    ${StructureL3FragmentDoc}`;
 
 /**
  * __useWagtailBlockStructureQuery__
