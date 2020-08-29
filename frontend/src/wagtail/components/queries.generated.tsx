@@ -11,6 +11,7 @@ export type WagtailBlockValidationErrorFragment = (
 
 export type WagtailStreamFieldValidationErrorFragment = (
   { __typename: 'WagtailStreamFieldValidationError' }
+  & Pick<Types.WagtailStreamFieldValidationError, 'non_block_error'>
   & { block_errors: Array<(
     { __typename: 'WagtailBlockValidationError' }
     & WagtailBlockValidationErrorFragment
@@ -72,6 +73,206 @@ export type WagtailSavePageMutation = (
   ) }
 );
 
+export type WagtailBlockStructureQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+
+export type WagtailBlockStructureQuery = (
+  { __typename: 'Query' }
+  & { result: (
+    { __typename: 'WagtailBooleanBlockStructure' }
+    & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailCharBlockStructure' }
+    & Pick<Types.WagtailCharBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailImageBlockStructure' }
+    & Pick<Types.WagtailImageBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailListBlockStructure' }
+    & Pick<Types.WagtailListBlockStructure, 'label'>
+    & { child_block: (
+      { __typename: 'WagtailBooleanBlockStructure' }
+      & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+    ) | (
+      { __typename: 'WagtailCharBlockStructure' }
+      & Pick<Types.WagtailCharBlockStructure, 'label'>
+    ) | (
+      { __typename: 'WagtailImageBlockStructure' }
+      & Pick<Types.WagtailImageBlockStructure, 'label'>
+    ) | (
+      { __typename: 'WagtailListBlockStructure' }
+      & Pick<Types.WagtailListBlockStructure, 'label'>
+    ) | (
+      { __typename: 'WagtailRichTextBlockStructure' }
+      & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+    ) | (
+      { __typename: 'WagtailStaticBlockStructure' }
+      & Pick<Types.WagtailStaticBlockStructure, 'label'>
+    ) | (
+      { __typename: 'WagtailStructBlockStructure' }
+      & Pick<Types.WagtailStructBlockStructure, 'label'>
+      & { child_blocks: Array<(
+        { __typename: 'WagtailStructBlockChildStructure' }
+        & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+        & { definition: (
+          { __typename: 'WagtailBooleanBlockStructure' }
+          & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailCharBlockStructure' }
+          & Pick<Types.WagtailCharBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailImageBlockStructure' }
+          & Pick<Types.WagtailImageBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailListBlockStructure' }
+          & Pick<Types.WagtailListBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailRichTextBlockStructure' }
+          & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailStaticBlockStructure' }
+          & Pick<Types.WagtailStaticBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailStructBlockStructure' }
+          & Pick<Types.WagtailStructBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailURLBlockStructure' }
+          & Pick<Types.WagtailUrlBlockStructure, 'label'>
+        ) }
+      )> }
+    ) | (
+      { __typename: 'WagtailURLBlockStructure' }
+      & Pick<Types.WagtailUrlBlockStructure, 'label'>
+    ) }
+  ) | (
+    { __typename: 'WagtailRichTextBlockStructure' }
+    & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailStaticBlockStructure' }
+    & Pick<Types.WagtailStaticBlockStructure, 'label'>
+  ) | (
+    { __typename: 'WagtailStructBlockStructure' }
+    & Pick<Types.WagtailStructBlockStructure, 'label'>
+    & { child_blocks: Array<(
+      { __typename: 'WagtailStructBlockChildStructure' }
+      & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+      & { definition: (
+        { __typename: 'WagtailBooleanBlockStructure' }
+        & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+      ) | (
+        { __typename: 'WagtailCharBlockStructure' }
+        & Pick<Types.WagtailCharBlockStructure, 'label'>
+      ) | (
+        { __typename: 'WagtailImageBlockStructure' }
+        & Pick<Types.WagtailImageBlockStructure, 'label'>
+      ) | (
+        { __typename: 'WagtailListBlockStructure' }
+        & Pick<Types.WagtailListBlockStructure, 'label'>
+        & { child_block: (
+          { __typename: 'WagtailBooleanBlockStructure' }
+          & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailCharBlockStructure' }
+          & Pick<Types.WagtailCharBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailImageBlockStructure' }
+          & Pick<Types.WagtailImageBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailListBlockStructure' }
+          & Pick<Types.WagtailListBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailRichTextBlockStructure' }
+          & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailStaticBlockStructure' }
+          & Pick<Types.WagtailStaticBlockStructure, 'label'>
+        ) | (
+          { __typename: 'WagtailStructBlockStructure' }
+          & Pick<Types.WagtailStructBlockStructure, 'label'>
+          & { child_blocks: Array<(
+            { __typename: 'WagtailStructBlockChildStructure' }
+            & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+            & { definition: (
+              { __typename: 'WagtailBooleanBlockStructure' }
+              & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailCharBlockStructure' }
+              & Pick<Types.WagtailCharBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailImageBlockStructure' }
+              & Pick<Types.WagtailImageBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailListBlockStructure' }
+              & Pick<Types.WagtailListBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailRichTextBlockStructure' }
+              & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailStaticBlockStructure' }
+              & Pick<Types.WagtailStaticBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailStructBlockStructure' }
+              & Pick<Types.WagtailStructBlockStructure, 'label'>
+            ) | (
+              { __typename: 'WagtailURLBlockStructure' }
+              & Pick<Types.WagtailUrlBlockStructure, 'label'>
+            ) }
+          )> }
+        ) | (
+          { __typename: 'WagtailURLBlockStructure' }
+          & Pick<Types.WagtailUrlBlockStructure, 'label'>
+        ) }
+      ) | (
+        { __typename: 'WagtailRichTextBlockStructure' }
+        & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+      ) | (
+        { __typename: 'WagtailStaticBlockStructure' }
+        & Pick<Types.WagtailStaticBlockStructure, 'label'>
+      ) | (
+        { __typename: 'WagtailStructBlockStructure' }
+        & Pick<Types.WagtailStructBlockStructure, 'label'>
+        & { child_blocks: Array<(
+          { __typename: 'WagtailStructBlockChildStructure' }
+          & Pick<Types.WagtailStructBlockChildStructure, 'name'>
+          & { definition: (
+            { __typename: 'WagtailBooleanBlockStructure' }
+            & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailCharBlockStructure' }
+            & Pick<Types.WagtailCharBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailImageBlockStructure' }
+            & Pick<Types.WagtailImageBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailListBlockStructure' }
+            & Pick<Types.WagtailListBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailRichTextBlockStructure' }
+            & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailStaticBlockStructure' }
+            & Pick<Types.WagtailStaticBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailStructBlockStructure' }
+            & Pick<Types.WagtailStructBlockStructure, 'label'>
+          ) | (
+            { __typename: 'WagtailURLBlockStructure' }
+            & Pick<Types.WagtailUrlBlockStructure, 'label'>
+          ) }
+        )> }
+      ) | (
+        { __typename: 'WagtailURLBlockStructure' }
+        & Pick<Types.WagtailUrlBlockStructure, 'label'>
+      ) }
+    )> }
+  ) | (
+    { __typename: 'WagtailURLBlockStructure' }
+    & Pick<Types.WagtailUrlBlockStructure, 'label'>
+  ) }
+);
+
 export const WagtailBlockValidationErrorFragmentDoc = gql`
     fragment WagtailBlockValidationError on WagtailBlockValidationError {
   block_id
@@ -80,6 +281,7 @@ export const WagtailBlockValidationErrorFragmentDoc = gql`
     `;
 export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
     fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
+  non_block_error
   block_errors {
     ...WagtailBlockValidationError
   }
@@ -122,3 +324,78 @@ export function useWagtailSavePageMutation(baseOptions?: ApolloReactHooks.Mutati
 export type WagtailSavePageMutationHookResult = ReturnType<typeof useWagtailSavePageMutation>;
 export type WagtailSavePageMutationResult = ApolloReactCommon.MutationResult<WagtailSavePageMutation>;
 export type WagtailSavePageMutationOptions = ApolloReactCommon.BaseMutationOptions<WagtailSavePageMutation, WagtailSavePageMutationVariables>;
+export const WagtailBlockStructureDocument = gql`
+    query WagtailBlockStructure($name: String!) {
+  result: wagtailBlockStructure(input: {name: $name}) {
+    label
+    ... on WagtailListBlockStructure {
+      child_block {
+        label
+        ... on WagtailStructBlockStructure {
+          child_blocks {
+            name
+            definition {
+              label
+            }
+          }
+        }
+      }
+    }
+    ... on WagtailStructBlockStructure {
+      child_blocks {
+        name
+        definition {
+          label
+          ... on WagtailListBlockStructure {
+            child_block {
+              label
+              ... on WagtailStructBlockStructure {
+                child_blocks {
+                  name
+                  definition {
+                    label
+                  }
+                }
+              }
+            }
+          }
+          ... on WagtailStructBlockStructure {
+            child_blocks {
+              name
+              definition {
+                label
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useWagtailBlockStructureQuery__
+ *
+ * To run a query within a React component, call `useWagtailBlockStructureQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWagtailBlockStructureQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWagtailBlockStructureQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useWagtailBlockStructureQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>) {
+        return ApolloReactHooks.useQuery<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>(WagtailBlockStructureDocument, baseOptions);
+      }
+export function useWagtailBlockStructureLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>(WagtailBlockStructureDocument, baseOptions);
+        }
+export type WagtailBlockStructureQueryHookResult = ReturnType<typeof useWagtailBlockStructureQuery>;
+export type WagtailBlockStructureLazyQueryHookResult = ReturnType<typeof useWagtailBlockStructureLazyQuery>;
+export type WagtailBlockStructureQueryResult = ApolloReactCommon.QueryResult<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>;

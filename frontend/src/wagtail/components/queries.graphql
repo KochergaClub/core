@@ -4,6 +4,7 @@ fragment WagtailBlockValidationError on WagtailBlockValidationError {
 }
 
 fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
+  non_block_error
   block_errors {
     ...WagtailBlockValidationError
   }
@@ -16,6 +17,54 @@ mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
     }
     validation_error {
       ...WagtailStreamFieldValidationError
+    }
+  }
+}
+
+query WagtailBlockStructure($name: String!) {
+  result: wagtailBlockStructure(input: { name: $name }) {
+    label
+    ... on WagtailListBlockStructure {
+      child_block {
+        label
+        ... on WagtailStructBlockStructure {
+          child_blocks {
+            name
+            definition {
+              label
+            }
+          }
+        }
+      }
+    }
+    ... on WagtailStructBlockStructure {
+      child_blocks {
+        name
+        definition {
+          label
+          ... on WagtailListBlockStructure {
+            child_block {
+              label
+              ... on WagtailStructBlockStructure {
+                child_blocks {
+                  name
+                  definition {
+                    label
+                  }
+                }
+              }
+            }
+          }
+          ... on WagtailStructBlockStructure {
+            child_blocks {
+              name
+              definition {
+                label
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

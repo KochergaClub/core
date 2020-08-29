@@ -2,6 +2,8 @@ import { FieldNode, FragmentDefinitionNode } from 'graphql';
 import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
+import { useApolloClient } from '@apollo/client';
+
 import { WagtailPageContext } from '~/cms/contexts';
 import { useNotification } from '~/common/hooks';
 import { AsyncButton } from '~/components';
@@ -9,7 +11,9 @@ import { AsyncButton } from '~/components';
 import { allBlockComponents, isKnownBlock } from '../blocks';
 import { AnyBlockFragment } from '../types';
 import { EditBlocksContext } from './EditWagtailBlocks';
-import { useWagtailSavePageMutation } from './queries.generated';
+import {
+    useWagtailSavePageMutation, WagtailBlockStructureDocument, WagtailBlockStructureQuery
+} from './queries.generated';
 
 const Container = styled.div`
   position: fixed;
@@ -25,14 +29,61 @@ interface Props {
   blocks: AnyBlockFragment[];
 }
 
-// TODO - compare value with block's shape
-const valueToBackendValue = (value: any): any => {
-  if (typeof value === 'object') {
-    if (value instanceof Array) {
-      return value.map(valueToBackendValue);
-    }
+type StructureFragment = WagtailBlockStructureQuery['result'];
 
-    if (value.__typename === 'WagtailImageRendition') {
+// TODO - compare value with block's shape
+const valueToBackendValue = (structure: StructureFragment, value: any): any => {
+  // window.alert(
+  //   JSON.stringify(structure, null, 2) + '\n\n' + JSON.stringify(value, null, 2)
+  // );
+  switch (structure.__typename) {
+    case 'WagtailStructBlockStructure':
+      if (!structure.child_blocks) {
+        throw new Error('Structure is incomplete (too deeply nested?)');
+      }
+      if (typeof value !== 'object') {
+        throw new Error(`Expected object, got ${value}`);
+      }
+      if (value instanceof Array) {
+        throw new Error(`Expected non-array object, got array`);
+      }
+      // TODO - validate that there are no extra fields in value
+
+      const result: any = {};
+      for (const child_block of structure.child_blocks) {
+        const child_value = value[child_block.name]; // TODO - consider aliases
+        result[child_block.name] = valueToBackendValue(
+          child_block.definition,
+          child_value
+        );
+      }
+      return result;
+    case 'WagtailListBlockStructure':
+      if (!structure.child_block) {
+        throw new Error('Structure is incomplete (too deeply nested?)');
+      }
+      if (!(value instanceof Array)) {
+        throw new Error(`Expected array, got ${JSON.stringify(value)}`);
+      }
+      return value.map((subvalue) =>
+        valueToBackendValue(structure.child_block, subvalue)
+      );
+    case 'WagtailBooleanBlockStructure':
+      if (typeof value !== 'boolean') {
+        throw new Error(`Expected boolean, got ${value}`);
+      }
+      return value;
+    case 'WagtailCharBlockStructure':
+    case 'WagtailURLBlockStructure':
+    case 'WagtailRichTextBlockStructure':
+      if (typeof value !== 'string') {
+        throw new Error(`Expected string, got ${value}`);
+      }
+      return value;
+    case 'WagtailImageBlockStructure':
+      if (value.__typename !== 'WagtailImageRendition') {
+        throw new Error(`Expected ImageRendition value, got ${value}`);
+      }
       // TODO
       const originalImageId = value?.original_image?.id;
       if (!originalImageId) {
@@ -41,21 +92,15 @@ const valueToBackendValue = (value: any): any => {
         );
       }
       return originalImageId;
-    }
-
-    return Object.fromEntries(
-      Object.keys(value)
-        .filter((key) => key !== '__typename')
-        .map((key) => {
-          return [key, valueToBackendValue(value[key])];
-        })
-    );
-  } else {
-    return value;
+    default:
+      throw new Error(`Unknown type in structure: ${structure.__typename}`);
   }
 };
 
-const serializeBlockValue = (block: AnyBlockFragment) => {
+const serializeBlockValue = (
+  structure: StructureFragment,
+  block: AnyBlockFragment
+) => {
   const typename = block.__typename;
   if (!isKnownBlock(block)) {
     throw new Error(`Unknown block ${typename}`);
@@ -79,7 +124,7 @@ const serializeBlockValue = (block: AnyBlockFragment) => {
   const valueKey = valueSelection.alias?.value || 'value';
 
   const value = (block as any)[valueKey];
-  return valueToBackendValue(value);
+  return valueToBackendValue(structure, value);
 };
 
 const typenameToBackendBlockName = (typename: string) => {
@@ -96,11 +141,30 @@ const typenameToBackendBlockName = (typename: string) => {
     .join('_');
 };
 
-const serializeBlocks = (blocks: AnyBlockFragment[]) => {
-  return blocks.map((block) => {
-    const value = serializeBlockValue(block);
-    return { type: typenameToBackendBlockName(block.__typename), value };
-  });
+const useBlocksSerializer = () => {
+  const apolloClient = useApolloClient();
+  return async (blocks: AnyBlockFragment[]) => {
+    const result = [];
+    for (const block of blocks) {
+      const blockName = typenameToBackendBlockName(block.__typename);
+      const structureQueryResults = await apolloClient.query<
+        WagtailBlockStructureQuery
+      >({
+        query: WagtailBlockStructureDocument,
+        variables: {
+          name: blockName,
+        },
+        fetchPolicy: 'cache-first',
+      });
+      if (!structureQueryResults.data?.result) {
+        throw new Error(`Couldn't load block structure for block ${blockName}`);
+      }
+      const structure = structureQueryResults.data.result;
+      const value = serializeBlockValue(structure, block);
+      result.push({ type: blockName, value });
+    }
+    return result;
+  };
 };
 
 const EditControls: React.FC<Props> = ({ blocks }) => {
@@ -114,13 +178,15 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
 
   const [saveMutation] = useWagtailSavePageMutation();
 
+  const serializeBlocks = useBlocksSerializer();
+
   const save = useCallback(async () => {
     if (!page_id) {
       return; // shouldn't happen
     }
 
-    const blocksJson = JSON.stringify(serializeBlocks(blocks), null, 2);
-    // window.alert(blocksJson);
+    const blocksJson = JSON.stringify(await serializeBlocks(blocks), null, 2);
+    window.alert(blocksJson);
     const mutationResults = await saveMutation({
       variables: {
         input: {
@@ -136,10 +202,18 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
         type: 'SET_VALIDATION_ERROR',
         payload: validation_error,
       });
+
+      let errorText = 'Failed to save.';
+      if (validation_error.block_errors.length) {
+        errorText +=
+          ' Errors in blocks ' +
+          validation_error.block_errors.map((e) => e.block_id + 1).join(', ');
+      }
+      if (validation_error.non_block_error) {
+        errorText += ' Error: ' + validation_error.non_block_error;
+      }
       notify({
-        text:
-          'Failed to save. Errors in blocks ' +
-          validation_error.block_errors.map((e) => e.block_id + 1).join(', '),
+        text: errorText,
         type: 'Error',
       });
     }
@@ -150,7 +224,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     //     payload: mutationResults.data?.page.body,
     //   });
     // }
-  }, [saveMutation, blocks, page_id, notify, editDispatch]);
+  }, [saveMutation, blocks, page_id, notify, editDispatch, serializeBlocks]);
 
   if (!page_id) {
     throw new Error('No page_id in WagtailPageContext');

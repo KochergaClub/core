@@ -1,3 +1,4 @@
+from __future__ import annotations
 import logging
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,8 @@ class FieldHelper:
 
 
 class Collection:
+    fields: Dict[str, graphql.GraphQLField]
+
     def __init__(self):
         self.fields = {}
 
@@ -63,6 +66,15 @@ class Collection:
 
     def as_dict(self):
         return self.fields
+
+    @classmethod
+    def merge(cls, *params: Dict[str, graphql.GraphQLField]):
+        merged = Collection()
+        for param in params:
+            for name, value in param.items():
+                merged.add_field(name, value)
+
+        return merged.as_dict()
 
 
 def merge_field_dicts(field_dicts: List[Dict[str, g.Field]]):

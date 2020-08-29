@@ -1039,6 +1039,7 @@ type ProjectPage implements WagtailPage {
 type Query {
   wagtailPage(path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
+  wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
   wagtailSearch(input: WagtailSearchInput!): WagtailSearchResult!
   search(input: SearchInput!): SearchResult!
   authGroupsAll: [AuthGroup!]!
@@ -1417,9 +1418,28 @@ interface WagtailBlock {
   id: ID!
 }
 
+interface WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+input WagtailBlockStructureInput {
+  name: String!
+}
+
 type WagtailBlockValidationError {
   block_id: Int!
   error_message: String!
+}
+
+type WagtailBooleanBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+type WagtailCharBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
 }
 
 input WagtailEditPageBodyBlocksInput {
@@ -1445,12 +1465,23 @@ type WagtailImage {
   height: Int!
 }
 
+type WagtailImageBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
 type WagtailImageRendition {
   id: ID!
   url: String!
   width: Int!
   height: Int!
   original_image: WagtailImage!
+}
+
+type WagtailListBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  child_block: WagtailBlockStructure!
 }
 
 interface WagtailPage {
@@ -1469,6 +1500,11 @@ type WagtailPagePermissions {
   can_edit: Boolean!
 }
 
+type WagtailRichTextBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
 input WagtailSearchInput {
   query: String!
   limit: Int
@@ -1479,8 +1515,30 @@ type WagtailSearchResult {
   more: Boolean!
 }
 
+type WagtailStaticBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
 type WagtailStreamFieldValidationError {
   block_errors: [WagtailBlockValidationError!]!
+  non_block_error: String
+}
+
+type WagtailStructBlockChildStructure {
+  name: String!
+  definition: WagtailBlockStructure!
+}
+
+type WagtailStructBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  child_blocks: [WagtailStructBlockChildStructure!]!
+}
+
+type WagtailURLBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
 }
 
 input WagtailUploadImageFromUrlInput {

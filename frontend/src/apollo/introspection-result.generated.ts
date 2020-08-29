@@ -52,6 +52,16 @@
       "SlideRichTextBlock",
       "SlideTitleBlock"
     ],
+    "WagtailBlockStructure": [
+      "WagtailBooleanBlockStructure",
+      "WagtailCharBlockStructure",
+      "WagtailImageBlockStructure",
+      "WagtailListBlockStructure",
+      "WagtailRichTextBlockStructure",
+      "WagtailStaticBlockStructure",
+      "WagtailStructBlockStructure",
+      "WagtailURLBlockStructure"
+    ],
     "WagtailPage": [
       "BlogIndexPage",
       "BlogPostPage",

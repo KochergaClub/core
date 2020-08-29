@@ -6,8 +6,9 @@ from kocherga.wagtail.schema.types import WagtailBlock, WagtailImageRendition
 from kocherga.events.schema import types as event_types
 
 import kocherga.events.models
+from kocherga.wagtail.blocks import registry as blocks_registry
 
-from .. import blocks, models
+from .. import models
 
 
 FreeFormPage = WagtailPageType(
@@ -62,9 +63,16 @@ def create_static_block(name: str):
     return g.ObjectType(name, interfaces=[WagtailBlock], fields=g.fields({'id': 'ID!'}))
 
 
+# TODO - save app on blocks registering instead? some other solution to keep this DRY?
+blocks = sum(
+    [blocks_registry.by_tag(tag) for tag in ('basic', 'columns', 'various', 'front')],
+    start=[],
+)
+
+
 block_types = [
     t
-    for block in [*blocks.all_blocks, *blocks.front_blocks]
+    for block in blocks
     if block[0] not in ('events_list', 'photo_ribbon', 'hr', 'front_social_links')
     for t in block_to_types(block)
 ]

@@ -1,3 +1,9 @@
+from typing import Optional
+
+import wagtail.core.blocks
+import wagtail.images.blocks
+import kocherga.wagtail.blocks
+
 from kocherga.graphql import g
 
 
@@ -16,9 +22,9 @@ WagtailPageMeta = g.ObjectType(
         {
             'slug': str,
             'html_url': str,
-            'permissions': g.NN(g.ObjectType(
-                'WagtailPagePermissions', g.fields({'can_edit': bool})
-            )),
+            'permissions': g.NN(
+                g.ObjectType('WagtailPagePermissions', g.fields({'can_edit': bool}))
+            ),
         }
     ),
 )
@@ -94,3 +100,79 @@ WagtailBlock = g.InterfaceType(
 
 # WagtailGeo
 WagtailGeo = g.ObjectType('WagtailGeo', g.fields({'lat': str, 'lng': str}))
+
+
+# block structure types
+common_structure_fields = {'label': str, 'group': Optional[str]}
+
+BASIC_TYPES = ['Char', 'RichText', 'Boolean', 'Static']
+
+
+def resolve_BlockStructure_type(obj, *_):
+    if isinstance(obj, wagtail.core.blocks.StructBlock):
+        return 'WagtailStructBlockStructure'
+
+    if isinstance(obj, wagtail.core.blocks.ListBlock):
+        return 'WagtailListBlockStructure'
+
+    if isinstance(obj, wagtail.images.blocks.ImageChooserBlock):
+        return 'WagtailImageBlockStructure'
+
+    if isinstance(obj, kocherga.wagtail.blocks.URLOrAbsolutePathBlock):
+        return 'WagtailURLBlockStructure'
+
+    for basic_type in BASIC_TYPES:
+        cls = getattr(wagtail.core.blocks, basic_type + 'Block')
+        if isinstance(obj, cls):
+            return f'Wagtail{basic_type}BlockStructure'
+
+    raise Exception(f"Unknown block {obj}")
+
+
+BlockStructure = g.InterfaceType(
+    'WagtailBlockStructure',
+    fields=g.fields(common_structure_fields),
+    resolve_type=resolve_BlockStructure_type,
+)
+
+StructBlockChildStructure = g.ObjectType(
+    'WagtailStructBlockChildStructure',
+    fields=lambda: g.fields({'name': str, 'definition': g.NN(BlockStructure)}),
+)
+
+StructBlockStructure = g.ObjectType(
+    'WagtailStructBlockStructure',
+    interfaces=[BlockStructure],
+    fields=g.fields(
+        {
+            **common_structure_fields,
+            'child_blocks': g.Field(
+                g.NNList(StructBlockChildStructure),
+                resolve=lambda obj, info: [
+                    {'name': name, 'definition': block}
+                    for name, block in obj.child_blocks.items()
+                ],
+            ),
+        }
+    ),
+)
+
+
+ListBlockStructure = g.ObjectType(
+    'WagtailListBlockStructure',
+    interfaces=[BlockStructure],
+    fields=g.fields({**common_structure_fields, 'child_block': g.NN(BlockStructure)}),
+)
+
+
+def create_basic_structure(subname: str):
+    return g.ObjectType(
+        f'Wagtail{subname}BlockStructure',
+        interfaces=[BlockStructure],
+        fields=g.fields(common_structure_fields),
+    )
+
+
+exported_types = [StructBlockStructure, ListBlockStructure] + [
+    create_basic_structure(subname) for subname in BASIC_TYPES + ['Image', 'URL']
+]

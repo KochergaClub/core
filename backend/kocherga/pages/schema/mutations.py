@@ -46,6 +46,8 @@ def build_WagtailStreamFieldValidationError():
         result = []
         for k, v in obj['params'].items():
             assert isinstance(v, ErrorList)
+            if k == '__all__':
+                continue  # non-block error
             error = v.data[0]
             result.append({'block_id': k, 'error_message': repr(vars(error))})
         return result
@@ -56,7 +58,11 @@ def build_WagtailStreamFieldValidationError():
             {
                 'block_errors': g.Field(
                     g.NNList(WagtailBlockValidationError), resolve=resolve_block_errors
-                )
+                ),
+                'non_block_error': g.Field(
+                    g.String,
+                    resolve=lambda obj, info: str(obj['params'].get('__all__')),
+                ),
             }
         ),
     )
