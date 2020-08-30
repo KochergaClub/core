@@ -18,7 +18,7 @@
     "@graphql-codegen/typescript-operations": "^1.17.6",
     "@graphql-codegen/typescript-react-apollo": "^1.17.6",
     "@graphql-codegen/typescript-resolvers": "^1.17.6",
-    "@kocherga/frontkit": "^1.8.3",
+    "@kocherga/frontkit": "^1.8.4",
     "@next/bundle-analyzer": "^9.5.0",
     "@popperjs/core": "^2.4.4",
     "@sentry/browser": "^5.20.1",
@@ -105,6 +105,7 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^10.4.7"
   }
 }
