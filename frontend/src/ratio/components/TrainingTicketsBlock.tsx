@@ -47,7 +47,7 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
   return (
     <ModalFormButton
       post={cb}
-      fields={fields}
+      shape={fields}
       buttonName="Добавить"
       modalButtonName="Добавить"
       modalTitle="Добавить билет"

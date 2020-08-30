@@ -4,8 +4,7 @@ import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
 import {
-  useEmailMailchimpCategoriesQuery,
-  useEmailSubscribeChannelCreateMutation,
+    useEmailMailchimpCategoriesQuery, useEmailSubscribeChannelCreateMutation
 } from '../queries.generated';
 
 const CreateSubscribeChannelButton: React.FC = () => {
@@ -38,9 +37,9 @@ const CreateSubscribeChannelButton: React.FC = () => {
     async (values: { [k: string]: string | boolean }) => {
       const slug = values.slug as string;
       const interest_ids = formShape
-        .filter(field => field.type === 'boolean')
-        .filter(field => values[field.name])
-        .map(field => field.name);
+        .filter((field) => field.type === 'boolean')
+        .filter((field) => values[field.name])
+        .map((field) => field.name);
 
       await createMutation({
         variables: {
@@ -60,7 +59,7 @@ const CreateSubscribeChannelButton: React.FC = () => {
       buttonName="Создать канал подписки"
       modalButtonName="Создать"
       modalTitle="Создать канал подписки"
-      fields={formShape}
+      shape={formShape}
     />
   );
 };

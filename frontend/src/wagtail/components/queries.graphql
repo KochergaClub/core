@@ -21,18 +21,22 @@ mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
   }
 }
 
+fragment StructureL0 on WagtailBlockStructure {
+  label
+}
+
 fragment StructureL1 on WagtailBlockStructure {
   label
   ... on WagtailListBlockStructure {
     child_block {
-      label
+      ...StructureL0
     }
   }
   ... on WagtailStructBlockStructure {
     child_blocks {
       name
       definition {
-        label
+        ...StructureL0
       }
     }
   }

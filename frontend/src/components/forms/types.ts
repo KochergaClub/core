@@ -39,18 +39,37 @@ export interface ForeignKeyFormField extends AnyFormField {
     getValue: (item: any) => number | string;
   };
 }
-//export interface ListField extends AnyFormField {
-//  readonly type: 'list';
-//  readonly items: FormField[];
-//}
+
+export interface ShapeFormField extends AnyFormField {
+  readonly type: 'shape';
+  readonly value?: AnyFormValues;
+  readonly shape: FormShape;
+}
+
+export interface ListFormField extends AnyFormField {
+  readonly type: 'list';
+  readonly value?: AnyFormValues[];
+  readonly field: FormField;
+}
 
 export type FormField =
   | StringFormField
   | NumberFormField
   | ChoiceFormField
   | BooleanFormField
-  | ForeignKeyFormField;
+  | ForeignKeyFormField
+  | ShapeFormField
+  | ListFormField;
 
 export type FormShape = FormField[];
 
-export type Values = { [k: string]: string | number | boolean };
+export type AnyFormValues = {
+  [k: string]:
+    | string
+    | number
+    | boolean
+    | AnyFormValues
+    | AnyFormValues[]
+    | null
+    | undefined;
+};

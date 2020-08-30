@@ -71,6 +71,10 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
             __typename: 'WagtailImageRendition',
             id: '1',
             url: 'https://example.com',
+            original_image: {
+              __typename: 'WagtailImage',
+              id: '1',
+            },
           },
         },
         {
@@ -83,6 +87,10 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
             __typename: 'WagtailImageRendition',
             id: '1',
             url: 'https://example.com',
+            original_image: {
+              __typename: 'WagtailImage',
+              id: '1',
+            },
           },
         },
       ],

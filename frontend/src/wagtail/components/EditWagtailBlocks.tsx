@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 
 import { AnyBlockFragment } from '../types';
+import { getBlockValueKey } from '../utils';
 import AnyBlock from './AnyBlock';
 import EditBlockWrapper from './EditBlockWrapper';
 import EditControls from './EditControls';
@@ -23,12 +24,20 @@ type DeleteBlockAction = {
   payload: string;
 };
 
+type EditBlockAction = {
+  type: 'EDIT_BLOCK';
+  payload: {
+    id: string;
+    value: any; // FIXME
+  };
+};
+
 type SetValidationErrorAction = {
   type: 'SET_VALIDATION_ERROR';
   payload: WagtailStreamFieldValidationErrorFragment;
 };
 
-type Action = DeleteBlockAction | SetValidationErrorAction;
+type Action = DeleteBlockAction | EditBlockAction | SetValidationErrorAction;
 
 interface State {
   blocks: AnyBlockFragment[];
@@ -42,6 +51,23 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         blocks: state.blocks.filter((block) => block.id !== action.payload),
         validation_error: undefined,
+      };
+    case 'EDIT_BLOCK':
+      return {
+        ...state,
+        blocks: state.blocks.map((block) => {
+          if (block.id !== action.payload.id) {
+            return block;
+          }
+          const valueKey = getBlockValueKey(block);
+          if (!valueKey) {
+            return block; // block can be static, nothing to change then
+          }
+          return {
+            ...block,
+            [valueKey]: action.payload.value,
+          };
+        }),
       };
     case 'SET_VALIDATION_ERROR':
       return {

@@ -3,13 +3,13 @@ import React from 'react';
 import { Column, Row } from '@kocherga/frontkit';
 
 import { capitalize } from '~/common/utils';
-import { FormShape } from '~/components/forms/types';
+import { AnyFormValues, FormShape } from '~/components/forms/types';
 
 import CreateItemButton from './CreateItemButton';
 import DumpJSONView from './DumpJSONView';
 import { AnyViewProps, EntityNames } from './types';
 
-interface Props<I, A extends {}> {
+interface Props<I, A extends AnyFormValues> {
   items: I[];
   names?: EntityNames;
   add?: {
@@ -19,7 +19,7 @@ interface Props<I, A extends {}> {
   view?: React.ElementType<AnyViewProps<I>>;
 }
 
-function Collection<I, A>(props: Props<I, A>) {
+function Collection<I, A extends AnyFormValues>(props: Props<I, A>) {
   const View = props.view || DumpJSONView;
 
   return (

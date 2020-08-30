@@ -12,9 +12,9 @@ import {
     useEmailSubscribeChannelDeleteMutation
 } from '../queries.generated';
 
-interface ManualSubscribeFormResults {
+type ManualSubscribeFormResults = {
   email: string;
-}
+};
 
 const manualSubscribeFormShape: FormShape = [{ name: 'email', type: 'email' }];
 
@@ -78,7 +78,7 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
           Удалить
         </AsyncButtonWithConfirm>
         <ModalFormButton
-          fields={manualSubscribeFormShape}
+          shape={manualSubscribeFormShape}
           small
           buttonName="Подписать вручную"
           modalTitle="Подписать вручную"

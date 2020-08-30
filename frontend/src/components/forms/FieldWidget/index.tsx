@@ -1,20 +1,19 @@
-import Select from 'react-select';
-
-import { ErrorMessage } from 'formik';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { ErrorMessage } from 'formik';
 import DatePicker from 'react-datepicker';
+import Select from 'react-select';
 
-import { Label, Input } from '@kocherga/frontkit';
+import { Input, Label } from '@kocherga/frontkit';
 
-import { FormField, ChoiceFormField } from '../types';
-
-import LabeledField from './LabeledField';
+import { ChoiceFormField, FormField } from '../types';
 import ErrorLabel from './ErrorLabel';
 import ForeignKeyWidget from './ForeignKeyWidget';
+import LabeledField from './LabeledField';
 
 interface Props {
   field: FormField;
+  prefix?: string;
 }
 
 const FieldInputForType: React.FC<{ field: FormField; type: string }> = ({
@@ -31,7 +30,7 @@ const FieldInputForDate: React.FC<{ field: FormField }> = ({ field }) => (
     {({ field, form }) => (
       <DatePicker
         selected={field.value ? new Date(field.value) : new Date()}
-        onChange={date => {
+        onChange={(date) => {
           form.setFieldValue(
             field.name,
             date ? format(date, 'yyyy-MM-dd') : undefined
@@ -53,7 +52,7 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
         <LabeledField for={field}>
           {({ field: formikField }) => (
             <>
-              {field.options.map(option => {
+              {field.options.map((option) => {
                 return (
                   <div key={option[0]}>
                     <label>
@@ -77,7 +76,7 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
         <LabeledField for={field}>
           {({ field: formikField, form }) => {
             const option = field.options.find(
-              option => option[0] === formikField.value
+              (option) => option[0] === formikField.value
             );
             return (
               <Select
@@ -90,15 +89,15 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
                     form.setFieldValue(formikField.name, selected.value);
                   } // TODO - else?
                 }}
-                options={field.options.map(option => ({
+                options={field.options.map((option) => ({
                   value: option[0],
                   label: option[1],
                 }))}
                 menuPlacement="auto"
                 menuPortalTarget={document.body}
                 styles={{
-                  menuPortal: provided => ({ ...provided, zIndex: 1100 }),
-                  container: provided => ({ ...provided, width: '100%' }),
+                  menuPortal: (provided) => ({ ...provided, zIndex: 1100 }),
+                  container: (provided) => ({ ...provided, width: '100%' }),
                 }}
               />
             );
@@ -150,6 +149,17 @@ const FieldWidget: React.FC<Props> = ({ field }) => {
       } else {
         return <FieldInputForType field={field} type="number" />;
       }
+    case 'shape':
+      return (
+        <div>
+          <header>subshape</header>
+          {field.shape.map((subfield, i) => (
+            <FieldWidget key={i} field={subfield} prefix={field.name} />
+          ))}
+        </div>
+      );
+    case 'list':
+      return <div>TODO</div>;
   }
 };
 

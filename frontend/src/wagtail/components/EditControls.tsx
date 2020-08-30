@@ -1,19 +1,17 @@
-import { FieldNode, FragmentDefinitionNode } from 'graphql';
 import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-
-import { useApolloClient } from '@apollo/client';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { useNotification } from '~/common/hooks';
 import { AsyncButton } from '~/components';
 
-import { allBlockComponents, isKnownBlock } from '../blocks';
-import { AnyBlockFragment } from '../types';
+import { useBlockStructureLoader } from '../hooks';
+import { AnyBlockFragment, StructureFragment } from '../types';
+import { getBlockValueKey, typenameToBackendBlockName } from '../utils';
 import { EditBlocksContext } from './EditWagtailBlocks';
 import {
-    StructureL1Fragment, StructureL2Fragment, StructureL3Fragment, useWagtailSavePageMutation,
-    WagtailBlockStructureDocument, WagtailBlockStructureQuery
+    StructureL0Fragment, StructureL1Fragment, StructureL2Fragment, StructureL3Fragment,
+    useWagtailSavePageMutation
 } from './queries.generated';
 
 const Container = styled.div`
@@ -30,19 +28,27 @@ interface Props {
   blocks: AnyBlockFragment[];
 }
 
-type StructureFragment = WagtailBlockStructureQuery['result'];
+// via https://github.com/microsoft/TypeScript/issues/1897
+type JsonSimple = string | number | boolean;
+type JsonObject = {
+  [x: string]: JsonSimple | JsonObject | JsonArray;
+};
+interface JsonArray extends Array<JsonSimple | JsonObject | JsonArray> {}
+
+type Json = JsonSimple | JsonObject | JsonArray;
 
 // TODO - compare value with block's shape
 const valueToBackendValue = (
-  structure: StructureL1Fragment | StructureL2Fragment | StructureL3Fragment,
+  structure:
+    | StructureL0Fragment
+    | StructureL1Fragment
+    | StructureL2Fragment
+    | StructureL3Fragment,
   value: any
-): any => {
-  // window.alert(
-  //   JSON.stringify(structure, null, 2) + '\n\n' + JSON.stringify(value, null, 2)
-  // );
+): Json => {
   switch (structure.__typename) {
     case 'WagtailStructBlockStructure':
-      if (!structure.child_blocks) {
+      if (!('child_blocks' in structure)) {
         throw new Error('Structure is incomplete (too deeply nested?)');
       }
       if (typeof value !== 'object') {
@@ -53,7 +59,7 @@ const valueToBackendValue = (
       }
       // TODO - validate that there are no extra fields in value
 
-      const result: any = {};
+      const result: Json = {};
       for (const child_block of structure.child_blocks) {
         const child_value = value[child_block.name]; // TODO - consider aliases
         result[child_block.name] = valueToBackendValue(
@@ -63,7 +69,7 @@ const valueToBackendValue = (
       }
       return result;
     case 'WagtailListBlockStructure':
-      if (!structure.child_block) {
+      if (!('child_block' in structure)) {
         throw new Error('Structure is incomplete (too deeply nested?)');
       }
       if (!(value instanceof Array)) {
@@ -105,65 +111,23 @@ const serializeBlockValue = (
   structure: StructureFragment,
   block: AnyBlockFragment
 ) => {
-  const typename = block.__typename;
-  if (!isKnownBlock(block)) {
-    throw new Error(`Unknown block ${typename}`);
-  }
+  const valueKey = getBlockValueKey(block);
 
-  const blockComponent = allBlockComponents[block.__typename];
-  const fieldSelections = (blockComponent.fragment
-    .definitions[0] as FragmentDefinitionNode).selectionSet.selections.filter(
-    (s) => s.kind === 'Field'
-  ) as FieldNode[];
-
-  const valueSelection = fieldSelections.find(
-    (selection) => selection.name.value === 'value'
-  );
-  if (!valueSelection) {
-    // That's probably ok, some blocks don't have values (but we should check the block's shape just to be
-    // safe).
+  if (valueKey === undefined) {
     return null;
   }
-
-  const valueKey = valueSelection.alias?.value || 'value';
-
   const value = (block as any)[valueKey];
   return valueToBackendValue(structure, value);
 };
 
-const typenameToBackendBlockName = (typename: string) => {
-  const parts = Array.from(typename.matchAll(/([A-Z][a-z]*)/g)).map(
-    (match) => match[0]
-  );
-  if (parts[parts.length - 1] !== 'Block') {
-    throw new Error(`Invalid typename ${typename}, should end with ...Block`);
-  }
-
-  return parts
-    .slice(0, -1)
-    .map((p) => p.toLowerCase())
-    .join('_');
-};
-
 const useBlocksSerializer = () => {
-  const apolloClient = useApolloClient();
+  const structureLoader = useBlockStructureLoader();
+
   return async (blocks: AnyBlockFragment[]) => {
     const result = [];
     for (const block of blocks) {
+      const structure = await structureLoader(block);
       const blockName = typenameToBackendBlockName(block.__typename);
-      const structureQueryResults = await apolloClient.query<
-        WagtailBlockStructureQuery
-      >({
-        query: WagtailBlockStructureDocument,
-        variables: {
-          name: blockName,
-        },
-        fetchPolicy: 'cache-first',
-      });
-      if (!structureQueryResults.data?.result) {
-        throw new Error(`Couldn't load block structure for block ${blockName}`);
-      }
-      const structure = structureQueryResults.data.result;
       const value = serializeBlockValue(structure, block);
       result.push({ type: blockName, value });
     }

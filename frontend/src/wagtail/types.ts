@@ -1,5 +1,6 @@
 import { DocumentNode } from 'graphql';
 
+import { WagtailBlockStructureQuery } from './components/queries.generated';
 import { FreeFormPageFragment } from './queries.generated';
 
 export interface AnyWagtailPage {
@@ -22,3 +23,5 @@ export interface BlockComponent<P extends BaseWagtailBlock> {
   (props: P): JSX.Element | null;
   fragment: DocumentNode;
 }
+
+export type StructureFragment = WagtailBlockStructureQuery['result'];

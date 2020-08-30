@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { FormShape } from '~/components/forms/types';
+
 import ModalFormButton from '~/components/forms/ModalFormButton';
+import { FormShape } from '~/components/forms/types';
 
 import {
-  MastermindDatingCohortDetailsFragment as Cohort,
-  useMastermindDatingCreateParticipantMutation,
+    MastermindDatingCohortDetailsFragment as Cohort, useMastermindDatingCreateParticipantMutation
 } from '../../queries.generated';
 
 interface Props {
@@ -20,7 +20,7 @@ const CreateParticipantButton = ({ cohort }: Props) => {
   });
 
   const createCb = useCallback(
-    async values => {
+    async (values) => {
       await createMutation({
         variables: {
           cohort_id: cohort.id,
@@ -37,7 +37,7 @@ const CreateParticipantButton = ({ cohort }: Props) => {
       buttonName="Добавить"
       modalButtonName="Добавить"
       modalTitle="Добавить: Участник дейтинга"
-      fields={fields}
+      shape={fields}
     />
   );
 };

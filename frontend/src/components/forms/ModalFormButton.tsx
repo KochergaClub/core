@@ -8,15 +8,15 @@ import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import ButtonWithModal from '../ButtonWithModal';
 import FieldWidget from './FieldWidget';
 import ErrorLabel from './FieldWidget/ErrorLabel'; // TODO - move ErrorLabel to one level up?
-import { FormShape } from './types';
+import { AnyFormValues, FormShape } from './types';
 
 interface PostResult {
   close: boolean;
   error?: string;
 }
 
-interface Props<Values> {
-  fields: FormShape; // FormShape should match Values!
+interface Props<Values extends AnyFormValues> {
+  shape: FormShape; // FormShape should match Values!
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
@@ -24,12 +24,40 @@ interface Props<Values> {
   post: (values: Values) => Promise<PostResult | void>;
 }
 
-interface ModalProps<Values> extends Props<Values> {
+interface ModalProps<Values extends AnyFormValues> extends Props<Values> {
   close: () => void;
 }
 
-function ModalForm<Values>({
-  fields,
+const buildInitialValues = (shape: FormShape): AnyFormValues => {
+  const result: AnyFormValues = {};
+  for (const field of shape) {
+    let value: AnyFormValues[keyof AnyFormValues] = '';
+
+    switch (field.type) {
+      case 'boolean':
+        // Without this special case the initial value of boolean field becomes '', which leads to "Required" errors for untouched fields.
+        // TODO - check if this was fixed in formik v2
+        value = field.value || false;
+        break;
+      case 'shape':
+        value = buildInitialValues(field.shape);
+        break;
+      case 'list':
+        // throw new Error("Can't handle lists yet");
+        value = [];
+        break;
+      default:
+        if (field.value) {
+          value = field.value;
+        }
+    }
+    result[field.name] = value;
+  }
+  return result;
+};
+
+function ModalForm<Values extends AnyFormValues>({
+  shape,
   post,
   close,
   modalButtonName,
@@ -38,29 +66,15 @@ function ModalForm<Values>({
   const [submitError, setSubmitError] = useState('');
 
   const initialValues = useMemo(() => {
-    const result: { [k: string]: string | number | boolean } = {};
-    for (const field of fields) {
-      let value: string | number | boolean = '';
-      if (field.value) {
-        value = field.value;
-      } else {
-        if (field.type === 'boolean') {
-          // Without this special case the initial value of boolean field becomes '', which leads to "Required" errors for untouched fields.
-          // TODO - check if this was fixed in formik v2
-          value = false;
-        }
-      }
-      result[field.name] = value;
-    }
-    return (result as any) as Values;
-  }, [fields]);
+    return buildInitialValues(shape) as Values;
+  }, [shape]);
 
   const submit = useCallback(
     async (values: Values, actions: FormikHelpers<Values>) => {
       // Values should match FormShape, so this should be ok (but it still feels ugly)
       const postValues = { ...values } as any;
 
-      for (const field of fields) {
+      for (const field of shape) {
         if (field.readonly) {
           // set readonly fields
           if (field.value) {
@@ -96,13 +110,13 @@ function ModalForm<Values>({
         setSubmitError(postResult.error);
       }
     },
-    [fields, post, close]
+    [shape, post, close]
   );
 
   const validate = useCallback(
     (values) => {
       const errors: { [k: string]: string } = {};
-      for (const field of fields) {
+      for (const field of shape) {
         const value = values[field.name];
         if (value === '' && !field.optional) {
           errors[field.name] = 'Обязательное поле';
@@ -121,7 +135,7 @@ function ModalForm<Values>({
       }
       return errors;
     },
-    [fields]
+    [shape]
   );
 
   const focus = useFocusOnFirstModalRender();
@@ -141,7 +155,7 @@ function ModalForm<Values>({
           <Form>
             <Modal.Body ref={focus} {...hotkeys}>
               <Column stretch>
-                {fields.map((field) => (
+                {shape.map((field) => (
                   <FieldWidget key={field.name} field={field} />
                 ))}
               </Column>
@@ -155,7 +169,7 @@ function ModalForm<Values>({
               <ControlsFooter>
                 <Button
                   type="submit"
-                  loading={isSubmitting}
+                  loading={isSubmitting || undefined}
                   disabled={isSubmitting}
                 >
                   {modalButtonName}
@@ -169,7 +183,7 @@ function ModalForm<Values>({
   );
 }
 
-function ModalFormButton<Values>(props: Props<Values>) {
+function ModalFormButton<Values extends AnyFormValues>(props: Props<Values>) {
   return (
     <ButtonWithModal title={props.buttonName} small={props.small}>
       {({ close }) => <ModalForm {...props} close={close} />}

@@ -48,7 +48,7 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
     <ApolloModalFormButton
       mutation={addMutation}
       small
-      fields={fields}
+      shape={fields}
       buttonName="Добавить платёж"
       modalButtonName="Добавить"
       modalTitle="Добавить платёж"

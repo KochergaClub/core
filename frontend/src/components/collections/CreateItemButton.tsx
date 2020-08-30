@@ -1,15 +1,15 @@
 import ModalFormButton from '~/components/forms/ModalFormButton';
-import { FormShape } from '~/components/forms/types';
+import { AnyFormValues, FormShape } from '~/components/forms/types';
 
 import { EntityNames } from './types';
 
-interface Props<A> {
+interface Props<A extends AnyFormValues> {
   names?: EntityNames;
   shape: FormShape;
   add: (item: A) => Promise<void>;
 }
 
-function CreateItemButton<A>(props: Props<A>) {
+function CreateItemButton<A extends AnyFormValues>(props: Props<A>) {
   return (
     <ModalFormButton
       post={props.add}
@@ -18,7 +18,7 @@ function CreateItemButton<A>(props: Props<A>) {
       modalTitle={`Создать${
         props.names && props.names.genitive ? ' ' + props.names.genitive : ''
       }`}
-      fields={props.shape}
+      shape={props.shape}
     />
   );
 }
