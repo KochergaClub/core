@@ -6,33 +6,37 @@ import Select from 'react-select';
 
 import { Input, Label } from '@kocherga/frontkit';
 
-import { ChoiceFormField, FormField } from '../types';
+import { BasicFormField, ChoiceFormField } from '../types';
 import ErrorLabel from './ErrorLabel';
 import ForeignKeyWidget from './ForeignKeyWidget';
 import LabeledField from './LabeledField';
 
 interface Props {
-  field: FormField;
-  prefix?: string;
+  field: BasicFormField;
+  name: string;
 }
 
-const FieldInputForType: React.FC<{ field: FormField; type: string }> = ({
-  field,
-  type,
-}) => (
-  <LabeledField for={field}>
+const FieldInputForType: React.FC<{
+  field: BasicFormField;
+  type: string;
+  name: string;
+}> = ({ field, type, name }) => (
+  <LabeledField for={field} name={name}>
     {({ field }) => <Input {...field} type={type} />}
   </LabeledField>
 );
 
-const FieldInputForDate: React.FC<{ field: FormField }> = ({ field }) => (
-  <LabeledField for={field}>
+const FieldInputForDate: React.FC<{ field: BasicFormField; name: string }> = ({
+  field,
+  name,
+}) => (
+  <LabeledField for={field} name={name}>
     {({ field, form }) => (
       <DatePicker
         selected={field.value ? new Date(field.value) : new Date()}
         onChange={(date) => {
           form.setFieldValue(
-            field.name,
+            name,
             date ? format(date, 'yyyy-MM-dd') : undefined
           );
         }}
@@ -45,11 +49,14 @@ const FieldInputForDate: React.FC<{ field: FormField }> = ({ field }) => (
   </LabeledField>
 );
 
-const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
+const ChoiceFieldInput: React.FC<{ field: ChoiceFormField; name: string }> = ({
+  field,
+  name,
+}) => {
   switch (field.widget) {
     case 'radio':
       return (
-        <LabeledField for={field}>
+        <LabeledField for={field} name={name}>
           {({ field: formikField }) => (
             <>
               {field.options.map((option) => {
@@ -73,7 +80,7 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
       );
     default:
       return (
-        <LabeledField for={field}>
+        <LabeledField for={field} name={name}>
           {({ field: formikField, form }) => {
             const option = field.options.find(
               (option) => option[0] === formikField.value
@@ -107,28 +114,29 @@ const ChoiceFieldInput: React.FC<{ field: ChoiceFormField }> = ({ field }) => {
   }
 };
 
-const FieldWidget: React.FC<Props> = ({ field }) => {
-  if (field.readonly) {
+const BasicFieldWidget: React.FC<Props> = ({ field, name }) => {
+  if ('readonly' in field && field.readonly) {
     return (
       <div>
         <Label>{field.name}</Label>
-        <div>{field.value}</div>
-        <ErrorMessage name={field.name} component={ErrorLabel} />
+        <div>{field.default}</div>
+        <ErrorMessage name={name} component={ErrorLabel} />
       </div>
     );
   }
+
   switch (field.type) {
     case 'string':
-      return <FieldInputForType field={field} type="text" />;
+      return <FieldInputForType name={name} field={field} type="text" />;
     case 'email':
-      return <FieldInputForType field={field} type="email" />;
+      return <FieldInputForType name={name} field={field} type="email" />;
     case 'date':
-      return <FieldInputForDate field={field} />;
+      return <FieldInputForDate name={name} field={field} />;
     case 'password':
-      return <FieldInputForType field={field} type="password" />;
+      return <FieldInputForType name={name} field={field} type="password" />;
     case 'number':
       return (
-        <LabeledField for={field}>
+        <LabeledField for={field} name={name}>
           {({ field: formikField }) => (
             <Input
               {...formikField}
@@ -140,27 +148,16 @@ const FieldWidget: React.FC<Props> = ({ field }) => {
         </LabeledField>
       );
     case 'choice':
-      return <ChoiceFieldInput field={field} />;
+      return <ChoiceFieldInput name={name} field={field} />;
     case 'boolean':
-      return <FieldInputForType field={field} type="checkbox" />;
+      return <FieldInputForType name={name} field={field} type="checkbox" />;
     case 'fk':
       if (field.widget) {
-        return <ForeignKeyWidget field={field} />;
+        return <ForeignKeyWidget name={name} field={field} />;
       } else {
-        return <FieldInputForType field={field} type="number" />;
+        return <FieldInputForType name={name} field={field} type="number" />;
       }
-    case 'shape':
-      return (
-        <div>
-          <header>subshape</header>
-          {field.shape.map((subfield, i) => (
-            <FieldWidget key={i} field={subfield} prefix={field.name} />
-          ))}
-        </div>
-      );
-    case 'list':
-      return <div>TODO</div>;
   }
 };
 
-export default FieldWidget;
+export default BasicFieldWidget;

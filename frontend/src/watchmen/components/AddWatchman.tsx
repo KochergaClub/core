@@ -16,7 +16,7 @@ const fields: FormShape = [
       ['MALE', 'М'],
       ['FEMALE', 'Ж'],
     ],
-    value: 'FEMALE',
+    default: 'FEMALE',
   },
   { name: 'skip_wiki', title: 'Не добавлять на вики', type: 'boolean' },
   {

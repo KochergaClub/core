@@ -17,14 +17,14 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
   });
 
   const fields: FormShape = [
-    { name: 'ticket_id', type: 'fk', readonly: true, value: ticket_id },
+    { name: 'ticket_id', type: 'fk', readonly: true, default: ticket_id },
     { name: 'amount', title: 'Сумма', type: 'number', min: 0, max: 1000000 },
     {
       name: 'fiscalization_status',
       title: 'Нужен чек?',
       type: 'choice',
       widget: 'dropdown',
-      value: 'todo',
+      default: 'todo',
       options: [
         ['todo', 'Да'],
         ['not_needed', 'Нет'],
@@ -35,7 +35,7 @@ const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
       title: 'Вид оплаты',
       type: 'choice',
       widget: 'dropdown',
-      value: 'kassa',
+      default: 'kassa',
       options: [
         ['kassa', 'Яндекс.Касса'],
         ['cash', 'Наличные'],

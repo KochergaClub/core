@@ -6,9 +6,10 @@ import LabeledField from './LabeledField';
 
 interface Props {
   field: ForeignKeyFormField;
+  name: string;
 }
 
-const ForeignKeyWidget: React.FC<Props> = ({ field }) => {
+const ForeignKeyWidget: React.FC<Props> = ({ field, name }) => {
   const { widget } = field;
 
   if (!widget) {
@@ -21,9 +22,9 @@ const ForeignKeyWidget: React.FC<Props> = ({ field }) => {
   }
 
   const loadOptions = useCallback(
-    async inputValue => {
+    async (inputValue) => {
       const items = await widget.load(inputValue);
-      const options = items.map(item => ({
+      const options = items.map((item) => ({
         value: widget.getValue(item),
         label: widget.display(item),
       }));
@@ -33,12 +34,12 @@ const ForeignKeyWidget: React.FC<Props> = ({ field }) => {
   );
 
   return (
-    <LabeledField for={field}>
+    <LabeledField for={field} name={name}>
       {({ field: formikField, form }) => {
         return (
           <AsyncSelect
             loadOptions={loadOptions}
-            onChange={selected => {
+            onChange={(selected) => {
               if (!selected) {
                 return;
               }
@@ -50,8 +51,8 @@ const ForeignKeyWidget: React.FC<Props> = ({ field }) => {
             menuPlacement="auto"
             menuPortalTarget={document.body}
             styles={{
-              menuPortal: provided => ({ ...provided, zIndex: 1100 }),
-              container: provided => ({ ...provided, width: '100%' }),
+              menuPortal: (provided) => ({ ...provided, zIndex: 1100 }),
+              container: (provided) => ({ ...provided, width: '100%' }),
             }}
           />
         );

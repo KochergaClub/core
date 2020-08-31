@@ -154,7 +154,6 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     }
 
     const blocksJson = JSON.stringify(await serializeBlocks(blocks), null, 2);
-    window.alert(blocksJson);
     const mutationResults = await saveMutation({
       variables: {
         input: {

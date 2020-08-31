@@ -17,7 +17,7 @@ const CreateDayButton: React.FC<Props> = ({ training }) => {
     {
       name: 'training_slug',
       type: 'string',
-      value: training.slug,
+      default: training.slug,
       readonly: true,
     },
     {

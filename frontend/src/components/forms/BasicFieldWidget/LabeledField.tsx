@@ -1,34 +1,35 @@
-import { Field, FieldProps, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, FieldProps } from 'formik';
 
-import { Row, Label } from '@kocherga/frontkit';
+import { Label, Row } from '@kocherga/frontkit';
 
 import { AnyFormField, FormField } from '../types';
 import ErrorLabel from './ErrorLabel';
 
 interface Props {
   for: AnyFormField;
+  name: string;
   children: (fieldProps: FieldProps<any>) => React.ReactNode;
 }
 
-const LabeledField: React.FC<Props> = ({ for: field, children }) => {
+const LabeledField: React.FC<Props> = ({ for: field, name, children }) => {
   if ((field as FormField).type === 'boolean') {
     return (
       <div>
         <Label>
           <Row vCentered>
-            <Field name={field.name}>{children}</Field>
+            <Field name={name}>{children}</Field>
             <span>{field.title || field.name}</span>
           </Row>
         </Label>
-        <ErrorMessage name={field.name} component={ErrorLabel} />
+        <ErrorMessage name={name} component={ErrorLabel} />
       </div>
     );
   }
   return (
     <div>
       <Label>{field.title || field.name}</Label>
-      <Field name={field.name}>{children}</Field>
-      <ErrorMessage name={field.name} component={ErrorLabel} />
+      <Field name={name}>{children}</Field>
+      <ErrorMessage name={name} component={ErrorLabel} />
     </div>
   );
 };

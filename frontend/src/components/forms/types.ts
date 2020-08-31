@@ -1,37 +1,40 @@
 export interface AnyFormField {
   readonly name: string;
   readonly title?: string;
+}
+
+export interface AnyBasicFormField extends AnyFormField {
   readonly?: boolean;
   optional?: boolean;
 }
 
-export interface StringFormField extends AnyFormField {
+export interface StringFormField extends AnyBasicFormField {
   readonly type: 'string' | 'email' | 'password' | 'date';
-  readonly value?: string;
+  readonly default?: string;
 }
 
-export interface NumberFormField extends AnyFormField {
+export interface NumberFormField extends AnyBasicFormField {
   readonly type: 'number';
-  readonly value?: number;
+  readonly default?: number;
   readonly min?: number;
   readonly max?: number;
 }
 
-export interface ChoiceFormField extends AnyFormField {
+export interface ChoiceFormField extends AnyBasicFormField {
   readonly type: 'choice';
   readonly widget?: 'radio' | 'dropdown';
-  readonly value?: string;
+  readonly default?: string;
   readonly options: [string, string][];
 }
 
-export interface BooleanFormField extends AnyFormField {
+export interface BooleanFormField extends AnyBasicFormField {
   readonly type: 'boolean';
-  readonly value?: boolean;
+  readonly default?: boolean;
 }
 
-export interface ForeignKeyFormField extends AnyFormField {
+export interface ForeignKeyFormField extends AnyBasicFormField {
   readonly type: 'fk';
-  readonly value?: number | string;
+  readonly default?: number | string;
   readonly widget?: {
     type: 'async';
     display: (item: any) => string;
@@ -42,24 +45,22 @@ export interface ForeignKeyFormField extends AnyFormField {
 
 export interface ShapeFormField extends AnyFormField {
   readonly type: 'shape';
-  readonly value?: AnyFormValues;
   readonly shape: FormShape;
 }
 
 export interface ListFormField extends AnyFormField {
   readonly type: 'list';
-  readonly value?: AnyFormValues[];
   readonly field: FormField;
 }
 
-export type FormField =
+export type BasicFormField =
   | StringFormField
   | NumberFormField
   | ChoiceFormField
   | BooleanFormField
-  | ForeignKeyFormField
-  | ShapeFormField
-  | ListFormField;
+  | ForeignKeyFormField;
+
+export type FormField = BasicFormField | ShapeFormField | ListFormField;
 
 export type FormShape = FormField[];
 

@@ -8,6 +8,7 @@ import { FormField, FormShape } from '~/components/forms/types';
 
 import { useBlockStructureLoader } from '../hooks';
 import { AnyBlockFragment, StructureFragment } from '../types';
+import { getBlockValueKey } from '../utils';
 import ControlledBlockContainer from './ControlledBlockContainer';
 import { EditBlocksContext } from './EditWagtailBlocks';
 import {
@@ -51,7 +52,7 @@ const structureToFormField = (
         type: 'string',
         name,
         readonly: true,
-        value: 'static', // FIXME
+        default: 'static', // FIXME
       };
     case 'WagtailStructBlockStructure':
       if (!('child_blocks' in structure)) {
@@ -129,6 +130,16 @@ const Controls: React.FC<Props> = ({ block }) => {
   }
 
   const shape = structureToShape(structure);
+  const valueKey = getBlockValueKey(block);
+  let blockValue = valueKey ? (block as any)[valueKey] : undefined;
+
+  const valueWrappedInForm =
+    structure.__typename === 'WagtailListBlockStructure';
+  if (valueWrappedInForm) {
+    blockValue = {
+      form: blockValue,
+    };
+  }
 
   return (
     <Row>
@@ -137,16 +148,18 @@ const Controls: React.FC<Props> = ({ block }) => {
       </Button>
       <ModalFormButton
         small
+        initialValues={blockValue}
         shape={shape}
         buttonName="Редактировать"
         modalButtonName="Сохранить"
         modalTitle="Редактирование блока"
         post={async (v) => {
+          const value = valueWrappedInForm ? v.form : v;
           dispatch({
             type: 'EDIT_BLOCK',
             payload: {
               id: block.id,
-              value: v,
+              value,
             },
           });
         }}
