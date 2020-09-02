@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import FlipMove from 'react-flip-move';
 
 import { AnyBlockFragment } from '../types';
 import AnyBlock from './AnyBlock';
@@ -28,12 +29,24 @@ type EditBlockAction = {
   payload: AnyBlockFragment;
 };
 
+type SwapBlocksAction = {
+  type: 'SWAP_BLOCKS';
+  payload: {
+    first: number;
+    second: number;
+  };
+};
+
 type SetValidationErrorAction = {
   type: 'SET_VALIDATION_ERROR';
   payload: WagtailStreamFieldValidationErrorFragment;
 };
 
-type Action = DeleteBlockAction | EditBlockAction | SetValidationErrorAction;
+type Action =
+  | DeleteBlockAction
+  | EditBlockAction
+  | SwapBlocksAction
+  | SetValidationErrorAction;
 
 interface State {
   blocks: AnyBlockFragment[];
@@ -58,6 +71,30 @@ const reducer = (state: State, action: Action): State => {
           return action.payload;
         }),
       };
+    case 'SWAP_BLOCKS':
+      if (
+        action.payload.first < 0 ||
+        action.payload.first >= state.blocks.length
+      ) {
+        throw new Error("Can't swap, wrong id");
+      }
+      if (
+        action.payload.second < 0 ||
+        action.payload.second >= state.blocks.length
+      ) {
+        throw new Error("Can't swap, wrong id");
+      }
+      return {
+        ...state,
+        blocks: state.blocks.map((block, i) => {
+          if (i === action.payload.first) {
+            return state.blocks[action.payload.second];
+          } else if (i === action.payload.second) {
+            return state.blocks[action.payload.first];
+          }
+          return block;
+        }),
+      };
     case 'SET_VALIDATION_ERROR':
       return {
         ...state,
@@ -72,30 +109,29 @@ const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
     blocks: JSON.parse(JSON.stringify(blocks)),
   }));
 
-  // TODO:
-  // - [ ] request blocks structure from backend
-  // - [x] make an editable copy of all blocks
-  // - [x] set up a context for editing callbacks
-  // - [ ] implement UPDATE_BLOCK action
-  // - [ ] implement CREATE_BLOCK action
   return (
     <EditBlocksContext.Provider value={{ dispatch }}>
       <div>
         <EditControls blocks={state.blocks} />
-        {state.blocks.map((block, i) => {
-          const block_validation_error = state.validation_error?.block_errors.find(
-            (e) => e.block_id === i
-          );
-          return (
-            <EditBlockWrapper
-              key={block.id}
-              block={block}
-              validation_error={block_validation_error}
-            >
-              <AnyBlock {...block} />
-            </EditBlockWrapper>
-          );
-        })}
+        <FlipMove>
+          {state.blocks.map((block, i) => {
+            const block_validation_error = state.validation_error?.block_errors.find(
+              (e) => e.block_id === i
+            );
+            return (
+              <div key={block.id}>
+                <EditBlockWrapper
+                  block={block}
+                  validation_error={block_validation_error}
+                  position={i}
+                  total={state.blocks.length}
+                >
+                  <AnyBlock {...block} />
+                </EditBlockWrapper>
+              </div>
+            );
+          })}
+        </FlipMove>
       </div>
     </EditBlocksContext.Provider>
   );

@@ -29,11 +29,19 @@ const ControlsContainer = styled.div`
 
 interface Props {
   block: AnyBlockFragment;
-  controls: React.ElementType<{ block: AnyBlockFragment }>;
+  position?: number;
+  total?: number;
+  controls: React.ElementType<{
+    block: AnyBlockFragment;
+    position?: number;
+    total?: number;
+  }>;
 }
 
 const ControlledBlockContainer: React.FC<Props> = ({
   block,
+  position,
+  total,
   controls,
   children,
 }) => {
@@ -41,7 +49,7 @@ const ControlledBlockContainer: React.FC<Props> = ({
   return (
     <Container>
       <ControlsContainer className="controls">
-        <Controls block={block} />
+        <Controls block={block} position={position} total={total} />
       </ControlsContainer>
       {children}
     </Container>

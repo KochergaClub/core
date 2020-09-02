@@ -17,6 +17,8 @@ import { WagtailBlockValidationErrorFragment } from './queries.generated';
 
 interface Props {
   block: AnyBlockFragment;
+  position?: number;
+  total?: number;
   validation_error?: WagtailBlockValidationErrorFragment;
 }
 
@@ -125,7 +127,7 @@ const EditButton: React.FC<Props & { structure: StructureFragment }> = ({
   );
 };
 
-const Controls: React.FC<Props> = ({ block }) => {
+const Controls: React.FC<Props> = ({ block, position, total }) => {
   const { dispatch } = useContext(EditBlocksContext);
   const deleteCb = () => {
     dispatch({ type: 'DELETE_BLOCK', payload: block.id });
@@ -150,17 +152,50 @@ const Controls: React.FC<Props> = ({ block }) => {
       ) : (
         <div>Loading...</div>
       )}
+      {position !== undefined && position > 0 ? (
+        <Button
+          size="small"
+          onClick={() =>
+            dispatch({
+              type: 'SWAP_BLOCKS',
+              payload: { first: position, second: position - 1 },
+            })
+          }
+        >
+          &uarr;
+        </Button>
+      ) : null}
+      {position !== undefined && total !== undefined && position < total - 1 ? (
+        <Button
+          size="small"
+          onClick={() =>
+            dispatch({
+              type: 'SWAP_BLOCKS',
+              payload: { first: position, second: position + 1 },
+            })
+          }
+        >
+          &darr;
+        </Button>
+      ) : null}
     </Row>
   );
 };
 
 const EditBlockWrapper: React.FC<Props> = ({
   block,
+  position,
+  total,
   validation_error,
   children,
 }) => {
   return (
-    <ControlledBlockContainer controls={Controls} block={block}>
+    <ControlledBlockContainer
+      controls={Controls}
+      block={block}
+      position={position}
+      total={total}
+    >
       {children}
       {validation_error && <ValidationError error={validation_error} />}
     </ControlledBlockContainer>
