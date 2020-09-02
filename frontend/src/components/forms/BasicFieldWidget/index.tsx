@@ -3,6 +3,7 @@ import { ru } from 'date-fns/locale';
 import { ErrorMessage } from 'formik';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
+import styled from 'styled-components';
 
 import { Input, Label } from '@kocherga/frontkit';
 
@@ -16,13 +17,17 @@ interface Props {
   name: string;
 }
 
+const WideInput = styled(Input)`
+  width: 100%;
+`;
+
 const FieldInputForType: React.FC<{
   field: BasicFormField;
   type: string;
   name: string;
 }> = ({ field, type, name }) => (
   <LabeledField for={field} name={name}>
-    {({ field }) => <Input {...field} type={type} />}
+    {({ field }) => <WideInput {...field} type={type} />}
   </LabeledField>
 );
 

@@ -9,6 +9,7 @@ import ButtonWithModal from '../ButtonWithModal';
 import AnyFieldWidget from './AnyFieldWidget';
 import ErrorLabel from './BasicFieldWidget/ErrorLabel'; // TODO - move ErrorLabel to one level up
 import { AnyFormValues, FormField, FormShape } from './types';
+import { buildInitialValues } from './utils';
 
 interface PostResult {
   close: boolean;
@@ -28,34 +29,6 @@ interface Props<Values extends AnyFormValues> {
 interface ModalProps<Values extends AnyFormValues> extends Props<Values> {
   close: () => void;
 }
-
-const buildInitialValues = (shape: FormShape): AnyFormValues => {
-  const result: AnyFormValues = {};
-  for (const field of shape) {
-    let value: AnyFormValues[keyof AnyFormValues] = '';
-
-    switch (field.type) {
-      case 'boolean':
-        // Without this special case the initial value of boolean field becomes '', which leads to "Required" errors for untouched fields.
-        // TODO - check if this was fixed in formik v2
-        value = field.default || false;
-        break;
-      case 'shape':
-        value = buildInitialValues(field.shape);
-        break;
-      case 'list':
-        // throw new Error("Can't handle lists yet");
-        value = [];
-        break;
-      default:
-        if (field.default) {
-          value = field.default;
-        }
-    }
-    result[field.name] = value;
-  }
-  return result;
-};
 
 type ValidationErrors = { [k: string]: string };
 
@@ -202,7 +175,6 @@ function ModalForm<Values extends AnyFormValues>({
   const submit = useCallback(
     async (values: Values, actions: FormikHelpers<Values>) => {
       const postValues: Values = prepareValuesByShape(shape, values);
-      console.log(postValues);
 
       let postResult: PostResult | undefined;
       try {

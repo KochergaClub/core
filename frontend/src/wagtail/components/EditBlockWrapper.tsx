@@ -143,7 +143,7 @@ const Controls: React.FC<Props> = ({ block }) => {
   return (
     <Row>
       <Button size="small" onClick={deleteCb}>
-        удалить
+        Удалить
       </Button>
       {structure ? (
         <EditButton structure={structure} block={block} />

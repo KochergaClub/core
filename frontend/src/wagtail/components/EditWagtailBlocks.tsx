@@ -1,7 +1,6 @@
 import React, { useReducer } from 'react';
 
 import { AnyBlockFragment } from '../types';
-import { getBlockValueKey } from '../utils';
 import AnyBlock from './AnyBlock';
 import EditBlockWrapper from './EditBlockWrapper';
 import EditControls from './EditControls';
