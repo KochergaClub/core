@@ -1656,6 +1656,7 @@ export type Query = {
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
   wagtailBlockStructure: WagtailBlockStructure;
+  wagtailRenderBlock: WagtailBlock;
   wagtailSearch: WagtailSearchResult;
   search: SearchResult;
   authGroupsAll: Array<AuthGroup>;
@@ -1711,6 +1712,11 @@ export type QueryWagtailPageArgs = {
 
 export type QueryWagtailBlockStructureArgs = {
   input: WagtailBlockStructureInput;
+};
+
+
+export type QueryWagtailRenderBlockArgs = {
+  input: WagtailRenderBlockInput;
 };
 
 
@@ -2329,6 +2335,11 @@ export type WagtailPageMeta = {
 export type WagtailPagePermissions = {
   __typename?: 'WagtailPagePermissions';
   can_edit: Scalars['Boolean'];
+};
+
+export type WagtailRenderBlockInput = {
+  name: Scalars['String'];
+  blockJson: Scalars['String'];
 };
 
 export type WagtailRichTextBlockStructure = WagtailBlockStructure & {

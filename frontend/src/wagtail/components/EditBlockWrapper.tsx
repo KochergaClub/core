@@ -1,13 +1,16 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { gql, useApolloClient } from '@apollo/client';
 import { Button, colors, Row } from '@kocherga/frontkit';
 
 import ModalFormButton from '~/components/forms/ModalFormButton';
+import { AnyFormValues } from '~/components/forms/types';
 
+import { allBlockComponents, isKnownBlock } from '../blocks';
 import { useBlockStructureLoader } from '../hooks';
 import { AnyBlockFragment, StructureFragment } from '../types';
-import { getBlockValueKey, structureToShape } from '../utils';
+import { blockToParams, structureToShape, typenameToBackendBlockName } from '../utils';
 import ControlledBlockContainer from './ControlledBlockContainer';
 import { EditBlocksContext } from './EditWagtailBlocks';
 import { WagtailBlockValidationErrorFragment } from './queries.generated';
@@ -35,6 +38,93 @@ const ValidationError: React.FC<{
   );
 };
 
+const EditButton: React.FC<Props & { structure: StructureFragment }> = ({
+  block,
+  structure,
+}) => {
+  const { dispatch } = useContext(EditBlocksContext);
+
+  const shape = structureToShape(structure);
+
+  const valueWrappedInForm =
+    structure.__typename !== 'WagtailStructBlockStructure';
+
+  const blockParams = (valueWrappedInForm
+    ? {
+        form: blockToParams(structure, block),
+      }
+    : blockToParams(structure, block)) as AnyFormValues | undefined;
+
+  const apolloClient = useApolloClient();
+
+  const save = useCallback(
+    async (v: AnyFormValues) => {
+      const value = valueWrappedInForm ? v.form : v;
+
+      if (!isKnownBlock(block)) {
+        throw new Error(`Block ${block.__typename} is unknown`);
+      }
+      const blockComponent = allBlockComponents[block.__typename];
+      const renderBlockQuery = gql`
+        query RenderBlock($type: String!, $paramsJson: String!) {
+          result: wagtailRenderBlock(input: {type: $type, paramsJson: $paramsJson}) {
+            validation_error {
+              non_block_error
+              block_errors {
+                error_message
+              }
+            }
+            block {
+              ...${block.__typename}
+            }
+          }
+        }
+        ${blockComponent.fragment}
+      `;
+
+      const type = typenameToBackendBlockName(block.__typename);
+      const { data } = await apolloClient.query({
+        query: renderBlockQuery,
+        variables: {
+          type,
+          paramsJson: JSON.stringify(value),
+        },
+      });
+      if (!data.result) {
+        throw new Error('Query for rendered block failed');
+      }
+      if (data.result.validation_error) {
+        throw new Error(
+          `Render error: ${JSON.stringify(data.result.validation_error)}`
+        );
+      }
+      if (!data.result.block) {
+        throw new Error("Couldn't find block in wagtailRenderBlock results");
+      }
+      dispatch({
+        type: 'EDIT_BLOCK',
+        payload: {
+          ...data.result.block,
+          id: block.id,
+        },
+      });
+    },
+    [apolloClient, dispatch, block, valueWrappedInForm]
+  );
+
+  return (
+    <ModalFormButton
+      small
+      initialValues={blockParams}
+      shape={shape}
+      buttonName="Редактировать"
+      modalButtonName="Сохранить"
+      modalTitle="Редактирование блока"
+      post={save}
+    />
+  );
+};
+
 const Controls: React.FC<Props> = ({ block }) => {
   const { dispatch } = useContext(EditBlocksContext);
   const deleteCb = () => {
@@ -50,45 +140,16 @@ const Controls: React.FC<Props> = ({ block }) => {
     })();
   }, [block, structureLoader]);
 
-  if (!structure) {
-    return <Row>Loading...</Row>;
-  }
-
-  const shape = structureToShape(structure);
-  const valueKey = getBlockValueKey(block);
-  let blockValue = valueKey ? (block as any)[valueKey] : undefined;
-
-  const valueWrappedInForm =
-    structure.__typename === 'WagtailListBlockStructure';
-  if (valueWrappedInForm) {
-    blockValue = {
-      form: blockValue,
-    };
-  }
-
   return (
     <Row>
       <Button size="small" onClick={deleteCb}>
         удалить
       </Button>
-      <ModalFormButton
-        small
-        initialValues={blockValue}
-        shape={shape}
-        buttonName="Редактировать"
-        modalButtonName="Сохранить"
-        modalTitle="Редактирование блока"
-        post={async (v) => {
-          const value = valueWrappedInForm ? v.form : v;
-          dispatch({
-            type: 'EDIT_BLOCK',
-            payload: {
-              id: block.id,
-              value,
-            },
-          });
-        }}
-      />
+      {structure ? (
+        <EditButton structure={structure} block={block} />
+      ) : (
+        <div>Loading...</div>
+      )}
     </Row>
   );
 };

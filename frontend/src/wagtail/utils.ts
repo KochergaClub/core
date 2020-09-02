@@ -208,6 +208,7 @@ export const blockToParams = (
   if (valueKey === undefined) {
     return null;
   }
+
   const value = (block as any)[valueKey];
   return blockValueToParams(structure, value);
 };

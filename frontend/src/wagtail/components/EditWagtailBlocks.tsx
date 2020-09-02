@@ -26,10 +26,7 @@ type DeleteBlockAction = {
 
 type EditBlockAction = {
   type: 'EDIT_BLOCK';
-  payload: {
-    id: string;
-    value: any; // FIXME
-  };
+  payload: AnyBlockFragment;
 };
 
 type SetValidationErrorAction = {
@@ -59,14 +56,7 @@ const reducer = (state: State, action: Action): State => {
           if (block.id !== action.payload.id) {
             return block;
           }
-          const valueKey = getBlockValueKey(block);
-          if (!valueKey) {
-            return block; // block can be static, nothing to change then
-          }
-          return {
-            ...block,
-            [valueKey]: action.payload.value,
-          };
+          return action.payload;
         }),
       };
     case 'SET_VALIDATION_ERROR':

@@ -1,7 +1,10 @@
+import json
+import wagtail.core.fields
+
 from kocherga.graphql import g, helpers
 
 from ...blocks import registry as blocks_registry
-from ..types import BlockStructure
+from ..types import BlockStructure, WagtailBlock, WagtailStreamFieldValidationError
 
 c = helpers.Collection()
 
@@ -22,3 +25,50 @@ class wagtailBlockStructure(helpers.BaseFieldWithInput):
 
 
 queries = c.as_dict()
+
+
+@c.class_field
+class wagtailRenderBlock(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        name = input['type']
+        stream_block = wagtail.core.fields.StreamField(
+            [
+                (name, blocks_registry.by_name(name))
+            ]  # TODO - skip private blocks which could leak important data
+        ).stream_block
+        params = json.loads(input['paramsJson'])
+
+        from wagtail.core.blocks.stream_block import StreamBlockValidationError
+
+        try:
+            result = stream_block.clean(
+                stream_block.to_python([{'type': name, 'value': params}])
+            )
+        except StreamBlockValidationError as e:
+            return {'validation_error': {'params': e.params}}
+
+        assert len(result) == 1
+
+        # copy-pasted from events/models/event.py
+        import base64
+        import uuid
+
+        def generate_uuid():
+            return base64.b32encode(uuid.uuid4().bytes)[:26].lower().decode('ascii')
+
+        result[
+            0
+        ].id = (
+            generate_uuid()
+        )  # uuid so that we don't confuse frontend with identical objects
+        return {'block': result[0]}
+
+    permissions = []
+    input = {
+        'type': str,
+        'paramsJson': str,
+    }
+    result = {
+        'validation_error': WagtailStreamFieldValidationError,
+        'block': WagtailBlock,
+    }

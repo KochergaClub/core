@@ -12,64 +12,6 @@ from .. import models
 
 c = helpers.Collection()
 
-# interface BlockError {
-#   message: String!
-# }
-
-# type ListErrorWrapper {
-#   block_id: Int!
-#   error: BlockError!
-# }
-
-# type ListBlockError implements BlockError {
-#   block_errors: [BlockError!]!
-# }
-
-# type StructErrorWrapper {
-#   field: String!
-#   error: BlockError!
-# }
-
-# type StructBlockError implements BlockError {
-#   block_errors: [StructErrorWrapper!]!
-# }
-
-WagtailBlockValidationError = g.ObjectType(
-    'WagtailBlockValidationError', g.fields({'block_id': int, 'error_message': str})
-)
-
-
-def build_WagtailStreamFieldValidationError():
-    from django.forms.utils import ErrorList
-
-    def resolve_block_errors(obj, info):
-        result = []
-        for k, v in obj['params'].items():
-            assert isinstance(v, ErrorList)
-            if k == '__all__':
-                continue  # non-block error
-            error = v.data[0]
-            result.append({'block_id': k, 'error_message': repr(vars(error))})
-        return result
-
-    return g.ObjectType(
-        'WagtailStreamFieldValidationError',
-        g.fields(
-            {
-                'block_errors': g.Field(
-                    g.NNList(WagtailBlockValidationError), resolve=resolve_block_errors
-                ),
-                'non_block_error': g.Field(
-                    g.String,
-                    resolve=lambda obj, info: str(obj['params'].get('__all__')),
-                ),
-            }
-        ),
-    )
-
-
-WagtailStreamFieldValidationError = build_WagtailStreamFieldValidationError()
-
 
 @c.class_field
 class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
@@ -101,7 +43,14 @@ class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
 
         # TODO - pass user
         # TODO - consider `publish` flag
-        page.save_revision()
+        revision = page.save_revision(
+            user=info.context.user,
+            # log_action=True,  # uncomment on wagtail 2.10
+        )
+        if input['publish']:
+            revision.publish(
+                # user=info.context.user
+            )
 
         return {
             'page': page,
@@ -117,7 +66,7 @@ class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
     }
     result = {
         'page': kocherga.wagtail.schema.types.WagtailPage,
-        'validation_error': WagtailStreamFieldValidationError,
+        'validation_error': kocherga.wagtail.schema.types.WagtailStreamFieldValidationError,
     }
 
 

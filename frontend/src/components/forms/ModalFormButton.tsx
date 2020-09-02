@@ -96,10 +96,13 @@ const validateByField = (
     return { [field.name]: 'Обязательное поле' };
   }
   if (field.type === 'number' && value !== '') {
-    if (typeof value !== 'string') {
-      throw new Error('Internal error, expected string value');
+    if (typeof value !== 'string' && typeof value !== 'number') {
+      throw new Error(
+        `Internal error, expected string or number value, got ${value}`
+      );
     }
-    const numValue = parseInt(value, 10);
+    const numValue: number =
+      typeof value === 'string' ? parseInt(value, 10) : value;
     if (field.max !== undefined && numValue > field.max) {
       return { [field.name]: `Значение превышает максимальное: ${field.max}` };
     }
@@ -128,6 +131,60 @@ const validateByShape = <Values extends AnyFormValues>(
   return errors;
 };
 
+const prepareValueByField = (
+  field: FormField,
+  value: AnyFormValues[keyof AnyFormValues]
+): any => {
+  switch (field.type) {
+    case 'list':
+      if (!Array.isArray(value)) {
+        throw new Error('expected array, internal formik bug?');
+      }
+      return value
+        ? value.map((subvalue) => prepareValueByField(field.field, subvalue))
+        : undefined;
+    case 'shape':
+      if (!value || typeof value !== 'object' || Array.isArray(value)) {
+        throw new Error(`Internal error. Expected object, got ${value}`);
+      }
+      return prepareValuesByShape(field.shape, value);
+    default:
+      // if ('readonly' in field) {
+      //   if (field.readonly) {
+      //     // set readonly fields
+      //     if (field.default) {
+      //       return field.default;
+      //     }
+
+      //     if (field.type === 'boolean') {
+      //       return false;
+      //     } else {
+      //       return '';
+      //     }
+      //   } else {
+      //     if (field.type === 'number' && value === '') {
+      //       return undefined; // TODO - check if the field is optional?
+      //     }
+      //   }
+      // }
+      if (field.type === 'number' && value !== undefined) {
+        return parseInt(value as string, 10);
+      }
+      return value;
+  }
+};
+
+const prepareValuesByShape = <Values extends AnyFormValues>(
+  shape: FormShape,
+  values: Values
+): Values => {
+  const result: any = {};
+  for (const field of shape) {
+    result[field.name] = prepareValueByField(field, values[field.name]);
+  }
+  return result;
+};
+
 function ModalForm<Values extends AnyFormValues>({
   shape,
   post,
@@ -144,30 +201,9 @@ function ModalForm<Values extends AnyFormValues>({
 
   const submit = useCallback(
     async (values: Values, actions: FormikHelpers<Values>) => {
-      // Values should match FormShape, so this should be ok (but it still feels ugly)
-      const postValues = { ...values } as any;
+      const postValues: Values = prepareValuesByShape(shape, values);
+      console.log(postValues);
 
-      for (const field of shape) {
-        if ('readonly' in field) {
-          if (field.readonly) {
-            // set readonly fields
-            if (field.default) {
-              postValues[field.name] = field.default;
-              continue;
-            }
-
-            if (field.type === 'boolean') {
-              postValues[field.name] = false;
-            } else {
-              postValues[field.name] = '';
-            }
-          } else {
-            if (field.type === 'number' && postValues[field.name] === '') {
-              delete postValues[field.name]; // TODO - check if the field is optional?
-            }
-          }
-        }
-      }
       let postResult: PostResult | undefined;
       try {
         postResult = (await post(postValues as Values)) || { close: true };
@@ -208,7 +244,7 @@ function ModalForm<Values extends AnyFormValues>({
         onSubmit={submit}
         validate={validate}
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, isValid, values }) => (
           <Form>
             <Modal.Body ref={focus} {...hotkeys}>
               <Column stretch>
@@ -232,7 +268,7 @@ function ModalForm<Values extends AnyFormValues>({
                 <Button
                   type="submit"
                   loading={isSubmitting || undefined}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isValid}
                 >
                   {modalButtonName}
                 </Button>

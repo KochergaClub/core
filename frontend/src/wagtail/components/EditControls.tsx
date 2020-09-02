@@ -64,7 +64,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
         input: {
           page_id,
           blocksJson,
-          publish: false,
+          publish: true,
         },
       },
     });
