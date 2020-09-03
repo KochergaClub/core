@@ -74,3 +74,8 @@ export type AnyFormValues = {
     | null
     | undefined;
 };
+
+export interface PostResult {
+  close: boolean;
+  error?: string;
+}

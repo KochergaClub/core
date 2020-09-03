@@ -10,7 +10,7 @@ interface Props {
 const ShapeFieldWidget: React.FC<Props> = ({ field, values, name }) => {
   return (
     <div>
-      <header>shape</header>
+      <header>{field.name}</header>
       {field.shape.map((subfield, i) => (
         <AnyFieldWidget
           key={i}

@@ -9,8 +9,8 @@ import { typenameToBackendBlockName } from './utils';
 export const useBlockStructureLoader = () => {
   const apolloClient = useApolloClient();
 
-  return async (block: AnyBlockFragment) => {
-    const blockName = typenameToBackendBlockName(block.__typename);
+  return async (typename: AnyBlockFragment['__typename']) => {
+    const blockName = typenameToBackendBlockName(typename);
     const structureQueryResults = await apolloClient.query<
       WagtailBlockStructureQuery
     >({

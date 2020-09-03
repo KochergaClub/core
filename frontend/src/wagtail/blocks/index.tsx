@@ -31,7 +31,9 @@ export const allBlockComponents = {
 
 type ComponentsMap = typeof allBlockComponents;
 
-type KnownBlockFragment = Parameters<ComponentsMap[keyof ComponentsMap]>[0];
+export type KnownBlockFragment = Parameters<
+  ComponentsMap[keyof ComponentsMap]
+>[0];
 
 export const isKnownBlock = (
   block: AnyBlockFragment

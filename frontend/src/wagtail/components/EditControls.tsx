@@ -1,11 +1,14 @@
 import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
+import { A, Row } from '@kocherga/frontkit';
+
 import { WagtailPageContext } from '~/cms/contexts';
 import { useNotification } from '~/common/hooks';
 import { AsyncButton } from '~/components';
 
 import { useBlockStructureLoader } from '../hooks';
+import { wagtailAdminPageEditLink } from '../routes';
 import { AnyBlockFragment } from '../types';
 import { blockToParams, typenameToBackendBlockName } from '../utils';
 import { EditBlocksContext } from './EditWagtailBlocks';
@@ -31,7 +34,7 @@ const useBlocksSerializer = () => {
   return async (blocks: AnyBlockFragment[]) => {
     const result = [];
     for (const block of blocks) {
-      const structure = await structureLoader(block);
+      const structure = await structureLoader(block.__typename);
       const blockName = typenameToBackendBlockName(block.__typename);
       const value = blockToParams(structure, block);
       result.push({ type: blockName, value });
@@ -104,7 +107,12 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
 
   return (
     <Container>
-      <AsyncButton act={save}>Сохранить</AsyncButton>
+      <Row spaced vCentered>
+        <A href={wagtailAdminPageEditLink(page_id)}>Редактировать в Wagtail</A>
+        <AsyncButton act={save} kind="primary">
+          Сохранить
+        </AsyncButton>
+      </Row>
     </Container>
   );
 };

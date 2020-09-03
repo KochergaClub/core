@@ -29,6 +29,14 @@ type EditBlockAction = {
   payload: AnyBlockFragment;
 };
 
+type AddBlockAction = {
+  type: 'ADD_BLOCK';
+  payload: {
+    block: AnyBlockFragment;
+    position: number;
+  };
+};
+
 type SwapBlocksAction = {
   type: 'SWAP_BLOCKS';
   payload: {
@@ -45,6 +53,7 @@ type SetValidationErrorAction = {
 type Action =
   | DeleteBlockAction
   | EditBlockAction
+  | AddBlockAction
   | SwapBlocksAction
   | SetValidationErrorAction;
 
@@ -70,6 +79,15 @@ const reducer = (state: State, action: Action): State => {
           }
           return action.payload;
         }),
+      };
+    case 'ADD_BLOCK':
+      return {
+        ...state,
+        blocks: [
+          ...state.blocks.slice(0, action.payload.position),
+          action.payload.block,
+          ...state.blocks.slice(action.payload.position),
+        ],
       };
     case 'SWAP_BLOCKS':
       if (
