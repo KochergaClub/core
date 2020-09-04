@@ -5,7 +5,7 @@ import { isKnownBlock } from '~/wagtail/blocks';
 
 import { AnyBlockFragment } from '../../types';
 import { EditBlocksContext } from '../EditWagtailBlocks';
-import ModalBlockForm from './ModalBlockForm';
+import ModalBlockForm from '../ModalBlockForm';
 
 interface Props {
   block: AnyBlockFragment;

@@ -62,6 +62,11 @@
       "WagtailStructBlockStructure",
       "WagtailURLBlockStructure"
     ],
+    "WagtailBlockValidationError": [
+      "WagtailAnyBlockValidationError",
+      "WagtailListBlockValidationError",
+      "WagtailStructBlockValidationError"
+    ],
     "WagtailPage": [
       "BlogIndexPage",
       "BlogPostPage",

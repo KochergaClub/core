@@ -9,6 +9,11 @@ import { allBlockComponents, KnownBlockFragment } from '../../blocks';
 import { useBlockStructureLoader } from '../../hooks';
 import { StructureFragment } from '../../types';
 import { blockToParams, structureToShape, typenameToBackendBlockName } from '../../utils';
+import {
+    WagtailBlockValidationError_L0Fragment, WagtailBlockValidationError_L1Fragment,
+    WagtailBlockValidationError_L2Fragment, WagtailBlockValidationError_L3Fragment,
+    WagtailBlockValidationError_L3FragmentDoc
+} from './fragments.generated';
 
 interface Props {
   block?: KnownBlockFragment;
@@ -17,6 +22,36 @@ interface Props {
   close: () => void;
   modalTitle: string;
 }
+
+const validationErrorToFormErrors = (
+  error:
+    | WagtailBlockValidationError_L3Fragment
+    | WagtailBlockValidationError_L2Fragment
+    | WagtailBlockValidationError_L1Fragment
+    | WagtailBlockValidationError_L0Fragment
+): any => {
+  switch (error.__typename) {
+    case 'WagtailStructBlockValidationError':
+      if (!('errors' in error)) {
+        throw new Error('Too deeply nested validation error');
+      }
+      return Object.fromEntries(
+        (error.errors as any[]).map((field) => {
+          return [field.name, validationErrorToFormErrors(field.error)];
+        })
+      );
+    case 'WagtailListBlockValidationError':
+      if (!('list_errors' in error)) {
+        throw new Error('Too deeply nested validation error');
+      }
+      return (error.list_errors as any[]).map(
+        (subError) => (subError ? validationErrorToFormErrors(subError) : '') // list errors can be null, that's normal
+      );
+      return;
+    case 'WagtailAnyBlockValidationError':
+      return error.error_message;
+  }
+};
 
 const ModalBlockForm: React.FC<Props> = ({
   block,
@@ -72,7 +107,9 @@ const ModalBlockForm: React.FC<Props> = ({
             validation_error {
               non_block_error
               block_errors {
-                error_message
+                error {
+                  ...WagtailBlockValidationError_L3
+                }
               }
             }
             block {
@@ -81,6 +118,7 @@ const ModalBlockForm: React.FC<Props> = ({
           }
         }
         ${blockComponent.fragment}
+        ${WagtailBlockValidationError_L3FragmentDoc}
       `;
 
       const type = typenameToBackendBlockName(typename);
@@ -95,8 +133,21 @@ const ModalBlockForm: React.FC<Props> = ({
         throw new Error('Query for rendered block failed');
       }
       if (data.result.validation_error) {
+        const error = data.result.validation_error;
+        if (error.non_block_error) {
+          throw new Error(`Non-block error: ${error.non_block_error}`);
+        }
+        if (error.block_errors.length === 1) {
+          const innerError = error.block_errors[0]
+            .error as WagtailBlockValidationError_L3Fragment;
+          return {
+            close: false,
+            formErrors: validationErrorToFormErrors(innerError),
+            error: 'Server-side validation error',
+          };
+        }
         throw new Error(
-          `Render error: ${JSON.stringify(data.result.validation_error)}`
+          `Validation error: ${JSON.stringify(data.result.validation_error)}`
         );
       }
       if (!data.result.block) {

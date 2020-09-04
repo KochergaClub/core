@@ -10,7 +10,7 @@ export type HeroFrontBlockFragment = (
     & Pick<Types.HeroFrontBlockValue, 'title'>
     & { buttons: Array<(
       { __typename: 'HeroFrontBlock_buttonsValue' }
-      & Pick<Types.HeroFrontBlock_ButtonsValue, 'title' | 'link'>
+      & Pick<Types.HeroFrontBlock_ButtonsValue, 'title' | 'link' | 'highlight'>
     )> }
   ) }
 );
@@ -23,6 +23,7 @@ export const HeroFrontBlockFragmentDoc = gql`
     buttons {
       title
       link
+      highlight
     }
   }
 }

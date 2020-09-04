@@ -4,17 +4,22 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
-export type WagtailBlockValidationErrorFragment = (
-  { __typename: 'WagtailBlockValidationError' }
-  & Pick<Types.WagtailBlockValidationError, 'block_id' | 'error_message'>
-);
-
 export type WagtailStreamFieldValidationErrorFragment = (
   { __typename: 'WagtailStreamFieldValidationError' }
   & Pick<Types.WagtailStreamFieldValidationError, 'non_block_error'>
   & { block_errors: Array<(
-    { __typename: 'WagtailBlockValidationError' }
-    & WagtailBlockValidationErrorFragment
+    { __typename: 'WagtailStreamBlockValidationError' }
+    & Pick<Types.WagtailStreamBlockValidationError, 'block_id'>
+    & { error?: Types.Maybe<(
+      { __typename: 'WagtailAnyBlockValidationError' }
+      & Pick<Types.WagtailAnyBlockValidationError, 'error_message'>
+    ) | (
+      { __typename: 'WagtailListBlockValidationError' }
+      & Pick<Types.WagtailListBlockValidationError, 'error_message'>
+    ) | (
+      { __typename: 'WagtailStructBlockValidationError' }
+      & Pick<Types.WagtailStructBlockValidationError, 'error_message'>
+    )> }
   )> }
 );
 
@@ -437,20 +442,17 @@ export type WagtailBlockStructureQuery = (
   ) }
 );
 
-export const WagtailBlockValidationErrorFragmentDoc = gql`
-    fragment WagtailBlockValidationError on WagtailBlockValidationError {
-  block_id
-  error_message
-}
-    `;
 export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
     fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
   non_block_error
   block_errors {
-    ...WagtailBlockValidationError
+    block_id
+    error {
+      error_message
+    }
   }
 }
-    ${WagtailBlockValidationErrorFragmentDoc}`;
+    `;
 export const StructureL0FragmentDoc = gql`
     fragment StructureL0 on WagtailBlockStructure {
   label

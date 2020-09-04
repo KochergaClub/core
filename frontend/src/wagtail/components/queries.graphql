@@ -1,12 +1,10 @@
-fragment WagtailBlockValidationError on WagtailBlockValidationError {
-  block_id
-  error_message
-}
-
 fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
   non_block_error
   block_errors {
-    ...WagtailBlockValidationError
+    block_id
+    error {
+      error_message
+    }
   }
 }
 

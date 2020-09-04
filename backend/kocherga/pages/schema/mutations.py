@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 import json
 
-from kocherga.graphql import g, helpers
+from kocherga.graphql import helpers
 import kocherga.wagtail.schema.types
 import kocherga.wagtail.utils
 

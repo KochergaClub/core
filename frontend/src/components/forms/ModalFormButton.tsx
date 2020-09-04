@@ -9,7 +9,7 @@ interface Props<Values extends AnyFormValues> {
   modalButtonName: string;
   modalTitle: string;
   small?: boolean;
-  post: (values: Values) => Promise<PostResult | void>;
+  post: (values: Values) => Promise<PostResult<Values> | void>;
 }
 
 function ModalFormButton<Values extends AnyFormValues>(props: Props<Values>) {

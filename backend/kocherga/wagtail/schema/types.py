@@ -1,4 +1,10 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from typing import Optional
+
+from django.forms.utils import ErrorList
 
 import wagtail.core.blocks
 import wagtail.images.blocks
@@ -127,35 +133,136 @@ WagtailGeo = g.ObjectType('WagtailGeo', g.fields({'lat': str, 'lng': str}))
 #   block_errors: [StructErrorWrapper!]!
 # }
 
-WagtailBlockValidationError = g.ObjectType(
-    'WagtailBlockValidationError', g.fields({'block_id': int, 'error_message': str})
+
+def resolve_WagtailBlockValidationError_type(value, *_):
+    if not isinstance(value, ErrorList):
+        raise Exception(f"Expected ErrorList, got: {value}, type {type(value)}")
+    err = value.data[0]
+    if not isinstance(err, Exception):
+        raise Exception(
+            f"Weird, expected exception in ErrorList, got {err}, type {type(err)}"
+        )
+
+    message = getattr(err, 'message', None)
+
+    if message == 'Validation error in StructBlock':
+        return 'WagtailStructBlockValidationError'
+    elif message == 'Validation error in ListBlock':
+        return 'WagtailListBlockValidationError'
+    else:
+        return 'WagtailAnyBlockValidationError'
+
+
+valdiation_error_message_field = g.Field(
+    g.NN(g.String), resolve=lambda obj, info: repr(vars(obj.data[0]))
+)
+
+
+WagtailBlockValidationError = g.InterfaceType(
+    'WagtailBlockValidationError',
+    fields=g.fields({'error_message': valdiation_error_message_field}),
+    resolve_type=resolve_WagtailBlockValidationError_type,
+)
+
+
+def build_ListBlockValidationError():
+    def resolve_errors(obj, info):
+        return obj.data[0].params
+
+    return g.ObjectType(
+        'WagtailListBlockValidationError',
+        fields=lambda: g.fields(
+            {
+                'error_message': valdiation_error_message_field,
+                'errors': g.Field(
+                    g.NN(g.List(WagtailBlockValidationError)), resolve=resolve_errors,
+                ),
+            }
+        ),
+        interfaces=[WagtailBlockValidationError],
+    )
+
+
+WagtailListBlockValidationError = build_ListBlockValidationError()
+
+
+def build_StructBlockValidationError():
+    FieldValidationError = g.ObjectType(
+        'WagtailStructBlockFieldValidationError',
+        fields=lambda: g.fields({'name': str, 'error': WagtailBlockValidationError}),
+    )
+
+    return g.ObjectType(
+        'WagtailStructBlockValidationError',
+        fields=lambda: g.fields(
+            {
+                'error_message': valdiation_error_message_field,
+                'errors': g.Field(
+                    g.NNList(FieldValidationError),
+                    resolve=lambda obj, info: [
+                        {'name': k, 'error': v} for k, v in obj.data[0].params.items()
+                    ],
+                ),
+            }
+        ),
+        interfaces=[WagtailBlockValidationError],
+    )
+
+
+WagtailStructBlockValidationError = build_StructBlockValidationError()
+
+
+def build_AnyBlockValidationError():
+    return g.ObjectType(
+        'WagtailAnyBlockValidationError',
+        fields=lambda: g.fields(
+            {
+                'error_message': g.Field(
+                    g.NN(g.String),
+                    resolve=lambda obj, info: getattr(
+                        obj.data[0], 'message', str(obj.data[0])
+                    ),
+                ),
+            }
+        ),
+        interfaces=[WagtailBlockValidationError],
+    )
+
+
+WagtailAnyBlockValidationError = build_AnyBlockValidationError()
+
+
+WagtailStreamBlockValidationError = g.ObjectType(
+    'WagtailStreamBlockValidationError',
+    g.fields({'block_id': int, 'error': WagtailBlockValidationError}),
 )
 
 
 def build_WagtailStreamFieldValidationError():
-    from django.forms.utils import ErrorList
-
     def resolve_block_errors(obj, info):
         result = []
         for k, v in obj['params'].items():
             assert isinstance(v, ErrorList)
             if k == '__all__':
                 continue  # non-block error
-            error = v.data[0]
-            result.append({'block_id': k, 'error_message': repr(vars(error))})
+            result.append({'block_id': k, 'error': v})
         return result
+
+    def resolve_non_block_error(obj, info):
+        error = obj['params'].get('__all__')
+        if error is None:
+            return None
+        return str(error)
 
     return g.ObjectType(
         'WagtailStreamFieldValidationError',
         g.fields(
             {
                 'block_errors': g.Field(
-                    g.NNList(WagtailBlockValidationError), resolve=resolve_block_errors
+                    g.NNList(WagtailStreamBlockValidationError),
+                    resolve=resolve_block_errors,
                 ),
-                'non_block_error': g.Field(
-                    g.String,
-                    resolve=lambda obj, info: str(obj['params'].get('__all__')),
-                ),
+                'non_block_error': g.Field(g.String, resolve=resolve_non_block_error),
             }
         ),
     )
@@ -235,6 +342,13 @@ def create_basic_structure(subname: str):
     )
 
 
-exported_types = [StructBlockStructure, ListBlockStructure] + [
-    create_basic_structure(subname) for subname in BASIC_TYPES + ['Image', 'URL']
-]
+exported_types = (
+    [StructBlockStructure, ListBlockStructure]
+    + [create_basic_structure(subname) for subname in BASIC_TYPES + ['Image', 'URL']]
+    + [
+        WagtailStructBlockValidationError,
+        WagtailListBlockValidationError,
+        WagtailAnyBlockValidationError,
+    ]
+)
+

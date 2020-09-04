@@ -1,3 +1,5 @@
+import { FormikErrors } from 'formik';
+
 export interface AnyFormField {
   readonly name: string;
   readonly title?: string;
@@ -75,7 +77,8 @@ export type AnyFormValues = {
     | undefined;
 };
 
-export interface PostResult {
+export interface PostResult<Values extends AnyFormValues> {
   close: boolean;
   error?: string;
+  formErrors?: FormikErrors<Values>;
 }

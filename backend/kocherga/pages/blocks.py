@@ -159,6 +159,12 @@ registry.register_list(
                                             label='Ссылка', required=False
                                         ),
                                     ),
+                                    (
+                                        'highlight',
+                                        blocks.BooleanBlock(
+                                            label='Важная кнопка', default=False
+                                        ),
+                                    ),
                                 ]
                             ),
                             label='Кнопки',

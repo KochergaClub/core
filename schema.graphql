@@ -736,6 +736,7 @@ type HeroFrontBlockValue {
 type HeroFrontBlock_buttonsValue {
   title: String!
   link: String!
+  highlight: Boolean!
 }
 
 type HrBlock implements WagtailBlock {
@@ -1040,7 +1041,7 @@ type Query {
   wagtailPage(path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
   wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
-  wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailBlock!
+  wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
   wagtailSearch(input: WagtailSearchInput!): WagtailSearchResult!
   search(input: SearchInput!): SearchResult!
   authGroupsAll: [AuthGroup!]!
@@ -1415,6 +1416,10 @@ type VkGroup {
   name: String!
 }
 
+type WagtailAnyBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+}
+
 interface WagtailBlock {
   id: ID!
 }
@@ -1428,8 +1433,7 @@ input WagtailBlockStructureInput {
   name: String!
 }
 
-type WagtailBlockValidationError {
-  block_id: Int!
+interface WagtailBlockValidationError {
   error_message: String!
 }
 
@@ -1485,6 +1489,11 @@ type WagtailListBlockStructure implements WagtailBlockStructure {
   child_block: WagtailBlockStructure!
 }
 
+type WagtailListBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+  errors: [WagtailBlockValidationError]!
+}
+
 interface WagtailPage {
   id: ID!
   title: String!
@@ -1502,8 +1511,13 @@ type WagtailPagePermissions {
 }
 
 input WagtailRenderBlockInput {
-  name: String!
-  blockJson: String!
+  type: String!
+  paramsJson: String!
+}
+
+type WagtailRenderBlockResult {
+  validation_error: WagtailStreamFieldValidationError
+  block: WagtailBlock
 }
 
 type WagtailRichTextBlockStructure implements WagtailBlockStructure {
@@ -1526,8 +1540,13 @@ type WagtailStaticBlockStructure implements WagtailBlockStructure {
   group: String
 }
 
+type WagtailStreamBlockValidationError {
+  block_id: Int!
+  error: WagtailBlockValidationError
+}
+
 type WagtailStreamFieldValidationError {
-  block_errors: [WagtailBlockValidationError!]!
+  block_errors: [WagtailStreamBlockValidationError!]!
   non_block_error: String
 }
 
@@ -1536,10 +1555,20 @@ type WagtailStructBlockChildStructure {
   definition: WagtailBlockStructure!
 }
 
+type WagtailStructBlockFieldValidationError {
+  name: String!
+  error: WagtailBlockValidationError
+}
+
 type WagtailStructBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
   child_blocks: [WagtailStructBlockChildStructure!]!
+}
+
+type WagtailStructBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+  errors: [WagtailStructBlockFieldValidationError!]!
 }
 
 type WagtailURLBlockStructure implements WagtailBlockStructure {

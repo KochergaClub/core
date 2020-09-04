@@ -15,7 +15,7 @@ interface Props<Values extends AnyFormValues> {
   initialValues?: Values; // used for editing existing data; if initialValues is set then shape.*.default is ignored
   modalButtonName: string;
   modalTitle: string;
-  post: (values: Values) => Promise<PostResult | void>;
+  post: (values: Values) => Promise<PostResult<Values> | void>;
 }
 
 interface ModalProps<Values extends AnyFormValues> extends Props<Values> {
@@ -168,7 +168,7 @@ function ModalForm<Values extends AnyFormValues>({
     async (values: Values, actions: FormikHelpers<Values>) => {
       const postValues: Values = prepareValuesByShape(shape, values);
 
-      let postResult: PostResult | undefined;
+      let postResult: PostResult<Values> | undefined;
       try {
         postResult = (await post(postValues as Values)) || { close: true };
       } catch (e) {
@@ -183,6 +183,9 @@ function ModalForm<Values extends AnyFormValues>({
       }
       if (postResult.error) {
         setSubmitError(postResult.error);
+      }
+      if (postResult.formErrors) {
+        actions.setErrors(postResult.formErrors);
       }
     },
     [shape, post, close]

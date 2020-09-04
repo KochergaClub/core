@@ -133,9 +133,9 @@ const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
         <EditControls blocks={state.blocks} />
         <FlipMove>
           {state.blocks.map((block, i) => {
-            const block_validation_error = state.validation_error?.block_errors.find(
-              (e) => e.block_id === i
-            );
+            const block_validation_error =
+              state.validation_error?.block_errors.find((e) => e.block_id === i)
+                ?.error || undefined;
             return (
               <div key={block.id}>
                 <EditBlockWrapper

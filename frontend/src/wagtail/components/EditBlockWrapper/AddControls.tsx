@@ -7,7 +7,7 @@ import { Button, Column, Modal } from '@kocherga/frontkit';
 import { allBlockComponents, KnownBlockFragment } from '~/wagtail/blocks';
 
 import { EditBlocksContext } from '../EditWagtailBlocks';
-import ModalBlockForm from './ModalBlockForm';
+import ModalBlockForm from '../ModalBlockForm';
 
 const AddControlsContainer = styled.div`
   position: absolute;

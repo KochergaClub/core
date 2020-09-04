@@ -4,15 +4,19 @@ import { colors } from '@kocherga/frontkit';
 
 import { AnyBlockFragment } from '../../types';
 import ControlledBlockContainer from '../ControlledBlockContainer';
-import { WagtailBlockValidationErrorFragment } from '../queries.generated';
+import { WagtailStreamFieldValidationErrorFragment } from '../queries.generated';
 import AddControls from './AddControls';
 import Controls from './Controls';
+
+type BlockValidationError = NonNullable<
+  WagtailStreamFieldValidationErrorFragment['block_errors'][0]['error']
+>;
 
 interface Props {
   block: AnyBlockFragment;
   position?: number;
   total?: number;
-  validation_error?: WagtailBlockValidationErrorFragment;
+  validation_error?: BlockValidationError;
 }
 
 const ValidationErrorContainer = styled.div`
@@ -26,7 +30,7 @@ const ValidationErrorContainer = styled.div`
 `;
 
 const ValidationError: React.FC<{
-  error: WagtailBlockValidationErrorFragment;
+  error: BlockValidationError;
 }> = ({ error }) => {
   return (
     <ValidationErrorContainer>{error.error_message}</ValidationErrorContainer>
