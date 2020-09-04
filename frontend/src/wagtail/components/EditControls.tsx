@@ -1,11 +1,11 @@
 import { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-import { A, Row } from '@kocherga/frontkit';
+import { A, Button, Row } from '@kocherga/frontkit';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { useNotification } from '~/common/hooks';
-import { AsyncButton } from '~/components';
+import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
 import { useBlockStructureLoader } from '../hooks';
 import { wagtailAdminPageEditLink } from '../routes';
@@ -46,6 +46,7 @@ const useBlocksSerializer = () => {
 const EditControls: React.FC<Props> = ({ blocks }) => {
   const {
     state: { page_id },
+    dispatch: pageDispatch,
   } = useContext(WagtailPageContext);
 
   const { dispatch: editDispatch } = useContext(EditBlocksContext);
@@ -109,9 +110,20 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     <Container>
       <Row spaced vCentered>
         <A href={wagtailAdminPageEditLink(page_id)}>Редактировать в Wagtail</A>
-        <AsyncButton act={save} kind="primary">
-          Сохранить
-        </AsyncButton>
+        <Row>
+          <AsyncButtonWithConfirm
+            act={async () => {
+              pageDispatch && pageDispatch({ type: 'STOP_EDITING' });
+            }}
+            headerText="Вы уверены?"
+            confirmText="Несохранённые изменения будут потеряны."
+          >
+            Прекратить редактирование
+          </AsyncButtonWithConfirm>
+          <AsyncButton act={save} kind="primary">
+            Сохранить
+          </AsyncButton>
+        </Row>
       </Row>
     </Container>
   );

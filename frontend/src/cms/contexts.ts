@@ -4,7 +4,11 @@ interface EditAction {
   type: 'EDIT';
 }
 
-type Action = EditAction;
+interface StopEditingAction {
+  type: 'STOP_EDITING';
+}
+
+type Action = EditAction | StopEditingAction;
 
 interface PageShape {
   page_id?: string;
@@ -23,6 +27,11 @@ const reducer = (state: PageShape, action: Action): PageShape => {
       return {
         ...state,
         editing: true,
+      };
+    case 'STOP_EDITING':
+      return {
+        ...state,
+        editing: false,
       };
   }
 };
