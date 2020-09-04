@@ -117,18 +117,22 @@ registry.register_list(
                 [
                     (
                         'news',
-                        blocks.BooleanBlock(label='Материалы и новости', default=True),
+                        blocks.BooleanBlock(
+                            label='Материалы и новости', default=True, required=False
+                        ),
                     ),
                     (
                         'events',
                         blocks.BooleanBlock(
-                            label='Расписание мероприятий', default=True
+                            label='Расписание мероприятий', default=True, required=False
                         ),
                     ),
                     (
                         'trainings',
                         blocks.BooleanBlock(
-                            label='Уведомления о новых тренингах', default=True
+                            label='Уведомления о новых тренингах',
+                            default=True,
+                            required=False,
                         ),
                     ),
                 ],
@@ -162,7 +166,9 @@ registry.register_list(
                                     (
                                         'highlight',
                                         blocks.BooleanBlock(
-                                            label='Важная кнопка', default=False
+                                            label='Важная кнопка',
+                                            default=False,
+                                            required=False,
                                         ),
                                     ),
                                 ]

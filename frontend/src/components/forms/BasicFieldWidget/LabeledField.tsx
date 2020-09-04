@@ -17,7 +17,9 @@ const LabeledField: React.FC<Props> = ({ for: field, name, children }) => {
       <div>
         <Label>
           <Row vCentered>
-            <Field name={name}>{children}</Field>
+            <Field name={name} type="checkbox">
+              {children}
+            </Field>
             <span>{field.title || field.name}</span>
           </Row>
         </Label>
