@@ -1,3 +1,5 @@
+import { Label } from '@kocherga/frontkit';
+
 import AnyFieldWidget from './AnyFieldWidget';
 import { AnyFormValues, ShapeFormField } from './types';
 
@@ -5,12 +7,18 @@ interface Props {
   field: ShapeFormField;
   values: AnyFormValues;
   name: string;
+  hideLabel?: boolean;
 }
 
-const ShapeFieldWidget: React.FC<Props> = ({ field, values, name }) => {
+const ShapeFieldWidget: React.FC<Props> = ({
+  field,
+  values,
+  name,
+  hideLabel,
+}) => {
   return (
     <div>
-      <header>{field.name}</header>
+      {hideLabel ? null : <Label>{field.name}</Label>}
       {field.shape.map((subfield, i) => (
         <AnyFieldWidget
           key={i}

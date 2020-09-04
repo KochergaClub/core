@@ -3,7 +3,7 @@ import { useState } from 'react';
 import FlipMove from 'react-flip-move';
 import styled from 'styled-components';
 
-import { Button, colors, Row } from '@kocherga/frontkit';
+import { Button, colors, Label, Row } from '@kocherga/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
 import { AnyFormValues, ListFormField } from './types';
@@ -13,6 +13,7 @@ interface Props {
   field: ListFormField;
   values: AnyFormValues[];
   name: string;
+  hideLabel?: boolean;
 }
 
 const ListContainer = styled.div`
@@ -23,9 +24,15 @@ const ListContainer = styled.div`
 const ItemContainer = styled.div`
   border: 1px dotted ${colors.grey[300]};
   padding: 4px;
+  margin-bottom: 4px;
 `;
 
-const ListFieldWidget: React.FC<Props> = ({ field, values, name }) => {
+const ListFieldWidget: React.FC<Props> = ({
+  field,
+  values,
+  name,
+  hideLabel,
+}) => {
   const [keys, setKeys] = useState(() => {
     return values.map((v, i) => i);
   });
@@ -34,6 +41,7 @@ const ListFieldWidget: React.FC<Props> = ({ field, values, name }) => {
     <FieldArray name={name}>
       {({ push, remove, swap }) => (
         <ListContainer>
+          {hideLabel ? null : <Label>{field.name}</Label>}
           <FlipMove>
             {values.map((value, i) => {
               const wrappedSwap = (a: number, b: number) => {
@@ -86,6 +94,7 @@ const ListFieldWidget: React.FC<Props> = ({ field, values, name }) => {
                     field={field.field}
                     value={value}
                     name={name + '[' + i + ']'}
+                    hideLabel={true}
                   />
                 </ItemContainer>
               );

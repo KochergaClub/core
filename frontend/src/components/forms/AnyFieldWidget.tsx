@@ -7,9 +7,10 @@ interface Props {
   field: FormField;
   name: string;
   value: AnyFormValues[keyof AnyFormValues];
+  hideLabel?: boolean;
 }
 
-const AnyFieldWidget: React.FC<Props> = ({ field, name, value }) => {
+const AnyFieldWidget: React.FC<Props> = ({ field, name, value, hideLabel }) => {
   if (field.type === 'shape') {
     if (typeof value !== 'object') {
       throw new Error(
@@ -21,7 +22,14 @@ const AnyFieldWidget: React.FC<Props> = ({ field, name, value }) => {
     if (Array.isArray(value)) {
       throw new Error('Expected non-array value for shape widget');
     }
-    return <ShapeFieldWidget field={field} values={value || {}} name={name} />;
+    return (
+      <ShapeFieldWidget
+        field={field}
+        values={value || {}}
+        name={name}
+        hideLabel={hideLabel}
+      />
+    );
   } else if (field.type === 'list') {
     if (!Array.isArray(value)) {
       throw new Error(
@@ -30,9 +38,16 @@ const AnyFieldWidget: React.FC<Props> = ({ field, name, value }) => {
         )}`
       );
     }
-    return <ListFieldWidget field={field} values={value || []} name={name} />;
+    return (
+      <ListFieldWidget
+        field={field}
+        values={value || []}
+        name={name}
+        hideLabel={hideLabel}
+      />
+    );
   } else {
-    return <BasicFieldWidget field={field} name={name} />;
+    return <BasicFieldWidget field={field} name={name} hideLabel={hideLabel} />;
   }
 };
 

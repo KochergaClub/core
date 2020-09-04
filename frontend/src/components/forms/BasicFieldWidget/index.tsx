@@ -15,6 +15,7 @@ import LabeledField from './LabeledField';
 interface Props {
   field: BasicFormField;
   name: string;
+  hideLabel?: boolean; // TODO - handle hideLabel flag
 }
 
 const WideInput = styled(Input)`
@@ -27,7 +28,13 @@ const FieldInputForType: React.FC<{
   name: string;
 }> = ({ field, type, name }) => (
   <LabeledField for={field} name={name}>
-    {({ field }) => <WideInput {...field} type={type} />}
+    {({ field }) =>
+      type === 'checkbox' ? (
+        <Input {...field} type={type} />
+      ) : (
+        <WideInput {...field} type={type} />
+      )
+    }
   </LabeledField>
 );
 
