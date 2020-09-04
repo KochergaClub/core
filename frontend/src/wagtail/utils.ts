@@ -64,21 +64,25 @@ const structureToFormField = (
       return {
         type: 'string',
         name,
+        title: structure.label,
       };
     case 'WagtailBooleanBlockStructure':
       return {
         type: 'boolean',
         name,
+        title: structure.label,
       };
     case 'WagtailImageBlockStructure':
       return {
         type: 'number',
         name,
+        title: structure.label,
       };
     case 'WagtailStaticBlockStructure':
       return {
         type: 'string',
         name,
+        title: structure.label,
         readonly: true,
         default: 'static', // FIXME
       };
@@ -97,6 +101,7 @@ const structureToFormField = (
       return {
         type: 'shape',
         name,
+        title: structure.label,
         shape: structShape,
       };
     case 'WagtailListBlockStructure':
@@ -106,6 +111,7 @@ const structureToFormField = (
       return {
         type: 'list',
         name,
+        title: structure.label,
         field: structureToFormField(structure.child_block, 'item'),
       };
   }

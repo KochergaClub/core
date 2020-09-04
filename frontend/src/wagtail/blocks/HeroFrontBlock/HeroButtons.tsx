@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, deviceMediaQueries, Row } from '@kocherga/frontkit';
+import { colors, deviceMediaQueries } from '@kocherga/frontkit';
 
 import { ButtonsListType } from './types';
 
@@ -20,12 +20,13 @@ const ButtonsContainer = styled.div`
   `)}
 `;
 
-const HeroButton = styled.a`
+const HeroButton = styled.a<{ highlight: boolean }>`
   padding: 16px 60px;
   border-radius: 100px;
   border: none;
   font-weight: bold;
-  background-color: ${colors.grey[200]};
+  background-color: ${(props) =>
+    props.highlight ? colors.accent[300] : colors.grey[200]};
   text-decoration: none;
   color: black;
 `;
@@ -37,7 +38,7 @@ interface Props {
 const HeroButtons: React.FC<Props> = ({ buttons }) => (
   <ButtonsContainer>
     {buttons.map((button, i) => (
-      <HeroButton href={button.link} key={i}>
+      <HeroButton href={button.link} highlight={button.highlight} key={i}>
         {button.title}
       </HeroButton>
     ))}

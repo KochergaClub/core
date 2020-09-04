@@ -3,7 +3,7 @@ import { useState } from 'react';
 import FlipMove from 'react-flip-move';
 import styled from 'styled-components';
 
-import { Button, colors, Label, Row } from '@kocherga/frontkit';
+import { Button, colors, Column, fonts, Label, Row } from '@kocherga/frontkit';
 
 import AnyFieldWidget from './AnyFieldWidget';
 import { AnyFormValues, ListFormField } from './types';
@@ -21,10 +21,22 @@ const ListContainer = styled.div`
   padding: 4px;
 `;
 
+const ItemNumber = styled.div`
+  border-radius: 20px;
+  padding: 0 8px;
+  background-color: ${colors.primary[700]};
+  color: white;
+  font-size: ${fonts.sizes.XS};
+`;
+
 const ItemContainer = styled.div`
   border: 1px dotted ${colors.grey[300]};
   padding: 4px;
   margin-bottom: 4px;
+
+  &:hover {
+    background-color: ${colors.grey[100]};
+  }
 `;
 
 const ListFieldWidget: React.FC<Props> = ({
@@ -41,7 +53,7 @@ const ListFieldWidget: React.FC<Props> = ({
     <FieldArray name={name}>
       {({ push, remove, swap }) => (
         <ListContainer>
-          {hideLabel ? null : <Label>{field.name}</Label>}
+          {hideLabel ? null : <Label>{field.title || field.name}</Label>}
           <FlipMove>
             {values.map((value, i) => {
               const wrappedSwap = (a: number, b: number) => {
@@ -54,48 +66,53 @@ const ListFieldWidget: React.FC<Props> = ({
               };
               return (
                 <ItemContainer key={keys[i]}>
-                  <Row>
-                    <Button
-                      size="small"
-                      type="button"
-                      onClick={() => {
-                        const newKeys = [...keys];
-                        newKeys.splice(i, 1);
-                        setKeys(newKeys);
-                        remove(i);
-                      }}
-                    >
-                      удалить
-                    </Button>
-                    {i > 0 && (
-                      <Button
-                        size="small"
-                        type="button"
-                        onClick={() => {
-                          wrappedSwap(i, i - 1);
-                        }}
-                      >
-                        &uarr;
-                      </Button>
-                    )}
-                    {i < values.length - 1 && (
-                      <Button
-                        size="small"
-                        type="button"
-                        onClick={() => {
-                          wrappedSwap(i, i + 1);
-                        }}
-                      >
-                        &darr;
-                      </Button>
-                    )}
-                  </Row>
-                  <AnyFieldWidget
-                    field={field.field}
-                    value={value}
-                    name={name + '[' + i + ']'}
-                    hideLabel={true}
-                  />
+                  <Column stretch>
+                    <Row spaced vCentered>
+                      <ItemNumber>{i + 1}</ItemNumber>
+                      <Row>
+                        <Button
+                          size="small"
+                          type="button"
+                          onClick={() => {
+                            const newKeys = [...keys];
+                            newKeys.splice(i, 1);
+                            setKeys(newKeys);
+                            remove(i);
+                          }}
+                        >
+                          удалить
+                        </Button>
+                        {i > 0 && (
+                          <Button
+                            size="small"
+                            type="button"
+                            onClick={() => {
+                              wrappedSwap(i, i - 1);
+                            }}
+                          >
+                            &uarr;
+                          </Button>
+                        )}
+                        {i < values.length - 1 && (
+                          <Button
+                            size="small"
+                            type="button"
+                            onClick={() => {
+                              wrappedSwap(i, i + 1);
+                            }}
+                          >
+                            &darr;
+                          </Button>
+                        )}
+                      </Row>
+                    </Row>
+                    <AnyFieldWidget
+                      field={field.field}
+                      value={value}
+                      name={name + '[' + i + ']'}
+                      hideLabel={true}
+                    />
+                  </Column>
                 </ItemContainer>
               );
             })}
