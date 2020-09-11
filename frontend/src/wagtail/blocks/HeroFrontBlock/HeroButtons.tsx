@@ -26,9 +26,9 @@ const HeroButton = styled.a<{ highlight: boolean }>`
   border: none;
   font-weight: bold;
   background-color: ${(props) =>
-    props.highlight ? colors.accent[300] : colors.grey[200]};
+    props.highlight ? colors.accent[700] : colors.grey[200]};
   text-decoration: none;
-  color: black;
+  color: ${(props) => (props.highlight ? 'white' : 'black')};
 `;
 
 interface Props {
