@@ -156,7 +156,7 @@ registry.register_list(
                         blocks.ListBlock(
                             blocks.StructBlock(
                                 [
-                                    ('title', blocks.CharBlock(label='Подзаголовок')),
+                                    ('title', blocks.CharBlock(label='Текст')),
                                     (
                                         'link',
                                         URLOrAbsolutePathBlock(

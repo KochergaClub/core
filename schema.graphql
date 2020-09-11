@@ -1038,7 +1038,7 @@ type ProjectPage implements WagtailPage {
 }
 
 type Query {
-  wagtailPage(path: String, preview_token: String): WagtailPage
+  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
   wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
   wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
@@ -1503,11 +1503,20 @@ interface WagtailPage {
 type WagtailPageMeta {
   slug: String!
   html_url: String!
+  url: String!
   permissions: WagtailPagePermissions!
+  revisions: [WagtailPageRevision!]!
+  revision(id: ID!): WagtailPageRevision!
 }
 
 type WagtailPagePermissions {
   can_edit: Boolean!
+}
+
+type WagtailPageRevision {
+  id: ID!
+  created_at: String!
+  as_page: WagtailPage!
 }
 
 input WagtailRenderBlockInput {

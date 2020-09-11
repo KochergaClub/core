@@ -23,61 +23,6 @@ export type WagtailStreamFieldValidationErrorFragment = (
   )> }
 );
 
-export type WagtailSavePageMutationVariables = Types.Exact<{
-  input: Types.WagtailEditPageBodyBlocksInput;
-}>;
-
-
-export type WagtailSavePageMutation = (
-  { __typename: 'Mutation' }
-  & { result: (
-    { __typename: 'WagtailEditPageBodyBlocksResult' }
-    & { page?: Types.Maybe<(
-      { __typename: 'BlogIndexPage' }
-      & Pick<Types.BlogIndexPage, 'id'>
-    ) | (
-      { __typename: 'BlogPostPage' }
-      & Pick<Types.BlogPostPage, 'id'>
-    ) | (
-      { __typename: 'FaqPage' }
-      & Pick<Types.FaqPage, 'id'>
-    ) | (
-      { __typename: 'FolderPage' }
-      & Pick<Types.FolderPage, 'id'>
-    ) | (
-      { __typename: 'FreeFormPage' }
-      & Pick<Types.FreeFormPage, 'id'>
-    ) | (
-      { __typename: 'PresentationPage' }
-      & Pick<Types.PresentationPage, 'id'>
-    ) | (
-      { __typename: 'ProjectIndexPage' }
-      & Pick<Types.ProjectIndexPage, 'id'>
-    ) | (
-      { __typename: 'ProjectPage' }
-      & Pick<Types.ProjectPage, 'id'>
-    ) | (
-      { __typename: 'RatioNotebookIndexPage' }
-      & Pick<Types.RatioNotebookIndexPage, 'id'>
-    ) | (
-      { __typename: 'RatioNotebookPage' }
-      & Pick<Types.RatioNotebookPage, 'id'>
-    ) | (
-      { __typename: 'RatioPresentationIndexPage' }
-      & Pick<Types.RatioPresentationIndexPage, 'id'>
-    ) | (
-      { __typename: 'RatioSectionIndexPage' }
-      & Pick<Types.RatioSectionIndexPage, 'id'>
-    ) | (
-      { __typename: 'RatioSectionPage' }
-      & Pick<Types.RatioSectionPage, 'id'>
-    )>, validation_error?: Types.Maybe<(
-      { __typename: 'WagtailStreamFieldValidationError' }
-      & WagtailStreamFieldValidationErrorFragment
-    )> }
-  ) }
-);
-
 export type StructureL0_WagtailBooleanBlockStructure_Fragment = (
   { __typename: 'WagtailBooleanBlockStructure' }
   & Pick<Types.WagtailBooleanBlockStructure, 'label'>
@@ -442,6 +387,146 @@ export type WagtailBlockStructureQuery = (
   ) }
 );
 
+export type WagtailPageRevisionsQueryVariables = Types.Exact<{
+  page_id: Types.Scalars['ID'];
+}>;
+
+
+export type WagtailPageRevisionsQuery = (
+  { __typename: 'Query' }
+  & { result?: Types.Maybe<(
+    { __typename: 'BlogIndexPage' }
+    & Pick<Types.BlogIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'BlogPostPage' }
+    & Pick<Types.BlogPostPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'FaqPage' }
+    & Pick<Types.FaqPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'FolderPage' }
+    & Pick<Types.FolderPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'FreeFormPage' }
+    & Pick<Types.FreeFormPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'PresentationPage' }
+    & Pick<Types.PresentationPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'ProjectIndexPage' }
+    & Pick<Types.ProjectIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'ProjectPage' }
+    & Pick<Types.ProjectPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioNotebookIndexPage' }
+    & Pick<Types.RatioNotebookIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioNotebookPage' }
+    & Pick<Types.RatioNotebookPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioPresentationIndexPage' }
+    & Pick<Types.RatioPresentationIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioSectionIndexPage' }
+    & Pick<Types.RatioSectionIndexPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  ) | (
+    { __typename: 'RatioSectionPage' }
+    & Pick<Types.RatioSectionPage, 'id'>
+    & { meta: (
+      { __typename: 'WagtailPageMeta' }
+      & { revisions: Array<(
+        { __typename: 'WagtailPageRevision' }
+        & Pick<Types.WagtailPageRevision, 'id' | 'created_at'>
+      )> }
+    ) }
+  )> }
+);
+
 export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
     fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
   non_block_error
@@ -512,43 +597,6 @@ export const StructureL3FragmentDoc = gql`
   }
 }
     ${StructureL2FragmentDoc}`;
-export const WagtailSavePageDocument = gql`
-    mutation WagtailSavePage($input: WagtailEditPageBodyBlocksInput!) {
-  result: wagtailEditPageBodyBlocks(input: $input) {
-    page {
-      id
-    }
-    validation_error {
-      ...WagtailStreamFieldValidationError
-    }
-  }
-}
-    ${WagtailStreamFieldValidationErrorFragmentDoc}`;
-export type WagtailSavePageMutationFn = ApolloReactCommon.MutationFunction<WagtailSavePageMutation, WagtailSavePageMutationVariables>;
-
-/**
- * __useWagtailSavePageMutation__
- *
- * To run a mutation, you first call `useWagtailSavePageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useWagtailSavePageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [wagtailSavePageMutation, { data, loading, error }] = useWagtailSavePageMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useWagtailSavePageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<WagtailSavePageMutation, WagtailSavePageMutationVariables>) {
-        return ApolloReactHooks.useMutation<WagtailSavePageMutation, WagtailSavePageMutationVariables>(WagtailSavePageDocument, baseOptions);
-      }
-export type WagtailSavePageMutationHookResult = ReturnType<typeof useWagtailSavePageMutation>;
-export type WagtailSavePageMutationResult = ApolloReactCommon.MutationResult<WagtailSavePageMutation>;
-export type WagtailSavePageMutationOptions = ApolloReactCommon.BaseMutationOptions<WagtailSavePageMutation, WagtailSavePageMutationVariables>;
 export const WagtailBlockStructureDocument = gql`
     query WagtailBlockStructure($name: String!) {
   result: wagtailBlockStructure(input: {name: $name}) {
@@ -582,3 +630,42 @@ export function useWagtailBlockStructureLazyQuery(baseOptions?: ApolloReactHooks
 export type WagtailBlockStructureQueryHookResult = ReturnType<typeof useWagtailBlockStructureQuery>;
 export type WagtailBlockStructureLazyQueryHookResult = ReturnType<typeof useWagtailBlockStructureLazyQuery>;
 export type WagtailBlockStructureQueryResult = ApolloReactCommon.QueryResult<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>;
+export const WagtailPageRevisionsDocument = gql`
+    query WagtailPageRevisions($page_id: ID!) {
+  result: wagtailPage(page_id: $page_id) {
+    id
+    meta {
+      revisions {
+        id
+        created_at
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useWagtailPageRevisionsQuery__
+ *
+ * To run a query within a React component, call `useWagtailPageRevisionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWagtailPageRevisionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWagtailPageRevisionsQuery({
+ *   variables: {
+ *      page_id: // value for 'page_id'
+ *   },
+ * });
+ */
+export function useWagtailPageRevisionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>) {
+        return ApolloReactHooks.useQuery<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>(WagtailPageRevisionsDocument, baseOptions);
+      }
+export function useWagtailPageRevisionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>(WagtailPageRevisionsDocument, baseOptions);
+        }
+export type WagtailPageRevisionsQueryHookResult = ReturnType<typeof useWagtailPageRevisionsQuery>;
+export type WagtailPageRevisionsLazyQueryHookResult = ReturnType<typeof useWagtailPageRevisionsLazyQuery>;
+export type WagtailPageRevisionsQueryResult = ApolloReactCommon.QueryResult<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>;

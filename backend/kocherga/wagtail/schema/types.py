@@ -21,29 +21,72 @@ def resolve_WagtailPage_type(page, *_):
     return page_class.graphql_type
 
 
-# WagtailPageMeta
-WagtailPageMeta = g.ObjectType(
-    'WagtailPageMeta',
-    g.fields(
-        {
-            'slug': str,
-            'html_url': str,
-            'permissions': g.NN(
-                g.ObjectType('WagtailPagePermissions', g.fields({'can_edit': bool}))
-            ),
-        }
-    ),
-)
+def build_WagtailPageMeta():
+    def _can_edit(page, user):
+        return page.permissions_for_user(user).can_edit()
+
+    def resolve_permissions(page, info):
+        return {'can_edit': _can_edit(page, info.context.user)}
+
+    WagtailPageRevision = g.ObjectType(
+        'WagtailPageRevision',
+        fields=lambda: g.fields(
+            {
+                'id': 'ID!',
+                'created_at': str,
+                'as_page': g.Field(
+                    g.NN(WagtailPage), resolve=lambda obj, info: obj.as_page_object()
+                ),
+            }
+        ),
+    )
+
+    def resolve_revisions(page, info):
+        if not _can_edit(page, info.context.user):
+            raise Exception("Can't get revisions without can_edit permission")
+        return list(page.revisions.all())
+
+    def resolve_single_revision(page, info, id):
+        if not _can_edit(page, info.context.user):
+            raise Exception("Can't get revisions without can_edit permission")
+        return page.revisions.get(pk=id)
+
+    return g.ObjectType(
+        'WagtailPageMeta',
+        g.fields(
+            {
+                'slug': str,
+                'html_url': g.Field(
+                    g.NN(g.String), resolve=lambda page, info: page.url
+                ),  # deprecated
+                'url': str,
+                'permissions': g.Field(
+                    g.NN(
+                        g.ObjectType(
+                            'WagtailPagePermissions', g.fields({'can_edit': bool})
+                        )
+                    ),
+                    resolve=resolve_permissions,
+                ),
+                # 'live_revision_id': 'ID',  # can be null if page is not published yet
+                'revisions': g.Field(
+                    g.NNList(WagtailPageRevision), resolve=resolve_revisions,
+                ),
+                'revision': g.Field(
+                    g.NN(WagtailPageRevision),
+                    args=g.arguments({'id': 'ID!'}),
+                    resolve=resolve_single_revision,
+                ),
+            }
+        ),
+    )
+
+
+WagtailPageMeta = build_WagtailPageMeta()
 
 
 def resolve_WagtailPage_meta(page, info):
-    return {
-        'slug': page.slug,
-        'html_url': page.url,
-        'permissions': {
-            'can_edit': page.permissions_for_user(info.context.user).can_edit(),
-        },
-    }
+    return page
 
 
 WagtailPage = g.InterfaceType(
@@ -109,29 +152,6 @@ WagtailGeo = g.ObjectType('WagtailGeo', g.fields({'lat': str, 'lng': str}))
 
 
 # block validation errors
-
-## TODO:
-# interface BlockError {
-#   message: String!
-# }
-
-# type ListErrorWrapper {
-#   block_id: Int!
-#   error: BlockError!
-# }
-
-# type ListBlockError implements BlockError {
-#   block_errors: [BlockError!]!
-# }
-
-# type StructErrorWrapper {
-#   field: String!
-#   error: BlockError!
-# }
-
-# type StructBlockError implements BlockError {
-#   block_errors: [StructErrorWrapper!]!
-# }
 
 
 def resolve_WagtailBlockValidationError_type(value, *_):

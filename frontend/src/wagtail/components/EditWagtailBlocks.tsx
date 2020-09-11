@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import FlipMove from 'react-flip-move';
 
 import { AnyBlockFragment } from '../types';
@@ -37,6 +37,11 @@ type AddBlockAction = {
   };
 };
 
+type ReplaceBlocksAction = {
+  type: 'REPLACE_BLOCKS';
+  payload: AnyBlockFragment[];
+};
+
 type SwapBlocksAction = {
   type: 'SWAP_BLOCKS';
   payload: {
@@ -55,7 +60,8 @@ type Action =
   | EditBlockAction
   | AddBlockAction
   | SwapBlocksAction
-  | SetValidationErrorAction;
+  | SetValidationErrorAction
+  | ReplaceBlocksAction;
 
 interface State {
   blocks: AnyBlockFragment[];
@@ -118,14 +124,27 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         validation_error: action.payload,
       };
+    case 'REPLACE_BLOCKS':
+      return {
+        ...state,
+        blocks: action.payload,
+        validation_error: undefined,
+      };
   }
 };
 
 const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
   // copying blocks data since we're going to edit them on frontend
-  const [state, dispatch] = useReducer(reducer, blocks, (blocks) => ({
-    blocks: JSON.parse(JSON.stringify(blocks)),
-  }));
+  const [state, dispatch] = useReducer(reducer, { blocks: [] });
+
+  // if the entire wagtail page changes (e.g. on calling SET_PAGE in WagtailPageContext) then we drop all edited blocks
+  // TODO - get rid of EditBlocksContext, just change page in WagtailPageContext instead with action helpers
+  useEffect(() => {
+    dispatch({
+      type: 'REPLACE_BLOCKS',
+      payload: blocks,
+    });
+  }, [blocks]);
 
   return (
     <EditBlocksContext.Provider value={{ dispatch }}>

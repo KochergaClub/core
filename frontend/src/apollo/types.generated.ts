@@ -1706,6 +1706,7 @@ export type Query = {
 
 
 export type QueryWagtailPageArgs = {
+  page_id?: Maybe<Scalars['ID']>;
   path?: Maybe<Scalars['String']>;
   preview_token?: Maybe<Scalars['String']>;
 };
@@ -2339,12 +2340,27 @@ export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
   html_url: Scalars['String'];
+  url: Scalars['String'];
   permissions: WagtailPagePermissions;
+  revisions: Array<WagtailPageRevision>;
+  revision: WagtailPageRevision;
+};
+
+
+export type WagtailPageMetaRevisionArgs = {
+  id: Scalars['ID'];
 };
 
 export type WagtailPagePermissions = {
   __typename?: 'WagtailPagePermissions';
   can_edit: Scalars['Boolean'];
+};
+
+export type WagtailPageRevision = {
+  __typename?: 'WagtailPageRevision';
+  id: Scalars['ID'];
+  created_at: Scalars['String'];
+  as_page: WagtailPage;
 };
 
 export type WagtailRenderBlockInput = {

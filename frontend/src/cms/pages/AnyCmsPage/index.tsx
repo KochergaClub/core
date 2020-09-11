@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
@@ -25,19 +26,31 @@ interface TildaProps {
 
 export type Props = WagtailProps | TildaProps;
 
-export const WagtailCmsPage: React.FC<WagtailProps> = ({ typename, page }) => {
+export const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
+  // We need to have control over page because pages can be editable.
+  // But this creates a problem: on navigation NextJS will replace the page prop and we need to handle it correctly.
   const [state, dispatch] = useWagtailPageReducer({
-    page_id: page.id,
+    page,
   });
+
+  useEffect(() => {
+    dispatch({
+      type: 'NAVIGATE',
+      payload: page,
+    });
+  }, [dispatch, page]);
+
+  const typename = state.page.__typename;
 
   const Component = getComponentByTypename(typename);
   if (!Component) {
-    return <div>oops</div>; // FIXME - better error
+    // TODO - prettier error
+    return <div>Внутренняя ошибка: страница неизвестного типа ${typename}</div>;
   }
 
   return (
     <WagtailPageContext.Provider value={{ state, dispatch }}>
-      <Component page={page} />
+      <Component page={state.page} />
     </WagtailPageContext.Provider>
   );
 };
@@ -55,7 +68,7 @@ export const AnyCmsPage: NextApolloPage<Props> = (props) => {
       }
       return <TildaPage {...props.data} />;
     case 'wagtail':
-      return <WagtailCmsPage {...props} />;
+      return <WagtailCmsPage page={props.page} />;
   }
 };
 

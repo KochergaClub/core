@@ -15,7 +15,9 @@ const PreviewWagtailPage: NextApolloPage<Props> = (props) => {
     return <div>oops</div>; // FIXME - better error
   }
   return (
-    <WagtailPageContext.Provider value={{ state: { preview: true } }}>
+    <WagtailPageContext.Provider
+      value={{ state: { page: props.page, preview: true } }}
+    >
       <Component page={props.page} />
     </WagtailPageContext.Provider>
   );

@@ -12,7 +12,7 @@ from wagtail.core.models import Site
 
 from kocherga.graphql import g, helpers
 
-from ...models import PagePreview
+from ...models import PagePreview, KochergaPage
 
 from .. import types
 
@@ -22,21 +22,23 @@ c = helpers.Collection()
 
 @c.class_field
 class wagtailPage(helpers.BaseField):
-    def resolve(self, _, info, path=None, preview_token=None):
-        if path and preview_token:
-            raise Exception("Only one of `path` and `preview_token` must be set.")
+    def resolve(self, _, info, path=None, preview_token=None, page_id=None):
+        non_empty_args = len(
+            [x for x in (path, preview_token, page_id) if x is not None]
+        )
+        if non_empty_args != 1:
+            raise Exception(
+                "One and only one of `page_id`, `path` and `preview_token` must be set."
+            )
 
-        if path is None and not preview_token:
-            raise Exception("One of `path` and `preview_token` must be set.")
-
-        if preview_token:
+        if preview_token is not None:
             page_preview = PagePreview.objects.get(token=preview_token)
             page = page_preview.as_page()
             if not page.id:
                 # fake primary key to satisfy GraphQL schema
                 page.id = 0
             return page
-        else:
+        elif path is not None:
             path_components = [
                 component
                 for component in urllib.parse.unquote(path).split('/')
@@ -50,16 +52,21 @@ class wagtailPage(helpers.BaseField):
                 )
             except Http404:
                 return
+        elif page_id is not None:
+            page = KochergaPage.objects.get(pk=page_id)
+        else:
+            raise Exception("Internal logic error")
 
-            # checking permissions
-            queryset = get_page_queryset_for_request(info.context)
-            if not queryset.filter(id=page.id).exists():
-                return
+        # checking permissions
+        queryset = get_page_queryset_for_request(info.context)
+        if not queryset.filter(id=page.id).exists():
+            return
 
-            return page.specific
+        return page.specific
 
     permissions = []
     args = {
+        'page_id': 'ID',
         'path': Optional[str],
         'preview_token': Optional[str],
     }
