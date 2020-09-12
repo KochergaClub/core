@@ -4,7 +4,9 @@ from wagtail.admin.edit_handlers import StreamFieldPanel
 from kocherga.wagtail.models import KochergaPage
 
 from kocherga.wagtail.blocks import registry as blocks_registry
-from . import blocks  # for side-effects - register in blocks registry
+
+# for side-effects - register in blocks registry
+from . import blocks  # noqa: F401
 
 
 class FreeFormPage(KochergaPage):

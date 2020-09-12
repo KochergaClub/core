@@ -391,4 +391,3 @@ exported_types = (
         WagtailAnyBlockValidationError,
     ]
 )
-
