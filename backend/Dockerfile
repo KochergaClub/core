@@ -33,4 +33,3 @@ COPY . /code/
 ENV DJANGO_SETTINGS_MODULE kocherga.django.settings.main
 
 CMD ["gunicorn", "-c", "python:gunicorn_conf", "kocherga.django.asgi"]
-
