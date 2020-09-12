@@ -1,6 +1,7 @@
 import { Column } from '@kocherga/frontkit';
 
-import ImageEditor from '../common/ImageEditor';
+import ImageEditor from '~/components/images/ImageEditor';
+
 import { useUpdateMutation } from './hooks';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
 

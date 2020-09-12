@@ -1,8 +1,8 @@
 import * as Types from '../../apollo/types.generated';
 
-import { WagtailImageRendition_ForEditorFragment } from '../common/ImageEditor/fragments.generated';
+import { WagtailImageRendition_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
 import gql from 'graphql-tag';
-import { WagtailImageRendition_ForEditorFragmentDoc } from '../common/ImageEditor/fragments.generated';
+import { WagtailImageRendition_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 

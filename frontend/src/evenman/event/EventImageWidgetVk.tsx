@@ -2,7 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { Button, Column, Row } from '@kocherga/frontkit';
 
-import ImageEditor from '../common/ImageEditor';
+import ImageEditor from '~/components/images/ImageEditor';
+
 import {
     EvenmanEvent_DetailsFragment, useEvenmanVkAnnouncementSetImageMutation
 } from './queries.generated';

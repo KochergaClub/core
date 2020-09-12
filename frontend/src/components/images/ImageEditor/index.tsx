@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import { useAPI } from '~/common/hooks';
 
-import ImageBox from '../images/ImageBox';
-import ViewOverlay from '../images/ViewOverlay';
+import ImageBox from '../helpers/ImageBox';
+import ViewOverlay from '../helpers/ViewOverlay';
 import Controls from './Controls';
 import { WagtailImageRendition_ForEditorFragment as ImageFragment } from './fragments.generated';
 import { Defaults } from './types';

@@ -56,7 +56,7 @@ const AddControls: React.FC<Props> = ({ position }) => {
     closeModal();
   };
 
-  // TODO - load from server? filter out deprecated blocks?
+  // TODO - load from server
   const typenames = Object.keys(allBlockComponents) as Typename[];
 
   return (

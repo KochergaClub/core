@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Column } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
+import ImagePreview from '~/components/images/ImagePreview';
 
-import ImagePreview from '../common/ImagePreview';
 import Buttons from './Buttons';
 import { useEvenmanWeeklyDigestQuery } from './queries.generated';
 

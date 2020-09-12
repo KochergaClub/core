@@ -1,5 +1,5 @@
-import ImageBox from './images/ImageBox';
-import ViewOverlay from './images/ViewOverlay';
+import ImageBox from './helpers/ImageBox';
+import ViewOverlay from './helpers/ViewOverlay';
 
 interface Props {
   url: string;

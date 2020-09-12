@@ -3,10 +3,6 @@ import styled from 'styled-components';
 const Container = styled.div<{ displayOverlay?: boolean }>`
   position: relative; /* allows overlay positioning */
 
-  /* Otherwise child dropdowns get covered by other position: relative elements, e.g. react-toggle.
-   (this feels like a dirty hack, is there a better solution?) */
-  /* z-index: 1; */
-
   > .image-container > img {
     display: block;
   }

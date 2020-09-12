@@ -1,6 +1,7 @@
 import { Row } from '@kocherga/frontkit';
 
-import ImageEditor from '../../common/ImageEditor';
+import ImageEditor from '~/components/images/ImageEditor';
+
 import { EventsPrototypeFragment, useEvenmanPrototypeSetImageMutation } from '../queries.generated';
 
 interface Props {
