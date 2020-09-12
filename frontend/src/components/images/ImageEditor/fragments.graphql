@@ -1,0 +1,8 @@
+fragment WagtailImage_ForEditor on WagtailImage {
+  id
+  url
+  rendition(spec: "width-240") {
+    id
+    url
+  }
+}

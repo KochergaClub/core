@@ -5,10 +5,10 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type MaybeStaffUserFragment = (
-  { __typename?: 'AuthUser' }
+  { __typename: 'AuthUser' }
   & Pick<Types.AuthUser, 'id' | 'email'>
   & { staff_member?: Types.Maybe<(
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & Pick<Types.StaffMember, 'id' | 'full_name'>
   )> }
 );
@@ -17,15 +17,15 @@ export type AuthGroupsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type AuthGroupsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { groups: Array<(
-    { __typename?: 'AuthGroup' }
+    { __typename: 'AuthGroup' }
     & Pick<Types.AuthGroup, 'id' | 'name'>
     & { permissions: Array<(
-      { __typename?: 'AuthPermission' }
+      { __typename: 'AuthPermission' }
       & Pick<Types.AuthPermission, 'id' | 'name'>
     )>, users: Array<(
-      { __typename?: 'AuthUser' }
+      { __typename: 'AuthUser' }
       & MaybeStaffUserFragment
     )> }
   )> }
@@ -38,7 +38,7 @@ export type AuthAddUserToGroupMutationVariables = Types.Exact<{
 
 
 export type AuthAddUserToGroupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'authAddUserToGroup'>
 );
 
@@ -49,7 +49,7 @@ export type AuthRemoveUserFromGroupMutationVariables = Types.Exact<{
 
 
 export type AuthRemoveUserFromGroupMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'authRemoveUserFromGroup'>
 );
 
@@ -57,12 +57,12 @@ export type AuthPermissionsQueryVariables = Types.Exact<{ [key: string]: never; 
 
 
 export type AuthPermissionsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { permissions: Array<(
-    { __typename?: 'AuthPermission' }
+    { __typename: 'AuthPermission' }
     & Pick<Types.AuthPermission, 'id' | 'name'>
     & { users: Array<(
-      { __typename?: 'AuthUser' }
+      { __typename: 'AuthUser' }
       & MaybeStaffUserFragment
     )> }
   )> }

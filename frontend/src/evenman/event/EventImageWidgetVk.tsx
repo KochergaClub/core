@@ -2,7 +2,8 @@ import { useCallback, useState } from 'react';
 
 import { Button, Column, Row } from '@kocherga/frontkit';
 
-import ImageEditor from '../common/ImageEditor';
+import ImageEditor from '~/components/images/ImageEditor';
+
 import {
     EvenmanEvent_DetailsFragment, useEvenmanVkAnnouncementSetImageMutation
 } from './queries.generated';
@@ -48,7 +49,7 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
       )}
       <ImageEditor
         onChange={onSave}
-        image={event.announcements.vk.image || undefined}
+        image={event.announcements.vk.image?.original_image || undefined}
         defaults={{
           title: `[VK] ${event.title}`,
           basename: `event-vk-image-${event.id}`,

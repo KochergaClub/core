@@ -5,33 +5,33 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type StaffMemberFullFragment = (
-  { __typename?: 'StaffMember' }
+  { __typename: 'StaffMember' }
   & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'role' | 'color' | 'is_current' | 'vk'>
   & { slack_user?: Types.Maybe<(
-    { __typename?: 'SlackUser' }
+    { __typename: 'SlackUser' }
     & Pick<Types.SlackUser, 'slack_id' | 'image_url'>
   )>, user: (
-    { __typename?: 'AuthUser' }
+    { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'id' | 'email'>
   ) }
 );
 
 export type StaffMemberExternalAccountsFragment = (
-  { __typename?: 'StaffMember' }
+  { __typename: 'StaffMember' }
   & Pick<Types.StaffMember, 'id'>
   & { user: (
-    { __typename?: 'AuthUser' }
+    { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'id'>
     & { external_accounts: Array<(
-      { __typename?: 'SlackAccount' }
+      { __typename: 'SlackAccount' }
       & { service: (
-        { __typename?: 'SlackExternalService' }
+        { __typename: 'SlackExternalService' }
         & Pick<Types.SlackExternalService, 'slug'>
       ) }
     ) | (
-      { __typename?: 'WikiAccount' }
+      { __typename: 'WikiAccount' }
       & { service: (
-        { __typename?: 'WikiExternalService' }
+        { __typename: 'WikiExternalService' }
         & Pick<Types.WikiExternalService, 'slug'>
       ) }
     )> }
@@ -39,15 +39,15 @@ export type StaffMemberExternalAccountsFragment = (
 );
 
 export type StaffMemberForListFragment = (
-  { __typename?: 'StaffMember' }
+  { __typename: 'StaffMember' }
   & Pick<Types.StaffMember, 'id' | 'full_name' | 'is_current' | 'role'>
 );
 
 export type StaffMemberForPickerFragment = (
-  { __typename?: 'StaffMember' }
+  { __typename: 'StaffMember' }
   & Pick<Types.StaffMember, 'id' | 'full_name' | 'short_name' | 'is_current' | 'color'>
   & { user: (
-    { __typename?: 'AuthUser' }
+    { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'id'>
   ) }
 );
@@ -56,9 +56,9 @@ export type StaffMembersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type StaffMembersQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { staffMembersAll: Array<(
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & StaffMemberForListFragment
   )> }
 );
@@ -67,9 +67,9 @@ export type StaffMembersForPickerQueryVariables = Types.Exact<{ [key: string]: n
 
 
 export type StaffMembersForPickerQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { members: Array<(
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & StaffMemberForPickerFragment
   )> }
 );
@@ -80,9 +80,9 @@ export type StaffMemberQueryVariables = Types.Exact<{
 
 
 export type StaffMemberQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { staffMember: (
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & StaffMemberFullFragment
   ) }
 );
@@ -93,9 +93,9 @@ export type StaffMemberExternalAccountsQueryVariables = Types.Exact<{
 
 
 export type StaffMemberExternalAccountsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { staffMember: (
-    { __typename?: 'StaffMember' }
+    { __typename: 'StaffMember' }
     & StaffMemberExternalAccountsFragment
   ) }
 );
@@ -106,7 +106,7 @@ export type StaffGrantGooglePermissionsToMemberMutationVariables = Types.Exact<{
 
 
 export type StaffGrantGooglePermissionsToMemberMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'staffGrantGooglePermissionsToMember'>
 );
 
@@ -116,7 +116,7 @@ export type StaffFireMemberMutationVariables = Types.Exact<{
 
 
 export type StaffFireMemberMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'staffFireMember'>
 );
 
@@ -126,7 +126,7 @@ export type StaffUnfireMemberMutationVariables = Types.Exact<{
 
 
 export type StaffUnfireMemberMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'staffUnfireMember'>
 );
 

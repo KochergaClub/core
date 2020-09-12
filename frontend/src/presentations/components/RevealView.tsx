@@ -25,7 +25,10 @@ const SlideFragment: React.FC<{
       return <div dangerouslySetInnerHTML={{ __html: fragment.value }} />;
     default:
       return (
-        <div>ОШИБКА: тип фрагмента {fragment.__typename} не поддерживается</div>
+        <div>
+          ОШИБКА: тип фрагмента{' '}
+          {(fragment as { __typename: string }).__typename} не поддерживается
+        </div>
       );
   }
 };

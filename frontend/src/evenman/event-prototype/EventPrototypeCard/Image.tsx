@@ -1,6 +1,7 @@
 import { Row } from '@kocherga/frontkit';
 
-import ImageEditor from '../../common/ImageEditor';
+import ImageEditor from '~/components/images/ImageEditor';
+
 import { EventsPrototypeFragment, useEvenmanPrototypeSetImageMutation } from '../queries.generated';
 
 interface Props {
@@ -23,7 +24,7 @@ const Image: React.FC<Props> = ({ prototype }) => {
     <Row centered>
       <ImageEditor
         onChange={onChange}
-        image={prototype.image || undefined}
+        image={prototype.image?.original_image || undefined}
         defaults={{
           title: prototype.title,
           basename: `prototype-image-${prototype.id}`,

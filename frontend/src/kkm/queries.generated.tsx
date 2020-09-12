@@ -10,9 +10,9 @@ export type KkmRegisterCheckMutationVariables = Types.Exact<{
 
 
 export type KkmRegisterCheckMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { kkmRegisterCheck: (
-    { __typename?: 'KkmRegisterCheckResult' }
+    { __typename: 'KkmRegisterCheckResult' }
     & Pick<Types.KkmRegisterCheckResult, 'url' | 'error' | 'status'>
   ) }
 );

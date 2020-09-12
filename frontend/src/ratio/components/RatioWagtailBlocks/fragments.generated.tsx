@@ -3,45 +3,45 @@ import * as Types from '../../../apollo/types.generated';
 import gql from 'graphql-tag';
 
 export type RatioHeaderBlockFragment = (
-  { __typename?: 'RatioHeaderBlock' }
+  { __typename: 'RatioHeaderBlock' }
   & Pick<Types.RatioHeaderBlock, 'id' | 'value'>
 );
 
 export type RatioParagraphBlockFragment = (
-  { __typename?: 'RatioParagraphBlock' }
+  { __typename: 'RatioParagraphBlock' }
   & Pick<Types.RatioParagraphBlock, 'id' | 'value'>
 );
 
 export type RatioInsetBlockFragment = (
-  { __typename?: 'RatioInsetBlock' }
+  { __typename: 'RatioInsetBlock' }
   & Pick<Types.RatioInsetBlock, 'id' | 'value'>
 );
 
 export type RatioExerciseBlockFragment = (
-  { __typename?: 'RatioExerciseBlock' }
+  { __typename: 'RatioExerciseBlock' }
   & Pick<Types.RatioExerciseBlock, 'id'>
   & { exercise: (
-    { __typename?: 'RatioExerciseBlockValue' }
+    { __typename: 'RatioExerciseBlockValue' }
     & Pick<Types.RatioExerciseBlockValue, 'enumerate' | 'header' | 'lines_count'>
   ) }
 );
 
 export type RatioExerciseOnelineBlockFragment = (
-  { __typename?: 'RatioExerciseOnelineBlock' }
+  { __typename: 'RatioExerciseOnelineBlock' }
   & Pick<Types.RatioExerciseOnelineBlock, 'id'>
   & { exercise_oneline: (
-    { __typename?: 'RatioExerciseOnelineBlockValue' }
+    { __typename: 'RatioExerciseOnelineBlockValue' }
     & Pick<Types.RatioExerciseOnelineBlockValue, 'text'>
   ) }
 );
 
 export type RatioBriefingBlockFragment = (
-  { __typename?: 'RatioBriefingBlock' }
+  { __typename: 'RatioBriefingBlock' }
   & Pick<Types.RatioBriefingBlock, 'id' | 'value'>
 );
 
 export type RatioMathBlockFragment = (
-  { __typename?: 'RatioMathBlock' }
+  { __typename: 'RatioMathBlock' }
   & Pick<Types.RatioMathBlock, 'id' | 'value'>
 );
 

@@ -5,24 +5,24 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type MailchimpInterestFragment = (
-  { __typename?: 'EmailMailchimpInterest' }
+  { __typename: 'EmailMailchimpInterest' }
   & Pick<Types.EmailMailchimpInterest, 'id' | 'name'>
 );
 
 export type SubscribeChannelFragment = (
-  { __typename?: 'EmailSubscribeChannel' }
+  { __typename: 'EmailSubscribeChannel' }
   & Pick<Types.EmailSubscribeChannel, 'id' | 'slug'>
   & { interests: Array<(
-    { __typename?: 'EmailMailchimpInterest' }
+    { __typename: 'EmailMailchimpInterest' }
     & MailchimpInterestFragment
   )> }
 );
 
 export type MailchimpCategoryFragment = (
-  { __typename?: 'EmailMailchimpCategory' }
+  { __typename: 'EmailMailchimpCategory' }
   & Pick<Types.EmailMailchimpCategory, 'id' | 'title'>
   & { interests: Array<(
-    { __typename?: 'EmailMailchimpInterest' }
+    { __typename: 'EmailMailchimpInterest' }
     & MailchimpInterestFragment
   )> }
 );
@@ -31,9 +31,9 @@ export type EmailSubscribeChannelsQueryVariables = Types.Exact<{ [key: string]: 
 
 
 export type EmailSubscribeChannelsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { subscribeChannels: Array<(
-    { __typename?: 'EmailSubscribeChannel' }
+    { __typename: 'EmailSubscribeChannel' }
     & SubscribeChannelFragment
   )> }
 );
@@ -42,9 +42,9 @@ export type EmailMailchimpCategoriesQueryVariables = Types.Exact<{ [key: string]
 
 
 export type EmailMailchimpCategoriesQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { mailchimpCategories: Array<(
-    { __typename?: 'EmailMailchimpCategory' }
+    { __typename: 'EmailMailchimpCategory' }
     & MailchimpCategoryFragment
   )> }
 );
@@ -55,7 +55,7 @@ export type EmailSubscribeChannelDeleteMutationVariables = Types.Exact<{
 
 
 export type EmailSubscribeChannelDeleteMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'emailSubscribeChannelDelete'>
 );
 
@@ -66,7 +66,7 @@ export type EmailSubscribeChannelAddEmailMutationVariables = Types.Exact<{
 
 
 export type EmailSubscribeChannelAddEmailMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'emailSubscribeChannelAddEmail'>
 );
 
@@ -76,7 +76,7 @@ export type EmailSubscribeChannelCreateMutationVariables = Types.Exact<{
 
 
 export type EmailSubscribeChannelCreateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'emailSubscribeChannelCreate'>
 );
 

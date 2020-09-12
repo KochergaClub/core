@@ -5,15 +5,15 @@ import gql from 'graphql-tag';
 import { RatioHeaderBlockFragmentDoc, RatioParagraphBlockFragmentDoc, RatioInsetBlockFragmentDoc, RatioExerciseBlockFragmentDoc, RatioExerciseOnelineBlockFragmentDoc, RatioBriefingBlockFragmentDoc, RatioMathBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
 
 export type RatioSectionIndexPageFragment = (
-  { __typename?: 'RatioSectionIndexPage' }
+  { __typename: 'RatioSectionIndexPage' }
   & Pick<Types.RatioSectionIndexPage, 'id' | 'title'>
 );
 
 export type RatioSectionPageFragment = (
-  { __typename?: 'RatioSectionPage' }
+  { __typename: 'RatioSectionPage' }
   & Pick<Types.RatioSectionPage, 'id' | 'title'>
   & { meta: (
-    { __typename?: 'WagtailPageMeta' }
+    { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), body: Array<(
     { __typename: 'BasicLeadBlock' }
@@ -21,6 +21,9 @@ export type RatioSectionPageFragment = (
   ) | (
     { __typename: 'BasicParagraphBlock' }
     & Pick<Types.BasicParagraphBlock, 'id'>
+  ) | (
+    { __typename: 'BasicTextBlock' }
+    & Pick<Types.BasicTextBlock, 'id'>
   ) | (
     { __typename: 'BigContactsBlock' }
     & Pick<Types.BigContactsBlock, 'id'>
@@ -31,17 +34,23 @@ export type RatioSectionPageFragment = (
     { __typename: 'ColumnsButtonsBlock' }
     & Pick<Types.ColumnsButtonsBlock, 'id'>
   ) | (
-    { __typename: 'ColumnsMembershipsBlock' }
-    & Pick<Types.ColumnsMembershipsBlock, 'id'>
-  ) | (
     { __typename: 'EventsListBlock' }
     & Pick<Types.EventsListBlock, 'id'>
+  ) | (
+    { __typename: 'FrontPartnersBlock' }
+    & Pick<Types.FrontPartnersBlock, 'id'>
+  ) | (
+    { __typename: 'FrontSocialLinksBlock' }
+    & Pick<Types.FrontSocialLinksBlock, 'id'>
   ) | (
     { __typename: 'GreyBlock' }
     & Pick<Types.GreyBlock, 'id'>
   ) | (
     { __typename: 'HeroFrontBlock' }
     & Pick<Types.HeroFrontBlock, 'id'>
+  ) | (
+    { __typename: 'HrBlock' }
+    & Pick<Types.HrBlock, 'id'>
   ) | (
     { __typename: 'MailchimpSubscribeBlock' }
     & Pick<Types.MailchimpSubscribeBlock, 'id'>
@@ -101,31 +110,31 @@ export type RatioSectionPageFragment = (
 );
 
 export type RatioNotebookIndexPageFragment = (
-  { __typename?: 'RatioNotebookIndexPage' }
+  { __typename: 'RatioNotebookIndexPage' }
   & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
 );
 
 export type RatioNotebookPageFragment = (
-  { __typename?: 'RatioNotebookPage' }
+  { __typename: 'RatioNotebookPage' }
   & Pick<Types.RatioNotebookPage, 'id' | 'title'>
   & { sections: Array<(
-    { __typename?: 'RatioNotebookSectionBlock' }
+    { __typename: 'RatioNotebookSectionBlock' }
     & Pick<Types.RatioNotebookSectionBlock, 'id'>
     & { value: (
-      { __typename?: 'RatioSectionPage' }
+      { __typename: 'RatioSectionPage' }
       & RatioSectionPageFragment
     ) }
   )> }
 );
 
 export type RatioPresentationIndexPageFragment = (
-  { __typename?: 'RatioPresentationIndexPage' }
+  { __typename: 'RatioPresentationIndexPage' }
   & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
   & { presentations: Array<(
-    { __typename?: 'PresentationPage' }
+    { __typename: 'PresentationPage' }
     & Pick<Types.PresentationPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   )> }

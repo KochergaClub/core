@@ -25,13 +25,16 @@
     "WagtailBlock": [
       "BasicLeadBlock",
       "BasicParagraphBlock",
+      "BasicTextBlock",
       "BigContactsBlock",
       "ColumnsBasicBlock",
       "ColumnsButtonsBlock",
-      "ColumnsMembershipsBlock",
       "EventsListBlock",
+      "FrontPartnersBlock",
+      "FrontSocialLinksBlock",
       "GreyBlock",
       "HeroFrontBlock",
+      "HrBlock",
       "MailchimpSubscribeBlock",
       "PhotoRibbonBlock",
       "RatioBriefingBlock",
@@ -48,6 +51,21 @@
       "SlideRawHtmlBlock",
       "SlideRichTextBlock",
       "SlideTitleBlock"
+    ],
+    "WagtailBlockStructure": [
+      "WagtailBooleanBlockStructure",
+      "WagtailCharBlockStructure",
+      "WagtailImageBlockStructure",
+      "WagtailListBlockStructure",
+      "WagtailRichTextBlockStructure",
+      "WagtailStaticBlockStructure",
+      "WagtailStructBlockStructure",
+      "WagtailURLBlockStructure"
+    ],
+    "WagtailBlockValidationError": [
+      "WagtailAnyBlockValidationError",
+      "WagtailListBlockValidationError",
+      "WagtailStructBlockValidationError"
     ],
     "WagtailPage": [
       "BlogIndexPage",

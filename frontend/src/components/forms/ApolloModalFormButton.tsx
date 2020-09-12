@@ -1,26 +1,25 @@
+import { GraphQLError } from 'graphql';
 import { useCallback } from 'react';
 
-import { GraphQLError } from 'graphql';
 import { FetchResult } from '@apollo/client';
 
-import { FormShape } from './types';
 import ModalFormButton from './ModalFormButton';
+import { AnyFormValues, FormShape } from './types';
 
-interface Props<FormResult extends {}> {
-  fields: FormShape; // FormShape should match mutation params!
+interface Props<FormResult extends AnyFormValues> {
+  shape: FormShape; // FormShape should match mutation params!
   buttonName: string;
   modalButtonName: string;
   modalTitle: string;
   small?: boolean;
   mutation: (options: {
     variables: { params: FormResult };
-  }) => Promise<FetchResult<any>>;
+  }) => Promise<FetchResult<unknown>>;
 }
 
-export default function ApolloModalFormButton<FormResult>({
-  mutation,
-  ...otherProps
-}: Props<FormResult>) {
+export default function ApolloModalFormButton<
+  FormResult extends AnyFormValues
+>({ mutation, ...otherProps }: Props<FormResult>) {
   const cb = useCallback(
     async (values: FormResult) => {
       try {
@@ -36,7 +35,7 @@ export default function ApolloModalFormButton<FormResult>({
         const error = errors.length
           ? errors
               .map(
-                e =>
+                (e) =>
                   e.message +
                   ': ' +
                   JSON.stringify(

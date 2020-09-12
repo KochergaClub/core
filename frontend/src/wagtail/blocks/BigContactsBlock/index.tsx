@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
+import { gql } from '@apollo/client';
 import { colors, fonts } from '@kocherga/frontkit';
 
 import SocialIcons from '~/components/Page/PageMenu/SocialIcons';
 
-import { BigContactsBlockFragment as Props } from '../fragments.generated';
+import { BlockComponent } from '../../types';
+import { BigContactsBlockFragment as Props } from './index.generated';
 
 const TwoColumns = styled.div`
   display: flex;
@@ -49,7 +51,7 @@ const Link = styled.a`
 
 const KEY = 'AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI'; // FIXME
 
-export default function BigContactsBlock(props: Props) {
+const BigContactsBlock: BlockComponent<Props> = (props) => {
   return (
     <TwoColumns>
       <MapIFrame
@@ -77,4 +79,22 @@ export default function BigContactsBlock(props: Props) {
       </RightColumn>
     </TwoColumns>
   );
-}
+};
+
+BigContactsBlock.fragment = gql`
+  fragment BigContactsBlock on BigContactsBlock {
+    id
+    contacts: value {
+      map {
+        lat
+        lng
+      }
+      address
+      phone
+      email
+      text
+    }
+  }
+`;
+
+export default BigContactsBlock;

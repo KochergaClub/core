@@ -16,7 +16,7 @@ const fields: FormShape = [
       ['MALE', 'М'],
       ['FEMALE', 'Ж'],
     ],
-    value: 'FEMALE',
+    default: 'FEMALE',
   },
   { name: 'skip_wiki', title: 'Не добавлять на вики', type: 'boolean' },
   {
@@ -30,6 +30,7 @@ const fields: FormShape = [
     type: 'boolean',
   },
 ];
+
 const AddWatchman: React.FC = () => {
   const [createMutation] = useWatchmenCreateWatchmanMutation({
     refetchQueries: ['WatchmenWatchmenList'],
@@ -40,7 +41,7 @@ const AddWatchman: React.FC = () => {
     <div>
       <ApolloModalFormButton
         mutation={createMutation}
-        fields={fields}
+        shape={fields}
         modalTitle="Добавить админа"
         modalButtonName="Добавить"
         buttonName="Добавить"

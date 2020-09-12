@@ -128,6 +128,18 @@ export type BasicResult = {
   ok?: Maybe<Scalars['Boolean']>;
 };
 
+export type BasicTextBlock = WagtailBlock & {
+  __typename?: 'BasicTextBlock';
+  id: Scalars['ID'];
+  value: BasicTextBlockValue;
+};
+
+export type BasicTextBlockValue = {
+  __typename?: 'BasicTextBlockValue';
+  text: Scalars['String'];
+  centered: Scalars['Boolean'];
+};
+
 export type BigContactsBlock = WagtailBlock & {
   __typename?: 'BigContactsBlock';
   id: Scalars['ID'];
@@ -285,22 +297,15 @@ export type ColumnsButtonsBlock = WagtailBlock & {
 export type ColumnsButtonsBlockValue = {
   __typename?: 'ColumnsButtonsBlockValue';
   title: Scalars['String'];
+  text: Scalars['String'];
+  image: WagtailImageRendition;
   caption: Scalars['String'];
   link: Scalars['String'];
 };
 
-export type ColumnsMembershipsBlock = WagtailBlock & {
-  __typename?: 'ColumnsMembershipsBlock';
-  id: Scalars['ID'];
-  value: Array<ColumnsMembershipsBlockValue>;
-};
 
-export type ColumnsMembershipsBlockValue = {
-  __typename?: 'ColumnsMembershipsBlockValue';
-  title: Scalars['String'];
-  subtitle: Scalars['String'];
-  price: Scalars['Int'];
-  description: Scalars['String'];
+export type ColumnsButtonsBlockValueImageArgs = {
+  spec: Scalars['String'];
 };
 
 export type EmailMailchimpCategory = {
@@ -824,6 +829,28 @@ export type FreeFormPage = WagtailPage & {
   body: Array<WagtailBlock>;
 };
 
+export type FrontPartnersBlock = WagtailBlock & {
+  __typename?: 'FrontPartnersBlock';
+  id: Scalars['ID'];
+  value: Array<FrontPartnersBlockValue>;
+};
+
+export type FrontPartnersBlockValue = {
+  __typename?: 'FrontPartnersBlockValue';
+  link: Scalars['String'];
+  image: WagtailImageRendition;
+};
+
+
+export type FrontPartnersBlockValueImageArgs = {
+  spec: Scalars['String'];
+};
+
+export type FrontSocialLinksBlock = WagtailBlock & {
+  __typename?: 'FrontSocialLinksBlock';
+  id: Scalars['ID'];
+};
+
 export type GreyBlock = WagtailBlock & {
   __typename?: 'GreyBlock';
   id: Scalars['ID'];
@@ -852,6 +879,12 @@ export type HeroFrontBlock_ButtonsValue = {
   __typename?: 'HeroFrontBlock_buttonsValue';
   title: Scalars['String'];
   link: Scalars['String'];
+  highlight: Scalars['Boolean'];
+};
+
+export type HrBlock = WagtailBlock & {
+  __typename?: 'HrBlock';
+  id: Scalars['ID'];
 };
 
 export type ImageTemplate = {
@@ -1034,6 +1067,7 @@ export type Mutation = {
   mastermindDatingCreateParticipant: MastermindDatingParticipantMutationResult;
   mastermindDatingActivateVoting: MastermindDatingParticipantMutationResult;
   mastermindDatingSetPresenceStatus: MastermindDatingParticipantMutationResult;
+  wagtailEditPageBodyBlocks: WagtailEditPageBodyBlocksResult;
   emailSubscribeChannelDelete?: Maybe<Scalars['Boolean']>;
   emailSubscribeChannelCreate?: Maybe<Scalars['Boolean']>;
   emailSubscribeChannelAddEmail?: Maybe<Scalars['Boolean']>;
@@ -1433,6 +1467,11 @@ export type MutationMastermindDatingSetPresenceStatusArgs = {
 };
 
 
+export type MutationWagtailEditPageBodyBlocksArgs = {
+  input: WagtailEditPageBodyBlocksInput;
+};
+
+
 export type MutationEmailSubscribeChannelDeleteArgs = {
   slug: Scalars['String'];
 };
@@ -1617,7 +1656,9 @@ export type Query = {
   __typename?: 'Query';
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
-  wagtailSearch: WagtailSearchResult;
+  wagtailImage?: Maybe<WagtailImage>;
+  wagtailBlockStructure: WagtailBlockStructure;
+  wagtailRenderBlock: WagtailRenderBlockResult;
   search: SearchResult;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
@@ -1665,13 +1706,24 @@ export type Query = {
 
 
 export type QueryWagtailPageArgs = {
+  page_id?: Maybe<Scalars['ID']>;
   path?: Maybe<Scalars['String']>;
   preview_token?: Maybe<Scalars['String']>;
 };
 
 
-export type QueryWagtailSearchArgs = {
-  input: WagtailSearchInput;
+export type QueryWagtailImageArgs = {
+  input: WagtailImageInput;
+};
+
+
+export type QueryWagtailBlockStructureArgs = {
+  input: WagtailBlockStructureInput;
+};
+
+
+export type QueryWagtailRenderBlockArgs = {
+  input: WagtailRenderBlockInput;
 };
 
 
@@ -2190,8 +2242,50 @@ export type VkGroup = {
   name: Scalars['String'];
 };
 
+export type WagtailAnyBlockValidationError = WagtailBlockValidationError & {
+  __typename?: 'WagtailAnyBlockValidationError';
+  error_message: Scalars['String'];
+};
+
 export type WagtailBlock = {
   id: Scalars['ID'];
+};
+
+export type WagtailBlockStructure = {
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailBlockStructureInput = {
+  name: Scalars['String'];
+};
+
+export type WagtailBlockValidationError = {
+  error_message: Scalars['String'];
+};
+
+export type WagtailBooleanBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailBooleanBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailCharBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailCharBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailEditPageBodyBlocksInput = {
+  page_id: Scalars['ID'];
+  publish: Scalars['Boolean'];
+  blocksJson: Scalars['String'];
+};
+
+export type WagtailEditPageBodyBlocksResult = {
+  __typename?: 'WagtailEditPageBodyBlocksResult';
+  page?: Maybe<WagtailPage>;
+  validation_error?: Maybe<WagtailStreamFieldValidationError>;
 };
 
 export type WagtailGeo = {
@@ -2206,6 +2300,22 @@ export type WagtailImage = {
   url: Scalars['String'];
   width: Scalars['Int'];
   height: Scalars['Int'];
+  rendition: WagtailImageRendition;
+};
+
+
+export type WagtailImageRenditionArgs = {
+  spec: Scalars['String'];
+};
+
+export type WagtailImageBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailImageBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailImageInput = {
+  id: Scalars['ID'];
 };
 
 export type WagtailImageRendition = {
@@ -2215,6 +2325,19 @@ export type WagtailImageRendition = {
   width: Scalars['Int'];
   height: Scalars['Int'];
   original_image: WagtailImage;
+};
+
+export type WagtailListBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailListBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+  child_block: WagtailBlockStructure;
+};
+
+export type WagtailListBlockValidationError = WagtailBlockValidationError & {
+  __typename?: 'WagtailListBlockValidationError';
+  error_message: Scalars['String'];
+  errors: Array<Maybe<WagtailBlockValidationError>>;
 };
 
 export type WagtailPage = {
@@ -2227,17 +2350,93 @@ export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
   html_url: Scalars['String'];
+  url: Scalars['String'];
+  permissions: WagtailPagePermissions;
+  revisions: Array<WagtailPageRevision>;
+  revision: WagtailPageRevision;
 };
 
-export type WagtailSearchInput = {
-  query: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
+
+export type WagtailPageMetaRevisionArgs = {
+  id: Scalars['ID'];
 };
 
-export type WagtailSearchResult = {
-  __typename?: 'WagtailSearchResult';
-  results: Array<WagtailPage>;
-  more: Scalars['Boolean'];
+export type WagtailPagePermissions = {
+  __typename?: 'WagtailPagePermissions';
+  can_edit: Scalars['Boolean'];
+};
+
+export type WagtailPageRevision = {
+  __typename?: 'WagtailPageRevision';
+  id: Scalars['ID'];
+  created_at: Scalars['String'];
+  as_page: WagtailPage;
+};
+
+export type WagtailRenderBlockInput = {
+  type: Scalars['String'];
+  paramsJson: Scalars['String'];
+};
+
+export type WagtailRenderBlockResult = {
+  __typename?: 'WagtailRenderBlockResult';
+  validation_error?: Maybe<WagtailStreamFieldValidationError>;
+  block?: Maybe<WagtailBlock>;
+};
+
+export type WagtailRichTextBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailRichTextBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailStaticBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailStaticBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailStreamBlockValidationError = {
+  __typename?: 'WagtailStreamBlockValidationError';
+  block_id: Scalars['Int'];
+  error?: Maybe<WagtailBlockValidationError>;
+};
+
+export type WagtailStreamFieldValidationError = {
+  __typename?: 'WagtailStreamFieldValidationError';
+  block_errors: Array<WagtailStreamBlockValidationError>;
+  non_block_error?: Maybe<Scalars['String']>;
+};
+
+export type WagtailStructBlockChildStructure = {
+  __typename?: 'WagtailStructBlockChildStructure';
+  name: Scalars['String'];
+  definition: WagtailBlockStructure;
+};
+
+export type WagtailStructBlockFieldValidationError = {
+  __typename?: 'WagtailStructBlockFieldValidationError';
+  name: Scalars['String'];
+  error?: Maybe<WagtailBlockValidationError>;
+};
+
+export type WagtailStructBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailStructBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
+  child_blocks: Array<WagtailStructBlockChildStructure>;
+};
+
+export type WagtailStructBlockValidationError = WagtailBlockValidationError & {
+  __typename?: 'WagtailStructBlockValidationError';
+  error_message: Scalars['String'];
+  errors: Array<WagtailStructBlockFieldValidationError>;
+};
+
+export type WagtailUrlBlockStructure = WagtailBlockStructure & {
+  __typename?: 'WagtailURLBlockStructure';
+  label: Scalars['String'];
+  group?: Maybe<Scalars['String']>;
 };
 
 export type WagtailUploadImageFromUrlInput = {

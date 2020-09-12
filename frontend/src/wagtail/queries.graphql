@@ -5,15 +5,17 @@ fragment FreeFormPage on FreeFormPage {
     __typename
     id
     ...BasicLeadBlock
-    ...BasicParagraphBlock
+    ...BasicTextBlock
     ...GreyBlock
     ...ColumnsBasicBlock
-    ...ColumnsMembershipsBlock
     ...ColumnsButtonsBlock
     ...EventsListBlock
     ...BigContactsBlock
     ...PhotoRibbonBlock
     ...MailchimpSubscribeBlock
     ...HeroFrontBlock
+    ...HrBlock
+    ...FrontPartnersBlock
+    ...FrontSocialLinksBlock
   }
 }

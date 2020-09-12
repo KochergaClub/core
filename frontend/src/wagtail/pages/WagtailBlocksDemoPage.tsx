@@ -1,7 +1,8 @@
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
-import { WagtailPreviewContext } from '~/cms/contexts';
+import { WagtailPageContext } from '~/cms/contexts';
 import { Page } from '~/components';
-import WagtailBlocks, { AnyBlockFragment } from '~/wagtail/components/WagtailBlocks';
+import WagtailBlocks from '~/wagtail/components/WagtailBlocks';
+import { AnyBlockFragment } from '~/wagtail/types';
 
 const WagtailBlocksDemoPage: NextApolloPage = () => {
   const blocks: AnyBlockFragment[] = [
@@ -12,14 +13,29 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
     },
     {
       id: '',
-      __typename: 'BasicParagraphBlock',
-      value:
-        'Обычный текст (BasicParagraphBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
+      __typename: 'BasicTextBlock',
+      basic_text: {
+        __typename: 'BasicTextBlockValue',
+        text:
+          'Обычный текст (BasicTextBlock). Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. По умолчанию выравнивается по левому краю.',
+        centered: false,
+      },
+    },
+    {
+      id: '',
+      __typename: 'BasicTextBlock',
+      basic_text: {
+        __typename: 'BasicTextBlockValue',
+        text:
+          'Обычный текст (BasicTextBlock) с центрированием. Поддерживает html-форматирование: <b>bold</b>, <i>italic</i>. При проставленной настройке "centered" выравнивается по центру.',
+        centered: true,
+      },
     },
     {
       id: '',
       __typename: 'GreyBlock',
       grey_value: {
+        __typename: 'GreyBlockValue',
         header: 'Серый блок',
         text:
           'Текст поддерживает html-форматирование: <b>bold</b>, <i>italic</i>.',
@@ -30,30 +46,14 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       __typename: 'ColumnsBasicBlock',
       basic_columns: [
         {
+          __typename: 'ColumnsBasicBlockValue',
           header: 'Колонка 1',
           text: '',
         },
         {
+          __typename: 'ColumnsBasicBlockValue',
           header: 'Колонка 2',
           text: 'Опциональный текст',
-        },
-      ],
-    },
-    {
-      id: '',
-      __typename: 'ColumnsMembershipsBlock',
-      membership_columns: [
-        {
-          title: 'Колонка 1',
-          subtitle: 'Подзаголовок 1',
-          price: 500,
-          description: 'Описание 1',
-        },
-        {
-          title: 'Колонка 2',
-          subtitle: 'Подзаголовок 2',
-          price: 1500,
-          description: 'Описание 2',
         },
       ],
     },
@@ -62,14 +62,36 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       __typename: 'ColumnsButtonsBlock',
       button_columns: [
         {
+          __typename: 'ColumnsButtonsBlockValue',
           title: 'Колонка 1',
+          text: 'Описание колонки 1',
           caption: 'Заголовок 1',
           link: 'https://example.com',
+          image: {
+            __typename: 'WagtailImageRendition',
+            id: '1',
+            url: 'https://example.com',
+            original_image: {
+              __typename: 'WagtailImage',
+              id: '1',
+            },
+          },
         },
         {
+          __typename: 'ColumnsButtonsBlockValue',
           title: 'Колонка 2',
+          text: 'Описание колонки 2',
           caption: 'Заголовок 2',
           link: 'https://example.com',
+          image: {
+            __typename: 'WagtailImageRendition',
+            id: '1',
+            url: 'https://example.com',
+            original_image: {
+              __typename: 'WagtailImage',
+              id: '1',
+            },
+          },
         },
       ],
     },
@@ -77,7 +99,9 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'BigContactsBlock',
       contacts: {
+        __typename: 'BigContactsBlockValue',
         map: {
+          __typename: 'WagtailGeo',
           lat: '100',
           lng: '100',
         },
@@ -91,6 +115,7 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
       id: '',
       __typename: 'MailchimpSubscribeBlock',
       mailchimp: {
+        __typename: 'MailchimpSubscribeBlockValue',
         news: true,
         events: true,
         trainings: true,
@@ -98,30 +123,12 @@ const WagtailBlocksDemoPage: NextApolloPage = () => {
     },
   ];
 
-  // const headedPairs = blocks.map(
-  //   (block) =>
-  //     [
-  //       {
-  //         id: '',
-  //         __typename: 'BasicLeadBlock',
-  //         value: block.__typename + ':',
-  //       },
-  //       block,
-  //     ] as AnyBlockFragment[]
-  // );
-
-  // // can't use [].flat yet - not supported by node
-  // const blocksWithHeaders = ([] as AnyBlockFragment[]).concat.apply(
-  //   [],
-  //   headedPairs
-  // );
-
   return (
     <Page title="Примеры Wagtail-блоков" menu="team">
       <Page.Title>Примеры Wagtail-блоков</Page.Title>
-      <WagtailPreviewContext.Provider value={{ preview: true }}>
+      <WagtailPageContext.Provider value={{ state: { preview: true } }}>
         <WagtailBlocks blocks={blocks} />
-      </WagtailPreviewContext.Provider>
+      </WagtailPageContext.Provider>
     </Page>
   );
 };

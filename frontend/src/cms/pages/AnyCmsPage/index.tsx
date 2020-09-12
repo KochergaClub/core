@@ -1,19 +1,17 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { withApollo, NextApolloPage } from '~/apollo';
+import { useEffect } from 'react';
+
+import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
 import { KochergaApolloClient } from '~/apollo/types';
 
-import {
-  getComponentByTypename,
-  wagtailPageUrls,
-  loadWagtailPage,
-} from '../../utils';
-import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
-
-import { TildaPageQuery } from '../../queries.generated';
-import TildaPage from '../../components/TildaPage';
 import FallbackPage from '../../components/FallbackPage';
+import TildaPage from '../../components/TildaPage';
+import { useWagtailPageReducer, WagtailPageContext } from '../../contexts';
+import { TildaPageQuery } from '../../queries.generated';
+import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
+import { getComponentByTypename, loadWagtailPage, wagtailPageUrls } from '../../utils';
 
 interface WagtailProps {
   kind: 'wagtail';
@@ -28,6 +26,35 @@ interface TildaProps {
 
 export type Props = WagtailProps | TildaProps;
 
+export const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
+  // We need to have control over page because pages can be editable.
+  // But this creates a problem: on navigation NextJS will replace the page prop and we need to handle it correctly.
+  const [state, dispatch] = useWagtailPageReducer({
+    page,
+  });
+
+  useEffect(() => {
+    dispatch({
+      type: 'NAVIGATE',
+      payload: page,
+    });
+  }, [dispatch, page]);
+
+  const typename = state.page.__typename;
+
+  const Component = getComponentByTypename(typename);
+  if (!Component) {
+    // TODO - prettier error
+    return <div>Внутренняя ошибка: страница неизвестного типа ${typename}</div>;
+  }
+
+  return (
+    <WagtailPageContext.Provider value={{ state, dispatch }}>
+      <Component page={state.page} />
+    </WagtailPageContext.Provider>
+  );
+};
+
 export const AnyCmsPage: NextApolloPage<Props> = (props) => {
   const router = useRouter();
   if (router.isFallback) {
@@ -41,11 +68,7 @@ export const AnyCmsPage: NextApolloPage<Props> = (props) => {
       }
       return <TildaPage {...props.data} />;
     case 'wagtail':
-      const Component = getComponentByTypename(props.typename);
-      if (!Component) {
-        return <div>oops</div>; // FIXME - better error
-      }
-      return <Component page={props.page} />;
+      return <WagtailCmsPage page={props.page} />;
   }
 };
 

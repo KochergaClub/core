@@ -104,6 +104,16 @@ type BasicResult {
   ok: Boolean
 }
 
+type BasicTextBlock implements WagtailBlock {
+  id: ID!
+  value: BasicTextBlockValue!
+}
+
+type BasicTextBlockValue {
+  text: String!
+  centered: Boolean!
+}
+
 type BigContactsBlock implements WagtailBlock {
   id: ID!
   value: BigContactsBlockValue!
@@ -230,20 +240,10 @@ type ColumnsButtonsBlock implements WagtailBlock {
 
 type ColumnsButtonsBlockValue {
   title: String!
+  text: String!
+  image(spec: String!): WagtailImageRendition!
   caption: String!
   link: String!
-}
-
-type ColumnsMembershipsBlock implements WagtailBlock {
-  id: ID!
-  value: [ColumnsMembershipsBlockValue!]!
-}
-
-type ColumnsMembershipsBlockValue {
-  title: String!
-  subtitle: String!
-  price: Int!
-  description: String!
 }
 
 type EmailMailchimpCategory {
@@ -699,6 +699,20 @@ type FreeFormPage implements WagtailPage {
   body: [WagtailBlock!]!
 }
 
+type FrontPartnersBlock implements WagtailBlock {
+  id: ID!
+  value: [FrontPartnersBlockValue!]!
+}
+
+type FrontPartnersBlockValue {
+  link: String!
+  image(spec: String!): WagtailImageRendition!
+}
+
+type FrontSocialLinksBlock implements WagtailBlock {
+  id: ID!
+}
+
 type GreyBlock implements WagtailBlock {
   id: ID!
   value: GreyBlockValue!
@@ -722,6 +736,11 @@ type HeroFrontBlockValue {
 type HeroFrontBlock_buttonsValue {
   title: String!
   link: String!
+  highlight: Boolean!
+}
+
+type HrBlock implements WagtailBlock {
+  id: ID!
 }
 
 type ImageTemplate {
@@ -890,6 +909,7 @@ type Mutation {
   mastermindDatingCreateParticipant(cohort_id: ID!, email: String!): MastermindDatingParticipantMutationResult!
   mastermindDatingActivateVoting(participant_id: ID!): MastermindDatingParticipantMutationResult!
   mastermindDatingSetPresenceStatus(participant_id: ID!, present: Boolean!): MastermindDatingParticipantMutationResult!
+  wagtailEditPageBodyBlocks(input: WagtailEditPageBodyBlocksInput!): WagtailEditPageBodyBlocksResult!
   emailSubscribeChannelDelete(slug: String!): Boolean
   emailSubscribeChannelCreate(params: EmailSubscribeChannelCreateInput!): Boolean
   emailSubscribeChannelAddEmail(slug: String!, email: String!): Boolean
@@ -1018,9 +1038,11 @@ type ProjectPage implements WagtailPage {
 }
 
 type Query {
-  wagtailPage(path: String, preview_token: String): WagtailPage
+  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
-  wagtailSearch(input: WagtailSearchInput!): WagtailSearchResult!
+  wagtailImage(input: WagtailImageInput!): WagtailImage
+  wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
+  wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
   search(input: SearchInput!): SearchResult!
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
@@ -1394,8 +1416,46 @@ type VkGroup {
   name: String!
 }
 
+type WagtailAnyBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+}
+
 interface WagtailBlock {
   id: ID!
+}
+
+interface WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+input WagtailBlockStructureInput {
+  name: String!
+}
+
+interface WagtailBlockValidationError {
+  error_message: String!
+}
+
+type WagtailBooleanBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+type WagtailCharBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+input WagtailEditPageBodyBlocksInput {
+  page_id: ID!
+  publish: Boolean!
+  blocksJson: String!
+}
+
+type WagtailEditPageBodyBlocksResult {
+  page: WagtailPage
+  validation_error: WagtailStreamFieldValidationError
 }
 
 type WagtailGeo {
@@ -1408,6 +1468,16 @@ type WagtailImage {
   url: String!
   width: Int!
   height: Int!
+  rendition(spec: String!): WagtailImageRendition!
+}
+
+type WagtailImageBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+input WagtailImageInput {
+  id: ID!
 }
 
 type WagtailImageRendition {
@@ -1416,6 +1486,17 @@ type WagtailImageRendition {
   width: Int!
   height: Int!
   original_image: WagtailImage!
+}
+
+type WagtailListBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  child_block: WagtailBlockStructure!
+}
+
+type WagtailListBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+  errors: [WagtailBlockValidationError]!
 }
 
 interface WagtailPage {
@@ -1427,16 +1508,76 @@ interface WagtailPage {
 type WagtailPageMeta {
   slug: String!
   html_url: String!
+  url: String!
+  permissions: WagtailPagePermissions!
+  revisions: [WagtailPageRevision!]!
+  revision(id: ID!): WagtailPageRevision!
 }
 
-input WagtailSearchInput {
-  query: String!
-  limit: Int
+type WagtailPagePermissions {
+  can_edit: Boolean!
 }
 
-type WagtailSearchResult {
-  results: [WagtailPage!]!
-  more: Boolean!
+type WagtailPageRevision {
+  id: ID!
+  created_at: String!
+  as_page: WagtailPage!
+}
+
+input WagtailRenderBlockInput {
+  type: String!
+  paramsJson: String!
+}
+
+type WagtailRenderBlockResult {
+  validation_error: WagtailStreamFieldValidationError
+  block: WagtailBlock
+}
+
+type WagtailRichTextBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+type WagtailStaticBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+}
+
+type WagtailStreamBlockValidationError {
+  block_id: Int!
+  error: WagtailBlockValidationError
+}
+
+type WagtailStreamFieldValidationError {
+  block_errors: [WagtailStreamBlockValidationError!]!
+  non_block_error: String
+}
+
+type WagtailStructBlockChildStructure {
+  name: String!
+  definition: WagtailBlockStructure!
+}
+
+type WagtailStructBlockFieldValidationError {
+  name: String!
+  error: WagtailBlockValidationError
+}
+
+type WagtailStructBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
+  child_blocks: [WagtailStructBlockChildStructure!]!
+}
+
+type WagtailStructBlockValidationError implements WagtailBlockValidationError {
+  error_message: String!
+  errors: [WagtailStructBlockFieldValidationError!]!
+}
+
+type WagtailURLBlockStructure implements WagtailBlockStructure {
+  label: String!
+  group: String
 }
 
 input WagtailUploadImageFromUrlInput {

@@ -8,9 +8,9 @@ export type ImportersQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type ImportersQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { importers: Array<(
-    { __typename?: 'Importer' }
+    { __typename: 'Importer' }
     & Pick<Types.Importer, 'name'>
   )> }
 );

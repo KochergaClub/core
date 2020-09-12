@@ -1,0 +1,82 @@
+fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
+  non_block_error
+  block_errors {
+    block_id
+    error {
+      error_message
+    }
+  }
+}
+
+fragment StructureL0 on WagtailBlockStructure {
+  label
+}
+
+fragment StructureL1 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL0
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL0
+      }
+    }
+  }
+}
+
+fragment StructureL2 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL1
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL1
+      }
+    }
+  }
+}
+
+fragment StructureL3 on WagtailBlockStructure {
+  label
+  ... on WagtailListBlockStructure {
+    child_block {
+      ...StructureL2
+    }
+  }
+  ... on WagtailStructBlockStructure {
+    child_blocks {
+      name
+      definition {
+        ...StructureL2
+      }
+    }
+  }
+}
+
+query WagtailBlockStructure($name: String!) {
+  result: wagtailBlockStructure(input: { name: $name }) {
+    ...StructureL3
+  }
+}
+
+query WagtailPageRevisions($page_id: ID!) {
+  result: wagtailPage(page_id: $page_id) {
+    id
+    meta {
+      revisions {
+        id
+        created_at
+      }
+    }
+  }
+}

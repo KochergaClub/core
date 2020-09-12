@@ -1,62 +1,46 @@
 // Stream of Wagtail blocks rendered in order based on their type.
 
-import BasicLeadBlock from '../blocks/BasicLeadBlock';
-import BasicParagraphBlock from '../blocks/BasicParagraphBlock';
-import BigContactsBlock from '../blocks/BigContactsBlock';
-import ColumnsBasicBlock from '../blocks/ColumnsBasicBlock';
-import ColumnsButtonsBlock from '../blocks/ColumnsButtonsBlock';
-import ColumnsMembershipsBlock from '../blocks/ColumnsMembershipsBlock';
-import DebugBlock from '../blocks/DebugBlock';
-import EventsListBlock from '../blocks/EventsListBlock';
-import GreyBlock from '../blocks/GreyBlock';
-import HeroFrontBlock from '../blocks/HeroFrontBlock';
-import MailchimpSubscribeBlock from '../blocks/MailchimpSubscribeBlock';
-import PhotoRibbonBlock from '../blocks/PhotoRibbonBlock';
-import { FreeFormPageFragment } from '../queries.generated';
-import WagtailBlockContainer from './WagtailBlockContainer';
+import { useContext } from 'react';
 
-export type AnyBlockFragment = FreeFormPageFragment['body'][0];
+import { WagtailPageContext } from '~/cms/contexts';
+
+import { AnyBlockFragment } from '../types';
+import AnyBlock from './AnyBlock';
+import EditWagtailBlocks from './EditWagtailBlocks';
+// wrappers for different modes
+// TODO - load dynamically?
+import PreviewBlockWrapper from './PreviewBlockWrapper';
 
 interface Props {
   blocks: AnyBlockFragment[];
 }
 
-const AnyBlock = (block: AnyBlockFragment) => {
-  switch (block.__typename) {
-    case 'BasicLeadBlock':
-      return <BasicLeadBlock {...block} />;
-    case 'GreyBlock':
-      return <GreyBlock {...block} />;
-    case 'BasicParagraphBlock':
-      return <BasicParagraphBlock {...block} />;
-    case 'ColumnsBasicBlock':
-      return <ColumnsBasicBlock {...block} />;
-    case 'ColumnsMembershipsBlock':
-      return <ColumnsMembershipsBlock {...block} />;
-    case 'ColumnsButtonsBlock':
-      return <ColumnsButtonsBlock {...block} />;
-    case 'EventsListBlock':
-      return <EventsListBlock {...block} />;
-    case 'BigContactsBlock':
-      return <BigContactsBlock {...block} />;
-    case 'HeroFrontBlock':
-      return <HeroFrontBlock {...block} />;
-    case 'PhotoRibbonBlock':
-      return <PhotoRibbonBlock {...block} />;
-    case 'MailchimpSubscribeBlock':
-      return <MailchimpSubscribeBlock {...block} />;
-    default:
-      return <DebugBlock typename={block.__typename || 'UNKNOWN'} />;
-  }
+const ViewBlockWrapper: React.FC<{ block: AnyBlockFragment }> = ({
+  children,
+}) => {
+  // TODO - wrap in <div> or <section> for parity with other modes?
+  return <>{children}</>;
 };
 
 export default function WagtailBlocks({ blocks }: Props) {
+  const {
+    state: { editing, preview },
+  } = useContext(WagtailPageContext);
+
+  if (editing) {
+    // too complicated to be replaced with ModeWrapper pattern below
+    // for example, EditWagtailBlocks creates an editable copy of all blocks
+    return <EditWagtailBlocks blocks={blocks} />;
+  }
+
+  const ModeWrapper = preview ? PreviewBlockWrapper : ViewBlockWrapper;
+
   return (
     <div>
       {blocks.map((block) => (
-        <WagtailBlockContainer key={block.id} block={block}>
+        <ModeWrapper key={block.id} block={block}>
           <AnyBlock {...block} />
-        </WagtailBlockContainer>
+        </ModeWrapper>
       ))}
     </div>
   );

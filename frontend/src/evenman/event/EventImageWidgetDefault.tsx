@@ -1,6 +1,7 @@
 import { Column } from '@kocherga/frontkit';
 
-import ImageEditor from '../common/ImageEditor';
+import ImageEditor from '~/components/images/ImageEditor';
+
 import { useUpdateMutation } from './hooks';
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
 
@@ -16,7 +17,7 @@ const EventImageWidgetDefault: React.FC<Props> = ({ event }) => {
       <header>Основная картинка:</header>
       <ImageEditor
         onChange={(image_id) => update({ image_id })}
-        image={event.image || undefined}
+        image={event.image?.original_image || undefined}
         defaults={{ title: event.title, basename: `event-image-${event.id}` }}
       />
     </Column>

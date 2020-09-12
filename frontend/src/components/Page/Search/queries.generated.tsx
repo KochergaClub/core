@@ -5,105 +5,105 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type PageSearchItemFragment = (
-  { __typename?: 'PageSearchItem' }
+  { __typename: 'PageSearchItem' }
   & { page: (
-    { __typename?: 'BlogIndexPage' }
+    { __typename: 'BlogIndexPage' }
     & Pick<Types.BlogIndexPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'BlogPostPage' }
+    { __typename: 'BlogPostPage' }
     & Pick<Types.BlogPostPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'FaqPage' }
+    { __typename: 'FaqPage' }
     & Pick<Types.FaqPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'FolderPage' }
+    { __typename: 'FolderPage' }
     & Pick<Types.FolderPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'FreeFormPage' }
+    { __typename: 'FreeFormPage' }
     & Pick<Types.FreeFormPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'PresentationPage' }
+    { __typename: 'PresentationPage' }
     & Pick<Types.PresentationPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'ProjectIndexPage' }
+    { __typename: 'ProjectIndexPage' }
     & Pick<Types.ProjectIndexPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & Pick<Types.ProjectPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioNotebookIndexPage' }
+    { __typename: 'RatioNotebookIndexPage' }
     & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioNotebookPage' }
+    { __typename: 'RatioNotebookPage' }
     & Pick<Types.RatioNotebookPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioPresentationIndexPage' }
+    { __typename: 'RatioPresentationIndexPage' }
     & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioSectionIndexPage' }
+    { __typename: 'RatioSectionIndexPage' }
     & Pick<Types.RatioSectionIndexPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) | (
-    { __typename?: 'RatioSectionPage' }
+    { __typename: 'RatioSectionPage' }
     & Pick<Types.RatioSectionPage, 'id' | 'title'>
     & { meta: (
-      { __typename?: 'WagtailPageMeta' }
+      { __typename: 'WagtailPageMeta' }
       & Pick<Types.WagtailPageMeta, 'html_url'>
     ) }
   ) }
 );
 
 export type EventSearchItemFragment = (
-  { __typename?: 'EventSearchItem' }
+  { __typename: 'EventSearchItem' }
   & { event: (
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Pick<Types.Event, 'id' | 'title' | 'start'>
   ) }
 );
@@ -114,15 +114,15 @@ export type SearchQueryVariables = Types.Exact<{
 
 
 export type SearchQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { search: (
-    { __typename?: 'SearchResult' }
+    { __typename: 'SearchResult' }
     & Pick<Types.SearchResult, 'more'>
     & { results: Array<(
-      { __typename?: 'PageSearchItem' }
+      { __typename: 'PageSearchItem' }
       & PageSearchItemFragment
     ) | (
-      { __typename?: 'EventSearchItem' }
+      { __typename: 'EventSearchItem' }
       & EventSearchItemFragment
     )> }
   ) }

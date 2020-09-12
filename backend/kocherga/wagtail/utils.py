@@ -1,10 +1,10 @@
 import imghdr
 
 from django.db.models import Q
-from wagtail.core.models import PageViewRestriction
 from django.core.files.images import ImageFile
 
-from .models import CustomImage
+from wagtail.core.models import PageViewRestriction, Site
+from .models import CustomImage, KochergaPage
 
 
 # Copy-pasted from old REST API
@@ -33,3 +33,25 @@ def create_image_from_fh(fh, title, basename) -> CustomImage:
     image.file.save(basename + '.' + ext, ImageFile(fh))
     image.save()
     return image
+
+
+# Simplified from https://github.com/wagtail/wagtail/blob/master/wagtail/api/v2/endpoints.py
+# to allow non-public pages in API.
+def get_page_queryset_for_request(request):
+    queryset = KochergaPage.objects.all()
+
+    # Get live pages that are not in a private section
+    queryset = filter_queryset_by_page_permissions(request, queryset)
+
+    # Get live pages only
+    queryset = queryset.live()
+
+    # Filter by site
+    site = Site.find_for_request(request)
+    if site:
+        queryset = queryset.descendant_of(site.root_page, inclusive=True)
+    else:
+        # No sites configured
+        queryset = queryset.none()
+
+    return queryset

@@ -5,7 +5,7 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type AuthCurrentUserFragment = (
-  { __typename?: 'AuthCurrentUser' }
+  { __typename: 'AuthCurrentUser' }
   & Pick<Types.AuthCurrentUser, 'id' | 'is_authenticated' | 'is_staff' | 'permissions' | 'email'>
 );
 
@@ -13,11 +13,11 @@ export type CurrentUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { my: (
-    { __typename?: 'My' }
+    { __typename: 'My' }
     & { user: (
-      { __typename?: 'AuthCurrentUser' }
+      { __typename: 'AuthCurrentUser' }
       & AuthCurrentUserFragment
     ) }
   ) }
@@ -30,12 +30,12 @@ export type LoginMutationVariables = Types.Exact<{
 
 
 export type LoginMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'AuthLoginResult' }
+    { __typename: 'AuthLoginResult' }
     & Pick<Types.AuthLoginResult, 'error'>
     & { user?: Types.Maybe<(
-      { __typename?: 'AuthCurrentUser' }
+      { __typename: 'AuthCurrentUser' }
       & AuthCurrentUserFragment
     )> }
   ) }
@@ -47,12 +47,12 @@ export type TokenLoginMutationVariables = Types.Exact<{
 
 
 export type TokenLoginMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'AuthLoginResult' }
+    { __typename: 'AuthLoginResult' }
     & Pick<Types.AuthLoginResult, 'error'>
     & { user?: Types.Maybe<(
-      { __typename?: 'AuthCurrentUser' }
+      { __typename: 'AuthCurrentUser' }
       & AuthCurrentUserFragment
     )> }
   ) }
@@ -65,9 +65,9 @@ export type SendMagicLinkMutationVariables = Types.Exact<{
 
 
 export type SendMagicLinkMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'AuthSendMagicLinkResult' }
+    { __typename: 'AuthSendMagicLinkResult' }
     & Pick<Types.AuthSendMagicLinkResult, 'ok' | 'error'>
   ) }
 );

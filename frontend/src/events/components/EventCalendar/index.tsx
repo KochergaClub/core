@@ -147,8 +147,8 @@ const EventCalendar: NextPage<Props> = (props) => {
         optimisticResponse: {
           __typename: 'Mutation' as const,
           result: {
+            __typename: 'EventUpdateResult',
             event: {
-              __typename: 'Event' as const,
               ...eventWithMetadata.event,
               start: start.toISOString(),
               end: end.toISOString(),

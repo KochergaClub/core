@@ -5,16 +5,16 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type EvenmanEvent_ForZoomAnalyticsFragment = (
-  { __typename?: 'Event' }
+  { __typename: 'Event' }
   & Pick<Types.Event, 'id'>
   & { zoom_meeting?: Types.Maybe<(
-    { __typename?: 'ZoomMeeting' }
+    { __typename: 'ZoomMeeting' }
     & Pick<Types.ZoomMeeting, 'id'>
     & { instances: Array<(
-      { __typename?: 'ZoomMeetingInstance' }
+      { __typename: 'ZoomMeetingInstance' }
       & Pick<Types.ZoomMeetingInstance, 'id' | 'start_time' | 'end_time'>
       & { participants: Array<(
-        { __typename?: 'ZoomParticipant' }
+        { __typename: 'ZoomParticipant' }
         & Pick<Types.ZoomParticipant, 'id' | 'name' | 'join_time' | 'leave_time'>
       )> }
     )> }
@@ -27,9 +27,9 @@ export type EvenmanEventForZoomAnalyticsQueryVariables = Types.Exact<{
 
 
 export type EvenmanEventForZoomAnalyticsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { event?: Types.Maybe<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & EvenmanEvent_ForZoomAnalyticsFragment
   )> }
 );

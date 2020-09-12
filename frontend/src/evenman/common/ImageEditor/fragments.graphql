@@ -1,8 +1,0 @@
-fragment WagtailImageRendition_ForEditor on WagtailImageRendition {
-  id
-  url
-  original_image {
-    id
-    url
-  }
-}

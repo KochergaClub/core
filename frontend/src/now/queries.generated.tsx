@@ -5,10 +5,10 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type NowFragment = (
-  { __typename?: 'NowInfo' }
+  { __typename: 'NowInfo' }
   & Pick<Types.NowInfo, 'total'>
   & { customers: Array<(
-    { __typename?: 'NowCustomer' }
+    { __typename: 'NowCustomer' }
     & Pick<Types.NowCustomer, 'first_name' | 'last_name'>
   )> }
 );
@@ -17,9 +17,9 @@ export type NowQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type NowQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { now: (
-    { __typename?: 'NowInfo' }
+    { __typename: 'NowInfo' }
     & NowFragment
   ) }
 );

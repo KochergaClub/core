@@ -1,10 +1,12 @@
+import { gql } from '@apollo/client';
 import { A, Button, Column, Input, Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
-import { MailchimpSubscribeBlockFragment as Props } from '../fragments.generated';
+import { BlockComponent } from '../../types';
+import { MailchimpSubscribeBlockFragment as Props } from './index.generated';
 
-const GROUP_ID = 21289;
+const GROUP_ID = 21289; // FIXME - move to config
 
 const INTEREST_IDS: { [k: string]: number } = {
   news: 2,
@@ -32,11 +34,11 @@ const InterestCheckbox = ({
   );
 };
 
-export default function MailchimpSubscribeBlock(props: Props) {
+const MailchimpSubscribeBlock: BlockComponent<Props> = (props) => {
   return (
     <PaddedBlock>
       <form
-        action="https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&amp;id=d73cd4de36"
+        action="https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&amp;id=d73cd4de36" // FIXME - move to config
         method="post"
         target="_blank"
       >
@@ -52,25 +54,45 @@ export default function MailchimpSubscribeBlock(props: Props) {
         <div style={{ position: 'absolute', left: -5000 }} aria-hidden="true">
           <input
             type="text"
-            name="b_275ee3f3bd1fdc7e05496a122_d73cd4de36"
+            name="b_275ee3f3bd1fdc7e05496a122_d73cd4de36" // FIXME - move to config
             tabIndex={-1}
             value=""
             readOnly
           />
         </div>
 
-        <Column centered>
-          <Row>
-            <Input type="text" name="EMAIL" placeholder="Ваш E-mail" />
-            <Button type="submit">Подписаться</Button>
+        <Column centered gutter={16}>
+          <Row stretch gutter={16}>
+            <Input
+              type="text"
+              name="EMAIL"
+              placeholder="Ваш E-mail"
+              scale="big"
+            />
+            <Button type="submit" kind="primary">
+              Подписаться
+            </Button>
           </Row>
 
-          <div>
+          <small>
             Заполняя форму, я даю согласие на{' '}
             <A href="/terms">обработку персональных данных</A>.
-          </div>
+          </small>
         </Column>
       </form>
     </PaddedBlock>
   );
-}
+};
+
+MailchimpSubscribeBlock.fragment = gql`
+  fragment MailchimpSubscribeBlock on MailchimpSubscribeBlock {
+    id
+    mailchimp: value {
+      news
+      events
+      trainings
+    }
+  }
+`;
+
+export default MailchimpSubscribeBlock;

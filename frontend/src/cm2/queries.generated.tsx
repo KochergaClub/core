@@ -7,15 +7,15 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type CustomerFragment = (
-  { __typename?: 'Cm2Customer' }
+  { __typename: 'Cm2Customer' }
   & Pick<Types.Cm2Customer, 'id' | 'first_name' | 'last_name' | 'card_id'>
 );
 
 export type OrderWithCustomerFragment = (
-  { __typename?: 'Cm2Order' }
+  { __typename: 'Cm2Order' }
   & Pick<Types.Cm2Order, 'id' | 'start' | 'end' | 'value'>
   & { customer?: Types.Maybe<(
-    { __typename?: 'Cm2Customer' }
+    { __typename: 'Cm2Customer' }
     & CustomerFragment
   )> }
 );
@@ -30,16 +30,16 @@ export type Cm2OrdersQueryVariables = Types.Exact<{
 
 
 export type Cm2OrdersQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cm2Orders: (
-    { __typename?: 'Cm2OrderConnection' }
+    { __typename: 'Cm2OrderConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & PageInfoFragment
     ), edges: Array<(
-      { __typename?: 'Cm2OrderEdge' }
+      { __typename: 'Cm2OrderEdge' }
       & { node: (
-        { __typename?: 'Cm2Order' }
+        { __typename: 'Cm2Order' }
         & OrderWithCustomerFragment
       ) }
     )> }
@@ -52,9 +52,9 @@ export type Cm2OrderQueryVariables = Types.Exact<{
 
 
 export type Cm2OrderQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cm2Order: (
-    { __typename?: 'Cm2Order' }
+    { __typename: 'Cm2Order' }
     & OrderWithCustomerFragment
   ) }
 );
@@ -65,11 +65,11 @@ export type Cm2CreateOrderMutationVariables = Types.Exact<{
 
 
 export type Cm2CreateOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { cm2CreateOrder: (
-    { __typename?: 'Cm2Order' }
+    { __typename: 'Cm2Order' }
     & { customer?: Types.Maybe<(
-      { __typename?: 'Cm2Customer' }
+      { __typename: 'Cm2Customer' }
       & Pick<Types.Cm2Customer, 'id'>
     )> }
   ) }
@@ -81,13 +81,13 @@ export type Cm2SearchCustomersQueryVariables = Types.Exact<{
 
 
 export type Cm2SearchCustomersQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cm2Customers: (
-    { __typename?: 'Cm2CustomerConnection' }
+    { __typename: 'Cm2CustomerConnection' }
     & { edges: Array<(
-      { __typename?: 'Cm2CustomerEdge' }
+      { __typename: 'Cm2CustomerEdge' }
       & { node: (
-        { __typename?: 'Cm2Customer' }
+        { __typename: 'Cm2Customer' }
         & CustomerFragment
       ) }
     )> }
@@ -103,16 +103,16 @@ export type Cm2CustomersQueryVariables = Types.Exact<{
 
 
 export type Cm2CustomersQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cm2Customers: (
-    { __typename?: 'Cm2CustomerConnection' }
+    { __typename: 'Cm2CustomerConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & PageInfoFragment
     ), edges: Array<(
-      { __typename?: 'Cm2CustomerEdge' }
+      { __typename: 'Cm2CustomerEdge' }
       & { node: (
-        { __typename?: 'Cm2Customer' }
+        { __typename: 'Cm2Customer' }
         & CustomerFragment
       ) }
     )> }
@@ -125,9 +125,9 @@ export type Cm2CreateCustomerMutationVariables = Types.Exact<{
 
 
 export type Cm2CreateCustomerMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { cm2CreateCustomer: (
-    { __typename?: 'Cm2Customer' }
+    { __typename: 'Cm2Customer' }
     & Pick<Types.Cm2Customer, 'id'>
   ) }
 );
@@ -138,7 +138,7 @@ export type Cm2CloseOrderMutationVariables = Types.Exact<{
 
 
 export type Cm2CloseOrderMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'cm2CloseOrder'>
 );
 
@@ -148,15 +148,15 @@ export type Cm2CustomerPageQueryVariables = Types.Exact<{
 
 
 export type Cm2CustomerPageQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { cm2Customer: (
-    { __typename?: 'Cm2Customer' }
+    { __typename: 'Cm2Customer' }
     & { orders: (
-      { __typename?: 'Cm2OrderConnection' }
+      { __typename: 'Cm2OrderConnection' }
       & { edges: Array<(
-        { __typename?: 'Cm2OrderEdge' }
+        { __typename: 'Cm2OrderEdge' }
         & { node: (
-          { __typename?: 'Cm2Order' }
+          { __typename: 'Cm2Order' }
           & Pick<Types.Cm2Order, 'id' | 'start'>
         ) }
       )> }

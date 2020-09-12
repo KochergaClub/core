@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      if (typeof jest !== undefined) {
+      if (typeof jest !== 'undefined') {
         throw new Error('Jest is not tolerant to errors');
       }
       // You can render any custom fallback UI

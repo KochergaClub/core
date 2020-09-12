@@ -65,7 +65,11 @@ fragment EvenmanEvent_Details on Event {
   tags
 
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
 
   imageForVkBackground: image(spec: "width-1100") {
@@ -94,7 +98,11 @@ fragment EvenmanEvent_Details on Event {
       link
       group
       image(spec: "width-240") {
-        ...WagtailImageRendition_ForEditor
+        id
+        url
+        original_image {
+          ...WagtailImage_ForEditor
+        }
       }
     }
     fb {

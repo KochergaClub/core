@@ -8,9 +8,9 @@ export type OpenviduGenerateRoomTokenMutationVariables = Types.Exact<{ [key: str
 
 
 export type OpenviduGenerateRoomTokenMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'OpenviduGenerateRoomTokenResult' }
+    { __typename: 'OpenviduGenerateRoomTokenResult' }
     & Pick<Types.OpenviduGenerateRoomTokenResult, 'token'>
   ) }
 );

@@ -1,25 +1,29 @@
 import * as Types from '../../apollo/types.generated';
 
-import { WagtailImageRendition_ForEditorFragment } from '../common/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
 import gql from 'graphql-tag';
-import { WagtailImageRendition_ForEditorFragmentDoc } from '../common/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type EvenmanWeeklyDigestFragment = (
-  { __typename?: 'EventsWeeklyDigest' }
+  { __typename: 'EventsWeeklyDigest' }
   & Pick<Types.EventsWeeklyDigest, 'id' | 'start'>
   & { image?: Types.Maybe<(
-    { __typename?: 'WagtailImageRendition' }
-    & WagtailImageRendition_ForEditorFragment
+    { __typename: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+    & { original_image: (
+      { __typename: 'WagtailImage' }
+      & WagtailImage_ForEditorFragment
+    ) }
   )>, mailchimp: (
-    { __typename?: 'EventsWeeklyDigestMailchimp' }
+    { __typename: 'EventsWeeklyDigestMailchimp' }
     & Pick<Types.EventsWeeklyDigestMailchimp, 'link'>
   ), telegram: (
-    { __typename?: 'EventsWeeklyDigestTelegram' }
+    { __typename: 'EventsWeeklyDigestTelegram' }
     & Pick<Types.EventsWeeklyDigestTelegram, 'link'>
   ), vk: (
-    { __typename?: 'EventsWeeklyDigestVk' }
+    { __typename: 'EventsWeeklyDigestVk' }
     & Pick<Types.EventsWeeklyDigestVk, 'link'>
   ) }
 );
@@ -28,9 +32,9 @@ export type EvenmanWeeklyDigestQueryVariables = Types.Exact<{ [key: string]: nev
 
 
 export type EvenmanWeeklyDigestQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { digest: (
-    { __typename?: 'EventsWeeklyDigest' }
+    { __typename: 'EventsWeeklyDigest' }
     & EvenmanWeeklyDigestFragment
   ) }
 );
@@ -39,12 +43,12 @@ export type EvenmanDigestToVkMutationVariables = Types.Exact<{ [key: string]: ne
 
 
 export type EvenmanDigestToVkMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventsWeeklyDigestUpdateResult' }
+    { __typename: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
     & { digest: (
-      { __typename?: 'EventsWeeklyDigest' }
+      { __typename: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
     ) }
   ) }
@@ -54,12 +58,12 @@ export type EvenmanDigestToTelegramMutationVariables = Types.Exact<{ [key: strin
 
 
 export type EvenmanDigestToTelegramMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventsWeeklyDigestUpdateResult' }
+    { __typename: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
     & { digest: (
-      { __typename?: 'EventsWeeklyDigest' }
+      { __typename: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
     ) }
   ) }
@@ -71,12 +75,12 @@ export type EvenmanDigestToMailchimpMutationVariables = Types.Exact<{
 
 
 export type EvenmanDigestToMailchimpMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result: (
-    { __typename?: 'EventsWeeklyDigestUpdateResult' }
+    { __typename: 'EventsWeeklyDigestUpdateResult' }
     & Pick<Types.EventsWeeklyDigestUpdateResult, 'ok'>
     & { digest: (
-      { __typename?: 'EventsWeeklyDigest' }
+      { __typename: 'EventsWeeklyDigest' }
       & EvenmanWeeklyDigestFragment
     ) }
   ) }
@@ -86,9 +90,9 @@ export type EvenmanVkWikiScheduleUpdateMutationVariables = Types.Exact<{ [key: s
 
 
 export type EvenmanVkWikiScheduleUpdateMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & { result?: Types.Maybe<(
-    { __typename?: 'BasicResult' }
+    { __typename: 'BasicResult' }
     & Pick<Types.BasicResult, 'ok'>
   )> }
 );
@@ -98,7 +102,11 @@ export const EvenmanWeeklyDigestFragmentDoc = gql`
   id
   start
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
   mailchimp {
     link
@@ -110,7 +118,7 @@ export const EvenmanWeeklyDigestFragmentDoc = gql`
     link
   }
 }
-    ${WagtailImageRendition_ForEditorFragmentDoc}`;
+    ${WagtailImage_ForEditorFragmentDoc}`;
 export const EvenmanWeeklyDigestDocument = gql`
     query EvenmanWeeklyDigest {
   digest: eventsWeeklyDigestCurrent {

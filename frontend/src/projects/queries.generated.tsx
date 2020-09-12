@@ -5,34 +5,34 @@ import gql from 'graphql-tag';
 import { Event_SummaryFragmentDoc } from '../events/queries.generated';
 
 export type ProjectPage_SummaryFragment = (
-  { __typename?: 'ProjectPage' }
+  { __typename: 'ProjectPage' }
   & Pick<Types.ProjectPage, 'id' | 'title' | 'summary' | 'activity_summary' | 'is_active'>
   & { meta: (
-    { __typename?: 'WagtailPageMeta' }
+    { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), image: (
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url' | 'width' | 'height'>
   ) }
 );
 
 export type ProjectIndexPageFragment = (
-  { __typename?: 'ProjectIndexPage' }
+  { __typename: 'ProjectIndexPage' }
   & Pick<Types.ProjectIndexPage, 'id' | 'title'>
   & { projects: Array<(
-    { __typename?: 'ProjectPage' }
+    { __typename: 'ProjectPage' }
     & ProjectPage_SummaryFragment
   )> }
 );
 
 export type ProjectPageFragment = (
-  { __typename?: 'ProjectPage' }
+  { __typename: 'ProjectPage' }
   & Pick<Types.ProjectPage, 'id' | 'title' | 'summary' | 'body' | 'is_active' | 'activity_summary'>
   & { image: (
-    { __typename?: 'WagtailImageRendition' }
+    { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
   ), upcoming_events: Array<(
-    { __typename?: 'Event' }
+    { __typename: 'Event' }
     & Event_SummaryFragment
   )> }
 );

@@ -1,0 +1,54 @@
+fragment WagtailBlockValidationError_L0 on WagtailBlockValidationError {
+  error_message
+}
+
+fragment WagtailBlockValidationError_L1 on WagtailBlockValidationError {
+  error_message
+  ... on WagtailStructBlockValidationError {
+    errors {
+      name
+      error {
+        ...WagtailBlockValidationError_L0
+      }
+    }
+  }
+  ... on WagtailListBlockValidationError {
+    list_errors: errors {
+      ...WagtailBlockValidationError_L0
+    }
+  }
+}
+
+fragment WagtailBlockValidationError_L2 on WagtailBlockValidationError {
+  error_message
+  ... on WagtailStructBlockValidationError {
+    errors {
+      name
+      error {
+        ...WagtailBlockValidationError_L1
+      }
+    }
+  }
+  ... on WagtailListBlockValidationError {
+    list_errors: errors {
+      ...WagtailBlockValidationError_L1
+    }
+  }
+}
+
+fragment WagtailBlockValidationError_L3 on WagtailBlockValidationError {
+  error_message
+  ... on WagtailStructBlockValidationError {
+    errors {
+      name
+      error {
+        ...WagtailBlockValidationError_L2
+      }
+    }
+  }
+  ... on WagtailListBlockValidationError {
+    list_errors: errors {
+      ...WagtailBlockValidationError_L2
+    }
+  }
+}

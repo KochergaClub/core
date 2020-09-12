@@ -1,11 +1,35 @@
+import gql from 'graphql-tag';
 import * as Types from '../apollo/types.generated';
 
-import { BasicLeadBlockFragment, BasicParagraphBlockFragment, GreyBlockFragment, ColumnsBasicBlockFragment, ColumnsMembershipsBlockFragment, ColumnsButtonsBlockFragment, EventsListBlockFragment, BigContactsBlockFragment, PhotoRibbonBlockFragment, MailchimpSubscribeBlockFragment, HeroFrontBlockFragment } from './blocks/fragments.generated';
-import gql from 'graphql-tag';
-import { BasicLeadBlockFragmentDoc, BasicParagraphBlockFragmentDoc, GreyBlockFragmentDoc, ColumnsBasicBlockFragmentDoc, ColumnsMembershipsBlockFragmentDoc, ColumnsButtonsBlockFragmentDoc, EventsListBlockFragmentDoc, BigContactsBlockFragmentDoc, PhotoRibbonBlockFragmentDoc, MailchimpSubscribeBlockFragmentDoc, HeroFrontBlockFragmentDoc } from './blocks/fragments.generated';
+import { BasicTextBlockFragment } from './blocks/BasicTextBlock/index.generated';
+import { GreyBlockFragment } from './blocks/GreyBlock/index.generated';
+import { ColumnsBasicBlockFragment } from './blocks/ColumnsBasicBlock/index.generated';
+import { ColumnsButtonsBlockFragment } from './blocks/ColumnsButtonsBlock/index.generated';
+import { EventsListBlockFragment } from './blocks/EventsListBlock/index.generated';
+import { BigContactsBlockFragment } from './blocks/BigContactsBlock/index.generated';
+import { PhotoRibbonBlockFragment } from './blocks/PhotoRibbonBlock/index.generated';
+import { MailchimpSubscribeBlockFragment } from './blocks/MailchimpSubscribeBlock/index.generated';
+import { HeroFrontBlockFragment } from './blocks/HeroFrontBlock/index.generated';
+import { HrBlockFragment } from './blocks/HrBlock/index.generated';
+import { FrontPartnersBlockFragment } from './blocks/FrontPartnersBlock/index.generated';
+import { FrontSocialLinksBlockFragment } from './blocks/FrontSocialLinksBlock/index.generated';
+import { BasicLeadBlockFragment } from './blocks/BasicLeadBlock/index.generated';
+import { BasicLeadBlockFragmentDoc } from './blocks/BasicLeadBlock/index.generated';
+import { BasicTextBlockFragmentDoc } from './blocks/BasicTextBlock/index.generated';
+import { GreyBlockFragmentDoc } from './blocks/GreyBlock/index.generated';
+import { ColumnsBasicBlockFragmentDoc } from './blocks/ColumnsBasicBlock/index.generated';
+import { ColumnsButtonsBlockFragmentDoc } from './blocks/ColumnsButtonsBlock/index.generated';
+import { EventsListBlockFragmentDoc } from './blocks/EventsListBlock/index.generated';
+import { BigContactsBlockFragmentDoc } from './blocks/BigContactsBlock/index.generated';
+import { PhotoRibbonBlockFragmentDoc } from './blocks/PhotoRibbonBlock/index.generated';
+import { MailchimpSubscribeBlockFragmentDoc } from './blocks/MailchimpSubscribeBlock/index.generated';
+import { HeroFrontBlockFragmentDoc } from './blocks/HeroFrontBlock/index.generated';
+import { HrBlockFragmentDoc } from './blocks/HrBlock/index.generated';
+import { FrontPartnersBlockFragmentDoc } from './blocks/FrontPartnersBlock/index.generated';
+import { FrontSocialLinksBlockFragmentDoc } from './blocks/FrontSocialLinksBlock/index.generated';
 
 export type FreeFormPageFragment = (
-  { __typename?: 'FreeFormPage' }
+  { __typename: 'FreeFormPage' }
   & Pick<Types.FreeFormPage, 'id' | 'title'>
   & { body: Array<(
     { __typename: 'BasicLeadBlock' }
@@ -14,7 +38,10 @@ export type FreeFormPageFragment = (
   ) | (
     { __typename: 'BasicParagraphBlock' }
     & Pick<Types.BasicParagraphBlock, 'id'>
-    & BasicParagraphBlockFragment
+  ) | (
+    { __typename: 'BasicTextBlock' }
+    & Pick<Types.BasicTextBlock, 'id'>
+    & BasicTextBlockFragment
   ) | (
     { __typename: 'BigContactsBlock' }
     & Pick<Types.BigContactsBlock, 'id'>
@@ -28,13 +55,17 @@ export type FreeFormPageFragment = (
     & Pick<Types.ColumnsButtonsBlock, 'id'>
     & ColumnsButtonsBlockFragment
   ) | (
-    { __typename: 'ColumnsMembershipsBlock' }
-    & Pick<Types.ColumnsMembershipsBlock, 'id'>
-    & ColumnsMembershipsBlockFragment
-  ) | (
     { __typename: 'EventsListBlock' }
     & Pick<Types.EventsListBlock, 'id'>
     & EventsListBlockFragment
+  ) | (
+    { __typename: 'FrontPartnersBlock' }
+    & Pick<Types.FrontPartnersBlock, 'id'>
+    & FrontPartnersBlockFragment
+  ) | (
+    { __typename: 'FrontSocialLinksBlock' }
+    & Pick<Types.FrontSocialLinksBlock, 'id'>
+    & FrontSocialLinksBlockFragment
   ) | (
     { __typename: 'GreyBlock' }
     & Pick<Types.GreyBlock, 'id'>
@@ -43,6 +74,10 @@ export type FreeFormPageFragment = (
     { __typename: 'HeroFrontBlock' }
     & Pick<Types.HeroFrontBlock, 'id'>
     & HeroFrontBlockFragment
+  ) | (
+    { __typename: 'HrBlock' }
+    & Pick<Types.HrBlock, 'id'>
+    & HrBlockFragment
   ) | (
     { __typename: 'MailchimpSubscribeBlock' }
     & Pick<Types.MailchimpSubscribeBlock, 'id'>
@@ -104,26 +139,30 @@ export const FreeFormPageFragmentDoc = gql`
     __typename
     id
     ...BasicLeadBlock
-    ...BasicParagraphBlock
+    ...BasicTextBlock
     ...GreyBlock
     ...ColumnsBasicBlock
-    ...ColumnsMembershipsBlock
     ...ColumnsButtonsBlock
     ...EventsListBlock
     ...BigContactsBlock
     ...PhotoRibbonBlock
     ...MailchimpSubscribeBlock
     ...HeroFrontBlock
+    ...HrBlock
+    ...FrontPartnersBlock
+    ...FrontSocialLinksBlock
   }
 }
     ${BasicLeadBlockFragmentDoc}
-${BasicParagraphBlockFragmentDoc}
+${BasicTextBlockFragmentDoc}
 ${GreyBlockFragmentDoc}
 ${ColumnsBasicBlockFragmentDoc}
-${ColumnsMembershipsBlockFragmentDoc}
 ${ColumnsButtonsBlockFragmentDoc}
 ${EventsListBlockFragmentDoc}
 ${BigContactsBlockFragmentDoc}
 ${PhotoRibbonBlockFragmentDoc}
 ${MailchimpSubscribeBlockFragmentDoc}
-${HeroFrontBlockFragmentDoc}`;
+${HeroFrontBlockFragmentDoc}
+${HrBlockFragmentDoc}
+${FrontPartnersBlockFragmentDoc}
+${FrontSocialLinksBlockFragmentDoc}`;

@@ -1,17 +1,16 @@
+import Link from 'next/link';
 import { useCallback } from 'react';
 import { FaHeart, FaUser } from 'react-icons/fa';
-import Link from 'next/link';
 
-import { A, Row, Column, Label, colors } from '@kocherga/frontkit';
+import { A, colors, Column, Label, Row } from '@kocherga/frontkit';
 
-import { trackEvent } from '~/components/analytics';
+import { useUser } from '~/common/hooks';
 import { AsyncButton } from '~/components';
+import { trackEvent } from '~/components/analytics';
 import TicketCard from '~/my/components/TicketCard';
 
-import { CommonProps } from '../types';
-
 import { useMyEventsTicketRegisterMutation } from '../queries.generated';
-import { useUser } from '~/common/hooks';
+import { CommonProps } from '../types';
 
 const Registered: React.FC<CommonProps> = ({ event }) => {
   if (!event.my_ticket) {
@@ -21,6 +20,7 @@ const Registered: React.FC<CommonProps> = ({ event }) => {
     <Column stretch gutter={16}>
       <TicketCard
         ticket={{
+          __typename: event.my_ticket.__typename,
           id: event.my_ticket.id,
           status: event.my_ticket.status,
           zoom_link: event.my_ticket.zoom_link,

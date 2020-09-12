@@ -2,7 +2,11 @@ fragment EvenmanWeeklyDigest on EventsWeeklyDigest {
   id
   start
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
   mailchimp {
     link

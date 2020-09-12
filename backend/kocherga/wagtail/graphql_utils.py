@@ -13,6 +13,7 @@ import wagtail.core.blocks
 import wagtail.images.models
 import wagtailmath.blocks
 import wagtailgeowidget.blocks
+from wagtail.images.blocks import ImageChooserBlock
 
 import kocherga.wagtail.blocks
 import kocherga.wagtail.models
@@ -128,6 +129,22 @@ def block_to_gfield(
             return wagtail.core.rich_text.expand_db_html(value.source)
 
         return g.Field(g.NN(g.String), resolve=resolve_richtext_value)
+
+    if isinstance(block_type, ImageChooserBlock):
+
+        def resolve_image_value(obj, info, spec):
+            image = graphql.default_field_resolver(obj, info)
+            if not image:
+                return None
+            return image.get_rendition(spec)
+
+        Result = types.WagtailImageRendition
+        if block_type.required:
+            Result = g.NN(Result)
+
+        return g.Field(
+            Result, args=g.arguments({'spec': str}), resolve=resolve_image_value
+        )
 
     if isinstance(block_type, wagtail.core.blocks.ListBlock):
         child_field = block_to_gfield(

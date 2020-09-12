@@ -5,13 +5,13 @@ import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
 export type PaymentFragment = (
-  { __typename?: 'CashierPayment' }
+  { __typename: 'CashierPayment' }
   & Pick<Types.CashierPayment, 'id' | 'amount' | 'comment' | 'is_redeemed' | 'created_dt' | 'redeem_dt'>
   & { whom: (
-    { __typename?: 'AuthUser' }
+    { __typename: 'AuthUser' }
     & Pick<Types.AuthUser, 'id' | 'email'>
     & { staff_member?: Types.Maybe<(
-      { __typename?: 'StaffMember' }
+      { __typename: 'StaffMember' }
       & Pick<Types.StaffMember, 'id' | 'full_name'>
     )> }
   ) }
@@ -26,16 +26,16 @@ export type CashierPaymentsQueryVariables = Types.Exact<{
 
 
 export type CashierPaymentsQuery = (
-  { __typename?: 'Query' }
+  { __typename: 'Query' }
   & { payments: (
-    { __typename?: 'CashierPaymentConnection' }
+    { __typename: 'CashierPaymentConnection' }
     & { pageInfo: (
-      { __typename?: 'PageInfo' }
+      { __typename: 'PageInfo' }
       & Pick<Types.PageInfo, 'hasNextPage' | 'hasPreviousPage' | 'startCursor' | 'endCursor'>
     ), edges: Array<(
-      { __typename?: 'CashierPaymentEdge' }
+      { __typename: 'CashierPaymentEdge' }
       & { node: (
-        { __typename?: 'CashierPayment' }
+        { __typename: 'CashierPayment' }
         & PaymentFragment
       ) }
     )> }
@@ -48,7 +48,7 @@ export type CashierCreatePaymentMutationVariables = Types.Exact<{
 
 
 export type CashierCreatePaymentMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'cashierCreatePayment'>
 );
 
@@ -58,7 +58,7 @@ export type CashierRedeemPaymentMutationVariables = Types.Exact<{
 
 
 export type CashierRedeemPaymentMutation = (
-  { __typename?: 'Mutation' }
+  { __typename: 'Mutation' }
   & Pick<Types.Mutation, 'cashierRedeemPayment'>
 );
 
