@@ -1656,9 +1656,9 @@ export type Query = {
   __typename?: 'Query';
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
+  wagtailImage?: Maybe<WagtailImage>;
   wagtailBlockStructure: WagtailBlockStructure;
   wagtailRenderBlock: WagtailRenderBlockResult;
-  wagtailSearch: WagtailSearchResult;
   search: SearchResult;
   authGroupsAll: Array<AuthGroup>;
   authPermissionsAll: Array<AuthPermission>;
@@ -1712,6 +1712,11 @@ export type QueryWagtailPageArgs = {
 };
 
 
+export type QueryWagtailImageArgs = {
+  input: WagtailImageInput;
+};
+
+
 export type QueryWagtailBlockStructureArgs = {
   input: WagtailBlockStructureInput;
 };
@@ -1719,11 +1724,6 @@ export type QueryWagtailBlockStructureArgs = {
 
 export type QueryWagtailRenderBlockArgs = {
   input: WagtailRenderBlockInput;
-};
-
-
-export type QueryWagtailSearchArgs = {
-  input: WagtailSearchInput;
 };
 
 
@@ -2300,12 +2300,22 @@ export type WagtailImage = {
   url: Scalars['String'];
   width: Scalars['Int'];
   height: Scalars['Int'];
+  rendition: WagtailImageRendition;
+};
+
+
+export type WagtailImageRenditionArgs = {
+  spec: Scalars['String'];
 };
 
 export type WagtailImageBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailImageBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+};
+
+export type WagtailImageInput = {
+  id: Scalars['ID'];
 };
 
 export type WagtailImageRendition = {
@@ -2378,17 +2388,6 @@ export type WagtailRichTextBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailRichTextBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
-};
-
-export type WagtailSearchInput = {
-  query: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-};
-
-export type WagtailSearchResult = {
-  __typename?: 'WagtailSearchResult';
-  results: Array<WagtailPage>;
-  more: Scalars['Boolean'];
 };
 
 export type WagtailStaticBlockStructure = WagtailBlockStructure & {

@@ -1,8 +1,8 @@
 import * as Types from '../../apollo/types.generated';
 
-import { WagtailImageRendition_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
 import gql from 'graphql-tag';
-import { WagtailImageRendition_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
@@ -11,7 +11,11 @@ export type EvenmanWeeklyDigestFragment = (
   & Pick<Types.EventsWeeklyDigest, 'id' | 'start'>
   & { image?: Types.Maybe<(
     { __typename: 'WagtailImageRendition' }
-    & WagtailImageRendition_ForEditorFragment
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+    & { original_image: (
+      { __typename: 'WagtailImage' }
+      & WagtailImage_ForEditorFragment
+    ) }
   )>, mailchimp: (
     { __typename: 'EventsWeeklyDigestMailchimp' }
     & Pick<Types.EventsWeeklyDigestMailchimp, 'link'>
@@ -98,7 +102,11 @@ export const EvenmanWeeklyDigestFragmentDoc = gql`
   id
   start
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
   mailchimp {
     link
@@ -110,7 +118,7 @@ export const EvenmanWeeklyDigestFragmentDoc = gql`
     link
   }
 }
-    ${WagtailImageRendition_ForEditorFragmentDoc}`;
+    ${WagtailImage_ForEditorFragmentDoc}`;
 export const EvenmanWeeklyDigestDocument = gql`
     query EvenmanWeeklyDigest {
   digest: eventsWeeklyDigestCurrent {

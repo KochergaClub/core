@@ -19,7 +19,11 @@ fragment EventsPrototype on EventsPrototype {
     name
   }
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
   project {
     meta {

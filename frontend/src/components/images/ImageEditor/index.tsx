@@ -7,7 +7,7 @@ import { useAPI } from '~/common/hooks';
 import ImageBox from '../helpers/ImageBox';
 import ViewOverlay from '../helpers/ViewOverlay';
 import Controls from './Controls';
-import { WagtailImageRendition_ForEditorFragment as ImageFragment } from './fragments.generated';
+import { WagtailImage_ForEditorFragment as ImageFragment } from './fragments.generated';
 import { Defaults } from './types';
 
 const Placeholder = styled.div`
@@ -117,13 +117,11 @@ const ImageEditor: React.FC<Props> = ({ image, onChange, defaults }) => {
   return (
     <Container {...getRootProps()} active={isDragActive} ref={hoverRef}>
       <ImageBox
-        src={image?.url}
+        src={image?.rendition.url}
         empty={() => <Placeholder>Сюда можно бросить файл</Placeholder>}
         displayOverlay={showControls}
       >
-        {image && (
-          <ViewOverlay link={`/wagtail/images/${image.original_image.id}/`} />
-        )}
+        {image && <ViewOverlay link={`/wagtail/images/${image.id}/`} />}
         <input {...getInputProps()} />
         <ControlsContainer className="controls-container">
           <Controls

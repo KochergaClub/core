@@ -39,6 +39,11 @@ export interface BooleanFormField extends AnyBasicFormField {
   readonly default?: boolean;
 }
 
+export interface ImageFormField extends AnyBasicFormField {
+  readonly type: 'image';
+  readonly default?: string;
+}
+
 export interface ForeignKeyFormField extends AnyBasicFormField {
   readonly type: 'fk';
   readonly default?: number | string;
@@ -66,6 +71,7 @@ export type BasicFormField =
   | NumberFormField
   | ChoiceFormField
   | BooleanFormField
+  | ImageFormField
   | ForeignKeyFormField;
 
 export type FormField = BasicFormField | ShapeFormField | ListFormField;

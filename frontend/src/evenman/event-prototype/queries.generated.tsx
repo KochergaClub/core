@@ -1,8 +1,8 @@
 import * as Types from '../../apollo/types.generated';
 
-import { WagtailImageRendition_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
 import gql from 'graphql-tag';
-import { WagtailImageRendition_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
@@ -17,7 +17,11 @@ export type EventsPrototypeFragment = (
     & Pick<Types.TimepadCategory, 'code' | 'name'>
   )>, image?: Types.Maybe<(
     { __typename: 'WagtailImageRendition' }
-    & WagtailImageRendition_ForEditorFragment
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+    & { original_image: (
+      { __typename: 'WagtailImage' }
+      & WagtailImage_ForEditorFragment
+    ) }
   )>, project?: Types.Maybe<(
     { __typename: 'ProjectPage' }
     & { meta: (
@@ -217,7 +221,11 @@ export const EventsPrototypeFragmentDoc = gql`
     name
   }
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
   project {
     meta {
@@ -232,7 +240,7 @@ export const EventsPrototypeFragmentDoc = gql`
     visitors
   }
 }
-    ${WagtailImageRendition_ForEditorFragmentDoc}`;
+    ${WagtailImage_ForEditorFragmentDoc}`;
 export const EventsPrototype_SummaryFragmentDoc = gql`
     fragment EventsPrototype_Summary on EventsPrototype {
   id

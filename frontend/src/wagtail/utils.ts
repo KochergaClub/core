@@ -79,7 +79,7 @@ const structureToFormField = (
       };
     case 'WagtailImageBlockStructure':
       return {
-        type: 'number',
+        type: 'image',
         name,
         title: structure.label,
       };

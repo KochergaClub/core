@@ -1,8 +1,8 @@
 import * as Types from '../../apollo/types.generated';
 
-import { WagtailImageRendition_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragment } from '../../components/images/ImageEditor/fragments.generated';
 import gql from 'graphql-tag';
-import { WagtailImageRendition_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
+import { WagtailImage_ForEditorFragmentDoc } from '../../components/images/ImageEditor/fragments.generated';
 import * as ApolloReactCommon from '@apollo/client';
 import * as ApolloReactHooks from '@apollo/client';
 
@@ -68,7 +68,11 @@ export type EvenmanEvent_DetailsFragment = (
     & Pick<Types.ZoomMeeting, 'id' | 'participants_count'>
   )>, image?: Types.Maybe<(
     { __typename: 'WagtailImageRendition' }
-    & WagtailImageRendition_ForEditorFragment
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+    & { original_image: (
+      { __typename: 'WagtailImage' }
+      & WagtailImage_ForEditorFragment
+    ) }
   )>, imageForVkBackground?: Types.Maybe<(
     { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'id' | 'url'>
@@ -91,7 +95,11 @@ export type EvenmanEvent_DetailsFragment = (
       & Pick<Types.EventsAnnouncementVk, 'link' | 'group'>
       & { image?: Types.Maybe<(
         { __typename: 'WagtailImageRendition' }
-        & WagtailImageRendition_ForEditorFragment
+        & Pick<Types.WagtailImageRendition, 'id' | 'url'>
+        & { original_image: (
+          { __typename: 'WagtailImage' }
+          & WagtailImage_ForEditorFragment
+        ) }
       )> }
     ), fb: (
       { __typename: 'EventsAnnouncementFb' }
@@ -412,7 +420,11 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
   visitors
   tags
   image(spec: "width-240") {
-    ...WagtailImageRendition_ForEditor
+    id
+    url
+    original_image {
+      ...WagtailImage_ForEditor
+    }
   }
   imageForVkBackground: image(spec: "width-1100") {
     id
@@ -437,7 +449,11 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
       link
       group
       image(spec: "width-240") {
-        ...WagtailImageRendition_ForEditor
+        id
+        url
+        original_image {
+          ...WagtailImage_ForEditor
+        }
       }
     }
     fb {
@@ -449,7 +465,7 @@ export const EvenmanEvent_DetailsFragmentDoc = gql`
     id
   }
 }
-    ${WagtailImageRendition_ForEditorFragmentDoc}`;
+    ${WagtailImage_ForEditorFragmentDoc}`;
 export const EvenmanEventsDocument = gql`
     query EvenmanEvents($start: String!, $end: String!) {
   events(after: $start, before: $end, first: 100) {

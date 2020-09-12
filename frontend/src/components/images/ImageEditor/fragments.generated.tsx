@@ -2,20 +2,20 @@ import * as Types from '../../../apollo/types.generated';
 
 import gql from 'graphql-tag';
 
-export type WagtailImageRendition_ForEditorFragment = (
-  { __typename: 'WagtailImageRendition' }
-  & Pick<Types.WagtailImageRendition, 'id' | 'url'>
-  & { original_image: (
-    { __typename: 'WagtailImage' }
-    & Pick<Types.WagtailImage, 'id' | 'url'>
+export type WagtailImage_ForEditorFragment = (
+  { __typename: 'WagtailImage' }
+  & Pick<Types.WagtailImage, 'id' | 'url'>
+  & { rendition: (
+    { __typename: 'WagtailImageRendition' }
+    & Pick<Types.WagtailImageRendition, 'id' | 'url'>
   ) }
 );
 
-export const WagtailImageRendition_ForEditorFragmentDoc = gql`
-    fragment WagtailImageRendition_ForEditor on WagtailImageRendition {
+export const WagtailImage_ForEditorFragmentDoc = gql`
+    fragment WagtailImage_ForEditor on WagtailImage {
   id
   url
-  original_image {
+  rendition(spec: "width-240") {
     id
     url
   }

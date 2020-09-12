@@ -1040,9 +1040,9 @@ type ProjectPage implements WagtailPage {
 type Query {
   wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
+  wagtailImage(input: WagtailImageInput!): WagtailImage
   wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
   wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
-  wagtailSearch(input: WagtailSearchInput!): WagtailSearchResult!
   search(input: SearchInput!): SearchResult!
   authGroupsAll: [AuthGroup!]!
   authPermissionsAll: [AuthPermission!]!
@@ -1468,11 +1468,16 @@ type WagtailImage {
   url: String!
   width: Int!
   height: Int!
+  rendition(spec: String!): WagtailImageRendition!
 }
 
 type WagtailImageBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+}
+
+input WagtailImageInput {
+  id: ID!
 }
 
 type WagtailImageRendition {
@@ -1532,16 +1537,6 @@ type WagtailRenderBlockResult {
 type WagtailRichTextBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
-}
-
-input WagtailSearchInput {
-  query: String!
-  limit: Int
-}
-
-type WagtailSearchResult {
-  results: [WagtailPage!]!
-  more: Boolean!
 }
 
 type WagtailStaticBlockStructure implements WagtailBlockStructure {

@@ -103,9 +103,29 @@ WagtailPage = g.InterfaceType(
 
 
 # WagtailImage
-WagtailImage = g.ObjectType(
-    'WagtailImage', g.fields({'id': 'ID!', 'url': str, 'width': int, 'height': int})
-)
+def build_WagtailImage():
+    def resolve_rendition(obj, info, spec):
+        return obj.get_rendition(spec)
+
+    return g.ObjectType(
+        'WagtailImage',
+        lambda: g.fields(
+            {
+                'id': 'ID!',
+                'url': str,
+                'width': int,
+                'height': int,
+                'rendition': g.Field(
+                    g.NN(WagtailImageRendition),
+                    args=g.arguments({'spec': str}),
+                    resolve=resolve_rendition,
+                ),
+            }
+        ),
+    )
+
+
+WagtailImage = build_WagtailImage()
 
 # WagtailImageRendition
 WagtailImageRendition = g.ObjectType(

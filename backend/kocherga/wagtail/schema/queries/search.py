@@ -48,42 +48,6 @@ SearchItem = g.UnionType(
 )
 
 
-# mostly deprecated in favor of `search`
-# TODO - rename to pageSearch?
-@c.class_field
-class wagtailSearch(helpers.BaseFieldWithInput):
-    def resolve(self, _, info, input):
-        query = input['query']
-        qs = get_page_queryset_for_request(info.context).search(query)
-
-        limit = input.pop('limit', None)
-        if limit:
-            # ask for one more to determine if there are more results
-            qs = qs[: limit + 1]
-
-        pages = list(qs)
-
-        more = False
-        if limit:
-            more = len(pages) > limit
-            pages = pages[:limit]
-
-        return {
-            'results': [page.specific for page in pages],
-            'more': more,
-        }
-
-    permissions = []
-    input = {
-        'query': str,
-        'limit': Optional[int],
-    }
-    result = {
-        'results': g.NNList(types.WagtailPage),
-        'more': bool,
-    }
-
-
 # Search is not paged, since combining relay_page with search is non-trivial.
 @c.class_field
 class search(helpers.BaseFieldWithInput):

@@ -10,6 +10,7 @@ import { Input, Label } from '@kocherga/frontkit';
 import { BasicFormField, ChoiceFormField } from '../types';
 import ErrorLabel from './ErrorLabel';
 import ForeignKeyWidget from './ForeignKeyWidget';
+import ImageInput from './ImageInput';
 import LabeledField from './LabeledField';
 import RichTextInput from './RichTextInput';
 
@@ -143,6 +144,8 @@ const BasicFieldWidget: React.FC<Props> = ({ field, name }) => {
       return <FieldInputForType name={name} field={field} type="text" />;
     case 'richtext':
       return <RichTextInput name={name} field={field} />;
+    case 'image':
+      return <ImageInput name={name} field={field} />;
     case 'email':
       return <FieldInputForType name={name} field={field} type="email" />;
     case 'date':

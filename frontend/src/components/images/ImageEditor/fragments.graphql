@@ -1,7 +1,7 @@
-fragment WagtailImageRendition_ForEditor on WagtailImageRendition {
+fragment WagtailImage_ForEditor on WagtailImage {
   id
   url
-  original_image {
+  rendition(spec: "width-240") {
     id
     url
   }
