@@ -60,9 +60,14 @@ const structureToFormField = (
   switch (structure.__typename) {
     case 'WagtailCharBlockStructure':
     case 'WagtailURLBlockStructure':
-    case 'WagtailRichTextBlockStructure':
       return {
         type: 'string',
+        name,
+        title: structure.label,
+      };
+    case 'WagtailRichTextBlockStructure':
+      return {
+        type: 'richtext',
         name,
         title: structure.label,
       };

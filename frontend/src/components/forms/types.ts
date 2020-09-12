@@ -15,6 +15,11 @@ export interface StringFormField extends AnyBasicFormField {
   readonly default?: string;
 }
 
+export interface RichTextFormField extends AnyBasicFormField {
+  readonly type: 'richtext';
+  readonly default?: string;
+}
+
 export interface NumberFormField extends AnyBasicFormField {
   readonly type: 'number';
   readonly default?: number;
@@ -57,6 +62,7 @@ export interface ListFormField extends AnyFormField {
 
 export type BasicFormField =
   | StringFormField
+  | RichTextFormField
   | NumberFormField
   | ChoiceFormField
   | BooleanFormField

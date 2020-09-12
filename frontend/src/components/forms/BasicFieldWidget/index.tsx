@@ -11,6 +11,7 @@ import { BasicFormField, ChoiceFormField } from '../types';
 import ErrorLabel from './ErrorLabel';
 import ForeignKeyWidget from './ForeignKeyWidget';
 import LabeledField from './LabeledField';
+import RichTextInput from './RichTextInput';
 
 interface Props {
   field: BasicFormField;
@@ -140,6 +141,8 @@ const BasicFieldWidget: React.FC<Props> = ({ field, name }) => {
   switch (field.type) {
     case 'string':
       return <FieldInputForType name={name} field={field} type="text" />;
+    case 'richtext':
+      return <RichTextInput name={name} field={field} />;
     case 'email':
       return <FieldInputForType name={name} field={field} type="email" />;
     case 'date':

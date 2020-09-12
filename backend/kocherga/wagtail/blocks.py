@@ -1,12 +1,54 @@
 from typing import List, Any, Tuple, Dict
 from dataclasses import dataclass
 
-from wagtail.core.blocks import FieldBlock
+import bleach
+import wagtail.core.blocks
+import wagtail.core.rich_text
 
 from . import forms
 
 
-class URLOrAbsolutePathBlock(FieldBlock):
+class SafeRichTextBlock(wagtail.core.blocks.RichTextBlock):
+    def clean(self, value):
+        value = super().clean(value)
+        return wagtail.core.rich_text.RichText(
+            bleach.clean(
+                value.source,
+                tags=[
+                    'a',
+                    'b',
+                    'strong',
+                    'i',
+                    'em',
+                    'br',
+                    'hr',
+                    'img',
+                    'ol',
+                    'ul',
+                    'h1',
+                    'h2',
+                    'h3',
+                    'h4',
+                    'h5',
+                    'h6',
+                    'p',
+                    'div',
+                    'span',
+                ],
+                attributes={
+                    'a': ['href', 'title'],
+                    'abbr': ['title'],
+                    'acronym': ['title'],
+                    'img': ['src', 'alt', 'title'],
+                    'p': ['class'],
+                    'div': ['class'],
+                    'span': ['class'],
+                },
+            )
+        )
+
+
+class URLOrAbsolutePathBlock(wagtail.core.blocks.FieldBlock):
     "Copy-pasted from wagtail's URLBlock."
 
     def __init__(

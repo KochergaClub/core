@@ -50,6 +50,7 @@ ariadne == 0.11.0
 django-storages
 elasticsearch >= 7.0.0
 python-docx
+bleach
 
 # dev-dependencies
 pytest

@@ -3,7 +3,7 @@ from wagtail.images.blocks import ImageChooserBlock
 
 from wagtailgeowidget.blocks import GeoBlock
 
-from kocherga.wagtail.blocks import URLOrAbsolutePathBlock, registry
+from kocherga.wagtail.blocks import URLOrAbsolutePathBlock, SafeRichTextBlock, registry
 
 registry.register_list(
     tag='basic',
@@ -13,7 +13,7 @@ registry.register_list(
             blocks.StructBlock(
                 [
                     ('header', blocks.CharBlock()),
-                    ('text', blocks.RichTextBlock(required=False)),
+                    ('text', SafeRichTextBlock(required=False)),
                 ],
                 group='basic',
                 label='Заголовок секции',
@@ -22,17 +22,17 @@ registry.register_list(
         ),
         (
             'basic_lead',  # deprecated
-            blocks.RichTextBlock(group='basic', label='Крупный текст', icon='bold'),
+            SafeRichTextBlock(group='basic', label='Крупный текст', icon='bold'),
         ),
         (
             'basic_paragraph',  # deprecated
-            blocks.RichTextBlock(group='basic', label='Обычный текст', icon='doc-full'),
+            SafeRichTextBlock(group='basic', label='Обычный текст', icon='doc-full'),
         ),
         (
             'basic_text',
             blocks.StructBlock(
                 [
-                    ('text', blocks.RichTextBlock()),
+                    ('text', SafeRichTextBlock()),
                     ('centered', blocks.BooleanBlock(required=False)),
                 ],
                 group='basic',
@@ -58,7 +58,7 @@ registry.register_list(
                 blocks.StructBlock(
                     [
                         ('header', blocks.CharBlock()),
-                        ('text', blocks.RichTextBlock(required=False)),
+                        ('text', SafeRichTextBlock(required=False)),
                     ],
                 ),
                 group='columns',
