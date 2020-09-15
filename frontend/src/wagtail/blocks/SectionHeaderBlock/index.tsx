@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import { colors, fonts, RichText } from '@kocherga/frontkit';
 
 import { BlockComponent } from '../../types';
-import { GreyBlockFragment as Props } from './index.generated';
+import { SectionHeaderBlockFragment as Props } from './index.generated';
 
 const Container = styled(RichText)`
   background-color: ${colors.grey[100]};

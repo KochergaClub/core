@@ -2,6 +2,8 @@ import gql from 'graphql-tag';
 import * as Types from '../apollo/types.generated';
 
 import { BasicTextBlockFragment } from './blocks/BasicTextBlock/index.generated';
+import { SectionHeaderBlockFragment } from './blocks/SectionHeaderBlock/index.generated';
+import { BasicCardBlockFragment } from './blocks/BasicCardBlock/index.generated';
 import { GreyBlockFragment } from './blocks/GreyBlock/index.generated';
 import { ColumnsBasicBlockFragment } from './blocks/ColumnsBasicBlock/index.generated';
 import { ColumnsButtonsBlockFragment } from './blocks/ColumnsButtonsBlock/index.generated';
@@ -16,6 +18,8 @@ import { FrontSocialLinksBlockFragment } from './blocks/FrontSocialLinksBlock/in
 import { BasicLeadBlockFragment } from './blocks/BasicLeadBlock/index.generated';
 import { BasicLeadBlockFragmentDoc } from './blocks/BasicLeadBlock/index.generated';
 import { BasicTextBlockFragmentDoc } from './blocks/BasicTextBlock/index.generated';
+import { SectionHeaderBlockFragmentDoc } from './blocks/SectionHeaderBlock/index.generated';
+import { BasicCardBlockFragmentDoc } from './blocks/BasicCardBlock/index.generated';
 import { GreyBlockFragmentDoc } from './blocks/GreyBlock/index.generated';
 import { ColumnsBasicBlockFragmentDoc } from './blocks/ColumnsBasicBlock/index.generated';
 import { ColumnsButtonsBlockFragmentDoc } from './blocks/ColumnsButtonsBlock/index.generated';
@@ -34,6 +38,7 @@ export type FreeFormPageFragment = (
   & { body: Array<(
     { __typename: 'BasicCardBlock' }
     & Pick<Types.BasicCardBlock, 'id'>
+    & BasicCardBlockFragment
   ) | (
     { __typename: 'BasicLeadBlock' }
     & Pick<Types.BasicLeadBlock, 'id'>
@@ -113,6 +118,7 @@ export type FreeFormPageFragment = (
   ) | (
     { __typename: 'SectionHeaderBlock' }
     & Pick<Types.SectionHeaderBlock, 'id'>
+    & SectionHeaderBlockFragment
   ) | (
     { __typename: 'SlideFragmentsBlock' }
     & Pick<Types.SlideFragmentsBlock, 'id'>
@@ -143,6 +149,8 @@ export const FreeFormPageFragmentDoc = gql`
     id
     ...BasicLeadBlock
     ...BasicTextBlock
+    ...SectionHeaderBlock
+    ...BasicCardBlock
     ...GreyBlock
     ...ColumnsBasicBlock
     ...ColumnsButtonsBlock
@@ -158,6 +166,8 @@ export const FreeFormPageFragmentDoc = gql`
 }
     ${BasicLeadBlockFragmentDoc}
 ${BasicTextBlockFragmentDoc}
+${SectionHeaderBlockFragmentDoc}
+${BasicCardBlockFragmentDoc}
 ${GreyBlockFragmentDoc}
 ${ColumnsBasicBlockFragmentDoc}
 ${ColumnsButtonsBlockFragmentDoc}

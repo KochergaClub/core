@@ -6,6 +6,8 @@ fragment FreeFormPage on FreeFormPage {
     id
     ...BasicLeadBlock
     ...BasicTextBlock
+    ...SectionHeaderBlock
+    ...BasicCardBlock
     ...GreyBlock
     ...ColumnsBasicBlock
     ...ColumnsButtonsBlock
