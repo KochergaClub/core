@@ -10,14 +10,16 @@ import HeroButtons from './HeroButtons';
 import { HeroFrontBlockFragment as Props } from './index.generated';
 
 const Container = styled.div`
-  padding-left: 60px;
-  ${deviceMediaQueries.mobile(`
-    padding-left: 40px;
-  `)}
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 60px);
+
+  padding-left: 60px;
+  padding-right: 40px;
   justify-content: center;
+  ${deviceMediaQueries.mobile(`
+    padding-left: 40px;
+  `)}
 
   background: right 100px center / 400px no-repeat url("${staticUrl(
     'logo/logo.svg'
@@ -34,6 +36,7 @@ const Header = styled.h1`
   line-height: 1.2;
   ${deviceMediaQueries.mobile(`
     font-size: ${fonts.sizes.XL};
+    text-align: center;
   `)}
   ${deviceMediaQueries.tablet(`
     font-size: ${fonts.sizes.XXL};
@@ -43,6 +46,10 @@ const Header = styled.h1`
 
 const ContentContainer = styled.div`
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(60vh - 60px);
 `;
 
 const HeroFrontBlock: BlockComponent<Props> = (props) => {

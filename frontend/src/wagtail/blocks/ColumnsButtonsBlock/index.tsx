@@ -18,7 +18,7 @@ const ColumnContainer = styled(Column)`
 `;
 
 const Image = styled.img`
-  width: 400px;
+  width: 100%;
   height: auto;
 `;
 
@@ -53,6 +53,7 @@ const ColumnsButtonsBlock: BlockComponent<Props> = (block) => {
   );
 };
 
+// TODO - calculate spec for image (based on number of columns and gutter size? no, that's too fragile...)
 ColumnsButtonsBlock.fragment = gql`
   fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
     id

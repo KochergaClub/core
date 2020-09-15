@@ -4,20 +4,23 @@ import { colors, deviceMediaQueries } from '@kocherga/frontkit';
 
 import { ButtonsListType } from './types';
 
+const mobileStyles = `
+    flex-direction: column;
+      align-items: center;
+    & > * + * {
+      margin-left: 0;
+      margin-top: 16px;
+    }
+  `;
+
 const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
   & > * + * {
     margin-left: 16px;
   }
-  ${deviceMediaQueries.mobile(`
-    flex-direction: column;
-      align-items: start;
-    & > * + * {
-      margin-left: 0;
-      margin-top: 16px;
-    }
-  `)}
+  ${deviceMediaQueries.mobile(mobileStyles)}
+  ${deviceMediaQueries.tablet(mobileStyles)}
 `;
 
 const HeroButton = styled.a<{ highlight: boolean }>`
@@ -25,6 +28,7 @@ const HeroButton = styled.a<{ highlight: boolean }>`
   border-radius: 100px;
   border: none;
   font-weight: bold;
+  text-align: center;
   background-color: ${(props) =>
     props.highlight ? colors.accent[700] : colors.grey[200]};
   text-decoration: none;
