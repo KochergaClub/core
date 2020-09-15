@@ -46,7 +46,11 @@ const RichTextInput: React.FC<{
               theme="snow"
               defaultValue={formikField.value}
               onChange={(value) => {
-                form.setFieldValue(formikField.name, value);
+                let valueInFormik = value;
+                if (valueInFormik === '<p><br></p>') {
+                  valueInFormik = '';
+                }
+                form.setFieldValue(formikField.name, valueInFormik);
               }}
               bounds={ref.current || undefined}
               formats={formats}

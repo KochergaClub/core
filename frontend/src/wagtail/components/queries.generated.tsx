@@ -23,162 +23,161 @@ export type WagtailStreamFieldValidationErrorFragment = (
   )> }
 );
 
-export type StructureL0_WagtailBooleanBlockStructure_Fragment = (
+export type StructureCommon_WagtailBooleanBlockStructure_Fragment = (
   { __typename: 'WagtailBooleanBlockStructure' }
-  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+  & Pick<Types.WagtailBooleanBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailCharBlockStructure_Fragment = (
+export type StructureCommon_WagtailCharBlockStructure_Fragment = (
   { __typename: 'WagtailCharBlockStructure' }
-  & Pick<Types.WagtailCharBlockStructure, 'label'>
+  & Pick<Types.WagtailCharBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailImageBlockStructure_Fragment = (
+export type StructureCommon_WagtailImageBlockStructure_Fragment = (
   { __typename: 'WagtailImageBlockStructure' }
-  & Pick<Types.WagtailImageBlockStructure, 'label'>
+  & Pick<Types.WagtailImageBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailListBlockStructure_Fragment = (
+export type StructureCommon_WagtailListBlockStructure_Fragment = (
   { __typename: 'WagtailListBlockStructure' }
-  & Pick<Types.WagtailListBlockStructure, 'label'>
+  & Pick<Types.WagtailListBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailRichTextBlockStructure_Fragment = (
+export type StructureCommon_WagtailRichTextBlockStructure_Fragment = (
   { __typename: 'WagtailRichTextBlockStructure' }
-  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+  & Pick<Types.WagtailRichTextBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailStaticBlockStructure_Fragment = (
+export type StructureCommon_WagtailStaticBlockStructure_Fragment = (
   { __typename: 'WagtailStaticBlockStructure' }
-  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+  & Pick<Types.WagtailStaticBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailStructBlockStructure_Fragment = (
+export type StructureCommon_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
-  & Pick<Types.WagtailStructBlockStructure, 'label'>
+  & Pick<Types.WagtailStructBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0_WagtailUrlBlockStructure_Fragment = (
+export type StructureCommon_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
-  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+  & Pick<Types.WagtailUrlBlockStructure, 'label' | 'required'>
 );
 
-export type StructureL0Fragment = StructureL0_WagtailBooleanBlockStructure_Fragment | StructureL0_WagtailCharBlockStructure_Fragment | StructureL0_WagtailImageBlockStructure_Fragment | StructureL0_WagtailListBlockStructure_Fragment | StructureL0_WagtailRichTextBlockStructure_Fragment | StructureL0_WagtailStaticBlockStructure_Fragment | StructureL0_WagtailStructBlockStructure_Fragment | StructureL0_WagtailUrlBlockStructure_Fragment;
+export type StructureCommonFragment = StructureCommon_WagtailBooleanBlockStructure_Fragment | StructureCommon_WagtailCharBlockStructure_Fragment | StructureCommon_WagtailImageBlockStructure_Fragment | StructureCommon_WagtailListBlockStructure_Fragment | StructureCommon_WagtailRichTextBlockStructure_Fragment | StructureCommon_WagtailStaticBlockStructure_Fragment | StructureCommon_WagtailStructBlockStructure_Fragment | StructureCommon_WagtailUrlBlockStructure_Fragment;
 
 export type StructureL1_WagtailBooleanBlockStructure_Fragment = (
   { __typename: 'WagtailBooleanBlockStructure' }
-  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+  & StructureCommon_WagtailBooleanBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailCharBlockStructure_Fragment = (
   { __typename: 'WagtailCharBlockStructure' }
-  & Pick<Types.WagtailCharBlockStructure, 'label'>
+  & StructureCommon_WagtailCharBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailImageBlockStructure_Fragment = (
   { __typename: 'WagtailImageBlockStructure' }
-  & Pick<Types.WagtailImageBlockStructure, 'label'>
+  & StructureCommon_WagtailImageBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailListBlockStructure_Fragment = (
   { __typename: 'WagtailListBlockStructure' }
-  & Pick<Types.WagtailListBlockStructure, 'label'>
   & { child_block: (
     { __typename: 'WagtailBooleanBlockStructure' }
-    & StructureL0_WagtailBooleanBlockStructure_Fragment
+    & StructureCommon_WagtailBooleanBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailCharBlockStructure' }
-    & StructureL0_WagtailCharBlockStructure_Fragment
+    & StructureCommon_WagtailCharBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailImageBlockStructure' }
-    & StructureL0_WagtailImageBlockStructure_Fragment
+    & StructureCommon_WagtailImageBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailListBlockStructure' }
-    & StructureL0_WagtailListBlockStructure_Fragment
+    & StructureCommon_WagtailListBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailRichTextBlockStructure' }
-    & StructureL0_WagtailRichTextBlockStructure_Fragment
+    & StructureCommon_WagtailRichTextBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailStaticBlockStructure' }
-    & StructureL0_WagtailStaticBlockStructure_Fragment
+    & StructureCommon_WagtailStaticBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailStructBlockStructure' }
-    & StructureL0_WagtailStructBlockStructure_Fragment
+    & StructureCommon_WagtailStructBlockStructure_Fragment
   ) | (
     { __typename: 'WagtailURLBlockStructure' }
-    & StructureL0_WagtailUrlBlockStructure_Fragment
+    & StructureCommon_WagtailUrlBlockStructure_Fragment
   ) }
+  & StructureCommon_WagtailListBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailRichTextBlockStructure_Fragment = (
   { __typename: 'WagtailRichTextBlockStructure' }
-  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+  & StructureCommon_WagtailRichTextBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailStaticBlockStructure_Fragment = (
   { __typename: 'WagtailStaticBlockStructure' }
-  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+  & StructureCommon_WagtailStaticBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
-  & Pick<Types.WagtailStructBlockStructure, 'label'>
   & { child_blocks: Array<(
     { __typename: 'WagtailStructBlockChildStructure' }
     & Pick<Types.WagtailStructBlockChildStructure, 'name'>
     & { definition: (
       { __typename: 'WagtailBooleanBlockStructure' }
-      & StructureL0_WagtailBooleanBlockStructure_Fragment
+      & StructureCommon_WagtailBooleanBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailCharBlockStructure' }
-      & StructureL0_WagtailCharBlockStructure_Fragment
+      & StructureCommon_WagtailCharBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailImageBlockStructure' }
-      & StructureL0_WagtailImageBlockStructure_Fragment
+      & StructureCommon_WagtailImageBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailListBlockStructure' }
-      & StructureL0_WagtailListBlockStructure_Fragment
+      & StructureCommon_WagtailListBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailRichTextBlockStructure' }
-      & StructureL0_WagtailRichTextBlockStructure_Fragment
+      & StructureCommon_WagtailRichTextBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailStaticBlockStructure' }
-      & StructureL0_WagtailStaticBlockStructure_Fragment
+      & StructureCommon_WagtailStaticBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailStructBlockStructure' }
-      & StructureL0_WagtailStructBlockStructure_Fragment
+      & StructureCommon_WagtailStructBlockStructure_Fragment
     ) | (
       { __typename: 'WagtailURLBlockStructure' }
-      & StructureL0_WagtailUrlBlockStructure_Fragment
+      & StructureCommon_WagtailUrlBlockStructure_Fragment
     ) }
   )> }
+  & StructureCommon_WagtailStructBlockStructure_Fragment
 );
 
 export type StructureL1_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
-  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+  & StructureCommon_WagtailUrlBlockStructure_Fragment
 );
 
 export type StructureL1Fragment = StructureL1_WagtailBooleanBlockStructure_Fragment | StructureL1_WagtailCharBlockStructure_Fragment | StructureL1_WagtailImageBlockStructure_Fragment | StructureL1_WagtailListBlockStructure_Fragment | StructureL1_WagtailRichTextBlockStructure_Fragment | StructureL1_WagtailStaticBlockStructure_Fragment | StructureL1_WagtailStructBlockStructure_Fragment | StructureL1_WagtailUrlBlockStructure_Fragment;
 
 export type StructureL2_WagtailBooleanBlockStructure_Fragment = (
   { __typename: 'WagtailBooleanBlockStructure' }
-  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+  & StructureCommon_WagtailBooleanBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailCharBlockStructure_Fragment = (
   { __typename: 'WagtailCharBlockStructure' }
-  & Pick<Types.WagtailCharBlockStructure, 'label'>
+  & StructureCommon_WagtailCharBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailImageBlockStructure_Fragment = (
   { __typename: 'WagtailImageBlockStructure' }
-  & Pick<Types.WagtailImageBlockStructure, 'label'>
+  & StructureCommon_WagtailImageBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailListBlockStructure_Fragment = (
   { __typename: 'WagtailListBlockStructure' }
-  & Pick<Types.WagtailListBlockStructure, 'label'>
   & { child_block: (
     { __typename: 'WagtailBooleanBlockStructure' }
     & StructureL1_WagtailBooleanBlockStructure_Fragment
@@ -204,21 +203,21 @@ export type StructureL2_WagtailListBlockStructure_Fragment = (
     { __typename: 'WagtailURLBlockStructure' }
     & StructureL1_WagtailUrlBlockStructure_Fragment
   ) }
+  & StructureCommon_WagtailListBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailRichTextBlockStructure_Fragment = (
   { __typename: 'WagtailRichTextBlockStructure' }
-  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+  & StructureCommon_WagtailRichTextBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailStaticBlockStructure_Fragment = (
   { __typename: 'WagtailStaticBlockStructure' }
-  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+  & StructureCommon_WagtailStaticBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
-  & Pick<Types.WagtailStructBlockStructure, 'label'>
   & { child_blocks: Array<(
     { __typename: 'WagtailStructBlockChildStructure' }
     & Pick<Types.WagtailStructBlockChildStructure, 'name'>
@@ -248,33 +247,33 @@ export type StructureL2_WagtailStructBlockStructure_Fragment = (
       & StructureL1_WagtailUrlBlockStructure_Fragment
     ) }
   )> }
+  & StructureCommon_WagtailStructBlockStructure_Fragment
 );
 
 export type StructureL2_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
-  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+  & StructureCommon_WagtailUrlBlockStructure_Fragment
 );
 
 export type StructureL2Fragment = StructureL2_WagtailBooleanBlockStructure_Fragment | StructureL2_WagtailCharBlockStructure_Fragment | StructureL2_WagtailImageBlockStructure_Fragment | StructureL2_WagtailListBlockStructure_Fragment | StructureL2_WagtailRichTextBlockStructure_Fragment | StructureL2_WagtailStaticBlockStructure_Fragment | StructureL2_WagtailStructBlockStructure_Fragment | StructureL2_WagtailUrlBlockStructure_Fragment;
 
 export type StructureL3_WagtailBooleanBlockStructure_Fragment = (
   { __typename: 'WagtailBooleanBlockStructure' }
-  & Pick<Types.WagtailBooleanBlockStructure, 'label'>
+  & StructureCommon_WagtailBooleanBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailCharBlockStructure_Fragment = (
   { __typename: 'WagtailCharBlockStructure' }
-  & Pick<Types.WagtailCharBlockStructure, 'label'>
+  & StructureCommon_WagtailCharBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailImageBlockStructure_Fragment = (
   { __typename: 'WagtailImageBlockStructure' }
-  & Pick<Types.WagtailImageBlockStructure, 'label'>
+  & StructureCommon_WagtailImageBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailListBlockStructure_Fragment = (
   { __typename: 'WagtailListBlockStructure' }
-  & Pick<Types.WagtailListBlockStructure, 'label'>
   & { child_block: (
     { __typename: 'WagtailBooleanBlockStructure' }
     & StructureL2_WagtailBooleanBlockStructure_Fragment
@@ -300,21 +299,21 @@ export type StructureL3_WagtailListBlockStructure_Fragment = (
     { __typename: 'WagtailURLBlockStructure' }
     & StructureL2_WagtailUrlBlockStructure_Fragment
   ) }
+  & StructureCommon_WagtailListBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailRichTextBlockStructure_Fragment = (
   { __typename: 'WagtailRichTextBlockStructure' }
-  & Pick<Types.WagtailRichTextBlockStructure, 'label'>
+  & StructureCommon_WagtailRichTextBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailStaticBlockStructure_Fragment = (
   { __typename: 'WagtailStaticBlockStructure' }
-  & Pick<Types.WagtailStaticBlockStructure, 'label'>
+  & StructureCommon_WagtailStaticBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailStructBlockStructure_Fragment = (
   { __typename: 'WagtailStructBlockStructure' }
-  & Pick<Types.WagtailStructBlockStructure, 'label'>
   & { child_blocks: Array<(
     { __typename: 'WagtailStructBlockChildStructure' }
     & Pick<Types.WagtailStructBlockChildStructure, 'name'>
@@ -344,11 +343,12 @@ export type StructureL3_WagtailStructBlockStructure_Fragment = (
       & StructureL2_WagtailUrlBlockStructure_Fragment
     ) }
   )> }
+  & StructureCommon_WagtailStructBlockStructure_Fragment
 );
 
 export type StructureL3_WagtailUrlBlockStructure_Fragment = (
   { __typename: 'WagtailURLBlockStructure' }
-  & Pick<Types.WagtailUrlBlockStructure, 'label'>
+  & StructureCommon_WagtailUrlBlockStructure_Fragment
 );
 
 export type StructureL3Fragment = StructureL3_WagtailBooleanBlockStructure_Fragment | StructureL3_WagtailCharBlockStructure_Fragment | StructureL3_WagtailImageBlockStructure_Fragment | StructureL3_WagtailListBlockStructure_Fragment | StructureL3_WagtailRichTextBlockStructure_Fragment | StructureL3_WagtailStaticBlockStructure_Fragment | StructureL3_WagtailStructBlockStructure_Fragment | StructureL3_WagtailUrlBlockStructure_Fragment;
@@ -538,32 +538,33 @@ export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
   }
 }
     `;
-export const StructureL0FragmentDoc = gql`
-    fragment StructureL0 on WagtailBlockStructure {
+export const StructureCommonFragmentDoc = gql`
+    fragment StructureCommon on WagtailBlockStructure {
   label
+  required
 }
     `;
 export const StructureL1FragmentDoc = gql`
     fragment StructureL1 on WagtailBlockStructure {
-  label
+  ...StructureCommon
   ... on WagtailListBlockStructure {
     child_block {
-      ...StructureL0
+      ...StructureCommon
     }
   }
   ... on WagtailStructBlockStructure {
     child_blocks {
       name
       definition {
-        ...StructureL0
+        ...StructureCommon
       }
     }
   }
 }
-    ${StructureL0FragmentDoc}`;
+    ${StructureCommonFragmentDoc}`;
 export const StructureL2FragmentDoc = gql`
     fragment StructureL2 on WagtailBlockStructure {
-  label
+  ...StructureCommon
   ... on WagtailListBlockStructure {
     child_block {
       ...StructureL1
@@ -578,10 +579,11 @@ export const StructureL2FragmentDoc = gql`
     }
   }
 }
-    ${StructureL1FragmentDoc}`;
+    ${StructureCommonFragmentDoc}
+${StructureL1FragmentDoc}`;
 export const StructureL3FragmentDoc = gql`
     fragment StructureL3 on WagtailBlockStructure {
-  label
+  ...StructureCommon
   ... on WagtailListBlockStructure {
     child_block {
       ...StructureL2
@@ -596,7 +598,8 @@ export const StructureL3FragmentDoc = gql`
     }
   }
 }
-    ${StructureL2FragmentDoc}`;
+    ${StructureCommonFragmentDoc}
+${StructureL2FragmentDoc}`;
 export const WagtailBlockStructureDocument = gql`
     query WagtailBlockStructure($name: String!) {
   result: wagtailBlockStructure(input: {name: $name}) {

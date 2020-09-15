@@ -4,7 +4,7 @@ import { FormField, FormShape } from '~/components/forms/types';
 
 import { allBlockComponents, isKnownBlock } from './blocks';
 import {
-    StructureL0Fragment, StructureL1Fragment, StructureL2Fragment, StructureL3Fragment
+    StructureCommonFragment, StructureL1Fragment, StructureL2Fragment, StructureL3Fragment
 } from './components/queries.generated';
 import { AnyBlockFragment, StructureFragment } from './types';
 
@@ -51,7 +51,7 @@ export const getBlockValueKey = (
 
 const structureToFormField = (
   structure:
-    | StructureL0Fragment
+    | StructureCommonFragment
     | StructureL1Fragment
     | StructureL2Fragment
     | StructureL3Fragment,
@@ -64,30 +64,35 @@ const structureToFormField = (
         type: 'string',
         name,
         title: structure.label,
+        optional: !structure.required,
       };
     case 'WagtailRichTextBlockStructure':
       return {
         type: 'richtext',
         name,
         title: structure.label,
+        optional: !structure.required,
       };
     case 'WagtailBooleanBlockStructure':
       return {
         type: 'boolean',
         name,
         title: structure.label,
+        optional: !structure.required,
       };
     case 'WagtailImageBlockStructure':
       return {
         type: 'image',
         name,
         title: structure.label,
+        optional: !structure.required,
       };
     case 'WagtailStaticBlockStructure':
       return {
         type: 'string',
         name,
         title: structure.label,
+        optional: !structure.required,
         readonly: true,
         default: 'static', // FIXME
       };
