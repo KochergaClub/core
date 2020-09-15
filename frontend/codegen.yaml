@@ -2,7 +2,9 @@ schema:
   - ../schema.graphql
 documents:
   - "src/**/*.graphql"
-  - "src/wagtail/blocks/*/index.tsx"
+  - "src/*/wagtail/**/*.tsx"
+  - "src/*/blocks/**/*.tsx"
+  - "!src/**/*.generated.tsx"
 
 generates:
   src/apollo/types.generated.ts:
