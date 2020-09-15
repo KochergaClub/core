@@ -24,7 +24,6 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 100px;
   border-top: 2px solid red;
   background-color: white;
   padding: 20px;
@@ -152,10 +151,10 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
 
   return (
     <Container>
-      <Row spaced vCentered>
+      <Row spaced vCentered wrap>
         <A href={wagtailAdminPageEditLink(page.id)}>Редактировать в Wagtail</A>
-        <PageRevisions />
-        <Row>
+        <Row gutter={8} vCentered wrap>
+          <PageRevisions />
           <AsyncButtonWithConfirm
             act={stopEditing}
             headerText="Вы уверены?"

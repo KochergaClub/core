@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
-import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
+import styled from 'styled-components';
 
 const animationTimeout = 250;
 const animationClass = 'transition';
