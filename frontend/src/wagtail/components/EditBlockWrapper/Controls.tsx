@@ -1,10 +1,20 @@
 import { useContext } from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
+import styled from 'styled-components';
 
-import { Button, Row } from '@kocherga/frontkit';
+import { Button, colors, fonts, Row } from '@kocherga/frontkit';
 
 import { AnyBlockFragment } from '../../types';
 import { EditBlocksContext } from '../EditWagtailBlocks';
 import EditButton from './EditButton';
+
+const BlockName = styled.div`
+  color: white;
+  background-color: ${colors.primary[300]};
+  font-size: ${fonts.sizes.XS};
+  padding: 0 8px;
+  border-radius: 8px;
+`;
 
 interface Props {
   block: AnyBlockFragment;
@@ -19,9 +29,12 @@ const Controls: React.FC<Props> = ({ block, position, total }) => {
   };
 
   return (
-    <Row>
+    <Row vCentered>
       <Button size="small" onClick={deleteCb}>
-        Удалить
+        <Row vCentered>
+          <FaTrashAlt />
+          <span>Удалить</span>
+        </Row>
       </Button>
       <EditButton block={block} />
       {position !== undefined && position > 0 ? (
@@ -50,6 +63,7 @@ const Controls: React.FC<Props> = ({ block, position, total }) => {
           &darr;
         </Button>
       ) : null}
+      <BlockName>{block.__typename}</BlockName>
     </Row>
   );
 };

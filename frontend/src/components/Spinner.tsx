@@ -1,7 +1,6 @@
-import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-
 import { FaSpinner } from 'react-icons/fa';
+import styled from 'styled-components';
 
 import { colors, Row } from '@kocherga/frontkit';
 
@@ -43,16 +42,17 @@ const BlockContainer = styled.div`
   font-size: 2em;
 `;
 
-const DELAY = 500;
-
-const Spinner: React.FC<{ size: Size }> = ({ size }) => {
+const Spinner: React.FC<{ size: Size; delay?: number }> = ({
+  size,
+  delay = 500,
+}) => {
   const [appear, setAppear] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => {
       setAppear(true);
-    }, DELAY);
+    }, delay);
     return () => clearTimeout(timer);
-  }, []);
+  }, [delay]);
 
   const SpinnerComponent: React.ComponentType =
     size === 'block' ? FishSpinner : BasicSpinner;
