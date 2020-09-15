@@ -16,11 +16,11 @@ export type RatioSectionPageFragment = (
     { __typename: 'WagtailPageMeta' }
     & Pick<Types.WagtailPageMeta, 'slug'>
   ), body: Array<(
+    { __typename: 'BasicCardBlock' }
+    & Pick<Types.BasicCardBlock, 'id'>
+  ) | (
     { __typename: 'BasicLeadBlock' }
     & Pick<Types.BasicLeadBlock, 'id'>
-  ) | (
-    { __typename: 'BasicParagraphBlock' }
-    & Pick<Types.BasicParagraphBlock, 'id'>
   ) | (
     { __typename: 'BasicTextBlock' }
     & Pick<Types.BasicTextBlock, 'id'>
@@ -88,6 +88,9 @@ export type RatioSectionPageFragment = (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
     & RatioParagraphBlockFragment
+  ) | (
+    { __typename: 'SectionHeaderBlock' }
+    & Pick<Types.SectionHeaderBlock, 'id'>
   ) | (
     { __typename: 'SlideFragmentsBlock' }
     & Pick<Types.SlideFragmentsBlock, 'id'>

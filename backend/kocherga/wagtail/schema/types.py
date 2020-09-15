@@ -312,7 +312,11 @@ WagtailStreamFieldValidationError = build_WagtailStreamFieldValidationError()
 
 
 # block structure types
-common_structure_fields = {'label': str, 'group': Optional[str]}
+common_structure_fields = {
+    'label': str,
+    'group': Optional[str],
+    'required': bool,
+}
 
 BASIC_TYPES = ['Char', 'RichText', 'Boolean', 'Static']
 

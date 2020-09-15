@@ -8,29 +8,30 @@ fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError 
   }
 }
 
-fragment StructureL0 on WagtailBlockStructure {
+fragment StructureCommon on WagtailBlockStructure {
   label
+  required
 }
 
 fragment StructureL1 on WagtailBlockStructure {
-  label
+  ...StructureCommon
   ... on WagtailListBlockStructure {
     child_block {
-      ...StructureL0
+      ...StructureCommon
     }
   }
   ... on WagtailStructBlockStructure {
     child_blocks {
       name
       definition {
-        ...StructureL0
+        ...StructureCommon
       }
     }
   }
 }
 
 fragment StructureL2 on WagtailBlockStructure {
-  label
+  ...StructureCommon
   ... on WagtailListBlockStructure {
     child_block {
       ...StructureL1
@@ -47,7 +48,7 @@ fragment StructureL2 on WagtailBlockStructure {
 }
 
 fragment StructureL3 on WagtailBlockStructure {
-  label
+  ...StructureCommon
   ... on WagtailListBlockStructure {
     child_block {
       ...StructureL2

@@ -111,14 +111,14 @@ export type AuthUser = {
   external_accounts: Array<ExternalServiceAccount>;
 };
 
-export type BasicLeadBlock = WagtailBlock & {
-  __typename?: 'BasicLeadBlock';
+export type BasicCardBlock = WagtailBlock & {
+  __typename?: 'BasicCardBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };
 
-export type BasicParagraphBlock = WagtailBlock & {
-  __typename?: 'BasicParagraphBlock';
+export type BasicLeadBlock = WagtailBlock & {
+  __typename?: 'BasicLeadBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };
@@ -1657,6 +1657,7 @@ export type Query = {
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPages: Array<WagtailPage>;
   wagtailImage?: Maybe<WagtailImage>;
+  wagtailImageSearch: WagtailImageSearchResult;
   wagtailBlockStructure: WagtailBlockStructure;
   wagtailRenderBlock: WagtailRenderBlockResult;
   search: SearchResult;
@@ -1714,6 +1715,11 @@ export type QueryWagtailPageArgs = {
 
 export type QueryWagtailImageArgs = {
   input: WagtailImageInput;
+};
+
+
+export type QueryWagtailImageSearchArgs = {
+  input: WagtailImageSearchInput;
 };
 
 
@@ -2127,6 +2133,18 @@ export type SearchResult = {
   more: Scalars['Boolean'];
 };
 
+export type SectionHeaderBlock = WagtailBlock & {
+  __typename?: 'SectionHeaderBlock';
+  id: Scalars['ID'];
+  value: SectionHeaderBlockValue;
+};
+
+export type SectionHeaderBlockValue = {
+  __typename?: 'SectionHeaderBlockValue';
+  header: Scalars['String'];
+  text: Scalars['String'];
+};
+
 export type SlackAccount = ExternalServiceAccount & {
   __typename?: 'SlackAccount';
   service: SlackExternalService;
@@ -2254,6 +2272,7 @@ export type WagtailBlock = {
 export type WagtailBlockStructure = {
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailBlockStructureInput = {
@@ -2268,12 +2287,14 @@ export type WagtailBooleanBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailBooleanBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailCharBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailCharBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailEditPageBodyBlocksInput = {
@@ -2312,6 +2333,7 @@ export type WagtailImageBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailImageBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailImageInput = {
@@ -2327,10 +2349,20 @@ export type WagtailImageRendition = {
   original_image: WagtailImage;
 };
 
+export type WagtailImageSearchInput = {
+  query: Scalars['String'];
+};
+
+export type WagtailImageSearchResult = {
+  __typename?: 'WagtailImageSearchResult';
+  results: Array<WagtailImage>;
+};
+
 export type WagtailListBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailListBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
   child_block: WagtailBlockStructure;
 };
 
@@ -2388,12 +2420,14 @@ export type WagtailRichTextBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailRichTextBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailStaticBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailStaticBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailStreamBlockValidationError = {
@@ -2424,6 +2458,7 @@ export type WagtailStructBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailStructBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
   child_blocks: Array<WagtailStructBlockChildStructure>;
 };
 
@@ -2437,6 +2472,7 @@ export type WagtailUrlBlockStructure = WagtailBlockStructure & {
   __typename?: 'WagtailURLBlockStructure';
   label: Scalars['String'];
   group?: Maybe<Scalars['String']>;
+  required: Scalars['Boolean'];
 };
 
 export type WagtailUploadImageFromUrlInput = {

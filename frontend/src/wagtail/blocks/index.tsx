@@ -1,4 +1,5 @@
 import { AnyBlockFragment } from '../types';
+import BasicCardBlock from './BasicCardBlock';
 import BasicLeadBlock from './BasicLeadBlock';
 import BasicTextBlock from './BasicTextBlock';
 import BigContactsBlock from './BigContactsBlock';
@@ -12,10 +13,13 @@ import HeroFrontBlock from './HeroFrontBlock';
 import HrBlock from './HrBlock';
 import MailchimpSubscribeBlock from './MailchimpSubscribeBlock';
 import PhotoRibbonBlock from './PhotoRibbonBlock';
+import SectionHeaderBlock from './SectionHeaderBlock';
 
 export const allBlockComponents = {
   BasicLeadBlock,
+  BasicCardBlock,
   GreyBlock,
+  SectionHeaderBlock,
   BasicTextBlock,
   ColumnsBasicBlock,
   ColumnsButtonsBlock,

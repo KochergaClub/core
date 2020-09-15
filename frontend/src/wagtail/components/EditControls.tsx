@@ -1,5 +1,6 @@
 import { FragmentDefinitionNode } from 'graphql';
 import { useCallback, useContext, useState } from 'react';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { gql, useApolloClient } from '@apollo/client';
@@ -24,7 +25,6 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 100px;
   border-top: 2px solid red;
   background-color: white;
   padding: 20px;
@@ -152,10 +152,17 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
 
   return (
     <Container>
-      <Row spaced vCentered>
-        <A href={wagtailAdminPageEditLink(page.id)}>Редактировать в Wagtail</A>
-        <PageRevisions />
-        <Row>
+      <Row spaced vCentered wrap>
+        <A href={wagtailAdminPageEditLink(page.id)} target="_blank">
+          <small>
+            <Row vCentered>
+              <span>Редактировать в Wagtail</span>
+              <FaExternalLinkAlt />
+            </Row>
+          </small>
+        </A>
+        <Row gutter={8} vCentered wrap>
+          <PageRevisions />
           <AsyncButtonWithConfirm
             act={stopEditing}
             headerText="Вы уверены?"

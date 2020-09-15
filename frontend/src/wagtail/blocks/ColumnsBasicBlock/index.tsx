@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { ColumnsBlock, fonts, RichText } from '@kocherga/frontkit';
-
-import { PaddedBlock } from '~/components';
+import { ColumnsBlock, fonts, ResponsivePadding, RichText } from '@kocherga/frontkit';
 
 import { BlockComponent } from '../../types';
 import { ColumnsBasicBlockFragment as Props } from './index.generated';
+
+const VerticalPadding = styled.div`
+  padding: 40px 0;
+`;
 
 const Header = styled.h2`
   font-size: ${fonts.sizes.L};
@@ -24,13 +26,15 @@ const OneColumn = (column: Props['basic_columns'][0]) => (
 
 const ColumnsBasicBlock: BlockComponent<Props> = (block) => {
   return (
-    <PaddedBlock width="wide">
-      <ColumnsBlock>
-        {block.basic_columns.map((column, i) => (
-          <OneColumn {...column} key={i} />
-        ))}
-      </ColumnsBlock>
-    </PaddedBlock>
+    <VerticalPadding>
+      <ResponsivePadding>
+        <ColumnsBlock>
+          {block.basic_columns.map((column, i) => (
+            <OneColumn {...column} key={i} />
+          ))}
+        </ColumnsBlock>
+      </ResponsivePadding>
+    </VerticalPadding>
   );
 };
 

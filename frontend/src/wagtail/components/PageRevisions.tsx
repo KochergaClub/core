@@ -1,16 +1,41 @@
+import { differenceInCalendarDays, formatRelative } from 'date-fns';
+import { ru } from 'date-fns/locale';
 import { FragmentDefinitionNode } from 'graphql';
 import { useContext } from 'react';
+import styled from 'styled-components';
 
 import { gql, useApolloClient } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { getComponentByTypename } from '~/cms/utils';
-import { formatDate } from '~/common/utils';
-import { ApolloQueryResults, AsyncButton, DropdownMenu } from '~/components';
+import { capitalize, formatDate } from '~/common/utils';
+import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action } from '~/components/DropdownMenu';
 
 import { useWagtailPageRevisionsQuery } from './queries.generated';
+
+const ScrollableDropdownArea = styled.div`
+  overflow-x: hidden; /* vertical scroll covers some part of area children, but we compensate for it with margin-right */
+  overflow-y: auto;
+  max-height: 80vh;
+`;
+
+const ActionWrapper = styled.div`
+  margin-right: 10px;
+`;
+
+const formatRelativeWrapped = (date: Date) => {
+  const now = new Date();
+  const diff = differenceInCalendarDays(date, now);
+  return diff < -6
+    ? formatDate(date, 'yyyy-MM-dd HH:mm')
+    : capitalize(
+        formatRelative(date, now, {
+          locale: ru,
+          weekStartsOn: 1,
+        })
+      );
+};
 
 const PageRevisions: React.FC = () => {
   const {
@@ -86,16 +111,20 @@ const PageRevisions: React.FC = () => {
         const { revisions } = result.meta;
         return (
           <DropdownMenu title="История" placement="top">
-            {revisions.map((revision) => (
-              <Action
-                act={async () => {
-                  await pickRevision(revision.id);
-                }}
-                key={revision.id}
-              >
-                {formatDate(new Date(revision.created_at), 'yyyy-MM-dd, HH:mm')}
-              </Action>
-            ))}
+            <ScrollableDropdownArea>
+              {revisions.map((revision) => (
+                <Action
+                  act={async () => {
+                    await pickRevision(revision.id);
+                  }}
+                  key={revision.id}
+                >
+                  <ActionWrapper>
+                    {formatRelativeWrapped(new Date(revision.created_at))}
+                  </ActionWrapper>
+                </Action>
+              ))}
+            </ScrollableDropdownArea>
           </DropdownMenu>
         );
       }}

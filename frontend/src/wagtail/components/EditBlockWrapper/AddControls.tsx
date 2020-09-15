@@ -69,7 +69,7 @@ const AddControls: React.FC<Props> = ({ position }) => {
           close={closeModal}
           typename={typename}
           post={add}
-          modalTitle="Создание блока"
+          modalTitle={`Создание блока ${typename}`}
         />
       ) : showModal ? (
         <Modal>

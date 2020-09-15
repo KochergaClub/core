@@ -44,11 +44,11 @@ export type PresentationPageFragment = (
   { __typename: 'PresentationPage' }
   & Pick<Types.PresentationPage, 'id' | 'title'>
   & { slides: Array<(
+    { __typename: 'BasicCardBlock' }
+    & Pick<Types.BasicCardBlock, 'id'>
+  ) | (
     { __typename: 'BasicLeadBlock' }
     & Pick<Types.BasicLeadBlock, 'id'>
-  ) | (
-    { __typename: 'BasicParagraphBlock' }
-    & Pick<Types.BasicParagraphBlock, 'id'>
   ) | (
     { __typename: 'BasicTextBlock' }
     & Pick<Types.BasicTextBlock, 'id'>
@@ -109,6 +109,9 @@ export type PresentationPageFragment = (
   ) | (
     { __typename: 'RatioParagraphBlock' }
     & Pick<Types.RatioParagraphBlock, 'id'>
+  ) | (
+    { __typename: 'SectionHeaderBlock' }
+    & Pick<Types.SectionHeaderBlock, 'id'>
   ) | (
     { __typename: 'SlideFragmentsBlock' }
     & Pick<Types.SlideFragmentsBlock, 'id'>

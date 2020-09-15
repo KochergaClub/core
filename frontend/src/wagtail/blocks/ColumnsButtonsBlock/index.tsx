@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { Button, Column, ColumnsBlock, fonts } from '@kocherga/frontkit';
-
-import { PaddedBlock } from '~/components';
+import { Button, Column, ColumnsBlock, fonts, ResponsivePadding } from '@kocherga/frontkit';
 
 import { BlockComponent } from '../../types';
 import { ColumnsButtonsBlockFragment as Props } from './index.generated';
@@ -20,8 +18,12 @@ const ColumnContainer = styled(Column)`
 `;
 
 const Image = styled.img`
-  width: 400px;
+  width: 100%;
   height: auto;
+`;
+
+const VerticalPadding = styled.div`
+  padding: 40px 0;
 `;
 
 const OneColumn = (column: Props['button_columns'][0]) => (
@@ -39,16 +41,19 @@ const OneColumn = (column: Props['button_columns'][0]) => (
 
 const ColumnsButtonsBlock: BlockComponent<Props> = (block) => {
   return (
-    <PaddedBlock>
-      <ColumnsBlock>
-        {block.button_columns.map((column, i) => (
-          <OneColumn {...column} key={i} />
-        ))}
-      </ColumnsBlock>
-    </PaddedBlock>
+    <VerticalPadding>
+      <ResponsivePadding>
+        <ColumnsBlock>
+          {block.button_columns.map((column, i) => (
+            <OneColumn {...column} key={i} />
+          ))}
+        </ColumnsBlock>
+      </ResponsivePadding>
+    </VerticalPadding>
   );
 };
 
+// TODO - calculate spec for image (based on number of columns and gutter size? no, that's too fragile...)
 ColumnsButtonsBlock.fragment = gql`
   fragment ColumnsButtonsBlock on ColumnsButtonsBlock {
     id

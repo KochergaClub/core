@@ -90,12 +90,12 @@ type AuthUser {
   external_accounts: [ExternalServiceAccount!]!
 }
 
-type BasicLeadBlock implements WagtailBlock {
+type BasicCardBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
 
-type BasicParagraphBlock implements WagtailBlock {
+type BasicLeadBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
@@ -1041,6 +1041,7 @@ type Query {
   wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
   wagtailPages: [WagtailPage!]!
   wagtailImage(input: WagtailImageInput!): WagtailImage
+  wagtailImageSearch(input: WagtailImageSearchInput!): WagtailImageSearchResult!
   wagtailBlockStructure(input: WagtailBlockStructureInput!): WagtailBlockStructure!
   wagtailRenderBlock(input: WagtailRenderBlockInput!): WagtailRenderBlockResult!
   search(input: SearchInput!): SearchResult!
@@ -1321,6 +1322,16 @@ type SearchResult {
   more: Boolean!
 }
 
+type SectionHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: SectionHeaderBlockValue!
+}
+
+type SectionHeaderBlockValue {
+  header: String!
+  text: String!
+}
+
 type SlackAccount implements ExternalServiceAccount {
   service: SlackExternalService!
   email: String!
@@ -1427,6 +1438,7 @@ interface WagtailBlock {
 interface WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 input WagtailBlockStructureInput {
@@ -1440,11 +1452,13 @@ interface WagtailBlockValidationError {
 type WagtailBooleanBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 type WagtailCharBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 input WagtailEditPageBodyBlocksInput {
@@ -1474,6 +1488,7 @@ type WagtailImage {
 type WagtailImageBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 input WagtailImageInput {
@@ -1488,9 +1503,18 @@ type WagtailImageRendition {
   original_image: WagtailImage!
 }
 
+input WagtailImageSearchInput {
+  query: String!
+}
+
+type WagtailImageSearchResult {
+  results: [WagtailImage!]!
+}
+
 type WagtailListBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
   child_block: WagtailBlockStructure!
 }
 
@@ -1537,11 +1561,13 @@ type WagtailRenderBlockResult {
 type WagtailRichTextBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 type WagtailStaticBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 type WagtailStreamBlockValidationError {
@@ -1567,6 +1593,7 @@ type WagtailStructBlockFieldValidationError {
 type WagtailStructBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
   child_blocks: [WagtailStructBlockChildStructure!]!
 }
 
@@ -1578,6 +1605,7 @@ type WagtailStructBlockValidationError implements WagtailBlockValidationError {
 type WagtailURLBlockStructure implements WagtailBlockStructure {
   label: String!
   group: String
+  required: Boolean!
 }
 
 input WagtailUploadImageFromUrlInput {
