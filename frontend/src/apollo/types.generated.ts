@@ -111,14 +111,14 @@ export type AuthUser = {
   external_accounts: Array<ExternalServiceAccount>;
 };
 
-export type BasicLeadBlock = WagtailBlock & {
-  __typename?: 'BasicLeadBlock';
+export type BasicCardBlock = WagtailBlock & {
+  __typename?: 'BasicCardBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };
 
-export type BasicParagraphBlock = WagtailBlock & {
-  __typename?: 'BasicParagraphBlock';
+export type BasicLeadBlock = WagtailBlock & {
+  __typename?: 'BasicLeadBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
 };

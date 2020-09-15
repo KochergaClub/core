@@ -32,12 +32,12 @@ export type FreeFormPageFragment = (
   { __typename: 'FreeFormPage' }
   & Pick<Types.FreeFormPage, 'id' | 'title'>
   & { body: Array<(
+    { __typename: 'BasicCardBlock' }
+    & Pick<Types.BasicCardBlock, 'id'>
+  ) | (
     { __typename: 'BasicLeadBlock' }
     & Pick<Types.BasicLeadBlock, 'id'>
     & BasicLeadBlockFragment
-  ) | (
-    { __typename: 'BasicParagraphBlock' }
-    & Pick<Types.BasicParagraphBlock, 'id'>
   ) | (
     { __typename: 'BasicTextBlock' }
     & Pick<Types.BasicTextBlock, 'id'>

@@ -90,12 +90,12 @@ type AuthUser {
   external_accounts: [ExternalServiceAccount!]!
 }
 
-type BasicLeadBlock implements WagtailBlock {
+type BasicCardBlock implements WagtailBlock {
   id: ID!
   value: String!
 }
 
-type BasicParagraphBlock implements WagtailBlock {
+type BasicLeadBlock implements WagtailBlock {
   id: ID!
   value: String!
 }

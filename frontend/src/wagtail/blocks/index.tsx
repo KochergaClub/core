@@ -1,4 +1,5 @@
 import { AnyBlockFragment } from '../types';
+import BasicCardBlock from './BasicCardBlock';
 import BasicLeadBlock from './BasicLeadBlock';
 import BasicTextBlock from './BasicTextBlock';
 import BigContactsBlock from './BigContactsBlock';
@@ -15,6 +16,7 @@ import PhotoRibbonBlock from './PhotoRibbonBlock';
 
 export const allBlockComponents = {
   BasicLeadBlock,
+  BasicCardBlock,
   GreyBlock,
   BasicTextBlock,
   ColumnsBasicBlock,

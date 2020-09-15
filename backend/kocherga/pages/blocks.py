@@ -21,12 +21,8 @@ registry.register_list(
             ),
         ),
         (
-            'basic_lead',  # deprecated
+            'basic_lead',  # deprecated in favor of basic_grey and basic_card
             SafeRichTextBlock(group='basic', label='Крупный текст', icon='bold'),
-        ),
-        (
-            'basic_paragraph',  # deprecated
-            SafeRichTextBlock(group='basic', label='Обычный текст', icon='doc-full'),
         ),
         (
             'basic_text',
@@ -36,9 +32,13 @@ registry.register_list(
                     ('centered', blocks.BooleanBlock(required=False)),
                 ],
                 group='basic',
-                label='Обычный текст v2',
+                label='Обычный текст',
                 icon='doc-full',
             ),
+        ),
+        (
+            'basic_card',
+            SafeRichTextBlock(group='basic', label='Карточка с информацией'),
         ),
         (
             'hr',

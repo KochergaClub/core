@@ -23,8 +23,8 @@
       "SlideFragmentsBlock_RawHtmlBlock"
     ],
     "WagtailBlock": [
+      "BasicCardBlock",
       "BasicLeadBlock",
-      "BasicParagraphBlock",
       "BasicTextBlock",
       "BigContactsBlock",
       "ColumnsBasicBlock",
