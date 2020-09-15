@@ -50,6 +50,8 @@ const RichTextInput: React.FC<{
                 if (valueInFormik === '<p><br></p>') {
                   valueInFormik = '';
                 }
+                valueInFormik = valueInFormik.replace(/<br>/g, '<br/>');
+                valueInFormik = valueInFormik.replace(/<hr>/g, '<hr/>');
                 form.setFieldValue(formikField.name, valueInFormik);
               }}
               bounds={ref.current || undefined}

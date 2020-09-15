@@ -1,5 +1,6 @@
 import { FragmentDefinitionNode } from 'graphql';
 import { useCallback, useContext, useState } from 'react';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { gql, useApolloClient } from '@apollo/client';
@@ -152,7 +153,14 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
   return (
     <Container>
       <Row spaced vCentered wrap>
-        <A href={wagtailAdminPageEditLink(page.id)}>Редактировать в Wagtail</A>
+        <A href={wagtailAdminPageEditLink(page.id)} target="_blank">
+          <small>
+            <Row vCentered>
+              <span>Редактировать в Wagtail</span>
+              <FaExternalLinkAlt />
+            </Row>
+          </small>
+        </A>
         <Row gutter={8} vCentered wrap>
           <PageRevisions />
           <AsyncButtonWithConfirm
