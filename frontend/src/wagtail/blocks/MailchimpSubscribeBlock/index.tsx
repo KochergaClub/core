@@ -1,12 +1,44 @@
+import styled from 'styled-components';
+
 import { gql } from '@apollo/client';
-import { A, Button, Column, Input, Row } from '@kocherga/frontkit';
+import { A, Button, Column, deviceMediaQueries, Input } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
 import { BlockComponent } from '../../types';
 import { MailchimpSubscribeBlockFragment as Props } from './index.generated';
 
-const GROUP_ID = 21289; // FIXME - move to config
+// FIXME - move to config
+const GROUP_ID = 21289;
+const MAILCHIMP_CODE = 'b_275ee3f3bd1fdc7e05496a122_d73cd4de36';
+const MAILCHIMP_ACTION =
+  'https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&id=d73cd4de36';
+
+const SubscribeButton = styled(Button)`
+  padding: 10px 40px;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  > * + * {
+    margin-top: 16px;
+  }
+
+  ${deviceMediaQueries.desktop(`
+    width: auto;
+    flex-direction: row;
+    > input {
+      min-width: 500px;
+    }
+    > * + * {
+      margin-left: 16px;
+      margin-top: 0;
+    }
+  `)}
+`;
 
 const INTEREST_IDS: { [k: string]: number } = {
   news: 2,
@@ -37,11 +69,7 @@ const InterestCheckbox = ({
 const MailchimpSubscribeBlock: BlockComponent<Props> = (props) => {
   return (
     <PaddedBlock>
-      <form
-        action="https://kocherga-club.us11.list-manage.com/subscribe/post?u=275ee3f3bd1fdc7e05496a122&amp;id=d73cd4de36" // FIXME - move to config
-        method="post"
-        target="_blank"
-      >
+      <form action={MAILCHIMP_ACTION} method="post" target="_blank">
         <div style={{ display: 'none' }}>
           <InterestCheckbox interest="news" value={props.mailchimp.news} />
           <InterestCheckbox interest="events" value={props.mailchimp.events} />
@@ -54,7 +82,7 @@ const MailchimpSubscribeBlock: BlockComponent<Props> = (props) => {
         <div style={{ position: 'absolute', left: -5000 }} aria-hidden="true">
           <input
             type="text"
-            name="b_275ee3f3bd1fdc7e05496a122_d73cd4de36" // FIXME - move to config
+            name={MAILCHIMP_CODE}
             tabIndex={-1}
             value=""
             readOnly
@@ -62,20 +90,20 @@ const MailchimpSubscribeBlock: BlockComponent<Props> = (props) => {
         </div>
 
         <Column centered gutter={16}>
-          <Row stretch gutter={16}>
+          <InputContainer>
             <Input
               type="text"
               name="EMAIL"
               placeholder="Ваш E-mail"
               scale="big"
             />
-            <Button type="submit" kind="primary">
-              Подписаться
-            </Button>
-          </Row>
 
+            <SubscribeButton type="submit" kind="primary">
+              Подписаться
+            </SubscribeButton>
+          </InputContainer>
           <small>
-            Заполняя форму, я даю согласие на{' '}
+            Заполняя форму, вы даёте согласие на{' '}
             <A href="/terms">обработку персональных данных</A>.
           </small>
         </Column>
