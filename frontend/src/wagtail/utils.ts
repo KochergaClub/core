@@ -148,7 +148,7 @@ type Json = JsonSimple | JsonObject | JsonArray;
 // TODO - compare value with block's shape
 const blockValueToParams = (
   structure:
-    | StructureL0Fragment
+    | StructureCommonFragment
     | StructureL1Fragment
     | StructureL2Fragment
     | StructureL3Fragment,
