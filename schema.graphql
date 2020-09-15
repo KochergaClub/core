@@ -1322,6 +1322,16 @@ type SearchResult {
   more: Boolean!
 }
 
+type SectionHeaderBlock implements WagtailBlock {
+  id: ID!
+  value: SectionHeaderBlockValue!
+}
+
+type SectionHeaderBlockValue {
+  header: String!
+  text: String!
+}
+
 type SlackAccount implements ExternalServiceAccount {
   service: SlackExternalService!
   email: String!

@@ -2133,6 +2133,18 @@ export type SearchResult = {
   more: Scalars['Boolean'];
 };
 
+export type SectionHeaderBlock = WagtailBlock & {
+  __typename?: 'SectionHeaderBlock';
+  id: Scalars['ID'];
+  value: SectionHeaderBlockValue;
+};
+
+export type SectionHeaderBlockValue = {
+  __typename?: 'SectionHeaderBlockValue';
+  header: Scalars['String'];
+  text: Scalars['String'];
+};
+
 export type SlackAccount = ExternalServiceAccount & {
   __typename?: 'SlackAccount';
   service: SlackExternalService;

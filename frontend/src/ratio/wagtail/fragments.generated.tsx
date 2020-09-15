@@ -89,6 +89,9 @@ export type RatioSectionPageFragment = (
     & Pick<Types.RatioParagraphBlock, 'id'>
     & RatioParagraphBlockFragment
   ) | (
+    { __typename: 'SectionHeaderBlock' }
+    & Pick<Types.SectionHeaderBlock, 'id'>
+  ) | (
     { __typename: 'SlideFragmentsBlock' }
     & Pick<Types.SlideFragmentsBlock, 'id'>
   ) | (

@@ -9,7 +9,7 @@ registry.register_list(
     tag='basic',
     blocks=[
         (
-            'grey',  # TODO - rename to `basic_header` or `basic_section_header`
+            'grey',  # deprecated in favor of section_header
             blocks.StructBlock(
                 [
                     ('header', blocks.CharBlock()),
@@ -39,6 +39,18 @@ registry.register_list(
         (
             'basic_card',
             SafeRichTextBlock(group='basic', label='Карточка с информацией'),
+        ),
+        (
+            'section_header',
+            blocks.StructBlock(
+                [
+                    ('header', blocks.CharBlock()),
+                    ('text', SafeRichTextBlock(required=False)),
+                ],
+                group='basic',
+                label='Заголовок секции',
+                icon='title',
+            ),
         ),
         (
             'hr',

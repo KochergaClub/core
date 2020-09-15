@@ -45,6 +45,7 @@
       "RatioMathBlock",
       "RatioNotebookSectionBlock",
       "RatioParagraphBlock",
+      "SectionHeaderBlock",
       "SlideFragmentsBlock",
       "SlideFragmentsBlock_RawHtmlBlock",
       "SlideFragmentsBlock_RichTextBlock",
