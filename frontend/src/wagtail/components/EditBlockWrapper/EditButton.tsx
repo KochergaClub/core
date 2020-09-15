@@ -35,7 +35,7 @@ const EditButton: React.FC<Props> = ({ block }) => {
     <ButtonWithModal title="Редактировать" small>
       {({ close }) => (
         <ModalBlockForm
-          modalTitle="Редактирование блока"
+          modalTitle={`Редактирование блока ${block.__typename}`}
           post={save}
           typename={block.__typename}
           block={block}
