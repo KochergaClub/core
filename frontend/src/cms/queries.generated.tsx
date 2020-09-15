@@ -97,79 +97,79 @@ export type WagtailPagesQuery = (
     { __typename: 'BlogIndexPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'BlogPostPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'FaqPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'FolderPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'FreeFormPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'PresentationPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'ProjectIndexPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'ProjectPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'RatioNotebookIndexPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'RatioNotebookPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'RatioPresentationIndexPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'RatioSectionIndexPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   ) | (
     { __typename: 'RatioSectionPage' }
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   )> }
 );
@@ -291,7 +291,7 @@ export const WagtailPagesDocument = gql`
     query WagtailPages {
   wagtailPages {
     meta {
-      html_url
+      url
     }
   }
 }

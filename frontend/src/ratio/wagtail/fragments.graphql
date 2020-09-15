@@ -47,7 +47,7 @@ fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
     id
     title
     meta {
-      html_url
+      url
     }
   }
 }

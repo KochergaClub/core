@@ -155,7 +155,7 @@ export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
     throw new APIError('GraphQL error', 500);
   }
 
-  return data.wagtailPages.map((p) => p.meta.html_url.replace(/^\//, ''));
+  return data.wagtailPages.map((p) => p.meta.url.replace(/^\//, ''));
 };
 
 export const normalizeSsrPath = (path: string) => {

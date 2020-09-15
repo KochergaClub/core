@@ -57,8 +57,10 @@ def build_WagtailPageMeta():
             {
                 'slug': str,
                 'html_url': g.Field(
-                    g.NN(g.String), resolve=lambda page, info: page.url
-                ),  # deprecated
+                    g.NN(g.String),
+                    resolve=lambda page, info: page.url,
+                    deprecation_reason='renamed to `url`',
+                ),
                 'url': str,
                 'permissions': g.Field(
                     g.NN(

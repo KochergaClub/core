@@ -7,7 +7,7 @@ export type FaqPage_SummaryFragment = (
   & Pick<Types.FaqPage, 'id' | 'summary' | 'title'>
   & { meta: (
     { __typename: 'WagtailPageMeta' }
-    & Pick<Types.WagtailPageMeta, 'html_url'>
+    & Pick<Types.WagtailPageMeta, 'url'>
   ) }
 );
 
@@ -21,7 +21,7 @@ export type FaqPageFragment = (
   & Pick<Types.FaqPage, 'id' | 'title' | 'summary'>
   & { meta: (
     { __typename: 'WagtailPageMeta' }
-    & Pick<Types.WagtailPageMeta, 'html_url'>
+    & Pick<Types.WagtailPageMeta, 'url'>
   ), next_page?: Types.Maybe<(
     { __typename: 'FaqPage' }
     & FaqPage_SummaryFragment
@@ -43,7 +43,7 @@ export const FaqPage_SummaryFragmentDoc = gql`
   summary
   title
   meta {
-    html_url
+    url
   }
 }
     `;
@@ -58,7 +58,7 @@ export const FaqPageFragmentDoc = gql`
     fragment FaqPage on FaqPage {
   id
   meta {
-    html_url
+    url
   }
   title
   summary

@@ -32,7 +32,7 @@ query TildaPages {
 query WagtailPages {
   wagtailPages {
     meta {
-      html_url
+      url
     }
   }
 }

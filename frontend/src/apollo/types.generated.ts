@@ -2381,6 +2381,7 @@ export type WagtailPage = {
 export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
+  /** @deprecated renamed to `url` */
   html_url: Scalars['String'];
   url: Scalars['String'];
   permissions: WagtailPagePermissions;

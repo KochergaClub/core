@@ -138,7 +138,7 @@ export type RatioPresentationIndexPageFragment = (
     & Pick<Types.PresentationPage, 'id' | 'title'>
     & { meta: (
       { __typename: 'WagtailPageMeta' }
-      & Pick<Types.WagtailPageMeta, 'html_url'>
+      & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   )> }
 );
@@ -203,7 +203,7 @@ export const RatioPresentationIndexPageFragmentDoc = gql`
     id
     title
     meta {
-      html_url
+      url
     }
   }
 }

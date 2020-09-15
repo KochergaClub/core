@@ -1,12 +1,11 @@
-import { Page, PaddedBlock } from '~/components';
+import { A } from '@kocherga/frontkit';
 
+import { PaddedBlock, Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {
-  RatioPresentationIndexPageFragment,
-  RatioPresentationIndexPageFragmentDoc,
+    RatioPresentationIndexPageFragment, RatioPresentationIndexPageFragmentDoc
 } from './fragments.generated';
-import { A } from '@kocherga/frontkit';
 
 const PresentationIndexPage: NextWagtailPage<RatioPresentationIndexPageFragment> = ({
   page,
@@ -15,9 +14,9 @@ const PresentationIndexPage: NextWagtailPage<RatioPresentationIndexPageFragment>
     <Page title={page.title} menu="team">
       <Page.Title>{page.title}</Page.Title>
       <PaddedBlock>
-        {page.presentations.map(presentation => (
+        {page.presentations.map((presentation) => (
           <div key={presentation.id}>
-            <A href={presentation.meta.html_url}>{presentation.title}</A>
+            <A href={presentation.meta.url}>{presentation.title}</A>
           </div>
         ))}
       </PaddedBlock>

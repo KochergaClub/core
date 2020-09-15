@@ -3,7 +3,7 @@ fragment PageSearchItem on PageSearchItem {
     id
     title
     meta {
-      html_url
+      url
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Row, A, HR } from '@kocherga/frontkit';
+import { A, HR, Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 
@@ -21,12 +21,12 @@ const NavigationBlock: React.FC<Props> = ({ wagtailPage }) => {
       <HR />
       <Row spaced>
         {prev ? (
-          <A href={prev.meta.html_url}>&larr; {prev.title}</A>
+          <A href={prev.meta.url}>&larr; {prev.title}</A>
         ) : (
           <span>&nbsp;</span>
         )}
         {next ? (
-          <A href={next.meta.html_url}>{next.title} &rarr;</A>
+          <A href={next.meta.url}>{next.title} &rarr;</A>
         ) : (
           <span>&nbsp;</span>
         )}

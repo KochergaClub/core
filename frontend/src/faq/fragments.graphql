@@ -3,7 +3,7 @@ fragment FaqPage_summary on FaqPage {
   summary
   title
   meta {
-    html_url
+    url
   }
 }
 
@@ -16,7 +16,7 @@ fragment FaqEntry on FaqEntry {
 fragment FaqPage on FaqPage {
   id
   meta {
-    html_url
+    url
   }
   title
   summary

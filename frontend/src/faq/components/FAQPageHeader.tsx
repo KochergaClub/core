@@ -1,6 +1,5 @@
-import { ParentLinkInHeader } from '~/components';
-
 import PageHeader from '~/blocks/PageHeader';
+import { ParentLinkInHeader } from '~/components';
 
 import { FaqPageFragment } from '../fragments.generated';
 
@@ -10,7 +9,7 @@ interface Props {
 
 const FAQPageHeader: React.FC<Props> = ({ wagtailPage }) => {
   const root = '/faq';
-  const isRoot = wagtailPage.meta.html_url === root;
+  const isRoot = wagtailPage.meta.url === root;
 
   const top = <ParentLinkInHeader href={root}>FAQ</ParentLinkInHeader>;
 

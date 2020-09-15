@@ -1,4 +1,4 @@
-import { PaddedBlock, AnotherPageSummary } from '~/components';
+import { AnotherPageSummary, PaddedBlock } from '~/components';
 
 import { FaqPage_SummaryFragment } from '../fragments.generated';
 
@@ -8,10 +8,10 @@ interface Props {
 
 const SubpagesBlock: React.FC<Props> = ({ subpages }) => (
   <PaddedBlock>
-    {subpages.map(subpage => (
+    {subpages.map((subpage) => (
       <AnotherPageSummary
         key={subpage.id}
-        href={subpage.meta.html_url}
+        href={subpage.meta.url}
         title={subpage.title}
         description={subpage.summary}
       />

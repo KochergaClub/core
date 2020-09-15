@@ -1531,7 +1531,7 @@ interface WagtailPage {
 
 type WagtailPageMeta {
   slug: String!
-  html_url: String!
+  html_url: String! @deprecated(reason: "renamed to `url`")
   url: String!
   permissions: WagtailPagePermissions!
   revisions: [WagtailPageRevision!]!
