@@ -15,7 +15,7 @@ c = helpers.Collection()
 SpecialOffer = DjangoObjectType(
     'SpecialOffer',
     model=models.SpecialOffer,
-    db_fields=['id', 'text', 'link', 'button_text', 'until', 'hide_duration',],
+    db_fields=['id', 'text', 'link', 'button_text', 'until', 'hide_duration'],
 )
 
 

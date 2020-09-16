@@ -21,4 +21,5 @@ class WebsiteGroup(ModelAdminGroup):
         kocherga.tilda.wagtail_hooks.TildaPageAdmin,
     )
 
+
 modeladmin_register(WebsiteGroup)
