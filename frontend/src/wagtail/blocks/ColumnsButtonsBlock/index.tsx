@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
@@ -26,18 +27,21 @@ const VerticalPadding = styled.div`
   padding: 40px 0;
 `;
 
-const OneColumn = (column: Props['button_columns'][0]) => (
-  <div>
-    <ColumnContainer gutter={16} centered>
-      {column.image && <Image src={column.image.url} />}
-      <Header>{column.title}</Header>
-      <Text>{column.text}</Text>
-      <Button onClick={() => window.alert(column.link)}>
-        {column.caption}
-      </Button>
-    </ColumnContainer>
-  </div>
-);
+const OneColumn = (column: Props['button_columns'][0]) => {
+  const navigate = useCallback(() => {
+    window.location.href = column.link;
+  }, [column.link]);
+  return (
+    <div>
+      <ColumnContainer gutter={16} centered>
+        {column.image && <Image src={column.image.url} />}
+        <Header>{column.title}</Header>
+        <Text>{column.text}</Text>
+        <Button onClick={navigate}>{column.caption}</Button>
+      </ColumnContainer>
+    </div>
+  );
+};
 
 const ColumnsButtonsBlock: BlockComponent<Props> = (block) => {
   return (
