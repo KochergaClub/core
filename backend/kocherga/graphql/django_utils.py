@@ -12,6 +12,7 @@ from django.db.models.fields.reverse_related import ForeignObjectRel
 
 def model_field(model: Type[models.Model], field_name: str):
     db_field = model._meta.get_field(field_name)
+    resolve = None
 
     if (
         isinstance(db_field, models.TextField)
@@ -26,6 +27,16 @@ def model_field(model: Type[models.Model], field_name: str):
             type_ = g.ID
         else:
             type_ = g.Int
+    elif isinstance(db_field, models.DurationField):
+        type_ = g.Int
+
+        def resolve_duration(obj, info):
+            value = getattr(obj, info.field_name)
+            if not value:
+                return None
+            return value.total_seconds()
+
+        resolve = resolve_duration
     elif isinstance(db_field, models.FloatField):
         type_ = g.Float
     elif isinstance(db_field, models.BooleanField):
@@ -38,7 +49,7 @@ def model_field(model: Type[models.Model], field_name: str):
     if not db_field.null:
         type_ = g.NN(type_)
 
-    return g.Field(type_)
+    return g.Field(type_, resolve=resolve)
 
 
 def model_fields(model: Type[models.Model], field_names: List[str]):

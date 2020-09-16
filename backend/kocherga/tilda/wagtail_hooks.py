@@ -1,4 +1,4 @@
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.options import ModelAdmin
 
 from . import models
 
@@ -9,4 +9,4 @@ class TildaPageAdmin(ModelAdmin):
     list_display = ('title', 'path')
 
 
-modeladmin_register(TildaPageAdmin)
+# not registered - registered in website group from kocherga.pages.wagtail_hooks

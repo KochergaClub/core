@@ -1079,6 +1079,7 @@ type Query {
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!
+  specialOffer: SpecialOffer
   emailMailchimpCategoriesAll: [EmailMailchimpCategory!]!
   emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
   imageTemplatesAll: [ImageTemplate!]!
@@ -1377,6 +1378,15 @@ type SlideRichTextBlock implements WagtailBlock {
 type SlideTitleBlock implements WagtailBlock {
   id: ID!
   value: String!
+}
+
+type SpecialOffer {
+  id: ID!
+  text: String!
+  link: String!
+  button_text: String!
+  until: String!
+  hide_duration: Int!
 }
 
 type StaffMember {

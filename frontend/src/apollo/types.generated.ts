@@ -1695,6 +1695,7 @@ export type Query = {
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
+  specialOffer?: Maybe<SpecialOffer>;
   emailMailchimpCategoriesAll: Array<EmailMailchimpCategory>;
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>;
   imageTemplatesAll: Array<ImageTemplate>;
@@ -2199,6 +2200,16 @@ export type SlideTitleBlock = WagtailBlock & {
   __typename?: 'SlideTitleBlock';
   id: Scalars['ID'];
   value: Scalars['String'];
+};
+
+export type SpecialOffer = {
+  __typename?: 'SpecialOffer';
+  id: Scalars['ID'];
+  text: Scalars['String'];
+  link: Scalars['String'];
+  button_text: Scalars['String'];
+  until: Scalars['String'];
+  hide_duration: Scalars['Int'];
 };
 
 export type StaffMember = {

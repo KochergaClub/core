@@ -1,6 +1,10 @@
+from datetime import timedelta
+
+from django.db import models
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import StreamFieldPanel
 
+from kocherga.django.models import SingletonModel
 from kocherga.wagtail.models import KochergaPage
 
 from kocherga.wagtail.blocks import registry as blocks_registry
@@ -45,3 +49,14 @@ class FrontPage(KochergaPage):
 # fake model for wagtail folders
 class FolderPage(KochergaPage):
     graphql_type = 'FolderPage'
+
+
+class SpecialOffer(SingletonModel):
+    text = models.CharField(max_length=255)
+    link = models.CharField(max_length=255)
+    button_text = models.CharField(max_length=40)
+    until = models.DateTimeField()
+    hide_duration = models.DurationField(default=timedelta(days=7))
+
+    def __str__(self):
+        return 'Особое предложение'
