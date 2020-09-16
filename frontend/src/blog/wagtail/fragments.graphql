@@ -7,8 +7,7 @@ fragment BlogPostAuthor on BlogPostAuthor {
 }
 
 fragment BlogPostPage on BlogPostPage {
-  id
-  title
+  ...CommonWagtailPage
   summary
   date
   body
@@ -28,8 +27,7 @@ fragment BlogPostPage_summary on BlogPostPage {
 }
 
 fragment BlogIndexPage on BlogIndexPage {
-  id
-  title
+  ...CommonWagtailPage
   subtitle
   posts {
     ...BlogPostPage_summary

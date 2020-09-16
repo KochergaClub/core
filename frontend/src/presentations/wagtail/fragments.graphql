@@ -32,8 +32,7 @@ fragment SlideFragmentsBlock on SlideFragmentsBlock {
 }
 
 fragment PresentationPage on PresentationPage {
-  id
-  title
+  ...CommonWagtailPage
   slides {
     __typename
     id

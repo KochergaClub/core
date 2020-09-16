@@ -174,7 +174,136 @@ export type WagtailPagesQuery = (
   )> }
 );
 
+export type CommonWagtailPage_BlogIndexPage_Fragment = (
+  { __typename: 'BlogIndexPage' }
+  & Pick<Types.BlogIndexPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
 
+export type CommonWagtailPage_BlogPostPage_Fragment = (
+  { __typename: 'BlogPostPage' }
+  & Pick<Types.BlogPostPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_FaqPage_Fragment = (
+  { __typename: 'FaqPage' }
+  & Pick<Types.FaqPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_FolderPage_Fragment = (
+  { __typename: 'FolderPage' }
+  & Pick<Types.FolderPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_FreeFormPage_Fragment = (
+  { __typename: 'FreeFormPage' }
+  & Pick<Types.FreeFormPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_PresentationPage_Fragment = (
+  { __typename: 'PresentationPage' }
+  & Pick<Types.PresentationPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_ProjectIndexPage_Fragment = (
+  { __typename: 'ProjectIndexPage' }
+  & Pick<Types.ProjectIndexPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_ProjectPage_Fragment = (
+  { __typename: 'ProjectPage' }
+  & Pick<Types.ProjectPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_RatioNotebookIndexPage_Fragment = (
+  { __typename: 'RatioNotebookIndexPage' }
+  & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_RatioNotebookPage_Fragment = (
+  { __typename: 'RatioNotebookPage' }
+  & Pick<Types.RatioNotebookPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_RatioPresentationIndexPage_Fragment = (
+  { __typename: 'RatioPresentationIndexPage' }
+  & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_RatioSectionIndexPage_Fragment = (
+  { __typename: 'RatioSectionIndexPage' }
+  & Pick<Types.RatioSectionIndexPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPage_RatioSectionPage_Fragment = (
+  { __typename: 'RatioSectionPage' }
+  & Pick<Types.RatioSectionPage, 'id' | 'title'>
+  & { meta: (
+    { __typename: 'WagtailPageMeta' }
+    & Pick<Types.WagtailPageMeta, 'slug' | 'url' | 'description'>
+  ) }
+);
+
+export type CommonWagtailPageFragment = CommonWagtailPage_BlogIndexPage_Fragment | CommonWagtailPage_BlogPostPage_Fragment | CommonWagtailPage_FaqPage_Fragment | CommonWagtailPage_FolderPage_Fragment | CommonWagtailPage_FreeFormPage_Fragment | CommonWagtailPage_PresentationPage_Fragment | CommonWagtailPage_ProjectIndexPage_Fragment | CommonWagtailPage_ProjectPage_Fragment | CommonWagtailPage_RatioNotebookIndexPage_Fragment | CommonWagtailPage_RatioNotebookPage_Fragment | CommonWagtailPage_RatioPresentationIndexPage_Fragment | CommonWagtailPage_RatioSectionIndexPage_Fragment | CommonWagtailPage_RatioSectionPage_Fragment;
+
+export const CommonWagtailPageFragmentDoc = gql`
+    fragment CommonWagtailPage on WagtailPage {
+  id
+  title
+  meta {
+    slug
+    url
+    description
+  }
+}
+    `;
 export const WagtailPageTypeDocument = gql`
     query WagtailPageType($path: String, $preview_token: String) {
   wagtailPage(path: $path, preview_token: $preview_token) {

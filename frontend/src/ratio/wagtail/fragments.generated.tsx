@@ -1,21 +1,19 @@
 import * as Types from '../../apollo/types.generated';
 
+import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../../cms/queries.generated';
 import { RatioHeaderBlockFragment, RatioParagraphBlockFragment, RatioInsetBlockFragment, RatioExerciseBlockFragment, RatioExerciseOnelineBlockFragment, RatioBriefingBlockFragment, RatioMathBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
 import gql from 'graphql-tag';
+import { CommonWagtailPageFragmentDoc } from '../../cms/queries.generated';
 import { RatioHeaderBlockFragmentDoc, RatioParagraphBlockFragmentDoc, RatioInsetBlockFragmentDoc, RatioExerciseBlockFragmentDoc, RatioExerciseOnelineBlockFragmentDoc, RatioBriefingBlockFragmentDoc, RatioMathBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
 
 export type RatioSectionIndexPageFragment = (
   { __typename: 'RatioSectionIndexPage' }
-  & Pick<Types.RatioSectionIndexPage, 'id' | 'title'>
+  & CommonWagtailPage_RatioSectionIndexPage_Fragment
 );
 
 export type RatioSectionPageFragment = (
   { __typename: 'RatioSectionPage' }
-  & Pick<Types.RatioSectionPage, 'id' | 'title'>
-  & { meta: (
-    { __typename: 'WagtailPageMeta' }
-    & Pick<Types.WagtailPageMeta, 'slug'>
-  ), body: Array<(
+  & { body: Array<(
     { __typename: 'BasicCardBlock' }
     & Pick<Types.BasicCardBlock, 'id'>
   ) | (
@@ -110,16 +108,16 @@ export type RatioSectionPageFragment = (
     { __typename: 'SlideTitleBlock' }
     & Pick<Types.SlideTitleBlock, 'id'>
   )> }
+  & CommonWagtailPage_RatioSectionPage_Fragment
 );
 
 export type RatioNotebookIndexPageFragment = (
   { __typename: 'RatioNotebookIndexPage' }
-  & Pick<Types.RatioNotebookIndexPage, 'id' | 'title'>
+  & CommonWagtailPage_RatioNotebookIndexPage_Fragment
 );
 
 export type RatioNotebookPageFragment = (
   { __typename: 'RatioNotebookPage' }
-  & Pick<Types.RatioNotebookPage, 'id' | 'title'>
   & { sections: Array<(
     { __typename: 'RatioNotebookSectionBlock' }
     & Pick<Types.RatioNotebookSectionBlock, 'id'>
@@ -128,11 +126,11 @@ export type RatioNotebookPageFragment = (
       & RatioSectionPageFragment
     ) }
   )> }
+  & CommonWagtailPage_RatioNotebookPage_Fragment
 );
 
 export type RatioPresentationIndexPageFragment = (
   { __typename: 'RatioPresentationIndexPage' }
-  & Pick<Types.RatioPresentationIndexPage, 'id' | 'title'>
   & { presentations: Array<(
     { __typename: 'PresentationPage' }
     & Pick<Types.PresentationPage, 'id' | 'title'>
@@ -141,27 +139,22 @@ export type RatioPresentationIndexPageFragment = (
       & Pick<Types.WagtailPageMeta, 'url'>
     ) }
   )> }
+  & CommonWagtailPage_RatioPresentationIndexPage_Fragment
 );
 
 export const RatioSectionIndexPageFragmentDoc = gql`
     fragment RatioSectionIndexPage on RatioSectionIndexPage {
-  id
-  title
+  ...CommonWagtailPage
 }
-    `;
+    ${CommonWagtailPageFragmentDoc}`;
 export const RatioNotebookIndexPageFragmentDoc = gql`
     fragment RatioNotebookIndexPage on RatioNotebookIndexPage {
-  id
-  title
+  ...CommonWagtailPage
 }
-    `;
+    ${CommonWagtailPageFragmentDoc}`;
 export const RatioSectionPageFragmentDoc = gql`
     fragment RatioSectionPage on RatioSectionPage {
-  id
-  meta {
-    slug
-  }
-  title
+  ...CommonWagtailPage
   body {
     __typename
     id
@@ -174,7 +167,8 @@ export const RatioSectionPageFragmentDoc = gql`
     ...RatioMathBlock
   }
 }
-    ${RatioHeaderBlockFragmentDoc}
+    ${CommonWagtailPageFragmentDoc}
+${RatioHeaderBlockFragmentDoc}
 ${RatioParagraphBlockFragmentDoc}
 ${RatioInsetBlockFragmentDoc}
 ${RatioExerciseBlockFragmentDoc}
@@ -183,8 +177,7 @@ ${RatioBriefingBlockFragmentDoc}
 ${RatioMathBlockFragmentDoc}`;
 export const RatioNotebookPageFragmentDoc = gql`
     fragment RatioNotebookPage on RatioNotebookPage {
-  id
-  title
+  ...CommonWagtailPage
   sections {
     ... on RatioNotebookSectionBlock {
       id
@@ -194,11 +187,11 @@ export const RatioNotebookPageFragmentDoc = gql`
     }
   }
 }
-    ${RatioSectionPageFragmentDoc}`;
+    ${CommonWagtailPageFragmentDoc}
+${RatioSectionPageFragmentDoc}`;
 export const RatioPresentationIndexPageFragmentDoc = gql`
     fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
-  id
-  title
+  ...CommonWagtailPage
   presentations {
     id
     title
@@ -207,4 +200,4 @@ export const RatioPresentationIndexPageFragmentDoc = gql`
     }
   }
 }
-    `;
+    ${CommonWagtailPageFragmentDoc}`;

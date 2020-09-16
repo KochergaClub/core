@@ -1,13 +1,13 @@
 import { FragmentDefinitionNode } from 'graphql';
 import gql from 'graphql-tag';
 
+// TODO - dynamic() to reduce the bundle size for wagtail pages
 import { KochergaApolloClient } from '~/apollo/types';
 import * as BlogPages from '~/blog/wagtail';
 import { APIError } from '~/common/api';
 import * as FAQPages from '~/faq/wagtail';
 import * as PresentationPages from '~/presentations/wagtail';
 import * as ProjectsPages from '~/projects/wagtail';
-// TODO - async load or other trick to reduce the bundle size for wagtail pages
 import * as RatioPages from '~/ratio/wagtail';
 import { NextWagtailPage } from '~/wagtail/types';
 import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';

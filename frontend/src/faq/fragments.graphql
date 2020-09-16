@@ -14,11 +14,7 @@ fragment FaqEntry on FaqEntry {
 }
 
 fragment FaqPage on FaqPage {
-  id
-  meta {
-    url
-  }
-  title
+  ...CommonWagtailPage
   summary
   next_page {
     ...FaqPage_summary

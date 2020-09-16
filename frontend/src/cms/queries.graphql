@@ -36,3 +36,13 @@ query WagtailPages {
     }
   }
 }
+
+fragment CommonWagtailPage on WagtailPage {
+  id
+  title
+  meta {
+    slug
+    url
+    description
+  }
+}

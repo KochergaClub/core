@@ -56,6 +56,9 @@ def build_WagtailPageMeta():
         g.fields(
             {
                 'slug': str,
+                'description': g.Field(
+                    g.NN(g.String), resolve=lambda page, info: page.search_description
+                ),
                 'html_url': g.Field(
                     g.NN(g.String),
                     resolve=lambda page, info: page.url,

@@ -1,9 +1,5 @@
 fragment ProjectPage_summary on ProjectPage {
-  id
-  meta {
-    slug
-  }
-  title
+  ...CommonWagtailPage
   summary
   activity_summary
   is_active
@@ -15,16 +11,14 @@ fragment ProjectPage_summary on ProjectPage {
 }
 
 fragment ProjectIndexPage on ProjectIndexPage {
-  id
-  title
+  ...CommonWagtailPage
   projects {
     ...ProjectPage_summary
   }
 }
 
 fragment ProjectPage on ProjectPage {
-  id
-  title
+  ...CommonWagtailPage
   summary
   body
   is_active

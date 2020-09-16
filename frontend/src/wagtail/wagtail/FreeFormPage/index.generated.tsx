@@ -1,40 +1,41 @@
 import gql from 'graphql-tag';
-import * as Types from '../apollo/types.generated';
+import * as Types from '../../../apollo/types.generated';
 
-import { BasicTextBlockFragment } from './blocks/BasicTextBlock/index.generated';
-import { SectionHeaderBlockFragment } from './blocks/SectionHeaderBlock/index.generated';
-import { BasicCardBlockFragment } from './blocks/BasicCardBlock/index.generated';
-import { GreyBlockFragment } from './blocks/GreyBlock/index.generated';
-import { ColumnsBasicBlockFragment } from './blocks/ColumnsBasicBlock/index.generated';
-import { ColumnsButtonsBlockFragment } from './blocks/ColumnsButtonsBlock/index.generated';
-import { EventsListBlockFragment } from './blocks/EventsListBlock/index.generated';
-import { BigContactsBlockFragment } from './blocks/BigContactsBlock/index.generated';
-import { PhotoRibbonBlockFragment } from './blocks/PhotoRibbonBlock/index.generated';
-import { MailchimpSubscribeBlockFragment } from './blocks/MailchimpSubscribeBlock/index.generated';
-import { HeroFrontBlockFragment } from './blocks/HeroFrontBlock/index.generated';
-import { HrBlockFragment } from './blocks/HrBlock/index.generated';
-import { FrontPartnersBlockFragment } from './blocks/FrontPartnersBlock/index.generated';
-import { FrontSocialLinksBlockFragment } from './blocks/FrontSocialLinksBlock/index.generated';
-import { BasicLeadBlockFragment } from './blocks/BasicLeadBlock/index.generated';
-import { BasicLeadBlockFragmentDoc } from './blocks/BasicLeadBlock/index.generated';
-import { BasicTextBlockFragmentDoc } from './blocks/BasicTextBlock/index.generated';
-import { SectionHeaderBlockFragmentDoc } from './blocks/SectionHeaderBlock/index.generated';
-import { BasicCardBlockFragmentDoc } from './blocks/BasicCardBlock/index.generated';
-import { GreyBlockFragmentDoc } from './blocks/GreyBlock/index.generated';
-import { ColumnsBasicBlockFragmentDoc } from './blocks/ColumnsBasicBlock/index.generated';
-import { ColumnsButtonsBlockFragmentDoc } from './blocks/ColumnsButtonsBlock/index.generated';
-import { EventsListBlockFragmentDoc } from './blocks/EventsListBlock/index.generated';
-import { BigContactsBlockFragmentDoc } from './blocks/BigContactsBlock/index.generated';
-import { PhotoRibbonBlockFragmentDoc } from './blocks/PhotoRibbonBlock/index.generated';
-import { MailchimpSubscribeBlockFragmentDoc } from './blocks/MailchimpSubscribeBlock/index.generated';
-import { HeroFrontBlockFragmentDoc } from './blocks/HeroFrontBlock/index.generated';
-import { HrBlockFragmentDoc } from './blocks/HrBlock/index.generated';
-import { FrontPartnersBlockFragmentDoc } from './blocks/FrontPartnersBlock/index.generated';
-import { FrontSocialLinksBlockFragmentDoc } from './blocks/FrontSocialLinksBlock/index.generated';
+import { BasicLeadBlockFragment } from '../../blocks/BasicLeadBlock/index.generated';
+import { BasicTextBlockFragment } from '../../blocks/BasicTextBlock/index.generated';
+import { SectionHeaderBlockFragment } from '../../blocks/SectionHeaderBlock/index.generated';
+import { BasicCardBlockFragment } from '../../blocks/BasicCardBlock/index.generated';
+import { GreyBlockFragment } from '../../blocks/GreyBlock/index.generated';
+import { ColumnsBasicBlockFragment } from '../../blocks/ColumnsBasicBlock/index.generated';
+import { ColumnsButtonsBlockFragment } from '../../blocks/ColumnsButtonsBlock/index.generated';
+import { EventsListBlockFragment } from '../../blocks/EventsListBlock/index.generated';
+import { BigContactsBlockFragment } from '../../blocks/BigContactsBlock/index.generated';
+import { PhotoRibbonBlockFragment } from '../../blocks/PhotoRibbonBlock/index.generated';
+import { MailchimpSubscribeBlockFragment } from '../../blocks/MailchimpSubscribeBlock/index.generated';
+import { HeroFrontBlockFragment } from '../../blocks/HeroFrontBlock/index.generated';
+import { HrBlockFragment } from '../../blocks/HrBlock/index.generated';
+import { FrontPartnersBlockFragment } from '../../blocks/FrontPartnersBlock/index.generated';
+import { FrontSocialLinksBlockFragment } from '../../blocks/FrontSocialLinksBlock/index.generated';
+import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../../../cms/queries.generated';
+import { CommonWagtailPageFragmentDoc } from '../../../cms/queries.generated';
+import { BasicLeadBlockFragmentDoc } from '../../blocks/BasicLeadBlock/index.generated';
+import { BasicTextBlockFragmentDoc } from '../../blocks/BasicTextBlock/index.generated';
+import { SectionHeaderBlockFragmentDoc } from '../../blocks/SectionHeaderBlock/index.generated';
+import { BasicCardBlockFragmentDoc } from '../../blocks/BasicCardBlock/index.generated';
+import { GreyBlockFragmentDoc } from '../../blocks/GreyBlock/index.generated';
+import { ColumnsBasicBlockFragmentDoc } from '../../blocks/ColumnsBasicBlock/index.generated';
+import { ColumnsButtonsBlockFragmentDoc } from '../../blocks/ColumnsButtonsBlock/index.generated';
+import { EventsListBlockFragmentDoc } from '../../blocks/EventsListBlock/index.generated';
+import { BigContactsBlockFragmentDoc } from '../../blocks/BigContactsBlock/index.generated';
+import { PhotoRibbonBlockFragmentDoc } from '../../blocks/PhotoRibbonBlock/index.generated';
+import { MailchimpSubscribeBlockFragmentDoc } from '../../blocks/MailchimpSubscribeBlock/index.generated';
+import { HeroFrontBlockFragmentDoc } from '../../blocks/HeroFrontBlock/index.generated';
+import { HrBlockFragmentDoc } from '../../blocks/HrBlock/index.generated';
+import { FrontPartnersBlockFragmentDoc } from '../../blocks/FrontPartnersBlock/index.generated';
+import { FrontSocialLinksBlockFragmentDoc } from '../../blocks/FrontSocialLinksBlock/index.generated';
 
 export type FreeFormPageFragment = (
   { __typename: 'FreeFormPage' }
-  & Pick<Types.FreeFormPage, 'id' | 'title'>
   & { body: Array<(
     { __typename: 'BasicCardBlock' }
     & Pick<Types.BasicCardBlock, 'id'>
@@ -138,12 +139,12 @@ export type FreeFormPageFragment = (
     { __typename: 'SlideTitleBlock' }
     & Pick<Types.SlideTitleBlock, 'id'>
   )> }
+  & CommonWagtailPage_FreeFormPage_Fragment
 );
 
 export const FreeFormPageFragmentDoc = gql`
     fragment FreeFormPage on FreeFormPage {
-  id
-  title
+  ...CommonWagtailPage
   body {
     __typename
     id
@@ -164,7 +165,8 @@ export const FreeFormPageFragmentDoc = gql`
     ...FrontSocialLinksBlock
   }
 }
-    ${BasicLeadBlockFragmentDoc}
+    ${CommonWagtailPageFragmentDoc}
+${BasicLeadBlockFragmentDoc}
 ${BasicTextBlockFragmentDoc}
 ${SectionHeaderBlockFragmentDoc}
 ${BasicCardBlockFragmentDoc}

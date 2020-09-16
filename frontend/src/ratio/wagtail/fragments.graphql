@@ -1,14 +1,9 @@
 fragment RatioSectionIndexPage on RatioSectionIndexPage {
-  id
-  title
+  ...CommonWagtailPage
 }
 
 fragment RatioSectionPage on RatioSectionPage {
-  id
-  meta {
-    slug
-  }
-  title
+  ...CommonWagtailPage
   body {
     __typename
     id
@@ -23,13 +18,11 @@ fragment RatioSectionPage on RatioSectionPage {
 }
 
 fragment RatioNotebookIndexPage on RatioNotebookIndexPage {
-  id
-  title
+  ...CommonWagtailPage
 }
 
 fragment RatioNotebookPage on RatioNotebookPage {
-  id
-  title
+  ...CommonWagtailPage
   sections {
     ... on RatioNotebookSectionBlock {
       id
@@ -41,8 +34,7 @@ fragment RatioNotebookPage on RatioNotebookPage {
 }
 
 fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
-  id
-  title
+  ...CommonWagtailPage
   presentations {
     id
     title

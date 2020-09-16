@@ -1,33 +1,33 @@
 import * as Types from '../apollo/types.generated';
 
+import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../cms/queries.generated';
 import { Event_SummaryFragment } from '../events/queries.generated';
 import gql from 'graphql-tag';
+import { CommonWagtailPageFragmentDoc } from '../cms/queries.generated';
 import { Event_SummaryFragmentDoc } from '../events/queries.generated';
 
 export type ProjectPage_SummaryFragment = (
   { __typename: 'ProjectPage' }
-  & Pick<Types.ProjectPage, 'id' | 'title' | 'summary' | 'activity_summary' | 'is_active'>
-  & { meta: (
-    { __typename: 'WagtailPageMeta' }
-    & Pick<Types.WagtailPageMeta, 'slug'>
-  ), image: (
+  & Pick<Types.ProjectPage, 'summary' | 'activity_summary' | 'is_active'>
+  & { image: (
     { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url' | 'width' | 'height'>
   ) }
+  & CommonWagtailPage_ProjectPage_Fragment
 );
 
 export type ProjectIndexPageFragment = (
   { __typename: 'ProjectIndexPage' }
-  & Pick<Types.ProjectIndexPage, 'id' | 'title'>
   & { projects: Array<(
     { __typename: 'ProjectPage' }
     & ProjectPage_SummaryFragment
   )> }
+  & CommonWagtailPage_ProjectIndexPage_Fragment
 );
 
 export type ProjectPageFragment = (
   { __typename: 'ProjectPage' }
-  & Pick<Types.ProjectPage, 'id' | 'title' | 'summary' | 'body' | 'is_active' | 'activity_summary'>
+  & Pick<Types.ProjectPage, 'summary' | 'body' | 'is_active' | 'activity_summary'>
   & { image: (
     { __typename: 'WagtailImageRendition' }
     & Pick<Types.WagtailImageRendition, 'url'>
@@ -35,15 +35,12 @@ export type ProjectPageFragment = (
     { __typename: 'Event' }
     & Event_SummaryFragment
   )> }
+  & CommonWagtailPage_ProjectPage_Fragment
 );
 
 export const ProjectPage_SummaryFragmentDoc = gql`
     fragment ProjectPage_summary on ProjectPage {
-  id
-  meta {
-    slug
-  }
-  title
+  ...CommonWagtailPage
   summary
   activity_summary
   is_active
@@ -53,20 +50,19 @@ export const ProjectPage_SummaryFragmentDoc = gql`
     height
   }
 }
-    `;
+    ${CommonWagtailPageFragmentDoc}`;
 export const ProjectIndexPageFragmentDoc = gql`
     fragment ProjectIndexPage on ProjectIndexPage {
-  id
-  title
+  ...CommonWagtailPage
   projects {
     ...ProjectPage_summary
   }
 }
-    ${ProjectPage_SummaryFragmentDoc}`;
+    ${CommonWagtailPageFragmentDoc}
+${ProjectPage_SummaryFragmentDoc}`;
 export const ProjectPageFragmentDoc = gql`
     fragment ProjectPage on ProjectPage {
-  id
-  title
+  ...CommonWagtailPage
   summary
   body
   is_active
@@ -78,4 +74,5 @@ export const ProjectPageFragmentDoc = gql`
     ...Event_Summary
   }
 }
-    ${Event_SummaryFragmentDoc}`;
+    ${CommonWagtailPageFragmentDoc}
+${Event_SummaryFragmentDoc}`;

@@ -1,14 +1,11 @@
 import { DocumentNode } from 'graphql';
 
+import { CommonWagtailPageFragment } from '~/cms/queries.generated';
+
 import { WagtailBlockStructureQuery } from './components/queries.generated';
-import { FreeFormPageFragment } from './queries.generated';
+import { FreeFormPageFragment } from './wagtail/FreeFormPage/index.generated';
 
-export interface AnyWagtailPage {
-  id: string;
-  title: string;
-}
-
-export interface NextWagtailPage<P extends AnyWagtailPage> {
+export interface NextWagtailPage<P extends CommonWagtailPageFragment> {
   (props: { page: P }): JSX.Element | null;
   fragment: DocumentNode;
 }

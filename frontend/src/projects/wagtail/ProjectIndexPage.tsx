@@ -70,11 +70,8 @@ const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
   page,
 }) => {
   return (
-    <Page
-      title={page.title}
-      description="Регулярные мероприятия и сообщества, которые собираются в Кочерге.
-      Рациональность, научно-популярные лектории, критическое мышление и многое другое."
-    >
+    <Page title={page.title} description={page.meta.description}>
+      {/* TODO - move text to wagtail */}
       <TL02 title="Активные проекты">
         Регулярные мероприятия и сообщества, которые собираются в Кочерге.
         <br />

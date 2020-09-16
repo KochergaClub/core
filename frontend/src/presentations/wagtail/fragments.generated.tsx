@@ -1,6 +1,8 @@
 import * as Types from '../../apollo/types.generated';
 
+import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../../cms/queries.generated';
 import gql from 'graphql-tag';
+import { CommonWagtailPageFragmentDoc } from '../../cms/queries.generated';
 
 export type SlideTitleBlockFragment = (
   { __typename: 'SlideTitleBlock' }
@@ -42,7 +44,6 @@ export type SlideFragmentsBlockFragment = (
 
 export type PresentationPageFragment = (
   { __typename: 'PresentationPage' }
-  & Pick<Types.PresentationPage, 'id' | 'title'>
   & { slides: Array<(
     { __typename: 'BasicCardBlock' }
     & Pick<Types.BasicCardBlock, 'id'>
@@ -135,6 +136,7 @@ export type PresentationPageFragment = (
     & Pick<Types.SlideTitleBlock, 'id'>
     & SlideTitleBlockFragment
   )> }
+  & CommonWagtailPage_PresentationPage_Fragment
 );
 
 export const SlideTitleBlockFragmentDoc = gql`
@@ -179,8 +181,7 @@ export const SlideFragmentsBlockFragmentDoc = gql`
 ${SlideFragmentRawHtmlFragmentDoc}`;
 export const PresentationPageFragmentDoc = gql`
     fragment PresentationPage on PresentationPage {
-  id
-  title
+  ...CommonWagtailPage
   slides {
     __typename
     id
@@ -190,7 +191,8 @@ export const PresentationPageFragmentDoc = gql`
     ...SlideFragmentsBlock
   }
 }
-    ${SlideTitleBlockFragmentDoc}
+    ${CommonWagtailPageFragmentDoc}
+${SlideTitleBlockFragmentDoc}
 ${SlideRichTextBlockFragmentDoc}
 ${SlideRawHtmlBlockFragmentDoc}
 ${SlideFragmentsBlockFragmentDoc}`;
