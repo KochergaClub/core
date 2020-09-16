@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { PaddedBlock } from '~/components';
 
 import { Event_SummaryFragment } from '../../queries.generated';
-
 import EventCard from './EventCard';
 
 const List = styled.div`
@@ -21,7 +20,7 @@ export default function EventsListBlock({ events }: Props) {
     <PaddedBlock>
       {events.length ? (
         <List>
-          {events.map(event => (
+          {events.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
         </List>

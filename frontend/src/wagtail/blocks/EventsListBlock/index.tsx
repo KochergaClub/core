@@ -1,3 +1,5 @@
+import dynamic from 'next/dynamic';
+
 import { gql } from '@apollo/client';
 
 import NonWagtailEventsListBlock from '~/events/components/EventsListBlock';
@@ -5,8 +7,18 @@ import { BlockComponent } from '~/wagtail/types';
 
 import { EventsListBlockFragment as Props, EventsListBlockFragmentDoc } from './index.generated';
 
+const PublicEventsCalendar = dynamic(
+  () => import('~/events/components/PublicEventsCalendar'),
+  { ssr: false }
+);
+
 const EventsListBlock: BlockComponent<Props> = (props) => {
-  return <NonWagtailEventsListBlock events={props.events} />;
+  return (
+    <div>
+      <PublicEventsCalendar />
+      <NonWagtailEventsListBlock events={props.events} />
+    </div>
+  );
 };
 
 gql`
