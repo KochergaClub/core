@@ -19,6 +19,7 @@ const Container = styled.div`
   background-color: ${mainColor};
   color: white;
   padding: 12px 40px;
+  z-index: 100;
 `;
 
 const ContentContainer = styled.div`
