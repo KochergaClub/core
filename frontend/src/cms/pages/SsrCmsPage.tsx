@@ -1,6 +1,7 @@
-import { Props, AnyCmsPage, getCmsProps } from './AnyCmsPage';
 import { NextApolloPage, withApollo } from '~/apollo';
+
 import { normalizeSsrPath } from '../utils';
+import { AnyCmsPage, getCmsProps, Props } from './AnyCmsPage';
 
 const SsrCmsPage: NextApolloPage<Props> = (props) => <AnyCmsPage {...props} />;
 

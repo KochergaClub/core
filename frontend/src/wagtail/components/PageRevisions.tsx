@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { gql, useApolloClient } from '@apollo/client';
 
 import { WagtailPageContext } from '~/cms/contexts';
-import { getComponentByTypename } from '~/cms/utils';
+import { getComponentByTypename } from '~/cms/wagtail-utils';
 import { capitalize, formatDate } from '~/common/utils';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action } from '~/components/DropdownMenu';

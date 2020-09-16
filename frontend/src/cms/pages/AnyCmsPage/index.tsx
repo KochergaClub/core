@@ -11,11 +11,10 @@ import TildaPage from '../../components/TildaPage';
 import { useWagtailPageReducer, WagtailPageContext } from '../../contexts';
 import { TildaPageQuery } from '../../queries.generated';
 import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
-import { getComponentByTypename, loadWagtailPage, wagtailPageUrls } from '../../utils';
+import { getComponentByTypename, loadWagtailPage, wagtailPageUrls } from '../../wagtail-utils';
 
 interface WagtailProps {
   kind: 'wagtail';
-  typename: string;
   page: any;
 }
 
@@ -111,14 +110,13 @@ export const getCmsProps = async (
     };
   }
 
-  const { page, typename } = await loadWagtailPage({
+  const page = await loadWagtailPage({
     locator: { path },
     apolloClient,
   });
 
   return {
     kind: 'wagtail',
-    typename,
     page,
   };
 };

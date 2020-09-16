@@ -1,10 +1,8 @@
 import { Page } from '~/components';
-
 import { NextWagtailPage } from '~/wagtail/types';
 
 import {
-  RatioSectionIndexPageFragment,
-  RatioSectionIndexPageFragmentDoc,
+    RatioSectionIndexPageFragment, RatioSectionIndexPageFragmentDoc
 } from './fragments.generated';
 
 const SectionIndexPage: NextWagtailPage<RatioSectionIndexPageFragment> = ({

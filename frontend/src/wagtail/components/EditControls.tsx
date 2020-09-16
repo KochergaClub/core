@@ -7,7 +7,7 @@ import { gql, useApolloClient } from '@apollo/client';
 import { A, Row } from '@kocherga/frontkit';
 
 import { WagtailPageContext } from '~/cms/contexts';
-import { getComponentByTypename } from '~/cms/utils';
+import { getComponentByTypename } from '~/cms/wagtail-utils';
 import { useNotification } from '~/common/hooks';
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
