@@ -1,7 +1,9 @@
 import dynamic from 'next/dynamic';
 
 import { gql } from '@apollo/client';
+import { A, Row } from '@kocherga/frontkit';
 
+import { PaddedBlock } from '~/components';
 import NonWagtailEventsListBlock from '~/events/components/EventsListBlock';
 import { BlockComponent } from '~/wagtail/types';
 
@@ -13,10 +15,20 @@ const PublicEventsCalendar = dynamic(
 );
 
 const EventsListBlock: BlockComponent<Props> = (props) => {
+  const maxEvents = 5;
+  const events = props.events.slice(0, maxEvents);
+  const moreEvents = props.events.length > maxEvents;
   return (
     <div>
       <PublicEventsCalendar />
-      <NonWagtailEventsListBlock events={props.events} />
+      <NonWagtailEventsListBlock events={events} />
+      {moreEvents && (
+        <PaddedBlock>
+          <Row centered>
+            <A href="/events">Больше событий &rarr;</A>
+          </Row>
+        </PaddedBlock>
+      )}
     </div>
   );
 };
