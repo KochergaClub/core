@@ -145,6 +145,9 @@ class EventPrototype(models.Model):
         event.full_clean()
         event.save()
 
+        for tag_name in self.tag_names():
+            event.add_tag(tag_name)
+
         if self.vk_group:
             event.vk_announcement.group = self.vk_group
             event.vk_announcement.save()
