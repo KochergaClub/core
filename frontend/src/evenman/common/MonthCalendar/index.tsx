@@ -38,26 +38,25 @@ const MonthCalendar = (props: Props) => {
     });
   }, [props.date, props.weeks]);
 
+  const normalStyle = (item: Date) => ({
+    opacity: 1,
+    height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
+  });
+
   const transitions = useTransition(
     weeksState.weeks,
     (week) => formatDate(week, 'yyyy-MM-dd'),
     {
+      initial: {
+        opacity: 1,
+        height: 'auto',
+      },
       from: {
         opacity: 0,
         height: 0,
       },
-      update: (item) => {
-        return {
-          opacity: 1,
-          height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
-        };
-      },
-      enter: (item) => {
-        return {
-          opacity: 1,
-          height: weeksState.heights[formatDate(item, 'yyyy-MM-dd')] || 0,
-        };
-      },
+      update: normalStyle,
+      enter: normalStyle,
       leave: {
         opacity: 0,
         height: 0,
@@ -81,15 +80,7 @@ const MonthCalendar = (props: Props) => {
       <MonthHeader />
 
       {transitions.map(({ item: week, props: style, key }) => (
-        <animated.div
-          key={key}
-          style={{
-            opacity: style.opacity,
-            height: style.height
-              ? style.height.interpolate((height) => `${height}px`)
-              : 0,
-          }}
-        >
+        <animated.div key={key} style={style}>
           <Week
             firstDay={week}
             renderCell={props.renderCell}
