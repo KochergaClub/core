@@ -150,7 +150,11 @@ const EditWagtailBlocks: React.FC<Props> = ({ blocks }) => {
     <EditBlocksContext.Provider value={{ dispatch }}>
       <div>
         <EditControls blocks={state.blocks} />
-        <FlipMove>
+        <FlipMove
+          appearAnimation={false}
+          enterAnimation="fade"
+          leaveAnimation="fade"
+        >
           {state.blocks.map((block, i) => {
             const block_validation_error =
               state.validation_error?.block_errors.find((e) => e.block_id === i)
