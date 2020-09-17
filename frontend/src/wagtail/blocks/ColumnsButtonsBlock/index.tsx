@@ -20,6 +20,7 @@ const ColumnContainer = styled(Column)`
 
 const Image = styled.img`
   width: 100%;
+  max-width: 500px;
   height: auto;
 `;
 
@@ -34,7 +35,12 @@ const OneColumn = (column: Props['button_columns'][0]) => {
   return (
     <div>
       <ColumnContainer gutter={16} centered>
-        {column.image && <Image src={column.image.url} />}
+        {column.image && (
+          <Image
+            src={column.image.url}
+            srcSet={`${column.image.url}, ${column.image_x2.url} 2x`}
+          />
+        )}
         <Header>{column.title}</Header>
         <Text>{column.text}</Text>
         <Button onClick={navigate}>{column.caption}</Button>
@@ -64,12 +70,16 @@ ColumnsButtonsBlock.fragment = gql`
     button_columns: value {
       title
       text
-      image(spec: "original") {
+      image(spec: "width-500") {
         id
         url
         original_image {
           id
         }
+      }
+      image_x2: image(spec: "width-1000") {
+        id
+        url
       }
       caption
       link

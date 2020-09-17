@@ -15,6 +15,9 @@ export type ColumnsButtonsBlockFragment = (
         { __typename: 'WagtailImage' }
         & Pick<Types.WagtailImage, 'id'>
       ) }
+    ), image_x2: (
+      { __typename: 'WagtailImageRendition' }
+      & Pick<Types.WagtailImageRendition, 'id' | 'url'>
     ) }
   )> }
 );
@@ -25,12 +28,16 @@ export const ColumnsButtonsBlockFragmentDoc = gql`
   button_columns: value {
     title
     text
-    image(spec: "original") {
+    image(spec: "width-500") {
       id
       url
       original_image {
         id
       }
+    }
+    image_x2: image(spec: "width-1000") {
+      id
+      url
     }
     caption
     link
