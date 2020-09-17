@@ -16,7 +16,7 @@ const ListContainer = styled.div`
   min-width: 300px;
 `;
 
-const ControlButton = styled(AsyncButton)`
+const ControlButton = styled(AsyncButton).attrs({ size: 'small' })`
   width: 40px;
 `;
 
