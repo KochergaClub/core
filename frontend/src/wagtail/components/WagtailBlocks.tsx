@@ -1,26 +1,23 @@
 // Stream of Wagtail blocks rendered in order based on their type.
-
+import dynamic from 'next/dynamic';
 import { useContext } from 'react';
 
 import { WagtailPageContext } from '~/cms/contexts';
+import { Spinner } from '~/components';
 
 import { AnyBlockFragment } from '../types';
 import AnyBlock from './AnyBlock';
-import EditWagtailBlocks from './EditWagtailBlocks';
-// wrappers for different modes
-// TODO - load dynamically?
-import PreviewBlockWrapper from './PreviewBlockWrapper';
+
+const EditWagtailBlocks = dynamic(() => import('./EditWagtailBlocks'), {
+  loading: () => <Spinner size="block" />, // eslint-disable-line react/display-name
+});
+const PreviewWagtailBlocks = dynamic(() => import('./PreviewWagtailBlocks'), {
+  loading: () => <Spinner size="block" />, // eslint-disable-line react/display-name
+});
 
 interface Props {
   blocks: AnyBlockFragment[];
 }
-
-const ViewBlockWrapper: React.FC<{ block: AnyBlockFragment }> = ({
-  children,
-}) => {
-  // TODO - wrap in <div> or <section> for parity with other modes?
-  return <>{children}</>;
-};
 
 export default function WagtailBlocks({ blocks }: Props) {
   const {
@@ -28,20 +25,18 @@ export default function WagtailBlocks({ blocks }: Props) {
   } = useContext(WagtailPageContext);
 
   if (editing) {
-    // too complicated to be replaced with ModeWrapper pattern below
-    // for example, EditWagtailBlocks creates an editable copy of all blocks
     return <EditWagtailBlocks blocks={blocks} />;
+  } else if (preview) {
+    return <PreviewWagtailBlocks blocks={blocks} />;
+  } else {
+    return (
+      <div>
+        {blocks.map((block) => (
+          <div key={block.id}>
+            <AnyBlock {...block} />
+          </div>
+        ))}
+      </div>
+    );
   }
-
-  const ModeWrapper = preview ? PreviewBlockWrapper : ViewBlockWrapper;
-
-  return (
-    <div>
-      {blocks.map((block) => (
-        <ModeWrapper key={block.id} block={block}>
-          <AnyBlock {...block} />
-        </ModeWrapper>
-      ))}
-    </div>
-  );
 }
