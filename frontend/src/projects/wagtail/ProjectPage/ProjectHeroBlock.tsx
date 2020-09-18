@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { Label, fonts, deviceMediaQueries } from '@kocherga/frontkit';
 
-import { ProjectPageFragment } from '../queries.generated';
+import { deviceMediaQueries, fonts, Label } from '@kocherga/frontkit';
+
+import { ProjectPageFragment } from './fragments.generated';
 
 const Container = styled.div<{ image: string }>`
   min-height: 400px;

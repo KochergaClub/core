@@ -1,18 +1,14 @@
-import styled from 'styled-components';
 import { parseISO } from 'date-fns';
-
-import { CalendarStyle, CalendarDndStyle } from './CalendarStyle';
-import Toolbar from './Toolbar';
-
 import { Calendar, CalendarProps, stringOrDate } from 'react-big-calendar';
-
-import { localizer } from './localizer';
-
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 // FIXME - some some reason `import { Views } from 'react-big-calendar'` imports type, not constant.
 // This is a workaround.
 import { views } from 'react-big-calendar/lib/utils/constants';
+import styled from 'styled-components';
 
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import { CalendarDndStyle, CalendarStyle } from './CalendarStyle';
+import { localizer } from './localizer';
+import Toolbar from './Toolbar';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 

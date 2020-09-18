@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { Label } from '@kocherga/frontkit';
 
-import { ProjectPage_SummaryFragment } from '../queries.generated';
+import { ProjectPage_SummaryFragment } from './fragments.generated';
 
 const ProjectA = styled.a`
   text-decoration: none;

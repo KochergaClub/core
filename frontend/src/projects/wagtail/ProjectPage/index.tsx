@@ -2,9 +2,9 @@ import RichTextBlock from '~/blocks/RichTextBlock';
 import { Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
-import ProjectHeroBlock from '../../components/ProjectHeroBlock';
-import UpcomingEventsBlock from '../../components/UpcomingEventsBlock';
 import { ProjectPageFragment, ProjectPageFragmentDoc } from './fragments.generated';
+import ProjectHeroBlock from './ProjectHeroBlock';
+import UpcomingEventsBlock from './UpcomingEventsBlock';
 
 const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
   page: project,

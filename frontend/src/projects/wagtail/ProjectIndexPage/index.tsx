@@ -7,10 +7,10 @@ import TL02 from '~/blocks/TL02';
 import { Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
-import ProjectCard from '../../components/ProjectCard';
 import {
     ProjectIndexPageFragment, ProjectIndexPageFragmentDoc, ProjectPage_SummaryFragment
 } from './fragments.generated';
+import ProjectCard from './ProjectCard';
 
 const Grid = styled.div`
   background-color: #eee;

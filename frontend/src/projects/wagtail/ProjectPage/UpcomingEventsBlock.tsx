@@ -1,8 +1,7 @@
 import TL03 from '~/blocks/TL03';
-
 import EventsListBlock from '~/events/components/EventsListBlock';
 
-import { ProjectPageFragment } from '../queries.generated';
+import { ProjectPageFragment } from './fragments.generated';
 
 const UpcomingEventsBlock: React.FC<{ project: ProjectPageFragment }> = ({
   project,

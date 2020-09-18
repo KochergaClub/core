@@ -48,7 +48,7 @@ const FieldInputForDate: React.FC<{ field: BasicFormField; name: string }> = ({
     {({ field, form }) => (
       <DatePicker
         selected={field.value ? new Date(field.value) : new Date()}
-        onChange={(date) => {
+        onChange={(date: Date | null) => {
           form.setFieldValue(
             name,
             date ? format(date, 'yyyy-MM-dd') : undefined
