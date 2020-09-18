@@ -1,15 +1,3 @@
-fragment ProjectPage_summary on ProjectPage {
-  ...CommonWagtailPage
-  summary
-  activity_summary
-  is_active
-  image(spec: "fill-500x300") {
-    url
-    width
-    height
-  }
-}
-
 fragment ProjectIndexPage on ProjectIndexPage {
   ...CommonWagtailPage
   active_description
@@ -21,16 +9,15 @@ fragment ProjectIndexPage on ProjectIndexPage {
   }
 }
 
-fragment ProjectPage on ProjectPage {
+fragment ProjectPage_summary on ProjectPage {
   ...CommonWagtailPage
   summary
-  body
-  is_active
   activity_summary
-  image(spec: "fill-1080x400") {
+  is_active
+  image(spec: "fill-500x300") {
+    id
     url
-  }
-  upcoming_events {
-    ...Event_Summary
+    width
+    height
   }
 }

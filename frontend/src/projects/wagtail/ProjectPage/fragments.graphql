@@ -1,0 +1,14 @@
+fragment ProjectPage on ProjectPage {
+  ...CommonWagtailPage
+  summary
+  body
+  is_active
+  activity_summary
+  image(spec: "fill-1080x400") {
+    id
+    url
+  }
+  upcoming_events {
+    ...Event_Summary
+  }
+}

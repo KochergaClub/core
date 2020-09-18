@@ -13,7 +13,6 @@ import {
     PresentationIndexPage as RatioPresentationIndexPage, SectionIndexPage as RatioSectionIndexPage,
     SectionPage as RatioSectionPage
 } from '~/ratio/wagtail';
-import { NextWagtailPage } from '~/wagtail/types';
 import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
 import {

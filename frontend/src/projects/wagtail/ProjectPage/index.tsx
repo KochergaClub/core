@@ -1,15 +1,10 @@
-import { Page } from '~/components';
 import RichTextBlock from '~/blocks/RichTextBlock';
-
+import { Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';
 
-import {
-  ProjectPageFragment,
-  ProjectPageFragmentDoc,
-} from '../queries.generated';
-
-import ProjectHeroBlock from '../components/ProjectHeroBlock';
-import UpcomingEventsBlock from '../components/UpcomingEventsBlock';
+import ProjectHeroBlock from '../../components/ProjectHeroBlock';
+import UpcomingEventsBlock from '../../components/UpcomingEventsBlock';
+import { ProjectPageFragment, ProjectPageFragmentDoc } from './fragments.generated';
 
 const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
   page: project,
