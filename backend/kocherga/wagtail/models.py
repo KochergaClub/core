@@ -10,6 +10,7 @@ from django.db import models
 
 import wagtail.images.models
 import wagtail.core.models
+from wagtail.admin.edit_handlers import FieldPanel
 from .mixins import HeadlessPreviewMixin
 from kocherga.django.managers import RelayQuerySetMixin
 
@@ -104,6 +105,14 @@ KochergaPageManager = wagtail.core.models.PageManager.from_queryset(
 
 class KochergaPage(HeadlessPreviewMixin, wagtail.core.models.Page):
     objects = KochergaPageManager()
+
+    content_panels = [
+        FieldPanel('slug'),
+        FieldPanel('title', classname="full title"),
+        FieldPanel('search_description'),
+    ]
+
+    promote_panels = None
 
     class Meta:
         # Not `abstract = True` because we want to use KochergaPage.objects.
