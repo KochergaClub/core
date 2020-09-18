@@ -37,7 +37,7 @@ channels_redis >= 2.4.2
 django-reversion >= 3.0.5
 redis >= 3.2
 django-reversion-compare >= 0.9.0
-wagtail == 2.9.*
+wagtail == 2.10.1
 git+https://github.com/berekuk/wagtailmath.git@master
 django-annoying >= 0.10.6
 pywatchman

@@ -41,15 +41,10 @@ class wagtailEditPageBodyBlocks(helpers.BaseFieldWithInput):
             logger.info('caught an exception!')
             return {'validation_error': {'params': e.params}}
 
-        # TODO - pass user
-        # TODO - consider `publish` flag
-        revision = page.save_revision(
-            user=info.context.user,
-            # log_action=True,  # uncomment on wagtail 2.10
-        )
+        revision = page.save_revision(user=info.context.user, log_action=True)
         if input['publish']:
             revision.publish(
-                # user=info.context.user
+                user=info.context.user, changed=True,
             )
 
         return {
