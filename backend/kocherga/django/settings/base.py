@@ -292,4 +292,4 @@ TELEGRAM_PROXY = ''
 
 KOCHERGA_IMPORTER_DISABLED = False
 
-KKM_SERVER_CERT = '/KKMServer.pem'  # mounted by k8s
+KKM_SERVER_CERT = None  # can be set to custom certificate file path

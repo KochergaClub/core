@@ -127,8 +127,8 @@ BASE_URL = KOCHERGA_WEBSITE
 
 TILDA_PUBLIC_KEY = "egq8lznrfxn6ok7bjvte"
 
-KKM_SERVER = "https://inside.kocherga.club:5893"
-KKM_SERVER_CERT = "/KKMServer.pem"
+KKM_SERVER = "https://kkm.kocherga.club"
+# KKM_SERVER_CERT = "/KKMServer.pem"
 
 if os.environ.get("STATIC_S3_BUCKET"):
     DEFAULT_FILE_STORAGE = "kocherga.django.storages.MediaStorage"

@@ -83,4 +83,5 @@ module "dns" {
   prod_ingress_ip = hcloud_floating_ip.main.ip_address
   #  dev_ingress_ip  = module.k3s-dev.master_ip
   openvidu_ip = module.openvidu.ip
+  kkm_ip = var.kkm_ip
 }
