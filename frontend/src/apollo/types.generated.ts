@@ -1631,6 +1631,7 @@ export type ProjectIndexPage = WagtailPage & {
   id: Scalars['ID'];
   title: Scalars['String'];
   meta: WagtailPageMeta;
+  active_description: Scalars['String'];
   projects: Array<ProjectPage>;
 };
 

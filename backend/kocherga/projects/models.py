@@ -29,6 +29,12 @@ class UpcomingEventsField(Field):
 
 
 class ProjectIndexPage(KochergaPage):
+    active_description = RichTextField('Описание активных проектов', blank=True)
+
+    content_panels = KochergaPage.content_panels + [
+        FieldPanel('active_description'),
+    ]
+
     subpage_types = ['projects.ProjectPage']
     parent_page_types = ['pages.FrontPage']
 

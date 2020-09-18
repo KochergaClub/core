@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, deviceMediaQueries, Row } from '@kocherga/frontkit';
+import { Button, deviceMediaQueries, RichText, Row } from '@kocherga/frontkit';
 
 import TL02 from '~/blocks/TL02';
 import { Page } from '~/components';
@@ -73,10 +73,9 @@ const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
     <Page title={page.title} description={page.meta.description}>
       {/* TODO - move text to wagtail */}
       <TL02 title="Активные проекты">
-        Регулярные мероприятия и сообщества, которые собираются в Кочерге.
-        <br />
-        Рациональность, научно-популярные лектории, критическое мышление и
-        многое другое.
+        <RichText
+          dangerouslySetInnerHTML={{ __html: page.active_description }}
+        />
       </TL02>
       <ProjectsGrid projects={page.active_projects} />
       <TL02 title="Неактивные проекты" />

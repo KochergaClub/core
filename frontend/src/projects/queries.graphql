@@ -12,6 +12,7 @@ fragment ProjectPage_summary on ProjectPage {
 
 fragment ProjectIndexPage on ProjectIndexPage {
   ...CommonWagtailPage
+  active_description
   active_projects: projects(is_active: true) {
     ...ProjectPage_summary
   }

@@ -49,7 +49,9 @@ ProjectIndexPage = g.ObjectType(
     interfaces=[WagtailPage],
     fields={
         **wagtail_utils.basic_fields(),
-        **django_utils.model_fields(models.ProjectIndexPage, ['title']),
+        **django_utils.model_fields(
+            models.ProjectIndexPage, ['title', 'active_description']
+        ),
         'projects': ProjectIndexPage_projects().as_field(),
     },
 )
