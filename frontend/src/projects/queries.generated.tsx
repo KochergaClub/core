@@ -18,7 +18,10 @@ export type ProjectPage_SummaryFragment = (
 
 export type ProjectIndexPageFragment = (
   { __typename: 'ProjectIndexPage' }
-  & { projects: Array<(
+  & { active_projects: Array<(
+    { __typename: 'ProjectPage' }
+    & ProjectPage_SummaryFragment
+  )>, inactive_projects: Array<(
     { __typename: 'ProjectPage' }
     & ProjectPage_SummaryFragment
   )> }
@@ -54,7 +57,10 @@ export const ProjectPage_SummaryFragmentDoc = gql`
 export const ProjectIndexPageFragmentDoc = gql`
     fragment ProjectIndexPage on ProjectIndexPage {
   ...CommonWagtailPage
-  projects {
+  active_projects: projects(is_active: true) {
+    ...ProjectPage_summary
+  }
+  inactive_projects: projects(is_active: false) {
     ...ProjectPage_summary
   }
 }

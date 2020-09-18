@@ -78,13 +78,9 @@ const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
         Рациональность, научно-популярные лектории, критическое мышление и
         многое другое.
       </TL02>
-      <ProjectsGrid
-        projects={page.projects.filter((project) => project.is_active)}
-      />
+      <ProjectsGrid projects={page.active_projects} />
       <TL02 title="Неактивные проекты" />
-      <InactiveProjects
-        projects={page.projects.filter((project) => !project.is_active)}
-      />
+      <InactiveProjects projects={page.inactive_projects} />
     </Page>
   );
 };

@@ -1634,6 +1634,11 @@ export type ProjectIndexPage = WagtailPage & {
   projects: Array<ProjectPage>;
 };
 
+
+export type ProjectIndexPageProjectsArgs = {
+  is_active?: Maybe<Scalars['Boolean']>;
+};
+
 export type ProjectPage = WagtailPage & {
   __typename?: 'ProjectPage';
   id: Scalars['ID'];

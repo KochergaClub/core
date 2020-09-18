@@ -1022,7 +1022,7 @@ type ProjectIndexPage implements WagtailPage {
   id: ID!
   title: String!
   meta: WagtailPageMeta!
-  projects: [ProjectPage!]!
+  projects(is_active: Boolean): [ProjectPage!]!
 }
 
 type ProjectPage implements WagtailPage {
