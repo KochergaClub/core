@@ -36,6 +36,7 @@ const TildaPage: React.FC<Props> = (props) => {
         chrome={props.show_header_and_footer ? 'default' : 'none'}
         og={{ image: props.og_image?.url }}
         vkImage={props.vk_image?.url}
+        noWhitespace
       >
         <Container dangerouslySetInnerHTML={{ __html: props.body }} />
       </Page>
