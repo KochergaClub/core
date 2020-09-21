@@ -1,7 +1,5 @@
 import { useApolloClient } from '@apollo/client';
 
-import { dedupeFragments } from '~/common/utils';
-
 import { WagtailBlockStructureDocument } from './components/queries.generated';
 import { AnyBlockFragment } from './types';
 import { typenameToBackendBlockName } from './utils';
@@ -12,7 +10,7 @@ export const useBlockStructureLoader = () => {
   return async (typename: AnyBlockFragment['__typename']) => {
     const blockName = typenameToBackendBlockName(typename);
     const structureQueryResults = await apolloClient.query({
-      query: dedupeFragments(WagtailBlockStructureDocument),
+      query: WagtailBlockStructureDocument,
       variables: {
         name: blockName,
       },

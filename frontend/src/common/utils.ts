@@ -63,32 +63,6 @@ export function guid() {
   );
 }
 
-// from https://github.com/dotansimha/graphql-code-generator/issues/4684, useful until this issue will be fixed.
-export const dedupeFragments = <Operation, Variables>(
-  document: DocumentNode<Operation, Variables>
-): DocumentNode<Operation, Variables> => {
-  const seenFragments = new Set();
-
-  return {
-    ...document,
-    definitions: document.definitions.filter((definition) => {
-      if (definition.kind === 'FragmentDefinition') {
-        const fragmentDefinition = definition as FragmentDefinitionNode;
-
-        const fragmentName = fragmentDefinition.name.value;
-
-        if (seenFragments.has(fragmentName)) {
-          return false;
-        }
-
-        seenFragments.add(fragmentName);
-      }
-
-      return true;
-    }),
-  };
-};
-
 export const withFragments = <Operation, Variables>(
   document: DocumentNode<Operation, Variables>,
   fragments: DocumentNode<unknown, unknown>[]

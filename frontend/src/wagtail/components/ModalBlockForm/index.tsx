@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { gql, useApolloClient } from '@apollo/client';
+import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
 import { Modal } from '@kocherga/frontkit';
 
+import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';
 import { Spinner } from '~/components';
 import ModalForm from '~/components/forms/ModalForm';
@@ -56,6 +57,53 @@ const validationErrorToFormErrors = (
   }
 };
 
+type RenderBlockResult<T extends KnownBlockFragment['__typename']> = {
+  __typename: 'Query';
+} & {
+  result?: {
+    validation_error?: {
+      non_block_error?: string;
+      block_errors: {
+        error?: WagtailBlockValidationError_L3Fragment;
+      }[];
+    };
+    block?: Parameters<typeof allBlockComponents[T]>[0];
+  };
+};
+
+type RenderBlockVariables = {
+  type: string;
+  paramsJson: string;
+};
+
+const buildRenderBlockDocument = <T extends KnownBlockFragment['__typename']>(
+  typename: T
+): TypedDocumentNode<RenderBlockResult<T>, RenderBlockVariables> => {
+  const blockComponent = allBlockComponents[typename];
+  return dedupeFragments(
+    withFragments(
+      gql`
+      query RenderBlock($type: String!, $paramsJson: String!) {
+        result: wagtailRenderBlock(input: {type: $type, paramsJson: $paramsJson}) {
+          validation_error {
+            non_block_error
+            block_errors {
+              error {
+                ...WagtailBlockValidationError_L3
+              }
+            }
+          }
+          block {
+            ...${typename}
+          }
+        }
+      }
+    `,
+      [blockComponent.fragment, WagtailBlockValidationError_L3FragmentDoc]
+    )
+  );
+};
+
 const ModalBlockForm: React.FC<Props> = ({
   block,
   typename,
@@ -103,31 +151,11 @@ const ModalBlockForm: React.FC<Props> = ({
     async (v: AnyFormValues) => {
       const value = valueWrappedInForm ? v.form : v;
 
-      const blockComponent = allBlockComponents[typename];
-      const renderBlockQuery = withFragments(
-        gql`
-        query RenderBlock($type: String!, $paramsJson: String!) {
-          result: wagtailRenderBlock(input: {type: $type, paramsJson: $paramsJson}) {
-            validation_error {
-              non_block_error
-              block_errors {
-                error {
-                  ...WagtailBlockValidationError_L3
-                }
-              }
-            }
-            block {
-              ...${typename}
-            }
-          }
-        }
-      `,
-        [blockComponent.fragment, WagtailBlockValidationError_L3FragmentDoc]
-      );
+      const RenderBlockDocument = buildRenderBlockDocument(typename);
 
       const type = typenameToBackendBlockName(typename);
       const { data } = await apolloClient.query({
-        query: renderBlockQuery,
+        query: RenderBlockDocument,
         variables: {
           type,
           paramsJson: JSON.stringify(value),

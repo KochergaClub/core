@@ -5,6 +5,9 @@
   "author": "Vyacheslav Matyukhin <slava@kocherga-club.ru>",
   "private": true,
   "license": "AGPL-3.0-only",
+  "scripts": {
+    "postinstall": "patch-package"
+  },
   "dependencies": {
     "@apollo/client": "^3.2.0",
     "@fullcalendar/core": "^5.1.0",
@@ -70,6 +73,7 @@
     "npm-why": "^1.1.6",
     "nprogress": "^0.2.0",
     "openvidu-browser": "^2.15.1-alpha2",
+    "patch-package": "^6.2.2",
     "prettier": "^2.1.2",
     "react": "^16.13.1",
     "react-big-calendar": "^0.26.1",

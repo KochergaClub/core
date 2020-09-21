@@ -3,11 +3,12 @@ import { useCallback, useContext, useState } from 'react';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { gql, useApolloClient } from '@apollo/client';
+import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
 import { A, Row } from '@kocherga/frontkit';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { getComponentByTypename } from '~/cms/wagtail-utils';
+import { dedupeFragments } from '~/common/dedupeFragments';
 import { useNotification } from '~/common/hooks';
 import { withFragments } from '~/common/utils';
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
@@ -51,6 +52,50 @@ const useBlocksSerializer = () => {
   };
 };
 
+type SaveResult = { __typename: 'Mutation' } & {
+  result?: {
+    page?: unknown;
+    validation_error?: WagtailStreamFieldValidationErrorFragment;
+  };
+};
+
+type SaveVariables = {
+  input: {
+    page_id: string;
+    blocksJson: string;
+    publish: boolean;
+  };
+};
+
+const buildSaveDocument = (
+  typename: any
+): TypedDocumentNode<SaveResult, SaveVariables> => {
+  const component = getComponentByTypename(typename);
+  if (!component) {
+    throw new Error('Internal logic error');
+  }
+  const fragmentDoc = component.fragment;
+  const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
+    .name.value;
+
+  return dedupeFragments(
+    withFragments(
+      gql`
+    mutation WagtailSave${fragmentName}($input: WagtailEditPageBodyBlocksInput!) {
+      result: wagtailEditPageBodyBlocks(input: $input) {
+        page {
+          ...${fragmentName}
+        }
+        validation_error {
+          ...WagtailStreamFieldValidationError
+        }
+      }
+    }`,
+      [fragmentDoc, WagtailStreamFieldValidationErrorFragmentDoc]
+    )
+  );
+};
+
 const EditControls: React.FC<Props> = ({ blocks }) => {
   const {
     state: { page },
@@ -74,32 +119,11 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     }
 
     const typename = page.__typename;
-    const component = getComponentByTypename(typename);
-    if (!component) {
-      throw new Error('Internal logic error');
-    }
-    const fragmentDoc = component.fragment;
-    const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
-      .name.value;
-
-    const mutation = withFragments(
-      gql`
-      mutation WagtailSave${fragmentName}($input: WagtailEditPageBodyBlocksInput!) {
-        result: wagtailEditPageBodyBlocks(input: $input) {
-          page {
-            ...${fragmentName}
-          }
-          validation_error {
-            ...WagtailStreamFieldValidationError
-          }
-        }
-      }`,
-      [fragmentDoc, WagtailStreamFieldValidationErrorFragmentDoc]
-    );
+    const SaveDocument = buildSaveDocument(typename);
 
     const blocksJson = JSON.stringify(await serializeBlocks(blocks), null, 2);
     const mutationResults = await apolloClient.mutate({
-      mutation,
+      mutation: SaveDocument,
       variables: {
         input: {
           page_id: page.id,
@@ -109,7 +133,7 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
       },
     });
 
-    if (mutationResults.data?.error) {
+    if (mutationResults.errors || !mutationResults.data?.result) {
       notify({
         text: 'Не удалось сохранить страницу',
         type: 'Error',

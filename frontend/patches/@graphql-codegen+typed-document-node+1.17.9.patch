@@ -1,0 +1,155 @@
+diff --git a/node_modules/@graphql-codegen/typed-document-node/index.cjs.js b/node_modules/@graphql-codegen/typed-document-node/index.cjs.js
+index b305f91..035635e 100644
+--- a/node_modules/@graphql-codegen/typed-document-node/index.cjs.js
++++ b/node_modules/@graphql-codegen/typed-document-node/index.cjs.js
+@@ -9,6 +9,49 @@ const path = require('path');
+ const visitorPluginCommon = require('@graphql-codegen/visitor-plugin-common');
+ const autoBind = _interopDefault(require('auto-bind'));
+ 
++// via https://github.com/dotansimha/graphql-code-generator/issues/4684
++const ts = require('typescript');
++
++const includeFragmentDeduplicator = operation => {
++    const tree = ts.createSourceFile(
++        'file',
++        operation,
++        undefined,
++        true
++    );
++
++    const transformer = context => root => {
++        const visit = (node) => {
++            node = ts.visitEachChild(node, visit, context);
++
++            if(node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
++                const kindPropertyIndex = node.properties.findIndex(property => {
++                    return property.name && property.name.text === 'kind'
++                });
++
++                const hasKindProperty = kindPropertyIndex !== -1;
++                const isDocumentKind = () => node.properties[kindPropertyIndex].initializer.text === 'Document';
++
++                if(hasKindProperty && isDocumentKind()) {
++                    return ts.createCall(
++                        ts.createIdentifier('dedupeFragments'),
++                        undefined,
++                        [node]
++                    );
++                }
++            }
++
++            return node;
++        }
++
++        return ts.visitNode(root, visit);
++    }
++
++    const result = ts.transform(tree, [transformer]);
++
++    return ts.createPrinter().printFile(result.transformed[0]);
++}
++
+ class TypeScriptDocumentNodesVisitor extends visitorPluginCommon.ClientSideBaseVisitor {
+     constructor(schema, fragments, rawConfig, documents) {
+         super(schema, fragments, {
+@@ -47,9 +90,21 @@ const plugin = (schema, documents, config) => {
+     ];
+     const visitor = new TypeScriptDocumentNodesVisitor(schema, allFragments, config, documents);
+     const visitorResult = graphql.visit(allAst, { leave: visitor });
++
++    const operations = visitorResult.definitions.filter(t => typeof t === 'string').map(includeFragmentDeduplicator);
++
++    const content = [visitor.fragments, ...operations].join('\n');
++
++    if(operations.length > 0) {
++        const dedupeImportName = visitor._parseImport('~/common/dedupeFragments#dedupeFragments');
++        const dedupeImport = visitor._generateImport(dedupeImportName, 'dedupeFragments', false);
++
++        visitor._imports.add(dedupeImport);
++    }
++
+     return {
+         prepend: visitor.getImports(),
+-        content: [visitor.fragments, ...visitorResult.definitions.filter(t => typeof t === 'string')].join('\n'),
++        content: content,
+     };
+ };
+ const validate = async (schema, documents, config, outputFile) => {
+diff --git a/node_modules/@graphql-codegen/typed-document-node/index.esm.js b/node_modules/@graphql-codegen/typed-document-node/index.esm.js
+index dddb1a6..909fefa 100644
+--- a/node_modules/@graphql-codegen/typed-document-node/index.esm.js
++++ b/node_modules/@graphql-codegen/typed-document-node/index.esm.js
+@@ -3,6 +3,49 @@ import { extname } from 'path';
+ import { ClientSideBaseVisitor, DocumentMode } from '@graphql-codegen/visitor-plugin-common';
+ import autoBind from 'auto-bind';
+ 
++// via https://github.com/dotansimha/graphql-code-generator/issues/4684
++import ts from 'typescript';
++
++const includeFragmentDeduplicator = operation => {
++    const tree = ts.createSourceFile(
++        'file',
++        operation,
++        undefined,
++        true
++    );
++
++    const transformer = context => root => {
++        const visit = (node) => {
++            node = ts.visitEachChild(node, visit, context);
++
++            if(node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
++                const kindPropertyIndex = node.properties.findIndex(property => {
++                    return property.name && property.name.text === 'kind'
++                });
++
++                const hasKindProperty = kindPropertyIndex !== -1;
++                const isDocumentKind = () => node.properties[kindPropertyIndex].initializer.text === 'Document';
++
++                if(hasKindProperty && isDocumentKind()) {
++                    return ts.createCall(
++                        ts.createIdentifier('dedupeFragments'),
++                        undefined,
++                        [node]
++                    );
++                }
++            }
++
++            return node;
++        }
++
++        return ts.visitNode(root, visit);
++    }
++
++    const result = ts.transform(tree, [transformer]);
++
++    return ts.createPrinter().printFile(result.transformed[0]);
++}
++
+ class TypeScriptDocumentNodesVisitor extends ClientSideBaseVisitor {
+     constructor(schema, fragments, rawConfig, documents) {
+         super(schema, fragments, {
+@@ -41,9 +84,22 @@ const plugin = (schema, documents, config) => {
+     ];
+     const visitor = new TypeScriptDocumentNodesVisitor(schema, allFragments, config, documents);
+     const visitorResult = visit(allAst, { leave: visitor });
++
++    
++    const operations = visitorResult.definitions.filter(t => typeof t === 'string').map(includeFragmentDeduplicator);
++
++    const content = [visitor.fragments, ...operations].join('\n');
++
++    if(operations.length > 0) {
++        const dedupeImportName = visitor._parseImport('~/common/dedupeFragments#dedupeFragments');
++        const dedupeImport = visitor._generateImport(dedupeImportName, 'dedupeFragments', false);
++
++        visitor._imports.add(dedupeImport);
++    }
++
+     return {
+         prepend: visitor.getImports(),
+-        content: [visitor.fragments, ...visitorResult.definitions.filter(t => typeof t === 'string')].join('\n'),
++        content: content,
+     };
+ };
+ const validate = async (schema, documents, config, outputFile) => {

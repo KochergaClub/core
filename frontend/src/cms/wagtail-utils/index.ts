@@ -1,11 +1,12 @@
 import { FragmentDefinitionNode } from 'graphql';
 
-import { gql } from '@apollo/client';
+import { gql, TypedDocumentNode } from '@apollo/client';
 
 // TODO - dynamic() to reduce the bundle size for wagtail pages
 import { KochergaApolloClient } from '~/apollo/types';
 import { BlogIndexPage, BlogPostPage } from '~/blog/wagtail';
 import { APIError } from '~/common/api';
+import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';
 import { FAQPage as FaqPage } from '~/faq/wagtail';
 import { PresentationPage } from '~/presentations/wagtail';
@@ -86,63 +87,49 @@ export const loadTypename = async (
   return wagtailPage.__typename;
 };
 
-interface LoadPageProps {
-  apolloClient: KochergaApolloClient;
-  component: KnownWagtailPage;
-  typename: KnownWagtailPageTypename;
-  locator: PageLocator;
-}
+type GetPageResult<T extends KnownWagtailPageTypename> = {
+  __typename: 'Query';
+} & {
+  wagtailPage?: Parameters<WagtailPageComponentsMap[T]>[0]['page'];
+};
 
-export const loadPageForComponent = async (
-  props: LoadPageProps
-): Promise<KnownWagtailPageFragment> => {
+type GetPageVariables = {
+  path?: string;
+  preview_token?: string;
+};
+
+const buildGetPageDocument = <T extends KnownWagtailPageTypename>(
+  typename: T
+): TypedDocumentNode<GetPageResult<T>, GetPageVariables> => {
+  const component = getComponentByTypename(typename);
   // Specific wagtail pages should define `.fragment` property with FragmentDoc.
   // The fragment should be something like `fragment MyPage on MyPage`, usually in a queries.graphql file.
 
-  const fragmentDoc = props.component.fragment;
+  const fragmentDoc = component.fragment;
   const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
     .name.value;
   const objectName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
     .typeCondition.name.value;
 
-  if (objectName !== props.typename) {
+  if (objectName !== typename) {
     throw new APIError(
-      `Invalid fragment - typename is ${objectName}, should be ${props.typename}`,
+      `Invalid fragment - typename is ${objectName}, should be ${typename}`,
       500
     );
   }
 
-  // TODO - global cache for typename -> query?
-  const query = withFragments(
-    gql`
+  // TODO - memoize?
+  return dedupeFragments(
+    withFragments(
+      gql`
 query Get${fragmentName}($path: String, $preview_token: String) {
   wagtailPage(path: $path, preview_token: $preview_token) {
     ...${fragmentName}
   }
 }`,
-    [fragmentDoc]
+      [fragmentDoc]
+    )
   );
-
-  const { data, errors } = await props.apolloClient.query({
-    query,
-    variables: props.locator,
-    fetchPolicy: 'network-only',
-  });
-
-  if (errors) {
-    throw new APIError('Error while querying for full wagtail page', 500);
-  }
-
-  const page = data?.wagtailPage;
-
-  if (!page) {
-    throw new APIError(
-      'Wagtail page in GraphQL response is empty for some reason',
-      500
-    );
-  }
-
-  return page;
 };
 
 export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
@@ -163,7 +150,7 @@ export const loadWagtailPage = async ({
 }: {
   locator: PageLocator;
   apolloClient: KochergaApolloClient;
-}) => {
+}): Promise<KnownWagtailPageFragment> => {
   const typename = await loadTypename({
     apolloClient,
     locator,
@@ -172,14 +159,26 @@ export const loadWagtailPage = async ({
   if (!isKnownTypename(typename)) {
     throw new APIError('Unknown typename', 500);
   }
-  const component = getComponentByTypename(typename);
+  const GetPageDocument = buildGetPageDocument(typename);
 
-  const page = await loadPageForComponent({
-    component,
-    typename,
-    apolloClient,
-    locator,
+  const { data, errors } = await apolloClient.query({
+    query: GetPageDocument,
+    variables: locator,
+    fetchPolicy: 'network-only',
   });
+
+  if (errors) {
+    throw new APIError('Error while querying for full wagtail page', 500);
+  }
+
+  const page = data?.wagtailPage;
+
+  if (!page) {
+    throw new APIError(
+      'Wagtail page in GraphQL response is empty for some reason',
+      500
+    );
+  }
 
   return page;
 };

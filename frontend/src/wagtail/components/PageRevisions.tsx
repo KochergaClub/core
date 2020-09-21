@@ -4,10 +4,11 @@ import { FragmentDefinitionNode } from 'graphql';
 import { useContext } from 'react';
 import styled from 'styled-components';
 
-import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { gql, TypedDocumentNode, useApolloClient, useQuery } from '@apollo/client';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { getComponentByTypename } from '~/cms/wagtail-utils';
+import { dedupeFragments } from '~/common/dedupeFragments';
 import { capitalize, formatDate, withFragments } from '~/common/utils';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action } from '~/components/DropdownMenu';
@@ -37,26 +38,41 @@ const formatRelativeWrapped = (date: Date) => {
       );
 };
 
-const PageRevisions: React.FC = () => {
-  const {
-    state: { page },
-    dispatch: pageDispatch,
-  } = useContext(WagtailPageContext);
+type PageRevisionResult = {
+  __typename: 'Query';
+} & {
+  result?: {
+    __typename: 'WagtailPage';
+    id: string;
+    meta: {
+      revision: {
+        id: string;
+        created_at: string;
+        as_page: unknown;
+      };
+    };
+  };
+};
 
-  const apolloClient = useApolloClient();
+type PageRevisionVariables = {
+  page_id: string;
+  revision_id: string;
+};
 
-  const pickRevision = async (revision_id: string) => {
-    const typename = page.__typename;
-    const component = getComponentByTypename(typename);
-    if (!component) {
-      throw new Error('Internal logic error');
-    }
-    const fragmentDoc = component.fragment;
-    const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
-      .name.value;
+const buildWagtailPageRevisionDocument = (
+  typename: any
+): TypedDocumentNode<PageRevisionResult, PageRevisionVariables> => {
+  const component = getComponentByTypename(typename);
+  if (!component) {
+    throw new Error('Internal logic error');
+  }
+  const fragmentDoc = component.fragment;
+  const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
+    .name.value;
 
-    // TODO - wagtailPageRevision query
-    const query = withFragments(
+  // TODO - wagtailPageRevision query
+  return dedupeFragments(
+    withFragments(
       gql`
       query WagtailPageRevisions($page_id: ID!, $revision_id: ID!) {
         result: wagtailPage(page_id: $page_id) {
@@ -74,16 +90,32 @@ const PageRevisions: React.FC = () => {
       }
       `,
       [fragmentDoc]
+    )
+  );
+};
+
+const PageRevisions: React.FC = () => {
+  const {
+    state: { page },
+    dispatch: pageDispatch,
+  } = useContext(WagtailPageContext);
+
+  const apolloClient = useApolloClient();
+
+  const pickRevision = async (revision_id: string) => {
+    const typename = page.__typename;
+    const WagtailPageRevisionDocument = buildWagtailPageRevisionDocument(
+      typename
     );
 
     const pickResults = await apolloClient.query({
-      query,
+      query: WagtailPageRevisionDocument,
       variables: {
         page_id: page.id,
         revision_id,
       },
     });
-    const revisionPage = pickResults.data?.result.meta.revision.as_page;
+    const revisionPage = pickResults.data?.result?.meta.revision.as_page;
     if (!revisionPage) {
       throw new Error('Failed to fetch revision');
     }
