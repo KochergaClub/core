@@ -69,7 +69,9 @@ export const withFragments = <Operation, Variables>(
 ): DocumentNode<Operation, Variables> => {
   const definitions = [
     ...document.definitions,
-    ...fragments.map((f) => f.definitions).flat(),
+    ...fragments
+      .map((f) => f.definitions)
+      .reduce((acc, value) => acc.concat(value), []), // flatten the definitions (Array.prototype.flat is not supported in node yet)
   ];
   return {
     ...document,
