@@ -58,3 +58,5 @@ name2schema['training'] = Schema(
         Field('background_url'),
     ],
 )
+
+name2schema['ratio-online-badge'] = Schema([Field('text')])

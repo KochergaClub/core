@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <base href="{{ url_root }}" />
+    <style>
+      @font-face {
+        font-family: "Intro";
+        src: url('{{ static("fonts/intro.woff2") }}') format("woff2"),
+          url('{{ static("fonts/intro.woff") }}') format("woff");
+      }
+      @font-face {
+        font-family: "Intro Regular";
+        src: url('{{ static("fonts/intro-pack/Intro-Regular.otf") }}')
+          format("opentype");
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .container {
+        color: white;
+        background: radial-gradient(
+          94.21% 218.24% at 101.58% 101.98%,
+          #dae9f1 0%,
+          #8fbdd6 35.86%,
+          #3f85ad 100%
+        );
+        width: 600px;
+        height: 315px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .content {
+        width: 259px;
+      }
+      .content > hr {
+        width: 259px;
+        margin-top: 2px;
+        margin-bottom: 8px;
+        padding: 0;
+        height: 0px;
+        color: white;
+        border: none;
+        border-top: 2px solid white;
+      }
+      .top {
+        font-size: 32px;
+        line-height: 38.5px;
+        font-family: "Intro";
+      }
+      .bottom {
+        font-family: "Intro Regular";
+        font-size: 20px;
+        line-height: 22px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+        <div class="top">
+          Онлайн-курс,<br />который<br />учит<br />решать<br />проблемы
+        </div>
+        <hr />
+        <div class="bottom">
+          <div>Рациональность в деле</div>
+          <div>{{text}}</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<!-- width=600 height=315 -->
