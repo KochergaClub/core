@@ -1,11 +1,14 @@
+import { useQuery } from '@apollo/client';
+
 import { NextApolloPage, withApollo } from '~/apollo';
-import { Page, ApolloQueryResults, PaddedBlock } from '~/components';
-import { useMyVisitsPageQuery } from '../queries.generated';
-import VisitsTab from '../tabs/VisitsTab';
 import { requireAuth } from '~/auth/utils';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+
+import { MyVisitsPageDocument } from '../queries.generated';
+import VisitsTab from '../tabs/VisitsTab';
 
 const MyVisitsPage: NextApolloPage = () => {
-  const queryResults = useMyVisitsPageQuery();
+  const queryResults = useQuery(MyVisitsPageDocument);
   const title = 'Посещения пространства | Личный кабинет';
 
   return (

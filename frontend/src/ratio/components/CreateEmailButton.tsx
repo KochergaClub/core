@@ -1,15 +1,12 @@
 import { useCallback, useState } from 'react';
-import { useApolloClient } from '@apollo/client';
 
-import { Button, Row, Column, Input, Modal } from '@kocherga/frontkit';
+import { useApolloClient, useMutation } from '@apollo/client';
+import { Button, Column, Input, Modal, Row } from '@kocherga/frontkit';
 
 import { AsyncButton, ButtonWithModal } from '~/components';
 
 import {
-  RatioTrainingEmailPrototypeQuery,
-  RatioTrainingEmailPrototypeQueryVariables,
-  RatioTrainingEmailPrototypeDocument,
-  useRatioTrainingSendEmailMutation,
+    RatioTrainingEmailPrototypeDocument, RatioTrainingSendEmailDocument
 } from '../queries.generated';
 
 interface PrototypeParams {
@@ -43,10 +40,7 @@ const PrototypePicker: React.FC<PrototypePickerProps> = ({
   const apolloClient = useApolloClient();
 
   const loadPrototype = useCallback(async () => {
-    const { data } = await apolloClient.query<
-      RatioTrainingEmailPrototypeQuery,
-      RatioTrainingEmailPrototypeQueryVariables
-    >({
+    const { data } = await apolloClient.query({
       query: RatioTrainingEmailPrototypeDocument,
       variables: { training_id, type: prototype.type },
     });
@@ -89,7 +83,7 @@ const EmailModal = (props: ModalProps) => {
   const [title, setTitle] = useState('');
   const [creating, setCreating] = useState(false);
 
-  const [sendEmailMutation] = useRatioTrainingSendEmailMutation();
+  const [sendEmailMutation] = useMutation(RatioTrainingSendEmailDocument);
 
   const { close } = props;
   const create = useCallback(async () => {

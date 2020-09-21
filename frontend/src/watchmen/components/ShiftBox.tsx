@@ -1,21 +1,17 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 
+import { useMutation } from '@apollo/client';
 import { colors } from '@kocherga/frontkit';
-
-import WatchmanPicker from './WatchmanPicker';
 
 import { useExpandable } from '~/common/hooks';
 
 import { nightColor } from '../constants';
 import { EditingContext } from '../contexts';
-
 import {
-  ShiftFragment,
-  ShiftFragmentDoc,
-  WatchmanForPickerFragment,
-  useWatchmenUpdateShiftMutation,
+    ShiftFragment, ShiftFragmentDoc, WatchmanForPickerFragment, WatchmenUpdateShiftDocument
 } from '../queries.generated';
+import WatchmanPicker from './WatchmanPicker';
 
 const Container = styled.div<{ editing: boolean }>`
   position: relative;
@@ -81,7 +77,7 @@ interface Props {
 
 const ShiftBox = (props: Props) => {
   const { editing } = useContext(EditingContext);
-  const [updateMutation] = useWatchmenUpdateShiftMutation({
+  const [updateMutation] = useMutation(WatchmenUpdateShiftDocument, {
     update(cache, { data }) {
       if (!data) {
         return;

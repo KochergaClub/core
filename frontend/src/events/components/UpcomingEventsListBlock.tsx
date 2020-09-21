@@ -1,12 +1,13 @@
-import { ApolloQueryResults } from '~/components';
+import { useQuery } from '@apollo/client';
+
 import { formatDate } from '~/common/utils';
+import { ApolloQueryResults } from '~/components';
 
-import { useUpcomingPublicEventsQuery } from '../queries.generated';
-
+import { UpcomingPublicEventsDocument } from '../queries.generated';
 import EventsListBlock from './EventsListBlock';
 
 const UpcomingEventsListBlock: React.FC = () => {
-  const queryResults = useUpcomingPublicEventsQuery({
+  const queryResults = useQuery(UpcomingPublicEventsDocument, {
     variables: {
       today: formatDate(new Date(), 'yyyy-MM-dd'),
     },

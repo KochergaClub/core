@@ -1,9 +1,6 @@
 import * as Types from '../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type KkmRegisterCheckMutationVariables = Types.Exact<{
   params: Types.KkmRegisterCheckInput;
 }>;
@@ -18,37 +15,4 @@ export type KkmRegisterCheckMutation = (
 );
 
 
-export const KkmRegisterCheckDocument = gql`
-    mutation KkmRegisterCheck($params: KkmRegisterCheckInput!) {
-  kkmRegisterCheck(params: $params) {
-    url
-    error
-    status
-  }
-}
-    `;
-export type KkmRegisterCheckMutationFn = ApolloReactCommon.MutationFunction<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables>;
-
-/**
- * __useKkmRegisterCheckMutation__
- *
- * To run a mutation, you first call `useKkmRegisterCheckMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useKkmRegisterCheckMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [kkmRegisterCheckMutation, { data, loading, error }] = useKkmRegisterCheckMutation({
- *   variables: {
- *      params: // value for 'params'
- *   },
- * });
- */
-export function useKkmRegisterCheckMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables>) {
-        return ApolloReactHooks.useMutation<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables>(KkmRegisterCheckDocument, baseOptions);
-      }
-export type KkmRegisterCheckMutationHookResult = ReturnType<typeof useKkmRegisterCheckMutation>;
-export type KkmRegisterCheckMutationResult = ApolloReactCommon.MutationResult<KkmRegisterCheckMutation>;
-export type KkmRegisterCheckMutationOptions = ApolloReactCommon.BaseMutationOptions<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables>;
+export const KkmRegisterCheckDocument: DocumentNode<KkmRegisterCheckMutation, KkmRegisterCheckMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"KkmRegisterCheck"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"params"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"KkmRegisterCheckInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kkmRegisterCheck"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"params"},"value":{"kind":"Variable","name":{"kind":"Name","value":"params"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"error"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[],"directives":[]}]}}]}}]};

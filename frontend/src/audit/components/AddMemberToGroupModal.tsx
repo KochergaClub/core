@@ -1,12 +1,11 @@
 import { useCallback } from 'react';
 
+import { useMutation } from '@apollo/client';
+
 import ModalMemberPicker from '~/staff/components/ModalMemberPicker';
 import { StaffMemberForPickerFragment } from '~/staff/queries.generated';
 
-import {
-  AuthGroupsDocument,
-  useAuthAddUserToGroupMutation,
-} from '../queries.generated';
+import { AuthAddUserToGroupDocument, AuthGroupsDocument } from '../queries.generated';
 
 interface Props {
   close: () => void;
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const AddMemberToGroupModal: React.FC<Props> = ({ close, group }) => {
-  const [addMutation] = useAuthAddUserToGroupMutation({
+  const [addMutation] = useMutation(AuthAddUserToGroupDocument, {
     refetchQueries: [{ query: AuthGroupsDocument }],
     awaitRefetchQueries: true,
   });

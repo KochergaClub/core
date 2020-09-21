@@ -1,6 +1,7 @@
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
+import { useMutation } from '@apollo/client';
 import { Column, Row } from '@kocherga/frontkit';
 
 import { formatDate } from '~/common/utils';
@@ -10,7 +11,7 @@ import { MutedSpan } from '../../components/ui';
 import EditableDateSpan from '../EditableDateSpan';
 import EventDropdownMenu from '../EventDropdownMenu';
 import { useUpdateMutation } from '../hooks';
-import { EvenmanEvent_DetailsFragment, useEvenmanEventMoveMutation } from '../queries.generated';
+import { EvenmanEvent_DetailsFragment, EvenmanEventMoveDocument } from '../queries.generated';
 import EventTypeField from './EventTypeField';
 
 const DateSpan: React.FC<{ date: Date }> = ({ date }) => (
@@ -29,7 +30,7 @@ interface Props {
 
 const EventHeader: React.FC<Props> = ({ event }) => {
   const update = useUpdateMutation(event.id);
-  const [moveMutation] = useEvenmanEventMoveMutation();
+  const [moveMutation] = useMutation(EvenmanEventMoveDocument);
 
   return (
     // TODO - refactor messy layout with display: grid

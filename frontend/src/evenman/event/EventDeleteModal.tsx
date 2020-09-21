@@ -1,16 +1,15 @@
-import { useCallback, useState } from 'react';
-import styled from 'styled-components';
 import Router from 'next/router';
-
+import { useCallback, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
-import { Modal, ControlsFooter, Button } from '@kocherga/frontkit';
+import styled from 'styled-components';
+
+import { useMutation } from '@apollo/client';
+import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
-import {
-  EvenmanEvent_DetailsFragment,
-  useEvenmanEventDeleteMutation,
-} from './queries.generated';
+
 import { rootRoute } from '../routes';
+import { EvenmanEvent_DetailsFragment, EvenmanEventDeleteDocument } from './queries.generated';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
@@ -30,7 +29,7 @@ const CenteredLine = styled.div`
 
 const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const [deleted, setDeleted] = useState(false);
-  const [deleteMutation] = useEvenmanEventDeleteMutation({
+  const [deleteMutation] = useMutation(EvenmanEventDeleteDocument, {
     variables: { id: event.id },
   });
 

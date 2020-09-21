@@ -1,24 +1,26 @@
-import { NextApolloPage } from '~/apollo/types';
-import { Page, ApolloQueryResults, AsyncButton } from '~/components';
-import { withApollo, withStaff } from '~/apollo';
-import {
-  useTildaPagesForAdminQuery,
-  useTildaImportAllMutation,
-  useTildaImportMutation,
-} from '../queries.generated';
 import Link from 'next/link';
-import { A, Row, Column, Label } from '@kocherga/frontkit';
+
+import { useMutation, useQuery } from '@apollo/client';
+import { A, Column, Label, Row } from '@kocherga/frontkit';
+
+import { withApollo, withStaff } from '~/apollo';
+import { NextApolloPage } from '~/apollo/types';
+import { ApolloQueryResults, AsyncButton, Page } from '~/components';
 import Card, { CardList } from '~/components/Card';
 
-const TildaAdminPage: NextApolloPage = () => {
-  const queryResults = useTildaPagesForAdminQuery();
+import {
+    TildaImportAllDocument, TildaImportDocument, TildaPagesForAdminDocument
+} from '../queries.generated';
 
-  const [importAllMutation] = useTildaImportAllMutation({
+const TildaAdminPage: NextApolloPage = () => {
+  const queryResults = useQuery(TildaPagesForAdminDocument);
+
+  const [importAllMutation] = useMutation(TildaImportAllDocument, {
     refetchQueries: ['TildaPagesForAdmin'],
     awaitRefetchQueries: true,
   });
 
-  const [importMutation] = useTildaImportMutation({
+  const [importMutation] = useMutation(TildaImportDocument, {
     refetchQueries: ['TildaPagesForAdmin'],
     awaitRefetchQueries: true,
   });

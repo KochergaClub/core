@@ -1,20 +1,20 @@
+import { useQuery } from '@apollo/client';
 import { A, Column } from '@kocherga/frontkit';
 
-import { withApollo, NextApolloPage, withStaff } from '~/apollo';
-
-import { Page, PaddedBlock, ApolloQueryResults } from '~/components';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import EventInfo from '~/events/components/EventInfo';
+import { TeamEventDetailsDocument } from '~/events/queries.generated';
+
 import FeedbackCollection from './FeedbackCollection';
 import TicketsCollection from './TicketsCollection';
-import { useTeamEventDetailsQuery } from '~/events/queries.generated';
 
 interface Props {
   event_id: string;
 }
 
 const TeamEventPage: NextApolloPage<Props> = ({ event_id }) => {
-  const queryResults = useTeamEventDetailsQuery({
+  const queryResults = useQuery(TeamEventDetailsDocument, {
     variables: { id: event_id },
   });
 

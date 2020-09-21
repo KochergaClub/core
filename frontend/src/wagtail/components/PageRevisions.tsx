@@ -4,15 +4,15 @@ import { FragmentDefinitionNode } from 'graphql';
 import { useContext } from 'react';
 import styled from 'styled-components';
 
-import { gql, useApolloClient } from '@apollo/client';
+import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { getComponentByTypename } from '~/cms/wagtail-utils';
-import { capitalize, formatDate } from '~/common/utils';
+import { capitalize, formatDate, withFragments } from '~/common/utils';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action } from '~/components/DropdownMenu';
 
-import { useWagtailPageRevisionsQuery } from './queries.generated';
+import { WagtailPageRevisionsDocument } from './queries.generated';
 
 const ScrollableDropdownArea = styled.div`
   overflow-x: hidden; /* vertical scroll covers some part of area children, but we compensate for it with margin-right */
@@ -56,7 +56,8 @@ const PageRevisions: React.FC = () => {
       .name.value;
 
     // TODO - wagtailPageRevision query
-    const query = gql`
+    const query = withFragments(
+      gql`
       query WagtailPageRevisions($page_id: ID!, $revision_id: ID!) {
         result: wagtailPage(page_id: $page_id) {
           id
@@ -71,8 +72,9 @@ const PageRevisions: React.FC = () => {
           }
         }
       }
-      ${fragmentDoc}
-    `;
+      `,
+      [fragmentDoc]
+    );
 
     const pickResults = await apolloClient.query({
       query,
@@ -95,8 +97,7 @@ const PageRevisions: React.FC = () => {
     });
   };
 
-  // TODO - type
-  const queryResults = useWagtailPageRevisionsQuery({
+  const queryResults = useQuery(WagtailPageRevisionsDocument, {
     variables: {
       page_id: page.id,
     },

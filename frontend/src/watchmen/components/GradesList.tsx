@@ -1,12 +1,10 @@
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
-import Card, { CardList } from '~/components/Card';
 import { ApolloQueryResults } from '~/components';
+import Card, { CardList } from '~/components/Card';
 
-import {
-  useWatchmenGradesListQuery,
-  GradeFragment,
-} from '../queries.generated';
+import { GradeFragment, WatchmenGradesListDocument } from '../queries.generated';
 
 const GradeItem = ({ grade }: { grade: GradeFragment }) => (
   <Card>
@@ -18,7 +16,7 @@ const GradeItem = ({ grade }: { grade: GradeFragment }) => (
 );
 
 const GradesList = () => {
-  const gradesQueryResults = useWatchmenGradesListQuery();
+  const gradesQueryResults = useQuery(WatchmenGradesListDocument);
 
   return (
     <div>

@@ -1,38 +1,33 @@
-import { Column, Row, Label } from '@kocherga/frontkit';
+import { useMutation, useQuery } from '@apollo/client';
+import { Column, Label, Row } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
-import { Card, CardHeader, CardBody } from '../../components/Card';
-import { Header } from '../../components/ui';
 
 import EventShapeDescription from '../../common/EventShapeDescription';
+import EventShapeProjectLink from '../../common/EventShapeProjectLink';
+import EventShapeTags from '../../common/EventShapeTags';
 import EventShapeTimingDescription from '../../common/EventShapeTimingDescription';
 import TimepadCategoryPicker from '../../common/TimepadCategoryPicker';
-import EventShapeTags from '../../common/EventShapeTags';
 import VkGroupPicker from '../../common/VkGroupPicker';
-import EventShapeProjectLink from '../../common/EventShapeProjectLink';
-
+import { Card, CardBody, CardHeader } from '../../components/Card';
 import EditableString from '../../components/EditableString';
-
+import { Header } from '../../components/ui';
 import {
-  useEvenmanPrototypeQuery,
-  useEvenmanPrototypeAddTagMutation,
-  useEvenmanPrototypeDeleteTagMutation,
+    EvenmanPrototypeAddTagDocument, EvenmanPrototypeDeleteTagDocument, EvenmanPrototypeDocument
 } from '../queries.generated';
-
-import { useUpdateMutation } from './hooks';
-
-import ExistingEvents from './ExistingEvents';
 import ActiveStatus from './ActiveStatus';
+import ExistingEvents from './ExistingEvents';
+import { useUpdateMutation } from './hooks';
+import Image from './Image';
 import Schedule from './Schedule';
 import SuggestedEvents from './SuggestedEvents';
-import Image from './Image';
 
 interface Props {
   prototype_id: string;
 }
 
 const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
-  const queryResults = useEvenmanPrototypeQuery({
+  const queryResults = useQuery(EvenmanPrototypeDocument, {
     variables: {
       id: prototype_id,
     },
@@ -40,8 +35,8 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
 
   const update = useUpdateMutation(prototype_id);
 
-  const [addTag] = useEvenmanPrototypeAddTagMutation();
-  const [deleteTag] = useEvenmanPrototypeDeleteTagMutation();
+  const [addTag] = useMutation(EvenmanPrototypeAddTagDocument);
+  const [deleteTag] = useMutation(EvenmanPrototypeDeleteTagDocument);
 
   return (
     <ApolloQueryResults {...queryResults}>
@@ -52,14 +47,14 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
               <EditableString
                 value={prototype.title}
                 renderValue={() => <b>{prototype.title}</b>}
-                save={v => update({ title: v })}
+                save={(v) => update({ title: v })}
               />
               <ActiveStatus prototype={prototype} />
             </Row>
             <EditableString
               value={prototype.location}
               renderValue={() => prototype.location}
-              save={v => update({ location: v })}
+              save={(v) => update({ location: v })}
             />
           </CardHeader>
           <CardBody>
@@ -68,7 +63,7 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <Header>Проект</Header>
                 <EventShapeProjectLink
                   selected={prototype.project?.meta.slug}
-                  select={async slug => {
+                  select={async (slug) => {
                     await update({
                       project_slug: slug,
                     });
@@ -90,8 +85,8 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <EventShapeDescription
                   summary={prototype.summary}
                   description={prototype.description}
-                  setSummary={value => update({ summary: value })}
-                  setDescription={value =>
+                  setSummary={(value) => update({ summary: value })}
+                  setDescription={(value) =>
                     update({
                       description: value,
                     })
@@ -103,7 +98,7 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <Header>Описание расписания</Header>
                 <EventShapeTimingDescription
                   value={prototype.timing_description_override}
-                  setValue={value =>
+                  setValue={(value) =>
                     update({
                       timing_description_override: value,
                     })
@@ -115,10 +110,10 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <Header>Теги</Header>
                 <EventShapeTags
                   tags={prototype.tags}
-                  addTag={tag =>
+                  addTag={(tag) =>
                     addTag({ variables: { id: prototype_id, tag } })
                   }
-                  deleteTag={tag =>
+                  deleteTag={(tag) =>
                     deleteTag({ variables: { id: prototype_id, tag } })
                   }
                 />
@@ -133,7 +128,7 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 <Header>Timepad</Header>
                 <TimepadCategoryPicker
                   code={prototype.timepad_category?.code}
-                  setCode={code => update({ timepad_category_code: code })}
+                  setCode={(code) => update({ timepad_category_code: code })}
                 />
               </section>
 
@@ -157,7 +152,7 @@ const EventPrototypeCard: React.FC<Props> = ({ prototype_id }) => {
                 </Label>
                 <VkGroupPicker
                   value={prototype.vk_group?.name || ''}
-                  setValue={v => update({ vk_group_name: v })}
+                  setValue={(v) => update({ vk_group_name: v })}
                 />
               </section>
             </Column>

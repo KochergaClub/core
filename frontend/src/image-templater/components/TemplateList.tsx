@@ -1,13 +1,13 @@
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
+import { ImageTemplatesDocument } from '../queries.generated';
 import TemplateCard from './TemplateCard';
 
-import { useImageTemplatesQuery } from '../queries.generated';
-
 const TemplateList: React.FC = () => {
-  const queryResults = useImageTemplatesQuery();
+  const queryResults = useQuery(ImageTemplatesDocument);
 
   return (
     <ApolloQueryResults {...queryResults}>

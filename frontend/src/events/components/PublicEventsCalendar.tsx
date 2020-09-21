@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import '@fullcalendar/react'; // side effects!
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { EventClickArg } from '@fullcalendar/core';
 import ruLocale from '@fullcalendar/core/locales/ru';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -17,9 +17,7 @@ import { AlertCard, ApolloQueryResults, PaddedBlock } from '~/components';
 
 import {
   PublicEventsForCalendarDocument,
-  PublicEventsForCalendarQuery,
-  PublicEventsForCalendarQueryVariables,
-  useEventsPublicGoogleCalendarQuery,
+  EventsPublicGoogleCalendarDocument,
 } from '../queries.generated';
 import { publicEventRoute } from '../routes';
 
@@ -69,16 +67,13 @@ const Container = styled.div`
 `;
 
 const PublicEventsCalendar = () => {
-  const googleCalendarQueryResults = useEventsPublicGoogleCalendarQuery();
+  const googleCalendarQueryResults = useQuery(EventsPublicGoogleCalendarDocument);
 
   const apolloClient = useApolloClient();
 
   const events = useCallback(
     async ({ start, end }: { start: Date; end: Date }) => {
-      const queryResults = await apolloClient.query<
-        PublicEventsForCalendarQuery,
-        PublicEventsForCalendarQueryVariables
-      >({
+      const queryResults = await apolloClient.query({
         query: PublicEventsForCalendarDocument,
         variables: {
           from: formatDate(start, 'yyyy-MM-dd'),

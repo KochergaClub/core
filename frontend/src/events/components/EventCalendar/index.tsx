@@ -2,10 +2,12 @@ import { addDays, parseISO } from 'date-fns';
 import { format, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
 import { useCallback, useState } from 'react';
 
+import { useMutation, useQuery } from '@apollo/client';
+
 import { NextPage } from '~/common/types';
 import { timezone } from '~/common/utils';
 
-import { useEventsInRangeQuery, useResizeEventMutation } from '../../queries.generated';
+import { EventsInRangeDocument, ResizeEventDocument } from '../../queries.generated';
 import {
     CalendarUIContext, startNewUI, startViewUI, useCalendarUIReducer
 } from '../../reducers/calendarUI';
@@ -46,7 +48,7 @@ interface Props {
 }
 
 const EventCalendar: NextPage<Props> = (props) => {
-  const [resizeMutation] = useResizeEventMutation();
+  const [resizeMutation] = useMutation(ResizeEventDocument);
 
   const [uiState, uiDispatch] = useCalendarUIReducer();
 
@@ -55,7 +57,7 @@ const EventCalendar: NextPage<Props> = (props) => {
     end: parseISO(props.range.end),
   }));
 
-  const queryResults = useEventsInRangeQuery({
+  const queryResults = useQuery(EventsInRangeDocument, {
     variables: {
       start: format(range.start, 'yyyy-MM-dd'),
       end: format(range.end, 'yyyy-MM-dd'),

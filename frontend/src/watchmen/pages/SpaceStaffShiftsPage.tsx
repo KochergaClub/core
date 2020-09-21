@@ -1,21 +1,18 @@
+import { addWeeks, format, parseISO, startOfWeek } from 'date-fns';
 import { useState } from 'react';
-import { format, parseISO, addWeeks, startOfWeek } from 'date-fns';
 
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
-import { Page, ApolloQueryResults } from '~/components';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { useListeningWebSocket, usePermissions } from '~/common/hooks';
+import { ApolloQueryResults, Page } from '~/components';
 
-import { useWatchmenShiftsQuery } from '../queries.generated';
-
-import ShiftsCalendar from '../components/ShiftsCalendar';
 import EditingSwitch from '../components/EditingSwitch';
 import Pager from '../components/Pager';
-
+import ShiftsCalendar from '../components/ShiftsCalendar';
 import { EditingContext } from '../contexts';
+import { WatchmenShiftsDocument } from '../queries.generated';
 
 interface Props {
   from_date: string;
@@ -30,7 +27,7 @@ const SpaceStaffShiftsPage: NextApolloPage<Props> = props => {
   const from_date = parseISO(props.from_date);
   const to_date = parseISO(props.to_date);
 
-  const queryResults = useWatchmenShiftsQuery({
+  const queryResults = useQuery(WatchmenShiftsDocument, {
     variables: {
       from_date: props.from_date,
       to_date: props.to_date,

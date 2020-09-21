@@ -2,12 +2,13 @@ import React, { useCallback } from 'react';
 import { FaGlobeAfrica, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
+import { useMutation, useQuery } from '@apollo/client';
 import { Button, Column, Row } from '@kocherga/frontkit';
 
 import { AsyncButton, DropdownMenu } from '~/components';
 
 import {
-    EvenmanUnknownEventFragment, useEvenmanSetEventTypeMutation, useEvenmanUnknownEventsQuery
+    EvenmanSetEventTypeDocument, EvenmanUnknownEventFragment, EvenmanUnknownEventsDocument
 } from './queries.generated';
 
 const ListContainer = styled.div`
@@ -21,7 +22,7 @@ const ControlButton = styled(AsyncButton).attrs({ size: 'small' })`
 `;
 
 const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
-  const [setEventType] = useEvenmanSetEventTypeMutation({
+  const [setEventType] = useMutation(EvenmanSetEventTypeDocument, {
     refetchQueries: ['EvenmanUnknownEvents'],
     awaitRefetchQueries: true,
   });
@@ -60,7 +61,7 @@ const ListItem = ({ event }: { event: EvenmanUnknownEventFragment }) => {
 };
 
 const UnknownEventsDropdown: React.FC = () => {
-  const queryResults = useEvenmanUnknownEventsQuery();
+  const queryResults = useQuery(EvenmanUnknownEventsDocument);
 
   if (!queryResults.data) {
     return null;

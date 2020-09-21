@@ -2,10 +2,9 @@ import * as Types from '../../apollo/types.generated';
 
 import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../../cms/queries.generated';
 import { RatioHeaderBlockFragment, RatioParagraphBlockFragment, RatioInsetBlockFragment, RatioExerciseBlockFragment, RatioExerciseOnelineBlockFragment, RatioBriefingBlockFragment, RatioMathBlockFragment } from '../components/RatioWagtailBlocks/fragments.generated';
-import gql from 'graphql-tag';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { CommonWagtailPageFragmentDoc } from '../../cms/queries.generated';
 import { RatioHeaderBlockFragmentDoc, RatioParagraphBlockFragmentDoc, RatioInsetBlockFragmentDoc, RatioExerciseBlockFragmentDoc, RatioExerciseOnelineBlockFragmentDoc, RatioBriefingBlockFragmentDoc, RatioMathBlockFragmentDoc } from '../components/RatioWagtailBlocks/fragments.generated';
-
 export type RatioSectionIndexPageFragment = (
   { __typename: 'RatioSectionIndexPage' }
   & CommonWagtailPage_RatioSectionIndexPage_Fragment
@@ -142,62 +141,8 @@ export type RatioPresentationIndexPageFragment = (
   & CommonWagtailPage_RatioPresentationIndexPage_Fragment
 );
 
-export const RatioSectionIndexPageFragmentDoc = gql`
-    fragment RatioSectionIndexPage on RatioSectionIndexPage {
-  ...CommonWagtailPage
-}
-    ${CommonWagtailPageFragmentDoc}`;
-export const RatioNotebookIndexPageFragmentDoc = gql`
-    fragment RatioNotebookIndexPage on RatioNotebookIndexPage {
-  ...CommonWagtailPage
-}
-    ${CommonWagtailPageFragmentDoc}`;
-export const RatioSectionPageFragmentDoc = gql`
-    fragment RatioSectionPage on RatioSectionPage {
-  ...CommonWagtailPage
-  body {
-    __typename
-    id
-    ...RatioHeaderBlock
-    ...RatioParagraphBlock
-    ...RatioInsetBlock
-    ...RatioExerciseBlock
-    ...RatioExerciseOnelineBlock
-    ...RatioBriefingBlock
-    ...RatioMathBlock
-  }
-}
-    ${CommonWagtailPageFragmentDoc}
-${RatioHeaderBlockFragmentDoc}
-${RatioParagraphBlockFragmentDoc}
-${RatioInsetBlockFragmentDoc}
-${RatioExerciseBlockFragmentDoc}
-${RatioExerciseOnelineBlockFragmentDoc}
-${RatioBriefingBlockFragmentDoc}
-${RatioMathBlockFragmentDoc}`;
-export const RatioNotebookPageFragmentDoc = gql`
-    fragment RatioNotebookPage on RatioNotebookPage {
-  ...CommonWagtailPage
-  sections {
-    ... on RatioNotebookSectionBlock {
-      id
-      value {
-        ...RatioSectionPage
-      }
-    }
-  }
-}
-    ${CommonWagtailPageFragmentDoc}
-${RatioSectionPageFragmentDoc}`;
-export const RatioPresentationIndexPageFragmentDoc = gql`
-    fragment RatioPresentationIndexPage on RatioPresentationIndexPage {
-  ...CommonWagtailPage
-  presentations {
-    id
-    title
-    meta {
-      url
-    }
-  }
-}
-    ${CommonWagtailPageFragmentDoc}`;
+export const RatioSectionIndexPageFragmentDoc: DocumentNode<RatioSectionIndexPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioSectionIndexPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioSectionIndexPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]}]}},...CommonWagtailPageFragmentDoc.definitions]};
+export const RatioNotebookIndexPageFragmentDoc: DocumentNode<RatioNotebookIndexPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioNotebookIndexPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioNotebookIndexPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]}]}},...CommonWagtailPageFragmentDoc.definitions]};
+export const RatioSectionPageFragmentDoc: DocumentNode<RatioSectionPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioSectionPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioSectionPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"body"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioHeaderBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioParagraphBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioInsetBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioExerciseBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioExerciseOnelineBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioBriefingBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioMathBlock"},"directives":[]}]}}]}},...CommonWagtailPageFragmentDoc.definitions,...RatioHeaderBlockFragmentDoc.definitions,...RatioParagraphBlockFragmentDoc.definitions,...RatioInsetBlockFragmentDoc.definitions,...RatioExerciseBlockFragmentDoc.definitions,...RatioExerciseOnelineBlockFragmentDoc.definitions,...RatioBriefingBlockFragmentDoc.definitions,...RatioMathBlockFragmentDoc.definitions]};
+export const RatioNotebookPageFragmentDoc: DocumentNode<RatioNotebookPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioNotebookPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioNotebookPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"sections"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioNotebookSectionBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"RatioSectionPage"},"directives":[]}]}}]}}]}}]}},...CommonWagtailPageFragmentDoc.definitions,...RatioSectionPageFragmentDoc.definitions]};
+export const RatioPresentationIndexPageFragmentDoc: DocumentNode<RatioPresentationIndexPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioPresentationIndexPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioPresentationIndexPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"presentations"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"meta"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]}]}}]}}]}},...CommonWagtailPageFragmentDoc.definitions]};

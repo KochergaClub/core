@@ -1,20 +1,17 @@
 import Toggle from 'react-toggle';
 
+import { useMutation } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
-import { AsyncButton } from '~/components';
 import { EventAnnounceTarget } from '~/apollo/types.generated';
+import { AsyncButton } from '~/components';
 
 import TimepadCategoryPicker from '../../common/TimepadCategoryPicker';
-
-import {
-  EvenmanEvent_DetailsFragment,
-  useEvenmanAnnounceMutation,
-} from '../queries.generated';
-import { useEvenmanTimepadAnnouncementUpdateMutation } from './queries.generated';
-import { useSetAnnounceUrl } from './hooks';
-import EditableOrElement from './EditableOrElement';
 import { useUpdateMutation } from '../hooks';
+import { EvenmanAnnounceDocument, EvenmanEvent_DetailsFragment } from '../queries.generated';
+import EditableOrElement from './EditableOrElement';
+import { useSetAnnounceUrl } from './hooks';
+import { EvenmanTimepadAnnouncementUpdateDocument } from './queries.generated';
 
 interface Props {}
 
@@ -23,7 +20,7 @@ interface Props {
 }
 
 const AnnounceLinkTimepad: React.FC<Props> = ({ event }) => {
-  const [announce] = useEvenmanAnnounceMutation({
+  const [announce] = useMutation(EvenmanAnnounceDocument, {
     variables: {
       event_id: event.id,
       target: EventAnnounceTarget.Timepad,
@@ -49,7 +46,9 @@ const AnnounceLinkTimepad: React.FC<Props> = ({ event }) => {
 
 const TimepadAnnounce: React.FC<Props> = ({ event }) => {
   const update = useUpdateMutation(event.id);
-  const [announcementUpdate] = useEvenmanTimepadAnnouncementUpdateMutation();
+  const [announcementUpdate] = useMutation(
+    EvenmanTimepadAnnouncementUpdateDocument
+  );
 
   const setAnnounceUrl = useSetAnnounceUrl(
     event.id,
@@ -60,7 +59,7 @@ const TimepadAnnounce: React.FC<Props> = ({ event }) => {
     <div>
       <TimepadCategoryPicker
         code={event.announcements.timepad.category_code}
-        setCode={code =>
+        setCode={(code) =>
           announcementUpdate({
             variables: { event_id: event.id, category_code: code || '' },
           })
@@ -85,7 +84,7 @@ const TimepadAnnounce: React.FC<Props> = ({ event }) => {
         <div>Нативная регистрация</div>
         <Toggle
           checked={event.registration_type === 'timepad'}
-          onChange={e =>
+          onChange={(e) =>
             update({
               registration_type: e.target.checked ? 'timepad' : 'native',
             })

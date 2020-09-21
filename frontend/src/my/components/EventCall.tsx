@@ -1,8 +1,10 @@
-import { useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { useCallback } from 'react';
+
+import { useMutation } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
-import { useEventGenerateOpenViduTokenMutation } from '../queries.generated';
+import { EventGenerateOpenViduTokenDocument } from '../queries.generated';
 
 const OpenViduApp = dynamic(() => import('~/openvidu/OpenViduApp'), {
   ssr: false,
@@ -13,7 +15,7 @@ interface Props {
 }
 
 const EventCall: React.FC<Props> = ({ event_id }) => {
-  const [generateTokenMutation] = useEventGenerateOpenViduTokenMutation();
+  const [generateTokenMutation] = useMutation(EventGenerateOpenViduTokenDocument);
 
   const getToken = useCallback(async () => {
     const { data } = await generateTokenMutation({

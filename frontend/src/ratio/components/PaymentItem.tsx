@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { FaCashRegister, FaCheck, FaTimes } from 'react-icons/fa';
 
+import { useMutation } from '@apollo/client';
 import { colors, Row } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
@@ -8,8 +9,8 @@ import { Badge } from '~/components';
 import DropdownMenu, { Action } from '~/components/DropdownMenu';
 
 import {
-    RatioPaymentFragment, useRatioPaymentDeleteMutation, useRatioPaymentFiscalizedManuallyMutation,
-    useRatioPaymentFiscalizeMutation, useRatioPaymentSetStatusMutation
+    RatioPaymentDeleteDocument, RatioPaymentFiscalizedManuallyDocument,
+    RatioPaymentFiscalizeDocument, RatioPaymentFragment, RatioPaymentSetStatusDocument
 } from '../queries.generated';
 
 interface Props {
@@ -20,7 +21,7 @@ const CanceledBadge = () => <Badge type="accent">ОТКАЗ</Badge>;
 
 const FiscalizeAction: React.FC<Props> = ({ payment }) => {
   const [isKkmUser] = usePermissions(['cashier.kkm_user']);
-  const [fiscalizeMutation] = useRatioPaymentFiscalizeMutation({
+  const [fiscalizeMutation] = useMutation(RatioPaymentFiscalizeDocument, {
     refetchQueries: ['RatioTrainingBySlug'],
     awaitRefetchQueries: true,
   });
@@ -47,7 +48,7 @@ const FiscalizeAction: React.FC<Props> = ({ payment }) => {
 };
 
 const DeleteAction: React.FC<Props> = ({ payment }) => {
-  const [mutation] = useRatioPaymentDeleteMutation({
+  const [mutation] = useMutation(RatioPaymentDeleteDocument, {
     variables: {
       payment_id: payment.id,
     },
@@ -63,7 +64,7 @@ const DeleteAction: React.FC<Props> = ({ payment }) => {
 };
 
 const FiscalizedManuallyAction: React.FC<Props> = ({ payment }) => {
-  const [mutation] = useRatioPaymentFiscalizedManuallyMutation({
+  const [mutation] = useMutation(RatioPaymentFiscalizedManuallyDocument, {
     variables: {
       payment_id: payment.id,
     },
@@ -120,7 +121,7 @@ const SetStatusAction: React.FC<{
   payment: RatioPaymentFragment;
   status: string;
 }> = ({ payment, status, children }) => {
-  const [setStatusMutation] = useRatioPaymentSetStatusMutation();
+  const [setStatusMutation] = useMutation(RatioPaymentSetStatusDocument);
 
   const act = useCallback(async () => {
     await setStatusMutation({

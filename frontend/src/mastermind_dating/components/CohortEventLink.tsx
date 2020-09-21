@@ -1,22 +1,17 @@
-import { useState, useCallback } from 'react';
-import { useApolloClient } from '@apollo/client';
-import Async from 'react-select/async';
-import { ValueType } from 'react-select';
-
 import { format, parseISO } from 'date-fns';
+import { useCallback, useState } from 'react';
+import { ValueType } from 'react-select';
+import Async from 'react-select/async';
 
+import { useApolloClient, useMutation } from '@apollo/client';
 import { A, Label, Row } from '@kocherga/frontkit';
 
 import { AsyncButton, ConfirmModal } from '~/components';
 
 import {
-  MastermindDatingCohortDetailsFragment as Cohort,
-  useMastermindDatingUnsetEventForCohortMutation,
-  useMastermindDatingSetEventForCohortMutation,
-  MastermindDatingSearchEventsQuery,
-  MastermindDatingSearchEventsQueryVariables,
-  MastermindDatingSearchEventsDocument,
-  MastermindDatingEventFragment as Event,
+    MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingEventFragment as Event,
+    MastermindDatingSearchEventsDocument, MastermindDatingSetEventForCohortDocument,
+    MastermindDatingUnsetEventForCohortDocument
 } from '../queries.generated';
 
 interface Props {
@@ -33,15 +28,18 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
 
   const apolloClient = useApolloClient();
 
-  const [unsetEvent] = useMastermindDatingUnsetEventForCohortMutation({
-    refetchQueries: ['MastermindDatingCohorts'],
-    awaitRefetchQueries: true,
-    variables: {
-      cohort_id: cohort.id,
-    },
-  });
+  const [unsetEvent] = useMutation(
+    MastermindDatingUnsetEventForCohortDocument,
+    {
+      refetchQueries: ['MastermindDatingCohorts'],
+      awaitRefetchQueries: true,
+      variables: {
+        cohort_id: cohort.id,
+      },
+    }
+  );
 
-  const [setEvent] = useMastermindDatingSetEventForCohortMutation({
+  const [setEvent] = useMutation(MastermindDatingSetEventForCohortDocument, {
     refetchQueries: ['MastermindDatingCohorts'],
     awaitRefetchQueries: true,
   });
@@ -49,10 +47,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
   const loadEvents = useCallback(
     async (inputValue: string, callback: (options: OptionType[]) => void) => {
       try {
-        const { data } = await apolloClient.query<
-          MastermindDatingSearchEventsQuery,
-          MastermindDatingSearchEventsQueryVariables
-        >({
+        const { data } = await apolloClient.query({
           query: MastermindDatingSearchEventsDocument,
           variables: { search: inputValue },
         });
@@ -61,7 +56,7 @@ const CohortEventLink: React.FC<Props> = ({ cohort }) => {
         }
 
         callback(
-          data.events.nodes.map(event => {
+          data.events.nodes.map((event) => {
             const label = `${event.title} ${format(
               parseISO(event.start),
               'yyyy-MM-dd'

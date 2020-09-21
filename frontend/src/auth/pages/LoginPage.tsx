@@ -5,7 +5,7 @@ import { redirect } from '~/components/RedirectPage';
 
 import AuthForm from '../components/AuthForm';
 import CenteredLayout from '../components/CenteredLayout';
-import { CurrentUserDocument, CurrentUserQuery } from '../queries.generated';
+import { CurrentUserDocument } from '../queries.generated';
 import { checkYourEmailRoute } from '../routes';
 
 interface Props {
@@ -37,7 +37,7 @@ const LoginPage: NextApolloPage<Props> = (props) => {
 };
 
 LoginPage.getInitialProps = async ({ apolloClient, query, res }) => {
-  const result = await apolloClient.query<CurrentUserQuery>({
+  const result = await apolloClient.query({
     query: CurrentUserDocument,
   });
 

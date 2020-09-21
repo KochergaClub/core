@@ -1,16 +1,17 @@
 import { useCallback } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Column, Row } from '@kocherga/frontkit';
 
 import { PaddedBlock } from '~/components';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { RatioTrainingFragment, useRatioAddTicketMutation } from '../queries.generated';
+import { RatioAddTicketDocument, RatioTrainingFragment } from '../queries.generated';
 import TicketList from './TicketList';
 
 const CreateTicketButton = ({ training_id }: { training_id: string }) => {
-  const [addTicketMutation] = useRatioAddTicketMutation({
+  const [addTicketMutation] = useMutation(RatioAddTicketDocument, {
     refetchQueries: ['RatioTrainingBySlug'],
     awaitRefetchQueries: true,
   });

@@ -1,7 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type WagtailBlockValidationError_L0_WagtailAnyBlockValidationError_Fragment = (
   { __typename: 'WagtailAnyBlockValidationError' }
   & Pick<Types.WagtailAnyBlockValidationError, 'error_message'>
@@ -142,62 +141,7 @@ export type WagtailBlockValidationError_L3_WagtailStructBlockValidationError_Fra
 
 export type WagtailBlockValidationError_L3Fragment = WagtailBlockValidationError_L3_WagtailAnyBlockValidationError_Fragment | WagtailBlockValidationError_L3_WagtailListBlockValidationError_Fragment | WagtailBlockValidationError_L3_WagtailStructBlockValidationError_Fragment;
 
-export const WagtailBlockValidationError_L0FragmentDoc = gql`
-    fragment WagtailBlockValidationError_L0 on WagtailBlockValidationError {
-  error_message
-}
-    `;
-export const WagtailBlockValidationError_L1FragmentDoc = gql`
-    fragment WagtailBlockValidationError_L1 on WagtailBlockValidationError {
-  error_message
-  ... on WagtailStructBlockValidationError {
-    errors {
-      name
-      error {
-        ...WagtailBlockValidationError_L0
-      }
-    }
-  }
-  ... on WagtailListBlockValidationError {
-    list_errors: errors {
-      ...WagtailBlockValidationError_L0
-    }
-  }
-}
-    ${WagtailBlockValidationError_L0FragmentDoc}`;
-export const WagtailBlockValidationError_L2FragmentDoc = gql`
-    fragment WagtailBlockValidationError_L2 on WagtailBlockValidationError {
-  error_message
-  ... on WagtailStructBlockValidationError {
-    errors {
-      name
-      error {
-        ...WagtailBlockValidationError_L1
-      }
-    }
-  }
-  ... on WagtailListBlockValidationError {
-    list_errors: errors {
-      ...WagtailBlockValidationError_L1
-    }
-  }
-}
-    ${WagtailBlockValidationError_L1FragmentDoc}`;
-export const WagtailBlockValidationError_L3FragmentDoc = gql`
-    fragment WagtailBlockValidationError_L3 on WagtailBlockValidationError {
-  error_message
-  ... on WagtailStructBlockValidationError {
-    errors {
-      name
-      error {
-        ...WagtailBlockValidationError_L2
-      }
-    }
-  }
-  ... on WagtailListBlockValidationError {
-    list_errors: errors {
-      ...WagtailBlockValidationError_L2
-    }
-  }
-}
-    ${WagtailBlockValidationError_L2FragmentDoc}`;
+export const WagtailBlockValidationError_L0FragmentDoc: DocumentNode<WagtailBlockValidationError_L0Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WagtailBlockValidationError_L0"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error_message"},"arguments":[],"directives":[]}]}}]};
+export const WagtailBlockValidationError_L1FragmentDoc: DocumentNode<WagtailBlockValidationError_L1Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WagtailBlockValidationError_L1"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error_message"},"arguments":[],"directives":[]},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"error"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WagtailBlockValidationError_L0"},"directives":[]}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"list_errors"},"name":{"kind":"Name","value":"errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WagtailBlockValidationError_L0"},"directives":[]}]}}]}}]}},...WagtailBlockValidationError_L0FragmentDoc.definitions]};
+export const WagtailBlockValidationError_L2FragmentDoc: DocumentNode<WagtailBlockValidationError_L2Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WagtailBlockValidationError_L2"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error_message"},"arguments":[],"directives":[]},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"error"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WagtailBlockValidationError_L1"},"directives":[]}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"list_errors"},"name":{"kind":"Name","value":"errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WagtailBlockValidationError_L1"},"directives":[]}]}}]}}]}},...WagtailBlockValidationError_L1FragmentDoc.definitions]};
+export const WagtailBlockValidationError_L3FragmentDoc: DocumentNode<WagtailBlockValidationError_L3Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WagtailBlockValidationError_L3"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error_message"},"arguments":[],"directives":[]},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"error"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WagtailBlockValidationError_L2"},"directives":[]}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"list_errors"},"name":{"kind":"Name","value":"errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"WagtailBlockValidationError_L2"},"directives":[]}]}}]}}]}},...WagtailBlockValidationError_L2FragmentDoc.definitions]};

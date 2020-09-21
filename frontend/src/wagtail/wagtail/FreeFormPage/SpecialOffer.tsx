@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
-import { gql } from '@apollo/client';
-import { colors, deviceMediaQueries, fonts, Row } from '@kocherga/frontkit';
+import { gql, useQuery } from '@apollo/client';
+import { colors, deviceMediaQueries, fonts } from '@kocherga/frontkit';
 
-import { useSpecialOfferQuery } from './SpecialOffer.generated';
+import { SpecialOfferDocument } from './SpecialOffer.generated';
 
 const mainColor = colors.primary[500];
 
@@ -96,7 +96,7 @@ const SpecialOffer: React.FC = () => {
     const value = window.localStorage?.getItem(LOCAL_STORAGE_KEY);
     return value ? parseInt(value, 10) : undefined;
   });
-  const queryResults = useSpecialOfferQuery();
+  const queryResults = useQuery(SpecialOfferDocument);
 
   if (!queryResults.data) {
     return null; // quiet fallback, even on errors

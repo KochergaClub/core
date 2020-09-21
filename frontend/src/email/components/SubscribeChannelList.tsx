@@ -1,14 +1,15 @@
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
-import { CardList } from '~/components/Card';
+
 import { ApolloQueryResults } from '~/components';
+import { CardList } from '~/components/Card';
 
-import { useEmailSubscribeChannelsQuery } from '../queries.generated';
-
+import { EmailSubscribeChannelsDocument } from '../queries.generated';
 import CreateSubscribeChannelButton from './CreateSubscribeChannelButton';
 import SubscribeChannelCard from './SubscribeChannelCard';
 
 const SubscribeChannelList: React.FC = () => {
-  const queryResults = useEmailSubscribeChannelsQuery();
+  const queryResults = useQuery(EmailSubscribeChannelsDocument);
 
   return (
     <div>
@@ -20,7 +21,7 @@ const SubscribeChannelList: React.FC = () => {
               <CreateSubscribeChannelButton />
             </div>
             <CardList>
-              {subscribeChannels.map(subscribeChannel => (
+              {subscribeChannels.map((subscribeChannel) => (
                 <SubscribeChannelCard
                   key={subscribeChannel.slug}
                   subscribeChannel={subscribeChannel}

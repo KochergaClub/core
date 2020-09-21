@@ -9,6 +9,7 @@ import { A, Row } from '@kocherga/frontkit';
 import { WagtailPageContext } from '~/cms/contexts';
 import { getComponentByTypename } from '~/cms/wagtail-utils';
 import { useNotification } from '~/common/hooks';
+import { withFragments } from '~/common/utils';
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
 import { useBlockStructureLoader } from '../hooks';
@@ -81,7 +82,8 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
     const fragmentName = (fragmentDoc.definitions[0] as FragmentDefinitionNode)
       .name.value;
 
-    const mutation = gql`
+    const mutation = withFragments(
+      gql`
       mutation WagtailSave${fragmentName}($input: WagtailEditPageBodyBlocksInput!) {
         result: wagtailEditPageBodyBlocks(input: $input) {
           page {
@@ -91,10 +93,9 @@ const EditControls: React.FC<Props> = ({ blocks }) => {
             ...WagtailStreamFieldValidationError
           }
         }
-      }
-      ${fragmentDoc}
-      ${WagtailStreamFieldValidationErrorFragmentDoc}
-    `;
+      }`,
+      [fragmentDoc, WagtailStreamFieldValidationErrorFragmentDoc]
+    );
 
     const blocksJson = JSON.stringify(await serializeBlocks(blocks), null, 2);
     const mutationResults = await apolloClient.mutate({

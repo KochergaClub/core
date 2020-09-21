@@ -1,31 +1,22 @@
 import { useCallback } from 'react';
-import { DocumentNode } from 'graphql';
-import { useMutation } from '@apollo/client';
-
 import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
 
-import { A, Column, Row, Label, colors } from '@kocherga/frontkit';
+import { useMutation, useQuery } from '@apollo/client';
+import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { A, colors, Column, Label, Row } from '@kocherga/frontkit';
 
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
-import {
-  ApolloQueryResults,
-  AsyncButton,
-  Page,
-  PaddedBlock,
-  ParentLinkInHeader,
-} from '~/components';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import PageHeader from '~/blocks/PageHeader';
-
 import {
-  useRatioTrainingBySlugQuery,
-  RatioTrainingSyncParticipantsToMailchimpDocument,
-  RatioTrainingSyncParticipantsToMailchimpMutationVariables,
-} from '../queries.generated';
-
+    ApolloQueryResults, AsyncButton, PaddedBlock, Page, ParentLinkInHeader
+} from '~/components';
 // import CreateEmailButton from '~/ratio/components/CreateEmailButton';
 import TrainingTicketsBlock from '~/ratio/components/TrainingTicketsBlock';
+
+import {
+    RatioTrainingBySlugDocument, RatioTrainingSyncParticipantsToMailchimpDocument,
+    RatioTrainingSyncParticipantsToMailchimpMutationVariables
+} from '../queries.generated';
 
 interface Props {
   slug: string;
@@ -36,7 +27,7 @@ function MutationButton<V extends Record<string, unknown>>({
   variables,
   children,
 }: {
-  mutation: DocumentNode;
+  mutation: TypedDocumentNode<unknown, V>;
   variables: V;
   children: React.ReactNode;
 }) {
@@ -67,7 +58,7 @@ const LinkWithIcon = ({
 };
 
 const RatioTrainingPage: NextApolloPage<Props> = ({ slug }) => {
-  const queryResults = useRatioTrainingBySlugQuery({
+  const queryResults = useQuery(RatioTrainingBySlugDocument, {
     variables: { slug },
   });
 

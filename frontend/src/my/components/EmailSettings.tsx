@@ -1,18 +1,15 @@
 import { useCallback } from 'react';
 
-import { Row, Column } from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { Column, Row } from '@kocherga/frontkit';
 
 import { AsyncButton, Badge } from '~/components';
 
 import {
-  EmailSubscriptionFragment,
-  EmailSubscriptionInterestFragment,
-  useMyEmailUnsubscribeMutation,
-  useMyEmailResubscribeMutation,
-  useMyEmailUnsubscribeFromInterestMutation,
-  useMyEmailSubscribeToInterestMutation,
+    EmailSubscriptionFragment, EmailSubscriptionInterestFragment, MyEmailResubscribeDocument,
+    MyEmailSubscribeToInterestDocument, MyEmailUnsubscribeDocument,
+    MyEmailUnsubscribeFromInterestDocument
 } from '../queries.generated';
-
 import HeadedFragment from './HeadedFragment';
 
 interface InterestProps {
@@ -20,11 +17,11 @@ interface InterestProps {
 }
 
 const InterestCheckbox: React.FC<InterestProps> = ({ interest }) => {
-  const [subscribeMutation] = useMyEmailSubscribeToInterestMutation({
+  const [subscribeMutation] = useMutation(MyEmailSubscribeToInterestDocument, {
     refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
-  const [unsubscribeMutation] = useMyEmailUnsubscribeFromInterestMutation({
+  const [unsubscribeMutation] = useMutation(MyEmailUnsubscribeFromInterestDocument, {
     refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
@@ -74,11 +71,11 @@ interface Props {
 }
 
 const EmailSettings: React.FC<Props> = ({ email_subscription }) => {
-  const [resubscribeCb] = useMyEmailResubscribeMutation({
+  const [resubscribeCb] = useMutation(MyEmailResubscribeDocument, {
     refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });
-  const [unsubscribeCb] = useMyEmailUnsubscribeMutation({
+  const [unsubscribeCb] = useMutation(MyEmailUnsubscribeDocument, {
     refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });

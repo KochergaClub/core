@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
+import { useQuery } from '@apollo/client';
+
 import { ApolloQueryResults } from '~/components';
 
-import { useEvenmanEventQuery } from '../queries.generated';
+import { EvenmanEventDocument } from '../queries.generated';
 import LoadedEventCard from './LoadedEventCard';
 
 interface Props {
@@ -16,7 +18,7 @@ const NotFound = styled.div`
 `;
 
 const EventCard: React.FC<Props> = ({ id }) => {
-  const queryResults = useEvenmanEventQuery({
+  const queryResults = useQuery(EvenmanEventDocument, {
     variables: {
       id,
     },

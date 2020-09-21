@@ -1,17 +1,14 @@
-import { useState, useCallback } from 'react';
-
-import styled from 'styled-components';
+import { useCallback, useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
+import styled from 'styled-components';
 
-import { Button, Row, Column, Label, Input, colors } from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { Button, colors, Column, Input, Label, Row } from '@kocherga/frontkit';
+
 import { useCommonHotkeys } from '~/common/hooks';
 import { HintCard } from '~/components';
 
-import {
-  useSetMyNamesMutation,
-  MySettingsPageFragment,
-} from '../queries.generated';
-
+import { MySettingsPageFragment, SetMyNamesDocument } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
 
 // TODO - consolidate with ErrorMessage from ~/components/forms
@@ -31,7 +28,7 @@ const SetNames: React.FC<Props> = ({ user }) => {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const [setNamesMutation] = useSetMyNamesMutation();
+  const [setNamesMutation] = useMutation(SetMyNamesDocument);
 
   const act = useCallback(async () => {
     setActing(true);

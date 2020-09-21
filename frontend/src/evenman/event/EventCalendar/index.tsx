@@ -2,11 +2,12 @@ import { addWeeks, format, isEqual, parseISO, startOfDay, startOfWeek } from 'da
 import { ru } from 'date-fns/locale';
 import { useCallback, useMemo, useReducer, useState } from 'react';
 
+import { useQuery, useSubscription } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
 import MonthCalendar from '../../common/MonthCalendar';
 import {
-    EvenmanEventDocument, useEvenmanEventsQuery, useOnEventsSubscription
+    EvenmanEventDocument, EvenmanEventsDocument, OnEventsDocument
 } from '../queries.generated';
 import CalendarCell from './CalendarCell';
 import CalendarCellHeader from './CalendarCellHeader';
@@ -36,14 +37,14 @@ const EventCalendar: React.FC<Props> = ({ selected_id }) => {
     setStart(startOfWeek(newDate, { locale: ru }));
   }, []);
 
-  const queryResults = useEvenmanEventsQuery({
+  const queryResults = useQuery(EvenmanEventsDocument, {
     variables: {
       start: format(start, 'yyyy-MM-dd'),
       end: format(end, 'yyyy-MM-dd'),
     },
   });
 
-  useOnEventsSubscription({
+  useSubscription(OnEventsDocument, {
     async onSubscriptionData({ client, subscriptionData }) {
       if (!subscriptionData.data) {
         return;

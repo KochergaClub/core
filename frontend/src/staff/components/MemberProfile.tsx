@@ -1,23 +1,15 @@
 import { useCallback } from 'react';
-
 import styled from 'styled-components';
 
+import { useMutation, useQuery } from '@apollo/client';
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
-import {
-  AsyncButton,
-  AsyncButtonWithConfirm,
-  ApolloQueryResults,
-} from '~/components';
+import { ApolloQueryResults, AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
 import {
-  StaffMemberFullFragment,
-  StaffMemberDocument,
-  useStaffGrantGooglePermissionsToMemberMutation,
-  useStaffFireMemberMutation,
-  useStaffUnfireMemberMutation,
-  useStaffMemberExternalAccountsQuery,
+    StaffFireMemberDocument, StaffGrantGooglePermissionsToMemberDocument, StaffMemberDocument,
+    StaffMemberExternalAccountsDocument, StaffMemberFullFragment, StaffUnfireMemberDocument
 } from '../queries.generated';
 
 const Ex = styled.div`
@@ -37,7 +29,7 @@ interface Props {
 }
 
 const ExternalServices: React.FC<{ member_id: string }> = ({ member_id }) => {
-  const queryResults = useStaffMemberExternalAccountsQuery({
+  const queryResults = useQuery(StaffMemberExternalAccountsDocument, {
     variables: {
       id: member_id,
     },
@@ -76,9 +68,9 @@ const ManagerControls: React.FC<Props> = ({ member }) => {
 
   const [
     grantGooglePermissionsMutation,
-  ] = useStaffGrantGooglePermissionsToMemberMutation(refetchConfig);
-  const [fireMutation] = useStaffFireMemberMutation(refetchConfig);
-  const [unfireMutation] = useStaffUnfireMemberMutation(refetchConfig);
+  ] = useMutation(StaffGrantGooglePermissionsToMemberDocument, refetchConfig);
+  const [fireMutation] = useMutation(StaffFireMemberDocument, refetchConfig);
+  const [unfireMutation] = useMutation(StaffUnfireMemberDocument, refetchConfig);
 
   const grantGooglePermissions = useCallback(async () => {
     await grantGooglePermissionsMutation({ variables: { id: member.id } });

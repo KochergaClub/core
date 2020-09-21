@@ -1,14 +1,16 @@
+import { useMutation } from '@apollo/client';
+
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { RatioTrainingFragment, useRatioTrainingAddDayMutation } from '../queries.generated';
+import { RatioTrainingAddDayDocument, RatioTrainingFragment } from '../queries.generated';
 
 interface Props {
   training: RatioTrainingFragment;
 }
 
 const CreateDayButton: React.FC<Props> = ({ training }) => {
-  const [createMutation] = useRatioTrainingAddDayMutation({
+  const [createMutation] = useMutation(RatioTrainingAddDayDocument, {
     refetchQueries: ['RatioTrainingWithSchedule'],
     awaitRefetchQueries: true,
   });

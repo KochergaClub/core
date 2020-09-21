@@ -1,23 +1,22 @@
 import { useCallback } from 'react';
 
-import { ApolloQueryResults } from '~/components';
+import { useMutation, useQuery } from '@apollo/client';
 
+import { ApolloQueryResults } from '~/components';
 import { Collection, CustomCardListView } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import {
-  MastermindDatingCohortSummaryFragment as CohortFragment,
-  useMastermindDatingCohortsQuery,
-  useMastermindDatingCreateCohortMutation,
+    MastermindDatingCohortsDocument, MastermindDatingCohortSummaryFragment as CohortFragment,
+    MastermindDatingCreateCohortDocument
 } from '../../queries.generated';
-
 import CohortItem from './CohortItem';
 
 const cohortShape: FormShape = [];
 
 const CohortCollection: React.FC = () => {
-  const queryResults = useMastermindDatingCohortsQuery();
-  const [createMutation] = useMastermindDatingCreateCohortMutation({
+  const queryResults = useQuery(MastermindDatingCohortsDocument);
+  const [createMutation] = useMutation(MastermindDatingCreateCohortDocument, {
     refetchQueries: ['MastermindDatingCohorts'],
     awaitRefetchQueries: true,
   });

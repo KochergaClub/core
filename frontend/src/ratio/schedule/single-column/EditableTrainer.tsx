@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 
-import Picker from '~/components/Picker';
-import { useExpandable } from '~/common/hooks';
+import { useQuery } from '@apollo/client';
 
-import {
-  useRatioTrainersQuery,
-  RatioTrainerFragment,
-} from '../../queries.generated';
+import { useExpandable } from '~/common/hooks';
+import Picker from '~/components/Picker';
+
+import { RatioTrainerFragment, RatioTrainersDocument } from '../../queries.generated';
 
 interface Props {
   trainer_name?: string;
@@ -44,7 +43,7 @@ export default function EditableTrainer({
 }: Props) {
   const { expanded, unexpand, flipExpand, ref } = useExpandable();
 
-  const queryResults = useRatioTrainersQuery();
+  const queryResults = useQuery(RatioTrainersDocument);
 
   return (
     <OuterContainer>

@@ -1,18 +1,13 @@
+import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
-import { parseISO } from 'date-fns';
-
+import { useMutation, useQuery } from '@apollo/client';
 import { Column, Label } from '@kocherga/frontkit';
 
-import { ApolloQueryResults, AsyncButton } from '~/components';
 import { formatDate } from '~/common/utils';
+import { ApolloQueryResults, AsyncButton } from '~/components';
 
-import {
-  useCm2OrderQuery,
-  Cm2OrderDocument,
-  useCm2CloseOrderMutation,
-} from '../queries.generated';
-
+import { Cm2CloseOrderDocument, Cm2OrderDocument } from '../queries.generated';
 import CustomerLink from './CustomerLink';
 
 interface Props {
@@ -20,9 +15,9 @@ interface Props {
 }
 
 export const OrderDetailsScreen: React.FC<Props> = ({ id }) => {
-  const queryResults = useCm2OrderQuery({ variables: { id } });
+  const queryResults = useQuery(Cm2OrderDocument, { variables: { id } });
 
-  const [closeMutation] = useCm2CloseOrderMutation({
+  const [closeMutation] = useMutation(Cm2CloseOrderDocument, {
     refetchQueries: [
       {
         query: Cm2OrderDocument,

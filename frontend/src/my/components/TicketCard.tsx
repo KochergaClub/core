@@ -1,33 +1,21 @@
-import { useRef, useCallback } from 'react';
-import Link from 'next/link';
-import styled from 'styled-components';
-
 import { formatDistanceToNow, parseISO } from 'date-fns';
-
 import { utcToZonedTime } from 'date-fns-tz';
 import { ru } from 'date-fns/locale';
+import Link from 'next/link';
+import { useCallback, useRef } from 'react';
+import { FaRegCopy, FaTicketAlt } from 'react-icons/fa';
 import { FiVideo } from 'react-icons/fi';
-import { FaTicketAlt, FaRegCopy } from 'react-icons/fa';
+import styled from 'styled-components';
 
-import {
-  A,
-  Label,
-  Row,
-  Button,
-  Column,
-  colors,
-  fonts,
-} from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { A, Button, colors, Column, fonts, Label, Row } from '@kocherga/frontkit';
 
+import { formatDate, timezone } from '~/common/utils';
 import { DropdownMenu } from '~/components';
 import Card from '~/components/Card';
 import { Action } from '~/components/DropdownMenu';
-import { timezone, formatDate } from '~/common/utils';
 
-import {
-  MyTicketFragment,
-  useMyTicketDeleteMutation,
-} from '../queries.generated';
+import { MyTicketDeleteDocument, MyTicketFragment } from '../queries.generated';
 
 const EventLink = styled(A)`
   color: black;
@@ -82,7 +70,7 @@ interface Props {
 }
 
 const TicketCard: React.FC<Props> = ({ ticket, later }) => {
-  const [deleteMutation] = useMyTicketDeleteMutation();
+  const [deleteMutation] = useMutation(MyTicketDeleteDocument);
 
   const cancel = useCallback(async () => {
     await deleteMutation({

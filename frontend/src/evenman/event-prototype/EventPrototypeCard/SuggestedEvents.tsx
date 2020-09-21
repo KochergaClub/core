@@ -1,16 +1,14 @@
-import { parseISO, getUnixTime } from 'date-fns';
+import { getUnixTime, parseISO } from 'date-fns';
 
+import { useMutation } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
 import { formatDate } from '~/common/utils';
 import { AsyncButton } from '~/components';
 
 import { Header } from '../../components/ui';
-
 import {
-  useEvenmanPrototypeCancelDateMutation,
-  useEvenmanPrototypeNewEventMutation,
-  EventsPrototypeFragment,
+    EvenmanPrototypeCancelDateDocument, EvenmanPrototypeNewEventDocument, EventsPrototypeFragment
 } from '../queries.generated';
 
 interface Props {
@@ -18,10 +16,10 @@ interface Props {
 }
 
 const SuggestedEvents: React.FC<Props> = ({ prototype }) => {
-  const [cancelDate] = useEvenmanPrototypeCancelDateMutation({
+  const [cancelDate] = useMutation(EvenmanPrototypeCancelDateDocument, {
     refetchQueries: ['EvenmanPrototype'],
   });
-  const [newEvent] = useEvenmanPrototypeNewEventMutation({
+  const [newEvent] = useMutation(EvenmanPrototypeNewEventDocument, {
     refetchQueries: ['EvenmanPrototype'],
   });
 

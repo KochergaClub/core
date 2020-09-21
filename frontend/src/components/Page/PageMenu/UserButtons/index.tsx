@@ -4,19 +4,20 @@ import { FaEdit, FaUser, FaUserCircle, FaUserTie } from 'react-icons/fa';
 import { GoGear, GoSignOut } from 'react-icons/go';
 import styled from 'styled-components';
 
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { colors, fonts, Row } from '@kocherga/frontkit';
 
-import { useCurrentUserLazyQuery } from '~/auth/queries.generated';
+import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
 import { useNotification } from '~/common/hooks';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { BasicSpinner } from '~/components/Spinner';
-import { useLogoutMutation } from '~/my/queries.generated';
+import { LogoutDocument } from '~/my/queries.generated';
 
 import { MenuKind } from '../../types';
 import LoginButton from './LoginButton';
-import { useWagtailEditablePageLazyQuery } from './queries.generated';
+import { WagtailEditablePageDocument } from './queries.generated';
 
 const Email = styled.div`
   padding: 4px 12px;
@@ -27,7 +28,7 @@ const Email = styled.div`
 const LogoutAction: React.FC = () => {
   const [acting, setActing] = useState(false);
 
-  const [logoutMutation] = useLogoutMutation();
+  const [logoutMutation] = useMutation(LogoutDocument);
   const notify = useNotification();
 
   const act = useCallback(async () => {
@@ -61,7 +62,7 @@ const EditWagtailPageAction: React.FC = () => {
     dispatch,
   } = useContext(WagtailPageContext);
 
-  const [query, queryResults] = useWagtailEditablePageLazyQuery({
+  const [query, queryResults] = useLazyQuery(WagtailEditablePageDocument, {
     variables: { path: window.location.pathname },
   });
 
@@ -110,7 +111,7 @@ const UserButtons: React.FC<Props> = (
     /* kind */
   }
 ) => {
-  const [getUser, queryResults] = useCurrentUserLazyQuery({
+  const [getUser, queryResults] = useLazyQuery(CurrentUserDocument, {
     // we can't provide user data from server since we often use static pages, e.g. for wagtail
     fetchPolicy: 'network-only',
   });

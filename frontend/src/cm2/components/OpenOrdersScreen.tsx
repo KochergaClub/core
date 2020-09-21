@@ -1,31 +1,24 @@
 import { useCallback } from 'react';
 
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 
+import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { Collection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
-import { PaddedBlock, ApolloQueryResults } from '~/components';
-
 import {
-  CustomerFragment,
-  useCm2OrdersQuery,
-  useCm2CreateOrderMutation,
-  Cm2SearchCustomersQuery,
-  Cm2SearchCustomersDocument,
-  Cm2SearchCustomersQueryVariables,
+    Cm2CreateOrderDocument, Cm2OrdersDocument, Cm2SearchCustomersDocument, CustomerFragment
 } from '../queries.generated';
-
 import OrdersTableView from './OrdersTableView';
 
 const OpenOrdersScreen: React.FC = () => {
-  const queryResults = useCm2OrdersQuery({
+  const queryResults = useQuery(Cm2OrdersDocument, {
     variables: { status: 'open' },
     fetchPolicy: 'cache-and-network',
   });
   const apolloClient = useApolloClient();
 
-  const [addMutation] = useCm2CreateOrderMutation({
+  const [addMutation] = useMutation(Cm2CreateOrderDocument, {
     refetchQueries: ['Cm2Orders'],
     awaitRefetchQueries: true,
   });
@@ -51,17 +44,14 @@ const OpenOrdersScreen: React.FC = () => {
         display: (c: CustomerFragment) =>
           `№${c.card_id} ${c.first_name} ${c.last_name}`,
         load: async (inputValue: string) => {
-          const { data: customersData } = await apolloClient.query<
-            Cm2SearchCustomersQuery,
-            Cm2SearchCustomersQueryVariables
-          >({
+          const { data: customersData } = await apolloClient.query({
             query: Cm2SearchCustomersDocument,
             variables: { search: inputValue },
           });
           if (!customersData) {
             return []; // TODO - proper error handling
           }
-          return customersData.cm2Customers.edges.map(e => e.node);
+          return customersData.cm2Customers.edges.map((e) => e.node);
         },
         getValue: (c: CustomerFragment) => parseInt(c.id),
       },
@@ -76,7 +66,7 @@ const OpenOrdersScreen: React.FC = () => {
             cm2Orders: { edges },
           },
         }) => {
-          const orders = edges.map(edge => edge.node);
+          const orders = edges.map((edge) => edge.node);
           return (
             <Collection
               items={orders}

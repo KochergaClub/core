@@ -1,11 +1,13 @@
 import dynamic from 'next/dynamic';
 import { useCallback } from 'react';
 
+import { useMutation } from '@apollo/client';
+
 import { NextApolloPage, withApollo } from '~/apollo';
 import { requireAuth } from '~/auth/utils';
 import { Page } from '~/components';
 
-import { useOpenviduGenerateRoomTokenMutation } from '../queries.generated';
+import { OpenviduGenerateRoomTokenDocument } from '../queries.generated';
 
 const OpenViduApp = dynamic(() => import('~/openvidu/OpenViduApp'), {
   ssr: false,
@@ -13,7 +15,7 @@ const OpenViduApp = dynamic(() => import('~/openvidu/OpenViduApp'), {
 
 const MyEventPage: NextApolloPage = () => {
   const title = 'Открытая комната (альфа-версия)';
-  const [generateTokenMutation] = useOpenviduGenerateRoomTokenMutation();
+  const [generateTokenMutation] = useMutation(OpenviduGenerateRoomTokenDocument);
 
   const getToken = useCallback(async () => {
     const { data } = await generateTokenMutation();

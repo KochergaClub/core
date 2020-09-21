@@ -1,26 +1,20 @@
+import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
-import { parseISO } from 'date-fns';
-
-import { Row, Label } from '@kocherga/frontkit';
-
-import { formatDate } from '~/common/utils';
-
-import { usePermissions } from '~/common/hooks';
-
-import { AsyncButtonWithConfirm } from '~/components';
+import { useMutation } from '@apollo/client';
+import { Label, Row } from '@kocherga/frontkit';
 
 import UserInfo from '~/audit/components/UserInfo';
+import { usePermissions } from '~/common/hooks';
+import { formatDate } from '~/common/utils';
+import { AsyncButtonWithConfirm } from '~/components';
 
-import {
-  PaymentFragment,
-  useCashierRedeemPaymentMutation,
-} from '../queries.generated';
+import { CashierRedeemPaymentDocument, PaymentFragment } from '../queries.generated';
 
 const PaymentCard = ({ payment }: { payment: PaymentFragment }) => {
   const [canRedeem] = usePermissions(['cashier.redeem']);
 
-  const [redeemMutation] = useCashierRedeemPaymentMutation({
+  const [redeemMutation] = useMutation(CashierRedeemPaymentDocument, {
     refetchQueries: ['CashierPayments'],
     awaitRefetchQueries: true,
   });

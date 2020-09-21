@@ -1,18 +1,15 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
+import { useMutation } from '@apollo/client';
 import { A, Button, Column } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
 
 import DigestEmailModal from './DigestEmailModal';
-
 import {
-  useEvenmanDigestToVkMutation,
-  useEvenmanDigestToTelegramMutation,
-  useEvenmanDigestToMailchimpMutation,
-  useEvenmanVkWikiScheduleUpdateMutation,
-  EvenmanWeeklyDigestFragment,
+    EvenmanDigestToMailchimpDocument, EvenmanDigestToTelegramDocument, EvenmanDigestToVkDocument,
+    EvenmanVkWikiScheduleUpdateDocument, EvenmanWeeklyDigestFragment
 } from './queries.generated';
 
 const WideAsyncButton = styled(AsyncButton)`
@@ -20,7 +17,7 @@ const WideAsyncButton = styled(AsyncButton)`
 `;
 
 const EmailDigestButton: React.FC = ({ children }) => {
-  const [mutation, { loading: acting }] = useEvenmanDigestToMailchimpMutation();
+  const [mutation, { loading: acting }] = useMutation(EvenmanDigestToMailchimpDocument);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -55,9 +52,9 @@ interface Props {
 }
 
 const Buttons: React.FC<Props> = ({ digest }) => {
-  const [postToVk] = useEvenmanDigestToVkMutation();
-  const [postToTelegram] = useEvenmanDigestToTelegramMutation();
-  const [updateVkWikiSchedule] = useEvenmanVkWikiScheduleUpdateMutation();
+  const [postToVk] = useMutation(EvenmanDigestToVkDocument);
+  const [postToTelegram] = useMutation(EvenmanDigestToTelegramDocument);
+  const [updateVkWikiSchedule] = useMutation(EvenmanVkWikiScheduleUpdateDocument);
 
   return (
     <div>

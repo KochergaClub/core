@@ -1,9 +1,8 @@
 import * as Types from '../apollo/types.generated';
 
 import { CommonWagtailPage_BlogIndexPage_Fragment, CommonWagtailPage_BlogPostPage_Fragment, CommonWagtailPage_FaqPage_Fragment, CommonWagtailPage_FolderPage_Fragment, CommonWagtailPage_FreeFormPage_Fragment, CommonWagtailPage_PresentationPage_Fragment, CommonWagtailPage_ProjectIndexPage_Fragment, CommonWagtailPage_ProjectPage_Fragment, CommonWagtailPage_RatioNotebookIndexPage_Fragment, CommonWagtailPage_RatioNotebookPage_Fragment, CommonWagtailPage_RatioPresentationIndexPage_Fragment, CommonWagtailPage_RatioSectionIndexPage_Fragment, CommonWagtailPage_RatioSectionPage_Fragment } from '../cms/queries.generated';
-import gql from 'graphql-tag';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { CommonWagtailPageFragmentDoc } from '../cms/queries.generated';
-
 export type FaqPage_SummaryFragment = (
   { __typename: 'FaqPage' }
   & Pick<Types.FaqPage, 'id' | 'summary' | 'title'>
@@ -37,40 +36,6 @@ export type FaqPageFragment = (
   & CommonWagtailPage_FaqPage_Fragment
 );
 
-export const FaqPage_SummaryFragmentDoc = gql`
-    fragment FaqPage_summary on FaqPage {
-  id
-  summary
-  title
-  meta {
-    url
-  }
-}
-    `;
-export const FaqEntryFragmentDoc = gql`
-    fragment FaqEntry on FaqEntry {
-  id
-  question
-  answer
-}
-    `;
-export const FaqPageFragmentDoc = gql`
-    fragment FaqPage on FaqPage {
-  ...CommonWagtailPage
-  summary
-  next_page {
-    ...FaqPage_summary
-  }
-  prev_page {
-    ...FaqPage_summary
-  }
-  subpages {
-    ...FaqPage_summary
-  }
-  entries {
-    ...FaqEntry
-  }
-}
-    ${CommonWagtailPageFragmentDoc}
-${FaqPage_SummaryFragmentDoc}
-${FaqEntryFragmentDoc}`;
+export const FaqPage_SummaryFragmentDoc: DocumentNode<FaqPage_SummaryFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FaqPage_summary"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FaqPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"summary"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"meta"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]}]}}]}}]};
+export const FaqEntryFragmentDoc: DocumentNode<FaqEntryFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FaqEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FaqEntry"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"question"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"answer"},"arguments":[],"directives":[]}]}}]};
+export const FaqPageFragmentDoc: DocumentNode<FaqPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FaqPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FaqPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"summary"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"next_page"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FaqPage_summary"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"prev_page"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FaqPage_summary"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"subpages"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FaqPage_summary"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"entries"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FaqEntry"},"directives":[]}]}}]}},...CommonWagtailPageFragmentDoc.definitions,...FaqPage_SummaryFragmentDoc.definitions,...FaqEntryFragmentDoc.definitions]};

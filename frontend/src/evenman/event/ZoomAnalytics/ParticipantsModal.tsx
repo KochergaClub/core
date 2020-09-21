@@ -1,10 +1,12 @@
 import { parseISO } from 'date-fns';
 
+import { useQuery } from '@apollo/client';
 import { Modal } from '@kocherga/frontkit';
 
-import { ApolloQueryResults } from '~/components';
-import { useEvenmanEventForZoomAnalyticsQuery } from './queries.generated';
 import { formatDate } from '~/common/utils';
+import { ApolloQueryResults } from '~/components';
+
+import { EvenmanEventForZoomAnalyticsDocument } from './queries.generated';
 
 interface Props {
   close: () => void;
@@ -12,7 +14,7 @@ interface Props {
 }
 
 const ParticipantsModal: React.FC<Props> = ({ close, event_id }) => {
-  const queryResults = useEvenmanEventForZoomAnalyticsQuery({
+  const queryResults = useQuery(EvenmanEventForZoomAnalyticsDocument,{
     variables: { id: event_id },
   });
   return (

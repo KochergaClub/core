@@ -1,15 +1,12 @@
 import Link from 'next/link';
 
+import { useQuery } from '@apollo/client';
 import { A, Column } from '@kocherga/frontkit';
 
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { ApolloQueryResults, Page } from '~/components';
 
-import { Page, ApolloQueryResults } from '~/components';
-
-import {
-  StaffMemberForListFragment,
-  useStaffMembersQuery,
-} from '../queries.generated';
+import { StaffMemberForListFragment, StaffMembersDocument } from '../queries.generated';
 
 const MemberList = ({
   title,
@@ -34,7 +31,7 @@ const MemberList = ({
 );
 
 const StaffIndexPage: NextApolloPage = () => {
-  const queryResults = useStaffMembersQuery();
+  const queryResults = useQuery(StaffMembersDocument);
 
   return (
     <Page title="Список сотрудников" menu="team">

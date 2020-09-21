@@ -1,6 +1,7 @@
 import { utcToZonedTime } from 'date-fns-tz';
 import { useCallback, useContext, useState } from 'react';
 
+import { useMutation, useQuery } from '@apollo/client';
 import { Button, Modal, Row } from '@kocherga/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
@@ -8,8 +9,8 @@ import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults } from '~/components';
 
 import {
-    TeamCalendarEventFragment, useTeamCalendarDeleteEventMutation, useTeamCalendarEventQuery,
-    useTeamCalendarUpdateEventMutation
+    TeamCalendarDeleteEventDocument, TeamCalendarEventDocument, TeamCalendarEventFragment,
+    TeamCalendarUpdateEventDocument
 } from '../queries.generated';
 import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
 import EventFields from './EventFields';
@@ -21,12 +22,12 @@ interface LoadedProps {
 const EditEventModalLoaded: React.FC<LoadedProps> = ({ event }) => {
   const { dispatch } = useContext(CalendarUIContext);
 
-  const [updateMutation] = useTeamCalendarUpdateEventMutation({
+  const [updateMutation] = useMutation(TeamCalendarUpdateEventDocument, {
     // TODO - update cache instead
     refetchQueries: ['EventsInRange'],
     awaitRefetchQueries: true,
   });
-  const [deleteMutation] = useTeamCalendarDeleteEventMutation({
+  const [deleteMutation] = useMutation(TeamCalendarDeleteEventDocument, {
     // TODO - update cache instead
     refetchQueries: ['EventsInRange'],
     awaitRefetchQueries: true,
@@ -135,7 +136,7 @@ interface Props {
 }
 
 const EditEventModal: React.FC<Props> = ({ event_id }) => {
-  const queryResults = useTeamCalendarEventQuery({
+  const queryResults = useQuery(TeamCalendarEventDocument, {
     variables: { id: event_id },
   });
 

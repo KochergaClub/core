@@ -57,6 +57,9 @@ const structureToFormField = (
     | StructureL3Fragment,
   name: string
 ): FormField => {
+  if (!structure.__typename) {
+    throw new Error("Expected __typename to be set");
+  }
   switch (structure.__typename) {
     case 'WagtailCharBlockStructure':
     case 'WagtailURLBlockStructure':

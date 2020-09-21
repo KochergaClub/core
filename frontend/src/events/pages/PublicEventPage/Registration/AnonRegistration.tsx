@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react';
-
+import { FaCheck, FaHeart } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { FaCheck, FaHeart } from 'react-icons/fa';
-import { A, Button, Input, Column, Label, Row } from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { A, Button, Column, Input, Label, Row } from '@kocherga/frontkit';
 
 import { HintCard } from '~/components';
 import { trackEvent } from '~/components/analytics';
-import { useMyEventsTicketRegisterAnonMutation } from '../queries.generated';
 
+import { MyEventsTicketRegisterAnonDocument } from '../queries.generated';
 import { CommonProps as Props } from '../types';
 
 const CheckboxLabel = styled(Label)`
@@ -75,7 +75,7 @@ const AnonRegistration: React.FC<Props> = ({ event }) => {
   const [subscribedToNewsletter, setSubscribedToNewsletter] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  const [registerMutation] = useMyEventsTicketRegisterAnonMutation();
+  const [registerMutation] = useMutation(MyEventsTicketRegisterAnonDocument);
 
   const anonRegister = useCallback(async () => {
     trackEvent('register', {

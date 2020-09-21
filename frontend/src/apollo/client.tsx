@@ -6,7 +6,7 @@ import { ApolloClient, ApolloProvider, HttpLink, split } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
-import { CurrentUserDocument, CurrentUserQuery } from '~/auth/queries.generated';
+import { CurrentUserDocument } from '~/auth/queries.generated';
 import { IS_SERVER } from '~/common/utils';
 
 import KochergaApolloCache from './cache';
@@ -163,7 +163,7 @@ export const apolloClientForStaticProps = async () => {
   const apolloClient = initApolloClient();
 
   // the result is always non-authenticated user, but a lot of components still rely of this data being in apollo cache
-  const currentUserQueryResult = await apolloClient.query<CurrentUserQuery>({
+  const currentUserQueryResult = await apolloClient.query({
     query: CurrentUserDocument,
   });
 
@@ -242,11 +242,9 @@ export const withApollo = <P extends {}, IP = P>(
         ctx.req
       ));
 
-      const currentUserQueryResult = await apolloClient.query<CurrentUserQuery>(
-        {
-          query: CurrentUserDocument,
-        }
-      );
+      const currentUserQueryResult = await apolloClient.query({
+        query: CurrentUserDocument,
+      });
 
       if (!currentUserQueryResult.data) {
         throw new Error('CurrentUser query failed');

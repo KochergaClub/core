@@ -1,19 +1,20 @@
 import styled from 'styled-components';
 
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import ImagePreview from '~/components/images/ImagePreview';
 
 import Buttons from './Buttons';
-import { useEvenmanWeeklyDigestQuery } from './queries.generated';
+import { EvenmanWeeklyDigestDocument } from './queries.generated';
 
 const Container = styled.main`
   margin-top: 10px;
 `;
 
 const ScheduleScreen: React.FC = () => {
-  const queryResults = useEvenmanWeeklyDigestQuery();
+  const queryResults = useQuery(EvenmanWeeklyDigestDocument);
 
   return (
     <Container>

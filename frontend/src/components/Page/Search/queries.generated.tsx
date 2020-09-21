@@ -1,9 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type PageSearchItemFragment = (
   { __typename: 'PageSearchItem' }
   & { page: (
@@ -128,61 +125,6 @@ export type SearchQuery = (
   ) }
 );
 
-export const PageSearchItemFragmentDoc = gql`
-    fragment PageSearchItem on PageSearchItem {
-  page {
-    id
-    title
-    meta {
-      url
-    }
-  }
-}
-    `;
-export const EventSearchItemFragmentDoc = gql`
-    fragment EventSearchItem on EventSearchItem {
-  event {
-    id
-    title
-    start
-  }
-}
-    `;
-export const SearchDocument = gql`
-    query Search($input: SearchInput!) {
-  search(input: $input) {
-    results {
-      ...PageSearchItem
-      ...EventSearchItem
-    }
-    more
-  }
-}
-    ${PageSearchItemFragmentDoc}
-${EventSearchItemFragmentDoc}`;
-
-/**
- * __useSearchQuery__
- *
- * To run a query within a React component, call `useSearchQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useSearchQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchQuery, SearchQueryVariables>) {
-        return ApolloReactHooks.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, baseOptions);
-      }
-export function useSearchLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, baseOptions);
-        }
-export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
-export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;
-export type SearchQueryResult = ApolloReactCommon.QueryResult<SearchQuery, SearchQueryVariables>;
+export const PageSearchItemFragmentDoc: DocumentNode<PageSearchItemFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageSearchItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PageSearchItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"meta"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]}]}}]}}]}}]};
+export const EventSearchItemFragmentDoc: DocumentNode<EventSearchItemFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventSearchItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventSearchItem"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"start"},"arguments":[],"directives":[]}]}}]}}]};
+export const SearchDocument: DocumentNode<SearchQuery, SearchQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Search"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"search"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"results"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageSearchItem"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventSearchItem"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"more"},"arguments":[],"directives":[]}]}}]}},...PageSearchItemFragmentDoc.definitions,...EventSearchItemFragmentDoc.definitions]};

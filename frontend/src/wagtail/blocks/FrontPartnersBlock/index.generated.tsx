@@ -1,7 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type FrontPartnersBlockFragment = (
   { __typename: 'FrontPartnersBlock' }
   & Pick<Types.FrontPartnersBlock, 'id'>
@@ -26,25 +25,4 @@ export type FrontPartnersBlockFragment = (
   )> }
 );
 
-export const FrontPartnersBlockFragmentDoc = gql`
-    fragment FrontPartnersBlock on FrontPartnersBlock {
-  id
-  partners: value {
-    link
-    image(spec: "width-160") {
-      id
-      url
-      original_image {
-        id
-      }
-    }
-    image_x2: image(spec: "width-320") {
-      id
-      url
-      original_image {
-        id
-      }
-    }
-  }
-}
-    `;
+export const FrontPartnersBlockFragmentDoc: DocumentNode<FrontPartnersBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FrontPartnersBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FrontPartnersBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","alias":{"kind":"Name","value":"partners"},"name":{"kind":"Name","value":"value"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"link"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"image"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"spec"},"value":{"kind":"StringValue","value":"width-160","block":false}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"original_image"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"image_x2"},"name":{"kind":"Name","value":"image"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"spec"},"value":{"kind":"StringValue","value":"width-320","block":false}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"original_image"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]}]}}]}}]}}]}}]};

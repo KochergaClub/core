@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Button, Column, Row } from '@kocherga/frontkit';
 
 import ImageEditor from '~/components/images/ImageEditor';
 
 import {
-    EvenmanEvent_DetailsFragment, useEvenmanVkAnnouncementSetImageMutation
+    EvenmanEvent_DetailsFragment, EvenmanVkAnnouncementSetImageDocument
 } from './queries.generated';
 import VkImageModal from './VkImageModal';
 
@@ -20,7 +21,7 @@ const EventImageWidgetVk: React.FC<Props> = ({ event }) => {
     setModalIsOpen(!modalIsOpen);
   }, [modalIsOpen]);
 
-  const [setImage] = useEvenmanVkAnnouncementSetImageMutation();
+  const [setImage] = useMutation(EvenmanVkAnnouncementSetImageDocument);
 
   const onSave = useCallback(
     (image_id) => setImage({ variables: { event_id: event.id, image_id } }),

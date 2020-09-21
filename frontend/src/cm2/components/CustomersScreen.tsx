@@ -1,21 +1,15 @@
 import { useCallback } from 'react';
 
-import { Row, Label } from '@kocherga/frontkit';
+import { useMutation, useQuery } from '@apollo/client';
+import { Label, Row } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
-
-import {
-  PagedApolloCollection,
-  CustomCardListView,
-} from '~/components/collections';
+import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import {
-  useCm2CustomersQuery,
-  useCm2CreateCustomerMutation,
-  CustomerFragment,
+    Cm2CreateCustomerDocument, Cm2CustomersDocument, CustomerFragment
 } from '../queries.generated';
-
 import CustomerLink from './CustomerLink';
 
 const CustomerCard: React.FC<{ customer: CustomerFragment }> = ({
@@ -33,13 +27,13 @@ const CustomerCard: React.FC<{ customer: CustomerFragment }> = ({
 };
 
 const CustomersScreen: React.FC = () => {
-  const queryResults = useCm2CustomersQuery({
+  const queryResults = useQuery(Cm2CustomersDocument, {
     variables: {
       first: 20,
     },
   });
 
-  const [add] = useCm2CreateCustomerMutation({
+  const [add] = useMutation(Cm2CreateCustomerDocument, {
     refetchQueries: ['Cm2Customers'],
     awaitRefetchQueries: true,
   });
@@ -93,7 +87,7 @@ const CustomersScreen: React.FC = () => {
               },
               shape: addShape,
             }}
-            view={props => (
+            view={(props) => (
               <CustomCardListView {...props} renderItem={renderItem} />
             )}
           />

@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import useOnClickOutside from 'use-onclickoutside';
 
+import { useLazyQuery } from '@apollo/client';
+
 import { FloatingList } from '~/components';
 
-import { useSearchLazyQuery } from './queries.generated';
+import { SearchDocument } from './queries.generated';
 import SearchInput from './SearchInput';
 import SearchResults from './SearchResults';
 
@@ -13,7 +15,7 @@ const isRunnableQuery = (query: string) => query !== '';
 const Search: React.FC = () => {
   const [query, setQuery] = useState('');
 
-  const [runSearchQuery, queryResults] = useSearchLazyQuery({
+  const [runSearchQuery, queryResults] = useLazyQuery(SearchDocument, {
     variables: {
       input: {
         query,

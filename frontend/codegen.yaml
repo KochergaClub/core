@@ -24,7 +24,7 @@ generates:
       baseTypesPath: apollo/types.generated.ts
     plugins:
       - typescript-operations
-      - typescript-react-apollo
+      - typed-document-node
     config:
       # Apollo always asks for __typename.
       # Technically this is violated in Jest tests when we use MockedProvider, but so far this hasn't caused
@@ -32,7 +32,3 @@ generates:
       # This option is necessary, for example, for proper casting of AnyBlockFragment to KnownBlockFragment
       # in wagtail/components/AnyBlock.
       nonOptionalTypename: true
-      withComponent: false
-      withHOC: false
-      withHooks: true
-      reactApolloVersion: 3

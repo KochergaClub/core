@@ -1,38 +1,27 @@
 import { useCallback } from 'react';
 
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 
 import { usePermissions } from '~/common/hooks';
-
 import { ApolloQueryResults } from '~/components';
-import {
-  PagedApolloCollection,
-  CustomCardListView,
-} from '~/components/collections';
+import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
-
 import {
-  StaffMembersDocument,
-  StaffMembersQuery,
-  StaffMemberFullFragment,
+    StaffMemberFullFragment, StaffMembersDocument, StaffMembersQuery
 } from '~/staff/queries.generated';
 
 import {
-  useCashierPaymentsQuery,
-  CashierPaymentsDocument,
-  useCashierCreatePaymentMutation,
-  PaymentFragment,
+    CashierCreatePaymentDocument, CashierPaymentsDocument, PaymentFragment
 } from '../queries.generated';
-
 import PaymentCard from './PaymentCard';
 
 const PaymentCollection: React.FC = () => {
-  const queryResults = useCashierPaymentsQuery({
+  const queryResults = useQuery(CashierPaymentsDocument, {
     variables: {
       first: 20,
     },
   });
-  const [createPaymentMutation] = useCashierCreatePaymentMutation({
+  const [createPaymentMutation] = useMutation(CashierCreatePaymentDocument, {
     refetchQueries: [
       {
         query: CashierPaymentsDocument,
@@ -55,7 +44,7 @@ const PaymentCollection: React.FC = () => {
       widget: {
         type: 'async',
         load: async () => {
-          const { data } = await apolloClient.query<StaffMembersQuery>({
+          const { data } = await apolloClient.query({
             query: StaffMembersDocument,
           });
 
@@ -99,10 +88,10 @@ const PaymentCollection: React.FC = () => {
             genitive: 'выплату',
           }}
           add={canCreate ? { cb: add, shape: paymentShape } : undefined}
-          view={props => (
+          view={(props) => (
             <CustomCardListView
               {...props}
-              isMuted={payment => payment.is_redeemed}
+              isMuted={(payment) => payment.is_redeemed}
               renderItem={renderItem}
             />
           )}

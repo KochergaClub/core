@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { useLazyQuery } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
@@ -7,7 +8,7 @@ import ImageEditor from '~/components/images/ImageEditor';
 
 import { ImageFormField } from '../../types';
 import LabeledField from '../LabeledField';
-import { useWagtailImageLazyQuery } from './queries.generated';
+import { WagtailImageDocument } from './queries.generated';
 
 interface EditorProps {
   id?: string;
@@ -16,7 +17,7 @@ interface EditorProps {
 }
 
 const ImageEditorById: React.FC<EditorProps> = ({ id, onChange }) => {
-  const [loadImage, queryResults] = useWagtailImageLazyQuery();
+  const [loadImage, queryResults] = useLazyQuery(WagtailImageDocument);
 
   useEffect(() => {
     if (!id) {

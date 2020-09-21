@@ -1,12 +1,13 @@
 import { getHours, getMinutes } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Column, Input, Label, Modal } from '@kocherga/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton } from '~/components';
 
-import { useEvenmanPrototypeCreateMutation } from './queries.generated';
+import { EvenmanPrototypeCreateDocument } from './queries.generated';
 import TimePicker from './TimePicker';
 import WeekdayPicker from './WeekdayPicker';
 
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const NewPrototypeModal: React.FC<Props> = ({ close }) => {
-  const [createMutation] = useEvenmanPrototypeCreateMutation({
+  const [createMutation] = useMutation(EvenmanPrototypeCreateDocument, {
     refetchQueries: ['EvenmanPrototypes'],
     awaitRefetchQueries: true,
   });

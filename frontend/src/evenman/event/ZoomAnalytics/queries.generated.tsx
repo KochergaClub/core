@@ -1,9 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type EvenmanEvent_ForZoomAnalyticsFragment = (
   { __typename: 'Event' }
   & Pick<Types.Event, 'id'>
@@ -34,55 +31,5 @@ export type EvenmanEventForZoomAnalyticsQuery = (
   )> }
 );
 
-export const EvenmanEvent_ForZoomAnalyticsFragmentDoc = gql`
-    fragment EvenmanEvent_ForZoomAnalytics on Event {
-  id
-  zoom_meeting {
-    id
-    instances {
-      id
-      start_time
-      end_time
-      participants {
-        id
-        name
-        join_time
-        leave_time
-      }
-    }
-  }
-}
-    `;
-export const EvenmanEventForZoomAnalyticsDocument = gql`
-    query EvenmanEventForZoomAnalytics($id: ID!) {
-  event(event_id: $id) {
-    ...EvenmanEvent_ForZoomAnalytics
-  }
-}
-    ${EvenmanEvent_ForZoomAnalyticsFragmentDoc}`;
-
-/**
- * __useEvenmanEventForZoomAnalyticsQuery__
- *
- * To run a query within a React component, call `useEvenmanEventForZoomAnalyticsQuery` and pass it any options that fit your needs.
- * When your component renders, `useEvenmanEventForZoomAnalyticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEvenmanEventForZoomAnalyticsQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useEvenmanEventForZoomAnalyticsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EvenmanEventForZoomAnalyticsQuery, EvenmanEventForZoomAnalyticsQueryVariables>) {
-        return ApolloReactHooks.useQuery<EvenmanEventForZoomAnalyticsQuery, EvenmanEventForZoomAnalyticsQueryVariables>(EvenmanEventForZoomAnalyticsDocument, baseOptions);
-      }
-export function useEvenmanEventForZoomAnalyticsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EvenmanEventForZoomAnalyticsQuery, EvenmanEventForZoomAnalyticsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<EvenmanEventForZoomAnalyticsQuery, EvenmanEventForZoomAnalyticsQueryVariables>(EvenmanEventForZoomAnalyticsDocument, baseOptions);
-        }
-export type EvenmanEventForZoomAnalyticsQueryHookResult = ReturnType<typeof useEvenmanEventForZoomAnalyticsQuery>;
-export type EvenmanEventForZoomAnalyticsLazyQueryHookResult = ReturnType<typeof useEvenmanEventForZoomAnalyticsLazyQuery>;
-export type EvenmanEventForZoomAnalyticsQueryResult = ApolloReactCommon.QueryResult<EvenmanEventForZoomAnalyticsQuery, EvenmanEventForZoomAnalyticsQueryVariables>;
+export const EvenmanEvent_ForZoomAnalyticsFragmentDoc: DocumentNode<EvenmanEvent_ForZoomAnalyticsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EvenmanEvent_ForZoomAnalytics"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Event"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"zoom_meeting"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"instances"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"start_time"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"end_time"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"participants"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"join_time"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"leave_time"},"arguments":[],"directives":[]}]}}]}}]}}]}}]};
+export const EvenmanEventForZoomAnalyticsDocument: DocumentNode<EvenmanEventForZoomAnalyticsQuery, EvenmanEventForZoomAnalyticsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"EvenmanEventForZoomAnalytics"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"event_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EvenmanEvent_ForZoomAnalytics"},"directives":[]}]}}]}},...EvenmanEvent_ForZoomAnalyticsFragmentDoc.definitions]};

@@ -1,33 +1,15 @@
-import { useState, useCallback } from 'react';
-import {
-  setHours,
-  setMinutes,
-  getHours,
-  getMinutes,
-  addHours,
-  parseISO,
-} from 'date-fns';
+import { addHours, getHours, getMinutes, parseISO, setHours, setMinutes } from 'date-fns';
 import Router from 'next/router';
-
+import { useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
-import {
-  Modal,
-  Column,
-  ControlsFooter,
-  Input,
-  Button,
-  Label,
-} from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
 
-import {
-  useCommonHotkeys,
-  useNotification,
-  useFocusOnFirstModalRender,
-} from '~/common/hooks';
+import { useCommonHotkeys, useFocusOnFirstModalRender, useNotification } from '~/common/hooks';
 
-import { useEvenmanEventCreateMutation } from './queries.generated';
 import { eventRoute } from '../routes';
+import { EvenmanEventCreateDocument } from './queries.generated';
 
 interface Props {
   close: () => void;
@@ -36,7 +18,7 @@ interface Props {
 
 const NewEventModal: React.FC<Props> = props => {
   const notify = useNotification();
-  const [createMutation, { loading: creating }] = useEvenmanEventCreateMutation(
+  const [createMutation, { loading: creating }] = useMutation(EvenmanEventCreateDocument,
     {
       refetchQueries: ['EvenmanEvents'],
       awaitRefetchQueries: true,

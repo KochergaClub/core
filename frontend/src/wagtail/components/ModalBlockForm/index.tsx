@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { gql, useApolloClient } from '@apollo/client';
 import { Modal } from '@kocherga/frontkit';
 
+import { withFragments } from '~/common/utils';
 import { Spinner } from '~/components';
 import ModalForm from '~/components/forms/ModalForm';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
@@ -103,7 +104,8 @@ const ModalBlockForm: React.FC<Props> = ({
       const value = valueWrappedInForm ? v.form : v;
 
       const blockComponent = allBlockComponents[typename];
-      const renderBlockQuery = gql`
+      const renderBlockQuery = withFragments(
+        gql`
         query RenderBlock($type: String!, $paramsJson: String!) {
           result: wagtailRenderBlock(input: {type: $type, paramsJson: $paramsJson}) {
             validation_error {
@@ -119,9 +121,9 @@ const ModalBlockForm: React.FC<Props> = ({
             }
           }
         }
-        ${blockComponent.fragment}
-        ${WagtailBlockValidationError_L3FragmentDoc}
-      `;
+      `,
+        [blockComponent.fragment, WagtailBlockValidationError_L3FragmentDoc]
+      );
 
       const type = typenameToBackendBlockName(typename);
       const { data } = await apolloClient.query({

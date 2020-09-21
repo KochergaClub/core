@@ -1,7 +1,9 @@
-import { useCurrentUserQuery } from '~/auth/queries.generated';
+import { useQuery } from '@apollo/client';
+
+import { CurrentUserDocument } from '~/auth/queries.generated';
 
 const useUser = () => {
-  const result = useCurrentUserQuery({
+  const result = useQuery(CurrentUserDocument, {
     fetchPolicy: 'cache-only',
   });
   if (!result.data) {

@@ -1,26 +1,21 @@
-import { useState, useCallback } from 'react';
+import Link from 'next/link';
+import { useCallback, useState } from 'react';
+import { FaEdit } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import Link from 'next/link';
-
-import { FaEdit } from 'react-icons/fa';
-
-import { A, Row, Button, Label } from '@kocherga/frontkit';
+import { useMutation, useQuery } from '@apollo/client';
+import { A, Button, Label, Row } from '@kocherga/frontkit';
 
 import { usePermissions } from '~/common/hooks';
+import { ApolloQueryResults, AsyncButton } from '~/components';
 import Card, { CardList } from '~/components/Card';
-import { AsyncButton, ApolloQueryResults } from '~/components';
 
 import {
-  GradeFragment,
-  WatchmanFragment,
-  useWatchmenWatchmenListQuery,
-  useWatchmenSetWatchmanPriorityMutation,
-  useWatchmenSetWatchmanGradeMutation,
+    GradeFragment, WatchmanFragment, WatchmenSetWatchmanGradeDocument,
+    WatchmenSetWatchmanPriorityDocument, WatchmenWatchmenListDocument
 } from '../queries.generated';
-
-import PickGradeModal from './PickGradeModal';
 import AddWatchman from './AddWatchman';
+import PickGradeModal from './PickGradeModal';
 
 const priority2name: { [k: number]: string } = {
   1: 'Регулярный админ',
@@ -36,7 +31,7 @@ const WatchmanPriorityButton: React.FC<{
   watchman: WatchmanFragment;
   priority: number;
 }> = ({ watchman, priority, children }) => {
-  const [setPriorityMutation] = useWatchmenSetWatchmanPriorityMutation({
+  const [setPriorityMutation] = useMutation(WatchmenSetWatchmanPriorityDocument, {
     refetchQueries: ['WatchmenWatchmenList'],
     awaitRefetchQueries: true,
   });
@@ -68,7 +63,7 @@ const WatchmanItem = ({ watchman }: { watchman: WatchmanFragment }) => {
   const [canManage] = usePermissions(['watchmen.manage']);
   const [askingForGrade, setAskingForGrade] = useState(false);
 
-  const [setGradeMutation] = useWatchmenSetWatchmanGradeMutation({
+  const [setGradeMutation] = useMutation(WatchmenSetWatchmanGradeDocument, {
     refetchQueries: ['WatchmenWatchmenList'],
     awaitRefetchQueries: true,
   });
@@ -192,7 +187,7 @@ const WatchmenListResults: React.FC<{ watchmen: WatchmanFragment[] }> = ({
 };
 
 const WatchmenList = () => {
-  const queryResults = useWatchmenWatchmenListQuery({
+  const queryResults = useQuery(WatchmenWatchmenListDocument, {
     fetchPolicy: 'network-only',
   });
 

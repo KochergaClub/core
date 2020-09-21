@@ -1,23 +1,16 @@
+import { isBefore, parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
-import { isBefore, parseISO } from 'date-fns';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { usePermissions } from '~/common/hooks';
-
 import { ApolloQueryResults, PaddedBlock } from '~/components';
-import {
-  PagedApolloCollection,
-  CustomCardListView,
-} from '~/components/collections';
-
+import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
 
 import {
-  useRatioTrainingsQuery,
-  useRatioAddTrainingMutation,
-  RatioTrainingFragment,
+    RatioAddTrainingDocument, RatioTrainingFragment, RatioTrainingsDocument
 } from '../queries.generated';
-
 import TrainingCard from './TrainingCard';
 
 const trainingShape: FormShape = [
@@ -60,12 +53,12 @@ const isMuted = (training: RatioTrainingFragment) =>
 const TrainingCollectionBlock: React.FC = () => {
   const [canCreate] = usePermissions(['ratio.manage']);
 
-  const queryResults = useRatioTrainingsQuery({
+  const queryResults = useQuery(RatioTrainingsDocument, {
     variables: {
       first: 20,
     },
   });
-  const [addTrainingMutation] = useRatioAddTrainingMutation({
+  const [addTrainingMutation] = useMutation(RatioAddTrainingDocument, {
     refetchQueries: ['RatioTrainings'],
     awaitRefetchQueries: true,
   });

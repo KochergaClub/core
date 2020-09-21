@@ -1,12 +1,13 @@
 import { utcToZonedTime } from 'date-fns-tz';
 import { useCallback, useContext, useState } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { formatDate, timezone } from '~/common/utils';
 
-import { useTeamCalendarCreateEventMutation } from '../queries.generated';
+import { TeamCalendarCreateEventDocument } from '../queries.generated';
 import { CalendarUIContext, closeUI } from '../reducers/calendarUI';
 import EventFields from './EventFields';
 
@@ -16,7 +17,7 @@ const NewEventModal: React.FC = () => {
   const [room, setRoom] = useState('');
   const [saving, setSaving] = useState(false);
 
-  const [createMutation] = useTeamCalendarCreateEventMutation({
+  const [createMutation] = useMutation(TeamCalendarCreateEventDocument, {
     // TODO - update cache instead
     refetchQueries: ['EventsInRange'],
     awaitRefetchQueries: true,

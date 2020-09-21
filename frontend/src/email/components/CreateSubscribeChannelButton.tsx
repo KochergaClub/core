@@ -1,15 +1,17 @@
 import { useCallback, useMemo } from 'react';
 
+import { useMutation, useQuery } from '@apollo/client';
+
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
 import {
-    useEmailMailchimpCategoriesQuery, useEmailSubscribeChannelCreateMutation
+    EmailMailchimpCategoriesDocument, EmailSubscribeChannelCreateDocument
 } from '../queries.generated';
 
 const CreateSubscribeChannelButton: React.FC = () => {
-  const queryResults = useEmailMailchimpCategoriesQuery();
-  const [createMutation] = useEmailSubscribeChannelCreateMutation({
+  const queryResults = useQuery(EmailMailchimpCategoriesDocument);
+  const [createMutation] = useMutation(EmailSubscribeChannelCreateDocument, {
     refetchQueries: ['EmailSubscribeChannels'],
     awaitRefetchQueries: true,
   });

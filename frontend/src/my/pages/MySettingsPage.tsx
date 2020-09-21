@@ -1,11 +1,14 @@
+import { useQuery } from '@apollo/client';
+
 import { NextApolloPage, withApollo } from '~/apollo';
-import { Page, ApolloQueryResults, PaddedBlock } from '~/components';
-import { useMySettingsPageQuery } from '../queries.generated';
-import SettingsTab from '../tabs/SettingsTab';
 import { requireAuth } from '~/auth/utils';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+
+import { MySettingsPageDocument } from '../queries.generated';
+import SettingsTab from '../tabs/SettingsTab';
 
 const MySettingsPage: NextApolloPage = () => {
-  const queryResults = useMySettingsPageQuery();
+  const queryResults = useQuery(MySettingsPageDocument);
   const title = 'Настройки';
 
   return (

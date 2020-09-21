@@ -1,11 +1,12 @@
 import Select from 'react-select';
 import { ActionTypes } from 'react-select/src/types';
 
+import { useQuery } from '@apollo/client';
 import { Label } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
-import { useEvenmanProjectsListQuery } from './queries.generated';
+import { EvenmanProjectsListDocument } from './queries.generated';
 
 interface Props {
   selected?: string;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const EventShapeProjectLink = ({ selected, select }: Props) => {
-  const projectsResult = useEvenmanProjectsListQuery();
+  const projectsResult = useQuery(EvenmanProjectsListDocument);
 
   return (
     <ApolloQueryResults {...projectsResult}>

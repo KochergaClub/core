@@ -1,9 +1,6 @@
 import * as Types from '../../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type WagtailEditablePageQueryVariables = Types.Exact<{
   path: Types.Scalars['String'];
 }>;
@@ -145,41 +142,4 @@ export type WagtailEditablePageQuery = (
 );
 
 
-export const WagtailEditablePageDocument = gql`
-    query WagtailEditablePage($path: String!) {
-  wagtailPage(path: $path) {
-    id
-    meta {
-      permissions {
-        can_edit
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useWagtailEditablePageQuery__
- *
- * To run a query within a React component, call `useWagtailEditablePageQuery` and pass it any options that fit your needs.
- * When your component renders, `useWagtailEditablePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWagtailEditablePageQuery({
- *   variables: {
- *      path: // value for 'path'
- *   },
- * });
- */
-export function useWagtailEditablePageQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WagtailEditablePageQuery, WagtailEditablePageQueryVariables>) {
-        return ApolloReactHooks.useQuery<WagtailEditablePageQuery, WagtailEditablePageQueryVariables>(WagtailEditablePageDocument, baseOptions);
-      }
-export function useWagtailEditablePageLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WagtailEditablePageQuery, WagtailEditablePageQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<WagtailEditablePageQuery, WagtailEditablePageQueryVariables>(WagtailEditablePageDocument, baseOptions);
-        }
-export type WagtailEditablePageQueryHookResult = ReturnType<typeof useWagtailEditablePageQuery>;
-export type WagtailEditablePageLazyQueryHookResult = ReturnType<typeof useWagtailEditablePageLazyQuery>;
-export type WagtailEditablePageQueryResult = ApolloReactCommon.QueryResult<WagtailEditablePageQuery, WagtailEditablePageQueryVariables>;
+export const WagtailEditablePageDocument: DocumentNode<WagtailEditablePageQuery, WagtailEditablePageQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WagtailEditablePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"path"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wagtailPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"path"},"value":{"kind":"Variable","name":{"kind":"Name","value":"path"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"meta"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"permissions"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_edit"},"arguments":[],"directives":[]}]}}]}}]}}]}}]};

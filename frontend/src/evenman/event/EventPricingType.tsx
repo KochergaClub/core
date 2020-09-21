@@ -1,23 +1,23 @@
-import { colors, Row, Column } from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { colors, Column, Row } from '@kocherga/frontkit';
 
-import {
-  EvenmanEvent_DetailsFragment,
-  useEvenmanUpdateMutation,
-} from './queries.generated';
+import { EvenmanEvent_DetailsFragment, EvenmanUpdateDocument } from './queries.generated';
 
 interface Props {
   event: EvenmanEvent_DetailsFragment;
 }
 
 const EventRealm: React.FC<Props> = ({ event }) => {
-  const [updateMutation, { loading: mutating }] = useEvenmanUpdateMutation();
+  const [updateMutation, { loading: mutating }] = useMutation(
+    EvenmanUpdateDocument
+  );
 
   return (
     <Column>
       {[
         { value: 'anticafe', title: 'Тариф антикафе' },
         { value: 'free', title: 'Бесплатно' },
-      ].map(item => (
+      ].map((item) => (
         <Row key={item.value} vCentered>
           <input
             type="radio"

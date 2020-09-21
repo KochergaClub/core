@@ -5,6 +5,7 @@ import Markdown from 'react-markdown';
 import breaks from 'remark-breaks';
 import styled from 'styled-components';
 
+import { useQuery } from '@apollo/client';
 import { RichText } from '@kocherga/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
@@ -19,7 +20,7 @@ import EventHeroBlock from './EventHeroBlock';
 import EventToCalendar from './EventToCalendar';
 import Map from './Map';
 import ProjectInfo from './ProjectInfo';
-import { useGetPublicEventQuery } from './queries.generated';
+import { GetPublicEventDocument } from './queries.generated';
 
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -35,7 +36,7 @@ interface Props {
 }
 
 export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
-  const queryResults = useGetPublicEventQuery({
+  const queryResults = useQuery(GetPublicEventDocument, {
     variables: {
       event_id,
     },

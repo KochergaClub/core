@@ -1,10 +1,9 @@
-import Card, { CardList } from '~/components/Card';
-import { ApolloQueryResults } from '~/components';
+import { useQuery } from '@apollo/client';
 
-import {
-  useEmailMailchimpCategoriesQuery,
-  MailchimpCategoryFragment,
-} from '../queries.generated';
+import { ApolloQueryResults } from '~/components';
+import Card, { CardList } from '~/components/Card';
+
+import { EmailMailchimpCategoriesDocument, MailchimpCategoryFragment } from '../queries.generated';
 
 interface Props {
   mailchimpCategory: MailchimpCategoryFragment;
@@ -14,7 +13,7 @@ const MailchimpCategoryCard: React.FC<Props> = ({ mailchimpCategory }) => (
   <Card>
     <header>{mailchimpCategory.title}</header>
     <ul>
-      {mailchimpCategory.interests.map(interest => (
+      {mailchimpCategory.interests.map((interest) => (
         <li key={interest.id}>{interest.name}</li>
       ))}
     </ul>
@@ -22,7 +21,7 @@ const MailchimpCategoryCard: React.FC<Props> = ({ mailchimpCategory }) => (
 );
 
 const MailchimpCategoryList: React.FC = () => {
-  const queryResults = useEmailMailchimpCategoriesQuery();
+  const queryResults = useQuery(EmailMailchimpCategoriesDocument);
 
   return (
     <div>
@@ -30,7 +29,7 @@ const MailchimpCategoryList: React.FC = () => {
       <ApolloQueryResults {...queryResults}>
         {({ data: { mailchimpCategories } }) => (
           <CardList>
-            {mailchimpCategories.map(c => (
+            {mailchimpCategories.map((c) => (
               <MailchimpCategoryCard key={c.id} mailchimpCategory={c} />
             ))}
           </CardList>

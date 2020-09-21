@@ -1,9 +1,6 @@
 import * as Types from '../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type OpenviduGenerateRoomTokenMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -16,34 +13,4 @@ export type OpenviduGenerateRoomTokenMutation = (
 );
 
 
-export const OpenviduGenerateRoomTokenDocument = gql`
-    mutation OpenviduGenerateRoomToken {
-  result: openviduGenerateRoomToken {
-    token
-  }
-}
-    `;
-export type OpenviduGenerateRoomTokenMutationFn = ApolloReactCommon.MutationFunction<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>;
-
-/**
- * __useOpenviduGenerateRoomTokenMutation__
- *
- * To run a mutation, you first call `useOpenviduGenerateRoomTokenMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useOpenviduGenerateRoomTokenMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [openviduGenerateRoomTokenMutation, { data, loading, error }] = useOpenviduGenerateRoomTokenMutation({
- *   variables: {
- *   },
- * });
- */
-export function useOpenviduGenerateRoomTokenMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>) {
-        return ApolloReactHooks.useMutation<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>(OpenviduGenerateRoomTokenDocument, baseOptions);
-      }
-export type OpenviduGenerateRoomTokenMutationHookResult = ReturnType<typeof useOpenviduGenerateRoomTokenMutation>;
-export type OpenviduGenerateRoomTokenMutationResult = ApolloReactCommon.MutationResult<OpenviduGenerateRoomTokenMutation>;
-export type OpenviduGenerateRoomTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables>;
+export const OpenviduGenerateRoomTokenDocument: DocumentNode<OpenviduGenerateRoomTokenMutation, OpenviduGenerateRoomTokenMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"OpenviduGenerateRoomToken"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"result"},"name":{"kind":"Name","value":"openviduGenerateRoomToken"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"},"arguments":[],"directives":[]}]}}]}}]};

@@ -1,23 +1,19 @@
-import { useState, useCallback } from 'react';
-
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
+import { useMutation } from '@apollo/client';
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { staticUrl } from '~/common/utils';
 
 import {
-  TrainingWithScheduleFragment,
-  TrainingForPickerFragment,
-  useRatioTrainingCopyScheduleFromMutation,
+    RatioTrainingCopyScheduleFromDocument, TrainingForPickerFragment, TrainingWithScheduleFragment
 } from '../queries.generated';
-
-import Unprintable from './Unprintable';
-
-import CreateDayButton from './CreateDayButton';
-import SingleColumnSchedule from './SingleColumnSchedule';
-import MultiColumnSchedule from './MultiColumnSchedule';
 import CopyScheduleFromPicker from './CopyScheduleFromPicker';
+import CreateDayButton from './CreateDayButton';
+import MultiColumnSchedule from './MultiColumnSchedule';
+import SingleColumnSchedule from './SingleColumnSchedule';
+import Unprintable from './Unprintable';
 
 const Header = styled.header``;
 
@@ -51,7 +47,7 @@ interface Props {
 
 const SchedulePage: React.FC<Props> = ({ training }) => {
   const { schedule } = training;
-  const [copyScheduleFromMutation] = useRatioTrainingCopyScheduleFromMutation({
+  const [copyScheduleFromMutation] = useMutation(RatioTrainingCopyScheduleFromDocument, {
     refetchQueries: ['RatioTrainingWithSchedule'],
     awaitRefetchQueries: true,
   });

@@ -1,10 +1,12 @@
 import { FragmentDefinitionNode } from 'graphql';
-import gql from 'graphql-tag';
+
+import { gql } from '@apollo/client';
 
 // TODO - dynamic() to reduce the bundle size for wagtail pages
 import { KochergaApolloClient } from '~/apollo/types';
 import { BlogIndexPage, BlogPostPage } from '~/blog/wagtail';
 import { APIError } from '~/common/api';
+import { withFragments } from '~/common/utils';
 import { FAQPage as FaqPage } from '~/faq/wagtail';
 import { PresentationPage } from '~/presentations/wagtail';
 import { ProjectIndexPage, ProjectPage } from '~/projects/wagtail';
@@ -15,9 +17,7 @@ import {
 } from '~/ratio/wagtail';
 import FreeFormPage from '~/wagtail/wagtail/FreeFormPage';
 
-import {
-    WagtailPagesDocument, WagtailPagesQuery, WagtailPageTypeDocument, WagtailPageTypeQuery
-} from '../queries.generated';
+import { WagtailPagesDocument, WagtailPageTypeDocument } from '../queries.generated';
 
 export type PageLocator = { path: string } | { preview_token: string };
 
@@ -64,12 +64,10 @@ interface LoadTypenameProps {
 export const loadTypename = async (
   props: LoadTypenameProps
 ): Promise<string> => {
-  const { data, errors } = await props.apolloClient.query<WagtailPageTypeQuery>(
-    {
-      query: WagtailPageTypeDocument,
-      variables: props.locator,
-    }
-  );
+  const { data, errors } = await props.apolloClient.query({
+    query: WagtailPageTypeDocument,
+    variables: props.locator,
+  });
 
   if (errors) {
     throw new APIError('GraphQL error', 500);
@@ -115,14 +113,15 @@ export const loadPageForComponent = async (
   }
 
   // TODO - global cache for typename -> query?
-  const query = gql`
+  const query = withFragments(
+    gql`
 query Get${fragmentName}($path: String, $preview_token: String) {
   wagtailPage(path: $path, preview_token: $preview_token) {
     ...${fragmentName}
   }
-}
-${fragmentDoc}
-  `;
+}`,
+    [fragmentDoc]
+  );
 
   const { data, errors } = await props.apolloClient.query({
     query,
@@ -147,7 +146,7 @@ ${fragmentDoc}
 };
 
 export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
-  const { data, errors } = await apolloClient.query<WagtailPagesQuery>({
+  const { data, errors } = await apolloClient.query({
     query: WagtailPagesDocument,
   });
 

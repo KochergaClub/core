@@ -1,18 +1,19 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-import { Page, ApolloQueryResults } from '~/components';
+import { useQuery } from '@apollo/client';
+
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { ApolloQueryResults, Page } from '~/components';
 
 import Controls from '../components/Controls';
-import ParticipantSection from '../components/ParticipantSection';
 import GroupSection from '../components/GroupSection';
-
-import { useMastermindDatingCohortByIdQuery } from '../queries.generated';
+import ParticipantSection from '../components/ParticipantSection';
+import { MastermindDatingCohortByIdDocument } from '../queries.generated';
 
 interface Props {
   cohort_id: string;
 }
 
 const MastermindCohortPage: NextApolloPage<Props> = props => {
-  const queryResults = useMastermindDatingCohortByIdQuery({
+  const queryResults = useQuery(MastermindDatingCohortByIdDocument, {
     variables: {
       id: props.cohort_id,
     },

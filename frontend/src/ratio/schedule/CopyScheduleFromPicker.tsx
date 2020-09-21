@@ -1,11 +1,9 @@
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
-import { AsyncButton, ApolloQueryResults } from '~/components';
+import { ApolloQueryResults, AsyncButton } from '~/components';
 
-import {
-  TrainingForPickerFragment,
-  useRatioTrainingsForPickerQuery,
-} from '../queries.generated';
+import { RatioTrainingsForPickerDocument, TrainingForPickerFragment } from '../queries.generated';
 
 interface Props {
   pick: (srcTraining: TrainingForPickerFragment) => Promise<void>;
@@ -13,7 +11,7 @@ interface Props {
 }
 
 export default function CopyScheduleFromPicker(props: Props) {
-  const queryResults = useRatioTrainingsForPickerQuery({
+  const queryResults = useQuery(RatioTrainingsForPickerDocument, {
     variables: {
       first: 20,
     },

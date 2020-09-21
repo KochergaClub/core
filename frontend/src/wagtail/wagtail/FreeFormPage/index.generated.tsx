@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import * as Types from '../../../apollo/types.generated';
 
 import { BasicLeadBlockFragment } from '../../blocks/BasicLeadBlock/index.generated';
@@ -33,7 +33,6 @@ import { HeroFrontBlockFragmentDoc } from '../../blocks/HeroFrontBlock/index.gen
 import { HrBlockFragmentDoc } from '../../blocks/HrBlock/index.generated';
 import { FrontPartnersBlockFragmentDoc } from '../../blocks/FrontPartnersBlock/index.generated';
 import { FrontSocialLinksBlockFragmentDoc } from '../../blocks/FrontSocialLinksBlock/index.generated';
-
 export type FreeFormPageFragment = (
   { __typename: 'FreeFormPage' }
   & { body: Array<(
@@ -142,42 +141,4 @@ export type FreeFormPageFragment = (
   & CommonWagtailPage_FreeFormPage_Fragment
 );
 
-export const FreeFormPageFragmentDoc = gql`
-    fragment FreeFormPage on FreeFormPage {
-  ...CommonWagtailPage
-  body {
-    __typename
-    id
-    ...BasicLeadBlock
-    ...BasicTextBlock
-    ...SectionHeaderBlock
-    ...BasicCardBlock
-    ...GreyBlock
-    ...ColumnsBasicBlock
-    ...ColumnsButtonsBlock
-    ...EventsListBlock
-    ...BigContactsBlock
-    ...PhotoRibbonBlock
-    ...MailchimpSubscribeBlock
-    ...HeroFrontBlock
-    ...HrBlock
-    ...FrontPartnersBlock
-    ...FrontSocialLinksBlock
-  }
-}
-    ${CommonWagtailPageFragmentDoc}
-${BasicLeadBlockFragmentDoc}
-${BasicTextBlockFragmentDoc}
-${SectionHeaderBlockFragmentDoc}
-${BasicCardBlockFragmentDoc}
-${GreyBlockFragmentDoc}
-${ColumnsBasicBlockFragmentDoc}
-${ColumnsButtonsBlockFragmentDoc}
-${EventsListBlockFragmentDoc}
-${BigContactsBlockFragmentDoc}
-${PhotoRibbonBlockFragmentDoc}
-${MailchimpSubscribeBlockFragmentDoc}
-${HeroFrontBlockFragmentDoc}
-${HrBlockFragmentDoc}
-${FrontPartnersBlockFragmentDoc}
-${FrontSocialLinksBlockFragmentDoc}`;
+export const FreeFormPageFragmentDoc: DocumentNode<FreeFormPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FreeFormPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FreeFormPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonWagtailPage"},"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"body"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BasicLeadBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BasicTextBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"SectionHeaderBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BasicCardBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"GreyBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ColumnsBasicBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ColumnsButtonsBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventsListBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"BigContactsBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"PhotoRibbonBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"MailchimpSubscribeBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"HeroFrontBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"HrBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"FrontPartnersBlock"},"directives":[]},{"kind":"FragmentSpread","name":{"kind":"Name","value":"FrontSocialLinksBlock"},"directives":[]}]}}]}},...CommonWagtailPageFragmentDoc.definitions,...BasicLeadBlockFragmentDoc.definitions,...BasicTextBlockFragmentDoc.definitions,...SectionHeaderBlockFragmentDoc.definitions,...BasicCardBlockFragmentDoc.definitions,...GreyBlockFragmentDoc.definitions,...ColumnsBasicBlockFragmentDoc.definitions,...ColumnsButtonsBlockFragmentDoc.definitions,...EventsListBlockFragmentDoc.definitions,...BigContactsBlockFragmentDoc.definitions,...PhotoRibbonBlockFragmentDoc.definitions,...MailchimpSubscribeBlockFragmentDoc.definitions,...HeroFrontBlockFragmentDoc.definitions,...HrBlockFragmentDoc.definitions,...FrontPartnersBlockFragmentDoc.definitions,...FrontSocialLinksBlockFragmentDoc.definitions]};

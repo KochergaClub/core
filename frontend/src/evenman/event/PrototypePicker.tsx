@@ -1,7 +1,9 @@
+import { useQuery } from '@apollo/client';
+
 import { ApolloQueryResults } from '~/components';
 
 import { ReactSelect } from '../components/ui';
-import { useEvenmanPrototypesForPickerQuery } from './queries.generated';
+import { EvenmanPrototypesForPickerDocument } from './queries.generated';
 
 interface Props {
   selectedId?: string;
@@ -16,7 +18,7 @@ const value2option = (g: { id: string; title: string }) => {
 };
 
 const Picker: React.FC<Props> = ({ selectedId, select }) => {
-  const queryResults = useEvenmanPrototypesForPickerQuery();
+  const queryResults = useQuery(EvenmanPrototypesForPickerDocument);
 
   return (
     <ApolloQueryResults {...queryResults}>

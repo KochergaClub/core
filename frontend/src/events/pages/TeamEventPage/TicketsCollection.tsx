@@ -1,16 +1,17 @@
+import { useQuery } from '@apollo/client';
 import { Row } from '@kocherga/frontkit';
 
-import Card, { CardList } from '~/components/Card';
 import { ApolloQueryResults, Badge } from '~/components';
+import Card, { CardList } from '~/components/Card';
 
-import { useGetEventTicketsQuery } from './queries.generated';
+import { GetEventTicketsDocument } from './queries.generated';
 
 interface Props {
   event_id: string;
 }
 
 const TicketsCollection: React.FC<Props> = ({ event_id }) => {
-  const queryResults = useGetEventTicketsQuery({
+  const queryResults = useQuery(GetEventTicketsDocument, {
     variables: {
       event_id,
     },

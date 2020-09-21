@@ -1,11 +1,14 @@
+import { useQuery } from '@apollo/client';
+
 import { NextApolloPage, withApollo } from '~/apollo';
-import { Page, ApolloQueryResults, PaddedBlock } from '~/components';
-import { useMyTicketsPageQuery } from '../queries.generated';
-import TicketsTab from '../tabs/TicketsTab';
 import { requireAuth } from '~/auth/utils';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
+
+import { MyTicketsPageDocument } from '../queries.generated';
+import TicketsTab from '../tabs/TicketsTab';
 
 const MyTicketsPage: NextApolloPage = () => {
-  const queryResults = useMyTicketsPageQuery();
+  const queryResults = useQuery(MyTicketsPageDocument);
   const title = 'Личный кабинет';
 
   return (

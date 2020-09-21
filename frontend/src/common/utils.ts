@@ -1,5 +1,8 @@
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { FragmentDefinitionNode } from 'graphql';
+
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 
 export const IS_SERVER = typeof window === 'undefined';
 
@@ -24,7 +27,7 @@ export const parseQueryString = (
 export const buildQueryString = (params: { [s: string]: string | boolean }) => {
   const esc = encodeURIComponent;
   return Object.keys(params)
-    .map(k => esc(k) + '=' + esc(params[k] as string))
+    .map((k) => esc(k) + '=' + esc(params[k] as string))
     .join('&');
 };
 
@@ -59,3 +62,43 @@ export function guid() {
     s4()
   );
 }
+
+// from https://github.com/dotansimha/graphql-code-generator/issues/4684, useful until this issue will be fixed.
+export const dedupeFragments = <Operation, Variables>(
+  document: DocumentNode<Operation, Variables>
+): DocumentNode<Operation, Variables> => {
+  const seenFragments = new Set();
+
+  return {
+    ...document,
+    definitions: document.definitions.filter((definition) => {
+      if (definition.kind === 'FragmentDefinition') {
+        const fragmentDefinition = definition as FragmentDefinitionNode;
+
+        const fragmentName = fragmentDefinition.name.value;
+
+        if (seenFragments.has(fragmentName)) {
+          return false;
+        }
+
+        seenFragments.add(fragmentName);
+      }
+
+      return true;
+    }),
+  };
+};
+
+export const withFragments = <Operation, Variables>(
+  document: DocumentNode<Operation, Variables>,
+  fragments: DocumentNode<unknown, unknown>[]
+): DocumentNode<Operation, Variables> => {
+  const definitions = [
+    ...document.definitions,
+    ...fragments.map((f) => f.definitions).flat(),
+  ];
+  return {
+    ...document,
+    definitions,
+  };
+};

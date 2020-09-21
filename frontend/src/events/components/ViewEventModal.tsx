@@ -1,20 +1,15 @@
-import { useContext, useCallback } from 'react';
-
+import { useCallback, useContext } from 'react';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { FaExternalLinkAlt } from 'react-icons/fa';
-
+import { useQuery } from '@apollo/client';
 import { A, Button, Modal, Row } from '@kocherga/frontkit';
 
-import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
+import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 
+import { TeamCalendarEventDocument } from '../queries.generated';
+import { CalendarUIContext, closeUI, viewToEditUI } from '../reducers/calendarUI';
 import EventInfo from './EventInfo';
-import {
-  CalendarUIContext,
-  closeUI,
-  viewToEditUI,
-} from '../reducers/calendarUI';
-import { useTeamCalendarEventQuery } from '../queries.generated';
 
 interface Props {
   event_id: string;
@@ -33,7 +28,7 @@ const ExpandLink: React.FC<{ href: string }> = ({ href }) => (
 );
 
 const ViewEventModal: React.FC<Props> = ({ event_id }) => {
-  const queryResults = useTeamCalendarEventQuery({
+  const queryResults = useQuery(TeamCalendarEventDocument, {
     variables: { id: event_id },
   });
   const { dispatch } = useContext(CalendarUIContext);

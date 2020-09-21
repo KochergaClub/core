@@ -1,21 +1,19 @@
+import Head from 'next/head';
 import { useState } from 'react';
 import Toggle from 'react-toggle';
 
-import Head from 'next/head';
-
+import { useMutation } from '@apollo/client';
 import { Column, Row } from '@kocherga/frontkit';
 
-import { AsyncButton } from '~/components';
 import { staticUrl } from '~/common/utils';
+import { AsyncButton } from '~/components';
 
 import {
-  MastermindDatingCohortDetailsFragment as Cohort,
-  useMastermindDatingPopulateCohortFromEventMutation,
-  useMastermindDatingSendInviteEmailsMutation,
+    MastermindDatingCohortDetailsFragment as Cohort,
+    MastermindDatingPopulateCohortFromEventDocument, MastermindDatingSendInviteEmailsDocument
 } from '../../queries.generated';
-
-import ParticipantList from './ParticipantList';
 import CreateParticipantButton from './CreateParticipantButton';
+import ParticipantList from './ParticipantList';
 
 interface Props {
   cohort: Cohort;
@@ -24,13 +22,13 @@ interface Props {
 const ParticipantSection: React.FC<Props> = ({ cohort }) => {
   const [
     populateFromEvent,
-  ] = useMastermindDatingPopulateCohortFromEventMutation({
+  ] = useMutation(MastermindDatingPopulateCohortFromEventDocument, {
     variables: {
       cohort_id: cohort.id,
     },
   });
 
-  const [sendInviteEmails] = useMastermindDatingSendInviteEmailsMutation({
+  const [sendInviteEmails] = useMutation(MastermindDatingSendInviteEmailsDocument, {
     variables: {
       cohort_id: cohort.id,
     },

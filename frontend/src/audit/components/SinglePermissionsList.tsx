@@ -1,18 +1,19 @@
-import { Column, Row, Label } from '@kocherga/frontkit';
+import { useQuery } from '@apollo/client';
+import { Column, Label, Row } from '@kocherga/frontkit';
+
 import { ApolloQueryResults } from '~/components';
 
+import { AuthPermissionsDocument } from '../queries.generated';
 import UserInfo from './UserInfo';
 
-import { useAuthPermissionsQuery } from '../queries.generated';
-
 const SinglePermissionsList: React.FC = () => {
-  const queryResults = useAuthPermissionsQuery();
+  const queryResults = useQuery(AuthPermissionsDocument);
 
   return (
     <ApolloQueryResults {...queryResults}>
       {({ data: { permissions } }) => {
         const nonEmptyPermissions = permissions.filter(
-          permission => permission.users.length > 0
+          (permission) => permission.users.length > 0
         );
         if (!nonEmptyPermissions.length) {
           return null;
@@ -20,12 +21,12 @@ const SinglePermissionsList: React.FC = () => {
         return (
           <section>
             <h2>ВНИМАНИЕ: есть пользователи с доступами вне групп!</h2>
-            {nonEmptyPermissions.map(permission => (
+            {nonEmptyPermissions.map((permission) => (
               <Column key={permission.id}>
                 <strong>{permission.name}</strong>
                 <Label>Пользователи с этим доступом:</Label>
                 <Row>
-                  {permission.users.map(user => (
+                  {permission.users.map((user) => (
                     <UserInfo key={user.id} user={user} />
                   ))}
                 </Row>

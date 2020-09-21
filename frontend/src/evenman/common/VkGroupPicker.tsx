@@ -1,14 +1,15 @@
-import { useEvenmanVkGroupsQuery } from './queries.generated';
+import { useQuery } from '@apollo/client';
 
 import LoadingPicker from './LoadingPicker';
+import { EvenmanVkGroupsDocument } from './queries.generated';
 
 interface Props {
   value: string;
   setValue: (v?: string) => void;
 }
 
-const VkGroupPicker: React.FC<Props> = props => {
-  const { data, loading, error } = useEvenmanVkGroupsQuery();
+const VkGroupPicker: React.FC<Props> = (props) => {
+  const { data, loading, error } = useQuery(EvenmanVkGroupsDocument);
 
   return (
     <LoadingPicker
@@ -17,7 +18,7 @@ const VkGroupPicker: React.FC<Props> = props => {
       setValue={props.setValue}
       loading={loading}
       error={Boolean(error)}
-      values={data && data.vkGroups.map(v => v.name)}
+      values={data && data.vkGroups.map((v) => v.name)}
     />
   );
 };

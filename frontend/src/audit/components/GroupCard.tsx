@@ -1,34 +1,30 @@
 import { useCallback } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Column, Row } from '@kocherga/frontkit';
 
-import DropdownMenu, {
-  LinkAction,
-  ModalAction,
-} from '~/components/DropdownMenu';
-
-import { Badge, AsyncButton } from '~/components';
+import { AsyncButton, Badge } from '~/components';
 import Card from '~/components/Card';
-
-import UserInfo from './UserInfo';
-import AddMemberToGroupModal from './AddMemberToGroupModal';
+import DropdownMenu, { LinkAction, ModalAction } from '~/components/DropdownMenu';
 
 import {
-  AuthGroupsQuery,
-  AuthGroupsDocument,
-  MaybeStaffUserFragment,
-  useAuthRemoveUserFromGroupMutation,
+    AuthGroupsDocument, AuthGroupsQuery, AuthRemoveUserFromGroupDocument, MaybeStaffUserFragment
 } from '../queries.generated';
+import AddMemberToGroupModal from './AddMemberToGroupModal';
+import UserInfo from './UserInfo';
 
 interface Props {
   group: AuthGroupsQuery['groups'][0];
 }
 
 const GroupCard: React.FC<Props> = ({ group }) => {
-  const [removeUserFromGroupMutation] = useAuthRemoveUserFromGroupMutation({
-    refetchQueries: [{ query: AuthGroupsDocument }],
-    awaitRefetchQueries: true,
-  });
+  const [removeUserFromGroupMutation] = useMutation(
+    AuthRemoveUserFromGroupDocument,
+    {
+      refetchQueries: [{ query: AuthGroupsDocument }],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const removeUserCb = useCallback(
     async (user: MaybeStaffUserFragment) => {
@@ -59,11 +55,11 @@ const GroupCard: React.FC<Props> = ({ group }) => {
           </DropdownMenu>
         </Row>
         <Row wrap={true}>
-          {group.permissions.map(permission => (
+          {group.permissions.map((permission) => (
             <Badge key={permission.id}>{permission.name}</Badge>
           ))}
         </Row>
-        {group.users.map(user => (
+        {group.users.map((user) => (
           <Row key={user.id}>
             <UserInfo user={user} />
             <AsyncButton small act={async () => removeUserCb(user)}>

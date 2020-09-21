@@ -1,30 +1,29 @@
 import Link from 'next/link';
+import { useCallback } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { A, Column, Row } from '@kocherga/frontkit';
 
 import { AsyncButton, AsyncButtonWithConfirm } from '~/components';
 
 import {
-  MastermindDatingCohortDetailsFragment as Cohort,
-  useMastermindDatingRunSolverMutation,
-  useMastermindDatingDeleteCohortMutation,
+    MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingDeleteCohortDocument,
+    MastermindDatingRunSolverDocument
 } from '../queries.generated';
-
 import CohortEventLink from './CohortEventLink';
-import { useCallback } from 'react';
 
 interface Props {
   cohort: Cohort;
 }
 
 const Controls: React.FC<Props> = ({ cohort }) => {
-  const [runSolver] = useMastermindDatingRunSolverMutation({
+  const [runSolver] = useMutation(MastermindDatingRunSolverDocument, {
     variables: {
       cohort_id: cohort.id,
     },
   });
 
-  const [deleteCohortMutation] = useMastermindDatingDeleteCohortMutation({
+  const [deleteCohortMutation] = useMutation(MastermindDatingDeleteCohortDocument, {
     variables: {
       cohort_id: cohort.id,
     },

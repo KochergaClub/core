@@ -1,15 +1,13 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Input, Column } from '@kocherga/frontkit';
-import { useCommonHotkeys, useNotification } from '~/common/hooks';
-import AuthContainer from './AuthContainer';
+import { useMutation } from '@apollo/client';
+import { Button, Column, Input } from '@kocherga/frontkit';
 
-import {
-  useLoginMutation,
-  useSendMagicLinkMutation,
-} from '../queries.generated';
+import { useCommonHotkeys, useNotification } from '~/common/hooks';
+
+import { LoginDocument, SendMagicLinkDocument } from '../queries.generated';
+import AuthContainer from './AuthContainer';
 
 const SmallNote = styled.small`
   font-size: 0.6rem;
@@ -23,7 +21,7 @@ interface Props {
   next: string;
 }
 
-const AuthForm: React.FC<Props> = props => {
+const AuthForm: React.FC<Props> = (props) => {
   const notify = useNotification();
 
   const [email, setEmail] = useState('');
@@ -34,10 +32,11 @@ const AuthForm: React.FC<Props> = props => {
 
   const [leaving, setLeaving] = useState(false);
 
-  const [loginMutation, { loading: submittingWithPassword }] = useLoginMutation(
+  const [loginMutation, { loading: submittingWithPassword }] = useMutation(
+    LoginDocument,
     {
       variables: { email, password },
-      onCompleted: data => {
+      onCompleted: (data) => {
         if (data.result.error) {
           notify({
             type: 'Error',
@@ -65,9 +64,9 @@ const AuthForm: React.FC<Props> = props => {
   const [
     sendMagicLinkMutation,
     { loading: submittingWithoutPassword },
-  ] = useSendMagicLinkMutation({
+  ] = useMutation(SendMagicLinkDocument, {
     variables: { email, next: props.next },
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (!data.result.ok) {
         notify({
           type: 'Error',
@@ -122,7 +121,7 @@ const AuthForm: React.FC<Props> = props => {
             ref={emailRef}
             disabled={acting}
             value={email}
-            onChange={e => setEmail(e.currentTarget.value)}
+            onChange={(e) => setEmail(e.currentTarget.value)}
           />
         </Column>
         <Column stretch gutter={0}>
@@ -138,7 +137,7 @@ const AuthForm: React.FC<Props> = props => {
             id="id_password"
             disabled={acting}
             value={password}
-            onChange={e => setPassword(e.currentTarget.value)}
+            onChange={(e) => setPassword(e.currentTarget.value)}
           />
         </Column>
         <Button

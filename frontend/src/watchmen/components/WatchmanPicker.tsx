@@ -1,10 +1,11 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+
+import { useQuery } from '@apollo/client';
 
 import Picker from '~/components/Picker';
 
 import {
-  useWatchmenWatchmenListForPickerQuery,
-  WatchmanForPickerFragment,
+    WatchmanForPickerFragment, WatchmenWatchmenListForPickerDocument
 } from '../queries.generated';
 
 interface Extra {
@@ -36,7 +37,7 @@ const WatchmanPicker: React.FC<Props> = ({
   pickedExtra,
   pickedWatchman,
 }) => {
-  const queryResults = useWatchmenWatchmenListForPickerQuery({
+  const queryResults = useQuery(WatchmenWatchmenListForPickerDocument, {
     fetchPolicy: 'cache-first',
   });
 

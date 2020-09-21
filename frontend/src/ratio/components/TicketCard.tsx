@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import { A, Column, Label, Row } from '@kocherga/frontkit';
 
 import { Badge } from '~/components';
@@ -5,13 +6,13 @@ import Card from '~/components/Card';
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { RatioTicketFragment, useRatioPaymentAddMutation } from '../queries.generated';
+import { RatioPaymentAddDocument, RatioTicketFragment } from '../queries.generated';
 import PaymentItem from './PaymentItem';
 
 const CanceledBadge = () => <Badge>ОТКАЗ</Badge>;
 
 const CreatePaymentButton = ({ ticket_id }: { ticket_id: string }) => {
-  const [addMutation] = useRatioPaymentAddMutation({
+  const [addMutation] = useMutation(RatioPaymentAddDocument, {
     refetchQueries: ['RatioTrainingBySlug'],
     awaitRefetchQueries: true,
   });

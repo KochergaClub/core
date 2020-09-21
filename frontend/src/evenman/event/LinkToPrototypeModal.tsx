@@ -1,15 +1,15 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Button, Modal, ControlsFooter, Row, Column } from '@kocherga/frontkit';
+import { useCallback, useEffect, useState } from 'react';
 import Toggle from 'react-toggle';
 
+import { useLazyQuery } from '@apollo/client';
+import { Button, Column, ControlsFooter, Modal, Row } from '@kocherga/frontkit';
+
 import { AsyncButton, Spinner } from '~/components';
-import PrototypePicker from './PrototypePicker';
-import {
-  EvenmanEvent_DetailsFragment,
-  EvenmanUpdateMutationVariables,
-} from './queries.generated';
-import { useEvenmanPrototypeLazyQuery } from '../event-prototype/queries.generated';
+
+import { EvenmanPrototypeDocument } from '../event-prototype/queries.generated';
 import { useUpdateMutation } from './hooks';
+import PrototypePicker from './PrototypePicker';
+import { EvenmanEvent_DetailsFragment, EvenmanUpdateMutationVariables } from './queries.generated';
 
 const WrappedToggle: React.FC<{
   title: string;
@@ -62,10 +62,12 @@ const LinkToPrototypeModal: React.FC<Props> = ({ event, close }) => {
   const [selectedId, setSelectedId] = useState(event.prototype?.id);
   const update = useUpdateMutation(event.id);
 
-  const [loadPrototype, { loading, data }] = useEvenmanPrototypeLazyQuery();
+  const [loadPrototype, { loading, data }] = useLazyQuery(
+    EvenmanPrototypeDocument
+  );
 
   const [selectedFields, setSelectedFields] = useState(
-    () => new Set<keyof UpdatableArgs>(FIELDS.map(f => f.key))
+    () => new Set<keyof UpdatableArgs>(FIELDS.map((f) => f.key))
   );
 
   const save = useCallback(async () => {
@@ -75,7 +77,7 @@ const LinkToPrototypeModal: React.FC<Props> = ({ event, close }) => {
 
     const updateArgs: UpdatableArgs = {};
 
-    selectedFields.forEach(f => {
+    selectedFields.forEach((f) => {
       if (f === 'project_slug') {
         updateArgs[f] = data.prototype.project?.meta.slug;
       } else if (f === 'image_id') {
@@ -115,7 +117,7 @@ const LinkToPrototypeModal: React.FC<Props> = ({ event, close }) => {
           <PrototypePicker selectedId={selectedId} select={setSelectedId} />
           {selectedId && (
             <>
-              {FIELDS.map(f => (
+              {FIELDS.map((f) => (
                 <WrappedToggle
                   key={f.key}
                   checked={selectedFields.has(f.key)}

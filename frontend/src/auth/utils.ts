@@ -1,9 +1,8 @@
 import { KochergaApolloClient } from '~/apollo/types';
-
-import { CurrentUserQuery, CurrentUserDocument } from './queries.generated';
-
 import { APIError } from '~/common/api';
+
 import { NeedLoginError } from './errors';
+import { CurrentUserDocument } from './queries.generated';
 
 interface Params {
   is_authenticated?: boolean;
@@ -16,7 +15,7 @@ export const requireAuth = async (
   client: KochergaApolloClient,
   params: Params
 ) => {
-  const result = await client.query<CurrentUserQuery>({
+  const result = await client.query({
     query: CurrentUserDocument,
   });
 

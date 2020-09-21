@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 
-import { withApollo, NextApolloPage } from '~/apollo';
+import { useMutation } from '@apollo/client';
 
-import { Page } from '~/components';
+import { NextApolloPage, withApollo } from '~/apollo';
 import AuthContainer from '~/auth/components/AuthContainer';
+import { Page } from '~/components';
 
-import { useTokenLoginMutation } from '../queries.generated';
 import CenteredLayout from '../components/CenteredLayout';
+import { TokenLoginDocument } from '../queries.generated';
 
 interface Props {
   token: string;
@@ -14,7 +15,7 @@ interface Props {
 }
 
 const MagicLinkPage: NextApolloPage<Props> = ({ token, next }) => {
-  const [tokenLoginMutation] = useTokenLoginMutation();
+  const [tokenLoginMutation] = useMutation(TokenLoginDocument);
 
   useEffect(() => {
     async function login() {

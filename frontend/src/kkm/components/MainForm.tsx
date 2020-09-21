@@ -1,15 +1,14 @@
-import { useState, useCallback } from 'react';
+import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { Form, Formik, FormikErrors, Field, FieldProps } from 'formik';
 
-import { A, Input, Column, Label, Button } from '@kocherga/frontkit';
+import { useMutation } from '@apollo/client';
+import { A, Button, Column, Input, Label } from '@kocherga/frontkit';
 
-import Suggestions from './Suggestions';
 import MainModal from '../components/MainModal';
-
-import { useKkmRegisterCheckMutation } from '../queries.generated';
-
-import { SignMethodCalculation, FormValues } from '../types';
+import { KkmRegisterCheckDocument } from '../queries.generated';
+import { FormValues, SignMethodCalculation } from '../types';
+import Suggestions from './Suggestions';
 
 const FormSection = styled.section`
   width: 100%;
@@ -28,7 +27,7 @@ const MainForm: React.FC = () => {
   const [confirmingValues, setConfirmingValues] = useState<
     FormValues | undefined
   >(undefined);
-  const [registerMutation] = useKkmRegisterCheckMutation();
+  const [registerMutation] = useMutation(KkmRegisterCheckDocument);
   const [outcome, setOutcome] = useState<Outcome | undefined>(undefined);
 
   const submit = useCallback((values: FormValues) => {

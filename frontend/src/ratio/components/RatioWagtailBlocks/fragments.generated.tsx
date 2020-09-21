@@ -1,7 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type RatioHeaderBlockFragment = (
   { __typename: 'RatioHeaderBlock' }
   & Pick<Types.RatioHeaderBlock, 'id' | 'value'>
@@ -45,51 +44,10 @@ export type RatioMathBlockFragment = (
   & Pick<Types.RatioMathBlock, 'id' | 'value'>
 );
 
-export const RatioHeaderBlockFragmentDoc = gql`
-    fragment RatioHeaderBlock on RatioHeaderBlock {
-  id
-  value
-}
-    `;
-export const RatioParagraphBlockFragmentDoc = gql`
-    fragment RatioParagraphBlock on RatioParagraphBlock {
-  id
-  value
-}
-    `;
-export const RatioInsetBlockFragmentDoc = gql`
-    fragment RatioInsetBlock on RatioInsetBlock {
-  id
-  value
-}
-    `;
-export const RatioExerciseBlockFragmentDoc = gql`
-    fragment RatioExerciseBlock on RatioExerciseBlock {
-  id
-  exercise: value {
-    enumerate
-    header
-    lines_count
-  }
-}
-    `;
-export const RatioExerciseOnelineBlockFragmentDoc = gql`
-    fragment RatioExerciseOnelineBlock on RatioExerciseOnelineBlock {
-  id
-  exercise_oneline: value {
-    text
-  }
-}
-    `;
-export const RatioBriefingBlockFragmentDoc = gql`
-    fragment RatioBriefingBlock on RatioBriefingBlock {
-  id
-  value
-}
-    `;
-export const RatioMathBlockFragmentDoc = gql`
-    fragment RatioMathBlock on RatioMathBlock {
-  id
-  value
-}
-    `;
+export const RatioHeaderBlockFragmentDoc: DocumentNode<RatioHeaderBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioHeaderBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioHeaderBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[]}]}}]};
+export const RatioParagraphBlockFragmentDoc: DocumentNode<RatioParagraphBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioParagraphBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioParagraphBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[]}]}}]};
+export const RatioInsetBlockFragmentDoc: DocumentNode<RatioInsetBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioInsetBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioInsetBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[]}]}}]};
+export const RatioExerciseBlockFragmentDoc: DocumentNode<RatioExerciseBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioExerciseBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioExerciseBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","alias":{"kind":"Name","value":"exercise"},"name":{"kind":"Name","value":"value"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"enumerate"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"header"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"lines_count"},"arguments":[],"directives":[]}]}}]}}]};
+export const RatioExerciseOnelineBlockFragmentDoc: DocumentNode<RatioExerciseOnelineBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioExerciseOnelineBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioExerciseOnelineBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","alias":{"kind":"Name","value":"exercise_oneline"},"name":{"kind":"Name","value":"value"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"},"arguments":[],"directives":[]}]}}]}}]};
+export const RatioBriefingBlockFragmentDoc: DocumentNode<RatioBriefingBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioBriefingBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioBriefingBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[]}]}}]};
+export const RatioMathBlockFragmentDoc: DocumentNode<RatioMathBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RatioMathBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"RatioMathBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"value"},"arguments":[],"directives":[]}]}}]};

@@ -1,20 +1,15 @@
 import { useEffect } from 'react';
+import baseStyled, { ThemedBaseStyledInterface, ThemeProvider } from 'styled-components';
 
-import baseStyled, {
-  ThemedBaseStyledInterface,
-  ThemeProvider,
-} from 'styled-components';
+import { useQuery } from '@apollo/client';
 
-import { withApollo, NextApolloPage } from '~/apollo';
-
+import { NextApolloPage, withApollo } from '~/apollo';
 import { staticUrl } from '~/common/utils';
-
-import { Page, ApolloQueryResults } from '~/components';
+import { ApolloQueryResults, Page } from '~/components';
 
 import HR from '../components/HR';
 import NowData from '../components/NowData';
-
-import { useNowQuery } from '../queries.generated';
+import { NowDocument } from '../queries.generated';
 
 export type ThemeName = 'default' | 'tv';
 
@@ -89,7 +84,7 @@ const TopHeaderLink = styled.a`
 const NowPage: NextApolloPage<Props> = props => {
   const { theme } = props;
 
-  const nowQueryResults = useNowQuery();
+  const nowQueryResults = useQuery(NowDocument);
 
   useEffect(() => {
     const id = setInterval(() => {

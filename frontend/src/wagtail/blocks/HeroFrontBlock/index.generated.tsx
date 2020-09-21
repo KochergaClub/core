@@ -1,7 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type HeroFrontBlockFragment = (
   { __typename: 'HeroFrontBlock' }
   & Pick<Types.HeroFrontBlock, 'id'>
@@ -15,16 +14,4 @@ export type HeroFrontBlockFragment = (
   ) }
 );
 
-export const HeroFrontBlockFragmentDoc = gql`
-    fragment HeroFrontBlock on HeroFrontBlock {
-  id
-  hero: value {
-    title
-    buttons {
-      title
-      link
-      highlight
-    }
-  }
-}
-    `;
+export const HeroFrontBlockFragmentDoc: DocumentNode<HeroFrontBlockFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"HeroFrontBlock"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HeroFrontBlock"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","alias":{"kind":"Name","value":"hero"},"name":{"kind":"Name","value":"value"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"buttons"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"link"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"highlight"},"arguments":[],"directives":[]}]}}]}}]}}]};

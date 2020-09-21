@@ -1,17 +1,15 @@
 import { useCallback } from 'react';
-
 import styled from 'styled-components';
 
+import { useMutation } from '@apollo/client';
 import { Label } from '@kocherga/frontkit';
 
-import { usePermissions, useExpandable } from '~/common/hooks';
-
+import { useExpandable, usePermissions } from '~/common/hooks';
 import WatchmanPicker from '~/watchmen/components/WatchmanPicker';
 import { WatchmanForPickerFragment } from '~/watchmen/queries.generated';
 
 import {
-  CommonZadarmaPbxCallFragment,
-  useZadarmaSetMemberForPbxCallMutation,
+    CommonZadarmaPbxCallFragment, ZadarmaSetMemberForPbxCallDocument
 } from '../queries.generated';
 
 interface Props {
@@ -48,7 +46,7 @@ const StaffMemberName: React.FC<Props> = ({ pbx_call }) => {
 
 const StaffMember: React.FC<Props> = ({ pbx_call }) => {
   const [isZadarmaAdmin] = usePermissions(['zadarma.admin']);
-  const [setStaffMemberMutation] = useZadarmaSetMemberForPbxCallMutation({
+  const [setStaffMemberMutation] = useMutation(ZadarmaSetMemberForPbxCallDocument, {
     refetchQueries: ['ZadarmaPbxCalls', 'ZadarmaPbxCall'],
     awaitRefetchQueries: true,
   });

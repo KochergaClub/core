@@ -1,11 +1,13 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
+import { useQuery } from '@apollo/client';
 
-import { Page, ApolloQueryResults, PaddedBlock } from '~/components';
-import { useImportersQuery } from '../queries.generated';
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import Card, { CardList } from '~/components/Card';
 
+import { ImportersDocument } from '../queries.generated';
+
 const ImportersPage: NextApolloPage = () => {
-  const queryResults = useImportersQuery();
+  const queryResults = useQuery(ImportersDocument);
 
   return (
     <Page title="Управление импортерами" menu="team">

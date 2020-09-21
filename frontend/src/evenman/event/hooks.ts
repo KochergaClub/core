@@ -1,12 +1,12 @@
-import {
-  useEvenmanUpdateMutation,
-  EvenmanUpdateMutationVariables,
-} from './queries.generated';
+import { useMutation } from '@apollo/client';
+
 import { useNotification } from '~/common/hooks';
+
+import { EvenmanUpdateDocument, EvenmanUpdateMutationVariables } from './queries.generated';
 
 export const useUpdateMutation = (event_id: string) => {
   const notify = useNotification();
-  const [mutation] = useEvenmanUpdateMutation({
+  const [mutation] = useMutation(EvenmanUpdateDocument, {
     onError(error) {
       notify({
         text: error.message,

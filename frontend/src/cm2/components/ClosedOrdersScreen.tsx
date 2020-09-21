@@ -1,13 +1,13 @@
+import { useQuery } from '@apollo/client';
+
+import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { Collection } from '~/components/collections';
 
-import { PaddedBlock, ApolloQueryResults } from '~/components';
-
-import { useCm2OrdersQuery } from '../queries.generated';
-
+import { Cm2OrdersDocument } from '../queries.generated';
 import OrdersTableView from './OrdersTableView';
 
 const ClosedOrdersScreen: React.FC = () => {
-  const queryResults = useCm2OrdersQuery({
+  const queryResults = useQuery(Cm2OrdersDocument, {
     variables: { status: 'closed' },
     fetchPolicy: 'cache-and-network',
   });
@@ -20,7 +20,7 @@ const ClosedOrdersScreen: React.FC = () => {
             cm2Orders: { edges },
           },
         }) => {
-          const orders = edges.map(edge => edge.node);
+          const orders = edges.map((edge) => edge.node);
           return (
             <Collection
               items={orders}

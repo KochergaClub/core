@@ -1,9 +1,6 @@
 import * as Types from '../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type WagtailStreamFieldValidationErrorFragment = (
   { __typename: 'WagtailStreamFieldValidationError' }
   & Pick<Types.WagtailStreamFieldValidationError, 'non_block_error'>
@@ -527,148 +524,10 @@ export type WagtailPageRevisionsQuery = (
   )> }
 );
 
-export const WagtailStreamFieldValidationErrorFragmentDoc = gql`
-    fragment WagtailStreamFieldValidationError on WagtailStreamFieldValidationError {
-  non_block_error
-  block_errors {
-    block_id
-    error {
-      error_message
-    }
-  }
-}
-    `;
-export const StructureCommonFragmentDoc = gql`
-    fragment StructureCommon on WagtailBlockStructure {
-  label
-  required
-}
-    `;
-export const StructureL1FragmentDoc = gql`
-    fragment StructureL1 on WagtailBlockStructure {
-  ...StructureCommon
-  ... on WagtailListBlockStructure {
-    child_block {
-      ...StructureCommon
-    }
-  }
-  ... on WagtailStructBlockStructure {
-    child_blocks {
-      name
-      definition {
-        ...StructureCommon
-      }
-    }
-  }
-}
-    ${StructureCommonFragmentDoc}`;
-export const StructureL2FragmentDoc = gql`
-    fragment StructureL2 on WagtailBlockStructure {
-  ...StructureCommon
-  ... on WagtailListBlockStructure {
-    child_block {
-      ...StructureL1
-    }
-  }
-  ... on WagtailStructBlockStructure {
-    child_blocks {
-      name
-      definition {
-        ...StructureL1
-      }
-    }
-  }
-}
-    ${StructureCommonFragmentDoc}
-${StructureL1FragmentDoc}`;
-export const StructureL3FragmentDoc = gql`
-    fragment StructureL3 on WagtailBlockStructure {
-  ...StructureCommon
-  ... on WagtailListBlockStructure {
-    child_block {
-      ...StructureL2
-    }
-  }
-  ... on WagtailStructBlockStructure {
-    child_blocks {
-      name
-      definition {
-        ...StructureL2
-      }
-    }
-  }
-}
-    ${StructureCommonFragmentDoc}
-${StructureL2FragmentDoc}`;
-export const WagtailBlockStructureDocument = gql`
-    query WagtailBlockStructure($name: String!) {
-  result: wagtailBlockStructure(input: {name: $name}) {
-    ...StructureL3
-  }
-}
-    ${StructureL3FragmentDoc}`;
-
-/**
- * __useWagtailBlockStructureQuery__
- *
- * To run a query within a React component, call `useWagtailBlockStructureQuery` and pass it any options that fit your needs.
- * When your component renders, `useWagtailBlockStructureQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWagtailBlockStructureQuery({
- *   variables: {
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useWagtailBlockStructureQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>) {
-        return ApolloReactHooks.useQuery<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>(WagtailBlockStructureDocument, baseOptions);
-      }
-export function useWagtailBlockStructureLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>(WagtailBlockStructureDocument, baseOptions);
-        }
-export type WagtailBlockStructureQueryHookResult = ReturnType<typeof useWagtailBlockStructureQuery>;
-export type WagtailBlockStructureLazyQueryHookResult = ReturnType<typeof useWagtailBlockStructureLazyQuery>;
-export type WagtailBlockStructureQueryResult = ApolloReactCommon.QueryResult<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables>;
-export const WagtailPageRevisionsDocument = gql`
-    query WagtailPageRevisions($page_id: ID!) {
-  result: wagtailPage(page_id: $page_id) {
-    id
-    meta {
-      revisions {
-        id
-        created_at
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useWagtailPageRevisionsQuery__
- *
- * To run a query within a React component, call `useWagtailPageRevisionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWagtailPageRevisionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useWagtailPageRevisionsQuery({
- *   variables: {
- *      page_id: // value for 'page_id'
- *   },
- * });
- */
-export function useWagtailPageRevisionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>) {
-        return ApolloReactHooks.useQuery<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>(WagtailPageRevisionsDocument, baseOptions);
-      }
-export function useWagtailPageRevisionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>(WagtailPageRevisionsDocument, baseOptions);
-        }
-export type WagtailPageRevisionsQueryHookResult = ReturnType<typeof useWagtailPageRevisionsQuery>;
-export type WagtailPageRevisionsLazyQueryHookResult = ReturnType<typeof useWagtailPageRevisionsLazyQuery>;
-export type WagtailPageRevisionsQueryResult = ApolloReactCommon.QueryResult<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables>;
+export const WagtailStreamFieldValidationErrorFragmentDoc: DocumentNode<WagtailStreamFieldValidationErrorFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WagtailStreamFieldValidationError"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStreamFieldValidationError"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"non_block_error"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"block_errors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block_id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"error"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"error_message"},"arguments":[],"directives":[]}]}}]}}]}}]};
+export const StructureCommonFragmentDoc: DocumentNode<StructureCommonFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"StructureCommon"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"required"},"arguments":[],"directives":[]}]}}]};
+export const StructureL1FragmentDoc: DocumentNode<StructureL1Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"StructureL1"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"},"directives":[]},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_block"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"},"directives":[]}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_blocks"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"definition"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"},"directives":[]}]}}]}}]}}]}},...StructureCommonFragmentDoc.definitions]};
+export const StructureL2FragmentDoc: DocumentNode<StructureL2Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"StructureL2"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"},"directives":[]},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_block"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL1"},"directives":[]}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_blocks"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"definition"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL1"},"directives":[]}]}}]}}]}}]}},...StructureCommonFragmentDoc.definitions,...StructureL1FragmentDoc.definitions]};
+export const StructureL3FragmentDoc: DocumentNode<StructureL3Fragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"StructureL3"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureCommon"},"directives":[]},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailListBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_block"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL2"},"directives":[]}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailStructBlockStructure"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"child_blocks"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"definition"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL2"},"directives":[]}]}}]}}]}}]}},...StructureCommonFragmentDoc.definitions,...StructureL2FragmentDoc.definitions]};
+export const WagtailBlockStructureDocument: DocumentNode<WagtailBlockStructureQuery, WagtailBlockStructureQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WagtailBlockStructure"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"result"},"name":{"kind":"Name","value":"wagtailBlockStructure"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"StructureL3"},"directives":[]}]}}]}},...StructureL3FragmentDoc.definitions]};
+export const WagtailPageRevisionsDocument: DocumentNode<WagtailPageRevisionsQuery, WagtailPageRevisionsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"WagtailPageRevisions"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"result"},"name":{"kind":"Name","value":"wagtailPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page_id"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"meta"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"revisions"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"created_at"},"arguments":[],"directives":[]}]}}]}}]}}]}}]};

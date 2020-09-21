@@ -1,19 +1,20 @@
+import { useQuery } from '@apollo/client';
 import { A } from '@kocherga/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
-import { Page, ApolloQueryResults, PaddedBlock } from '~/components';
 import { requireAuth } from '~/auth/utils';
-
-import { useMyEventPageQuery } from '../queries.generated';
-import EventCall from '../components/EventCall';
+import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
 import ErrorBlock from '~/error-pages/ErrorBlock';
+
+import EventCall from '../components/EventCall';
+import { MyEventPageDocument } from '../queries.generated';
 
 interface Props {
   event_id: string;
 }
 
 const MyEventPage: NextApolloPage<Props> = ({ event_id }) => {
-  const queryResults = useMyEventPageQuery({ variables: { event_id } });
+  const queryResults = useQuery(MyEventPageDocument, { variables: { event_id } });
 
   const event = queryResults.data?.publicEvent;
   const loading = queryResults.loading;

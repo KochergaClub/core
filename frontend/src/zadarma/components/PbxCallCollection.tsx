@@ -1,20 +1,15 @@
 import { useCallback } from 'react';
 
-import { ApolloQueryResults } from '~/components';
-import {
-  PagedApolloCollection,
-  CustomCardListView,
-} from '~/components/collections';
+import { useQuery } from '@apollo/client';
 
+import { ApolloQueryResults } from '~/components';
+import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
+
+import { CommonZadarmaPbxCallFragment, ZadarmaPbxCallsDocument } from '../queries.generated';
 import PbxCallCard from './PbxCallCard';
 
-import {
-  CommonZadarmaPbxCallFragment,
-  useZadarmaPbxCallsQuery,
-} from '../queries.generated';
-
 const PbxCallCollection: React.FC = () => {
-  const queryResults = useZadarmaPbxCallsQuery({
+  const queryResults = useQuery(ZadarmaPbxCallsDocument, {
     fetchPolicy: 'network-only',
     variables: {
       first: 20,

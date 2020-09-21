@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useCallback } from 'react';
 import { FaHeart, FaUser } from 'react-icons/fa';
 
+import { useMutation } from '@apollo/client';
 import { A, colors, Column, Label, Row } from '@kocherga/frontkit';
 
 import { useUser } from '~/common/hooks';
@@ -9,7 +10,7 @@ import { AsyncButton } from '~/components';
 import { trackEvent } from '~/components/analytics';
 import TicketCard from '~/my/components/TicketCard';
 
-import { useMyEventsTicketRegisterMutation } from '../queries.generated';
+import { MyEventsTicketRegisterDocument } from '../queries.generated';
 import { CommonProps } from '../types';
 
 const Registered: React.FC<CommonProps> = ({ event }) => {
@@ -37,7 +38,7 @@ const Registered: React.FC<CommonProps> = ({ event }) => {
 };
 
 const Unregistered: React.FC<CommonProps> = ({ event }) => {
-  const [registerMutation] = useMyEventsTicketRegisterMutation({
+  const [registerMutation] = useMutation(MyEventsTicketRegisterDocument, {
     variables: {
       event_id: event.id,
     },

@@ -1,20 +1,15 @@
 import { useCallback } from 'react';
+import { FaGlobe, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { FaGlobe, FaLock } from 'react-icons/fa';
-
+import { useMutation } from '@apollo/client';
 import { A, Column } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
 
-import TVIcon from './TVIcon';
-
+import { MyPrivacyModeSetDocument, MySettingsPageFragment } from '../queries.generated';
 import HeadedFragment from './HeadedFragment';
-
-import {
-  MySettingsPageFragment,
-  useMyPrivacyModeSetMutation,
-} from '../queries.generated';
+import TVIcon from './TVIcon';
 
 const TvContainer = styled.div`
   position: relative;
@@ -48,7 +43,7 @@ interface Props {
 }
 
 const PrivacySettings: React.FC<Props> = ({ membership }) => {
-  const [setPrivacyModeMutation] = useMyPrivacyModeSetMutation({
+  const [setPrivacyModeMutation] = useMutation(MyPrivacyModeSetDocument, {
     refetchQueries: ['MySettingsPage'],
     awaitRefetchQueries: true,
   });

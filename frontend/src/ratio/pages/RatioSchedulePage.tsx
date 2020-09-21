@@ -1,9 +1,8 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
+import { useQuery } from '@apollo/client';
 
-import { Page, ApolloQueryResults } from '~/components';
-
-import { useRatioTrainingWithScheduleQuery } from '~/ratio/queries.generated';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { ApolloQueryResults, Page } from '~/components';
+import { RatioTrainingWithScheduleDocument } from '~/ratio/queries.generated';
 import SchedulePage from '~/ratio/schedule';
 
 interface Props {
@@ -11,7 +10,7 @@ interface Props {
 }
 
 const RatioSchedulePage: NextApolloPage<Props> = ({ slug }) => {
-  const queryResults = useRatioTrainingWithScheduleQuery({
+  const queryResults = useQuery(RatioTrainingWithScheduleDocument, {
     variables: { slug },
   });
 

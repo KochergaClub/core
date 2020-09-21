@@ -1,20 +1,20 @@
-import { getUnixTime, startOfToday, addWeeks } from 'date-fns';
+import { addWeeks, getUnixTime, startOfToday } from 'date-fns';
 
+import { useQuery } from '@apollo/client';
 import { Column } from '@kocherga/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 
 import LoadingOverlay from '../components/LoadingOverlay';
-
-import { useEvenmanPrototypesQuery } from './queries.generated';
 import PrototypeNavList from './PrototypeNavList';
+import { EvenmanPrototypesDocument } from './queries.generated';
 
 interface Props {
   selectedId?: string;
 }
 
 const EventPrototypeList = (props: Props) => {
-  const queryResults = useEvenmanPrototypesQuery({
+  const queryResults = useQuery(EvenmanPrototypesDocument, {
     variables: {
       suggested_until_ts: getUnixTime(addWeeks(startOfToday(), 1)),
     },
@@ -30,12 +30,12 @@ const EventPrototypeList = (props: Props) => {
           <Column gutter={10} stretch>
             <PrototypeNavList
               title="Активные"
-              items={prototypes.filter(p => p.active)}
+              items={prototypes.filter((p) => p.active)}
               selectedId={props.selectedId}
             />
             <PrototypeNavList
               title="Неактивные"
-              items={prototypes.filter(p => !p.active)}
+              items={prototypes.filter((p) => !p.active)}
               selectedId={props.selectedId}
             />
           </Column>

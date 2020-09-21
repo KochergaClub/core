@@ -1,17 +1,15 @@
 import { useCallback } from 'react';
 
-import { Collection, ShapedTableView } from '~/components/collections';
-import { FormShape } from '~/components/forms/types';
-
-import shapes from '~/shapes';
+import { useMutation } from '@apollo/client';
 
 import { AsyncButtonWithConfirm } from '~/components';
+import { Collection, ShapedTableView } from '~/components/collections';
+import { FormShape } from '~/components/forms/types';
 import {
-  TeamEventDetailsFragment,
-  TeamEventFeedbackFragment,
-  useEventFeedbackDeleteMutation,
-  useEventFeedbackCreateMutation,
+    EventFeedbackCreateDocument, EventFeedbackDeleteDocument, TeamEventDetailsFragment,
+    TeamEventFeedbackFragment
 } from '~/events/queries.generated';
+import shapes from '~/shapes';
 
 const feedbackShape: FormShape = shapes.events.feedback.filter(
   f => f.name !== 'event_id' && f.name !== 'id'
@@ -20,7 +18,7 @@ const feedbackShape: FormShape = shapes.events.feedback.filter(
 const DeleteFeedback: React.FC<{ feedback: TeamEventFeedbackFragment }> = ({
   feedback,
 }) => {
-  const [deleteMutation] = useEventFeedbackDeleteMutation({
+  const [deleteMutation] = useMutation(EventFeedbackDeleteDocument, {
     refetchQueries: ['TeamEventDetails'],
     awaitRefetchQueries: true,
   });
@@ -41,7 +39,7 @@ interface Props {
 
 const FeedbackCollection: React.FC<Props> = ({ event }) => {
   const feedbacks = event.feedbacks;
-  const [createMutation] = useEventFeedbackCreateMutation({
+  const [createMutation] = useMutation(EventFeedbackCreateDocument, {
     refetchQueries: ['TeamEventDetails'],
     awaitRefetchQueries: true,
   });

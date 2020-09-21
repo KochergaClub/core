@@ -1,11 +1,8 @@
 import * as Types from '../../../apollo/types.generated';
 
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';
-import gql from 'graphql-tag';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { EvenmanEvent_DetailsFragmentDoc } from '../queries.generated';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
 export type EvenmanTimepadAnnouncementUpdateMutationVariables = Types.Exact<{
   event_id: Types.Scalars['ID'];
   category_code?: Types.Maybe<Types.Scalars['String']>;
@@ -44,76 +41,5 @@ export type EvenmanVkAnnouncementUpdateMutation = (
 );
 
 
-export const EvenmanTimepadAnnouncementUpdateDocument = gql`
-    mutation EvenmanTimepadAnnouncementUpdate($event_id: ID!, $category_code: String, $prepaid_tickets: Boolean) {
-  result: eventTimepadAnnouncementUpdate(input: {event_id: $event_id, category_code: $category_code, prepaid_tickets: $prepaid_tickets}) {
-    ok
-    event {
-      ...EvenmanEvent_Details
-    }
-  }
-}
-    ${EvenmanEvent_DetailsFragmentDoc}`;
-export type EvenmanTimepadAnnouncementUpdateMutationFn = ApolloReactCommon.MutationFunction<EvenmanTimepadAnnouncementUpdateMutation, EvenmanTimepadAnnouncementUpdateMutationVariables>;
-
-/**
- * __useEvenmanTimepadAnnouncementUpdateMutation__
- *
- * To run a mutation, you first call `useEvenmanTimepadAnnouncementUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanTimepadAnnouncementUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evenmanTimepadAnnouncementUpdateMutation, { data, loading, error }] = useEvenmanTimepadAnnouncementUpdateMutation({
- *   variables: {
- *      event_id: // value for 'event_id'
- *      category_code: // value for 'category_code'
- *      prepaid_tickets: // value for 'prepaid_tickets'
- *   },
- * });
- */
-export function useEvenmanTimepadAnnouncementUpdateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanTimepadAnnouncementUpdateMutation, EvenmanTimepadAnnouncementUpdateMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanTimepadAnnouncementUpdateMutation, EvenmanTimepadAnnouncementUpdateMutationVariables>(EvenmanTimepadAnnouncementUpdateDocument, baseOptions);
-      }
-export type EvenmanTimepadAnnouncementUpdateMutationHookResult = ReturnType<typeof useEvenmanTimepadAnnouncementUpdateMutation>;
-export type EvenmanTimepadAnnouncementUpdateMutationResult = ApolloReactCommon.MutationResult<EvenmanTimepadAnnouncementUpdateMutation>;
-export type EvenmanTimepadAnnouncementUpdateMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanTimepadAnnouncementUpdateMutation, EvenmanTimepadAnnouncementUpdateMutationVariables>;
-export const EvenmanVkAnnouncementUpdateDocument = gql`
-    mutation EvenmanVkAnnouncementUpdate($event_id: ID!, $group: String) {
-  result: eventVkAnnouncementUpdate(input: {event_id: $event_id, group: $group}) {
-    ok
-    event {
-      ...EvenmanEvent_Details
-    }
-  }
-}
-    ${EvenmanEvent_DetailsFragmentDoc}`;
-export type EvenmanVkAnnouncementUpdateMutationFn = ApolloReactCommon.MutationFunction<EvenmanVkAnnouncementUpdateMutation, EvenmanVkAnnouncementUpdateMutationVariables>;
-
-/**
- * __useEvenmanVkAnnouncementUpdateMutation__
- *
- * To run a mutation, you first call `useEvenmanVkAnnouncementUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEvenmanVkAnnouncementUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [evenmanVkAnnouncementUpdateMutation, { data, loading, error }] = useEvenmanVkAnnouncementUpdateMutation({
- *   variables: {
- *      event_id: // value for 'event_id'
- *      group: // value for 'group'
- *   },
- * });
- */
-export function useEvenmanVkAnnouncementUpdateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<EvenmanVkAnnouncementUpdateMutation, EvenmanVkAnnouncementUpdateMutationVariables>) {
-        return ApolloReactHooks.useMutation<EvenmanVkAnnouncementUpdateMutation, EvenmanVkAnnouncementUpdateMutationVariables>(EvenmanVkAnnouncementUpdateDocument, baseOptions);
-      }
-export type EvenmanVkAnnouncementUpdateMutationHookResult = ReturnType<typeof useEvenmanVkAnnouncementUpdateMutation>;
-export type EvenmanVkAnnouncementUpdateMutationResult = ApolloReactCommon.MutationResult<EvenmanVkAnnouncementUpdateMutation>;
-export type EvenmanVkAnnouncementUpdateMutationOptions = ApolloReactCommon.BaseMutationOptions<EvenmanVkAnnouncementUpdateMutation, EvenmanVkAnnouncementUpdateMutationVariables>;
+export const EvenmanTimepadAnnouncementUpdateDocument: DocumentNode<EvenmanTimepadAnnouncementUpdateMutation, EvenmanTimepadAnnouncementUpdateMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"EvenmanTimepadAnnouncementUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"event_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"category_code"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"prepaid_tickets"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"result"},"name":{"kind":"Name","value":"eventTimepadAnnouncementUpdate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"event_id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"category_code"},"value":{"kind":"Variable","name":{"kind":"Name","value":"category_code"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"prepaid_tickets"},"value":{"kind":"Variable","name":{"kind":"Name","value":"prepaid_tickets"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EvenmanEvent_Details"},"directives":[]}]}}]}}]}},...EvenmanEvent_DetailsFragmentDoc.definitions]};
+export const EvenmanVkAnnouncementUpdateDocument: DocumentNode<EvenmanVkAnnouncementUpdateMutation, EvenmanVkAnnouncementUpdateMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"EvenmanVkAnnouncementUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"event_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"group"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"result"},"name":{"kind":"Name","value":"eventVkAnnouncementUpdate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"event_id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"group"},"value":{"kind":"Variable","name":{"kind":"Name","value":"group"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ok"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EvenmanEvent_Details"},"directives":[]}]}}]}}]}},...EvenmanEvent_DetailsFragmentDoc.definitions]};

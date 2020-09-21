@@ -1,11 +1,11 @@
+import { useMutation } from '@apollo/client';
 import { A, Label } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
 
 import {
-  MastermindDatingCohortDetailsFragment as Cohort,
-  MastermindDatingGroupFragment as Group,
-  useMastermindDatingCreateGroupMutation,
+    MastermindDatingCohortDetailsFragment as Cohort, MastermindDatingCreateGroupDocument,
+    MastermindDatingGroupFragment as Group
 } from '../queries.generated';
 
 interface Props {
@@ -37,7 +37,7 @@ const GroupInfo = ({ group }: { group: Group }) => {
 };
 
 const GroupSection: React.FC<Props> = ({ cohort }) => {
-  const [createGroupMutation] = useMastermindDatingCreateGroupMutation({
+  const [createGroupMutation] = useMutation(MastermindDatingCreateGroupDocument, {
     variables: {
       cohort_id: cohort.id,
     },

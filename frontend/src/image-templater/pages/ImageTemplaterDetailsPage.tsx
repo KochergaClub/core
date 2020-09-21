@@ -1,17 +1,17 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
+import { useQuery } from '@apollo/client';
 
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, Page } from '~/components';
 
-import { useImageTemplateBySlugQuery } from '../queries.generated';
-
 import ViewingTemplateScreen from '../components/ViewingTemplateScreen';
+import { ImageTemplateBySlugDocument } from '../queries.generated';
 
 interface Props {
   slug: string;
 }
 
 const ImageTemplaterDetailsPage: NextApolloPage<Props> = ({ slug }) => {
-  const queryResults = useImageTemplateBySlugQuery({
+  const queryResults = useQuery(ImageTemplateBySlugDocument, {
     variables: {
       slug,
     },

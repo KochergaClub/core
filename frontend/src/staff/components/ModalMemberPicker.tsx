@@ -1,11 +1,9 @@
-import { Modal, Column } from '@kocherga/frontkit';
+import { useQuery } from '@apollo/client';
+import { Column, Modal } from '@kocherga/frontkit';
 
-import { AsyncButton, ApolloQueryResults } from '~/components';
+import { ApolloQueryResults, AsyncButton } from '~/components';
 
-import {
-  useStaffMembersForPickerQuery,
-  StaffMemberForPickerFragment,
-} from '../queries.generated';
+import { StaffMemberForPickerFragment, StaffMembersForPickerDocument } from '../queries.generated';
 
 interface Props {
   close: () => void;
@@ -13,7 +11,7 @@ interface Props {
 }
 
 const ModalMemberPicker: React.FC<Props> = ({ close, pick }) => {
-  const queryResults = useStaffMembersForPickerQuery();
+  const queryResults = useQuery(StaffMembersForPickerDocument);
 
   return (
     <Modal isOpen={true}>

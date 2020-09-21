@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Label, Row } from '@kocherga/frontkit';
 
 import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
@@ -8,8 +9,8 @@ import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
 import {
-    SubscribeChannelFragment, useEmailSubscribeChannelAddEmailMutation,
-    useEmailSubscribeChannelDeleteMutation
+    EmailSubscribeChannelAddEmailDocument, EmailSubscribeChannelDeleteDocument,
+    SubscribeChannelFragment
 } from '../queries.generated';
 
 type ManualSubscribeFormResults = {
@@ -23,14 +24,17 @@ interface Props {
 }
 
 const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
-  const [deleteMutation] = useEmailSubscribeChannelDeleteMutation({
+  const [deleteMutation] = useMutation(EmailSubscribeChannelDeleteDocument, {
     refetchQueries: ['EmailSubscribeChannels'],
     awaitRefetchQueries: true,
   });
-  const [subscribeMutation] = useEmailSubscribeChannelAddEmailMutation({
-    refetchQueries: ['EmailSubscribeChannels'],
-    awaitRefetchQueries: true,
-  });
+  const [subscribeMutation] = useMutation(
+    EmailSubscribeChannelAddEmailDocument,
+    {
+      refetchQueries: ['EmailSubscribeChannels'],
+      awaitRefetchQueries: true,
+    }
+  );
 
   const deleteCb = useCallback(async () => {
     await deleteMutation({

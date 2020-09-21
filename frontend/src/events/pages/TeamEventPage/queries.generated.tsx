@@ -1,9 +1,6 @@
 import * as Types from '../../../apollo/types.generated';
 
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
-
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type EventsTicketFragment = (
   { __typename: 'EventsTicket' }
   & Pick<Types.EventsTicket, 'id' | 'status'>
@@ -30,48 +27,5 @@ export type GetEventTicketsQuery = (
   )> }
 );
 
-export const EventsTicketFragmentDoc = gql`
-    fragment EventsTicket on EventsTicket {
-  id
-  status
-  user {
-    email
-  }
-}
-    `;
-export const GetEventTicketsDocument = gql`
-    query GetEventTickets($event_id: ID!) {
-  event(event_id: $event_id) {
-    id
-    tickets {
-      ...EventsTicket
-    }
-  }
-}
-    ${EventsTicketFragmentDoc}`;
-
-/**
- * __useGetEventTicketsQuery__
- *
- * To run a query within a React component, call `useGetEventTicketsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEventTicketsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEventTicketsQuery({
- *   variables: {
- *      event_id: // value for 'event_id'
- *   },
- * });
- */
-export function useGetEventTicketsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetEventTicketsQuery, GetEventTicketsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetEventTicketsQuery, GetEventTicketsQueryVariables>(GetEventTicketsDocument, baseOptions);
-      }
-export function useGetEventTicketsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetEventTicketsQuery, GetEventTicketsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetEventTicketsQuery, GetEventTicketsQueryVariables>(GetEventTicketsDocument, baseOptions);
-        }
-export type GetEventTicketsQueryHookResult = ReturnType<typeof useGetEventTicketsQuery>;
-export type GetEventTicketsLazyQueryHookResult = ReturnType<typeof useGetEventTicketsLazyQuery>;
-export type GetEventTicketsQueryResult = ApolloReactCommon.QueryResult<GetEventTicketsQuery, GetEventTicketsQueryVariables>;
+export const EventsTicketFragmentDoc: DocumentNode<EventsTicketFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventsTicket"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventsTicket"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"},"arguments":[],"directives":[]}]}}]}}]};
+export const GetEventTicketsDocument: DocumentNode<GetEventTicketsQuery, GetEventTicketsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEventTickets"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"event_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"event_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"event_id"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tickets"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventsTicket"},"directives":[]}]}}]}}]}},...EventsTicketFragmentDoc.definitions]};

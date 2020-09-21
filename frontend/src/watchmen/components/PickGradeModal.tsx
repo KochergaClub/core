@@ -1,15 +1,12 @@
 import { useCallback, useState } from 'react';
 
-import { Column, Row, Modal } from '@kocherga/frontkit';
-import { AsyncButton, ApolloQueryResults } from '~/components';
+import { useQuery } from '@apollo/client';
+import { Column, Modal, Row } from '@kocherga/frontkit';
 
-import { useFocusOnFirstModalRender, useCommonHotkeys } from '~/common/hooks';
+import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { ApolloQueryResults, AsyncButton } from '~/components';
 
-import {
-  useWatchmenGradesListQuery,
-  GradeFragment,
-  WatchmanFragment,
-} from '../queries.generated';
+import { GradeFragment, WatchmanFragment, WatchmenGradesListDocument } from '../queries.generated';
 
 interface GradeItemProps {
   grade: GradeFragment;
@@ -46,7 +43,7 @@ interface Props {
 
 const PickGradeModal: React.FC<Props> = ({ watchman, close, pick }) => {
   const [acting, setActing] = useState(false);
-  const gradesQueryResults = useWatchmenGradesListQuery();
+  const gradesQueryResults = useQuery(WatchmenGradesListDocument);
 
   const focus = useFocusOnFirstModalRender();
   const hotkeys = useCommonHotkeys({

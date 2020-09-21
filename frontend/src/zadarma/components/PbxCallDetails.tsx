@@ -1,9 +1,9 @@
+import { useQuery } from '@apollo/client';
+
 import { ApolloQueryResults } from '~/components';
-
-import { useZadarmaPbxCallQuery } from '../queries.generated';
-
 import Card from '~/components/Card';
 
+import { ZadarmaPbxCallDocument } from '../queries.generated';
 import PbxCallCard from './PbxCallCard';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const PbxCallDetails: React.FC<Props> = ({ id }) => {
-  const queryResults = useZadarmaPbxCallQuery({
+  const queryResults = useQuery(ZadarmaPbxCallDocument, {
     variables: { pbx_call_id: id },
   });
 

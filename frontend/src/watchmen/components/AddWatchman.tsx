@@ -1,7 +1,9 @@
+import { useMutation } from '@apollo/client';
+
 import ApolloModalFormButton from '~/components/forms/ApolloModalFormButton';
 import { FormShape } from '~/components/forms/types';
 
-import { useWatchmenCreateWatchmanMutation } from '../queries.generated';
+import { WatchmenCreateWatchmanDocument } from '../queries.generated';
 
 const fields: FormShape = [
   { name: 'email', type: 'email' },
@@ -32,7 +34,7 @@ const fields: FormShape = [
 ];
 
 const AddWatchman: React.FC = () => {
-  const [createMutation] = useWatchmenCreateWatchmanMutation({
+  const [createMutation] = useMutation(WatchmenCreateWatchmanDocument, {
     refetchQueries: ['WatchmenWatchmenList'],
     awaitRefetchQueries: true,
   });

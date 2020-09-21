@@ -1,16 +1,15 @@
 import { useCallback } from 'react';
 import Toggle from 'react-toggle';
-
 import styled from 'styled-components';
+
+import { useMutation } from '@apollo/client';
+import { colors, Column, fonts, Row } from '@kocherga/frontkit';
 
 import { AsyncButton } from '~/components';
 
-import { Column, Row, colors, fonts } from '@kocherga/frontkit';
-
 import {
-  MastermindDatingParticipantFragment as Participant,
-  useMastermindDatingActivateVotingMutation,
-  useMastermindDatingSetPresenceStatusMutation,
+    MastermindDatingActivateVotingDocument, MastermindDatingParticipantFragment as Participant,
+    MastermindDatingSetPresenceStatusDocument
 } from '../../queries.generated';
 
 const Photo = styled.img`
@@ -53,7 +52,7 @@ interface Props {
 }
 
 const VoteForm: React.FC<Props> = ({ participant }) => {
-  const [mutation] = useMastermindDatingActivateVotingMutation({
+  const [mutation] = useMutation(MastermindDatingActivateVotingDocument, {
     variables: {
       participant_id: participant.id,
     },
@@ -71,7 +70,7 @@ const ParticipantCard: React.FC<Props> = props => {
 
   const [
     setPresenceStatusMutation,
-  ] = useMastermindDatingSetPresenceStatusMutation();
+  ] = useMutation(MastermindDatingSetPresenceStatusDocument);
 
   const onPresenceChange = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {

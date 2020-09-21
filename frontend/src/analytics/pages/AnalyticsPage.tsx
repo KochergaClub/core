@@ -1,12 +1,11 @@
+import { useMutation, useQuery } from '@apollo/client';
 import { A } from '@kocherga/frontkit';
 
-import { withApollo, NextApolloPage, withStaff } from '~/apollo';
-import { Page, ApolloQueryResults, AsyncButton } from '~/components';
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { ApolloQueryResults, AsyncButton, Page } from '~/components';
 
 import {
-  useAnalyticsBovStatsQuery,
-  useAnalyticsUpdateFbRatioAudienceMutation,
-  AnalyticsBovStatFragment,
+    AnalyticsBovStatFragment, AnalyticsBovStatsDocument, AnalyticsUpdateFbRatioAudienceDocument
 } from '../queries.generated';
 
 interface Props {
@@ -22,9 +21,11 @@ const BOVStatCard = ({ bovStat }: { bovStat: AnalyticsBovStatFragment }) => (
 );
 
 const AnalyticsPage: NextApolloPage<Props> = () => {
-  const queryResults = useAnalyticsBovStatsQuery();
+  const queryResults = useQuery(AnalyticsBovStatsDocument);
 
-  const [updateFbRatioTickets] = useAnalyticsUpdateFbRatioAudienceMutation();
+  const [updateFbRatioTickets] = useMutation(
+    AnalyticsUpdateFbRatioAudienceDocument
+  );
 
   return (
     <Page title="Аналитика Кочерги" menu="team">
