@@ -25,6 +25,7 @@ interface Props {
   noAnalytics?: boolean; // used on /auth/magic-link page to avoid leaking tokens to analytics
   noWhitespace?: boolean; // useful e.g. for /now page where we don't want a white whitespace, especially in black tv mode
   og?: OpenGraph;
+  vkImage?: string; // link for vk:image tag
   canonicalUrl?: string;
 }
 
@@ -85,6 +86,7 @@ const Page: PageType = (props) => {
         title={props.title}
         description={props.description}
         og={props.og || {}}
+        vkImage={props.vkImage}
         canonicalUrl={props.canonicalUrl}
       />
       {props.noAnalytics || (

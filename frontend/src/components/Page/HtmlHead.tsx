@@ -12,10 +12,12 @@ interface Props {
   title: string;
   description?: string;
   canonicalUrl?: string;
+  vkImage?: string;
 }
 
 const HtmlHead: React.FC<Props> = ({
   og,
+  vkImage,
   title,
   description,
   canonicalUrl,
@@ -31,6 +33,7 @@ const HtmlHead: React.FC<Props> = ({
         property="og:image"
         content={og ? og.image || DEFAULT_IMAGE : DEFAULT_IMAGE}
       />
+      {vkImage ? <meta property="vk:image" content={vkImage} /> : null}
       <meta name="og:url" content={ogUrl} />
       <meta name="og:type" content="website" />
       {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}

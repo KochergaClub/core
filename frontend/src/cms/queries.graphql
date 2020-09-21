@@ -14,6 +14,9 @@ query TildaPage($path: String!) {
     og_image(spec: "fill-1200x630") {
       url
     }
+    vk_image: og_image(spec: "fill-1020x456") {
+      url
+    }
     css {
       url
     }
