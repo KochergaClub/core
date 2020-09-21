@@ -1,6 +1,3 @@
-import 'reveal.js/dist/reveal.css';
-import 'reveal.js/dist/theme/white.css';
-
 import dynamic from 'next/dynamic';
 
 import { Page } from '~/components';

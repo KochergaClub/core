@@ -1,3 +1,5 @@
+import '~/css/react-datepicker.css';
+
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { ErrorMessage } from 'formik';

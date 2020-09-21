@@ -1,3 +1,6 @@
+import 'reveal.js/dist/reveal.css';
+import 'reveal.js/dist/theme/white.css';
+
 import { useCallback } from 'react';
 import Reveal from 'reveal.js';
 import styled from 'styled-components';
