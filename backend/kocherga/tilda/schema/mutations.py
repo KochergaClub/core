@@ -8,7 +8,7 @@ c = helpers.Collection()
 @c.class_field
 class tildaImportAll(helpers.BaseField):
     def resolve(self, _, info):
-        models.TildaPage.objects.export_all()
+        models.TildaPage.objects.import_all()
         return {'ok': True}
 
     permissions = [permissions.staffonly]
@@ -18,7 +18,7 @@ class tildaImportAll(helpers.BaseField):
 @c.class_field
 class tildaImport(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
-        models.TildaPage.objects.export_page(input['page_id'])
+        models.TildaPage.objects.import_page(input['page_id'])
         return {'ok': True}
 
     permissions = [permissions.staffonly]

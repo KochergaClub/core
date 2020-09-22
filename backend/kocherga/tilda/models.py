@@ -11,13 +11,13 @@ from . import api
 
 
 class TildaPageManager(models.Manager):
-    def export_all(self):
+    def import_all(self):
         logger.info('Exporting all Tilda pages')
         pages = api.get_pages_list()
         for page in pages:
-            self.export_page(page['id'])
+            self.import_page(page['id'])
 
-    def export_page(self, page_id: int):
+    def import_page(self, page_id: int):
         # unfortunately, we need both
         page_full_export = api.api_call('getpagefullexport', {'pageid': page_id})
         page_body = api.api_call('getpage', {'pageid': page_id})
