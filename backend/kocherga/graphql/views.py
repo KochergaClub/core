@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from timeit import default_timer
-from prometheus_client import Histogram
+from prometheus_client import Histogram, Counter
 
 from django.http import HttpRequest
 from django.conf import settings
@@ -18,17 +18,23 @@ duration_histogram = Histogram(
     'graphql_request', 'Duration of GraphQL requests', ['operation']
 )
 
+failures_counter = Counter(
+    'graphql_request_failures', 'Number of GraphQL errors', ['operation']
+)
+
 
 class WrappedGraphQLView(GraphQLView):
     def execute_query(self, request: HttpRequest, data: dict) -> GraphQLResult:
-        start = default_timer()
-        result = super().execute_query(request, data)
-        duration = default_timer() - start
+        operation = data.get('operationName', None) or 'UNKNOWN'
 
-        operation = data.get('operationName', None) or 'unknown operation'
-        duration_histogram.labels(operation=operation).observe(duration)
-        logger.info(f'GraphQL: {operation} [{duration:.3f}]')
-        return result
+        with failures_counter.labels(operation=operation).count_exceptions():
+            start = default_timer()
+            result = super().execute_query(request, data)
+            duration = default_timer() - start
+
+            duration_histogram.labels(operation=operation).observe(duration)
+            logger.info(f'Operation {operation} [{duration:.3f}]')
+            return result
 
 
 kocherga_graphql_view = WrappedGraphQLView.as_view(
