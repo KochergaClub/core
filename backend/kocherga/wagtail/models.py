@@ -114,6 +114,9 @@ class KochergaPage(HeadlessPreviewMixin, wagtail.core.models.Page):
 
     promote_panels = None
 
+    # see https://docs.wagtail.io/en/stable/reference/pages/model_reference.html#wagtail.core.models.Page.is_creatable
+    is_creatable = False
+
     class Meta:
         # Not `abstract = True` because we want to use KochergaPage.objects.
         # Not non-abstract, non-proxy page because we don't want to create another DB table

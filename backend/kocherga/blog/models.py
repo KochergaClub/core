@@ -11,13 +11,15 @@ from kocherga.wagtail.models import KochergaPage
 
 
 class BlogIndexPage(KochergaPage):
-    subpage_types = ['blog.BlogPostPage']
-
     subtitle = models.TextField('Подзаголовок')
 
     content_panels = KochergaPage.content_panels + [
         FieldPanel('subtitle'),
     ]
+
+    subpage_types = ['blog.BlogPostPage']
+    parent_page_types = ['pages.FrontPage']
+    max_count = 1
 
     @property
     def posts(self):

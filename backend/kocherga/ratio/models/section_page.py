@@ -10,6 +10,7 @@ from kocherga.wagtail.models import KochergaPage
 class SectionIndexPage(KochergaPage):
     # parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.SectionPage']
+    max_count = 1
 
     graphql_type = 'RatioSectionIndexPage'
 

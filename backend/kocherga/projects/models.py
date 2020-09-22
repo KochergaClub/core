@@ -37,6 +37,7 @@ class ProjectIndexPage(KochergaPage):
 
     subpage_types = ['projects.ProjectPage']
     parent_page_types = ['pages.FrontPage']
+    max_count = 1
 
     graphql_type = 'ProjectIndexPage'
 

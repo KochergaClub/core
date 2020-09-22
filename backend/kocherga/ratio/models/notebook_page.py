@@ -9,6 +9,7 @@ from kocherga.wagtail.models import KochergaPage
 class NotebookIndexPage(KochergaPage):
     parent_page_types = ['pages.FolderPage']
     subpage_types = ['ratio.NotebookPage']
+    max_count = 1
 
     graphql_type = 'RatioNotebookIndexPage'
 

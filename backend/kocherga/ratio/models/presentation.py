@@ -3,6 +3,7 @@ from kocherga.wagtail.models import KochergaPage
 
 class PresentationIndexPage(KochergaPage):
     subpage_types = ['presentations.PresentationPage']
+    max_count = 1
 
     graphql_type = 'RatioPresentationIndexPage'
 
