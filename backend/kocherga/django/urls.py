@@ -9,12 +9,11 @@ from django.views.generic.base import RedirectView
 from wagtail.core import urls as wagtail_urls
 
 import kocherga.django.drf
-from kocherga.graphql.schema import schema
-from kocherga.graphql.views import KochergaGraphQLView
+from kocherga.graphql.views import kocherga_graphql_view
 
 urlpatterns = (
     [
-        path('api/graphql', KochergaGraphQLView.as_view(schema=schema), name='graphql'),
+        path('api/graphql', kocherga_graphql_view, name='graphql',),
         path('api/', include('kocherga.api.urls')),
         path('api/tochka/', include('kocherga.money.tochka.urls')),
         path('api/', include('kocherga.events.urls')),

@@ -45,7 +45,7 @@ wagtailgeowidget >= 5.0
 django-prometheus
 wagtail-condensedinlinepanel >= 0.5.3
 html2text
-ariadne == 0.11.0
+ariadne == 0.12.0
 # aiodataloader  # not used for now, but we might need it in the future
 django-storages
 elasticsearch >= 7.0.0

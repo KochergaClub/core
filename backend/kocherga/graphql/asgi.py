@@ -28,4 +28,4 @@ async def get_context_value(websocket):
     return ASGIContext(user=await get_user(websocket.scope))
 
 
-asgi_graphql_app = ASGIGraphQL(schema, context_value=get_context_value,)
+asgi_graphql_app = ASGIGraphQL(schema, context_value=get_context_value)
