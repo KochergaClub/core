@@ -13,6 +13,9 @@ class SubscribeChannel(models.Model):
     def subscribe_email(self, email: str):
         LIST_ID = kocherga.mailchimp.MAIN_LIST_ID
         subscriber_hash = hashlib.md5(email.lower().encode()).hexdigest()
+
+        SubscribeChannelLog.objects.create(channel=self, email=email.lower())
+
         kocherga.mailchimp.api_call(
             'PUT',
             f'lists/{LIST_ID}/members/{subscriber_hash}',
@@ -24,3 +27,9 @@ class SubscribeChannel(models.Model):
                 'status_if_new': 'subscribed',
             },
         )
+
+
+class SubscribeChannelLog(models.Model):
+    channel = models.ForeignKey(SubscribeChannel, on_delete=models.CASCADE)
+    dt = models.DateTimeField(auto_now_add=True)
+    email = models.EmailField()

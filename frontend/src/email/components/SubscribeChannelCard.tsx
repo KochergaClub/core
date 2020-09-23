@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useMutation } from '@apollo/client';
 import { Label, Row } from '@kocherga/frontkit';
 
-import AsyncButtonWithConfirm from '~/components/AsyncButtonWithConfirm';
+import { AsyncButtonWithConfirm, CopyToClipboardIcon } from '~/components';
 import Card, { CardHeader } from '~/components/Card';
 import ModalFormButton from '~/components/forms/ModalFormButton';
 import { FormShape } from '~/components/forms/types';
@@ -57,20 +57,21 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
     [subscribeMutation, subscribeChannel.slug]
   );
 
+  const url = `${process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE}/api/email/subscribe_channel/${subscribeChannel.slug}/subscribe`;
+
   return (
     <Card>
       <CardHeader>{subscribeChannel.slug}</CardHeader>
       <Row vCentered>
         <Label>Webhook:</Label>
-        <code>
-          {process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE}
-          /api/email/subscribe_channel/
-          {subscribeChannel.slug}/subscribe
-        </code>
+        <code>{url}</code>
+        <CopyToClipboardIcon text={url} />
       </Row>
       <ul>
         {subscribeChannel.interests.map((interest) => (
-          <li key={interest.id}>{interest.name}</li>
+          <li key={interest.id}>
+            {interest.category.title} &rarr; {interest.name}
+          </li>
         ))}
       </ul>
       <Row>

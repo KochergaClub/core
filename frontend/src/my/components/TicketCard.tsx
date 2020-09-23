@@ -2,8 +2,8 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ru } from 'date-fns/locale';
 import Link from 'next/link';
-import { useCallback, useRef } from 'react';
-import { FaRegCopy, FaTicketAlt } from 'react-icons/fa';
+import { useCallback } from 'react';
+import { FaTicketAlt } from 'react-icons/fa';
 import { FiVideo } from 'react-icons/fi';
 import styled from 'styled-components';
 
@@ -11,7 +11,7 @@ import { useMutation } from '@apollo/client';
 import { A, Button, colors, Column, fonts, Label, Row } from '@kocherga/frontkit';
 
 import { formatDate, timezone } from '~/common/utils';
-import { DropdownMenu } from '~/components';
+import { CopyToClipboardIcon, DropdownMenu } from '~/components';
 import Card from '~/components/Card';
 import { Action } from '~/components/DropdownMenu';
 
@@ -32,37 +32,6 @@ const DropdownContainer = styled.div`
   float: right;
   margin-left: 10px;
 `;
-
-const ClipboardIcon = styled(FaRegCopy)`
-  color: ${colors.grey[500]};
-  cursor: pointer;
-  &:hover {
-    color: black;
-  }
-`;
-
-// TODO - extract to ~/components
-const CopyToClipboardIcon: React.FC<{ text: string }> = ({ text }) => {
-  const textRef = useRef<HTMLTextAreaElement>(null);
-  const copy = useCallback(() => {
-    if (!textRef.current) {
-      return; // shouldn't happen
-    }
-    textRef.current.select();
-    document.execCommand('copy');
-  }, []);
-
-  return (
-    <>
-      <textarea
-        style={{ position: 'absolute', left: -10000, top: -10000 }}
-        ref={textRef}
-        value={text}
-      />
-      <ClipboardIcon onClick={copy} />
-    </>
-  );
-};
 
 interface Props {
   ticket: MyTicketFragment;

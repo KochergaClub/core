@@ -11,7 +11,7 @@ interface Props {
 
 const MailchimpCategoryCard: React.FC<Props> = ({ mailchimpCategory }) => (
   <Card>
-    <header>{mailchimpCategory.title}</header>
+    <h3>{mailchimpCategory.title}</h3>
     <ul>
       {mailchimpCategory.interests.map((interest) => (
         <li key={interest.id}>{interest.name}</li>

@@ -1,61 +1,25 @@
-from kocherga.graphql import g, django_utils
+from kocherga.graphql.django_utils import DjangoObjectType
+from kocherga.graphql import g
 
 from .. import models
 
-# type EmailMailchimpInterest {
-#   id: ID!
-#   interest_id: String!
-#   name: String!
-#   subscriber_count: Int!
-# }
-
-EmailMailchimpInterest = g.ObjectType(
+EmailMailchimpInterest = DjangoObjectType(
     'EmailMailchimpInterest',
-    g.fields(
-        {
-            'id': 'ID!',
-            'interest_id': str,  # id in mailchimp
-            'name': str,
-            'subscriber_count': int,
-        }
-    ),
+    model=models.MailchimpInterest,
+    db_fields=['id', 'interest_id', 'name', 'subscriber_count'],
+    extra_fields=lambda: {'category': g.NN(EmailMailchimpCategory)},
 )
 
-# type EmailMailchimpCategory {
-#   id: ID!
-#   title: String!
-#   category_id: String!
-#   interests: [EmailMailchimpInterest!]!
-# }
-
-EmailMailchimpCategory = g.ObjectType(
+EmailMailchimpCategory = DjangoObjectType(
     'EmailMailchimpCategory',
-    g.fields(
-        {
-            **django_utils.model_fields(
-                models.MailchimpCategory, ['id', 'title', 'category_id']
-            ),
-            'interests': django_utils.related_field(
-                models.MailchimpCategory, 'interests', item_type=EmailMailchimpInterest,
-            ),
-        }
-    ),
+    model=models.MailchimpCategory,
+    db_fields=['id', 'title', 'category_id'],
+    related_fields={'interests': EmailMailchimpInterest},
 )
 
-# type EmailSubscribeChannel {
-#   id: ID!
-#   slug: String!
-#   interests: [EmailMailchimpInterest!]!
-# }
-
-EmailSubscribeChannel = g.ObjectType(
+EmailSubscribeChannel = DjangoObjectType(
     'EmailSubscribeChannel',
-    g.fields(
-        {
-            **django_utils.model_fields(models.SubscribeChannel, ['id', 'slug']),
-            'interests': django_utils.related_field(
-                models.SubscribeChannel, 'interests', item_type=EmailMailchimpInterest,
-            ),
-        }
-    ),
+    model=models.SubscribeChannel,
+    db_fields=['id', 'slug'],
+    related_fields={'interests': EmailMailchimpInterest},
 )

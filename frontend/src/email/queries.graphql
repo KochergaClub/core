@@ -8,6 +8,10 @@ fragment SubscribeChannel on EmailSubscribeChannel {
   slug
   interests {
     ...MailchimpInterest
+    category {
+      id
+      title
+    }
   }
 }
 
@@ -39,6 +43,8 @@ mutation EmailSubscribeChannelAddEmail($slug: String!, $email: String!) {
   emailSubscribeChannelAddEmail(slug: $slug, email: $email)
 }
 
-mutation EmailSubscribeChannelCreate($params: EmailSubscribeChannelCreateInput!) {
+mutation EmailSubscribeChannelCreate(
+  $params: EmailSubscribeChannelCreateInput!
+) {
   emailSubscribeChannelCreate(params: $params)
 }

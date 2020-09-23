@@ -258,6 +258,7 @@ type EmailMailchimpInterest {
   interest_id: String!
   name: String!
   subscriber_count: Int!
+  category: EmailMailchimpCategory!
 }
 
 type EmailSubscribeChannel {

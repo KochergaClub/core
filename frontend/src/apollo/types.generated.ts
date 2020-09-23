@@ -322,6 +322,7 @@ export type EmailMailchimpInterest = {
   interest_id: Scalars['String'];
   name: Scalars['String'];
   subscriber_count: Scalars['Int'];
+  category: EmailMailchimpCategory;
 };
 
 export type EmailSubscribeChannel = {

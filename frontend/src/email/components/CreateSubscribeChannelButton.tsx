@@ -23,25 +23,44 @@ const CreateSubscribeChannelButton: React.FC = () => {
     }
 
     for (const mailchimpCategory of queryResults.data.mailchimpCategories) {
+      const subShape: FormShape = [];
       for (const mailchimpInterest of mailchimpCategory.interests) {
-        result.push({
+        subShape.push({
           type: 'boolean',
           name: mailchimpInterest.id,
           title: mailchimpInterest.name,
         });
       }
+      result.push({
+        type: 'shape',
+        name: mailchimpCategory.id,
+        title: mailchimpCategory.title,
+        shape: subShape,
+      });
     }
 
     return result;
   }, [queryResults.data]);
 
   const postCb = useCallback(
-    async (values: { [k: string]: string | boolean }) => {
+    async (values: { [k: string]: string | { [k: string]: boolean } }) => {
+      console.log(values);
+      const interest_ids = [];
       const slug = values.slug as string;
-      const interest_ids = formShape
-        .filter((field) => field.type === 'boolean')
-        .filter((field) => values[field.name])
-        .map((field) => field.name);
+
+      for (const field of formShape) {
+        if (field.type !== 'shape') {
+          continue;
+        }
+        for (const subField of field.shape) {
+          if (subField.type !== 'boolean') {
+            continue;
+          }
+          if ((values[field.name] as { [k: string]: boolean })[subField.name]) {
+            interest_ids.push(subField.name);
+          }
+        }
+      }
 
       await createMutation({
         variables: {

@@ -18,7 +18,7 @@ const ShapeFieldWidget: React.FC<Props> = ({
 }) => {
   return (
     <div>
-      {hideLabel ? null : <Label>{field.name}</Label>}
+      {hideLabel ? null : <Label>{field.title || field.name}</Label>}
       {field.shape.map((subfield, i) => (
         <AnyFieldWidget
           key={i}
