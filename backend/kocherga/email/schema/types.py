@@ -1,4 +1,4 @@
-from kocherga.graphql.django_utils import DjangoObjectType, related_field
+from kocherga.graphql.django_utils import DjangoObjectType
 from kocherga.graphql import g, helpers
 
 from .. import models
