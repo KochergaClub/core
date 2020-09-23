@@ -330,11 +330,39 @@ export type EmailSubscribeChannel = {
   id: Scalars['ID'];
   slug: Scalars['String'];
   interests: Array<EmailMailchimpInterest>;
+  log: EmailSubscribeChannelLogConnection;
+};
+
+
+export type EmailSubscribeChannelLogArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 export type EmailSubscribeChannelCreateInput = {
   slug: Scalars['String'];
   interest_ids: Array<Scalars['ID']>;
+};
+
+export type EmailSubscribeChannelLog = {
+  __typename?: 'EmailSubscribeChannelLog';
+  id: Scalars['ID'];
+  dt: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type EmailSubscribeChannelLogConnection = {
+  __typename?: 'EmailSubscribeChannelLogConnection';
+  pageInfo: PageInfo;
+  nodes: Array<EmailSubscribeChannelLog>;
+  edges: Array<EmailSubscribeChannelLogEdge>;
+};
+
+export type EmailSubscribeChannelLogEdge = {
+  __typename?: 'EmailSubscribeChannelLogEdge';
+  node: EmailSubscribeChannelLog;
 };
 
 export type Event = {

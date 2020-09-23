@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Label, Row } from '@kocherga/frontkit';
+import { Column, Label, Row } from '@kocherga/frontkit';
 
 import { AsyncButtonWithConfirm, CopyToClipboardIcon } from '~/components';
 import Card, { CardHeader } from '~/components/Card';
@@ -61,36 +61,56 @@ const SubscribeChannelCard: React.FC<Props> = ({ subscribeChannel }) => {
 
   return (
     <Card>
-      <CardHeader>{subscribeChannel.slug}</CardHeader>
-      <Row vCentered>
-        <Label>Webhook:</Label>
-        <code>{url}</code>
-        <CopyToClipboardIcon text={url} />
-      </Row>
-      <ul>
-        {subscribeChannel.interests.map((interest) => (
-          <li key={interest.id}>
-            {interest.category.title} &rarr; {interest.name}
-          </li>
-        ))}
-      </ul>
-      <Row>
-        <AsyncButtonWithConfirm
-          small
-          act={deleteCb}
-          confirmText="Точно удалить?"
-        >
-          Удалить
-        </AsyncButtonWithConfirm>
-        <ModalFormButton
-          shape={manualSubscribeFormShape}
-          small
-          buttonName="Подписать вручную"
-          modalTitle="Подписать вручную"
-          modalButtonName="Подписать"
-          post={manualSubscribeCb}
-        />
-      </Row>
+      <Column>
+        <CardHeader>
+          <Row gutter={8}>
+            <div>{subscribeChannel.slug}</div>
+            <AsyncButtonWithConfirm
+              small
+              act={deleteCb}
+              confirmText="Точно удалить?"
+            >
+              Удалить
+            </AsyncButtonWithConfirm>
+            <ModalFormButton
+              shape={manualSubscribeFormShape}
+              small
+              buttonName="Подписать вручную"
+              modalTitle="Подписать вручную"
+              modalButtonName="Подписать"
+              post={manualSubscribeCb}
+            />
+          </Row>
+        </CardHeader>
+        <div>
+          <Label>Webhook:</Label>
+          <Row vCentered>
+            <code>{url}</code>
+            <CopyToClipboardIcon text={url} />
+          </Row>
+        </div>
+        <div>
+          <Label>Интересы:</Label>
+          <ul>
+            {subscribeChannel.interests.map((interest) => (
+              <li key={interest.id}>
+                {interest.category.title} &rarr; {interest.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {subscribeChannel.log.nodes.length ? (
+          <div>
+            <Label>Последние подписки:</Label>
+            {subscribeChannel.log.nodes.map((entry) => (
+              <Row key={entry.id}>
+                <div>{entry.email}</div>
+                <div>{entry.dt}</div>
+              </Row>
+            ))}
+          </div>
+        ) : null}
+      </Column>
     </Card>
   );
 };

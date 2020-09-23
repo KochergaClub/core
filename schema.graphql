@@ -265,11 +265,28 @@ type EmailSubscribeChannel {
   id: ID!
   slug: String!
   interests: [EmailMailchimpInterest!]!
+  log(before: String, after: String, first: Int, last: Int): EmailSubscribeChannelLogConnection!
 }
 
 input EmailSubscribeChannelCreateInput {
   slug: String!
   interest_ids: [ID!]!
+}
+
+type EmailSubscribeChannelLog {
+  id: ID!
+  dt: String!
+  email: String!
+}
+
+type EmailSubscribeChannelLogConnection {
+  pageInfo: PageInfo!
+  nodes: [EmailSubscribeChannelLog!]!
+  edges: [EmailSubscribeChannelLogEdge!]!
+}
+
+type EmailSubscribeChannelLogEdge {
+  node: EmailSubscribeChannelLog!
 }
 
 type Event {

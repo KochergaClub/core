@@ -13,6 +13,13 @@ fragment SubscribeChannel on EmailSubscribeChannel {
       title
     }
   }
+  log(first: 3) {
+    nodes {
+      id
+      dt
+      email
+    }
+  }
 }
 
 fragment MailchimpCategory on EmailMailchimpCategory {

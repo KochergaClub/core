@@ -1,5 +1,7 @@
 import hashlib
 
+from kocherga.django.managers import RelayQuerySet
+
 from .mailchimp_interest import MailchimpInterest
 from django.db import models
 
@@ -30,6 +32,8 @@ class SubscribeChannel(models.Model):
 
 
 class SubscribeChannelLog(models.Model):
-    channel = models.ForeignKey(SubscribeChannel, on_delete=models.CASCADE)
+    channel = models.ForeignKey(SubscribeChannel, on_delete=models.CASCADE, related_name='log')
     dt = models.DateTimeField(auto_now_add=True)
     email = models.EmailField()
+
+    objects = RelayQuerySet.as_manager()
