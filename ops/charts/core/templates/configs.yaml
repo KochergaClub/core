@@ -26,6 +26,9 @@ data:
   NEXT_PUBLIC_GOOGLE_MAPS_KEY: {{ .Values.env.frontend.GOOGLE_MAPS_KEY | quote }}
   NEXT_PUBLIC_STATIC_S3_BUCKET: {{ .Values.env.common.STATIC_S3_BUCKET | quote }}
   NEXT_PUBLIC_KOCHERGA_WEBSITE: {{ .Values.env.common.KOCHERGA_WEBSITE | quote }}
+  SENTRY_AUTH_TOKEN: {{ .Values.sentry.auth_token | quote }}
+  SENTRY_ORG: {{ .Values.sentry.org | quote }}
+  SENTRY_PROJECT: {{ .Values.sentry.projects.frontend | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -7,14 +7,6 @@
     "isolatedModules": false,
     "noEmit": false
   },
-  "exclude": [
-    "node_modules",
-    ".next",
-    "next.config.js",
-    "next.raw-config.js",
-    "dist"
-  ],
-  "include": [
-    "server/**/*.ts"
-  ]
+  "exclude": ["node_modules", ".next", "next.config.js", "dist"],
+  "include": ["server/**/*.ts"]
 }

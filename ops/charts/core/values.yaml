@@ -5,6 +5,13 @@ image:
   chrome: ""
   mysql_backup: ""
 
+sentry:
+  auth_token: ""
+  org: ""
+  projects:
+    frontend: ""
+    backend: ""
+
 env:
   common:
     STATIC_S3_BUCKET: ""

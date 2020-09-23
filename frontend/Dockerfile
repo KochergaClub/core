@@ -16,10 +16,12 @@ RUN npm ci
 
 COPY . /code/
 
+ARG SENTRY_RELEASE=""
+ENV SENTRY_RELEASE=${SENTRY_RELEASE}
+
 CMD ["node", "./dist/index.js"]
 
 FROM base as production
 
 # RUN NODE_ENV=production npx next build
 RUN NODE_ENV=production npx webpack --config webpack.server.js
-

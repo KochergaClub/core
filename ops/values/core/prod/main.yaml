@@ -11,6 +11,11 @@ env:
     VK_MESSAGES_WIDGET_ID: "99973027"
     GOOGLE_MAPS_KEY: "AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI"
 
+sentry:
+  org: kocherga
+  projects:
+    frontend: frontend
+
 ingress:
   host: "kocherga-club.ru"
   ludwig_host: "ludwig.team.kocherga.club"

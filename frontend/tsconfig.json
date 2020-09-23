@@ -23,13 +23,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "exclude": [
-    "node_modules",
-    ".next",
-    "next.config.js",
-    "next.raw-config.js",
-    "dist",
-    "src/server"
-  ],
+  "exclude": ["node_modules", ".next", "next.config.js", "dist"],
   "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "server/**/*.ts"]
 }

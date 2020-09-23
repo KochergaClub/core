@@ -18,6 +18,9 @@ build:
         #   - tests/**
     - image: registry.gitlab.com/kocherga/core/frontend
       context: frontend
+      docker:
+        buildArgs:
+          SENTRY_RELEASE: "{{.CI_COMMIT_SHORT_SHA}}"
       sync:
         # frontend Dockerfile is multi-stage and skaffold can't figure out infer syncs, so we use manual instead
         manual:
@@ -51,9 +54,8 @@ profiles:
       - command: dev
     patches:
       - op: add
-        path: /build/artifacts/1/docker
-        value:
-          target: base # avoid slow `next build`
+        path: /build/artifacts/1/docker/target
+        value: base # avoid slow `next build`
     build:
       local:
         push: false
