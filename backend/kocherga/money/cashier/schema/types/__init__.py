@@ -1,22 +1,14 @@
 from kocherga.graphql import g, helpers, django_utils
-from kocherga.auth.schema import types as auth_types
+from kocherga.auth.schema.types import AuthUser
 
 from ... import models
 
-# type CashierPayment {
-#   whom: AuthUser!
-# }
-CashierPayment = g.ObjectType(
+CashierPayment = django_utils.DjangoObjectType(
     'CashierPayment',
-    g.fields(
-        {
-            **django_utils.model_fields(
-                models.Payment, ['id', 'amount', 'created_dt', 'redeem_dt', 'comment']
-            ),
-            'is_redeemed': bool,
-            'whom': g.NN(auth_types.AuthUser),
-        }
-    ),
+    model=models.Payment,
+    db_fields=['id', 'amount', 'created_dt', 'redeem_dt', 'comment'],
+    method_fields=['is_redeemed'],
+    extra_fields={'whom': g.NN(AuthUser)},
 )
 
 CashierPaymentConnection = helpers.ConnectionType(CashierPayment)
