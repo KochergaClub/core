@@ -15,7 +15,7 @@ const NavListUl = (styled(FlipMove)`
     font-size: 0.8rem;
     border-top: 1px solid #d8d8d8;
   }
-` as any) as typeof FlipMove; // weird fix for typescript + styled + react-flip-move
+` as unknown) as typeof FlipMove; // weird fix for typescript + styled + react-flip-move
 
 const Header = styled.header`
   padding: 4px;
