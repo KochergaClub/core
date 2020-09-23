@@ -47,7 +47,7 @@ const rawConfig = {
           ignore: ['node_modules'],
           stripPrefix: ['webpack://_N_E/'],
           urlPrefix: `~/_next`,
-          release: SENTRY_RELEASE,
+          release: process.env.SENTRY_RELEASE,
         })
       );
     }
