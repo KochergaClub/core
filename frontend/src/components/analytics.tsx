@@ -154,7 +154,7 @@ export const VkRetargetingScript = () => {
 export const trackPageview = (url: string) => {
   // hack to get the correct page title (via https://stackoverflow.com/a/54675433)
   window.setTimeout(() => {
-    if (GA_TRACKING_ID) {
+    if (GA_TRACKING_ID && window.gtag) {
       window.gtag('config', GA_TRACKING_ID, {
         page_path: url,
       });
@@ -188,7 +188,7 @@ export const trackEvent = (action: string, params?: GTagEventParams) => {
     non_interaction: false,
   };
 
-  if (GA_TRACKING_ID) {
+  if (GA_TRACKING_ID && window.gtag) {
     window.gtag('event', action, {
       event_category: category,
       event_label: label,
