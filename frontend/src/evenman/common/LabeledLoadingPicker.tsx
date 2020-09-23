@@ -1,4 +1,5 @@
-import { ReactSelectCreatable } from '../components/ui';
+import { ValueType } from 'react-select';
+import ReactSelectCreatable from 'react-select/creatable';
 
 interface Option {
   value: string;
@@ -14,7 +15,7 @@ interface Props {
   error?: boolean;
 }
 
-const LoadingPicker: React.FC<Props> = props => {
+const LabeledLoadingPicker: React.FC<Props> = (props) => {
   if (props.loading) {
     return <ReactSelectCreatable placeholder={props.placeholder} isDisabled />;
   }
@@ -24,7 +25,7 @@ const LoadingPicker: React.FC<Props> = props => {
 
   if (
     props.value &&
-    props.values.findIndex(v => v.value === props.value?.value) === -1
+    props.values.findIndex((v) => v.value === props.value?.value) === -1
   ) {
     props.values.push(props.value);
   }
@@ -34,11 +35,14 @@ const LoadingPicker: React.FC<Props> = props => {
       placeholder={props.placeholder}
       options={props.values || { value: '', label: 'Ø' }}
       value={props.value}
-      onChange={(option?: Option) => {
-        props.setValue(option);
+      onChange={(option: ValueType<Option>) => {
+        if (Array.isArray(option)) {
+          throw new Error('Internal code error'); // shouldn't happen
+        }
+        props.setValue((option as Option | undefined) ?? undefined);
       }}
     />
   );
 };
 
-export default LoadingPicker;
+export default LabeledLoadingPicker;

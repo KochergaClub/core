@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic';
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
 
 import { EventGenerateOpenViduTokenDocument } from '../queries.generated';
 
@@ -15,7 +14,9 @@ interface Props {
 }
 
 const EventCall: React.FC<Props> = ({ event_id }) => {
-  const [generateTokenMutation] = useMutation(EventGenerateOpenViduTokenDocument);
+  const [generateTokenMutation] = useMutation(
+    EventGenerateOpenViduTokenDocument
+  );
 
   const getToken = useCallback(async () => {
     const { data } = await generateTokenMutation({
@@ -27,11 +28,7 @@ const EventCall: React.FC<Props> = ({ event_id }) => {
     return data.result.token;
   }, [generateTokenMutation, event_id]);
 
-  return (
-    <Row centered>Функционал созвонов через сайт находится в разработке.</Row>
-  );
-
-  // return <OpenViduApp getToken={getToken} />;
+  return <OpenViduApp getToken={getToken} />;
 };
 
 export default EventCall;

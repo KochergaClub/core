@@ -1,4 +1,4 @@
-import { ReactSelectCreatable } from '../components/ui';
+import ReactSelectCreatable from 'react-select/creatable';
 
 interface Props {
   tags: string[];

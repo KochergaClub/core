@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-
-import { ReactSelect } from '../components/ui';
+import Select, { ValueType } from 'react-select';
 
 interface Props {
   value: number | undefined;
@@ -17,20 +16,28 @@ const weekdays = [
   'Воскресенье',
 ];
 
+interface OptionType {
+  value: number;
+  label: string;
+}
+
 const WeekdayPicker: React.FC<Props> = ({ value, setValue }) => {
   const onChange = useCallback(
-    (selectOption: any) => {
-      setValue(parseInt(selectOption.value as string, 10));
+    (option: ValueType<OptionType>) => {
+      if (!option || Array.isArray(option)) {
+        throw new Error('Code logic error');
+      }
+      setValue((option as OptionType).value);
     },
     [setValue]
   );
 
   return (
-    <ReactSelect
+    <Select
       placeholder="Выбрать..."
       menuPortalTarget={document.body}
       styles={{
-        menuPortal: (base: any) => ({ ...base, zIndex: 1500 }),
+        menuPortal: (base) => ({ ...base, zIndex: 1500 }),
       }}
       options={[0, 1, 2, 3, 4, 5, 6].map((n) => ({
         value: n,

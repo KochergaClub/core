@@ -21,7 +21,10 @@ let apolloClient: KochergaApolloClient | null = null;
 const createServerLink = (req: NextApolloPageContext['req']) => {
   // this is important for webpack to remove this code on client
   if (IS_SERVER) {
-    const { API_HOST } = require('../../server/constants');
+    const API_HOST = process.env.DJANGO_HOST;
+    if (!API_HOST) {
+      throw new Error('DJANGO_HOST should be set in env');
+    }
 
     // req can be empty:
     // - when we do the last styled-components-extracting rendering pass in _document.

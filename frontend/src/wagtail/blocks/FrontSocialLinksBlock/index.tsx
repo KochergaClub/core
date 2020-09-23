@@ -9,7 +9,7 @@ import YoutubeIcon from '~/components/icons/YoutubeIcon';
 import { BlockComponent } from '../../types';
 import { FrontSocialLinksBlockFragment as Props } from './index.generated';
 
-const FrontSocialLinksBlock: BlockComponent<Props> = (block) => {
+const FrontSocialLinksBlock: BlockComponent<Props> = () => {
   // FIXME - move links to config
   return (
     <PaddedBlock>

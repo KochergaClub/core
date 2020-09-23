@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { FragmentDefinitionNode } from 'graphql';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 

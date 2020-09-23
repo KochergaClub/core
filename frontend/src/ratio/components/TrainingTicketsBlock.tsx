@@ -23,8 +23,15 @@ const CreateTicketButton = ({ training_id }: { training_id: string }) => {
     { name: 'payment_amount', title: 'Стоимость билета', type: 'number' },
   ];
 
+  type Values = {
+    email: string;
+    first_name: string;
+    last_name: string;
+    payment_amount: number;
+  };
+
   const cb = useCallback(
-    async (values: any) => {
+    async (values: Values) => {
       const { data } = await addTicketMutation({
         variables: {
           params: {

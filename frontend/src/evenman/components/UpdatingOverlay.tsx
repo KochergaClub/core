@@ -53,7 +53,7 @@ interface Props {
 
 const UpdatingOverlay = styled('div')<Props>`
   position: relative;
-  ${(props: any) => (props.progress ? progressCSS : '')}
+  ${(props) => (props.progress ? progressCSS : '')}
 `;
 
 export default UpdatingOverlay;

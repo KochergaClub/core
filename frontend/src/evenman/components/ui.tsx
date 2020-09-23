@@ -1,6 +1,3 @@
-import Select from 'react-select';
-import Creatable from 'react-select/creatable';
-
 import styled from 'styled-components';
 
 import { colors, RichText } from '@kocherga/frontkit';
@@ -24,14 +21,6 @@ export const IconLink = styled.a`
   &:hover {
     color: black;
   }
-`;
-
-export const ReactSelect = styled(Select)`
-  flex: 1;
-`;
-
-export const ReactSelectCreatable = styled(Creatable)`
-  flex: 1;
 `;
 
 export const UserText = styled(RichText)`

@@ -1,6 +1,6 @@
 import { Device, OpenVidu, PublisherProperties } from 'openvidu-browser';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Select, { ValueType } from 'react-select';
+import Select from 'react-select';
 import styled from 'styled-components';
 
 import { Column, Label, Row } from '@kocherga/frontkit';
@@ -49,7 +49,7 @@ const DevicePicker: React.FC<DevicePickerProps> = ({
     <Select
       options={options}
       value={currentOption}
-      onChange={async (selected: ValueType<MyOption>) => {
+      onChange={async (selected) => {
         if (!selected || Array.isArray(selected)) {
           throw new Error('react-select is weird'); // shouldn't happen
         }

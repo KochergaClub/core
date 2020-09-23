@@ -1,6 +1,7 @@
+import { StreamManager } from 'openvidu-browser';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { StreamManager } from 'openvidu-browser';
+
 import { fonts } from '@kocherga/frontkit';
 
 interface Props {
