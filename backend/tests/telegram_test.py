@@ -1,4 +1,4 @@
-from kocherga.telegram import split_message_into_chunks
+from kocherga.telegram.utils import split_message_into_chunks
 
 
 def test_split_short():

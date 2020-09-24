@@ -20,7 +20,7 @@ from kocherga.dateutils import TZ
 import kocherga.dateutils
 import kocherga.vk.api
 import kocherga.vk.helpers
-import kocherga.telegram
+import kocherga.telegram.utils
 import kocherga.mailchimp
 import kocherga.templater.models
 from kocherga.email.tools import get_utmify, mjml2html
@@ -258,7 +258,7 @@ class WeeklyDigest(models.Model):
             raise Exception("Telegram message is already sent")
 
         text = self._telegram_message()
-        posted_messages = kocherga.telegram.post_to_channel(text)
+        posted_messages = kocherga.telegram.utils.post_to_channel(text)
         self.telegram_id = posted_messages[0]['result']['message_id']
         self.save()
 
@@ -266,7 +266,7 @@ class WeeklyDigest(models.Model):
         if not self.telegram_id:
             return None
 
-        return kocherga.telegram.channel_message_link_by_id(self.telegram_id)
+        return kocherga.telegram.utils.channel_message_link_by_id(self.telegram_id)
 
     def post_vk(self, prefix_text):
         if self.vk_id:

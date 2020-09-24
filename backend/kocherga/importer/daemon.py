@@ -29,6 +29,7 @@ IMPORTER_MODULES = [
     "slack",
     "email",
     "zoom",
+    "telegram",
 ]
 
 

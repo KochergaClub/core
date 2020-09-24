@@ -6,6 +6,7 @@ from wagtail.contrib.modeladmin.options import (
 
 from . import models
 import kocherga.projects.wagtail_hooks
+import kocherga.telegram.wagtail_hooks
 
 
 class GoogleCalendarAdmin(ModelAdmin):
@@ -22,6 +23,7 @@ class EventsGroup(ModelAdminGroup):
     items = (
         GoogleCalendarAdmin,
         kocherga.projects.wagtail_hooks.ProjectPageAdmin,
+        kocherga.telegram.wagtail_hooks.ChatAdmin,
     )
 
 
