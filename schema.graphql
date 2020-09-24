@@ -1103,6 +1103,7 @@ type Query {
   emailSubscribeChannelsAll: [EmailSubscribeChannel!]!
   imageTemplatesAll: [ImageTemplate!]!
   imageTemplateBySlug(slug: String!): ImageTemplate!
+  telegramChats: [TelegramChat!]!
   tildaPage(path: String!): TildaPage
   tildaPages: [TildaPage!]!
   externalServices: [ExternalService!]!
@@ -1422,6 +1423,13 @@ type StaffMember {
 
 type Subscription {
   events: EventNotification!
+}
+
+type TelegramChat {
+  id: ID!
+  username: String!
+  title: String!
+  photo(spec: String!): WagtailImageRendition
 }
 
 type TildaAsset {

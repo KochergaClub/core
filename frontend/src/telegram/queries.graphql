@@ -1,0 +1,19 @@
+fragment TelegramChat on TelegramChat {
+  id
+  username
+  title
+  photo(spec: "fill-50x50") {
+    id
+    url
+  }
+  photo_x2: photo(spec: "fill-100x100") {
+    id
+    url
+  }
+}
+
+query TelegramChats {
+  telegramChats {
+    ...TelegramChat
+  }
+}

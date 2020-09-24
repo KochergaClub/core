@@ -1735,6 +1735,7 @@ export type Query = {
   emailSubscribeChannelsAll: Array<EmailSubscribeChannel>;
   imageTemplatesAll: Array<ImageTemplate>;
   imageTemplateBySlug: ImageTemplate;
+  telegramChats: Array<TelegramChat>;
   tildaPage?: Maybe<TildaPage>;
   tildaPages: Array<TildaPage>;
   externalServices: Array<ExternalService>;
@@ -2263,6 +2264,19 @@ export type StaffMember = {
 export type Subscription = {
   __typename?: 'Subscription';
   events: EventNotification;
+};
+
+export type TelegramChat = {
+  __typename?: 'TelegramChat';
+  id: Scalars['ID'];
+  username: Scalars['String'];
+  title: Scalars['String'];
+  photo?: Maybe<WagtailImageRendition>;
+};
+
+
+export type TelegramChatPhotoArgs = {
+  spec: Scalars['String'];
 };
 
 export type TildaAsset = {
