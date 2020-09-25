@@ -59,7 +59,6 @@ const TelegramChatCard: React.FC<Props> = ({ chat, hideProjectLink }) => {
               <Link {...projectRoute(chat.project.meta.slug)} passHref>
                 <A>{chat.project.title}</A>
               </Link>
-              .
             </small>
           ) : null}
         </div>

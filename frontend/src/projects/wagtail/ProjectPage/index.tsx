@@ -21,7 +21,6 @@ const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
     >
       <ProjectHeroBlock project={project} />
       <RichTextBlock html={project.body} />
-      <UpcomingEventsBlock project={project} />
       {project.telegram_chats.length ? (
         <div>
           <TL03
@@ -34,6 +33,7 @@ const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
           />
         </div>
       ) : null}
+      <UpcomingEventsBlock project={project} />
     </Page>
   );
 };
