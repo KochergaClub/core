@@ -1054,6 +1054,7 @@ type ProjectPage implements WagtailPage {
   body: String!
   image(spec: String!): WagtailImageRendition!
   upcoming_events: [Event!]!
+  telegram_chats: [TelegramChat!]!
 }
 
 type Query {
@@ -1430,6 +1431,7 @@ type TelegramChat {
   username: String!
   title: String!
   photo(spec: String!): WagtailImageRendition
+  project: ProjectPage
 }
 
 type TildaAsset {

@@ -1,16 +1,10 @@
-from kocherga.graphql import g, helpers, django_utils
-from kocherga.wagtail import graphql_utils as wagtail_utils
+from kocherga.graphql import g, helpers
 
 from .. import models
 
-c = helpers.Collection()
+from .types import TelegramChat
 
-TelegramChat = django_utils.DjangoObjectType(
-    'TelegramChat',
-    model=models.Chat,
-    db_fields=['id', 'username', 'title'],
-    extra_fields={'photo': wagtail_utils.image_rendition_field(models.Chat, 'photo')},
-)
+c = helpers.Collection()
 
 
 @c.class_field

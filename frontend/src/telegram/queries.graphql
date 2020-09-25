@@ -10,6 +10,13 @@ fragment TelegramChat on TelegramChat {
     id
     url
   }
+  project {
+    id
+    title
+    meta {
+      slug
+    }
+  }
 }
 
 query TelegramChats {

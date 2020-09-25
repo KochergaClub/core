@@ -9,6 +9,7 @@ from .. import models
 
 from kocherga.wagtail.utils import filter_queryset_by_page_permissions
 from kocherga.events.schema import types as event_types
+from kocherga.telegram.schema import types as telegram_types
 
 
 ProjectPage = g.ObjectType(
@@ -22,6 +23,11 @@ ProjectPage = g.ObjectType(
         'body': wagtail_utils.richtext_field(models.ProjectPage, 'body'),
         'image': wagtail_utils.image_rendition_field(models.ProjectPage, 'image'),
         'upcoming_events': g.Field(g.NNList(event_types.Event)),
+        'telegram_chats': django_utils.related_field(
+            models.ProjectPage,
+            field_name='telegram_chats',
+            item_type=telegram_types.TelegramChat,
+        ),
     },
 )
 

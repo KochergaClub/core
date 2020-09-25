@@ -11,4 +11,7 @@ fragment ProjectPage on ProjectPage {
   upcoming_events {
     ...Event_Summary
   }
+  telegram_chats {
+    ...TelegramChat
+  }
 }

@@ -1,8 +1,11 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
-import { colors, LabelDiv, Row } from '@kocherga/frontkit';
+import { A, colors, LabelDiv, Row } from '@kocherga/frontkit';
 
+import Card from '~/components/Card';
 import TelegramIcon from '~/components/icons/TelegramIcon';
+import { projectRoute } from '~/projects/routes';
 
 import { TelegramChatFragment } from '../queries.generated';
 
@@ -14,7 +17,7 @@ const ImgContainer = styled.div`
   }
 `;
 
-const Link = styled.a`
+const ChatLink = styled.a`
   text-decoration: none;
   color: black;
 `;
@@ -23,31 +26,45 @@ const Header = styled.header`
   font-weight: bold;
 `;
 
-const TelegramChatCard: React.FC<{ chat: TelegramChatFragment }> = ({
-  chat,
-}) => {
+interface Props {
+  chat: TelegramChatFragment;
+  hideProjectLink?: boolean;
+}
+
+const TelegramChatCard: React.FC<Props> = ({ chat, hideProjectLink }) => {
   const href = `https://t.me/${chat.username}`;
   return (
-    <Row vCentered gutter={16}>
-      <Link href={href}>
-        <ImgContainer>
-          {chat.photo && chat.photo_x2 ? (
-            <img
-              src={chat.photo.url}
-              srcSet={`${chat.photo.url}, ${chat.photo_x2.url} 2x`}
-            />
-          ) : (
-            <TelegramIcon size={50} color={colors.grey[500]} />
-          )}
-        </ImgContainer>
-      </Link>
-      <div>
-        <Link href={href}>
-          <Header>{chat.title}</Header>
-          <LabelDiv>@{chat.username}</LabelDiv>
-        </Link>
-      </div>
-    </Row>
+    <Card>
+      <Row gutter={16}>
+        <ChatLink href={href}>
+          <ImgContainer>
+            {chat.photo && chat.photo_x2 ? (
+              <img
+                src={chat.photo.url}
+                srcSet={`${chat.photo.url}, ${chat.photo_x2.url} 2x`}
+              />
+            ) : (
+              <TelegramIcon size={50} color={colors.grey[500]} />
+            )}
+          </ImgContainer>
+        </ChatLink>
+        <div>
+          <ChatLink href={href}>
+            <Header>{chat.title}</Header>
+            <LabelDiv>@{chat.username}</LabelDiv>
+          </ChatLink>
+          {chat.project && !hideProjectLink ? (
+            <small>
+              Чат проекта{' '}
+              <Link {...projectRoute(chat.project.meta.slug)} passHref>
+                <A>{chat.project.title}</A>
+              </Link>
+              .
+            </small>
+          ) : null}
+        </div>
+      </Row>
+    </Card>
   );
 };
 

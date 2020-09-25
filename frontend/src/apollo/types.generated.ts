@@ -1680,6 +1680,7 @@ export type ProjectPage = WagtailPage & {
   body: Scalars['String'];
   image: WagtailImageRendition;
   upcoming_events: Array<Event>;
+  telegram_chats: Array<TelegramChat>;
 };
 
 
@@ -2272,6 +2273,7 @@ export type TelegramChat = {
   username: Scalars['String'];
   title: Scalars['String'];
   photo?: Maybe<WagtailImageRendition>;
+  project?: Maybe<ProjectPage>;
 };
 
 
