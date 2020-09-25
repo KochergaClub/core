@@ -22,7 +22,7 @@ const ProjectPage: NextWagtailPage<ProjectPageFragment> = ({
       <ProjectHeroBlock project={project} />
       <RichTextBlock html={project.body} />
       <UpcomingEventsBlock project={project} />
-      {project.telegram_chats ? (
+      {project.telegram_chats.length ? (
         <div>
           <TL03
             title={`Чат${project.telegram_chats.length > 1 ? 'ы' : ''} проекта`}
