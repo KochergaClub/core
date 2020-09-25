@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'wagtail.sites',
     'wagtailmath',
     'wagtailgeowidget',
+    'wagtailorderable',
     'condensedinlinepanel',
     'ariadne.contrib.django',
     'kocherga.wagtail',

@@ -1,4 +1,7 @@
 from django.db import models
+
+from wagtailorderable.models import Orderable
+
 from kocherga.django.models import SingletonModel
 
 
@@ -6,7 +9,7 @@ class Auth(SingletonModel):
     token = models.CharField(max_length=1024)
 
 
-class Chat(models.Model):
+class Chat(Orderable, models.Model):
     username = models.CharField(max_length=40)
 
     # will be populated by importer
