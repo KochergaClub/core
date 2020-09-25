@@ -1,20 +1,12 @@
+import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
-import Link from 'next/link';
-
 import { colors } from '@kocherga/frontkit';
+
 import { usePermissions } from '~/common/hooks';
 
-import {
-  SingleItem,
-  ExpandableItem,
-  Item,
-  kind2color,
-  kind2items,
-  styled,
-} from './constants';
-
 import { MenuKind } from '../types';
+import { ExpandableItem, Item, kind2color, kind2items, SingleItem, styled } from './constants';
 
 const MenuItemsNav = styled.nav`
   margin-left: 30px;
@@ -44,7 +36,15 @@ const MenuItemsList = styled.ul`
 
   a:hover {
     text-decoration: none;
-    color: ${colors.grey[200]};
+    color: ${colors.grey[300]};
+  }
+
+  a > strong {
+    color: hsl(120, 40%, 55%);
+    font-weight: bold;
+  }
+  a:hover > strong {
+    color: hsl(120, 40%, 45%);
   }
 
   @media screen and (max-width: 980px) {
@@ -60,21 +60,26 @@ const MenuItemsList = styled.ul`
 `;
 
 const ItemLink: React.FC<{ item: SingleItem }> = ({ item }) => {
+  const content = item.highlight ? (
+    <strong>{item.title}</strong>
+  ) : (
+    <>{item.title}</>
+  );
   if (item.mode === 'next') {
     return (
       <Link href={item.link}>
-        <a>{item.title}</a>
+        <a>{content}</a>
       </Link>
     );
   }
   if (item.mode === 'wagtail') {
     return (
       <Link href="/[...slug]" as={item.link}>
-        <a>{item.title}</a>
+        <a>{content}</a>
       </Link>
     );
   }
-  return <a href={item.link}>{item.title}</a>;
+  return <a href={item.link}>{content}</a>;
 };
 
 const MenuSingleItem: React.FC<{ item: SingleItem }> = ({ item }) => {
@@ -82,7 +87,7 @@ const MenuSingleItem: React.FC<{ item: SingleItem }> = ({ item }) => {
 
   if (
     permissions.length &&
-    permissions.length !== permissions.filter(p => p === true).length
+    permissions.length !== permissions.filter((p) => p === true).length
   ) {
     return null;
   }
@@ -105,7 +110,7 @@ const MenuItemDropdown = styled.ul`
   padding: 5px 0;
   list-style-type: none;
   border: 1px solid white;
-  background: ${props => kind2color[props.theme.kind]};
+  background: ${(props) => kind2color[props.theme.kind]};
   color: white;
 
   & > li {
@@ -130,12 +135,18 @@ const MenuItemExpandable: React.FC<{ item: ExpandableItem }> = ({ item }) => {
     );
   };
 
+  const preventClick = useCallback((e: React.SyntheticEvent) => {
+    e.preventDefault();
+  }, []);
+
   return (
     <MenuItemExpandableContainer
       onMouseOver={revealDropdown}
       onMouseLeave={hideDropdown}
     >
-      <a href="#">{item.title} ▼</a>
+      <a href="#" onClick={preventClick}>
+        {item.title} ▼
+      </a>
       {revealed && renderDropdown()}
     </MenuItemExpandableContainer>
   );

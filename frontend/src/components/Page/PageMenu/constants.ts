@@ -15,6 +15,7 @@ export interface SingleItem {
   link: string;
   mode?: 'next' | 'wagtail';
   permissions?: string[];
+  highlight?: boolean;
 }
 
 export interface ExpandableItem {
@@ -36,29 +37,43 @@ const publicMenuItems: Item[] = [
     items: [
       { link: '/events', title: 'Расписание мероприятий', mode: 'next' },
       { link: '/projects', title: 'Проекты', mode: 'wagtail' },
+      { link: '/community/chats', title: 'Чаты', mode: 'next' },
     ],
   },
   {
     title: 'Обучение',
     items: [
-      { link: '/rationality', title: 'Рациональность' },
-      { link: '/rationality/online', title: 'Онлайн' },
-      { link: '/rationality/dojo', title: 'Додзё' },
-      { link: '/3week', title: 'Трёхнедельный курс' },
-      { link: '/workshop/country', title: 'Выездной воркшоп' },
-      { link: '/rationality/integration', title: '"Интеграция"' },
-      { link: '/rationality/corporate', title: 'Для бизнеса' },
+      { link: '/rationality', title: 'Рациональность', mode: 'wagtail' },
+      {
+        link: '/rationality/online',
+        title: 'Онлайн-курс',
+        mode: 'wagtail',
+        highlight: true,
+      },
+      { link: '/rationality/corporate', title: 'Для бизнеса', mode: 'wagtail' },
+      { link: '/workshop/country', title: 'Выездной воркшоп', mode: 'wagtail' },
+      {
+        link: '/rationality/integration',
+        title: 'Интеграция',
+        mode: 'wagtail',
+      },
+      { link: '/rationality/dojo', title: 'Додзё', mode: 'wagtail' },
+      { link: '/3week', title: 'Трёхнедельный курс', mode: 'wagtail' },
     ],
   },
   {
     title: 'Материалы',
-    items: [{ link: '/blog', title: 'Блог', mode: 'wagtail' }],
+    items: [
+      { link: '/blog', title: 'Блог', mode: 'wagtail' },
+      { link: 'https://www.youtube.com/c/КочергаКлуб', title: 'YouTube' },
+      { link: 'https://lesswrong.ru', title: 'LessWrong.ru' },
+    ],
   },
   {
     title: 'Мета',
     items: [
       { link: '/faq', title: 'F.A.Q.', mode: 'wagtail' },
-      { link: '/patreon', title: 'Помочь' },
+      { link: '/patreon', title: 'Помочь', mode: 'wagtail' },
       { link: '/#contacts', title: 'Контакты' },
     ],
   },
