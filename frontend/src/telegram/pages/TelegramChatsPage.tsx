@@ -11,7 +11,10 @@ const TelegramChatsPage: NextApolloPage = () => {
   const queryResults = useQuery(TelegramChatsDocument);
 
   return (
-    <Page title="Чаты сообщества Кочерги">
+    <Page
+      title="Чаты сообщества Кочерги"
+      description="Список ссылок на телеграм-чаты сообщества"
+    >
       <Page.Main>
         <TL02 title="Чаты сообщества Кочерги" />
         <ApolloQueryResults {...queryResults} size="block">
@@ -24,4 +27,4 @@ const TelegramChatsPage: NextApolloPage = () => {
   );
 };
 
-export default withApollo(withStaff(TelegramChatsPage));
+export default withApollo(TelegramChatsPage);
