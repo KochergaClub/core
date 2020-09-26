@@ -21,8 +21,7 @@ dev_init: wait_for_migrate superuser wagtail_init restart_backend proxy
 
 ##### Tests #####
 test-types:
-	git submodule init
-	MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs docker-compose -f docker/compose.dev.yml exec api mypy --strict-optional --check-untyped-defs kocherga # FIXME
+	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- env MYPYPATH=stubs/local-stubs:stubs/sqlalchemy-stubs mypy --strict-optional --check-untyped-defs kocherga
 
 test-code:
 	$(K) exec -it $(shell $(K) get po -l app=core-django -o name) -- pytest
