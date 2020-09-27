@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 
-import { NextApolloPage, withApollo, withStaff } from '~/apollo';
+import { NextApolloPage, withApollo } from '~/apollo';
 import TL02 from '~/blocks/TL02';
 import { ApolloQueryResults, Page } from '~/components';
 
