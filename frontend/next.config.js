@@ -12,7 +12,7 @@ const rawConfig = {
 
     // via https://github.com/vercel/next.js/blob/canary/examples/with-sentry/next.config.js
     if (!options.isServer) {
-      config.resolve.alias['@sentry/node'] = '@sentry/browser';
+      config.resolve.alias['@sentry/node'] = '@sentry/react';
     }
 
     // NOTE: uncomment for webpack 5

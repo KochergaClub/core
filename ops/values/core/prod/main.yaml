@@ -16,8 +16,4 @@ sentry:
   projects:
     frontend: frontend
 
-ingress:
-  host: "kocherga-club.ru"
-  ludwig_host: "ludwig.team.kocherga.club"
-
 monitor: true

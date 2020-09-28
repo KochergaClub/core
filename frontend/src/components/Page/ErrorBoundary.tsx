@@ -5,13 +5,27 @@ import * as Sentry from '@sentry/node';
 
 import { PaddedBlock } from '~/components';
 
-interface Props {}
-interface State {
-  hasError: boolean;
-}
+const FallbackComponent: React.FC = () => {
+  return (
+    <PaddedBlock>
+      <h1>Что-то пошло не так.</h1>
+      <h2>В коде страницы баг.</h2>
+      <p>
+        Мы будем благодарны, если вы зарепортите проблему в наш{' '}
+        <A href="https://t.me/kocherga_code">Телеграм-чат</A> или{' '}
+        <A href="https://gitlab.com/kocherga/core/issues">GitLab</A>.
+      </p>
+    </PaddedBlock>
+  );
+};
 
-class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
+interface SSRProps {}
+
+class SSRErrorBoundary extends React.Component<
+  SSRProps,
+  { hasError: boolean }
+> {
+  constructor(props: SSRProps) {
     super(props);
     this.state = { hasError: false };
   }
@@ -27,22 +41,24 @@ class ErrorBoundary extends React.Component<Props, State> {
       if (typeof jest !== 'undefined') {
         throw new Error('Jest is not tolerant to errors');
       }
-      // You can render any custom fallback UI
-      return (
-        <PaddedBlock>
-          <h1>Что-то пошло не так.</h1>
-          <h2>В коде страницы баг.</h2>
-          <p>
-            Мы будем благодарны, если вы зарепортите проблему в наш{' '}
-            <A href="https://gitlab.com/kocherga/core/issues">GitLab</A> или{' '}
-            <A href="https://t.me/kocherga_code">Телеграм-чат</A>.
-          </p>
-        </PaddedBlock>
-      );
+      return <FallbackComponent />;
     }
 
     return this.props.children;
   }
 }
+
+const ErrorBoundary: React.FC = ({ children }) => {
+  if (!Sentry.ErrorBoundary) {
+    // probably SSR, @sentry/react is replaced with @sentry/node on backend so we can't use Sentry.ErrorBoundary
+    return <SSRErrorBoundary>{children}</SSRErrorBoundary>;
+  }
+  // TODO - showDialog?
+  return (
+    <Sentry.ErrorBoundary fallback={FallbackComponent}>
+      {children}
+    </Sentry.ErrorBoundary>
+  );
+};
 
 export default ErrorBoundary;
