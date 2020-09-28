@@ -48,6 +48,10 @@ const rawConfig = {
           stripPrefix: ['webpack://_N_E/'],
           urlPrefix: `~/_next`,
           release: process.env.SENTRY_RELEASE,
+          setCommits: {
+            repo: 'Кочерга / core',
+            commit: process.env.SENTRY_RELEASE,
+          },
         })
       );
     }
