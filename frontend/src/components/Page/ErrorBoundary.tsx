@@ -49,15 +49,20 @@ class SSRErrorBoundary extends React.Component<
 }
 
 const ErrorBoundary: React.FC = ({ children }) => {
-  if (!Sentry.ErrorBoundary) {
+  // due to @sentry/node -> @sentry/react patching in next.config.js we can't just use Sentry.ErrorBoundary, typescript will complain
+  const SentryErrorBoundary = (Sentry as any).ErrorBoundary as
+    | React.ComponentType<any>
+    | undefined;
+
+  if (!SentryErrorBoundary) {
     // probably SSR, @sentry/react is replaced with @sentry/node on backend so we can't use Sentry.ErrorBoundary
     return <SSRErrorBoundary>{children}</SSRErrorBoundary>;
   }
   // TODO - showDialog?
   return (
-    <Sentry.ErrorBoundary fallback={FallbackComponent}>
+    <SentryErrorBoundary fallback={FallbackComponent}>
       {children}
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   );
 };
 
