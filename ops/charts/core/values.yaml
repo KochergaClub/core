@@ -14,7 +14,6 @@ sentry:
 
 env:
   common:
-    STATIC_S3_BUCKET: ""
     KOCHERGA_WEBSITE: ""
   frontend:
     GOOGLE_ANALYTICS_ID: ""
@@ -24,8 +23,10 @@ env:
     SENTRY_DSN_FRONTEND: ""
     VK_MESSAGES_WIDGET_ID: ""
     GOOGLE_MAPS_KEY: ""
+  backend:
+    STATIC_S3_BUCKET: ""
 
-cdn_prefix: ""
+cdn_domain: ""
 
 config:
   main_py: ""

@@ -1,6 +1,5 @@
 env:
   common:
-    STATIC_S3_BUCKET: "kocherga"
     KOCHERGA_WEBSITE: "https://kocherga-club.ru"
   frontend:
     GOOGLE_ANALYTICS_ID: "UA-67233667-1"
@@ -10,12 +9,14 @@ env:
     SENTRY_DSN_FRONTEND: "https://0caabf985a0943fab01ad414573a1f9f@sentry.io/1768687"
     VK_MESSAGES_WIDGET_ID: "99973027"
     GOOGLE_MAPS_KEY: "AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI"
+  backend:
+    STATIC_S3_BUCKET: "kocherga"
 
 sentry:
   org: kocherga
   projects:
     frontend: frontend
 
-cdn_prefix: "https://d3clgz63hzbqhb.cloudfront.net"
+cdn_domain: "d3clgz63hzbqhb.cloudfront.net"
 
 monitor: true

@@ -33,10 +33,10 @@ export const buildQueryString = (params: { [s: string]: string | boolean }) => {
 export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export const staticUrl = (path: string) => {
-  const staticPrefix = process.env.NEXT_PUBLIC_STATIC_S3_BUCKET
-    ? `https://${process.env.NEXT_PUBLIC_STATIC_S3_BUCKET}.s3.amazonaws.com/static/`
-    : '/static/';
-  return staticPrefix + path;
+  const cdnPrefix = process.env.NEXT_PUBLIC_CDN_DOMAIN
+    ? `https://${process.env.NEXT_PUBLIC_CDN_DOMAIN}`
+    : '';
+  returnj`${cdnPrefix}/static/${path}`;
 };
 
 // via https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript

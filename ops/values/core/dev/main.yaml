@@ -1,10 +1,11 @@
 env:
   common:
-    STATIC_S3_BUCKET: "kocherga-dev2"
     KOCHERGA_WEBSITE: "http://localhost:8000"
   frontend:
     GOOGLE_MAPS_KEY: "AIzaSyDTpyJfFT0Taz2DuiTJl5ng64Dn3st02TI"
     # SENTRY_DSN_FRONTEND: "https://cc8585b599784cf4bd3e35728bf73373@o130844.ingest.sentry.io/5443735"
+  backend:
+    STATIC_S3_BUCKET: "kocherga-dev2"
 
 #### uncomment if need to debug sentry in dev
 # sentry:

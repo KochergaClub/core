@@ -6,7 +6,6 @@ metadata:
   labels:
     release: {{ .Release.Name }}
 data:
-  STATIC_S3_BUCKET: {{ .Values.env.common.STATIC_S3_BUCKET | quote }}
   KOCHERGA_WEBSITE: {{ .Values.env.common.KOCHERGA_WEBSITE | quote }}
 ---
 apiVersion: v1
@@ -24,12 +23,11 @@ data:
   NEXT_PUBLIC_SENTRY_DSN_FRONTEND: {{ .Values.env.frontend.SENTRY_DSN_FRONTEND | quote }}
   NEXT_PUBLIC_VK_MESSAGES_WIDGET_ID: {{ .Values.env.frontend.VK_MESSAGES_WIDGET_ID | quote }}
   NEXT_PUBLIC_GOOGLE_MAPS_KEY: {{ .Values.env.frontend.GOOGLE_MAPS_KEY | quote }}
-  NEXT_PUBLIC_STATIC_S3_BUCKET: {{ .Values.env.common.STATIC_S3_BUCKET | quote }}
   NEXT_PUBLIC_KOCHERGA_WEBSITE: {{ .Values.env.common.KOCHERGA_WEBSITE | quote }}
   SENTRY_AUTH_TOKEN: {{ .Values.sentry.auth_token | quote }}
   SENTRY_ORG: {{ .Values.sentry.org | quote }}
   SENTRY_PROJECT: {{ .Values.sentry.projects.frontend | quote }}
-  CDN_PREFIX: {{ .Values.cdn_prefix | quote }}
+  NEXT_PUBLIC_CDN_DOMAIN: {{ .Values.cdn_domain | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -38,7 +36,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     release: {{ .Release.Name }}
-data: {} # not used yet; will be used later when we move from main.py settings to env settings
+data:
+  # not used much yet; will be used later when we move from main.py settings to env settings
+  STATIC_S3_BUCKET: {{ .Values.env.backend.STATIC_S3_BUCKET | quote }}
+  CDN_DOMAIN: {{ .Values.cdn_domain | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap
