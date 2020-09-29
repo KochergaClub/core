@@ -36,7 +36,7 @@ export const staticUrl = (path: string) => {
   const cdnPrefix = process.env.NEXT_PUBLIC_CDN_DOMAIN
     ? `https://${process.env.NEXT_PUBLIC_CDN_DOMAIN}`
     : '';
-  returnj`${cdnPrefix}/static/${path}`;
+  return `${cdnPrefix}/static/${path}`;
 };
 
 // via https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
