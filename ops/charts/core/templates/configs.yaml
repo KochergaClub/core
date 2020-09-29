@@ -29,6 +29,7 @@ data:
   SENTRY_AUTH_TOKEN: {{ .Values.sentry.auth_token | quote }}
   SENTRY_ORG: {{ .Values.sentry.org | quote }}
   SENTRY_PROJECT: {{ .Values.sentry.projects.frontend | quote }}
+  CDN_PREFIX: {{ .Values.cdn_prefix | quote }}
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -23,12 +23,12 @@ resource "aws_iam_user" "user" {
 }
 
 resource "aws_iam_access_key" "user-key" {
-  user    = aws_iam_user.user.name
+  user = aws_iam_user.user.name
 }
 
 resource "aws_iam_user_policy" "policy" {
   name = aws_iam_user.user.name
-  user    = aws_iam_user.user.name
+  user = aws_iam_user.user.name
 
   policy = <<EOF
 {
@@ -62,7 +62,7 @@ resource "aws_iam_user_policy" "backup-policy" {
   count = var.backup_bucket != "" ? 1 : 0
 
   name = "${aws_iam_user.user.name}--backups"
-  user    = aws_iam_user.user.name
+  user = aws_iam_user.user.name
 
   policy = <<EOF
 {

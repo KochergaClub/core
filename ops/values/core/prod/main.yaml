@@ -16,4 +16,6 @@ sentry:
   projects:
     frontend: frontend
 
+cdn_prefix: "https://d3clgz63hzbqhb.cloudfront.net"
+
 monitor: true

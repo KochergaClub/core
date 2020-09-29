@@ -63,6 +63,7 @@ const rawConfig = {
     maxInactiveAge: 60 * 60 * 1000,
     pagesBufferLength: 10,
   },
+  assetPrefix: process.env.CDN_PREFIX,
 };
 
 module.exports = withBundleAnalyzer(withSourceMaps(rawConfig));

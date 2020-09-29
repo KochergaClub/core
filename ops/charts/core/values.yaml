@@ -25,6 +25,8 @@ env:
     VK_MESSAGES_WIDGET_ID: ""
     GOOGLE_MAPS_KEY: ""
 
+cdn_prefix: ""
+
 config:
   main_py: ""
   secrets_py: ""
