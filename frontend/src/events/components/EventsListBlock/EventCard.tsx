@@ -1,9 +1,11 @@
-import styled, { css } from 'styled-components';
 import { parseISO } from 'date-fns';
+import Link from 'next/link';
+import styled, { css } from 'styled-components';
 
-import { colors, Column, Button } from '@kocherga/frontkit';
+import { Button, colors, Column } from '@kocherga/frontkit';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
+import { publicEventRoute } from '~/events/routes';
 
 import { Event_SummaryFragment } from '../../queries.generated';
 
@@ -27,11 +29,11 @@ const Background = styled.div<{
   height: 200px;
 
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url(${props => props.image?.url || ''});
+    url(${(props) => props.image?.url || ''});
 
   @media (min-resolution: 192dpi) {
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-      url(${props => props.image_2x?.url || ''});
+      url(${(props) => props.image_2x?.url || ''});
   }
 
   &:hover {
@@ -70,22 +72,23 @@ interface Props {
 }
 
 const EventCard: React.FC<Props> = ({ event }) => {
-  const href = `/events/${event.id}`;
+  const route = publicEventRoute(event.id);
 
-  // target="_top" attributes can be removed after we roll out the new frontpage and disable the schedule iframe (necessary for Tilda).
   return (
     <Column stretch gutter={16}>
-      <BackgroundLink href={href} target="_top">
-        <Background image={event.image} image_2x={event.image_2x}>
-          <Header>{event.title}</Header>
-        </Background>
-      </BackgroundLink>
+      <Link {...publicEventRoute(event.id)} passHref>
+        <BackgroundLink>
+          <Background image={event.image} image_2x={event.image_2x}>
+            <Header>{event.title}</Header>
+          </Background>
+        </BackgroundLink>
+      </Link>
       <TimeWrapper>
         <HumanizedDateTime date={parseISO(event.start)} />
       </TimeWrapper>
       <Padded>{event.summary}</Padded>
       <Padded>
-        <form action={href + '#register'} target="_top">
+        <form action={route.as + '#register'}>
           <Button>Зарегистрироваться</Button>
         </form>
       </Padded>

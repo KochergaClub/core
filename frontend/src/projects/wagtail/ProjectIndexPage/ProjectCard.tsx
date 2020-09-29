@@ -1,6 +1,9 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
 import { Label } from '@kocherga/frontkit';
+
+import { projectRoute } from '~/projects/routes';
 
 import { ProjectPage_SummaryFragment } from './fragments.generated';
 
@@ -47,24 +50,27 @@ const Image = styled.img`
 const ActivitySummary = styled(Label)`
   margin-top: 4px;
   margin-bottom: 10px;
-  cursor: inherit; // Label overrides cursor, but ActivitySummary is wrapped in Link so we'd prefer to inherit "pointer"
+  cursor: inherit; /* Label overrides cursor, but ActivitySummary is wrapped in Link so we'd prefer to inherit "pointer" */
 `;
 
 const ProjectCard = (props: ProjectPage_SummaryFragment) => {
-  // TODO - use <Link> for client-side navigation
+  const route = projectRoute(props.meta.slug);
+
   return (
-    <ProjectA href={`/projects/${props.meta.slug}`}>
-      <Card>
-        <Image src={props.image.url} />
-        <Inner>
-          <Header>{props.title}</Header>
-          {props.activity_summary && props.is_active && (
-            <ActivitySummary>{props.activity_summary}</ActivitySummary>
-          )}
-          <Summary>{props.summary}</Summary>
-        </Inner>
-      </Card>
-    </ProjectA>
+    <Link {...route} passHref>
+      <ProjectA>
+        <Card>
+          <Image src={props.image.url} />
+          <Inner>
+            <Header>{props.title}</Header>
+            {props.activity_summary && props.is_active && (
+              <ActivitySummary>{props.activity_summary}</ActivitySummary>
+            )}
+            <Summary>{props.summary}</Summary>
+          </Inner>
+        </Card>
+      </ProjectA>
+    </Link>
   );
 };
 
