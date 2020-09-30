@@ -1,5 +1,6 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRef } from 'react';
 import Markdown from 'react-markdown';
 import breaks from 'remark-breaks';
@@ -9,6 +10,7 @@ import { useQuery } from '@apollo/client';
 import { RichText } from '@kocherga/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
+import { apolloClientForStaticProps } from '~/apollo/client';
 import TL03 from '~/blocks/TL03';
 import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
@@ -110,10 +112,31 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
   );
 };
 
-PublicEventPage.getInitialProps = async ({ query }) => {
-  const event_id = query.id as string;
-
-  return { event_id };
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'unstable_blocking',
+  };
 };
 
-export default withApollo(PublicEventPage);
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const event_id = params!.id as string;
+  const apolloClient = await apolloClientForStaticProps();
+
+  await apolloClient.query({
+    query: GetPublicEventDocument,
+    variables: {
+      event_id,
+    },
+  });
+
+  return {
+    props: {
+      event_id,
+      apolloState: apolloClient.cache.extract(),
+    },
+    revalidate: 1,
+  };
+};
+
+export default withApollo(PublicEventPage, { ssr: false });

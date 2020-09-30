@@ -1,1 +1,5 @@
-export { default } from '~/events/pages/PublicEventPage';
+export {
+  default,
+  getStaticProps,
+  getStaticPaths,
+} from '~/events/pages/PublicEventPage';
