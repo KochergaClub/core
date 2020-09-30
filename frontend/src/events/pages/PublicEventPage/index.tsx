@@ -1,6 +1,5 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { GetServerSideProps } from 'next';
 import { useRef } from 'react';
 import Markdown from 'react-markdown';
 import breaks from 'remark-breaks';
@@ -10,7 +9,6 @@ import { useQuery } from '@apollo/client';
 import { RichText } from '@kocherga/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
-import { apolloClientForStaticProps } from '~/apollo/client';
 import TL03 from '~/blocks/TL03';
 import { formatDate, timezone } from '~/common/utils';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';
@@ -112,26 +110,10 @@ export const PublicEventPage: NextApolloPage<Props> = ({ event_id }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
-  Props,
-  { id: string }
-> = async ({ params, req }) => {
-  const event_id = params!.id;
-  const apolloClient = await apolloClientForStaticProps(req);
+PublicEventPage.getInitialProps = async ({ query }) => {
+  const event_id = query.id as string;
 
-  await apolloClient.query({
-    query: GetPublicEventDocument,
-    variables: {
-      event_id,
-    },
-  });
-
-  return {
-    props: {
-      event_id,
-      apolloState: apolloClient.cache.extract(),
-    },
-  };
+  return { event_id };
 };
 
-export default withApollo(PublicEventPage, { ssr: false });
+export default withApollo(PublicEventPage);

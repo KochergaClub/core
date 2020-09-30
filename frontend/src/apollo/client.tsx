@@ -162,10 +162,8 @@ const initApolloClient = (
   return apolloClient;
 };
 
-export const apolloClientForStaticProps = async (
-  req: NextApolloPageContext['req'] = undefined
-) => {
-  const apolloClient = initApolloClient(undefined, req);
+export const apolloClientForStaticProps = async () => {
+  const apolloClient = initApolloClient();
 
   // the result is always non-authenticated user, but a lot of components still rely of this data being in apollo cache
   const currentUserQueryResult = await apolloClient.query({
