@@ -1,1 +1,1 @@
-export { default } from '~/events/pages/PublicEventPage';
+export { default, getServerSideProps } from '~/events/pages/PublicEventPage';
