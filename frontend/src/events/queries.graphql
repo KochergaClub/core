@@ -2,11 +2,11 @@ fragment Event_Summary on Event {
   id
   title
   summary
-  image(spec: "fill-760x200") {
+  image(spec: "fill-760x200|jpegquality-50") {
     id
     url
   }
-  image_2x: image(spec: "fill-1520x400") {
+  image_2x: image(spec: "fill-1520x400|jpegquality-50") {
     id
     url
   }
