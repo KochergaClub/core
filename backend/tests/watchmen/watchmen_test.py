@@ -9,7 +9,7 @@ from kocherga.watchmen import schedule
 import kocherga.watchmen.models
 
 
-@pytest.fixture('session')
+@pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):
 
     with django_db_blocker.unblock():
