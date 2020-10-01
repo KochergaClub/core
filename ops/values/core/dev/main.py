@@ -9,8 +9,6 @@ logging.basicConfig(level=logging.INFO)
 
 DEBUG = True
 
-INSTALLED_APPS += ["debug_toolbar"]
-MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 ALLOWED_HOSTS = ["localhost", "kassa.lt.berekuk.ru", "192.168.1.68"]
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -28,7 +26,10 @@ KOCHERGA_TIMEPAD = {
     "organization": "kocherga-dev",
     "organization_id": 121284,
     "subscribers_list_id": 111111111,
-    "location": {"city": "Москва", "address": "ул. Большая Дорогомиловская, д.5к2"},
+    "location": {
+        "city": "Москва",
+        "address": "ул. Большая Дорогомиловская, д.5к2",
+    },
     "default_access_status": "private",
 }
 
@@ -47,11 +48,13 @@ KOCHERGA_FB = {
 
 KOCHERGA_WIKI = {
     "domain": "wiki-dev.team.kocherga.club",
-    "bot": {"username": "Вячеслав Матюхин@Блюдвиг",},
+    "bot": {
+        "username": "Вячеслав Матюхин@Блюдвиг",
+    },
 }
 
 KOCHERGA_VK = {
-    "main_page": {"id": "yudkowsky_sect",},
+    "main_page": {"id": "yudkowsky_sect"},
     "daily_page": "yudkowsky_sect_daily",
     "client_id": 6274394,
     "callback_secret": "12345",
@@ -59,7 +62,10 @@ KOCHERGA_VK = {
 
 KOCHERGA_TELEGRAM = {
     "channel": "-1001317764479",
-    "core_api": {"api_id": 12345, "api_hash": "00000",},
+    "core_api": {
+        "api_id": 12345,
+        "api_hash": "00000",
+    },
 }
 
 KOCHERGA_API_ROOT = "http://localhost:5302/api"
@@ -68,11 +74,7 @@ KOCHERGA_WEBSITE = "https://yudkowsky.cult"
 GDRIVE_WATCHMEN_FOLDER = "14QJy4SLl-TY-DwyPWktNcCIple75Ppe_"
 
 WAGTAILAPI_BASE_URL = "http://localhost:5302/api/wagtail"
-WAGTAILSEARCH_BACKENDS = {
-    'default': {
-        'BACKEND': 'wagtail.search.backends.db',
-    }
-}
+WAGTAILSEARCH_BACKENDS = {"default": {"BACKEND": "wagtail.search.backends.db"}}
 
 BASE_URL = KOCHERGA_WEBSITE
 
@@ -93,4 +95,3 @@ KOCHERGA_IMPORTER_DISABLED = True
 
 OPENVIDU_SERVER = "https://core-openvidu:30003"
 OPENVIDU_SECRET = "MY_SECRET"
-

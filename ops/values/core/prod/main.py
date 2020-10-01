@@ -44,9 +44,9 @@ logging.config.dictConfig(
             },
         },
         "handlers": {
-            "console": {"class": "logging.StreamHandler", "formatter": "console",},
+            "console": {"class": "logging.StreamHandler", "formatter": "console"},
         },
-        "loggers": {"": {"level": "INFO", "handlers": ["console"],},},
+        "loggers": {"": {"level": "INFO", "handlers": ["console"]}},
     }
 )
 
@@ -72,7 +72,7 @@ KOCHERGA_FB = {
     "main_page": {
         "id": 1083453805000382,
         "name": "Кочерга",
-        "autoreplace": {"from": "антикафе Кочерга", "to": "антикафе @Кочерга",},
+        "autoreplace": {"from": "антикафе Кочерга", "to": "антикафе @Кочерга"},
         "announce_page": "https://www.facebook.com/pg/kocherga.club",
         "slug": "kocherga.club",
     },
@@ -81,11 +81,14 @@ KOCHERGA_FB = {
 
 KOCHERGA_WIKI = {
     "domain": "wiki.team.kocherga.club",
-    "bot": {"username": "Вячеслав Матюхин@Людвиг",},
+    "bot": {"username": "Вячеслав Матюхин@Людвиг"},
 }
 
 KOCHERGA_VK = {
-    "main_page": {"id": "kocherga_club", "main_wall_page_id": 50473877,},
+    "main_page": {
+        "id": "kocherga_club",
+        "main_wall_page_id": 50473877,
+    },
     "daily_page": "kocherga_daily",
     "client_id": 6274394,
     "callback_secret": KOCHERGA_VK_CALLBACK_SECRET,
@@ -93,7 +96,10 @@ KOCHERGA_VK = {
 
 KOCHERGA_TELEGRAM = {
     "channel": "@kocherga_club",
-    "core_api": {"api_id": 434030, "api_hash": "c13cbcfc179d34db2b2c862d2693606f",},
+    "core_api": {
+        "api_id": 434030,
+        "api_hash": "c13cbcfc179d34db2b2c862d2693606f",
+    },
 }
 
 KOCHERGA_BACKUPS_S3_BUCKET = "kocherga-backups"

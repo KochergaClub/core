@@ -1,4 +1,4 @@
-FROM python:3.8.3
+FROM python:3.8.6
 
 RUN apt-get update && apt-get install -y locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -33,7 +33,3 @@ COPY . /code/
 ENV DJANGO_SETTINGS_MODULE kocherga.django.settings.main
 
 CMD ["gunicorn", "-c", "python:gunicorn_conf", "kocherga.django.asgi"]
-
-
-
-

@@ -35,9 +35,3 @@ urlpatterns = (
         path('', include(wagtail_urls)),
     ]
 )
-
-# Pretty useless - we use Django for DRF only.
-if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [path('__debug__/', include(debug_toolbar.urls))] + urlpatterns

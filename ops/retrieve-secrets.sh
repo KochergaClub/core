@@ -2,6 +2,7 @@
 
 set -e
 
+export VAULT_ADDR='https://vault.team.kocherga.club'
 PREFIX=kv/chart-secrets
 
 cp -r ops/secrets secrets-backup

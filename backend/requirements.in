@@ -22,7 +22,7 @@ requests-toolbelt  # used in cafe-manager multipart POSTs
 slappy == 0.5.1
 feedgen
 telethon
-django == 3.0.*
+django == 3.0.* # can't update to 3.1 until django-reversion will be ready for 3.1
 django-cors-headers
 django-rest-framework
 sentry-sdk[flask] >= 0.16.5
@@ -61,7 +61,7 @@ pytest-django
 pytest-cov
 freezegun
 mypy
-black == 19.10b0
+black == 20.8b1
 flake8 >= 3.7
 codecov
 factory_boy
