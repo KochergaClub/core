@@ -63,9 +63,7 @@ UpdateResult = g.NN(
     )
 )
 
-# eventPrototypeCreate(
-#   input: EventPrototypeCreateInput!
-# ): EventPrototypeCreateResult! @staffonly
+
 @c.class_field
 class eventPrototypeCreate(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -96,9 +94,6 @@ class eventPrototypeCreate(helpers.BaseFieldWithInput):
     result = UpdateResult
 
 
-# eventPrototypeUpdate(
-#   input: EventPrototypeUpdateInput!
-# ): EventPrototypeUpdateResult! @staffonly
 @c.class_field
 class eventPrototypeUpdate(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):

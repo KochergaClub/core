@@ -33,7 +33,8 @@ class Cohort(models.Model):
 
         for kocherga_user in self.event.registered_users():
             (participant, _) = Participant.objects.get_or_create(
-                user=kocherga_user, cohort=self,
+                user=kocherga_user,
+                cohort=self,
             )
         # TODO - remove stale participants (people can cancel their registrations)
 
@@ -146,7 +147,7 @@ class Cohort(models.Model):
         solution = json.load(open("solution.json", mode="r"))
         logger.info(f"Got solution: {solution}")
 
-        logger.info(f"Saving solution to db groups")
+        logger.info("Saving solution to db groups")
         ptg = solution["people_to_groups"]
         assert len(ptg) == len(participants)
         passoc = dict()

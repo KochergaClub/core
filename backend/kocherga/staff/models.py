@@ -41,7 +41,10 @@ class Member(models.Model):
     vk = models.URLField('Профиль VK', max_length=255, blank=True)
 
     gender = models.CharField(
-        'Пол', max_length=10, null=True, choices=[('MALE', 'М'), ('FEMALE', 'Ж')],
+        'Пол',
+        max_length=10,
+        null=True,
+        choices=[('MALE', 'М'), ('FEMALE', 'Ж')],
     )
 
     color = models.CharField(max_length=7)
@@ -69,7 +72,10 @@ class Member(models.Model):
                 edit_handlers.FieldPanel('user'),
                 edit_handlers.FieldPanel('full_name'),
                 edit_handlers.FieldPanel('short_name'),
-                edit_handlers.FieldPanel('gender', widget=widgets.RadioSelect(),),
+                edit_handlers.FieldPanel(
+                    'gender',
+                    widget=widgets.RadioSelect(),
+                ),
                 edit_handlers.FieldPanel('vk'),
                 edit_handlers.FieldPanel(
                     'color',
@@ -83,7 +89,10 @@ class Member(models.Model):
         edit_handlers.MultiFieldPanel(
             [
                 edit_handlers.FieldPanel('role'),
-                edit_handlers.FieldPanel('payment_type', widget=widgets.RadioSelect(),),
+                edit_handlers.FieldPanel(
+                    'payment_type',
+                    widget=widgets.RadioSelect(),
+                ),
             ],
             heading='Работа',
         ),

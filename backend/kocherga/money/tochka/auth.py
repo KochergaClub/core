@@ -39,7 +39,7 @@ def init_tokens():
 
 
 def update_tokens():
-    logger.info(f'Updating tokens')
+    logger.info('Updating tokens')
 
     auth = Auth.get()
     r = requests.post(

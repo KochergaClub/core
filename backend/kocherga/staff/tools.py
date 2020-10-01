@@ -74,7 +74,7 @@ def add_watchman(
     user.is_staff = True
     user.save()
 
-    logger.info(f'Creating Member')
+    logger.info('Creating Member')
     # FIXME - serializer for validation
     member = Member.objects.create(
         short_name=short_name,
@@ -88,7 +88,7 @@ def add_watchman(
     )
 
     if not skip_wiki:
-        logger.info(f'Creating wiki account')
+        logger.info('Creating wiki account')
         wiki = kocherga.wiki.get_wiki()
         wiki.api(action='query', meta='tokens', type='createaccount')
         wiki_token = wiki.api(action='query', meta='tokens', type='createaccount')[
@@ -104,7 +104,7 @@ def add_watchman(
             createreturnurl='https://kocherga.club',
         )
 
-    logger.info(f'Inviting to slack')
+    logger.info('Inviting to slack')
     sc = kocherga.slack.client.legacy_token_client()
 
     # undocumented api - see https://github.com/ErikKalkoken/slackApiDoc/blob/master/users.admin.invite.md
@@ -127,14 +127,17 @@ def add_watchman(
 
     cm_user = None
     if not skip_cm_user:
-        logger.info(f'Adding to Cafe Manager')
+        logger.info('Adding to Cafe Manager')
         cm_user = kocherga.cm.tools.add_manager(
-            login=email.split('@')[0], name=full_name, password=password, email=email,
+            login=email.split('@')[0],
+            name=full_name,
+            password=password,
+            email=email,
         )
         member.cm_login = cm_user.login
     member.save()
 
-    logger.info(f'Granting Google Drive and Calendar permissions')
+    logger.info('Granting Google Drive and Calendar permissions')
     member.grant_google_permissions()
 
     kocherga.watchmen.models.Watchman.objects.create(member=member)

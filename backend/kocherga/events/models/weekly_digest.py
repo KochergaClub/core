@@ -76,7 +76,10 @@ class WeeklyDigest(models.Model):
         return self.start + timedelta(days=6)
 
     def events(self):
-        query = Event.objects.public_events(from_date=self.start, to_date=self.end,)
+        query = Event.objects.public_events(
+            from_date=self.start,
+            to_date=self.end,
+        )
         result = list(query.all())
         logger.info(f"Schedule includes {len(result)} events")
         return result
@@ -166,7 +169,7 @@ class WeeklyDigest(models.Model):
         logger.info('Uploading weekly digest image to mailchimp')
         result = kocherga.mailchimp.api_call(
             'POST',
-            f'file-manager/files',
+            'file-manager/files',
             {
                 'folder_id': image_folder_id,
                 'name': f"weekly-image-{self.start.strftime('%Y-%m-%d')}.png",

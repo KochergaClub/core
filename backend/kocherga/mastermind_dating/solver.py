@@ -12,7 +12,7 @@ log = logging.getLogger("mm-bot-solver")
 
 
 async def broadcast_solution(cohort_id: int, bot: Bot):
-    log.info(f"Broadcasting solution")
+    log.info("Broadcasting solution")
 
     cohort = models.Cohort.objects.get(pk=cohort_id)
 
@@ -47,4 +47,4 @@ async def broadcast_solution(cohort_id: int, bot: Bot):
     log.info(f"Awaiting {len(tasks)} to finish")
     for task in tasks:
         await task
-    log.info(f"Broadcast complete")
+    log.info("Broadcast complete")

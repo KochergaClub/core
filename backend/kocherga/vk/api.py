@@ -41,7 +41,7 @@ def new_token_url():
     redirect_uri = "https://oauth.vk.com/blank.html"
     scope = "groups,wall,photos,offline"
     client_id = settings.KOCHERGA_VK['client_id']
-    return f"https://oauth.vk.com/authorize?" + urllib.parse.urlencode(
+    return "https://oauth.vk.com/authorize?" + urllib.parse.urlencode(
         {
             "client_id": client_id,
             "display": "page",

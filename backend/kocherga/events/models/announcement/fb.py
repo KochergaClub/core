@@ -35,7 +35,7 @@ class Manager(models.Manager):
 
 
 def error_screenshot_path(instance, filename):
-    return f'events/announcements/fb/error_screenshot'
+    return 'events/announcements/fb/error_screenshot'
 
 
 @reversion.register()
@@ -61,14 +61,14 @@ class FbAnnouncement(models.Model):
         async with kocherga.chrome.get_browser() as browser:
             session = await AnnounceSession.create(browser)
             try:
-                logger.info(f"Trying to create")
+                logger.info("Trying to create")
                 return await session.run(self.group, self.event, **kwargs)
             except Exception:
-                logger.exception(f"Error while creating a FB announcement")
+                logger.exception("Error while creating a FB announcement")
                 image_bytes = await session.screenshot()
                 self.error_screenshot.save('error', ContentFile(image_bytes))
                 self.save()
-                logger.info(f"Error screenshot saved")
+                logger.info("Error screenshot saved")
                 raise
 
     def announce(self):
@@ -97,7 +97,7 @@ class FbAnnouncement(models.Model):
                 image_bytes = await session.screenshot()
                 self.error_screenshot.save('error', ContentFile(image_bytes))
                 self.save()
-                logger.info(f"Error screenshot saved")
+                logger.info("Error screenshot saved")
                 raise
 
     def add_to_main_page(self):
@@ -381,12 +381,12 @@ class AnnounceSession:
         logger.info("Confirming")
         await page.click("[data-testid=event-create-dialog-confirm-button]")
 
-        logger.info(f"Clicked confirm button, waiting for title to appear")
+        logger.info("Clicked confirm button, waiting for title to appear")
         await page.waitForSelector(
             "h1#seo_h1_tag[data-testid=event-permalink-event-name]"
         )
 
-        logger.info(f"Confirmed")
+        logger.info("Confirmed")
 
         # page.url is invalid because waitForNavigation is broken
         page_url = await page.evaluate('() => window.location.href')
@@ -442,7 +442,8 @@ class AnnounceSession:
         button_el = await dialog_el.J('.uiOverlayFooter button.layerConfirm')
 
         await asyncio.gather(
-            button_el.click(), page.waitForNavigation(),
+            button_el.click(),
+            page.waitForNavigation(),
         )
 
         page_url = await page.evaluate('() => window.location.href')

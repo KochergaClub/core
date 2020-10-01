@@ -14,7 +14,7 @@ def authenticated(obj, info):
     """Checks that user is authenticated."""
 
     if not info.context.user.is_authenticated:
-        raise Exception(f"Forbidden: need to be authenticated")
+        raise Exception("Forbidden: need to be authenticated")
 
     return True
 

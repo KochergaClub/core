@@ -19,14 +19,14 @@ class TokenBackend:
         try:
             email = check_magic_token(token)
         except django.core.signing.SignatureExpired:
-            raise ValidationError(f"Token has expired")
+            raise ValidationError("Token has expired")
         except django.core.signing.BadSignature:
-            raise ValidationError(f"Invalid token")
+            raise ValidationError("Invalid token")
 
         try:
             user = UserModel.objects.get(email=email)
             if not user.is_active:
-                raise ValidationError(f"User is inactive, can't be authenticated")
+                raise ValidationError("User is inactive, can't be authenticated")
 
             if not user.last_login:
                 # existed from external data source, e.g. cm_customers

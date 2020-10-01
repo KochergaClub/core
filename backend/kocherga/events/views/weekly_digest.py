@@ -46,5 +46,5 @@ def r_schedule_weekly_image(request):
     digest = models.WeeklyDigest.objects.current_digest()
 
     digest.create_image_if_necessary()
-    logger.info(f'Serving weekly image file')
+    logger.info('Serving weekly image file')
     return FileResponse(digest.image.open('rb'), content_type='image/png')

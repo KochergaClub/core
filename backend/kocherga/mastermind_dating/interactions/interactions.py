@@ -120,7 +120,9 @@ def register_handlers(dsp: Dispatcher):
 
         # TODO - create_or_update
         models.TelegramUser.objects.create(
-            user=user.user, telegram_uid=msg.from_user.username, chat_id=msg.chat.id,
+            user=user.user,
+            telegram_uid=msg.from_user.username,
+            chat_id=msg.chat.id,
         )
         logger.info('Saved user telegram info')
 
@@ -296,7 +298,7 @@ def register_handlers(dsp: Dispatcher):
         dayid = 0
         for day in days:
             timeid = 0
-            markup.add(InlineKeyboardButton(day, callback_data=f"void"))
+            markup.add(InlineKeyboardButton(day, callback_data="void"))
             for time in times:
                 cell_id = f"{dayid}.{timeid}"
                 marker = "✅" if cell_id in selected_cells else ""
@@ -490,7 +492,8 @@ def register_handlers(dsp: Dispatcher):
             response += '\nВы НЕ ЗАРЕГИСТРИРОВАНЫ ни в каком мастермайнд-дейтинге.'
 
         await get_bot().send_message(
-            chat_id=chat_id, text=response,
+            chat_id=chat_id,
+            text=response,
         )
 
 
@@ -515,7 +518,7 @@ async def send_rate_request(
 
 async def tinder_activate(participant_id: int, bot: Bot):
     """
-        Activates voting for some user.
+    Activates voting for some user.
     """
     logger.info(f"Looking for participant {participant_id} to activate")
     user = models.Participant.objects.get(pk=participant_id)
@@ -524,7 +527,7 @@ async def tinder_activate(participant_id: int, bot: Bot):
     cohort = user.cohort
     to_notify = cohort.participants.filter(present=True).exclude(id=user.id).iterator()
     tasks = []
-    logger.info(f"Creating voting tasks")
+    logger.info("Creating voting tasks")
     for to in to_notify:
         tasks.append(asyncio.create_task(send_rate_request(to, user, bot)))
 

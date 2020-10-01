@@ -24,7 +24,7 @@ class WikiService(ExternalService):
         if not hasattr(user, 'staff_member'):
             raise Exception("Can grant wiki permissions for staff members only")
 
-        logger.info(f'Creating wiki account')
+        logger.info('Creating wiki account')
         wiki = kocherga.wiki.get_wiki()
         wiki.api(action='query', meta='tokens', type='createaccount')
         wiki_token = wiki.api(action='query', meta='tokens', type='createaccount')[

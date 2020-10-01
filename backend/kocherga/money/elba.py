@@ -58,7 +58,7 @@ def get_code():
 
 
 async def begin_request(page):
-    logger.info(f"Navigating to request options page")
+    logger.info("Navigating to request options page")
     await page.click("#MainMenu_Reports_LinkText")
     await page.waitForNavigation()
 
@@ -85,13 +85,13 @@ async def fill_date_input(page, selector, d):
 
 
 async def prepare_request_accounting(page, dt):
-    logger.info(f"Preparing accounting request")
+    logger.info("Preparing accounting request")
     await page.click("input[value=AccountingReference]")
     await fill_date_input(page, "#TypeRadioGroup_AccountingReferenceDate", dt)
 
 
 async def prepare_request_operations(page, year):
-    logger.info(f"Preparing operations request")
+    logger.info("Preparing operations request")
     await page.click("input[value=OperationsExcerpt]")
     await page.click("#TypeRadioGroup_OperationsExcerptSelect")
     await page.click(
@@ -100,14 +100,14 @@ async def prepare_request_operations(page, year):
 
 
 async def prepare_request_declaration(page, year):
-    logger.info(f"Preparing declaration request")
+    logger.info("Preparing declaration request")
     await page.click("input[value=DeclarationList]")
     await page.click("#TypeRadioGroup_DeclarationListSelect")
     await page.click(f'#TypeRadioGroup_DeclarationListSelect_Options li[key="{year}"]')
 
 
 async def request_anything(page):
-    logger.info(f"Requesting...")
+    logger.info("Requesting...")
     await page.click("#SendReportViaCloud_SendInternetReportButton")
 
     await page.waitForSelector("#SendCloudReportLightbox_CodeInput", visible=True)
@@ -115,7 +115,7 @@ async def request_anything(page):
     await page.type("#SendCloudReportLightbox_CodeInput", code)
     await page.click("#SendCloudReportLightbox_AcceptButton")
     await page.waitForNavigation()
-    logger.info(f"Request submitted")
+    logger.info("Request submitted")
 
 
 async def elba_page(browser):
@@ -191,7 +191,7 @@ async def add_cash_income(data, last_pko_id=None):
         page = await payments_page(browser)
 
         await page.click("#Filter_FormOfMoneyFilter_Caption")
-        await page.click(f'#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
+        await page.click('#Filter_FormOfMoneyFilter_Options li[key="Cash"]')
 
         await page.waitForXPath(
             '//span[@id="Footer_SelectedPeriod" and text()="Наличные"]'

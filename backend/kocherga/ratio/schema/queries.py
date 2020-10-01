@@ -47,7 +47,7 @@ class ratioTrainingEmailPrototype(helpers.BaseField):
         elif type == 'post':
             return email.get_post_content(training)
         else:
-            raise Exception(f"Unknown email type `type`")
+            raise Exception(f"Unknown email type {type}")
 
     permissions = [user_perm('ratio.manage')]
     args = {'training_id': 'ID!', 'type': str}
