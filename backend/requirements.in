@@ -29,7 +29,7 @@ sentry-sdk[flask] >= 0.16.5
 django-debug-toolbar
 tqdm
 gunicorn >= 19.9
-uvicorn
+uvicorn[standard]
 aiogram >= 2.0
 channels >= 2.4
 daphne >= 2.4.1

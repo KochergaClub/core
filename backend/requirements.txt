@@ -77,6 +77,7 @@ hiredis==1.1.0            # via aioredis
 html2text==2020.1.16      # via -r requirements.in
 html5lib==1.1             # via wagtail
 httplib2==0.18.1          # via google-api-python-client, google-auth-httplib2
+httptools==0.1.1          # via uvicorn
 hyperlink==20.0.1         # via twisted
 idna==2.10                # via hyperlink, requests, twisted, yarl
 incremental==17.5.0       # via twisted
@@ -135,9 +136,11 @@ pytest-env==0.6.2         # via -r requirements.in
 pytest==6.1.0             # via -r requirements.in, pytest-asyncio, pytest-cov, pytest-django, pytest-env
 python-dateutil==2.8.1    # via -r requirements.in, botocore, faker, feedgen, freezegun, pandas
 python-docx==0.8.10       # via -r requirements.in
+python-dotenv==0.14.0     # via uvicorn
 python-gitlab==2.5.0      # via -r requirements.in
 pytz==2020.1              # via -r requirements.in, apscheduler, babel, django, django-modelcluster, google-api-core, l18n, pandas, tzlocal
 pywatchman==1.4.1         # via -r requirements.in
+pyyaml==5.3.1             # via uvicorn
 redis==3.5.3              # via -r requirements.in
 regex==2020.9.27          # via black
 requests-oauthlib==1.3.0  # via google-auth-oauthlib, mwclient
@@ -169,16 +172,18 @@ tzlocal==2.1              # via apscheduler
 unidecode==1.1.1          # via wagtail
 uritemplate==3.0.1        # via google-api-python-client
 urllib3==1.25.10          # via botocore, elasticsearch, pyppeteer, requests, sentry-sdk
-uvicorn==0.12.1           # via -r requirements.in
+uvicorn[standard]==0.12.1  # via -r requirements.in
+uvloop==0.14.0            # via uvicorn
 wagtail-condensedinlinepanel==0.5.3  # via -r requirements.in
 wagtail-orderable==1.0.3  # via -r requirements.in
 wagtail==2.10.1           # via -r requirements.in, wagtail-orderable, wagtailmath
 wagtailgeowidget==5.0.2   # via -r requirements.in
 git+https://github.com/berekuk/wagtailmath.git@master  # via -r requirements.in
+watchgod==0.6             # via uvicorn
 wcwidth==0.2.5            # via prompt-toolkit
 webencodings==0.5.1       # via bleach, html5lib
 websocket-client==0.54.0  # via slackclient
-websockets==8.1           # via pyppeteer
+websockets==8.1           # via pyppeteer, uvicorn
 werkzeug==1.0.1           # via flask
 willow==1.4               # via wagtail
 xlrd==1.2.0               # via tablib
