@@ -23,7 +23,12 @@ DEBUG = True
 ALLOWED_HOSTS = ["localhost"]
 INTERNAL_IPS = ["127.0.0.1"]
 
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'local_db',}}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'local_db',
+    }
+}
 
 # Kocherga settings
 KOCHERGA_WATCHMEN_SPREADSHEET_KEY = "FAKE"
@@ -47,7 +52,10 @@ KOCHERGA_FB = {
     "main_page": {
         "id": 11111,
         "name": "UNSET",
-        "autoreplace": {"from": "UNSET", "to": "UNSET",},
+        "autoreplace": {
+            "from": "UNSET",
+            "to": "UNSET",
+        },
         "announce_page": "https://www.facebook.com/UNSET",
     },
     "announcer_login": "unset@example.com",
@@ -90,9 +98,9 @@ if os.environ.get("STATIC_S3_BUCKET"):
     AWS_STORAGE_BUCKET_NAME = os.environ["STATIC_S3_BUCKET"]
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_S3_REGION_NAME = "eu-central-1"
+    AWS_S3_FILE_OVERWRITE = False  # important! see https://docs.wagtail.io/en/latest/advanced_topics/deploying.html#cloud-storage
 
 KOCHERGA_IMPORTER_DISABLED = True
 
 OPENVIDU_SERVER = "https://core-openvidu:30003"
 OPENVIDU_SECRET = "MY_SECRET"
-

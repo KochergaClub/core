@@ -144,5 +144,6 @@ if os.environ.get("STATIC_S3_BUCKET"):
     AWS_STORAGE_BUCKET_NAME = os.environ["STATIC_S3_BUCKET"]
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_S3_REGION_NAME = "eu-central-1"
+    AWS_S3_FILE_OVERWRITE = False  # important! see https://docs.wagtail.io/en/latest/advanced_topics/deploying.html#cloud-storage
 
 OPENVIDU_SERVER = "https://openvidu.kocherga.club"
