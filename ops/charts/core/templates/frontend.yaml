@@ -44,6 +44,13 @@ spec:
               value: {{ .Release.Name }}-django
             - name: NODE_ENV
               value: production
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: 100m
+            limits:
+              memory: "2048Mi"
+              cpu: 800m
 {{- end }}
       containers:
         - name: default
