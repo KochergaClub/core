@@ -126,7 +126,7 @@ class Event(wagtail.search.index.Indexed, models.Model):
 
     title = models.CharField(max_length=255)
 
-    # This is used for the short schedule/timepad/email summaries.
+    # This is used for the short summaries, e.g. on /events list or in weekly digests.
     summary = models.TextField(blank=True)
 
     description = models.TextField(blank=True)
@@ -240,7 +240,9 @@ class Event(wagtail.search.index.Indexed, models.Model):
     # deprecated, upload and linking to wagtail image is handled by frontend
     def add_image(self, fh):
         self.image = create_image_from_fh(
-            fh, title=self.title, basename=f'event-image-{self.uuid}',
+            fh,
+            title=self.title,
+            basename=f'event-image-{self.uuid}',
         )
         self.save()
 

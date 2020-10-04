@@ -2,13 +2,12 @@
 __pycache__
 /.pytest_cache
 /.mypy_cache
+/local_db
 
 /minizinc
 /upload/event_image
 /upload/mailchimp
-/notebooks/scratch.ipynb
 /collected_static
 /data/
-/static/dist
 /.coverage
 /venv

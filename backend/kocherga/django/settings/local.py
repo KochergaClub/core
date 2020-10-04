@@ -7,6 +7,8 @@ import os
 os.environ['REDIS_HOST'] = 'localhost'
 os.environ['DB_PASSWORD'] = 'whatever'
 os.environ['DB_HOST'] = 'whatever'
+KOCHERGA_WEBSITE = "https://yudkowsky.cult"
+os.environ['KOCHERGA_WEBSITE'] = KOCHERGA_WEBSITE
 
 from .base import *
 
@@ -79,7 +81,6 @@ KOCHERGA_TELEGRAM = {
 }
 
 KOCHERGA_API_ROOT = "http://localhost:5302/api"
-KOCHERGA_WEBSITE = "https://yudkowsky.cult"
 
 GDRIVE_WATCHMEN_FOLDER = "14QJy4SLl-TY-DwyPWktNcCIple75Ppe_"
 

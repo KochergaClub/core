@@ -4,20 +4,6 @@ from django.db import migrations, models, connection
 import kocherga.importer.models
 
 
-def state_ts2dt(apps, schema_editor):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            'UPDATE importers_state SET last_dt = FROM_UNIXTIME(last_ts), until_dt = FROM_UNIXTIME(until_ts)'
-        )
-
-
-def logentry_ts2dt(apps, schema_editor):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            'UPDATE importers_log_entry SET start_dt = FROM_UNIXTIME(start_ts), end_dt = FROM_UNIXTIME(end_ts)'
-        )
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -25,26 +11,48 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(name='state', options={},),
-        migrations.AddField(
-            model_name='state', name='last_dt', field=models.DateTimeField(null=True),
+        migrations.AlterModelOptions(
+            name='state',
+            options={},
         ),
         migrations.AddField(
-            model_name='state', name='until_dt', field=models.DateTimeField(null=True),
+            model_name='state',
+            name='last_dt',
+            field=models.DateTimeField(null=True),
         ),
-        migrations.RunPython(state_ts2dt),
-        migrations.RemoveField(model_name='state', name='last_ts',),
-        migrations.RemoveField(model_name='state', name='until_ts',),
-        migrations.AlterModelOptions(name='logentry', options={},),
+        migrations.AddField(
+            model_name='state',
+            name='until_dt',
+            field=models.DateTimeField(null=True),
+        ),
+        migrations.RemoveField(
+            model_name='state',
+            name='last_ts',
+        ),
+        migrations.RemoveField(
+            model_name='state',
+            name='until_ts',
+        ),
+        migrations.AlterModelOptions(
+            name='logentry',
+            options={},
+        ),
         migrations.AddField(
             model_name='logentry',
             name='start_dt',
             field=models.DateTimeField(default=kocherga.importer.models.dt_now),
         ),
         migrations.AddField(
-            model_name='logentry', name='end_dt', field=models.DateTimeField(null=True),
+            model_name='logentry',
+            name='end_dt',
+            field=models.DateTimeField(null=True),
         ),
-        migrations.RunPython(logentry_ts2dt),
-        migrations.RemoveField(model_name='logentry', name='start_ts',),
-        migrations.RemoveField(model_name='logentry', name='end_ts',),
+        migrations.RemoveField(
+            model_name='logentry',
+            name='start_ts',
+        ),
+        migrations.RemoveField(
+            model_name='logentry',
+            name='end_ts',
+        ),
     ]
