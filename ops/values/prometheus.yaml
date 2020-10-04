@@ -1,5 +1,7 @@
 prometheus:
   prometheusSpec:
+    image:
+      tag: v2.19.2
     externalUrl: https://prometheus.team.kocherga.club
     retentionSize: "8GB"
     retention: 30d
