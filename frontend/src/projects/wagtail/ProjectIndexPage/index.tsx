@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, deviceMediaQueries, RichText, Row } from '@kocherga/frontkit';
+import { A, deviceMediaQueries, RichText } from '@kocherga/frontkit';
 
 import TL02 from '~/blocks/TL02';
 import { Page } from '~/components';
@@ -32,8 +32,14 @@ const Grid = styled.div`
   justify-items: stretch;
 `;
 
-const InactiveContainer = styled.div`
-  margin-bottom: 80px;
+const ShowInactiveContainer = styled.div`
+  margin: 40px 0;
+  text-align: center;
+`;
+
+const ShowInactive = styled(A)`
+  text-decoration: underline;
+  text-decoration-style: dashed;
 `;
 
 interface ProjectsGridProps {
@@ -51,18 +57,23 @@ const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => (
 const InactiveProjects: React.FC<ProjectsGridProps> = ({ projects }) => {
   const [revealed, setRevealed] = useState(false);
 
-  return (
-    <InactiveContainer>
-      {revealed ? (
-        <ProjectsGrid projects={projects} />
-      ) : (
-        <Row centered>
-          <Button size="big" onClick={() => setRevealed(true)}>
-            Показать
-          </Button>
-        </Row>
-      )}
-    </InactiveContainer>
+  return revealed ? (
+    <>
+      <TL02 title="Неактивные проекты" />
+      <ProjectsGrid projects={projects} />
+    </>
+  ) : (
+    <ShowInactiveContainer>
+      <ShowInactive
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setRevealed(true);
+        }}
+      >
+        Показать неактивные проекты
+      </ShowInactive>
+    </ShowInactiveContainer>
   );
 };
 
@@ -72,13 +83,12 @@ const ProjectIndexPage: NextWagtailPage<ProjectIndexPageFragment> = ({
   return (
     <Page title={page.title} description={page.meta.description}>
       {/* TODO - move text to wagtail */}
-      <TL02 title="Активные проекты">
+      <TL02 title="Проекты Кочерги">
         <RichText
           dangerouslySetInnerHTML={{ __html: page.active_description }}
         />
       </TL02>
       <ProjectsGrid projects={page.active_projects} />
-      <TL02 title="Неактивные проекты" />
       <InactiveProjects projects={page.inactive_projects} />
     </Page>
   );
