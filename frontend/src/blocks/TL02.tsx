@@ -2,15 +2,16 @@ import { Container, TLDescription, TLHeader } from './helpers/index';
 
 interface Props {
   title: string;
-  children?: React.ReactNode;
   grey?: boolean;
 }
 
-export default function TL02({ title, children, grey }: Props) {
+const TL02: React.FC<Props> = ({ title, grey, children }) => {
   return (
     <Container grey={grey}>
       <TLHeader size="64px">{title}</TLHeader>
       {children && <TLDescription large>{children}</TLDescription>}
     </Container>
   );
-}
+};
+
+export default TL02;
