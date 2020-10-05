@@ -180,7 +180,7 @@ class Event(wagtail.search.index.Indexed, models.Model):
     zoom_link = models.URLField(blank=True, max_length=255)
     zoom_meeting = models.OneToOneField(
         kocherga.zoom.models.Meeting,
-        related_name='events',
+        related_name='event',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

@@ -96,16 +96,22 @@ class Meeting(models.Model):
 class MeetingInstance(models.Model):
     zoom_uuid = models.CharField(max_length=100)
     meeting = models.ForeignKey(
-        Meeting, on_delete=models.CASCADE, related_name='instances',
+        Meeting,
+        on_delete=models.CASCADE,
+        related_name='instances',
     )
 
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
 
-    def update_participants(self):
+    def escaped_zoom_uuid(self):
         uuid = self.zoom_uuid
         if '//' in uuid or uuid[0] == '/':
             uuid = urllib.parse.quote_plus(urllib.parse.quote_plus(uuid))
+        return uuid
+
+    def update_participants(self):
+        uuid = self.escaped_zoom_uuid()
 
         logger.info(f'fetching participants for {uuid}')
         result = api_call(
