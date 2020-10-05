@@ -106,5 +106,5 @@ profiles:
         flags:
           upgrade:
             - --install
-      statusCheckDeadlineSeconds: 600
+      statusCheckDeadlineSeconds: 1200
       kubeContext: prod
