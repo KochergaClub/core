@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<body>
+  <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  <script type="text/javascript">
+    vkBridge.send("VKWebAppInit");
+    vkBridge.subscribe((e) => {
+      window.alert(JSON.stringify(e));
+    });
+    vkBridge.send("VKWebAppGetCommunityToken", {
+      app_id: 6644764,
+      group_id: 99973027,
+      scope: "stories,photos,app_widget,messages,docs,manage",
+    });
+  </script>
+</body>
