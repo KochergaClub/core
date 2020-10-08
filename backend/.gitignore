@@ -3,6 +3,7 @@ __pycache__
 /.pytest_cache
 /.mypy_cache
 /local_db
+/kocherga/django/settings/local_secrets.py
 
 /minizinc
 /upload/event_image
