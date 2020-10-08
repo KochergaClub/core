@@ -9,7 +9,7 @@ export type TildaPagesForAdminQuery = (
   { __typename: 'Query' }
   & { tildaPages: Array<(
     { __typename: 'TildaPage' }
-    & Pick<Types.TildaPage, 'page_id' | 'title' | 'description' | 'path'>
+    & Pick<Types.TildaPage, 'page_id' | 'title' | 'description' | 'path' | 'imported_dt'>
   )> }
 );
 
@@ -38,7 +38,7 @@ export type TildaImportMutation = (
 );
 
 
-export const TildaPagesForAdminDocument: DocumentNode<TildaPagesForAdminQuery, TildaPagesForAdminQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "TildaPagesForAdmin" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "tildaPages" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "page_id" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "title" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "description" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "path" }, "arguments": [], "directives": [] }] } }] } }] });
+export const TildaPagesForAdminDocument: DocumentNode<TildaPagesForAdminQuery, TildaPagesForAdminQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "TildaPagesForAdmin" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "tildaPages" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "page_id" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "title" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "description" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "path" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "imported_dt" }, "arguments": [], "directives": [] }] } }] } }] });
 
 export const TildaImportAllDocument: DocumentNode<TildaImportAllMutation, TildaImportAllMutationVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "TildaImportAll" }, "variableDefinitions": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "tildaImportAll" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "ok" }, "arguments": [], "directives": [] }] } }] } }] });
 

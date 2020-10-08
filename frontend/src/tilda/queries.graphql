@@ -4,6 +4,7 @@ query TildaPagesForAdmin {
     title
     description
     path
+    imported_dt
   }
 }
 

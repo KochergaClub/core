@@ -1,26 +1,47 @@
-import Link from 'next/link';
-
 import { useMutation, useQuery } from '@apollo/client';
-import { A, Column, Label, Row } from '@kocherga/frontkit';
+import { Column, Row } from '@kocherga/frontkit';
 
 import { withApollo, withStaff } from '~/apollo';
 import { NextApolloPage } from '~/apollo/types';
 import { ApolloQueryResults, AsyncButton, Page } from '~/components';
-import Card, { CardList } from '~/components/Card';
+import { CardList } from '~/components/Card';
+import ModalFormButton from '~/components/forms/ModalFormButton';
+import { FormShape } from '~/components/forms/types';
 
-import {
-    TildaImportAllDocument, TildaImportDocument, TildaPagesForAdminDocument
-} from '../queries.generated';
+import TildaPageCard from '../components/TildaPageCard';
+import { useImportMutation } from '../hooks';
+import { TildaImportAllDocument, TildaPagesForAdminDocument } from '../queries.generated';
+
+const ImportByIdButton: React.FC = () => {
+  const importMutation = useImportMutation();
+
+  const shape: FormShape = [
+    {
+      type: 'number',
+      name: 'ID',
+    },
+  ];
+
+  const post = async (values: { ID: number }) => {
+    await importMutation({
+      variables: { page_id: values.ID },
+    });
+  };
+  return (
+    <ModalFormButton
+      shape={shape}
+      post={post}
+      buttonName="Скачать страницу по ID"
+      modalButtonName="Скачать"
+      modalTitle="Скачать страницу по ID"
+    />
+  );
+};
 
 const TildaAdminPage: NextApolloPage = () => {
   const queryResults = useQuery(TildaPagesForAdminDocument);
 
   const [importAllMutation] = useMutation(TildaImportAllDocument, {
-    refetchQueries: ['TildaPagesForAdmin'],
-    awaitRefetchQueries: true,
-  });
-
-  const [importMutation] = useMutation(TildaImportDocument, {
     refetchQueries: ['TildaPagesForAdmin'],
     awaitRefetchQueries: true,
   });
@@ -31,9 +52,9 @@ const TildaAdminPage: NextApolloPage = () => {
       <Page.Main>
         <Column stretch gutter={24}>
           <Row gutter={16}>
-            <AsyncButton act={importAllMutation}>
-              Обновить все страницы
-            </AsyncButton>
+            <div>
+              <AsyncButton act={importAllMutation}>Обновить всё</AsyncButton>
+            </div>
             <div>
               Осторожно, эту кнопку нельзя нажимать слишком часто. Tilda
               позволяет импортировать не более 150 страниц в час, при этом мы
@@ -41,31 +62,12 @@ const TildaAdminPage: NextApolloPage = () => {
               истощится, если нажать кнопку несколько раз.
             </div>
           </Row>
+          <ImportByIdButton />
           <ApolloQueryResults {...queryResults}>
             {({ data: { tildaPages } }) => (
               <CardList>
-                {tildaPages.map(page => (
-                  <Card key={page.page_id}>
-                    <Row spaced>
-                      <Row vCentered gutter={16}>
-                        <Link href="/[...slug]" as={'/' + page.path} passHref>
-                          <A>{page.title}</A>
-                        </Link>
-                        <Label>{page.path}</Label>
-                      </Row>
-                      <AsyncButton
-                        act={() =>
-                          importMutation({
-                            variables: { page_id: page.page_id },
-                          })
-                        }
-                        small
-                      >
-                        Обновить
-                      </AsyncButton>
-                    </Row>
-                    <div>{page.description}</div>
-                  </Card>
+                {tildaPages.map((page) => (
+                  <TildaPageCard page={page} key={page.page_id} />
                 ))}
               </CardList>
             )}

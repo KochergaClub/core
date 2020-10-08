@@ -1454,6 +1454,7 @@ type TildaPage {
   assets: [TildaAsset!]!
   css: [TildaAsset!]!
   js: [TildaAsset!]!
+  imported_dt: String!
 }
 
 type TimepadCategory {

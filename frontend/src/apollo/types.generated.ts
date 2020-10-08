@@ -2303,6 +2303,7 @@ export type TildaPage = {
   assets: Array<TildaAsset>;
   css: Array<TildaAsset>;
   js: Array<TildaAsset>;
+  imported_dt: Scalars['String'];
 };
 
 

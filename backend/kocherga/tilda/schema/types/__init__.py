@@ -1,4 +1,4 @@
-from kocherga.graphql import g, django_utils
+from kocherga.graphql import g, helpers, permissions, django_utils
 from kocherga.wagtail import graphql_utils as wagtail_utils
 
 from ... import models
@@ -22,9 +22,18 @@ TildaPage = django_utils.DjangoObjectType(
             'assets': g.Field(g.NNList(TildaAsset), resolve=resolve_assets),
             'css': g.Field(g.NNList(TildaAsset), resolve=resolve_css),
             'js': g.Field(g.NNList(TildaAsset), resolve=resolve_js),
+            'imported_dt': imported_dt().as_field(),
         },
     ),
 )
+
+
+class imported_dt(helpers.BaseField):
+    def resolve(self, obj, info):
+        return obj.imported_dt
+
+    permissions = [permissions.staffonly]
+    result = str
 
 
 def resolve_assets(obj, info):
@@ -40,5 +49,7 @@ def resolve_js(obj, info):
 
 
 TildaAsset = django_utils.DjangoObjectType(
-    'TildaAsset', models.Asset, db_fields=['url', 'kind'],
+    'TildaAsset',
+    models.Asset,
+    db_fields=['url', 'kind'],
 )

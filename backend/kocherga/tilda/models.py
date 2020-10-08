@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from wagtail.admin import edit_handlers
 from wagtail.images import edit_handlers as images_edit_handlers
 
@@ -44,6 +45,7 @@ class TildaPageManager(models.Manager):
                 'title': title,
                 'description': description,
                 'page_id': page_id,
+                'imported_dt': timezone.now(),
             },
         )
 
@@ -53,7 +55,10 @@ class TildaPageManager(models.Manager):
         for kind in ('image', 'js', 'css'):
             key = 'images' if kind == 'image' else kind
             for item in page_full_export[key]:
-                asset, _ = Asset.objects.update_or_create(url=item['from'], kind=kind,)
+                asset, _ = Asset.objects.update_or_create(
+                    url=item['from'],
+                    kind=kind,
+                )
                 assets.append(asset)
 
         page.assets.set(assets)
@@ -74,6 +79,7 @@ class TildaPage(models.Model):
     title = models.CharField(max_length=1024, default='', editable=False)
     description = models.CharField(max_length=1024, default='', editable=False)
     page_id = models.IntegerField(editable=False, default=0)
+    imported_dt = models.DateTimeField(blank=True, null=True)
 
     assets = models.ManyToManyField(Asset)
 
