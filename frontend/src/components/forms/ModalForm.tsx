@@ -204,7 +204,7 @@ function ModalForm<Values extends AnyFormValues>({
   });
 
   return (
-    <Modal isOpen={true}>
+    <Modal>
       <Modal.Header toggle={close}>{modalTitle}</Modal.Header>
       <Formik
         initialValues={preparedInitialValues}
