@@ -41,12 +41,12 @@ class ratioAddTraining(helpers.BaseFieldWithInput):
 class ratioAddTicket(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         training_id = input.pop('training')
-        for f in ('status', 'fiscalization_status', 'payment_type'):
-            if f in input:
-                del input[f]
 
         training = models.Training.objects.get(pk=training_id)
-        ticket = models.Ticket.objects.create(**input, training=training,)
+        ticket = models.Ticket.objects.create(
+            **input,
+            training=training,
+        )
         return ticket
 
     permissions = [user_perm('ratio.manage')]
@@ -56,10 +56,7 @@ class ratioAddTicket(helpers.BaseFieldWithInput):
         'first_name': str,
         'last_name': Optional[str],
         'payment_amount': int,
-        'status': Optional[str],  # deprecated, we never need to add canceled tickets
         'ticket_type': Optional[str],
-        'fiscalization_status': Optional[str],  # deprecated, moved to Payment
-        'payment_type': Optional[str],  # deprecated, moved to Payment
         'comment': Optional[str],
     }
 
@@ -98,9 +95,7 @@ class ratioPaymentDelete(helpers.BaseField):
     def resolve(self, _, info, payment_id):
         payment = models.Payment.objects.get(pk=payment_id)
         payment.delete()
-        return {
-            'ok': True
-        }
+        return {'ok': True}
 
     permissions = [user_perm('ratio.manage')]
     args = {'payment_id': 'ID!'}

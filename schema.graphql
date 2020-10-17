@@ -1126,10 +1126,7 @@ input RatioAddTicketInput {
   first_name: String!
   last_name: String
   payment_amount: Int!
-  status: String
   ticket_type: String
-  fiscalization_status: String
-  payment_type: String
   comment: String
 }
 
@@ -1268,9 +1265,7 @@ type RatioTicket {
   registration_date: String
   status: String!
   ticket_type: String!
-  payment_type: String!
   payment_amount: Int!
-  fiscalization_status: String!
   comment: String!
   payments: [RatioPayment!]!
   training: RatioTraining!
