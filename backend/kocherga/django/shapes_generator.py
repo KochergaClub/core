@@ -121,8 +121,6 @@ def build_shape(serializer_class):
 def generate_shapes_to_fh(fh):
     serializers = [
         kocherga.events.serializers.FeedbackSerializer,
-        kocherga.events.serializers.PublicEventSerializer,
-        kocherga.ratio.serializers.TrainingSerializer,
     ]
 
     print("import { FormShape } from '~/components/forms/types';", file=fh)
