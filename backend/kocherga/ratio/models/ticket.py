@@ -47,43 +47,11 @@ class Ticket(models.Model):
             ('staff', 'Стафф'),
             ('replacement', 'Замена (заменяет другого участника)'),
             ('carry-over', 'Перенос (с прошлого мероприятия)'),
-        ),
-    )
-
-    # deprecated, moved to Payment
-    payment_type = models.CharField(
-        'Вид оплаты',
-        max_length=40,
-        blank=True,
-        default='website',
-        choices=(
-            ('none', '-'),
-            ('timepad', 'Timepad'),
-            ('website', 'Сайт'),
-            ('crowdfunding', 'Краудфандинг'),
-            ('cash', 'Нал'),
-            ('invoice', 'Счёт'),
-            ('transfer', 'Перевод'),
+            ('free-repeat', 'Бесплатный повтор'),
         ),
     )
 
     payment_amount = models.IntegerField('Размер оплаты')
-
-    # deprecated, should be calculated based on payment_amount - sum(payments.amount)
-    paid = models.BooleanField('Оплачено', default=False)
-
-    # deprecated, moved to Payment
-    fiscalization_status = models.CharField(
-        'Статус фискального чека',
-        max_length=40,
-        blank=True,
-        choices=(
-            ('todo', 'todo'),
-            ('not_needed', 'not_needed'),
-            ('in_progress', 'in_progress'),
-            ('fiscalized', 'fiscalized'),
-        ),
-    )
 
     comment = models.TextField(blank=True)
 

@@ -30,7 +30,7 @@ class TrainingDayAdmin(admin.ModelAdmin):
 @admin.register(models.Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_filter = ('training', 'status', 'ticket_type')
-    list_display = ('__str__', 'status', 'ticket_type', 'payment_amount', 'paid')
+    list_display = ('__str__', 'status', 'ticket_type')
     radio_fields = {
         'status': admin.VERTICAL,
         'ticket_type': admin.VERTICAL,
