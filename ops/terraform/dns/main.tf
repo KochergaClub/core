@@ -1,6 +1,6 @@
 # variable "dev_ingress_ip" {}
 variable "prod_ingress_ip" {}
-variable "openvidu_ip" {}
+# variable "openvidu_ip" {}
 variable "kkm_ip" {}
 
 data "aws_route53_zone" "kocherga_club" {
@@ -39,13 +39,13 @@ resource "aws_route53_record" "kocherga_club" {
   records = [var.prod_ingress_ip]
 }
 
-resource "aws_route53_record" "openvidu" {
-  zone_id = data.aws_route53_zone.kocherga_club.zone_id
-  name    = "openvidu"
-  type    = "A"
-  ttl     = "300"
-  records = [var.openvidu_ip]
-}
+# resource "aws_route53_record" "openvidu" {
+#   zone_id = data.aws_route53_zone.kocherga_club.zone_id
+#   name    = "openvidu"
+#   type    = "A"
+#   ttl     = "300"
+#   records = [var.openvidu_ip]
+# }
 
 resource "aws_route53_record" "kkm" {
   zone_id = data.aws_route53_zone.kocherga_club.zone_id
