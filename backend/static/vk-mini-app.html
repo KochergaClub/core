@@ -4,12 +4,18 @@
   <script type="text/javascript">
     vkBridge.send("VKWebAppInit");
     vkBridge.subscribe((e) => {
-      window.alert(JSON.stringify(e));
+      console.log(e);
     });
-    vkBridge.send("VKWebAppGetCommunityToken", {
-      app_id: 6644764,
-      group_id: 99973027,
-      scope: "stories,photos,app_widget,messages,docs,manage",
-    });
+    function requestToken() {
+      const group_id = parseInt(document.getElementById("group-id").value, 10);
+      vkBridge.send("VKWebAppGetCommunityToken", {
+        app_id: 6644764,
+        group_id,
+        scope: "stories,photos,app_widget,messages,docs,manage",
+      });
+    }
   </script>
+  <label>ID сообщества:</label>
+  <input id="group-id" type="text" />
+  <button onclick="requestToken()">Запросить доступ</button>
 </body>
