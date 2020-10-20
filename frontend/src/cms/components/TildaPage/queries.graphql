@@ -1,0 +1,7 @@
+mutation RatioCreateOrder($input: RatioCreateOrderInput!) {
+  ratioCreateOrder(input: $input) {
+    order {
+      confirmation_token
+    }
+  }
+}

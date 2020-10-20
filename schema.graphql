@@ -914,6 +914,8 @@ type Mutation {
   ratioTrainingAddDay(params: RatioTrainingAddDayInput!): Boolean!
   ratioTrainingSyncParticipantsToMailchimp(training_id: ID!): Boolean!
   ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
+  ratioCreateOrder(input: RatioCreateOrderInput!): RatioCreateOrderResult!
+  ratioConfirmOrder(input: RatioConfirmOrderInput!): RatioConfirmOrderResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!
@@ -1142,6 +1144,33 @@ type RatioBriefingBlock implements WagtailBlock {
   value: String!
 }
 
+input RatioConfirmOrderInput {
+  order_id: ID!
+}
+
+type RatioConfirmOrderResult {
+  ticket: RatioTicket!
+}
+
+input RatioCreateOrderInput {
+  article_id: ID!
+  email: String!
+  first_name: String!
+  last_name: String!
+  city: String!
+  payer: RatioCreateOrderPayerInput
+}
+
+input RatioCreateOrderPayerInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+}
+
+type RatioCreateOrderResult {
+  order: RatioOrder!
+}
+
 type RatioExerciseBlock implements WagtailBlock {
   id: ID!
   value: RatioExerciseBlockValue!
@@ -1193,6 +1222,12 @@ type RatioNotebookPage implements WagtailPage {
 type RatioNotebookSectionBlock implements WagtailBlock {
   id: ID!
   value: RatioSectionPage!
+}
+
+type RatioOrder {
+  fulfilled: Boolean!
+  id: ID!
+  confirmation_token: String!
 }
 
 type RatioParagraphBlock implements WagtailBlock {

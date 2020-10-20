@@ -4,6 +4,7 @@ from .ticket import RatioTicket
 from .payment import RatioPayment
 from .presentation import exported_types as presentation_exported_types
 from .notebook_pages import exported_types as notebook_exported_types
+from .order import RatioOrder
 
 __all__ = [
     'RatioTraining',
@@ -12,6 +13,7 @@ __all__ = [
     'RatioTrainer',
     'RatioTicket',
     'RatioPayment',
+    'RatioOrder',
     'RatioPresentationIndexPage',
     'RatioPresentationPage',
 ]

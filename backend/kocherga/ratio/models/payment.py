@@ -1,8 +1,10 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from kocherga.money.cashier import kkm
 
 from .ticket import Ticket
+from kocherga.yandex_kassa.models import Payment as KassaPayment
 
 
 class Payment(models.Model):
@@ -50,6 +52,20 @@ class Payment(models.Model):
         'Кастомный заголовок для чека', blank=True, max_length=255
     )
 
+    kassa_payment = models.OneToOneField(
+        KassaPayment,
+        on_delete=models.SET_NULL,
+        related_name='ratio_payment',
+        blank=True,
+        null=True,
+    )
+
+    def clean(self):
+        if self.kassa_payment and self.payment_type != 'kassa':
+            raise ValidationError(
+                'Only payments with `kassa` payment_type can refer to yandex_kassa.Payment'
+            )
+
     def kkm_title(self):
         return (
             self.custom_kkm_title
@@ -61,12 +77,13 @@ class Payment(models.Model):
             raise Exception("fiscalization_status must be `todo`")
 
         self.fiscalization_status = 'in_progress'
+        self.full_clean()
         self.save()
 
         kkm.execute(
             kkm.getCheckRequest(
                 kkm.OnlineCheck(
-                    title=f"Участие в мероприятии: {self.ticket.training.name}",
+                    title=self.kkm_title(),
                     signMethodCalculation=kkm.SignMethodCalculation.PrePayment100,
                     email=self.ticket.email,
                     sum=self.amount,
@@ -75,4 +92,5 @@ class Payment(models.Model):
         )
 
         self.fiscalization_status = 'fiscalized'
+        self.full_clean()
         self.save()

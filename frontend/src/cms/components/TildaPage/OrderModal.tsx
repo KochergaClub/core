@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { useMutation } from '@apollo/client';
 import { Modal } from '@kocherga/frontkit';
 
 import ModalForm from '~/components/forms/ModalForm';
 import { FormShape } from '~/components/forms/types';
+
+import { RatioCreateOrderDocument } from './queries.generated';
 
 interface Props {
   close: () => void;
@@ -12,9 +15,10 @@ interface Props {
 interface Values {
   training: string;
   email: string;
-  name: string;
-  recipientName: string;
-  recipientEmail: string;
+  first_name: string;
+  last_name: string;
+  // recipientName: string;
+  // recipientEmail: string;
   city: string;
 }
 const shape: FormShape = [
@@ -30,25 +34,30 @@ const shape: FormShape = [
   {
     type: 'email',
     name: 'email',
-    title: 'Ваш e-mail',
+    title: 'E-mail участника',
   },
   {
     type: 'string',
-    name: 'name',
-    title: 'Ваши полные, настоящие имя и фамилия',
+    name: 'first_name',
+    title: 'Имя участника',
   },
   {
     type: 'string',
-    name: 'recipientName',
-    title: 'Полные, настоящие имя и фамилия участвующего в курсе',
-    optional: true,
+    name: 'last_name',
+    title: 'Фамилия участника',
   },
-  {
-    type: 'email',
-    name: 'recipientEmail',
-    title: 'E-mail получающего',
-    optional: true,
-  },
+  // {
+  //   type: 'email',
+  //   name: 'recipientEmail',
+  //   title: 'E-mail получающего',
+  //   optional: true,
+  // },
+  // {
+  //   type: 'string',
+  //   name: 'recipientName',
+  //   title: 'Полные, настоящие имя и фамилия участвующего в курсе',
+  //   optional: true,
+  // },
   {
     type: 'string',
     name: 'city',
@@ -106,11 +115,29 @@ const CheckoutModal: React.FC<CheckoutProps> = ({ close, title }) => {
 const OrderModal: React.FC<Props> = ({ close }) => {
   const [step, setStep] = useState<'form' | 'checkout'>('form');
 
-  const postForm = useCallback(async (v: Values) => {
-    setStep('checkout');
-    return { close: false };
-  }, []);
+  const [createOrderMutation] = useMutation(RatioCreateOrderDocument);
 
+  const postForm = useCallback(
+    async (v: Values) => {
+      await createOrderMutation({
+        variables: {
+          input: {
+            article_id: 'FIXME',
+            email: v.email,
+            first_name: v.first_name, // FIXME
+            last_name: v.last_name,
+            city: v.city,
+            // TODO - payer
+          },
+        },
+      });
+      setStep('checkout');
+      return { close: false };
+    },
+    [createOrderMutation]
+  );
+
+  // TODO - take from TicketType
   const title = 'Регистрация на участие в онлайн-курсе «Рациональность в деле»';
 
   switch (step) {

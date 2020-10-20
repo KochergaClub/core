@@ -201,9 +201,6 @@ class ratioTrainingSyncParticipantsToMailchimp(helpers.BaseField):
     result = bool
 
 
-#   ratioTrainingSendEmail(
-#     input: RatioTrainingSendEmailInput!
-#   ): RatioTrainingSendEmailResult! @auth(permission: "ratio.manage")
 @c.class_field
 class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
@@ -224,6 +221,65 @@ class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
 
     result = {
         'draft_link': str,
+    }
+
+
+@c.class_field
+class ratioCreateOrder(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        article_id = input['article_id']
+        article = models.TicketArticle.objects.get(uuid=article_id)
+        order = models.Order.objects.create_order(
+            article=article,
+            email=input['email'],
+            first_name=input['first_name'],
+            last_name=input['last_name'],
+            city=input['city'],
+            payer_email=input.get('payer', {}).get('email'),
+            payer_first_name=input.get('payer', {}).get('first_name'),
+            payer_last_name=input.get('payer', {}).get('last_name'),
+        )
+        order.full_clean()  # extra precaution, make sure that order is ok
+        return order
+
+    permissions = []  # anyone can create an order
+
+    PayerInput = g.InputObjectType(
+        'RatioCreateOrderPayerInput',
+        g.input_fields(
+            {
+                'email': str,
+                'first_name': str,
+                'last_name': str,
+            }
+        ),
+    )
+    input = {
+        'article_id': 'ID!',  # this is uuid, article's pk is hidden
+        'email': str,
+        'first_name': str,
+        'last_name': str,
+        'city': str,
+        'payer': PayerInput,
+    }
+
+    result = {'order': g.NN(types.RatioOrder)}
+
+
+@c.class_field
+class ratioConfirmOrder(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        order_id = input['order_id']
+        order = models.Order.objects.get(uuid=order_id)
+        ticket = order.confirm()
+        return {'ticket': ticket}
+
+    permissions = []
+    input = {
+        'order_id': 'ID!',  # this is uuid, order's pk is hidden
+    }
+    result = {
+        'ticket': g.NN(types.RatioTicket),
     }
 
 

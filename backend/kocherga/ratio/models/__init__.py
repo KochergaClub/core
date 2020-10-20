@@ -7,6 +7,7 @@ from .activity import Activity
 from .section_page import SectionIndexPage, SectionPage
 from .notebook_page import NotebookIndexPage, NotebookPage
 from .presentation import PresentationIndexPage
+from .order import Order, TicketArticle
 
 
 __all__ = [
@@ -15,6 +16,8 @@ __all__ = [
     'Trainer',
     'Ticket',
     'Payment',
+    'TicketArticle',
+    'Order',
     'Activity',
     'SectionIndexPage',
     'SectionPage',

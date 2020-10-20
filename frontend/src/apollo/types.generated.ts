@@ -1083,6 +1083,8 @@ export type Mutation = {
   ratioTrainingAddDay: Scalars['Boolean'];
   ratioTrainingSyncParticipantsToMailchimp: Scalars['Boolean'];
   ratioTrainingSendEmail: RatioTrainingSendEmailResult;
+  ratioCreateOrder: RatioCreateOrderResult;
+  ratioConfirmOrder: RatioConfirmOrderResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1430,6 +1432,16 @@ export type MutationRatioTrainingSyncParticipantsToMailchimpArgs = {
 
 export type MutationRatioTrainingSendEmailArgs = {
   input: RatioTrainingSendEmailInput;
+};
+
+
+export type MutationRatioCreateOrderArgs = {
+  input: RatioCreateOrderInput;
+};
+
+
+export type MutationRatioConfirmOrderArgs = {
+  input: RatioConfirmOrderInput;
 };
 
 
@@ -1943,6 +1955,35 @@ export type RatioBriefingBlock = WagtailBlock & {
   value: Scalars['String'];
 };
 
+export type RatioConfirmOrderInput = {
+  order_id: Scalars['ID'];
+};
+
+export type RatioConfirmOrderResult = {
+  __typename?: 'RatioConfirmOrderResult';
+  ticket: RatioTicket;
+};
+
+export type RatioCreateOrderInput = {
+  article_id: Scalars['ID'];
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  city: Scalars['String'];
+  payer?: Maybe<RatioCreateOrderPayerInput>;
+};
+
+export type RatioCreateOrderPayerInput = {
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+};
+
+export type RatioCreateOrderResult = {
+  __typename?: 'RatioCreateOrderResult';
+  order: RatioOrder;
+};
+
 export type RatioExerciseBlock = WagtailBlock & {
   __typename?: 'RatioExerciseBlock';
   id: Scalars['ID'];
@@ -2004,6 +2045,13 @@ export type RatioNotebookSectionBlock = WagtailBlock & {
   __typename?: 'RatioNotebookSectionBlock';
   id: Scalars['ID'];
   value: RatioSectionPage;
+};
+
+export type RatioOrder = {
+  __typename?: 'RatioOrder';
+  fulfilled: Scalars['Boolean'];
+  id: Scalars['ID'];
+  confirmation_token: Scalars['String'];
 };
 
 export type RatioParagraphBlock = WagtailBlock & {

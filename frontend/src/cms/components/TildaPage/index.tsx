@@ -25,7 +25,7 @@ const TildaPage: React.FC<Props> = (props) => {
   const patchedBody = useMemo(
     () =>
       props.body.replace(
-        /(<a\s+href="#order: .*?")/g,
+        /(<a\s+href="#kocherga_order: .*?")/g,
         '$1 data-kocherga="tilda-order-link"'
       ),
     [props.body]
