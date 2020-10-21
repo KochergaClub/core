@@ -55,4 +55,13 @@ class ratioTrainingEmailPrototype(helpers.BaseField):
     result = str
 
 
+@c.class_field
+class ratioTicketTypes(helpers.BaseField):
+    def resolve(self, _, info):
+        return models.TicketType.objects.for_active_trainings()
+
+    permissions = []
+    result = g.NNList(types.RatioTicketType)
+
+
 queries = c.as_dict()

@@ -1,0 +1,5 @@
+mutation RatioConfirmOrder($id: ID!) {
+  result: ratioConfirmOrder(input: { order_id: $id }) {
+    outcome
+  }
+}

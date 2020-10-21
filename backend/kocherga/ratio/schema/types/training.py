@@ -6,8 +6,13 @@ from ... import models
 def related_fields():
     from .ticket import RatioTicket
     from .schedule import RatioTrainingDay
+    from .ticket_type import RatioTicketType
 
-    return {'tickets': RatioTicket, 'schedule': ('days', RatioTrainingDay)}
+    return {
+        'tickets': RatioTicket,
+        'schedule': ('days', RatioTrainingDay),
+        'ticket_types': RatioTicketType,
+    }
 
 
 RatioTraining = django_utils.DjangoObjectType(

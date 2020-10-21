@@ -1,5 +1,6 @@
 from typing import Optional
 import datetime
+import enum
 
 from kocherga.graphql import g, helpers, basic_types
 from kocherga.graphql.permissions import user_perm
@@ -227,20 +228,20 @@ class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
 @c.class_field
 class ratioCreateOrder(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
-        article_id = input['article_id']
-        article = models.TicketArticle.objects.get(uuid=article_id)
+        ticket_type_id = input['ticket_type_id']
+        ticket_type = models.TicketType.objects.get(uuid=ticket_type_id)
         order = models.Order.objects.create_order(
-            article=article,
+            ticket_type=ticket_type,
             email=input['email'],
             first_name=input['first_name'],
             last_name=input['last_name'],
             city=input['city'],
-            payer_email=input.get('payer', {}).get('email'),
-            payer_first_name=input.get('payer', {}).get('first_name'),
-            payer_last_name=input.get('payer', {}).get('last_name'),
+            payer_email=input.get('payer', {}).get('email', ''),
+            payer_first_name=input.get('payer', {}).get('first_name', ''),
+            payer_last_name=input.get('payer', {}).get('last_name', ''),
         )
         order.full_clean()  # extra precaution, make sure that order is ok
-        return order
+        return {'order': order}
 
     permissions = []  # anyone can create an order
 
@@ -255,7 +256,7 @@ class ratioCreateOrder(helpers.BaseFieldWithInput):
         ),
     )
     input = {
-        'article_id': 'ID!',  # this is uuid, article's pk is hidden
+        'ticket_type_id': 'ID!',  # this is uuid, TicketType's pk is hidden
         'email': str,
         'first_name': str,
         'last_name': str,
@@ -270,17 +271,85 @@ class ratioCreateOrder(helpers.BaseFieldWithInput):
 class ratioConfirmOrder(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         order_id = input['order_id']
-        order = models.Order.objects.get(uuid=order_id)
-        ticket = order.confirm()
-        return {'ticket': ticket}
+        try:
+            order = models.Order.objects.get(uuid=order_id)
+        except models.Order.DoesNotExist:
+            return {'outcome': self.OutcomeEnum.NOT_FOUND.value}
+
+        try:
+            order.confirm()
+        except models.Order.NotPaidError:
+            return {'outcome': self.OutcomeEnum.NOT_PAID.value}
+        except models.Order.AlreadyFulfilledError:
+            return {'outcome': self.OutcomeEnum.ALREADY_FULFILLED.value}
+        except models.Order.TicketAlreadyExistsError:
+            return {'outcome': self.OutcomeEnum.TICKET_ALREADY_EXISTS.value}
+
+        return {'outcome': self.OutcomeEnum.OK.value}
 
     permissions = []
     input = {
         'order_id': 'ID!',  # this is uuid, order's pk is hidden
     }
-    result = {
-        'ticket': g.NN(types.RatioTicket),
+
+    class OutcomeEnum(enum.Enum):
+        NOT_FOUND = 0
+        NOT_PAID = 1
+        OK = 2
+        ALREADY_FULFILLED = 3
+        TICKET_ALREADY_EXISTS = 4
+
+    Outcome = g.EnumType('RatioConfirmOrderOutcome', OutcomeEnum)
+
+    # Returning a ticket here is a bad idea: this mutation is public, so we shouldn' expose private objects.
+    # Ratio ticket is currently a private type for usage by internal APIs only.
+    result = g.NN(
+        g.ObjectType(
+            'RatioConfirmOrderResult',
+            g.fields(
+                {
+                    'outcome': g.NN(Outcome),
+                }
+            ),
+        )
+    )
+
+
+@c.class_field
+class createRatioTicketType(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        training_id = input['training_id']
+
+        training = models.Training.objects.get(pk=training_id)
+        ticket_type = models.TicketType.objects.create(
+            training=training,
+            price=input['price'],
+        )
+        ticket_type.full_clean()
+        return ticket_type
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'training_id': 'ID!',
+        'price': int,
     }
+    result = g.NN(types.RatioTicketType)
+
+
+@c.class_field
+class deleteRatioTicketType(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        ticket_type = models.TicketType.objects.get(
+            uuid=input['id'],
+        )
+        ticket_type.delete()
+        return {'ok': True}
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'id': 'ID!',
+    }
+    result = g.NN(basic_types.BasicResult)
 
 
 mutations = c.as_dict()

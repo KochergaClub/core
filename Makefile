@@ -109,6 +109,13 @@ graphql: graphql_schema graphql_types
 restart_backend:
 	$(K) rollout restart deploy/core-django
 
+# This target is due to the following complex issue which often happens in dev:
+# 1) ./manage.py runserver fails to restart on syntax errors, so we have to restart the backend.
+# 2) PY_SSIZE_T_CLEAN deprecation warnings obscure the `make tail` output, so it's hard to determine the cause.
+# 3) If you find yourself in this situation, you'll have to call `make backend_dev_error` first and then restart the backend somehow (I usually do `echo '' >>backend/Dockerfile`, but maybe I'll find a better way later. Note that `make restart_backend` is not enough since it will reset all source files in container to their original versions on build.)
+backend_dev_error:
+	$(K) logs -l app=core-django --tail=-1 | egrep -v '(PY_SSIZE_T_CLEAN|recv_bser_version|return bser.loads)'
+
 restart_frontend:
 	$(K) rollout restart deploy/core-frontend
 

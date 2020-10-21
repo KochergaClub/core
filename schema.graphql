@@ -246,6 +246,15 @@ type ColumnsButtonsBlockValue {
   link: String!
 }
 
+input CreateRatioTicketTypeInput {
+  training_id: ID!
+  price: Int!
+}
+
+input DeleteRatioTicketTypeInput {
+  id: ID!
+}
+
 type EmailMailchimpCategory {
   id: ID!
   title: String!
@@ -916,6 +925,8 @@ type Mutation {
   ratioTrainingSendEmail(input: RatioTrainingSendEmailInput!): RatioTrainingSendEmailResult!
   ratioCreateOrder(input: RatioCreateOrderInput!): RatioCreateOrderResult!
   ratioConfirmOrder(input: RatioConfirmOrderInput!): RatioConfirmOrderResult!
+  createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
+  deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
   mastermindDatingSendInviteEmails(cohort_id: ID!): MastermindDatingCohortMutationResult!
@@ -1098,6 +1109,7 @@ type Query {
   ratioTrainingBySlug(slug: String!): RatioTraining!
   ratioTrainersAll: [RatioTrainer!]!
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
+  ratioTicketTypes: [RatioTicketType!]!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!
@@ -1148,12 +1160,20 @@ input RatioConfirmOrderInput {
   order_id: ID!
 }
 
+enum RatioConfirmOrderOutcome {
+  NOT_FOUND
+  NOT_PAID
+  OK
+  ALREADY_FULFILLED
+  TICKET_ALREADY_EXISTS
+}
+
 type RatioConfirmOrderResult {
-  ticket: RatioTicket!
+  outcome: RatioConfirmOrderOutcome!
 }
 
 input RatioCreateOrderInput {
-  article_id: ID!
+  ticket_type_id: ID!
   email: String!
   first_name: String!
   last_name: String!
@@ -1306,6 +1326,12 @@ type RatioTicket {
   training: RatioTraining!
 }
 
+type RatioTicketType {
+  price: Int!
+  id: ID!
+  training: RatioTraining!
+}
+
 type RatioTrainer {
   id: ID!
   short_name: String!
@@ -1321,6 +1347,7 @@ type RatioTraining {
   salaries_paid: Boolean!
   tickets: [RatioTicket!]!
   schedule: [RatioTrainingDay!]!
+  ticket_types: [RatioTicketType!]!
   tickets_count: Int!
   total_income: Int!
   long_name: String!

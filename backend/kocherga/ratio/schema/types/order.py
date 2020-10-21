@@ -14,7 +14,7 @@ RatioOrder = DjangoObjectType(
         'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),
         'confirmation_token': g.Field(
             g.NN(g.String),
-            resolve=lambda obj, info: obj.payment.get_confrimation_token(),
+            resolve=lambda obj, info: obj.payment.get_confirmation_token(),
         ),
     },
 )

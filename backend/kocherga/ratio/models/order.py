@@ -1,32 +1,43 @@
+import datetime
+
 from django.db import models
 from kocherga.django.fields import ShortUUIDField
 
 from .ticket import Ticket
 from .payment import Payment
+from .training import Training
 from kocherga.yandex_kassa.models import Payment as KassaPayment
 
 
-class TicketArticle(models.Model):
-    # prevents iterating over all articles by users
+class TicketTypeQuerySet(models.QuerySet):
+    def for_active_trainings(self):
+        # TODO - flag `registration_open` on training object or something
+        return self.filter(training__date__gt=datetime.datetime.today())
+
+
+class TicketType(models.Model):
+    # prevents iterating over all ticket types by users
     uuid = ShortUUIDField()
 
     created = models.DateTimeField(auto_now_add=True)
 
     training = models.ForeignKey(
-        'ratio.Training',
+        Training,
         on_delete=models.PROTECT,
-        related_name='ticket_articles',
+        related_name='ticket_types',
     )
     # TODO - active until / dynamic scheduling
     price = models.IntegerField('Стоимость')
 
+    objects = TicketTypeQuerySet.as_manager()
+
 
 class OrderManager(models.Manager):
     def create_order(self, **kwargs):
-        article = kwargs['article']
+        ticket_type = kwargs['ticket_type']
         payment = KassaPayment.objects.create(
-            amount=article.price,
-            description=f'Участие в тренинге: {article.training.name}',
+            amount=ticket_type.price,
+            description=f'Участие в тренинге: {ticket_type.training.name}',
         )
 
         order = Order(
@@ -56,8 +67,8 @@ class Order(models.Model):
     # TODO:
     # promocode = ...
 
-    article = models.ForeignKey(
-        TicketArticle,
+    ticket_type = models.ForeignKey(
+        TicketType,
         on_delete=models.PROTECT,
         related_name='orders',
     )
@@ -66,21 +77,39 @@ class Order(models.Model):
     last_name = models.CharField('Фамилия', max_length=255)
     city = models.CharField('Город', max_length=255)
 
-    payer_email = models.EmailField(blank=True)
-    payer_first_name = models.EmailField(blank=True)
-    payer_last_name = models.EmailField(blank=True)
+    payer_email = models.EmailField(blank=True, default='')
+    payer_first_name = models.EmailField(blank=True, default='')
+    payer_last_name = models.EmailField(blank=True, default='')
+
+    objects = OrderManager()
+
+    class NotPaidError(Exception):
+        pass
+
+    class AlreadyFulfilledError(Exception):
+        pass
+
+    class TicketAlreadyExistsError(Exception):
+        pass
 
     def confirm(self):
         self.payment.update()
-        if not self.payment.is_paid():
-            raise Exception("Payment is not paid!")
+
+        if not self.payment.is_paid() and not self.payment.is_waiting_for_capture():
+            # FIXME - distinguish canceled due to timeout and not paid
+            raise self.NotPaidError("Payment is not paid and not waiting for capture")
+        if self.fulfilled:
+            raise self.AlreadyFulfilledError("Already fulfilled")
+        if Ticket.objects.filter(email=self.email).count():
+            raise self.TicketAlreadyExistsError("Ticket already exists")
 
         # TODO - use form/serializer instead
         ticket = Ticket(
+            training=self.ticket_type.training,
             email=self.email,
-            training=self.article.training,
             first_name=self.first_name,
             last_name=self.last_name,
+            payment_amount=self.ticket_type.price,
         )
         ticket.full_clean()
         ticket.save()
@@ -98,6 +127,9 @@ class Order(models.Model):
 
         self.fulfilled = True
         self.full_clean()
-        payment.save()
+        self.save()
+
+        if self.payment.is_waiting_for_capture():
+            self.payment.capture()
 
         return ticket

@@ -308,6 +308,15 @@ export type ColumnsButtonsBlockValueImageArgs = {
   spec: Scalars['String'];
 };
 
+export type CreateRatioTicketTypeInput = {
+  training_id: Scalars['ID'];
+  price: Scalars['Int'];
+};
+
+export type DeleteRatioTicketTypeInput = {
+  id: Scalars['ID'];
+};
+
 export type EmailMailchimpCategory = {
   __typename?: 'EmailMailchimpCategory';
   id: Scalars['ID'];
@@ -1085,6 +1094,8 @@ export type Mutation = {
   ratioTrainingSendEmail: RatioTrainingSendEmailResult;
   ratioCreateOrder: RatioCreateOrderResult;
   ratioConfirmOrder: RatioConfirmOrderResult;
+  createRatioTicketType: RatioTicketType;
+  deleteRatioTicketType: BasicResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
   mastermindDatingSendInviteEmails: MastermindDatingCohortMutationResult;
@@ -1445,6 +1456,16 @@ export type MutationRatioConfirmOrderArgs = {
 };
 
 
+export type MutationCreateRatioTicketTypeArgs = {
+  input: CreateRatioTicketTypeInput;
+};
+
+
+export type MutationDeleteRatioTicketTypeArgs = {
+  input: DeleteRatioTicketTypeInput;
+};
+
+
 export type MutationMastermindDatingPopulateCohortFromEventArgs = {
   cohort_id: Scalars['ID'];
 };
@@ -1740,6 +1761,7 @@ export type Query = {
   ratioTrainingBySlug: RatioTraining;
   ratioTrainersAll: Array<RatioTrainer>;
   ratioTrainingEmailPrototype: Scalars['String'];
+  ratioTicketTypes: Array<RatioTicketType>;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
@@ -1959,13 +1981,21 @@ export type RatioConfirmOrderInput = {
   order_id: Scalars['ID'];
 };
 
+export enum RatioConfirmOrderOutcome {
+  NotFound = 'NOT_FOUND',
+  NotPaid = 'NOT_PAID',
+  Ok = 'OK',
+  AlreadyFulfilled = 'ALREADY_FULFILLED',
+  TicketAlreadyExists = 'TICKET_ALREADY_EXISTS'
+}
+
 export type RatioConfirmOrderResult = {
   __typename?: 'RatioConfirmOrderResult';
-  ticket: RatioTicket;
+  outcome: RatioConfirmOrderOutcome;
 };
 
 export type RatioCreateOrderInput = {
-  article_id: Scalars['ID'];
+  ticket_type_id: Scalars['ID'];
   email: Scalars['String'];
   first_name: Scalars['String'];
   last_name: Scalars['String'];
@@ -2139,6 +2169,13 @@ export type RatioTicket = {
   training: RatioTraining;
 };
 
+export type RatioTicketType = {
+  __typename?: 'RatioTicketType';
+  price: Scalars['Int'];
+  id: Scalars['ID'];
+  training: RatioTraining;
+};
+
 export type RatioTrainer = {
   __typename?: 'RatioTrainer';
   id: Scalars['ID'];
@@ -2156,6 +2193,7 @@ export type RatioTraining = {
   salaries_paid: Scalars['Boolean'];
   tickets: Array<RatioTicket>;
   schedule: Array<RatioTrainingDay>;
+  ticket_types: Array<RatioTicketType>;
   tickets_count: Scalars['Int'];
   total_income: Scalars['Int'];
   long_name: Scalars['String'];

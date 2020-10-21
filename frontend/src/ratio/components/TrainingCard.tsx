@@ -1,6 +1,9 @@
 import Link from 'next/link';
+import React from 'react';
 
-import { A, Row, Label } from '@kocherga/frontkit';
+import { A, Label, Row } from '@kocherga/frontkit';
+
+import { Badge } from '~/components';
 
 import { RatioTrainingFragment } from '../queries.generated';
 
@@ -34,6 +37,18 @@ const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
           <A href={training.telegram_link}>{training.telegram_link}</A>
         </Row>
       )}
+      <Row vCentered>
+        <Label>Виды билетов:</Label>
+        {training.ticket_types.length ? (
+          <Row>
+            {training.ticket_types.map((ticket_type) => (
+              <Badge key={ticket_type.id}>{ticket_type.price} руб.</Badge>
+            ))}
+          </Row>
+        ) : (
+          <Badge type="accent">не настроены</Badge>
+        )}
+      </Row>
     </div>
   );
 };

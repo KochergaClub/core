@@ -10,9 +10,10 @@ import PageHeader from '~/blocks/PageHeader';
 import {
     ApolloQueryResults, AsyncButton, PaddedBlock, Page, ParentLinkInHeader
 } from '~/components';
-// import CreateEmailButton from '~/ratio/components/CreateEmailButton';
-import TrainingTicketsBlock from '~/ratio/components/TrainingTicketsBlock';
 
+import TrainingTicketTypesBlock from '../components/ticket-types/TicketTypesBlock';
+// import CreateEmailButton from '~/ratio/components/CreateEmailButton';
+import TrainingTicketsBlock from '../components/TrainingTicketsBlock';
 import {
     RatioTrainingBySlugDocument, RatioTrainingSyncParticipantsToMailchimpDocument,
     RatioTrainingSyncParticipantsToMailchimpMutationVariables
@@ -110,6 +111,7 @@ const RatioTrainingPage: NextApolloPage<Props> = ({ slug }) => {
                 </Column>
               </PaddedBlock>
 
+              <TrainingTicketTypesBlock training={training} />
               <TrainingTicketsBlock training={training} />
 
               <PaddedBlock width="max">

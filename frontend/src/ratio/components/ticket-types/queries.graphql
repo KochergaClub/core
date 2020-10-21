@@ -1,0 +1,11 @@
+mutation CreateRatioTicketType($input: CreateRatioTicketTypeInput!) {
+  createRatioTicketType(input: $input) {
+    ...RatioTicketType
+  }
+}
+
+mutation DeleteRatioTicketType($input: DeleteRatioTicketTypeInput!) {
+  deleteRatioTicketType(input: $input) {
+    ok
+  }
+}

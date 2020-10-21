@@ -26,6 +26,11 @@ fragment RatioTicket on RatioTicket {
   }
 }
 
+fragment RatioTicketType on RatioTicketType {
+  id
+  price
+}
+
 fragment RatioTraining on RatioTraining {
   id
   slug
@@ -36,6 +41,9 @@ fragment RatioTraining on RatioTraining {
   total_income
   tickets {
     ...RatioTicket
+  }
+  ticket_types {
+    ...RatioTicketType
   }
 }
 

@@ -1,7 +1,23 @@
+fragment RatioOrder on RatioOrder {
+  id
+  confirmation_token
+}
+
 mutation RatioCreateOrder($input: RatioCreateOrderInput!) {
-  ratioCreateOrder(input: $input) {
+  result: ratioCreateOrder(input: $input) {
     order {
-      confirmation_token
+      ...RatioOrder
     }
+  }
+}
+
+fragment RatioTicketType_ForPicker on RatioTicketType {
+  id
+  price
+}
+
+query RatioTicketTypes {
+  result: ratioTicketTypes {
+    ...RatioTicketType_ForPicker
   }
 }
