@@ -40,7 +40,7 @@ const FormOrderModal: React.FC<Props> = ({
         title: 'В каком потоке вы участвуете?',
         options: ticketTypes.map((ticketType) => [
           ticketType.id,
-          `TODO (${ticketType.price})`,
+          ticketType.name,
         ]),
       },
       {

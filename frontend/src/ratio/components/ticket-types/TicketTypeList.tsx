@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Row } from '@kocherga/frontkit';
+import { Column, Row } from '@kocherga/frontkit';
 
 import Card from '~/components/Card';
 
@@ -16,7 +16,12 @@ const TicketTypeList: React.FC<Props> = ({ ticketTypes }) => {
     <Row>
       {ticketTypes.map((ticketType) => (
         <EditTicketTypeLink key={ticketType.id} ticketType={ticketType}>
-          <Card>{ticketType.price} руб.</Card>
+          <Card>
+            <header>
+              <strong>{ticketType.price} руб.</strong>
+            </header>
+            <div>{ticketType.name}</div>{' '}
+          </Card>
         </EditTicketTypeLink>
       ))}
     </Row>

@@ -324,6 +324,7 @@ class createRatioTicketType(helpers.BaseFieldWithInput):
         ticket_type = models.TicketType.objects.create(
             training=training,
             price=input['price'],
+            name=input['name'],
         )
         ticket_type.full_clean()
         return ticket_type
@@ -332,6 +333,29 @@ class createRatioTicketType(helpers.BaseFieldWithInput):
     input = {
         'training_id': 'ID!',
         'price': int,
+        'name': str,
+    }
+    result = g.NN(types.RatioTicketType)
+
+
+@c.class_field
+class updateRatioTicketType(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        ticket_type = models.TicketType.objects.get(uuid=input['id'])
+
+        for field in ('price', 'name'):
+            if input.get(field) is not None:
+                setattr(ticket_type, field, input[field])
+
+        ticket_type.full_clean()
+        ticket_type.save()
+        return ticket_type
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'id': 'ID!',
+        'price': Optional[int],
+        'name': Optional[str],
     }
     result = g.NN(types.RatioTicketType)
 

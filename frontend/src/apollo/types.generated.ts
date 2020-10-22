@@ -311,6 +311,7 @@ export type ColumnsButtonsBlockValueImageArgs = {
 export type CreateRatioTicketTypeInput = {
   training_id: Scalars['ID'];
   price: Scalars['Int'];
+  name: Scalars['String'];
 };
 
 export type DeleteRatioTicketTypeInput = {
@@ -1095,6 +1096,7 @@ export type Mutation = {
   ratioCreateOrder: RatioCreateOrderResult;
   ratioConfirmOrder: RatioConfirmOrderResult;
   createRatioTicketType: RatioTicketType;
+  updateRatioTicketType: RatioTicketType;
   deleteRatioTicketType: BasicResult;
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult;
   mastermindDatingPopulateCohortFromEvent: MastermindDatingCohortMutationResult;
@@ -1458,6 +1460,11 @@ export type MutationRatioConfirmOrderArgs = {
 
 export type MutationCreateRatioTicketTypeArgs = {
   input: CreateRatioTicketTypeInput;
+};
+
+
+export type MutationUpdateRatioTicketTypeArgs = {
+  input: UpdateRatioTicketTypeInput;
 };
 
 
@@ -2172,6 +2179,7 @@ export type RatioTicket = {
 export type RatioTicketType = {
   __typename?: 'RatioTicketType';
   price: Scalars['Int'];
+  name: Scalars['String'];
   id: Scalars['ID'];
   training: RatioTraining;
 };
@@ -2397,6 +2405,12 @@ export type TimepadCategory = {
   id: Scalars['ID'];
   code: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type UpdateRatioTicketTypeInput = {
+  id: Scalars['ID'];
+  price?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type VkGroup = {

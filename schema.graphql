@@ -249,6 +249,7 @@ type ColumnsButtonsBlockValue {
 input CreateRatioTicketTypeInput {
   training_id: ID!
   price: Int!
+  name: String!
 }
 
 input DeleteRatioTicketTypeInput {
@@ -926,6 +927,7 @@ type Mutation {
   ratioCreateOrder(input: RatioCreateOrderInput!): RatioCreateOrderResult!
   ratioConfirmOrder(input: RatioConfirmOrderInput!): RatioConfirmOrderResult!
   createRatioTicketType(input: CreateRatioTicketTypeInput!): RatioTicketType!
+  updateRatioTicketType(input: UpdateRatioTicketTypeInput!): RatioTicketType!
   deleteRatioTicketType(input: DeleteRatioTicketTypeInput!): BasicResult!
   mastermindDatingCreateCohort: MastermindDatingCohortMutationResult!
   mastermindDatingPopulateCohortFromEvent(cohort_id: ID!): MastermindDatingCohortMutationResult!
@@ -1328,6 +1330,7 @@ type RatioTicket {
 
 type RatioTicketType {
   price: Int!
+  name: String!
   id: ID!
   training: RatioTraining!
 }
@@ -1518,6 +1521,12 @@ type TimepadCategory {
   id: ID!
   code: String!
   name: String!
+}
+
+input UpdateRatioTicketTypeInput {
+  id: ID!
+  price: Int
+  name: String
 }
 
 type VkGroup {

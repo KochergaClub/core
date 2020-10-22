@@ -29,6 +29,7 @@ fragment RatioTicket on RatioTicket {
 fragment RatioTicketType on RatioTicketType {
   id
   price
+  name
 }
 
 fragment RatioTraining on RatioTraining {

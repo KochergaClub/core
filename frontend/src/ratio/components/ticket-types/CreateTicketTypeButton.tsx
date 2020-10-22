@@ -19,10 +19,12 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
 
   const fields: FormShape = [
     { name: 'price', title: 'Стоимость', type: 'number' },
+    { name: 'name', title: 'Название', type: 'string' },
   ];
 
   type Values = {
     price: number;
+    name: string;
   };
 
   const cb = useCallback(
@@ -32,6 +34,7 @@ const CreateTicketTypeButton: React.FC<Props> = ({ training_id }) => {
           input: {
             training_id,
             price: values.price,
+            name: values.name,
           },
         },
       });

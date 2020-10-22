@@ -19,6 +19,7 @@ RatioTicketType = DjangoObjectType(
     model=models.TicketType,
     db_fields=[
         'price',
+        'name',
     ],
     extra_fields={
         'id': g.Field(g.NN(g.ID), resolve=lambda obj, info: obj.uuid),

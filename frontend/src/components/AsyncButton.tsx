@@ -29,6 +29,7 @@ const AsyncButton = ({ act, children, small, size, kind, disabled }: Props) => {
 
   return (
     <Button
+      type="button"
       loading={acting}
       disabled={disabled || acting}
       onClick={cb}
