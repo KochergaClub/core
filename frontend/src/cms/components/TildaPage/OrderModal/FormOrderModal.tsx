@@ -1,23 +1,15 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
+import { Button, Column, ControlsFooter, Label, Modal } from '@kocherga/frontkit';
 
-import ModalForm from '~/components/forms/ModalForm';
-import { FormShape } from '~/components/forms/types';
+import { WideInput } from '~/components';
 
 import {
     RatioCreateOrderDocument, RatioOrderFragment, RatioTicketType_ForPickerFragment
 } from '../queries.generated';
-
-interface Values {
-  ticket_type_id: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  // recipientName: string;
-  // recipientEmail: string;
-  city: string;
-}
 
 interface Props {
   close: () => void;
@@ -25,66 +17,35 @@ interface Props {
   onOrderCreated: (order: RatioOrderFragment) => void;
 }
 
+type SelectOptionType = {
+  value: RatioTicketType_ForPickerFragment;
+  label: string;
+};
+
+type FormData = {
+  ticket_type: SelectOptionType;
+  email: string;
+  first_name: string;
+  last_name: string;
+  city: string;
+};
+
 const FormOrderModal: React.FC<Props> = ({
   close,
   ticketTypes,
   onOrderCreated,
 }) => {
+  const form = useForm<FormData>();
+  const watchTicketType = form.watch('ticket_type');
+
   const [createOrderMutation] = useMutation(RatioCreateOrderDocument);
 
-  const shape: FormShape = useMemo(
-    () => [
-      {
-        type: 'choice',
-        name: 'ticket_type_id',
-        title: 'В каком потоке вы участвуете?',
-        options: ticketTypes.map((ticketType) => [
-          ticketType.id,
-          ticketType.name,
-        ]),
-      },
-      {
-        type: 'email',
-        name: 'email',
-        title: 'E-mail участника',
-      },
-      {
-        type: 'string',
-        name: 'first_name',
-        title: 'Имя участника',
-      },
-      {
-        type: 'string',
-        name: 'last_name',
-        title: 'Фамилия участника',
-      },
-      // {
-      //   type: 'email',
-      //   name: 'recipientEmail',
-      //   title: 'E-mail получающего',
-      //   optional: true,
-      // },
-      // {
-      //   type: 'string',
-      //   name: 'recipientName',
-      //   title: 'Полные, настоящие имя и фамилия участвующего в курсе',
-      //   optional: true,
-      // },
-      {
-        type: 'string',
-        name: 'city',
-        title: 'Из какого города вы планируете проходить курс?',
-      },
-    ],
-    [ticketTypes]
-  );
-
   const postForm = useCallback(
-    async (v: Values) => {
+    async (v: FormData) => {
       const { data } = await createOrderMutation({
         variables: {
           input: {
-            ticket_type_id: v.ticket_type_id,
+            ticket_type_id: v.ticket_type.value.id,
             email: v.email,
             first_name: v.first_name, // FIXME
             last_name: v.last_name,
@@ -103,13 +64,54 @@ const FormOrderModal: React.FC<Props> = ({
   );
 
   return (
-    <ModalForm
-      modalTitle="Регистрация"
-      shape={shape}
-      modalButtonName="Оплатить"
-      post={postForm}
-      close={close}
-    />
+    <Modal>
+      <Modal.Header toggle={close}>Регистрация</Modal.Header>
+      <form onSubmit={form.handleSubmit(postForm)}>
+        <Modal.Body>
+          <Column stretch gutter={16}>
+            <div>
+              <label>В каком потоке вы участвуете?</label>
+              <Controller
+                name="ticket_type"
+                as={Select}
+                options={ticketTypes.map(
+                  (ticketType) =>
+                    ({
+                      value: ticketType,
+                      label: ticketType.name,
+                    } as SelectOptionType)
+                )}
+                control={form.control}
+              />
+            </div>
+            <div>
+              <label>E-mail участника</label>
+              <WideInput type="email" name="email" ref={form.register} />
+            </div>
+            <div>
+              <label>Имя участника</label>
+              <WideInput type="string" name="first_name" ref={form.register} />
+            </div>
+            <div>
+              <label>Фамилия участника</label>
+              <WideInput type="string" name="last_name" ref={form.register} />
+            </div>
+            <div>
+              <label>Из какого города вы планируете проходить курс?</label>
+              <WideInput type="string" name="city" ref={form.register} />
+            </div>
+          </Column>
+        </Modal.Body>
+        <Modal.Footer>
+          <ControlsFooter>
+            <Button type="submit">
+              Оплатить
+              {watchTicketType ? ` ${watchTicketType.value.price} руб.` : ''}
+            </Button>
+          </ControlsFooter>
+        </Modal.Footer>
+      </form>
+    </Modal>
   );
 };
 

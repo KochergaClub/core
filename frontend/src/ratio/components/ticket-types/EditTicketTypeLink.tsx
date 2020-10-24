@@ -21,7 +21,12 @@ interface ModalProps {
 }
 
 const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
-  const form = useForm();
+  type FormData = {
+    name: string;
+    price: string;
+  };
+
+  const form = useForm<FormData>();
 
   const [deleteMutation] = useMutation(DeleteRatioTicketTypeDocument, {
     refetchQueries: ['RatioTrainingBySlug'],
@@ -41,7 +46,7 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
     close();
   }, [deleteMutation, ticketType.id, close]);
 
-  const updateCb = async (data: any) => {
+  const updateCb = async (data: FormData) => {
     await updateMutation({
       variables: {
         input: {
@@ -85,6 +90,7 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
               loading={form.formState.isSubmitting}
               disabled={form.formState.isSubmitting}
               kind="primary"
+              type="submit"
             >
               Сохранить
             </Button>
