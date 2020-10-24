@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Column, Modal } from '@kocherga/frontkit';
+import { Column, Modal } from '~/frontkit';
 
 import { ApolloQueryResults, AsyncButton } from '~/components';
 

@@ -4,7 +4,7 @@ import { FaTrash } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 

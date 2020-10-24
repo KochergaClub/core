@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import styled, { css } from 'styled-components';
 
-import { Button, colors, Column } from '@kocherga/frontkit';
+import { Button, colors, Column } from '~/frontkit';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import { publicEventRoute } from '~/events/routes';

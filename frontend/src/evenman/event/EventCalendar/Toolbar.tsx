@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { subWeeks, addWeeks, endOfWeek } from 'date-fns';
 
-import { A, Button, Row } from '@kocherga/frontkit';
+import { A, Button, Row } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 

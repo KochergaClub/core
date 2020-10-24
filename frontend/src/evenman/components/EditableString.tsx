@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, RefObject } from 'react';
 
-import { Input } from '@kocherga/frontkit';
+import { Input } from '~/frontkit';
 
 import { FaEdit, FaSpinner } from 'react-icons/fa';
 

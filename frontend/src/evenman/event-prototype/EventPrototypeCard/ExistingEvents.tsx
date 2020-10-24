@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { parseISO, isBefore } from 'date-fns';
 
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 import { MutedSpan } from '../../components/ui';

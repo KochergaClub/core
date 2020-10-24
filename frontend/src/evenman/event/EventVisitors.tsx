@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import EditableString from '../components/EditableString';
 

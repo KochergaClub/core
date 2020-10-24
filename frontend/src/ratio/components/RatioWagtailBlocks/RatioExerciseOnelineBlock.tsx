@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { RatioExerciseOnelineBlockFragment as Props } from './fragments.generated';
 

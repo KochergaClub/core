@@ -1,7 +1,7 @@
 import { parseISO } from 'date-fns';
 
 import { useQuery } from '@apollo/client';
-import { Modal } from '@kocherga/frontkit';
+import { Modal } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 import { ApolloQueryResults } from '~/components';

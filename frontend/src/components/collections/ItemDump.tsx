@@ -1,4 +1,4 @@
-import { Row, Label } from '@kocherga/frontkit';
+import { Row, Label } from '~/frontkit';
 
 import { FormShape } from '~/components/forms/types';
 

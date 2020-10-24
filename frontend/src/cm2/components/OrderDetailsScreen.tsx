@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Column, Label } from '@kocherga/frontkit';
+import { Column, Label } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 import { ApolloQueryResults, AsyncButton } from '~/components';

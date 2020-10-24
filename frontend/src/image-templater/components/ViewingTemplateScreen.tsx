@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 import { Formik, Field, FieldProps, Form, ErrorMessage } from 'formik';
 
-import { A, Column, Label, Input, Row, colors } from '@kocherga/frontkit';
+import { A, Column, Label, Input, Row, colors } from '~/frontkit';
 
 import { TemplateFragment } from '../queries.generated';
 import { FormState, state2link, jsonToQueryString } from '../utils';

@@ -1,6 +1,6 @@
 import baseStyled, { ThemedBaseStyledInterface } from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 import { MenuKind } from '../types';
 

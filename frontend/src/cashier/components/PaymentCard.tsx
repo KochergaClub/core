@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns';
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Label, Row } from '@kocherga/frontkit';
+import { Label, Row } from '~/frontkit';
 
 import UserInfo from '~/audit/components/UserInfo';
 import { usePermissions } from '~/common/hooks';

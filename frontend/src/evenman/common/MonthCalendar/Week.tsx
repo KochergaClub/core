@@ -5,7 +5,7 @@ import { addDays, isEqual, startOfDay } from 'date-fns';
 
 import useResizeAware from 'react-resize-aware';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 import { formatDate } from '~/common/utils';
 
 const borderColor = colors.grey[200];

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Card from './Card';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 const MutedCard = styled(Card)`
   color: ${colors.grey[700]};

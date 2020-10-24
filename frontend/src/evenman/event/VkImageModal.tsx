@@ -2,7 +2,7 @@ import { format, parseISO } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { useAPI, useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { state2link } from '~/image-templater/utils';

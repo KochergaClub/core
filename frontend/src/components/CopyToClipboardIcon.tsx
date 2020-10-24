@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 import { FaRegCopy } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 const ClipboardIcon = styled(FaRegCopy)`
   color: ${colors.grey[500]};

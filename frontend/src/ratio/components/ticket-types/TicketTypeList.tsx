@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import Card from '~/components/Card';
 

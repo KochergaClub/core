@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, fonts, deviceMediaQueries } from '@kocherga/frontkit';
+import { colors, fonts, deviceMediaQueries } from '~/frontkit';
 
 const Container = styled.div`
   background-color: ${colors.grey[100]};

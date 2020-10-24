@@ -1,4 +1,4 @@
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 import { Header } from '../../components/ui';
 
 import { EvenmanEvent_DetailsFragment } from '../queries.generated';

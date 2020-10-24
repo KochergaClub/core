@@ -2,7 +2,7 @@ import { getHours, getMinutes } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Input, Label, Modal } from '@kocherga/frontkit';
+import { Column, Input, Label, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton } from '~/components';

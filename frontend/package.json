@@ -22,13 +22,15 @@
     "@graphql-codegen/typescript-operations": "^1.17.8",
     "@graphql-codegen/typescript-react-apollo": "^2.0.6",
     "@graphql-codegen/typescript-resolvers": "^1.17.9",
-    "@kocherga/frontkit": "^1.8.5",
     "@next/bundle-analyzer": "^9.5.3",
     "@popperjs/core": "^2.5.1",
     "@sentry/browser": "^5.24.2",
     "@sentry/node": "^5.24.2",
     "@sentry/react": "^5.24.2",
     "@sentry/webpack-plugin": "^1.13.0",
+    "@storybook/addon-essentials": "^6.0.27",
+    "@storybook/addon-storyshots": "^6.0.27",
+    "@storybook/react": "^6.0.27",
     "@types/autosize": "^3.0.6",
     "@types/body-parser": "^1.17.0",
     "@types/cookie": "^0.4.0",
@@ -116,6 +118,8 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.0.4"
+    "@testing-library/react": "^11.0.4",
+    "core-js": "^3.6.5",
+    "react-test-renderer": "^17.0.1"
   }
 }

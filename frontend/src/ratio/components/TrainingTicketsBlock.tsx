@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import ModalFormButton from '~/components/forms/ModalFormButton';

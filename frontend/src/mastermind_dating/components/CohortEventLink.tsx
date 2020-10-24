@@ -4,7 +4,7 @@ import { ValueType } from 'react-select';
 import Async from 'react-select/async';
 
 import { useApolloClient, useMutation } from '@apollo/client';
-import { A, Label, Row } from '@kocherga/frontkit';
+import { A, Label, Row } from '~/frontkit';
 
 import { AsyncButton, ConfirmModal } from '~/components';
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { ColumnsBlock, fonts, ResponsivePadding, RichText } from '@kocherga/frontkit';
+import { ColumnsBlock, fonts, ResponsivePadding, RichText } from '~/frontkit';
 
 import { BlockComponent } from '../../types';
 import { ColumnsBasicBlockFragment as Props } from './index.generated';

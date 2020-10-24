@@ -3,7 +3,7 @@ import Toggle from 'react-toggle';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { colors, Column, fonts, Row } from '@kocherga/frontkit';
+import { colors, Column, fonts, Row } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 

@@ -2,7 +2,7 @@ import { addWeeks, format, parseISO, startOfWeek } from 'date-fns';
 import { useState } from 'react';
 
 import { useQuery } from '@apollo/client';
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { useListeningWebSocket, usePermissions } from '~/common/hooks';

@@ -2,7 +2,7 @@ import { StreamManager } from 'openvidu-browser';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { fonts } from '@kocherga/frontkit';
+import { fonts } from '~/frontkit';
 
 interface Props {
   streamManager: StreamManager;

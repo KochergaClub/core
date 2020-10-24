@@ -1,4 +1,4 @@
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 import { Code, code2title } from './codes';

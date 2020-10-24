@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, Row } from '@kocherga/frontkit';
+import { Button, Column, Row } from '~/frontkit';
 
 import ImageEditor from '~/components/images/ImageEditor';
 

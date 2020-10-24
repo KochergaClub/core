@@ -4,7 +4,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import { WagtailPageContext } from '~/cms/contexts';
 import { getComponentByTypename } from '~/cms/wagtail-utils';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { A, deviceMediaQueries, RichText } from '@kocherga/frontkit';
+import { A, deviceMediaQueries, RichText } from '~/frontkit';
 
 import TL02 from '~/blocks/TL02';
 import { Page } from '~/components';

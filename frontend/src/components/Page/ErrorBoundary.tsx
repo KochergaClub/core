@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 import * as Sentry from '@sentry/node';
 
 import { PaddedBlock } from '~/components';

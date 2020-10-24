@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { A, Column, HR, Row } from '@kocherga/frontkit';
+import { A, Column, HR, Row } from '~/frontkit';
 
 import { HintCard } from '~/components';
 

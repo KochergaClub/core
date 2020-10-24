@@ -1,7 +1,7 @@
 import React from 'react';
 import Toggle from 'react-toggle';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import UnknownEventsDropdown from '../UnknownEventsDropdown';
 import { Action, setEventType, setHideAnnounced, State } from './filters';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import ImagePreview from '~/components/images/ImagePreview';

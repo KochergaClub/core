@@ -1,6 +1,6 @@
 import Router from 'next/router';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { NavList, NavListItem } from '../components/NavList';
 import { NumberBadge, MutedSpan } from '../components/ui';

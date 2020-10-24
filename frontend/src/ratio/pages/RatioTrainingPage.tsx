@@ -3,7 +3,7 @@ import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
 
 import { useMutation, useQuery } from '@apollo/client';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
-import { A, colors, Column, Label, Row } from '@kocherga/frontkit';
+import { A, colors, Column, Label, Row } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import PageHeader from '~/blocks/PageHeader';

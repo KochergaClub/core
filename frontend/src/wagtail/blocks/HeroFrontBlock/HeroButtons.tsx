@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, deviceMediaQueries } from '@kocherga/frontkit';
+import { colors, deviceMediaQueries } from '~/frontkit';
 
 import { ButtonsListType } from './types';
 

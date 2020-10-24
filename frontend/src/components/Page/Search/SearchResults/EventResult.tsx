@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import { Label } from '@kocherga/frontkit';
+import { Label } from '~/frontkit';
 
 import { timezone, formatDate } from '~/common/utils';
 import { publicEventRoute } from '~/events/routes';

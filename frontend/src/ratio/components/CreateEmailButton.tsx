@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useApolloClient, useMutation } from '@apollo/client';
-import { Button, Column, Input, Modal, Row } from '@kocherga/frontkit';
+import { Button, Column, Input, Modal, Row } from '~/frontkit';
 
 import { AsyncButton, ButtonWithModal } from '~/components';
 

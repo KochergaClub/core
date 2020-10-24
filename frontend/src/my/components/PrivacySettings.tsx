@@ -3,7 +3,7 @@ import { FaGlobe, FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 

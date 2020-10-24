@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Column, Label, Row } from '@kocherga/frontkit';
+import { Column, Label, Row } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 

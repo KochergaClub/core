@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { A, Label } from '@kocherga/frontkit';
+import { A, Label } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-import { Button, Modal, ControlsFooter } from '@kocherga/frontkit';
+import { Button, Modal, ControlsFooter } from '~/frontkit';
 
 import { FormValues, SignMethodCalculation } from '../types';
 

@@ -6,7 +6,7 @@ import breaks from 'remark-breaks';
 import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { RichText } from '@kocherga/frontkit';
+import { RichText } from '~/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import TL03 from '~/blocks/TL03';

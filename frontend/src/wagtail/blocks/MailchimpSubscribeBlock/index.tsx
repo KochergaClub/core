@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { A, Button, Column, deviceMediaQueries, Input } from '@kocherga/frontkit';
+import { A, Button, Column, deviceMediaQueries, Input } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 

@@ -1,7 +1,7 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
 
-import { Button, Column, ControlsFooter, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 

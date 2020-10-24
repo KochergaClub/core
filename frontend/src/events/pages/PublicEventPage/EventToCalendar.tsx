@@ -1,5 +1,5 @@
 import { format, parseISO, addMinutes } from 'date-fns';
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column } from '~/frontkit';
 import { PaddedBlock } from '~/components';
 import { buildQueryString } from '~/common/utils';
 import { CommonProps } from './types';

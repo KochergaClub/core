@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 import { AnyBlockFragment } from '../../types';
 import ControlledBlockContainer from '../ControlledBlockContainer';

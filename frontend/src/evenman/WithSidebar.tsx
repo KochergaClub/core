@@ -1,7 +1,7 @@
 // FIXME - fork of frontkit's WithSidebar
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 const grey = colors.grey;
 

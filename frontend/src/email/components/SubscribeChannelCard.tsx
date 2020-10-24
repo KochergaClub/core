@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Column, Label, Row } from '@kocherga/frontkit';
+import { Column, Label, Row } from '~/frontkit';
 
 import { AsyncButtonWithConfirm, CopyToClipboardIcon } from '~/components';
 import Card, { CardHeader } from '~/components/Card';

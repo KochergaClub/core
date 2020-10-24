@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { ApolloError } from '@apollo/client';
 
-import { colors, A } from '@kocherga/frontkit';
+import { colors, A } from '~/frontkit';
 
 const ShortError = styled.div`
   font-size: 1.5em;

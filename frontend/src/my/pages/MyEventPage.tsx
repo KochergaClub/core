@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import { requireAuth } from '~/auth/utils';

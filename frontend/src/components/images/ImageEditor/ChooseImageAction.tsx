@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { A, Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { A, Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { ModalAction } from '~/components/DropdownMenu';

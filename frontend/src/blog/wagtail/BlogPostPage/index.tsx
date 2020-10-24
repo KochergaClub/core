@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { parseISO } from 'date-fns';
 
-import { RichText, colors } from '@kocherga/frontkit';
+import { RichText, colors } from '~/frontkit';
 
 import { Page } from '~/components';
 import ItemPageHeader from '~/blocks/ItemPageHeader';

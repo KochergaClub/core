@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import ImageEditor from '~/components/images/ImageEditor';
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Publisher, Session } from 'openvidu-browser';
-import { Row, Button } from '@kocherga/frontkit';
+import { Row, Button } from '~/frontkit';
 
 import MuteAudioButton from './MuteAudioButton';
 import MuteVideoButton from './MuteVideoButton';

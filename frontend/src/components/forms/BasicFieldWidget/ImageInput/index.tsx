@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { useLazyQuery } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import ImageEditor from '~/components/images/ImageEditor';

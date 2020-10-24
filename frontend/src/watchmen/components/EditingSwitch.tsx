@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import styled from 'styled-components';
 
-import { colors, Row } from '@kocherga/frontkit';
+import { colors, Row } from '~/frontkit';
 
 const ItemContainer = styled.a<{ active: boolean }>`
   text-decoration: none;

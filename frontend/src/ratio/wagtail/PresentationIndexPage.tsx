@@ -1,4 +1,4 @@
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { PaddedBlock, Page } from '~/components';
 import { NextWagtailPage } from '~/wagtail/types';

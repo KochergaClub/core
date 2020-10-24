@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useMutation, useQuery } from '@apollo/client';
-import { Label, Row } from '@kocherga/frontkit';
+import { Label, Row } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { fonts, RichText } from '@kocherga/frontkit';
+import { fonts, RichText } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import { BlockComponent } from '~/wagtail/types';

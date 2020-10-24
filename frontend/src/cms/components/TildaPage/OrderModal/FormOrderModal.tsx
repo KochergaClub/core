@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, ControlsFooter, Label, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Label, Modal } from '~/frontkit';
 
 import { WideInput } from '~/components';
 

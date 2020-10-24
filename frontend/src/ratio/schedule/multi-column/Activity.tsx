@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { staticUrl } from '~/common/utils';
 

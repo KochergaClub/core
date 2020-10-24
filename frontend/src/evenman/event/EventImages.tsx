@@ -1,4 +1,4 @@
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import EventImageWidgetDefault from './EventImageWidgetDefault';
 import EventImageWidgetVk from './EventImageWidgetVk';

@@ -4,7 +4,7 @@ import Router from 'next/router';
 
 import styled from 'styled-components';
 
-import { Column, ColumnNav } from '@kocherga/frontkit';
+import { Column, ColumnNav } from '~/frontkit';
 
 const LogoLink = styled.a`
   color: black;

@@ -1,4 +1,4 @@
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { EventsPrototypeFragment } from '../queries.generated';
 import EditScheduleButton from './EditScheduleButton';

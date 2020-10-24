@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { deviceMediaQueries, fonts, Label } from '@kocherga/frontkit';
+import { deviceMediaQueries, fonts, Label } from '~/frontkit';
 
 import { ProjectPageFragment } from './fragments.generated';
 

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Toggle from 'react-toggle';
 
 import { useLazyQuery } from '@apollo/client';
-import { Button, Column, ControlsFooter, Modal, Row } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { AsyncButton, Spinner } from '~/components';
 

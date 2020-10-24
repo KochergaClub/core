@@ -1,6 +1,6 @@
 import { isAfter } from 'date-fns';
 
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { Header, MutedSpan } from '../../components/ui';
 import { Card, CardHeader, CardBody } from '../../components/Card';

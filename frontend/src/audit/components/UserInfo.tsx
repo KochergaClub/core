@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import { Badge } from '~/components';
 

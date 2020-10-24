@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Modal } from '@kocherga/frontkit';
+import { Modal } from '~/frontkit';
 
 import { confirmOrderRoute } from '~/ratio/routes';
 

@@ -1,6 +1,6 @@
 import { differenceInCalendarDays, parseISO } from 'date-fns';
 
-import { RichText } from '@kocherga/frontkit';
+import { RichText } from '~/frontkit';
 
 import AlertCard from '~/components/AlertCard';
 

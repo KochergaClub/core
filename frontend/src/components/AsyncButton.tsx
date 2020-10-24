@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Button } from '@kocherga/frontkit';
+import { Button } from '~/frontkit';
 
 import { useNotification } from '~/common/hooks';
 

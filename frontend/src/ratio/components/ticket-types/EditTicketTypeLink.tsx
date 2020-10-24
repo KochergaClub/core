@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 

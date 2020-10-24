@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 export const Card = styled.div`
   border-top: 1px solid ${colors.grey[200]};

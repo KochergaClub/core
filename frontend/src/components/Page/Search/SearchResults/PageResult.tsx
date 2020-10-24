@@ -1,4 +1,4 @@
-import { Label } from '@kocherga/frontkit';
+import { Label } from '~/frontkit';
 
 import { cmsRoute } from '~/cms/routes';
 

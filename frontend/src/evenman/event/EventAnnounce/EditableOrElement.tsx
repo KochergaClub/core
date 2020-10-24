@@ -1,4 +1,4 @@
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import EditableLink, {
   Props as EditableLinkProps,

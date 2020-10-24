@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { gql, TypedDocumentNode, useApolloClient } from '@apollo/client';
-import { Modal } from '@kocherga/frontkit';
+import { Modal } from '~/frontkit';
 
 import { dedupeFragments } from '~/common/dedupeFragments';
 import { withFragments } from '~/common/utils';

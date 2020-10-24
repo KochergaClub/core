@@ -1,6 +1,6 @@
 import Toggle from 'react-toggle';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { useUpdateMutation } from './hooks';
 import { EventsPrototypeFragment } from '../queries.generated';

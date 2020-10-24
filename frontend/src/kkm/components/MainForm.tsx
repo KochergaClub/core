@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { A, Button, Column, Input, Label } from '@kocherga/frontkit';
+import { A, Button, Column, Input, Label } from '~/frontkit';
 
 import MainModal from '../components/MainModal';
 import { KkmRegisterCheckDocument } from '../queries.generated';

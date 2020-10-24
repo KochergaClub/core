@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { A, Column } from '@kocherga/frontkit';
+import { A, Column } from '~/frontkit';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { ApolloQueryResults, PaddedBlock, Page } from '~/components';

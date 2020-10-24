@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 import { useExpandable } from '~/common/hooks';
 

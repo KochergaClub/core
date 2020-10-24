@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
-import { Modal } from '@kocherga/frontkit';
+import { Modal } from '~/frontkit';
 
 import { Spinner } from '~/components';
 

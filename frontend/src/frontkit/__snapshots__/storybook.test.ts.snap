@@ -1,0 +1,1061 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Badge All 1`] = `
+<div
+  className="Column-sc-18tfx87-0 joUKyB"
+>
+  <div
+    className="Badge-mw861a-0 hybObf"
+  >
+    Текст
+  </div>
+  <div
+    className="Badge-mw861a-0 fPnKzm"
+    type="accent"
+  >
+    Текст
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Badge Basic 1`] = `
+<div
+  className="Badge-mw861a-0 hybObf"
+>
+  Текст
+</div>
+`;
+
+exports[`Storyshots Components/Burger Basic 1`] = `
+<div
+  className="Burger__BurgerContainer-sc-1kdykca-0 kYxVnR"
+  color="black"
+>
+  <span />
+  <span />
+  <span />
+  <span />
+</div>
+`;
+
+exports[`Storyshots Components/Button All 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 ibopnM"
+>
+  <div
+    className="Column-sc-18tfx87-0 joUKyB"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 iLjAbn"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 btKaeN"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 gHwoVP"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 ipsWCD"
+      size="small"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gnThZq"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 iJHSpm"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gnThZq"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 hzRdrB"
+      size="big"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gnThZq"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 iLjAbn"
+      disabled={true}
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 btKaeN"
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 gHwoVP"
+      disabled={true}
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="Column-sc-18tfx87-0 joUKyB"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 eEeAuz"
+      kind="primary"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 eaineF"
+      kind="primary"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 PQCBb"
+      kind="primary"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 jbyhzR"
+      kind="primary"
+      size="small"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gnThZq"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 fkrfMs"
+      kind="primary"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gnThZq"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 hfQvyT"
+      kind="primary"
+      size="big"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gnThZq"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 eEeAuz"
+      disabled={true}
+      kind="primary"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 eaineF"
+      disabled={true}
+      kind="primary"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 PQCBb"
+      disabled={true}
+      kind="primary"
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="Column-sc-18tfx87-0 joUKyB"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dIZyWk"
+      kind="danger"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dZrBlq"
+      kind="danger"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 chiqIw"
+      kind="danger"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 fktDuC"
+      kind="danger"
+      size="small"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 kbBeLQ"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dXcBjL"
+      kind="danger"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 kbBeLQ"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 ePjdAw"
+      kind="danger"
+      size="big"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 kbBeLQ"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dIZyWk"
+      disabled={true}
+      kind="danger"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dZrBlq"
+      disabled={true}
+      kind="danger"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 chiqIw"
+      disabled={true}
+      kind="danger"
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Button Basic 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 btKaeN"
+>
+  Текст на кнопке
+</button>
+`;
+
+exports[`Storyshots Components/Button Большая 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 gHwoVP"
+  size="big"
+>
+  Большая кнопка
+</button>
+`;
+
+exports[`Storyshots Components/Button Во время выполнения действия 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 iJHSpm"
+>
+  <div
+    className="Button__ButtonBackground-j52k6q-1 gnThZq"
+  />
+  Загружается...
+</button>
+`;
+
+exports[`Storyshots Components/Button Главная 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 eaineF"
+  kind="primary"
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Маленькая 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 iLjAbn"
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Неактивная 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  disabled={true}
+>
+  Нельзя нажать
+</button>
+`;
+
+exports[`Storyshots Components/ColumnNav Basic 1`] = `
+<nav>
+  <ul
+    className="ColumnNav__Ul-sc-1ebrfyn-1 iqnHUq"
+  >
+    <li
+      className="ColumnNav__Li-sc-1ebrfyn-0 VRYDK"
+      onClick={[Function]}
+    >
+      Item 1
+    </li>
+    <li
+      className="ColumnNav__Li-sc-1ebrfyn-0 qFZGy"
+      onClick={[Function]}
+      selected={true}
+    >
+      Item 2
+    </li>
+    <li
+      className="ColumnNav__Li-sc-1ebrfyn-0 VRYDK"
+      onClick={[Function]}
+    >
+      Item 3
+    </li>
+  </ul>
+</nav>
+`;
+
+exports[`Storyshots Components/Input Basic 1`] = `
+<input
+  className="Input-ma1ebw-0 gcGIhL"
+  placeholder="Введите текст"
+  type="text"
+/>
+`;
+
+exports[`Storyshots Components/Input Большое текстовое поле 1`] = `
+<input
+  className="Input-ma1ebw-0 hGgdeQ"
+  placeholder="Введите важный текст"
+  scale="big"
+  type="text"
+/>
+`;
+
+exports[`Storyshots Components/Input Несколько полей 1`] = `
+<div
+  className="Column-sc-18tfx87-0 joUKyB"
+>
+  <input
+    className="Input-ma1ebw-0 gcGIhL"
+    placeholder="Поле 1"
+    type="text"
+  />
+  <input
+    className="Input-ma1ebw-0 gcGIhL"
+    placeholder="Поле 2"
+    type="text"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Input Текстовое поле с меткой 1`] = `
+<div>
+  <label
+    className="Label-y8zejy-0 dtVPuo"
+  >
+    Метка:
+  </label>
+  <input
+    className="Input-ma1ebw-0 gcGIhL"
+    placeholder="Введите текст"
+    type="text"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal Basic 1`] = `
+<div>
+  <div
+    className="Modal__Overlay-sc-17tt3bl-0 kbRNjc"
+  />
+  <div
+    className="Modal__ModalContent-sc-17tt3bl-1 ctkIBu"
+  >
+    <header
+      className="ModalHeader__ModalHeaderEl-sc-1g0fqbo-0 fHMQXx"
+    >
+      Заголовок
+      <button
+        className="ModalHeader__HeaderButton-sc-1g0fqbo-1 bbptHc"
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </header>
+    <div
+      className="ModalBody-sc-2cx8u2-0 fnaQlB"
+    >
+      Основной текст
+    </div>
+    <footer
+      className="ModalFooter-sc-4hkn1a-0 kCfYnJ"
+    >
+      Футер
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Modal Large Modal Story 1`] = `
+<div>
+  <div
+    className="Modal__Overlay-sc-17tt3bl-0 kbRNjc"
+  />
+  <div
+    className="Modal__ModalContent-sc-17tt3bl-1 ctkIBu"
+  >
+    <header
+      className="ModalHeader__ModalHeaderEl-sc-1g0fqbo-0 fHMQXx"
+    >
+      Заголовок
+      <button
+        className="ModalHeader__HeaderButton-sc-1g0fqbo-1 bbptHc"
+        onClick={[Function]}
+      >
+        ×
+      </button>
+    </header>
+    <div
+      className="ModalBody-sc-2cx8u2-0 fnaQlB"
+    >
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Diam in arcu cursus euismod quis viverra nibh. In egestas erat imperdiet sed euismod nisi. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Nisl pretium fusce id velit. Morbi tempus iaculis urna id volutpat. Adipiscing commodo elit at imperdiet dui. Vitae aliquet nec ullamcorper sit. Nisi scelerisque eu ultrices vitae auctor eu augue. Nibh praesent tristique magna sit amet. Ut sem nulla pharetra diam. Mattis enim ut tellus elementum sagittis vitae et leo. Leo in vitae turpis massa sed elementum. Elit duis tristique sollicitudin nibh sit amet commodo nulla. Libero nunc consequat interdum varius sit amet mattis vulputate. Tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Tellus id interdum velit laoreet id donec ultrices. Egestas congue quisque egestas diam in arcu cursus. Integer malesuada nunc vel risus commodo. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Quis auctor elit sed vulputate mi sit amet mauris. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar. Imperdiet massa tincidunt nunc pulvinar sapien et ligula. Adipiscing vitae proin sagittis nisl rhoncus mattis. Diam phasellus vestibulum lorem sed risus ultricies tristique nulla. Platea dictumst vestibulum rhoncus est pellentesque elit. Libero justo laoreet sit amet. Feugiat vivamus at augue eget. Vitae aliquet nec ullamcorper sit. Amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Diam ut venenatis tellus in. Volutpat odio facilisis mauris sit amet massa. Est pellentesque elit ullamcorper dignissim cras tincidunt lobortis. Urna porttitor rhoncus dolor purus non enim praesent elementum. Id velit ut tortor pretium. In eu mi bibendum neque egestas. Amet nulla facilisi morbi tempus iaculis. Magna ac placerat vestibulum lectus mauris ultrices eros. Id aliquet risus feugiat in ante. Amet nulla facilisi morbi tempus iaculis urna id volutpat lacus. Dolor purus non enim praesent elementum facilisis leo vel fringilla. Suspendisse interdum consectetur libero id faucibus nisl tincidunt.
+    </div>
+    <footer
+      className="ModalFooter-sc-4hkn1a-0 kCfYnJ"
+    >
+      Футер
+    </footer>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/ReloadToast Basic 1`] = `
+<div
+  className="ReloadToast__HugeToast-artzw6-0 JRPDG"
+  onClick={[Function]}
+>
+  Код приложения обновился. Пожалуйста, 
+  <a
+    href="/"
+  >
+    обновите страницу
+  </a>
+  .
+</div>
+`;
+
+exports[`Storyshots Components/RowNav Basic 1`] = `
+<nav>
+  <ul
+    className="RowNav__Ul-sc-8x71d3-1 hwqIYI"
+  >
+    <li
+      className="RowNav__Li-sc-8x71d3-0 dgmjhz"
+      onClick={[Function]}
+    >
+      Item 1
+    </li>
+    <li
+      className="RowNav__Li-sc-8x71d3-0 bvmTaf"
+      onClick={[Function]}
+      selected={true}
+    >
+      Item 2
+    </li>
+    <li
+      className="RowNav__Li-sc-8x71d3-0 dgmjhz"
+      onClick={[Function]}
+    >
+      Item 3
+    </li>
+  </ul>
+</nav>
+`;
+
+exports[`Storyshots Components/WithSidebar Basic 1`] = `
+<div
+  className="WithSidebar__Container-tq2oun-0 bJIrIl"
+>
+  <div
+    className="WithSidebar__Sidebar-tq2oun-1 eOqmcE"
+  >
+    <h1>
+      hello
+    </h1>
+  </div>
+  <div
+    className="WithSidebar__Main-tq2oun-2 cOfxDd"
+  >
+    Main app content
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
+<div
+  className="WithSidebar__Container-tq2oun-0 bJIrIl"
+>
+  <div
+    className="WithSidebar__Sidebar-tq2oun-1 eOqmcE"
+  >
+    <nav>
+      <ul
+        className="ColumnNav__Ul-sc-1ebrfyn-1 iqnHUq"
+      >
+        <li
+          className="ColumnNav__Li-sc-1ebrfyn-0 VRYDK"
+          onClick={[Function]}
+        >
+          Item 1
+        </li>
+        <li
+          className="ColumnNav__Li-sc-1ebrfyn-0 VRYDK"
+          onClick={[Function]}
+        >
+          Item 2
+        </li>
+        <li
+          className="ColumnNav__Li-sc-1ebrfyn-0 qFZGy"
+          onClick={[Function]}
+          selected={true}
+        >
+          Item 3 (active)
+        </li>
+        <li
+          className="ColumnNav__Li-sc-1ebrfyn-0 VRYDK"
+          onClick={[Function]}
+        >
+          Item 4
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div
+    className="WithSidebar__Main-tq2oun-2 cOfxDd"
+  >
+    Main app content
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layout/Column Basic 1`] = `
+<div
+  className="Column-sc-18tfx87-0 joUKyB"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Column Custom Gutter 1`] = `
+<div
+  className="Column-sc-18tfx87-0 bybaPz"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Column Spaced 1`] = `
+<div
+  style={
+    Object {
+      "height": 500,
+    }
+  }
+>
+  <div
+    className="Column-sc-18tfx87-0 ddApuz"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 btKaeN"
+    >
+      button 1
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 btKaeN"
+    >
+      button 2
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 btKaeN"
+    >
+      button 3
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layout/ColumnsBlock Basic 1`] = `
+<div
+  className="ColumnsBlock__ColumnsBlockWithoutDefaults-sc-7vdhav-0 ljrUOo"
+>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 1
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 2
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 3
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layout/ColumnsBlock Custom Spaces 1`] = `
+<div
+  className="ColumnsBlock__ColumnsBlockWithoutDefaults-sc-7vdhav-0 isPtrm"
+>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 1
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 2
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 3
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layout/ResponsivePadding Basic 1`] = `
+<div
+  style={
+    Object {
+      "border": "1px solid black",
+    }
+  }
+>
+  <div
+    className="ResponsivePadding-sc-2n2vps-0 fxEqsG"
+  >
+    <div
+      style={
+        Object {
+          "backgroundColor": "#ddd",
+        }
+      }
+    >
+      Содержимое
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layout/Row Basic 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 ibopnM"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Row Custom Gutter 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 eEtTfy"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Row Spaced 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 eEgTrD"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 btKaeN"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Общее/Текст RichText 1`] = `
+<div
+  className="RichText-sc-5duiue-0 bMkNSl"
+>
+  <p>
+    Внутри RichText автоматически работают кастомные стили
+     
+    <a
+      href="http://example.com"
+    >
+      для ссылок
+    </a>
+    .
+  </p>
+  <hr
+    className="HR-qwq4lj-0 bBUmVL"
+  />
+  <p>
+    И для горизонтальных линий.
+  </p>
+</div>
+`;
+
+exports[`Storyshots Общее/Текст Горизонтальная черта 1`] = `
+Array [
+  <div>
+    Текст над чертой (в div).
+  </div>,
+  <hr
+    className="HR-qwq4lj-0 bBUmVL"
+  />,
+  <div>
+    Текст под чертой (в div).
+  </div>,
+  <p>
+    Теперь тест отступа вокруг черты для параграфов. Этот текст в параграфе над чертой.
+  </p>,
+  <hr
+    className="HR-qwq4lj-0 bBUmVL"
+  />,
+  <p>
+    А это текст в параграфе под чертой.
+  </p>,
+]
+`;
+
+exports[`Storyshots Общее/Текст Параграфы 1`] = `
+<section>
+  <p>
+    Рационалисты, как известно, любят мету. Мета-уровень (от греческого "после" или "за пределами") — это уровень осмысления, выходящий за рамки объектного.
+  </p>
+  <p>
+    Например, если разговор о моральных поступках можно считать объектным уровнем обсуждения, на котором речь идёт о конкретных действиях (зачастую в рамках конкретной морально-этической системы), то мета-обсуждением был бы диалог о различных моральных взглядах и выборе между ними. Другими словами, мы выходим за пределы конкретной системы и получаем возможность рассматривать её во всей полноте, а также сравнивать с другими системами, оценивать их плюсы и минусы.
+  </p>
+  <p>
+    Можно выйти на уровень ещё выше и разбирать саму концепцию моральной системы и то, насколько наше текущее понимание этой концепции основывается на здравых предпосылках (существует целый раздел философии, занимающийся такими вопросами: мета-этика).
+  </p>
+</section>
+`;
+
+exports[`Storyshots Общее/Текст Список 1`] = `
+<section>
+  <p>
+    Текст до списка.
+  </p>
+  <ul>
+    <li>
+      Элемент 1
+    </li>
+    <li>
+      Элемент 2
+    </li>
+    <li>
+      Элемент 3
+    </li>
+  </ul>
+  <p>
+    Текст после списка.
+  </p>
+</section>
+`;
+
+exports[`Storyshots Общее/Текст Ссылка 1`] = `
+Array [
+  <div>
+    Ссылки выглядят так: 
+    <a
+      className="A-sc-1o0z9uu-0 kvAjoK"
+      href="https://kocherga.club"
+    >
+      Кочерга
+    </a>
+    .
+  </div>,
+  <div>
+    При этом не стилизируются по умолчанию (
+    <a
+      href="https://kocherga.club"
+    >
+      пример
+    </a>
+    ).
+  </div>,
+]
+`;
+
+exports[`Storyshots Общее/Цвета Все цвета 1`] = `
+<div
+  className="Column-sc-18tfx87-0 bEObAw"
+>
+  <div
+    className="Row-sc-12w6u1l-0 kNTOAN"
+  >
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 jxBerF"
+      color="hsl(210, 80%, 95%)"
+    >
+      primary/
+      100
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 btHLSF"
+      color="hsl(210, 55%, 80%)"
+    >
+      primary/
+      300
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 iFxQAp"
+      color="hsl(210, 55%, 55%)"
+    >
+      primary/
+      500
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 fVtqpL"
+      color="hsl(210, 55%, 35%)"
+    >
+      primary/
+      700
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 crA-dnb"
+      color="hsl(210, 55%, 20%)"
+    >
+      primary/
+      900
+    </div>
+  </div>
+  <div
+    className="Row-sc-12w6u1l-0 kNTOAN"
+  >
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 erEISc"
+      color="hsl(208, 20%, 97%)"
+    >
+      grey/
+      100
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 iGCcyw"
+      color="hsl(208, 12%, 92%)"
+    >
+      grey/
+      200
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 gVzYqv"
+      color="hsl(208, 12%, 80%)"
+    >
+      grey/
+      300
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 gmosQY"
+      color="hsl(208, 12%, 70%)"
+    >
+      grey/
+      400
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 fpBmGq"
+      color="hsl(208, 12%, 58%)"
+    >
+      grey/
+      500
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 iHaqss"
+      color="hsl(208, 12%, 43%)"
+    >
+      grey/
+      600
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 eiHSWw"
+      color="hsl(208, 12%, 38%)"
+    >
+      grey/
+      700
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 Vrupr"
+      color="hsl(208, 12%, 33%)"
+    >
+      grey/
+      800
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 YrKAV"
+      color="hsl(208, 12%, 28%)"
+    >
+      grey/
+      900
+    </div>
+  </div>
+  <div
+    className="Row-sc-12w6u1l-0 kNTOAN"
+  >
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 byobLy"
+      color="hsl(0, 100%, 90%)"
+    >
+      accent/
+      100
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 hAHbrP"
+      color="hsl(0, 100%, 80%)"
+    >
+      accent/
+      300
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 enUgOM"
+      color="hsl(0, 100%, 74%)"
+    >
+      accent/
+      500
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 dhLyRM"
+      color="hsl(0, 100%, 70%)"
+    >
+      accent/
+      700
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 fEIBva"
+      color="hsl(0, 60%, 60%)"
+    >
+      accent/
+      900
+    </div>
+  </div>
+</div>
+`;

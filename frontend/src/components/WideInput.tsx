@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Input } from '@kocherga/frontkit';
+import { Input } from '~/frontkit';
 
 const WideInput = styled(Input)`
   width: 100%;

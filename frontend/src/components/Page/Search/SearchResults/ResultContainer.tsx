@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import { fonts, colors } from '@kocherga/frontkit';
+import { fonts, colors } from '~/frontkit';
 import { Route } from '~/common/types';
 
 const Item = styled.div`

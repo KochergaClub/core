@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { FaPlusCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { Button, Column, Modal } from '@kocherga/frontkit';
+import { Button, Column, Modal } from '~/frontkit';
 
 import { allBlockComponents, KnownBlockFragment } from '~/wagtail/blocks';
 

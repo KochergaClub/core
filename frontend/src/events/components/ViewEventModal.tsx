@@ -3,7 +3,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { A, Button, Modal, Row } from '@kocherga/frontkit';
+import { A, Button, Modal, Row } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 

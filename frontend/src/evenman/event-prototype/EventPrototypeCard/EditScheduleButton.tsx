@@ -1,7 +1,7 @@
 import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import { useCallback, useState } from 'react';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton } from '~/components';

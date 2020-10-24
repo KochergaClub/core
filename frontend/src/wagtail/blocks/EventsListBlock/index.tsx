@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import { gql } from '@apollo/client';
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 import NonWagtailEventsListBlock from '~/events/components/EventsListBlock';

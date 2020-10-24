@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { ApolloQueryResults } from '~/components';
 import Card, { CardList } from '~/components/Card';

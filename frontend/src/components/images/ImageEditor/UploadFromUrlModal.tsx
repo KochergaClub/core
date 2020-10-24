@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender, useNotification } from '~/common/hooks';
 

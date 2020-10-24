@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { colors, RichText } from '@kocherga/frontkit';
+import { colors, RichText } from '~/frontkit';
 
 export { default as Checkbox } from './Checkbox';
 export { default as UpdatingOverlay } from './UpdatingOverlay';

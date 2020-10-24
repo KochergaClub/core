@@ -5,7 +5,7 @@ import { GoGear, GoSignOut } from 'react-icons/go';
 import styled from 'styled-components';
 
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { colors, fonts, Row } from '@kocherga/frontkit';
+import { colors, fonts, Row } from '~/frontkit';
 
 import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';

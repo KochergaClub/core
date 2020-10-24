@@ -1,4 +1,4 @@
-import { Row, HR } from '@kocherga/frontkit';
+import { Row, HR } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 import { Collection } from '~/components/collections';

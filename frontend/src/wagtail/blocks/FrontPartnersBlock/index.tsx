@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { gql } from '@apollo/client';
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { PaddedBlock } from '~/components';
 

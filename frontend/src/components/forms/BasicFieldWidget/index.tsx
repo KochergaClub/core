@@ -7,7 +7,7 @@ import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 import styled from 'styled-components';
 
-import { Input, Label } from '@kocherga/frontkit';
+import { Input, Label } from '~/frontkit';
 
 import { BasicFormField, ChoiceFormField } from '../types';
 import ErrorLabel from './ErrorLabel';

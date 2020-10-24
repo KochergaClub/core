@@ -3,7 +3,7 @@ import { ru } from 'date-fns/locale';
 import { useCallback } from 'react';
 import DatePicker from 'react-datepicker';
 
-import { A, Row } from '@kocherga/frontkit';
+import { A, Row } from '~/frontkit';
 
 import { formatDate } from '~/common/utils';
 

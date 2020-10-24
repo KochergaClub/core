@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Column, Row } from '@kocherga/frontkit';
+import { Column, Row } from '~/frontkit';
 
 import { capitalize } from '~/common/utils';
 import { AnyFormValues, FormShape } from '~/components/forms/types';

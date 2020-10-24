@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
-import { colors } from '@kocherga/frontkit';
+import { colors } from '~/frontkit';
 
 import { usePermissions } from '~/common/hooks';
 

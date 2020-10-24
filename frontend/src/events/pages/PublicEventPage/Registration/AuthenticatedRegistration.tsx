@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { FaHeart, FaUser } from 'react-icons/fa';
 
 import { useMutation } from '@apollo/client';
-import { A, colors, Column, Label, Row } from '@kocherga/frontkit';
+import { A, colors, Column, Label, Row } from '~/frontkit';
 
 import { useUser } from '~/common/hooks';
 import { AsyncButton } from '~/components';

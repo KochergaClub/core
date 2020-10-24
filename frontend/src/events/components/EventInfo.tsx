@@ -5,7 +5,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 import breaks from 'remark-breaks';
 import Markdown from 'react-markdown';
 
-import { A, RichText, Row, Label } from '@kocherga/frontkit';
+import { A, RichText, Row, Label } from '~/frontkit';
 
 import { timezone, formatDate } from '~/common/utils';
 

@@ -2,7 +2,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { useCallback, useContext, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 import { useCommonHotkeys } from '~/common/hooks';
 import { formatDate, timezone } from '~/common/utils';

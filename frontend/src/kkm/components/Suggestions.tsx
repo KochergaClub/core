@@ -1,4 +1,4 @@
-import { Button, Row } from '@kocherga/frontkit';
+import { Button, Row } from '~/frontkit';
 
 interface Props<T extends string | number> {
   values: T[];

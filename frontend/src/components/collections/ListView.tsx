@@ -1,4 +1,4 @@
-import { Column } from '@kocherga/frontkit';
+import { Column } from '~/frontkit';
 
 import { AnyViewProps } from './types';
 

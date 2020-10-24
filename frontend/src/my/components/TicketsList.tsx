@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { differenceInHours, parseISO } from 'date-fns';
 
-import { Row } from '@kocherga/frontkit';
+import { Row } from '~/frontkit';
 
 import { CardList } from '~/components/Card';
 

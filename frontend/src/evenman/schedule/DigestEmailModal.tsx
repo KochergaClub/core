@@ -1,7 +1,7 @@
 import autosize from 'autosize';
 import { useCallback, useRef } from 'react';
 
-import { Modal } from '@kocherga/frontkit';
+import { Modal } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 

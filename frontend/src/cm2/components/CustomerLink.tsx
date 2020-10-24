@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { A } from '@kocherga/frontkit';
+import { A } from '~/frontkit';
 
 import { CustomerFragment } from '../queries.generated';
 

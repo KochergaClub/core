@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import { colors, Row } from '@kocherga/frontkit';
+import { colors, Row } from '~/frontkit';
 
 export type Size = 'block' | 'div' | 'span';
 

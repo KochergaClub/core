@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, FieldProps } from 'formik';
 
-import { Label, Row } from '@kocherga/frontkit';
+import { Label, Row } from '~/frontkit';
 
 import { AnyFormField, FormField } from '../types';
 import ErrorLabel from './ErrorLabel';

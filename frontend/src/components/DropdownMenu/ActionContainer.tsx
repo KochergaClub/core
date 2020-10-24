@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, fonts } from '@kocherga/frontkit';
+import { colors, fonts } from '~/frontkit';
 
 const ActionContainer = styled.div`
   padding: 8px 12px;

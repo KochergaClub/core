@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { A, Button, Row, Column } from '@kocherga/frontkit';
+import { A, Button, Row, Column } from '~/frontkit';
 
 import AuthForm from '~/auth/components/AuthForm';
 import { checkYourEmailRoute } from '~/auth/routes';

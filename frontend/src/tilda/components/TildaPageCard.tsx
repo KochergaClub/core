@@ -2,7 +2,7 @@ import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
 
-import { A, Label, Row } from '@kocherga/frontkit';
+import { A, Label, Row } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
 import Card from '~/components/Card';

@@ -3,7 +3,7 @@ import { FaEllipsisH } from 'react-icons/fa';
 import { usePopper } from 'react-popper';
 import styled from 'styled-components';
 
-import { colors, fonts } from '@kocherga/frontkit';
+import { colors, fonts } from '~/frontkit';
 import { Placement } from '@popperjs/core';
 
 import { useExpandable } from '~/common/hooks';

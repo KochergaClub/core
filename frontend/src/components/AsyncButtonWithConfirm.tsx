@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { Button, ControlsFooter, Modal } from '@kocherga/frontkit';
+import { Button, ControlsFooter, Modal } from '~/frontkit';
 
 interface Props {
   act: () => Promise<void>;

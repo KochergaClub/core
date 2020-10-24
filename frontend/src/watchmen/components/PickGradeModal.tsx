@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
-import { Column, Modal, Row } from '@kocherga/frontkit';
+import { Column, Modal, Row } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { ApolloQueryResults, AsyncButton } from '~/components';

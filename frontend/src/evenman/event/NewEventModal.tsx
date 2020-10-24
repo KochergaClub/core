@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '@kocherga/frontkit';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender, useNotification } from '~/common/hooks';
 
