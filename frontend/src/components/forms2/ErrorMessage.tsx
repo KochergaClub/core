@@ -1,13 +1,19 @@
 import { FieldError } from 'react-hook-form';
+import styled from 'styled-components';
 
-import { Badge } from '~/frontkit';
+import { colors } from '~/frontkit';
+
+const Error = styled.small`
+  color: ${colors.accent[700]};
+  font-weight: bold;
+`;
 
 const ErrorMessage: React.FC<{ error: FieldError }> = ({ error }) => {
   switch (error.type) {
     case 'required':
-      return <Badge type="accent">Обязательное поле</Badge>;
+      return <Error>⚠ Обязательное поле</Error>;
     default:
-      return <Badge type="accent">Ошибка: {error.type}</Badge>;
+      return <Error>⚠ Ошибка: {error.type}</Error>;
   }
 };
 

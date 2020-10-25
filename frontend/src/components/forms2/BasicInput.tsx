@@ -25,7 +25,7 @@ const BasicInput = <T extends Record<string, unknown>>({
 }: Props<T>): React.ReactElement => {
   return (
     <div>
-      <Row>
+      <Row vCentered>
         <Label>{title}</Label>
         {form.errors[name] && (
           <ErrorMessage error={form.errors[name] as FieldError} />
