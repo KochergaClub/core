@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-
 import styled from 'styled-components';
 
 import * as colors from '../../colors';
-
-import ModalHeader from './ModalHeader';
-import ModalFooter from './ModalFooter';
+import { deviceMediaQueries } from '../../sizes';
 import ModalBody from './ModalBody';
+import ModalFooter from './ModalFooter';
+import ModalHeader from './ModalHeader';
 
 // Styling tips: https://css-tricks.com/considerations-styling-modal/
 
@@ -31,6 +30,10 @@ const ModalContent = styled.div`
   z-index: 1001;
 
   min-width: 320px;
+  ${deviceMediaQueries.desktop(`
+    min-width: 480px;
+  `)}
+
   overflow: auto;
   max-width: 800px;
   max-height: 100%;
@@ -49,22 +52,22 @@ interface ModalWrapperProps {
 }
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
-  display: ${props => (props.isOpen ? 'block' : 'none')};
+  display: ${(props) => (props.isOpen ? 'block' : 'none')};
 `;
 
 interface Props {
   onOpened?: () => void;
-  isOpen?: boolean; // defaults to true
+  isOpen?: boolean; // defaults to true; deprecated
   overflow?: string; // deprecated
 }
 
 type ModalType = React.FC<Props> & {
-  Body: typeof ModalBody,
-  Footer: typeof ModalFooter,
-  Header: typeof ModalHeader,
-  _Content: typeof ModalContent,
-  _Overlay: typeof Overlay,
-}
+  Body: typeof ModalBody;
+  Footer: typeof ModalFooter;
+  Header: typeof ModalHeader;
+  _Content: typeof ModalContent;
+  _Overlay: typeof Overlay;
+};
 
 export const Modal: ModalType = (props) => {
   const [el] = React.useState(() => document.createElement('div'));
@@ -81,14 +84,11 @@ export const Modal: ModalType = (props) => {
     console.warn('Modal.overflow prop is deprecated');
   }
 
-  const isOpen = (props.isOpen === undefined) ? true : props.isOpen;
+  const isOpen = props.isOpen === undefined ? true : props.isOpen;
 
-  React.useEffect(
-    () => {
-      isOpen && props.onOpened && props.onOpened();
-    },
-    [isOpen, props.onOpened]
-  );
+  React.useEffect(() => {
+    isOpen && props.onOpened && props.onOpened();
+  }, [isOpen, props.onOpened]);
 
   const renderModal = () => {
     return (

@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
+import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { Modal } from '~/frontkit';
 
 import { Spinner } from '~/components';
+import { Modal } from '~/frontkit';
 
 import { RatioOrderFragment, RatioTicketTypesDocument } from '../queries.generated';
 import CheckoutOrderModal from './CheckoutOrderModal';
@@ -12,6 +13,10 @@ import FormOrderModal from './FormOrderModal';
 interface Props {
   close: () => void;
 }
+
+const SpinnerContainer = styled.div`
+  min-height: 400px;
+`;
 
 const OrderModal: React.FC<Props> = ({ close }) => {
   const [order, setOrder] = useState<RatioOrderFragment | undefined>();
@@ -29,7 +34,9 @@ const OrderModal: React.FC<Props> = ({ close }) => {
       <Modal>
         <Modal.Header toggle={close}>Регистрация</Modal.Header>
         <Modal.Body>
-          <Spinner size="div" />
+          <SpinnerContainer>
+            <Spinner size="div" />
+          </SpinnerContainer>
         </Modal.Body>
       </Modal>
     );

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FieldError, useForm } from 'react-hook-form';
 import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, ControlsFooter, Label, Modal } from '~/frontkit';
 
-import { WideInput } from '~/components';
+import { BasicInput, ErrorMessage } from '~/components/forms2';
+import { Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
 import {
     RatioCreateOrderDocument, RatioOrderFragment, RatioTicketType_ForPickerFragment
@@ -70,10 +70,16 @@ const FormOrderModal: React.FC<Props> = ({
         <Modal.Body>
           <Column stretch gutter={16}>
             <div>
-              <label>В каком потоке вы участвуете?</label>
+              <Row>
+                <Label>В каком потоке вы участвуете?</Label>
+                {form.errors.ticket_type && (
+                  <ErrorMessage error={form.errors.ticket_type as FieldError} />
+                )}
+              </Row>
               <Controller
                 name="ticket_type"
                 as={Select}
+                placeholder="Выбрать..."
                 options={ticketTypes.map(
                   (ticketType) =>
                     ({
@@ -82,29 +88,42 @@ const FormOrderModal: React.FC<Props> = ({
                     } as SelectOptionType)
                 )}
                 control={form.control}
+                rules={{ required: true }}
               />
             </div>
-            <div>
-              <label>E-mail участника</label>
-              <WideInput type="email" name="email" ref={form.register} />
-            </div>
-            <div>
-              <label>Имя участника</label>
-              <WideInput type="string" name="first_name" ref={form.register} />
-            </div>
-            <div>
-              <label>Фамилия участника</label>
-              <WideInput type="string" name="last_name" ref={form.register} />
-            </div>
-            <div>
-              <label>Из какого города вы планируете проходить курс?</label>
-              <WideInput type="string" name="city" ref={form.register} />
-            </div>
+            <BasicInput
+              title="E-mail участника"
+              name="email"
+              placeholder="ludwig@wittgenstein.com"
+              required
+              form={form}
+            />
+            <BasicInput
+              title="Имя участника"
+              name="first_name"
+              placeholder="Бертран"
+              required
+              form={form}
+            />
+            <BasicInput
+              title="Фамилия участника"
+              name="last_name"
+              placeholder="Рассел"
+              required
+              form={form}
+            />
+            <BasicInput
+              title="Из какого города вы планируете проходить курс?"
+              name="city"
+              placeholder="Москва"
+              required
+              form={form}
+            />
           </Column>
         </Modal.Body>
         <Modal.Footer>
           <ControlsFooter>
-            <Button type="submit">
+            <Button type="submit" kind="primary">
               Оплатить
               {watchTicketType ? ` ${watchTicketType.value.price} руб.` : ''}
             </Button>
