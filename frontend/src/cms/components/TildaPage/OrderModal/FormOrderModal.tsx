@@ -4,8 +4,8 @@ import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
 
-import { BasicInput, ErrorMessage } from '~/components/forms2';
-import { Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
+import { BasicInputField, FieldContainer } from '~/components/forms2';
+import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
 
 import {
     RatioCreateOrderDocument, RatioOrderFragment, RatioTicketType_ForPickerFragment
@@ -69,13 +69,10 @@ const FormOrderModal: React.FC<Props> = ({
       <form onSubmit={form.handleSubmit(postForm)}>
         <Modal.Body>
           <Column stretch gutter={16}>
-            <div>
-              <Row>
-                <Label>В каком потоке вы участвуете?</Label>
-                {form.errors.ticket_type && (
-                  <ErrorMessage error={form.errors.ticket_type as FieldError} />
-                )}
-              </Row>
+            <FieldContainer
+              title="В каком потоке вы участвуете?"
+              error={form.errors.ticket_type as FieldError | undefined}
+            >
               <Controller
                 name="ticket_type"
                 as={Select}
@@ -90,29 +87,29 @@ const FormOrderModal: React.FC<Props> = ({
                 control={form.control}
                 rules={{ required: true }}
               />
-            </div>
-            <BasicInput
+            </FieldContainer>
+            <BasicInputField
               title="E-mail участника"
               name="email"
               placeholder="ludwig@wittgenstein.com"
               required
               form={form}
             />
-            <BasicInput
+            <BasicInputField
               title="Имя участника"
               name="first_name"
               placeholder="Бертран"
               required
               form={form}
             />
-            <BasicInput
+            <BasicInputField
               title="Фамилия участника"
               name="last_name"
               placeholder="Рассел"
               required
               form={form}
             />
-            <BasicInput
+            <BasicInputField
               title="Из какого города вы планируете проходить курс?"
               name="city"
               placeholder="Москва"

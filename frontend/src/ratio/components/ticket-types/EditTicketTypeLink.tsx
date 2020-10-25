@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { AsyncButton } from '~/components';
+import { BasicInputField } from '~/components/forms2';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { RatioTicketTypeFragment } from '../../queries.generated';
 import { DeleteRatioTicketTypeDocument, UpdateRatioTicketTypeDocument } from './queries.generated';
@@ -64,20 +65,20 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
       <Modal.Header toggle={close}>Редактирование вида билета</Modal.Header>
       <form onSubmit={form.handleSubmit(updateCb)}>
         <Modal.Body>
-          <Column stretch>
-            <Label>Название</Label>
-            <Input
-              type="text"
+          <Column gutter={16} stretch>
+            <BasicInputField
+              title="Название"
               name="name"
               defaultValue={ticketType.name}
-              ref={form.register}
+              form={form}
+              required
             />
-            <Label>Стоимость</Label>
-            <Input
-              type="number"
+            <BasicInputField
+              title="Стоимость"
               name="price"
-              defaultValue={ticketType.price}
-              ref={form.register}
+              defaultValue={String(ticketType.price)}
+              form={form}
+              required
             />
           </Column>
         </Modal.Body>

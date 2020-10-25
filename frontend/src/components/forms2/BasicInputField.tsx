@@ -2,43 +2,39 @@ import React from 'react';
 import { FieldError, UseFormMethods } from 'react-hook-form';
 
 import { WideInput } from '~/components';
-import { Label, Row } from '~/frontkit';
 
-import ErrorMessage from './ErrorMessage';
+import FieldContainer from './FieldContainer';
 
 interface Props<T extends Record<string, unknown>> {
   name: keyof T;
   title: string;
+  type?: 'string' | 'email' | 'number';
   placeholder?: string;
   form: UseFormMethods<T>;
   required?: boolean;
-  type?: 'string' | 'email';
+  defaultValue?: string;
 }
 
-const BasicInput = <T extends Record<string, unknown>>({
+const BasicInputField = <T extends Record<string, unknown>>({
   name,
   title,
   type,
   placeholder,
-  required,
+  defaultValue,
   form,
+  required,
 }: Props<T>): React.ReactElement => {
   return (
-    <div>
-      <Row vCentered>
-        <Label>{title}</Label>
-        {form.errors[name] && (
-          <ErrorMessage error={form.errors[name] as FieldError} />
-        )}
-      </Row>
+    <FieldContainer title={title} error={form.errors[name] as FieldError}>
       <WideInput
         type={type || 'string'}
         name={name}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         ref={form.register({ required: required || false })}
       />
-    </div>
+    </FieldContainer>
   );
 };
 
-export default BasicInput;
+export default BasicInputField;
