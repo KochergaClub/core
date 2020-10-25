@@ -5,7 +5,7 @@ import * as fonts from '../fonts';
 
 export const Label = styled.label`
   display: block;
-  ${fonts.label};
+  font-size: ${fonts.sizes.S};
   font-weight: 500;
-  color: ${colors.grey[700]};
+  color: ${colors.grey[600]};
 `;
