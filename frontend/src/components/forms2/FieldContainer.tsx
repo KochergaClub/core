@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldError } from 'react-hook-form';
 
-import { Column, Label, Row } from '~/frontkit';
+import { Column, LabelDiv, Row } from '~/frontkit';
 
 import ErrorMessage from './ErrorMessage';
 
@@ -12,13 +12,15 @@ interface Props {
 
 const FieldContainer: React.FC<Props> = ({ error, title, children }) => {
   return (
-    <Column gutter={4} stretch>
-      <Row vCentered>
-        <Label>{title}</Label>
-        {error && <ErrorMessage error={error} />}
-      </Row>
-      {children}
-    </Column>
+    <label>
+      <Column gutter={4} stretch>
+        <Row vCentered>
+          <LabelDiv>{title}</LabelDiv>
+          {error && <ErrorMessage error={error} />}
+        </Row>
+        {children}
+      </Column>
+    </label>
   );
 };
 

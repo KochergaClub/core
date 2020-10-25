@@ -4,8 +4,8 @@ import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
 
-import { BasicInputField, FieldContainer } from '~/components/forms2';
-import { Button, Column, ControlsFooter, Modal } from '~/frontkit';
+import { BasicInputField, ErrorMessage, FieldContainer } from '~/components/forms2';
+import { A, Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
 import {
     RatioCreateOrderDocument, RatioOrderFragment, RatioTicketType_ForPickerFragment
@@ -28,6 +28,7 @@ type FormData = {
   first_name: string;
   last_name: string;
   city: string;
+  terms: boolean;
 };
 
 const FormOrderModal: React.FC<Props> = ({
@@ -47,7 +48,7 @@ const FormOrderModal: React.FC<Props> = ({
           input: {
             ticket_type_id: v.ticket_type.value.id,
             email: v.email,
-            first_name: v.first_name, // FIXME
+            first_name: v.first_name,
             last_name: v.last_name,
             city: v.city,
             // TODO - payer
@@ -116,6 +117,23 @@ const FormOrderModal: React.FC<Props> = ({
               required
               form={form}
             />
+            <Label>
+              <Row vCentered gutter={8}>
+                <input
+                  type="checkbox"
+                  name="terms"
+                  defaultChecked={true}
+                  ref={form.register({ required: true })}
+                />
+                <div>
+                  Ознакомлен и согласен с условиями{' '}
+                  <A href="/oferta" target="_blank">
+                    договора об оказании информационных услуг (публичная оферта)
+                  </A>
+                </div>
+              </Row>
+              <ErrorMessage error={form.errors.terms} />
+            </Label>
           </Column>
         </Modal.Body>
         <Modal.Footer>

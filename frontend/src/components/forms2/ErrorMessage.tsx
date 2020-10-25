@@ -8,7 +8,14 @@ const Error = styled.small`
   font-weight: bold;
 `;
 
-const ErrorMessage: React.FC<{ error: FieldError }> = ({ error }) => {
+interface Props {
+  error?: FieldError;
+}
+
+const ErrorMessage: React.FC<Props> = ({ error }) => {
+  if (!error) {
+    return null;
+  }
   switch (error.type) {
     case 'required':
       return <Error>⚠ Обязательное поле</Error>;
