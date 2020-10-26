@@ -3,7 +3,7 @@ import { FieldError } from 'react-hook-form';
 
 import { Column, LabelDiv, Row } from '~/frontkit';
 
-import ErrorMessage from './ErrorMessage';
+import FieldErrorMessage from './FieldErrorMessage';
 
 interface Props {
   error: FieldError | undefined;
@@ -16,7 +16,7 @@ const FieldContainer: React.FC<Props> = ({ error, title, children }) => {
       <Column gutter={4} stretch>
         <Row vCentered>
           <LabelDiv>{title}</LabelDiv>
-          {error && <ErrorMessage error={error} />}
+          {error && <FieldErrorMessage error={error} />}
         </Row>
         {children}
       </Column>

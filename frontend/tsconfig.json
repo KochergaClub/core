@@ -23,6 +23,12 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "exclude": ["node_modules", ".next", "next.config.js", "dist"],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "next.config.js",
+    "dist",
+    "src/**/*.stories.tsx"
+  ],
   "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "server/**/*.ts"]
 }

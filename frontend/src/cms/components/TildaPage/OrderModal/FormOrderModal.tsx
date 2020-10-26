@@ -4,7 +4,9 @@ import Select from 'react-select';
 
 import { useMutation } from '@apollo/client';
 
-import { BasicInputField, ErrorMessage, FieldContainer } from '~/components/forms2';
+import {
+    BasicInputField, ErrorMessage, FieldContainer, FieldErrorMessage
+} from '~/components/forms2';
 import { A, Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
 import {
@@ -44,40 +46,46 @@ const FormOrderModal: React.FC<Props> = ({
 
   const postForm = useCallback(
     async (v: FormData) => {
-      const { data } = await createOrderMutation({
-        variables: {
-          input: {
-            ticket_type_id: v.ticket_type.value.id,
-            email: v.email,
-            first_name: v.first_name,
-            last_name: v.last_name,
-            city: v.city,
-            // TODO - payer
+      try {
+        const { data } = await createOrderMutation({
+          variables: {
+            input: {
+              ticket_type_id: v.ticket_type.value.id,
+              email: v.email,
+              first_name: v.first_name,
+              last_name: v.last_name,
+              city: v.city,
+              // TODO - payer
+            },
           },
-        },
-      });
-      if (!data) {
-        throw new Error('Mutation failed');
+        });
+        if (!data) {
+          setSubmitError('Внутренняя ошибка');
+          return { close: false };
+        }
+        switch (data.result.__typename) {
+          case 'RatioOrder':
+            onOrderCreated(data.result);
+            break;
+          case 'ValidationError':
+            for (const error of data.result.errors) {
+              form.setError(error.name, {
+                type: 'manual',
+                message: error.messages.join('. '),
+              });
+            }
+            break;
+          case 'GenericError':
+            setSubmitError(data.result.message);
+            break;
+          default:
+            setSubmitError('Неизвестная ошибка');
+        }
+        return { close: false };
+      } catch (e) {
+        setSubmitError('Внутренняя ошибка'); // probably mutation error, though we should check `e` type
+        return { close: false };
       }
-      switch (data.result.__typename) {
-        case 'RatioOrder':
-          onOrderCreated(data.result);
-          break;
-        case 'ValidationError':
-          for (const error of data.result.errors) {
-            form.setError(error.name, {
-              type: 'manual',
-              message: error.messages.join('. '),
-            });
-          }
-          break;
-        case 'GenericError':
-          setSubmitError(data.result.message);
-          break;
-        default:
-          setSubmitError('Неизвестная ошибка');
-      }
-      return { close: false };
     },
     [createOrderMutation, onOrderCreated, form]
   );
@@ -154,16 +162,24 @@ const FormOrderModal: React.FC<Props> = ({
                   </div>
                 </Row>
               </Label>
-              <ErrorMessage error={form.errors.terms} />
+              <FieldErrorMessage error={form.errors.terms} />
             </div>
           </Column>
         </Modal.Body>
         <Modal.Footer>
           <ControlsFooter>
-            <Button type="submit" kind="primary">
-              Оплатить
-              {watchTicketType ? ` ${watchTicketType.value.price} руб.` : ''}
-            </Button>
+            <Row vCentered gutter={16}>
+              {submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+              <Button
+                type="submit"
+                kind="primary"
+                loading={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting}
+              >
+                Оплатить
+                {watchTicketType ? ` ${watchTicketType.value.price} руб.` : ''}
+              </Button>
+            </Row>
           </ControlsFooter>
         </Modal.Footer>
       </form>

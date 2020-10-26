@@ -28,7 +28,7 @@ const BasicInputField = <T extends Record<string, unknown>>({
     <FieldContainer title={title} error={form.errors[name] as FieldError}>
       <WideInput
         type={type}
-        name={name}
+        name={name as string}
         placeholder={placeholder}
         defaultValue={defaultValue}
         ref={form.register({ required })}
