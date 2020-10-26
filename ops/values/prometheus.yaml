@@ -3,14 +3,14 @@ prometheus:
     image:
       tag: v2.19.2
     externalUrl: https://prometheus.team.kocherga.club
-    retentionSize: "8GB"
+    retentionSize: "16GB"
     retention: 30d
     storageSpec:
       volumeClaimTemplate:
         spec:
           resources:
             requests:
-              storage: 10Gi
+              storage: 20Gi
     serviceMonitorNamespaceSelector: {}
     serviceMonitorSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
