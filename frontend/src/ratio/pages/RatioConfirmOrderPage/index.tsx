@@ -4,16 +4,10 @@ import React, { useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 
 import { NextApolloPage, withApollo } from '~/apollo';
-import { RatioConfirmOrderOutcome } from '~/apollo/types.generated';
 import { Page, Spinner } from '~/components';
 
+import ConfirmOutcome from './ConfirmOutcome';
 import { RatioConfirmOrderDocument } from './queries.generated';
-
-const ConfirmOutcome: React.FC<{ outcome: RatioConfirmOrderOutcome }> = ({
-  outcome,
-}) => {
-  return <div>{outcome}</div>;
-};
 
 const RatioConfirmOrderPage: NextApolloPage = () => {
   const router = useRouter();
@@ -35,7 +29,7 @@ const RatioConfirmOrderPage: NextApolloPage = () => {
 
   return (
     <Page title="Подтверждение заказа">
-      <Page.Title>TODO</Page.Title>
+      <Page.Title>Подтверждение заказа</Page.Title>
       <Page.Main>
         {confirmResults.loading ? (
           <Spinner size="block" />
