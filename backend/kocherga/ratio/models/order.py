@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from kocherga.django.fields import ShortUUIDField
 
 from .ticket import Ticket
@@ -14,6 +15,17 @@ class OrderManager(models.Manager):
             amount=ticket_type.price,
             description=f'Участие в тренинге: {ticket_type.training.name}',
         )
+
+        # Check that there's no ticket for this email and training.
+        # Note that this still allows for race conditions - it's still possible to create two orders for the same email
+        # if these orders are not confirmed. In this case we'll raise TicketAlreadyExistsError later.
+        if (
+            Ticket.objects.filter(
+                email=kwargs['email'], training=ticket_type.training
+            ).count()
+            > 0
+        ):
+            raise ValidationError({'email': ['Этот email уже зарегистрирован']})
 
         order = Order(
             **kwargs,
