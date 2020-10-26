@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Controller, FieldError, useForm } from 'react-hook-form';
 import Select from 'react-select';
 
@@ -38,6 +38,7 @@ const FormOrderModal: React.FC<Props> = ({
 }) => {
   const form = useForm<FormData>();
   const watchTicketType = form.watch('ticket_type');
+  const [submitError, setSubmitError] = useState('');
 
   const [createOrderMutation] = useMutation(RatioCreateOrderDocument);
 
@@ -58,10 +59,27 @@ const FormOrderModal: React.FC<Props> = ({
       if (!data) {
         throw new Error('Mutation failed');
       }
-      onOrderCreated(data.result.order);
+      switch (data.result.__typename) {
+        case 'RatioOrder':
+          onOrderCreated(data.result);
+          break;
+        case 'ValidationError':
+          for (const error of data.result.errors) {
+            form.setError(error.name, {
+              type: 'manual',
+              message: error.messages.join('. '),
+            });
+          }
+          break;
+        case 'GenericError':
+          setSubmitError(data.result.message);
+          break;
+        default:
+          setSubmitError('Неизвестная ошибка');
+      }
       return { close: false };
     },
-    [createOrderMutation, onOrderCreated]
+    [createOrderMutation, onOrderCreated, form]
   );
 
   return (
@@ -92,6 +110,7 @@ const FormOrderModal: React.FC<Props> = ({
             <BasicInputField
               title="E-mail участника"
               name="email"
+              type="email"
               placeholder="ludwig@wittgenstein.com"
               required
               form={form}
@@ -117,23 +136,26 @@ const FormOrderModal: React.FC<Props> = ({
               required
               form={form}
             />
-            <Label>
-              <Row vCentered gutter={8}>
-                <input
-                  type="checkbox"
-                  name="terms"
-                  defaultChecked={true}
-                  ref={form.register({ required: true })}
-                />
-                <div>
-                  Ознакомлен и согласен с условиями{' '}
-                  <A href="/oferta" target="_blank">
-                    договора об оказании информационных услуг (публичная оферта)
-                  </A>
-                </div>
-              </Row>
+            <div>
+              <Label>
+                <Row vCentered gutter={8}>
+                  <input
+                    type="checkbox"
+                    name="terms"
+                    defaultChecked={true}
+                    ref={form.register({ required: true })}
+                  />
+                  <div>
+                    Ознакомлен и согласен с условиями{' '}
+                    <A href="/oferta" target="_blank">
+                      договора об оказании информационных услуг (публичная
+                      оферта)
+                    </A>
+                  </div>
+                </Row>
+              </Label>
               <ErrorMessage error={form.errors.terms} />
-            </Label>
+            </div>
           </Column>
         </Modal.Body>
         <Modal.Footer>

@@ -25,6 +25,7 @@ def view404(request):
     raise NotFound()
 
 
+# Can be removed after we refactor kocherga.email.views.SubscribeChannelViewSet into a simpler hook.
 class BulkRetrieveMixin:
     @action(detail=False)
     def bulk(self: Manager, request):

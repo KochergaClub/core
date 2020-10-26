@@ -19,6 +19,8 @@ const ErrorMessage: React.FC<Props> = ({ error }) => {
   switch (error.type) {
     case 'required':
       return <Error>⚠ Обязательное поле</Error>;
+    case 'manual':
+      return <Error>⚠ {error.message}</Error>;
     default:
       return <Error>⚠ Ошибка: {error.type}</Error>;
   }

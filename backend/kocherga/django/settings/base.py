@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'wagtailorderable',
     'condensedinlinepanel',
     'ariadne.contrib.django',
+    'kocherga.django',
     'kocherga.wagtail',
     'kocherga.auth',
     'kocherga.zadarma',

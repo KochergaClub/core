@@ -890,6 +890,11 @@ export type FrontSocialLinksBlock = WagtailBlock & {
   id: Scalars['ID'];
 };
 
+export type GenericError = {
+  __typename?: 'GenericError';
+  message: Scalars['String'];
+};
+
 export type GreyBlock = WagtailBlock & {
   __typename?: 'GreyBlock';
   id: Scalars['ID'];
@@ -2016,10 +2021,7 @@ export type RatioCreateOrderPayerInput = {
   last_name: Scalars['String'];
 };
 
-export type RatioCreateOrderResult = {
-  __typename?: 'RatioCreateOrderResult';
-  order: RatioOrder;
-};
+export type RatioCreateOrderResult = RatioOrder | ValidationError | GenericError;
 
 export type RatioExerciseBlock = WagtailBlock & {
   __typename?: 'RatioExerciseBlock';
@@ -2411,6 +2413,17 @@ export type UpdateRatioTicketTypeInput = {
   id: Scalars['ID'];
   price?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+};
+
+export type ValidationError = {
+  __typename?: 'ValidationError';
+  errors: Array<ValidationErrorItem>;
+};
+
+export type ValidationErrorItem = {
+  __typename?: 'ValidationErrorItem';
+  name: Scalars['String'];
+  messages: Array<Scalars['String']>;
 };
 
 export type VkGroup = {

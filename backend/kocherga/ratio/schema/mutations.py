@@ -2,6 +2,11 @@ from typing import Optional
 import datetime
 import enum
 
+from django.core.exceptions import ValidationError
+
+import kocherga.django.schema.types
+from kocherga.django.errors import GenericError, BoxedError
+
 from kocherga.graphql import g, helpers, basic_types
 from kocherga.graphql.permissions import user_perm
 
@@ -229,19 +234,39 @@ class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
 class ratioCreateOrder(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         ticket_type_id = input['ticket_type_id']
-        ticket_type = models.TicketType.objects.get(uuid=ticket_type_id)
-        order = models.Order.objects.create_order(
-            ticket_type=ticket_type,
-            email=input['email'],
-            first_name=input['first_name'],
-            last_name=input['last_name'],
-            city=input['city'],
-            payer_email=input.get('payer', {}).get('email', ''),
-            payer_first_name=input.get('payer', {}).get('first_name', ''),
-            payer_last_name=input.get('payer', {}).get('last_name', ''),
-        )
-        order.full_clean()  # extra precaution, make sure that order is ok
-        return {'order': order}
+        try:
+            ticket_type = models.TicketType.objects.get(uuid=ticket_type_id)
+        except models.TicketType.DoesNotExist:
+            return GenericError('Тип билета не найден')
+
+        try:
+            order = models.Order.objects.create_order(
+                ticket_type=ticket_type,
+                email=input['email'],
+                first_name=input['first_name'],
+                last_name=input['last_name'],
+                city=input['city'],
+                payer_email=input.get('payer', {}).get('email', ''),
+                payer_first_name=input.get('payer', {}).get('first_name', ''),
+                payer_last_name=input.get('payer', {}).get('last_name', ''),
+            )
+            order.full_clean()  # extra precaution, make sure that order is ok
+        except ValidationError as e:
+            return BoxedError(e)
+
+        return order
+
+    def resolve_type(self, value, *_):
+        if isinstance(value, models.Order):
+            return types.RatioOrder
+        elif isinstance(value, BoxedError):
+            if isinstance(value.error, ValidationError):
+                return kocherga.django.schema.types.ValidationError
+            raise Exception(f"Can't recognize {value} as allowed return type")
+        elif isinstance(value, GenericError):
+            return kocherga.django.schema.types.GenericError
+        else:
+            raise Exception(f"Can't recognize {value} as allowed return type")
 
     permissions = []  # anyone can create an order
 
@@ -264,7 +289,19 @@ class ratioCreateOrder(helpers.BaseFieldWithInput):
         'payer': PayerInput,
     }
 
-    result = {'order': g.NN(types.RatioOrder)}
+    @property
+    def result(self):
+        return g.NN(
+            g.UnionType(
+                'RatioCreateOrderResult',
+                types=[
+                    types.RatioOrder,
+                    kocherga.django.schema.types.ValidationError,
+                    kocherga.django.schema.types.GenericError,
+                ],
+                resolve_type=lambda *_: self.resolve_type(*_),
+            )
+        )
 
 
 @c.class_field

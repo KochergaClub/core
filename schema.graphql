@@ -741,6 +741,10 @@ type FrontSocialLinksBlock implements WagtailBlock {
   id: ID!
 }
 
+type GenericError {
+  message: String!
+}
+
 type GreyBlock implements WagtailBlock {
   id: ID!
   value: GreyBlockValue!
@@ -1189,9 +1193,7 @@ input RatioCreateOrderPayerInput {
   last_name: String!
 }
 
-type RatioCreateOrderResult {
-  order: RatioOrder!
-}
+union RatioCreateOrderResult = RatioOrder | ValidationError | GenericError
 
 type RatioExerciseBlock implements WagtailBlock {
   id: ID!
@@ -1527,6 +1529,15 @@ input UpdateRatioTicketTypeInput {
   id: ID!
   price: Int
   name: String
+}
+
+type ValidationError {
+  errors: [ValidationErrorItem!]!
+}
+
+type ValidationErrorItem {
+  name: String!
+  messages: [String!]!
 }
 
 type VkGroup {

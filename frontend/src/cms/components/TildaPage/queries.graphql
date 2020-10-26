@@ -5,8 +5,17 @@ fragment RatioOrder on RatioOrder {
 
 mutation RatioCreateOrder($input: RatioCreateOrderInput!) {
   result: ratioCreateOrder(input: $input) {
-    order {
+    ... on RatioOrder {
       ...RatioOrder
+    }
+    ... on GenericError {
+      message
+    }
+    ... on ValidationError {
+      errors {
+        name
+        messages
+      }
     }
   }
 }

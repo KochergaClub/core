@@ -14,6 +14,11 @@
       "SlackAccount",
       "WikiAccount"
     ],
+    "RatioCreateOrderResult": [
+      "RatioOrder",
+      "ValidationError",
+      "GenericError"
+    ],
     "SearchItem": [
       "PageSearchItem",
       "EventSearchItem"

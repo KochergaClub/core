@@ -18,20 +18,20 @@ interface Props<T extends Record<string, unknown>> {
 const BasicInputField = <T extends Record<string, unknown>>({
   name,
   title,
-  type,
+  type = 'string',
   placeholder,
   defaultValue,
   form,
-  required,
+  required = false,
 }: Props<T>): React.ReactElement => {
   return (
     <FieldContainer title={title} error={form.errors[name] as FieldError}>
       <WideInput
-        type={type || 'string'}
+        type={type}
         name={name}
         placeholder={placeholder}
         defaultValue={defaultValue}
-        ref={form.register({ required: required || false })}
+        ref={form.register({ required })}
       />
     </FieldContainer>
   );
