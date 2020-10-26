@@ -3,16 +3,23 @@ import { MdError } from 'react-icons/md';
 import styled from 'styled-components';
 
 import { RatioConfirmOrderOutcome } from '~/apollo/types.generated';
-import { A, colors, fonts, Row } from '~/frontkit';
+import { PaddedBlock } from '~/components';
+import { A, colors, deviceMediaQueries, fonts, Row } from '~/frontkit';
 
 const BigOutcomeContainer = styled.div`
   max-width: 480px;
   margin: 60px auto;
+  ${deviceMediaQueries.mobile(`
+  margin: 0 auto;
+  `)}
 `;
 
 const BigOutcomeHeader = styled.h1`
   font-size: ${fonts.sizes.XL};
   line-height: 1;
+  ${deviceMediaQueries.mobile(`
+  font-size: ${fonts.sizes.L};
+  `)}
 `;
 
 const BigOutcome: React.FC<{
@@ -22,13 +29,15 @@ const BigOutcome: React.FC<{
 }> = ({ title, icon, color = 'black', children }) => {
   const Icon = icon;
   return (
-    <BigOutcomeContainer>
-      <Row gutter={16} vCentered>
-        <Icon style={{ color }} size={32} />
-        <BigOutcomeHeader>{title}</BigOutcomeHeader>
-      </Row>
-      <div>{children}</div>
-    </BigOutcomeContainer>
+    <PaddedBlock>
+      <BigOutcomeContainer>
+        <Row gutter={16} vCentered>
+          <Icon style={{ color }} size={32} />
+          <BigOutcomeHeader>{title}</BigOutcomeHeader>
+        </Row>
+        <div>{children}</div>
+      </BigOutcomeContainer>
+    </PaddedBlock>
   );
 };
 
