@@ -6,7 +6,8 @@
   "private": true,
   "license": "AGPL-3.0-only",
   "scripts": {
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
     "@apollo/client": "^3.2.0",
