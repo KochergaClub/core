@@ -1,8 +1,8 @@
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { Page } from '~/components';
 
-import TrainingCollectionBlock from '~/ratio/components/TrainingCollectionBlock';
+import OrderCollectionBlock from '../components/orders/OrderCollectionBlock';
+import TrainingCollectionBlock from '../components/TrainingCollectionBlock';
 
 const RatioIndexPage: NextApolloPage = () => {
   return (
@@ -10,6 +10,7 @@ const RatioIndexPage: NextApolloPage = () => {
       <Page.Title>Воркшопы, курсы, тренинги</Page.Title>
       <Page.Main>
         <TrainingCollectionBlock />
+        <OrderCollectionBlock />
       </Page.Main>
     </Page>
   );

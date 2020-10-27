@@ -64,4 +64,14 @@ class ratioTicketTypes(helpers.BaseField):
     result = g.NNList(types.RatioTicketType)
 
 
+@c.class_field
+class ratioOrders(helpers.BaseField):
+    def resolve(self, _, info, **pager):
+        return models.Order.objects.relay_page(order='-created', **pager)
+
+    permissions = [user_perm('ratio.manage')]
+    args = helpers.connection_args()
+    result = g.NN(types.RatioOrderConnection)
+
+
 queries = c.as_dict()

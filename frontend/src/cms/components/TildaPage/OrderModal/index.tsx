@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 import { Spinner } from '~/components';
 import { Modal } from '~/frontkit';
 
-import { RatioOrderFragment, RatioTicketTypesDocument } from '../queries.generated';
+import { RatioOrder_CreatedFragment, RatioTicketTypesDocument } from '../queries.generated';
 import CheckoutOrderModal from './CheckoutOrderModal';
 import FormOrderModal from './FormOrderModal';
 
@@ -19,13 +19,13 @@ const SpinnerContainer = styled.div`
 `;
 
 const OrderModal: React.FC<Props> = ({ close }) => {
-  const [order, setOrder] = useState<RatioOrderFragment | undefined>();
+  const [order, setOrder] = useState<RatioOrder_CreatedFragment | undefined>();
 
   const ticketTypesResults = useQuery(RatioTicketTypesDocument);
 
   const ticketTypes = ticketTypesResults.data?.result;
 
-  const onOrderCreated = useCallback((order: RatioOrderFragment) => {
+  const onOrderCreated = useCallback((order: RatioOrder_CreatedFragment) => {
     setOrder(order);
   }, []);
 

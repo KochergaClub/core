@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from kocherga.django.fields import ShortUUIDField
+from kocherga.django.managers import RelayQuerySetMixin
 
 from .ticket import Ticket
 from .payment import Payment
@@ -8,7 +9,17 @@ from .ticket_type import TicketType
 from kocherga.yandex_kassa.models import Payment as KassaPayment
 
 
+class OrderQuerySet(models.QuerySet, RelayQuerySetMixin):
+    pass
+
+
 class OrderManager(models.Manager):
+    def get_queryset(self):
+        return OrderQuerySet(self.model, using=self._db)
+
+    def relay_page(self, *args, **kwargs):
+        return self.get_queryset().relay_page(*args, **kwargs)
+
     def create_order(self, **kwargs):
         ticket_type = kwargs['ticket_type']
         payment = KassaPayment.objects.create(

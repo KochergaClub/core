@@ -1774,6 +1774,7 @@ export type Query = {
   ratioTrainersAll: Array<RatioTrainer>;
   ratioTrainingEmailPrototype: Scalars['String'];
   ratioTicketTypes: Array<RatioTicketType>;
+  ratioOrders: RatioOrderConnection;
   mastermindDatingCohorts: Array<MastermindDatingCohort>;
   mastermindDatingCohortById: MastermindDatingCohort;
   projects: Array<ProjectPage>;
@@ -1942,6 +1943,14 @@ export type QueryRatioTrainingEmailPrototypeArgs = {
 };
 
 
+export type QueryRatioOrdersArgs = {
+  before?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
 export type QueryMastermindDatingCohortByIdArgs = {
   id: Scalars['ID'];
 };
@@ -2091,6 +2100,24 @@ export type RatioOrder = {
   fulfilled: Scalars['Boolean'];
   id: Scalars['ID'];
   confirmation_token: Scalars['String'];
+  created: Scalars['String'];
+  email: Scalars['String'];
+  first_name: Scalars['String'];
+  last_name: Scalars['String'];
+  city: Scalars['String'];
+  ticket_type: RatioTicketType;
+};
+
+export type RatioOrderConnection = {
+  __typename?: 'RatioOrderConnection';
+  pageInfo: PageInfo;
+  nodes: Array<RatioOrder>;
+  edges: Array<RatioOrderEdge>;
+};
+
+export type RatioOrderEdge = {
+  __typename?: 'RatioOrderEdge';
+  node: RatioOrder;
 };
 
 export type RatioParagraphBlock = WagtailBlock & {

@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
 
+import { Badge } from '~/components';
 import { A, Label, Row } from '~/frontkit';
 
-import { Badge } from '~/components';
-
 import { RatioTrainingFragment } from '../queries.generated';
+import TicketTypeBadge from './ticket-types/TicketTypeBadge';
 
 const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
   training,
@@ -42,7 +42,7 @@ const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
         {training.ticket_types.length ? (
           <Row>
             {training.ticket_types.map((ticket_type) => (
-              <Badge key={ticket_type.id}>{ticket_type.price} руб.</Badge>
+              <TicketTypeBadge key={ticket_type.id} ticketType={ticket_type} />
             ))}
           </Row>
         ) : (

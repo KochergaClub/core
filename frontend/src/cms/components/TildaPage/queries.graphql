@@ -1,4 +1,4 @@
-fragment RatioOrder on RatioOrder {
+fragment RatioOrder_Created on RatioOrder {
   id
   confirmation_token
 }
@@ -6,7 +6,7 @@ fragment RatioOrder on RatioOrder {
 mutation RatioCreateOrder($input: RatioCreateOrderInput!) {
   result: ratioCreateOrder(input: $input) {
     ... on RatioOrder {
-      ...RatioOrder
+      ...RatioOrder_Created
     }
     ... on GenericError {
       message

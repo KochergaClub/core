@@ -1116,6 +1116,7 @@ type Query {
   ratioTrainersAll: [RatioTrainer!]!
   ratioTrainingEmailPrototype(training_id: ID!, type: String!): String!
   ratioTicketTypes: [RatioTicketType!]!
+  ratioOrders(before: String, after: String, first: Int, last: Int): RatioOrderConnection!
   mastermindDatingCohorts: [MastermindDatingCohort!]!
   mastermindDatingCohortById(id: ID!): MastermindDatingCohort!
   projects: [ProjectPage!]!
@@ -1252,6 +1253,22 @@ type RatioOrder {
   fulfilled: Boolean!
   id: ID!
   confirmation_token: String!
+  created: String!
+  email: String!
+  first_name: String!
+  last_name: String!
+  city: String!
+  ticket_type: RatioTicketType!
+}
+
+type RatioOrderConnection {
+  pageInfo: PageInfo!
+  nodes: [RatioOrder!]!
+  edges: [RatioOrderEdge!]!
+}
+
+type RatioOrderEdge {
+  node: RatioOrder!
 }
 
 type RatioParagraphBlock implements WagtailBlock {

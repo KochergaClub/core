@@ -10,13 +10,13 @@ import {
 import { A, Button, Column, ControlsFooter, Label, Modal, Row } from '~/frontkit';
 
 import {
-    RatioCreateOrderDocument, RatioOrderFragment, RatioTicketType_ForPickerFragment
+    RatioCreateOrderDocument, RatioOrder_CreatedFragment, RatioTicketType_ForPickerFragment
 } from '../queries.generated';
 
 interface Props {
   close: () => void;
   ticketTypes: RatioTicketType_ForPickerFragment[];
-  onOrderCreated: (order: RatioOrderFragment) => void;
+  onOrderCreated: (order: RatioOrder_CreatedFragment) => void;
 }
 
 type SelectOptionType = {
