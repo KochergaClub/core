@@ -8,7 +8,6 @@ export { LabelDiv } from './components/LabelDiv';
 export { ColumnNav } from './components/ColumnNav';
 export { RowNav } from './components/RowNav';
 export { Modal } from './components/Modal';
-export { ReloadToast } from './components/ReloadToast';
 export { Burger } from './components/Burger';
 export { WithSidebar } from './components/WithSidebar';
 
