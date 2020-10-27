@@ -6,27 +6,23 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 `;
 
 const Sidebar = styled.div`
   background-color: ${grey[100]};
   border-right: 1px solid ${grey[300]};
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  align-self: stretch;
 `;
 
 const Main = styled.div`
   flex: 1;
+  overflow: auto;
 `;
 
-export const WithSidebar = ({
+export const WithSidebar: React.FC<{ sidebar: React.ReactNode }> = ({
   children,
   sidebar,
-}: {
-  children: React.ReactNode;
-  sidebar: React.ReactNode;
 }) => (
   <Container>
     <Sidebar>{sidebar}</Sidebar>

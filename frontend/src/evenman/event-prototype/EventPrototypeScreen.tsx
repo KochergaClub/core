@@ -1,9 +1,8 @@
-import EventPrototypeCard from './EventPrototypeCard';
+import { WithSidebar } from '~/frontkit';
 
-import Sidebar from './Sidebar';
 import { EmptyCard } from '../components/Card';
-
-import { WithSidebar } from '../WithSidebar';
+import EventPrototypeCard from './EventPrototypeCard';
+import Sidebar from './Sidebar';
 
 interface Props {
   selected_id?: number;

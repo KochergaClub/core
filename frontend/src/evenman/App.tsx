@@ -1,21 +1,16 @@
 import Head from 'next/head';
-
 import { ParsedUrlQuery } from 'querystring';
 
-import { withApollo, withStaff, NextApolloPage } from '~/apollo';
-
-import { Page } from '~/components';
-
+import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { staticUrl } from '~/common/utils';
-
-import GlobalStyle from './GlobalStyle';
-
-import Sidebar from './Sidebar';
-import { WithSidebar } from './WithSidebar';
+import { Page } from '~/components';
+import { WithSidebar } from '~/frontkit';
 
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
-import ScheduleScreen from './schedule/ScheduleScreen';
 import EventScreen from './event/EventScreen';
+import GlobalStyle from './GlobalStyle';
+import ScheduleScreen from './schedule/ScheduleScreen';
+import Sidebar from './Sidebar';
 
 interface Props {
   route: string;
