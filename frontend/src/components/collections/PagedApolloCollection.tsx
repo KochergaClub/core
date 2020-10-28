@@ -55,12 +55,12 @@ interface Props<T, A extends {}> {
     after,
     first,
     last,
-  }: {
+  }?: {
     before?: string | null;
     after?: string | null;
     first?: number | null;
     last?: number | null;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
   names: EntityNames;
   add?: {
     shape: FormShape;
