@@ -5,7 +5,7 @@ export const confirmOrderRoute = (id: string): Route => ({
   as: `/rationality/confirm-order/${id}`,
 });
 
-export const trainingAdminRoute = (slug: string): Route => ({
+export const adminTrainingRoute = (slug: string): Route => ({
   href: `/team/ratio/training/[slug]`,
   as: `/team/ratio/training/${slug}`,
 });

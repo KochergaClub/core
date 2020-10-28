@@ -11,6 +11,7 @@ export { Modal } from './components/Modal';
 export { Burger } from './components/Burger';
 export { WithSidebar } from './components/WithSidebar';
 export { WithSmartSidebar } from './components/WithSmartSidebar';
+export { WithNavSidebar } from './components/WithNavSidebar';
 
 export { RichText } from './components/RichText';
 

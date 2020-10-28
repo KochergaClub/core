@@ -9,7 +9,7 @@ interface Props {
   slug: string;
 }
 
-const RatioSchedulePage: NextApolloPage<Props> = ({ slug }) => {
+const AdminRatioSchedulePage: NextApolloPage<Props> = ({ slug }) => {
   const queryResults = useQuery(RatioTrainingWithScheduleDocument, {
     variables: { slug },
   });
@@ -32,7 +32,7 @@ const RatioSchedulePage: NextApolloPage<Props> = ({ slug }) => {
   );
 };
 
-RatioSchedulePage.getInitialProps = async ({ query }) => {
+AdminRatioSchedulePage.getInitialProps = async ({ query }) => {
   const slug = query.slug as string;
 
   return {
@@ -40,4 +40,4 @@ RatioSchedulePage.getInitialProps = async ({ query }) => {
   };
 };
 
-export default withApollo(withStaff(RatioSchedulePage));
+export default withApollo(withStaff(AdminRatioSchedulePage));

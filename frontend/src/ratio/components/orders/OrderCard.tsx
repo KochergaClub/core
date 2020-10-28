@@ -4,7 +4,7 @@ import React from 'react';
 
 import HumanizedDateTime from '~/components/HumanizedDateTime';
 import { A, colors, Label, Row } from '~/frontkit';
-import { trainingAdminRoute } from '~/ratio/routes';
+import { adminTrainingRoute } from '~/ratio/routes';
 
 import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
 import { RatioOrderFragment } from './queries.generated';
@@ -26,7 +26,7 @@ const OrderCard: React.FC<Props> = ({ order }) => {
         <TicketTypeBadge ticketType={order.ticket_type} />
         <div>
           <Link
-            {...trainingAdminRoute(order.ticket_type.training.slug)}
+            {...adminTrainingRoute(order.ticket_type.training.slug)}
             passHref
           >
             <A>{order.ticket_type.name}</A>
