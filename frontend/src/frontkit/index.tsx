@@ -10,6 +10,7 @@ export { RowNav } from './components/RowNav';
 export { Modal } from './components/Modal';
 export { Burger } from './components/Burger';
 export { WithSidebar } from './components/WithSidebar';
+export { WithSmartSidebar } from './components/WithSmartSidebar';
 
 export { RichText } from './components/RichText';
 

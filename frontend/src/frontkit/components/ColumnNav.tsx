@@ -5,10 +5,10 @@ import * as colors from '../colors';
 import * as fonts from '../fonts';
 
 const Li = styled.li<{ selected?: boolean }>`
-  background-color: ${props => (props.selected ? colors.highlight : '')};
+  background-color: ${(props) => (props.selected ? colors.highlight : '')};
 
   &:hover {
-    background-color: ${props =>
+    background-color: ${(props) =>
       props.selected ? colors.highlight : colors.grey[100]};
   }
 `;
@@ -55,6 +55,6 @@ export const ColumnNav = (({ children }: IListProps) => (
   <nav>
     <Ul>{children}</Ul>
   </nav>
-)) as React.SFC & { Item: React.ComponentClass<ItemProps> };
+)) as React.FC & { Item: React.ComponentClass<ItemProps> };
 
 ColumnNav.Item = ColumnNavItem;
