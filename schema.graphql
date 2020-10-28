@@ -151,6 +151,12 @@ type BlogPostPage implements WagtailPage {
   authors: [BlogPostAuthor!]!
 }
 
+input CancelYandexKassaPaymentInput {
+  id: ID!
+}
+
+union CancelYandexKassaPaymentResult = YandexKassaPayment | GenericError
+
 input CashierCreatePaymentInput {
   amount: Int!
   whom: ID!
@@ -880,6 +886,8 @@ type Mutation {
   cashierCreatePayment(params: CashierCreatePaymentInput!): Boolean
   cashierRedeemPayment(id: ID!): Boolean
   kkmRegisterCheck(params: KkmRegisterCheckInput!): KkmRegisterCheckResult!
+  updateYandexKassaPayment(input: UpdateYandexKassaPaymentInput!): UpdateYandexKassaPaymentResult!
+  cancelYandexKassaPayment(input: CancelYandexKassaPaymentInput!): CancelYandexKassaPaymentResult!
   myEventsTicketUnregister(event_id: ID!): MyEventsTicket!
   myEventsTicketRegister(event_id: ID!): MyEventsTicket!
   myEventsTicketRegisterAnon(input: MyEventsTicketRegisterAnonInput!): MyEventsTicket!
@@ -1259,6 +1267,7 @@ type RatioOrder {
   last_name: String!
   city: String!
   ticket_type: RatioTicketType!
+  payment: YandexKassaPayment!
 }
 
 type RatioOrderConnection {
@@ -1548,6 +1557,12 @@ input UpdateRatioTicketTypeInput {
   name: String
 }
 
+input UpdateYandexKassaPaymentInput {
+  id: ID!
+}
+
+union UpdateYandexKassaPaymentResult = YandexKassaPayment | GenericError
+
 type ValidationError {
   errors: [ValidationErrorItem!]!
 }
@@ -1811,6 +1826,21 @@ type WikiAccount implements ExternalServiceAccount {
 type WikiExternalService implements ExternalService {
   slug: String!
   accounts: [WikiAccount!]!
+}
+
+type YandexKassaPayment {
+  id: ID!
+  kassa_id: String!
+  is_paid: Boolean!
+  status: YandexKassaPaymentStatus!
+  waiting_for_capture: Boolean!
+}
+
+enum YandexKassaPaymentStatus {
+  pending
+  waiting_for_capture
+  succeeded
+  canceled
 }
 
 type ZadarmaCall {

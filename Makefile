@@ -7,10 +7,12 @@ SUPERUSER_EMAIL ?= me@berekuk.ru
 ##### Dev environment #####
 dev:
 	kubectl --context=dev delete job core-django-migrate || true
-	# See:
+	# For `--force=false` see:
 	# https://github.com/GoogleContainerTools/skaffold/issues/3798
 	# https://github.com/GoogleContainerTools/skaffold/issues/3864
-	skaffold dev --force=false
+	# (but it doesn't really help)
+	# `--no-prune` is used because django migrations are SLOW.
+	skaffold dev --force=false --no-prune
 
 wait_for_migrate:
 	@echo Waiting for migrate

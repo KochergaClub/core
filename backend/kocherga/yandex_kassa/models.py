@@ -4,6 +4,8 @@ logger = logging.getLogger(__name__)
 
 from typing import Dict, Optional, Any
 import json
+import enum
+
 import requests
 from django.db import models
 from django.conf import settings
@@ -37,6 +39,13 @@ def api_call(
         logger.error(f"ERROR: {r.content}")
     r.raise_for_status()
     return r.json()
+
+
+class PaymentStatus(enum.Enum):
+    pending = 1
+    waiting_for_capture = 2
+    succeeded = 3
+    canceled = 4
 
 
 class Manager(models.Manager):
@@ -96,10 +105,16 @@ class Payment(models.Model):
     def get_confirmation_token(self):
         return self.payment_object['confirmation']['confirmation_token']
 
+    @property
     def is_paid(self):
         return self.payment_object['paid']
 
-    def is_waiting_for_capture(self):
+    @property
+    def status(self):
+        return PaymentStatus[self.payment_object['status']]
+
+    @property
+    def waiting_for_capture(self):
         return self.payment_object['status'] == 'waiting_for_capture'
 
     def update(self):
@@ -112,14 +127,20 @@ class Payment(models.Model):
         self.payment_data = json.dumps(result)
         self.save()
 
-    def capture(self):
+    def _payment_action(self, action: str):
         kassa_id = self.get_kassa_id()
 
         result = api_call(
             'POST',
-            f'payments/{kassa_id}/capture',
+            f'payments/{kassa_id}/{action}',
             {},
-            idempotence_key=f'payment-capture-{self.pk}',
+            idempotence_key=f'payment-{action}-{self.pk}',
         )
         self.payment_data = json.dumps(result)
         self.save()
+
+    def capture(self):
+        self._payment_action('capture')
+
+    def cancel(self):
+        self._payment_action('cancel')

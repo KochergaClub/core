@@ -1,14 +1,13 @@
 import { useCallback, useState } from 'react';
 
-import { Button } from '~/frontkit';
-
 import { useNotification } from '~/common/hooks';
+import { Button } from '~/frontkit';
 
 interface Props {
   act: () => Promise<unknown>;
   small?: boolean; // deprecated
-  size?: 'small' | 'normal' | 'big';
-  kind?: 'primary' | 'danger' | 'default';
+  size?: Parameters<typeof Button>[0]['size'];
+  kind?: Parameters<typeof Button>[0]['kind'];
   disabled?: boolean;
   children?: React.ReactNode;
 }

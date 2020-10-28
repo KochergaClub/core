@@ -1,3 +1,8 @@
+fragment PaymentForOrder on YandexKassaPayment {
+  id
+  status
+}
+
 fragment RatioOrder on RatioOrder {
   id
   created
@@ -16,6 +21,9 @@ fragment RatioOrder on RatioOrder {
       name
     }
   }
+  payment {
+    ...PaymentForOrder
+  }
 }
 
 query RatioOrders($before: String, $after: String, $first: Int, $last: Int) {
@@ -33,5 +41,17 @@ query RatioOrders($before: String, $after: String, $first: Int, $last: Int) {
         ...RatioOrder
       }
     }
+  }
+}
+
+mutation UpdateYandexKassaPayment($id: ID!) {
+  result: updateYandexKassaPayment(input: { id: $id }) {
+    ...PaymentForOrder
+  }
+}
+
+mutation CancelYandexKassaPayment($id: ID!) {
+  result: cancelYandexKassaPayment(input: { id: $id }) {
+    ...PaymentForOrder
   }
 }

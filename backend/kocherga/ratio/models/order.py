@@ -93,7 +93,7 @@ class Order(models.Model):
     def confirm(self):
         self.payment.update()
 
-        if not self.payment.is_paid() and not self.payment.is_waiting_for_capture():
+        if not self.payment.is_paid and not self.payment.waiting_for_capture:
             # FIXME - distinguish canceled due to timeout and not paid
             raise self.NotPaidError("Payment is not paid and not waiting for capture")
         if self.fulfilled:
@@ -127,7 +127,7 @@ class Order(models.Model):
         self.full_clean()
         self.save()
 
-        if self.payment.is_waiting_for_capture():
+        if self.payment.waiting_for_capture:
             self.payment.capture()
 
         return ticket

@@ -187,6 +187,12 @@ export type BlogPostPage = WagtailPage & {
   authors: Array<BlogPostAuthor>;
 };
 
+export type CancelYandexKassaPaymentInput = {
+  id: Scalars['ID'];
+};
+
+export type CancelYandexKassaPaymentResult = YandexKassaPayment | GenericError;
+
 export type CashierCreatePaymentInput = {
   amount: Scalars['Int'];
   whom: Scalars['ID'];
@@ -1050,6 +1056,8 @@ export type Mutation = {
   cashierCreatePayment?: Maybe<Scalars['Boolean']>;
   cashierRedeemPayment?: Maybe<Scalars['Boolean']>;
   kkmRegisterCheck: KkmRegisterCheckResult;
+  updateYandexKassaPayment: UpdateYandexKassaPaymentResult;
+  cancelYandexKassaPayment: CancelYandexKassaPaymentResult;
   myEventsTicketUnregister: MyEventsTicket;
   myEventsTicketRegister: MyEventsTicket;
   myEventsTicketRegisterAnon: MyEventsTicket;
@@ -1225,6 +1233,16 @@ export type MutationCashierRedeemPaymentArgs = {
 
 export type MutationKkmRegisterCheckArgs = {
   params: KkmRegisterCheckInput;
+};
+
+
+export type MutationUpdateYandexKassaPaymentArgs = {
+  input: UpdateYandexKassaPaymentInput;
+};
+
+
+export type MutationCancelYandexKassaPaymentArgs = {
+  input: CancelYandexKassaPaymentInput;
 };
 
 
@@ -2106,6 +2124,7 @@ export type RatioOrder = {
   last_name: Scalars['String'];
   city: Scalars['String'];
   ticket_type: RatioTicketType;
+  payment: YandexKassaPayment;
 };
 
 export type RatioOrderConnection = {
@@ -2442,6 +2461,12 @@ export type UpdateRatioTicketTypeInput = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type UpdateYandexKassaPaymentInput = {
+  id: Scalars['ID'];
+};
+
+export type UpdateYandexKassaPaymentResult = YandexKassaPayment | GenericError;
+
 export type ValidationError = {
   __typename?: 'ValidationError';
   errors: Array<ValidationErrorItem>;
@@ -2750,6 +2775,22 @@ export type WikiExternalService = ExternalService & {
   slug: Scalars['String'];
   accounts: Array<WikiAccount>;
 };
+
+export type YandexKassaPayment = {
+  __typename?: 'YandexKassaPayment';
+  id: Scalars['ID'];
+  kassa_id: Scalars['String'];
+  is_paid: Scalars['Boolean'];
+  status: YandexKassaPaymentStatus;
+  waiting_for_capture: Scalars['Boolean'];
+};
+
+export enum YandexKassaPaymentStatus {
+  Pending = 'pending',
+  WaitingForCapture = 'waiting_for_capture',
+  Succeeded = 'succeeded',
+  Canceled = 'canceled'
+}
 
 export type ZadarmaCall = {
   __typename?: 'ZadarmaCall';

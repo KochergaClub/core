@@ -1,9 +1,8 @@
-import { Row, HR } from '~/frontkit';
-
 import { AsyncButton } from '~/components';
 import { Collection } from '~/components/collections';
 import { AnyViewProps, EntityNames } from '~/components/collections/types';
 import { FormShape } from '~/components/forms/types';
+import { HR, Row } from '~/frontkit';
 
 interface PagerProps {
   pageInfo: {
@@ -76,8 +75,9 @@ function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
     <div>
       <Collection
         names={props.names}
-        items={props.connection.edges.map(edge => edge.node)}
+        items={props.connection.edges.map((edge) => edge.node)}
         add={props.add}
+        refetch={props.fetchPage}
         view={props.view}
       />
       <Pager

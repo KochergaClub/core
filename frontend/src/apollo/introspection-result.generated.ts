@@ -6,6 +6,10 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "CancelYandexKassaPaymentResult": [
+      "YandexKassaPayment",
+      "GenericError"
+    ],
     "ExternalService": [
       "SlackExternalService",
       "WikiExternalService"
@@ -26,6 +30,10 @@
     "SlideFragmentsBlockValues": [
       "SlideFragmentsBlock_RichTextBlock",
       "SlideFragmentsBlock_RawHtmlBlock"
+    ],
+    "UpdateYandexKassaPaymentResult": [
+      "YandexKassaPayment",
+      "GenericError"
     ],
     "WagtailBlock": [
       "BasicCardBlock",

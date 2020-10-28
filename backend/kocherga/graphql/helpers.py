@@ -135,6 +135,9 @@ def field_with_permissions(
 
 
 class BaseField(ABC):
+    def result_object_name(self):
+        return capitalize_first_only(self.__class__.__name__) + 'Result'
+
     def as_field(self):
         result = self.result
         if type(result) == dict:
@@ -143,7 +146,7 @@ class BaseField(ABC):
             # FieldNameResult doesn't make much sense in nested fields...
             result = g.NN(
                 g.ObjectType(
-                    capitalize_first_only(self.__class__.__name__) + 'Result',
+                    self.result_object_name(),
                     g.fields(result),
                 )
             )
@@ -193,3 +196,29 @@ class BaseFieldWithInput(BaseField):
         ...
 
     input_argument_name = 'input'
+
+
+class UnionFieldMixin:
+    @property
+    @abstractmethod
+    def result_types(self) -> Dict[type, g.ObjectType]:
+        ...
+
+    @property
+    def result(self):
+        result_types = self.result_types
+
+        def resolve_type(obj, info, *_):
+            for cls in result_types.keys():
+                if isinstance(obj, cls):
+                    return result_types[cls]
+
+            raise Exception(f"Can't recognize {obj} as allowed return type")
+
+        return g.NN(
+            g.UnionType(
+                self.result_object_name(),
+                types=list(result_types.values()),
+                resolve_type=resolve_type,
+            )
+        )

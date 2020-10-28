@@ -32,6 +32,7 @@
     "@storybook/addon-essentials": "^6.0.27",
     "@storybook/addon-storyshots": "^6.0.27",
     "@storybook/react": "^6.0.27",
+    "@tippyjs/react": "^4.2.0",
     "@types/autosize": "^3.0.6",
     "@types/body-parser": "^1.17.0",
     "@types/cookie": "^0.4.0",

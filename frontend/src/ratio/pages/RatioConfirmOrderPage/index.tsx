@@ -36,7 +36,7 @@ const RatioConfirmOrderPage: NextApolloPage = () => {
         ) : confirmResults.data ? (
           <ConfirmOutcome outcome={confirmResults.data.result.outcome} />
         ) : (
-          <div>Ошибка: {confirmResults.error}</div>
+          <div>Ошибка. Попробуйте обновить страницу.</div>
         )}
       </Page.Main>
     </Page>

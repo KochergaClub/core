@@ -1,11 +1,9 @@
 import Head from 'next/head';
-import { useCallback } from 'react';
 import { FaComments, FaEdit, FaRegListAlt } from 'react-icons/fa';
 
-import { useMutation, useQuery } from '@apollo/client';
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { useQuery } from '@apollo/client';
 
-import { ApolloQueryResults, AsyncButton, PaddedBlock, Page } from '~/components';
+import { ApolloQueryResults, MutationButton, PaddedBlock, Page } from '~/components';
 import { A, colors, Column, Label, Row } from '~/frontkit';
 
 import {
@@ -14,24 +12,6 @@ import {
 import TrainingTicketTypesBlock from '../ticket-types/TicketTypesBlock';
 // import CreateEmailButton from '~/ratio/components/CreateEmailButton';
 import TrainingTicketsBlock from '../TrainingTicketsBlock';
-
-function MutationButton<V extends Record<string, unknown>>({
-  mutation,
-  variables,
-  children,
-}: {
-  mutation: TypedDocumentNode<unknown, V>;
-  variables: V;
-  children: React.ReactNode;
-}) {
-  const [mutationCb] = useMutation(mutation);
-  const act = useCallback(async () => {
-    await mutationCb({
-      variables,
-    });
-  }, [mutationCb, variables]);
-  return <AsyncButton act={act}>{children}</AsyncButton>;
-}
 
 const LinkWithIcon = ({
   icon,
