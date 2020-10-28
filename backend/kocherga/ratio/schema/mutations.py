@@ -231,7 +231,7 @@ class ratioTrainingSendEmail(helpers.BaseFieldWithInput):
 
 
 @c.class_field
-class ratioCreateOrder(helpers.BaseFieldWithInput):
+class ratioCreateOrder(helpers.UnionFieldMixin, helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         ticket_type_id = input['ticket_type_id']
         try:
@@ -256,17 +256,11 @@ class ratioCreateOrder(helpers.BaseFieldWithInput):
 
         return order
 
-    def resolve_type(self, value, *_):
-        if isinstance(value, models.Order):
-            return types.RatioOrder
-        elif isinstance(value, BoxedError):
-            if isinstance(value.error, ValidationError):
-                return kocherga.django.schema.types.ValidationError
-            raise Exception(f"Can't recognize {value} as allowed return type")
-        elif isinstance(value, GenericError):
-            return kocherga.django.schema.types.GenericError
-        else:
-            raise Exception(f"Can't recognize {value} as allowed return type")
+    result_types = {
+        models.Order: types.RatioOrder,
+        BoxedError: kocherga.django.schema.types.ValidationError,
+        GenericError: kocherga.django.schema.types.GenericError,
+    }
 
     permissions = []  # anyone can create an order
 
@@ -288,20 +282,6 @@ class ratioCreateOrder(helpers.BaseFieldWithInput):
         'city': str,
         'payer': PayerInput,
     }
-
-    @property
-    def result(self):
-        return g.NN(
-            g.UnionType(
-                'RatioCreateOrderResult',
-                types=[
-                    types.RatioOrder,
-                    kocherga.django.schema.types.ValidationError,
-                    kocherga.django.schema.types.GenericError,
-                ],
-                resolve_type=lambda *_: self.resolve_type(*_),
-            )
-        )
 
 
 @c.class_field
