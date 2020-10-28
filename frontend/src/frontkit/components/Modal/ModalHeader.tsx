@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { MdClose } from 'react-icons/md';
 import styled from 'styled-components';
 
 import * as colors from '../../colors';
@@ -8,6 +8,10 @@ const ModalHeaderEl = styled.header`
   padding: 6px 10px;
   border-bottom: 1px solid ${colors.grey[200]};
   font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export interface Props {
@@ -21,8 +25,6 @@ const HeaderButton = styled.button`
   background: none;
   padding: 0 2px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
   color: #333;
   &:hover {
     color: red;
@@ -34,7 +36,9 @@ const ModalHeader = (props: Props) => {
     <ModalHeaderEl>
       {props.children}
       {props.toggle && (
-        <HeaderButton onClick={() => props.toggle!()}>×</HeaderButton>
+        <HeaderButton onClick={() => props.toggle!()}>
+          <MdClose />
+        </HeaderButton>
       )}
     </ModalHeaderEl>
   );
