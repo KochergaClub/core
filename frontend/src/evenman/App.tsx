@@ -1,11 +1,10 @@
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
-import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 
 import { NextApolloPage, withApollo, withStaff } from '~/apollo';
 import { staticUrl } from '~/common/utils';
 import { Page } from '~/components';
-import { Button, Row, WithSmartSidebar } from '~/frontkit';
+import { WithSmartSidebar } from '~/frontkit';
 
 import EventPrototypeScreen from './event-prototype/EventPrototypeScreen';
 import EventScreen from './event/EventScreen';
@@ -43,29 +42,6 @@ const App: NextApolloPage<Props> = ({ route, query }) => {
     inner = <div>Unknown route {route}</div>;
   }
 
-  const renderContent = ({
-    toggle,
-    visible,
-  }: {
-    isMobile: boolean;
-    visible: boolean;
-    toggle: () => void;
-  }) => {
-    return (
-      <>
-        <div style={{ position: 'absolute', left: 0, top: 0, zIndex: 1 }}>
-          <Button onClick={toggle} size="small">
-            <Row vCentered gutter={0}>
-              {visible ? <BiChevronsLeft /> : <BiChevronsRight />}
-              <span>Сайдбар</span>
-            </Row>
-          </Button>
-        </div>
-        {inner}
-      </>
-    );
-  };
-
   return (
     <Page title="Event Manager" menu="team" chrome="fullscreen">
       <Head>
@@ -78,7 +54,7 @@ const App: NextApolloPage<Props> = ({ route, query }) => {
       <GlobalStyle />
       <WithSmartSidebar
         renderSidebar={() => <Sidebar selected={tab} />}
-        renderContent={renderContent}
+        renderContent={() => inner}
       />
     </Page>
   );

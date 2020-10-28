@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { Button } from './Button';
-import { ColumnNav } from './ColumnNav';
-import { WithSmartSidebar } from './WithSmartSidebar';
+import { Button } from '../Button';
+import { ColumnNav } from '../ColumnNav';
+import { WithSmartSidebar } from './index';
 
 export default {
   title: 'Components/WithSmartSidebar',
   component: WithSmartSidebar,
   argTypes: {
     select: { action: 'selected' },
+  },
+  parameters: {
+    layout: 'fullscreen',
   },
 };
 
@@ -34,11 +37,8 @@ export const WithColumnNav = (args) => (
           <ColumnNav.Item select={args.select}>Item 4</ColumnNav.Item>
         </ColumnNav>
       )}
-      renderContent={(sidebar) => (
+      renderContent={() => (
         <div>
-          <Button onClick={sidebar.toggle} kind="primary">
-            {sidebar.visible ? '<<' : '>>'}
-          </Button>
           <div>Main app content</div>
         </div>
       )}
