@@ -5,7 +5,6 @@ import { GoGear, GoSignOut } from 'react-icons/go';
 import styled from 'styled-components';
 
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { colors, fonts, Row } from '~/frontkit';
 
 import { CurrentUserDocument } from '~/auth/queries.generated';
 import { WagtailPageContext } from '~/cms/contexts';
@@ -13,6 +12,7 @@ import { useNotification } from '~/common/hooks';
 import { ApolloQueryResults, DropdownMenu } from '~/components';
 import { Action, NextLinkAction } from '~/components/DropdownMenu';
 import { BasicSpinner } from '~/components/Spinner';
+import { colors, fonts, Row } from '~/frontkit';
 import { LogoutDocument } from '~/my/queries.generated';
 
 import { MenuKind } from '../../types';

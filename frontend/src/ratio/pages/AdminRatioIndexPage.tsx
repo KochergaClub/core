@@ -70,7 +70,7 @@ const AdminRatioIndexPage: NextApolloPage = () => {
   };
 
   return (
-    <Page title={getPageTitle()} chrome="fullscreen">
+    <Page title={getPageTitle()} chrome="fullscreen" menu="team">
       <WithNavSidebar
         tabs={tabs}
         header={{

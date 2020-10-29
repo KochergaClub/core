@@ -1,8 +1,8 @@
+import { motion } from 'framer-motion';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
-import { FadeAnimation } from '../../animations/FadeAnimation';
 import * as colors from '../../colors';
 import { deviceMediaQueries } from '../../sizes';
 import ModalBody from './ModalBody';
@@ -46,8 +46,6 @@ const ModalContent = styled.div`
   border-radius: 4px;
   background-color: white;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-
-  ${FadeAnimation.css}
 `;
 
 type ModalType = React.FC & {
@@ -60,11 +58,9 @@ type ModalType = React.FC & {
 
 export const Modal: ModalType = ({ children }) => {
   const [el] = React.useState(() => document.createElement('div'));
-  const [started, setStarted] = React.useState(false);
 
   React.useEffect(() => {
     document.body.appendChild(el);
-    setStarted(true);
 
     return () => {
       document.body.removeChild(el);
@@ -74,10 +70,10 @@ export const Modal: ModalType = ({ children }) => {
   const renderModal = () => {
     return (
       <div>
-        <Overlay id="modal-overlay" />
-        <FadeAnimation show={started}>
-          <ModalContent>{children}</ModalContent>
-        </FadeAnimation>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Overlay id="modal-overlay" />
+        </motion.div>
+        <ModalContent>{children}</ModalContent>
       </div>
     );
   };
