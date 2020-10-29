@@ -14,9 +14,9 @@ export const FadeAnimation: React.FC<Props> & { css: any } = ({
 }) => {
   return (
     <CSSTransition
-      appear={true}
-      mountOnEnter={true}
-      unmountOnExit={true}
+      appear
+      mountOnEnter
+      unmountOnExit
       in={show}
       timeout={animationTimeout}
       classNames={animationClass}
@@ -33,7 +33,7 @@ FadeAnimation.css = css`
 
   &.${animationClass}-enter-active {
     opacity: 1;
-    transition: opacity ${animationTimeout}ms ease-in-out;
+    transition: opacity ${animationTimeout}ms ease-in;
   }
 
   &.${animationClass}-exit {
@@ -42,6 +42,6 @@ FadeAnimation.css = css`
 
   &.${animationClass}-exit-active {
     opacity: 0;
-    transition: opacity ${animationTimeout}ms ease-in-out;
+    transition: opacity ${animationTimeout}ms ease-out;
   }
 `;
