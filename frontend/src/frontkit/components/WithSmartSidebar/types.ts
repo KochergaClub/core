@@ -1,5 +1,5 @@
 export interface SidebarControls {
   toggle: () => void;
   visible: boolean;
-  isMobile: boolean;
+  isMobile: boolean | undefined;
 }

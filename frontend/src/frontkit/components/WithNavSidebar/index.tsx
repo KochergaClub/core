@@ -57,7 +57,10 @@ const Sidebar: React.FC<Props> = (props) => {
         <header>
           <LogoLink
             href={header.href}
-            onClick={() => selectTab(header.tabName)}
+            onClick={(e: React.SyntheticEvent) => {
+              e.preventDefault();
+              selectTab(header.tabName);
+            }}
           >
             {header.title}
           </LogoLink>

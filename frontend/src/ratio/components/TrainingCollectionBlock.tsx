@@ -6,12 +6,13 @@ import { useMutation, useQuery } from '@apollo/client';
 import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults, PaddedBlock } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
+import { AnyViewProps } from '~/components/collections/types';
 import { FormShape } from '~/components/forms/types';
 
 import {
     RatioAddTrainingDocument, RatioTrainingFragment, RatioTrainingsDocument
 } from '../queries.generated';
-import TrainingCard from './TrainingCard';
+import TrainingCard from './trainings/TrainingCard';
 
 const trainingShape: FormShape = [
   {
@@ -50,6 +51,19 @@ interface CreateTrainingParams {
 const isMuted = (training: RatioTrainingFragment) =>
   isBefore(parseISO(training.date), new Date());
 
+const renderItem = (training: RatioTrainingFragment) => (
+  <TrainingCard training={training} />
+);
+
+const View: React.FC<AnyViewProps<RatioTrainingFragment>> = (props) => (
+  <CustomCardListView
+    {...props}
+    renderItem={renderItem}
+    isMuted={isMuted}
+    item2key={(training) => training.id}
+  />
+);
+
 const TrainingCollectionBlock: React.FC = () => {
   const [canCreate] = usePermissions(['ratio.manage']);
 
@@ -62,11 +76,6 @@ const TrainingCollectionBlock: React.FC = () => {
     refetchQueries: ['RatioTrainings'],
     awaitRefetchQueries: true,
   });
-
-  const renderItem = useCallback(
-    (training: RatioTrainingFragment) => <TrainingCard training={training} />,
-    []
-  );
 
   const add = useCallback(
     async (values: CreateTrainingParams) => {
@@ -91,13 +100,7 @@ const TrainingCollectionBlock: React.FC = () => {
               genitive: 'тренинг',
             }}
             add={canCreate ? { cb: add, shape: trainingShape } : undefined}
-            view={props => (
-              <CustomCardListView
-                {...props}
-                renderItem={renderItem}
-                isMuted={isMuted}
-              />
-            )}
+            view={View}
           />
         )}
       </ApolloQueryResults>

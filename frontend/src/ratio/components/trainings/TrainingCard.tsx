@@ -1,24 +1,38 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { Badge } from '~/components';
+import { Badge, MutationButton } from '~/components';
 import { A, Label, Row } from '~/frontkit';
 
-import { RatioTrainingFragment } from '../queries.generated';
-import TicketTypeBadge from './ticket-types/TicketTypeBadge';
+import { RatioTrainingFragment } from '../../queries.generated';
+import TicketTypeBadge from '../ticket-types/TicketTypeBadge';
+import { DeleteRatioTrainingDocument } from './queries.generated';
 
 const TrainingCard: React.FC<{ training: RatioTrainingFragment }> = ({
   training,
 }) => {
   return (
     <div>
-      <Link
-        href="/team/ratio/training/[slug]"
-        as={`/team/ratio/training/${training.slug}`}
-        passHref
-      >
-        <A>{training.name}</A>
-      </Link>
+      <Row spaced>
+        <Link
+          href="/team/ratio/training/[slug]"
+          as={`/team/ratio/training/${training.slug}`}
+          passHref
+        >
+          <A>{training.name}</A>
+        </Link>
+        {training.tickets_count === 0 && training.ticket_types.length === 0 && (
+          <MutationButton
+            mutation={DeleteRatioTrainingDocument}
+            variables={{ slug: training.slug }}
+            confirmText="Возможно удаление только полностью пустых тренингов, без билетов и типов билетов."
+            refetchQueries={['RatioTrainings']}
+            size="small"
+          >
+            Удалить
+          </MutationButton>
+        )}
+      </Row>
       <Row vCentered>
         <Label>Дата:</Label>
         <div>{training.date}</div>

@@ -926,6 +926,7 @@ type Mutation {
   staffFireMember(id: ID!): Boolean
   staffUnfireMember(id: ID!): Boolean
   ratioAddTraining(params: RatioAddTrainingInput!): RatioTraining!
+  ratioDeleteTraining(input: RatioDeleteTrainingInput!): BasicResult!
   ratioAddTicket(input: RatioAddTicketInput!): RatioTicket!
   ratioPaymentAdd(input: RatioPaymentAddInput!): RatioPaymentAddResult!
   ratioPaymentDelete(payment_id: ID!): BasicResult!
@@ -1203,6 +1204,10 @@ input RatioCreateOrderPayerInput {
 }
 
 union RatioCreateOrderResult = RatioOrder | ValidationError | GenericError
+
+input RatioDeleteTrainingInput {
+  slug: String!
+}
 
 type RatioExerciseBlock implements WagtailBlock {
   id: ID!

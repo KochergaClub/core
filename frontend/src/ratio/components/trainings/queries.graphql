@@ -1,0 +1,5 @@
+mutation DeleteRatioTraining($slug: String!) {
+  result: ratioDeleteTraining(input: { slug: $slug }) {
+    ok
+  }
+}

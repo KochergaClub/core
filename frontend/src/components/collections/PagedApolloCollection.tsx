@@ -66,6 +66,7 @@ interface Props<T, A extends {}> {
 
 function PagedApolloCollection<T, A extends {}>(props: Props<T, A>) {
   const DEFAULT_PAGE_SIZE = 20;
+
   return (
     <div>
       <Collection

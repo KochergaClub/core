@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useRef } from 'react';
 import { BiChevronsLeft, BiChevronsRight } from 'react-icons/bi';
 import styled from 'styled-components';
@@ -18,12 +19,8 @@ const MobileContainerInner = styled(DesktopContainer)`
 `;
 
 const MobileOverlay = styled.div`
-  // cover entire container
-  position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 1;
-
   // MobileSidebarInner needs to be positioned identically to Sidebar inside Container
   display: flex;
   flex-direction: row;
@@ -97,21 +94,26 @@ const SidebarWithControls: React.FC<{ sidebar: SidebarControls }> = ({
   );
 };
 
-const FloatingControlsContainer = styled(CommonControlsContainer)`
+interface CornerProps {
+  corner: 'left' | 'right';
+}
+
+const FloatingControlsContainer = styled(CommonControlsContainer)<CornerProps>`
   position: fixed;
   bottom: 0;
-  left: 0;
+  ${(props) => (props.corner === 'right' ? 'right: -32px;' : 'left: 0;')}
   width: 32px;
   border-right: 1px solid ${grey[300]};
   border-top: 1px solid ${grey[300]};
   z-index: 1;
+  background-color: ${grey[100]};
 `;
 
-const FloatingControls: React.FC<{ sidebar: SidebarControls }> = ({
-  sidebar,
-}) => {
+const FloatingControls: React.FC<
+  { sidebar: SidebarControls } & CornerProps
+> = ({ sidebar, corner }) => {
   return (
-    <FloatingControlsContainer onClick={sidebar.toggle}>
+    <FloatingControlsContainer onClick={sidebar.toggle} corner={corner}>
       <BiChevronsRight size={24} />
     </FloatingControlsContainer>
   );
@@ -123,19 +125,54 @@ interface Props {
 }
 
 export const Sidebar: React.FC<Props> = ({ sidebar, render }) => {
-  if (!sidebar.visible) {
-    return <FloatingControls sidebar={sidebar} />; // TODO - return fixed control button
-  }
-
   const withControls = (
     <SidebarWithControls sidebar={sidebar}>
       {render(sidebar)}
     </SidebarWithControls>
   );
 
-  if (sidebar.isMobile) {
-    return <MobileContainer sidebar={sidebar}>{withControls}</MobileContainer>;
-  } else {
-    return <DesktopContainer>{withControls}</DesktopContainer>;
+  if (sidebar.isMobile === undefined) {
+    return null; // still detecting screen width
   }
+
+  return (
+    <>
+      {sidebar.isMobile ? (
+        <AnimatePresence initial={false} key="mobile">
+          {sidebar.visible && (
+            <motion.div
+              style={{
+                position: 'fixed',
+                width: '100%',
+                height: '100%',
+                zIndex: 1,
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <MobileContainer sidebar={sidebar}>
+                {withControls}
+              </MobileContainer>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      ) : (
+        <AnimatePresence initial={false} key="desktop">
+          {sidebar.visible && (
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+            >
+              <DesktopContainer>{withControls}</DesktopContainer>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+      {!sidebar.visible && (
+        <FloatingControls sidebar={sidebar} corner="left" key="controls" />
+      )}
+    </>
+  );
 };

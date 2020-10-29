@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 
 import { Row } from '~/frontkit';
@@ -12,9 +13,19 @@ interface Props {
 const TicketTypeList: React.FC<Props> = ({ ticketTypes }) => {
   return (
     <Row>
-      {ticketTypes.map((ticketType) => (
-        <TicketTypeCard key={ticketType.id} ticketType={ticketType} />
-      ))}
+      <AnimatePresence initial={false}>
+        {ticketTypes.map((ticketType) => (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            key={ticketType.id}
+            layout
+          >
+            <TicketTypeCard ticketType={ticketType} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </Row>
   );
 };

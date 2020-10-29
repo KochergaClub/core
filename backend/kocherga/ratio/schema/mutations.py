@@ -44,6 +44,21 @@ class ratioAddTraining(helpers.BaseFieldWithInput):
 
 
 @c.class_field
+class ratioDeleteTraining(helpers.BaseFieldWithInput):
+    def resolve(self, _, info, input):
+        training = models.Training.objects.get(slug=input['slug'])
+        training.delete()
+        return {'ok': True}
+
+    permissions = [user_perm('ratio.manage')]
+    input = {
+        'slug': str,
+    }
+
+    result = g.NN(basic_types.BasicResult)
+
+
+@c.class_field
 class ratioAddTicket(helpers.BaseFieldWithInput):
     def resolve(self, _, info, input):
         training_id = input.pop('training')

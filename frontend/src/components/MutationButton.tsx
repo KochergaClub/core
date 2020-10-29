@@ -12,6 +12,7 @@ interface Props<V extends Record<string, unknown>> {
   size?: Parameters<typeof AsyncButton>[0]['size'];
   kind?: Parameters<typeof AsyncButton>[0]['kind'];
   confirmText?: string;
+  refetchQueries?: string[];
   children: React.ReactNode;
 }
 
@@ -21,9 +22,13 @@ function MutationButton<V extends Record<string, unknown>>({
   size,
   kind,
   confirmText,
+  refetchQueries,
   children,
 }: Props<V>) {
-  const [mutationCb] = useMutation(mutation);
+  const [mutationCb] = useMutation(mutation, {
+    refetchQueries,
+    awaitRefetchQueries: true,
+  });
   const act = useCallback(async () => {
     await mutationCb({
       variables,

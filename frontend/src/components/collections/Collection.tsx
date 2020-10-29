@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdRefresh } from 'react-icons/md';
 
 import { capitalize } from '~/common/utils';
 import { AnyFormValues, FormShape } from '~/components/forms/types';
@@ -26,7 +27,7 @@ function Collection<I, A extends AnyFormValues>(props: Props<I, A>) {
   return (
     <section>
       <h2>
-        <Row vCentered>
+        <Row vCentered gutter={8}>
           {props.names && props.names.plural && (
             <div>{capitalize(props.names.plural)}</div>
           )}
@@ -38,7 +39,12 @@ function Collection<I, A extends AnyFormValues>(props: Props<I, A>) {
             />
           )}
           {props.refetch && (
-            <AsyncButton act={props.refetch}>Обновить</AsyncButton>
+            <AsyncButton act={props.refetch}>
+              <Row vCentered>
+                <MdRefresh />
+                <span>Обновить</span>
+              </Row>
+            </AsyncButton>
           )}
         </Row>
       </h2>

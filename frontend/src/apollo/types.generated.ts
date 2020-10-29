@@ -1096,6 +1096,7 @@ export type Mutation = {
   staffFireMember?: Maybe<Scalars['Boolean']>;
   staffUnfireMember?: Maybe<Scalars['Boolean']>;
   ratioAddTraining: RatioTraining;
+  ratioDeleteTraining: BasicResult;
   ratioAddTicket: RatioTicket;
   ratioPaymentAdd: RatioPaymentAddResult;
   ratioPaymentDelete: BasicResult;
@@ -1418,6 +1419,11 @@ export type MutationStaffUnfireMemberArgs = {
 
 export type MutationRatioAddTrainingArgs = {
   params: RatioAddTrainingInput;
+};
+
+
+export type MutationRatioDeleteTrainingArgs = {
+  input: RatioDeleteTrainingInput;
 };
 
 
@@ -2049,6 +2055,10 @@ export type RatioCreateOrderPayerInput = {
 };
 
 export type RatioCreateOrderResult = RatioOrder | ValidationError | GenericError;
+
+export type RatioDeleteTrainingInput = {
+  slug: Scalars['String'];
+};
 
 export type RatioExerciseBlock = WagtailBlock & {
   __typename?: 'RatioExerciseBlock';

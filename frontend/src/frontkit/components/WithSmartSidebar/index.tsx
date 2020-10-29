@@ -20,11 +20,13 @@ const Main = styled.div`
 
 const useIsMobile = () => {
   const [resizeListener, sizes] = useResizeAware();
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 
   const MAX_MOBILE_WIDTH = 640;
   useEffect(() => {
-    setIsMobile(sizes.width <= MAX_MOBILE_WIDTH);
+    if (sizes.width) {
+      setIsMobile(sizes.width <= MAX_MOBILE_WIDTH);
+    }
   }, [sizes.width]);
 
   return [isMobile, resizeListener];
@@ -40,9 +42,13 @@ export const WithSmartSidebar: React.FC<Props> = ({
   renderContent,
 }) => {
   const [isMobile, resizeListener] = useIsMobile();
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
+    if (isMobile === undefined) {
+      // screen width not detected yet
+      return;
+    }
     if (isMobile && showSidebar) {
       setShowSidebar(false);
     } else if (!isMobile && !showSidebar) {
