@@ -50,12 +50,7 @@ interface Props<T, A extends {}> {
     }[];
   };
   pageSize?: number;
-  fetchPage: ({
-    before,
-    after,
-    first,
-    last,
-  }?: {
+  fetchPage: (args?: {
     before?: string | null;
     after?: string | null;
     first?: number | null;

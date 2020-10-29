@@ -62,7 +62,7 @@ const EditModal: React.FC<ModalProps> = ({ ticketType, close }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Редактирование вида билета</Modal.Header>
+      <Modal.Header close={close}>Редактирование вида билета</Modal.Header>
       <form onSubmit={form.handleSubmit(updateCb)}>
         <Modal.Body>
           <Column gutter={16} stretch>

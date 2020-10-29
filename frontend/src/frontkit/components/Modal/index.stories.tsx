@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal } from './index';
 
 export default {
-  title: "Components/Modal",
+  title: 'Components/Modal',
   component: Modal,
 };
 
@@ -11,19 +11,19 @@ export const ModalStory = () => (
   <div>
     <Modal._Overlay />
     <Modal._Content>
-      <Modal.Header toggle={() => 1}>Заголовок</Modal.Header>
+      <Modal.Header close={() => 1}>Заголовок</Modal.Header>
       <Modal.Body>Основной текст</Modal.Body>
       <Modal.Footer>Футер</Modal.Footer>
     </Modal._Content>
   </div>
 );
-ModalStory.storyName = "Basic";
+ModalStory.storyName = 'Basic';
 
 export const LargeModalStory = () => (
   <div>
     <Modal._Overlay />
     <Modal._Content>
-      <Modal.Header toggle={() => 1}>Заголовок</Modal.Header>
+      <Modal.Header close={() => 1}>Заголовок</Modal.Header>
       <Modal.Body>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Diam in arcu cursus

@@ -1,10 +1,9 @@
 import { getHours, getMinutes, setHours, setMinutes } from 'date-fns';
 import { useCallback, useState } from 'react';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
-
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton } from '~/components';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { EventsPrototypeFragment } from '../queries.generated';
 import TimePicker from '../TimePicker';
@@ -52,7 +51,7 @@ const EditScheduleModal: React.FC<ModalProps> = ({ prototype, close }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Редактировать расписание</Modal.Header>
+      <Modal.Header close={close}>Редактировать расписание</Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
           <Label>День недели:</Label>

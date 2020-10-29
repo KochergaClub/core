@@ -2,9 +2,8 @@ import { format, parseISO } from 'date-fns';
 import { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
-
 import { useAPI, useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 import { state2link } from '~/image-templater/utils';
 
 import { EvenmanEvent_DetailsFragment } from './queries.generated';
@@ -94,7 +93,7 @@ const VkImageModal: React.FC<Props> = ({ event, close, onSave }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Картинка для ВК</Modal.Header>
+      <Modal.Header close={close}>Картинка для ВК</Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
           <div>

@@ -4,9 +4,9 @@ import { useCallback, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
 import { useMutation } from '@apollo/client';
-import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender, useNotification } from '~/common/hooks';
+import { Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { eventRoute } from '../routes';
 import { EvenmanEventCreateDocument } from './queries.generated';
@@ -16,9 +16,10 @@ interface Props {
   date: string;
 }
 
-const NewEventModal: React.FC<Props> = props => {
+const NewEventModal: React.FC<Props> = (props) => {
   const notify = useNotification();
-  const [createMutation, { loading: creating }] = useMutation(EvenmanEventCreateDocument,
+  const [createMutation, { loading: creating }] = useMutation(
+    EvenmanEventCreateDocument,
     {
       refetchQueries: ['EvenmanEvents'],
       awaitRefetchQueries: true,
@@ -71,7 +72,7 @@ const NewEventModal: React.FC<Props> = props => {
 
   return (
     <Modal>
-      <Modal.Header toggle={props.close}>
+      <Modal.Header close={props.close}>
         Новое событие на {props.date}
       </Modal.Header>
       <Modal.Body {...hotkeys}>
@@ -80,7 +81,7 @@ const NewEventModal: React.FC<Props> = props => {
           <Input
             type="text"
             value={title}
-            onChange={e => setTitle(e.currentTarget.value)}
+            onChange={(e) => setTitle(e.currentTarget.value)}
             ref={focus}
           />
           <DatePicker

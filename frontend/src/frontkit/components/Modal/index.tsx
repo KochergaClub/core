@@ -47,21 +47,7 @@ const ModalContent = styled.div`
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 `;
 
-interface ModalWrapperProps {
-  isOpen: boolean;
-}
-
-const ModalWrapper = styled.div<ModalWrapperProps>`
-  display: ${(props) => (props.isOpen ? 'block' : 'none')};
-`;
-
-interface Props {
-  onOpened?: () => void;
-  isOpen?: boolean; // defaults to true; deprecated
-  overflow?: string; // deprecated
-}
-
-type ModalType = React.FC<Props> & {
+type ModalType = React.FC & {
   Body: typeof ModalBody;
   Footer: typeof ModalFooter;
   Header: typeof ModalHeader;
@@ -69,7 +55,7 @@ type ModalType = React.FC<Props> & {
   _Overlay: typeof Overlay;
 };
 
-export const Modal: ModalType = (props) => {
+export const Modal: ModalType = ({ children }) => {
   const [el] = React.useState(() => document.createElement('div'));
 
   React.useEffect(() => {
@@ -78,24 +64,14 @@ export const Modal: ModalType = (props) => {
     return () => {
       document.body.removeChild(el);
     };
-  }, []);
-
-  if (props.overflow) {
-    console.warn('Modal.overflow prop is deprecated');
-  }
-
-  const isOpen = props.isOpen === undefined ? true : props.isOpen;
-
-  React.useEffect(() => {
-    isOpen && props.onOpened && props.onOpened();
-  }, [isOpen, props.onOpened]);
+  }, [el]);
 
   const renderModal = () => {
     return (
-      <ModalWrapper isOpen={isOpen}>
+      <div>
         <Overlay id="modal-overlay" />
-        <ModalContent>{props.children}</ModalContent>
-      </ModalWrapper>
+        <ModalContent>{children}</ModalContent>
+      </div>
     );
   };
 

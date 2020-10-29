@@ -3,9 +3,9 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useQuery } from '@apollo/client';
-import { A, Button, Modal, Row } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
+import { A, Button, Modal, Row } from '~/frontkit';
 
 import { TeamCalendarEventDocument } from '../queries.generated';
 import { CalendarUIContext, closeUI, viewToEditUI } from '../reducers/calendarUI';
@@ -55,7 +55,7 @@ const ViewEventModal: React.FC<Props> = ({ event_id }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={closeCb}>&nbsp;</Modal.Header>
+      <Modal.Header close={closeCb}>&nbsp;</Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <EventTitle>{event.title}</EventTitle>
         <EventInfo event={event} />

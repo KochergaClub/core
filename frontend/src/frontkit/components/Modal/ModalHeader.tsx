@@ -15,7 +15,7 @@ const ModalHeaderEl = styled.header`
 `;
 
 export interface Props {
-  toggle?: () => void;
+  close: () => void;
   children: React.ReactNode;
 }
 
@@ -35,8 +35,8 @@ const ModalHeader = (props: Props) => {
   return (
     <ModalHeaderEl>
       {props.children}
-      {props.toggle && (
-        <HeaderButton onClick={() => props.toggle!()}>
+      {props.close && (
+        <HeaderButton onClick={() => props.close()}>
           <MdClose />
         </HeaderButton>
       )}

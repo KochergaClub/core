@@ -47,7 +47,7 @@ const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
   }, []);
   return (
     <Modal>
-      <Modal.Header toggle={close}>Регистрация</Modal.Header>
+      <Modal.Header close={close}>Регистрация</Modal.Header>
       <Modal.Body>
         <div id="kassa-checkout-form"></div>
       </Modal.Body>

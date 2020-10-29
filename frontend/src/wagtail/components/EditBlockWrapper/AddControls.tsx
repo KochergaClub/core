@@ -3,7 +3,6 @@ import { FaPlusCircle } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { Button, Column, Modal } from '~/frontkit';
-
 import { allBlockComponents, KnownBlockFragment } from '~/wagtail/blocks';
 
 import { EditBlocksContext } from '../EditWagtailBlocks';
@@ -73,7 +72,7 @@ const AddControls: React.FC<Props> = ({ position }) => {
         />
       ) : showModal ? (
         <Modal>
-          <Modal.Header toggle={closeModal}>Выберите тип блока</Modal.Header>
+          <Modal.Header close={closeModal}>Выберите тип блока</Modal.Header>
           <Modal.Body>
             <Column>
               {typenames.map((typename) => (

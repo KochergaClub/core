@@ -32,7 +32,7 @@ const OrderModal: React.FC<Props> = ({ close }) => {
   if (ticketTypesResults.loading || !ticketTypes) {
     return (
       <Modal>
-        <Modal.Header toggle={close}>Регистрация</Modal.Header>
+        <Modal.Header close={close}>Регистрация</Modal.Header>
         <Modal.Body>
           <SpinnerContainer>
             <Spinner size="div" />

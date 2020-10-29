@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react';
 
-import { A, Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
-
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { ModalAction } from '~/components/DropdownMenu';
+import { A, Button, Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { SetImageIdProps as Props } from './types';
 
@@ -36,7 +35,7 @@ const ChooseImageModal: React.FC<ModalProps> = ({ close, save }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Выбор существующей картинки</Modal.Header>
+      <Modal.Header close={close}>Выбор существующей картинки</Modal.Header>
       <Modal.Body {...hotkeys}>
         <Column stretch>
           <small>

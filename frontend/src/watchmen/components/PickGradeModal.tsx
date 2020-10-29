@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 
 import { useQuery } from '@apollo/client';
-import { Column, Modal, Row } from '~/frontkit';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { ApolloQueryResults, AsyncButton } from '~/components';
+import { Column, Modal, Row } from '~/frontkit';
 
 import { GradeFragment, WatchmanFragment, WatchmenGradesListDocument } from '../queries.generated';
 
@@ -60,14 +60,14 @@ const PickGradeModal: React.FC<Props> = ({ watchman, close, pick }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>
+      <Modal.Header close={close}>
         {watchman.member.short_name}. Выбрать грейд:
       </Modal.Header>
       <Modal.Body ref={focus} {...hotkeys}>
         <ApolloQueryResults {...gradesQueryResults}>
           {({ data: { grades } }) => (
             <Column stretch>
-              {grades.map(grade => (
+              {grades.map((grade) => (
                 <GradeItem
                   key={grade.id}
                   grade={grade}

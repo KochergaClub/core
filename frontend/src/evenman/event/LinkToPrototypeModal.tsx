@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import Toggle from 'react-toggle';
 
 import { useLazyQuery } from '@apollo/client';
-import { Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { AsyncButton, Spinner } from '~/components';
+import { Button, Column, ControlsFooter, Modal, Row } from '~/frontkit';
 
 import { EvenmanPrototypeDocument } from '../event-prototype/queries.generated';
 import { useUpdateMutation } from './hooks';
@@ -109,7 +109,7 @@ const LinkToPrototypeModal: React.FC<Props> = ({ event, close }) => {
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>
+      <Modal.Header close={close}>
         Заполнить из прототипа {loading && <Spinner size="span" />}
       </Modal.Header>
       <Modal.Body>

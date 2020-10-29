@@ -92,7 +92,7 @@ const FormOrderModal: React.FC<Props> = ({
 
   return (
     <Modal>
-      <Modal.Header toggle={close}>Регистрация</Modal.Header>
+      <Modal.Header close={close}>Регистрация</Modal.Header>
       <form onSubmit={form.handleSubmit(postForm)}>
         <Modal.Body>
           <Column stretch gutter={16}>

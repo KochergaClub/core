@@ -48,8 +48,8 @@ const AsyncButtonWithConfirm = ({
         {children}
       </Button>
       {confirming && (
-        <Modal isOpen={confirming}>
-          <Modal.Header toggle={closeConfirm}>
+        <Modal>
+          <Modal.Header close={closeConfirm}>
             {headerText ?? 'Точно?'}
           </Modal.Header>
           <Modal.Body>{confirmText}</Modal.Body>
