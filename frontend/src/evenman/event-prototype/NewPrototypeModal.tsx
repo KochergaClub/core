@@ -1,11 +1,11 @@
 import { getHours, getMinutes } from 'date-fns';
-import { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { useMutation } from '@apollo/client';
 
 import { useCommonHotkeys, useFocusOnFirstModalRender } from '~/common/hooks';
 import { AsyncButton } from '~/components';
-import { Column, Input, Label, Modal } from '~/frontkit';
+import { Column, ControlsFooter, Input, Label, Modal } from '~/frontkit';
 
 import { EvenmanPrototypeCreateDocument } from './queries.generated';
 import TimePicker from './TimePicker';
@@ -92,9 +92,11 @@ const NewPrototypeModal: React.FC<Props> = ({ close }) => {
         </Column>
       </Modal.Body>
       <Modal.Footer>
-        <AsyncButton act={create} disabled={!canCreate} kind="primary">
-          Создать
-        </AsyncButton>
+        <ControlsFooter>
+          <AsyncButton act={create} disabled={!canCreate} kind="primary">
+            Создать
+          </AsyncButton>
+        </ControlsFooter>
       </Modal.Footer>
     </Modal>
   );

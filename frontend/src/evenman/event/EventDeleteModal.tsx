@@ -31,6 +31,8 @@ const EventDeleteModal: React.FC<Props> = ({ event, close }) => {
   const [deleted, setDeleted] = useState(false);
   const [deleteMutation] = useMutation(EvenmanEventDeleteDocument, {
     variables: { id: event.id },
+    refetchQueries: ['EvenmanEvents'],
+    awaitRefetchQueries: true,
   });
 
   const act = useCallback(async () => {

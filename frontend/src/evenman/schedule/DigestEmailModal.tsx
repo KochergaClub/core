@@ -1,8 +1,8 @@
 import autosize from 'autosize';
-import { useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import { AsyncButton } from '~/components';
-import { Modal } from '~/frontkit';
+import { Column, ControlsFooter, Modal } from '~/frontkit';
 
 interface Props {
   close: () => void;
@@ -30,12 +30,16 @@ const DigestEmailModal: React.FC<Props> = ({ close, save }) => {
     <Modal>
       <Modal.Header close={close}>Текст еженедельной рассылки</Modal.Header>
       <Modal.Body>
-        <textarea ref={setTextarea} defaultValue={''} />
+        <Column stretch>
+          <textarea ref={setTextarea} defaultValue={''} />
+        </Column>
       </Modal.Body>
       <Modal.Footer>
-        <AsyncButton act={submit} kind="primary">
-          Создать черновик
-        </AsyncButton>
+        <ControlsFooter>
+          <AsyncButton act={submit} kind="primary">
+            Создать черновик
+          </AsyncButton>
+        </ControlsFooter>
       </Modal.Footer>
     </Modal>
   );
