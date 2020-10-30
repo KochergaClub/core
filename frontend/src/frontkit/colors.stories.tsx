@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { storiesOf } from '@storybook/react';
-
-import { A, colors, Column, HR, RichText, Row } from './';
+import { colors, Column, Row } from './';
 
 export default {
-  title: "Общее/Цвета",
+  title: 'Общее/Цвета',
 };
 
 const ColorBox = styled.div`
@@ -42,4 +40,4 @@ export const AllColors = () => (
     </Row>
   </Column>
 );
-AllColors.storyName = "Все цвета";
+AllColors.storyName = 'Все цвета';

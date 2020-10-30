@@ -6,9 +6,7 @@ import { usePermissions } from '~/common/hooks';
 import { ApolloQueryResults } from '~/components';
 import { CustomCardListView, PagedApolloCollection } from '~/components/collections';
 import { FormShape } from '~/components/forms/types';
-import {
-    StaffMemberFullFragment, StaffMembersDocument, StaffMembersQuery
-} from '~/staff/queries.generated';
+import { StaffMemberFullFragment, StaffMembersDocument } from '~/staff/queries.generated';
 
 import {
     CashierCreatePaymentDocument, CashierPaymentsDocument, PaymentFragment

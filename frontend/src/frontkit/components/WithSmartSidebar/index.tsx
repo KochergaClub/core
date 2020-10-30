@@ -54,6 +54,7 @@ export const WithSmartSidebar: React.FC<Props> = ({
     } else if (!isMobile && !showSidebar) {
       setShowSidebar(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]); // this is not a bug with missing dep! we actually want to toggle sidebar on isMobile changes only
 
   const sidebar: SidebarControls = {

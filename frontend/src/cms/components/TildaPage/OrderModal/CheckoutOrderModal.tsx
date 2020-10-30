@@ -44,7 +44,7 @@ const CheckoutOrderModal: React.FC<CheckoutProps> = ({ close, order }) => {
       });
       checkout.render('kassa-checkout-form');
     });
-  }, []);
+  }, [order.id, order.confirmation_token]);
   return (
     <Modal>
       <Modal.Header close={close}>Регистрация</Modal.Header>
