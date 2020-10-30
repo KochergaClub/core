@@ -5,8 +5,9 @@ import { useEffect } from 'react';
 import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
 import { KochergaApolloClient } from '~/apollo/types';
+import { APIError } from '~/common/api';
+import { Spinner } from '~/components';
 
-import FallbackPage from '../../components/FallbackPage';
 import TildaPage from '../../components/TildaPage';
 import { useWagtailPageReducer, WagtailPageContext } from '../../contexts';
 import { TildaPageQuery } from '../../queries.generated';
@@ -57,7 +58,7 @@ export const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
 export const AnyCmsPage: NextApolloPage<Props> = (props) => {
   const router = useRouter();
   if (router.isFallback) {
-    return <FallbackPage />;
+    return <Spinner size="block" />;
   }
 
   switch (props.kind) {
@@ -128,15 +129,24 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     ? (context.params.slug as string[]).join('/')
     : '';
 
-  const props = await getCmsProps(apolloClient, path);
+  try {
+    const props = await getCmsProps(apolloClient, path);
 
-  return {
-    props: {
-      ...props,
-      apolloState: apolloClient.cache.extract(),
-    },
-    revalidate: 1,
-  };
+    return {
+      props: {
+        ...props,
+        apolloState: apolloClient.cache.extract(),
+      },
+      revalidate: 1,
+    };
+  } catch (e) {
+    if (e instanceof APIError && e.status === 404) {
+      return {
+        notFound: true,
+      };
+    }
+    throw e;
+  }
 };
 
 // FIXME - there's a weird typescript error which I don't know how to fix

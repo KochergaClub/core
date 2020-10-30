@@ -1,12 +1,10 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { Page } from '~/components';
 
 import { TildaPageQuery } from '../../queries.generated';
-import { normalizeSsrPath } from '../../utils';
 import OrderModal from './OrderModal';
 
 type Props = TildaPageQuery['tildaPage'];
@@ -16,11 +14,7 @@ const Container = styled.div`
 `;
 
 const TildaPage: React.FC<Props> = (props) => {
-  const router = useRouter();
   const [ordering, setOrdering] = useState(false);
-
-  const canonicalUrl =
-    process.env.NEXT_PUBLIC_KOCHERGA_WEBSITE + normalizeSsrPath(router.asPath);
 
   const patchedBody = useMemo(
     () =>
@@ -64,7 +58,6 @@ const TildaPage: React.FC<Props> = (props) => {
       <Page
         title={props.title}
         description={props.description}
-        canonicalUrl={canonicalUrl}
         chrome={props.show_header_and_footer ? 'default' : 'none'}
         og={{ image: props.og_image?.url }}
         vkImage={props.vk_image?.url}
