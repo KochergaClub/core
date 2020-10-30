@@ -57,14 +57,27 @@ export const getComponentByTypename = <T extends KnownWagtailPageTypename>(
   return allPageComponents[typename];
 };
 
-interface LoadTypenameProps {
+interface LoadPageProps {
   apolloClient: KochergaApolloClient;
   locator: PageLocator;
 }
 
-export const loadTypename = async (
-  props: LoadTypenameProps
-): Promise<string> => {
+// TODO - merge these types with LoadWagtailPageResult with generics
+// TODO - add kind: 'not_found' instead of 404 exceptions?
+interface OkTypenameResult {
+  kind: 'ok';
+  typename: string;
+}
+
+interface PrivateTypenameResult {
+  kind: 'private';
+}
+
+type LoadTypenameResult = OkTypenameResult | PrivateTypenameResult;
+
+const loadTypename = async (
+  props: LoadPageProps
+): Promise<LoadTypenameResult> => {
   const { data, errors } = await props.apolloClient.query({
     query: WagtailPageTypeDocument,
     variables: props.locator,
@@ -78,19 +91,34 @@ export const loadTypename = async (
     throw new APIError('No data (huh?)', 500);
   }
 
-  const wagtailPage = data.wagtailPage;
+  const result = data.result;
 
-  if (!wagtailPage) {
-    throw new APIError('Page not found', 404);
+  switch (result.__typename) {
+    case 'WagtailPageContainer':
+      const wagtailPage = result.page;
+      if (!wagtailPage) {
+        throw new APIError('Page not found', 404);
+      }
+      return { kind: 'ok', typename: wagtailPage.__typename };
+    case 'WagtailPagePrivate':
+      return { kind: 'private' };
+    default:
+      throw new APIError('Unexpected query result', 500);
   }
-
-  return wagtailPage.__typename;
 };
 
 type GetPageResult<T extends KnownWagtailPageTypename> = {
   __typename: 'Query';
 } & {
-  wagtailPage?: Parameters<WagtailPageComponentsMap[T]>[0]['page'];
+  result:
+    | {
+        __typename: 'WagtailPageContainer';
+        page?: Parameters<WagtailPageComponentsMap[T]>[0]['page'];
+      }
+    | {
+        __typename: 'WagtailPagePrivate';
+        message: string;
+      };
 };
 
 type GetPageVariables = {
@@ -123,8 +151,15 @@ const buildGetPageDocument = <T extends KnownWagtailPageTypename>(
     withFragments(
       gql`
 query Get${fragmentName}($path: String, $preview_token: String) {
-  wagtailPage(path: $path, preview_token: $preview_token) {
-    ...${fragmentName}
+  result: wagtailPageOrPrivate(path: $path, preview_token: $preview_token) {
+    ... on WagtailPageContainer {
+      page {
+        ...${fragmentName}
+      }
+    }
+    ... on WagtailPagePrivate {
+      message
+    }
   }
 }`,
       [fragmentDoc]
@@ -144,17 +179,30 @@ export const wagtailPageUrls = async (apolloClient: KochergaApolloClient) => {
   return data.wagtailPages.map((p) => p.meta.url.replace(/^\//, ''));
 };
 
+interface OkWagtailPageResult {
+  kind: 'ok';
+  page: KnownWagtailPageFragment;
+}
+
+interface PrivateWagtailPageResult {
+  kind: 'private';
+}
+
+type LoadWagtailPageResult = OkWagtailPageResult | PrivateWagtailPageResult;
+
 export const loadWagtailPage = async ({
-  locator,
   apolloClient,
-}: {
-  locator: PageLocator;
-  apolloClient: KochergaApolloClient;
-}): Promise<KnownWagtailPageFragment> => {
-  const typename = await loadTypename({
+  locator,
+}: LoadPageProps): Promise<LoadWagtailPageResult> => {
+  const typenameOrPrivate = await loadTypename({
     apolloClient,
     locator,
   });
+
+  if (typenameOrPrivate.kind === 'private') {
+    return { kind: 'private' };
+  }
+  const typename = typenameOrPrivate.typename;
 
   if (!isKnownTypename(typename)) {
     throw new APIError('Unknown typename', 500);
@@ -171,14 +219,25 @@ export const loadWagtailPage = async ({
     throw new APIError('Error while querying for full wagtail page', 500);
   }
 
-  const page = data?.wagtailPage;
-
-  if (!page) {
-    throw new APIError(
-      'Wagtail page in GraphQL response is empty for some reason',
-      500
-    );
+  if (!data) {
+    throw new APIError('No data (huh?)', 500);
   }
 
-  return page;
+  switch (data.result.__typename) {
+    case 'WagtailPageContainer':
+      const page = data.result.page;
+      if (!page) {
+        throw new APIError(
+          'Wagtail page in GraphQL response is empty for some reason',
+          500
+        );
+      }
+
+      return { kind: 'ok', page };
+    case 'WagtailPagePrivate':
+      // shouldn't happen often since we just checked typename with loadTypename
+      return { kind: 'private' };
+    default:
+      throw new APIError('Unexpected result from GetPage query', 500);
+  }
 };

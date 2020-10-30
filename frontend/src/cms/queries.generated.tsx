@@ -10,46 +10,52 @@ export type WagtailPageTypeQueryVariables = Types.Exact<{
 
 export type WagtailPageTypeQuery = (
   { __typename: 'Query' }
-  & { wagtailPage?: Types.Maybe<(
-    { __typename: 'BlogIndexPage' }
-    & Pick<Types.BlogIndexPage, 'id'>
+  & { result: (
+    { __typename: 'WagtailPageContainer' }
+    & { page?: Types.Maybe<(
+      { __typename: 'BlogIndexPage' }
+      & Pick<Types.BlogIndexPage, 'id'>
+    ) | (
+      { __typename: 'BlogPostPage' }
+      & Pick<Types.BlogPostPage, 'id'>
+    ) | (
+      { __typename: 'FaqPage' }
+      & Pick<Types.FaqPage, 'id'>
+    ) | (
+      { __typename: 'FolderPage' }
+      & Pick<Types.FolderPage, 'id'>
+    ) | (
+      { __typename: 'FreeFormPage' }
+      & Pick<Types.FreeFormPage, 'id'>
+    ) | (
+      { __typename: 'PresentationPage' }
+      & Pick<Types.PresentationPage, 'id'>
+    ) | (
+      { __typename: 'ProjectIndexPage' }
+      & Pick<Types.ProjectIndexPage, 'id'>
+    ) | (
+      { __typename: 'ProjectPage' }
+      & Pick<Types.ProjectPage, 'id'>
+    ) | (
+      { __typename: 'RatioNotebookIndexPage' }
+      & Pick<Types.RatioNotebookIndexPage, 'id'>
+    ) | (
+      { __typename: 'RatioNotebookPage' }
+      & Pick<Types.RatioNotebookPage, 'id'>
+    ) | (
+      { __typename: 'RatioPresentationIndexPage' }
+      & Pick<Types.RatioPresentationIndexPage, 'id'>
+    ) | (
+      { __typename: 'RatioSectionIndexPage' }
+      & Pick<Types.RatioSectionIndexPage, 'id'>
+    ) | (
+      { __typename: 'RatioSectionPage' }
+      & Pick<Types.RatioSectionPage, 'id'>
+    )> }
   ) | (
-    { __typename: 'BlogPostPage' }
-    & Pick<Types.BlogPostPage, 'id'>
-  ) | (
-    { __typename: 'FaqPage' }
-    & Pick<Types.FaqPage, 'id'>
-  ) | (
-    { __typename: 'FolderPage' }
-    & Pick<Types.FolderPage, 'id'>
-  ) | (
-    { __typename: 'FreeFormPage' }
-    & Pick<Types.FreeFormPage, 'id'>
-  ) | (
-    { __typename: 'PresentationPage' }
-    & Pick<Types.PresentationPage, 'id'>
-  ) | (
-    { __typename: 'ProjectIndexPage' }
-    & Pick<Types.ProjectIndexPage, 'id'>
-  ) | (
-    { __typename: 'ProjectPage' }
-    & Pick<Types.ProjectPage, 'id'>
-  ) | (
-    { __typename: 'RatioNotebookIndexPage' }
-    & Pick<Types.RatioNotebookIndexPage, 'id'>
-  ) | (
-    { __typename: 'RatioNotebookPage' }
-    & Pick<Types.RatioNotebookPage, 'id'>
-  ) | (
-    { __typename: 'RatioPresentationIndexPage' }
-    & Pick<Types.RatioPresentationIndexPage, 'id'>
-  ) | (
-    { __typename: 'RatioSectionIndexPage' }
-    & Pick<Types.RatioSectionIndexPage, 'id'>
-  ) | (
-    { __typename: 'RatioSectionPage' }
-    & Pick<Types.RatioSectionPage, 'id'>
-  )> }
+    { __typename: 'WagtailPagePrivate' }
+    & Pick<Types.WagtailPagePrivate, 'message'>
+  ) }
 );
 
 export type TildaPageQueryVariables = Types.Exact<{
@@ -295,7 +301,7 @@ export type CommonWagtailPage_RatioSectionPage_Fragment = (
 export type CommonWagtailPageFragment = CommonWagtailPage_BlogIndexPage_Fragment | CommonWagtailPage_BlogPostPage_Fragment | CommonWagtailPage_FaqPage_Fragment | CommonWagtailPage_FolderPage_Fragment | CommonWagtailPage_FreeFormPage_Fragment | CommonWagtailPage_PresentationPage_Fragment | CommonWagtailPage_ProjectIndexPage_Fragment | CommonWagtailPage_ProjectPage_Fragment | CommonWagtailPage_RatioNotebookIndexPage_Fragment | CommonWagtailPage_RatioNotebookPage_Fragment | CommonWagtailPage_RatioPresentationIndexPage_Fragment | CommonWagtailPage_RatioSectionIndexPage_Fragment | CommonWagtailPage_RatioSectionPage_Fragment;
 
 export const CommonWagtailPageFragmentDoc: DocumentNode<CommonWagtailPageFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonWagtailPage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"WagtailPage"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"meta"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slug"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"url"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"description"},"arguments":[],"directives":[]}]}}]}}]};
-export const WagtailPageTypeDocument: DocumentNode<WagtailPageTypeQuery, WagtailPageTypeQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "WagtailPageType" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "path" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "preview_token" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "wagtailPage" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "path" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "path" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "preview_token" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "preview_token" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "__typename" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "id" }, "arguments": [], "directives": [] }] } }] } }] });
+export const WagtailPageTypeDocument: DocumentNode<WagtailPageTypeQuery, WagtailPageTypeQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "WagtailPageType" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "path" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }, "directives": [] }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "preview_token" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "alias": { "kind": "Name", "value": "result" }, "name": { "kind": "Name", "value": "wagtailPageOrPrivate" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "path" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "path" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "preview_token" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "preview_token" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "InlineFragment", "typeCondition": { "kind": "NamedType", "name": { "kind": "Name", "value": "WagtailPageContainer" } }, "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "page" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "__typename" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "id" }, "arguments": [], "directives": [] }] } }] } }, { "kind": "InlineFragment", "typeCondition": { "kind": "NamedType", "name": { "kind": "Name", "value": "WagtailPagePrivate" } }, "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "message" }, "arguments": [], "directives": [] }] } }] } }] } }] });
 
 export const TildaPageDocument: DocumentNode<TildaPageQuery, TildaPageQueryVariables> = dedupeFragments({ "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "TildaPage" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "path" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } }, "directives": [] }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "tildaPage" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "path" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "path" } } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "body" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "title" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "description" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "show_header_and_footer" }, "arguments": [], "directives": [] }, { "kind": "Field", "name": { "kind": "Name", "value": "og_image" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "spec" }, "value": { "kind": "StringValue", "value": "fill-1200x630", "block": false } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "url" }, "arguments": [], "directives": [] }] } }, { "kind": "Field", "alias": { "kind": "Name", "value": "vk_image" }, "name": { "kind": "Name", "value": "og_image" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "spec" }, "value": { "kind": "StringValue", "value": "fill-1020x456", "block": false } }], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "url" }, "arguments": [], "directives": [] }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "css" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "url" }, "arguments": [], "directives": [] }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "js" }, "arguments": [], "directives": [], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "url" }, "arguments": [], "directives": [] }] } }] } }] } }] });
 

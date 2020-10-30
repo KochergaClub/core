@@ -1,6 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 
 import { NextApolloPage, withApollo } from '~/apollo';
 import { apolloClientForStaticProps } from '~/apollo/client';
@@ -9,14 +8,19 @@ import { APIError } from '~/common/api';
 import { Spinner } from '~/components';
 
 import TildaPage from '../../components/TildaPage';
-import { useWagtailPageReducer, WagtailPageContext } from '../../contexts';
 import { TildaPageQuery } from '../../queries.generated';
 import { loadTildaPage, tildaPageUrls } from '../../tilda-utils';
-import { getComponentByTypename, loadWagtailPage, wagtailPageUrls } from '../../wagtail-utils';
+import { loadWagtailPage, wagtailPageUrls } from '../../wagtail-utils';
+import PrivateWagtailCmsPage from './PrivateWagtailCmsPage';
+import WagtailCmsPage from './WagtailCmsPage';
 
 interface WagtailProps {
   kind: 'wagtail';
   page: any;
+}
+
+interface PrivateWagtailProps {
+  kind: 'private-wagtail';
 }
 
 interface TildaProps {
@@ -24,36 +28,7 @@ interface TildaProps {
   data: TildaPageQuery['tildaPage'];
 }
 
-export type Props = WagtailProps | TildaProps;
-
-export const WagtailCmsPage: React.FC<{ page: any }> = ({ page }) => {
-  // We need to have control over page because pages can be editable.
-  // But this creates a problem: on navigation NextJS will replace the page prop and we need to handle it correctly.
-  const [state, dispatch] = useWagtailPageReducer({
-    page,
-  });
-
-  useEffect(() => {
-    dispatch({
-      type: 'NAVIGATE',
-      payload: page,
-    });
-  }, [dispatch, page]);
-
-  const typename = state.page.__typename;
-
-  const Component = getComponentByTypename(typename);
-  if (!Component) {
-    // TODO - prettier error
-    return <div>Внутренняя ошибка: страница неизвестного типа ${typename}</div>;
-  }
-
-  return (
-    <WagtailPageContext.Provider value={{ state, dispatch }}>
-      <Component page={state.page} />
-    </WagtailPageContext.Provider>
-  );
-};
+export type Props = WagtailProps | PrivateWagtailProps | TildaProps;
 
 export const AnyCmsPage: NextApolloPage<Props> = (props) => {
   const router = useRouter();
@@ -67,6 +42,8 @@ export const AnyCmsPage: NextApolloPage<Props> = (props) => {
         throw new Error('oops');
       }
       return <TildaPage {...props.data} />;
+    case 'private-wagtail':
+      return <PrivateWagtailCmsPage />;
     case 'wagtail':
       return <WagtailCmsPage page={props.page} />;
   }
@@ -111,15 +88,22 @@ export const getCmsProps = async (
     };
   }
 
-  const page = await loadWagtailPage({
+  const maybePage = await loadWagtailPage({
     locator: { path },
     apolloClient,
   });
 
-  return {
-    kind: 'wagtail',
-    page,
-  };
+  switch (maybePage.kind) {
+    case 'ok':
+      return {
+        kind: 'wagtail',
+        page: maybePage.page,
+      };
+    case 'private':
+      return {
+        kind: 'private-wagtail',
+      };
+  }
 };
 
 export const getStaticProps: GetStaticProps<Props> = async (context) => {

@@ -25,8 +25,6 @@ const PreviewWagtailPage: NextApolloPage<{ page: KnownWagtailPageFragment }> = <
     return <div>oops</div>; // FIXME - better error
   }
 
-  type X = Parameters<typeof Component>[0];
-
   return (
     <WagtailPageContext.Provider
       value={{ state: { page: props.page, preview: true } }}
@@ -41,14 +39,19 @@ PreviewWagtailPage.getInitialProps = async ({ query, apolloClient }) => {
   if (!preview_token) {
     throw new APIError('No token', 404);
   }
-  const page = await loadWagtailPage({
+  const maybePage = await loadWagtailPage({
     locator: { preview_token },
     apolloClient,
   });
 
-  return {
-    page,
-  };
+  switch (maybePage.kind) {
+    case 'ok':
+      return {
+        page: maybePage.page,
+      };
+    case 'private':
+      throw new APIError('Private', 500); // don't expect preview pages to be private
+  }
 };
 
 export default withApollo(PreviewWagtailPage);

@@ -1760,6 +1760,7 @@ export type ProjectPageImageArgs = {
 export type Query = {
   __typename?: 'Query';
   wagtailPage?: Maybe<WagtailPage>;
+  wagtailPageOrPrivate: WagtailPageOrPrivateResult;
   wagtailPages: Array<WagtailPage>;
   wagtailImage?: Maybe<WagtailImage>;
   wagtailImageSearch: WagtailImageSearchResult;
@@ -1816,6 +1817,13 @@ export type Query = {
 
 
 export type QueryWagtailPageArgs = {
+  page_id?: Maybe<Scalars['ID']>;
+  path?: Maybe<Scalars['String']>;
+  preview_token?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryWagtailPageOrPrivateArgs = {
   page_id?: Maybe<Scalars['ID']>;
   path?: Maybe<Scalars['String']>;
   preview_token?: Maybe<Scalars['String']>;
@@ -2611,6 +2619,11 @@ export type WagtailPage = {
   meta: WagtailPageMeta;
 };
 
+export type WagtailPageContainer = {
+  __typename?: 'WagtailPageContainer';
+  page?: Maybe<WagtailPage>;
+};
+
 export type WagtailPageMeta = {
   __typename?: 'WagtailPageMeta';
   slug: Scalars['String'];
@@ -2628,9 +2641,16 @@ export type WagtailPageMetaRevisionArgs = {
   id: Scalars['ID'];
 };
 
+export type WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate;
+
 export type WagtailPagePermissions = {
   __typename?: 'WagtailPagePermissions';
   can_edit: Scalars['Boolean'];
+};
+
+export type WagtailPagePrivate = {
+  __typename?: 'WagtailPagePrivate';
+  message: Scalars['String'];
 };
 
 export type WagtailPageRevision = {

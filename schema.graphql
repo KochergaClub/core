@@ -1087,6 +1087,7 @@ type ProjectPage implements WagtailPage {
 
 type Query {
   wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
+  wagtailPageOrPrivate(page_id: ID, path: String, preview_token: String): WagtailPageOrPrivateResult!
   wagtailPages: [WagtailPage!]!
   wagtailImage(input: WagtailImageInput!): WagtailImage
   wagtailImageSearch(input: WagtailImageSearchInput!): WagtailImageSearchResult!
@@ -1683,6 +1684,10 @@ interface WagtailPage {
   meta: WagtailPageMeta!
 }
 
+type WagtailPageContainer {
+  page: WagtailPage
+}
+
 type WagtailPageMeta {
   slug: String!
   description: String!
@@ -1693,8 +1698,14 @@ type WagtailPageMeta {
   revision(id: ID!): WagtailPageRevision!
 }
 
+union WagtailPageOrPrivateResult = WagtailPageContainer | WagtailPagePrivate
+
 type WagtailPagePermissions {
   can_edit: Boolean!
+}
+
+type WagtailPagePrivate {
+  message: String!
 }
 
 type WagtailPageRevision {

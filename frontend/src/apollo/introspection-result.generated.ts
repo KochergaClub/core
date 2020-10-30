@@ -95,6 +95,10 @@
       "RatioPresentationIndexPage",
       "RatioSectionIndexPage",
       "RatioSectionPage"
+    ],
+    "WagtailPageOrPrivateResult": [
+      "WagtailPageContainer",
+      "WagtailPagePrivate"
     ]
   }
 };
