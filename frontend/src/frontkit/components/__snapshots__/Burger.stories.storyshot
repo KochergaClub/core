@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Burger Basic 1`] = `
+<div
+  className="Burger__BurgerContainer-sc-1kdykca-0 kYxVnR"
+  color="black"
+>
+  <span />
+  <span />
+  <span />
+  <span />
+</div>
+`;

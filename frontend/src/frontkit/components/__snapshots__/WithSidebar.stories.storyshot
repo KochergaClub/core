@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/WithSidebar Basic 1`] = `
+<div
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
+>
+  <div
+    className="WithSidebar__Container-tq2oun-0 gwUDpd"
+  >
+    <div
+      className="WithSidebar__Sidebar-tq2oun-1 bOoxzu"
+    >
+      <h1>
+        hello
+      </h1>
+    </div>
+    <div
+      className="WithSidebar__Main-tq2oun-2 dAZEJP"
+    >
+      Main app content
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
+<div
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
+>
+  <div
+    className="WithSidebar__Container-tq2oun-0 gwUDpd"
+  >
+    <div
+      className="WithSidebar__Sidebar-tq2oun-1 bOoxzu"
+    >
+      <nav>
+        <ul
+          className="ColumnNav__Ul-sc-1ebrfyn-3 kCuuTg"
+        >
+          <li
+            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+          >
+            <div
+              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+            >
+              Item 1
+            </div>
+          </li>
+          <li
+            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+          >
+            <div
+              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+            >
+              Item 2
+            </div>
+          </li>
+          <li
+            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+            selected={true}
+          >
+            <div
+              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+            >
+              Item 3 (active)
+            </div>
+            <div
+              className="ColumnNav__Highlight-sc-1ebrfyn-2 hCnnIx"
+              layoutId="highlight"
+            />
+          </li>
+          <li
+            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+          >
+            <div
+              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+            >
+              Item 4
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div
+      className="WithSidebar__Main-tq2oun-2 dAZEJP"
+    >
+      Main app content
+    </div>
+  </div>
+</div>
+`;

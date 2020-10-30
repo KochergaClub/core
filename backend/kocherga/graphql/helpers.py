@@ -160,6 +160,7 @@ class BaseField(ABC):
             result,
             args=args,
             resolve=check_permissions(self.permissions)(self.resolve),
+            deprecation_reason=self.deprecation_reason,
         )
 
     @property
@@ -176,6 +177,8 @@ class BaseField(ABC):
     @abstractmethod
     def resolve(self):
         ...
+
+    deprecation_reason: Optional[str] = None
 
 
 class BaseFieldWithInput(BaseField):

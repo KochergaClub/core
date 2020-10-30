@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Layout/Column Basic 1`] = `
+<div
+  className="Column-sc-18tfx87-0 joUKyB"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Column Custom Gutter 1`] = `
+<div
+  className="Column-sc-18tfx87-0 bybaPz"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Column Spaced 1`] = `
+<div
+  style={
+    Object {
+      "height": 500,
+    }
+  }
+>
+  <div
+    className="Column-sc-18tfx87-0 ddApuz"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 elmpDd"
+    >
+      button 1
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 elmpDd"
+    >
+      button 2
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 elmpDd"
+    >
+      button 3
+    </button>
+  </div>
+</div>
+`;

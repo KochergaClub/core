@@ -1086,7 +1086,7 @@ type ProjectPage implements WagtailPage {
 }
 
 type Query {
-  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage
+  wagtailPage(page_id: ID, path: String, preview_token: String): WagtailPage @deprecated(reason: "Use wagtailPageOrPrivate instead")
   wagtailPageOrPrivate(page_id: ID, path: String, preview_token: String): WagtailPageOrPrivateResult!
   wagtailPages: [WagtailPage!]!
   wagtailImage(input: WagtailImageInput!): WagtailImage

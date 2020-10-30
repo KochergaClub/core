@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Layout/Row Basic 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 ibopnM"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Row Custom Gutter 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 eEtTfy"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 3
+  </button>
+</div>
+`;
+
+exports[`Storyshots Layout/Row Spaced 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 eEgTrD"
+>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 1
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 2
+  </button>
+  <button
+    className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  >
+    button 3
+  </button>
+</div>
+`;

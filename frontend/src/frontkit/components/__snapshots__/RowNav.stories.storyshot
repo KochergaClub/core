@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/RowNav Basic 1`] = `
+<nav>
+  <ul
+    className="RowNav__Ul-sc-8x71d3-1 hwqIYI"
+  >
+    <li
+      className="RowNav__Li-sc-8x71d3-0 kMjfLO"
+      onClick={[Function]}
+    >
+      Item 1
+    </li>
+    <li
+      className="RowNav__Li-sc-8x71d3-0 erYCny"
+      onClick={[Function]}
+      selected={true}
+    >
+      Item 2
+    </li>
+    <li
+      className="RowNav__Li-sc-8x71d3-0 kMjfLO"
+      onClick={[Function]}
+    >
+      Item 3
+    </li>
+  </ul>
+</nav>
+`;

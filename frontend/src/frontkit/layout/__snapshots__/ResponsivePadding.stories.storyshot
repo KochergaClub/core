@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Layout/ResponsivePadding Basic 1`] = `
+<div
+  style={
+    Object {
+      "border": "1px solid black",
+    }
+  }
+>
+  <div
+    className="ResponsivePadding-sc-2n2vps-0 fxEqsG"
+  >
+    <div
+      style={
+        Object {
+          "backgroundColor": "#ddd",
+        }
+      }
+    >
+      Содержимое
+    </div>
+  </div>
+</div>
+`;

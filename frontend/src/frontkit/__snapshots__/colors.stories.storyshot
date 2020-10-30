@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Общее/Цвета Все цвета 1`] = `
+<div
+  className="Column-sc-18tfx87-0 bEObAw"
+>
+  <div
+    className="Row-sc-12w6u1l-0 kNTOAN"
+  >
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 jxBerF"
+      color="hsl(210, 80%, 95%)"
+    >
+      primary/
+      100
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 btHLSF"
+      color="hsl(210, 55%, 80%)"
+    >
+      primary/
+      300
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 iFxQAp"
+      color="hsl(210, 55%, 55%)"
+    >
+      primary/
+      500
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 fVtqpL"
+      color="hsl(210, 55%, 35%)"
+    >
+      primary/
+      700
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 crA-dnb"
+      color="hsl(210, 55%, 20%)"
+    >
+      primary/
+      900
+    </div>
+  </div>
+  <div
+    className="Row-sc-12w6u1l-0 kNTOAN"
+  >
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 chEwTx"
+      color="hsl(210, 20%, 97%)"
+    >
+      grey/
+      100
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 gwBQzR"
+      color="hsl(210, 12%, 92%)"
+    >
+      grey/
+      200
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 kfxNmC"
+      color="hsl(210, 12%, 80%)"
+    >
+      grey/
+      300
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 ehoWbF"
+      color="hsl(210, 12%, 70%)"
+    >
+      grey/
+      400
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 dfBaHL"
+      color="hsl(210, 12%, 58%)"
+    >
+      grey/
+      500
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 bACGpN"
+      color="hsl(210, 12%, 43%)"
+    >
+      grey/
+      600
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 dwTGzl"
+      color="hsl(210, 12%, 38%)"
+    >
+      grey/
+      700
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 dfrGnW"
+      color="hsl(210, 12%, 33%)"
+    >
+      grey/
+      800
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 fGByYw"
+      color="hsl(210, 12%, 28%)"
+    >
+      grey/
+      900
+    </div>
+  </div>
+  <div
+    className="Row-sc-12w6u1l-0 kNTOAN"
+  >
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 byobLy"
+      color="hsl(0, 100%, 90%)"
+    >
+      accent/
+      100
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 hAHbrP"
+      color="hsl(0, 100%, 80%)"
+    >
+      accent/
+      300
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 enUgOM"
+      color="hsl(0, 100%, 74%)"
+    >
+      accent/
+      500
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 dhLyRM"
+      color="hsl(0, 100%, 70%)"
+    >
+      accent/
+      700
+    </div>
+    <div
+      className="colorsstories__ColorBox-sc-13y7tng-0 fEIBva"
+      color="hsl(0, 60%, 60%)"
+    >
+      accent/
+      900
+    </div>
+  </div>
+</div>
+`;

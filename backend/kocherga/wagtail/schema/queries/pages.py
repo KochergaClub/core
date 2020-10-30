@@ -86,6 +86,7 @@ class wagtailPage(WagtailPageMixin, helpers.BaseField):
         # WagtailPageMixin.resolve must return either PrivatePage or WagtailPageContainer
         raise Exception("Internal logic error")
 
+    deprecation_reason = 'Use wagtailPageOrPrivate instead'
     permissions = []
     args = {
         'page_id': 'ID',

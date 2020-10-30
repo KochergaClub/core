@@ -1759,6 +1759,7 @@ export type ProjectPageImageArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /** @deprecated Use wagtailPageOrPrivate instead */
   wagtailPage?: Maybe<WagtailPage>;
   wagtailPageOrPrivate: WagtailPageOrPrivateResult;
   wagtailPages: Array<WagtailPage>;

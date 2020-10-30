@@ -35,8 +35,13 @@ eslint:
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx eslint src --ext ts,tsx
 
 test-js:
+	# run typescript
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx tsc
+	# run js tests
 	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx jest
+	# test graphql documents
+	$(K) cp schema.graphql $(shell $(K) get po -l app=core-frontend -o name | awk -F "/" '{print $$2}'):/code/
+	$(K) exec -it $(shell $(K) get po -l app=core-frontend -o name) -- npx graphql-inspector validate --deprecated './src/**/*.graphql' ./schema.graphql
 
 test: test-types test-code test-js lint eslint
 

@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/ColumnNav Basic 1`] = `
+<nav>
+  <ul
+    className="ColumnNav__Ul-sc-1ebrfyn-3 kCuuTg"
+  >
+    <li
+      className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+    >
+      <div
+        className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+      >
+        Item 1
+      </div>
+    </li>
+    <li
+      className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+      selected={true}
+    >
+      <div
+        className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+      >
+        Item 2
+      </div>
+      <div
+        className="ColumnNav__Highlight-sc-1ebrfyn-2 hCnnIx"
+        layoutId="highlight"
+      />
+    </li>
+    <li
+      className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+    >
+      <div
+        className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+      >
+        Item 3
+      </div>
+    </li>
+  </ul>
+</nav>
+`;

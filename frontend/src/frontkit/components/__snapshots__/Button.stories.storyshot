@@ -1,0 +1,281 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Button All 1`] = `
+<div
+  className="Row-sc-12w6u1l-0 ibopnM"
+>
+  <div
+    className="Column-sc-18tfx87-0 joUKyB"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 jbDtMz"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 elmpDd"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 lmGujH"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 eXzsnG"
+      size="small"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 hnxvaH"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 iKseVk"
+      size="big"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 jbDtMz"
+      disabled={true}
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 elmpDd"
+      disabled={true}
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 lmGujH"
+      disabled={true}
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="Column-sc-18tfx87-0 joUKyB"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 iayhCj"
+      kind="primary"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 glXGhZ"
+      kind="primary"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dNaRRX"
+      kind="primary"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 eQwVFk"
+      kind="primary"
+      size="small"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 jjIVWd"
+      kind="primary"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dLdViK"
+      kind="primary"
+      size="big"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 iayhCj"
+      disabled={true}
+      kind="primary"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 glXGhZ"
+      disabled={true}
+      kind="primary"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dNaRRX"
+      disabled={true}
+      kind="primary"
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+  <div
+    className="Column-sc-18tfx87-0 joUKyB"
+  >
+    <button
+      className="Button__ButtonFrame-j52k6q-0 gnDEMY"
+      kind="danger"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dlliYu"
+      kind="danger"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 ijLaiE"
+      kind="danger"
+      size="big"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dMspCv"
+      kind="danger"
+      size="small"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 djyyGh"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 kWkpfS"
+      kind="danger"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 djyyGh"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 UYwex"
+      kind="danger"
+      size="big"
+    >
+      <div
+        className="Button__ButtonBackground-j52k6q-1 djyyGh"
+      />
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 gnDEMY"
+      disabled={true}
+      kind="danger"
+      size="small"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 dlliYu"
+      disabled={true}
+      kind="danger"
+    >
+      Кнопка
+    </button>
+    <button
+      className="Button__ButtonFrame-j52k6q-0 ijLaiE"
+      disabled={true}
+      kind="danger"
+      size="big"
+    >
+      Кнопка
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Button Basic 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 elmpDd"
+>
+  Текст на кнопке
+</button>
+`;
+
+exports[`Storyshots Components/Button Большая 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 lmGujH"
+  size="big"
+>
+  Большая кнопка
+</button>
+`;
+
+exports[`Storyshots Components/Button Во время выполнения действия 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 hnxvaH"
+>
+  <div
+    className="Button__ButtonBackground-j52k6q-1 gLyOPb"
+  />
+  Загружается...
+</button>
+`;
+
+exports[`Storyshots Components/Button Главная 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 glXGhZ"
+  kind="primary"
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Маленькая 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 jbDtMz"
+>
+  Привет
+</button>
+`;
+
+exports[`Storyshots Components/Button Неактивная 1`] = `
+<button
+  className="Button__ButtonFrame-j52k6q-0 elmpDd"
+  disabled={true}
+>
+  Нельзя нажать
+</button>
+`;

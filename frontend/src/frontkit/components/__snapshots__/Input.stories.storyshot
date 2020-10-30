@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Input Basic 1`] = `
+<input
+  className="Input-ma1ebw-0 fiPhii"
+  placeholder="Введите текст"
+  type="text"
+/>
+`;
+
+exports[`Storyshots Components/Input Большое текстовое поле 1`] = `
+<input
+  className="Input-ma1ebw-0 gavZwB"
+  placeholder="Введите важный текст"
+  scale="big"
+  type="text"
+/>
+`;
+
+exports[`Storyshots Components/Input Несколько полей 1`] = `
+<div
+  className="Column-sc-18tfx87-0 joUKyB"
+>
+  <input
+    className="Input-ma1ebw-0 fiPhii"
+    placeholder="Поле 1"
+    type="text"
+  />
+  <input
+    className="Input-ma1ebw-0 fiPhii"
+    placeholder="Поле 2"
+    type="text"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Input Текстовое поле с меткой 1`] = `
+<div>
+  <label
+    className="Label-y8zejy-0 dfyYVt"
+  >
+    Метка:
+  </label>
+  <input
+    className="Input-ma1ebw-0 fiPhii"
+    placeholder="Введите текст"
+    type="text"
+  />
+</div>
+`;

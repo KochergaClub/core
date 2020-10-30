@@ -118,8 +118,10 @@
     "yargs": "^16.0.3"
   },
   "devDependencies": {
+    "@graphql-inspector/cli": "^2.3.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
+    "@types/react-test-renderer": "^16.9.3",
     "core-js": "^3.6.5",
     "jest-styled-components": "^7.0.3",
     "react-test-renderer": "^17.0.1"

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/Badge All 1`] = `
+<div
+  className="Column-sc-18tfx87-0 joUKyB"
+>
+  <div
+    className="Badge__InnerBadge-mw861a-0 jQwDfo"
+  >
+    Текст
+  </div>
+  <div
+    className="Badge__InnerBadge-mw861a-0 fmbOgJ"
+    type="accent"
+  >
+    Текст
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/Badge Basic 1`] = `
+<div
+  className="Badge__InnerBadge-mw861a-0 jQwDfo"
+>
+  Текст
+</div>
+`;

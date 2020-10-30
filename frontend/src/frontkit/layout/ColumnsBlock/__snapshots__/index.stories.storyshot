@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Layout/ColumnsBlock Basic 1`] = `
+<div
+  className="ColumnsBlock__ColumnsBlockWithoutDefaults-sc-7vdhav-0 ljrUOo"
+>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 1
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 2
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 3
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layout/ColumnsBlock Custom Spaces 1`] = `
+<div
+  className="ColumnsBlock__ColumnsBlockWithoutDefaults-sc-7vdhav-0 isPtrm"
+>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 1
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 2
+  </div>
+  <div
+    style={
+      Object {
+        "backgroundColor": "#ddd",
+      }
+    }
+  >
+    Колонка 3
+  </div>
+</div>
+`;

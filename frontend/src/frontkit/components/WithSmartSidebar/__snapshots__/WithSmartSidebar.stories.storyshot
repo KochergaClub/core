@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Components/WithSmartSidebar Basic 1`] = `
+<div
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
+>
+  <div
+    className="WithSmartSidebar__Container-mooz12-0 iPrHbz"
+  >
+    <iframe
+      aria-hidden={true}
+      frameBorder={0}
+      src="about:blank"
+      style={
+        Object {
+          "display": "block",
+          "height": "100%",
+          "left": 0,
+          "opacity": 0,
+          "overflow": "hidden",
+          "pointerEvents": "none",
+          "position": "absolute",
+          "top": 0,
+          "width": "100%",
+          "zIndex": -1,
+        }
+      }
+      tabIndex={-1}
+    />
+    <div
+      className="WithSmartSidebar__Main-mooz12-1 eAhvkS"
+    >
+      <div>
+        Main app content
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Components/WithSmartSidebar With Column Nav 1`] = `
+<div
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
+>
+  <div
+    className="WithSmartSidebar__Container-mooz12-0 iPrHbz"
+  >
+    <iframe
+      aria-hidden={true}
+      frameBorder={0}
+      src="about:blank"
+      style={
+        Object {
+          "display": "block",
+          "height": "100%",
+          "left": 0,
+          "opacity": 0,
+          "overflow": "hidden",
+          "pointerEvents": "none",
+          "position": "absolute",
+          "top": 0,
+          "width": "100%",
+          "zIndex": -1,
+        }
+      }
+      tabIndex={-1}
+    />
+    <div
+      className="WithSmartSidebar__Main-mooz12-1 eAhvkS"
+    >
+      <div>
+        <div>
+          Main app content
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
