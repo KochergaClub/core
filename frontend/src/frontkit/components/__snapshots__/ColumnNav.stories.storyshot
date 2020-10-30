@@ -1,38 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/ColumnNav Basic 1`] = `
+.c1 {
+  position: relative;
+}
+
+.c2 {
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.c3 {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #ffffb3;
+}
+
+.c0 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
 <nav>
   <ul
-    className="ColumnNav__Ul-sc-1ebrfyn-3 kCuuTg"
+    className="c0"
   >
     <li
-      className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+      className="c1"
     >
       <div
-        className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+        className="c2"
       >
         Item 1
       </div>
     </li>
     <li
-      className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+      className="c1"
       selected={true}
     >
       <div
-        className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+        className="c2"
       >
         Item 2
       </div>
       <div
-        className="ColumnNav__Highlight-sc-1ebrfyn-2 hCnnIx"
+        className="c3"
         layoutId="highlight"
       />
     </li>
     <li
-      className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+      className="c1"
     >
       <div
-        className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+        className="c2"
       >
         Item 3
       </div>

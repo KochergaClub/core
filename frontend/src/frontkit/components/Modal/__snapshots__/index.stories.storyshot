@@ -1,19 +1,105 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/Modal Basic 1`] = `
+.c4 {
+  padding: 6px 10px;
+  overflow: auto;
+}
+
+.c5 {
+  padding: 6px 10px;
+  border-top: 1px solid hsl(210,12%,92%);
+}
+
+.c2 {
+  padding: 6px 10px;
+  border-bottom: 1px solid hsl(210,12%,92%);
+  font-weight: bold;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  float: right;
+  border: none;
+  background: none;
+  padding: 0 2px;
+  cursor: pointer;
+  color: #333;
+}
+
+.c3:hover {
+  color: red;
+}
+
+.c0 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  opacity: 0.3;
+  background-color: black;
+}
+
+.c1 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  z-index: 1001;
+  min-width: 320px;
+  overflow: auto;
+  max-width: 800px;
+  max-height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  border: 1px solid hsl(210,12%,92%);
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+@media (min-width:1200px) {
+  .c1 {
+    min-width: 480px;
+  }
+}
+
 <div>
   <div
-    className="Modal__Overlay-sc-17tt3bl-0 kbRNjc"
+    className="c0"
   />
   <div
-    className="Modal__ModalContent-sc-17tt3bl-1 ffPMX"
+    className="c1"
   >
     <header
-      className="ModalHeader__ModalHeaderEl-sc-1g0fqbo-0 ehnGNs"
+      className="c2"
     >
       Заголовок
       <button
-        className="ModalHeader__HeaderButton-sc-1g0fqbo-1 kVVqGP"
+        className="c3"
         onClick={[Function]}
       >
         <svg
@@ -37,12 +123,12 @@ exports[`Storyshots Components/Modal Basic 1`] = `
       </button>
     </header>
     <div
-      className="ModalBody-sc-2cx8u2-0 fnaQlB"
+      className="c4"
     >
       Основной текст
     </div>
     <footer
-      className="ModalFooter-sc-4hkn1a-0 iKWVGE"
+      className="c5"
     >
       Футер
     </footer>
@@ -51,19 +137,105 @@ exports[`Storyshots Components/Modal Basic 1`] = `
 `;
 
 exports[`Storyshots Components/Modal Large Modal Story 1`] = `
+.c4 {
+  padding: 6px 10px;
+  overflow: auto;
+}
+
+.c5 {
+  padding: 6px 10px;
+  border-top: 1px solid hsl(210,12%,92%);
+}
+
+.c2 {
+  padding: 6px 10px;
+  border-bottom: 1px solid hsl(210,12%,92%);
+  font-weight: bold;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.c3 {
+  float: right;
+  border: none;
+  background: none;
+  padding: 0 2px;
+  cursor: pointer;
+  color: #333;
+}
+
+.c3:hover {
+  color: red;
+}
+
+.c0 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  opacity: 0.3;
+  background-color: black;
+}
+
+.c1 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  z-index: 1001;
+  min-width: 320px;
+  overflow: auto;
+  max-width: 800px;
+  max-height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  border: 1px solid hsl(210,12%,92%);
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+@media (min-width:1200px) {
+  .c1 {
+    min-width: 480px;
+  }
+}
+
 <div>
   <div
-    className="Modal__Overlay-sc-17tt3bl-0 kbRNjc"
+    className="c0"
   />
   <div
-    className="Modal__ModalContent-sc-17tt3bl-1 ffPMX"
+    className="c1"
   >
     <header
-      className="ModalHeader__ModalHeaderEl-sc-1g0fqbo-0 ehnGNs"
+      className="c2"
     >
       Заголовок
       <button
-        className="ModalHeader__HeaderButton-sc-1g0fqbo-1 kVVqGP"
+        className="c3"
         onClick={[Function]}
       >
         <svg
@@ -87,12 +259,12 @@ exports[`Storyshots Components/Modal Large Modal Story 1`] = `
       </button>
     </header>
     <div
-      className="ModalBody-sc-2cx8u2-0 fnaQlB"
+      className="c4"
     >
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Diam in arcu cursus euismod quis viverra nibh. In egestas erat imperdiet sed euismod nisi. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Nisl pretium fusce id velit. Morbi tempus iaculis urna id volutpat. Adipiscing commodo elit at imperdiet dui. Vitae aliquet nec ullamcorper sit. Nisi scelerisque eu ultrices vitae auctor eu augue. Nibh praesent tristique magna sit amet. Ut sem nulla pharetra diam. Mattis enim ut tellus elementum sagittis vitae et leo. Leo in vitae turpis massa sed elementum. Elit duis tristique sollicitudin nibh sit amet commodo nulla. Libero nunc consequat interdum varius sit amet mattis vulputate. Tellus pellentesque eu tincidunt tortor aliquam nulla facilisi. Tellus id interdum velit laoreet id donec ultrices. Egestas congue quisque egestas diam in arcu cursus. Integer malesuada nunc vel risus commodo. Amet mauris commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Quis auctor elit sed vulputate mi sit amet mauris. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar. Imperdiet massa tincidunt nunc pulvinar sapien et ligula. Adipiscing vitae proin sagittis nisl rhoncus mattis. Diam phasellus vestibulum lorem sed risus ultricies tristique nulla. Platea dictumst vestibulum rhoncus est pellentesque elit. Libero justo laoreet sit amet. Feugiat vivamus at augue eget. Vitae aliquet nec ullamcorper sit. Amet luctus venenatis lectus magna fringilla urna porttitor rhoncus. Diam ut venenatis tellus in. Volutpat odio facilisis mauris sit amet massa. Est pellentesque elit ullamcorper dignissim cras tincidunt lobortis. Urna porttitor rhoncus dolor purus non enim praesent elementum. Id velit ut tortor pretium. In eu mi bibendum neque egestas. Amet nulla facilisi morbi tempus iaculis. Magna ac placerat vestibulum lectus mauris ultrices eros. Id aliquet risus feugiat in ante. Amet nulla facilisi morbi tempus iaculis urna id volutpat lacus. Dolor purus non enim praesent elementum facilisis leo vel fringilla. Suspendisse interdum consectetur libero id faucibus nisl tincidunt.
     </div>
     <footer
-      className="ModalFooter-sc-4hkn1a-0 iKWVGE"
+      className="c5"
     >
       Футер
     </footer>

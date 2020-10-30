@@ -1,42 +1,268 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Общее/Цвета Все цвета 1`] = `
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c1 > * + * {
+  margin-left: 4px;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: stretch;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+.c0 > * + * {
+  margin-top: 4px;
+}
+
+.c2 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,80%,95%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c3 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,55%,80%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c4 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,55%,55%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c5 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,55%,35%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c6 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,55%,20%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c7 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,20%,97%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c8 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,92%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c9 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,80%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c10 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,70%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c11 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,58%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c12 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,43%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c13 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,38%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c14 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,33%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c15 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(210,12%,28%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c16 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(0,100%,90%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c17 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(0,100%,80%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c18 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(0,100%,74%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c19 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(0,100%,70%);
+  text-align: center;
+  line-height: 50px;
+}
+
+.c20 {
+  height: 50px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background-color: hsl(0,60%,60%);
+  text-align: center;
+  line-height: 50px;
+}
+
 <div
-  className="Column-sc-18tfx87-0 bEObAw"
+  className="c0"
 >
   <div
-    className="Row-sc-12w6u1l-0 kNTOAN"
+    className="c1"
   >
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 jxBerF"
+      className="c2"
       color="hsl(210, 80%, 95%)"
     >
       primary/
       100
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 btHLSF"
+      className="c3"
       color="hsl(210, 55%, 80%)"
     >
       primary/
       300
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 iFxQAp"
+      className="c4"
       color="hsl(210, 55%, 55%)"
     >
       primary/
       500
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 fVtqpL"
+      className="c5"
       color="hsl(210, 55%, 35%)"
     >
       primary/
       700
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 crA-dnb"
+      className="c6"
       color="hsl(210, 55%, 20%)"
     >
       primary/
@@ -44,66 +270,66 @@ exports[`Storyshots Общее/Цвета Все цвета 1`] = `
     </div>
   </div>
   <div
-    className="Row-sc-12w6u1l-0 kNTOAN"
+    className="c1"
   >
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 chEwTx"
+      className="c7"
       color="hsl(210, 20%, 97%)"
     >
       grey/
       100
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 gwBQzR"
+      className="c8"
       color="hsl(210, 12%, 92%)"
     >
       grey/
       200
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 kfxNmC"
+      className="c9"
       color="hsl(210, 12%, 80%)"
     >
       grey/
       300
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 ehoWbF"
+      className="c10"
       color="hsl(210, 12%, 70%)"
     >
       grey/
       400
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 dfBaHL"
+      className="c11"
       color="hsl(210, 12%, 58%)"
     >
       grey/
       500
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 bACGpN"
+      className="c12"
       color="hsl(210, 12%, 43%)"
     >
       grey/
       600
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 dwTGzl"
+      className="c13"
       color="hsl(210, 12%, 38%)"
     >
       grey/
       700
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 dfrGnW"
+      className="c14"
       color="hsl(210, 12%, 33%)"
     >
       grey/
       800
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 fGByYw"
+      className="c15"
       color="hsl(210, 12%, 28%)"
     >
       grey/
@@ -111,38 +337,38 @@ exports[`Storyshots Общее/Цвета Все цвета 1`] = `
     </div>
   </div>
   <div
-    className="Row-sc-12w6u1l-0 kNTOAN"
+    className="c1"
   >
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 byobLy"
+      className="c16"
       color="hsl(0, 100%, 90%)"
     >
       accent/
       100
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 hAHbrP"
+      className="c17"
       color="hsl(0, 100%, 80%)"
     >
       accent/
       300
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 enUgOM"
+      className="c18"
       color="hsl(0, 100%, 74%)"
     >
       accent/
       500
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 dhLyRM"
+      className="c19"
       color="hsl(0, 100%, 70%)"
     >
       accent/
       700
     </div>
     <div
-      className="colorsstories__ColorBox-sc-13y7tng-0 fEIBva"
+      className="c20"
       color="hsl(0, 60%, 60%)"
     >
       accent/

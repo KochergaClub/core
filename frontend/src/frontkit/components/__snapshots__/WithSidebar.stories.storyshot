@@ -1,6 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Components/WithSidebar Basic 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.c1 {
+  background-color: hsl(210,20%,97%);
+  border-right: 1px solid hsl(210,12%,80%);
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
+}
+
+.c2 {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  overflow: auto;
+}
+
 <div
   style={
     Object {
@@ -9,17 +36,17 @@ exports[`Storyshots Components/WithSidebar Basic 1`] = `
   }
 >
   <div
-    className="WithSidebar__Container-tq2oun-0 gwUDpd"
+    className="c0"
   >
     <div
-      className="WithSidebar__Sidebar-tq2oun-1 bOoxzu"
+      className="c1"
     >
       <h1>
         hello
       </h1>
     </div>
     <div
-      className="WithSidebar__Main-tq2oun-2 dAZEJP"
+      className="c2"
     >
       Main app content
     </div>
@@ -28,6 +55,61 @@ exports[`Storyshots Components/WithSidebar Basic 1`] = `
 `;
 
 exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
+.c3 {
+  position: relative;
+}
+
+.c4 {
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.c5 {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #ffffb3;
+}
+
+.c2 {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.c1 {
+  background-color: hsl(210,20%,97%);
+  border-right: 1px solid hsl(210,12%,80%);
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
+}
+
+.c6 {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  overflow: auto;
+}
+
 <div
   style={
     Object {
@@ -36,52 +118,52 @@ exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
   }
 >
   <div
-    className="WithSidebar__Container-tq2oun-0 gwUDpd"
+    className="c0"
   >
     <div
-      className="WithSidebar__Sidebar-tq2oun-1 bOoxzu"
+      className="c1"
     >
       <nav>
         <ul
-          className="ColumnNav__Ul-sc-1ebrfyn-3 kCuuTg"
+          className="c2"
         >
           <li
-            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+            className="c3"
           >
             <div
-              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+              className="c4"
             >
               Item 1
             </div>
           </li>
           <li
-            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+            className="c3"
           >
             <div
-              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+              className="c4"
             >
               Item 2
             </div>
           </li>
           <li
-            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+            className="c3"
             selected={true}
           >
             <div
-              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+              className="c4"
             >
               Item 3 (active)
             </div>
             <div
-              className="ColumnNav__Highlight-sc-1ebrfyn-2 hCnnIx"
+              className="c5"
               layoutId="highlight"
             />
           </li>
           <li
-            className="ColumnNav__Li-sc-1ebrfyn-0 idBVTO"
+            className="c3"
           >
             <div
-              className="ColumnNav__LiInner-sc-1ebrfyn-1 eBMzmX"
+              className="c4"
             >
               Item 4
             </div>
@@ -90,7 +172,7 @@ exports[`Storyshots Components/WithSidebar With Column Nav 1`] = `
       </nav>
     </div>
     <div
-      className="WithSidebar__Main-tq2oun-2 dAZEJP"
+      className="c6"
     >
       Main app content
     </div>

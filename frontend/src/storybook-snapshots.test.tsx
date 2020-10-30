@@ -1,8 +1,13 @@
-import 'jest-styled-components';
-
+// jest-specific-snapshot (which we use in runTest code below) doesn't work with jest-styled-components out of the box.
+// So we have to call addSerializer() manually.
+// See details: https://github.com/styled-components/jest-styled-components#serializer
+import { addSerializer } from 'jest-specific-snapshot';
+import { styleSheetSerializer } from 'jest-styled-components';
 import { act, create } from 'react-test-renderer';
 
 import initStoryshots, { Stories2SnapsConverter } from '@storybook/addon-storyshots';
+
+addSerializer(styleSheetSerializer);
 
 // via https://spectrum.chat/framer/general/jest-snapshot-testing-framer-motion~90ba2cc1-6e9c-4e5a-8627-620e208011ac?m=MTU5NjY2MjkwMjQxOQ==
 jest.mock('framer-motion', () => {
@@ -31,7 +36,6 @@ const converter = new Stories2SnapsConverter();
 
 const runTest = async (story: any, context: any) => {
   const filename = converter.getSnapshotFileName(context);
-  console.log(filename);
 
   if (!filename) {
     return;
