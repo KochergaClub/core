@@ -7,7 +7,7 @@ import EventCalendarItem from '../EventCalendarItem';
 import { EventsEvent_SummaryFragment } from '../queries.generated';
 
 const CalendarCellContainer = styled.div`
-  height: 3em;
+  width: 100%;
   overflow: auto;
 `;
 

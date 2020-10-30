@@ -32,12 +32,13 @@ const App: NextApolloPage<Props> = () => {
   const renderTab = (name: string) => {
     switch (name) {
       case 'Event':
-        return <EventScreen />;
+        const event_id = router.query.id as string;
+        return <EventScreen selected_id={event_id} />;
       case 'Schedule':
         return <ScheduleScreen />;
       case 'EventPrototype':
-        const selected_id = parseInt(router.query.id as string, 10);
-        return <EventPrototypeScreen selected_id={selected_id} />;
+        const prototype_id = parseInt(router.query.id as string, 10);
+        return <EventPrototypeScreen selected_id={prototype_id} />;
       default:
         return <div>Unknown route {name}</div>;
     }

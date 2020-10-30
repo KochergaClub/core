@@ -3,6 +3,7 @@ import { ru } from 'date-fns/locale';
 import { useCallback, useMemo, useReducer, useState } from 'react';
 
 import { useQuery, useSubscription } from '@apollo/client';
+
 import { Column } from '~/frontkit';
 
 import MonthCalendar from '../../common/MonthCalendar';
